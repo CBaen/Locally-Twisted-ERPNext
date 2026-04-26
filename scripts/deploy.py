@@ -84,9 +84,17 @@ def run_gate(gate_name: str, command: list[str]) -> str:
 # Gate 1: Migration broad-write lint (PRE-DEPLOY, ALWAYS)
 # =============================================================================
 def gate_migration_lint() -> str:
+    """
+    Lint patches/migrations under THIS client's app for unbounded broad-write
+    patterns. Scoped to `apps/<frappe_app_name>/` so third-party app code
+    (e.g. bind-mounted upstream `webshop`) is not swept — the gate's purpose
+    is to protect code we own, not to police upstream.
+    """
+    app = CONFIG["frappe_app_name"]
     return run_gate(
         "Migration broad-write lint",
-        [sys.executable, str(LINT_DIR / "migration_broad_write.py")],
+        [sys.executable, str(LINT_DIR / "migration_broad_write.py"),
+         "--patterns", f"apps/{app}/**/patches/**/*.py", f"apps/{app}/**/migrations/**/*.py"],
     )
 
 # =============================================================================
