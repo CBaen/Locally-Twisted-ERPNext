@@ -1,8 +1,101 @@
-{# JINJA OVERRIDE TEST 2026-04-26 — if you see "LT FOOTER OVERRIDE TEST" rendered,
-   the override path resolves correctly in our Docker bind-mounted setup.
-   Replace this with the real LT footer once the test passes. #}
-<footer class="lt-footer-test" style="background:#C3DCF3;padding:2rem;text-align:center;">
-  <p style="font-family:'DM Serif Display',serif;font-size:1.5rem;color:#1A1A1A;margin:0;">
-    LT FOOTER OVERRIDE TEST
-  </p>
+{# Locally Twisted footer override.
+   Replaces apps/frappe/frappe/templates/includes/footer/footer.html
+   via same-path resolution in Frappe's ChoiceLoader. Ignores Frappe's
+   default sub-includes (footer_logo_extension, footer_grouped_links,
+   footer_links, footer_info) and writes the LT-shaped structure
+   directly. Source: Odoo XML footer.xml.
+   Newsletter signup is intentionally omitted until Phase 4 wires
+   a real list backend (loud-failure rule: no silent forms).
+#}
+<footer class="lt-footer">
+
+    {# Section 1: Centered brand + 3 social icons (no Twitter) #}
+    <section class="lt-footer__brand-band">
+        <div class="container lt-footer__brand-inner">
+            <p class="lt-footer__brand-name">Locally Twisted</p>
+            <p class="lt-footer__brand-tagline">Utah's Balloon Specialists since 1998.</p>
+            <nav class="lt-footer__social" aria-label="Locally Twisted on social media">
+                <a href="https://facebook.com/locallytwisted"
+                   target="_blank" rel="noopener noreferrer"
+                   class="lt-footer__social-link"
+                   aria-label="Locally Twisted on Facebook (opens in new tab)">
+                    <img src="/assets/locally_twisted/icons/facebook.svg" alt="" aria-hidden="true" width="24" height="24">
+                </a>
+                <a href="https://instagram.com/locally_twisted"
+                   target="_blank" rel="noopener noreferrer"
+                   class="lt-footer__social-link"
+                   aria-label="Locally Twisted on Instagram (opens in new tab)">
+                    <img src="/assets/locally_twisted/icons/instagram.svg" alt="" aria-hidden="true" width="24" height="24">
+                </a>
+                <a href="https://pinterest.com/locallytwisted"
+                   target="_blank" rel="noopener noreferrer"
+                   class="lt-footer__social-link"
+                   aria-label="Locally Twisted on Pinterest (opens in new tab)">
+                    <img src="/assets/locally_twisted/icons/pinterest.svg" alt="" aria-hidden="true" width="24" height="24">
+                </a>
+            </nav>
+        </div>
+    </section>
+
+    {# Section 2: Three-column links #}
+    <nav class="lt-footer__links" aria-label="Footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-4 lt-footer__col">
+                    <p class="lt-footer__col-title">Shop</p>
+                    <ul class="list-unstyled lt-footer__col-list">
+                        <li><a href="/all-products">All Products</a></li>
+                        <li><a href="/shop-by-category">Special Occasions</a></li>
+                        <li><a href="/shop-by-category">Holidays &amp; Seasons</a></li>
+                        <li><a href="/all-products">What We Make</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-12 col-md-4 lt-footer__col">
+                    <p class="lt-footer__col-title">Company</p>
+                    <ul class="list-unstyled lt-footer__col-list">
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/balloon-twisting-and-face-painting">Balloon Twisting</a></li>
+                        <li><a href="/book">Book an Event</a></li>
+                        <li><a href="/blog">Behind the Balloons</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-12 col-md-4 lt-footer__col">
+                    <p class="lt-footer__col-title">Get In Touch</p>
+                    <ul class="list-unstyled lt-footer__col-list lt-footer__col-list--info">
+                        <li>
+                            <span class="lt-footer__icon" aria-hidden="true">&#x1F4CD;</span>
+                            <span>West Jordan, UT</span>
+                        </li>
+                        <li>
+                            <a href="tel:+18012850860">
+                                <span class="lt-footer__icon" aria-hidden="true">&#x260E;</span>
+                                <span>(801) 285-0860</span>
+                            </a>
+                        </li>
+                        <li>
+                            <span class="lt-footer__icon" aria-hidden="true">&#x1F552;</span>
+                            <span>Tue&ndash;Fri 12&ndash;6, Sat 10&ndash;4</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    {# Section 3: Centered copyright bar #}
+    <section class="lt-footer__bar">
+        <div class="container text-center">
+            <span class="lt-footer__legal">
+                &copy; 2026 Locally Twisted. All rights reserved.
+                <span class="lt-footer__sep" aria-hidden="true">|</span>
+                <a href="/refund-policy">Refund Policy</a>
+                <span class="lt-footer__sep" aria-hidden="true">|</span>
+                <a href="/accessibility">Accessibility</a>
+            </span>
+        </div>
+    </section>
+
 </footer>

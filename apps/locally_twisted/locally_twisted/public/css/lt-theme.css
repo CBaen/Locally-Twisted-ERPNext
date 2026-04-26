@@ -606,3 +606,371 @@ html, body {
     text-align: left;
   }
 }
+
+/* ============================================================
+   Header (Jinja partial override at templates/includes/navbar/navbar.html)
+   ============================================================ */
+
+.lt-header {
+  background-color: var(--lt-white);
+  border-bottom: 1px solid rgba(26, 26, 26, 0.08);
+}
+
+/* Tier 1 — utility bar */
+.lt-header__utility {
+  border-bottom: 1px solid rgba(26, 26, 26, 0.06);
+}
+
+.lt-header__utility-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 0.625rem 1rem;
+  gap: 1rem;
+}
+
+.lt-header__utility-left {
+  font-family: 'Raleway', sans-serif;
+  font-size: 0.875rem;
+  color: var(--lt-soft-gray);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.lt-header__truck {
+  font-size: 1.125rem;
+}
+
+.lt-header__brand {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  justify-self: center;
+}
+
+.lt-header__brand img,
+.lt-header__brand .lt-logo {
+  display: block;
+  height: 44px;
+  width: auto;
+  max-width: 200px;
+}
+
+.lt-header__brand-fallback {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 1.5rem;
+  color: var(--lt-near-black);
+}
+
+.lt-header__utility-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-self: end;
+}
+
+.lt-header__util-link {
+  font-family: 'Raleway', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--lt-soft-gray);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.lt-header__util-link:hover,
+.lt-header__util-link:focus-visible {
+  color: var(--lt-near-black);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.lt-header__util-link--cart span[aria-hidden="true"] {
+  font-size: 1.125rem;
+}
+
+/* Tier 2 — main nav */
+.lt-header__nav {
+  background-color: var(--lt-white);
+}
+
+.lt-header__nav-row {
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+}
+
+.lt-header__nav-list {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.lt-header__nav-link {
+  font-family: 'Raleway', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--lt-near-black);
+  text-decoration: none;
+  padding: 0.5rem 0.25rem;
+  border-bottom: 2px solid transparent;
+  display: inline-block;
+}
+
+.lt-header__nav-link:hover,
+.lt-header__nav-link:focus-visible {
+  color: var(--lt-teal);
+  border-bottom-color: var(--lt-teal);
+}
+
+/* Mobile header */
+.lt-header__mobile {
+  background-color: var(--lt-white);
+}
+
+.lt-header__mobile-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+}
+
+.lt-header__brand--mobile img,
+.lt-header__brand--mobile .lt-logo {
+  height: 38px;
+  max-width: 160px;
+}
+
+.lt-header__toggle {
+  background: none;
+  border: 1px solid rgba(26, 26, 26, 0.12);
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.lt-header__toggle:hover,
+.lt-header__toggle:focus-visible {
+  border-color: var(--lt-near-black);
+}
+
+.lt-header__mobile-strip {
+  background-color: var(--lt-blue-tint);
+  text-align: center;
+  font-family: 'Raleway', sans-serif;
+  font-size: 0.8125rem;
+  color: var(--lt-soft-gray);
+  padding: 0.4rem 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.lt-header__mobile-nav-collapse {
+  border-top: 1px solid rgba(26, 26, 26, 0.08);
+}
+
+.lt-header__mobile-nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 0;
+}
+
+.lt-header__mobile-nav-link {
+  display: block;
+  padding: 0.875rem 1.25rem;
+  font-family: 'Raleway', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--lt-near-black);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(26, 26, 26, 0.04);
+}
+
+.lt-header__mobile-nav-link:hover,
+.lt-header__mobile-nav-link:focus-visible {
+  background-color: var(--lt-blue-tint);
+  color: var(--lt-teal);
+}
+
+.lt-header__mobile-nav-divider {
+  height: 1px;
+  background-color: rgba(26, 26, 26, 0.08);
+  margin: 0.5rem 0;
+}
+
+/* ============================================================
+   Footer (Jinja partial override at templates/includes/footer/footer.html)
+   ============================================================ */
+
+.lt-footer {
+  background-color: var(--lt-soft-blue);
+  color: var(--lt-near-black);
+  font-family: 'Raleway', sans-serif;
+  margin-top: auto;
+}
+
+/* Section 1 — centered brand + social */
+.lt-footer__brand-band {
+  padding: 3rem 1rem 2rem;
+}
+
+.lt-footer__brand-inner {
+  text-align: center;
+}
+
+.lt-footer__brand-name {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 1.75rem;
+  color: var(--lt-near-black);
+  margin: 0 0 0.25rem;
+  line-height: 1.1;
+}
+
+.lt-footer__brand-tagline {
+  font-size: 1rem;
+  color: var(--lt-soft-gray);
+  margin: 0 0 1.25rem;
+}
+
+.lt-footer__social {
+  display: inline-flex;
+  gap: 0.85rem;
+}
+
+.lt-footer__social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--lt-white);
+  text-decoration: none;
+  transition: transform 0.15s ease;
+}
+
+.lt-footer__social-link:hover,
+.lt-footer__social-link:focus-visible {
+  transform: translateY(-2px);
+  outline: 2px solid var(--lt-teal);
+  outline-offset: 2px;
+}
+
+.lt-footer__social-link img {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+/* Section 2 — three column links */
+.lt-footer__links {
+  padding: 0 1rem 2.5rem;
+}
+
+.lt-footer__col {
+  margin-bottom: 1.5rem;
+}
+
+.lt-footer__col-title {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--lt-near-black);
+  margin: 0 0 0.85rem;
+}
+
+.lt-footer__col-list {
+  margin: 0;
+  padding: 0;
+}
+
+.lt-footer__col-list li {
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+.lt-footer__col-list a {
+  color: var(--lt-soft-gray);
+  text-decoration: none;
+}
+
+.lt-footer__col-list a:hover,
+.lt-footer__col-list a:focus-visible {
+  color: var(--lt-near-black);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.lt-footer__col-list--info li {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--lt-soft-gray);
+}
+
+.lt-footer__col-list--info a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.lt-footer__icon {
+  display: inline-flex;
+  font-size: 1rem;
+  width: 1.25rem;
+}
+
+/* Section 3 — copyright bar */
+.lt-footer__bar {
+  background-color: rgba(26, 26, 26, 0.04);
+  border-top: 1px solid rgba(26, 26, 26, 0.08);
+  padding: 1.25rem 1rem;
+}
+
+.lt-footer__legal {
+  font-size: 0.875rem;
+  color: var(--lt-soft-gray);
+}
+
+.lt-footer__legal a {
+  color: var(--lt-soft-gray);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.lt-footer__legal a:hover,
+.lt-footer__legal a:focus-visible {
+  color: var(--lt-near-black);
+}
+
+.lt-footer__sep {
+  margin: 0 0.4rem;
+  color: rgba(26, 26, 26, 0.35);
+}
+
+/* Mobile adjustments */
+@media (max-width: 767.98px) {
+  .lt-footer__brand-band {
+    padding: 2.25rem 1rem 1.5rem;
+  }
+  .lt-footer__brand-name {
+    font-size: 1.5rem;
+  }
+  .lt-footer__col {
+    margin-bottom: 1.75rem;
+  }
+}
