@@ -1,0 +1,38 @@
+# Secrets
+.env
+*.env.local
+*.secret
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+.pytest_cache/
+
+# Node (if Frontend folder grows)
+node_modules/
+dist/
+build/
+
+# Frappe / ERPNext temporary
+*.log
+sites/*/private/
+sites/*/public/files/
+
+# Cookie jars created by translation scripts (curl -c /tmp/lt_cookies)
+*_cookies
