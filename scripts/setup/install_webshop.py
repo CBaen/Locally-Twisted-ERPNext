@@ -55,7 +55,7 @@ from typing import Iterable
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 COMPOSE_PROJECT = "locally-twisted-erpnext-v15"
 SITE = "frontend"
-APPS = ("payments", "webshop")
+APPS = ("locally_twisted", "payments", "webshop")
 SERVICES_NEEDING_PIP = ("backend", "queue-long", "queue-short", "scheduler")
 WEBSHOP_REPO = "https://github.com/frappe/webshop"
 PAYMENTS_REPO = "https://github.com/frappe/payments"
