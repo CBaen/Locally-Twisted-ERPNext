@@ -166,12 +166,107 @@ def verify_routes() -> None:
                   f"/home/frappe/frappe-bench/sites/{SITE}/logs/frappe.log")
 
 
+def build_assets() -> None:
+    """Install Node+yarn (if missing) and run `bench build` so webshop's
+    SCSS/JS bundles actually compile.
+
+    Why this is its own step:
+      - frappe_docker's production image has no Node. `bench install-app`
+        and `bench get-app` both attempt asset builds and crash in our
+        container, so the apps install with NO compiled bundles.
+      - Without compiled bundles, `webshop-web.bundle.css` and
+        `web.bundle.js` are missing from sites/assets/assets.json.
+        Frappe's bundled_asset() falls back to the bare path → 404.
+      - The 404 itself is browser-visible noise. Worse, `web.bundle.js`
+        defines the global `webshop` JS namespace; without it, every
+        webshop page (e.g. /all-products) throws
+        `Uncaught ReferenceError: webshop is not defined`.
+
+    What this does (idempotent):
+      1. As root: apt-install nodejs and curl (skipped if already there).
+      2. As root: install yarn globally (skipped if `yarn --version` works).
+      3. As root: symlink node + yarn from frappe-user nvm into
+         /usr/local/bin/ so subprocesses spawned via /bin/sh find them.
+         (bench build's popen wrapper uses sh, not bash with nvm sourced.)
+      4. As frappe: `bench build` (all apps; webshop alone leaves
+         frappe-web.bundle missing on a clean container).
+      5. Flush Redis cache + bump assets.json mtime so Frappe re-reads.
+
+    Run after every `docker compose --force-recreate`. The compiled
+    bundles in apps/<app>/public/dist/ persist via the bind-mount,
+    but assets.json (in the sites volume) is rewritten by bench build,
+    and Node + yarn live in the container's writable layer which is
+    lost on recreate.
+
+    Long-term fix: bake Node + yarn into a custom Docker image, OR
+    add a sidecar Node container that runs bench build on demand.
+    Tracked at agency conventions doc "Asset pipeline reality" section.
+    """
+    backend = container("backend")
+    print("\n=== Build assets — install Node + yarn (if missing) and run bench build ===")
+
+    # Step 1+2+3: ensure node + yarn on system path (idempotent).
+    # Run as root so apt + npm install -g work; symlink covers nvm-only installs.
+    bootstrap_script = r"""set -e
+if ! command -v node >/dev/null 2>&1; then
+  apt-get update -qq
+  apt-get install -y --no-install-recommends curl ca-certificates >/dev/null
+  curl -fsSL https://deb.nodesource.com/setup_18.x | bash - >/dev/null
+  apt-get install -y --no-install-recommends nodejs >/dev/null
+fi
+# Capture the frappe-user's nvm node + yarn if they exist (we may have just
+# installed system node, but the bench helper expects yarn too).
+NVM_NODE=$(ls /home/frappe/.nvm/versions/node/*/bin/node 2>/dev/null | head -1 || true)
+NVM_YARN=$(ls /home/frappe/.nvm/versions/node/*/bin/yarn 2>/dev/null | head -1 || true)
+# Install yarn via npm if no nvm-yarn exists.
+if [ -z "$NVM_YARN" ] && ! command -v yarn >/dev/null 2>&1; then
+  npm install -g yarn >/dev/null 2>&1
+  NVM_YARN=$(ls /home/frappe/.nvm/versions/node/*/bin/yarn 2>/dev/null | head -1 || command -v yarn || true)
+fi
+# Symlink to /usr/local/bin so /bin/sh subprocesses find them.
+[ -n "$NVM_NODE" ] && ln -sf "$NVM_NODE" /usr/local/bin/node
+[ -n "$NVM_YARN" ] && ln -sf "$NVM_YARN" /usr/local/bin/yarn
+echo "node: $(/usr/local/bin/node --version 2>&1 || which node)"
+echo "yarn: $(/usr/local/bin/yarn --version 2>&1 || which yarn)"
+"""
+    run(["docker", "exec", "-u", "0", backend, "bash", "-lc", bootstrap_script])
+
+    # Step 4: bench build (as frappe). Build every app — webshop alone
+    # would leave frappe-web/erpnext-web bundles missing on a fresh container.
+    print("\n=== Run bench build ===")
+    run(["docker", "exec", backend, "bash", "-lc",
+         f"cd /home/frappe/frappe-bench && bench build"])
+
+    # Step 5: invalidate cached assets.json and restart so the new entries
+    # are picked up on the next page render.
+    print("\n=== Flush asset cache and restart backend ===")
+    run(["docker", "exec", container("redis-cache"), "redis-cli", "FLUSHALL"], capture=True)
+    run(["docker", "exec", backend, "bash", "-lc",
+         "touch /home/frappe/frappe-bench/sites/assets/assets.json"])
+    run(["docker", "restart", backend], capture=True)
+    # Wait for backend to come back.
+    print("  waiting for backend to be ready...")
+    for _ in range(30):
+        result = subprocess.run(
+            ["curl", "-s", "-o", "/dev/null", "-w", "%{http_code}",
+             "http://localhost:8081/accessibility"],
+            capture_output=True, text=True, check=False,
+        )
+        if (result.stdout or "").strip() == "200":
+            print("  backend ready.")
+            return
+        time.sleep(1)
+    print("  WARN  backend did not return 200 within 30 s; check `docker logs` if pages misbehave.")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--fetch", action="store_true",
                         help="Clone payments+webshop from upstream into apps/ first.")
     parser.add_argument("--site-install", action="store_true",
                         help="Run bench install-app on the site (first install only).")
+    parser.add_argument("--build-assets", action="store_true",
+                        help="Install Node+yarn if missing and run bench build.")
     args = parser.parse_args()
 
     if args.fetch:
@@ -187,6 +282,9 @@ def main() -> None:
         reinstall_pip()
         restart_services()
         verify_imports()
+
+    if args.build_assets:
+        build_assets()
 
     verify_routes()
     print("\nDone. Webshop install is reproducible.")

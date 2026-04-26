@@ -652,9 +652,9 @@ html, body {
 .lt-header__brand img,
 .lt-header__brand .lt-logo {
   display: block;
-  height: 44px;
+  height: 110px;
   width: auto;
-  max-width: 200px;
+  max-width: 500px;
 }
 
 .lt-header__brand-fallback {
