@@ -34,6 +34,15 @@ app_license = "mit"
 web_include_css = "/assets/locally_twisted/css/lt-theme.css"
 # web_include_js = "/assets/locally_twisted/js/locally_twisted.js"
 
+# Friendly-URL aliases. Frappe's www/ router doesn't auto-translate
+# underscored Python module filenames into dashed URLs, so we alias
+# explicitly. Python module names (used for the @whitelist API path)
+# stay underscored.
+website_route_rules = [
+    {"from_route": "/balloon-twisting-and-face-painting",
+     "to_route": "balloon_twisting_and_face_painting"},
+]
+
 # include custom scss in every website theme (without file extension ".scss")
 # website_theme_scss = "locally_twisted/public/scss/website"
 

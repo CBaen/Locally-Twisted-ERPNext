@@ -1,0 +1,249 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+
+<section class="lt-btfp__intro">
+    <div class="container">
+        <h1>Balloon Twisting &amp; Face Painting</h1>
+        <p class="lt-btfp__intro-lede">Live entertainment that keeps every guest smiling</p>
+    </div>
+</section>
+
+<section class="lt-btfp__services">
+    <div class="lt-btfp__services-grid">
+
+        <article class="lt-btfp__service-card">
+            <div class="lt-btfp__service-image" aria-hidden="true">Face painting photo coming soon</div>
+            <h2>Face Painting</h2>
+            <ul>
+                <li>Butterflies, superheroes, tigers, princesses</li>
+                <li>FDA-approved, skin-safe paints</li>
+                <li>Faces, arms, and hands</li>
+                <li>Kids, teens, and adults</li>
+            </ul>
+        </article>
+
+        <article class="lt-btfp__service-card">
+            <div class="lt-btfp__service-image" aria-hidden="true">Balloon twisting photo coming soon</div>
+            <h2>Balloon Twisting</h2>
+            <ul>
+                <li>Animals, swords, crowns, flowers</li>
+                <li>Custom designs on the spot</li>
+                <li>Guests watch the designs come together</li>
+            </ul>
+        </article>
+
+    </div>
+</section>
+
+<section id="lt-booking" class="lt-btfp__booking">
+    <div class="lt-btfp__booking-grid">
+
+        <div class="lt-btfp__form-wrap">
+            <h2>Tell us about your event</h2>
+            <p class="lt-btfp__form-subtitle">Share a few details and we'll take it from there.</p>
+
+            <form id="lt-btfp-form" class="lt-btfp__form" novalidate>
+                <fieldset>
+                    <legend class="visually-hidden">Booking request</legend>
+
+                    <div class="row">
+                        <div class="lt-btfp__field">
+                            <label for="bf-service">What would you like? <span class="lt-btfp__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></label>
+                            <select id="bf-service" name="service_choice" class="lt-btfp__select" required aria-required="true">
+                                {% for value, label in service_choices %}
+                                <option value="{{ value }}" {% if value == 'both' %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="lt-btfp__field">
+                            <label for="bf-hours">Hours needed <span class="lt-btfp__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></label>
+                            <select id="bf-hours" name="hours_needed" class="lt-btfp__select" required aria-required="true">
+                                {% for value, label in hours_options %}
+                                <option value="{{ value }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="lt-btfp__field">
+                            <label for="bf-name">Your name <span class="lt-btfp__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></label>
+                            <input type="text" id="bf-name" name="name" class="lt-btfp__input" required aria-required="true" autocomplete="name">
+                        </div>
+                        <div class="lt-btfp__field">
+                            <label for="bf-phone">Phone <span class="lt-btfp__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></label>
+                            <input type="tel" id="bf-phone" name="phone" class="lt-btfp__input" required aria-required="true" autocomplete="tel">
+                        </div>
+                    </div>
+
+                    <div class="lt-btfp__field" style="margin-bottom: 1rem;">
+                        <label for="bf-email">Email <span class="lt-btfp__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></label>
+                        <input type="email" id="bf-email" name="email" class="lt-btfp__input" required aria-required="true" autocomplete="email">
+                    </div>
+
+                    <div class="row">
+                        <div class="lt-btfp__field">
+                            <label for="bf-event-date">Event date <span class="lt-btfp__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></label>
+                            <input type="date" id="bf-event-date" name="event_date" class="lt-btfp__input" required aria-required="true">
+                        </div>
+                        <div class="lt-btfp__field">
+                            <label for="bf-event-time">Preferred start time</label>
+                            <input type="time" id="bf-event-time" name="event_time" class="lt-btfp__input">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="lt-btfp__field">
+                            <label for="bf-event-type">Event type</label>
+                            <select id="bf-event-type" name="event_type" class="lt-btfp__select">
+                                <option value="">Select one...</option>
+                                {% for value, label in event_types %}
+                                <option value="{{ value }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="lt-btfp__field">
+                            <label for="bf-guest-count">Estimated guests</label>
+                            <input type="number" id="bf-guest-count" name="guest_count" class="lt-btfp__input" placeholder="e.g. 30" min="1">
+                        </div>
+                    </div>
+
+                    <div class="lt-btfp__field" style="margin-bottom: 0.5rem;">
+                        <label for="bf-notes">Anything else we should know?</label>
+                        <textarea id="bf-notes" name="notes" rows="3" class="lt-btfp__textarea"
+                                  placeholder="Event theme, color preferences, special requests..."></textarea>
+                    </div>
+
+                    <p class="lt-btfp__privacy">
+                        We'll use this info to contact you about your event.
+                        See our <a href="/refund-policy">policies</a>.
+                    </p>
+
+                    <button type="submit" class="lt-btfp__submit" id="bf-submit">Send Request</button>
+
+                    <div id="bf-feedback" class="lt-btfp__feedback" role="status" aria-live="polite"></div>
+                </fieldset>
+            </form>
+        </div>
+
+        <aside class="lt-btfp__expect-wrap">
+            <div class="lt-btfp__expect-card">
+                <h3>What to Expect</h3>
+                <ul class="lt-btfp__expect-list">
+                    <li>
+                        <span class="lt-btfp__expect-icon" aria-hidden="true">&#x21BA;</span>
+                        <span>We reach out within 24 hours.</span>
+                    </li>
+                    <li>
+                        <span class="lt-btfp__expect-icon" aria-hidden="true">&#x1F4C5;</span>
+                        <span>A $50 deposit secures your date.</span>
+                    </li>
+                    <li>
+                        <span class="lt-btfp__expect-icon" aria-hidden="true">&#x1F4B3;</span>
+                        <span>The remaining balance is due before your event.</span>
+                    </li>
+                </ul>
+
+                <hr class="lt-btfp__expect-divider">
+
+                <h4>Cancellation</h4>
+                <p>48 hours' notice required. Deposits are non-refundable.</p>
+
+                <hr class="lt-btfp__expect-divider">
+
+                <h4>Prefer to talk?</h4>
+                <ul class="lt-btfp__expect-contact">
+                    <li>
+                        <span class="lt-btfp__expect-icon" aria-hidden="true">&#x260E;</span>
+                        <a href="tel:+18012850860">(801) 285-0860</a>
+                    </li>
+                    <li>
+                        <span class="lt-btfp__expect-icon" aria-hidden="true">&#x2709;</span>
+                        <a href="mailto:hi@locallytwisted.com">hi@locallytwisted.com</a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+</section>
+
+<script>
+(function () {
+    var form = document.getElementById('lt-btfp-form');
+    var submit = document.getElementById('bf-submit');
+    var feedback = document.getElementById('bf-feedback');
+    if (!form || !submit || !feedback) return;
+
+    function setFeedback(state, msg) {
+        feedback.classList.remove('is-success', 'is-error');
+        if (state) feedback.classList.add('is-' + state);
+        feedback.textContent = msg || '';
+    }
+
+    form.addEventListener('submit', function (ev) {
+        ev.preventDefault();
+        setFeedback(null, '');
+
+        var fd = new FormData(form);
+        var name = (fd.get('name') || '').toString().trim();
+        var email = (fd.get('email') || '').toString().trim();
+        var phone = (fd.get('phone') || '').toString().trim();
+        var service = (fd.get('service_choice') || '').toString().trim();
+        var hours = (fd.get('hours_needed') || '').toString().trim();
+        var date = (fd.get('event_date') || '').toString().trim();
+
+        if (!name || !email || !phone || !service || !hours || !date) {
+            setFeedback('error', 'Please fill in your name, phone, email, the service options, and an event date.');
+            return;
+        }
+
+        var payload = new FormData();
+        payload.append('name', name);
+        payload.append('email', email);
+        payload.append('phone', phone);
+        payload.append('service_choice', service);
+        payload.append('hours_needed', hours);
+        payload.append('event_date', date);
+        payload.append('event_time', (fd.get('event_time') || '').toString());
+        payload.append('event_type', (fd.get('event_type') || '').toString());
+        payload.append('guest_count', (fd.get('guest_count') || '').toString());
+        payload.append('notes', (fd.get('notes') || '').toString());
+
+        submit.disabled = true;
+        var originalLabel = submit.textContent;
+        submit.textContent = 'Sending...';
+
+        fetch('/api/method/locally_twisted.www.balloon_twisting_and_face_painting.submit_btfp_booking', {
+            method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            body: payload,
+            credentials: 'same-origin'
+        })
+        .then(function (resp) { return resp.json().then(function (data) { return { status: resp.status, body: data }; }); })
+        .then(function (result) {
+            submit.disabled = false;
+            submit.textContent = originalLabel;
+            if (result.status >= 200 && result.status < 300 && result.body && result.body.message && result.body.message.ok) {
+                setFeedback('success', "Request received. We'll be in touch within 24 hours.");
+                form.reset();
+            } else {
+                var msg = (result.body && (result.body._server_messages || result.body.exception || result.body.message))
+                    || 'Something went wrong. Please call (801) 285-0860 or email hi@locallytwisted.com.';
+                if (typeof msg === 'string' && msg.indexOf('{') === 0) {
+                    try { msg = JSON.parse(msg).message || msg; } catch (e) {}
+                }
+                setFeedback('error', typeof msg === 'string' ? msg : 'Something went wrong. Please call (801) 285-0860 or email hi@locallytwisted.com.');
+            }
+        })
+        .catch(function (err) {
+            submit.disabled = false;
+            submit.textContent = originalLabel;
+            setFeedback('error', "We couldn't send the request. Please call (801) 285-0860 or email hi@locallytwisted.com.");
+            if (window.console && console.error) console.error('BTFP form submit failed', err);
+        });
+    });
+})();
+</script>
+
+{% endblock %}
