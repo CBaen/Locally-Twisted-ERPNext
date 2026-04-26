@@ -141,7 +141,10 @@ def verify_routes() -> None:
     """Probe webshop public URLs. Wait briefly for services to come up after restart."""
     print("\n=== Probe webshop routes ===")
     time.sleep(5)
-    routes = ("/shop", "/all-products", "/cart")
+    # /all-products is webshop's products listing; /shop-by-category its category index.
+    # /cart redirects to /login when no customer session (HTTP 301 is expected).
+    # The LT site will probably want /shop as a friendlier URL (custom website_route_rule).
+    routes = ("/all-products", "/shop-by-category", "/cart")
     for route in routes:
         result = run(
             ["curl", "-sS", "-o", "/dev/null", "-w", "%{http_code}",
@@ -151,7 +154,7 @@ def verify_routes() -> None:
         code = (result.stdout or "").strip()
         print(f"  {route}: HTTP {code}")
         if code in ("500", "502", "503"):
-            print(f"    ⚠  {route} returned {code} — check backend logs:")
+            print(f"    WARN  {route} returned {code} -- check backend logs:")
             print(f"       docker exec {container('backend')} tail -40 "
                   f"/home/frappe/frappe-bench/sites/{SITE}/logs/frappe.log")
 
