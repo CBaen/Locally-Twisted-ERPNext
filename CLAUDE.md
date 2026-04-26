@@ -7,9 +7,9 @@
 **Email:** hi@locallytwisted.com
 **Address:** 8969 S 2700 W, West Jordan, UT 84088
 **Website:** https://locallytwisted.com
-**Project type:** Odoo → ERPNext migration (backend, automations, portal, storefront, payments — end-to-end)
-**Status:** ACTIVE — in flight
-**Currently working on:** Phase 2 (Backend Models) — Lead schema customization done; next translations queued
+**Project type:** First professional business management system for Locally Twisted, built on ERPNext v15 (website, ecommerce, lead intake, operator workflow, invoicing, payments, accounting, payroll)
+**Status:** ACTIVE — frame reset 2026-04-26; new ROADMAP being drafted
+**Currently working on:** Reframe in progress (PROJECT-v2.md and ROADMAP-v2.md being drafted for review). Lead schema work in ERPNext at `:8081` is complete and stable — feeds into Phase 3 (Lead Intake) under the new roadmap.
 
 ## Local stack
 
@@ -68,11 +68,11 @@ The four reference surfaces above (failed Hetzner site, Odoo GitHub repo, local 
 - **Odoo GitHub repo** (`https://github.com/CBaen/locally-twisted-odoo`): will be **archived as read-only**. Useful for historical questions only; never cite as live state.
 - **Current `locallytwisted.com`** site: stays live until cutover, but is **damaged beyond repair** and out of scope for editing. After cutover, it will be replaced by the new ERPNext storefront at the same domain.
 
-**This new project must stand on its own.** Anything from the Odoo dir that applies to the new build has been (or will be) **copied here, scrubbed of Odoo references, and integrated into this folder's structure**. The canonical sources for the new build are:
+**This new project stands on its own.** Anything from the Odoo dir that applies to the new build has been **copied here, scrubbed of Odoo references, and integrated into this folder's structure**. The canonical sources for the new build are:
 
-- **Style guide:** `_resources/STYLE-GUIDE.md` (to be copied; for now, see `C:\Users\baenb\projects\locally-twisted-odoo\STYLE-GUIDE.md`)
-- **Business policies:** `_resources/policies/` — full set of LT's confirmed business rules and the legal interview answers
-- **Tax data + research:** `_resources/utah-tax-rates-2026q2.md` (to be copied)
+- **Style guide:** `_resources/STYLE-GUIDE.md` — design system, color palette, typography, components, voice (Quiet Confidence + blog Kindergarten Teacher), accessibility (WCAG 2.1 AA)
+- **Business policies:** `_resources/policies/` — full set of LT's confirmed business rules + the legal interview answers (sufficient for attorney to draft v1 contract)
+- **Tax data + research:** `_resources/utah-tax-rates-2026q2.md` — Utah destination-based sales tax research, per-jurisdiction rates
 
 **Rule for future instances:** if you find yourself reaching into the Odoo dir for something other than these copied resources, stop. The thing you need either lives here already, or it's not needed in the new build. When in doubt, ask GL.
 
