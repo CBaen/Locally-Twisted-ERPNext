@@ -135,50 +135,25 @@ def build_footer_items() -> list[dict]:
 
 
 def build_footer_address_html() -> str:
-    """The footer 'address' field renders as HTML at the top of the footer.
+    """The footer 'address' field renders as HTML in footer-info.
 
-    Frappe places this above the column links — perfect spot for the brand
-    wordmark, tagline, and social row. SVG icons inline so we don't need
-    Font Awesome / external icon dep.
+    Frappe HTML-sanitizes this field — it strips <path d=...> attributes from
+    inline SVGs (verified by inspection: rendered output has empty <path></path>).
+    Workaround: social icons rendered via CSS background-image data URIs,
+    keyed off class names on the <a>. Class names survive sanitization.
     """
     return """\
 <div class="lt-footer-brand-block">
   <div class="lt-footer-brand">Locally Twisted</div>
   <div class="lt-footer-tagline">Utah's balloon specialists since 1998</div>
   <ul class="lt-footer-social" aria-label="Locally Twisted on social media">
-    <li>
-      <a href="https://www.instagram.com/locally_twisted/" rel="noopener" aria-label="Instagram (opens in new tab)" target="_blank">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.8.2 2.3.4.6.2 1 .5 1.5 1s.8.9 1 1.5c.2.5.4 1.1.4 2.3.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.2 1.8-.4 2.3-.2.6-.5 1-1 1.5s-.9.8-1.5 1c-.5.2-1.1.4-2.3.4-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.8-.2-2.3-.4-.6-.2-1-.5-1.5-1s-.8-.9-1-1.5c-.2-.5-.4-1.1-.4-2.3C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8c.1-1.2.2-1.8.4-2.3.2-.6.5-1 1-1.5s.9-.8 1.5-1c.5-.2 1.1-.4 2.3-.4C8.4 2.2 8.8 2.2 12 2.2zm0 1.8c-3.2 0-3.5 0-4.7.1-1.1.1-1.7.2-2.1.4-.5.2-.9.4-1.3.8-.4.4-.6.8-.8 1.3-.2.4-.3 1-.4 2.1-.1 1.2-.1 1.5-.1 4.7s0 3.5.1 4.7c.1 1.1.2 1.7.4 2.1.2.5.4.9.8 1.3.4.4.8.6 1.3.8.4.2 1 .3 2.1.4 1.2.1 1.5.1 4.7.1s3.5 0 4.7-.1c1.1-.1 1.7-.2 2.1-.4.5-.2.9-.4 1.3-.8.4-.4.6-.8.8-1.3.2-.4.3-1 .4-2.1.1-1.2.1-1.5.1-4.7s0-3.5-.1-4.7c-.1-1.1-.2-1.7-.4-2.1-.2-.5-.4-.9-.8-1.3-.4-.4-.8-.6-1.3-.8-.4-.2-1-.3-2.1-.4-1.2-.1-1.5-.1-4.7-.1zm0 3.1a4.9 4.9 0 1 1 0 9.8 4.9 4.9 0 0 1 0-9.8zm0 8a3.1 3.1 0 1 0 0-6.2 3.1 3.1 0 0 0 0 6.2zm6.3-8.2a1.1 1.1 0 1 1-2.3 0 1.1 1.1 0 0 1 2.3 0z"/>
-        </svg>
-      </a>
-    </li>
-    <li>
-      <a href="https://www.facebook.com/locallytwisted" rel="noopener" aria-label="Facebook (opens in new tab)" target="_blank">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M22 12.07C22 6.51 17.52 2 12 2S2 6.51 2 12.07c0 5.02 3.66 9.18 8.44 9.93v-7.02H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.24.2 2.24.2v2.47h-1.26c-1.24 0-1.63.78-1.63 1.57v1.88h2.78l-.44 2.91h-2.34V22c4.78-.75 8.44-4.91 8.44-9.93z"/>
-        </svg>
-      </a>
-    </li>
-    <li>
-      <a href="https://www.pinterest.com/locallytwisted/" rel="noopener" aria-label="Pinterest (opens in new tab)" target="_blank">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12c0 4.24 2.64 7.85 6.36 9.31-.09-.79-.17-2.01.04-2.87.19-.78 1.21-4.94 1.21-4.94s-.31-.62-.31-1.54c0-1.44.84-2.52 1.88-2.52.89 0 1.32.67 1.32 1.47 0 .9-.57 2.24-.86 3.49-.25 1.05.52 1.9 1.55 1.9 1.86 0 3.29-1.96 3.29-4.79 0-2.5-1.8-4.25-4.37-4.25-2.98 0-4.73 2.23-4.73 4.54 0 .9.34 1.86.78 2.39.08.1.1.19.07.29-.08.32-.26 1.05-.29 1.2-.05.19-.15.24-.35.14-1.31-.61-2.13-2.51-2.13-4.04 0-3.29 2.39-6.31 6.89-6.31 3.62 0 6.43 2.58 6.43 6.02 0 3.59-2.27 6.49-5.42 6.49-1.06 0-2.05-.55-2.39-1.2 0 0-.53 2.01-.65 2.51-.24.92-.88 2.07-1.31 2.77.99.31 2.04.47 3.13.47 5.52 0 10-4.48 10-10S17.52 2 12 2z"/>
-        </svg>
-      </a>
-    </li>
-    <li>
-      <a href="https://twitter.com/locallytwisted" rel="noopener" aria-label="Twitter (opens in new tab)" target="_blank">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-        </svg>
-      </a>
-    </li>
+    <li><a class="lt-social lt-social--instagram" href="https://www.instagram.com/locally_twisted/" rel="noopener" target="_blank" aria-label="Instagram (opens in new tab)"></a></li>
+    <li><a class="lt-social lt-social--facebook" href="https://www.facebook.com/locallytwisted" rel="noopener" target="_blank" aria-label="Facebook (opens in new tab)"></a></li>
+    <li><a class="lt-social lt-social--pinterest" href="https://www.pinterest.com/locallytwisted/" rel="noopener" target="_blank" aria-label="Pinterest (opens in new tab)"></a></li>
+    <li><a class="lt-social lt-social--twitter" href="https://twitter.com/locallytwisted" rel="noopener" target="_blank" aria-label="Twitter (opens in new tab)"></a></li>
   </ul>
   <address class="lt-footer-address">
-    <a href="https://maps.google.com/?q=8969+S+2700+W+West+Jordan+UT" rel="noopener" target="_blank">
-      8969 S 2700 W<br>West Jordan, UT 84088
-    </a><br>
+    <a href="https://maps.google.com/?q=8969+S+2700+W+West+Jordan+UT" rel="noopener" target="_blank">8969 S 2700 W<br>West Jordan, UT 84088</a><br>
     <a href="tel:+18012850860">(801) 285-0860</a><br>
     <a href="mailto:hi@locallytwisted.com">hi@locallytwisted.com</a>
   </address>
@@ -196,9 +171,13 @@ def build_brand_html() -> str:
 
 
 def build_copyright_html() -> str:
-    """Copyright bar — accessibility link required by Phase 1 Slice 2 spec."""
+    """Copyright bar — accessibility link required by Phase 1 Slice 2 spec.
+
+    Frappe auto-prepends a "©" character to the copyright field when rendering,
+    so this value must NOT start with one — otherwise we get "© ©" duplication.
+    """
     return (
-        '© 2026 Locally Twisted &middot; '
+        '2026 Locally Twisted &middot; '
         '<a href="/accessibility">Accessibility</a> &middot; '
         '<a href="/refund-policy">Refund Policy</a>'
     )
