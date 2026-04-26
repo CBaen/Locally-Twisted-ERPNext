@@ -219,7 +219,7 @@ All spacing uses **8px increments**.
 ### Logo
 
 - Always links to homepage (`/`)
-- Odoo's `placeholder_header_brand` provides this by default — never override or unwrap the anchor
+- Whatever component renders the header brand, the brand element must remain a wrapping anchor — never strip the link
 
 ### Hero Carousel
 
