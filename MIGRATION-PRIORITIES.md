@@ -53,9 +53,11 @@ These are in priority order. Each must exist before LT goes live on Frappe. Each
 
 ---
 
-### Gate 1: HOW-TO-WIN-AT-FRAPPE Catalog
+### Gate 1: HOW-TO-WIN-AT-FRAPPE Catalog `[AGENCY-ONLY]`
 
-**What it gates:** Instance behavior in the first minutes of any Frappe session. Without this, every arriving instance rediscovers framework friction independently and band-aids it independently.
+**Portability:** Stays at `C:\Users\baenb\.claude\HOW-TO-WIN-AT-FRAPPE\`. Does not ship with the client repo. **The portable analog** is `<repo>/docs/framework-traps.md` (provided by the gate-kit template) — the client's own framework-trap catalog that travels with the codebase. Both files exist; they have different audiences.
+
+**What it gates:** Claude Code instance behavior in the first minutes of any Frappe session. Without this, every arriving instance rediscovers framework friction independently and band-aids it independently.
 
 **What it prevents:** The same failure curve that produced 76 Odoo lessons. The catalog does not prevent failures by itself (documentation alone fails — see AGENCY-WISDOM.md Finding 1) — it is the prerequisite for building Gates 2-4 correctly.
 
@@ -82,7 +84,9 @@ GL can verify by asking the arriving instance at the start of a session: "Name t
 
 ---
 
-### Gate 2: `frappe-pretooluse-gate.py` Hook
+### Gate 2: `frappe-pretooluse-gate.py` Hook `[AGENCY-ONLY]`
+
+**Portability:** Stays at `C:\Users\baenb\.claude\hooks\frappe-pretooluse-gate.py`. The hook fires only inside Claude Code; it has no meaning for a contractor using a normal IDE. **No portable analog** — this is a Claude-Code-instance-discipline gate, and contractors who don't have the instance don't have the failure mode.
 
 **What it gates:** The moment before dangerous Frappe actions. Requires an instance to have invoked the relevant skill before proceeding.
 
@@ -104,22 +108,26 @@ After the hook is built, ask the arriving instance to start a session and attemp
 
 ---
 
-### Gate 3: `frappe-deploy.py` Script
+### Gate 3: Deploy Orchestrator `[PORTABLE]`
+
+**Portability:** Lives at `<repo>/scripts/deploy.py`. Ships with the LT repo. The gate-kit template at `_TEMPLATES/client-repo-gate-kit/scripts/deploy.py` is the canonical version — copy from there during install. Travels cleanly to any owner; runs without any `~/.claude/` dependency.
 
 **What it gates:** Every production deployment. Without this, deployment is a manual sequence of bench commands documented in HANDOFF.md — a manual sequence gets skipped under session pressure.
 
 **What it prevents:** Auto-committed unreviewed code reaching production; deploy steps skipped; smoke test omitted under time pressure. [Lane 8 §Break 3; DA §Audit 8-C Gate 3; Proxy §Ask SW-4 item 5]
 
-**How it's built:** Create `scripts/frappe-deploy.py` at the LT Frappe root. Minimum viable version:
+**How it's built:** Copy from the template (`_TEMPLATES/client-repo-gate-kit/scripts/deploy.py`) into `<repo>/scripts/deploy.py`. Configure the `CONFIG` block at the top with the client's site name, URL, and form path. The template's deploy.py runs (in order):
 
-1. Verify a human-reviewed commit exists after the last auto-commit (this is the Layer C prevention that was never built on Odoo — it requires a human-authored git commit, not an `auto:` commit, before deployment proceeds)
-2. Run `bench migrate`
-3. Run `bench clear-website-cache`
-4. Run Playwright smoke test suite (Gate 4)
-5. Run Stripe invoice verification check (POST test payment, verify invoice created within 30 seconds)
-6. Report PASS or FAIL with per-step detail
+1. Pre-deploy gates (Migration broad-write lint, Schema parity check, Human-review commit check)
+2. The actual deploy (`bench migrate`, `bench clear-website-cache`, `bench build`)
+3. Post-deploy gates (Visual screenshot verification, Form smoke test)
 
-Block the deploy on smoke test failure. Do not make "continue anyway" an easy option.
+Each gate has its own exit code. Failure at any gate stops the deploy or fails the post-deploy verification. The orchestrator does not provide a "continue anyway" easy option — `--skip-pre` exists for emergencies but emits a loud warning.
+
+The template's deploy.py also bakes in **two additional portable gates** the original Gate 3 spec omitted:
+
+- **Schema parity check** at `<repo>/scripts/verify/schema_parity.py` — compares declared DocType fields against live DB columns. Catches the LT 2026-04-08 incident class (deploy a new field without migrating the column).
+- **Migration broad-write lint** at `<repo>/scripts/lint/migration_broad_write.py` — AST scan for `Document.search([]).write(...)` patterns and similar unfiltered mutations. Catches the LT 2026-04-23 19.0.2.13.0 migration class.
 
 **Verification test:**
 
@@ -129,18 +137,22 @@ Jeff can observe the same output during a joint session.
 
 ---
 
-### Gate 4: `smoke_forms.py` for the Frappe Booking Form
+### Gate 4: Form Smoke Test `[PORTABLE]`
+
+**Portability:** Lives at `<repo>/scripts/verify/smoke_forms.py`. Ships with the LT repo. Template version at `_TEMPLATES/client-repo-gate-kit/scripts/verify/smoke_forms.py`. Self-contained — uses Playwright (a standard pip-installable dependency); no agency tooling required.
 
 **What it gates:** Every deployment that touches a customer-facing form. Without this, the form can drop customer submissions silently for days before anyone notices. The /book form evidence: the form dropped submissions and the gap was only noticed because Jeff asked about missing leads. Build the smoke test on the day the booking form ships, not after.
 
 **What it prevents:** The LT /book form 10-day silent failure pattern on Frappe. [Proxy §SN-2; Lane 8 §Break 4; Convergence §PC-4]
 
-**How it's built:** Create `scripts/verify/smoke_forms.py`. At minimum:
+**How it's built:** Copy the template (`_TEMPLATES/client-repo-gate-kit/scripts/verify/smoke_forms.py`) into `<repo>/scripts/verify/smoke_forms.py`. Adapt the form-field selectors to the actual booking form. The template's smoke test:
 
-1. POST a test Lead via the booking form's REST API endpoint, with test data (name: "SMOKE TEST", marked with a test flag)
-2. Verify the Lead record exists in ERPNext CRM within 30 seconds
-3. Verify the acknowledgment email automation fired (check `Email Queue` for a record to the test address)
-4. Delete the test record after verification
+1. Navigates to the form URL via Playwright (headless)
+2. Verifies a `<form>` element exists (shape check; runs in CI without prod access via `--shape-only`)
+3. Fills the form with a unique test marker
+4. Submits and verifies the page response is not a blank-white-page (the LT 2026-04-22 silent-failure pattern)
+5. Queries the backend REST API to verify the test record was actually created
+6. Logs failure loudly with the specific failure mode named
 
 When checkout is wired (Stripe integration): add a Stripe test payment check as a separate step. Form smoke test and payment smoke test are different tests. Both must exist before the form and checkout go live. [DA §Audit 8-B Gate 4 — form and payment are not one gate]
 
@@ -150,9 +162,11 @@ After the smoke test runs, Jeff can verify by navigating to ERPNext CRM and chec
 
 ---
 
-### Gate 5: Human-Review Commit Requirement
+### Gate 5: Human-Review Commit Requirement `[PORTABLE]`
 
-**What it gates:** Auto-committed edits reaching production. The `post-write-hook.py` at `C:\Users\baenb\.claude\hooks\post-write-hook.py` applies to the LT Frappe project directory. Every Edit and Write auto-commits to git with `auto: {tool_name} {rel_path}`. Without this gate, the deploy script (Gate 3) would deploy from auto-commits.
+**Portability:** Implemented as a check inside `<repo>/scripts/deploy.py` (a portable file). The check inspects the most recent commit message and refuses to deploy if it starts with `auto:`. This means the gate works for any team using BBC's auto-commit workflow AND is a no-op for any team that doesn't (since their commits will all be human-authored). Travels cleanly. Does not break for non-Claude-Code owners.
+
+**What it gates:** Auto-committed edits reaching production. BBC's `post-write-hook.py` at `C:\Users\baenb\.claude\hooks\post-write-hook.py` applies to client project directories during BBC sessions. Every Edit and Write auto-commits to git with `auto: {tool_name} {rel_path}`. Without this gate, the deploy script (Gate 3) would deploy from auto-commits.
 
 **What it prevents:** Unreviewed migrations and server scripts reaching production. [DA §Audit 8-C Missing Gate 5; Proxy §Ask SW-4 item 5]
 
@@ -166,7 +180,9 @@ After the gate is built, start a session, make an edit, and attempt to deploy wi
 
 ---
 
-### Gate 6: Playwright Screenshot Before Any "Done" Claim on Visual Work
+### Gate 6: Playwright Screenshot Before Any "Done" Claim on Visual Work `[MIXED]`
+
+**Portability:** The screenshot **script** is `[PORTABLE]` — lives at `<repo>/scripts/verify/playwright_screenshot.py`, ships with the repo, runs without agency tooling. The CLAUDE.md **rule** that mandates running it before any "done" claim is `[AGENCY-ONLY]` — applies to Claude Code instances and lives in `<repo>/CLAUDE.md` (which contractors may or may not read). The portable layer of defense is the script itself, wired into `scripts/deploy.py` as the post-deploy visual gate. Even if a contractor never reads CLAUDE.md, the deploy will not pass without the screenshot succeeding.
 
 **What it gates:** The reporting-without-watching reflex at the completion boundary of every turn involving visual work. [DA §Audit 8-C Missing Gate 6; Proxy §Ask SW-4 item 6; Lane 5 §Pattern A]
 
