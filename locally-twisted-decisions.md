@@ -8,6 +8,34 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-04-26 (post-session research) — License posture clarified: ERPNext is GPL-3.0, Frappe is MIT, AGPL concern was Builder-specific (not installed)
+
+**Decision:** The expedition's Flag 8 raised an AGPL concern. Research + direct verification against `apps/<app>/license.txt` in the running LT stack establishes the actual license set:
+
+| App | License | Notes |
+|---|---|---|
+| frappe (Framework) | MIT | Custom code on Frappe sits closest to MIT territory |
+| erpnext | GPL-3.0 | Derivative-work exposure if our app derives from ERPNext internals |
+| webshop | GPL-3.0 | Same |
+| payments | MIT | No copyleft pressure |
+| locally_twisted (custom) | MIT | License placeholder in license.txt — owner field needs filling |
+
+**The AGPL claim was specifically about Frappe Builder** (a separate optional app) — NOT about ERPNext or Frappe Framework core. Builder is not installed on LT. The AGPL concern only re-applies if a future BBC client adopts Builder; it does not apply to LT's current stack.
+
+**Reasoning:** the expedition's Flag 8 left this ambiguous, and a downstream reading could have absorbed "ERPNext / Frappe might be AGPL." Direct verification corrects that. Our Build → Sell → Transfer model deals with GPL-3.0 derivative-work analysis (a more conventional, well-documented legal posture), not the AGPL network-use clause.
+
+**Operational consequence for LT specifically:**
+- Continue building `locally_twisted` as a Frappe-first custom app
+- Interact with ERPNext / Webshop via documented hooks, public APIs, DocType reads, NOT by editing core or subclassing internals
+- When Phase 4 (payments) wires up Stripe, that goes through the `payments` app's `Payment Gateway Account` DocType (MIT-licensed surface)
+- When the catalog seeds, query through Webshop's `Website Item` API (GPL-3.0 read), don't copy Webshop internals into our app
+
+**Open architectural question for the agency tier (not LT's call alone):** whether to split custom code into `agency_platform` (reusable) + `locally_twisted_connector` (thin adapter) for stronger license isolation. Tracked at `Built_by_Cameron/built-by-cameron-decisions.md` 2026-04-26 entry "License matrix verified..." Finding 3.
+
+**Decided by:** Perplexity research surfaced the license question; verification done by reading license files directly in the running LT container 2026-04-26. Codified at agency-tier conventions doc.
+
+---
+
 ## 2026-04-26 (session end) — Platform-direction question is OPEN; landing build approach was wrong on three counts
 
 **Decision:** No platform direction decided this session. The question is now explicitly on GL's desk for the next conversation.
