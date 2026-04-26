@@ -110,6 +110,38 @@ Canonical resources for the new build live in `_resources/` and are platform-agn
 
 ## Updates
 
+### 2026-04-26 (Slice 2 build session) — Slice 2 attempted, paused mid-execution; custom Frappe app scaffolded; meta-pattern documented
+
+This session produced more documentation than working code, by design. The instance attempting Slice 2 (header + footer) hit a cascade of Frappe / ERPNext quirks (sanitizer, CSS load order, navbar markup, footer height constraint) and band-aided each one with `!important` overrides instead of studying the framework's intended customization primitives. GL stopped the session after a sequence of confidently-wrong claims about visible state. The session pivoted from "build Slice 2" to "study the framework, document everything for the next instance, leave broken state honestly visible."
+
+**Code/infrastructure changes:**
+- Custom Frappe app `locally_twisted` scaffolded via `bench new-app` inside the backend container, copied to host at `apps/locally_twisted/`, and bind-mounted into 8 frappe-image services via `pwd.yml` (so future edits flow through and survive container recreations).
+- App installed on the LT site (`bench --site frontend install-app locally_twisted`).
+- Theme CSS migrated from `Website Settings.head_html` (push-via-API anti-pattern) to a real bundled asset at `apps/locally_twisted/locally_twisted/public/css/lt-theme.css`, registered via `web_include_css` in app's `hooks.py`.
+- LT logo PNG copied from Odoo source to `apps/locally_twisted/locally_twisted/public/icons/lt-logo.png` and wired via `Website Settings.brand_html`.
+- Social icons converted from inline-HTML SVGs (Frappe's HTML sanitizer was stripping `<path d=...>` attributes) to real SVG files in `apps/locally_twisted/locally_twisted/public/icons/{instagram,facebook,pinterest,twitter}.svg` referenced via CSS background-image.
+- Removed redundant `_resources/lt-theme.css` source-of-truth file; canonical is now the file in the app.
+- Updated `scripts/setup/setup_slice2_header_footer.py` to no longer push CSS to head_html (CSS is now served by the app).
+- Created `scripts/verify/playwright_home_screenshot.py` — Playwright-based real-browser screenshot capture at desktop + mobile viewports with DOM facts dump, replacing the lower-fidelity `chrome --headless --screenshot` pattern.
+
+**Documentation added:**
+- `_CLIENTS/locally-twisted/anti-gl-patterns.md` — new section 0 "Building before understanding the framework" with full receipt of this session.
+- `_CLIENTS/locally-twisted/lessons-learned.md` — 11 dated entries cataloging Frappe/ERPNext quirks (license casing, parent URL constraint, content_type field-routing, sanitizer, head_html cascade order, data URI silent failure, navbar-toggler markup, copyright auto-prepend, editable pip install lifecycle, the unresolved `.web-footer` height mystery).
+- `_CLIENTS/locally-twisted/HANDOFF.md` — full rewrite reflecting honest broken state.
+- `Built_by_Cameron/lessons-learned.md` — cross-client Frappe gotchas with a generalizable "study the source first" rule.
+- `Built_by_Cameron/.claude/capabilities/recipes/frappe-conventions.md` — agency-tier reference for Frappe v15 customization primitives, the right way to override theme CSS / navbar / footer / pages, and the v15 ecommerce surprise.
+- `_CLIENTS/locally-twisted/CLAUDE.md` + `Built_by_Cameron/CLAUDE.md` — added "Stack & code conventions" blocks pointing at the conventions reference.
+- `<memory>/jeff_trust_and_phase_1_demo_stakes.md` — project memory: Jeff knows about the Odoo attempt and lived its struggles; what he doesn't know is the full platform pivot to ERPNext.
+
+**Decisions logged (in `locally-twisted-decisions.md`):**
+- Custom Frappe app scaffolding moved from "deferred until critical mass" to "active build" status. Only Frappe Cloud cutover stays deferred until Phase 6.
+
+**Critical surprise discovered:** ERPNext v15 has NO built-in webshop / cart / checkout module. The v14 `e_commerce` module was extracted to a separate app at `https://github.com/frappe/webshop`. Phases 1.7-1.9 (products listing, product detail, cart) and Phase 4 (Stripe + invoicing) require installing that app as a hard dependency. Decision pending.
+
+**Known broken at session end:**
+- Slice 2's footer brand block / social icons / address / copyright bar render outside the painted Soft Blue area on white background due to `.web-footer`'s computed height being constrained to ~305 px. Root cause not yet identified.
+- Approved Odoo structure (two-tier centered-logo header, 3-column footer, 3 social icons, hours block, etc.) substantively differs from what's currently wired up.
+
 ### 2026-04-26 (late) — Phase 1 Slice 1 done; reframe complete; image set generated
 
 - Project reframed from "Odoo → ERPNext migration" to "First professional business platform for LT, built on ERPNext" (PROJECT.md, ROADMAP.md, HANDOFF.md, STATE.md, queue, decisions log, all corresponding sections of CLAUDE.md updated)
