@@ -35,6 +35,13 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 
 - [P2] **Persist the nginx Origin patch across container recreation.** Currently applied via `docker exec` in `scripts/fix/patch_nginx_socketio_origin.py` and only survives until the frontend container is recreated. Cleaner long-term: docker-compose override that mounts a custom `frappe.conf` with the pass-through line. Acceptable to defer since recreations are rare in local dev.
 
+- [P1] **Extract Frappe/ERPNext patterns from this session to agency capabilities + lessons.** During Phase 1 Slice 2 build, hit ~8 reusable Frappe v15 / ERPNext-specific patterns that future BBC clients on the same stack will rediscover otherwise. After Slice 2 ships, write:
+  - `Built_by_Cameron/.claude/capabilities/recipes/frappe-website-shell-setup.md` — recipe bundling Website Settings configuration (`top_bar_items`, `footer_items`, `brand_html`, `address`, `copyright`, `head_html`) with the gotchas inline.
+  - Append cross-client entries to `Built_by_Cameron/lessons-learned.md` for the high-bite gotchas (Web Page `content_type` field-mapping trap, HTML sanitizer stripping SVG path data, head_html cascade-order vs Frappe bundles, Frappe auto-prepending © on copyright, navbar-toggler markup divergence from Bootstrap).
+  Source material: this LT session's transcripts + `_resources/lt-theme.css` + `scripts/setup/setup_slice2_header_footer.py`.
+
+- [P2] **Tidy the "Waiting on GL" queue section.** Every item in that section is already resolved per `locally-twisted-decisions.md` (2026-04-26 entries) and `HANDOFF.md`. Delete per the queue convention: "When an item is completed, DELETE it from this file."
+
 ## Blocked
 
 *nothing*
