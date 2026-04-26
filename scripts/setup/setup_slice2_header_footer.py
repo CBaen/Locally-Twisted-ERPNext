@@ -274,7 +274,11 @@ def ensure_home_web_page(session: requests.Session) -> None:
                 "published": 1,
                 "show_title": 0,
                 "main_section": main_section_html,
-                "content_type": "HTML",
+                # Rich Text content_type tells Frappe to render `main_section`
+                # as raw HTML inside the article. content_type="HTML" expects
+                # `main_section_html` instead and silently renders blank if you
+                # only set main_section.
+                "content_type": "Rich Text",
                 "show_sidebar": 0,
                 "dynamic_route": 0,
             }
