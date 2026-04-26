@@ -24,7 +24,8 @@
 
 **What doesn't work yet:**
 - 6 of 9 Odoo models still need translation (next: `res_partner`, `product_template`, `project_task`, `calendar_event`, `hr_expense`, `res_config_settings`)
-- `gusto_service` and `twilio_service` not implemented (Phase 3 work — abstract service classes, not DocTypes)
+- `twilio_service` not implemented (Phase 3 work — abstract service class, not DocType)
+- Native payroll: ERPNext HRMS module to be configured post-cutover (agency-wide standard 2026-04-26)
 - 15–17 base.automations not ported (Phase 3)
 - Utah tax (16 rates + 105 fiscal positions) not ported (Phase 3)
 - Portal not built (Phase 4)

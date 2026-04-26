@@ -19,8 +19,9 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 - [P0] **Translate `project_task.py`** — 14 custom fields. Target ERPNext: Custom Fields on Task DocType. Pattern follows `translate_crm_lead.py`.
 - [P0] **Translate `calendar_event.py`** — 1 computed field. Target ERPNext: Custom Field + Server Script on Event DocType.
 - [P0] **Translate `hr_expense.py`** — 12 lines, minor extension. Target ERPNext: Custom Fields on Expense Claim DocType.
-- [P0] **Translate `res_config_settings.py`** — Twilio + Gusto credential fields. Target ERPNext: new Single DocType "LT Settings" with the credential fields, accessed via `frappe.db.get_single_value('LT Settings', '...')`.
-- [P0] **Implement `twilio_service` and `gusto_service`** — these are NOT new DocTypes (per 2026-04-26 decision). Implement as Python helpers in a future LT custom Frappe app, or as Server Scripts hooked to relevant events. Defer until Phase 3 (Automations) is in flight, since they're called BY automations.
+- [P0] **Translate `res_config_settings.py`** — Twilio credential fields only (Gusto fields dropped per 2026-04-26 directive). Target ERPNext: new Single DocType "LT Settings" with the credential fields, accessed via `frappe.db.get_single_value('LT Settings', '...')`.
+- [P0] **Implement `twilio_service`** — NOT a new DocType (per 2026-04-26 decision). Implement as Python helper in a future LT custom Frappe app, or as Server Script hooked to relevant events. Defer until Phase 3 (Automations) is in flight, since it's called BY automations.
+- [P2] **Configure ERPNext HRMS for native payroll** — replaces legacy Gusto integration (agency-wide standard 2026-04-26). Defer until post-cutover; salary structures, payroll periods, direct deposit, etc. North Peak (accountant) needs heads-up that payroll moves off Gusto.
 
 ### Open iterations on already-translated work
 

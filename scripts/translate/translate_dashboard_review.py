@@ -11,7 +11,7 @@ Stdlib only (urllib + json) — no `pip install` required.
 
 Pattern proven here is the on-ramp for the remaining model translations:
   - 7 standard-extension models (just need Custom Fields, not new DocTypes)
-  - 2 more custom domain models (gusto_service.py, twilio_service.py)
+  - 1 more custom domain model (twilio_service.py)
 
 Author: Trellis (Opus 4.7), 2026-04-25 evening.
 """

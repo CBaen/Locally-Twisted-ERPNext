@@ -48,7 +48,7 @@ The `research/extended-expedition-off-odoo-replacement/inventory-findings.md` fi
 
 - **Module use matrix** (28 Odoo modules, Active/Stub/Unused classification with evidence file:line citations) [VERIFIED: read file directly]
 - **Custom model field tables** for `crm.lead` (13 fields) and `project.task` (14 fields) [VERIFIED]
-- **Integration topology** (Stripe, Cloudflare, Hetzner, Google OAuth, Twilio, Gusto) [VERIFIED]
+- **Integration topology** (Stripe, Cloudflare, Hetzner, Google OAuth, Twilio) [VERIFIED]
 - **Quantification counts**: ~30,103 lines of code, 14 migration scripts, 16 snippets, 9 custom models, 4 security groups, 24 record rules, 17 automations (actual count is 15 — see discrepancy note below), 12 email templates, 16 tax rates + 105 fiscal positions [VERIFIED by direct file inspection]
 - **Production failure class catalog** (9 failure classes with lesson counts)
 - **What carries vs what doesn't** for migration

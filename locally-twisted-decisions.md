@@ -8,13 +8,33 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
-## 2026-04-26 — `gusto_service.py` and `twilio_service.py` are NOT new DocTypes — they're abstract service classes
+## 2026-04-26 (later) — All clients default to ERPNext native payroll; Gusto removed from project scope
 
-**Decision:** When the Phase 2 translation reaches `gusto_service.py` and `twilio_service.py`, do NOT create new DocTypes for them. They were `models.AbstractModel` in Odoo (no records, only methods bound to a model namespace for `env["..."].method()` invocation). The Frappe-equivalent is Python helper functions inside a custom Frappe app, OR Server Scripts bound to a hook — not a DocType.
+**Decision:** All Built by Cameron client builds default to ERPNext's native HRMS / Payroll module. Gusto is removed from the LT ERPNext-side project scope: no Gusto credential fields in `res_config_settings`, no `gusto_service` Python helper, no Gusto CSV export job. The legacy Odoo `gusto_service.py` keeps running on the production Hetzner host until cutover (untouched per the read-only rule); on the new ERPNext system, payroll is handled natively.
 
-**Reasoning:** HANDOFF.md and the queue claimed "3 custom domain models need new DocTypes" — counting `dashboard_review` (done), `gusto_service`, `twilio_service`. Reading the actual sources confirmed that only `dashboard_review` stores records. The other two are stub-and-ready service abstractions: Gusto reads `account.analytic.line` and writes a CSV; Twilio reads `ir.config_parameter` for credentials and calls the Twilio SDK. Both have config-param-backed credentials (Settings UI in Odoo). In Frappe these become Python utility modules referencing Frappe's equivalent (`frappe.db.get_single_value('LT Settings', '...')`).
+**Reasoning:** GL directive 2026-04-26: "All clients will default to the ERP's native payroll. Please delete anything labeled 'Gusto.'" Removing Gusto eliminates one third-party integration to learn, configure, document, and hand off. ERPNext HRMS supports salary structures, payroll periods, leave, attendance, and direct deposit out of the box; whatever Gusto did, ERPNext can do without an external service. Fewer moving parts = less to break + simpler transfer to Jeff.
 
-**Alternatives considered:** Create empty DocTypes that hold nothing and exist just to namespace the methods (rejected — pointless, breaks the Frappe pattern). Skip Twilio + Gusto entirely (rejected — they're Phase 2 scope; just need to be implemented at the right layer).
+**Alternatives considered:** Keep Gusto on ERPNext side as a CSV-export Server Script (rejected — perpetuates the "outsource payroll to Gusto" pattern, which the agency standard now overrides). Defer the decision until Phase 3 (rejected — cleaner to delete now than carry it forward through every planning artifact).
+
+**What this means in practice:**
+- `res_config_settings.py` translation drops the `gusto_*` fields; only `twilio_*` credentials carry over.
+- The `gusto_service.py` Odoo helper is NOT translated.
+- A future phase (post-cutover) installs Frappe HRMS and configures it for LT.
+- The accountant (North Peak) needs to be told payroll moves from Gusto-import to ERPNext native; that's a Phase 9 conversation, not now.
+
+**Supersedes:** the earlier 2026-04-26 entry that treated `gusto_service` as Phase 3 scope. The earlier entry has been rewritten to cover only `twilio_service`.
+
+**Decided by:** GL directive 2026-04-26.
+
+---
+
+## 2026-04-26 — `twilio_service.py` is NOT a new DocType — it's an abstract service class
+
+**Decision:** When the Phase 2 translation reaches `twilio_service.py`, do NOT create a new DocType for it. It was `models.AbstractModel` in Odoo (no records, only methods bound to a model namespace for `env["..."].method()` invocation). The Frappe-equivalent is Python helper functions inside a custom Frappe app, OR Server Scripts bound to a hook — not a DocType.
+
+**Reasoning:** HANDOFF.md and the queue originally claimed "3 custom domain models need new DocTypes" — counting `dashboard_review` (done), `twilio_service`, and (formerly) `gusto_service`. Reading the actual sources confirmed that only `dashboard_review` stores records. `twilio_service` is a stub-and-ready service abstraction: it reads `ir.config_parameter` for credentials and calls the Twilio SDK. In Frappe it becomes a Python utility module referencing `frappe.db.get_single_value('LT Settings', '...')`.
+
+**Alternatives considered:** Create an empty DocType that holds nothing and exists just to namespace the methods (rejected — pointless, breaks the Frappe pattern). Skip Twilio entirely (rejected — SMS notifications are real product scope).
 
 **Decided by:** Trellis-successor (this session), 2026-04-26, after reading the actual model files. Documents the correction so the next instance doesn't re-introduce the wrong assumption.
 
