@@ -1,6 +1,6 @@
 # LT Website + Ecommerce — Page-by-Page Build Index
 
-**Status:** DRAFT v1, 2026-04-26. Awaiting GL review.
+**Status:** v2 — GL-confirmed 2026-04-26. All open questions resolved. Build order locked.
 
 **Scope:** Customer-facing website + ecommerce + payment process only. NOT operator workflow, NOT lead intake (those are Phase 2/3). The point of this index is to lock the build approach BEFORE writing code, so we don't repeat the override-the-framework mistake.
 
