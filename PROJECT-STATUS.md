@@ -1,131 +1,137 @@
 # Locally Twisted — Project Status
 
-**Repo:** `git init` 2026-04-26 at `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted` (separate from BBC agency repo per the 2026-04-26 isolation rule)
-**Tech:** ERPNext v15.105.0 + Frappe v15 (bundled in Docker image), MariaDB 11.8, Redis 6.2, nginx — running via `frappe_docker` upstream + custom port pinning
-**Purpose:** Migrate Locally Twisted's business platform from Odoo → ERPNext, with isolation/transferability built in.
+**Repo:** `git init` 2026-04-26 at `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted`. Pushed to `https://github.com/CBaen/Locally-Twisted-ERPNext`. Separate from BBC agency repo per the agency isolation rule.
+**Tech:** ERPNext v15.105.0 + Frappe v15 (bundled in Docker image), MariaDB 11.8, Redis 6.2, nginx — running via `frappe_docker` upstream + custom port pinning.
+**Purpose:** Build LT's first professional business management system — website, ecommerce, lead intake, operator workflow, invoicing, payments, accounting, payroll. End-to-end, on ERPNext v15.
+**Owner:** Jeff Kimber.
 
 ---
 
 ## Current State
 
 **What works:**
-- LT ERPNext v15.105.0 running locally at `http://localhost:8081`
+- ERPNext v15.105.0 running locally at `http://localhost:8081`
 - WSL2 tuned: 8 GB RAM, 4 CPU, swap 2 GB, dropcache (`C:\Users\baenb\.wslconfig`)
 - `pwd.yml` pinned to `frappe/erpnext:v15.105.0`
 - LT Company record exists with full contact info (phone, email, website, address, tagline, Services domain)
-- 3 active Users: Administrator, Cameron Paul (System Manager), Jeff Kimber (System Manager, pre-created for transfer — currently mis-labeled as "Jeff Baen" in ERPNext, queued to fix)
-- 1 placeholder User: Jeff Kimber (`locallytwisted@yahoo.com`) — created by an earlier wizard run, awaiting GL decision (delete/rename/keep)
+- 2 active System Manager users: Cameron Paul (`cameron@builtbycameron.com`), Jeff Kimber (`locallytwisted@gmail.com`, pre-created for transfer to Frappe Cloud)
+- 1 disabled placeholder user (`locallytwisted@yahoo.com`) — wizard-generated phantom; disabled rather than deleted for reversibility
 - LT Address record linked to Company (West Jordan HQ)
 - Fiscal Year 2026 (Jan 1 – Dec 31)
 - Chart of Accounts: Standard with Numbers
-- 2 custom DocTypes ported: `Dashboard Reviewed Item`, `LT Service Type` (+ `LT Lead Service Type` child + `LT Lead Photo` child)
-- `Lead` DocType extended with 46 Custom Fields + relabeled standard qualification fields, "Additional Information" tab hidden
+- 3 LT-specific DocTypes: `Dashboard Reviewed Item`, `LT Service Type` (+ `LT Lead Service Type` child + `LT Lead Photo` child)
+- `Lead` DocType extended with 45+ Custom Fields, plain-language relabels of standard qualification fields, "Additional Information" tab hidden, file upload to 25 MB
 - nginx Origin pass-through patched on the LT frontend container (socket.io now works)
+- **Phase 1 Slice 1 done — brand foundation theme** installed via `Website Settings.head_html`. Source-of-truth at `_resources/lt-theme.css` (7159 bytes — fonts, color palette, spacing, buttons, forms, focus indicators). Verified in served HTML.
+- **Resources pre-positioned for Phase 1 build:** `_resources/STYLE-GUIDE.md`, `_resources/policies/` (6 business-policy files), `_resources/utah-tax-rates-2026q2.md`, `_resources/images/` (15 brand-aligned placeholder images via FLUX.1-schnell).
 
-**What doesn't work yet:**
-- 6 of 9 Odoo models still need translation (next: `res_partner`, `product_template`, `project_task`, `calendar_event`, `hr_expense`, `res_config_settings`)
-- `twilio_service` not implemented (Phase 3 work — abstract service class, not DocType)
-- Native payroll: ERPNext HRMS module to be configured post-cutover (agency-wide standard 2026-04-26)
-- 15–17 base.automations not ported (Phase 3)
-- Utah tax (16 rates + 105 fiscal positions) not ported (Phase 3)
-- Portal not built (Phase 4)
-- Storefront rebuild not started (Phase 5)
-- Payments not wired (Phase 7)
-- Verification harness not built (Phase 8)
+**What's next:**
+- Phase 1 Slice 2 (header + footer) — unblocked, ready to build
+- Phase 1 Slices 3–9 (landing page, BTFP service page with embedded pricing calculator, contact, blog framework + posts, legal pages, products, cart) — all unblocked
 
-**Known bugs:** None yet — nothing built that's broken.
+**Known bugs:**
+- `LT Lead Photo` child DocType exists and `lt_section_photos` Section Break exists on Lead, BUT the Table field connecting them was never created (iter 4 step F failed silently). Section heading shows on the Lead form with nothing under it. Tied to the deferred Inspiration Photos UX decision.
 
 ---
 
 ## Architecture Decisions
 
-See `locally-twisted-decisions.md` for full reasoned log. Summary table:
+See `locally-twisted-decisions.md` for the full reasoned log. Summary:
 
-| Date | Decision | Reasoning |
-|------|----------|-----------|
-| 2026-04-26 | LT lives at `_CLIENTS/locally-twisted/` with its own git repo | Per the agency isolation rule — transferability is the load-bearer of project value |
-| 2026-04-26 | GSD execution mode for translations: direct script-write-and-run | Trellis's burnt-tokens drift was the receipt; planner-checker loops on mechanical work add no value |
-| 2026-04-26 | All clients default to ERPNext native payroll (HRMS) — agency standard | Removes a third-party integration; ERPNext has full native payroll |
-| 2026-04-26 | `twilio_service` is NOT a new DocType — abstract service class | Stores no records in Odoo; in Frappe becomes Python helpers / Server Scripts |
+| Date | Decision | Why |
+|------|----------|-----|
+| 2026-04-26 | Project reframed: "first professional business platform," not "Odoo migration" | Jeff was never told the prior Odoo attempt happened; migration framing leaks that context |
+| 2026-04-26 | Phase 1 = customer-facing site + storefront (the proof point) | If ERPNext can't deliver this, GL pivots before building backend |
+| 2026-04-26 | Pricing calculator embedded in BTFP service page (no standalone /pricing) | Customers on the service page are already asking the cost question |
+| 2026-04-26 | Header navigation Option B: single What-We-Make + occasion landing pages | Eliminates SEO duplication, customer confusion, mega-menu mobile complexity |
+| 2026-04-26 | Accessibility statement Option B: brief intent-only + actually meeting WCAG 2.1 AA | Avoids warranty-claim risk while preserving good-faith protection |
+| 2026-04-26 | Blog: ship framework + live posts in Phase 1 (not deferred) | Adds Phase 1 substance; the "Kindergarten Teacher" voice is a brand asset |
+| 2026-04-26 | Photography: 15 placeholders generated via Together API FLUX.1-schnell | Real photos arrive in a future iteration; placeholders close the visual gap |
+| 2026-04-26 | All clients default to ERPNext native HRMS payroll (agency standard) | One less third-party integration; simpler transfer |
+| 2026-04-26 | Drop standalone About + Services index pages | Info distributes; About summary lands on contact page |
+| 2026-04-26 | All policy + brand resources live in `_resources/` (scrubbed of platform refs) | Project must stand alone; Odoo dir will be retired |
 | 2026-04-25 | ERPNext v15.105.0 pinned (latest stable v15 patch) | Past Stripe-broken window; latest patch on a mature line |
 | 2026-04-25 | Local Docker for build, Frappe Cloud Sites plan ($5/mo) for prod | Local is free + breakable; Frappe Cloud is managed + transferable per-site |
-| 2026-04-25 | Skip Phase 1 entirely (use existing off-Odoo expedition inventory) | Phase 1 was elaborate planning that never produced code — drift |
-| 2026-04-25 | Build everything locally first; defer bench/transfer concerns | Build the *thing* before the *packaging* — GL explicit |
-| 2026-04-25 | Don't modify anything in `locally-twisted-odoo/` | GL explicit; preserves Odoo deploy gates and trust history with Jeff |
+| 2026-04-25 | Don't modify anything in `locally-twisted-odoo/` | Read-only reference; will be retired post-cutover |
 
-## Research Archive
+## Reference Disposition (per CLAUDE.md)
 
-| Topic | Location | Status |
-|-------|----------|--------|
-| Off-Odoo replacement candidates (5-researcher extended expedition, MODERATE confidence) | `C:\Users\baenb\projects\locally-twisted-odoo\research\extended-expedition-off-odoo-replacement\` | DONE — drives PROJECT.md framing; recommended ERPNext |
-| Phase 1 Inventory research (gap-fill against the off-Odoo expedition) | `.planning\phases\01-inventory\01-RESEARCH.md` | KEEP for reference |
-| Phase 1 Validation strategy + threat model | `.planning\phases\01-inventory\01-VALIDATION.md` | KEEP — threat model still applicable when INV-02 reactivates near cutover |
+The four reference surfaces are temporary and will be retired. Future instances must NOT assume any of them exist:
+
+| Surface | Disposition |
+|---|---|
+| Local Odoo clone (`C:\Users\baenb\projects\locally-twisted-odoo\`) | Will be archived to GitHub and removed from disk |
+| Failed Hetzner deployment (`http://5.78.136.133/`) | Will be decommissioned after Phase 1 demo |
+| Odoo GitHub repo (`https://github.com/CBaen/locally-twisted-odoo`) | Will be archived as read-only |
+| Current `locallytwisted.com` site | Damaged beyond repair; replaced at cutover |
+
+Canonical resources for the new build live in `_resources/` and are platform-agnostic.
 
 ## Key Files
 
 | File | Purpose |
 |------|---------|
-| `CLAUDE.md` | Client project rules, voice & language, reading order |
+| `CLAUDE.md` | Client project rules, voice & language, reading order, Reference Disposition |
 | `HANDOFF.md` | Instance-to-instance handoff (overwrite, ~40 lines) |
 | `PROJECT-STATUS.md` | This file — current state, architecture decisions, dated update log |
 | `lessons-learned.md` | Append-only project lessons (LT-specific) |
-| `anti-gl-patterns.md` | Project-local anti-pattern catalog (peer register, GL doesn't read) |
+| `anti-gl-patterns.md` | Project-local instance-authored anti-pattern catalog |
 | `locally-twisted-decisions.md` | Append-only decision log with reasoning |
 | `locally-twisted-queue.md` | Active work queue (delete completed items) |
 | `locally-twisted-index.md` | Pointer index for client artifacts |
-| `.planning/PROJECT.md` | GSD source-of-truth |
-| `.planning/ROADMAP.md` | 10 phases with success criteria |
-| `.planning/REQUIREMENTS.md` | 13 v1 requirements with REQ-IDs and traceability |
+| `_resources/STYLE-GUIDE.md` | Design system source-of-truth |
+| `_resources/policies/INDEX.md` + 6 policy files | Business policies (legal interview answers + 5 supporting rules) |
+| `_resources/utah-tax-rates-2026q2.md` | Utah destination-based sales tax research |
+| `_resources/images/INDEX.md` + 15 placeholder PNGs | Phase 1 image set |
+| `_resources/lt-theme.css` | Brand foundation CSS (installed in ERPNext via `Website Settings.head_html`) |
+| `.planning/PROJECT.md` | Source-of-truth project context, requirements, decisions |
+| `.planning/ROADMAP.md` | 6 workflow-centric phases |
+| `.planning/REQUIREMENTS.md` | Requirements with REQ-IDs and traceability |
 | `.planning/STATE.md` | Current execution pointer |
-| `.planning/config.json` | GSD config |
-| `scripts/setup/setup_lt_company.py` | One-shot wizard completion + LT company seeding |
-| `scripts/translate/translate_dashboard_review.py` | Dashboard Reviewed Item DocType (Trellis pattern proof) |
-| `scripts/translate/translate_crm_lead.py` | Initial 42 Custom Fields on Lead |
-| `scripts/fix/fix_crm_lead_multiselect.py` | iter 2: Table MultiSelect + depends_on |
-| `scripts/fix/fix_crm_lead_match_book_form.py` | iter 3: align with live /book form |
-| `scripts/fix/fix_crm_lead_iteration_3.py` | iter 3 follow-on: reorder, AM/PM, Delivery Window |
-| `scripts/fix/fix_crm_lead_iteration_4.py` | iter 4: Time fieldtype, photos, label renames, hide Additional Info tab, +25MB upload |
-| `scripts/fix/fix_lead_photo_thumbnail.py` | Attempted thumbnail (blocked by Frappe; reverted) |
-| `scripts/fix/patch_nginx_socketio_origin.py` | nginx /socket.io/ Origin pass-through patch (run via docker cp + exec) |
+| `.planning/decisions/header-navigation.md` | Phase 1 decision brief — option B chosen |
+| `.planning/decisions/accessibility-statement.md` | Phase 1 decision brief — option B chosen |
+| `.planning/phases/01-customer-site-and-storefront/PLAN.md` | Phase 1 slice plan (all gates resolved) |
+| `scripts/setup/setup_lt_company.py` | One-shot wizard completion + LT Company seeding (reusable on fresh installs) |
+| `scripts/translate/translate_crm_lead.py` + 4 fix scripts | Built the active Lead schema (done; reference for how to use Frappe API) |
+| `scripts/fix/patch_nginx_socketio_origin.py` | nginx Origin pass-through patch (re-run after container recreation) |
 
 ## Rules
 
-- **Build everything locally first.** No bench/Frappe-Cloud/transfer work until there's something real to ship. (GL explicit, 2026-04-25)
-- **`locally-twisted-odoo/` is read-only reference.** Do not modify any file there from this project. (GL explicit, 2026-04-25)
-- **No deployment-tier work right now.** Production DB read, SSH paths, Frappe Cloud signup — all deferred. The work is the REBUILD.
-- **Voice & Language: plain language, no jargon.** See `CLAUDE.md`.
-- **Trust constraint inherited from `feedback_odoo_deployment_trust.md`.** Verify before claiming done. Repeat-failure is project-killing.
+- **Reframe is locked.** This is a NEW BUILD on ERPNext, not a migration. No artifact should re-introduce migration framing.
+- **Stealth on the verdict.** Jeff knows there's an audit; he doesn't know the conclusion. Internal docs stay internal until Phase 1 is demo-ready.
+- **`_resources/` is canonical.** Anything from the Odoo dir that applies has been copied + scrubbed. Don't reach back into the Odoo dir for new content.
+- **Voice & Language.** Plain language, no jargon. See `_resources/STYLE-GUIDE.md` voice section.
+- **Verify in UI before claiming done.** GL has caught bugs by opening the form themselves. Take screenshots; don't self-report.
+- **Loud failure rule.** Per global rule. Every form / cross-system handoff / external API call must fail loudly and be observable.
 
 ---
 
 ## Updates
 
+### 2026-04-26 (late) — Phase 1 Slice 1 done; reframe complete; image set generated
+
+- Project reframed from "Odoo → ERPNext migration" to "First professional business platform for LT, built on ERPNext" (PROJECT.md, ROADMAP.md, HANDOFF.md, STATE.md, queue, decisions log, all corresponding sections of CLAUDE.md updated)
+- Reference Disposition section added to CLAUDE.md — Odoo dir, Hetzner deployment, GitHub Odoo repo, current `locallytwisted.com` all documented as temporary references that will be retired
+- Resources brought into the project from the Odoo dir + scrubbed of platform-specific references: `_resources/STYLE-GUIDE.md`, `_resources/utah-tax-rates-2026q2.md`, `_resources/policies/` (6 files including the legal interview answers from Jeff's contract-design sessions)
+- **Phase 1 Slice 1 — brand foundation — DONE.** LT theme CSS (DM Serif Display + Raleway, full color palette as CSS variables, 8px spacing scale, button + form + card + section + thin-band patterns, focus-visible outline, prefers-reduced-motion) installed via `Website Settings.head_html`. Verified in served HTML head.
+- All Phase 1 decision gates resolved (header nav B, accessibility B, blog yes, photography placeholders, customer-inquiry email = locallytwisted@gmail.com, pricing calc embedded in BTFP page)
+- 15 brand-aligned placeholder images generated via Together API FLUX.1-schnell (~$0.05). Mapped slot → file → use in `_resources/images/INDEX.md`
+- ERPNext user records cleaned: `locallytwisted@gmail.com` renamed "Jeff Baen" → "Jeff Kimber" (Baen was Cameron's middle name that got tangled); `locallytwisted@yahoo.com` placeholder disabled (reversible)
+- Agency-tier capabilities added: `together-image-gen` ingredient + `generate-client-image-set` recipe (transferable to any future BBC client) at `Built_by_Cameron/.claude/capabilities/`
+- Stale artifacts deleted: `.planning/phases/01-inventory/` (research from old framing), empty `Locally-Twisted-Frontend/`
+
 ### 2026-04-26 — Restructure: BBC root → agency-level; LT lives in `_CLIENTS/locally-twisted/`
 
-- All LT-specific artifacts (`.planning/`, `scripts/`, decisions, queue, lessons, anti-patterns, HANDOFF) moved from BBC root into this folder
-- `git init` here for separate transferable repo
-- BBC root refactored to be agency-level (rules across all clients, port allocations, v15 standard, Voice & Language general rule)
-- `_CLIENTS/bbc-personal-website/` pre-staged as a separate client folder (BBC's own ERPNext install for agency-internal ops; not started)
+- All LT-specific artifacts moved from BBC root into this folder; LT got its own git repo
+- BBC root refactored to be agency-level (cross-client rules, port allocations, v15 standard, voice & language general rule)
 
-### 2026-04-26 — Phase 2 in flight: crm.lead translated, refined across 4 iterations
+### 2026-04-26 — Lead schema customization complete (carried into the new framing)
 
-- Initial translation: 42 Custom Fields on Lead with sectioned layout
-- iter 2: Multi-select via Table MultiSelect → "LT Service Type" + conditional sub-section visibility
-- iter 3: Realigned to live `/book` form spec; dropped 6 obsolete fields from older booking forms; +`custom_anything_else`
-- iter 4: Time fieldtype, +Delivery Window Start/End, +Internal Only Notes, +Inspiration Photos child, label renames via Property Setter, hidden "Additional Information" tab, max upload 25 MB
-- nginx /socket.io/ Origin pass-through patched (Trellis's earlier `bench set-config host_name` was incomplete; the actual culprit was nginx rewriting Origin to internal Docker hostname)
-- LT setup wizard finalized; Cameron + Jeff users + Jeff Kimber placeholder + Address + Company contact details all populated
-- 2 deferred items: photo thumbnail UX path; GL's "this is one Lead!" realization (no specific direction yet)
+- 45+ Custom Fields on Lead with sectioned layout, Table MultiSelect for Service Type, conditional sub-section visibility, Time fieldtype for time fields, +Delivery Window Start/End, +Internal Only Notes, +Inspiration Photos child table (table field connection bug — see Known Bugs), label renames via Property Setter, hidden "Additional Information" tab, max upload 25 MB
+- nginx /socket.io/ Origin pass-through patched
 
-### 2026-04-25 evening — GSD scaffolding done; Phase 1 skipped; ready to translate
+### 2026-04-25 — ERPNext install + setup wizard
 
-- Initialized GSD project (PROJECT.md, REQUIREMENTS.md, ROADMAP.md, STATE.md, config.json) via `/gsd-new-project`
-- Phase 1 (Inventory) plans created but never executed; pivot to "skip Phase 1" after GL named the drift
-- 6 Phase 1 plan files deleted; `01-RESEARCH.md` + `01-VALIDATION.md` retained
-- Two background planner agents from earlier session were spawned and killed when their work no longer fit GL's direction
-
-### 2026-04-25 day — ERPNext install + setup wizard
-
-- Installed LT ERPNext at `:8081` (compose project `locally-twisted-erpnext-v15`, frappe_docker pwd.yml pinned to v15.105.0); first business account created
-- Off-Odoo expedition findings located and read (5-researcher convergence; ERPNext recommended)
-- Frappe Cloud pricing verified: $5/mo Sites plan, self-service site transfer via Actions tab
+- Installed LT ERPNext at `:8081` (compose project `locally-twisted-erpnext-v15`, frappe_docker pwd.yml pinned to v15.105.0)
+- LT Company record seeded with real address, phone, email, website
+- Off-Odoo expedition findings reviewed (5-researcher convergence; ERPNext recommended)
