@@ -4,6 +4,24 @@
 **Source:** `C:\Users\baenb\projects\Built_by_Cameron\_TEMPLATES\client-repo-gate-kit\`
 **Verification doc:** `docs/offboarding-check.md` (10 steps; results below)
 
+## Round 2 update — 2026-04-26 (later same day)
+
+After GL reviewed the first install, four follow-ups landed in the same session:
+
+1. **Lint-scope fix at the agency template** (`Built_by_Cameron/_TEMPLATES/client-repo-gate-kit/scripts/deploy.py:gate_migration_lint()`) — the migration broad-write lint now reads `CONFIG["frappe_app_name"]` and scopes its glob to `apps/<app>/**/patches/**/*.py` so third-party bind-mounted apps (e.g. upstream `webshop`) are no longer swept. Backported to LT (`scripts/deploy.py:gate_migration_lint()`). After this fix, the LT lint sees 1 file (LT-authored) and exits PASS — the prior 2 webshop findings are correctly out of scope.
+2. **`framework-traps.md` section structure** — both files (template + LT) now split explicitly into "Agency baseline" (don't delete; fix at template) and "Client-specific traps" (append; do not propagate without proposal). Both sections render uniformly across clients and the divergence-without-process risk is reduced.
+3. **3 LT-specific traps added** to `docs/framework-traps.md` under the "Client-specific traps (Locally Twisted)" section: `Trap LT-1` (`.web-footer` band-aid `!important` chains masquerading as a framework constraint — Slice 2 receipt); `Trap LT-2` (nginx Origin patch is non-persistent across container recreation); `Trap LT-3` (`/book` form silent-failure pattern — the founding receipt for the loud-failure rule).
+4. **CI workflow renamed** in LT only: `.github/workflows/ci.yml` `name: gate-kit-ci` → `name: locally-twisted-ci`.
+
+**Verification after Round 2:** A human-review commit was made (`review: gate-kit personalization + agency template lint-scope fix`), then `python scripts/deploy.py --dry-run` was re-run. Result: all three pre-deploy gates **PASS**; exit code 0; "DRY RUN — STOPPING BEFORE DEPLOY". The kit is now fully green end-to-end for LT's current install state.
+
+**Updated gap list (since Round 1):**
+- Items 1, 4, 5, 6, 7, 8 from the original "What is NOT yet wired" list below are unchanged.
+- Item 2 (`/book` form smoke test) — still gated behind Phase 2 build; expected.
+- **Item 3 (lint scope) — RESOLVED** by the agency-template fix above. Kept for historical record but no longer an open gap.
+
+---
+
 ## What this is (plain language)
 
 A self-contained set of four framework-protective gates that ship inside this repo. They are designed to fire on every deploy and to keep firing if the repo ever leaves Built_by_Cameron — to a contractor, to Jeff Kimber, or to another agency. Together they protect against four classes of failure that happened on Locally Twisted's prior Odoo work: schema drift between code and database, unfiltered "rewrite everything" migrations, silent form failures (the /book 10-day silence pattern), and reporting visual work as "done" without observing it. A fifth check inside the deploy orchestrator refuses to deploy from auto-committed code so that nothing reaches production unreviewed. The kit has zero dependencies on `~/.claude/` or any agency tooling — `python scripts/deploy.py` runs cleanly on a fresh clone with `playwright` and `requests` installed.
