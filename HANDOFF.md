@@ -10,6 +10,16 @@ This session resolved three blockers from the prior session and installed the we
 
 **GL's standing directive (2026-04-26):** *"I don't want to fight Frappe or ERPNext. I want to work within it."* Every decision in this session is grounded in that. The next instance must, too.
 
+## Gate Kit Installed (2026-04-26 — Opus 4.7, separate session)
+
+The portable gate kit from `Built_by_Cameron/_TEMPLATES/client-repo-gate-kit/` is now in this repo at `scripts/deploy.py`, `scripts/lint/`, `scripts/verify/{schema_parity,smoke_forms,playwright_screenshot}.py`, `.github/workflows/ci.yml`, `docs/framework-traps.md`, `docs/offboarding-check.md`. Single entry point for production deploy is now `python scripts/deploy.py`. Full notes at `docs/GATE-KIT-INSTALL-NOTES.md` (sources read appendix included).
+
+**What works today:** orchestrator runs all gates with explicit per-gate PASS/SKIP/FAIL; visual gate captures live LT home; `bench`-dependent schema gate skips gracefully on the host; `migration_broad_write` lint scans patches/migrations.
+
+**Deploy ritual added:** the human-review-commit gate refuses to deploy from `auto:`-prefixed commits. Before any production deploy, write a human-authored commit (e.g. `git commit --allow-empty -m "review: <pre-deploy summary>"`).
+
+**Known gaps tracked in `locally-twisted-queue.md`** under "Gate-kit follow-ups": no `requirements.txt`, lint sweeps third-party webshop code (2 findings to triage), production URL TBD until cutover, CI `STAGING_URL` secret unset.
+
 ## What was done this session
 
 1. **Webshop installed and made durable.** `frappe/webshop` + its hard dependency `frappe/payments` are installed on the `frontend` site and bind-mounted into all 8 frappe-image services via `pwd.yml`. Reproducible install: `python scripts/setup/install_webshop.py` (no flags = re-pip-install + restart, run after any container recreation).

@@ -40,6 +40,15 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 
 - [P2] **Persist the nginx Origin patch across container recreation.** Currently applied via `docker exec` in `scripts/fix/patch_nginx_socketio_origin.py` and only survives until the frontend container is recreated. Cleaner long-term: docker-compose override that mounts a custom `frappe.conf` with the pass-through line. Acceptable to defer since recreations are rare in local dev.
 
+### Gate-kit follow-ups (added 2026-04-26 by gate-kit install — see `docs/GATE-KIT-INSTALL-NOTES.md`)
+
+- [P1] **Add `requirements.txt` at repo root.** Currently `playwright` and `requests` are install-time prerequisites for the gate kit but not declared anywhere. Minimum: `playwright>=1.40` and `requests>=2.31`. Decision needed: where does this file sit relative to bind-mounted Frappe apps and their own deps? Resolves "fresh clone" install friction.
+- [P1] **Triage `migration_broad_write.py` lint scope.** Current pattern `**/patches/**/*.py` sweeps third-party `apps/webshop/webshop/patches/` and finds 2 real `get_all()`-without-filters calls. Pick (a) restrict the lint to LT-authored paths (e.g., `apps/locally_twisted/**/patches/**/*.py`) — recommended, the gate's purpose is to protect *our* code — or (b) add `# noqa: broadwrite` to the upstream lines after one-time review. Until resolved, `python scripts/deploy.py --dry-run` always FAILs the migration_lint gate.
+- [P2] **Document the human-review-commit deploy ritual in `scripts/README.md`.** The gate at `scripts/deploy.py:gate_human_review_commit()` refuses to deploy when HEAD's commit message starts with `auto:`. Routine remediation: `git commit --allow-empty -m "review: <pre-deploy summary>"` before running deploy. Add a one-line note to `scripts/README.md` under operational rituals.
+- [P2] **Set `STAGING_URL` secret in GitHub repo settings + uncomment the CI form-shape step.** `.github/workflows/ci.yml` lines 35-36 are commented out pending a staging URL. Ships staging-form-shape verification on every PR once enabled. Defer until staging exists.
+- [P3] **At cutover (Phase 6): flip `scripts/deploy.py` `CONFIG["site_url"]` and `smoke_test_screenshot_paths`.** Currently `http://localhost:8081`; production URL TBD (likely `https://locallytwisted.com` or new subdomain). TODO comments in code mark both spots.
+- [P3] **Wire `/book` smoke test the day Phase 2 ships.** `CONFIG["smoke_test_form_path"] = "/book"` is parked. The form smoke test will FAIL until the form exists; that's expected. Add `/book` to `smoke_test_screenshot_paths` at the same time.
+
 
 ## Blocked
 
