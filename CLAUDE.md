@@ -8,8 +8,8 @@
 **Address:** 8969 S 2700 W, West Jordan, UT 84088
 **Website:** https://locallytwisted.com
 **Project type:** First professional business management system for Locally Twisted, built on ERPNext v15 (website, ecommerce, lead intake, operator workflow, invoicing, payments, accounting, payroll)
-**Status:** ACTIVE — frame reset 2026-04-26; new ROADMAP being drafted
-**Currently working on:** Reframe in progress (PROJECT-v2.md and ROADMAP-v2.md being drafted for review). Lead schema work in ERPNext at `:8081` is complete and stable — feeds into Phase 3 (Lead Intake) under the new roadmap.
+**Status:** ACTIVE — Phase 1 (customer site + storefront) in flight. Frame reset 2026-04-26 is complete; PROJECT.md and ROADMAP.md are the new framing.
+**Currently working on:** Phase 1, Slice 2 (header + footer) was attempted 2026-04-26 and paused mid-build after the responsible instance band-aided framework friction with `!important` overrides; the visible state is broken-honest. The framework-study path forward (read Frappe website source → use intended primitives → replicate approved Odoo structure via Jinja partial overrides) is the active work. The `webshop` app install (required for Slices 7-9 + Phase 4) is also active. Lead schema in ERPNext is complete and stable — feeds Phase 2 (Lead Intake).
 
 ## Local stack
 
