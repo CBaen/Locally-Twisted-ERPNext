@@ -36,3 +36,10 @@ sites/*/public/files/
 
 # Cookie jars created by translation scripts (curl -c /tmp/lt_cookies)
 *_cookies
+
+# Upstream frappe_docker clone (reproducible from upstream + v15.105.0 pin in CLAUDE.md)
+# Has its own .git/; nginx Origin patch lives in scripts/fix/patch_nginx_socketio_origin.py
+Locally-Twisted-Backend/
+
+# Empty placeholder; reserved for future frontend assets
+Locally-Twisted-Frontend/
