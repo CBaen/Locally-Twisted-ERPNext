@@ -188,9 +188,15 @@ After the gate is built, start a session, make an edit, and attempt to deploy wi
 
 **What it prevents:** The Slice 2 footer "declared done" while rendering invisibly. The form fixes "done" before production verification. The Frappe equivalent of the 19.0.2.13.0 crash in front of Jeff.
 
-**How it's built:** The `playwright_home_screenshot.py` script already exists in the LT Frappe tree. Change its status from optional to mandatory. In the LT Frappe `CLAUDE.md`, add a rule to the verification section: "Before any claim that visual work is done, run the Playwright screenshot script and confirm the screenshot shows the expected state. If the screenshot cannot be run, name this explicitly rather than claiming done."
+**How it's built:** Copy the template (`_TEMPLATES/client-repo-gate-kit/scripts/verify/playwright_screenshot.py`) into `<repo>/scripts/verify/playwright_screenshot.py`. The template version also includes structural checks beyond just screenshotting:
 
-The goal is to make the screenshot step the natural next move after visual work, not an afterthought.
+- Page body must not be empty (catches blank-white-page silent failures)
+- Page must have stylesheets loaded (catches asset bundle silent failure — the LT and TME pattern)
+- Screenshot is saved to a timestamped folder for visual review
+
+The template version is wired into `scripts/deploy.py` as the post-deploy visual gate. The deploy fails if the screenshot gate fails. Even if the LT-Frappe CLAUDE.md rule is never read by a future owner, the deploy enforces the visual check.
+
+In the LT Frappe `CLAUDE.md`, also add the rule to the verification section: "Before any claim that visual work is done, run the Playwright screenshot script and confirm the screenshot shows the expected state. If the screenshot cannot be run, name this explicitly rather than claiming done." The goal is to make the screenshot step the natural next move after visual work, not an afterthought — for the agency-side discipline. The portable layer (deploy.py wiring) catches the failure even when the rule isn't followed.
 
 **Verification test:**
 
@@ -254,6 +260,27 @@ Every form, cascade, and integration in the LT Frappe build must have the same l
 
 ---
 
+## Part 7: Client Offboarding Check
+
+**Run this check at install time (after the gate kit is copied into the LT repo) AND before any handoff** (to a contractor, to Jeff, or to another agency). The check verifies the kit's portability promise: the four `[PORTABLE]` gates must run without any `~/.claude/` dependency.
+
+**Step-by-step verification** is documented at `_TEMPLATES/client-repo-gate-kit/docs/offboarding-check.md`. Once the kit is installed in `<repo>/`, the same file is at `<repo>/docs/offboarding-check.md` and travels with the repo.
+
+**Pass criteria summary:**
+
+1. `grep -rn "\.claude" scripts/ docs/ .github/` returns zero non-comment results
+2. `python scripts/lint/migration_broad_write.py` exits 0 (PASS) or surfaces concrete findings
+3. `python scripts/verify/schema_parity.py --site SITE` either passes or skips gracefully
+4. `python scripts/verify/smoke_forms.py --base-url URL --form-path /book --shape-only` passes
+5. `python scripts/verify/playwright_screenshot.py --base-url URL --paths /` passes
+6. `python scripts/deploy.py --dry-run` reports each gate's status and exits 0
+7. `.github/workflows/ci.yml` parses as valid YAML
+8. `docs/framework-traps.md` exists and contains substantive content
+
+**If any of those fail at handoff time, do not hand off until the failure is fixed.** The kit's deliverable promise is that a contractor on a fresh laptop, with no Built_by_Cameron tooling, can clone the repo and run `python scripts/deploy.py` to deploy this client's work — including all framework-protective gates — without anything breaking due to a missing agency dependency. A failed offboarding check means that promise is broken.
+
+---
+
 ## Part 6: Two Outstanding LT-Odoo Issues Before Frappe Cutover
 
 These were flagged by the GL Proxy as requiring attention before the Odoo-to-Frappe cutover. The next LT-Odoo instance should address them. [Proxy §Section 4, doc parity audit]
@@ -290,3 +317,5 @@ Verification: navigate to `/blog` on the live LT site from an incognito browser 
 | `lane8-frappe-prediction-retro.md` | [Incomplete: lines 370-447 of 448 total] |
 
 *Synthesis Writer, 2026-04-26. Six gates, in priority order. Verification tests written for GL/Jeff observability. No new findings — every item traces to the lane(s) that support it.*
+
+*Revised 2026-04-26 (later same day) by GL's portability question. Gates split into `[PORTABLE]` (4 gates ship with the client repo) and `[AGENCY-ONLY]` (2 gates stay with BBC). New Part 0 establishes the architectural constraint. New Part 7 adds the offboarding check. Reusable template at `C:\Users\baenb\projects\Built_by_Cameron\_TEMPLATES\client-repo-gate-kit\` carries the four portable gates as a copyable scaffold for every future client. The framework-traps catalog has both an agency version (`~/.claude/HOW-TO-WIN-AT-FRAPPE/`) and a portable version (`<repo>/docs/framework-traps.md`). When LT eventually ships to Frappe production, it ships with its own gates — and if Jeff ever takes the codebase elsewhere, the gates go with him.*
