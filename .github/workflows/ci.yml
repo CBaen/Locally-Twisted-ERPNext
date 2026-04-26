@@ -1,0 +1,40 @@
+name: locally-twisted-ci
+
+on:
+  pull_request:
+    branches: [main, master]
+  push:
+    branches: [main, master]
+
+jobs:
+  lint:
+    name: Migration broad-write lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run migration lint
+        run: python scripts/lint/migration_broad_write.py
+
+  form-shape:
+    name: Form shape check (no production access)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install playwright
+        run: |
+          pip install playwright
+          playwright install chromium
+      - name: Run form shape check against staging
+        # Uncomment when STAGING_URL secret is set in GitHub repo settings.
+        # if: secrets.STAGING_URL != ''
+        # run: python scripts/verify/smoke_forms.py --base-url ${{ secrets.STAGING_URL }} --form-path /book --shape-only
+        run: |
+          echo "STAGING_URL secret not configured. Skipping form shape check."
+          echo "To enable: set STAGING_URL in GitHub repo settings > Secrets > Actions"
+          echo "Then uncomment the 'if' and 'run' lines above."

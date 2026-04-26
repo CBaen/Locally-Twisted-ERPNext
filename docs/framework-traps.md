@@ -121,6 +121,46 @@ This file is split into two sections:
 
 ---
 
+## Client-specific traps (Locally Twisted)
+
+These have been observed in the LT build itself. They are receipts, not predictions.
+
+### Trap LT-1: `.web-footer` band-aid `!important` chains masquerading as a framework constraint
+
+**Status:** OBSERVED — receipt: 2026-04-26 Slice 2 build session; resolved entry in `lessons-learned.md`; `apps/locally_twisted/locally_twisted/public/css/lt-theme.css` lines 477-526 (the chains that need stripping).
+
+**Mechanism:** During Slice 2, a footer rendering issue was observed (`.web-footer` computed bounding box ~305px while child `.container` was 755px — Soft-Blue band cut off after one row). The responsible instance attributed the gap to a Frappe framework `max-height` constraint and added `!important` chains to LT's `lt-theme.css` to "win the cascade." The actual cause was the LT theme's earlier `!important` overrides interacting with body's flex sticky-footer pattern. There is no max-height rule in Frappe's `footer.scss`. The fix is to remove the band-aid chains and override the footer Jinja partials at `apps/locally_twisted/locally_twisted/templates/includes/footer/`, not to add more CSS overrides.
+
+**Defense:** Before adding `!important` to override Frappe styling, read the actual Frappe SCSS source inside the running container (`docker exec -it <frappe-svc> cat /home/frappe/frappe-bench/apps/frappe/frappe/public/scss/website/footer.scss`). If the rule you're fighting is not actually there, the friction is coming from your own code.
+
+**Verification:** `grep -rn "!important" apps/locally_twisted/locally_twisted/public/css/` should return zero results once Slice 2 is redone correctly. GL's directive 2026-04-26: *"Work WITHIN Frappe and ERPNext, don't fight them."*
+
+---
+
+### Trap LT-2: nginx Origin patch is non-persistent across container recreation
+
+**Status:** OBSERVED — receipt: HANDOFF.md 2026-04-26 ("nginx Origin patch... Re-applied this session post-recreate"); fix script at `scripts/fix/patch_nginx_socketio_origin.py`.
+
+**Mechanism:** A correct browser-direct localhost setup requires nginx to receive the right `Origin` header for SocketIO upgrades. The default `frappe_docker` nginx config does not pass it through. The patch is currently applied via `docker exec` editing the container's nginx config — which means the patch is lost on every `docker compose up --force-recreate`, every container respawn, and every image upgrade. Without the patch, real-time UI features fail silently against `http://localhost:8081`.
+
+**Defense:** After every `docker compose up --force-recreate` (or any container respawn): run `python scripts/fix/patch_nginx_socketio_origin.py`. Long-term: replace the docker-exec patch with a docker-compose override that bind-mounts a custom `frappe.conf` containing the pass-through line. Tracked as P2 in `locally-twisted-queue.md` ("Persist the nginx Origin patch...").
+
+**Verification:** After container respawn, `curl -I http://localhost:8081/socket.io/` should return a 200 or 101 (not 502). `Access-Control-Allow-Origin: http://localhost:8081` should appear on responses.
+
+---
+
+### Trap LT-3: `/book` form silent-failure pattern (the founding receipt for the loud-failure rule)
+
+**Status:** VERIFIED — receipt: prior Odoo platform incident 2026-04-22 ("the /book form bug"). Documented in global `loud-failure.md` rule. The smoke test gate (`scripts/verify/smoke_forms.py`) exists specifically to prevent this on the new ERPNext build.
+
+**Mechanism:** On the prior Odoo platform, customers filled in the booking form. Odoo's website form widget crashed on init with `TypeError: Cannot read properties of null`. The browser fell back to a plain HTML POST. The server returned `text/html` with an empty body. The customer saw a blank white page. No CRM lead was created. No acknowledgment email fired. Jeff was not notified. The form dropped customer submissions for ~10 days before Jeff asked about missing leads. **None of this was visible to Jeff until he asked** — every customer who hit this form had no way to reach him during the silence.
+
+**Defense:** Build the new `/book` form (Phase 2 — Lead Intake) as custom HTML/Jinja with REST API submission, AJAX error handling, and the three-audience loud-failure check (user-visible error state, developer log entry, monitor alert). NEVER use the deprecated Frappe Web Form DocType (Trap 5 above). On the day the form ships, exercise `python scripts/verify/smoke_forms.py --base-url <url> --form-path /book` (full submission, not `--shape-only`) and confirm it creates a Lead in the backend.
+
+**Verification:** After deploy, `python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --form-path /book` exits 0 and reports `BACKEND VERIFIED — record exists`. In ERPNext UI: navigate to CRM > Lead and find the `SMOKE-TEST-<timestamp>` record created within the last 5 minutes.
+
+---
+
 ## Adding a new trap to this file
 
 When you find a framework trap not listed above:
@@ -132,6 +172,7 @@ When you find a framework trap not listed above:
    - `OBSERVED` — you saw it happen but cannot yet point at a primary source
 3. **Open a PR.** The trap catalog grows by review, not by silent edits.
 4. **Propose a defense and a verification.** A trap entry without a defense is incomplete.
+5. **Decide section:** is this client-specific (append to the LT section above), or does it apply to every BBC Frappe client (propose promotion to the agency template)?
 
 ---
 
