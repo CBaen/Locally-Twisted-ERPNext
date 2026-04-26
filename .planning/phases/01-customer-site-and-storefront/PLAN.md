@@ -12,19 +12,18 @@ Build order is sequential, but slices 6 (legal pages) and 9 (cart/checkout) can 
 
 | # | Slice | Dependencies | Decision gate? |
 |---|---|---|---|
-| 1 | Brand foundation (theme tokens, fonts, colors installed) | none | no |
-| 2 | Header + footer | Slice 1; **header navigation decision** | yes |
-| 3 | Landing page | Slices 1–2 | partial (depends on photography availability) |
-| 4 | Balloon Twisting + Face Painting service page | Slices 1–2 | no (carry-forward content) |
+| 1 | Brand foundation (theme tokens, fonts, colors installed) | DONE | no |
+| 2 | Header + footer | Slice 1 | no (nav option B locked) |
+| 3 | Landing page | Slices 1–2 | no (placeholders set) |
+| 4 | Balloon Twisting + Face Painting service page **with embedded pricing calculator** | Slices 1–2 | no (combined per GL 2026-04-26) |
 | 5 | Contact page (with brief about summary embedded) | Slices 1–2 | no |
 | 5b | Blog framework + first 2-3 live posts | Slices 1–2 | no (blog yes/no resolved 2026-04-26) |
 | 6 | Accessibility + Refund Policy + FAQ pages | Slices 1–2 | no (accessibility option B resolved 2026-04-26) |
-| 7 | Products listing (browse) | Slices 1–2; **header nav decision** | yes |
+| 7 | Products listing (browse) | Slices 1–2 | no (URL structure: `/shop/<product-type>/<slug>`) |
 | 8 | Individual product pages | Slice 7 | no |
 | 9 | Cart + checkout shell (Stripe stubbed until Phase 4) | Slice 8 | no |
-| (10) | Pricing calculator | Slices 1–2 | yes (in Phase 1 or defer?) |
 
-Slice 10 (pricing calculator) is conditional on a GL decision: include in Phase 1 or defer to a later phase.
+**No more standalone Slice 10.** GL's call 2026-04-26: the pricing calculator lives **embedded on the Balloon Twisting + Face Painting service page** (Slice 4). Customers learning about artist services see the price math right there — better placement than a separate /pricing URL.
 
 ## Slice 1 — Brand foundation
 
