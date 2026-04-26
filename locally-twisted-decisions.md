@@ -8,6 +8,31 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-04-26 (webshop install + framework study) — Webshop installed durably; "work within Frappe" is the standing principle
+
+**Decision:** Three reinforcing decisions taken in one session.
+
+1. **`frappe/webshop` and `frappe/payments` are installed on the LT site as durable infrastructure** — bind-mounted in `pwd.yml` into all 8 frappe-image services, gitignored at the project level (the install script is the source-of-truth for HOW we installed them, not the upstream code itself). Reproducible via `python scripts/setup/install_webshop.py`. Phase 1 Slices 7-9 (products + cart + checkout) and Phase 4 (payments) are unblocked.
+
+2. **"Work within Frappe, don't fight it" is the standing principle for all UI/template work.** GL directive 2026-04-26: *"I don't want to fight Frappe or ERPNext and their code. I want to work within it."* Operationalized as: use Jinja partial overrides (templates/includes/...) as the primary surface for header/footer/page customization; use `web_include_css` (loads after the bundle) or `website_theme_scss` (compiles into the bundle) for theme CSS; refuse `!important` chains as the receipt of fighting the framework; use Webshop's existing hooks for cart/checkout customization rather than replacing the cart pipeline.
+
+3. **The `.web-footer` height "constraint" was never a framework constraint.** Reading `apps/frappe/frappe/public/scss/website/footer.scss` in the running container confirmed there is no `max-height` rule. The previous instance's observation came from `lt-theme.css`'s own `!important` chain interacting with the body's flex-column sticky-footer pattern. The `.web-footer` block in `lt-theme.css` (lines 477-503) and the related `.web-footer ul/li/footer-group` blocks (505-526) should be removed before the Slice 2 redo. Documented in `lessons-learned.md` 2026-04-26 entry (RESOLVED) + agency `frappe-conventions.md` "Verified against source" appendix.
+
+**Reasoning:** Webshop install was already a known requirement (per the prior Slice 2 build session's queue + the agency capability). The install proved: (a) `bench get-app` requires `--skip-assets` to avoid the Node-not-in-image error; (b) `payments` is a hard `webshop` dependency missed in the original conventions doc; (c) `apps/` is NOT shared across frappe-image services in pwd.yml — each service needs its own bind-mount + editable pip install. All three discoveries are now in the agency conventions doc.
+
+The "work within Frappe" principle locks in what the previous Slice 2 attempt failed to do. It is non-negotiable going forward — the band-aid pattern doubles trust damage by inheriting brittle code into the next session.
+
+The `.web-footer` resolution unblocks the Slice 2 redo: the next instance can override the Jinja partial with their own structure (any class names, no inheritance from `.web-footer`'s SCSS) without needing to chase a phantom framework bug.
+
+**Alternatives considered:**
+- Skip webshop, run an external storefront (rejected — destroys the value of an integrated ERPNext build).
+- Bake webshop into a custom Docker image instead of bind-mounting (deferred to Phase 6 Frappe Cloud cutover work — bind-mount is consistent with the existing `locally_twisted` pattern).
+- Keep the `.web-footer` `!important` chains "just in case" (rejected — they actively interfere with the redo).
+
+**Decided by:** GL directive 2026-04-26 ("we want the workshop", "I don't want to fight Frappe or ERPNext and their code. I want to work within it") + framework verification by current session.
+
+---
+
 ## 2026-04-26 (Slice 2 build) — Custom Frappe app scaffolding is on; only Frappe Cloud cutover stays deferred
 
 **Decision:** Custom Frappe app scaffolding (`locally_twisted` as an installable app inside the local bench) is part of the active build, not deferred. What stays deferred until Phase 6 is the Frappe Cloud signup, production deployment, and transfer-to-Jeff machinery.

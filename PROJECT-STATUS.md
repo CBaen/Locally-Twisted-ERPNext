@@ -110,6 +110,31 @@ Canonical resources for the new build live in `_resources/` and are platform-agn
 
 ## Updates
 
+### 2026-04-26 (webshop install + framework study session) — Three blockers resolved; Slice 2 redo unblocked
+
+**What landed:**
+- **Webshop installed durably.** `frappe/webshop` + hard dependency `frappe/payments` cloned to `apps/`, bind-mounted into all 8 frappe-image services via `pwd.yml`, installed on the `frontend` site. `/all-products` returns HTTP 200; `/cart` returns HTTP 301 (redirect to login — expected for anonymous). Phase 1 Slices 7-9 + Phase 4 unblocked.
+- **Framework verification done.** Read Frappe's actual website module source in the running container (`apps/frappe/frappe/templates/includes/{footer,navbar}/`, `public/scss/website/`). Confirmed agency `frappe-conventions.md` claims; **resolved the `.web-footer` height "constraint" myth** (no `max-height` rule in Frappe's footer.scss — the previous observation came from `lt-theme.css`'s `!important` chain interacting with body's flex-column sticky-footer pattern). Slice 2 redo now unblocked.
+- **Webshop module mapped.** Documented which Jinja files to override for Slices 7-9 visual customization; cart-to-Quotation-to-Sales-Order-to-Payment-Request flow noted for Phase 4 Stripe wiring. All in the agency conventions doc.
+- **Reproducible scripts.** `scripts/setup/install_webshop.py` (handles fresh install, post-recreate re-pip-install, and verification). `scripts/dev/clear_website_cache.py` (cache-clear after editing Jinja/CSS). `scripts/README.md` indexes the full scripts dir.
+- **Bookkeeping cleanup.** `CLAUDE.md` "Currently working on" updated. `STATE.md` reflects actual progress (Slice 1 done, Slice 2 in flight). Queue's stale "Waiting on GL" section trimmed (Phase 1 gates were already resolved).
+- **Standing principle codified.** Per GL directive 2026-04-26: *"work WITHIN Frappe, don't fight it."* Captured in `locally-twisted-decisions.md` as the operating principle for all UI/template work going forward.
+
+**Code/infrastructure changes:**
+- `apps/payments/` and `apps/webshop/` cloned from upstream into project (gitignored — install script is source-of-truth for HOW we installed them)
+- `Locally-Twisted-Backend/frappe_docker/pwd.yml` — added bind-mount lines for `payments` + `webshop` next to existing `locally_twisted` lines (8 services × 2 apps = 16 new lines)
+- `.gitignore` updated for `apps/webshop/` and `apps/payments/`
+- nginx Origin patch re-applied post-recreate
+
+**Documentation added/updated:**
+- `Built_by_Cameron/.claude/capabilities/recipes/frappe-conventions.md` — added `payments` dependency note, `--skip-assets` install pattern, "Customizing webshop pages" primitive map, "Verified against source — 2026-04-26" appendix (with `.web-footer` myth correction)
+- `_CLIENTS/locally-twisted/lessons-learned.md` — `.web-footer` entry rewritten with RESOLVED status + root cause + path forward
+- `_CLIENTS/locally-twisted/HANDOFF.md` — full rewrite reflecting current state + Slice 2 redo plan
+- `_CLIENTS/locally-twisted/locally-twisted-decisions.md` — entry on webshop install + "work within Frappe" principle + `.web-footer` resolution
+- `_CLIENTS/locally-twisted/scripts/README.md` — new index of all scripts
+
+**Slice 2 visual state UNCHANGED.** The `lt-theme.css` `!important` chains and the Slice 2 setup script's `Website Settings` content from the prior session are still in place — broken-honest. The Slice 2 redo will (a) strip `!important` chains and (b) override Jinja partials. That redo is the next session's work.
+
 ### 2026-04-26 (Slice 2 build session) — Slice 2 attempted, paused mid-execution; custom Frappe app scaffolded; meta-pattern documented
 
 This session produced more documentation than working code, by design. The instance attempting Slice 2 (header + footer) hit a cascade of Frappe / ERPNext quirks (sanitizer, CSS load order, navbar markup, footer height constraint) and band-aided each one with `!important` overrides instead of studying the framework's intended customization primitives. GL stopped the session after a sequence of confidently-wrong claims about visible state. The session pivoted from "build Slice 2" to "study the framework, document everything for the next instance, leave broken state honestly visible."
