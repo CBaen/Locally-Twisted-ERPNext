@@ -43,3 +43,7 @@ Locally-Twisted-Backend/
 
 # Empty placeholder; reserved for future frontend assets
 Locally-Twisted-Frontend/
+
+# Scratch / one-off scaffolding (image generator script, throwaway HTML pulls)
+# The IMAGES go in _resources/images/ which IS committed.
+.scratch/
