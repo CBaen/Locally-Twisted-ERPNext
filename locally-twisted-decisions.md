@@ -8,6 +8,34 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-04-26 (Web Page tabs finding) — Per-page interactivity belongs in the DocType, not a custom Web Template
+
+**Decision:** All per-page interactivity (JavaScript, CSS, server-side data fetching) for one-off pages goes into the corresponding `Web Page` record's native tabs (`javascript`, `css`, `context_script`, `header`), NOT into a custom Web Template or a custom controller. Custom Web Templates are reserved for layouts that genuinely need cross-page reuse.
+
+**Reasoning:** GL surfaced this 2026-04-26 after noticing that the previous instance's homepage Web Page record (`/app/web-page/locally-twisted`) used only `main_section` (Rich Text) and ignored the Script + Style + Page Builder tabs. Reading the actual `Web Page` DocType schema confirmed the framework natively provides:
+- `javascript` (Code field) — per-page JavaScript at page load
+- `css` (Code field) + `insert_style` (Check) — per-page CSS
+- `page_blocks` (Table) — Page Builder for layout
+- `header` (HTML editor) — custom hero HTML
+- `context_script` (Code, Python) — server-side data fetching that injects into the Jinja context BEFORE render
+- Plus full meta-tag, breadcrumb, and sidebar control
+
+**Concrete impact on this project:**
+- The pricing calculator on the BTFP service page was classified as the only tier-4 piece in Phase 1 (per the v2 website-page-index.md). It now collapses to tier 1: Page Builder for static layout + `javascript` field for math + `css` field for styling. No custom Web Template, no hooks, no app code.
+- Phase 1 may have **zero tier-4 pieces**. Color swatches are the only remaining candidate, and even that may be reachable via `context_script` + a custom field on `Item Attribute Value`.
+- Future page builds (landing, BTFP, contact) all use the right tabs from the start. The previous instance's content-field-only pattern is a documented anti-pattern.
+
+**Alternatives considered:**
+- Custom Web Template per interactive page (rejected — strictly worse than using the DocType's native fields; more files, more breakage surfaces, no benefit).
+- Per-page `<script>` tags injected into `main_section_html` (rejected — works but harder to maintain than the dedicated `javascript` field; loses the structural separation Frappe provides).
+- Custom controller per page (rejected — `context_script` does this natively without registering a controller).
+
+**Generalizable to agency tier:** This decision motivated promoting "System-native first" to a standing principle at the top of `Built_by_Cameron/.claude/capabilities/recipes/frappe-conventions.md`, with a concrete rule: "before writing custom code, read the relevant DocType's full schema." Every BBC client benefits.
+
+**Decided by:** GL directive 2026-04-26 ("you can use java on these pages!") + framework verification by reading the Web Page DocType schema.
+
+---
+
 ## 2026-04-26 (webshop install + framework study) — Webshop installed durably; "work within Frappe" is the standing principle
 
 **Decision:** Three reinforcing decisions taken in one session.

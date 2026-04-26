@@ -43,7 +43,7 @@ The **goal of this index** is to push every page as low in the tier list as poss
 | Page | Tier | Native source | What we add | Notes |
 |---|---|---|---|---|
 | Homepage `/` | **2** | Web Page record with `content_type="Page Builder"` (`Website Settings.home_page = "home"`) | Build sections in Page Builder: hero, services snapshot, featured products, social proof, closing CTA. Use existing `_resources/images/`. Copy from style guide voice. | Page Builder gives us blocks for hero, columns, featured items, CTA bands. Theme CSS handles brand styling. |
-| Balloon Twisting + Face Painting service page `/balloon-twisting-and-face-painting` | **2 + small tier 4 (calculator)** | Web Page record with Page Builder | Brand the page with Page Builder blocks (H1, photo, body copy, FAQ accordion). **Pricing calculator is the tier-4 piece** (live JavaScript math, `aria-live` updates) — embedded in the page via a custom Web Template. | The calculator is real custom code. It's small (~80 lines of HTML + JS), self-contained, doesn't override anything Frappe owns. Acceptable tier 4. |
+| Balloon Twisting + Face Painting service page `/balloon-twisting-and-face-painting` | **1** (was tier 4 in v2 — recategorized 2026-04-26 after Web Page tabs finding) | Web Page record with all four tabs used: Page Builder, Script (`javascript`), Style (`css`), Header | Page Builder blocks for H1, photo, body copy, FAQ accordion. **Pricing calculator's HTML inputs go in a Page Builder HTML block; the live math goes in the page's `javascript` field; calculator-specific styling goes in the `css` field.** No custom Web Template, no app code. Pure DocType configuration. | See "Web Page native primitives" section below for the full tab map. |
 | Contact page `/contact` | **2** | Web Page record with Page Builder + Frappe's Web Form for the form itself | Page Builder blocks for the brief about summary + service area + contact info + map; Web Form handles the form fields, submission, lead creation, acknowledgment | **Web Form is Phase 2 work** when we wire it to `Lead`. For Phase 1, the page can render with a stub form that shows "thank you" on submit but doesn't yet create a Lead. |
 | FAQ `/faq` | **2** | Web Page record with Page Builder OR custom Web Template if we want JSON-LD FAQ schema | FAQ content from `_resources/policies/`. If we want rich-result FAQ schema, that's a small tier-4 (custom Web Template with schema markup). Otherwise tier 2. | Recommendation: tier 2 first, add schema markup later if SEO needs it. |
 | Refund Policy `/refund-policy` | **3** | Web Page record with `content_type="Rich Text"` | Plain HTML body from `_resources/policies/legal-interview-answers.md` | Pure content. No layout work. |
@@ -78,6 +78,28 @@ The **goal of this index** is to push every page as low in the tier list as poss
 | Utah city-based tax | **2 or 4** | ERPNext's `Sales Taxes and Charges Template` + `Tax Rule` DocTypes natively support tax rules by territory/city | Create Tax Rules per Utah city using `_resources/utah-tax-rates-2026q2.md`. **If Frappe's Tax Rule supports city-based matching natively → tier 1/2 (just data).** **If it requires custom logic → tier 4 (small custom function).** Need to verify. | Tier classification pending source-check. |
 | Invoice generation | **1** | ERPNext's `Sales Invoice` DocType auto-generates from Sales Order; native PDF rendering. | Configure invoice print format with LT brand. | Native. |
 | Late fee + Net 30 (corporate) | **1 or 4** | ERPNext has Payment Terms + Auto Repeat. May or may not natively support 10% simple late fee + manual override workflow. | Configure if native; small custom hook if not. | Phase 4 work, deferred until Phase 1 ships. Verify capability when we get there. |
+
+---
+
+## Web Page native primitives — the unlock that recategorizes the calculator
+
+GL surfaced this 2026-04-26: the previous instance edited the homepage Web Page (`/app/web-page/locally-twisted`) using only the **content field** (Rich Text → `main_section`). They missed the other tabs on the same DocType form. Reading the schema (`apps/frappe/frappe/website/doctype/web_page/web_page.json`) revealed:
+
+| Tab | Field | What it does |
+|---|---|---|
+| Content | `main_section` (Rich Text) / `main_section_html` / `main_section_md` / `page_blocks` (Page Builder) | Body content. Pick `content_type` carefully — wrong content_type silently empties the page. |
+| **Script** | `javascript` (Code field) | **Per-page JavaScript at page load.** Pricing calculators, form interactivity, dynamic UI live here. |
+| **Style** | `css` (Code field), `insert_style` (Check) | **Per-page CSS scoped to this page only.** Toggle `insert_style` to inject. |
+| Header and Breadcrumbs | `header` (HTML editor), `breadcrumbs` (Code), `dynamic_template` | Custom hero HTML + breadcrumb logic |
+| Settings | `show_sidebar`, `enable_comments`, `full_width` | Layout toggles |
+| Meta Tags | `meta_title`, `meta_description`, `meta_image`, `dynamic_route` | Per-page SEO |
+| **Context** | `context_script` (Code, Python) | **Server-side Python that runs BEFORE render.** Inject Jinja context vars without writing a controller. |
+
+**Implication for the LT plan:** the pricing calculator on BTFP, originally classified tier 4 ("custom Web Template required"), collapses to tier 1. Same JavaScript code, but it lives in the Web Page record's `javascript` field instead of in a Jinja template file. No app code, no template overrides, no hook registrations.
+
+**Phase 1 may have ZERO tier-4 pieces.** The only remaining tier-4 candidate is color swatches for the Latex Color attribute, and even that may be reachable via `context_script` + a custom field on `Item Attribute Value` (will verify during Step 3).
+
+**Standing pattern for any new page:** open the DocType `.json` schema first. Map the page's needs to the existing fields. Only escalate to a custom Web Template if the field set genuinely doesn't fit. (This rule is now codified at the top of the agency `frappe-conventions.md`.)
 
 ---
 
