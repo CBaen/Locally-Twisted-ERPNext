@@ -38,6 +38,13 @@ Usage:
                                                      # (only needed on first install ever — once
                                                      # the app is on the site, recreates need only
                                                      # the pip install + restart)
+  python scripts/setup/install_webshop.py --build-assets  # also: install Node+yarn (if missing)
+                                                     # and run `bench build` so webshop's
+                                                     # web.bundle.js and webshop-web.bundle.css
+                                                     # actually compile. Required after every
+                                                     # container recreation, since the apt-installed
+                                                     # node + system-PATH symlinks live in the
+                                                     # container's writable layer.
 
 Idempotent: safe to re-run.
 """
