@@ -1,0 +1,99 @@
+{# Locally Twisted navbar override.
+   Replaces apps/frappe/frappe/templates/includes/navbar/navbar.html
+   via same-path resolution in Frappe's ChoiceLoader.
+   Approved structure: two-tier desktop (utility strip + main nav),
+   single-row mobile with hamburger. Source: Odoo XML header.xml.
+#}
+<header class="lt-header">
+
+    {# Desktop: Tier 1 — utility bar (delivery left | logo center | login right) #}
+    <div class="lt-header__utility d-none d-lg-block">
+        <div class="container lt-header__utility-row">
+            <div class="lt-header__utility-left">
+                <span class="lt-header__truck" aria-hidden="true">&#x1F69A;</span>
+                <span>Bringing celebration to the Wasatch Front since 1998</span>
+            </div>
+
+            <a class="lt-header__brand" href="{{ home_page or '/' }}" aria-label="Locally Twisted home">
+                {%- if brand_html -%}
+                    {{ brand_html | safe }}
+                {%- else -%}
+                    <span class="lt-header__brand-fallback">Locally Twisted</span>
+                {%- endif -%}
+            </a>
+
+            <div class="lt-header__utility-right">
+                {% if frappe.session.user == "Guest" %}
+                    <a class="lt-header__util-link" href="/login">Sign In</a>
+                {% else %}
+                    <a class="lt-header__util-link" href="/me">Account</a>
+                    <a class="lt-header__util-link" href="/api/method/logout">Sign Out</a>
+                {% endif %}
+                <a class="lt-header__util-link lt-header__util-link--cart" href="/cart" aria-label="Cart">
+                    <span aria-hidden="true">&#x1F6D2;</span>
+                    <span class="lt-header__util-link-text">Cart</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {# Desktop: Tier 2 — main nav, centered #}
+    <nav class="lt-header__nav d-none d-lg-block" aria-label="Primary">
+        <div class="container lt-header__nav-row">
+            <ul class="lt-header__nav-list">
+                <li><a class="lt-header__nav-link" href="/">Home</a></li>
+                <li><a class="lt-header__nav-link" href="/all-products">What We Make</a></li>
+                <li><a class="lt-header__nav-link" href="/balloon-twisting-and-face-painting">Twisting &amp; Painting</a></li>
+                <li><a class="lt-header__nav-link" href="/shop-by-category">Browse by Occasion</a></li>
+                <li><a class="lt-header__nav-link" href="/contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    {# Mobile: single-row header with logo left, hamburger right.
+       The delivery strip appears below it, full-width. #}
+    <div class="lt-header__mobile d-lg-none">
+        <div class="container lt-header__mobile-row">
+            <a class="lt-header__brand lt-header__brand--mobile" href="{{ home_page or '/' }}" aria-label="Locally Twisted home">
+                {%- if brand_html -%}
+                    {{ brand_html | safe }}
+                {%- else -%}
+                    <span class="lt-header__brand-fallback">Locally Twisted</span>
+                {%- endif -%}
+            </a>
+            <button type="button"
+                    class="lt-header__toggle"
+                    data-toggle="collapse"
+                    data-target="#lt-mobile-nav"
+                    aria-controls="lt-mobile-nav"
+                    aria-expanded="false"
+                    aria-label="Open menu">
+                <img src="/assets/locally_twisted/icons/menu.svg" alt="" aria-hidden="true" width="24" height="24">
+            </button>
+        </div>
+        <div class="lt-header__mobile-strip">
+            <span class="lt-header__truck" aria-hidden="true">&#x1F69A;</span>
+            <span>Bringing celebration to the Wasatch Front since 1998</span>
+        </div>
+        <div class="collapse lt-header__mobile-nav-collapse" id="lt-mobile-nav">
+            <nav aria-label="Mobile primary">
+                <ul class="lt-header__mobile-nav-list">
+                    <li><a class="lt-header__mobile-nav-link" href="/">Home</a></li>
+                    <li><a class="lt-header__mobile-nav-link" href="/all-products">What We Make</a></li>
+                    <li><a class="lt-header__mobile-nav-link" href="/balloon-twisting-and-face-painting">Twisting &amp; Painting</a></li>
+                    <li><a class="lt-header__mobile-nav-link" href="/shop-by-category">Browse by Occasion</a></li>
+                    <li><a class="lt-header__mobile-nav-link" href="/contact">Contact</a></li>
+                    <li class="lt-header__mobile-nav-divider" role="separator"></li>
+                    {% if frappe.session.user == "Guest" %}
+                        <li><a class="lt-header__mobile-nav-link" href="/login">Sign In</a></li>
+                    {% else %}
+                        <li><a class="lt-header__mobile-nav-link" href="/me">Account</a></li>
+                        <li><a class="lt-header__mobile-nav-link" href="/api/method/logout">Sign Out</a></li>
+                    {% endif %}
+                    <li><a class="lt-header__mobile-nav-link" href="/cart">Cart</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+</header>
