@@ -13,7 +13,7 @@
 - WSL2 tuned: 8 GB RAM, 4 CPU, swap 2 GB, dropcache (`C:\Users\baenb\.wslconfig`)
 - `pwd.yml` pinned to `frappe/erpnext:v15.105.0`
 - LT Company record exists with full contact info (phone, email, website, address, tagline, Services domain)
-- 3 active Users: Administrator, Cameron Paul (System Manager), Jeff Baen (System Manager, pre-created for transfer)
+- 3 active Users: Administrator, Cameron Paul (System Manager), Jeff Kimber (System Manager, pre-created for transfer — currently mis-labeled as "Jeff Baen" in ERPNext, queued to fix)
 - 1 placeholder User: Jeff Kimber (`locallytwisted@yahoo.com`) — created by an earlier wizard run, awaiting GL decision (delete/rename/keep)
 - LT Address record linked to Company (West Jordan HQ)
 - Fiscal Year 2026 (Jan 1 – Dec 31)

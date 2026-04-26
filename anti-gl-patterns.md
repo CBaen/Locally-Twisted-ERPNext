@@ -76,7 +76,7 @@ If you find yourself in a planner-checker revision loop on a phase that hasn't m
 
 **The cost to GL.** Diluted focus. GL clarified twice: "I'm not sure why a rebuild of Locally Twisted from Odoo to ERPNext starts with talking about my one-person agency... the GSD project IS the LT migration. Lead correctly." Then later (2026-04-26 restructure): "BBC is my ERPNext/Frappe design agency. LT is a CLIENT of BBC."
 
-**Counter-move.** This client folder IS Locally Twisted. The headline of every doc here is LT. Built by Cameron is the *agency that built it for LT*, mentioned only in transfer/billing context, never as a project framing. When transferred to Jeff Baen, the BBC reference disappears entirely.
+**Counter-move.** This client folder IS Locally Twisted. The headline of every doc here is LT. Built by Cameron is the *agency that built it for LT*, mentioned only in transfer/billing context, never as a project framing. When transferred to Jeff Kimber, the BBC reference disappears entirely.
 
 ---
 

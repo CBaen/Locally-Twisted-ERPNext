@@ -9,7 +9,7 @@ After completion:
   - Company "Locally Twisted" exists with fiscal year 2026, USD, "Standard
     with Numbers" chart of accounts, Services domain
   - User "cameron@builtbycameron.com" exists as System Manager (developer)
-  - User "locallytwisted@gmail.com" exists as System Manager (Jeff Baen,
+  - User "locallytwisted@gmail.com" exists as System Manager (Jeff Kimber,
     pre-created so future Frappe Cloud transfer is clean)
   - Address "Locally Twisted HQ" linked to the Company with the West Jordan
     storefront address, phone, and contact email
