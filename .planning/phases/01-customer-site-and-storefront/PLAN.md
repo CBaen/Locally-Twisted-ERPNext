@@ -85,21 +85,43 @@ Build order is sequential, but slices 6 (legal pages) and 9 (cart/checkout) can 
 4. LocalBusiness JSON-LD is present and validates against schema.org
 5. Page title + meta description are unique and descriptive
 
-## Slice 4 — Balloon Twisting + Face Painting service page
+## Slice 4 — Balloon Twisting + Face Painting service page (with embedded pricing calculator)
 
-**Goal:** Carry forward the prior approved page content + visuals. This was already correct.
+**Goal:** Carry forward the prior approved page content + visuals AND embed the live pricing calculator in-page so customers can self-serve "what does this cost?" without emailing or calling. Per GL 2026-04-26: "the pricing calculator would be perfect for the face painting and balloon twisting page."
 
-**Scope:**
-- H1: "Balloon Twisting & Face Painting"
-- Two H2 sections: "Face Painting" / "Balloon Twisting"
-- "Tell us about your event" CTA (links to /book or contact form)
-- "Frequently Asked Questions" section pulling from `_resources/policies/`
-- Pricing per artist (no combination discount framing per `pricing-formula.md`)
+**Scope — page sections (top to bottom):**
+
+1. **H1 hero** — "Balloon Twisting & Face Painting" with `btfp-hero.png`
+2. **H2 — Face Painting** — section copy + `btfp-painting-detail.png` + "any character, any request" highlight (per `_resources/policies/theme-and-character-rules.md`)
+3. **H2 — Balloon Twisting** — section copy + `btfp-twisting-detail.png` + "any character, any request" highlight
+4. **Pricing calculator** (embedded widget — see scope below)
+5. **"Tell us about your event" CTA** — primary Teal button linking to the contact / book form
+6. **Frequently Asked Questions** — pulled from `_resources/policies/` (pricing math, themes/characters, service area, deposit + cancellation, weather)
+
+**Pricing calculator scope (embedded section):**
+
+- Heading: "What does it cost?" (style-guide voice — invite, don't push)
+- Inputs (with labels for screen readers):
+  - "How many twisters?" — number input, default 1, min 0
+  - "How many face painters?" — number input, default 1, min 0
+  - "How many hours?" — number input, default 2, min 1
+- Live output (updates without a full page reload, `aria-live="polite"` so screen readers announce changes):
+  - Per-artist line items showing the math (`Twister #1 — 2 hrs — $245`)
+  - Subtotal
+  - "+ Utah sales tax (calculated at checkout)" annotation per `_resources/policies/tax.md`
+  - "Estimated total: ~$X" rounded estimate (using ~7.25% combined rate as a customer-facing approximation)
+- "Why no combination discount? →" expander panel — opens to the quality-commitment framing per `_resources/policies/pricing-formula.md`. **This is the load-bearing copy** that turns a perceived missing-discount into a brand strength.
+- "Get a quote" CTA — pre-fills the contact form with the calculator's inputs (number of artists, hours)
 
 **Success criteria:**
-1. Page reads cleanly at every breakpoint
-2. Pricing math is correct (1 hr = $130; +$115/hr after) and "no combination discount" framing is prominent
-3. FAQ section uses Question/Answer schema for AEO
+1. Page reads cleanly at every breakpoint (375px, 768px, 992px+)
+2. Pricing math matches `_resources/policies/pricing-formula.md` exactly (1st hr $130, +$115/hr per artist; per-artist independent — no bundle discount)
+3. "Why no combination discount?" expander opens with the quality-commitment framing prominent
+4. Calculator updates live as inputs change — no page reload
+5. Calculator passes WCAG 2.1 AA: inputs have labels, output has `aria-live="polite"`, all touch targets ≥44px, keyboard tabbing works through the inputs in logical order
+6. FAQ section below the calculator uses Question/Answer schema for AEO
+7. "Get a quote" CTA opens contact form with artist/hours pre-filled (URL params, not session state)
+8. Page hero, twisting detail, painting detail images are sourced from `_resources/images/btfp-*.png`
 
 ## Slice 5 — Contact page (with brief about summary)
 
@@ -197,23 +219,9 @@ Build order is sequential, but slices 6 (legal pages) and 9 (cart/checkout) can 
 4. Order is recorded in ERPNext with status "Pending payment integration"
 5. Tax annotation visible in cart per `_resources/policies/tax.md`
 
-## Slice 10 — Pricing calculator (CONDITIONAL)
+## (Slice 10 — REMOVED 2026-04-26)
 
-**Goal:** Customer can play with "how many artists × how many hours" and see the price update in real time. Per-artist line-item math; "no combination discount" framing prominent.
-
-**Decision gate:** include in Phase 1 or defer?
-
-**Scope (if included):**
-- Frappe Web Form or custom widget on a `/pricing` page
-- Inputs: number of twisters, number of painters, hours per artist
-- Output: per-artist line items + subtotal + "+ Utah sales tax (calculated at checkout)" annotation
-- "Why no combination discount?" callout per `pricing-formula.md`
-- "Get a quote" CTA leading to the contact form pre-filled
-
-**Success criteria:**
-1. Math matches `_resources/policies/pricing-formula.md`
-2. Subtotal updates as inputs change without a full reload
-3. Page passes WCAG 2.1 AA (the inputs need labels, the result needs `aria-live`)
+The pricing calculator was originally drafted as a standalone slice on a `/pricing` page. Per GL's call 2026-04-26, it's now **embedded in Slice 4** (Balloon Twisting + Face Painting service page) where customers are already learning about artist services and naturally ask the cost question. No standalone `/pricing` URL.
 
 ## Cross-cutting Phase 1 expectations
 
@@ -234,9 +242,9 @@ These apply to every slice — not separate work items:
 | 5b (blog) | Blog presence in Phase 1? | **Yes** — ship framework + live posts |
 | 6 (accessibility) | Accessibility statement decision | **Option B** — brief intent-only + actually meeting AA |
 | 7 (products) | Header navigation; products to seed | URL structure: `/shop/<product-type>/<product-slug>`. Seed catalog: 6 products matching `_resources/images/product-*.png` |
-| 10 (pricing calc) | Yes/no decision | **Awaiting explanation** — GL asked for more info before deciding |
+| ~~10~~ (pricing calc) | Yes/no decision | **Built into Slice 4** — embedded on Balloon Twisting + Face Painting page (GL 2026-04-26) |
 
-**All slices are unblocked except Slice 10 (pricing calc — awaiting GL's call after explanation).**
+**All Phase 1 slices are unblocked. Ready for build.**
 
 ---
 *Draft v1 — 2026-04-26. Refines as slices complete.*
