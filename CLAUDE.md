@@ -27,6 +27,20 @@
 
 See `Built_by_Cameron/CLAUDE.md` for the agency-level standing rule. **Litmus test:** every file in this folder is scoped to Locally Twisted and will be transferred to Jeff Kimber on cutover. Don't add cross-client references; don't depend on agency-internal tooling that won't transfer with the folder.
 
+## Stack & code conventions (READ BEFORE TOUCHING THE WEBSITE)
+
+Frappe v15 + ERPNext v15. Backend is Python 3.11 + Frappe ORM + MariaDB 11.x + Redis. Templates are Jinja2. Frontend CSS is Bootstrap 4-flavored SCSS compiled into `website.bundle.css` by `bench build`. Frontend JS is vanilla + jQuery. Asset pipeline requires Node.js (NOT in production frappe_docker image — implications for asset bundling).
+
+**Customization primitives (use these — not `head_html` + `!important` overrides):**
+- Theme CSS: `web_include_css` in app's `hooks.py` pointing at a real file in `public/css/`. For SCSS that needs Frappe's variables, register `website_theme_scss` in `hooks.py`.
+- Navbar/Footer: override the Jinja partials by placing same-name files at `apps/<app>/<app>/templates/includes/navbar/navbar.html` and `templates/includes/footer/footer*.html`.
+- Pages: Web Page DocType (Rich Text content_type for raw HTML in `main_section`), or `apps/<app>/<app>/www/<route>.html` for static pages.
+- DocType records: fixtures via `hooks.py` `fixtures = [...]`.
+
+**Critical v15 surprise:** ERPNext v15 has NO ecommerce out of the box. The `webshop` module was extracted to `https://github.com/frappe/webshop`. Phase 1 Slices 7-9 (products, cart, checkout) and Phase 4 (Stripe + invoicing) require installing that app: `bench get-app webshop && bench --site frontend install-app webshop`.
+
+**Read this before any custom code:** `Built_by_Cameron/.claude/capabilities/recipes/frappe-conventions.md` — full map of customization surfaces, the right primitive for each common need, and the band-aid patterns to refuse. **The Slice 2 build session that produced this file's footer disaster is the receipt for why this rule exists.**
+
 ## Voice & Language — LT-specific
 
 LT is a balloon business run by Jeff Kimber, who is not a tech operator. Take ALL business jargon out of the ERPNext UI. Customers and Jeff alike will use plain language.
