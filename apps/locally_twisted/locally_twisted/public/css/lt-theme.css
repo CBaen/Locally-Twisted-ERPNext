@@ -968,7 +968,10 @@ html, body {
   color: rgba(26, 26, 26, 0.35);
 }
 
-/* Mobile adjustments */
+/* Mobile adjustments
+   Columns stay 3-across at every breakpoint per spec — typography
+   shrinks so narrow columns (~110-130px at 375-414px viewports)
+   don't crowd. Long link text wraps within its column. */
 @media (max-width: 767.98px) {
   .lt-footer__brand-band {
     padding: 1.5rem 1rem 1rem;
@@ -977,6 +980,35 @@ html, body {
     font-size: 1.5rem;
   }
   .lt-footer__col {
-    margin-bottom: 1.5rem;
+    margin-bottom: 0;
+  }
+  .lt-footer__col-title {
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.5rem;
+  }
+  .lt-footer__col-list li {
+    margin-bottom: 0.4rem;
+    line-height: 1.4;
+  }
+  .lt-footer__col-list a,
+  .lt-footer__col-list li {
+    font-size: 0.8125rem;
+  }
+  .lt-footer__col-list--info li {
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+  .lt-footer__icon {
+    font-size: 0.875rem;
+    width: 1rem;
+  }
+  .lt-footer__links .row {
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+  }
+  .lt-footer__links .col-4 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
   }
 }
