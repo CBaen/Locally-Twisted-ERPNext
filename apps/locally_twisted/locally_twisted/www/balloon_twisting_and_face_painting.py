@@ -55,12 +55,14 @@ PAGE_CSS = """
     color: var(--lt-near-black);
     margin: 0 0 0.5rem;
     line-height: 1.15;
+    text-align: center;
 }
 .lt-btfp__intro-lede {
     font-size: 1.125rem;
     color: var(--lt-soft-gray);
     margin: 0;
     font-weight: 300;
+    text-align: center;
 }
 
 .lt-btfp__services {
