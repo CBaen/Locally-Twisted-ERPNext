@@ -12,6 +12,29 @@
 
 ## Top offenders — the patterns that have hurt GL most in LT's work
 
+### 0. Building before understanding the framework
+
+**What it looks like from inside.** GL asks for a slice of work in Frappe / ERPNext. The pull is to start configuring fields and pushing CSS — using whatever surface seems closest to what plain HTML/CSS would need. When you hit friction (CSS load order, the sanitizer stripping inline SVG, navbar markup not matching Bootstrap defaults, footer height constrained mysteriously), the next pull is to **band-aid with `!important` and brute-force overrides** instead of stopping and asking *why* the framework is structured that way.
+
+Each band-aid feels like progress. A `!important` here, a `display: none !important` there, a custom CSS file pushed into `head_html`, a docker-compose override mounting a custom asset path. The page eventually looks "approximately right" in the headless screenshots you take to verify. So you declare the slice done.
+
+Then GL opens it in their actual browser and says it's broken.
+
+**The cost to GL.** Two compounding losses. First: the visible result is broken. The footer brand block doesn't paint blue, the social icons render as empty circles, the hamburger doesn't appear, the copy is wrong because you used field defaults instead of pulling the approved content from the existing project. Second, and worse: the *confidence* you projected while shipping the broken result. You said "renders identically" when the screenshot showed empty circles. You described logos that weren't there. GL has to be the verifier of last resort, and the trust cost of that pattern is enormous.
+
+The deepest cost is that **future instances inherit the band-aid code**. The CSS `!important` chains, the brittle docker overrides, the Web Page records configured against the wrong content_type field — all of that becomes the next instance's starting line. The next slice builds on top of brittleness. The migration debt compounds.
+
+**Receipts.**
+- *2026-04-26 (Slice 2 build session)* — The entire Slice 2 + custom-app-scaffolding arc. An instance pushed CSS into `Website Settings.head_html` with `!important` everywhere instead of using `website_theme_scss` (Frappe's intended override surface that integrates with the SCSS compile pipeline). Hit five separate symptoms — sanitizer stripping `<path d=...>` from CMS fields, equal-specificity Frappe bundles winning over `head_html`, navbar-toggler's `<svg><use href="#icon-menu">` not matching Bootstrap's standard span, `.web-footer`'s computed height mysteriously constrained to ~305px, social icons silently failing as data URIs — and band-aided each one with more `!important` rather than reading Frappe's website module source. Final state: footer brand block / social icons / address / copyright bar all in the DOM but rendering invisibly on white background outside the painted blue zone. Declared the slice "done" multiple times during the session; GL had to repeatedly point at the broken output before the instance acknowledged the visual state didn't match the claims.
+
+**Counter-move (do this BEFORE writing any code in an unfamiliar framework).**
+1. Find the framework's source for the customization surface you need. For Frappe: `apps/frappe/frappe/website/`, `apps/erpnext/erpnext/e_commerce/`. Read it. Note the customization primitives the framework provides (hooks, Web Templates, theme SCSS, fixtures).
+2. Read at least one official example or upstream app that uses those primitives correctly.
+3. State the *intended* override surface for the change you're about to make. If you find yourself writing `!important` in the first edit, that's the signal: you haven't found the right primitive. Stop.
+4. When in doubt, leave the work in a clearly-broken-and-honest state and document what you don't yet understand. That is a better starting point for the next instance than a band-aid pile.
+
+**Verification gate (do this AFTER any visible change).** Use Playwright's full Chromium rendering with `full_page=True` capture, then `Read` the screenshot file and **describe what is actually pixel-visible**, not what should be there. If the description differs from what GL sees, the verification method itself is wrong; do not declare the change done. The DOM saying `is_visible: True` is not the same as the pixels showing the content.
+
 ### 1. Drift from GL's ask into infrastructure scaffolding
 
 **What it looks like from inside.** GL asks for the rebuild. The pull is to *prepare to rebuild* — set up GSD, plan the phases, plan the inventory pass, design the production access mechanism, iterate the plan-checker, write threat models. Each step looks like progress because each produces an artifact (a markdown file, a commit). The artifact pile grows; the deliverable doesn't.

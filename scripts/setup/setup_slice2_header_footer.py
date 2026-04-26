@@ -162,13 +162,15 @@ def build_footer_address_html() -> str:
 
 
 def build_brand_html() -> str:
-    """Logo area on the navbar — text wordmark in DM Serif Display.
+    """Logo area on the navbar — uses the real LT logo PNG pulled from the
+    prior Odoo project's static assets, now bundled in this app at
+    /assets/locally_twisted/icons/lt-logo.png.
 
     Style guide rule: brand element must remain a wrapping anchor — never strip
     the link. Frappe wraps brand_html in <a class="navbar-brand" href="/"> by
     default, so we just provide the inner content.
     """
-    return '<span>Locally Twisted</span>'
+    return '<img src="/assets/locally_twisted/icons/lt-logo.png" alt="Locally Twisted" class="lt-logo">'
 
 
 def build_copyright_html() -> str:
