@@ -8,6 +8,32 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-04-26 (later, after Slice 2 + accessibility + contact build) — Platform direction RESOLVED: stay Frappe-native
+
+**Decision:** LT's customer-facing website stays inside Frappe / Frappe webshop. The platform-direction question that the previous instance left open at session end is now answered by demonstration.
+
+**Reasoning:** The codified Frappe-native technique passed three independent visual gates this session:
+
+1. **`/accessibility` static portal page** — built end-to-end as `apps/locally_twisted/locally_twisted/www/accessibility.{html,py}`, GL confirmed: *"the content in the middle of the page looked good!"*
+2. **Slice 2 chrome (header + footer)** — Jinja partial overrides at `templates/includes/{navbar,footer}/`, replaced Frappe's defaults with the approved Odoo two-tier desktop / single-row mobile structure. GL iterated on logo size, footer centering, footer padding, and 3-column-on-mobile spec; technique held under those iterations. GL confirmed: *"so far so good! It's getting better."*
+3. **`/contact` form-bearing portal page** — full pipeline working: AJAX form → whitelisted controller → Lead + linked Communication created, zero console errors, smoke test confirmed `CRM-LEAD-2026-00001` persisted with the message body. GL confirmed: *"Holy shit! You did it!"*
+
+The two prior failed attempts on this stack failed by *technique*, not *architecture*. The codification work earlier this session (`frappe-portal-implementation.md`, `frappe-conventions.md` updates, `license-isolated-app-architecture.md`, plus the `Built_by_Cameron/.claude/capabilities/meals/build-frappe-portal-page.md` meal) made the right technique discoverable and enforceable. The architecture was always sound.
+
+**What this commits us to:**
+- All Phase 1 customer-facing surfaces continue on Frappe + webshop. The remaining slices (refund-policy, FAQ, BTFP service page, products browse, product detail, cart, checkout) build on the meal pattern.
+- Phase 2 (`/book` lead intake form) follows the same form-bearing portal page shape as `/contact`, with the larger Lead schema.
+- Phase 4 (Stripe via webshop's payments-app integration) stays in scope; webshop's bundles are now compiled (Node + yarn installed in the backend container) so storefront pages render correctly.
+- The agency-tier "two-app split" question (`agency_platform` + `<client>_connector`) stays open as a future architectural decision per the agency decisions log; not blocking for LT's current Phase 1 work.
+
+**What's NOT committed:**
+- The platform decision is *Frappe-native for the customer-facing website*. It does NOT preclude a future pivot if a specific page or workflow proves Frappe-impossible. The off-ramp condition GL set ("if Frappe can't deliver this visual + UX bar, GL pivots away from ERPNext") still applies — it just hasn't fired yet.
+- Newsletter signup, Google Maps embed, modal-with-auto-redirect, and a few other polish items were deliberately skipped on the contact page and are documented as future work; they don't change the platform decision.
+
+**Decided by:** GL by demonstration. The contact-page success was the implicit affirmation; this entry makes it written.
+
+---
+
 ## 2026-04-26 (post-session research) — License posture clarified: ERPNext is GPL-3.0, Frappe is MIT, AGPL concern was Builder-specific (not installed)
 
 **Decision:** The expedition's Flag 8 raised an AGPL concern. Research + direct verification against `apps/<app>/license.txt` in the running LT stack establishes the actual license set:

@@ -435,6 +435,17 @@ def submit_contact(name="", email="", phone="", event_type="", event_date="", me
     safe_phone = escape_html(phone)
     safe_message = escape_html(message)
 
+    # Ensure the "Website" Lead Source exists (idempotent).
+    # On a fresh ERPNext install the Lead Source list is empty;
+    # creating the Lead with a non-existent source raises
+    # LinkValidationError. We create the source on first use.
+    if not frappe.db.exists("Lead Source", "Website"):
+        try:
+            frappe.get_doc({"doctype": "Lead Source", "source_name": "Website"}) \
+                .insert(ignore_permissions=True, ignore_if_duplicate=True)
+        except frappe.DuplicateEntryError:
+            pass
+
     # Create the Lead
     lead = frappe.get_doc({
         "doctype": "Lead",
