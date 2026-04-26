@@ -15,7 +15,13 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slice list. Highlights:
 
 - [DONE 2026-04-26] **Slice 1 — Brand foundation.** Style-guide tokens installed; theme CSS now served by the `locally_twisted` custom Frappe app at `/assets/locally_twisted/css/lt-theme.css` (registered via `web_include_css` in `hooks.py`). Source at `apps/locally_twisted/locally_twisted/public/css/lt-theme.css` (~21 KB).
-- [P0 — IN PROGRESS, NOT DONE] **Slice 2 — Header + footer.** Wiring via `Website Settings` exists (per `scripts/setup/setup_slice2_header_footer.py`) but VISUAL STATE IS BROKEN: `.web-footer` computed height constrained, `.footer-info` rendering on white background. The approved Odoo structure has substantively different copy + layout. **Resume order:** (1) framework verification (this session's task #3), (2) webshop install (this session's task #2), (3) override Jinja partials at `apps/locally_twisted/locally_twisted/templates/includes/footer/footer.html` etc. using approved Odoo structure as spec. Full forensic in `anti-gl-patterns.md` section 0 + `lessons-learned.md` 2026-04-26 (Slice 2 build).
+- [P0 — READY FOR REDO] **Slice 2 — Header + footer.** Visual state still broken-honest, but the path forward is fully unblocked (webshop installed durably + framework verified + `.web-footer` height "constraint" resolved as a band-aid problem, not a framework bug). **Redo plan:**
+  1. Strip `!important` chains from `apps/locally_twisted/locally_twisted/public/css/lt-theme.css` (specifically the `.web-footer` block lines 477-503 and `.web-footer ul/li/footer-group` blocks 505-526). They were band-aids around the wrong problem.
+  2. Create override Jinja partials at `apps/locally_twisted/locally_twisted/templates/includes/footer/footer.html` (and `footer_grouped_links.html`, `footer_info.html`, `footer_logo_extension.html`) replicating the approved Odoo structure: two-tier centered-logo header, 3-column footer with hours block, 3 social icons (no Twitter), centered brand block.
+  3. Same pattern for navbar — override `apps/locally_twisted/locally_twisted/templates/includes/navbar/navbar.html`.
+  4. After every edit: `python scripts/dev/clear_website_cache.py`.
+  5. Verify with `python scripts/verify/playwright_home_screenshot.py` + Read the screenshot file before declaring done.
+  Reference: `Built_by_Cameron/.claude/capabilities/recipes/frappe-conventions.md` "Approved LT structure" table.
 - [P0] **Slice 3 — Landing page.** Partially blocked on real photography sourcing. Should not start until Slice 2 is genuinely complete.
 - [P0] **Slice 4 — Balloon Twisting + Face Painting service page.** Carry-forward content.
 - [P0] **Slice 5 — Contact page.** Brief about summary embedded.
@@ -23,7 +29,6 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 - [P0] **Slice 7 — Products listing.** Blocked on header navigation decision (URL structure depends on it).
 - [P0] **Slice 8 — Individual product pages.** Variant pricing must work.
 - [P0] **Slice 9 — Cart + checkout shell.** Stripe stubbed until Phase 4.
-- [P1?] **Slice 10 — Pricing calculator.** Conditional on GL decision: include in Phase 1 or defer.
 
 ### Open iterations on already-built Lead schema (carried into Phase 2)
 
@@ -35,12 +40,6 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 
 - [P2] **Persist the nginx Origin patch across container recreation.** Currently applied via `docker exec` in `scripts/fix/patch_nginx_socketio_origin.py` and only survives until the frontend container is recreated. Cleaner long-term: docker-compose override that mounts a custom `frappe.conf` with the pass-through line. Acceptable to defer since recreations are rare in local dev.
 
-- [P1] **Extract Frappe/ERPNext patterns from this session to agency capabilities + lessons.** During Phase 1 Slice 2 build, hit ~8 reusable Frappe v15 / ERPNext-specific patterns that future BBC clients on the same stack will rediscover otherwise. After Slice 2 ships, write:
-  - `Built_by_Cameron/.claude/capabilities/recipes/frappe-website-shell-setup.md` — recipe bundling Website Settings configuration (`top_bar_items`, `footer_items`, `brand_html`, `address`, `copyright`, `head_html`) with the gotchas inline.
-  - Append cross-client entries to `Built_by_Cameron/lessons-learned.md` for the high-bite gotchas (Web Page `content_type` field-mapping trap, HTML sanitizer stripping SVG path data, head_html cascade-order vs Frappe bundles, Frappe auto-prepending © on copyright, navbar-toggler markup divergence from Bootstrap).
-  Source material: this LT session's transcripts + `_resources/lt-theme.css` + `scripts/setup/setup_slice2_header_footer.py`.
-
-- [P2] **Tidy the "Waiting on GL" queue section.** Every item in that section is already resolved per `locally-twisted-decisions.md` (2026-04-26 entries) and `HANDOFF.md`. Delete per the queue convention: "When an item is completed, DELETE it from this file."
 
 ## Blocked
 

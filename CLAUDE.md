@@ -37,9 +37,16 @@ Frappe v15 + ERPNext v15. Backend is Python 3.11 + Frappe ORM + MariaDB 11.x + R
 - Pages: Web Page DocType (Rich Text content_type for raw HTML in `main_section`), or `apps/<app>/<app>/www/<route>.html` for static pages.
 - DocType records: fixtures via `hooks.py` `fixtures = [...]`.
 
-**Critical v15 surprise:** ERPNext v15 has NO ecommerce out of the box. The `webshop` module was extracted to `https://github.com/frappe/webshop`. Phase 1 Slices 7-9 (products, cart, checkout) and Phase 4 (Stripe + invoicing) require installing that app: `bench get-app webshop && bench --site frontend install-app webshop`.
+**Webshop is INSTALLED 2026-04-26.** `frappe/webshop` + its hard dependency `frappe/payments` are installed on the `frontend` site, bind-mounted into all 8 frappe-image services via `pwd.yml`, and gitignored at the project level (the install script is the source-of-truth for HOW we installed them, not the upstream code itself). Reproducible install: `python scripts/setup/install_webshop.py` (no flags = re-pip-install + restart, run after any container recreation; `--fetch --site-install` = fresh install from upstream). Public routes live: `/all-products`, `/shop-by-category`, `/cart`. Phase 1 Slices 7-9 + Phase 4 (Stripe via `payments`) are unblocked.
 
-**Read this before any custom code:** `Built_by_Cameron/.claude/capabilities/recipes/frappe-conventions.md` — full map of customization surfaces, the right primitive for each common need, and the band-aid patterns to refuse. **The Slice 2 build session that produced this file's footer disaster is the receipt for why this rule exists.**
+**Read this before any custom code:** `Built_by_Cameron/.claude/capabilities/recipes/frappe-conventions.md` — full map of customization surfaces, the right primitive for each common need, the "Verified against source — 2026-04-26" appendix (with `.web-footer` myth correction), the "Customizing webshop pages" primitive map, and the band-aid patterns to refuse. **The Slice 2 build session that produced this file's footer disaster is the receipt for why this rule exists.**
+
+**Standing principle (GL directive 2026-04-26):** *"Work WITHIN Frappe and ERPNext, don't fight them."* Operationalized: use Jinja partial overrides (`templates/includes/...`) as the primary surface for header/footer/page customization; use `web_include_css` (loads after the bundle) or `website_theme_scss` (compiles into the bundle) for theme CSS; refuse `!important` chains as the receipt of fighting the framework; use Webshop's existing hooks for cart/checkout customization rather than replacing the cart pipeline.
+
+**Operational rituals (see `scripts/README.md` for full index):**
+- After `docker compose up --force-recreate`: `python scripts/setup/install_webshop.py` then re-apply nginx Origin patch
+- After editing any Jinja template / CSS / Web Page record: `python scripts/dev/clear_website_cache.py`
+- Before declaring any visible change done: `python scripts/verify/playwright_home_screenshot.py` + `Read` the screenshot file
 
 ## Voice & Language — LT-specific
 
