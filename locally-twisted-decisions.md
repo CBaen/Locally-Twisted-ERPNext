@@ -10,17 +10,16 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ## 2026-04-26 (later) — All clients default to ERPNext native payroll; Gusto removed from project scope
 
-**Decision:** All Built by Cameron client builds default to ERPNext's native HRMS / Payroll module. Gusto is removed from the LT ERPNext-side project scope: no Gusto credential fields in `res_config_settings`, no `gusto_service` Python helper, no Gusto CSV export job. The legacy Odoo `gusto_service.py` keeps running on the production Hetzner host until cutover (untouched per the read-only rule); on the new ERPNext system, payroll is handled natively.
+**Decision:** All Built by Cameron client builds default to ERPNext's native HRMS / Payroll module. Gusto is removed from the LT ERPNext-side project scope: no Gusto credential fields, no `gusto_service` Python helper, no Gusto CSV export job. The Gusto integration in the failed Odoo attempt was **never wired or used** (per GL clarification 2026-04-26) — the Odoo files are dead code on a never-launched test deployment.
 
-**Reasoning:** GL directive 2026-04-26: "All clients will default to the ERP's native payroll. Please delete anything labeled 'Gusto.'" Removing Gusto eliminates one third-party integration to learn, configure, document, and hand off. ERPNext HRMS supports salary structures, payroll periods, leave, attendance, and direct deposit out of the box; whatever Gusto did, ERPNext can do without an external service. Fewer moving parts = less to break + simpler transfer to Jeff.
+**Reasoning:** GL directive 2026-04-26: "All clients will default to the ERP's native payroll. Please delete anything labeled 'Gusto.'" ERPNext HRMS supports salary structures, payroll periods, leave, attendance, and direct deposit natively. One less third-party integration to learn, configure, document, and hand off. Since Gusto never went live, there is no production behavior to preserve — clean slate.
 
-**Alternatives considered:** Keep Gusto on ERPNext side as a CSV-export Server Script (rejected — perpetuates the "outsource payroll to Gusto" pattern, which the agency standard now overrides). Defer the decision until Phase 3 (rejected — cleaner to delete now than carry it forward through every planning artifact).
+**Alternatives considered:** Keep Gusto on ERPNext side as a CSV-export Server Script (rejected — perpetuates a third-party-payroll pattern the agency standard now overrides).
 
 **What this means in practice:**
-- `res_config_settings.py` translation drops the `gusto_*` fields; only `twilio_*` credentials carry over.
-- The `gusto_service.py` Odoo helper is NOT translated.
-- A future phase (post-cutover) installs Frappe HRMS and configures it for LT.
-- The accountant (North Peak) needs to be told payroll moves from Gusto-import to ERPNext native; that's a Phase 9 conversation, not now.
+- `res_config_settings.py` translation drops any `gusto_*` fields; only `twilio_*` credentials carry over.
+- A future phase (after the core build is stable) installs Frappe HRMS and configures it for LT.
+- No accountant conversation needed — Gusto was never the system of record for LT's payroll.
 
 **Supersedes:** the earlier 2026-04-26 entry that treated `gusto_service` as Phase 3 scope. The earlier entry has been rewritten to cover only `twilio_service`.
 
