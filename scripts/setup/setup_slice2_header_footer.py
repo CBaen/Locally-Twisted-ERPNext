@@ -188,17 +188,7 @@ def build_copyright_html() -> str:
     )
 
 
-def build_head_html(theme_css: str) -> str:
-    """Wrap the theme CSS in a <style> block with a discoverable marker."""
-    return (
-        f'{THEME_MARKER_HEADER}\n'
-        f'<style data-source="lt-brand-foundation">\n'
-        f'{theme_css}\n'
-        f'</style>'
-    )
-
-
-def update_website_settings(session: requests.Session, theme_css: str) -> None:
+def update_website_settings(session: requests.Session) -> None:
     payload = {
         "app_name": "Locally Twisted",
         "brand_html": build_brand_html(),
@@ -206,7 +196,9 @@ def update_website_settings(session: requests.Session, theme_css: str) -> None:
         "footer_items": build_footer_items(),
         "address": build_footer_address_html(),
         "copyright": build_copyright_html(),
-        "head_html": build_head_html(theme_css),
+        # Just the marker comment — actual CSS is served by the locally_twisted
+        # custom Frappe app via web_include_css in its hooks.py.
+        "head_html": HEAD_HTML_MARKER,
         "home_page": "home",
         "disable_signup": 1,
         "show_login_link": 0,
@@ -279,15 +271,19 @@ def verify(session: requests.Session) -> None:
 
     checks = {
         "navbar renders": '<nav class="navbar' in html,
-        "brand wordmark present": "Locally Twisted</span>" in html or "Locally Twisted</a>" in html,
-        "footer brand block": "lt-footer-brand" in html,
-        "soft-blue footer styling": "web-footer" in html,
-        "social row present": "lt-footer-social" in html,
+        "brand logo image referenced": '/assets/locally_twisted/icons/lt-logo.png' in html,
+        "footer brand block in DOM": "lt-footer-brand" in html,
+        "footer (web-footer element)": "web-footer" in html,
+        "social row in DOM": "lt-footer-social" in html,
         "accessibility link in copyright": '/accessibility' in html,
-        "theme CSS injected": 'data-source="lt-brand-foundation"' in html,
+        "theme CSS link tag (served via app)": '/assets/locally_twisted/css/lt-theme.css' in html,
         "home page rendered (not login)": "<title>Locally Twisted" in html or "Locally Twisted</h1>" in html,
-        "ERPNext powered hidden by CSS": "footer-powered" in html,  # element exists; CSS hides it
+        "footer-powered element rendered (CSS-hidden)": "footer-powered" in html,
     }
+    # NOTE: these are DOM presence checks only. They do NOT verify visual
+    # rendering. After this script runs, ALWAYS run:
+    #   python scripts/verify/playwright_home_screenshot.py
+    # and Read the resulting screenshot files yourself.
     print("\n--- Verification ---")
     for label, ok in checks.items():
         print(f"  {'✓' if ok else '✗'} {label}")
@@ -298,17 +294,12 @@ def verify(session: requests.Session) -> None:
 
 
 def main() -> None:
-    if not THEME_CSS_PATH.exists():
-        raise SystemExit(f"theme CSS missing: {THEME_CSS_PATH}")
-    theme_css = THEME_CSS_PATH.read_text(encoding="utf-8")
-    print(f"→ Loaded theme CSS: {len(theme_css)} bytes")
-
     session = requests.Session()
     print("→ Logging in as Administrator")
     login(session)
 
     print("→ Updating Website Settings")
-    update_website_settings(session, theme_css)
+    update_website_settings(session)
 
     print("→ Ensuring home Web Page exists")
     ensure_home_web_page(session)
