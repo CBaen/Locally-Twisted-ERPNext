@@ -14,7 +14,7 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slice list. Highlights:
 
-- [P0] **Slice 1 — Brand foundation.** Install style-guide tokens (DM Serif Display, Raleway, color CSS variables, 8px spacing scale, focus-visible outline, prefers-reduced-motion) into ERPNext theme. Unblocked; can begin without further GL input.
+- [DONE 2026-04-26] **Slice 1 — Brand foundation.** Style-guide tokens (DM Serif Display, Raleway, full color palette as CSS variables, 8px spacing scale, focus-visible outline, prefers-reduced-motion, button + form input + card + section + thin-band patterns) installed via `Website Settings.head_html`. Source-of-truth at `_resources/lt-theme.css`. Verified via `curl http://localhost:8081/` — CSS present in served HTML head with `data-source="lt-brand-foundation"` marker. 7159 bytes injected. Survives until container recreation; promote to packaged Frappe app when there's a critical mass of customizations.
 - [P0] **Slice 2 — Header + footer.** Blocked on header navigation decision (see `.planning/decisions/header-navigation.md`).
 - [P0] **Slice 3 — Landing page.** Partially blocked on real photography sourcing.
 - [P0] **Slice 4 — Balloon Twisting + Face Painting service page.** Carry-forward content.
