@@ -41,6 +41,12 @@ sites/*/public/files/
 # Has its own .git/; nginx Origin patch lives in scripts/fix/patch_nginx_socketio_origin.py
 Locally-Twisted-Backend/
 
+# Upstream Frappe apps (installed via scripts/setup/install_webshop.py).
+# Source-of-truth for HOW we install them lives in that script.
+# We bind-mount these into the docker stack so each frappe-image service can import them.
+apps/webshop/
+apps/payments/
+
 # Empty placeholder; reserved for future frontend assets
 Locally-Twisted-Frontend/
 

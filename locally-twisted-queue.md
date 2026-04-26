@@ -14,8 +14,8 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slice list. Highlights:
 
-- [DONE 2026-04-26] **Slice 1 — Brand foundation.** Style-guide tokens (DM Serif Display, Raleway, full color palette as CSS variables, 8px spacing scale, focus-visible outline, prefers-reduced-motion, button + form input + card + section + thin-band patterns) installed via `Website Settings.head_html`. Source-of-truth at `_resources/lt-theme.css`. Verified via `curl http://localhost:8081/` — CSS present in served HTML head with `data-source="lt-brand-foundation"` marker. 7159 bytes injected. Survives until container recreation; promote to packaged Frappe app when there's a critical mass of customizations.
-- [P0 — IN PROGRESS, NOT DONE] **Slice 2 — Header + footer.** Header + footer wired up via `Website Settings` (top_bar_items, footer_items, brand_html with logo PNG, address, copyright, home_page) by `scripts/setup/setup_slice2_header_footer.py`. The custom Frappe app `locally_twisted` is scaffolded at `apps/locally_twisted/`, bind-mounted into all frappe-image services via `pwd.yml`, installed on the site, with the theme CSS at `apps/locally_twisted/locally_twisted/public/css/lt-theme.css` registered via `web_include_css` in `hooks.py`. **VISUAL STATE IS BROKEN:** the `.web-footer`'s computed height is constrained to ~305 px (root cause unidentified — likely in Frappe's bundled SCSS or a body-flex layout); `.footer-info` (containing brand wordmark, social icons, address, copyright bar) renders below the painted Soft Blue area, on white background, looking partially missing. The approved Odoo structure has substantively different copy + layout (centered logo with two-tier utility-bar header, 3-column footer, centered brand block, 3 social icons not 4, "Tue-Fri 12-6 / Sat 10-4" hours block, etc.) — see `_CLIENTS/locally-twisted/anti-gl-patterns.md` section 0 + `lessons-learned.md` 2026-04-26 (Slice 2 build) for the full forensic. **Resume order:** (1) study Frappe website module + `frappe-conventions.md` agency capability, (2) install `webshop` app or decide to skip, (3) replace Slice 2 implementation by overriding the Jinja partials (`templates/includes/footer/footer.html` etc.) using the approved Odoo structure as the spec.
+- [DONE 2026-04-26] **Slice 1 — Brand foundation.** Style-guide tokens installed; theme CSS now served by the `locally_twisted` custom Frappe app at `/assets/locally_twisted/css/lt-theme.css` (registered via `web_include_css` in `hooks.py`). Source at `apps/locally_twisted/locally_twisted/public/css/lt-theme.css` (~21 KB).
+- [P0 — IN PROGRESS, NOT DONE] **Slice 2 — Header + footer.** Wiring via `Website Settings` exists (per `scripts/setup/setup_slice2_header_footer.py`) but VISUAL STATE IS BROKEN: `.web-footer` computed height constrained, `.footer-info` rendering on white background. The approved Odoo structure has substantively different copy + layout. **Resume order:** (1) framework verification (this session's task #3), (2) webshop install (this session's task #2), (3) override Jinja partials at `apps/locally_twisted/locally_twisted/templates/includes/footer/footer.html` etc. using approved Odoo structure as spec. Full forensic in `anti-gl-patterns.md` section 0 + `lessons-learned.md` 2026-04-26 (Slice 2 build).
 - [P0] **Slice 3 — Landing page.** Partially blocked on real photography sourcing. Should not start until Slice 2 is genuinely complete.
 - [P0] **Slice 4 — Balloon Twisting + Face Painting service page.** Carry-forward content.
 - [P0] **Slice 5 — Contact page.** Brief about summary embedded.
@@ -46,16 +46,12 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 
 *nothing*
 
-## Waiting on GL (Phase 1 decision gates)
+## Waiting on GL
 
-- **Header navigation structure** — see `.planning/decisions/header-navigation.md` (Claude recommends Option B)
-- **Accessibility statement nuance** — see `.planning/decisions/accessibility-statement.md` (Claude strongly recommends Option B)
-- **Blog presence in Phase 1** — ship framework + one seed post / framework only (hidden) / defer
-- **Real photography sourcing** — where do good LT event photos live, or do we ship Phase 1 with placeholders?
-- **Customer-inquiry email destination** — where do current `locallytwisted.com` contact-form submissions land? (Need this for Phase 2 acknowledgment routing)
-- **Pricing calculator in Phase 1?** — Slice 10 yes/no/defer
-- **Inspiration Photos thumbnail UX** — pick (a)/(b)/(c) from the Lead-schema iteration item above
-- **"This is one Lead" realization** — what did you want to model that you thought was happening?
+- **Inspiration Photos thumbnail UX** — pick (a)/(b)/(c) from the Lead-schema iteration item above (carries into Phase 2)
+- **"This is one Lead" realization** — what did you want to model that you thought was happening? (carries into Phase 2)
+
+*All Phase 1 decision gates resolved 2026-04-26 — see `locally-twisted-decisions.md`.*
 
 ## Deferred (intentional, not blocked)
 
