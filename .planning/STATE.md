@@ -63,7 +63,7 @@ Recent decisions affecting current work:
 
 - 2026-04-26: GSD execution mode for translation = direct script-write-and-run (no formal PLAN files); heavier process reserved for architectural choices
 - 2026-04-26: `twilio_service.py` is NOT a new DocType — it's an abstract service class; implement as Python helper / Server Script
-- 2026-04-26: All clients default to ERPNext native payroll (HRMS); Gusto removed from project scope (GL directive)
+- 2026-04-26: All clients default to ERPNext native payroll (HRMS) — agency-wide standard (GL directive)
 - 2026-04-25 evening: Skip Phase 1 entirely; use existing off-Odoo expedition inventory as baseline
 - 2026-04-25 evening: Build everything locally first; defer bench/Frappe-Cloud/transferable concerns until something is real to ship
 - 2026-04-25 evening: Don't modify anything in `locally-twisted-odoo/` (read-only reference)
@@ -79,8 +79,8 @@ Phase 2 translation queue (in priority order — see `built-by-cameron-queue.md`
 - Translate `project_task.py` (14 Custom Fields on Task)
 - Translate `calendar_event.py` (1 computed field)
 - Translate `hr_expense.py` (Custom Fields on Expense Claim)
-- Translate `res_config_settings.py` → new "LT Settings" Single DocType for Twilio + Gusto credentials
-- Implement `twilio_service` and `gusto_service` (Python helpers, deferred to Phase 3 when automations call them)
+- Translate `res_config_settings.py` → new "LT Settings" Single DocType for Twilio credentials
+- Implement `twilio_service` (Python helper, deferred to Phase 3 when automations call it)
 
 Cross-cutting:
 

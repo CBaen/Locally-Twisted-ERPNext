@@ -17,7 +17,6 @@ Overwrite-not-append. ~40 lines. Git is the changelog.
   - iter 4: Time fields → Time fieldtype, +Delivery Window Start/End, +Internal Only Notes, +Inspiration Photos child table, qualification labels relabeled, "Additional Information" tab hidden, max upload 25 MB
 - ☐ `res_partner`, `product_template`, `project_task`, `calendar_event`, `hr_expense`, `res_config_settings` (next translations)
 - ☐ `twilio_service` is an abstract service class — implement as Python helpers / Server Scripts, NOT a new DocType (per 2026-04-26 decision)
-- ✗ `gusto_service` removed from project scope — all clients default to ERPNext native payroll (HRMS) per 2026-04-26 GL directive
 
 **Two open items deferred from this session, awaiting user decision before resuming:**
 1. **Inspiration Photos thumbnail UX** — Frappe blocks `in_list_view` on Attach Image AND Image fieldtypes in child tables. Three paths offered to GL: (a) click-to-expand (current state), (b) Frappe Client Script for inline gallery rendering, (c) drop child table for built-in attachments sidebar. GL hasn't picked yet.

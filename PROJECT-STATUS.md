@@ -45,7 +45,8 @@ See `locally-twisted-decisions.md` for full reasoned log. Summary table:
 |------|----------|-----------|
 | 2026-04-26 | LT lives at `_CLIENTS/locally-twisted/` with its own git repo | Per the agency isolation rule — transferability is the load-bearer of project value |
 | 2026-04-26 | GSD execution mode for translations: direct script-write-and-run | Trellis's burnt-tokens drift was the receipt; planner-checker loops on mechanical work add no value |
-| 2026-04-26 | `gusto_service` + `twilio_service` are NOT new DocTypes — abstract service classes | They store no records in Odoo; in Frappe they become Python helpers / Server Scripts |
+| 2026-04-26 | All clients default to ERPNext native payroll (HRMS) — agency standard | Removes a third-party integration; ERPNext has full native payroll |
+| 2026-04-26 | `twilio_service` is NOT a new DocType — abstract service class | Stores no records in Odoo; in Frappe becomes Python helpers / Server Scripts |
 | 2026-04-25 | ERPNext v15.105.0 pinned (latest stable v15 patch) | Past Stripe-broken window; latest patch on a mature line |
 | 2026-04-25 | Local Docker for build, Frappe Cloud Sites plan ($5/mo) for prod | Local is free + breakable; Frappe Cloud is managed + transferable per-site |
 | 2026-04-25 | Skip Phase 1 entirely (use existing off-Odoo expedition inventory) | Phase 1 was elaborate planning that never produced code — drift |

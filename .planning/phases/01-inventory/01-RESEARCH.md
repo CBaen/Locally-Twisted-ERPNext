@@ -57,7 +57,7 @@ The `research/extended-expedition-off-odoo-replacement/inventory-findings.md` fi
 
 1. **Per-data-file inventory** — `blog_data.xml` (976 lines, 2 posts + metadata), `delivery_data.xml` (142 lines, 3 carriers), `crm_stage_data.xml` (51 lines, 6 stages), `mailing_data.xml` (25 lines), `seasonal_campaigns_data.xml`, `survey_data.xml` (137 lines, 44 records), `activity_types.xml`, `ir_config_parameter.xml`, `google_config_data.xml`, `ir_asset.xml` — not individually mapped.
 2. **Per-migration-script summary** — 14 migration versions identified but not individually described (what each fixed, which records it touched).
-3. **Model fields for remaining 7 models** — `res_partner.py` (7 fields: 3 computed health status + 4 stored), `calendar_event.py` (1 computed field), `product_template.py` (no new fields — only CRUD override for description sync), `dashboard_review.py`, `res_config_settings.py`, `twilio_service.py`, `gusto_service.py` not field-mapped.
+3. **Model fields for remaining 6 models** — `res_partner.py` (7 fields: 3 computed health status + 4 stored), `calendar_event.py` (1 computed field), `product_template.py` (no new fields — only CRUD override for description sync), `dashboard_review.py`, `res_config_settings.py`, `twilio_service.py` not field-mapped.
 4. **Exact per-snippet status** — which of the 16 snippets are on the live homepage vs available-but-unused.
 5. **The `page_refund_policy.xml` page** — present in manifest and views/pages/ but not mentioned in CLAUDE.md's page list (added after CLAUDE.md was written).
 6. **SCSS file count and structure** — 13 SCSS files + 5 per-page files + snippet SCSS (16 dirs per CLAUDE.md) not individually documented.
@@ -134,7 +134,7 @@ The 15 confirmed automations by ID:
 INV-01 is a local read-only codebase scan. No production access needed. Steps:
 
 1. **Read `__manifest__.py`** — canonical list of all data files and dependencies [VERIFIED: already done]
-2. **Read each Python model file** — extract class name, `_inherit` target, field names, field types, computed fields, methods [7 model files not yet field-mapped: dashboard_review, res_config_settings, twilio_service, gusto_service, calendar_event, res_partner, product_template — already read the last 3]
+2. **Read each Python model file** — extract class name, `_inherit` target, field names, field types, computed fields, methods [6 model files not yet field-mapped: dashboard_review, res_config_settings, twilio_service, calendar_event, res_partner, product_template — already read the last 3]
 3. **Read each migration script `post-migrate.py`** — one sentence description of what it fixes
 4. **Count snippets, pages, SCSS files** — confirm vs CLAUDE.md numbers
 5. **Cross-reference PROJECT-STATUS.md** for production status flags
