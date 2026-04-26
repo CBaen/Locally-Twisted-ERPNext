@@ -110,6 +110,49 @@ Canonical resources for the new build live in `_resources/` and are platform-agn
 
 ## Updates
 
+### 2026-04-26 (closing session — long, mixed outcomes) — Webshop durable + catalog exported + Step 0 done + Jinja path validated; landing build FAILED for the second time; expedition surfaced platform-direction question now on GL's desk
+
+**What landed:**
+- **Webshop foundation locked.** `frappe/payments` + `frappe/webshop` cloned to `apps/`, bind-mounted in `pwd.yml` across 8 services, gitignored. `install_webshop.py` is reproducible after any `docker compose --force-recreate`. Webshop public routes live (`/all-products` 200, `/cart` 301).
+- **Odoo catalog exported.** 51 products / 47 with attributes / 48 with images. `_resources/odoo-export/catalog.json` + 48 image files. `export_odoo_catalog.py` is idempotent and re-runnable.
+- **Step 0 fully completed.** Stripped the broken navbar toggler block (lines 388-415 — used a `data:image/svg+xml;utf8,...` data URI that silently failed in real browsers). Replaced with a real SVG file at `apps/locally_twisted/locally_twisted/public/icons/menu.svg`. lt-theme.css now 608 lines (was 770). Two `!important` blocks intentionally retired this session.
+- **Jinja override path validated.** Two prior HANDOFFs claimed it would work; nobody had verified. This session: dropped one test file, confirmed it resolved in served HTML, removed the test. Slice 2 redo path is now unblocked architecturally (only relevant if GL's platform direction stays Frappe).
+- **Reproducible scripts.** `install_webshop.py`, `clear_website_cache.py`, `export_odoo_catalog.py`, `scripts/README.md`.
+- **Agency conventions doc substantially upgraded.** "System-native first" standing principle added at the top. Web Page DocType complete tab map (Script + Style + Page Builder + Context). Webshop module map for Slices 7-9. Webshop+payments install pattern with `--skip-assets`. "Verified against source — 2026-04-26" appendix.
+- **Full expedition completed.** 3 source-separated researchers (Web Scout / Docs & Standards / Ground Truth) → convergence analyst → devil's advocate → GL Proxy review → synthesis. Eight files in `research/expedition-frappe-theme/`.
+
+**What FAILED (be honest):**
+- **Landing page build.** Instance built with Page Builder + 4 default Web Templates + invented copy. Looked fine from DOM facts, broken in GL's actual browser, not mobile-responsive. Rolled back to "Site under construction" placeholder. Same anti-pattern as the prior Slice 2 failure: invent + band-aid + claim-done-off-DOM-facts.
+- **Slice 2 visual remains in the broken-honest state from the prior session.** Website Settings has data populated; visual is still Frappe's default styling. No Jinja partial overrides built (only the test override, which was removed).
+- **Catalog has not been seeded into ERPNext.** Data exists in `_resources/odoo-export/`; no Item / Item Group / Website Item records exist on the LT site yet.
+- **Mock comparison of pills vs swatches not built.** Deferred until platform direction resolves.
+
+**Key decision OPEN at session end (load-bearing):**
+- **Platform direction.** Stay on Frappe (custom Jinja + custom CSS) OR put a different front door (WordPress / Webflow / Next.js + Medusa/Saleor) on it with ERPNext quietly running the back office. The expedition synthesis is the briefing. GL is collecting more information before deciding — they want to compare Vercel Commerce demo + Frappe Builder + Webflow templates side by side first. See `research/expedition-frappe-theme/synthesis.md`.
+
+**Standing rules added this session (in `locally-twisted-decisions.md`):**
+- All customer-facing copy comes from the Odoo XML or live locallytwisted.com — NEVER invented.
+- GL's eyes on the actual page > any DOM fact extraction.
+- Per-page interactivity belongs in the Web Page DocType's Script/Style tabs, not in custom Web Templates.
+- "System-native first" is the agency-tier rule for all BBC clients on Frappe (codified in agency conventions doc).
+
+**Code/file changes this session:**
+- New: `apps/locally_twisted/locally_twisted/setup_pages/{__init__.py, landing.py}` (rollback-only)
+- New: `apps/locally_twisted/locally_twisted/templates/includes/footer/` (directory; empty after test removal)
+- New: `apps/locally_twisted/locally_twisted/public/icons/menu.svg`
+- New: `scripts/setup/install_webshop.py`
+- New: `scripts/setup/export_odoo_catalog.py`
+- New: `scripts/dev/clear_website_cache.py`
+- New: `scripts/README.md`
+- New: `_resources/website-page-index.md` (v2 — note: tier classifications assume Frappe path; partially invalidated if GL's platform direction goes elsewhere)
+- New: `_resources/odoo-export/catalog.json` + `_resources/odoo-export/images/` (48 PNGs)
+- New: `research/expedition-frappe-theme/` (8 files)
+- New: `apps/payments/` + `apps/webshop/` (bind-mounted; gitignored)
+- Modified: `pwd.yml` (added bind-mounts for payments + webshop in all 8 services)
+- Modified: `apps/locally_twisted/locally_twisted/public/css/lt-theme.css` (down to 608 lines from 770; navbar toggler block + `.web-footer` chains stripped)
+- Modified: `CLAUDE.md`, `STATE.md`, `lessons-learned.md`, `locally-twisted-decisions.md`, `locally-twisted-queue.md`, `HANDOFF.md`, agency `Built_by_Cameron/.claude/capabilities/recipes/frappe-conventions.md`
+- Deleted: `scripts/setup/build_landing_page.sh` (the broken landing build orchestrator — retired)
+
 ### 2026-04-26 (webshop install + framework study session) — Three blockers resolved; Slice 2 redo unblocked
 
 **What landed:**

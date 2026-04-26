@@ -23,6 +23,7 @@ Run scripts from the project root: `python scripts/<dir>/<name>.py`.
 | `setup_lt_company.py` | One-shot wizard completion + LT Company seeding | Once, on a fresh install |
 | `setup_slice2_header_footer.py` | Wires `Website Settings` (top_bar_items, footer_items, brand_html, address, copyright, home_page) for Slice 2's first attempt | **Stale — represents the band-aid Slice 2 attempt. The Slice 2 redo will use Jinja partial overrides instead. Don't re-run without reading `lessons-learned.md` 2026-04-26 (Slice 2 build) and `anti-gl-patterns.md` section 0 first.** |
 | `install_webshop.py` | Installs `frappe/webshop` + `frappe/payments` (a hard dependency). Also re-runs editable pip install for `locally_twisted`/`payments`/`webshop` in all 4 frappe-image services after `docker compose up --force-recreate`. | (a) Once on initial install, with `--fetch --site-install` flags. (b) After every container recreation, with no flags. |
+| `export_odoo_catalog.py` | One-shot HTML scraper for the live LT Odoo catalog (`http://5.78.136.133/`). Outputs `_resources/odoo-export/catalog.json` (51 products with attributes + variant data) and downloads product images to `_resources/odoo-export/images/`. Idempotent — re-running overwrites JSON, skips already-downloaded images. Also a candidate agency-tier capability (cross-client Odoo migration pattern). | (a) Once at session 2026-04-26 — already run. (b) Re-run before Hetzner Odoo is decommissioned to refresh image set. |
 
 ### `dev/`
 
