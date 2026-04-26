@@ -90,13 +90,13 @@ The four reference surfaces above (failed Hetzner site, Odoo GitHub repo, local 
 
 Per global rule at `C:\Users\baenb\.claude\rules\loud-failure.md`. LT-specific surfaces tracked as they're built. The Odoo `/book` form silent-failure incident (2026-04-22) is the founding receipt for this rule — never repeat that pattern.
 
-## Customer / Contact dedup (Phase 3 work)
+## Customer / Contact dedup (Phase 2 work — Lead Intake)
 
-When the customer-facing form lands a Lead in ERPNext, the Lead must auto-link to a Contact: lookup by email_id / mobile_no / phone; attach if found, create if not. Mirrors Odoo's `_find_matching_partner` + `_create_partner_from_lead`. Implementation: Server Script on Lead `before_insert`. Tracked in queue.
+When the customer-facing form lands a Lead in ERPNext, the Lead must auto-link to a Contact: lookup by email_id / mobile_no / phone; attach if found, create if not. Mirrors prior `_find_matching_partner` + `_create_partner_from_lead`. Implementation: Server Script on Lead `before_insert`. Tracked in queue.
 
-## Form-handler routing (Phase 5 work)
+## Form-handler routing (Phase 2 work — Lead Intake)
 
-The live customer-facing `/book` form (currently on Odoo) posts to Odoo field names: `contact_name`, `phone`, `email_from`, `partner_name`, `description`, `x_*` fields. ERPNext Lead expects: `lead_name`, `phone`, `email_id`, `company_name`, `custom_anything_else`, `custom_*`. Build the field-rename mapping in the Web Form / API endpoint that replaces /book on the ERPNext side. Tracked in queue.
+The new `/book` and `/contact` forms on the ERPNext site post directly to Lead. The prior site posted under different field names (`contact_name`, `email_from`, `partner_name`, `x_*`). For the new build, forms post to ERPNext's Lead field names natively (`lead_name`, `phone`, `email_id`, `company_name`, `custom_anything_else`, `custom_*`) — no legacy name-mapping shim needed. Tracked in queue.
 
 ## Project Skills
 
