@@ -69,8 +69,10 @@ def build_top_bar_items() -> list[dict]:
     """
     return [
         {"label": "Home", "url": "/", "open_in_new_tab": 0, "right": 0},
-        # "What We Make" parent + product-type children
-        {"label": "What We Make", "url": "/shop", "open_in_new_tab": 0, "right": 0},
+        # "What We Make" parent + product-type children. A parent dropdown row
+        # cannot itself carry a URL (Frappe Top Bar Item validation) — children
+        # handle navigation; the parent acts only as the dropdown trigger.
+        {"label": "What We Make", "url": "", "open_in_new_tab": 0, "right": 0},
         {"label": "Arches", "url": "/shop?type=arch", "open_in_new_tab": 0, "right": 0,
          "parent_label": "What We Make"},
         {"label": "Garlands", "url": "/shop?type=garland", "open_in_new_tab": 0, "right": 0,
@@ -97,11 +99,16 @@ def build_top_bar_items() -> list[dict]:
 def build_footer_items() -> list[dict]:
     """Footer columns: Shop / Services / Company / Contact.
 
-    Frappe groups footer items into columns by parent_label. Each parent_label
-    becomes a column heading. Items without parent_label are skipped by the
-    standard footer template, so EVERY item here has parent_label set.
+    Frappe groups footer items into columns by parent_label, BUT each parent
+    label must exist as its own row first (URL-less, like a top-bar dropdown
+    parent). Children then reference those parent rows via parent_label.
     """
     return [
+        # Column headers (URL-less parent rows)
+        {"label": "Shop", "url": ""},
+        {"label": "Services", "url": ""},
+        {"label": "Company", "url": ""},
+        {"label": "Contact", "url": ""},
         # Shop column
         {"label": "All Products", "url": "/shop", "parent_label": "Shop"},
         {"label": "Arches", "url": "/shop?type=arch", "parent_label": "Shop"},
