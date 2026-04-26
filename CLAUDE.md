@@ -59,6 +59,23 @@ LT has never had a professional business management system. The ERPNext build un
 
 **Do NOT modify any file in `locally-twisted-odoo/` from this project** (standing rule 2026-04-25). It has its own git repo and gates. Read it for reference; write nothing back.
 
+## Reference Disposition (READ THIS BEFORE CITING ANYTHING OUTSIDE THIS FOLDER)
+
+The four reference surfaces above (failed Hetzner site, Odoo GitHub repo, local Odoo clone, current locallytwisted.com) are **temporary**. Their disposition is:
+
+- **Local Odoo clone** (`C:\Users\baenb\projects\locally-twisted-odoo\`): will be **archived to GitHub and removed from disk**. Future instances must NOT assume it exists.
+- **Failed Hetzner deployment** (`http://5.78.136.133/`): will be **decommissioned** after we have a working ERPNext replacement to show. Future instances must NOT assume it is reachable.
+- **Odoo GitHub repo** (`https://github.com/CBaen/locally-twisted-odoo`): will be **archived as read-only**. Useful for historical questions only; never cite as live state.
+- **Current `locallytwisted.com`** site: stays live until cutover, but is **damaged beyond repair** and out of scope for editing. After cutover, it will be replaced by the new ERPNext storefront at the same domain.
+
+**This new project must stand on its own.** Anything from the Odoo dir that applies to the new build has been (or will be) **copied here, scrubbed of Odoo references, and integrated into this folder's structure**. The canonical sources for the new build are:
+
+- **Style guide:** `_resources/STYLE-GUIDE.md` (to be copied; for now, see `C:\Users\baenb\projects\locally-twisted-odoo\STYLE-GUIDE.md`)
+- **Business policies:** `_resources/policies/` — full set of LT's confirmed business rules and the legal interview answers
+- **Tax data + research:** `_resources/utah-tax-rates-2026q2.md` (to be copied)
+
+**Rule for future instances:** if you find yourself reaching into the Odoo dir for something other than these copied resources, stop. The thing you need either lives here already, or it's not needed in the new build. When in doubt, ask GL.
+
 ## Reading order on arrival
 
 1. Global `C:\Users\baenb\.claude\CLAUDE.md` (auto-injected)
