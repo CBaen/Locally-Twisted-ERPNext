@@ -42,21 +42,22 @@ LT is a balloon business run by Jeff Baen, who is not a tech operator. Take ALL 
 
 This applies to: Custom Field labels, Property Setter relabels of standard fields, Server Script messages, mail.template subject + body, document title customizations, status workflow names. **When in doubt, ask: would Jeff or a customer-base socialite balloon-party-thrower understand this?** If not, reword.
 
-## Legacy Odoo system — three reachable sources, NONE authoritative
+## What this project actually is — a NEW BUILD, not a migration
 
-The Odoo system being migrated FROM has three surfaces you may want to consult:
+LT has never had a professional business management system. The ERPNext build under way at `:8081` is **the first one**. It is not replacing a working system — it is replacing improvisation.
 
-| Source | Location | Notes |
-|--------|----------|-------|
-| Live production | `http://5.78.136.133/` | Currently serving real customers; verified UP via `curl -sI` HTTP 200 (2026-04-26) |
-| GitHub repo | `https://github.com/CBaen/locally-twisted-odoo` | Remote source-of-record (last-pushed state) |
-| Local clone | `C:\Users\baenb\projects\locally-twisted-odoo` | Working copy on Wardenclyffe; `git status` may diverge from prod and from GitHub |
+**Two prior surfaces exist as reference material, not source of truth:**
 
-**Read this twice: NONE of these can be considered the source of truth.** Production drifted from committed code via manual hotfixes and `noupdate=1` data records that XML updates could not retouch. The local clone may have unpushed work or be behind GitHub. GitHub may not reflect what's actually deployed on Hetzner. The last Odoo crash was the trigger for this migration; treat any single source as a hint, not ground truth.
+| Surface | Location | What it is |
+|---------|----------|-----------|
+| Failed Odoo test deployment | `http://5.78.136.133/` | Attempt #1 at giving LT a backend. Was in testing phase; never went live to customers. Odoo failed the testing phase before launch. The Hetzner host still responds (HTTP 200) but no customers depend on it. |
+| Odoo GitHub repo | `https://github.com/CBaen/locally-twisted-odoo` | The codebase of attempt #1. |
+| Odoo local clone | `C:\Users\baenb\projects\locally-twisted-odoo` | Working copy on Wardenclyffe. |
+| Live customer-facing website | `https://locallytwisted.com` | The current site customers actually use. Damaged beyond repair; out of scope for editing. |
 
-**When the new ERPNext system needs to mirror legacy behavior, verify the same fact in at least two of the three sources before relying on it.** If they disagree, prefer the live production HTML over the local clone over GitHub (production is what customers actually saw).
+**None of these is authoritative for what the new ERPNext system should do.** The Odoo attempt encodes what GL/Jeff thought they wanted at one point — useful for understanding *intent* (form fields, automation ideas, model shape), but not customer-validated and not battle-tested. When in doubt about what the new system needs, **ask GL or look at how Jeff actually runs the business today** — don't reverse-engineer truth from the failed Odoo attempt.
 
-**Do NOT modify any file in `locally-twisted-odoo/` from this project** (per directive 2026-04-25). It has its own deploy gates and trust history with Jeff. ERPNext-side scripts only, in this folder.
+**Do NOT modify any file in `locally-twisted-odoo/` from this project** (standing rule 2026-04-25). It has its own git repo and gates. Read it for reference; write nothing back.
 
 ## Reading order on arrival
 
