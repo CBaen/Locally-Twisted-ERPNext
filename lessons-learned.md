@@ -88,13 +88,37 @@ done
 docker restart <project>-backend-1 <project>-queue-long-1 <project>-queue-short-1 <project>-scheduler-1
 ```
 
-### `.web-footer`'s computed height is mysteriously constrained even with `height: auto !important` (UNRESOLVED at end of session)
+### `.web-footer`'s computed height "constraint" — RESOLVED 2026-04-26 (current session)
 
-The standard Frappe footer renders as `<footer class="web-footer">` containing a `.container` with `.footer-logo-extension`, `.footer-grouped-links`, and `.footer-info`. In the LT site at end of Slice 2, `.web-footer`'s computed bounding box is 305px tall (y=595–900) but its child `.container` is 755px tall (y=643–1398). The child `.footer-info` (with the brand wordmark, social icons, address, copyright bar) renders at y=1024–1398 — well below the parent's painted blue background area, so it appears on the page's white background and looks invisible (white-on-white text is visible-but-faint, brand block looks "missing").
+The previous instance reported `.web-footer`'s computed height was "mysteriously constrained to ~305 px" while its child `.container` was 755 px tall. This was logged as UNRESOLVED.
 
-`overflow: visible !important`, `height: auto !important`, `min-height: 0 !important`, `max-height: none !important` on `.web-footer` did NOT change the computed height. Computed `position` of all relevant elements is `static`. No transform, no flex constraints visible in inspected styles.
+**Root cause from reading Frappe's actual source in the running container** (`docker exec backend cat /home/frappe/frappe-bench/apps/frappe/frappe/public/scss/website/footer.scss`): there is **no `max-height` rule on `.web-footer`**. The actual SCSS is:
 
-**Status: open.** This needs the framework study (next instance, Tasks 5–8 of the Slice 2 wrap-up TaskList) before another fix attempt. The likely root cause: Frappe's bundled CSS or a Web Template hook is forcing a height somewhere we haven't found, or the standard footer template wraps `.footer-info` outside the main `<footer>` parent's painted region in a way that's invisible to DOM-only checks. **Do not band-aid further until the framework's footer rendering pipeline is understood.**
+```scss
+.web-footer {
+  padding: 3rem 0;
+  min-height: 140px;
+  background-color: var(--fg-color);
+  border-top: 1px solid $border-color;
+  margin-top: auto;
+}
+```
+
+The `margin-top: auto` participates in Frappe's intended sticky-footer pattern: `apps/frappe/frappe/public/scss/website/base.scss` declares `html { height: 100% }` and `body { display: flex; flex-direction: column }`. The footer is the last flex child and `margin-top: auto` pushes it to the bottom of body when the main content is shorter than viewport. **This is not a bug — this is Frappe's intended layout.**
+
+The previous "305 px constraint" observation likely came from one or more of:
+1. The previous instance's own `lt-theme.css` `!important` chain on `.web-footer` interacting with the body's flex column in unexpected ways
+2. Measurement confusion between multiple `.container` elements on the page (the header has a `.container` too; the previous DOM-fact dump may have grabbed the wrong one)
+3. The page state at measurement time differed from what the screenshot rendered (cached CSS bundle, stale cookies, etc.)
+
+**The right move forward** (per the agency `frappe-conventions.md` "Verified against source — 2026-04-26" appendix and per GL's directive "work WITHIN Frappe, don't fight it"):
+
+1. Override the Jinja partial at `apps/locally_twisted/locally_twisted/templates/includes/footer/footer.html`. Your override resolves before Frappe's standard one. Use whatever class names you want — no inheritance from `.web-footer` necessary.
+2. Strip the `!important` chains from `lt-theme.css`. They were band-aids around the wrong problem.
+3. Use `web_include_css` (already wired in `hooks.py`) for the LT theme CSS — it loads AFTER the website bundle in cascade order, so equal-specificity rules win without `!important`.
+4. For SCSS that needs Frappe's variables and to be compiled into the bundle, register `website_theme_scss` in `hooks.py` and create `apps/locally_twisted/locally_twisted/public/scss/website.scss`.
+
+**Status: resolved.** Slice 2 redo can proceed using the right primitives; the framework was never the obstacle.
 
 ---
 
