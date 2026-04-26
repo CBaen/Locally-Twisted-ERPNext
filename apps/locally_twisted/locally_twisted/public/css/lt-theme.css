@@ -384,36 +384,28 @@ p {
    Targeting .navbar-toggler-icon (Bootstrap's standard span class) misses
    Frappe's structure entirely. Instead: brute-force the icon onto the button
    itself via background-image, and hide Frappe's inner SVG. */
+/* Real SVG file at /assets/locally_twisted/icons/menu.svg replaces the
+   prior data:image/svg+xml;utf8,... data URI that silently failed in real
+   browsers (per lessons-learned.md 2026-04-26). Frappe's bundle hides the
+   toggler at >=lg breakpoint; we only need to style its appearance. */
 .navbar-toggler {
-  display: inline-block !important;
-  width: 44px !important;
-  height: 44px !important;
-  border: 1px solid rgba(26, 26, 26, 0.35) !important;
-  border-radius: 0.375rem !important;
-  padding: 0 !important;
-  background-color: #FBFBFB !important;
-  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3E%3Cpath stroke='%231A1A1A' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E") !important;
-  background-repeat: no-repeat !important;
-  background-position: center center !important;
-  background-size: 24px 24px !important;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(26, 26, 26, 0.35);
+  border-radius: 0.375rem;
+  padding: 0;
+  background-color: #FBFBFB;
+  background-image: url("/assets/locally_twisted/icons/menu.svg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 24px 24px;
   cursor: pointer;
 }
 
 .navbar-toggler > span,
 .navbar-toggler svg,
 .navbar-toggler .icon {
-  display: none !important;
-}
-
-.navbar-toggler:hover {
-  background-color: #FBFBFB !important;
-}
-
-/* Hide toggler at lg+ where the menu is fully expanded */
-@media (min-width: 992px) {
-  .navbar-toggler {
-    display: none !important;
-  }
+  display: none;
 }
 
 /* Dropdown menu — surface tint per style guide "Mega Menu" */
