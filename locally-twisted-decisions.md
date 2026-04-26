@@ -8,6 +8,57 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-04-26 (session end) — Platform-direction question is OPEN; landing build approach was wrong on three counts
+
+**Decision:** No platform direction decided this session. The question is now explicitly on GL's desk for the next conversation.
+
+**The question, verbatim from the synthesis:** *Do you want to keep building the customer-facing website inside Frappe + webshop, OR explore a simpler front door (WordPress / Webflow / Next.js) with ERPNext quietly running the back office?*
+
+**Reasoning:** A full expedition (3 source-separated researchers + convergence + devil's advocate + GL Proxy) found:
+
+1. The Frappe theme ecosystem is THIN. No turnkey polished customer-facing themes exist. Every Frappe-built site that looks polished was built by Frappe employees for Frappe properties (frappe.io, fossunited.org, cloud.frappe.io). No documented case of a small business successfully running a polished customer-facing site on Frappe was found.
+2. Two LT homepage builds have failed in two consecutive sessions. Both failed by the same pattern: invented placeholder copy + band-aid CSS overrides + declaring "done" off DOM facts before GL opened the page in a real browser. The architecture wasn't the problem; the technique was.
+3. The Phase 1 off-ramp condition GL set ("if ERPNext can't deliver this visual + UX bar, GL pivots away from ERPNext") is exactly what the Devil's Advocate questioned. It has not been answered consciously.
+
+The GL Proxy flagged the convergence's tendency to route past the platform question and steelman the Frappe path. This decision entry surfaces it as the open question it is.
+
+**What's known:**
+- Frappe + custom Jinja + custom CSS will work eventually but requires substantial custom CSS work and Jeff cannot maintain it post-handoff.
+- WordPress + WooCommerce has the most off-the-shelf plugins for service booking + ecommerce but is the most-hacked CMS in the world (security maintenance burden).
+- Webflow is designer-first and Jeff can edit pages himself, but its ecommerce is light for complex variant catalogs.
+- Next.js + headless commerce (Vercel Commerce, Saleor, Medusa.js) gives best design freedom and best SEO but is Cameron-maintained forever and adds a sync layer to ERPNext.
+
+**Alternatives considered:** Keep building on Frappe without surfacing the question (rejected — would repeat the two-session failure pattern). Pre-decide for GL based on convergence (rejected — the choice depends on trade-offs only GL can weigh). Run more research first (rejected — the expedition was thorough; what's missing is GL's input, not more data).
+
+**Decided by:** No decision yet. GL is collecting more information. They asked specifically about webshop architecture, SEO/GEO/AEO of decoupled, service-scheduling needs, GitHub catalog import patterns, and whether Next.js works for ecommerce. All answered in the session transcript before this entry was written. They want to compare Vercel Commerce demo + Frappe Builder + Webflow templates side by side before deciding.
+
+**Status:** PENDING. Blocks all build tasks (#11, #12, #13, #14 in the session-end queue). Next instance must read `research/expedition-frappe-theme/synthesis.md` and confirm direction with GL before any visible build work resumes.
+
+---
+
+## 2026-04-26 (session end) — Approved Jeff content is NEVER invented — pull from Odoo XML or live locallytwisted.com
+
+**Decision:** All customer-facing copy on the LT site comes from one of two authoritative sources, never from instance imagination:
+1. **`C:/Users/baenb/projects/locally-twisted-odoo/addons/locally_twisted/views/`** (XML view files in the local Odoo project) — the most recent Jeff-approved Odoo update, captured verbatim in `research/expedition-frappe-theme/ground-truth-findings.md`. Per CLAUDE.md, this is authoritative for the new build.
+2. **`https://locallytwisted.com/`** (the live WordPress site Jeff still uses) — actively in front of customers today, captured verbatim in `research/expedition-frappe-theme/web-scout-findings.md`. The two sources diverge on hero copy, social icon count (3 vs 4), and credential framing ("since 1998" vs "Over 22 years"). GL has NOT yet picked which is "the" version.
+
+**Reasoning:** Two consecutive instances invented placeholder copy ("Make Your Celebration Unforgettable", "Three services. One promise: you get the moment, we handle the magic", "Ready to plan something unforgettable?") when the actual approved copy was sitting on disk. GL caught both. The trust cost was real both times. The pattern needs to die.
+
+**What this means in practice:**
+- Before writing any text that will appear on a customer-facing page, READ the Odoo XML or scrape the live site and use the actual content.
+- For copy that needs to be slightly adapted to fit a new layout, do the adaptation but preserve voice + key phrases verbatim.
+- If neither source has copy for a new surface, ASK GL — do not invent.
+
+**Open sub-decision for GL:** Which of the two sources is "the" approved version when they disagree? Specifically:
+- Hero copy: "Utah's Balloon Specialists" / "Making celebrations unforgettable since 1998" (Odoo) vs "Make Your Party POP!" / "Anything you imagine, we can shape into reality" (live site)
+- Social icons: 3 (Facebook, Instagram, Pinterest — Odoo) vs 4 (+ Twitter — live site)
+- Credentials: "since 1998" / 28 years (Odoo) vs "Over 22 years" (live site)
+- Tagline: "Utah's Balloon Specialists since 1998." (Odoo) vs different framings on live site
+
+**Decided by:** Lessons-learned pattern from this session + GL's explicit "did you make it up?" callout. The decision becomes a standing rule once GL confirms which source is authoritative.
+
+---
+
 ## 2026-04-26 (Web Page tabs finding) — Per-page interactivity belongs in the DocType, not a custom Web Template
 
 **Decision:** All per-page interactivity (JavaScript, CSS, server-side data fetching) for one-off pages goes into the corresponding `Web Page` record's native tabs (`javascript`, `css`, `context_script`, `header`), NOT into a custom Web Template or a custom controller. Custom Web Templates are reserved for layouts that genuinely need cross-page reuse.
