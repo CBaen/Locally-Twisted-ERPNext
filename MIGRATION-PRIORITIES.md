@@ -7,7 +7,21 @@ produced_by: Synthesis Agent D (Synthesis Writer), retro-odoo-2026-04-26 expedit
 
 # Migration Priorities
 
-**Plain summary:** Six things to build before LT goes live on Frappe. Each has a verification test you or Jeff can observe. The first one (HOW-TO-WIN catalog) is the prerequisite for the others. The six gates are what protect this work from repeating the Odoo failure curve.
+**Plain summary:** Six gates to build before LT goes live on Frappe. Each has a verification test you or Jeff can observe. **Four gates ship inside the LT repo and travel with it** if Jeff (or any future contractor) ever takes the codebase elsewhere. **Two gates stay at the agency** because they protect Claude Code instances, not the client's deliverable. The first agency gate (HOW-TO-WIN catalog) is the prerequisite for everything else.
+
+---
+
+## Part 0: Architectural Constraint — Portable vs Agency-Only Gates
+
+**Established 2026-04-26 in response to GL's portability question.** Every gate in this document is tagged either `[PORTABLE]` or `[AGENCY-ONLY]`.
+
+**`[PORTABLE]` gates live inside the LT repo at `<repo>/scripts/`, `<repo>/docs/`, `<repo>/.github/workflows/`.** They have no dependency on `~/.claude/`, on Built_by_Cameron's hooks, or on any path outside the repo. If LT is handed off to a contractor or to Jeff himself, these gates continue to fire under the new owner's hands. They protect the codebase against framework traps regardless of who is writing the code.
+
+**`[AGENCY-ONLY]` gates live at `C:\Users\baenb\.claude\` and stay with Built_by_Cameron.** They protect Claude Code instances under task pressure — a contractor using a normal IDE doesn't have those instances, so doesn't need those gates. If LT leaves BBC, these gates leave with BBC. The client doesn't lose protection — the protection didn't apply to them in the first place.
+
+**The portable subset is implemented as a reusable template** at `C:\Users\baenb\projects\Built_by_Cameron\_TEMPLATES\client-repo-gate-kit\`. Every BBC client repo gets the kit pre-installed at onboarding. When a client onboards, copy the kit into their repo, follow `client-repo-gate-kit/INSTALL.md`, and the four portable gates ship with them from day 1.
+
+**Why this matters:** GL named the constraint directly — *"these gates need to be built and be self contained with each client. They can't pull from outside of their directories because they need to port out and I don't want anyone to take it out if it's going to break in 90 days."* The split below honors that.
 
 ---
 

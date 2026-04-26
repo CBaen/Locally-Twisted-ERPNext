@@ -94,14 +94,16 @@ def services_values() -> dict:
 
 
 def social_values() -> dict:
+    # Section with Cards skips a card row whose card_N_title is empty.
+    # We use a single card with a brief title + content as our social-proof block.
     return {
         "title": "Trusted by Utah's best since 1998",
         "subtitle": "Twenty-seven years of celebrations across Davis, Weber, Salt Lake, and Utah counties.",
         "card_size": "Large",
-        "card_1_title": "",
-        "card_1_content": "",
+        "card_1_title": "From small parties to corporate events",
+        "card_1_content": "Hundreds of weddings, birthdays, baby showers, holidays, and corporate events. Every celebration handled with care.",
         "card_1_image": "/files/home-social-proof.png",
-        "card_1_url": "",
+        "card_1_url": "/all-products",
     }
 
 
