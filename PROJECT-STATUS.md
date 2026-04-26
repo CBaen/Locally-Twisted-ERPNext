@@ -110,6 +110,50 @@ Canonical resources for the new build live in `_resources/` and are platform-agn
 
 ## Updates
 
+### 2026-04-26 (codification + chrome + 3 portal pages session) — Platform direction RESOLVED; Slices 1+2+4+5+6-partial DONE; agency-tier meal codified
+
+**What landed:**
+- **Codification.** Three new agency-tier capability files (`frappe-portal-implementation.md`, `license-isolated-app-architecture.md`, plus updates to `frappe-conventions.md`) + one meal (`build-frappe-portal-page.md`). Every claim verified against running Frappe v15 source. Caught one wrong claim in external research (`extend_doctype_class` is not a v15 hook) — corrected at codification time, before it bit anyone.
+- **Slice 2 chrome** — Jinja partial overrides at `templates/includes/{navbar,footer}/`. Two-tier desktop header (delivery strip + centered logo + login/cart on right; main nav row centered), mobile single-row with hamburger + delivery strip below. Footer with centered brand band (3 social icons, no Twitter), 3-column links (always 3 across per GL spec — including mobile), centered copyright bar. GL iterated on logo size (2.5×), centering, padding, mobile column count; all addressed.
+- **Slice 6 partial — `/accessibility`** — first portal page shipped via the meal. Static, ~15 minutes mechanical work. GL confirmed: *"the content in the middle of the page looked good!"*
+- **Slice 5 — `/contact`** — full form-bearing portal page. AJAX submit to whitelisted controller method → Lead + Communication. Lead Source ensure-or-create gotcha caught at smoke test. GL confirmed: *"Holy shit! You did it!"*
+- **Slice 4 — `/balloon-twisting-and-face-painting`** — second form-bearing portal page (10-field form). Aliased from underscored filename via `website_route_rules`. First-ship MVP — carousels, event-crawl, modal deliberately deferred.
+- **Webshop bundles compile.** Node 18 + yarn installed in backend container; symlinked to `/usr/local/bin` for `/bin/sh` subprocesses. `bench build` produces real bundles. `install_webshop.py --build-assets` flag wraps the install + symlink + build sequence for reproducibility after container recreation. `/all-products` renders cleanly with zero console errors.
+- **Platform direction RESOLVED.** Frappe-native confirmed by demonstration. Logged at `locally-twisted-decisions.md` 2026-04-26 (later, after Slice 2 + accessibility + contact build).
+
+**What's NOT done (next session candidates):**
+- Slice 3 (homepage) — content exists in Odoo XML; meal applies cleanly
+- Slice 6 remainder (`/refund-policy`, `/faq`) — small static portal pages; ~15 min each
+- Slice 7-9 (products + cart + checkout) — different shape than the meal; webshop-driven; needs Website Item seeding first
+- BTFP first-ship omissions: carousels, event-crawl, modal
+- Contact first-ship omissions: Google Maps iframe, modal, `/privacy` link target
+
+**Standing rules added/refined this session:**
+- The meal at `Built_by_Cameron/.claude/capabilities/meals/build-frappe-portal-page.md` is the binding shape for any new portal page.
+- Five "Known gotchas" with receipts now codified in the meal: text-align inheritance, underscore→dash routing, webshop bundle compilation, Lead Source ensure-or-create, browser cache.
+- "Hard refresh" must be in every handoff to GL when shipping a CSS-touching change. Always.
+
+**Code/file changes this session:**
+- New: `apps/locally_twisted/locally_twisted/templates/includes/navbar/navbar.html` (Jinja override)
+- New: `apps/locally_twisted/locally_twisted/templates/includes/footer/footer.html` (Jinja override)
+- New: `apps/locally_twisted/locally_twisted/www/{__init__.py, accessibility.html, accessibility.py, contact.html, contact.py, balloon_twisting_and_face_painting.html, balloon_twisting_and_face_painting.py}`
+- Modified: `apps/locally_twisted/locally_twisted/public/css/lt-theme.css` — appended `.lt-header__*`, `.lt-footer__*` BEM blocks (no `!important`)
+- Modified: `apps/locally_twisted/locally_twisted/hooks.py` — added `website_route_rules` for the BTFP dashed-URL alias
+- Modified: `scripts/setup/install_webshop.py` — added `--build-assets` flag with full Node + yarn + bench build pipeline
+- New (agency-tier): `Built_by_Cameron/.claude/capabilities/meals/build-frappe-portal-page.md`
+- New (agency-tier): `Built_by_Cameron/.claude/capabilities/recipes/frappe-portal-implementation.md`
+- New (agency-tier): `Built_by_Cameron/.claude/capabilities/recipes/license-isolated-app-architecture.md`
+- Modified (agency-tier): `Built_by_Cameron/.claude/capabilities/INDEX.md`, `Built_by_Cameron/.claude/capabilities/recipes/frappe-conventions.md`, `Built_by_Cameron/built-by-cameron-decisions.md`
+- New (agency-tier): kitchen note at `Built_by_Cameron/.claude/capabilities/kitchen/2026-04-26-1830-frappe-portal-validator-skill.md`
+- Deleted: 6 disposable `_oneshot_*.py` screenshot scripts (git history preserves them)
+- Deleted from DB: smoke-test Leads `CRM-LEAD-2026-00001`, `CRM-LEAD-2026-00002` + linked Communications
+
+**Open architectural question (agency-tier, not LT-blocking):**
+- Two-app split (`agency_platform` + `<client>_connector`) — see `Built_by_Cameron/built-by-cameron-decisions.md` 2026-04-26 entry "License matrix verified" Finding 3. Best decided before next BBC client onboards.
+
+**Open small item (LT-tier):**
+- LT app `license.txt` is still placeholder (`Copyright (c) [year] [fullname]`). Suggested fill: `Copyright (c) 2026 Built by Cameron`.
+
 ### 2026-04-26 (closing session — long, mixed outcomes) — Webshop durable + catalog exported + Step 0 done + Jinja path validated; landing build FAILED for the second time; expedition surfaced platform-direction question now on GL's desk
 
 **What landed:**
