@@ -42,12 +42,21 @@ LT is a balloon business run by Jeff Baen, who is not a tech operator. Take ALL 
 
 This applies to: Custom Field labels, Property Setter relabels of standard fields, Server Script messages, mail.template subject + body, document title customizations, status workflow names. **When in doubt, ask: would Jeff or a customer-base socialite balloon-party-thrower understand this?** If not, reword.
 
-## Source-of-truth Odoo project (read-only reference)
+## Legacy Odoo system — three reachable sources, NONE authoritative
 
-The Odoo system being migrated FROM lives at:
-`C:\Users\baenb\projects\locally-twisted-odoo`
+The Odoo system being migrated FROM has three surfaces you may want to consult:
 
-Production at `5.78.136.133`. Continues running normally throughout migration. **Do NOT modify any file in `locally-twisted-odoo/` from this project** (per directive 2026-04-25). It has its own deploy gates and trust history with Jeff. ERPNext-side scripts only, in this folder.
+| Source | Location | Notes |
+|--------|----------|-------|
+| Live production | `http://5.78.136.133/` | Currently serving real customers; verified UP via `curl -sI` HTTP 200 (2026-04-26) |
+| GitHub repo | `https://github.com/CBaen/locally-twisted-odoo` | Remote source-of-record (last-pushed state) |
+| Local clone | `C:\Users\baenb\projects\locally-twisted-odoo` | Working copy on Wardenclyffe; `git status` may diverge from prod and from GitHub |
+
+**Read this twice: NONE of these can be considered the source of truth.** Production drifted from committed code via manual hotfixes and `noupdate=1` data records that XML updates could not retouch. The local clone may have unpushed work or be behind GitHub. GitHub may not reflect what's actually deployed on Hetzner. The last Odoo crash was the trigger for this migration; treat any single source as a hint, not ground truth.
+
+**When the new ERPNext system needs to mirror legacy behavior, verify the same fact in at least two of the three sources before relying on it.** If they disagree, prefer the live production HTML over the local clone over GitHub (production is what customers actually saw).
+
+**Do NOT modify any file in `locally-twisted-odoo/` from this project** (per directive 2026-04-25). It has its own deploy gates and trust history with Jeff. ERPNext-side scripts only, in this folder.
 
 ## Reading order on arrival
 
