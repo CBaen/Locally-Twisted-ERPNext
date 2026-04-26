@@ -36,8 +36,20 @@ def capture(p, viewport, output_path, *, is_mobile=False):
     )
     page = context.new_page()
     page.goto(URL, wait_until="networkidle", timeout=15000)
-    # Extra settle for any late layout/font swaps
-    page.wait_for_timeout(1000)
+    # Page Builder uses intersection-observer lazy-load on images; scroll
+    # the full page so all data-src images get swapped in before capture.
+    page.evaluate("""async () => {
+      const distance = 200;
+      const delay = 80;
+      const height = document.body.scrollHeight;
+      for (let y = 0; y < height; y += distance) {
+        window.scrollTo(0, y);
+        await new Promise(r => setTimeout(r, delay));
+      }
+      window.scrollTo(0, 0);
+    }""")
+    page.wait_for_load_state("networkidle", timeout=15000)
+    page.wait_for_timeout(1500)
     page.screenshot(path=str(output_path), full_page=True)
 
     # While we're here, capture a few facts about what's actually in the DOM
