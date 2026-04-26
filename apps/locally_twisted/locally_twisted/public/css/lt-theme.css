@@ -460,11 +460,26 @@ body .web-footer {
   background-color: #C3DCF3 !important;  /* lt-soft-blue */
   color: var(--lt-near-black) !important;
   padding-top: 3rem !important;
-  padding-bottom: 0 !important;
+  padding-bottom: 2rem !important;
   font-family: 'Raleway', sans-serif !important;
   font-size: 0.9375rem;
   border-top: none !important;
   margin-top: 4rem;
+  /* Frappe's bundle was constraining the footer's computed height to ~298px,
+     making .footer-info render outside the blue zone. Force auto-height. */
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* Belt-and-suspenders: paint the same blue on every footer section so a
+   constrained parent doesn't leave child sections on white. */
+.web-footer .footer-logo-extension,
+.web-footer .footer-grouped-links,
+.web-footer .footer-info,
+.web-footer > .container {
+  background-color: #C3DCF3 !important;
 }
 
 /* Force list items to stack vertically (Frappe's footer-group-links

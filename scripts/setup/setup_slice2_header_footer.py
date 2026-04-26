@@ -91,8 +91,9 @@ def build_top_bar_items() -> list[dict]:
         {"label": "Browse by Occasion", "url": "/occasions",
          "open_in_new_tab": 0, "right": 0},
         {"label": "Contact", "url": "/contact", "open_in_new_tab": 0, "right": 0},
-        # Right-aligned utility
-        {"label": "Sign in", "url": "/login", "open_in_new_tab": 0, "right": 1},
+        # No "Sign in" entry — Frappe's navbar auto-injects a "Login" link for
+        # anonymous visitors (and a user-area dropdown for logged-in users).
+        # Adding our own would duplicate it for anonymous viewers.
     ]
 
 
