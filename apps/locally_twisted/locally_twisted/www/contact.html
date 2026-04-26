@@ -1,0 +1,258 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+
+<section class="lt-contact__intro">
+    <div class="container">
+        <h1>Let's Create Something Amazing</h1>
+        <p class="lt-contact__intro-lede">Tell us about your celebration</p>
+    </div>
+</section>
+
+<section class="lt-contact">
+    <div class="lt-contact__grid">
+
+        {# Form #}
+        <div class="lt-contact__form-wrap">
+            <h2>Send Us a Message</h2>
+            <form id="lt-contact-form" class="lt-contact__form" novalidate>
+                <fieldset>
+                    <legend class="visually-hidden">Contact information</legend>
+
+                    <div class="row">
+                        <div class="lt-contact__field">
+                            <label for="ct-name">Your name <span class="lt-contact__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></label>
+                            <input type="text" id="ct-name" name="name"
+                                   class="lt-contact__input"
+                                   required aria-required="true"
+                                   autocomplete="name"
+                                   placeholder="Full name">
+                        </div>
+                        <div class="lt-contact__field">
+                            <label for="ct-email">Email <span class="lt-contact__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></label>
+                            <input type="email" id="ct-email" name="email"
+                                   class="lt-contact__input"
+                                   required aria-required="true"
+                                   autocomplete="email"
+                                   placeholder="your@email.com">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="lt-contact__field">
+                            <label for="ct-phone">Phone</label>
+                            <input type="tel" id="ct-phone" name="phone"
+                                   class="lt-contact__input"
+                                   autocomplete="tel"
+                                   placeholder="(801) 555-0000">
+                        </div>
+                        <div class="lt-contact__field">
+                            <label for="ct-event-type">Event type</label>
+                            <select id="ct-event-type" name="event_type" class="lt-contact__select">
+                                <option value="">Select an event type</option>
+                                {% for value, label in event_types %}
+                                <option value="{{ value }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="lt-contact__field" style="margin-bottom: 1rem;">
+                        <label for="ct-event-date">Event date</label>
+                        <input type="date" id="ct-event-date" name="event_date"
+                               class="lt-contact__input">
+                    </div>
+
+                    <div class="lt-contact__field" style="margin-bottom: 0.5rem;">
+                        <label for="ct-message">Tell us about your event</label>
+                        <textarea id="ct-message" name="message" rows="4"
+                                  class="lt-contact__textarea"
+                                  placeholder="Describe your vision, theme, colors, guest count..."></textarea>
+                    </div>
+
+                    <p class="lt-contact__privacy">
+                        We'll use this info to contact you about your event.
+                        See our <a href="/refund-policy">policies</a>.
+                    </p>
+
+                    <button type="submit" class="lt-contact__submit" id="ct-submit">
+                        Send Inquiry
+                    </button>
+
+                    <div id="ct-feedback" class="lt-contact__feedback" role="status" aria-live="polite"></div>
+                </fieldset>
+            </form>
+        </div>
+
+        {# Info card #}
+        <aside class="lt-contact__info-wrap">
+            <div class="lt-contact__info-card">
+                <h3>Get In Touch</h3>
+                <ul class="lt-contact__info-list">
+                    <li>
+                        <span class="lt-contact__icon" aria-hidden="true">&#x260E;</span>
+                        <a href="tel:+18012850860">(801) 285-0860</a>
+                    </li>
+                    <li>
+                        <span class="lt-contact__icon" aria-hidden="true">&#x2709;</span>
+                        <a href="mailto:hi@locallytwisted.com">hi@locallytwisted.com</a>
+                    </li>
+                </ul>
+
+                <hr class="lt-contact__divider">
+
+                <h4>Prefer to talk?</h4>
+                <p>Give us a call to discuss your event in detail. We're happy to talk through ideas before you commit.</p>
+                <a class="lt-contact__call-btn" href="tel:+18012850860">
+                    <span aria-hidden="true">&#x260E;</span>
+                    Call Now
+                </a>
+            </div>
+
+            <div class="lt-contact__social-block">
+                <h4>Follow Us</h4>
+                <div class="lt-contact__social-row">
+                    <a href="https://facebook.com/locallytwisted" target="_blank" rel="noopener noreferrer" aria-label="Locally Twisted on Facebook (opens in new tab)">
+                        <img src="/assets/locally_twisted/icons/facebook.svg" alt="" aria-hidden="true" width="22" height="22">
+                    </a>
+                    <a href="https://instagram.com/locally_twisted" target="_blank" rel="noopener noreferrer" aria-label="Locally Twisted on Instagram (opens in new tab)">
+                        <img src="/assets/locally_twisted/icons/instagram.svg" alt="" aria-hidden="true" width="22" height="22">
+                    </a>
+                    <a href="https://pinterest.com/locallytwisted" target="_blank" rel="noopener noreferrer" aria-label="Locally Twisted on Pinterest (opens in new tab)">
+                        <img src="/assets/locally_twisted/icons/pinterest.svg" alt="" aria-hidden="true" width="22" height="22">
+                    </a>
+                </div>
+            </div>
+        </aside>
+    </div>
+</section>
+
+<section class="lt-locations">
+    <div class="container">
+        <h2>Our Locations</h2>
+        <p class="lt-locations__subtitle">
+            Two convenient Utah locations to serve your celebration needs.
+        </p>
+
+        <div class="lt-locations__grid">
+            <article class="lt-location-card">
+                <span class="lt-location-card__badge">Creative Studio</span>
+                <h3>West Jordan</h3>
+                <p class="lt-location-card__desc">
+                    Visit our creative studio where the magic happens.
+                    Browse balloon bouquets, grab last-minute party supplies,
+                    or sit down with our team to design your dream event.
+                </p>
+                <ul class="lt-location-card__details">
+                    <li><span class="lt-contact__icon" aria-hidden="true">&#x1F4CD;</span><span>8969 S 2700 W, West Jordan, UT 84088</span></li>
+                    <li><span class="lt-contact__icon" aria-hidden="true">&#x1F552;</span><span>Tue&ndash;Fri: 12&ndash;6 pm</span></li>
+                    <li><span class="lt-contact__icon" aria-hidden="true">&#x1F552;</span><span>Sat: 10 am&ndash;4 pm</span></li>
+                    <li><span class="lt-contact__icon" aria-hidden="true">&#x260E;</span><a href="tel:+18012850860">(801) 285-0860</a></li>
+                </ul>
+                <a class="lt-location-card__directions"
+                   href="https://maps.google.com/maps?q=8969+S+2700+W,+West+Jordan,+UT+84088"
+                   target="_blank" rel="noopener noreferrer">
+                    <span aria-hidden="true">&#x27A4;</span>
+                    Get Directions
+                    <span class="visually-hidden"> (opens in new tab)</span>
+                </a>
+            </article>
+
+            <article class="lt-location-card">
+                <span class="lt-location-card__badge">Quick Pickups</span>
+                <h3>Riverdale</h3>
+                <p class="lt-location-card__desc">
+                    Convenient pickup for your online orders.
+                    Place your order, swing by, and you're party-ready.
+                </p>
+                <ul class="lt-location-card__details">
+                    <li><span class="lt-contact__icon" aria-hidden="true">&#x1F4CD;</span><span>913 W 4400 S, Riverdale, UT</span></li>
+                    <li><span class="lt-contact__icon" aria-hidden="true">&#x1F552;</span><span>Mon&ndash;Sat: 12&ndash;6 pm</span></li>
+                </ul>
+                <a class="lt-location-card__directions"
+                   href="https://maps.google.com/maps?q=913+W+4400+S,+Riverdale,+UT"
+                   target="_blank" rel="noopener noreferrer">
+                    <span aria-hidden="true">&#x27A4;</span>
+                    Get Directions
+                    <span class="visually-hidden"> (opens in new tab)</span>
+                </a>
+            </article>
+        </div>
+    </div>
+</section>
+
+<script>
+(function () {
+    var form = document.getElementById('lt-contact-form');
+    var submit = document.getElementById('ct-submit');
+    var feedback = document.getElementById('ct-feedback');
+    if (!form || !submit || !feedback) return;
+
+    function setFeedback(state, msg) {
+        feedback.classList.remove('is-success', 'is-error');
+        if (state) feedback.classList.add('is-' + state);
+        feedback.textContent = msg || '';
+    }
+
+    form.addEventListener('submit', function (ev) {
+        ev.preventDefault();
+        setFeedback(null, '');
+
+        var name = (form.elements['name'].value || '').trim();
+        var email = (form.elements['email'].value || '').trim();
+        if (!name || !email) {
+            setFeedback('error', 'Please fill in your name and email so we can reply.');
+            (name ? form.elements['email'] : form.elements['name']).focus();
+            return;
+        }
+
+        var payload = new FormData();
+        payload.append('name', name);
+        payload.append('email', email);
+        payload.append('phone', form.elements['phone'].value || '');
+        payload.append('event_type', form.elements['event_type'].value || '');
+        payload.append('event_date', form.elements['event_date'].value || '');
+        payload.append('message', form.elements['message'].value || '');
+
+        submit.disabled = true;
+        var originalLabel = submit.textContent;
+        submit.textContent = 'Sending...';
+
+        fetch('/api/method/locally_twisted.www.contact.submit_contact', {
+            method: 'POST',
+            headers: {
+                'X-Frappe-CSRF-Token': (window.frappe && window.frappe.csrf_token) || 'token',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: payload,
+            credentials: 'same-origin'
+        })
+        .then(function (resp) {
+            return resp.json().then(function (data) { return { status: resp.status, body: data }; });
+        })
+        .then(function (result) {
+            submit.disabled = false;
+            submit.textContent = originalLabel;
+            if (result.status >= 200 && result.status < 300 && result.body && result.body.message && result.body.message.ok) {
+                setFeedback('success', "Thanks — we got it. We'll be in touch soon.");
+                form.reset();
+            } else {
+                var msg = (result.body && (result.body._server_messages || result.body.exception || result.body.message))
+                    || 'Something went wrong. Please call (801) 285-0860 or email hi@locallytwisted.com.';
+                if (typeof msg === 'string' && msg.indexOf('{') === 0) {
+                    try { msg = JSON.parse(msg).message || msg; } catch (e) {}
+                }
+                setFeedback('error', typeof msg === 'string' ? msg : 'Something went wrong. Please call (801) 285-0860 or email hi@locallytwisted.com.');
+            }
+        })
+        .catch(function (err) {
+            submit.disabled = false;
+            submit.textContent = originalLabel;
+            setFeedback('error', "We couldn't send the message. Please call (801) 285-0860 or email hi@locallytwisted.com.");
+            if (window.console && console.error) console.error('Contact form submit failed', err);
+        });
+    });
+})();
+</script>
+
+{% endblock %}
