@@ -1,7 +1,7 @@
 # Locally Twisted — Client Project CLAUDE.md
 
 **Client:** Locally Twisted
-**Owner:** Jeff Baen
+**Owner:** Jeff Kimber
 **Business:** Custom balloon decor (arches, garlands, walls, drops), balloon twisting, face painting — Wasatch Front, Utah
 **Phone:** (801) 285-0860
 **Email:** hi@locallytwisted.com
@@ -21,15 +21,15 @@
 | ERPNext image pin | `frappe/erpnext:v15.105.0` (latest stable v15 patch) |
 | Frappe site | `frontend` |
 | URL | http://localhost:8081 |
-| Logins | `Administrator` / `admin` (superuser) · `cameron@builtbycameron.com` / `LocalDev2026!` (Cameron — System Manager dev account) · `locallytwisted@gmail.com` (Jeff Baen — pre-created for transfer, no password yet) |
+| Logins | `Administrator` / `admin` (superuser) · `cameron@builtbycameron.com` / `LocalDev2026!` (Cameron — System Manager dev account) · `locallytwisted@gmail.com` (Jeff Kimber — pre-created for transfer, no password yet) |
 
 ## This folder is structured per the agency isolation rule
 
-See `Built_by_Cameron/CLAUDE.md` for the agency-level standing rule. **Litmus test:** every file in this folder is scoped to Locally Twisted and will be transferred to Jeff Baen on cutover. Don't add cross-client references; don't depend on agency-internal tooling that won't transfer with the folder.
+See `Built_by_Cameron/CLAUDE.md` for the agency-level standing rule. **Litmus test:** every file in this folder is scoped to Locally Twisted and will be transferred to Jeff Kimber on cutover. Don't add cross-client references; don't depend on agency-internal tooling that won't transfer with the folder.
 
 ## Voice & Language — LT-specific
 
-LT is a balloon business run by Jeff Baen, who is not a tech operator. Take ALL business jargon out of the ERPNext UI. Customers and Jeff alike will use plain language.
+LT is a balloon business run by Jeff Kimber, who is not a tech operator. Take ALL business jargon out of the ERPNext UI. Customers and Jeff alike will use plain language.
 
 | Avoid | Use instead |
 |-------|-------------|
