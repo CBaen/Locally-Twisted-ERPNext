@@ -1,20 +1,22 @@
 """
 Phase 1, Slice 2 — Header + Footer setup.
 
-Configures ERPNext's Website Settings to render LT's header (nav per Option B
-locked decision) and footer (Soft Blue band, brand wordmark, social, legal links,
-business contact). Re-uploads the full lt-theme.css source-of-truth into
-Website Settings.head_html so Slice 1 + Slice 2 styles are present together.
+⚠ STATUS: Slice 2 is NOT visually complete. This script populates Website
+Settings (top_bar_items, footer_items, brand_html, address, copyright,
+home_page) and creates a placeholder home Web Page, but the rendered footer
+brand block / social icons / address / copyright currently render outside
+the painted Soft Blue area due to an unresolved `.web-footer` height
+constraint. See HANDOFF.md and lessons-learned.md before resuming.
 
-Also creates a minimal "Coming soon" home Web Page so `/` is publicly reachable
-for verification — Slice 3 will replace this content with the real landing page.
+Configures ERPNext's Website Settings to render LT's header (nav per Option B)
+and footer (4 columns + brand block in `address` field). The theme CSS itself
+is served by the `locally_twisted` custom Frappe app via `web_include_css` in
+its hooks.py — this script does NOT push CSS to head_html anymore.
 
 Run:
-    python scripts/setup/setup_slice2_header_footer.py
+    PYTHONIOENCODING=utf-8 PYTHONUTF8=1 python scripts/setup/setup_slice2_header_footer.py
 
-Verify:
-    curl -s http://localhost:8081/ | grep -c "lt-footer-brand"   # should be 1+
-    curl -s http://localhost:8081/ | grep -c 'navbar-brand'      # should be 1+
+Verify with Playwright (NOT chrome --screenshot) — see scripts/verify/playwright_home_screenshot.py.
 """
 
 from __future__ import annotations
@@ -27,10 +29,10 @@ import requests
 
 BASE = "http://localhost:8081"
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-THEME_CSS_PATH = PROJECT_ROOT / "_resources" / "lt-theme.css"
-THEME_MARKER_HEADER = (
-    "<!-- LT Theme: source-of-truth at _resources/lt-theme.css ; "
-    "Phase 1 Slices 1+2 -->"
+HEAD_HTML_MARKER = (
+    "<!-- LT theme served via locally_twisted custom Frappe app at "
+    "/assets/locally_twisted/css/lt-theme.css (registered via web_include_css "
+    "in apps/locally_twisted/locally_twisted/hooks.py). -->"
 )
 
 
