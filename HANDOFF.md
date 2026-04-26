@@ -1,38 +1,46 @@
-# HANDOFF — Locally Twisted (Odoo→ERPNext Migration)
+# HANDOFF — Locally Twisted (First Professional Business Platform)
 
-**Last updated:** 2026-04-26 (Opus 4.7, Trellis-successor — no name chosen)
+**Last updated:** 2026-04-26 (Opus 4.7, post-reframe session)
 
 Overwrite-not-append. ~40 lines. Git is the changelog.
 
 ## Live state
 
-**LT ERPNext v15.105.0 running:** http://localhost:8081 — compose project `locally-twisted-erpnext-v15`. Setup wizard complete. Logins per `CLAUDE.md`.
+**ERPNext v15.105.0 running:** http://localhost:8081 — compose project `locally-twisted-erpnext-v15`. Setup wizard complete. Logins per `CLAUDE.md`.
 
-**Phase 2 (Backend Models) — in flight.** Custom models translated:
-- ✓ `dashboard_review` → `Dashboard Reviewed Item` DocType (Trellis, prior session)
-- ✓ `crm_lead` → 46 Custom Fields on `Lead` after 4 iterations:
-  - iter 1: 42 Custom Fields, sectioned but Select-only
-  - iter 2: Multi-select via Table MultiSelect → "LT Service Type" (6 canonical services after iter 3)
-  - iter 3: Realigned to live `/book` form, dropped 6 obsolete fields, +`custom_anything_else`, conditional sections per service
-  - iter 4: Time fields → Time fieldtype, +Delivery Window Start/End, +Internal Only Notes, +Inspiration Photos child table, qualification labels relabeled, "Additional Information" tab hidden, max upload 25 MB
-- ☐ `res_partner`, `product_template`, `project_task`, `calendar_event`, `hr_expense`, `res_config_settings` (next translations)
-- ☐ `twilio_service` is an abstract service class — implement as Python helpers / Server Scripts, NOT a new DocType (per 2026-04-26 decision)
+**Frame reset 2026-04-26:** project is no longer "Odoo → ERPNext migration." It is "first professional business platform for LT, built on ERPNext." Jeff Kimber doesn't know about the failed Odoo attempt that preceded this build; no artifact on disk should leak that. See `CLAUDE.md` "What this project actually is" + "Reference Disposition" sections.
 
-**Two open items deferred from this session, awaiting user decision before resuming:**
-1. **Inspiration Photos thumbnail UX** — Frappe blocks `in_list_view` on Attach Image AND Image fieldtypes in child tables. Three paths offered to GL: (a) click-to-expand (current state), (b) Frappe Client Script for inline gallery rendering, (c) drop child table for built-in attachments sidebar. GL hasn't picked yet.
-2. **GL's "this is one Lead!" realization** — was thinking each tab was a Lead category; reality is sections of one Lead form. GL hasn't said what they actually wanted to model differently. **Don't redesign without their explicit direction.**
+**Phase 1 is the new active phase: customer site + storefront** (the proof point — if ERPNext can't deliver this, GL pivots). PROJECT.md and ROADMAP.md have been promoted to the v2 frame. Old 10-phase translation-centric ROADMAP lives in git history.
+
+## What's already built (carries forward into the new ROADMAP)
+
+- **Lead schema** — 45+ Custom Fields on `Lead` with sectioned layout, plain-language relabels of standard fields, "Additional Information" tab hidden, file upload to 25 MB. Built across `scripts/translate/translate_crm_lead.py` + 4 fix scripts. Feeds Phase 2 (Lead Intake).
+- **Dashboard Reviewed Item DocType** — built via `scripts/translate/translate_dashboard_review.py`. Quiet placeholder; no Phase yet depends on it.
+- **nginx Origin pass-through patch** — applied via `scripts/fix/patch_nginx_socketio_origin.py`. Survives until container recreation; persistent via docker-compose override is a P2 backlog item.
+- **Setup wizard finalization** — Cameron + Jeff Kimber (currently mis-labeled as "Jeff Baen" in ERPNext, queued to fix), Address, Company contact details all populated.
 
 ## Hot direction (load-bearing for next session)
 
-1. **GL is leading less, partnering more.** "You are my partner and collaborator with all things technical. I need you to lead!" (2026-04-26). Make calls; surface choices that need GL input; don't ask permission for obvious moves.
-2. **Verify in UI before claiming done.** GL caught the multi-select bug because they actually opened the form. Use `python C:/Users/baenb/.claude/scripts/screenshot.py` (primary monitor) or the virtual-screen one-liner in PowerShell. Browser is on a separate monitor.
-3. **Translation pattern (now agreed mode):** read Odoo source → write `scripts/translate/translate_<model>.py` → run via `python` → verify in UI → commit. Revisions land as `scripts/fix/fix_<thing>.py`. NO formal GSD plan files for translations.
-4. **Voice & Language:** plain language, no business jargon (see `CLAUDE.md`). LT is a balloon business; Jeff is not corporate.
-5. **The customer-facing `/book` form (Odoo side) needs to mirror the new Lead schema** — add `x_event_end_time`, switch all time inputs to AM/PM-friendly, add the new fields per iter 3+4. **Coordinate with GL on which session/instance does this** — `locally-twisted-odoo/` is read-only from this project per directive 2026-04-25.
+1. **Auto mode is active.** GL wants forward motion without unnecessary check-ins. Take the lead on technical work; flag dependencies GL didn't think to ask about; apply obvious companion features and report what + why.
+2. **Phase 1 is the customer-facing proof.** First slice in `.planning/phases/01-customer-site-and-storefront/PLAN.md` is the brand-token install. Each subsequent slice ends in something visible.
+3. **Verify in UI before claiming done.** Use `python C:/Users/baenb/.claude/scripts/screenshot.py` (primary monitor only). Browser is on a separate monitor.
+4. **Voice & Language:** plain language, no business jargon. See `CLAUDE.md` and `_resources/STYLE-GUIDE.md` voice section ("Quiet Confidence").
+5. **Reference Disposition.** Odoo dir + Hetzner deployment + GitHub Odoo repo all retire post-cutover. Canonical resources live in `_resources/`.
 
-## Major architectural change in this session
+## Decision gates that need GL input before Phase 1 deep work
 
-The whole BBC repository was restructured 2026-04-26 (this session) per GL's epiphany: BBC is purely an ERPNext design agency; LT is a CLIENT (not part of BBC). All LT-specific work moved from BBC root to `_CLIENTS/locally-twisted/`. Each client now has its own git repo, own CLAUDE.md, own standard project files. Litmus test: if it stays useful when transferred to the client owner, it lives in the client folder. See `Built_by_Cameron/CLAUDE.md` for the agency-level rule.
+1. **Header navigation:** consolidated "What We Make" + occasion landing pages (Claude's recommendation) vs. three competing super-menus. See `.planning/decisions/header-navigation.md`.
+2. **Accessibility statement:** brief intent-only with working contact (Claude's recommendation) vs. detailed AA conformance claim vs. skip. See `.planning/decisions/accessibility-statement.md`.
+3. **Blog presence in Phase 1:** ship framework + one seed post / framework only / defer.
+4. **Real photography sourcing:** where do good LT event photos live, or do we ship Phase 1 with placeholders?
+5. **Customer-inquiry email destination:** where do current contact-form submissions land?
+6. **Pricing calculator:** in Phase 1 or deferred?
+
+## ERPNext user cleanup pending
+
+- Rename `locallytwisted@gmail.com` user record's full_name from "Jeff Baen" to "Jeff Kimber" — explicit GL approval given
+- Disable (or delete) `locallytwisted@yahoo.com` placeholder user — explicit GL confirmation it shouldn't exist
+  *(Auto-mode safer move: disable instead of delete, since deletion is destructive on the running ERPNext.)*
 
 ## Not in flight
 
