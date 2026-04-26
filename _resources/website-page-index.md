@@ -125,30 +125,44 @@ When the time comes for the demo, the Jeff-facing value sentence per area is:
 
 ---
 
-## Open questions for GL
+## GL-confirmed answers (2026-04-26)
 
-1. **Footer layout** — confirm: live with Frappe's default footer (data populated for Shop/Company/Get-In-Touch columns + copyright) and SKIP the centered brand block + 3 social icons + hours block? Or is one of those load-bearing for Jeff and we should tier-4 just that piece?
-2. **Pricing calculator** — confirm: this is the only tier-4 piece in Phase 1, embedded in the BTFP service page?
-3. **Product catalog scope** — how many products total? All structurally similar to the Classic Organic Arch (size + color + add-on)? Or do some have different attribute models?
-4. **Color swatches vs pills** — for the 53 latex colors, native webshop renders pills (works but visually heavy). Dropdown or color-swatch grid would be tier 4. Acceptable to ship pills for v1?
-5. **Product photography** — for product detail pages, do we use `_resources/images/product-*.png` placeholders, or does Jeff have real product photos somewhere?
-6. **Blog content** — the framework supports tier 3 native rendering, but you also need to write the first 2-3 posts. Where does that copy come from?
+1. **Footer layout — RESOLVED.** Use whatever native Frappe footer template natively supports as close to the prior Odoo design as possible; accept Frappe's default for everything else. **Specifically:** native footer supports columns (`footer_items`), address (`footer_address`), copyright (`copyright`), powered-by (`footer_powered`). Native footer does NOT have: centered brand block, hours block, social icon row. Per GL: skip those. Configure the natives, don't override the template.
+2. **Pricing calculator — RESOLVED.** Confirmed: only tier-4 piece in Phase 1. Embedded in BTFP service page.
+3. **Product catalog scope — RESOLVED via inventory.** Roughly **~50 products across ~20 categories**, scraped from Odoo `What We Make` (3 paginated pages). Categories include: Backdrops, Balloon Arches, Balloon Cups, Balloon Drops, Classic Columns, Premium Garlands/Arches/Columns, Number Columns, Photo Frames, Bouquets (Unicorn, Mickey Mouse, etc.), themed event categories (Baby Shower, Graduation, Halloween, Easter, Pride). Sample products: Classic Organic Arch, Classic Organic Garland, Premium Organic Arch, Number Balloon Columns, Easter Bunny Ear Arch, Pride Progress Rainbow Arch, Mickey Mouse Bouquet, Balloon Drop. **Implication:** manual entry is impractical; an Odoo data export is now a load-bearing deliverable.
+4. **Color swatches vs pills — DEFERRED to mock comparison.** Confirmed `Item Attribute Value` DocType has no native swatch field (only `attribute_value` Data + `abbr` Data). Swatches require: custom field via Customize Form (e.g., `swatch_hex` Color field) + custom Web Template that renders swatch grid. **Pills = tier 1, swatches = tier 4.** Render both as mock pages with a 5-color test product so GL can decide before catalog seed.
+5. **Product photography — RESOLVED.** Real photos exist in Odoo. Export script will pull product assets (images), product list, attributes, variants, and customer list (customers deferred but captured opportunistically for Phase 6 cutover).
+6. **Blog content — DEFERRED.** Instances will write blog posts. **Blog is OUT of Phase 1 scope per GL: "Blogs don't matter right now."** Slice 5b removed from active work; deferred until Phase 1 ships.
+
+## Build order (LOCKED — GL directive 2026-04-26)
+
+Per GL: *"I need the landing page, balloon twisting and face painting, ecommerce workflow, contact ... that is the order."*
+
+| # | Step | Tier | Notes |
+|---|---|---|---|
+| 0 | **Reset to native baseline** (prereq) | — | Strip `!important` chains from `lt-theme.css` (lines 477-526). Retire `scripts/setup/setup_slice2_header_footer.py` from active use. Verify home + webshop pages render cleanly with native Frappe + LT theme colors only. |
+| 1 | **Landing page** `/` | 2 | Web Page record with `content_type="Page Builder"`, route="home", set as `Website Settings.home_page`. Page Builder blocks. Placeholders from `_resources/images/`. |
+| 2 | **Balloon Twisting + Face Painting** `/balloon-twisting-and-face-painting` | 2 + 4 | Page Builder for layout. Pricing calculator embedded — the one tier-4 piece in Phase 1. |
+| 3a | Run **Odoo data export** | tooling | Script-based: products + attributes + variants + photos + customers. Output to `_resources/odoo-export/`. |
+| 3b | **Decide pills vs swatches** | — | After mock render comparison. |
+| 3c | Seed **catalog data** (categories, products, attributes, variants, photos) into ERPNext | 1 (data only) | Bulk import via script. |
+| 3d–f | Verify **`/all-products`, product detail, cart, checkout** flow | 1 | Native webshop pages. Theme CSS for visual polish only. No template overrides. |
+| 4 | **Contact page** `/contact` | 2 | Page Builder + Frappe Web Form (form-to-Lead wiring is Phase 2; for now stub the submit). |
+
+**Out of Phase 1 (per GL 2026-04-26):**
+- Blog
+- Refund Policy + Accessibility + FAQ standalone pages — DEFERRED. (May be added back as quick tier-3 pages once the four above ship; explicitly NOT in current scope.)
+- Lead intake wiring (Phase 2)
+- Stripe production wiring (Phase 4)
+
+## What changed from v1
+
+- All 6 open questions resolved.
+- Build order now reflects GL's exact priority sequence (landing → BTFP → ecommerce → contact, blog out).
+- Catalog scope confirmed as ~50 products / ~20 categories — Odoo export is now load-bearing infrastructure (not a "nice to have").
+- Footer decision locked as native-config-only (accept Frappe's defaults for what isn't natively supported).
+- Color swatches confirmed tier 4 because Frappe's `Item Attribute Value` schema has no native swatch field.
 
 ---
 
-## Recommended build order (lowest risk first)
-
-If this index gets your sign-off, the work order is:
-
-1. **Reset to native baseline.** Strip `!important` chains from `lt-theme.css`. Strip the `Website Settings` overrides from the prior `setup_slice2_header_footer.py` (the data values can stay, but the setup script should be retired or rewritten to be minimal). Verify the home page still loads cleanly with just LT colors.
-2. **Tier 1 wins first** (header + footer + simple settings). Sub-day work each.
-3. **Tier 3 content pages** (refund, accessibility, blog framework + posts). Pure content entry.
-4. **Tier 2 marketing pages with Page Builder** (homepage, BTFP service page WITHOUT calculator, contact page).
-5. **Ecommerce catalog seed** (Item Templates + Attributes + Variants + Website Items). The bulk of Phase 1 effort lives here. Start with 1 product end-to-end, validate the variant rendering, then scale.
-6. **The one tier-4 piece** (pricing calculator on BTFP page).
-7. **Webshop pages live** (just verify they render and are linked from header nav + homepage).
-8. **Stripe + invoicing + Utah tax** (Phase 4 — happens after Phase 1 ships).
-
----
-
-*Draft v1 — 2026-04-26. Awaiting GL review of: tier classifications, footer layout decision, product catalog scope, and the open questions above.*
+*v2 — 2026-04-26 — GL-confirmed. Build order locked. Tasks created in current session: #7 (this update), #8 (Step 0 reset), #9 (Odoo export), #10 (mock pills/swatches render), #11 (landing), #12 (BTFP), #13 (ecommerce), #14 (contact).*

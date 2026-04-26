@@ -471,171 +471,20 @@ p {
 }
 
 /* ── Footer ──
-   !important + literal hex used because Frappe's website.bundle.css and
-   erpnext-web.bundle.css load AFTER head_html in the cascade and would
-   otherwise win at equal specificity. */
-.web-footer,
-footer.web-footer,
-body .web-footer {
-  background-color: #C3DCF3 !important;  /* lt-soft-blue */
-  color: var(--lt-near-black) !important;
-  padding-top: 3rem !important;
-  padding-bottom: 2rem !important;
-  font-family: 'Raleway', sans-serif !important;
+   Loaded via web_include_css in hooks.py, which injects this stylesheet
+   AFTER Frappe's website.bundle.css. Equal-specificity rules win without
+   !important. We style only what Frappe's native footer renders — no custom
+   brand block, no custom social row, no template overrides. */
+.web-footer {
+  background-color: var(--lt-soft-blue);
+  color: var(--lt-near-black);
+  font-family: 'Raleway', sans-serif;
   font-size: 0.9375rem;
-  border-top: none !important;
-  margin-top: 4rem;
-  /* Frappe's bundle was constraining the footer's computed height to ~298px,
-     making .footer-info render outside the blue zone. Force auto-height. */
-  height: auto !important;
-  min-height: 0 !important;
-  max-height: none !important;
-  overflow: visible !important;
-}
-
-/* Belt-and-suspenders: paint the same blue on every footer section so a
-   constrained parent doesn't leave child sections on white. */
-.web-footer .footer-logo-extension,
-.web-footer .footer-grouped-links,
-.web-footer .footer-info,
-.web-footer > .container {
-  background-color: #C3DCF3 !important;
-}
-
-/* Force list items to stack vertically (Frappe's footer-group-links
-   inherits flex behavior from the bundle that flows items horizontally) */
-.web-footer ul,
-.web-footer .footer-group-links,
-.web-footer ul.list-unstyled {
-  display: block !important;
-  list-style: none !important;
-  padding: 0 !important;
-  margin: 0 !important;
-}
-
-.web-footer li,
-.web-footer .footer-child-item {
-  display: list-item !important;
-  width: 100% !important;
-  padding: 0.375rem 0 !important;
-}
-
-.web-footer .footer-group {
-  display: block;
-  margin-bottom: 1.5rem;
 }
 
 @media (min-width: 992px) {
   .web-footer {
     padding-top: 4rem;
-  }
-}
-
-/* Footer brand block (rendered from Website Settings.address HTML) */
-.lt-footer-brand {
-  font-family: 'DM Serif Display', Georgia, serif;
-  font-weight: 400;
-  font-size: 1.875rem;
-  color: var(--lt-near-black);
-  margin: 0 0 0.5rem 0;
-  line-height: 1.1;
-  letter-spacing: 0.01em;
-}
-
-@media (min-width: 992px) {
-  .lt-footer-brand { font-size: 2.25rem; }
-}
-
-.lt-footer-tagline {
-  font-family: 'Raleway', sans-serif;
-  font-weight: 400;
-  font-size: 0.875rem;
-  color: var(--lt-near-black);
-  opacity: 0.8;
-  margin: 0 0 1.5rem 0;
-}
-
-.lt-footer-address {
-  font-family: 'Raleway', sans-serif;
-  font-size: 0.875rem;
-  color: var(--lt-near-black);
-  line-height: 1.7;
-  margin: 0 0 1rem 0;
-}
-
-.lt-footer-address a,
-.lt-footer-address a:visited {
-  color: var(--lt-near-black);
-  text-decoration: none;
-}
-
-.lt-footer-address a:hover,
-.lt-footer-address a:focus-visible {
-  text-decoration: underline;
-  color: var(--lt-near-black);
-}
-
-/* Footer social row — 44px circles.
-   Icons rendered via CSS background-image because Frappe's HTML sanitizer
-   strips <path d="..."> attributes from CMS fields (address, address_html).
-   Class names on the <a> tell us which icon to render. */
-.web-footer ul.lt-footer-social,
-.lt-footer-social {
-  list-style: none !important;
-  padding: 0 !important;
-  margin: 0 0 1.5rem 0 !important;
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 0.5rem !important;
-}
-
-.web-footer .lt-footer-social li,
-.lt-footer-social li {
-  display: list-item !important;
-  width: auto !important;
-  padding: 0 !important;
-}
-
-.lt-social,
-.lt-footer-social a,
-.lt-footer-social a:visited {
-  display: inline-block !important;
-  width: 44px !important;
-  height: 44px !important;
-  border-radius: 50% !important;
-  background-color: rgba(26, 26, 26, 0.06) !important;
-  background-repeat: no-repeat !important;
-  background-position: center center !important;
-  background-size: 20px 20px !important;
-  color: var(--lt-near-black) !important;
-  text-decoration: none !important;
-  transition: background-color 0.15s ease;
-  vertical-align: middle;
-}
-
-.lt-social:hover,
-.lt-social:focus-visible,
-.lt-footer-social a:hover,
-.lt-footer-social a:focus-visible {
-  background-color: #F4DFD7 !important;  /* lt-blush */
-}
-
-/* Icon SVGs as actual files served from /assets/locally_twisted/icons/.
-   The earlier data-URI approach silently failed in real browsers: empty
-   circles because of the non-standard `data:image/svg+xml;utf8,` prefix
-   and unencoded spaces inside the path's d attribute. Real files have no
-   encoding ambiguity and are easier to maintain. */
-.lt-social--instagram { background-image: url("/assets/locally_twisted/icons/instagram.svg") !important; }
-.lt-social--facebook  { background-image: url("/assets/locally_twisted/icons/facebook.svg")  !important; }
-.lt-social--pinterest { background-image: url("/assets/locally_twisted/icons/pinterest.svg") !important; }
-.lt-social--twitter   { background-image: url("/assets/locally_twisted/icons/twitter.svg")   !important; }
-
-/* Force navbar-toggler visible on mobile (Bootstrap navbar-expand-lg should
-   handle this but Frappe's bundled CSS sometimes adds d-none variants) */
-@media (max-width: 991.98px) {
-  .navbar-toggler {
-    display: inline-block !important;
-    visibility: visible !important;
   }
 }
 
