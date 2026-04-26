@@ -17,7 +17,8 @@ Build order is sequential, but slices 6 (legal pages) and 9 (cart/checkout) can 
 | 3 | Landing page | Slices 1–2 | partial (depends on photography availability) |
 | 4 | Balloon Twisting + Face Painting service page | Slices 1–2 | no (carry-forward content) |
 | 5 | Contact page (with brief about summary embedded) | Slices 1–2 | no |
-| 6 | Accessibility + Refund Policy + FAQ pages | Slices 1–2; **accessibility statement decision** | yes |
+| 5b | Blog framework + first 2-3 live posts | Slices 1–2 | no (blog yes/no resolved 2026-04-26) |
+| 6 | Accessibility + Refund Policy + FAQ pages | Slices 1–2 | no (accessibility option B resolved 2026-04-26) |
 | 7 | Products listing (browse) | Slices 1–2; **header nav decision** | yes |
 | 8 | Individual product pages | Slice 7 | no |
 | 9 | Cart + checkout shell (Stripe stubbed until Phase 4) | Slice 8 | no |
@@ -225,17 +226,18 @@ These apply to every slice — not separate work items:
 - **Accessibility:** WCAG 2.1 AA non-negotiable per the style guide. Every slice gets an automated accessibility scan + manual keyboard test before declaring done.
 - **SEO baseline:** unique title + meta description per page, semantic HTML, schema.org markup where applicable, OpenGraph + Twitter cards.
 
-## What I need from GL before specific slices can build
+## All Phase 1 decision gates resolved 2026-04-26
 
-| Slice | Blocked on |
-|---|---|
-| 2 (header) | Header navigation decision |
-| 3 (landing) | Real photography sourcing (or accept placeholders) |
-| 6 (accessibility) | Accessibility statement decision |
-| 7 (products) | Header navigation decision (determines URL structure); products to seed |
-| 10 (pricing calc) | Yes/no decision |
+| Slice | Was blocked on | Resolution |
+|---|---|---|
+| 2 (header) | Header navigation decision | **Option B** — single What-We-Make + occasion landing pages |
+| 3 (landing) | Real photography sourcing | **Placeholders generated** — `_resources/images/home-*.png` |
+| 5b (blog) | Blog presence in Phase 1? | **Yes** — ship framework + live posts |
+| 6 (accessibility) | Accessibility statement decision | **Option B** — brief intent-only + actually meeting AA |
+| 7 (products) | Header navigation; products to seed | URL structure: `/shop/<product-type>/<product-slug>`. Seed catalog: 6 products matching `_resources/images/product-*.png` |
+| 10 (pricing calc) | Yes/no decision | **Awaiting explanation** — GL asked for more info before deciding |
 
-**Slice 1 (brand foundation) is unblocked and can begin without further GL input.**
+**All slices are unblocked except Slice 10 (pricing calc — awaiting GL's call after explanation).**
 
 ---
 *Draft v1 — 2026-04-26. Refines as slices complete.*
