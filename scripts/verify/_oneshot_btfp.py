@@ -26,12 +26,20 @@ def capture(p, viewport, label):
 
     page.goto(BASE_URL + "/balloon-twisting-and-face-painting",
               wait_until="networkidle", timeout=30000)
+    # Let carousel settle so first image is at full opacity (3% of 36s = 1.08s).
+    page.wait_for_timeout(1500)
     out_path = OUT / f"btfp-{label}.png"
     page.screenshot(path=str(out_path), full_page=True)
 
     print(f"\n=== {label} ({viewport['width']}x{viewport['height']}) ===")
     print(f"saved: {out_path}")
     print(f"title: {page.title()}")
+
+    banner_visible = page.locator(".lt-btfp__banner-copy").count() > 0
+    carousel_imgs = page.locator(".lt-btfp__carousel-img").count()
+    fp_carousels = page.locator(".lt-btfp__carousel").count()
+    print(f"banner present: {banner_visible}")
+    print(f"carousels: {fp_carousels}, total images: {carousel_imgs}")
 
     faq_heading = page.locator("#lt-btfp__faq-heading")
     faq_visible = faq_heading.count() > 0 and faq_heading.is_visible()

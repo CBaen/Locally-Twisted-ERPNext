@@ -164,18 +164,40 @@ PAGE_CSS = """
 .lt-btfp__service-card li {
     margin-bottom: 0.4rem;
 }
-.lt-btfp__service-image {
+.lt-btfp__carousel {
     width: 100%;
     aspect-ratio: 4 / 3;
-    background: linear-gradient(135deg, var(--lt-blue-tint), var(--lt-blush-tint));
     border-radius: 0.375rem;
     margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'DM Serif Display', Georgia, serif;
-    color: rgba(26, 26, 26, 0.4);
-    font-size: 1rem;
+    background-color: var(--lt-blush-tint);
+    position: relative;
+    overflow: hidden;
+}
+.lt-btfp__carousel-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    animation: lt-btfp-carousel-fade 36s infinite;
+}
+.lt-btfp__carousel-img:nth-child(1) { animation-delay: 0s; }
+.lt-btfp__carousel-img:nth-child(2) { animation-delay: 6s; }
+.lt-btfp__carousel-img:nth-child(3) { animation-delay: 12s; }
+.lt-btfp__carousel-img:nth-child(4) { animation-delay: 18s; }
+.lt-btfp__carousel-img:nth-child(5) { animation-delay: 24s; }
+.lt-btfp__carousel-img:nth-child(6) { animation-delay: 30s; }
+@keyframes lt-btfp-carousel-fade {
+    0%   { opacity: 0; }
+    3%   { opacity: 1; }
+    16%  { opacity: 1; }
+    19%  { opacity: 0; }
+    100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lt-btfp__carousel-img { animation: none; opacity: 0; }
+    .lt-btfp__carousel-img:first-child { opacity: 1; }
 }
 
 .lt-btfp__booking {
