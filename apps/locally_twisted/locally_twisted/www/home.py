@@ -391,14 +391,29 @@ PAGE_CSS = """
 }
 
 /* --- Reviews block (replaces the prior trust strip) ----------------- */
+/* Per GL 2026-04-27 round 3: reviews carousel was visually constrained
+ * inside a 1200px column on a 1920px band — the fade-mask was clipping
+ * the text of the edge cards. The badge stays centered/narrow; the
+ * carousel viewport spans the full band so more cards are visible at
+ * once and the mask fades into empty space, not readable text. */
 .lt-reviews-block {
     background-color: var(--lt-blue-tint);
     padding: 3rem 1rem 3.5rem;
 }
 .lt-reviews-block__inner {
+    /* Narrow column for the badge above the carousel. */
     max-width: 1200px;
     margin: 0 auto;
     text-align: center;
+}
+.lt-reviews-block__quotes {
+    /* Carousel viewport breaks out of the inner column to span the band. */
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
 }
 .lt-reviews-block__badge {
     display: inline-flex;
