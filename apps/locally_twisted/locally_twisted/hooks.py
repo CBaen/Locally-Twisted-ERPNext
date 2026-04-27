@@ -41,6 +41,8 @@ web_include_css = "/assets/locally_twisted/css/lt-theme.css"
 website_route_rules = [
     {"from_route": "/balloon-twisting-and-face-painting",
      "to_route": "balloon_twisting_and_face_painting"},
+    {"from_route": "/refund-policy",
+     "to_route": "refund_policy"},
 ]
 
 # include custom scss in every website theme (without file extension ".scss")
