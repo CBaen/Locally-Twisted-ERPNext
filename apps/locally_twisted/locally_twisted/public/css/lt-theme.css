@@ -1012,3 +1012,19 @@ html, body {
     padding-right: 0.5rem;
   }
 }
+
+/* ----------------------------------------------------------------------
+   Full-bleed band — promoted from home.py PAGE_CSS 2026-04-27 (second
+   in-project use, on /balloon-twisting-and-face-painting Common Questions).
+   Breaks a section out of Frappe's parent .container so its background
+   spans the full viewport. Pair with an inner div (max-width + margin auto)
+   to keep readable content width.
+   ---------------------------------------------------------------------- */
+.lt-fullbleed {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+}
