@@ -516,8 +516,9 @@ PAGE_CSS = """
     font-size: 1rem;
     letter-spacing: 0.12em;
     line-height: 1;
-    margin-top: auto;  /* push to bottom of flex-column card */
-    padding-top: 0.5rem;
+    margin-top: auto;        /* push to bottom of flex-column card */
+    padding-top: 0.75rem;
+    text-align: center;      /* GL 2026-04-27 r3: stars must be centered */
 }
 .lt-reviews-block__quote--placeholder {
     background-color: rgba(255, 255, 255, 0.5);

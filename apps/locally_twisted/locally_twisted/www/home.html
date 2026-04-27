@@ -77,7 +77,7 @@
                         <p class="lt-reviews-block__quote-mark" aria-hidden="true">&ldquo;</p>
                         <p class="lt-reviews-block__quote-text">{{ quote.text }}</p>
                         <p class="lt-reviews-block__quote-attr">
-                            &mdash; {{ quote.name }}{% if quote.event %}, {{ quote.event }}{% endif %}
+                            &mdash; {{ quote.display_name or quote.name }}{% if quote.event %}, {{ quote.event }}{% endif %}
                         </p>
                         <div class="lt-reviews-block__quote-stars"
                              aria-label="{{ quote.rating or 5 }} out of 5 stars">
@@ -100,7 +100,7 @@
                             <p class="lt-reviews-block__quote-mark" aria-hidden="true">&ldquo;</p>
                             <p class="lt-reviews-block__quote-text">{{ quote.text }}</p>
                             <p class="lt-reviews-block__quote-attr">
-                                &mdash; {{ quote.name }}{% if quote.event %}, {{ quote.event }}{% endif %}
+                                &mdash; {{ quote.display_name or quote.name }}{% if quote.event %}, {{ quote.event }}{% endif %}
                             </p>
                         </article>
                         {% else %}

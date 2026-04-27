@@ -24,29 +24,61 @@ PAGE_CSS = """
     margin: 0 0 2rem;
 }
 .lt-faq__group {
-    margin: 0 0 2.5rem;
+    margin: 0 0 2rem;
 }
 .lt-faq__group-title {
     font-size: 1.25rem;
     font-weight: 600;
-    margin: 0 0 1rem;
+    margin: 0 0 0.75rem;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     line-height: 1.3;
 }
 .lt-faq__item {
-    margin: 0 0 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    margin: 0;
+    padding: 0;
 }
-.lt-faq__question {
+.lt-faq__item summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 1rem 2.5rem 1rem 0;
+    position: relative;
     font-size: 1rem;
     font-weight: 600;
-    margin: 0 0 0.5rem;
     line-height: 1.4;
+    color: inherit;
+}
+.lt-faq__item summary::-webkit-details-marker {
+    display: none;
+}
+.lt-faq__item summary::after {
+    content: "+";
+    position: absolute;
+    right: 0.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 1;
+    color: inherit;
+    transition: transform 0.2s ease;
+}
+.lt-faq__item[open] summary::after {
+    content: "\\2212";
+}
+.lt-faq__item summary:hover {
+    color: var(--lt-teal, #008080);
+}
+.lt-faq__item summary:focus-visible {
+    outline: 3px solid var(--lt-teal, #008080);
+    outline-offset: 2px;
+    border-radius: 2px;
 }
 .lt-faq__answer {
+    padding: 0 0 1.25rem;
     font-size: 1rem;
     line-height: 1.6;
-    margin: 0;
 }
 .lt-faq__answer p {
     font-size: 1rem;
@@ -93,6 +125,11 @@ PAGE_CSS = """
 .lt-faq__link:focus-visible {
     outline: 3px solid currentColor;
     outline-offset: 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+    .lt-faq__item summary::after {
+        transition: none;
+    }
 }
 @media (max-width: 480px) {
     .lt-faq {
