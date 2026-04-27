@@ -61,6 +61,13 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 - [P0] Loud-failure compliance audit across every form on Phase 1 surfaces
 - [P1] Monitor alerts (Better Stack or equivalent) — fire if `/book` or `/contact` form-creation rate drops to zero for >24 hours
 
+### New asset drops at `assets/` (GL added 2026-04-27)
+
+- [P1] **`assets/blue dog favicon.png`** — the balloon dog favicon GL was looking for. Wire into the site's favicon slot when ready (Frappe: drop into `public/icons/` and reference via Website Settings or `<link rel="icon">` in template).
+- [P1] **`assets/blue dog logo.png`** — the balloon dog logo (companion to the existing text logo). Possible future use: header chrome, footer brand block, OG image for social shares.
+- [P2] **`assets/product photos/`** — additional product photography. Inventory + match against `_resources/odoo-export/catalog.json` SKUs when seeding the small shop (Slice 11).
+- [P2] **`assets/what we do photos/`** — additional event/decor photography. Candidate pool for the homepage hero swap, Featured Work cards, and the future Lookbook (Slice 7).
+
 ### Real customer reviews — ongoing
 
 - [P3] When new 5-star reviews land, append to `home.py` `REVIEW_QUOTES` list. Carousel auto-scales to any count. Truncated reviews from the 2026-04-27 paste (Holly Offret, Angela Corona, Susie Jones, Connie Norton, Lisa Olsen, Al van der Beek, Dallas Yates, Kristi Johnson) are dropped — if you can get the full text, wire them in.
