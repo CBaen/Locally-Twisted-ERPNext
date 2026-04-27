@@ -122,6 +122,20 @@ PAGE_CSS = """
  * Uses CSS variables from lt-theme.css (--lt-teal, --lt-near-black, etc.)
  * ====================================================================== */
 
+/* --- Visually hidden (screen-reader only) --------------------------- */
+.lt-hero ~ * .visually-hidden,
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
 /* --- Full-bleed helper ---------------------------------------------- */
 /* Frappe's templates/web.html wraps content in a max-width .container.
  * Sections that should read as full-width horizontal bands need to
