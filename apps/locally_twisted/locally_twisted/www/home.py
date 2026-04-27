@@ -111,16 +111,101 @@ FEATURED_WORK = [
 #    "event": "wedding", "text": "Full review verbatim..."}
 # Until then, None entries render as clearly-marked placeholder cards.
 REVIEW_QUOTES = [
-    None,  # 10 placeholder slots so the carousel has motion until GL
-    None,  # pastes real reviews from Claude.ai. Replace this list with
-    None,  # a list of dicts (see header above) when ready.
-    None,
-    None,
-    None,
-    None,
-    None,
-    None,
-    None,
+    {
+        "name": "Bobbie Weyland", "rating": 5, "date": "2026-04",
+        "source": "Google", "event": "delivery",
+        "text": "Great company to work with and same day delivery.",
+    },
+    {
+        "name": "Craig Campbell", "rating": 5, "date": "2026-03",
+        "source": "Google", "event": "event decor",
+        "text": "Awesome place for your party or event decor!! Jeff and his team do an outstanding job and customize the decor to fit your needs. HIGHLY recommend Locally Twisted!!",
+    },
+    {
+        "name": "Maria Manby", "rating": 5, "date": "2026-03",
+        "source": "Google", "event": None,
+        "text": "Very helpful and customer service oriented!",
+    },
+    {
+        "name": "KJSCOTT", "rating": 5, "date": "2026-03",
+        "source": "Google", "event": "memorial",
+        "text": "I needed a sports themed funeral stand. I reached out to Totally Twisted. I told them what I needed, they captured my vision, delivered on time, very reasonable, and had many complements. Very tasteful and meaningful. Highly recommend!",
+    },
+    {
+        "name": "Vishal Lakhani", "rating": 5, "date": "2026-02",
+        "source": "Google", "event": "out-of-town client",
+        "text": "Jeff and the team are amazing. I am not local to the area so I really need their assistance and they were simply brilliant. They provided an amazing product and went above and beyond. Top service. Using Locally Twisted is a no-brainer. I wish I could give them 6 stars!",
+    },
+    {
+        "name": "Victoria Fischer", "rating": 5, "date": "2025-12",
+        "source": "Google", "event": "kids party",
+        "text": "So easy to book. Even on short notice. Wendy was amazing! She brought our 4 year old a Lego Minifigure balloon and handled a room full of tiny humans with wild requests. Would definitely recommend her!",
+    },
+    {
+        "name": "Leslie Barcus", "rating": 5, "date": "2025-12",
+        "source": "Google", "event": "balloon twisting + face painting",
+        "text": "Lovely balloon display, excellent balloon twisting into all kinds of interesting animals and shapes — and a really talented face painter for our event. Very fun!",
+    },
+    {
+        "name": "Hannah Hinde", "rating": 5, "date": "2025-09",
+        "source": "Google", "event": "school",
+        "text": "Amazing group and amazing artists! They are our school's new go-to group for all the balloon animals!",
+    },
+    {
+        "name": "Kyley Jex", "rating": 5, "date": "2025-08",
+        "source": "Google", "event": "neighborhood event",
+        "text": "Locally Twisted was a hit at our neighborhood summer bash! The kids LOVED the variety of the balloon art. The biggest line at the party for sure.",
+    },
+    {
+        "name": "Sara Mejeur", "rating": 5, "date": "2025-07",
+        "source": "Google", "event": "longtime client",
+        "text": "I LOVE Locally Twisted! Jeff has been listed in my phone for 7-ish years as “balloon guy” and has been my go-to for that long. I know I can trust him and his team to always exceed my expectations. They make every event I plan easier and extra special!!",
+    },
+    {
+        "name": "Matt Tipton", "rating": 5, "date": "2025-07",
+        "source": "Google", "event": "face painting",
+        "text": "Our face painters were EXCELLENT!! They were on time. Their setup was incredibly professional. They probably painted 50 faces, and made the day of every single person. Great job!!",
+    },
+    {
+        "name": "Lindsay", "rating": 5, "date": "2025-06",
+        "source": "Google", "event": "ribbon cutting",
+        "text": "They provided a balloon arch for our ribbon cutting. They were wonderful to work with, very responsive, and the arch looked great!",
+    },
+    {
+        "name": "Mary DeMann", "rating": 5, "date": "2025-06",
+        "source": "Google", "event": "corporate",
+        "text": "Locally Twisted is truly the best! Jeff is always kind, professional, and reliable. We've hired Locally Twisted for multiple company events, and every time, our guests have been amazed by the incredible balloon art. They consistently impress and add a fun, memorable touch to our gatherings.",
+    },
+    {
+        "name": "LuAnn Keith", "rating": 5, "date": "2025-05",
+        "source": "Google", "event": "Mother's Day",
+        "text": "They went above and beyond what they needed to do for my mom's Mother's Day gift. I made a mistake on the delivery date and they fixed the date and made the delivery. I will definitely order again! Thank you Locally Twisted for fixing my mistake!",
+    },
+    {
+        "name": "Sarah Johnston-Powell", "rating": 5, "date": "2025-05",
+        "source": "Google", "event": "birthday",
+        "text": "Jeff was super nice and helpful, helped me figure out the perfect thing for our son's birthday. Prompt, accommodating, great communication and friendly!",
+    },
+    {
+        "name": "Tiffiny Lipscomb", "rating": 5, "date": "2025-04",
+        "source": "Google", "event": "family events",
+        "text": "Locally Twisted has done a phenomenal job on many occasions (I don't use that word lightly!). They are kind, friendly, and have done some rush jobs for me. In fact, they are now my go-to easy decorating plan for any of my family events. I don't have to do anything, my house is festive, and I get to enjoy it too! Five big stars!",
+    },
+    {
+        "name": "Mark Taylor", "rating": 5, "date": "2025-04",
+        "source": "Google", "event": "wedding + birthday",
+        "text": "I have told so many people about how much we loved the balloon creations at a friend's wedding. We were seriously blown away and my kids were delighted. My oldest son requested they come to his birthday party. They were fantastic!",
+    },
+    {
+        "name": "Em Cebrowski", "rating": 5, "date": "2025-04",
+        "source": "Google", "event": "church picnic",
+        "text": "Our balloon artist was Marianne — she was kind, organized, creative, and worked for two hours straight in the blazing heat. We hired her for a church picnic; all the children were delighted with their balloons, and so were several adults. Thank you Locally Twisted for making our party extra special.",
+    },
+    {
+        "name": "Alisha", "rating": 5, "date": "2025-04",
+        "source": "Google", "event": "personal",
+        "text": "You made this sick girl smile with this big unicorn balloon. Very professional and wanted to give me exactly what I wanted. We spent a few days texting back and forth and you came through with exactly what I wanted. Thank you!",
+    },
 ]
 
 
