@@ -6,6 +6,75 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-04-27 (small-shop seed session) — Six webshop gotchas
+
+### `upload_file` API does NOT auto-write the file_url to the parent doc's field
+
+Called Frappe's `/api/method/upload_file` endpoint with `doctype=Item`, `docname=<slug>`, `fieldname=image`, `is_private=0` and got back a valid `{"file_url": "/files/<slug>.png"}` response. **The File record was created** with `attached_to_doctype=Item`, `attached_to_name=<slug>`, `attached_to_field=image`. **But `Item.image` stayed null.**
+
+**Why:** the upload endpoint creates the File attachment record but does NOT write the file_url back into the parent doc's named field. Two separate operations.
+
+**Fix:** explicit `frappe.client.set_value` call after upload — `Item.image = file_url`. AND for storefront display, also set the **separate** `Website Item.website_image` field (Item.image and Website Item.website_image are independent in v15).
+
+**Receipt:** Seed script ran successfully, 33 File records created with the right attached_to_field, but the storefront showed empty placeholder boxes ("NB", "GG" letter avatars). Auditing Item records showed all 33 with `image: None` despite the File records existing.
+
+### Webshop is OFF by default — `Webshop Settings.enabled = 0`
+
+Fresh install of `frappe/webshop` ships with the storefront effectively disabled. **All these critical fields default to 0:** `enabled`, `show_price`, `show_stock_availability`, `enable_field_filters`, `enable_attribute_filters`, `enable_checkout`, `enable_wishlist`, `enable_reviews`, `allow_items_not_in_stock`. **And `price_list` defaults to None.**
+
+**Fix:** explicitly set every field that matters BEFORE expecting browse / price-display / cart to work. Minimum to get a browseable shop with prices:
+```
+enabled = 1
+show_price = 1
+allow_items_not_in_stock = 1   # required for non-stock (made-to-order) items
+products_per_page = 12         # default 0 = silently broken
+price_list = "Standard Selling"  # default None = no prices visible
+default_customer_group = "Individual"
+enable_checkout = 1            # otherwise "Add to Quote" instead of "Add to Cart"
+```
+
+**Receipt:** Created 33 Website Items with `published=1`. /all-products rendered exactly 2 of them with no prices. Spent multiple turns chasing pagination + permission filter theories before discovering Webshop Settings.enabled=0 was silently filtering the entire result set in `add_display_details`.
+
+### Webshop's whitelisted method path is `webshop.webshop.api.*`, not `webshop.api.*`
+
+Folder layout: `apps/webshop/webshop/webshop/api.py`. Frappe convention says this Python module is `webshop.webshop.api`. The compiled JS bundle correctly calls `frappe.call({method: "webshop.webshop.api.get_product_filter_data"})`. **But intuitively the path "looks like" it should be `webshop.api.*` — and that's wrong.**
+
+Calling `webshop.api.get_product_filter_data` returns HTTP 417 EXPECTATION FAILED with `ValidationError: Failed to get method ... with No module named 'webshop.api'`.
+
+**Pattern:** Frappe apps double-namespace. The `<app_name>` Python package contains a `<app_name>` sub-module containing the module files. So `<app>.<module>.<file>` is the import path, even when `<app> == <module>`.
+
+**Receipt:** Spent a turn convinced the JS was calling the wrong path because my direct curl was getting 417. The JS was correct; my curl was wrong.
+
+### Frappe's `body { display: flex; height: 100vh; overflow-y: auto }` defeats Playwright `full_page=True`
+
+The webshop pages set the body to a fixed-height flex container with internal overflow-scroll. **Playwright's `full_page=True` only captures `documentElement.scrollHeight`, which on these pages = viewport height = 800px** — even though the actual content (product grid) extends thousands of pixels below.
+
+The user experience is fine: customers scroll inside the page body and see all the products. **But if you screenshot at the default 1280×800 viewport and trust what you see, you'll declare the shop "broken" when only the first row visible.**
+
+**Fix when verifying with Playwright:** use a tall viewport (`viewport={"width": 1280, "height": 3500}`). The DOM still renders identically; the viewport just captures more in the screenshot.
+
+**Receipt:** Spent two iterations debugging "only 2 items render" before checking `body.offsetHeight` (= 800) vs `#products-grid-area.offsetHeight` (= 2707). 12 items WERE rendered, just below the captured frame.
+
+**Pattern:** Always probe `document.documentElement.scrollHeight` AND the children's heights before trusting a Playwright screenshot's "what's missing" implication. Add the height probe to the standard verification preamble.
+
+### Setting `Item.standard_rate` auto-creates an Item Price — explicit Item Price insert hits a duplicate-detection exception
+
+When inserting an Item via `frappe.client.insert` with `standard_rate` populated, ERPNext's Item controller auto-creates a corresponding Item Price record (under "Standard Buying" by default, or "Standard Selling" for sales-only items). A subsequent explicit `Item Price` insert for the same item + price list raises `ItemPriceDuplicateItem` (HTTP 417), which is NOT caught by the standard `"already exists" / "DuplicateEntryError"` patterns.
+
+**Fix:** expand idempotency-detection in any seed script to ALSO catch `ItemPriceDuplicateItem` and `"appears multiple times"`. Or skip the explicit Item Price insert entirely when standard_rate is set on the Item.
+
+**Receipt:** First seeder run blew up at item #1 with HTTP 417 because of the duplicate. Patched the idempotency check, re-ran, succeeded.
+
+### Webshop initial render goes through AJAX, not server-side Jinja
+
+The `/all-products` page's index.html is empty for products (just `<div id="product-listing"><!-- Rendered via JS --></div>`). The JS in `index.js` instantiates `webshop.ProductView` which calls `frappe.call({method: "webshop.webshop.api.get_product_filter_data"})` and renders results client-side.
+
+**Implication for verification:** `curl http://localhost:8081/all-products | grep <product-name>` returns nothing — products are not in the server-rendered HTML. Use Playwright with `wait_until="networkidle"` to capture post-JS state.
+
+**Implication for SEO:** the storefront is JS-rendered, which is bad for crawlers without execution. If SEO matters for the small shop, server-side rendering of the first batch is a future concern. Out of scope for v1.
+
+---
+
 ## 2026-04-27 (homepage build session) — Five gotchas + two reusable patterns
 
 ### Frappe Python module cache is sticky — restart backend after editing `www/<route>.py`
