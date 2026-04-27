@@ -49,6 +49,11 @@ PAGE_CSS = """
     padding: 3rem 1rem 2.5rem;
     text-align: center;
 }
+.lt-btfp__intro-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: center;
+}
 .lt-btfp__intro h1 {
     font-family: 'DM Serif Display', Georgia, serif;
     font-size: 2.25rem;
@@ -63,6 +68,63 @@ PAGE_CSS = """
     margin: 0;
     font-weight: 300;
     text-align: center;
+}
+
+.lt-btfp__banner {
+    background-color: var(--lt-blue-tint);
+    padding: 1.25rem 1rem;
+    border-top: 1px solid rgba(26, 26, 26, 0.06);
+    border-bottom: 1px solid rgba(26, 26, 26, 0.06);
+}
+.lt-btfp__banner-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    text-align: center;
+}
+@media (min-width: 768px) {
+    .lt-btfp__banner-inner {
+        flex-direction: row;
+        gap: 1.5rem;
+    }
+}
+.lt-btfp__banner-copy {
+    font-family: 'Raleway', sans-serif;
+    font-size: 1rem;
+    color: var(--lt-near-black);
+    margin: 0;
+    line-height: 1.45;
+}
+.lt-btfp__banner-copy strong {
+    font-weight: 600;
+}
+.lt-btfp__banner-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 1rem;
+    align-items: center;
+}
+.lt-btfp__banner-link {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--lt-teal);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+}
+.lt-btfp__banner-link:hover,
+.lt-btfp__banner-link:focus-visible {
+    text-decoration-thickness: 2px;
+}
+.lt-btfp__banner-link:focus-visible {
+    outline: 3px solid var(--lt-teal);
+    outline-offset: 3px;
+    border-radius: 2px;
 }
 
 .lt-btfp__services {
