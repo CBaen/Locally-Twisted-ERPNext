@@ -110,6 +110,49 @@ Canonical resources for the new build live in `_resources/` and are platform-agn
 
 ## Updates
 
+### 2026-04-27 (homepage build session) — Slice 3 (Homepage) DONE; site shape locked; reviews carousel with 19 real Google quotes wired
+
+**What landed:**
+- **Slice 3 — Homepage** at `/`. Lookbook-forward shape (decided this session). 9 sections in order: Hero (cycling headline + stable tagline + photo + single inquiry CTA) → Reviews carousel (4.9 stars + 114 reviews + 19 real Google review cards in horizontal marquee, hover-pause, 5-star anchored at card bottom) → 3-dot divider → Custom Creations (5 categories with SVG icons) → Recent Celebrations (3 featured-work cards, 4:5 portrait aspect) → 3-dot divider → Client logo crawl (54 names, 270s scroll) → Closing CTA → Twisting & Face Painting spotlight (moved to bottom, de-emphasized). All sections use the `.lt-fullbleed` pattern to break out of Frappe's parent .container.
+- **Site shape decision** at `.planning/decisions/site-shape.md` — lookbook-forward + small shop sidebar (sub-$300 pre-configured items only, no configurator-for-checkout). Future "Design Studio" interactive picker scoped for arches/columns/garlands/backdrops/drops/bouquets — captures customer vision, outputs an inquiry, NOT a checkout. Resolves Jeff's "customers want to see colors and pick options" instinct without the wrong checkout flow.
+- **Competitor survey** at `_resources/competitor-survey-2026-04-26.md` — 9 verified live competitor sites (4 balloon decor + 3 wedding florists + 1 mixed + 1 enterprise tier). Five patterns observed across all 9: every custom-decor offering uses inquiry/quote, never configurator; portfolio is a nav item not a homepage feature; shops are sidebars; "Inquire" beats "Buy" above ~$30; social proof tier matches business tier. The survey is the receipt for the lookbook-forward decision.
+- **ROADMAP.md and PLAN.md updated** to reflect the site shape and the slice reorder. `/book` moved from Phase 2 → Phase 1 (Slice 10) since the lookbook-forward shape requires the inquiry conversion path live in Phase 1. Phase 2 reframed to "form-handling depth" (Contact dedup, ack email, loud-failure audit, monitor alerts).
+- **About snippet removed** from homepage. Defer until Jeff is ready (per GL).
+- **5 real photos copied** from `locally-twisted-odoo/assets/image assets/photos for website/` (and `balloon twisting pics/`) to `apps/locally_twisted/locally_twisted/public/images/home/`: hero (Celebrate backdrop), featured-arches (Knight & Dragon), featured-garlands (Celebrate organic arch), featured-corporate (Logo arch), twisting (Twisting photo).
+- **Web Page record `locally-twisted` (route="home")** set to `published=0` — was the placeholder "Site under construction" content. Deactivating let the new `www/home.html` take precedence.
+- **Reviews wired into the carousel** — 19 real 5-star Google reviews verbatim from GL's paste, mix of birthday / wedding / corporate / ribbon-cutting / school / face-painting / Mother's Day / church-picnic / funeral-stand / longtime-client. Names, dates, event tags preserved. Verbatim including KJSCOTT's "Totally Twisted" typo (authenticity over correction).
+- **Carousel slowed to 270s** (was 90s → 180s → 270s after iterations) for the client logo crawl. Reviews carousel runs 360s.
+
+**What's NOT done (next session candidates):**
+- Slice 6b — Refund Policy + FAQ (small static portal pages, ~15-30 min each via the meal)
+- Slice 7 — Lookbook (full portfolio, organized by event type)
+- Slice 8 — Service category pages (×5: Corporate, Weddings, Birthdays, Schools, Seasonal)
+- Slice 9 — Color Chart (`/color-chart`, static reference, 70 balloon colors)
+- Slice 10 — `/book` form page (the deep 45-field intake; primary inquiry conversion)
+- Slice 11 — Small Shop browse + detail
+- Slice 12 — Cart + checkout shell
+- Slice 13 — Blog framework (when shipped, replaces the `HERO_CYCLING_TITLES` placeholder list with a `frappe.get_list("Blog Post", ...)` call)
+- Future: Design Studio interactive picker (post-Phase-1)
+
+**Standing rules added/refined this session:**
+- Reviews carousel > client logo crawl as primary social proof. Words from real customers persuade more than corporate logos for high-touch event services.
+- `/book` is THE primary inquiry conversion path — every CTA on the lookbook-forward site routes there.
+- Bouquets join the customizable categories list (6 total). Originally only 5 in the approved Odoo XML; bouquets are also customizable in Jeff's actual business.
+- About page deferred until Jeff is ready — no pressure.
+
+**Code/file changes this session:**
+- New: `apps/locally_twisted/locally_twisted/www/home.{py,html}` (Slice 3 homepage; replaces the inactive placeholder Web Page record)
+- New: `apps/locally_twisted/locally_twisted/public/images/home/{hero.jpg, featured-arches.png, featured-garlands.png, featured-corporate.png, twisting.jpg}`
+- New: `_resources/competitor-survey-2026-04-26.md` (9-site competitor survey)
+- New: `.planning/decisions/site-shape.md` (lookbook-forward decision with full rationale)
+- New: `scripts/verify/_oneshot_home.py` (mobile + desktop screenshot script with console capture)
+- Modified: `.planning/ROADMAP.md`, `.planning/phases/01-customer-site-and-storefront/PLAN.md` (full rewrites for the lookbook-forward shape)
+- Modified: Web Page record `locally-twisted` (set published=0) — placeholder deactivated
+
+**Open small items (LT-tier):**
+- 8 truncated reviews from GL's paste (Holly Offret, Angela Corona, Susie Jones, Connie Norton, Lisa Olsen, Al van der Beek, Dallas Yates, Kristi Johnson) — only partial text was visible. If full text becomes available, append to `home.py` `REVIEW_QUOTES` list.
+- Custom Creations mobile symmetry — 2-2-1 layout has the 5th (Balloon Drops) orphaned on row 3. GL flagged but didn't pick a fix. Easy CSS one-liner when ready.
+
 ### 2026-04-26 (codification + chrome + 3 portal pages session) — Platform direction RESOLVED; Slices 1+2+4+5+6-partial DONE; agency-tier meal codified
 
 **What landed:**
