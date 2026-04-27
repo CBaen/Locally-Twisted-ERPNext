@@ -338,24 +338,56 @@ PAGE_CSS = """
     font-size: 0.95rem;
     color: var(--lt-soft-gray);
 }
-/* Auto-fit pattern — show as many full cards as fit at minmax(220px,1fr).
- * At ~1180px container, 5 cards fit. At narrower viewports the grid
- * reflows to 4, 3, 2, 1 — cards never get cut off mid-card. Per GL:
- * "5 inline of the reviews or as many as the screen will hold the
- *  full card, no cutting cards off." */
+/* Reviews carousel — horizontal-scrolling marquee of customer praise.
+ * Pattern mirrors .lt-crawl but with full review cards instead of
+ * client names. Speed is much slower (360s vs 180s) because the
+ * cards need reading time. Pauses on hover/focus.
+ * Per GL 2026-04-27: "carousel review of praise that matter more
+ * than the carousel of businesses at the bottom." */
 .lt-reviews-block__quotes {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1.25rem;
-    max-width: 1300px;
-    margin: 0 auto;
+    overflow: hidden;
+    width: 100%;
+    margin: 0;
+    mask-image: linear-gradient(
+        to right, transparent 0, #000 4%, #000 96%, transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+        to right, transparent 0, #000 4%, #000 96%, transparent 100%
+    );
+}
+.lt-reviews-block__track {
+    display: flex;
+    align-items: stretch;
+    gap: 1rem;
+    width: max-content;
+    animation: lt-reviews-scroll 360s linear infinite;
+}
+.lt-reviews-block__quotes:hover .lt-reviews-block__track,
+.lt-reviews-block__track:focus-within {
+    animation-play-state: paused;
+}
+@keyframes lt-reviews-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lt-reviews-block__quotes { mask-image: none; -webkit-mask-image: none; }
+    .lt-reviews-block__track {
+        animation: none;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+    }
 }
 .lt-reviews-block__quote {
+    flex: 0 0 320px;
     background-color: var(--lt-white);
     border-radius: 0.5rem;
     padding: 1.5rem 1.5rem 1.25rem;
     text-align: left;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
 }
 .lt-reviews-block__quote-mark {
     font-family: 'DM Serif Display', Georgia, serif;
