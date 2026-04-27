@@ -111,6 +111,8 @@ REVIEW_QUOTES = [
     None,  # to be filled with a real 5-star Google review
     None,
     None,
+    None,
+    None,
 ]
 
 
