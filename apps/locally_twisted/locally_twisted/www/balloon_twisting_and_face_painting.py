@@ -179,11 +179,9 @@ PAGE_CSS = """
     width: 100%;
     /* Portrait 3:4 — matches the dominant source-photo orientation
        (10 of 12 photos are portrait/square iPhone shots). Avoids the
-       aggressive cover-crop that made portraits feel "too close-up". */
+       aggressive cover-crop that made portraits feel "too close-up".
+       No max-width cap — let carousels fill their column for presence. */
     aspect-ratio: 3 / 4;
-    max-width: 380px;
-    margin-left: auto;
-    margin-right: auto;
     border-radius: 0.375rem;
     margin-bottom: 1rem;
     background-color: var(--lt-blush-tint);

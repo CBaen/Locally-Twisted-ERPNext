@@ -953,9 +953,11 @@ html, body {
   width: 1.25rem;
 }
 
-/* Section 3 — copyright bar */
+/* Section 3 — copyright bar
+   Uses the new base white token (--lt-near-white = #fffcfc as of 2026-04-27)
+   to break visually from the soft-blue band above it. */
 .lt-footer__bar {
-  background-color: rgba(26, 26, 26, 0.04);
+  background-color: var(--lt-near-white);
   border-top: 1px solid rgba(26, 26, 26, 0.08);
   padding: 0.75rem 1rem;
 }
