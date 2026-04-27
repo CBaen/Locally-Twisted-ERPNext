@@ -315,6 +315,94 @@ PAGE_CSS = """
 .lt-btfp__expect-contact a:focus-visible {
     text-decoration: underline;
 }
+
+.lt-btfp__faq {
+    background-color: var(--lt-white);
+    padding: 3rem 1rem 4rem;
+}
+.lt-btfp__faq-inner {
+    max-width: 44rem;
+    margin: 0 auto;
+}
+.lt-btfp__faq-heading {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 1.75rem;
+    color: var(--lt-near-black);
+    margin: 0 0 1.5rem;
+    line-height: 1.2;
+}
+.lt-btfp__faq-item {
+    border-bottom: 1px solid rgba(26, 26, 26, 0.1);
+}
+.lt-btfp__faq-item summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 1rem 2.5rem 1rem 0;
+    position: relative;
+    font-family: 'Raleway', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--lt-near-black);
+}
+.lt-btfp__faq-item summary::-webkit-details-marker {
+    display: none;
+}
+.lt-btfp__faq-item summary::after {
+    content: "+";
+    position: absolute;
+    right: 0.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--lt-teal);
+    transition: transform 0.2s ease;
+}
+.lt-btfp__faq-item[open] summary::after {
+    content: "\\2212";
+}
+.lt-btfp__faq-item summary:hover {
+    color: var(--lt-teal);
+}
+.lt-btfp__faq-item summary:focus-visible {
+    outline: 3px solid var(--lt-teal);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+.lt-btfp__faq-answer {
+    padding: 0 0 1.25rem;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--lt-soft-gray);
+}
+.lt-btfp__faq-answer p {
+    margin: 0 0 0.75rem;
+}
+.lt-btfp__faq-answer p:last-child {
+    margin-bottom: 0;
+}
+.lt-btfp__faq-answer strong {
+    font-weight: 600;
+    color: var(--lt-near-black);
+}
+.lt-btfp__faq-answer a {
+    color: var(--lt-near-black);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+}
+@media (prefers-reduced-motion: reduce) {
+    .lt-btfp__faq-item summary::after {
+        transition: none;
+    }
+}
+@media (max-width: 480px) {
+    .lt-btfp__faq-heading {
+        font-size: 1.5rem;
+    }
+}
 """
 
 
