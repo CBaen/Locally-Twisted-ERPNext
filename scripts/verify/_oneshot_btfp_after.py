@@ -33,37 +33,50 @@ def capture(p, viewport, label):
                               "width": viewport["width"],
                               "height": sb["height"] + 16})
 
-    # Force show each carousel image individually
+    # Force show each carousel image individually (desktop only)
     if label == "desktop":
-        # Pause animation, set all carousel imgs opacity to 0
         page.evaluate("""() => {
-            const sheet = document.styleSheets;
             document.querySelectorAll('.lt-btfp__carousel-img').forEach(el => {
                 el.style.animation = 'none';
                 el.style.opacity = '0';
             });
         }""")
-        carousels = page.locator(".lt-btfp__carousel").all()
-        for ci, carousel in enumerate(carousels, 1):
-            label_name = "twisting" if ci == 2 else "facepainting"  # order in DOM
-            imgs = carousel.locator(".lt-btfp__carousel-img").all()
-            for pi, img in enumerate(imgs, 1):
-                page.evaluate("""(els) => {
-                    els.forEach(e => e.style.opacity = '0');
-                }""", carousel.locator(".lt-btfp__carousel-img").all())
-                # Show just this one
-                page.evaluate("""(el) => { el.style.opacity = '1'; }""", img)
-                page.wait_for_timeout(120)
-                src = img.get_attribute("src") or ""
-                fn = src.rsplit("/", 1)[-1]
-                box = carousel.bounding_box()
-                if box and box["width"] > 0:
-                    img.scroll_into_view_if_needed()
-                    page.wait_for_timeout(80)
-                    box = carousel.bounding_box()
-                    page.screenshot(path=str(OUT / f"{label_name}-{pi}-{fn}.png"),
-                                    clip={"x": box["x"], "y": box["y"],
-                                          "width": box["width"], "height": box["height"]})
+        # Get a flat list of (carousel-index, img-index, src) to iterate over from JS
+        descriptor = page.evaluate("""() => {
+            const out = [];
+            document.querySelectorAll('.lt-btfp__carousel').forEach((c, ci) => {
+                c.querySelectorAll('.lt-btfp__carousel-img').forEach((img, pi) => {
+                    out.push({ ci, pi, src: img.getAttribute('src') });
+                });
+            });
+            return out;
+        }""")
+        for item in descriptor:
+            ci, pi, src = item["ci"], item["pi"], item["src"]
+            label_name = "facepainting" if ci == 0 else "twisting"
+            fn = src.rsplit("/", 1)[-1]
+            page.evaluate(
+                """({ci, pi}) => {
+                    document.querySelectorAll('.lt-btfp__carousel-img').forEach(el => el.style.opacity = '0');
+                    const c = document.querySelectorAll('.lt-btfp__carousel')[ci];
+                    const img = c.querySelectorAll('.lt-btfp__carousel-img')[pi];
+                    img.style.opacity = '1';
+                    c.scrollIntoView({block:'center'});
+                }""",
+                {"ci": ci, "pi": pi},
+            )
+            page.wait_for_timeout(180)
+            box = page.evaluate(
+                """(ci) => {
+                    const c = document.querySelectorAll('.lt-btfp__carousel')[ci];
+                    const r = c.getBoundingClientRect();
+                    return { x: r.x, y: r.y, w: r.width, h: r.height };
+                }""", ci,
+            )
+            if box and box["w"] > 0:
+                page.screenshot(path=str(OUT / f"{label_name}-{pi+1}-{fn}.png"),
+                                clip={"x": box["x"], "y": box["y"],
+                                      "width": box["w"], "height": box["h"]})
 
 
 def main():

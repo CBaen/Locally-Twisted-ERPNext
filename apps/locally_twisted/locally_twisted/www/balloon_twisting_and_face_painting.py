@@ -573,13 +573,16 @@ PAGE_CSS = """
     align-self: center;
 }
 
-/* Thin decorative ribbons (full-bleed horizontal accent bands) */
+/* Thin decorative ribbons (full-bleed horizontal accent bands).
+   Must NOT set margin shorthand — that resets margin-left/right and
+   defeats the .lt-fullbleed negative margins. */
 .lt-btfp__ribbon {
     height: 40px;
     border: none;
-    margin: 0;
     padding: 0;
     display: block;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 .lt-btfp__ribbon--blush {
     background-color: var(--lt-blush);
