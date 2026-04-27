@@ -612,7 +612,7 @@ html, body {
    ============================================================ */
 
 .lt-header {
-  background-color: var(--lt-white);
+  background-color: var(--lt-soft-blue);
   border-bottom: 1px solid rgba(26, 26, 26, 0.08);
 }
 
