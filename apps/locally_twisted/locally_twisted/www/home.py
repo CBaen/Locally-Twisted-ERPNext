@@ -235,6 +235,7 @@ PAGE_CSS = """
     font-size: 1.125rem;
     color: var(--lt-near-black);
     margin: 0 0 0.25rem;
+    text-align: center;
 }
 .lt-trust__desc {
     display: none;
@@ -242,6 +243,7 @@ PAGE_CSS = """
     font-size: 0.875rem;
     color: var(--lt-soft-gray);
     margin: 0;
+    text-align: center;
 }
 @media (min-width: 768px) {
     .lt-trust__title { font-size: 1.375rem; }
@@ -559,6 +561,7 @@ PAGE_CSS = """
     letter-spacing: 0.1em;
     color: var(--lt-soft-gray);
     margin: 0 0 0.5rem;
+    text-align: center;
 }
 .lt-about__heading {
     font-family: 'DM Serif Display', Georgia, serif;
@@ -566,6 +569,7 @@ PAGE_CSS = """
     color: var(--lt-near-black);
     margin: 0 0 1rem;
     line-height: 1.2;
+    text-align: center;
 }
 .lt-about__body {
     font-family: 'Raleway', sans-serif;
@@ -573,6 +577,7 @@ PAGE_CSS = """
     color: var(--lt-near-black);
     margin: 0;
     line-height: 1.65;
+    text-align: center;
 }
 
 /* --- Closing CTA ----------------------------------------------------- */
@@ -587,6 +592,7 @@ PAGE_CSS = """
     color: var(--lt-near-black);
     margin: 0 0 1rem;
     line-height: 1.15;
+    text-align: center;
 }
 .lt-cta__body {
     font-family: 'Raleway', sans-serif;
@@ -595,6 +601,7 @@ PAGE_CSS = """
     max-width: 620px;
     margin: 0 auto 1.75rem;
     line-height: 1.55;
+    text-align: center;
 }
 .lt-cta__button {
     display: inline-flex;
