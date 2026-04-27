@@ -106,7 +106,12 @@ def insert_doc(opener, doc, label):
             return parsed.get("message", {}).get("name", "?"), False
     except urllib.error.HTTPError as e:
         body = e.read().decode()
-        if "already exists" in body or "DuplicateEntryError" in body:
+        if (
+            "already exists" in body
+            or "DuplicateEntryError" in body
+            or "ItemPriceDuplicateItem" in body
+            or "appears multiple times" in body
+        ):
             return None, True
         raise SystemExit(f"[{label}] insert failed: HTTP {e.code} body={body[:400]}")
 
@@ -218,11 +223,11 @@ def load_eligible_products():
         eligible.append(
             {
                 "slug": slug,
-                "name": html.unescape(p.get("name", "")).strip(),
-                "description": html.unescape(p.get("description", "")).strip(),
+                "name": html.unescape(p.get("name") or "").strip(),
+                "description": html.unescape(p.get("description") or "").strip(),
                 "price": price,
                 "image_path": image_path,
-                "url": p.get("url", ""),
+                "url": p.get("url") or "",
             }
         )
     return eligible
