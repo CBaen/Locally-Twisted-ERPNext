@@ -64,16 +64,18 @@ CLIENT_CRAWL = [
 ]
 
 
-# The 5 customizable categories — these are the items GL/Jeff actually
-# customize (arches, columns, garlands, backdrops, drops). Each will
-# eventually point at a Lookbook category page (Slice 7) and into the
-# future Design Studio interactive experience (post-Slice 9).
+# The 6 customizable categories — these are the items GL/Jeff actually
+# customize (arches, columns, garlands, backdrops, drops, bouquets). Each
+# will eventually point at a Lookbook category page (Slice 7) and into
+# the future Design Studio interactive experience (post-Slice 9).
+# Bouquets added 2026-04-27 per GL — also customizable in Jeff's business.
 CUSTOM_CATEGORIES = [
     {"slug": "balloon-arches", "name": "Balloon Arches", "icon": "arch"},
     {"slug": "columns-and-pillars", "name": "Columns & Pillars", "icon": "column"},
     {"slug": "organic-garlands", "name": "Organic Garlands", "icon": "garland"},
     {"slug": "picture-perfect-backdrops", "name": "Picture Perfect Backdrops", "icon": "backdrop"},
     {"slug": "balloon-drops", "name": "Balloon Drops", "icon": "drop"},
+    {"slug": "balloon-bouquets", "name": "Balloon Bouquets", "icon": "bouquet"},
 ]
 
 
