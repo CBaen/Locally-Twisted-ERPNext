@@ -1,25 +1,45 @@
-"""Homepage controller — `/` route.
+"""Homepage controller — `/` route. v2.
 
-Renders the lookbook-forward homepage. Section order, copy, and the
-client-crawl list are sourced from the prior project's approved Odoo
-XML at addons/locally_twisted/views/homepage.xml + the snippet templates
-in views/snippets/. Reframed for the lookbook-forward shape decided
-2026-04-26 (see .planning/decisions/site-shape.md):
-- Hero CTA points at /book (inquiry-led), not /shop
-- "Featured Work" replaces "Seasonal Favorites" placeholder (lookbook-led)
-- About snippet replaces the "Local Favorites" e-commerce placeholder
-- Custom Creations categories link into the future /lookbook?category=X
-  (placeholder hrefs for now; will activate when Slice 7 ships)
+v2 changes (per GL feedback 2026-04-27):
+- Hero: cycling headline (placeholder for future blog post titles) +
+  stable tagline below + single CTA. Photo stays static.
+- Reviews block replaces the prior trust strip ("Since 1998 / Custom
+  Designs / Made with Love"). Shows stars + count + placeholder slot
+  for 3 real Google review quotes.
+- Three-dot divider element between key sections, brand-Teal.
+- Recent Celebrations photos significantly bigger (taller aspect, wider
+  container).
+- Twisting & Face Painting spotlight moved to bottom of page (per
+  business strategy: big-event work leads, twisting/face painting is
+  a smaller revenue line).
+- About snippet removed (defer until Jeff is ready, per GL 2026-04-27).
+- Client crawl slowed 50% (90s -> 180s).
+- Sections that should read as bands now use the .lt-fullbleed pattern
+  to break out of Frappe's constraining parent .container.
+- Inner content max-widths bumped to ~1200px so the page feels grand
+  on desktop.
 
-CSS is colocated as PAGE_CSS and injected via context.colocated_css —
-the same pattern as /contact and /balloon-twisting-and-face-painting.
-This keeps each page's CSS scoped to the page that uses it; the
-shared brand foundation lives in lt-theme.css.
+Voice and copy carry from the approved Odoo XML (homepage.xml +
+snippet templates) where they exist; cycling headline lines are pulled
+from the gallery/ design competition voice docs (designer-1, -3, -5
+all converge on the same Quiet Confidence rules from BRIEF.md).
 """
 import frappe
 
 no_cache = 1
 sitemap = 1
+
+
+# Cycling hero headlines. These rotate via CSS animation in the hero —
+# stable tagline below stays put. When the blog framework ships
+# (Slice 14), these get replaced by the latest blog post titles
+# pulled from `frappe.get_list("Blog Post", ...)`.
+HERO_CYCLING_TITLES = [
+    "Twenty-eight years, made by hand.",
+    "Every arch begins with a color conversation.",
+    "We make things people remember.",
+    "Custom balloon decor, Wasatch Front.",
+]
 
 
 # Real client list from the approved homepage XML's s_lt_client_crawl
@@ -57,10 +77,9 @@ CUSTOM_CATEGORIES = [
 ]
 
 
-# Featured work — 3 case-study cards. Photos and event names are
-# placeholder until GL surfaces real ones from Jeff's archive. Source
-# of real photos when ready: locally-twisted-odoo/assets/image assets/
-# photos for website/.
+# Featured work — 3 case-study cards (odd ≤ 3 → single row per GL's
+# symmetry rule). Photos and event names are placeholder until GL
+# surfaces real ones from Jeff's archive.
 FEATURED_WORK = [
     {
         "category": "Balloon Arches",
@@ -83,18 +102,62 @@ FEATURED_WORK = [
 ]
 
 
+# Reviews block — placeholder until GL pastes real Google review quotes
+# from the browser-Claude prompt. Each entry stays as None until the
+# real quote is provided; the template renders a clearly-marked
+# "review pending" card for any None entry. This avoids fabricating
+# customer voices.
+REVIEW_QUOTES = [
+    None,  # to be filled with a real 5-star Google review
+    None,
+    None,
+]
+
+
 PAGE_CSS = """
 /* ======================================================================
- * HOMEPAGE — lookbook-forward shape
- * BEM blocks: lt-hero, lt-reviews, lt-trust, lt-categories, lt-featured,
- *             lt-twisting-spotlight, lt-crawl, lt-about, lt-cta
+ * HOMEPAGE v2 — lookbook-forward shape (lookbook-led, twisting at bottom)
+ * BEM blocks: lt-hero, lt-reviews-block, lt-divider, lt-categories,
+ *             lt-featured, lt-crawl, lt-cta, lt-twisting-spotlight
  * Uses CSS variables from lt-theme.css (--lt-teal, --lt-near-black, etc.)
  * ====================================================================== */
 
-/* --- Hero ----------------------------------------------------------- */
+/* --- Full-bleed helper ---------------------------------------------- */
+/* Frappe's templates/web.html wraps content in a max-width .container.
+ * Sections that should read as full-width horizontal bands need to
+ * break out via this technique. Used on hero, reviews, featured, crawl,
+ * twisting spotlight, and the closing CTA. */
+.lt-fullbleed {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+}
+
+/* --- 3-dot divider --------------------------------------------------- */
+.lt-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1.75rem 0;
+    background-color: var(--lt-white);
+}
+.lt-divider span {
+    display: block;
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background-color: var(--lt-teal);
+    opacity: 0.55;
+}
+
+/* --- Hero ------------------------------------------------------------ */
 .lt-hero {
     position: relative;
-    min-height: 560px;
+    min-height: 580px;
     background-color: var(--lt-blush-tint);
     overflow: hidden;
     display: flex;
@@ -114,15 +177,17 @@ PAGE_CSS = """
     inset: 0;
     background: linear-gradient(
         to bottom,
-        rgba(0, 0, 0, 0) 40%,
-        rgba(0, 0, 0, 0.55) 100%
+        rgba(0, 0, 0, 0) 30%,
+        rgba(0, 0, 0, 0.65) 100%
     );
 }
 .lt-hero__content {
     position: relative;
     z-index: 1;
     width: 100%;
-    padding: 3rem 1.25rem 2.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 2.75rem;
     text-align: center;
     color: var(--lt-white);
 }
@@ -130,34 +195,66 @@ PAGE_CSS = """
     font-family: 'Raleway', sans-serif;
     font-size: 0.875rem;
     font-weight: 600;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    margin: 0 0 0.5rem;
-    opacity: 0.95;
+    margin: 0 0 0.75rem;
+    opacity: 0.92;
     text-align: center;
+}
+.lt-hero__cycling {
+    position: relative;
+    min-height: 4.4rem;
+    margin: 0 0 0.75rem;
 }
 .lt-hero__title {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 2.5rem;
+    font-size: 2.25rem;
     line-height: 1.1;
-    margin: 0 0 0.6rem;
     color: var(--lt-white);
     text-align: center;
+    margin: 0;
+    opacity: 0;
+    animation: lt-hero-cycle 32s infinite;
 }
-.lt-hero__lede {
+/* Stagger 4 titles — each visible ~6.5s out of 32s */
+.lt-hero__title:nth-child(1) { animation-delay: 0s; }
+.lt-hero__title:nth-child(2) { animation-delay: 8s; }
+.lt-hero__title:nth-child(3) { animation-delay: 16s; }
+.lt-hero__title:nth-child(4) { animation-delay: 24s; }
+@keyframes lt-hero-cycle {
+    0%   { opacity: 0; }
+    3%   { opacity: 1; }
+    22%  { opacity: 1; }
+    25%  { opacity: 0; }
+    100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lt-hero__title {
+        animation: none;
+        opacity: 0;
+    }
+    .lt-hero__title:nth-child(1) { opacity: 1; }
+}
+.lt-hero__tagline {
     font-family: 'Raleway', sans-serif;
-    font-size: 1.125rem;
-    margin: 0 auto 1.5rem;
+    font-size: 1.0625rem;
+    margin: 0 auto 1.75rem;
     max-width: 38ch;
     font-weight: 300;
-    color: rgba(255, 255, 255, 0.95);
+    color: rgba(255, 255, 255, 0.96);
     text-align: center;
+    letter-spacing: 0.01em;
 }
 .lt-hero__cta {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.875rem 1.75rem;
+    padding: 0.95rem 2rem;
     background-color: var(--lt-teal);
     color: var(--lt-white);
     text-decoration: none;
@@ -175,89 +272,104 @@ PAGE_CSS = """
     outline-offset: 2px;
 }
 @media (min-width: 768px) {
-    .lt-hero { min-height: 640px; }
-    .lt-hero__title { font-size: 3.5rem; }
-    .lt-hero__lede { font-size: 1.25rem; }
-    .lt-hero__content { padding: 4rem 2rem 3.5rem; }
+    .lt-hero { min-height: 680px; }
+    .lt-hero__content { padding: 4.5rem 2rem 4rem; }
+    .lt-hero__cycling { min-height: 5.5rem; }
+    .lt-hero__title { font-size: 3.75rem; }
+    .lt-hero__tagline { font-size: 1.25rem; }
 }
 
-/* --- Reviews badge --------------------------------------------------- */
-.lt-reviews {
-    background-color: var(--lt-white);
-    padding: 1.75rem 1rem;
-    text-align: center;
-}
-.lt-reviews__link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.65rem;
-    color: var(--lt-near-black);
-    text-decoration: none;
-    font-family: 'Raleway', sans-serif;
-    font-size: 1rem;
-    font-weight: 500;
-}
-.lt-reviews__link:hover,
-.lt-reviews__link:focus-visible {
-    text-decoration: underline;
-}
-.lt-reviews__score {
-    font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 1.5rem;
-    color: var(--lt-near-black);
-}
-.lt-reviews__stars {
-    color: #f5b400;
-    letter-spacing: 0.12em;
-}
-.lt-reviews__count {
-    color: var(--lt-soft-gray);
-}
-
-/* --- Trust strip ---------------------------------------------------- */
-.lt-trust {
+/* --- Reviews block (replaces the prior trust strip) ----------------- */
+.lt-reviews-block {
     background-color: var(--lt-blue-tint);
-    padding: 2.5rem 1rem;
+    padding: 3rem 1rem 3.5rem;
 }
-.lt-trust__row {
-    max-width: 980px;
+.lt-reviews-block__inner {
+    max-width: 1200px;
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
     text-align: center;
 }
-.lt-trust__item {
-    padding: 0.5rem;
-}
-.lt-trust__title {
-    font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 1.125rem;
+.lt-reviews-block__badge {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0 0 2rem;
+    text-decoration: none;
     color: var(--lt-near-black);
-    margin: 0 0 0.25rem;
-    text-align: center;
 }
-.lt-trust__desc {
-    display: none;
+.lt-reviews-block__stars {
+    color: #f5b400;
+    font-size: 1.625rem;
+    letter-spacing: 0.1em;
+    line-height: 1;
+}
+.lt-reviews-block__score {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 2rem;
+    color: var(--lt-near-black);
+}
+.lt-reviews-block__count {
     font-family: 'Raleway', sans-serif;
-    font-size: 0.875rem;
+    font-size: 0.95rem;
     color: var(--lt-soft-gray);
-    margin: 0;
-    text-align: center;
+}
+.lt-reviews-block__quotes {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    max-width: 1100px;
+    margin: 0 auto;
 }
 @media (min-width: 768px) {
-    .lt-trust__title { font-size: 1.375rem; }
-    .lt-trust__desc { display: block; }
+    .lt-reviews-block__quotes { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+}
+.lt-reviews-block__quote {
+    background-color: var(--lt-white);
+    border-radius: 0.5rem;
+    padding: 1.5rem 1.5rem 1.25rem;
+    text-align: left;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+.lt-reviews-block__quote-mark {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 2.5rem;
+    color: var(--lt-teal);
+    line-height: 1;
+    margin: 0 0 0.5rem;
+    opacity: 0.6;
+}
+.lt-reviews-block__quote-text {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.95rem;
+    color: var(--lt-near-black);
+    line-height: 1.55;
+    margin: 0 0 0.75rem;
+    min-height: 3.5rem;
+}
+.lt-reviews-block__quote-attr {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.8125rem;
+    color: var(--lt-soft-gray);
+    margin: 0;
+}
+.lt-reviews-block__quote--placeholder {
+    background-color: rgba(255, 255, 255, 0.5);
+    border: 1px dashed var(--lt-soft-gray);
+}
+.lt-reviews-block__quote--placeholder .lt-reviews-block__quote-text {
+    color: var(--lt-soft-gray);
+    font-style: italic;
 }
 
 /* --- Custom Creations categories ------------------------------------ */
 .lt-categories {
     background-color: var(--lt-white);
-    padding: 3.5rem 1rem;
+    padding: 4rem 1rem;
 }
 .lt-categories__heading {
     font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 2rem;
+    font-size: 2.25rem;
     text-align: center;
     color: var(--lt-near-black);
     margin: 0 0 0.5rem;
@@ -266,18 +378,21 @@ PAGE_CSS = """
     text-align: center;
     color: var(--lt-soft-gray);
     max-width: 540px;
-    margin: 0 auto 2.5rem;
+    margin: 0 auto 2.75rem;
     font-size: 1rem;
 }
 .lt-categories__grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-    max-width: 980px;
+    gap: 2rem 1.5rem;
+    max-width: 1200px;
     margin: 0 auto;
 }
 @media (min-width: 768px) {
-    .lt-categories__grid { grid-template-columns: repeat(5, 1fr); }
+    .lt-categories__grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 2rem;
+    }
 }
 .lt-categories__item {
     text-align: center;
@@ -286,13 +401,13 @@ PAGE_CSS = """
     display: inline-flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.85rem;
     text-decoration: none;
     color: var(--lt-near-black);
 }
 .lt-categories__circle {
-    width: 110px;
-    height: 110px;
+    width: 130px;
+    height: 130px;
     border-radius: 50%;
     background-color: var(--lt-blush-tint);
     display: flex;
@@ -306,26 +421,30 @@ PAGE_CSS = """
     transform: translateY(-3px);
 }
 .lt-categories__icon-svg {
-    width: 48px;
-    height: 48px;
+    width: 56px;
+    height: 56px;
     color: var(--lt-near-black);
 }
 .lt-categories__name {
     font-family: 'Raleway', sans-serif;
-    font-size: 0.9375rem;
+    font-size: 1rem;
     font-weight: 600;
     line-height: 1.3;
-    max-width: 8rem;
+    max-width: 9rem;
 }
 
-/* --- Featured Work --------------------------------------------------- */
+/* --- Featured Work (Recent Celebrations) ---------------------------- */
 .lt-featured {
     background-color: var(--lt-near-white);
-    padding: 3.5rem 1rem;
+    padding: 4rem 1rem 4.5rem;
+}
+.lt-featured__inner {
+    max-width: 1300px;
+    margin: 0 auto;
 }
 .lt-featured__heading {
     font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 2rem;
+    font-size: 2.25rem;
     text-align: center;
     color: var(--lt-near-black);
     margin: 0 0 0.5rem;
@@ -333,16 +452,14 @@ PAGE_CSS = """
 .lt-featured__lede {
     text-align: center;
     color: var(--lt-soft-gray);
-    max-width: 540px;
-    margin: 0 auto 2.5rem;
+    max-width: 580px;
+    margin: 0 auto 3rem;
     font-size: 1rem;
 }
 .lt-featured__grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 1.5rem;
-    max-width: 1100px;
-    margin: 0 auto;
 }
 @media (min-width: 768px) {
     .lt-featured__grid { grid-template-columns: repeat(3, 1fr); gap: 2rem; }
@@ -359,42 +476,42 @@ PAGE_CSS = """
 }
 .lt-featured__card:hover,
 .lt-featured__card:focus-visible {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
 }
 .lt-featured__image {
     width: 100%;
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 4 / 5;
     background-color: var(--lt-blush-tint);
     background-size: cover;
     background-position: center;
 }
 .lt-featured__body {
-    padding: 1rem 1.25rem 1.25rem;
+    padding: 1.25rem 1.5rem 1.5rem;
 }
 .lt-featured__category {
     font-family: 'Raleway', sans-serif;
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.1em;
     color: var(--lt-soft-gray);
-    margin: 0 0 0.4rem;
+    margin: 0 0 0.5rem;
 }
 .lt-featured__title {
     font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 1.25rem;
+    font-size: 1.375rem;
     color: var(--lt-near-black);
     margin: 0;
     line-height: 1.25;
 }
 .lt-featured__viewall {
     text-align: center;
-    margin: 2rem 0 0;
+    margin: 2.5rem 0 0;
 }
 .lt-featured__viewall a {
     display: inline-block;
-    padding: 0.625rem 1.5rem;
+    padding: 0.75rem 1.75rem;
     color: var(--lt-near-black);
     text-decoration: none;
     border: 1px solid var(--lt-near-black);
@@ -409,13 +526,131 @@ PAGE_CSS = """
     color: var(--lt-white);
 }
 
-/* --- Twisting & Face Painting spotlight ----------------------------- */
+/* --- Client Logo Crawl ---------------------------------------------- */
+.lt-crawl {
+    background-color: var(--lt-blush-tint);
+    padding: 2.75rem 0 3.25rem;
+    overflow: hidden;
+}
+.lt-crawl__heading {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 1.625rem;
+    text-align: center;
+    color: var(--lt-near-black);
+    margin: 0 0 1.75rem;
+    padding: 0 1rem;
+}
+@media (min-width: 768px) {
+    .lt-crawl__heading { font-size: 2rem; }
+}
+.lt-crawl__viewport {
+    overflow: hidden;
+    width: 100%;
+    mask-image: linear-gradient(
+        to right,
+        transparent 0,
+        #000 5%,
+        #000 95%,
+        transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+        to right,
+        transparent 0,
+        #000 5%,
+        #000 95%,
+        transparent 100%
+    );
+}
+.lt-crawl__track {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    /* v2: 90s -> 180s per GL feedback (was moving way too fast) */
+    animation: lt-crawl-scroll 180s linear infinite;
+}
+.lt-crawl__item {
+    flex: 0 0 auto;
+    padding: 0 2rem;
+    font-family: 'Raleway', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--lt-near-black);
+    white-space: nowrap;
+    opacity: 0.7;
+}
+@keyframes lt-crawl-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lt-crawl__track {
+        animation: none;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+    }
+    .lt-crawl__item { padding: 0.4rem 1rem; }
+}
+
+/* --- Closing CTA ---------------------------------------------------- */
+.lt-cta {
+    background-color: var(--lt-soft-blue, var(--lt-blue-tint));
+    padding: 4rem 1rem 4.5rem;
+    text-align: center;
+}
+.lt-cta__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.lt-cta__heading {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 2.5rem;
+    color: var(--lt-near-black);
+    margin: 0 0 1rem;
+    line-height: 1.15;
+    text-align: center;
+}
+.lt-cta__body {
+    font-family: 'Raleway', sans-serif;
+    font-size: 1.125rem;
+    color: var(--lt-near-black);
+    max-width: 620px;
+    margin: 0 auto 1.75rem;
+    line-height: 1.55;
+    text-align: center;
+}
+.lt-cta__button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.95rem 2rem;
+    background-color: var(--lt-teal);
+    color: var(--lt-white);
+    text-decoration: none;
+    border-radius: 0.375rem;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    min-height: 48px;
+}
+.lt-cta__button:hover,
+.lt-cta__button:focus-visible {
+    background-color: #006666;
+    color: var(--lt-white);
+    outline: 2px solid var(--lt-near-black);
+    outline-offset: 2px;
+}
+@media (min-width: 768px) {
+    .lt-cta__heading { font-size: 3rem; }
+}
+
+/* --- Twisting & Face Painting spotlight (now at bottom) ------------ */
 .lt-twisting-spotlight {
     background-color: var(--lt-white);
-    padding: 3.5rem 1rem;
+    padding: 4rem 1rem;
 }
 .lt-twisting-spotlight__inner {
-    max-width: 1100px;
+    max-width: 1200px;
     margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr;
@@ -425,7 +660,7 @@ PAGE_CSS = """
 @media (min-width: 768px) {
     .lt-twisting-spotlight__inner {
         grid-template-columns: 1fr 1fr;
-        gap: 3rem;
+        gap: 3.5rem;
     }
 }
 .lt-twisting-spotlight__image {
@@ -442,7 +677,7 @@ PAGE_CSS = """
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
     color: var(--lt-soft-gray);
     margin: 0 0 0.5rem;
 }
@@ -477,156 +712,6 @@ PAGE_CSS = """
     background-color: #006666;
     color: var(--lt-white);
 }
-
-/* --- Client Logo Crawl ---------------------------------------------- */
-.lt-crawl {
-    background-color: var(--lt-blush-tint);
-    padding: 2.5rem 0 3rem;
-    overflow: hidden;
-}
-.lt-crawl__heading {
-    font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 1.5rem;
-    text-align: center;
-    color: var(--lt-near-black);
-    margin: 0 0 1.5rem;
-    padding: 0 1rem;
-}
-@media (min-width: 768px) {
-    .lt-crawl__heading { font-size: 1.875rem; }
-}
-.lt-crawl__viewport {
-    overflow: hidden;
-    width: 100%;
-    mask-image: linear-gradient(
-        to right,
-        transparent 0,
-        #000 5%,
-        #000 95%,
-        transparent 100%
-    );
-    -webkit-mask-image: linear-gradient(
-        to right,
-        transparent 0,
-        #000 5%,
-        #000 95%,
-        transparent 100%
-    );
-}
-.lt-crawl__track {
-    display: flex;
-    align-items: center;
-    width: max-content;
-    animation: lt-crawl-scroll 90s linear infinite;
-}
-.lt-crawl__item {
-    flex: 0 0 auto;
-    padding: 0 1.75rem;
-    font-family: 'Raleway', sans-serif;
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--lt-near-black);
-    white-space: nowrap;
-    opacity: 0.7;
-}
-@keyframes lt-crawl-scroll {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
-}
-@media (prefers-reduced-motion: reduce) {
-    .lt-crawl__track {
-        animation: none;
-        flex-wrap: wrap;
-        justify-content: center;
-        width: 100%;
-    }
-    .lt-crawl__item { padding: 0.4rem 1rem; }
-}
-
-/* --- About snippet --------------------------------------------------- */
-.lt-about {
-    background-color: var(--lt-white);
-    padding: 3rem 1rem;
-}
-.lt-about__inner {
-    max-width: 720px;
-    margin: 0 auto;
-    text-align: center;
-}
-.lt-about__eyebrow {
-    font-family: 'Raleway', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--lt-soft-gray);
-    margin: 0 0 0.5rem;
-    text-align: center;
-}
-.lt-about__heading {
-    font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 1.875rem;
-    color: var(--lt-near-black);
-    margin: 0 0 1rem;
-    line-height: 1.2;
-    text-align: center;
-}
-.lt-about__body {
-    font-family: 'Raleway', sans-serif;
-    font-size: 1.0625rem;
-    color: var(--lt-near-black);
-    margin: 0;
-    line-height: 1.65;
-    text-align: center;
-}
-
-/* --- Closing CTA ----------------------------------------------------- */
-.lt-cta {
-    background-color: var(--lt-soft-blue, var(--lt-blue-tint));
-    padding: 3.5rem 1rem;
-    text-align: center;
-}
-.lt-cta__heading {
-    font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 2.25rem;
-    color: var(--lt-near-black);
-    margin: 0 0 1rem;
-    line-height: 1.15;
-    text-align: center;
-}
-.lt-cta__body {
-    font-family: 'Raleway', sans-serif;
-    font-size: 1.125rem;
-    color: var(--lt-near-black);
-    max-width: 620px;
-    margin: 0 auto 1.75rem;
-    line-height: 1.55;
-    text-align: center;
-}
-.lt-cta__button {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.875rem 2rem;
-    background-color: var(--lt-teal);
-    color: var(--lt-white);
-    text-decoration: none;
-    border-radius: 0.375rem;
-    font-family: 'Raleway', sans-serif;
-    font-weight: 600;
-    font-size: 1rem;
-    min-height: 48px;
-}
-.lt-cta__button:hover,
-.lt-cta__button:focus-visible {
-    background-color: #006666;
-    color: var(--lt-white);
-    outline: 2px solid var(--lt-near-black);
-    outline-offset: 2px;
-}
-@media (min-width: 768px) {
-    .lt-cta__heading { font-size: 2.75rem; }
-}
 """
 
 
@@ -642,8 +727,10 @@ def get_context(context):
         "og:description": "Custom balloon decor for celebrations across the Wasatch Front since 1998.",
         "og:type": "website",
     }
+    context.hero_cycling_titles = HERO_CYCLING_TITLES
     context.client_crawl = CLIENT_CRAWL
     context.custom_categories = CUSTOM_CATEGORIES
     context.featured_work = FEATURED_WORK
+    context.review_quotes = REVIEW_QUOTES
     context.colocated_css = PAGE_CSS
     return context
