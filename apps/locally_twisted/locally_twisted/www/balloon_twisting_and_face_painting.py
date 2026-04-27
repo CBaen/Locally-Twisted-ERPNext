@@ -498,6 +498,209 @@ PAGE_CSS = """
         font-size: 1.5rem;
     }
 }
+
+/* ============================================================
+   Mockup-aligned restructure (2026-04-27 r5)
+   Hero kicker, service spec tables, decorative ribbons,
+   process section, event-types section.
+   ============================================================ */
+
+.lt-btfp__kicker {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: var(--lt-soft-gray);
+    text-transform: uppercase;
+    margin: 0 0 1rem;
+    text-align: left;
+}
+
+/* Service card — restructured for spec-table layout */
+.lt-btfp__service-kicker {
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+.lt-btfp__service-title {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 1.5rem;
+    color: var(--lt-near-black);
+    margin: 0 0 1rem;
+    line-height: 1.2;
+}
+.lt-btfp__service-body {
+    color: var(--lt-soft-gray);
+    line-height: 1.6;
+    margin: 0 0 1.5rem;
+    font-size: 0.95rem;
+}
+.lt-btfp__service-spec {
+    margin: 0;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(26, 26, 26, 0.1);
+}
+.lt-btfp__service-spec-row {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 1rem;
+    padding: 0.65rem 0;
+    border-bottom: 1px solid rgba(26, 26, 26, 0.05);
+}
+.lt-btfp__service-spec-row:last-child {
+    border-bottom: none;
+}
+.lt-btfp__service-spec-row dt {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--lt-near-black);
+    text-transform: uppercase;
+    margin: 0;
+    align-self: center;
+}
+.lt-btfp__service-spec-row dd {
+    font-size: 0.95rem;
+    color: var(--lt-soft-gray);
+    margin: 0;
+    line-height: 1.5;
+    align-self: center;
+}
+
+/* Thin decorative ribbons (full-bleed horizontal accent bands) */
+.lt-btfp__ribbon {
+    height: 40px;
+    border: none;
+    margin: 0;
+    padding: 0;
+    display: block;
+}
+.lt-btfp__ribbon--blush {
+    background-color: var(--lt-blush);
+}
+.lt-btfp__ribbon--soft-blue {
+    background-color: var(--lt-soft-blue);
+}
+@media (min-width: 992px) {
+    .lt-btfp__ribbon {
+        height: 56px;
+    }
+}
+
+/* Process section — "Booking is straightforward." */
+.lt-btfp__process {
+    background-color: var(--lt-near-white);
+    padding: 4rem 1.5rem;
+}
+.lt-btfp__process-inner {
+    max-width: 760px;
+    margin: 0 auto;
+}
+.lt-btfp__process-title {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 2rem;
+    color: var(--lt-near-black);
+    margin: 0 0 2rem;
+    line-height: 1.15;
+}
+@media (min-width: 992px) {
+    .lt-btfp__process-title {
+        font-size: 2.5rem;
+    }
+}
+.lt-btfp__process-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.lt-btfp__process-item {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 1.5rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid rgba(26, 26, 26, 0.08);
+    align-items: start;
+}
+.lt-btfp__process-item:last-child {
+    border-bottom: none;
+}
+.lt-btfp__process-number {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 1.5rem;
+    color: rgba(26, 26, 26, 0.3);
+    line-height: 1;
+    padding-top: 0.15rem;
+}
+.lt-btfp__process-step-title {
+    font-family: 'Raleway', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--lt-near-black);
+    margin: 0 0 0.5rem;
+    line-height: 1.3;
+}
+.lt-btfp__process-content p {
+    font-size: 0.95rem;
+    color: var(--lt-soft-gray);
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* Event types section — "Any Event. Any Size." */
+.lt-btfp__events {
+    background-color: var(--lt-white);
+    padding: 4rem 1.5rem;
+}
+.lt-btfp__events-inner {
+    max-width: 760px;
+    margin: 0 auto;
+}
+.lt-btfp__events-title {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 2rem;
+    color: var(--lt-near-black);
+    margin: 0 0 2rem;
+    line-height: 1.15;
+}
+@media (min-width: 992px) {
+    .lt-btfp__events-title {
+        font-size: 2.5rem;
+    }
+}
+.lt-btfp__events-list {
+    margin: 0;
+    padding: 0;
+}
+.lt-btfp__events-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid rgba(26, 26, 26, 0.08);
+}
+@media (min-width: 768px) {
+    .lt-btfp__events-row {
+        grid-template-columns: 14rem 1fr;
+        gap: 2rem;
+        align-items: baseline;
+    }
+}
+.lt-btfp__events-row:last-child {
+    border-bottom: none;
+}
+.lt-btfp__events-row dt {
+    font-family: 'Raleway', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--lt-near-black);
+    margin: 0;
+}
+.lt-btfp__events-row dd {
+    font-size: 0.95rem;
+    color: var(--lt-soft-gray);
+    margin: 0;
+    line-height: 1.5;
+}
 """
 
 
