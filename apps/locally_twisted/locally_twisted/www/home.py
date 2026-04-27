@@ -541,6 +541,19 @@ PAGE_CSS = """
     color: var(--lt-near-black);
     margin: 0 0 0.5rem;
 }
+.lt-categories__heading-link {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    padding-bottom: 0.15rem;
+    transition: border-color 0.2s ease, color 0.2s ease;
+}
+.lt-categories__heading-link:hover,
+.lt-categories__heading-link:focus-visible {
+    color: var(--lt-teal);
+    border-bottom-color: var(--lt-teal);
+    text-decoration: none;
+}
 .lt-categories__lede {
     text-align: center;
     color: var(--lt-soft-gray);

@@ -148,11 +148,15 @@
     </div>
 </section>
 
-{# --- 5. Custom Creations — 6 customizable categories (full-bleed band) --- #}
+{# --- 5. Custom Event Decor — 6 customizable categories (full-bleed band).
+     Heading is a link to /event-decor (the Event Decor page; consultative
+     work, NOT in the shop). Renamed from "Custom Creations" per GL r4. #}
 <section class="lt-categories lt-fullbleed" aria-labelledby="lt-categories-heading">
-    <h2 id="lt-categories-heading" class="lt-categories__heading">Custom Creations</h2>
+    <h2 id="lt-categories-heading" class="lt-categories__heading">
+        <a class="lt-categories__heading-link" href="/event-decor">Custom Event Decor</a>
+    </h2>
     <p class="lt-categories__lede">
-        Six things we make custom for your event. Pick a shape &mdash; we'll bring the colors.
+        Six custom pieces in your colors. Mix, match, and layer them &mdash; design your event.
     </p>
     <div class="lt-categories__grid">
         {% for cat in custom_categories %}
