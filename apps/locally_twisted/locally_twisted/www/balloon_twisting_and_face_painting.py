@@ -177,7 +177,13 @@ PAGE_CSS = """
 }
 .lt-btfp__carousel {
     width: 100%;
-    aspect-ratio: 4 / 3;
+    /* Portrait 3:4 — matches the dominant source-photo orientation
+       (10 of 12 photos are portrait/square iPhone shots). Avoids the
+       aggressive cover-crop that made portraits feel "too close-up". */
+    aspect-ratio: 3 / 4;
+    max-width: 380px;
+    margin-left: auto;
+    margin-right: auto;
     border-radius: 0.375rem;
     margin-bottom: 1rem;
     background-color: var(--lt-blush-tint);
