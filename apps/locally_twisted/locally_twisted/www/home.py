@@ -406,15 +406,6 @@ PAGE_CSS = """
     margin: 0 auto;
     text-align: center;
 }
-.lt-reviews-block__quotes {
-    /* Carousel viewport breaks out of the inner column to span the band. */
-    width: 100vw;
-    position: relative;
-    left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
-}
 .lt-reviews-block__badge {
     display: inline-flex;
     flex-direction: column;
@@ -447,9 +438,16 @@ PAGE_CSS = """
  * Per GL 2026-04-27: "carousel review of praise that matter more
  * than the carousel of businesses at the bottom." */
 .lt-reviews-block__quotes {
+    /* Carousel viewport breaks out of the .lt-reviews-block__inner 1200px
+     * column to span the full band — otherwise on a 1920px monitor the
+     * mask would clip readable text on edge cards. Per GL 2026-04-27 r3. */
     overflow: hidden;
-    width: 100%;
-    margin: 0;
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
     mask-image: linear-gradient(
         to right, transparent 0, #000 4%, #000 96%, transparent 100%
     );
@@ -916,6 +914,24 @@ PAGE_CSS = """
 """
 
 
+def _abbreviate_name(name):
+    """Privacy-friendly review attribution per GL 2026-04-27 r3.
+
+    "Mary DeMann"            -> "Mary D."
+    "Sarah Johnston-Powell"  -> "Sarah J."
+    "Mary Anne DeMann"       -> "Mary D."     (middle name dropped)
+    "Lindsay"                -> "Lindsay"     (single name unchanged)
+    "KJSCOTT"                -> "KJSCOTT"     (single name unchanged)
+    """
+    parts = (name or "").strip().split()
+    if len(parts) <= 1:
+        return parts[0] if parts else ""
+    first = parts[0]
+    last = parts[-1]
+    initial = last[0].upper() if last else ""
+    return f"{first} {initial}."
+
+
 def get_context(context):
     context.title = "Locally Twisted — Utah's Balloon Specialists | Custom Event Decor"
     context.metatags = {
@@ -932,6 +948,11 @@ def get_context(context):
     context.client_crawl = CLIENT_CRAWL
     context.custom_categories = CUSTOM_CATEGORIES
     context.featured_work = FEATURED_WORK
-    context.review_quotes = REVIEW_QUOTES
+    # Compute display_name at request time so the source list keeps full
+    # names (audit trail) but the rendered cards show "First L." only.
+    context.review_quotes = [
+        dict(q, display_name=_abbreviate_name(q.get("name", ""))) if q else None
+        for q in REVIEW_QUOTES
+    ]
     context.colocated_css = PAGE_CSS
     return context
