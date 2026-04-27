@@ -14,7 +14,6 @@ PAGE_CSS = """
 }
 .lt-faq h1 {
     font-size: 2rem;
-    font-weight: 600;
     margin: 0 0 1.5rem;
     line-height: 1.2;
 }
@@ -27,8 +26,7 @@ PAGE_CSS = """
     margin: 0 0 2rem;
 }
 .lt-faq__group-title {
-    font-size: 1.25rem;
-    font-weight: 600;
+    font-size: 1.5rem;
     margin: 0 0 0.75rem;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
