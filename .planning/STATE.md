@@ -3,16 +3,16 @@ gsd_state_version: 1.0
 milestone: v0.1
 milestone_name: customer-site-storefront
 status: in_progress
-stopped_at: Phase 1 Slice 2 attempted then paused mid-build; framework study + webshop install underway
-last_updated: "2026-04-26T18:00:00.000Z"
-last_activity: 2026-04-26 — Slice 2 (header+footer) attempted and paused after band-aid pattern surfaced; custom Frappe app `locally_twisted` scaffolded + bind-mounted + installed; theme CSS migrated to app via web_include_css; agency capability `frappe-conventions.md` written; framework study + webshop install in flight
+stopped_at: Phase 1 — Slice 3 (Homepage) DONE; remaining slices (6b refund/FAQ, 7 lookbook, 8 service categories, 9 color chart, 10 /book, 11 shop, 12 cart, 13 blog) ahead. Strategic shape locked: lookbook-forward + small shop sidebar.
+last_updated: "2026-04-27T03:30:00.000Z"
+last_activity: 2026-04-27 — Homepage shipped (Slice 3) with hero cycling headline + reviews carousel (19 real Google quotes) + 5 customizable categories + featured work + client crawl + closing CTA + twisting at bottom. Site shape decision recorded at `.planning/decisions/site-shape.md`. Competitor survey at `_resources/competitor-survey-2026-04-26.md`. ROADMAP and Phase 1 PLAN rewritten for lookbook-forward shape; `/book` moved from Phase 2 to Phase 1 (Slice 10). About snippet deferred. Bouquets added as 6th customizable category for future Design Studio.
 progress:
   total_phases: 6
   completed_phases: 0
   deferred_phases: 0
   total_plans: 1
   completed_plans: 0
-  percent: 5
+  percent: 30
 ---
 
 # Project State
@@ -23,24 +23,22 @@ See: `.planning/PROJECT.md` (frame reset 2026-04-26)
 
 **Core value:** Jeff's first interaction with the new system makes him feel equipped — like he finally has the tools he should have had years ago. End result must look obvious, professional, trustworthy.
 
-**Current focus:** Phase 1 — Customer site + storefront (the proof point). If ERPNext can't deliver this, GL pivots before building backend.
+**Current focus:** Phase 1 — Customer site (lookbook-forward, with small shop). 6 of ~14 slices done.
 
 ## Current Position
 
-Phase: 1 of 6 (Customer site + storefront)
-Plan: `.planning/phases/01-customer-site-and-storefront/PLAN.md` (9 slices, all decision gates resolved 2026-04-26)
-Status: in flight. Slice 1 (brand foundation) DONE. Slice 2 (header + footer) attempted then paused mid-build — visible state is broken-honest pending framework study + Jinja partial override approach. Framework study + webshop app install are the active work.
-Last activity: 2026-04-26 — Slice 2 build session ended on meta-pause after band-aid pattern surfaced; agency capability `frappe-conventions.md` written; HANDOFF + lessons-learned + anti-gl-patterns updated with full forensic; current session resumes via study-then-build path.
+Phase: 1 of 6 (Customer site, lookbook-forward shape)
+Plan: `.planning/phases/01-customer-site-and-storefront/PLAN.md` (rewritten 2026-04-27 for the new shape)
+Status: in flight. **Slice 1 (brand foundation), Slice 2 (chrome), Slice 4 (BTFP), Slice 5 (Contact), Slice 6a (Accessibility), and Slice 3 (Homepage) all DONE.** Remaining: Slice 6b (Refund + FAQ), Slice 7 (Lookbook), Slice 8 (Service category pages), Slice 9 (Color Chart), Slice 10 (`/book` form), Slice 11 (Small Shop), Slice 12 (Cart + checkout), Slice 13 (Blog).
+Last activity: 2026-04-27 — Homepage built and iterated through three rounds with GL (v1 → v2 with reorder + full-bleed + reviews-instead-of-trust → v3 with reviews-carousel + 19 real quotes + 5-star ratings on cards).
 
-Progress: [█░░░░░░░░░] ~5% (Slice 1 of 9 done; framework study + webshop install in progress)
+Progress: [███░░░░░░░] ~30% (6 of ~14 slices done; major surfaces remaining)
 
 ## Performance Metrics
 
 **Velocity:**
-
-- Total plans completed: 0
-- Average duration: —
-- Total execution time: 0 hours
+- Total plans completed: 0 (Phase 1 plan still in flight; multiple slices done)
+- Phase 1 slices: 6 of ~14 done
 
 ## Accumulated Context
 
@@ -48,54 +46,46 @@ Progress: [█░░░░░░░░░] ~5% (Slice 1 of 9 done; framework stu
 
 Recent decisions (full reasoned log in `locally-twisted-decisions.md`):
 
-- 2026-04-26: Project reframed from "Odoo → ERPNext migration" to "First professional business platform for LT, built on ERPNext" (GL directive)
-- 2026-04-26: Customer-facing site + storefront is Phase 1 — the proof point (GL directive)
-- 2026-04-26: Drop standalone About page and standalone Services index — info distributes (GL directive)
-- 2026-04-26: All clients default to ERPNext native HRMS payroll — agency-wide standard (GL directive)
-- 2026-04-26: All policy/brand resources live in `_resources/` and are scrubbed of platform-specific references
-- 2026-04-25: ERPNext v15.105.0 pinned (latest stable v15 patch)
-- 2026-04-25: Frappe Cloud Sites plan ($5/mo) chosen for production hosting; transfer is self-service via dashboard
+- 2026-04-27: Bouquets added as 6th customizable category for the future Design Studio
+- 2026-04-27: Reviews carousel chosen over expanded client logo crawl as primary social proof
+- 2026-04-27: Twisting & Face Painting moved to bottom of homepage (de-emphasized strategically)
+- 2026-04-27: `/book` moved from Phase 2 → Phase 1 (Slice 10); Phase 2 reframed to "form-handling depth"
+- 2026-04-27: About page deferred until Jeff is ready
+- 2026-04-27: Site shape locked — lookbook-forward + small shop sidebar; future Design Studio for customizable categories
+- 2026-04-26 (later): Platform direction RESOLVED — stay Frappe-native (decided by demonstration after 4 surfaces shipped)
+- 2026-04-26: Project reframed from "Odoo → ERPNext migration" to "First professional business platform for LT, built on ERPNext"
 
 ### Pending Todos
 
-Phase 1 decision gates (all RESOLVED 2026-04-26 — see `locally-twisted-decisions.md`):
+Phase 1 remaining slices (in priority order):
 
-- ✓ Header navigation structure — Option B (single What-We-Make + occasion landing pages)
-- ✓ Accessibility statement nuance — Option B (brief intent + actually meet WCAG 2.1 AA)
-- ✓ Blog presence in Phase 1 — yes, framework + live posts (Slice 5b)
-- ✓ Real photography sourcing — placeholders generated, real photos for a future iteration
-- ✓ Customer-inquiry email destination — `locallytwisted@gmail.com`
-- ✓ Pricing calculator placement — embedded in Slice 4 (Balloon Twisting + Face Painting page), no standalone /pricing
-- ✓ ERPNext user cleanup — done (Jeff Kimber renamed; yahoo placeholder disabled)
+- [P0] Slice 6b — Refund Policy + FAQ pages (small static portal pages, ~15-30 min each)
+- [P0] Slice 7 — Lookbook (`/lookbook`, full portfolio organized by event type)
+- [P0] Slice 8 — Service category pages (×5: Corporate, Weddings, Birthdays, Schools, Seasonal)
+- [P0] Slice 9 — Color Chart (`/color-chart`, static reference for the 70 balloon colors)
+- [P0] Slice 10 — `/book` form page (45-field Lead schema, primary inquiry conversion)
+- [P1] Slice 11 — Small Shop browse + detail (sub-$300 pre-configured items only)
+- [P1] Slice 12 — Cart + checkout shell (Stripe stubbed until Phase 4)
+- [P2] Slice 13 — Blog framework + 2-3 first posts (replaces hero placeholder titles)
 
-Active work (this session):
-
-- Bookkeeping cleanup of CLAUDE.md / STATE.md / queue staleness
-- `frappe/webshop` app install (required for Slices 7-9 + Phase 4 cart/checkout/payment)
-- Verify agency `frappe-conventions.md` claims against actual Frappe source in container
-- Document webshop module structure (which Jinja files to override for Slices 7-9 visual customization)
-- Build reusable dev scripts (editable-pip-reinstall, asset-rebuild)
-- Reposition HANDOFF / PROJECT-STATUS for next session
-
-Cross-cutting (deferred):
-
-- Persist nginx Origin patch via docker-compose override (P2 — only matters on container recreation)
-- Inspiration Photos Table field on Lead — empty section heading; tied to deferred photo UX decision
+Future scope (post-Phase-1):
+- Design Studio — interactive picker for arches/columns/garlands/backdrops/drops/bouquets
 
 ### Blockers/Concerns
 
-Slice 2 redo (the right way, via Jinja partial overrides) blocked on completing the framework verification task. Slices 7-9 unblock when webshop is installed and its module structure is documented.
+None active. All Phase 1 decision gates resolved. Photos for the small shop catalog already exist (`_resources/odoo-export/catalog.json` + 48 product images).
 
 ## Deferred Items
 
 | Category | Item | Status | Deferred At |
 |----------|------|--------|-------------|
+| About page | Wait until Jeff is ready | DEFERRED — contact page covers basics | 2026-04-27 |
 | Custom Frappe app | Packaging/containerization for transfer | DEFERRED until critical mass of customizations | 2026-04-25 |
 | Production hosting | Frappe Cloud signup + DEPLOY-01 | DEFERRED until Phase 6 (cutover) | 2026-04-25 |
 
 ## Session Continuity
 
-Last session: 2026-04-26 (Slice 2 build attempt, paused mid-execution)
-Stopped at: Slice 2 visible state broken-honest (`.web-footer` height constrained, footer brand block rendering on white background). HANDOFF, anti-gl-patterns section 0, lessons-learned 2026-04-26 entry, and agency capability `frappe-conventions.md` capture the full forensic.
+Last session: 2026-04-27 (homepage build, three iterations, ended on closeout)
+Stopped at: Homepage live at `/` with all 9 sections rendering, 19 real reviews in carousel, 0 page errors, GL-confirmed.
 Resume file: `HANDOFF.md` (project root) — load-bearing for next instance
-Next concrete step: Resume Slice 2 the right way — override Jinja partials at `apps/locally_twisted/locally_twisted/templates/includes/footer/footer.html` (and `footer_grouped_links.html`, `footer_info.html`, `footer_logo_extension.html`) replicating the approved Odoo structure (centered logo, two-tier header, 3-column footer, hours block, 3 social icons). Use the verified findings from this session's framework study, NOT more CSS overrides.
+Next concrete step: Slice 6b — Refund Policy + FAQ pages. Smallest victories available; both are static portal pages via the existing meal pattern. Content lives in `_resources/policies/`.
