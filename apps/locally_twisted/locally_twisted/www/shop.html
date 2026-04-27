@@ -1,0 +1,183 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+
+<style>{{ page_css }}</style>
+
+<section class="lt-shop__hero" aria-label="Shop header">
+    <div class="lt-shop__hero-inner">
+        <div>
+            <p class="lt-shop__hero-eyebrow">Take home</p>
+            <h1 class="lt-shop__hero-title">A few things you can take home today.</h1>
+            <p class="lt-shop__hero-lede">
+                Smaller pieces available for pickup or delivery along the Wasatch Front.
+                For custom balloon decor, start with <a href="/contact">a conversation</a>.
+            </p>
+        </div>
+
+        <a class="lt-shop__cart-btn" href="/cart" aria-label="View cart">
+            {# Lucide shopping-cart, matches the chrome icon set #}
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <circle cx="8" cy="21" r="1"/>
+                <circle cx="19" cy="21" r="1"/>
+                <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+            </svg>
+            <span>Cart</span>
+        </a>
+    </div>
+</section>
+
+<div class="lt-shop__band lt-shop__band--blush" aria-hidden="true"></div>
+
+<section class="lt-shop__listing" aria-label="Product grid">
+    <div class="lt-shop__listing-inner">
+
+        <div class="lt-shop__filters" role="group" aria-label="Filter by category">
+            {% for cat in categories %}
+            <button type="button"
+                    class="lt-shop__chip"
+                    data-category="{{ cat.id }}"
+                    aria-pressed="{{ 'true' if cat.id == 'all' else 'false' }}">
+                {{ cat.label }}
+            </button>
+            {% endfor %}
+        </div>
+
+        <p class="lt-shop__count" id="lt-shop-count">{{ total_items }} item{% if total_items != 1 %}s{% endif %}</p>
+
+        <div class="lt-shop__grid" id="lt-shop-grid">
+            {% for item in items %}
+            <article class="lt-shop__card"
+                     data-category="{{ item.category }}"
+                     aria-label="{{ item.web_item_name }}">
+
+                <a class="lt-shop__card-image{% if not item.website_image %} lt-shop__card-image--placeholder{% endif %}"
+                   href="/{{ item.route }}"
+                   aria-label="View details for {{ item.web_item_name }}">
+                    {% if item.website_image %}
+                    <img src="{{ item.website_image }}" alt="" loading="lazy">
+                    {% endif %}
+                </a>
+
+                <h3 class="lt-shop__card-name">
+                    <a href="/{{ item.route }}">{{ item.web_item_name }}</a>
+                </h3>
+
+                {% if item.short_description %}
+                <p class="lt-shop__card-desc">{{ item.short_description }}</p>
+                {% endif %}
+
+                <div class="lt-shop__card-footer">
+                    <span class="lt-shop__card-price">{{ item.price_display }}</span>
+                    <button type="button"
+                            class="lt-shop__card-add"
+                            data-item-code="{{ item.item_code }}"
+                            data-item-name="{{ item.web_item_name }}"
+                            aria-label="Add {{ item.web_item_name }} to cart">
+                        Add to cart
+                    </button>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+
+        <div class="lt-shop__feedback" id="lt-shop-feedback" role="status" aria-live="polite"></div>
+
+    </div>
+</section>
+
+<div class="lt-shop__band lt-shop__band--aqua" aria-hidden="true"></div>
+
+<section class="lt-shop__cta" aria-label="Custom work">
+    <div class="lt-shop__cta-inner">
+        <p class="lt-shop__hero-eyebrow">For something larger</p>
+        <h2>Custom balloon decor starts with a conversation, not a cart.</h2>
+        <div class="lt-shop__cta-actions">
+            <a class="lt-shop__cta-btn lt-shop__cta-btn--secondary" href="/lookbook">See the look book</a>
+            <a class="lt-shop__cta-btn lt-shop__cta-btn--primary" href="/contact">Tell us what you&rsquo;re imagining</a>
+        </div>
+    </div>
+</section>
+
+<script>
+(function () {
+    // Category filter — client-side, no roundtrip
+    var chips = document.querySelectorAll('.lt-shop__chip');
+    var cards = document.querySelectorAll('.lt-shop__card');
+    var countEl = document.getElementById('lt-shop-count');
+    var labelById = {};
+    chips.forEach(function (c) { labelById[c.dataset.category] = c.textContent.trim(); });
+
+    function applyFilter(category) {
+        var visible = 0;
+        cards.forEach(function (card) {
+            var match = (category === 'all' || card.dataset.category === category);
+            card.hidden = !match;
+            if (match) visible++;
+        });
+        chips.forEach(function (c) {
+            c.setAttribute('aria-pressed', c.dataset.category === category ? 'true' : 'false');
+        });
+        if (countEl) {
+            var label = (category === 'all') ? '' : (' in ' + labelById[category]);
+            countEl.textContent = visible + ' item' + (visible !== 1 ? 's' : '') + label;
+        }
+    }
+
+    chips.forEach(function (c) {
+        c.addEventListener('click', function () { applyFilter(c.dataset.category); });
+    });
+
+    // Add-to-cart — call webshop's existing endpoint, no parallel cart
+    var feedback = document.getElementById('lt-shop-feedback');
+    function setFeedback(state, msg) {
+        if (!feedback) return;
+        feedback.classList.remove('is-error');
+        if (state === 'error') feedback.classList.add('is-error');
+        feedback.textContent = msg || '';
+    }
+
+    document.querySelectorAll('.lt-shop__card-add').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var itemCode = btn.dataset.itemCode;
+            var itemName = btn.dataset.itemName;
+            if (!itemCode) return;
+            btn.disabled = true;
+            var originalLabel = btn.textContent;
+            btn.textContent = 'Adding...';
+            setFeedback(null, '');
+
+            // Webshop's whitelisted update_cart endpoint.
+            // Method path: webshop.webshop.shopping_cart.cart.update_cart
+            var fd = new FormData();
+            fd.append('item_code', itemCode);
+            fd.append('qty', '1');
+            fd.append('with_items', '0');
+
+            fetch('/api/method/webshop.webshop.shopping_cart.cart.update_cart', {
+                method: 'POST',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                body: fd,
+                credentials: 'same-origin'
+            })
+            .then(function (resp) { return resp.json().then(function (data) { return { status: resp.status, body: data }; }); })
+            .then(function (result) {
+                btn.disabled = false;
+                btn.textContent = originalLabel;
+                if (result.status >= 200 && result.status < 300) {
+                    setFeedback('success', 'Added "' + itemName + '" to your cart.');
+                } else {
+                    setFeedback('error', "Couldn't add to cart. Please call (801) 285-0860.");
+                }
+            })
+            .catch(function () {
+                btn.disabled = false;
+                btn.textContent = originalLabel;
+                setFeedback('error', "Couldn't add to cart. Please call (801) 285-0860.");
+            });
+        });
+    });
+})();
+</script>
+
+{% endblock %}
