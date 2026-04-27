@@ -51,6 +51,9 @@ WEBSHOP_TARGETS = {
     "enable_field_filters": 1,
     "show_attachments": 0,
     "enable_checkout": 1,
+    "price_list": "Standard Selling",
+    "default_customer_group": "Individual",
+    "company": "Locally Twisted",
 }
 
 
