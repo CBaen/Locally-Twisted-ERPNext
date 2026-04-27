@@ -330,15 +330,17 @@ PAGE_CSS = """
     font-size: 0.95rem;
     color: var(--lt-soft-gray);
 }
+/* Auto-fit pattern — show as many full cards as fit at minmax(220px,1fr).
+ * At ~1180px container, 5 cards fit. At narrower viewports the grid
+ * reflows to 4, 3, 2, 1 — cards never get cut off mid-card. Per GL:
+ * "5 inline of the reviews or as many as the screen will hold the
+ *  full card, no cutting cards off." */
 .lt-reviews-block__quotes {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 1.25rem;
-    max-width: 1100px;
+    max-width: 1300px;
     margin: 0 auto;
-}
-@media (min-width: 768px) {
-    .lt-reviews-block__quotes { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
 }
 .lt-reviews-block__quote {
     background-color: var(--lt-white);
