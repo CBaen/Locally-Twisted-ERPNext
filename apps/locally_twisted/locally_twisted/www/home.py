@@ -518,7 +518,7 @@ PAGE_CSS = """
 /* --- Custom Creations categories ------------------------------------ */
 .lt-categories {
     background-color: var(--lt-white);
-    padding: 4rem 1rem;
+    padding: 4rem 1.5rem;
 }
 .lt-categories__heading {
     font-family: 'DM Serif Display', Georgia, serif;
@@ -534,16 +534,26 @@ PAGE_CSS = """
     margin: 0 auto 2.75rem;
     font-size: 1rem;
 }
+/* 6-category grid:
+ *   <768px : 2 columns × 3 rows  (clean 2-2-2 mobile)
+ *   768-1199px : 3 columns × 2 rows (clean 3-3 tablet)
+ *   ≥1200px : 6 columns × 1 row (single ribbon, full desktop impact) */
 .lt-categories__grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem 1.5rem;
-    max-width: 1200px;
+    max-width: 1700px;
     margin: 0 auto;
 }
 @media (min-width: 768px) {
     .lt-categories__grid {
-        grid-template-columns: repeat(5, 1fr);
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2.5rem 2rem;
+    }
+}
+@media (min-width: 1200px) {
+    .lt-categories__grid {
+        grid-template-columns: repeat(6, 1fr);
         gap: 2rem;
     }
 }
@@ -586,14 +596,22 @@ PAGE_CSS = """
     max-width: 9rem;
 }
 
-/* --- Featured Work (Recent Celebrations) ---------------------------- */
+/* --- Featured Work (Recent Celebrations) — full-width hero band ----- */
+/* Per GL 2026-04-27 (round 2): Recent Celebrations should occupy the
+ * width of a desktop monitor — currently feels small/contained. Strategy:
+ * remove inner max-width on widescreen, edge-pad with viewport-relative
+ * padding so cards scale up naturally on big screens. */
 .lt-featured {
     background-color: var(--lt-near-white);
-    padding: 4rem 1rem 4.5rem;
+    padding: 4rem 1.25rem 4.5rem;
 }
 .lt-featured__inner {
-    max-width: 1300px;
+    max-width: 1700px;
     margin: 0 auto;
+}
+@media (min-width: 1400px) {
+    .lt-featured { padding-left: 4vw; padding-right: 4vw; }
+    .lt-featured__inner { max-width: none; }
 }
 .lt-featured__heading {
     font-family: 'DM Serif Display', Georgia, serif;
@@ -601,6 +619,9 @@ PAGE_CSS = """
     text-align: center;
     color: var(--lt-near-black);
     margin: 0 0 0.5rem;
+}
+@media (min-width: 1200px) {
+    .lt-featured__heading { font-size: 2.75rem; }
 }
 .lt-featured__lede {
     text-align: center;
@@ -616,6 +637,9 @@ PAGE_CSS = """
 }
 @media (min-width: 768px) {
     .lt-featured__grid { grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+}
+@media (min-width: 1200px) {
+    .lt-featured__grid { gap: 2.5rem; }
 }
 .lt-featured__card {
     background-color: var(--lt-white);
@@ -639,8 +663,16 @@ PAGE_CSS = """
     background-size: cover;
     background-position: center;
 }
+@media (min-width: 1200px) {
+    /* Slightly wider crop on big monitors — photos scale up the full
+     * width of the band; 4:5 stays portrait, just bigger. */
+    .lt-featured__image { aspect-ratio: 5 / 6; }
+}
 .lt-featured__body {
     padding: 1.25rem 1.5rem 1.5rem;
+}
+@media (min-width: 1200px) {
+    .lt-featured__body { padding: 1.75rem 2rem 2rem; }
 }
 .lt-featured__category {
     font-family: 'Raleway', sans-serif;
