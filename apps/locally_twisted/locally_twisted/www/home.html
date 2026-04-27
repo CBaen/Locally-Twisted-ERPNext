@@ -78,6 +78,10 @@
                         <p class="lt-reviews-block__quote-attr">
                             &mdash; {{ quote.name }}{% if quote.event %}, {{ quote.event }}{% endif %}
                         </p>
+                        <div class="lt-reviews-block__quote-stars"
+                             aria-label="{{ quote.rating or 5 }} out of 5 stars">
+                            {% for _ in range(quote.rating or 5) %}&#9733;{% endfor %}
+                        </div>
                     </article>
                     {% else %}
                     <article class="lt-reviews-block__quote lt-reviews-block__quote--placeholder">
