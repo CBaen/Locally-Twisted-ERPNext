@@ -102,13 +102,21 @@ FEATURED_WORK = [
 ]
 
 
-# Reviews block — placeholder until GL pastes real Google review quotes
-# from the browser-Claude prompt. Each entry stays as None until the
-# real quote is provided; the template renders a clearly-marked
-# "review pending" card for any None entry. This avoids fabricating
-# customer voices.
+# Reviews carousel — horizontal-scrolling marquee of customer praise.
+# Per GL 2026-04-27: 28 years in business deserves a carousel of real
+# reviews, not just 5 inline cards. Words matter more than client logos
+# for an event-decor business. When GL pastes the JSON from the
+# browser-Claude prompt, REVIEW_QUOTES becomes a list of dicts:
+#   {"name": "Sarah K.", "rating": 5, "date": "2025-11", "source": "Google",
+#    "event": "wedding", "text": "Full review verbatim..."}
+# Until then, None entries render as clearly-marked placeholder cards.
 REVIEW_QUOTES = [
-    None,  # to be filled with a real 5-star Google review
+    None,  # 10 placeholder slots so the carousel has motion until GL
+    None,  # pastes real reviews from Claude.ai. Replace this list with
+    None,  # a list of dicts (see header above) when ready.
+    None,
+    None,
+    None,
     None,
     None,
     None,
