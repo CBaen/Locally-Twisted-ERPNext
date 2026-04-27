@@ -23,7 +23,8 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 
 **Remaining (in priority order):**
 
-- [P0] **Slice 6b — Refund Policy + FAQ pages.** Both small static portal pages; content in `_resources/policies/`. ~15-30 minutes each via the meal. Smallest victory available.
+- [P0] **Slice 6b — FAQ page.** Small static portal page; content composed from `_resources/policies/` (deposits, service-area, tax, theme rules, pricing). Composition is a synthesis step beyond verbatim transcription — surface question list to GL before shipping.
+  - **DONE 2026-04-27:** Refund Policy at `/refund-policy` (and `/refund_policy` alias). Plain-language translation of `legal-interview-answers.md` Part 2C + `deposits.md`. 8 sections, no console errors, mobile + desktop verified.
 - [P0] **Slice 7 — Lookbook (full portfolio).** `/lookbook` — visual heart of the site, organized by event type (Corporate, Weddings, Birthdays, Schools, Seasonal). The 5 Custom Creations circles + the 3 Recent Celebrations cards on the homepage already link here as stubs (currently 404).
 - [P0] **Slice 8 — Service category pages.** `/services/<event-type>` × 5 (Corporate, Weddings, Birthdays, Schools, Seasonal). Each ends with inquiry CTA pre-filling `/book` with the category.
 - [P0] **Slice 9 — Color Chart page.** `/color-chart` — static reference, all 70 balloon colors with names. Answers Jeff's "customers want to see colors" instinct without a configurator. Visual swatch grid + print-friendly stylesheet.
