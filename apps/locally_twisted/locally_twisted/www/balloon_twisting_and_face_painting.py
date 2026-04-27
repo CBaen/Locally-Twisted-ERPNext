@@ -46,28 +46,39 @@ EVENT_TYPES = [
 PAGE_CSS = """
 .lt-btfp__intro {
     background-color: var(--lt-blush-tint);
-    padding: 3rem 1rem 2.5rem;
-    text-align: center;
+    padding: 4rem 1.5rem 3.5rem;
+    text-align: left;
 }
 .lt-btfp__intro-inner {
     max-width: 1100px;
     margin: 0 auto;
-    text-align: center;
+    text-align: left;
 }
-.lt-btfp__intro h1 {
+.lt-btfp__intro-title {
     font-family: 'DM Serif Display', Georgia, serif;
     font-size: 2.25rem;
     color: var(--lt-near-black);
-    margin: 0 0 0.5rem;
-    line-height: 1.15;
-    text-align: center;
+    margin: 0 0 1.25rem;
+    line-height: 1.1;
+    text-align: left;
+    max-width: 30rem;
 }
 .lt-btfp__intro-lede {
-    font-size: 1.125rem;
+    font-size: 1.0625rem;
     color: var(--lt-soft-gray);
     margin: 0;
     font-weight: 300;
-    text-align: center;
+    text-align: left;
+    max-width: 32rem;
+    line-height: 1.6;
+}
+@media (min-width: 992px) {
+    .lt-btfp__intro {
+        padding: 5rem 2rem 4rem;
+    }
+    .lt-btfp__intro-title {
+        font-size: 3.25rem;
+    }
 }
 
 .lt-btfp__banner {
