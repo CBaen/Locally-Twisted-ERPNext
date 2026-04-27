@@ -62,24 +62,52 @@
             <span class="lt-reviews-block__count">114 Google reviews</span>
         </a>
 
-        <div class="lt-reviews-block__quotes">
-            {% for quote in review_quotes %}
-                {% if quote %}
-                <article class="lt-reviews-block__quote">
-                    <p class="lt-reviews-block__quote-mark" aria-hidden="true">&ldquo;</p>
-                    <p class="lt-reviews-block__quote-text">{{ quote.text }}</p>
-                    <p class="lt-reviews-block__quote-attr">
-                        &mdash; {{ quote.name }}{% if quote.event %}, {{ quote.event }}{% endif %}
-                    </p>
-                </article>
-                {% else %}
-                <article class="lt-reviews-block__quote lt-reviews-block__quote--placeholder">
-                    <p class="lt-reviews-block__quote-mark" aria-hidden="true">&ldquo;</p>
-                    <p class="lt-reviews-block__quote-text">Real Google review pending&hellip;</p>
-                    <p class="lt-reviews-block__quote-attr">&mdash; coming soon</p>
-                </article>
-                {% endif %}
-            {% endfor %}
+        {#
+            Reviews carousel — horizontal scrolling marquee of cards.
+            Track holds two copies of the review list for a seamless
+            infinite loop; the duplicate set is aria-hidden so screen
+            readers only read each review once. Pauses on hover/focus.
+        #}
+        <div class="lt-reviews-block__quotes" aria-label="Customer reviews carousel">
+            <div class="lt-reviews-block__track">
+                {% for quote in review_quotes %}
+                    {% if quote %}
+                    <article class="lt-reviews-block__quote" tabindex="0">
+                        <p class="lt-reviews-block__quote-mark" aria-hidden="true">&ldquo;</p>
+                        <p class="lt-reviews-block__quote-text">{{ quote.text }}</p>
+                        <p class="lt-reviews-block__quote-attr">
+                            &mdash; {{ quote.name }}{% if quote.event %}, {{ quote.event }}{% endif %}
+                        </p>
+                    </article>
+                    {% else %}
+                    <article class="lt-reviews-block__quote lt-reviews-block__quote--placeholder">
+                        <p class="lt-reviews-block__quote-mark" aria-hidden="true">&ldquo;</p>
+                        <p class="lt-reviews-block__quote-text">Real Google review pending&hellip;</p>
+                        <p class="lt-reviews-block__quote-attr">&mdash; coming soon</p>
+                    </article>
+                    {% endif %}
+                {% endfor %}
+                {# Duplicate set for seamless loop, aria-hidden so screen readers don't double-read. #}
+                <div aria-hidden="true" style="display: contents;">
+                    {% for quote in review_quotes %}
+                        {% if quote %}
+                        <article class="lt-reviews-block__quote">
+                            <p class="lt-reviews-block__quote-mark" aria-hidden="true">&ldquo;</p>
+                            <p class="lt-reviews-block__quote-text">{{ quote.text }}</p>
+                            <p class="lt-reviews-block__quote-attr">
+                                &mdash; {{ quote.name }}{% if quote.event %}, {{ quote.event }}{% endif %}
+                            </p>
+                        </article>
+                        {% else %}
+                        <article class="lt-reviews-block__quote lt-reviews-block__quote--placeholder">
+                            <p class="lt-reviews-block__quote-mark" aria-hidden="true">&ldquo;</p>
+                            <p class="lt-reviews-block__quote-text">Real Google review pending&hellip;</p>
+                            <p class="lt-reviews-block__quote-attr">&mdash; coming soon</p>
+                        </article>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
         </div>
     </div>
 </section>
