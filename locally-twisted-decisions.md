@@ -8,6 +8,78 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-04-27 (homepage build session — late) — Bouquets added as 6th customizable category for the future Design Studio
+
+**Decision:** Bouquets join Balloon Arches, Columns & Pillars, Organic Garlands, Picture Perfect Backdrops, and Balloon Drops as the customizable categories that will eventually get the interactive "Design Studio" experience.
+
+**Reasoning:** GL realized 2026-04-27 that bouquets are also customizable in Jeff's actual business (size of bouquet, number of balloons, mylar add-ons, themed toppers, etc.). The original 5-category list came from the approved Odoo `s_lt_categories` snippet which didn't include bouquets explicitly. Adding it to the future Design Studio scope; the homepage Custom Creations grid stays at 5 for now until the Lookbook surface (Slice 7) is the right place to surface the 6th.
+
+**Decided by:** GL.
+
+---
+
+## 2026-04-27 (homepage build session) — Reviews carousel chosen over expanded client logo crawl as primary social proof
+
+**Decision:** The reviews block on the homepage uses a horizontal-scrolling carousel of full review cards (currently 19 real Google 5-star reviews × 2 for seamless loop = 38 cards in the DOM). The client logo crawl stays at the bottom of the page but is now visually subordinated to the reviews.
+
+**Reasoning:** GL's instinct: "He's been in business 28 years; the man can have a carousel of praise that matters more than the carousel of businesses at the bottom." For a high-touch event-decor business, customer *words* persuade prospective clients more than corporate *logos*. Logos prove "we worked with X"; quotes prove "X said this thing about working with us." The latter is harder to fake and harder to ignore.
+
+**Implementation:** Same CSS marquee pattern as the client crawl (overflow:hidden + flex track + animation:translateX + duplicate set with aria-hidden + edge-fade mask + pause-on-hover) but with full review cards (320px wide, fixed). 360s for full loop so cards have reading time. Reduced-motion users see all cards stacked statically.
+
+**Alternatives considered:** Single-card fade carousel (simpler, less visible content); page-based fade (5 cards visible, fade to next 5); arrow-controlled manual carousel (more complex). Horizontal marquee won because it matches the existing client crawl pattern and lets the user pause-on-hover to read whichever card catches their eye.
+
+**Decided by:** GL.
+
+---
+
+## 2026-04-27 (homepage build session) — Twisting & Face Painting moved to bottom of homepage
+
+**Decision:** The Balloon Twisting & Face Painting spotlight section moved from mid-page (after Recent Celebrations) to the bottom of the homepage (after the Closing CTA).
+
+**Reasoning:** Per GL's strategic frame: balloon twisting and face painting are Jeff's love but are not the high-margin work and don't grow the business. Big-event corporate/wedding/birthday work is where the revenue is and where the business can be set up for sale. The homepage should lead with the lookbook-forward shape (hero → reviews → categories → recent work) and only mention the live-services side at the bottom for visitors specifically looking for it. Quote: *"That is not where this is right now. I do not think people who buy a balloon event company want to deal with a face-painting company run by white Mormon women who are all very self-important."*
+
+The `/balloon-twisting-and-face-painting` page itself is still a first-class surface (already built); just no longer mid-homepage.
+
+**Decided by:** GL. Strategic frame for the rebuild.
+
+---
+
+## 2026-04-27 (homepage build session) — `/book` moved from Phase 2 → Phase 1 (Slice 10)
+
+**Decision:** The `/book` form (the deep 45-field inquiry intake) is now part of Phase 1 (Customer site), specifically Slice 10. It was originally Phase 2 (Lead Intake).
+
+**Reasoning:** The lookbook-forward shape requires `/book` to be live on day one. Every "Tell us about your event" CTA on the site (hero, closing, future service-category pages, future Color Chart, future Lookbook) points at `/book` as the inquiry conversion path. Without `/book`, the inquiries go nowhere. Phase 1 cannot be demoed to Jeff without the conversion path working.
+
+**Phase 2 reframed:** Phase 2 is now "form-handling depth" — Contact dedup logic, customer acknowledgment email automation, loud-failure compliance audit across all forms, monitor alerts. The forms exist in Phase 1; the depth around them lives in Phase 2.
+
+**Decided by:** This instance, ratified by the lookbook-forward direction GL had already locked. ROADMAP.md and PLAN.md updated to reflect.
+
+---
+
+## 2026-04-27 (homepage build session) — About page deferred until Jeff is ready
+
+**Decision:** No About page or About snippet ships in v1 of the homepage. Contact page covers the basics. The previously-coded "About" section on the homepage was removed.
+
+**Reasoning:** Jeff hasn't approved the About copy. GL's frame: *"We will make an about page when Jeff is ready. We don't need to pressure him. There's a contact page. No about section, no about page for now. It doesn't need to ship with v1."* The synthesis design instances had filler "Built by hand. Built by people who love this." copy; that's voice-OK but not GL-confirmed about the actual team. Better to omit than to invent.
+
+**Decided by:** GL.
+
+---
+
+## 2026-04-27 (homepage build session, earlier) — Site shape: lookbook-forward + small shop sidebar
+
+**Decision:** LT's website shape is portfolio/lookbook-forward, with a small e-commerce sidebar for sub-$300 pre-configured items. Configurator UI for custom arches/columns/etc. is rejected as a checkout flow but accepted as a future "Design Studio" inquiry-capture experience.
+
+**Reasoning:** Surveyed 9 live competitor sites in the events-decor / luxury-floral / balloon-decor category (`_resources/competitor-survey-2026-04-26.md`). Five patterns emerged across all 9: (1) every high-dollar custom item routes through consultation/quote, never a configurator; (2) portfolio is a nav item, not a homepage feature; (3) shops, when they exist, are sidebars, never headlines; (4) "Inquire" beats "Buy" above ~$30; (5) social proof tier (testimonials → Google reviews → press) matches business tier.
+
+LT's revenue concentration is in big-ticket events ($400-15,000 custom arches, walls, drops, garlands) sold through pitch decks → invoices → phone calls. Customers don't configure $400+ on a website. The "Design Studio" concept resolves Jeff's "customers want to see colors and pick options" instinct without the wrong checkout flow: pick mood + colors + scale → output is an inquiry, not a cart.
+
+Full rationale: `.planning/decisions/site-shape.md`. Cover story for Jeff: *"We couldn't use Odoo, so we had to rebuild on a different program. While I was rebuilding, I looked at how every other custom-balloon and event-decor company in our tier is structured today — Partistry, Balloon Emporium, the wedding florists. None of them sell custom installs through a checkout flow."*
+
+**Decided by:** GL, with concurrence from this instance after competitor survey.
+
+---
+
 ## 2026-04-26 (later, after Slice 2 + accessibility + contact build) — Platform direction RESOLVED: stay Frappe-native
 
 **Decision:** LT's customer-facing website stays inside Frappe / Frappe webshop. The platform-direction question that the previous instance left open at session end is now answered by demonstration.
