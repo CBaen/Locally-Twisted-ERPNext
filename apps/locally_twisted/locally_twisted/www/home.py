@@ -716,8 +716,9 @@ PAGE_CSS = """
     display: flex;
     align-items: center;
     width: max-content;
-    /* v2: 90s -> 180s per GL feedback (was moving way too fast) */
-    animation: lt-crawl-scroll 180s linear infinite;
+    /* v2: 90s -> 180s per GL feedback (was moving way too fast)
+     * v3: 180s -> 270s — still too fast at 180s. */
+    animation: lt-crawl-scroll 270s linear infinite;
 }
 .lt-crawl__item {
     flex: 0 0 auto;
