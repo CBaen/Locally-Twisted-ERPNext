@@ -4,16 +4,16 @@
 
 Six phases organized around what Locally Twisted delivers to whom.
 
-**Phase 1 is the customer-facing proof point.** If ERPNext can't deliver a visual + UX experience that's at least as good as what GL approved on the prior attempt, GL pivots away from ERPNext before building further. This is the off-ramp.
+**Phase 1 is the customer-facing proof point** — built lookbook-forward (portfolio leads, custom work goes through inquiry, small shop sidebar). If ERPNext / Frappe can't deliver this experience, GL has the off-ramp before building further. Decision recorded at `.planning/decisions/site-shape.md`.
 
-**Phases 2-6 build on Phase 1's foundation:** lead intake, operator workflow, money & compliance, customer portal, cutover. Each phase ends with something Jeff (and customers) can see and use.
+**Phases 2-6 build on Phase 1's foundation:** form-handling depth, operator workflow, money & compliance, customer portal, cutover. Each phase ends with something Jeff (and customers) can see and use.
 
 The brand foundation (style guide tokens, fonts, colors, typography) is baked into Phase 1; it's not a separate phase. Resources are pre-positioned in `_resources/` so Phase 1 starts on a complete brand baseline.
 
 ## Phases
 
-- [ ] **Phase 1 — Customer site + storefront (the proof point).** Public website + ecommerce. Decision gate: does ERPNext deliver?
-- [ ] **Phase 2 — Lead intake.** Customer forms (`/book`, `/contact`) into the existing Lead schema with confirmation and Contact dedup.
+- [~] **Phase 1 — Customer site (lookbook-forward, with small shop).** Public website organized around portfolio + inquiry, with a small e-commerce sidebar for sub-$200 items. **In flight; ~5 of ~14 slices done.**
+- [ ] **Phase 2 — Form-handling depth.** Contact dedup, customer acknowledgment email, loud-failure compliance audit, monitor alerts. (`/book` itself moved into Phase 1; this phase covers the depth around all forms.)
 - [ ] **Phase 3 — Operator workflow.** Lead → Quote → Booking → Calendar → Project Task. The pipeline Jeff runs his business through.
 - [ ] **Phase 4 — Money & compliance.** Invoicing, Stripe, Utah tax, ERPNext accounting (replaces QuickBooks), ERPNext HRMS payroll.
 - [ ] **Phase 5 — Customer portal.** Logged-in customer can see orders, invoices, quotes, account.
@@ -21,58 +21,67 @@ The brand foundation (style guide tokens, fonts, colors, typography) is baked in
 
 ## Phase Details
 
-### Phase 1 — Customer site + storefront
+### Phase 1 — Customer site (lookbook-forward, with small shop)
 
-**Goal:** A customer can land on the site, browse what LT makes, learn enough to choose LT, and either complete a small purchase through the store or know how to start a custom booking conversation. The site looks and feels professional enough that Jeff says "yes, this is the LT experience" without prompting.
+**Goal:** A first-time visitor lands on the site, immediately understands LT does custom event balloon decor at the level visible in the portfolio, knows how to inquire for custom work, and can browse a small set of pre-configured themed items if they're shopping for a casual celebration. Jeff sees the result and says *"yes — show this to my next corporate prospect."*
+
+**Strategic shape:** lookbook-forward + small shop sidebar. Decision and rationale at `.planning/decisions/site-shape.md`. Built atop the competitor survey at `_resources/competitor-survey-2026-04-26.md` — 9 live sites in the events-decor / luxury-floral category exemplify the same pattern.
 
 **Surfaces in scope:**
 
-| Surface | Source | Notes |
+| Surface | State | Notes |
 |---|---|---|
-| Header + footer | Carry forward design pattern | Resolves the super-menu question (see decision gate below) |
-| Landing page | Style-guide-driven build | Hero, services snapshot, featured products, social proof, closing CTA |
-| Balloon Twisting + Face Painting page | Carry forward content + visuals | Was already correct on prior attempt |
-| Contact page | Carry forward + add brief "about" summary | About info merges in here per GL directive |
-| Accessibility page | Build new with caveats | See "Accessibility statement nuance" decision gate below |
-| Refund Policy page | Build new from `_resources/policies/legal-interview-answers.md` Part 2C | Plain-language version of the cancellation rules |
-| FAQ page | Build new from `_resources/policies/` | Pricing math, no-combination-discount framing, any-character rule, service area, deposit & cancellation, weather |
-| Products listing page | Rebuild on Frappe webshop primitives | Visual pattern from prior attempt |
-| Individual product pages | Rebuild on Frappe webshop primitives | Variant pricing must work; visual pattern from prior attempt |
-| Cart + checkout | Rebuild on Frappe webshop primitives | Stripe wired in Phase 4; checkout shell built here, payments stubbed until Phase 4 |
-| Pricing calculator (artist services) | Build new | Per-artist line-item math; "no combination" framing prominent |
+| Brand foundation (theme tokens) | DONE | `apps/locally_twisted/.../public/css/lt-theme.css` |
+| Header + footer | DONE | Jinja partial overrides; nav structure may shift slightly to elevate Lookbook + demote Shop |
+| Balloon Twisting + Face Painting page (with embedded pricing calculator) | DONE | `/balloon-twisting-and-face-painting` |
+| Contact page | DONE | `/contact` — form-bearing, AJAX → Lead + Communication |
+| Accessibility statement | DONE | `/accessibility` |
+| **Homepage (lookbook-forward)** | TODO | Hero portfolio image + single inquiry CTA + trust strip with corporate logos + services teaser + 3 case-study previews |
+| **Lookbook (full portfolio)** | TODO | `/lookbook` — grid/masonry of all events organized by event type |
+| **Service category pages** | TODO | `/services/corporate`, `/services/weddings`, `/services/birthdays`, `/services/schools`, `/services/seasonal` — each ends with inquiry CTA |
+| **Color Chart** | TODO | `/color-chart` — static reference; visual swatches with names |
+| **`/book` form page** | TODO | Primary inquiry conversion form; uses the existing 45-field Lead schema |
+| **Small Shop browse** | TODO | `/shop` — webshop-driven; ~6–12 themed bouquets + gift items + simple kits, sub-$200 only |
+| **Small Shop product detail** | TODO | webshop-driven; pre-configured items only — no configurator |
+| **Cart + checkout shell** | TODO | webshop-driven; Stripe stubbed until Phase 4 |
+| **Refund Policy + FAQ pages** | TODO | Small static portal pages from `_resources/policies/` |
+| **Blog framework + 2-3 posts** | TODO (deferrable) | "Kindergarten Teacher" voice; ships before or after the demo to Jeff |
 
-**Surfaces explicitly NOT in scope** (per GL 2026-04-26):
-- Standalone About page
-- Standalone Services index page
-
-**Decision gates inside Phase 1** (need GL input before/during build):
-1. **Header navigation structure.** Are "Special Occasions" / "Holidays & Seasons" / "What We Make" each their own mega-menu, or is "What We Make" the only product menu and the others become filters / landing pages? See `.planning/decisions/header-navigation.md`.
-2. **Accessibility statement nuance.** GL flagged the small-business lawsuit risk of accessibility statements. Three options: (a) publish a real statement and commit to actually meeting WCAG 2.1 AA, (b) publish a brief statement of intent without specific commitments, (c) skip the published statement entirely. See `.planning/decisions/accessibility-statement.md`.
-3. **Blog presence.** The style guide includes a "Kindergarten Teacher" voice for a blog. Do we ship Phase 1 with the blog framework in place (even if empty) or defer until later?
-4. **Real photography sourcing.** Style guide says "Photography is the star." Where does real LT event photography live, or do we ship Phase 1 with stubbed/placeholder slots?
-
-**Success criteria:**
-1. Anonymous visitor can browse from landing page through service pages and product pages without hitting a broken layout, missing image, or JavaScript error
-2. Anonymous visitor can add a product to cart and reach a checkout page (payment integration stubbed until Phase 4)
-3. Visual identity matches `_resources/STYLE-GUIDE.md` — verified by side-by-side check against the spec, not by self-report
-4. SEO baseline: each page has unique title + meta description, semantic HTML, schema.org LocalBusiness markup, OpenGraph tags
-5. AEO/GEO baseline: FAQ schema on the FAQ page, LocalBusiness schema with service area on the homepage and contact page
-6. WCAG 2.1 AA passes on every page in scope — verified by automated tool + manual keyboard navigation
-7. Mobile-first: every page works at 375px width with no horizontal scroll, all touch targets ≥44px
-8. **GL viewing the result says "yes — show this to Jeff."** This is the off-ramp gate.
-
-### Phase 2 — Lead intake
-
-**Goal:** A customer who fills `/book` or `/contact` on the new site lands a Lead in ERPNext with all fields mapped correctly, deduped against existing Contacts, and gets an immediate acknowledgment. Jeff sees the new lead in his admin within minutes.
-
-**Depends on:** Phase 1 (site is live); existing Lead schema already in ERPNext.
+**Surfaces explicitly NOT in scope** (per the site-shape decision):
+- Configurator UI for custom arches (3 sizes × 70 colors × 8 picks). Customers requesting that level of customization use the inquiry form.
+- Standalone About page (info distributes across homepage, service pages, contact)
+- Standalone Services index page (event-type service pages serve this purpose)
+- "Featured products" homepage block (homepage features portfolio, not products)
 
 **Success criteria:**
-1. Submitting `/book` form posts every field into the matching ERPNext Lead Custom Field — verified by completing one of each branch (decor, twisting, painting, delivery-only, package, other)
-2. Submitting `/contact` form (simpler) creates a Lead with the right subset of fields populated
-3. If the customer's email or phone matches an existing Contact, the Lead links to that Contact; otherwise a new Contact is created (Customer/Contact dedup logic, mirrors prior `_find_matching_partner`)
-4. Customer sees a confirmation page (not a blank screen) and receives an acknowledgment email within 5 minutes
-5. **Loud failure verified:** intentionally break the form with a malformed submission and confirm the customer sees a real error message, the failure is logged at ERROR level with the payload, and a monitor alert fires
+1. Visitor can browse from homepage → lookbook → service-category page → inquiry form without hitting a broken layout, missing image, or JavaScript error
+2. Inquiry form (`/book`) successfully creates a Lead in ERPNext with the existing 45-field schema populated correctly; visitor sees a confirmation page (no blank screen)
+3. Small Shop: visitor can add a sub-$200 themed item to cart and reach the checkout shell; payment integration stubbed until Phase 4
+4. Visual identity matches `_resources/STYLE-GUIDE.md` — verified by side-by-side check against the spec
+5. SEO baseline: each page has unique title + meta description, semantic HTML, schema.org LocalBusiness markup, OpenGraph tags
+6. AEO/GEO baseline: FAQ schema on FAQ page, LocalBusiness schema with service area on homepage and contact page
+7. WCAG 2.1 AA passes on every page in scope — automated tool + manual keyboard navigation
+8. Mobile-first: every page works at 375px width with no horizontal scroll, all touch targets ≥44px
+9. **GL viewing the result says "yes — show this to Jeff."** This is the off-ramp gate.
+
+### Phase 2 — Form-handling depth
+
+**Goal:** Every form on the site (contact, book, BTFP, any other) has loud-failure protection, a customer acknowledgment, and Contact dedup against existing records. Jeff sees the new lead in his admin within minutes, pre-linked to a Contact if one exists.
+
+**Depends on:** Phase 1 forms shipping (which they will, including `/book`).
+
+**Scope:**
+- Contact dedup logic: when a Lead is created, lookup existing Contact by email_id / mobile_no / phone; attach if found, create if not. Implemented as a Server Script on Lead `before_insert`.
+- Customer acknowledgment email: auto-fired on Lead creation with a branded "we received your inquiry" template; stored as a Communication linked to the Lead.
+- Loud-failure compliance audit: every form has user-facing error message on failure (no blank screens), exception logged at ERROR level with sanitized payload, monitor alert configured.
+- Monitor alerts: Better Stack (or equivalent) configured to alert if `/book` or `/contact` form-creation rate drops to zero for >24 hours.
+- Form-handler routing for any new forms that emerge from Phase 1 build.
+
+**Success criteria:**
+1. New Lead from `/book` auto-links to existing Contact when email or phone matches; otherwise creates new Contact
+2. Customer receives acknowledgment email within 5 minutes of submitting any form
+3. Intentionally broken submission shows real error message to customer + logs at ERROR level + triggers monitor alert
+4. Loud-failure audit doc covers every form on every Phase 1 surface
 
 ### Phase 3 — Operator workflow
 
@@ -102,15 +111,18 @@ The brand foundation (style guide tokens, fonts, colors, typography) is baked in
 - ERPNext native accounting set up; QuickBooks data migration planned (separate sub-task)
 - Frappe HRMS installed and configured for LT's salary structure
 
+**Note:** The smaller storefront (sub-$200 small-shop only) means Stripe scope is genuinely modest. The big-ticket payments still flow through invoicing, where Stripe is wired to the invoice rather than the cart.
+
 **Success criteria:**
-1. Test-mode checkout completes end-to-end and the order has a Stripe charge ID stored
-2. Stripe webhook delivery verified: webhook fires, ERPNext endpoint receives, order status updates
-3. At least one production-mode dry run with a real card; charge appears in Stripe dashboard
-4. Invoice line items show Utah sales tax as its own visible line; rate matches the delivery / event city
-5. Corporate invoices age correctly: day 31 produces a late-fee notification; "may waive" + "may suspend" workflow gives Jeff one-click discretion
-6. ERPNext accounting books the same numbers Jeff's accountant would see in QuickBooks for the same transactions (verified for at least 5 representative transactions)
-7. Payroll: Frappe HRMS produces a sample payroll run for Jeff's actual employee structure
-8. North Peak (Jeff's accountant) gets a heads-up that LT is moving off QuickBooks; transition plan agreed with her
+1. Test-mode small-shop checkout completes end-to-end and the order has a Stripe charge ID stored
+2. Test-mode invoice payment via Stripe completes end-to-end (the path big-ticket events use)
+3. Stripe webhook delivery verified: webhook fires, ERPNext endpoint receives, order/invoice status updates
+4. At least one production-mode dry run with a real card; charge appears in Stripe dashboard
+5. Invoice line items show Utah sales tax as its own visible line; rate matches the delivery / event city
+6. Corporate invoices age correctly: day 31 produces a late-fee notification; "may waive" + "may suspend" workflow gives Jeff one-click discretion
+7. ERPNext accounting books the same numbers Jeff's accountant would see in QuickBooks for the same transactions (verified for at least 5 representative transactions)
+8. Payroll: Frappe HRMS produces a sample payroll run for Jeff's actual employee structure
+9. North Peak (Jeff's accountant) gets a heads-up that LT is moving off QuickBooks; transition plan agreed with her
 
 ### Phase 5 — Customer portal
 
@@ -140,14 +152,14 @@ The brand foundation (style guide tokens, fonts, colors, typography) is baked in
 
 ## Progress
 
-| Phase | Status | Plans | Completed |
-|-------|--------|-------|-----------|
-| 1. Customer site + storefront | Not started | 0 / TBD | — |
-| 2. Lead intake | Not started | 0 / TBD | — |
-| 3. Operator workflow | Not started | 0 / TBD | — |
-| 4. Money & compliance | Not started | 0 / TBD | — |
-| 5. Customer portal | Not started | 0 / TBD | — |
-| 6. Cutover & handoff | Not started | 0 / TBD | — |
+| Phase | Status | Slices done | Notes |
+|-------|--------|-------------|-------|
+| 1. Customer site (lookbook-forward) | In flight | 5 of ~14 | Brand, chrome, BTFP, contact, accessibility done. Homepage + lookbook + service pages + /book + shop remain. |
+| 2. Form-handling depth | Not started | — | Reframed; /book moved into Phase 1 |
+| 3. Operator workflow | Not started | — | — |
+| 4. Money & compliance | Not started | — | Smaller scope due to small-shop framing |
+| 5. Customer portal | Not started | — | — |
+| 6. Cutover & handoff | Not started | — | — |
 
 ---
-*Last updated: 2026-04-26 — frame reset (replaces prior 10-phase translation-centric ROADMAP).*
+*Last updated: 2026-04-26 — strategic shift to lookbook-forward shape (replaces the prior implicit "ecommerce-first" framing). Backed by competitor survey + decision doc at `.planning/decisions/site-shape.md`.*
