@@ -6,6 +6,110 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-04-27 (homepage build session) — Five gotchas + two reusable patterns
+
+### Frappe Python module cache is sticky — restart backend after editing `www/<route>.py`
+
+Edited `home.py` PAGE_CSS expecting the next `clear-website-cache` to refresh the served HTML. It did NOT. The HTML markup updated but the inline `<style>` block (injected via `context.colocated_css`) kept serving the OLD CSS.
+
+**Why:** Frappe imports `www/home.py` once per Python worker process, then caches the module. `bench --site frontend clear-cache` clears Frappe's render cache, but doesn't reload Python imports. Editing the .py file means the running gunicorn worker still holds the old module in memory.
+
+**Fix:** `docker restart locally-twisted-erpnext-v15-backend-1` — that bounces the gunicorn workers and forces re-import on next request. Sleep 8s for the container to come up, then test.
+
+**Receipt:** Spent a turn confused why `lt-fullbleed` wasn't visibly working. `curl localhost:8081/ | grep "@keyframes lt-hero-cycle"` showed 0 matches (the v2 keyframes weren't in the served HTML). Restart fixed it immediately.
+
+**Pattern:** Whenever PAGE_CSS or any Python data structure changes in a `www/` controller, the cycle is: edit → `docker restart <backend>` → `clear-website-cache` → test. Template-only changes (just HTML) re-render on next page hit; controller changes need the restart.
+
+### Web Page DocType records compete with `www/` files for the same route
+
+Visited `/` after creating `home.py` + `home.html` and got the prior "Site under construction" placeholder, NOT my new homepage. Diagnosed via SQL: `SELECT name, route, published FROM \`tabWeb Page\` WHERE route IN ('home');` → returned name="locally-twisted", route="home", published=1.
+
+**Why:** Website Settings.home_page = "home". When `/` resolves, Frappe looks for a route named "home" via multiple resolvers. A published Web Page record AND a `www/home.html` file both claim that route. The Web Page record won.
+
+**Fix:** `UPDATE \`tabWeb Page\` SET published = 0 WHERE name = 'locally-twisted';` — deactivates the placeholder. The www/home.html file then takes precedence.
+
+**Pattern:** Before creating any new `www/<route>.<py|html>` file, check if a published Web Page record already claims that route. If yes, decide: (a) deactivate the Web Page record (cleanest), (b) move the Web Page content into your www/ template, (c) pick a different route. Don't assume www/ wins by default — it depends on Website Settings.home_page and which resolver runs first.
+
+### Frappe full-bleed pattern — `width: 100vw` + `margin-left: -50vw` breaks out of the parent .container
+
+Bands rendered as colored stripes inside the centered content column, leaving white margins on left and right (GL's "Image #5" complaint about banners cut off). The `templates/web.html` parent wraps content in a `.container` with max-width that constrains everything inside.
+
+**Fix:** A `.lt-fullbleed` modifier class:
+
+```css
+.lt-fullbleed {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+}
+```
+
+Applied to `<section>` elements that should read as full-width bands (hero, reviews, featured, crawl, CTA, twisting spotlight). Inside each section, an inner `.lt-<block>__inner` div with `max-width: 1200px; margin: 0 auto;` keeps content readable.
+
+**Receipt:** The first homepage v2 deploy showed bands visibly constrained. Adding `.lt-fullbleed` to 6 sections fixed it without touching the parent template.
+
+**Pattern:** This is the standard CSS technique for "break out of a constraining parent container." Document it in the meal — every BBC client's portal pages have the same parent.container constraint.
+
+### CSS-only cycling content (hero headlines, blog post titles, etc.) — staggered animation-delay on absolutely-positioned children
+
+GL wanted the hero headline to cycle through blog post titles while a stable tagline stays put underneath. Implemented with pure CSS (no JS):
+
+```css
+.lt-hero__cycling { position: relative; min-height: 4.4rem; }
+.lt-hero__title {
+    position: absolute; inset: 0;
+    opacity: 0;
+    animation: lt-hero-cycle 32s infinite;
+}
+.lt-hero__title:nth-child(1) { animation-delay: 0s; }
+.lt-hero__title:nth-child(2) { animation-delay: 8s; }
+.lt-hero__title:nth-child(3) { animation-delay: 16s; }
+.lt-hero__title:nth-child(4) { animation-delay: 24s; }
+@keyframes lt-hero-cycle {
+    0%   { opacity: 0; }
+    3%   { opacity: 1; }
+    22%  { opacity: 1; }
+    25%  { opacity: 0; }
+    100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lt-hero__title { animation: none; opacity: 0; }
+    .lt-hero__title:nth-child(1) { opacity: 1; }
+}
+```
+
+**First-paint gotcha:** at t=0 the keyframe is at 0% which is opacity 0. Title 1 invisible until 1s into the cycle. Solutions: (a) negative `animation-delay: -1s` on title 1 to start mid-cycle, or (b) live with the 1s fade-in delay (current state — Playwright captures show title 1 visible by the time `wait_until="networkidle"` fires).
+
+**Pattern:** Reuse for any cycling content where one stable element + one rotating element is the desired UX (testimonials, blog teasers, mood-to-quote in lookbook). Total cycle = N × per-title duration; staggered delays = full duration / N.
+
+### Carousel of cards — same CSS marquee pattern as text crawl, just bigger items
+
+GL pivoted reviews from 5-inline-cards to a horizontal-scrolling carousel of all 19 reviews. Reused the existing `.lt-crawl` pattern verbatim, swapping text spans for full review cards:
+
+- Outer viewport: `overflow: hidden; mask-image: linear-gradient(...);` for edge fade
+- Track: `display: flex; gap: 1rem; width: max-content; animation: scroll Ns linear infinite;`
+- Items: `flex: 0 0 320px;` (fixed card width, no shrink)
+- Track has duplicate set (aria-hidden) for seamless loop
+- `.viewport:hover .track { animation-play-state: paused; }` for reading-on-hover
+- `prefers-reduced-motion` falls back to flex-wrap (cards stack)
+
+**Speed scaling:** text crawl = 270s for 54 names; card carousel = 360s for 19 cards. Cards are bigger and need reading time.
+
+**Pattern:** Same primitive can do client-name marquee, review-card carousel, photo-strip carousel, etc. Worth a recipe (kitchen note dropped at agency-tier capabilities).
+
+### `git status` showed 6 deleted `_oneshot_*` files persisting from prior session — auto-commit hook handles writes, not deletions
+
+The git status at session start showed 6 ` D ` (working-tree-deleted, unstaged) entries from prior session's cleanup. These weren't blocking but they made `git status` noisy.
+
+**Why:** the auto-commit hook fires on Write tool calls. Deletions via filesystem don't trigger it. Net effect: deleted files stay as unstaged deletions until someone commits them explicitly.
+
+**Pattern:** If a session ends with stale ` D ` entries in git status, that's not a leak — but worth a cleanup commit if doing housekeeping. Otherwise the next instance will see them too.
+
+---
+
 ## 2026-04-26 (codification + chrome + accessibility + contact + BTFP session) — Five gotchas worth carrying forward
 
 This session shipped four real surfaces (chrome, accessibility, contact, BTFP) and one meal. Five gotchas hit during the work, each with a verified receipt. All five are now codified in `Built_by_Cameron/.claude/capabilities/meals/build-frappe-portal-page.md` "Known gotchas" section so the next instance doesn't rediscover.
