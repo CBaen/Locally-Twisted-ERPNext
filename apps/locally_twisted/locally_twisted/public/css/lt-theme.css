@@ -639,7 +639,19 @@ html, body {
 }
 
 .lt-header__truck {
-  font-size: 1.125rem;
+  display: inline-flex;
+  align-items: center;
+  /* color inherits from parent (lt-soft-gray on desktop strip + mobile strip) */
+}
+
+.lt-header__icon {
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+.lt-header__icon--truck {
+  /* Cab faces right — heading toward the centered brand logo. */
+  transform: scaleX(-1);
 }
 
 .lt-header__brand {
@@ -689,9 +701,6 @@ html, body {
   text-underline-offset: 0.2em;
 }
 
-.lt-header__util-link--cart span[aria-hidden="true"] {
-  font-size: 1.125rem;
-}
 
 /* Tier 2 — main nav */
 .lt-header__nav {
