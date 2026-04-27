@@ -1,0 +1,248 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+
+{#
+    Homepage v2 — lookbook-forward, twisting moved to bottom.
+    Sections that should read as full-width bands wear the .lt-fullbleed
+    class to break out of Frappe's parent .container constraint (the
+    "banners cut off" issue from Image #5).
+
+    Order:
+      1. Hero — cycling headline + stable tagline
+      2. Reviews block (replaces prior trust strip)
+      3. 3-dot divider
+      4. Custom Creations (5 categories)
+      5. Recent Celebrations — big photos, 4:5 aspect, 3-up at desktop
+      6. 3-dot divider
+      7. Client Logo Crawl — slowed to 180s
+      8. Closing CTA
+      9. Twisting & Face Painting spotlight (moved to bottom)
+#}
+
+{# --- 1. Hero --- #}
+<section class="lt-hero lt-fullbleed" aria-labelledby="lt-hero-tagline">
+    <div class="lt-hero__image" aria-hidden="true"></div>
+    <div class="lt-hero__content">
+        <p class="lt-hero__eyebrow">Utah's Wasatch Front · Since 1998</p>
+
+        {#
+            Cycling headline — placeholder until the blog framework
+            ships and we pull real Blog Post titles. The tagline below
+            is the stable anchor; titles cycle every ~8s. Reduced-motion
+            users see only the first title.
+        #}
+        <div class="lt-hero__cycling" aria-live="off">
+            {% for title in hero_cycling_titles %}
+            <h2 class="lt-hero__title">{{ title }}</h2>
+            {% endfor %}
+        </div>
+
+        <p id="lt-hero-tagline" class="lt-hero__tagline">
+            Making celebrations unforgettable since 1998.
+        </p>
+        <a href="/book" class="lt-hero__cta">
+            Tell us about your event
+            <span aria-hidden="true">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+{# --- 2. Reviews block (replaces the old "Since 1998 / Custom Designs / Made with Love" trust strip) --- #}
+<section class="lt-reviews-block lt-fullbleed" aria-labelledby="lt-reviews-heading">
+    <div class="lt-reviews-block__inner">
+        <h2 id="lt-reviews-heading" class="visually-hidden">What people say</h2>
+
+        <a href="https://www.google.com/search?q=Locally+Twisted+Reviews"
+           target="_blank" rel="noopener noreferrer"
+           class="lt-reviews-block__badge"
+           aria-label="Locally Twisted Google reviews: 4.9 stars from 114 reviews (opens in new tab)">
+            <span class="lt-reviews-block__stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+            <span class="lt-reviews-block__score">4.9 out of 5</span>
+            <span class="lt-reviews-block__count">114 Google reviews</span>
+        </a>
+
+        <div class="lt-reviews-block__quotes">
+            {% for quote in review_quotes %}
+                {% if quote %}
+                <article class="lt-reviews-block__quote">
+                    <p class="lt-reviews-block__quote-mark" aria-hidden="true">&ldquo;</p>
+                    <p class="lt-reviews-block__quote-text">{{ quote.text }}</p>
+                    <p class="lt-reviews-block__quote-attr">
+                        &mdash; {{ quote.name }}{% if quote.event %}, {{ quote.event }}{% endif %}
+                    </p>
+                </article>
+                {% else %}
+                <article class="lt-reviews-block__quote lt-reviews-block__quote--placeholder">
+                    <p class="lt-reviews-block__quote-mark" aria-hidden="true">&ldquo;</p>
+                    <p class="lt-reviews-block__quote-text">Real Google review pending&hellip;</p>
+                    <p class="lt-reviews-block__quote-attr">&mdash; coming soon</p>
+                </article>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{# --- 3. 3-dot divider --- #}
+<div class="lt-divider" role="presentation" aria-hidden="true">
+    <span></span><span></span><span></span>
+</div>
+
+{# --- 4. Custom Creations — 5 customizable categories --- #}
+<section class="lt-categories" aria-labelledby="lt-categories-heading">
+    <h2 id="lt-categories-heading" class="lt-categories__heading">Custom Creations</h2>
+    <p class="lt-categories__lede">
+        Five things we make custom for your event. Pick a shape &mdash; we'll bring the colors.
+    </p>
+    <div class="lt-categories__grid">
+        {% for cat in custom_categories %}
+        <div class="lt-categories__item">
+            <a href="/lookbook#{{ cat.slug }}" class="lt-categories__link">
+                <span class="lt-categories__circle">
+                    {% if cat.icon == 'arch' %}
+                    <svg class="lt-categories__icon-svg" viewBox="0 0 64 64" fill="none"
+                         stroke="currentColor" stroke-width="3" aria-hidden="true">
+                        <path d="M10 54 V32 a22 22 0 0 1 44 0 V54" stroke-linecap="round"/>
+                        <circle cx="14" cy="22" r="3" fill="currentColor" stroke="none"/>
+                        <circle cx="32" cy="12" r="3" fill="currentColor" stroke="none"/>
+                        <circle cx="50" cy="22" r="3" fill="currentColor" stroke="none"/>
+                    </svg>
+                    {% elif cat.icon == 'column' %}
+                    <svg class="lt-categories__icon-svg" viewBox="0 0 64 64" fill="none"
+                         stroke="currentColor" stroke-width="3" aria-hidden="true">
+                        <rect x="24" y="10" width="16" height="44" rx="3" stroke-linejoin="round"/>
+                        <circle cx="32" cy="22" r="2.5" fill="currentColor" stroke="none"/>
+                        <circle cx="32" cy="34" r="2.5" fill="currentColor" stroke="none"/>
+                        <circle cx="32" cy="46" r="2.5" fill="currentColor" stroke="none"/>
+                    </svg>
+                    {% elif cat.icon == 'garland' %}
+                    <svg class="lt-categories__icon-svg" viewBox="0 0 64 64" fill="none"
+                         stroke="currentColor" stroke-width="3" aria-hidden="true">
+                        <path d="M6 22 Q32 50 58 22" stroke-linecap="round"/>
+                        <circle cx="14" cy="28" r="3" fill="currentColor" stroke="none"/>
+                        <circle cx="24" cy="36" r="3" fill="currentColor" stroke="none"/>
+                        <circle cx="32" cy="38" r="3" fill="currentColor" stroke="none"/>
+                        <circle cx="40" cy="36" r="3" fill="currentColor" stroke="none"/>
+                        <circle cx="50" cy="28" r="3" fill="currentColor" stroke="none"/>
+                    </svg>
+                    {% elif cat.icon == 'backdrop' %}
+                    <svg class="lt-categories__icon-svg" viewBox="0 0 64 64" fill="none"
+                         stroke="currentColor" stroke-width="3" aria-hidden="true">
+                        <rect x="8" y="12" width="48" height="32" rx="2" stroke-linejoin="round"/>
+                        <path d="M14 36 L24 26 L32 32 L42 22 L50 30" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="42" cy="22" r="3" fill="currentColor" stroke="none"/>
+                    </svg>
+                    {% elif cat.icon == 'drop' %}
+                    <svg class="lt-categories__icon-svg" viewBox="0 0 64 64" fill="none"
+                         stroke="currentColor" stroke-width="3" aria-hidden="true">
+                        <line x1="6" y1="10" x2="58" y2="10" stroke-linecap="round"/>
+                        <circle cx="16" cy="22" r="4" fill="currentColor" stroke="none"/>
+                        <circle cx="28" cy="32" r="4" fill="currentColor" stroke="none"/>
+                        <circle cx="40" cy="42" r="4" fill="currentColor" stroke="none"/>
+                        <circle cx="52" cy="26" r="4" fill="currentColor" stroke="none"/>
+                        <circle cx="22" cy="48" r="4" fill="currentColor" stroke="none"/>
+                        <circle cx="46" cy="54" r="4" fill="currentColor" stroke="none"/>
+                    </svg>
+                    {% endif %}
+                </span>
+                <span class="lt-categories__name">{{ cat.name }}</span>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{# --- 5. Recent Celebrations — big, dominant photos --- #}
+<section class="lt-featured lt-fullbleed" aria-labelledby="lt-featured-heading">
+    <div class="lt-featured__inner">
+        <h2 id="lt-featured-heading" class="lt-featured__heading">Recent Celebrations</h2>
+        <p class="lt-featured__lede">
+            A small slice of what we've made for Utah's events. The full lookbook is coming &mdash; for now, a glimpse.
+        </p>
+        <div class="lt-featured__grid">
+            {% for piece in featured_work %}
+            <a class="lt-featured__card" href="/lookbook" aria-label="View {{ piece.title }} in our lookbook">
+                <div class="lt-featured__image"
+                     style="background-image: url('{{ piece.image }}');"
+                     role="img" aria-label="{{ piece.alt }}"></div>
+                <div class="lt-featured__body">
+                    <p class="lt-featured__category">{{ piece.category }}</p>
+                    <h3 class="lt-featured__title">{{ piece.title }}</h3>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        <p class="lt-featured__viewall">
+            <a href="/lookbook">See the full lookbook</a>
+        </p>
+    </div>
+</section>
+
+{# --- 6. 3-dot divider --- #}
+<div class="lt-divider" role="presentation" aria-hidden="true">
+    <span></span><span></span><span></span>
+</div>
+
+{# --- 7. Client Logo Crawl --- #}
+<section class="lt-crawl lt-fullbleed" aria-labelledby="lt-crawl-heading">
+    <h2 id="lt-crawl-heading" class="lt-crawl__heading">Trusted by Utah's Best Since 1998</h2>
+    <div class="lt-crawl__viewport" role="presentation">
+        <div class="lt-crawl__track">
+            {% for client in client_crawl %}
+            <span class="lt-crawl__item">{{ client }}</span>
+            {% endfor %}
+            <div aria-hidden="true" style="display: contents;">
+                {% for client in client_crawl %}
+                <span class="lt-crawl__item">{{ client }}</span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{# --- 8. Closing CTA --- #}
+<section class="lt-cta lt-fullbleed" aria-labelledby="lt-cta-heading">
+    <div class="lt-cta__inner">
+        <h2 id="lt-cta-heading" class="lt-cta__heading">Make Your Celebration Unforgettable</h2>
+        <p class="lt-cta__body">
+            From birthdays to weddings, baby showers to corporate events &mdash;
+            we've been part of Utah celebrations since 1998. Yours is next.
+        </p>
+        <a href="/book" class="lt-cta__button">
+            Tell us about your event
+            <span aria-hidden="true">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+{# --- 9. Twisting & Face Painting spotlight (moved to bottom — strategic
+    de-emphasis per GL 2026-04-27: big-event work leads, twisting/face
+    painting is a smaller revenue line) --- #}
+<section class="lt-twisting-spotlight lt-fullbleed" aria-labelledby="lt-twisting-heading">
+    <div class="lt-twisting-spotlight__inner">
+        <div class="lt-twisting-spotlight__image"
+             role="img"
+             aria-label="A balloon artist creating sculptures at a children's birthday party"></div>
+        <div class="lt-twisting-spotlight__body">
+            <p class="lt-twisting-spotlight__eyebrow">Live entertainment</p>
+            <h2 id="lt-twisting-heading" class="lt-twisting-spotlight__heading">
+                Balloon Twisting &amp; Face Painting
+            </h2>
+            <p>
+                Add unforgettable entertainment to any event. Our skilled artists create
+                balloon animals, swords, crowns, and custom designs on the spot &mdash;
+                plus professional face painting that transforms kids (and adults!) into
+                their favorite characters.
+            </p>
+            <p>
+                Perfect for birthday parties, school events, corporate family days, and festivals.
+            </p>
+            <a class="lt-twisting-spotlight__cta" href="/balloon-twisting-and-face-painting">
+                Book Entertainment
+            </a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
