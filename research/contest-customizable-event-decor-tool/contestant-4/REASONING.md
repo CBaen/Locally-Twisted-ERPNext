@@ -37,7 +37,7 @@ The composition view is a **horizontal scroll of piece-cards**. Each card is app
 
 Each card shows:
 - The SVG illustration with the customer's chosen colors applied
-- The piece name ("Arch", "Column", "Centerpiece")
+- The piece name ("Arch", "Column", "Garland")
 - An "Edit Colors" affordance (a small paint palette icon, or a tap anywhere on the illustration re-opens the color view)
 
 The horizontal scroll is my design judgment, not a direct finding from the moodboard app research. What the DesignFiles article (https://blog.designfiles.co/moodboard-apps/) actually establishes is a distinction between apps that feel like "digital scrapbooking" (Shuffles — layered, tactile, process-joyful) versus apps that feel like "design tools" (output-focused, workflow-driven). The brief explicitly calls for the former. The article does not compare horizontal vs. vertical scroll direction or claim any layout outperforms another.
@@ -54,7 +54,7 @@ The picker opens as a **bottom sheet** (slides up from below the SVG illustratio
 
 1. **Recently Used** (top row, up to 8 swatches, horizontal): populated as the customer picks colors. Empty on first visit — slots are shown as light gray circles. This directly addresses the first complaint in the iDownloadBlog Pigment review's "The Bad" section (https://www.idownloadblog.com/2016/01/05/pigment-review/): "there is no way to access recently used colors, which is incredibly frustrating when you've made a custom color." It is one of only two major flaws the reviewer identifies, opening that section with strong language — not a passing mention. The recents row is a small feature with outsized impact on the experience of coloring multiple shapes.
 
-2. **Full Palette** (grid, 4 columns × N rows, scrollable): all 50+ balloon colors as circles, ~56px each, with color name below each swatch in 10px Raleway. This meets the 44px minimum tap target (iOS HIG, confirmed by UIinkits color picker research at https://www.uinkits.com/blog-post/what-is-a-color-picker-and-how-to-use-it-in-ui-ux-design) while fitting 4 across at 375px (4 × 56px + 3 × 12px gap ≈ 260px, fits with horizontal padding).
+2. **Full Palette** (grid, scrollable): all 53 real LT latex balloon colors, organized by family — Reflexes (metallics), Dusks (muted/dusty), Pastels, Brights, Greens, Blues & Purples, Neutrals. Each family has a header label; swatches are circles ~56px each with color name below in 10px Raleway. Families are separated visually so the customer can scan "I want something dusty and muted" → go straight to Dusks without reading all 53 names. Color names are the supplier-actionable identifiers (verbatim from LT's catalog); hex values are approximate eyeball-matching aids displayed as a secondary badge on tap. This meets the 44px minimum tap target (iOS HIG, confirmed by UIinkits color picker research at https://www.uinkits.com/blog-post/what-is-a-color-picker-and-how-to-use-it-in-ui-ux-design) while fitting 4 across at 375px (4 × 56px + 3 × 12px gap ≈ 260px, fits with horizontal padding).
 
 3. **Hex display** (appears when a swatch is tapped, shown as a small badge near the swatch before committing): the hex code surfaces on swatch selection, not on hover (hover doesn't exist on touch — per SVG micro-interaction research at https://www.svggenie.com/blog/svg-micro-interactions-ux-guide). Customer can see "Teal — #008080" before the color applies.
 
@@ -98,7 +98,7 @@ After a customer colors their first piece (e.g., a column), the "Add a Piece" ca
 
 Tapping this suggestion adds an arch to the composition, pre-populated with the same primary and accent colors the customer just chose for their column. They can then adjust the colors independently.
 
-This is the "coloring one thing makes you want to color the next thing" dynamic from the brief. The trigger is: after any shape is colored, the Add card's suggestion updates to name a complementary piece. The pairings (arch + column, garland + backdrop, centerpiece + arch) are hardcoded — no ML needed for v1.
+This is the "coloring one thing makes you want to color the next thing" dynamic from the brief. The trigger is: after any shape is colored, the Add card's suggestion updates to name a complementary piece. The pairings (arch + column, garland + arch, drop + backdrop) are hardcoded — no ML needed for v1.
 
 The visual empty placeholder in the "Add" card also carries suggestion weight: the outlined/ghosted shape preview in the same proportions as the completed pieces communicates "something belongs here" without explicit text. Both mechanisms (text suggestion + visual placeholder) work together.
 
