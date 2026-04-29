@@ -63,9 +63,13 @@ The brief says: "Show what the 'captured' moment looks like; how it's stored is 
 
 This is where the slot-based composition pattern earns its place. After the customer colors and adds their first piece, the composition view has empty slots with placeholder outlines: a soft gray arch-shaped silhouette in "Column" position, a soft gray round shape in "Centerpiece" position. These aren't recommendations — they're empty slots in the customer's own design.
 
-The Zeigarnik Effect explains why this works: people find incomplete tasks cognitively uncomfortable and are drawn to resolve them [upsell research: medium.com/@srihari45.design]. The empty column silhouette says "there's a space here in your design that could have your colors on it." No text needed. The customer taps the silhouette and it opens the column shape ready to color. The upsell is implicit, not explicit.
+The Zeigarnik Effect grounds why this works: people remember and are drawn to resolve uncompleted tasks [Laws of UX: lawsofux.com/zeigarnik-effect/ — "people remember uncompleted or interrupted tasks better than completed tasks"; ux-bulletin.com/zeigarnik-effect-ux/ — explicitly lists "empty states that reference incomplete workflows" as a Zeigarnik application]. The empty slot is not a recommendation card; it is a gap in the customer's own design. The distinction matters: a recommendation card asks the customer to buy something new; an empty slot tells the customer their own work is unfinished. The second framing is less salesy and more true to the coloring-page frame.
 
-When the customer reaches the done screen (05-done), there's also a single contextual note: "Customers who add a matching column often find they want the arch too." This is the Hick's Law application — show one suggestion, not five [same upsell research source]. One suggestion is an invitation; five suggestions are a menu.
+**Honest caveat:** This application — a visual placeholder slot in a design tool — is a principled extension of the Zeigarnik principle as documented in UX literature. It has not been user-tested specifically for balloon design tools. The prediction is grounded in theory; it would need testing to confirm it works at this fidelity for this audience.
+
+The empty column silhouette says "there's a space here in your design that could have your colors on it." No text needed. The customer taps the silhouette and it opens the column shape ready to color. The upsell is implicit, not explicit.
+
+When the customer reaches the done screen (05-done), there's also a single contextual note: "Customers who add a matching column often find they want the arch too." This is the Hick's Law application — show one suggestion, not five [Medium, Srihari GP: medium.com/@srihari45.design — the Hick's Law guidance in that article is the one claim from that source that holds up; the Zeigarnik claim in that article does not]. One suggestion is an invitation; five suggestions are a menu.
 
 ---
 
