@@ -2,22 +2,12 @@
 
 {% block page_content %}
 <section class="lt-checkout">
-    <div class="lt-checkout__inner">
-        <h1 class="lt-checkout__title">Checkout</h1>
-        <p class="lt-checkout__subtitle">
-            No account required. We&rsquo;ll send a receipt to the email you give us.
-        </p>
-
-        <div class="lt-checkout__summary">
-            <div class="lt-checkout__summary-img"
-                 {% if item.website_image %}style="background-image: url('{{ item.website_image }}');"{% endif %}
-                 aria-hidden="true"></div>
-            <div class="lt-checkout__summary-body">
-                <p class="lt-checkout__summary-name">{{ item.web_item_name }}</p>
-                <p class="lt-checkout__summary-meta">Quantity: {{ qty }} &middot; ${{ "%.2f"|format(unit_price) }} each</p>
-            </div>
-            <p class="lt-checkout__summary-price">${{ "%.2f"|format(line_total) }}</p>
-        </div>
+    <div class="lt-checkout__container">
+        <div class="lt-checkout__main">
+            <h1 class="lt-checkout__title">Checkout</h1>
+            <p class="lt-checkout__subtitle">
+                No account required. We&rsquo;ll send a receipt to the email you give us.
+            </p>
 
         <form id="lt-checkout-form" class="lt-checkout__form" novalidate>
             <input type="hidden" name="item_code" value="{{ item.item_code }}">
@@ -87,6 +77,35 @@
 
             <div id="co-feedback" class="lt-checkout__feedback" role="status" aria-live="polite"></div>
         </form>
+        </div>
+
+        <aside class="lt-checkout__aside" aria-label="Order summary">
+            <div class="lt-checkout__order-card">
+                <h2 class="lt-checkout__order-heading">Order summary</h2>
+                <div class="lt-checkout__line">
+                    <div class="lt-checkout__line-img"
+                         {% if item.website_image %}style="background-image: url('{{ item.website_image }}');"{% endif %}
+                         aria-hidden="true"></div>
+                    <div class="lt-checkout__line-body">
+                        <p class="lt-checkout__line-name">{{ item.web_item_name }}</p>
+                        <p class="lt-checkout__line-meta">Qty {{ qty }} &middot; ${{ "%.2f"|format(unit_price) }} each</p>
+                    </div>
+                    <p class="lt-checkout__line-amount">${{ "%.2f"|format(line_total) }}</p>
+                </div>
+                <div class="lt-checkout__totals-row">
+                    <span>Subtotal</span>
+                    <span>${{ "%.2f"|format(line_total) }}</span>
+                </div>
+                <div class="lt-checkout__totals-row lt-checkout__totals-row--grand">
+                    <span>Total</span>
+                    <span>${{ "%.2f"|format(line_total) }}</span>
+                </div>
+                <p class="lt-checkout__secure">
+                    <strong>Secure payment</strong> &mdash; payment is processed by Stripe.
+                    We never see or store your card details.
+                </p>
+            </div>
+        </aside>
     </div>
 </section>
 

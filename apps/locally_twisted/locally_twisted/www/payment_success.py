@@ -1,23 +1,25 @@
 """Override Frappe's /payment-success page for guest checkouts.
 
-Why this file exists: Frappe's payments app constructs the post-charge
-redirect URL in stripe_settings.py:finalize_request — and at line 272 it
-unconditionally appends `?redirect_to=None` (literal string "None") even
-when the URL already contains `?`. Result: customers land on
-    /payment-success?doctype=Payment%20Request&docname=ACC-PRQ-...?redirect_to=None
-The malformed second `?` makes `docname` carry the redirect_to suffix,
-and even if it didn't, the upstream controller calls
-    frappe.get_doc("Payment Request", docname)
-under the GUEST session — which 403s because Payment Request is restricted.
+Two paths supported:
 
-We override /payment-success here (via website_route_rules in hooks.py)
-to hand guest customers off to /thank-you?order=<so_name>. We don't read
-the Payment Request through guest perms; we verify the charge actually
-completed (Integration Request status = Completed) and then look up the
-Sales Order with elevated read perms.
+1. PRIMARY — Stripe Checkout Session redirect (current flow):
+   Stripe's success_url comes back as `/payment-success?session_id=cs_test_...`.
+   We retrieve the session, verify payment_status == "paid", read
+   client_reference_id (= Sales Order name), and redirect to
+   /thank-you?order=<so_name>.
 
-When the upstream bug is fixed, this override remains useful: it gives
-guests a clean post-checkout landing without exposing Payment Request.
+2. LEGACY — Frappe payments redirect (kept for any in-flight charges):
+   The bundled payments app builds a redirect URL like
+   `/payment-success?doctype=Payment%20Request&docname=ACC-PRQ-...?redirect_to=None`.
+   Two upstream bugs make this fail: (a) the malformed double-`?` URL,
+   (b) guests can't read Payment Request → 403. We dodge both: clean the
+   docname, verify Integration Request status, look up the SO with
+   elevated perms, redirect.
+
+Why an override at all: Frappe's payment_success.py loads the Payment
+Request via `frappe.get_doc(...)` under the guest session, which 403s.
+We never read Payment Request as guest; we verify completion via the
+Stripe API or Integration Request status instead.
 """
 import frappe
 
@@ -27,9 +29,12 @@ sitemap = 0
 
 
 def get_context(context):
+    session_id = (frappe.form_dict.get("session_id") or "").strip()
+    if session_id:
+        _handle_stripe_session(session_id)
+
     docname_raw = (frappe.form_dict.get("docname") or "").strip()
     doctype = (frappe.form_dict.get("doctype") or "").strip()
-
     docname = docname_raw.split("?", 1)[0] if docname_raw else ""
 
     if doctype != "Payment Request" or not docname:
@@ -44,6 +49,34 @@ def get_context(context):
         _redirect("/")
 
     sales_order = frappe.db.get_value("Payment Request", docname, "reference_name")
+    if not sales_order:
+        _redirect("/")
+
+    _redirect(f"/thank-you?order={sales_order}")
+
+
+def _handle_stripe_session(session_id):
+    """Resolve a Stripe Checkout Session → Sales Order → /thank-you.
+
+    Verifies payment_status == 'paid' before exposing the order. If the
+    session lookup fails or the payment didn't complete, redirect home
+    rather than leak existence information.
+    """
+    from locally_twisted.payments.stripe_session import retrieve_session
+
+    try:
+        session = retrieve_session(session_id)
+    except Exception:
+        frappe.log_error(frappe.get_traceback(), "Stripe session retrieval failed")
+        _redirect("/")
+
+    if (session.get("payment_status") or "").lower() != "paid":
+        _redirect("/")
+
+    sales_order = (
+        session.get("client_reference_id")
+        or (session.get("metadata") or {}).get("sales_order")
+    )
     if not sales_order:
         _redirect("/")
 
