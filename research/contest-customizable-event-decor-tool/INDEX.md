@@ -1,17 +1,17 @@
 # Contest Index — Customizable Event Decor Design Tool
 
-**Status:** Phase 0 — Brief drafted, awaiting GL approval before dispatch.
+**Status:** Phase 2 — Field summary written. Ready for Round 2 dispatch.
 
 ## Phase tracker
 
 | Phase | Status | Notes |
 |---|---|---|
-| 0. Pre-flight | IN PROGRESS | Brief written; awaiting GL approval |
-| 1. Round 1 (blind) | — | 4 contestants, parallel persistent agents |
-| 1a. Round 1 reflective loops | — | Proxy ↔ each contestant, 2-3 perspective shifts each |
-| 2. Field summary | — | Orchestrator solo |
-| 3. Round 2 (mutual visibility) | — | SendMessage to contestants |
-| 3a. Round 2 reflective loops | — | Proxy ↔ each contestant, 2-3 deeper perspective shifts |
+| 0. Pre-flight | ✓ DONE | Brief written; GL approval received |
+| 1. Round 1 (blind) | ✓ DONE | 4 contestants delivered RESEARCH-NOTES + REASONING + renderable mockup |
+| 1a. Round 1 reflective loops | ✓ DONE | 2 loops × 4 contestants. Loop 1 = research probe; Loop 2 = Jeff's-perspective probe. All 8 + 8 reply files written. |
+| 2. Field summary | ✓ DONE | `FIELD-AT-ROUND-1.md` written |
+| 3. Round 2 (mutual visibility) | NEXT | SendMessage to all 4 — choose Refine / Lean / Pivot |
+| 3a. Round 2 reflective loops | — | Proxy ↔ each contestant, deeper perspective shifts |
 | 4. Mutual peer scoring | — | 4 dimensions × 3 peers each |
 | 5. Aggregation | — | Orchestrator solo |
 | 6. Dissent moment | — | Continue / Step Away / Wildcard Pivot per contestant |
@@ -58,11 +58,23 @@
 ## Dispatch readiness checklist
 
 - [x] Brief written
-- [x] Contestant directories scaffolded (placeholder READMEs)
+- [x] Contestant directories scaffolded
 - [x] Index.md tracking phases
-- [ ] Persistent Proxy spawned with brief context
-- [ ] GL approval on brief
-- [ ] All 4 contestants spawned in parallel for Round 1
+- [x] Persistent Proxy spawned (decor-tool-coach, agentId aa3108d9ab3c5a978)
+- [x] GL approval on brief
+- [x] All 4 contestants spawned in parallel for Round 1
+- [x] Round 1 reflective loops (Loop 1 + Loop 2) complete for all 4
+- [x] Field summary (`FIELD-AT-ROUND-1.md`) written
+
+## Agent IDs (for SendMessage)
+
+| Agent | ID |
+|---|---|
+| Proxy | aa3108d9ab3c5a978 |
+| Contestant 1 | a76396efd739881c3 |
+| Contestant 2 | a3a7df4f715615f21 |
+| Contestant 3 | ad72af232430d89f3 |
+| Contestant 4 | a30d848ce821198bb |
 
 ## Operational notes for the orchestrator
 
