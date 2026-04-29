@@ -20,10 +20,6 @@ so they don't appear on the storefront.
 
 Idempotent. Re-runs are safe — only writes when the target value differs
 from the current one.
-
-Naming history: this script was originally `categorize_quick_picks.py`;
-renamed 2026-04-29 when GL retired the "Quick Picks" label in favor of
-"Shop" sitewide.
 """
 
 import json
