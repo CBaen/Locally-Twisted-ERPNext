@@ -410,8 +410,11 @@ const state = {
   ],
   size: 25,           // ft
   style: 'Swirl',
-  cap: 160,
 };
+
+// Constant from GL's source (app/design/page.tsx): arch render caps at 160 balloons.
+// Not user-facing — present in source as a fixed numeric.
+const ARCH_RENDER_CAP = 160;
 
 // =========================================================================
 // HELPERS (ported)
@@ -586,14 +589,15 @@ function render() {
     return;
   }
 
-  // Compute balloon count for chosen size, capped at render cap
+  // Compute balloon count for chosen size, capped at GL's source constant (160)
   const targetCount = (state.size / 5) * BALLOONS_PER_5FT;
-  const renderCount = Math.min(targetCount, state.cap);
+  const renderCount = Math.min(targetCount, ARCH_RENDER_CAP);
 
   const balloons = generateArchBalloons(renderCount, state.colors, state.style, state.size);
 
-  // Balloon size in pixels - tuned to match GL's DesignPreview balloon-size = 15px for arch
-  const balloonPx = 22;
+  // Balloon size in pixels — direct port from GL's getBalloonPixelSize() in app/design/page.tsx
+  // (arch case returns 15; chosen for proper overlap in quad clusters)
+  const balloonPx = 15;
   const balloonHeightPx = balloonPx * 1.12;
 
   for (const b of balloons) {
@@ -735,13 +739,6 @@ function wireControls() {
     });
   });
 
-  const cap = document.getElementById('cap');
-  const capDisplay = document.getElementById('cap-display');
-  cap.addEventListener('input', e => {
-    state.cap = parseInt(e.target.value, 10);
-    capDisplay.textContent = state.cap;
-    rerender();
-  });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
