@@ -6,6 +6,85 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-04-29 (Stripe migration session) — Six things learned migrating Charges API → Checkout Sessions
+
+### `/payment-success` upstream URL bug + guest 403 require route override
+
+Frappe's `payments` app builds the post-charge redirect URL at `apps/payments/payments/payment_gateways/doctype/stripe_settings/stripe_settings.py:272`. When `redirect_to` is `None`, the code unconditionally appends `?redirect_to=None` (literal string "None") even when the URL already has `?`. The result is a malformed URL like:
+
+```
+/payment-success?doctype=Payment%20Request&docname=ACC-PRQ-...?redirect_to=None
+                                                              ^ should be & not ?
+```
+
+The malformed second `?` mashes the redirect_to suffix into the docname value. AND — even with a clean URL — Frappe's bundled `payment_success.py` calls `frappe.get_doc("Payment Request", docname)` under the GUEST session, which 403s because Payment Request is restricted.
+
+**Fix (don't patch upstream — `apps/payments/` is bind-mounted from a gitignored upstream clone):** Override the route in our app via `website_route_rules` in `hooks.py`, with our own `www/payment_success.py` that:
+1. Strips any `?redirect_to=None` tail off `docname`
+2. Verifies the linked `Integration Request` (or Stripe session) is `Completed` — proves the charge actually succeeded; defends against guessing PR names
+3. Looks up the SO with elevated read perms (we never read PR as guest)
+4. Redirects to `/thank-you?order=<so_name>`
+
+**Receipt:** GL hit this 2026-04-29 with the bug-report URL `/payment-success?doctype=Payment%20Request&docname=ACC-PRQ-2026-00008?redirect_to=None` returning 403. Override pattern fixed it. See `apps/locally_twisted/locally_twisted/www/payment_success.py`.
+
+### Frappe payments app uses legacy Charges API — every BBC client needs Checkout Sessions before customer-facing work
+
+Frappe's `payments` app (`apps/payments/payments/payment_gateways/doctype/stripe_settings/stripe_settings.py:create_charge_on_stripe`) calls `stripe.Charge.create()` — the **legacy Charges API**. The `stripe-best-practices` skill explicitly says: "Never recommend the Charges API." Reasons:
+
+- No 3DS / SCA support (will fail in EU; may fail with US issuers requiring 3DS)
+- No dynamic payment methods (no Apple Pay, Google Pay, Link auto-injection)
+- No fraud signals as rich as PaymentIntents
+
+The customer-facing form Frappe ships (`/stripe_checkout`) is also a custom card UI that looks unbranded and erodes trust at point of payment. GL's reaction 2026-04-29: *"This looks unprofessional. I don't trust it."*
+
+**Fix:** Bypass Frappe's payment_url entirely. Create a Stripe Checkout Session directly from our app and hand the customer the `checkout.stripe.com/c/pay/cs_test_...` URL. Customer sees Stripe's polished hosted page with their full UI: dynamic payment methods, security badges, real-time validation, "Powered by Stripe" footer.
+
+**Pattern:** New `apps/locally_twisted/locally_twisted/payments/stripe_session.py` with `create_session_for_sales_order(...)`. Called from `submit_guest_order` after PR creation. Returns the hosted URL.
+
+**For every future BBC client on Frappe**: do this BEFORE any customer-facing demo. The Frappe-bundled card form is too embarrassing to ship.
+
+### Stripe CLI's `--api-key` flag bypasses login when CLI auth is blocked
+
+Stripe CLI normally requires browser-based login + 2FA via `stripe login`. For LT, Jeff's phone holds the 2FA — not always reachable when GL needs to test. Workaround: `stripe listen --api-key <sk_test_...>` accepts the secret key directly and bypasses the stored auth entirely.
+
+**Pattern that works:**
+```bash
+export STRIPE_LT_KEY=$(grep '^STRIPE_TEST_SECRET_KEY=' .env | sed 's/^STRIPE_TEST_SECRET_KEY=//')
+stripe listen --api-key "$STRIPE_LT_KEY" --forward-to http://localhost:8081/api/method/locally_twisted.payments.stripe_webhook.stripe_webhook
+```
+
+The listener prints `whsec_...` on the second line. Pass that to `scripts/setup/set_stripe_webhook_secret.py whsec_<value>` to persist in `site_config.json`. Restart backend.
+
+**Caveat:** the secret rotates each time the listener restarts. So this is for dev convenience, not a stable production webhook. For prod, use Stripe Dashboard → Webhooks → Add endpoint, get the stable signing secret.
+
+**Receipt:** 2026-04-29. The CLI's stored auth was BBC's (and BBC's test key had expired). Fresh login to LT's account was blocked by 2FA. The `--api-key` flag let us point the listener at LT's account using the secret key already in `.env`.
+
+### Webhook signing secret belongs in `site_config.json`, not Stripe Settings doctype
+
+Per-environment values that should NEVER travel between dev/staging/production live in `site_config.json`. Doctypes get backed up + restored across sites; `site_config` does not. The Stripe webhook secret for the local dev listener is different from the one Stripe Cloud will issue for production.
+
+**Pattern:** `frappe.conf.get('stripe_webhook_signing_secret')` reads from `site_config.json` at the site root. Setup helper at `scripts/setup/set_stripe_webhook_secret.py` writes via `bench --site frontend set-config`.
+
+This was a deliberate choice over adding a Custom Field to Stripe Settings. Custom Fields are fixtures that travel; `site_config` is per-site by design.
+
+### Server-side reconciliation on `/payment-success` keeps the demo working without webhooks
+
+The customer-facing flow can mark the SO/PR Paid synchronously when the customer's browser lands on `/payment-success?session_id=...` — using `stripe.checkout.Session.retrieve()` to verify `payment_status == 'paid'`, then calling `pr.set_as_paid()`.
+
+This makes the webhook **optional** for demo purposes. The webhook handler still exists (and is signature-verified, idempotent) for production where it's the safety net for browser-closed-before-redirect cases. Whichever path fires first marks the PR Paid; the second path no-ops.
+
+**Trade-off accepted:** if the customer closes their browser between Stripe success and our redirect, the SO won't be marked Paid until the webhook fires. For LT's controlled-demo and small-customer-volume situation, that's fine. For a high-volume e-commerce build, the webhook should be the source of truth.
+
+### "I had it backwards" — the .env keys are the auth, the CLI is separate
+
+Twice this session I asked GL for credentials they'd already provided. The .env file's `STRIPE_TEST_PUBLISHABLE_KEY` + `STRIPE_TEST_SECRET_KEY` ARE LT's authentication for ERPNext's Stripe integration. The Stripe CLI's stored auth (visible via `stripe config --list`) is a SEPARATE auth context for the listener tool.
+
+**Lesson for the next instance:** before asking GL for credentials, check (a) `.env` for service-side keys, (b) `stripe config --list` for CLI auth, (c) `bench --site frontend execute frappe.client.get_value` against Stripe Settings. If something is already there, don't ask GL to redo it.
+
+GL named this directly: *"I've already done this authentication!"* — the second time. Anti-pattern #5 fired on top of #5: don't make GL prove they've done something.
+
+---
+
 ## 2026-04-29 (mobile-drawer build) — `web_include_css` browser-cache trap
 
 ### What happened
