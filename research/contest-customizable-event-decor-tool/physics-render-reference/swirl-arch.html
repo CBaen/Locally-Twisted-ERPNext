@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Physics Render Reference - Balloon Arch (ported from locally-twisted-app)</title>
+<title>Physics Render Reference - Balloon Arch (Three.js port)</title>
 <style>
   :root {
     --soft-blue: #DCE6EE;
@@ -13,7 +13,7 @@
     --ink: #1B1B1B;
     --grey: #6B6B6B;
     --line: #E5E5E5;
-    --canvas-bg: #F0EEEC;
+    --studio-bg: #E5E4E2;   /* matches GL's --muted (Platinum Grey) */
   }
   * { box-sizing: border-box; }
   body {
@@ -33,12 +33,7 @@
     font-size: 28px;
     margin: 0 0 6px;
   }
-  header p {
-    margin: 0;
-    color: var(--grey);
-    font-size: 14px;
-    max-width: 800px;
-  }
+  header p { margin: 0; color: var(--grey); font-size: 14px; max-width: 800px; }
   header .source-attribution {
     margin-top: 8px;
     font-size: 12px;
@@ -68,11 +63,7 @@
     letter-spacing: 0.5px;
     color: var(--grey);
   }
-  .controls label {
-    display: block;
-    font-size: 13px;
-    margin: 6px 0;
-  }
+  .controls label { display: block; font-size: 13px; margin: 6px 0; }
   .swatch-grid {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
@@ -88,6 +79,7 @@
     cursor: pointer;
     position: relative;
     transition: transform 0.15s;
+    padding: 0;
   }
   .swatch:hover { transform: scale(1.1); }
   .swatch.active {
@@ -102,9 +94,7 @@
     background: rgba(255,255,255,0.4);
     pointer-events: none;
   }
-  .category {
-    margin-bottom: 12px;
-  }
+  .category { margin-bottom: 12px; }
   .category h3 {
     font-size: 11px;
     text-transform: uppercase;
@@ -114,7 +104,7 @@
     font-weight: 600;
   }
   .canvas-wrap {
-    background: var(--canvas-bg);
+    background: var(--studio-bg);
     border: 1px solid var(--line);
     border-radius: 6px;
     padding: 16px;
@@ -123,46 +113,21 @@
   .scene {
     position: relative;
     width: 100%;
-    /* Match GL's design page render: Card-wrapped at ~590px desktop, ~340px mobile.
-       Without this constraint, the 4% tube radius scales with container width
-       while the 15px balloon size stays fixed — clusters drift sparse at
-       larger containers. Cap matches the typical Card width. */
+    /* Match GL's design page: BalloonPreview3D wrapped in Card with aspect-[4/3].
+       Constraining max-width keeps the Three.js camera framing consistent with
+       what GL's render produces in the actual app. */
     max-width: 600px;
     margin: 0 auto;
     aspect-ratio: 4 / 3;
-    perspective: 600px;
-    perspective-origin: 50% 50%;
-    background: var(--canvas-bg);
+    background: var(--studio-bg);
     overflow: hidden;
-    border-radius: 4px;
+    border-radius: 8px;
   }
-  .scene-3d {
-    position: absolute;
-    inset: 0;
-    transform-style: preserve-3d;
-  }
-  .ground {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 8px;
-    background: rgba(0,0,0,0.05);
-    border-top: 1px solid rgba(0,0,0,0.1);
-  }
-  .balloon {
-    position: absolute;
-    border-radius: 50% 50% 50% 50% / 45% 45% 55% 55%;
-    will-change: transform;
-  }
-  .balloon-highlight {
-    position: absolute;
-    top: 10%;
-    left: 18%;
-    width: 35%;
-    height: 25%;
-    border-radius: 50%;
-    pointer-events: none;
+  .scene canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
   }
   .palette {
     margin-top: 16px;
@@ -202,11 +167,7 @@
     border-radius: 50%;
     border: 1px solid rgba(0,0,0,0.12);
   }
-  .stat {
-    font-size: 12px;
-    color: var(--grey);
-    margin-top: 8px;
-  }
+  .stat { font-size: 12px; color: var(--grey); margin-top: 8px; }
   .annotation {
     background: rgba(46, 125, 119, 0.08);
     border-left: 3px solid var(--teal);
@@ -224,10 +185,7 @@
     font-size: 13px;
     line-height: 1.6;
   }
-  .math-notes h2 {
-    margin: 0 0 8px;
-    font-size: 14px;
-  }
+  .math-notes h2 { margin: 0 0 8px; font-size: 14px; }
   .math-notes pre {
     background: white;
     padding: 12px;
@@ -236,22 +194,21 @@
     font-size: 12px;
     margin: 8px 0;
   }
-  input[type="range"] { width: 100%; }
 </style>
 </head>
 <body>
 <header>
-  <h1>Physics Render Reference - Balloon Arch</h1>
-  <p>Quad-cluster physics: 4 balloons radiate outward from a center rope; each cluster rotates 45 degrees from the previous, nesting into gaps to create a dense interlocking tube. Vanilla HTML + CSS3D transforms + JS - no library, Frappe-recreatable.</p>
-  <div class="source-attribution">Math ported from <code>locally-twisted-app/src/components/balloon-preview-3d.tsx</code> (generateArchBalloons) and <code>app/design/page.tsx</code> (DesignPreview / CSS3D). All balloon colors verbatim from GL's existing LT catalog.</div>
+  <h1>Physics Render Reference - Balloon Arch (Three.js port)</h1>
+  <p>Direct port of GL's <code>BalloonScene</code> from <code>locally-twisted-app/src/components/balloon-preview-3d.tsx</code> into vanilla Three.js (no React, no React Three Fiber). Same library GL ships with: Three.js 0.182. Loaded from CDN via importmap. CDN script tag works in a Frappe portal page.</p>
+  <div class="source-attribution">Math is verbatim from <code>generateArchBalloons()</code>. Scene setup (lights, fog, camera, ground, OrbitControls, materials) verbatim from <code>BalloonScene</code> + <code>BalloonInstances</code> in the same file.</div>
 </header>
 
 <main>
   <aside class="controls">
     <fieldset>
       <legend>Style</legend>
-      <label><input type="radio" name="style" value="Swirl" checked> Swirl - colors cycle within each quad (max 4 colors)</label>
-      <label><input type="radio" name="style" value="Layered"> Layered - bands of 2 quads same color (max 8 colors)</label>
+      <label><input type="radio" name="style" value="Swirl" checked> Swirl - colors cycle within each quad (max 4)</label>
+      <label><input type="radio" name="style" value="Layered"> Layered - bands of 2 quads same color (max 8)</label>
     </fieldset>
 
     <fieldset>
@@ -260,7 +217,7 @@
       <label><input type="radio" name="size" value="25" checked> 25 ft (200 balloons)</label>
       <label><input type="radio" name="size" value="30"> 30 ft (240 balloons)</label>
       <label><input type="radio" name="size" value="40"> 40 ft (320 balloons)</label>
-      <p class="stat">Industry standard: 40 balloons per 5 feet = 8 per foot = 2 quads per foot.</p>
+      <p class="stat">Industry standard: 40 balloons per 5 feet = 8 per foot = 2 quads per foot. Render caps at 160 (constant in GL's source).</p>
     </fieldset>
 
     <fieldset>
@@ -272,10 +229,7 @@
 
   <section>
     <div class="canvas-wrap">
-      <div class="scene" id="scene">
-        <div class="scene-3d" id="scene-3d"></div>
-        <div class="ground"></div>
-      </div>
+      <div class="scene" id="scene"></div>
     </div>
 
     <div class="palette">
@@ -284,62 +238,69 @@
     </div>
 
     <div class="annotation">
-      <strong>Cluster count:</strong> <span id="cluster-count">-</span>. Each cluster = 4 balloons in a quad, tied at necks, radiating outward from the rope. Each successive cluster rotates 45 degrees from the previous, so balloons nest into the gaps - the dense interlocking pattern you see in real LT installs.
+      <strong>Cluster count:</strong> <span id="cluster-count">-</span>. Each cluster = 4 balloons in a quad, tied at necks, radiating outward from the rope. Each successive cluster rotates 45 degrees from the previous, so balloons nest into the gaps.
     </div>
 
     <div class="math-notes">
       <h2>Physics math (binding reference for Frappe build)</h2>
 
-<pre>// === Quad cluster radiates OUTWARD from center rope ===
-// Tie point is ON the curve; balloon centers are offset by ~0.85 * radius
-// This creates the dense interlocking tube, NOT a hollow flat ring
-
-// === Arch curve (half-circle) ===
-//   x(theta) = cos(theta) * (archWidth/2)
-//   y(theta) = sin(theta) * archHeight
-// Tangent angle at this point: angle - PI/2 (perpendicular to radial)
-
-// === 45-degree spiral rotation per cluster ===
-//   spiralAngle = PI / 4
-//   clusterRotation = clusterIndex * spiralAngle
-// Each balloon in the quad points in one of 4 directions (every PI/2)
-// Plus the cluster's spiral rotation:
-//   angleInCluster = balloonInCluster * (PI/2) + clusterRotation
-// This is a PHYSICAL rotation - the balloon positions actually rotate.
-// Spiral effect comes from THIS, not from color rotation.
-
-// === Color logic depends on Style ===
-// SWIRL (max 4 colors): each balloon in quad gets next color
-//   colorIndex = balloonInCluster % colors.length
-//   With the 45-degree physical rotation, this creates a barber-pole twist.
-// LAYERED (max 8 colors): all balloons in cluster same color, 2 quads per band
-//   bandIndex = floor(clusterIndex / 2)
-//   colorIndex = bandIndex % colors.length
-//   Pattern: AA-BB-CC-DD across the arch (no spiral within a band)
-
-// === Real-world units (catalog-grounded) ===
+<pre>// === generateArchBalloons - direct port from balloon-preview-3d.tsx ===
 // 11" balloon = 0.458 ft radius = 0.917 ft diameter
-// 40 balloons / 5 feet of arch (industry standard)
-// 8 balloons / foot = 2 quad clusters / foot</pre>
-
-      <h2>Differences from the prior (incorrect) version</h2>
-      <p>
-        The first iteration of this prototype used a 2D diamond cluster on a 2D arch curve - balloons appeared FLAT, like a hollow ring. That math was wrong. GL's actual implementation has balloons radiating outward from the rope in 3D, with a 45-degree physical rotation per cluster creating the dense nested look. The spiral effect is geometric (physical rotation), not color-coded.
-      </p>
-      <p>
-        Visual tell: in GL's correct version, you see balloons distributed AROUND the rope (some pop forward via translateZ, some recede), giving a 3D tube appearance. In the wrong version, all balloons sat flat in the page plane.
-      </p>
+// 40 balloons per 5 feet of arch (industry standard)
+// archWidth  = archLengthFt * 0.5
+// archHeight = archLengthFt * 0.4
+// offsetFromCenter = balloonRadius * 0.85   (slight compression for density)
+// spiralAngle = PI / 4                       (45 degrees per cluster)
+//
+// For balloon i:
+//   clusterIndex     = floor(i / 4)
+//   balloonInCluster = i % 4
+//   t                = clusterIndex / (totalClusters - 1)
+//   angle            = t * PI                 (0 left foot -> PI right foot)
+//
+//   curveX           = cos(angle) * (archWidth/2)
+//   curveY           = sin(angle) * archHeight
+//
+//   normalX          = cos(angle)             (radial outward)
+//   normalY          = sin(angle)
+//
+//   clusterRotation  = clusterIndex * spiralAngle
+//   angleInCluster   = balloonInCluster * (PI/2) + clusterRotation
+//
+//   offsetRadial     = cos(angleInCluster) * offsetFromCenter
+//   offsetZ          = sin(angleInCluster) * offsetFromCenter
+//   offsetX          = normalX * offsetRadial
+//   offsetY          = normalY * offsetRadial
+//
+//   x = curveX + offsetX * radiusJitter + posJitterX
+//   y = curveY + offsetY * radiusJitter + posJitterY
+//   z = curveZ + offsetZ * radiusJitter + posJitterZ
+//   scale = balloonDiameter * sizeVariation   (0.95 to 1.0)
+//
+// Color logic by Style:
+//   SWIRL:   colorIndex = balloonInCluster % colors.length      (max 4 colors)
+//   LAYERED: colorIndex = floor(clusterIndex / 2) % colors.length (max 8)</pre>
     </div>
   </section>
 </main>
 
-<script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
 // =========================================================================
-// PHYSICS RENDER REFERENCE - BALLOON ARCH
-// Direct port of GL's generateArchBalloons() from
-// locally-twisted-app/src/components/balloon-preview-3d.tsx
-// + DesignPreview() CSS3D approach from app/design/page.tsx
-// Vanilla HTML + CSS3D + JS. No library. Frappe-recreatable.
+// PHYSICS RENDER REFERENCE - BALLOON ARCH (Three.js)
+// Direct port of generateArchBalloons + BalloonScene + BalloonInstances
+// from locally-twisted-app/src/components/balloon-preview-3d.tsx
 // =========================================================================
 
 // --- Real LT balloon catalog (verbatim from app/design/page.tsx) ---
@@ -402,62 +363,25 @@ const BALLOON_COLORS = {
   ],
 };
 
-// Industry standard density
 const BALLOONS_PER_5FT = 40;
+const ARCH_RENDER_CAP = 160;     // GL's source: arch caps render at 160 balloons
 
 // State
 const state = {
-  // Default palette: Blush + Gold + White + Nude (Fan Favorite "Blush & Gold")
+  // Default palette: Blush & Gold (matches GL's first colorPalette in design/page.tsx)
   colors: [
     { name: 'Pastel Pink', hex: '#FFD1DC' },
     { name: 'Chrome Gold', hex: '#D4AF37' },
-    { name: 'White', hex: '#FFFFFF' },
-    { name: 'Nude', hex: '#E3BC9A' },
+    { name: 'White',       hex: '#FFFFFF' },
+    { name: 'Nude',        hex: '#E3BC9A' },
   ],
-  size: 25,           // ft
+  size: 25,
   style: 'Swirl',
 };
 
-// Constant from GL's source (app/design/page.tsx): arch render caps at 160 balloons.
-// Not user-facing — present in source as a fixed numeric.
-const ARCH_RENDER_CAP = 160;
-
 // =========================================================================
-// HELPERS (ported)
+// MATH - direct port from balloon-preview-3d.tsx generateArchBalloons
 // =========================================================================
-
-function isChrome(name) {
-  if (!name) return false;
-  const n = name.toLowerCase();
-  return n.includes('chrome') || n.includes('metallic') || n.includes('champagne');
-}
-
-function darkenHex(hex, amount) {
-  const num = parseInt(hex.replace('#', ''), 16);
-  const r = Math.max(0, (num >> 16) - amount);
-  const g = Math.max(0, ((num >> 8) & 0xff) - amount);
-  const b = Math.max(0, (num & 0xff) - amount);
-  return '#' + ((r << 16) | (g << 8) | b).toString(16).padStart(6, '0');
-}
-function lightenHex(hex, amount) {
-  const num = parseInt(hex.replace('#', ''), 16);
-  const r = Math.min(255, (num >> 16) + amount);
-  const g = Math.min(255, ((num >> 8) & 0xff) + amount);
-  const b = Math.min(255, (num & 0xff) + amount);
-  return '#' + ((r << 16) | (g << 8) | b).toString(16).padStart(6, '0');
-}
-
-function balloonGradient(hex, metallic) {
-  const dark = darkenHex(hex, 40);
-  const darker = darkenHex(hex, metallic ? 60 : 50);
-  const light = lightenHex(hex, 30);
-  if (metallic) {
-    return 'radial-gradient(ellipse at 25% 25%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.6) 8%, ' +
-      light + ' 15%, ' + hex + ' 40%, ' + dark + ' 75%, ' + darker + ' 100%)';
-  }
-  return 'radial-gradient(ellipse at 30% 25%, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.3) 12%, ' +
-    light + ' 20%, ' + hex + ' 50%, ' + dark + ' 85%, ' + darker + ' 100%)';
-}
 
 function seededRandom(seed) {
   return () => {
@@ -466,197 +390,254 @@ function seededRandom(seed) {
   };
 }
 
-// =========================================================================
-// PHYSICS - direct port of generateArchBalloons (Three.js -> CSS3D)
-// =========================================================================
-
-function generateArchBalloons(balloonCount, colors, style, archLengthFt) {
-  // Returns array of balloons in container-percentage coords:
-  //   { x: 0-100, y: 0-100, z: pixels, color: {name, hex}, scale: 1.0, isMetallic: bool }
+function generateArchBalloons(balloonCount, colors, style, archLength) {
   const balloons = [];
   const random = seededRandom(42);
 
   const balloonsPerCluster = 4;
   const totalClusters = Math.ceil(balloonCount / balloonsPerCluster);
 
-  // Arch geometry in container-percentage coords
-  // (This is the same shape as GL's tubeRadius=4, archRadius=38, archCenterX=50, archBaseY=88
-  //  in design/page.tsx DesignPreview function.)
-  const archRadius = 38;     // arch height/half-width in container %
-  const archCenterX = 50;    // horizontal center
-  const archBaseY = 88;      // where feet touch ground
-  const tubeRadius = 4;      // cluster offset from rope (% of container)
+  // 11" balloon = 0.458 feet radius, 0.917 feet diameter
+  const balloonRadius = 0.458;
+  const balloonDiameter = balloonRadius * 2;
 
-  // 45-degree spiral rotation per cluster
+  // Arch dimensions
+  const archWidth = archLength * 0.5;
+  const archHeight = archLength * 0.4;
+
+  // Balloons radiate FROM the center line OUTWARD; tie point is ON the line
+  const offsetFromCenter = balloonRadius * 0.85;
+
+  // 45-degree rotation between clusters for nesting effect
   const spiralAngle = Math.PI / 4;
 
   for (let i = 0; i < balloonCount; i++) {
     const clusterIndex = Math.floor(i / balloonsPerCluster);
     const balloonInCluster = i % balloonsPerCluster;
 
-    // Progress along the arch: 0 to 1
     const t = totalClusters > 1 ? clusterIndex / (totalClusters - 1) : 0.5;
-
-    // Semi-circle: angle from 0 (left foot) to PI (right foot)
     const angle = t * Math.PI;
 
-    // Position on the arch curve (the rope line)
-    const curveX = Math.cos(angle);   // -1 to +1
-    const curveY = Math.sin(angle);   // 0 -> 1 -> 0 (peaks at center)
+    // Position on the rope curve (center line)
+    const curveX = Math.cos(angle) * (archWidth / 2);
+    const curveY = Math.sin(angle) * archHeight;
+    const curveZ = 0;
 
-    // Tangent angle at this point (perpendicular to radius)
-    const tangentAngle = angle - Math.PI / 2;
+    // Normal: pointing outward from arch center (radial direction)
+    const normalX = Math.cos(angle);
+    const normalY = Math.sin(angle);
 
-    // 45-degree spiral rotation: each cluster rotates from previous
+    // Spiral rotation: each cluster rotates 45 deg from previous
     const clusterRotation = clusterIndex * spiralAngle;
 
-    // Each balloon in quad points in one of 4 directions (every 90 deg)
-    // Plus the cluster's spiral rotation
-    const angleInCluster = balloonInCluster * (Math.PI / 2) + clusterRotation;
+    // Each balloon in the quad points in one of 4 directions (90 deg apart)
+    const angleInCluster = (balloonInCluster * Math.PI) / 2 + clusterRotation;
 
-    // Local offset in cluster (before rotating to follow arch)
-    const localX = Math.cos(angleInCluster) * tubeRadius;
-    const localZ = Math.sin(angleInCluster);   // normalized for Z depth
+    // Offset direction in plane perpendicular to arch tangent
+    const offsetRadial = Math.cos(angleInCluster) * offsetFromCenter;
+    const offsetZ = Math.sin(angleInCluster) * offsetFromCenter;
 
-    // Rotate offset to follow the arch tangent
-    const rotatedOffsetX = localX * Math.cos(tangentAngle);
-    const rotatedOffsetY = localX * Math.sin(tangentAngle);
+    // Apply radial offset along the normal direction
+    const offsetX = normalX * offsetRadial;
+    const offsetY = normalY * offsetRadial;
 
-    // Final container-% position
-    const finalX = archCenterX + curveX * archRadius + rotatedOffsetX;
-    const finalY = archBaseY - curveY * archRadius * 0.85 + rotatedOffsetY;
+    // Organic variation
+    const jitterAmount = 0.08;
+    const radiusJitter = 1 + (random() - 0.5) * 0.15;
+    const posJitterX = (random() - 0.5) * jitterAmount;
+    const posJitterY = (random() - 0.5) * jitterAmount;
+    const posJitterZ = (random() - 0.5) * jitterAmount;
 
-    // Z depth from cluster position (front/back of tube)
-    const finalZ = localZ * 15;
-
-    // Tiny jitter for organic feel
-    const jitterX = (random() - 0.5) * 0.8;
-    const jitterY = (random() - 0.5) * 0.8;
-    const jitterZ = (random() - 0.5) * 3;
+    const x = curveX + offsetX * radiusJitter + posJitterX;
+    const y = curveY + offsetY * radiusJitter + posJitterY;
+    const z = curveZ + offsetZ * radiusJitter + posJitterZ;
 
     // Color logic by Style
     let colorIndex;
     if (style === 'Swirl') {
-      // SWIRL: colors cycle within each quad
-      // 2 colors -> A-B-A-B; 3 -> A-B-C-A; 4 -> A-B-C-D
-      // 45-deg physical rotation makes this read as barber-pole twist
       if (colors.length === 1) colorIndex = 0;
+      else if (colors.length === 2) colorIndex = balloonInCluster % 2;
+      else if (colors.length === 3) colorIndex = balloonInCluster % 3;
       else colorIndex = balloonInCluster % colors.length;
     } else {
-      // LAYERED: all balloons in cluster same color
-      // 2 quads (8 balloons) per band; AA-BB-CC-DD pattern
+      // Layered: 2 quads (8 balloons) per band
       const clustersPerBand = 2;
       const bandIndex = Math.floor(clusterIndex / clustersPerBand);
       colorIndex = bandIndex % colors.length;
     }
-    const color = colors[colorIndex];
-    const metallic = isChrome(color.name);
 
-    // Slight size variation (95-100% of base)
-    const scale = 0.95 + random() * 0.05;
-    // Tiny rotation for organic feel
-    const rotation = (random() - 0.5) * 8;
+    const sizeVariation = 0.95 + random() * 0.05;
+    const baseScale = balloonDiameter * sizeVariation;
 
     balloons.push({
-      x: finalX + jitterX,
-      y: finalY + jitterY,
-      z: finalZ + jitterZ,
-      color,
-      scale,
-      isMetallic: metallic,
-      rotation,
+      position: new THREE.Vector3(x, y, z),
+      color: new THREE.Color(colors[colorIndex].hex),
+      scale: baseScale,
     });
   }
-
-  // Sort back-to-front so closer balloons paint over further ones
-  balloons.sort((a, b) => a.z - b.z);
 
   return balloons;
 }
 
 // =========================================================================
-// RENDER (CSS3D)
+// THREE.JS SCENE - direct port from BalloonScene + BalloonInstances
 // =========================================================================
 
-function clearChildren(node) {
-  while (node.firstChild) node.removeChild(node.firstChild);
+const sceneEl = document.getElementById('scene');
+const STUDIO_BG = 0xE5E4E2;       // GL's --muted Platinum Grey
+const GROUND_COLOR = 0x046307;     // GL's emerald --chart-3
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.0;
+renderer.setClearColor(STUDIO_BG);
+sceneEl.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(STUDIO_BG);
+
+// Fog: tied to size below; will be created in updateScene
+
+let camera = null;
+let controls = null;
+let balloonMesh = null;
+let groundMesh = null;
+
+function setupCamera() {
+  const size = state.size;
+  const aspect = sceneEl.clientWidth / sceneEl.clientHeight;
+  camera = new THREE.PerspectiveCamera(45, aspect, 0.1, 1000);
+  camera.position.set(0, size * 0.35, size * 0.9);
+  camera.lookAt(0, size * 0.2, 0);
+
+  controls = new OrbitControls(camera, renderer.domElement);
+  controls.enablePan = false;
+  controls.enableZoom = true;
+  controls.enableRotate = true;
+  controls.minDistance = size * 0.3;
+  controls.maxDistance = size * 1.2;
+  controls.minPolarAngle = Math.PI * 0.1;
+  controls.maxPolarAngle = Math.PI * 0.55;
+  controls.target.set(0, size * 0.2, 0);
+  controls.update();
 }
 
-function render() {
-  const scene3d = document.getElementById('scene-3d');
-  clearChildren(scene3d);
+// Lights (port: ambient 0.6 + directional 0.8 at (5,10,5))
+const ambient = new THREE.AmbientLight(0xFFFFFF, 0.6);
+scene.add(ambient);
+const directional = new THREE.DirectionalLight(0xFFFFFF, 0.8);
+directional.position.set(5, 10, 5);
+directional.castShadow = true;
+scene.add(directional);
 
-  if (state.colors.length === 0) {
-    const msg = document.createElement('div');
-    msg.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#999;font-size:16px';
-    msg.textContent = 'Pick at least 1 color to render the arch';
-    scene3d.appendChild(msg);
-    document.getElementById('cluster-count').textContent = '-';
-    return;
+function buildGround() {
+  if (groundMesh) {
+    scene.remove(groundMesh);
+    groundMesh.geometry.dispose();
+    groundMesh.material.dispose();
   }
+  const groundSize = Math.max(state.size * 3, 20);
+  const geo = new THREE.PlaneGeometry(groundSize, groundSize);
+  const mat = new THREE.MeshStandardMaterial({ color: GROUND_COLOR, roughness: 0.9, metalness: 0 });
+  groundMesh = new THREE.Mesh(geo, mat);
+  groundMesh.rotation.x = -Math.PI / 2;
+  groundMesh.position.y = -0.01;
+  groundMesh.receiveShadow = true;
+  scene.add(groundMesh);
+}
 
-  // Compute balloon count for chosen size, capped at GL's source constant (160)
+function buildBalloons() {
+  if (balloonMesh) {
+    scene.remove(balloonMesh);
+    balloonMesh.geometry.dispose();
+    balloonMesh.material.dispose();
+  }
+  if (state.colors.length === 0) return;
+
   const targetCount = (state.size / 5) * BALLOONS_PER_5FT;
   const renderCount = Math.min(targetCount, ARCH_RENDER_CAP);
 
   const balloons = generateArchBalloons(renderCount, state.colors, state.style, state.size);
 
-  // Balloon size in pixels — direct port from GL's getBalloonPixelSize() in app/design/page.tsx
-  // (arch case returns 15; chosen for proper overlap in quad clusters)
-  const balloonPx = 15;
-  const balloonHeightPx = balloonPx * 1.12;
+  // Sphere geometry args [0.5, 32, 32] from GL's source
+  const geo = new THREE.SphereGeometry(0.5, 32, 32);
+  const mat = new THREE.MeshStandardMaterial({ roughness: 0.6, metalness: 0.0 });
+  balloonMesh = new THREE.InstancedMesh(geo, mat, balloons.length);
+  balloonMesh.castShadow = true;
 
-  for (const b of balloons) {
-    const div = document.createElement('div');
-    div.className = 'balloon';
-
-    // Depth scale: closer balloons appear larger (matches GL's depthScale = 1 + z/150)
-    const depthScale = 1 + b.z / 150;
-    const finalSize = balloonPx * b.scale * depthScale;
-    const finalHeight = balloonHeightPx * b.scale * depthScale;
-
-    div.style.cssText = [
-      'left:' + b.x.toFixed(2) + '%',
-      'top:' + b.y.toFixed(2) + '%',
-      'width:' + finalSize.toFixed(2) + 'px',
-      'height:' + finalHeight.toFixed(2) + 'px',
-      'background:' + balloonGradient(b.color.hex, b.isMetallic),
-      'transform: translate(-50%, -50%) translateZ(' + b.z.toFixed(2) + 'px) rotate(' + b.rotation.toFixed(2) + 'deg)',
-      'box-shadow: ' + (b.isMetallic
-        ? 'inset -3px -5px 10px rgba(0,0,0,0.3), inset 2px 2px 8px rgba(255,255,255,0.6), 2px 3px 6px rgba(0,0,0,0.2)'
-        : 'inset -2px -4px 8px rgba(0,0,0,0.25), inset 1px 1px 4px rgba(255,255,255,0.4), 1px 2px 4px rgba(0,0,0,0.15)'),
-    ].join(';');
-
-    // Highlight reflection
-    const highlight = document.createElement('div');
-    highlight.className = 'balloon-highlight';
-    highlight.style.background = b.isMetallic
-      ? 'radial-gradient(ellipse, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 70%)'
-      : 'radial-gradient(ellipse, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%)';
-    div.appendChild(highlight);
-
-    // Secondary highlight for chrome (matches GL's design)
-    if (b.isMetallic) {
-      const second = document.createElement('div');
-      second.style.cssText = 'position:absolute;bottom:20%;right:12%;width:22%;height:15%;border-radius:50%;background:radial-gradient(ellipse, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 70%);pointer-events:none';
-      div.appendChild(second);
-    }
-
-    scene3d.appendChild(div);
-  }
+  const tempObj = new THREE.Object3D();
+  balloons.forEach((b, i) => {
+    tempObj.position.copy(b.position);
+    tempObj.scale.setScalar(b.scale);
+    // Random rotation for organic feel (port from BalloonInstances)
+    tempObj.rotation.set(
+      Math.random() * 0.2,
+      Math.random() * Math.PI * 2,
+      Math.random() * 0.2
+    );
+    tempObj.updateMatrix();
+    balloonMesh.setMatrixAt(i, tempObj.matrix);
+    balloonMesh.setColorAt(i, b.color);
+  });
+  balloonMesh.instanceMatrix.needsUpdate = true;
+  if (balloonMesh.instanceColor) balloonMesh.instanceColor.needsUpdate = true;
+  scene.add(balloonMesh);
 
   document.getElementById('cluster-count').textContent =
     Math.ceil(renderCount / 4) + ' clusters (' + Math.round(renderCount) + ' balloons rendered, ' +
     targetCount + ' in the actual install)';
 }
 
+function updateFog() {
+  // Fog distances vary by size (port: near = size*1.5, far = size*4)
+  scene.fog = new THREE.Fog(STUDIO_BG, state.size * 1.5, state.size * 4);
+}
+
+function rebuildScene() {
+  updateFog();
+  buildGround();
+  buildBalloons();
+  if (camera) {
+    // Update camera distance for current size
+    const size = state.size;
+    camera.position.set(0, size * 0.35, size * 0.9);
+    controls.minDistance = size * 0.3;
+    controls.maxDistance = size * 1.2;
+    controls.target.set(0, size * 0.2, 0);
+    controls.update();
+  }
+}
+
+function resize() {
+  const w = sceneEl.clientWidth;
+  const h = sceneEl.clientHeight;
+  renderer.setSize(w, h, false);
+  if (camera) {
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+}
+
+function animate() {
+  requestAnimationFrame(animate);
+  if (controls) controls.update();
+  if (camera) renderer.render(scene, camera);
+}
+
 // =========================================================================
-// CONTROLS
+// CONTROLS UI
 // =========================================================================
+
+function clearChildren(node) {
+  while (node.firstChild) node.removeChild(node.firstChild);
+}
 
 function renderColorGrid() {
   const grid = document.getElementById('color-grid');
   clearChildren(grid);
+  const max = state.style === 'Swirl' ? 4 : 8;
 
   for (const [category, colors] of Object.entries(BALLOON_COLORS)) {
     const wrap = document.createElement('div');
@@ -678,15 +659,13 @@ function renderColorGrid() {
       sw.setAttribute('aria-label', c.name);
       sw.style.background = c.hex;
 
-      const maxColors = state.style === 'Swirl' ? 4 : 8;
-
       sw.addEventListener('click', () => {
         if (isActive) {
           if (state.colors.length > 1) {
             state.colors = state.colors.filter(sc => sc.name !== c.name);
           }
         } else {
-          if (state.colors.length < maxColors) {
+          if (state.colors.length < max) {
             state.colors = [...state.colors, c];
           }
         }
@@ -698,7 +677,6 @@ function renderColorGrid() {
     grid.appendChild(wrap);
   }
 
-  const max = state.style === 'Swirl' ? 4 : 8;
   document.getElementById('color-stat').textContent =
     state.colors.length + ' of ' + max + ' colors selected (' + state.style + ' style)';
 }
@@ -720,12 +698,9 @@ function renderPaletteList() {
 }
 
 function rerender() {
-  // If switching from Layered (8 max) back to Swirl (4 max), trim
   const max = state.style === 'Swirl' ? 4 : 8;
-  if (state.colors.length > max) {
-    state.colors = state.colors.slice(0, max);
-  }
-  render();
+  if (state.colors.length > max) state.colors = state.colors.slice(0, max);
+  rebuildScene();
   renderPaletteList();
   renderColorGrid();
 }
@@ -737,20 +712,35 @@ function wireControls() {
       rerender();
     });
   });
-
   document.querySelectorAll('input[name="size"]').forEach(input => {
     input.addEventListener('change', e => {
       state.size = parseInt(e.target.value, 10);
       rerender();
     });
   });
-
+  window.addEventListener('resize', resize);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+// =========================================================================
+// INIT
+// =========================================================================
+
+function init() {
+  resize();
+  setupCamera();
+  rebuildScene();
+  renderPaletteList();
+  renderColorGrid();
   wireControls();
-  rerender();
-});
+  animate();
+}
+
+// Wait for layout to settle (sceneEl needs measurable dimensions)
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
 </script>
 </body>
 </html>
