@@ -93,7 +93,7 @@
         <p class="lt-shop__hero-eyebrow">For something larger</p>
         <h2>Custom balloon decor starts with a conversation, not a cart.</h2>
         <div class="lt-shop__cta-actions">
-            <a class="lt-shop__cta-btn lt-shop__cta-btn--secondary" href="/lookbook">See the look book</a>
+            <a class="lt-shop__cta-btn lt-shop__cta-btn--secondary" href="/portfolio">See the portfolio</a>
             <a class="lt-shop__cta-btn lt-shop__cta-btn--primary" href="/contact">Tell us what you&rsquo;re imagining</a>
         </div>
     </div>
@@ -147,34 +147,26 @@
             btn.textContent = 'Adding...';
             setFeedback(null, '');
 
-            // Webshop's whitelisted update_cart endpoint.
-            // Method path: webshop.webshop.shopping_cart.cart.update_cart
-            var fd = new FormData();
-            fd.append('item_code', itemCode);
-            fd.append('qty', '1');
-            fd.append('with_items', '0');
-
-            fetch('/api/method/webshop.webshop.shopping_cart.cart.update_cart', {
-                method: 'POST',
-                headers: { 'X-Requested-With': 'XMLHttpRequest' },
-                body: fd,
-                credentials: 'same-origin'
-            })
-            .then(function (resp) { return resp.json().then(function (data) { return { status: resp.status, body: data }; }); })
-            .then(function (result) {
-                btn.disabled = false;
-                btn.textContent = originalLabel;
-                if (result.status >= 200 && result.status < 300) {
-                    setFeedback('success', 'Added "' + itemName + '" to your cart.');
-                } else {
-                    setFeedback('error', "Couldn't add to cart. Please call (801) 285-0860.");
+            // Cart lives in localStorage via LT_CART (apps/locally_twisted/.../public/js/lt-guest-cart.js).
+            // No server roundtrip on add — server validates at /cart render
+            // and again at checkout submit. Sign-in is optional throughout.
+            try {
+                if (typeof window.LT_CART === 'undefined') {
+                    throw new Error('LT_CART not loaded');
                 }
-            })
-            .catch(function () {
+                window.LT_CART.add(itemCode, 1);
+                setFeedback('success', 'Added "' + itemName + '" to your cart.');
+            } catch (err) {
+                console.error('[lt-shop] add failed:', err);
+                setFeedback('error', "Couldn't add to cart. Please call (801) 285-0860.");
+            }
+
+            // Restore button label after a short pause so the customer
+            // sees the "Adding..." state before it reverts.
+            window.setTimeout(function () {
                 btn.disabled = false;
                 btn.textContent = originalLabel;
-                setFeedback('error', "Couldn't add to cart. Please call (801) 285-0860.");
-            });
+            }, 800);
         });
     });
 })();

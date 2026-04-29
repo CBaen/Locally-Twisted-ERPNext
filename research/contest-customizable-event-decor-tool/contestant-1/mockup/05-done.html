@@ -287,8 +287,13 @@
             <div class="dslist__piece">Column</div>
             <div class="dslist__colors">
               <div class="dslist__dot" style="background:#B8A8C8;"></div>
+              <span class="dslist__color-names" style="font-size:11px;color:#888;">Main:</span>
+              <span class="dslist__color-names">Dusk Lilac</span>
+            </div>
+            <div class="dslist__colors" style="margin-top:2px;">
               <div class="dslist__dot" style="background:#F2B8C0;"></div>
-              <span class="dslist__color-names">Dusk Lilac + Blush</span>
+              <span class="dslist__color-names" style="font-size:11px;color:#888;">Accent:</span>
+              <span class="dslist__color-names">Blush</span>
             </div>
           </div>
         </li>
@@ -306,8 +311,13 @@
             <div class="dslist__piece">Balloon Arch</div>
             <div class="dslist__colors">
               <div class="dslist__dot" style="background:#C02870;"></div>
+              <span class="dslist__color-names" style="font-size:11px;color:#888;">Slot 1:</span>
+              <span class="dslist__color-names">Raspberry</span>
+            </div>
+            <div class="dslist__colors" style="margin-top:2px;">
               <div class="dslist__dot" style="background:#D4C09A;"></div>
-              <span class="dslist__color-names">Raspberry + Reflex Champagne</span>
+              <span class="dslist__color-names" style="font-size:11px;color:#888;">Slot 2:</span>
+              <span class="dslist__color-names">Reflex Champagne</span>
             </div>
           </div>
         </li>
@@ -326,12 +336,52 @@
             <div class="dslist__piece">Backdrop</div>
             <div class="dslist__colors">
               <div class="dslist__dot" style="background:#68C8A0;"></div>
+              <span class="dslist__color-names" style="font-size:11px;color:#888;">Background:</span>
+              <span class="dslist__color-names">Empowermint</span>
+            </div>
+            <div class="dslist__colors" style="margin-top:2px;">
               <div class="dslist__dot" style="background:#7DB89A;"></div>
-              <span class="dslist__color-names">Empowermint + Eucalyptus</span>
+              <span class="dslist__color-names" style="font-size:11px;color:#888;">Pattern:</span>
+              <span class="dslist__color-names">Eucalyptus</span>
             </div>
           </div>
         </li>
       </ul>
+    </div>
+
+    <!-- Pieces considered — THE CROWN JEWEL (visible here for GL)
+         These are the pieces the tool suggested after the customer colored their first shape.
+         The customer saw them rendered in their own colors and chose not to add them.
+         This row travels to Jeff's CRM alongside the chosen pieces.
+         Jeff reading "also considered: Garland, Balloon Drop (customer passed)" knows
+         the tool already made the soft offer — his pitch starts from "tell me about your event,"
+         not "would you like a garland?" which the customer already declined.
+         The grayed chips are not a prompt — they're a signal for Jeff's Tuesday morning read.
+    -->
+    <div class="design-description" style="padding-top:0;">
+      <h3 style="font-size:13px;color:#AAAAAA;font-weight:600;margin-bottom:8px;">Also considered — not added</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <!-- Garland chip — shown to customer in their palette; they passed -->
+        <div style="display:flex;align-items:center;gap:5px;padding:5px 10px 5px 6px;border:1.5px solid #E8E8E8;border-radius:20px;opacity:0.45;">
+          <svg viewBox="0 0 20 12" fill="none" width="20" height="12">
+            <ellipse cx="2"  cy="8" rx="2" ry="2.5" fill="#C02870"/>
+            <ellipse cx="7"  cy="5" rx="2.5" ry="3" fill="#D4C09A"/>
+            <ellipse cx="13" cy="5" rx="2.5" ry="3" fill="#C02870"/>
+            <ellipse cx="18" cy="8" rx="2" ry="2.5" fill="#D4C09A"/>
+          </svg>
+          <span style="font-size:12px;font-weight:600;color:#595A5C;">Garland</span>
+        </div>
+        <!-- Balloon Drop chip — shown to customer in their palette; they passed -->
+        <div style="display:flex;align-items:center;gap:5px;padding:5px 10px 5px 6px;border:1.5px solid #E8E8E8;border-radius:20px;opacity:0.45;">
+          <svg viewBox="0 0 20 16" fill="none" width="20" height="16">
+            <ellipse cx="5"  cy="6" rx="4" ry="4.5" fill="#C02870"/>
+            <ellipse cx="13" cy="5" rx="4" ry="5"   fill="#D4C09A"/>
+            <ellipse cx="9"  cy="12" rx="4" ry="4.5" fill="#C02870"/>
+          </svg>
+          <span style="font-size:12px;font-weight:600;color:#595A5C;">Balloon Drop</span>
+        </div>
+      </div>
+      <p style="font-size:11px;color:#CCCCCC;margin-top:6px;padding:0;">Shown to customer in their palette — they browsed past. Travels to Jeff's CRM as signal.</p>
     </div>
 
     <!-- CTA: Send to Jeff -->

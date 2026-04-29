@@ -91,28 +91,33 @@
             <line x1="20" y1="75" x2="20" y2="80" stroke="#CCC" stroke-width="2"/>
           </svg>
 
-          <!-- Ghost arch (to be filled) -->
+          <!-- Ghost arch — pre-tinted in customer's palette (Teal + Reflex Gold) at 35% opacity -->
+          <!-- A-B alternating pattern shows the arch would wear the same colors as the column -->
+          <!-- opacity raised from 0.25 → 0.35 so palette inheritance is legible, not a generic void -->
           <svg viewBox="0 0 160 100" xmlns="http://www.w3.org/2000/svg" width="140" height="88">
-            <g opacity="0.25">
-              <circle cx="18"  cy="78" r="11" fill="#008080"/>
-              <circle cx="17"  cy="58" r="10" fill="#008080"/>
-              <circle cx="28"  cy="40" r="10" fill="#008080"/>
-              <circle cx="46"  cy="24" r="11" fill="#008080"/>
-              <circle cx="80"  cy="14" r="12" fill="#008080"/>
-              <circle cx="114" cy="24" r="11" fill="#008080"/>
-              <circle cx="132" cy="40" r="10" fill="#008080"/>
-              <circle cx="143" cy="58" r="10" fill="#008080"/>
-              <circle cx="142" cy="78" r="11" fill="#008080"/>
+            <g opacity="0.35">
+              <!-- Primary (Teal) balloons — same fill as column main -->
+              <circle cx="18"  cy="78" r="11" fill="#007878"/>
+              <circle cx="28"  cy="40" r="10" fill="#007878"/>
+              <circle cx="80"  cy="14" r="12" fill="#007878"/>
+              <circle cx="132" cy="40" r="10" fill="#007878"/>
+              <circle cx="142" cy="78" r="11" fill="#007878"/>
+              <!-- Accent (Reflex Gold) balloons — same fill as column accent -->
+              <circle cx="17"  cy="58" r="10" fill="#D4A017"/>
+              <circle cx="46"  cy="24" r="11" fill="#D4A017"/>
+              <circle cx="114" cy="24" r="11" fill="#D4A017"/>
+              <circle cx="143" cy="58" r="10" fill="#D4A017"/>
+              <!-- Interstitial accent row -->
               <circle cx="17"  cy="68" r="8"  fill="#D4A017"/>
-              <circle cx="22"  cy="49" r="8"  fill="#D4A017"/>
+              <circle cx="22"  cy="49" r="8"  fill="#007878"/>
               <circle cx="36"  cy="32" r="9"  fill="#D4A017"/>
-              <circle cx="62"  cy="18" r="9"  fill="#D4A017"/>
+              <circle cx="62"  cy="18" r="9"  fill="#007878"/>
               <circle cx="98"  cy="18" r="9"  fill="#D4A017"/>
-              <circle cx="124" cy="32" r="9"  fill="#D4A017"/>
+              <circle cx="124" cy="32" r="9"  fill="#007878"/>
               <circle cx="138" cy="49" r="8"  fill="#D4A017"/>
-              <circle cx="143" cy="68" r="8"  fill="#D4A017"/>
+              <circle cx="143" cy="68" r="8"  fill="#007878"/>
             </g>
-            <!-- "Tap to add" label centered -->
+            <!-- "Tap to add" label -->
             <text x="80" y="55" text-anchor="middle" font-family="Raleway,sans-serif" font-size="11" fill="#008080" font-weight="600">Tap to add →</text>
             <line x1="18" y1="88" x2="18" y2="100" stroke="#DDD" stroke-width="3"/>
             <line x1="142" y1="88" x2="142" y2="100" stroke="#DDD" stroke-width="3"/>
