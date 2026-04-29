@@ -64,7 +64,21 @@ The customer finishes coloring 2-3 pieces and arrives at the "I'm done" feeling 
 - Two CTAs: "Discuss This Design" (teal fill, primary) and "Keep Designing" (text link)
 - A light note: "Your design is remembered while you're here. Ready to bring it to life? Jeff can make this happen."
 
-The "discuss" CTA pre-populates an inquiry form with: the customer's design state (piece types + hex colors), no price, no commitment language. The output is a **lead for Jeff**, not a cart item.
+The "discuss" CTA pre-populates an inquiry form with the customer's design state — structured per piece, per region, so Jeff can act on it without a disambiguation call. The payload format:
+
+```
+Design reference: LT-4728
+Pieces:
+  Arch        — main balloons: Teal (#008080) / accent balloons: Gold (#D4A017)
+  Column      — main balloons: Teal (#008080) / accent balloons: Gold (#D4A017)
+  Centerpiece — main balloons: Blush (#F4DFD7) / accent balloons: Soft Blue (#C3DCF3)
+```
+
+Each row gives Jeff: piece identity, which balloon region, color name, and hex. The region label ("main balloons" / "accent balloons") comes directly from the `data-region` attributes already in the SVG — no new data needed, just a rendering decision. Jeff can take this to a supplier conversation or pre-fill a balloon order without calling the customer back to ask "which color goes where."
+
+The customer never sees this structured breakdown during their design experience — they see the composition spread and a friendly done-screen. The per-piece attribution appears only in the Design Summary section (visible on the done-screen as a reference for both customer and Jeff) and in the inquiry payload. The customer-facing framing stays warm and simple; the Jeff-facing structure is precise.
+
+No price, no commitment language anywhere. The output is a **lead for Jeff**, not a cart item.
 
 The "captured" feeling comes from the composition view itself — seeing 3 colored pieces laid out together is the moment of "I made this." The UI doesn't need a dramatic "save complete" animation; the act of seeing the composition IS the capture moment. (Persistence mechanism is deliberately out of scope per brief Section 4.)
 

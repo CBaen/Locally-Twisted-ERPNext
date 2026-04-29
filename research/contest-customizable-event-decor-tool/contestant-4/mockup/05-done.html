@@ -136,26 +136,61 @@
         <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #B0B0B0; margin-bottom: 12px;">
           Design Summary
         </div>
-        <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; flex-direction: column; gap: 0;">
 
-          <div style="display: flex; align-items: center; justify-content: space-between;">
-            <span style="font-size: 14px; color: #595A5C;">Pieces</span>
-            <span style="font-size: 14px; font-weight: 600; color: #1A1A1A;">Arch, Column, Centerpiece</span>
+          <!-- Per-piece color attribution — the structure Jeff takes to a supplier call -->
+          <!-- Each row: piece name · main balloon color · accent balloon color -->
+
+          <!-- Header row -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding: 0 0 8px; border-bottom: 1px solid #E8E8E8; margin-bottom: 8px;">
+            <span style="font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #B0B0B0;">Piece</span>
+            <span style="font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #B0B0B0;">Main balloons</span>
+            <span style="font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #B0B0B0;">Accent balloons</span>
           </div>
 
-          <div style="display: flex; align-items: center; justify-content: space-between;">
-            <span style="font-size: 14px; color: #595A5C;">Main Colors</span>
-            <div style="display: flex; gap: 6px; align-items: center;">
-              <div style="width:16px; height:16px; border-radius:50%; background:#008080; border:1px solid rgba(0,0,0,0.1);"></div>
-              <div style="width:16px; height:16px; border-radius:50%; background:#D4A017; border:1px solid rgba(0,0,0,0.1);"></div>
-              <div style="width:16px; height:16px; border-radius:50%; background:#F4DFD7; border:1px solid rgba(0,0,0,0.1);"></div>
-              <div style="width:16px; height:16px; border-radius:50%; background:#C3DCF3; border:1px solid rgba(0,0,0,0.1);"></div>
+          <!-- Arch row -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; align-items: center; padding: 8px 0; border-bottom: 1px solid #F0F0F0;">
+            <span style="font-size: 13px; font-weight: 600; color: #1A1A1A;">Arch</span>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <div style="width:14px; height:14px; border-radius:50%; background:#008080; border:1px solid rgba(0,0,0,0.1); flex-shrink:0;"></div>
+              <span style="font-size: 12px; color: #595A5C;">Teal</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <div style="width:14px; height:14px; border-radius:50%; background:#D4A017; border:1px solid rgba(0,0,0,0.1); flex-shrink:0;"></div>
+              <span style="font-size: 12px; color: #595A5C;">Gold</span>
             </div>
           </div>
 
-          <div style="display: flex; align-items: center; justify-content: space-between;">
-            <span style="font-size: 14px; color: #595A5C;">Event Type</span>
-            <span style="font-size: 14px; color: #999; font-style: italic;">Not specified yet</span>
+          <!-- Column row -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; align-items: center; padding: 8px 0; border-bottom: 1px solid #F0F0F0;">
+            <span style="font-size: 13px; font-weight: 600; color: #1A1A1A;">Column</span>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <div style="width:14px; height:14px; border-radius:50%; background:#008080; border:1px solid rgba(0,0,0,0.1); flex-shrink:0;"></div>
+              <span style="font-size: 12px; color: #595A5C;">Teal</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <div style="width:14px; height:14px; border-radius:50%; background:#D4A017; border:1px solid rgba(0,0,0,0.1); flex-shrink:0;"></div>
+              <span style="font-size: 12px; color: #595A5C;">Gold</span>
+            </div>
+          </div>
+
+          <!-- Centerpiece row -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; align-items: center; padding: 8px 0; border-bottom: 1px solid #F0F0F0;">
+            <span style="font-size: 13px; font-weight: 600; color: #1A1A1A;">Centerpiece</span>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <div style="width:14px; height:14px; border-radius:50%; background:#F4DFD7; border:1px solid rgba(0,0,0,0.15); flex-shrink:0;"></div>
+              <span style="font-size: 12px; color: #595A5C;">Blush</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <div style="width:14px; height:14px; border-radius:50%; background:#C3DCF3; border:1px solid rgba(0,0,0,0.1); flex-shrink:0;"></div>
+              <span style="font-size: 12px; color: #595A5C;">Soft Blue</span>
+            </div>
+          </div>
+
+          <!-- Event type -->
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 0;">
+            <span style="font-size: 13px; color: #595A5C;">Event</span>
+            <span style="font-size: 13px; color: #999; font-style: italic;">Not specified yet</span>
           </div>
 
         </div>

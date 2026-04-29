@@ -474,41 +474,179 @@ function initGhostPlaceholder() {
 // ================================================================
 // Done / Capture screen
 // ================================================================
+// buildInquiryPayload — assembles everything Jeff needs to open his pitch.
+// Returns a plain object matching Frappe Lead fields.
+//
+// Fields Jeff sees in ERPNext CRM:
+//   lead_name           — customer name
+//   email_id / phone    — contact (whichever they provided)
+//   custom_design_ref   — "LT-{timestamp}" shared reference number
+//   custom_pieces       — "Balloon Arch, Column, Centerpiece"
+//   custom_palette      — "#FFB6C1 (Light Pink), #87CEEB (Sky Blue), #FFFFFF (White)"
+//   custom_design_notes — optional freeform from the textarea
+//   source              — "Design Studio"
+//
+// Hex codes are explicit in custom_palette so Jeff can match SKUs with
+// his balloon supplier directly — color names alone are ambiguous across
+// catalogs.
+function buildInquiryPayload() {
+  // --- Collect composition state ---
+  // In production this comes from DesignStudio.composition; here we read
+  // whatever demo state is present and fall back gracefully.
+  var pieces = [];
+  var paletteMap = {}; // hex -> name, deduped
+
+  // Pull from DesignStudio state if available
+  if (DesignStudio.composition && DesignStudio.composition.length) {
+    DesignStudio.composition.forEach(function(piece) {
+      pieces.push(piece.name || piece.type || 'Piece');
+      if (piece.regionColors) {
+        Object.values(piece.regionColors).forEach(function(c) {
+          paletteMap[c.hex] = c.name || c.hex;
+        });
+      }
+    });
+  }
+
+  // Fall back to demo data for mockup context
+  if (!pieces.length) {
+    pieces = ['Balloon Arch', 'Column', 'Centerpiece'];
+  }
+  if (!Object.keys(paletteMap).length) {
+    paletteMap = {
+      '#FFB6C1': 'Light Pink',
+      '#87CEEB': 'Sky Blue',
+      '#FFFFFF': 'White'
+    };
+  }
+
+  // Format palette string: "#FFB6C1 (Light Pink), #87CEEB (Sky Blue), ..."
+  var paletteStr = Object.keys(paletteMap).map(function(hex) {
+    return hex + ' (' + paletteMap[hex] + ')';
+  }).join(', ');
+
+  // Design reference number (timestamp-based, shown on card as "LT-2026-001" in demo)
+  var ref = 'LT-' + Date.now();
+
+  // Contact fields
+  var senderName    = ($('#sender-name').val()    || '').trim();
+  var senderContact = ($('#sender-contact').val() || '').trim();
+  var senderNotes   = ($('#sender-notes').val()   || '').trim();
+
+  // Determine email vs phone from contact field heuristic
+  var emailVal = senderContact.indexOf('@') > -1 ? senderContact : '';
+  var phoneVal = senderContact.indexOf('@') > -1 ? '' : senderContact;
+
+  return {
+    doctype:              'Lead',
+    lead_name:            senderName || 'Design Studio Visitor',
+    email_id:             emailVal,
+    phone:                phoneVal,
+    source:               'Design Studio',
+    custom_design_ref:    ref,
+    custom_pieces:        pieces.join(', '),
+    custom_palette:       paletteStr,
+    custom_design_notes:  senderNotes
+  };
+}
+
+// checkSendReady — enables the CTA only when name + contact are filled
+function checkSendReady() {
+  var name    = ($('#sender-name').val()    || '').trim();
+  var contact = ($('#sender-contact').val() || '').trim();
+  var ready   = name.length > 0 && contact.length > 0;
+  var $btn    = $('#send-to-jeff-btn');
+  $btn.prop('disabled', !ready);
+  $btn.css('opacity', ready ? '1' : '0.5');
+  $btn.css('cursor', ready ? 'pointer' : 'not-allowed');
+}
+
 function initDoneScreen() {
-  // Populate palette row from sessionStorage (if available)
+  // Populate palette row with hex + name rows (colors from state or demo fallback)
   var colors = [];
   try {
     var stored = sessionStorage.getItem('lt_design_palette');
     if (stored) colors = JSON.parse(stored);
   } catch(e) {}
 
-  // Fallback demo colors
+  // Demo fallback with names
   if (!colors.length) {
     colors = [
-      { hex: '#FFB6C1' },
-      { hex: '#87CEEB' },
-      { hex: '#FFFFFF' },
-      { hex: '#FFD700' },
-      { hex: '#FF69B4' }
+      { hex: '#FFB6C1', name: 'Light Pink' },
+      { hex: '#87CEEB', name: 'Sky Blue'   },
+      { hex: '#FFFFFF', name: 'White'       }
     ];
   }
 
+  // If we have live colors, replace the static HTML rows
   var $row = $('#done-palette-row');
-  if ($row.length) {
+  if ($row.length && colors.length) {
+    $row.empty();
     colors.forEach(function(c) {
-      $row.append('<div class="palette-swatch" style="background:' + c.hex + ';"></div>');
+      var borderStyle = c.hex === '#FFFFFF' ? 'border:2px solid #EBEBEB;' : 'border:2px solid #fff;';
+      $row.append(
+        '<div style="display:flex; align-items:center; gap:8px;">' +
+          '<div style="width:18px; height:18px; border-radius:50%; background:' + c.hex + '; ' + borderStyle + ' box-shadow:0 1px 3px rgba(0,0,0,.12); flex-shrink:0;"></div>' +
+          '<span style="font-family:monospace; font-size:0.75rem; font-weight:600; color:#1A1A1A;">' + c.hex + '</span>' +
+          '<span style="font-size:0.75rem; color:#595A5C;">' + (c.name || '') + '</span>' +
+        '</div>'
+      );
     });
   }
 
+  // Wire contact fields
+  $('#sender-name, #sender-contact').on('input', checkSendReady);
+
   // "Send to Jeff" button handler
   $('#send-to-jeff-btn').on('click', function() {
-    // In production: frappe.call() to create a Lead with composition data
-    // Mockup: show a confirmation
-    var confirmed = confirm('Your design will be sent to Jeff. He\'ll reach out to talk through the details!');
-    if (confirmed) {
-      alert('Design sent! Jeff will be in touch at (801) 285-0860 or hi@locallytwisted.com');
-    }
+    if ($(this).prop('disabled')) return;
+
+    var payload = buildInquiryPayload();
+
+    // Production path: frappe.call() creates the Lead record.
+    // The frappe global is available on all Frappe website pages.
+    //
+    //   frappe.call({
+    //     method: 'frappe.client.insert',
+    //     args:   { doc: payload },
+    //     callback: function(r) {
+    //       if (r.message && r.message.name) {
+    //         showSentConfirmation(payload.custom_design_ref);
+    //       } else {
+    //         showSendError();
+    //       }
+    //     },
+    //     error: function() { showSendError(); }
+    //   });
+    //
+    // Mockup path (frappe not available in static HTML double-click context):
+    console.log('Design Studio inquiry payload:', JSON.stringify(payload, null, 2));
+    showSentConfirmation(payload.custom_design_ref);
   });
+}
+
+function showSentConfirmation(ref) {
+  // Hide send form, show confirmation
+  $('#send-to-jeff-btn').closest('.done-actions').hide();
+  $('.done-send-note').hide();
+  $('#sent-confirm').fadeIn(300);
+  // Update Jeff-note to post-send message
+  $('.jeff-note__msg').text(
+    'Got it — I\'ll look up design ' + ref + ' and give you a call. ' +
+    'Expect to hear from me within 24 hours.'
+  );
+}
+
+function showSendError() {
+  // Loud failure: tell the customer, never show a blank screen
+  var $btn = $('#send-to-jeff-btn');
+  $btn.text('Couldn\'t send — try again');
+  $btn.css('background', '#8B0000');
+  $btn.prop('disabled', false).css('opacity', '1').css('cursor', 'pointer');
+  // Secondary channel always visible
+  $('.done-send-note').html(
+    'Having trouble? Call Jeff directly: <strong>(801) 285-0860</strong> or email <strong>hi@locallytwisted.com</strong>'
+  ).css('color', '#8B0000');
 }
 
 // ================================================================
