@@ -8,31 +8,116 @@
  */
 
 // ==============================
-// COLOR CATALOG
-// A representative 20-color subset for mockup; production will have 50+
+// COLOR CATALOG — 53 real LT latex colors
+// Names are VERBATIM from LT's catalog (supplier-actionable identifiers).
+// Hex values are approximate eyeball-matching aids; Jeff sources real
+// Pantone/hex mappings in Stage 2. Names are load-bearing, hex is secondary.
+// Organized by family for picker grouping.
 // ==============================
-var LT_COLORS = [
-  { name: "White",         hex: "#FFFFFF" },
-  { name: "Ivory",         hex: "#FFFFF0" },
-  { name: "Blush",         hex: "#F4DFD7" },
-  { name: "Rose",          hex: "#E8A0A0" },
-  { name: "Coral",         hex: "#E8735A" },
-  { name: "Red",           hex: "#C0392B" },
-  { name: "Burgundy",      hex: "#7B2D42" },
-  { name: "Lavender",      hex: "#C3A8E0" },
-  { name: "Lilac",         hex: "#D8B4E2" },
-  { name: "Purple",        hex: "#7D3C98" },
-  { name: "Navy",          hex: "#1B3A6B" },
-  { name: "Soft Blue",     hex: "#C3DCF3" },
-  { name: "Sky",           hex: "#A0E9FF" },
-  { name: "Teal",          hex: "#008080" },
-  { name: "Seafoam",       hex: "#88FED0" },
-  { name: "Lime",          hex: "#B8FF9E" },
-  { name: "Yellow",        hex: "#F9F871" },
-  { name: "Gold",          hex: "#D4A017" },
-  { name: "Champagne",     hex: "#F0D9B5" },
-  { name: "Black",         hex: "#1A1A1A" }
+
+var LT_COLOR_FAMILIES = [
+  {
+    family: "Reflexes",
+    hint:   "Metallics",
+    colors: [
+      { name: "Reflex Champagne", hex: "#F0D9B5" },
+      { name: "Reflex Truffle",   hex: "#A07850" },
+      { name: "Reflex Silver",    hex: "#C0C0C0" },
+      { name: "Reflex Gold",      hex: "#D4A017" },
+      { name: "Reflex Blue",      hex: "#1A3A8C" },
+      { name: "Reflex Green",     hex: "#1A7A3A" },
+      { name: "Reflex Violet",    hex: "#5A1A8C" },
+      { name: "Reflex Red",       hex: "#9C0010" }
+    ]
+  },
+  {
+    family: "Dusks",
+    hint:   "Muted & dusty tones",
+    colors: [
+      { name: "Dusk Cream",    hex: "#EDE0C8" },
+      { name: "Dusk Green Tea",hex: "#A8C0A0" },
+      { name: "Dusk Blue",     hex: "#8CA8C0" },
+      { name: "Dusk Lilac",    hex: "#C0A8C8" },
+      { name: "Dusk Rose",     hex: "#C89090" }
+    ]
+  },
+  {
+    family: "Pastels",
+    hint:   "Soft tints",
+    colors: [
+      { name: "Pastel Pink",   hex: "#F8C8D0" },
+      { name: "Pastel Blue",   hex: "#C8DCF0" },
+      { name: "Pastel Green",  hex: "#C0E8C8" },
+      { name: "Pastel Purple", hex: "#D8C8E8" },
+      { name: "Pastel Yellow", hex: "#F8F0B0" },
+      { name: "Pastel Melon",  hex: "#F8C8B0" }
+    ]
+  },
+  {
+    family: "Brights",
+    hint:   "Bold saturated colors",
+    colors: [
+      { name: "Red",         hex: "#CC1010" },
+      { name: "Orange",      hex: "#E87020" },
+      { name: "Yellow",      hex: "#F8D020" },
+      { name: "Lime",        hex: "#90D030" },
+      { name: "Raspberry",   hex: "#C01850" },
+      { name: "Fuchsia",     hex: "#D020A0" },
+      { name: "Bubble Gum",  hex: "#F080B0" },
+      { name: "Royal Blue",  hex: "#1840C0" },
+      { name: "LT Blue",     hex: "#60A8E0" },
+      { name: "Robin's Egg", hex: "#70D0E0" },
+      { name: "Honey",       hex: "#E0A030" }
+    ]
+  },
+  {
+    family: "Greens",
+    hint:   "Greens & teals",
+    colors: [
+      { name: "Eucalyptus",    hex: "#88B8A0" },
+      { name: "Forest",        hex: "#286030" },
+      { name: "Shamrock",      hex: "#30A040" },
+      { name: "Wintergreen",   hex: "#288060" },
+      { name: "Teal",          hex: "#007878" },
+      { name: "Deep Teal",     hex: "#005858" },
+      { name: "Empowermint",   hex: "#50D0A8" }
+    ]
+  },
+  {
+    family: "Blues & Purples",
+    hint:   "Blues, violets & periwinkle",
+    colors: [
+      { name: "Blue Slate",  hex: "#607898" },
+      { name: "Periwinkle",  hex: "#8898D8" },
+      { name: "Violet",      hex: "#601890" },
+      { name: "Orchid",      hex: "#A850C0" },
+      { name: "Lilac",       hex: "#C8A0D8" }
+    ]
+  },
+  {
+    family: "Neutrals",
+    hint:   "White, black, grey & earth tones",
+    colors: [
+      { name: "White",      hex: "#FFFFFF" },
+      { name: "Clear",      hex: "#F0F8FF" },
+      { name: "Grey",       hex: "#909090" },
+      { name: "Smoke Grey", hex: "#707070" },
+      { name: "Black",      hex: "#1A1A1A" },
+      { name: "Blush",      hex: "#F4DFD7" },
+      { name: "Latte",      hex: "#C8A880" },
+      { name: "Brown",      hex: "#804020" },
+      { name: "Chocolate",  hex: "#502010" }
+    ]
+  }
 ];
+
+// Flat array for backward-compat with picker iteration
+var LT_COLORS = [];
+LT_COLOR_FAMILIES.forEach(function(fam) {
+  fam.colors.forEach(function(c) {
+    LT_COLORS.push(c);
+  });
+});
 
 // ==============================
 // DESIGN STATE

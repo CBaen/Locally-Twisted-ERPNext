@@ -155,16 +155,50 @@
       <!-- Controls panel (visible on desktop in sidebar, on mobile below canvas) -->
       <div class="desktop-split__controls" id="controls-panel">
 
-        <!-- Region selector chips -->
-        <div class="region-selector">
+        <!-- Design style toggle: Swirl | Organic -->
+        <!-- Swirl = 2-color A B A B pattern (4-cluster, gcd math) -->
+        <!-- Organic = palette-driven, no fixed regions, artist-arranged -->
+        <div style="padding: 12px 20px; background: #FAFAFA; border-bottom: 1px solid #E8E8E8;">
+          <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #B0B0B0; margin-bottom: 8px;">
+            Design Style
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button id="style-swirl" class="style-toggle active"
+              style="flex:1; padding:8px 12px; border-radius:8px; border:1.5px solid #1A1A1A; background:white; font-size:13px; font-weight:600; color:#1A1A1A; cursor:pointer; transition:all 0.15s;">
+              Swirl
+            </button>
+            <button id="style-organic" class="style-toggle"
+              style="flex:1; padding:8px 12px; border-radius:8px; border:1.5px solid #E8E8E8; background:white; font-size:13px; font-weight:500; color:#999; cursor:pointer; transition:all 0.15s;">
+              Organic
+            </button>
+          </div>
+          <!-- Swirl explanation -->
+          <div id="style-hint-swirl" style="margin-top:8px; font-size:12px; color:#595A5C; line-height:1.4;">
+            Balloons alternate in a spiral pattern. Pick 2 colors — they'll alternate A B A B along the arch.
+          </div>
+          <!-- Organic explanation (hidden by default) -->
+          <div id="style-hint-organic" style="display:none; margin-top:8px; font-size:12px; color:#595A5C; line-height:1.4;">
+            Balloons are arranged organically in mixed sizes. Pick a palette of colors — Jeff will blend them naturally.
+          </div>
+        </div>
+
+        <!-- Region selector chips (Swirl only — hidden in Organic mode) -->
+        <div class="region-selector" id="region-selector">
           <button class="region-chip active" data-region="primary" aria-pressed="true">
-            <span class="region-chip__swatch" id="swatch-primary" style="background: #E8A0A0;"></span>
+            <span class="region-chip__swatch" id="swatch-primary" style="background: #C88888;"></span>
             Main Color
           </button>
           <button class="region-chip" data-region="accent" aria-pressed="false">
-            <span class="region-chip__swatch" id="swatch-accent" style="background: #C3DCF3;"></span>
+            <span class="region-chip__swatch" id="swatch-accent" style="background: #8CA8C0;"></span>
             Accent Color
           </button>
+        </div>
+
+        <!-- Organic palette chips (hidden by default, shown in Organic mode) -->
+        <div id="organic-palette-hint" style="display:none; padding:12px 20px; background:#F0FAF9; border-bottom:1px solid #D0EDED;">
+          <p style="font-size:13px; color:#006060; font-weight:500; line-height:1.4;">
+            In Organic style, tap "See All Colors" below to pick your palette. Jeff will arrange them with natural variation.
+          </p>
         </div>
 
         <!-- Current color display -->
