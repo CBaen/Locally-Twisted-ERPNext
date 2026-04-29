@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Color Stage — Color Your Arch | Locally Twisted</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="screen-demo-label">Screen 02 — Coloring One Shape (Balloon Arch)</div>
+
+<div class="lt-page">
+
+  <!-- Header -->
+  <header class="lt-header">
+    <a href="01-entry.html" class="nav-back" style="padding: 0;">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M10 12L6 8L10 4" stroke="#595A5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Shapes
+    </a>
+    <span class="lt-header__subtitle">Balloon Arch</span>
+    <a href="04-composition.html" class="btn-cta btn-cta--sm">Add to stage →</a>
+  </header>
+
+  <!-- Stage strip (event composition preview — currently just this one piece) -->
+  <div class="stage-strip">
+    <div class="stage-strip__label">Your event stage</div>
+    <div class="stage-strip__scroll">
+      <!-- The current arch in progress -->
+      <div class="stage-piece is-active">
+        <svg viewBox="0 0 80 80" fill="none">
+          <ellipse cx="12" cy="60" rx="7" ry="8" fill="#F4A0A0" class="arch-main-preview"/>
+          <ellipse cx="20" cy="50" rx="8" ry="9" fill="#F4DFD7" class="arch-accent-preview"/>
+          <ellipse cx="30" cy="40" rx="9" ry="10" fill="#F4A0A0" class="arch-main-preview"/>
+          <ellipse cx="40" cy="34" rx="10" ry="11" fill="#FFD1DC" class="arch-accent-preview"/>
+          <ellipse cx="51" cy="40" rx="9" ry="10" fill="#F4A0A0" class="arch-main-preview"/>
+          <ellipse cx="61" cy="50" rx="8" ry="9" fill="#F4DFD7" class="arch-accent-preview"/>
+          <ellipse cx="68" cy="60" rx="7" ry="8" fill="#F4A0A0" class="arch-main-preview"/>
+          <rect x="10" y="67" width="4" height="8" rx="2" fill="#DCDCDC"/>
+          <rect x="66" y="67" width="4" height="8" rx="2" fill="#DCDCDC"/>
+        </svg>
+        <span class="stage-piece__label">Arch</span>
+      </div>
+      <!-- Add more placeholder -->
+      <div class="stage-add-btn">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M10 4V16M4 10H16" stroke="#CCCCCC" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        Add
+      </div>
+    </div>
+  </div>
+
+  <!-- Main illustration area -->
+  <div class="shape-canvas">
+    <div class="shape-canvas__title">
+      <h2>Balloon Arch</h2>
+      <span class="shape-canvas__hint">Tap a zone to color it</span>
+    </div>
+
+    <!-- SVG Illustration — Balloon Arch with 2 tappable fill regions -->
+    <div class="shape-illustration">
+      <svg viewBox="0 0 340 260" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Balloon arch illustration">
+
+        <!-- REGION: Main cluster (larger balloons) -->
+        <g class="fill-region" data-region="main" role="button" aria-label="Main balloon cluster" tabindex="0">
+          <ellipse cx="22"  cy="220" rx="22" ry="25" fill="#F4A0A0"/>
+          <ellipse cx="58"  cy="188" rx="26" ry="28" fill="#F4A0A0"/>
+          <ellipse cx="100" cy="155" rx="28" ry="30" fill="#F4A0A0"/>
+          <ellipse cx="148" cy="125" rx="32" ry="34" fill="#F4A0A0"/>
+          <ellipse cx="198" cy="125" rx="32" ry="34" fill="#F4A0A0"/>
+          <ellipse cx="246" cy="155" rx="28" ry="30" fill="#F4A0A0"/>
+          <ellipse cx="284" cy="188" rx="26" ry="28" fill="#F4A0A0"/>
+          <ellipse cx="318" cy="220" rx="22" ry="25" fill="#F4A0A0"/>
+        </g>
+
+        <!-- REGION: Accent cluster (smaller organic fill-in balloons) -->
+        <g class="fill-region" data-region="accent" role="button" aria-label="Accent balloon cluster" tabindex="0">
+          <ellipse cx="40"  cy="208" rx="14" ry="16" fill="#F4DFD7"/>
+          <ellipse cx="80"  cy="170" rx="16" ry="18" fill="#F4DFD7"/>
+          <ellipse cx="124" cy="138" rx="18" ry="20" fill="#F4DFD7"/>
+          <ellipse cx="173" cy="105" rx="20" ry="22" fill="#F4DFD7"/>
+          <ellipse cx="220" cy="138" rx="18" ry="20" fill="#F4DFD7"/>
+          <ellipse cx="262" cy="170" rx="16" ry="18" fill="#F4DFD7"/>
+          <ellipse cx="300" cy="208" rx="14" ry="16" fill="#F4DFD7"/>
+        </g>
+
+        <!-- Stems (non-interactive) -->
+        <rect x="14" y="240" width="12" height="20" rx="4" fill="#D0D0D0"/>
+        <rect x="314" y="240" width="12" height="20" rx="4" fill="#D0D0D0"/>
+
+      </svg>
+    </div><!-- /.shape-illustration -->
+
+    <!-- Region selector chips -->
+    <div class="region-labels">
+      <button class="region-chip is-active" data-region="main" data-label="Main balloons" type="button">
+        <span class="region-chip__dot" style="background-color: #F4A0A0;"></span>
+        Main balloons
+      </button>
+      <button class="region-chip" data-region="accent" data-label="Accent balloons" type="button">
+        <span class="region-chip__dot" style="background-color: #F4DFD7;"></span>
+        Accent balloons
+      </button>
+    </div>
+
+  </div><!-- /.shape-canvas -->
+
+  <!-- Color picker panel -->
+  <div class="color-picker-panel">
+
+    <!-- Currently selected color display -->
+    <div class="selected-color-display">
+      <div class="selected-color-preview" style="background-color: #F4A0A0;"></div>
+      <div>
+        <div class="selected-color-name">Blush</div>
+        <div class="selected-color-hex">#F4A0A0</div>
+      </div>
+    </div>
+
+    <div class="color-picker-panel__label">Color for: Main balloons</div>
+
+    <!-- Quick swatches row — built by JS from LT_COLORS.popular -->
+    <div class="swatch-quick-row-wrap">
+      <div class="swatch-quick-row" id="swatch-quick-row">
+        <!-- Populated by script.js renderQuickSwatches() -->
+      </div>
+    </div>
+
+  </div><!-- /.color-picker-panel -->
+
+  <!-- Full palette bottom sheet -->
+  <div class="palette-sheet-overlay"></div>
+  <div class="palette-sheet">
+    <div class="palette-sheet__handle"></div>
+    <div class="palette-sheet__title">All balloon colors</div>
+    <div id="palette-full-groups">
+      <!-- Populated by script.js renderFullPalette() -->
+    </div>
+    <div class="mt-2">
+      <button class="btn-ghost js-close-palette" type="button" style="width:100%;">Done</button>
+    </div>
+  </div>
+
+</div><!-- /.lt-page -->
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

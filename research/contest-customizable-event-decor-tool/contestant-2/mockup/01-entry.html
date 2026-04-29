@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design Your Event — Locally Twisted</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Page-scoped overrides for 01-entry */
+    body { background: #FFFFFF; }
+
+    .studio-page {
+      max-width: 480px;
+      margin: 0 auto;
+      background: #FBFBFB;
+    }
+
+    /* Hero accent band */
+    .hero-accent {
+      height: 4px;
+      background: linear-gradient(90deg, #F4DFD7 0%, #C3DCF3 33%, #88FED0 66%, #F9F871 100%);
+    }
+  </style>
+</head>
+<body>
+<div class="studio-page">
+
+  <!-- Accent band -->
+  <div class="hero-accent"></div>
+
+  <!-- Nav -->
+  <nav class="studio-nav">
+    <div>
+      <div class="studio-nav__logo">Locally Twisted</div>
+      <div class="studio-nav__subtitle">Design Studio</div>
+    </div>
+    <div class="studio-nav__right">
+      <button class="btn-icon" title="View my designs">
+        <!-- Heart / saved icon -->
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M10 16.5S2.5 12 2.5 6.75C2.5 5 3.9 3.5 5.75 3.5c1.1 0 2.1.55 2.75 1.4C9.15 4.05 10.15 3.5 11.25 3.5 13.1 3.5 14.5 5 14.5 6.75 14.5 12 7 16.5 7 16.5h3z" stroke="#595A5C" stroke-width="1.5" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="entry-hero">
+    <div class="entry-hero__eyebrow">Design Studio</div>
+    <h1>What are you<br>dreaming of?</h1>
+    <p>Pick a piece, choose your colors, and build the look for your event — no experience needed.</p>
+  </section>
+
+  <!-- Shape grid — 7 product types -->
+  <section aria-label="Choose a shape to color">
+    <div style="padding: 0 16px 8px;">
+      <p style="font-size:0.6875rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#595A5C;">Start with a piece</p>
+    </div>
+    <div class="shape-grid">
+
+      <!-- Balloon Arch -->
+      <a href="02-color-one.html" class="shape-tile" aria-label="Balloon Arch">
+        <svg class="shape-tile__icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- Stylized arch illustration -->
+          <ellipse cx="12" cy="46" rx="8" ry="9" fill="#F4DFD7" stroke="#1A1A1A" stroke-width="1.2"/>
+          <ellipse cx="24" cy="34" rx="8" ry="9" fill="#C3DCF3" stroke="#1A1A1A" stroke-width="1.2"/>
+          <ellipse cx="38" cy="28" rx="9" ry="9" fill="#88FED0" stroke="#1A1A1A" stroke-width="1.2"/>
+          <ellipse cx="52" cy="34" rx="8" ry="9" fill="#F4DFD7" stroke="#1A1A1A" stroke-width="1.2"/>
+          <!-- Hidden small balloons -->
+          <ellipse cx="18" cy="40" rx="6" ry="6.5" fill="#F9F871" stroke="#1A1A1A" stroke-width="1"/>
+          <ellipse cx="44" cy="32" rx="6" ry="6.5" fill="#C3DCF3" stroke="#1A1A1A" stroke-width="1"/>
+          <!-- Strings -->
+          <line x1="12" y1="55" x2="12" y2="60" stroke="#1A1A1A" stroke-width="1"/>
+          <line x1="52" y1="43" x2="52" y2="60" stroke="#1A1A1A" stroke-width="1"/>
+        </svg>
+        <span class="shape-tile__name">Balloon Arch</span>
+        <span class="shape-tile__badge">Most loved</span>
+      </a>
+
+      <!-- Column -->
+      <a href="02-color-one.html" class="shape-tile" aria-label="Column">
+        <svg class="shape-tile__icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <ellipse cx="32" cy="10" rx="11" ry="10" fill="#F4DFD7" stroke="#1A1A1A" stroke-width="1.2"/>
+          <ellipse cx="32" cy="27" rx="10" ry="9" fill="#C3DCF3" stroke="#1A1A1A" stroke-width="1.2"/>
+          <ellipse cx="32" cy="43" rx="11" ry="10" fill="#88FED0" stroke="#1A1A1A" stroke-width="1.2"/>
+          <ellipse cx="32" cy="56" rx="9" ry="6" fill="#F9F871" stroke="#1A1A1A" stroke-width="1"/>
+          <line x1="32" y1="55" x2="32" y2="64" stroke="#1A1A1A" stroke-width="1.5"/>
+        </svg>
+        <span class="shape-tile__name">Column</span>
+      </a>
+
+      <!-- Garland -->
+      <a href="02-color-one.html" class="shape-tile" aria-label="Garland">
+        <svg class="shape-tile__icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- Wave of balloon clusters -->
+          <circle cx="10" cy="35" r="7" fill="#F4DFD7" stroke="#1A1A1A" stroke-width="1.2"/>
+          <circle cx="21" cy="28" r="7" fill="#C3DCF3" stroke="#1A1A1A" stroke-width="1.2"/>
+          <circle cx="32" cy="24" r="8" fill="#88FED0" stroke="#1A1A1A" stroke-width="1.2"/>
+          <circle cx="43" cy="28" r="7" fill="#F9F871" stroke="#1A1A1A" stroke-width="1.2"/>
+          <circle cx="54" cy="35" r="7" fill="#F4DFD7" stroke="#1A1A1A" stroke-width="1.2"/>
+          <!-- Second row (smaller, tucked behind) -->
+          <circle cx="16" cy="38" r="5" fill="#F9F871" stroke="#1A1A1A" stroke-width="1"/>
+          <circle cx="48" cy="38" r="5" fill="#C3DCF3" stroke="#1A1A1A" stroke-width="1"/>
+          <!-- Curve line -->
+          <path d="M 10 42 Q 32 48 54 42" stroke="#1A1A1A" stroke-width="1" fill="none"/>
+        </svg>
+        <span class="shape-tile__name">Garland</span>
+      </a>
+
+      <!-- Backdrop -->
+      <a href="02-color-one.html" class="shape-tile" aria-label="Picture Perfect Backdrop">
+        <svg class="shape-tile__icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- Wall/backdrop frame -->
+          <rect x="6" y="8" width="52" height="48" rx="4" fill="#F9F9F9" stroke="#1A1A1A" stroke-width="1.5"/>
+          <!-- Balloon clusters filling the backdrop -->
+          <circle cx="18" cy="20" r="7" fill="#F4DFD7" stroke="#1A1A1A" stroke-width="1"/>
+          <circle cx="30" cy="16" r="8" fill="#88FED0" stroke="#1A1A1A" stroke-width="1"/>
+          <circle cx="44" cy="20" r="7" fill="#C3DCF3" stroke="#1A1A1A" stroke-width="1"/>
+          <circle cx="14" cy="34" r="6" fill="#F9F871" stroke="#1A1A1A" stroke-width="1"/>
+          <circle cx="24" cy="30" r="7" fill="#C3DCF3" stroke="#1A1A1A" stroke-width="1"/>
+          <circle cx="40" cy="30" r="7" fill="#F4DFD7" stroke="#1A1A1A" stroke-width="1"/>
+          <circle cx="50" cy="36" r="6" fill="#88FED0" stroke="#1A1A1A" stroke-width="1"/>
+          <circle cx="32" cy="44" r="5" fill="#F9F871" stroke="#1A1A1A" stroke-width="1"/>
+        </svg>
+        <span class="shape-tile__name">Backdrop</span>
+      </a>
+
+      <!-- Balloon Drop -->
+      <a href="02-color-one.html" class="shape-tile" aria-label="Balloon Drop">
+        <svg class="shape-tile__icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- Net at top -->
+          <rect x="14" y="4" width="36" height="8" rx="4" fill="#D0D0D0" stroke="#1A1A1A" stroke-width="1.2"/>
+          <!-- Balloons packed together, drooping down -->
+          <ellipse cx="22" cy="20" rx="7" ry="8" fill="#F4DFD7" stroke="#1A1A1A" stroke-width="1.2"/>
+          <ellipse cx="36" cy="18" rx="8" ry="9" fill="#C3DCF3" stroke="#1A1A1A" stroke-width="1.2"/>
+          <ellipse cx="48" cy="23" rx="7" ry="8" fill="#88FED0" stroke="#1A1A1A" stroke-width="1.2"/>
+          <ellipse cx="16" cy="35" rx="6" ry="7" fill="#F9F871" stroke="#1A1A1A" stroke-width="1"/>
+          <ellipse cx="30" cy="32" rx="7" ry="8" fill="#F4DFD7" stroke="#1A1A1A" stroke-width="1.2"/>
+          <ellipse cx="44" cy="36" rx="6" ry="7" fill="#C3DCF3" stroke="#1A1A1A" stroke-width="1"/>
+          <!-- Falling strings -->
+          <line x1="22" y1="28" x2="22" y2="60" stroke="#1A1A1A" stroke-width="0.75" stroke-dasharray="2 2"/>
+          <line x1="36" y1="27" x2="36" y2="60" stroke="#1A1A1A" stroke-width="0.75" stroke-dasharray="2 2"/>
+          <line x1="50" y1="31" x2="50" y2="60" stroke="#1A1A1A" stroke-width="0.75" stroke-dasharray="2 2"/>
+        </svg>
+        <span class="shape-tile__name">Balloon Drop</span>
+      </a>
+
+      <!-- Bouquet -->
+      <a href="02-color-one.html" class="shape-tile" aria-label="Balloon Bouquet">
+        <svg class="shape-tile__icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- Cluster of balloons rising from a point -->
+          <ellipse cx="20" cy="28" rx="9" ry="11" fill="#F4DFD7" stroke="#1A1A1A" stroke-width="1.2"/>
+          <ellipse cx="32" cy="18" rx="10" ry="12" fill="#88FED0" stroke="#1A1A1A" stroke-width="1.2"/>
+          <ellipse cx="44" cy="28" rx="9" ry="11" fill="#C3DCF3" stroke="#1A1A1A" stroke-width="1.2"/>
+          <!-- Strings converging -->
+          <path d="M20 39 L32 56" stroke="#1A1A1A" stroke-width="1"/>
+          <path d="M32 30 L32 56" stroke="#1A1A1A" stroke-width="1"/>
+          <path d="M44 39 L32 56" stroke="#1A1A1A" stroke-width="1"/>
+          <!-- Weight at bottom -->
+          <circle cx="32" cy="58" r="4" fill="#1A1A1A"/>
+        </svg>
+        <span class="shape-tile__name">Bouquet</span>
+      </a>
+
+      <!-- Centerpiece -->
+      <a href="02-color-one.html" class="shape-tile" aria-label="Centerpiece">
+        <svg class="shape-tile__icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- Table base -->
+          <rect x="20" y="56" width="24" height="4" rx="2" fill="#1A1A1A"/>
+          <!-- Stem -->
+          <rect x="30" y="44" width="4" height="14" fill="#1A1A1A"/>
+          <!-- Large center balloon -->
+          <ellipse cx="32" cy="28" rx="14" ry="16" fill="#F4DFD7" stroke="#1A1A1A" stroke-width="1.5"/>
+          <!-- Small accent balloons -->
+          <ellipse cx="14" cy="34" rx="8" ry="9" fill="#C3DCF3" stroke="#1A1A1A" stroke-width="1.2"/>
+          <ellipse cx="50" cy="34" rx="8" ry="9" fill="#88FED0" stroke="#1A1A1A" stroke-width="1.2"/>
+          <!-- Tiny top accent -->
+          <circle cx="32" cy="13" r="5" fill="#F9F871" stroke="#1A1A1A" stroke-width="1"/>
+        </svg>
+        <span class="shape-tile__name">Centerpiece</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- Divider -->
+  <div style="height:1px; background:#EBEBEB; margin:0 16px;"></div>
+
+  <!-- Starter combos section -->
+  <section class="starter-section" style="margin-top:20px;">
+    <h2>Popular combos to start from</h2>
+    <div class="starter-cards">
+
+      <a href="04-composition.html" class="starter-card">
+        <div class="starter-card__preview accent-blush" style="position:relative; overflow:hidden;">
+          <!-- Mini composition SVG -->
+          <svg width="110" height="70" viewBox="0 0 110 70" fill="none" style="position:absolute; bottom:0; left:50%; transform:translateX(-50%);">
+            <!-- Mini arch -->
+            <ellipse cx="20" cy="55" rx="7" ry="8" fill="#F4DFD7" stroke="#1A1A1A" stroke-width="0.8"/>
+            <ellipse cx="30" cy="46" rx="7" ry="8" fill="#C3DCF3" stroke="#1A1A1A" stroke-width="0.8"/>
+            <ellipse cx="42" cy="42" rx="8" ry="8" fill="#F4DFD7" stroke="#1A1A1A" stroke-width="0.8"/>
+            <!-- Mini column -->
+            <ellipse cx="72" cy="28" rx="8" ry="9" fill="#C3DCF3" stroke="#1A1A1A" stroke-width="0.8"/>
+            <ellipse cx="72" cy="42" rx="8" ry="9" fill="#F4DFD7" stroke="#1A1A1A" stroke-width="0.8"/>
+            <ellipse cx="72" cy="56" rx="7" ry="7" fill="#88FED0" stroke="#1A1A1A" stroke-width="0.8"/>
+          </svg>
+        </div>
+        <div class="starter-card__title">Arch + Column</div>
+        <div class="starter-card__meta">Party classic</div>
+      </a>
+
+      <a href="04-composition.html" class="starter-card">
+        <div class="starter-card__preview accent-blue" style="position:relative; overflow:hidden;">
+          <svg width="110" height="70" viewBox="0 0 110 70" fill="none" style="position:absolute; bottom:0; left:50%; transform:translateX(-50%);">
+            <!-- Mini backdrop -->
+            <rect x="5" y="10" width="60" height="60" rx="3" fill="#FBFBFB" stroke="#1A1A1A" stroke-width="0.8"/>
+            <circle cx="20" cy="25" r="7" fill="#C3DCF3" stroke="#1A1A1A" stroke-width="0.7"/>
+            <circle cx="32" cy="20" r="7" fill="#88FED0" stroke="#1A1A1A" stroke-width="0.7"/>
+            <circle cx="44" cy="25" r="7" fill="#C3DCF3" stroke="#1A1A1A" stroke-width="0.7"/>
+            <!-- Mini centerpiece -->
+            <ellipse cx="90" cy="48" rx="11" ry="13" fill="#F4DFD7" stroke="#1A1A1A" stroke-width="0.8"/>
+            <rect x="87" y="58" width="6" height="10" fill="#1A1A1A"/>
+          </svg>
+        </div>
+        <div class="starter-card__title">Backdrop + Centerpiece</div>
+        <div class="starter-card__meta">Photo-ready</div>
+      </a>
+
+      <a href="04-composition.html" class="starter-card">
+        <div class="starter-card__preview accent-seafoam" style="position:relative; overflow:hidden;">
+          <svg width="110" height="70" viewBox="0 0 110 70" fill="none" style="position:absolute; bottom:0; left:50%; transform:translateX(-50%);">
+            <!-- Mini arch -->
+            <ellipse cx="15" cy="52" rx="7" ry="8" fill="#88FED0" stroke="#1A1A1A" stroke-width="0.8"/>
+            <ellipse cx="27" cy="42" rx="8" ry="9" fill="#F9F871" stroke="#1A1A1A" stroke-width="0.8"/>
+            <ellipse cx="40" cy="38" rx="8" ry="8" fill="#88FED0" stroke="#1A1A1A" stroke-width="0.8"/>
+            <ellipse cx="53" cy="42" rx="8" ry="9" fill="#F9F871" stroke="#1A1A1A" stroke-width="0.8"/>
+            <ellipse cx="65" cy="52" rx="7" ry="8" fill="#88FED0" stroke="#1A1A1A" stroke-width="0.8"/>
+            <!-- Mini garland along bottom -->
+            <circle cx="15" cy="62" r="5" fill="#F4DFD7" stroke="#1A1A1A" stroke-width="0.7"/>
+            <circle cx="32" cy="62" r="5" fill="#88FED0" stroke="#1A1A1A" stroke-width="0.7"/>
+            <circle cx="50" cy="62" r="5" fill="#F4DFD7" stroke="#1A1A1A" stroke-width="0.7"/>
+          </svg>
+        </div>
+        <div class="starter-card__title">Full Setup</div>
+        <div class="starter-card__meta">Arch + garland</div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- Bottom note -->
+  <div style="padding: 8px 16px 32px; text-align:center;">
+    <p style="font-size:0.8125rem; color:#595A5C;">Color it your way. When you love it — send it to Jeff and he'll make it happen.</p>
+  </div>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="script.js"></script>
+<script>
+  // Hover feedback on shape tiles
+  $('.shape-tile').on('mouseenter', function() { $(this).addClass('shape-tile--hovered'); })
+                 .on('mouseleave', function() { $(this).removeClass('shape-tile--hovered'); });
+</script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Colors — Design Studio</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <a href="02-color-one.html" class="nav-back">← Back to arch</a>
+  <a href="index.html" class="logo" style="text-align:right;">Colors<span>all 50+ shades</span></a>
+</header>
+
+<!-- PICKER SCREEN -->
+<div class="picker-screen">
+
+  <!-- Selected color display -->
+  <div class="picker-hex-display">
+    <div class="picker-hex-preview" id="picker-preview" style="background:#88FED0;"></div>
+    <div class="picker-hex-info">
+      <span class="picker-hex-value" id="picker-hex-value">#88FED0</span>
+      <span class="picker-hex-name" id="picker-hex-name">Seafoam</span>
+    </div>
+    <button class="btn btn-primary btn-sm picker-apply-btn" id="btn-apply-color"
+            onclick="window.location.href='02-color-one.html'">
+      Apply color
+    </button>
+  </div>
+
+  <!-- Which region we're coloring -->
+  <div class="picker-header">
+    <span style="font-family:'Raleway',sans-serif;font-size:0.8rem;color:#595A5C;">Coloring:</span>
+    <span class="region-badge">Main balloons</span>
+    <a href="02-color-one.html" style="margin-left:auto;font-family:'Raleway',sans-serif;font-size:0.78rem;color:#595A5C;text-decoration:none;">Change →</a>
+  </div>
+
+  <!-- Search -->
+  <div class="picker-search">
+    <input type="text" id="picker-search-input"
+           placeholder="Search by name or hex code…"
+           autocomplete="off" autocorrect="off" spellcheck="false">
+  </div>
+
+  <!-- Hex code note -->
+  <div style="padding:8px 16px;background:#FBFBFB;border-bottom:1px solid #E8E8E8;
+              font-family:'Raleway',sans-serif;font-size:0.75rem;color:#595A5C;font-weight:300;">
+    Matching a venue or outfit color? Each swatch shows its exact hex code above — compare with your venue's palette.
+  </div>
+
+  <!-- Palette body: grouped by family -->
+  <div class="picker-palette-body" id="picker-palette-body">
+    <!-- Dynamically populated by script.js initFullPicker() -->
+  </div>
+
+  <!-- Apply button (sticky bottom) -->
+  <div style="background:#fff;border-top:1px solid #E8E8E8;padding:12px 16px;">
+    <button class="btn btn-primary btn-block" onclick="window.location.href='02-color-one.html'">
+      Apply this color →
+    </button>
+  </div>
+
+</div><!-- /.picker-screen -->
+
+<!-- DESIGN NOTE (contextual, below fold) -->
+<!-- This note explains the UX choice: grouped families vs flat 50+ grid -->
+<div style="background:#F4DFD7;padding:16px;border-top:1px solid #E8E8E8;
+            font-family:'Raleway',sans-serif;font-size:0.78rem;color:#595A5C;line-height:1.5;">
+  <strong style="color:#1A1A1A;display:block;margin-bottom:4px;">Design note (mockup annotation)</strong>
+  Colors grouped by family (Reds & Pinks, Greens, Blues, etc.) rather than a flat 50+ grid.
+  Research source: <em>Baymard Institute, "Mobile Interactive Color Swatches"</em> — grouped families
+  outperform flat grids on mobile. Horizontal scroll within each family (with truncated rightmost swatch)
+  signals more colors exist without overwhelming the viewport.
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
