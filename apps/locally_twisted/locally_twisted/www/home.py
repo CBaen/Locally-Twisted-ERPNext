@@ -77,7 +77,7 @@ CUSTOM_CATEGORIES = [
     {"slug": "balloon-drops", "name": "Balloon Drops", "icon": "drop"},
     {"slug": "balloon-bouquets", "name": "Balloon Bouquets", "icon": "bouquet"},
     {"slug": "centerpieces", "name": "Centerpieces", "icon": "centerpiece"},
-    {"slug": "personalized-pieces", "name": "100% Personalized Pieces", "icon": "personalized"},
+    {"slug": "custom-sculptures", "name": "Custom Sculptures", "icon": "sculpture"},
 ]
 
 
@@ -92,7 +92,7 @@ FEATURED_WORK = [
         "alt": "Custom themed balloon arch for a children's birthday party",
     },
     {
-        "category": "Organic Garlands",
+        "category": "Garlands",
         "title": "Wedding Ceremony Garland",
         "image": "/assets/locally_twisted/images/home/featured-garlands.png",
         "alt": "Soft organic balloon garland framing a wedding ceremony space",

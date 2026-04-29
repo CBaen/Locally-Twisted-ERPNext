@@ -55,7 +55,7 @@ EVENT_TYPES = [
 CATEGORIES = [
     {"slug": "balloon-arches", "name": "Balloon Arches"},
     {"slug": "columns", "name": "Columns"},
-    {"slug": "organic-garlands", "name": "Organic Garlands"},
+    {"slug": "garlands", "name": "Garlands"},
     {"slug": "picture-perfect-backdrops", "name": "Picture Perfect Backdrops"},
     {"slug": "balloon-drops", "name": "Balloon Drops"},
     {"slug": "balloon-bouquets", "name": "Balloon Bouquets"},
@@ -121,7 +121,7 @@ GALLERY_ITEMS = [
     {
         "slug": "wedding-organic-half-arch",
         "title": "Organic White Floral Half-Arch",
-        "category": "organic-garlands",
+        "category": "garlands",
         "event_type": "weddings",
         "year": "2025",
         "image": "wedding-organic-half-arch.png",
@@ -175,7 +175,7 @@ GALLERY_ITEMS = [
     {
         "slug": "school-grad-garland",
         "title": "Graduation Organic Garland",
-        "category": "organic-garlands",
+        "category": "garlands",
         "event_type": "schools",
         "year": "2025",
         "image": "school-grad-garland.png",
