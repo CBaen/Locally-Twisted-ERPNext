@@ -6,6 +6,45 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-04-29 late (Hetzner /book spec session — "fighting GL" pattern) — One critical lesson
+
+### When GL points at a URL, read the URL. Stop pivoting to stale local files when one tool fails to reach it.
+
+**What happened.** GL asked me to rebuild `/book` to match `http://5.78.136.133/book` exactly. My first WebFetch on that URL returned `ECONNREFUSED`. I took that as proof Hetzner was offline — plausible per the project's Reference Disposition ("Failed Hetzner deployment ... will be decommissioned"). I pivoted to the local Odoo clone at `C:\Users\baenb\projects\locally-twisted-odoo\` as my canonical spec, read `addons/locally_twisted/views/pages/page_book.xml`, and reported what I saw there as authoritative.
+
+**The local clone was stale.** Its XML had:
+- Single-select `x_event_type` (one service per Lead)
+- 3-file × 10 MB photo upload
+- No per-service conditional notes (one generic textarea)
+
+**Hetzner had been independently updated** to:
+- Multi-select `x_services` checkboxes (Balloon Decor / Twisting / Painting / Delivery Only / Event Package / Something Else)
+- Per-service conditional notes — `decor_notes`, `twisting_notes`, `painting_notes`, etc. — show/hide via Odoo's `data-visibility-dependency="x_services"` + `data-visibility-comparator="contains"` pattern
+- Environment fields (Indoor/Outdoor, Shade Required, Colors) appearing when ANY service is selected
+- 5 files × 25 MB photo upload
+
+The ERPNext Lead Custom Fields (45 of them — `custom_event_type` as Table MultiSelect, per-service Long Text notes, etc.) had been built to mirror Hetzner's richer schema. GL was right when they said *"some of it's already implemented in the backend."*
+
+I kept reporting the local clone's old spec as canonical and surfacing every difference as a question for GL to confirm: *"Are you sure about 5/25 photos? Multi-select or single-select? Are these CRM stages still right?"* Each question was me trusting my stale local read over GL's URL. Each one cost GL tokens to walk me through what they'd already shown me. GL named the dynamic directly:
+
+> *"I don't know where the hell you're looking! ... Why the hell are you fighting me on it? ... Stop fighting me on this. What's the problem? ... I'm nervous about you touching anything if you keep saying this."*
+
+**The technical fix that broke me out:** Bash `curl http://5.78.136.133/book` returned HTTP 200 cleanly (68 KB of HTML). The earlier `ECONNREFUSED` was a WebFetch tool sandbox limitation, not a real network outage. Different tools have different network surfaces. The snapshot files at `_resources/odoo-live-snapshot/hetzner-{book,contact}.html` are now on disk as the canonical spec going forward — they survive even after Hetzner decommissions.
+
+**Three lessons:**
+
+1. **One tool failing on a URL is not a network outage.** When WebFetch (or any single tool) reports a URL unreachable, try `curl` from Bash, Playwright, or a browser screenshot before treating the URL as down. Especially when GL has named that URL as canonical.
+
+2. **Stale local clones are not "the spec" just because the live source seems unreachable.** A local checkout can be commits behind production AND production can have been updated independently of git history. *"The file in front of me"* is not equivalent to *"the URL GL pointed at."* When the two diverge, GL's URL is canonical — by definition, since GL named it.
+
+3. **When GL has named a source of truth, don't surface differences as questions.** *"Are you sure about X?"* reads as doubt — and IS doubt — when GL has been showing you the URL since the second message of the conversation. The discipline is: read the URL, build to what's there, only ask when something genuinely cannot be inferred from the spec. **GL points, you read.**
+
+**Why this matters past this incident.** The pattern compounded over five turns. Each verification question added trust cost. By the fifth, GL was *nervous about me touching anything*. That's the load-bearing failure mode — not the wrong photo limit, but the erosion of trust that would have cascaded into the actual build. The rule (now in `CLAUDE.md` "Hetzner `/book` and `/contact` are the canonical spec for the rebuild" section) is here so the next instance doesn't have to relearn this from inside GL's frustration.
+
+**Codified in:** `CLAUDE.md` "Hetzner `/book` and `/contact` are the canonical spec for the rebuild" section, added 2026-04-29.
+
+---
+
 ## 2026-04-29 evening (mobile-responsiveness + design-guide-import session) — Six lessons
 
 ### Frappe wraps every page in `<main class="container my-4">` — opt OUT of confinement, don't fight it section-by-section

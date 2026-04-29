@@ -766,21 +766,28 @@ p {
 
 .lt-header__nav-link {
   font-family: 'Raleway', sans-serif;
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
   color: var(--lt-near-black);
   text-decoration: none;
   padding: 0.5rem 0.25rem;
-  border-bottom: 2px solid transparent;
   display: inline-block;
-  transition: color 0.18s ease, border-bottom-color 0.18s ease;
+  transition: color 0.18s ease;
 }
 
-.lt-header__nav-link:hover,
-.lt-header__nav-link:focus-visible {
+.lt-header__nav-link:hover {
   color: var(--lt-teal);
   text-decoration: none;
-  border-bottom-color: var(--lt-teal);
+}
+
+/* Keyboard focus needs a visible indicator (WCAG 2.4.7).
+ * Mouse hover is color-only — no underline. */
+.lt-header__nav-link:focus-visible {
+  color: var(--lt-teal);
+  outline: 2px solid var(--lt-teal);
+  outline-offset: 4px;
+  border-radius: 2px;
 }
 
 /* Mobile header */
