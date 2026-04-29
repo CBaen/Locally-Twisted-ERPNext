@@ -6,6 +6,110 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-04-29 (Stripe wiring + true guest checkout session) — Five Frappe internals discovered
+
+### Frappe Payment Request `payment_url` is gated behind `send_mail` — manual call required when suppressed
+
+`Payment Request.on_submit` (apps/erpnext/...accounts/doctype/payment_request/payment_request.py:215) calls `set_payment_request_url()` ONLY inside the `if send_mail and self.payment_channel != "Phone":` branch. `send_mail` becomes False when EITHER `ref_doc.order_type == "Shopping Cart"` OR `self.flags.mute_email = True` (line 211). Both are necessary for guest checkout — but they ALSO suppress the URL-generation call.
+
+**Fix:** after `pr.submit()`, call `pr.set_payment_request_url()` manually then `pr.reload()`. See `apps/locally_twisted/locally_twisted/www/checkout.py` for the working pattern.
+
+**Receipt:** smoke test #3 (URL Test customer, since cleaned). After fixing wkhtmltopdf error, `payment_url` came back None. Traced to `set_payment_request_url` not being called. Manual call populated it correctly.
+
+### wkhtmltopdf inside the Frappe Docker container can't reach localhost:8081
+
+Anywhere Frappe auto-renders a PDF inside the running container — `attach_print()`, Sales Order print formats, Payment Request emails — wkhtmltopdf is invoked and tries to fetch CSS/assets from the site's public URL. Inside the container's network namespace, `localhost:8081` doesn't resolve. Result: `OSError: wkhtmltopdf reported an error: Exit with code 1 due to network error: ConnectionRefusedError`.
+
+**Workaround for Payment Request:** set `Sales Order.order_type = "Shopping Cart"` AND `payment_request.flags.mute_email = True` BEFORE `pr.submit()`. Both checks are at `payment_request.py:211`. Either alone may not be enough.
+
+**Long-term fix (deferred):** configure `host_name` in `site_config.json` to a docker-internal hostname (e.g., `http://frontend:80`) so wkhtmltopdf can reach back to the site from inside the network. Future hardening item.
+
+**Receipt:** smoke test #2 (Trace Test, since cleaned). Got the full traceback chain: `Payment Request on_submit → send_email → attach_print → pdfkit.to_pdf → wkhtmltopdf → ConnectionRefusedError`.
+
+### `Contact.links` is a child table, NOT a column — query Dynamic Link directly
+
+`Contact` has a `links` field that looks like a column in Customize Form, but it's a Table-fieldtype (child of Contact). Querying `frappe.db.get_value("Contact", ..., ["links"])` errors with `pymysql.err.OperationalError: (1054, "Unknown column 'links' in 'SELECT'")`.
+
+**Fix pattern for Contact → Customer lookup:**
+```python
+contact_name = frappe.db.get_value("Contact Email", {"email_id": email}, "parent")
+if contact_name:
+    customer_name = frappe.db.get_value(
+        "Dynamic Link",
+        {"parent": contact_name, "link_doctype": "Customer", "parenttype": "Contact"},
+        "link_name",
+    )
+```
+
+Same pattern applies to any parent doctype's Table fields — query the child table by `parent` field, not the parent's "column."
+
+**Receipt:** first guest-checkout smoke test failed with the Unknown column error. Fix is in `checkout.py:292-302` with comments.
+
+### Stripe Settings auto-creates the entire payment chain on insert
+
+Inserting a `Stripe Settings` record with `gateway_name`, `publishable_key`, `secret_key` triggers ERPNext's `on_update` hook which auto-creates:
+- Payment Gateway named `Stripe-{gateway_name}` (e.g., `Stripe-Test`)
+- Bank Account named `Stripe-{gateway_name} - {company_abbr}` (e.g., `Stripe-Test - LT`) — Currency = company default
+- Payment Gateway Account linking the gateway to the bank account, marked default
+
+You don't need to create any of those manually. Just insert the Stripe Settings → wire `Webshop Settings.payment_gateway_account` to the auto-created PGA name → done. Pattern codified in `scripts/setup/configure_stripe_test_mode.py`.
+
+**Receipt:** session 2026-04-29. Wrote configure_stripe_test_mode.py expecting to need follow-up scripts for PG / PGA / Account creation. None needed — all four records existed after one insert.
+
+### Webshop checkout requires `payment_gateway_account` set OR `enable_checkout=1` won't stick
+
+`Webshop Settings.enable_checkout = 1` set via `frappe.client.set_value` silently reverts to 0 if `payment_gateway_account` is null. The save validator quietly rejects the change. Set both fields in the same `set_value` call (with the multi-field `fieldname` dict format) and both stick.
+
+**Pattern:**
+```python
+frappe.client.set_value(
+    doctype="Webshop Settings",
+    name="Webshop Settings",
+    fieldname={
+        "payment_gateway_account": "Stripe-Test - USD - LT",
+        "enable_checkout": 1,
+    },
+)
+```
+
+**Receipt:** session 2026-04-29. First attempt set only `enable_checkout=1`, saved silently, value was still "0" on read-back. Second attempt set both fields together — both took.
+
+---
+
+## 2026-04-28 (BTFP restructure + ribbons + font weight + color session) — Three CSS gotchas
+
+### DM Serif Display is a single-weight font (400 only) — never override `font-weight` on heading classes
+
+The brand serif at `https://fonts.googleapis.com/css2?family=DM+Serif+Display` has only the default cut. Setting `font-weight: 600` on `.lt-faq h1`, `.lt-faq__group-title`, `.lt-policy h1`, `.lt-policy h2`, etc. produces synthetic-bold (faux-bold) rendering — chunky, heavy, unrefined.
+
+**Fix:** remove `font-weight: 600` from any class that targets a heading (h1/h2/h3) which inherits the global `h1, h2, h3 { font-family: 'DM Serif Display'; font-weight: 400; }` rule. Want emphasis? Use SIZE not WEIGHT (e.g., bumped FAQ group titles from 1.25rem → 1.5rem after removing the weight override).
+
+`font-weight: 600` IS valid on Raleway-based classes (`.lt-faq__link`, `.lt-policy__link`, `.lt-faq__answer strong`) — Raleway has real 600. The rule is heading-class-specific.
+
+**Receipt:** GL flagged the chunky look on /faq + /refund-policy. Comparing to BTFP intro h1 (no override → elegant) confirmed the cause. Fix landed in `faq.py` and `refund_policy.py` 2026-04-28.
+
+### CSS `margin: 0` (shorthand) defeats `.lt-fullbleed` negative margins
+
+`.lt-fullbleed` (in lt-theme.css) uses:
+```css
+margin-left: -50vw;
+margin-right: -50vw;
+```
+
+Any rule with `margin: 0` or `margin: <something>` (the shorthand) wipes out the negative margins because shorthand sets all four sides. Result: the section stops at the parent container's edge instead of going edge-to-edge.
+
+**Fix:** when defining a class that needs to coexist with `.lt-fullbleed`, use specific properties (`margin-top: 0; margin-bottom: 0;`) instead of the shorthand. Or just not set vertical margins at all.
+
+**Receipt:** GL flagged "the ribbon containers that are thin and supposed to go across the whole page dont." The blush + soft-blue ribbons had `.lt-btfp__ribbon { margin: 0 }`. Replaced with specific top/bottom margins; ribbons span full width.
+
+### `--lt-near-white` was too cold (#FBFBFB read as bluish-grey) — bumped to #fffcfc
+
+GL: *"the main white background is so white it's bluish and/or gray... Try fffcfc for the main background."* Updating the CSS custom property at `:root { --lt-near-white: #FBFBFB }` → `#fffcfc` makes the body, BTFP booking section, and (later) the footer copyright bar feel warm rather than cold. `#FFFFFF` (the `--lt-white` token, used on cards and contrasted panels) stays unchanged for visible contrast.
+
+**Pattern lesson:** `--lt-near-white` is the new "base white" token across the site. When choosing between `--lt-white` and `--lt-near-white` for a background, pick `--lt-near-white` for surfaces that should feel calm/quiet and `--lt-white` for surfaces that need to pop against the surrounding bands.
+
+---
+
 ## 2026-04-27 (small-shop seed session) — Six webshop gotchas
 
 ### `upload_file` API does NOT auto-write the file_url to the parent doc's field

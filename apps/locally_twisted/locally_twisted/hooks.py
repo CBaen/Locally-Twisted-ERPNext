@@ -31,7 +31,17 @@ app_license = "mit"
 # include js, css files in header of web template
 # Brand foundation theme — sourced at apps/locally_twisted/locally_twisted/public/css/lt-theme.css
 # Symlinked into sites/assets/locally_twisted/ by Frappe install-app, served by nginx.
-web_include_css = "/assets/locally_twisted/css/lt-theme.css"
+#
+# CACHE-BUST QUERY STRING — bump this on every lt-theme.css edit.
+# Frappe's `web_include_css` injects a static URL; nginx serves it with
+# Last-Modified / ETag, but browsers cache aggressively and often serve
+# stale CSS even after a server-side update. The version param invalidates
+# the browser cache for everyone, no hard-refresh required.
+# Format: YYYYMMDD-N (date + edit-number-that-day).
+# Receipt: 2026-04-29 — drawer overlay edit shipped server-side but old
+# CSS stayed cached in GL's browser; drawer rendered inline on every page
+# because the cached rules didn't have `position: fixed`.
+web_include_css = "/assets/locally_twisted/css/lt-theme.css?v=20260429-1"
 # web_include_js = "/assets/locally_twisted/js/locally_twisted.js"
 
 # Friendly-URL aliases. Frappe's www/ router doesn't auto-translate
