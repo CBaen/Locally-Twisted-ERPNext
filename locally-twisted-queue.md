@@ -23,15 +23,41 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 
 **Remaining (in priority order):**
 
-- [P0] **Slice 6b — FAQ page.** Small static portal page; content composed from `_resources/policies/` (deposits, service-area, tax, theme rules, pricing). Composition is a synthesis step beyond verbatim transcription — surface question list to GL before shipping.
-  - **DONE 2026-04-27:** Refund Policy at `/refund-policy` (and `/refund_policy` alias). Plain-language translation of `legal-interview-answers.md` Part 2C + `deposits.md`. 8 sections, no console errors, mobile + desktop verified.
-- [P0] **Slice 7 — Lookbook (full portfolio).** `/lookbook` — visual heart of the site, organized by event type (Corporate, Weddings, Birthdays, Schools, Seasonal). The 5 Custom Creations circles + the 3 Recent Celebrations cards on the homepage already link here as stubs (currently 404).
-- [P0] **Slice 8 — Service category pages.** `/services/<event-type>` × 5 (Corporate, Weddings, Birthdays, Schools, Seasonal). Each ends with inquiry CTA pre-filling `/book` with the category.
-- [P0] **Slice 9 — Color Chart page.** `/color-chart` — static reference, all 70 balloon colors with names. Answers Jeff's "customers want to see colors" instinct without a configurator. Visual swatch grid + print-friendly stylesheet.
-- [P0] **Slice 10 — `/book` form page.** Primary inquiry conversion form (45-field Lead schema). The hero CTA + closing CTA + every service-page CTA points here; currently 404.
-- [P1] **Slice 11 — Small Shop browse + detail.** Webshop-driven; ~6–12 sub-$300 SKUs (themed bouquets, gift items, simple kits). Catalog data exists at `_resources/odoo-export/catalog.json` + 48 product images. **No configurator** — pre-configured items only.
-- [P1] **Slice 12 — Cart + checkout shell.** Webshop default. Stripe stubbed until Phase 4.
+- [P0] **Verify post-Stripe success redirect.** Customer completes a real test purchase (`/checkout?item=unicorn-bouquet&qty=1` → form → Stripe Elements → card `4242 4242 4242 4242`) and we need to confirm where they land. Should be `/thank-you?order=<so_name>`. If not, override via Stripe Settings `redirect_url` or per-Payment-Request success_url. **GL was about to test manually before context wrapped — check their next message.**
+- [P0] **Receipt email (transactional only).** Email Template `LT Order Receipt` (Jinja for items/total/order ID) + Notification on `Payment Entry` `on_submit` (recipient = customer email). NO marketing in receipt — CAN-SPAM safe-harbor. Marketing opt-in (already a Custom Field on Customer) handled separately.
+- [P0] **Slice 10 — `/book` form page.** Primary inquiry conversion form (45-field Lead schema). The hero CTA + closing CTA + every service-page CTA points here; currently 404. Was DEFERRED 2026-04-29 when guest checkout took precedence.
+- [P0] **Spec table data on BTFP service cards.** Currently `Lorem ipsum` placeholders for BEST AT / DURATION / TEAM SIZE-or-ARTISTS / GOOD FOR. Jeff needs to confirm the actual numbers/lists. Replace lorem when confirmed.
+- [P1] **Slice 8 — Service category pages.** `/services/<event-type>` × 5 (Corporate, Weddings, Birthdays, Schools, Seasonal). Each ends with inquiry CTA pre-filling `/book` with the category.
+- [P1] **Slice 9 — Color Chart page.** `/color-chart` — static reference, all 70 balloon colors with names. Answers Jeff's "customers want to see colors" instinct without a configurator. Visual swatch grid + print-friendly stylesheet.
+- [P1] **Multi-item cart support for guest checkout.** `/checkout` is currently single-item (`?item=<code>&qty=<n>`). Webshop has a working multi-item cart at `/cart`; the "Checkout" button there should pass cart contents to `/checkout` as JSON. Refactor `submit_guest_order` to accept multiple items.
+- [P1] **Sample data for backend tour.** Before Jeff demo: a few realistic Lead records, one paid Sales Order, one upcoming event. Lets Jeff click around the desk and see the system in motion.
 - [P2] **Slice 13 — Blog framework + 2-3 first posts.** "Kindergarten Teacher" voice. Deferrable; not on demo critical path. **When this ships, the homepage's `HERO_CYCLING_TITLES` list should be replaced with a `frappe.get_list("Blog Post", ...)` call so real blog post titles cycle in the hero.**
+
+**Already DONE 2026-04-27:**
+- Slice 6b — Refund Policy (`/refund-policy`) + FAQ (`/faq`). Both with accordion structure. Source: legal-interview-answers Part 2C + deposits.md + 6 confirmed policy files.
+- BTFP page substantial restructure to match mockup: hero kicker + title, service cards with photo carousels + spec tables (lorem), process section "Booking is straightforward" 4 steps, event types "Any Event. Any Size.", blush + soft-blue ribbons, last-minute booking banner.
+- Color: `--lt-near-white` warmed `#FBFBFB` → `#fffcfc`. Header bg matches footer (both `--lt-soft-blue`). Copyright bar uses new base white.
+- LookBook → Portfolio in nav (URL stays /lookbook).
+- Font-weight error fix on FAQ + Refund Policy headings (DM Serif Display synthetic-bold).
+- Ribbon margin shorthand fix.
+
+**Already DONE 2026-04-28/29 (Stripe + true guest checkout):**
+- Stripe Settings "Test" configured with API keys from `.env`. Auto-created Payment Gateway "Stripe-Test", Bank Account "Stripe-Test - LT" (USD), Payment Gateway Account "Stripe-Test - USD - LT" (default).
+- Webshop Settings: enable_checkout=1, payment_gateway_account=Stripe-Test - USD - LT.
+- `/checkout?item=<code>&qty=<n>` page (controller + template). Form takes name + email + phone + UT shipping + marketing opt-in checkbox. POSTs to `submit_guest_order` whitelist endpoint.
+- `submit_guest_order` creates Customer + Contact + Address + Sales Order (order_type="Shopping Cart") + Payment Request (mute_email + manual set_payment_request_url). Returns payment_url.
+- `/thank-you` (alias of `/thank_you` via website_route_rule) page renders post-payment landing with order summary.
+- `marketing_opt_in` Custom Field on Customer (Check, default 0).
+- All 8 smoke-test records cleaned at session end (SAL-ORD-2026-00001 through 00008, test customers, addresses, payment requests).
+
+**Already DONE other-agent work overnight 2026-04-27→28:**
+- /lookbook (Portfolio) page exists and renders.
+- /shop page exists and renders.
+- BTFP carousel orientation/aspect work.
+- Header truck icon zoom adjustments.
+- web_include_css cache-bust query string pattern.
+
+**Slice numbering as of 2026-04-29:** Slices 1-7 all done (1 brand, 2 chrome, 3 homepage, 4 BTFP, 5 Contact, 6a Accessibility, 6b Refund + FAQ, 7 Lookbook). Slice 8 (service categories), Slice 9 (color chart), Slice 10 (`/book`), Slice 11 (small shop browse — partial via webshop default), Slice 12 (cart+checkout — DONE via /checkout custom flow). Slice 13 (blog) deferred.
 
 ### Future scope (post-Phase 1)
 

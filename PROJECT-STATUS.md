@@ -110,6 +110,36 @@ Canonical resources for the new build live in `_resources/` and are platform-agn
 
 ## Updates
 
+### 2026-04-29 (Stripe wiring + true guest checkout session) — Stripe configured, /checkout + /thank-you live, Customer-only flow (no User accounts)
+
+**See `HANDOFF.md` for current state at session end.** Summary:
+
+- **Stripe Test mode fully configured.** Stripe Settings "Test" + auto-created Payment Gateway "Stripe-Test" + Bank Account "Stripe-Test - LT" (USD) + Payment Gateway Account "Stripe-Test - USD - LT" (default). Webshop `enable_checkout=1` + `payment_gateway_account` wired. Reusable script: `scripts/setup/configure_stripe_test_mode.py`.
+- **`/checkout?item=<code>&qty=<n>` page live.** Form takes name + email + phone + UT shipping + marketing-opt-in checkbox. POSTs to `submit_guest_order` whitelist endpoint which creates Customer + Contact + Address + Sales Order (order_type "Shopping Cart") + Payment Request — **NO User account created**. Returns Stripe Elements URL; JS redirects.
+- **`/thank-you` (alias of `/thank_you`) page live.** Renders post-payment landing with order summary derived from `?order=<so_name>` param.
+- **Marketing opt-in**: Custom Field on Customer (Check, default 0). Checkbox on `/checkout` form, unchecked by default. Future marketing campaigns filter on this flag.
+- **Pivot recorded:** Option A (silent User account behind checkout) abandoned 2026-04-29 due to legal complexity; Option B (true guest checkout, no User) chosen. See `locally-twisted-decisions.md`.
+- **Frappe Stripe Charges API debt:** Frappe's payments app uses the deprecated Charges API. Test mode demo OK. Production hardening: swap to Checkout Sessions in Phase 4. Logged in `locally-twisted-decisions.md`.
+- **Pending verification:** post-Stripe-success redirect not tested (GL was about to do a manual `4242` purchase when context wrapped).
+- **Pending build:** Receipt email (Email Template + Notification on Payment Entry submit, transactional only). Slice 10 `/book` form (still 404).
+- **Cleanup:** all 8 smoke-test records (SOs, customers, addresses, payment requests) deleted at session end. DB is in clean state. `SAL-ORD-2026-00009` is the next number.
+
+### 2026-04-28 (BTFP restructure + ribbons + colors + LookBook→Portfolio) — Visible polish session
+
+**See `lessons-learned.md` and `locally-twisted-decisions.md` for full receipts.** Summary:
+
+- **BTFP page restructure** to match the design mockup: hero kicker "LIVE SERVICES" + headline "Something for the middle of the party." (left-aligned), service cards with photo carousels + spec tables (lorem placeholders awaiting Jeff's numbers), process section "Booking is straightforward." 4 steps, event types "Any Event. Any Size." 6 rows, two thin decorative ribbons (blush + soft-blue, no aqua/green per GL), last-minute booking banner.
+- **Color decisions:** `--lt-near-white` token warmed `#FBFBFB` → `#fffcfc`. Header background = footer background (both `--lt-soft-blue`). Copyright bar uses new base white. Established `--lt-near-white` as the new "base white" token.
+- **LookBook → Portfolio** rename in nav (URL `/lookbook` unchanged).
+- **Font-weight error fix:** removed `font-weight: 600` from `.lt-faq h1`, `.lt-faq__group-title`, `.lt-policy h1`, `.lt-policy h2` (DM Serif Display is single-weight; the override was producing synthetic faux-bold). Bumped group titles 1.25rem → 1.5rem to retain hierarchy via size.
+- **Ribbon margin shorthand bug fix:** `margin: 0` was defeating `.lt-fullbleed`'s negative margins; replaced with `margin-top: 0; margin-bottom: 0;`.
+
+### 2026-04-27 (Slice 6b — Refund Policy + FAQ + framework observations) — Static portal pages with accordion + agency capabilities update
+
+- **Slice 6b shipped:** `/refund-policy` and `/faq` (with accordion via native `<details>`/`<summary>`). Source: `legal-interview-answers.md` Part 2C + `deposits.md` + 6 confirmed policy files. All 13 FAQ Q&As trace to Jeff-confirmed policy content (no invention).
+- **Agency capabilities update:** added "Layer boundaries" section to `Built_by_Cameron/.claude/capabilities/INDEX.md` (recipe vs meal discipline). Dropped kitchen note `2026-04-27-framework-shape-observations.md` with 4 open questions for the framework's evolution.
+- **BTFP form copy fix:** updated cancellation note from "48 hours' notice required. Deposits are non-refundable." → "Cancel 72+ hours before your event and your deposit transfers to a new date." per GL's verbal confirmation matching legal-interview Part 2C.
+
 ### 2026-04-27 (homepage build session) — Slice 3 (Homepage) DONE; site shape locked; reviews carousel with 19 real Google quotes wired
 
 **What landed:**
