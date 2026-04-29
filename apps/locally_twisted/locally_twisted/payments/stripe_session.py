@@ -73,18 +73,25 @@ def create_session_for_sales_order(
         "lt_origin": "guest_checkout",
     }
 
-    # payment_method_types=["card"] is an EXPLICIT product decision (GL,
-    # 2026-04-29). Stripe's default dynamic payment methods surfaces Link
-    # as the primary option whenever it detects a Link account for the
-    # supplied customer_email — and presents a "Pay without Link" override
-    # the customer has to click past. GL explicitly rejects this UX:
-    # *"I hate Link, it's not going to gatekeep our checkout."*
+    # Link is disabled at the ACCOUNT LEVEL via a custom Payment Method
+    # Configuration (GL directive 2026-04-29). Stripe's default PMC has
+    # link.display_preference="on", which makes the Stripe-hosted page
+    # render Link "Save info" + Bank-via-Link UI even when the Session
+    # restricts payment_method_types to ["card"]. Per Stripe support:
+    # *"Link is controlled through the Dashboard. Create a custom payment
+    # method configuration with Link off."* — see the knowledge gem in
+    # the stripe:stripe-best-practices skill.
     #
-    # Locking to "card" eliminates Link entirely. Apple Pay + Google Pay
-    # still work — they're card wallets that surface automatically when
-    # Stripe detects device support, regardless of payment_method_types.
-    # If we later want Klarna / Affirm / Cash App Pay / Bank, add them to
-    # this list explicitly. Link is the only one we exclude.
+    # We created `pmc_1TRZH2DfnlZQv66ncb001soG` ("LT No Link") on LT's
+    # account with link=off, card=on. Passing payment_method_configuration
+    # on every Session forces that configuration. payment_method_types is
+    # NOT passed alongside because Stripe rejects the combination — when
+    # a configuration is set, the configuration owns the method list.
+    #
+    # GL's product reason: *"I hate Link, it's not going to gatekeep our
+    # checkout."* Apple Pay + Google Pay still work — they're card wallets
+    # that surface automatically on device-supported browsers, independent
+    # of whether Link is on the configuration.
     session = stripe.checkout.Session.create(
         api_key=api_key,
         mode="payment",
@@ -95,7 +102,7 @@ def create_session_for_sales_order(
         client_reference_id=so.name,
         metadata=metadata,
         payment_intent_data={"metadata": metadata},
-        payment_method_types=["card"],
+        payment_method_configuration="pmc_1TRZH2DfnlZQv66ncb001soG",
     )
 
     return session.url
