@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Color Picker — Locally Twisted Design Studio</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      background: rgba(0,0,0,0.32);
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      margin: 0;
+    }
+
+    /* Standalone picker sheet for this screen */
+    .picker-standalone {
+      width: 100%;
+      max-width: 480px;
+      background: #FFFFFF;
+      border-radius: 20px 20px 0 0;
+      padding-bottom: 24px;
+      box-shadow: 0 -4px 32px rgba(0,0,0,0.16);
+      animation: slideUp 0.25s ease-out;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(80px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .picker-handle {
+      width: 36px;
+      height: 4px;
+      background: #D0D0D0;
+      border-radius: 2px;
+      margin: 12px auto 0;
+    }
+
+    .picker-header {
+      padding: 12px 16px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .picker-header__region {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .picker-header__label {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #595A5C;
+      margin-bottom: 1px;
+    }
+
+    .picker-header__name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1rem;
+      color: #1A1A1A;
+    }
+
+    .picker-header__close {
+      width: 32px;
+      height: 32px;
+      background: #F9F9F9;
+      border: 1px solid #EBEBEB;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.125rem;
+      cursor: pointer;
+      color: #595A5C;
+      line-height: 1;
+      padding: 0;
+    }
+
+    .picker-header__close:hover {
+      background: #F4DFD7;
+    }
+
+    /* Recent colors row */
+    .recent-section {
+      padding: 4px 16px 10px;
+    }
+
+    .recent-label {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #595A5C;
+      margin-bottom: 8px;
+    }
+
+    .recent-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    /* Hue family tabs */
+    .hue-tabs-row {
+      display: flex;
+      gap: 6px;
+      padding: 0 16px 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .hue-tabs-row::-webkit-scrollbar { display: none; }
+
+    /* Swatch grid — 6-column on mobile */
+    .swatch-grid-area {
+      padding: 4px 16px 10px;
+    }
+
+    .swatch-grid-display {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+    }
+
+    /* Hex info chip */
+    .hex-info-chip {
+      margin: 0 16px 12px;
+      padding: 10px 14px;
+      background: #FBFBFB;
+      border: 1.5px solid #EBEBEB;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hex-info-chip__swatch {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      border: 1.5px solid #EBEBEB;
+      flex-shrink: 0;
+      background: #FFB6C1;
+    }
+
+    .hex-info-chip__details {
+      flex: 1;
+    }
+
+    .hex-info-chip__code {
+      font-family: monospace;
+      font-size: 0.9375rem;
+      font-weight: 700;
+      color: #1A1A1A;
+      letter-spacing: 0.04em;
+      display: block;
+    }
+
+    .hex-info-chip__name {
+      font-size: 0.75rem;
+      color: #595A5C;
+      display: block;
+      margin-top: 1px;
+    }
+
+    .hex-info-chip__match {
+      font-size: 0.6875rem;
+      color: #008080;
+      font-weight: 600;
+    }
+
+    /* Apply button */
+    .picker-apply {
+      padding: 4px 16px 0;
+    }
+
+    /* Selected swatch indicator */
+    .swatch-dot--selected {
+      box-shadow: 0 0 0 2.5px #FFFFFF, 0 0 0 4.5px #008080;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Background (simulates the arch page behind the overlay) -->
+<div style="
+  position: fixed;
+  inset: 0;
+  background: #FBFBFB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 0;
+">
+  <!-- Mini arch silhouette (blurred behind) -->
+  <svg viewBox="0 0 320 260" width="280" style="opacity:0.15;">
+    <ellipse cx="42" cy="180" rx="30" ry="34" fill="#FFB6C1"/>
+    <ellipse cx="72" cy="148" rx="28" ry="32" fill="#87CEEB"/>
+    <ellipse cx="160" cy="60" rx="32" ry="36" fill="#FFB6C1"/>
+    <ellipse cx="248" cy="148" rx="28" ry="32" fill="#87CEEB"/>
+    <ellipse cx="278" cy="180" rx="30" ry="34" fill="#FFB6C1"/>
+    <ellipse cx="100" cy="120" rx="26" ry="30" fill="#87CEEB"/>
+    <ellipse cx="220" cy="120" rx="26" ry="30" fill="#87CEEB"/>
+  </svg>
+  <!-- Dim overlay -->
+  <div style="position:fixed;inset:0;background:rgba(0,0,0,0.30);z-index:1;"></div>
+</div>
+
+<!-- Picker sheet -->
+<div class="picker-standalone" id="picker-standalone" style="position:relative; z-index:10;">
+
+  <div class="picker-handle"></div>
+
+  <div class="picker-header">
+    <div class="picker-header__region">
+      <div class="picker-header__label">Coloring</div>
+      <div class="picker-header__name">Main balloons</div>
+    </div>
+    <button class="picker-header__close" onclick="window.location.href='02-color-one.html'" title="Close picker">&#215;</button>
+  </div>
+
+  <!-- Recently used -->
+  <div class="recent-section">
+    <div class="recent-label">Recently Used</div>
+    <div class="recent-row" id="recent-colors-row">
+      <!-- Populated by script.js from localStorage -->
+      <!-- Fallback shown for demo: -->
+      <div class="swatch-dot" style="background:#FFB6C1;" title="Light Pink"></div>
+      <div class="swatch-dot" style="background:#87CEEB;" title="Sky Blue"></div>
+      <div class="swatch-dot" style="background:#FFFFFF; border-color:#D0D0D0;" title="White"></div>
+      <div class="swatch-dot swatch-dot--empty" title="No recent color"></div>
+      <div class="swatch-dot swatch-dot--empty" title="No recent color"></div>
+      <div class="swatch-dot swatch-dot--empty" title="No recent color"></div>
+    </div>
+  </div>
+
+  <!-- Hue family tabs -->
+  <div class="hue-tabs-row" id="hue-tabs">
+    <button class="hue-tab hue-tab--active" data-family="all">All</button>
+    <button class="hue-tab" data-family="pinks">Pinks</button>
+    <button class="hue-tab" data-family="blues">Blues</button>
+    <button class="hue-tab" data-family="greens">Greens</button>
+    <button class="hue-tab" data-family="yellows">Warm</button>
+    <button class="hue-tab" data-family="neutrals">Neutrals</button>
+    <button class="hue-tab" data-family="darks">Darks</button>
+  </div>
+
+  <!-- Swatch grid — initial state shows 'all' -->
+  <div class="swatch-grid-area">
+    <div class="swatch-grid-display" id="swatch-grid">
+      <!-- Rendered by script.js — preview swatches below for no-JS -->
+      <div class="swatch-dot" style="background:#FFB6C1;" title="Light Pink"></div>
+      <div class="swatch-dot" style="background:#FF69B4;" title="Hot Pink"></div>
+      <div class="swatch-dot" style="background:#FF1493;" title="Deep Pink"></div>
+      <div class="swatch-dot" style="background:#E75480;" title="Dark Pink"></div>
+      <div class="swatch-dot" style="background:#F4DFD7;" title="Blush"></div>
+      <div class="swatch-dot" style="background:#87CEEB;" title="Sky Blue"></div>
+      <div class="swatch-dot" style="background:#4169E1;" title="Royal Blue"></div>
+      <div class="swatch-dot" style="background:#003087;" title="Navy"></div>
+      <div class="swatch-dot" style="background:#C3DCF3;" title="Soft Blue"></div>
+      <div class="swatch-dot" style="background:#A0E9FF;" title="Sky Cyan"></div>
+      <div class="swatch-dot swatch-dot--selected" style="background:#00FF7F;" title="Spring Green"></div>
+      <div class="swatch-dot" style="background:#228B22;" title="Forest Green"></div>
+      <div class="swatch-dot" style="background:#B8FF9E;" title="Lime Pastel"></div>
+      <div class="swatch-dot" style="background:#88FED0;" title="Seafoam"></div>
+      <div class="swatch-dot" style="background:#80F5F3;" title="Aqua"></div>
+      <div class="swatch-dot" style="background:#FFD700;" title="Gold"></div>
+      <div class="swatch-dot" style="background:#F9F871;" title="Soft Lemon"></div>
+      <div class="swatch-dot" style="background:#FFA500;" title="Orange"></div>
+      <div class="swatch-dot" style="background:#FF6B35;" title="Coral"></div>
+      <div class="swatch-dot" style="background:#FFFFFF; border-color:#D0D0D0;" title="White"></div>
+      <div class="swatch-dot" style="background:#F5F5F5; border-color:#D0D0D0;" title="Ivory"></div>
+      <div class="swatch-dot" style="background:#C0C0C0;" title="Silver"></div>
+      <div class="swatch-dot" style="background:#D4AF37;" title="Champagne Gold"></div>
+      <div class="swatch-dot" style="background:#1A1A1A;" title="Near Black"></div>
+      <div class="swatch-dot" style="background:#4B0082;" title="Indigo"></div>
+      <div class="swatch-dot" style="background:#800020;" title="Burgundy"></div>
+      <div class="swatch-dot" style="background:#2F4F4F;" title="Dark Teal"></div>
+      <div class="swatch-dot" style="background:#8B0000;" title="Dark Red"></div>
+      <div class="swatch-dot" style="background:#A0522D;" title="Rust"></div>
+      <div class="swatch-dot" style="background:#FF4500;" title="Tomato"></div>
+    </div>
+  </div>
+
+  <!-- Hex display chip — shows selected color's hex code + name -->
+  <div class="hex-info-chip" id="hex-chip">
+    <div class="hex-info-chip__swatch" id="hex-chip-swatch" style="background:#00FF7F;"></div>
+    <div class="hex-info-chip__details">
+      <span class="hex-info-chip__code" id="hex-chip-code">#00FF7F</span>
+      <span class="hex-info-chip__name" id="hex-chip-name">Spring Green</span>
+    </div>
+    <div class="hex-info-chip__match">Matches venue</div>
+  </div>
+
+  <!-- Apply button -->
+  <div class="picker-apply">
+    <button class="btn-primary btn-primary--full" id="apply-color-btn-standalone">
+      Apply Color to Main Balloons
+    </button>
+  </div>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="script.js"></script>
+<script>
+$(document).ready(function() {
+  // Pre-select a color for demo state
+  DesignStudio.selectedColor = { hex: '#00FF7F', name: 'Spring Green' };
+  DesignStudio.activeHueFamily = 'all';
+
+  // Init hue tabs
+  initHueTabs();
+
+  // Wire up static swatch grid clicks
+  $('#swatch-grid .swatch-dot').on('click', function() {
+    if ($(this).hasClass('swatch-dot--empty')) return;
+    $('#swatch-grid .swatch-dot').removeClass('swatch-dot--selected');
+    $(this).addClass('swatch-dot--selected');
+    var hexColor = $(this).css('background-color');
+    var title = $(this).attr('title') || 'Color';
+    // Convert rgb to hex
+    var hex = rgbToHex(hexColor);
+    DesignStudio.selectedColor = { hex: hex, name: title };
+    $('#hex-chip-swatch').css('background', hex);
+    $('#hex-chip-code').text(hex);
+    $('#hex-chip-name').text(title);
+  });
+
+  // Recent colors static row
+  $('#recent-colors-row .swatch-dot:not(.swatch-dot--empty)').on('click', function() {
+    var title = $(this).attr('title') || 'Color';
+    var hexColor = $(this).css('background-color');
+    var hex = rgbToHex(hexColor);
+    DesignStudio.selectedColor = { hex: hex, name: title };
+    $('#hex-chip-swatch').css('background', hex);
+    $('#hex-chip-code').text(hex);
+    $('#hex-chip-name').text(title);
+    // Update grid selection
+    $('#swatch-grid .swatch-dot').removeClass('swatch-dot--selected');
+  });
+
+  // Apply button
+  $('#apply-color-btn-standalone').on('click', function() {
+    if (DesignStudio.selectedColor) {
+      // In production: applies color and returns to coloring screen
+      // For mockup: navigate back
+      window.location.href = '02-color-one.html';
+    }
+  });
+
+  // Helper: rgb(r,g,b) string -> #rrggbb
+  function rgbToHex(rgb) {
+    var result = rgb.match(/\d+/g);
+    if (!result || result.length < 3) return '#000000';
+    return '#' + result.slice(0,3).map(function(n) {
+      return ('0' + parseInt(n).toString(16)).slice(-2);
+    }).join('');
+  }
+});
+</script>
+</body>
+</html>

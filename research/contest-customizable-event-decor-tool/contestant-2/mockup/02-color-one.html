@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Color Your Arch — Locally Twisted Design Studio</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      background: #FBFBFB;
+      overflow: hidden; /* prevent scroll while coloring */
+    }
+    .color-one-layout {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      max-width: 480px;
+      margin: 0 auto;
+      background: #FFFFFF;
+    }
+
+    /* SVG canvas area */
+    .arch-canvas {
+      flex: 1;
+      background: #FBFBFB;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      cursor: default;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Region label bubble */
+    #region-label-bubble {
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1A1A1A;
+      color: #FFFFFF;
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 5px 14px;
+      border-radius: 20px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      white-space: nowrap;
+      z-index: 50;
+    }
+
+    #region-label-bubble.visible {
+      opacity: 1;
+    }
+
+    /* Bottom bar */
+    .color-bar {
+      background: #FFFFFF;
+      border-top: 1px solid #EBEBEB;
+      padding: 12px 16px 16px;
+    }
+
+    .color-bar__prompt {
+      font-size: 0.875rem;
+      color: #595A5C;
+      text-align: center;
+      padding: 6px 0 8px;
+    }
+
+    .color-bar__selected-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .color-bar__region-name {
+      flex: 1;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      color: #1A1A1A;
+    }
+
+    .color-bar__swatch-hex {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .color-bar__swatch {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid #EBEBEB;
+      background: #EBEBEB;
+      flex-shrink: 0;
+    }
+
+    .color-bar__hex {
+      font-family: monospace;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #595A5C;
+    }
+
+    .color-bar__actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    /* Navigation bar */
+    .color-nav {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      background: #FFFFFF;
+      border-bottom: 1px solid #EBEBEB;
+      gap: 8px;
+    }
+
+    .color-nav__back {
+      background: none;
+      border: none;
+      padding: 4px;
+      cursor: pointer;
+      color: #595A5C;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .color-nav__title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1rem;
+      color: #1A1A1A;
+      flex: 1;
+    }
+
+    .color-nav__hint {
+      font-size: 0.6875rem;
+      background: #F4DFD7;
+      color: #7A4030;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+
+    /* Instruction note */
+    .tap-instruction {
+      position: absolute;
+      bottom: 70px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.75rem;
+      color: #595A5C;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 1;
+      transition: opacity 0.4s ease;
+    }
+
+    .tap-instruction.hidden { opacity: 0; }
+
+    /* Region fill states */
+    .r-main { fill: #F0EDE8; }
+    .r-accent { fill: #EAE8F0; }
+    .r-base { fill: #E8F0EA; }
+    .r-top { fill: #F0EEE0; }
+
+    /* Colored states (examples) */
+    .r-main.colored    { fill: #FFB6C1; }
+    .r-accent.colored  { fill: #87CEEB; }
+  </style>
+</head>
+<body>
+<div class="color-one-layout">
+
+  <!-- Nav -->
+  <div class="color-nav">
+    <button class="color-nav__back" onclick="window.location.href='01-entry.html'">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="#595A5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back
+    </button>
+    <span class="color-nav__title">Balloon Arch</span>
+    <span class="color-nav__hint">Tap a region</span>
+  </div>
+
+  <!-- Canvas area with inline SVG arch -->
+  <div class="arch-canvas" id="arch-canvas-area">
+
+    <!-- Instruction -->
+    <div class="tap-instruction" id="tap-instruction">Tap any part of the arch to color it</div>
+
+    <!-- Region label bubble -->
+    <div id="region-label-bubble"></div>
+
+    <!-- Inline SVG — Balloon Arch -->
+    <!-- Each fill region has data-region and data-name attributes -->
+    <!-- Coloring book style: uncolored regions have dashed stroke -->
+    <svg id="svg-arch-container"
+         viewBox="0 0 320 260"
+         width="100%"
+         style="max-width:320px; max-height:260px; display:block; cursor:pointer;"
+         aria-label="Balloon arch. Tap any balloon region to color it."
+         role="img">
+
+      <!-- Shadow / base ground line -->
+      <ellipse cx="160" cy="248" rx="100" ry="8" fill="#EBEBEB" opacity="0.5"/>
+
+      <!-- ===================== -->
+      <!-- MAIN BALLOON CLUSTER  -->
+      <!-- ===================== -->
+
+      <!-- Left side large balloons (main color) -->
+      <ellipse data-region="main" data-name="Main balloons"
+        cx="42" cy="180" rx="30" ry="34"
+        class="svg-fill-region r-main"
+        style="stroke:#C0C0C0; stroke-width:1; stroke-dasharray:4 3;"
+      />
+      <ellipse data-region="main" data-name="Main balloons"
+        cx="72" cy="148" rx="28" ry="32"
+        class="svg-fill-region r-main"
+        style="stroke:#C0C0C0; stroke-width:1; stroke-dasharray:4 3;"
+      />
+      <ellipse data-region="main" data-name="Main balloons"
+        cx="278" cy="180" rx="30" ry="34"
+        class="svg-fill-region r-main"
+        style="stroke:#C0C0C0; stroke-width:1; stroke-dasharray:4 3;"
+      />
+      <ellipse data-region="main" data-name="Main balloons"
+        cx="248" cy="148" rx="28" ry="32"
+        class="svg-fill-region r-main"
+        style="stroke:#C0C0C0; stroke-width:1; stroke-dasharray:4 3;"
+      />
+
+      <!-- Top arch apex (main color) -->
+      <ellipse data-region="main" data-name="Main balloons"
+        cx="160" cy="60" rx="32" ry="36"
+        class="svg-fill-region r-main"
+        style="stroke:#C0C0C0; stroke-width:1; stroke-dasharray:4 3;"
+      />
+
+      <!-- ===================== -->
+      <!-- ACCENT BALLOONS       -->
+      <!-- ===================== -->
+      <ellipse data-region="accent" data-name="Accent balloons"
+        cx="100" cy="120" rx="26" ry="30"
+        class="svg-fill-region r-accent"
+        style="stroke:#C0C0C0; stroke-width:1; stroke-dasharray:4 3;"
+      />
+      <ellipse data-region="accent" data-name="Accent balloons"
+        cx="220" cy="120" rx="26" ry="30"
+        class="svg-fill-region r-accent"
+        style="stroke:#C0C0C0; stroke-width:1; stroke-dasharray:4 3;"
+      />
+      <ellipse data-region="accent" data-name="Accent balloons"
+        cx="130" cy="82" rx="22" ry="26"
+        class="svg-fill-region r-accent"
+        style="stroke:#C0C0C0; stroke-width:1; stroke-dasharray:4 3;"
+      />
+      <ellipse data-region="accent" data-name="Accent balloons"
+        cx="190" cy="82" rx="22" ry="26"
+        class="svg-fill-region r-accent"
+        style="stroke:#C0C0C0; stroke-width:1; stroke-dasharray:4 3;"
+      />
+
+      <!-- ===================== -->
+      <!-- BASE RING / FILLER    -->
+      <!-- ===================== -->
+      <ellipse data-region="base" data-name="Base balloons"
+        cx="42" cy="210" rx="24" ry="22"
+        class="svg-fill-region r-base"
+        style="stroke:#C0C0C0; stroke-width:1; stroke-dasharray:4 3;"
+      />
+      <ellipse data-region="base" data-name="Base balloons"
+        cx="278" cy="210" rx="24" ry="22"
+        class="svg-fill-region r-base"
+        style="stroke:#C0C0C0; stroke-width:1; stroke-dasharray:4 3;"
+      />
+      <!-- Filler balloons mid-arch -->
+      <ellipse data-region="base" data-name="Base balloons"
+        cx="160" cy="95" rx="18" ry="20"
+        class="svg-fill-region r-base"
+        style="stroke:#C0C0C0; stroke-width:1; stroke-dasharray:4 3;"
+      />
+
+      <!-- ===================== -->
+      <!-- TOPPER (optional top detail) -->
+      <!-- ===================== -->
+      <ellipse data-region="topper" data-name="Topper"
+        cx="160" cy="30" rx="16" ry="18"
+        class="svg-fill-region r-top"
+        style="stroke:#C0C0C0; stroke-width:1; stroke-dasharray:4 3;"
+      />
+
+      <!-- Outline overlays (non-interactive, drawn on top) -->
+      <!-- These are thin stroke paths giving the illustration depth -->
+      <ellipse cx="42" cy="180" rx="30" ry="34" fill="none" stroke="#1A1A1A" stroke-width="0.8" class="svg-outline-path" style="pointer-events:none;"/>
+      <ellipse cx="72" cy="148" rx="28" ry="32" fill="none" stroke="#1A1A1A" stroke-width="0.8" class="svg-outline-path" style="pointer-events:none;"/>
+      <ellipse cx="278" cy="180" rx="30" ry="34" fill="none" stroke="#1A1A1A" stroke-width="0.8" class="svg-outline-path" style="pointer-events:none;"/>
+      <ellipse cx="248" cy="148" rx="28" ry="32" fill="none" stroke="#1A1A1A" stroke-width="0.8" class="svg-outline-path" style="pointer-events:none;"/>
+      <ellipse cx="160" cy="60" rx="32" ry="36" fill="none" stroke="#1A1A1A" stroke-width="0.8" class="svg-outline-path" style="pointer-events:none;"/>
+      <ellipse cx="100" cy="120" rx="26" ry="30" fill="none" stroke="#1A1A1A" stroke-width="0.8" class="svg-outline-path" style="pointer-events:none;"/>
+      <ellipse cx="220" cy="120" rx="26" ry="30" fill="none" stroke="#1A1A1A" stroke-width="0.8" class="svg-outline-path" style="pointer-events:none;"/>
+      <ellipse cx="130" cy="82" rx="22" ry="26" fill="none" stroke="#1A1A1A" stroke-width="0.8" class="svg-outline-path" style="pointer-events:none;"/>
+      <ellipse cx="190" cy="82" rx="22" ry="26" fill="none" stroke="#1A1A1A" stroke-width="0.8" class="svg-outline-path" style="pointer-events:none;"/>
+      <ellipse cx="42" cy="210" rx="24" ry="22" fill="none" stroke="#1A1A1A" stroke-width="0.8" class="svg-outline-path" style="pointer-events:none;"/>
+      <ellipse cx="278" cy="210" rx="24" ry="22" fill="none" stroke="#1A1A1A" stroke-width="0.8" class="svg-outline-path" style="pointer-events:none;"/>
+      <ellipse cx="160" cy="95" rx="18" ry="20" fill="none" stroke="#1A1A1A" stroke-width="0.8" class="svg-outline-path" style="pointer-events:none;"/>
+      <ellipse cx="160" cy="30" rx="16" ry="18" fill="none" stroke="#1A1A1A" stroke-width="0.8" class="svg-outline-path" style="pointer-events:none;"/>
+
+      <!-- Ground strings -->
+      <line x1="42" y1="230" x2="42" y2="252" stroke="#1A1A1A" stroke-width="1" style="pointer-events:none;"/>
+      <line x1="278" y1="230" x2="278" y2="252" stroke="#1A1A1A" stroke-width="1" style="pointer-events:none;"/>
+    </svg>
+
+  </div><!-- /arch-canvas-area -->
+
+  <!-- Color bottom bar -->
+  <div class="color-bar" id="color-bottom-bar">
+    <!-- Prompt state (no region selected) -->
+    <div class="color-bar__prompt" id="color-bar-prompt">
+      Tap any balloon region above to choose its color
+    </div>
+
+    <!-- Selected state (hidden until region tapped) -->
+    <div class="color-bar__selected-row" id="color-bar-selected" style="display:none;">
+      <div class="color-bar__region-name" id="bar-region-name">—</div>
+      <div class="color-bar__swatch-hex">
+        <div class="color-bar__swatch" id="bar-swatch"></div>
+        <div class="color-bar__hex" id="bar-hex">no color</div>
+      </div>
+    </div>
+
+    <div class="color-bar__actions" id="color-bar-actions" style="display:none;">
+      <button class="btn-ghost" style="flex:1; font-size:0.875rem;"
+              onclick="clearRegionColor()">Clear</button>
+      <button class="btn-primary" style="flex:2; font-size:0.875rem;"
+              id="open-picker-btn">Choose color</button>
+    </div>
+  </div>
+
+  <!-- Add to composition bar -->
+  <div style="padding:12px 16px 16px; background:#FFFFFF; border-top:1px solid #EBEBEB; display:flex; gap:8px;">
+    <a href="04-composition.html" class="btn-primary btn-primary--full">
+      Add to my event design &rarr;
+    </a>
+  </div>
+
+</div><!-- /layout -->
+
+<!-- Color picker overlay (built dynamically by script.js) -->
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="script.js"></script>
+<script>
+// Page-specific override: SVG region interaction for this screen
+$(document).ready(function() {
+
+  // Wire SVG event delegation
+  initSVGInteraction('svg-arch-container');
+
+  // Override the generic showColorBar to update THIS page's DOM
+  window.showColorBar = function(regionId, regionName) {
+    $('#color-bar-prompt').hide();
+    $('#color-bar-selected').show();
+    $('#color-bar-actions').show();
+    $('#bar-region-name').text(regionName);
+    var current = DesignStudio.regionColors[regionId];
+    if (current) {
+      $('#bar-swatch').css('background', current.hex);
+      $('#bar-hex').text(current.hex);
+    } else {
+      $('#bar-swatch').css('background', '#EBEBEB');
+      $('#bar-hex').text('no color yet');
+    }
+    // Hide tap instruction
+    $('#tap-instruction').addClass('hidden');
+    // Show region label bubble
+    $('#region-label-bubble').text(regionName).addClass('visible');
+    setTimeout(function() {
+      $('#region-label-bubble').removeClass('visible');
+    }, 1800);
+  };
+
+  // Override updateColorBar
+  window.updateColorBar = function() {
+    var regionId = DesignStudio.selectedRegion;
+    if (!regionId) return;
+    var colorObj = DesignStudio.regionColors[regionId];
+    if (!colorObj) return;
+    $('#bar-swatch').css('background', colorObj.hex);
+    $('#bar-hex').text(colorObj.hex);
+  };
+
+  // Open picker
+  $('#open-picker-btn').on('click', function() {
+    if (!DesignStudio.selectedRegion) {
+      $('#tap-instruction').removeClass('hidden');
+      return;
+    }
+    openPicker();
+  });
+
+  // Clear region color
+  window.clearRegionColor = function() {
+    var regionId = DesignStudio.selectedRegion;
+    if (!regionId) return;
+    var regions = document.querySelectorAll('[data-region="' + regionId + '"]');
+    // Get default fill class
+    var defaultMap = { 'main': '#F0EDE8', 'accent': '#EAE8F0', 'base': '#E8F0EA', 'topper': '#F0EEE0' };
+    regions.forEach(function(el) {
+      $(el).attr('fill', defaultMap[regionId] || '#F0F0F0');
+      el.classList.remove('colored');
+      $(el).css({ 'stroke': '#C0C0C0', 'stroke-width': '1', 'stroke-dasharray': '4 3' });
+    });
+    delete DesignStudio.regionColors[regionId];
+    $('#bar-swatch').css('background', '#EBEBEB');
+    $('#bar-hex').text('no color yet');
+  };
+
+});
+</script>
+</body>
+</html>

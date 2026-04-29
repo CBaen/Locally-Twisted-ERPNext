@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complete Your Look — Design Studio</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <a href="04-composition.html" class="nav-back">← My design</a>
+  <a href="index.html" class="logo" style="text-align:right;">Locally Twisted<span>Design Studio</span></a>
+</header>
+
+<!-- UPSELL SCREEN -->
+<div class="upsell-screen">
+
+  <!-- Seafoam-tinted banner (NOT teal — teal is CTA only per brand rules) -->
+  <div class="upsell-banner">
+    <div class="upsell-eyebrow">You might like this</div>
+    <h2>An arch would belong here.</h2>
+    <p>Customers who color a column often find the arch completes the look — in the same colors you already chose.</p>
+  </div>
+
+  <div class="upsell-content">
+
+    <!-- Before / After comparison -->
+    <div style="font-family:'Raleway',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#595A5C;margin-bottom:12px;">
+      Your design · with and without
+    </div>
+
+    <div class="upsell-compare">
+
+      <!-- BEFORE: column alone -->
+      <div class="upsell-before">
+        <div class="upsell-piece-thumb" style="background:#FBFBFB;">
+          <svg viewBox="0 0 60 80" fill="none">
+            <!-- Column -->
+            <rect x="18" y="20" width="24" height="48" rx="6"
+                  fill="#88FED0" stroke="rgba(0,0,0,0.08)" stroke-width="1"/>
+            <ellipse cx="30" cy="20" rx="12" ry="6"
+                     fill="#F4DFD7" stroke="rgba(0,0,0,0.08)" stroke-width="1"/>
+            <ellipse cx="30" cy="15" rx="8" ry="4"
+                     fill="#B8FF9E" stroke="rgba(0,0,0,0.08)" stroke-width="1"/>
+            <rect x="12" y="68" width="36" height="6" rx="3" fill="#E8E8E8"/>
+          </svg>
+        </div>
+        <span class="upsell-piece-label">Column only</span>
+      </div>
+
+      <!-- AFTER: arch + column together -->
+      <div class="upsell-after">
+        <span class="upsell-label-suggested">Suggested</span>
+        <div class="upsell-piece-thumb" style="background:#FBFBFB;">
+          <svg viewBox="0 0 80 80" fill="none">
+            <!-- Arch (smaller, positioned right) -->
+            <path d="M20 72 Q20 28 50 28 Q80 28 80 72" stroke="#ccc" stroke-width="1" fill="none"/>
+            <circle cx="24" cy="60" r="8" fill="#88FED0" stroke="rgba(0,0,0,0.08)" stroke-width="1"/>
+            <circle cx="22" cy="48" r="7" fill="#F4DFD7" stroke="rgba(0,0,0,0.06)" stroke-width="1"/>
+            <circle cx="27" cy="38" r="7" fill="#B8FF9E" stroke="rgba(0,0,0,0.08)" stroke-width="1"/>
+            <circle cx="36" cy="32" r="7" fill="#B8FF9E" stroke="rgba(0,0,0,0.08)" stroke-width="1"/>
+            <circle cx="50" cy="30" r="8" fill="#B8FF9E" stroke="rgba(0,0,0,0.08)" stroke-width="1"/>
+            <circle cx="64" cy="32" r="7" fill="#F4DFD7" stroke="rgba(0,0,0,0.06)" stroke-width="1"/>
+            <circle cx="73" cy="38" r="7" fill="#F4DFD7" stroke="rgba(0,0,0,0.06)" stroke-width="1"/>
+            <circle cx="78" cy="48" r="7" fill="#88FED0" stroke="rgba(0,0,0,0.08)" stroke-width="1"/>
+            <!-- Column (left of arch) -->
+            <rect x="2" y="36" width="14" height="30" rx="4"
+                  fill="#88FED0" stroke="rgba(0,0,0,0.08)" stroke-width="1"/>
+            <ellipse cx="9" cy="36" rx="7" ry="3.5"
+                     fill="#F4DFD7" stroke="rgba(0,0,0,0.06)" stroke-width="1"/>
+            <ellipse cx="9" cy="33" rx="5" ry="2.5"
+                     fill="#B8FF9E" stroke="rgba(0,0,0,0.08)" stroke-width="1"/>
+            <!-- Base -->
+            <rect x="1" y="66" width="16" height="4" rx="2" fill="#E8E8E8"/>
+            <rect x="18" y="72" width="10" height="4" rx="2" fill="#E8E8E8"/>
+            <rect x="72" y="72" width="10" height="4" rx="2" fill="#E8E8E8"/>
+          </svg>
+        </div>
+        <span class="upsell-piece-label">Arch + Column</span>
+      </div>
+
+    </div><!-- /.upsell-compare -->
+
+    <!-- Color match reassurance -->
+    <div class="upsell-colors">
+      <span class="upsell-colors-label">Same colors:</span>
+      <div class="upsell-color-dots">
+        <div class="upsell-dot" style="background:#88FED0;"></div>
+        <div class="upsell-dot" style="background:#F4DFD7;"></div>
+        <div class="upsell-dot" style="background:#B8FF9E;"></div>
+      </div>
+      <span style="font-family:'Raleway',sans-serif;font-size:0.75rem;color:#595A5C;margin-left:4px;">auto-matched</span>
+    </div>
+
+    <!-- The discovery note: subtle, not pushy -->
+    <div style="background:#FBFBFB;border-radius:10px;border:1px solid #E8E8E8;padding:14px 16px;margin-top:16px;margin-bottom:24px;">
+      <div style="font-family:'DM Serif Display',serif;font-size:0.95rem;color:#1A1A1A;margin-bottom:6px;">
+        Why it works
+      </div>
+      <p style="font-family:'Raleway',sans-serif;font-size:0.82rem;font-weight:300;color:#595A5C;line-height:1.5;margin:0;">
+        A column on its own marks a spot. A column with an arch behind it frames a moment.
+        The colors are already picked — you'd just be filling in the arch silhouette.
+      </p>
+    </div>
+
+    <!-- CTA: Add arch to design (teal fill — only CTA on screen) -->
+    <button id="btn-add-arch" class="btn btn-primary btn-block btn-lg">
+      Add arch in my colors →
+    </button>
+
+    <a href="05-done.html" class="btn btn-ghost btn-block mt-1"
+       style="text-align:center;display:flex;">
+      Keep my design as-is
+    </a>
+
+    <!-- Annotation: design note for the evaluator -->
+    <div style="margin-top:32px;padding:16px;background:#88FED020;border-radius:12px;border:1px solid #88FED060;">
+      <div style="font-family:'Raleway',sans-serif;font-size:0.75rem;font-weight:700;color:#595A5C;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;">
+        Design note (mockup annotation)
+      </div>
+      <p style="font-family:'Raleway',sans-serif;font-size:0.78rem;color:#595A5C;line-height:1.5;margin:0;">
+        This upsell fires <em>after</em> the customer has already added a column and viewed their composition —
+        never mid-flow. The suggestion is ONE piece (arch), not a list of options.
+        Research grounding: Hick's Law (limit to 2 alternatives), Zeigarnik Effect (empty-slot in composition
+        view is more compelling than a recommendation card), post-completion suggestion timing
+        (Srihari GP, Medium — "interrupting at the wrong moment leads to frustration").
+      </p>
+    </div>
+
+  </div><!-- /.upsell-content -->
+
+</div><!-- /.upsell-screen -->
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
