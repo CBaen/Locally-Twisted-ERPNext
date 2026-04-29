@@ -111,6 +111,21 @@ The four reference surfaces above (failed Hetzner site, Odoo GitHub repo, local 
 7. `locally-twisted-decisions.md` (LT decisions with reasoning)
 8. `git log --oneline -20`
 
+## Design guide — where it is, why it's here, and why it must stay
+
+**Location:** `_resources/design-guide/` in this directory. Contains:
+- `README.md` — framing (guide, not gospel) + per-file purpose
+- `synthesis/` — Next.js TSX + globals.css + 5 markdown docs (rationale, mood, voice, menu, SYNTHESIS-BRIEF, SYNTHESIS-COMPLETE) from the synthesis instance that hybridized D3 + D5 + D7 onto LT's existing visual language
+- `screenshots/` — 8 GL-approved screenshots (4 pages × 2 viewports) + RENDER-REPORT.md
+
+**Why it's here:** Originally the synthesis lived at `C:\Users\baenb\projects\zoho-locally-twisted\gallery\` — a separate project directory outside this client's working tree. Multiple build instances failed to find it. Phase 1 PLAN.md referenced "Opus Competition Redesign concept" as a placeholder TBD with no path. The standard arrival reading order led every instance through every artifact and not one of them pointed at the gallery. Instances either skipped the design reference entirely or worked without it — measurable trust cost on the resulting customer-facing pages. GL had to point an instance at it explicitly on 2026-04-29 to break the cycle.
+
+The fix was structural: copy the synthesis + approved screenshots into this client's `_resources/`, signpost from this CLAUDE.md and from the reading order, log the receipt in `locally-twisted-decisions.md` (2026-04-29). Now any arriving instance encounters it during normal arrival.
+
+**Why it must stay here:** The agency client-isolation rule says every client folder is self-contained for transfer. A design contract that lives outside the client folder is a transferability bug — it would break the moment Jeff takes ownership, and it broke for us long before that. **Do not move the design guide back into a parent project directory or any external location.** If the synthesis is ever updated (new round, refinement, new winner), update it in place at `_resources/design-guide/` and append a note to the decisions log.
+
+**Status (it's a guide, not gospel):** Per GL 2026-04-29, *"they should live in our directory as a design guide, not as gospel."* Treat the synthesis as taste calibration and structural inspiration — not a literal port target. The brand foundation in `_resources/STYLE-GUIDE.md` remains the source of truth for tokens (colors, fonts, spacing). When the synthesis suggests a structural pattern (eyebrow caps, generous whitespace, full-bleed bands, soft cards) and the LT pages don't have it, the synthesis is the right reference to reach for. When the synthesis and LT's accessibility / brand / business constraints conflict, the constraints win.
+
 ## Loud Failure Coverage
 
 Per global rule at `C:\Users\baenb\.claude\rules\loud-failure.md`. LT-specific surfaces tracked as they're built. The Odoo `/book` form silent-failure incident (2026-04-22) is the founding receipt for this rule — never repeat that pattern.
