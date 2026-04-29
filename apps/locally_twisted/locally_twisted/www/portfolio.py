@@ -887,6 +887,103 @@ PAGE_JS = """
     const initial = readInitialState();
     applyFilter(initial.event, initial.category);
 })();
+
+
+/* Lightbox modal — opens the full photo when a card is clicked.
+ * Single modal element reused across all cards. Reads card data attrs
+ * (data-modal-image / data-modal-title / data-modal-category-label / data-modal-alt)
+ * to populate the panel. Handles ESC, backdrop click, close button,
+ * focus management, body scroll lock, and prefers-reduced-motion.
+ */
+(function () {
+    'use strict';
+
+    const modal = document.querySelector('[data-portfolio-modal]');
+    if (!modal) return;
+    const modalImage = modal.querySelector('[data-modal-image]');
+    const modalTitle = modal.querySelector('[data-modal-title]');
+    const modalCategory = modal.querySelector('[data-modal-category]');
+    const closeTriggers = Array.from(modal.querySelectorAll('[data-modal-close]'));
+    const cards = Array.from(document.querySelectorAll('[data-portfolio-card]'));
+
+    let lastFocused = null;
+
+    function openModal(card) {
+        const image = card.getAttribute('data-modal-image') || '';
+        const alt = card.getAttribute('data-modal-alt') || '';
+        const title = card.getAttribute('data-modal-title') || '';
+        const category = card.getAttribute('data-modal-category-label') || '';
+
+        modalImage.setAttribute('src', image);
+        modalImage.setAttribute('alt', alt);
+        modalTitle.textContent = title;
+        modalCategory.textContent = category;
+
+        lastFocused = card;
+        modal.removeAttribute('hidden');
+        document.body.classList.add('lt-modal-open');
+
+        // Move focus to close button on next tick (after display swap settles)
+        const closeBtn = modal.querySelector('.lt-portfolio-modal__close');
+        if (closeBtn) {
+            window.setTimeout(function () { closeBtn.focus(); }, 0);
+        }
+    }
+
+    function closeModal() {
+        if (modal.hasAttribute('hidden')) return;
+        modal.setAttribute('hidden', '');
+        document.body.classList.remove('lt-modal-open');
+        // Free the loaded image so memory doesn't grow with each open
+        modalImage.setAttribute('src', '');
+        modalImage.setAttribute('alt', '');
+        if (lastFocused && typeof lastFocused.focus === 'function') {
+            lastFocused.focus();
+        }
+        lastFocused = null;
+    }
+
+    function isOpen() {
+        return !modal.hasAttribute('hidden');
+    }
+
+    // Wire each card to open the modal on click
+    cards.forEach(function (card) {
+        card.addEventListener('click', function () { openModal(card); });
+    });
+
+    // Wire close triggers (close button + backdrop)
+    closeTriggers.forEach(function (el) {
+        el.addEventListener('click', function () { closeModal(); });
+    });
+
+    // Keyboard: ESC closes modal (capture phase so the filter's ESC handler
+    // doesn't also fire and clear filters when modal is open).
+    document.addEventListener('keydown', function (ev) {
+        if (!isOpen()) return;
+        if (ev.key === 'Escape') {
+            ev.stopImmediatePropagation();
+            closeModal();
+            return;
+        }
+        // Focus trap inside modal
+        if (ev.key === 'Tab') {
+            const focusable = modal.querySelectorAll(
+                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            );
+            if (focusable.length === 0) return;
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+            if (ev.shiftKey && document.activeElement === first) {
+                ev.preventDefault();
+                last.focus();
+            } else if (!ev.shiftKey && document.activeElement === last) {
+                ev.preventDefault();
+                first.focus();
+            }
+        }
+    }, true);
+})();
 """
 
 
