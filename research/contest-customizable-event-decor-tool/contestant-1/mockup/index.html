@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Color Stage — Screen Gallery | Contestant 1</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body { background: #F0F0F0; }
+    .gallery-page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 16px 48px;
+    }
+    .gallery-header {
+      padding: 40px 0 24px;
+      text-align: center;
+    }
+    .gallery-header h1 { font-size: 32px; margin-bottom: 8px; }
+    .gallery-header p { font-size: 14px; color: #999; }
+    .concept-pill {
+      display: inline-block;
+      background: #1A1A1A;
+      color: white;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+    }
+    .gallery-meta {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    .gallery-meta__item {
+      font-size: 12px;
+      color: #999;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .gallery-meta__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #008080;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    @media (min-width: 768px) {
+      .gallery-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .gallery-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      text-decoration: none;
+      display: block;
+      transition: box-shadow 0.15s, transform 0.1s;
+    }
+    .gallery-card:hover {
+      box-shadow: 0 8px 24px rgba(0,128,128,0.12);
+      transform: translateY(-2px);
+    }
+    .gallery-card__preview {
+      background: #FAFAFA;
+      min-height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .gallery-card__preview iframe {
+      width: 375px;
+      height: 667px;
+      border: none;
+      transform: scale(0.45);
+      transform-origin: top left;
+      pointer-events: none;
+    }
+    .gallery-card__preview-wrap {
+      width: 169px; /* 375 * 0.45 */
+      height: 300px; /* 667 * 0.45 */
+      overflow: hidden;
+    }
+    .gallery-card__num {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: #1A1A1A;
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.08em;
+    }
+    .gallery-card__info {
+      padding: 12px 14px 14px;
+    }
+    .gallery-card__screen {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #CCC;
+    }
+    .gallery-card__title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 16px;
+      color: #1A1A1A;
+      margin: 2px 0 4px;
+    }
+    .gallery-card__desc {
+      font-size: 12px;
+      color: #999;
+      line-height: 1.5;
+    }
+    .gallery-card__link {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #008080;
+      text-decoration: none;
+    }
+
+    /* Design principles callout */
+    .principles-block {
+      background: #1A1A1A;
+      color: white;
+      border-radius: 12px;
+      padding: 24px;
+      margin: 24px 0;
+    }
+    .principles-block h3 {
+      font-family: 'DM Serif Display', serif;
+      color: white;
+      font-size: 20px;
+      margin-bottom: 16px;
+    }
+    .principles-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 600px) {
+      .principles-list { grid-template-columns: 1fr; }
+    }
+    .principles-list li {
+      font-size: 13px;
+      line-height: 1.5;
+      color: rgba(255,255,255,0.75);
+      padding-left: 16px;
+      position: relative;
+    }
+    .principles-list li::before {
+      content: '✦';
+      position: absolute;
+      left: 0;
+      color: #008080;
+      font-size: 10px;
+      top: 3px;
+    }
+  </style>
+</head>
+<body>
+<div class="gallery-page">
+
+  <div class="gallery-header">
+    <div class="concept-pill">The Color Stage</div>
+    <h1>Screen Gallery</h1>
+    <p>Contestant 1 — Locally Twisted Design Studio mockup</p>
+    <div class="gallery-meta">
+      <div class="gallery-meta__item">
+        <div class="gallery-meta__dot"></div>
+        6 screen states
+      </div>
+      <div class="gallery-meta__item">
+        <div class="gallery-meta__dot"></div>
+        Mobile-first 375px baseline
+      </div>
+      <div class="gallery-meta__item">
+        <div class="gallery-meta__dot"></div>
+        Vanilla JS + jQuery only
+      </div>
+      <div class="gallery-meta__item">
+        <div class="gallery-meta__dot"></div>
+        Frappe-recreatable
+      </div>
+    </div>
+  </div>
+
+  <!-- Screen cards -->
+  <div class="gallery-grid">
+
+    <a href="01-entry.html" class="gallery-card">
+      <div class="gallery-card__preview" style="background: #FBFBFB;">
+        <span class="gallery-card__num">01</span>
+        <!-- Preview illustration: shape grid -->
+        <svg width="140" height="120" viewBox="0 0 200 160" fill="none">
+          <!-- 4 shape thumbnails -->
+          <rect x="4" y="4" width="88" height="72" rx="8" fill="white" stroke="#EBEBEB" stroke-width="2"/>
+          <ellipse cx="22" cy="28" rx="6" ry="7" fill="#F4A0A0"/>
+          <ellipse cx="31" cy="22" rx="7" ry="8" fill="#F4DFD7"/>
+          <ellipse cx="40" cy="18" rx="8" ry="9" fill="#F4A0A0"/>
+          <ellipse cx="50" cy="18" rx="8" ry="9" fill="#F4DFD7"/>
+          <ellipse cx="59" cy="22" rx="7" ry="8" fill="#F4A0A0"/>
+          <ellipse cx="68" cy="28" rx="6" ry="7" fill="#F4DFD7"/>
+          <text x="48" y="60" text-anchor="middle" font-family="serif" font-size="9" fill="#595A5C">Balloon Arch</text>
+
+          <rect x="100" y="4" width="88" height="72" rx="8" fill="white" stroke="#EBEBEB" stroke-width="2"/>
+          <ellipse cx="144" cy="58" rx="12" ry="8" fill="#C3B1E1"/>
+          <ellipse cx="144" cy="46" rx="13" ry="10" fill="#B57EDC"/>
+          <ellipse cx="144" cy="33" rx="13" ry="10" fill="#C3B1E1"/>
+          <ellipse cx="144" cy="20" rx="12" ry="9" fill="#B57EDC"/>
+          <text x="144" y="68" text-anchor="middle" font-family="serif" font-size="9" fill="#595A5C">Column</text>
+
+          <rect x="4" y="84" width="88" height="72" rx="8" fill="white" stroke="#EBEBEB" stroke-width="2"/>
+          <ellipse cx="10" cy="100" rx="7" ry="8" fill="#ADD8E6"/>
+          <ellipse cx="22" cy="108" rx="8" ry="9" fill="#C3DCF3"/>
+          <ellipse cx="35" cy="114" rx="8" ry="9" fill="#ADD8E6"/>
+          <ellipse cx="48" cy="116" rx="9" ry="9" fill="#C3DCF3"/>
+          <ellipse cx="61" cy="114" rx="8" ry="9" fill="#ADD8E6"/>
+          <ellipse cx="74" cy="108" rx="8" ry="9" fill="#C3DCF3"/>
+          <text x="48" y="148" text-anchor="middle" font-family="serif" font-size="9" fill="#595A5C">Garland</text>
+
+          <rect x="100" y="84" width="88" height="72" rx="8" fill="white" stroke="#EBEBEB" stroke-width="2"/>
+          <ellipse cx="112" cy="96" rx="8" ry="8" fill="#88FED0"/>
+          <ellipse cx="128" cy="96" rx="8" ry="8" fill="#9DC08B"/>
+          <ellipse cx="144" cy="96" rx="8" ry="8" fill="#88FED0"/>
+          <ellipse cx="160" cy="96" rx="8" ry="8" fill="#9DC08B"/>
+          <ellipse cx="120" cy="110" rx="8" ry="8" fill="#9DC08B"/>
+          <ellipse cx="136" cy="110" rx="8" ry="8" fill="#88FED0"/>
+          <ellipse cx="152" cy="110" rx="8" ry="8" fill="#9DC08B"/>
+          <ellipse cx="112" cy="124" rx="8" ry="8" fill="#88FED0"/>
+          <ellipse cx="128" cy="124" rx="8" ry="8" fill="#9DC08B"/>
+          <ellipse cx="144" cy="124" rx="8" ry="8" fill="#88FED0"/>
+          <text x="144" y="148" text-anchor="middle" font-family="serif" font-size="9" fill="#595A5C">Backdrop</text>
+        </svg>
+      </div>
+      <div class="gallery-card__info">
+        <div class="gallery-card__screen">Screen 01</div>
+        <div class="gallery-card__title">Pick a Shape</div>
+        <div class="gallery-card__desc">Customer arrives. 7 shapes as stylized illustration cards. No dropdowns, no prices.</div>
+        <span class="gallery-card__link">Open screen →</span>
+      </div>
+    </a>
+
+    <a href="02-color-one.html" class="gallery-card">
+      <div class="gallery-card__preview" style="background: #FBFBFB;">
+        <span class="gallery-card__num">02</span>
+        <svg width="140" height="120" viewBox="0 0 200 160" fill="none">
+          <!-- Arch illustration with color zones -->
+          <ellipse cx="10"  cy="130" rx="12" ry="14" fill="#FF6B6B"/>
+          <ellipse cx="35"  cy="108" rx="14" ry="16" fill="#FF6B6B"/>
+          <ellipse cx="64"  cy="85"  rx="16" ry="18" fill="#FF6B6B"/>
+          <ellipse cx="100" cy="70"  rx="18" ry="20" fill="#FF6B6B"/>
+          <ellipse cx="136" cy="85"  rx="16" ry="18" fill="#FF6B6B"/>
+          <ellipse cx="165" cy="108" rx="14" ry="16" fill="#FF6B6B"/>
+          <ellipse cx="190" cy="130" rx="12" ry="14" fill="#FF6B6B"/>
+          <!-- Accent -->
+          <ellipse cx="23"  cy="118" rx="8"  ry="9"  fill="#F7E7CE"/>
+          <ellipse cx="50"  cy="96"  rx="9"  ry="10" fill="#F7E7CE"/>
+          <ellipse cx="82"  cy="76"  rx="10" ry="11" fill="#F7E7CE"/>
+          <ellipse cx="118" cy="76"  rx="10" ry="11" fill="#F7E7CE"/>
+          <ellipse cx="150" cy="96"  rx="9"  ry="10" fill="#F7E7CE"/>
+          <ellipse cx="177" cy="118" rx="8"  ry="9"  fill="#F7E7CE"/>
+          <!-- Color chips hint -->
+          <rect x="4" y="148" width="28" height="10" rx="5" fill="#FF6B6B"/>
+          <rect x="36" y="148" width="36" height="10" rx="5" fill="#F7E7CE"/>
+          <rect x="76" y="148" width="28" height="10" rx="5" fill="#C3B1E1"/>
+        </svg>
+      </div>
+      <div class="gallery-card__info">
+        <div class="gallery-card__screen">Screen 02</div>
+        <div class="gallery-card__title">Color One Shape</div>
+        <div class="gallery-card__desc">Tap a region, pick from the quick swatch row. Illustration repaints immediately. Region chips show current colors.</div>
+        <span class="gallery-card__link">Open screen →</span>
+      </div>
+    </a>
+
+    <a href="03-picker.html" class="gallery-card">
+      <div class="gallery-card__preview" style="background: #FBFBFB;">
+        <span class="gallery-card__num">03</span>
+        <svg width="140" height="120" viewBox="0 0 200 160" fill="none">
+          <!-- Grid of swatches -->
+          <text x="6" y="16" font-family="sans-serif" font-size="8" fill="#BBB" font-weight="700">PINKS &amp; REDS</text>
+          <rect x="6"  y="22" width="24" height="24" rx="5" fill="#FFD1DC"/>
+          <rect x="34" y="22" width="24" height="24" rx="5" fill="#F4A0A0"/>
+          <rect x="62" y="22" width="24" height="24" rx="5" fill="#FF6B6B" stroke="#1A1A1A" stroke-width="2"/>
+          <rect x="90" y="22" width="24" height="24" rx="5" fill="#D4849A"/>
+          <rect x="118" y="22" width="24" height="24" rx="5" fill="#FF69B4"/>
+          <rect x="146" y="22" width="24" height="24" rx="5" fill="#C06B85"/>
+          <!-- Hex tooltip -->
+          <rect x="52" y="50" width="80" height="20" rx="4" fill="#1A1A1A"/>
+          <text x="92" y="63" text-anchor="middle" font-family="monospace" font-size="9" fill="white">#FF6B6B Coral</text>
+          <text x="6" y="84" font-family="sans-serif" font-size="8" fill="#BBB" font-weight="700">PURPLES &amp; BLUES</text>
+          <rect x="6"  y="90" width="24" height="24" rx="5" fill="#C3B1E1"/>
+          <rect x="34" y="90" width="24" height="24" rx="5" fill="#B57EDC"/>
+          <rect x="62" y="90" width="24" height="24" rx="5" fill="#8BA5D8"/>
+          <rect x="90" y="90" width="24" height="24" rx="5" fill="#4169E1"/>
+          <rect x="118" y="90" width="24" height="24" rx="5" fill="#ADD8E6"/>
+          <rect x="146" y="90" width="24" height="24" rx="5" fill="#001F5B"/>
+          <text x="6" y="130" font-family="sans-serif" font-size="8" fill="#BBB" font-weight="700">GREENS &amp; TEALS</text>
+          <rect x="6"  y="136" width="24" height="20" rx="5" fill="#88FED0"/>
+          <rect x="34" y="136" width="24" height="20" rx="5" fill="#9DC08B"/>
+          <rect x="62" y="136" width="24" height="20" rx="5" fill="#93E9BE"/>
+          <rect x="90" y="136" width="24" height="20" rx="5" fill="#228B22"/>
+          <rect x="118" y="136" width="24" height="20" rx="5" fill="#50C878"/>
+          <rect x="146" y="136" width="24" height="20" rx="5" fill="#355E3B"/>
+        </svg>
+      </div>
+      <div class="gallery-card__info">
+        <div class="gallery-card__screen">Screen 03</div>
+        <div class="gallery-card__title">Full Palette (50+ colors)</div>
+        <div class="gallery-card__desc">Colors grouped by family. Hex code on hover. Recently used row at top. All LT balloon colors browseable.</div>
+        <span class="gallery-card__link">Open screen →</span>
+      </div>
+    </a>
+
+    <a href="04-composition.html" class="gallery-card">
+      <div class="gallery-card__preview" style="background: #FAFAFA;">
+        <span class="gallery-card__num">04</span>
+        <svg width="160" height="100" viewBox="0 0 240 140" fill="none">
+          <!-- Three pieces side by side -->
+          <!-- Column mini -->
+          <ellipse cx="22" cy="125" rx="12" ry="7" fill="#C3B1E1"/>
+          <ellipse cx="22" cy="113" rx="14" ry="10" fill="#B57EDC"/>
+          <ellipse cx="22" cy="98"  rx="14" ry="10" fill="#C3B1E1"/>
+          <ellipse cx="22" cy="83"  rx="14" ry="10" fill="#B57EDC"/>
+          <ellipse cx="22" cy="68"  rx="14" ry="10" fill="#C3B1E1"/>
+          <ellipse cx="15" cy="48" rx="10" ry="12" fill="#FFD1DC"/>
+          <ellipse cx="22" cy="43" rx="10" ry="13" fill="#F4A0A0"/>
+          <ellipse cx="29" cy="48" rx="10" ry="12" fill="#FFD1DC"/>
+
+          <!-- Arch center -->
+          <ellipse cx="60"  cy="130" rx="10" ry="12" fill="#FF6B6B"/>
+          <ellipse cx="80"  cy="112" rx="12" ry="14" fill="#FF6B6B"/>
+          <ellipse cx="105" cy="95"  rx="14" ry="16" fill="#FF6B6B"/>
+          <ellipse cx="130" cy="88"  rx="16" ry="18" fill="#FF6B6B"/>
+          <ellipse cx="158" cy="95"  rx="14" ry="16" fill="#FF6B6B"/>
+          <ellipse cx="182" cy="112" rx="12" ry="14" fill="#FF6B6B"/>
+          <ellipse cx="200" cy="130" rx="10" ry="12" fill="#FF6B6B"/>
+          <ellipse cx="70"  cy="120" rx="7" ry="8" fill="#F7E7CE"/>
+          <ellipse cx="93"  cy="103" rx="8" ry="9" fill="#F7E7CE"/>
+          <ellipse cx="118" cy="90"  rx="9" ry="10" fill="#F7E7CE"/>
+          <ellipse cx="144" cy="90"  rx="9" ry="10" fill="#F7E7CE"/>
+          <ellipse cx="170" cy="103" rx="8" ry="9" fill="#F7E7CE"/>
+          <ellipse cx="193" cy="120" rx="7" ry="8" fill="#F7E7CE"/>
+
+          <!-- Backdrop mini right -->
+          <ellipse cx="214" cy="50" rx="8" ry="8" fill="#88FED0"/>
+          <ellipse cx="228" cy="50" rx="8" ry="8" fill="#9DC08B"/>
+          <ellipse cx="221" cy="65" rx="8" ry="8" fill="#88FED0"/>
+          <ellipse cx="214" cy="80" rx="8" ry="8" fill="#9DC08B"/>
+          <ellipse cx="228" cy="80" rx="8" ry="8" fill="#88FED0"/>
+          <ellipse cx="221" cy="95" rx="8" ry="8" fill="#9DC08B"/>
+          <ellipse cx="214" cy="110" rx="8" ry="8" fill="#88FED0"/>
+          <ellipse cx="228" cy="110" rx="8" ry="8" fill="#9DC08B"/>
+
+          <!-- Ground line -->
+          <line x1="0" y1="135" x2="240" y2="135" stroke="#E0E0E0" stroke-width="2"/>
+        </svg>
+      </div>
+      <div class="gallery-card__info">
+        <div class="gallery-card__screen">Screen 04</div>
+        <div class="gallery-card__title">Composition View</div>
+        <div class="gallery-card__desc">3 pieces assembled side-by-side on the stage. Each piece tappable to edit. Full color list below.</div>
+        <span class="gallery-card__link">Open screen →</span>
+      </div>
+    </a>
+
+    <a href="05-done.html" class="gallery-card">
+      <div class="gallery-card__preview" style="background: linear-gradient(160deg, #FFF5F5, #F0FAF5);">
+        <span class="gallery-card__num">05</span>
+        <svg width="140" height="100" viewBox="0 0 200 130" fill="none">
+          <rect x="10" y="10" width="180" height="90" rx="12" fill="white" opacity="0.8"/>
+          <!-- Mini stage inside card -->
+          <ellipse cx="36" cy="86" rx="8" ry="9" fill="#FF6B6B"/>
+          <ellipse cx="52" cy="74" rx="9" ry="10" fill="#FF6B6B"/>
+          <ellipse cx="70" cy="64" rx="10" ry="12" fill="#FF6B6B"/>
+          <ellipse cx="90" cy="58" rx="12" ry="14" fill="#FF6B6B"/>
+          <ellipse cx="110" cy="64" rx="10" ry="12" fill="#FF6B6B"/>
+          <ellipse cx="128" cy="74" rx="9" ry="10" fill="#FF6B6B"/>
+          <ellipse cx="145" cy="86" rx="8" ry="9" fill="#FF6B6B"/>
+          <ellipse cx="44" cy="79" rx="6" ry="7" fill="#F7E7CE"/>
+          <ellipse cx="61" cy="69" rx="7" ry="8" fill="#F7E7CE"/>
+          <ellipse cx="80" cy="61" rx="8" ry="9" fill="#F7E7CE"/>
+          <ellipse cx="100" cy="61" rx="8" ry="9" fill="#F7E7CE"/>
+          <ellipse cx="119" cy="69" rx="7" ry="8" fill="#F7E7CE"/>
+          <ellipse cx="137" cy="79" rx="6" ry="7" fill="#F7E7CE"/>
+          <!-- CTA hint -->
+          <rect x="40" y="100" width="120" height="18" rx="9" fill="#008080"/>
+          <text x="100" y="113" text-anchor="middle" font-family="sans-serif" font-size="9" fill="white" font-weight="700">Send this to Jeff</text>
+        </svg>
+      </div>
+      <div class="gallery-card__info">
+        <div class="gallery-card__screen">Screen 05</div>
+        <div class="gallery-card__title">"I'm Done" Moment</div>
+        <div class="gallery-card__desc">Design summary view. Plain-language piece list. Pre-filled inquiry form. "Send to Jeff" CTA. No price shown.</div>
+        <span class="gallery-card__link">Open screen →</span>
+      </div>
+    </a>
+
+    <a href="06-upsell.html" class="gallery-card">
+      <div class="gallery-card__preview" style="background: #FBFBFB;">
+        <span class="gallery-card__num">06</span>
+        <svg width="140" height="100" viewBox="0 0 200 130" fill="none">
+          <!-- Arch (just colored) -->
+          <ellipse cx="40"  cy="80" rx="8"  ry="9"  fill="#FF6B6B"/>
+          <ellipse cx="60"  cy="65" rx="10" ry="11" fill="#FF6B6B"/>
+          <ellipse cx="84"  cy="55" rx="12" ry="13" fill="#FF6B6B"/>
+          <ellipse cx="108" cy="55" rx="12" ry="13" fill="#FF6B6B"/>
+          <ellipse cx="132" cy="65" rx="10" ry="11" fill="#FF6B6B"/>
+          <ellipse cx="152" cy="80" rx="8"  ry="9"  fill="#FF6B6B"/>
+          <!-- Suggestion chip: garland in same colors -->
+          <rect x="20"  y="96" width="70" height="28" rx="8" fill="white" stroke="#EBEBEB" stroke-width="1.5"/>
+          <ellipse cx="30" cy="108" rx="5" ry="6" fill="#FF6B6B"/>
+          <ellipse cx="40" cy="113" rx="6" ry="6" fill="#F7E7CE"/>
+          <ellipse cx="52" cy="116" rx="6" ry="6" fill="#FF6B6B"/>
+          <text x="62" y="114" font-family="serif" font-size="8" fill="#1A1A1A">Garland</text>
+          <!-- Suggestion chip: bouquet -->
+          <rect x="100" y="96" width="70" height="28" rx="8" fill="white" stroke="#EBEBEB" stroke-width="1.5"/>
+          <line x1="135" y1="122" x2="125" y2="108" stroke="#DDD" stroke-width="1"/>
+          <line x1="135" y1="122" x2="135" y2="106" stroke="#DDD" stroke-width="1"/>
+          <line x1="135" y1="122" x2="145" y2="108" stroke="#DDD" stroke-width="1"/>
+          <ellipse cx="125" cy="104" rx="5" ry="6" fill="#FF6B6B"/>
+          <ellipse cx="135" cy="102" rx="5" ry="6" fill="#F7E7CE"/>
+          <ellipse cx="145" cy="104" rx="5" ry="6" fill="#FF6B6B"/>
+          <text x="135" y="120" text-anchor="middle" font-family="serif" font-size="8" fill="#1A1A1A">Bouquet</text>
+        </svg>
+      </div>
+      <div class="gallery-card__info">
+        <div class="gallery-card__screen">Screen 06</div>
+        <div class="gallery-card__title">Discovery Moment</div>
+        <div class="gallery-card__desc">After coloring arch — suggested pieces shown IN CUSTOMER'S COLORS. The next piece looks like it already belongs.</div>
+        <span class="gallery-card__link">Open screen →</span>
+      </div>
+    </a>
+
+  </div><!-- /.gallery-grid -->
+
+  <!-- Design principles summary -->
+  <div class="principles-block">
+    <h3>The Color Stage — Design Principles</h3>
+    <ul class="principles-list">
+      <li><strong>Coloring book feel, not form feel.</strong> Tap a region, pick a color, watch it fill. No dropdowns, no selects.</li>
+      <li><strong>Stage accumulates, never locks.</strong> Any piece is re-editable at any time. No linear wizard steps.</li>
+      <li><strong>Palette is catalog.</strong> 50+ LT balloon colors, grouped by family. No freeform color wheel — these are real balloons Jeff can source.</li>
+      <li><strong>Discovery through color inheritance.</strong> Suggested pieces are shown in the customer's own palette — the next arch already looks like it belongs.</li>
+      <li><strong>Ends with inquiry, not cart.</strong> "Send to Jeff" is the only CTA. Design is pre-filled into the inquiry form. No price shown during design.</li>
+      <li><strong>Frappe-native.</strong> Inline SVG in Web Page HTML content. Script section for JS. web_include_css for shared styles. Zero NPM, zero build step.</li>
+      <li><strong>Mobile-first 375px.</strong> Horizontal swatch scroll (44px hit area), bottom sheet palette, stage strip horizontal scroll.</li>
+      <li><strong>V1 floor:</strong> 1 shape, 2 fill zones, 12 swatches, mailto inquiry. Everything else is Stage 2.</li>
+    </ul>
+  </div>
+
+  <p style="text-align:center; font-size:12px; color:#BBB; padding: 16px;">
+    Contestant 1 · The Color Stage · Locally Twisted Design Studio mockup · 2026-04-29
+  </p>
+
+</div><!-- /.gallery-page -->
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</body>
+</html>
