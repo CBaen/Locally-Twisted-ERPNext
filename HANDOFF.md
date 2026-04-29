@@ -42,7 +42,7 @@ To resume any of them: `SendMessage(to: "<id>", message: ...)`. The runtime says
 
 GL has the synthesis path pre-mapped before they see the renders. **Your job for `FINAL-SURFACE.md` is to surface this pipeline + scoring + crown jewels + render gallery, not to pick a winner.**
 
-**3. C1 may still be tightening when you arrive.** I dispatched the tightening pass to all 4 in parallel; C2/C3/C4 landed, C1 was still running when I started this handoff. Check `contestant-1/TIGHTEN-COMPLETE.md` before running the render gallery — if it's not there, wait or send a status check. If it IS there, all 4 are ready.
+**3. All 4 contestants are READY for the render gallery.** C1 landed their tightening just before this handoff was finalized — verified `TIGHTEN-COMPLETE.md` exists in all 4 contestant dirs. C1's tightening was the strongest single pass: full rewrite of `02-color-one.html` to resolve the mockup-vs-reasoning misalignment, per-region attribution on `05-done.html`, and the crown jewel ("pieces considered") is now visible in `05-done.html` rather than living only in REASONING.md. All 4 are ready to capture.
 
 ## What's at the contest root
 

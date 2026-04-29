@@ -1,17 +1,26 @@
 """LT guest checkout — true guest, no User account.
 
-Single-item buy-now flow for demo:
-    /checkout?item=<item_code>&qty=<n>
+Two entry shapes both land here:
 
-- Page renders item summary + shipping form (email, name, phone, address)
-- Submits to submit_guest_order via AJAX
-- Endpoint creates Customer + Contact (NO User) + Sales Order
-- Returns sales_order name; next turn wires the Stripe Payment Request
+    /checkout?item=<code>&qty=<n>   buy-now path; server renders the summary line
+    /checkout                        cart path; client JS hydrates summary from localStorage
+
+Submission accepts EITHER `item_code` + `qty` (buy-now, backwards-compatible)
+OR `items_json` (cart, JSON array of {item_code, qty}). The endpoint resolves
+both shapes through `_resolve_cart_items` into a single canonical list, then
+validates each line against published Website Item + Item Price on the server
+side. Pricing is NEVER taken from the client.
+
+Endpoint creates Customer + Contact (NO User) + Sales Order with one or more
+lines + Payment Request + Stripe Checkout Session. Returns the hosted Stripe
+URL; the caller redirects there.
 
 Legal frame: customer data collected only for order fulfillment. No
 account-creation surface. No marketing without opt-in. Receipt email
 on order completion is transactional only (CAN-SPAM-safe).
 """
+import json
+
 import frappe
 from frappe import _
 from frappe.rate_limiter import rate_limit
@@ -19,6 +28,9 @@ from frappe.utils import escape_html, validate_email_address, flt, cint
 
 no_cache = 1
 sitemap = 0  # don't index the checkout page
+
+MAX_CART_LINES = 50  # mirrors locally_twisted.api.cart.MAX_CART_LINES
+PRICE_LIST = "Standard Selling"
 
 
 PAGE_CSS = """
@@ -232,45 +244,105 @@ PAGE_CSS = """
 
 
 def get_context(context):
-    """Render the guest checkout page for one Website Item.
+    """Render the guest checkout page in either buy-now or cart mode.
 
-    Query params: item (item_code, required), qty (int, default 1).
-    Page-not-found if the item is missing or unpublished.
+    Buy-now mode (?item=<code>&qty=<n>): server renders the single-item
+    summary at request time. Backwards-compatible with existing buy-now
+    URLs from product detail pages.
+
+    Cart mode (no params): server renders an empty summary container.
+    Client JS in checkout.html reads localStorage, calls
+    locally_twisted.api.cart.get_cart_items, and hydrates the summary
+    + a hidden items_json field on the form.
+
+    Page-not-found is reserved for buy-now URLs whose item disappears;
+    cart mode renders happily even with an empty cart (the JS shows an
+    empty-cart message and disables submit).
     """
     item_code = (frappe.form_dict.get("item") or "").strip()
     qty = max(1, cint(frappe.form_dict.get("qty") or 1))
 
-    if not item_code:
-        frappe.throw(_("Please pick an item before checking out."), frappe.ValidationError)
-
-    website_item = frappe.db.get_value(
-        "Website Item",
-        {"item_code": item_code, "published": 1},
-        ["name", "item_code", "web_item_name", "website_image", "route"],
-        as_dict=True,
-    )
-    if not website_item:
-        raise frappe.PageDoesNotExistError(_("Item not found."))
-
-    item_price = frappe.db.get_value(
-        "Item Price",
-        {"item_code": item_code, "price_list": "Standard Selling"},
-        ["price_list_rate"],
-    )
-    if not item_price:
-        frappe.throw(_("This item doesn't have a price set."), frappe.ValidationError)
-
-    context.title = f"Checkout — {website_item.web_item_name} | Locally Twisted"
     context.metatags = {
         "description": "Locally Twisted secure checkout. Pay by card via Stripe.",
         "robots": "noindex, nofollow",
     }
     context.colocated_css = PAGE_CSS
-    context.item = website_item
-    context.qty = qty
-    context.unit_price = flt(item_price)
-    context.line_total = flt(item_price) * qty
+
+    if item_code:
+        # Buy-now: server-render the single line.
+        website_item = frappe.db.get_value(
+            "Website Item",
+            {"item_code": item_code, "published": 1},
+            ["name", "item_code", "web_item_name", "website_image", "route"],
+            as_dict=True,
+        )
+        if not website_item:
+            raise frappe.PageDoesNotExistError(_("Item not found."))
+
+        item_price = frappe.db.get_value(
+            "Item Price",
+            {"item_code": item_code, "price_list": PRICE_LIST},
+            ["price_list_rate"],
+        )
+        if not item_price:
+            frappe.throw(_("This item doesn't have a price set."), frappe.ValidationError)
+
+        context.mode = "buy_now"
+        context.title = f"Checkout — {website_item.web_item_name} | Locally Twisted"
+        context.item = website_item
+        context.qty = qty
+        context.unit_price = flt(item_price)
+        context.line_total = flt(item_price) * qty
+    else:
+        # Cart mode: empty shell, JS hydrates from localStorage.
+        context.mode = "cart"
+        context.title = "Checkout | Locally Twisted"
+        context.item = None
+        context.qty = 0
+        context.unit_price = 0.0
+        context.line_total = 0.0
     return context
+
+
+def _resolve_cart_items(item_code, qty, items_json):
+    """Resolve buy-now params OR items_json payload into one canonical list.
+
+    Returns list of {"item_code": str, "qty": int}. Order is preserved.
+    Duplicates are coalesced (later qty wins on collision — matches the
+    client cart's add-or-increment semantics).
+
+    Raises ValidationError on malformed input.
+    """
+    if items_json:
+        try:
+            parsed = json.loads(items_json)
+        except (ValueError, TypeError):
+            frappe.throw(_("Cart payload is not valid JSON."), frappe.ValidationError)
+        if not isinstance(parsed, list):
+            frappe.throw(_("Cart payload must be a list."), frappe.ValidationError)
+        if len(parsed) > MAX_CART_LINES:
+            frappe.throw(
+                _("Cart exceeds the {0}-item limit.").format(MAX_CART_LINES),
+                frappe.ValidationError,
+            )
+        seen = {}
+        order = []
+        for entry in parsed:
+            if not isinstance(entry, dict):
+                continue
+            ic = (entry.get("item_code") or "").strip()
+            q = max(1, cint(entry.get("qty") or 1))
+            if not ic:
+                continue
+            if ic not in seen:
+                order.append(ic)
+            seen[ic] = q
+        return [{"item_code": ic, "qty": seen[ic]} for ic in order]
+
+    if item_code:
+        return [{"item_code": item_code.strip(), "qty": max(1, cint(qty))}]
+
+    return []
 
 
 @frappe.whitelist(allow_guest=True)
