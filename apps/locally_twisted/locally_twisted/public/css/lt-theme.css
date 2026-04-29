@@ -501,13 +501,16 @@ html, body {
   }
 }
 
-/* Frappe wraps every page in <main class="container my-4">. On desktop the
-   .container max-width keeps content readable; on mobile it injects 24px
-   gutters that compound with our own section padding, squeezing hero bands
-   and confining full-bleed backgrounds. Below the lg breakpoint, give pages
-   the full viewport width so sections can use it. */
+/* Frappe wraps every page in <main class="container my-4"> inside
+   .page-content-wrapper. On mobile, Frappe's website index.scss adds
+   `.page-content-wrapper .container { padding: 1.5rem }` which squeezes
+   our content sections (compound padding with our own section gutters,
+   confines full-bleed backgrounds). Override at matching specificity so
+   sections get the full viewport on mobile. Desktop is untouched: the
+   .container max-width still kicks in at lg+ for readable centering. */
 @media (max-width: 991.98px) {
-  body main.container {
+  .page-content-wrapper .container,
+  .page-content-wrapper main.container {
     padding-left: 0;
     padding-right: 0;
     max-width: 100%;
