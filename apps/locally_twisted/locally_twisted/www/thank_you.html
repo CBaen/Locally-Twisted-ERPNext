@@ -1,0 +1,52 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+<section class="lt-thanks">
+    <div class="lt-thanks__inner">
+        <h1 class="lt-thanks__title">Thank you.</h1>
+        <p class="lt-thanks__lede">
+            Your payment came through. We&rsquo;ve got your order and we&rsquo;ll send a confirmation receipt to the email you gave us.
+        </p>
+
+        {% if so %}
+        <div class="lt-thanks__order">
+            <p class="lt-thanks__order-meta">Order</p>
+            <p class="lt-thanks__order-id">{{ so.name }}</p>
+            {% for line in line_items %}
+            <div class="lt-thanks__order-line">
+                <span>{{ line.item_name }} &times; {{ line.qty }}</span>
+                <span>${{ "%.2f"|format(line.amount) }}</span>
+            </div>
+            {% endfor %}
+            <div class="lt-thanks__order-line lt-thanks__order-line--total">
+                <span>Total</span>
+                <span>${{ "%.2f"|format(so.grand_total) }} {{ so.currency }}</span>
+            </div>
+        </div>
+        {% endif %}
+
+        <a href="/" class="lt-thanks__cta">Back to Locally Twisted</a>
+    </div>
+</section>
+
+<script>
+/* The customer's just-paid SO replaces their localStorage cart.
+ * Clear it so a back-button trip doesn't show stale items and a
+ * re-submit can't double-charge. Idempotent (LT_CART.clear() on
+ * empty is a no-op). Wrapped because LT_CART might not have loaded
+ * if an asset dropped — in that case we keep going silently.
+ *
+ * Receipt: 2026-04-29 — moved here from payment_success.html after
+ * realizing payment_success.py raises frappe.Redirect before the
+ * template renders, so JS in that file never executes. */
+(function () {
+    try {
+        if (typeof window.LT_CART !== "undefined") {
+            window.LT_CART.clear();
+        }
+    } catch (err) {
+        if (window.console && console.warn) console.warn("[thank-you] cart clear failed", err);
+    }
+})();
+</script>
+{% endblock %}

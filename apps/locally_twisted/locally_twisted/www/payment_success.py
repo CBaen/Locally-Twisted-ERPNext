@@ -20,8 +20,17 @@ Why an override at all: Frappe's payment_success.py loads the Payment
 Request via `frappe.get_doc(...)` under the guest session, which 403s.
 We never read Payment Request as guest; we verify completion via the
 Stripe API or Integration Request status instead.
+
+Side-effects on payment success (added 2026-04-29):
+- Sales Invoice creation from the SO (so the order lands in ERPNext's
+  invoicing pipeline, not just as an SO + Payment Entry pair).
+- Transactional receipt email to the customer's address email_id.
+Both wrapped in try/except — a backend reconciliation glitch must not
+block the customer's /thank-you landing. Errors are logged for
+follow-up.
 """
 import frappe
+from frappe.utils import escape_html, flt
 
 
 no_cache = 1
@@ -98,6 +107,25 @@ def _handle_stripe_session(session_id):
                 frappe.get_traceback(),
                 f"payment_success: marking PR {pr_name} paid failed",
             )
+
+    # Sales Invoice — convert the SO to an invoice so it lands in the
+    # accounting / invoicing surface, not just SO + Payment Entry.
+    try:
+        _ensure_sales_invoice(sales_order)
+    except Exception:
+        frappe.log_error(
+            frappe.get_traceback(),
+            f"payment_success: SI creation failed for SO {sales_order}",
+        )
+
+    # Transactional receipt email — fires once per paid order.
+    try:
+        _send_receipt_email(sales_order)
+    except Exception:
+        frappe.log_error(
+            frappe.get_traceback(),
+            f"payment_success: receipt email failed for SO {sales_order}",
+        )
 
     _redirect(f"/thank-you?order={sales_order}")
 
