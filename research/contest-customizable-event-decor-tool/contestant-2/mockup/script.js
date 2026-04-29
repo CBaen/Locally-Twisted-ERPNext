@@ -489,43 +489,6 @@ function updateColorBar() {
 }
 
 // ================================================================
-// Hue family tab switching (standalone pages)
-// ================================================================
-function initHueTabs() {
-  $('.hue-tab').on('click', function() {
-    var family = $(this).data('family');
-    DesignStudio.activeHueFamily = family;
-    $('.hue-tab').removeClass('hue-tab--active');
-    $(this).addClass('hue-tab--active');
-    // Re-render grid in static page context
-    renderStaticSwatchGrid(family);
-  });
-}
-
-function renderStaticSwatchGrid(family) {
-  var $grid = $('.swatch-grid');
-  if (!$grid.length) return;
-  $grid.empty();
-
-  var colors = family === 'all' ? getAllColors() : (COLOR_CATALOG[family] || []);
-
-  colors.forEach(function(c) {
-    var $dot = $('<div class="swatch-dot" title="' + c.name + '"></div>');
-    $dot.css('background', c.hex);
-    $dot.on('click', function() {
-      $('.swatch-dot').removeClass('swatch-dot--selected');
-      $dot.addClass('swatch-dot--selected');
-      // Update hex chip
-      $('#hex-chip-swatch').css('background', c.hex);
-      $('#hex-chip-code').text(c.hex);
-      $('#hex-chip-name').text(c.name);
-      DesignStudio.selectedColor = c;
-    });
-    $grid.append($dot);
-  });
-}
-
-// ================================================================
 // Composition: piece strip interaction
 // ================================================================
 function initPieceStrip() {
@@ -542,10 +505,16 @@ function initPieceStrip() {
 
 // ================================================================
 // Ghost placeholder tap (upsell mechanic)
+// Cascading ghost: each completed piece reveals ONE ghost for the next.
+// The ghost inherits Design style + palette from the preceding piece —
+// so the customer sees "A Column in your Swirl, already in your colors"
+// rather than a blank "Add a column?" prompt.
+// Source: NN/G progressive disclosure — "the very fact that something
+// appears on the initial display tells users that it's important."
+// https://www.nngroup.com/articles/progressive-disclosure/
 // ================================================================
 function initGhostPlaceholder() {
-  $('.ghost-shape').on('click', function() {
-    // Navigate to entry page to add a new piece
+  $('.ghost-placeholder, .ghost-shape').on('click', function() {
     window.location.href = '01-entry.html';
   });
 
@@ -553,12 +522,82 @@ function initGhostPlaceholder() {
     $('.suggestion-panel').slideUp(200);
   });
 
-  // In the upsell screen: "Add this column" button
+  // In the upsell screen: "Add this" button
   $('#add-suggested-piece').on('click', function() {
-    // In production: adds the suggested piece to composition
-    // Mockup: navigate to coloring screen
     window.location.href = '02-color-one.html';
   });
+}
+
+// buildGhostPreviewColors — returns the composition's current palette
+// as an array of {hex, name} for pre-tinting a ghost suggestion.
+// The ghost renders in the customer's actual colors, not generic grey.
+function buildGhostPreviewColors() {
+  // Prefer live composition state
+  if (DesignStudio.composition && DesignStudio.composition.length) {
+    var seen = {};
+    var palette = [];
+    DesignStudio.composition.forEach(function(piece) {
+      if (piece.regionColors) {
+        Object.values(piece.regionColors).forEach(function(c) {
+          if (c && c.hex && !seen[c.hex]) {
+            seen[c.hex] = true;
+            palette.push(c);
+          }
+        });
+      }
+    });
+    if (palette.length) return palette;
+  }
+  // Demo fallback — matches the demo arch colors in 04-composition.html
+  return [
+    { hex: '#FFB6C1', name: 'Blush'         },
+    { hex: '#7FA3C0', name: 'Dusk Blue'     },
+    { hex: '#FFFFFF', name: 'White'         }
+  ];
+}
+
+// buildGhostSuggestionLabel — contextualizes the ghost label with the
+// preceding piece's Design attribute.
+// "A Column in your Swirl style" vs "A Column in your Organic style"
+function buildGhostSuggestionLabel(pieceType, precedingDesign) {
+  var design = precedingDesign || DesignStudio.currentDesign || 'swirl';
+  var designLabel = { swirl: 'Swirl', layered: 'Layered', organic: 'Organic' }[design] || 'matching';
+  return 'A ' + pieceType + ' in your ' + designLabel + ' style';
+}
+
+// initGhostInheritance — called on the upsell/composition screen to
+// pre-tint the ghost column and update its suggestion copy.
+function initGhostInheritance() {
+  var palette    = buildGhostPreviewColors();
+  var label      = buildGhostSuggestionLabel('Column', DesignStudio.currentDesign);
+  var $panel     = $('.suggestion-panel');
+
+  // Update suggestion panel headline
+  $panel.find('.suggestion-panel__headline').text(label + ' — they pair beautifully');
+
+  // Pre-tint the ghost column preview balloons with the live palette
+  var $ghostBalloons = $('.ghost-column-preview [data-ghost-balloon]');
+  if ($ghostBalloons.length && palette.length) {
+    $ghostBalloons.each(function(i) {
+      var color = palette[i % palette.length];
+      $(this).attr('fill', color.hex);
+      $(this).attr('title', color.name);
+    });
+  }
+
+  // Show palette preview dots under the suggestion
+  var $dots = $panel.find('.suggestion-palette-dots');
+  if ($dots.length) {
+    $dots.empty();
+    palette.slice(0, 4).forEach(function(c) {
+      var border = c.hex === '#FFFFFF' ? '2px solid #EBEBEB' : '2px solid rgba(255,255,255,0.6)';
+      $dots.append(
+        '<span style="display:inline-block; width:14px; height:14px; border-radius:50%; ' +
+        'background:' + c.hex + '; border:' + border + '; margin-right:4px; ' +
+        'box-shadow:0 1px 3px rgba(0,0,0,0.15);" title="' + c.name + '"></span>'
+      );
+    });
+  }
 }
 
 // ================================================================
@@ -750,6 +789,70 @@ function hexToRgb(hex) {
 }
 
 // ================================================================
+// Design attribute selector
+// Wires the Swirl / Layered / Organic pill buttons on screen 02.
+// Changing design type updates the color cap and resets any
+// over-cap regions (prompts re-pick rather than silently clipping).
+// ================================================================
+function initDesignSelector() {
+  $('.design-pill').on('click', function() {
+    var newDesign = $(this).data('design');
+    if (!newDesign) return;
+
+    DesignStudio.currentDesign = newDesign;
+    $('.design-pill').removeClass('design-pill--active');
+    $(this).addClass('design-pill--active');
+
+    // Update cap hint text
+    var caps = { swirl: 'up to 4 colors', layered: 'up to 8 colors', organic: 'palette-driven' };
+    $('#design-cap-hint').text(caps[newDesign] || '');
+
+    // If current region colors exceed the new cap, surface a soft nudge
+    // (don't auto-delete; let the customer decide what to keep)
+    var activeCount = getActiveColorCount();
+    var newCap = DesignStudio.DESIGN_COLOR_CAPS[newDesign];
+    if (activeCount > newCap) {
+      $('#design-cap-nudge-switch').text(
+        'You have ' + activeCount + ' colors picked. ' +
+        (newDesign === 'swirl' ? 'Swirl uses up to ' + newCap + ' — tap a region to swap a color out.' : '')
+      ).show();
+    } else {
+      $('#design-cap-nudge-switch').hide();
+    }
+  });
+}
+
+// ================================================================
+// Hue family tab switching (standalone pages)
+// ================================================================
+function initHueTabs() {
+  $('.hue-tab').on('click', function() {
+    var family = $(this).data('family');
+    DesignStudio.activeHueFamily = family;
+    $('.hue-tab').removeClass('hue-tab--active');
+    $(this).addClass('hue-tab--active');
+    renderStaticSwatchGrid(family);
+  });
+}
+
+function renderStaticSwatchGrid(family) {
+  var $grid = $('.swatch-grid');
+  if (!$grid.length) return;
+  $grid.empty();
+
+  var colors = family === 'all' ? getAllColors() : (COLOR_CATALOG[family] || []);
+
+  colors.forEach(function(c) {
+    var $dot = $('<div class="swatch-dot" title="' + c.name + '"></div>');
+    $dot.css('background', c.hex);
+    $dot.on('click', function() {
+      selectSwatchColor(c);
+    });
+    $grid.append($dot);
+  });
+}
+
+// ================================================================
 // Page-specific init
 // ================================================================
 $(document).ready(function() {
@@ -760,6 +863,8 @@ $(document).ready(function() {
     initSVGInteraction('svg-arch-container');
     // Open picker button
     $('#open-picker-btn').on('click', openPicker);
+    // Design attribute selector (Swirl / Layered / Organic pill buttons)
+    initDesignSelector();
     // Start with prompt visible
     hideColorBarDetails();
   }
@@ -776,7 +881,7 @@ $(document).ready(function() {
     $('#apply-color-btn-standalone').on('click', function() {
       if (DesignStudio.selectedColor) {
         // In production: applies color to selected region and closes sheet
-        alert('Color ' + DesignStudio.selectedColor.hex + ' (' + DesignStudio.selectedColor.name + ') selected!');
+        console.log('Color selected:', DesignStudio.selectedColor.name, DesignStudio.selectedColor.hex);
       }
     });
   }
@@ -785,6 +890,8 @@ $(document).ready(function() {
   if ($('#composition-canvas').length) {
     initPieceStrip();
     initGhostPlaceholder();
+    // Ghost inherits design context from composition state
+    initGhostInheritance();
   }
 
   // Screen 05: done
@@ -795,7 +902,9 @@ $(document).ready(function() {
   // Screen 06: upsell
   if ($('#upsell-screen').length) {
     initGhostPlaceholder();
-    // Animate suggestion panel in after delay
+    // Ghost inherits design + palette from preceding piece
+    initGhostInheritance();
+    // Animate suggestion panel in after brief delay
     setTimeout(function() {
       $('.suggestion-panel').css('display', 'block');
     }, 800);
