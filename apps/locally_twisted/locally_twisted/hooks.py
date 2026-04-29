@@ -43,6 +43,8 @@ website_route_rules = [
      "to_route": "balloon_twisting_and_face_painting"},
     {"from_route": "/refund-policy",
      "to_route": "refund_policy"},
+    {"from_route": "/thank-you",
+     "to_route": "thank_you"},
 ]
 
 # include custom scss in every website theme (without file extension ".scss")

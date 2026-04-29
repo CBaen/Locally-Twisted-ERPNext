@@ -366,6 +366,12 @@ def submit_guest_order(item_code="", qty=1, name="", email="", phone="",
     # stripe_settings.py:create_charge_on_stripe). For a test-mode demo
     # this works fine; for production hardening (Phase 4) we may want to
     # swap to Stripe Checkout Sessions for 3DS + dynamic payment methods.
+    # mute_email=1: do NOT have Payment Request send a "click here to pay"
+    # email. Inside the LT Docker stack, that email triggers a wkhtmltopdf
+    # render that fails with ConnectionRefusedError. We don't need it
+    # anyway — we hand the payment URL directly to the customer's browser
+    # via JS redirect. The transactional receipt email fires later, on
+    # Payment Entry submit (next-turn work).
     pr = frappe.get_doc({
         "doctype": "Payment Request",
         "payment_request_type": "Inward",
@@ -377,11 +383,9 @@ def submit_guest_order(item_code="", qty=1, name="", email="", phone="",
         "currency": "USD",
         "grand_total": flt(so.grand_total),
         "email_to": email,
+        "mute_email": 1,
         "subject": f"Payment for order {so.name} — Locally Twisted",
-        "message": (
-            f"Thank you for your order with Locally Twisted. "
-            f"Please complete your payment to confirm."
-        ),
+        "message": "Please complete your payment to confirm your order.",
     })
     pr.insert(ignore_permissions=True)
     pr.submit()
