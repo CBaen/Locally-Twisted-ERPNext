@@ -1,6 +1,6 @@
 # Contest Index — Customizable Event Decor Design Tool
 
-**Status:** Phase 2 — Field summary written. Ready for Round 2 dispatch.
+**Status:** ✅ COMPLETE. Surfaced to GL via `FINAL-SURFACE.md`. Awaiting GL's synthesis.
 
 ## Phase tracker
 
@@ -8,16 +8,16 @@
 |---|---|---|
 | 0. Pre-flight | ✓ DONE | Brief written; GL approval received |
 | 1. Round 1 (blind) | ✓ DONE | 4 contestants delivered RESEARCH-NOTES + REASONING + renderable mockup |
-| 1a. Round 1 reflective loops | ✓ DONE | 2 loops × 4 contestants. Loop 1 = research probe; Loop 2 = Jeff's-perspective probe. All 8 + 8 reply files written. |
+| 1a. Round 1 reflective loops | ✓ DONE | 2 loops × 4 contestants. Loop 1 = research probe; Loop 2 = Jeff's-perspective probe. |
 | 2. Field summary | ✓ DONE | `FIELD-AT-ROUND-1.md` written |
-| 3. Round 2 (mutual visibility) | NEXT | SendMessage to all 4 — choose Refine / Lean / Pivot |
-| 3a. Round 2 reflective loops | — | Proxy ↔ each contestant, deeper perspective shifts |
-| 4. Mutual peer scoring | — | 4 dimensions × 3 peers each |
-| 5. Aggregation | — | Orchestrator solo |
-| 6. Dissent moment | — | Continue / Step Away / Wildcard Pivot per contestant |
-| 7. Tightening pass (ALL 4) | — | Adapted: all 4 get tightening, not just top-K, since GL wants all surfaced |
-| 8. Render gallery | — | Playwright screenshots all contestants × 6 screens × 2 viewports |
-| 9. Surface to GL | — | All 4 with ratings + reasons; GL synthesizes |
+| 3. Round 2 (mutual visibility) | ✓ DONE | All 4 chose Refine path; submitted ROUND-2-COMPLETE |
+| 3a. Round 2 reflective loops | ✓ DONE | 2 loops × 4 contestants. Loop 1 = exhausted-parent probe; Loop 2 = crown-jewel commitment probe. |
+| 4. Mutual peer scoring | ✓ DONE | 4 dimensions × 3 peers each. Spread: 32.67 - 34.67 (2.0 points) |
+| 5. Aggregation | ✓ DONE | `SCORING-RESULTS.md` — C2 & C3 tied at top, C4 close, C1 third |
+| 6. Dissent moment | ✓ DONE | All 4 chose Continue. `DISSENT-RESULTS.md` |
+| 7. Tightening pass (ALL 4) | ✓ DONE | `PROXY-REVIEW-ROUND-2.md` + 4 × `TIGHTEN-COMPLETE.md` |
+| 8. Render gallery | ✓ DONE | 56 PNGs in `_render/contestant-{1-4}/` (7 screens × 2 viewports each) |
+| 9. Surface to GL | ✓ DONE | `FINAL-SURFACE.md` |
 | 10. (Skipped) Orchestrator synthesis | N/A | GL synthesizes downstream by picking pieces |
 
 ## Contestant directories

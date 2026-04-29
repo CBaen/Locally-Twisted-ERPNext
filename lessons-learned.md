@@ -6,55 +6,6 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
-## 2026-04-29 (mobile responsiveness session) — Two CSS rules fix every page; band-aid removed
-
-**What GL saw:** Every page rendered "tightened" on mobile. Hero bands looked like narrow inset boxes instead of full-width banners. The hamburger menu button was missing entirely from mobile screenshots — meaning real users on real phones could not open the navigation menu.
-
-**Root cause #1 — Frappe's `<main class="container my-4">` wrapper.** Every Frappe website page is wrapped in `<main class="container my-4">`. Frappe's bundled `apps/frappe/frappe/public/scss/website/index.scss:117-122` adds `.page-content-wrapper .container { padding: 1.5rem }` at `(max-width: 992px)`. That injects 24px of left/right padding on mobile, squeezing all content sections and confining hero/banner backgrounds (which were intended to span full viewport).
-
-**Root cause #2 — mobile brand logo too wide.** `lt-theme.css:783-788` had `max-width: 350px` on `.lt-header__brand--mobile img`. With viewport 375 minus 32px row padding minus 44px hamburger = 299px available for the logo. The 350px logo overflowed by 51px, pushing the 44px hamburger 35px past the right edge of the screen. Previous instance hid this with `body { max-width: 100vw; overflow-x: hidden }` — the visual symptom (horizontal scroll) was masked but the hamburger was still functionally unreachable; only 9px of the 44px tap target was inside the visible viewport.
-
-**The fix — two CSS rules in `lt-theme.css`:**
-
-```css
-/* Override Frappe's bundled .page-content-wrapper .container at mobile breakpoints.
-   Specificity 0,0,2,0 matches Frappe's rule and wins by source order. */
-@media (max-width: 991.98px) {
-  .page-content-wrapper .container,
-  .page-content-wrapper main.container {
-    padding-left: 0;
-    padding-right: 0;
-    max-width: 100%;
-  }
-}
-
-/* Responsive cap on the mobile brand logo so the hamburger always fits.
-   88px reserved = 44 hamburger + 32 row padding + 12 gap.
-   height: auto preserves the logo's aspect ratio at every viewport. */
-.lt-header__brand--mobile img,
-.lt-header__brand--mobile .lt-logo {
-  height: auto;
-  max-height: 90px;
-  max-width: calc(100vw - 88px);
-}
-```
-
-**Verified at 320 / 375 / 414 viewports across `/`, `/contact`, `/shop`:**
-- Body width = viewport width on every combination (zero overflow)
-- Hamburger button visible and tappable (right edge always inside viewport with breathing room)
-- Hero bands span full viewport width on mobile (no inset)
-- Desktop unchanged: brand logo at desktop still 483×138 per the r4 spec
-
-**The band-aid is gone.** Removed `body { max-width: 100vw; overflow-x: hidden }` from `lt-theme.css` once the actual overflow source was eliminated. `body { overflow-x: visible }` confirmed at all three viewport widths with no horizontal scroll.
-
-**Why this matters for future BBC clients:** Both rules are global to the theme — every current and future page inherits the fix. There is NO per-page CSS work needed for mobile responsiveness on this stack. If a future page looks broken on mobile, the bug is in the page's own section CSS, not in the framework wrapper.
-
-**The pattern that almost got missed:** I declared the first rule "fixed" off compressed full-page screenshots that made tall pages look mostly empty. GL pushed back — *"Contact and shop pages weren't actually fixed."* The real test was viewport-only screenshots at concrete device widths, plus programmatic verification of element positions. Lesson: full-page screenshots compress at extreme aspect ratios and lie about what GL sees on a real phone. Always pair with viewport-only captures + DOM probes for hamburger/nav fit.
-
-**Receipt:** Cache-bust versions `?v=20260429-8` (page-content-wrapper override), `?v=20260429-9` (brand logo cap), `?v=20260429-10` (band-aid removal). Verified via `scripts/verify/_oneshot_three_viewports.py`.
-
----
-
 ## 2026-04-29 (Stripe migration session) — Six things learned migrating Charges API → Checkout Sessions
 
 ### `/payment-success` upstream URL bug + guest 403 require route override

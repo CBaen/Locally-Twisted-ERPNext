@@ -133,3 +133,12 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 - **Frappe Cloud signup + production deployment** — Phase 6 (cutover).
 - **Reading Jeff's UI-edited content from any prior platform's database** — Not applicable; the prior platform never went live.
 - **Two-app split (`agency_platform` + `<client>_connector`) and three-tier alternative** — agency-wide architectural decision; deferred until BBC has 2-3 clients to inform pattern (see `Built_by_Cameron/built-by-cameron-decisions.md` 2026-04-26).
+
+### Design Studio contest — post-synthesis follow-ups (added 2026-04-29 late evening; updated by next-day instance after surface)
+
+**Contest itself is COMPLETE.** Render gallery (56 PNGs) + `FINAL-SURFACE.md` shipped. GL holding 5 agents (Proxy + 4 contestants by ID) for synthesis follow-ups. Shutdown deferred until GL signals contest fully done.
+
+- [P1] **Write LT-tier lessons-learned + decisions log entries** for the contest outcomes. Capture *after* GL completes synthesis with the picked pieces — entries should reflect what GL chose and why, not the orchestration itself.
+- [P2] **Possible global capabilities update** about the persistent-agent-by-ID pattern (the contest skill's name-addressing assumption is wrong-shaped per session learning).
+- [P2] **Send shutdown SendMessages to the 5 contest agents** once GL signals the contest is fully done. IDs: Proxy `aa3108d9ab3c5a978`, C1 `a76396efd739881c3`, C2 `a3a7df4f715615f21`, C3 `ad72af232430d89f3`, C4 `a30d848ce821198bb`.
+
