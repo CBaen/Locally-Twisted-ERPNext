@@ -84,7 +84,15 @@ p, span, label { color: #595A5C; }
 
 /* Desktop expansion */
 @media (min-width: 1280px) {
+  /* Default: keep mobile-first layout, just center it at desktop with breathing room */
   .lt-page {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  /* Opt-in 2-column for screens that need a side-by-side panel
+     (currently: 02-color-one + 03-picker, which use .color-picker-panel) */
+  .lt-page--two-col {
     max-width: 1280px;
     display: grid;
     grid-template-columns: 1fr 420px;
