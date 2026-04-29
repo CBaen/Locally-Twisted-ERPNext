@@ -308,6 +308,7 @@ def submit_guest_order(item_code="", qty=1, name="", email="", phone="",
             "customer_type": "Individual",
             "customer_group": "Individual",
             "territory": "All Territories",
+            "marketing_opt_in": 1 if marketing_opt_in else 0,
         })
         customer_doc.insert(ignore_permissions=True)
         customer_name = customer_doc.name
@@ -320,6 +321,9 @@ def submit_guest_order(item_code="", qty=1, name="", email="", phone="",
             "links": [{"link_doctype": "Customer", "link_name": customer_name}],
         })
         contact_doc.insert(ignore_permissions=True)
+    elif marketing_opt_in:
+        # Existing customer just opted in this checkout — flip the flag.
+        frappe.db.set_value("Customer", customer_name, "marketing_opt_in", 1)
 
     # ── Address (always create a fresh shipping address per order) ───
     address_doc = frappe.get_doc({
@@ -354,16 +358,41 @@ def submit_guest_order(item_code="", qty=1, name="", email="", phone="",
         }],
     })
     so.insert(ignore_permissions=True)
+    so.submit()
+
+    # ── Payment Request → Stripe Hosted Checkout ─────────────────────
+    # NOTE on the underlying Stripe API: Frappe's payments app currently
+    # uses the legacy Charges API on Stripe's side (apps/payments/.../
+    # stripe_settings.py:create_charge_on_stripe). For a test-mode demo
+    # this works fine; for production hardening (Phase 4) we may want to
+    # swap to Stripe Checkout Sessions for 3DS + dynamic payment methods.
+    pr = frappe.get_doc({
+        "doctype": "Payment Request",
+        "payment_request_type": "Inward",
+        "payment_gateway_account": "Stripe-Test - USD - LT",
+        "party_type": "Customer",
+        "party": customer_name,
+        "reference_doctype": "Sales Order",
+        "reference_name": so.name,
+        "currency": "USD",
+        "grand_total": flt(so.grand_total),
+        "email_to": email,
+        "subject": f"Payment for order {so.name} — Locally Twisted",
+        "message": (
+            f"Thank you for your order with Locally Twisted. "
+            f"Please complete your payment to confirm."
+        ),
+    })
+    pr.insert(ignore_permissions=True)
+    pr.submit()
 
     frappe.db.commit()
 
-    # TODO (next turn): create Payment Request, redirect to Stripe.
-    # TODO (next turn): on Stripe success, send transactional receipt
-    #                   via Email Template + Notification.
     return {
         "ok": True,
         "sales_order": so.name,
         "customer": customer_name,
         "address": address_doc.name,
-        "stripe_redirect_url": None,  # next turn
+        "payment_request": pr.name,
+        "stripe_redirect_url": pr.payment_url,
     }
