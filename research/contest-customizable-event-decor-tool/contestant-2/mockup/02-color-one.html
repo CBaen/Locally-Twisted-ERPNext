@@ -269,12 +269,22 @@
   <!-- Layered: up to 8 colors (banded/chunk pattern)  -->
   <!-- Organic: palette-driven, mixed sizes, no fixed cluster -->
   <!-- Per PRODUCT-DETAILS §2.1 — Design is the first thing chosen -->
+  <!-- Descriptors added so labels self-explain at midnight without insider knowledge -->
   <div class="design-selector">
-    <span class="design-selector__label">Design</span>
+    <span class="design-selector__label">Look</span>
     <div class="design-pills">
-      <button class="design-pill design-pill--active" data-design="swirl">Swirl</button>
-      <button class="design-pill" data-design="layered">Layered</button>
-      <button class="design-pill" data-design="organic">Organic</button>
+      <button class="design-pill design-pill--active" data-design="swirl">
+        Swirl
+        <span class="design-pill__desc">spiral pattern</span>
+      </button>
+      <button class="design-pill" data-design="layered">
+        Layered
+        <span class="design-pill__desc">color bands</span>
+      </button>
+      <button class="design-pill" data-design="organic">
+        Organic
+        <span class="design-pill__desc">mixed &amp; flowing</span>
+      </button>
     </div>
   </div>
   <div class="design-cap-hint" id="design-cap-hint">up to 4 colors</div>
