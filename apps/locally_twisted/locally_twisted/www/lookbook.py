@@ -47,15 +47,20 @@ EVENT_TYPES = [
 
 
 # Product-type filter dropdown (the secondary axis). Slugs MUST match the
-# homepage's CUSTOM_CATEGORIES (home.py) so the homepage's six tile links
-# resolve to the correct filtered view.
+# homepage's CUSTOM_CATEGORIES (home.py) so the homepage's tile links
+# resolve to the correct filtered view. Eight categories per GL 2026-04-28
+# (Centerpieces + 100% Personalized Pieces added; Pillars retired).
+# Centerpieces and Personalized Pieces have no photos yet — filtering to
+# them will render the empty state until Jeff's archive surfaces examples.
 CATEGORIES = [
     {"slug": "balloon-arches", "name": "Balloon Arches"},
-    {"slug": "columns-and-pillars", "name": "Columns & Pillars"},
+    {"slug": "columns", "name": "Columns"},
     {"slug": "organic-garlands", "name": "Organic Garlands"},
     {"slug": "picture-perfect-backdrops", "name": "Picture Perfect Backdrops"},
     {"slug": "balloon-drops", "name": "Balloon Drops"},
     {"slug": "balloon-bouquets", "name": "Balloon Bouquets"},
+    {"slug": "centerpieces", "name": "Centerpieces"},
+    {"slug": "personalized-pieces", "name": "100% Personalized Pieces"},
 ]
 
 
@@ -134,7 +139,7 @@ GALLERY_ITEMS = [
     {
         "slug": "birthday-pirate-column",
         "title": "Pirate-Themed Balloon Column",
-        "category": "columns-and-pillars",
+        "category": "columns",
         "event_type": "birthdays",
         "year": "2023",
         "image": "birthday-pirate-column.jpg",

@@ -156,7 +156,7 @@
         <a class="lt-categories__heading-link" href="/event-decor">Custom Event Decor</a>
     </h2>
     <p class="lt-categories__lede">
-        Six custom pieces in your colors. Mix, match, and layer them &mdash; design your event.
+        Eight custom pieces in your colors. Mix, match, and layer them &mdash; design your event.
     </p>
     <div class="lt-categories__grid">
         {% for cat in custom_categories %}
@@ -226,6 +226,28 @@
                         <circle cx="50" cy="22" r="4" fill="currentColor" stroke="none"/>
                         <circle cx="32" cy="48" r="3" fill="currentColor" stroke="none"/>
                         <path d="M32 48 L28 56 M32 48 L36 56" stroke-linecap="round"/>
+                    </svg>
+                    {% elif cat.icon == 'centerpiece' %}
+                    {# Centerpiece: 3-balloon cluster on a stem rising from a
+                       tabletop. Same line+circle aesthetic. #}
+                    <svg class="lt-categories__icon-svg" viewBox="0 0 64 64" fill="none"
+                         stroke="currentColor" stroke-width="3" aria-hidden="true">
+                        <circle cx="20" cy="24" r="6" fill="currentColor" stroke="none"/>
+                        <circle cx="32" cy="14" r="6" fill="currentColor" stroke="none"/>
+                        <circle cx="44" cy="24" r="6" fill="currentColor" stroke="none"/>
+                        <line x1="32" y1="30" x2="32" y2="54" stroke-linecap="round"/>
+                        <line x1="12" y1="54" x2="52" y2="54" stroke-linecap="round"/>
+                    </svg>
+                    {% elif cat.icon == 'personalized' %}
+                    {# 100% Personalized Pieces: 4-point sparkle/star plus two
+                       small accent circles, signaling "anything you imagine,
+                       made specially." Same stroke aesthetic as siblings. #}
+                    <svg class="lt-categories__icon-svg" viewBox="0 0 64 64" fill="none"
+                         stroke="currentColor" stroke-width="3" aria-hidden="true">
+                        <path d="M32 8 L36 28 L56 32 L36 36 L32 56 L28 36 L8 32 L28 28 Z"
+                              stroke-linejoin="round"/>
+                        <circle cx="52" cy="14" r="2.5" fill="currentColor" stroke="none"/>
+                        <circle cx="14" cy="50" r="2.5" fill="currentColor" stroke="none"/>
                     </svg>
                     {% endif %}
                 </span>

@@ -563,27 +563,30 @@ PAGE_CSS = """
     margin: 0 auto 2.75rem;
     font-size: 1rem;
 }
-/* 6-category grid:
- *   <768px : 2 columns × 3 rows  (clean 2-2-2 mobile)
- *   768-1199px : 3 columns × 2 rows (clean 3-3 tablet)
- *   ≥1200px : 6 columns × 1 row (single ribbon, full desktop impact) */
+/* 8-category grid (per GL 2026-04-28 — Centerpieces + 100% Personalized
+ * Pieces added; Pillars retired):
+ *   <768px : 2 columns × 4 rows  (clean 2-2-2-2 mobile)
+ *   768-1399px : 4 columns × 2 rows (4-4 tablet, even rows, no orphans)
+ *   ≥1400px : 4 columns × 2 rows (kept at 4-wide for legibility — 8 in a
+ *                                  single ribbon would compress circles
+ *                                  and labels at typical desktop widths) */
 .lt-categories__grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem 1.5rem;
-    max-width: 1700px;
+    max-width: 1500px;
     margin: 0 auto;
 }
 @media (min-width: 768px) {
     .lt-categories__grid {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
         gap: 2.5rem 2rem;
     }
 }
 @media (min-width: 1200px) {
     .lt-categories__grid {
-        grid-template-columns: repeat(6, 1fr);
-        gap: 2rem;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 3rem 2.5rem;
     }
 }
 .lt-categories__item {
