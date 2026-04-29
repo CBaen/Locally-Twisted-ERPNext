@@ -49,7 +49,7 @@ EVENT_TYPES = [
 # Product-type filter dropdown (the secondary axis). Slugs MUST match the
 # homepage's CUSTOM_CATEGORIES (home.py) so the homepage's tile links
 # resolve to the correct filtered view. Eight categories per GL 2026-04-28
-# (Centerpieces + 100% Personalized Pieces added; Pillars retired).
+# (Centerpieces + 100% Personalized Pieces added).
 # Centerpieces and Personalized Pieces have no photos yet — filtering to
 # them will render the empty state until Jeff's archive surfaces examples.
 CATEGORIES = [
@@ -210,7 +210,7 @@ GALLERY_ITEMS = [
     },
 ]
 # Re-tag the Pride one to columns category (more accurate).
-GALLERY_ITEMS[14]["category"] = "columns-and-pillars"
+GALLERY_ITEMS[14]["category"] = "columns"
 
 
 def _filter_label(items, event_slug, category_slug):

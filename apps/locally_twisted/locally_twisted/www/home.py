@@ -66,13 +66,13 @@ CLIENT_CRAWL = [
 
 # The 8 customizable categories — items Jeff actually customizes for events.
 # These point at the Lookbook (current) and the future Event Decor / Design
-# Studio interactive experience (post-Phase 1). Per GL 2026-04-28:
-# - "Pillars" removed from naming — there are only Columns.
-# - Added Centerpieces and 100% Personalized Pieces (display retains the "100%").
+# Studio interactive experience (post-Phase 1). Updated 2026-04-28 per GL:
+# Columns is the canonical name; Centerpieces and 100% Personalized Pieces
+# added (display label retains the "100%").
 CUSTOM_CATEGORIES = [
     {"slug": "balloon-arches", "name": "Balloon Arches", "icon": "arch"},
     {"slug": "columns", "name": "Columns", "icon": "column"},
-    {"slug": "organic-garlands", "name": "Organic Garlands", "icon": "garland"},
+    {"slug": "garlands", "name": "Garlands", "icon": "garland"},
     {"slug": "picture-perfect-backdrops", "name": "Picture Perfect Backdrops", "icon": "backdrop"},
     {"slug": "balloon-drops", "name": "Balloon Drops", "icon": "drop"},
     {"slug": "balloon-bouquets", "name": "Balloon Bouquets", "icon": "bouquet"},
@@ -564,7 +564,7 @@ PAGE_CSS = """
     font-size: 1rem;
 }
 /* 8-category grid (per GL 2026-04-28 — Centerpieces + 100% Personalized
- * Pieces added; Pillars retired):
+ * Pieces added):
  *   <768px : 2 columns × 4 rows  (clean 2-2-2-2 mobile)
  *   768-1399px : 4 columns × 2 rows (4-4 tablet, even rows, no orphans)
  *   ≥1400px : 4 columns × 2 rows (kept at 4-wide for legibility — 8 in a
