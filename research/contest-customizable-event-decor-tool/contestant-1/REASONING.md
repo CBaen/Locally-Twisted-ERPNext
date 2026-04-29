@@ -132,32 +132,43 @@ On mobile, the suggestion chips appear in a horizontal scroll below the stage. O
 ## Question 6: What's the simplest version that captures the essence?
 
 **V1 scope (minimum viable):**
-- 1 shape: Balloon Arch only
-- 2 fill regions: Main Cluster + Accent Cluster
-- 12 color swatches (no Tier 2 full palette, no hex code display, just the quick row)
-- Composition view: just the arch, no multi-piece stage
-- Done moment: "Send to Jeff" button opens a mailto link with the color choices in the body
+- 1 shape: Backdrop (chosen because tap-region UX maps directly to real construction physics — two regions: background clusters + pattern clusters)
+- 2 fill regions: Background + Pattern
+- 12 popular swatches from the real 53-color LT catalog (Quick Row, no Tier 2 full palette)
+- Color names shown as primary on selection; approximate hex for visual rendering only
+- Composition view: just the one piece, no multi-piece stage
+- Done moment: "Send to Jeff" button opens a mailto link with color NAMES in the body (`Backdrop: Empowermint + Eucalyptus`)
 - No upsell mechanic
 - No color inheritance (Stage 2 — requires palette state management across multiple shapes)
 
-**What you get with V1:** A customer can pick colors for a balloon arch and send an inquiry with those colors. Jeff opens his email and knows what the customer wants. That alone eliminates the "I don't know what I want, can you show me options?" call.
+**What you get with V1:** A customer can pick named colors for a backdrop and send an inquiry with those names. Jeff opens his email and can place the supplier order directly — "Empowermint + Eucalyptus" is the SKU identifier, not an approximation. That alone eliminates the "I don't know what I want, can you show me options?" call.
 
-**Why this is the floor:** Every piece above V1 is additive. The multi-piece composition, the Tier 2 palette, the upsell suggestions, and color inheritance — all of these deepen the experience but aren't required to deliver "customer arrives, picks colors, sends inquiry." The floor produces value independently.
+**Why Backdrop over Arch for V1 floor:** The Backdrop's tap-region mechanic is the most honest mapping between UX and physics — two cluster zones genuinely correspond to two tappable SVG regions. An Arch V1 would require explaining the style-then-colors mechanic, which adds one more concept. The Backdrop V1 is the clearest demonstration of the coloring-book metaphor with zero physics mismatch.
+
+**Why this is the floor:** Every piece above V1 is additive. The multi-piece composition, the Tier 2 palette, the upsell suggestions, and color inheritance — all of these deepen the experience but aren't required to deliver "customer arrives, picks colors, sends inquiry with correct names." The floor produces value independently.
 
 **Where I'd cut vs. keep:**
 - Cut first: color inheritance in upsell chips (Stage 2 — needs palette state held across shapes; upsell chips still work in V2 without color inheritance, showing shapes in neutral/default colors)
-- Cut second: upsell mechanic entirely (Stage 2; adds complexity; delivers only after core is working)
-- Cut third: Tier 2 full palette (12 colors covers most customers; full palette is for the color-matcher edge case)
-- Keep always: the inline SVG illustration, the stage view, the "Send to Jeff" inquiry bridge
+- Cut second: upsell mechanic entirely (V2; adds complexity; delivers only after core is working)
+- Cut third: Tier 2 full palette (12-swatch Quick Row covers most customers; full 53-color palette is for the color-matcher edge case)
+- Keep always: the inline SVG illustration, the real LT color names in the picker, the "Send to Jeff" inquiry bridge with names as primary
 
-**Frappe flags (none for V1):** The V1 scope is fully implementable as a single Web Page DocType with inline SVG, a page-scoped `<style>` block, and a Script section. No `web_include_css` needed at V1. No Node.js build step. No external dependencies.
+**Frappe flags (none for V1):** The V1 scope is fully implementable as a single Web Page DocType with inline SVG, a page-scoped `<style>` block, and a Script section. No `web_include_css` needed at V1. No Node.js build step. No external dependencies. The color catalog is a JS array at the top of the Script section — adding colors means editing one array entry.
 
 ---
 
 ## Technical approach notes
 
-All interaction logic is vanilla JS with jQuery available from Frappe's bundle. The SVG illustration for each shape is a hand-drawn-style simplified vector with named path groups: `<g data-region="main">`, `<g data-region="accent">`. Color change: `document.querySelectorAll('[data-region="main"] path').forEach(p => p.setAttribute('fill', color))`. This is standard DOM manipulation — no libraries needed, no build step.
+All interaction logic is vanilla JS with jQuery available from Frappe's bundle. The SVG illustration for each shape is a hand-drawn-style simplified vector with named path groups: `<g data-region="main">`, `<g data-region="accent">`. Color change: `$('[data-region="main"]').find('path, circle, ellipse, rect').attr('fill', hex)`. This is standard jQuery DOM manipulation — no libraries needed, no build step.
 
-The color configuration is a JS array at the top of the script: `const LT_COLORS = [{name: "Coral", hex: "#FF6B6B"}, ...]`. Adding a color is editing one line. No backend interaction during design. The inquiry form submission is a Frappe Web Form POST — standard Frappe infrastructure.
+**Color catalog (Round 2):** The color configuration is the actual 53-color LT named catalog (per PRODUCT-DETAILS.md §2.8), stored as a JS object `var LT_COLORS = { popular: [...], groups: [...] }` at the top of the script. Each entry: `{ name: "Reflex Champagne", hex: "#D4C09A" }`. The hex value is an approximation for visual rendering; the name is the supplier-actionable identifier. Adding or adjusting a color means editing one array entry — no UI changes needed.
+
+**Color name storage on region chips:** When a customer selects a color, `DesignStudio.selectColor()` stores `data-color-name` and `data-color-hex` on the active region chip. The inquiry payload builder reads these name attributes, not the hex. The hex is used only for the dot preview in the summary list.
+
+**Inquiry payload assembly:** `DesignStudio.buildPayloadLine(pieceName, regions)` iterates region chips and outputs `"Piece: Color Name + Color Name"` — names as primary, hex as optional parenthetical. This is the text that pre-fills the inquiry form's design field and, in V1, the mailto body.
+
+**Color inheritance (Stage 2 only):** The upsell screen reads `data-color-name` + `data-color-hex` from the most recently completed piece's region chips, applies those hex values to the suggestion SVG fills, and uses the names in the upsell copy ("These pair beautifully with your Raspberry + Reflex Champagne"). All reads are from DOM attributes already set during the coloring flow — no additional state object needed.
+
+No backend interaction during design. The inquiry form submission is a Frappe Web Form POST — standard Frappe infrastructure.
 
 The one Frappe caveat flagged for GL: the CSS theme conflict (RESEARCH-NOTES Source 20). Solution chosen: page-scoped `<style>` block in the Web Page HTML content, not `web_include_css`. This avoids the known cascade conflict entirely.

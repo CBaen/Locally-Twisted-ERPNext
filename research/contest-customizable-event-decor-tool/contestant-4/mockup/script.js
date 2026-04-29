@@ -205,16 +205,27 @@ var ColorPicker = {
     var $grid = $('.swatch-grid');
     if (!$grid.length) return;
     $grid.empty();
-    LT_COLORS.forEach(function(c) {
-      var isDark = _isLightColor(c.hex);
+    // Render family-grouped palette with a header row per family
+    LT_COLOR_FAMILIES.forEach(function(fam) {
+      // Family header
+      var hintText = fam.hint ? ' <span style="font-weight:400; color:#B0B0B0;">— ' + fam.hint + '</span>' : '';
       $grid.append(
-        '<div class="swatch-item" data-hex="' + c.hex + '">' +
-          '<div class="swatch-item__circle" style="background:' + c.hex + '; border-color:' + (isDark ? '#D0D0D0' : c.hex) + '">' +
-            '<span class="hex-badge">' + c.hex + '</span>' +
-          '</div>' +
-          '<span class="swatch-item__name">' + c.name + '</span>' +
+        '<div class="swatch-family-header" style="width:100%; padding: 10px 0 4px; font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#595A5C;">' +
+          fam.family + hintText +
         '</div>'
       );
+      // Colors in this family
+      fam.colors.forEach(function(c) {
+        var isDark = _isLightColor(c.hex);
+        $grid.append(
+          '<div class="swatch-item" data-hex="' + c.hex + '">' +
+            '<div class="swatch-item__circle" style="background:' + c.hex + '; border-color:' + (isDark ? '#D0D0D0' : c.hex) + '">' +
+              '<span class="hex-badge">' + c.hex + '</span>' +
+            '</div>' +
+            '<span class="swatch-item__name">' + c.name + '</span>' +
+          '</div>'
+        );
+      });
     });
   },
 
@@ -379,8 +390,8 @@ function _getShapePreviewSVG(type, primary, accent) {
       return _archSVG(primary, accent);
     case 'column':
       return _columnSVG(primary, accent);
-    case 'centerpiece':
-      return _centerpieceSVG(primary, accent);
+    case 'garland':
+      return _garlandSVG(primary, accent);
     default:
       return _archSVG(primary, accent);
   }
@@ -412,15 +423,20 @@ function _columnSVG(primary, accent) {
   '</svg>';
 }
 
-function _centerpieceSVG(primary, accent) {
-  return '<svg viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg">' +
-    '<circle cx="50" cy="30" r="18" fill="' + primary + '"/>' +
-    '<circle cx="22" cy="55" r="14" fill="' + accent + '"/>' +
-    '<circle cx="78" cy="55" r="14" fill="' + accent + '"/>' +
-    '<circle cx="35" cy="78" r="12" fill="' + primary + '"/>' +
-    '<circle cx="65" cy="78" r="12" fill="' + primary + '"/>' +
-    '<circle cx="50" cy="92" r="10" fill="' + accent + '"/>' +
-    '<line x1="50" y1="102" x2="50" y2="110" stroke="#999" stroke-width="2"/>' +
+// Garland — organic chain of alternating balloon clusters along a draping curve
+function _garlandSVG(primary, accent) {
+  return '<svg viewBox="0 0 160 80" xmlns="http://www.w3.org/2000/svg">' +
+    // Garland drape path (decorative guide, not interactive)
+    '<path d="M 10 30 Q 40 60 80 50 Q 120 40 150 30" fill="none" stroke="#E0E0E0" stroke-width="2" stroke-dasharray="4 3"/>' +
+    // Alternating balloon clusters along the drape
+    '<circle cx="10"  cy="30" r="11" fill="' + primary + '"/>' +
+    '<circle cx="30"  cy="48" r="10" fill="' + accent  + '"/>' +
+    '<circle cx="50"  cy="54" r="11" fill="' + primary + '"/>' +
+    '<circle cx="70"  cy="52" r="10" fill="' + accent  + '"/>' +
+    '<circle cx="90"  cy="48" r="11" fill="' + primary + '"/>' +
+    '<circle cx="110" cy="42" r="10" fill="' + accent  + '"/>' +
+    '<circle cx="130" cy="34" r="11" fill="' + primary + '"/>' +
+    '<circle cx="150" cy="30" r="10" fill="' + accent  + '"/>' +
   '</svg>';
 }
 
