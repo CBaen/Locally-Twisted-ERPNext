@@ -343,9 +343,15 @@ def submit_guest_order(item_code="", qty=1, name="", email="", phone="",
     address_doc.insert(ignore_permissions=True)
 
     # ── Sales Order ──────────────────────────────────────────────────
+    # order_type="Shopping Cart" matters: ERPNext's Payment Request on_submit
+    # checks this and skips the auto-email/PDF render if true. Without it,
+    # the wkhtmltopdf PDF render runs and fails inside Docker because it
+    # can't reach localhost:8081. Setting Shopping Cart is also semantically
+    # accurate for guest webshop purchases.
     so = frappe.get_doc({
         "doctype": "Sales Order",
         "customer": customer_name,
+        "order_type": "Shopping Cart",
         "transaction_date": frappe.utils.nowdate(),
         "delivery_date": frappe.utils.add_days(frappe.utils.nowdate(), 7),
         "currency": "USD",
