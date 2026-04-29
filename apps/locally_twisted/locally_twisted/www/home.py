@@ -67,8 +67,11 @@ CLIENT_CRAWL = [
 # The 8 customizable categories — items Jeff actually customizes for events.
 # These point at the Lookbook (current) and the future Event Decor / Design
 # Studio interactive experience (post-Phase 1). Updated 2026-04-28 per GL:
-# Columns is the canonical name; Centerpieces and 100% Personalized Pieces
-# added (display label retains the "100%").
+# Columns is the canonical name; Garlands replaces "Organic Garlands"
+# (organic is a custom option, not a separate product); Centerpieces and
+# Custom Sculptures added (Sculptures = the "anything you imagine" bucket
+# — characters, themed shapes, one-off builds; distinct from balloon
+# twisting entertainment which lives at /balloon-twisting-and-face-painting).
 CUSTOM_CATEGORIES = [
     {"slug": "balloon-arches", "name": "Balloon Arches", "icon": "arch"},
     {"slug": "columns", "name": "Columns", "icon": "column"},
@@ -563,8 +566,8 @@ PAGE_CSS = """
     margin: 0 auto 2.75rem;
     font-size: 1rem;
 }
-/* 8-category grid (per GL 2026-04-28 — Centerpieces + 100% Personalized
- * Pieces added):
+/* 8-category grid (per GL 2026-04-28 — Centerpieces + Custom Sculptures
+ * added; Garlands replaces "Organic Garlands"; Pillars retired):
  *   <768px : 2 columns × 4 rows  (clean 2-2-2-2 mobile)
  *   768-1399px : 4 columns × 2 rows (4-4 tablet, even rows, no orphans)
  *   ≥1400px : 4 columns × 2 rows (kept at 4-wide for legibility — 8 in a
