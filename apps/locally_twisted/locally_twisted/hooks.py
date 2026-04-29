@@ -41,7 +41,7 @@ app_license = "mit"
 # Receipt: 2026-04-29 — drawer overlay edit shipped server-side but old
 # CSS stayed cached in GL's browser; drawer rendered inline on every page
 # because the cached rules didn't have `position: fixed`.
-web_include_css = "/assets/locally_twisted/css/lt-theme.css?v=20260429-7"
+web_include_css = "/assets/locally_twisted/css/lt-theme.css?v=20260429-8"
 
 # Guest cart engine — overrides webshop's broken-for-guest cart functions
 # at runtime, exposes window.LT_CART, and keeps cart count badges live.
@@ -65,9 +65,11 @@ website_route_rules = [
     {"from_route": "/payment-success",
      "to_route": "payment_success"},
     # Override webshop's bundled /cart — webshop's requires login, ours
-    # is localStorage-backed and works for guests. See www/cart.py.
+    # is localStorage-backed and works for guests. Renamed to lt_cart to
+    # avoid a name collision with webshop's templates/pages/cart.html
+    # that was winning resolution even with the route rule in place.
     {"from_route": "/cart",
-     "to_route": "cart"},
+     "to_route": "lt_cart"},
 ]
 
 # include custom scss in every website theme (without file extension ".scss")
