@@ -8,6 +8,69 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-04-29 (Stripe migration session) — Migrate Charges API → Checkout Sessions NOW, not in Phase 4
+
+**Decision:** The migration from Frappe's bundled Stripe Charges API integration to Stripe Checkout Sessions (Stripe-hosted page) happens BEFORE the demo to Jeff, not in Phase 4 hardening. The previous instance had logged this as Phase 4 debt (entry below 2026-04-29 "Frappe payments app uses legacy Charges API"); GL pulled it forward when they saw the customer experience.
+
+**Reasoning:** GL hit `/stripe_checkout` (Frappe's bundled card form, legacy Charges API) during a real test purchase and stopped. *"This looks unprofessional. I don't trust it."* Compared against the Odoo `/shop/cart` → `/shop/address` → `/shop/payment` flow which had branded LT chrome + persistent order summary throughout. The Frappe form had the LT header but a barebones unbranded panel below — no order summary, no item visual, no security indicators, no "Powered by Stripe" badge.
+
+The professionalism gap is bigger than the dev-effort cost. Jeff will react the same way GL did. Migration cannot wait.
+
+**What it commits us to:**
+- `submit_guest_order` returns a `https://checkout.stripe.com/c/pay/cs_test_...` URL instead of Frappe's `pr.payment_url`
+- Customer sees Stripe's hosted page with their full production UI: dynamic payment methods (Card / Klarna / Affirm / Cash App Pay / Bank / Link), real-time card validation, "Powered by Stripe" footer, security badges
+- URL bar reads `checkout.stripe.com` — recognized trust signal
+- Sales Order + Payment Request creation stays as-is (auditable record); only the customer-facing URL changes
+- Webhook handler shipped at `apps/locally_twisted/locally_twisted/payments/stripe_webhook.py` (signature-verified, idempotent) for production reconciliation
+- Server-side reconciliation on `/payment-success` route makes webhook OPTIONAL for the demo flow — the moment a customer lands after Stripe success, we retrieve the session via Stripe API, verify `payment_status == 'paid'`, and call `pr.set_as_paid()` synchronously. Idempotent: if the webhook also fires, it no-ops because the PR is already Paid.
+
+**Alternatives considered:**
+- Polish the existing Frappe `/stripe_checkout` template via CSS overrides (rejected — customer still doesn't see `checkout.stripe.com`, still legacy Charges API, still no Apple Pay / Link / 3DS, looks "homemade" no matter how well styled)
+- Stripe Payment Element (embedded) instead of hosted Checkout (rejected for now — keeping customer on our domain is nice but the trust signal of `checkout.stripe.com` in the URL bar is the bigger win for LT's customer base of one-off occasional buyers)
+
+**Decided by:** GL 2026-04-29, after seeing the side-by-side comparison (Odoo's flow vs. our Frappe form vs. Stripe's hosted page).
+
+---
+
+## 2026-04-29 (Stripe migration session) — `/payment-success` overridden via website_route_rules
+
+**Decision:** `/payment-success` is overridden in our app (not Frappe's bundled template). Custom controller at `apps/locally_twisted/locally_twisted/www/payment_success.py` handles two paths: Stripe Checkout Session redirect (`?session_id=cs_test_...`) and a legacy fallback for the Frappe payments redirect URL.
+
+**Reasoning:** Frappe's `payments` app has TWO upstream bugs that converge on this route:
+1. `apps/payments/.../stripe_settings.py:272` unconditionally appends `?redirect_to=None` (literal "None") to the redirect URL even when the URL already has `?` — produces a malformed double-`?` URL
+2. The bundled `/payment-success` controller calls `frappe.get_doc("Payment Request", ...)` under the GUEST session — 403s because Payment Request is restricted
+
+We can't patch upstream cleanly: `apps/payments/` is bind-mounted from a gitignored upstream clone. The agency rule "work WITHIN Frappe, don't fight it" still applies — the right move is to use Frappe's documented mechanism (`website_route_rules` in `hooks.py`) to claim the route in our app.
+
+**The override does:**
+- Strips any `?redirect_to=None` tail off the `docname` form_dict value (defends against the upstream URL malformation if it ever fires)
+- Verifies the linked `Integration Request` is `Completed` OR the Stripe session reports `payment_status == 'paid'` — proves the charge actually succeeded; defends against guessing PR/SO names
+- Looks up the SO with elevated read perms (we never read PR as guest)
+- Marks the PR Paid synchronously (creates Payment Entry)
+- Redirects to `/thank-you?order=<so_name>` (already exists, works for guests)
+
+**Trade-off:** when (if) Frappe fixes the upstream bugs, our override is still useful — it gives guests a clean post-checkout landing without exposing Payment Request, and handles `session_id`-based redirects that the Frappe controller doesn't.
+
+**Decided by:** This instance, 2026-04-29, after debugging GL's `/payment-success?...?redirect_to=None` 403 report.
+
+---
+
+## 2026-04-29 (Stripe migration session) — Each LT integration uses LT's own Stripe account, not BBC's
+
+**Decision:** LT's customer-facing payments flow through LT's own Stripe account. BBC's Stripe account is only ever used to bill GL's clients for agency work — never to process customer charges to LT (or any other BBC client).
+
+**Reasoning:** This is the agency-wide standard codified during the same session at `Built_by_Cameron/built-by-cameron-decisions.md`. For LT specifically, the previous instance configured Stripe Settings 'Test' from `.env` keys provided by GL. Those keys ARE LT's. The Stripe CLI's stored auth (via `stripe login`) is a SEPARATE auth context — it can be (and currently is) authed to BBC for development convenience without affecting ERPNext's runtime.
+
+**Practical implications:**
+- ERPNext's Stripe Settings 'Test' uses LT's `pk_test_...` and `sk_test_...` from `.env` — verified by the Stripe Checkout page rendering the line item under LT's account name
+- The Stripe Dashboard's public business name shown on the Checkout page comes from LT's account profile (currently "Locally twisted llc" — rename to "Locally Twisted" when Jeff's available for 2FA)
+- For Stripe CLI tasks (e.g., webhook listening), use `stripe listen --api-key $SK_TEST_FROM_ENV` to point at LT's account WITHOUT needing CLI auth — bypasses the 2FA blocker
+- At Frappe Cloud cutover (Phase 6), LT's live mode keys go in `.env` and Stripe Settings 'Live'; webhook endpoint is configured in Stripe Dashboard against LT's account; signing secret goes in production `site_config.json`
+
+**Decided by:** GL 2026-04-29, in response to my mistakenly assuming BBC's CLI auth was the right credentials. *"the Built by Cameron account is for my personal business not locally twisted. they have their own account. we need to keep them separate."*
+
+---
+
 ## 2026-04-29 (Stripe + guest checkout session) — Option B (true guest checkout) over Option A (silent User account)
 
 **Decision:** No User account is created during checkout — ever. Guest checkout creates only Customer + Contact + Address + Sales Order + Payment Request. The customer is identified by email; they cannot log in to a portal because no User record exists for their email.

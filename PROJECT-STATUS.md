@@ -110,6 +110,21 @@ Canonical resources for the new build live in `_resources/` and are platform-agn
 
 ## Updates
 
+### 2026-04-29 (Stripe Charges → Checkout Sessions migration session) — Hosted Stripe checkout live, /payment-success override fixed, agency-tier pattern codified
+
+**See `HANDOFF.md` for current state at session end.** Summary:
+
+- **Migrated from Frappe's bundled Stripe (legacy Charges API) to Stripe Checkout Sessions (Stripe-hosted page).** Customer's `/checkout?item=<code>&qty=<n>` form now submits → creates SO + PR (unchanged) → creates a Stripe Checkout Session → returns `https://checkout.stripe.com/c/pay/cs_test_...` URL → JS redirects there. Customer sees Stripe's polished hosted UI: dynamic payment methods (Card / Klarna / Affirm / Cash App Pay / Bank / Link), real-time validation, "Powered by Stripe" footer.
+- **`/payment-success` override SHIPPED.** Fixes the Frappe `payments` app upstream URL bug at `stripe_settings.py:272` (appends `?redirect_to=None` even when None) AND the guest 403 (Frappe's bundled controller calls `frappe.get_doc("Payment Request", ...)` as guest). Our override at `www/payment_success.py` handles both `?session_id=cs_test_...` (modern) and `?doctype=Payment%20Request&docname=...` (legacy fallback). Route registered via `website_route_rules` in `hooks.py`.
+- **Server-side reconciliation on `/payment-success`** marks the PR paid synchronously when the customer's browser lands — uses `stripe.checkout.Session.retrieve()` to verify `payment_status == 'paid'` then calls `pr.set_as_paid()`. Idempotent: webhook also fires async, second path no-ops.
+- **Webhook handler shipped** at `apps/locally_twisted/locally_twisted/payments/stripe_webhook.py`. Signature-verified, reads secret from `frappe.conf.get('stripe_webhook_signing_secret')` (which lives in `site_config.json`, not in a doctype). Currently dormant (success-page reconciliation handles the demo flow); ready for production where it's the safety net for browser-closed-before-redirect.
+- **`/checkout` page got two-column layout with persistent right-side order summary** (item thumbnail + name + qty + line total + grand total + "Secure payment — payment is processed by Stripe" notice). On mobile, summary stacks above form. Matches the Odoo `/shop/cart`/`/shop/address` pattern GL referenced.
+- **Agency-tier decision logged + kitchen note dropped** at `Built_by_Cameron/built-by-cameron-decisions.md` (per-client Stripe accounts; Charges API forbidden for new builds; webhook secrets in `site_config.json`) and `Built_by_Cameron/.claude/capabilities/kitchen/2026-04-29-stripe-checkout-sessions-for-frappe.md` (full pattern). Promote kitchen note to recipe when client #2 adopts.
+- **Local dev webhook listener pattern:** `stripe listen --api-key "$STRIPE_TEST_SECRET_KEY" --forward-to <url>` bypasses `stripe login` 2FA when client account isn't accessible. Stripe CLI's stored auth (`stripe config --list`) is a separate context from ERPNext's runtime auth (Stripe Settings doctype, populated from `.env`).
+- **NOT verified by GL with a real `4242` card.** All my checks were curl + Playwright + simulated session_id. The actual customer flow — fill form → land on Stripe's page → submit `4242` → land on `/thank-you` → SO marked Paid in desk — is GL's first task on resume.
+- **Files added:** `apps/locally_twisted/locally_twisted/payments/{__init__.py, stripe_session.py, stripe_webhook.py}`, `apps/locally_twisted/locally_twisted/www/payment_success.{py,html}`, `scripts/setup/set_stripe_webhook_secret.py`.
+- **Files modified:** `apps/locally_twisted/locally_twisted/www/checkout.{py,html}` (Stripe Session integration + two-column layout), `apps/locally_twisted/locally_twisted/hooks.py` (`/payment-success` route rule).
+
 ### 2026-04-29 (Stripe wiring + true guest checkout session) — Stripe configured, /checkout + /thank-you live, Customer-only flow (no User accounts)
 
 **See `HANDOFF.md` for current state at session end.** Summary:
