@@ -1,0 +1,14 @@
+{% extends "templates/web.html" %}
+
+{% block title %}{{ _("Payment Success") }}{% endblock %}
+
+{%- block page_content -%}
+<div style="text-align:center; padding:4rem 1.5rem;">
+  <p>{{ _("Redirecting to your order…") }}</p>
+  <p><a href="/">{{ _("Continue") }}</a></p>
+</div>
+<script>
+  // Fallback: if the server-side redirect didn't fire (rare), send home.
+  setTimeout(function(){ window.location.href = "/"; }, 3000);
+</script>
+{% endblock %}

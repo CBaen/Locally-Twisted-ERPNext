@@ -55,6 +55,10 @@ website_route_rules = [
      "to_route": "refund_policy"},
     {"from_route": "/thank-you",
      "to_route": "thank_you"},
+    # Override Frappe payments' /payment-success — see www/payment_success.py
+    # for why (upstream URL malformation + guest 403 on Payment Request read).
+    {"from_route": "/payment-success",
+     "to_route": "payment_success"},
 ]
 
 # include custom scss in every website theme (without file extension ".scss")
