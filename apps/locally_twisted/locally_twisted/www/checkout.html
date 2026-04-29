@@ -9,9 +9,15 @@
                 No account required. We&rsquo;ll send a receipt to the email you give us.
             </p>
 
-        <form id="lt-checkout-form" class="lt-checkout__form" novalidate>
+        <form id="lt-checkout-form" class="lt-checkout__form" novalidate data-mode="{{ mode }}">
+            {% if mode == "buy_now" %}
+            {# Buy-now: pre-fill the single-item params server-side. #}
             <input type="hidden" name="item_code" value="{{ item.item_code }}">
             <input type="hidden" name="qty" value="{{ qty }}">
+            {% else %}
+            {# Cart mode: items_json is populated by JS from localStorage on load. #}
+            <input type="hidden" name="items_json" id="lt-checkout-items-json" value="">
+            {% endif %}
 
             <div class="lt-checkout__row">
                 <div class="lt-checkout__field">
@@ -82,6 +88,9 @@
         <aside class="lt-checkout__aside" aria-label="Order summary">
             <div class="lt-checkout__order-card">
                 <h2 class="lt-checkout__order-heading">Order summary</h2>
+
+                {% if mode == "buy_now" %}
+                {# Server-rendered single line for buy-now URLs. #}
                 <div class="lt-checkout__line">
                     <div class="lt-checkout__line-img"
                          {% if item.website_image %}style="background-image: url('{{ item.website_image }}');"{% endif %}
@@ -100,6 +109,28 @@
                     <span>Total</span>
                     <span>${{ "%.2f"|format(line_total) }}</span>
                 </div>
+                {% else %}
+                {# Cart mode: JS hydrates from localStorage on page load. #}
+                <div id="lt-checkout-summary-loading" class="lt-checkout__line-meta" role="status" aria-live="polite"
+                     style="padding: 0.5rem 0;">Loading your cart&hellip;</div>
+                <div id="lt-checkout-summary-empty" class="lt-checkout__line-meta" role="status" hidden>
+                    Your cart is empty. <a href="/shop">Continue shopping</a>.
+                </div>
+                <div id="lt-checkout-summary-error" role="alert" hidden
+                     style="background-color: #fdecec; border: 1px solid #c0392b; color: #842424; padding: 0.75rem 1rem; border-radius: 0.375rem; font-size: 0.85rem; line-height: 1.45;">
+                    Couldn&rsquo;t load your cart. Please <a href="/cart">return to cart</a> or call (801) 285-0860.
+                </div>
+                <div id="lt-checkout-summary-lines"></div>
+                <div class="lt-checkout__totals-row" id="lt-checkout-summary-subtotal-row" hidden>
+                    <span>Subtotal</span>
+                    <span id="lt-checkout-summary-subtotal">$0</span>
+                </div>
+                <div class="lt-checkout__totals-row lt-checkout__totals-row--grand" id="lt-checkout-summary-grand-row" hidden>
+                    <span>Total</span>
+                    <span id="lt-checkout-summary-grand">$0</span>
+                </div>
+                {% endif %}
+
                 <p class="lt-checkout__secure">
                     <strong>Secure payment</strong> &mdash; payment is processed by Stripe.
                     We never see or store your card details.
@@ -116,12 +147,178 @@
     var feedback = document.getElementById('co-feedback');
     if (!form || !submit || !feedback) return;
 
+    var mode = form.dataset.mode || 'buy_now';
+    var itemsJsonInput = document.getElementById('lt-checkout-items-json');
+
+    /* Cart-mode summary refs (only present when mode === 'cart'). */
+    var sumLoading  = document.getElementById('lt-checkout-summary-loading');
+    var sumEmpty    = document.getElementById('lt-checkout-summary-empty');
+    var sumError    = document.getElementById('lt-checkout-summary-error');
+    var sumLines    = document.getElementById('lt-checkout-summary-lines');
+    var sumSubRow   = document.getElementById('lt-checkout-summary-subtotal-row');
+    var sumSub      = document.getElementById('lt-checkout-summary-subtotal');
+    var sumGrandRow = document.getElementById('lt-checkout-summary-grand-row');
+    var sumGrand    = document.getElementById('lt-checkout-summary-grand');
+
     function setFeedback(state, msg) {
         feedback.classList.remove('is-success', 'is-error');
         if (state) feedback.classList.add('is-' + state);
         feedback.textContent = msg || '';
     }
 
+    function fmtMoney(n) {
+        if (typeof n !== 'number' || !isFinite(n)) return '$0';
+        return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+    }
+
+    /* Safe DOM-construction helper — same pattern as /cart page. Avoids
+     * innerHTML so user-controlled strings can't escape the markup. */
+    function el(tag, opts, children) {
+        var node = document.createElement(tag);
+        if (opts) {
+            for (var k in opts) {
+                if (!Object.prototype.hasOwnProperty.call(opts, k)) continue;
+                var v = opts[k];
+                if (v == null) continue;
+                if (k === 'text') node.textContent = String(v);
+                else if (k === 'class') node.className = String(v);
+                else if (k === 'data') {
+                    for (var d in v) {
+                        if (Object.prototype.hasOwnProperty.call(v, d)) node.dataset[d] = String(v[d]);
+                    }
+                } else node.setAttribute(k, String(v));
+            }
+        }
+        if (children) {
+            for (var i = 0; i < children.length; i++) {
+                if (children[i] != null) node.appendChild(children[i]);
+            }
+        }
+        return node;
+    }
+
+    function showSummaryState(which) {
+        if (!sumLoading) return;  // not in cart mode
+        sumLoading.hidden  = which !== 'loading';
+        sumEmpty.hidden    = which !== 'empty';
+        sumError.hidden    = which !== 'error';
+        sumSubRow.hidden   = which !== 'populated';
+        sumGrandRow.hidden = which !== 'populated';
+    }
+
+    function disableSubmit(reason) {
+        submit.disabled = true;
+        if (reason) submit.title = reason;
+    }
+
+    function enableSubmit() {
+        submit.disabled = false;
+        submit.removeAttribute('title');
+    }
+
+    /* CART MODE: load summary on page render. */
+    function hydrateCartSummary() {
+        if (mode !== 'cart') return;
+
+        if (typeof window.LT_CART === 'undefined') {
+            console.error('[checkout] LT_CART not loaded');
+            showSummaryState('error');
+            disableSubmit('Cart engine not loaded');
+            return;
+        }
+        var cart = window.LT_CART.getCart();
+        if (!cart.items.length) {
+            showSummaryState('empty');
+            disableSubmit('Cart is empty');
+            return;
+        }
+
+        showSummaryState('loading');
+        disableSubmit('Loading cart');
+
+        var codes = cart.items.map(function (it) { return it.item_code; });
+        var fd = new FormData();
+        fd.append('item_codes', JSON.stringify(codes));
+
+        fetch('/api/method/locally_twisted.api.cart.get_cart_items', {
+            method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            body: fd,
+            credentials: 'same-origin',
+        })
+        .then(function (resp) {
+            if (!resp.ok) throw new Error('HTTP ' + resp.status);
+            return resp.json();
+        })
+        .then(function (json) {
+            var data = (json && json.message) || { items: [], missing: [] };
+            renderSummary(cart, data.items || [], data.missing || []);
+        })
+        .catch(function (err) {
+            console.error('[checkout] cart fetch failed:', err);
+            showSummaryState('error');
+            disableSubmit('Cart load failed');
+        });
+    }
+
+    function renderSummary(cart, serverItems, missing) {
+        var byCode = {};
+        for (var i = 0; i < serverItems.length; i++) {
+            byCode[serverItems[i].item_code] = serverItems[i];
+        }
+
+        // Drop missing items from localStorage so the customer doesn't
+        // submit a stale cart that the server will reject.
+        if (missing && missing.length) {
+            for (var m = 0; m < missing.length; m++) {
+                window.LT_CART.remove(missing[m].item_code);
+            }
+            cart = window.LT_CART.getCart();
+            if (!cart.items.length) {
+                showSummaryState('empty');
+                disableSubmit('Cart is empty');
+                return;
+            }
+        }
+
+        // Reset and rebuild lines via DOM construction.
+        while (sumLines.firstChild) sumLines.removeChild(sumLines.firstChild);
+
+        var subtotal = 0;
+        var itemsForSubmit = [];
+
+        for (var k = 0; k < cart.items.length; k++) {
+            var line = cart.items[k];
+            var server = byCode[line.item_code];
+            if (!server) continue;
+            var lineTotal = server.price_list_rate * line.qty;
+            subtotal += lineTotal;
+            itemsForSubmit.push({ item_code: server.item_code, qty: line.qty });
+
+            var img = el('div', { 'class': 'lt-checkout__line-img', 'aria-hidden': 'true' });
+            if (server.website_image) {
+                img.style.setProperty(
+                    'background-image',
+                    'url("' + server.website_image.replace(/"/g, '%22') + '")'
+                );
+            }
+            var name = el('p', { 'class': 'lt-checkout__line-name', text: server.web_item_name || server.item_code });
+            var meta = el('p', { 'class': 'lt-checkout__line-meta',
+                                 text: 'Qty ' + line.qty + ' · ' + fmtMoney(server.price_list_rate) + ' each' });
+            var body = el('div', { 'class': 'lt-checkout__line-body' }, [name, meta]);
+            var amount = el('p', { 'class': 'lt-checkout__line-amount', text: fmtMoney(lineTotal) });
+            sumLines.appendChild(el('div', { 'class': 'lt-checkout__line' }, [img, body, amount]));
+        }
+
+        sumSub.textContent = fmtMoney(subtotal);
+        sumGrand.textContent = fmtMoney(subtotal);
+        showSummaryState('populated');
+
+        if (itemsJsonInput) itemsJsonInput.value = JSON.stringify(itemsForSubmit);
+        enableSubmit();
+    }
+
+    /* SUBMIT handler — works for both modes. */
     form.addEventListener('submit', function (ev) {
         ev.preventDefault();
         setFeedback(null, '');
@@ -140,6 +337,14 @@
             return;
         }
 
+        if (mode === 'cart') {
+            var itemsJson = (fd.get('items_json') || '').toString();
+            if (!itemsJson || itemsJson === '[]') {
+                setFeedback('error', 'Your cart is empty. Add an item before checking out.');
+                return;
+            }
+        }
+
         submit.disabled = true;
         var originalLabel = submit.textContent;
         submit.textContent = 'Creating your order...';
@@ -156,13 +361,19 @@
             submit.textContent = originalLabel;
             if (result.status >= 200 && result.status < 300 && result.body && result.body.message && result.body.message.ok) {
                 var msg = result.body.message;
+                /* Cart mode: clear localStorage now so a back-button trip
+                 * doesn't show the just-purchased items. Buy-now leaves
+                 * the cart alone (no relationship between buy-now items
+                 * and the saved cart). */
+                if (mode === 'cart' && typeof window.LT_CART !== 'undefined') {
+                    window.LT_CART.clear();
+                }
                 if (msg.stripe_redirect_url) {
                     window.location.href = msg.stripe_redirect_url;
                     return;
                 }
                 setFeedback('success',
-                    'Order created (' + msg.sales_order + '). Stripe payment integration is the next step. ' +
-                    'For the demo right now, this confirms guest checkout works without an account.');
+                    'Order created (' + msg.sales_order + '). Stripe payment integration is the next step.');
                 form.reset();
             } else {
                 var emsg = (result.body && (result.body._server_messages || result.body.exception || result.body.message))
@@ -180,6 +391,12 @@
             if (window.console && console.error) console.error('Checkout submit failed', err);
         });
     });
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', hydrateCartSummary);
+    } else {
+        hydrateCartSummary();
+    }
 })();
 </script>
 {% endblock %}
