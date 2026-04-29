@@ -59,7 +59,9 @@ Tap-to-fill is distinct from brush-stroke coloring. The former uses flood-fill/r
 ### DIY Candy — Best Adult Coloring Apps
 **URL:** https://diycandy.com/best-adult-coloring-apps/
 
-Notes that "swipe from the bottom of the screen" to switch color shades in Recolor is a mobile-native pattern. Key takeaway: **a bottom-anchored color picker is the mobile-native location** — it's within thumb reach and doesn't obscure the composition above.
+**CORRECTED after Proxy probe.** On re-fetch, this article does not describe a "swipe from bottom" mechanic for Recolor. It mentions Recolor's color palettes briefly ("The color palettes are great, and you get an option for gradient colors depending on the drawing") with no gesture or bottom-sheet UX detail. The prior "swipe from bottom" attribution was a mis-citation — that phrasing likely crept in from a different source during synthesis.
+
+**Replaced by:** NN/G — Bottom Sheets (https://www.nngroup.com/articles/bottom-sheet/). The NN/G article documents that bottom sheets are appropriate when "users are likely to need to refer to the main, background information while interacting with the information or options presented in the sheet" — precisely the color-picking situation, where the customer needs the arch visible while choosing. NN/G also notes the middle of screen is more ergonomically reachable than the bottom for varied grip styles, so the justification for a bottom sheet is context-preservation, not thumb reach. Key takeaway: **a bottom sheet for the color picker keeps the shape visible while the customer picks — the customer never loses their place.**
 
 ---
 

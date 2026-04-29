@@ -15,7 +15,7 @@ This is distinct from the pro-tool model (BalloonBuilder, Virtualoon) which requ
 
 ## Q1: What does coloring ONE shape look like?
 
-The customer taps on any region of the SVG illustration — say, the main body of a balloon arch. The region highlights (a soft teal ring appears around it, 2px). A bottom sheet slides up from below — this is the mobile-native pattern confirmed by Recolor's "swipe from bottom" mechanic (https://diycandy.com/best-adult-coloring-apps/).
+The customer taps on any region of the SVG illustration — say, the main body of a balloon arch. The region highlights (a soft teal ring appears around it, 2px). A bottom sheet slides up from below. The bottom sheet is chosen because, per NN/G's research on this pattern (https://www.nngroup.com/articles/bottom-sheet/), it "preserves some of the user's current context" — unlike navigating to a separate page, the arch stays visible behind the sheet while the customer picks. They never lose sight of what they're coloring.
 
 Fill regions communicate themselves through subtle dotted outlines on uncolored areas — like a coloring book's black-line regions waiting for color. Selected regions get the ring indicator and a brief scale-pulse animation (CSS `transform: scale(1.03)` at 150ms, then back). The shape responds to selection by showing its region labels (e.g., "main balloons," "accent balloons," "base ring") as small tooltips on first visit.
 
@@ -39,7 +39,7 @@ I deliberately avoid free-drag positioning because (a) it's hard at 375px and (b
 
 Three-component picker in a bottom sheet:
 1. **Recently Used** — a row of up to 6 swatches at top (localStorage-backed, confirmed feasible via https://bams-thinkery.ca/tools/color-picker)
-2. **Hue-family filter tabs** — 6 small tabs (Reds/Pinks | Blues/Purples | Greens | Yellows/Oranges | Neutrals | Darks). Each shows ~8-10 swatches. Tabs scroll horizontally if needed. This solves the 50+ problem by chunking into 10-item groups, confirmed as the right chunk size by https://www.uxpin.com/create-design-system-guide/build-color-palette-for-design-system.
+2. **Hue-family filter tabs** — 6 small tabs (Reds/Pinks | Blues/Purples | Greens | Yellows/Oranges | Neutrals | Darks). Each shows ~5-8 swatches — a reasoned estimate, not a research-backed spec. The UXPin color system article (https://www.uxpin.com/create-design-system-guide/build-color-palette-for-design-system) supports organizing palettes by family and ensuring complete coverage, but does not prescribe a specific count per group. The ~5-8 estimate comes from dividing LT's 50-color catalog across 6 families and verifying each tab stays scannable at a glance on a 375px screen — the constraint drives the number, not the source.
 3. **Hex code display** — tapping any swatch shows its hex code in a read-only chip below the swatch grid. Customers matching venue colors can verify hex (confirmed as essential by https://mobbin.com/glossary/color-picker and the Pigment guide https://emma-rose-portfolio.com/blog/pigment).
 
 I explicitly omit a custom hex input field in v1 (see "simplest version" below). A read-only hex display meets "customers need to verify their hex" without the complexity of hex-input validation.
@@ -64,7 +64,11 @@ After a customer finishes coloring an arch, a ghost placeholder column appears t
 
 The customer taps the ghost → the column materializes with the arch's primary color pre-applied. They can adjust independently. The column's appearance unlocks a ghost backdrop behind both pieces.
 
-This cascading ghost pattern draws from Fanfaire's SWAP mechanic (https://www.fanfaire.io/design-studio) but inverted: instead of swapping, we're offering the next natural complement. The key is that the ghost column is already in the right visual position relative to the arch — the customer doesn't have to imagine placement.
+This cascading ghost pattern is my own design move, inspired by the concept of customer-initiated element substitution that Fanfaire implements (https://www.fanfaire.io/design-studio — "Let clients swap elements"). Fanfaire's SWAP is also customer-facing, so the surface similarity is real, but my mechanism is structurally different: the ghost appears as a consequence of completing the previous piece, not from a decorator-curated alternative set.
+
+The cascade (one ghost at a time, unlocked by completion) is a design judgment, not a researched pattern. The argument for it over showing all ghosts at once: NN/G's progressive disclosure research (https://www.nngroup.com/articles/progressive-disclosure/) notes that "the very fact that something appears on the initial display tells users that it's important." Two or three ghost shapes competing for attention dilute the signal of each. A single ghost, appearing after the arch is colored, has the full weight of "this is the logical next step" — the customer's eye goes there because there is nowhere else to look. The sequence also keeps the composition from appearing overwhelming before anything is colored.
+
+The key is that the ghost column is already in the right visual position relative to the arch — the customer doesn't have to imagine placement.
 
 ---
 

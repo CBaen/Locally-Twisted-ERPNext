@@ -15,7 +15,7 @@ The customer taps **Main Cluster**. The region highlights (stroke thickens, slig
 
 They tap a swatch. The fill region immediately repaints. No "apply" button needed — tap is commit. The hex code appears briefly as a small tooltip below the selected swatch.
 
-**Why this approach (citation):** The Pigment coloring app (RESEARCH-NOTES Source 7) proves the "tap a region to activate it" mechanic is intuitive — it's the exact interaction that makes coloring apps feel like actual coloring rather than form filling. The SVG tap → region highlight → color sheet is a direct translation of that mechanic into a balloon context.
+**Why this approach (citation):** The Pigment coloring app (RESEARCH-NOTES Source 7) validates the two-step region-activation mechanic: the review describes "tap a section of an illustration to activate the 'color-inside-the-lines' feature, which highlights the spot so that it is the only part of the illustration that will be affected." This confirms that tap → activate/highlight is an established, intuitive pattern. Precision note: after activation, Pigment uses freeform brush strokes; my design uses a swatch tap for instant flat fill. The citation supports step one (tap to activate and isolate a region). Step two — swatch tap commits a flat fill immediately — is a design choice suited to balloon context (a balloon zone is a single color, not a gradated brushstroke; instant fill is faster and more satisfying).
 
 Fill regions are consciously limited to 2-3 per shape. The brief allows "many (per-balloon control)" but I'm advocating for the minimum level. More than 3 fill regions per shape creates cognitive overload on a 375px screen — the picker would have to reopen for every single balloon. The 2-3 zone approach gives the feel of customization without the burden of configuration.
 
@@ -39,7 +39,7 @@ Each piece on the stage is independently re-tappable — tap it to return to edi
 
 **Two-tier picker.**
 
-**Tier 1 — Quick Row:** 12 swatches in a horizontally scrollable row below the shape illustration. These are the 12 most popular LT colors (defined in the JS config, not hardcoded UI). The row is truncated with visible fade-out on the right edge signaling more exist. Each swatch is 44px × 44px — above Baymard's 7mm minimum (RESEARCH-NOTES Source 9). Hit area: generous.
+**Tier 1 — Quick Row:** 12 swatches in a horizontally scrollable row below the shape illustration. These are the 12 most popular LT colors (defined in the JS config, not hardcoded UI). The row is truncated with visible fade-out on the right edge signaling more exist. Each swatch is 44px × 44px — above the 7mm minimum touch target threshold from Baymard's button/touch-target research (https://baymard.com/learn/button-design), applied here to swatches as tappable elements. The swatch-specific post (RESEARCH-NOTES Source 9) describes "large hit areas and generous spacing" qualitatively but gives no numerical threshold. Hit area: generous.
 
 **Tier 2 — Full Palette Sheet:** Tapping "More colors →" opens a bottom sheet with all 50+ colors organized into named groups: Neutrals, Pastels, Brights, Metallics. Each group is a wrapped 6-per-row grid of 40px swatches. The hex code for any swatch appears on long-press or hover.
 
@@ -77,7 +77,9 @@ Below the placeholder, 2-3 shape suggestions appear as small illustration chips 
 
 This is the key move: **the suggestion already shows their colors**. The customer doesn't see a blank "Add an Arch?" prompt — they see *their arch* waiting to be confirmed. The discovery mechanic works because it collapses the gap between "what I could add" and "what this would look like."
 
-**Why this works (citation):** The Fanfaire "variants" mechanic (RESEARCH-NOTES Source 14) shows pieces in alternative configurations — that's the seed of this idea. The color inheritance (suggested pieces shown in the customer's chosen palette) is my extrapolation from Gemar Creator's preset compositions (RESEARCH-NOTES Source 4): presets work because customers see something finished. The suggestion chip shows a finished thing.
+**Why this works (first-principles reasoning):** Color inheritance — showing a suggested piece already rendered in the customer's in-progress palette — is a design invention, not a pattern sourced from the research. Fanfaire variants (Source 14) show Jeff's pre-made design alternatives, not a customer's live palette projected onto new pieces. Gemar Creator presets (Source 4) are starting-point compositions the customer then modifies from zero. Neither source describes this mechanic.
+
+The reasoning that makes it defensible without a citation: the gap between "imagining what this would look like" and "deciding to add it" is the abandonment point. Showing a blank arch chip next to a colored column asks the customer to do mental work. Showing a coral-and-champagne arch chip — already matching their column — collapses that gap. The suggestion looks like it already belongs, because it does. This is a Stage 2 feature (see Q6), not V1 — it requires the tool to hold the customer's palette choices in memory and apply them to untouched shape templates at the moment of suggestion.
 
 On mobile, the suggestion chips appear in a horizontal scroll below the stage. On desktop, they appear as a persistent sidebar panel.
 
@@ -92,14 +94,16 @@ On mobile, the suggestion chips appear in a horizontal scroll below the stage. O
 - Composition view: just the arch, no multi-piece stage
 - Done moment: "Send to Jeff" button opens a mailto link with the color choices in the body
 - No upsell mechanic
+- No color inheritance (Stage 2 — requires palette state management across multiple shapes)
 
 **What you get with V1:** A customer can pick colors for a balloon arch and send an inquiry with those colors. Jeff opens his email and knows what the customer wants. That alone eliminates the "I don't know what I want, can you show me options?" call.
 
-**Why this is the floor:** Every piece above V1 is additive. The multi-piece composition, the Tier 2 palette, the upsell suggestions — all of these deepen the experience but aren't required to deliver "customer arrives, picks colors, sends inquiry." The floor produces value independently.
+**Why this is the floor:** Every piece above V1 is additive. The multi-piece composition, the Tier 2 palette, the upsell suggestions, and color inheritance — all of these deepen the experience but aren't required to deliver "customer arrives, picks colors, sends inquiry." The floor produces value independently.
 
 **Where I'd cut vs. keep:**
-- Cut first: upsell mechanic (Stage 2 feature; adds complexity, delivers after core is working)
-- Cut second: Tier 2 full palette (12 colors covers most customers; full palette is for the color-matcher edge case)
+- Cut first: color inheritance in upsell chips (Stage 2 — needs palette state held across shapes; upsell chips still work in V2 without color inheritance, showing shapes in neutral/default colors)
+- Cut second: upsell mechanic entirely (Stage 2; adds complexity; delivers only after core is working)
+- Cut third: Tier 2 full palette (12 colors covers most customers; full palette is for the color-matcher edge case)
 - Keep always: the inline SVG illustration, the stage view, the "Send to Jeff" inquiry bridge
 
 **Frappe flags (none for V1):** The V1 scope is fully implementable as a single Web Page DocType with inline SVG, a page-scoped `<style>` block, and a Script section. No `web_include_css` needed at V1. No Node.js build step. No external dependencies.
