@@ -1,0 +1,97 @@
+"""Stripe Checkout Session helper for guest checkouts.
+
+We use Stripe's hosted Checkout (https://checkout.stripe.com/<session>) instead
+of Frappe's built-in card form. Two reasons:
+
+1. Trust signal — customers recognize the Stripe-hosted page; the URL bar
+   literally reads "checkout.stripe.com". Frappe's form is a custom card UI
+   that looks unbranded and erodes confidence at the point of payment.
+2. Modern Stripe API — Checkout Sessions support 3DS / SCA, dynamic payment
+   methods (Apple Pay, Google Pay, Link), address autocomplete, and the
+   real-time validation Stripe is famous for. Frappe's bundled flow uses the
+   legacy Charges API and supports none of that.
+
+Skill guidance applied (stripe-best-practices, 2026-04-29):
+- Never recommend Charges API → we don't use it
+- Don't pass payment_method_types — let dynamic payment methods choose
+- Default to latest API/SDK — using whatever Stripe SDK ships in the bench
+
+We keep ERPNext's existing Sales Order + Payment Request creation as the
+auditable record. The Payment Request's payment_url is replaced with the
+Stripe Checkout Session URL. When Stripe fires the checkout.session.completed
+webhook, we reconcile by marking the PR Paid (creates Payment Entry).
+"""
+from __future__ import annotations
+
+import frappe
+from frappe import _
+from frappe.utils import flt, get_url
+
+
+def create_session_for_sales_order(
+    sales_order: str,
+    payment_request: str,
+    cancel_route: str,
+    customer_email: str,
+) -> str:
+    """Create a Stripe Checkout Session for a guest's Sales Order.
+
+    Returns the hosted Stripe URL. Caller redirects the customer's browser
+    there. After payment, Stripe redirects to /payment-success?session_id=...
+    which our www/payment_success.py override handles.
+
+    Raises if the Stripe API call fails — the @whitelist caller in
+    submit_guest_order will surface the error as a form-level message.
+    """
+    import stripe
+
+    stripe_settings = frappe.get_doc("Stripe Settings", "Test")
+    api_key = stripe_settings.get_password("secret_key", raise_exception=True)
+
+    so = frappe.get_doc("Sales Order", sales_order)
+
+    line_items = []
+    for item in so.items:
+        item_name = (item.item_name or item.item_code).strip()
+        unit_amount_cents = int(round(flt(item.rate) * 100))
+        line_items.append({
+            "price_data": {
+                "currency": (so.currency or "USD").lower(),
+                "product_data": {"name": item_name},
+                "unit_amount": unit_amount_cents,
+            },
+            "quantity": int(item.qty),
+        })
+
+    site_url = get_url().rstrip("/")
+    success_url = f"{site_url}/payment-success?session_id={{CHECKOUT_SESSION_ID}}"
+    cancel_url = f"{site_url}{cancel_route}"
+
+    metadata = {
+        "sales_order": so.name,
+        "payment_request": payment_request,
+        "lt_origin": "guest_checkout",
+    }
+
+    session = stripe.checkout.Session.create(
+        api_key=api_key,
+        mode="payment",
+        line_items=line_items,
+        success_url=success_url,
+        cancel_url=cancel_url,
+        customer_email=customer_email,
+        client_reference_id=so.name,
+        metadata=metadata,
+        payment_intent_data={"metadata": metadata},
+    )
+
+    return session.url
+
+
+def retrieve_session(session_id: str):
+    """Retrieve a Checkout Session for verification on /payment-success."""
+    import stripe
+
+    stripe_settings = frappe.get_doc("Stripe Settings", "Test")
+    api_key = stripe_settings.get_password("secret_key", raise_exception=True)
+    return stripe.checkout.Session.retrieve(session_id, api_key=api_key)

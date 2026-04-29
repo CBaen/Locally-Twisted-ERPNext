@@ -366,18 +366,16 @@ def submit_guest_order(item_code="", qty=1, name="", email="", phone="",
     so.insert(ignore_permissions=True)
     so.submit()
 
-    # ── Payment Request → Stripe Hosted Checkout ─────────────────────
-    # NOTE on the underlying Stripe API: Frappe's payments app currently
-    # uses the legacy Charges API on Stripe's side (apps/payments/.../
-    # stripe_settings.py:create_charge_on_stripe). For a test-mode demo
-    # this works fine; for production hardening (Phase 4) we may want to
-    # swap to Stripe Checkout Sessions for 3DS + dynamic payment methods.
-    # mute_email=1: do NOT have Payment Request send a "click here to pay"
-    # email. Inside the LT Docker stack, that email triggers a wkhtmltopdf
-    # render that fails with ConnectionRefusedError. We don't need it
-    # anyway — we hand the payment URL directly to the customer's browser
-    # via JS redirect. The transactional receipt email fires later, on
-    # Payment Entry submit (next-turn work).
+    # ── Payment Request (auditable record only) ──────────────────────
+    # We still create the Payment Request because ERPNext uses it as the
+    # auditable record linking SO → Payment Entry. But we DO NOT use its
+    # payment_url — that points at Frappe's bundled card form (legacy
+    # Charges API, ugly). Instead we hand the customer to a Stripe
+    # Checkout Session (Stripe-hosted page, modern Stripe API).
+    #
+    # mute_email=1 + order_type="Shopping Cart" together suppress the
+    # auto-email + wkhtmltopdf render that fails inside Docker. The
+    # transactional receipt email fires later on Payment Entry submit.
     pr = frappe.get_doc({
         "doctype": "Payment Request",
         "payment_request_type": "Inward",
@@ -392,17 +390,20 @@ def submit_guest_order(item_code="", qty=1, name="", email="", phone="",
         "subject": f"Payment for order {so.name} — Locally Twisted",
         "message": "Please complete your payment to confirm your order.",
     })
-    pr.flags.mute_email = True   # belt-and-suspenders alongside order_type="Shopping Cart"
+    pr.flags.mute_email = True
     pr.insert(ignore_permissions=True)
     pr.submit()
 
-    # ERPNext gates payment_url generation behind send_mail=True (see
-    # payment_request.py:215 → set_payment_request_url() only runs in that
-    # branch). With Shopping Cart order_type + mute_email flag, send_mail
-    # is False and payment_url stays empty. Trigger it manually here.
-    if not pr.payment_url:
-        pr.set_payment_request_url()
-        pr.reload()
+    # ── Stripe Checkout Session → hand the customer a hosted URL ─────
+    from locally_twisted.payments.stripe_session import create_session_for_sales_order
+
+    cancel_route = f"/checkout?item={item_code}&qty={qty}"
+    stripe_url = create_session_for_sales_order(
+        sales_order=so.name,
+        payment_request=pr.name,
+        cancel_route=cancel_route,
+        customer_email=email,
+    )
 
     frappe.db.commit()
 
@@ -412,5 +413,5 @@ def submit_guest_order(item_code="", qty=1, name="", email="", phone="",
         "customer": customer_name,
         "address": address_doc.name,
         "payment_request": pr.name,
-        "stripe_redirect_url": pr.payment_url,
+        "stripe_redirect_url": stripe_url,
     }
