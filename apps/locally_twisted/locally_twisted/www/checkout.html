@@ -1,0 +1,158 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+<section class="lt-checkout">
+    <div class="lt-checkout__inner">
+        <h1 class="lt-checkout__title">Checkout</h1>
+        <p class="lt-checkout__subtitle">
+            No account required. We&rsquo;ll send a receipt to the email you give us.
+        </p>
+
+        <div class="lt-checkout__summary">
+            <div class="lt-checkout__summary-img"
+                 {% if item.website_image %}style="background-image: url('{{ item.website_image }}');"{% endif %}
+                 aria-hidden="true"></div>
+            <div class="lt-checkout__summary-body">
+                <p class="lt-checkout__summary-name">{{ item.web_item_name }}</p>
+                <p class="lt-checkout__summary-meta">Quantity: {{ qty }} &middot; ${{ "%.2f"|format(unit_price) }} each</p>
+            </div>
+            <p class="lt-checkout__summary-price">${{ "%.2f"|format(line_total) }}</p>
+        </div>
+
+        <form id="lt-checkout-form" class="lt-checkout__form" novalidate>
+            <input type="hidden" name="item_code" value="{{ item.item_code }}">
+            <input type="hidden" name="qty" value="{{ qty }}">
+
+            <div class="lt-checkout__row">
+                <div class="lt-checkout__field">
+                    <label for="co-name">Your name <span class="lt-checkout__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></label>
+                    <input type="text" id="co-name" name="name" class="lt-checkout__input" required autocomplete="name">
+                </div>
+                <div class="lt-checkout__field">
+                    <label for="co-phone">Phone <span class="lt-checkout__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></label>
+                    <input type="tel" id="co-phone" name="phone" class="lt-checkout__input" required autocomplete="tel">
+                </div>
+            </div>
+
+            <div class="lt-checkout__field">
+                <label for="co-email">Email (we&rsquo;ll send your receipt here) <span class="lt-checkout__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></label>
+                <input type="email" id="co-email" name="email" class="lt-checkout__input" required autocomplete="email">
+            </div>
+
+            <div class="lt-checkout__field">
+                <label for="co-addr1">Delivery address <span class="lt-checkout__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></label>
+                <input type="text" id="co-addr1" name="address_line1" class="lt-checkout__input" required autocomplete="address-line1" placeholder="Street address">
+            </div>
+            <div class="lt-checkout__field">
+                <label for="co-addr2">Apt, suite, unit (optional)</label>
+                <input type="text" id="co-addr2" name="address_line2" class="lt-checkout__input" autocomplete="address-line2">
+            </div>
+
+            <div class="lt-checkout__row lt-checkout__row--3">
+                <div class="lt-checkout__field">
+                    <label for="co-city">City <span class="lt-checkout__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></label>
+                    <input type="text" id="co-city" name="city" class="lt-checkout__input" required autocomplete="address-level2">
+                </div>
+                <div class="lt-checkout__field">
+                    <label for="co-state">State <span class="lt-checkout__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></label>
+                    <input type="text" id="co-state" name="state" class="lt-checkout__input" required autocomplete="address-level1" value="UT" maxlength="2">
+                </div>
+                <div class="lt-checkout__field">
+                    <label for="co-zip">ZIP <span class="lt-checkout__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></label>
+                    <input type="text" id="co-zip" name="postal_code" class="lt-checkout__input" required autocomplete="postal-code" inputmode="numeric">
+                </div>
+            </div>
+
+            <div class="lt-checkout__field">
+                <label for="co-notes">Anything we should know? (optional)</label>
+                <input type="text" id="co-notes" name="order_notes" class="lt-checkout__input" placeholder="Color preferences, event date, drop-off instructions...">
+            </div>
+
+            <p class="lt-checkout__notice">
+                We use this info only to fulfill your order and send you a receipt.
+                See our <a href="/refund-policy">policies</a>.
+            </p>
+
+            <button type="submit" class="lt-checkout__submit" id="co-submit">
+                Continue to payment
+            </button>
+
+            <div id="co-feedback" class="lt-checkout__feedback" role="status" aria-live="polite"></div>
+        </form>
+    </div>
+</section>
+
+<script>
+(function () {
+    var form = document.getElementById('lt-checkout-form');
+    var submit = document.getElementById('co-submit');
+    var feedback = document.getElementById('co-feedback');
+    if (!form || !submit || !feedback) return;
+
+    function setFeedback(state, msg) {
+        feedback.classList.remove('is-success', 'is-error');
+        if (state) feedback.classList.add('is-' + state);
+        feedback.textContent = msg || '';
+    }
+
+    form.addEventListener('submit', function (ev) {
+        ev.preventDefault();
+        setFeedback(null, '');
+
+        var fd = new FormData(form);
+        var name = (fd.get('name') || '').toString().trim();
+        var email = (fd.get('email') || '').toString().trim();
+        var phone = (fd.get('phone') || '').toString().trim();
+        var addr1 = (fd.get('address_line1') || '').toString().trim();
+        var city = (fd.get('city') || '').toString().trim();
+        var state = (fd.get('state') || '').toString().trim();
+        var zip = (fd.get('postal_code') || '').toString().trim();
+
+        if (!name || !email || !phone || !addr1 || !city || !state || !zip) {
+            setFeedback('error', 'Please fill in all required fields.');
+            return;
+        }
+
+        submit.disabled = true;
+        var originalLabel = submit.textContent;
+        submit.textContent = 'Creating your order...';
+
+        fetch('/api/method/locally_twisted.www.checkout.submit_guest_order', {
+            method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            body: fd,
+            credentials: 'same-origin'
+        })
+        .then(function (resp) { return resp.json().then(function (data) { return { status: resp.status, body: data }; }); })
+        .then(function (result) {
+            submit.disabled = false;
+            submit.textContent = originalLabel;
+            if (result.status >= 200 && result.status < 300 && result.body && result.body.message && result.body.message.ok) {
+                var msg = result.body.message;
+                if (msg.stripe_redirect_url) {
+                    window.location.href = msg.stripe_redirect_url;
+                    return;
+                }
+                setFeedback('success',
+                    'Order created (' + msg.sales_order + '). Stripe payment integration is the next step. ' +
+                    'For the demo right now, this confirms guest checkout works without an account.');
+                form.reset();
+            } else {
+                var emsg = (result.body && (result.body._server_messages || result.body.exception || result.body.message))
+                    || 'Something went wrong. Please call (801) 285-0860.';
+                if (typeof emsg === 'string' && emsg.indexOf('{') === 0) {
+                    try { emsg = JSON.parse(emsg).message || emsg; } catch (e) {}
+                }
+                setFeedback('error', typeof emsg === 'string' ? emsg : 'Something went wrong. Please call (801) 285-0860.');
+            }
+        })
+        .catch(function (err) {
+            submit.disabled = false;
+            submit.textContent = originalLabel;
+            setFeedback('error', "We couldn't create your order. Please call (801) 285-0860 or email hi@locallytwisted.com.");
+            if (window.console && console.error) console.error('Checkout submit failed', err);
+        });
+    });
+})();
+</script>
+{% endblock %}

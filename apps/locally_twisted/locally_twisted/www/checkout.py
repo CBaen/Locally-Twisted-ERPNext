@@ -289,23 +289,17 @@ def submit_guest_order(item_code="", qty=1, name="", email="", phone="",
     # ── Customer (idempotent by email) ───────────────────────────────
     # We identify customers by email. No User account is created — guest
     # checkout means just Customer + Contact records.
-    existing_customer = frappe.db.get_value(
-        "Contact",
-        {"email_id": email},
-        ["name", "links"],
-        as_dict=True,
-    )
-
+    # Lookup chain: Contact Email (child) → parent Contact → Dynamic Link → Customer.
     customer_name = None
-    if existing_customer:
-        # Find the linked Customer through Dynamic Links on the Contact
-        link = frappe.db.get_value(
+    contact_name = frappe.db.get_value(
+        "Contact Email", {"email_id": email}, "parent"
+    )
+    if contact_name:
+        customer_name = frappe.db.get_value(
             "Dynamic Link",
-            {"parent": existing_customer.name, "link_doctype": "Customer"},
+            {"parent": contact_name, "link_doctype": "Customer", "parenttype": "Contact"},
             "link_name",
         )
-        if link:
-            customer_name = link
 
     if not customer_name:
         customer_doc = frappe.get_doc({
