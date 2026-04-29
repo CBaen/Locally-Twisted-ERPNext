@@ -14,25 +14,33 @@
 - WSL2 tuned: 8 GB RAM, 4 CPU, swap 2 GB, dropcache (`C:\Users\baenb\.wslconfig`)
 - `pwd.yml` pinned to `frappe/erpnext:v15.105.0`; bind-mount of `apps/locally_twisted/` to `/home/frappe/frappe-bench/apps/locally_twisted/` on all 8 frappe-image services
 - LT Company record exists with full contact info
-- 2 active System Manager users + 1 disabled placeholder
 - Fiscal Year 2026, Standard with Numbers chart of accounts, Services domain
 - 3 LT-specific DocTypes: `Dashboard Reviewed Item`, `LT Service Type` (+ `LT Lead Service Type` child + `LT Lead Photo` child)
 - `Lead` DocType extended with 45+ Custom Fields, plain-language relabels, "Additional Information" tab hidden, 25 MB upload
-- nginx Origin pass-through patched on the LT frontend container (re-applied this session post-recreate; lost on next recreate)
-- **Phase 1 Slice 1 done — brand foundation theme** now served by the `locally_twisted` custom Frappe app at `/assets/locally_twisted/css/lt-theme.css` (registered via `web_include_css` in app's `hooks.py`). Source lives at `apps/locally_twisted/locally_twisted/public/css/lt-theme.css` (~21 KB; Slice 1 + Slice 2 styles). The previous `_resources/lt-theme.css` source-of-truth file was deleted as redundant.
-- **Custom Frappe app `locally_twisted` scaffolded + installed** on the site (`bench --site frontend list-apps` shows `locally_twisted 0.0.1`). App lives at `apps/locally_twisted/` on host, bind-mounted into containers.
-- **Resources pre-positioned for Phase 1 build:** `_resources/STYLE-GUIDE.md`, `_resources/policies/` (6 business-policy files), `_resources/utah-tax-rates-2026q2.md`, `_resources/images/` (15 brand-aligned placeholder images), LT logo PNG at `apps/locally_twisted/locally_twisted/public/icons/lt-logo.png`.
+- nginx Origin pass-through patched on the LT frontend container (lost on container recreation; re-apply via `scripts/fix/patch_nginx_socketio_origin.py`)
+- **Custom Frappe app `locally_twisted` installed**. App lives at `apps/locally_twisted/` on host, bind-mounted into containers. `bench --site frontend list-apps` shows `frappe`, `erpnext`, `locally_twisted`, `payments`, `webshop`.
+- **Brand foundation theme** served by the app at `/assets/locally_twisted/css/lt-theme.css` (registered via `web_include_css` in `hooks.py`, cache-bust query string `?v=YYYYMMDD-N`). Source at `apps/locally_twisted/locally_twisted/public/css/lt-theme.css`.
+- **Stripe end-to-end live (test mode).** `/checkout?item=<code>&qty=<n>` → SO + PR + Stripe Checkout Session → Stripe-hosted page → `/payment-success` (LT override) → `/thank-you?order=<so>`. Stripe Link disabled at account level via PMC `pmc_1TRZH2DfnlZQv66ncb001soG`. ERPNext cascade wired: PR Paid → SI created → receipt email + operator notification + welcome email. GL completed real `4242` purchase 2026-04-29.
+- **localStorage-backed guest cart** at `/cart` (LT-owned route; multi-item checkout supported).
+- **Phase 1 customer surfaces live:** `/`, `/lookbook`, `/shop`, `/balloon-twisting-and-face-painting`, `/contact`, `/all-products`, `/faq`, `/refund-policy`, `/accessibility`, `/cart`, `/checkout`, `/payment-success`, `/thank-you`. All form-bearing pages have AJAX → Lead + Communication wiring with three-channel loud-failure compliance.
+- **Mobile responsiveness shipped 2026-04-29 evening** at 320 / 375 / 414 viewports. Hamburger toggle visible+tappable. Hero bands span full viewport. Webshop product detail centered with intentional max-width 1200 on desktop. Brand logo responsive via `calc(100vw - 88px)`.
+- **LT design guide imported 2026-04-29** at `_resources/design-guide/` — synthesis output from the 2026-04-26 design competition. Was previously stranded at `zoho-locally-twisted/gallery/` outside our directory; signposted from CLAUDE.md and reading order so future instances find it.
+- **Resources pre-positioned for Phase 1 build:** `_resources/STYLE-GUIDE.md`, `_resources/design-guide/`, `_resources/policies/` (6 files), `_resources/utah-tax-rates-2026q2.md`, `_resources/competitor-survey-2026-04-26.md`, `_resources/images/` (15 placeholder PNGs), `_resources/odoo-export/catalog.json` (51 products + 48 images for future webshop seeding).
 
-**What's broken (NOT done):**
-- **Slice 2 visual rendering.** The DOM is correct, the CSS is served, the data is in `Website Settings`, but `.web-footer`'s computed bounding box is constrained to ~305 px while its child `.container` is 755 px tall — the brand block, social icons, address, copyright bar render below the painted Soft Blue area on white background. Multiple `!important` overrides on `.web-footer { height: auto }` did not change the computed height. Root cause: NOT YET IDENTIFIED. Must be tracked through Frappe's source — likely in body-flex layout or one of Frappe's bundled SCSS files. **Do not band-aid further.**
-- **Approved structure mismatch.** The Odoo source's approved header is two-tier (utility bar with truck-icon line + centered logo + sign-in/cart/CTA, then centered nav row). Mine is single-tier with left-aligned logo. Approved footer is 3 columns + centered brand block + 3 social icons (no Twitter) + hours block. Mine is 4 columns + left-aligned brand + 4 social icons + no hours. Approved copy strings differ in dozens of places. Replicating the approved structure is the right move when Slice 2 resumes.
+**What's broken / pending visual quality work:**
+- **`/shop`, `/shop-items`, `/shop/<item>` design quality is below the bar.** GL named it "horrible" 2026-04-29 evening. Specific issues: breadcrumb bleeds left edge, vestigial mid-page bar on product detail, "Item Code: 7-butterfly-column" jargon visible to customers, image-expand modal doesn't close on outside click. /shop-items is webshop's stock listing page with zero LT design treatment. **Holistic redesign against the new design guide is the next P0** — instructions in HANDOFF.
+- **Pre-existing Frappe asset-map bug** on `/shop/<item>` console: `Cannot read properties of undefined (reading 'file_uploader.bundle.js')`. Not from our work; Frappe's bundled `upload.js:8` calling `bundled_asset()` against an undefined map entry. Page renders fine, no LT functionality affected. P2.
 
 **What's next (in order):**
-- **Resume Phase 1 Slice 2 from a fresh instance, AFTER reading `frappe-conventions.md` agency capability + the 2026-04-26 (Slice 2 build) lessons-learned entry.** Override Frappe's footer Jinja partials at `apps/locally_twisted/locally_twisted/templates/includes/footer/footer.html` (and `footer_grouped_links.html`, `footer_info.html`) to match the approved Odoo structure. This replaces the CSS-override-by-`!important` approach.
-- **Decision blocking Slices 7-9 + Phase 4: install the separate `frappe/webshop` app or skip ecommerce?** ERPNext v15 has no built-in cart/checkout. `bench get-app https://github.com/frappe/webshop && bench --site frontend install-app webshop` is the install command. GL needs to decide before any product / cart / Stripe work begins.
+- **Holistic redesign of /shop, /shop-items, /shop/&lt;item&gt;, /contact** against `_resources/design-guide/synthesis/`. Read voice.md, mood.md, rationale.md, view all 8 screenshots BEFORE starting. Bring observations + plan to GL first. Verify in real browser before declaring done.
+- **Slice 10 — `/book` form page** (45-field Lead schema). Every homepage CTA still 404s here. Was deferred 3x.
+- **`/privacy` and `/terms-of-service` pages** — both required by Stripe for live mode activation, both currently `example.com/...` placeholders in Stripe Dashboard.
+- **Spec table data on BTFP service cards** still lorem ipsum — Jeff to confirm BEST AT / DURATION / TEAM SIZE / GOOD FOR.
+- **Sample data for backend tour** — realistic Lead records, paid SO, upcoming event for Jeff's desk demo.
 
 **Known bugs (carry-overs):**
-- `LT Lead Photo` child DocType exists and `lt_section_photos` Section Break exists on Lead, BUT the Table field connecting them was never created (iter 4 step F failed silently).
+- `LT Lead Photo` child DocType exists and `lt_section_photos` Section Break exists on Lead, BUT the Table field connecting them was never created (iter 4 step F failed silently). Still unaddressed.
+- Cleanup overdue: `scripts/verify/_screenshots/` has 80+ accumulated subdirs from sessions back to 2026-04-26. Most are dead diagnostic captures. One-time sweep is its own decision.
 
 ---
 

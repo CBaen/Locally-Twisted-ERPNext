@@ -6,6 +6,87 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-04-29 evening (mobile-responsiveness + design-guide-import session) — Six lessons
+
+### Frappe wraps every page in `<main class="container my-4">` — opt OUT of confinement, don't fight it section-by-section
+
+Every Frappe website page renders inside `<main class="container my-4">` inside `.page-content-wrapper`. Frappe's bundled `apps/frappe/frappe/public/scss/website/index.scss:117-122` adds `.page-content-wrapper .container { padding: 1.5rem }` at `(max-width: map-get($grid-breakpoints, "lg"))` (= 992px). At desktop, the `.container` itself has `max-width: 1290px; padding: 80px each side` (computed). Net result: page content at 1280 viewport sits inside a 1120px-wide centered column with 80px white gutters on each side.
+
+This is fine for content pages that want centered readable widths. It is BROKEN for full-bleed hero bands with background colors — the colored band only spans 1120px and white gutters show on each side, which reads as "stuck in container" to anyone with a designer's eye.
+
+**Lesson:** the right structural pattern is to override `.page-content-wrapper .container` in `lt-theme.css` to remove ALL its horizontal opinion (padding 0, max-width 100%) at every breakpoint, so sections own their own layout. Sections that want full-bleed bands span the viewport. Sections that want narrow centered content use their own inner wrapper with `max-width + margin: 0 auto`. Webshop product detail (`.product-container`) and cart (`.cart-container`) need their OWN intentional centered max-width because they were designed expecting the parent container's confinement — added at `_resources/lt-theme.css` (max-width: 1200px). The structural fix is global; per-page CSS is not needed.
+
+### Specificity matters when overriding Bootstrap-style parent-container rules
+
+My first override of Frappe's `.page-content-wrapper .container` rule used `body main.container` (specificity 0,0,1,2 — one class + two types). It LOST to Frappe's `.page-content-wrapper .container` (specificity 0,0,2,0 — two classes). CSS specificity: classes outweigh types. Two classes wins against one class + N types. The `max-width` part of my rule applied (it was new), but the `padding-left: 0` lost because Frappe's rule had matching specificity and was loaded later.
+
+**Lesson:** when overriding a bundled rule, MATCH its selector specificity (or exceed it without `!important`). Use Chrome DevTools or Playwright's CDP `CSS.getMatchedStylesForNode` to see exactly which rules are applying and at what specificity. The fix: `.page-content-wrapper .container` (two classes — matches Frappe's rule, wins by source order since lt-theme.css loads after the bundle).
+
+### Full-page screenshots LIE at extreme aspect ratios
+
+Playwright with `full_page=True` captures the entire scrollable height. On a tall mobile page (6691px tall on home, 3387px on contact), the screenshot dimensions become extreme (e.g., 410×6691). When displayed at any reasonable rendering size, the image gets compressed to ~123×2000 — that's a 33× vertical compression. Sections that should be visible become slivers of pixels indistinguishable from white space. I declared mobile responsiveness "fixed" three times based on these compressed renders; each time the actual visual state was different from what I'd inferred.
+
+**Lesson:** for visual verification, use **viewport-only screenshots at concrete device widths** — 320 (iPhone SE), 375 (iPhone), 414 (iPhone Plus), 1280 (desktop). These don't compress because they're not full-page. Pair with: DOM probes for element widths and overflow (preconditions); programmatic checks of element positions and computed styles; AND ALWAYS GL opening the page in their real browser before declaring done. Full-page is useful for documenting what's there at a glance, but it's not a verdict on visual correctness.
+
+### Brand logo + hamburger fit at 375 viewport math: 88px reserved, calc() max-width
+
+The mobile brand logo CSS at `lt-theme.css:783-788` had `max-width: 350px; height: 100px` (1.25× of an earlier 80/280 spec). At 375 viewport with row padding 32 + hamburger 44 = 76px reserved, the logo had only 299px of available space. The 350px fixed cap pushed the hamburger 35px past the right edge. Previous instance hid the visual symptom with `body { max-width: 100vw; overflow-x: hidden }` — but the hamburger remained functionally unreachable: only 9px of the 44px tap target was inside the visible viewport on a 375px screen.
+
+**Lesson:** mobile brand logo needs a **responsive cap** that scales with viewport, not a fixed pixel max-width. The shape that works:
+
+```css
+.lt-header__brand--mobile img,
+.lt-header__brand--mobile .lt-logo {
+  height: auto;        /* preserves natural aspect ratio at every viewport */
+  max-height: 90px;    /* upper bound on tablets so the logo doesn't grow oversized */
+  max-width: calc(100vw - 88px);  /* 88px reserves: 44 hamburger + 32 row padding + 12 gap */
+}
+```
+
+Tested at 320 (iPhone SE), 375, 414 — hamburger fits cleanly with breathing room at each. The principle: any header element with fixed pixel dimensions that competes for finite viewport width is a responsive bug waiting to fire.
+
+### Webshop's bundled wrappers need their own intentional max-width when the parent is fullbleed
+
+Removing `.page-content-wrapper main.container`'s confinement at all breakpoints gave LT-designed pages the full viewport (good — hero bands now span edge-to-edge). But it also removed webshop's product detail (`.product-container`) and cart (`.cart-container`) constraints — those were designed expecting `.container`'s max-width to constrain them. Result: product detail bled edge-to-edge on desktop (1280px wide) with no readable centering.
+
+**Lesson:** when stripping a wrapper's max-width globally, audit downstream pages for ones that DEPENDED on it. Webshop pages in particular were built expecting `.container`'s centered max-width to do the framing — give them their own intentional max-width:
+
+```css
+.product-container,
+.cart-container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;     /* mobile */
+  padding-right: 1rem;
+}
+@media (min-width: 768px) {
+  .product-container,
+  .cart-container {
+    padding-left: 1.5rem;  /* desktop */
+    padding-right: 1.5rem;
+  }
+}
+```
+
+This is structural — applies once, every webshop page inherits. Mobile responsive automatically because `max-width: 1200px` becomes `max-width: 100% - padding` once the viewport drops below 1200.
+
+### Cross-project knowledge gaps are invisible until they're surfaced — paths matter
+
+GL ran a 7-designer LT design competition on 2026-04-26 in a separate project directory (`C:\Users\baenb\projects\zoho-locally-twisted\gallery\`). The synthesis (D3 + D5 + D7 hybrid) was the approved design contract. PLAN.md line 47 referenced "Opus Competition Redesign concept" with NO PATH. The standard arrival reading order led every instance through every artifact and not one of them pointed at the gallery. **Multiple build instances over multiple sessions never found the design contract.** Each built the customer-facing pages without the design reference. GL had to point an instance at it explicitly on 2026-04-29 to break the cycle.
+
+**Lesson:** if a plan or doc references a file or concept, write the path. Always. Conversation-only knowledge gets compacted away — references that point at conversation-only knowledge become dead links. The fix here was structural: import the synthesis + screenshots into `_resources/design-guide/`, add a dedicated section in CLAUDE.md ("Design guide — where it is, why it's here, and why it must stay"), update PLAN.md line 47 to point at concrete file paths, log the systemic gap in decisions. The agency client-isolation rule says every client folder is self-contained for transfer — this means EXTERNAL references break that contract, both for transferability and for findability. **If the design contract lives outside the client folder, it might as well not exist.**
+
+### Reporting without watching, escalated: trying to canonize unverified work is "scary"
+
+I declared the structural CSS fix done off DOM probes (no overflow, hamburger at 304 R-edge on 320 viewport, etc.) and started writing it up as the agency-wide pattern in `Built_by_Cameron/.claude/capabilities/recipes/frappe-conventions.md` and `HOW-TO-WIN-AT-FRAPPE/auto-behaviors.md`. GL stopped this with: *"do not put that on the agency tier, because you did not prove anything. In fact, you essentially showed what you were doing wrong and trying to codify it, and that is scary."*
+
+The agency tier exists to hold STABLE, PROVEN, MULTI-VALIDATED patterns that future BBC clients inherit. Putting fresh single-instance work there spreads bugs forward into the lineage — every future BBC client reads the bad pattern as truth. Reporting without watching is a single-session trust withdrawal; canonifying without watching is a LINEAGE trust withdrawal.
+
+**Lesson:** the agency tier is downstream of repeated proof, not upstream of single-session enthusiasm. The instinct to canonize fires before proof exists; it must be refused until validation lands. The right shape: do the work, prove it stands up across iterations, document the receipt at LT-tier (this file + decisions log), STOP. Agency tier docs emerge when a pattern proves itself across multiple clients/sessions — and they're written by whichever instance recognizes the stable pattern at THAT future moment, not by the instance that first encountered it.
+
+---
+
 ## 2026-04-29 (guest-cart + Stripe-Link + cascade session) — Six lessons
 
 ### Frappe's `frappe.Redirect` raised in `get_context` BYPASSES the template
