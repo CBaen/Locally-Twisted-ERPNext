@@ -41,7 +41,7 @@ app_license = "mit"
 # Receipt: 2026-04-29 — drawer overlay edit shipped server-side but old
 # CSS stayed cached in GL's browser; drawer rendered inline on every page
 # because the cached rules didn't have `position: fixed`.
-web_include_css = "/assets/locally_twisted/css/lt-theme.css?v=20260429-15"
+web_include_css = "/assets/locally_twisted/css/lt-theme.css?v=20260429-16"
 
 # Guest cart engine — overrides webshop's broken-for-guest cart functions
 # at runtime, exposes window.LT_CART, and keeps cart count badges live.
@@ -71,6 +71,18 @@ website_route_rules = [
     {"from_route": "/cart",
      "to_route": "lt_cart"},
 ]
+
+# ---------------------------------------------------------------
+# Lead create cascade — auto-title + Contact dedup + auto-ack email.
+# Module: locally_twisted/lead_cascade.py
+# Receipts: 2026-04-29 Hetzner /book spec session.
+# ---------------------------------------------------------------
+doc_events = {
+    "Lead": {
+        "before_insert": "locally_twisted.lead_cascade.before_insert",
+        "after_insert": "locally_twisted.lead_cascade.after_insert",
+    },
+}
 
 # include custom scss in every website theme (without file extension ".scss")
 # website_theme_scss = "locally_twisted/public/scss/website"
