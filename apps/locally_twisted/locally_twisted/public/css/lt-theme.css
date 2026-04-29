@@ -686,9 +686,11 @@ html, body {
   display: flex;
   align-items: center;
   gap: 1rem;
-  /* Far-right of column — mirrors the left content's far-left position
-   * for page-edge symmetry per GL 2026-04-29. */
-  justify-self: end;
+  /* Hug the logo on the right side, matching the left content's small
+   * inner gap to the logo (~16px). Per GL 2026-04-29 (option B): symmetry
+   * is logo-distance, not page-edge. Empty space falls to the page-right
+   * edge instead of between the cluster and the logo. */
+  justify-self: start;
 }
 
 .lt-header__util-link {
