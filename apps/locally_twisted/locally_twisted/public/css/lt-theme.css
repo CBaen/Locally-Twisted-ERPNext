@@ -631,12 +631,12 @@ html, body {
 
 .lt-header__utility-left {
   font-family: 'Raleway', sans-serif;
-  /* 1rem (16px) per GL 2026-04-29 — accessibility + matches right-side
-   * util-link size. Text wraps to two lines via an explicit <br> in
-   * navbar.html. Content stays at far-left of the column (default
-   * justify-self: start) per GL preference — symmetry is page-edge
-   * mirror (left's left-edge ≈ right's right-edge from page edges). */
-  font-size: 1rem;
+  /* 17.5px (16px + 1.5px) bold per GL 2026-04-29 — emphasis + readability.
+   * Text wraps to two lines via explicit <br> in navbar.html. Content
+   * stays at far-left of the column (default justify-self: start) —
+   * symmetry is page-edge mirror, not inner-to-logo. */
+  font-size: 17.5px;
+  font-weight: 700;
   line-height: 1.4;
   color: var(--lt-soft-gray);
   display: flex;
@@ -686,9 +686,9 @@ html, body {
   display: flex;
   align-items: center;
   gap: 1rem;
-  /* Pull content toward the logo (left edge of right column) so it
-   * mirrors the left side per GL 2026-04-29 symmetry directive. */
-  justify-self: start;
+  /* Far-right of column — mirrors the left content's far-left position
+   * for page-edge symmetry per GL 2026-04-29. */
+  justify-self: end;
 }
 
 .lt-header__util-link {
