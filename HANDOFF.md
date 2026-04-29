@@ -128,6 +128,17 @@ GL's operating constraints (verified again this session):
 - One-shot verification scripts (`_oneshot_guest_cart.py`, `_oneshot_stripe_link.py`) deleted at session close. They served their purpose; git history preserves them if needed.
 - ONE thing the parallel agent on the contest stream did continue through this session — research/contest-customizable-event-decor-tool/ commits visible in git log. Don't conflict with their files.
 
+## Note on the parallel contest stream
+
+This HANDOFF overwrote the contest orchestrator's previous closeout. The contest-stream context in their HANDOFF — verbatim from the version I replaced — was: *"orchestrator of the Customizable Event Decor Design Tool contest. Closing at 74% context; contest is one phase from done."* The full contest state lives at `research/contest-customizable-event-decor-tool/`:
+- `INDEX.md` — contest navigation
+- `FIELD-AT-ROUND-1.md` and `FIELD-AT-ROUND-2.md` if present — field state at each round
+- `PRODUCT-DETAILS.md` — what's being designed
+- `contestant-{1,2,3,4}/` — each agent's work (mockups, REASONING.md, ROUND-2-CHOICE.md, PROXY-LOOP-*.md)
+- 5 long-running agents are likely still addressable by ID (see locally-twisted-queue.md "Design Studio contest" tail for the IDs and the shutdown SendMessage protocol)
+
+If the next instance wants to resume the contest stream rather than the customer-site stream, that's GL's call — the two streams are independent. The customer-site work documented in the rest of this HANDOFF is what shipped this session and what the demo critical path depends on.
+
 ## A quick honesty pass
 
 **What worked:**
