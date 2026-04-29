@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discovery Moment — Locally Twisted Design Studio</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body { background: #FBFBFB; }
+
+    .upsell-layout {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      max-width: 480px;
+      margin: 0 auto;
+      background: #FFFFFF;
+      overflow: hidden;
+    }
+
+    /* Nav */
+    .upsell-nav {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      background: #FFFFFF;
+      border-bottom: 1px solid #EBEBEB;
+    }
+
+    .upsell-nav__back {
+      background: none;
+      border: none;
+      padding: 4px;
+      cursor: pointer;
+      color: #595A5C;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .upsell-nav__title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1rem;
+      color: #1A1A1A;
+      flex: 1;
+    }
+
+    /* Canvas: shows the arch + ghost column waiting -->*/
+    .upsell-canvas {
+      flex: 1;
+      background: #F9F9F9;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 16px;
+      padding: 16px 20px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .upsell-done-badge {
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #FFFFFF;
+      border: 1.5px solid #EBEBEB;
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #595A5C;
+      white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    /* Arch piece (fully colored) */
+    .arch-piece {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .arch-piece__name {
+      font-size: 0.6875rem;
+      font-weight: 500;
+      color: #595A5C;
+      margin-top: 5px;
+    }
+
+    .arch-piece__checkmark {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #008080;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 4px;
+    }
+
+    /* Ghost column — the discovery target */
+    .ghost-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .ghost-column__shape {
+      border: 2px dashed #C3DCF3;
+      border-radius: 12px;
+      width: 70px;
+      height: 130px;
+      position: relative;
+      background: rgba(195,220,243,0.06);
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+
+    .ghost-column:hover .ghost-column__shape {
+      border-color: #008080;
+      background: rgba(0,128,128,0.04);
+    }
+
+    /* Ghost column with pre-colored preview (tinted to match arch colors) */
+    .ghost-column__preview {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      opacity: 0.4;
+    }
+
+    .ghost-col-balloon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+    }
+
+    .ghost-column__label-area {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      right: 0;
+      text-align: center;
+    }
+
+    .ghost-column__plus {
+      font-size: 1.25rem;
+      color: #C3DCF3;
+      display: block;
+      margin-bottom: 3px;
+      line-height: 1;
+    }
+
+    .ghost-column__name {
+      font-size: 0.5625rem;
+      font-weight: 700;
+      color: #595A5C;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .ghost-column__meta {
+      font-size: 0.5rem;
+      font-weight: 500;
+      color: #595A5C;
+    }
+
+    .ghost-column__tap-label {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      color: #595A5C;
+      margin-top: 6px;
+      text-align: center;
+    }
+
+    /* Suggestion panel (slides up from bottom) */
+    .suggestion-panel {
+      background: #FFFFFF;
+      border-top: 1px solid #EBEBEB;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.07);
+      animation: panelSlideUp 0.35s ease-out;
+    }
+
+    @keyframes panelSlideUp {
+      from { transform: translateY(100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .suggestion-handle {
+      width: 36px;
+      height: 4px;
+      background: #D0D0D0;
+      border-radius: 2px;
+      margin: 10px auto 0;
+    }
+
+    .suggestion-header {
+      padding: 10px 16px 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .suggestion-header__title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1rem;
+      color: #1A1A1A;
+    }
+
+    .suggestion-header__dismiss {
+      background: none;
+      border: none;
+      font-size: 1.25rem;
+      color: #595A5C;
+      cursor: pointer;
+      padding: 4px;
+      line-height: 1;
+      border-radius: 6px;
+    }
+
+    .suggestion-header__dismiss:hover {
+      background: #F4DFD7;
+    }
+
+    .suggestion-body {
+      padding: 10px 16px 16px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .suggestion-preview-col {
+      width: 68px;
+      height: 90px;
+      flex-shrink: 0;
+      border-radius: 10px;
+      border: 1.5px solid #EBEBEB;
+      background: #F9F9F9;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .suggestion-text {
+      flex: 1;
+    }
+
+    .suggestion-subtitle {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #595A5C;
+      margin-bottom: 4px;
+    }
+
+    .suggestion-desc {
+      font-size: 0.875rem;
+      color: #1A1A1A;
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+
+    .suggestion-colors-note {
+      font-size: 0.75rem;
+      color: #595A5C;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .suggestion-colors-row {
+      display: flex;
+      gap: 4px;
+    }
+
+    .suggestion-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 1.5px solid #FFFFFF;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    }
+
+    .suggestion-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .suggestion-actions .btn-ghost {
+      font-size: 0.8125rem;
+      padding: 10px 16px;
+    }
+
+    .suggestion-actions .btn-primary {
+      font-size: 0.8125rem;
+      padding: 10px 16px;
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+<div class="upsell-layout" id="upsell-screen">
+
+  <!-- Nav -->
+  <div class="upsell-nav">
+    <button class="upsell-nav__back" onclick="window.location.href='02-color-one.html'">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="#595A5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back
+    </button>
+    <span class="upsell-nav__title">Balloon Arch</span>
+  </div>
+
+  <!-- Canvas: colored arch + ghost column waiting -->
+  <div class="upsell-canvas">
+    <div class="upsell-done-badge">Arch looks great!</div>
+
+    <!-- The colored arch -->
+    <div class="arch-piece">
+      <svg viewBox="0 0 140 120" width="140" height="120" fill="none">
+        <ellipse cx="18" cy="90" rx="15" ry="18" fill="#FFB6C1" stroke="#1A1A1A" stroke-width="0.8"/>
+        <ellipse cx="38" cy="70" rx="14" ry="17" fill="#87CEEB" stroke="#1A1A1A" stroke-width="0.8"/>
+        <ellipse cx="70" cy="42" rx="18" ry="20" fill="#FFB6C1" stroke="#1A1A1A" stroke-width="0.8"/>
+        <ellipse cx="102" cy="70" rx="14" ry="17" fill="#87CEEB" stroke="#1A1A1A" stroke-width="0.8"/>
+        <ellipse cx="122" cy="90" rx="15" ry="18" fill="#FFB6C1" stroke="#1A1A1A" stroke-width="0.8"/>
+        <ellipse cx="52" cy="56" rx="10" ry="13" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.7"/>
+        <ellipse cx="88" cy="56" rx="10" ry="13" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.7"/>
+        <line x1="18" y1="108" x2="18" y2="120" stroke="#1A1A1A" stroke-width="0.8"/>
+        <line x1="122" y1="108" x2="122" y2="120" stroke="#1A1A1A" stroke-width="0.8"/>
+      </svg>
+      <div class="arch-piece__name">Arch</div>
+      <div class="arch-piece__checkmark">
+        <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+          <path d="M1 4l3 3L9 1" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Ghost column — awaiting the customer -->
+    <div class="ghost-column" id="ghost-column-target" onclick="window.location.href='02-color-one.html'" title="Add a matching column">
+      <div class="ghost-column__shape">
+        <!-- Pre-tinted preview balloons in arch colors (very faint) -->
+        <div class="ghost-column__preview">
+          <div class="ghost-col-balloon" style="background:#FFB6C1;"></div>
+          <div class="ghost-col-balloon" style="background:#87CEEB;"></div>
+          <div class="ghost-col-balloon" style="background:#FFB6C1;"></div>
+        </div>
+        <div class="ghost-column__label-area">
+          <span class="ghost-column__plus">+</span>
+          <div class="ghost-column__name">Column</div>
+          <div class="ghost-column__meta">matches your arch</div>
+        </div>
+      </div>
+      <div class="ghost-column__tap-label">+ Add column</div>
+    </div>
+
+  </div><!-- /upsell-canvas -->
+
+  <!-- Suggestion panel (slides up after ~800ms, per script) -->
+  <div class="suggestion-panel">
+    <div class="suggestion-handle"></div>
+
+    <div class="suggestion-header">
+      <div class="suggestion-header__title">Complete the look</div>
+      <button class="suggestion-header__dismiss" onclick="$('.suggestion-panel').slideUp(200)" title="Dismiss">&#215;</button>
+    </div>
+
+    <div class="suggestion-body">
+
+      <!-- Column preview with arch colors applied -->
+      <div class="suggestion-preview-col">
+        <svg viewBox="0 0 52 80" width="52" height="80" fill="none">
+          <ellipse cx="26" cy="11" rx="13" ry="12" fill="#FFB6C1" stroke="#1A1A1A" stroke-width="0.7"/>
+          <ellipse cx="26" cy="31" rx="12" ry="12" fill="#87CEEB" stroke="#1A1A1A" stroke-width="0.7"/>
+          <ellipse cx="26" cy="50" rx="13" ry="12" fill="#FFB6C1" stroke="#1A1A1A" stroke-width="0.7"/>
+          <ellipse cx="26" cy="68" rx="12" ry="11" fill="#87CEEB" stroke="#1A1A1A" stroke-width="0.7"/>
+          <line x1="26" y1="79" x2="26" y2="80" stroke="#1A1A1A" stroke-width="1"/>
+        </svg>
+      </div>
+
+      <div class="suggestion-text">
+        <div class="suggestion-subtitle">Suggested next</div>
+        <div class="suggestion-desc">A matching column in your same colors would go perfectly alongside this arch.</div>
+        <div class="suggestion-colors-note">
+          <div class="suggestion-colors-row">
+            <div class="suggestion-dot" style="background:#FFB6C1;"></div>
+            <div class="suggestion-dot" style="background:#87CEEB;"></div>
+            <div class="suggestion-dot" style="background:#FFFFFF; border-color:#D0D0D0;"></div>
+          </div>
+          <span>Pre-filled with your arch colors</span>
+        </div>
+        <div class="suggestion-actions">
+          <button class="btn-ghost" onclick="window.location.href='04-composition.html'">Skip</button>
+          <button class="btn-primary" id="add-suggested-piece" onclick="window.location.href='02-color-one.html'">Add a column</button>
+        </div>
+      </div>
+
+    </div><!-- /suggestion-body -->
+  </div><!-- /suggestion-panel -->
+
+</div><!-- /upsell-layout -->
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="script.js"></script>
+<script>
+$(document).ready(function() {
+  // The suggestion panel is already visible in this screen's static HTML
+  // (In the live tool it would animate up after ~800ms post-completion)
+
+  // Dismiss handler
+  $('.suggestion-header__dismiss').on('click', function() {
+    $('.suggestion-panel').slideUp(200);
+    // After dismissing, show just the composition with ghost
+    // Customer can still tap the ghost column directly
+  });
+
+  // Ghost column hover pulse
+  var pulsing = true;
+  function pulseGhost() {
+    if (!pulsing) return;
+    $('#ghost-column-target').animate({ opacity: 0.6 }, 700, function() {
+      $(this).animate({ opacity: 1 }, 700, pulseGhost);
+    });
+  }
+  setTimeout(pulseGhost, 1500);
+
+  // Stop pulsing on hover
+  $('#ghost-column-target').on('mouseenter', function() {
+    pulsing = false;
+    $(this).stop(true, true).css('opacity', 1);
+  });
+});
+</script>
+</body>
+</html>

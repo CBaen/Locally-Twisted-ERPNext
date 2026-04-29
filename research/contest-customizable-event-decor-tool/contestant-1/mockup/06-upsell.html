@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Color Stage — Add More | Locally Twisted</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .upsell-screen {
+      padding: 0 0 40px;
+    }
+
+    /* Completed piece summary at top */
+    .completed-piece-banner {
+      background: linear-gradient(135deg, #FFF0EE 0%, #FFF8F5 100%);
+      padding: 20px 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .completed-piece-banner__illustration {
+      flex-shrink: 0;
+    }
+
+    .completed-piece-banner__illustration svg {
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.08));
+    }
+
+    .completed-piece-banner__text {}
+    .completed-piece-banner__label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #BBB;
+      margin-bottom: 4px;
+    }
+    .completed-piece-banner__name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px;
+      color: #1A1A1A;
+    }
+    .completed-piece-banner__colors {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      margin-top: 4px;
+    }
+    .completed-piece-banner__dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    .completed-piece-banner__colornames {
+      font-size: 12px;
+      color: #999;
+    }
+
+    /* Transition: "what goes with this?" */
+    .upsell-intro {
+      padding: 20px 16px 0;
+    }
+    .upsell-intro h2 {
+      font-size: 22px;
+      margin-bottom: 6px;
+    }
+    .upsell-intro p {
+      font-size: 14px;
+      color: #595A5C;
+      line-height: 1.6;
+    }
+
+    /* Suggestion chips — rendered in CUSTOMER'S palette */
+    .suggestion-block {
+      padding: 20px 16px;
+    }
+
+    .suggestion-block__label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #999;
+      margin-bottom: 12px;
+    }
+
+    .suggestion-cards {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 4px;
+    }
+    .suggestion-cards::-webkit-scrollbar { display: none; }
+
+    /* Key innovation: suggestion shows shape in CUSTOMER'S colors */
+    .suggestion-card {
+      flex: 0 0 140px;
+      background: white;
+      border: 1.5px solid #EBEBEB;
+      border-radius: 16px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .suggestion-card:hover {
+      border-color: #008080;
+      box-shadow: 0 4px 16px rgba(0,128,128,0.1);
+    }
+
+    .suggestion-card svg {
+      width: 90px;
+      height: 90px;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.06));
+    }
+
+    .suggestion-card__name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 15px;
+      color: #1A1A1A;
+      text-align: center;
+    }
+
+    .suggestion-card__colors {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+    .suggestion-card__dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+
+    /* The "hint" text under a suggestion card */
+    .suggestion-card__hint {
+      font-size: 11px;
+      color: #999;
+      text-align: center;
+    }
+
+    /* "Or try something different" section */
+    .other-shapes {
+      padding: 0 16px;
+    }
+    .other-shapes__label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #BBB;
+      margin-bottom: 12px;
+    }
+    .other-shapes-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    /* Visual placeholder slot in stage strip */
+    .placeholder-slot {
+      flex: 0 0 100px;
+      height: 80px;
+      border: 2px dashed #DCDCDC;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      color: #BBBBBB;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      animation: dashedPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes dashedPulse {
+      0%, 100% { border-color: #DCDCDC; }
+      50% { border-color: #BBBBBB; }
+    }
+  </style>
+</head>
+<body>
+<div class="screen-demo-label">Screen 06 — Discovery / Upsell Moment</div>
+
+<div class="lt-page">
+
+  <!-- Header -->
+  <header class="lt-header">
+    <a href="04-composition.html" class="nav-back" style="padding: 0;">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M10 12L6 8L10 4" stroke="#595A5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Stage
+    </a>
+    <span class="lt-header__subtitle">Add a piece</span>
+    <a href="05-done.html" class="btn-cta btn-cta--sm">I'm done →</a>
+  </header>
+
+  <!-- Stage strip with the pieces they've done + a placeholder slot -->
+  <div class="stage-strip">
+    <div class="stage-strip__label">Your event stage</div>
+    <div class="stage-strip__scroll">
+      <!-- Column -->
+      <div class="stage-piece">
+        <svg viewBox="0 0 80 160" fill="none">
+          <ellipse cx="40" cy="150" rx="14" ry="8" fill="#C3B1E1"/>
+          <ellipse cx="40" cy="137" rx="16" ry="12" fill="#B57EDC"/>
+          <ellipse cx="40" cy="120" rx="16" ry="12" fill="#C3B1E1"/>
+          <ellipse cx="40" cy="103" rx="16" ry="12" fill="#B57EDC"/>
+          <ellipse cx="40" cy="86"  rx="16" ry="12" fill="#C3B1E1"/>
+          <ellipse cx="32" cy="60" rx="12" ry="14" fill="#FFD1DC"/>
+          <ellipse cx="40" cy="54" rx="12" ry="15" fill="#F4A0A0"/>
+          <ellipse cx="48" cy="60" rx="12" ry="14" fill="#FFD1DC"/>
+        </svg>
+        <span class="stage-piece__label">Column</span>
+      </div>
+      <!-- Arch (currently active — they finished coloring it) -->
+      <div class="stage-piece is-active">
+        <svg viewBox="0 0 80 60" fill="none">
+          <ellipse cx="5"  cy="55" rx="6"  ry="7"  fill="#FF6B6B"/>
+          <ellipse cx="16" cy="45" rx="7"  ry="8"  fill="#F7E7CE"/>
+          <ellipse cx="28" cy="34" rx="8"  ry="9"  fill="#FF6B6B"/>
+          <ellipse cx="40" cy="28" rx="9"  ry="10" fill="#F7E7CE"/>
+          <ellipse cx="52" cy="34" rx="8"  ry="9"  fill="#FF6B6B"/>
+          <ellipse cx="64" cy="45" rx="7"  ry="8"  fill="#F7E7CE"/>
+          <ellipse cx="75" cy="55" rx="6"  ry="7"  fill="#FF6B6B"/>
+        </svg>
+        <span class="stage-piece__label">Arch ✦</span>
+      </div>
+      <!-- Backdrop -->
+      <div class="stage-piece">
+        <svg viewBox="0 0 80 80" fill="none">
+          <ellipse cx="10" cy="10" rx="8" ry="8" fill="#88FED0"/>
+          <ellipse cx="28" cy="10" rx="8" ry="8" fill="#9DC08B"/>
+          <ellipse cx="46" cy="10" rx="8" ry="8" fill="#88FED0"/>
+          <ellipse cx="64" cy="10" rx="8" ry="8" fill="#9DC08B"/>
+          <ellipse cx="19" cy="27" rx="8" ry="8" fill="#9DC08B"/>
+          <ellipse cx="37" cy="27" rx="8" ry="8" fill="#88FED0"/>
+          <ellipse cx="55" cy="27" rx="8" ry="8" fill="#9DC08B"/>
+          <ellipse cx="10" cy="44" rx="8" ry="8" fill="#88FED0"/>
+          <ellipse cx="28" cy="44" rx="8" ry="8" fill="#9DC08B"/>
+          <ellipse cx="46" cy="44" rx="8" ry="8" fill="#88FED0"/>
+          <ellipse cx="64" cy="44" rx="8" ry="8" fill="#9DC08B"/>
+        </svg>
+        <span class="stage-piece__label">Backdrop</span>
+      </div>
+      <!-- Placeholder slot -->
+      <div class="placeholder-slot">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M10 4V16M4 10H16" stroke="#CCCCCC" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        Next?
+      </div>
+    </div>
+  </div>
+
+  <div class="upsell-screen">
+
+    <!-- The piece they just finished -->
+    <div class="completed-piece-banner">
+      <div class="completed-piece-banner__illustration">
+        <svg width="70" height="50" viewBox="0 0 340 200" fill="none">
+          <ellipse cx="22"  cy="178" rx="20" ry="22" fill="#FF6B6B"/>
+          <ellipse cx="58"  cy="150" rx="24" ry="26" fill="#FF6B6B"/>
+          <ellipse cx="100" cy="120" rx="26" ry="28" fill="#FF6B6B"/>
+          <ellipse cx="148" cy="95"  rx="30" ry="32" fill="#FF6B6B"/>
+          <ellipse cx="198" cy="95"  rx="30" ry="32" fill="#FF6B6B"/>
+          <ellipse cx="246" cy="120" rx="26" ry="28" fill="#FF6B6B"/>
+          <ellipse cx="284" cy="150" rx="24" ry="26" fill="#FF6B6B"/>
+          <ellipse cx="318" cy="178" rx="20" ry="22" fill="#FF6B6B"/>
+          <ellipse cx="40"  cy="163" rx="12" ry="14" fill="#F7E7CE"/>
+          <ellipse cx="80"  cy="133" rx="14" ry="16" fill="#F7E7CE"/>
+          <ellipse cx="124" cy="105" rx="16" ry="18" fill="#F7E7CE"/>
+          <ellipse cx="173" cy="76"  rx="18" ry="20" fill="#F7E7CE"/>
+          <ellipse cx="220" cy="105" rx="16" ry="18" fill="#F7E7CE"/>
+          <ellipse cx="262" cy="133" rx="14" ry="16" fill="#F7E7CE"/>
+          <ellipse cx="300" cy="163" rx="12" ry="14" fill="#F7E7CE"/>
+        </svg>
+      </div>
+      <div class="completed-piece-banner__text">
+        <div class="completed-piece-banner__label">Just colored</div>
+        <div class="completed-piece-banner__name">Balloon Arch</div>
+        <div class="completed-piece-banner__colors">
+          <div class="completed-piece-banner__dot" style="background: #FF6B6B;"></div>
+          <div class="completed-piece-banner__dot" style="background: #F7E7CE;"></div>
+          <span class="completed-piece-banner__colornames">Coral + Champagne</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Discovery prompt -->
+    <div class="upsell-intro">
+      <h2>What else belongs here?</h2>
+      <p>These look beautiful in your Coral + Champagne palette. Tap to see what it would look like.</p>
+    </div>
+
+    <!-- THE KEY MECHANIC: Suggestions rendered in CUSTOMER'S palette colors -->
+    <div class="suggestion-block">
+      <div class="suggestion-block__label">In your colors</div>
+      <div class="suggestion-cards">
+
+        <!-- Garland — in Coral + Champagne -->
+        <a href="02-color-one.html" class="suggestion-card">
+          <svg viewBox="0 0 90 60" fill="none">
+            <ellipse cx="8"  cy="22" rx="7" ry="8" fill="#FF6B6B"/>
+            <ellipse cx="20" cy="32" rx="8" ry="9" fill="#F7E7CE"/>
+            <ellipse cx="33" cy="40" rx="9" ry="10" fill="#FF6B6B"/>
+            <ellipse cx="46" cy="44" rx="9" ry="10" fill="#F7E7CE"/>
+            <ellipse cx="59" cy="40" rx="9" ry="10" fill="#FF6B6B"/>
+            <ellipse cx="72" cy="32" rx="8" ry="9" fill="#F7E7CE"/>
+            <ellipse cx="83" cy="22" rx="7" ry="8" fill="#FF6B6B"/>
+            <ellipse cx="14" cy="18" rx="4" ry="5" fill="#F7E7CE" opacity="0.7"/>
+            <ellipse cx="46" cy="33" rx="4" ry="5" fill="#FF6B6B" opacity="0.6"/>
+            <ellipse cx="77" cy="18" rx="4" ry="5" fill="#F7E7CE" opacity="0.7"/>
+          </svg>
+          <span class="suggestion-card__name">Garland</span>
+          <div class="suggestion-card__colors">
+            <div class="suggestion-card__dot" style="background:#FF6B6B;"></div>
+            <div class="suggestion-card__dot" style="background:#F7E7CE;"></div>
+          </div>
+          <span class="suggestion-card__hint">Matches your arch</span>
+        </a>
+
+        <!-- Bouquet — in Coral + Champagne -->
+        <a href="02-color-one.html" class="suggestion-card">
+          <svg viewBox="0 0 90 80" fill="none">
+            <line x1="45" y1="76" x2="30" y2="40" stroke="#DCDCDC" stroke-width="1.5"/>
+            <line x1="45" y1="76" x2="43" y2="37" stroke="#DCDCDC" stroke-width="1.5"/>
+            <line x1="45" y1="76" x2="57" y2="40" stroke="#DCDCDC" stroke-width="1.5"/>
+            <line x1="45" y1="76" x2="22" y2="32" stroke="#DCDCDC" stroke-width="1.5"/>
+            <line x1="45" y1="76" x2="67" y2="32" stroke="#DCDCDC" stroke-width="1.5"/>
+            <ellipse cx="22" cy="24" rx="10" ry="12" fill="#F7E7CE"/>
+            <ellipse cx="30" cy="32" rx="10" ry="12" fill="#FF6B6B"/>
+            <ellipse cx="45" cy="29" rx="11" ry="13" fill="#F7E7CE"/>
+            <ellipse cx="58" cy="32" rx="10" ry="12" fill="#FF6B6B"/>
+            <ellipse cx="67" cy="24" rx="10" ry="12" fill="#F7E7CE"/>
+            <ellipse cx="45" cy="76" rx="5" ry="3" fill="#FF6B6B" opacity="0.6"/>
+          </svg>
+          <span class="suggestion-card__name">Bouquet</span>
+          <div class="suggestion-card__colors">
+            <div class="suggestion-card__dot" style="background:#FF6B6B;"></div>
+            <div class="suggestion-card__dot" style="background:#F7E7CE;"></div>
+          </div>
+          <span class="suggestion-card__hint">For the tables</span>
+        </a>
+
+        <!-- Centerpiece — in Coral + Champagne -->
+        <a href="02-color-one.html" class="suggestion-card">
+          <svg viewBox="0 0 90 90" fill="none">
+            <rect x="36" y="70" width="18" height="8" rx="3" fill="#E8E8E8"/>
+            <rect x="30" y="78" width="30" height="5" rx="2" fill="#DCDCDC"/>
+            <ellipse cx="45" cy="64" rx="8" ry="8" fill="#F7E7CE"/>
+            <ellipse cx="45" cy="52" rx="8" ry="8" fill="#FF6B6B"/>
+            <ellipse cx="45" cy="40" rx="8" ry="8" fill="#F7E7CE"/>
+            <ellipse cx="35" cy="26" rx="8" ry="10" fill="#FF6B6B"/>
+            <ellipse cx="45" cy="21" rx="8" ry="11" fill="#F7E7CE"/>
+            <ellipse cx="55" cy="26" rx="8" ry="10" fill="#FF6B6B"/>
+          </svg>
+          <span class="suggestion-card__name">Centerpiece</span>
+          <div class="suggestion-card__colors">
+            <div class="suggestion-card__dot" style="background:#FF6B6B;"></div>
+            <div class="suggestion-card__dot" style="background:#F7E7CE;"></div>
+          </div>
+          <span class="suggestion-card__hint">Ties it together</span>
+        </a>
+
+      </div><!-- /.suggestion-cards -->
+    </div><!-- /.suggestion-block -->
+
+    <!-- Or try something different -->
+    <div class="other-shapes">
+      <div class="other-shapes__label">Or try something different</div>
+      <div class="other-shapes-grid">
+        <a href="02-color-one.html" class="shape-card" style="padding: 12px 8px;">
+          <svg viewBox="0 0 60 60" fill="none" style="width:50px;height:50px;">
+            <ellipse cx="8"  cy="50" rx="8"  ry="10" fill="#F8F4EF"/>
+            <ellipse cx="22" cy="38" rx="9"  ry="11" fill="#F8F4EF"/>
+            <ellipse cx="38" cy="28" rx="10" ry="12" fill="#F8F4EF"/>
+            <ellipse cx="52" cy="38" rx="9"  ry="11" fill="#F8F4EF"/>
+          </svg>
+          <span class="shape-card__name" style="font-size:12px;">Balloon Drop</span>
+        </a>
+        <a href="02-color-one.html" class="shape-card" style="padding: 12px 8px;">
+          <svg viewBox="0 0 60 60" fill="none" style="width:50px;height:50px;">
+            <ellipse cx="10" cy="10" rx="9" ry="9" fill="#F8F4EF"/>
+            <ellipse cx="30" cy="10" rx="9" ry="9" fill="#F8F4EF"/>
+            <ellipse cx="50" cy="10" rx="9" ry="9" fill="#F8F4EF"/>
+            <ellipse cx="10" cy="30" rx="9" ry="9" fill="#F8F4EF"/>
+            <ellipse cx="30" cy="30" rx="9" ry="9" fill="#F8F4EF"/>
+            <ellipse cx="50" cy="30" rx="9" ry="9" fill="#F8F4EF"/>
+            <ellipse cx="10" cy="50" rx="9" ry="9" fill="#F8F4EF"/>
+            <ellipse cx="30" cy="50" rx="9" ry="9" fill="#F8F4EF"/>
+            <ellipse cx="50" cy="50" rx="9" ry="9" fill="#F8F4EF"/>
+          </svg>
+          <span class="shape-card__name" style="font-size:12px;">Backdrop</span>
+        </a>
+      </div>
+    </div>
+
+    <div style="padding: 20px 16px 0;">
+      <a href="05-done.html" class="btn-ghost" style="width:100%;">No thanks — I'm done designing</a>
+    </div>
+
+  </div><!-- /.upsell-screen -->
+
+</div><!-- /.lt-page -->
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

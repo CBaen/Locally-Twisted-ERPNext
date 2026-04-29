@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Event Design — Locally Twisted Design Studio</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body { background: #FBFBFB; overflow: hidden; }
+
+    .comp-layout {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      max-width: 480px;
+      margin: 0 auto;
+      background: #FFFFFF;
+    }
+
+    /* Desktop: side-by-side layout */
+    @media (min-width: 768px) {
+      .comp-layout {
+        max-width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+      .comp-nav {
+        width: 100%;
+      }
+      .comp-main-area {
+        flex: 1;
+        min-height: calc(100vh - 60px);
+      }
+      .comp-right-panel-desktop {
+        display: flex;
+      }
+      .comp-piece-strip {
+        display: none;
+      }
+    }
+
+    .comp-nav {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      background: #FFFFFF;
+      border-bottom: 1px solid #EBEBEB;
+      gap: 8px;
+    }
+
+    .comp-nav__back {
+      background: none;
+      border: none;
+      padding: 4px;
+      cursor: pointer;
+      color: #595A5C;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .comp-nav__title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1rem;
+      color: #1A1A1A;
+      flex: 1;
+    }
+
+    /* Active piece indicator */
+    .comp-active-pill {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: #008080;
+      background: rgba(0,128,128,0.08);
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    /* Composition canvas */
+    .comp-main-area {
+      flex: 1;
+      background: #F9F9F9;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 8px;
+      padding: 16px 12px 20px;
+      position: relative;
+      overflow: hidden;
+      min-height: 280px;
+    }
+
+    /* Scene label */
+    .scene-label {
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #595A5C;
+      white-space: nowrap;
+    }
+
+    /* Individual piece in canvas */
+    .canvas-piece {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .canvas-piece:hover {
+      transform: translateY(-2px);
+    }
+
+    .canvas-piece--active {
+      position: relative;
+    }
+
+    .canvas-piece--active::after {
+      content: '';
+      position: absolute;
+      inset: -4px -4px;
+      border: 2px solid #008080;
+      border-radius: 10px;
+      pointer-events: none;
+    }
+
+    .canvas-piece__name {
+      font-size: 0.625rem;
+      font-weight: 500;
+      color: #595A5C;
+      margin-top: 5px;
+      text-align: center;
+    }
+
+    .canvas-piece__colors {
+      display: flex;
+      gap: 3px;
+      margin-top: 3px;
+    }
+
+    .canvas-color-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.7);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+    }
+
+    /* Ghost placeholder */
+    .ghost-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      opacity: 0.5;
+      transition: opacity 0.2s ease;
+    }
+
+    .ghost-placeholder:hover {
+      opacity: 0.9;
+    }
+
+    .ghost-placeholder__shape {
+      border: 2px dashed #C3DCF3;
+      border-radius: 10px;
+      width: 60px;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(195,220,243,0.08);
+    }
+
+    .ghost-placeholder__plus {
+      font-size: 1.5rem;
+      color: #C3DCF3;
+      line-height: 1;
+    }
+
+    .ghost-placeholder__label {
+      font-size: 0.5625rem;
+      font-weight: 600;
+      color: #595A5C;
+      text-align: center;
+      margin-top: 5px;
+      letter-spacing: 0.04em;
+      max-width: 64px;
+      line-height: 1.3;
+    }
+
+    /* Piece selector strip (bottom) */
+    .comp-piece-strip {
+      background: #FFFFFF;
+      border-top: 1px solid #EBEBEB;
+      padding: 10px 0 12px;
+    }
+
+    .strip-label {
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #595A5C;
+      padding: 0 16px;
+      margin-bottom: 8px;
+    }
+
+    .strip-scroll {
+      display: flex;
+      gap: 10px;
+      padding: 0 16px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .strip-scroll::-webkit-scrollbar { display: none; }
+
+    .strip-chip {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+    }
+
+    .strip-chip__thumb {
+      width: 56px;
+      height: 64px;
+      border-radius: 10px;
+      background: #F9F9F9;
+      border: 2px solid #EBEBEB;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      transition: all 0.15s ease;
+    }
+
+    .strip-chip--active .strip-chip__thumb {
+      border-color: #008080;
+      box-shadow: 0 0 0 2px rgba(0,128,128,0.15);
+    }
+
+    .strip-chip__name {
+      font-size: 0.5625rem;
+      font-weight: 500;
+      color: #595A5C;
+      text-align: center;
+      max-width: 60px;
+    }
+
+    /* Add piece chip */
+    .strip-chip--add .strip-chip__thumb {
+      border-style: dashed;
+      border-color: #D0D0D0;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .strip-chip--add:hover .strip-chip__thumb {
+      border-color: #008080;
+    }
+
+    /* Action bar at bottom */
+    .comp-action-bar {
+      padding: 10px 16px 14px;
+      background: #FFFFFF;
+      border-top: 1px solid #EBEBEB;
+      display: flex;
+      gap: 8px;
+    }
+
+    /* Desktop right panel */
+    .comp-right-panel-desktop {
+      display: none;
+      width: 240px;
+      border-left: 1px solid #EBEBEB;
+      background: #FFFFFF;
+      padding: 20px 16px;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .comp-right-panel-desktop {
+        display: flex;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="comp-layout" id="composition-canvas">
+
+  <!-- Nav -->
+  <div class="comp-nav">
+    <button class="comp-nav__back" onclick="window.location.href='02-color-one.html'">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="#595A5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back
+    </button>
+    <span class="comp-nav__title">My Event Design</span>
+    <span class="comp-active-pill">Arch selected</span>
+  </div>
+
+  <!-- Composition canvas -->
+  <div class="comp-main-area">
+    <div class="scene-label">Your event — tap a piece to edit it</div>
+
+    <!-- Piece 1: Arch (active / selected) -->
+    <div class="canvas-piece canvas-piece--active" data-idx="0">
+      <svg viewBox="0 0 100 90" width="100" height="90" fill="none">
+        <!-- Arch in pink/blue/white -->
+        <ellipse cx="15" cy="62" rx="11" ry="13" fill="#FFB6C1" stroke="#1A1A1A" stroke-width="0.7"/>
+        <ellipse cx="28" cy="50" rx="10" ry="12" fill="#87CEEB" stroke="#1A1A1A" stroke-width="0.7"/>
+        <ellipse cx="50" cy="30" rx="13" ry="14" fill="#FFB6C1" stroke="#1A1A1A" stroke-width="0.7"/>
+        <ellipse cx="72" cy="50" rx="10" ry="12" fill="#87CEEB" stroke="#1A1A1A" stroke-width="0.7"/>
+        <ellipse cx="85" cy="62" rx="11" ry="13" fill="#FFB6C1" stroke="#1A1A1A" stroke-width="0.7"/>
+        <ellipse cx="38" cy="40" rx="8" ry="10" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.6"/>
+        <ellipse cx="62" cy="40" rx="8" ry="10" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.6"/>
+        <line x1="15" y1="75" x2="15" y2="88" stroke="#1A1A1A" stroke-width="0.7"/>
+        <line x1="85" y1="75" x2="85" y2="88" stroke="#1A1A1A" stroke-width="0.7"/>
+      </svg>
+      <div class="canvas-piece__name">Arch</div>
+      <div class="canvas-piece__colors">
+        <div class="canvas-color-dot" style="background:#FFB6C1;"></div>
+        <div class="canvas-color-dot" style="background:#87CEEB;"></div>
+        <div class="canvas-color-dot" style="background:#FFFFFF; border-color:#D0D0D0;"></div>
+      </div>
+    </div>
+
+    <!-- Piece 2: Column -->
+    <div class="canvas-piece" data-idx="1">
+      <svg viewBox="0 0 55 110" width="55" height="110" fill="none">
+        <ellipse cx="27" cy="15" rx="14" ry="14" fill="#FFB6C1" stroke="#1A1A1A" stroke-width="0.7"/>
+        <ellipse cx="27" cy="40" rx="13" ry="13" fill="#87CEEB" stroke="#1A1A1A" stroke-width="0.7"/>
+        <ellipse cx="27" cy="63" rx="14" ry="14" fill="#FFB6C1" stroke="#1A1A1A" stroke-width="0.7"/>
+        <ellipse cx="27" cy="86" rx="13" ry="13" fill="#87CEEB" stroke="#1A1A1A" stroke-width="0.7"/>
+        <line x1="27" y1="98" x2="27" y2="110" stroke="#1A1A1A" stroke-width="1.2"/>
+      </svg>
+      <div class="canvas-piece__name">Column</div>
+      <div class="canvas-piece__colors">
+        <div class="canvas-color-dot" style="background:#FFB6C1;"></div>
+        <div class="canvas-color-dot" style="background:#87CEEB;"></div>
+      </div>
+    </div>
+
+    <!-- Piece 3: Centerpiece -->
+    <div class="canvas-piece" data-idx="2">
+      <svg viewBox="0 0 60 90" width="60" height="90" fill="none">
+        <rect x="20" y="82" width="20" height="6" rx="2" fill="#1A1A1A"/>
+        <rect x="27" y="62" width="6" height="22" fill="#1A1A1A"/>
+        <ellipse cx="30" cy="40" rx="18" ry="20" fill="#FFB6C1" stroke="#1A1A1A" stroke-width="0.8"/>
+        <ellipse cx="10" cy="52" rx="10" ry="12" fill="#87CEEB" stroke="#1A1A1A" stroke-width="0.7"/>
+        <ellipse cx="50" cy="52" rx="10" ry="12" fill="#87CEEB" stroke="#1A1A1A" stroke-width="0.7"/>
+        <circle cx="30" cy="21" r="7" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.7"/>
+      </svg>
+      <div class="canvas-piece__name">Centerpiece</div>
+      <div class="canvas-piece__colors">
+        <div class="canvas-color-dot" style="background:#FFB6C1;"></div>
+        <div class="canvas-color-dot" style="background:#87CEEB;"></div>
+        <div class="canvas-color-dot" style="background:#FFFFFF; border-color:#D0D0D0;"></div>
+      </div>
+    </div>
+
+    <!-- Ghost placeholder — next suggested piece -->
+    <div class="ghost-placeholder" onclick="window.location.href='01-entry.html'" title="Add a garland">
+      <div class="ghost-placeholder__shape">
+        <span class="ghost-placeholder__plus">+</span>
+      </div>
+      <div class="ghost-placeholder__label">Add garland?</div>
+    </div>
+
+  </div><!-- /comp-main-area -->
+
+  <!-- Piece selector strip -->
+  <div class="comp-piece-strip">
+    <div class="strip-label">Your pieces</div>
+    <div class="strip-scroll">
+
+      <!-- Arch (active) -->
+      <div class="strip-chip strip-chip--active" data-idx="0">
+        <div class="strip-chip__thumb">
+          <svg viewBox="0 0 50 44" width="50" height="44" fill="none">
+            <ellipse cx="8" cy="30" rx="6" ry="7" fill="#FFB6C1" stroke="#1A1A1A" stroke-width="0.6"/>
+            <ellipse cx="15" cy="24" rx="5" ry="6" fill="#87CEEB" stroke="#1A1A1A" stroke-width="0.6"/>
+            <ellipse cx="25" cy="15" rx="7" ry="7" fill="#FFB6C1" stroke="#1A1A1A" stroke-width="0.6"/>
+            <ellipse cx="35" cy="24" rx="5" ry="6" fill="#87CEEB" stroke="#1A1A1A" stroke-width="0.6"/>
+            <ellipse cx="42" cy="30" rx="6" ry="7" fill="#FFB6C1" stroke="#1A1A1A" stroke-width="0.6"/>
+          </svg>
+        </div>
+        <div class="strip-chip__name">Arch</div>
+      </div>
+
+      <!-- Column -->
+      <div class="strip-chip" data-idx="1">
+        <div class="strip-chip__thumb">
+          <svg viewBox="0 0 30 55" width="30" height="55" fill="none">
+            <ellipse cx="15" cy="8" rx="8" ry="8" fill="#FFB6C1" stroke="#1A1A1A" stroke-width="0.6"/>
+            <ellipse cx="15" cy="21" rx="7" ry="7" fill="#87CEEB" stroke="#1A1A1A" stroke-width="0.6"/>
+            <ellipse cx="15" cy="33" rx="8" ry="8" fill="#FFB6C1" stroke="#1A1A1A" stroke-width="0.6"/>
+            <ellipse cx="15" cy="46" rx="7" ry="7" fill="#87CEEB" stroke="#1A1A1A" stroke-width="0.6"/>
+          </svg>
+        </div>
+        <div class="strip-chip__name">Column</div>
+      </div>
+
+      <!-- Centerpiece -->
+      <div class="strip-chip" data-idx="2">
+        <div class="strip-chip__thumb">
+          <svg viewBox="0 0 32 50" width="32" height="50" fill="none">
+            <ellipse cx="16" cy="22" rx="10" ry="12" fill="#FFB6C1" stroke="#1A1A1A" stroke-width="0.6"/>
+            <ellipse cx="6" cy="30" rx="5" ry="6" fill="#87CEEB" stroke="#1A1A1A" stroke-width="0.6"/>
+            <ellipse cx="26" cy="30" rx="5" ry="6" fill="#87CEEB" stroke="#1A1A1A" stroke-width="0.6"/>
+            <rect x="13" y="33" width="6" height="14" fill="#1A1A1A"/>
+          </svg>
+        </div>
+        <div class="strip-chip__name">Centerpiece</div>
+      </div>
+
+      <!-- Add piece chip -->
+      <div class="strip-chip strip-chip--add" onclick="window.location.href='01-entry.html'">
+        <div class="strip-chip__thumb" style="border-style:dashed; border-color:#D0D0D0;">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <line x1="10" y1="4" x2="10" y2="16" stroke="#D0D0D0" stroke-width="2" stroke-linecap="round"/>
+            <line x1="4" y1="10" x2="16" y2="10" stroke="#D0D0D0" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="strip-chip__name">Add piece</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Action bar -->
+  <div class="comp-action-bar">
+    <button class="btn-ghost" style="flex:1; font-size:0.8125rem;" onclick="window.location.href='02-color-one.html'">Edit arch</button>
+    <a href="05-done.html" class="btn-primary" style="flex:2; font-size:0.875rem; text-decoration:none; display:inline-flex; align-items:center; justify-content:center;">I love this design &rarr;</a>
+  </div>
+
+</div>
+
+<!-- Desktop right panel -->
+<div class="comp-right-panel-desktop">
+  <h3 style="font-family:'DM Serif Display',serif; font-size:1rem; color:#1A1A1A; margin-bottom:16px;">Your colors</h3>
+  <div style="display:flex; gap:8px; flex-wrap:wrap;">
+    <div style="width:32px; height:32px; border-radius:50%; background:#FFB6C1; border:2px solid #FFF; box-shadow:0 1px 4px rgba(0,0,0,0.12);" title="#FFB6C1 Light Pink"></div>
+    <div style="width:32px; height:32px; border-radius:50%; background:#87CEEB; border:2px solid #FFF; box-shadow:0 1px 4px rgba(0,0,0,0.12);" title="#87CEEB Sky Blue"></div>
+    <div style="width:32px; height:32px; border-radius:50%; background:#FFFFFF; border:2px solid #EBEBEB; box-shadow:0 1px 4px rgba(0,0,0,0.12);" title="#FFFFFF White"></div>
+  </div>
+  <div style="margin-top:20px; font-size:0.8125rem; color:#595A5C; line-height:1.5;">
+    3 pieces · Pink, Blue &amp; White palette
+  </div>
+  <a href="05-done.html" class="btn-primary btn-primary--full" style="margin-top:auto; text-decoration:none;">Save &amp; send to Jeff &rarr;</a>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="script.js"></script>
+<script>
+$(document).ready(function() {
+  // Piece strip interaction
+  $('.strip-chip:not(.strip-chip--add)').on('click', function() {
+    var idx = $(this).data('idx');
+    $('.strip-chip').removeClass('strip-chip--active');
+    $(this).addClass('strip-chip--active');
+    // Update active piece in canvas
+    $('.canvas-piece').removeClass('canvas-piece--active');
+    $('.canvas-piece[data-idx="' + idx + '"]').addClass('canvas-piece--active');
+    // Update active pill label
+    var names = ['Arch', 'Column', 'Centerpiece'];
+    $('.comp-active-pill').text((names[idx] || 'Piece') + ' selected');
+    // Update edit button
+    var editNames = ['arch', 'column', 'centerpiece'];
+    $('.comp-action-bar .btn-ghost').text('Edit ' + (editNames[idx] || 'piece'));
+  });
+});
+</script>
+</body>
+</html>
