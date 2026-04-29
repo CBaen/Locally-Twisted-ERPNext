@@ -1,0 +1,337 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+
+<style>{{ colocated_css }}</style>
+
+<section class="lt-cart" aria-labelledby="lt-cart-heading">
+    <div class="lt-cart__container">
+
+        <h1 id="lt-cart-heading" class="lt-cart__title">Your cart</h1>
+        <p class="lt-cart__subtitle">Review your selections, then continue to secure checkout. No account needed.</p>
+
+        {# Loading state — visible while we fetch from server. #}
+        <div class="lt-cart__state lt-cart__loading" id="lt-cart-loading" role="status" aria-live="polite">
+            Loading your cart&hellip;
+        </div>
+
+        {# Error state — shown if the server fetch fails. #}
+        <div class="lt-cart__state lt-cart__error" id="lt-cart-error" role="alert" hidden>
+            <strong>Something went wrong loading your cart.</strong>
+            Please refresh the page or call <a href="tel:8012850860">(801) 285-0860</a> for help.
+        </div>
+
+        {# Empty state. #}
+        <div class="lt-cart__state lt-cart__empty" id="lt-cart-empty" hidden>
+            <svg class="lt-cart__empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="8" cy="21" r="1"/>
+                <circle cx="19" cy="21" r="1"/>
+                <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+            </svg>
+            <h2>Your cart is empty.</h2>
+            <p>Browse the shop or get in touch about a custom installation.</p>
+            <div class="lt-cart__empty-actions">
+                <a class="lt-shop__cta-btn lt-shop__cta-btn--secondary" href="/shop">Browse the shop</a>
+                <a class="lt-shop__cta-btn lt-shop__cta-btn--primary" href="/contact">Tell us about your event</a>
+            </div>
+        </div>
+
+        {# Populated state. #}
+        <div class="lt-cart__state lt-cart__populated" id="lt-cart-populated" hidden>
+
+            <div class="lt-cart__notice" id="lt-cart-removed-notice" hidden role="status"></div>
+
+            <div class="lt-cart__layout">
+
+                <div class="lt-cart__lines" id="lt-cart-lines"
+                     role="list" aria-label="Items in your cart"></div>
+
+                <aside class="lt-cart__summary" aria-label="Order summary">
+                    <h2>Order summary</h2>
+                    <div class="lt-cart__summary-row">
+                        <span>Subtotal</span>
+                        <span id="lt-cart-subtotal">$0</span>
+                    </div>
+                    <div class="lt-cart__summary-row">
+                        <span>Tax + delivery</span>
+                        <span>Calculated at checkout</span>
+                    </div>
+                    <div class="lt-cart__summary-row lt-cart__summary-row--grand">
+                        <span>Total</span>
+                        <span id="lt-cart-grand">$0</span>
+                    </div>
+                    <a class="lt-cart__checkout" href="/checkout" id="lt-cart-checkout-btn">
+                        Continue to checkout
+                    </a>
+                    <p class="lt-cart__summary-note">
+                        Sign-in is optional &mdash; we&rsquo;ll just need a name, email, and delivery address at checkout.
+                    </p>
+                    <a class="lt-cart__continue" href="/shop">Continue shopping</a>
+                </aside>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<script>
+(function () {
+    "use strict";
+
+    var loadingEl   = document.getElementById("lt-cart-loading");
+    var errorEl     = document.getElementById("lt-cart-error");
+    var emptyEl     = document.getElementById("lt-cart-empty");
+    var populatedEl = document.getElementById("lt-cart-populated");
+    var linesEl     = document.getElementById("lt-cart-lines");
+    var subtotalEl  = document.getElementById("lt-cart-subtotal");
+    var grandEl     = document.getElementById("lt-cart-grand");
+    var noticeEl    = document.getElementById("lt-cart-removed-notice");
+
+    function showState(which) {
+        loadingEl.hidden   = which !== "loading";
+        errorEl.hidden     = which !== "error";
+        emptyEl.hidden     = which !== "empty";
+        populatedEl.hidden = which !== "populated";
+    }
+
+    function fmtMoney(n) {
+        if (typeof n !== "number" || !isFinite(n)) return "$0";
+        return "$" + n.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+    }
+
+    /* DOM-construction helper: creates a node with attrs + text content.
+     * Avoids innerHTML entirely so user-controlled strings can't escape
+     * into the markup, even if a future change removes the escapeHtml
+     * step we'd otherwise need. */
+    function el(tag, opts, children) {
+        var node = document.createElement(tag);
+        if (opts) {
+            for (var k in opts) {
+                if (!Object.prototype.hasOwnProperty.call(opts, k)) continue;
+                var v = opts[k];
+                if (v == null) continue;
+                if (k === "text") node.textContent = String(v);
+                else if (k === "html") { /* deliberately not supported */ }
+                else if (k === "class") node.className = String(v);
+                else if (k === "data") {
+                    for (var d in v) {
+                        if (Object.prototype.hasOwnProperty.call(v, d)) node.dataset[d] = String(v[d]);
+                    }
+                } else node.setAttribute(k, String(v));
+            }
+        }
+        if (children) {
+            for (var i = 0; i < children.length; i++) {
+                if (children[i] != null) node.appendChild(children[i]);
+            }
+        }
+        return node;
+    }
+
+    function buildLine(server, qty) {
+        var lineTotal = server.price_list_rate * qty;
+        var routeHref = "/" + server.route;
+        var safeName = server.web_item_name || server.item_code;
+
+        // Image. Use setAttribute("style", ...) only with a URL we
+        // re-encode via encodeURIComponent on the path segments to be
+        // certain no quote/parenthesis can break out of url(...).
+        var img = el("a", {
+            "class": "lt-cart__line-img",
+            href: routeHref,
+            "aria-label": "View " + safeName,
+        });
+        if (server.website_image) {
+            // Setting the image as a property bypasses CSS parsing risks;
+            // setProperty does proper escaping.
+            img.style.setProperty("background-image", 'url("' + server.website_image.replace(/"/g, "%22") + '")');
+        }
+
+        var bodyName = el("h3", { "class": "lt-cart__line-name" }, [
+            el("a", { href: routeHref, text: safeName }),
+        ]);
+        var bodyMeta = el("p", { "class": "lt-cart__line-meta", text: fmtMoney(server.price_list_rate) + " each" });
+        var removeBtn = el("button", {
+            type: "button",
+            "class": "lt-cart__line-remove",
+            data: { action: "remove", itemCode: server.item_code },
+            text: "Remove",
+        });
+        var body = el("div", { "class": "lt-cart__line-body" }, [bodyName, bodyMeta, removeBtn]);
+
+        var decBtn = el("button", {
+            type: "button",
+            "class": "lt-cart__qty-btn",
+            data: { action: "dec", itemCode: server.item_code },
+            "aria-label": "Decrease quantity",
+        });
+        decBtn.textContent = "−";  // unicode minus
+        if (qty <= 1) decBtn.disabled = true;
+
+        var qtyInput = el("input", {
+            type: "number",
+            "class": "lt-cart__qty-input",
+            min: "1",
+            max: "99",
+            value: String(qty),
+            "aria-label": "Quantity",
+            data: { itemCode: server.item_code },
+        });
+
+        var incBtn = el("button", {
+            type: "button",
+            "class": "lt-cart__qty-btn",
+            data: { action: "inc", itemCode: server.item_code },
+            "aria-label": "Increase quantity",
+            text: "+",
+        });
+
+        var qtyGroup = el("div", { "class": "lt-cart__qty" }, [decBtn, qtyInput, incBtn]);
+        var amount = el("p", { "class": "lt-cart__line-amount", text: fmtMoney(lineTotal) });
+
+        return el("div", {
+            "class": "lt-cart__line",
+            role: "listitem",
+            data: { itemCode: server.item_code },
+        }, [img, body, qtyGroup, amount]);
+    }
+
+    function loadAndRender() {
+        if (typeof window.LT_CART === "undefined") {
+            console.error("[lt-cart] LT_CART global is missing");
+            showState("error");
+            return;
+        }
+        var cart = window.LT_CART.getCart();
+        if (!cart.items.length) {
+            showState("empty");
+            return;
+        }
+
+        showState("loading");
+
+        var codes = cart.items.map(function (it) { return it.item_code; });
+        var fd = new FormData();
+        fd.append("item_codes", JSON.stringify(codes));
+
+        fetch("/api/method/locally_twisted.api.cart.get_cart_items", {
+            method: "POST",
+            headers: { "X-Requested-With": "XMLHttpRequest" },
+            body: fd,
+            credentials: "same-origin",
+        })
+        .then(function (resp) {
+            if (!resp.ok) throw new Error("HTTP " + resp.status);
+            return resp.json();
+        })
+        .then(function (json) {
+            var data = (json && json.message) || { items: [], missing: [] };
+            renderCart(cart, data.items || [], data.missing || []);
+        })
+        .catch(function (err) {
+            console.error("[lt-cart] fetch failed:", err);
+            showState("error");
+        });
+    }
+
+    function renderCart(cart, serverItems, missing) {
+        var byCode = {};
+        for (var i = 0; i < serverItems.length; i++) {
+            byCode[serverItems[i].item_code] = serverItems[i];
+        }
+
+        if (missing && missing.length) {
+            var droppedCount = 0;
+            for (var m = 0; m < missing.length; m++) {
+                window.LT_CART.remove(missing[m].item_code);
+                droppedCount++;
+            }
+            noticeEl.hidden = false;
+            noticeEl.textContent =
+                droppedCount === 1
+                    ? "One item was no longer available and has been removed."
+                    : droppedCount + " items were no longer available and have been removed.";
+            cart = window.LT_CART.getCart();
+            if (!cart.items.length) {
+                showState("empty");
+                return;
+            }
+        } else {
+            noticeEl.hidden = true;
+            noticeEl.textContent = "";
+        }
+
+        // Reset and rebuild lines via DOM construction.
+        while (linesEl.firstChild) linesEl.removeChild(linesEl.firstChild);
+
+        var subtotal = 0;
+        for (var k = 0; k < cart.items.length; k++) {
+            var line = cart.items[k];
+            var server = byCode[line.item_code];
+            if (!server) continue;
+            subtotal += server.price_list_rate * line.qty;
+            linesEl.appendChild(buildLine(server, line.qty));
+        }
+
+        subtotalEl.textContent = fmtMoney(subtotal);
+        grandEl.textContent = fmtMoney(subtotal);
+        showState("populated");
+    }
+
+    // Delegated event handler for qty buttons + remove links.
+    document.addEventListener("click", function (ev) {
+        var btn = ev.target.closest("[data-action]");
+        if (!btn) return;
+        var code = btn.dataset.itemCode;
+        if (!code) return;
+        var action = btn.dataset.action;
+        if (action === "inc") {
+            var c = window.LT_CART.getCart();
+            for (var i = 0; i < c.items.length; i++) {
+                if (c.items[i].item_code === code) {
+                    window.LT_CART.update(code, c.items[i].qty + 1);
+                    break;
+                }
+            }
+            loadAndRender();
+        } else if (action === "dec") {
+            var c2 = window.LT_CART.getCart();
+            for (var j = 0; j < c2.items.length; j++) {
+                if (c2.items[j].item_code === code) {
+                    if (c2.items[j].qty > 1) window.LT_CART.update(code, c2.items[j].qty - 1);
+                    break;
+                }
+            }
+            loadAndRender();
+        } else if (action === "remove") {
+            window.LT_CART.remove(code);
+            loadAndRender();
+        }
+    });
+
+    // Numeric input change -> update qty.
+    document.addEventListener("change", function (ev) {
+        if (!ev.target.classList.contains("lt-cart__qty-input")) return;
+        var code = ev.target.dataset.itemCode;
+        if (!code) return;
+        var v = parseInt(ev.target.value, 10);
+        if (!isFinite(v) || v < 1) v = 1;
+        if (v > 99) v = 99;
+        window.LT_CART.update(code, v);
+        loadAndRender();
+    });
+
+    // React to cross-tab cart changes.
+    document.addEventListener("lt-cart-change", function () { loadAndRender(); });
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", loadAndRender);
+    } else {
+        loadAndRender();
+    }
+})();
+</script>
+
+{% endblock %}
