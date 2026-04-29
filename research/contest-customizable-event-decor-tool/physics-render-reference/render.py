@@ -42,8 +42,9 @@ def capture_all() -> int:
                 output_path = RENDER_DIR / f"{shape}-{viewport_name}.png"
                 print(f"[{viewport_name:7s}] {shape:14s} -> {output_path.relative_to(CONTEST_DIR)}")
                 try:
-                    page.goto(url, timeout=15000, wait_until="domcontentloaded")
-                    page.wait_for_timeout(600)
+                    # Three.js loads from CDN via importmap and needs WebGL context + first render
+                    page.goto(url, timeout=30000, wait_until="networkidle")
+                    page.wait_for_timeout(3000)
                     body_text = page.locator("body").inner_text().strip()
                     if not body_text:
                         fails.append(f"{shape} {viewport_name} - empty body")
