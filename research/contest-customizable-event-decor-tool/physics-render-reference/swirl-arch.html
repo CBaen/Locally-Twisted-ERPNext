@@ -366,6 +366,25 @@ const BALLOON_COLORS = {
 const BALLOONS_PER_5FT = 40;
 const ARCH_RENDER_CAP = 160;     // GL's source: arch caps render at 160 balloons
 
+// === Physics corrections (deviation from GL's source) ===
+// 1. LEG_HEIGHT lifts the rope above the ground so balloon bottoms don't clip
+//    through the floor at the feet. Real LT installs use 4-5 ft stand poles.
+//    GL's source has rope at y=0 at feet → balloons clip ground; bug hidden by
+//    Card chrome that crops the canvas above the ground.
+const LEG_HEIGHT = 4;            // ft, stand pole height
+const LEG_RADIUS = 0.05;         // ft, pole thickness
+const LEG_COLOR  = 0xC0C0C0;     // silver/aluminum
+
+// 2. Camera framing: GL's source scaled cameraZ/cameraY with size, hiding the
+//    actual scale change between 20ft and 40ft arches. Customer needs to SEE
+//    the size. Fixed camera framed for the largest size (40ft arch with 4ft
+//    legs = ~20ft total height, ~20ft total width). Smaller sizes appear
+//    proportionally smaller in frame.
+const CAMERA_FIXED_POSITION = { x: 0, y: 11, z: 32 };  // frames a 40ft arch fully
+const CAMERA_FIXED_TARGET   = { x: 0, y: 7,  z: 0  };
+const CAMERA_MIN_DISTANCE   = 12;
+const CAMERA_MAX_DISTANCE   = 50;
+
 // State
 const state = {
   // Default palette: Blush & Gold (matches GL's first colorPalette in design/page.tsx)

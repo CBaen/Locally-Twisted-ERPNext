@@ -8,6 +8,33 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-04-29 (mobile-responsiveness session) — LT design competition synthesis imported as `_resources/design-guide/`
+
+**Decision:** The 2026-04-26 LT design competition output (synthesis dir + 8 approved screenshots) is imported into this project's `_resources/design-guide/` and signposted from `CLAUDE.md` reading order step 6. Original location at `C:\Users\baenb\projects\zoho-locally-twisted\gallery\` will be deleted by GL. Treated as reference inspiration / taste calibration, not as a contract to implement verbatim.
+
+**Reasoning:** Multiple build instances (including this one) failed to find the design contest output because it lived in a separate project directory (`zoho-locally-twisted/gallery/`) outside our LT working tree. Phase 1 PLAN.md line 47 referenced "GL's Opus Competition Redesign concept" with no path. The standard reading order on arrival (CLAUDE.md → HANDOFF.md → PROJECT.md → PLAN.md → decisions log → git log) led every instance THROUGH every artifact, and not one of them pointed at the gallery. Instances either skipped the design reference or worked without it — measurable trust cost on the resulting customer-facing pages.
+
+GL's directive 2026-04-29: *"they should live in our directory as a design guide, not as gospel."* — affirms the inspiration framing and the agency client-isolation rule (each client folder is self-contained for transfer).
+
+**What was imported:**
+- `_resources/design-guide/synthesis/` — 4 page TSXs (landing, lookbook, shop, balloon-twisting), layout.tsx, globals.css, 5 markdown docs (rationale, mood, voice, menu, SYNTHESIS-BRIEF, SYNTHESIS-COMPLETE)
+- `_resources/design-guide/screenshots/` — 8 approved PNGs (4 pages × 2 viewports) + RENDER-REPORT.md
+- `_resources/design-guide/README.md` — framing note (guide, not gospel) + per-file purpose
+
+**What was NOT imported:**
+- `take_screenshots.py` (utility specific to the source project's Next.js dev server)
+- `WINNER.md`, `BRIEF.md`, `SCORING-RESULTS.md`, designer-1 through designer-7 outputs — the contest provenance was preserved in this entry; the only artifact the build phase needs is the synthesis itself
+
+**Updates to standing artifacts:**
+- `CLAUDE.md` "Reference Disposition" — added `_resources/design-guide/` as a canonical resource, reading order step 6 now requires skimming the README + voice/mood/rationale before any frontend work
+- `.planning/phases/01-customer-site-and-storefront/PLAN.md` line 47 — replaced vague "Opus Competition Redesign concept" reference with concrete file paths inside `_resources/design-guide/`
+
+**Trust-cost receipt that drove this:** mobile-responsiveness session 2026-04-29. GL had to point me at the contest output explicitly because no signpost existed in the project. Every prior instance had the same gap. The fix is structural — once the README is in the standard reading order, future instances will encounter it during the normal arrival path.
+
+**Decided by:** GL directive 2026-04-29.
+
+---
+
 ## 2026-04-29 (guest-cart + Stripe-Link + cascade session) — Path B (true cookie cart) over the cheap Buy-Now-only alternative
 
 **Decision:** Build a real localStorage-backed multi-item guest cart (Path B) rather than removing webshop's Add-to-Cart UI and routing all flows through the single-item buy-now `/checkout?item=...` path (Path A).
