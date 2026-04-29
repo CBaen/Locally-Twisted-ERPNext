@@ -7,7 +7,8 @@
  * - SVG event delegation: https://gomakethings.com/detecting-click-events-on-svgs-with-vanilla-js-event-delegation/
  * - jQuery SVG fill: https://copyprogramming.com/howto/javascript-svg-fill-jquery-in-click
  * - Recent colors localStorage: https://bams-thinkery.ca/tools/color-picker
- * - Bottom sheet slide-up: pattern from mobile coloring apps (https://diycandy.com/best-adult-coloring-apps/)
+ * - Bottom sheet context-preservation: https://www.nngroup.com/articles/bottom-sheet/
+ * - Progressive disclosure (cascading ghost): https://www.nngroup.com/articles/progressive-disclosure/
  */
 
 // ================================================================
@@ -20,7 +21,7 @@ var DesignStudio = {
   selectedColor: null,
   // Colors applied to each region: { regionId: { hex, name } }
   regionColors: {},
-  // Pieces in the composition: [{id, type, name, regionColors}]
+  // Pieces in the composition: [{id, type, name, design, regionColors}]
   composition: [],
   // Active piece index in composition
   activePieceIdx: 0,
@@ -29,65 +30,147 @@ var DesignStudio = {
   // Recent colors array (up to 6, localStorage-backed)
   recentColors: [],
   // localStorage key
-  RECENT_KEY: 'lt_design_studio_recent'
+  RECENT_KEY: 'lt_design_studio_recent',
+  // Design attribute for current piece: 'swirl' | 'layered' | 'organic'
+  // Swirl: up to 4 colors. Layered: up to 8. Organic: palette-driven (no fixed cap).
+  currentDesign: 'swirl',
+  // Color caps per design type (per PRODUCT-DETAILS.md §2.1)
+  DESIGN_COLOR_CAPS: { swirl: 4, layered: 8, organic: 53 }
 };
 
 // ================================================================
-// Color Catalog (representative 20-color subset; production = 50+)
-// Organized by hue family
+// Color Catalog — actual 53 named LT latex colors (PRODUCT-DETAILS §2.8)
+// Family clusters are the natural picker-organization groups.
+// NOTE: hex values are eyeball approximations for mockup rendering.
+// The COLOR NAME is the supplier-actionable identifier — not the hex.
+// Jeff calls his supplier with color names, not hex codes.
 // ================================================================
 var COLOR_CATALOG = {
-  'pinks': [
-    { hex: '#FFB6C1', name: 'Light Pink' },
-    { hex: '#FF69B4', name: 'Hot Pink' },
-    { hex: '#FF1493', name: 'Deep Pink' },
-    { hex: '#E75480', name: 'Dark Pink' },
-    { hex: '#F4DFD7', name: 'Blush' }
+  // Reflex metallics — high-gloss pearlized finish
+  'reflex': [
+    { hex: '#F2E8D0', name: 'Reflex Champagne' },
+    { hex: '#7B6354', name: 'Reflex Truffle'   },
+    { hex: '#C0C0C0', name: 'Reflex Silver'    },
+    { hex: '#D4AF37', name: 'Reflex Gold'      },
+    { hex: '#0047AB', name: 'Reflex Blue'      },
+    { hex: '#2E6B2E', name: 'Reflex Green'     },
+    { hex: '#6A0DAD', name: 'Reflex Violet'    },
+    { hex: '#CC0000', name: 'Reflex Red'       }
   ],
-  'blues': [
-    { hex: '#87CEEB', name: 'Sky Blue' },
-    { hex: '#4169E1', name: 'Royal Blue' },
-    { hex: '#003087', name: 'Navy' },
-    { hex: '#C3DCF3', name: 'Soft Blue' },
-    { hex: '#A0E9FF', name: 'Sky Cyan' }
+  // Dusk — muted/desaturated tones, sophisticated palette
+  'dusk': [
+    { hex: '#F2EAD9', name: 'Dusk Cream'     },
+    { hex: '#8FAF87', name: 'Dusk Green Tea' },
+    { hex: '#7FA3C0', name: 'Dusk Blue'      },
+    { hex: '#B39DBB', name: 'Dusk Lilac'     },
+    { hex: '#C98F8F', name: 'Dusk Rose'      }
   ],
-  'greens': [
-    { hex: '#00FF7F', name: 'Spring Green' },
-    { hex: '#228B22', name: 'Forest Green' },
-    { hex: '#B8FF9E', name: 'Lime Pastel' },
-    { hex: '#88FED0', name: 'Seafoam' },
-    { hex: '#80F5F3', name: 'Aqua' }
+  // Pastel — soft tints, popular for baby showers / spring events
+  'pastel': [
+    { hex: '#FADADD', name: 'Pastel Pink'   },
+    { hex: '#B8D8F0', name: 'Pastel Blue'   },
+    { hex: '#C7E8C2', name: 'Pastel Green'  },
+    { hex: '#D9C4E8', name: 'Pastel Purple' },
+    { hex: '#FFF5B0', name: 'Pastel Yellow' },
+    { hex: '#FAC8A8', name: 'Pastel Melon'  }
   ],
-  'yellows': [
-    { hex: '#FFD700', name: 'Gold' },
-    { hex: '#F9F871', name: 'Soft Lemon' },
-    { hex: '#FFA500', name: 'Orange' },
-    { hex: '#FF6B35', name: 'Coral' },
-    { hex: '#FF4500', name: 'Tomato' }
+  // Brights — bold saturated tones
+  'brights': [
+    { hex: '#E8272A', name: 'Red'        },
+    { hex: '#F57C00', name: 'Orange'     },
+    { hex: '#FFD600', name: 'Yellow'     },
+    { hex: '#C62828', name: 'Raspberry'  },
+    { hex: '#E91E8C', name: 'Fuchsia'    },
+    { hex: '#F48FB1', name: 'Bubble Gum' },
+    { hex: '#A8D5A2', name: 'Eucalyptus' },
+    { hex: '#BEFF00', name: 'Lime'       },
+    { hex: '#6EC6F0', name: 'LT Blue'    },
+    { hex: '#7986CB', name: 'Periwinkle' },
+    { hex: '#1E3FA8', name: 'Royal Blue' },
+    { hex: '#80DEEA', name: "Robin's Egg" },
+    { hex: '#F4C842', name: 'Honey'      },
+    { hex: '#7B1FA2', name: 'Violet'     },
+    { hex: '#CE93D8', name: 'Orchid'     },
+    { hex: '#B39DDB', name: 'Lilac'      }
   ],
+  // Neutrals — white, black, grey, earth tones
   'neutrals': [
-    { hex: '#FFFFFF', name: 'White' },
-    { hex: '#F5F5F5', name: 'Ivory' },
-    { hex: '#C0C0C0', name: 'Silver' },
-    { hex: '#D4AF37', name: 'Champagne Gold' },
-    { hex: '#A0522D', name: 'Rust' }
+    { hex: '#FFFFFF', name: 'White'      },
+    { hex: '#1A1A1A', name: 'Black'      },
+    { hex: '#BDBDBD', name: 'Grey'       },
+    { hex: '#808080', name: 'Smoke Grey' },
+    { hex: '#D7C4A3', name: 'Latte'      },
+    { hex: '#795548', name: 'Brown'      },
+    { hex: '#4E342E', name: 'Chocolate'  },
+    { hex: '#E0D5C1', name: 'Clear'      },
+    { hex: '#F4C2C2', name: 'Blush'      }
   ],
-  'darks': [
-    { hex: '#1A1A1A', name: 'Near Black' },
-    { hex: '#4B0082', name: 'Indigo' },
-    { hex: '#800020', name: 'Burgundy' },
-    { hex: '#2F4F4F', name: 'Dark Teal' },
-    { hex: '#8B0000', name: 'Dark Red' }
+  // Deep tones — rich, saturated darks
+  'deep': [
+    { hex: '#1B5E20', name: 'Forest'      },
+    { hex: '#1A5744', name: 'Shamrock'    },
+    { hex: '#004D40', name: 'Wintergreen' },
+    { hex: '#00695C', name: 'Teal'        },
+    { hex: '#006064', name: 'Deep Teal'   },
+    { hex: '#37474F', name: 'Blue Slate'  },
+    { hex: '#00897B', name: 'Empowermint' }
   ]
 };
 
-// Flat list for 'all' tab
+// Flat list for 'all' tab — preserves family order for scannability
 function getAllColors() {
   var all = [];
   Object.keys(COLOR_CATALOG).forEach(function(family) {
     COLOR_CATALOG[family].forEach(function(c) { all.push(c); });
   });
   return all;
+}
+
+// ================================================================
+// Design attribute helpers
+// ================================================================
+
+// Returns the color cap for the current design type
+function getColorCap() {
+  return DesignStudio.DESIGN_COLOR_CAPS[DesignStudio.currentDesign] || 4;
+}
+
+// Count how many distinct colors are currently in use across all regions
+function getActiveColorCount() {
+  var hexSet = {};
+  Object.values(DesignStudio.regionColors).forEach(function(c) {
+    if (c && c.hex) hexSet[c.hex] = true;
+  });
+  return Object.keys(hexSet).length;
+}
+
+// Returns true if adding newColorHex would exceed the design's cap
+function wouldExceedCap(newColorHex) {
+  var cap = getColorCap();
+  var existing = {};
+  Object.values(DesignStudio.regionColors).forEach(function(c) {
+    if (c && c.hex) existing[c.hex] = true;
+  });
+  if (existing[newColorHex]) return false; // already in use, no new slot needed
+  return Object.keys(existing).length >= cap;
+}
+
+// Show a color cap nudge in the picker
+function showColorCapNudge() {
+  var cap = getColorCap();
+  var nextDesign = cap === 4 ? 'Layered' : null;
+  var msg = 'Swirl designs use up to ' + cap + ' colors.';
+  if (nextDesign) msg += ' Switch to ' + nextDesign + ' for more.';
+  var $nudge = $('#color-cap-nudge');
+  if (!$nudge.length) {
+    $nudge = $('<div id="color-cap-nudge" style="' +
+      'background:#FFF8E1; border-left:3px solid #F4C842; padding:8px 12px; ' +
+      'font-size:0.75rem; color:#5D4037; line-height:1.4; margin:8px 16px;">' +
+    '</div>');
+    $('.swatch-grid').before($nudge);
+  }
+  $nudge.text(msg).show();
+  setTimeout(function() { $nudge.fadeOut(400); }, 2800);
 }
 
 // ================================================================
@@ -367,16 +450,23 @@ function renderSwatchGrid(family) {
 }
 
 function selectSwatchColor(colorObj) {
+  // Cap enforcement: block selection if this color would exceed the design cap
+  if (wouldExceedCap(colorObj.hex)) {
+    showColorCapNudge();
+    return;
+  }
+
   DesignStudio.selectedColor = colorObj;
-  // Update hex chip
+
+  // Update hex chip — NAME is primary (supplier-actionable), hex is secondary annotation
+  // Per PRODUCT-DETAILS §4: "Color NAME is the supplier-actionable identifier — not the hex."
   $('#hex-chip-swatch').css('background', colorObj.hex);
-  $('#hex-chip-code').text(colorObj.hex);
-  $('#hex-chip-name').text(colorObj.name);
+  $('#hex-chip-name').text(colorObj.name);           // large, prominent
+  $('#hex-chip-code').text(colorObj.hex);            // small monospace annotation
   // Update selected state in grid
   $('#swatch-grid .swatch-dot').removeClass('swatch-dot--selected');
   $('#swatch-grid .swatch-dot').each(function() {
-    if ($(this).css('background-color') === hexToRgb(colorObj.hex) ||
-        $(this).attr('title') === colorObj.name) {
+    if ($(this).attr('title') === colorObj.name) {
       $(this).addClass('swatch-dot--selected');
     }
   });

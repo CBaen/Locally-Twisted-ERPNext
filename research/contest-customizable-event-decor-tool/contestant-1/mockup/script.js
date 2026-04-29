@@ -2,73 +2,128 @@
  * Contestant 1 - Vanilla JS + jQuery (Frappe-compatible)
  * No build step, no NPM, no frameworks.
  * All state is in-memory. Persistence is downstream (inquiry form).
+ *
+ * ROUND 2 CHANGES:
+ * - Color catalog replaced with actual 53 LT named colors (PRODUCT-DETAILS.md §2.8)
+ * - Hex values are APPROXIMATIONS for visual rendering only.
+ *   Color NAME is the supplier-actionable identifier; name flows to Jeff's CRM.
+ * - Popular row updated to real LT names customers will recognize.
+ * - Groups organized per natural families in §2.8.
  */
 
-/* COLOR CATALOG - LT Balloon Colors (representative subset) */
+/* COLOR CATALOG - LT Balloon Colors (53 named, hex = approximation for rendering) */
 var LT_COLORS = {
+  /* 12 high-demand swatches for the Quick Row — real names that match popular requests */
   popular: [
-    { name: "Pearl White", hex: "#F8F4EF" },
-    { name: "Blush",       hex: "#F4A0A0" },
-    { name: "Coral",       hex: "#FF6B6B" },
-    { name: "Dusty Rose",  hex: "#D4849A" },
-    { name: "Mauve",       hex: "#C06B85" },
-    { name: "Lavender",    hex: "#C3B1E1" },
-    { name: "Periwinkle",  hex: "#8BA5D8" },
-    { name: "Baby Blue",   hex: "#ADD8E6" },
-    { name: "Sage",        hex: "#9DC08B" },
-    { name: "Mint",        hex: "#88FED0" },
-    { name: "Gold",        hex: "#D4AF37" },
-    { name: "Champagne",   hex: "#F7E7CE" }
+    { name: "White",         hex: "#F5F5F0" },
+    { name: "Blush",         hex: "#F2B8C0" },
+    { name: "Dusk Rose",     hex: "#C98FA0" },
+    { name: "Bubble Gum",    hex: "#F570A0" },
+    { name: "Orchid",        hex: "#C47EC6" },
+    { name: "Periwinkle",    hex: "#9BAADE" },
+    { name: "Pastel Blue",   hex: "#A8C8E8" },
+    { name: "Eucalyptus",    hex: "#7DB89A" },
+    { name: "Pastel Green",  hex: "#A8D5B0" },
+    { name: "Reflex Gold",   hex: "#C8A830" },
+    { name: "Reflex Silver", hex: "#B0B8C0" },
+    { name: "Empowermint",   hex: "#68C8A0" }
   ],
+
+  /* Full 53-color catalog organized by natural family per PRODUCT-DETAILS §2.8 */
   groups: [
-    { name: "Neutrals & Whites", colors: [
-      { name: "Pearl White", hex: "#F8F4EF" },
-      { name: "Ivory",       hex: "#FFFFF0" },
-      { name: "Champagne",   hex: "#F7E7CE" },
-      { name: "Sand",        hex: "#C2B280" },
-      { name: "Mocha",       hex: "#967969" },
-      { name: "Black",       hex: "#1A1A1A" }
-    ]},
-    { name: "Pinks & Reds", colors: [
-      { name: "Baby Pink",  hex: "#FFD1DC" },
-      { name: "Blush",      hex: "#F4A0A0" },
-      { name: "Coral",      hex: "#FF6B6B" },
-      { name: "Dusty Rose", hex: "#D4849A" },
-      { name: "Hot Pink",   hex: "#FF69B4" },
-      { name: "Mauve",      hex: "#C06B85" }
-    ]},
-    { name: "Purples & Blues", colors: [
-      { name: "Lavender",   hex: "#C3B1E1" },
-      { name: "Lilac",      hex: "#B57EDC" },
-      { name: "Periwinkle", hex: "#8BA5D8" },
-      { name: "Royal Blue", hex: "#4169E1" },
-      { name: "Baby Blue",  hex: "#ADD8E6" },
-      { name: "Navy",       hex: "#001F5B" }
-    ]},
-    { name: "Greens & Teals", colors: [
-      { name: "Mint",     hex: "#88FED0" },
-      { name: "Sage",     hex: "#9DC08B" },
-      { name: "Seafoam",  hex: "#93E9BE" },
-      { name: "Forest",   hex: "#228B22" },
-      { name: "Emerald",  hex: "#50C878" },
-      { name: "Hunter",   hex: "#355E3B" }
-    ]},
-    { name: "Yellows & Oranges", colors: [
-      { name: "Lemon",     hex: "#FFF44F" },
-      { name: "Butter",    hex: "#FFF8DC" },
-      { name: "Peach",     hex: "#FFCBA4" },
-      { name: "Orange",    hex: "#FF8C00" },
-      { name: "Tangerine", hex: "#F28500" },
-      { name: "Mustard",   hex: "#FFDB58" }
-    ]},
-    { name: "Metallics & Special", colors: [
-      { name: "Gold",       hex: "#D4AF37" },
-      { name: "Rose Gold",  hex: "#B76E79" },
-      { name: "Silver",     hex: "#C0C0C0" },
-      { name: "Chrome Gold",hex: "#FFD700" },
-      { name: "Copper",     hex: "#B87333" },
-      { name: "Iridescent", hex: "#E8D5E8" }
-    ]}
+    {
+      name: "Reflex (Metallics)",
+      colors: [
+        { name: "Reflex Champagne", hex: "#D4C09A" },
+        { name: "Reflex Truffle",   hex: "#9A7060" },
+        { name: "Reflex Silver",    hex: "#B0B8C0" },
+        { name: "Reflex Gold",      hex: "#C8A830" },
+        { name: "Reflex Blue",      hex: "#3058B8" },
+        { name: "Reflex Green",     hex: "#208040" },
+        { name: "Reflex Violet",    hex: "#7030A0" },
+        { name: "Reflex Red",       hex: "#C02030" }
+      ]
+    },
+    {
+      name: "Dusk (Muted Tones)",
+      colors: [
+        { name: "Dusk Cream",    hex: "#E8D8BE" },
+        { name: "Dusk Green Tea",hex: "#A8B898" },
+        { name: "Dusk Blue",     hex: "#8898B8" },
+        { name: "Dusk Lilac",    hex: "#B8A8C8" },
+        { name: "Dusk Rose",     hex: "#C98FA0" }
+      ]
+    },
+    {
+      name: "Pastel",
+      colors: [
+        { name: "Pastel Pink",   hex: "#F8C8D0" },
+        { name: "Pastel Blue",   hex: "#A8C8E8" },
+        { name: "Pastel Green",  hex: "#A8D5B0" },
+        { name: "Pastel Purple", hex: "#C8B8E8" },
+        { name: "Pastel Yellow", hex: "#F8E898" },
+        { name: "Pastel Melon",  hex: "#F8C8A8" }
+      ]
+    },
+    {
+      name: "Brights",
+      colors: [
+        { name: "Red",        hex: "#D02020" },
+        { name: "Orange",     hex: "#F07020" },
+        { name: "Yellow",     hex: "#F0D020" },
+        { name: "Lime",       hex: "#80D820" },
+        { name: "Raspberry",  hex: "#C02870" },
+        { name: "Fuchsia",    hex: "#D83090" },
+        { name: "Bubble Gum", hex: "#F570A0" },
+        { name: "Honey",      hex: "#D09820" }
+      ]
+    },
+    {
+      name: "Purples & Blues",
+      colors: [
+        { name: "Lilac",      hex: "#C8A8D8" },
+        { name: "Orchid",     hex: "#C47EC6" },
+        { name: "Violet",     hex: "#7030A0" },
+        { name: "Periwinkle", hex: "#9BAADE" },
+        { name: "LT Blue",    hex: "#70A8E0" },
+        { name: "Royal Blue", hex: "#2848C8" },
+        { name: "Robin's Egg",hex: "#70C8D8" },
+        { name: "Dusk Blue",  hex: "#8898B8" }
+      ]
+    },
+    {
+      name: "Greens & Teals",
+      colors: [
+        { name: "Eucalyptus",  hex: "#7DB89A" },
+        { name: "Empowermint", hex: "#68C8A0" },
+        { name: "Shamrock",    hex: "#208838" },
+        { name: "Forest",      hex: "#286028" },
+        { name: "Wintergreen", hex: "#488858" },
+        { name: "Teal",        hex: "#008080" },
+        { name: "Deep Teal",   hex: "#006870" },
+        { name: "Dusk Green Tea", hex: "#A8B898" }
+      ]
+    },
+    {
+      name: "Neutrals",
+      colors: [
+        { name: "White",      hex: "#F5F5F0" },
+        { name: "Grey",       hex: "#B0B0B0" },
+        { name: "Smoke Grey", hex: "#888888" },
+        { name: "Black",      hex: "#1A1A1A" },
+        { name: "Latte",      hex: "#C8A888" },
+        { name: "Brown",      hex: "#8B5E3C" },
+        { name: "Chocolate",  hex: "#6A3520" },
+        { name: "Clear",      hex: "#E8F4F8" },
+        { name: "Blush",      hex: "#F2B8C0" }
+      ]
+    },
+    {
+      name: "Blue Slate & Special",
+      colors: [
+        { name: "Blue Slate",     hex: "#708090" }
+      ]
+    }
   ]
 };
 
@@ -100,12 +155,16 @@ var DesignStudio = {
     $(".swatch, .palette-swatch").removeClass("is-selected");
     swatchEl.addClass("is-selected");
     $(".selected-color-preview").css("background-color", hex);
+    /* Name is primary — shown first. Hex is visual aid only. */
     $(".selected-color-name").text(name);
     $(".selected-color-hex").text(hex);
     this.applyColorToRegion(hex);
     if (this.activeRegion) {
       var dotSel = ".region-chip[data-region='" + this.activeRegion + "'] .region-chip__dot";
       $(dotSel).css("background-color", hex);
+      /* Store name on the region chip for payload assembly */
+      var chip = $(".region-chip[data-region='" + this.activeRegion + "']");
+      chip.attr("data-color-name", name).attr("data-color-hex", hex);
     }
   },
 
@@ -167,6 +226,21 @@ var DesignStudio = {
       $(this).closest(".stage-strip").find(".stage-piece").removeClass("is-active");
       $(this).addClass("is-active");
     });
+  },
+
+  /* Build inquiry payload: color NAME is primary; hex is visual aid shown in parens.
+   * Pattern per PRODUCT-DETAILS §4: "Reflex Gold" is the supplier SKU.
+   * Hex is eyeball-matching aid only — Jeff's supplier call uses the name.
+   * Output: "Column: Lavender (approx. #C3B1E1) + Blush (approx. #F2B8C0)"
+   */
+  buildPayloadLine: function(pieceName, regions) {
+    var parts = regions.map(function(r) {
+      var chip = $(".region-chip[data-region='" + r + "']");
+      var cname = chip.attr("data-color-name") || "(not set)";
+      var chex  = chip.attr("data-color-hex")  || "";
+      return chex ? cname + " (approx. " + chex + ")" : cname;
+    });
+    return pieceName + ": " + parts.join(" + ");
   }
 };
 
@@ -178,7 +252,11 @@ function renderQuickSwatches(id) {
     c.append(
       $("<div></div>")
         .addClass("swatch")
-        .attr({"data-hex": col.hex, "data-name": col.name, "title": col.name + " " + col.hex})
+        .attr({
+          "data-hex": col.hex,
+          "data-name": col.name,
+          "title": col.name + " (approx. " + col.hex + ")"
+        })
         .css("background-color", col.hex)
     );
   });
@@ -201,7 +279,11 @@ function renderFullPalette(id) {
       grid.append(
         $("<div></div>")
           .addClass("palette-swatch")
-          .attr({"data-hex": col.hex, "data-name": col.name, "title": col.name + " " + col.hex})
+          .attr({
+            "data-hex": col.hex,
+            "data-name": col.name,
+            "title": col.name + " (approx. " + col.hex + ")"
+          })
           .css("background-color", col.hex)
       );
     });

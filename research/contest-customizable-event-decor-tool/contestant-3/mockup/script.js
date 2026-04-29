@@ -14,93 +14,125 @@
 
   // =========================================================
   // BALLOON COLOR CATALOG
-  // 50+ named balloon colors with hex values
+  // 53 named balloon colors — verbatim from LT catalog (PRODUCT-DETAILS.md Section 2.8)
+  // Hex values are reasonable approximations for display only.
+  // COLOR NAMES are the supplier-actionable identifiers: Jeff orders by name.
+  // Hex codes are eyeball-matching aids; the catalog has no official hex values yet.
   // Organized into families for the grouped palette pattern
   // (Baymard research: grouped families beat flat 50+ grid on mobile)
   // =========================================================
   var BALLOON_COLORS = {
+    // 16 "hot" picks for the quick-access grid — chosen to span the full palette range
     hot: [
-      { name: 'White',       hex: '#F5F5F5' },
-      { name: 'Blush',       hex: '#F4DFD7' },
-      { name: 'Rose',        hex: '#E8A8A0' },
-      { name: 'Red',         hex: '#D63838' },
-      { name: 'Coral',       hex: '#FF6F61' },
-      { name: 'Gold',        hex: '#D4AF37' },
-      { name: 'Lemon',       hex: '#F9F871' },
-      { name: 'Lime',        hex: '#B8FF9E' },
-      { name: 'Mint',        hex: '#A8E6CF' },
-      { name: 'Seafoam',     hex: '#88FED0' },
-      { name: 'Teal',        hex: '#008080' },
-      { name: 'Sky Blue',    hex: '#A0E9FF' },
-      { name: 'Soft Blue',   hex: '#C3DCF3' },
-      { name: 'Lavender',    hex: '#C9B8F5' },
-      { name: 'Plum',        hex: '#7B4F9E' },
-      { name: 'Black',       hex: '#1A1A1A' },
+      { name: 'White',            hex: '#F5F5F5' },
+      { name: 'Blush',            hex: '#F4DFD7' },
+      { name: 'Dusk Rose',        hex: '#D4A5A5' },
+      { name: 'Raspberry',        hex: '#C0115E' },
+      { name: 'Red',              hex: '#D63838' },
+      { name: 'Reflex Gold',      hex: '#C9A227' },
+      { name: 'Pastel Yellow',    hex: '#FFF3B0' },
+      { name: 'Empowermint',      hex: '#A8E6CF' },
+      { name: 'Lime',             hex: '#BFFF5C' },
+      { name: 'Teal',             hex: '#008080' },
+      { name: 'Robin\'s Egg',     hex: '#8ECAE6' },
+      { name: 'Pastel Blue',      hex: '#C5D8F0' },
+      { name: 'Periwinkle',       hex: '#CCCCFF' },
+      { name: 'Orchid',           hex: '#DA70D6' },
+      { name: 'Reflex Silver',    hex: '#C0C0C0' },
+      { name: 'Black',            hex: '#1A1A1A' },
     ],
     families: [
       {
-        label: 'Reds & Pinks',
+        // Reflex = metallic/shiny
+        label: 'Reflex (Metallics)',
         colors: [
-          { name: 'Deep Red',    hex: '#8B1A1A' },
-          { name: 'Cherry',      hex: '#D63838' },
-          { name: 'Coral',       hex: '#FF6F61' },
-          { name: 'Salmon',      hex: '#FA8072' },
-          { name: 'Hot Pink',    hex: '#FF69B4' },
+          { name: 'Reflex Champagne', hex: '#F7E7CE' },
+          { name: 'Reflex Truffle',   hex: '#9C7A5A' },
+          { name: 'Reflex Silver',    hex: '#C0C0C0' },
+          { name: 'Reflex Gold',      hex: '#C9A227' },
+          { name: 'Reflex Blue',      hex: '#2563EB' },
+          { name: 'Reflex Green',     hex: '#16A34A' },
+          { name: 'Reflex Violet',    hex: '#7C3AED' },
+          { name: 'Reflex Red',       hex: '#B91C1C' },
+        ]
+      },
+      {
+        // Dusk = muted / desaturated tones
+        label: 'Dusk (Muted)',
+        colors: [
+          { name: 'Dusk Cream',     hex: '#F5ECD7' },
+          { name: 'Dusk Green Tea', hex: '#B5C9B0' },
+          { name: 'Dusk Blue',      hex: '#8BA7C7' },
+          { name: 'Dusk Lilac',     hex: '#C4B5D0' },
+          { name: 'Dusk Rose',      hex: '#D4A5A5' },
+        ]
+      },
+      {
+        // Pastel = soft tints
+        label: 'Pastels',
+        colors: [
+          { name: 'Pastel Pink',   hex: '#FFD1DC' },
+          { name: 'Pastel Blue',   hex: '#C5D8F0' },
+          { name: 'Pastel Green',  hex: '#C3EBC3' },
+          { name: 'Pastel Purple', hex: '#DDD0F0' },
+          { name: 'Pastel Yellow', hex: '#FFF3B0' },
+          { name: 'Pastel Melon',  hex: '#FFCBA4' },
+          { name: 'Blush',         hex: '#F4DFD7' },
+        ]
+      },
+      {
+        // Brights = saturated vivid colors
+        label: 'Brights',
+        colors: [
+          { name: 'Red',         hex: '#D63838' },
+          { name: 'Orange',      hex: '#F77F00' },
+          { name: 'Yellow',      hex: '#FAD02C' },
+          { name: 'Raspberry',   hex: '#C0115E' },
           { name: 'Fuchsia',     hex: '#E91E8C' },
-          { name: 'Rose',        hex: '#E8A8A0' },
-          { name: 'Blush',       hex: '#F4DFD7' },
-          { name: 'Petal',       hex: '#FFD1DC' },
-        ]
-      },
-      {
-        label: 'Oranges & Yellows',
-        colors: [
-          { name: 'Tangerine',   hex: '#FF8C00' },
-          { name: 'Orange',      hex: '#FF6A00' },
-          { name: 'Peach',       hex: '#FFCBA4' },
-          { name: 'Butter',      hex: '#FFF3B0' },
-          { name: 'Lemon',       hex: '#F9F871' },
-          { name: 'Sunflower',   hex: '#FFD700' },
-          { name: 'Gold',        hex: '#D4AF37' },
-        ]
-      },
-      {
-        label: 'Greens',
-        colors: [
-          { name: 'Lime',        hex: '#B8FF9E' },
-          { name: 'Mint',        hex: '#A8E6CF' },
-          { name: 'Seafoam',     hex: '#88FED0' },
-          { name: 'Sage',        hex: '#B2C9A0' },
-          { name: 'Forest',      hex: '#228B22' },
-          { name: 'Emerald',     hex: '#50C878' },
-          { name: 'Olive',       hex: '#808000' },
-        ]
-      },
-      {
-        label: 'Blues & Teals',
-        colors: [
-          { name: 'Sky Cyan',    hex: '#A0E9FF' },
-          { name: 'Aqua',        hex: '#80F5F3' },
-          { name: 'Soft Blue',   hex: '#C3DCF3' },
-          { name: 'Cornflower',  hex: '#6495ED' },
-          { name: 'Royal Blue',  hex: '#4169E1' },
-          { name: 'Navy',        hex: '#1A237E' },
+          { name: 'Bubble Gum',  hex: '#FF88C2' },
+          { name: 'Lime',        hex: '#BFFF5C' },
+          { name: 'Shamrock',    hex: '#009E60' },
+          { name: 'Eucalyptus',  hex: '#44A08D' },
           { name: 'Teal',        hex: '#008080' },
-          { name: 'Cobalt',      hex: '#0047AB' },
+          { name: 'LT Blue',     hex: '#ADD8E6' },
+          { name: 'Periwinkle',  hex: '#CCCCFF' },
+          { name: 'Royal Blue',  hex: '#4169E1' },
+          { name: 'Robin\'s Egg', hex: '#8ECAE6' },
+          { name: 'Orchid',      hex: '#DA70D6' },
+          { name: 'Honey',       hex: '#FFBD35' },
         ]
       },
       {
-        label: 'Purples & Neutrals',
+        // Greens & Teals
+        label: 'Greens & Teals',
         colors: [
-          { name: 'Lavender',    hex: '#C9B8F5' },
-          { name: 'Lilac',       hex: '#E0C8F8' },
+          { name: 'Empowermint',  hex: '#A8E6CF' },
+          { name: 'Wintergreen',  hex: '#3EB489' },
+          { name: 'Forest',       hex: '#228B22' },
+          { name: 'Deep Teal',    hex: '#006374' },
+          { name: 'Blue Slate',   hex: '#6A8FA7' },
+          { name: 'Smoke Grey',   hex: '#9E9E9E' },
+        ]
+      },
+      {
+        // Purples & Blues (deeper)
+        label: 'Blues & Purples',
+        colors: [
           { name: 'Violet',      hex: '#8B00FF' },
-          { name: 'Plum',        hex: '#7B4F9E' },
-          { name: 'Champagne',   hex: '#F7E7CE' },
-          { name: 'Silver',      hex: '#C0C0C0' },
+          { name: 'Lilac',       hex: '#C8A2C8' },
+        ]
+      },
+      {
+        // Neutrals = whites, blacks, grays, browns
+        label: 'Neutrals & Browns',
+        colors: [
           { name: 'White',       hex: '#F5F5F5' },
-          { name: 'Ivory',       hex: '#FFFFF0' },
+          { name: 'Grey',        hex: '#9E9E9E' },
           { name: 'Black',       hex: '#1A1A1A' },
+          { name: 'Latte',       hex: '#D4B896' },
+          { name: 'Brown',       hex: '#7B3F00' },
+          { name: 'Chocolate',   hex: '#3D1C02' },
+          { name: 'Clear',       hex: '#E8F4FF' },
         ]
       }
     ]
