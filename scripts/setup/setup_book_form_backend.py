@@ -56,6 +56,7 @@ def login(opener):
 def get_custom_field(opener, dt, fieldname):
     """Return the Custom Field doc as a dict, or None if not found."""
     qs = urllib.parse.urlencode({
+        "doctype": "Custom Field",
         "filters": json.dumps([
             ["dt", "=", dt],
             ["fieldname", "=", fieldname],
@@ -64,7 +65,7 @@ def get_custom_field(opener, dt, fieldname):
         "limit_page_length": 1,
     })
     req = urllib.request.Request(
-        f"{BASE}/api/method/frappe.client.get_list?doctype=Custom Field&{qs}"
+        f"{BASE}/api/method/frappe.client.get_list?{qs}"
     )
     with opener.open(req, timeout=15) as r:
         body = json.loads(r.read().decode())
