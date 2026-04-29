@@ -110,3 +110,60 @@ What this removes: composition canvas, ghost placeholders, multi-piece side-by-s
 The full tool lives in a single `www/design-studio.html` portal page with a `www/design-studio.py` controller. Inline SVG is in the page HTML (confirmed: Web Page HTML content type supports arbitrary HTML including SVG). CSS is in a `<style>` block on the page. JS uses jQuery (already in Frappe's bundle) with vanilla DOM. No CDN fetches, no NPM, no build step. The inquiry form submits via Frappe's `frappe.call()` to create a Lead — consistent with the LT form-handler routing in CLAUDE.md.
 
 No forbidden primitives used. No flags to raise.
+
+---
+
+## Round 2 — B-lean: Sharpening the Cascading Ghost
+
+**Path chosen:** B-lean. The cascading ghost is the distinctive move. Round 2 commits harder to it rather than pivoting.
+
+Two product-physics corrections were load-bearing and non-optional:
+
+### Correction 1: 53 named LT colors replace generic hex swatches
+
+PRODUCT-DETAILS §2.8 provides the actual LT latex color catalog verbatim. PRODUCT-DETAILS §4 is explicit: **color NAME is the supplier-actionable identifier, not hex.** Jeff calls his supplier with "Blush" and "Dusk Blue" — not "#F4C2C2" and "#7FA3C0."
+
+Round 1's COLOR_CATALOG used invented generic names (Light Pink, Hot Pink, Sky Blue) that are not in LT's catalog. That was wrong. Round 2 replaces the entire catalog with the 53 actual named colors organized into the natural family clusters the spec provides: Reflex metallics, Dusk muted tones, Pastel soft tints, Brights, Neutrals, Deep tones.
+
+The UX implication is significant. The hex chip in the color picker now shows **NAME prominently (large, bold) with hex as a smaller secondary annotation**. The done screen's palette row shows NAME first ("Blush"), hex second ("#F4C2C2 "). The inquiry payload sent to Jeff's CRM formats palette as "Blush #F4C2C2, Dusk Blue #7FA3C0, White #FFFFFF" — name leads, hex follows. This is what Jeff reads to his supplier.
+
+### Correction 2: Centerpiece removed from composition
+
+PRODUCT-DETAILS §2.7: "drop centerpieces from the design tool." The Round 1 composition (arch + column + centerpiece) had an out-of-scope piece. Round 2 removes centerpiece. The composition is now arch + column. The cascading ghost after both pieces is a **Garland** — organic construction, doublet + filler, which is a legitimate third piece per §2.3.
+
+The ghost garland in 04-composition.html renders as an organic doublet arrangement pre-tinted in the arch's palette. This is more honest than a dashed box with a "+" because it shows what a garland *actually looks like* — irregular sizes, organic spacing — already in the customer's colors.
+
+### The B-lean sharpening: ghost inherits Design style
+
+The field summary for B-lean: "sharpen the cascading-ghost mechanic — a ghost column suggested next to a Swirl arch picks up the same Swirl style by default."
+
+This is implemented via `initGhostInheritance()` in script.js:
+
+1. `buildGhostPreviewColors()` — returns the composition's live palette as an array of `{hex, name}` objects
+2. The ghost column SVG has `[data-ghost-balloon]` attributes on each ellipse — `initGhostInheritance()` iterates these and sets `fill` to the palette colors in cycle order
+3. `buildGhostSuggestionLabel(pieceType, precedingDesign)` — constructs "A Column in your Swirl style" or "A Column in your Organic style" depending on which Design attribute the arch was given
+4. The suggestion panel headline (`.suggestion-panel__headline`) is updated with this label + " — they pair beautifully"
+5. The `.suggestion-palette-dots` container is populated with live-tinted circles, each titled with the actual LT color name
+
+The result: the ghost column is not a generic blank invitation — it is a Swirl column, in Blush and Dusk Blue and White, labeled "A Column in your Swirl style." The customer sees their design already extended. The gap between "what I could add" and "what this would look like" collapses.
+
+This sharpens the cascading ghost's core claim: **the ghost is not an upsell prompt. It is a preview of the customer's own event, already built, waiting for a tap.**
+
+### Design attribute selector added to coloring screen
+
+PRODUCT-DETAILS §2.1: Design = Swirl (≤4 colors) | Layered (≤8 colors) | Organic (palette-driven). This selector belongs on screen 02 as the first decision, before color picking begins — because Design governs the color cap.
+
+Three pill buttons (Swirl / Layered / Organic) appear below the nav on the coloring screen. Selecting a pill:
+- Sets `DesignStudio.currentDesign`
+- Updates the cap hint text ("up to 4 colors" / "up to 8 colors" / "palette-driven")
+- Enables `wouldExceedCap()` enforcement in `selectSwatchColor()`: if the customer already has 4 colors and tries a 5th on a Swirl arch, a nudge appears ("Swirl uses up to 4 colors. Switch to Layered for more.") rather than silently applying or silently blocking
+
+The Design attribute also flows into the ghost suggestion: `DesignStudio.currentDesign` is passed to `buildGhostSuggestionLabel()` so the ghost column knows to say "Swirl style" vs "Organic style."
+
+### What was NOT changed
+
+- Bottom-sheet picker structure — sound, stays
+- `buildInquiryPayload()` and `initDoneScreen()` — already had full payload spec from Loop 1-2; updated only to use real LT color names in the demo fallback and to format palette as NAME-first
+- Loud-failure error path (`showSendError()`) — unchanged, still present
+- Composition layout (strip + canvas) — unchanged
+- Frappe-native constraints — unchanged, still zero forbidden primitives
