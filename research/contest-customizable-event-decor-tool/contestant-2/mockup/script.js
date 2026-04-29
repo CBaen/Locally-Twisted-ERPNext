@@ -610,14 +610,15 @@ function initGhostInheritance() {
 //   lead_name           — customer name
 //   email_id / phone    — contact (whichever they provided)
 //   custom_design_ref   — "LT-{timestamp}" shared reference number
-//   custom_pieces       — "Balloon Arch, Column, Centerpiece"
-//   custom_palette      — "#FFB6C1 (Light Pink), #87CEEB (Sky Blue), #FFFFFF (White)"
+//   custom_pieces       — "Balloon Arch (Swirl), Column (Swirl)"
+//   custom_palette      — "Blush #F4C2C2, Dusk Blue #7FA3C0, White #FFFFFF"
 //   custom_design_notes — optional freeform from the textarea
 //   source              — "Design Studio"
 //
-// Hex codes are explicit in custom_palette so Jeff can match SKUs with
-// his balloon supplier directly — color names alone are ambiguous across
-// catalogs.
+// Color NAME is the primary identifier — Jeff calls his supplier by name
+// (e.g. "Blush", "Dusk Blue"), not by hex. Hex is the secondary annotation
+// for cross-catalog matching.
+// Per PRODUCT-DETAILS §4: "Color NAME is the supplier-actionable identifier."
 function buildInquiryPayload() {
   // --- Collect composition state ---
   // In production this comes from DesignStudio.composition; here we read
@@ -628,7 +629,9 @@ function buildInquiryPayload() {
   // Pull from DesignStudio state if available
   if (DesignStudio.composition && DesignStudio.composition.length) {
     DesignStudio.composition.forEach(function(piece) {
-      pieces.push(piece.name || piece.type || 'Piece');
+      var label = (piece.name || piece.type || 'Piece');
+      if (piece.design) label += ' (' + piece.design.charAt(0).toUpperCase() + piece.design.slice(1) + ')';
+      pieces.push(label);
       if (piece.regionColors) {
         Object.values(piece.regionColors).forEach(function(c) {
           paletteMap[c.hex] = c.name || c.hex;
@@ -638,20 +641,23 @@ function buildInquiryPayload() {
   }
 
   // Fall back to demo data for mockup context
+  // Uses actual LT catalog color names (PRODUCT-DETAILS §2.8)
   if (!pieces.length) {
-    pieces = ['Balloon Arch', 'Column', 'Centerpiece'];
+    pieces = ['Balloon Arch (Swirl)', 'Column (Swirl)'];
   }
   if (!Object.keys(paletteMap).length) {
     paletteMap = {
-      '#FFB6C1': 'Light Pink',
-      '#87CEEB': 'Sky Blue',
+      '#F4C2C2': 'Blush',
+      '#7FA3C0': 'Dusk Blue',
       '#FFFFFF': 'White'
     };
   }
 
-  // Format palette string: "#FFB6C1 (Light Pink), #87CEEB (Sky Blue), ..."
+  // Format palette string: NAME first, hex as annotation — per PRODUCT-DETAILS §4
+  // "Blush #F4C2C2, Dusk Blue #7FA3C0, White #FFFFFF"
+  // Jeff reads the name to his supplier; the hex is for cross-catalog verification.
   var paletteStr = Object.keys(paletteMap).map(function(hex) {
-    return hex + ' (' + paletteMap[hex] + ')';
+    return paletteMap[hex] + ' ' + hex;
   }).join(', ');
 
   // Design reference number (timestamp-based, shown on card as "LT-2026-001" in demo)
@@ -698,26 +704,28 @@ function initDoneScreen() {
     if (stored) colors = JSON.parse(stored);
   } catch(e) {}
 
-  // Demo fallback with names
+  // Demo fallback — uses actual LT catalog color names (PRODUCT-DETAILS §2.8)
   if (!colors.length) {
     colors = [
-      { hex: '#FFB6C1', name: 'Light Pink' },
-      { hex: '#87CEEB', name: 'Sky Blue'   },
-      { hex: '#FFFFFF', name: 'White'       }
+      { hex: '#F4C2C2', name: 'Blush'     },
+      { hex: '#7FA3C0', name: 'Dusk Blue' },
+      { hex: '#FFFFFF', name: 'White'     }
     ];
   }
 
-  // If we have live colors, replace the static HTML rows
+  // Render palette rows: NAME is the primary label, hex is the secondary annotation.
+  // Per PRODUCT-DETAILS §4: color NAME is the supplier-actionable identifier.
+  // Jeff reads "Blush" to his supplier — not "#F4C2C2".
   var $row = $('#done-palette-row');
   if ($row.length && colors.length) {
     $row.empty();
     colors.forEach(function(c) {
       var borderStyle = c.hex === '#FFFFFF' ? 'border:2px solid #EBEBEB;' : 'border:2px solid #fff;';
       $row.append(
-        '<div style="display:flex; align-items:center; gap:8px;">' +
+        '<div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">' +
           '<div style="width:18px; height:18px; border-radius:50%; background:' + c.hex + '; ' + borderStyle + ' box-shadow:0 1px 3px rgba(0,0,0,.12); flex-shrink:0;"></div>' +
-          '<span style="font-family:monospace; font-size:0.75rem; font-weight:600; color:#1A1A1A;">' + c.hex + '</span>' +
-          '<span style="font-size:0.75rem; color:#595A5C;">' + (c.name || '') + '</span>' +
+          '<span style="font-size:0.8125rem; font-weight:600; color:#1A1A1A;">' + (c.name || c.hex) + '</span>' +
+          '<span style="font-family:monospace; font-size:0.6875rem; color:#595A5C;">' + c.hex + '</span>' +
         '</div>'
       );
     });

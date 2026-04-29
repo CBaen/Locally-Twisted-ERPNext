@@ -114,32 +114,32 @@
           <!-- Primary balloons (main color) -->
           <g class="fill-region" data-region="primary" id="region-primary" role="button" aria-label="Main balloon color">
             <!-- Left column base -->
-            <circle cx="36"  cy="190" r="22" fill="#E8A0A0"/>
-            <circle cx="34"  cy="148" r="20" fill="#E8A0A0"/>
+            <circle cx="36"  cy="190" r="22" fill="#C88888"/>
+            <circle cx="34"  cy="148" r="20" fill="#C88888"/>
             <!-- Left rising -->
-            <circle cx="56"  cy="108" r="20" fill="#E8A0A0"/>
+            <circle cx="56"  cy="108" r="20" fill="#C88888"/>
             <!-- Crown -->
-            <circle cx="92"  cy="72"  r="22" fill="#E8A0A0"/>
-            <circle cx="160" cy="52"  r="24" fill="#E8A0A0"/>
-            <circle cx="228" cy="72"  r="22" fill="#E8A0A0"/>
+            <circle cx="92"  cy="72"  r="22" fill="#C88888"/>
+            <circle cx="160" cy="52"  r="24" fill="#C88888"/>
+            <circle cx="228" cy="72"  r="22" fill="#C88888"/>
             <!-- Right rising -->
-            <circle cx="264" cy="108" r="20" fill="#E8A0A0"/>
-            <circle cx="284" cy="148" r="20" fill="#E8A0A0"/>
+            <circle cx="264" cy="108" r="20" fill="#C88888"/>
+            <circle cx="284" cy="148" r="20" fill="#C88888"/>
             <!-- Right column base -->
-            <circle cx="284" cy="190" r="22" fill="#E8A0A0"/>
+            <circle cx="284" cy="190" r="22" fill="#C88888"/>
           </g>
 
           <!-- Accent balloons (alternate color) -->
           <g class="fill-region" data-region="accent" id="region-accent" role="button" aria-label="Accent balloon color">
             <!-- Interspersed accent balloons -->
-            <circle cx="34"  cy="170" r="16" fill="#C3DCF3"/>
-            <circle cx="44"  cy="130" r="17" fill="#C3DCF3"/>
-            <circle cx="72"  cy="90"  r="18" fill="#C3DCF3"/>
-            <circle cx="124" cy="60"  r="19" fill="#C3DCF3"/>
-            <circle cx="196" cy="60"  r="19" fill="#C3DCF3"/>
-            <circle cx="248" cy="90"  r="18" fill="#C3DCF3"/>
-            <circle cx="276" cy="130" r="17" fill="#C3DCF3"/>
-            <circle cx="284" cy="170" r="16" fill="#C3DCF3"/>
+            <circle cx="34"  cy="170" r="16" fill="#8CA8C0"/>
+            <circle cx="44"  cy="130" r="17" fill="#8CA8C0"/>
+            <circle cx="72"  cy="90"  r="18" fill="#8CA8C0"/>
+            <circle cx="124" cy="60"  r="19" fill="#8CA8C0"/>
+            <circle cx="196" cy="60"  r="19" fill="#8CA8C0"/>
+            <circle cx="248" cy="90"  r="18" fill="#8CA8C0"/>
+            <circle cx="276" cy="130" r="17" fill="#8CA8C0"/>
+            <circle cx="284" cy="170" r="16" fill="#8CA8C0"/>
           </g>
 
           <!-- Ground feet (decorative, no interaction) -->
@@ -207,10 +207,10 @@
             Selected Region
           </div>
           <div style="display:flex; align-items:center; gap:12px;">
-            <div id="active-swatch-preview" style="width:48px; height:48px; border-radius:50%; background:#E8A0A0; border:2px solid #E8E8E8;"></div>
+            <div id="active-swatch-preview" style="width:48px; height:48px; border-radius:50%; background:#C88888; border:2px solid #E8E8E8;"></div>
             <div>
-              <div id="active-color-name" style="font-family:'DM Serif Display',serif; font-size:16px; color:#1A1A1A;">Rose</div>
-              <div id="active-hex-display" style="font-family:'Courier New',monospace; font-size:12px; color:#999;">#E8A0A0</div>
+              <div id="active-color-name" style="font-family:'DM Serif Display',serif; font-size:16px; color:#1A1A1A;">Dusk Rose</div>
+              <div id="active-hex-display" style="font-family:'Courier New',monospace; font-size:12px; color:#999;">#C88888</div>
             </div>
           </div>
         </div>
@@ -251,7 +251,7 @@
         <!-- Full palette button -->
         <div style="padding: 16px 20px; border-bottom: 1px solid #E8E8E8;">
           <button id="open-picker-btn" class="btn btn--secondary btn--full">
-            See All 50+ Colors →
+            See All 53 Colors →
           </button>
         </div>
 
@@ -316,8 +316,8 @@
     $(document).ready(function() {
       // Track current active region
       var activeRegion = 'primary';
-      var regionColors = { primary: '#E8A0A0', accent: '#C3DCF3' };
-      var regionNames  = { primary: 'Rose',    accent: 'Soft Blue' };
+      var regionColors = { primary: '#C88888', accent: '#8CA8C0' };
+      var regionNames  = { primary: 'Dusk Rose', accent: 'Dusk Blue' };
 
       function applyColor(region, hex) {
         regionColors[region] = hex;
@@ -409,6 +409,44 @@
       }).on('mouseleave', '.swatch-item', function() {
         $(this).find('.hex-badge').css('opacity', 0);
       });
+
+      // ---- Design style toggle: Swirl | Organic ----
+      // Swirl: show region chips + Swirl hint, hide Organic hint + palette hint
+      // Organic: hide region chips + Swirl hint, show Organic hint + palette hint
+      var currentStyle = 'swirl';
+
+      function applyStyleUI(style) {
+        currentStyle = style;
+        if (style === 'swirl') {
+          $('#style-swirl')
+            .css({ 'border-color': '#1A1A1A', 'font-weight': '600', 'color': '#1A1A1A' })
+            .addClass('active');
+          $('#style-organic')
+            .css({ 'border-color': '#E8E8E8', 'font-weight': '500', 'color': '#999' })
+            .removeClass('active');
+          $('#style-hint-swirl').show();
+          $('#style-hint-organic').hide();
+          $('#region-selector').show();
+          $('#organic-palette-hint').hide();
+        } else {
+          $('#style-organic')
+            .css({ 'border-color': '#1A1A1A', 'font-weight': '600', 'color': '#1A1A1A' })
+            .addClass('active');
+          $('#style-swirl')
+            .css({ 'border-color': '#E8E8E8', 'font-weight': '500', 'color': '#999' })
+            .removeClass('active');
+          $('#style-hint-organic').show();
+          $('#style-hint-swirl').hide();
+          $('#region-selector').hide();
+          $('#organic-palette-hint').show();
+        }
+      }
+
+      $('#style-swirl').on('click', function() { applyStyleUI('swirl'); });
+      $('#style-organic').on('click', function() { applyStyleUI('organic'); });
+
+      // Apply initial state (Swirl is default)
+      applyStyleUI('swirl');
     });
   </script>
 </body>

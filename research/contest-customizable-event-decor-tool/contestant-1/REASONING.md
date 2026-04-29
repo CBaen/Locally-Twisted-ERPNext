@@ -9,15 +9,28 @@ Elevator: *A customer taps a shape, colors it like a coloring book, taps "add an
 
 The customer arrives at the tool and sees a gallery of the 7 shapes as stylized illustration thumbnails — not product cards with prices, not dropdowns, just the illustrations. They tap "Balloon Arch."
 
-The arch illustration expands to fill most of the screen. The SVG has 2-3 labeled fill regions: **Main Cluster** (the balloon body), **Accent Cluster** (smaller bubbles at the ends), and optionally **Stem** (the base). Each region shows a thin animated pulse on first load — a "tap me" affordance that disappears after 3 seconds.
+**Round 2 update — Physics reconciliation (PRODUCT-DETAILS.md §3 + §5.3):**
 
-The customer taps **Main Cluster**. The region highlights (stroke thickens, slight brightening). A color picker slides up from the bottom of the screen — a horizontal scrolling row of 12 swatches showing the most popular balloon colors (derived from LT's catalog), with a "More colors →" chip at the right end that opens the full palette sheet.
+The real balloon construction physics distinguishes two fundamentally different shape families:
 
-They tap a swatch. The fill region immediately repaints. No "apply" button needed — tap is commit. The hex code appears briefly as a small tooltip below the selected swatch.
+- **Grid-mapped shapes (Backdrop/Wall):** Each 4-balloon cluster in the grid IS a tappable region. Region-tap UX maps directly to build reality. Two tap regions (background + pattern stripe/block) cover all Backdrop design variants. This is where the tap-to-color metaphor is most honest.
+- **Sequence-distributed shapes (Arch, Column, Garland):** The customer doesn't tap spatial regions; they pick a **Design style** (Swirl / Layered / Organic) and a **color count**, then the tool auto-distributes colors across the cluster sequence using the `min_repeat = C ÷ gcd(C, 4)` math. The customer doesn't choose which cluster gets which color — the distribution formula handles that.
 
-**Why this approach (citation):** The Pigment coloring app (RESEARCH-NOTES Source 7) validates the two-step region-activation mechanic: the review describes "tap a section of an illustration to activate the 'color-inside-the-lines' feature, which highlights the spot so that it is the only part of the illustration that will be affected." This confirms that tap → activate/highlight is an established, intuitive pattern. Precision note: after activation, Pigment uses freeform brush strokes; my design uses a swatch tap for instant flat fill. The citation supports step one (tap to activate and isolate a region). Step two — swatch tap commits a flat fill immediately — is a design choice suited to balloon context (a balloon zone is a single color, not a gradated brushstroke; instant fill is faster and more satisfying).
+I'm taking Option (a) from PRODUCT-DETAILS §5.3: for the screen-02/coloring view of Arches, Columns, and Garlands, the UI presents a **style chip** (Swirl / Layered / Organic) above the illustration, and **color slot chips** below the illustration (2 slots for Swirl, up to 4 for Layered, palette-open for Organic). The tap-to-activate-region metaphor is replaced for these shapes by a tap-a-color-slot mechanic: the customer taps a numbered slot, opens the picker, assigns a color; the illustration re-renders showing the auto-distributed result. This is more honest to the physics and still coloring-book in spirit — the customer is choosing the palette and watching the design respond.
 
-Fill regions are consciously limited to 2-3 per shape. The brief allows "many (per-balloon control)" but I'm advocating for the minimum level. More than 3 fill regions per shape creates cognitive overload on a 375px screen — the picker would have to reopen for every single balloon. The 2-3 zone approach gives the feel of customization without the burden of configuration.
+For **Backdrops**, the tap-region UX is preserved intact: two named SVG regions (background clusters + pattern clusters) are genuinely tappable because each corresponds to real construction zones in the cluster grid.
+
+For **Garlands** (organic, doublet-on-strip), the customer picks a style (Solid / Two-tone / Ombré / Multi-color blend) and assigns colors to slots; the illustration shows a randomized but constraint-compliant preview (no-touching-twins rule applied).
+
+The 2-screen mockup (02-color-one.html) shows a Backdrop as the demonstration shape — the tap-region mechanic is fully valid there. The REASONING note below covers how this extends to other shapes.
+
+---
+
+The arch/column/garland illustrations in the coloring screen show the **result** of the customer's color choices, not tappable regions. The customer interacts with the color slot chips, not directly with the SVG. This keeps the "coloring book" feel (you see the design fill with your colors) without pretending the customer is painting individual balloons.
+
+**Why this approach (citation):** The Pigment coloring app (RESEARCH-NOTES Source 7) validates the two-step region-activation mechanic: the review describes "tap a section of an illustration to activate the 'color-inside-the-lines' feature, which highlights the spot so that it is the only part of the illustration that will be affected." This confirms that tap → activate/highlight is an established, intuitive pattern. Precision note: after activation, Pigment uses freeform brush strokes; my design adapts this to swatch-tap for instant flat fill. The citation supports step one (tap to activate and isolate a region). For Backdrop, both steps apply directly. For Arch/Column/Garland, I use a color-slot chip as the activation surface instead of an SVG region — same two-step structure, different tap target.
+
+Fill regions are consciously limited to 2-3 per shape for Backdrops. For Arches/Columns: 2 slots for Swirl (main + accent), up to 4 for Layered. For Garlands: style determines the slot count (Solid=1, Two-tone=2, Ombré=2-3, Multi-color=3-4). This keeps cognitive load manageable on a 375px screen.
 
 ---
 
@@ -67,19 +80,24 @@ The CTA opens a pre-filled inquiry form with the design description embedded in 
 
 The brief explicitly says not to design the persistence mechanic — just show what "captured" looks like. The summary screen achieves that.
 
-**Inquiry payload specification (from Proxy Loop 1-2):**
+**Inquiry payload specification (Round 2 update — PRODUCT-DETAILS.md §4):**
 
-The pre-filled design notes field includes hex codes alongside color names. Format:
+Color name is the primary supplier-actionable identifier. "Reflex Champagne" is a distinct SKU from "Champagne" or "Pastel Yellow." Jeff orders against names; his supplier call maps names to inventory. Hex codes in the catalog are not yet sourced — Jeff will provide Pantone/hex mappings later. The tool's hex values are approximations used for visual rendering in the picker only.
+
+The pre-filled design notes field therefore shows names as primary, with approximate hex as a parenthetical visual aid:
 
 ```
-Column: Lavender (#C3B1E1) + Blush (#F4A0A0)
-Balloon Arch: Coral (#FF6B6B) + Champagne (#F7E7CE)
-Backdrop: Mint (#88FED0) + Sage (#9DC08B)
+Column: Dusk Lilac + Blush
+Balloon Arch: Raspberry + Reflex Champagne
+Backdrop: Empowermint + Eucalyptus
+(Hex approximations for visual reference only — Jeff orders by color name)
 ```
 
-Color names alone are ambiguous to a balloon supplier — "Coral" maps to multiple product SKUs. The hex code gives Jeff (and his supplier) a precise reference. The JS that builds this string iterates the stage pieces array: for each piece, `${piece.label}: ${piece.colors.map(c => c.name + ' (' + c.hex + ')').join(' + ')}`. This is the same data already held in the client-side `DesignStudio.stagePieces` state object — no additional work at form-submit time.
+The JS that builds this string iterates the stage pieces array: for each piece, `piece.label + ': ' + piece.colors.map(c => c.name).join(' + ')`. Hex is stored in client state for rendering the swatch dots in the summary; it is not included in the inquiry payload text. If Jeff wants to cross-reference the visual, the approximate hex can appear in a separate "for reference" line.
 
-For the V1 mailto path (single shape, no stage), the format simplifies to: `Balloon Arch: Coral (#FF6B6B) [main] + Champagne (#F7E7CE) [accent]` — bracket-labeling the region so Jeff knows which color goes where on the shape. The mailto body is URL-encoded from this string.
+For the V1 mailto path (single shape, no stage), the format simplifies to: `Balloon Arch: Raspberry [main] + Reflex Champagne [accent]` — bracket-labeling the region so Jeff knows which color goes where. The mailto body is URL-encoded from this string.
+
+**Credit:** C3's dual-audience design card framing (FIELD-AT-ROUND-1.md) prompted this correction — the name-first requirement was present in the real product spec but my Loop 1-2 reply had prioritized hex. C3 had the right instinct from Round 1: the inquiry text must be supplier-readable without translation.
 
 **Stage 2 inquiry enhancements:**
 
@@ -95,13 +113,17 @@ Two items worth flagging for Stage 2, both requiring state that doesn't exist in
 
 After the customer finishes coloring their first piece (e.g., a column), the composition stage shows their column plus **one empty placeholder slot** with a dashed border and a gentle label: "Something that belongs next to this?"
 
-Below the placeholder, 2-3 shape suggestions appear as small illustration chips — the shapes most commonly paired with whatever they just colored. For a column: "Arch" and "Garland" appear. Each chip shows the suggestion in *their current colors* — the column's coral-and-gold palette applied to the arch illustration.
+Below the placeholder, 2-3 shape suggestions appear as small illustration chips — the shapes most commonly paired with whatever they just colored. For a column: "Arch" and "Garland" appear. Each chip shows the suggestion in *their current colors* — the column's palette applied to the arch illustration.
 
-This is the key move: **the suggestion already shows their colors**. The customer doesn't see a blank "Add an Arch?" prompt — they see *their arch* waiting to be confirmed. The discovery mechanic works because it collapses the gap between "what I could add" and "what this would look like."
+This is the key move: **the suggestion already shows their colors AND uses their real color names.** The customer doesn't see a blank "Add an Arch?" prompt — they see *their arch* waiting to be confirmed, with the color name labels showing "Raspberry + Reflex Champagne." The discovery mechanic works because it collapses the gap between "what I could add" and "what this would look like" AND because it shows the customer that the system already knows their palette by name, not just by visual approximation.
+
+**Round 2 sharpening of the mechanic:** The color inheritance chips are rendered via JS: when the upsell screen loads, it reads the most recently completed piece's color assignments (`data-color-name` and `data-color-hex` attributes stored on the region chips by `DesignStudio.selectColor()`), then sets the `fill` attributes on the suggestion SVGs to those hex values and the dot labels to those names. The customer sees their exact named colors reflected back in the suggestion. The upsell copy reads: "These pair beautifully with your Raspberry + Reflex Champagne." — using the catalog names, not generic "your colors."
 
 **Why this works (first-principles reasoning):** Color inheritance — showing a suggested piece already rendered in the customer's in-progress palette — is a design invention, not a pattern sourced from the research. Fanfaire variants (Source 14) show Jeff's pre-made design alternatives, not a customer's live palette projected onto new pieces. Gemar Creator presets (Source 4) are starting-point compositions the customer then modifies from zero. Neither source describes this mechanic.
 
-The reasoning that makes it defensible without a citation: the gap between "imagining what this would look like" and "deciding to add it" is the abandonment point. Showing a blank arch chip next to a colored column asks the customer to do mental work. Showing a coral-and-champagne arch chip — already matching their column — collapses that gap. The suggestion looks like it already belongs, because it does. This is a Stage 2 feature (see Q6), not V1 — it requires the tool to hold the customer's palette choices in memory and apply them to untouched shape templates at the moment of suggestion.
+The reasoning that makes it defensible without a citation: the gap between "imagining what this would look like" and "deciding to add it" is the abandonment point. Showing a blank arch chip next to a colored column asks the customer to do mental work. Showing a Raspberry-and-Reflex-Champagne arch chip — already matching their column, labeled with the names they already chose — collapses that gap. The suggestion looks like it already belongs, because it does. This is a Stage 2 feature (see Q6), not V1 — it requires the tool to hold the customer's named palette choices in memory and apply them to untouched shape templates at the moment of suggestion.
+
+**Bouquet is different (Round 2 correction per PRODUCT-DETAILS.md §2.6):** Bouquets are theme-locked, not palette-customizable in the same sense. The customer browses available themes (Unicorn, Football, Stitch, etc.) — the theme determines the latex palette. Foil colors (Star, Heart, Number shapes) are picker-able within shape-specific palettes. Logo bouquets are the custom-palette exception. The gallery card for Bouquet in the entry screen notes "Pick a theme" rather than inviting region-tap coloring. The upsell suggestion for Bouquet would show the Reflex Gold / Reflex Champagne foil styling (the metallic family being the most broadly complementary), with copy noting "theme and size chosen at inquiry."
 
 On mobile, the suggestion chips appear in a horizontal scroll below the stage. On desktop, they appear as a persistent sidebar panel.
 
