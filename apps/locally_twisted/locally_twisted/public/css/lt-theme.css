@@ -631,7 +631,12 @@ html, body {
 
 .lt-header__utility-left {
   font-family: 'Raleway', sans-serif;
-  font-size: 0.875rem;
+  /* Bumped from 0.875rem (14px) to 1rem (16px) per GL 2026-04-29 —
+   * accessibility + balance with the centered logo. The text wraps
+   * to two lines via an explicit <br> in navbar.html so it visually
+   * matches the right-side cluster (Sign In + Cart). */
+  font-size: 1rem;
+  line-height: 1.4;
   color: var(--lt-soft-gray);
   display: flex;
   align-items: center;
