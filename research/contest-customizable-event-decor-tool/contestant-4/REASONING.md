@@ -88,7 +88,7 @@ The "captured" feeling comes from the composition view itself — seeing 3 color
 
 After a customer colors their first piece (e.g., a column), the "Add a Piece" card at the end of the composition scroll shows a **contextual suggestion** beneath the standard shape list:
 
-> "Columns look great next to a matching arch — add one in your colors?"
+> "Columns look great next to an arch — they pair beautifully. Add one to your design?"
 
 Tapping this suggestion adds an arch to the composition, pre-populated with the same primary and accent colors the customer just chose for their column. They can then adjust the colors independently.
 
