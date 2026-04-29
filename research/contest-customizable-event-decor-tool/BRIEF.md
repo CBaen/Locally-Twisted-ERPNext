@@ -136,7 +136,7 @@ GL named this directly: **"They cannot rely on their own training data."** The c
 3. **Color picker UX research for 50+ swatches** — when does a flat grid of swatches stop working? How do real design tools (Figma, Canva, Adobe) handle large palettes on mobile? URLs required (find UX studies, design system docs, or actual product screenshots).
 4. **Multi-piece composition patterns** — Pinterest pins, scrapbook apps, wedding-planning mood-board tools, Canva. How does a customer arrange multiple pieces without it feeling like a "design tool" in the intimidating sense? URLs required.
 5. **Mobile-first interactive SVG patterns** — what works at 375px width with touch input? What breaks? URLs required.
-6. **Frappe website asset capabilities** — confirm what you're designing within. Can you embed inline SVG in a Web Page record? Can `web_include_css` carry the CSS? Use the `mcp__plugin_context7_context7__query-docs` tool to fetch live Frappe docs on website rendering. URLs required.
+6. **Frappe website asset capabilities** — confirm what you're designing within. Can you embed inline SVG in a Web Page record? Can `web_include_css` carry the CSS? `WebFetch` against `https://frappeframework.com/docs/v15/user/en/website` and the relevant subpages. URLs required.
 
 ### How research figures into the deliverable
 
@@ -148,8 +148,8 @@ GL named this directly: **"They cannot rely on their own training data."** The c
 ### Tools available for research
 
 - `WebSearch` — find sources
-- `WebFetch` — read sources end-to-end
-- `mcp__plugin_context7_context7__query-docs` + `mcp__plugin_context7_context7__resolve-library-id` — for library/framework documentation (Frappe, jQuery, SVG specs)
+- `WebFetch` — read sources end-to-end (use this for Frappe docs at `frappeframework.com/docs/v15/user/en/website`)
+- If a `context7` or similar docs MCP is available in your tool list, you may use it — but don't depend on it; WebFetch covers the same ground.
 
 ---
 
