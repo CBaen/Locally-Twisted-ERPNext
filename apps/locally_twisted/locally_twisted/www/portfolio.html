@@ -135,7 +135,7 @@
     <div class="lt-cta__inner">
         <h2 id="lt-portfolio-cta-heading" class="lt-cta__heading">Something else in mind?</h2>
         <p class="lt-cta__body">
-            The look book is a sample of the range &mdash; not a menu. If you're imagining
+            The portfolio is a sample of the range &mdash; not a menu. If you're imagining
             something you don't see here, that's exactly the conversation Jeff is built for.
         </p>
         <a href="/book" class="lt-cta__button">
@@ -144,6 +144,31 @@
         </a>
     </div>
 </section>
+
+{# --- Lightbox modal (single instance, reused for every card) --- #}
+<div class="lt-portfolio-modal"
+     data-portfolio-modal
+     hidden
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="lt-portfolio-modal-title">
+    <div class="lt-portfolio-modal__backdrop" data-modal-close aria-hidden="true"></div>
+    <div class="lt-portfolio-modal__panel" role="document">
+        <button type="button"
+                class="lt-portfolio-modal__close"
+                data-modal-close
+                aria-label="Close photo">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <img class="lt-portfolio-modal__image" data-modal-image src="" alt="">
+        <div class="lt-portfolio-modal__caption">
+            <p class="lt-portfolio-modal__category" data-modal-category></p>
+            <h2 id="lt-portfolio-modal-title"
+                class="lt-portfolio-modal__title"
+                data-modal-title></h2>
+        </div>
+    </div>
+</div>
 
 {# --- ItemList JSON-LD schema (validates against schema.org) --- #}
 <script type="application/ld+json">
