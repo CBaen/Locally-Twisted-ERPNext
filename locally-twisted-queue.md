@@ -23,15 +23,19 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 
 **Remaining (in priority order):**
 
-- [P0] **Real-card end-to-end test of the new Stripe Checkout Session flow.** Customer fills `/checkout?item=number-balloon-columns&qty=1` (or any Website Item) → form → redirected to `checkout.stripe.com` (NOT Frappe's `/stripe_checkout` anymore) → enter `4242 4242 4242 4242` + any future expiry + any CVC + any zip → land on `/thank-you?order=SAL-ORD-...`. Verify in desk after: SO status = "To Deliver and Bill" with linked Payment Entry, PR status = "Paid". **2026-04-29 closeout: the migration to Checkout Sessions shipped + the `/payment-success` route override shipped + server-side reconciliation shipped. ALL my checks were curl + Playwright + simulated session_id. The real card test is GL's next move.** Stripe listener is in this Claude Code session's background; closing the session stops it but the demo flow doesn't depend on the listener (success-page reconciliation handles it).
-- [P0] **Receipt email (transactional only).** Email Template `LT Order Receipt` (Jinja for items/total/order ID) + Notification on `Payment Entry` `on_submit` (recipient = customer email). NO marketing in receipt — CAN-SPAM safe-harbor. Marketing opt-in (already a Custom Field on Customer) handled separately.
-- [P0] **Slice 10 — `/book` form page.** Primary inquiry conversion form (45-field Lead schema). The hero CTA + closing CTA + every service-page CTA points here; currently 404. Was DEFERRED 2026-04-29 when guest checkout took precedence.
+- [P0] **Slice 10 — `/book` form page.** Primary inquiry conversion form (45-field Lead schema). The hero CTA + closing CTA + every service-page CTA points here; currently 404. Was DEFERRED 2026-04-29 when guest checkout took precedence; deferred AGAIN 2026-04-29 (later) when guest cart Path B + Stripe Link kill + cascade work landed. **NEXT major build.**
 - [P0] **Spec table data on BTFP service cards.** Currently `Lorem ipsum` placeholders for BEST AT / DURATION / TEAM SIZE-or-ARTISTS / GOOD FOR. Jeff needs to confirm the actual numbers/lists. Replace lorem when confirmed.
+- [P0] **`/privacy` page (Privacy Policy)** — required by Stripe for live mode activation. Currently `https://example.com/privacy-policy` placeholder in Stripe Dashboard. Build the page, point Stripe Dashboard's "Privacy policy URL" field at it, then update the in-site form link targets.
+- [P0] **`/terms-of-service` page (Terms of Service)** — required by Stripe for live mode activation. Currently `https://example.com/terms-of-service` placeholder. Pair with `/privacy` for attorney pass.
 - [P1] **Slice 8 — Service category pages.** `/services/<event-type>` × 5 (Corporate, Weddings, Birthdays, Schools, Seasonal). Each ends with inquiry CTA pre-filling `/book` with the category.
 - [P1] **Slice 9 — Color Chart page.** `/color-chart` — static reference, all 70 balloon colors with names. Answers Jeff's "customers want to see colors" instinct without a configurator. Visual swatch grid + print-friendly stylesheet.
-- [P1] **Multi-item cart support for guest checkout.** `/checkout` is currently single-item (`?item=<code>&qty=<n>`). Webshop has a working multi-item cart at `/cart`; the "Checkout" button there should pass cart contents to `/checkout` as JSON. Refactor `submit_guest_order` to accept multiple items.
-- [P1] **Sample data for backend tour.** Before Jeff demo: a few realistic Lead records, one paid Sales Order, one upcoming event. Lets Jeff click around the desk and see the system in motion.
+- [P1] **Sample data for backend tour.** Before Jeff demo: a few realistic Lead records, one or two completed orders, one upcoming event. Lets Jeff click around the desk and see the system in motion.
 - [P2] **Slice 13 — Blog framework + 2-3 first posts.** "Kindergarten Teacher" voice. Deferrable; not on demo critical path. **When this ships, the homepage's `HERO_CYCLING_TITLES` list should be replaced with a `frappe.get_list("Blog Post", ...)` call so real blog post titles cycle in the hero.**
+
+**DONE 2026-04-29 (guest-cart + cascade session) — DELETED FROM QUEUE:**
+- ~~Real-card end-to-end test~~ — GL completed `4242` purchase for SAL-ORD-2026-00019.
+- ~~Receipt email~~ — shipped via `_send_receipt_email` in `payment_success.py`. Plus operator notification + welcome email + Sales Invoice creation. Email Account configured.
+- ~~Multi-item cart support~~ — full localStorage-backed cart shipped (Path B). `/cart` is LT-owned; `/checkout` accepts items_json; `submit_guest_order` builds multi-line SO.
 
 **Already DONE 2026-04-27:**
 - Slice 6b — Refund Policy (`/refund-policy`) + FAQ (`/faq`). Both with accordion structure. Source: legal-interview-answers Part 2C + deposits.md + 6 confirmed policy files.
