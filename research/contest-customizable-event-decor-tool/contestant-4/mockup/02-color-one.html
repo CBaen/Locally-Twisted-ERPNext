@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Color Your Arch — Design Studio | Locally Twisted</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Inline styles for this screen's SVG interaction feedback */
+    .fill-region {
+      cursor: pointer;
+      transition: opacity 0.15s ease, filter 0.15s ease;
+    }
+    .fill-region:hover {
+      filter: brightness(0.92);
+    }
+    .fill-region.active {
+      filter: drop-shadow(0 0 4px rgba(0,0,0,0.3));
+    }
+    /* Pulse animation for first-time entry highlight */
+    @keyframes pulse-region {
+      0%   { opacity: 1; }
+      50%  { opacity: 0.7; }
+      100% { opacity: 1; }
+    }
+    .fill-region.pulse {
+      animation: pulse-region 1.2s ease-in-out 2;
+    }
+
+    /* Color indicator on canvas */
+    .canvas-label {
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255,255,255,0.92);
+      border: 1px solid #E8E8E8;
+      border-radius: 100px;
+      padding: 5px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #595A5C;
+      white-space: nowrap;
+      backdrop-filter: blur(4px);
+    }
+
+    /* Desktop layout: split canvas + controls */
+    @media (min-width: 768px) {
+      .desktop-split {
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        flex: 1;
+      }
+      .desktop-split__canvas {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #FAFAFA;
+        padding: 40px;
+        min-height: 400px;
+      }
+      .desktop-split__canvas svg {
+        max-width: 400px;
+        max-height: 340px;
+      }
+      .desktop-split__controls {
+        width: 320px;
+        border-left: 1px solid #E8E8E8;
+        display: flex;
+        flex-direction: column;
+        background: white;
+        overflow-y: auto;
+      }
+    }
+  </style>
+</head>
+<body data-page="color-one">
+
+  <div class="lt-page">
+
+    <!-- Header -->
+    <header class="lt-header">
+      <a href="01-entry.html" class="lt-header__back">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M10 3L5 8l5 5"/>
+        </svg>
+        Shapes
+      </a>
+      <span class="lt-header__title">Balloon Arch</span>
+      <a href="04-composition.html" style="font-size:13px; font-weight:600; color:#008080; text-decoration:none; white-space:nowrap;">
+        View Design →
+      </a>
+    </header>
+
+    <div class="desktop-split">
+
+      <!-- Canvas area -->
+      <div class="desktop-split__canvas color-stage__canvas" id="canvas-area" style="position:relative;">
+
+        <span class="canvas-label" id="tap-hint">Tap a region to color it</span>
+
+        <!-- Main interactive SVG — Balloon Arch with named fill regions -->
+        <svg id="arch-svg" viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg"
+             role="img" aria-label="Balloon arch illustration with colorable regions">
+
+          <!-- Arch body — primary fill region -->
+          <!-- Using a thick stroke path to represent the arch structure -->
+          <!-- Each balloon cluster is its own group for clarity -->
+
+          <!-- Primary balloons (main color) -->
+          <g class="fill-region" data-region="primary" id="region-primary" role="button" aria-label="Main balloon color">
+            <!-- Left column base -->
+            <circle cx="36"  cy="190" r="22" fill="#E8A0A0"/>
+            <circle cx="34"  cy="148" r="20" fill="#E8A0A0"/>
+            <!-- Left rising -->
+            <circle cx="56"  cy="108" r="20" fill="#E8A0A0"/>
+            <!-- Crown -->
+            <circle cx="92"  cy="72"  r="22" fill="#E8A0A0"/>
+            <circle cx="160" cy="52"  r="24" fill="#E8A0A0"/>
+            <circle cx="228" cy="72"  r="22" fill="#E8A0A0"/>
+            <!-- Right rising -->
+            <circle cx="264" cy="108" r="20" fill="#E8A0A0"/>
+            <circle cx="284" cy="148" r="20" fill="#E8A0A0"/>
+            <!-- Right column base -->
+            <circle cx="284" cy="190" r="22" fill="#E8A0A0"/>
+          </g>
+
+          <!-- Accent balloons (alternate color) -->
+          <g class="fill-region" data-region="accent" id="region-accent" role="button" aria-label="Accent balloon color">
+            <!-- Interspersed accent balloons -->
+            <circle cx="34"  cy="170" r="16" fill="#C3DCF3"/>
+            <circle cx="44"  cy="130" r="17" fill="#C3DCF3"/>
+            <circle cx="72"  cy="90"  r="18" fill="#C3DCF3"/>
+            <circle cx="124" cy="60"  r="19" fill="#C3DCF3"/>
+            <circle cx="196" cy="60"  r="19" fill="#C3DCF3"/>
+            <circle cx="248" cy="90"  r="18" fill="#C3DCF3"/>
+            <circle cx="276" cy="130" r="17" fill="#C3DCF3"/>
+            <circle cx="284" cy="170" r="16" fill="#C3DCF3"/>
+          </g>
+
+          <!-- Ground feet (decorative, no interaction) -->
+          <line x1="36"  y1="210" x2="36"  y2="240" stroke="#C8C8C8" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="36" cy="240" r="4" fill="#C8C8C8"/>
+          <line x1="284" y1="210" x2="284" y2="240" stroke="#C8C8C8" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="284" cy="240" r="4" fill="#C8C8C8"/>
+
+        </svg>
+
+      </div><!-- /canvas -->
+
+      <!-- Controls panel (visible on desktop in sidebar, on mobile below canvas) -->
+      <div class="desktop-split__controls" id="controls-panel">
+
+        <!-- Region selector chips -->
+        <div class="region-selector">
+          <button class="region-chip active" data-region="primary" aria-pressed="true">
+            <span class="region-chip__swatch" id="swatch-primary" style="background: #E8A0A0;"></span>
+            Main Color
+          </button>
+          <button class="region-chip" data-region="accent" aria-pressed="false">
+            <span class="region-chip__swatch" id="swatch-accent" style="background: #C3DCF3;"></span>
+            Accent Color
+          </button>
+        </div>
+
+        <!-- Current color display -->
+        <div style="padding: 16px 20px; border-bottom: 1px solid #E8E8E8;">
+          <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #B0B0B0; margin-bottom: 8px;">
+            Selected Region
+          </div>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div id="active-swatch-preview" style="width:48px; height:48px; border-radius:50%; background:#E8A0A0; border:2px solid #E8E8E8;"></div>
+            <div>
+              <div id="active-color-name" style="font-family:'DM Serif Display',serif; font-size:16px; color:#1A1A1A;">Rose</div>
+              <div id="active-hex-display" style="font-family:'Courier New',monospace; font-size:12px; color:#999;">#E8A0A0</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tap instruction (mobile only) -->
+        <div style="padding: 12px 20px; background: #F0FAF9; border-bottom: 1px solid #D0EDED;">
+          <p style="font-size: 13px; color: #006060; font-weight: 500; line-height: 1.4;">
+            Tap a region on the arch above, or use the chips to switch regions.
+          </p>
+        </div>
+
+        <!-- Quick-pick: show 6 popular colors inline for fast picking without full picker -->
+        <div style="padding: 16px 20px; border-bottom: 1px solid #E8E8E8;">
+          <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #B0B0B0; margin-bottom: 10px;">
+            Quick Colors
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+            <button class="quick-swatch" data-hex="#FFFFFF" title="White"
+              style="width:36px;height:36px;border-radius:50%;background:#FFFFFF;border:2px solid #D0D0D0;cursor:pointer;"></button>
+            <button class="quick-swatch" data-hex="#E8A0A0" title="Rose"
+              style="width:36px;height:36px;border-radius:50%;background:#E8A0A0;border:2px solid transparent;cursor:pointer;"></button>
+            <button class="quick-swatch" data-hex="#F4DFD7" title="Blush"
+              style="width:36px;height:36px;border-radius:50%;background:#F4DFD7;border:2px solid transparent;cursor:pointer;"></button>
+            <button class="quick-swatch" data-hex="#C3DCF3" title="Soft Blue"
+              style="width:36px;height:36px;border-radius:50%;background:#C3DCF3;border:2px solid transparent;cursor:pointer;"></button>
+            <button class="quick-swatch" data-hex="#008080" title="Teal"
+              style="width:36px;height:36px;border-radius:50%;background:#008080;border:2px solid transparent;cursor:pointer;"></button>
+            <button class="quick-swatch" data-hex="#D4A017" title="Gold"
+              style="width:36px;height:36px;border-radius:50%;background:#D4A017;border:2px solid transparent;cursor:pointer;"></button>
+            <button class="quick-swatch" data-hex="#B8FF9E" title="Lime"
+              style="width:36px;height:36px;border-radius:50%;background:#B8FF9E;border:2px solid transparent;cursor:pointer;"></button>
+            <button class="quick-swatch" data-hex="#1A1A1A" title="Black"
+              style="width:36px;height:36px;border-radius:50%;background:#1A1A1A;border:2px solid transparent;cursor:pointer;"></button>
+          </div>
+        </div>
+
+        <!-- Full palette button -->
+        <div style="padding: 16px 20px; border-bottom: 1px solid #E8E8E8;">
+          <button id="open-picker-btn" class="btn btn--secondary btn--full">
+            See All 50+ Colors →
+          </button>
+        </div>
+
+        <!-- Add to composition / next -->
+        <div style="padding: 20px; display: flex; flex-direction: column; gap: 10px; margin-top: auto;">
+          <a href="04-composition.html" class="btn btn--primary btn--full">
+            Add to Design
+          </a>
+          <a href="04-composition.html" class="btn btn--text" style="text-align:center;">
+            View My Design (1 piece)
+          </a>
+        </div>
+
+      </div><!-- /controls -->
+
+    </div><!-- /desktop-split -->
+
+  </div><!-- /lt-page -->
+
+  <!-- Color picker bottom sheet (see 03-picker for full standalone view) -->
+  <div id="picker-overlay" class="picker-overlay"></div>
+  <div id="picker-sheet" class="picker-sheet">
+    <div class="picker-sheet__handle"></div>
+    <div class="picker-sheet__region-label">
+      <div class="current-swatch" style="background:#E8A0A0;"></div>
+      <span id="picker-region-label">Choosing: Main Color</span>
+    </div>
+
+    <!-- Recently used -->
+    <div class="picker-recents">
+      <div class="picker-recents__label">Recently Used</div>
+      <div class="picker-recents__row">
+        <!-- Populated by JS -->
+        <div class="swatch-circle empty"></div>
+        <div class="swatch-circle empty"></div>
+        <div class="swatch-circle empty"></div>
+        <div class="swatch-circle empty"></div>
+        <div class="swatch-circle empty"></div>
+        <div class="swatch-circle empty"></div>
+        <div class="swatch-circle empty"></div>
+        <div class="swatch-circle empty"></div>
+      </div>
+    </div>
+
+    <!-- Full palette -->
+    <div class="picker-palette">
+      <div class="picker-palette__label">All Balloon Colors</div>
+      <div class="swatch-grid">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <div style="padding: 8px 20px 16px;">
+      <button id="close-picker-btn" class="btn btn--secondary btn--full">Done</button>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="script.js"></script>
+  <script>
+    // Page-specific init
+    $(document).ready(function() {
+      // Track current active region
+      var activeRegion = 'primary';
+      var regionColors = { primary: '#E8A0A0', accent: '#C3DCF3' };
+      var regionNames  = { primary: 'Rose',    accent: 'Soft Blue' };
+
+      function applyColor(region, hex) {
+        regionColors[region] = hex;
+        // Apply fill to SVG regions
+        $('#region-' + region + ' circle').attr('fill', hex);
+        // Update chip swatch
+        $('#swatch-' + region).css('background', hex);
+        // Update preview
+        $('#active-swatch-preview').css('background', hex);
+        $('#active-hex-display').text(hex);
+        // Find color name from catalog
+        var found = LT_COLORS.find(function(c) { return c.hex.toUpperCase() === hex.toUpperCase(); });
+        $('#active-color-name').text(found ? found.name : hex);
+        // Update current-swatch in picker
+        $('.current-swatch').css('background', hex);
+      }
+
+      function setActiveRegion(region) {
+        activeRegion = region;
+        $('.region-chip').removeClass('active').attr('aria-pressed', 'false');
+        $('.region-chip[data-region="' + region + '"]').addClass('active').attr('aria-pressed', 'true');
+        // Update preview to current color of this region
+        applyColor(region, regionColors[region]);
+        // Update picker label
+        $('#picker-region-label').text('Choosing: ' + (region === 'primary' ? 'Main Color' : 'Accent Color'));
+      }
+
+      // Region chip click
+      $('.region-chip').on('click', function() {
+        setActiveRegion($(this).data('region'));
+        openPicker();
+      });
+
+      // SVG region click — activate region and open picker
+      $('.fill-region').on('click', function() {
+        var region = $(this).data('region');
+        setActiveRegion(region);
+        // Remove pulse animation if showing
+        $(this).removeClass('pulse');
+        openPicker();
+      });
+
+      // Quick swatch click
+      $('.quick-swatch').on('click', function() {
+        var hex = $(this).data('hex');
+        applyColor(activeRegion, hex);
+        DesignState.addRecent(hex);
+      });
+
+      // Open picker button
+      $('#open-picker-btn').on('click', function() { openPicker(); });
+      // Close button
+      $('#close-picker-btn').on('click', function() { closePicker(); });
+      // Overlay click closes
+      $('#picker-overlay').on('click', function() { closePicker(); });
+
+      function openPicker() {
+        ColorPicker.open(regionColors[activeRegion], function(hex) {
+          applyColor(activeRegion, hex);
+        });
+        // Manually init if not done yet
+        if (!ColorPicker.$sheet) {
+          ColorPicker.init();
+          ColorPicker.open(regionColors[activeRegion], function(hex) {
+            applyColor(activeRegion, hex);
+          });
+        }
+      }
+
+      function closePicker() {
+        ColorPicker.close();
+      }
+
+      // Init ColorPicker
+      ColorPicker.init();
+
+      // Pulse primary region on load to indicate it's tappable
+      setTimeout(function() {
+        $('#region-primary').addClass('pulse');
+      }, 600);
+
+      // Update picker label when a swatch is hovered/focused on desktop
+      $(document).on('mouseenter', '.swatch-item', function() {
+        var hex = $(this).data('hex');
+        var found = LT_COLORS.find(function(c) { return c.hex.toUpperCase() === hex.toUpperCase(); });
+        if (found) {
+          $(this).find('.hex-badge').css('opacity', 1);
+        }
+      }).on('mouseleave', '.swatch-item', function() {
+        $(this).find('.hex-badge').css('opacity', 0);
+      });
+    });
+  </script>
+</body>
+</html>
