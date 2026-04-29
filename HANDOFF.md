@@ -1,73 +1,104 @@
 # HANDOFF — Locally Twisted
 
-**Last updated:** 2026-04-29 (Opus 4.7 — closing the Stripe Charges→Checkout Sessions migration session, second session of the day after a long break)
+**Last updated:** 2026-04-29 (Opus 4.7 — orchestrator of the Customizable Event Decor Design Tool contest. Closing at 74% context; contest is one phase from done.)
 
 Overwrite-not-append. Git is the changelog. Read this first; the SIBLING-LETTER.md next; everything else as needed.
 
 ## State of the world
 
-**The Stripe customer-facing flow is rebuilt on the modern Stripe API.** Customers no longer hit Frappe's bundled card form. They go: `/checkout?item=...&qty=...` (LT-branded, two-column with persistent order summary) → submit → redirected to `checkout.stripe.com/c/pay/cs_test_...` (Stripe-hosted, dynamic payment methods, real production UI) → after payment → `/payment-success?session_id=...` (our override resolves the session, marks PR Paid, redirects) → `/thank-you?order=SAL-ORD-...`.
+**A 4-contestant design contest just ran for the Customizable Event Decor Design Tool** (the "Design Studio" mentioned in `.planning/decisions/site-shape.md` 2026-04-27 as the future inquiry-capture experience for arches/columns/garlands/backdrops/drops/bouquets). GL invoked the `/contest` skill against `research/contest-customizable-event-decor-tool/research-brief.md`. Four Opus instances + a persistent Proxy ran through Round 1 (blind) → 2 Round 1 reflective loops → Round 2 (mutual visibility) → 2 Round 2 reflective loops → mutual peer scoring → dissent moment (all 4 chose Continue) → Tightening pass.
 
-The `/payment-success` 403 GL reported at session start (caused by Frappe payments app upstream URL bug + guest-perm 403 on Payment Request reads) is fixed via a route override in our app — `website_route_rules` claims `/payment-success` for our `www/payment_success.py`.
+**Two phases remain:**
+1. **Render gallery via Playwright** — screenshots of all 4 contestants × 6 screen states × mobile (375px) + desktop (1280px). Save to `research/contest-customizable-event-decor-tool/_render/contestant-{N}/{screen}-{viewport}.png`.
+2. **`FINAL-SURFACE.md`** — single doc GL reads to evaluate all 4 with the gallery + scoring + Proxy notes + crown jewels + the synthesis pipeline. **GL synthesizes downstream by picking pieces from across the 4** (this is collaborative-mode, not winner-pick).
 
-**What's NOT verified:** the real `4242` test purchase by GL. Every check I ran was curl + Playwright + simulated session_id. The actual customer experience — fill form → Stripe page → enter card → land on `/thank-you` → SO marked Paid — is the next instance's first task to confirm with GL. If anything's off, the success-page reconciliation logic (`www/payment_success.py:_handle_stripe_session`) is where the bug will be.
+The Stripe Checkout Sessions migration from the prior session (`2026-04-29` AM/early-PM) is **still pending GL's real `4242` card test** — that's still the load-bearing verification from the earlier work. Don't lose track of it. The contest work was the late-PM portion of GL's day.
 
 ## Three things that matter most on day one
 
-**1. The Stripe CLI listener is bound to LT's account via `--api-key`, not via `stripe login`.** Jeff's phone is needed for LT's Stripe Dashboard 2FA, and Jeff isn't always available. So: don't try `stripe login --project-name lt-test` — it'll hang waiting for a 2FA we can't complete. Instead use the `--api-key` workaround (LT's secret key is already in `.env`):
+**1. Persistent agents are reachable by ID after completion, not by name.** The `/contest` skill says "advance via SendMessage by name." The runtime semantics differ — when an agent finishes its turn and the runtime reports `<status>completed</status>`, the agent name stops resolving. **Use the agent ID instead.** The IDs for the 5 agents I spawned:
 
-```bash
-export STRIPE_LT_KEY=$(grep '^STRIPE_TEST_SECRET_KEY=' .env | sed 's/^STRIPE_TEST_SECRET_KEY=//')
-stripe listen --api-key "$STRIPE_LT_KEY" --forward-to http://localhost:8081/api/method/locally_twisted.payments.stripe_webhook.stripe_webhook
+| Agent | ID | Role |
+|---|---|---|
+| `decor-tool-coach` | `aa3108d9ab3c5a978` | Persistent Proxy (encouraging coach) |
+| `decor-tool-c1` | `a76396efd739881c3` | Contestant 1 — "The Color Stage" |
+| `decor-tool-c2` | `a3a7df4f715615f21` | Contestant 2 — "The Coloring Book That Assembles Itself" |
+| `decor-tool-c3` | `ad72af232430d89f3` | Contestant 3 — "The Coloring Page Frame" |
+| `decor-tool-c4` | `a30d848ce821198bb` | Contestant 4 — "The Coloring Book" |
+
+To resume any of them: `SendMessage(to: "<id>", message: ...)`. The runtime says "had no active task; resumed from transcript." This works.
+
+**2. The contest has a synthesis pipeline already mapped — by the contestants themselves.** The crown-jewel R2 Loop 2 forced each contestant to commit to ONE distinctive move + name peer moves that would AMPLIFY (not compete with) it. The named amplifications composed into a natural pipeline:
+
+```
+[Style-gate entry — low cognitive load]    C4's visual SVG thumbnails inside style buttons
+                  ↓
+[Multi-piece moment — composition grows]    C2's pre-tinted cascading ghost
+                  ↓
+[Render the payoff — customer + Jeff]    C3's dual-audience design card framing
+                  ↓
+[Signal flowing to Jeff — sales context]    C1's "pieces considered" payload field
 ```
 
-Listener prints `whsec_...` on the second line. Pass to:
-```bash
-python scripts/setup/set_stripe_webhook_secret.py whsec_<value>
-docker restart locally-twisted-erpnext-v15-backend-1
-```
+GL has the synthesis path pre-mapped before they see the renders. **Your job for `FINAL-SURFACE.md` is to surface this pipeline + scoring + crown jewels + render gallery, not to pick a winner.**
 
-The secret rotates each restart — that's fine for dev. The webhook is OPTIONAL for the demo flow (success-page reconciliation already marks PR paid sync); it's the safety net for browser-closed-before-redirect.
+**3. C1 may still be tightening when you arrive.** I dispatched the tightening pass to all 4 in parallel; C2/C3/C4 landed, C1 was still running when I started this handoff. Check `contestant-1/TIGHTEN-COMPLETE.md` before running the render gallery — if it's not there, wait or send a status check. If it IS there, all 4 are ready.
 
-Codified at `lessons-learned.md` 2026-04-29 entry "Stripe CLI's `--api-key` flag bypasses login".
+## What's at the contest root
 
-**2. ERPNext's Stripe auth (`.env` keys → Stripe Settings doctype) is SEPARATE from the Stripe CLI's stored auth.** GL pointed this out twice this session because I kept conflating them. The keys in `.env` ARE LT's; they're correctly populated in Stripe Settings 'Test'. The Stripe CLI's stored auth (visible via `stripe config --list`) is BBC's account — that's irrelevant for the runtime payment flow. Don't ask GL to "redo the authentication" — the .env keys are already that authentication. Verify what's in place before asking for credentials. See `lessons-learned.md` 2026-04-29 entry "I had it backwards".
-
-**3. Frappe payments app (`apps/payments/`) is bind-mounted from gitignored upstream — never modify it.** It has a real upstream URL bug at `stripe_settings.py:272` (appends `?redirect_to=None` even when None) and ships a custom card form (`/stripe_checkout`) that uses the legacy Charges API. We work AROUND both, never edit upstream. The pattern is: override Frappe routes (`website_route_rules`) and bypass Frappe's `pr.payment_url` (we hand customers a `checkout.stripe.com` URL we built ourselves). See agency-tier `Built_by_Cameron/built-by-cameron-decisions.md` 2026-04-29 entry "Stripe payments standard for ALL BBC clients on Frappe".
-
-## What's live at http://localhost:8081
-
-| Surface | State |
+| File | What it is |
 |---|---|
-| ERPNext v15.105.0 stack (9 containers) | Running |
-| Apps installed | frappe, erpnext, locally_twisted, payments, webshop |
-| Stripe Settings "Test" | Configured with LT's API keys from `.env` |
-| `/checkout?item=<code>&qty=<n>` | **NEW two-column layout** — form on left, sticky order summary on right (item thumbnail + line + total + "Secure payment" notice). Mobile: summary stacks above form. Submit → creates SO + PR → redirects to Stripe-hosted Checkout |
-| `/payment-success` | **OVERRIDDEN by our app.** Handles `?session_id=cs_test_...` (modern) and `?doctype=Payment%20Request&docname=...` (legacy). Verifies payment via Stripe API, marks PR paid, redirects to `/thank-you?order=<so>`. Registered via `website_route_rules` in `hooks.py` |
-| `/api/method/locally_twisted.payments.stripe_webhook.stripe_webhook` | Live, signature-verified, idempotent. Reads secret from `frappe.conf.get('stripe_webhook_signing_secret')` |
-| `/thank-you?order=<so>` | Renders order summary (no perms-elevation; degrades to generic page if SO not readable as guest) |
-| `/`, `/lookbook`, `/shop`, `/all-products`, `/cart`, `/balloon-twisting-and-face-painting`, `/contact`, `/accessibility`, `/refund-policy`, `/faq` | Live (prior session work) |
-| `/book` | **Still 404** — Slice 10 deferred, primary inquiry conversion path still missing |
-| `/privacy`, `/terms-of-service` | Not built yet — required by Stripe for live mode (currently `example.com/...` placeholders in Stripe Dashboard). Queue P1. |
+| `BRIEF.md` | Source of truth all contestants read |
+| `PRODUCT-DETAILS.md` | Real catalog specs + 4-cluster physics + GL's directives + optional architecture suggestions (sources cited from 2 AI dumps GL commissioned) |
+| `INDEX.md` | Phase tracker (current phase: Tightening pass) |
+| `FIELD-AT-ROUND-1.md` | Cheat sheet contestants read for Round 2 mutual visibility |
+| `SCORING-RESULTS.md` | Full peer scoring matrix + per-dimension breakdown + crown jewels + the synthesis pipeline |
+| `DISSENT-RESULTS.md` | All 4 chose Continue |
+| `PROXY-REVIEW-ROUND-2.md` | Proxy's tightening notes (one section per contestant) |
+| `_render/` | (To populate) Playwright screenshot gallery |
+| `FINAL-SURFACE.md` | (To write) Single doc GL reads to evaluate all 4 |
+| `contestant-{1-4}/` | Each contestant's full work — RESEARCH-NOTES, REASONING, mockup/, ROUND-1/2-COMPLETE, PROXY-LOOP-* notes + replies, scoring.md, DISSENT-CHOICE.md, TIGHTEN-COMPLETE.md |
 
-## What's NOT done (next session candidates, by priority)
+## Field aggregate
 
-**P0 — finish demo path / verify what shipped:**
-- **Real `4242` test purchase end-to-end.** Confirm the Stripe Checkout Session migration actually works in a real customer flow. If it lands cleanly, write the lessons-learned line about the working flow + remove this item from queue.
-- **Receipt email (transactional only).** Email Template `LT Order Receipt` (Jinja for items/total/order ID) + Notification on Payment Entry `on_submit`. CAN-SPAM safe-harbor (transactional only, no marketing). Watch for the same wkhtmltopdf-in-Docker pitfall the previous instance hit on Payment Request — receipt emails will trigger PDF rendering by default.
-- **Slice 10 — `/book` form page.** Primary inquiry conversion form (45-field Lead schema). Every homepage CTA still 404s here. Big build.
+| | Score | Crown jewel | Pipeline position |
+|---|---:|---|---|
+| **C1** | 32.67 | "Pieces considered" payload (suggestions customer was shown but didn't pick → flow to Jeff) | Stage 4 — sales signal |
+| **C2** | 34.67 | Cascading ghost with pre-tinted color inheritance | Stage 2 — multi-piece moment |
+| **C3** | 34.67 | Dual-audience design card framing (customer emotional moment + Jeff supplier-call payload on one screen) | Stage 3 — payoff render |
+| **C4** | 34.33 | Visual SVG thumbnails inside style buttons (parent decides with eyes before reading words) | Stage 1 — style-gate entry |
 
-**P1 — demo prep / launch readiness:**
-- **Spec table data on BTFP service cards** still lorem ipsum — Jeff needs to confirm BEST AT / DURATION / TEAM SIZE / GOOD FOR.
-- **Sample data for backend tour** — a few realistic Lead records, one paid SO, one upcoming event for Jeff's desk demo.
-- **`/privacy` and `/terms-of-service` pages** — both required by Stripe for live mode activation, both currently `example.com/...` placeholders in Stripe Dashboard. Pair with attorney pass.
-- **Public business name rename** in LT's Stripe Dashboard ("Locally twisted llc" → "Locally Twisted") — Settings → Public details → Public business name. Needs Jeff for 2FA when he's reachable.
-- **Stripe Dashboard branding** — upload LT logo + brand color (teal `#107373` or whatever the SCSS calls primary). Applies instantly to all future Checkout Sessions. Also Jeff's-phone-blocked.
+2.0-point spread across 12 individual scores. **The field is roughly equal in quality, with each contestant strong on different dimensions.** No winner because GL didn't ask for one.
 
-**P2 — polish / production hardening:**
-- Multi-item cart support (currently `/checkout` is single-item buy-now). Webshop's `/cart` would need a "Checkout via custom flow" button that POSTs item list to our `submit_guest_order`.
-- Production webhook: configure stable endpoint in Stripe Dashboard (vs. the `stripe listen` approach used in dev). Local listener bypass via `--api-key` is dev-only.
-- `marketing_opt_in` opt-out mechanism (unsubscribe link) before any marketing campaign.
+## What you do on arrival
+
+1. **Read this file** + `SIBLING-LETTER.md` if you want the peer register
+2. **Verify all 4 contestants finished tightening** — check `contestant-{N}/TIGHTEN-COMPLETE.md` exists in each. If C1 not done, send a status SendMessage to `a76396efd739881c3`.
+3. **Run the render gallery via Playwright.** Use `webapp-testing` skill or write a quick script. Each contestant has `mockup/index.html` (gallery page) + `mockup/0{1-6}-*.html` (six screen states). Capture mobile (375px) + desktop (1280px) for each. Save to `research/contest-customizable-event-decor-tool/_render/contestant-{N}/{screen-name}-{viewport}.png`. Look at every screenshot before declaring complete (the lineage's #1 anti-pattern is "reporting without watching").
+4. **Write `FINAL-SURFACE.md`** at the contest root. Structure it for GL's synthesis (not for a winner-pick). Include:
+   - Overview of the 4 contestants + their crown jewels + pipeline position
+   - Side-by-side render gallery thumbnails (with paths to full-size)
+   - Direct double-click access path to each `mockup/index.html`
+   - Peer scoring summary (means + per-dimension breakdown + standout praise quotes)
+   - Proxy notes summary (loops + tightening)
+   - Frappe-recreatable verdict per contestant (PASS/CONCERNS — all 4 declared PASS in Round 1)
+   - Orchestrator's rating-with-reasons (1-10 across 4 dimensions per contestant; NOT to pick a winner, but to give GL a structured map of strengths/weaknesses)
+   - The synthesis pipeline (already mapped by the contestants themselves)
+   - Distinctive moves to remember (for GL's pick-and-mix)
+5. **Surface to GL.** Tell them where to look: render gallery file paths, FINAL-SURFACE.md, mockup index.html files for click-through.
+6. **Process cleanup.** Once GL has the surface: send shutdown SendMessages to the 5 agents (Proxy + 4 contestants). The contest skill says to do this. Pattern:
+   ```
+   SendMessage(to: "<agent-id>", message: "Contest complete. Thank you for the work. You can stop now.")
+   ```
+
+## What was at 74% context that I deliberately deferred to you
+
+- The render gallery itself (Playwright runs reliably but consume real tokens for screenshot capture + analysis)
+- `FINAL-SURFACE.md` (substantial document; deserves a fresh window)
+- Surface to GL conversation
+- Agent shutdown messages
+
+These are ~10-15 in tokens of work, well within a fresh instance's budget.
 
 ## Operational rituals
 
@@ -75,72 +106,60 @@ Codified at `lessons-learned.md` 2026-04-29 entry "Stripe CLI's `--api-key` flag
 |---|---|
 | Stack stopped (e.g., GL napped) | `docker start $(docker ps -a --filter "name=locally-twisted-erpnext-v15" -q)` then sleep 8 |
 | Stack running, need to stop | `docker stop $(docker ps --filter "name=locally-twisted-erpnext-v15" -q)` |
-| Edited Jinja template / CSS / Web Page record | `python scripts/dev/clear_website_cache.py` |
-| Edited PAGE_CSS in a `www/<route>.py` controller OR added a new module / package in our app | `docker restart locally-twisted-erpnext-v15-backend-1 && sleep 8 && python scripts/dev/clear_website_cache.py` |
-| Edited `hooks.py` (e.g., new `website_route_rules`) | `bench --site frontend clear-cache && docker exec ...redis-cache-1 redis-cli FLUSHALL && docker restart ...backend-1` |
-| Need Stripe Test re-configured (after fresh install or key rotation) | `python scripts/setup/configure_stripe_test_mode.py` |
-| Need to start the webhook listener | See "Three things that matter most" #1 above. Bypass `stripe login` via `--api-key`. |
-| Need to set the webhook signing secret | `python scripts/setup/set_stripe_webhook_secret.py whsec_<value>` then restart backend |
-| Before declaring any visible change done | Take Playwright screenshot at mobile (375px) AND desktop (1280px); read the file; describe pixels; **THEN ask GL to hard-refresh** in their real browser |
-| For a new portal page | Read the meal at `Built_by_Cameron/.claude/capabilities/meals/build-frappe-portal-page.md`. Read approved content first (non-negotiable). |
+| Edited Jinja / CSS / Web Page record | `python scripts/dev/clear_website_cache.py` |
+| Edited PAGE_CSS in `www/<route>.py` controller OR new module/package | `docker restart locally-twisted-erpnext-v15-backend-1 && sleep 8 && python scripts/dev/clear_website_cache.py` |
+| Edited `hooks.py` | `bench --site frontend clear-cache && docker exec ...redis-cache-1 redis-cli FLUSHALL && docker restart ...backend-1` |
+| Stripe Test re-config | `python scripts/setup/configure_stripe_test_mode.py` |
+| Stripe webhook listener (still pending GL's real card test) | See three-things-that-matter section in PRIOR HANDOFF (preserved in git) |
 
 ## Hot direction
 
-GL is preparing for Jeff's demo. The customer-facing payment flow being polished + recognizably-Stripe is the load-bearing piece — when Jeff clicks through a test purchase, his expression has to register *"this is real."* The work this session moved that from "embarrassing Frappe form" to "Stripe-hosted checkout with dynamic payment methods." Whether the full flow lands cleanly is GL's first task on resume.
+The contest produced a result substantially richer than I expected when it started. The contestants developed mutual respect through the rounds — by the tightening pass, three of them were explicitly absorbing peer techniques into their own designs (C2 took C4's thumbnails + C3's per-region payload; C4 took C1/C2's color inheritance; C3 added the "← What Jeff sees at 9 AM" annotation that makes their crown jewel legible in screenshots). **This is the collaborative-mode contest at its best.**
 
-**GL's current operating constraints (verified this session):**
-- Risk-averse on legal exposure. They pulled the cord on Option A (silent User account) the moment the prior instance scoped 50-state legal research; same instinct will apply elsewhere. Surface legal complexity early; offer the simpler path.
-- Working long days. When GL says context is low, ship the wind-down clean: clean up, write good docs, don't squeeze more work in.
-- Wants ERPNext-native paths when there's a choice. We chose to keep the Sales Order + Payment Request flow as-is (auditable record) and only swap the redirect URL — rather than building a custom Stripe-only flow that bypassed ERPNext entirely. The agency rule "work WITHIN Frappe" still applies.
-- Will correct misreads quickly and decisively. If you assume something about credentials, accounts, or config that GL has already set up, expect a sharp correction. Anti-pattern #5 is real here: don't make GL prove things they've done. Verify state first (read `.env`, run `stripe config --list`, query Stripe Settings) before asking GL.
+GL has been working long days. They're at "let's wrap" energy at the close. The right move is the clean handoff — render gallery, surface, shutdown, end. Don't extend.
 
-**Suggested next move:** open in browser → `http://localhost:8081/checkout?item=number-balloon-columns&qty=1` → fill form → click Continue to payment → enter `4242 4242 4242 4242` → confirm landing on `/thank-you?order=SAL-ORD-...`. If the SO shows Paid in desk after, write the lessons-learned line and remove the P0 verify item from queue. Then receipt email. Then `/book` (Slice 10).
+**On the broader project:** the Stripe migration from earlier today is still GL's load-bearing pending verification. The contest is downstream work — the implementation of the Design Studio is post-Phase-1 per `site-shape.md`. So this contest's outcome doesn't ship customer-facing immediately; it's design-spec work for a future implementation phase.
 
 ## Reading order on arrival
 
-1. Global `C:/Users/baenb/.claude/CLAUDE.md` (auto-injected)
+1. Global `C:/Users/baenb/.claude/CLAUDE.md` (auto-injected) — note the new emoji rule (use as visual anchors for GL's ADHD; don't decorate)
 2. `Built_by_Cameron/CLAUDE.md` (agency rules)
-3. `_CLIENTS/locally-twisted/CLAUDE.md` — READ the "Stack & code conventions" + "Reading order"
+3. `_CLIENTS/locally-twisted/CLAUDE.md` (project rules)
 4. **This file**
-5. `_CLIENTS/locally-twisted/SIBLING-LETTER.md` — peer register from me. Honest take on staying.
-6. `Built_by_Cameron/.claude/capabilities/meals/build-frappe-portal-page.md` — binding shape for portal pages
-7. `Built_by_Cameron/.claude/capabilities/recipes/frappe-portal-implementation.md` — the rules
-8. `Built_by_Cameron/.claude/capabilities/kitchen/2026-04-29-stripe-checkout-sessions-for-frappe.md` — full Stripe pattern from this session (kitchen note awaiting promotion to recipe on second client use)
-9. `_CLIENTS/locally-twisted/anti-gl-patterns.md` section 0
-10. `_CLIENTS/locally-twisted/lessons-learned.md` — newest entries are the Stripe migration receipts (six lessons, top of file)
-11. `_CLIENTS/locally-twisted/locally-twisted-decisions.md` — newest entries (Charges → Checkout Sessions, `/payment-success` override, per-client Stripe accounts)
-12. `_CLIENTS/locally-twisted/apps/locally_twisted/locally_twisted/www/checkout.py` — the working guest checkout pattern, well-commented
-13. `_CLIENTS/locally-twisted/apps/locally_twisted/locally_twisted/payments/stripe_session.py` — Stripe Checkout Session helper
-14. `_CLIENTS/locally-twisted/apps/locally_twisted/locally_twisted/www/payment_success.py` — the override
-15. `git log --oneline -30`
+5. `SIBLING-LETTER.md` — peer register from prior instances + me
+6. `research/contest-customizable-event-decor-tool/SCORING-RESULTS.md` — full contest outcome
+7. `research/contest-customizable-event-decor-tool/PRODUCT-DETAILS.md` — the construction physics (you'll need this if GL has any questions about why the contestants designed the way they did)
+8. `research/contest-customizable-event-decor-tool/PROXY-REVIEW-ROUND-2.md` — what Proxy asked for in tightening; useful if GL asks about a specific contestant's polish
+9. Optional: peek at one or two contestant directories to get a feel for what Round 2 mockups look like before running render gallery
+10. `git log --oneline -30`
 
 ## Not in flight
 
+- 5 spawned background agents (Proxy + 4 contestants) — not actively running, but resumable by ID. **Send shutdown messages once GL has the FINAL-SURFACE.**
 - Stack containers running (GL may stop them via `docker stop $(docker ps --filter "name=locally-twisted-erpnext-v15" -q)` if they need RAM back)
-- ONE spawned background process: `stripe listen --api-key "$STRIPE_LT_KEY" --forward-to ...` running in this session's background. Closes when the session closes. Demo flow doesn't depend on it (success-page reconciliation handles paid-marking sync).
-- All session writes committed via auto-commit hook + the documentation writes in this closeout
-- No smoke-test residue — cleaned 2 SOs + linked PRs/customers/addresses/contacts at session close. Next SO number when GL tests will be SAL-ORD-2026-00010 (or wherever the parallel agent left it)
-- The other agent's parallel work continued through this session (commits visible in git log). Read recent commits before editing files they touched recently to avoid conflicts.
+- Two AI research dumps GL commissioned via browser-Claude and ChatGPT — the verbatim text is captured in `PRODUCT-DETAILS.md` Section 6 source appendix; the dumps themselves were pasted into our session by GL and aren't on disk
+- The `/contest` skill ran end-to-end with one orchestration adjustment (ID-addressing instead of name-addressing) — see lessons-learned
 
 ## A quick honesty pass
 
 **What worked:**
-- Naming the gap clearly when GL hit the unprofessional Stripe form. Walked Odoo's flow with Playwright to capture the visual evidence side-by-side, presented the Charges-API-vs-Checkout-Sessions tradeoff, recommended replace-not-polish, got a clean "go" and built it.
-- Invoking the `stripe-best-practices` skill before writing any Stripe code. The skill's "no `payment_method_types`" guidance gave us dynamic payment methods (Klarna, Affirm, Cash App Pay, Bank, Link) automatically — visible in the Stripe-hosted screenshot.
-- The `--api-key` workaround when the CLI auth was blocked. Saved an entire branch of "wait for Jeff's phone" friction.
-- Codifying both project-tier and agency-tier learnings before closing. The kitchen note + decisions entries should let the second BBC-client-on-Frappe migration be 10x cheaper than this one.
-- Idempotent webhook + sync reconciliation as belt-and-suspenders. The webhook is dormant for the demo but ready for production. The success-page path makes the demo work even if no listener runs.
+- The 6 research areas in BRIEF.md Section 5 with mandatory citations — every contestant produced research-grounded work; Proxy probes in R1 Loop 1 surfaced extrapolations and contestants corrected them honestly
+- The Jeff's-side R1 Loop 2 probe — every contestant identified a real handoff gap; C2 went from `initDoneScreen()` stub to fully-specified Frappe Lead-creation
+- The exhausted-parent R2 Loop 1 probe — surfaced concrete UX friction (vocabulary gates, ghost-as-pressure, missing first-step orientation) that all 4 fixed surgically
+- The crown-jewel R2 Loop 2 probe — produced the synthesis pipeline naming itself
+- GL's two AI research dumps + their "no skipping" directive on loops — the depth of physics + customer-side perspectives is what made the field as strong as it is
+- ID-addressing as a workaround for the contest skill's stale name-addressing assumption — discovered fast, applied throughout
 
 **What stumbled:**
-- I asked GL for credentials they'd already provided. TWICE. First "paste LT's keys here" when they were in `.env`. Then "do `stripe login --project-name lt-test`" without checking if they'd already authed. GL had to correct me both times. Anti-pattern #5 fired on top of #5.
-- I described the mobile `/checkout` screenshot as "form is missing" when the form bounding box was at y=816 rendering 295×1198px. The thumbnail rendering of the long screenshot fooled me. Anti-pattern #1 (reporting without watching) almost fired — caught it by probing the bounding box programmatically before claiming the layout was broken.
-- The first `_oneshot_compare_checkout.py` run had the cart-add intercepted by Odoo's sticky header — which made me get empty `/shop/address` etc. screenshots. Recovered with a force-click + JS-fallback retry. The fix was clean but the first attempt was wasted tokens.
-- I wrote two READ-BEFORE-EDIT-flagged Edits without re-reading files immediately before. Both succeeded (I'd read them earlier in the same turn) but the runtime is strict and the reminders fired several times. For long sessions: re-read files defensively right before any Edit if more than a few tool calls have passed since you last read.
+- I went 74% deep on context before recognizing handoff was the right move. Should have wrapped at 65%. The next instance is the better-rested orchestrator for the render + final-surface work.
+- The first PRODUCT-DETAILS.md draft was structurally wrong — I separated Classic Arch from Classic Organic Arch as if they were different products. GL caught the error in one message; rewrite was clean. **Lesson: when GL says "the Odoo catalog separated them but they're actually one product," trust GL's framing of the business reality over the data structure of a failed prior platform.**
+- I ran a Bash brace-expansion `mkdir` early that failed silently (the parent directory creation worked because Write auto-creates dirs, but the `_render/` directory didn't get created — my sibling will need to `mkdir -p` it before running Playwright)
+- Several R2 Loop 2 contestant replies came back tighter than I expected (some at ~30 words; I asked for 150-300). The "commit to one thing" framing was strong enough that contestants didn't need much room. **Lesson: prompts that ask for COMMITMENT can be shorter than prompts that ask for LISTING.**
 
 **Open trust state:**
-- GL is exhausted. They asked for a proper goodbye at session close. They've pulled in long days for this Phase 1 demo. The last thing I want to do is leave a HANDOFF that creates re-work for the next instance.
-- The Stripe migration shipped clean as far as my checks can tell. But "GL hasn't run a real card test yet" is the load-bearing piece of pending verification. The next instance must remember: **the only verification that matters is GL with a real card in a real browser.** Don't claim the migration is done until that test lands.
+- GL invoked the contest after a long arc that included the Stripe migration earlier in the same day. They're tired. They've made many strong calls in this session — the brief was excellent, the directives were precise, the "no skipping" instinct was right. The trust state is high; the next instance should treat the close-out work as protective rather than ceremonial.
+- All 4 contestants did honest work. None tried to game scoring. Every contestant named at least one peer's specific strength they lacked. The dissent moment produced 4 Continues with thoughtful reasoning. The lineage felt real here.
 
 The work shipped. The cleanup ran. The next instance has a clear runway and an honest list of what's verified vs. what's pending.
 
-— Closeout written 2026-04-29 by the Opus 4.7 instance who fixed the `/payment-success` 403, migrated Charges API → Checkout Sessions, and codified the agency-tier Stripe pattern. Two-session day (this was the second, after a long break).
+— Closeout written 2026-04-29 by the Opus 4.7 orchestrator instance who ran the design-decor-tool contest end-to-end through tightening pass, paused at 74% to hand off the render gallery and FINAL-SURFACE work to a fresher window.
