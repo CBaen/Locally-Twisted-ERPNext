@@ -429,10 +429,20 @@ def submit_guest_order(item_code="", qty=1, items_json="",
     safe_name = escape_html(name)
     safe_phone = escape_html(phone)
 
-    # ── Customer (idempotent by email) ───────────────────────────────
+    # ── Customer dedup + Lead linking ────────────────────────────────
     # We identify customers by email. No User account is created — guest
     # checkout means just Customer + Contact records.
-    # Lookup chain: Contact Email (child) → parent Contact → Dynamic Link → Customer.
+    #
+    # Three cases the lookup chain handles:
+    #   A. Email matches an existing Contact already linked to a Customer
+    #      → reuse that Customer (return customer)
+    #   B. Email matches an existing Contact linked ONLY to a Lead (the
+    #      person filled /contact previously) → create Customer, attach
+    #      it to the same Contact, and convert the Lead so the records
+    #      stay one-source-of-truth instead of orphaning the inquiry
+    #   C. No match → create Customer + new Contact
+    #
+    # Lookup chain: Contact Email (child) → parent Contact → Dynamic Link.
     customer_name = None
     contact_name = frappe.db.get_value(
         "Contact Email", {"email_id": email}, "parent"
@@ -444,7 +454,18 @@ def submit_guest_order(item_code="", qty=1, items_json="",
             "link_name",
         )
 
-    if not customer_name:
+    is_new_customer = False
+
+    if customer_name:
+        # Case A — returning customer.
+        if marketing_opt_in:
+            # Existing customer just opted in this checkout — flip the flag.
+            frappe.db.set_value("Customer", customer_name, "marketing_opt_in", 1)
+    elif contact_name:
+        # Case B — Contact exists (likely from a Lead inquiry) but no
+        # Customer linked yet. Promote the Contact: create the Customer,
+        # attach Customer to the existing Contact, and convert any
+        # linked Lead so the inquiry → order trail stays connected.
         customer_doc = frappe.get_doc({
             "doctype": "Customer",
             "customer_name": safe_name,
@@ -455,6 +476,53 @@ def submit_guest_order(item_code="", qty=1, items_json="",
         })
         customer_doc.insert(ignore_permissions=True)
         customer_name = customer_doc.name
+        is_new_customer = True
+
+        # Append Customer link to the existing Contact (preserves the
+        # Lead link if one exists — Dynamic Links is a child table).
+        contact_doc = frappe.get_doc("Contact", contact_name)
+        contact_doc.append(
+            "links",
+            {"link_doctype": "Customer", "link_name": customer_name},
+        )
+        contact_doc.save(ignore_permissions=True)
+
+        # If the Contact is linked to a Lead, mark the Lead converted
+        # and back-fill its `customer` field. This closes the inquiry-
+        # to-purchase loop in CRM. Multiple Leads possible (rare); we
+        # convert all of them.
+        lead_links = [
+            ln for ln in contact_doc.links
+            if ln.link_doctype == "Lead" and ln.link_name
+        ]
+        for ln in lead_links:
+            try:
+                lead = frappe.get_doc("Lead", ln.link_name)
+                if lead.status != "Converted":
+                    lead.status = "Converted"
+                if not lead.get("customer"):
+                    lead.customer = customer_name
+                lead.flags.ignore_permissions = True
+                lead.save(ignore_permissions=True)
+            except Exception:
+                # Don't block the order on a Lead-conversion glitch.
+                frappe.log_error(
+                    frappe.get_traceback(),
+                    f"submit_guest_order: Lead conversion failed for {ln.link_name}",
+                )
+    else:
+        # Case C — fresh customer, no prior Contact.
+        customer_doc = frappe.get_doc({
+            "doctype": "Customer",
+            "customer_name": safe_name,
+            "customer_type": "Individual",
+            "customer_group": "Individual",
+            "territory": "All Territories",
+            "marketing_opt_in": 1 if marketing_opt_in else 0,
+        })
+        customer_doc.insert(ignore_permissions=True)
+        customer_name = customer_doc.name
+        is_new_customer = True
 
         contact_doc = frappe.get_doc({
             "doctype": "Contact",
@@ -464,9 +532,6 @@ def submit_guest_order(item_code="", qty=1, items_json="",
             "links": [{"link_doctype": "Customer", "link_name": customer_name}],
         })
         contact_doc.insert(ignore_permissions=True)
-    elif marketing_opt_in:
-        # Existing customer just opted in this checkout — flip the flag.
-        frappe.db.set_value("Customer", customer_name, "marketing_opt_in", 1)
 
     # ── Address (always create a fresh shipping address per order) ───
     address_doc = frappe.get_doc({
