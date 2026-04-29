@@ -127,6 +127,25 @@ def _handle_stripe_session(session_id):
             f"payment_success: receipt email failed for SO {sales_order}",
         )
 
+    # Operator notification — Jeff sees a new paid order land without
+    # refreshing his desk.
+    try:
+        _send_operator_notification(sales_order)
+    except Exception:
+        frappe.log_error(
+            frappe.get_traceback(),
+            f"payment_success: operator notification failed for SO {sales_order}",
+        )
+
+    # Welcome email — only fires for first-time customers.
+    try:
+        _send_welcome_email_if_first_order(sales_order)
+    except Exception:
+        frappe.log_error(
+            frappe.get_traceback(),
+            f"payment_success: welcome email failed for SO {sales_order}",
+        )
+
     _redirect(f"/thank-you?order={sales_order}")
 
 
