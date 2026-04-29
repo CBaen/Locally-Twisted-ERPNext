@@ -94,6 +94,7 @@ The four reference surfaces above (failed Hetzner site, Odoo GitHub repo, local 
 **This new project stands on its own.** Anything from the Odoo dir that applies to the new build has been **copied here, scrubbed of Odoo references, and integrated into this folder's structure**. The canonical sources for the new build are:
 
 - **Style guide:** `_resources/STYLE-GUIDE.md` — design system, color palette, typography, components, voice (Quiet Confidence + blog Kindergarten Teacher), accessibility (WCAG 2.1 AA)
+- **Design guide:** `_resources/design-guide/` — synthesis output from the 2026-04-26 LT design competition (7 designers, GL picked a hybrid synthesis). Reference inspiration / taste calibration for visual hierarchy, typography, spacing, page shapes. Read `README.md` first; treat as guide, not gospel. Brought into this directory 2026-04-29 from `zoho-locally-twisted/gallery/` (which was deleted) so future instances find it via the standard reading order.
 - **Business policies:** `_resources/policies/` — full set of LT's confirmed business rules + the legal interview answers (sufficient for attorney to draft v1 contract)
 - **Tax data + research:** `_resources/utah-tax-rates-2026q2.md` — Utah destination-based sales tax research, per-jurisdiction rates
 
@@ -106,8 +107,9 @@ The four reference surfaces above (failed Hetzner site, Odoo GitHub repo, local 
 3. **This file**
 4. `HANDOFF.md` (last instance's continuity notes)
 5. `.planning\PROJECT.md` (GSD project source-of-truth)
-6. `locally-twisted-decisions.md` (LT decisions with reasoning)
-7. `git log --oneline -20`
+6. `_resources/design-guide/README.md` + skim `synthesis/voice.md`, `synthesis/mood.md`, `synthesis/rationale.md` — taste calibration before any frontend work
+7. `locally-twisted-decisions.md` (LT decisions with reasoning)
+8. `git log --oneline -20`
 
 ## Loud Failure Coverage
 
