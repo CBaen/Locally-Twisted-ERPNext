@@ -1,0 +1,153 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+
+{#
+    Portfolio — /portfolio — Slice 7
+    Sections that should read as full-width bands wear the .lt-fullbleed class.
+
+    Order:
+      1. Hero band (eyebrow + H1 + body)
+      2. Pink ribbon divider
+      3. Filter row (event-type pills + category dropdown + count + clear)
+      4. Gallery grid (cards + empty state)
+      5. Closing CTA
+#}
+
+{# --- 1. Hero band --- #}
+<section class="lt-portfolio-hero lt-fullbleed" aria-labelledby="lt-portfolio-title">
+    <div class="lt-portfolio-hero__inner">
+        <p class="lt-portfolio-hero__eyebrow">What we've made</p>
+        <h1 id="lt-portfolio-title" class="lt-portfolio-hero__title">The work speaks.</h1>
+        <p class="lt-portfolio-hero__body">
+            Custom balloon decor for weddings, corporate events, and milestone celebrations
+            along Utah's Wasatch Front. Every piece is designed for the specific event and venue.
+        </p>
+    </div>
+</section>
+
+{# --- 2. Pink ribbon divider (saturated brand blush) --- #}
+<div class="lt-portfolio-ribbon lt-fullbleed" role="presentation" aria-hidden="true"></div>
+
+{# --- 3. Filter row --- #}
+<section class="lt-portfolio-filter lt-fullbleed"
+         data-portfolio-filter
+         aria-label="Filter portfolio">
+    <div class="lt-portfolio-filter__inner">
+
+        {# Event-type pill chips. "All" is rendered inline as the first pill. #}
+        <ul class="lt-portfolio-filter__pills" role="list">
+            <li class="lt-portfolio-filter__pill">
+                <button type="button"
+                        data-event-pill="all"
+                        aria-pressed="{{ 'true' if initial_event == 'all' else 'false' }}">
+                    All
+                </button>
+            </li>
+            {% for ev in event_types %}
+            <li class="lt-portfolio-filter__pill">
+                <button type="button"
+                        data-event-pill="{{ ev.slug }}"
+                        aria-pressed="{{ 'true' if initial_event == ev.slug else 'false' }}">
+                    {{ ev.name }}
+                </button>
+            </li>
+            {% endfor %}
+        </ul>
+
+        {# Category dropdown #}
+        <div class="lt-portfolio-filter__dropdown">
+            <label for="lt-portfolio-category-select">Category</label>
+            <select id="lt-portfolio-category-select"
+                    data-category-select
+                    aria-label="Filter by product category">
+                <option value="all" {{ 'selected' if initial_category == 'all' else '' }}>All categories</option>
+                {% for cat in categories %}
+                <option value="{{ cat.slug }}"
+                        {{ 'selected' if initial_category == cat.slug else '' }}>
+                    {{ cat.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        {# Count + clear #}
+        <div class="lt-portfolio-filter__meta">
+            <span class="lt-portfolio-filter__count"
+                  data-portfolio-count
+                  aria-live="polite"
+                  aria-atomic="true">
+                {{ gallery_items | length }} pieces
+            </span>
+            <button type="button"
+                    class="lt-portfolio-filter__clear"
+                    data-portfolio-clear
+                    aria-label="Clear all filters">
+                Clear
+            </button>
+        </div>
+
+    </div>
+</section>
+
+{# --- 4. Gallery grid --- #}
+<section class="lt-portfolio-grid lt-fullbleed"
+         data-portfolio-grid
+         data-empty="false"
+         aria-label="Portfolio gallery">
+    <div class="lt-portfolio-grid__inner">
+        <div class="lt-portfolio-grid__cards">
+            {% for item in gallery_items %}
+            {%- set category_label %}{%- for cat in categories -%}{%- if cat.slug == item.category -%}{{ cat.name }}{%- endif -%}{%- endfor -%}{% endset -%}
+            <button type="button" class="lt-portfolio-card"
+                    data-portfolio-card
+                    data-event-type="{{ item.event_type }}"
+                    data-category="{{ item.category }}"
+                    data-modal-image="/assets/locally_twisted/images/portfolio/{{ item.image }}"
+                    data-modal-title="{{ item.title }}"
+                    data-modal-category-label="{{ category_label | trim }}"
+                    data-modal-alt="{{ item.alt }}"
+                    aria-label="{{ item.title }} — view full photo">
+                <span class="lt-portfolio-card__image"
+                      style="background-image: url('/assets/locally_twisted/images/portfolio/{{ item.image }}');"
+                      role="img" aria-label="{{ item.alt }}"></span>
+                <span class="lt-portfolio-card__body">
+                    <span class="lt-portfolio-card__category">{{ category_label | trim }}</span>
+                    <span class="lt-portfolio-card__title">{{ item.title }}</span>
+                </span>
+            </button>
+            {% endfor %}
+
+            {# Empty state — visible only when grid[data-empty="true"] (set by JS). #}
+            <div class="lt-portfolio-empty" role="status">
+                <h2 class="lt-portfolio-empty__heading">No work matches that filter yet.</h2>
+                <p class="lt-portfolio-empty__body">
+                    The portfolio is growing — try adjusting the occasion or category, or start a conversation about your event.
+                </p>
+                <a href="/book" class="lt-portfolio-empty__cta">Start a conversation</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# --- 5. Closing CTA --- #}
+<section class="lt-cta lt-fullbleed" aria-labelledby="lt-portfolio-cta-heading">
+    <div class="lt-cta__inner">
+        <h2 id="lt-portfolio-cta-heading" class="lt-cta__heading">Something else in mind?</h2>
+        <p class="lt-cta__body">
+            The look book is a sample of the range &mdash; not a menu. If you're imagining
+            something you don't see here, that's exactly the conversation Jeff is built for.
+        </p>
+        <a href="/book" class="lt-cta__button">
+            Start a conversation
+            <span aria-hidden="true">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+{# --- ItemList JSON-LD schema (validates against schema.org) --- #}
+<script type="application/ld+json">
+{{ itemlist_jsonld | safe }}
+</script>
+
+{% endblock %}

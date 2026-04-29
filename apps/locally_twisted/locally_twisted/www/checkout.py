@@ -389,12 +389,20 @@ def submit_guest_order(item_code="", qty=1, name="", email="", phone="",
         "currency": "USD",
         "grand_total": flt(so.grand_total),
         "email_to": email,
-        "mute_email": 1,
         "subject": f"Payment for order {so.name} — Locally Twisted",
         "message": "Please complete your payment to confirm your order.",
     })
+    pr.flags.mute_email = True   # belt-and-suspenders alongside order_type="Shopping Cart"
     pr.insert(ignore_permissions=True)
     pr.submit()
+
+    # ERPNext gates payment_url generation behind send_mail=True (see
+    # payment_request.py:215 → set_payment_request_url() only runs in that
+    # branch). With Shopping Cart order_type + mute_email flag, send_mail
+    # is False and payment_url stays empty. Trigger it manually here.
+    if not pr.payment_url:
+        pr.set_payment_request_url()
+        pr.reload()
 
     frappe.db.commit()
 
