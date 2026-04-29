@@ -8,6 +8,80 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-04-29 (guest-cart + Stripe-Link + cascade session) — Path B (true cookie cart) over the cheap Buy-Now-only alternative
+
+**Decision:** Build a real localStorage-backed multi-item guest cart (Path B) rather than removing webshop's Add-to-Cart UI and routing all flows through the single-item buy-now `/checkout?item=...` path (Path A).
+
+**Reasoning:** GL: *"Path B is the only answer. Quality is ALWAYS the answer."* The cheaper Path A would have shipped today but locked the customer experience to one item per checkout. For LT's small-shop tier (sub-$200 themed bouquets, kits) that's acceptable for a single purchase but blocks the natural "I'll add a few things while I'm here" multi-item shopping behavior. Path B took the rest of the session to build but matches what customers expect from any e-commerce site.
+
+**Architecture committed:**
+- Cart stored in browser localStorage (versioned schema, in-memory fallback for Safari Private Mode)
+- Server-side state created ONCE at checkout submit (Customer + Contact + Address + SO + PR + Stripe Session)
+- Webshop's `update_cart` JS function overridden at runtime; `.btn-add-to-cart-list` clicks intercepted in capture phase BEFORE webshop's bubble-phase login redirect
+- `/cart` page LT-owned (overrides webshop's via `website_route_rules`, file named `lt_cart.{py,html}` to avoid name collision)
+- `/checkout` operates in two modes: buy-now (server-renders single line from `?item=&qty=`) or cart (JS hydrates summary from localStorage)
+- `submit_guest_order` accepts EITHER buy-now params OR `items_json` array
+
+**Alternatives rejected:**
+- Path A: hide webshop's stock product pages from nav, convert LT `/shop` Add-to-Cart buttons to Buy Now, drop multi-item entirely. (Rejected: loses the natural multi-item UX customers expect.)
+- Path C: change `redirect_on_action` to /contact instead of /login. (Rejected: still bounces the customer off the cart, doesn't actually solve the requirement.)
+- Modifying webshop directly: `apps/webshop/` is bind-mounted from a gitignored upstream clone; modifications would be wiped on next install/restart.
+
+**Decided by:** GL 2026-04-29. *"Quality is ALWAYS the answer."*
+
+---
+
+## 2026-04-29 (guest-cart session) — Stripe Link disabled at the ACCOUNT level via custom PMC, not per-Session
+
+**Decision:** Disable Link via a custom Stripe Payment Method Configuration on LT's account (`pmc_1TRZH2DfnlZQv66ncb001soG` "LT No Link", `link.display_preference="off"`), passed on every Checkout Session. Do NOT rely on `payment_method_types=["card"]` on the Session.
+
+**Reasoning:** GL hit the Stripe-hosted Checkout page and saw Link "Save info" + "Pay with Bank via Link" + "By paying, you agree to Link's Terms and Privacy" UI rendering on top of the card form. *"I hate Link, it's not going to gatekeep our checkout. 'Pay without link' is not going to be forced upon anyone."*
+
+I shipped `payment_method_types=["card"]` first; GL caught it ("straight to link again"). Rendered the page in Playwright, confirmed Link UI persisted regardless of the Session-level restriction. Per Stripe documentation and a knowledge gem in the `stripe:stripe-best-practices` skill: *"Link is controlled through the Dashboard. Create a custom payment method configuration with Link off."*
+
+**Pattern:**
+1. Create a top-level PMC on the account: `stripe.PaymentMethodConfiguration.create(name=..., card={"display_preference": {"preference": "on"}}, link={"display_preference": {"preference": "off"}})`
+2. Pass `payment_method_configuration: <pmc_id>` on every Checkout Session
+3. Verify by rendering the page in Playwright and grepping for "Link" — the SDK Session response is misleading (it'll say `payment_method_types: ["card"]` even when Link UI is showing)
+
+**Side effects accepted:**
+- No Klarna / Affirm / Cash App Pay / Bank-via-ACH (could be added by enabling those individually on the PMC if GL ever wants them)
+- Apple Pay + Google Pay still work — they're card wallets, surface automatically on supported devices, independent of Link
+
+**Constraint discovered:** PMC parent-child API has ownership rules. Pre-existing platform-managed PMCs on the account cannot be modified or used as parents for child configs ("Child configurations can only be created by the parent configuration's owner"). Workaround: create a NEW top-level PMC without specifying parent — succeeds because the account owns it.
+
+**Decided by:** GL 2026-04-29. The PMC pattern was implementation-level; the "kill Link entirely, sign-in is optional" product rule came from GL.
+
+---
+
+## 2026-04-29 (cascade session) — ERPNext "everything cascades" pattern wired in `/payment-success`
+
+**Decision:** Beyond marking PR paid, `/payment-success` now also: creates Sales Invoice from SO (idempotent), sends transactional receipt email to customer, sends operator notification to `locallytwisted@gmail.com` (overridable via `site_config.lt_operator_email`), sends welcome email if first-time customer. All four wrapped in try/except so a backend reconciliation glitch never blocks the customer's `/thank-you` redirect.
+
+**Reasoning:** GL's framing: *"This is one of the things we need to utilize HEAVILY with this software. That's why I picked it."* Per the discussion-tier ambition, every paid order should propagate into ERPNext's accounting + comms + analytics surfaces automatically — not as discrete subsequent tasks. The cascade is the foundation for "one source of truth" customer records.
+
+**What cascades automatically post-decision:**
+- Customer dedup at /checkout (3-case: returning / Contact-from-Lead / fresh) — closes the orphan-customer hole
+- SO submit → ERPNext's standard chain (Customer record updated, address attached)
+- PR.set_as_paid → Payment Entry (auto via ERPNext) → posts to AR + Bank account in GL
+- SI submit → posts to Sales income + Tax payable in GL
+- Each email send → Communication record on SO/Customer (auto via `frappe.sendmail` reference_doctype/name)
+
+**What's deliberately deferred:**
+- Calendar Event from SO delivery_date — Phase 3 (operator workflow)
+- Project + Task from big-ticket SOs — Phase 3
+- Stock movement / Delivery Note — Phase 4 (when stock-tracking turns on; currently `allow_items_not_in_stock=1`)
+
+**Idempotency principle:** Every email helper checks for existing Communication with the exact subject before sending. Means: backfill is safe, webhook double-fire is safe, retry is safe. Same principle for SI: check existing Sales Invoice Item rows for this SO before creating.
+
+**Trap avoided:** wkhtmltopdf-in-Docker. Set `mute_email = True` on Sales Invoice and never pass `attach_print` on `frappe.sendmail`. The HTML body of the email IS the receipt; production should configure `host_name` in `site_config.json` to a docker-internal hostname so PDF rendering works, but for the demo flow the HTML email is sufficient.
+
+**Operator email recipient:** Hardcoded constant `OPERATOR_EMAIL = "locallytwisted@gmail.com"` in `payment_success.py`, with override path via `frappe.conf.get("lt_operator_email")`. When LT routes to a different inbox, set via `bench --site frontend set-config lt_operator_email <addr>` rather than editing the constant.
+
+**Decided by:** GL 2026-04-29. The cascade architecture, the file structure, and the idempotency pattern are all implementation choices; the "utilize HEAVILY" ambition came from GL.
+
+---
+
 ## 2026-04-29 (Stripe migration session) — Migrate Charges API → Checkout Sessions NOW, not in Phase 4
 
 **Decision:** The migration from Frappe's bundled Stripe Charges API integration to Stripe Checkout Sessions (Stripe-hosted page) happens BEFORE the demo to Jeff, not in Phase 4 hardening. The previous instance had logged this as Phase 4 debt (entry below 2026-04-29 "Frappe payments app uses legacy Charges API"); GL pulled it forward when they saw the customer experience.

@@ -6,6 +6,67 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-04-29 (guest-cart + Stripe-Link + cascade session) — Six lessons
+
+### Frappe's `frappe.Redirect` raised in `get_context` BYPASSES the template
+
+`payment_success.py` `_handle_stripe_session` calls `_redirect()` which sets `frappe.local.flags.redirect_location` and raises `frappe.Redirect`. The browser gets a 302 → /thank-you and never sees the `payment_success.html` body. Any JS in that template never executes. My first attempt to clear `LT_CART` in `payment_success.html` was inert. Cart-clear had to live in `thank_you.html` (the page the browser actually renders).
+
+**Lesson:** When putting JS in a Frappe template, trace the controller flow. If `get_context` raises `frappe.Redirect`, the template is a stub that never renders. Such pages are useful as routing-only controllers but can't carry browser-executed code. Customer-side JS goes in the destination page.
+
+**Receipt:** 2026-04-29. GL reported "the cart show 2 item in it. The order processed and now the cart needs to clear" after their successful /thank-you landing. Diagnosed by reading `payment_success.py` line 102 `_redirect(...)` and tracing the raise.
+
+### Stripe `payment_method_types=["card"]` does NOT suppress Link UI — that's account-level
+
+`payment_method_types=["card"]` on a Checkout Session restricts which payment METHODS appear, but Stripe layers Link UI ("Save my information for faster checkout" + "Pay with Bank via Link" + Link Terms/Privacy) on top regardless. The skill content says it explicitly: *"Link is controlled through the Dashboard. Create a custom payment method configuration with Link off."* I half-read it on first pass.
+
+**Fix:** Create a Payment Method Configuration on the account with `link.display_preference={"preference": "off"}`, pass `payment_method_configuration: <pmc_id>` on every Checkout Session. PMC creation has a quirk: `preference="off"` is rejected on parent (default) PMCs — child-only restriction. Workaround: create a NEW top-level PMC without specifying parent. We did: `pmc_1TRZH2DfnlZQv66ncb001soG` ("LT No Link"). Hard-coded constant in `payments/stripe_session.py`.
+
+**Verification gate:** Render the actual Stripe page in Playwright before claiming Link is gone. The API response will say `payment_method_types: ["card"]` even when the Link UI is showing — the Session config doesn't reflect the page render.
+
+**Receipt:** 2026-04-29. GL reported "straight to link again" after the first fix shipped. Rendered in Playwright, saw "Save my information for faster checkout" + "Pay securely at Locally Twisted and everywhere Link is accepted" + Link Terms still rendering. Custom PMC fixed it.
+
+### Webshop `templates/pages/cart.html` wins route resolution over `www/cart.py` — rename to avoid collision
+
+Frappe resolves `/cart` against `templates/pages/cart.html` BEFORE applying `website_route_rules`. Webshop ships such a template at `apps/webshop/webshop/templates/pages/cart.html`. Even with our `hooks.py` route rule mapping `/cart → cart`, webshop's pages-style template wins and our `www/cart.{py,html}` never serves.
+
+**Fix:** Rename our files to `lt_cart.{py,html}` and update the route rule to `/cart → lt_cart`. Verified by `curl /cart | grep lt-cart__title` — present means ours, absent means webshop's.
+
+**Lesson generalizes:** When overriding any webshop / payments / erpnext stock page, our local module name MUST NOT collide with theirs OR we lose resolution silently.
+
+**Receipt:** 2026-04-29. Initial implementation lived in `www/cart.{py,html}` and rendered webshop's "Your cart is Empty" page despite the route rule. Cache-clear + redis flush + bench restart didn't help. Renaming to `lt_cart` resolved it.
+
+### `Address.address_display` is NOT a stored DB column — it's computed at render time and lives on the SO
+
+Tried `frappe.db.get_value("Address", name, "address_display")` and got `OperationalError: (1054, "Unknown column 'address_display'")`. The Address doctype's `address_display` is a virtual/computed field that gets HTML-rendered at SO save time and stored on `Sales Order.shipping_address` (HTML string), not on `tabAddress` itself.
+
+**Fix:** Read the components — `address_line1`, `address_line2`, `city`, `state`, `pincode`, `country` — and assemble inline.
+
+**Lesson:** Verify field-as-DB-column before reading via `frappe.db.get_value`. Quick check: `frappe.get_meta("Address").get_field("address_display")` returns the field metadata; if `fieldtype == "Small Text"` with no DB column, it's computed. Or: just check the existing schema visually.
+
+### Stripe PMC parent-child permissions — child configs require parent ownership
+
+Tried to create a child PMC under both pre-existing parent configs on LT's account. Both rejected with `"Child configurations can only be created by the parent configuration's owner"`. The two pre-existing PMCs (`pmc_1RdVUoDfnlZQv66nVzkbi0JH` and `pmc_1R2KesDfnlZQv66nLj0Smbnn`) are platform-managed (created by Stripe internally when LT's account was provisioned), not LT-owned.
+
+**Fix:** Create a new top-level PMC without specifying `parent` — that succeeds because LT IS the owner of the new config. Stripe accepts a top-level config that lives alongside the platform-managed ones.
+
+**Lesson:** When a Stripe account inherits a default PMC from platform/account-creation, you can't modify it OR child it. Create your own top-level config. The Stripe documentation doesn't make this distinction obvious; trial revealed it.
+
+### Customer dedup must handle the Lead-from-Contact case explicitly
+
+The original `submit_guest_order` checked Contact Email → Contact → Dynamic Link → Customer. If no Customer link, it created a NEW Customer with a NEW Contact — orphaning any existing Contact (which often came from a previous /contact form Lead submission). Result: same email, multiple Customer records, broken one-source-of-truth.
+
+**Fix:** Three-case branching:
+1. Customer link exists → reuse (returning customer)
+2. Contact exists but no Customer link → create Customer, attach Customer link to existing Contact, find any Lead linked to Contact and mark `status="Converted"` + back-fill `lead.customer`
+3. No prior records → create both fresh
+
+The Lead-from-Contact case is the load-bearing one for the "everything cascades" architecture GL named this session. Without it, every customer who fills /contact then /shop becomes an orphan.
+
+**Receipt:** 2026-04-29. GL named the ambition: *"Everything should cascade. We should also be adding the customer information in contacts unless it's a duplicate."* The orphan hole would have shipped silently broken without GL's framing.
+
+---
+
 ## 2026-04-29 (Stripe migration session) — Six things learned migrating Charges API → Checkout Sessions
 
 ### `/payment-success` upstream URL bug + guest 403 require route override
