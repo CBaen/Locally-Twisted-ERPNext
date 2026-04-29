@@ -161,7 +161,7 @@
     <div class="lt-categories__grid">
         {% for cat in custom_categories %}
         <div class="lt-categories__item">
-            <a href="/lookbook#{{ cat.slug }}" class="lt-categories__link">
+            <a href="/lookbook?category={{ cat.slug }}" class="lt-categories__link">
                 <span class="lt-categories__circle">
                     {% if cat.icon == 'arch' %}
                     <svg class="lt-categories__icon-svg" viewBox="0 0 64 64" fill="none"
