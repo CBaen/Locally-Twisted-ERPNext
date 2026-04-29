@@ -782,9 +782,15 @@ html, body {
 
 .lt-header__brand--mobile img,
 .lt-header__brand--mobile .lt-logo {
-  /* 1.25x of original 80px / 280px per GL 2026-04-27 r4. */
-  height: 100px;
-  max-width: 350px;
+  /* Responsive cap so the 44px hamburger + 32px row padding + 12px gap
+     always fits inside the viewport. height: auto preserves the logo's
+     natural aspect ratio at every screen width; max-height: 90px keeps
+     the r4 vision close on devices wide enough to show it. Was a fixed
+     350px max-width which left only 25px for a 44px hamburger button —
+     pushing the toggle 35px offscreen on every mobile device. */
+  height: auto;
+  max-height: 90px;
+  max-width: calc(100vw - 88px);
 }
 
 .lt-header__toggle {
