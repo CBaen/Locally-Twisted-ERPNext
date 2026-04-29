@@ -8,6 +8,22 @@
   <p><a href="/">{{ _("Continue") }}</a></p>
 </div>
 <script>
+  // Reaching this page means the server-side handler verified the
+  // Stripe session is paid and is now redirecting to /thank-you. The
+  // customer's cart has been converted to a Sales Order — empty the
+  // localStorage cart so a back-button trip doesn't show stale items
+  // OR cause the next session to submit the same cart twice.
+  //
+  // Idempotent: LT_CART.clear() on an already-empty cart is a no-op.
+  // Safe even if the redirect fires before this JS runs.
+  try {
+    if (typeof window.LT_CART !== "undefined") {
+      window.LT_CART.clear();
+    }
+  } catch (err) {
+    if (window.console && console.warn) console.warn("[payment-success] cart clear failed", err);
+  }
+
   // Fallback: if the server-side redirect didn't fire (rare), send home.
   setTimeout(function(){ window.location.href = "/"; }, 3000);
 </script>
