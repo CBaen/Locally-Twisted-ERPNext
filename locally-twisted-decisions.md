@@ -8,6 +8,95 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-04-29 (Stripe + guest checkout session) — Option B (true guest checkout) over Option A (silent User account)
+
+**Decision:** No User account is created during checkout — ever. Guest checkout creates only Customer + Contact + Address + Sales Order + Payment Request. The customer is identified by email; they cannot log in to a portal because no User record exists for their email.
+
+**Reasoning:** GL initially greenlit Option A (silently create User with `send_welcome_email=0` so the customer experiences "guest checkout" without a registration form, but a User record exists). I drafted a research brief at `research/expedition-guest-checkout-legal/research-brief.md` to scope the legal compliance — 50 state privacy laws, CAN-SPAM, UCPA, the silent-account-creation gray area. GL read the framing and pulled the cord: *"Oh, this is too complex legally. We cannot deal with that. There needs to be a genuine guest checkout. I'm not dealing with this research being wrong."*
+
+Option B is well-trodden e-commerce territory: collect customer data for order fulfillment + send transactional receipt + don't market without explicit opt-in. No account-creation gray area. No silent-User state to defend in court. The legal surface stays small and uniform across all 50 US states.
+
+**Trade-off accepted:** customer cannot self-serve their order history through a portal. Communications and receipts go through email only. For LT's customer base (one-off occasional sub-$200 buyers), this is fine — most never come back to a portal anyway.
+
+**Decided by:** GL.
+
+---
+
+## 2026-04-29 (Stripe session) — Frappe payments app uses legacy Charges API; accepted for test demo, swap before live launch
+
+**Decision:** For the demo to Jeff and through Phase 1, use Frappe's built-in Stripe integration as-is. Do not refactor to Stripe Checkout Sessions or Payment Intents during the customer-site phase.
+
+**Reasoning:** Frappe's Stripe controller at `apps/payments/payments/payment_gateways/doctype/stripe_settings/stripe_settings.py:create_charge_on_stripe` calls `stripe.Charge.create()` — the LEGACY Charges API. Per the `stripe-best-practices` skill (invoked this session): *"Never recommend the Charges API. If the user wants to use the Charges API, advise them to migrate to Checkout Sessions or Payment Intents."* The reasons modern Stripe pushes off Charges:
+- No 3DS / Strong Customer Authentication support (will fail in EU; may fail with US issuers requiring 3DS)
+- No dynamic payment methods (no Apple Pay, Google Pay, Link auto-injection)
+- No fraud signals as rich as PaymentIntents
+
+For test mode + a US-only customer base in Utah at sub-$300 transaction sizes, Charges API still works and serves the demo. **For production hardening (Phase 4 — Stripe + invoicing slice), this gets fixed first.** Either:
+- Build a custom controller in our app that uses CheckoutSessions, register it via `override_payment_gateway_controller` (or wrap the existing Stripe Settings via subclass)
+- Wait for Frappe community to update the payments app and rebase
+
+**Alternatives considered:**
+- Build CheckoutSessions integration NOW, bypassing the payments app entirely — too much work for the demo timeline; would require reimplementing the Sales Order → Payment Request → Payment Entry plumbing
+- Use Stripe Payment Links per product, sidestepping ERPNext checkout — loses the "ERPNext is doing the work" framing for the demo
+
+**Decided by:** This instance, ratified by demo timeline. Logged as known debt for Phase 4.
+
+---
+
+## 2026-04-29 (Stripe session) — Order type "Shopping Cart" + flags.mute_email pattern for guest-checkout Payment Requests
+
+**Decision:** Sales Orders created via `submit_guest_order` MUST have `order_type = "Shopping Cart"`. Payment Request submission MUST set `pr.flags.mute_email = True` AND a manual `pr.set_payment_request_url()` call after `pr.submit()` to populate `payment_url`.
+
+**Reasoning:** Frappe's Payment Request `on_submit` hook (apps/erpnext/...payment_request.py:215) calls `send_email() → attach_print() → wkhtmltopdf` regardless of test/live mode. Inside the LT Docker stack, wkhtmltopdf cannot reach `localhost:8081` from the container's network namespace → `ConnectionRefusedError`. Both `order_type="Shopping Cart"` (line 211) AND `flags.mute_email` short-circuit `send_mail` to False, skipping the email/PDF render.
+
+But: `set_payment_request_url()` is INSIDE the same `if send_mail:` branch. Suppressing the email also suppresses URL generation. So we must call it manually after submit, then `pr.reload()` to refresh `payment_url`.
+
+This pattern is documented inline in `apps/locally_twisted/locally_twisted/www/checkout.py` for the next instance.
+
+**Long-term fix (deferred):** configure `host_name` in `site_config.json` to a docker-internal hostname so wkhtmltopdf can reach back to the site without the workaround. Until that's done, every PDF-generating operation in the container will need the same pattern.
+
+**Decided by:** This instance, after debugging three failed smoke tests and reading the Frappe payments source.
+
+---
+
+## 2026-04-28 (BTFP restructure session) — Background warmer (`--lt-near-white: #fffcfc`) + header matches footer blue
+
+**Decision:** `--lt-near-white` token changed from `#FBFBFB` (cold grey) to `#fffcfc` (warm pink-tinted off-white). `.lt-header` background changed from `var(--lt-white)` to `var(--lt-soft-blue)` (the same color as `.lt-footer`). `.lt-footer__bar` (copyright bar) changed to use `var(--lt-near-white)` instead of `rgba(26, 26, 26, 0.04)` — establishing `--lt-near-white` as the new "base white" token.
+
+**Reasoning:** GL: *"the main white background is so white it's bluish and/or gray... Try fffcfc for the main background."* The chrome (header) being matched to the footer creates a "wrap" feeling — the page is bookended by the same brand color. The copyright bar uses the new warm white to break visually from the soft-blue footer band above it.
+
+**Tokens after this decision (for the next instance to know):**
+- `--lt-white: #FFFFFF` — pure white, used for cards and panels that need to pop
+- `--lt-near-white: #fffcfc` — warm base white, used for body / off-white sections / copyright bar
+- `--lt-soft-blue: #C3DCF3` — the brand soft blue, used for header + footer band
+- `--lt-blush-tint: #FBF5F2` — used for hero bands
+
+**Decided by:** GL.
+
+---
+
+## 2026-04-28 (BTFP restructure session) — Aqua + green ribbons rejected; blush + soft-blue kept
+
+**Decision:** When adding decorative thin ribbons (full-bleed colored bands as visual separators), use ONLY blush (`.lt-band--blush`) and soft-blue (`.lt-band--soft-blue`). Aqua (`.lt-band--aqua`) and lime/green (`.lt-band--lime`) are not used in the LT visual identity.
+
+**Reasoning:** GL specified: *"The Aqua ribbon and green ribbon have to go."* The brand palette includes those colors but they don't serve the calm/celebratory tone of the LT site. The blush + soft-blue alternation matches the brand identity and the customer base (event clients, parents, corporate event coordinators).
+
+**Decided by:** GL.
+
+---
+
+## 2026-04-27 (LookBook → Portfolio rename) — Menu name changed; URL /lookbook stays
+
+**Decision:** The navigation link previously labeled "LookBook" now reads "Portfolio" in both desktop and mobile menus. Same homepage CTAs that read "lookbook" now read "portfolio." The URL path `/lookbook` is unchanged — clicking "Portfolio" goes to `/lookbook`.
+
+**Reasoning:** GL: *"I prefer 'Portfolio' over 'LookBook' or 'Gallery.' Jeff charges art prices so he might as well act like an artist haha. No he really is."* "Lookbook" is physical-book terminology; "portfolio" matches an artist's positioning and Jeff's actual price tier ($400+ custom installations, $130/$115 hourly per artist).
+
+**URL trade-off:** keeping `/lookbook` avoids 301 redirect chains and any SEO disruption (though the page wasn't getting indexed yet). When Slice 7 is iterated again, GL can reconsider renaming the route to `/portfolio` with a redirect.
+
+**Decided by:** GL.
+
+---
+
 ## 2026-04-27 (homepage build session — late) — Bouquets added as 6th customizable category for the future Design Studio
 
 **Decision:** Bouquets join Balloon Arches, Columns & Pillars, Organic Garlands, Picture Perfect Backdrops, and Balloon Drops as the customizable categories that will eventually get the interactive "Design Studio" experience.

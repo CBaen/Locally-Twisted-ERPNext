@@ -6,6 +6,63 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-04-29 (mobile-drawer build) — `web_include_css` browser-cache trap
+
+### What happened
+
+Edited `lt-theme.css` to add a mobile drawer overlay (drawer + backdrop + body scroll lock). Server-side everything was correct: `curl /assets/locally_twisted/css/lt-theme.css` returned the new content with `Last-Modified` set to the edit time. Playwright (fresh browser context, no cache) rendered the page perfectly — drawer hidden on desktop via `position: fixed; visibility: hidden; transform: translateX(100%)`.
+
+But on GL's actual browser, the drawer rendered as inline content on **every page**, on desktop. The "Menu" heading, X close button, and all 7 nav links appeared in normal page flow below the desktop nav.
+
+### Why
+
+`web_include_css` injects a static URL (`/assets/locally_twisted/css/lt-theme.css`) with no version query string. Nginx serves it with `Last-Modified` and `ETag`, so a polite browser should revalidate — but in practice, Chromium-family browsers cache aggressively and serve stale CSS for hours-to-days unless explicitly forced.
+
+When GL navigated to a page after the edit:
+- The HTML was fresh (Frappe templates are server-rendered per request) → new drawer markup loaded
+- The CSS was cached (browser served the old `lt-theme.css`) → no `position: fixed` rule for `.lt-header__mobile-nav-collapse` → drawer fell into normal document flow
+
+The new HTML + old CSS combination is the worst case: the user sees the new structure rendered with the old (or missing) styles. This is invisible to Playwright (fresh context, no cache) and to `curl` (always fetches fresh) — only a real long-lived browser session reproduces it.
+
+### What to do differently
+
+**Standing rule:** every edit to `lt-theme.css` requires a bump to the `?v=` query string in `hooks.py`'s `web_include_css` line. Format: `YYYYMMDD-N`.
+
+Current line:
+```python
+web_include_css = "/assets/locally_twisted/css/lt-theme.css?v=20260429-1"
+```
+
+Each edit → bump the version. Each version bump → backend restart (`docker restart locally-twisted-erpnext-v15-backend-1`) so Frappe re-reads `hooks.py`. The query string change forces every browser to fetch fresh CSS the next time the page loads — no hard-refresh needed by the user.
+
+### Verification gate (post-CSS-edit ritual update)
+
+The existing operational ritual was:
+> Edit Jinja / CSS / Web Page record → `python scripts/dev/clear_website_cache.py`
+
+That clears server-side template cache but does NOT bust browser caches. Updated ritual:
+1. Edit `lt-theme.css`
+2. Bump `?v=` in `hooks.py`
+3. `docker restart locally-twisted-erpnext-v15-backend-1 && sleep 8`
+4. `python scripts/dev/clear_website_cache.py`
+5. Verify in a fresh-incognito Playwright AND in GL's actual browser before declaring done
+
+Without step 2, GL's browser will serve stale CSS even though the server-side file is current. This pattern bit us 2026-04-29 with the mobile drawer overlay.
+
+### Belt-and-suspenders option (deferred)
+
+A more durable fix: compute the version dynamically from the file's mtime in `hooks.py`. Sketch:
+```python
+import os
+_THEME = os.path.dirname(os.path.abspath(__file__)) + "/public/css/lt-theme.css"
+_V = int(os.path.getmtime(_THEME)) if os.path.exists(_THEME) else 0
+web_include_css = f"/assets/locally_twisted/css/lt-theme.css?v={_V}"
+```
+
+Pro: no manual bump, no rule to remember. Con: needs to be tested against Frappe's hooks.py loader (does it tolerate computed values? do containers see the right file path?). Park as a future cleanup once the manual rule has lived through enough sessions to confirm it's reliable.
+
+---
+
 ## 2026-04-29 (Stripe wiring + true guest checkout session) — Five Frappe internals discovered
 
 ### Frappe Payment Request `payment_url` is gated behind `send_mail` — manual call required when suppressed
