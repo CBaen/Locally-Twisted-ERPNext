@@ -56,6 +56,29 @@ The "captured" feeling comes from the snapshot layout — it looks like a design
 
 This pattern draws from PilaMania's "add to your request... you decide when it's ready" framing (https://www.pilamania.com/en/products/3d-color-designs/): no purchase pressure, just capture.
 
+### What actually travels to Jeff — the inquiry payload
+
+When the customer taps "Send this design to Jeff," the tool calls Frappe's Lead creation endpoint via `frappe.call('frappe.client.insert', { doc: { doctype: 'Lead', ... } })`. The Lead record receives these fields:
+
+```
+lead_name:        customer's name (collected via a two-field prompt on the send screen — name + phone/email)
+email_id:         customer's email
+phone:            customer's phone
+custom_design_ref: "LT-{timestamp}" — the reference number shown on the card
+custom_pieces:    "Balloon Arch, Column, Centerpiece" — comma-separated piece names
+custom_palette:   "#FFB6C1 (Light Pink), #87CEEB (Sky Blue), #FFFFFF (White)" — hex + name for every color used
+custom_design_notes: freeform text (optional — a single textarea on the send screen, "Anything else Jeff should know?")
+source:           "Design Studio"
+```
+
+The `custom_palette` field carries **hex codes, not just color names**. "Pink" is ambiguous across balloon catalogs; `#FFB6C1` is not. Jeff takes the hex to his supplier and matches SKUs directly.
+
+Jeff's inbox view (ERPNext CRM Lead list): the Lead title shows the customer name + reference number. Opening the Lead shows the custom fields in a "Design Studio" section: piece list, palette with hex codes, optional notes. Jeff's first sentence on the call is "I loved what you designed — I'm looking at your arch in Light Pink (#FFB6C1) and Sky Blue (#87CEEB), tell me about the event." The design reference gives both parties shared vocabulary; the hex codes remove the color-matching step from Jeff's supplier conversation.
+
+**No screenshot or image is sent.** The SVG composition is not captured as an image in v1 — the text payload (pieces + hex codes) gives Jeff everything he needs to open a pitch. A visual capture (dom-to-image to a data URL, or a server-side render) is a v2 enhancement worth flagging but not load-bearing for v1: if Jeff wants to see the visual, the customer can return to the tool and share their browser view. The reference number makes that conversation possible.
+
+**The contact fields:** To avoid the "send without a name" problem, the "Send this design to Jeff" button shows a lightweight inline prompt (not a new page) — two fields below the card: "Your name" and "Best way to reach you (phone or email)." Both required. The teal CTA only activates after both are filled. This is the minimum viable identity capture for the Lead record and keeps the send flow on one screen.
+
 ---
 
 ## Q5: What's the discovery upsell mechanic?

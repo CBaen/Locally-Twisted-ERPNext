@@ -53,9 +53,24 @@ The flat unsorted 50+ grid is explicitly rejected per my research. Two sources g
 
 ### Question 4: What does the "I'm done for now" moment look like?
 
-The customer has colored 2+ pieces. They're looking at the composition view. There's a "Capture this design" button at the bottom — teal fill, the only teal on the page. Tapping it produces a "design card" view: the composition displayed as a tall card (portrait, phone-screenshotable) with the LT wordmark in the corner, a brief summary ("Your arch in Blush & Seafoam with a matching column"), and a "Send this to Jeff" CTA that opens the inquiry form pre-populated with their color choices.
+The customer has colored 2+ pieces. They're looking at the composition view. There's a "Capture this design" button at the bottom — teal fill, the only teal on the page. Tapping it produces the design card view (05-done).
 
-The brief says: "Show what the 'captured' moment looks like; how it's stored is downstream." So the design card is a visual summary — it communicates "this is saved" through the card UI even though the actual persistence mechanism (session storage, URL state, or form data) is a separate concern. The card is designed to be screenshotted and texted to a friend or spouse — the sharing mechanic doesn't require us to build sharing.
+**Two paths leave this screen. They serve different audiences.**
+
+**Path A — "Send this to Jeff" (form submission, primary CRM path).** The customer taps the teal button inside the card. This fires the `/book` or `/contact` inquiry form, pre-populated with the design data. The form payload contains:
+- Customer name and contact info (collected on submission)
+- Each piece in the composition, by name: "Balloon Arch," "Column"
+- Per-piece, per-region color data: region label + color name + hex code. Example: `Arch / Main: Seafoam #88FED0 · Arch / Accent: Blush #F4DFD7 · Arch / Pop: Lime Pastel #B8FF9E`
+- Total piece count
+- Free-text field: "Anything else?" (optional)
+
+Jeff opens his CRM at 8 AM and sees a Lead with this payload already populated. He has supplier-call-ready information before he picks up the phone: color names for his balloon catalog lookup, hex codes to confirm against swatches, piece names to estimate labor. He doesn't need to ask "what colors were you thinking?" — that question is answered. His pitch starts from "tell me about your event" not "what did you have in mind."
+
+**Path B — screenshot-and-share (customer-side, no CRM event).** The design card is deliberately portrait-shaped and phone-screenshotable. A customer who wants to show their spouse, a planner, or a friend before committing takes a screenshot and texts it. This sharing path requires no build work — the card's visual format IS the sharing artifact. No social share buttons, no saved-link URLs, no backend persistence. Jeff doesn't receive anything from this path; it's between the customer and whoever they're consulting.
+
+**What the card illustration does vs. what the text does.** The arch illustration at 60px rendered width is identifiable as an arch — it gives the customer the emotional hit of seeing "their design" in miniature, a memento of what they made. But Jeff's pitch prep runs almost entirely off the text summary: piece names + region labels + color names + hex codes. The illustration earns its place on the card by serving the customer's moment of capture; the text earns its place by serving Jeff's morning briefing. Both belong; they do different jobs. The card is designed to close both loops simultaneously.
+
+The brief says: "Show what the 'captured' moment looks like; how it's stored is downstream." The persistence mechanism (session storage, URL state, or server-side Lead creation on form submit) is implementation-time work. What the mockup specifies is the data shape and the two-path handoff — that's what matters for the design decision.
 
 ---
 
@@ -70,6 +85,8 @@ The Zeigarnik Effect grounds why this works: people remember and are drawn to re
 The empty column silhouette says "there's a space here in your design that could have your colors on it." No text needed. The customer taps the silhouette and it opens the column shape ready to color. The upsell is implicit, not explicit.
 
 When the customer reaches the done screen (05-done), there's also a single contextual note: "Customers who add a matching column often find they want the arch too." This is the Hick's Law application — show one suggestion, not five [Medium, Srihari GP: medium.com/@srihari45.design — the Hick's Law guidance in that article is the one claim from that source that holds up; the Zeigarnik claim in that article does not]. One suggestion is an invitation; five suggestions are a menu.
+
+**What the empty slots tell Jeff.** A customer who submits a 2-piece inquiry after having seen empty centerpiece and garland slots has already been offered more and chose to stop at two. Jeff knows this. His pitch should start from "tell me about your event" — context-gathering — not "would you also like a centerpiece?" which would re-tread ground the tool already covered. The division of labor is: the tool does the soft options-surfacing pass; Jeff does the context and relationship work. The tool never says "you should add this" — it only creates space. Jeff fills that space with conversation, not with a repeat of the tool's suggestion. This is a more respectful pitch posture and your design naturally produces it.
 
 ---
 

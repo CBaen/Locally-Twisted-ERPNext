@@ -305,14 +305,26 @@
 
       <!-- Footer -->
       <div class="design-card-footer">
-        <div class="design-card-footer__row">
+        <div class="design-card-footer__row" style="align-items:flex-start; flex-direction:column; gap:6px;">
           <span class="design-card-footer__label">Colors</span>
-          <div class="palette-row" id="done-palette-row">
-            <div class="palette-swatch" style="background:#FFB6C1;"></div>
-            <div class="palette-swatch" style="background:#87CEEB;"></div>
-            <div class="palette-swatch" style="background:#FFFFFF; border-color:#EBEBEB;"></div>
+          <div id="done-palette-row" style="display:flex; flex-direction:column; gap:5px; width:100%;">
+            <!-- Populated by initDoneScreen() — static fallback below -->
+            <div style="display:flex; align-items:center; gap:8px;">
+              <div class="palette-swatch" style="background:#FFB6C1; width:18px; height:18px; border-radius:50%; border:2px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.12); flex-shrink:0;"></div>
+              <span style="font-family:monospace; font-size:0.75rem; font-weight:600; color:#1A1A1A;">#FFB6C1</span>
+              <span style="font-size:0.75rem; color:#595A5C;">Light Pink</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <div class="palette-swatch" style="background:#87CEEB; width:18px; height:18px; border-radius:50%; border:2px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.12); flex-shrink:0;"></div>
+              <span style="font-family:monospace; font-size:0.75rem; font-weight:600; color:#1A1A1A;">#87CEEB</span>
+              <span style="font-size:0.75rem; color:#595A5C;">Sky Blue</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <div class="palette-swatch" style="background:#FFFFFF; border:2px solid #EBEBEB; width:18px; height:18px; border-radius:50%; box-shadow:0 1px 3px rgba(0,0,0,.12); flex-shrink:0;"></div>
+              <span style="font-family:monospace; font-size:0.75rem; font-weight:600; color:#1A1A1A;">#FFFFFF</span>
+              <span style="font-size:0.75rem; color:#595A5C;">White</span>
+            </div>
           </div>
-          <span style="font-size:0.75rem; color:#595A5C; margin-left:auto;">Pink · Blue · White</span>
         </div>
         <div class="design-card-footer__row">
           <span class="design-card-footer__label">Pieces</span>
@@ -342,14 +354,46 @@
     Sending is free. No commitment. Jeff will reach out within 24 hours.
   </p>
 
+  <!-- Contact capture fields (inline — no new page) -->
+  <div style="padding:0 16px 12px;">
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      <input id="sender-name"
+             type="text"
+             placeholder="Your name"
+             autocomplete="name"
+             style="width:100%; padding:12px 14px; border:1.5px solid #EBEBEB; border-radius:10px; font-family:'Raleway',sans-serif; font-size:0.9375rem; color:#1A1A1A; outline:none; background:#FBFBFB;"
+             oninput="checkSendReady()"
+      />
+      <input id="sender-contact"
+             type="text"
+             placeholder="Phone or email — how Jeff should reach you"
+             autocomplete="tel email"
+             style="width:100%; padding:12px 14px; border:1.5px solid #EBEBEB; border-radius:10px; font-family:'Raleway',sans-serif; font-size:0.9375rem; color:#1A1A1A; outline:none; background:#FBFBFB;"
+             oninput="checkSendReady()"
+      />
+      <textarea id="sender-notes"
+                placeholder="Anything else Jeff should know? (optional — event date, venue, vibe)"
+                rows="2"
+                style="width:100%; padding:12px 14px; border:1.5px solid #EBEBEB; border-radius:10px; font-family:'Raleway',sans-serif; font-size:0.9375rem; color:#1A1A1A; outline:none; background:#FBFBFB; resize:none;"
+      ></textarea>
+    </div>
+  </div>
+
   <!-- Action buttons -->
   <div class="done-actions">
-    <button class="btn-primary btn-primary--full" id="send-to-jeff-btn">
+    <button class="btn-primary btn-primary--full" id="send-to-jeff-btn" disabled
+            style="opacity:0.5; cursor:not-allowed; transition:opacity 0.2s ease;">
       Send this design to Jeff
     </button>
     <button class="btn-ghost" style="width:100%;" onclick="window.location.href='04-composition.html'">
       Keep editing
     </button>
+  </div>
+
+  <!-- Sent confirmation (hidden until submission) -->
+  <div id="sent-confirm" style="display:none; margin:0 16px 16px; padding:14px 16px; background:rgba(0,128,128,0.06); border:1.5px solid rgba(0,128,128,0.2); border-radius:12px; text-align:center;">
+    <div style="font-family:'DM Serif Display',serif; font-size:1rem; color:#006666; margin-bottom:4px;">Design sent!</div>
+    <div style="font-size:0.8125rem; color:#595A5C;">Jeff will be in touch at <strong>(801) 285-0860</strong> or <strong>hi@locallytwisted.com</strong></div>
   </div>
 
   <!-- Start over -->

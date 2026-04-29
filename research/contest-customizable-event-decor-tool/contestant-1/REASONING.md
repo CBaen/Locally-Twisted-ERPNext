@@ -67,6 +67,28 @@ The CTA opens a pre-filled inquiry form with the design description embedded in 
 
 The brief explicitly says not to design the persistence mechanic — just show what "captured" looks like. The summary screen achieves that.
 
+**Inquiry payload specification (from Proxy Loop 1-2):**
+
+The pre-filled design notes field includes hex codes alongside color names. Format:
+
+```
+Column: Lavender (#C3B1E1) + Blush (#F4A0A0)
+Balloon Arch: Coral (#FF6B6B) + Champagne (#F7E7CE)
+Backdrop: Mint (#88FED0) + Sage (#9DC08B)
+```
+
+Color names alone are ambiguous to a balloon supplier — "Coral" maps to multiple product SKUs. The hex code gives Jeff (and his supplier) a precise reference. The JS that builds this string iterates the stage pieces array: for each piece, `${piece.label}: ${piece.colors.map(c => c.name + ' (' + c.hex + ')').join(' + ')}`. This is the same data already held in the client-side `DesignStudio.stagePieces` state object — no additional work at form-submit time.
+
+For the V1 mailto path (single shape, no stage), the format simplifies to: `Balloon Arch: Coral (#FF6B6B) [main] + Champagne (#F7E7CE) [accent]` — bracket-labeling the region so Jeff knows which color goes where on the shape. The mailto body is URL-encoded from this string.
+
+**Stage 2 inquiry enhancements:**
+
+Two items worth flagging for Stage 2, both requiring state that doesn't exist in V1:
+
+1. **"Pieces you considered" field.** When the upsell stage surfaces suggestion chips and the customer doesn't tap any, those suggestions could appear in the inquiry as: `Also suggested by the tool (customer didn't select): Garland, Bouquet.` Jeff reading "the tool offered a garland and the customer passed" gets useful signal — this customer was shown the option and didn't want it, which saves a pitch step. Implementation: the upsell JS records which suggestions were surfaced, and the inquiry-builder appends them if non-empty.
+
+2. **Design snapshot.** A rasterized or data-URI PNG of the customer's assembled composition, attached to the inquiry, means Jeff has the visual without navigating back to the tool. This requires either canvas-based SVG rasterization (client-side, via `<canvas>` + `drawImage` of a serialized SVG blob) or a server-side render step — both cross into Stage 2 scope. Flag it, don't implement in V1. The composition is already visible on the tool if Jeff needs it; the text payload carries the essential information.
+
 ---
 
 ## Question 5: What's the discovery upsell mechanic?
