@@ -81,11 +81,14 @@ Canonical resources for the new build live in `_resources/` and are platform-agn
 | `locally-twisted-decisions.md` | Append-only decision log with reasoning |
 | `locally-twisted-queue.md` | Active work queue (delete completed items) |
 | `locally-twisted-index.md` | Pointer index for client artifacts |
-| `_resources/STYLE-GUIDE.md` | Design system source-of-truth |
+| `_resources/STYLE-GUIDE.md` | Design system source-of-truth — color tokens, typography, components, voice ("Quiet Confidence") |
+| `_resources/design-guide/` | LT design competition synthesis (imported 2026-04-29). Reference inspiration / taste calibration — guide, not gospel. README.md frames; `synthesis/` has TSX + voice/mood/rationale/menu docs; `screenshots/` has 8 GL-approved page captures. |
 | `_resources/policies/INDEX.md` + 6 policy files | Business policies (legal interview answers + 5 supporting rules) |
 | `_resources/utah-tax-rates-2026q2.md` | Utah destination-based sales tax research |
+| `_resources/competitor-survey-2026-04-26.md` | 9 competitor sites surveyed; receipt for the lookbook-forward decision |
 | `_resources/images/INDEX.md` + 15 placeholder PNGs | Phase 1 image set |
-| `_resources/lt-theme.css` | Brand foundation CSS (installed in ERPNext via `Website Settings.head_html`) |
+| `_resources/odoo-export/catalog.json` + 48 image PNGs | 51-product catalog from prior Odoo attempt; reference for webshop seeding |
+| `apps/locally_twisted/locally_twisted/public/css/lt-theme.css` | Brand foundation CSS (canonical, served via `web_include_css` in `hooks.py`) |
 | `.planning/PROJECT.md` | Source-of-truth project context, requirements, decisions |
 | `.planning/ROADMAP.md` | 6 workflow-centric phases |
 | `.planning/REQUIREMENTS.md` | Requirements with REQ-IDs and traceability |
