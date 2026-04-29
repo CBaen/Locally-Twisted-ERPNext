@@ -495,20 +495,18 @@ p {
   }
 }
 
-/* Frappe wraps every page in <main class="container my-4"> inside
-   .page-content-wrapper. On mobile, Frappe's website index.scss adds
-   `.page-content-wrapper .container { padding: 1.5rem }` which squeezes
-   our content sections (compound padding with our own section gutters,
-   confines full-bleed backgrounds). Override at matching specificity so
-   sections get the full viewport on mobile. Desktop is untouched: the
-   .container max-width still kicks in at lg+ for readable centering. */
-@media (max-width: 991.98px) {
-  .page-content-wrapper .container,
-  .page-content-wrapper main.container {
-    padding-left: 0;
-    padding-right: 0;
-    max-width: 100%;
-  }
+/* STRUCTURAL: Frappe wraps every page in <main class="container my-4">
+   inside .page-content-wrapper. We refuse that confinement at every
+   breakpoint. Sections own their own layout — full-bleed bands span the
+   full viewport; sections that want narrow readable content use their
+   own inner wrapper with max-width + margin auto. The contract is:
+   the framework wrapper provides zero horizontal opinion. Mobile and
+   desktop both. This is the foundation other BBC clients build on. */
+.page-content-wrapper .container,
+.page-content-wrapper main.container {
+  padding-left: 0;
+  padding-right: 0;
+  max-width: 100%;
 }
 
 /* Footer column titles + link lists (Frappe renders these from footer_items) */
