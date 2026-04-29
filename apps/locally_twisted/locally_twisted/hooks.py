@@ -41,7 +41,7 @@ app_license = "mit"
 # Receipt: 2026-04-29 — drawer overlay edit shipped server-side but old
 # CSS stayed cached in GL's browser; drawer rendered inline on every page
 # because the cached rules didn't have `position: fixed`.
-web_include_css = "/assets/locally_twisted/css/lt-theme.css?v=20260429-5"
+web_include_css = "/assets/locally_twisted/css/lt-theme.css?v=20260429-6"
 # web_include_js = "/assets/locally_twisted/js/locally_twisted.js"
 
 # Friendly-URL aliases. Frappe's www/ router doesn't auto-translate

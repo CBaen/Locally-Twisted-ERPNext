@@ -56,11 +56,17 @@ def get_context(context):
 
 
 def _handle_stripe_session(session_id):
-    """Resolve a Stripe Checkout Session → Sales Order → /thank-you.
+    """Resolve a Stripe Checkout Session → mark PR paid → redirect.
 
-    Verifies payment_status == 'paid' before exposing the order. If the
-    session lookup fails or the payment didn't complete, redirect home
-    rather than leak existence information.
+    Verifies payment_status == 'paid' via the Stripe API before exposing
+    the order. Then marks the linked Payment Request paid synchronously
+    here (the webhook handler in payments/stripe_webhook.py would do the
+    same thing async — both paths are idempotent, so whichever fires
+    first wins and the second is a no-op). This keeps the demo flow
+    working without a webhook listener; in production the webhook is
+    still the safety net for browser-closed-before-redirect cases.
+
+    On any failure, redirect home rather than leak existence information.
     """
     from locally_twisted.payments.stripe_session import retrieve_session
 
@@ -80,7 +86,34 @@ def _handle_stripe_session(session_id):
     if not sales_order:
         _redirect("/")
 
+    pr_name = (session.get("metadata") or {}).get("payment_request")
+    if pr_name:
+        try:
+            _mark_payment_request_paid(pr_name)
+        except Exception:
+            # Don't block the customer's success landing on a backend
+            # reconciliation error. Logged for follow-up; the customer
+            # still sees /thank-you.
+            frappe.log_error(
+                frappe.get_traceback(),
+                f"payment_success: marking PR {pr_name} paid failed",
+            )
+
     _redirect(f"/thank-you?order={sales_order}")
+
+
+def _mark_payment_request_paid(pr_name):
+    """Mark a Payment Request paid + create Payment Entry. Idempotent."""
+    if not frappe.db.exists("Payment Request", pr_name):
+        return
+    if frappe.db.get_value("Payment Request", pr_name, "status") == "Paid":
+        return
+
+    pr = frappe.get_doc("Payment Request", pr_name)
+    pr.flags.ignore_permissions = True
+    pr.flags.mute_email = True
+    pr.set_as_paid()
+    frappe.db.commit()
 
 
 def _redirect(location):
