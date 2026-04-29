@@ -164,6 +164,17 @@
       .removeClass('fill-region') // keep styled but mark as filled
       .addClass('fill-region');   // re-add for stroke handling
 
+    // Also fill all mirror circles that point to this primary regionId
+    $('[data-mirrors="' + regionId + '"]')
+      .attr('fill', hex)
+      .addClass('filled');
+
+    // Also fill sibling circles with same base ID prefix (e.g. arch-main-2, arch-accent-2)
+    // These are secondary circles within the same region group
+    $('[id^="' + regionId + '-"]').each(function () {
+      $(this).attr('fill', hex).addClass('filled');
+    });
+
     // Update region-key dot color
     $('[data-region-key="' + regionId + '"] .region-key-dot')
       .css('background-color', hex)
@@ -176,7 +187,11 @@
     // Listen for taps on fill regions
     $(document).on('click touchend', '.fill-region', function (e) {
       e.preventDefault();
-      var regionId = $(this).attr('id');
+      var $el = $(this);
+      // If this is a mirror, delegate to the primary region
+      var mirrorTarget = $el.data('mirrors');
+      var regionId = mirrorTarget || $el.attr('id');
+      if (!regionId) return;
       selectRegion(regionId);
       // Apply current color immediately
       fillRegion(regionId, state.selectedColor.hex);

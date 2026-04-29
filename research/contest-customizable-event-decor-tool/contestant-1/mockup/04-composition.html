@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Color Stage — Event Stage | Locally Twisted</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Composition-specific layout */
+    .composition-view {
+      padding: 16px;
+    }
+    .composition-title {
+      margin-bottom: 16px;
+    }
+    .composition-title h2 {
+      font-size: 22px;
+      margin-bottom: 4px;
+    }
+    .composition-title p {
+      font-size: 13px;
+      color: #999;
+    }
+
+    /* Full stage view — the assembled event */
+    .stage-full {
+      background: #FAFAFA;
+      border-radius: 16px;
+      padding: 24px 16px;
+      margin-bottom: 16px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .stage-full::-webkit-scrollbar { display: none; }
+
+    .stage-full__pieces {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      min-width: max-content;
+      padding-bottom: 4px;
+    }
+
+    /* Individual piece in composition view */
+    .comp-piece {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      gap: 4px;
+      position: relative;
+    }
+
+    .comp-piece svg {
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.08));
+    }
+
+    .comp-piece.is-active svg {
+      filter: drop-shadow(0 4px 16px rgba(0,128,128,0.2));
+    }
+
+    .comp-piece__label {
+      font-size: 10px;
+      font-weight: 600;
+      color: #AAA;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    /* Edit hint on piece */
+    .comp-piece__edit-badge {
+      display: none;
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: #1A1A1A;
+      color: white;
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 5px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .comp-piece:hover .comp-piece__edit-badge,
+    .comp-piece.is-active .comp-piece__edit-badge {
+      display: block;
+    }
+
+    /* Ground line */
+    .stage-ground {
+      height: 3px;
+      background: linear-gradient(to right, transparent, #E0E0E0, transparent);
+      margin-bottom: 8px;
+    }
+
+    /* Piece list below stage */
+    .piece-list {
+      list-style: none;
+      margin-bottom: 24px;
+    }
+    .piece-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid #F0F0F0;
+      cursor: pointer;
+    }
+    .piece-list li:last-child { border-bottom: none; }
+    .piece-list__thumb {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: #F5F5F5;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .piece-list__thumb svg { width: 30px; height: 30px; }
+    .piece-list__info { flex: 1; }
+    .piece-list__name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1A1A1A;
+    }
+    .piece-list__colors {
+      display: flex;
+      gap: 4px;
+      margin-top: 3px;
+    }
+    .piece-list__color-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+    .piece-list__color-label {
+      font-size: 11px;
+      color: #999;
+      margin-left: 4px;
+    }
+    .piece-list__edit {
+      font-size: 12px;
+      font-weight: 600;
+      color: #008080;
+    }
+
+    /* Desktop two-column layout additions */
+    @media (min-width: 1280px) {
+      .stage-full {
+        padding: 40px 32px;
+      }
+      .stage-full__pieces {
+        gap: 24px;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="screen-demo-label">Screen 04 — Composition: 3 Pieces Side-by-Side</div>
+
+<div class="lt-page">
+
+  <!-- Header -->
+  <header class="lt-header">
+    <a href="02-color-one.html" class="nav-back" style="padding: 0;">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M10 12L6 8L10 4" stroke="#595A5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Edit arch
+    </a>
+    <span class="lt-header__subtitle">Your event stage</span>
+    <a href="05-done.html" class="btn-cta btn-cta--sm">Save this →</a>
+  </header>
+
+  <div class="composition-view">
+    <div class="composition-title">
+      <h2>Your Event</h2>
+      <p>3 pieces · Tap any piece to edit it</p>
+    </div>
+
+    <!-- Main composition stage -->
+    <div class="stage-full">
+      <div class="stage-full__pieces">
+
+        <!-- PIECE 1: Column (left side) -->
+        <div class="comp-piece" title="Tap to edit Column">
+          <span class="comp-piece__edit-badge">Edit</span>
+          <svg width="80" height="160" viewBox="0 0 80 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="40" cy="168" rx="16" ry="8" fill="#C3B1E1"/>
+            <ellipse cx="40" cy="155" rx="18" ry="14" fill="#B57EDC"/>
+            <ellipse cx="40" cy="136" rx="18" ry="14" fill="#C3B1E1"/>
+            <ellipse cx="40" cy="117" rx="18" ry="14" fill="#B57EDC"/>
+            <ellipse cx="40" cy="98"  rx="18" ry="14" fill="#C3B1E1"/>
+            <ellipse cx="40" cy="79"  rx="18" ry="14" fill="#B57EDC"/>
+            <ellipse cx="40" cy="60"  rx="18" ry="14" fill="#C3B1E1"/>
+            <!-- topper -->
+            <ellipse cx="30" cy="38" rx="14" ry="16" fill="#FFD1DC"/>
+            <ellipse cx="40" cy="30" rx="14" ry="18" fill="#F4A0A0"/>
+            <ellipse cx="50" cy="38" rx="14" ry="16" fill="#FFD1DC"/>
+          </svg>
+          <span class="comp-piece__label">Column</span>
+        </div>
+
+        <!-- PIECE 2: Arch (center — taller) -->
+        <div class="comp-piece is-active" title="Tap to edit Arch">
+          <span class="comp-piece__edit-badge">Edit</span>
+          <svg width="200" height="160" viewBox="0 0 340 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Main cluster -->
+            <ellipse cx="22"  cy="178" rx="20" ry="22" fill="#FF6B6B"/>
+            <ellipse cx="58"  cy="150" rx="24" ry="26" fill="#FF6B6B"/>
+            <ellipse cx="100" cy="120" rx="26" ry="28" fill="#FF6B6B"/>
+            <ellipse cx="148" cy="95"  rx="30" ry="32" fill="#FF6B6B"/>
+            <ellipse cx="198" cy="95"  rx="30" ry="32" fill="#FF6B6B"/>
+            <ellipse cx="246" cy="120" rx="26" ry="28" fill="#FF6B6B"/>
+            <ellipse cx="284" cy="150" rx="24" ry="26" fill="#FF6B6B"/>
+            <ellipse cx="318" cy="178" rx="20" ry="22" fill="#FF6B6B"/>
+            <!-- Accent cluster -->
+            <ellipse cx="40"  cy="163" rx="12" ry="14" fill="#F7E7CE"/>
+            <ellipse cx="80"  cy="133" rx="14" ry="16" fill="#F7E7CE"/>
+            <ellipse cx="124" cy="105" rx="16" ry="18" fill="#F7E7CE"/>
+            <ellipse cx="173" cy="76"  rx="18" ry="20" fill="#F7E7CE"/>
+            <ellipse cx="220" cy="105" rx="16" ry="18" fill="#F7E7CE"/>
+            <ellipse cx="262" cy="133" rx="14" ry="16" fill="#F7E7CE"/>
+            <ellipse cx="300" cy="163" rx="12" ry="14" fill="#F7E7CE"/>
+            <!-- Stems -->
+            <rect x="14" y="194" width="10" height="10" rx="3" fill="#D0D0D0"/>
+            <rect x="316" y="194" width="10" height="10" rx="3" fill="#D0D0D0"/>
+          </svg>
+          <span class="comp-piece__label">Arch ✦</span>
+        </div>
+
+        <!-- PIECE 3: Backdrop (right side) -->
+        <div class="comp-piece" title="Tap to edit Backdrop">
+          <span class="comp-piece__edit-badge">Edit</span>
+          <svg width="110" height="160" viewBox="0 0 110 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Wall grid -->
+            <ellipse cx="16"  cy="18"  rx="12" ry="12" fill="#88FED0"/>
+            <ellipse cx="40"  cy="18"  rx="12" ry="12" fill="#9DC08B"/>
+            <ellipse cx="64"  cy="18"  rx="12" ry="12" fill="#88FED0"/>
+            <ellipse cx="88"  cy="18"  rx="12" ry="12" fill="#9DC08B"/>
+            <ellipse cx="28"  cy="40"  rx="12" ry="12" fill="#9DC08B"/>
+            <ellipse cx="52"  cy="40"  rx="12" ry="12" fill="#88FED0"/>
+            <ellipse cx="76"  cy="40"  rx="12" ry="12" fill="#9DC08B"/>
+            <ellipse cx="100" cy="40"  rx="12" ry="12" fill="#88FED0"/>
+            <ellipse cx="16"  cy="62"  rx="12" ry="12" fill="#88FED0"/>
+            <ellipse cx="40"  cy="62"  rx="12" ry="12" fill="#9DC08B"/>
+            <ellipse cx="64"  cy="62"  rx="12" ry="12" fill="#88FED0"/>
+            <ellipse cx="88"  cy="62"  rx="12" ry="12" fill="#9DC08B"/>
+            <ellipse cx="28"  cy="84"  rx="12" ry="12" fill="#9DC08B"/>
+            <ellipse cx="52"  cy="84"  rx="12" ry="12" fill="#88FED0"/>
+            <ellipse cx="76"  cy="84"  rx="12" ry="12" fill="#9DC08B"/>
+            <ellipse cx="100" cy="84"  rx="12" ry="12" fill="#88FED0"/>
+            <ellipse cx="16"  cy="106" rx="12" ry="12" fill="#88FED0"/>
+            <ellipse cx="40"  cy="106" rx="12" ry="12" fill="#9DC08B"/>
+            <ellipse cx="64"  cy="106" rx="12" ry="12" fill="#88FED0"/>
+            <ellipse cx="88"  cy="106" rx="12" ry="12" fill="#9DC08B"/>
+            <ellipse cx="28"  cy="128" rx="12" ry="12" fill="#9DC08B"/>
+            <ellipse cx="52"  cy="128" rx="12" ry="12" fill="#88FED0"/>
+            <ellipse cx="76"  cy="128" rx="12" ry="12" fill="#9DC08B"/>
+            <ellipse cx="100" cy="128" rx="12" ry="12" fill="#88FED0"/>
+            <ellipse cx="16"  cy="150" rx="12" ry="12" fill="#88FED0"/>
+            <ellipse cx="40"  cy="150" rx="12" ry="12" fill="#9DC08B"/>
+            <ellipse cx="64"  cy="150" rx="12" ry="12" fill="#88FED0"/>
+            <ellipse cx="88"  cy="150" rx="12" ry="12" fill="#9DC08B"/>
+            <ellipse cx="28"  cy="172" rx="12" ry="12" fill="#9DC08B"/>
+            <ellipse cx="52"  cy="172" rx="12" ry="12" fill="#88FED0"/>
+            <ellipse cx="76"  cy="172" rx="12" ry="12" fill="#9DC08B"/>
+            <ellipse cx="100" cy="172" rx="12" ry="12" fill="#88FED0"/>
+          </svg>
+          <span class="comp-piece__label">Backdrop</span>
+        </div>
+
+      </div><!-- /.stage-full__pieces -->
+    </div><!-- /.stage-full -->
+
+    <!-- Ground line -->
+    <div class="stage-ground"></div>
+
+    <!-- Piece list -->
+    <ul class="piece-list">
+      <li>
+        <div class="piece-list__thumb">
+          <svg viewBox="0 0 30 40" fill="none">
+            <ellipse cx="15" cy="36" rx="6" ry="4" fill="#C3B1E1"/>
+            <ellipse cx="15" cy="28" rx="7" ry="6" fill="#B57EDC"/>
+            <ellipse cx="15" cy="18" rx="7" ry="6" fill="#C3B1E1"/>
+            <ellipse cx="10" cy="8"  rx="5" ry="6" fill="#FFD1DC"/>
+            <ellipse cx="15" cy="6"  rx="5" ry="6" fill="#F4A0A0"/>
+            <ellipse cx="20" cy="8"  rx="5" ry="6" fill="#FFD1DC"/>
+          </svg>
+        </div>
+        <div class="piece-list__info">
+          <div class="piece-list__name">Column</div>
+          <div class="piece-list__colors">
+            <div class="piece-list__color-dot" style="background:#C3B1E1;"></div>
+            <div class="piece-list__color-dot" style="background:#F4A0A0;"></div>
+            <span class="piece-list__color-label">Lavender + Blush</span>
+          </div>
+        </div>
+        <span class="piece-list__edit">Edit</span>
+      </li>
+      <li>
+        <div class="piece-list__thumb">
+          <svg viewBox="0 0 30 20" fill="none">
+            <ellipse cx="4"  cy="18" rx="4" ry="5" fill="#FF6B6B"/>
+            <ellipse cx="10" cy="13" rx="5" ry="6" fill="#F7E7CE"/>
+            <ellipse cx="15" cy="10" rx="6" ry="7" fill="#FF6B6B"/>
+            <ellipse cx="20" cy="13" rx="5" ry="6" fill="#F7E7CE"/>
+            <ellipse cx="26" cy="18" rx="4" ry="5" fill="#FF6B6B"/>
+          </svg>
+        </div>
+        <div class="piece-list__info">
+          <div class="piece-list__name">Balloon Arch</div>
+          <div class="piece-list__colors">
+            <div class="piece-list__color-dot" style="background:#FF6B6B;"></div>
+            <div class="piece-list__color-dot" style="background:#F7E7CE;"></div>
+            <span class="piece-list__color-label">Coral + Champagne</span>
+          </div>
+        </div>
+        <span class="piece-list__edit" style="color:#008080; font-weight:700;">Editing</span>
+      </li>
+      <li>
+        <div class="piece-list__thumb">
+          <svg viewBox="0 0 30 30" fill="none">
+            <ellipse cx="5"  cy="5"  rx="4" ry="4" fill="#88FED0"/>
+            <ellipse cx="15" cy="5"  rx="4" ry="4" fill="#9DC08B"/>
+            <ellipse cx="25" cy="5"  rx="4" ry="4" fill="#88FED0"/>
+            <ellipse cx="5"  cy="15" rx="4" ry="4" fill="#9DC08B"/>
+            <ellipse cx="15" cy="15" rx="4" ry="4" fill="#88FED0"/>
+            <ellipse cx="25" cy="15" rx="4" ry="4" fill="#9DC08B"/>
+            <ellipse cx="5"  cy="25" rx="4" ry="4" fill="#88FED0"/>
+            <ellipse cx="15" cy="25" rx="4" ry="4" fill="#9DC08B"/>
+            <ellipse cx="25" cy="25" rx="4" ry="4" fill="#88FED0"/>
+          </svg>
+        </div>
+        <div class="piece-list__info">
+          <div class="piece-list__name">Backdrop</div>
+          <div class="piece-list__colors">
+            <div class="piece-list__color-dot" style="background:#88FED0;"></div>
+            <div class="piece-list__color-dot" style="background:#9DC08B;"></div>
+            <span class="piece-list__color-label">Mint + Sage</span>
+          </div>
+        </div>
+        <span class="piece-list__edit">Edit</span>
+      </li>
+    </ul>
+
+    <!-- Add another piece -->
+    <button class="btn-ghost" type="button" style="width:100%; margin-bottom:16px;">
+      + Add another piece
+    </button>
+
+    <!-- Save CTA -->
+    <a href="05-done.html" class="btn-cta btn-cta--full">Save my design →</a>
+
+  </div><!-- /.composition-view -->
+
+</div><!-- /.lt-page -->
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="script.js"></script>
+<script>
+  // Simple: clicking a comp-piece sets active state
+  $(document).on('click', '.comp-piece', function() {
+    $('.comp-piece').removeClass('is-active');
+    $(this).addClass('is-active');
+  });
+</script>
+</body>
+</html>

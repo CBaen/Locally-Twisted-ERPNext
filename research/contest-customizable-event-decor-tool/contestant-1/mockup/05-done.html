@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Color Stage — Your Design | Locally Twisted</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .done-screen {
+      padding: 0 0 40px;
+    }
+
+    /* Hero banner — their assembled event */
+    .design-hero {
+      background: linear-gradient(160deg, #FFF5F5 0%, #F0FAF5 100%);
+      padding: 32px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .design-hero__bg-text {
+      position: absolute;
+      font-family: 'DM Serif Display', serif;
+      font-size: 80px;
+      color: rgba(0,0,0,0.03);
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .design-hero__label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #999;
+      margin-bottom: 8px;
+    }
+
+    .design-hero__title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 26px;
+      color: #1A1A1A;
+      margin-bottom: 16px;
+    }
+
+    /* Mini stage in done screen */
+    .mini-stage {
+      display: inline-flex;
+      align-items: flex-end;
+      gap: 8px;
+      background: white;
+      border-radius: 16px;
+      padding: 16px 24px 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    }
+
+    .mini-stage svg { filter: drop-shadow(0 2px 6px rgba(0,0,0,0.06)); }
+
+    /* Design description block */
+    .design-description {
+      padding: 24px 16px 0;
+    }
+
+    .design-description h3 {
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+
+    .design-summary-list {
+      list-style: none;
+    }
+
+    .design-summary-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid #F5F5F5;
+      font-size: 14px;
+      color: #595A5C;
+    }
+
+    .design-summary-list li:last-child { border-bottom: none; }
+
+    .dslist__icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: #F5F5F5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .dslist__icon svg { width: 20px; height: 20px; }
+
+    .dslist__piece { font-weight: 600; color: #1A1A1A; }
+    .dslist__colors { display: flex; gap: 4px; align-items: center; margin-top: 2px; }
+    .dslist__dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+    .dslist__color-names { font-size: 12px; color: #999; }
+
+    /* CTA block */
+    .done-cta-block {
+      padding: 24px 16px 8px;
+    }
+
+    .done-cta-block__heading {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      color: #1A1A1A;
+      margin-bottom: 8px;
+    }
+
+    .done-cta-block__body {
+      font-size: 14px;
+      color: #595A5C;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    /* Form preview */
+    .inquiry-form-preview {
+      background: #FAFAFA;
+      border: 1.5px solid #EBEBEB;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .inquiry-form-preview__label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #BBB;
+      margin-bottom: 12px;
+    }
+
+    .form-field-preview {
+      margin-bottom: 12px;
+    }
+
+    .form-field-preview label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #595A5C;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .form-field-preview__input {
+      background: white;
+      border: 1.5px solid #DCDCDC;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 14px;
+      color: #1A1A1A;
+      width: 100%;
+      font-family: 'Raleway', sans-serif;
+    }
+
+    .form-field-preview__input.is-prefilled {
+      color: #595A5C;
+      background: #F9F9F9;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .done-secondary-actions {
+      padding: 0 16px;
+      display: flex;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body>
+<div class="screen-demo-label">Screen 05 — "I'm Done For Now" — Captured Design Moment</div>
+
+<div class="lt-page">
+
+  <!-- Header -->
+  <header class="lt-header">
+    <a href="04-composition.html" class="nav-back" style="padding: 0;">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M10 12L6 8L10 4" stroke="#595A5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Edit
+    </a>
+    <span class="lt-header__subtitle">Your design</span>
+  </header>
+
+  <div class="done-screen">
+
+    <!-- Hero: visual of their assembled event -->
+    <div class="design-hero">
+      <div class="design-hero__bg-text">Your Event</div>
+      <div class="design-hero__label">Your event stage</div>
+      <h1 class="design-hero__title">Looking beautiful.</h1>
+
+      <!-- Mini assembled stage -->
+      <div class="mini-stage">
+
+        <!-- Column mini -->
+        <svg width="44" height="100" viewBox="0 0 80 180" fill="none">
+          <ellipse cx="40" cy="168" rx="16" ry="8" fill="#C3B1E1"/>
+          <ellipse cx="40" cy="150" rx="18" ry="14" fill="#B57EDC"/>
+          <ellipse cx="40" cy="130" rx="18" ry="14" fill="#C3B1E1"/>
+          <ellipse cx="40" cy="110" rx="18" ry="14" fill="#B57EDC"/>
+          <ellipse cx="40" cy="90"  rx="18" ry="14" fill="#C3B1E1"/>
+          <ellipse cx="40" cy="70"  rx="18" ry="14" fill="#B57EDC"/>
+          <ellipse cx="30" cy="42" rx="14" ry="15" fill="#FFD1DC"/>
+          <ellipse cx="40" cy="34" rx="14" ry="17" fill="#F4A0A0"/>
+          <ellipse cx="50" cy="42" rx="14" ry="15" fill="#FFD1DC"/>
+        </svg>
+
+        <!-- Arch mini -->
+        <svg width="140" height="100" viewBox="0 0 340 200" fill="none">
+          <ellipse cx="22"  cy="178" rx="20" ry="22" fill="#FF6B6B"/>
+          <ellipse cx="58"  cy="150" rx="24" ry="26" fill="#FF6B6B"/>
+          <ellipse cx="100" cy="120" rx="26" ry="28" fill="#FF6B6B"/>
+          <ellipse cx="148" cy="95"  rx="30" ry="32" fill="#FF6B6B"/>
+          <ellipse cx="198" cy="95"  rx="30" ry="32" fill="#FF6B6B"/>
+          <ellipse cx="246" cy="120" rx="26" ry="28" fill="#FF6B6B"/>
+          <ellipse cx="284" cy="150" rx="24" ry="26" fill="#FF6B6B"/>
+          <ellipse cx="318" cy="178" rx="20" ry="22" fill="#FF6B6B"/>
+          <ellipse cx="40"  cy="163" rx="12" ry="14" fill="#F7E7CE"/>
+          <ellipse cx="80"  cy="133" rx="14" ry="16" fill="#F7E7CE"/>
+          <ellipse cx="124" cy="105" rx="16" ry="18" fill="#F7E7CE"/>
+          <ellipse cx="173" cy="76"  rx="18" ry="20" fill="#F7E7CE"/>
+          <ellipse cx="220" cy="105" rx="16" ry="18" fill="#F7E7CE"/>
+          <ellipse cx="262" cy="133" rx="14" ry="16" fill="#F7E7CE"/>
+          <ellipse cx="300" cy="163" rx="12" ry="14" fill="#F7E7CE"/>
+        </svg>
+
+        <!-- Backdrop mini -->
+        <svg width="60" height="100" viewBox="0 0 110 200" fill="none">
+          <ellipse cx="16"  cy="18"  rx="11" ry="11" fill="#88FED0"/>
+          <ellipse cx="40"  cy="18"  rx="11" ry="11" fill="#9DC08B"/>
+          <ellipse cx="64"  cy="18"  rx="11" ry="11" fill="#88FED0"/>
+          <ellipse cx="88"  cy="18"  rx="11" ry="11" fill="#9DC08B"/>
+          <ellipse cx="28"  cy="40"  rx="11" ry="11" fill="#9DC08B"/>
+          <ellipse cx="52"  cy="40"  rx="11" ry="11" fill="#88FED0"/>
+          <ellipse cx="76"  cy="40"  rx="11" ry="11" fill="#9DC08B"/>
+          <ellipse cx="16"  cy="62"  rx="11" ry="11" fill="#88FED0"/>
+          <ellipse cx="40"  cy="62"  rx="11" ry="11" fill="#9DC08B"/>
+          <ellipse cx="64"  cy="62"  rx="11" ry="11" fill="#88FED0"/>
+          <ellipse cx="28"  cy="84"  rx="11" ry="11" fill="#9DC08B"/>
+          <ellipse cx="52"  cy="84"  rx="11" ry="11" fill="#88FED0"/>
+          <ellipse cx="76"  cy="84"  rx="11" ry="11" fill="#9DC08B"/>
+          <ellipse cx="16"  cy="106" rx="11" ry="11" fill="#88FED0"/>
+          <ellipse cx="40"  cy="106" rx="11" ry="11" fill="#9DC08B"/>
+          <ellipse cx="64"  cy="106" rx="11" ry="11" fill="#88FED0"/>
+          <ellipse cx="28"  cy="128" rx="11" ry="11" fill="#9DC08B"/>
+          <ellipse cx="52"  cy="128" rx="11" ry="11" fill="#88FED0"/>
+          <ellipse cx="16"  cy="150" rx="11" ry="11" fill="#88FED0"/>
+          <ellipse cx="40"  cy="150" rx="11" ry="11" fill="#9DC08B"/>
+        </svg>
+
+      </div><!-- /.mini-stage -->
+    </div><!-- /.design-hero -->
+
+    <!-- Design description -->
+    <div class="design-description">
+      <h3>What you designed</h3>
+      <ul class="design-summary-list">
+        <li>
+          <div class="dslist__icon">
+            <svg viewBox="0 0 20 12" fill="none">
+              <ellipse cx="2" cy="11" rx="2" ry="2.5" fill="#C3B1E1"/>
+              <ellipse cx="6" cy="8"  rx="2.5" ry="3" fill="#C3B1E1"/>
+              <ellipse cx="10" cy="6" rx="3" ry="3.5" fill="#C3B1E1"/>
+              <ellipse cx="14" cy="8" rx="2.5" ry="3" fill="#C3B1E1"/>
+              <ellipse cx="18" cy="11" rx="2" ry="2.5" fill="#C3B1E1"/>
+            </svg>
+          </div>
+          <div>
+            <div class="dslist__piece">Column</div>
+            <div class="dslist__colors">
+              <div class="dslist__dot" style="background:#C3B1E1;"></div>
+              <div class="dslist__dot" style="background:#F4A0A0;"></div>
+              <span class="dslist__color-names">Lavender + Blush</span>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="dslist__icon">
+            <svg viewBox="0 0 20 12" fill="none">
+              <ellipse cx="2"  cy="11" rx="2"   ry="2.5" fill="#FF6B6B"/>
+              <ellipse cx="6"  cy="8"  rx="2.5" ry="3"   fill="#F7E7CE"/>
+              <ellipse cx="10" cy="5"  rx="3"   ry="3.5" fill="#FF6B6B"/>
+              <ellipse cx="14" cy="8"  rx="2.5" ry="3"   fill="#F7E7CE"/>
+              <ellipse cx="18" cy="11" rx="2"   ry="2.5" fill="#FF6B6B"/>
+            </svg>
+          </div>
+          <div>
+            <div class="dslist__piece">Balloon Arch</div>
+            <div class="dslist__colors">
+              <div class="dslist__dot" style="background:#FF6B6B;"></div>
+              <div class="dslist__dot" style="background:#F7E7CE;"></div>
+              <span class="dslist__color-names">Coral + Champagne</span>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="dslist__icon">
+            <svg viewBox="0 0 20 16" fill="none">
+              <ellipse cx="3"  cy="4"  rx="3" ry="3" fill="#88FED0"/>
+              <ellipse cx="10" cy="4"  rx="3" ry="3" fill="#9DC08B"/>
+              <ellipse cx="17" cy="4"  rx="3" ry="3" fill="#88FED0"/>
+              <ellipse cx="3"  cy="12" rx="3" ry="3" fill="#9DC08B"/>
+              <ellipse cx="10" cy="12" rx="3" ry="3" fill="#88FED0"/>
+              <ellipse cx="17" cy="12" rx="3" ry="3" fill="#9DC08B"/>
+            </svg>
+          </div>
+          <div>
+            <div class="dslist__piece">Backdrop</div>
+            <div class="dslist__colors">
+              <div class="dslist__dot" style="background:#88FED0;"></div>
+              <div class="dslist__dot" style="background:#9DC08B;"></div>
+              <span class="dslist__color-names">Mint + Sage</span>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- CTA: Send to Jeff -->
+    <div class="done-cta-block">
+      <h2 class="done-cta-block__heading">Ready to talk?</h2>
+      <p class="done-cta-block__body">
+        Send this to Jeff and he'll reach out to talk details, availability, and everything else. No pressure — this is just the starting point.
+      </p>
+
+      <!-- Inquiry form with design pre-filled -->
+      <div class="inquiry-form-preview">
+        <div class="inquiry-form-preview__label">Your inquiry</div>
+        <div class="form-field-preview">
+          <label>Your name</label>
+          <div class="form-field-preview__input" style="color:#999;">Sarah M.</div>
+        </div>
+        <div class="form-field-preview">
+          <label>Event date (rough idea is fine)</label>
+          <div class="form-field-preview__input" style="color:#999;">July 2026</div>
+        </div>
+        <div class="form-field-preview">
+          <label>Your design (auto-filled)</label>
+          <div class="form-field-preview__input is-prefilled">
+            Column: Lavender + Blush<br>
+            Balloon Arch: Coral + Champagne<br>
+            Backdrop: Mint + Sage
+          </div>
+        </div>
+        <div class="form-field-preview">
+          <label>Anything else?</label>
+          <div class="form-field-preview__input" style="color:#999;">It's for a baby shower...</div>
+        </div>
+      </div>
+
+      <a href="#" class="btn-cta btn-cta--full" style="margin-bottom:12px;">Send this to Jeff</a>
+    </div>
+
+    <div class="done-secondary-actions">
+      <a href="04-composition.html" class="btn-ghost" style="flex:1;">Edit design</a>
+      <a href="06-upsell.html" class="btn-ghost" style="flex:1;">Add more pieces</a>
+    </div>
+
+  </div><!-- /.done-screen -->
+
+</div><!-- /.lt-page -->
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
