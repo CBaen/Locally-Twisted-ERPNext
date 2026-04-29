@@ -46,6 +46,10 @@
                         <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
                     </svg>
                     <span class="lt-header__util-link-text">Cart</span>
+                    {# Cart count badge — populated/cleared by lt-guest-cart.js
+                       paintBadges() on every cart change. Hidden when 0
+                       via the absence of .is-populated. #}
+                    <span id="lt-cart-count" class="lt-cart-count" aria-live="polite" aria-atomic="true"></span>
                 </a>
             </div>
         </div>
@@ -102,6 +106,43 @@
 
 </header>
 
+<style>
+/* Cart count badge — populated by lt-guest-cart.js paintBadges() on
+   every cart change. Hidden when count = 0 via absence of .is-populated.
+   Lives inline so the navbar partial is self-contained. */
+.lt-header__util-link--cart {
+    position: relative;
+}
+.lt-cart-count {
+    display: none;
+    position: absolute;
+    top: -6px;
+    right: -10px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    background-color: #c0392b;
+    color: #ffffff;
+    border-radius: 9px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 18px;
+    text-align: center;
+    box-sizing: border-box;
+    pointer-events: none;
+}
+.lt-cart-count.is-populated {
+    display: inline-block;
+}
+.lt-cart-count--mobile {
+    position: static;
+    margin-left: 0.5rem;
+    background-color: var(--lt-teal, #107373);
+    vertical-align: middle;
+}
+</style>
+
 {# ====================================================================
    Mobile drawer + backdrop. Positioned OUTSIDE the <header> stacking
    context so they overlay the page cleanly. Hidden on desktop via CSS
@@ -143,7 +184,7 @@
                 <li><a class="lt-header__mobile-nav-link" href="/me">Account</a></li>
                 <li><a class="lt-header__mobile-nav-link" href="/api/method/logout">Sign Out</a></li>
             {% endif %}
-            <li><a class="lt-header__mobile-nav-link" href="/cart">Cart</a></li>
+            <li><a class="lt-header__mobile-nav-link" href="/cart">Cart <span class="lt-cart-count lt-cart-count--mobile" aria-live="polite" aria-atomic="true"></span></a></li>
         </ul>
     </nav>
 </aside>
