@@ -320,6 +320,217 @@ def _send_receipt_email(so_name):
     frappe.db.commit()
 
 
+OPERATOR_EMAIL = "locallytwisted@gmail.com"
+# Jeff's operator inbox. Update via site_config.json
+# (`bench --site frontend set-config lt_operator_email <addr>`) when LT
+# wants to route notifications elsewhere; the lookup falls through to
+# this constant if no override is set.
+
+
+def _send_operator_notification(so_name):
+    """Email Jeff (or whoever owns the operator inbox) when a new paid
+    order lands. Plain HTML body — no PDF attachment (wkhtmltopdf trap).
+    Idempotent: looks for an existing Communication with the same subject
+    on this SO.
+    """
+    so = frappe.get_doc("Sales Order", so_name)
+    recipient = frappe.conf.get("lt_operator_email") or OPERATOR_EMAIL
+
+    subject = f"New paid order — {so.name} — ${flt(so.grand_total):,.2f}"
+
+    already_sent = frappe.get_all(
+        "Communication",
+        filters={
+            "reference_doctype": "Sales Order",
+            "reference_name": so_name,
+            "subject": subject,
+        },
+        limit=1,
+    )
+    if already_sent:
+        return
+
+    customer_email = None
+    if so.shipping_address_name:
+        customer_email = frappe.db.get_value(
+            "Address", so.shipping_address_name, "email_id"
+        )
+
+    customer_phone = None
+    if so.shipping_address_name:
+        customer_phone = frappe.db.get_value(
+            "Address", so.shipping_address_name, "phone"
+        )
+
+    # Pull the address components and assemble a multi-line block.
+    # `address_display` is a computed HTML field stored on the SO
+    # (so.shipping_address) but not on the Address row itself, so we
+    # read the components and format ourselves to keep this email-safe.
+    shipping_addr = ""
+    if so.shipping_address_name:
+        addr = frappe.db.get_value(
+            "Address",
+            so.shipping_address_name,
+            ["address_line1", "address_line2", "city", "state", "pincode", "country"],
+            as_dict=True,
+        ) or {}
+        parts = []
+        if addr.get("address_line1"):
+            parts.append(addr["address_line1"])
+        if addr.get("address_line2"):
+            parts.append(addr["address_line2"])
+        city_state_zip = ", ".join(filter(None, [
+            addr.get("city"),
+            " ".join(filter(None, [addr.get("state"), addr.get("pincode")])),
+        ]))
+        if city_state_zip:
+            parts.append(city_state_zip)
+        if addr.get("country") and addr.get("country") != "United States":
+            parts.append(addr["country"])
+        shipping_addr = "\n".join(parts)
+
+    lines_html = ""
+    for item in so.items:
+        name = item.item_name or item.item_code
+        lines_html += (
+            f'<tr>'
+            f'<td style="padding:6px 12px 6px 0;">{escape_html(name)}</td>'
+            f'<td style="padding:6px 12px;text-align:center;">{int(item.qty)}</td>'
+            f'<td style="padding:6px 0;text-align:right;">${flt(item.amount):,.2f}</td>'
+            f'</tr>'
+        )
+
+    site_url = frappe.utils.get_url().rstrip("/")
+    desk_link = f"{site_url}/app/sales-order/{so.name}"
+
+    body = f"""
+<div style="font-family: Raleway, Helvetica, Arial, sans-serif; max-width:600px; color:#1a1a1a; line-height:1.55;">
+  <h1 style="font-family:'DM Serif Display', Georgia, serif; font-size:22px; margin:0 0 4px;">
+    A new paid order just landed.
+  </h1>
+  <p style="margin:0 0 16px; color:#5a5a5a;">{escape_html(so.name)} &middot; ${flt(so.grand_total):,.2f} {escape_html(so.currency or "USD")}</p>
+
+  <table style="width:100%; border-collapse:collapse; font-size:14px; margin:0 0 16px;">
+    <thead>
+      <tr style="border-bottom:1px solid #ddd;">
+        <th style="text-align:left; padding:6px 12px 6px 0;">Item</th>
+        <th style="text-align:center; padding:6px 12px;">Qty</th>
+        <th style="text-align:right; padding:6px 0;">Amount</th>
+      </tr>
+    </thead>
+    <tbody>{lines_html}</tbody>
+  </table>
+
+  <p style="margin:0 0 6px;"><strong>Customer:</strong> {escape_html(so.customer_name or so.customer or "")}</p>
+  {f'<p style="margin:0 0 6px;"><strong>Email:</strong> {escape_html(customer_email)}</p>' if customer_email else ''}
+  {f'<p style="margin:0 0 6px;"><strong>Phone:</strong> {escape_html(customer_phone)}</p>' if customer_phone else ''}
+  {f'<p style="margin:0 0 16px; white-space:pre-line;"><strong>Shipping:</strong><br>{shipping_addr}</p>' if shipping_addr else ''}
+
+  <p style="margin:24px 0 0;">
+    <a href="{desk_link}" style="display:inline-block; padding:8px 16px; background:#107373; color:#fff; text-decoration:none; border-radius:4px; font-weight:600;">
+      Open order in desk
+    </a>
+  </p>
+</div>
+"""
+
+    frappe.sendmail(
+        recipients=[recipient],
+        subject=subject,
+        message=body,
+        reference_doctype="Sales Order",
+        reference_name=so_name,
+        now=False,
+    )
+    frappe.db.commit()
+
+
+def _send_welcome_email_if_first_order(so_name):
+    """Send a one-time welcome email to first-time customers.
+
+    Definition of first-time: this SO is the customer's only submitted
+    Sales Order. If they have any other submitted SO (this one or
+    earlier), they're a returning customer and we skip welcome.
+
+    Idempotent via Communication subject lookup.
+    """
+    so = frappe.get_doc("Sales Order", so_name)
+    if not so.customer:
+        return
+
+    # Look for any OTHER submitted SO on this customer.
+    other_orders = frappe.get_all(
+        "Sales Order",
+        filters={
+            "customer": so.customer,
+            "docstatus": 1,
+            "name": ("!=", so_name),
+        },
+        limit=1,
+    )
+    if other_orders:
+        return  # Returning customer; skip welcome
+
+    email = None
+    if so.shipping_address_name:
+        email = frappe.db.get_value("Address", so.shipping_address_name, "email_id")
+    if not email:
+        return
+
+    subject = "Welcome to Locally Twisted"
+
+    already_sent = frappe.get_all(
+        "Communication",
+        filters={
+            "reference_doctype": "Customer",
+            "reference_name": so.customer,
+            "subject": subject,
+        },
+        limit=1,
+    )
+    if already_sent:
+        return
+
+    body = f"""
+<div style="font-family: Raleway, Helvetica, Arial, sans-serif; max-width:560px; margin:0 auto; color:#1a1a1a; line-height:1.6;">
+  <h1 style="font-family:'DM Serif Display', Georgia, serif; font-size:30px; margin:0 0 16px;">
+    Welcome to Locally Twisted.
+  </h1>
+  <p style="font-size:16px; color:#3a3a3a; margin:0 0 20px;">
+    Thanks for your first order with us. We&rsquo;ve been making celebrations
+    along the Wasatch Front since 1998, and we&rsquo;re glad you&rsquo;re part of it now.
+  </p>
+
+  <h2 style="font-family:'DM Serif Display', Georgia, serif; font-size:20px; margin:24px 0 8px;">
+    What happens next
+  </h2>
+  <ul style="font-size:15px; color:#3a3a3a; padding-left:20px; margin:0 0 20px;">
+    <li style="margin-bottom:6px;">You&rsquo;ll get a separate receipt email with your order details.</li>
+    <li style="margin-bottom:6px;">We&rsquo;ll be in touch about delivery timing for your event.</li>
+    <li style="margin-bottom:6px;">If anything changes on your end, just reply to this email.</li>
+  </ul>
+
+  <p style="font-size:14px; color:#5a5a5a; margin:24px 0 0;">
+    Questions, color preferences, or last-minute additions?
+    Reply here or call (801) 285-0860.
+  </p>
+  <p style="font-size:12px; color:#9a9a9a; margin:24px 0 0;">
+    Locally Twisted &middot; 8969 S 2700 W, West Jordan, UT 84088
+  </p>
+</div>
+"""
+
+    frappe.sendmail(
+        recipients=[email],
+        subject=subject,
+        message=body,
+        reference_doctype="Customer",
+        reference_name=so.customer,
+        now=False,
+    )
+    frappe.db.commit()
+
+
 def _redirect(location):
     frappe.local.flags.redirect_location = location
     raise frappe.Redirect
