@@ -86,10 +86,10 @@
 
     .design-pill {
       flex: 1;
-      padding: 5px 0;
+      padding: 5px 4px;
       font-size: 0.75rem;
       font-weight: 600;
-      border-radius: 20px;
+      border-radius: 12px;
       border: 1.5px solid #D0D0D0;
       background: #FFFFFF;
       color: #595A5C;
@@ -97,6 +97,11 @@
       text-align: center;
       transition: all 0.15s ease;
       white-space: nowrap;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      line-height: 1.2;
     }
 
     .design-pill:hover {
@@ -110,21 +115,26 @@
       color: #FFFFFF;
     }
 
+    /* SVG thumbnail inside pill — visual pattern preview */
+    /* C4 pattern borrowed: shows the actual arrangement visually before reading */
+    .design-pill__thumb {
+      display: block;
+      flex-shrink: 0;
+    }
+
+    .design-pill--active .design-pill__thumb circle {
+      /* Invert thumbnail circles to white when pill is active (dark bg) */
+      fill: rgba(255,255,255,0.85);
+    }
+
     /* Descriptor line under pill label — self-explains at midnight */
     .design-pill__desc {
       display: block;
       font-size: 0.5625rem;
       font-weight: 400;
       letter-spacing: 0.01em;
-      margin-top: 2px;
       opacity: 0.75;
       line-height: 1.1;
-    }
-
-    .design-pill {
-      /* Override: allow two lines now that descriptor is present */
-      line-height: 1.2;
-      padding: 4px 0 5px;
     }
 
     /* Color cap hint — shown under pills */
@@ -290,18 +300,43 @@
   <div class="design-selector">
     <span class="design-selector__label">Look</span>
     <div class="design-pills">
+
+      <!-- Swirl: alternating A-B-A-B-A circles (2-color repeating spiral) -->
       <button class="design-pill design-pill--active" data-design="swirl">
+        <svg class="design-pill__thumb" viewBox="0 0 44 10" width="44" height="10" aria-hidden="true">
+          <circle cx="5"  cy="5" r="4.5" fill="#F4C2C2"/>
+          <circle cx="16" cy="5" r="4.5" fill="#7FA3C0"/>
+          <circle cx="27" cy="5" r="4.5" fill="#F4C2C2"/>
+          <circle cx="38" cy="5" r="4.5" fill="#7FA3C0"/>
+        </svg>
         Swirl
-        <span class="design-pill__desc">spiral pattern</span>
+        <span class="design-pill__desc">alternating colors</span>
       </button>
+
+      <!-- Layered: banded chunks — 3 distinct color segments stacked -->
       <button class="design-pill" data-design="layered">
+        <svg class="design-pill__thumb" viewBox="0 0 44 10" width="44" height="10" aria-hidden="true">
+          <circle cx="5"  cy="5" r="4.5" fill="#F4C2C2"/>
+          <circle cx="16" cy="5" r="4.5" fill="#F4C2C2"/>
+          <circle cx="27" cy="5" r="4.5" fill="#7FA3C0"/>
+          <circle cx="38" cy="5" r="4.5" fill="#7FA3C0"/>
+        </svg>
         Layered
-        <span class="design-pill__desc">color bands</span>
+        <span class="design-pill__desc">color in bands</span>
       </button>
+
+      <!-- Organic: varied colors, no fixed pattern -->
       <button class="design-pill" data-design="organic">
+        <svg class="design-pill__thumb" viewBox="0 0 44 10" width="44" height="10" aria-hidden="true">
+          <circle cx="5"  cy="5" r="4.5" fill="#F4C2C2"/>
+          <circle cx="16" cy="5" r="4.5" fill="#7FA3C0"/>
+          <circle cx="27" cy="5" r="4.5" fill="#D4A017"/>
+          <circle cx="38" cy="5" r="4.5" fill="#FFFFFF" stroke="#D0D0D0" stroke-width="0.8"/>
+        </svg>
         Organic
         <span class="design-pill__desc">mixed &amp; flowing</span>
       </button>
+
     </div>
   </div>
   <div class="design-cap-hint" id="design-cap-hint">up to 4 colors</div>

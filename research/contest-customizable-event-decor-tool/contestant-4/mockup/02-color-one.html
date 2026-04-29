@@ -301,20 +301,17 @@
       <span id="picker-region-label">Choosing: Main Color</span>
     </div>
 
-    <!-- Recently used -->
-    <div class="picker-recents">
+    <!-- Recently used — hidden until populated by JS -->
+    <!-- JS adds 'has-recents' class to .picker-recents when first color is picked -->
+    <div class="picker-recents" id="picker-recents-section" style="display:none;">
       <div class="picker-recents__label">Recently Used</div>
       <div class="picker-recents__row">
         <!-- Populated by JS -->
-        <div class="swatch-circle empty"></div>
-        <div class="swatch-circle empty"></div>
-        <div class="swatch-circle empty"></div>
-        <div class="swatch-circle empty"></div>
-        <div class="swatch-circle empty"></div>
-        <div class="swatch-circle empty"></div>
-        <div class="swatch-circle empty"></div>
-        <div class="swatch-circle empty"></div>
       </div>
+    </div>
+    <!-- Placeholder shown when no recents yet -->
+    <div id="picker-recents-placeholder" style="padding: 10px 20px 4px; font-size: 12px; color: #C0C0C0; font-style: italic;">
+      Colors you pick will appear here
     </div>
 
     <!-- Full palette -->

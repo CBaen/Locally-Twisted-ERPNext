@@ -233,13 +233,24 @@ var ColorPicker = {
     var $row = $('.picker-recents__row');
     if (!$row.length) return;
     $row.empty();
+
+    var hasAny = DesignState.recentColors.length > 0;
+
+    // Show/hide the recents section vs placeholder based on whether any colors have been picked
+    if (hasAny) {
+      $('#picker-recents-section').show();
+      $('#picker-recents-placeholder').hide();
+    } else {
+      $('#picker-recents-section').hide();
+      $('#picker-recents-placeholder').show();
+      return; // nothing to render
+    }
+
     var slots = 8;
     for (var i = 0; i < slots; i++) {
       var hex = DesignState.recentColors[i];
       if (hex) {
         $row.append('<div class="swatch-circle recent-swatch" data-hex="' + hex + '" style="background:' + hex + '"></div>');
-      } else {
-        $row.append('<div class="swatch-circle empty"></div>');
       }
     }
   },
