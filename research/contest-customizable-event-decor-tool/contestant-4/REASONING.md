@@ -21,7 +21,13 @@ This is informed by Pigment's tap-to-fill model (https://www.idownloadblog.com/2
 
 SVG fill regions work via `addEventListener("click", ...)` + `setAttribute("fill", hex)` — confirmed viable on mobile via https://svg-tutorial.com/svg/interaction and the Frappe portal pages confirmation at https://docs.frappe.io/framework/v15/user/en/portal-pages (inline SVG has full DOM access in Frappe templates).
 
-**Number of fill regions: 2 per shape by default.** Research on existing balloon tools (Virtualoon at https://www.virtualoon.com/, BalloonBuilder at https://balloonbuilder.com/balloonbuilder-overview/) shows that professional tools offer per-balloon control, but this overwhelms customers. The Tangled Balloons configurator (https://tangledballoons.com/products/arch) names its arches in pattern terms — "4 color spiral arch," "4 color spiral arrow arch" — which confirms that customers encounter and think in terms of color patterns, not individual balloon selection. Two regions (primary + accent) captures that pattern-first mental model: the customer chooses a main color and an alternating accent, and the tool renders the pattern. This is a design judgment grounded in the Tangled Balloons observation and in LT's own design vocabulary — not a measured prevalence figure. (Note: the page offered no customer-choice statistics; the 3D configurator on the page was broken. The observation is pattern naming, not data.)
+**Number of fill regions: 2 per shape by default — grounded in construction physics, not just customer mental model inference.**
+
+Balloon arches and columns are built in 4-balloon clusters (one triplet cluster + one accent balloon per knot-tying unit). This is the atomic unit of classic arch/column/wall construction. Given a cluster size of 4, the minimum repeat length for a color pattern is `min_repeat = C ÷ gcd(C, 4)`, where C is the number of colors in the pattern. For 2 colors: `gcd(2, 4) = 2`, so `min_repeat = 2 ÷ 2 = 1` — a single cluster completes the full pattern. The 2-color Swirl is mathematically the cleanest case: one primary balloon, one accent balloon, repeating A B A B along the arch with no partial clusters and no remainder. It is also the most common arrangement LT builds for everyday events.
+
+This construction physics is why the tool defaults to Swirl mode with 2 fill regions. It is not a simplification for simplicity's sake — it is the simplification that matches the physics of how the product is actually constructed. The Tangled Balloons configurator (https://tangledballoons.com/products/arch) naming its arches in pattern terms ("4 color spiral arch," "4 color spiral arrow arch") confirms customers already encounter and think in terms of color patterns rather than individual balloon selection — a UX observation consistent with the physics, though the page offered no customer-choice statistics and its 3D configurator was broken at the time of review.
+
+For Organic arrangements (mixed-size clusters, no fixed repeat), the tool switches to a palette-only mode — the customer picks a set of colors and Jeff arranges them with natural variation. This is the honest path for organic work: no fill-region UI can accurately represent a controlled-random arrangement, so the tool doesn't attempt one. The toggle between Swirl (2 regions, A B A B) and Organic (palette only) is visible on the color-one screen, making the distinction explicit to the customer.
 
 ---
 
@@ -69,9 +75,9 @@ The "discuss" CTA pre-populates an inquiry form with the customer's design state
 ```
 Design reference: LT-4728
 Pieces:
-  Arch        — main balloons: Teal (#008080) / accent balloons: Gold (#D4A017)
-  Column      — main balloons: Teal (#008080) / accent balloons: Gold (#D4A017)
-  Centerpiece — main balloons: Blush (#F4DFD7) / accent balloons: Soft Blue (#C3DCF3)
+  Arch    — main balloons: Teal (#007878) / accent balloons: Reflex Gold (#D4A017)
+  Column  — main balloons: Teal (#007878) / accent balloons: Reflex Gold (#D4A017)
+  Garland — main balloons: Blush (#F4DFD7) / accent balloons: Dusk Blue (#8CA8C0)
 ```
 
 Each row gives Jeff: piece identity, which balloon region, color name, and hex. The region label ("main balloons" / "accent balloons") comes directly from the `data-region` attributes already in the SVG — no new data needed, just a rendering decision. Jeff can take this to a supplier conversation or pre-fill a balloon order without calling the customer back to ask "which color goes where."
