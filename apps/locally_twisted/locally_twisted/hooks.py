@@ -42,7 +42,12 @@ app_license = "mit"
 # CSS stayed cached in GL's browser; drawer rendered inline on every page
 # because the cached rules didn't have `position: fixed`.
 web_include_css = "/assets/locally_twisted/css/lt-theme.css?v=20260429-7"
-# web_include_js = "/assets/locally_twisted/js/locally_twisted.js"
+
+# Guest cart engine — overrides webshop's broken-for-guest cart functions
+# at runtime, exposes window.LT_CART, and keeps cart count badges live.
+# Loaded on every website page so cart actions work from anywhere.
+# Cache-bust query string follows the same convention as web_include_css.
+web_include_js = "/assets/locally_twisted/js/lt-guest-cart.js?v=20260429-1"
 
 # Friendly-URL aliases. Frappe's www/ router doesn't auto-translate
 # underscored Python module filenames into dashed URLs, so we alias
@@ -59,6 +64,10 @@ website_route_rules = [
     # for why (upstream URL malformation + guest 403 on Payment Request read).
     {"from_route": "/payment-success",
      "to_route": "payment_success"},
+    # Override webshop's bundled /cart — webshop's requires login, ours
+    # is localStorage-backed and works for guests. See www/cart.py.
+    {"from_route": "/cart",
+     "to_route": "cart"},
 ]
 
 # include custom scss in every website theme (without file extension ".scss")
