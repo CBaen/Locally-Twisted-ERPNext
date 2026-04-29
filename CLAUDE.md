@@ -100,6 +100,16 @@ The four reference surfaces above (failed Hetzner site, Odoo GitHub repo, local 
 
 **Rule for future instances:** if you find yourself reaching into the Odoo dir for something other than these copied resources, stop. The thing you need either lives here already, or it's not needed in the new build. When in doubt, ask GL.
 
+## Hetzner `/book` and `/contact` are the canonical spec for the rebuild
+
+The Odoo deployment at `http://5.78.136.133` is the source of truth for the ERPNext rebuild of `/book` and `/contact`. The local Odoo clone at `C:\Users\baenb\projects\locally-twisted-odoo\` is **stale** relative to Hetzner — its XML shows older single-select `x_event_type` and 3-photo / 10 MB limits. **Hetzner has the actual spec:** multi-select services (`x_services` checkboxes) with per-service conditional notes, indoor/outdoor + shade required + colors environment fields appearing when any service is selected, 5 photos × 25 MB. The 45 ERPNext Lead Custom Fields someone already built mirror Hetzner, not the local clone.
+
+**Snapshots on disk** (canonical even after Hetzner decommissions): `_resources/odoo-live-snapshot/hetzner-book.html` and `hetzner-contact.html`. Saved 2026-04-29 via Bash `curl`.
+
+**Tool-failure routing.** If WebFetch returns ECONNREFUSED on `5.78.136.133`, that's a WebFetch sandbox limitation — not a network outage. Bash `curl` reaches it. Try alternates (curl, Playwright, a browser screenshot) before treating any URL as unreachable.
+
+**No more "are you sure about" questions when GL has named a canonical source.** If GL points at a URL and says "look at the live site," read the URL. Don't ask GL to confirm what's at it. Doubting GL's source-of-truth burns their tokens and erodes trust — and worse, future instances that re-read the asking pattern in this CLAUDE.md will repeat it. **The discipline: GL points, you read.** Receipt: `lessons-learned.md` 2026-04-29.
+
 ## Reading order on arrival
 
 1. Global `C:\Users\baenb\.claude\CLAUDE.md` (auto-injected)
