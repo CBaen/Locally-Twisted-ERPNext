@@ -1,0 +1,849 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+
+<style>
+/* /book page styles. BEM-prefix lt-book__. Page-scoped; do NOT promote
+   to lt-theme.css until a second page reuses the pattern. */
+
+.lt-book__intro {
+    background-color: var(--lt-blue-tint);
+    padding: 3rem 1rem 2.5rem;
+    text-align: center;
+}
+.lt-book__intro h1 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 2.25rem;
+    color: var(--lt-near-black);
+    margin: 0 0 0.5rem;
+    line-height: 1.15;
+}
+.lt-book__intro-lede {
+    font-size: 1.125rem;
+    color: var(--lt-soft-gray);
+    margin: 0;
+    font-weight: 300;
+}
+
+.lt-book {
+    padding: 2.5rem 1rem 3rem;
+}
+.lt-book__form-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+.lt-book__row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+@media (min-width: 768px) {
+    .lt-book__row--two { grid-template-columns: 1fr 1fr; }
+}
+
+.lt-book__field {
+    display: flex;
+    flex-direction: column;
+}
+.lt-book__field label,
+.lt-book__field .lt-book__label {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--lt-near-black);
+    margin-bottom: 0.35rem;
+}
+.lt-book__required {
+    color: #c0392b;
+    margin-left: 0.15rem;
+}
+.lt-book__optional {
+    color: var(--lt-soft-gray);
+    font-weight: 400;
+    font-size: 0.8125rem;
+    margin-left: 0.35rem;
+}
+.lt-book__input,
+.lt-book__select,
+.lt-book__textarea {
+    font-family: 'Raleway', sans-serif;
+    font-size: 1rem;
+    padding: 0.65rem 0.85rem;
+    border: 1px solid rgba(26, 26, 26, 0.18);
+    border-radius: 0.375rem;
+    background-color: var(--lt-white);
+    color: var(--lt-near-black);
+    width: 100%;
+    min-height: 44px;
+}
+.lt-book__input:focus,
+.lt-book__select:focus,
+.lt-book__textarea:focus {
+    outline: 2px solid var(--lt-teal);
+    outline-offset: 1px;
+    border-color: var(--lt-teal);
+}
+.lt-book__textarea {
+    min-height: 96px;
+    resize: vertical;
+    font-family: 'Raleway', sans-serif;
+}
+
+.lt-book__services {
+    margin: 1.5rem 0;
+}
+.lt-book__services-legend {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--lt-near-black);
+    margin-bottom: 0.65rem;
+    display: block;
+}
+.lt-book__services-hint {
+    font-weight: 400;
+    color: var(--lt-soft-gray);
+    font-size: 0.8125rem;
+    margin-left: 0.35rem;
+}
+.lt-book__check {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 0;
+    font-size: 1rem;
+    color: var(--lt-near-black);
+    cursor: pointer;
+    min-height: 44px;
+}
+.lt-book__check input[type="checkbox"] {
+    width: 1.1rem;
+    height: 1.1rem;
+    accent-color: var(--lt-teal);
+    flex-shrink: 0;
+}
+
+.lt-book__conditional {
+    background-color: var(--lt-near-white);
+    border-left: 3px solid var(--lt-teal);
+    padding: 1.25rem 1.25rem 1rem;
+    margin: 1rem 0;
+    border-radius: 0 0.375rem 0.375rem 0;
+}
+.lt-book__conditional[hidden] { display: none !important; }
+.lt-book__conditional-title {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 1.25rem;
+    color: var(--lt-near-black);
+    margin: 0 0 0.85rem;
+    line-height: 1.2;
+}
+
+.lt-book__photos-hint {
+    font-size: 0.8125rem;
+    color: var(--lt-soft-gray);
+    margin-top: 0.35rem;
+}
+.lt-book__photos-hint--error {
+    color: #c0392b;
+}
+
+.lt-book__privacy {
+    font-size: 0.8125rem;
+    color: var(--lt-soft-gray);
+    margin: 1rem 0 1.25rem;
+}
+
+.lt-book__submit {
+    background-color: var(--lt-teal);
+    color: var(--lt-white);
+    border: none;
+    border-radius: 0.375rem;
+    padding: 0.875rem 2rem;
+    font-family: 'Raleway', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    min-height: 48px;
+    min-width: 180px;
+}
+.lt-book__submit:hover,
+.lt-book__submit:focus-visible {
+    background-color: #006666;
+    outline: 2px solid var(--lt-near-black);
+    outline-offset: 2px;
+}
+.lt-book__submit[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.lt-book__feedback {
+    margin-top: 1rem;
+    padding: 0.85rem 1rem;
+    border-radius: 0.375rem;
+    font-size: 0.95rem;
+    display: none;
+}
+.lt-book__feedback.is-error {
+    display: block;
+    background-color: #fdecec;
+    border: 1px solid #c0392b;
+    color: #842424;
+}
+
+/* Info row beneath the form */
+.lt-book__info {
+    background-color: var(--lt-blush-tint);
+    padding: 2rem 1rem;
+    margin-top: 1rem;
+}
+.lt-book__info-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem 2.5rem;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 1rem;
+    color: var(--lt-near-black);
+}
+.lt-book__info-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.lt-book__info-item a {
+    color: var(--lt-near-black);
+    text-decoration: none;
+    font-weight: 600;
+}
+.lt-book__info-item a:hover { text-decoration: underline; }
+
+/* Confirmation modal */
+.lt-book__modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1080;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+.lt-book__modal--open {
+    display: flex;
+}
+.lt-book__modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(26, 26, 26, 0.55);
+}
+.lt-book__modal-card {
+    position: relative;
+    background-color: var(--lt-white);
+    border-radius: 0.75rem;
+    max-width: 440px;
+    width: calc(100% - 2rem);
+    padding: 2.5rem 2rem 2rem;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+}
+.lt-book__modal-check {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: var(--lt-teal);
+    color: var(--lt-white);
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+}
+.lt-book__modal-card h2 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 1.625rem;
+    color: var(--lt-near-black);
+    margin: 0 0 0.5rem;
+}
+.lt-book__modal-card p {
+    font-size: 1rem;
+    color: var(--lt-soft-gray);
+    margin: 0 0 1.5rem;
+}
+.lt-book__modal-close {
+    background-color: transparent;
+    border: 1px solid var(--lt-near-black);
+    color: var(--lt-near-black);
+    border-radius: 0.375rem;
+    padding: 0.55rem 1.25rem;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    min-height: 44px;
+}
+.lt-book__modal-close:hover,
+.lt-book__modal-close:focus-visible {
+    background-color: var(--lt-near-black);
+    color: var(--lt-white);
+}
+</style>
+
+<section class="lt-book__intro">
+    <div class="container">
+        <h1>Tell us about your celebration</h1>
+        <p class="lt-book__intro-lede">Share a few details and we take it from there.</p>
+    </div>
+</section>
+
+<section class="lt-book">
+    <div class="lt-book__form-wrap">
+        <form id="lt-book-form" novalidate enctype="multipart/form-data">
+            <fieldset>
+                <legend class="visually-hidden">Event Booking Request</legend>
+
+                {# Row 1: Name + Phone #}
+                <div class="lt-book__row lt-book__row--two">
+                    <div class="lt-book__field">
+                        <label for="book_name">
+                            Your Name <span class="lt-book__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span>
+                        </label>
+                        <input type="text" id="book_name" name="contact_name"
+                               class="lt-book__input"
+                               required aria-required="true"
+                               autocomplete="name"/>
+                    </div>
+                    <div class="lt-book__field">
+                        <label for="book_phone">Phone</label>
+                        <input type="tel" id="book_phone" name="phone"
+                               class="lt-book__input"
+                               autocomplete="tel"
+                               placeholder="(801) 555-0000"/>
+                    </div>
+                </div>
+
+                {# Row 2: Email + Company #}
+                <div class="lt-book__row lt-book__row--two">
+                    <div class="lt-book__field">
+                        <label for="book_email">
+                            Email <span class="lt-book__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span>
+                        </label>
+                        <input type="email" id="book_email" name="email_from"
+                               class="lt-book__input"
+                               required aria-required="true"
+                               autocomplete="email"
+                               placeholder="your@email.com"/>
+                    </div>
+                    <div class="lt-book__field">
+                        <label for="book_company">
+                            Company <span class="lt-book__optional">(optional)</span>
+                        </label>
+                        <input type="text" id="book_company" name="partner_name"
+                               class="lt-book__input"
+                               autocomplete="organization"/>
+                    </div>
+                </div>
+
+                {# Row 3: Occasion + Event Date #}
+                <div class="lt-book__row lt-book__row--two">
+                    <div class="lt-book__field">
+                        <label for="book_occasion">What are you celebrating?</label>
+                        <select id="book_occasion" name="x_occasion_type" class="lt-book__select">
+                            <option value="">Select one...</option>
+                            {% for value, label in occasion_options %}
+                            <option value="{{ value }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="lt-book__field">
+                        <label for="book_date">Event Date</label>
+                        <input type="date" id="book_date" name="x_event_date"
+                               class="lt-book__input"/>
+                    </div>
+                </div>
+
+                {# Row 4: Event Time + City/Location #}
+                <div class="lt-book__row lt-book__row--two">
+                    <div class="lt-book__field">
+                        <label for="book_time">Preferred Event Time</label>
+                        <input type="time" id="book_time" name="x_event_time"
+                               class="lt-book__input"/>
+                    </div>
+                    <div class="lt-book__field">
+                        <label for="book_location">City / Location</label>
+                        <input type="text" id="book_location" name="x_event_location"
+                               class="lt-book__input"
+                               placeholder="Address, venue name, or city"/>
+                    </div>
+                </div>
+
+                {# Row 5: Guest count (single col) #}
+                <div class="lt-book__row lt-book__row--two">
+                    <div class="lt-book__field">
+                        <label for="book_guests">Estimated Guests</label>
+                        <input type="number" id="book_guests" name="x_guest_count"
+                               class="lt-book__input"
+                               min="1" placeholder="e.g. 50"/>
+                    </div>
+                </div>
+
+                {# Multi-select services #}
+                <fieldset class="lt-book__services">
+                    <legend class="lt-book__services-legend">
+                        What services are you interested in?
+                        <span class="lt-book__services-hint">(select all that apply)</span>
+                    </legend>
+                    {% for cb_id, value, label in service_options %}
+                    <label class="lt-book__check" for="{{ cb_id }}">
+                        <input type="checkbox" id="{{ cb_id }}"
+                               name="x_services"
+                               value="{{ value }}"
+                               class="lt-book__service-checkbox"/>
+                        <span>{{ label }}</span>
+                    </label>
+                    {% endfor %}
+                </fieldset>
+
+                {# ============== Conditional: Balloon Decor ============== #}
+                <div class="lt-book__conditional"
+                     data-visibility-dependency="x_services"
+                     data-visibility-comparator="contains"
+                     data-visibility-condition="Balloon Decor"
+                     hidden>
+                    <h3 class="lt-book__conditional-title">Balloon Decor Details</h3>
+                    <div class="lt-book__field">
+                        <label for="book_decor_types">What type of decor?</label>
+                        <input type="text" id="book_decor_types" name="x_decor_types"
+                               class="lt-book__input"
+                               placeholder="Entrance decor, table decor, backdrop, columns..."
+                               disabled/>
+                    </div>
+                    <div class="lt-book__field" style="margin-top: 0.75rem;">
+                        <label for="book_setup_arrival">What time can we arrive to set up?</label>
+                        <input type="time" id="book_setup_arrival" name="x_setup_time_arrival"
+                               class="lt-book__input"
+                               disabled/>
+                    </div>
+                    <div class="lt-book__field" style="margin-top: 0.75rem;">
+                        <label for="book_decor_notes">Decor notes</label>
+                        <textarea id="book_decor_notes" name="x_decor_notes"
+                                  class="lt-book__textarea" rows="3"
+                                  placeholder="Size, style, any special requirements..."
+                                  disabled></textarea>
+                    </div>
+                </div>
+
+                {# ============== Conditional: Balloon Twisting ============== #}
+                <div class="lt-book__conditional"
+                     data-visibility-dependency="x_services"
+                     data-visibility-comparator="contains"
+                     data-visibility-condition="Balloon Twisting"
+                     hidden>
+                    <h3 class="lt-book__conditional-title">Balloon Twisting Details</h3>
+                    <div class="lt-book__field">
+                        <label for="book_num_twisters">Number of twisters</label>
+                        <input type="number" id="book_num_twisters" name="x_num_twisters"
+                               class="lt-book__input" min="1"
+                               disabled/>
+                    </div>
+                    <div class="lt-book__row lt-book__row--two" style="margin-top: 0.75rem;">
+                        <div class="lt-book__field">
+                            <label for="book_artist_start">Start time</label>
+                            <input type="time" id="book_artist_start" name="x_artist_start"
+                                   class="lt-book__input"
+                                   disabled/>
+                        </div>
+                        <div class="lt-book__field">
+                            <label for="book_artist_end">End time</label>
+                            <input type="time" id="book_artist_end" name="x_artist_end"
+                                   class="lt-book__input"
+                                   disabled/>
+                        </div>
+                    </div>
+                    <div class="lt-book__field" style="margin-top: 0.75rem;">
+                        <label for="book_twisting_notes">Twisting notes</label>
+                        <textarea id="book_twisting_notes" name="x_twisting_notes"
+                                  class="lt-book__textarea" rows="3"
+                                  placeholder="Special requests, character themes..."
+                                  disabled></textarea>
+                    </div>
+                </div>
+
+                {# ============== Conditional: Face Painting ============== #}
+                <div class="lt-book__conditional"
+                     data-visibility-dependency="x_services"
+                     data-visibility-comparator="contains"
+                     data-visibility-condition="Face Painting"
+                     hidden>
+                    <h3 class="lt-book__conditional-title">Face Painting Details</h3>
+                    <div class="lt-book__field">
+                        <label for="book_num_painters">Number of face painters</label>
+                        <input type="number" id="book_num_painters" name="x_num_painters"
+                               class="lt-book__input" min="1"
+                               disabled/>
+                    </div>
+                    <div class="lt-book__row lt-book__row--two" style="margin-top: 0.75rem;">
+                        <div class="lt-book__field">
+                            <label for="book_painter_start">Start time</label>
+                            <input type="time" id="book_painter_start" name="x_painter_start"
+                                   class="lt-book__input"
+                                   disabled/>
+                        </div>
+                        <div class="lt-book__field">
+                            <label for="book_painter_end">End time</label>
+                            <input type="time" id="book_painter_end" name="x_painter_end"
+                                   class="lt-book__input"
+                                   disabled/>
+                        </div>
+                    </div>
+                    <div class="lt-book__field" style="margin-top: 0.75rem;">
+                        <label for="book_painting_notes">Face painting notes</label>
+                        <textarea id="book_painting_notes" name="x_painting_notes"
+                                  class="lt-book__textarea" rows="3"
+                                  placeholder="Design preferences, age range of kids..."
+                                  disabled></textarea>
+                    </div>
+                </div>
+
+                {# ============== Conditional: Delivery Only ============== #}
+                <div class="lt-book__conditional"
+                     data-visibility-dependency="x_services"
+                     data-visibility-comparator="contains"
+                     data-visibility-condition="Delivery Only"
+                     hidden>
+                    <h3 class="lt-book__conditional-title">Delivery Details</h3>
+                    <div class="lt-book__field">
+                        <label for="book_delivery_notes">Delivery time frame</label>
+                        <textarea id="book_delivery_notes" name="x_delivery_notes"
+                                  class="lt-book__textarea" rows="3"
+                                  placeholder="When do you need delivery? Morning, afternoon, specific time..."
+                                  disabled></textarea>
+                    </div>
+                </div>
+
+                {# ============== Conditional: Event Package ============== #}
+                <div class="lt-book__conditional"
+                     data-visibility-dependency="x_services"
+                     data-visibility-comparator="contains"
+                     data-visibility-condition="Event Package"
+                     hidden>
+                    <h3 class="lt-book__conditional-title">Event Package Details</h3>
+                    <div class="lt-book__field">
+                        <label for="book_package_notes">Tell us what you're envisioning</label>
+                        <textarea id="book_package_notes" name="x_package_notes"
+                                  class="lt-book__textarea" rows="3"
+                                  placeholder="Describe your ideal event package..."
+                                  disabled></textarea>
+                    </div>
+                </div>
+
+                {# ============== Conditional: Something Else ============== #}
+                <div class="lt-book__conditional"
+                     data-visibility-dependency="x_services"
+                     data-visibility-comparator="contains"
+                     data-visibility-condition="Something Else"
+                     hidden>
+                    <h3 class="lt-book__conditional-title">Tell Us More</h3>
+                    <div class="lt-book__field">
+                        <label for="book_other_notes">Describe what you're looking for</label>
+                        <textarea id="book_other_notes" name="x_other_notes"
+                                  class="lt-book__textarea" rows="3"
+                                  placeholder="Tell us about your idea..."
+                                  disabled></textarea>
+                    </div>
+                </div>
+
+                {# ============== Conditional: Event Environment (any service) ============== #}
+                <div class="lt-book__conditional"
+                     data-visibility-dependency="x_services"
+                     data-visibility-comparator="set"
+                     hidden>
+                    <h3 class="lt-book__conditional-title">Event Environment</h3>
+                    <div class="lt-book__row lt-book__row--two">
+                        <div class="lt-book__field">
+                            <label for="book_indoor_outdoor">Indoor / Outdoor</label>
+                            <select id="book_indoor_outdoor" name="x_indoor_outdoor"
+                                    class="lt-book__select" disabled>
+                                <option value="">Select one...</option>
+                                <option value="indoor">Indoor</option>
+                                <option value="outdoor">Outdoor</option>
+                                <option value="both">Both</option>
+                            </select>
+                        </div>
+                    </div>
+                    <label class="lt-book__check" for="book_shade_required" style="margin-top: 0.5rem;">
+                        <input type="checkbox" id="book_shade_required"
+                               name="x_shade_required" value="true" disabled/>
+                        <span>Shade is required for outdoor events</span>
+                    </label>
+                    <div class="lt-book__field" style="margin-top: 0.75rem;">
+                        <label for="book_colors">Color preferences</label>
+                        <input type="text" id="book_colors" name="x_colors"
+                               class="lt-book__input"
+                               placeholder="Specific colors, brand colors, theme colors..."
+                               disabled/>
+                    </div>
+                </div>
+
+                {# Photos #}
+                <div class="lt-book__field" style="margin-top: 1.5rem;">
+                    <label for="book_photos">
+                        Inspiration photos <span class="lt-book__optional">(optional)</span>
+                    </label>
+                    <input type="file" id="book_photos" name="ufile"
+                           class="lt-book__input"
+                           accept="image/jpeg,image/png,image/gif,image/webp,image/heic,.heic,.heif"
+                           multiple
+                           aria-describedby="book_photos_hint"/>
+                    <div id="book_photos_hint" class="lt-book__photos-hint">
+                        Up to {{ max_photos }} images. JPEG, PNG, GIF, WebP, or HEIC. {{ max_photo_mb }} MB each.
+                    </div>
+                </div>
+
+                {# Free-form catch-all #}
+                <div class="lt-book__field" style="margin-top: 1rem;">
+                    <label for="book_notes">Anything else we should know?</label>
+                    <textarea id="book_notes" name="description"
+                              class="lt-book__textarea" rows="3"
+                              placeholder="Colors, theme, special requests..."></textarea>
+                </div>
+
+                <p class="lt-book__privacy">
+                    We'll use this info to contact you about your event.
+                </p>
+
+                <button type="submit" id="book_submit" class="lt-book__submit">
+                    Send Request
+                </button>
+
+                <div id="book_feedback" class="lt-book__feedback" role="alert" aria-live="assertive"></div>
+            </fieldset>
+        </form>
+    </div>
+</section>
+
+<section class="lt-book__info">
+    <div class="lt-book__info-row">
+        <div class="lt-book__info-item">
+            <span aria-hidden="true">&#x21A9;</span>
+            <span>We reach out within 24 hours</span>
+        </div>
+        <div class="lt-book__info-item">
+            <span aria-hidden="true">&#x260E;</span>
+            <a href="tel:+18012850860"><span class="o_force_ltr">(801) 285-0860</span></a>
+        </div>
+    </div>
+</section>
+
+{# Confirmation modal — id="received" matches /book#received #}
+<div id="received" class="lt-book__modal" role="dialog" aria-label="Request received" aria-modal="true" aria-hidden="true">
+    <div class="lt-book__modal-backdrop"></div>
+    <div class="lt-book__modal-card" tabindex="-1">
+        <div class="lt-book__modal-check" aria-hidden="true">&#x2713;</div>
+        <h2>Request received</h2>
+        <p>We'll get back to you as soon as possible.</p>
+        <button type="button" class="lt-book__modal-close" aria-label="Close and return to homepage">
+            Back to home
+        </button>
+    </div>
+</div>
+
+<script>
+(function () {
+    /* --- 1. Service-checkbox visibility toggle ----------------------- */
+    function setVisible(el, visible) {
+        if (visible) {
+            el.hidden = false;
+            el.removeAttribute('aria-hidden');
+            el.querySelectorAll('input, select, textarea').forEach(function (i) {
+                i.removeAttribute('disabled');
+            });
+        } else {
+            el.hidden = true;
+            el.setAttribute('aria-hidden', 'true');
+            el.querySelectorAll('input, select, textarea').forEach(function (i) {
+                i.setAttribute('disabled', 'disabled');
+            });
+        }
+    }
+
+    function getCheckedServices() {
+        return Array.from(document.querySelectorAll('input[name="x_services"]:checked'))
+                    .map(function (cb) { return cb.value; });
+    }
+
+    function updateConditionals() {
+        var checked = getCheckedServices();
+        var anyChecked = checked.length > 0;
+        document.querySelectorAll('[data-visibility-dependency="x_services"]').forEach(function (el) {
+            var comparator = el.getAttribute('data-visibility-comparator');
+            var condition = el.getAttribute('data-visibility-condition') || '';
+            var show = false;
+            if (comparator === 'contains') {
+                show = checked.indexOf(condition) !== -1;
+            } else if (comparator === 'set') {
+                show = anyChecked;
+            }
+            setVisible(el, show);
+        });
+    }
+
+    document.querySelectorAll('input[name="x_services"]').forEach(function (cb) {
+        cb.addEventListener('change', updateConditionals);
+    });
+    updateConditionals();
+
+    /* --- 2. Photo file count + size validation ----------------------- */
+    var fileInput = document.getElementById('book_photos');
+    var hintEl = document.getElementById('book_photos_hint');
+    var defaultHint = hintEl ? hintEl.textContent : '';
+    var MAX_FILES = {{ max_photos }};
+    var MAX_BYTES = {{ max_photo_mb }} * 1024 * 1024;
+
+    if (fileInput) {
+        fileInput.addEventListener('change', function () {
+            var files = Array.from(this.files);
+            var errors = [];
+            if (files.length > MAX_FILES) {
+                errors.push('Please select up to ' + MAX_FILES + ' photos.');
+            }
+            files.forEach(function (f) {
+                if (f.size > MAX_BYTES) {
+                    errors.push(f.name + ' is over {{ max_photo_mb }} MB.');
+                }
+            });
+            if (errors.length) {
+                hintEl.textContent = errors.join(' ');
+                hintEl.classList.add('lt-book__photos-hint--error');
+                fileInput.value = '';
+            } else {
+                hintEl.textContent = defaultHint;
+                hintEl.classList.remove('lt-book__photos-hint--error');
+            }
+        });
+    }
+
+    /* --- 3. Form AJAX submit ----------------------------------------- */
+    var form = document.getElementById('lt-book-form');
+    var submitBtn = document.getElementById('book_submit');
+    var feedback = document.getElementById('book_feedback');
+    if (!form || !submitBtn || !feedback) return;
+
+    function showError(message) {
+        feedback.textContent = message;
+        feedback.classList.add('is-error');
+        feedback.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function clearError() {
+        feedback.textContent = '';
+        feedback.classList.remove('is-error');
+    }
+
+    form.addEventListener('submit', function (ev) {
+        ev.preventDefault();
+        clearError();
+
+        var name = (form.elements['contact_name'].value || '').trim();
+        var email = (form.elements['email_from'].value || '').trim();
+        if (!name) {
+            showError('Please tell us your name.');
+            form.elements['contact_name'].focus();
+            return;
+        }
+        if (!email) {
+            showError('Please give us an email so we can reply.');
+            form.elements['email_from'].focus();
+            return;
+        }
+
+        var data = new FormData(form);
+
+        submitBtn.disabled = true;
+        var originalLabel = submitBtn.textContent;
+        submitBtn.textContent = 'Sending...';
+
+        fetch('/api/method/locally_twisted.www.book.submit_book_inquiry', {
+            method: 'POST',
+            headers: {
+                'X-Frappe-CSRF-Token': (window.frappe && window.frappe.csrf_token) || 'token',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: data,
+            credentials: 'same-origin'
+        }).then(function (resp) {
+            return resp.json().then(function (body) { return { status: resp.status, body: body }; });
+        }).then(function (result) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalLabel;
+            if (result.status >= 200 && result.status < 300 && result.body && result.body.message && result.body.message.ok) {
+                form.reset();
+                updateConditionals();
+                window.location.hash = '#received';
+                showModal();
+            } else {
+                var msg = parseServerError(result.body) || 'Something went wrong. Please call (801) 285-0860 or email hi@locallytwisted.com.';
+                showError(msg);
+            }
+        }).catch(function (err) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalLabel;
+            showError("We couldn't send your request. Please call (801) 285-0860 or email hi@locallytwisted.com.");
+            if (window.console && console.error) console.error('Book form submit failed', err);
+        });
+    });
+
+    function parseServerError(body) {
+        if (!body) return null;
+        if (body._server_messages) {
+            try {
+                var msgs = JSON.parse(body._server_messages);
+                if (Array.isArray(msgs) && msgs.length) {
+                    var first = JSON.parse(msgs[0]);
+                    return first.message || null;
+                }
+            } catch (e) {}
+        }
+        if (typeof body.exception === 'string' && body.exception) return body.exception;
+        if (typeof body.message === 'string' && body.message) return body.message;
+        return null;
+    }
+
+    /* --- 4. Confirmation modal -------------------------------------- */
+    var modalTimer = null;
+    function showModal() {
+        var modal = document.getElementById('received');
+        if (!modal) return;
+        if (modal.classList.contains('lt-book__modal--open')) return;
+        modal.classList.add('lt-book__modal--open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        var card = modal.querySelector('.lt-book__modal-card');
+        if (card) card.focus();
+
+        modalTimer = setTimeout(function () {
+            window.location.href = '/';
+        }, 4000);
+
+        var closeBtn = modal.querySelector('.lt-book__modal-close');
+        if (closeBtn) closeBtn.addEventListener('click', dismissModal);
+        var backdrop = modal.querySelector('.lt-book__modal-backdrop');
+        if (backdrop) backdrop.addEventListener('click', dismissModal);
+    }
+    function dismissModal() {
+        if (modalTimer) clearTimeout(modalTimer);
+        window.location.href = '/';
+    }
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') dismissModal();
+    });
+    if (window.location.hash === '#received') showModal();
+    window.addEventListener('hashchange', function () {
+        if (window.location.hash === '#received') showModal();
+    });
+})();
+</script>
+
+{% endblock %}
