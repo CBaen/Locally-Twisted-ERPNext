@@ -510,6 +510,28 @@ p {
   max-width: 100%;
 }
 
+/* Webshop product detail and cart pages were designed to live inside
+   Frappe's centered .container max-width. Our structural override above
+   gives sections full viewport (so LT-designed bands span edge-to-edge);
+   these webshop-bundled wrappers need their own intentional centering
+   to stay readable on desktop. Fluid max-width drops to viewport-padding
+   on mobile, so this stays mobile-responsive at every breakpoint. */
+.product-container,
+.cart-container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+@media (min-width: 768px) {
+  .product-container,
+  .cart-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
 /* Footer column titles + link lists (Frappe renders these from footer_items) */
 .web-footer h4,
 .web-footer h5,
