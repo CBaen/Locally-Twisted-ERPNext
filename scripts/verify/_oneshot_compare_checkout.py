@@ -42,23 +42,45 @@ def main():
         else:
             shot(page, "01-odoo-shop")
 
-            # Click the first product card to drill into a product page.
+            # Drill to a real product page (not a category). Look for links
+            # that match the Odoo product detail pattern /shop/<slug>-<id>.
             try:
-                first_link = page.locator("a[href^='/shop/']").nth(2)
-                href = first_link.get_attribute("href")
-                if href and "/shop/" in href and href != "/shop/cart":
-                    print(f"[ODOO] clicking product: {href}")
-                    page.goto(f"{ODOO_BASE}{href}", timeout=20000, wait_until="domcontentloaded")
+                product_hrefs = page.evaluate("""
+                    () => Array.from(document.querySelectorAll("a[href^='/shop/']"))
+                        .map(a => a.getAttribute('href'))
+                        .filter(h => /^\\/shop\\/[a-z0-9-]+-\\d+(\\?|$)/.test(h))
+                """)
+                print(f"[ODOO] candidate product hrefs: {product_hrefs[:5]}")
+                target = product_hrefs[0] if product_hrefs else None
+                if target:
+                    print(f"[ODOO] navigating to product: {target}")
+                    page.goto(f"{ODOO_BASE}{target}", timeout=20000, wait_until="domcontentloaded")
+                    time.sleep(1)
                     shot(page, "02-odoo-product")
 
-                    # Add to cart — Odoo's standard button is named #add_to_cart
+                    # Force-click the add-to-cart button — sticky header
+                    # intercepts normal clicks. force=True bypasses the
+                    # actionability check, then we wait for navigation.
                     try:
-                        page.click("#add_to_cart, a:has-text('Add to Cart'), button:has-text('Add to Cart')",
-                                   timeout=5000)
-                        time.sleep(2)
-                        print("[ODOO] added to cart")
+                        page.locator("#add_to_cart").first.click(force=True, timeout=8000)
+                        time.sleep(3)
+                        print(f"[ODOO] after add-to-cart, on: {page.url}")
                     except Exception as e:
-                        print(f"[ODOO] could not click add-to-cart: {e}")
+                        # Fallback — submit the product form directly via JS.
+                        print(f"[ODOO] click failed ({e}); trying JS form submit")
+                        try:
+                            page.evaluate("""
+                                () => {
+                                    const f = document.querySelector("form.js_add_cart_json")
+                                          || document.querySelector("form[action*='cart/update_json']")
+                                          || document.querySelector("form#product_details");
+                                    if (f) f.submit();
+                                }
+                            """)
+                            time.sleep(3)
+                            print(f"[ODOO] after JS submit, on: {page.url}")
+                        except Exception as e2:
+                            print(f"[ODOO] JS submit also failed: {e2}")
             except Exception as e:
                 print(f"[ODOO] could not find product link: {e}")
 
