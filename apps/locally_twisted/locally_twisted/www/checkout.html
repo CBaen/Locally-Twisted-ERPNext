@@ -361,13 +361,14 @@
             submit.textContent = originalLabel;
             if (result.status >= 200 && result.status < 300 && result.body && result.body.message && result.body.message.ok) {
                 var msg = result.body.message;
-                /* Cart mode: clear localStorage now so a back-button trip
-                 * doesn't show the just-purchased items. Buy-now leaves
-                 * the cart alone (no relationship between buy-now items
-                 * and the saved cart). */
-                if (mode === 'cart' && typeof window.LT_CART !== 'undefined') {
-                    window.LT_CART.clear();
-                }
+                /* DON'T clear LT_CART here. The customer is about to be
+                 * redirected to Stripe; if they back out without paying,
+                 * we want their cart intact so they can retry. The cart
+                 * is cleared on /payment-success only after Stripe has
+                 * verified the session is paid (see www/payment_success.html).
+                 *
+                 * Receipt: 2026-04-29 — clearing on submit wiped GL's cart
+                 * when they backed out of Stripe to escape Link's prompt. */
                 if (msg.stripe_redirect_url) {
                     window.location.href = msg.stripe_redirect_url;
                     return;

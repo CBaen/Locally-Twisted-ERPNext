@@ -73,6 +73,18 @@ def create_session_for_sales_order(
         "lt_origin": "guest_checkout",
     }
 
+    # payment_method_types=["card"] is an EXPLICIT product decision (GL,
+    # 2026-04-29). Stripe's default dynamic payment methods surfaces Link
+    # as the primary option whenever it detects a Link account for the
+    # supplied customer_email — and presents a "Pay without Link" override
+    # the customer has to click past. GL explicitly rejects this UX:
+    # *"I hate Link, it's not going to gatekeep our checkout."*
+    #
+    # Locking to "card" eliminates Link entirely. Apple Pay + Google Pay
+    # still work — they're card wallets that surface automatically when
+    # Stripe detects device support, regardless of payment_method_types.
+    # If we later want Klarna / Affirm / Cash App Pay / Bank, add them to
+    # this list explicitly. Link is the only one we exclude.
     session = stripe.checkout.Session.create(
         api_key=api_key,
         mode="payment",
@@ -83,6 +95,7 @@ def create_session_for_sales_order(
         client_reference_id=so.name,
         metadata=metadata,
         payment_intent_data={"metadata": metadata},
+        payment_method_types=["card"],
     )
 
     return session.url
