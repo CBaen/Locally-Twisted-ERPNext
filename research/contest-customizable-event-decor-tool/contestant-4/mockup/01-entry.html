@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design Studio — Pick a Shape | Locally Twisted</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="entry">
+
+  <div class="lt-page">
+
+    <!-- Header -->
+    <header class="lt-header">
+      <a href="index.html" class="lt-header__back">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M10 3L5 8l5 5"/>
+        </svg>
+        Gallery
+      </a>
+      <span class="lt-header__wordmark">locally <span>twisted</span></span>
+      <div style="width:60px"></div><!-- spacer -->
+    </header>
+
+    <!-- Hero section -->
+    <section class="entry-hero">
+      <div class="entry-hero__eyebrow">Design Studio</div>
+      <h1 class="entry-hero__headline">Build Your Event Look</h1>
+      <p class="entry-hero__sub">Pick a piece to start. Color it. Add more. See your event come together.</p>
+    </section>
+
+    <!-- Instruction band -->
+    <div style="padding: 12px 20px; background: #F0FAF9; border-top: 1px solid #D0EDED; border-bottom: 1px solid #D0EDED; display: flex; align-items: center; gap: 10px;">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="8" cy="8" r="7" stroke="#008080" stroke-width="1.5"/>
+        <path d="M8 7v4M8 5.5v.5" stroke="#008080" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <span style="font-size:13px; color:#006060; font-weight:500;">Tap any shape to start coloring</span>
+    </div>
+
+    <!-- Shape grid -->
+    <div class="shape-grid">
+
+      <!-- Balloon Arch -->
+      <a href="02-color-one.html" class="shape-card">
+        <div class="shape-card__icon">
+          <svg viewBox="0 0 80 60" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 8 50 Q 8 8 40 8 Q 72 8 72 50" fill="none" stroke="#E8A0A0" stroke-width="12" stroke-linecap="round"/>
+            <circle cx="8" cy="50" r="6" fill="#C3DCF3"/>
+            <circle cx="18" cy="26" r="6" fill="#C3DCF3"/>
+            <circle cx="40" cy="9" r="6" fill="#C3DCF3"/>
+            <circle cx="62" cy="26" r="6" fill="#C3DCF3"/>
+            <circle cx="72" cy="50" r="6" fill="#C3DCF3"/>
+          </svg>
+        </div>
+        <span class="shape-card__name">Balloon Arch</span>
+        <span class="shape-card__hint">2 fill regions</span>
+      </a>
+
+      <!-- Column -->
+      <a href="02-color-one.html?shape=column" class="shape-card">
+        <div class="shape-card__icon">
+          <svg viewBox="0 0 40 60" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="52" r="7" fill="#E8A0A0"/>
+            <circle cx="20" cy="38" r="7" fill="#C3DCF3"/>
+            <circle cx="20" cy="24" r="7" fill="#E8A0A0"/>
+            <circle cx="20" cy="11" r="7" fill="#C3DCF3"/>
+            <circle cx="20" cy="3" r="5" fill="#E8A0A0"/>
+            <line x1="20" y1="58" x2="20" y2="60" stroke="#999" stroke-width="2"/>
+          </svg>
+        </div>
+        <span class="shape-card__name">Column</span>
+        <span class="shape-card__hint">2 fill regions</span>
+      </a>
+
+      <!-- Garland -->
+      <a href="02-color-one.html?shape=garland" class="shape-card">
+        <div class="shape-card__icon">
+          <svg viewBox="0 0 80 40" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 10 Q 20 30 40 20 Q 60 10 75 30" fill="none" stroke="#B8FF9E" stroke-width="3" stroke-dasharray="4 3"/>
+            <circle cx="5" cy="10" r="7" fill="#E8A0A0"/>
+            <circle cx="18" cy="26" r="6" fill="#C3DCF3"/>
+            <circle cx="32" cy="16" r="7" fill="#E8A0A0"/>
+            <circle cx="48" cy="14" r="6" fill="#C3DCF3"/>
+            <circle cx="62" cy="20" r="7" fill="#E8A0A0"/>
+            <circle cx="75" cy="30" r="6" fill="#C3DCF3"/>
+          </svg>
+        </div>
+        <span class="shape-card__name">Garland</span>
+        <span class="shape-card__hint">2 fill regions</span>
+      </a>
+
+      <!-- Backdrop / Wall -->
+      <a href="02-color-one.html?shape=backdrop" class="shape-card">
+        <div class="shape-card__icon">
+          <svg viewBox="0 0 70 60" xmlns="http://www.w3.org/2000/svg">
+            <rect x="8" y="8" width="54" height="44" rx="4" fill="#F4DFD7" stroke="#E8A0A0" stroke-width="1.5"/>
+            <circle cx="20" cy="20" r="7" fill="#E8A0A0"/>
+            <circle cx="35" cy="20" r="7" fill="#C3DCF3"/>
+            <circle cx="50" cy="20" r="7" fill="#E8A0A0"/>
+            <circle cx="20" cy="36" r="7" fill="#C3DCF3"/>
+            <circle cx="35" cy="36" r="7" fill="#E8A0A0"/>
+            <circle cx="50" cy="36" r="7" fill="#C3DCF3"/>
+          </svg>
+        </div>
+        <span class="shape-card__name">Backdrop</span>
+        <span class="shape-card__hint">2 fill regions</span>
+      </a>
+
+      <!-- Balloon Drop -->
+      <a href="02-color-one.html?shape=drop" class="shape-card">
+        <div class="shape-card__icon">
+          <svg viewBox="0 0 50 64" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="25" cy="10" r="8" fill="#C3DCF3"/>
+            <circle cx="14" cy="24" r="7" fill="#E8A0A0"/>
+            <circle cx="36" cy="24" r="7" fill="#C3DCF3"/>
+            <circle cx="25" cy="38" r="7" fill="#E8A0A0"/>
+            <circle cx="14" cy="52" r="6" fill="#C3DCF3"/>
+            <circle cx="36" cy="52" r="6" fill="#E8A0A0"/>
+          </svg>
+        </div>
+        <span class="shape-card__name">Balloon Drop</span>
+        <span class="shape-card__hint">2 fill regions</span>
+      </a>
+
+      <!-- Bouquet -->
+      <a href="02-color-one.html?shape=bouquet" class="shape-card">
+        <div class="shape-card__icon">
+          <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="30" cy="14" r="10" fill="#E8A0A0"/>
+            <circle cx="16" cy="30" r="8" fill="#C3DCF3"/>
+            <circle cx="44" cy="30" r="8" fill="#C3DCF3"/>
+            <circle cx="24" cy="46" r="7" fill="#E8A0A0"/>
+            <circle cx="36" cy="46" r="7" fill="#E8A0A0"/>
+            <line x1="30" y1="55" x2="30" y2="60" stroke="#999" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <span class="shape-card__name">Bouquet</span>
+        <span class="shape-card__hint">2 fill regions</span>
+      </a>
+
+      <!-- Centerpiece -->
+      <a href="02-color-one.html?shape=centerpiece" class="shape-card">
+        <div class="shape-card__icon">
+          <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="30" cy="16" r="10" fill="#E8A0A0"/>
+            <circle cx="14" cy="34" r="8" fill="#C3DCF3"/>
+            <circle cx="46" cy="34" r="8" fill="#C3DCF3"/>
+            <circle cx="22" cy="52" r="7" fill="#E8A0A0"/>
+            <circle cx="38" cy="52" r="7" fill="#E8A0A0"/>
+            <line x1="30" y1="58" x2="30" y2="60" stroke="#999" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <span class="shape-card__name">Centerpiece</span>
+        <span class="shape-card__hint">2 fill regions</span>
+      </a>
+
+      <!-- Already have pieces? View composition -->
+      <a href="04-composition.html" class="shape-card" style="border-style: dashed; background: #FBFBFB;">
+        <div class="shape-card__icon" style="opacity:0.5;">
+          <svg viewBox="0 0 80 60" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 6 50 Q 6 14 28 14 Q 50 14 50 50" fill="none" stroke="#D0D0D0" stroke-width="8" stroke-linecap="round"/>
+            <circle cx="56" cy="48" r="5" fill="#D0D0D0"/>
+            <circle cx="56" cy="36" r="5" fill="#E0E0E0"/>
+            <circle cx="56" cy="24" r="5" fill="#D0D0D0"/>
+            <circle cx="56" cy="14" r="4" fill="#E0E0E0"/>
+          </svg>
+        </div>
+        <span class="shape-card__name" style="color:#999;">View Design</span>
+        <span class="shape-card__hint">See your pieces</span>
+      </a>
+
+    </div><!-- /shape-grid -->
+
+    <!-- Footer nudge -->
+    <div style="padding: 16px 24px 32px; text-align: center; color: #bbb; font-size: 12px; line-height: 1.6;">
+      No account needed. Nothing to buy.<br>
+      Just pick your look, then talk to Jeff.
+    </div>
+
+  </div><!-- /lt-page -->
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
