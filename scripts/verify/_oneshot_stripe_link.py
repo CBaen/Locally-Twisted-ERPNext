@@ -18,12 +18,16 @@ except ImportError:
     print("FAIL — playwright not installed")
     sys.exit(1)
 
-URL_FILE = Path("/tmp/lt_stripe_url.txt")
-if not URL_FILE.exists():
-    print(f"FAIL — {URL_FILE} not found")
-    sys.exit(1)
-
-url = URL_FILE.read_text().strip()
+# Accept URL as first argv arg; falls back to /tmp/lt_stripe_url.txt for
+# environments that resolve POSIX paths.
+if len(sys.argv) > 1:
+    url = sys.argv[1].strip()
+else:
+    URL_FILE = Path("/tmp/lt_stripe_url.txt")
+    if not URL_FILE.exists():
+        print(f"FAIL — pass URL as argv[1] or write it to {URL_FILE}")
+        sys.exit(1)
+    url = URL_FILE.read_text().strip()
 print(f"URL: {url[:120]}...")
 
 out_dir = Path(__file__).parent / "_screenshots" / time.strftime("stripe-link-%Y%m%d-%H%M%S")
@@ -35,8 +39,11 @@ with sync_playwright() as p:
     page = ctx.new_page()
 
     print("\nLoading Stripe page...")
-    page.goto(url, timeout=45000, wait_until="networkidle")
-    time.sleep(3)  # let any deferred Link UI render
+    # Stripe's page keeps a persistent connection so 'networkidle' never
+    # fires. 'domcontentloaded' is enough; the post-load sleep covers any
+    # deferred Link UI rendering.
+    page.goto(url, timeout=45000, wait_until="domcontentloaded")
+    time.sleep(6)
 
     page.screenshot(path=str(out_dir / "stripe-checkout.png"), full_page=True)
 
