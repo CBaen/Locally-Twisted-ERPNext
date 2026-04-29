@@ -35,11 +35,11 @@
 |------|-----|-------------|
 | Blush | #F4DFD7 | Warm |
 | Soft Lemon | #F9F871 | Warm |
-| Lime Pastel | #B8FF9E | Warm-neutral |
 | Seafoam | #88FED0 | Cool-neutral |
-| Aqua | #80F5F3 | Cool |
 | Sky Cyan | #A0E9FF | Cool |
 | Soft Blue | #C3DCF3 | Cool |
+
+*Removed 2026-04-29: Aqua (#80F5F3) and Lime Pastel (#B8FF9E) — too candy-pop for the LT brand register. Confirmed GL directive 2026-04-29.*
 
 ### Surface Tints (inputs, menus, subtle backgrounds)
 

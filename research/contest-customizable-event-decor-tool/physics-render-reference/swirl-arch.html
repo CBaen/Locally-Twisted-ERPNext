@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Physics Render Reference - Swirl Arch</title>
+<style>
+  :root {
+    --soft-blue: #DCE6EE;
+    --blush: #F4D6D6;
+    --near-white: #FFFCFC;
+    --teal: #2E7D77;
+    --ink: #1B1B1B;
+    --grey: #6B6B6B;
+    --line: #E5E5E5;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background: var(--near-white);
+  }
+  header {
+    padding: 24px 32px;
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(to right, var(--blush) 0%, var(--soft-blue) 100%);
+  }
+  header h1 {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-weight: normal;
+    font-size: 28px;
+    margin: 0 0 6px;
+  }
+  header p {
+    margin: 0;
+    color: var(--grey);
+    font-size: 14px;
+    max-width: 720px;
+  }
+  main {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 24px;
+    padding: 24px 32px;
+  }
+  @media (max-width: 720px) {
+    main { grid-template-columns: 1fr; padding: 16px; }
+  }
+  .controls fieldset {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin: 0 0 16px;
+  }
+  .controls legend {
+    padding: 0 6px;
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--grey);
+  }
+  .swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .swatch {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: white;
+    font-size: 12px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .swatch.active {
+    background: var(--ink);
+    color: white;
+    border-color: var(--ink);
+  }
+  .swatch-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.12);
+    flex-shrink: 0;
+  }
+  .controls label {
+    display: block;
+    font-size: 13px;
+    margin: 6px 0;
+  }
+  .controls input[type="range"] {
+    width: 100%;
+  }
+  .canvas-wrap {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 16px;
+  }
+  svg.arch-canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: var(--near-white);
+    border-radius: 4px;
+  }
+  .palette {
+    margin-top: 16px;
+    padding: 12px 16px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: white;
+  }
+  .palette h2 {
+    margin: 0 0 8px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--grey);
+  }
+  .palette ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .palette li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+  }
+  .math-notes {
+    margin-top: 24px;
+    padding: 16px;
+    background: #F7F7F7;
+    border-radius: 6px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .math-notes h2 {
+    margin: 0 0 8px;
+    font-size: 14px;
+  }
+  .math-notes pre {
+    background: white;
+    padding: 12px;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-size: 12px;
+    margin: 8px 0;
+  }
+  .stat {
+    font-size: 12px;
+    color: var(--grey);
+    margin-top: 8px;
+  }
+  .annotation {
+    background: rgba(46, 125, 119, 0.08);
+    border-left: 3px solid var(--teal);
+    padding: 10px 14px;
+    border-radius: 4px;
+    font-size: 13px;
+    color: var(--ink);
+    margin-top: 16px;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Physics Render Reference - Swirl Arch</h1>
+  <p>Vanilla JS + inline SVG prototype demonstrating the 4-balloon cluster atomic unit, spiral color rotation, and math-driven cluster placement on a half-circle arch curve. Binding reference for the eventual Frappe build - implementations must use this math.</p>
+</header>
+
+<main>
+  <aside class="controls">
+    <fieldset>
+      <legend>Colors (2-6)</legend>
+      <div class="swatches" id="color-swatches" aria-label="Available colors. Click to add or remove from palette."></div>
+      <p class="stat" id="color-stat"></p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Size</legend>
+      <label><input type="radio" name="size" value="small"> Small (12 clusters · ~6 ft)</label>
+      <label><input type="radio" name="size" value="medium" checked> Medium (16 clusters · ~8 ft)</label>
+      <label><input type="radio" name="size" value="large"> Large (20 clusters · ~10 ft)</label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Spiral step</legend>
+      <label>Step: <span id="spiral-step-display">1</span></label>
+      <input type="range" id="spiral-step" min="1" max="3" value="1" step="1">
+      <p class="stat">Each cluster's color order shifts by this many positions. Step=1 produces a slow continuous spiral; step=2 produces tighter alternation; step=3 produces a denser repeat.</p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Diagnostic</legend>
+      <label><input type="checkbox" id="show-cluster-labels"> Show cluster numbers</label>
+      <label><input type="checkbox" id="show-balloon-positions"> Show balloon positions (T/R/B/L)</label>
+    </fieldset>
+  </aside>
+
+  <section>
+    <div class="canvas-wrap">
+      <svg class="arch-canvas" id="arch-svg" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" aria-label="Rendered swirl arch"></svg>
+    </div>
+
+    <div class="palette">
+      <h2>Your colors (the names Jeff orders by)</h2>
+      <ol id="palette-list"></ol>
+    </div>
+
+    <div class="annotation">
+      <strong>Min repeat:</strong> <span id="min-repeat-display"></span>. The smallest number of clusters before the color pattern repeats - derived from <code>colors / gcd(colors, 4)</code>.
+    </div>
+
+    <div class="math-notes">
+      <h2>Physics math (binding reference for Frappe build)</h2>
+
+<pre>// === Arch curve (half-circle) ===
+// Parametrize theta from pi -> 0 across cluster_count steps:
+//   x(theta) = cx + rx * cos(theta)
+//   y(theta) = cy - ry * sin(theta)         (SVG y-down; minus -> upward)
+//
+// Cluster orientation: rotation = pi/2 - theta
+//   Rotates the cluster diamond so its "top" balloon points
+//   toward the outward normal of the arch at every position.
+//   Verified: theta=pi/2 -> rot=0   (no rotation at top of arch)
+//             theta=0    -> rot=pi/2 (rotates 90 at right foot)
+
+// === Cluster geometry (4 balloons, diamond pack) ===
+// Balloon position offsets (default, untransformed):
+//   pos 0 (top):    ( 0, -offset)
+//   pos 1 (right):  ( offset, 0 )
+//   pos 2 (bottom): ( 0,  offset)
+//   pos 3 (left):   (-offset, 0 )
+//
+// offset = balloon_radius * 0.7    (intentional overlap -> reads as cluster)
+//
+// Apply rotation (cosA, sinA) to each (dx, dy):
+//   rotDx = dx*cosA - dy*sinA
+//   rotDy = dx*sinA + dy*cosA
+
+// === Spiral color rotation ===
+// For balloon b in cluster c with N colors, spiral_step s:
+//   color_index = (c*s + b) mod N
+//
+// With N=4, s=1: cluster 0 -> [0,1,2,3]
+//                cluster 1 -> [1,2,3,0]
+//                cluster 2 -> [2,3,0,1]
+//                cluster 3 -> [3,0,1,2]   (then repeats)
+
+// === Min repeat (informational) ===
+//   min_repeat = N / gcd(N, 4)
+//   N=2: 1     N=3: 3     N=4: 1     N=5: 5     N=6: 3</pre>
+
+      <h2>What this demonstrates (and what it does NOT)</h2>
+      <p>
+        Demonstrated: 4-balloon cluster atomic unit; spiral color rotation; math-driven cluster placement along a curve; vanilla JS + inline SVG (no React, no build step).
+      </p>
+      <p>
+        NOT demonstrated yet: garland organic-flow randomness rules; no-touching-twins constraint; 60/30/10 size mix; backdrop sqft -> cluster grid; column gravity rules; drop physics; bouquet anchor + inflation pattern. <em>Each needs its own physics-render-reference page before implementation.</em>
+      </p>
+    </div>
+  </section>
+</main>
+
+<script>
+// =========================================================================
+// PHYSICS RENDER REFERENCE - SWIRL ARCH
+// Binding math reference for the eventual Frappe Design Studio build.
+// Vanilla JS + inline SVG. No build step. Frappe-recreatable.
+// =========================================================================
+
+const LT_COLORS = [
+  { name: 'Blush',         hex: '#F4C2C2' },
+  { name: 'Dusk Blue',     hex: '#7FA3C0' },
+  { name: 'Empowermint',   hex: '#A8E6CF' },
+  { name: 'Raspberry',     hex: '#B22251' },
+  { name: 'Coral',         hex: '#FF6B6B' },
+  { name: 'Lilac',         hex: '#C8A2C8' },
+  { name: 'Champagne',     hex: '#F7E7CE' },
+  { name: 'Soft Yellow',   hex: '#FFF1A8' },
+  { name: 'Sage',          hex: '#9CAF88' },
+  { name: 'Eucalyptus',    hex: '#7FB28A' },
+];
+
+const SIZE_TO_CLUSTERS = { small: 12, medium: 16, large: 20 };
+const SVG_NS = 'http://www.w3.org/2000/svg';
+
+const state = {
+  colors: [LT_COLORS[0], LT_COLORS[1], LT_COLORS[2]],
+  size: 'medium',
+  spiralStep: 1,
+  showClusterLabels: false,
+  showBalloonPositions: false,
+};
+
+// =========================================================================
+// MATH
+// =========================================================================
+
+function gcd(a, b) {
+  return b === 0 ? a : gcd(b, a % b);
+}
+
+function minRepeat(colorCount) {
+  if (colorCount === 0) return 0;
+  return colorCount / gcd(colorCount, 4);
+}
+
+function archCenters(clusterCount, archWidth, archHeight, originX, baseY) {
+  const cx = originX + archWidth / 2;
+  const cy = baseY;
+  const rx = archWidth / 2;
+  const ry = archHeight;
+  const centers = [];
+  for (let i = 0; i < clusterCount; i++) {
+    const t = i / (clusterCount - 1);
+    const theta = Math.PI * (1 - t);
+    const x = cx + rx * Math.cos(theta);
+    const y = cy - ry * Math.sin(theta);
+    const rotation = Math.PI / 2 - theta;
+    centers.push({ x, y, rotation });
+  }
+  return centers;
+}
+
+function clusterBalloons(center, rotation, balloonRadius, colors, clusterIndex, spiralStep) {
+  const offset = balloonRadius * 0.7;
+  const diamond = [
+    { dx:  0,        dy: -offset, label: 'T' },
+    { dx:  offset,   dy:  0,      label: 'R' },
+    { dx:  0,        dy:  offset, label: 'B' },
+    { dx: -offset,   dy:  0,      label: 'L' },
+  ];
+  const cosA = Math.cos(rotation);
+  const sinA = Math.sin(rotation);
+  const balloons = [];
+  for (let b = 0; b < 4; b++) {
+    const colorIdx = (clusterIndex * spiralStep + b) % colors.length;
+    const dx = diamond[b].dx;
+    const dy = diamond[b].dy;
+    const rotDx = dx * cosA - dy * sinA;
+    const rotDy = dx * sinA + dy * cosA;
+    balloons.push({
+      cx: center.x + rotDx,
+      cy: center.y + rotDy,
+      r: balloonRadius,
+      color: colors[colorIdx],
+      ballonPosition: b,
+      ballonLabel: diamond[b].label,
+      clusterIndex,
+    });
+  }
+  return balloons;
+}
+
+// =========================================================================
+// RENDER
+// =========================================================================
+
+function clearChildren(node) {
+  while (node.firstChild) node.removeChild(node.firstChild);
+}
+
+function svgEl(tag, attrs = {}) {
+  const node = document.createElementNS(SVG_NS, tag);
+  for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, v);
+  return node;
+}
+
+function renderArch() {
+  const svg = document.getElementById('arch-svg');
+  clearChildren(svg);
+
+  if (state.colors.length === 0) {
+    const t = svgEl('text', {
+      x: 400, y: 250, 'text-anchor': 'middle',
+      'font-family': 'sans-serif', 'font-size': 18, fill: '#999',
+    });
+    t.textContent = 'Pick at least 1 color to render the arch';
+    svg.appendChild(t);
+    return;
+  }
+
+  const clusterCount = SIZE_TO_CLUSTERS[state.size];
+  const archWidth = 700;
+  const archHeight = 350;
+  const originX = 50;
+  const baseY = 450;
+  const balloonR = 16;
+
+  const centers = archCenters(clusterCount, archWidth, archHeight, originX, baseY);
+
+  // Arch legs
+  for (const center of [centers[0], centers[centers.length - 1]]) {
+    svg.appendChild(svgEl('rect', {
+      x: center.x - 2, y: center.y, width: 4, height: baseY + 30 - center.y,
+      fill: '#C0C0C0',
+    }));
+    svg.appendChild(svgEl('rect', {
+      x: center.x - 12, y: baseY + 28, width: 24, height: 4, fill: '#A0A0A0',
+    }));
+  }
+
+  // Render clusters left-to-right; balloons within cluster bottom-first for natural stacking
+  const balloonRenderOrder = [2, 1, 3, 0];
+  for (let c = 0; c < centers.length; c++) {
+    const balloons = clusterBalloons(
+      centers[c], centers[c].rotation, balloonR,
+      state.colors, c, state.spiralStep
+    );
+
+    const g = svgEl('g', { 'data-cluster': c });
+    for (const idx of balloonRenderOrder) {
+      const b = balloons[idx];
+      g.appendChild(svgEl('circle', {
+        cx: b.cx, cy: b.cy, r: b.r,
+        fill: b.color.hex,
+        stroke: 'rgba(0,0,0,0.15)', 'stroke-width': 1,
+      }));
+      g.appendChild(svgEl('circle', {
+        cx: b.cx - b.r * 0.3, cy: b.cy - b.r * 0.3, r: b.r * 0.22,
+        fill: 'rgba(255,255,255,0.5)',
+      }));
+      if (state.showBalloonPositions) {
+        const t = svgEl('text', {
+          x: b.cx, y: b.cy + 3,
+          'text-anchor': 'middle', 'font-size': 8,
+          'font-family': 'monospace', fill: 'rgba(0,0,0,0.6)',
+        });
+        t.textContent = b.ballonLabel;
+        g.appendChild(t);
+      }
+    }
+
+    if (state.showClusterLabels) {
+      const cluster = centers[c];
+      const t = svgEl('text', {
+        x: cluster.x, y: cluster.y - balloonR * 1.6,
+        'text-anchor': 'middle', 'font-size': 10,
+        'font-family': 'monospace', fill: '#2E7D77',
+      });
+      t.textContent = 'c' + c;
+      g.appendChild(t);
+    }
+    svg.appendChild(g);
+  }
+}
+
+function renderPaletteList() {
+  const ol = document.getElementById('palette-list');
+  clearChildren(ol);
+  for (const c of state.colors) {
+    const li = document.createElement('li');
+    const dot = document.createElement('span');
+    dot.className = 'swatch-dot';
+    dot.style.background = c.hex;
+    li.appendChild(dot);
+    const text = document.createElement('span');
+    text.textContent = c.name;
+    li.appendChild(text);
+    ol.appendChild(li);
+  }
+}
+
+function renderColorSwatches() {
+  const div = document.getElementById('color-swatches');
+  clearChildren(div);
+  for (const c of LT_COLORS) {
+    const isActive = state.colors.some(sc => sc.name === c.name);
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'swatch' + (isActive ? ' active' : '');
+    button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+
+    const dot = document.createElement('span');
+    dot.className = 'swatch-dot';
+    dot.style.background = c.hex;
+    button.appendChild(dot);
+
+    const text = document.createElement('span');
+    text.textContent = c.name;
+    button.appendChild(text);
+
+    button.addEventListener('click', () => {
+      if (isActive) {
+        if (state.colors.length > 1) {
+          state.colors = state.colors.filter(sc => sc.name !== c.name);
+        }
+      } else {
+        if (state.colors.length < 6) {
+          state.colors = [...state.colors, c];
+        }
+      }
+      rerender();
+    });
+    div.appendChild(button);
+  }
+  document.getElementById('color-stat').textContent =
+    state.colors.length + ' of 6 selected';
+}
+
+function renderMinRepeat() {
+  const mr = minRepeat(state.colors.length);
+  const text = state.colors.length === 0
+    ? '-'
+    : (mr + ' cluster' + (mr === 1 ? '' : 's'));
+  document.getElementById('min-repeat-display').textContent = text;
+}
+
+function rerender() {
+  renderArch();
+  renderPaletteList();
+  renderColorSwatches();
+  renderMinRepeat();
+}
+
+// =========================================================================
+// CONTROLS
+// =========================================================================
+
+function wireControls() {
+  document.querySelectorAll('input[name="size"]').forEach(input => {
+    input.addEventListener('change', e => {
+      state.size = e.target.value;
+      rerender();
+    });
+  });
+
+  const spiralInput = document.getElementById('spiral-step');
+  const spiralDisplay = document.getElementById('spiral-step-display');
+  spiralInput.addEventListener('input', e => {
+    state.spiralStep = parseInt(e.target.value, 10);
+    spiralDisplay.textContent = state.spiralStep;
+    rerender();
+  });
+
+  document.getElementById('show-cluster-labels').addEventListener('change', e => {
+    state.showClusterLabels = e.target.checked;
+    renderArch();
+  });
+  document.getElementById('show-balloon-positions').addEventListener('change', e => {
+    state.showBalloonPositions = e.target.checked;
+    renderArch();
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  wireControls();
+  rerender();
+});
+</script>
+</body>
+</html>

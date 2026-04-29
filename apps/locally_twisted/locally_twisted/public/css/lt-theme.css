@@ -20,12 +20,15 @@
   --lt-white: #FFFFFF;
   --lt-near-white: #fffcfc;
 
-  /* Accent palette — backgrounds, bands, slider panels */
+  /* Accent palette — backgrounds, bands, slider panels.
+     Aqua and lime-pastel were removed from the design system on 2026-04-29
+     after GL flagged them as the wrong register for LT (cyan/lime-green
+     are too candy-pop for the brand). The 2026-04-28 ribbon decision
+     already restricted bands to blush + soft-blue; this commits the
+     deletion to the token layer too. */
   --lt-blush: #F4DFD7;
   --lt-soft-lemon: #F9F871;
-  --lt-lime-pastel: #B8FF9E;
   --lt-seafoam: #88FED0;
-  --lt-aqua: #80F5F3;
   --lt-sky-cyan: #A0E9FF;
   --lt-soft-blue: #C3DCF3;
 
@@ -248,9 +251,7 @@ section,
 .lt-band--soft-blue { background-color: var(--lt-soft-blue); color: var(--lt-near-black); }
 .lt-band--seafoam { background-color: var(--lt-seafoam); color: var(--lt-near-black); }
 .lt-band--lemon { background-color: var(--lt-soft-lemon); color: var(--lt-near-black); }
-.lt-band--aqua { background-color: var(--lt-aqua); color: var(--lt-near-black); }
 .lt-band--sky-cyan { background-color: var(--lt-sky-cyan); color: var(--lt-near-black); }
-.lt-band--lime { background-color: var(--lt-lime-pastel); color: var(--lt-near-black); }
 
 /* ── Body text rules ── */
 p {

@@ -158,7 +158,6 @@ PAGE_CSS = """
     width: 100%;
 }
 .lt-shop__band--blush { background-color: var(--lt-blush); }
-.lt-shop__band--aqua { background-color: var(--lt-aqua); }
 
 /* Filter + grid */
 .lt-shop__listing {
