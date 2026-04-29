@@ -631,16 +631,19 @@ html, body {
 
 .lt-header__utility-left {
   font-family: 'Raleway', sans-serif;
-  /* Bumped from 0.875rem (14px) to 1rem (16px) per GL 2026-04-29 —
-   * accessibility + balance with the centered logo. The text wraps
-   * to two lines via an explicit <br> in navbar.html so it visually
-   * matches the right-side cluster (Sign In + Cart). */
+  /* 1rem (16px) per GL 2026-04-29 — accessibility + matches right-side
+   * util-link size for desktop symmetry around the logo. Text wraps
+   * to two lines via an explicit <br> in navbar.html. */
   font-size: 1rem;
   line-height: 1.4;
   color: var(--lt-soft-gray);
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  /* Pull content toward the logo (right edge of left column) so the
+   * "the" → logo gap mirrors the logo → "Sign" gap on the right. */
+  justify-self: end;
+  text-align: right;
 }
 
 .lt-header__truck {
