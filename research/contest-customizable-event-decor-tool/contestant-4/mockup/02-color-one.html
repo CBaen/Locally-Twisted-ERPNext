@@ -155,30 +155,51 @@
       <!-- Controls panel (visible on desktop in sidebar, on mobile below canvas) -->
       <div class="desktop-split__controls" id="controls-panel">
 
-        <!-- Design style toggle: Swirl | Organic -->
-        <!-- Swirl = 2-color A B A B pattern (4-cluster, gcd math) -->
-        <!-- Organic = palette-driven, no fixed regions, artist-arranged -->
+        <!-- Design style toggle: Alternating | Mixed -->
+        <!-- Alternating = 2-color A B A B pattern (4-cluster, gcd math) — renamed from "Swirl" for customer clarity -->
+        <!-- Mixed = palette-driven, no fixed regions, artist-arranged — renamed from "Organic" for customer clarity -->
         <div style="padding: 12px 20px; background: #FAFAFA; border-bottom: 1px solid #E8E8E8;">
           <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #B0B0B0; margin-bottom: 8px;">
-            Design Style
+            How do you want the colors arranged?
           </div>
           <div style="display: flex; gap: 8px;">
+
+            <!-- Alternating button: inline SVG thumbnail shows A B A B pattern -->
             <button id="style-swirl" class="style-toggle active"
-              style="flex:1; padding:8px 12px; border-radius:8px; border:1.5px solid #1A1A1A; background:white; font-size:13px; font-weight:600; color:#1A1A1A; cursor:pointer; transition:all 0.15s;">
-              Swirl
+              style="flex:1; padding:8px 10px; border-radius:8px; border:1.5px solid #1A1A1A; background:white; font-size:13px; font-weight:600; color:#1A1A1A; cursor:pointer; transition:all 0.15s; display:flex; flex-direction:column; align-items:center; gap:5px;">
+              <!-- Thumbnail: 5 circles alternating A B A B A, two distinct fill colors -->
+              <svg viewBox="0 0 56 16" xmlns="http://www.w3.org/2000/svg" width="56" height="16" aria-hidden="true" style="flex-shrink:0;">
+                <circle cx="6"  cy="8" r="6" fill="#C88888"/>
+                <circle cx="18" cy="8" r="6" fill="#8CA8C0"/>
+                <circle cx="30" cy="8" r="6" fill="#C88888"/>
+                <circle cx="42" cy="8" r="6" fill="#8CA8C0"/>
+                <circle cx="54" cy="8" r="6" fill="#C88888"/>
+              </svg>
+              Alternating
             </button>
+
+            <!-- Mixed button: inline SVG thumbnail shows varied colors, no strict pattern -->
             <button id="style-organic" class="style-toggle"
-              style="flex:1; padding:8px 12px; border-radius:8px; border:1.5px solid #E8E8E8; background:white; font-size:13px; font-weight:500; color:#999; cursor:pointer; transition:all 0.15s;">
-              Organic
+              style="flex:1; padding:8px 10px; border-radius:8px; border:1.5px solid #E8E8E8; background:white; font-size:13px; font-weight:500; color:#999; cursor:pointer; transition:all 0.15s; display:flex; flex-direction:column; align-items:center; gap:5px;">
+              <!-- Thumbnail: 5 circles in varied, non-repeating colors -->
+              <svg viewBox="0 0 56 16" xmlns="http://www.w3.org/2000/svg" width="56" height="16" aria-hidden="true" style="flex-shrink:0; opacity:0.55;">
+                <circle cx="6"  cy="8" r="6" fill="#C88888"/>
+                <circle cx="18" cy="8" r="6" fill="#D4A017"/>
+                <circle cx="30" cy="8" r="6" fill="#8CA8C0"/>
+                <circle cx="42" cy="8" r="6" fill="#F4DFD7"/>
+                <circle cx="54" cy="8" r="6" fill="#C88888"/>
+              </svg>
+              Mixed
             </button>
+
           </div>
-          <!-- Swirl explanation -->
+          <!-- Alternating explanation -->
           <div id="style-hint-swirl" style="margin-top:8px; font-size:12px; color:#595A5C; line-height:1.4;">
-            Balloons alternate in a spiral pattern. Pick 2 colors — they'll alternate A B A B along the arch.
+            Two colors take turns all the way around. You pick both — Jeff makes it happen.
           </div>
-          <!-- Organic explanation (hidden by default) -->
+          <!-- Mixed explanation (hidden by default) -->
           <div id="style-hint-organic" style="display:none; margin-top:8px; font-size:12px; color:#595A5C; line-height:1.4;">
-            Balloons are arranged organically in mixed sizes. Pick a palette of colors — Jeff will blend them naturally.
+            Pick a palette of colors and Jeff will blend them in a natural, organic arrangement.
           </div>
         </div>
 
@@ -194,10 +215,10 @@
           </button>
         </div>
 
-        <!-- Organic palette chips (hidden by default, shown in Organic mode) -->
+        <!-- Mixed palette hint (hidden by default, shown in Mixed mode) -->
         <div id="organic-palette-hint" style="display:none; padding:12px 20px; background:#F0FAF9; border-bottom:1px solid #D0EDED;">
           <p style="font-size:13px; color:#006060; font-weight:500; line-height:1.4;">
-            In Organic style, tap "See All Colors" below to pick your palette. Jeff will arrange them with natural variation.
+            Tap "See All 53 Colors" below to pick your palette. Jeff will arrange them naturally.
           </p>
         </div>
 
