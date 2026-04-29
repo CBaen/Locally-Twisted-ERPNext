@@ -1,0 +1,153 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+
+{#
+    Lookbook — /lookbook — Slice 7
+    Sections that should read as full-width bands wear the .lt-fullbleed class.
+
+    Order:
+      1. Hero band (eyebrow + H1 + body)
+      2. Pink ribbon divider
+      3. Filter row (event-type pills + category dropdown + count + clear)
+      4. Gallery grid (cards + empty state)
+      5. Closing CTA
+#}
+
+{# --- 1. Hero band --- #}
+<section class="lt-lookbook-hero lt-fullbleed" aria-labelledby="lt-lookbook-title">
+    <div class="lt-lookbook-hero__inner">
+        <p class="lt-lookbook-hero__eyebrow">What we've made</p>
+        <h1 id="lt-lookbook-title" class="lt-lookbook-hero__title">The work speaks.</h1>
+        <p class="lt-lookbook-hero__body">
+            Custom balloon decor for weddings, corporate events, and milestone celebrations
+            along Utah's Wasatch Front. Every piece is designed for the specific event and venue.
+        </p>
+    </div>
+</section>
+
+{# --- 2. Pink ribbon divider (saturated brand blush) --- #}
+<div class="lt-lookbook-ribbon lt-fullbleed" role="presentation" aria-hidden="true"></div>
+
+{# --- 3. Filter row --- #}
+<section class="lt-lookbook-filter lt-fullbleed"
+         data-lookbook-filter
+         aria-label="Filter portfolio">
+    <div class="lt-lookbook-filter__inner">
+
+        {# Event-type pill chips. "All" is rendered inline as the first pill. #}
+        <ul class="lt-lookbook-filter__pills" role="list">
+            <li class="lt-lookbook-filter__pill">
+                <button type="button"
+                        data-event-pill="all"
+                        aria-pressed="{{ 'true' if initial_event == 'all' else 'false' }}">
+                    All
+                </button>
+            </li>
+            {% for ev in event_types %}
+            <li class="lt-lookbook-filter__pill">
+                <button type="button"
+                        data-event-pill="{{ ev.slug }}"
+                        aria-pressed="{{ 'true' if initial_event == ev.slug else 'false' }}">
+                    {{ ev.name }}
+                </button>
+            </li>
+            {% endfor %}
+        </ul>
+
+        {# Category dropdown #}
+        <div class="lt-lookbook-filter__dropdown">
+            <label for="lt-lookbook-category-select">Category</label>
+            <select id="lt-lookbook-category-select"
+                    data-category-select
+                    aria-label="Filter by product category">
+                <option value="all" {{ 'selected' if initial_category == 'all' else '' }}>All categories</option>
+                {% for cat in categories %}
+                <option value="{{ cat.slug }}"
+                        {{ 'selected' if initial_category == cat.slug else '' }}>
+                    {{ cat.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        {# Count + clear #}
+        <div class="lt-lookbook-filter__meta">
+            <span class="lt-lookbook-filter__count"
+                  data-lookbook-count
+                  aria-live="polite"
+                  aria-atomic="true">
+                {{ gallery_items | length }} pieces
+            </span>
+            <button type="button"
+                    class="lt-lookbook-filter__clear"
+                    data-lookbook-clear
+                    aria-label="Clear all filters">
+                Clear
+            </button>
+        </div>
+
+    </div>
+</section>
+
+{# --- 4. Gallery grid --- #}
+<section class="lt-lookbook-grid lt-fullbleed"
+         data-lookbook-grid
+         data-empty="false"
+         aria-label="Portfolio gallery">
+    <div class="lt-lookbook-grid__inner">
+        <div class="lt-lookbook-grid__cards">
+            {% for item in gallery_items %}
+            <a class="lt-lookbook-card"
+               href="/book?category={{ item.category }}&event={{ item.event_type }}"
+               data-lookbook-card
+               data-event-type="{{ item.event_type }}"
+               data-category="{{ item.category }}"
+               aria-label="{{ item.title }} — inquire about a similar piece">
+                <div class="lt-lookbook-card__image"
+                     style="background-image: url('/assets/locally_twisted/images/lookbook/{{ item.image }}');"
+                     role="img" aria-label="{{ item.alt }}"></div>
+                <div class="lt-lookbook-card__body">
+                    <p class="lt-lookbook-card__category">
+                        {%- for cat in categories -%}
+                            {%- if cat.slug == item.category -%}{{ cat.name }}{%- endif -%}
+                        {%- endfor -%}
+                    </p>
+                    <h2 class="lt-lookbook-card__title">{{ item.title }}</h2>
+                </div>
+            </a>
+            {% endfor %}
+
+            {# Empty state — visible only when grid[data-empty="true"] (set by JS). #}
+            <div class="lt-lookbook-empty" role="status">
+                <h2 class="lt-lookbook-empty__heading">No work matches that filter yet.</h2>
+                <p class="lt-lookbook-empty__body">
+                    The portfolio is growing — try adjusting the occasion or category, or start a conversation about your event.
+                </p>
+                <a href="/book" class="lt-lookbook-empty__cta">Start a conversation</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# --- 5. Closing CTA --- #}
+<section class="lt-cta lt-fullbleed" aria-labelledby="lt-lookbook-cta-heading">
+    <div class="lt-cta__inner">
+        <h2 id="lt-lookbook-cta-heading" class="lt-cta__heading">Something else in mind?</h2>
+        <p class="lt-cta__body">
+            The look book is a sample of the range &mdash; not a menu. If you're imagining
+            something you don't see here, that's exactly the conversation Jeff is built for.
+        </p>
+        <a href="/book" class="lt-cta__button">
+            Start a conversation
+            <span aria-hidden="true">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+{# --- ItemList JSON-LD schema (validates against schema.org) --- #}
+<script type="application/ld+json">
+{{ itemlist_jsonld | safe }}
+</script>
+
+{% endblock %}
