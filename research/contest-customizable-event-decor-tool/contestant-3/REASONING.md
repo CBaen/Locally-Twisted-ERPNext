@@ -25,7 +25,7 @@ They tap "Arch." The card expands. The arch SVG fills the screen. Fill regions a
 
 A palette tray slides up from the bottom (mobile) or appears as a side panel (desktop). They tap a teal balloon on the palette. The main region fills immediately — no animation delay, just immediate fill. This is the satisfaction moment. The visual feedback is instant [Pigment's core satisfaction driver: "immediate visual feedback"].
 
-The shape now has one color applied. The accent region still shows the dashed outline, waiting. This incompleteness is deliberate — it's the Zeigarnik Effect at work [upsell research, medium.com/@srihari45.design]. The brain registers the unfinished accent region as a "task open." The customer taps the accent region, picks a blush. Now the shape feels finished and theirs.
+The shape now has one color applied. The accent region still shows the dashed outline, waiting. This incompleteness is deliberate — it's the Zeigarnik Effect at work [Laws of UX: lawsofux.com/zeigarnik-effect/ — "provide clear signifiers of additional content"]. The brain registers the unfinished accent region as a "task open." The customer taps the accent region, picks a blush. Now the shape feels finished and theirs.
 
 ---
 
@@ -47,7 +47,7 @@ The palette tray shows 16 swatches in a 4×4 grid on initial open — visible wi
 
 Each swatch: 40px × 40px circle (hit-target safe for thumbs), with a thin border ring appearing on tap to confirm selection. The hex code for the focused swatch appears in a pill beneath the grid: `#F4DFD7 — Blush Pink`. This persists until a different swatch is tapped, so the customer can match a venue color without hunting.
 
-The flat unsorted 50+ grid is explicitly rejected per my research: Baymard found horizontal scrolling within family categories outperforms flat grids on mobile. IxDF's 2026 color system guidance recommends grouping by family [ixdf.org/literature/article/ui-color-palette]. My implementation follows this: 16 "hot" swatches (the most balloon-common colors) up front in a 4×4 grid, then families behind a label.
+The flat unsorted 50+ grid is explicitly rejected per my research. Two sources ground this choice: (1) Baymard Institute [baymard.com/blog/mobile-interactive-color-swatches] establishes that horizontal scrolling avoids pushing content off screen and that a truncated rightmost swatch signals "more exists" — their tested pattern is a single flat scrollable row, but the principle (scroll over grid-expansion) applies per family section in my design. (2) Adobe Spectrum's design system documentation [adobe.design/stories/design-for-scale/naming-colors-in-design-systems] establishes family-based color naming as the correct organizational structure for large palettes — "use common words (blue, not oceanic)" paired with brightness scales. My implementation applies Baymard's scroll principle within Adobe-style family groupings: 16 "hot" swatches up front in a 4×4 grid, then family-labeled horizontal-scroll rows below. This is my own configuration combining both principles; Baymard did not test this exact 2D arrangement.
 
 ---
 

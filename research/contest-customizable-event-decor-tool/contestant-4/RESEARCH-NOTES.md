@@ -45,7 +45,7 @@ Pigment's two-mode approach is instructive:
 - **Tap-to-fill mode** (for beginners): tap a closed region → it fills with the selected color. The region highlights on tap to confirm selection, then fills. This is the exact pattern needed for LT's coloring-book metaphor.
 - **Freehand mode** (for advanced): draw within lines without affecting outside areas.
 
-Critical finding: Pigment has **no recently-used colors row**, which reviewers flagged as "incredibly frustrating when you've made a custom color." This is a known pain point — **LT's tool must include a recently-used colors row** to avoid the same frustration when customers switch between shapes. Pigment offers 126 colors with shadow/highlight sliders. For LT, a curated 50+ real balloon colors replaces the artistic color wheel — customers match physical balloon swatches, not create artistic gradients.
+Critical finding: Pigment has **no recently-used colors row**. The iDownloadBlog review places this as the **first complaint in its "The Bad" section** — one of only two major flaws called out — using the phrase "incredibly frustrating when you've made a custom color." This is not a passing mention; it opens the negative section of the review with strong language. **LT's tool must include a recently-used colors row** to avoid the same frustration when customers switch between shapes. Pigment offers 126 colors with shadow/highlight sliders. For LT, a curated 50+ real balloon colors replaces the artistic color wheel — customers match physical balloon swatches, not create artistic gradients.
 
 ### Sarah Renae Clark coloring tutorials
 URL: https://sarahrenaeclark.com/best-adult-coloring-apps/
@@ -100,7 +100,7 @@ Milanote uses a flexible canvas where elements snap loosely. The feel is "arrang
 
 ### Key takeaway from Area 4:
 - The composition view should feel like pieces on a table / items in a scrapbook spread
-- **Horizontal row (scroll right) works better on mobile than a 2D free canvas** — avoids accidental drag, works with thumb scroll
+- **Horizontal row is my design judgment applied to the scrapbooking spirit the DesignFiles article describes** — the article itself does not compare layout directions or claim horizontal outperforms vertical. The reasoning: a free 2D canvas on a 375px touchscreen conflates scroll-drag with rearrange-drag; a horizontal card strip matches the "spread" metaphor; thumb-swiping left-right is natural on a vertically-held phone. This is inference from the research frame, not a stated finding.
 - Each piece has its own panel with a colored illustration + piece name + "edit colors" affordance
 - Adding a new piece is like adding a page to a scrapbook — satisfying, low commitment
 

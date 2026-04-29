@@ -49,9 +49,13 @@
 **URL:** https://mobbin.com/glossary/color-picker
 **What I learned:** (The page returned a 403 for full content, but the search summary captured key patterns.) Four main design variants: palette, color slider, color wheel, color area. For our use case (curated brand balloon colors, not arbitrary hex picking), the palette variant is correct — swatches with circular indicators and a ring/check mark for selection. Text labels alongside swatches help colorblind users.
 
-### Source 10: IxDF — UI Color Palette 2026
+### Source 10: IxDF — UI Color Palette article ⚠️ CORRECTED after Proxy probe
 **URL:** https://ixdf.org/literature/article/ui-color-palette
-**What I learned:** For 2025-2026, structured color systems use primitive tokens (named color families). For our balloon palette, this suggests grouping colors by family: reds, pinks, blues, greens, neutrals. Grouped categories outperform a flat unsorted grid of 50+ for navigation. WCAG 2.1 AA compliance is now an active compliance requirement (European Accessibility Act, June 2025). Each swatch needs sufficient contrast on its label.
+**What I learned — corrected:** The URL resolves to a real page. "2026" in the title is an SEO date marker, not a labeled guidance year. The article covers color theory basics (hue, saturation, lightness), color schemes (analogous, complementary), and the 60-30-10 proportion rule. It does NOT discuss grouping by color family for large palette navigation. My original claim — "IxDF's 2026 color system guidance recommends grouping by family" — was wrong on both counts. The WCAG 2.1 AA compliance note is accurate (the article mentions the European Accessibility Act context). Family-grouping guidance is sourced elsewhere (see Source 10b below).
+
+### Source 10b: Adobe Design — Naming Colors in Design Systems ✦ REPLACEMENT SOURCE
+**URL:** https://adobe.design/stories/design-for-scale/naming-colors-in-design-systems
+**What I learned:** Adobe Spectrum explicitly organizes colors by family name paired with a brightness scale (blue-50 through blue-900, red-50 through red-900, etc.). Their guidance: "Use common words (blue, not oceanic)" — family names over branded names. This is the correct source for the claim that family-based grouping is established design-system practice. The principle transfers directly to a balloon palette: "Seafoam" lives in the Greens family, "Blush" in Reds & Pinks, etc. Adobe's rationale — "If (more like when) you add more tones, there's more room for them" — also applies to our 50+ and growing balloon catalog.
 
 ---
 
@@ -65,9 +69,17 @@
 **URL:** https://www.theknot.com/content/how-to-make-an-inspiration-board
 **What I learned:** Wedding planning tools succeed by giving customers a "here's what goes together" starting frame, not a blank canvas. The pattern: "here are the slots for ceremony + reception + florals" — predefined categories give structure. For balloon decor: "here's your arch slot, your column slot, your centerpiece slot" — same structure applied to event decor. The goal is "I see what my event could look like" not "I built something from scratch."
 
-### Source 13: Upsell/discovery UX — Medium article by Srihari GP
+### Source 13: Upsell/discovery UX — Medium article by Srihari GP ⚠️ PARTIALLY CORRECTED after Proxy probe
 **URL:** https://medium.com/@srihari45.design/the-ultimate-playbook-for-upselling-cross-selling-in-e-commerce-ux-design-a-user-experience-1ed388ea4dc7
-**What I learned:** Two critical findings: (1) The Zeigarnik Effect — people remember incomplete tasks better than completed ones. An empty slot in the composition view is more compelling as an upsell mechanic than a product recommendation card, because the user's brain treats the empty slot as an unfinished task that needs completing. (2) Hick's Law — limit to 2 alternatives maximum when suggesting additions, to avoid choice paralysis. Don't show "here are 4 shapes that would go with your arch" — show "an arch in these colors would complete this."
+**What I learned — corrected:** The article mentions the Zeigarnik Effect once, applying it to *cart abandonment reminders* ("send reminders to customers who haven't completed their purchase") — not to visual placeholder slots in a UI. It asserts the Zeigarnik–upsell connection as a principle with no user research or e-commerce evidence cited. The Hick's Law guidance (limit to 2 alternatives) is still valid and comes from this source. The Zeigarnik application to empty visual slots is a principled extension I made; it is not demonstrated by this source. The Zeigarnik claim is now grounded in the sources below (13b and 13c).
+
+### Source 13b: Laws of UX — Zeigarnik Effect ✦ REPLACEMENT SOURCE
+**URL:** https://lawsofux.com/zeigarnik-effect/
+**What I learned:** Laws of UX is the authoritative UX-practitioner reference for psychology principles. On Zeigarnik: "People remember uncompleted or interrupted tasks better than completed tasks." Key design takeaway: "Invite content discovery by providing clear signifiers of additional content" and "implement artificial advancement toward goals to sustain user motivation for task completion." An empty placeholder slot in the composition view is precisely a "signifier of additional content" — the connection to discovery mechanics is direct from this source.
+
+### Source 13c: UX Bulletin — The Zeigarnik Effect: How Unfinished Tasks Hook Users ✦ REPLACEMENT SOURCE
+**URL:** https://www.ux-bulletin.com/zeigarnik-effect-ux/
+**What I learned:** This article explicitly lists "empty states that reference incomplete workflows" as a Zeigarnik design tactic alongside progress bars and onboarding checklists. Quote: "The magic isn't in pestering users — it's in designing experiences that let them leave something unfinished but within reach." This is the closest existing source to my specific implementation: an empty slot that sits in the customer's composition, visible and unfilled, pulling them toward action without a push. **Caveat acknowledged:** the article does not study empty slots in a visual design tool specifically — it discusses empty states in SaaS workflows. My application of the principle to balloon composition slots is a design extension, not a tested equivalence.
 
 ---
 
@@ -105,10 +117,12 @@
 
 ## Summary of Key Research Findings
 
+*Updated after Proxy Loop 1-1 to correct three citation overreaches. Corrections marked inline above.*
+
 1. **No customer-facing balloon design tool exists** that does what the brief describes. The market is wide open.
 2. **Tap-to-fill (Pigment's Tap-to-Fill mode)** is the right UX primitive for non-designer users coloring SVG regions.
-3. **Horizontal scrolling swatches** (Baymard) beat collapsible sections for 50+ colors on mobile.
+3. **Horizontal scroll (Baymard)** is the right primitive for 50+ colors on mobile — but Baymard describes a single flat row, not grouped rows. Family grouping is sourced separately from Adobe design system conventions (Source 10b).
 4. **Slot-based composition** (wedding moodboard pattern) beats freeform canvas for non-designers.
-5. **Empty slots trigger the Zeigarnik Effect** (upsell research) — they're more compelling than recommendation cards.
+5. **Empty slots as Zeigarnik-driven discovery mechanic** — grounded in Laws of UX (Source 13b) and ux-bulletin's explicit "empty states" application (Source 13c). The Medium source (Source 13) only supports Hick's Law guidance. The visual-slot application is a principled design extension, not a tested equivalence.
 6. **Inline SVG + vanilla JS** is technically complete for fill-region interactivity, and fully Frappe-recreatable via `www/` pages.
 7. **Frappe www/ pages** support page-scoped CSS and JS files — our entire tool fits inside one `www/design-studio.html` + supporting files.

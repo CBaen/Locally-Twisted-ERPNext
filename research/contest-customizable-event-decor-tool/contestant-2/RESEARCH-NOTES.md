@@ -85,7 +85,9 @@ Demonstrates that a 12-color history with localStorage is a lightweight persiste
 ### UXPin — Building a Color Palette for Design Systems
 **URL:** https://www.uxpin.com/create-design-system-guide/build-color-palette-for-design-system
 
-At 50+ colors, flat grids stop working without organization. 10-11 swatches per "family group" is the recommended chunk size for visual scanning. Key takeaway: **organize 50+ balloon colors into 5-6 hue families** (reds/pinks, blues/purples, greens, yellows/oranges, neutrals/whites, darks/blacks). Show one family at a time, navigated by a compact hue-family tab row.
+**CORRECTED after Proxy probe.** On re-fetch, this article does not give a specific swatch count per family group. It covers functional organization principles: derive accent shades programmatically (darken/lighten from a base), keep primary colors in one bucket rather than sub-categorizing them, ensure no UI color falls outside the palette. No "10-11 per group" figure appears in the source — that number was my extrapolation, not a citation.
+
+The underlying design choice (hue-family tabs keeping each tab to ~5-8 swatches at 375px) remains sound, but it is a reasoned estimate derived from dividing LT's ~50-color catalog across 6 families and checking that each tab fits one screen row without scrolling. Key takeaway: **organize 50+ balloon colors into hue families for navigation; the specific count per family is determined by the catalog size and screen width, not by a prescribed spec.**
 
 ---
 

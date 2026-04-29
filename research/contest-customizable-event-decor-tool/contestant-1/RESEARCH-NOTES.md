@@ -29,7 +29,11 @@ URL returned 404 — site no longer available. The pattern (large retailer attem
 ## Research Area 2: Coloring Book / Illustration-Fill UX Patterns
 
 ### Source 7 — Pigment App Review (https://www.idownloadblog.com/2016/01/05/pigment-review/)
-Pigment offers **126 colors in themed palettes** (e.g., "Roller Rink," "Rain Forest"). Two fill modes: (a) freeform trace/scribble, (b) tap-to-activate constrained region coloring that restricts edits to one section at a time. Critical for LT: **the "tap a region to activate it, then color inside" mechanic is directly applicable** to tapping a balloon cluster zone and then choosing from a curated palette. Pigment also supports hex code entry for custom colors.
+Pigment offers **126 colors in themed palettes** (e.g., "Roller Rink," "Rain Forest"). Two fill modes: (a) freeform trace/scribble, (b) tap-to-activate constrained region coloring. The review's exact description of mode (b): *"tap a section of an illustration to activate the 'color-inside-the-lines' feature, which highlights the spot so that it is the only part of the illustration that will be affected by your scribbles, even if you go outside the lines."*
+
+**What this citation supports:** The two-step mechanic — tap to activate/highlight a region, then color within it — is confirmed. Step one (tap → region highlights and becomes the active zone) maps directly to the design.
+
+**Precision note (from Proxy Loop 1-1):** After activation, Pigment uses freeform brush strokes. The design here uses swatch-tap → instant flat fill as step two. The citation validates step one (region activation); step two is a design choice suited to balloon context where a zone is a single flat color, not a brushstroke gradient. Instant fill on swatch selection is faster and more satisfying for this use case. Pigment also supports hex entry for custom colors.
 
 ### Source 8 — Adult Coloring Apps Review (https://sarahrenaeclark.com/best-adult-coloring-apps/)
 Key insight: coloring apps succeed when they "recreate the relaxing experience of actually coloring." The emotional contract is flow + satisfaction, not precision + completion. For LT: the design tool should feel like coloring a page, not filling out a form.
@@ -39,15 +43,17 @@ Key insight: coloring apps succeed when they "recreate the relaxing experience o
 ## Research Area 3: Color Picker UX for 50+ Swatches
 
 ### Source 9 — Baymard Research on Mobile Color Swatches (https://baymard.com/blog/mobile-interactive-color-swatches)
-**Specific findings:**
+**Specific findings from this post:**
 - 57% of ecommerce sites fail to make all swatches available in mobile list views
 - Horizontal scrolling with clearly truncated rightmost swatch works best for mobile
-- Minimum hit area: **7mm x 7mm** minimum per swatch, 2mm minimum spacing between
 - "+8" indicators fail — users assume visible swatches are ALL options
 - Expandable downward sections fail at many colors — pushes content off screen
 - **Inline scrollable areas risk scroll hijacking** — avoid
+- The post describes "large hit areas and generous spacing between swatches" qualitatively (citing a Walgreens example) but **does not state a numerical minimum size**
 
-**Design decision for LT:** Show 8-10 swatches in a horizontally scrollable row. Truncate visibly to signal more. Tap a swatch to see hex code. Separate "browse all" trigger opens a grouped full-palette sheet.
+**Sourcing correction (from Proxy Loop 1-1):** The 7mm minimum touch target figure originally attributed to this URL is not in this post. The 7mm figure comes from Baymard's separate button/touch-target research at https://baymard.com/learn/button-design, which states: "Our research finds a minimum hit area of 7mm by 7mm reduces the number of tap issues." That is general mobile touch target guidance, applied here to swatches as tappable elements — a reasonable application, but sourced from the button article, not the swatch article.
+
+**Design decision for LT:** Show 8-10 swatches in a horizontally scrollable row. Truncate visibly to signal more. 44px swatch size (well above 7mm at standard screen DPI). Separate "browse all" trigger opens grouped full-palette sheet.
 
 ### Source 10 — Designing a Good Color Picker (https://medium.com/design-bootcamp/designing-a-good-color-picker-4c08573dcb7b)
 The key insight: most users don't need to pick *any* color — they need to pick the *right* color from an established palette. Shared palettes, version-controlled, prevent errors. For LT: the 50+ balloon colors ARE the palette. The customer is not choosing from infinity — they're choosing from LT's actual catalog. This frames the picker as a *catalog browser*, not a color wheel.
@@ -66,7 +72,9 @@ Milanote's key design philosophy: **"boards don't have any restrictions — you 
 Most wedding mood board tools (Milanote, Canva, StudioBinder) use drag-and-drop on desktop, simplified tap-to-add on mobile. The composition view is a "board" that accumulates pieces. Key finding: **templates significantly reduce abandonment** on blank-canvas tools. Starting with a pre-populated "party starter" composition (e.g., "arch + column in teal") gives the customer a baseline to modify rather than building from zero.
 
 ### Source 14 — Fanfaire Variants Feature (https://www.fanfaire.io/design-studio)
-Fanfaire allows "variants" — offering different versions of a design. For LT: the composition view shows multiple pieces side-by-side; a customer can see "my arch + the matching column" and understand the visual relationship before committing. The variant mechanic (swap vs. add) is also the upsell mechanic.
+Fanfaire allows "variants" — the page states: "Offer different versions of a design for more flexibility." The swap feature lets "clients swap elements (e.g., iridescent shimmer wall for gold)." These are Jeff's pre-made alternative design options, not a customer's live palette projected forward onto untouched shapes.
+
+**Correction (from Proxy Loop 1-1):** This source was originally cited as a seed for the color-inheritance upsell mechanic (suggested pieces shown in the customer's chosen palette). That citation does not hold — Fanfaire variants show pre-authored design alternatives, not palette-aware dynamic previews. The color-inheritance mechanic is a design invention, not a pattern sourced here. Source 14 remains valid for the general point that showing design alternatives before commitment is an established pattern in this space; it does not support the specific palette-inheritance behavior.
 
 ---
 
@@ -122,7 +130,7 @@ Known issue: `web_include_css` can conflict with Website Theme CSS. Workaround: 
 
 2. **SVG tap-to-fill is technically proven.** Inline SVG + `pointer-events` + event delegation is a well-documented vanilla JS pattern. No library needed.
 
-3. **Mobile color pickers must scroll horizontally, not expand.** Baymard: 7mm minimum swatch hit area, visible truncation signals "more colors exist."
+3. **Mobile color pickers must scroll horizontally, not expand.** Baymard swatch post: horizontal scroll + visible truncation signals "more colors exist"; qualitative guidance on large hit areas. Baymard button research (separate post): 7mm minimum touch target, applied to swatches as tappable elements.
 
 4. **The palette is the product.** LT has 50+ real balloon colors — the picker is a catalog browser, not a color wheel. Customers don't pick from infinity; they pick from LT's actual inventory.
 
