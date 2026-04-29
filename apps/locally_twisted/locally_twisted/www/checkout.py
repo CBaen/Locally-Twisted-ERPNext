@@ -347,21 +347,25 @@ def _resolve_cart_items(item_code, qty, items_json):
 
 @frappe.whitelist(allow_guest=True)
 @rate_limit(limit=10, seconds=60 * 60)
-def submit_guest_order(item_code="", qty=1, name="", email="", phone="",
+def submit_guest_order(item_code="", qty=1, items_json="",
+                       name="", email="", phone="",
                        address_line1="", address_line2="", city="", state="",
                        postal_code="", country="United States",
                        order_notes="", marketing_opt_in=0):
     """Create Customer + Contact + Sales Order for a guest checkout.
 
+    Accepts EITHER buy-now params (item_code + qty) OR a cart payload
+    (items_json — JSON list of {item_code, qty}). One canonical items
+    list comes out of `_resolve_cart_items` and drives the rest.
+
     No User account is created. Customer is identified by email_id.
-    Returns the Sales Order name; the next stage (Stripe payment) is
-    wired in a follow-up phase.
+    Returns the Stripe-hosted checkout URL; caller redirects there.
 
     Loud-failure compliant: validation and persistence errors raise so
-    the caller can surface the message to the user.
+    the caller can surface the message to the user. Pricing is taken
+    from server-side Item Price ONLY — client-supplied prices are never
+    trusted at any layer.
     """
-    item_code = (item_code or "").strip()
-    qty = max(1, cint(qty))
     name = (name or "").strip()
     email = (email or "").strip()
     phone = (phone or "").strip()
@@ -372,9 +376,12 @@ def submit_guest_order(item_code="", qty=1, name="", email="", phone="",
     country = (country or "United States").strip()
     marketing_opt_in = cint(marketing_opt_in)
 
-    # ── Validate ─────────────────────────────────────────────────────
-    if not item_code:
-        frappe.throw(_("Please pick an item before checking out."), frappe.ValidationError)
+    # ── Resolve + validate cart ──────────────────────────────────────
+    cart_items = _resolve_cart_items(item_code, qty, items_json)
+    if not cart_items:
+        frappe.throw(_("Please pick at least one item before checking out."), frappe.ValidationError)
+
+    # ── Validate customer fields ─────────────────────────────────────
     if not name:
         frappe.throw(_("Please tell us your name."), frappe.ValidationError)
     if not email:
@@ -386,21 +393,38 @@ def submit_guest_order(item_code="", qty=1, name="", email="", phone="",
 
     email = validate_email_address(email, throw=True)
 
-    # Verify item still published + priced
-    website_item = frappe.db.get_value(
-        "Website Item", {"item_code": item_code, "published": 1},
-        ["item_code", "web_item_name"], as_dict=True,
-    )
-    if not website_item:
-        frappe.throw(_("That item is not available right now."), frappe.ValidationError)
-
-    item_price = frappe.db.get_value(
-        "Item Price",
-        {"item_code": item_code, "price_list": "Standard Selling"},
-        ["price_list_rate"],
-    )
-    if not item_price:
-        frappe.throw(_("That item doesn't have a price right now."), frappe.ValidationError)
+    # ── Validate each cart line; build SO line list with server prices.
+    # Pricing comes from Item Price here, never from anything the client
+    # sent. Unpublished or unpriced items abort the order — the cart UI
+    # already prunes those at /cart load, so reaching here means the
+    # state changed between cart load and submit (rare, but possible).
+    so_line_items = []
+    for line in cart_items:
+        wi = frappe.db.get_value(
+            "Website Item",
+            {"item_code": line["item_code"], "published": 1},
+            ["item_code", "web_item_name"], as_dict=True,
+        )
+        if not wi:
+            frappe.throw(
+                _("'{0}' is no longer available. Please remove it and try again.").format(line["item_code"]),
+                frappe.ValidationError,
+            )
+        rate = frappe.db.get_value(
+            "Item Price",
+            {"item_code": line["item_code"], "price_list": PRICE_LIST},
+            ["price_list_rate"],
+        )
+        if not rate:
+            frappe.throw(
+                _("'{0}' doesn't have a price right now. Please remove it and try again.").format(line["item_code"]),
+                frappe.ValidationError,
+            )
+        so_line_items.append({
+            "item_code": line["item_code"],
+            "qty": int(line["qty"]),
+            "rate": flt(rate),
+        })
 
     safe_name = escape_html(name)
     safe_phone = escape_html(phone)
@@ -474,13 +498,9 @@ def submit_guest_order(item_code="", qty=1, name="", email="", phone="",
         "transaction_date": frappe.utils.nowdate(),
         "delivery_date": frappe.utils.add_days(frappe.utils.nowdate(), 7),
         "currency": "USD",
-        "selling_price_list": "Standard Selling",
+        "selling_price_list": PRICE_LIST,
         "shipping_address_name": address_doc.name,
-        "items": [{
-            "item_code": item_code,
-            "qty": qty,
-            "rate": flt(item_price),
-        }],
+        "items": so_line_items,
     })
     so.insert(ignore_permissions=True)
     so.submit()
@@ -514,9 +534,17 @@ def submit_guest_order(item_code="", qty=1, name="", email="", phone="",
     pr.submit()
 
     # ── Stripe Checkout Session → hand the customer a hosted URL ─────
+    # Cart mode → cancel returns to /cart so the customer can adjust
+    # before retrying. Buy-now mode → cancel returns to the same buy-now
+    # checkout URL with the original item + qty preserved.
     from locally_twisted.payments.stripe_session import create_session_for_sales_order
 
-    cancel_route = f"/checkout?item={item_code}&qty={qty}"
+    if items_json:
+        cancel_route = "/cart"
+    else:
+        first = so_line_items[0]
+        cancel_route = f"/checkout?item={first['item_code']}&qty={first['qty']}"
+
     stripe_url = create_session_for_sales_order(
         sales_order=so.name,
         payment_request=pr.name,
