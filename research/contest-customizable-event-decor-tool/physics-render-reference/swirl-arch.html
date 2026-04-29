@@ -123,6 +123,12 @@
   .scene {
     position: relative;
     width: 100%;
+    /* Match GL's design page render: Card-wrapped at ~590px desktop, ~340px mobile.
+       Without this constraint, the 4% tube radius scales with container width
+       while the 15px balloon size stays fixed — clusters drift sparse at
+       larger containers. Cap matches the typical Card width. */
+    max-width: 600px;
+    margin: 0 auto;
     aspect-ratio: 4 / 3;
     perspective: 600px;
     perspective-origin: 50% 50%;

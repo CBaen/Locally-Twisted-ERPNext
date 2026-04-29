@@ -110,6 +110,23 @@ Canonical resources for the new build live in `_resources/` and are platform-agn
 
 ## Updates
 
+### 2026-04-29 (guest-cart + Stripe-Link + cascade session) — localStorage cart shipped, Link killed at account level, ERPNext cascade wired
+
+**See `HANDOFF.md` for current state at session end.** Summary:
+
+- **localStorage-backed guest cart shipped (Path B).** Webshop's stock cart hard-redirects guests to /login at the JS layer — has always been login-only by architecture. GL chose Path B (true cookie cart) over the cheap "remove Add-to-Cart, only Buy-Now" alternative. New files: `apps/locally_twisted/locally_twisted/public/js/lt-guest-cart.js` (cart engine + capture-phase webshop overrides), `api/cart.py` (`get_cart_items` server endpoint, allow_guest), `www/lt_cart.{py,html}` (the /cart page — name MUST stay `lt_cart` because `cart` collides with webshop's `templates/pages/cart.html` and webshop wins resolution). hooks.py registers `web_include_js` and route rule `/cart → lt_cart`.
+- **Multi-item checkout working.** `submit_guest_order` accepts EITHER buy-now params (item_code + qty) OR a JSON `items_json` array. `_resolve_cart_items` resolves both. Multi-line SO created. checkout.html branches: buy-now mode renders single line server-side; cart mode hydrates summary from localStorage on render.
+- **Stripe Link disabled at account level.** Custom Payment Method Configuration `pmc_1TRZH2DfnlZQv66ncb001soG` ("LT No Link") created on LT's Stripe account with `link.display_preference="off"`. Wired into `payments/stripe_session.py` via `payment_method_configuration` parameter. **`payment_method_types=["card"]` alone was insufficient** — Stripe layers Link "Save info" + Bank-via-Link UI on top regardless. Verified Link is gone via Playwright render of the actual Stripe page.
+- **GL completed first real `4242` test purchase end-to-end** — SAL-ORD-2026-00019. The pending verification from prior session is now closed.
+- **ERPNext cascade wired into `/payment-success`.** Beyond marking PR paid: now also creates Sales Invoice from SO (idempotent, ERPNext's `make_sales_invoice`), sends transactional receipt email, sends operator notification to `locallytwisted@gmail.com` with desk deep link, sends welcome email if first-time customer. All four wrapped in try/except so backend hiccups don't block /thank-you redirect. All three emails idempotent via Communication-by-subject lookup.
+- **Lead-aware Customer dedup** in `submit_guest_order`. Three cases: returning customer (reuse), Contact-from-Lead (attach Customer to existing Contact + mark Lead Converted with back-pointer), or fresh (create Customer + Contact). Closes the orphan-customer hole when the same email submits /contact then /shop.
+- **Email Account configured.** `Locally Twisted` Email Account on smtp.gmail.com:587 TLS, default outgoing. Reads App Password from `.env` `GMAIL_APP_PASSWORD` (was already there from the Odoo days). Backfill of order #19 sent all three emails successfully.
+- **Cart-clear bug fixed.** First fix in `payment_success.html` was inert because that template never renders (`_redirect()` raises `frappe.Redirect` before Jinja). Moved `LT_CART.clear()` to `thank_you.html`.
+- **Removed "Questions? Call (801) 285-0860..." contact line** from `/thank-you` per GL.
+- **Files added:** `apps/locally_twisted/locally_twisted/public/js/lt-guest-cart.js`, `api/__init__.py`, `api/cart.py`, `www/lt_cart.py`, `www/lt_cart.html`. PMC `pmc_1TRZH2DfnlZQv66ncb001soG` on LT's Stripe account. `Locally Twisted` Email Account.
+- **Files modified:** `payments/stripe_session.py` (PMC), `www/checkout.{py,html}` (multi-item + Lead-aware dedup), `www/payment_success.py` (full cascade), `www/thank_you.html` (cart clear, contact line removed), `www/shop.html` (LT_CART.add), `templates/includes/navbar/navbar.html` (cart count badge), `hooks.py` (route + JS registration).
+- **Cleanup:** `Smoke LinkTest`, `Link Verify`, `Link Inspect` test customers + cascading records deleted at session close. `_oneshot_guest_cart.py` and `_oneshot_stripe_link.py` deleted (served their purpose; git history preserves).
+
 ### 2026-04-29 (Stripe Charges → Checkout Sessions migration session) — Hosted Stripe checkout live, /payment-success override fixed, agency-tier pattern codified
 
 **See `HANDOFF.md` for current state at session end.** Summary:
