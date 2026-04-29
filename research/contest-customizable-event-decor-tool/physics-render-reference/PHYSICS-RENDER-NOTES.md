@@ -1,189 +1,248 @@
 # Physics Render Reference - Notes
 
-This directory holds **binding math references** for the eventual Frappe Design Studio implementation. The contest mockups demonstrated UX framework choices but stayed in *abstract pretty circles* register and did not render the actual balloon construction physics. This reference is the corrective: the math that the eventual build is bound to.
+This directory holds **binding math references** for the eventual Frappe Design Studio implementation. The contest mockups demonstrated UX framework choices but stayed in *abstract pretty circles* register and did not render the actual balloon construction physics. This reference is the corrective: the math the eventual build is bound to.
+
+## Origin: GL's existing implementation
+
+GL had already built the correct balloon physics in a prior platform attempt at:
+
+> `C:\Users\baenb\projects\locally-twisted-app\` — Next.js + Three.js + React Three Fiber + a CSS3D fallback. Frappe-recreatable path: the CSS3D version (no library required).
+
+Specifically:
+- `src/components/balloon-preview-3d.tsx` — `generateArchBalloons`, `generateColumnBalloons` (Three.js)
+- `src/app/design/page.tsx` — `DesignPreview` (CSS3D, no library)
+- `src/app/design/page.tsx` — `balloonColors` (the 48-color real LT catalog in 4 categories)
+
+The Next.js framework is superseded by the current LT ERPNext build, but **the physics math is correct and load-bearing**. Anyone implementing the Design Studio in Frappe must port from this code, not invent.
 
 ## What lives here
 
 | File | Status | What it proves |
 |---|---|---|
-| `swirl-arch.html` | Built 2026-04-29 | 4-balloon cluster atomic unit + spiral color rotation + math-driven cluster placement on a half-circle arch curve. Vanilla JS + inline SVG, no React, no build step. Frappe-recreatable. |
-| `column.html` | Not built | Column gravity rules + main-color-with-topper construction |
-| `garland-organic.html` | Not built | Doublet-on-strip + 5" filler + 60/30/10 size mix + no-touching-twins controlled randomness |
-| `backdrop.html` | Not built | `clusters = width_ft x height_ft` math + stripe / X-design patterns |
-| `drop.html` | Not built | Helium-drop physics; ceiling anchor + cluster cascade |
-| `bouquet.html` | Not built | Theme-locked anchor + inflation pattern (theme-locked per LT catalog) |
+| `swirl-arch.html` | Built 2026-04-29 (corrected) | Quad-cluster physics: 4 balloons radiate outward from center rope, 45-degree spiral rotation per cluster, Swirl + Layered color logic, real LT 48-color catalog. CSS3D transforms (translateZ + perspective + preserve-3d), no library, Frappe-recreatable. |
+| `column.html` | Not built | Vertical quad-cluster stack with 45-degree spiral. Math: port from `generateColumnBalloons` in balloon-preview-3d.tsx. |
+| `garland.html` | Not built | Flowing horizontal with wave path + 3 depth layers. Math: port from `DesignPreview` garland branch in app/design/page.tsx. |
+| `wall.html` | Not built | Honeycomb grid with 3 depth layers. Math: port from `DesignPreview` wall branch. |
 
-Each future shape file is binding for the implementation phase. Build instances must use these math references; they do not get to invent their own rendering.
+LT's actual Design Tool catalog has **4 product types**: Balloon Arch, Balloon Garland, Balloon Column, Organic Display Wall. (The earlier contest framing of 6 shapes — adding Backdrop, Drop, Bouquet — does not match the existing implementation. Confirm with GL before designing for shapes not in this list.)
 
-## Why this exists
+Each future shape file is binding for the implementation phase. Build instances must port from GL's existing math; they do not get to invent their own rendering.
 
-The contest produced 4 strong UX framework references but ZERO physics-faithful renderings. None of the mockups showed:
+## Why this exists (and why the FIRST version of this prototype was wrong)
 
-- A 4-balloon cluster rendered as 4 circles in a diamond pack
-- Spiral color rotation across clusters following `(c * s + b) mod N`
-- Garland doublet-on-strip + size mix + no-touching-twins
-- Backdrop sqft x cluster count with the cluster grid as visual pixels
-- Organic flow controlled randomness
+The contest produced 4 strong UX framework references but ZERO physics-faithful renderings. None of the contest mockups showed:
 
-GL provided this physics in two AI research dumps + direct conversation; the contestants documented it in `PRODUCT-DETAILS.md` but did not implement it visually. Without an explicit binding reference, the implementation phase risks the same drift: "we'll render abstract circles and call it good." This directory prevents that.
+- A 4-balloon cluster rendered as a quad radiating outward from a rope
+- 45-degree spiral rotation per cluster (the source of the dense interlocking pattern)
+- Real-world balloon density (40 per 5 ft of arch)
+- Real LT catalog colors with names
+
+The first iteration of `swirl-arch.html` (built 2026-04-29 morning) made the same kind of error in a different form: it rendered a 2D diamond cluster on a 2D arch curve. Balloons appeared FLAT, like a hollow ring. GL caught this immediately and pointed at the existing 3D modeling. This file documents the corrected math so the next instance does not repeat the same drift.
+
+**The wrong version (first iteration of this file):**
+- Diamond pack lying flat on the curve plane
+- Spiral effect implemented as color rotation `(c * s + b) mod N`
+- Generic placeholder colors
+
+**The correct version (current):**
+- Quad cluster radiates outward from the rope in 3D (some balloons forward via translateZ, some backward — a tube structure, not a flat ring)
+- Spiral effect implemented as a 45-degree PHYSICAL rotation per cluster
+- Swirl color = balloon position within quad; Layered color = bands of 2 quads same color
+- Real LT 48-color catalog
 
 ## Math captured in `swirl-arch.html`
+
+### Real-world units (catalog-grounded)
+
+```
+11" balloon = 0.458 ft radius = 0.917 ft diameter
+Industry standard: 40 balloons per 5 feet of arch
+                 = 8 per foot
+                 = 2 quad clusters per foot
+```
+
+### Quad cluster radiates outward from rope
+
+Each cluster is 4 balloons tied at necks, with the tie point ON the rope and balloon centers offset radially OUTWARD. This produces a 3D tube around the rope, not a flat ring.
+
+```
+balloonsPerCluster = 4
+tubeRadius = 4               // % of container width (offset from rope)
+spiralAngle = PI / 4         // 45 degrees, fixed
+
+For balloon b in cluster c:
+  // Each balloon points in one of 4 directions (every 90 deg)
+  // Plus the cluster's spiral rotation
+  angleInCluster = b * (PI / 2) + (c * spiralAngle)
+  
+  // Local offset in cluster (outward in cluster plane)
+  localX = cos(angleInCluster) * tubeRadius
+  localZ = sin(angleInCluster)              // normalized for Z depth
+```
+
+The `localZ` value goes into a CSS `translateZ()` for actual 3D depth. With `perspective: 600px` on the parent, near balloons grow and far balloons shrink — the dense interlocking tube reads correctly.
 
 ### Arch curve (half-circle parametrization)
 
 ```
-For cluster i in [0, N-1]:
-  t = i / (N - 1)              // [0, 1]
-  theta = pi * (1 - t)         // pi -> 0  (left foot -> right foot)
-  x = cx + rx * cos(theta)
-  y = cy - ry * sin(theta)     // SVG y-down; minus -> upward
+For cluster c (0 to totalClusters-1):
+  t = c / (totalClusters - 1)        // [0, 1]
+  angle = t * PI                     // 0 (left foot) -> PI (right foot)
+  
+  curveX = cos(angle)                // -1 to +1
+  curveY = sin(angle)                // 0 -> 1 -> 0 (peaks at PI/2)
 ```
 
-### Cluster orientation (rotates to follow outward normal)
+### Cluster offset rotates to follow tangent
 
-Closed form: `rotation = pi/2 - theta`
-
-Verified at three positions:
-- `theta = pi` (left foot): `rotation = -pi/2` -> diamond rotates -90, top points left (outward)
-- `theta = pi/2` (top of arch): `rotation = 0` -> no rotation, top points up
-- `theta = 0` (right foot): `rotation = pi/2` -> diamond rotates +90, top points right (outward)
-
-### 4-balloon diamond cluster
-
-Default positions (untransformed; T/R/B/L):
+The cluster's "outward-from-rope" direction must align with the local arch tangent. Tangent angle at any point on the half-circle is `angle - PI/2`.
 
 ```
-pos 0 (top):    ( 0, -offset )
-pos 1 (right):  ( offset, 0 )
-pos 2 (bottom): ( 0,  offset )
-pos 3 (left):   (-offset, 0 )
+tangentAngle = angle - PI/2
 
-offset = balloon_radius * 0.7   // intentional overlap -> reads as cluster
+// Rotate the local offset to follow the arch
+rotatedOffsetX = localX * cos(tangentAngle)
+rotatedOffsetY = localX * sin(tangentAngle)
+
+// Final container-% position (the on-curve point + the radial offset)
+finalX = archCenterX + curveX * archRadius + rotatedOffsetX
+finalY = archBaseY  - curveY * archRadius * 0.85 + rotatedOffsetY
+finalZ = localZ * 15                 // depth in pixels
 ```
 
-Apply 2D rotation matrix to each (dx, dy):
+### Color logic by Style
+
+**Swirl style (max 4 colors):**
 
 ```
-rotDx = dx * cos(rotation) - dy * sin(rotation)
-rotDy = dx * sin(rotation) + dy * cos(rotation)
-
-balloon.cx = center.x + rotDx
-balloon.cy = center.y + rotDy
+colorIndex = balloonInCluster % colors.length
 ```
 
-### Spiral color rotation
+Within each quad, colors cycle by balloon position (0,1,2,3). With 2 colors → A-B-A-B; with 4 → A-B-C-D. The 45-degree physical rotation between clusters makes this read as a barber-pole twist.
 
-For balloon `b` in cluster `c` with N colors, spiral_step `s`:
-
-```
-color_index = (c * s + b) mod N
-```
-
-Examples (N=4, s=1):
-- Cluster 0 -> [0, 1, 2, 3]
-- Cluster 1 -> [1, 2, 3, 0]
-- Cluster 2 -> [2, 3, 0, 1]
-- Cluster 3 -> [3, 0, 1, 2]   (then repeats)
-
-### Min repeat (informational)
-
-Smallest cluster count before pattern repeats:
+**Layered style (max 8 colors):**
 
 ```
-min_repeat = N / gcd(N, 4)
-
-N=2: min_repeat = 1     (alternating)
-N=3: min_repeat = 3
-N=4: min_repeat = 1     (rotates one position per cluster; visual cycle = 4)
-N=5: min_repeat = 5
-N=6: min_repeat = 3
-N=7: min_repeat = 7
-N=8: min_repeat = 2
+clustersPerBand = 2                          // 2 quads = 8 balloons per band
+bandIndex = floor(clusterIndex / 2)
+colorIndex = bandIndex % colors.length
 ```
 
-Note: `min_repeat * spiral_step` gives the visual cycle length when `gcd(spiral_step, N) = 1`.
+ALL balloons in a cluster get the SAME color. Pattern across the arch: AA-BB-CC-DD. The physical 45-degree rotation still happens (it's structural to the cluster geometry) but does not produce a color twist.
 
-## Visual rendering choices
+### Back-to-front Z-sort (CSS3D layering)
 
-These are aesthetic decisions in the prototype, NOT binding math:
+After computing all balloon positions, sort by Z so the renderer draws from back to front:
 
-| Choice | Value | Rationale |
+```
+balloons.sort((a, b) => a.z - b.z)
+```
+
+CSS3D does NOT auto-sort by Z. Without this, near balloons can render UNDER far ones, breaking the 3D illusion.
+
+## Visual rendering (CSS3D + radial-gradient)
+
+The HTML structure:
+
+```
+<div class="scene" style="perspective: 600px">
+  <div class="scene-3d" style="transform-style: preserve-3d">
+    <!-- one absolute-positioned div per balloon -->
+    <div class="balloon" style="
+      left: X%;
+      top: Y%;
+      transform: translate(-50%, -50%) translateZ(Zpx) rotate(deg);
+      background: radial-gradient(...);
+      border-radius: 50% 50% 50% 50% / 45% 45% 55% 55%;
+    ">
+      <div class="balloon-highlight"></div>
+    </div>
+  </div>
+</div>
+```
+
+Visual choices ported from `DesignPreview` in app/design/page.tsx:
+
+| Choice | Value | Source |
 |---|---|---|
-| Balloon radius | 16 px | Reads cleanly at 800x500 viewBox; scales with viewport |
-| Cluster overlap | 70% of radius | Tight enough to read as cluster, loose enough to distinguish individual balloons |
-| Render order within cluster | bottom -> right -> left -> top | Natural visual stacking; top balloon overlaps |
-| Balloon highlight | rgba(255,255,255,0.5) at 22% radius, upper-left | Faux-3D depth cue |
-| Stroke | rgba(0,0,0,0.15) at 1px | Edge definition without harshness |
-| Arch leg | 4px wide silver pole, 24x4 foot plate | Mimics real LT setup poles |
+| Balloon size base | 22 px | tuned for 4:3 container |
+| Balloon shape | `border-radius: 50% 50% 50% 50% / 45% 45% 55% 55%` | slightly elongated downward, like real latex balloon |
+| Standard gradient | radial 3-stop with white highlight + base + dark | port |
+| Chrome gradient | radial 5-stop with stronger reflections | port |
+| Highlight overlay | 35% × 25% ellipse at top-left, 80% white opacity | port |
+| Chrome secondary highlight | 22% × 15% ellipse at bottom-right, 50% opacity | port |
+| Box-shadow standard | inset highlights + drop-shadow | port |
+| Box-shadow chrome | stronger inset highlights + drop-shadow | port |
+| Depth scale | `1 + z / 150` | closer balloons grow, far balloons shrink |
+| Container perspective | `perspective: 600px` on `.scene` | port |
+| Z-sort | back-to-front (smallest z first) | port |
 
-The implementation phase can adjust these without breaking the binding math. **The math is binding; the visual treatment is style.**
-
-## Caveats
-
-### Hex codes are placeholders
-
-The `LT_COLORS` array in `swirl-arch.html` uses approximate hex values for 10 LT named colors:
-
-```
-Blush, Dusk Blue, Empowermint, Raspberry, Coral, Lilac,
-Champagne, Soft Yellow, Sage, Eucalyptus
-```
-
-The actual hex codes for the 53-named-color LT catalog **are not yet locked**. Implementation must source these from:
-1. Jeff's confirmed catalog (preferred)
-2. A `LT Balloon Color` DocType seeded from the confirmed catalog (recommended for editability)
-3. A static JSON file at `apps/locally_twisted/locally_twisted/data/balloon_colors.json` (acceptable fallback)
-
-Do NOT hard-code the prototype's hex values into production. They were chosen for visual demonstration only.
-
-### Ellipse vs. circle
-
-The prototype uses `rx = archWidth/2` and `ry = archHeight`, producing an ellipse arch. The closed-form rotation `pi/2 - theta` is the exact tangent ONLY when `rx = ry` (true circle). For `rx != ry`, cluster orientations slightly drift from the perfect outward-normal at intermediate positions. Visually negligible at LT's typical proportions. If the implementation needs perfect ellipse tangents, use:
+### Chrome detection
 
 ```
-tangent_dx = -rx * sin(theta)
-tangent_dy = -ry * cos(theta)
-tangent_angle = atan2(tangent_dy, tangent_dx)
-rotation = tangent_angle - pi   // perpendicular to tangent
+isChrome(name) = name includes 'chrome' OR 'metallic' OR 'champagne'
 ```
 
-### What the prototype does NOT show
+Drives gradient selection and box-shadow strength.
 
-These belong to other shape references (not this one):
-- Garland organic-flow randomness
-- No-touching-twins constraint
-- 60/30/10 size mix (60% 11", 30% 5", 10% 16")
-- Backdrop sqft -> cluster grid
-- Column gravity / inflation order
-- Drop ceiling-anchor cascade
-- Bouquet anchor + helium dynamics
+## Real LT 48-color catalog (verbatim from app/design/page.tsx)
 
-Each shape needs its own `physics-render-reference/<shape>.html` page before that shape can be safely implemented.
+| Category | Count | Examples |
+|---|---:|---|
+| Standard | 17 | White, Black, Red, Raspberry, Fuchsia, Bubble Gum, Orange, Yellow, Forest, Shamrock, Lime, Teal, Turquoise, Caribbean, Navy, Sapphire, Periwinkle |
+| Pastels | 12 | Pastel Pink, Spring Lilac, Lavender, Pink, Coral, Coral Blush, Peach, Apricot, Mint Bliss, Sage, Dusty Blue, Fog |
+| Neutrals | 9 | Ivory, Grey, Caramel, Buttercup, Mustard, Gold, Vintage Rose, Nude, Wild Berry |
+| Chrome | 10 | Chrome Gold, Chrome Silver, Chrome Rose Gold, Chrome Pink, Chrome Red, Chrome Blue, Chrome Violet, Chrome Green, Champagne, Chrome Fuchsia |
+
+These are the names Jeff orders by. Hex codes are GL's confirmed values from the Locally Twisted color sheets — these are the real catalog values, not approximations.
+
+The total is 48; if the canonical LT catalog says 53, the difference is 5 colors not yet in this app's data file. Confirm with GL before assuming 48 is final. The implementation should source from a `LT Balloon Color` DocType (recommended) or `apps/locally_twisted/locally_twisted/data/balloon_colors.json` rather than hard-coding the array.
 
 ## How the eventual Frappe build uses this
 
 The Design Studio portal page (post-Phase-1, scoped per `.planning/decisions/site-shape.md`) will:
 
-1. **Inline this math directly** in `apps/locally_twisted/locally_twisted/www/design-studio.js` (or an equivalent module).
-2. **Inline the SVG render functions** as JS functions that take `{colors, size, spiralStep}` and return SVG element trees.
-3. **Wire to the customer's selected colors** from the LT catalog (sourced from `LT Balloon Color` DocType or equivalent).
-4. **On "Send to Jeff"**: package the design state (shape + colors + size + spiral step + any other inputs) as a JSON payload on the Lead record's `design_studio_payload` Custom Field (Long Text).
+1. **Port the math directly** from this file's `generateArchBalloons` (and the analogous functions for column/garland/wall) into `apps/locally_twisted/locally_twisted/www/design-studio.js` (or an equivalent module).
+2. **Use CSS3D** for the visual approach. Three.js is overkill for this use case + would add ~600 KB to the asset bundle. CSS3D + radial-gradient + back-to-front z-sort gives the same visual fidelity at near-zero asset cost.
+3. **Source colors from a DocType** — `LT Balloon Color` with fields: name, hex, category. Seed it from this app's `balloonColors`. Lets Jeff edit colors in the desk.
+4. **Wire to customer selection** — `frappe.call()` to a whitelisted method that creates a Lead with `design_studio_payload` Custom Field (Long Text JSON).
 
-The same file structure as `/contact` and `/checkout` already shipped: controller (`design-studio.py`) + template (`design-studio.html`) + page JS (referenced via `PAGE_JS` attribute) + appended BEM CSS in `lt-theme.css`.
+Same file shape as `/contact` and `/checkout` already shipped: controller (`design-studio.py`) + template (`design-studio.html`) + page JS (referenced via `PAGE_JS` attribute) + appended BEM CSS in `lt-theme.css`.
 
-**Do not deviate from this math during implementation without first updating this reference.**
+**Do not deviate from this math during implementation without first updating this reference AND syncing with the locally-twisted-app source.**
 
 ## How to extend
 
 To add a new shape reference:
 
-1. Create `<shape>.html` in this directory using `swirl-arch.html` as the template.
-2. Implement the shape's physics math at the top of the script section, with comments matching the math notes section.
-3. Add the shape to the table at the top of this file.
+1. Identify the source function in `locally-twisted-app/` (e.g., `generateColumnBalloons` in balloon-preview-3d.tsx, or the column/garland/wall branch of `DesignPreview` in app/design/page.tsx).
+2. Create `<shape>.html` here using `swirl-arch.html` as the template.
+3. Port the math, keeping variable names + comments matching the source for traceability.
 4. Render via Playwright at mobile + desktop; save to `_render/physics-reference/<shape>-{mobile,desktop}.png`.
 5. Read each render to verify (no reporting-without-watching).
-6. Document caveats specific to that shape's math.
+6. Update this file's table with what the new shape proves.
+
+## Caveats
+
+### Color count is 48 in app data, possibly 53 in canonical catalog
+
+The `balloonColors` constant in app/design/page.tsx has 48 colors. The contest brief mentioned 53 named colors. Reconcile before finalizing the DocType seed — Jeff is the source of truth for the actual count.
+
+### CSS3D performance ceiling
+
+The prototype caps render at 160 balloons by default (slider goes to 320). Real installs use the full count (40 ft arch = 320 balloons). On lower-end devices CSS3D may stutter at 320; this is a runtime perf concern, not a math concern. The implementation can either keep the cap (visual-fidelity vs perf trade) or render at full count — confirm with GL.
+
+### What this shape's prototype does NOT show
+
+The arch shape proves quad-cluster geometry + 45-degree spiral + Swirl/Layered color logic. It does NOT prove:
+- Vertical column gravity (column.html will)
+- Garland wave-path with depth layers (garland.html will)
+- Honeycomb wall packing with 3 depth layers (wall.html will)
+- AR overlay onto a real-world photo (in app/design/page.tsx as the `BackdropPlane` + custom photo upload — different concern, not strictly physics)
+- Customer-uploaded photo as backdrop (separate UX feature)
+
+Each of those needs its own port before the implementation phase begins.
 
 ---
 
-*Reference seeded 2026-04-29 by the Opus 4.7 instance who finished the contest render gallery + final surface and built this prototype after GL named the gap: "the framework of 1 is good. The rendering of the balloons is bad."*
+*Reference rewritten 2026-04-29 (afternoon) by the Opus 4.7 instance who first built a wrong version of this prototype, was corrected by GL ("the rendering of the balloons is bad — there's a 3D modeling I made"), found GL's existing locally-twisted-app code, and ported the actual physics. The wrong version is preserved only in git history.*
