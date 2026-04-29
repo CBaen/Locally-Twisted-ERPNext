@@ -6,6 +6,21 @@
 /* /book page styles. BEM-prefix lt-book__. Page-scoped; do NOT promote
    to lt-theme.css until a second page reuses the pattern. */
 
+/* Standard a11y utility — Frappe's bundle doesn't ship a working
+   .visually-hidden, so define it page-scoped. Hides text from sighted
+   users while keeping it readable to assistive tech. */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
 .lt-book__intro {
     background-color: var(--lt-blue-tint);
     padding: 3rem 1rem 2.5rem;
