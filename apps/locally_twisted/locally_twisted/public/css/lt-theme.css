@@ -632,18 +632,16 @@ html, body {
 .lt-header__utility-left {
   font-family: 'Raleway', sans-serif;
   /* 1rem (16px) per GL 2026-04-29 — accessibility + matches right-side
-   * util-link size for desktop symmetry around the logo. Text wraps
-   * to two lines via an explicit <br> in navbar.html. */
+   * util-link size. Text wraps to two lines via an explicit <br> in
+   * navbar.html. Content stays at far-left of the column (default
+   * justify-self: start) per GL preference — symmetry is page-edge
+   * mirror (left's left-edge ≈ right's right-edge from page edges). */
   font-size: 1rem;
   line-height: 1.4;
   color: var(--lt-soft-gray);
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  /* Pull content toward the logo (right edge of left column) so the
-   * "the" → logo gap mirrors the logo → "Sign" gap on the right. */
-  justify-self: end;
-  text-align: right;
 }
 
 .lt-header__truck {
@@ -688,12 +686,16 @@ html, body {
   display: flex;
   align-items: center;
   gap: 1rem;
-  justify-self: end;
+  /* Pull content toward the logo (left edge of right column) so it
+   * mirrors the left side per GL 2026-04-29 symmetry directive. */
+  justify-self: start;
 }
 
 .lt-header__util-link {
   font-family: 'Raleway', sans-serif;
-  font-size: 0.875rem;
+  /* 1rem (16px) per GL 2026-04-29 — matches left-side utility text
+   * size so both flank the logo at the same scale. */
+  font-size: 1rem;
   font-weight: 500;
   color: var(--lt-soft-gray);
   text-decoration: none;
