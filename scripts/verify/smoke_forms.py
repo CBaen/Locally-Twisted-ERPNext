@@ -88,21 +88,34 @@ def smoke_test(base_url: str, form_path: str, shape_only: bool = False) -> int:
 
         # Step 3: fill the form (TEMPLATE — adapt selectors to actual form)
         # Replace these selectors with the real form's field names.
+        # Email must be unique per submission (Lead.email_id is unique-indexed),
+        # so embed the test_marker into the email so multiple form_paths in one
+        # run don't trigger a DuplicateEntryError on the second submission.
         try:
             name_field = page.locator("input[name='contact_name'], input[name='lead_name'], input[name='name']").first
             email_field = page.locator("input[type='email'], input[name='email_id']").first
             if name_field.count() > 0:
                 name_field.fill(test_marker)
             if email_field.count() > 0:
-                email_field.fill("smoke-test@example.invalid")
+                email_field.fill(f"{test_marker.lower()}@bbc-test.invalid")
         except Exception as e:
             print(f"        FAIL — could not fill form fields: {e}")
             browser.close()
             return 1
 
         # Step 4: submit
+        # Target the inquiry form's submit button by ID. The header search +
+        # footer newsletter add their own submit buttons that come BEFORE
+        # the inquiry button in DOM order, so `.first` picks the wrong one.
+        # Both /book and /contact render id="book_submit" via the shared
+        # partial. Fall back to the form-scoped submit if id isn't present
+        # (kept for any non-LT smoke runs that point at a different form).
         try:
-            page.locator("button[type='submit'], input[type='submit']").first.click(timeout=10000)
+            inquiry_submit = page.locator("#book_submit")
+            if inquiry_submit.count() > 0:
+                inquiry_submit.click(timeout=10000)
+            else:
+                page.locator("form button[type='submit'], form input[type='submit']").first.click(timeout=10000)
         except PlaywrightTimeout:
             print(f"        FAIL — could not click submit button")
             browser.close()
