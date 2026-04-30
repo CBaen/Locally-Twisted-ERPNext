@@ -46,14 +46,23 @@ Frappe v15 + ERPNext v15. Backend is Python 3.11 + Frappe ORM + MariaDB 11.x + R
 **Standing principle (GL directive 2026-04-26):** *"Work WITHIN Frappe and ERPNext, don't fight them."* Operationalized: use Jinja partial overrides (`templates/includes/...`) as the primary surface for header/footer/page customization; use `web_include_css` (loads after the bundle) or `website_theme_scss` (compiles into the bundle) for theme CSS; refuse `!important` chains as the receipt of fighting the framework; use Webshop's existing hooks for cart/checkout customization rather than replacing the cart pipeline.
 
 **Operational rituals (see `scripts/README.md` for full index):**
-- **After editing `apps/locally_twisted/` source files:** rebuild the image and recreate the stack:
-  ```
-  docker build -f docker/Dockerfile -t locally-twisted-erpnext:v15 .
-  docker compose -p locally-twisted-erpnext-v15 -f Locally-Twisted-Backend/frappe_docker/pwd.yml up -d --force-recreate
-  ```
-  The image bakes locally_twisted + payments + webshop + Node + compiled assets + the nginx Origin patch in. `--force-recreate` produces a fully-working stack with NO post-recreate scripts. The bind-mount + reinstall pattern (and `scripts/setup/install_webshop.py` + `scripts/fix/patch_nginx_socketio_origin.py`) is **deprecated 2026-04-30** — kept on disk only for historical reference. **Do not run them against the current stack.** See `docker/Dockerfile` for the source-of-truth on what's in the image.
-- After editing any Jinja template / CSS / Web Page record (without rebuilding the image): `python scripts/dev/clear_website_cache.py`. Note: template/CSS edits inside `apps/locally_twisted/` need an image rebuild + recreate to actually be served, since the apps are now in the image, not bind-mounted.
-- Before declaring any visible change done: `python scripts/verify/playwright_home_screenshot.py` + `Read` the screenshot file
+
+**Two-mode setup (decided 2026-04-30):**
+- **Image baseline:** `locally-twisted-erpnext:v15` (built from `docker/Dockerfile`) bakes frappe + erpnext + payments + webshop + locally_twisted + Node + compiled assets + the nginx Origin patch into a self-contained image. A `docker compose up --force-recreate` produces a fully-working stack with NO post-recreate scripts. This is the safety net — containers can't break themselves anymore.
+- **Dev live-edit overlay:** `pwd.yml` bind-mounts `apps/locally_twisted/` from host on top of the baked image. Edits to `apps/locally_twisted/` source files (Jinja templates, Python controllers, hooks.py, fixtures) show up in the running container **immediately** — no image rebuild, no recreate. The image's baked copy of the app stays as a safety net. Payments and webshop are NOT bind-mounted (we don't edit them; we override their pages from inside locally_twisted).
+
+**Day-to-day rituals:**
+- **After editing a Jinja template / Python controller / hooks.py inside `apps/locally_twisted/`:** `python scripts/dev/clear_website_cache.py`. Browser refresh shows the change. No image rebuild needed.
+- **After editing CSS or JS inside `apps/locally_twisted/public/`:** `MSYS_NO_PATHCONV=1 docker exec locally-twisted-erpnext-v15-backend-1 bash -lc "cd /home/frappe/frappe-bench && bench build --app locally_twisted"` then `python scripts/dev/clear_website_cache.py`. The build writes to the bind-mounted dir; host sees the compiled output.
+- **Before declaring any visible change done:** `python scripts/verify/playwright_home_screenshot.py` + `Read` the screenshot file.
+
+**When you DO need to rebuild the image (rare):**
+- Adding new Python deps to locally_twisted's `pyproject.toml`
+- Updating payments or webshop to a different upstream version
+- Changing the base image pin
+- Build: `docker build -f docker/Dockerfile -t locally-twisted-erpnext:v15 .` then recreate.
+
+**Deprecated, do not run:** `scripts/setup/install_webshop.py`, `scripts/fix/patch_nginx_socketio_origin.py`. Both kept on disk for history only. The patterns they enforced are now baked into the image. See `docker/Dockerfile` for what's in the image and `locally-twisted-decisions.md` 2026-04-30 entry for the reasoning.
 
 ## Voice & Language — LT-specific
 
