@@ -115,11 +115,10 @@ I read this as: do not ask whether to skip something. Do not propose lighter alt
 2. `Built_by_Cameron/CLAUDE.md` (agency rules)
 3. `_CLIENTS/locally-twisted/CLAUDE.md`
 4. **This file**
-5. `_CLIENTS/locally-twisted/SIBLING-LETTER.md` (the prior instance's letter — read before starting work)
-6. `_CLIENTS/locally-twisted/_resources/design-guide/README.md` + `synthesis/voice.md`, `mood.md`, `rationale.md` — taste calibration
-7. `_CLIENTS/locally-twisted/anti-gl-patterns.md` section 0
-8. `_CLIENTS/locally-twisted/lessons-learned.md` newest entries (catalog port at top — six lessons + three bonuses)
-9. `_CLIENTS/locally-twisted/locally-twisted-decisions.md` newest entries (10 catalog-port decisions)
+5. `_CLIENTS/locally-twisted/_resources/design-guide/README.md` + `synthesis/voice.md`, `mood.md`, `rationale.md` — taste calibration
+6. `_CLIENTS/locally-twisted/anti-gl-patterns.md` section 0
+7. `_CLIENTS/locally-twisted/lessons-learned.md` newest entries (catalog port at top — six lessons + three bonuses)
+8. `_CLIENTS/locally-twisted/locally-twisted-decisions.md` newest entries (10 catalog-port decisions)
 10. `git log --oneline -30`
 
 ## Not in flight

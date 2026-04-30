@@ -8,9 +8,9 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ## 2026-04-30 — Full catalog port from live Odoo to ERPNext webshop
 
-### Six lessons from a 53-product / 10,613-Item / 8,925-Item-Price port
+### Six lessons from a 53-Website-Item / 10,631-Item / 10,613-Item-Price port
 
-**Context.** GL's directive: rebuild the entire live Odoo catalog (`http://5.78.136.133/shop`) into ERPNext webshop. Every product, every variant, every option, no exceptions. Result: 53 products, 24 distinct attribute types, 195 unique attribute values, 10,613 Items (templates + variants), 8,925 Item Prices, 53 Website Items, 11 Item Group children + restructured hierarchy, mega menu, on-brand product detail pages with inline variant selectors. Smoke tests pass.
+**Context.** GL's directive: rebuild the entire old live Odoo test shop catalog (`http://5.78.136.133/shop`) into ERPNext webshop. Every product, every variant, every option, no exceptions. Result after DB verification: 53 Website Items, 10,631 Items total, 49 variant templates, 4 single-SKU templates, 10,578 variants, 10,613 Item Prices, 32,002 Item Variant Attribute child rows, 11 Item Group children + restructured hierarchy, mega menu, on-brand product detail pages with inline variant selectors. Smoke tests pass. This was catalog-data porting into a new ERPNext build, not an Odoo migration.
 
 ### Lesson 1 — The catalog source of truth is the LIVE site, not the cached export.
 
@@ -83,7 +83,7 @@ This is the right call here even though `!important` chains are normally a code 
 
 ### Bonus — Odoo's per-product attribute-exclusions data is captured in the scrape and respected.
 
-Odoo's product page emits `data-attribute-exclusions="{exclusions: {...}, mapped_attribute_names: {...}}"` JSON in the form HTML. The scraper parses it, builds the cartesian product of all attribute values, then filters out combinations where any selected ptav_id appears in another's exclusion list. For LT's 53 products this filtered down to 10,613 valid Item Variants (vs the naive cartesian count of more). Odoo's `archived_combinations` is also captured but currently empty for LT's catalog.
+Odoo's product page emits `data-attribute-exclusions="{exclusions: {...}, mapped_attribute_names: {...}}"` JSON in the form HTML. The scraper parses it, builds the cartesian product of all attribute values, then filters out combinations where any selected ptav_id appears in another's exclusion list. For LT's catalog this filtered down to 10,578 ERPNext Item Variants (vs the naive cartesian count of more). Odoo's `archived_combinations` is also captured but currently empty for LT's catalog.
 
 The math sanity-check: `birthday-deliveries` has 4 attributes (Delivery Size 3 × Delivery themes 27 × Add Foil Number 10 × Add Bouquet 3 = 2,430 cartesian; 0 exclusions; 2,430 valid). Confirmed.
 
@@ -211,7 +211,7 @@ GL ran a 7-designer LT design competition on 2026-04-26 in a separate project di
 
 I declared the structural CSS fix done off DOM probes (no overflow, hamburger at 304 R-edge on 320 viewport, etc.) and started writing it up as the agency-wide pattern in `Built_by_Cameron/.claude/capabilities/recipes/frappe-conventions.md` and `HOW-TO-WIN-AT-FRAPPE/auto-behaviors.md`. GL stopped this with: *"do not put that on the agency tier, because you did not prove anything. In fact, you essentially showed what you were doing wrong and trying to codify it, and that is scary."*
 
-The agency tier exists to hold STABLE, PROVEN, MULTI-VALIDATED patterns that future BBC clients inherit. Putting fresh single-instance work there spreads bugs forward into the lineage — every future BBC client reads the bad pattern as truth. Reporting without watching is a single-session trust withdrawal; canonifying without watching is a LINEAGE trust withdrawal.
+The agency tier exists to hold STABLE, PROVEN, MULTI-VALIDATED patterns that future BBC clients inherit. Putting fresh single-instance work there spreads bugs forward into every future client — they read the bad pattern as truth. Reporting without watching is a single-session trust withdrawal; canonifying without watching is a cross-client trust withdrawal.
 
 **Lesson:** the agency tier is downstream of repeated proof, not upstream of single-session enthusiasm. The instinct to canonize fires before proof exists; it must be refused until validation lands. The right shape: do the work, prove it stands up across iterations, document the receipt at LT-tier (this file + decisions log), STOP. Agency tier docs emerge when a pattern proves itself across multiple clients/sessions — and they're written by whichever instance recognizes the stable pattern at THAT future moment, not by the instance that first encountered it.
 
@@ -794,7 +794,7 @@ I went and read the Web Page DocType schema (`apps/frappe/frappe/website/doctype
 - Calculator-specific styling → `css` field (with `insert_style=1`)
 - No custom Web Template, no hooks, no app code, no Jinja overrides. Pure DocType configuration.
 
-**What was learned (load-bearing for the lineage):**
+**What was learned (load-bearing for future client work):**
 
 1. **DocTypes are the configuration surface, including for "code" things.** Frappe's Code-fieldtype fields (javascript, css, context_script) are configuration, not code-in-the-traditional-sense. They live in DocType records. They're versioned via fixtures. They survive cleanly across upgrades. Writing a custom Web Template to hold the same JavaScript is strictly worse: more files, more places to break, no benefit.
 
