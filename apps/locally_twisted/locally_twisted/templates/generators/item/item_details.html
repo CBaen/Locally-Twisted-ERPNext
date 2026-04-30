@@ -1,59 +1,78 @@
-{# LT_OVERRIDE_TEST_MARKER_2026-04-30 — verbatim webshop copy except this comment + marker class #}
+{# Locally Twisted override of webshop's item_details.html.
+   Replaces apps/webshop/webshop/templates/generators/item/item_details.html
+   via same-path resolution in Frappe's ChoiceLoader (locally_twisted is last
+   in installed_apps so its template wins).
+
+   What changed vs webshop's stock template:
+   - Stripped the "Shop Items | Item Code: <slug>" jargon block (line 32-39 in stock).
+     Customer-facing surface should never expose internal item codes.
+   - Added an eyebrow with the Item Group as kicker (e.g., ARCHES) — design guide register.
+   - Switched body title to DM Serif Display via .lt-product CSS classes.
+   - Kept the wishlist icon include where it was useful.
+
+   Inclusions still flow through the original webshop partials; we only override
+   THIS file. item_configure.html and item_add_to_cart.html are also overridden
+   in this directory.
+#}
 {% set width_class = "expand" if not slides else "" %}
 {% set cart_settings = shopping_cart.cart_settings %}
 {% set product_info = shopping_cart.product_info %}
 {% set price_info = product_info.get('price') or {} %}
 
-<div class="col-md-7 product-details lt-override-test-marker {{ width_class }}">
-	<div class="d-flex">
-		<!-- title -->
-		<div class="product-title col-11" itemprop="name">
-			{{ _(doc.web_item_name) }}
-		</div>
+<div class="col-md-7 lt-product__details {{ width_class }}">
 
-		<!-- Wishlist -->
-		{% if cart_settings.enable_wishlist %}
-			<div class="like-action-item-fp like-action {{ 'like-action-wished' if wished else ''}} ml-2"
-				data-item-code="{{ doc.item_code }}">
-				<svg class="icon sm">
-					<use class="{{ 'wished' if wished else 'not-wished' }} wish-icon" href="#icon-heart"></use>
-				</svg>
-			</div>
-		{% endif %}
-	</div>
+    {# Eyebrow — Item Group as kicker. Design guide register. #}
+    {% if doc.item_group and doc.item_group != "Shop Items" %}
+        <div class="lt-product__eyebrow">{{ _(doc.item_group) }}</div>
+    {% endif %}
 
-	<div itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating">
-	</div>
+    {# Title row with optional wishlist heart #}
+    <div class="lt-product__title-row">
+        <h1 class="lt-product__title" itemprop="name">
+            {{ _(doc.web_item_name) }}
+        </h1>
+        {% if cart_settings.enable_wishlist %}
+            <button type="button"
+                    class="lt-product__wishlist like-action-item-fp like-action {{ 'like-action-wished' if wished else ''}}"
+                    data-item-code="{{ doc.item_code }}"
+                    aria-label="{{ _('Save to wishlist') }}">
+                <svg class="icon sm">
+                    <use class="{{ 'wished' if wished else 'not-wished' }} wish-icon" href="#icon-heart"></use>
+                </svg>
+            </button>
+        {% endif %}
+    </div>
 
-	<div itemprop="review" itemscope itemtype="https://schema.org/Review">
-	</div>
+    {# Schema.org rating/review hooks (kept for SEO) — empty wrappers, not visible #}
+    <div itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating"></div>
+    <div itemprop="review" itemscope itemtype="https://schema.org/Review"></div>
 
-	<p class="product-code">
-		<span class="product-item-group">
-			{{ _(doc.item_group) }}
-		</span>
-		<span class="product-item-code" itemprop="name">
-			{{ _("Item Code") }}:
-		</span>
-		<span itemprop="name">{{ _(doc.item_code) }}</span>
-	</p>
-	{% if has_variants %}
-		<!-- configure template -->
-		{% include "templates/generators/item/item_configure.html" %}
-	{% else %}
-		<!-- add variant to cart -->
-		{% include "templates/generators/item/item_add_to_cart.html" %}
-	{% endif %}
-	<!-- description -->
-	<div class="product-description" itemprop="description">
-	{% if frappe.utils.strip_html(doc.web_long_description or '') %}
-		{{ _(doc.web_long_description) | safe }}
-	{% elif frappe.utils.strip_html(doc.description or '')  %}
-		{{ _(doc.description) | safe }}
-	{% else %}
-		{{ "" }}
-	{% endif  %}
-	</div>
+    {# Variant selector OR add-to-cart, per webshop #}
+    {% if has_variants %}
+        {% include "templates/generators/item/item_configure.html" %}
+    {% else %}
+        {% include "templates/generators/item/item_add_to_cart.html" %}
+    {% endif %}
+
+    {# Description — Quiet Confidence prose. #}
+    {% if frappe.utils.strip_html(doc.web_long_description or '') %}
+        <div class="lt-product__description" itemprop="description">
+            {{ _(doc.web_long_description) | safe }}
+        </div>
+    {% elif frappe.utils.strip_html(doc.description or '') %}
+        <div class="lt-product__description" itemprop="description">
+            {{ _(doc.description) | safe }}
+        </div>
+    {% endif %}
+
+    {# Custom-decor inquiry cross-link — for items where "the cart isn't the answer". #}
+    {% if cart_settings.show_contact_us_button %}
+        <p class="lt-product__inquiry">
+            {{ _("Want this in your colors, your scale, your story?") }}
+            <a href="/contact?subject={{ doc.web_item_name | urlencode }}">{{ _("Tell us what you're imagining.") }}</a>
+        </p>
+    {% endif %}
+
 </div>
 
 {% block base_scripts %}
@@ -62,9 +81,8 @@
 {% endblock %}
 
 <script>
-	$('.page_content').on('click', '.like-action-item-fp', (e) => {
-			// Bind action on wishlist button
-			const $btn = $(e.currentTarget);
-			webshop.webshop.wishlist.wishlist_action($btn);
-		});
+    $('.page_content').on('click', '.like-action-item-fp', (e) => {
+        const $btn = $(e.currentTarget);
+        webshop.webshop.wishlist.wishlist_action($btn);
+    });
 </script>
