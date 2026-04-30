@@ -8,6 +8,112 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-04-30 — Catalog rebuild from live Odoo (no exceptions)
+
+**Decision:** Live Odoo (`http://5.78.136.133/shop`) is the catalog source of truth. The cached `_resources/odoo-export/catalog.json` (2026-04-26) is historical reference. Fresh scrape lives at `_resources/odoo-live/catalog.json`. Re-scrape via `scripts/setup/scrape_odoo_live.py` before any catalog work.
+
+**Reasoning:** GL directive 2026-04-30: *"the only source of truth is the live site... pull every product from the live site... with every single variation that a product has."* The cached catalog had 51 products; the live re-scrape on 2026-04-30 found 53 (Odoo had added `birthday-deliveries`, `large-head-missionary` since the cache). 5 products had `image_url=null` cached but DO have images on the live site (the original scraper missed lazy-loaded `data-src` patterns). Also Odoo's per-product `data-attribute-exclusions` JSON was not captured in the original scraper — the new live scrape captures and respects it.
+
+**Alternatives considered:** keep the cached catalog and patch missing fields. Rejected — caches drift, GL was explicit.
+
+**Decided by:** GL.
+
+---
+
+## 2026-04-30 — Full Item Variant model, no skipping
+
+**Decision:** Every Odoo-valid attribute combination becomes an `Item Variant` record. Honoring Odoo's `data-attribute-exclusions` to filter forbidden combinations from the cartesian product. Total: 10,613 Items + 8,925 Item Prices + 53 Website Items + 32,002 Item Variant Attribute child rows.
+
+**Reasoning:** GL directive 2026-04-30: *"ALL VARIANTS DO NOT SKIP ANY."* Earlier in the same session I had proposed a "form-fed options" alternative (treat each product as single Item, render LT-owned color/size selectors at order time) — GL named it as me trying to "divert" from the task. Rebuild Odoo accurately means full ERPNext variant model.
+
+**Alternatives considered:** form-fed options (simpler, no variant explosion). Rejected.
+
+**Decided by:** GL.
+
+---
+
+## 2026-04-30 — 11-category Item Group hierarchy
+
+**Decision:** `Shop Items` becomes a parent (`is_group=1`) with 11 children: Arches (10), Columns (10), Bouquets (16), Get-Well Bouquets (3), Garlands (4), Drops (1), Grab & Go (2), Table Decor (3), Stands & Easels (2), Deliveries (1), Seasonal & Specialty (1). Each `show_in_website=1`. Routes auto-generated as `shop-items/<scrubbed-name>`.
+
+**Reasoning:** GL directive: mega menu populated from Odoo's natural taxonomy. The taxonomy is implied by Odoo product slug patterns (`*-arch`, `*-column`, `*-bouquet`, etc.) — formalized as 11 explicit BBC-decision Item Groups. Captured as a fixture so it's reproducible on transfer.
+
+**Slug→group mapping:** lives at `_resources/odoo-live/slug_to_group.json` for review.
+
+**Decided by:** Claude (taxonomy proposal), confirmed by GL via "Shape A" answer.
+
+---
+
+## 2026-04-30 — Routes change to `/shop-items/<group>/<item>`
+
+**Decision:** All Website Items re-route from `shop/<item_code>` (the prior pattern) to `shop-items/<group_slug>/<item_slug>` for IA cleanliness. Pre-launch site has no public bookmarks; old `/shop/<item>` returns 404 from this date forward.
+
+**Implementation gotcha:** webshop's `WebsiteItem.make_route()` appends `random_string(5)` to every auto-generated route. Override by setting `wi.route = clean_route` BEFORE save. Captured in `lessons-learned.md` 2026-04-30 Lesson 3.
+
+**Decided by:** Claude (implementation choice within GL's "Shape A" routing decision).
+
+---
+
+## 2026-04-30 — `installed_apps` order changed: `locally_twisted` last
+
+**Decision:** Reordered Frappe's `installed_apps` global JSON list to put `locally_twisted` LAST: `["frappe", "erpnext", "payments", "webshop", "locally_twisted"]`. Required for our template overrides at `apps/locally_twisted/.../templates/generators/item/...` to win the reversed-app-order ChoiceLoader resolution against webshop's stock templates.
+
+**Reasoning:** `template_page.py:53` does `for app in reversed(frappe.get_installed_apps())` and picks the first match. Default order placed locally_twisted in middle; reversed put webshop first. Empirically verified: a marker class in our override file did NOT render until apps order was changed.
+
+**Side-effect:** any future new app installed AFTER this change will appear AFTER locally_twisted in the list — meaning the new app would WIN over our overrides for any template path it defines. If a new app is installed, re-set the global to keep `locally_twisted` last.
+
+**Decided by:** Claude (necessary technical fix to enable template overrides).
+
+---
+
+## 2026-04-30 — "Item Code" jargon and "/Nos" UoM stripped from customer-facing surfaces
+
+**Decision:** Strip both via:
+
+| Surface | Mechanism |
+|---|---|
+| Product detail title block | Jinja override at `templates/generators/item/item_details.html` (deletes the `<p class="product-code">` block) |
+| Product detail price block | Jinja override at `item_add_to_cart.html` (deletes the `(...$X / Nos)` line) |
+| Listing cards (JS-rendered) | CSS hide `.product-code` in lt-theme.css — webshop's compiled JS bundle can't be Jinja-overridden |
+
+The CSS-hide is `display: none !important` — the only such chain we kept. It's contained: it removes the jargon at customer-render time without forking webshop's compiled JS bundle.
+
+**Reasoning:** GL flagged "Shop Items | Item Code : baby-shower-garland" and "$ 150.00 / Nos" as customer-facing leakage of internal naming. Both are stock webshop chrome. Three different override mechanisms because three different render paths.
+
+**Decided by:** GL (the flag), Claude (the implementation choice).
+
+---
+
+## 2026-04-30 — Variant selectors render INLINE, not behind a dialog
+
+**Decision:** Override webshop's `item_configure.html` to render attribute selectors inline (chips for ≤8 values, dropdown for 9+) via Jinja iteration over `doc.attributes` × `frappe.get_all("Item Attribute Value", parent=<attr>)`. JS validates selection via `webshop.webshop.variant_selector.utils.get_next_attribute_and_values` and updates Add-to-Cart with the matched variant + price.
+
+**Reasoning:** Webshop's stock pattern is a "Select Variant" button that opens a Frappe Dialog modal — customer perception is "options are hidden." GL flagged this as "missing options." Inline selectors solve the perception problem without rebuilding the underlying variant matching logic.
+
+**Decided by:** Claude (implementation choice).
+
+---
+
+## 2026-04-30 — Webshop Settings managed via setup script, not fixture
+
+**Decision:** `enable_variants=1`, `enable_attribute_filters=1`, `show_attribute_dropdowns=1` set via `scripts/setup/enable_webshop_variants.py` (one-shot, idempotent). NOT fixtured.
+
+**Reasoning:** Webshop Settings is a Singles doctype with many fields Jeff might tweak (Stripe gateway account, checkout behavior flags, recommendations, etc.). Fixturing the whole record would risk overwriting his other config on the next `bench migrate`. Targeted setup script is precise and won't fight Jeff's edits.
+
+**Decided by:** Claude (per fixture-discipline skill — operator-state-sensitive fields stay out of fixtures).
+
+---
+
+## 2026-04-30 — Phase 6 cutover work item: prune `Item Attribute Value` from fixtures
+
+**Decision (forward-looking):** Before Jeff's first deploy after Phase 6 takeover, REMOVE `Item Attribute` from `hooks.py fixtures = [...]` for the operator-state-sensitive subset (especially `latex colors` — 51 values Jeff is most likely to add/rename as his supplier inventory shifts). Document in `NOUPDATE-DRIFT.md`.
+
+**Reasoning:** Per `frappe-fixture-discipline` skill: BBC fixture sync uses `force=True`, which silently overwrites DB records on every migrate. If Jeff renames "Empowermint" via UI and BBC's deploy chain later runs, his rename gets reverted with no warning. Today's risk is zero (no Jeff edits yet); future risk is real.
+
+**Decided by:** Claude (per fixture-discipline skill).
+
+---
+
 ## 2026-04-29 (mobile-responsiveness session) — LT design competition synthesis imported as `_resources/design-guide/`
 
 **Decision:** The 2026-04-26 LT design competition output (synthesis dir + 8 approved screenshots) is imported into this project's `_resources/design-guide/` and signposted from `CLAUDE.md` reading order step 6. Original location at `C:\Users\baenb\projects\zoho-locally-twisted\gallery\` will be deleted by GL. Treated as reference inspiration / taste calibration, not as a contract to implement verbatim.
