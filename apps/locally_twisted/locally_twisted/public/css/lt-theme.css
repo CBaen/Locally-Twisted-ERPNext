@@ -690,10 +690,12 @@ p {
 }
 
 .lt-header__mobile-row {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.75rem 1rem;
+  min-height: 76px;
+  padding: 0.75rem 7rem 0.75rem 1rem;
   gap: 0.75rem;
   overflow: hidden;
 }
@@ -703,15 +705,20 @@ p {
   align-items: center;
   flex: 1 1 auto;
   min-width: 0;
-  max-width: min(220px, calc(100vw - 140px));
+  max-width: min(190px, calc(100vw - 156px));
 }
 
 .lt-header__mobile-actions {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
   display: inline-flex;
   align-items: center;
   justify-content: flex-end;
   gap: 0.5rem;
   flex: 0 0 auto;
+  z-index: 2;
 }
 
 .lt-header__mobile-cart {
@@ -772,6 +779,7 @@ p {
 }
 
 .lt-header__mobile-strip small {
+  display: block;
   min-width: 0;
   line-height: 1.3;
   white-space: normal;
@@ -973,10 +981,19 @@ body.lt-nav-open {
 /* Section 2 — three column links */
 .lt-footer__links {
   padding: 0 1rem 1.5rem;
+  text-align: center;
+}
+
+.lt-footer__links-row {
+  justify-content: center;
 }
 
 .lt-footer__col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin-bottom: 1.5rem;
+  text-align: center;
 }
 
 .lt-footer__col-title {
@@ -990,8 +1007,12 @@ body.lt-nav-open {
 }
 
 .lt-footer__col-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin: 0;
   padding: 0;
+  text-align: center;
 }
 
 .lt-footer__col-list li {
@@ -1014,13 +1035,16 @@ body.lt-nav-open {
 .lt-footer__col-list--info li {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.4rem;
   color: var(--lt-soft-gray);
+  text-align: center;
 }
 
 .lt-footer__col-list--info a {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.4rem;
 }
 
@@ -2737,4 +2761,52 @@ body.lt-filter-open {
         max-width: 1500px;
         padding: 0 2.5rem;
     }
+}
+
+/* ── Newsletter banner real fix (GL feedback round 2) ──────────────────
+   1. Heading + subhead were rendering text-align: LEFT despite the
+      .text-center bootstrap class on the container. Force center with
+      higher specificity.
+   2. The form contains a wrapping <div class="lt-footer-newsletter__input-group">
+      around the input + button. That wrapper had no CSS, so it shrank to
+      content and the input + button stacked vertically. Make it a horizontal
+      flex container so they sit side by side with proper spacing. */
+
+.lt-footer-newsletter .lt-footer-newsletter__heading,
+.lt-footer-newsletter .lt-footer-newsletter__subhead {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.lt-footer-newsletter .lt-footer-newsletter__subhead {
+    max-width: 60ch;
+}
+
+.lt-footer-newsletter .lt-footer-newsletter__form {
+    display: block;
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+.lt-footer-newsletter .lt-footer-newsletter__input-group {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+.lt-footer-newsletter .lt-footer-newsletter__input-group .lt-footer-newsletter__input {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: auto;
+}
+
+.lt-footer-newsletter .lt-footer-newsletter__input-group .lt-footer-newsletter__button {
+    flex: 0 0 auto;
+    width: auto;
+    white-space: nowrap;
 }
