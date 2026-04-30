@@ -23,46 +23,19 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 
 **Remaining (in priority order):**
 
-- [P0] **Holistic redesign of /shop, /shop-items, /shop/&lt;item&gt;, /contact against the design guide.** GL flagged the current state as "horrible" 2026-04-29 evening. Specific issues on /shop/&lt;item&gt;: breadcrumb bleeds left edge, vestigial mid-page bar below product card, image-expand modal doesn't close on outside click, "Item Code: 7-butterfly-column" jargon visible to customers. /shop-items is webshop's stock listing page with zero LT design treatment. **The fix is NOT more CSS overrides** — it's reading `_resources/design-guide/synthesis/` end-to-end (rationale.md, mood.md, voice.md, layout.tsx, the 4 page TSXs), viewing the 8 GL-approved screenshots at full size, then bringing the webshop pages into the LT design register holistically. Bring observations + plan to GL before executing. Verify in real browser before declaring done. **NEXT major build (replaces /book in priority position because it's blocking demo visual quality).**
-- [P0] **Slice 10 — `/book` form page.** Primary inquiry conversion form (45-field Lead schema). The hero CTA + closing CTA + every service-page CTA points here; currently 404. Was DEFERRED 2026-04-29 (×3): once when guest checkout took precedence, once when guest cart Path B + Stripe Link kill + cascade work landed, once when mobile responsiveness + design-guide-import took precedence.
+- [P0] **Slice 10 — `/book` form page.** Primary inquiry conversion form (45-field Lead schema). The hero CTA + closing CTA + every service-page CTA points here; currently 404. Deferred 4x. The Lead schema is already done — needs the form template + AJAX submit + Lead+Communication on submit + acknowledgment email + loud-failure compliance per `~/.claude/rules/loud-failure.md`. Reference for spec: `_resources/odoo-live-snapshot/{book.html,hetzner-book.html}` (HTML scrapes from a prior session). The Hetzner schema is multi-select services + per-service conditional notes + 5×25MB upload — match it.
+- [P0] **`/privacy` page** — required by Stripe for live mode activation. Currently `https://example.com/privacy-policy` placeholder in Stripe Dashboard. Build the page, point Stripe Dashboard, update in-site link targets.
+- [P0] **`/terms-of-service` page** — required by Stripe for live mode activation. Pair with `/privacy` for attorney pass.
 - [P0] **Spec table data on BTFP service cards.** Currently `Lorem ipsum` placeholders for BEST AT / DURATION / TEAM SIZE-or-ARTISTS / GOOD FOR. Jeff needs to confirm the actual numbers/lists. Replace lorem when confirmed.
-- [P0] **`/privacy` page (Privacy Policy)** — required by Stripe for live mode activation. Currently `https://example.com/privacy-policy` placeholder in Stripe Dashboard. Build the page, point Stripe Dashboard's "Privacy policy URL" field at it, then update the in-site form link targets.
-- [P0] **`/terms-of-service` page (Terms of Service)** — required by Stripe for live mode activation. Currently `https://example.com/terms-of-service` placeholder. Pair with `/privacy` for attorney pass.
+- [P1] **Item Group images.** Each Item Group child has empty `image` field — `/shop-by-category` cards show letter placeholders (A/B/C/...). Adding a representative photo per category makes both the landing page and a future image-rich mega-menu feel designed.
 - [P1] **Slice 8 — Service category pages.** `/services/<event-type>` × 5 (Corporate, Weddings, Birthdays, Schools, Seasonal). Each ends with inquiry CTA pre-filling `/book` with the category.
-- [P1] **Slice 9 — Color Chart page.** `/color-chart` — static reference, all 70 balloon colors with names. Answers Jeff's "customers want to see colors" instinct without a configurator. Visual swatch grid + print-friendly stylesheet.
+- [P1] **Slice 9 — Color Chart page.** `/color-chart` — static reference, all balloon colors with names. Answers Jeff's "customers want to see colors" instinct without a configurator. Visual swatch grid + print-friendly stylesheet.
 - [P1] **Sample data for backend tour.** Before Jeff demo: a few realistic Lead records, one or two completed orders, one upcoming event. Lets Jeff click around the desk and see the system in motion.
-- [P2] **Slice 13 — Blog framework + 2-3 first posts.** "Kindergarten Teacher" voice. Deferrable; not on demo critical path. **When this ships, the homepage's `HERO_CYCLING_TITLES` list should be replaced with a `frappe.get_list("Blog Post", ...)` call so real blog post titles cycle in the hero.**
+- [P2] **Slice 13 — Blog framework + 2-3 first posts.** "Kindergarten Teacher" voice. Deferrable. When this ships, the homepage's `HERO_CYCLING_TITLES` list should be replaced with a `frappe.get_list("Blog Post", ...)` call so real blog post titles cycle in the hero.
+- [P2] **Variant cache rebuild on Webshop Settings change.** If the next instance enables/disables variants or attribute filters, run `for template in templates: ItemVariantsCacheManager(template).rebuild_cache()` to flush stale Redis state.
+- [P6] **Phase 6 cutover work item — fixture pruning.** BEFORE Jeff's first post-takeover deploy, REMOVE operator-state-sensitive Item Attribute fixtures from `hooks.py fixtures = [...]` (especially `latex colors` — 51 values Jeff is most likely to edit as supplier inventory shifts). Otherwise BBC fixture sync silently overwrites his renames on every `bench migrate`. Document in `NOUPDATE-DRIFT.md` (TBD). See `locally-twisted-decisions.md` 2026-04-30 entry.
 
-**DONE 2026-04-29 (guest-cart + cascade session) — DELETED FROM QUEUE:**
-- ~~Real-card end-to-end test~~ — GL completed `4242` purchase for SAL-ORD-2026-00019.
-- ~~Receipt email~~ — shipped via `_send_receipt_email` in `payment_success.py`. Plus operator notification + welcome email + Sales Invoice creation. Email Account configured.
-- ~~Multi-item cart support~~ — full localStorage-backed cart shipped (Path B). `/cart` is LT-owned; `/checkout` accepts items_json; `submit_guest_order` builds multi-line SO.
-
-**Already DONE 2026-04-27:**
-- Slice 6b — Refund Policy (`/refund-policy`) + FAQ (`/faq`). Both with accordion structure. Source: legal-interview-answers Part 2C + deposits.md + 6 confirmed policy files.
-- BTFP page substantial restructure to match mockup: hero kicker + title, service cards with photo carousels + spec tables (lorem), process section "Booking is straightforward" 4 steps, event types "Any Event. Any Size.", blush + soft-blue ribbons, last-minute booking banner.
-- Color: `--lt-near-white` warmed `#FBFBFB` → `#fffcfc`. Header bg matches footer (both `--lt-soft-blue`). Copyright bar uses new base white.
-- LookBook → Portfolio in nav (URL stays /lookbook).
-- Font-weight error fix on FAQ + Refund Policy headings (DM Serif Display synthetic-bold).
-- Ribbon margin shorthand fix.
-
-**Already DONE 2026-04-28/29 (Stripe + true guest checkout):**
-- Stripe Settings "Test" configured with API keys from `.env`. Auto-created Payment Gateway "Stripe-Test", Bank Account "Stripe-Test - LT" (USD), Payment Gateway Account "Stripe-Test - USD - LT" (default).
-- Webshop Settings: enable_checkout=1, payment_gateway_account=Stripe-Test - USD - LT.
-- `/checkout?item=<code>&qty=<n>` page (controller + template). Form takes name + email + phone + UT shipping + marketing opt-in checkbox. POSTs to `submit_guest_order` whitelist endpoint.
-- `submit_guest_order` creates Customer + Contact + Address + Sales Order (order_type="Shopping Cart") + Payment Request (mute_email + manual set_payment_request_url). Returns payment_url.
-- `/thank-you` (alias of `/thank_you` via website_route_rule) page renders post-payment landing with order summary.
-- `marketing_opt_in` Custom Field on Customer (Check, default 0).
-- All 8 smoke-test records cleaned at session end (SAL-ORD-2026-00001 through 00008, test customers, addresses, payment requests).
-
-**Already DONE other-agent work overnight 2026-04-27→28:**
-- /lookbook (Portfolio) page exists and renders.
-- /shop page exists and renders.
-- BTFP carousel orientation/aspect work.
-- Header truck icon zoom adjustments.
-- web_include_css cache-bust query string pattern.
-
-**Slice numbering as of 2026-04-29:** Slices 1-7 all done (1 brand, 2 chrome, 3 homepage, 4 BTFP, 5 Contact, 6a Accessibility, 6b Refund + FAQ, 7 Lookbook). Slice 8 (service categories), Slice 9 (color chart), Slice 10 (`/book`), Slice 11 (small shop browse — partial via webshop default), Slice 12 (cart+checkout — DONE via /checkout custom flow). Slice 13 (blog) deferred.
+**Slice numbering (current state):** 1-7 done (brand, chrome, homepage, BTFP, Contact, Accessibility, Refund+FAQ, Lookbook). Slice 8 (service categories), Slice 9 (color chart), Slice 10 (`/book`), Slice 13 (blog) — all PENDING. Slice 11 (browse) + Slice 12 (cart+checkout) DONE. **2026-04-30 catalog port shipped on top of Slice 11/12** — 53 products + 10,613 Items + on-brand product detail + mega menu + /shop-by-category. See `locally-twisted-decisions.md` 2026-04-30 entries. Historical "Already DONE" entries removed from queue per the "GitHub is our archive" rule — `git log` is the changelog.
 
 ### Future scope (post-Phase 1)
 

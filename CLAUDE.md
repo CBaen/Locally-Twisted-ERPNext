@@ -9,7 +9,7 @@
 **Website:** https://locallytwisted.com
 **Project type:** First professional business management system for Locally Twisted, built on ERPNext v15 (website, ecommerce, lead intake, operator workflow, invoicing, payments, accounting, payroll)
 **Status:** ACTIVE — Phase 1 (customer site + storefront) in flight. Frame reset 2026-04-26 is complete; PROJECT.md and ROADMAP.md are the new framing.
-**Currently working on:** Phase 1, Slice 2 (header + footer) was attempted 2026-04-26 and paused mid-build after the responsible instance band-aided framework friction with `!important` overrides; the visible state is broken-honest. The framework-study path forward (read Frappe website source → use intended primitives → replicate approved Odoo structure via Jinja partial overrides) is the active work. The `webshop` app install (required for Slices 7-9 + Phase 4) is also active. Lead schema in ERPNext is complete and stable — feeds Phase 2 (Lead Intake).
+**Currently working on:** **Catalog port from live Odoo COMPLETE 2026-04-30.** 53 products, 10,613 Items, 8,925 Item Prices, mega menu, on-brand product detail with inline variant selectors, /shop-by-category landing, all 7 shop smoke checks pass. Source of truth: `http://5.78.136.133/shop` (live Odoo). See `locally-twisted-decisions.md` 2026-04-30 entries for the 10 catalog-port decisions. Next major build: **Slice 10 `/book` form page** (45-field Lead schema, primary inquiry conversion path, 404 today, deferred 3x). Then `/privacy` + `/terms-of-service` (Stripe live-mode requirement).
 
 ## Local stack
 
