@@ -1,14 +1,13 @@
-"""Locally Twisted — Take Home shop page.
+"""Locally Twisted — /shop page.
 
 Custom-themed listing that runs on top of webshop's existing data:
 Website Item records for inventory, Item Price for pricing, and webshop's
-own /cart endpoint + update_cart RPC for cart actions. We do NOT rebuild
+own cart endpoint + update_cart RPC for cart actions. We do NOT rebuild
 cart logic — webshop owns that. This page is purely the visual shell.
 
-Categorization: webshop ships items in a single "Shop Items" Item Group
-right now. Until they're re-tagged into proper groups, the filter chips
-bucket items by web_item_name keyword (Bouquet / Cup / Centerpiece / etc.).
-That's a v1 shortcut — replace with real Item Groups when re-tagging happens.
+Updated 2026-04-30: filter pills now source from Item Group children of
+"Shop Items" (Arches, Columns, Bouquets, etc.) instead of the old keyword
+categorizer. Driven by item.item_group field after the catalog port.
 """
 import frappe
 
@@ -30,28 +29,64 @@ def get_context(context):
             ip.price_list_rate
         FROM `tabWebsite Item` wi
         LEFT JOIN `tabItem Price` ip
-            ON ip.item_code = wi.item_code AND ip.price_list = 'Standard Selling'
+            ON ip.item_code = wi.item_code
+            AND ip.price_list = 'Standard Selling'
+            AND ip.selling = 1
+        LEFT JOIN `tabItem` it ON it.item_code = wi.item_code
         WHERE wi.published = 1
-        ORDER BY wi.web_item_name
+          AND (it.variant_of IS NULL OR it.variant_of = '')
+        ORDER BY wi.item_group, wi.web_item_name
         """,
         as_dict=True,
     )
 
+    # For variant templates we don't have an Item Price on the template (validate_item_template
+    # blocks that). Pull a representative variant price (the lowest) so the card shows a
+    # "from $X" baseline.
     for item in items:
-        item["category"] = _categorize(item.get("web_item_name"))
-        rate = item.get("price_list_rate")
-        item["price_display"] = "${:g}".format(float(rate)) if rate else ""
-        # Webshop's product detail route already starts with /shop/<slug>;
-        # use as-is when present, otherwise build from item_code.
-        if not item.get("route"):
-            item["route"] = "shop/{}".format(item["item_code"])
+        if item.get("has_variants") and not item.get("price_list_rate"):
+            min_price = frappe.db.sql(
+                """SELECT MIN(ip.price_list_rate)
+                   FROM `tabItem` it
+                   JOIN `tabItem Price` ip ON ip.item_code = it.item_code
+                   WHERE it.variant_of = %s
+                     AND ip.price_list = 'Standard Selling'
+                     AND ip.selling = 1""",
+                (item["item_code"],),
+            )
+            if min_price and min_price[0] and min_price[0][0]:
+                item["price_list_rate"] = min_price[0][0]
+                item["price_is_from"] = True
 
-    categories = [
-        {"id": "all", "label": "All items"},
-        {"id": "bouquets", "label": "Bouquets"},
-        {"id": "cups", "label": "Cups & Centerpieces"},
-        {"id": "ready-made", "label": "Ready-Made"},
-    ]
+        # Slug for filter pill data attribute (Item Group "Get-Well Bouquets" → "get-well-bouquets")
+        item["category_slug"] = frappe.scrub(item.get("item_group") or "all").replace("_", "-")
+        rate = item.get("price_list_rate")
+        if rate:
+            item["price_display"] = (
+                "from ${:g}".format(float(rate)) if item.get("price_is_from")
+                else "${:g}".format(float(rate))
+            )
+        else:
+            item["price_display"] = ""
+        if not item.get("route"):
+            item["route"] = "shop-items/{}/{}".format(
+                frappe.scrub(item.get("item_group") or "shop-items").replace("_", "-"),
+                item["item_code"],
+            )
+
+    # Sourced live from Item Group children of "Shop Items" — order by weightage.
+    children = frappe.db.get_all(
+        "Item Group",
+        filters={"parent_item_group": "Shop Items", "show_in_website": 1},
+        fields=["name", "item_group_name", "weightage"],
+        order_by="weightage asc, item_group_name asc",
+    )
+    categories = [{"id": "all", "label": "All items"}]
+    for c in children:
+        categories.append({
+            "id": frappe.scrub(c["name"]).replace("_", "-"),
+            "label": c["item_group_name"] or c["name"],
+        })
 
     context.items = items
     context.categories = categories
@@ -60,18 +95,6 @@ def get_context(context):
     context.page_css = PAGE_CSS
 
     return context
-
-
-def _categorize(name):
-    """Bucket a Website Item into one of the design's 3 customer-facing
-    categories by keyword. v1 shortcut — replace when items get re-tagged
-    into proper Item Groups."""
-    n = (name or "").lower()
-    if "bouquet" in n:
-        return "bouquets"
-    if "cup" in n or "centerpiece" in n:
-        return "cups"
-    return "ready-made"
 
 
 PAGE_CSS = """
