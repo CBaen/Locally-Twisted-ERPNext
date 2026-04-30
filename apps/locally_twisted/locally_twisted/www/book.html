@@ -852,7 +852,10 @@
         window.location.href = '/';
     }
     document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') dismissModal();
+        if (e.key !== 'Escape') return;
+        var modal = document.getElementById('received');
+        if (!modal || !modal.classList.contains('lt-book__modal--open')) return;
+        dismissModal();
     });
     if (window.location.hash === '#received') showModal();
     window.addEventListener('hashchange', function () {

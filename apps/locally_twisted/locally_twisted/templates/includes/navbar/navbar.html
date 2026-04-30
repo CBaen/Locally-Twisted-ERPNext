@@ -28,7 +28,7 @@
        - Toggle:   <button id="lt-mobile-toggle">
        - Backdrop: <div id="lt-mobile-backdrop">
        - Close:    <button id="lt-mobile-close">
-       - Mobile accordion triggers: data-lt-accordion-trigger="<panel-id>"
+       - Mobile accordion triggers: data-lt-drawer-accordion-trigger="<panel-id>"
        - Mobile accordion panels:   id="<panel-id>" hidden
 
    Cart badge:
@@ -83,7 +83,7 @@
                     {% endif %}
 
                     <li>
-                        <a class="lt-utility-bar__cart"
+                        <a class="lt-header__util-link--cart"
                            href="/shop/cart"
                            aria-label="Shopping cart">
                             <img src="/assets/locally_twisted/icons/cart.svg"
@@ -102,8 +102,8 @@
         </div>
 
         {# Tier 2: Primary nav — Balloon Twisting | 3 mega menus | overflow | search #}
-        <div class="lt-header__nav-bar">
-            <div class="container lt-header__nav-inner">
+        <div class="lt-header__nav">
+            <div class="container lt-header__nav-row">
 
                 <ul class="lt-header__nav-list" role="menubar">
 
@@ -114,7 +114,7 @@
                     </li>
 
                     {# ---- Mega 1: Special Occasions ---- #}
-                    <li class="lt-header__mega-item" role="none">
+                    <li class="lt-header__has-mega" role="none">
                         <button type="button"
                                 class="lt-header__nav-link lt-header__nav-trigger"
                                 data-lt-megamenu-trigger="lt-mega-special-occasions"
@@ -134,7 +134,7 @@
                                 <path d="m6 9 6 6 6-6"/>
                             </svg>
                         </button>
-                        <div class="lt-megamenu"
+                        <div class="lt-header__mega"
                              id="lt-mega-special-occasions"
                              role="region"
                              aria-label="Special Occasions categories"
@@ -158,7 +158,7 @@
                     </li>
 
                     {# ---- Mega 2: Holidays & Seasons ---- #}
-                    <li class="lt-header__mega-item" role="none">
+                    <li class="lt-header__has-mega" role="none">
                         <button type="button"
                                 class="lt-header__nav-link lt-header__nav-trigger"
                                 data-lt-megamenu-trigger="lt-mega-holidays-seasons"
@@ -178,7 +178,7 @@
                                 <path d="m6 9 6 6 6-6"/>
                             </svg>
                         </button>
-                        <div class="lt-megamenu"
+                        <div class="lt-header__mega"
                              id="lt-mega-holidays-seasons"
                              role="region"
                              aria-label="Holidays and Seasons categories"
@@ -220,7 +220,7 @@
                     </li>
 
                     {# ---- Mega 3: What We Make ---- #}
-                    <li class="lt-header__mega-item" role="none">
+                    <li class="lt-header__has-mega" role="none">
                         <button type="button"
                                 class="lt-header__nav-link lt-header__nav-trigger"
                                 data-lt-megamenu-trigger="lt-mega-what-we-make"
@@ -240,7 +240,7 @@
                                 <path d="m6 9 6 6 6-6"/>
                             </svg>
                         </button>
-                        <div class="lt-megamenu"
+                        <div class="lt-header__mega"
                              id="lt-mega-what-we-make"
                              role="region"
                              aria-label="What We Make categories"
@@ -440,7 +440,7 @@
             <li class="lt-header__mobile-accordion-item">
                 <button type="button"
                         class="lt-header__mobile-nav-link lt-header__mobile-accordion-toggle"
-                        data-lt-accordion-trigger="lt-mob-special-occasions"
+                        data-lt-drawer-accordion-trigger="lt-mob-special-occasions"
                         aria-expanded="false"
                         aria-controls="lt-mob-special-occasions">
                     Special Occasions
@@ -470,7 +470,7 @@
             <li class="lt-header__mobile-accordion-item">
                 <button type="button"
                         class="lt-header__mobile-nav-link lt-header__mobile-accordion-toggle"
-                        data-lt-accordion-trigger="lt-mob-holidays-seasons"
+                        data-lt-drawer-accordion-trigger="lt-mob-holidays-seasons"
                         aria-expanded="false"
                         aria-controls="lt-mob-holidays-seasons">
                     Holidays &amp; Seasons
@@ -500,7 +500,7 @@
             <li class="lt-header__mobile-accordion-item">
                 <button type="button"
                         class="lt-header__mobile-nav-link lt-header__mobile-accordion-toggle"
-                        data-lt-accordion-trigger="lt-mob-what-we-make"
+                        data-lt-drawer-accordion-trigger="lt-mob-what-we-make"
                         aria-expanded="false"
                         aria-controls="lt-mob-what-we-make">
                     What We Make

@@ -432,12 +432,15 @@
         }
 
         /* ── Legacy accordion (no data-* attr — uses .lt-header__mobile-accordion-toggle
-         * with aria-controls attribute, which is how the current navbar.html is built) */
-        var legacyAccToggle = drawer.querySelector(".lt-header__mobile-accordion-toggle");
-        if (legacyAccToggle) {
-            var legacyPanelId = legacyAccToggle.getAttribute("aria-controls");
-            var legacyAccPanel = legacyPanelId ? document.getElementById(legacyPanelId) : null;
-            if (legacyAccPanel) {
+         * with aria-controls attribute, which is how the pre-fix-round navbar.html was built).
+         * querySelectorAll (plural) so ALL three mobile accordion toggles are wired,
+         * not just the first (Architect F004 / Execution F001 fix). */
+        var legacyAccToggles = drawer.querySelectorAll(".lt-header__mobile-accordion-toggle");
+        for (var la = 0; la < legacyAccToggles.length; la++) {
+            (function (legacyAccToggle) {
+                var legacyPanelId = legacyAccToggle.getAttribute("aria-controls");
+                var legacyAccPanel = legacyPanelId ? document.getElementById(legacyPanelId) : null;
+                if (!legacyAccPanel) return;
                 /* Remove any existing listener (inline scripts are being removed;
                  * but as a defensive measure de-dupe by cloning) */
                 var fresh = legacyAccToggle.cloneNode(true);
@@ -451,7 +454,7 @@
                         legacyAccPanel.removeAttribute("hidden");
                     }
                 });
-            }
+            }(legacyAccToggles[la]));
         }
 
         /* ── Expose public drawer API ── */
