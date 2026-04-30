@@ -58,7 +58,18 @@ RUN /home/frappe/frappe-bench/env/bin/pip install --quiet --upgrade --no-cache-d
 # Compile assets at image-build time. The compiled bundles end up in
 # apps/<app>/public/dist/, which is in the image. No more "Node disappears
 # on recreate" because Node was only used during the build, not at runtime.
-RUN bench build --production
+#
+# Build each app explicitly. `bench build --production` (no --app) only walks
+# apps registered via `bench get-app`. Because we used `pip install -e` instead,
+# the apps must be passed by name or their bundles get skipped — that's the bug
+# that left webshop's web.bundle.js missing and broke category pages.
+RUN bench build \
+    --app frappe \
+    --app erpnext \
+    --app payments \
+    --app webshop \
+    --app locally_twisted \
+    --production
 
 # Strip any leftover .git dirs (defense-in-depth; clones already stripped above).
 RUN find apps -mindepth 1 -path "*/.git" -exec rm -rf {} + 2>/dev/null || true
