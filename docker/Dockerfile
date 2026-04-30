@@ -55,6 +55,13 @@ RUN /home/frappe/frappe-bench/env/bin/pip install --quiet --upgrade --no-cache-d
     -e apps/webshop \
     -e apps/locally_twisted
 
+# Register apps in sites/apps.txt so `bench build --app <name>` finds them.
+# pip install registers Python packages; bench reads apps.txt to know which
+# apps to walk for asset compilation. Configurator service rewrites this file
+# at container startup with the live list — at image-build time we just need
+# bench to see the apps now.
+RUN printf '%s\n' frappe erpnext payments webshop locally_twisted > sites/apps.txt
+
 # Compile assets at image-build time. The compiled bundles end up in
 # apps/<app>/public/dist/, which is in the image. No more "Node disappears
 # on recreate" because Node was only used during the build, not at runtime.
@@ -69,6 +76,11 @@ RUN /home/frappe/frappe-bench/env/bin/pip install --quiet --upgrade --no-cache-d
 # frappe + erpnext are already compiled in the base image, so don't rebuild
 # them. locally_twisted has only plain CSS + plain JS (no SCSS, no bundle
 # entry point) so it doesn't need bench build either.
+#
+# NODE_OPTIONS caps Node's heap so the bundler stays within the build host's
+# memory budget. Without this, esbuild can OOM during the production minify
+# step on Docker Desktop's 8GB WSL2 default.
+ENV NODE_OPTIONS=--max-old-space-size=3072
 RUN bench build --app payments --production
 RUN bench build --app webshop --production
 
