@@ -1,0 +1,22 @@
+# Dockerignore for the LT custom image build.
+# Build context is the LT project root — most of it is NOT needed in the image.
+
+# Everything by default
+*
+
+# Re-include only what the Dockerfile needs
+!apps/locally_twisted
+
+# Inside locally_twisted, exclude noise
+apps/locally_twisted/**/__pycache__
+apps/locally_twisted/**/*.pyc
+apps/locally_twisted/**/*.pyo
+apps/locally_twisted/**/.git
+apps/locally_twisted/**/.pytest_cache
+apps/locally_twisted/**/node_modules
+apps/locally_twisted/**/.eggs
+apps/locally_twisted/**/*.egg-info
+
+# Exclude the staging copy of seed data — re-staged from _resources/odoo-live/
+# when needed; not part of runtime
+apps/locally_twisted/locally_twisted/seed/_data

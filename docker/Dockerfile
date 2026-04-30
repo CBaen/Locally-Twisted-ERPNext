@@ -63,5 +63,17 @@ RUN bench build --production
 # Strip any leftover .git dirs (defense-in-depth; clones already stripped above).
 RUN find apps -mindepth 1 -path "*/.git" -exec rm -rf {} + 2>/dev/null || true
 
+# Patch the nginx config template so socket.io passes the browser's actual
+# Origin header through to the upstream socketio service, rather than rewriting
+# it to http://frontend (which fails browser-direct-localhost access). The base
+# image's nginx-entrypoint.sh renders this template on container startup, so
+# patching the template at image-build time means recreates inherit the patch
+# automatically — no more runtime patch script needed.
+USER root
+RUN sed -i 's|proxy_set_header Origin \$proxy_x_forwarded_proto://frontend;|proxy_set_header Origin $http_origin;|' \
+    /templates/nginx/frappe.conf.template \
+    && grep -q 'proxy_set_header Origin $http_origin;' /templates/nginx/frappe.conf.template
+USER frappe
+
 # Inherit volumes, ports, command from the base image. The base already
 # declares VOLUME /home/frappe/frappe-bench/sites and /logs and CMD gunicorn.
