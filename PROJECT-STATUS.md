@@ -64,7 +64,8 @@ See `locally-twisted-decisions.md` for the full reasoned log. Summary:
 
 | Date | Decision | Why |
 |------|----------|-----|
-| 2026-04-26 | Project reframed: "first professional business platform," not "Odoo migration" | Jeff was never told the prior Odoo attempt happened; migration framing leaks that context |
+| 2026-04-30 | Frame revised: "migration of business intent + catalog data into a fresh ERPNext install" | Supersedes the 2026-04-26 reframe. Catalog port + form intent + policies + domain cutover are migration shape. Jeff-disclosure stealth and hand-build-not-auto-translate survive as constraints, not as a denial of migration reality. (See decisions log 2026-04-30 frame entry.) |
+| 2026-04-26 | Earlier reframe: "first professional business platform," not "Odoo migration" | Was motivated by Jeff-disclosure concerns and avoiding too-mechanical translation framing. Superseded 2026-04-30. |
 | 2026-04-26 | Phase 1 = customer-facing site + storefront (the proof point) | If ERPNext can't deliver this, GL pivots before building backend |
 | 2026-04-26 | Pricing calculator embedded in BTFP service page (no standalone /pricing) | Customers on the service page are already asking the cost question |
 | 2026-04-26 | Header navigation Option B: single What-We-Make + occasion landing pages | Eliminates SEO duplication, customer confusion, mega-menu mobile complexity |
