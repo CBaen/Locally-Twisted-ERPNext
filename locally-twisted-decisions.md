@@ -8,6 +8,46 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-04-30 (evening) — Mega menu IA: flat 11-Item-Group structure preserved + template-level grouping into 3 panels
+
+**Decision:** The Hetzner mirror has 3 mega menu panels (Special Occasions / Holidays & Seasons / What We Make) with 2-level hierarchy. Our ERPNext catalog has 11 flat children under "Shop Items" (Arches, Columns, Bouquets, etc. — verified by the catalog port: 53 Website Items, 10,578 variants, 10,613 Item Prices). Rather than restructuring the Item Group tree to add Special Occasions + Holidays & Seasons parents (and reassigning all 53 Website Items), we keep the flat 11 and group them into the 3 Hetzner panels at the **template layer** via three new context keys exposed by `navbar_context.py`: `mega_special_occasions`, `mega_holidays_seasons`, `mega_what_we_make`. Each is a list of `{label, route}` dicts. Some leafs (Birthdays, Showers, Graduations, Missionary, Get-Well) point at content-only routes that may not have published pages yet — those will resolve via Phase 2 page builds OR remain as 404 placeholders until populated.
+
+**Reasoning:** Lower blast radius. Restructuring the catalog tree would risk the just-verified data integrity (53/10,578/10,613). Template-level grouping is reversible — if GL prefers the 2-level Item Group tree structure later, we restructure `fixtures/item_group.json` and re-tag the 53 Website Items, and the navbar template adjusts. The "flat + template-group" choice preserves all existing investment in catalog data while delivering Hetzner's 3-panel UX.
+
+**Alternatives considered:** Restructure the Item Group tree with Special Occasions + Holidays & Seasons as new parents under "Shop Items," reassign the 11 children appropriately. Rejected because it touches the data layer that was just verified at high cost.
+
+**Decided by:** Claude Opus 4.7 (orchestrator), under GL's autonomous-decision authorization for the chrome rebuild session. **Reversible** — see `MIRROR-REBUILD-PLAN.md` Decision A.
+
+---
+
+## 2026-04-30 (evening) — Category URL shape: ERPNext-native `/shop-items/<slug>` retained, NOT Hetzner's `/shop/category/<slug>-<id>`
+
+**Decision:** ERPNext webshop's `WebshopItemGroup.make_route()` auto-generates `/shop-items/<slug>` from the Item Group's `route` field (no Odoo-style numeric IDs). The Hetzner mirror uses `/shop/category/<slug>-<id>` URLs. Rather than mimic Hetzner's URLs exactly, we use ERPNext-native `/shop-items/<slug>` everywhere. Mega menu links + footer Shop column links + breadcrumbs all use the ERPNext shape.
+
+To handle inbound references to Hetzner-shaped URLs (none exist externally today, but mirror markup contains them and Phase 2 page rebuilds may reference them):  add `website_route_rules` redirects from `/shop/category/<slug>` → `/shop-items/<slug>` for the 11 known categories when a real referrer surfaces.
+
+**Reasoning:** Doesn't fight ERPNext's `make_route()` convention. No need to manually set `route` on each Item Group (which would be operator-state-sensitive — Jeff might rename a category later and the URL would break). Lower blast than redirect rules per category. Pre-launch — no external bookmarks to preserve. Hetzner-shape URL preservation can be added later via redirects if real inbound traffic appears.
+
+**Alternatives considered:**
+- Manually set `route="shop/category/arches"` etc. on each of the 11 Item Groups via fixture override. Rejected — operator-state-sensitive (per `frappe-fixture-discipline`).
+- Add 11 `website_route_rules` redirect entries today. Rejected — no inbound traffic yet; would be premature complexity.
+
+**Decided by:** Claude Opus 4.7 (orchestrator), under GL's autonomous-decision authorization. **Reversible** — see `MIRROR-REBUILD-PLAN.md` Decision B.
+
+---
+
+## 2026-04-30 (evening) — Blog: use Frappe's NATIVE `Blog Post` DocType, NOT a custom `LT Blog Post`
+
+**Decision:** Frappe core ships a fully-functional blog system: `Blog Post` + `Blog Category` + `Blogger` + `Blog Settings` DocTypes, plus `blog_post.html` and `blog_post_list.html` templates. Use the native DocType. Add a `tags` field via `Customize Form` (Table MultiSelect linking to a tiny `LT Blog Tag` DocType — 1 field) for the tag-filtering feature Hetzner has but Frappe's blog lacks. Add a thin template override at `apps/locally_twisted/locally_twisted/templates/pages/blog_post.html` for the SEO meta tags Frappe's native template doesn't emit (canonical link, article:published_time/modified_time/tag OG metas, Twitter `summary_large_image`, BreadcrumbList JSON-LD).
+
+**Reasoning:** Frappe's native `Blog Post` provides for free: schema.org BlogPosting itemscope, OG meta tags with auto-fallback, `read_time` auto-calc, RSS/Atom feeds per category, "Load More" pagination, browse_by_category dropdown, full-text search, breadcrumbs, social sharing toggles, likes, comments, blog_intro 200-char excerpt, `Blogger` author block. Building a custom `LT Blog Post` would duplicate all of that and lose the framework integration. The original `MIRROR-REBUILD-PLAN.md` called for a custom DocType; `/plan-deepen` caught this regression vs the website-page-index.md (which had already classified blog as Tier 3 native).
+
+**Alternatives considered:** Custom `LT Blog Post` DocType. Rejected — reinvents the wheel.
+
+**Decided by:** Claude Opus 4.7 (orchestrator) following /plan-deepen finding. Plan section "Phase 2 — orders #9/#10" rewritten accordingly.
+
+---
+
 ## 2026-04-30 — Project frame: this IS a migration, not a new build
 
 **Decision:** Frame Locally Twisted's ERPNext project as **a migration of business intent + catalog data into a fresh ERPNext install** — superseding the 2026-04-26 "first professional business platform / new build, not a migration" reframe.

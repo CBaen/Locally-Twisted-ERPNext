@@ -136,6 +136,28 @@ Canonical resources for the migration destination live in `_resources/` and are 
 
 ## Updates
 
+### 2026-04-30 (evening, autonomous nap session) — Mirror rebuild Phase 1 chrome shipped via /triadic-construction-v2
+
+**See `HANDOFF.md` and `MIRROR-REBUILD-COMPLETE.md` for full session report.** Summary:
+
+- **Project frame revised** from "new build, not a migration" → "migration of business intent + catalog data into a fresh ERPNext install" per GL directive at session open. 8 docs updated to reflect.
+- **Hetzner mirror landed** at `_resources/odoo-live-mirror/` — 346 pages + 510 assets via `crawl4ai` (chosen over httrack/wget for JS-rendering). Mirror script reusable at `scripts/mirror/mirror_hetzner.py`. Tool research at `research/website-mirror-tool-discovery.md`.
+- **/book unblocked** — was 404 every prior session. Files existed; root cause was stale Frappe website cache + nginx upstream-IP staleness after backend restart. Pre-task chain (cache flush + frontend container restart) made it HTTP 200 with the full form rendering.
+- **6 pre-task fixes shipped** before the chrome dispatch: `max_file_size = 25 MB` verified, smoke_forms.py selector aligned (`contact_name` vs `lead_name`), `lead.insert()` wrapped in try/except + `frappe.log_error` (loud-failure rule), `/contactus → /contact` redirect added, shop card `data-category` typo fixed (silently broken filter since launch), cache flush + `/book` verify.
+- **Phase 1 chrome rebuild via /triadic-construction-v2** — 3 builders (Jinja / CSS / JS) + 3 reviewers (Architect / SecOps / Execution Engine) + GL Proxy + fix round + audit pass. Deliverables:
+  - Hetzner-shaped header (utility bar + logo + 3 desktop mega menus + mobile drawer + accordion)
+  - Hetzner-shaped footer (newsletter strip + 3-col + social + legal bar)
+  - `lt-megamenu.js` + `lt-newsletter.js` (vanilla JS, no jQuery)
+  - `LT Newsletter Signup` DocType + `api/newsletter.py` whitelisted endpoint (rate-limited 10/hr per email, idempotent)
+  - `lt-theme.css` overhauled — ~340 lines of dead `.navbar.*` and `.web-footer` blocks deleted, ~163 lines of new BEM blocks added (`.lt-utility-bar__*`, `.lt-footer-newsletter__*`). Final 1,959 lines.
+  - All chrome class/attribute names aligned across template / CSS / JS after Round 2 fix round
+- **Triadic discipline caught real defects** that solo build would have shipped: mobile drawer always visible (CSS class mismatch), 2 of 3 mobile mega menu accordions completely dead (data-attr + querySelector singular bug), megamenu panel had no CSS rules, mega-trigger CSS open-state targeting wrong class, newsletter `showError` `textContent` strips `<a href="tel:">` phone fallback, `@rate_limit` X-Forwarded-For bypass, `hash(email)` instability across container restarts, Esc-key on `/book` navigates away from form, newsletter smoke test missing (loud-failure violation). All caught + fixed in Round 2.
+- **Architectural decisions logged (reversible):** (A) mega menu IA — flat 11-Item-Group structure preserved + template-level grouping into 3 Hetzner panels (does NOT touch the verified catalog data). (B) Category URLs — ERPNext-native `/shop-items/<slug>` retained (NOT Hetzner's `/shop/category/<slug>-<id>`). (C) Blog — use Frappe's NATIVE `Blog Post` DocType (plan-deepen caught a planned regression to a custom DocType). See `locally-twisted-decisions.md` 2026-04-30 evening entries.
+- **Audit screenshots** at `_resources/audit-2026-04-30-chrome/` (6 PNGs at desktop 1280 + mobile 375 for /, /book, /shop). Zero console errors. Mobile chrome looks good. **Desktop chrome flagged for polish:** centered logo dominates utility bar (intrinsic 1050×300 from brand image), tagline wraps vertically — short CSS fix needed. GL named this at session close: *"There's serious issues with the bleed and container issues on desktop but you've done a really good job so far."*
+- **GL trust state at close:** *"This looks like it could be usable... you've done a really good job so far."* Session was autonomous (GL napping). All architectural calls logged as reversible. Phase 2 page rebuilds (~12 routes) deferred to next session.
+- **Cleanup:** Deleted `Odoo Migration/5.78.136.133.har` (turned out to be DevTools-filtered to CSS/JS only — no HTML pages, useless) + `Odoo Migration/book initial state.jpg` (superseded by full mirror at `pages/book.html`). Empty `Odoo Migration/` dir removed.
+- **Agency-tier additions** at `Built_by_Cameron/`: `built-by-cameron-decisions.md` 2026-04-30 entries (rate_limit composite-identity + nginx-resolver-cache + crawl4ai-as-mirror-tool); `HOW-TO-WIN-AT-FRAPPE/auto-behaviors.md` new traps B5 + B6; kitchen note for crawl4ai mirror pattern.
+
 ### 2026-04-29 (mobile-responsiveness + design-guide-import session) — Mobile responsive at 320/375/414, hamburger fits, design contest synthesis imported into project tree
 
 **See `HANDOFF.md` for current state at session end.** Summary:
