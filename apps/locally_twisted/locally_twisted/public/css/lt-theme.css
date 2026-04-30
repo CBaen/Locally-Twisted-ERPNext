@@ -2539,3 +2539,68 @@ body.lt-filter-open {
         transition: none;
     }
 }
+
+/* ── Card refinement to match Hetzner spec ─────────────────────────────
+   GL feedback 2026-04-30: cards looked tacky. Hetzner cards have NO border,
+   NO shadow, NO hover transforms — just clean image + name + description +
+   price. Strip the chrome and add the description text. JS patch in
+   templates/generators/item_group.html replaces .product-category with
+   .lt-card-desc carrying the item's short_description. */
+
+#products-grid-area .card {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    background-color: transparent;
+    transition: none;
+}
+
+#products-grid-area .card:hover {
+    box-shadow: none;
+    transform: none;
+}
+
+#products-grid-area .card-img-container {
+    background-color: transparent;
+    border-radius: 0.25rem;
+}
+
+#products-grid-area .card:hover .card-img {
+    transform: none;
+}
+
+#products-grid-area .card-body {
+    padding: 0.875rem 0 0.5rem;
+}
+
+/* Defensive — if the JS patch fails, hide the raw category sub-tag */
+#products-grid-area .product-category {
+    display: none;
+}
+
+/* Description line — Hetzner's muted small text under the title */
+#products-grid-area .lt-card-desc {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--lt-soft-gray, #6c757d);
+    margin: 0.375rem 0 0.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+#products-grid-area .product-title {
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0.25rem 0 0;
+}
+
+#products-grid-area .product-price {
+    font-family: 'Raleway', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--lt-near-black);
+    margin: 0.25rem 0 0;
+}
