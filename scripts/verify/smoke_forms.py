@@ -322,19 +322,27 @@ def main():
         description="Run form smoke tests against the Locally Twisted ERPNext stack."
     )
     parser.add_argument("--base-url", required=True, help="http://localhost:8081")
-    parser.add_argument("--form-path", default="/book", help="path to the /book form (default: /book)")
+    parser.add_argument("--form-path", action="append", default=None,
+                        help="path to a form to smoke (repeatable). Default: /book + /contact")
     parser.add_argument("--shape-only", action="store_true",
                         help="Only verify form structure; do not submit (for CI without prod access)")
     parser.add_argument("--skip-book", action="store_true",
-                        help="Skip the /book Playwright smoke test (e.g. no Playwright installed)")
+                        help="Skip the inquiry-form Playwright smoke test")
     parser.add_argument("--skip-newsletter", action="store_true",
                         help="Skip the newsletter API smoke test")
     args = parser.parse_args()
 
+    # Both /book and /contact render the same shared inquiry form (per GL
+    # directive 2026-04-30 — one form, two URL surfaces). Smoke both by
+    # default so a partial-include regression on either page fails the
+    # deploy. Override with one or more --form-path flags.
+    form_paths = args.form_path or ["/book", "/contact"]
+
     failures = 0
 
     if not args.skip_book:
-        failures += smoke_test(args.base_url, args.form_path, args.shape_only)
+        for form_path in form_paths:
+            failures += smoke_test(args.base_url, form_path, args.shape_only)
 
     if not args.skip_newsletter:
         failures += smoke_newsletter(args.base_url)
