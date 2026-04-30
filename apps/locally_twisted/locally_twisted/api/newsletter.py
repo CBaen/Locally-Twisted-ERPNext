@@ -11,7 +11,12 @@ Loud-failure compliance (per project CLAUDE.md + global loud-failure rule):
   - Monitor: add to scripts/verify/smoke_forms.py (flagged as TODO — not yet
     covered; tracked in builder-js-build.md self-review concerns).
 
-Rate-limiting: 10 requests per IP per hour via @rate_limit decorator.
+Rate-limiting: 10 requests per email address per hour via @rate_limit decorator
+(key="email", ip_based=False). Email-keyed limiting defeats X-Forwarded-For
+spoofing (SecOps F001). Trade-off: an attacker can check whether a specific
+email hit its limit (10/hr enumeration). For newsletter signup that trade-off
+is acceptable. Option B (nginx-level XFF strip) is the higher-leverage fix that
+would also protect book.py / checkout.py / btfp.py — flagged for ops/infra.
 
 Notes on privacy:
   - If the email passes format validation we do NOT log the raw email in the
@@ -20,6 +25,7 @@ Notes on privacy:
   - If validation fails we don't log at all — the frappe.throw response itself
     is the only signal, and it contains no PII.
 """
+import hashlib
 import re
 
 import frappe
@@ -41,7 +47,7 @@ _MAX_SOURCE_URL_LEN = 500
 
 
 @frappe.whitelist(allow_guest=True)
-@rate_limit(limit=10, seconds=60 * 60)
+@rate_limit(limit=10, seconds=60 * 60, key="email", ip_based=False)
 def signup(email=None):
     """Sign up a newsletter email address.
 
@@ -103,7 +109,7 @@ def signup(email=None):
             ).format(
                 exc_type=type(exc).__name__,
                 exc=exc,
-                email_hash=hash(email),
+                email_hash=hashlib.sha256(email.encode("utf-8")).hexdigest()[:16],
                 remote_ip=getattr(frappe.local, "request_ip", "unknown"),
             ),
         )

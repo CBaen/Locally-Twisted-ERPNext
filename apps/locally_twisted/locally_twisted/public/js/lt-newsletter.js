@@ -155,19 +155,93 @@
         if (!emailInput) return;  /* Nothing usable — don't bind */
 
         /** Show error message. Creates errorDiv inline if missing (graceful
-         *  degradation — Builder Jinja is supposed to include it). */
+         *  degradation — Builder Jinja is supposed to include it).
+         *
+         *  IMPORTANT: do NOT use div.textContent = msg here. The pre-built
+         *  footer error container (.lt-footer-newsletter__error) contains a
+         *  child <span> with a pre-built <a href="tel:+18012850860"> anchor
+         *  inside it. Setting textContent replaces ALL child nodes with a plain
+         *  text node — stripping the tel: link and making the phone number
+         *  unclickable on mobile (Execution F003 / loud-failure rule violation).
+         *
+         *  Fix: if the container was pre-built by Jinja (has the inner error-text
+         *  span), update only the span's text before the anchor.
+         *  If the container is freshly created (fallback path), build it with DOM
+         *  API so the tel: link is preserved.
+         */
         function showError(msg) {
             var div = errorDiv;
             if (!div) {
-                /* Graceful: create a fallback error element */
+                /* Fallback: create the error container from scratch with the
+                 * tel: anchor built via DOM API so it survives. */
                 div = document.createElement("div");
                 div.className = "lt-footer-newsletter__error";
                 div.setAttribute("role", "alert");
                 div.setAttribute("aria-live", "assertive");
+
+                var span = document.createElement("span");
+                span.className = "lt-footer-newsletter__error-text";
+
+                /* Build: <text> <a href="tel:...">(801) 285-0860</a>. */
+                span.appendChild(document.createTextNode(msg + " Please call "));
+                var telLink = document.createElement("a");
+                telLink.href = "tel:+18012850860";
+                telLink.className = "lt-footer-newsletter__error-phone";
+                telLink.textContent = "(801) 285-0860";
+                span.appendChild(telLink);
+                span.appendChild(document.createTextNode("."));
+
+                div.appendChild(span);
                 form.appendChild(div);
                 errorDiv = div;
+            } else {
+                /* Pre-built container (normal path): update only the text node
+                 * that precedes the tel: anchor inside the inner error-text span.
+                 * The span structure from footer.html is:
+                 *   <span class="lt-footer-newsletter__error-text">
+                 *     We couldn't add your email right now...
+                 *     <a href="tel:+18012850860">(801) 285-0860</a>.
+                 *   </span>
+                 * We find the first Text node child of the span and update it,
+                 * leaving the anchor intact. */
+                var errorSpan = div.querySelector(".lt-footer-newsletter__error-text");
+                if (errorSpan) {
+                    /* Find the first Text node and replace its data */
+                    var nodes = errorSpan.childNodes;
+                    var updated = false;
+                    for (var n = 0; n < nodes.length; n++) {
+                        if (nodes[n].nodeType === Node.TEXT_NODE) {
+                            nodes[n].data = msg + " Please call ";
+                            updated = true;
+                            break;
+                        }
+                    }
+                    if (!updated) {
+                        /* Span exists but has no text node (unexpected structure) —
+                         * prepend one safely. */
+                        errorSpan.insertBefore(
+                            document.createTextNode(msg + " Please call "),
+                            errorSpan.firstChild
+                        );
+                    }
+                } else {
+                    /* No inner span — safe fallback: build content with DOM API,
+                     * never textContent, to avoid clobbering any tel: anchors. */
+                    div.replaceChildren
+                        ? div.replaceChildren()
+                        : (function () { while (div.firstChild) div.removeChild(div.firstChild); }());
+                    var fallbackSpan = document.createElement("span");
+                    fallbackSpan.className = "lt-footer-newsletter__error-text";
+                    fallbackSpan.appendChild(document.createTextNode(msg + " Please call "));
+                    var fallbackLink = document.createElement("a");
+                    fallbackLink.href = "tel:+18012850860";
+                    fallbackLink.className = "lt-footer-newsletter__error-phone";
+                    fallbackLink.textContent = "(801) 285-0860";
+                    fallbackSpan.appendChild(fallbackLink);
+                    fallbackSpan.appendChild(document.createTextNode("."));
+                    div.appendChild(fallbackSpan);
+                }
             }
-            div.textContent = msg;
             div.removeAttribute("hidden");
             if (successDiv) successDiv.setAttribute("hidden", "");
         }

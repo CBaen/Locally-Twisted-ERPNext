@@ -58,8 +58,8 @@ web_include_css = "/assets/locally_twisted/css/lt-theme.css?v=20260430-5"
 #   Auto-binds to form[data-lt-newsletter] on DOMContentLoaded.
 web_include_js = [
     "/assets/locally_twisted/js/lt-guest-cart.js?v=20260429-1",
-    "/assets/locally_twisted/js/lt-megamenu.js?v=20260430-1",
-    "/assets/locally_twisted/js/lt-newsletter.js?v=20260430-1",
+    "/assets/locally_twisted/js/lt-megamenu.js?v=20260430-2",
+    "/assets/locally_twisted/js/lt-newsletter.js?v=20260430-2",
 ]
 
 # Friendly-URL aliases. Frappe's www/ router doesn't auto-translate

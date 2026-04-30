@@ -11,11 +11,19 @@ back to a plain HTML POST; the server returned an empty 200; the customer
 saw a blank page; no record was created. Jeff did not notice for ~10 days.
 This smoke test would have caught it on the first deploy.
 
+Contains two independent smoke tests:
+  1. smoke_test()        — /book form via Playwright browser automation
+  2. smoke_newsletter()  — newsletter API endpoint via direct HTTP POST
+
 Self-contained: no imports outside the standard library + playwright.
 """
 import argparse
+import json
 import sys
 import time
+import urllib.error
+import urllib.parse
+import urllib.request
 from pathlib import Path
 
 try:
