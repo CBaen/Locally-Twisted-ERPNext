@@ -115,11 +115,18 @@ def main() -> int:
         return 1
 
     catalog = json.loads(CATALOG_PATH.read_text(encoding="utf-8"))
-    attrs = collect_attributes_from_catalog(catalog)
+    attrs, normalize_map = collect_attributes_from_catalog(catalog)
 
     print(f"=== Found {len(attrs)} unique attribute names ===")
     for name in sorted(attrs.keys()):
         print(f"  {name:<25} {len(attrs[name])} values")
+
+    # Persist the normalization map for the bulk-import script to consume.
+    # Odoo's duplicate-casing values (e.g., 'Blue Slate' / 'Blue slate') need to
+    # be normalized when generating Item Variants so they reference the canonical name.
+    normalize_path = CATALOG_PATH.parent / "value_normalize_map.json"
+    normalize_path.write_text(json.dumps(normalize_map, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(f"  normalize map -> {normalize_path.relative_to(PROJECT_ROOT)}")
 
     records = build_fixture(attrs)
 
