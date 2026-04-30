@@ -25,11 +25,15 @@ from playwright.sync_api import sync_playwright
 
 BASE = "http://localhost:8081"
 TARGETS = [
+    ("shop-custom", f"{BASE}/shop"),
     ("shop-by-category", f"{BASE}/shop-by-category"),
-    ("shop-items", f"{BASE}/shop-items"),
-    ("product-baby-shower-garland", f"{BASE}/shop/baby-shower-garland"),
-    ("product-7-butterfly-column", f"{BASE}/shop/7-butterfly-column"),
-    ("shop-redirect", f"{BASE}/shop"),
+    ("category-arches", f"{BASE}/shop-items/arches"),
+    ("category-bouquets", f"{BASE}/shop-items/bouquets"),
+    ("category-garlands", f"{BASE}/shop-items/garlands"),
+    ("product-baby-shower-garland", f"{BASE}/shop-items/garlands/baby-shower-garland"),
+    ("product-7-butterfly-column", f"{BASE}/shop-items/columns/7-butterfly-column"),
+    ("product-basketball-arch", f"{BASE}/shop-items/arches/basketball-arch"),
+    ("product-unicorn-bouquet", f"{BASE}/shop-items/bouquets/unicorn-bouquet"),
     ("all-products", f"{BASE}/all-products"),
 ]
 VIEWPORTS = [
