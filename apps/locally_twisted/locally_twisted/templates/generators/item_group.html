@@ -13,6 +13,29 @@
 {% block breadcrumbs %}{% endblock %}
 
 {% block script %}
+{# Patch webshop's card builder BEFORE all-products/index.js calls it. The
+   default builder hardcodes item.item_group into a .product-category div
+   (renders as a category sub-tag like "Columns"). We swap it for the item's
+   short_description so cards match the Hetzner spec. #}
+<script>
+  (function patchProductGridForLT() {
+    if (typeof webshop !== 'undefined' && webshop.ProductGrid && webshop.ProductGrid.prototype.get_card_body_html) {
+      var orig = webshop.ProductGrid.prototype.get_card_body_html;
+      webshop.ProductGrid.prototype.get_card_body_html = function(item, title, settings) {
+        var html = orig.call(this, item, title, settings);
+        var desc = (item.short_description || item.web_long_description || '').replace(/<[^>]*>/g, '').trim();
+        var descSafe = desc.replace(/[<>"']/g, function(c){return '&#'+c.charCodeAt(0)+';';});
+        html = html.replace(
+          /<div class="product-category"[^>]*>[\s\S]*?<\/div>/,
+          desc ? '<div class="lt-card-desc">' + descSafe + '</div>' : ''
+        );
+        return html;
+      };
+      return;
+    }
+    setTimeout(patchProductGridForLT, 30);
+  })();
+</script>
 <script type="text/javascript" src="/all-products/index.js"></script>
 {% endblock %}
 
