@@ -1,384 +1,558 @@
-{# Locally Twisted navbar override.
+{# Locally Twisted navbar override — Round 1 Chrome Rebuild 2026-04-30
    Replaces apps/frappe/frappe/templates/includes/navbar/navbar.html
    via same-path resolution in Frappe's ChoiceLoader.
-   Approved structure: two-tier desktop (utility strip + main nav),
-   single-row mobile with hamburger. Source: Odoo XML header.xml.
+
+   Structure: two-tier desktop (utility bar | primary nav with 3 mega menus)
+   + mobile single-row + custom offcanvas drawer (aside[role=dialog]).
+
+   Context keys consumed (all provided by navbar_context.py):
+     brand_html            — injected by Frappe's website context
+     home_page             — injected by Frappe
+     frappe.session.user   — injected by Frappe
+     shop_categories       — list {name, item_group_name, route, weightage}
+     shop_root_route       — string (e.g. "shop-items")
+     mega_special_occasions — list {label, route}
+     mega_holidays_seasons  — list {label, route, column}
+     mega_what_we_make      — list {label, route, column}
+
+   JS contract (Builder JS owns lt-megamenu.js and lt-mobile-drawer.js):
+     Desktop mega menus:
+       - Trigger element: <button data-lt-megamenu-trigger="<panel-id>">
+       - Panel element:   <div id="<panel-id>" hidden>
+       - JS reads data-lt-megamenu-trigger to map trigger→panel
+       - JS toggles `hidden` attribute (NOT class) on the panel
+       - JS sets aria-expanded on the trigger
+
+     Mobile drawer:
+       - Drawer:   <aside id="lt-mobile-nav" role="dialog" aria-modal="true">
+       - Toggle:   <button id="lt-mobile-toggle">
+       - Backdrop: <div id="lt-mobile-backdrop">
+       - Close:    <button id="lt-mobile-close">
+       - Mobile accordion triggers: data-lt-accordion-trigger="<panel-id>"
+       - Mobile accordion panels:   id="<panel-id>" hidden
+
+   Cart badge:
+     <span class="lt-cart-count"> — populated by lt-guest-cart.js paintBadges().
+     Shown when .is-populated is present. Two instances: desktop utility bar
+     and mobile drawer.
+
+   CSS classes: all BEM-namespaced lt-* (lt-header__, lt-utility-bar__,
+   lt-megamenu__). NO inline <style> blocks. NO inline <script> blocks.
+   NO data-bs-* attributes. NO Bootstrap 5 utilities (gap-*, ms-*, me-*).
 #}
+
+{# ================================================================
+   DESKTOP NAV — hidden on mobile via d-none d-lg-block
+   ================================================================ #}
 <header class="lt-header">
 
-    {# Desktop: Tier 1 — utility bar (delivery left | logo center | login right) #}
-    <div class="lt-header__utility d-none d-lg-block">
-        <div class="container lt-header__utility-row">
-            <div class="lt-header__utility-left">
-                <span class="lt-header__truck" aria-hidden="true">
-                    {# Lucide truck. Flipped via CSS scaleX(-1) so cab faces right, toward the centered logo. #}
-                    <svg class="lt-header__icon lt-header__icon--truck" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false">
-                        <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/>
-                        <path d="M15 18H9"/>
-                        <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/>
-                        <circle cx="17" cy="18" r="2"/>
-                        <circle cx="7" cy="18" r="2"/>
-                    </svg>
-                </span>
-                <span>Bringing celebration to the<br>Wasatch Front since 1998</span>
-            </div>
+    <nav class="lt-header__desktop d-none d-lg-block" aria-label="Main navigation">
 
-            <a class="lt-header__brand" href="{{ home_page or '/' }}" aria-label="Locally Twisted home">
-                {%- if brand_html -%}
-                    {{ brand_html | safe }}
-                {%- else -%}
-                    <span class="lt-header__brand-fallback">Locally Twisted</span>
-                {%- endif -%}
-            </a>
+        {# Tier 1: Utility bar — truck tagline | logo | sign-in + cart + CTA #}
+        <div class="lt-utility-bar">
+            <div class="container lt-utility-bar__inner">
 
-            <div class="lt-header__utility-right">
-                {% if frappe.session.user == "Guest" %}
-                    <a class="lt-header__util-link" href="/login">Sign In</a>
-                {% else %}
-                    <a class="lt-header__util-link" href="/me">Account</a>
-                    <a class="lt-header__util-link" href="/api/method/logout">Sign Out</a>
-                {% endif %}
-                <a class="lt-header__util-link lt-header__util-link--cart" href="/cart" aria-label="Cart">
-                    {# Lucide shopping-cart. #}
-                    <svg class="lt-header__icon lt-header__icon--cart" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-                        <circle cx="8" cy="21" r="1"/>
-                        <circle cx="19" cy="21" r="1"/>
-                        <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
-                    </svg>
-                    <span class="lt-header__util-link-text">Cart</span>
-                    {# Cart count badge — populated/cleared by lt-guest-cart.js
-                       paintBadges() on every cart change. Hidden when 0
-                       via the absence of .is-populated. #}
-                    <span id="lt-cart-count" class="lt-cart-count" aria-live="polite" aria-atomic="true"></span>
+                <div class="lt-utility-bar__left">
+                    <img src="/assets/locally_twisted/icons/truck.svg"
+                         alt="" aria-hidden="true"
+                         class="lt-utility-bar__truck-icon"
+                         width="18" height="18">
+                    <span class="lt-utility-bar__tagline">Bringing celebration to the Wasatch Front since 1998</span>
+                </div>
+
+                <a class="lt-utility-bar__brand" href="{{ home_page or '/' }}" aria-label="Locally Twisted — go to homepage">
+                    {%- if brand_html -%}
+                        {{ brand_html | safe }}
+                    {%- else -%}
+                        <img src="/assets/locally_twisted/icons/lt-logo.png"
+                             alt="Locally Twisted"
+                             class="lt-utility-bar__logo"
+                             width="210" height="60">
+                    {%- endif -%}
                 </a>
+
+                <ul class="lt-utility-bar__right">
+                    {% if frappe.session.user == "Guest" %}
+                        <li>
+                            <a class="lt-utility-bar__sign-in" href="/login">Sign In</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a class="lt-utility-bar__sign-in" href="/me">My Account</a>
+                        </li>
+                    {% endif %}
+
+                    <li>
+                        <a class="lt-utility-bar__cart"
+                           href="/shop/cart"
+                           aria-label="Shopping cart">
+                            <img src="/assets/locally_twisted/icons/cart.svg"
+                                 alt="" aria-hidden="true"
+                                 width="20" height="20">
+                            <span class="lt-cart-count" aria-live="polite" aria-atomic="true"></span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="lt-utility-bar__cta btn btn-primary" href="/book">Contact Us</a>
+                    </li>
+                </ul>
+
             </div>
         </div>
-    </div>
 
-    {# Desktop: Tier 2 — main nav, centered. Shop is a mega menu dropdown.
-       Order: Twisting & Face Painting | Customizable Event Decor | Shop | Portfolio | Contact #}
-    <nav class="lt-header__nav d-none d-lg-block" aria-label="Primary">
-        <div class="container lt-header__nav-row">
-            <ul class="lt-header__nav-list">
-                <li><a class="lt-header__nav-link" href="/balloon-twisting-and-face-painting">Twisting &amp; Face Painting</a></li>
-                <li><a class="lt-header__nav-link" href="/customizable-event-decor">Customizable Event Decor</a></li>
-                <li class="lt-header__has-mega">
-                    <button type="button"
-                            class="lt-header__nav-link lt-header__nav-trigger"
-                            id="lt-shop-trigger"
-                            aria-haspopup="true"
-                            aria-expanded="false"
-                            aria-controls="lt-shop-mega">
-                        Shop
-                        <svg class="lt-header__nav-caret" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="m6 9 6 6 6-6"/>
-                        </svg>
-                    </button>
-                    <div class="lt-header__mega"
-                         id="lt-shop-mega"
-                         role="region"
-                         aria-label="Shop categories"
-                         hidden>
-                        <div class="lt-header__mega-inner">
-                            <a class="lt-header__mega-link lt-header__mega-link--all"
-                               href="/shop">
-                                <span class="lt-header__mega-link-label">All items</span>
-                                <span class="lt-header__mega-link-hint">Browse everything in one view</span>
-                            </a>
-                            {%- if shop_categories -%}
-                                {%- for cat in shop_categories -%}
-                                    <a class="lt-header__mega-link" href="/{{ cat.route }}">
-                                        <span class="lt-header__mega-link-label">{{ cat.item_group_name or cat.name }}</span>
-                                    </a>
-                                {%- endfor -%}
-                            {%- endif -%}
+        {# Tier 2: Primary nav — Balloon Twisting | 3 mega menus | overflow | search #}
+        <div class="lt-header__nav-bar">
+            <div class="container lt-header__nav-inner">
+
+                <ul class="lt-header__nav-list" role="menubar">
+
+                    <li role="none">
+                        <a class="lt-header__nav-link" href="/balloon-twisting-and-face-painting" role="menuitem">
+                            Balloon Twisting &amp; Face Painting
+                        </a>
+                    </li>
+
+                    {# ---- Mega 1: Special Occasions ---- #}
+                    <li class="lt-header__mega-item" role="none">
+                        <button type="button"
+                                class="lt-header__nav-link lt-header__nav-trigger"
+                                data-lt-megamenu-trigger="lt-mega-special-occasions"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                                aria-controls="lt-mega-special-occasions"
+                                role="menuitem">
+                            Special Occasions
+                            <svg class="lt-header__nav-caret"
+                                 xmlns="http://www.w3.org/2000/svg"
+                                 width="10" height="10"
+                                 viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor"
+                                 stroke-width="2.5" stroke-linecap="round"
+                                 stroke-linejoin="round"
+                                 aria-hidden="true" focusable="false">
+                                <path d="m6 9 6 6 6-6"/>
+                            </svg>
+                        </button>
+                        <div class="lt-megamenu"
+                             id="lt-mega-special-occasions"
+                             role="region"
+                             aria-label="Special Occasions categories"
+                             hidden>
+                            <div class="container lt-megamenu__inner">
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-4 lt-megamenu__col text-center">
+                                        <p class="lt-megamenu__heading">Life Events</p>
+                                        {%- if mega_special_occasions -%}
+                                            {%- for item in mega_special_occasions -%}
+                                                <a class="lt-megamenu__link" href="/{{ item.route }}">{{ item.label }}</a>
+                                            {%- endfor -%}
+                                        {%- endif -%}
+                                        <div class="lt-megamenu__cta-wrap">
+                                            <a class="lt-megamenu__cta" href="/{{ shop_root_route or 'shop-items' }}">Browse All</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </li>
-                <li><a class="lt-header__nav-link" href="/portfolio">Portfolio</a></li>
-                <li><a class="lt-header__nav-link" href="/contact">Contact</a></li>
-            </ul>
+                    </li>
+
+                    {# ---- Mega 2: Holidays & Seasons ---- #}
+                    <li class="lt-header__mega-item" role="none">
+                        <button type="button"
+                                class="lt-header__nav-link lt-header__nav-trigger"
+                                data-lt-megamenu-trigger="lt-mega-holidays-seasons"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                                aria-controls="lt-mega-holidays-seasons"
+                                role="menuitem">
+                            Holidays &amp; Seasons
+                            <svg class="lt-header__nav-caret"
+                                 xmlns="http://www.w3.org/2000/svg"
+                                 width="10" height="10"
+                                 viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor"
+                                 stroke-width="2.5" stroke-linecap="round"
+                                 stroke-linejoin="round"
+                                 aria-hidden="true" focusable="false">
+                                <path d="m6 9 6 6 6-6"/>
+                            </svg>
+                        </button>
+                        <div class="lt-megamenu"
+                             id="lt-mega-holidays-seasons"
+                             role="region"
+                             aria-label="Holidays and Seasons categories"
+                             hidden>
+                            <div class="container lt-megamenu__inner">
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-3 lt-megamenu__col text-center">
+                                        <p class="lt-megamenu__heading">Winter &amp; Spring</p>
+                                        {%- if mega_holidays_seasons -%}
+                                            {%- for item in mega_holidays_seasons if item.column == "winter_spring" -%}
+                                                <a class="lt-megamenu__link" href="/{{ item.route }}">{{ item.label }}</a>
+                                            {%- endfor -%}
+                                        {%- endif -%}
+                                    </div>
+                                    <div class="col-lg-3 lt-megamenu__col text-center">
+                                        <p class="lt-megamenu__heading">Spring &amp; Summer</p>
+                                        {%- if mega_holidays_seasons -%}
+                                            {%- for item in mega_holidays_seasons if item.column == "spring_summer" -%}
+                                                <a class="lt-megamenu__link" href="/{{ item.route }}">{{ item.label }}</a>
+                                            {%- endfor -%}
+                                        {%- endif -%}
+                                    </div>
+                                    <div class="col-lg-3 lt-megamenu__col text-center">
+                                        <p class="lt-megamenu__heading">Fall &amp; Winter</p>
+                                        {%- if mega_holidays_seasons -%}
+                                            {%- for item in mega_holidays_seasons if item.column == "fall_winter" -%}
+                                                <a class="lt-megamenu__link" href="/{{ item.route }}">{{ item.label }}</a>
+                                            {%- endfor -%}
+                                        {%- endif -%}
+                                    </div>
+                                </div>
+                                <div class="row justify-content-center lt-megamenu__browse-row">
+                                    <div class="col-auto">
+                                        <a class="lt-megamenu__cta" href="/{{ shop_root_route or 'shop-items' }}">Browse All Holidays</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    {# ---- Mega 3: What We Make ---- #}
+                    <li class="lt-header__mega-item" role="none">
+                        <button type="button"
+                                class="lt-header__nav-link lt-header__nav-trigger"
+                                data-lt-megamenu-trigger="lt-mega-what-we-make"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                                aria-controls="lt-mega-what-we-make"
+                                role="menuitem">
+                            What We Make
+                            <svg class="lt-header__nav-caret"
+                                 xmlns="http://www.w3.org/2000/svg"
+                                 width="10" height="10"
+                                 viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor"
+                                 stroke-width="2.5" stroke-linecap="round"
+                                 stroke-linejoin="round"
+                                 aria-hidden="true" focusable="false">
+                                <path d="m6 9 6 6 6-6"/>
+                            </svg>
+                        </button>
+                        <div class="lt-megamenu"
+                             id="lt-mega-what-we-make"
+                             role="region"
+                             aria-label="What We Make categories"
+                             hidden>
+                            <div class="container lt-megamenu__inner">
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-3 lt-megamenu__col text-center">
+                                        <p class="lt-megamenu__heading">Arrangements</p>
+                                        {%- if mega_what_we_make -%}
+                                            {%- for item in mega_what_we_make if item.column == "arrangements" -%}
+                                                <a class="lt-megamenu__link" href="/{{ item.route }}">{{ item.label }}</a>
+                                            {%- endfor -%}
+                                        {%- endif -%}
+                                    </div>
+                                    <div class="col-lg-3 lt-megamenu__col text-center">
+                                        <p class="lt-megamenu__heading">Installations</p>
+                                        {%- if mega_what_we_make -%}
+                                            {%- for item in mega_what_we_make if item.column == "installations" -%}
+                                                <a class="lt-megamenu__link" href="/{{ item.route }}">{{ item.label }}</a>
+                                            {%- endfor -%}
+                                        {%- endif -%}
+                                    </div>
+                                    <div class="col-lg-3 lt-megamenu__col text-center">
+                                        <p class="lt-megamenu__heading">Accents</p>
+                                        {%- if mega_what_we_make -%}
+                                            {%- for item in mega_what_we_make if item.column == "accents" -%}
+                                                <a class="lt-megamenu__link" href="/{{ item.route }}">{{ item.label }}</a>
+                                            {%- endfor -%}
+                                        {%- endif -%}
+                                    </div>
+                                </div>
+                                <div class="row justify-content-center lt-megamenu__browse-row">
+                                    <div class="col-auto">
+                                        <a class="lt-megamenu__cta" href="/{{ shop_root_route or 'shop-items' }}">Shop All Products</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    {# ---- Overflow: Contact, Blog ---- #}
+                    <li class="lt-header__overflow" role="none">
+                        <a class="lt-header__nav-link" href="/contact" role="menuitem">Contact</a>
+                    </li>
+                    <li class="lt-header__overflow" role="none">
+                        <a class="lt-header__nav-link" href="/blog" role="menuitem">Blog</a>
+                    </li>
+
+                </ul>
+
+                {# Search — Frappe website search modal trigger.
+                   Frappe ships a search modal at #o_search_modal via the website bundle.
+                   We link to /search as a graceful fallback if the modal isn't active. #}
+                <a href="/search"
+                   class="lt-header__search-btn"
+                   aria-label="Search the site"
+                   title="Search">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         width="18" height="18"
+                         viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor"
+                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                         aria-hidden="true" focusable="false">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.3-4.3"/>
+                    </svg>
+                </a>
+
+            </div>
         </div>
+
     </nav>
 
-    {# Mobile: single-row header with logo left, hamburger right.
-       The delivery strip appears below it, full-width. #}
+    {# ================================================================
+       MOBILE NAV — visible only on mobile via d-lg-none
+       Single row: logo left | cart + hamburger right
+       Delivery strip appears below the nav row.
+       ================================================================ #}
     <div class="lt-header__mobile d-lg-none">
+
         <div class="container lt-header__mobile-row">
-            <a class="lt-header__brand lt-header__brand--mobile" href="{{ home_page or '/' }}" aria-label="Locally Twisted home">
+
+            <a class="lt-header__mobile-brand" href="{{ home_page or '/' }}" aria-label="Locally Twisted — go to homepage">
                 {%- if brand_html -%}
                     {{ brand_html | safe }}
                 {%- else -%}
-                    <span class="lt-header__brand-fallback">Locally Twisted</span>
+                    <img src="/assets/locally_twisted/icons/lt-logo.png"
+                         alt="Locally Twisted"
+                         class="lt-header__mobile-logo"
+                         width="95" height="40">
                 {%- endif -%}
             </a>
-            <button type="button"
-                    class="lt-header__toggle"
-                    id="lt-mobile-toggle"
-                    aria-controls="lt-mobile-nav"
-                    aria-expanded="false"
-                    aria-label="Open menu">
-                <img src="/assets/locally_twisted/icons/menu.svg" alt="" aria-hidden="true" width="24" height="24">
-            </button>
+
+            <div class="lt-header__mobile-actions">
+                <a class="lt-header__mobile-cart"
+                   href="/shop/cart"
+                   aria-label="Shopping cart">
+                    <img src="/assets/locally_twisted/icons/cart.svg"
+                         alt="" aria-hidden="true"
+                         width="22" height="22">
+                    <span class="lt-cart-count lt-cart-count--mobile" aria-live="polite" aria-atomic="true"></span>
+                </a>
+                <button type="button"
+                        class="lt-header__toggle"
+                        id="lt-mobile-toggle"
+                        aria-controls="lt-mobile-nav"
+                        aria-expanded="false"
+                        aria-label="Open navigation menu">
+                    <img src="/assets/locally_twisted/icons/menu.svg"
+                         alt="" aria-hidden="true"
+                         width="24" height="24">
+                </button>
+            </div>
+
         </div>
+
         <div class="lt-header__mobile-strip">
-            <span class="lt-header__truck" aria-hidden="true">
-                {# Lucide truck, flipped to face the brand. Same SVG as desktop. #}
-                <svg class="lt-header__icon lt-header__icon--truck" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false">
-                    <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/>
-                    <path d="M15 18H9"/>
-                    <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/>
-                    <circle cx="17" cy="18" r="2"/>
-                    <circle cx="7" cy="18" r="2"/>
-                </svg>
-            </span>
-            <span>Bringing celebration to the Wasatch Front since 1998</span>
+            <img src="/assets/locally_twisted/icons/truck.svg"
+                 alt="" aria-hidden="true"
+                 class="lt-utility-bar__truck-icon"
+                 width="14" height="14">
+            <small>Bringing celebration to the Wasatch Front since 1998</small>
         </div>
+
     </div>
 
 </header>
 
-<style>
-/* Cart count badge — populated by lt-guest-cart.js paintBadges() on
-   every cart change. Hidden when count = 0 via absence of .is-populated.
-   Lives inline so the navbar partial is self-contained. */
-.lt-header__util-link--cart {
-    position: relative;
-}
-.lt-cart-count {
-    display: none;
-    position: absolute;
-    top: -6px;
-    right: -10px;
-    min-width: 18px;
-    height: 18px;
-    padding: 0 5px;
-    background-color: #c0392b;
-    color: #ffffff;
-    border-radius: 9px;
-    font-family: 'Raleway', sans-serif;
-    font-size: 10px;
-    font-weight: 700;
-    line-height: 18px;
-    text-align: center;
-    box-sizing: border-box;
-    pointer-events: none;
-}
-.lt-cart-count.is-populated {
-    display: inline-block;
-}
-.lt-cart-count--mobile {
-    position: static;
-    margin-left: 0.5rem;
-    background-color: var(--lt-teal, #107373);
-    vertical-align: middle;
-}
-</style>
+{# ================================================================
+   MOBILE DRAWER — positioned outside <header> stacking context
+   so it overlays the full page. Hidden on desktop via CSS.
+   JS: lt-megamenu.js handles drawer open/close + accordion expand.
+   ================================================================ #}
+<div class="lt-header__backdrop"
+     id="lt-mobile-backdrop"
+     aria-hidden="true"></div>
 
-{# ====================================================================
-   Mobile drawer + backdrop. Positioned OUTSIDE the <header> stacking
-   context so they overlay the page cleanly. Hidden on desktop via CSS
-   (the overlay relies on the .d-lg-none toggle being unreachable).
-   Per GL 2026-04-28: drawer must overlay (not push the page down) and
-   the hamburger must stay accessible while scrolling (sticky header).
-   ==================================================================== #}
-<div class="lt-header__backdrop" id="lt-mobile-backdrop" aria-hidden="true"></div>
-<aside class="lt-header__mobile-nav-collapse"
+<aside class="lt-header__mobile-nav"
        id="lt-mobile-nav"
        role="dialog"
        aria-modal="true"
        aria-labelledby="lt-mobile-nav-heading"
        aria-hidden="true">
+
     <div class="lt-header__drawer-head">
-        <h2 id="lt-mobile-nav-heading" class="visually-hidden">Menu</h2>
+        <h2 id="lt-mobile-nav-heading" class="visually-hidden">Navigation menu</h2>
         <button type="button"
                 class="lt-header__close"
                 id="lt-mobile-close"
-                aria-label="Close menu">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                 aria-hidden="true">
-                <path d="M6 6 L18 18 M18 6 L6 18"/>
+                aria-label="Close navigation menu">
+            <svg width="22" height="22" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round"
+                 aria-hidden="true" focusable="false">
+                <path d="M6 6L18 18M18 6L6 18"/>
             </svg>
         </button>
     </div>
-    <nav aria-label="Mobile primary">
+
+    {# Mobile search — inline form at top of drawer #}
+    <div class="lt-header__drawer-search">
+        <form method="get" action="/search" role="search">
+            <div class="lt-header__search-group">
+                <input type="search"
+                       name="q"
+                       class="lt-header__search-input"
+                       placeholder="Search…"
+                       aria-label="Search the site">
+                <button type="submit"
+                        class="lt-header__search-submit"
+                        aria-label="Submit search">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         width="16" height="16"
+                         viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor"
+                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                         aria-hidden="true" focusable="false">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.3-4.3"/>
+                    </svg>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <nav aria-label="Mobile navigation">
         <ul class="lt-header__mobile-nav-list">
-            <li><a class="lt-header__mobile-nav-link" href="/balloon-twisting-and-face-painting">Twisting &amp; Face Painting</a></li>
-            <li><a class="lt-header__mobile-nav-link" href="/customizable-event-decor">Customizable Event Decor</a></li>
-            <li class="lt-header__mobile-accordion">
+
+            <li class="lt-header__mobile-nav-item">
+                <a class="lt-header__mobile-nav-link"
+                   href="/balloon-twisting-and-face-painting">
+                    Balloon Twisting &amp; Face Painting
+                </a>
+            </li>
+
+            {# ---- Mobile accordion 1: Special Occasions ---- #}
+            <li class="lt-header__mobile-accordion-item">
                 <button type="button"
                         class="lt-header__mobile-nav-link lt-header__mobile-accordion-toggle"
+                        data-lt-accordion-trigger="lt-mob-special-occasions"
                         aria-expanded="false"
-                        aria-controls="lt-mobile-shop-panel">
-                    Shop
-                    <svg class="lt-header__mobile-accordion-caret" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        aria-controls="lt-mob-special-occasions">
+                    Special Occasions
+                    <svg class="lt-header__mobile-caret"
+                         xmlns="http://www.w3.org/2000/svg"
+                         width="14" height="14"
+                         viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor"
+                         stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                         aria-hidden="true" focusable="false">
                         <path d="m6 9 6 6 6-6"/>
                     </svg>
                 </button>
                 <ul class="lt-header__mobile-accordion-panel"
-                    id="lt-mobile-shop-panel"
+                    id="lt-mob-special-occasions"
                     hidden>
-                    <li><a class="lt-header__mobile-nav-sublink" href="/shop">All items</a></li>
-                    {%- if shop_categories -%}
-                        {%- for cat in shop_categories -%}
-                            <li><a class="lt-header__mobile-nav-sublink" href="/{{ cat.route }}">{{ cat.item_group_name or cat.name }}</a></li>
+                    {%- if mega_special_occasions -%}
+                        {%- for item in mega_special_occasions -%}
+                            <li><a class="lt-header__mobile-nav-sublink" href="/{{ item.route }}">{{ item.label }}</a></li>
                         {%- endfor -%}
                     {%- endif -%}
+                    <li><a class="lt-header__mobile-nav-sublink lt-header__mobile-nav-sublink--all" href="/{{ shop_root_route or 'shop-items' }}">Browse All</a></li>
                 </ul>
             </li>
-            <li><a class="lt-header__mobile-nav-link" href="/portfolio">Portfolio</a></li>
-            <li><a class="lt-header__mobile-nav-link" href="/contact">Contact</a></li>
+
+            {# ---- Mobile accordion 2: Holidays & Seasons ---- #}
+            <li class="lt-header__mobile-accordion-item">
+                <button type="button"
+                        class="lt-header__mobile-nav-link lt-header__mobile-accordion-toggle"
+                        data-lt-accordion-trigger="lt-mob-holidays-seasons"
+                        aria-expanded="false"
+                        aria-controls="lt-mob-holidays-seasons">
+                    Holidays &amp; Seasons
+                    <svg class="lt-header__mobile-caret"
+                         xmlns="http://www.w3.org/2000/svg"
+                         width="14" height="14"
+                         viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor"
+                         stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                         aria-hidden="true" focusable="false">
+                        <path d="m6 9 6 6 6-6"/>
+                    </svg>
+                </button>
+                <ul class="lt-header__mobile-accordion-panel"
+                    id="lt-mob-holidays-seasons"
+                    hidden>
+                    {%- if mega_holidays_seasons -%}
+                        {%- for item in mega_holidays_seasons -%}
+                            <li><a class="lt-header__mobile-nav-sublink" href="/{{ item.route }}">{{ item.label }}</a></li>
+                        {%- endfor -%}
+                    {%- endif -%}
+                    <li><a class="lt-header__mobile-nav-sublink lt-header__mobile-nav-sublink--all" href="/{{ shop_root_route or 'shop-items' }}">Browse All Holidays</a></li>
+                </ul>
+            </li>
+
+            {# ---- Mobile accordion 3: What We Make ---- #}
+            <li class="lt-header__mobile-accordion-item">
+                <button type="button"
+                        class="lt-header__mobile-nav-link lt-header__mobile-accordion-toggle"
+                        data-lt-accordion-trigger="lt-mob-what-we-make"
+                        aria-expanded="false"
+                        aria-controls="lt-mob-what-we-make">
+                    What We Make
+                    <svg class="lt-header__mobile-caret"
+                         xmlns="http://www.w3.org/2000/svg"
+                         width="14" height="14"
+                         viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor"
+                         stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                         aria-hidden="true" focusable="false">
+                        <path d="m6 9 6 6 6-6"/>
+                    </svg>
+                </button>
+                <ul class="lt-header__mobile-accordion-panel"
+                    id="lt-mob-what-we-make"
+                    hidden>
+                    {%- if mega_what_we_make -%}
+                        {%- for item in mega_what_we_make -%}
+                            <li><a class="lt-header__mobile-nav-sublink" href="/{{ item.route }}">{{ item.label }}</a></li>
+                        {%- endfor -%}
+                    {%- endif -%}
+                    <li><a class="lt-header__mobile-nav-sublink lt-header__mobile-nav-sublink--all" href="/{{ shop_root_route or 'shop-items' }}">Shop All Products</a></li>
+                </ul>
+            </li>
+
+            <li class="lt-header__mobile-nav-item">
+                <a class="lt-header__mobile-nav-link" href="/contact">Contact</a>
+            </li>
+
+            <li class="lt-header__mobile-nav-item">
+                <a class="lt-header__mobile-nav-link" href="/blog">Blog</a>
+            </li>
+
             <li class="lt-header__mobile-nav-divider" role="separator"></li>
+
             {% if frappe.session.user == "Guest" %}
-                <li><a class="lt-header__mobile-nav-link" href="/login">Sign In</a></li>
+                <li class="lt-header__mobile-nav-item">
+                    <a class="lt-header__mobile-nav-link" href="/login">Sign In</a>
+                </li>
             {% else %}
-                <li><a class="lt-header__mobile-nav-link" href="/me">Account</a></li>
-                <li><a class="lt-header__mobile-nav-link" href="/api/method/logout">Sign Out</a></li>
+                <li class="lt-header__mobile-nav-item">
+                    <a class="lt-header__mobile-nav-link" href="/me">My Account</a>
+                </li>
             {% endif %}
-            <li><a class="lt-header__mobile-nav-link" href="/cart">Cart <span class="lt-cart-count lt-cart-count--mobile" aria-live="polite" aria-atomic="true"></span></a></li>
+
+            <li class="lt-header__mobile-nav-item">
+                <a class="lt-header__mobile-nav-link lt-header__mobile-nav-link--cta btn btn-primary" href="/book">
+                    Contact Us
+                </a>
+            </li>
+
         </ul>
     </nav>
+
 </aside>
-
-<script>
-/* Mobile drawer behavior — open/close on toggle, close on:
- * backdrop click, close-button click, Esc key, or any nav-link click
- * (so an in-page anchor doesn't leave the drawer hanging). Body scroll
- * locks while open via the .lt-nav-open class. ARIA states track the
- * open/close so screen readers see the right thing. */
-(function () {
-    'use strict';
-    var toggle   = document.getElementById('lt-mobile-toggle');
-    var drawer   = document.getElementById('lt-mobile-nav');
-    var backdrop = document.getElementById('lt-mobile-backdrop');
-    var closeBtn = document.getElementById('lt-mobile-close');
-    if (!toggle || !drawer || !backdrop) return;
-
-    function open() {
-        drawer.classList.add('is-open');
-        backdrop.classList.add('is-open');
-        document.body.classList.add('lt-nav-open');
-        toggle.setAttribute('aria-expanded', 'true');
-        drawer.setAttribute('aria-hidden', 'false');
-        backdrop.setAttribute('aria-hidden', 'false');
-        if (closeBtn) {
-            // Defer focus until transition starts so screen readers
-            // pick up the dialog state correctly.
-            window.setTimeout(function () { closeBtn.focus(); }, 50);
-        }
-    }
-
-    function close() {
-        drawer.classList.remove('is-open');
-        backdrop.classList.remove('is-open');
-        document.body.classList.remove('lt-nav-open');
-        toggle.setAttribute('aria-expanded', 'false');
-        drawer.setAttribute('aria-hidden', 'true');
-        backdrop.setAttribute('aria-hidden', 'true');
-        toggle.focus();
-    }
-
-    toggle.addEventListener('click', function () {
-        if (drawer.classList.contains('is-open')) close(); else open();
-    });
-    if (closeBtn) closeBtn.addEventListener('click', close);
-    backdrop.addEventListener('click', close);
-
-    document.addEventListener('keydown', function (ev) {
-        if (ev.key === 'Escape' && drawer.classList.contains('is-open')) {
-            close();
-        }
-    });
-
-    // Close when a nav LINK (not the accordion toggle button) is clicked.
-    // Same-page anchors don't reload, so without this the drawer would stay
-    // open after navigating. Exclude the accordion toggle since clicking it
-    // expands the sub-list rather than navigating.
-    var navLinks = drawer.querySelectorAll(
-        '.lt-header__mobile-nav-link:not(.lt-header__mobile-accordion-toggle), ' +
-        '.lt-header__mobile-nav-sublink'
-    );
-    for (var i = 0; i < navLinks.length; i++) {
-        navLinks[i].addEventListener('click', close);
-    }
-
-    // Mobile Shop accordion: tap to expand sub-list of categories.
-    var accToggle = drawer.querySelector('.lt-header__mobile-accordion-toggle');
-    var accPanel  = drawer.querySelector('#lt-mobile-shop-panel');
-    if (accToggle && accPanel) {
-        accToggle.addEventListener('click', function () {
-            var isOpen = accToggle.getAttribute('aria-expanded') === 'true';
-            accToggle.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
-            if (isOpen) {
-                accPanel.setAttribute('hidden', '');
-            } else {
-                accPanel.removeAttribute('hidden');
-            }
-        });
-    }
-})();
-
-/* Desktop mega menu — hover-or-click to open, Escape or outside-click to close.
- * ARIA: aria-expanded toggles on the trigger, hidden attribute toggles on the panel,
- * focus management keeps screen-reader pacing right. Tab moves through links naturally.
- * No menu role used (per WCAG nav-dropdown guidance, role="menu" creates arrow-key
- * expectations that conflict with Tab-based browsing — region is correct here). */
-(function () {
-    'use strict';
-    var trigger = document.getElementById('lt-shop-trigger');
-    var panel   = document.getElementById('lt-shop-mega');
-    var li      = trigger ? trigger.closest('.lt-header__has-mega') : null;
-    if (!trigger || !panel || !li) return;
-
-    var openTimer = null;
-    var closeTimer = null;
-
-    function open() {
-        if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
-        trigger.setAttribute('aria-expanded', 'true');
-        panel.removeAttribute('hidden');
-        li.classList.add('is-open');
-    }
-    function close() {
-        if (openTimer) { clearTimeout(openTimer); openTimer = null; }
-        trigger.setAttribute('aria-expanded', 'false');
-        panel.setAttribute('hidden', '');
-        li.classList.remove('is-open');
-    }
-    function scheduleOpen()  { openTimer  = setTimeout(open, 80); }
-    function scheduleClose() { closeTimer = setTimeout(close, 200); }
-
-    // Click trigger toggles
-    trigger.addEventListener('click', function (e) {
-        e.preventDefault();
-        if (trigger.getAttribute('aria-expanded') === 'true') close(); else open();
-    });
-
-    // Hover open/close on the wrapper li
-    li.addEventListener('mouseenter', scheduleOpen);
-    li.addEventListener('mouseleave', scheduleClose);
-
-    // Keyboard: open on Enter/Space (default button behavior)
-    // Escape closes from anywhere
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && trigger.getAttribute('aria-expanded') === 'true') {
-            close();
-            trigger.focus();
-        }
-    });
-
-    // Click outside closes
-    document.addEventListener('click', function (e) {
-        if (li.contains(e.target)) return;
-        if (trigger.getAttribute('aria-expanded') === 'true') close();
-    });
-
-    // Tab outside the panel closes (focus moved away)
-    panel.addEventListener('focusout', function (e) {
-        if (!panel.contains(e.relatedTarget) && e.relatedTarget !== trigger) {
-            close();
-        }
-    });
-})();
-</script>

@@ -1,99 +1,213 @@
-{# Locally Twisted footer override.
+{# Locally Twisted footer override — Round 1 Chrome Rebuild 2026-04-30
    Replaces apps/frappe/frappe/templates/includes/footer/footer.html
-   via same-path resolution in Frappe's ChoiceLoader. Ignores Frappe's
-   default sub-includes (footer_logo_extension, footer_grouped_links,
-   footer_links, footer_info) and writes the LT-shaped structure
-   directly. Source: Odoo XML footer.xml.
-   Newsletter signup is intentionally omitted until Phase 4 wires
-   a real list backend (loud-failure rule: no silent forms).
+   via same-path resolution in Frappe's ChoiceLoader.
+
+   Structure:
+     1. Newsletter strip — "Stay in the loop" + email input + Join button
+     2. Main footer — centered brand + tagline + 3 social icons
+     3. Three-column links — Shop | Company | Get In Touch
+     4. Legal bar — copyright + Refund Policy + Accessibility
+
+   Newsletter form contract (Builder JS owns lt-newsletter.js):
+     - Form element:        <form data-lt-newsletter>
+     - Email input:         <input type="email" name="email" data-lt-newsletter-email>
+     - Submit button:       <button type="submit" data-lt-newsletter-submit>
+     - Success container:   <div data-lt-newsletter-success hidden role="status">
+     - Error container:     <div data-lt-newsletter-error hidden role="alert">
+     JS calls window.LT.newsletter.submit(email) → Promise {ok, message/error}
+     On resolve ok=true:  show success container, hide form
+     On resolve ok=false: show error container with message + phone fallback
+
+   Loud-failure rule (rules/loud-failure.md):
+     - Error container MUST show user-visible message on failure, including
+       the phone fallback: "(801) 285-0860"
+     - Server endpoint logs via frappe.log_error (Builder JS + backend own this)
+     - Smoke test entry required (Builder JS domain)
+
+   Column layout decision (2026-04-30):
+     Hetzner uses col-12 col-md-4 (stacks on mobile). Prior footer.html used
+     col-4 (always 3-across). This rebuild defaults to Hetzner-faithful
+     stacking — col-12 col-md-4. GL may override to col-4 if always-3-across
+     is preferred after visual review.
+
+   Social icon links (verbatim from mirror INVENTORY.md §3):
+     Facebook:  https://facebook.com/locallytwisted
+     Instagram: https://instagram.com/locally_twisted
+     Pinterest: https://pinterest.com/locallytwisted
+     NO Twitter.
+
+   CSS classes: all BEM-namespaced lt-footer__* and lt-footer-newsletter__*.
+   Odoo s_lt_* classes are renamed to lt-footer__* throughout.
+   NO inline <style> blocks. NO Bootstrap 5 utilities.
 #}
+
 <footer class="lt-footer">
 
-    {# Section 1: Centered brand + 3 social icons (no Twitter) #}
-    <section class="lt-footer__brand-band">
-        <div class="container lt-footer__brand-inner">
-            <p class="lt-footer__brand-name">Locally Twisted</p>
-            <p class="lt-footer__brand-tagline">Utah's Balloon Specialists since 1998.</p>
-            <nav class="lt-footer__social" aria-label="Locally Twisted on social media">
-                <a href="https://facebook.com/locallytwisted"
-                   target="_blank" rel="noopener noreferrer"
-                   class="lt-footer__social-link"
-                   aria-label="Locally Twisted on Facebook (opens in new tab)">
-                    <img src="/assets/locally_twisted/icons/facebook.svg" alt="" aria-hidden="true" width="24" height="24">
-                </a>
-                <a href="https://instagram.com/locally_twisted"
-                   target="_blank" rel="noopener noreferrer"
-                   class="lt-footer__social-link"
-                   aria-label="Locally Twisted on Instagram (opens in new tab)">
-                    <img src="/assets/locally_twisted/icons/instagram.svg" alt="" aria-hidden="true" width="24" height="24">
-                </a>
-                <a href="https://pinterest.com/locallytwisted"
-                   target="_blank" rel="noopener noreferrer"
-                   class="lt-footer__social-link"
-                   aria-label="Locally Twisted on Pinterest (opens in new tab)">
-                    <img src="/assets/locally_twisted/icons/pinterest.svg" alt="" aria-hidden="true" width="24" height="24">
-                </a>
-            </nav>
+    {# ================================================================
+       Section 1: Newsletter strip
+       ================================================================ #}
+    <section class="lt-footer-newsletter" aria-label="Newsletter signup">
+        <div class="container lt-footer-newsletter__inner text-center">
+
+            <p class="lt-footer-newsletter__heading">Stay in the loop</p>
+            <p class="lt-footer-newsletter__subhead">Seasonal specials, new designs, and celebration ideas.</p>
+
+            <form class="lt-footer-newsletter__form" data-lt-newsletter novalidate>
+                <div class="lt-footer-newsletter__input-group">
+                    <input type="email"
+                           name="email"
+                           data-lt-newsletter-email
+                           class="lt-footer-newsletter__input form-control"
+                           placeholder="Your email address"
+                           aria-label="Email address for newsletter"
+                           autocomplete="email"
+                           required>
+                    <button type="submit"
+                            data-lt-newsletter-submit
+                            class="lt-footer-newsletter__btn btn btn-primary">
+                        Join
+                    </button>
+                </div>
+
+                {# Success state — shown by lt-newsletter.js on ok=true #}
+                <div class="lt-footer-newsletter__success"
+                     data-lt-newsletter-success
+                     hidden
+                     role="status"
+                     aria-live="polite">
+                    <span class="lt-footer-newsletter__success-text">
+                        You're on the list. Welcome!
+                    </span>
+                </div>
+
+                {# Error state — shown by lt-newsletter.js on ok=false.
+                   Loud-failure rule: must include a phone fallback so the
+                   user has a human path when the form fails. #}
+                <div class="lt-footer-newsletter__error"
+                     data-lt-newsletter-error
+                     hidden
+                     role="alert"
+                     aria-live="assertive">
+                    <span class="lt-footer-newsletter__error-text">
+                        We couldn't add your email right now. Please try again or call us at
+                        <a href="tel:+18012850860" class="lt-footer-newsletter__error-phone">(801) 285-0860</a>.
+                    </span>
+                </div>
+
+            </form>
+
         </div>
     </section>
 
-    {# Section 2: Three-column links #}
-    <nav class="lt-footer__links" aria-label="Footer">
+    {# ================================================================
+       Section 2: Brand + tagline + social icons (centered)
+       ================================================================ #}
+    <section class="lt-footer__brand-band">
+        <div class="container lt-footer__brand-inner text-center">
+
+            <p class="lt-footer__brand-name">Locally Twisted</p>
+            <p class="lt-footer__brand-tagline">Utah's Balloon Specialists since 1998.</p>
+
+            <nav class="lt-footer__social" aria-label="Locally Twisted on social media">
+                <a href="https://facebook.com/locallytwisted"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="lt-footer__social-link"
+                   aria-label="Locally Twisted on Facebook (opens in new tab)">
+                    <img src="/assets/locally_twisted/icons/facebook.svg"
+                         alt="" aria-hidden="true"
+                         width="24" height="24">
+                    <span class="visually-hidden">(opens in new tab)</span>
+                </a>
+                <a href="https://instagram.com/locally_twisted"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="lt-footer__social-link"
+                   aria-label="Locally Twisted on Instagram (opens in new tab)">
+                    <img src="/assets/locally_twisted/icons/instagram.svg"
+                         alt="" aria-hidden="true"
+                         width="24" height="24">
+                    <span class="visually-hidden">(opens in new tab)</span>
+                </a>
+                <a href="https://pinterest.com/locallytwisted"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="lt-footer__social-link"
+                   aria-label="Locally Twisted on Pinterest (opens in new tab)">
+                    <img src="/assets/locally_twisted/icons/pinterest.svg"
+                         alt="" aria-hidden="true"
+                         width="24" height="24">
+                    <span class="visually-hidden">(opens in new tab)</span>
+                </a>
+            </nav>
+
+        </div>
+    </section>
+
+    {# ================================================================
+       Section 3: Three-column link grid
+       col-12 col-md-4 — stacks on mobile, 3-across at md+ (Hetzner-faithful)
+       ================================================================ #}
+    <nav class="lt-footer__links" aria-label="Footer navigation">
         <div class="container">
-            <div class="row">
-                <div class="col-4 lt-footer__col">
+            <div class="row lt-footer__links-row">
+
+                <div class="col-12 col-md-4 lt-footer__col">
                     <p class="lt-footer__col-title">Shop</p>
                     <ul class="list-unstyled lt-footer__col-list">
-                        <li><a href="/all-products">All Products</a></li>
-                        <li><a href="/shop-by-category">Special Occasions</a></li>
-                        <li><a href="/shop-by-category">Holidays &amp; Seasons</a></li>
-                        <li><a href="/all-products">What We Make</a></li>
+                        <li><a class="lt-footer__col-link" href="/all-products">All Products</a></li>
+                        <li><a class="lt-footer__col-link" href="/shop/category/special-occasions-1">Special Occasions</a></li>
+                        <li><a class="lt-footer__col-link" href="/shop/category/holidays-seasons-2">Holidays &amp; Seasons</a></li>
+                        <li><a class="lt-footer__col-link" href="/{{ shop_root_route or 'shop-items' }}">What We Make</a></li>
                     </ul>
                 </div>
 
-                <div class="col-4 lt-footer__col">
+                <div class="col-12 col-md-4 lt-footer__col">
                     <p class="lt-footer__col-title">Company</p>
                     <ul class="list-unstyled lt-footer__col-list">
-                        <li><a href="/about">About Us</a></li>
-                        <li><a href="/balloon-twisting-and-face-painting">Balloon Twisting</a></li>
-                        <li><a href="/book">Book an Event</a></li>
-                        <li><a href="/blog">Behind the Balloons</a></li>
-                        <li><a href="/contact">Contact</a></li>
+                        <li><a class="lt-footer__col-link" href="/about">About Us</a></li>
+                        <li><a class="lt-footer__col-link" href="/balloon-twisting-and-face-painting">Balloon Twisting</a></li>
+                        <li><a class="lt-footer__col-link" href="/book">Book an Event</a></li>
+                        <li><a class="lt-footer__col-link" href="/blog">Behind the Balloons</a></li>
+                        <li><a class="lt-footer__col-link" href="/contact">Contact</a></li>
                     </ul>
                 </div>
 
-                <div class="col-4 lt-footer__col">
+                <div class="col-12 col-md-4 lt-footer__col">
                     <p class="lt-footer__col-title">Get In Touch</p>
                     <ul class="list-unstyled lt-footer__col-list lt-footer__col-list--info">
-                        <li>
-                            <span class="lt-footer__icon" aria-hidden="true">&#x1F4CD;</span>
+                        <li class="lt-footer__info-item">
+                            <i class="fa fa-map-marker fa-fw" aria-hidden="true"></i>
                             <span>West Jordan, UT</span>
                         </li>
-                        <li>
-                            <a href="tel:+18012850860">
-                                <span class="lt-footer__icon" aria-hidden="true">&#x260E;</span>
+                        <li class="lt-footer__info-item">
+                            <a href="tel:+18012850860" class="lt-footer__col-link">
+                                <i class="fa fa-phone fa-fw" aria-hidden="true"></i>
                                 <span>(801) 285-0860</span>
                             </a>
                         </li>
-                        <li>
-                            <span class="lt-footer__icon" aria-hidden="true">&#x1F552;</span>
+                        <li class="lt-footer__info-item">
+                            <i class="fa fa-clock-o fa-fw" aria-hidden="true"></i>
                             <span>Tue&ndash;Fri 12&ndash;6, Sat 10&ndash;4</span>
                         </li>
                     </ul>
                 </div>
+
             </div>
         </div>
     </nav>
 
-    {# Section 3: Centered copyright bar #}
+    {# ================================================================
+       Section 4: Legal bar — copyright + policy links (centered)
+       ================================================================ #}
     <section class="lt-footer__bar">
         <div class="container text-center">
             <span class="lt-footer__legal">
                 &copy; 2026 Locally Twisted. All rights reserved.
                 <span class="lt-footer__sep" aria-hidden="true">|</span>
-                <a href="/refund-policy">Refund Policy</a>
+                <a class="lt-footer__legal-link" href="/refund-policy">Refund Policy</a>
                 <span class="lt-footer__sep" aria-hidden="true">|</span>
-                <a href="/accessibility">Accessibility</a>
+                <a class="lt-footer__legal-link" href="/accessibility">Accessibility</a>
             </span>
         </div>
     </section>
