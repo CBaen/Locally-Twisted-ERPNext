@@ -1,4 +1,11 @@
 """
+DEPRECATED 2026-04-30. The nginx config template (/templates/nginx/frappe.conf.template)
+is now patched at IMAGE-BUILD time inside `docker/Dockerfile`, so freshly recreated
+containers already serve socket.io with the correct Origin pass-through. Running
+this script against the current stack is harmless but unnecessary.
+
+Original docstring follows.
+
 Patch the LT frontend container's nginx config so socket.io passes the
 browser's actual Origin header through to the upstream socketio service,
 instead of rewriting it to `http://frontend` (the internal Docker hostname).

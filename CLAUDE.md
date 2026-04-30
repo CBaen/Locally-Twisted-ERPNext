@@ -46,8 +46,13 @@ Frappe v15 + ERPNext v15. Backend is Python 3.11 + Frappe ORM + MariaDB 11.x + R
 **Standing principle (GL directive 2026-04-26):** *"Work WITHIN Frappe and ERPNext, don't fight them."* Operationalized: use Jinja partial overrides (`templates/includes/...`) as the primary surface for header/footer/page customization; use `web_include_css` (loads after the bundle) or `website_theme_scss` (compiles into the bundle) for theme CSS; refuse `!important` chains as the receipt of fighting the framework; use Webshop's existing hooks for cart/checkout customization rather than replacing the cart pipeline.
 
 **Operational rituals (see `scripts/README.md` for full index):**
-- After `docker compose up --force-recreate`: `python scripts/setup/install_webshop.py` then re-apply nginx Origin patch
-- After editing any Jinja template / CSS / Web Page record: `python scripts/dev/clear_website_cache.py`
+- **After editing `apps/locally_twisted/` source files:** rebuild the image and recreate the stack:
+  ```
+  docker build -f docker/Dockerfile -t locally-twisted-erpnext:v15 .
+  docker compose -p locally-twisted-erpnext-v15 -f Locally-Twisted-Backend/frappe_docker/pwd.yml up -d --force-recreate
+  ```
+  The image bakes locally_twisted + payments + webshop + Node + compiled assets + the nginx Origin patch in. `--force-recreate` produces a fully-working stack with NO post-recreate scripts. The bind-mount + reinstall pattern (and `scripts/setup/install_webshop.py` + `scripts/fix/patch_nginx_socketio_origin.py`) is **deprecated 2026-04-30** — kept on disk only for historical reference. **Do not run them against the current stack.** See `docker/Dockerfile` for the source-of-truth on what's in the image.
+- After editing any Jinja template / CSS / Web Page record (without rebuilding the image): `python scripts/dev/clear_website_cache.py`. Note: template/CSS edits inside `apps/locally_twisted/` need an image rebuild + recreate to actually be served, since the apps are now in the image, not bind-mounted.
 - Before declaring any visible change done: `python scripts/verify/playwright_home_screenshot.py` + `Read` the screenshot file
 
 ## Voice & Language — LT-specific
