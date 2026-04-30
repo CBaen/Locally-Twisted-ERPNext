@@ -15,47 +15,54 @@
 #}
 {% if shopping_cart and shopping_cart.cart_settings.enabled and (cart_settings.enable_variants | int) %}
 
-{%- set _attrs = frappe.call("webshop.webshop.variant_selector.utils.get_attributes_and_values", item_code=doc.item_code) -%}
-
 <form class="lt-product__configure"
       data-template-item-code="{{ doc.item_code }}"
       aria-label="{{ _('Customize this item') }}">
 
-    {%- for attr in _attrs -%}
+    {# Iterate the template's attribute child rows and look up each attribute's
+       valid value list from Item Attribute Value. frappe.get_all is whitelisted
+       in Jinja per Frappe's safe-globals; passes through standard permissions.
+    #}
+    {%- for row in doc.attributes -%}
+        {%- set attr_name = row.attribute -%}
         {%- set field_id = "lt-attr-" ~ loop.index -%}
-        {%- set values = attr.values or [] -%}
+        {%- set values = frappe.get_all("Item Attribute Value",
+                                         filters={"parent": attr_name},
+                                         fields=["attribute_value"],
+                                         order_by="idx asc",
+                                         limit_page_length=0) -%}
         {%- set is_chips = values | length <= 8 -%}
 
         <div class="lt-product__attr"
-             data-attribute-name="{{ attr.attribute }}"
+             data-attribute-name="{{ attr_name }}"
              data-display-type="{{ 'chips' if is_chips else 'select' }}">
 
             <label for="{{ field_id }}" class="lt-product__attr-label">
-                {{ _(attr.attribute) }}
+                {{ _(attr_name) }}
                 <span class="lt-product__attr-selected" id="{{ field_id }}-selected"></span>
             </label>
 
             {%- if is_chips -%}
-                <div class="lt-product__chips" id="{{ field_id }}" role="radiogroup" aria-label="{{ _(attr.attribute) }}">
+                <div class="lt-product__chips" id="{{ field_id }}" role="radiogroup" aria-label="{{ _(attr_name) }}">
                     {%- for v in values -%}
                         <label class="lt-product__chip">
                             <input type="radio"
                                    class="lt-product__chip-input js-lt-attr-input"
-                                   name="lt-attr-{{ attr.attribute | replace(' ', '-') }}"
-                                   value="{{ v }}"
-                                   data-attribute-name="{{ attr.attribute }}">
-                            <span class="lt-product__chip-label">{{ v }}</span>
+                                   name="lt-attr-{{ attr_name | replace(' ', '-') }}"
+                                   value="{{ v.attribute_value }}"
+                                   data-attribute-name="{{ attr_name }}">
+                            <span class="lt-product__chip-label">{{ v.attribute_value }}</span>
                         </label>
                     {%- endfor -%}
                 </div>
             {%- else -%}
                 <select class="lt-product__select js-lt-attr-input"
                         id="{{ field_id }}"
-                        name="lt-attr-{{ attr.attribute | replace(' ', '-') }}"
-                        data-attribute-name="{{ attr.attribute }}">
-                    <option value="">{{ _("Choose a") }} {{ _(attr.attribute) | lower }}…</option>
+                        name="lt-attr-{{ attr_name | replace(' ', '-') }}"
+                        data-attribute-name="{{ attr_name }}">
+                    <option value="">{{ _("Choose a") }} {{ _(attr_name) | lower }}…</option>
                     {%- for v in values -%}
-                        <option value="{{ v }}">{{ v }}</option>
+                        <option value="{{ v.attribute_value }}">{{ v.attribute_value }}</option>
                     {%- endfor -%}
                 </select>
             {%- endif -%}
