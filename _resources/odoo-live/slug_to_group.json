@@ -1,0 +1,78 @@
+{
+  "_comment": "BBC taxonomy decision 2026-04-30: maps each Odoo product slug to its LT Item Group child. All 53 live-Odoo products mapped. Reviewable by GL. Edit here, re-run seed_catalog to re-tag.",
+
+  "_arches": "Arches",
+  "6-color-rainbow-arch": "Arches",
+  "basketball-arch": "Arches",
+  "classic-arch": "Arches",
+  "classic-organic-arch": "Arches",
+  "easter-arch": "Arches",
+  "easter-balloon-arch-bunny-ear": "Arches",
+  "halloween-arch": "Arches",
+  "premium-organic-arch": "Arches",
+  "pride-arch": "Arches",
+  "pride-progress-rainbow-balloon-arch": "Arches",
+
+  "_columns": "Columns",
+  "7-butterfly-column": "Columns",
+  "7-epic-column": "Columns",
+  "classic-column": "Columns",
+  "classic-organic-columns": "Columns",
+  "large-organic-column": "Columns",
+  "mothers-day-front-yard-7-column": "Columns",
+  "number-balloon-columns": "Columns",
+  "pemium-organic-column": "Columns",
+  "sleepy-baby-column": "Columns",
+  "star-column": "Columns",
+
+  "_bouquets": "Bouquets",
+  "elsa-bouquet": "Bouquets",
+  "encanto-bouquet": "Bouquets",
+  "flamingo-bouquet": "Bouquets",
+  "football-bouquet": "Bouquets",
+  "holy-cow-bouquet": "Bouquets",
+  "large-head-missionary": "Bouquets",
+  "logo-3-layered-bouquet": "Bouquets",
+  "mickey-mouse-bouquet": "Bouquets",
+  "minion-bouquet": "Bouquets",
+  "mothers-day-bouquet": "Bouquets",
+  "over-the-hill-bouquet": "Bouquets",
+  "paw-patrol-bouquet": "Bouquets",
+  "soccer-bouquet": "Bouquets",
+  "space-bouquet": "Bouquets",
+  "stitch-bouquet": "Bouquets",
+  "unicorn-bouquet": "Bouquets",
+
+  "_get_well": "Get-Well Bouquets",
+  "bandage-get-well-bouquet-latex-free": "Get-Well Bouquets",
+  "butterfly-get-well-bouquet-latex-free": "Get-Well Bouquets",
+  "shooting-star-get-well-bouquet-latex-free": "Get-Well Bouquets",
+
+  "_garlands": "Garlands",
+  "baby-shower-garland": "Garlands",
+  "classic-organic-balloon-garland": "Garlands",
+  "large-garland": "Garlands",
+  "premium-organic-garland": "Garlands",
+
+  "_drops": "Drops",
+  "balloon-drop": "Drops",
+
+  "_grab_n_go": "Grab & Go",
+  "graduation-grab-n-go": "Grab & Go",
+  "organic-grab-n-go": "Grab & Go",
+
+  "_table_decor": "Table Decor",
+  "baby-shower-combination-photo-opt": "Table Decor",
+  "baby-table-decor": "Table Decor",
+  "marble-table-decor": "Table Decor",
+
+  "_stands_easels": "Stands & Easels",
+  "6-graduation-stands": "Stands & Easels",
+  "classic-organic-for-easel": "Stands & Easels",
+
+  "_deliveries": "Deliveries",
+  "birthday-deliveries": "Deliveries",
+
+  "_seasonal": "Seasonal & Specialty",
+  "easter-balloon-cups": "Seasonal & Specialty"
+}
