@@ -100,10 +100,11 @@ Re-validation per the skill's Selective Re-Validation rule:
 1. Add full `.lt-utility-bar__*` block (delivery truck icon, layout, link styles, cart badge container)
 2. Add `.lt-megamenu` panel CSS (positioning, background, z-index, shadow) IF the Round 2 decision is to keep that class name; otherwise no addition (Builder Jinja renames to existing `.lt-header__mega`)
 
-**Builder JS** — three fixes:
+**Builder JS** — four fixes:
 1. `lt-megamenu.js:415-436` — change `querySelector` to `querySelectorAll` and align attribute name with template (`data-lt-drawer-accordion-trigger`)
 2. `lt-newsletter.js:170` — replace `div.textContent = msg` with safe DOM construction that preserves the `<a href="tel:..">` child anchor
-3. `api/newsletter.py` — replace `hash(email)` with `hashlib.sha256(email.encode()).hexdigest()[:16]`; consider `@rate_limit(key="email", ...)` to defeat XFF spoofing (or document trade-off + add IP-keyed PLUS email-keyed, two-tier)
+3. `api/newsletter.py` — replace `hash(email)` with `hashlib.sha256(email.encode()).hexdigest()[:16]`. Apply rate-limit fix per Proxy correction above (Option A email-keyed OR Option B nginx XFF strip — pick one, document choice in fix report)
+4. **Add newsletter smoke test entry to `scripts/verify/smoke_forms.py`** (was omitted from Round 1; non-negotiable per loud-failure rule). Smoke test posts unique email, verifies HTTP 200 + `{ok:true}` response, confirms `LT Newsletter Signup` record was created, deletes test record on cleanup.
 
 **Pre-task #6.5 — book.html /book Esc-key bug fix** (carry-over from SecOps F003):
 - Add `if (modal.classList.contains('lt-book__modal--open'))` guard around `dismissModal()` call so Esc on form doesn't navigate away when modal isn't open.
