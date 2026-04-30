@@ -2,7 +2,7 @@
 
 **Repo:** `git init` 2026-04-26 at `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted`. Pushed to `https://github.com/CBaen/Locally-Twisted-ERPNext`. Separate from BBC agency repo per the agency isolation rule.
 **Tech:** ERPNext v15.105.0 + Frappe v15 (bundled in Docker image), MariaDB 11.8, Redis 6.2, nginx — running via `frappe_docker` upstream + custom port pinning.
-**Purpose:** Build LT's first professional business management system — website, ecommerce, lead intake, operator workflow, invoicing, payments, accounting, payroll. End-to-end, on ERPNext v15.
+**Purpose:** Migrate LT's business intent + catalog data into a fresh ERPNext v15 install — website, ecommerce, lead intake, operator workflow, invoicing, payments, accounting, payroll, end-to-end. Frame revised 2026-04-30 (see `locally-twisted-decisions.md`). The destination is greenfield ERPNext; the migration sources are the failed Odoo attempt's discovery work, the catalog data ported 2026-04-30, and the legacy `locallytwisted.com` site that the new ERPNext storefront replaces at cutover.
 **Owner:** Jeff Kimber.
 
 ---
