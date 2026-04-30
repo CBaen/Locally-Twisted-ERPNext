@@ -6,6 +6,97 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-04-30 — Full catalog port from live Odoo to ERPNext webshop
+
+### Six lessons from a 53-product / 10,613-Item / 8,925-Item-Price port
+
+**Context.** GL's directive: rebuild the entire live Odoo catalog (`http://5.78.136.133/shop`) into ERPNext webshop. Every product, every variant, every option, no exceptions. Result: 53 products, 24 distinct attribute types, 195 unique attribute values, 10,613 Items (templates + variants), 8,925 Item Prices, 53 Website Items, 11 Item Group children + restructured hierarchy, mega menu, on-brand product detail pages with inline variant selectors. Smoke tests pass.
+
+### Lesson 1 — The catalog source of truth is the LIVE site, not the cached export.
+
+The existing `_resources/odoo-export/catalog.json` (created 2026-04-26) had 51 products. The live re-scrape on 2026-04-30 found **53 products** — Odoo had added `birthday-deliveries` and `large-head-missionary` since the cached export. Five products had `image_url=null` in the cached file but DO have images on the live site (the original scraper's regex missed `data-src` lazy-load patterns). For any catalog work: re-scrape live, don't trust caches.
+
+**To do differently:** treat `_resources/odoo-export/catalog.json` as historical reference; produce a fresh `_resources/odoo-live/catalog.json` from the live site at the start of any catalog rebuild.
+
+### Lesson 2 — Frappe `installed_apps` order determines who wins template ChoiceLoader resolution.
+
+`frappe.get_installed_apps()` reads from `db.get_global("installed_apps")` (a JSON list). `template_page.py:53` iterates that list **REVERSED**, picking the first match. With our default order `[frappe, erpnext, locally_twisted, payments, webshop]`, reversed = `[webshop, payments, locally_twisted, ...]` — webshop won every template at `templates/generators/item/...`. The override files we placed at `apps/locally_twisted/locally_twisted/templates/generators/item/` were silently ignored.
+
+**The fix:** put `locally_twisted` LAST in the installed apps list.
+
+```python
+# bench --site frontend console
+import json
+new = ["frappe", "erpnext", "payments", "webshop", "locally_twisted"]
+frappe.db.set_global("installed_apps", json.dumps(new))
+frappe.db.commit()
+# then docker restart the backend
+```
+
+This is irreversible-feeling but reversible. After the change, `apps/locally_twisted/.../templates/...` overrides win for any path webshop also defines.
+
+**Verification before any template-override work:** drop a marker file at the override path (e.g. add a unique CSS class to a copied-verbatim template), restart backend, hit the URL, grep the response for the marker. If absent, fix load order before continuing.
+
+### Lesson 3 — Webshop's `WebsiteItem.make_route()` adds `random_string(5)` to every auto-generated route. Always set `route` explicitly.
+
+`apps/webshop/webshop/webshop/doctype/website_item/website_item.py:108–118` returns `<group_route>/<scrubbed_name>-<random5>` when `self.route` is empty. Result: ugly unstable URLs like `/shop-items/arches/basketball-arch-tljq2`. Customer bookmarks would break on every `make_website_item` re-run.
+
+**The fix:** in `_upsert_website_item`, compute the clean route (`<group_route>/<slug>`) and set `wi.route = clean_route` BEFORE save. Webshop's make_route only fires when `self.route` is empty, so the explicit set wins.
+
+### Lesson 4 — Item Price cannot exist on a template Item with `has_variants=1`.
+
+`tabItem Price.validate_item_template()` throws `InvalidItemTemplateError` if you try to create one. Item Price must live on each variant's item_code instead. For "from $X" display on the listing card (template), query `MIN(price_list_rate)` across the variant set in the controller and surface as `price_is_from`.
+
+### Lesson 5 — Setting `Item.image = "/files/<x>.png"` directly silently fails when there's no `File` doctype record.
+
+Per webshop's `validate_website_image()`, the field gets cleared on save if no matching `File` doc exists for that URL. The `Item.image` field expects an attached `File`. Pattern that works:
+
+```python
+f = frappe.get_doc({
+    "doctype": "File",
+    "file_name": "basketball-arch.png",
+    "file_url": "/files/basketball-arch.png",
+    "is_private": 0,
+    "attached_to_doctype": "Item",
+    "attached_to_name": "basketball-arch",
+}).insert(ignore_permissions=True)
+# Then Item.image = "/files/basketball-arch.png" sticks.
+```
+
+The image file must exist on disk at `sites/<site>/public/files/<slug>.png` before the File doc is created. Copy via `shutil` or pre-stage outside the script.
+
+### Lesson 6 — Webshop variant cards are JS-rendered, not Jinja-templated. Override via CSS, not template.
+
+`apps/webshop/webshop/public/js/product_ui/list.js:101` bakes `${item.item_group} | Item Code : ${item.item_code}` into the card markup at compile time. There's no Jinja template to override — it's compiled into the bundle. Any product listing route (`/shop-items/<group>`, `/all-products`) renders cards through this JS.
+
+**The fix:** CSS hide `.product-code` in the listing context. Add to lt-theme.css:
+
+```css
+.product-list .product-code,
+.item-card-group-section .product-code,
+#product-listing .product-code {
+    display: none !important;
+}
+```
+
+This is the right call here even though `!important` chains are normally a code smell — we can't override a compiled JS bundle without forking it. The CSS-hide is contained and removes the jargon at customer-render time.
+
+### Bonus — Odoo's per-product attribute-exclusions data is captured in the scrape and respected.
+
+Odoo's product page emits `data-attribute-exclusions="{exclusions: {...}, mapped_attribute_names: {...}}"` JSON in the form HTML. The scraper parses it, builds the cartesian product of all attribute values, then filters out combinations where any selected ptav_id appears in another's exclusion list. For LT's 53 products this filtered down to 10,613 valid Item Variants (vs the naive cartesian count of more). Odoo's `archived_combinations` is also captured but currently empty for LT's catalog.
+
+The math sanity-check: `birthday-deliveries` has 4 attributes (Delivery Size 3 × Delivery themes 27 × Add Foil Number 10 × Add Bouquet 3 = 2,430 cartesian; 0 exclusions; 2,430 valid). Confirmed.
+
+### Bonus — Variant ABBR uniqueness is non-negotiable.
+
+ERPNext's `make_variant_item_code` builds variant `item_code` as `<template>-<abbr1>-<abbr2>-...`. If two attribute values share an `abbr` (or the abbr is blank), variant inserts collide on duplicate-key DB error. Solution in `build_item_attribute_fixture.py`: deterministic abbr generation with collision detection (3-char prefix → 4 → 5 → 6 → fallback `prefix+counter`). 195 values produced 195 unique abbrs.
+
+### Bonus — Item Attribute Value rejects case-only duplicates.
+
+Odoo had `Blue Slate` (ptav 1357) AND `Blue slate` (ptav 1399) for `latex colors` — same color, two ptav rows from different attribute lines. ERPNext's Item Attribute validate() throws `Attribute value: Blue Slate must appear only once` (case-insensitive). The fixture builder dedupes case-insensitively + whitespace-normalized, preserves first-seen casing as canonical, and persists a `value_normalize_map.json` so the bulk import script remaps Odoo's lower-case ptav references to the canonical capitalized name. 197 raw values → 195 canonical.
+
+---
+
 ## 2026-04-29 late (Hetzner /book spec session — "fighting GL" pattern) — One critical lesson
 
 ### When GL points at a URL, read the URL. Stop pivoting to stale local files when one tool fails to reach it.

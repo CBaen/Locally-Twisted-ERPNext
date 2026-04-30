@@ -165,10 +165,10 @@ def check_mobile_drawer(p):
     page.wait_for_timeout(200)
     panel = page.locator("#lt-mobile-shop-panel")
     assert_(not panel.is_hidden(), "Mobile Shop accordion didn't expand on click")
-    # Each category should be present
+    # Each category should be present (exact match — text="Bouquets" matches "Get-Well Bouquets" via substring otherwise)
+    sublinks_text = [el.inner_text().strip() for el in panel.locator(".lt-header__mobile-nav-sublink").all()]
     for cat_name in EXPECTED_CATEGORIES:
-        sub = panel.locator(f".lt-header__mobile-nav-sublink >> text={cat_name}")
-        assert_(sub.count() == 1, f"Mobile drawer missing sublink {cat_name!r}")
+        assert_(cat_name in sublinks_text, f"Mobile drawer missing sublink {cat_name!r} (have: {sublinks_text})")
     print(f"  ✓ accordion expands, all {len(EXPECTED_CATEGORIES)} categories present")
     browser.close()
 
