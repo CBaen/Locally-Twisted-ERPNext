@@ -341,112 +341,6 @@ p {
   }
 }
 
-/* Footer column titles + link lists (Frappe renders these from footer_items) */
-.web-footer h4,
-.web-footer h5,
-.web-footer h6,
-.web-footer .footer-col-title {
-  font-family: 'Raleway', sans-serif;
-  font-weight: 600;
-  font-size: 0.875rem;
-  color: var(--lt-near-black);
-  margin: 0 0 1rem 0;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.web-footer ul,
-.web-footer .footer-links ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.web-footer li,
-.web-footer .footer-links li {
-  padding: 0.375rem 0;
-}
-
-.web-footer a,
-.web-footer a:visited,
-.web-footer .footer-links a,
-.web-footer .footer-links a:visited {
-  color: var(--lt-near-black);
-  text-decoration: none;
-  font-weight: 400;
-}
-
-.web-footer a:hover,
-.web-footer .footer-links a:hover {
-  color: var(--lt-near-black);
-  text-decoration: underline;
-  text-underline-offset: 0.25rem;
-}
-
-/* Footer info bar (copyright row) */
-.web-footer .footer-info {
-  border-top: 1px solid rgba(26, 26, 26, 0.12);
-  margin-top: 2rem;
-  padding-top: 1.25rem;
-  padding-bottom: 1.25rem;
-  font-size: 0.8125rem;
-  color: var(--lt-near-black);
-}
-
-.web-footer .footer-info a,
-.web-footer .footer-info a:visited {
-  color: var(--lt-near-black);
-  text-decoration: none;
-}
-
-.web-footer .footer-info a:hover {
-  text-decoration: underline;
-}
-
-/* Hide "Powered by ERPNext" — Jeff doesn't need to see his platform's branding */
-.web-footer .footer-powered {
-  display: none !important;
-}
-
-/* Footer subscribe row (newsletter — input only, deferred wiring per slice spec) */
-.web-footer .footer-subscribe,
-.web-footer .footer-logo-extension {
-  margin-bottom: 1.5rem;
-}
-
-.web-footer .footer-subscribe input,
-.web-footer #footer-subscribe-email {
-  background-color: var(--lt-white);
-  border: 1px solid rgba(26, 26, 26, 0.15);
-  color: var(--lt-near-black);
-}
-
-.web-footer #footer-subscribe-button {
-  border: 1px solid var(--lt-near-black);
-  color: var(--lt-near-black);
-  background-color: var(--lt-white);
-  font-weight: 500;
-}
-
-.web-footer #footer-subscribe-button:hover {
-  background-color: var(--lt-near-black);
-  color: var(--lt-white);
-}
-
-/* Mobile footer: columns stack 1-up; brand block first */
-@media (max-width: 767.98px) {
-  .web-footer {
-    padding-top: 2.5rem;
-    text-align: left;
-  }
-  .web-footer .container > .row > [class*="col-"] {
-    margin-bottom: 1.75rem;
-  }
-  .web-footer .footer-info {
-    text-align: left;
-  }
-}
-
 /* ============================================================
    Header (Jinja partial override at templates/includes/navbar/navbar.html)
    ============================================================ */
@@ -1703,4 +1597,245 @@ body.product-page {
     background-color: var(--lt-blush-tint);
     color: var(--lt-near-black);
     text-decoration: none;
+}
+
+/* ====================================================================
+   Cart count badge
+   Rules moved here from the inline <style> block in navbar.html
+   (Build Brief hard constraint §5: no inline <style> in templates).
+   Populated and cleared by lt-guest-cart.js paintBadges() on every
+   cart change. Hidden when count = 0 via absence of .is-populated.
+   2026-04-30 chrome rebuild.
+   ==================================================================== */
+
+.lt-header__util-link--cart {
+    position: relative;
+}
+
+.lt-cart-count {
+    display: none;
+    position: absolute;
+    top: -6px;
+    right: -10px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    background-color: #c0392b;
+    color: #ffffff;
+    border-radius: 9px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 18px;
+    text-align: center;
+    box-sizing: border-box;
+    pointer-events: none;
+}
+
+.lt-cart-count.is-populated {
+    display: inline-block;
+}
+
+/* Mobile variant — sits inline next to "Cart" text in the drawer list item */
+.lt-cart-count--mobile {
+    position: static;
+    margin-left: 0.5rem;
+    background-color: var(--lt-teal);
+    vertical-align: middle;
+}
+
+/* ====================================================================
+   Footer — Newsletter strip
+   Hetzner-faithful: "Stay in the loop" heading, subhead, email input
+   + Join button, error/success feedback states.
+   Builder JS owns the submit handler and frappe.call wiring.
+   2026-04-30 chrome rebuild.
+   ==================================================================== */
+
+.lt-footer-newsletter {
+    background-color: var(--lt-blush-tint);
+    padding: 2.5rem 1rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(26, 26, 26, 0.06);
+}
+
+@media (min-width: 768px) {
+    .lt-footer-newsletter {
+        padding: 3rem 1.5rem;
+    }
+}
+
+.lt-footer-newsletter__heading {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--lt-near-black);
+    margin: 0 0 0.5rem;
+    line-height: 1.2;
+}
+
+@media (min-width: 768px) {
+    .lt-footer-newsletter__heading {
+        font-size: 1.875rem;
+    }
+}
+
+.lt-footer-newsletter__subhead {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.95rem;
+    color: var(--lt-soft-gray);
+    margin: 0 0 1.5rem;
+    line-height: 1.5;
+}
+
+.lt-footer-newsletter__form {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.lt-footer-newsletter__input {
+    flex: 1 1 220px;
+    min-width: 0;
+    padding: 0.75rem 1rem;
+    border: 1px solid rgba(26, 26, 26, 0.18);
+    border-radius: 0.375rem;
+    background-color: var(--lt-white);
+    color: var(--lt-near-black);
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.95rem;
+    min-height: 44px;
+}
+
+.lt-footer-newsletter__input:focus-visible {
+    outline: 2px solid var(--lt-teal);
+    outline-offset: 1px;
+    border-color: var(--lt-teal);
+}
+
+.lt-footer-newsletter__input::placeholder {
+    color: #999;
+}
+
+.lt-footer-newsletter__button {
+    padding: 0.75rem 1.5rem;
+    background-color: var(--lt-teal);
+    color: var(--lt-white);
+    border: 1px solid var(--lt-teal);
+    border-radius: 0.375rem;
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    min-height: 44px;
+    white-space: nowrap;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.lt-footer-newsletter__button:hover,
+.lt-footer-newsletter__button:focus-visible {
+    background-color: #006666;
+    border-color: #006666;
+    color: var(--lt-white);
+    outline: none;
+}
+
+.lt-footer-newsletter__button:focus-visible {
+    outline: 2px solid var(--lt-teal);
+    outline-offset: 2px;
+}
+
+.lt-footer-newsletter__button[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Feedback states — shown by lt-newsletter.js after submit attempt.
+   Loud-failure rule: error must be user-visible with phone fallback. */
+.lt-footer-newsletter__error,
+.lt-footer-newsletter__success {
+    margin-top: 0.75rem;
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.45;
+}
+
+.lt-footer-newsletter__error {
+    color: #c0392b;
+    background-color: #fdf0ef;
+    border: 1px solid rgba(192, 57, 43, 0.25);
+    border-radius: 0.375rem;
+    padding: 0.625rem 0.875rem;
+    text-align: left;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.lt-footer-newsletter__success {
+    color: #2e7d32;
+    background-color: #f0faf0;
+    border: 1px solid rgba(46, 125, 50, 0.25);
+    border-radius: 0.375rem;
+    padding: 0.625rem 0.875rem;
+    text-align: left;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Hidden utility — JS toggles these by removing the hidden attribute */
+.lt-footer-newsletter__error[hidden],
+.lt-footer-newsletter__success[hidden] {
+    display: none;
+}
+
+/* ====================================================================
+   Footer — Legal bar (copyright row beneath the main footer columns)
+   Distinct background (near-white) breaks visually from the soft-blue
+   main footer band above it. Already partially covered by .lt-footer__bar
+   in the BEM footer blocks above; these aliases match the Hetzner markup
+   class names used in footer.html so the template can reference either.
+   ==================================================================== */
+
+.lt-footer-bar {
+    background-color: var(--lt-near-white);
+    border-top: 1px solid rgba(26, 26, 26, 0.08);
+    padding: 0.75rem 1rem;
+    text-align: center;
+}
+
+.lt-footer-bar__legal {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.875rem;
+    color: var(--lt-soft-gray);
+    line-height: 1.5;
+}
+
+.lt-footer-bar__link {
+    color: var(--lt-soft-gray);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+}
+
+.lt-footer-bar__link:hover,
+.lt-footer-bar__link:focus-visible {
+    color: var(--lt-near-black);
+    outline: none;
+}
+
+.lt-footer-bar__link:focus-visible {
+    outline: 2px solid var(--lt-near-black);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lt-footer-newsletter__button,
+    .lt-header__util-link--cart {
+        transition: none;
+    }
 }
