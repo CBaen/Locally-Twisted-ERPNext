@@ -13,34 +13,48 @@
 - ERPNext v15.105.0 running locally at `http://localhost:8081` (9 containers, compose project `locally-twisted-erpnext-v15`)
 - WSL2 tuned: 8 GB RAM, 4 CPU, swap 2 GB, dropcache (`C:\Users\baenb\.wslconfig`)
 - `pwd.yml` pinned to `frappe/erpnext:v15.105.0`; bind-mount of `apps/locally_twisted/` to `/home/frappe/frappe-bench/apps/locally_twisted/` on all 8 frappe-image services
-- LT Company record exists with full contact info
-- Fiscal Year 2026, Standard with Numbers chart of accounts, Services domain
+- LT Company record + Fiscal Year 2026 + Services domain + Standard with Numbers chart of accounts
 - 3 LT-specific DocTypes: `Dashboard Reviewed Item`, `LT Service Type` (+ `LT Lead Service Type` child + `LT Lead Photo` child)
 - `Lead` DocType extended with 45+ Custom Fields, plain-language relabels, "Additional Information" tab hidden, 25 MB upload
-- nginx Origin pass-through patched on the LT frontend container (lost on container recreation; re-apply via `scripts/fix/patch_nginx_socketio_origin.py`)
-- **Custom Frappe app `locally_twisted` installed**. App lives at `apps/locally_twisted/` on host, bind-mounted into containers. `bench --site frontend list-apps` shows `frappe`, `erpnext`, `locally_twisted`, `payments`, `webshop`.
-- **Brand foundation theme** served by the app at `/assets/locally_twisted/css/lt-theme.css` (registered via `web_include_css` in `hooks.py`, cache-bust query string `?v=YYYYMMDD-N`). Source at `apps/locally_twisted/locally_twisted/public/css/lt-theme.css`.
-- **Stripe end-to-end live (test mode).** `/checkout?item=<code>&qty=<n>` → SO + PR + Stripe Checkout Session → Stripe-hosted page → `/payment-success` (LT override) → `/thank-you?order=<so>`. Stripe Link disabled at account level via PMC `pmc_1TRZH2DfnlZQv66ncb001soG`. ERPNext cascade wired: PR Paid → SI created → receipt email + operator notification + welcome email. GL completed real `4242` purchase 2026-04-29.
-- **localStorage-backed guest cart** at `/cart` (LT-owned route; multi-item checkout supported).
-- **Phase 1 customer surfaces live:** `/`, `/lookbook`, `/shop`, `/balloon-twisting-and-face-painting`, `/contact`, `/all-products`, `/faq`, `/refund-policy`, `/accessibility`, `/cart`, `/checkout`, `/payment-success`, `/thank-you`. All form-bearing pages have AJAX → Lead + Communication wiring with three-channel loud-failure compliance.
-- **Mobile responsiveness shipped 2026-04-29 evening** at 320 / 375 / 414 viewports. Hamburger toggle visible+tappable. Hero bands span full viewport. Webshop product detail centered with intentional max-width 1200 on desktop. Brand logo responsive via `calc(100vw - 88px)`.
-- **LT design guide imported 2026-04-29** at `_resources/design-guide/` — synthesis output from the 2026-04-26 design competition. Was previously stranded at `zoho-locally-twisted/gallery/` outside our directory; signposted from CLAUDE.md and reading order so future instances find it.
-- **Resources pre-positioned for Phase 1 build:** `_resources/STYLE-GUIDE.md`, `_resources/design-guide/`, `_resources/policies/` (6 files), `_resources/utah-tax-rates-2026q2.md`, `_resources/competitor-survey-2026-04-26.md`, `_resources/images/` (15 placeholder PNGs), `_resources/odoo-export/catalog.json` (51 products + 48 images for future webshop seeding).
+- nginx Origin pass-through patched on the LT frontend container (re-apply via `scripts/fix/patch_nginx_socketio_origin.py` after container recreation)
+- **Custom Frappe app `locally_twisted` installed**. **`installed_apps` order: `[frappe, erpnext, payments, webshop, locally_twisted]`** — locally_twisted MUST stay LAST so its template overrides win Frappe's reversed-app-order ChoiceLoader. Re-set via `db.set_global("installed_apps", json.dumps([...]))` if any new app installs append after locally_twisted.
+- **Brand foundation theme** at `/assets/locally_twisted/css/lt-theme.css` (registered via `web_include_css`, cache-bust query string `?v=YYYYMMDD-N`).
+- **Stripe end-to-end live (test mode).** `/checkout` → Stripe Checkout Session → `/payment-success` → `/thank-you`. ERPNext cascade: PR Paid → SI created → receipt + operator + welcome emails. GL completed real `4242` purchase 2026-04-29.
+- **localStorage-backed guest cart** at `/cart` (LT-owned route; multi-item checkout).
+- **Phase 1 customer surfaces live:** `/`, `/lookbook`, `/shop`, `/shop-by-category`, `/shop-items/<group>` × 11, `/shop-items/<group>/<slug>` × 53, `/balloon-twisting-and-face-painting`, `/contact`, `/all-products`, `/faq`, `/refund-policy`, `/accessibility`, `/cart`, `/checkout`, `/payment-success`, `/thank-you`. All form-bearing pages have AJAX → Lead + Communication wiring with three-channel loud-failure compliance.
+- **Mobile responsiveness shipped 2026-04-29** at 320 / 375 / 414 viewports.
+- **LT design guide** at `_resources/design-guide/` (synthesis from 2026-04-26 design competition).
 
-**What's broken / pending visual quality work:**
-- **`/shop`, `/shop-items`, `/shop/<item>` design quality is below the bar.** GL named it "horrible" 2026-04-29 evening. Specific issues: breadcrumb bleeds left edge, vestigial mid-page bar on product detail, "Item Code: 7-butterfly-column" jargon visible to customers, image-expand modal doesn't close on outside click. /shop-items is webshop's stock listing page with zero LT design treatment. **Holistic redesign against the new design guide is the next P0** — instructions in HANDOFF.
-- **Pre-existing Frappe asset-map bug** on `/shop/<item>` console: `Cannot read properties of undefined (reading 'file_uploader.bundle.js')`. Not from our work; Frappe's bundled `upload.js:8` calling `bundled_asset()` against an undefined map entry. Page renders fine, no LT functionality affected. P2.
+**Catalog port complete (2026-04-30):**
+- **Live Odoo catalog rebuilt in ERPNext webshop end-to-end.** Source of truth: `http://5.78.136.133/shop` (live), captured to `_resources/odoo-live/catalog.json` via `scripts/setup/scrape_odoo_live.py`.
+- **Counts: 53 products, 24 attribute types, 195 unique values, 10,613 Items (templates + variants), 8,925 Item Prices on Standard Selling, 53 Website Items published, 32,002 Item Variant Attribute child rows.**
+- Item Group hierarchy: `Shop Items` (parent, `is_group=1`) → 11 children with `show_in_website=1`: Arches (10), Columns (10), Bouquets (16), Get-Well Bouquets (3), Garlands (4), Drops (1), Grab & Go (2), Table Decor (3), Stands & Easels (2), Deliveries (1), Seasonal & Specialty (1). Captured as fixture at `apps/locally_twisted/locally_twisted/fixtures/item_group.json`.
+- Item Attribute records: 24 attributes, 195 values, all collision-free abbrs (per ERPNext variant naming requirement). Fixture at `apps/locally_twisted/locally_twisted/fixtures/item_attribute.json`.
+- Webshop Settings flags: `enable_variants=1`, `enable_attribute_filters=1`, `show_attribute_dropdowns=1` (set via `scripts/setup/enable_webshop_variants.py`, NOT fixtured per fixture-discipline — Singles doctype with operator-edited fields).
+- Bulk import: `apps/locally_twisted/locally_twisted/seed/seed_catalog.py` (idempotent, loud-fail, runs in-process via `bench execute locally_twisted.seed.seed_catalog.execute`). Honors Odoo's `data-attribute-exclusions` to filter forbidden combinations from the cartesian product.
+- **Mega menu** in navbar (desktop dropdown + mobile drawer accordion) sourced live from Item Group children via `update_website_context` hook (`apps/locally_twisted/locally_twisted/navbar_context.py`).
+- **Product detail templates** overridden at `apps/locally_twisted/locally_twisted/templates/generators/item/{item_details,item_add_to_cart,item_configure}.html`. "Item Code" jargon stripped, "/Nos" UoM stripped, **inline variant selectors** (chips ≤8 values, dropdown 9+) replacing webshop's "Select Variant" dialog button. JS computes matching variant + updates Add-to-Cart + price on every selection.
+- **`/shop-by-category`** custom override at `apps/locally_twisted/locally_twisted/www/shop-by-category/{index.py,index.html}` — 11 category cards with LT register (eyebrow / DM Serif headline / blush band / bottom CTA).
+- **`/shop`** updated: filter pills sourced from Item Group children (12 pills = All + 11 categories). Drops the keyword categorizer.
+- **CSS hide of `.product-code`** in lt-theme.css strips the "Item Code" jargon from compiled-JS-rendered listing cards (only `display: none !important` we kept; webshop's product_ui/list.js bakes the jargon at compile time; can't be Jinja-overridden).
+- **All 7 shop smoke checks pass:** `scripts/verify/smoke_shop.py` validates mega menu, /shop pills, /shop-by-category cards, all 11 category routes 200 + no jargon, variant detail inline, single-SKU clean, mobile drawer accordion.
+
+**What's broken / pending:**
+- **Pre-existing Frappe asset-map bug** on product detail console: `Cannot read properties of undefined (reading 'file_uploader.bundle.js')`. Not from our work; page renders fine. P2.
+- Routes changed from `/shop/<item>` to `/shop-items/<group>/<item>`. Pre-launch — no public bookmarks broken.
 
 **What's next (in order):**
-- **Holistic redesign of /shop, /shop-items, /shop/&lt;item&gt;, /contact** against `_resources/design-guide/synthesis/`. Read voice.md, mood.md, rationale.md, view all 8 screenshots BEFORE starting. Bring observations + plan to GL first. Verify in real browser before declaring done.
-- **Slice 10 — `/book` form page** (45-field Lead schema). Every homepage CTA still 404s here. Was deferred 3x.
+- **Slice 10 — `/book` form page** (45-field Lead schema). Every homepage CTA still 404s here. Was deferred 3x. Big build, primary inquiry conversion path.
 - **`/privacy` and `/terms-of-service` pages** — both required by Stripe for live mode activation, both currently `example.com/...` placeholders in Stripe Dashboard.
 - **Spec table data on BTFP service cards** still lorem ipsum — Jeff to confirm BEST AT / DURATION / TEAM SIZE / GOOD FOR.
 - **Sample data for backend tour** — realistic Lead records, paid SO, upcoming event for Jeff's desk demo.
+- **Item Group imagery** — each Item Group has empty `image` field. Adding category images would make `/shop-by-category` and a future image-rich mega menu feel more designed.
+
+**Phase 6 carry-forward (CRITICAL — must happen at cutover):**
+- **Remove operator-state-sensitive Item Attribute fixtures from `hooks.py fixtures = [...]` BEFORE Jeff's first post-takeover deploy.** Especially the `latex colors` Item Attribute (51 values — the most likely category Jeff edits as his supplier inventory shifts). Otherwise BBC fixture sync silently overwrites his renames on every `bench migrate`. See `locally-twisted-decisions.md` 2026-04-30 entry "Phase 6 cutover work item." Document in `NOUPDATE-DRIFT.md` (TBD).
 
 **Known bugs (carry-overs):**
 - `LT Lead Photo` child DocType exists and `lt_section_photos` Section Break exists on Lead, BUT the Table field connecting them was never created (iter 4 step F failed silently). Still unaddressed.
-- Cleanup overdue: `scripts/verify/_screenshots/` has 80+ accumulated subdirs from sessions back to 2026-04-26. Most are dead diagnostic captures. One-time sweep is its own decision.
 
 ---
 
