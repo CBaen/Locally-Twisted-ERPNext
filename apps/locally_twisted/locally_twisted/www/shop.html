@@ -38,7 +38,7 @@
         <div class="lt-shop__grid" id="lt-shop-grid">
             {% for item in items %}
             <article class="lt-shop__card"
-                     data-category="{{ item.category }}"
+                     data-category="{{ item.category_slug }}"
                      aria-label="{{ item.web_item_name }}">
 
                 <a class="lt-shop__card-image{% if not item.website_image %} lt-shop__card-image--placeholder{% endif %}"

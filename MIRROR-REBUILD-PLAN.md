@@ -126,7 +126,7 @@ Build order (by load-bearing-ness):
 
 | Order | Page | Why first |
 |---|---|---|
-| 1 | `/book` | Load-bearing 404 today; every CTA points here; primary inquiry path |
+| 1 | `/book` | **DEBUG-NOT-BUILD.** Page already exists at `www/book.{py,html}`. 404 is stale cache. Pre-tasks fix the loud-failure gaps; this step verifies the page loads and the form smokes clean |
 | 2 | `/contact` | Replaces existing; secondary inquiry path |
 | 3 | `/balloon-twisting-and-face-painting` | Replaces existing; second-most-visited service page |
 | 4 | `/about` | New build; nav points here |
@@ -134,8 +134,8 @@ Build order (by load-bearing-ness):
 | 6 | `/refund-policy` | Replaces existing; legal page |
 | 7 | `/accessibility` | Replaces existing; legal page |
 | 8 | `/gallery` | New build |
-| 9 | `/blog` (channel index) + `LT Blog Post` DocType | New build |
-| 10 | `/blog/<channel>/<post>` (1 post template) + 2 ported posts | New build |
+| 9 | `/blog` (channel index) — uses **native Frappe `Blog Post`** + `Blog Category` records (data entry, NOT a custom DocType) | Data entry + Customize Form `tags` field |
+| 10 | `/blog/<channel>/<post>` — thin template override at `templates/pages/blog_post.html` for missing SEO metas + 2 ported posts via desk | Template override + content paste |
 | 11 | Webshop `/shop` layout override | Replaces existing custom shop layout |
 | 12 | Webshop product detail layout | Replaces existing custom product detail |
 | 13 | Webshop category landing override | Replaces existing |
