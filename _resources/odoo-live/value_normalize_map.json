@@ -1,0 +1,245 @@
+{
+  "latex colors": {
+    "reflex champage": "Reflex Champage",
+    "reflex truffle": "Reflex Truffle",
+    "dusk cream": "Dusk Cream",
+    "dusk green tea": "Dusk Green Tea",
+    "dusk blue": "Dusk Blue",
+    "dusk lilac": "Dusk Lilac",
+    "dusk rose": "Dusk Rose",
+    "teal": "Teal",
+    "blue slate": "Blue Slate",
+    "smoke grey": "Smoke Grey",
+    "reflex silver": "Reflex Silver",
+    "reflex gold": "Reflex Gold",
+    "reflex blue": "Reflex Blue",
+    "reflex green": "Reflex green",
+    "reflex violet": "Reflex Violet",
+    "reflex red": "Reflex Red",
+    "white": "White",
+    "black": "black",
+    "red": "Red",
+    "orange": "Orange",
+    "yellow": "yellow",
+    "raspberry": "raspberry",
+    "fuchsia": "fuchsia",
+    "bubble gum": "bubble Gum",
+    "eucalyptus": "eucalyptus",
+    "forest": "Forest",
+    "shamrock": "Shamrock",
+    "wintergreen": "Wintergreen",
+    "lime": "Lime",
+    "lt blue": "LT Blue",
+    "periwinkle": "Periwinkle",
+    "royal blue": "Royal Blue",
+    "robin's egg": "Robin's Egg",
+    "deep teal": "Deep Teal",
+    "honey": "Honey",
+    "violet": "Violet",
+    "orchid": "Orchid",
+    "lilac": "Lilac",
+    "chocolate": "Chocolate",
+    "brown": "Brown",
+    "latte": "Latte",
+    "pastel pink": "Pastel Pink",
+    "pastel blue": "Pastel Blue",
+    "pastel green": "Pastel Green",
+    "pastel purple": "Pastel Purple",
+    "pastel yellow": "Pastel Yellow",
+    "pastel melon": "Pastel Melon",
+    "grey": "Grey",
+    "clear": "Clear",
+    "blush": "Blush",
+    "empowermint": "Empowermint"
+  },
+  "Garland Length": {
+    "6ft": "6ft",
+    "9ft": "9ft",
+    "12ft": "12ft"
+  },
+  "Arch Size": {
+    "20ft": "20ft",
+    "25ft": "25ft",
+    "30ft": "30ft",
+    "35ft": "35ft"
+  },
+  "Number colors": {
+    "gold": "Gold",
+    "silver": "Silver",
+    "rose gold": "Rose gold",
+    "pink": "pink",
+    "blue": "blue",
+    "white gold": "white gold",
+    "black": "Black"
+  },
+  "Missionary": {
+    "elder": "Elder",
+    "sister": "Sister"
+  },
+  "skin color": {
+    "blush": "Blush",
+    "latte": "Latte",
+    "brown": "Brown"
+  },
+  "Hair color": {
+    "black": "Black",
+    "brown": "Brown",
+    "yellow": "yellow",
+    "orange": "Orange",
+    "dark brown": "Dark Brown"
+  },
+  "Add ons": {
+    "foil stars": "Foil stars",
+    "themed foils": "themed foils",
+    "none": "None"
+  },
+  "Column Height": {
+    "5ft": "5ft",
+    "6ft": "6ft",
+    "7ft": "7ft",
+    "8ft": "8ft",
+    "9ft": "9ft",
+    "10ft": "10ft"
+  },
+  "Design": {
+    "swirl (up to 4 colors)": "Swirl (up to 4 colors)",
+    "layered (up to 8 colors)": "Layered (up to 8 colors)"
+  },
+  "LED Lights": {
+    "no lights": "No Lights",
+    "add led lights": "Add LED Lights"
+  },
+  "topper": {
+    "large topper": "large topper",
+    "burst": "Burst",
+    "foil star": "foil star",
+    "foil heart": "foil heart",
+    "bubble gum": "bubble gum",
+    "logo": "Logo"
+  },
+  "Drop Size": {
+    "250": "250",
+    "500": "500",
+    "1000": "1000"
+  },
+  "Bouquet Size": {
+    "small — 1 super shape, 2 foils, 7 latex": "Small — 1 super shape, 2 foils, 7 latex",
+    "medium — 2 super shapes, 4 foils, 14 latex": "Medium — 2 super shapes, 4 foils, 14 latex",
+    "large - 3 super shapes, 5 foil 16 latex": "Large - 3 super shapes, 5 foil 16 latex"
+  },
+  "Add Foil Number": {
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8",
+    "9": "9",
+    "0": "0"
+  },
+  "Delivery Size": {
+    "small": "Small",
+    "medium": "Medium",
+    "large": "Large"
+  },
+  "Delivery themes": {
+    "mickey": "Mickey",
+    "minnie": "Minnie",
+    "mermaid": "Mermaid",
+    "basketball": "Basketball",
+    "soccer": "Soccer",
+    "unicorn": "Unicorn",
+    "chase": "Chase",
+    "spiderman": "spiderman",
+    "batman": "batman",
+    "gamer": "Gamer",
+    "dino birthday": "Dino Birthday",
+    "sonic": "Sonic",
+    "elmo": "Elmo",
+    "encanto": "Encanto",
+    "camping birthday": "Camping Birthday",
+    "rainbow birthday": "Rainbow Birthday",
+    "space": "Space",
+    "boho rainbow": "Boho Rainbow",
+    "frozen": "Frozen",
+    "birthday celebration": "Birthday Celebration",
+    "jurassic world": "Jurassic World",
+    "blush and mint cake": "Blush and Mint Cake",
+    "rosegold and pink happy birthday": "Rosegold and pink Happy Birthday",
+    "pink butterfly": "Pink Butterfly",
+    "tiktok birthday": "TikTok Birthday",
+    "football": "Football",
+    "toy story": "Toy Story"
+  },
+  "Add Bouquet": {
+    "small 3 balloon bouquet": "Small 3 balloon bouquet",
+    "5 balloon bouquet": "5 balloon bouquet",
+    "7 balloon bouquet": "7 balloon bouquet"
+  },
+  "Easter Designs": {
+    "bunny": "Bunny",
+    "flower": "Flower",
+    "bunny in basket": "Bunny in basket",
+    "easter egg": "Easter egg",
+    "unicorn egg": "Unicorn egg",
+    "butterfly": "Butterfly",
+    "turtle": "Turtle"
+  },
+  "Color Palette": {
+    "black": "Black",
+    "white": "White",
+    "red": "Red",
+    "royal blue": "Royal Blue",
+    "green": "Green",
+    "yellow": "Yellow",
+    "orange": "Orange",
+    "purple": "Purple",
+    "pastel pink": "Pastel Pink",
+    "pastel blue": "Pastel Blue",
+    "pastel lilac": "Pastel Lilac",
+    "pastel green": "Pastel Green",
+    "pastel yellow": "Pastel Yellow",
+    "peach": "Peach",
+    "chrome silver": "Chrome Silver",
+    "chrome gold": "Chrome Gold",
+    "chrome rose gold": "Chrome Rose Gold",
+    "chrome blue": "Chrome Blue",
+    "chrome copper": "Chrome Copper",
+    "blush": "Blush",
+    "canyon rose": "Canyon Rose",
+    "caramel": "Caramel",
+    "sangria": "Sangria",
+    "chocolate": "Chocolate",
+    "slate blue": "Slate Blue",
+    "seafoam": "Seafoam",
+    "teal": "Teal",
+    "smoke grey": "Smoke Grey",
+    "navy": "Navy"
+  },
+  "Orbz toppers": {
+    "red": "Red",
+    "blue/green": "Blue/Green",
+    "black/gold": "Black/gold",
+    "purple": "Purple",
+    "blue/gold": "Blue/gold",
+    "fantacy": "Fantacy",
+    "pink/gold": "Pink/gold",
+    "gold marble": "Gold Marble",
+    "pink marble": "Pink Marble",
+    "blue marble": "Blue Marble"
+  },
+  "Baby color": {
+    "blue": "blue",
+    "pink": "pink"
+  },
+  "Plush add ons": {
+    "none": "None",
+    "teddy bear": "Teddy Bear"
+  },
+  "Graduation stands": {
+    "congrats": "Congrats",
+    "yay": "Yay"
+  }
+}

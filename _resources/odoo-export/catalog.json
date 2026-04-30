@@ -1,0 +1,7037 @@
+{
+  "source": "http://5.78.136.133",
+  "category": "/shop/category/what-we-make-3",
+  "product_count": 51,
+  "products": [
+    {
+      "slug_with_id": "what-we-make-3/baby-shower-combination-photo-opt-14",
+      "slug": "baby-shower-combination-photo-opt",
+      "name": "Baby Shower Combination Photo opt",
+      "url": "http://5.78.136.133/shop/what-we-make-3/baby-shower-combination-photo-opt-14",
+      "base_price": 650.0,
+      "currency": "USD",
+      "description": null,
+      "image_url": "http://5.78.136.133/web/image/product.product/14/image_1920?unique=75652bd",
+      "attributes": {
+        "latex colors": [
+          {
+            "value_id": "1349",
+            "value_name": "Reflex Champage"
+          },
+          {
+            "value_id": "1350",
+            "value_name": "Reflex Truffle"
+          },
+          {
+            "value_id": "1351",
+            "value_name": "Dusk Cream"
+          },
+          {
+            "value_id": "1352",
+            "value_name": "Dusk Green Tea"
+          },
+          {
+            "value_id": "1353",
+            "value_name": "Dusk Blue"
+          },
+          {
+            "value_id": "1354",
+            "value_name": "Dusk Lilac"
+          },
+          {
+            "value_id": "1355",
+            "value_name": "Dusk Rose"
+          },
+          {
+            "value_id": "1356",
+            "value_name": "Teal"
+          },
+          {
+            "value_id": "1357",
+            "value_name": "Blue Slate"
+          },
+          {
+            "value_id": "1358",
+            "value_name": "Smoke Grey"
+          },
+          {
+            "value_id": "1359",
+            "value_name": "Reflex Silver"
+          },
+          {
+            "value_id": "1360",
+            "value_name": "Reflex Gold"
+          },
+          {
+            "value_id": "1361",
+            "value_name": "Reflex Blue"
+          },
+          {
+            "value_id": "1362",
+            "value_name": "Reflex green"
+          },
+          {
+            "value_id": "1363",
+            "value_name": "Reflex Violet"
+          },
+          {
+            "value_id": "1364",
+            "value_name": "Reflex Red"
+          },
+          {
+            "value_id": "1365",
+            "value_name": "White"
+          },
+          {
+            "value_id": "1366",
+            "value_name": "black"
+          },
+          {
+            "value_id": "1367",
+            "value_name": "Red"
+          },
+          {
+            "value_id": "1368",
+            "value_name": "Orange"
+          },
+          {
+            "value_id": "1369",
+            "value_name": "yellow"
+          },
+          {
+            "value_id": "1370",
+            "value_name": "raspberry"
+          },
+          {
+            "value_id": "1371",
+            "value_name": "fuchsia"
+          },
+          {
+            "value_id": "1372",
+            "value_name": "bubble Gum"
+          },
+          {
+            "value_id": "1373",
+            "value_name": "eucalyptus"
+          },
+          {
+            "value_id": "1374",
+            "value_name": "Forest"
+          },
+          {
+            "value_id": "1375",
+            "value_name": "Shamrock"
+          },
+          {
+            "value_id": "1376",
+            "value_name": "Wintergreen"
+          },
+          {
+            "value_id": "1377",
+            "value_name": "Lime"
+          },
+          {
+            "value_id": "1378",
+            "value_name": "LT Blue"
+          },
+          {
+            "value_id": "1379",
+            "value_name": "Periwinkle"
+          },
+          {
+            "value_id": "1380",
+            "value_name": "Royal Blue"
+          },
+          {
+            "value_id": "1381",
+            "value_name": "Robin's Egg"
+          },
+          {
+            "value_id": "1382",
+            "value_name": "Deep Teal"
+          },
+          {
+            "value_id": "1383",
+            "value_name": "Honey"
+          },
+          {
+            "value_id": "1384",
+            "value_name": "Violet"
+          },
+          {
+            "value_id": "1385",
+            "value_name": "Orchid"
+          },
+          {
+            "value_id": "1386",
+            "value_name": "Lilac"
+          },
+          {
+            "value_id": "1387",
+            "value_name": "Chocolate"
+          },
+          {
+            "value_id": "1388",
+            "value_name": "Brown"
+          },
+          {
+            "value_id": "1389",
+            "value_name": "Latte"
+          },
+          {
+            "value_id": "1390",
+            "value_name": "Pastel Pink"
+          },
+          {
+            "value_id": "1391",
+            "value_name": "Pastel Blue"
+          },
+          {
+            "value_id": "1392",
+            "value_name": "Pastel Green"
+          },
+          {
+            "value_id": "1393",
+            "value_name": "Pastel Purple"
+          },
+          {
+            "value_id": "1394",
+            "value_name": "Pastel Yellow"
+          },
+          {
+            "value_id": "1395",
+            "value_name": "Pastel Melon"
+          },
+          {
+            "value_id": "1396",
+            "value_name": "Grey"
+          },
+          {
+            "value_id": "1397",
+            "value_name": "Clear"
+          },
+          {
+            "value_id": "1398",
+            "value_name": "Blush"
+          },
+          {
+            "value_id": "1399",
+            "value_name": "Blue slate"
+          },
+          {
+            "value_id": "1400",
+            "value_name": "Smoke grey"
+          },
+          {
+            "value_id": "1401",
+            "value_name": "Empowermint"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/classic-organic-balloon-garland-19",
+      "slug": "classic-organic-balloon-garland",
+      "name": "Classic Organic Balloon Garland",
+      "url": "http://5.78.136.133/shop/what-we-make-3/classic-organic-balloon-garland-19",
+      "base_price": null,
+      "currency": null,
+      "description": null,
+      "image_url": null,
+      "attributes": {
+        "Garland Length": [
+          {
+            "value_id": "1",
+            "value_name": "6ft"
+          },
+          {
+            "value_id": "2",
+            "value_name": "9ft"
+          },
+          {
+            "value_id": "3",
+            "value_name": "12ft"
+          }
+        ],
+        "latex colors": [
+          {
+            "value_id": "1934",
+            "value_name": "Reflex Champage"
+          },
+          {
+            "value_id": "1935",
+            "value_name": "Reflex Truffle"
+          },
+          {
+            "value_id": "1936",
+            "value_name": "Dusk Cream"
+          },
+          {
+            "value_id": "1937",
+            "value_name": "Dusk Green Tea"
+          },
+          {
+            "value_id": "1938",
+            "value_name": "Dusk Blue"
+          },
+          {
+            "value_id": "1939",
+            "value_name": "Dusk Lilac"
+          },
+          {
+            "value_id": "1940",
+            "value_name": "Dusk Rose"
+          },
+          {
+            "value_id": "1941",
+            "value_name": "Teal"
+          },
+          {
+            "value_id": "1942",
+            "value_name": "Blue Slate"
+          },
+          {
+            "value_id": "1943",
+            "value_name": "Smoke Grey"
+          },
+          {
+            "value_id": "1944",
+            "value_name": "Reflex Silver"
+          },
+          {
+            "value_id": "1945",
+            "value_name": "Reflex Gold"
+          },
+          {
+            "value_id": "1946",
+            "value_name": "Reflex Blue"
+          },
+          {
+            "value_id": "1947",
+            "value_name": "Reflex green"
+          },
+          {
+            "value_id": "1948",
+            "value_name": "Reflex Violet"
+          },
+          {
+            "value_id": "1949",
+            "value_name": "Reflex Red"
+          },
+          {
+            "value_id": "1950",
+            "value_name": "White"
+          },
+          {
+            "value_id": "1951",
+            "value_name": "black"
+          },
+          {
+            "value_id": "1952",
+            "value_name": "Red"
+          },
+          {
+            "value_id": "1953",
+            "value_name": "Orange"
+          },
+          {
+            "value_id": "1954",
+            "value_name": "yellow"
+          },
+          {
+            "value_id": "1955",
+            "value_name": "raspberry"
+          },
+          {
+            "value_id": "1956",
+            "value_name": "fuchsia"
+          },
+          {
+            "value_id": "1957",
+            "value_name": "bubble Gum"
+          },
+          {
+            "value_id": "1958",
+            "value_name": "eucalyptus"
+          },
+          {
+            "value_id": "1959",
+            "value_name": "Forest"
+          },
+          {
+            "value_id": "1960",
+            "value_name": "Shamrock"
+          },
+          {
+            "value_id": "1961",
+            "value_name": "Wintergreen"
+          },
+          {
+            "value_id": "1962",
+            "value_name": "Lime"
+          },
+          {
+            "value_id": "1963",
+            "value_name": "LT Blue"
+          },
+          {
+            "value_id": "1964",
+            "value_name": "Periwinkle"
+          },
+          {
+            "value_id": "1965",
+            "value_name": "Royal Blue"
+          },
+          {
+            "value_id": "1966",
+            "value_name": "Robin's Egg"
+          },
+          {
+            "value_id": "1967",
+            "value_name": "Deep Teal"
+          },
+          {
+            "value_id": "1968",
+            "value_name": "Honey"
+          },
+          {
+            "value_id": "1969",
+            "value_name": "Violet"
+          },
+          {
+            "value_id": "1970",
+            "value_name": "Orchid"
+          },
+          {
+            "value_id": "1971",
+            "value_name": "Lilac"
+          },
+          {
+            "value_id": "1972",
+            "value_name": "Chocolate"
+          },
+          {
+            "value_id": "1973",
+            "value_name": "Brown"
+          },
+          {
+            "value_id": "1974",
+            "value_name": "Latte"
+          },
+          {
+            "value_id": "1975",
+            "value_name": "Pastel Pink"
+          },
+          {
+            "value_id": "1976",
+            "value_name": "Pastel Blue"
+          },
+          {
+            "value_id": "1977",
+            "value_name": "Pastel Green"
+          },
+          {
+            "value_id": "1978",
+            "value_name": "Pastel Purple"
+          },
+          {
+            "value_id": "1979",
+            "value_name": "Pastel Yellow"
+          },
+          {
+            "value_id": "1980",
+            "value_name": "Pastel Melon"
+          },
+          {
+            "value_id": "1981",
+            "value_name": "Grey"
+          },
+          {
+            "value_id": "1982",
+            "value_name": "Clear"
+          },
+          {
+            "value_id": "1983",
+            "value_name": "Blush"
+          },
+          {
+            "value_id": "1984",
+            "value_name": "Blue slate"
+          },
+          {
+            "value_id": "1985",
+            "value_name": "Smoke grey"
+          },
+          {
+            "value_id": "1986",
+            "value_name": "Empowermint"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/basketball-arch-21",
+      "slug": "basketball-arch",
+      "name": "Basketball Arch",
+      "url": "http://5.78.136.133/shop/what-we-make-3/basketball-arch-21",
+      "base_price": "340.00",
+      "currency": "USD",
+      "description": "A full-span arch in your birthday colors. We work with you on palette, size, and placement so it anchors the room exactly where you want it.",
+      "image_url": "http://5.78.136.133/web/image/product.template/21/image_1920",
+      "attributes": {
+        "Arch Size": [
+          {
+            "value_id": "297",
+            "value_name": "20ft"
+          },
+          {
+            "value_id": "298",
+            "value_name": "25ft"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/number-balloon-columns-22",
+      "slug": "number-balloon-columns",
+      "name": "Number Balloon Columns",
+      "url": "http://5.78.136.133/shop/what-we-make-3/number-balloon-columns-22",
+      "base_price": "55.00",
+      "currency": "USD",
+      "description": "Two freestanding columns framing your entrance, stage, or photo area. Choose your colors and we handle the rest.",
+      "image_url": "http://5.78.136.133/web/image/product.template/22/image_1920",
+      "attributes": {
+        "Number colors": [
+          {
+            "value_id": "336",
+            "value_name": "Gold"
+          },
+          {
+            "value_id": "335",
+            "value_name": "Silver"
+          },
+          {
+            "value_id": "337",
+            "value_name": "Rose gold"
+          },
+          {
+            "value_id": "338",
+            "value_name": "pink"
+          },
+          {
+            "value_id": "339",
+            "value_name": "blue"
+          },
+          {
+            "value_id": "691",
+            "value_name": "white gold"
+          },
+          {
+            "value_id": "692",
+            "value_name": "Black"
+          }
+        ],
+        "Number selection": [
+          {
+            "value_id": "299",
+            "value_name": "1"
+          },
+          {
+            "value_id": "300",
+            "value_name": "2"
+          },
+          {
+            "value_id": "301",
+            "value_name": "3"
+          },
+          {
+            "value_id": "302",
+            "value_name": "4"
+          },
+          {
+            "value_id": "303",
+            "value_name": "5"
+          },
+          {
+            "value_id": "304",
+            "value_name": "6"
+          },
+          {
+            "value_id": "305",
+            "value_name": "7"
+          },
+          {
+            "value_id": "306",
+            "value_name": "8"
+          },
+          {
+            "value_id": "307",
+            "value_name": "9"
+          },
+          {
+            "value_id": "308",
+            "value_name": "0"
+          }
+        ],
+        "latex colors": [
+          {
+            "value_id": "1775",
+            "value_name": "Reflex Champage"
+          },
+          {
+            "value_id": "1776",
+            "value_name": "Reflex Truffle"
+          },
+          {
+            "value_id": "1777",
+            "value_name": "Dusk Cream"
+          },
+          {
+            "value_id": "1778",
+            "value_name": "Dusk Green Tea"
+          },
+          {
+            "value_id": "1779",
+            "value_name": "Dusk Blue"
+          },
+          {
+            "value_id": "1780",
+            "value_name": "Dusk Lilac"
+          },
+          {
+            "value_id": "1781",
+            "value_name": "Dusk Rose"
+          },
+          {
+            "value_id": "1782",
+            "value_name": "Teal"
+          },
+          {
+            "value_id": "1783",
+            "value_name": "Blue Slate"
+          },
+          {
+            "value_id": "1784",
+            "value_name": "Smoke Grey"
+          },
+          {
+            "value_id": "1785",
+            "value_name": "Reflex Silver"
+          },
+          {
+            "value_id": "1786",
+            "value_name": "Reflex Gold"
+          },
+          {
+            "value_id": "1787",
+            "value_name": "Reflex Blue"
+          },
+          {
+            "value_id": "1788",
+            "value_name": "Reflex green"
+          },
+          {
+            "value_id": "1789",
+            "value_name": "Reflex Violet"
+          },
+          {
+            "value_id": "1790",
+            "value_name": "Reflex Red"
+          },
+          {
+            "value_id": "1791",
+            "value_name": "White"
+          },
+          {
+            "value_id": "1792",
+            "value_name": "black"
+          },
+          {
+            "value_id": "1793",
+            "value_name": "Red"
+          },
+          {
+            "value_id": "1794",
+            "value_name": "Orange"
+          },
+          {
+            "value_id": "1795",
+            "value_name": "yellow"
+          },
+          {
+            "value_id": "1796",
+            "value_name": "raspberry"
+          },
+          {
+            "value_id": "1797",
+            "value_name": "fuchsia"
+          },
+          {
+            "value_id": "1798",
+            "value_name": "bubble Gum"
+          },
+          {
+            "value_id": "1799",
+            "value_name": "eucalyptus"
+          },
+          {
+            "value_id": "1800",
+            "value_name": "Forest"
+          },
+          {
+            "value_id": "1801",
+            "value_name": "Shamrock"
+          },
+          {
+            "value_id": "1802",
+            "value_name": "Wintergreen"
+          },
+          {
+            "value_id": "1803",
+            "value_name": "Lime"
+          },
+          {
+            "value_id": "1804",
+            "value_name": "LT Blue"
+          },
+          {
+            "value_id": "1805",
+            "value_name": "Periwinkle"
+          },
+          {
+            "value_id": "1806",
+            "value_name": "Royal Blue"
+          },
+          {
+            "value_id": "1807",
+            "value_name": "Robin's Egg"
+          },
+          {
+            "value_id": "1808",
+            "value_name": "Deep Teal"
+          },
+          {
+            "value_id": "1809",
+            "value_name": "Honey"
+          },
+          {
+            "value_id": "1810",
+            "value_name": "Violet"
+          },
+          {
+            "value_id": "1811",
+            "value_name": "Orchid"
+          },
+          {
+            "value_id": "1812",
+            "value_name": "Lilac"
+          },
+          {
+            "value_id": "1813",
+            "value_name": "Chocolate"
+          },
+          {
+            "value_id": "1814",
+            "value_name": "Brown"
+          },
+          {
+            "value_id": "1815",
+            "value_name": "Latte"
+          },
+          {
+            "value_id": "1816",
+            "value_name": "Pastel Pink"
+          },
+          {
+            "value_id": "1817",
+            "value_name": "Pastel Blue"
+          },
+          {
+            "value_id": "1818",
+            "value_name": "Pastel Green"
+          },
+          {
+            "value_id": "1819",
+            "value_name": "Pastel Purple"
+          },
+          {
+            "value_id": "1820",
+            "value_name": "Pastel Yellow"
+          },
+          {
+            "value_id": "1821",
+            "value_name": "Pastel Melon"
+          },
+          {
+            "value_id": "1822",
+            "value_name": "Grey"
+          },
+          {
+            "value_id": "1823",
+            "value_name": "Clear"
+          },
+          {
+            "value_id": "1824",
+            "value_name": "Blush"
+          },
+          {
+            "value_id": "1825",
+            "value_name": "Blue slate"
+          },
+          {
+            "value_id": "1826",
+            "value_name": "Smoke grey"
+          },
+          {
+            "value_id": "1827",
+            "value_name": "Empowermint"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/easter-balloon-arch-bunny-ear-30",
+      "slug": "easter-balloon-arch-bunny-ear",
+      "name": "Easter Balloon Arch - Bunny Ear",
+      "url": "http://5.78.136.133/shop/what-we-make-3/easter-balloon-arch-bunny-ear-30",
+      "base_price": "375.00",
+      "currency": "USD",
+      "description": "Soft pastels and spring greens in a garden-inspired arch. Designed for egg hunts, church socials, and family brunches.",
+      "image_url": "http://5.78.136.133/web/image/product.template/30/image_1920",
+      "attributes": {
+        "Arch Size": [
+          {
+            "value_id": "369",
+            "value_name": "20ft"
+          },
+          {
+            "value_id": "370",
+            "value_name": "25ft"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/graduation-grab-n-go-38",
+      "slug": "graduation-grab-n-go",
+      "name": "Graduation Grab n Go",
+      "url": "http://5.78.136.133/shop/what-we-make-3/graduation-grab-n-go-38",
+      "base_price": 85.0,
+      "currency": "USD",
+      "description": "School colors with a cap topper that says it all. Frames the stage, the photo spot, or the front door.",
+      "image_url": "http://5.78.136.133/web/image/product.product/38/image_1920?unique=d99d953",
+      "attributes": {
+        "latex colors": [
+          {
+            "value_id": "2297",
+            "value_name": "Reflex Champage"
+          },
+          {
+            "value_id": "2298",
+            "value_name": "Reflex Truffle"
+          },
+          {
+            "value_id": "2299",
+            "value_name": "Dusk Cream"
+          },
+          {
+            "value_id": "2300",
+            "value_name": "Dusk Green Tea"
+          },
+          {
+            "value_id": "2301",
+            "value_name": "Dusk Blue"
+          },
+          {
+            "value_id": "2302",
+            "value_name": "Dusk Lilac"
+          },
+          {
+            "value_id": "2303",
+            "value_name": "Dusk Rose"
+          },
+          {
+            "value_id": "2304",
+            "value_name": "Teal"
+          },
+          {
+            "value_id": "2305",
+            "value_name": "Blue Slate"
+          },
+          {
+            "value_id": "2306",
+            "value_name": "Smoke Grey"
+          },
+          {
+            "value_id": "2307",
+            "value_name": "Reflex Silver"
+          },
+          {
+            "value_id": "2308",
+            "value_name": "Reflex Gold"
+          },
+          {
+            "value_id": "2309",
+            "value_name": "Reflex Blue"
+          },
+          {
+            "value_id": "2310",
+            "value_name": "Reflex green"
+          },
+          {
+            "value_id": "2311",
+            "value_name": "Reflex Violet"
+          },
+          {
+            "value_id": "2312",
+            "value_name": "Reflex Red"
+          },
+          {
+            "value_id": "2313",
+            "value_name": "White"
+          },
+          {
+            "value_id": "2314",
+            "value_name": "black"
+          },
+          {
+            "value_id": "2315",
+            "value_name": "Red"
+          },
+          {
+            "value_id": "2316",
+            "value_name": "Orange"
+          },
+          {
+            "value_id": "2317",
+            "value_name": "yellow"
+          },
+          {
+            "value_id": "2318",
+            "value_name": "raspberry"
+          },
+          {
+            "value_id": "2319",
+            "value_name": "fuchsia"
+          },
+          {
+            "value_id": "2320",
+            "value_name": "bubble Gum"
+          },
+          {
+            "value_id": "2321",
+            "value_name": "eucalyptus"
+          },
+          {
+            "value_id": "2322",
+            "value_name": "Forest"
+          },
+          {
+            "value_id": "2323",
+            "value_name": "Shamrock"
+          },
+          {
+            "value_id": "2324",
+            "value_name": "Wintergreen"
+          },
+          {
+            "value_id": "2325",
+            "value_name": "Lime"
+          },
+          {
+            "value_id": "2326",
+            "value_name": "LT Blue"
+          },
+          {
+            "value_id": "2327",
+            "value_name": "Periwinkle"
+          },
+          {
+            "value_id": "2328",
+            "value_name": "Royal Blue"
+          },
+          {
+            "value_id": "2329",
+            "value_name": "Robin's Egg"
+          },
+          {
+            "value_id": "2330",
+            "value_name": "Deep Teal"
+          },
+          {
+            "value_id": "2331",
+            "value_name": "Honey"
+          },
+          {
+            "value_id": "2332",
+            "value_name": "Violet"
+          },
+          {
+            "value_id": "2333",
+            "value_name": "Orchid"
+          },
+          {
+            "value_id": "2334",
+            "value_name": "Lilac"
+          },
+          {
+            "value_id": "2335",
+            "value_name": "Chocolate"
+          },
+          {
+            "value_id": "2336",
+            "value_name": "Brown"
+          },
+          {
+            "value_id": "2337",
+            "value_name": "Latte"
+          },
+          {
+            "value_id": "2338",
+            "value_name": "Pastel Pink"
+          },
+          {
+            "value_id": "2339",
+            "value_name": "Pastel Blue"
+          },
+          {
+            "value_id": "2340",
+            "value_name": "Pastel Green"
+          },
+          {
+            "value_id": "2341",
+            "value_name": "Pastel Purple"
+          },
+          {
+            "value_id": "2342",
+            "value_name": "Pastel Yellow"
+          },
+          {
+            "value_id": "2343",
+            "value_name": "Pastel Melon"
+          },
+          {
+            "value_id": "2344",
+            "value_name": "Grey"
+          },
+          {
+            "value_id": "2345",
+            "value_name": "Clear"
+          },
+          {
+            "value_id": "2346",
+            "value_name": "Blush"
+          },
+          {
+            "value_id": "2347",
+            "value_name": "Blue slate"
+          },
+          {
+            "value_id": "2348",
+            "value_name": "Smoke grey"
+          },
+          {
+            "value_id": "2349",
+            "value_name": "Empowermint"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/halloween-arch-39",
+      "slug": "halloween-arch",
+      "name": "Halloween arch",
+      "url": "http://5.78.136.133/shop/what-we-make-3/halloween-arch-39",
+      "base_price": "300.00",
+      "currency": "USD",
+      "description": "Orange, black, and purple columns that set the mood. Built for trunk-or-treats, porch displays, and haunted house entrances.",
+      "image_url": "http://5.78.136.133/web/image/product.template/39/image_1920",
+      "attributes": {
+        "Arch Size": [
+          {
+            "value_id": "371",
+            "value_name": "20ft"
+          },
+          {
+            "value_id": "372",
+            "value_name": "25ft"
+          },
+          {
+            "value_id": "373",
+            "value_name": "30ft"
+          },
+          {
+            "value_id": "374",
+            "value_name": "35ft"
+          }
+        ],
+        "latex colors": [
+          {
+            "value_id": "1616",
+            "value_name": "Reflex Champage"
+          },
+          {
+            "value_id": "1617",
+            "value_name": "Reflex Truffle"
+          },
+          {
+            "value_id": "1618",
+            "value_name": "Dusk Cream"
+          },
+          {
+            "value_id": "1619",
+            "value_name": "Dusk Green Tea"
+          },
+          {
+            "value_id": "1620",
+            "value_name": "Dusk Blue"
+          },
+          {
+            "value_id": "1621",
+            "value_name": "Dusk Lilac"
+          },
+          {
+            "value_id": "1622",
+            "value_name": "Dusk Rose"
+          },
+          {
+            "value_id": "1623",
+            "value_name": "Teal"
+          },
+          {
+            "value_id": "1624",
+            "value_name": "Blue Slate"
+          },
+          {
+            "value_id": "1625",
+            "value_name": "Smoke Grey"
+          },
+          {
+            "value_id": "1626",
+            "value_name": "Reflex Silver"
+          },
+          {
+            "value_id": "1627",
+            "value_name": "Reflex Gold"
+          },
+          {
+            "value_id": "1628",
+            "value_name": "Reflex Blue"
+          },
+          {
+            "value_id": "1629",
+            "value_name": "Reflex green"
+          },
+          {
+            "value_id": "1630",
+            "value_name": "Reflex Violet"
+          },
+          {
+            "value_id": "1631",
+            "value_name": "Reflex Red"
+          },
+          {
+            "value_id": "1632",
+            "value_name": "White"
+          },
+          {
+            "value_id": "1633",
+            "value_name": "black"
+          },
+          {
+            "value_id": "1634",
+            "value_name": "Red"
+          },
+          {
+            "value_id": "1635",
+            "value_name": "Orange"
+          },
+          {
+            "value_id": "1636",
+            "value_name": "yellow"
+          },
+          {
+            "value_id": "1637",
+            "value_name": "raspberry"
+          },
+          {
+            "value_id": "1638",
+            "value_name": "fuchsia"
+          },
+          {
+            "value_id": "1639",
+            "value_name": "bubble Gum"
+          },
+          {
+            "value_id": "1640",
+            "value_name": "eucalyptus"
+          },
+          {
+            "value_id": "1641",
+            "value_name": "Forest"
+          },
+          {
+            "value_id": "1642",
+            "value_name": "Shamrock"
+          },
+          {
+            "value_id": "1643",
+            "value_name": "Wintergreen"
+          },
+          {
+            "value_id": "1644",
+            "value_name": "Lime"
+          },
+          {
+            "value_id": "1645",
+            "value_name": "LT Blue"
+          },
+          {
+            "value_id": "1646",
+            "value_name": "Periwinkle"
+          },
+          {
+            "value_id": "1647",
+            "value_name": "Royal Blue"
+          },
+          {
+            "value_id": "1648",
+            "value_name": "Robin's Egg"
+          },
+          {
+            "value_id": "1649",
+            "value_name": "Deep Teal"
+          },
+          {
+            "value_id": "1650",
+            "value_name": "Honey"
+          },
+          {
+            "value_id": "1651",
+            "value_name": "Violet"
+          },
+          {
+            "value_id": "1652",
+            "value_name": "Orchid"
+          },
+          {
+            "value_id": "1653",
+            "value_name": "Lilac"
+          },
+          {
+            "value_id": "1654",
+            "value_name": "Chocolate"
+          },
+          {
+            "value_id": "1655",
+            "value_name": "Brown"
+          },
+          {
+            "value_id": "1656",
+            "value_name": "Latte"
+          },
+          {
+            "value_id": "1657",
+            "value_name": "Pastel Pink"
+          },
+          {
+            "value_id": "1658",
+            "value_name": "Pastel Blue"
+          },
+          {
+            "value_id": "1659",
+            "value_name": "Pastel Green"
+          },
+          {
+            "value_id": "1660",
+            "value_name": "Pastel Purple"
+          },
+          {
+            "value_id": "1661",
+            "value_name": "Pastel Yellow"
+          },
+          {
+            "value_id": "1662",
+            "value_name": "Pastel Melon"
+          },
+          {
+            "value_id": "1663",
+            "value_name": "Grey"
+          },
+          {
+            "value_id": "1664",
+            "value_name": "Clear"
+          },
+          {
+            "value_id": "1665",
+            "value_name": "Blush"
+          },
+          {
+            "value_id": "1666",
+            "value_name": "Blue slate"
+          },
+          {
+            "value_id": "1667",
+            "value_name": "Smoke grey"
+          },
+          {
+            "value_id": "1668",
+            "value_name": "Empowermint"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/premium-organic-garland-52",
+      "slug": "premium-organic-garland",
+      "name": "Premium Organic Garland",
+      "url": "http://5.78.136.133/shop/what-we-make-3/premium-organic-garland-52",
+      "base_price": "216.00",
+      "currency": "USD",
+      "description": "Balloons up to 24 inches \u2014 bolder, more dramatic. The scale creates depth and dimension that a standard garland can\u2019t.",
+      "image_url": "http://5.78.136.133/web/image/product.template/52/image_1920",
+      "attributes": {
+        "Garland Length": [
+          {
+            "value_id": "101",
+            "value_name": "6ft"
+          },
+          {
+            "value_id": "102",
+            "value_name": "9ft"
+          },
+          {
+            "value_id": "103",
+            "value_name": "12ft"
+          }
+        ],
+        "latex colors": [
+          {
+            "value_id": "1987",
+            "value_name": "Reflex Champage"
+          },
+          {
+            "value_id": "1988",
+            "value_name": "Reflex Truffle"
+          },
+          {
+            "value_id": "1989",
+            "value_name": "Dusk Cream"
+          },
+          {
+            "value_id": "1990",
+            "value_name": "Dusk Green Tea"
+          },
+          {
+            "value_id": "1991",
+            "value_name": "Dusk Blue"
+          },
+          {
+            "value_id": "1992",
+            "value_name": "Dusk Lilac"
+          },
+          {
+            "value_id": "1993",
+            "value_name": "Dusk Rose"
+          },
+          {
+            "value_id": "1994",
+            "value_name": "Teal"
+          },
+          {
+            "value_id": "1995",
+            "value_name": "Blue Slate"
+          },
+          {
+            "value_id": "1996",
+            "value_name": "Smoke Grey"
+          },
+          {
+            "value_id": "1997",
+            "value_name": "Reflex Silver"
+          },
+          {
+            "value_id": "1998",
+            "value_name": "Reflex Gold"
+          },
+          {
+            "value_id": "1999",
+            "value_name": "Reflex Blue"
+          },
+          {
+            "value_id": "2000",
+            "value_name": "Reflex green"
+          },
+          {
+            "value_id": "2001",
+            "value_name": "Reflex Violet"
+          },
+          {
+            "value_id": "2002",
+            "value_name": "Reflex Red"
+          },
+          {
+            "value_id": "2003",
+            "value_name": "White"
+          },
+          {
+            "value_id": "2004",
+            "value_name": "black"
+          },
+          {
+            "value_id": "2005",
+            "value_name": "Red"
+          },
+          {
+            "value_id": "2006",
+            "value_name": "Orange"
+          },
+          {
+            "value_id": "2007",
+            "value_name": "yellow"
+          },
+          {
+            "value_id": "2008",
+            "value_name": "raspberry"
+          },
+          {
+            "value_id": "2009",
+            "value_name": "fuchsia"
+          },
+          {
+            "value_id": "2010",
+            "value_name": "bubble Gum"
+          },
+          {
+            "value_id": "2011",
+            "value_name": "eucalyptus"
+          },
+          {
+            "value_id": "2012",
+            "value_name": "Forest"
+          },
+          {
+            "value_id": "2013",
+            "value_name": "Shamrock"
+          },
+          {
+            "value_id": "2014",
+            "value_name": "Wintergreen"
+          },
+          {
+            "value_id": "2015",
+            "value_name": "Lime"
+          },
+          {
+            "value_id": "2016",
+            "value_name": "LT Blue"
+          },
+          {
+            "value_id": "2017",
+            "value_name": "Periwinkle"
+          },
+          {
+            "value_id": "2018",
+            "value_name": "Royal Blue"
+          },
+          {
+            "value_id": "2019",
+            "value_name": "Robin's Egg"
+          },
+          {
+            "value_id": "2020",
+            "value_name": "Deep Teal"
+          },
+          {
+            "value_id": "2021",
+            "value_name": "Honey"
+          },
+          {
+            "value_id": "2022",
+            "value_name": "Violet"
+          },
+          {
+            "value_id": "2023",
+            "value_name": "Orchid"
+          },
+          {
+            "value_id": "2024",
+            "value_name": "Lilac"
+          },
+          {
+            "value_id": "2025",
+            "value_name": "Chocolate"
+          },
+          {
+            "value_id": "2026",
+            "value_name": "Brown"
+          },
+          {
+            "value_id": "2027",
+            "value_name": "Latte"
+          },
+          {
+            "value_id": "2028",
+            "value_name": "Pastel Pink"
+          },
+          {
+            "value_id": "2029",
+            "value_name": "Pastel Blue"
+          },
+          {
+            "value_id": "2030",
+            "value_name": "Pastel Green"
+          },
+          {
+            "value_id": "2031",
+            "value_name": "Pastel Purple"
+          },
+          {
+            "value_id": "2032",
+            "value_name": "Pastel Yellow"
+          },
+          {
+            "value_id": "2033",
+            "value_name": "Pastel Melon"
+          },
+          {
+            "value_id": "2034",
+            "value_name": "Grey"
+          },
+          {
+            "value_id": "2035",
+            "value_name": "Clear"
+          },
+          {
+            "value_id": "2036",
+            "value_name": "Blush"
+          },
+          {
+            "value_id": "2037",
+            "value_name": "Blue slate"
+          },
+          {
+            "value_id": "2038",
+            "value_name": "Smoke grey"
+          },
+          {
+            "value_id": "2039",
+            "value_name": "Empowermint"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/premium-organic-arch-53",
+      "slug": "premium-organic-arch",
+      "name": "Premium Organic Arch",
+      "url": "http://5.78.136.133/shop/what-we-make-3/premium-organic-arch-53",
+      "base_price": "720.00",
+      "currency": "USD",
+      "description": "Balloons up to 24 inches, built into an organic arch. The scale adds depth and dimension that a standard arch doesn\u2019t have.",
+      "image_url": "http://5.78.136.133/web/image/product.template/53/image_1920",
+      "attributes": {
+        "Arch Size": [
+          {
+            "value_id": "133",
+            "value_name": "20ft"
+          },
+          {
+            "value_id": "134",
+            "value_name": "25ft"
+          },
+          {
+            "value_id": "135",
+            "value_name": "30ft"
+          },
+          {
+            "value_id": "136",
+            "value_name": "35ft"
+          }
+        ],
+        "latex colors": [
+          {
+            "value_id": "1669",
+            "value_name": "Reflex Champage"
+          },
+          {
+            "value_id": "1670",
+            "value_name": "Reflex Truffle"
+          },
+          {
+            "value_id": "1671",
+            "value_name": "Dusk Cream"
+          },
+          {
+            "value_id": "1672",
+            "value_name": "Dusk Green Tea"
+          },
+          {
+            "value_id": "1673",
+            "value_name": "Dusk Blue"
+          },
+          {
+            "value_id": "1674",
+            "value_name": "Dusk Lilac"
+          },
+          {
+            "value_id": "1675",
+            "value_name": "Dusk Rose"
+          },
+          {
+            "value_id": "1676",
+            "value_name": "Teal"
+          },
+          {
+            "value_id": "1677",
+            "value_name": "Blue Slate"
+          },
+          {
+            "value_id": "1678",
+            "value_name": "Smoke Grey"
+          },
+          {
+            "value_id": "1679",
+            "value_name": "Reflex Silver"
+          },
+          {
+            "value_id": "1680",
+            "value_name": "Reflex Gold"
+          },
+          {
+            "value_id": "1681",
+            "value_name": "Reflex Blue"
+          },
+          {
+            "value_id": "1682",
+            "value_name": "Reflex green"
+          },
+          {
+            "value_id": "1683",
+            "value_name": "Reflex Violet"
+          },
+          {
+            "value_id": "1684",
+            "value_name": "Reflex Red"
+          },
+          {
+            "value_id": "1685",
+            "value_name": "White"
+          },
+          {
+            "value_id": "1686",
+            "value_name": "black"
+          },
+          {
+            "value_id": "1687",
+            "value_name": "Red"
+          },
+          {
+            "value_id": "1688",
+            "value_name": "Orange"
+          },
+          {
+            "value_id": "1689",
+            "value_name": "yellow"
+          },
+          {
+            "value_id": "1690",
+            "value_name": "raspberry"
+          },
+          {
+            "value_id": "1691",
+            "value_name": "fuchsia"
+          },
+          {
+            "value_id": "1692",
+            "value_name": "bubble Gum"
+          },
+          {
+            "value_id": "1693",
+            "value_name": "eucalyptus"
+          },
+          {
+            "value_id": "1694",
+            "value_name": "Forest"
+          },
+          {
+            "value_id": "1695",
+            "value_name": "Shamrock"
+          },
+          {
+            "value_id": "1696",
+            "value_name": "Wintergreen"
+          },
+          {
+            "value_id": "1697",
+            "value_name": "Lime"
+          },
+          {
+            "value_id": "1698",
+            "value_name": "LT Blue"
+          },
+          {
+            "value_id": "1699",
+            "value_name": "Periwinkle"
+          },
+          {
+            "value_id": "1700",
+            "value_name": "Royal Blue"
+          },
+          {
+            "value_id": "1701",
+            "value_name": "Robin's Egg"
+          },
+          {
+            "value_id": "1702",
+            "value_name": "Deep Teal"
+          },
+          {
+            "value_id": "1703",
+            "value_name": "Honey"
+          },
+          {
+            "value_id": "1704",
+            "value_name": "Violet"
+          },
+          {
+            "value_id": "1705",
+            "value_name": "Orchid"
+          },
+          {
+            "value_id": "1706",
+            "value_name": "Lilac"
+          },
+          {
+            "value_id": "1707",
+            "value_name": "Chocolate"
+          },
+          {
+            "value_id": "1708",
+            "value_name": "Brown"
+          },
+          {
+            "value_id": "1709",
+            "value_name": "Latte"
+          },
+          {
+            "value_id": "1710",
+            "value_name": "Pastel Pink"
+          },
+          {
+            "value_id": "1711",
+            "value_name": "Pastel Blue"
+          },
+          {
+            "value_id": "1712",
+            "value_name": "Pastel Green"
+          },
+          {
+            "value_id": "1713",
+            "value_name": "Pastel Purple"
+          },
+          {
+            "value_id": "1714",
+            "value_name": "Pastel Yellow"
+          },
+          {
+            "value_id": "1715",
+            "value_name": "Pastel Melon"
+          },
+          {
+            "value_id": "1716",
+            "value_name": "Grey"
+          },
+          {
+            "value_id": "1717",
+            "value_name": "Clear"
+          },
+          {
+            "value_id": "1718",
+            "value_name": "Blush"
+          },
+          {
+            "value_id": "1719",
+            "value_name": "Blue slate"
+          },
+          {
+            "value_id": "1720",
+            "value_name": "Smoke grey"
+          },
+          {
+            "value_id": "1721",
+            "value_name": "Empowermint"
+          }
+        ],
+        "Add ons": [
+          {
+            "value_id": "933",
+            "value_name": "Foil stars"
+          },
+          {
+            "value_id": "934",
+            "value_name": "themed foils"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/pemium-organic-column-54",
+      "slug": "pemium-organic-column",
+      "name": "Pemium Organic Column",
+      "url": "http://5.78.136.133/shop/what-we-make-3/pemium-organic-column-54",
+      "base_price": "180.00",
+      "currency": "USD",
+      "description": "Balloons up to 24 inches, stacked into a column. The scale brings presence that a standard column doesn\u2019t.",
+      "image_url": "http://5.78.136.133/web/image/product.template/54/image_1920",
+      "attributes": {
+        "Column Height": [
+          {
+            "value_id": "166",
+            "value_name": "5ft"
+          },
+          {
+            "value_id": "167",
+            "value_name": "6ft"
+          },
+          {
+            "value_id": "168",
+            "value_name": "7ft"
+          },
+          {
+            "value_id": "169",
+            "value_name": "8ft"
+          },
+          {
+            "value_id": "170",
+            "value_name": "9ft"
+          },
+          {
+            "value_id": "171",
+            "value_name": "10ft"
+          }
+        ],
+        "latex colors": [
+          {
+            "value_id": "1561",
+            "value_name": "Reflex Champage"
+          },
+          {
+            "value_id": "1562",
+            "value_name": "Reflex Truffle"
+          },
+          {
+            "value_id": "1563",
+            "value_name": "Dusk Cream"
+          },
+          {
+            "value_id": "1564",
+            "value_name": "Dusk Green Tea"
+          },
+          {
+            "value_id": "1565",
+            "value_name": "Dusk Blue"
+          },
+          {
+            "value_id": "1566",
+            "value_name": "Dusk Lilac"
+          },
+          {
+            "value_id": "1567",
+            "value_name": "Dusk Rose"
+          },
+          {
+            "value_id": "1568",
+            "value_name": "Teal"
+          },
+          {
+            "value_id": "1569",
+            "value_name": "Blue Slate"
+          },
+          {
+            "value_id": "1570",
+            "value_name": "Smoke Grey"
+          },
+          {
+            "value_id": "1571",
+            "value_name": "Reflex Silver"
+          },
+          {
+            "value_id": "1572",
+            "value_name": "Reflex Gold"
+          },
+          {
+            "value_id": "1573",
+            "value_name": "Reflex Blue"
+          },
+          {
+            "value_id": "1574",
+            "value_name": "Reflex green"
+          },
+          {
+            "value_id": "1575",
+            "value_name": "Reflex Violet"
+          },
+          {
+            "value_id": "1576",
+            "value_name": "Reflex Red"
+          },
+          {
+            "value_id": "1577",
+            "value_name": "White"
+          },
+          {
+            "value_id": "1578",
+            "value_name": "black"
+          },
+          {
+            "value_id": "1579",
+            "value_name": "Red"
+          },
+          {
+            "value_id": "1580",
+            "value_name": "Orange"
+          },
+          {
+            "value_id": "1581",
+            "value_name": "yellow"
+          },
+          {
+            "value_id": "1582",
+            "value_name": "raspberry"
+          },
+          {
+            "value_id": "1583",
+            "value_name": "fuchsia"
+          },
+          {
+            "value_id": "1584",
+            "value_name": "bubble Gum"
+          },
+          {
+            "value_id": "1585",
+            "value_name": "eucalyptus"
+          },
+          {
+            "value_id": "1586",
+            "value_name": "Forest"
+          },
+          {
+            "value_id": "1587",
+            "value_name": "Shamrock"
+          },
+          {
+            "value_id": "1588",
+            "value_name": "Wintergreen"
+          },
+          {
+            "value_id": "1589",
+            "value_name": "Lime"
+          },
+          {
+            "value_id": "1590",
+            "value_name": "LT Blue"
+          },
+          {
+            "value_id": "1591",
+            "value_name": "Periwinkle"
+          },
+          {
+            "value_id": "1592",
+            "value_name": "Royal Blue"
+          },
+          {
+            "value_id": "1593",
+            "value_name": "Robin's Egg"
+          },
+          {
+            "value_id": "1594",
+            "value_name": "Deep Teal"
+          },
+          {
+            "value_id": "1595",
+            "value_name": "Honey"
+          },
+          {
+            "value_id": "1596",
+            "value_name": "Violet"
+          },
+          {
+            "value_id": "1597",
+            "value_name": "Orchid"
+          },
+          {
+            "value_id": "1598",
+            "value_name": "Lilac"
+          },
+          {
+            "value_id": "1599",
+            "value_name": "Chocolate"
+          },
+          {
+            "value_id": "1600",
+            "value_name": "Brown"
+          },
+          {
+            "value_id": "1601",
+            "value_name": "Latte"
+          },
+          {
+            "value_id": "1602",
+            "value_name": "Pastel Pink"
+          },
+          {
+            "value_id": "1603",
+            "value_name": "Pastel Blue"
+          },
+          {
+            "value_id": "1604",
+            "value_name": "Pastel Green"
+          },
+          {
+            "value_id": "1605",
+            "value_name": "Pastel Purple"
+          },
+          {
+            "value_id": "1606",
+            "value_name": "Pastel Yellow"
+          },
+          {
+            "value_id": "1607",
+            "value_name": "Pastel Melon"
+          },
+          {
+            "value_id": "1608",
+            "value_name": "Grey"
+          },
+          {
+            "value_id": "1609",
+            "value_name": "Clear"
+          },
+          {
+            "value_id": "1610",
+            "value_name": "Blush"
+          },
+          {
+            "value_id": "1611",
+            "value_name": "Blue slate"
+          },
+          {
+            "value_id": "1612",
+            "value_name": "Smoke grey"
+          },
+          {
+            "value_id": "1613",
+            "value_name": "Empowermint"
+          }
+        ],
+        "Add ons": [
+          {
+            "value_id": "1614",
+            "value_name": "Foil stars"
+          },
+          {
+            "value_id": "1615",
+            "value_name": "themed foils"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/pride-progress-rainbow-balloon-arch-55",
+      "slug": "pride-progress-rainbow-balloon-arch",
+      "name": "Pride progress Rainbow Balloon Arch",
+      "url": "http://5.78.136.133/shop/what-we-make-3/pride-progress-rainbow-balloon-arch-55",
+      "base_price": "260.00",
+      "currency": "USD",
+      "description": "Full-spectrum rainbow in a statement arch. Bold, joyful, and built to celebrate exactly who you are.",
+      "image_url": "http://5.78.136.133/web/image/product.template/55/image_1920",
+      "attributes": {
+        "Arch Size": [
+          {
+            "value_id": "293",
+            "value_name": "20ft"
+          },
+          {
+            "value_id": "294",
+            "value_name": "25ft"
+          },
+          {
+            "value_id": "295",
+            "value_name": "30ft"
+          },
+          {
+            "value_id": "296",
+            "value_name": "35ft"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/classic-arch-57",
+      "slug": "classic-arch",
+      "name": "Classic Arch",
+      "url": "http://5.78.136.133/shop/what-we-make-3/classic-arch-57",
+      "base_price": "260.00",
+      "currency": "USD",
+      "description": "Every arch is built by hand, sized to your space, and designed around the colors you love. Structured spirals or layered bands \u2014 up to 4 colors, shaped to fit the entrance.",
+      "image_url": "http://5.78.136.133/web/image/product.template/57/image_1920",
+      "attributes": {
+        "Arch Size": [
+          {
+            "value_id": "201",
+            "value_name": "20ft"
+          },
+          {
+            "value_id": "202",
+            "value_name": "25ft"
+          },
+          {
+            "value_id": "203",
+            "value_name": "30ft"
+          },
+          {
+            "value_id": "204",
+            "value_name": "35ft"
+          }
+        ],
+        "latex colors": [
+          {
+            "value_id": "1508",
+            "value_name": "Reflex Champage"
+          },
+          {
+            "value_id": "1509",
+            "value_name": "Reflex Truffle"
+          },
+          {
+            "value_id": "1510",
+            "value_name": "Dusk Cream"
+          },
+          {
+            "value_id": "1511",
+            "value_name": "Dusk Green Tea"
+          },
+          {
+            "value_id": "1512",
+            "value_name": "Dusk Blue"
+          },
+          {
+            "value_id": "1513",
+            "value_name": "Dusk Lilac"
+          },
+          {
+            "value_id": "1514",
+            "value_name": "Dusk Rose"
+          },
+          {
+            "value_id": "1515",
+            "value_name": "Teal"
+          },
+          {
+            "value_id": "1516",
+            "value_name": "Blue Slate"
+          },
+          {
+            "value_id": "1517",
+            "value_name": "Smoke Grey"
+          },
+          {
+            "value_id": "1518",
+            "value_name": "Reflex Silver"
+          },
+          {
+            "value_id": "1519",
+            "value_name": "Reflex Gold"
+          },
+          {
+            "value_id": "1520",
+            "value_name": "Reflex Blue"
+          },
+          {
+            "value_id": "1521",
+            "value_name": "Reflex green"
+          },
+          {
+            "value_id": "1522",
+            "value_name": "Reflex Violet"
+          },
+          {
+            "value_id": "1523",
+            "value_name": "Reflex Red"
+          },
+          {
+            "value_id": "1524",
+            "value_name": "White"
+          },
+          {
+            "value_id": "1525",
+            "value_name": "black"
+          },
+          {
+            "value_id": "1526",
+            "value_name": "Red"
+          },
+          {
+            "value_id": "1527",
+            "value_name": "Orange"
+          },
+          {
+            "value_id": "1528",
+            "value_name": "yellow"
+          },
+          {
+            "value_id": "1529",
+            "value_name": "raspberry"
+          },
+          {
+            "value_id": "1530",
+            "value_name": "fuchsia"
+          },
+          {
+            "value_id": "1531",
+            "value_name": "bubble Gum"
+          },
+          {
+            "value_id": "1532",
+            "value_name": "eucalyptus"
+          },
+          {
+            "value_id": "1533",
+            "value_name": "Forest"
+          },
+          {
+            "value_id": "1534",
+            "value_name": "Shamrock"
+          },
+          {
+            "value_id": "1535",
+            "value_name": "Wintergreen"
+          },
+          {
+            "value_id": "1536",
+            "value_name": "Lime"
+          },
+          {
+            "value_id": "1537",
+            "value_name": "LT Blue"
+          },
+          {
+            "value_id": "1538",
+            "value_name": "Periwinkle"
+          },
+          {
+            "value_id": "1539",
+            "value_name": "Royal Blue"
+          },
+          {
+            "value_id": "1540",
+            "value_name": "Robin's Egg"
+          },
+          {
+            "value_id": "1541",
+            "value_name": "Deep Teal"
+          },
+          {
+            "value_id": "1542",
+            "value_name": "Honey"
+          },
+          {
+            "value_id": "1543",
+            "value_name": "Violet"
+          },
+          {
+            "value_id": "1544",
+            "value_name": "Orchid"
+          },
+          {
+            "value_id": "1545",
+            "value_name": "Lilac"
+          },
+          {
+            "value_id": "1546",
+            "value_name": "Chocolate"
+          },
+          {
+            "value_id": "1547",
+            "value_name": "Brown"
+          },
+          {
+            "value_id": "1548",
+            "value_name": "Latte"
+          },
+          {
+            "value_id": "1549",
+            "value_name": "Pastel Pink"
+          },
+          {
+            "value_id": "1550",
+            "value_name": "Pastel Blue"
+          },
+          {
+            "value_id": "1551",
+            "value_name": "Pastel Green"
+          },
+          {
+            "value_id": "1552",
+            "value_name": "Pastel Purple"
+          },
+          {
+            "value_id": "1553",
+            "value_name": "Pastel Yellow"
+          },
+          {
+            "value_id": "1554",
+            "value_name": "Pastel Melon"
+          },
+          {
+            "value_id": "1555",
+            "value_name": "Grey"
+          },
+          {
+            "value_id": "1556",
+            "value_name": "Clear"
+          },
+          {
+            "value_id": "1557",
+            "value_name": "Blush"
+          },
+          {
+            "value_id": "1558",
+            "value_name": "Blue slate"
+          },
+          {
+            "value_id": "1559",
+            "value_name": "Smoke grey"
+          },
+          {
+            "value_id": "1560",
+            "value_name": "Empowermint"
+          }
+        ],
+        "Design": [
+          {
+            "value_id": "234",
+            "value_name": "Swirl (up to 4 colors)"
+          },
+          {
+            "value_id": "235",
+            "value_name": "Layered (up to 8 colors)"
+          }
+        ],
+        "LED Lights": [
+          {
+            "value_id": "236",
+            "value_name": "No Lights"
+          },
+          {
+            "value_id": "237",
+            "value_name": "Add LED Lights"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/classic-column-58",
+      "slug": "classic-column",
+      "name": "Classic Column",
+      "url": "http://5.78.136.133/shop/what-we-make-3/classic-column-58",
+      "base_price": null,
+      "currency": null,
+      "description": null,
+      "image_url": null,
+      "attributes": {
+        "Column Height": [
+          {
+            "value_id": "238",
+            "value_name": "5ft"
+          },
+          {
+            "value_id": "239",
+            "value_name": "6ft"
+          },
+          {
+            "value_id": "240",
+            "value_name": "7ft"
+          },
+          {
+            "value_id": "241",
+            "value_name": "8ft"
+          },
+          {
+            "value_id": "242",
+            "value_name": "9ft"
+          },
+          {
+            "value_id": "243",
+            "value_name": "10ft"
+          }
+        ],
+        "latex colors": [
+          {
+            "value_id": "1828",
+            "value_name": "Reflex Champage"
+          },
+          {
+            "value_id": "1829",
+            "value_name": "Reflex Truffle"
+          },
+          {
+            "value_id": "1830",
+            "value_name": "Dusk Cream"
+          },
+          {
+            "value_id": "1831",
+            "value_name": "Dusk Green Tea"
+          },
+          {
+            "value_id": "1832",
+            "value_name": "Dusk Blue"
+          },
+          {
+            "value_id": "1833",
+            "value_name": "Dusk Lilac"
+          },
+          {
+            "value_id": "1834",
+            "value_name": "Dusk Rose"
+          },
+          {
+            "value_id": "1835",
+            "value_name": "Teal"
+          },
+          {
+            "value_id": "1836",
+            "value_name": "Blue Slate"
+          },
+          {
+            "value_id": "1837",
+            "value_name": "Smoke Grey"
+          },
+          {
+            "value_id": "1838",
+            "value_name": "Reflex Silver"
+          },
+          {
+            "value_id": "1839",
+            "value_name": "Reflex Gold"
+          },
+          {
+            "value_id": "1840",
+            "value_name": "Reflex Blue"
+          },
+          {
+            "value_id": "1841",
+            "value_name": "Reflex green"
+          },
+          {
+            "value_id": "1842",
+            "value_name": "Reflex Violet"
+          },
+          {
+            "value_id": "1843",
+            "value_name": "Reflex Red"
+          },
+          {
+            "value_id": "1844",
+            "value_name": "White"
+          },
+          {
+            "value_id": "1845",
+            "value_name": "black"
+          },
+          {
+            "value_id": "1846",
+            "value_name": "Red"
+          },
+          {
+            "value_id": "1847",
+            "value_name": "Orange"
+          },
+          {
+            "value_id": "1848",
+            "value_name": "yellow"
+          },
+          {
+            "value_id": "1849",
+            "value_name": "raspberry"
+          },
+          {
+            "value_id": "1850",
+            "value_name": "fuchsia"
+          },
+          {
+            "value_id": "1851",
+            "value_name": "bubble Gum"
+          },
+          {
+            "value_id": "1852",
+            "value_name": "eucalyptus"
+          },
+          {
+            "value_id": "1853",
+            "value_name": "Forest"
+          },
+          {
+            "value_id": "1854",
+            "value_name": "Shamrock"
+          },
+          {
+            "value_id": "1855",
+            "value_name": "Wintergreen"
+          },
+          {
+            "value_id": "1856",
+            "value_name": "Lime"
+          },
+          {
+            "value_id": "1857",
+            "value_name": "LT Blue"
+          },
+          {
+            "value_id": "1858",
+            "value_name": "Periwinkle"
+          },
+          {
+            "value_id": "1859",
+            "value_name": "Royal Blue"
+          },
+          {
+            "value_id": "1860",
+            "value_name": "Robin's Egg"
+          },
+          {
+            "value_id": "1861",
+            "value_name": "Deep Teal"
+          },
+          {
+            "value_id": "1862",
+            "value_name": "Honey"
+          },
+          {
+            "value_id": "1863",
+            "value_name": "Violet"
+          },
+          {
+            "value_id": "1864",
+            "value_name": "Orchid"
+          },
+          {
+            "value_id": "1865",
+            "value_name": "Lilac"
+          },
+          {
+            "value_id": "1866",
+            "value_name": "Chocolate"
+          },
+          {
+            "value_id": "1867",
+            "value_name": "Brown"
+          },
+          {
+            "value_id": "1868",
+            "value_name": "Latte"
+          },
+          {
+            "value_id": "1869",
+            "value_name": "Pastel Pink"
+          },
+          {
+            "value_id": "1870",
+            "value_name": "Pastel Blue"
+          },
+          {
+            "value_id": "1871",
+            "value_name": "Pastel Green"
+          },
+          {
+            "value_id": "1872",
+            "value_name": "Pastel Purple"
+          },
+          {
+            "value_id": "1873",
+            "value_name": "Pastel Yellow"
+          },
+          {
+            "value_id": "1874",
+            "value_name": "Pastel Melon"
+          },
+          {
+            "value_id": "1875",
+            "value_name": "Grey"
+          },
+          {
+            "value_id": "1876",
+            "value_name": "Clear"
+          },
+          {
+            "value_id": "1877",
+            "value_name": "Blush"
+          },
+          {
+            "value_id": "1878",
+            "value_name": "Blue slate"
+          },
+          {
+            "value_id": "1879",
+            "value_name": "Smoke grey"
+          },
+          {
+            "value_id": "1880",
+            "value_name": "Empowermint"
+          }
+        ],
+        "topper": [
+          {
+            "value_id": "287",
+            "value_name": "large topper"
+          },
+          {
+            "value_id": "288",
+            "value_name": "Burst"
+          },
+          {
+            "value_id": "289",
+            "value_name": "foil star"
+          },
+          {
+            "value_id": "290",
+            "value_name": "foil heart"
+          },
+          {
+            "value_id": "291",
+            "value_name": "bubble gum"
+          },
+          {
+            "value_id": "292",
+            "value_name": "Logo"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/classic-organic-columns-65",
+      "slug": "classic-organic-columns",
+      "name": "Classic Organic columns",
+      "url": "http://5.78.136.133/shop/what-we-make-3/classic-organic-columns-65",
+      "base_price": "125.00",
+      "currency": "USD",
+      "description": "Classic Organic columns",
+      "image_url": "http://5.78.136.133/web/image/product.template/65/image_1920",
+      "attributes": {
+        "Column Height": [
+          {
+            "value_id": "375",
+            "value_name": "5ft"
+          },
+          {
+            "value_id": "376",
+            "value_name": "6ft"
+          },
+          {
+            "value_id": "377",
+            "value_name": "7ft"
+          },
+          {
+            "value_id": "378",
+            "value_name": "8ft"
+          },
+          {
+            "value_id": "379",
+            "value_name": "9ft"
+          },
+          {
+            "value_id": "380",
+            "value_name": "10ft"
+          }
+        ],
+        "latex colors": [
+          {
+            "value_id": "1881",
+            "value_name": "Reflex Champage"
+          },
+          {
+            "value_id": "1882",
+            "value_name": "Reflex Truffle"
+          },
+          {
+            "value_id": "1883",
+            "value_name": "Dusk Cream"
+          },
+          {
+            "value_id": "1884",
+            "value_name": "Dusk Green Tea"
+          },
+          {
+            "value_id": "1885",
+            "value_name": "Dusk Blue"
+          },
+          {
+            "value_id": "1886",
+            "value_name": "Dusk Lilac"
+          },
+          {
+            "value_id": "1887",
+            "value_name": "Dusk Rose"
+          },
+          {
+            "value_id": "1888",
+            "value_name": "Teal"
+          },
+          {
+            "value_id": "1889",
+            "value_name": "Blue Slate"
+          },
+          {
+            "value_id": "1890",
+            "value_name": "Smoke Grey"
+          },
+          {
+            "value_id": "1891",
+            "value_name": "Reflex Silver"
+          },
+          {
+            "value_id": "1892",
+            "value_name": "Reflex Gold"
+          },
+          {
+            "value_id": "1893",
+            "value_name": "Reflex Blue"
+          },
+          {
+            "value_id": "1894",
+            "value_name": "Reflex green"
+          },
+          {
+            "value_id": "1895",
+            "value_name": "Reflex Violet"
+          },
+          {
+            "value_id": "1896",
+            "value_name": "Reflex Red"
+          },
+          {
+            "value_id": "1897",
+            "value_name": "White"
+          },
+          {
+            "value_id": "1898",
+            "value_name": "black"
+          },
+          {
+            "value_id": "1899",
+            "value_name": "Red"
+          },
+          {
+            "value_id": "1900",
+            "value_name": "Orange"
+          },
+          {
+            "value_id": "1901",
+            "value_name": "yellow"
+          },
+          {
+            "value_id": "1902",
+            "value_name": "raspberry"
+          },
+          {
+            "value_id": "1903",
+            "value_name": "fuchsia"
+          },
+          {
+            "value_id": "1904",
+            "value_name": "bubble Gum"
+          },
+          {
+            "value_id": "1905",
+            "value_name": "eucalyptus"
+          },
+          {
+            "value_id": "1906",
+            "value_name": "Forest"
+          },
+          {
+            "value_id": "1907",
+            "value_name": "Shamrock"
+          },
+          {
+            "value_id": "1908",
+            "value_name": "Wintergreen"
+          },
+          {
+            "value_id": "1909",
+            "value_name": "Lime"
+          },
+          {
+            "value_id": "1910",
+            "value_name": "LT Blue"
+          },
+          {
+            "value_id": "1911",
+            "value_name": "Periwinkle"
+          },
+          {
+            "value_id": "1912",
+            "value_name": "Royal Blue"
+          },
+          {
+            "value_id": "1913",
+            "value_name": "Robin's Egg"
+          },
+          {
+            "value_id": "1914",
+            "value_name": "Deep Teal"
+          },
+          {
+            "value_id": "1915",
+            "value_name": "Honey"
+          },
+          {
+            "value_id": "1916",
+            "value_name": "Violet"
+          },
+          {
+            "value_id": "1917",
+            "value_name": "Orchid"
+          },
+          {
+            "value_id": "1918",
+            "value_name": "Lilac"
+          },
+          {
+            "value_id": "1919",
+            "value_name": "Chocolate"
+          },
+          {
+            "value_id": "1920",
+            "value_name": "Brown"
+          },
+          {
+            "value_id": "1921",
+            "value_name": "Latte"
+          },
+          {
+            "value_id": "1922",
+            "value_name": "Pastel Pink"
+          },
+          {
+            "value_id": "1923",
+            "value_name": "Pastel Blue"
+          },
+          {
+            "value_id": "1924",
+            "value_name": "Pastel Green"
+          },
+          {
+            "value_id": "1925",
+            "value_name": "Pastel Purple"
+          },
+          {
+            "value_id": "1926",
+            "value_name": "Pastel Yellow"
+          },
+          {
+            "value_id": "1927",
+            "value_name": "Pastel Melon"
+          },
+          {
+            "value_id": "1928",
+            "value_name": "Grey"
+          },
+          {
+            "value_id": "1929",
+            "value_name": "Clear"
+          },
+          {
+            "value_id": "1930",
+            "value_name": "Blush"
+          },
+          {
+            "value_id": "1931",
+            "value_name": "Blue slate"
+          },
+          {
+            "value_id": "1932",
+            "value_name": "Smoke grey"
+          },
+          {
+            "value_id": "1933",
+            "value_name": "Empowermint"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/baby-shower-garland-71",
+      "slug": "baby-shower-garland",
+      "name": "Baby Shower Garland",
+      "url": "http://5.78.136.133/shop/what-we-make-3/baby-shower-garland-71",
+      "base_price": "150.00",
+      "currency": "USD",
+      "description": "A flowing organic garland in soft tones. We design around your theme \u2014 gender reveal, woodland, safari, or classic pastels.",
+      "image_url": "http://5.78.136.133/web/image/product.template/71/image_1920",
+      "attributes": {
+        "Garland Length": [
+          {
+            "value_id": "1293",
+            "value_name": "6ft"
+          },
+          {
+            "value_id": "1294",
+            "value_name": "9ft"
+          },
+          {
+            "value_id": "1295",
+            "value_name": "12ft"
+          }
+        ],
+        "latex colors": [
+          {
+            "value_id": "1296",
+            "value_name": "Reflex Champage"
+          },
+          {
+            "value_id": "1297",
+            "value_name": "Reflex Truffle"
+          },
+          {
+            "value_id": "1298",
+            "value_name": "Dusk Cream"
+          },
+          {
+            "value_id": "1299",
+            "value_name": "Dusk Green Tea"
+          },
+          {
+            "value_id": "1300",
+            "value_name": "Dusk Blue"
+          },
+          {
+            "value_id": "1301",
+            "value_name": "Dusk Lilac"
+          },
+          {
+            "value_id": "1302",
+            "value_name": "Dusk Rose"
+          },
+          {
+            "value_id": "1303",
+            "value_name": "Teal"
+          },
+          {
+            "value_id": "1304",
+            "value_name": "Blue Slate"
+          },
+          {
+            "value_id": "1305",
+            "value_name": "Smoke Grey"
+          },
+          {
+            "value_id": "1306",
+            "value_name": "Reflex Silver"
+          },
+          {
+            "value_id": "1307",
+            "value_name": "Reflex Gold"
+          },
+          {
+            "value_id": "1308",
+            "value_name": "Reflex Blue"
+          },
+          {
+            "value_id": "1309",
+            "value_name": "Reflex green"
+          },
+          {
+            "value_id": "1310",
+            "value_name": "Reflex Violet"
+          },
+          {
+            "value_id": "1311",
+            "value_name": "Reflex Red"
+          },
+          {
+            "value_id": "1312",
+            "value_name": "White"
+          },
+          {
+            "value_id": "1313",
+            "value_name": "black"
+          },
+          {
+            "value_id": "1314",
+            "value_name": "Red"
+          },
+          {
+            "value_id": "1315",
+            "value_name": "Orange"
+          },
+          {
+            "value_id": "1316",
+            "value_name": "yellow"
+          },
+          {
+            "value_id": "1317",
+            "value_name": "raspberry"
+          },
+          {
+            "value_id": "1318",
+            "value_name": "fuchsia"
+          },
+          {
+            "value_id": "1319",
+            "value_name": "bubble Gum"
+          },
+          {
+            "value_id": "1320",
+            "value_name": "eucalyptus"
+          },
+          {
+            "value_id": "1321",
+            "value_name": "Forest"
+          },
+          {
+            "value_id": "1322",
+            "value_name": "Shamrock"
+          },
+          {
+            "value_id": "1323",
+            "value_name": "Wintergreen"
+          },
+          {
+            "value_id": "1324",
+            "value_name": "Lime"
+          },
+          {
+            "value_id": "1325",
+            "value_name": "LT Blue"
+          },
+          {
+            "value_id": "1326",
+            "value_name": "Periwinkle"
+          },
+          {
+            "value_id": "1327",
+            "value_name": "Royal Blue"
+          },
+          {
+            "value_id": "1328",
+            "value_name": "Robin's Egg"
+          },
+          {
+            "value_id": "1329",
+            "value_name": "Deep Teal"
+          },
+          {
+            "value_id": "1330",
+            "value_name": "Honey"
+          },
+          {
+            "value_id": "1331",
+            "value_name": "Violet"
+          },
+          {
+            "value_id": "1332",
+            "value_name": "Orchid"
+          },
+          {
+            "value_id": "1333",
+            "value_name": "Lilac"
+          },
+          {
+            "value_id": "1334",
+            "value_name": "Chocolate"
+          },
+          {
+            "value_id": "1335",
+            "value_name": "Brown"
+          },
+          {
+            "value_id": "1336",
+            "value_name": "Latte"
+          },
+          {
+            "value_id": "1337",
+            "value_name": "Pastel Pink"
+          },
+          {
+            "value_id": "1338",
+            "value_name": "Pastel Blue"
+          },
+          {
+            "value_id": "1339",
+            "value_name": "Pastel Green"
+          },
+          {
+            "value_id": "1340",
+            "value_name": "Pastel Purple"
+          },
+          {
+            "value_id": "1341",
+            "value_name": "Pastel Yellow"
+          },
+          {
+            "value_id": "1342",
+            "value_name": "Pastel Melon"
+          },
+          {
+            "value_id": "1343",
+            "value_name": "Grey"
+          },
+          {
+            "value_id": "1344",
+            "value_name": "Clear"
+          },
+          {
+            "value_id": "1345",
+            "value_name": "Blush"
+          },
+          {
+            "value_id": "1346",
+            "value_name": "Blue slate"
+          },
+          {
+            "value_id": "1347",
+            "value_name": "Smoke grey"
+          },
+          {
+            "value_id": "1348",
+            "value_name": "Empowermint"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/balloon-drop-74",
+      "slug": "balloon-drop",
+      "name": "Balloon Drop",
+      "url": "http://5.78.136.133/shop/what-we-make-3/balloon-drop-74",
+      "base_price": "375.00",
+      "currency": "USD",
+      "description": "Hundreds of balloons ready for the stroke of midnight. We build the net, you pull the cord. The room erupts.",
+      "image_url": "http://5.78.136.133/web/image/product.template/74/image_1920",
+      "attributes": {
+        "Drop Size": [
+          {
+            "value_id": "802",
+            "value_name": "250"
+          },
+          {
+            "value_id": "803",
+            "value_name": "500"
+          },
+          {
+            "value_id": "804",
+            "value_name": "1000"
+          }
+        ],
+        "latex colors": [
+          {
+            "value_id": "2040",
+            "value_name": "Reflex Champage"
+          },
+          {
+            "value_id": "2041",
+            "value_name": "Reflex Truffle"
+          },
+          {
+            "value_id": "2042",
+            "value_name": "Dusk Cream"
+          },
+          {
+            "value_id": "2043",
+            "value_name": "Dusk Green Tea"
+          },
+          {
+            "value_id": "2044",
+            "value_name": "Dusk Blue"
+          },
+          {
+            "value_id": "2045",
+            "value_name": "Dusk Lilac"
+          },
+          {
+            "value_id": "2046",
+            "value_name": "Dusk Rose"
+          },
+          {
+            "value_id": "2047",
+            "value_name": "Teal"
+          },
+          {
+            "value_id": "2048",
+            "value_name": "Blue Slate"
+          },
+          {
+            "value_id": "2049",
+            "value_name": "Smoke Grey"
+          },
+          {
+            "value_id": "2050",
+            "value_name": "Reflex Silver"
+          },
+          {
+            "value_id": "2051",
+            "value_name": "Reflex Gold"
+          },
+          {
+            "value_id": "2052",
+            "value_name": "Reflex Blue"
+          },
+          {
+            "value_id": "2053",
+            "value_name": "Reflex green"
+          },
+          {
+            "value_id": "2054",
+            "value_name": "Reflex Violet"
+          },
+          {
+            "value_id": "2055",
+            "value_name": "Reflex Red"
+          },
+          {
+            "value_id": "2056",
+            "value_name": "White"
+          },
+          {
+            "value_id": "2057",
+            "value_name": "black"
+          },
+          {
+            "value_id": "2058",
+            "value_name": "Red"
+          },
+          {
+            "value_id": "2059",
+            "value_name": "Orange"
+          },
+          {
+            "value_id": "2060",
+            "value_name": "yellow"
+          },
+          {
+            "value_id": "2061",
+            "value_name": "raspberry"
+          },
+          {
+            "value_id": "2062",
+            "value_name": "fuchsia"
+          },
+          {
+            "value_id": "2063",
+            "value_name": "bubble Gum"
+          },
+          {
+            "value_id": "2064",
+            "value_name": "eucalyptus"
+          },
+          {
+            "value_id": "2065",
+            "value_name": "Forest"
+          },
+          {
+            "value_id": "2066",
+            "value_name": "Shamrock"
+          },
+          {
+            "value_id": "2067",
+            "value_name": "Wintergreen"
+          },
+          {
+            "value_id": "2068",
+            "value_name": "Lime"
+          },
+          {
+            "value_id": "2069",
+            "value_name": "LT Blue"
+          },
+          {
+            "value_id": "2070",
+            "value_name": "Periwinkle"
+          },
+          {
+            "value_id": "2071",
+            "value_name": "Royal Blue"
+          },
+          {
+            "value_id": "2072",
+            "value_name": "Robin's Egg"
+          },
+          {
+            "value_id": "2073",
+            "value_name": "Deep Teal"
+          },
+          {
+            "value_id": "2074",
+            "value_name": "Honey"
+          },
+          {
+            "value_id": "2075",
+            "value_name": "Violet"
+          },
+          {
+            "value_id": "2076",
+            "value_name": "Orchid"
+          },
+          {
+            "value_id": "2077",
+            "value_name": "Lilac"
+          },
+          {
+            "value_id": "2078",
+            "value_name": "Chocolate"
+          },
+          {
+            "value_id": "2079",
+            "value_name": "Brown"
+          },
+          {
+            "value_id": "2080",
+            "value_name": "Latte"
+          },
+          {
+            "value_id": "2081",
+            "value_name": "Pastel Pink"
+          },
+          {
+            "value_id": "2082",
+            "value_name": "Pastel Blue"
+          },
+          {
+            "value_id": "2083",
+            "value_name": "Pastel Green"
+          },
+          {
+            "value_id": "2084",
+            "value_name": "Pastel Purple"
+          },
+          {
+            "value_id": "2085",
+            "value_name": "Pastel Yellow"
+          },
+          {
+            "value_id": "2086",
+            "value_name": "Pastel Melon"
+          },
+          {
+            "value_id": "2087",
+            "value_name": "Grey"
+          },
+          {
+            "value_id": "2088",
+            "value_name": "Clear"
+          },
+          {
+            "value_id": "2089",
+            "value_name": "Blush"
+          },
+          {
+            "value_id": "2090",
+            "value_name": "Blue slate"
+          },
+          {
+            "value_id": "2091",
+            "value_name": "Smoke grey"
+          },
+          {
+            "value_id": "2092",
+            "value_name": "Empowermint"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/classic-organic-arch-99",
+      "slug": "classic-organic-arch",
+      "name": "Classic Organic Arch",
+      "url": "http://5.78.136.133/shop/what-we-make-3/classic-organic-arch-99",
+      "base_price": "500.00",
+      "currency": "USD",
+      "description": "Balloons up to 11 inches, built into a classic organic arch. The scale adds depth and dimension that a standard arch doesn\u2019t have.",
+      "image_url": "http://5.78.136.133/web/image/product.template/99/image_1920",
+      "attributes": {
+        "Arch Size": [
+          {
+            "value_id": "549",
+            "value_name": "20ft"
+          },
+          {
+            "value_id": "550",
+            "value_name": "25ft"
+          },
+          {
+            "value_id": "551",
+            "value_name": "30ft"
+          },
+          {
+            "value_id": "552",
+            "value_name": "35ft"
+          }
+        ],
+        "latex colors": [
+          {
+            "value_id": "1722",
+            "value_name": "Reflex Champage"
+          },
+          {
+            "value_id": "1723",
+            "value_name": "Reflex Truffle"
+          },
+          {
+            "value_id": "1724",
+            "value_name": "Dusk Cream"
+          },
+          {
+            "value_id": "1725",
+            "value_name": "Dusk Green Tea"
+          },
+          {
+            "value_id": "1726",
+            "value_name": "Dusk Blue"
+          },
+          {
+            "value_id": "1727",
+            "value_name": "Dusk Lilac"
+          },
+          {
+            "value_id": "1728",
+            "value_name": "Dusk Rose"
+          },
+          {
+            "value_id": "1729",
+            "value_name": "Teal"
+          },
+          {
+            "value_id": "1730",
+            "value_name": "Blue Slate"
+          },
+          {
+            "value_id": "1731",
+            "value_name": "Smoke Grey"
+          },
+          {
+            "value_id": "1732",
+            "value_name": "Reflex Silver"
+          },
+          {
+            "value_id": "1733",
+            "value_name": "Reflex Gold"
+          },
+          {
+            "value_id": "1734",
+            "value_name": "Reflex Blue"
+          },
+          {
+            "value_id": "1735",
+            "value_name": "Reflex green"
+          },
+          {
+            "value_id": "1736",
+            "value_name": "Reflex Violet"
+          },
+          {
+            "value_id": "1737",
+            "value_name": "Reflex Red"
+          },
+          {
+            "value_id": "1738",
+            "value_name": "White"
+          },
+          {
+            "value_id": "1739",
+            "value_name": "black"
+          },
+          {
+            "value_id": "1740",
+            "value_name": "Red"
+          },
+          {
+            "value_id": "1741",
+            "value_name": "Orange"
+          },
+          {
+            "value_id": "1742",
+            "value_name": "yellow"
+          },
+          {
+            "value_id": "1743",
+            "value_name": "raspberry"
+          },
+          {
+            "value_id": "1744",
+            "value_name": "fuchsia"
+          },
+          {
+            "value_id": "1745",
+            "value_name": "bubble Gum"
+          },
+          {
+            "value_id": "1746",
+            "value_name": "eucalyptus"
+          },
+          {
+            "value_id": "1747",
+            "value_name": "Forest"
+          },
+          {
+            "value_id": "1748",
+            "value_name": "Shamrock"
+          },
+          {
+            "value_id": "1749",
+            "value_name": "Wintergreen"
+          },
+          {
+            "value_id": "1750",
+            "value_name": "Lime"
+          },
+          {
+            "value_id": "1751",
+            "value_name": "LT Blue"
+          },
+          {
+            "value_id": "1752",
+            "value_name": "Periwinkle"
+          },
+          {
+            "value_id": "1753",
+            "value_name": "Royal Blue"
+          },
+          {
+            "value_id": "1754",
+            "value_name": "Robin's Egg"
+          },
+          {
+            "value_id": "1755",
+            "value_name": "Deep Teal"
+          },
+          {
+            "value_id": "1756",
+            "value_name": "Honey"
+          },
+          {
+            "value_id": "1757",
+            "value_name": "Violet"
+          },
+          {
+            "value_id": "1758",
+            "value_name": "Orchid"
+          },
+          {
+            "value_id": "1759",
+            "value_name": "Lilac"
+          },
+          {
+            "value_id": "1760",
+            "value_name": "Chocolate"
+          },
+          {
+            "value_id": "1761",
+            "value_name": "Brown"
+          },
+          {
+            "value_id": "1762",
+            "value_name": "Latte"
+          },
+          {
+            "value_id": "1763",
+            "value_name": "Pastel Pink"
+          },
+          {
+            "value_id": "1764",
+            "value_name": "Pastel Blue"
+          },
+          {
+            "value_id": "1765",
+            "value_name": "Pastel Green"
+          },
+          {
+            "value_id": "1766",
+            "value_name": "Pastel Purple"
+          },
+          {
+            "value_id": "1767",
+            "value_name": "Pastel Yellow"
+          },
+          {
+            "value_id": "1768",
+            "value_name": "Pastel Melon"
+          },
+          {
+            "value_id": "1769",
+            "value_name": "Grey"
+          },
+          {
+            "value_id": "1770",
+            "value_name": "Clear"
+          },
+          {
+            "value_id": "1771",
+            "value_name": "Blush"
+          },
+          {
+            "value_id": "1772",
+            "value_name": "Blue slate"
+          },
+          {
+            "value_id": "1773",
+            "value_name": "Smoke grey"
+          },
+          {
+            "value_id": "1774",
+            "value_name": "Empowermint"
+          }
+        ],
+        "Add ons": [
+          {
+            "value_id": "932",
+            "value_name": "None"
+          },
+          {
+            "value_id": "930",
+            "value_name": "Foil stars"
+          },
+          {
+            "value_id": "931",
+            "value_name": "themed foils"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/unicorn-bouquet-115",
+      "slug": "unicorn-bouquet",
+      "name": "Unicorn Bouquet",
+      "url": "http://5.78.136.133/shop/what-we-make-3/unicorn-bouquet-115",
+      "base_price": "35.00",
+      "currency": "USD",
+      "description": "Unicorn Bouquet",
+      "image_url": "http://5.78.136.133/web/image/product.template/115/image_1920",
+      "attributes": {
+        "Bouquet Size": [
+          {
+            "value_id": "685",
+            "value_name": "Small \u2014 1 super shape, 2 foils, 7 latex"
+          },
+          {
+            "value_id": "686",
+            "value_name": "Medium \u2014 2 super shapes, 4 foils, 14 latex"
+          },
+          {
+            "value_id": "687",
+            "value_name": "Large - 3 super shapes, 5 foil 16 latex"
+          }
+        ],
+        "Add Foil Number": [
+          {
+            "value_id": "772",
+            "value_name": "1"
+          },
+          {
+            "value_id": "773",
+            "value_name": "2"
+          },
+          {
+            "value_id": "774",
+            "value_name": "3"
+          },
+          {
+            "value_id": "775",
+            "value_name": "4"
+          },
+          {
+            "value_id": "776",
+            "value_name": "5"
+          },
+          {
+            "value_id": "777",
+            "value_name": "6"
+          },
+          {
+            "value_id": "778",
+            "value_name": "7"
+          },
+          {
+            "value_id": "779",
+            "value_name": "8"
+          },
+          {
+            "value_id": "780",
+            "value_name": "9"
+          },
+          {
+            "value_id": "781",
+            "value_name": "0"
+          },
+          {
+            "value_id": "2215",
+            "value_name": "1"
+          },
+          {
+            "value_id": "2216",
+            "value_name": "2"
+          },
+          {
+            "value_id": "2217",
+            "value_name": "3"
+          },
+          {
+            "value_id": "2218",
+            "value_name": "4"
+          },
+          {
+            "value_id": "2219",
+            "value_name": "5"
+          },
+          {
+            "value_id": "2220",
+            "value_name": "6"
+          },
+          {
+            "value_id": "2221",
+            "value_name": "7"
+          },
+          {
+            "value_id": "2222",
+            "value_name": "8"
+          },
+          {
+            "value_id": "2223",
+            "value_name": "9"
+          },
+          {
+            "value_id": "2224",
+            "value_name": "0"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/mickey-mouse-bouquet-116",
+      "slug": "mickey-mouse-bouquet",
+      "name": "Mickey Mouse Bouquet",
+      "url": "http://5.78.136.133/shop/what-we-make-3/mickey-mouse-bouquet-116",
+      "base_price": "35.00",
+      "currency": "USD",
+      "description": "Mickey Mouse Bouquet",
+      "image_url": "http://5.78.136.133/web/image/product.template/116/image_1920",
+      "attributes": {
+        "Bouquet Size": [
+          {
+            "value_id": "688",
+            "value_name": "Small \u2014 1 super shape, 2 foils, 7 latex"
+          },
+          {
+            "value_id": "689",
+            "value_name": "Medium \u2014 2 super shapes, 4 foils, 14 latex"
+          },
+          {
+            "value_id": "690",
+            "value_name": "Large - 3 super shapes, 5 foil 16 latex"
+          }
+        ],
+        "Add Foil Number": [
+          {
+            "value_id": "782",
+            "value_name": "1"
+          },
+          {
+            "value_id": "783",
+            "value_name": "2"
+          },
+          {
+            "value_id": "784",
+            "value_name": "3"
+          },
+          {
+            "value_id": "785",
+            "value_name": "4"
+          },
+          {
+            "value_id": "786",
+            "value_name": "5"
+          },
+          {
+            "value_id": "787",
+            "value_name": "6"
+          },
+          {
+            "value_id": "788",
+            "value_name": "7"
+          },
+          {
+            "value_id": "789",
+            "value_name": "8"
+          },
+          {
+            "value_id": "790",
+            "value_name": "9"
+          },
+          {
+            "value_id": "791",
+            "value_name": "0"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/minion-bouquet-117",
+      "slug": "minion-bouquet",
+      "name": "Minion Bouquet",
+      "url": "http://5.78.136.133/shop/what-we-make-3/minion-bouquet-117",
+      "base_price": "35.00",
+      "currency": "USD",
+      "description": "Minion Bouquet",
+      "image_url": "http://5.78.136.133/web/image/product.template/117/image_1920",
+      "attributes": {
+        "Bouquet Size": [
+          {
+            "value_id": "730",
+            "value_name": "Small \u2014 1 super shape, 2 foils, 7 latex"
+          },
+          {
+            "value_id": "731",
+            "value_name": "Medium \u2014 2 super shapes, 4 foils, 14 latex"
+          },
+          {
+            "value_id": "732",
+            "value_name": "Large - 3 super shapes, 5 foil 16 latex"
+          }
+        ],
+        "Add Foil Number": [
+          {
+            "value_id": "792",
+            "value_name": "1"
+          },
+          {
+            "value_id": "793",
+            "value_name": "2"
+          },
+          {
+            "value_id": "794",
+            "value_name": "3"
+          },
+          {
+            "value_id": "795",
+            "value_name": "4"
+          },
+          {
+            "value_id": "796",
+            "value_name": "5"
+          },
+          {
+            "value_id": "797",
+            "value_name": "6"
+          },
+          {
+            "value_id": "798",
+            "value_name": "7"
+          },
+          {
+            "value_id": "799",
+            "value_name": "8"
+          },
+          {
+            "value_id": "800",
+            "value_name": "9"
+          },
+          {
+            "value_id": "801",
+            "value_name": "0"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/encanto-bouquet-118",
+      "slug": "encanto-bouquet",
+      "name": "Encanto Bouquet",
+      "url": "http://5.78.136.133/shop/what-we-make-3/encanto-bouquet-118",
+      "base_price": "35.00",
+      "currency": "USD",
+      "description": "Encanto Bouquet",
+      "image_url": "http://5.78.136.133/web/image/product.template/118/image_1920",
+      "attributes": {
+        "Bouquet Size": [
+          {
+            "value_id": "733",
+            "value_name": "Small \u2014 1 super shape, 2 foils, 7 latex"
+          },
+          {
+            "value_id": "734",
+            "value_name": "Medium \u2014 2 super shapes, 4 foils, 14 latex"
+          },
+          {
+            "value_id": "735",
+            "value_name": "Large - 3 super shapes, 5 foil 16 latex"
+          }
+        ],
+        "Add Foil Number": [
+          {
+            "value_id": "805",
+            "value_name": "1"
+          },
+          {
+            "value_id": "806",
+            "value_name": "2"
+          },
+          {
+            "value_id": "807",
+            "value_name": "3"
+          },
+          {
+            "value_id": "808",
+            "value_name": "4"
+          },
+          {
+            "value_id": "809",
+            "value_name": "5"
+          },
+          {
+            "value_id": "810",
+            "value_name": "6"
+          },
+          {
+            "value_id": "811",
+            "value_name": "7"
+          },
+          {
+            "value_id": "812",
+            "value_name": "8"
+          },
+          {
+            "value_id": "813",
+            "value_name": "9"
+          },
+          {
+            "value_id": "814",
+            "value_name": "0"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/stitch-bouquet-119",
+      "slug": "stitch-bouquet",
+      "name": "Stitch Bouquet",
+      "url": "http://5.78.136.133/shop/what-we-make-3/stitch-bouquet-119",
+      "base_price": "35.00",
+      "currency": "USD",
+      "description": "Stitch Bouquet",
+      "image_url": "http://5.78.136.133/web/image/product.template/119/image_1920",
+      "attributes": {
+        "Bouquet Size": [
+          {
+            "value_id": "736",
+            "value_name": "Small \u2014 1 super shape, 2 foils, 7 latex"
+          },
+          {
+            "value_id": "737",
+            "value_name": "Medium \u2014 2 super shapes, 4 foils, 14 latex"
+          },
+          {
+            "value_id": "738",
+            "value_name": "Large - 3 super shapes, 5 foil 16 latex"
+          }
+        ],
+        "Add Foil Number": [
+          {
+            "value_id": "762",
+            "value_name": "1"
+          },
+          {
+            "value_id": "763",
+            "value_name": "2"
+          },
+          {
+            "value_id": "764",
+            "value_name": "3"
+          },
+          {
+            "value_id": "765",
+            "value_name": "4"
+          },
+          {
+            "value_id": "766",
+            "value_name": "5"
+          },
+          {
+            "value_id": "767",
+            "value_name": "6"
+          },
+          {
+            "value_id": "768",
+            "value_name": "7"
+          },
+          {
+            "value_id": "769",
+            "value_name": "8"
+          },
+          {
+            "value_id": "770",
+            "value_name": "9"
+          },
+          {
+            "value_id": "771",
+            "value_name": "0"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/flamingo-bouquet-120",
+      "slug": "flamingo-bouquet",
+      "name": "Flamingo Bouquet",
+      "url": "http://5.78.136.133/shop/what-we-make-3/flamingo-bouquet-120",
+      "base_price": "35.00",
+      "currency": "USD",
+      "description": "Flamingo Bouquet",
+      "image_url": "http://5.78.136.133/web/image/product.template/120/image_1920",
+      "attributes": {
+        "Bouquet Size": [
+          {
+            "value_id": "815",
+            "value_name": "Small \u2014 1 super shape, 2 foils, 7 latex"
+          },
+          {
+            "value_id": "816",
+            "value_name": "Medium \u2014 2 super shapes, 4 foils, 14 latex"
+          },
+          {
+            "value_id": "817",
+            "value_name": "Large - 3 super shapes, 5 foil 16 latex"
+          }
+        ],
+        "Add Foil Number": [
+          {
+            "value_id": "818",
+            "value_name": "1"
+          },
+          {
+            "value_id": "819",
+            "value_name": "2"
+          },
+          {
+            "value_id": "820",
+            "value_name": "3"
+          },
+          {
+            "value_id": "821",
+            "value_name": "4"
+          },
+          {
+            "value_id": "822",
+            "value_name": "5"
+          },
+          {
+            "value_id": "823",
+            "value_name": "6"
+          },
+          {
+            "value_id": "824",
+            "value_name": "7"
+          },
+          {
+            "value_id": "825",
+            "value_name": "8"
+          },
+          {
+            "value_id": "826",
+            "value_name": "9"
+          },
+          {
+            "value_id": "827",
+            "value_name": "0"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/football-bouquet-121",
+      "slug": "football-bouquet",
+      "name": "Football Bouquet",
+      "url": "http://5.78.136.133/shop/what-we-make-3/football-bouquet-121",
+      "base_price": "35.00",
+      "currency": "USD",
+      "description": "Football Bouquet",
+      "image_url": "http://5.78.136.133/web/image/product.template/121/image_1920",
+      "attributes": {
+        "Bouquet Size": [
+          {
+            "value_id": "838",
+            "value_name": "Small \u2014 1 super shape, 2 foils, 7 latex"
+          },
+          {
+            "value_id": "839",
+            "value_name": "Medium \u2014 2 super shapes, 4 foils, 14 latex"
+          },
+          {
+            "value_id": "840",
+            "value_name": "Large - 3 super shapes, 5 foil 16 latex"
+          }
+        ],
+        "Add Foil Number": [
+          {
+            "value_id": "841",
+            "value_name": "1"
+          },
+          {
+            "value_id": "842",
+            "value_name": "2"
+          },
+          {
+            "value_id": "843",
+            "value_name": "3"
+          },
+          {
+            "value_id": "844",
+            "value_name": "4"
+          },
+          {
+            "value_id": "845",
+            "value_name": "5"
+          },
+          {
+            "value_id": "846",
+            "value_name": "6"
+          },
+          {
+            "value_id": "847",
+            "value_name": "7"
+          },
+          {
+            "value_id": "848",
+            "value_name": "8"
+          },
+          {
+            "value_id": "849",
+            "value_name": "9"
+          },
+          {
+            "value_id": "850",
+            "value_name": "0"
+          },
+          {
+            "value_id": "890",
+            "value_name": "1"
+          },
+          {
+            "value_id": "891",
+            "value_name": "2"
+          },
+          {
+            "value_id": "892",
+            "value_name": "3"
+          },
+          {
+            "value_id": "893",
+            "value_name": "4"
+          },
+          {
+            "value_id": "894",
+            "value_name": "5"
+          },
+          {
+            "value_id": "895",
+            "value_name": "6"
+          },
+          {
+            "value_id": "896",
+            "value_name": "7"
+          },
+          {
+            "value_id": "897",
+            "value_name": "8"
+          },
+          {
+            "value_id": "898",
+            "value_name": "9"
+          },
+          {
+            "value_id": "899",
+            "value_name": "0"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/soccer-bouquet-122",
+      "slug": "soccer-bouquet",
+      "name": "Soccer Bouquet",
+      "url": "http://5.78.136.133/shop/what-we-make-3/soccer-bouquet-122",
+      "base_price": "35.00",
+      "currency": "USD",
+      "description": "Soccer Bouquet",
+      "image_url": "http://5.78.136.133/web/image/product.template/122/image_1920",
+      "attributes": {
+        "Bouquet Size": [
+          {
+            "value_id": "851",
+            "value_name": "Small \u2014 1 super shape, 2 foils, 7 latex"
+          },
+          {
+            "value_id": "852",
+            "value_name": "Medium \u2014 2 super shapes, 4 foils, 14 latex"
+          },
+          {
+            "value_id": "853",
+            "value_name": "Large - 3 super shapes, 5 foil 16 latex"
+          }
+        ],
+        "Add Foil Number": [
+          {
+            "value_id": "854",
+            "value_name": "1"
+          },
+          {
+            "value_id": "855",
+            "value_name": "2"
+          },
+          {
+            "value_id": "856",
+            "value_name": "3"
+          },
+          {
+            "value_id": "857",
+            "value_name": "4"
+          },
+          {
+            "value_id": "858",
+            "value_name": "5"
+          },
+          {
+            "value_id": "859",
+            "value_name": "6"
+          },
+          {
+            "value_id": "860",
+            "value_name": "7"
+          },
+          {
+            "value_id": "861",
+            "value_name": "8"
+          },
+          {
+            "value_id": "862",
+            "value_name": "9"
+          },
+          {
+            "value_id": "863",
+            "value_name": "0"
+          },
+          {
+            "value_id": "900",
+            "value_name": "1"
+          },
+          {
+            "value_id": "901",
+            "value_name": "2"
+          },
+          {
+            "value_id": "902",
+            "value_name": "3"
+          },
+          {
+            "value_id": "903",
+            "value_name": "4"
+          },
+          {
+            "value_id": "904",
+            "value_name": "5"
+          },
+          {
+            "value_id": "905",
+            "value_name": "6"
+          },
+          {
+            "value_id": "906",
+            "value_name": "7"
+          },
+          {
+            "value_id": "907",
+            "value_name": "8"
+          },
+          {
+            "value_id": "908",
+            "value_name": "9"
+          },
+          {
+            "value_id": "909",
+            "value_name": "0"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/over-the-hill-bouquet-124",
+      "slug": "over-the-hill-bouquet",
+      "name": "Over the Hill Bouquet",
+      "url": "http://5.78.136.133/shop/what-we-make-3/over-the-hill-bouquet-124",
+      "base_price": "35.00",
+      "currency": "USD",
+      "description": "Over the Hill Bouquet",
+      "image_url": "http://5.78.136.133/web/image/product.template/124/image_1920",
+      "attributes": {
+        "Bouquet Size": [
+          {
+            "value_id": "877",
+            "value_name": "Small \u2014 1 super shape, 2 foils, 7 latex"
+          },
+          {
+            "value_id": "878",
+            "value_name": "Medium \u2014 2 super shapes, 4 foils, 14 latex"
+          },
+          {
+            "value_id": "879",
+            "value_name": "Large - 3 super shapes, 5 foil 16 latex"
+          }
+        ],
+        "Add Foil Number": [
+          {
+            "value_id": "880",
+            "value_name": "1"
+          },
+          {
+            "value_id": "881",
+            "value_name": "2"
+          },
+          {
+            "value_id": "882",
+            "value_name": "3"
+          },
+          {
+            "value_id": "883",
+            "value_name": "4"
+          },
+          {
+            "value_id": "884",
+            "value_name": "5"
+          },
+          {
+            "value_id": "885",
+            "value_name": "6"
+          },
+          {
+            "value_id": "886",
+            "value_name": "7"
+          },
+          {
+            "value_id": "887",
+            "value_name": "8"
+          },
+          {
+            "value_id": "888",
+            "value_name": "9"
+          },
+          {
+            "value_id": "889",
+            "value_name": "0"
+          },
+          {
+            "value_id": "920",
+            "value_name": "1"
+          },
+          {
+            "value_id": "921",
+            "value_name": "2"
+          },
+          {
+            "value_id": "922",
+            "value_name": "3"
+          },
+          {
+            "value_id": "923",
+            "value_name": "4"
+          },
+          {
+            "value_id": "924",
+            "value_name": "5"
+          },
+          {
+            "value_id": "925",
+            "value_name": "6"
+          },
+          {
+            "value_id": "926",
+            "value_name": "7"
+          },
+          {
+            "value_id": "927",
+            "value_name": "8"
+          },
+          {
+            "value_id": "928",
+            "value_name": "9"
+          },
+          {
+            "value_id": "929",
+            "value_name": "0"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/space-bouquet-123",
+      "slug": "space-bouquet",
+      "name": "Space Bouquet",
+      "url": "http://5.78.136.133/shop/what-we-make-3/space-bouquet-123",
+      "base_price": "35.00",
+      "currency": "USD",
+      "description": "Space Bouquet",
+      "image_url": "http://5.78.136.133/web/image/product.template/123/image_1920",
+      "attributes": {
+        "Bouquet Size": [
+          {
+            "value_id": "864",
+            "value_name": "Small \u2014 1 super shape, 2 foils, 7 latex"
+          },
+          {
+            "value_id": "865",
+            "value_name": "Medium \u2014 2 super shapes, 4 foils, 14 latex"
+          },
+          {
+            "value_id": "866",
+            "value_name": "Large - 3 super shapes, 5 foil 16 latex"
+          }
+        ],
+        "Add Foil Number": [
+          {
+            "value_id": "867",
+            "value_name": "1"
+          },
+          {
+            "value_id": "868",
+            "value_name": "2"
+          },
+          {
+            "value_id": "869",
+            "value_name": "3"
+          },
+          {
+            "value_id": "870",
+            "value_name": "4"
+          },
+          {
+            "value_id": "871",
+            "value_name": "5"
+          },
+          {
+            "value_id": "872",
+            "value_name": "6"
+          },
+          {
+            "value_id": "873",
+            "value_name": "7"
+          },
+          {
+            "value_id": "874",
+            "value_name": "8"
+          },
+          {
+            "value_id": "875",
+            "value_name": "9"
+          },
+          {
+            "value_id": "876",
+            "value_name": "0"
+          },
+          {
+            "value_id": "910",
+            "value_name": "1"
+          },
+          {
+            "value_id": "911",
+            "value_name": "2"
+          },
+          {
+            "value_id": "912",
+            "value_name": "3"
+          },
+          {
+            "value_id": "913",
+            "value_name": "4"
+          },
+          {
+            "value_id": "914",
+            "value_name": "5"
+          },
+          {
+            "value_id": "915",
+            "value_name": "6"
+          },
+          {
+            "value_id": "916",
+            "value_name": "7"
+          },
+          {
+            "value_id": "917",
+            "value_name": "8"
+          },
+          {
+            "value_id": "918",
+            "value_name": "9"
+          },
+          {
+            "value_id": "919",
+            "value_name": "0"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/7-butterfly-column-125",
+      "slug": "7-butterfly-column",
+      "name": "7&#39; Butterfly Column",
+      "url": "http://5.78.136.133/shop/what-we-make-3/7-butterfly-column-125",
+      "base_price": 120.0,
+      "currency": "USD",
+      "description": "\nDelivery and setup is $30.",
+      "image_url": "http://5.78.136.133/web/image/product.product/485/image_1920?unique=42d7d48",
+      "attributes": {
+        "latex colors": [
+          {
+            "value_id": "1402",
+            "value_name": "Reflex Champage"
+          },
+          {
+            "value_id": "1403",
+            "value_name": "Reflex Truffle"
+          },
+          {
+            "value_id": "1404",
+            "value_name": "Dusk Cream"
+          },
+          {
+            "value_id": "1405",
+            "value_name": "Dusk Green Tea"
+          },
+          {
+            "value_id": "1406",
+            "value_name": "Dusk Blue"
+          },
+          {
+            "value_id": "1407",
+            "value_name": "Dusk Lilac"
+          },
+          {
+            "value_id": "1408",
+            "value_name": "Dusk Rose"
+          },
+          {
+            "value_id": "1409",
+            "value_name": "Teal"
+          },
+          {
+            "value_id": "1410",
+            "value_name": "Blue Slate"
+          },
+          {
+            "value_id": "1411",
+            "value_name": "Smoke Grey"
+          },
+          {
+            "value_id": "1412",
+            "value_name": "Reflex Silver"
+          },
+          {
+            "value_id": "1413",
+            "value_name": "Reflex Gold"
+          },
+          {
+            "value_id": "1414",
+            "value_name": "Reflex Blue"
+          },
+          {
+            "value_id": "1415",
+            "value_name": "Reflex green"
+          },
+          {
+            "value_id": "1416",
+            "value_name": "Reflex Violet"
+          },
+          {
+            "value_id": "1417",
+            "value_name": "Reflex Red"
+          },
+          {
+            "value_id": "1418",
+            "value_name": "White"
+          },
+          {
+            "value_id": "1419",
+            "value_name": "black"
+          },
+          {
+            "value_id": "1420",
+            "value_name": "Red"
+          },
+          {
+            "value_id": "1421",
+            "value_name": "Orange"
+          },
+          {
+            "value_id": "1422",
+            "value_name": "yellow"
+          },
+          {
+            "value_id": "1423",
+            "value_name": "raspberry"
+          },
+          {
+            "value_id": "1424",
+            "value_name": "fuchsia"
+          },
+          {
+            "value_id": "1425",
+            "value_name": "bubble Gum"
+          },
+          {
+            "value_id": "1426",
+            "value_name": "eucalyptus"
+          },
+          {
+            "value_id": "1427",
+            "value_name": "Forest"
+          },
+          {
+            "value_id": "1428",
+            "value_name": "Shamrock"
+          },
+          {
+            "value_id": "1429",
+            "value_name": "Wintergreen"
+          },
+          {
+            "value_id": "1430",
+            "value_name": "Lime"
+          },
+          {
+            "value_id": "1431",
+            "value_name": "LT Blue"
+          },
+          {
+            "value_id": "1432",
+            "value_name": "Periwinkle"
+          },
+          {
+            "value_id": "1433",
+            "value_name": "Royal Blue"
+          },
+          {
+            "value_id": "1434",
+            "value_name": "Robin's Egg"
+          },
+          {
+            "value_id": "1435",
+            "value_name": "Deep Teal"
+          },
+          {
+            "value_id": "1436",
+            "value_name": "Honey"
+          },
+          {
+            "value_id": "1437",
+            "value_name": "Violet"
+          },
+          {
+            "value_id": "1438",
+            "value_name": "Orchid"
+          },
+          {
+            "value_id": "1439",
+            "value_name": "Lilac"
+          },
+          {
+            "value_id": "1440",
+            "value_name": "Chocolate"
+          },
+          {
+            "value_id": "1441",
+            "value_name": "Brown"
+          },
+          {
+            "value_id": "1442",
+            "value_name": "Latte"
+          },
+          {
+            "value_id": "1443",
+            "value_name": "Pastel Pink"
+          },
+          {
+            "value_id": "1444",
+            "value_name": "Pastel Blue"
+          },
+          {
+            "value_id": "1445",
+            "value_name": "Pastel Green"
+          },
+          {
+            "value_id": "1446",
+            "value_name": "Pastel Purple"
+          },
+          {
+            "value_id": "1447",
+            "value_name": "Pastel Yellow"
+          },
+          {
+            "value_id": "1448",
+            "value_name": "Pastel Melon"
+          },
+          {
+            "value_id": "1449",
+            "value_name": "Grey"
+          },
+          {
+            "value_id": "1450",
+            "value_name": "Clear"
+          },
+          {
+            "value_id": "1451",
+            "value_name": "Blush"
+          },
+          {
+            "value_id": "1452",
+            "value_name": "Blue slate"
+          },
+          {
+            "value_id": "1453",
+            "value_name": "Smoke grey"
+          },
+          {
+            "value_id": "1454",
+            "value_name": "Empowermint"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/7-epic-column-126",
+      "slug": "7-epic-column",
+      "name": "7&#39; Epic Column",
+      "url": "http://5.78.136.133/shop/what-we-make-3/7-epic-column-126",
+      "base_price": 100.0,
+      "currency": "USD",
+      "description": "\nDelivery and setup is $30.",
+      "image_url": "http://5.78.136.133/web/image/product.product/486/image_1920?unique=eac7fc9",
+      "attributes": {
+        "latex colors": [
+          {
+            "value_id": "1455",
+            "value_name": "Reflex Champage"
+          },
+          {
+            "value_id": "1456",
+            "value_name": "Reflex Truffle"
+          },
+          {
+            "value_id": "1457",
+            "value_name": "Dusk Cream"
+          },
+          {
+            "value_id": "1458",
+            "value_name": "Dusk Green Tea"
+          },
+          {
+            "value_id": "1459",
+            "value_name": "Dusk Blue"
+          },
+          {
+            "value_id": "1460",
+            "value_name": "Dusk Lilac"
+          },
+          {
+            "value_id": "1461",
+            "value_name": "Dusk Rose"
+          },
+          {
+            "value_id": "1462",
+            "value_name": "Teal"
+          },
+          {
+            "value_id": "1463",
+            "value_name": "Blue Slate"
+          },
+          {
+            "value_id": "1464",
+            "value_name": "Smoke Grey"
+          },
+          {
+            "value_id": "1465",
+            "value_name": "Reflex Silver"
+          },
+          {
+            "value_id": "1466",
+            "value_name": "Reflex Gold"
+          },
+          {
+            "value_id": "1467",
+            "value_name": "Reflex Blue"
+          },
+          {
+            "value_id": "1468",
+            "value_name": "Reflex green"
+          },
+          {
+            "value_id": "1469",
+            "value_name": "Reflex Violet"
+          },
+          {
+            "value_id": "1470",
+            "value_name": "Reflex Red"
+          },
+          {
+            "value_id": "1471",
+            "value_name": "White"
+          },
+          {
+            "value_id": "1472",
+            "value_name": "black"
+          },
+          {
+            "value_id": "1473",
+            "value_name": "Red"
+          },
+          {
+            "value_id": "1474",
+            "value_name": "Orange"
+          },
+          {
+            "value_id": "1475",
+            "value_name": "yellow"
+          },
+          {
+            "value_id": "1476",
+            "value_name": "raspberry"
+          },
+          {
+            "value_id": "1477",
+            "value_name": "fuchsia"
+          },
+          {
+            "value_id": "1478",
+            "value_name": "bubble Gum"
+          },
+          {
+            "value_id": "1479",
+            "value_name": "eucalyptus"
+          },
+          {
+            "value_id": "1480",
+            "value_name": "Forest"
+          },
+          {
+            "value_id": "1481",
+            "value_name": "Shamrock"
+          },
+          {
+            "value_id": "1482",
+            "value_name": "Wintergreen"
+          },
+          {
+            "value_id": "1483",
+            "value_name": "Lime"
+          },
+          {
+            "value_id": "1484",
+            "value_name": "LT Blue"
+          },
+          {
+            "value_id": "1485",
+            "value_name": "Periwinkle"
+          },
+          {
+            "value_id": "1486",
+            "value_name": "Royal Blue"
+          },
+          {
+            "value_id": "1487",
+            "value_name": "Robin's Egg"
+          },
+          {
+            "value_id": "1488",
+            "value_name": "Deep Teal"
+          },
+          {
+            "value_id": "1489",
+            "value_name": "Honey"
+          },
+          {
+            "value_id": "1490",
+            "value_name": "Violet"
+          },
+          {
+            "value_id": "1491",
+            "value_name": "Orchid"
+          },
+          {
+            "value_id": "1492",
+            "value_name": "Lilac"
+          },
+          {
+            "value_id": "1493",
+            "value_name": "Chocolate"
+          },
+          {
+            "value_id": "1494",
+            "value_name": "Brown"
+          },
+          {
+            "value_id": "1495",
+            "value_name": "Latte"
+          },
+          {
+            "value_id": "1496",
+            "value_name": "Pastel Pink"
+          },
+          {
+            "value_id": "1497",
+            "value_name": "Pastel Blue"
+          },
+          {
+            "value_id": "1498",
+            "value_name": "Pastel Green"
+          },
+          {
+            "value_id": "1499",
+            "value_name": "Pastel Purple"
+          },
+          {
+            "value_id": "1500",
+            "value_name": "Pastel Yellow"
+          },
+          {
+            "value_id": "1501",
+            "value_name": "Pastel Melon"
+          },
+          {
+            "value_id": "1502",
+            "value_name": "Grey"
+          },
+          {
+            "value_id": "1503",
+            "value_name": "Clear"
+          },
+          {
+            "value_id": "1504",
+            "value_name": "Blush"
+          },
+          {
+            "value_id": "1505",
+            "value_name": "Blue slate"
+          },
+          {
+            "value_id": "1506",
+            "value_name": "Smoke grey"
+          },
+          {
+            "value_id": "1507",
+            "value_name": "Empowermint"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/organic-grab-n-go-127",
+      "slug": "organic-grab-n-go",
+      "name": "Organic Grab n&#39; Go",
+      "url": "http://5.78.136.133/shop/what-we-make-3/organic-grab-n-go-127",
+      "base_price": "70.00",
+      "currency": "USD",
+      "description": "Organic Grab n&#39; Go",
+      "image_url": "http://5.78.136.133/web/image/product.template/127/image_1920",
+      "attributes": {
+        "Garland Length": [
+          {
+            "value_id": "1005",
+            "value_name": "6ft"
+          },
+          {
+            "value_id": "1006",
+            "value_name": "9ft"
+          },
+          {
+            "value_id": "1007",
+            "value_name": "12ft"
+          }
+        ],
+        "latex colors": [
+          {
+            "value_id": "1117",
+            "value_name": "Reflex Champage"
+          },
+          {
+            "value_id": "1118",
+            "value_name": "Reflex Truffle"
+          },
+          {
+            "value_id": "1119",
+            "value_name": "Dusk Cream"
+          },
+          {
+            "value_id": "1120",
+            "value_name": "Dusk Green Tea"
+          },
+          {
+            "value_id": "1121",
+            "value_name": "Dusk Blue"
+          },
+          {
+            "value_id": "1122",
+            "value_name": "Dusk Lilac"
+          },
+          {
+            "value_id": "1123",
+            "value_name": "Dusk Rose"
+          },
+          {
+            "value_id": "1124",
+            "value_name": "Teal"
+          },
+          {
+            "value_id": "1125",
+            "value_name": "Blue Slate"
+          },
+          {
+            "value_id": "1126",
+            "value_name": "Smoke Grey"
+          },
+          {
+            "value_id": "1127",
+            "value_name": "Reflex Silver"
+          },
+          {
+            "value_id": "1128",
+            "value_name": "Reflex Gold"
+          },
+          {
+            "value_id": "1129",
+            "value_name": "Reflex Blue"
+          },
+          {
+            "value_id": "1130",
+            "value_name": "Reflex green"
+          },
+          {
+            "value_id": "1131",
+            "value_name": "Reflex Violet"
+          },
+          {
+            "value_id": "1132",
+            "value_name": "Reflex Red"
+          },
+          {
+            "value_id": "1133",
+            "value_name": "White"
+          },
+          {
+            "value_id": "1134",
+            "value_name": "black"
+          },
+          {
+            "value_id": "1135",
+            "value_name": "Red"
+          },
+          {
+            "value_id": "1136",
+            "value_name": "Orange"
+          },
+          {
+            "value_id": "1137",
+            "value_name": "yellow"
+          },
+          {
+            "value_id": "1138",
+            "value_name": "raspberry"
+          },
+          {
+            "value_id": "1139",
+            "value_name": "fuchsia"
+          },
+          {
+            "value_id": "1140",
+            "value_name": "bubble Gum"
+          },
+          {
+            "value_id": "1141",
+            "value_name": "eucalyptus"
+          },
+          {
+            "value_id": "1142",
+            "value_name": "Forest"
+          },
+          {
+            "value_id": "1143",
+            "value_name": "Shamrock"
+          },
+          {
+            "value_id": "1144",
+            "value_name": "Wintergreen"
+          },
+          {
+            "value_id": "1145",
+            "value_name": "Lime"
+          },
+          {
+            "value_id": "1146",
+            "value_name": "LT Blue"
+          },
+          {
+            "value_id": "1147",
+            "value_name": "Periwinkle"
+          },
+          {
+            "value_id": "1148",
+            "value_name": "Royal Blue"
+          },
+          {
+            "value_id": "1149",
+            "value_name": "Robin's Egg"
+          },
+          {
+            "value_id": "1150",
+            "value_name": "Deep Teal"
+          },
+          {
+            "value_id": "1151",
+            "value_name": "Honey"
+          },
+          {
+            "value_id": "1152",
+            "value_name": "Violet"
+          },
+          {
+            "value_id": "1153",
+            "value_name": "Orchid"
+          },
+          {
+            "value_id": "1154",
+            "value_name": "Lilac"
+          },
+          {
+            "value_id": "1155",
+            "value_name": "Chocolate"
+          },
+          {
+            "value_id": "1156",
+            "value_name": "Brown"
+          },
+          {
+            "value_id": "1157",
+            "value_name": "Latte"
+          },
+          {
+            "value_id": "1158",
+            "value_name": "Pastel Pink"
+          },
+          {
+            "value_id": "1159",
+            "value_name": "Pastel Blue"
+          },
+          {
+            "value_id": "1160",
+            "value_name": "Pastel Green"
+          },
+          {
+            "value_id": "1161",
+            "value_name": "Pastel Purple"
+          },
+          {
+            "value_id": "1162",
+            "value_name": "Pastel Yellow"
+          },
+          {
+            "value_id": "1163",
+            "value_name": "Pastel Melon"
+          },
+          {
+            "value_id": "1164",
+            "value_name": "Grey"
+          },
+          {
+            "value_id": "1165",
+            "value_name": "Clear"
+          },
+          {
+            "value_id": "1166",
+            "value_name": "Blush"
+          },
+          {
+            "value_id": "1167",
+            "value_name": "Blue slate"
+          },
+          {
+            "value_id": "1168",
+            "value_name": "Smoke grey"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/easter-balloon-cups-130",
+      "slug": "easter-balloon-cups",
+      "name": "Easter Balloon Cups",
+      "url": "http://5.78.136.133/shop/what-we-make-3/easter-balloon-cups-130",
+      "base_price": "13.00",
+      "currency": "USD",
+      "description": "Easter Balloon Cups",
+      "image_url": "http://5.78.136.133/web/image/product.template/130/image_1920",
+      "attributes": {
+        "Easter Designs": [
+          {
+            "value_id": "1201",
+            "value_name": "Bunny"
+          },
+          {
+            "value_id": "1203",
+            "value_name": "Flower"
+          },
+          {
+            "value_id": "1205",
+            "value_name": "Bunny in basket"
+          },
+          {
+            "value_id": "1206",
+            "value_name": "Easter egg"
+          },
+          {
+            "value_id": "1207",
+            "value_name": "Unicorn egg"
+          },
+          {
+            "value_id": "1208",
+            "value_name": "Butterfly"
+          },
+          {
+            "value_id": "1209",
+            "value_name": "Turtle"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/star-column-131",
+      "slug": "star-column",
+      "name": "Star Column",
+      "url": "http://5.78.136.133/shop/what-we-make-3/star-column-131",
+      "base_price": null,
+      "currency": null,
+      "description": null,
+      "image_url": null,
+      "attributes": {
+        "Color Palette": [
+          {
+            "value_id": "1250",
+            "value_name": "Black"
+          },
+          {
+            "value_id": "1251",
+            "value_name": "White"
+          },
+          {
+            "value_id": "1252",
+            "value_name": "Red"
+          },
+          {
+            "value_id": "1253",
+            "value_name": "Royal Blue"
+          },
+          {
+            "value_id": "1254",
+            "value_name": "Green"
+          },
+          {
+            "value_id": "1255",
+            "value_name": "Yellow"
+          },
+          {
+            "value_id": "1256",
+            "value_name": "Orange"
+          },
+          {
+            "value_id": "1257",
+            "value_name": "Purple"
+          },
+          {
+            "value_id": "1258",
+            "value_name": "Pastel Pink"
+          },
+          {
+            "value_id": "1259",
+            "value_name": "Pastel Blue"
+          },
+          {
+            "value_id": "1260",
+            "value_name": "Pastel Lilac"
+          },
+          {
+            "value_id": "1261",
+            "value_name": "Pastel Green"
+          },
+          {
+            "value_id": "1262",
+            "value_name": "Pastel Yellow"
+          },
+          {
+            "value_id": "1263",
+            "value_name": "Peach"
+          },
+          {
+            "value_id": "1264",
+            "value_name": "Chrome Silver"
+          },
+          {
+            "value_id": "1265",
+            "value_name": "Chrome Gold"
+          },
+          {
+            "value_id": "1266",
+            "value_name": "Chrome Rose Gold"
+          },
+          {
+            "value_id": "1267",
+            "value_name": "Chrome Blue"
+          },
+          {
+            "value_id": "1268",
+            "value_name": "Chrome Copper"
+          },
+          {
+            "value_id": "1269",
+            "value_name": "Blush"
+          },
+          {
+            "value_id": "1270",
+            "value_name": "Canyon Rose"
+          },
+          {
+            "value_id": "1271",
+            "value_name": "Caramel"
+          },
+          {
+            "value_id": "1272",
+            "value_name": "Sangria"
+          },
+          {
+            "value_id": "1273",
+            "value_name": "Chocolate"
+          },
+          {
+            "value_id": "1274",
+            "value_name": "Slate Blue"
+          },
+          {
+            "value_id": "1275",
+            "value_name": "Seafoam"
+          },
+          {
+            "value_id": "1276",
+            "value_name": "Teal"
+          },
+          {
+            "value_id": "1277",
+            "value_name": "Smoke Grey"
+          },
+          {
+            "value_id": "1278",
+            "value_name": "Navy"
+          }
+        ],
+        "Column Height": [
+          {
+            "value_id": "1279",
+            "value_name": "6ft"
+          },
+          {
+            "value_id": "1280",
+            "value_name": "7ft"
+          },
+          {
+            "value_id": "1281",
+            "value_name": "8ft"
+          },
+          {
+            "value_id": "1282",
+            "value_name": "9ft"
+          }
+        ],
+        "Orbz toppers": [
+          {
+            "value_id": "1284",
+            "value_name": "Red"
+          },
+          {
+            "value_id": "1285",
+            "value_name": "Blue/Green"
+          },
+          {
+            "value_id": "1283",
+            "value_name": "Black/gold"
+          },
+          {
+            "value_id": "1286",
+            "value_name": "Purple"
+          },
+          {
+            "value_id": "1287",
+            "value_name": "Blue/gold"
+          },
+          {
+            "value_id": "1288",
+            "value_name": "Fantacy"
+          },
+          {
+            "value_id": "1289",
+            "value_name": "Pink/gold"
+          },
+          {
+            "value_id": "1290",
+            "value_name": "Gold Marble"
+          },
+          {
+            "value_id": "1291",
+            "value_name": "Pink Marble"
+          },
+          {
+            "value_id": "1292",
+            "value_name": "Blue Marble"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/sleepy-baby-column-132",
+      "slug": "sleepy-baby-column",
+      "name": "Sleepy Baby Column",
+      "url": "http://5.78.136.133/shop/what-we-make-3/sleepy-baby-column-132",
+      "base_price": 220.0,
+      "currency": "USD",
+      "description": null,
+      "image_url": "http://5.78.136.133/web/image/product.product/1064/image_1920?unique=4ad9a11",
+      "attributes": {
+        "latex colors": [
+          {
+            "value_id": "2093",
+            "value_name": "Reflex Champage"
+          },
+          {
+            "value_id": "2094",
+            "value_name": "Reflex Truffle"
+          },
+          {
+            "value_id": "2095",
+            "value_name": "Dusk Cream"
+          },
+          {
+            "value_id": "2096",
+            "value_name": "Dusk Green Tea"
+          },
+          {
+            "value_id": "2097",
+            "value_name": "Dusk Blue"
+          },
+          {
+            "value_id": "2098",
+            "value_name": "Dusk Lilac"
+          },
+          {
+            "value_id": "2099",
+            "value_name": "Dusk Rose"
+          },
+          {
+            "value_id": "2100",
+            "value_name": "Teal"
+          },
+          {
+            "value_id": "2101",
+            "value_name": "Blue Slate"
+          },
+          {
+            "value_id": "2102",
+            "value_name": "Smoke Grey"
+          },
+          {
+            "value_id": "2103",
+            "value_name": "Reflex Silver"
+          },
+          {
+            "value_id": "2104",
+            "value_name": "Reflex Gold"
+          },
+          {
+            "value_id": "2105",
+            "value_name": "Reflex Blue"
+          },
+          {
+            "value_id": "2106",
+            "value_name": "Reflex green"
+          },
+          {
+            "value_id": "2107",
+            "value_name": "Reflex Violet"
+          },
+          {
+            "value_id": "2108",
+            "value_name": "Reflex Red"
+          },
+          {
+            "value_id": "2109",
+            "value_name": "White"
+          },
+          {
+            "value_id": "2110",
+            "value_name": "black"
+          },
+          {
+            "value_id": "2111",
+            "value_name": "Red"
+          },
+          {
+            "value_id": "2112",
+            "value_name": "Orange"
+          },
+          {
+            "value_id": "2113",
+            "value_name": "yellow"
+          },
+          {
+            "value_id": "2114",
+            "value_name": "raspberry"
+          },
+          {
+            "value_id": "2115",
+            "value_name": "fuchsia"
+          },
+          {
+            "value_id": "2116",
+            "value_name": "bubble Gum"
+          },
+          {
+            "value_id": "2117",
+            "value_name": "eucalyptus"
+          },
+          {
+            "value_id": "2118",
+            "value_name": "Forest"
+          },
+          {
+            "value_id": "2119",
+            "value_name": "Shamrock"
+          },
+          {
+            "value_id": "2120",
+            "value_name": "Wintergreen"
+          },
+          {
+            "value_id": "2121",
+            "value_name": "Lime"
+          },
+          {
+            "value_id": "2122",
+            "value_name": "LT Blue"
+          },
+          {
+            "value_id": "2123",
+            "value_name": "Periwinkle"
+          },
+          {
+            "value_id": "2124",
+            "value_name": "Royal Blue"
+          },
+          {
+            "value_id": "2125",
+            "value_name": "Robin's Egg"
+          },
+          {
+            "value_id": "2126",
+            "value_name": "Deep Teal"
+          },
+          {
+            "value_id": "2127",
+            "value_name": "Honey"
+          },
+          {
+            "value_id": "2128",
+            "value_name": "Violet"
+          },
+          {
+            "value_id": "2129",
+            "value_name": "Orchid"
+          },
+          {
+            "value_id": "2130",
+            "value_name": "Lilac"
+          },
+          {
+            "value_id": "2131",
+            "value_name": "Chocolate"
+          },
+          {
+            "value_id": "2132",
+            "value_name": "Brown"
+          },
+          {
+            "value_id": "2133",
+            "value_name": "Latte"
+          },
+          {
+            "value_id": "2134",
+            "value_name": "Pastel Pink"
+          },
+          {
+            "value_id": "2135",
+            "value_name": "Pastel Blue"
+          },
+          {
+            "value_id": "2136",
+            "value_name": "Pastel Green"
+          },
+          {
+            "value_id": "2137",
+            "value_name": "Pastel Purple"
+          },
+          {
+            "value_id": "2138",
+            "value_name": "Pastel Yellow"
+          },
+          {
+            "value_id": "2139",
+            "value_name": "Pastel Melon"
+          },
+          {
+            "value_id": "2140",
+            "value_name": "Grey"
+          },
+          {
+            "value_id": "2141",
+            "value_name": "Clear"
+          },
+          {
+            "value_id": "2142",
+            "value_name": "Blush"
+          },
+          {
+            "value_id": "2143",
+            "value_name": "Blue slate"
+          },
+          {
+            "value_id": "2144",
+            "value_name": "Smoke grey"
+          },
+          {
+            "value_id": "2145",
+            "value_name": "Empowermint"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/baby-table-decor-133",
+      "slug": "baby-table-decor",
+      "name": "Baby Table decor",
+      "url": "http://5.78.136.133/shop/what-we-make-3/baby-table-decor-133",
+      "base_price": "30.00",
+      "currency": "USD",
+      "description": "Baby Table decor",
+      "image_url": "http://5.78.136.133/web/image/product.template/133/image_1920",
+      "attributes": {
+        "Baby color": [
+          {
+            "value_id": "2146",
+            "value_name": "blue"
+          },
+          {
+            "value_id": "2147",
+            "value_name": "pink"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/logo-3-layered-bouquet-134",
+      "slug": "logo-3-layered-bouquet",
+      "name": "Logo 3 layered bouquet",
+      "url": "http://5.78.136.133/shop/what-we-make-3/logo-3-layered-bouquet-134",
+      "base_price": 90.0,
+      "currency": "USD",
+      "description": null,
+      "image_url": "http://5.78.136.133/web/image/product.product/1067/image_1920?unique=f1c9116",
+      "attributes": {
+        "latex colors": [
+          {
+            "value_id": "2148",
+            "value_name": "Reflex Champage"
+          },
+          {
+            "value_id": "2149",
+            "value_name": "Reflex Truffle"
+          },
+          {
+            "value_id": "2150",
+            "value_name": "Dusk Cream"
+          },
+          {
+            "value_id": "2151",
+            "value_name": "Dusk Green Tea"
+          },
+          {
+            "value_id": "2152",
+            "value_name": "Dusk Blue"
+          },
+          {
+            "value_id": "2153",
+            "value_name": "Dusk Lilac"
+          },
+          {
+            "value_id": "2154",
+            "value_name": "Dusk Rose"
+          },
+          {
+            "value_id": "2155",
+            "value_name": "Teal"
+          },
+          {
+            "value_id": "2156",
+            "value_name": "Blue Slate"
+          },
+          {
+            "value_id": "2157",
+            "value_name": "Smoke Grey"
+          },
+          {
+            "value_id": "2158",
+            "value_name": "Reflex Silver"
+          },
+          {
+            "value_id": "2159",
+            "value_name": "Reflex Gold"
+          },
+          {
+            "value_id": "2160",
+            "value_name": "Reflex Blue"
+          },
+          {
+            "value_id": "2161",
+            "value_name": "Reflex green"
+          },
+          {
+            "value_id": "2162",
+            "value_name": "Reflex Violet"
+          },
+          {
+            "value_id": "2163",
+            "value_name": "Reflex Red"
+          },
+          {
+            "value_id": "2164",
+            "value_name": "White"
+          },
+          {
+            "value_id": "2165",
+            "value_name": "black"
+          },
+          {
+            "value_id": "2166",
+            "value_name": "Red"
+          },
+          {
+            "value_id": "2167",
+            "value_name": "Orange"
+          },
+          {
+            "value_id": "2168",
+            "value_name": "yellow"
+          },
+          {
+            "value_id": "2169",
+            "value_name": "raspberry"
+          },
+          {
+            "value_id": "2170",
+            "value_name": "fuchsia"
+          },
+          {
+            "value_id": "2171",
+            "value_name": "bubble Gum"
+          },
+          {
+            "value_id": "2172",
+            "value_name": "eucalyptus"
+          },
+          {
+            "value_id": "2173",
+            "value_name": "Forest"
+          },
+          {
+            "value_id": "2174",
+            "value_name": "Shamrock"
+          },
+          {
+            "value_id": "2175",
+            "value_name": "Wintergreen"
+          },
+          {
+            "value_id": "2176",
+            "value_name": "Lime"
+          },
+          {
+            "value_id": "2177",
+            "value_name": "LT Blue"
+          },
+          {
+            "value_id": "2178",
+            "value_name": "Periwinkle"
+          },
+          {
+            "value_id": "2179",
+            "value_name": "Royal Blue"
+          },
+          {
+            "value_id": "2180",
+            "value_name": "Robin's Egg"
+          },
+          {
+            "value_id": "2181",
+            "value_name": "Deep Teal"
+          },
+          {
+            "value_id": "2182",
+            "value_name": "Honey"
+          },
+          {
+            "value_id": "2183",
+            "value_name": "Violet"
+          },
+          {
+            "value_id": "2184",
+            "value_name": "Orchid"
+          },
+          {
+            "value_id": "2185",
+            "value_name": "Lilac"
+          },
+          {
+            "value_id": "2186",
+            "value_name": "Chocolate"
+          },
+          {
+            "value_id": "2187",
+            "value_name": "Brown"
+          },
+          {
+            "value_id": "2188",
+            "value_name": "Latte"
+          },
+          {
+            "value_id": "2189",
+            "value_name": "Pastel Pink"
+          },
+          {
+            "value_id": "2190",
+            "value_name": "Pastel Blue"
+          },
+          {
+            "value_id": "2191",
+            "value_name": "Pastel Green"
+          },
+          {
+            "value_id": "2192",
+            "value_name": "Pastel Purple"
+          },
+          {
+            "value_id": "2193",
+            "value_name": "Pastel Yellow"
+          },
+          {
+            "value_id": "2194",
+            "value_name": "Pastel Melon"
+          },
+          {
+            "value_id": "2195",
+            "value_name": "Grey"
+          },
+          {
+            "value_id": "2196",
+            "value_name": "Clear"
+          },
+          {
+            "value_id": "2197",
+            "value_name": "Blush"
+          },
+          {
+            "value_id": "2198",
+            "value_name": "Blue slate"
+          },
+          {
+            "value_id": "2199",
+            "value_name": "Smoke grey"
+          },
+          {
+            "value_id": "2200",
+            "value_name": "Empowermint"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/6-color-rainbow-arch-135",
+      "slug": "6-color-rainbow-arch",
+      "name": "6 color rainbow arch",
+      "url": "http://5.78.136.133/shop/what-we-make-3/6-color-rainbow-arch-135",
+      "base_price": "340.00",
+      "currency": "USD",
+      "description": "6 color rainbow arch",
+      "image_url": "http://5.78.136.133/web/image/product.template/135/image_1920",
+      "attributes": {
+        "Arch Size": [
+          {
+            "value_id": "2201",
+            "value_name": "20ft"
+          },
+          {
+            "value_id": "2202",
+            "value_name": "25ft"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/mothers-day-front-yard-7-column-137",
+      "slug": "mothers-day-front-yard-7-column",
+      "name": "Mother&#39;s day front yard 7&#39; Column",
+      "url": "http://5.78.136.133/shop/what-we-make-3/mothers-day-front-yard-7-column-137",
+      "base_price": 140.0,
+      "currency": "USD",
+      "description": null,
+      "image_url": "http://5.78.136.133/web/image/product.product/1072/image_1920?unique=c91c160",
+      "attributes": {},
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/marble-table-decor-140",
+      "slug": "marble-table-decor",
+      "name": "Marble table decor",
+      "url": "http://5.78.136.133/shop/what-we-make-3/marble-table-decor-140",
+      "base_price": "75.00",
+      "currency": "USD",
+      "description": "Marble table decor",
+      "image_url": "http://5.78.136.133/web/image/product.template/140/image_1920",
+      "attributes": {
+        "Orbz toppers": [
+          {
+            "value_id": "2205",
+            "value_name": "Red"
+          },
+          {
+            "value_id": "2206",
+            "value_name": "Blue/Green"
+          },
+          {
+            "value_id": "2207",
+            "value_name": "Black/gold"
+          },
+          {
+            "value_id": "2208",
+            "value_name": "Purple"
+          },
+          {
+            "value_id": "2209",
+            "value_name": "Blue/gold"
+          },
+          {
+            "value_id": "2210",
+            "value_name": "Fantacy"
+          },
+          {
+            "value_id": "2211",
+            "value_name": "Pink/gold"
+          },
+          {
+            "value_id": "2212",
+            "value_name": "Gold Marble"
+          },
+          {
+            "value_id": "2213",
+            "value_name": "Pink Marble"
+          },
+          {
+            "value_id": "2214",
+            "value_name": "Blue Marble"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/paw-patrol-bouquet-141",
+      "slug": "paw-patrol-bouquet",
+      "name": "Paw Patrol Bouquet",
+      "url": "http://5.78.136.133/shop/what-we-make-3/paw-patrol-bouquet-141",
+      "base_price": "35.00",
+      "currency": "USD",
+      "description": "Paw Patrol Bouquet",
+      "image_url": "http://5.78.136.133/web/image/product.template/141/image_1920",
+      "attributes": {
+        "Bouquet Size": [
+          {
+            "value_id": "2225",
+            "value_name": "Small \u2014 1 super shape, 2 foils, 7 latex"
+          },
+          {
+            "value_id": "2226",
+            "value_name": "Medium \u2014 2 super shapes, 4 foils, 14 latex"
+          },
+          {
+            "value_id": "2227",
+            "value_name": "Large - 3 super shapes, 5 foil 16 latex"
+          }
+        ],
+        "Add Foil Number": [
+          {
+            "value_id": "2228",
+            "value_name": "1"
+          },
+          {
+            "value_id": "2229",
+            "value_name": "2"
+          },
+          {
+            "value_id": "2230",
+            "value_name": "3"
+          },
+          {
+            "value_id": "2231",
+            "value_name": "4"
+          },
+          {
+            "value_id": "2232",
+            "value_name": "5"
+          },
+          {
+            "value_id": "2233",
+            "value_name": "6"
+          },
+          {
+            "value_id": "2234",
+            "value_name": "7"
+          },
+          {
+            "value_id": "2235",
+            "value_name": "8"
+          },
+          {
+            "value_id": "2236",
+            "value_name": "9"
+          },
+          {
+            "value_id": "2237",
+            "value_name": "0"
+          },
+          {
+            "value_id": "2238",
+            "value_name": "1"
+          },
+          {
+            "value_id": "2239",
+            "value_name": "2"
+          },
+          {
+            "value_id": "2240",
+            "value_name": "3"
+          },
+          {
+            "value_id": "2241",
+            "value_name": "4"
+          },
+          {
+            "value_id": "2242",
+            "value_name": "5"
+          },
+          {
+            "value_id": "2243",
+            "value_name": "6"
+          },
+          {
+            "value_id": "2244",
+            "value_name": "7"
+          },
+          {
+            "value_id": "2245",
+            "value_name": "8"
+          },
+          {
+            "value_id": "2246",
+            "value_name": "9"
+          },
+          {
+            "value_id": "2247",
+            "value_name": "0"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/elsa-bouquet-142",
+      "slug": "elsa-bouquet",
+      "name": "Elsa Bouquet",
+      "url": "http://5.78.136.133/shop/what-we-make-3/elsa-bouquet-142",
+      "base_price": "35.00",
+      "currency": "USD",
+      "description": "Elsa Bouquet",
+      "image_url": "http://5.78.136.133/web/image/product.template/142/image_1920",
+      "attributes": {
+        "Bouquet Size": [
+          {
+            "value_id": "2248",
+            "value_name": "Small \u2014 1 super shape, 2 foils, 7 latex"
+          },
+          {
+            "value_id": "2249",
+            "value_name": "Medium \u2014 2 super shapes, 4 foils, 14 latex"
+          },
+          {
+            "value_id": "2250",
+            "value_name": "Large - 3 super shapes, 5 foil 16 latex"
+          }
+        ],
+        "Add Foil Number": [
+          {
+            "value_id": "2251",
+            "value_name": "1"
+          },
+          {
+            "value_id": "2252",
+            "value_name": "2"
+          },
+          {
+            "value_id": "2253",
+            "value_name": "3"
+          },
+          {
+            "value_id": "2254",
+            "value_name": "4"
+          },
+          {
+            "value_id": "2255",
+            "value_name": "5"
+          },
+          {
+            "value_id": "2256",
+            "value_name": "6"
+          },
+          {
+            "value_id": "2257",
+            "value_name": "7"
+          },
+          {
+            "value_id": "2258",
+            "value_name": "8"
+          },
+          {
+            "value_id": "2259",
+            "value_name": "9"
+          },
+          {
+            "value_id": "2260",
+            "value_name": "0"
+          },
+          {
+            "value_id": "2261",
+            "value_name": "1"
+          },
+          {
+            "value_id": "2262",
+            "value_name": "2"
+          },
+          {
+            "value_id": "2263",
+            "value_name": "3"
+          },
+          {
+            "value_id": "2264",
+            "value_name": "4"
+          },
+          {
+            "value_id": "2265",
+            "value_name": "5"
+          },
+          {
+            "value_id": "2266",
+            "value_name": "6"
+          },
+          {
+            "value_id": "2267",
+            "value_name": "7"
+          },
+          {
+            "value_id": "2268",
+            "value_name": "8"
+          },
+          {
+            "value_id": "2269",
+            "value_name": "9"
+          },
+          {
+            "value_id": "2270",
+            "value_name": "0"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/holy-cow-bouquet-143",
+      "slug": "holy-cow-bouquet",
+      "name": "Holy COW!! Bouquet",
+      "url": "http://5.78.136.133/shop/what-we-make-3/holy-cow-bouquet-143",
+      "base_price": "35.00",
+      "currency": "USD",
+      "description": "Holy COW!! Bouquet",
+      "image_url": "http://5.78.136.133/web/image/product.template/143/image_1920",
+      "attributes": {
+        "Bouquet Size": [
+          {
+            "value_id": "2271",
+            "value_name": "Small \u2014 1 super shape, 2 foils, 7 latex"
+          },
+          {
+            "value_id": "2272",
+            "value_name": "Medium \u2014 2 super shapes, 4 foils, 14 latex"
+          },
+          {
+            "value_id": "2273",
+            "value_name": "Large - 3 super shapes, 5 foil 16 latex"
+          }
+        ],
+        "Add Foil Number": [
+          {
+            "value_id": "2274",
+            "value_name": "1"
+          },
+          {
+            "value_id": "2275",
+            "value_name": "2"
+          },
+          {
+            "value_id": "2276",
+            "value_name": "3"
+          },
+          {
+            "value_id": "2277",
+            "value_name": "4"
+          },
+          {
+            "value_id": "2278",
+            "value_name": "5"
+          },
+          {
+            "value_id": "2279",
+            "value_name": "6"
+          },
+          {
+            "value_id": "2280",
+            "value_name": "7"
+          },
+          {
+            "value_id": "2281",
+            "value_name": "8"
+          },
+          {
+            "value_id": "2282",
+            "value_name": "9"
+          },
+          {
+            "value_id": "2283",
+            "value_name": "0"
+          },
+          {
+            "value_id": "2284",
+            "value_name": "1"
+          },
+          {
+            "value_id": "2285",
+            "value_name": "2"
+          },
+          {
+            "value_id": "2286",
+            "value_name": "3"
+          },
+          {
+            "value_id": "2287",
+            "value_name": "4"
+          },
+          {
+            "value_id": "2288",
+            "value_name": "5"
+          },
+          {
+            "value_id": "2289",
+            "value_name": "6"
+          },
+          {
+            "value_id": "2290",
+            "value_name": "7"
+          },
+          {
+            "value_id": "2291",
+            "value_name": "8"
+          },
+          {
+            "value_id": "2292",
+            "value_name": "9"
+          },
+          {
+            "value_id": "2293",
+            "value_name": "0"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/butterfly-get-well-bouquet-latex-free-144",
+      "slug": "butterfly-get-well-bouquet-latex-free",
+      "name": "Butterfly &#34;GET WELL&#34; Bouquet (Latex free)",
+      "url": "http://5.78.136.133/shop/what-we-make-3/butterfly-get-well-bouquet-latex-free-144",
+      "base_price": 35.0,
+      "currency": "USD",
+      "description": null,
+      "image_url": "http://5.78.136.133/web/image/product.product/1092/image_1920?unique=e289928",
+      "attributes": {
+        "Plush add ons": [
+          {
+            "value_id": "2296",
+            "value_name": "None"
+          },
+          {
+            "value_id": "2295",
+            "value_name": "Teddy Bear"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/bandage-get-well-bouquet-latex-free-146",
+      "slug": "bandage-get-well-bouquet-latex-free",
+      "name": "Bandage &#34;GET WELL&#34; Bouquet (Latex free)",
+      "url": "http://5.78.136.133/shop/what-we-make-3/bandage-get-well-bouquet-latex-free-146",
+      "base_price": 35.0,
+      "currency": "USD",
+      "description": null,
+      "image_url": "http://5.78.136.133/web/image/product.product/1094/image_1920?unique=e289928",
+      "attributes": {
+        "Plush add ons": [
+          {
+            "value_id": "2350",
+            "value_name": "None"
+          },
+          {
+            "value_id": "2351",
+            "value_name": "Teddy Bear"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/shooting-star-get-well-bouquet-latex-free-147",
+      "slug": "shooting-star-get-well-bouquet-latex-free",
+      "name": "Shooting star &#34;GET WELL&#34; Bouquet (Latex free)",
+      "url": "http://5.78.136.133/shop/what-we-make-3/shooting-star-get-well-bouquet-latex-free-147",
+      "base_price": 35.0,
+      "currency": "USD",
+      "description": null,
+      "image_url": "http://5.78.136.133/web/image/product.product/1095/image_1920?unique=e289928",
+      "attributes": {
+        "Plush add ons": [
+          {
+            "value_id": "2352",
+            "value_name": "None"
+          },
+          {
+            "value_id": "2353",
+            "value_name": "Teddy Bear"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/6-graduation-stands-149",
+      "slug": "6-graduation-stands",
+      "name": "6&#39; Graduation stands",
+      "url": "http://5.78.136.133/shop/what-we-make-3/6-graduation-stands-149",
+      "base_price": "45.00",
+      "currency": "USD",
+      "description": "These are for indoors use only as the base is balloons and can pop on grass or cement ",
+      "image_url": "http://5.78.136.133/web/image/product.template/149/image_1920",
+      "attributes": {
+        "Graduation stands": [
+          {
+            "value_id": "2415",
+            "value_name": "Congrats"
+          },
+          {
+            "value_id": "2416",
+            "value_name": "Yay"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/classic-organic-for-easel-152",
+      "slug": "classic-organic-for-easel",
+      "name": "classic organic for easel",
+      "url": "http://5.78.136.133/shop/what-we-make-3/classic-organic-for-easel-152",
+      "base_price": 100.0,
+      "currency": "USD",
+      "description": null,
+      "image_url": "http://5.78.136.133/web/image/product.product/1181/image_1920?unique=56465fb",
+      "attributes": {
+        "latex colors": [
+          {
+            "value_id": "2707",
+            "value_name": "Reflex Champage"
+          },
+          {
+            "value_id": "2708",
+            "value_name": "Reflex Truffle"
+          },
+          {
+            "value_id": "2709",
+            "value_name": "Dusk Cream"
+          },
+          {
+            "value_id": "2710",
+            "value_name": "Dusk Green Tea"
+          },
+          {
+            "value_id": "2711",
+            "value_name": "Dusk Blue"
+          },
+          {
+            "value_id": "2712",
+            "value_name": "Dusk Lilac"
+          },
+          {
+            "value_id": "2713",
+            "value_name": "Dusk Rose"
+          },
+          {
+            "value_id": "2714",
+            "value_name": "Teal"
+          },
+          {
+            "value_id": "2715",
+            "value_name": "Blue Slate"
+          },
+          {
+            "value_id": "2716",
+            "value_name": "Smoke Grey"
+          },
+          {
+            "value_id": "2717",
+            "value_name": "Reflex Silver"
+          },
+          {
+            "value_id": "2718",
+            "value_name": "Reflex Gold"
+          },
+          {
+            "value_id": "2719",
+            "value_name": "Reflex Blue"
+          },
+          {
+            "value_id": "2720",
+            "value_name": "Reflex green"
+          },
+          {
+            "value_id": "2721",
+            "value_name": "Reflex Violet"
+          },
+          {
+            "value_id": "2722",
+            "value_name": "Reflex Red"
+          },
+          {
+            "value_id": "2723",
+            "value_name": "White"
+          },
+          {
+            "value_id": "2724",
+            "value_name": "black"
+          },
+          {
+            "value_id": "2725",
+            "value_name": "Red"
+          },
+          {
+            "value_id": "2726",
+            "value_name": "Orange"
+          },
+          {
+            "value_id": "2727",
+            "value_name": "yellow"
+          },
+          {
+            "value_id": "2728",
+            "value_name": "raspberry"
+          },
+          {
+            "value_id": "2729",
+            "value_name": "fuchsia"
+          },
+          {
+            "value_id": "2730",
+            "value_name": "bubble Gum"
+          },
+          {
+            "value_id": "2731",
+            "value_name": "eucalyptus"
+          },
+          {
+            "value_id": "2732",
+            "value_name": "Forest"
+          },
+          {
+            "value_id": "2733",
+            "value_name": "Shamrock"
+          },
+          {
+            "value_id": "2734",
+            "value_name": "Wintergreen"
+          },
+          {
+            "value_id": "2735",
+            "value_name": "Lime"
+          },
+          {
+            "value_id": "2736",
+            "value_name": "LT Blue"
+          },
+          {
+            "value_id": "2737",
+            "value_name": "Periwinkle"
+          },
+          {
+            "value_id": "2738",
+            "value_name": "Royal Blue"
+          },
+          {
+            "value_id": "2739",
+            "value_name": "Robin's Egg"
+          },
+          {
+            "value_id": "2740",
+            "value_name": "Deep Teal"
+          },
+          {
+            "value_id": "2741",
+            "value_name": "Honey"
+          },
+          {
+            "value_id": "2742",
+            "value_name": "Violet"
+          },
+          {
+            "value_id": "2743",
+            "value_name": "Orchid"
+          },
+          {
+            "value_id": "2744",
+            "value_name": "Lilac"
+          },
+          {
+            "value_id": "2745",
+            "value_name": "Chocolate"
+          },
+          {
+            "value_id": "2746",
+            "value_name": "Brown"
+          },
+          {
+            "value_id": "2747",
+            "value_name": "Latte"
+          },
+          {
+            "value_id": "2748",
+            "value_name": "Pastel Pink"
+          },
+          {
+            "value_id": "2749",
+            "value_name": "Pastel Blue"
+          },
+          {
+            "value_id": "2750",
+            "value_name": "Pastel Green"
+          },
+          {
+            "value_id": "2751",
+            "value_name": "Pastel Purple"
+          },
+          {
+            "value_id": "2752",
+            "value_name": "Pastel Yellow"
+          },
+          {
+            "value_id": "2753",
+            "value_name": "Pastel Melon"
+          },
+          {
+            "value_id": "2754",
+            "value_name": "Grey"
+          },
+          {
+            "value_id": "2755",
+            "value_name": "Clear"
+          },
+          {
+            "value_id": "2756",
+            "value_name": "Blush"
+          },
+          {
+            "value_id": "2757",
+            "value_name": "Blue slate"
+          },
+          {
+            "value_id": "2758",
+            "value_name": "Smoke grey"
+          },
+          {
+            "value_id": "2759",
+            "value_name": "Empowermint"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/easter-arch-158",
+      "slug": "easter-arch",
+      "name": "Easter Arch",
+      "url": "http://5.78.136.133/shop/what-we-make-3/easter-arch-158",
+      "base_price": 250.0,
+      "currency": "USD",
+      "description": "Soft pastels and spring greens in a garden-inspired arch. Designed for egg hunts, church socials, and family brunches.",
+      "image_url": "http://5.78.136.133/web/image/product.product/1190/image_1920?unique=ea94776",
+      "attributes": {},
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/mothers-day-bouquet-165",
+      "slug": "mothers-day-bouquet",
+      "name": "Mother&#39;s Day Bouquet",
+      "url": "http://5.78.136.133/shop/what-we-make-3/mothers-day-bouquet-165",
+      "base_price": 65.0,
+      "currency": "USD",
+      "description": "Soft pinks, lavenders, and whites in a bouquet that says what flowers say \u2014 but lasts longer.",
+      "image_url": "http://5.78.136.133/web/image/product.product/1204/image_1920?unique=ea94776",
+      "attributes": {},
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/large-garland-177",
+      "slug": "large-garland",
+      "name": "Large Garland",
+      "url": "http://5.78.136.133/shop/what-we-make-3/large-garland-177",
+      "base_price": "216.00",
+      "currency": "USD",
+      "description": "Balloons up to 24 inches \u2014 bolder, more dramatic. The scale creates depth and dimension that a standard garland can\u2019t.",
+      "image_url": "http://5.78.136.133/web/image/product.template/177/image_1920",
+      "attributes": {
+        "Garland Length": [
+          {
+            "value_id": "2818",
+            "value_name": "6ft"
+          },
+          {
+            "value_id": "2819",
+            "value_name": "9ft"
+          },
+          {
+            "value_id": "2820",
+            "value_name": "12ft"
+          }
+        ],
+        "Color Palette": [
+          {
+            "value_id": "2821",
+            "value_name": "Black"
+          },
+          {
+            "value_id": "2822",
+            "value_name": "White"
+          },
+          {
+            "value_id": "2823",
+            "value_name": "Red"
+          },
+          {
+            "value_id": "2824",
+            "value_name": "Royal Blue"
+          },
+          {
+            "value_id": "2825",
+            "value_name": "Green"
+          },
+          {
+            "value_id": "2826",
+            "value_name": "Yellow"
+          },
+          {
+            "value_id": "2827",
+            "value_name": "Orange"
+          },
+          {
+            "value_id": "2828",
+            "value_name": "Purple"
+          },
+          {
+            "value_id": "2829",
+            "value_name": "Pastel Pink"
+          },
+          {
+            "value_id": "2830",
+            "value_name": "Pastel Blue"
+          },
+          {
+            "value_id": "2831",
+            "value_name": "Pastel Lilac"
+          },
+          {
+            "value_id": "2832",
+            "value_name": "Pastel Green"
+          },
+          {
+            "value_id": "2833",
+            "value_name": "Pastel Yellow"
+          },
+          {
+            "value_id": "2834",
+            "value_name": "Peach"
+          },
+          {
+            "value_id": "2835",
+            "value_name": "Chrome Silver"
+          },
+          {
+            "value_id": "2836",
+            "value_name": "Chrome Gold"
+          },
+          {
+            "value_id": "2837",
+            "value_name": "Chrome Rose Gold"
+          },
+          {
+            "value_id": "2838",
+            "value_name": "Chrome Blue"
+          },
+          {
+            "value_id": "2839",
+            "value_name": "Chrome Copper"
+          },
+          {
+            "value_id": "2840",
+            "value_name": "Blush"
+          },
+          {
+            "value_id": "2841",
+            "value_name": "Canyon Rose"
+          },
+          {
+            "value_id": "2842",
+            "value_name": "Caramel"
+          },
+          {
+            "value_id": "2843",
+            "value_name": "Sangria"
+          },
+          {
+            "value_id": "2844",
+            "value_name": "Chocolate"
+          },
+          {
+            "value_id": "2845",
+            "value_name": "Slate Blue"
+          },
+          {
+            "value_id": "2846",
+            "value_name": "Seafoam"
+          },
+          {
+            "value_id": "2847",
+            "value_name": "Teal"
+          },
+          {
+            "value_id": "2848",
+            "value_name": "Smoke Grey"
+          },
+          {
+            "value_id": "2849",
+            "value_name": "Navy"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/large-organic-column-178",
+      "slug": "large-organic-column",
+      "name": "Large Organic Column",
+      "url": "http://5.78.136.133/shop/what-we-make-3/large-organic-column-178",
+      "base_price": "180.00",
+      "currency": "USD",
+      "description": "Balloons up to 24 inches, stacked into a column. The scale brings presence that a standard column doesn\u2019t.",
+      "image_url": "http://5.78.136.133/web/image/product.template/178/image_1920",
+      "attributes": {
+        "Column Height": [
+          {
+            "value_id": "2850",
+            "value_name": "5ft"
+          },
+          {
+            "value_id": "2851",
+            "value_name": "6ft"
+          },
+          {
+            "value_id": "2852",
+            "value_name": "7ft"
+          },
+          {
+            "value_id": "2853",
+            "value_name": "8ft"
+          },
+          {
+            "value_id": "2854",
+            "value_name": "9ft"
+          },
+          {
+            "value_id": "2855",
+            "value_name": "10ft"
+          }
+        ],
+        "Color Palette": [
+          {
+            "value_id": "2856",
+            "value_name": "Black"
+          },
+          {
+            "value_id": "2857",
+            "value_name": "White"
+          },
+          {
+            "value_id": "2858",
+            "value_name": "Red"
+          },
+          {
+            "value_id": "2859",
+            "value_name": "Royal Blue"
+          },
+          {
+            "value_id": "2860",
+            "value_name": "Green"
+          },
+          {
+            "value_id": "2861",
+            "value_name": "Yellow"
+          },
+          {
+            "value_id": "2862",
+            "value_name": "Orange"
+          },
+          {
+            "value_id": "2863",
+            "value_name": "Purple"
+          },
+          {
+            "value_id": "2864",
+            "value_name": "Pastel Pink"
+          },
+          {
+            "value_id": "2865",
+            "value_name": "Pastel Blue"
+          },
+          {
+            "value_id": "2866",
+            "value_name": "Pastel Lilac"
+          },
+          {
+            "value_id": "2867",
+            "value_name": "Pastel Green"
+          },
+          {
+            "value_id": "2868",
+            "value_name": "Pastel Yellow"
+          },
+          {
+            "value_id": "2869",
+            "value_name": "Peach"
+          },
+          {
+            "value_id": "2870",
+            "value_name": "Chrome Silver"
+          },
+          {
+            "value_id": "2871",
+            "value_name": "Chrome Gold"
+          },
+          {
+            "value_id": "2872",
+            "value_name": "Chrome Rose Gold"
+          },
+          {
+            "value_id": "2873",
+            "value_name": "Chrome Blue"
+          },
+          {
+            "value_id": "2874",
+            "value_name": "Chrome Copper"
+          },
+          {
+            "value_id": "2875",
+            "value_name": "Blush"
+          },
+          {
+            "value_id": "2876",
+            "value_name": "Canyon Rose"
+          },
+          {
+            "value_id": "2877",
+            "value_name": "Caramel"
+          },
+          {
+            "value_id": "2878",
+            "value_name": "Sangria"
+          },
+          {
+            "value_id": "2879",
+            "value_name": "Chocolate"
+          },
+          {
+            "value_id": "2880",
+            "value_name": "Slate Blue"
+          },
+          {
+            "value_id": "2881",
+            "value_name": "Seafoam"
+          },
+          {
+            "value_id": "2882",
+            "value_name": "Teal"
+          },
+          {
+            "value_id": "2883",
+            "value_name": "Smoke Grey"
+          },
+          {
+            "value_id": "2884",
+            "value_name": "Navy"
+          }
+        ]
+      },
+      "variants": [],
+      "variant_count": 0
+    },
+    {
+      "slug_with_id": "what-we-make-3/pride-arch-179",
+      "slug": "pride-arch",
+      "name": "Pride Arch",
+      "url": "http://5.78.136.133/shop/what-we-make-3/pride-arch-179",
+      "base_price": 325.0,
+      "currency": "USD",
+      "description": "Full-spectrum rainbow in a statement arch. Bold, joyful, and built to celebrate exactly who you are.",
+      "image_url": "http://5.78.136.133/web/image/product.product/1243/image_1920?unique=132b54e",
+      "attributes": {},
+      "variants": [],
+      "variant_count": 0
+    }
+  ]
+}

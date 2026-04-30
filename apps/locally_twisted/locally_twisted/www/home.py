@@ -65,7 +65,7 @@ CLIENT_CRAWL = [
 
 
 # The 8 customizable categories — items Jeff actually customizes for events.
-# These point at the Lookbook (current) and the future Event Decor / Design
+# These point at the Portfolio (current) and the future Event Decor / Design
 # Studio interactive experience (post-Phase 1). Updated 2026-04-28 per GL:
 # Columns is the canonical name; Garlands replaces "Organic Garlands"
 # (organic is a custom option, not a separate product); Centerpieces and
@@ -218,7 +218,7 @@ REVIEW_QUOTES = [
 
 PAGE_CSS = """
 /* ======================================================================
- * HOMEPAGE v2 — lookbook-forward shape (lookbook-led, twisting at bottom)
+ * HOMEPAGE v2 — portfolio-forward shape (portfolio-led, twisting at bottom)
  * BEM blocks: lt-hero, lt-reviews-block, lt-divider, lt-categories,
  *             lt-featured, lt-crawl, lt-cta, lt-twisting-spotlight
  * Uses CSS variables from lt-theme.css (--lt-teal, --lt-near-black, etc.)

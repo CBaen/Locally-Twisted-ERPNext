@@ -1,0 +1,998 @@
+[
+ {
+  "doctype": "Item Attribute",
+  "name": "Add Bouquet",
+  "attribute_name": "Add Bouquet",
+  "numeric_values": 0,
+  "item_attribute_values": [
+   {
+    "attribute_value": "Small 3 balloon bouquet",
+    "abbr": "SMA"
+   },
+   {
+    "attribute_value": "5 balloon bouquet",
+    "abbr": "5BA"
+   },
+   {
+    "attribute_value": "7 balloon bouquet",
+    "abbr": "7BA"
+   }
+  ],
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Attribute",
+  "name": "Add Foil Number",
+  "attribute_name": "Add Foil Number",
+  "numeric_values": 0,
+  "item_attribute_values": [
+   {
+    "attribute_value": "1",
+    "abbr": "12"
+   },
+   {
+    "attribute_value": "2",
+    "abbr": "22"
+   },
+   {
+    "attribute_value": "3",
+    "abbr": "32"
+   },
+   {
+    "attribute_value": "4",
+    "abbr": "42"
+   },
+   {
+    "attribute_value": "5",
+    "abbr": "52"
+   },
+   {
+    "attribute_value": "6",
+    "abbr": "62"
+   },
+   {
+    "attribute_value": "7",
+    "abbr": "72"
+   },
+   {
+    "attribute_value": "8",
+    "abbr": "82"
+   },
+   {
+    "attribute_value": "9",
+    "abbr": "92"
+   },
+   {
+    "attribute_value": "0",
+    "abbr": "02"
+   }
+  ],
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Attribute",
+  "name": "Add ons",
+  "attribute_name": "Add ons",
+  "numeric_values": 0,
+  "item_attribute_values": [
+   {
+    "attribute_value": "Foil stars",
+    "abbr": "FOI"
+   },
+   {
+    "attribute_value": "themed foils",
+    "abbr": "THE"
+   },
+   {
+    "attribute_value": "None",
+    "abbr": "NON"
+   }
+  ],
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Attribute",
+  "name": "Arch Size",
+  "attribute_name": "Arch Size",
+  "numeric_values": 0,
+  "item_attribute_values": [
+   {
+    "attribute_value": "20ft",
+    "abbr": "20F"
+   },
+   {
+    "attribute_value": "25ft",
+    "abbr": "25F"
+   },
+   {
+    "attribute_value": "30ft",
+    "abbr": "30F"
+   },
+   {
+    "attribute_value": "35ft",
+    "abbr": "35F"
+   }
+  ],
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Attribute",
+  "name": "Baby color",
+  "attribute_name": "Baby color",
+  "numeric_values": 0,
+  "item_attribute_values": [
+   {
+    "attribute_value": "blue",
+    "abbr": "BLU"
+   },
+   {
+    "attribute_value": "pink",
+    "abbr": "PIN"
+   }
+  ],
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Attribute",
+  "name": "Bouquet Size",
+  "attribute_name": "Bouquet Size",
+  "numeric_values": 0,
+  "item_attribute_values": [
+   {
+    "attribute_value": "Small — 1 super shape, 2 foils, 7 latex",
+    "abbr": "SMA"
+   },
+   {
+    "attribute_value": "Medium — 2 super shapes, 4 foils, 14 latex",
+    "abbr": "MED"
+   },
+   {
+    "attribute_value": "Large - 3 super shapes, 5 foil 16 latex",
+    "abbr": "LAR"
+   }
+  ],
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Attribute",
+  "name": "Color Palette",
+  "attribute_name": "Color Palette",
+  "numeric_values": 0,
+  "item_attribute_values": [
+   {
+    "attribute_value": "Black",
+    "abbr": "BLA"
+   },
+   {
+    "attribute_value": "White",
+    "abbr": "WHI"
+   },
+   {
+    "attribute_value": "Red",
+    "abbr": "RED"
+   },
+   {
+    "attribute_value": "Royal Blue",
+    "abbr": "ROY"
+   },
+   {
+    "attribute_value": "Green",
+    "abbr": "GRE"
+   },
+   {
+    "attribute_value": "Yellow",
+    "abbr": "YEL"
+   },
+   {
+    "attribute_value": "Orange",
+    "abbr": "ORA"
+   },
+   {
+    "attribute_value": "Purple",
+    "abbr": "PUR"
+   },
+   {
+    "attribute_value": "Pastel Pink",
+    "abbr": "PAS"
+   },
+   {
+    "attribute_value": "Pastel Blue",
+    "abbr": "PAST"
+   },
+   {
+    "attribute_value": "Pastel Lilac",
+    "abbr": "PASTE"
+   },
+   {
+    "attribute_value": "Pastel Green",
+    "abbr": "PASTEL"
+   },
+   {
+    "attribute_value": "Pastel Yellow",
+    "abbr": "PAS2"
+   },
+   {
+    "attribute_value": "Peach",
+    "abbr": "PEA"
+   },
+   {
+    "attribute_value": "Chrome Silver",
+    "abbr": "CHR"
+   },
+   {
+    "attribute_value": "Chrome Gold",
+    "abbr": "CHRO"
+   },
+   {
+    "attribute_value": "Chrome Rose Gold",
+    "abbr": "CHROM"
+   },
+   {
+    "attribute_value": "Chrome Blue",
+    "abbr": "CHROME"
+   },
+   {
+    "attribute_value": "Chrome Copper",
+    "abbr": "CHR2"
+   },
+   {
+    "attribute_value": "Blush",
+    "abbr": "BLU"
+   },
+   {
+    "attribute_value": "Canyon Rose",
+    "abbr": "CAN"
+   },
+   {
+    "attribute_value": "Caramel",
+    "abbr": "CAR"
+   },
+   {
+    "attribute_value": "Sangria",
+    "abbr": "SAN"
+   },
+   {
+    "attribute_value": "Chocolate",
+    "abbr": "CHO"
+   },
+   {
+    "attribute_value": "Slate Blue",
+    "abbr": "SLA"
+   },
+   {
+    "attribute_value": "Seafoam",
+    "abbr": "SEA"
+   },
+   {
+    "attribute_value": "Teal",
+    "abbr": "TEA"
+   },
+   {
+    "attribute_value": "Smoke Grey",
+    "abbr": "SMO"
+   },
+   {
+    "attribute_value": "Navy",
+    "abbr": "NAV"
+   }
+  ],
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Attribute",
+  "name": "Column Height",
+  "attribute_name": "Column Height",
+  "numeric_values": 0,
+  "item_attribute_values": [
+   {
+    "attribute_value": "5ft",
+    "abbr": "5FT"
+   },
+   {
+    "attribute_value": "6ft",
+    "abbr": "6FT"
+   },
+   {
+    "attribute_value": "7ft",
+    "abbr": "7FT"
+   },
+   {
+    "attribute_value": "8ft",
+    "abbr": "8FT"
+   },
+   {
+    "attribute_value": "9ft",
+    "abbr": "9FT"
+   },
+   {
+    "attribute_value": "10ft",
+    "abbr": "10F"
+   }
+  ],
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Attribute",
+  "name": "Delivery Size",
+  "attribute_name": "Delivery Size",
+  "numeric_values": 0,
+  "item_attribute_values": [
+   {
+    "attribute_value": "Small",
+    "abbr": "SMA"
+   },
+   {
+    "attribute_value": "Medium",
+    "abbr": "MED"
+   },
+   {
+    "attribute_value": "Large",
+    "abbr": "LAR"
+   }
+  ],
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Attribute",
+  "name": "Delivery themes",
+  "attribute_name": "Delivery themes",
+  "numeric_values": 0,
+  "item_attribute_values": [
+   {
+    "attribute_value": "Mickey",
+    "abbr": "MIC"
+   },
+   {
+    "attribute_value": "Minnie",
+    "abbr": "MIN"
+   },
+   {
+    "attribute_value": "Mermaid",
+    "abbr": "MER"
+   },
+   {
+    "attribute_value": "Basketball",
+    "abbr": "BAS"
+   },
+   {
+    "attribute_value": "Soccer",
+    "abbr": "SOC"
+   },
+   {
+    "attribute_value": "Unicorn",
+    "abbr": "UNI"
+   },
+   {
+    "attribute_value": "Chase",
+    "abbr": "CHA"
+   },
+   {
+    "attribute_value": "spiderman",
+    "abbr": "SPI"
+   },
+   {
+    "attribute_value": "batman",
+    "abbr": "BAT"
+   },
+   {
+    "attribute_value": "Gamer",
+    "abbr": "GAM"
+   },
+   {
+    "attribute_value": "Dino Birthday",
+    "abbr": "DIN"
+   },
+   {
+    "attribute_value": "Sonic",
+    "abbr": "SON"
+   },
+   {
+    "attribute_value": "Elmo",
+    "abbr": "ELM"
+   },
+   {
+    "attribute_value": "Encanto",
+    "abbr": "ENC"
+   },
+   {
+    "attribute_value": "Camping Birthday",
+    "abbr": "CAM"
+   },
+   {
+    "attribute_value": "Rainbow Birthday",
+    "abbr": "RAI"
+   },
+   {
+    "attribute_value": "Space",
+    "abbr": "SPA"
+   },
+   {
+    "attribute_value": "Boho Rainbow",
+    "abbr": "BOH"
+   },
+   {
+    "attribute_value": "Frozen",
+    "abbr": "FRO"
+   },
+   {
+    "attribute_value": "Birthday Celebration",
+    "abbr": "BIR"
+   },
+   {
+    "attribute_value": "Jurassic World",
+    "abbr": "JUR"
+   },
+   {
+    "attribute_value": "Blush and Mint Cake",
+    "abbr": "BLU"
+   },
+   {
+    "attribute_value": "Rosegold and pink Happy Birthday",
+    "abbr": "ROS"
+   },
+   {
+    "attribute_value": "Pink Butterfly",
+    "abbr": "PIN"
+   },
+   {
+    "attribute_value": "TikTok Birthday",
+    "abbr": "TIK"
+   },
+   {
+    "attribute_value": "Football",
+    "abbr": "FOO"
+   },
+   {
+    "attribute_value": "Toy Story",
+    "abbr": "TOY"
+   }
+  ],
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Attribute",
+  "name": "Design",
+  "attribute_name": "Design",
+  "numeric_values": 0,
+  "item_attribute_values": [
+   {
+    "attribute_value": "Swirl (up to 4 colors)",
+    "abbr": "SWI"
+   },
+   {
+    "attribute_value": "Layered (up to 8 colors)",
+    "abbr": "LAY"
+   }
+  ],
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Attribute",
+  "name": "Drop Size",
+  "attribute_name": "Drop Size",
+  "numeric_values": 0,
+  "item_attribute_values": [
+   {
+    "attribute_value": "250",
+    "abbr": "250"
+   },
+   {
+    "attribute_value": "500",
+    "abbr": "500"
+   },
+   {
+    "attribute_value": "1000",
+    "abbr": "100"
+   }
+  ],
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Attribute",
+  "name": "Easter Designs",
+  "attribute_name": "Easter Designs",
+  "numeric_values": 0,
+  "item_attribute_values": [
+   {
+    "attribute_value": "Bunny",
+    "abbr": "BUN"
+   },
+   {
+    "attribute_value": "Flower",
+    "abbr": "FLO"
+   },
+   {
+    "attribute_value": "Bunny in basket",
+    "abbr": "BUNN"
+   },
+   {
+    "attribute_value": "Easter egg",
+    "abbr": "EAS"
+   },
+   {
+    "attribute_value": "Unicorn egg",
+    "abbr": "UNI"
+   },
+   {
+    "attribute_value": "Butterfly",
+    "abbr": "BUT"
+   },
+   {
+    "attribute_value": "Turtle",
+    "abbr": "TUR"
+   }
+  ],
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Attribute",
+  "name": "Garland Length",
+  "attribute_name": "Garland Length",
+  "numeric_values": 0,
+  "item_attribute_values": [
+   {
+    "attribute_value": "6ft",
+    "abbr": "6FT"
+   },
+   {
+    "attribute_value": "9ft",
+    "abbr": "9FT"
+   },
+   {
+    "attribute_value": "12ft",
+    "abbr": "12F"
+   }
+  ],
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Attribute",
+  "name": "Graduation stands",
+  "attribute_name": "Graduation stands",
+  "numeric_values": 0,
+  "item_attribute_values": [
+   {
+    "attribute_value": "Congrats",
+    "abbr": "CON"
+   },
+   {
+    "attribute_value": "Yay",
+    "abbr": "YAY"
+   }
+  ],
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Attribute",
+  "name": "Hair color",
+  "attribute_name": "Hair color",
+  "numeric_values": 0,
+  "item_attribute_values": [
+   {
+    "attribute_value": "Black",
+    "abbr": "BLA"
+   },
+   {
+    "attribute_value": "Brown",
+    "abbr": "BRO"
+   },
+   {
+    "attribute_value": "yellow",
+    "abbr": "YEL"
+   },
+   {
+    "attribute_value": "Orange",
+    "abbr": "ORA"
+   },
+   {
+    "attribute_value": "Dark Brown",
+    "abbr": "DAR"
+   }
+  ],
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Attribute",
+  "name": "LED Lights",
+  "attribute_name": "LED Lights",
+  "numeric_values": 0,
+  "item_attribute_values": [
+   {
+    "attribute_value": "No Lights",
+    "abbr": "NOL"
+   },
+   {
+    "attribute_value": "Add LED Lights",
+    "abbr": "ADD"
+   }
+  ],
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Attribute",
+  "name": "Missionary",
+  "attribute_name": "Missionary",
+  "numeric_values": 0,
+  "item_attribute_values": [
+   {
+    "attribute_value": "Elder",
+    "abbr": "ELD"
+   },
+   {
+    "attribute_value": "Sister",
+    "abbr": "SIS"
+   }
+  ],
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Attribute",
+  "name": "Number colors",
+  "attribute_name": "Number colors",
+  "numeric_values": 0,
+  "item_attribute_values": [
+   {
+    "attribute_value": "Gold",
+    "abbr": "GOL"
+   },
+   {
+    "attribute_value": "Silver",
+    "abbr": "SIL"
+   },
+   {
+    "attribute_value": "Rose gold",
+    "abbr": "ROS"
+   },
+   {
+    "attribute_value": "pink",
+    "abbr": "PIN"
+   },
+   {
+    "attribute_value": "blue",
+    "abbr": "BLU"
+   },
+   {
+    "attribute_value": "white gold",
+    "abbr": "WHI"
+   },
+   {
+    "attribute_value": "Black",
+    "abbr": "BLA"
+   }
+  ],
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Attribute",
+  "name": "Orbz toppers",
+  "attribute_name": "Orbz toppers",
+  "numeric_values": 0,
+  "item_attribute_values": [
+   {
+    "attribute_value": "Red",
+    "abbr": "RED"
+   },
+   {
+    "attribute_value": "Blue/Green",
+    "abbr": "BLU"
+   },
+   {
+    "attribute_value": "Black/gold",
+    "abbr": "BLA"
+   },
+   {
+    "attribute_value": "Purple",
+    "abbr": "PUR"
+   },
+   {
+    "attribute_value": "Blue/gold",
+    "abbr": "BLUE"
+   },
+   {
+    "attribute_value": "Fantacy",
+    "abbr": "FAN"
+   },
+   {
+    "attribute_value": "Pink/gold",
+    "abbr": "PIN"
+   },
+   {
+    "attribute_value": "Gold Marble",
+    "abbr": "GOL"
+   },
+   {
+    "attribute_value": "Pink Marble",
+    "abbr": "PINK"
+   },
+   {
+    "attribute_value": "Blue Marble",
+    "abbr": "BLUEM"
+   }
+  ],
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Attribute",
+  "name": "Plush add ons",
+  "attribute_name": "Plush add ons",
+  "numeric_values": 0,
+  "item_attribute_values": [
+   {
+    "attribute_value": "None",
+    "abbr": "NON"
+   },
+   {
+    "attribute_value": "Teddy Bear",
+    "abbr": "TED"
+   }
+  ],
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Attribute",
+  "name": "latex colors",
+  "attribute_name": "latex colors",
+  "numeric_values": 0,
+  "item_attribute_values": [
+   {
+    "attribute_value": "Reflex Champage",
+    "abbr": "REF"
+   },
+   {
+    "attribute_value": "Reflex Truffle",
+    "abbr": "REFL"
+   },
+   {
+    "attribute_value": "Dusk Cream",
+    "abbr": "DUS"
+   },
+   {
+    "attribute_value": "Dusk Green Tea",
+    "abbr": "DUSK"
+   },
+   {
+    "attribute_value": "Dusk Blue",
+    "abbr": "DUSKB"
+   },
+   {
+    "attribute_value": "Dusk Lilac",
+    "abbr": "DUSKL"
+   },
+   {
+    "attribute_value": "Dusk Rose",
+    "abbr": "DUSKR"
+   },
+   {
+    "attribute_value": "Teal",
+    "abbr": "TEA"
+   },
+   {
+    "attribute_value": "Blue Slate",
+    "abbr": "BLU"
+   },
+   {
+    "attribute_value": "Smoke Grey",
+    "abbr": "SMO"
+   },
+   {
+    "attribute_value": "Reflex Silver",
+    "abbr": "REFLE"
+   },
+   {
+    "attribute_value": "Reflex Gold",
+    "abbr": "REFLEX"
+   },
+   {
+    "attribute_value": "Reflex Blue",
+    "abbr": "REF2"
+   },
+   {
+    "attribute_value": "Reflex green",
+    "abbr": "REF3"
+   },
+   {
+    "attribute_value": "Reflex Violet",
+    "abbr": "REF4"
+   },
+   {
+    "attribute_value": "Reflex Red",
+    "abbr": "REF5"
+   },
+   {
+    "attribute_value": "White",
+    "abbr": "WHI"
+   },
+   {
+    "attribute_value": "black",
+    "abbr": "BLA"
+   },
+   {
+    "attribute_value": "Red",
+    "abbr": "RED"
+   },
+   {
+    "attribute_value": "Orange",
+    "abbr": "ORA"
+   },
+   {
+    "attribute_value": "yellow",
+    "abbr": "YEL"
+   },
+   {
+    "attribute_value": "raspberry",
+    "abbr": "RAS"
+   },
+   {
+    "attribute_value": "fuchsia",
+    "abbr": "FUC"
+   },
+   {
+    "attribute_value": "bubble Gum",
+    "abbr": "BUB"
+   },
+   {
+    "attribute_value": "eucalyptus",
+    "abbr": "EUC"
+   },
+   {
+    "attribute_value": "Forest",
+    "abbr": "FOR"
+   },
+   {
+    "attribute_value": "Shamrock",
+    "abbr": "SHA"
+   },
+   {
+    "attribute_value": "Wintergreen",
+    "abbr": "WIN"
+   },
+   {
+    "attribute_value": "Lime",
+    "abbr": "LIM"
+   },
+   {
+    "attribute_value": "LT Blue",
+    "abbr": "LTB"
+   },
+   {
+    "attribute_value": "Periwinkle",
+    "abbr": "PER"
+   },
+   {
+    "attribute_value": "Royal Blue",
+    "abbr": "ROY"
+   },
+   {
+    "attribute_value": "Robin's Egg",
+    "abbr": "ROB"
+   },
+   {
+    "attribute_value": "Deep Teal",
+    "abbr": "DEE"
+   },
+   {
+    "attribute_value": "Honey",
+    "abbr": "HON"
+   },
+   {
+    "attribute_value": "Violet",
+    "abbr": "VIO"
+   },
+   {
+    "attribute_value": "Orchid",
+    "abbr": "ORC"
+   },
+   {
+    "attribute_value": "Lilac",
+    "abbr": "LIL"
+   },
+   {
+    "attribute_value": "Chocolate",
+    "abbr": "CHO"
+   },
+   {
+    "attribute_value": "Brown",
+    "abbr": "BRO"
+   },
+   {
+    "attribute_value": "Latte",
+    "abbr": "LAT"
+   },
+   {
+    "attribute_value": "Pastel Pink",
+    "abbr": "PAS"
+   },
+   {
+    "attribute_value": "Pastel Blue",
+    "abbr": "PAST"
+   },
+   {
+    "attribute_value": "Pastel Green",
+    "abbr": "PASTE"
+   },
+   {
+    "attribute_value": "Pastel Purple",
+    "abbr": "PASTEL"
+   },
+   {
+    "attribute_value": "Pastel Yellow",
+    "abbr": "PAS2"
+   },
+   {
+    "attribute_value": "Pastel Melon",
+    "abbr": "PAS3"
+   },
+   {
+    "attribute_value": "Grey",
+    "abbr": "GRE"
+   },
+   {
+    "attribute_value": "Clear",
+    "abbr": "CLE"
+   },
+   {
+    "attribute_value": "Blush",
+    "abbr": "BLUS"
+   },
+   {
+    "attribute_value": "Empowermint",
+    "abbr": "EMP"
+   }
+  ],
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Attribute",
+  "name": "skin color",
+  "attribute_name": "skin color",
+  "numeric_values": 0,
+  "item_attribute_values": [
+   {
+    "attribute_value": "Blush",
+    "abbr": "BLU"
+   },
+   {
+    "attribute_value": "Latte",
+    "abbr": "LAT"
+   },
+   {
+    "attribute_value": "Brown",
+    "abbr": "BRO"
+   }
+  ],
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Attribute",
+  "name": "topper",
+  "attribute_name": "topper",
+  "numeric_values": 0,
+  "item_attribute_values": [
+   {
+    "attribute_value": "large topper",
+    "abbr": "LAR"
+   },
+   {
+    "attribute_value": "Burst",
+    "abbr": "BUR"
+   },
+   {
+    "attribute_value": "foil star",
+    "abbr": "FOI"
+   },
+   {
+    "attribute_value": "foil heart",
+    "abbr": "FOIL"
+   },
+   {
+    "attribute_value": "bubble gum",
+    "abbr": "BUB"
+   },
+   {
+    "attribute_value": "Logo",
+    "abbr": "LOG"
+   }
+  ],
+  "modified": "2026-04-30 12:00:00.000000"
+ }
+]
