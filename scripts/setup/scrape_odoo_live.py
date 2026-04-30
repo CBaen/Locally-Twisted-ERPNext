@@ -111,7 +111,9 @@ def collect_product_links(category_root_html: str) -> list[tuple[str, str, int]]
         r'href="(/shop/[a-z][a-z0-9-]*/[a-z0-9-]+-(\d+))"[^>]*title="([^"]+)"'
     )
     for m in pattern.finditer(category_root_html):
-        rows.append((m.group(1), m.group(3), int(m.group(2))))
+        # Decode HTML entities in product names: &#39; → ', &#34; → ", etc.
+        name = html_lib.unescape(m.group(3))
+        rows.append((m.group(1), name, int(m.group(2))))
     return rows
 
 
@@ -155,7 +157,7 @@ VARIANT_INPUT_RE = re.compile(
     r'<input[^>]+data-value-id="(\d+)"[^>]+data-value-name="([^"]+)"',
     re.IGNORECASE,
 )
-IMG_RE = re.compile(r'<img[^>]+src="(/web/image/product[^"]+)"', re.IGNORECASE)
+IMG_RE = re.compile(r'(?:src|data-src|href)="(/web/image/product[^"]+)"', re.IGNORECASE)
 
 
 def html_unescape(s: str) -> str:
@@ -253,11 +255,11 @@ def extract_attribute_blocks(html: str) -> dict[str, dict]:
                 i = next_close + 5
         block_end = i
         block_html = html[block_start:block_end]
-        # Parse value rows
+        # Parse value rows; HTML-decode value names just in case
         values = []
         for m in VARIANT_INPUT_RE.finditer(block_html):
             ptav_id = int(m.group(1))
-            value_name = m.group(2)
+            value_name = html_lib.unescape(m.group(2))
             values.append({"ptav_id": ptav_id, "name": value_name})
         if values:
             out[attr_name] = {
@@ -270,16 +272,35 @@ def extract_attribute_blocks(html: str) -> dict[str, dict]:
 
 
 def extract_image_urls(html: str, jsonld: dict) -> tuple[str | None, list[str]]:
-    """Main image (from JSON-LD), plus additional unique image URLs from the page."""
+    """Main image (from JSON-LD), plus additional unique image URLs from the page.
+
+    If JSON-LD has no `image` field (5 LT products are like this), promote the
+    first DOM-discovered /web/image/product URL to be main. Prefer the
+    `product.product/<id>/image_1920` shape (highest-res, customer-facing) over
+    the smaller template variants.
+    """
     main = jsonld.get("image")
     if main and not main.startswith("http"):
         main = urljoin(ODOO_BASE, main)
-    extras: list[str] = []
-    seen_main = main or ""
+
+    found: list[str] = []
     for m in IMG_RE.finditer(html):
         u = urljoin(ODOO_BASE, m.group(1))
-        if u != seen_main and u not in extras:
-            extras.append(u)
+        if u not in found:
+            found.append(u)
+
+    if not main and found:
+        # Pick the best fallback: prefer product.product/.../image_1920
+        def priority(u: str) -> tuple[int, int, int]:
+            return (
+                0 if "/product.product/" in u else 1,
+                0 if "image_1920" in u else (1 if "image_1024" in u else 2),
+                found.index(u),  # stable tie-break
+            )
+        sorted_found = sorted(found, key=priority)
+        main = sorted_found[0]
+
+    extras = [u for u in found if u != main]
     return main, extras
 
 
