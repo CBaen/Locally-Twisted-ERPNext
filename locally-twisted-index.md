@@ -18,7 +18,7 @@ Pointer index. Links to artifacts that live elsewhere or that are easy to lose t
 | `locally-twisted-index.md` | This file |
 | `.env` | LT secrets (gitignored) |
 
-## Resources (canonical for the new build — `_resources/`)
+## Resources (canonical for the migration destination — `_resources/`)
 
 | File | Purpose |
 |------|---------|
@@ -89,7 +89,7 @@ The four reference surfaces below are **temporary** and will be retired. See `CL
 |------|--------------|
 | `C:\Users\baenb\projects\Built_by_Cameron` | Parent agency folder. Holds cross-client rules, port allocations, agency decisions log |
 | `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\bbc-personal-website` | Peer client folder (BBC the agency's own ERPNext install). Pre-staged 2026-04-26; not started. Uses port `:8080`. |
-| `https://github.com/CBaen/Locally-Twisted-ERPNext` | This project's GitHub repo (canonical source for the new build) |
+| `https://github.com/CBaen/Locally-Twisted-ERPNext` | This project's GitHub repo (canonical source for the migration destination) |
 
 ## External resources
 

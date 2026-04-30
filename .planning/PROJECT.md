@@ -74,7 +74,8 @@ The Odoo work informs this build (forms, models, copy, business policies all cam
 
 | Date | Decision | Why |
 |---|---|---|
-| 2026-04-26 | Project reframed from "Odoo → ERPNext migration" to "First professional business platform for LT, built on ERPNext" | Jeff was never told the prior attempt happened; the migration framing leaks that context and structures the work around the wrong arc |
+| 2026-04-30 | Project frame revised to "migration of business intent + catalog data into a fresh ERPNext install" | Supersedes the 2026-04-26 reframe; the technical reality (catalog data ported 2026-04-30, form intent + policies carried across, domain cutover at Phase 6) is migration shape. Jeff-disclosure stealth and hand-build-not-auto-translate are the constraints that survive — not the language. (See decisions log 2026-04-30 frame entry.) |
+| 2026-04-26 | Earlier reframe from "Odoo → ERPNext migration" to "first professional business platform / new build" | Was motivated by Jeff-disclosure concerns and avoiding too-mechanical translation framing. Superseded 2026-04-30 — those concerns survive as constraints, not as a denial of migration reality. |
 | 2026-04-26 | Customer-facing website + storefront is Phase 1 | Visual + UX proof point. If ERPNext can't deliver this, GL pivots before building backend |
 | 2026-04-26 | All clients default to ERPNext native HRMS payroll (no third-party payroll integration) | Agency-wide standard; one less integration to learn / configure / hand off |
 | 2026-04-26 | Drop standalone About page and standalone Services index | Redundant; info distributes across homepage + service pages; brief about summary lands on contact page |
@@ -101,4 +102,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-26 — frame reset (replaces prior "Odoo → ERPNext migration" framing).*
+*Last updated: 2026-04-30 — frame revised to "migration of business intent + catalog data into a fresh ERPNext install" (supersedes the 2026-04-26 "first professional business platform / new build" reframe).*

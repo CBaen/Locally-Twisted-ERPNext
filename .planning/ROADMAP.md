@@ -1,4 +1,6 @@
-# Roadmap: Locally Twisted — First Professional Business Platform
+# Roadmap: Locally Twisted — ERPNext Migration
+
+(Frame revised 2026-04-30 — see `.planning/PROJECT.md` and `locally-twisted-decisions.md`. The destination is a fresh ERPNext v15 install; the migration sources are LT's business intent + catalog data from the prior Odoo attempt and the legacy `locallytwisted.com` site.)
 
 ## Overview
 
