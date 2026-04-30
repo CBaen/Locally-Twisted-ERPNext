@@ -1,4 +1,27 @@
 """
+DEPRECATED 2026-04-30. The bind-mount + post-recreate-reinstall pattern this
+script was built for has been replaced by a custom Docker image
+(`locally-twisted-erpnext:v15`, built from `docker/Dockerfile`) that bakes
+frappe + erpnext + payments + webshop + locally_twisted + Node + compiled
+assets directly into the image. A `docker compose up --force-recreate` now
+produces a fully-working stack with no manual scripts. Apps and assets live
+in the image, not in bind-mounts and not in the container's writable layer.
+
+Kept here for historical reference and as documentation of why the structural
+change was needed at the time. Do NOT run this script against the current
+stack — it will pip-install editable copies that are already baked into the
+image, which has no useful effect and may add confusion.
+
+To rebuild the image after changes to apps/locally_twisted/:
+  docker build -f docker/Dockerfile -t locally-twisted-erpnext:v15 .
+
+To pick up the new image:
+  docker compose -p locally-twisted-erpnext-v15 -f Locally-Twisted-Backend/frappe_docker/pwd.yml up -d --force-recreate
+
+---
+
+Original docstring follows.
+
 install_webshop.py — Reproducible install of frappe/webshop + frappe/payments
 on the Locally Twisted ERPNext stack.
 

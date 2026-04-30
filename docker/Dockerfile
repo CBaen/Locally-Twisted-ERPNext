@@ -70,9 +70,9 @@ RUN find apps -mindepth 1 -path "*/.git" -exec rm -rf {} + 2>/dev/null || true
 # patching the template at image-build time means recreates inherit the patch
 # automatically — no more runtime patch script needed.
 USER root
-RUN sed -i 's|proxy_set_header Origin \$proxy_x_forwarded_proto://frontend;|proxy_set_header Origin $http_origin;|' \
+RUN sed -i 's|proxy_set_header Origin [^;]*;|proxy_set_header Origin $http_origin;|' \
     /templates/nginx/frappe.conf.template \
-    && grep -q 'proxy_set_header Origin $http_origin;' /templates/nginx/frappe.conf.template
+    && grep -q 'proxy_set_header Origin \$http_origin;' /templates/nginx/frappe.conf.template
 USER frappe
 
 # Inherit volumes, ports, command from the base image. The base already
