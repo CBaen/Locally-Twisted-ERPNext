@@ -51,6 +51,9 @@ import frappe
 
 # Catalog and mapping paths — relative to bench-bench dir or /workspace mount
 WORKSPACE_PATHS = [
+    # Primary path: bind-mounted via apps/locally_twisted/. Run `python tools/sync_seed_data.py`
+    # on the host before running this module to refresh the staged data.
+    Path("/home/frappe/frappe-bench/apps/locally_twisted/locally_twisted/seed/_data"),
     Path("/workspace/_resources/odoo-live"),
     Path("/home/frappe/frappe-bench/_resources/odoo-live"),
     Path("/home/frappe/frappe-bench/sites/_resources/odoo-live"),
