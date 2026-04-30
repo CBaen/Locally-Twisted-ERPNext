@@ -8,8 +8,9 @@ Do not treat old handoff files as truth. Treat them as claims, then verify impor
 
 - Client: Locally Twisted, owned by Jeff Kimber.
 - Business: custom balloon decor, balloon twisting, and face painting on the Wasatch Front, Utah.
-- Build: Locally Twisted's first professional business management system on ERPNext v15.
-- This is a new ERPNext build, not an Odoo migration.
+- Build: Locally Twisted's ERPNext v15 install — the destination of a migration of LT's business intent + catalog data into a fresh ERPNext install (frame revised 2026-04-30 — see `locally-twisted-decisions.md`).
+- "Fresh install" — destination is greenfield ERPNext; no auto-translated Odoo modules or DB dumps.
+- "Migration" — catalog records, form intent, policies, voice/brand were carried across from the prior Odoo attempt and the legacy `locallytwisted.com` site, and the new storefront replaces `locallytwisted.com` at cutover.
 - The failed Odoo test deployment is reference material only. It never served customers.
 - The live Odoo test shop at `http://5.78.136.133/shop` was the catalog source/reference for the 2026-04-30 catalog port.
 - Do not modify `C:\Users\baenb\projects\locally-twisted-odoo\` from this project.

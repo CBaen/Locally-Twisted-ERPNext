@@ -1,18 +1,20 @@
-# Locally Twisted: First Professional Business Platform
+# Locally Twisted: ERPNext Migration
 
 ## What This Is
 
-Locally Twisted is a 27-year-old Utah balloon-decor and event-services business owned by Jeff Kimber. Until now, LT has run on improvisation — manual records, paper notes, QuickBooks for accounting, a website built years ago that customers still reach but that has degraded beyond practical repair. **This project gives LT its first professional business management system, built on ERPNext v15.**
+Locally Twisted is a 27-year-old Utah balloon-decor and event-services business owned by Jeff Kimber. Until now, LT has run on improvisation — manual records, paper notes, QuickBooks for accounting, a website built years ago that customers still reach but that has degraded beyond practical repair. A prior attempt to give LT a backend (an Odoo build) failed in testing — never went live to customers and Jeff was never told the audit's verdict.
 
-End-to-end scope: customer-facing website + ecommerce storefront + lead intake forms + operator workflow (lead → quote → booking → calendar → project) + invoicing + Stripe payments + Utah tax compliance + native ERPNext accounting + native ERPNext HRMS payroll + customer self-service portal.
+**This project is a migration of LT's business intent + catalog data into a fresh ERPNext v15 install** (frame revised 2026-04-30 — see `locally-twisted-decisions.md`; supersedes the 2026-04-26 "first professional business platform / new build, not a migration" reframe). "Fresh install" because ERPNext was greenfield — no auto-translated Odoo modules, no DB dumps imported, no Odoo configuration carried across; everything was hand-built informed by Odoo discovery. "Migration" because the catalog data (53 Website Items / 10,578 variants / 10,613 Item Prices, ported 2026-04-30), the 45-field Lead schema, the `/book` and `/contact` form intent, the business policies, the brand identity, and the voice rules were all carried across from the Odoo attempt — and at cutover (Phase 6), the new ERPNext storefront replaces `locallytwisted.com` at the same domain.
+
+End-to-end destination scope: customer-facing website + ecommerce storefront + lead intake forms + operator workflow (lead → quote → booking → calendar → project) + invoicing + Stripe payments + Utah tax compliance + native ERPNext accounting + native ERPNext HRMS payroll + customer self-service portal.
 
 The build runs locally on `:8081` until it's ready to show Jeff. At cutover it deploys to Frappe Cloud and ownership transfers to Jeff Kimber's own account.
 
-A prior attempt to give LT a backend (an Odoo build) failed in testing — never went live to customers and Jeff was never told the audit's verdict. The Odoo work informs this build (forms, models, copy, business policies all came out of that attempt's discovery work) but does not constrain it. See `CLAUDE.md` "Reference Disposition" for how the Odoo references will be retired.
+The Odoo work informs this build (forms, models, copy, business policies all came out of that attempt's discovery work) but the destination doesn't depend on the Odoo system continuing to exist. See `CLAUDE.md` "Reference Disposition" for how the Odoo references will be retired.
 
 ## Core Value
 
-**Jeff's first interaction with this system makes him feel equipped — like he finally has the tools he should have had years ago.** He doesn't need to know it took two attempts. The end result must look obvious, professional, and trustworthy: the system a serious balloon business in Utah would have. If the customer-facing experience doesn't pass that bar in Phase 1, ERPNext is the wrong platform and we pivot before building further.
+**Jeff's first interaction with the destination system makes him feel equipped — like he finally has the tools he should have had years ago.** He doesn't need to know it took two attempts. The end result must look obvious, professional, and trustworthy: the system a serious balloon business in Utah would have. If the customer-facing experience doesn't pass that bar in Phase 1, ERPNext is the wrong destination and we pivot before building further.
 
 ## Requirements
 
@@ -40,11 +42,11 @@ A prior attempt to give LT a backend (an Odoo build) failed in testing — never
 
 <!-- Explicit boundaries. Reasoning included so they don't get re-added. -->
 
-- **Migration tooling for the Odoo dir** — the Odoo dir is reference material, not a system being migrated. No automated translation needed; we hand-build informed by what was learned.
+- **Automated Odoo→ERPNext translation tooling** — the Odoo dir is reference material; we hand-build informed by what was learned. The migration carries business intent + catalog data, not modules or schemas. (Catalog port 2026-04-30 was a record-by-record port from the live Odoo site, not an automated module/data conversion.)
 - **Standalone Services index page** — redundant. Service info lives on individual service pages and on the homepage. (GL directive 2026-04-26)
 - **Standalone About page** — about info distributes across the site (homepage, service pages); a brief summary lands on the contact page. (GL directive 2026-04-26)
 - **Gusto / third-party payroll** — agency standard is ERPNext native HRMS for all clients. (Decision 2026-04-26)
-- **"Stealth migration" framing of any kind** — Jeff doesn't know there was an Odoo attempt that failed; no documents on disk should reference it. The Odoo attempt is BBC-internal context, not project narrative.
+- **Surfacing the failed Odoo attempt to Jeff** — Jeff knows there's an audit; he doesn't yet know the prior Odoo attempt failed in testing. Internal docs use the migration framing freely; Jeff-facing communications still don't leak that context until Phase 1 is in a state GL can demo. (Was framed as "no migration framing of any kind" pre-2026-04-30; the actual constraint is Jeff-disclosure, not internal vocabulary.)
 - **Multi-company in one ERPNext site** — rejected; per-client isolation is structural.
 - **Hosting on Hetzner / self-hosted** — superseded by Frappe Cloud (managed, transferable per-site).
 - **Telling Jeff before there's a working replacement to show** — Jeff has been told there's an audit / debug / stress test of his existing system. The audit's conclusion (that the prior platform isn't sufficient) is not surfaced to him until Phase 1 is in a state GL can demo. Until then, all docs that mention the verdict stay internal to this folder.

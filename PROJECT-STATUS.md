@@ -89,7 +89,7 @@ The four reference surfaces are temporary and will be retired. Future instances 
 | Odoo GitHub repo (`https://github.com/CBaen/locally-twisted-odoo`) | Will be archived as read-only |
 | Current `locallytwisted.com` site | Damaged beyond repair; replaced at cutover |
 
-Canonical resources for the new build live in `_resources/` and are platform-agnostic.
+Canonical resources for the migration destination live in `_resources/` and are platform-agnostic.
 
 ## Key Files
 
@@ -124,7 +124,7 @@ Canonical resources for the new build live in `_resources/` and are platform-agn
 
 ## Rules
 
-- **Reframe is locked.** This is a NEW BUILD on ERPNext, not a migration. No artifact should re-introduce migration framing.
+- **Frame (revised 2026-04-30):** This is a **migration of LT's business intent + catalog data into a fresh ERPNext install**. "Fresh install" — destination is greenfield ERPNext, hand-built informed by Odoo discovery; no auto-translated modules or DB dumps. "Migration" — catalog records, form intent, policies, voice/brand, and the eventual domain cutover are real ports from the prior Odoo attempt + the legacy `locallytwisted.com` site. Supersedes the 2026-04-26 "new build, not a migration" reframe. See `locally-twisted-decisions.md` 2026-04-30 frame entry.
 - **Stealth on the verdict.** Jeff knows there's an audit; he doesn't know the conclusion. Internal docs stay internal until Phase 1 is demo-ready.
 - **`_resources/` is canonical.** Anything from the Odoo dir that applies has been copied + scrubbed. Don't reach back into the Odoo dir for new content.
 - **Voice & Language.** Plain language, no jargon. See `_resources/STYLE-GUIDE.md` voice section.
