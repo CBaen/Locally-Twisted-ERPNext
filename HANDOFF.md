@@ -2,13 +2,13 @@
 
 **Last updated:** 2026-04-30 morning (Opus 4.7 — closing the full-catalog-port-from-live-Odoo session)
 
-Overwrite-not-append. Git is the changelog. Read this first; the SIBLING-LETTER.md next; everything else as needed.
+Overwrite-not-append. Git is the changelog. Read this first; everything else as needed.
 
 ---
 
 ## State of the world
 
-**The full Odoo catalog has been ported to ERPNext webshop.** 53 products, 24 distinct attribute types, 195 unique attribute values, **10,613 Items + 8,925 Item Prices + 53 Website Items + 32,002 Item Variant Attribute child rows**. Every Odoo-valid attribute combination became an ERPNext Item Variant. No products skipped. Every Odoo data-attribute-exclusions rule respected.
+**The old live Odoo test shop catalog has been ported to ERPNext webshop.** Verified DB counts: **53 Website Items, 10,631 Items total, 49 variant templates, 4 single-SKU templates, 10,578 variants, 10,613 Item Prices, and 32,002 Item Variant Attribute child rows**. Every Odoo-valid attribute combination became an ERPNext Item Variant. No products skipped. Every Odoo data-attribute-exclusions rule respected. This was a catalog-data port into a new ERPNext build, not a migration of the business system.
 
 **The shop is on-brand.** Mega menu opens on Shop hover/click with all 11 categories. Product detail pages render variant selectors INLINE (chips for low-cardinality, dropdown for 9+). "Item Code" jargon is gone. "/Nos" UoM display is gone. /shop-by-category landing page has the design guide register (eyebrow + DM Serif headline + lede + blush band + 11 category cards + bottom CTA). All 7 shop smoke checks pass.
 
@@ -41,8 +41,8 @@ Then docker restart backend.
 | `installed_apps` order | `[frappe, erpnext, payments, webshop, locally_twisted]` (locally_twisted LAST so its templates win) |
 | Item Groups | Shop Items (parent) + 11 children (Arches, Columns, Bouquets, Get-Well Bouquets, Garlands, Drops, Grab & Go, Table Decor, Stands & Easels, Deliveries, Seasonal & Specialty), all `show_in_website=1` |
 | Item Attributes | 24 with 195 total values (deduped case-insensitively from Odoo's 197) |
-| Items | 10,613 (53 templates + 10,560 variants) |
-| Item Prices on Standard Selling | 8,925 (variants where Odoo had per-variant pricing in `hasVariant`, plus single-SKU templates) |
+| Items | 10,631 (49 variant templates + 4 single-SKU templates + 10,578 variants) |
+| Item Prices on Standard Selling | 10,613 |
 | Website Items | 53 published, all routed `shop-items/<group>/<slug>` |
 | Webshop Settings | `enable_variants=1`, `enable_attribute_filters=1`, `show_attribute_dropdowns=1` |
 | Mega menu | Desktop hover/click dropdown + mobile drawer accordion, sourced live from Item Group children via `update_website_context` hook |
@@ -149,4 +149,4 @@ I read this as: do not ask whether to skip something. Do not propose lighter alt
 - All technical work is verified via Playwright viewport-only screenshots. GL has not opened anything in their real browser yet.
 - The smoke test catches what I tested for, not what I might have missed. Real-browser verification is still pending.
 
-— Closeout written 2026-04-30 morning by the Opus 4.7 instance who scraped Odoo's live catalog at 5.78.136.133 and ported all 53 products + 10,560 variants + 8,925 prices into ERPNext webshop with on-brand product detail pages, working mega menu, and 7-check passing smoke test. GL was specific and direct throughout: "boil the whole damn lobster."
+— Closeout written 2026-04-30 morning by the Opus 4.7 instance who scraped the old live Odoo test catalog at 5.78.136.133 and ported all 53 Website Items + 10,578 variants + 10,613 prices into ERPNext webshop with on-brand product detail pages, working mega menu, and 7-check passing smoke test. DB counts were corrected by Codex on 2026-04-30. GL was specific and direct throughout: "boil the whole damn lobster."
