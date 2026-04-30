@@ -2281,26 +2281,59 @@ body.lt-filter-open {
 }
 
 /* ── Product grid ──────────────────────────────────────────────────── */
-.lt-shop__grid,
+
+/* Hide webshop's injected toolbar (.toolbar div: search box + view togglers).
+   We render our own sort/filter toolbar above #product-listing.
+   The div is appended into #product-listing by ProductView.prepare_toolbar(). */
+#product-listing .toolbar {
+    display: none;
+}
+
+/* Hide the list-view area — we force grid view via localStorage before
+   all-products/index.js runs. Webshop's set_view_state() adds .hidden to
+   #products-list-area when view_type is "Grid View", but belt-and-suspenders. */
+#products-list-area {
+    display: none;
+}
+
+/* #product-listing wraps both areas — keep it as a plain block. */
 #product-listing.lt-shop__grid {
+    display: block;
+}
+
+/* #products-grid-area is webshop's actual card container.
+   It gets class="row products-list mt-minus-1" from Bootstrap.
+   Override Bootstrap's .row flex behaviour with CSS grid.
+   Mobile-first: 1 col → 2 col (480px+) → 3 col (992px+). */
+#products-grid-area {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 @media (max-width: 479px) {
-    .lt-shop__grid,
-    #product-listing.lt-shop__grid {
+    #products-grid-area {
         grid-template-columns: 1fr;
     }
 }
 
 @media (min-width: 992px) {
-    .lt-shop__grid,
-    #product-listing.lt-shop__grid {
+    #products-grid-area {
         grid-template-columns: 1fr 1fr 1fr;
         gap: 1.5rem;
     }
+}
+
+/* Each card cell — webshop wraps each card in .item-card.col-sm-4.
+   Override Bootstrap's col padding/flex behaviour so it fills the grid cell. */
+#products-grid-area .item-card {
+    padding-left: 0;
+    padding-right: 0;
+    width: 100%;
+    max-width: 100%;
+    flex: none;
 }
 
 .lt-shop__loading {
@@ -2313,13 +2346,28 @@ body.lt-filter-open {
 }
 
 /* ── Webshop card override ─────────────────────────────────────────── */
-.lt-shop__grid .product-card-wrapper,
-#product-listing .product-card-wrapper {
+
+/* product-card-wrapper is the <a> tag wrapping the whole card */
+#products-grid-area .product-card-wrapper {
     width: 100%;
+    display: flex;
+    text-decoration: none;
+    color: inherit;
 }
 
-.lt-shop__grid .card.product-card,
-#product-listing .card.product-card {
+#products-grid-area .product-card-wrapper:hover,
+#products-grid-area .product-card-wrapper:focus-visible {
+    text-decoration: none;
+    color: inherit;
+}
+
+#products-grid-area .product-card-wrapper:focus-visible {
+    outline: 2px solid var(--lt-teal);
+    outline-offset: 3px;
+    border-radius: 0.5rem;
+}
+
+#products-grid-area .card.product-card {
     border: 1px solid rgba(26, 26, 26, 0.08);
     border-radius: 0.5rem;
     overflow: hidden;
@@ -2330,24 +2378,22 @@ body.lt-filter-open {
     display: flex;
     flex-direction: column;
     height: 100%;
+    width: 100%;
 }
 
-.lt-shop__grid .card.product-card:hover,
-#product-listing .card.product-card:hover {
+#products-grid-area .card.product-card:hover {
     box-shadow: 0 4px 16px rgba(26, 26, 26, 0.10);
     transform: translateY(-2px);
 }
 
-.lt-shop__grid .product-image,
-#product-listing .product-image {
+#products-grid-area .product-image {
     aspect-ratio: 1 / 1;
     overflow: hidden;
     background-color: var(--lt-blush-tint);
     flex-shrink: 0;
 }
 
-.lt-shop__grid .product-image img,
-#product-listing .product-image img {
+#products-grid-area .product-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -2355,13 +2401,11 @@ body.lt-filter-open {
     transition: transform 0.3s ease;
 }
 
-.lt-shop__grid .card.product-card:hover .product-image img,
-#product-listing .card.product-card:hover .product-image img {
+#products-grid-area .card.product-card:hover .product-image img {
     transform: scale(1.03);
 }
 
-.lt-shop__grid .card-body,
-#product-listing .card-body {
+#products-grid-area .card-body {
     padding: 0.875rem 0.875rem 1rem;
     flex: 1;
     display: flex;
@@ -2369,8 +2413,7 @@ body.lt-filter-open {
     gap: 0.25rem;
 }
 
-.lt-shop__grid .product-title,
-#product-listing .product-title {
+#products-grid-area .product-title {
     font-family: 'Raleway', sans-serif;
     font-size: 0.9375rem;
     font-weight: 600;
@@ -2383,40 +2426,17 @@ body.lt-filter-open {
     overflow: hidden;
 }
 
-.lt-shop__grid .product-price,
-#product-listing .product-price {
+#products-grid-area .product-price {
     font-family: 'DM Serif Display', Georgia, serif;
     font-size: 1.125rem;
     color: var(--lt-near-black);
     margin: 0.25rem 0 0;
 }
 
-/* Hide "Explore" button — whole card is already clickable */
-.lt-shop__grid .btn.btn-explore,
-#product-listing .btn.btn-explore,
-.lt-shop__grid .btn-explore,
-#product-listing .btn-explore {
+/* Hide "Explore" button — whole card is already a link */
+#products-grid-area .btn.btn-explore,
+#products-grid-area .btn-explore {
     display: none;
-}
-
-.lt-shop__grid a.product-card-wrapper,
-#product-listing a.product-card-wrapper {
-    display: flex;
-    text-decoration: none;
-    color: inherit;
-}
-
-.lt-shop__grid a.product-card-wrapper:hover,
-#product-listing a.product-card-wrapper:hover {
-    text-decoration: none;
-    color: inherit;
-}
-
-.lt-shop__grid a.product-card-wrapper:focus-visible,
-#product-listing a.product-card-wrapper:focus-visible {
-    outline: 2px solid var(--lt-teal);
-    outline-offset: 3px;
-    border-radius: 0.5rem;
 }
 
 /* ── Pagination ────────────────────────────────────────────────────── */
@@ -2481,10 +2501,8 @@ body.lt-filter-open {
 
 /* ── Reduced motion ────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-    .lt-shop__grid .card.product-card,
-    #product-listing .card.product-card,
-    .lt-shop__grid .product-image img,
-    #product-listing .product-image img {
+    #products-grid-area .card.product-card,
+    #products-grid-area .product-image img {
         transition: none;
     }
 }
