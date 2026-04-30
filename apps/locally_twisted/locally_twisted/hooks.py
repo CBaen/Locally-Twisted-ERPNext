@@ -84,6 +84,33 @@ doc_events = {
     },
 }
 
+# ---------------------------------------------------------------
+# Fixtures — code-owned schema records that travel with the app.
+# Per BBC fixture-discipline: Item Group children + Item Attribute
+# records are SEED state. At Phase 6 cutover the operator-owned
+# subset gets removed from this list (per NOUPDATE-DRIFT.md, TBD).
+# Receipts: 2026-04-30 catalog rebuild from live Odoo.
+# ---------------------------------------------------------------
+fixtures = [
+    {
+        "dt": "Item Group",
+        "filters": [["name", "in", [
+            "Shop Items",
+            "Arches",
+            "Columns",
+            "Bouquets",
+            "Get-Well Bouquets",
+            "Garlands",
+            "Drops",
+            "Grab & Go",
+            "Table Decor",
+            "Stands & Easels",
+            "Deliveries",
+            "Seasonal & Specialty",
+        ]]],
+    },
+]
+
 # include custom scss in every website theme (without file extension ".scss")
 # website_theme_scss = "locally_twisted/public/scss/website"
 
