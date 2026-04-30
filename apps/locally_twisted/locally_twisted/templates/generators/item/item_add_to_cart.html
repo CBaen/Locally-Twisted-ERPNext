@@ -1,0 +1,97 @@
+{# Locally Twisted override of webshop's item_add_to_cart.html.
+   Replaces apps/webshop/webshop/templates/generators/item/item_add_to_cart.html.
+
+   What changed vs webshop's stock template:
+   - Stripped the "({{ price_info.formatted_price }} / {{ product_info.uom }})"
+     suffix line (the awkward "$ 150.00 / Nos" UoM display GL flagged).
+   - Stripped the unused offers block (LT doesn't use ERPNext Offer doctype).
+   - Reorganized: price prominent at top in DM Serif Display, then stock indicator,
+     then the action buttons.
+   - LT register: teal "Add to cart" CTA (per design guide rule "teal is earned").
+   - Inquiry button is secondary outlined style.
+#}
+{% if shopping_cart and shopping_cart.cart_settings.enabled %}
+
+{% set cart_settings = shopping_cart.cart_settings %}
+{% set product_info = shopping_cart.product_info %}
+
+<div class="lt-product__cart" data-variant-item-code="{{ item_code }}">
+
+    {# Price — DM Serif Display, no UoM suffix. #}
+    {% if cart_settings.show_price and product_info.price %}
+        {% set price_info = product_info.price %}
+        <div class="lt-product__price"
+             itemprop="offers"
+             itemscope
+             itemtype="https://schema.org/AggregateOffer">
+            {% if price_info.formatted_mrp %}
+                <span class="lt-product__price-current"
+                      itemprop="lowPrice"
+                      content="{{ price_info.formatted_price_sales_uom }}">{{ price_info.formatted_price_sales_uom }}</span>
+                <span class="lt-product__price-mrp">
+                    <s>{{ price_info.formatted_mrp }}</s>
+                </span>
+            {% else %}
+                <span class="lt-product__price-current"
+                      itemprop="highPrice"
+                      content="{{ price_info.formatted_price_sales_uom }}">{{ price_info.formatted_price_sales_uom }}</span>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    {# Stock indicator — only when configured. Plain language. #}
+    {% if cart_settings.show_stock_availability %}
+        <div class="lt-product__stock">
+            {% if product_info.get("on_backorder") %}
+                <span class="lt-product__stock-flag lt-product__stock-flag--backorder">
+                    {{ _('Available on backorder') }}
+                </span>
+            {% elif product_info.in_stock == 0 %}
+                <span class="lt-product__stock-flag lt-product__stock-flag--out">
+                    {{ _('Out of stock') }}
+                </span>
+            {% elif product_info.in_stock == 1 %}
+                <span class="lt-product__stock-flag lt-product__stock-flag--in">
+                    {{ _('In stock') }}
+                </span>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    {# Add to Cart — teal earned CTA. #}
+    <div class="lt-product__actions">
+        {% if product_info.price and (cart_settings.allow_items_not_in_stock or product_info.get("in_stock")) %}
+            <button data-item-code="{{ item_code }}"
+                    class="lt-product__cta lt-product__cta--primary btn-add-to-cart">
+                {{ _("Add to Cart") if cart_settings.enable_checkout else _("Add to Quote") }}
+            </button>
+            <a href="/cart"
+               class="lt-product__cta lt-product__cta--secondary btn-view-in-cart hidden">
+                {{ _("View in Cart") if cart_settings.enable_checkout else _("View in Quote") }}
+            </a>
+        {% endif %}
+    </div>
+
+</div>
+
+<script>
+    frappe.ready(() => {
+        $('.page_content').on('click', '.btn-add-to-cart', (e) => {
+            const $btn = $(e.currentTarget);
+            $btn.prop('disabled', true);
+            const item_code = $btn.data('item-code');
+            webshop.webshop.shopping_cart.update_cart({
+                item_code,
+                qty: 1,
+                callback(r) {
+                    $btn.prop('disabled', false);
+                    if (r.message) {
+                        $('.btn-add-to-cart, .btn-view-in-cart').toggleClass('hidden');
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+{% endif %}

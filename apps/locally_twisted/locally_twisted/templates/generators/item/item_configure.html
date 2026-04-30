@@ -1,0 +1,231 @@
+{# Locally Twisted override of webshop's item_configure.html.
+   Replaces apps/webshop/webshop/templates/generators/item/item_configure.html.
+
+   Stock template renders only a "Select Variant" button that opens a Frappe
+   Dialog. Customer-perceived options are hidden behind a click — GL flagged
+   this as "missing options."
+
+   LT version renders attribute selectors INLINE. Customers see what they can
+   pick at a glance: chips for low-cardinality (≤8 values), dropdown for high.
+   JS computes the matching variant on every change and updates Add-to-Cart.
+
+   Server-side data: webshop.webshop.variant_selector.utils.get_attributes_and_values
+   already returns attribute → valid-values for this template (filtered to values
+   that have at least one variant). Reused.
+#}
+{% if shopping_cart and shopping_cart.cart_settings.enabled and (cart_settings.enable_variants | int) %}
+
+{%- set _attrs = frappe.call("webshop.webshop.variant_selector.utils.get_attributes_and_values", item_code=doc.item_code) -%}
+
+<form class="lt-product__configure"
+      data-template-item-code="{{ doc.item_code }}"
+      aria-label="{{ _('Customize this item') }}">
+
+    {%- for attr in _attrs -%}
+        {%- set field_id = "lt-attr-" ~ loop.index -%}
+        {%- set values = attr.values or [] -%}
+        {%- set is_chips = values | length <= 8 -%}
+
+        <div class="lt-product__attr"
+             data-attribute-name="{{ attr.attribute }}"
+             data-display-type="{{ 'chips' if is_chips else 'select' }}">
+
+            <label for="{{ field_id }}" class="lt-product__attr-label">
+                {{ _(attr.attribute) }}
+                <span class="lt-product__attr-selected" id="{{ field_id }}-selected"></span>
+            </label>
+
+            {%- if is_chips -%}
+                <div class="lt-product__chips" id="{{ field_id }}" role="radiogroup" aria-label="{{ _(attr.attribute) }}">
+                    {%- for v in values -%}
+                        <label class="lt-product__chip">
+                            <input type="radio"
+                                   class="lt-product__chip-input js-lt-attr-input"
+                                   name="lt-attr-{{ attr.attribute | replace(' ', '-') }}"
+                                   value="{{ v }}"
+                                   data-attribute-name="{{ attr.attribute }}">
+                            <span class="lt-product__chip-label">{{ v }}</span>
+                        </label>
+                    {%- endfor -%}
+                </div>
+            {%- else -%}
+                <select class="lt-product__select js-lt-attr-input"
+                        id="{{ field_id }}"
+                        name="lt-attr-{{ attr.attribute | replace(' ', '-') }}"
+                        data-attribute-name="{{ attr.attribute }}">
+                    <option value="">{{ _("Choose a") }} {{ _(attr.attribute) | lower }}…</option>
+                    {%- for v in values -%}
+                        <option value="{{ v }}">{{ v }}</option>
+                    {%- endfor -%}
+                </select>
+            {%- endif -%}
+        </div>
+    {%- endfor -%}
+
+    <div class="lt-product__configure-status" id="lt-configure-status" aria-live="polite"></div>
+
+    {# Price + Add-to-Cart, populated by JS once a complete combination is selected #}
+    <div class="lt-product__cart" data-variant-item-code="">
+        <div class="lt-product__price">
+            <span class="lt-product__price-current" id="lt-product-price-text">{{ _("Price shows when you choose your options") }}</span>
+        </div>
+        <div class="lt-product__actions">
+            <button type="button"
+                    id="lt-add-to-cart-variant"
+                    class="lt-product__cta lt-product__cta--primary"
+                    disabled
+                    data-item-code="">
+                {{ _("Choose your options to add to cart") }}
+            </button>
+            <a href="/cart"
+               class="lt-product__cta lt-product__cta--secondary lt-view-in-cart hidden">
+                {{ _("View in Cart") }}
+            </a>
+        </div>
+        <p class="lt-product__inquiry-cross">
+            {{ _("Bigger or different than what's here?") }}
+            <a href="/contact?subject={{ doc.web_item_name | urlencode }}">{{ _("Start a conversation.") }}</a>
+        </p>
+    </div>
+</form>
+
+<script>
+(function () {
+    'use strict';
+    // Safe-DOM variant selector: no innerHTML, only textContent + createElement.
+    // Server-trusted price strings still get sanitized via textContent.
+    var form = document.querySelector('.lt-product__configure');
+    if (!form) return;
+    var templateCode = form.getAttribute('data-template-item-code');
+    var statusEl = document.getElementById('lt-configure-status');
+    var priceTextEl = document.getElementById('lt-product-price-text');
+    var addBtn = document.getElementById('lt-add-to-cart-variant');
+    var viewInCart = form.querySelector('.lt-view-in-cart');
+    var attrEls = form.querySelectorAll('.lt-product__attr');
+
+    var msgChooseOptions = "{{ _('Pick a value for each option.') | replace("'", "\\'") }}";
+    var msgIncomplete = "{{ _('Choose your options to add to cart') | replace("'", "\\'") }}";
+    var msgAddToCart = "{{ _('Add to Cart') | replace("'", "\\'") }}";
+    var msgUnavailable = "{{ _('That combination is not available. Try a different option.') | replace("'", "\\'") }}";
+    var msgPickValid = "{{ _('Choose a valid combination') | replace("'", "\\'") }}";
+    var msgFrappeNotReady = "{{ _('Loading...') | replace("'", "\\'") }}";
+    var msgPriceWaiting = "{{ _('Price shows when you choose your options') | replace("'", "\\'") }}";
+
+    function selectedAttrs() {
+        var picks = {};
+        attrEls.forEach(function (a) {
+            var name = a.getAttribute('data-attribute-name');
+            var sel = a.querySelector('select.js-lt-attr-input');
+            if (sel) {
+                if (sel.value) picks[name] = sel.value;
+                return;
+            }
+            var checked = a.querySelector('.js-lt-attr-input:checked');
+            if (checked) picks[name] = checked.value;
+        });
+        return picks;
+    }
+
+    function showSelectedTags() {
+        attrEls.forEach(function (a) {
+            var sel = a.querySelector('.lt-product__attr-selected');
+            var name = a.getAttribute('data-attribute-name');
+            var picks = selectedAttrs();
+            sel.textContent = picks[name] ? '— ' + picks[name] : '';
+        });
+    }
+
+    function setStatus(msg, isError) {
+        statusEl.textContent = msg || '';
+        statusEl.classList.toggle('is-error', !!isError);
+    }
+
+    function disableAdd(label) {
+        addBtn.disabled = true;
+        addBtn.textContent = label;
+        addBtn.setAttribute('data-item-code', '');
+        if (viewInCart) viewInCart.classList.add('hidden');
+    }
+
+    function enableAdd(variantCode, formattedPrice) {
+        addBtn.disabled = false;
+        addBtn.textContent = msgAddToCart;
+        addBtn.setAttribute('data-item-code', variantCode);
+        priceTextEl.textContent = formattedPrice || msgPriceWaiting;
+    }
+
+    function refresh() {
+        showSelectedTags();
+        var picks = selectedAttrs();
+        var totalAttrs = attrEls.length;
+        var pickedCount = Object.keys(picks).length;
+
+        if (pickedCount < totalAttrs) {
+            setStatus(msgChooseOptions);
+            disableAdd(msgIncomplete);
+            priceTextEl.textContent = msgPriceWaiting;
+            return;
+        }
+
+        if (!window.frappe || !frappe.call) {
+            disableAdd(msgFrappeNotReady);
+            return;
+        }
+
+        frappe.call({
+            method: 'webshop.webshop.variant_selector.utils.get_next_attribute_and_values',
+            args: {
+                item_code: templateCode,
+                selected_attributes: picks
+            },
+            callback: function (r) {
+                var msg = r && r.message ? r.message : {};
+                var matches = msg.exact_match || [];
+                if (matches.length === 1) {
+                    var variantCode = matches[0];
+                    frappe.call({
+                        method: 'webshop.webshop.shopping_cart.product_info.get_product_info_for_website',
+                        args: { item_code: variantCode },
+                        callback: function (pr) {
+                            var pmsg = (pr && pr.message) || {};
+                            var pinfo = pmsg.product_info && pmsg.product_info.price;
+                            var fp = pinfo && pinfo.formatted_price_sales_uom ? pinfo.formatted_price_sales_uom : '';
+                            enableAdd(variantCode, fp);
+                            setStatus('');
+                        }
+                    });
+                } else if (matches.length === 0) {
+                    setStatus(msgUnavailable, true);
+                    disableAdd(msgPickValid);
+                } else {
+                    setStatus(msgChooseOptions);
+                    disableAdd(msgIncomplete);
+                }
+            }
+        });
+    }
+
+    form.addEventListener('change', refresh);
+    form.addEventListener('input', refresh);
+
+    addBtn.addEventListener('click', function () {
+        var code = addBtn.getAttribute('data-item-code');
+        if (!code) return;
+        addBtn.disabled = true;
+        webshop.webshop.shopping_cart.update_cart({
+            item_code: code,
+            qty: 1,
+            callback: function (r) {
+                addBtn.disabled = false;
+                if (r.message && viewInCart) {
+                    viewInCart.classList.remove('hidden');
+                }
+            }
+        });
+    });
+
+    refresh();
+})();
+</script>
+
+{% endif %}
