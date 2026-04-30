@@ -2346,28 +2346,20 @@ body.lt-filter-open {
 }
 
 /* ── Webshop card override ─────────────────────────────────────────── */
+/* Actual webshop card structure (verified from live DOM 2026-04-30):
+   .item-card.col-sm-4
+     .card.text-left
+       .card-img-container
+         a > img.card-img
+       .card-body.card-body-flex
+         div > a > .product-title
+         .product-category
+         .product-price
+         a > .btn.btn-sm.btn-explore-variants   ← "Explore" button
+*/
 
-/* product-card-wrapper is the <a> tag wrapping the whole card */
-#products-grid-area .product-card-wrapper {
-    width: 100%;
-    display: flex;
-    text-decoration: none;
-    color: inherit;
-}
-
-#products-grid-area .product-card-wrapper:hover,
-#products-grid-area .product-card-wrapper:focus-visible {
-    text-decoration: none;
-    color: inherit;
-}
-
-#products-grid-area .product-card-wrapper:focus-visible {
-    outline: 2px solid var(--lt-teal);
-    outline-offset: 3px;
-    border-radius: 0.5rem;
-}
-
-#products-grid-area .card.product-card {
+/* The card itself — .card (no product-card class in actual DOM) */
+#products-grid-area .card {
     border: 1px solid rgba(26, 26, 26, 0.08);
     border-radius: 0.5rem;
     overflow: hidden;
@@ -2381,19 +2373,27 @@ body.lt-filter-open {
     width: 100%;
 }
 
-#products-grid-area .card.product-card:hover {
+#products-grid-area .card:hover {
     box-shadow: 0 4px 16px rgba(26, 26, 26, 0.10);
     transform: translateY(-2px);
 }
 
-#products-grid-area .product-image {
+/* Image container — square aspect ratio */
+#products-grid-area .card-img-container {
     aspect-ratio: 1 / 1;
     overflow: hidden;
     background-color: var(--lt-blush-tint);
     flex-shrink: 0;
+    display: block;
 }
 
-#products-grid-area .product-image img {
+#products-grid-area .card-img-container a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+#products-grid-area .card-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -2401,16 +2401,24 @@ body.lt-filter-open {
     transition: transform 0.3s ease;
 }
 
-#products-grid-area .card.product-card:hover .product-image img {
+#products-grid-area .card:hover .card-img {
     transform: scale(1.03);
 }
 
+/* Card body */
 #products-grid-area .card-body {
     padding: 0.875rem 0.875rem 1rem;
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+    width: 100%;
+}
+
+/* Webshop wraps the title in an extra div with inline margin — neutralise */
+#products-grid-area .card-body > div:first-child {
+    margin-top: 0;
+    display: block;
 }
 
 #products-grid-area .product-title {
@@ -2424,19 +2432,44 @@ body.lt-filter-open {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    text-decoration: none;
+}
+
+#products-grid-area a:hover .product-title {
+    text-decoration: none;
+    color: var(--lt-near-black);
+}
+
+/* Category label — de-emphasise */
+#products-grid-area .product-category {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.75rem;
+    color: var(--lt-soft-gray);
+    margin: 0.125rem 0 0;
 }
 
 #products-grid-area .product-price {
     font-family: 'DM Serif Display', Georgia, serif;
     font-size: 1.125rem;
     color: var(--lt-near-black);
-    margin: 0.25rem 0 0;
+    margin: 0.375rem 0 0;
 }
 
-/* Hide "Explore" button — whole card is already a link */
-#products-grid-area .btn.btn-explore,
+/* Hide "Explore" button — actual class is btn-explore-variants */
+#products-grid-area .btn-explore-variants,
 #products-grid-area .btn-explore {
     display: none;
+}
+
+/* De-link the card body's wrapping anchor — text decoration off */
+#products-grid-area .card-body a {
+    text-decoration: none;
+    color: inherit;
+}
+
+#products-grid-area .card-body a:hover {
+    text-decoration: none;
+    color: inherit;
 }
 
 /* ── Pagination ────────────────────────────────────────────────────── */
