@@ -80,7 +80,7 @@ The remaining findings (SecOps F001, F002, F003; Execution F003) are independent
 Re-validation per the skill's Selective Re-Validation rule:
 - Naming alignments: NO re-validation needed (string changes only — confirms the heuristic)
 - Active Agreement findings: per skill rule "Original issue was classified as Active Disagreement" triggers re-validation; Active Agreement does NOT, but for safety, re-run a single reviewer (Execution Engine, since they trace control flow) to verify the named-aligned templates render correctly.
-- SecOps F001 (rate limit bypass): switching to `key="email"` is a security-critical change → re-validation required.
+- SecOps F001 (rate limit bypass): switching to `key="email"` (with `ip_based=False`) is a security-critical change → re-validation required. **Proxy correction 2026-04-30:** the "two-tier" framing earlier in this synthesis was mechanically wrong — Frappe's `@rate_limit` decorator combines `ip` and `key` into a single `ip:key` identity, NOT two counters. Pick ONE: Option A `@rate_limit(limit=10, seconds=3600, key="email", ip_based=False)` (email-only, accepts the "10/hr per email" enumeration trade-off as documented), OR Option B (nginx-level X-Forwarded-For strip — higher-leverage fix that protects book.py / checkout.py / btfp.py too). Builder JS picks A or B and documents.
 - SecOps F003 + Execution F003: UX bugs, not security/state — single-reviewer re-validation sufficient.
 
 ---
