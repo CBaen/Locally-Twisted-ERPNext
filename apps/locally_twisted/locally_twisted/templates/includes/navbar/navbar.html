@@ -37,7 +37,7 @@
      and mobile drawer.
 
    CSS classes: all BEM-namespaced lt-* (lt-header__, lt-utility-bar__,
-   lt-megamenu__). NO inline <style> blocks. NO inline <script> blocks.
+   lt-header__mega-). NO inline <style> blocks. NO inline <script> blocks.
    NO data-bs-* attributes. NO Bootstrap 5 utilities (gap-*, ms-*, me-*).
 #}
 
@@ -139,17 +139,17 @@
                              role="region"
                              aria-label="Special Occasions categories"
                              hidden>
-                            <div class="container lt-megamenu__inner">
+                            <div class="container lt-header__mega-inner">
                                 <div class="row justify-content-center">
-                                    <div class="col-lg-4 lt-megamenu__col text-center">
-                                        <p class="lt-megamenu__heading">Life Events</p>
+                                    <div class="col-lg-4 lt-header__mega-col text-center">
+                                        <p class="lt-header__mega-heading">Life Events</p>
                                         {%- if mega_special_occasions -%}
                                             {%- for item in mega_special_occasions -%}
-                                                <a class="lt-megamenu__link" href="/{{ item.route }}">{{ item.label }}</a>
+                                                <a class="lt-header__mega-link" href="/{{ item.route }}">{{ item.label }}</a>
                                             {%- endfor -%}
                                         {%- endif -%}
-                                        <div class="lt-megamenu__cta-wrap">
-                                            <a class="lt-megamenu__cta" href="/{{ shop_root_route or 'shop-items' }}">Browse All</a>
+                                        <div class="lt-header__mega-cta-wrap">
+                                            <a class="lt-header__mega-cta" href="/{{ shop_root_route or 'shop-items' }}">Browse All</a>
                                         </div>
                                     </div>
                                 </div>
@@ -183,36 +183,36 @@
                              role="region"
                              aria-label="Holidays and Seasons categories"
                              hidden>
-                            <div class="container lt-megamenu__inner">
+                            <div class="container lt-header__mega-inner">
                                 <div class="row justify-content-center">
-                                    <div class="col-lg-3 lt-megamenu__col text-center">
-                                        <p class="lt-megamenu__heading">Winter &amp; Spring</p>
+                                    <div class="col-lg-3 lt-header__mega-col text-center">
+                                        <p class="lt-header__mega-heading">Winter &amp; Spring</p>
                                         {%- if mega_holidays_seasons -%}
                                             {%- for item in mega_holidays_seasons if item.column == "winter_spring" -%}
-                                                <a class="lt-megamenu__link" href="/{{ item.route }}">{{ item.label }}</a>
+                                                <a class="lt-header__mega-link" href="/{{ item.route }}">{{ item.label }}</a>
                                             {%- endfor -%}
                                         {%- endif -%}
                                     </div>
-                                    <div class="col-lg-3 lt-megamenu__col text-center">
-                                        <p class="lt-megamenu__heading">Spring &amp; Summer</p>
+                                    <div class="col-lg-3 lt-header__mega-col text-center">
+                                        <p class="lt-header__mega-heading">Spring &amp; Summer</p>
                                         {%- if mega_holidays_seasons -%}
                                             {%- for item in mega_holidays_seasons if item.column == "spring_summer" -%}
-                                                <a class="lt-megamenu__link" href="/{{ item.route }}">{{ item.label }}</a>
+                                                <a class="lt-header__mega-link" href="/{{ item.route }}">{{ item.label }}</a>
                                             {%- endfor -%}
                                         {%- endif -%}
                                     </div>
-                                    <div class="col-lg-3 lt-megamenu__col text-center">
-                                        <p class="lt-megamenu__heading">Fall &amp; Winter</p>
+                                    <div class="col-lg-3 lt-header__mega-col text-center">
+                                        <p class="lt-header__mega-heading">Fall &amp; Winter</p>
                                         {%- if mega_holidays_seasons -%}
                                             {%- for item in mega_holidays_seasons if item.column == "fall_winter" -%}
-                                                <a class="lt-megamenu__link" href="/{{ item.route }}">{{ item.label }}</a>
+                                                <a class="lt-header__mega-link" href="/{{ item.route }}">{{ item.label }}</a>
                                             {%- endfor -%}
                                         {%- endif -%}
                                     </div>
                                 </div>
-                                <div class="row justify-content-center lt-megamenu__browse-row">
+                                <div class="row justify-content-center lt-header__mega-browse-row">
                                     <div class="col-auto">
-                                        <a class="lt-megamenu__cta" href="/{{ shop_root_route or 'shop-items' }}">Browse All Holidays</a>
+                                        <a class="lt-header__mega-cta" href="/{{ shop_root_route or 'shop-items' }}">Browse All Holidays</a>
                                     </div>
                                 </div>
                             </div>
@@ -245,36 +245,36 @@
                              role="region"
                              aria-label="What We Make categories"
                              hidden>
-                            <div class="container lt-megamenu__inner">
+                            <div class="container lt-header__mega-inner">
                                 <div class="row justify-content-center">
-                                    <div class="col-lg-3 lt-megamenu__col text-center">
-                                        <p class="lt-megamenu__heading">Arrangements</p>
+                                    <div class="col-lg-3 lt-header__mega-col text-center">
+                                        <p class="lt-header__mega-heading">Arrangements</p>
                                         {%- if mega_what_we_make -%}
                                             {%- for item in mega_what_we_make if item.column == "arrangements" -%}
-                                                <a class="lt-megamenu__link" href="/{{ item.route }}">{{ item.label }}</a>
+                                                <a class="lt-header__mega-link" href="/{{ item.route }}">{{ item.label }}</a>
                                             {%- endfor -%}
                                         {%- endif -%}
                                     </div>
-                                    <div class="col-lg-3 lt-megamenu__col text-center">
-                                        <p class="lt-megamenu__heading">Installations</p>
+                                    <div class="col-lg-3 lt-header__mega-col text-center">
+                                        <p class="lt-header__mega-heading">Installations</p>
                                         {%- if mega_what_we_make -%}
                                             {%- for item in mega_what_we_make if item.column == "installations" -%}
-                                                <a class="lt-megamenu__link" href="/{{ item.route }}">{{ item.label }}</a>
+                                                <a class="lt-header__mega-link" href="/{{ item.route }}">{{ item.label }}</a>
                                             {%- endfor -%}
                                         {%- endif -%}
                                     </div>
-                                    <div class="col-lg-3 lt-megamenu__col text-center">
-                                        <p class="lt-megamenu__heading">Accents</p>
+                                    <div class="col-lg-3 lt-header__mega-col text-center">
+                                        <p class="lt-header__mega-heading">Accents</p>
                                         {%- if mega_what_we_make -%}
                                             {%- for item in mega_what_we_make if item.column == "accents" -%}
-                                                <a class="lt-megamenu__link" href="/{{ item.route }}">{{ item.label }}</a>
+                                                <a class="lt-header__mega-link" href="/{{ item.route }}">{{ item.label }}</a>
                                             {%- endfor -%}
                                         {%- endif -%}
                                     </div>
                                 </div>
-                                <div class="row justify-content-center lt-megamenu__browse-row">
+                                <div class="row justify-content-center lt-header__mega-browse-row">
                                     <div class="col-auto">
-                                        <a class="lt-megamenu__cta" href="/{{ shop_root_route or 'shop-items' }}">Shop All Products</a>
+                                        <a class="lt-header__mega-cta" href="/{{ shop_root_route or 'shop-items' }}">Shop All Products</a>
                                     </div>
                                 </div>
                             </div>
