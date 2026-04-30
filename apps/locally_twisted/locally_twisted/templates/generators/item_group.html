@@ -202,9 +202,30 @@ frappe.ready(() => {
     });
   });
 
+  /* ── Remove webshop's injected toolbar (search box + view togglers) ── */
+  // ProductView.prepare_toolbar() appends a .toolbar.d-flex div into
+  // #product-listing. Bootstrap's d-flex utility uses !important so CSS
+  // display:none loses the cascade war. Removing the node is cleaner.
+  // MutationObserver catches it after webshop's JS renders it async.
+  (function removeWebshopToolbar() {
+    function tryRemove() {
+      const t = document.querySelector('#product-listing .toolbar');
+      if (t) { t.remove(); return; }
+    }
+    // Try immediately (page may already have rendered it)
+    tryRemove();
+    // Watch for it to appear if webshop JS hasn't run yet
+    const obs = new MutationObserver(() => {
+      const t = document.querySelector('#product-listing .toolbar');
+      if (t) { t.remove(); obs.disconnect(); }
+    });
+    const listing = document.getElementById('product-listing');
+    if (listing) obs.observe(listing, { childList: true, subtree: false });
+  })();
+
   /* ── Result count label update ───────────────────────────────── */
-  // Webshop's product_ui fires a custom event when results load.
-  // We listen and update the count label.
+  // Webshop fires a product_list_update custom event when results load.
+  // Listen and update our count label.
   document.addEventListener('product_list_update', e => {
     const countEl = document.getElementById('lt-result-count');
     if (countEl && e.detail && typeof e.detail.total_count !== 'undefined') {
