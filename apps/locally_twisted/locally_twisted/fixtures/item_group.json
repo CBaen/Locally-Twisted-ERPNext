@@ -1,0 +1,122 @@
+[
+ {
+  "doctype": "Item Group",
+  "name": "Shop Items",
+  "item_group_name": "Shop Items",
+  "parent_item_group": "All Item Groups",
+  "is_group": 1,
+  "show_in_website": 1,
+  "weightage": 0,
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Group",
+  "name": "Arches",
+  "item_group_name": "Arches",
+  "parent_item_group": "Shop Items",
+  "is_group": 0,
+  "show_in_website": 1,
+  "weightage": 10,
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Group",
+  "name": "Columns",
+  "item_group_name": "Columns",
+  "parent_item_group": "Shop Items",
+  "is_group": 0,
+  "show_in_website": 1,
+  "weightage": 20,
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Group",
+  "name": "Bouquets",
+  "item_group_name": "Bouquets",
+  "parent_item_group": "Shop Items",
+  "is_group": 0,
+  "show_in_website": 1,
+  "weightage": 30,
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Group",
+  "name": "Get-Well Bouquets",
+  "item_group_name": "Get-Well Bouquets",
+  "parent_item_group": "Shop Items",
+  "is_group": 0,
+  "show_in_website": 1,
+  "weightage": 35,
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Group",
+  "name": "Garlands",
+  "item_group_name": "Garlands",
+  "parent_item_group": "Shop Items",
+  "is_group": 0,
+  "show_in_website": 1,
+  "weightage": 40,
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Group",
+  "name": "Drops",
+  "item_group_name": "Drops",
+  "parent_item_group": "Shop Items",
+  "is_group": 0,
+  "show_in_website": 1,
+  "weightage": 50,
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Group",
+  "name": "Grab & Go",
+  "item_group_name": "Grab & Go",
+  "parent_item_group": "Shop Items",
+  "is_group": 0,
+  "show_in_website": 1,
+  "weightage": 60,
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Group",
+  "name": "Table Decor",
+  "item_group_name": "Table Decor",
+  "parent_item_group": "Shop Items",
+  "is_group": 0,
+  "show_in_website": 1,
+  "weightage": 70,
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Group",
+  "name": "Stands & Easels",
+  "item_group_name": "Stands & Easels",
+  "parent_item_group": "Shop Items",
+  "is_group": 0,
+  "show_in_website": 1,
+  "weightage": 80,
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Group",
+  "name": "Deliveries",
+  "item_group_name": "Deliveries",
+  "parent_item_group": "Shop Items",
+  "is_group": 0,
+  "show_in_website": 1,
+  "weightage": 90,
+  "modified": "2026-04-30 12:00:00.000000"
+ },
+ {
+  "doctype": "Item Group",
+  "name": "Seasonal & Specialty",
+  "item_group_name": "Seasonal & Specialty",
+  "parent_item_group": "Shop Items",
+  "is_group": 0,
+  "show_in_website": 1,
+  "weightage": 100,
+  "modified": "2026-04-30 12:00:00.000000"
+ }
+]
