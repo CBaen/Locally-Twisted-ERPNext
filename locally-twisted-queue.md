@@ -21,11 +21,37 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 **Already DONE in prior sessions:**
 - Slice 1 (brand foundation theme), Slice 2 (header + footer chrome), Slice 4 (BTFP page), Slice 5 (Contact page), Slice 6a (Accessibility statement). All form-bearing pages have AJAX → Lead + Communication wiring.
 
+**Mirror Rebuild Phase 1 (Chrome) DONE 2026-04-30 evening:**
+- Hetzner-shaped header + footer + 3 mega menus + mobile drawer + newsletter strip + `LT Newsletter Signup` DocType + endpoint + smoke test. 6 pre-task fixes (including unblocking /book). Triadic-construction-v2 + GL Proxy + fix round + audit pass. See `HANDOFF.md`, `MIRROR-REBUILD-COMPLETE.md`, `research/triadic-build-chrome-rebuild/` for receipts.
+
 **Remaining (in priority order):**
 
-- [P0] **Slice 10 — `/book` form page.** Primary inquiry conversion form (45-field Lead schema). The hero CTA + closing CTA + every service-page CTA points here; currently 404. Deferred 4x. The Lead schema is already done — needs the form template + AJAX submit + Lead+Communication on submit + acknowledgment email + loud-failure compliance per `~/.claude/rules/loud-failure.md`. Reference for spec: `_resources/odoo-live-snapshot/{book.html,hetzner-book.html}` (HTML scrapes from a prior session). The Hetzner schema is multi-select services + per-service conditional notes + 5×25MB upload — match it.
-- [P0] **`/privacy` page** — required by Stripe for live mode activation. Currently `https://example.com/privacy-policy` placeholder in Stripe Dashboard. Build the page, point Stripe Dashboard, update in-site link targets.
-- [P0] **`/terms-of-service` page** — required by Stripe for live mode activation. Pair with `/privacy` for attorney pass.
+- [P0] **Desktop chrome polish — utility bar logo + tagline wrap.** GL flagged at session close 2026-04-30: *"There's serious issues with the bleed and container issues on desktop."* Centered logo dominating + tagline wrapping vertically. CSS-only fix to `.lt-utility-bar__logo` (max-height: 60-90px on desktop) or `.lt-utility-bar__inner` grid template. ~5 min. Mobile renders fine.
+- [P0] **Mirror Rebuild Phase 2 — page rebuilds, in priority order:**
+  1. `/contact` rebuild as Hetzner-style separate 6-field form (currently redirects to /book). Mirror source: `_resources/odoo-live-mirror/pages/contact.html`.
+  2. `/balloon-twisting-and-face-painting` Hetzner-faithful refresh (replaces existing). Mirror source: `pages/balloon-twisting-and-face-painting.html`.
+  3. `/about` (new build — does not exist today). Mirror source: `pages/about.html`.
+  4. `/privacy` page (Stripe live-mode block). Mirror source: `pages/privacy.html`.
+  5. `/terms-of-service` page (Stripe live-mode block). Hetzner doesn't have one — draft fresh OR copy `/privacy` shape and adapt; legal review separate.
+  6. `/refund-policy` Hetzner-faithful refresh. Mirror source: `pages/refund-policy.html`.
+  7. `/accessibility` Hetzner-faithful refresh. Mirror source: `pages/accessibility.html`.
+  8. `/gallery` (new build). Mirror source: `pages/gallery.html`.
+  9. `/blog` channel index + 2 ported posts. Use Frappe's NATIVE `Blog Post` DocType (NOT a custom one — plan-deepen 2026-04-30 caught the regression). Add `tags` field via `Customize Form` linking to a tiny `LT Blog Tag` DocType. Override `templates/pages/blog_post.html` for SEO meta tags Frappe's native template doesn't emit.
+  10. Webshop `/shop` layout overhaul (against the new design guide).
+  11. Webshop product detail layout overhaul.
+  12. Webshop category landing layout overhaul.
+- [P0] **Per-product variant correctness diff.** For each of 53 products, parse mirror's `data-attribute-exclusions` JSON from the captured page HTML and compare to ERPNext's variant set. Surfaces any data discrepancies from the catalog port. Run BEFORE webshop layout overhauls. Plan section in `MIRROR-REBUILD-PLAN.md`.
+- [P0] **5 latent webshop bugs to fix during Phase 2 layout overhaul** (caught by SecOps/Execution reviewers; same files as the layout work):
+  1. Variant items grid "Add to cart" calls `LT_CART.add(templateCode)` — template codes not purchasable (functional bug).
+  2. Configure form add-to-cart calls webshop's `update_cart` for variants — redirects guests to login (split-cart inconsistency vs non-variant items using LT_CART correctly).
+  3. `frappe.get_all` inside Jinja in `item_configure.html` — DB hit per render per attribute. Expensive for 53-color products. Use `get_attributes_and_values` server-side instead.
+  4. `valid_options_for_attributes` not consumed — combination errors only show after all attributes selected. Hetzner pre-disables invalid combos progressively.
+  5. Latex-color "checkbox swatches" must be radio inputs under the hood (single-select); variant API expects exactly one value per attribute.
+- [P1] **Newsletter X-Forwarded-For strip at nginx layer (Option B).** Option A (email-keyed rate limit) shipped on `/api/method/locally_twisted.api.newsletter.signup` this session. Option B would protect `/book`, `/checkout`, `/balloon-twisting-and-face-painting` too — they all use IP-based `@rate_limit` and share the same XFF-spoofing vulnerability. Ops/infra task: edit nginx config to strip/overwrite X-Forwarded-For before forwarding to gunicorn. See `Built_by_Cameron/built-by-cameron-decisions.md` 2026-04-30 entry "Frappe `@rate_limit` IP+key combine into ONE identity, not two."
+- [P1] **Mega panel inner content polish.** `.lt-header__mega-col`, `.lt-header__mega-heading`, `.lt-header__mega-cta`, `.lt-header__mega-cta-wrap`, `.lt-header__mega-browse-row` exist in markup but no CSS rules. Bootstrap col-lg-* handles layout; default browser styling for the rest. Functional but unrefined when panels open.
+- [P1] **Real-browser confirmation of mega menu hover behavior** by GL. Playwright DOM check confirms 3 panels exist + Execution Engine reviewer traced control flow + verified querySelectorAll. Hover behavior was not visually tested — needs real-browser eye.
+- [P1] **`/privacy` + `/terms-of-service` Stripe Dashboard wiring.** After Phase 2 builds them, update Stripe Dashboard's "Privacy policy URL" + "Terms of service URL" (currently `example.com/...` placeholders blocking live-mode activation).
+- [P0] **Spec table data on BTFP service cards.** Currently `Lorem ipsum` placeholders for BEST AT / DURATION / TEAM SIZE-or-ARTISTS / GOOD FOR. Jeff needs to confirm the actual numbers/lists. Replace lorem when confirmed.
 - [P0] **Spec table data on BTFP service cards.** Currently `Lorem ipsum` placeholders for BEST AT / DURATION / TEAM SIZE-or-ARTISTS / GOOD FOR. Jeff needs to confirm the actual numbers/lists. Replace lorem when confirmed.
 - [P1] **Item Group images.** Each Item Group child has empty `image` field — `/shop-by-category` cards show letter placeholders (A/B/C/...). Adding a representative photo per category makes both the landing page and a future image-rich mega-menu feel designed.
 - [P1] **Slice 8 — Service category pages.** `/services/<event-type>` × 5 (Corporate, Weddings, Birthdays, Schools, Seasonal). Each ends with inquiry CTA pre-filling `/book` with the category.
@@ -35,7 +61,7 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 - [P2] **Variant cache rebuild on Webshop Settings change.** If the next instance enables/disables variants or attribute filters, run `for template in templates: ItemVariantsCacheManager(template).rebuild_cache()` to flush stale Redis state.
 - [P6] **Phase 6 cutover work item — fixture pruning.** BEFORE Jeff's first post-takeover deploy, REMOVE operator-state-sensitive Item Attribute fixtures from `hooks.py fixtures = [...]` (especially `latex colors` — 51 values Jeff is most likely to edit as supplier inventory shifts). Otherwise BBC fixture sync silently overwrites his renames on every `bench migrate`. Document in `NOUPDATE-DRIFT.md` (TBD). See `locally-twisted-decisions.md` 2026-04-30 entry.
 
-**Slice numbering (current state):** 1-7 done (brand, chrome, homepage, BTFP, Contact, Accessibility, Refund+FAQ, Lookbook). Slice 8 (service categories), Slice 9 (color chart), Slice 10 (`/book`), Slice 13 (blog) — all PENDING. Slice 11 (browse) + Slice 12 (cart+checkout) DONE. **2026-04-30 catalog port shipped on top of Slice 11/12** — 53 products + 10,613 Items + on-brand product detail + mega menu + /shop-by-category. See `locally-twisted-decisions.md` 2026-04-30 entries. Historical "Already DONE" entries removed from queue per the "GitHub is our archive" rule — `git log` is the changelog.
+**Slice numbering (current state):** 1-7 done (brand, chrome, homepage, BTFP, Contact, Accessibility, Refund+FAQ, Lookbook). Slice 8 (service categories), Slice 9 (color chart), Slice 10 (`/book`), Slice 13 (blog) — all PENDING. Slice 11 (browse) + Slice 12 (cart+checkout) DONE. **2026-04-30 catalog port shipped on top of Slice 11/12** — verified DB counts: 53 Website Items, 10,631 Items total, 10,578 variants, 10,613 Item Prices, on-brand product detail, mega menu, and /shop-by-category. See `locally-twisted-decisions.md` 2026-04-30 entries. Historical "Already DONE" entries removed from queue per the "GitHub is our archive" rule — `git log` is the changelog.
 
 ### Future scope (post-Phase 1)
 
@@ -125,4 +151,3 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 - [P1] **Write LT-tier lessons-learned + decisions log entries** for the contest outcomes. Capture *after* GL completes synthesis with the picked pieces — entries should reflect what GL chose and why, not the orchestration itself.
 - [P2] **Possible global capabilities update** about the persistent-agent-by-ID pattern (the contest skill's name-addressing assumption is wrong-shaped per session learning).
 - [P2] **Send shutdown SendMessages to the 5 contest agents** once GL signals the contest is fully done. IDs: Proxy `aa3108d9ab3c5a978`, C1 `a76396efd739881c3`, C2 `a3a7df4f715615f21`, C3 `ad72af232430d89f3`, C4 `a30d848ce821198bb`.
-
