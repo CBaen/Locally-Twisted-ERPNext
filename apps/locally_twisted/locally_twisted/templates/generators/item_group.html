@@ -23,7 +23,11 @@
       var orig = webshop.ProductGrid.prototype.get_card_body_html;
       webshop.ProductGrid.prototype.get_card_body_html = function(item, title, settings) {
         var html = orig.call(this, item, title, settings);
-        var desc = (item.short_description || item.web_long_description || '').replace(/<[^>]*>/g, '').trim();
+        var rawDesc = (item.short_description || item.web_long_description || '').replace(/<[^>]*>/g, '').trim();
+        var name = (item.web_item_name || item.item_name || '').trim();
+        // If the description equals the item name (catalog import oversight),
+        // treat it as empty — don't duplicate the title under itself.
+        var desc = (rawDesc && rawDesc.toLowerCase() !== name.toLowerCase()) ? rawDesc : '';
         var descSafe = desc.replace(/[<>"']/g, function(c){return '&#'+c.charCodeAt(0)+';';});
         html = html.replace(
           /<div class="product-category"[^>]*>[\s\S]*?<\/div>/,
