@@ -52,24 +52,36 @@ def make_abbr(value_name: str, used: set[str]) -> str:
         n += 1
 
 
-def collect_attributes_from_catalog(catalog: dict) -> dict[str, list[str]]:
+def collect_attributes_from_catalog(catalog: dict) -> tuple[dict[str, list[str]], dict[str, dict[str, str]]]:
     """For each attribute name, collect unique value names across all products.
-    Preserves first-seen order (so balloon colors stay in Odoo's source order)."""
+    Preserves first-seen order (so balloon colors stay in Odoo's source order).
+
+    Dedup is CASE-INSENSITIVE + whitespace-normalized: ERPNext's Item Attribute
+    validate() rejects values that differ only in casing/whitespace. Odoo has e.g.
+    'Blue Slate' (id 1357) and 'Blue slate' (id 1399) — same color, two ptav rows
+    in Odoo. We keep first-seen casing as canonical and remap downstream variants.
+
+    Returns:
+      (attrs, normalize_map) where:
+        attrs[attr_name] = [canonical_value_name, ...]
+        normalize_map[attr_name][lowercased_value] = canonical_value_name
+    """
     attrs: dict[str, list[str]] = {}
-    seen: dict[str, set[str]] = {}
+    canon_seen: dict[str, dict[str, str]] = {}  # attr_name -> {key -> canonical}
     for prod in catalog.get("products", []):
         for attr_name, attr_data in (prod.get("attributes") or {}).items():
             if attr_name not in attrs:
                 attrs[attr_name] = []
-                seen[attr_name] = set()
+                canon_seen[attr_name] = {}
             for val in attr_data.get("values", []):
                 vname = val.get("name", "").strip()
                 if not vname:
                     continue
-                if vname not in seen[attr_name]:
+                key = re.sub(r'\s+', ' ', vname).lower()
+                if key not in canon_seen[attr_name]:
+                    canon_seen[attr_name][key] = vname
                     attrs[attr_name].append(vname)
-                    seen[attr_name].add(vname)
-    return attrs
+    return attrs, canon_seen
 
 
 def build_fixture(attrs: dict[str, list[str]]) -> list[dict]:
