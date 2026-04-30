@@ -219,18 +219,33 @@ def _upsert_template_item(prod: dict, item_group: str, file_url: str | None) -> 
     return item.name
 
 
+def _clean_route(item_group: str, slug: str) -> str:
+    """Build a clean predictable route: '<group_route>/<slug>'.
+
+    Webshop's WebsiteItem.make_route() appends random_string(5) to every
+    auto-generated route (line 116 of website_item.py). This produces ugly,
+    unstable URLs like '/shop-items/arches/basketball-arch-tljq2'. We override
+    by setting `route` explicitly so the if-not-self.route branch doesn't fire.
+    """
+    group_route = frappe.db.get_value("Item Group", item_group, "route") or ""
+    return f"{group_route}/{slug}".lstrip("/")
+
+
 def _upsert_website_item(template_code: str, prod: dict, item_group: str, file_url: str | None) -> str:
     """Find-or-create the Website Item for the template. Returns the Website Item name."""
     existing = frappe.db.exists("Website Item", {"item_code": template_code})
+    slug = prod["slug"]
     web_item_name = prod["name"][:140]
     short_desc = prod.get("description") or web_item_name
     long_desc = prod.get("description") or ""
+    target_route = _clean_route(item_group, slug)
 
     if existing:
         wi = frappe.get_doc("Website Item", existing)
         wi.web_item_name = web_item_name
         wi.item_group = item_group
         wi.published = 1
+        wi.route = target_route  # force clean route — overrides random_string suffix
         wi.short_description = short_desc[:140] if short_desc else None
         wi.web_long_description = long_desc
         if file_url:
@@ -238,7 +253,8 @@ def _upsert_website_item(template_code: str, prod: dict, item_group: str, file_u
         wi.save(ignore_permissions=True)
         return wi.name
 
-    # Webshop's helper enforces correct linkage and triggers the right hooks.
+    # New Website Item — go through webshop's helper for correct linkage,
+    # then override the random-suffixed route with our clean one.
     from webshop.webshop.doctype.website_item.website_item import make_website_item
     item_doc = frappe.get_doc("Item", template_code)
     web_item_name_returned, _route = make_website_item(item_doc, save=True)
@@ -246,6 +262,7 @@ def _upsert_website_item(template_code: str, prod: dict, item_group: str, file_u
     wi.web_item_name = web_item_name
     wi.item_group = item_group
     wi.published = 1
+    wi.route = target_route
     wi.short_description = short_desc[:140] if short_desc else None
     wi.web_long_description = long_desc
     if file_url:
