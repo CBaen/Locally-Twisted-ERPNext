@@ -6,6 +6,58 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-04-30 (evening) — Mirror rebuild Phase 1 chrome via /triadic-construction-v2
+
+### Context
+
+GL exhausted. Catalog port shipped that morning but visually disappointed them ("I hate the entire shop"). They directed: clone Hetzner Odoo deployment wholesale into ERPNext-coded chrome + pages, keep only the homepage, use agent teams. Then went to nap. I ran an autonomous chain: tool research → mirror → /plan-deepen → 6 pre-tasks → triadic chrome rebuild → fix round → audit. Chrome shipped (with desktop polish flagged); Phase 2 page rebuilds deferred to next session.
+
+### Lesson 1 — When GL names a frame, the live correction beats the documented rule.
+
+I opened the session by parroting CLAUDE.md's "new build, not a migration" frame on the first message. GL corrected immediately: *"it is a migration, not a new build."* The "Reframe is locked" rule in CLAUDE.md was itself superseded by GL's live directive. I had to undo a multi-file framing cascade across 8 docs. **Counter-move:** when GL names something authoritatively in conversation, treat that as ground truth even when documentation contradicts. Update the docs to match GL, not the reverse.
+
+### Lesson 2 — The "load-bearing 404" was always infrastructure, never missing code.
+
+`/book` had been 404 every prior session for ~weeks. Plan-deepen agent found that `www/book.{py,html}` already exist with full implementation per the `frappe-form-integrity` skill. The 404 was a stale Frappe website cache + nginx upstream-IP staleness after a backend restart. Cache flush + frontend container restart unblocked it in <30 minutes. **Counter-move:** before assuming a Frappe route is missing code, run the cache flush + check container restart status. The site exists where you put it; cache lies louder than missing files.
+
+### Lesson 3 — Triadic-construction-v2 reviewers caught what solo build would have shipped broken.
+
+Round 1 chrome shipped with **mobile drawer always visible** (CSS class mismatch — every mobile page would have looked broken to customers), **2 of 3 mobile mega menu accordions completely dead** (data-attribute mismatch + querySelector singular bug), **megamenu panel had no CSS rules** (would render as inline blocks pushing content down), and **mega-trigger CSS open-state targeting wrong class**. Architect + Execution Engine reviewers found these via Active Agreement (independent flags, same defects). SecOps reviewer caught a separate set (rate-limit X-Forwarded-For bypass, hash instability, /book Esc-key UX bug). All caught in the same round; all fixed mechanically because the findings cited file:line. **Counter-move:** for high-blast-radius work (chrome, payment flows, schema changes), pay the triadic context cost. The discipline earns its keep.
+
+### Lesson 4 — Triadic Build Brief must specify class-name alignment per element, not just namespaces.
+
+The single biggest time-sink in the triadic round was Builder Jinja choosing different BEM class names than what Builder CSS had pre-existing rules for. Build Brief said "BEM namespace `lt-*`" but didn't enumerate specific names. Round 1 shipped with 8+ template-vs-CSS class divergences (`lt-header__mobile-nav` vs `lt-header__mobile-nav-collapse`, `lt-header__mega-item` vs `lt-header__has-mega`, `lt-megamenu__*` vs `lt-header__mega-*`, etc.). **Counter-move:** for any future triadic dispatch involving template-CSS coordination, include a class-name alignment table in the Build Brief: "trigger `<li>` uses `.lt-header__has-mega`; panel `<div>` uses `.lt-header__mega`; inner container uses `.lt-header__mega-inner`; link uses `.lt-header__mega-link`." Specificity per element prevents the divergence.
+
+### Lesson 5 — Sub-agents need explicit skill-invocation instructions in their briefs (agency gate is per-session).
+
+The agency pretooluse gate fires on Edit/Write to Frappe app files unless `frappe-form-integrity` / `frappe-asset-pipeline` / etc. skills have been invoked **in that session**. Sub-agents have their own session context. Each builder I dispatched had to invoke the relevant safety skill BEFORE their first edit. I documented this in each builder brief; without it, the gate blocks the build silently from the agent's perspective and they fall back to Bash workarounds. **Counter-move:** every Frappe-app-file-touching agent gets a "Required skill invocation BEFORE any edit" section in its brief. Builder JS this session reported a `frappe-migration-guard` gate detection edge case for sub-agent contexts — flagged for ops/infra.
+
+### Lesson 6 — `@rate_limit(key="X", ip_based=True)` does NOT create two counters.
+
+I wrote a synthesis fix-shape calling for "two-tier rate limiting" (IP + email). GL Proxy caught it: Frappe's `@rate_limit` combines `ip` and `key` into a SINGLE `ip:key` identity, not two independent counters. The correct shapes are Option A (`key="email", ip_based=False` — defeats X-Forwarded-For spoofing, accepts email-enumeration trade-off) OR Option B (nginx-level XFF strip — higher leverage, protects all rate-limited endpoints). **Counter-move:** read the actual Frappe source before describing decorator behavior. Don't synthesize from training memory. The Proxy review at Phase 2.5 is the safety net — don't lean on it for what you should verify yourself.
+
+### Lesson 7 — Frappe nginx upstream-IP is sticky after backend container restart.
+
+After `docker restart locally-twisted-erpnext-v15-backend-1`, nginx in the frontend container kept hitting the OLD container's IP (`172.22.0.8`) and returning 502 even though backend was up at a new IP. Cause: Frappe's bundled `frappe.conf` for nginx has no `resolver` directive — nginx resolves backend's IP once at startup and caches forever. **Counter-move:** any time you restart the backend container, also restart frontend OR document that the user expects 502s for ~5 min until you do. Logged as agency-tier auto-behavior B5.
+
+### Lesson 8 — `hash(email)` is randomized per Python process — useless for log correlation.
+
+Python's `hash()` builtin uses PYTHONHASHSEED which is randomized per process by default. Across container restarts, the same email produces different hashes. SecOps reviewer caught it. Replace with `hashlib.sha256(email.encode("utf-8")).hexdigest()[:16]` for stable, non-reversible-in-practice log correlation. **Counter-move:** any time you use `hash()` for cross-process correlation (logs, dedup keys, cache keys), reach for `hashlib.sha256` instead. The builtin is for in-memory dictionary keys only.
+
+### Lesson 9 — Auto-orchestrate the architectural calls + log reversibility, don't ask GL when they're asleep.
+
+GL gave clear authorization: *"if it's Odoo only and there's an ERPNext equivalent, do that. OR DON'T, and just tell me what you couldn't do."* Two architectural decisions came up mid-build (mega menu IA — extend Item Group tree vs template-grouping; category URL shape — match Hetzner's `/shop/category/X-N` vs ERPNext native `/shop-items/X`). I picked the lower-blast-radius option for both, logged them as reversible in `locally-twisted-decisions.md`, and proceeded. GL's wake-up message confirmed this was the right shape: "you've done a really good job so far." **Counter-move:** when GL is unavailable and authorization is broad, decide + log + proceed. Don't pile up gates that block work.
+
+### Lesson 10 — Read the actual screenshots, don't just trust DOM facts + script flags.
+
+The Playwright audit script extracted DOM facts (`.lt-header` count, `.lt-footer` count, `.lt-header__mega` count, `mobile_drawer_visible`) and reported all routes "OK." But when I read the actual home-desktop.png file as an image, the centered logo dominating + tagline wrapping vertically was immediately visible. DOM-says-rendered ≠ pixels-look-right. The agency's standing rule from 2026-04-29 lessons: "viewport-only Playwright screenshots are the verification method, NOT full-page screenshots... DOM widths are preconditions, not verdicts." **Counter-move:** Read every screenshot file you capture as an image. Describe what's pixel-visible. Don't ship a verification report based on DOM facts alone.
+
+### What this means for the next instance
+
+The chrome work shipped (Phase 1 of the mirror rebuild). Phase 2 page rebuilds (~12 routes) are next — single focused builder per page is probably the right shape (lower interdependency than chrome). Reserve full triadic for things touching every page. The mirror at `_resources/odoo-live-mirror/` IS the spec — read the relevant page file before each rebuild. GL named the desktop chrome polish issue at session close; address it early in your session as a quick win. Don't ask GL questions they've already answered. Document architectural calls as reversible. Read your own screenshots.
+
+---
+
 ## 2026-04-30 — Full catalog port from live Odoo to ERPNext webshop
 
 ### Six lessons from a 53-Website-Item / 10,631-Item / 10,613-Item-Price port
