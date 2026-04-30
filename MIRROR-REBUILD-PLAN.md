@@ -240,6 +240,50 @@ GSD skills considered but NOT used: `/gsd-execute-phase` etc. — this work isn'
 
 ---
 
+## Research Notes (from /plan-deepen, GL-Proxy reviewed 2026-04-30)
+
+Five parallel research agents stress-tested the plan; GL Proxy reviewed and corrected. Findings:
+
+### Architectural decisions made autonomously (logged for GL review on wake)
+
+**Decision A — Mega menu IA: flat 11-group structure preserved, template-level grouping for 3 Hetzner panels.**
+- Why: lower blast radius — doesn't touch the verified 53 Website Items / 10,578 variants / 10,613 Item Prices catalog. Reversible if GL prefers the restructured tree.
+- Implementation: `navbar_context.py` extended to expose `mega_special_occasions`, `mega_holidays_seasons`, `mega_what_we_make` lists, each statically mapping a subset of the 11 Item Group children + (where Hetzner shows) life-event leafs (Birthdays, Showers, Graduations, Missionary, Get-Well) which become content-only links not Item Groups. Mobile drawer accordion uses the same context.
+
+**Decision B — Category URL shape: ERPNext-native `/shop-items/<slug>` retained.**
+- Why: doesn't fight ERPNext's `WebshopItemGroup.make_route()`; lower blast than manually setting 11 Item Group `route` fields; fewer redirect hops.
+- Implementation: `hooks.py` `website_route_rules` adds redirects from `/shop/category/<slug>` for the 11 known categories, mapping to `/shop-items/<slug>`. Mega menu links use `/shop-items/<slug>` directly.
+
+### Plan corrections from research
+
+1. **`/book` action: DEBUG, not BUILD.** `apps/locally_twisted/locally_twisted/www/book.{py,html}` already exist (full implementation per `frappe-form-integrity` skill). The 404 is a stale website cache issue. Fix is `python scripts/dev/clear_website_cache.py` + verify. Phase 2 order #1 changed from "build /book" to "verify /book resolves + ship the open-risk-item fixes."
+2. **Blog: use Frappe's built-in `Blog Post` DocType.** Not a custom `LT Blog Post`. This corrects a regression vs `_resources/website-page-index.md` which already classified blog as Tier 3 (native Frappe). Phase 2 orders #9/#10 simplified to: data entry (Blog Category + Blogger record + 2 posts via desk) + thin template override at `templates/pages/blog_post.html` for SEO meta tags Frappe's native template doesn't emit. Tags added via `Customize Form` Table MultiSelect linking to a tiny `LT Blog Tag` DocType (1 field). Tag URLs use `?tag=` query param, NOT `/tag/<tag>` path.
+3. **CSS rebuild target restated.** `lt-theme.css` is already 1,897 lines (not 700). About 340 lines are dead code: legacy `.navbar.*` block (lines 297-464) and `.web-footer` block (lines 466-638) targeting Frappe's native chrome that no longer renders. Rebuild target: REPLACE these dead sections + add chrome blocks → net ~1,500 lines, not grow to 1,500.
+4. **Inline `<style>` block in `navbar.html` (lines 141-176)** for `.lt-cart-count` rules folds into `lt-theme.css` during chrome rebuild. CSS-in-two-places is cleaned up.
+5. **`web_include_js` cache-bust** on `lt-guest-cart.js` (currently `?v=20260429-1`) bumps with JS changes — same convention as CSS.
+6. **Removed:** Plan's previous "Smoke test not wired into deploy gate" was a research-agent factual error. `gate_form_smoke()` IS wired at `scripts/deploy.py:222`. Already in place.
+
+### Pre-tasks (autonomous, before Phase 1 chrome dispatch)
+
+These are discrete, atomic fixes the proxy flagged. Each gets one commit. Run in this order:
+
+1. **Verify `System Settings.max_file_size = 25 MB`** (per `fix_crm_lead_iteration_4.py` step H). If still at default 10 MB, file uploads on `/book` silently fail at framework level. `bench --site frontend execute frappe.db.get_single_value --kwargs '{"doctype":"System Settings","fieldname":"max_file_size"}'`.
+2. **Fix smoke test selector mismatch.** `scripts/verify/smoke_forms.py:84` uses `input[name='lead_name']`; `/book` form has `name="contact_name"`. One-line fix.
+3. **Wrap `lead.insert()` in `submit_book_inquiry`** (`apps/locally_twisted/locally_twisted/www/book.py` ~line 205) with `try/except Exception as e: frappe.log_error(...)` capturing payload + remote IP + form URL. Loud-failure rule, non-negotiable.
+4. **Add `/contactus` → `/contact` redirect** to `hooks.py` `website_route_rules`.
+5. **Fix `shop.py`/`shop.html` `category_slug` vs `category` key mismatch.** Card `data-category` attribute writes wrong key; category filter has been silently broken since launch. Fix in current shop file — separate from the layout overhaul.
+6. **Clear website cache + verify `/book` resolves.** Once #1-#5 are committed, cache flush + Playwright screenshot of `/book` at desktop + mobile to confirm the page loads correctly.
+
+### Pending GL review on wake
+
+Three items where the autonomous decision was made with a reversibility note:
+
+- Decision A (mega menu IA: flat-with-template-grouping)
+- Decision B (URL shape: `/shop-items/<slug>` + redirects from `/shop/category/<slug>`)
+- The 5 latent webshop bugs (data-category, variant grid add-to-cart, guest variant cart, inline `frappe.get_all`, unused `valid_options_for_attributes`) — fixed during Phase 2 layout overhaul rather than as separate pre-tasks, since the layout overhaul rewrites the same files
+
+---
+
 ## Hand-off contract
 
 When this plan is fully executed:
