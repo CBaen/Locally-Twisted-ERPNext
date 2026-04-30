@@ -3,6 +3,10 @@
 
 {% block head_include %}
 <meta name="robots" content="index, follow">
+{# Force grid view BEFORE webshop's all-products/index.js reads localStorage.
+   index.js reads localStorage.getItem("product_view") || "List View" on DOMContentLoaded.
+   This inline script runs first during HTML parse so the value is already set. #}
+<script>localStorage.setItem('product_view', 'Grid View');</script>
 {% endblock %}
 
 {% block header %}{% endblock %}
