@@ -47,7 +47,20 @@ web_include_css = "/assets/locally_twisted/css/lt-theme.css?v=20260430-4"
 # at runtime, exposes window.LT_CART, and keeps cart count badges live.
 # Loaded on every website page so cart actions work from anywhere.
 # Cache-bust query string follows the same convention as web_include_css.
-web_include_js = "/assets/locally_twisted/js/lt-guest-cart.js?v=20260429-1"
+#
+# lt-megamenu.js — desktop hover mega menu + mobile drawer accordion engine.
+#   Replaces the inline <script> block removed from navbar.html.
+#   Exposes window.LT.megamenu (init, openPanel, closePanel, closeAll)
+#   and window.LT.drawer (open, close).
+#
+# lt-newsletter.js — footer newsletter form auto-binder + loud-failure handler.
+#   Exposes window.LT.newsletter.submit(email) → Promise.
+#   Auto-binds to form[data-lt-newsletter] on DOMContentLoaded.
+web_include_js = [
+    "/assets/locally_twisted/js/lt-guest-cart.js?v=20260429-1",
+    "/assets/locally_twisted/js/lt-megamenu.js?v=20260430-1",
+    "/assets/locally_twisted/js/lt-newsletter.js?v=20260430-1",
+]
 
 # Friendly-URL aliases. Frappe's www/ router doesn't auto-translate
 # underscored Python module filenames into dashed URLs, so we alias
