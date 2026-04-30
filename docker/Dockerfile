@@ -63,13 +63,14 @@ RUN /home/frappe/frappe-bench/env/bin/pip install --quiet --upgrade --no-cache-d
 # apps registered via `bench get-app`. Because we used `pip install -e` instead,
 # the apps must be passed by name or their bundles get skipped — that's the bug
 # that left webshop's web.bundle.js missing and broke category pages.
-RUN bench build \
-    --app frappe \
-    --app erpnext \
-    --app payments \
-    --app webshop \
-    --app locally_twisted \
-    --production
+#
+# Split into separate RUN steps to avoid OOM on Docker Desktop's 8GB WSL2 cap
+# (yarn's bundler holds a lot of RAM per app; one app per RUN clears between).
+# frappe + erpnext are already compiled in the base image, so don't rebuild
+# them. locally_twisted has only plain CSS + plain JS (no SCSS, no bundle
+# entry point) so it doesn't need bench build either.
+RUN bench build --app payments --production
+RUN bench build --app webshop --production
 
 # Strip any leftover .git dirs (defense-in-depth; clones already stripped above).
 RUN find apps -mindepth 1 -path "*/.git" -exec rm -rf {} + 2>/dev/null || true
