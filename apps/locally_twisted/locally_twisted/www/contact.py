@@ -1,34 +1,41 @@
-"""/contact route — redirects to /book.
+"""/contact route — Hetzner-shaped contact page with the embedded /book form.
 
-Per GL directive 2026-04-29 (Hetzner /book spec session): the two forms
-consolidate into one. /book is the canonical inquiry surface; /contact
-preserves the URL for any external links / SEO continuity but routes
-everyone to the same form.
+Per GL directive 2026-04-30: /contact no longer redirects to /book. It
+renders the Hetzner-mirror layout (intro hero + form + info card aside +
+Locations + map) but uses the SAME inquiry form as /book via the shared
+partial at templates/includes/book_form.html. One form, two URL surfaces.
 
-The old /contact form's `submit_contact` whitelist endpoint was removed
-because the consolidated form lives at
-`locally_twisted.www.book.submit_book_inquiry`.
-
-If you arrive here looking for the old form fields (name/email/event
-type/message): they're now mapped into the richer Lead Custom Fields
-on /book. Old /contact data lived in a Communication HTML blob;
-new /book data lives in typed fields. See
-`_CLIENTS/locally-twisted/CLAUDE.md` "Hetzner /book and /contact are the
-canonical spec for the rebuild" section.
+Same Jinja context as /book so the partial renders identically. Submission
+goes to locally_twisted.www.book.submit_book_inquiry.
 """
 import frappe
 
+from locally_twisted.www.book import (
+    OCCASION_OPTIONS,
+    SERVICE_OPTIONS,
+    MAX_PHOTOS,
+    MAX_PHOTO_BYTES,
+)
+
 
 no_cache = 1
+sitemap = 1
 
 
 def get_context(context):
-    """Raise frappe.Redirect to send the browser to /book.
-
-    `frappe.local.flags.redirect_location` is the documented mechanism;
-    raising `frappe.Redirect` triggers Frappe's website router to issue
-    a 302 to the target URL. Same pattern used by /thank-you and
-    /payment-success in this app.
-    """
-    frappe.local.flags.redirect_location = "/book"
-    raise frappe.Redirect
+    context.title = "Contact - Locally Twisted | Utah's Balloon Specialists"
+    context.metatags = {
+        "description": (
+            "Get in touch with Locally Twisted. Custom balloon decor, "
+            "twisting, and face painting across the Wasatch Front. "
+            "Two Utah locations: West Jordan and Riverdale."
+        ),
+        "og:title": "Contact - Locally Twisted",
+        "og:description": "Get in touch about your celebration.",
+        "og:type": "website",
+    }
+    context.occasion_options = OCCASION_OPTIONS
+    context.service_options = SERVICE_OPTIONS
+    context.max_photos = MAX_PHOTOS
+    context.max_photo_mb = MAX_PHOTO_BYTES // (1024 * 1024)
+    return context
