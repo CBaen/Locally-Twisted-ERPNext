@@ -55,14 +55,46 @@
         </div>
     </div>
 
-    {# Desktop: Tier 2 — main nav, centered.
+    {# Desktop: Tier 2 — main nav, centered. Shop is a mega menu dropdown.
        Order: Twisting & Face Painting | Customizable Event Decor | Shop | Portfolio | Contact #}
     <nav class="lt-header__nav d-none d-lg-block" aria-label="Primary">
         <div class="container lt-header__nav-row">
             <ul class="lt-header__nav-list">
                 <li><a class="lt-header__nav-link" href="/balloon-twisting-and-face-painting">Twisting &amp; Face Painting</a></li>
                 <li><a class="lt-header__nav-link" href="/customizable-event-decor">Customizable Event Decor</a></li>
-                <li><a class="lt-header__nav-link" href="/shop">Shop</a></li>
+                <li class="lt-header__has-mega">
+                    <button type="button"
+                            class="lt-header__nav-link lt-header__nav-trigger"
+                            id="lt-shop-trigger"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                            aria-controls="lt-shop-mega">
+                        Shop
+                        <svg class="lt-header__nav-caret" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="m6 9 6 6 6-6"/>
+                        </svg>
+                    </button>
+                    <div class="lt-header__mega"
+                         id="lt-shop-mega"
+                         role="region"
+                         aria-label="Shop categories"
+                         hidden>
+                        <div class="lt-header__mega-inner">
+                            <a class="lt-header__mega-link lt-header__mega-link--all"
+                               href="/shop">
+                                <span class="lt-header__mega-link-label">All items</span>
+                                <span class="lt-header__mega-link-hint">Browse everything in one view</span>
+                            </a>
+                            {%- if shop_categories -%}
+                                {%- for cat in shop_categories -%}
+                                    <a class="lt-header__mega-link" href="/{{ cat.route }}">
+                                        <span class="lt-header__mega-link-label">{{ cat.item_group_name or cat.name }}</span>
+                                    </a>
+                                {%- endfor -%}
+                            {%- endif -%}
+                        </div>
+                    </div>
+                </li>
                 <li><a class="lt-header__nav-link" href="/portfolio">Portfolio</a></li>
                 <li><a class="lt-header__nav-link" href="/contact">Contact</a></li>
             </ul>
@@ -174,7 +206,27 @@
         <ul class="lt-header__mobile-nav-list">
             <li><a class="lt-header__mobile-nav-link" href="/balloon-twisting-and-face-painting">Twisting &amp; Face Painting</a></li>
             <li><a class="lt-header__mobile-nav-link" href="/customizable-event-decor">Customizable Event Decor</a></li>
-            <li><a class="lt-header__mobile-nav-link" href="/shop">Shop</a></li>
+            <li class="lt-header__mobile-accordion">
+                <button type="button"
+                        class="lt-header__mobile-nav-link lt-header__mobile-accordion-toggle"
+                        aria-expanded="false"
+                        aria-controls="lt-mobile-shop-panel">
+                    Shop
+                    <svg class="lt-header__mobile-accordion-caret" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="m6 9 6 6 6-6"/>
+                    </svg>
+                </button>
+                <ul class="lt-header__mobile-accordion-panel"
+                    id="lt-mobile-shop-panel"
+                    hidden>
+                    <li><a class="lt-header__mobile-nav-sublink" href="/shop">All items</a></li>
+                    {%- if shop_categories -%}
+                        {%- for cat in shop_categories -%}
+                            <li><a class="lt-header__mobile-nav-sublink" href="/{{ cat.route }}">{{ cat.item_group_name or cat.name }}</a></li>
+                        {%- endfor -%}
+                    {%- endif -%}
+                </ul>
+            </li>
             <li><a class="lt-header__mobile-nav-link" href="/portfolio">Portfolio</a></li>
             <li><a class="lt-header__mobile-nav-link" href="/contact">Contact</a></li>
             <li class="lt-header__mobile-nav-divider" role="separator"></li>
@@ -239,11 +291,94 @@
         }
     });
 
-    // Close when a nav link is clicked. Same-page anchors don't reload,
-    // so without this the drawer would stay open after navigating.
-    var links = drawer.querySelectorAll('.lt-header__mobile-nav-link');
-    for (var i = 0; i < links.length; i++) {
-        links[i].addEventListener('click', close);
+    // Close when a nav LINK (not the accordion toggle button) is clicked.
+    // Same-page anchors don't reload, so without this the drawer would stay
+    // open after navigating. Exclude the accordion toggle since clicking it
+    // expands the sub-list rather than navigating.
+    var navLinks = drawer.querySelectorAll(
+        '.lt-header__mobile-nav-link:not(.lt-header__mobile-accordion-toggle), ' +
+        '.lt-header__mobile-nav-sublink'
+    );
+    for (var i = 0; i < navLinks.length; i++) {
+        navLinks[i].addEventListener('click', close);
     }
+
+    // Mobile Shop accordion: tap to expand sub-list of categories.
+    var accToggle = drawer.querySelector('.lt-header__mobile-accordion-toggle');
+    var accPanel  = drawer.querySelector('#lt-mobile-shop-panel');
+    if (accToggle && accPanel) {
+        accToggle.addEventListener('click', function () {
+            var isOpen = accToggle.getAttribute('aria-expanded') === 'true';
+            accToggle.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+            if (isOpen) {
+                accPanel.setAttribute('hidden', '');
+            } else {
+                accPanel.removeAttribute('hidden');
+            }
+        });
+    }
+})();
+
+/* Desktop mega menu — hover-or-click to open, Escape or outside-click to close.
+ * ARIA: aria-expanded toggles on the trigger, hidden attribute toggles on the panel,
+ * focus management keeps screen-reader pacing right. Tab moves through links naturally.
+ * No menu role used (per WCAG nav-dropdown guidance, role="menu" creates arrow-key
+ * expectations that conflict with Tab-based browsing — region is correct here). */
+(function () {
+    'use strict';
+    var trigger = document.getElementById('lt-shop-trigger');
+    var panel   = document.getElementById('lt-shop-mega');
+    var li      = trigger ? trigger.closest('.lt-header__has-mega') : null;
+    if (!trigger || !panel || !li) return;
+
+    var openTimer = null;
+    var closeTimer = null;
+
+    function open() {
+        if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+        trigger.setAttribute('aria-expanded', 'true');
+        panel.removeAttribute('hidden');
+        li.classList.add('is-open');
+    }
+    function close() {
+        if (openTimer) { clearTimeout(openTimer); openTimer = null; }
+        trigger.setAttribute('aria-expanded', 'false');
+        panel.setAttribute('hidden', '');
+        li.classList.remove('is-open');
+    }
+    function scheduleOpen()  { openTimer  = setTimeout(open, 80); }
+    function scheduleClose() { closeTimer = setTimeout(close, 200); }
+
+    // Click trigger toggles
+    trigger.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (trigger.getAttribute('aria-expanded') === 'true') close(); else open();
+    });
+
+    // Hover open/close on the wrapper li
+    li.addEventListener('mouseenter', scheduleOpen);
+    li.addEventListener('mouseleave', scheduleClose);
+
+    // Keyboard: open on Enter/Space (default button behavior)
+    // Escape closes from anywhere
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && trigger.getAttribute('aria-expanded') === 'true') {
+            close();
+            trigger.focus();
+        }
+    });
+
+    // Click outside closes
+    document.addEventListener('click', function (e) {
+        if (li.contains(e.target)) return;
+        if (trigger.getAttribute('aria-expanded') === 'true') close();
+    });
+
+    // Tab outside the panel closes (focus moved away)
+    panel.addEventListener('focusout', function (e) {
+        if (!panel.contains(e.relatedTarget) && e.relatedTarget !== trigger) {
+            close();
+        }
+    });
 })();
 </script>

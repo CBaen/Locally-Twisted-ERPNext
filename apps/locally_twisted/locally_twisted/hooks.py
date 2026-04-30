@@ -85,6 +85,13 @@ doc_events = {
 }
 
 # ---------------------------------------------------------------
+# Website context — inject Shop categories into the navbar template
+# Module: locally_twisted/navbar_context.py
+# Source: 2026-04-30 mega-menu build
+# ---------------------------------------------------------------
+update_website_context = ["locally_twisted.navbar_context.update_website_context"]
+
+# ---------------------------------------------------------------
 # Fixtures — code-owned schema records that travel with the app.
 # Per BBC fixture-discipline: Item Group children + Item Attribute
 # records are SEED state. At Phase 6 cutover the operator-owned
