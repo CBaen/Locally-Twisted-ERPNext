@@ -9,7 +9,7 @@
 
 - `BRIEF.md` — full read, every section including the anti-patterns, hard constraints, mandatory research list, and the 6 questions each contestant must answer
 - `user_guiding_light.md` — GL's profile, communication style, RSD dynamics, what earns trust and what breaks it
-- `CLAUDE.md` — global lineage rules including the no-time rule, the five patterns that have hurt GL most, and the pulls instances should name rather than follow
+- `CLAUDE.md` — global operating rules including the no-time rule, the five patterns that have hurt GL most, and the pulls instances should name rather than follow
 - All four contestant directories — confirmed each contains only its placeholder README. Round 1 has not started.
 
 ---

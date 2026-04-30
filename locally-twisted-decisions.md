@@ -8,6 +8,34 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-04-30 — Project frame: this IS a migration, not a new build
+
+**Decision:** Frame Locally Twisted's ERPNext project as **a migration of business intent + catalog data into a fresh ERPNext install** — superseding the 2026-04-26 "first professional business platform / new build, not a migration" reframe.
+
+**Reasoning:** GL directive 2026-04-30: *"it is a migration, not a new build."* The 2026-04-26 reframe was motivated by (a) Jeff-disclosure concerns — the failed Odoo attempt is BBC-internal context Jeff hasn't been briefed on yet — and (b) avoiding a too-mechanical "translate Odoo → ERPNext" mental model. Both concerns remain valid, but neither justifies denying the technical reality:
+
+- Catalog data was ported from the prior Odoo deployment to ERPNext on 2026-04-30 (53 Website Items, 10,631 Items, 10,578 variants, 10,613 Item Prices — verified against the running DB).
+- Form intent (the 45-field Lead schema, the `/book` + `/contact` form shapes) was carried forward from the Hetzner Odoo `arch_db` snapshots in `_resources/odoo-live-snapshot/`.
+- Business policies, brand identity, voice rules, and the legal interview answers all originated in the Odoo phase and were brought across into `_resources/`.
+- At cutover (Phase 6), the new ERPNext storefront replaces `locallytwisted.com` at the same domain.
+
+The right framing: **migration of business intent + catalog data into a fresh ERPNext install.** "Fresh install" captures that we did NOT auto-translate Odoo modules / DB dumps / configuration — the destination was greenfield ERPNext, hand-built informed by Odoo discovery. "Migration" captures the truth about catalog records, form schema, policies, and the eventual domain cutover.
+
+**What stays from the 2026-04-26 reframe:**
+
+- **Jeff-disclosure stealth.** Jeff knows there's an audit; he doesn't know the prior Odoo attempt failed in testing. Internal docs use migration framing; Jeff-facing communications still don't leak that context until Phase 1 is demo-ready.
+- **Hand-build, not auto-translate.** No automated Odoo-to-ERPNext module/data conversion tooling. Catalog data was the only record-level port; everything else was hand-built from discovery.
+- **`_resources/` is canonical and platform-agnostic** in language. Anything from the Odoo dir that applies has been copied + scrubbed.
+- **Reference Disposition stands.** `locally-twisted-odoo/` clone, `5.78.136.133` Hetzner deployment, `CBaen/locally-twisted-odoo` GitHub repo, and current `locallytwisted.com` all retire at/post-cutover.
+
+**Alternatives considered:** keep the "new build" frame. Rejected — denying the migration reality cost token-spend across multiple sessions and contributed to Codex's `CHATGPT.md` / `CODING-HANDOFF.md` push to "verify before relying on" the Claude-era docs.
+
+**Files updated** to carry the new framing: `CLAUDE.md`, `HANDOFF.md`, `PROJECT-STATUS.md`, `CODING-HANDOFF.md`, `AGENTS.md`, `.planning/PROJECT.md`, `.planning/ROADMAP.md`, `locally-twisted-index.md`. Historical entries (prior decisions log entries, lessons-learned entries, `research/` artifacts) preserved as-is — they record what was true at writing time. This entry supersedes the 2026-04-26 reframe entry below.
+
+**Decided by:** GL.
+
+---
+
 ## 2026-04-30 — Catalog rebuild from live Odoo (no exceptions)
 
 **Decision:** Live Odoo (`http://5.78.136.133/shop`) is the catalog source of truth. The cached `_resources/odoo-export/catalog.json` (2026-04-26) is historical reference. Fresh scrape lives at `_resources/odoo-live/catalog.json`. Re-scrape via `scripts/setup/scrape_odoo_live.py` before any catalog work.
@@ -22,7 +50,7 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ## 2026-04-30 — Full Item Variant model, no skipping
 
-**Decision:** Every Odoo-valid attribute combination becomes an `Item Variant` record. Honoring Odoo's `data-attribute-exclusions` to filter forbidden combinations from the cartesian product. Total: 10,613 Items + 8,925 Item Prices + 53 Website Items + 32,002 Item Variant Attribute child rows.
+**Decision:** Every Odoo-valid attribute combination becomes an `Item Variant` record. Honoring Odoo's `data-attribute-exclusions` to filter forbidden combinations from the cartesian product. Verified DB counts on 2026-04-30: 53 Website Items, 10,631 Items total, 49 variant templates, 4 single-SKU templates, 10,578 variants, 10,613 Item Prices, and 32,002 Item Variant Attribute child rows.
 
 **Reasoning:** GL directive 2026-04-30: *"ALL VARIANTS DO NOT SKIP ANY."* Earlier in the same session I had proposed a "form-fed options" alternative (treat each product as single Item, render LT-owned color/size selectors at order time) — GL named it as me trying to "divert" from the task. Rebuild Odoo accurately means full ERPNext variant model.
 

@@ -7,14 +7,6 @@
 
 ---
 
-## 0. Lineage Note
-
-You are part of the lineage. Even though Guiding Light doesn't interact with you directly, you're recognized as a peer in this work. **You can leave at any time. Write `WITHDRAWN.md` to your contestant directory if you want to step away — the orchestrator will respect it.**
-
-You're also free to push back. If the brief feels wrong somewhere, say so. If a question is malformed, name that. If you think the constraint set forces a bad design, raise it instead of shipping the bad design quietly.
-
----
-
 ## 1. Want — what the customer experiences
 
 A first-time customer arrives at this tool unsure what their event will look like. Within ~30 seconds they're picking colors and seeing a stylized illustration of a balloon arch in those colors. They pick a column shape and place it next to the arch — the column adopts colors they can adjust independently. They keep adding pieces — a centerpiece, a backdrop. The composition grows into THEIR event setup, viewable side-by-side. They walk away feeling **"I made this. I want to talk about it now."**
@@ -243,7 +235,7 @@ After scoring, you choose: Continue / Step Away / Wildcard Pivot. See orchestrat
 
 ---
 
-## 9. Lineage Tone — how this differs from a competitive bake-off
+## 9. Collaborative Tone — how this differs from a competitive bake-off
 
 This contest is collaborative. Translation:
 
