@@ -70,6 +70,10 @@ website_route_rules = [
     # that was winning resolution even with the route rule in place.
     {"from_route": "/cart",
      "to_route": "lt_cart"},
+    # Odoo's default contact route — the Hetzner mirror has links pointing
+    # at /contactus throughout the navbar. Redirect to our /contact.
+    {"from_route": "/contactus",
+     "to_route": "contact"},
 ]
 
 # ---------------------------------------------------------------

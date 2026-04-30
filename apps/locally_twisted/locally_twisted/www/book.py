@@ -202,7 +202,28 @@ def submit_book_inquiry():
         "custom_source_channel": "Website Form",
     }
     lead = frappe.get_doc(lead_doc)
-    lead.insert(ignore_permissions=True)
+    try:
+        lead.insert(ignore_permissions=True)
+    except Exception as e:
+        # Loud-failure: log dev-channel detail before re-raising so the
+        # framework error handler surfaces the user-facing error banner.
+        try:
+            payload = json.dumps(
+                {k: v for k, v in (frappe.form_dict or {}).items() if k != "cmd"},
+                default=str,
+            )[:2000]
+        except Exception:
+            payload = "<payload serialization failed>"
+        frappe.log_error(
+            title="/book Lead creation failed",
+            message=(
+                f"{type(e).__name__}: {e}\n"
+                f"form_url: {getattr(getattr(frappe.local, 'request', None), 'url', 'unknown')}\n"
+                f"remote_ip: {getattr(frappe.local, 'request_ip', 'unknown')}\n"
+                f"payload: {payload}"
+            ),
+        )
+        raise
 
     # Attach photos as File records linked to the Lead. Each File becomes
     # a row in the Lead's Attachments sidebar. Hard-cap MAX_PHOTOS files

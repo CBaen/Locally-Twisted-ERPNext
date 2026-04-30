@@ -81,7 +81,7 @@ def smoke_test(base_url: str, form_path: str, shape_only: bool = False) -> int:
         # Step 3: fill the form (TEMPLATE — adapt selectors to actual form)
         # Replace these selectors with the real form's field names.
         try:
-            name_field = page.locator("input[name='lead_name'], input[name='name']").first
+            name_field = page.locator("input[name='contact_name'], input[name='lead_name'], input[name='name']").first
             email_field = page.locator("input[type='email'], input[name='email_id']").first
             if name_field.count() > 0:
                 name_field.fill(test_marker)
