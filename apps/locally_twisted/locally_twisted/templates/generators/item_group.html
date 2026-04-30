@@ -1,0 +1,214 @@
+{% from "webshop/templates/includes/macros.html" import field_filter_section, attribute_filter_section %}
+{% extends "templates/web.html" %}
+
+{% block head_include %}
+<meta name="robots" content="index, follow">
+{% endblock %}
+
+{% block header %}{% endblock %}
+{% block breadcrumbs %}{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="/all-products/index.js"></script>
+{% endblock %}
+
+{% block page_content %}
+<div class="lt-shop" data-item-group="{{ name }}" itemscope itemtype="http://schema.org/ItemList">
+
+  {# ── Page hero ─────────────────────────────────────────────────────── #}
+  <div class="lt-shop__hero">
+    <div class="lt-shop__hero-inner">
+      <p class="lt-shop__eyebrow">Shop</p>
+      <h1 class="lt-shop__title">{{ item_group_name }}</h1>
+    </div>
+  </div>
+
+  {# ── Main layout: sidebar + grid ───────────────────────────────────── #}
+  <div class="lt-shop__layout">
+
+    {# ── Left sidebar ──────────────────────────────────────────────── #}
+    <aside class="lt-shop__sidebar" aria-label="Shop categories">
+      <p class="lt-shop__sidebar-heading">Categories</p>
+      <nav aria-label="Product categories">
+        <ul class="lt-shop__sidebar-list">
+          {% for cat in shop_categories %}
+          <li class="lt-shop__sidebar-item">
+            <a href="/{{ cat.route }}"
+               class="lt-shop__sidebar-link{% if cat.item_group_name == item_group_name %} is-active{% endif %}">
+              {{ cat.item_group_name }}
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </nav>
+
+      {# ── Filters (desktop: in sidebar) ───────────────────────────── #}
+      {% if field_filters or attribute_filters %}
+      <div class="lt-shop__filters lt-shop__filters--desktop" id="product-filters">
+        <p class="lt-shop__filters-heading">Filter</p>
+        {{ field_filter_section(field_filters) }}
+        {{ attribute_filter_section(attribute_filters) }}
+        <a href="/{{ doc.route }}" class="lt-shop__clear-link">Clear all</a>
+      </div>
+      {% endif %}
+    </aside>
+
+    {# ── Product grid area ─────────────────────────────────────────── #}
+    <div class="lt-shop__main">
+
+      {# ── Toolbar: sort + filter toggle (mobile) ──────────────────── #}
+      <div class="lt-shop__toolbar">
+        <p class="lt-shop__toolbar-count" id="lt-result-count" aria-live="polite"></p>
+        <div class="lt-shop__toolbar-right">
+          {# Mobile filter toggle #}
+          {% if field_filters or attribute_filters %}
+          <button class="lt-shop__filter-toggle" aria-expanded="false"
+                  aria-controls="lt-mobile-filters" id="lt-filter-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+              <line x1="4" y1="6" x2="20" y2="6"/>
+              <line x1="8" y1="12" x2="20" y2="12"/>
+              <line x1="12" y1="18" x2="20" y2="18"/>
+            </svg>
+            Filter
+          </button>
+          {% endif %}
+          {# Sort dropdown — wired to webshop's sort param #}
+          <div class="lt-shop__sort-wrap">
+            <label class="lt-shop__sort-label" for="lt-sort-select">Sort</label>
+            <select class="lt-shop__sort-select" id="lt-sort-select" aria-label="Sort products">
+              <option value="">Featured</option>
+              <option value="price asc">Price: low to high</option>
+              <option value="price desc">Price: high to low</option>
+              <option value="item_name asc">Name: A–Z</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {# ── Mobile filter panel (slides open on filter button tap) ──── #}
+      {% if field_filters or attribute_filters %}
+      <div class="lt-shop__filters lt-shop__filters--mobile" id="lt-mobile-filters"
+           aria-hidden="true" hidden>
+        <div class="lt-shop__filters-mobile-inner">
+          <div class="lt-shop__filters-mobile-head">
+            <span class="lt-shop__filters-heading">Filter</span>
+            <button class="lt-shop__filter-close" aria-label="Close filters"
+                    id="lt-filter-close">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+          </div>
+          {{ field_filter_section(field_filters) }}
+          {{ attribute_filter_section(attribute_filters) }}
+          <a href="/{{ doc.route }}" class="lt-shop__clear-link">Clear all</a>
+        </div>
+      </div>
+      <div class="lt-shop__filter-backdrop" id="lt-filter-backdrop" hidden></div>
+      {% endif %}
+
+      {# ── Product listing — rendered by all-products/index.js ─────── #}
+      <div id="product-listing" class="lt-shop__grid item-card-group-section">
+        {# JS fills this — placeholder for no-JS / slow connection #}
+        <p class="lt-shop__loading" aria-live="polite">Loading products…</p>
+      </div>
+
+      {# ── Pagination buttons (rendered by webshop's JS) ───────────── #}
+      <div class="lt-shop__pagination" id="lt-pagination">
+        <button class="btn-prev lt-shop__page-btn" data-start="0" disabled>
+          ← Previous
+        </button>
+        <button class="btn-next lt-shop__page-btn" data-start="0" disabled>
+          Next →
+        </button>
+      </div>
+
+    </div>{# /.lt-shop__main #}
+  </div>{# /.lt-shop__layout #}
+
+</div>{# /.lt-shop #}
+
+<script>
+frappe.ready(() => {
+
+  /* ── Sort dropdown → re-query with webshop's sort param ──────── */
+  const sortSel = document.getElementById('lt-sort-select');
+  if (sortSel) {
+    // Pre-select from URL param if present
+    const params = new URLSearchParams(window.location.search);
+    const sortParam = params.get('sort_by') || '';
+    if (sortParam) {
+      const opt = sortSel.querySelector(`[value="${sortParam}"]`);
+      if (opt) opt.selected = true;
+    }
+    sortSel.addEventListener('change', () => {
+      const url = new URL(window.location.href);
+      if (sortSel.value) {
+        url.searchParams.set('sort_by', sortSel.value);
+      } else {
+        url.searchParams.delete('sort_by');
+      }
+      window.location.href = url.toString();
+    });
+  }
+
+  /* ── Mobile filter panel open/close ──────────────────────────── */
+  const filterBtn = document.getElementById('lt-filter-btn');
+  const filterPanel = document.getElementById('lt-mobile-filters');
+  const filterClose = document.getElementById('lt-filter-close');
+  const filterBackdrop = document.getElementById('lt-filter-backdrop');
+
+  function openFilters() {
+    if (!filterPanel) return;
+    filterPanel.hidden = false;
+    filterPanel.setAttribute('aria-hidden', 'false');
+    if (filterBackdrop) { filterBackdrop.hidden = false; }
+    if (filterBtn) { filterBtn.setAttribute('aria-expanded', 'true'); }
+    document.body.classList.add('lt-filter-open');
+  }
+
+  function closeFilters() {
+    if (!filterPanel) return;
+    filterPanel.hidden = true;
+    filterPanel.setAttribute('aria-hidden', 'true');
+    if (filterBackdrop) { filterBackdrop.hidden = true; }
+    if (filterBtn) { filterBtn.setAttribute('aria-expanded', 'false'); }
+    document.body.classList.remove('lt-filter-open');
+  }
+
+  if (filterBtn) filterBtn.addEventListener('click', openFilters);
+  if (filterClose) filterClose.addEventListener('click', closeFilters);
+  if (filterBackdrop) filterBackdrop.addEventListener('click', closeFilters);
+
+  /* ── Pagination buttons ──────────────────────────────────────── */
+  document.querySelectorAll('.btn-prev, .btn-next').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const $btn = $(e.target);
+      $btn.prop('disabled', true);
+      const start = $btn.data('start');
+      let query_params = frappe.utils.get_query_params();
+      query_params.start = start;
+      let path = window.location.pathname + '?' + frappe.utils.get_url_from_dict(query_params);
+      window.location.href = path;
+    });
+  });
+
+  /* ── Result count label update ───────────────────────────────── */
+  // Webshop's product_ui fires a custom event when results load.
+  // We listen and update the count label.
+  document.addEventListener('product_list_update', e => {
+    const countEl = document.getElementById('lt-result-count');
+    if (countEl && e.detail && typeof e.detail.total_count !== 'undefined') {
+      const n = e.detail.total_count;
+      countEl.textContent = n === 1 ? '1 item' : `${n} items`;
+    }
+  });
+
+});
+</script>
+{% endblock %}
