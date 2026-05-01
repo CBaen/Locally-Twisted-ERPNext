@@ -518,6 +518,19 @@ every deploy.
                     </div>
                 </div>
 
+                {# ============== Conditional: Pickup Only ============== #}
+                <div class="lt-book__conditional"
+                     data-visibility-dependency="x_services"
+                     data-visibility-comparator="contains"
+                     data-visibility-condition="Pickup Only"
+                     hidden>
+                    <h3 class="lt-book__conditional-title">Pickup Details</h3>
+                    <p class="lt-book__conditional-help">
+                        Choose pickup when you want to collect your order from a Locally Twisted location.
+                        Our location details are below this form.
+                    </p>
+                </div>
+
                 {# ============== Conditional: Events Inquiry ============== #}
                 <div class="lt-book__conditional"
                      data-visibility-dependency="x_services"

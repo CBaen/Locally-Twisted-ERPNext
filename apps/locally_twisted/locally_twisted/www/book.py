@@ -72,6 +72,7 @@ SERVICE_OPTIONS = [
     ("svc_twisting", "Balloon Twisting", "Balloon Twisting"),
     ("svc_painting", "Face Painting", "Face Painting"),
     ("svc_delivery", "Delivery Only", "Delivery Only (helium bouquets, balloon pieces)"),
+    ("svc_pickup", "Pickup Only", "Pickup Only"),
     ("svc_package", "Events Inquiry", "Events Inquiry"),
     ("svc_other", "Something Else", "Something Else"),
 ]

@@ -108,13 +108,19 @@ def main() -> int:
             page,
             "Delivery Only",
             {"Delivery Only"},
-            {"Balloon Decor", "Balloon Twisting", "Face Painting", "Events Inquiry", "Event Environment"},
+            {"Balloon Decor", "Balloon Twisting", "Face Painting", "Pickup Only", "Events Inquiry", "Event Environment"},
+        ))
+        failures.extend(check_service(
+            page,
+            "Pickup Only",
+            {"Pickup Only"},
+            {"Balloon Decor", "Balloon Twisting", "Face Painting", "Delivery Only", "Events Inquiry", "Event Environment"},
         ))
         failures.extend(check_service(
             page,
             "Events Inquiry",
             {"Events Inquiry"},
-            {"Balloon Decor", "Balloon Twisting", "Face Painting", "Delivery Only", "Event Environment"},
+            {"Balloon Decor", "Balloon Twisting", "Face Painting", "Delivery Only", "Pickup Only", "Event Environment"},
         ))
         events_panel = panel(page, "Events Inquiry")
         if events_panel.count() == 1 and events_panel.first.is_visible():
@@ -135,18 +141,20 @@ def main() -> int:
             page,
             "Balloon Twisting",
             {"Balloon Twisting", "Event Environment"},
-            {"Balloon Decor", "Face Painting", "Delivery Only", "Events Inquiry"},
+            {"Balloon Decor", "Face Painting", "Delivery Only", "Pickup Only", "Events Inquiry"},
         ))
         failures.extend(check_service(
             page,
             "Face Painting",
             {"Face Painting", "Event Environment"},
-            {"Balloon Decor", "Balloon Twisting", "Delivery Only", "Events Inquiry"},
+            {"Balloon Decor", "Balloon Twisting", "Delivery Only", "Pickup Only", "Events Inquiry"},
         ))
 
         shade = page.locator("#book_shade_required")
         if shade.count() != 1:
             failures.append("shade checkbox should exist once inside Event Environment")
+        if page.get_by_text("Northern Utah Location (Residential Address)").count() < 1:
+            failures.append("Riverdale location should be labeled as Northern Utah Location (Residential Address)")
 
         browser.close()
 

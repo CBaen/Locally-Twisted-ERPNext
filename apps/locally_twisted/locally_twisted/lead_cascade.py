@@ -39,6 +39,7 @@ SERVICE_LABEL_MAP = {
     "Balloon Twisting": "Balloon Twisting",
     "Face Painting": "Face Painting",
     "Delivery Only": "Delivery",
+    "Pickup Only": "Pickup",
     "Events Inquiry": "Event Inquiry",
     "Something Else": "Other",
 }
