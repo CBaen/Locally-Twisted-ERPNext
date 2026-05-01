@@ -102,25 +102,25 @@ def main() -> int:
             page,
             "Balloon Decor",
             {"Balloon Decor"},
-            {"Balloon Twisting", "Face Painting", "Delivery Only", "Events Inquiry", "Event Environment"},
+            {"Balloon Twisting", "Face Painting", "Delivery", "Events Inquiry", "Event Environment"},
         ))
         failures.extend(check_service(
             page,
-            "Delivery Only",
-            {"Delivery Only"},
-            {"Balloon Decor", "Balloon Twisting", "Face Painting", "Pickup Only", "Events Inquiry", "Event Environment"},
+            "Delivery",
+            {"Delivery"},
+            {"Balloon Decor", "Balloon Twisting", "Face Painting", "Pickup", "Events Inquiry", "Event Environment"},
         ))
         failures.extend(check_service(
             page,
-            "Pickup Only",
-            {"Pickup Only"},
-            {"Balloon Decor", "Balloon Twisting", "Face Painting", "Delivery Only", "Events Inquiry", "Event Environment"},
+            "Pickup",
+            {"Pickup"},
+            {"Balloon Decor", "Balloon Twisting", "Face Painting", "Delivery", "Events Inquiry", "Event Environment"},
         ))
         failures.extend(check_service(
             page,
             "Events Inquiry",
             {"Events Inquiry"},
-            {"Balloon Decor", "Balloon Twisting", "Face Painting", "Delivery Only", "Pickup Only", "Event Environment"},
+            {"Balloon Decor", "Balloon Twisting", "Face Painting", "Delivery", "Pickup", "Event Environment"},
         ))
         events_panel = panel(page, "Events Inquiry")
         if events_panel.count() == 1 and events_panel.first.is_visible():
@@ -141,13 +141,13 @@ def main() -> int:
             page,
             "Balloon Twisting",
             {"Balloon Twisting", "Event Environment"},
-            {"Balloon Decor", "Face Painting", "Delivery Only", "Pickup Only", "Events Inquiry"},
+            {"Balloon Decor", "Face Painting", "Delivery", "Pickup", "Events Inquiry"},
         ))
         failures.extend(check_service(
             page,
             "Face Painting",
             {"Face Painting", "Event Environment"},
-            {"Balloon Decor", "Balloon Twisting", "Delivery Only", "Pickup Only", "Events Inquiry"},
+            {"Balloon Decor", "Balloon Twisting", "Delivery", "Pickup", "Events Inquiry"},
         ))
 
         shade = page.locator("#book_shade_required")
