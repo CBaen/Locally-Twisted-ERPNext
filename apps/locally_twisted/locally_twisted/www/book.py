@@ -72,7 +72,7 @@ SERVICE_OPTIONS = [
     ("svc_twisting", "Balloon Twisting", "Balloon Twisting"),
     ("svc_painting", "Face Painting", "Face Painting"),
     ("svc_delivery", "Delivery Only", "Delivery Only (helium bouquets, balloon pieces)"),
-    ("svc_package", "Event Package", "Event Package"),
+    ("svc_package", "Events Inquiry", "Events Inquiry"),
     ("svc_other", "Something Else", "Something Else"),
 ]
 
@@ -407,7 +407,7 @@ def _record_inquiry_communication(
     line("Painter end", painter_end)
     line("Painting notes", painting_notes)
     line("Delivery notes", delivery_notes)
-    line("Package notes", package_notes)
+    line("Events inquiry notes", package_notes)
     line("Other notes", other_notes)
     if photo_count:
         line("Inspiration photos", f"{photo_count} attached")

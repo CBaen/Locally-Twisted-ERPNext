@@ -400,6 +400,13 @@ every deploy.
                                disabled/>
                     </div>
                     <div class="lt-book__field" style="margin-top: 0.75rem;">
+                        <label for="book_colors">Color preferences</label>
+                        <input type="text" id="book_colors" name="x_colors"
+                               class="lt-book__input"
+                               placeholder="Specific colors, brand colors, theme colors..."
+                               disabled/>
+                    </div>
+                    <div class="lt-book__field" style="margin-top: 0.75rem;">
                         <label for="book_decor_notes">Decor notes</label>
                         <textarea id="book_decor_notes" name="x_decor_notes"
                                   class="lt-book__textarea" rows="3"
@@ -496,42 +503,28 @@ every deploy.
                     </div>
                 </div>
 
-                {# ============== Conditional: Event Package ============== #}
+                {# ============== Conditional: Events Inquiry ============== #}
                 <div class="lt-book__conditional"
                      data-visibility-dependency="x_services"
                      data-visibility-comparator="contains"
-                     data-visibility-condition="Event Package"
+                     data-visibility-condition="Events Inquiry"
                      hidden>
-                    <h3 class="lt-book__conditional-title">Event Package Details</h3>
+                    <h3 class="lt-book__conditional-title">Events Inquiry Details</h3>
                     <div class="lt-book__field">
                         <label for="book_package_notes">Tell us what you're envisioning</label>
                         <textarea id="book_package_notes" name="x_package_notes"
                                   class="lt-book__textarea" rows="3"
-                                  placeholder="Describe your ideal event package..."
+                                  placeholder="Tell us about the event, crowd, and what kind of help you need..."
                                   disabled></textarea>
                     </div>
                 </div>
 
-                {# ============== Conditional: Something Else ============== #}
+                {# ============== Conditional: Event Environment (live artists only) ============== #}
                 <div class="lt-book__conditional"
                      data-visibility-dependency="x_services"
-                     data-visibility-comparator="contains"
-                     data-visibility-condition="Something Else"
-                     hidden>
-                    <h3 class="lt-book__conditional-title">Tell Us More</h3>
-                    <div class="lt-book__field">
-                        <label for="book_other_notes">Describe what you're looking for</label>
-                        <textarea id="book_other_notes" name="x_other_notes"
-                                  class="lt-book__textarea" rows="3"
-                                  placeholder="Tell us about your idea..."
-                                  disabled></textarea>
-                    </div>
-                </div>
-
-                {# ============== Conditional: Event Environment (any service) ============== #}
-                <div class="lt-book__conditional"
-                     data-visibility-dependency="x_services"
-                     data-visibility-comparator="set"
+                     data-visibility-comparator="intersects"
+                     data-visibility-condition="Event Environment"
+                     data-visibility-values="Balloon Twisting|Face Painting"
                      hidden>
                     <h3 class="lt-book__conditional-title">Event Environment</h3>
                     <div class="lt-book__row lt-book__row--two">
@@ -551,13 +544,6 @@ every deploy.
                                name="x_shade_required" value="true" disabled/>
                         <span>Shade is required for outdoor events</span>
                     </label>
-                    <div class="lt-book__field" style="margin-top: 0.75rem;">
-                        <label for="book_colors">Color preferences</label>
-                        <input type="text" id="book_colors" name="x_colors"
-                               class="lt-book__input"
-                               placeholder="Specific colors, brand colors, theme colors..."
-                               disabled/>
-                    </div>
                 </div>
 
                 {# Photos #}
@@ -643,6 +629,13 @@ every deploy.
             var show = false;
             if (comparator === 'contains') {
                 show = checked.indexOf(condition) !== -1;
+            } else if (comparator === 'intersects') {
+                var values = (el.getAttribute('data-visibility-values') || '')
+                    .split('|')
+                    .filter(Boolean);
+                show = values.some(function (value) {
+                    return checked.indexOf(value) !== -1;
+                });
             } else if (comparator === 'set') {
                 show = anyChecked;
             }
