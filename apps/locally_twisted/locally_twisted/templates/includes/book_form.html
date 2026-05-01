@@ -1,7 +1,7 @@
-{# Inquiry form partial — used by /book and /contact.
+{# Inquiry form partial — used by /contact.
 
 Per GL directive 2026-04-30: one form, two URL surfaces. /contact no
-longer redirects to /book; both pages render this same partial inside
+longer redirects to /book; /contact renders this partial inside
 their own page layout. The form posts to:
 
     locally_twisted.www.book.submit_book_inquiry
@@ -325,7 +325,7 @@ every deploy.
                         <select id="book_occasion" name="x_occasion_type" class="lt-book__select">
                             <option value="">Select one...</option>
                             {% for value, label in occasion_options %}
-                            <option value="{{ value }}">{{ label }}</option>
+                            <option value="{{ value }}"{% if selected_occasion == value %} selected{% endif %}>{{ label }}</option>
                             {% endfor %}
                         </select>
                     </div>

@@ -1,12 +1,7 @@
-"""/contact route — Hetzner-shaped contact page with the embedded /book form.
+"""/contact route — primary Locally Twisted inquiry form.
 
-Per GL directive 2026-04-30: /contact no longer redirects to /book. It
-renders the Hetzner-mirror layout (intro hero + form + info card aside +
-Locations + map) but uses the SAME inquiry form as /book via the shared
-partial at templates/includes/book_form.html. One form, two URL surfaces.
-
-Same Jinja context as /book so the partial renders identically. Submission
-goes to locally_twisted.www.book.submit_book_inquiry.
+/contact is the surviving customer inquiry surface. Old /book traffic is
+handled as a route alias, but navigation should point customers here.
 """
 import frappe
 
@@ -35,6 +30,7 @@ def get_context(context):
         "og:type": "website",
     }
     context.occasion_options = OCCASION_OPTIONS
+    context.selected_occasion = frappe.form_dict.get("occasion") or ""
     context.service_options = SERVICE_OPTIONS
     context.max_photos = MAX_PHOTOS
     context.max_photo_mb = MAX_PHOTO_BYTES // (1024 * 1024)

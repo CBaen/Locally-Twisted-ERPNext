@@ -8,6 +8,84 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-01 - Layout fit is a browser-gated contract, not a visual impression
+
+**Decision:** Customer-facing fit checks now live in `scripts/verify/layout_fit.spec.js`. The gate covers the main public pages, the new policy pages, shop/category/product routes, and cart at 320px, 375px, tablet, and desktop widths. The check fails on horizontal document overflow, visible element overflow outside the viewport, and text overflow inside visible elements. It intentionally ignores descendants clipped by an overflow-hidden/scroll/auto ancestor, so carousels can keep offscreen track content without creating false positives.
+
+**Reasoning:** GL reported real visible breakage: the Seasonal category `Next` button was half off screen, and product breadcrumbs/title text escaped the viewport. One-off screenshots were not enough; the project needed a repeatable gate that catches this class of defect before anyone claims a page fits.
+
+**Alternatives considered:** Rely on manual screenshot review only. Rejected because screenshot review is necessary but not durable. Add broad `overflow-x: hidden` to the body. Rejected because it hides evidence instead of fixing or identifying the source. The implemented gate checks actual layout geometry and forces specific fixes.
+
+**Verification receipt:** Latest direct Playwright run: 60 tests passed using `C:\Users\baenb\AppData\Local\npm-cache\_npx\420ff84f11983ee5\node_modules\.bin\playwright.cmd`.
+
+**Decided by:** GL directive 2026-05-01 ("Everything needs to be checked for actual fit") and implemented by Codex.
+
+---
+
+## 2026-05-01 - Privacy and Terms are static Frappe routes, with legal approval still separate
+
+**Decision:** `/privacy` and `/terms-of-service` are static Frappe `www/` routes in the `locally_twisted` app. They are plain-language readiness pages for Stripe live-mode URL requirements. The dashed `/terms-of-service` URL aliases to `terms_of_service` through `website_route_rules` because Frappe does not auto-map underscored filenames to dashed URLs.
+
+**Reasoning:** Stripe Dashboard had placeholder policy URLs, and both routes were 404. The captured Hetzner `privacy.html` was itself a 404 shell, so there was no old policy copy to port. The pages therefore use verified local sources: form behavior, payment flow, deposit rules, cancellation/refund policy, service area, and Jeff's legal-interview answers. Copy stays conservative and operational, not lawyer-reviewed final legal language.
+
+**Alternatives considered:** Wait for attorney-ready pages before adding routes. Rejected because Stripe live-mode readiness needs working URLs now, and the pages clearly state operational policy using existing verified sources. Invent broader legal terms. Rejected because the project rule forbids inventing business/legal facts.
+
+**Follow-up:** GL/legal review, then update Stripe Dashboard "Privacy policy URL" and "Terms of service URL" away from placeholders.
+
+**Decided by:** Queue P0/P1 Stripe-readiness blockers and implemented by Codex from verified project policy sources.
+
+---
+
+## 2026-05-01 - Occasion navigation must be product-backed; `/contact` is the inquiry path
+
+**Decision:** `Plan by Occasion` is product discovery navigation, not a shortcut into the inquiry form. Current occasion links point to real product/category pages: Birthdays -> Birthday Deliveries; Baby Showers & Reveals -> Baby Shower Garland; Graduations -> Graduation Grab n Go; Get Well -> Get-Well Bouquets; Missionary Farewells & Homecomings -> Large head Missionary; Church Events/Weddings -> Garlands; Religious Celebrations -> Easter Arch; Corporate Events -> Logo 3 layered bouquet; Schools & Community -> Basketball Arch; Holidays & Seasons -> Seasonal & Specialty.
+
+**Reasoning:** GL corrected the contact-first interpretation directly: if a customer opens an occasion menu in a shop, they expect products. Routing every occasion to `/contact?occasion=...` made the menu feel empty and evasive. The contact path already exists in the top utility bar and primary CTAs; the occasion dropdown should keep customers browsing purchasable or inspectable products.
+
+**Alternatives considered:** Keep all occasion links as prefilled contact form URLs. Rejected by GL. Create new occasion landing pages now. Deferred because current ERPNext Website Items already provide concrete product/category targets and new landing pages would add more surface before the shop IA is stable.
+
+**Parity rule:** Run `python scripts/verify/nav_ia.py` after nav changes. The verifier now fails if occasion routes regress to `contact?occasion=...`, if `/book` returns to nav, or if duplicate Contact links appear in the mobile drawer.
+
+**Decided by:** GL directive 2026-05-01; implemented by Codex against verified Website Item/Item Group routes.
+
+---
+
+## 2026-05-01 - `/book` retired; `/contact` is the surviving customer inquiry surface
+
+**Decision:** `/contact` is the standard solo customer contact form. `/book` is no longer a customer-facing destination and exists only as a route alias to `/contact` for legacy/internal traffic. Current site CTAs and navigation should point to `/contact`.
+
+**Reasoning:** GL corrected the inherited `/book` framing: "The `/book` contact form is now the standard solo contact form." Continuing to treat `/book` as the primary conversion page kept queue/status docs and CTAs out of parity with the current site direction. The existing Lead submission machinery can still be reused behind the contact form; the public route decision is separate.
+
+**Alternatives considered:** Keep both `/book` and `/contact` as first-class surfaces. Rejected because it duplicates the same customer action and keeps stale nav/docs alive. Delete all `/book` code immediately. Deferred because `/contact` still imports the shared form/submission machinery from `www/book.py`; deeper code rename can be a later cleanup if worth the churn.
+
+**Decided by:** GL directive 2026-05-01.
+
+---
+
+## 2026-05-01 - Root shop browse routes alias to `/shop-by-category`
+
+**Decision:** `/shop-items` and `/all-products` route to `/shop-by-category`. The far-left primary nav label is `Shop Balloon Decor`, and its "All Balloon Decor" CTA also uses `/shop-by-category`.
+
+**Reasoning:** GL flagged `/shop-items` as pointless/empty. ERPNext's root Item Group page is too thin as a customer browse landing page, while the custom `/shop-by-category` route gives the intended category-card browse surface. Keeping the thin route visible would preserve a bad first impression.
+
+**Alternatives considered:** Build a richer root Item Group page at `/shop-items`. Deferred because `/shop-by-category` already exists and is the intended browse surface. Redirecting/aliasing is lower blast radius and keeps category detail routes under `/shop-items/<group>` intact.
+
+**Decided by:** GL directive 2026-05-01; implemented by Codex.
+
+---
+
+## 2026-05-01 - No Gallery in current navigation
+
+**Decision:** Gallery is not part of current nav or Phase 2 page-rebuild priority. Do not add a Gallery link until GL reopens that scope.
+
+**Reasoning:** GL explicitly said "no gallery for now." The mirror has gallery material, but exposing another route before the core shop/contact/policy surfaces are stable adds clutter and more unfinished surface area.
+
+**Alternatives considered:** Keep Gallery as a placeholder because the mirror has a page. Rejected because current nav must reflect active scope, not inherited mirror shape.
+
+**Decided by:** GL directive 2026-05-01.
+
+---
+
 ## 2026-05-01 — Customer chrome IA cleanup: no `What We Make`, no About, no Book an Event links
 
 **Decision:** The current header/footer navigation does not include `What We Make`, `About Us`, or `Book an Event`. The footer Shop column keeps `All Products`; Company links stay limited to real, currently supported surfaces.

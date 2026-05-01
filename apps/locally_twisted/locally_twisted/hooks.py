@@ -41,7 +41,7 @@ app_license = "mit"
 # Receipt: 2026-04-29 — drawer overlay edit shipped server-side but old
 # CSS stayed cached in GL's browser; drawer rendered inline on every page
 # because the cached rules didn't have `position: fixed`.
-web_include_css = "/assets/locally_twisted/css/lt-theme.css?v=20260501-4"
+web_include_css = "/assets/locally_twisted/css/lt-theme.css?v=20260501-5"
 
 # Guest cart engine — overrides webshop's broken-for-guest cart functions
 # at runtime, exposes window.LT_CART, and keeps cart count badges live.
@@ -72,6 +72,8 @@ website_route_rules = [
      "to_route": "balloon_twisting_and_face_painting"},
     {"from_route": "/refund-policy",
      "to_route": "refund_policy"},
+    {"from_route": "/terms-of-service",
+     "to_route": "terms_of_service"},
     {"from_route": "/thank-you",
      "to_route": "thank_you"},
     # Override Frappe payments' /payment-success — see www/payment_success.py

@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 """Backend prep for the /book form.
 
-Adds three new options to the Lead Custom Field `custom_occasion_type`:
+Adds options to the Lead Custom Field `custom_occasion_type`:
   - Wedding
   - Baby Shower
   - Grand Opening
+  - Graduation
+  - Get Well
+  - Missionary Farewell / Homecoming
+  - Religious Celebration
 
 These came from the Odoo /contact form's event_type and were folded into
 the consolidated /book form per GL's directive 2026-04-29. The Custom
@@ -36,6 +40,10 @@ NEW_OCCASION_OPTIONS = [
     "Wedding",
     "Baby Shower",
     "Grand Opening",
+    "Graduation",
+    "Get Well",
+    "Missionary Farewell / Homecoming",
+    "Religious Celebration",
 ]
 
 
@@ -121,7 +129,7 @@ def main():
     opener = make_opener()
     login(opener)
 
-    print(f"\n[task] Ensure 3 new options on Lead.custom_occasion_type")
+    print(f"\n[task] Ensure occasion options on Lead.custom_occasion_type")
     ensure_occasion_options(opener)
 
     print(f"\nDONE")

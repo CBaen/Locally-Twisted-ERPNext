@@ -6,6 +6,38 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-01 - Actual fit needs a geometry gate, not a confidence statement
+
+### Lesson 1 - Offscreen controls are usually framework residue, not just CSS drift.
+
+The Seasonal category page showed `Prev` / `Next` half off screen. The visible controls were not the themed `#lt-pagination` block; Webshop was injecting a second `.product-paging-area` row inside `#product-listing` with Bootstrap rows and inline float styles. CSS aimed only at the themed block could never fix it. **Counter-move:** inspect the rendered DOM before polishing. If a control ignores scoped CSS, find whether the framework injected a second copy.
+
+### Lesson 2 - A fit check must distinguish visible overflow from clipped carousel internals.
+
+The expanded layout spec initially failed the homepage because the reviews carousel track intentionally extends far outside the viewport, but the page had no document overflow and the track is clipped by its wrapper. That was a false positive. **Counter-move:** layout-fit tests should flag document overflow and visible un-clipped element overflow, while allowing descendants inside an overflow-clipping ancestor.
+
+### Lesson 3 - Python Playwright and Node Playwright are different installations.
+
+`python scripts/verify/smoke_shop.py` failed because `C:\Python314\python.exe` has no Python `playwright` package. Playwright was still installed: Node/CLI Playwright 1.59.1 lives in npm's npx cache at `C:\Users\baenb\AppData\Local\npm-cache\_npx\420ff84f11983ee5\node_modules\.bin\playwright.cmd`. **Counter-move:** when someone says "Playwright is installed," locate which runtime owns it before declaring a verifier unavailable.
+
+---
+
+## 2026-05-01 - Navigation labels must match customer intent
+
+### Lesson 1 - "Plan by Occasion" in a shop means product discovery first.
+
+I initially routed every occasion link to `/contact?occasion=...` because it was easy to connect the event labels to the Lead form. GL corrected it hard: customers opening an occasion dropdown in a shop are asking "show me the products for this occasion," not "send me to a generic contact form." **Counter-move:** when a nav label sounds like browsing (`Shop`, `Plan`, `Browse`, `Occasion`, `Category`), route to product/category/content discovery first. Inquiry CTAs belong where they are explicitly framed as inquiry.
+
+### Lesson 2 - Verify nav against real catalog routes before inventing landing pages.
+
+The fix did not require new occasion pages. The ERPNext catalog already had product-backed answers: Birthday Deliveries, Baby Shower Garland, Graduation Grab n Go, Get-Well Bouquets, Large head Missionary, Easter Arch, etc. **Counter-move:** query Website Items and Item Groups before adding routes. Prefer existing real product/category pages over placeholder landing pages or contact shortcuts.
+
+### Lesson 3 - Source-level IA checks catch regressions that screenshots miss.
+
+The opened-dropdown screenshots showed a clean layout, but they would not by themselves prevent someone from re-pointing every occasion link back to contact later. `scripts/verify/nav_ia.py` now encodes the behavioral contract: no duplicate Contact CTA in mobile drawer, no nav `/book`, and no `contact?occasion` routes in Plan by Occasion. **Counter-move:** pair visual checks with a small source-level invariant script for nav IA.
+
+---
+
 ## 2026-05-01 — Storefront correction pass: preserve framework contracts and accessibility
 
 ### Lesson 1 — Category listing bugs can be wrapper-contract bugs, not catalog bugs.

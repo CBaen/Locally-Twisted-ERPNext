@@ -49,11 +49,15 @@ OCCASION_OPTIONS = [
     ("birthday", "Birthday Party"),
     ("wedding", "Wedding"),
     ("baby_shower", "Baby Shower"),
+    ("graduation", "Graduation"),
+    ("get_well", "Get Well"),
     ("school", "School Event"),
     ("corporate", "Corporate Event"),
     ("grand_opening", "Grand Opening"),
     ("festival", "Festival / Fair"),
     ("church", "Church Event"),
+    ("missionary", "Missionary Farewell / Homecoming"),
+    ("religious", "Religious Celebration"),
     ("reunion", "Family Reunion"),
     ("holiday", "Holiday Party"),
     ("other", "Other"),
@@ -96,6 +100,7 @@ def get_context(context):
         "og:type": "website",
     }
     context.occasion_options = OCCASION_OPTIONS
+    context.selected_occasion = frappe.form_dict.get("occasion") or ""
     context.service_options = SERVICE_OPTIONS
     context.max_photos = MAX_PHOTOS
     context.max_photo_mb = MAX_PHOTO_BYTES // (1024 * 1024)

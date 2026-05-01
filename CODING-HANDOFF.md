@@ -1,6 +1,6 @@
 # Locally Twisted - Coding Handoff
 
-Last updated: 2026-05-01 by Codex after storefront correction pass.
+Last updated: 2026-05-01 by Codex after storefront navigation/routing cleanup.
 
 ## State Of Reality
 
@@ -28,9 +28,14 @@ Docs that still mention `10,613 Items`, `8,925 Item Prices`, or `10,560 variants
 Verified or updated during the 2026-05-01 storefront correction pass:
 
 - Header/menu no longer exposes `What We Make`; desktop dropdown panels are contained, and mobile cart/hamburger controls are visible at 390px and 430px with accessible target sizing.
-- Footer no longer exposes `What We Make`, `About Us`, or `Book an Event`; `All Products` remains.
+- Primary nav order is now `Shop Balloon Decor`, `Plan by Occasion`, `Balloon Twisting & Face Painting`, `FAQ`, `Blog`, search. The top utility bar keeps the only `Contact Us` CTA; lower nav and mobile drawer do not duplicate it.
+- `Plan by Occasion` is product-discovery navigation, not inquiry navigation. Every current occasion link routes to a verified product/category page, including missionary/religious paths. Do not re-point the occasion dropdown to `/contact?occasion=...`.
+- Footer no longer exposes `What We Make`, `About Us`, or `Book an Event`; `All Balloon Decor` routes to `/shop-by-category`.
 - Product detail/configure templates no longer include the "Start a conversation" or "Tell us what you're imagining" sales-pitch blocks.
 - `/shop-items/arches` now scopes to Arches. Root cause was missing Webshop `.item-group-content` class in the custom Item Group wrapper, not catalog data.
+- `/shop-items` and `/all-products` route to `/shop-by-category`; the ERPNext root Item Group page is too thin for customers.
+- `/book` is retired as a customer-facing page and aliases to `/contact`. Current CTAs should use `/contact`; old `/book` traffic is compatibility only.
+- `/privacy` and `/terms-of-service` exist as static Frappe routes and return HTTP 200 locally. They are plain-language drafts for Stripe readiness; legal review and Stripe Dashboard URL wiring are still separate follow-ups.
 - Product listing cards can display `lt_brand_description` through the local Webshop API wrapper in `locally_twisted.api.product_listing`.
 - Website cache was cleared after Jinja/CSS changes; `hooks.py` CSS cache-bust was bumped to the current session version.
 
@@ -55,15 +60,14 @@ Treat these as verified only after re-running smoke tests or checking the routes
 
 ## Next Safest Slice
 
-P0 remains `/book`:
+P0 is no longer `/book`; GL retired that surface. The primary customer inquiry path is the standard `/contact` form, and `/book` is only a route alias for legacy traffic.
 
-- Primary inquiry conversion page.
-- Existing CTAs point there.
-- Queue says it is still missing/404.
-- Existing Lead schema is supposed to be in place.
-- Canonical form shape is the Hetzner `/book` snapshot in `_resources/odoo-live-snapshot/hetzner-book.html`, cross-checked against the running ERPNext Lead Custom Fields.
+Next safest slices:
 
-Then build `/privacy` and `/terms-of-service` for Stripe live-mode readiness.
+- Wire the Stripe Dashboard privacy/terms URLs to `/privacy` and `/terms-of-service` after GL/legal approval.
+- Keep product navigation product-backed: use `scripts/verify/nav_ia.py` before touching header/footer IA.
+- Replace remaining placeholder BTFP spec table values once Jeff confirms the real data.
+- Add Item Group imagery for `/shop-by-category` cards when representative photos are selected.
 
 ## Verification Commands
 
@@ -88,6 +92,12 @@ After Jinja/CSS/Web Page changes:
 
 ```powershell
 python scripts/dev/clear_website_cache.py
+```
+
+Navigation IA regression check:
+
+```powershell
+python scripts/verify/nav_ia.py
 ```
 
 Before declaring visible work done, capture and inspect desktop and mobile screenshots. Use the repo's existing Playwright scripts where possible.

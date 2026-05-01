@@ -39,6 +39,9 @@
 - **CSS hide of `.product-code`** in lt-theme.css strips the "Item Code" jargon from compiled-JS-rendered listing cards (only `display: none !important` we kept; webshop's product_ui/list.js bakes the jargon at compile time; can't be Jinja-overridden).
 - **All 7 shop smoke checks pass:** `scripts/verify/smoke_shop.py` validates mega menu, /shop pills, /shop-by-category cards, all 11 category routes 200 + no jargon, variant detail inline, single-SKU clean, mobile drawer accordion.
 - **Storefront correction pass shipped 2026-05-01:** header/footer IA cleaned to match current routes (`What We Make`, `About Us`, `Book an Event` removed; `All Products` kept), menu dropdowns contained, mobile cart/hamburger visible at 390px/430px, footer centered without shrinking below accessible sizes.
+- **Navigation/routing cleanup shipped 2026-05-01:** primary nav is `Shop Balloon Decor`, `Plan by Occasion`, `Balloon Twisting & Face Painting`, `FAQ`, `Blog`, search. The top utility bar owns the only `Contact Us` CTA. `Plan by Occasion` routes to product/category pages, not contact shortcuts. `/book` aliases to `/contact`; `/shop-items` and `/all-products` alias to `/shop-by-category`.
+- **Privacy and Terms routes added 2026-05-01:** `/privacy` and `/terms-of-service` return HTTP 200 locally. Treat as plain-language drafts for Stripe readiness; Stripe Dashboard URL wiring and any legal review remain follow-ups.
+- **Actual-fit browser gate added 2026-05-01:** `scripts/verify/layout_fit.spec.js` checks 15 public/shop/cart routes across 320px, 375px, tablet, and desktop viewports for document overflow, visible element overflow, and text overflow. Latest run: 60 passed using the located Node Playwright CLI.
 - **Product listing/detail corrections shipped 2026-05-01:** item detail/configure sales-pitch blocks removed; `/shop-items/arches` fixed by preserving Webshop's `.item-group-content` wrapper contract; listing cards now receive `lt_brand_description` through `locally_twisted.api.product_listing` and prefer it in card copy.
 
 **What's broken / pending:**
@@ -46,8 +49,8 @@
 - Routes changed from `/shop/<item>` to `/shop-items/<group>/<item>`. Pre-launch — no public bookmarks broken.
 
 **What's next (in order):**
-- **Slice 10 — `/book` form page** (45-field Lead schema). Every homepage CTA still 404s here. Was deferred 3x. Big build, primary inquiry conversion path.
-- **`/privacy` and `/terms-of-service` pages** — both required by Stripe for live mode activation, both currently `example.com/...` placeholders in Stripe Dashboard.
+- **Stripe Dashboard URL wiring for `/privacy` and `/terms-of-service`** after GL/legal approval; dashboard still has placeholder URLs until changed.
+- **BTFP page refresh** against the current mirror/design direction.
 - **Spec table data on BTFP service cards** still lorem ipsum — Jeff to confirm BEST AT / DURATION / TEAM SIZE / GOOD FOR.
 - **Sample data for backend tour** — realistic Lead records, paid SO, upcoming event for Jeff's desk demo.
 - **Item Group imagery** — each Item Group has empty `image` field. Adding category images would make `/shop-by-category` and a future image-rich mega menu feel more designed.
@@ -142,6 +145,11 @@ Canonical resources for the migration destination live in `_resources/` and are 
 
 - **Header/footer IA corrected:** removed `What We Make`, `About Us`, and `Book an Event` from customer chrome. `All Products` remains. Footer columns were re-centered through layout/content cleanup, not by shrinking text below accessibility expectations.
 - **Menu containment corrected:** desktop dropdowns are contained under the nav; mobile drawer/cart/hamburger visibility verified at narrow mobile widths with accessible touch sizing preserved.
+- **Customer nav corrected again after GL review:** lower nav order is `Shop Balloon Decor`, `Plan by Occasion`, `Balloon Twisting & Face Painting`, `FAQ`, `Blog`, search. No Gallery for now. No lower-nav Contact duplicate because the top utility bar already has `Contact Us`.
+- **Occasion nav is product-backed:** `Plan by Occasion` links now route to real product/category pages (`Birthday Deliveries`, `Baby Shower Garland`, `Graduation Grab n Go`, `Get-Well Bouquets`, `Large head Missionary`, etc.) instead of `/contact?occasion=...`. The nav IA verifier now fails if occasion links regress to contact shortcuts.
+- **Retired routes handled:** `/book` aliases to `/contact`; customer CTAs now point to `/contact`. `/shop-items` and `/all-products` alias to `/shop-by-category`.
+- **Policy routes added:** `/privacy` and `/terms-of-service` are static Frappe routes for Stripe readiness. Both return HTTP 200 locally; Stripe Dashboard wiring remains separate.
+- **Layout fit verifier added:** `scripts/verify/layout_fit.spec.js` covers `/`, `/book`, `/contact`, `/balloon-twisting-and-face-painting`, `/faq`, `/privacy`, `/terms-of-service`, `/refund-policy`, `/accessibility`, `/shop`, `/shop-by-category`, two product routes, the Seasonal category, and `/cart` at 4 viewports. Latest run: 60 passed.
 - **Product detail pitches removed:** stripped "Start a conversation" from `item_configure.html` and "Tell us what you're imagining" from `item_details.html`.
 - **`/shop-items/arches` bug fixed:** root cause was missing Webshop `.item-group-content` class in the LT Item Group wrapper. Restored the framework contract so the Webshop listing JS scopes results to the active Item Group. Verified Arches API response returns only Arches.
 - **Brand descriptions on listing cards:** added `locally_twisted.api.product_listing.get_product_filter_data` as a local wrapper for Webshop's product filter API and registered it with `override_whitelisted_methods`; listing cards now prefer `lt_brand_description` with existing description fallbacks.

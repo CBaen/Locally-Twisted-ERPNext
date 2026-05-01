@@ -7,9 +7,9 @@ import frappe
 def update_website_context(context):
     """Add product and occasion menu data to the website context.
 
-    Product links are backed by real ERPNext Item Group routes.
-    Occasion links are planning contexts that route to /contact with a backend
-    occasion value, rather than pretending occasions are product categories.
+    Product links are backed by real ERPNext Item Group and Website Item
+    routes. Occasion links should keep customers in product discovery; the
+    top utility Contact Us button remains the inquiry path.
     """
     try:
         children = frappe.db.get_all(
@@ -45,17 +45,17 @@ def update_website_context(context):
     ]
 
     context["mega_plan_by_occasion"] = [
-        {"label": "Birthdays", "route": "contact?occasion=birthday", "column": "personal"},
-        {"label": "Baby Showers & Reveals", "route": "contact?occasion=baby_shower", "column": "personal"},
-        {"label": "Graduations", "route": "contact?occasion=graduation", "column": "personal"},
-        {"label": "Get Well", "route": "contact?occasion=get_well", "column": "personal"},
-        {"label": "Missionary Farewells & Homecomings", "route": "contact?occasion=missionary", "column": "faith"},
-        {"label": "Church Events", "route": "contact?occasion=church", "column": "faith"},
-        {"label": "Religious Celebrations", "route": "contact?occasion=religious", "column": "faith"},
-        {"label": "Corporate Events", "route": "contact?occasion=corporate", "column": "hosted"},
-        {"label": "Schools & Community", "route": "contact?occasion=school", "column": "hosted"},
-        {"label": "Weddings", "route": "contact?occasion=wedding", "column": "hosted"},
-        {"label": "Holidays & Seasons", "route": "contact?occasion=holiday", "column": "hosted"},
+        {"label": "Birthdays", "route": "shop-items/deliveries/birthday-deliveries", "column": "personal"},
+        {"label": "Baby Showers & Reveals", "route": "shop-items/garlands/baby-shower-garland", "column": "personal"},
+        {"label": "Graduations", "route": "shop-items/grab-go/graduation-grab-n-go", "column": "personal"},
+        {"label": "Get Well", "route": "shop-items/get-well-bouquets", "column": "personal"},
+        {"label": "Missionary Farewells & Homecomings", "route": "shop-items/bouquets/large-head-missionary", "column": "faith"},
+        {"label": "Church Events", "route": "shop-items/garlands", "column": "faith"},
+        {"label": "Religious Celebrations", "route": "shop-items/arches/easter-arch", "column": "faith"},
+        {"label": "Corporate Events", "route": "shop-items/bouquets/logo-3-layered-bouquet", "column": "hosted"},
+        {"label": "Schools & Community", "route": "shop-items/arches/basketball-arch", "column": "hosted"},
+        {"label": "Weddings", "route": "shop-items/garlands", "column": "hosted"},
+        {"label": "Holidays & Seasons", "route": "shop-items/seasonal-specialty", "column": "hosted"},
     ]
 
     context["shop_categories"] = children
