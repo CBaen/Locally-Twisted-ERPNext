@@ -77,6 +77,18 @@ SERVICE_OPTIONS = [
 ]
 
 
+PACKAGE_ITEM_OPTIONS = [
+    "Balloon Arches",
+    "Columns",
+    "Garlands",
+    "Picture Perfect Backdrops",
+    "Balloon Drops",
+    "Balloon Bouquets",
+    "Centerpieces",
+    "Custom Sculptures",
+]
+
+
 # 5 photos x 25 MB each, per GL's spec (2026-04-29) and Hetzner JS
 # constants. Server-side validation matches the client-side limits in
 # the inline JS.
@@ -142,13 +154,19 @@ def submit_book_inquiry():
     painter_end = (fd.get("x_painter_end") or "").strip()
     painting_notes = (fd.get("x_painting_notes") or "").strip()
     delivery_notes = (fd.get("x_delivery_notes") or "").strip()
-    package_notes = (fd.get("x_package_notes") or "").strip()
+    package_items = _parse_multivalue(fd.get("x_package_items"))
+    package_colors = (fd.get("x_package_colors") or "").strip()
+    package_notes = _compose_events_inquiry_notes(
+        package_items,
+        package_colors,
+        (fd.get("x_package_notes") or "").strip(),
+    )
     other_notes = (fd.get("x_other_notes") or "").strip()
 
     # Environment (visible when any service is checked)
     indoor_outdoor = (fd.get("x_indoor_outdoor") or "").strip()
     shade_required = 1 if str(fd.get("x_shade_required") or "").lower() in ("true", "on", "1", "yes") else 0
-    colors = (fd.get("x_colors") or "").strip()
+    colors = _combine_text_values((fd.get("x_colors") or "").strip(), package_colors)
 
     # Free-form catch-all
     description = (fd.get("description") or "").strip()
@@ -309,6 +327,21 @@ def _indoor_outdoor_label(value):
         return None
     mapping = {"indoor": "Indoor", "outdoor": "Outdoor", "both": "Both"}
     return mapping.get(value.lower(), value)
+
+
+def _combine_text_values(*values):
+    return "; ".join(str(v).strip() for v in values if str(v).strip())
+
+
+def _compose_events_inquiry_notes(package_items, package_colors, package_notes):
+    parts = []
+    if package_items:
+        parts.append("Interested pieces: " + ", ".join(package_items))
+    if package_colors:
+        parts.append("Colors: " + package_colors)
+    if package_notes:
+        parts.append("Memory: " + package_notes)
+    return "\n".join(parts)
 
 
 def _ensure_lead_source(source_name):

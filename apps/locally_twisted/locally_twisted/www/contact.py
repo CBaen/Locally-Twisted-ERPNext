@@ -7,6 +7,7 @@ import frappe
 
 from locally_twisted.www.book import (
     OCCASION_OPTIONS,
+    PACKAGE_ITEM_OPTIONS,
     SERVICE_OPTIONS,
     MAX_PHOTOS,
     MAX_PHOTO_BYTES,
@@ -47,6 +48,7 @@ def get_context(context):
     context.occasion_options = OCCASION_OPTIONS
     context.selected_occasion = frappe.form_dict.get("occasion") or ""
     context.service_options = SERVICE_OPTIONS
+    context.package_item_options = PACKAGE_ITEM_OPTIONS
     context.preselected_services = preselected_services
     context.contact_intent = intent_param
     context.contact_intro_title = (

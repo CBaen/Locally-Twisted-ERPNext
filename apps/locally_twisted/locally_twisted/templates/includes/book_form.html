@@ -9,6 +9,7 @@ their own page layout. The form posts to:
 Required Jinja context (each page's controller must set):
   - occasion_options: list of (value, label) tuples
   - service_options:  list of (cb_id, value, label) tuples
+  - package_item_options: list of strings for large Events Inquiry pieces
   - max_photos:       int  (file count cap)
   - max_photo_mb:     int  (per-file size cap in MB)
 
@@ -147,6 +148,20 @@ every deploy.
     color: var(--lt-near-black);
     margin: 0 0 0.85rem;
     line-height: 1.2;
+}
+.lt-book__conditional-help {
+    color: var(--lt-soft-gray);
+    font-size: 0.95rem;
+    margin: -0.25rem 0 1rem;
+}
+.lt-book__choice-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.15rem 1rem;
+    margin-top: 0.25rem;
+}
+@media (min-width: 640px) {
+    .lt-book__choice-grid { grid-template-columns: 1fr 1fr; }
 }
 
 .lt-book__photos-hint {
@@ -509,12 +524,37 @@ every deploy.
                      data-visibility-comparator="contains"
                      data-visibility-condition="Events Inquiry"
                      hidden>
-                    <h3 class="lt-book__conditional-title">Events Inquiry Details</h3>
-                    <div class="lt-book__field">
+                    <h3 class="lt-book__conditional-title">Let's build a memory</h3>
+                    <p class="lt-book__conditional-help">
+                        Pick the pieces you are imagining. We will help shape the right mix.
+                    </p>
+                    <fieldset class="lt-book__services" style="margin: 0 0 0.75rem;">
+                        <legend class="lt-book__services-legend">What should be part of it?</legend>
+                        <div class="lt-book__choice-grid">
+                            {% for item in package_item_options %}
+                            <label class="lt-book__check" for="package_item_{{ loop.index }}">
+                                <input type="checkbox"
+                                       id="package_item_{{ loop.index }}"
+                                       name="x_package_items"
+                                       value="{{ item }}"
+                                       disabled/>
+                                <span>{{ item }}</span>
+                            </label>
+                            {% endfor %}
+                        </div>
+                    </fieldset>
+                    <div class="lt-book__field" style="margin-top: 0.75rem;">
+                        <label for="book_package_colors">What colors should lead the party?</label>
+                        <input type="text" id="book_package_colors" name="x_package_colors"
+                               class="lt-book__input"
+                               placeholder="Brand colors, school colors, soft pastels, bold and bright..."
+                               disabled/>
+                    </div>
+                    <div class="lt-book__field" style="margin-top: 0.75rem;">
                         <label for="book_package_notes">Tell us what you're envisioning</label>
                         <textarea id="book_package_notes" name="x_package_notes"
                                   class="lt-book__textarea" rows="3"
-                                  placeholder="Tell us about the event, crowd, and what kind of help you need..."
+                                  placeholder="Corporate entrance, photo moment, stage backdrop, grand reveal..."
                                   disabled></textarea>
                     </div>
                 </div>

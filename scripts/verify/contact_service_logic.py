@@ -11,6 +11,16 @@ except ImportError:
 
 
 BASE_PATH = "/contact"
+PACKAGE_ITEMS = [
+    "Balloon Arches",
+    "Columns",
+    "Garlands",
+    "Picture Perfect Backdrops",
+    "Balloon Drops",
+    "Balloon Bouquets",
+    "Centerpieces",
+    "Custom Sculptures",
+]
 
 
 def expect_checkbox(page, value: str, *, present: bool = True) -> list[str]:
@@ -106,6 +116,21 @@ def main() -> int:
             {"Events Inquiry"},
             {"Balloon Decor", "Balloon Twisting", "Face Painting", "Delivery Only", "Event Environment"},
         ))
+        events_panel = panel(page, "Events Inquiry")
+        if events_panel.count() == 1 and events_panel.first.is_visible():
+            heading = events_panel.locator(".lt-book__conditional-title").first.text_content() or ""
+            if heading.strip() != "Let's build a memory":
+                failures.append("Events Inquiry heading should be \"Let's build a memory\"")
+            for item in PACKAGE_ITEMS:
+                item_checkbox = events_panel.locator(f'input[name="x_package_items"][value="{item}"]')
+                if item_checkbox.count() != 1:
+                    failures.append(f"Events Inquiry package item {item!r} should be a checkbox")
+            if events_panel.locator("#book_package_colors").count() != 1:
+                failures.append("Events Inquiry should ask for package colors")
+            if events_panel.locator("#book_package_notes").count() != 1:
+                failures.append("Events Inquiry should keep one memory/vibe notes box")
+            if events_panel.locator("#book_decor_types").count() != 0:
+                failures.append("Events Inquiry should not use the freeform decor types field")
         failures.extend(check_service(
             page,
             "Balloon Twisting",
