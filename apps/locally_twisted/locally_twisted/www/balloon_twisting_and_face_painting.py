@@ -124,7 +124,7 @@ PAGE_CSS = """
     font-family: 'Raleway', sans-serif;
     font-size: 0.95rem;
     font-weight: 600;
-    color: var(--lt-teal);
+    color: var(--lt-near-black);
     text-decoration: underline;
     text-underline-offset: 0.2em;
 }
