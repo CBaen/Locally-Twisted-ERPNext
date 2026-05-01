@@ -634,7 +634,7 @@ PAGE_CSS = """
 .lt-btfp__process-number {
     font-family: 'DM Serif Display', Georgia, serif;
     font-size: 1.5rem;
-    color: rgba(26, 26, 26, 0.3);
+    color: var(--lt-near-black);
     line-height: 1;
     padding-top: 0.15rem;
 }

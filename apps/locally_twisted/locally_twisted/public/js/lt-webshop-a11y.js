@@ -30,7 +30,28 @@
   } else {
     apply();
   }
-  // Webshop renders some elements asynchronously — re-apply after a couple of ticks.
-  setTimeout(apply, 500);
-  setTimeout(apply, 1500);
+
+  // Webshop renders #list / #image-view buttons asynchronously after page
+  // load. A timeout-based re-apply has a race with axe-core (and any other
+  // a11y check that runs before the timeout fires). MutationObserver applies
+  // labels the instant the buttons appear in the DOM — no race window.
+  const observer = new MutationObserver(function (mutations) {
+    for (const m of mutations) {
+      for (const node of m.addedNodes) {
+        if (node.nodeType !== 1) continue;
+        if (
+          node.id === "list" ||
+          node.id === "image-view" ||
+          (node.querySelector && (node.querySelector("#list") || node.querySelector("#image-view")))
+        ) {
+          apply();
+          return;
+        }
+      }
+    }
+  });
+  observer.observe(document.documentElement, { childList: true, subtree: true });
+
+  // Disconnect after 5s — webshop's late renders are well over by then.
+  setTimeout(function () { observer.disconnect(); }, 5000);
 })();
