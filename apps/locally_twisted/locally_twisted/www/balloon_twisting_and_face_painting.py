@@ -1,50 +1,15 @@
-"""Balloon Twisting & Face Painting service page + booking endpoint.
+"""Balloon Twisting & Face Painting editorial service page.
 
-Frappe maps this file to the route /balloon-twisting-and-face-painting
-(underscore filename → dash URL automatically, see Frappe's own
-www/complete_signup.html → /complete-signup pattern).
-
-Source of truth for content/structure: the prior Odoo project's
-addons/locally_twisted/views/pages/page_balloon_twisting.xml — captured
-verbatim 2026-04-26 per the standing rule on customer-facing copy.
-
-For first ship the image carousels, event-type crawl, and confirmation
-modal are deliberately omitted; the form uses an inline success banner.
+Frappe maps this file to the route /balloon-twisting-and-face-painting.
+The customer inquiry path is the canonical /contact form. This page
+explains the service and links to /contact?service=btfp.
 """
-import frappe
-from frappe import _
-from frappe.rate_limiter import rate_limit
-from frappe.utils import escape_html, validate_email_address
 
 no_cache = 1
 sitemap = 1
 
 
-SERVICE_CHOICES = [
-    ("both", "Both — Balloon Twisting & Face Painting"),
-    ("twisting", "Balloon Twisting Only"),
-    ("painting", "Face Painting Only"),
-]
-HOURS_OPTIONS = [
-    ("1", "1 hour"),
-    ("2", "2 hours"),
-    ("3", "3 hours"),
-    ("4+", "4+ hours"),
-]
-EVENT_TYPES = [
-    ("birthday", "Birthday Party"),
-    ("school", "School Event"),
-    ("corporate", "Corporate Event"),
-    ("festival", "Festival / Fair"),
-    ("church", "Church Event"),
-    ("reunion", "Family Reunion"),
-    ("holiday", "Holiday Party"),
-    ("other", "Other"),
-]
-
-
-PAGE_CSS = """
-.lt-btfp__intro {
+PAGE_CSS = """.lt-btfp__intro {
     background-color: var(--lt-blush-tint);
     padding: 4rem 1.5rem 3.5rem;
     text-align: left;
@@ -708,6 +673,68 @@ PAGE_CSS = """
     margin: 0;
     line-height: 1.5;
 }
+
+.lt-btfp__contact-cta {
+    background-color: var(--lt-near-white);
+    padding: 4rem 1.5rem;
+}
+.lt-btfp__contact-cta-inner {
+    max-width: 760px;
+    margin: 0 auto;
+}
+.lt-btfp__contact-cta h2 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 2rem;
+    color: var(--lt-near-black);
+    margin: 0 0 1rem;
+    line-height: 1.15;
+}
+.lt-btfp__contact-cta p {
+    color: var(--lt-soft-gray);
+    line-height: 1.6;
+    margin: 0 0 1.25rem;
+}
+.lt-btfp__contact-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+.lt-btfp__contact-primary,
+.lt-btfp__contact-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    border-radius: 0.375rem;
+    padding: 0.75rem 1.25rem;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 600;
+    text-decoration: none;
+}
+.lt-btfp__contact-primary {
+    background-color: var(--lt-teal);
+    color: var(--lt-white);
+    border: 1px solid var(--lt-teal);
+}
+.lt-btfp__contact-primary:hover,
+.lt-btfp__contact-primary:focus-visible {
+    background-color: #006666;
+    border-color: #006666;
+    color: var(--lt-white);
+    text-decoration: none;
+}
+.lt-btfp__contact-secondary {
+    background-color: var(--lt-white);
+    color: var(--lt-near-black);
+    border: 1px solid rgba(26, 26, 26, 0.18);
+}
+.lt-btfp__contact-secondary:hover,
+.lt-btfp__contact-secondary:focus-visible {
+    background-color: var(--lt-blush-tint);
+    border-color: var(--lt-near-black);
+    color: var(--lt-near-black);
+    text-decoration: none;
+}
 """
 
 
@@ -723,106 +750,5 @@ def get_context(context):
         "og:description": "Live entertainment that keeps every guest smiling.",
         "og:type": "website",
     }
-    context.service_choices = SERVICE_CHOICES
-    context.hours_options = HOURS_OPTIONS
-    context.event_types = EVENT_TYPES
     context.colocated_css = PAGE_CSS
     return context
-
-
-@frappe.whitelist(allow_guest=True)
-@rate_limit(limit=20, seconds=60 * 60)
-def submit_btfp_booking(name="", email="", phone="", service_choice="", hours_needed="",
-                        event_date="", event_time="", event_type="", guest_count="", notes=""):
-    """Receive a BTFP booking inquiry from /balloon-twisting-and-face-painting and create a Lead.
-
-    Required: name, email, phone, service_choice, hours_needed, event_date.
-    Loud-failure compliant: validation errors and persistence errors raise so
-    the client-side script can show a visible message to the user.
-    """
-    name = (name or "").strip()
-    email = (email or "").strip()
-    phone = (phone or "").strip()
-    service_choice = (service_choice or "").strip()
-    hours_needed = (hours_needed or "").strip()
-    event_date = (event_date or "").strip()
-    event_time = (event_time or "").strip()
-    event_type = (event_type or "").strip()
-    guest_count = (guest_count or "").strip()
-    notes = (notes or "").strip()
-
-    if not name:
-        frappe.throw(_("Please tell us your name."), frappe.ValidationError)
-    if not email:
-        frappe.throw(_("Please give us an email so we can reply."), frappe.ValidationError)
-    if not phone:
-        frappe.throw(_("Please give us a phone number for fastest response."), frappe.ValidationError)
-    if not service_choice:
-        frappe.throw(_("Please pick a service option."), frappe.ValidationError)
-    if not hours_needed:
-        frappe.throw(_("Please tell us how many hours you need."), frappe.ValidationError)
-    if not event_date:
-        frappe.throw(_("Please give us your event date."), frappe.ValidationError)
-
-    email = validate_email_address(email, throw=True)
-
-    safe_name = escape_html(name)
-    safe_phone = escape_html(phone)
-    safe_notes = escape_html(notes)
-
-    # Idempotently ensure the Website Lead Source exists (caught at LT
-    # contact-page first smoke test 2026-04-26 — fresh ERPNext has no
-    # Lead Source records by default).
-    if not frappe.db.exists("Lead Source", "Website"):
-        try:
-            frappe.get_doc({"doctype": "Lead Source", "source_name": "Website"}) \
-                .insert(ignore_permissions=True, ignore_if_duplicate=True)
-        except frappe.DuplicateEntryError:
-            pass
-
-    lead = frappe.get_doc({
-        "doctype": "Lead",
-        "lead_name": safe_name,
-        "email_id": email,
-        "mobile_no": safe_phone,
-        "source": "Website",
-        "status": "Open",
-    })
-    lead.insert(ignore_permissions=True)
-
-    # Build a readable communication body packaging the BTFP-specific fields.
-    service_label = dict(SERVICE_CHOICES).get(service_choice, service_choice)
-    hours_label = dict(HOURS_OPTIONS).get(hours_needed, hours_needed)
-    parts = [
-        f"<strong>Service:</strong> {escape_html(service_label)}",
-        f"<strong>Hours needed:</strong> {escape_html(hours_label)}",
-        f"<strong>Event date:</strong> {escape_html(event_date)}",
-    ]
-    if event_time:
-        parts.append(f"<strong>Preferred start time:</strong> {escape_html(event_time)}")
-    if event_type:
-        parts.append(f"<strong>Event type:</strong> {escape_html(dict(EVENT_TYPES).get(event_type, event_type))}")
-    if guest_count:
-        parts.append(f"<strong>Estimated guests:</strong> {escape_html(guest_count)}")
-    if safe_phone:
-        parts.append(f"<strong>Phone:</strong> {safe_phone}")
-    if safe_notes:
-        parts.append("")
-        parts.append(safe_notes.replace("\n", "<br>"))
-    body_html = "<br>".join(parts)
-
-    frappe.get_doc({
-        "doctype": "Communication",
-        "communication_type": "Communication",
-        "communication_medium": "Email",
-        "sender": email,
-        "subject": f"BTFP booking from {safe_name}",
-        "content": body_html,
-        "sent_or_received": "Received",
-        "status": "Open",
-        "reference_doctype": "Lead",
-        "reference_name": lead.name,
-    }).insert(ignore_permissions=True)
-
-    frappe.db.commit()
-    return {"ok": True, "lead": lead.name}

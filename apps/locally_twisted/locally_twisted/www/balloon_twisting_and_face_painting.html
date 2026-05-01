@@ -44,19 +44,19 @@
             <dl class="lt-btfp__service-spec">
                 <div class="lt-btfp__service-spec-row">
                     <dt>BEST AT</dt>
-                    <dd>Lorem ipsum</dd>
+                    <dd>Birthday parties, school events, festivals, corporate family days</dd>
                 </div>
                 <div class="lt-btfp__service-spec-row">
-                    <dt>DURATION</dt>
-                    <dd>Lorem ipsum</dd>
+                    <dt>PACE</dt>
+                    <dd>Typically 15&ndash;20 children per hour, depending on design complexity</dd>
                 </div>
                 <div class="lt-btfp__service-spec-row">
                     <dt>TEAM SIZE</dt>
-                    <dd>Lorem ipsum</dd>
+                    <dd>One balloon artist for smaller events; larger events may need more</dd>
                 </div>
                 <div class="lt-btfp__service-spec-row">
-                    <dt>GOOD FOR</dt>
-                    <dd>Lorem ipsum dolor sit</dd>
+                    <dt>PRICING</dt>
+                    <dd>$130 first hour, $115 each additional hour &mdash; per artist</dd>
                 </div>
             </dl>
         </article>
@@ -78,19 +78,19 @@
             <dl class="lt-btfp__service-spec">
                 <div class="lt-btfp__service-spec-row">
                     <dt>BEST AT</dt>
-                    <dd>Lorem ipsum</dd>
+                    <dd>Birthday parties, school events, festivals, corporate family days</dd>
                 </div>
                 <div class="lt-btfp__service-spec-row">
-                    <dt>DURATION</dt>
-                    <dd>Lorem ipsum</dd>
+                    <dt>STAFFING</dt>
+                    <dd>Face painting is staffed separately from balloon twisting</dd>
                 </div>
                 <div class="lt-btfp__service-spec-row">
                     <dt>ARTISTS</dt>
-                    <dd>Lorem ipsum</dd>
+                    <dd>Book one of each when you want twisting and painting at the same time</dd>
                 </div>
                 <div class="lt-btfp__service-spec-row">
-                    <dt>GOOD FOR</dt>
-                    <dd>Lorem ipsum dolor sit</dd>
+                    <dt>PRICING</dt>
+                    <dd>$130 first hour, $115 each additional hour &mdash; per artist</dd>
                 </div>
             </dl>
         </article>
@@ -123,7 +123,7 @@
                 <span class="lt-btfp__process-number" aria-hidden="true">03</span>
                 <div class="lt-btfp__process-content">
                     <h3 class="lt-btfp__process-step-title">Deposit holds your date</h3>
-                    <p>A deposit reserves the team. The balance is due closer to the event. We send a confirmation with all logistics.</p>
+                    <p>A $50 deposit per artist secures the date after availability and scope are confirmed. We send the next step once the booking details are clear.</p>
                 </div>
             </li>
             <li class="lt-btfp__process-item">
@@ -172,135 +172,19 @@
 
 <div class="lt-btfp__ribbon lt-btfp__ribbon--soft-blue lt-fullbleed" aria-hidden="true"></div>
 
-<section id="lt-booking" class="lt-btfp__booking">
-    <div class="lt-btfp__booking-grid">
-
-        <div class="lt-btfp__form-wrap">
-            <h2>Tell us about your event</h2>
-            <p class="lt-btfp__form-subtitle">Share a few details and we'll take it from there.</p>
-
-            <form id="lt-btfp-form" class="lt-btfp__form" novalidate>
-                <fieldset>
-                    <legend class="visually-hidden">Booking request</legend>
-
-                    <div class="row">
-                        <div class="lt-btfp__field">
-                            <label for="bf-service">What would you like? <span class="lt-btfp__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></label>
-                            <select id="bf-service" name="service_choice" class="lt-btfp__select" required aria-required="true">
-                                {% for value, label in service_choices %}
-                                <option value="{{ value }}" {% if value == 'both' %}selected{% endif %}>{{ label }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="lt-btfp__field">
-                            <label for="bf-hours">Hours needed <span class="lt-btfp__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></label>
-                            <select id="bf-hours" name="hours_needed" class="lt-btfp__select" required aria-required="true">
-                                {% for value, label in hours_options %}
-                                <option value="{{ value }}">{{ label }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="lt-btfp__field">
-                            <label for="bf-name">Your name <span class="lt-btfp__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></label>
-                            <input type="text" id="bf-name" name="name" class="lt-btfp__input" required aria-required="true" autocomplete="name">
-                        </div>
-                        <div class="lt-btfp__field">
-                            <label for="bf-phone">Phone <span class="lt-btfp__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></label>
-                            <input type="tel" id="bf-phone" name="phone" class="lt-btfp__input" required aria-required="true" autocomplete="tel">
-                        </div>
-                    </div>
-
-                    <div class="lt-btfp__field" style="margin-bottom: 1rem;">
-                        <label for="bf-email">Email <span class="lt-btfp__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></label>
-                        <input type="email" id="bf-email" name="email" class="lt-btfp__input" required aria-required="true" autocomplete="email">
-                    </div>
-
-                    <div class="row">
-                        <div class="lt-btfp__field">
-                            <label for="bf-event-date">Event date <span class="lt-btfp__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></label>
-                            <input type="date" id="bf-event-date" name="event_date" class="lt-btfp__input" required aria-required="true">
-                        </div>
-                        <div class="lt-btfp__field">
-                            <label for="bf-event-time">Preferred start time</label>
-                            <input type="time" id="bf-event-time" name="event_time" class="lt-btfp__input">
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="lt-btfp__field">
-                            <label for="bf-event-type">Event type</label>
-                            <select id="bf-event-type" name="event_type" class="lt-btfp__select">
-                                <option value="">Select one...</option>
-                                {% for value, label in event_types %}
-                                <option value="{{ value }}">{{ label }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="lt-btfp__field">
-                            <label for="bf-guest-count">Estimated guests</label>
-                            <input type="number" id="bf-guest-count" name="guest_count" class="lt-btfp__input" placeholder="e.g. 30" min="1">
-                        </div>
-                    </div>
-
-                    <div class="lt-btfp__field" style="margin-bottom: 0.5rem;">
-                        <label for="bf-notes">Anything else we should know?</label>
-                        <textarea id="bf-notes" name="notes" rows="3" class="lt-btfp__textarea"
-                                  placeholder="Event theme, color preferences, special requests..."></textarea>
-                    </div>
-
-                    <p class="lt-btfp__privacy">
-                        We'll use this info to contact you about your event.
-                        See our <a href="/refund-policy" style="text-decoration: underline; text-underline-offset: 0.2em;">policies</a>.
-                    </p>
-
-                    <button type="submit" class="lt-btfp__submit" id="bf-submit">Send Request</button>
-
-                    <div id="bf-feedback" class="lt-btfp__feedback" role="status" aria-live="polite"></div>
-                </fieldset>
-            </form>
+<section class="lt-btfp__contact-cta">
+    <div class="lt-btfp__contact-cta-inner">
+        <p class="lt-btfp__kicker">START HERE</p>
+        <h2>Tell us about your event.</h2>
+        <p>
+            A rough picture is enough to start. Share the date, location,
+            guest count, and whether you want balloon twisting, face painting,
+            or both. We will follow up with availability and the right team size.
+        </p>
+        <div class="lt-btfp__contact-actions">
+            <a class="lt-btfp__contact-primary" href="/contact?service=btfp">Start the inquiry</a>
+            <a class="lt-btfp__contact-secondary" href="tel:+18012850860">(801) 285-0860</a>
         </div>
-
-        <aside class="lt-btfp__expect-wrap" aria-label="What to expect">
-            <div class="lt-btfp__expect-card">
-                <h3>What to Expect</h3>
-                <ul class="lt-btfp__expect-list">
-                    <li>
-                        <span class="lt-btfp__expect-icon" aria-hidden="true">&#x21BA;</span>
-                        <span>We reach out within 24 hours.</span>
-                    </li>
-                    <li>
-                        <span class="lt-btfp__expect-icon" aria-hidden="true">&#x1F4C5;</span>
-                        <span>A $50 deposit secures your date.</span>
-                    </li>
-                    <li>
-                        <span class="lt-btfp__expect-icon" aria-hidden="true">&#x1F4B3;</span>
-                        <span>The remaining balance is due before your event.</span>
-                    </li>
-                </ul>
-
-                <hr class="lt-btfp__expect-divider">
-
-                <h4>Cancellation</h4>
-                <p>Cancel 72+ hours before your event and your deposit transfers to a new date. See our <a href="/refund-policy" style="text-decoration: underline; text-underline-offset: 0.2em;">policies</a> for the full picture.</p>
-
-                <hr class="lt-btfp__expect-divider">
-
-                <h4>Prefer to talk?</h4>
-                <ul class="lt-btfp__expect-contact">
-                    <li>
-                        <span class="lt-btfp__expect-icon" aria-hidden="true">&#x260E;</span>
-                        <a href="tel:+18012850860">(801) 285-0860</a>
-                    </li>
-                    <li>
-                        <span class="lt-btfp__expect-icon" aria-hidden="true">&#x2709;</span>
-                        <a href="mailto:hi@locallytwisted.com">hi@locallytwisted.com</a>
-                    </li>
-                </ul>
-            </div>
-        </aside>
     </div>
 </section>
 
@@ -308,45 +192,31 @@
     <div class="lt-btfp__faq-inner">
         <h2 id="lt-btfp__faq-heading" class="lt-btfp__faq-heading">Common questions</h2>
 
-        <details class="lt-btfp__faq-item">
-            <summary>How is pricing calculated?</summary>
+        <details class="lt-btfp__faq-item" open>
+            <summary>How many kids can one artist serve per hour?</summary>
             <div class="lt-btfp__faq-answer">
-                <p>Each artist is <strong>$130 for the first hour</strong> and <strong>$115 for each additional hour</strong>. Twisting and face painting are priced the same way. Tax is added at checkout.</p>
+                <p>A balloon artist typically serves 15&ndash;20 children per hour. Face painting is a separate skill, and we book dedicated face painters &mdash; not the same people who twist balloons. For larger events or events that want both at once, we staff one of each so nobody waits in line.</p>
             </div>
         </details>
 
         <details class="lt-btfp__faq-item">
-            <summary>Why don&rsquo;t you offer a multi-artist discount?</summary>
+            <summary>Do you do outdoor events?</summary>
             <div class="lt-btfp__faq-answer">
-                <p>Each artist is creating custom art for your event &mdash; two artists means twice the creative work. We price each one independently so we can keep the quality of every minute they&rsquo;re with you.</p>
+                <p>Yes. We handle outdoor events regularly including festivals, school carnivals, and backyard parties. For outdoor balloon decor, we ask about shade availability since direct sun and wind affect balloon longevity.</p>
             </div>
         </details>
 
         <details class="lt-btfp__faq-item">
-            <summary>Can I book on short notice?</summary>
+            <summary>How far in advance should I book?</summary>
             <div class="lt-btfp__faq-answer">
-                <p>Yes &mdash; last-minute is one of our specialties. We&rsquo;ve taken bookings even 24 hours out. Give us a call at <a href="tel:+18012850860">(801) 285-0860</a> or send us a message and we&rsquo;ll find a way to make it work.</p>
+                <p>We recommend booking at least 2&ndash;3 weeks in advance for standard events. For weddings and large corporate events, 4&ndash;6 weeks is ideal. Last-minute bookings are sometimes possible.</p>
             </div>
         </details>
 
         <details class="lt-btfp__faq-item">
-            <summary>What deposit do you require?</summary>
+            <summary>What is your service area?</summary>
             <div class="lt-btfp__faq-answer">
-                <p><strong>$50 per artist when you book</strong> &mdash; that secures your date. Corporate clients don&rsquo;t pay a deposit; we invoice on Net 30 after the event.</p>
-            </div>
-        </details>
-
-        <details class="lt-btfp__faq-item">
-            <summary>When is the balance due?</summary>
-            <div class="lt-btfp__faq-answer">
-                <p>The remaining balance is due <strong>72 hours before your event</strong>. We&rsquo;ll send a reminder.</p>
-            </div>
-        </details>
-
-        <details class="lt-btfp__faq-item">
-            <summary>How does sales tax work?</summary>
-            <div class="lt-btfp__faq-answer">
-                <p>Utah sales tax is calculated at checkout based on the delivery or event city. The combined rate is typically around 7.25%. Quoted prices don&rsquo;t include tax &mdash; it&rsquo;s added as its own line item so you can see exactly what you&rsquo;re paying.</p>
+                <p>We serve the Wasatch Front including Salt Lake City, Provo, Ogden, Park City, and surrounding areas. We regularly travel to Logan and other Utah locations.</p>
             </div>
         </details>
 
@@ -355,83 +225,5 @@
         </p>
     </div>
 </section>
-
-<script>
-(function () {
-    var form = document.getElementById('lt-btfp-form');
-    var submit = document.getElementById('bf-submit');
-    var feedback = document.getElementById('bf-feedback');
-    if (!form || !submit || !feedback) return;
-
-    function setFeedback(state, msg) {
-        feedback.classList.remove('is-success', 'is-error');
-        if (state) feedback.classList.add('is-' + state);
-        feedback.textContent = msg || '';
-    }
-
-    form.addEventListener('submit', function (ev) {
-        ev.preventDefault();
-        setFeedback(null, '');
-
-        var fd = new FormData(form);
-        var name = (fd.get('name') || '').toString().trim();
-        var email = (fd.get('email') || '').toString().trim();
-        var phone = (fd.get('phone') || '').toString().trim();
-        var service = (fd.get('service_choice') || '').toString().trim();
-        var hours = (fd.get('hours_needed') || '').toString().trim();
-        var date = (fd.get('event_date') || '').toString().trim();
-
-        if (!name || !email || !phone || !service || !hours || !date) {
-            setFeedback('error', 'Please fill in your name, phone, email, the service options, and an event date.');
-            return;
-        }
-
-        var payload = new FormData();
-        payload.append('name', name);
-        payload.append('email', email);
-        payload.append('phone', phone);
-        payload.append('service_choice', service);
-        payload.append('hours_needed', hours);
-        payload.append('event_date', date);
-        payload.append('event_time', (fd.get('event_time') || '').toString());
-        payload.append('event_type', (fd.get('event_type') || '').toString());
-        payload.append('guest_count', (fd.get('guest_count') || '').toString());
-        payload.append('notes', (fd.get('notes') || '').toString());
-
-        submit.disabled = true;
-        var originalLabel = submit.textContent;
-        submit.textContent = 'Sending...';
-
-        fetch('/api/method/locally_twisted.www.balloon_twisting_and_face_painting.submit_btfp_booking', {
-            method: 'POST',
-            headers: { 'X-Requested-With': 'XMLHttpRequest' },
-            body: payload,
-            credentials: 'same-origin'
-        })
-        .then(function (resp) { return resp.json().then(function (data) { return { status: resp.status, body: data }; }); })
-        .then(function (result) {
-            submit.disabled = false;
-            submit.textContent = originalLabel;
-            if (result.status >= 200 && result.status < 300 && result.body && result.body.message && result.body.message.ok) {
-                setFeedback('success', "Request received. We'll be in touch within 24 hours.");
-                form.reset();
-            } else {
-                var msg = (result.body && (result.body._server_messages || result.body.exception || result.body.message))
-                    || 'Something went wrong. Please call (801) 285-0860 or email hi@locallytwisted.com.';
-                if (typeof msg === 'string' && msg.indexOf('{') === 0) {
-                    try { msg = JSON.parse(msg).message || msg; } catch (e) {}
-                }
-                setFeedback('error', typeof msg === 'string' ? msg : 'Something went wrong. Please call (801) 285-0860 or email hi@locallytwisted.com.');
-            }
-        })
-        .catch(function (err) {
-            submit.disabled = false;
-            submit.textContent = originalLabel;
-            setFeedback('error', "We couldn't send the request. Please call (801) 285-0860 or email hi@locallytwisted.com.");
-            if (window.console && console.error) console.error('BTFP form submit failed', err);
-        });
-    });
-})();
-</script>
 
 {% endblock %}
