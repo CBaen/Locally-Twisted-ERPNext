@@ -8,6 +8,18 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-01 - Codex project capabilities are routed through AGENTS.md
+
+**Decision:** LT now has a project-level Codex capability install at `.codex/capabilities/`, routed from `AGENTS.md`. Codex should read `.codex/capabilities/INDEX.md` when a task depends on local tools, reusable workflows, operating knowledge, or prior lessons, then open only the specific capability files needed.
+
+**Reasoning:** GL wants the Claude-era capabilities framework translated into a clean Codex-compatible workshop. Codex does not use Claude Code's eager `@import` behavior, so the correct project-level pattern is explicit `AGENTS.md` routing plus on-demand reads. This preserves the multi-tier model without loading the whole capability tree into every turn.
+
+**Verification receipt:** An ephemeral Codex run in this repo found `.codex/capabilities/INDEX.md` from the project-level `AGENTS.md` section and read `.codex/capabilities/ingredients/screenshot.md`.
+
+**Decided by:** GL approved adapting the framework for Codex; implemented by Codex.
+
+---
+
 ## 2026-05-01 - Layout fit is a browser-gated contract, not a visual impression
 
 **Decision:** Customer-facing fit checks now live in `scripts/verify/layout_fit.spec.js`. The gate covers the main public pages, the new policy pages, shop/category/product routes, and cart at 320px, 375px, tablet, and desktop widths. The check fails on horizontal document overflow, visible element overflow outside the viewport, and text overflow inside visible elements. It intentionally ignores descendants clipped by an overflow-hidden/scroll/auto ancestor, so carousels can keep offscreen track content without creating false positives.

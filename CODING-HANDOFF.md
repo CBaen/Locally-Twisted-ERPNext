@@ -34,6 +34,7 @@ Verified or updated during the 2026-05-01 storefront correction pass:
 - Product detail/configure templates no longer include the "Start a conversation" or "Tell us what you're imagining" sales-pitch blocks.
 - `/shop-items/arches` now scopes to Arches. Root cause was missing Webshop `.item-group-content` class in the custom Item Group wrapper, not catalog data.
 - `/shop-items` and `/all-products` route to `/shop-by-category`; the ERPNext root Item Group page is too thin for customers.
+- Project-level Codex capabilities are installed at `.codex/capabilities/` and routed from `AGENTS.md`; ephemeral Codex validation found the index and read the `screenshot` ingredient.
 - `/book` is retired as a customer-facing page and aliases to `/contact`. Current CTAs should use `/contact`; old `/book` traffic is compatibility only.
 - `/privacy` and `/terms-of-service` exist as static Frappe routes and return HTTP 200 locally. They are plain-language drafts for Stripe readiness; legal review and Stripe Dashboard URL wiring are still separate follow-ups.
 - Product listing cards can display `lt_brand_description` through the local Webshop API wrapper in `locally_twisted.api.product_listing`.

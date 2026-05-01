@@ -64,6 +64,14 @@ If another app is installed, re-set `installed_apps` so LT template overrides st
 
 Claude-era files such as `CLAUDE.md`, `HANDOFF.md`, and `PROJECT-STATUS.md` may contain useful operational history, but they are not authoritative unless verified.
 
+## Capabilities
+
+Project-level Codex capability docs live at `.codex/capabilities/INDEX.md`.
+
+Read the index when a task depends on local tools, reusable workflows, project-specific operating knowledge, or prior lessons. Then open only the specific capability files needed for the current task.
+
+Treat `last_verified` dates older than about 90 days as stale until rechecked.
+
 ## Frappe / ERPNext Rules
 
 Work within Frappe and ERPNext.

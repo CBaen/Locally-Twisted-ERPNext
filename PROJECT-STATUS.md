@@ -43,6 +43,7 @@
 - **Privacy and Terms routes added 2026-05-01:** `/privacy` and `/terms-of-service` return HTTP 200 locally. Treat as plain-language drafts for Stripe readiness; Stripe Dashboard URL wiring and any legal review remain follow-ups.
 - **Actual-fit browser gate added 2026-05-01:** `scripts/verify/layout_fit.spec.js` checks 15 public/shop/cart routes across 320px, 375px, tablet, and desktop viewports for document overflow, visible element overflow, and text overflow. Latest run: 60 passed using the located Node Playwright CLI.
 - **Product listing/detail corrections shipped 2026-05-01:** item detail/configure sales-pitch blocks removed; `/shop-items/arches` fixed by preserving Webshop's `.item-group-content` wrapper contract; listing cards now receive `lt_brand_description` through `locally_twisted.api.product_listing` and prefer it in card copy.
+- **Project-level Codex capabilities installed 2026-05-01:** `.codex/capabilities/` is routed from `AGENTS.md`. Ephemeral Codex validation found `.codex/capabilities/INDEX.md` and read the `screenshot` ingredient on demand.
 
 **What's broken / pending:**
 - **Pre-existing Frappe asset-map bug** on product detail console: `Cannot read properties of undefined (reading 'file_uploader.bundle.js')`. Not from our work; page renders fine. P2.
