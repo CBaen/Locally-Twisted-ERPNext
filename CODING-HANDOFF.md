@@ -1,6 +1,6 @@
 # Locally Twisted - Coding Handoff
 
-Last updated: 2026-05-01 by Codex after storefront navigation/routing cleanup.
+Last updated: 2026-05-01 by Codex after contact/BTFP inquiry consolidation and form taxonomy cleanup.
 
 ## State Of Reality
 
@@ -25,8 +25,15 @@ Docs that still mention `10,613 Items`, `8,925 Item Prices`, or `10,560 variants
 
 ## Actually Working, Pending Re-Verification
 
-Verified or updated during the 2026-05-01 storefront correction pass:
+Verified or updated during the 2026-05-01 storefront correction and contact cleanup passes:
 
+- `/contact` is the canonical customer inquiry form. `/book` returns a 301 to `/contact?intent=quick`; do not rebuild `/book` as a separate public page.
+- `/balloon-twisting-and-face-painting` is now a contact-led editorial service page using real BTFP information. It has no embedded form and no public deposit-checkout CTA.
+- `/contact` supports guided prefill for `?service=btfp`, `?service=twisting`, and `?service=face-painting`.
+- The contact form service taxonomy is current: `Balloon Decor`, `Balloon Twisting`, `Face Painting`, `Delivery`, `Pickup`, `Events Inquiry`, `Something Else`. Do not reintroduce `Delivery Only`, `Pickup Only`, or `Event Package`.
+- `Events Inquiry` is the high-value package planning path. It shows "Let's build a memory", package-piece checkboxes from the homepage custom categories, color prompt, and one planning text area. The server aggregates those values into `custom_package_notes`; no new ERPNext fields were added in this slice.
+- `Event Environment` and "Shade is required for outdoor events" only appear for live artist services: Balloon Twisting and Face Painting.
+- `Pickup` is stackable with other services and points customers to the locations section. Riverdale is labeled `Northern Utah Location (Residential Address)`.
 - Header/menu no longer exposes `What We Make`; desktop dropdown panels are contained, and mobile cart/hamburger controls are visible at 390px and 430px with accessible target sizing.
 - Primary nav order is now `Shop Balloon Decor`, `Plan by Occasion`, `Balloon Twisting & Face Painting`, `FAQ`, `Blog`, search. The top utility bar keeps the only `Contact Us` CTA; lower nav and mobile drawer do not duplicate it.
 - `Plan by Occasion` is product-discovery navigation, not inquiry navigation. Every current occasion link routes to a verified product/category page, including missionary/religious paths. Do not re-point the occasion dropdown to `/contact?occasion=...`.
@@ -35,7 +42,7 @@ Verified or updated during the 2026-05-01 storefront correction pass:
 - `/shop-items/arches` now scopes to Arches. Root cause was missing Webshop `.item-group-content` class in the custom Item Group wrapper, not catalog data.
 - `/shop-items` and `/all-products` route to `/shop-by-category`; the ERPNext root Item Group page is too thin for customers.
 - Project-level Codex capabilities are installed at `.codex/capabilities/` and routed from `AGENTS.md`; ephemeral Codex validation found the index and read the `screenshot` ingredient.
-- `/book` is retired as a customer-facing page and aliases to `/contact`. Current CTAs should use `/contact`; old `/book` traffic is compatibility only.
+- `/book` is retired as a customer-facing page and redirects to `/contact?intent=quick`. Current CTAs should use `/contact`; old `/book` traffic is compatibility only.
 - `/privacy` and `/terms-of-service` exist as static Frappe routes and return HTTP 200 locally. They are plain-language drafts for Stripe readiness; legal review and Stripe Dashboard URL wiring are still separate follow-ups.
 - Product listing cards can display `lt_brand_description` through the local Webshop API wrapper in `locally_twisted.api.product_listing`.
 - `scripts/verify/layout_fit.spec.js` has been restored as a committed Playwright Test gate. Latest verified command: `npm run test:layout-fit` -> 60 passed after fixing `.lt-contact__icon` sizing on `/contact`.
@@ -67,10 +74,10 @@ P0 is no longer `/book`; GL retired that surface. The primary customer inquiry p
 
 Next safest slices:
 
+- Verify and, if needed, update the ERPNext Desk Lead/CRM form presentation for the revised customer intake taxonomy. Current submission data already lands on Lead fields (`custom_services`, `custom_package_notes`, `custom_colors`, etc.), but the backend form may still need label/section cleanup so Jeff sees `Events Inquiry`, `Delivery`, and `Pickup` plainly.
 - Wire the Stripe Dashboard privacy/terms URLs to `/privacy` and `/terms-of-service` after GL/legal approval.
 - Reconcile catalog media: source has extra product images for 49 products and size-like options on 33 products, while current ERPNext variants have no per-variant images. Start with size/height/length/delivery-tied images before product layout polish.
 - Keep product navigation product-backed: use `scripts/verify/nav_ia.py` before touching header/footer IA.
-- Replace remaining placeholder BTFP spec table values once Jeff confirms the real data.
 - Add Item Group imagery for `/shop-by-category` cards when representative photos are selected.
 
 ## Verification Commands
@@ -108,6 +115,14 @@ Layout fit regression check:
 
 ```powershell
 npm run test:layout-fit
+```
+
+Contact form logic regression checks:
+
+```powershell
+python scripts/verify/contact_service_logic.py --base-url http://localhost:8081
+python scripts/verify/contact_prefill.py --base-url http://localhost:8081
+python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --form-path /contact --skip-newsletter
 ```
 
 Before declaring visible work done, capture and inspect desktop and mobile screenshots. Use the repo's existing Playwright scripts where possible; the layout-fit gate is necessary but does not replace screenshot review.

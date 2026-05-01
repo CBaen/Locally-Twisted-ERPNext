@@ -1,6 +1,6 @@
 # HANDOFF — Locally Twisted
 
-**Last updated:** 2026-05-01 (Codex - storefront nav/routing cleanup + product-backed occasion menu)
+**Last updated:** 2026-05-01 (Codex - contact/BTFP inquiry consolidation + form taxonomy cleanup)
 
 Overwrite-not-append. Git is the changelog. Read this first; everything else as needed. **Audience: peer Opus 4.7 instance.** Read like I'd want to read before substantive work.
 
@@ -9,12 +9,21 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 ## State of the world (the load-bearing facts)
 
 **Current-session delta (2026-05-01):**
+- `/contact` is the canonical inquiry form and now carries the revised service taxonomy: Balloon Decor, Balloon Twisting, Face Painting, Delivery, Pickup, Events Inquiry, Something Else.
+- `/book` is retired as a customer-facing page and redirects to `/contact?intent=quick`. Do not restore `/book` as a separate public form unless GL explicitly changes direction.
+- Guided service links prefill the contact form: `/contact?service=btfp`, `/contact?service=twisting`, and `/contact?service=face-painting`.
+- `/balloon-twisting-and-face-painting` was refreshed into a contact-led service page using Hetzner content and current LT styling. It no longer embeds a separate form or public deposit checkout CTA.
+- `Events Inquiry` replaced `Event Package`; it is the high-value package planning path with structured package-piece checkboxes from the homepage custom categories, color prompt, and a single notes field that aggregates into existing Lead text fields.
+- Delivery and Pickup are stackable services, not "Only" choices. Do not reintroduce `Delivery Only` or `Pickup Only` labels unless the UI enforces mutual exclusion.
+- "Shade is required for outdoor events" only appears for live artists: Balloon Twisting and Face Painting. It does not apply to outside balloon decor, delivery, pickup, Events Inquiry, or Something Else.
+- Pickup has its own panel and points customers to the location information below the form. The Riverdale badge now reads `Northern Utah Location (Residential Address)`.
+- Next backend slice: verify/update the ERPNext Desk Lead/CRM form presentation for this revised intake taxonomy. Public submissions already map through the existing Lead cascade fields, but Desk layout/labels have not been visually verified in this session.
 - Header/footer IA has been corrected against current routes: `What We Make`, `About Us`, and `Book an Event` are removed. `All Products` remains.
 - Primary nav order is now `Shop Balloon Decor`, `Plan by Occasion`, `Balloon Twisting & Face Painting`, `FAQ`, `Blog`, search. `Shop Balloon Decor` stays far-left.
 - Top utility bar keeps the only `Contact Us` CTA. No lower-nav Contact duplicate and no mobile-drawer Contact duplicate.
 - `Plan by Occasion` routes to product/category pages, not `/contact?occasion=...` shortcuts. Verified current links: Birthday Deliveries, Baby Shower Garland, Graduation Grab n Go, Get-Well Bouquets, Large head Missionary, Garlands, Easter Arch, Logo 3 layered bouquet, Basketball Arch, Seasonal & Specialty.
 - No Gallery link in current nav.
-- `/book` is retired as a customer-facing page and aliases to `/contact`; CTAs now use `/contact`.
+- `/book` is retired as a customer-facing page and redirects to `/contact?intent=quick`; CTAs now use `/contact`.
 - `/shop-items` and `/all-products` alias to `/shop-by-category` because the root Item Group page is too thin.
 - `/privacy` and `/terms-of-service` now exist and return HTTP 200 locally. Treat as plain-language drafts for Stripe readiness; Dashboard wiring/legal approval still separate.
 - `scripts/verify/layout_fit.spec.js` is restored and verified. Latest command: `npm run test:layout-fit` -> 60 passed after the gate caught and Codex fixed `.lt-contact__icon` text overflow on `/contact`.
@@ -44,7 +53,7 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 
    All caught and fixed in Round 2. Full receipts at `research/triadic-build-chrome-rebuild/`.
 
-**4. `/book` is NOT the customer path anymore.** It aliases to `/contact` for old traffic only. GL corrected the product direction on 2026-05-01: the old booking/intake surface is now the standard solo contact form, and customer CTAs/nav should use `/contact`.
+**4. `/book` is NOT the customer path anymore.** It redirects to `/contact?intent=quick` for old traffic only. GL corrected the product direction on 2026-05-01: the old booking/intake surface is now the standard solo contact form, and customer CTAs/nav should use `/contact`.
 
 **5. The shop card category filter was silently broken since launch.** Pre-existing typo: `shop.html` wrote `data-category="{{ item.category }}"` but `shop.py` set `item["category_slug"]`. Fixed during pre-tasks. Filter pills now actually filter.
 
@@ -66,9 +75,10 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 | Hetzner-shaped footer (newsletter + 3-col + social + legal) | Shipped; obsolete/nonexistent links removed |
 | Mobile drawer with accordion-expand mega menus | Shipped + fixed (was always-visible at Round 1) |
 | Newsletter form + endpoint + DocType + smoke test | Shipped, rate-limited 10/hr per email |
-| `/book` | Retired customer surface; route alias to `/contact` |
+| `/book` | Retired customer surface; redirects to `/contact?intent=quick` |
 | `/contactus` → `/contact` redirect | Live |
-| `/contact` | Primary customer inquiry form |
+| `/contact` | Primary customer inquiry form with stackable service taxonomy, guided prefill, Events Inquiry package path, Pickup, and service-specific conditional fields |
+| `/balloon-twisting-and-face-painting` | Contact-led service page refreshed from Hetzner source; CTAs use guided `/contact?service=...` links |
 | `/shop-items` + `/all-products` | Alias to `/shop-by-category` |
 | `Plan by Occasion` | Product/category links only; no contact shortcuts |
 | `/privacy` + `/terms-of-service` | Static policy routes live; Stripe Dashboard wiring still pending |
@@ -79,14 +89,15 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 
 **P0 — Real-browser confirmation by GL.** Every Playwright + DOM verdict is a precondition. GL opening localhost:8081 at desktop AND mobile is the actual ship gate. They've already done initial visual review (gave green light on "usable") so this is partial-confirmation already.
 
+**P0 - Backend CRM/Lead form parity for revised intake taxonomy.** Public `/contact` submissions now map through the existing Lead cascade and text fields, but the ERPNext Desk Lead/CRM presentation needs a visual pass: service labels, Events Inquiry package notes, Pickup/Delivery wording, live-artist shade question, and plain-language backend labels.
+
 **P0 — Phase 2 page rebuilds (the big remaining bite).** From the rebuild plan, in priority order:
-1. `/balloon-twisting-and-face-painting` Hetzner-faithful refresh (replaces existing)
-2. `/refund-policy` Hetzner refresh
-3. `/accessibility` Hetzner refresh
-4. `/blog` channel + posts (use Frappe's NATIVE `Blog Post` DocType, not custom — plan-deepen caught my mistake of planning a custom one). Two posts to port verbatim from mirror.
-5. Webshop `/shop` layout overhaul
-6. Webshop product detail layout overhaul
-7. Webshop category landing layout overhaul
+1. `/refund-policy` Hetzner refresh
+2. `/accessibility` Hetzner refresh
+3. `/blog` channel + posts (use Frappe's NATIVE `Blog Post` DocType, not custom — plan-deepen caught my mistake of planning a custom one). Two posts to port verbatim from mirror.
+4. Webshop `/shop` layout overhaul
+5. Webshop product detail layout overhaul
+6. Webshop category landing layout overhaul
 
 No Gallery for now per GL 2026-05-01.
 
@@ -104,8 +115,6 @@ Each page: read mirror source → build Frappe controller + template → atomic 
 
 **P2 — Real photos for `/shop-by-category`.** Each Item Group has empty `image` field; cards show letter placeholders.
 
-**P2 — Spec table data on BTFP service cards.** Currently lorem ipsum. Jeff to confirm BEST AT / DURATION / TEAM SIZE / GOOD FOR.
-
 ## Operational rituals
 
 | Trigger | Command |
@@ -114,6 +123,8 @@ Each page: read mirror source → build Frappe controller + template → atomic 
 | Edited Jinja/CSS/Web Page | `python scripts/dev/clear_website_cache.py` |
 | Edited `hooks.py` / new module / fixture | `docker restart locally-twisted-erpnext-v15-backend-1 && sleep 12 && python scripts/dev/clear_website_cache.py` |
 | Edited nav IA | `python scripts/verify/nav_ia.py` plus route checks for new links |
+| Edited contact form service logic | `python scripts/verify/contact_service_logic.py --base-url http://localhost:8081` and `python scripts/verify/contact_prefill.py --base-url http://localhost:8081` |
+| Smoke test `/contact` form | `python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --form-path /contact --skip-newsletter` (set `LT_ADMIN_PASSWORD` when backend record verification is required) |
 | Check customer-site layout fit | `npm run test:layout-fit` |
 | **Backend restarted, frontend now 502** | `docker restart locally-twisted-erpnext-v15-frontend-1` (nginx upstream IP cached at startup; flush by restart) — this gotcha cost me an hour today; documented in agency auto-behaviors |
 | Re-mirror Hetzner | `python scripts/mirror/mirror_hetzner.py` |
@@ -134,8 +145,9 @@ I read this as: **autonomous ownership inside the migration frame.** GL doesn't 
 
 1. Have GL open `localhost:8081/` plus `/shop-items/seasonal-specialty`, `/shop-items/seasonal-specialty/easter-balloon-cups`, `/privacy`, and `/terms-of-service` in a real browser.
 2. Wire Stripe Dashboard policy URLs after GL/legal approval of `/privacy` and `/terms-of-service`.
-3. Continue Phase 2 in the current order above. `/contact` is the inquiry surface; `/book` is alias-only.
-4. Run the per-product variant correctness diff before starting webshop layout overhauls. If data discrepancies exist between Hetzner and our DB, fix at the seed layer first.
+3. Verify/update the ERPNext Desk Lead/CRM form presentation so it matches the revised `/contact` intake taxonomy before moving deeper into backend workflow work.
+4. Continue Phase 2 in the current order above. `/contact` is the inquiry surface; `/book` redirects to `/contact?intent=quick`.
+5. Run the per-product variant correctness diff before starting webshop layout overhauls. If data discrepancies exist between Hetzner and our DB, fix at the seed layer first.
 
 ## Reading order on arrival
 
@@ -182,6 +194,6 @@ I read this as: **autonomous ownership inside the migration frame.** GL doesn't 
 - GL has done partial real-browser confirmation; gave green light on "usable."
 - Mobile chrome and the reported shop/product overflow pages look contained in the latest verification screenshots.
 - Newsletter endpoint load-tested with 11 sequential requests — rate-limit fix held (11th hit limit).
-- /book renders structurally complete; not real-browser-tested-by-me-with-actual-test-submission, but GL's call on whether to test before Phase 2 continues.
+- /book is no longer a structural page to test; verify its redirect behavior only. `/contact` is the form surface.
 
 — Closeout written 2026-04-30 evening by the Opus 4.7 instance who walked the mirror rebuild from "rebuild the whole site" → frame correction (migration not new build) → mirror crawl with crawl4ai → /plan-deepen + GL Proxy → 6 pre-tasks (including unblocking /book) → triadic chrome rebuild → fix round → audit pass → documentation. GL was direct, exhausted, autonomous. The chrome shipped. Next instance: take the bite that fits your context.

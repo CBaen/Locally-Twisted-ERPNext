@@ -8,6 +8,22 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-01 - Contact services are stackable; Events Inquiry is the high-value package path
+
+**Decision:** `/contact` is the canonical inquiry surface and its service choices are stackable: Balloon Decor, Balloon Twisting, Face Painting, Delivery, Pickup, Events Inquiry, and Something Else. `Events Inquiry` replaces `Event Package` and is the package-planning path for larger, multi-piece purchases. Delivery and Pickup do not use "Only" labels. `/book` redirects to `/contact?intent=quick`, and `/balloon-twisting-and-face-painting` routes interested customers to guided contact URLs instead of embedding a separate form.
+
+**Reasoning:** GL corrected the form logic: "Only" implies mutual exclusion, but Delivery and Pickup can stack with other services. Large corporate and multi-piece event packages are the ideal customer path, so Events Inquiry should be structured and inviting instead of a freeform decor note. Questions should only appear when relevant; shade/environment applies to live artists, not outside balloon decor, delivery, pickup, or Something Else.
+
+**Implementation notes:** Events Inquiry uses package-piece checkboxes from the homepage custom categories (Balloon Arches, Columns, Garlands, Picture Perfect Backdrops, Balloon Drops, Balloon Bouquets, Centerpieces, Custom Sculptures), asks for colors with more playful copy, and aggregates selected pieces/colors/notes into the existing Lead text fields. Pickup has its own panel and points customers to the location information below the form. Riverdale location copy is `Northern Utah Location (Residential Address)`.
+
+**Alternatives considered:** Keep `Event Package` and a freeform "What type of decor?" field; rejected because it underserves the ideal large-package buyer. Keep `Delivery Only` / `Pickup Only`; rejected because it promises mutual exclusion the UI does not enforce. Add new ERPNext schema fields immediately for every Events Inquiry sub-answer; deferred until the backend Desk/CRM form parity pass verifies whether new fields are worth the schema churn.
+
+**Verification receipt:** Public form logic passed `python scripts/verify/contact_service_logic.py --base-url http://localhost:8081`, `python scripts/verify/contact_prefill.py --base-url http://localhost:8081`, `python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --form-path /contact --skip-newsletter`, and `npm run test:layout-fit`. Backend record verification in `smoke_forms.py` requires `LT_ADMIN_PASSWORD`; Desk CRM presentation still needs a visual parity pass.
+
+**Decided by:** GL directives during 2026-05-01 form cleanup; implemented by Codex in commits `b473690`, `89d9870`, `9ec272b`, and `ca2e951`.
+
+---
+
 ## 2026-05-01 - Runtime packaging clarified: custom image plus LT live-edit overlay
 
 **Decision:** Current local runtime uses the custom image `locally-twisted-erpnext:v15` for Frappe, ERPNext, payments, webshop, build tooling, assets, and the nginx Origin pass-through patch. It also still bind-mounts `apps/locally_twisted` into Frappe services as a development live-edit overlay. Payments and Webshop are image-owned upstream apps, not host bind-mounted.

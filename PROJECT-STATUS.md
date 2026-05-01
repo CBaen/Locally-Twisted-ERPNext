@@ -39,7 +39,8 @@
 - **CSS hide of `.product-code`** in lt-theme.css strips the "Item Code" jargon from compiled-JS-rendered listing cards (only `display: none !important` we kept; webshop's product_ui/list.js bakes the jargon at compile time; can't be Jinja-overridden).
 - **All 7 shop smoke checks pass:** `scripts/verify/smoke_shop.py` validates mega menu, /shop pills, /shop-by-category cards, all 11 category routes 200 + no jargon, variant detail inline, single-SKU clean, mobile drawer accordion.
 - **Storefront correction pass shipped 2026-05-01:** header/footer IA cleaned to match current routes (`What We Make`, `About Us`, `Book an Event` removed; `All Products` kept), menu dropdowns contained, mobile cart/hamburger visible at 390px/430px, footer centered without shrinking below accessible sizes.
-- **Navigation/routing cleanup shipped 2026-05-01:** primary nav is `Shop Balloon Decor`, `Plan by Occasion`, `Balloon Twisting & Face Painting`, `FAQ`, `Blog`, search. The top utility bar owns the only `Contact Us` CTA. `Plan by Occasion` routes to product/category pages, not contact shortcuts. `/book` aliases to `/contact`; `/shop-items` and `/all-products` alias to `/shop-by-category`.
+- **Navigation/routing cleanup shipped 2026-05-01:** primary nav is `Shop Balloon Decor`, `Plan by Occasion`, `Balloon Twisting & Face Painting`, `FAQ`, `Blog`, search. The top utility bar owns the only `Contact Us` CTA. `Plan by Occasion` routes to product/category pages, not contact shortcuts. `/book` redirects to `/contact?intent=quick`; `/shop-items` and `/all-products` alias to `/shop-by-category`.
+- **Contact/BTFP inquiry consolidation shipped 2026-05-01:** `/contact` is the canonical inquiry form with stackable service choices, guided prefill URLs, service-specific conditional panels, Events Inquiry package planning, Pickup, and Delivery/Pickup labels without "Only." `/balloon-twisting-and-face-painting` is now a contact-led service page that sends customers to `/contact?service=btfp`, `/contact?service=twisting`, or `/contact?service=face-painting`. `/book` redirects to `/contact?intent=quick`.
 - **Privacy and Terms routes added 2026-05-01:** `/privacy` and `/terms-of-service` return HTTP 200 locally. Treat as plain-language drafts for Stripe readiness; Stripe Dashboard URL wiring and any legal review remain follow-ups.
 - **Layout-fit gate restored 2026-05-01:** `scripts/verify/layout_fit.spec.js` checks 15 public/shop/cart routes across 320px, 375px, tablet, and desktop viewports. Latest verified command: `npm run test:layout-fit` -> 60 passed after fixing `.lt-contact__icon` sizing on `/contact`.
 - **Product listing/detail corrections shipped 2026-05-01:** item detail/configure sales-pitch blocks removed; `/shop-items/arches` fixed by preserving Webshop's `.item-group-content` wrapper contract; listing cards now receive `lt_brand_description` through `locally_twisted.api.product_listing` and prefer it in card copy.
@@ -51,8 +52,7 @@
 
 **What's next (in order):**
 - **Stripe Dashboard URL wiring for `/privacy` and `/terms-of-service`** after GL/legal approval; dashboard still has placeholder URLs until changed.
-- **BTFP page refresh** against the current mirror/design direction.
-- **Spec table data on BTFP service cards** still lorem ipsum — Jeff to confirm BEST AT / DURATION / TEAM SIZE / GOOD FOR.
+- **Backend CRM/Lead form parity for revised contact intake taxonomy** — verify/update the ERPNext Desk Lead presentation for stackable services, Events Inquiry notes, Pickup/Delivery wording, and live-artist shade logic.
 - **Sample data for backend tour** — realistic Lead records, paid SO, upcoming event for Jeff's desk demo.
 - **Item Group imagery** — each Item Group has empty `image` field. Adding category images would make `/shop-by-category` and a future image-rich mega menu feel more designed.
 
@@ -70,6 +70,7 @@ See `locally-twisted-decisions.md` for the full reasoned log. Summary:
 
 | Date | Decision | Why |
 |------|----------|-----|
+| 2026-05-01 | Contact service choices are stackable; Events Inquiry is the package planning path | "Only" implies mutual exclusion. GL wants large multi-piece/corporate event packages to be the ideal path, with structured package-piece choices and fewer irrelevant conditional questions. |
 | 2026-04-30 | Frame revised: "migration of business intent + catalog data into a fresh ERPNext install" | Supersedes the 2026-04-26 reframe. Catalog port + form intent + policies + domain cutover are migration shape. Jeff-disclosure stealth and hand-build-not-auto-translate survive as constraints, not as a denial of migration reality. (See decisions log 2026-04-30 frame entry.) |
 | 2026-04-26 | Earlier reframe: "first professional business platform," not "Odoo migration" | Was motivated by Jeff-disclosure concerns and avoiding too-mechanical translation framing. Superseded 2026-04-30. |
 | 2026-04-26 | Phase 1 = customer-facing site + storefront (the proof point) | If ERPNext can't deliver this, GL pivots before building backend |
@@ -144,13 +145,23 @@ Canonical resources for the migration destination live in `_resources/` and are 
 
 **Current-state warning:** dated updates below are historical receipts. Older entries still describe bind-mounts, `/book` as primary, or unseeded catalog states that were later superseded by the 2026-04-30 custom Docker image/catalog port and the 2026-05-01 `/contact` route decision. Use the Current State section plus `CODING-HANDOFF.md` for live operating facts.
 
+### 2026-05-01 (contact/BTFP inquiry consolidation) — canonical contact form + service-specific logic
+
+- **BTFP page refreshed:** `/balloon-twisting-and-face-painting` is now a contact-led service page using actual Hetzner content and current LT styling. Service CTAs prefill `/contact`.
+- **Book route retired:** `/book` redirects to `/contact?intent=quick`; it is not a separate public form and not a legacy alias to preserve as its own experience.
+- **Service taxonomy cleaned:** `Event Package` became `Events Inquiry`; `Delivery Only` and `Pickup Only` became stackable `Delivery` and `Pickup`.
+- **Events Inquiry structured:** package-piece checkboxes mirror homepage custom categories, color prompt is more fun/customer-facing, and details aggregate into existing Lead text fields.
+- **Conditional form logic corrected:** live-artist shade/environment questions appear only for Balloon Twisting and Face Painting; Something Else, Delivery, Pickup, and outside balloon decor do not get irrelevant dropdowns.
+- **Pickup added:** pickup customers get a location prompt below the form, and Riverdale now reads `Northern Utah Location (Residential Address)`.
+- **Verification:** `contact_service_logic.py`, `contact_prefill.py`, `smoke_forms.py --form-path /contact --skip-newsletter`, and `npm run test:layout-fit` passed locally. Backend record verification in `smoke_forms.py` needs `LT_ADMIN_PASSWORD` set.
+
 ### 2026-05-01 (storefront correction pass) — header/footer/menu cleanup + product listing/detail fixes
 
 - **Header/footer IA corrected:** removed `What We Make`, `About Us`, and `Book an Event` from customer chrome. `All Products` remains. Footer columns were re-centered through layout/content cleanup, not by shrinking text below accessibility expectations.
 - **Menu containment corrected:** desktop dropdowns are contained under the nav; mobile drawer/cart/hamburger visibility verified at narrow mobile widths with accessible touch sizing preserved.
 - **Customer nav corrected again after GL review:** lower nav order is `Shop Balloon Decor`, `Plan by Occasion`, `Balloon Twisting & Face Painting`, `FAQ`, `Blog`, search. No Gallery for now. No lower-nav Contact duplicate because the top utility bar already has `Contact Us`.
 - **Occasion nav is product-backed:** `Plan by Occasion` links now route to real product/category pages (`Birthday Deliveries`, `Baby Shower Garland`, `Graduation Grab n Go`, `Get-Well Bouquets`, `Large head Missionary`, etc.) instead of `/contact?occasion=...`. The nav IA verifier now fails if occasion links regress to contact shortcuts.
-- **Retired routes handled:** `/book` aliases to `/contact`; customer CTAs now point to `/contact`. `/shop-items` and `/all-products` alias to `/shop-by-category`.
+- **Retired routes handled:** `/book` redirects to `/contact?intent=quick`; customer CTAs now point to `/contact`. `/shop-items` and `/all-products` alias to `/shop-by-category`.
 - **Policy routes added:** `/privacy` and `/terms-of-service` are static Frappe routes for Stripe readiness. Both return HTTP 200 locally; Stripe Dashboard wiring remains separate.
 - **Layout fit verifier restored:** `scripts/verify/layout_fit.spec.js` is present and runnable through `npm run test:layout-fit`. Latest run: 60 passed.
 - **Product detail pitches removed:** stripped "Start a conversation" from `item_configure.html` and "Tell us what you're imagining" from `item_details.html`.
@@ -279,7 +290,7 @@ Canonical resources for the migration destination live in `_resources/` and are 
 - Slice 7 — Lookbook (full portfolio, organized by event type)
 - Slice 8 — Service category pages (×5: Corporate, Weddings, Birthdays, Schools, Seasonal)
 - Slice 9 — Color Chart (`/color-chart`, static reference, 70 balloon colors)
-- Slice 10 — `/book` form page is retired as a customer-facing route; `/contact` is the surviving inquiry surface and `/book` aliases there.
+- Slice 10 — `/book` form page is retired as a customer-facing route; `/contact` is the surviving inquiry surface and `/book` redirects to `/contact?intent=quick`.
 - Slice 11 — Small Shop browse + detail
 - Slice 12 — Cart + checkout shell
 - Slice 13 — Blog framework (when shipped, replaces the `HERO_CYCLING_TITLES` placeholder list with a `frappe.get_list("Blog Post", ...)` call)
@@ -287,7 +298,7 @@ Canonical resources for the migration destination live in `_resources/` and are 
 
 **Standing rules added/refined this session:**
 - Reviews carousel > client logo crawl as primary social proof. Words from real customers persuade more than corporate logos for high-touch event services.
-- `/contact` is the primary inquiry conversion path. Older `/book`-primary claims are stale; `/book` is alias-only.
+- `/contact` is the primary inquiry conversion path. Older `/book`-primary claims are stale; `/book` redirects to `/contact?intent=quick`.
 - Bouquets join the customizable categories list (6 total). Originally only 5 in the approved Odoo XML; bouquets are also customizable in Jeff's actual business.
 - About page deferred until Jeff is ready — no pressure.
 

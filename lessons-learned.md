@@ -6,6 +6,26 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-01 - Form labels are behavior contracts
+
+### Lesson 1 - "Only" means the UI must enforce exclusivity.
+
+Delivery Only and Pickup Only sounded clear in isolation, but the form lets customers stack services. That label was therefore wrong: it implied selecting Delivery/Pickup should lock out decor, twisting, face painting, or Events Inquiry. **Counter-move:** if a service can combine with other services, do not label it "Only." If the business truly wants an only path, enforce that logic in the UI and backend mapping.
+
+### Lesson 2 - The ideal customer path needs structure, not a blank box.
+
+Events Inquiry is the high-value path for large, multi-piece packages. A freeform "What type of decor?" field made the best customer do the most work. **Counter-move:** give ideal buyers structured choices pulled from the real catalog/homepage categories, then add color and notes fields for personality and nuance.
+
+### Lesson 3 - Conditional fields should ask only the people who can answer them.
+
+"Shade is required for outdoor events" matters for live artists, not outside balloon decor, pickup, delivery, or Something Else. Every irrelevant dropdown makes the form feel less intelligent. **Counter-move:** verify each service choice independently with an automated form-logic script, including the absence of stale labels.
+
+### Lesson 4 - GL tangent flow needs queue capture, not a forced linear review.
+
+GL named an ADHD inattentive working style during this session. Product direction arrived as a chain of quick corrections: Events Inquiry, shade logic, pickup, location wording, "Only" labels. **Counter-move:** keep the active slice small, restate the current target, convert tangents into queue/docs when they are not the current task, and avoid making GL re-review stale items one by one.
+
+---
+
 ## 2026-05-01 - Actual fit needs a geometry gate, not a confidence statement
 
 ### Lesson 1 - Offscreen controls are usually framework residue, not just CSS drift.
@@ -202,6 +222,8 @@ Odoo had `Blue Slate` (ptav 1357) AND `Blue slate` (ptav 1399) for `latex colors
 ---
 
 ## 2026-04-29 late (Hetzner /book spec session — "fighting GL" pattern) — One critical lesson
+
+**Superseded form labels 2026-05-01:** the lesson below is still valid as a stale-source receipt, but the old Hetzner labels `Delivery Only` and `Event Package` are no longer current LT form truth. Current labels are `Delivery`, `Pickup`, and `Events Inquiry`.
 
 ### When GL points at a URL, read the URL. Stop pivoting to stale local files when one tool fails to reach it.
 

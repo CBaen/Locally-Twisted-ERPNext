@@ -10,7 +10,7 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 ## Active
 
-**Reconciliation note (2026-05-01):** `scripts/verify/layout_fit.spec.js` has been restored and verified through `npm run test:layout-fit` (60 passed). Treat `.planning/phases/01-customer-site-and-storefront/PLAN.md` as historical; `/contact` is the primary inquiry route and `/book` is alias-only.
+**Reconciliation note (2026-05-01):** `scripts/verify/layout_fit.spec.js` has been restored and verified through `npm run test:layout-fit` (60 passed). Treat `.planning/phases/01-customer-site-and-storefront/PLAN.md` as historical; `/contact` is the primary inquiry route and `/book` redirects to `/contact?intent=quick`.
 
 ### Phase 1 — Customer site (lookbook-forward, with small shop)
 
@@ -28,14 +28,14 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 
 **Remaining (in priority order):**
 
+- [P0] **Backend CRM/Lead form parity for revised contact intake taxonomy.** Public `/contact` now uses stackable services, Events Inquiry package planning, Pickup/Delivery without "Only", and live-artist-only shade logic. Verify/update the ERPNext Desk Lead form/CRM presentation so backend labels and sections match the public intake. Do not claim backend CRM parity until visually checked in the running Desk.
 - [P0] **Mirror Rebuild Phase 2 — page rebuilds, in priority order:**
-  1. `/balloon-twisting-and-face-painting` Hetzner-faithful refresh (replaces existing). Mirror source: `pages/balloon-twisting-and-face-painting.html`.
-  2. `/refund-policy` Hetzner-faithful refresh. Mirror source: `pages/refund-policy.html`.
-  3. `/accessibility` Hetzner-faithful refresh. Mirror source: `pages/accessibility.html`.
-  4. `/blog` channel index + 2 ported posts. Use Frappe's NATIVE `Blog Post` DocType (NOT a custom one — plan-deepen 2026-04-30 caught the regression). Add `tags` field via `Customize Form` linking to a tiny `LT Blog Tag` DocType. Override `templates/pages/blog_post.html` for SEO meta tags Frappe's native template doesn't emit.
-  5. Webshop `/shop` layout overhaul (against the new design guide).
-  6. Webshop product detail layout overhaul.
-  7. Webshop category landing layout overhaul.
+  1. `/refund-policy` Hetzner-faithful refresh. Mirror source: `pages/refund-policy.html`.
+  2. `/accessibility` Hetzner-faithful refresh. Mirror source: `pages/accessibility.html`.
+  3. `/blog` channel index + 2 ported posts. Use Frappe's NATIVE `Blog Post` DocType (NOT a custom one — plan-deepen 2026-04-30 caught the regression). Add `tags` field via `Customize Form` linking to a tiny `LT Blog Tag` DocType. Override `templates/pages/blog_post.html` for SEO meta tags Frappe's native template doesn't emit.
+  4. Webshop `/shop` layout overhaul (against the new design guide).
+  5. Webshop product detail layout overhaul.
+  6. Webshop category landing layout overhaul.
 - [P0] **Per-product variant correctness diff.** For each of 53 products, parse mirror's `data-attribute-exclusions` JSON from the captured page HTML and compare to ERPNext's variant set. Surfaces any data discrepancies from the catalog port. Run BEFORE webshop layout overhauls. Plan section in `MIRROR-REBUILD-PLAN.md`.
 - [P0] **Catalog media reconciliation: variant/size photos.** Audit 2026-05-01 found `_resources/odoo-live/catalog.json` has `additional_image_urls` for 49 products and size-like options on 33 products, but current ERPNext variants have `Item.image = null` across the checked variant set. Source image files are already present under `_resources/odoo-live/images/` as `slug--extra-NN.*`. Fix needs a deliberate mapping from Odoo `product.product` / `product.image` URLs to ERPNext variant or option images, usually tied to size/height/length/delivery choices. Do not treat the current single template image as complete catalog media.
 - [P0] **5 latent webshop bugs to fix during Phase 2 layout overhaul** (caught by SecOps/Execution reviewers; same files as the layout work):
@@ -46,7 +46,6 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
   5. Latex-color "checkbox swatches" must be radio inputs under the hood (single-select); variant API expects exactly one value per attribute.
 - [P1] **Newsletter X-Forwarded-For strip at nginx layer (Option B).** Option A (email-keyed rate limit) shipped on `/api/method/locally_twisted.api.newsletter.signup` this session. Option B would protect `/contact`, `/checkout`, `/balloon-twisting-and-face-painting` too — they all use IP-based `@rate_limit` and share the same XFF-spoofing vulnerability. Ops/infra task: edit nginx config to strip/overwrite X-Forwarded-For before forwarding to gunicorn. See `Built_by_Cameron/built-by-cameron-decisions.md` 2026-04-30 entry "Frappe `@rate_limit` IP+key combine into ONE identity, not two."
 - [P1] **`/privacy` + `/terms-of-service` Stripe Dashboard wiring.** Pages now exist locally; after GL/legal approval, update Stripe Dashboard's "Privacy policy URL" + "Terms of service URL" (currently `example.com/...` placeholders blocking live-mode activation).
-- [P0] **Spec table data on BTFP service cards.** Currently `Lorem ipsum` placeholders for BEST AT / DURATION / TEAM SIZE-or-ARTISTS / GOOD FOR. Jeff needs to confirm the actual numbers/lists. Replace lorem when confirmed.
 - [P1] **Item Group images.** Each Item Group child has empty `image` field — `/shop-by-category` cards show letter placeholders (A/B/C/...). Adding a representative photo per category makes both the landing page and a future image-rich mega-menu feel designed.
 - [P1] **Slice 8 — Service category pages.** `/services/<event-type>` × 5 (Corporate, Weddings, Birthdays, Schools, Seasonal). Each ends with inquiry CTA to `/contact`.
 - [P1] **Slice 9 — Color Chart page.** `/color-chart` — static reference, all balloon colors with names. Answers Jeff's "customers want to see colors" instinct without a configurator. Visual swatch grid + print-friendly stylesheet.
@@ -55,7 +54,7 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 - [P2] **Variant cache rebuild on Webshop Settings change.** If the next instance enables/disables variants or attribute filters, run `for template in templates: ItemVariantsCacheManager(template).rebuild_cache()` to flush stale Redis state.
 - [P6] **Phase 6 cutover work item — fixture pruning.** BEFORE Jeff's first post-takeover deploy, REMOVE operator-state-sensitive Item Attribute fixtures from `hooks.py fixtures = [...]` (especially `latex colors` — 51 values Jeff is most likely to edit as supplier inventory shifts). Otherwise BBC fixture sync silently overwrites his renames on every `bench migrate`. Document in `NOUPDATE-DRIFT.md` (TBD). See `locally-twisted-decisions.md` 2026-04-30 entry.
 
-**Slice numbering (current state):** 1-7 done (brand, chrome, homepage, BTFP, Contact, Accessibility, Refund+FAQ, Lookbook). Slice 8 (service categories), Slice 9 (color chart), Slice 13 (blog) — PENDING. Slice 10 (`/book`) is retired; `/contact` is the primary inquiry route and `/book` aliases there. Slice 11 (browse) + Slice 12 (cart+checkout) DONE. **2026-04-30 catalog port shipped on top of Slice 11/12** — verified DB counts: 53 Website Items, 10,631 Items total, 10,578 variants, 10,613 Item Prices, on-brand product detail, mega menu, and /shop-by-category. See `locally-twisted-decisions.md` 2026-04-30 entries. Historical "Already DONE" entries removed from queue per the "GitHub is our archive" rule — `git log` is the changelog.
+**Slice numbering (current state):** 1-7 done (brand, chrome, homepage, BTFP, Contact, Accessibility, Refund+FAQ, Lookbook). Slice 8 (service categories), Slice 9 (color chart), Slice 13 (blog) — PENDING. Slice 10 (`/book`) is retired; `/contact` is the primary inquiry route and `/book` redirects to `/contact?intent=quick`. Slice 11 (browse) + Slice 12 (cart+checkout) DONE. **2026-04-30 catalog port shipped on top of Slice 11/12** — verified DB counts: 53 Website Items, 10,631 Items total, 10,578 variants, 10,613 Item Prices, on-brand product detail, mega menu, and /shop-by-category. See `locally-twisted-decisions.md` 2026-04-30 entries. Historical "Already DONE" entries removed from queue per the "GitHub is our archive" rule — `git log` is the changelog.
 
 ### Future scope (post-Phase 1)
 
@@ -67,7 +66,6 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 - [P2] **BTFP event-type animated crawl** — horizontal-scroll thin band of event types. Polish, not core.
 - [P2] **BTFP and contact confirmation modals with auto-redirect** — replaced with inline success banners on first ship; add modal+redirect on a polish pass.
 - [P2] **Contact Google Maps iframe** — adds external dep; address visible without it. Add when GL wants.
-- [P2] **`/shop/event-booking-deposit-32` deposit link** — referenced from BTFP "Pay $50 Deposit" button (Odoo's webshop product ID). Needs webshop product seeding first.
 - [P2] **Symmetry fix for Custom Creations on mobile** — currently 2-2-1 layout (Balloon Drops orphan on row 3). GL flagged the orphan-on-row-3 violates symmetry preference. Options: (a) center the orphan via `grid-column: 1 / -1` on `:nth-child(5)` (cleanest minimal change), (b) 1-per-row stack on mobile. Easy CSS fix; defer until next homepage iteration.
 
 ### Open iterations on already-built Lead schema (carried into Phase 2)
@@ -78,7 +76,9 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 
 ### Phase 2 — Form-handling depth (reframed 2026-04-27)
 
-`/contact` is the primary inquiry route. `/book` is retired and aliases to `/contact`. Phase 2 now covers depth around all forms:
+`/contact` is the primary inquiry route. `/book` is retired and redirects to `/contact?intent=quick`. Phase 2 now covers depth around all forms:
+
+- [P0] Verify CRM/Lead Desk layout parity for the revised public `/contact` taxonomy before treating the backend mapping as done. Customer submissions currently land in existing Lead fields through `lead_cascade.py`; the remaining question is operator-facing presentation, labels, and whether additional custom fields are worth the schema churn.
 
 - [P0] Verify Contact dedup logic now in `apps/locally_twisted/locally_twisted/lead_cascade.py` (Lead → existing Contact match by email/phone, else create new). Queue previously listed this as unbuilt; confirm with a smoke record before deleting.
 - [P0] Verify customer acknowledgment email automation now in `apps/locally_twisted/locally_twisted/lead_cascade.py` (`after_insert`, queued `frappe.sendmail`). Queue previously listed this as unbuilt; confirm mail queue behavior before deleting.
@@ -111,7 +111,7 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 - [P2] **Document the human-review-commit deploy ritual in `scripts/README.md`.** The gate at `scripts/deploy.py:gate_human_review_commit()` refuses to deploy when HEAD's commit message starts with `auto:`. Routine remediation: `git commit --allow-empty -m "review: <pre-deploy summary>"` before running deploy.
 - [P2] **Set `STAGING_URL` secret in GitHub repo settings + uncomment the CI form-shape step.** `.github/workflows/ci.yml` lines 35-36 are commented out pending a staging URL. Defer until staging exists.
 - [P3] **At cutover (Phase 6): flip `scripts/deploy.py` `CONFIG["site_url"]` and `smoke_test_screenshot_paths`.** Currently `http://localhost:8081`; production URL TBD.
-- [P3] **Wire `/contact` smoke test into deploy config.** `CONFIG["smoke_test_form_path"]` should target `/contact`; `/book` is alias-only.
+- [P3] **Wire `/contact` smoke test into deploy config.** `CONFIG["smoke_test_form_path"]` should target `/contact`; `/book` redirects to `/contact?intent=quick`.
 
 
 ## Blocked

@@ -52,6 +52,9 @@ Run the layout-fit gate from the project root: `npm run test:layout-fit`.
 | Script | Purpose | Run when |
 |--------|---------|----------|
 | `layout_fit.spec.js` | Playwright Test gate for 15 public/shop/cart routes across 320px, 375px, tablet, and desktop. Fails on HTTP errors, document horizontal overflow, visible element overflow, and direct text overflow. | Before visual claims, after customer-facing CSS/Jinja/template changes |
+| `contact_service_logic.py` | Verifies `/contact` service-specific conditional logic: stackable services, Events Inquiry labels, live-artist-only shade/environment fields, Pickup/Delivery wording, and absence of stale `Event Package` / `Only` labels. | After editing contact form labels, service choices, conditionals, or Lead payload mapping |
+| `contact_prefill.py` | Verifies guided contact URLs preselect the intended service checkboxes and reveal the matching panels for BTFP, twisting, and face painting. | After editing service-page CTAs or `/contact?service=...` parsing |
+| `smoke_forms.py` | Browser smoke test for public forms. Use `--form-path /contact --skip-newsletter` for the current canonical inquiry form; set `LT_ADMIN_PASSWORD` when backend Lead/Communication verification is required. | Before claiming form submissions work end-to-end |
 | `playwright_home_screenshot.py` | Real-Chromium full-page screenshot capture at desktop + mobile viewports + DOM facts dump | Before declaring any visible change "done." Mandatory per `anti-gl-patterns.md` section 0. |
 
 ## Standing rules
