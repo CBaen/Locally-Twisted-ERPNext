@@ -39,6 +39,7 @@ Verified or updated during the 2026-05-01 storefront correction pass:
 - `/privacy` and `/terms-of-service` exist as static Frappe routes and return HTTP 200 locally. They are plain-language drafts for Stripe readiness; legal review and Stripe Dashboard URL wiring are still separate follow-ups.
 - Product listing cards can display `lt_brand_description` through the local Webshop API wrapper in `locally_twisted.api.product_listing`.
 - `scripts/verify/layout_fit.spec.js` has been restored as a committed Playwright Test gate. Latest verified command: `npm run test:layout-fit` -> 60 passed after fixing `.lt-contact__icon` sizing on `/contact`.
+- Catalog variant counts match the normalized Odoo source: the raw scrape has duplicate-case latex color values, but `_resources/odoo-live/value_normalize_map.json` collapses them and the normalized expected variant counts match ERPNext.
 - Website cache was cleared after Jinja/CSS changes; `hooks.py` CSS cache-bust was bumped to the current session version.
 
 Claims from older docs still need re-verification before being repeated:
@@ -67,6 +68,7 @@ P0 is no longer `/book`; GL retired that surface. The primary customer inquiry p
 Next safest slices:
 
 - Wire the Stripe Dashboard privacy/terms URLs to `/privacy` and `/terms-of-service` after GL/legal approval.
+- Reconcile catalog media: source has extra product images for 49 products and size-like options on 33 products, while current ERPNext variants have no per-variant images. Start with size/height/length/delivery-tied images before product layout polish.
 - Keep product navigation product-backed: use `scripts/verify/nav_ia.py` before touching header/footer IA.
 - Replace remaining placeholder BTFP spec table values once Jeff confirms the real data.
 - Add Item Group imagery for `/shop-by-category` cards when representative photos are selected.

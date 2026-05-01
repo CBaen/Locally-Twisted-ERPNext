@@ -37,6 +37,7 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
   6. Webshop product detail layout overhaul.
   7. Webshop category landing layout overhaul.
 - [P0] **Per-product variant correctness diff.** For each of 53 products, parse mirror's `data-attribute-exclusions` JSON from the captured page HTML and compare to ERPNext's variant set. Surfaces any data discrepancies from the catalog port. Run BEFORE webshop layout overhauls. Plan section in `MIRROR-REBUILD-PLAN.md`.
+- [P0] **Catalog media reconciliation: variant/size photos.** Audit 2026-05-01 found `_resources/odoo-live/catalog.json` has `additional_image_urls` for 49 products and size-like options on 33 products, but current ERPNext variants have `Item.image = null` across the checked variant set. Source image files are already present under `_resources/odoo-live/images/` as `slug--extra-NN.*`. Fix needs a deliberate mapping from Odoo `product.product` / `product.image` URLs to ERPNext variant or option images, usually tied to size/height/length/delivery choices. Do not treat the current single template image as complete catalog media.
 - [P0] **5 latent webshop bugs to fix during Phase 2 layout overhaul** (caught by SecOps/Execution reviewers; same files as the layout work):
   1. Variant items grid "Add to cart" calls `LT_CART.add(templateCode)` — template codes not purchasable (functional bug).
   2. Configure form add-to-cart calls webshop's `update_cart` for variants — redirects guests to login (split-cart inconsistency vs non-variant items using LT_CART correctly).
