@@ -1,6 +1,6 @@
 # HANDOFF — Locally Twisted
 
-**Last updated:** 2026-05-01 (Codex - contact/BTFP inquiry consolidation + form taxonomy cleanup)
+**Last updated:** 2026-05-01 (Codex - backend Lead/CRM intake parity sync)
 
 Overwrite-not-append. Git is the changelog. Read this first; everything else as needed. **Audience: peer Opus 4.7 instance.** Read like I'd want to read before substantive work.
 
@@ -17,7 +17,7 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 - Delivery and Pickup are stackable services, not "Only" choices. Do not reintroduce `Delivery Only` or `Pickup Only` labels unless the UI enforces mutual exclusion.
 - "Shade is required for outdoor events" only appears for live artists: Balloon Twisting and Face Painting. It does not apply to outside balloon decor, delivery, pickup, Events Inquiry, or Something Else.
 - Pickup has its own panel and points customers to the location information below the form. The Riverdale badge now reads `Northern Utah Location (Residential Address)`.
-- Next backend slice: verify/update the ERPNext Desk Lead/CRM form presentation for this revised intake taxonomy. Public submissions already map through the existing Lead cascade fields, but Desk layout/labels have not been visually verified in this session.
+- Backend Lead/CRM parity is synced for the revised intake taxonomy. `LT Service Type` now has `Delivery`, `Pickup`, and `Events Inquiry`; stale `Delivery Only` / `Event Package` records are gone; Lead Custom Field labels/depends_on logic match the public form; website submissions populate the Desk Table MultiSelect `custom_event_type`.
 - Header/footer IA has been corrected against current routes: `What We Make`, `About Us`, and `Book an Event` are removed. `All Products` remains.
 - Primary nav order is now `Shop Balloon Decor`, `Plan by Occasion`, `Balloon Twisting & Face Painting`, `FAQ`, `Blog`, search. `Shop Balloon Decor` stays far-left.
 - Top utility bar keeps the only `Contact Us` CTA. No lower-nav Contact duplicate and no mobile-drawer Contact duplicate.
@@ -89,8 +89,6 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 
 **P0 — Real-browser confirmation by GL.** Every Playwright + DOM verdict is a precondition. GL opening localhost:8081 at desktop AND mobile is the actual ship gate. They've already done initial visual review (gave green light on "usable") so this is partial-confirmation already.
 
-**P0 - Backend CRM/Lead form parity for revised intake taxonomy.** Public `/contact` submissions now map through the existing Lead cascade and text fields, but the ERPNext Desk Lead/CRM presentation needs a visual pass: service labels, Events Inquiry package notes, Pickup/Delivery wording, live-artist shade question, and plain-language backend labels.
-
 **P0 — Phase 2 page rebuilds (the big remaining bite).** From the rebuild plan, in priority order:
 1. `/refund-policy` Hetzner refresh
 2. `/accessibility` Hetzner refresh
@@ -124,6 +122,7 @@ Each page: read mirror source → build Frappe controller + template → atomic 
 | Edited `hooks.py` / new module / fixture | `docker restart locally-twisted-erpnext-v15-backend-1 && sleep 12 && python scripts/dev/clear_website_cache.py` |
 | Edited nav IA | `python scripts/verify/nav_ia.py` plus route checks for new links |
 | Edited contact form service logic | `python scripts/verify/contact_service_logic.py --base-url http://localhost:8081` and `python scripts/verify/contact_prefill.py --base-url http://localhost:8081` |
+| Edited backend Lead/CRM intake mapping | `python scripts/setup/sync_contact_intake_backend.py` then `python scripts/verify/lead_backend_intake_parity.py` |
 | Smoke test `/contact` form | `python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --form-path /contact --skip-newsletter` (set `LT_ADMIN_PASSWORD` when backend record verification is required) |
 | Check customer-site layout fit | `npm run test:layout-fit` |
 | **Backend restarted, frontend now 502** | `docker restart locally-twisted-erpnext-v15-frontend-1` (nginx upstream IP cached at startup; flush by restart) — this gotcha cost me an hour today; documented in agency auto-behaviors |
@@ -145,9 +144,8 @@ I read this as: **autonomous ownership inside the migration frame.** GL doesn't 
 
 1. Have GL open `localhost:8081/` plus `/shop-items/seasonal-specialty`, `/shop-items/seasonal-specialty/easter-balloon-cups`, `/privacy`, and `/terms-of-service` in a real browser.
 2. Wire Stripe Dashboard policy URLs after GL/legal approval of `/privacy` and `/terms-of-service`.
-3. Verify/update the ERPNext Desk Lead/CRM form presentation so it matches the revised `/contact` intake taxonomy before moving deeper into backend workflow work.
-4. Continue Phase 2 in the current order above. `/contact` is the inquiry surface; `/book` redirects to `/contact?intent=quick`.
-5. Run the per-product variant correctness diff before starting webshop layout overhauls. If data discrepancies exist between Hetzner and our DB, fix at the seed layer first.
+3. Continue Phase 2 in the current order above. `/contact` is the inquiry surface; `/book` redirects to `/contact?intent=quick`.
+4. Run the per-product variant correctness diff before starting webshop layout overhauls. If data discrepancies exist between Hetzner and our DB, fix at the seed layer first.
 
 ## Reading order on arrival
 

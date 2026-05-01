@@ -103,18 +103,16 @@ def _format_services_label(doc):
     """Pull the multi-select services from the Lead and format them
     for the title.
 
-    custom_event_type is a Table MultiSelect on Lead. The child rows
-    are accessible via doc.get('custom_event_type') as a list of
-    LT Service Type rows. The child row's link field name depends on
-    the child doctype's design; we read the .service_type or fall
-    back to .service_type_name etc.
+    custom_event_type is the Desk Table MultiSelect on Lead. The public
+    /contact submit handler populates this child table directly so Desk
+    conditional sections open from a real website inquiry.
 
     Returns a comma-joined string like "Balloon Decor + Twisting" or "".
     """
     rows = doc.get("custom_event_type") or []
     if not rows:
-        # Fallback: look at custom_services (Data field on Lead, set by
-        # form when child-table population isn't available).
+        # Legacy fallback for older test records / schema attempts where
+        # services were stored as a CSV instead of child rows.
         services_csv = (doc.get("custom_services") or "").strip()
         if not services_csv:
             return ""

@@ -1,6 +1,6 @@
 # Locally Twisted - Coding Handoff
 
-Last updated: 2026-05-01 by Codex after contact/BTFP inquiry consolidation and form taxonomy cleanup.
+Last updated: 2026-05-01 by Codex after backend Lead/CRM intake parity sync.
 
 ## State Of Reality
 
@@ -34,6 +34,7 @@ Verified or updated during the 2026-05-01 storefront correction and contact clea
 - `Events Inquiry` is the high-value package planning path. It shows "Let's build a memory", package-piece checkboxes from the homepage custom categories, color prompt, and one planning text area. The server aggregates those values into `custom_package_notes`; no new ERPNext fields were added in this slice.
 - `Event Environment` and "Shade is required for outdoor events" only appear for live artist services: Balloon Twisting and Face Painting.
 - `Pickup` is stackable with other services and points customers to the locations section. Riverdale is labeled `Northern Utah Location (Residential Address)`.
+- Backend Lead/CRM parity is synced: `LT Service Type` now has `Delivery`, `Pickup`, and `Events Inquiry`; stale `Delivery Only` / `Event Package` records are gone; Lead Custom Field labels/depends_on logic match the public form; website submissions populate the Desk Table MultiSelect `custom_event_type`.
 - Header/menu no longer exposes `What We Make`; desktop dropdown panels are contained, and mobile cart/hamburger controls are visible at 390px and 430px with accessible target sizing.
 - Primary nav order is now `Shop Balloon Decor`, `Plan by Occasion`, `Balloon Twisting & Face Painting`, `FAQ`, `Blog`, search. The top utility bar keeps the only `Contact Us` CTA; lower nav and mobile drawer do not duplicate it.
 - `Plan by Occasion` is product-discovery navigation, not inquiry navigation. Every current occasion link routes to a verified product/category page, including missionary/religious paths. Do not re-point the occasion dropdown to `/contact?occasion=...`.
@@ -74,7 +75,6 @@ P0 is no longer `/book`; GL retired that surface. The primary customer inquiry p
 
 Next safest slices:
 
-- Verify and, if needed, update the ERPNext Desk Lead/CRM form presentation for the revised customer intake taxonomy. Current submission data already lands on Lead fields (`custom_services`, `custom_package_notes`, `custom_colors`, etc.), but the backend form may still need label/section cleanup so Jeff sees `Events Inquiry`, `Delivery`, and `Pickup` plainly.
 - Wire the Stripe Dashboard privacy/terms URLs to `/privacy` and `/terms-of-service` after GL/legal approval.
 - Reconcile catalog media: source has extra product images for 49 products and size-like options on 33 products, while current ERPNext variants have no per-variant images. Start with size/height/length/delivery-tied images before product layout polish.
 - Keep product navigation product-backed: use `scripts/verify/nav_ia.py` before touching header/footer IA.
@@ -123,6 +123,13 @@ Contact form logic regression checks:
 python scripts/verify/contact_service_logic.py --base-url http://localhost:8081
 python scripts/verify/contact_prefill.py --base-url http://localhost:8081
 python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --form-path /contact --skip-newsletter
+```
+
+Backend Lead/CRM intake parity:
+
+```powershell
+python scripts/setup/sync_contact_intake_backend.py
+python scripts/verify/lead_backend_intake_parity.py
 ```
 
 Before declaring visible work done, capture and inspect desktop and mobile screenshots. Use the repo's existing Playwright scripts where possible; the layout-fit gate is necessary but does not replace screenshot review.

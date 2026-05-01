@@ -6,6 +6,14 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-01 - Desk conditionals need the real child-table field, not a text echo
+
+The public `/contact` form looked correct, but the ERPNext Desk form still depended on `custom_event_type`, a Table MultiSelect. The submit handler was only echoing services into text-style data, so real inquiries could arrive without the Desk conditional sections opening. **Counter-move:** when a public form feeds a Desk workflow, verify the exact backend field that drives Desk behavior, not just that the submission created a Lead.
+
+The useful verifier checks three layers together: current service records, Lead Custom Field labels/depends_on logic, and the submit helper that builds child rows. A browser success modal alone is not enough for CRM parity.
+
+---
+
 ## 2026-05-01 - Form labels are behavior contracts
 
 ### Lesson 1 - "Only" means the UI must enforce exclusivity.

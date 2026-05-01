@@ -1,6 +1,6 @@
-"""Booking-form page controller and submit endpoint.
+"""Inquiry-form submit endpoint and retired /book route.
 
-Renders /book (and serves /contact via redirect from www/contact.py).
+/contact renders the form partial. /book redirects to /contact?intent=quick.
 
 Spec: Hetzner http://5.78.136.133/book — saved 2026-04-29 to
 _resources/odoo-live-snapshot/hetzner-book.html. The local Odoo clone is
@@ -21,13 +21,12 @@ Submit flow:
   6. Each uploaded photo becomes a File record attached_to_doctype="Lead"
   7. Controller posts a Communication so the inquiry message lands on
      the Lead's timeline (Frappe's standard "communication on inbound")
-  8. Returns JSON {ok: true, lead: <name>} -> client navigates to
-     /book#received -> modal shows -> 4-second auto-redirect to home
+  8. Returns JSON {ok: true, lead: <name>} -> client shows the received modal
 
 Loud-failure compliance (per project CLAUDE.md + global loud-failure rule):
   - User: visible error banner with retry; never blank page on failure
   - Developer: frappe.log_error on every uncaught exception with payload
-  - Monitor: scripts/verify/smoke_forms.py covers /book on every deploy
+  - Monitor: scripts/verify/smoke_forms.py covers /contact on every deploy
 """
 import json
 
@@ -64,7 +63,7 @@ OCCASION_OPTIONS = [
 ]
 
 
-# The 6 service checkboxes mirror Hetzner /book's x_services multi-select.
+# The service checkboxes mirror the current /contact x_services multi-select.
 # The visibility-condition values must match these label strings exactly
 # because the JS does string-contains matching against the joined list.
 SERVICE_OPTIONS = [
@@ -76,6 +75,7 @@ SERVICE_OPTIONS = [
     ("svc_package", "Events Inquiry", "Events Inquiry"),
     ("svc_other", "Something Else", "Something Else"),
 ]
+SERVICE_VALUES = {value for _cb_id, value, _label in SERVICE_OPTIONS}
 
 
 PACKAGE_ITEM_OPTIONS = [
@@ -140,7 +140,6 @@ def submit_book_inquiry():
 
     # Multi-select services (incoming as repeated form field or CSV).
     services = _parse_multivalue(fd.get("x_services"))
-    services_csv = ", ".join(services)
 
     # Per-service notes (only relevant if the matching service was checked)
     decor_types = (fd.get("x_decor_types") or "").strip()
@@ -190,7 +189,7 @@ def submit_book_inquiry():
         "custom_event_time": event_time or None,
         "custom_event_location": event_location or None,
         "custom_guest_count": guest_count,
-        "custom_services": services_csv or None,
+        "custom_event_type": _service_child_rows(services),
         "custom_decor_types": decor_types or None,
         "custom_setup_time_arrival": setup_arrival or None,
         "custom_decor_notes": decor_notes or None,
@@ -332,6 +331,15 @@ def _indoor_outdoor_label(value):
 
 def _combine_text_values(*values):
     return "; ".join(str(v).strip() for v in values if str(v).strip())
+
+
+def _service_child_rows(services):
+    """Build Lead Table MultiSelect rows from public service labels."""
+    return [
+        {"service_type": service}
+        for service in services
+        if service in SERVICE_VALUES
+    ]
 
 
 def _compose_events_inquiry_notes(package_items, package_colors, package_notes):

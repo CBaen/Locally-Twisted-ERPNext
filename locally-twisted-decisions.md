@@ -8,6 +8,20 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-01 - Public service selections populate Lead `custom_event_type`
+
+**Decision:** Website inquiry submissions populate the Lead `custom_event_type` Table MultiSelect child rows, not only text notes. `custom_event_type` is the backend source of truth for selected services because Lead Desk conditional sections depend on those child rows.
+
+**Reasoning:** The public form was current, but the live ERPNext backend still had stale `LT Service Type` records (`Delivery Only`, `Event Package`) and Desk conditions tied to those values. The submit handler also wrote service labels as text but did not populate the Table MultiSelect, so a real web inquiry could land without opening the relevant Desk sections for Jeff. Mapping into `custom_event_type` fixes the actual CRM usability gap.
+
+**Implementation notes:** `locally_twisted.seed.sync_contact_intake_backend.execute` renames stale service records, adds `Pickup`, updates Lead Custom Field labels/depends_on logic, and clears Lead cache. `submit_book_inquiry` now builds `custom_event_type` child rows from selected public services. No new Lead fields were added.
+
+**Verification receipt:** `python scripts/verify/lead_backend_intake_parity.py` passed after the sync. A direct endpoint submission with `Delivery`, `Pickup`, and `Events Inquiry` created a Lead whose `custom_event_type` rows matched those three services; the test Lead and related artifacts were deleted.
+
+**Decided by:** GL approved the backend parity slice; implemented by Codex.
+
+---
+
 ## 2026-05-01 - Contact services are stackable; Events Inquiry is the high-value package path
 
 **Decision:** `/contact` is the canonical inquiry surface and its service choices are stackable: Balloon Decor, Balloon Twisting, Face Painting, Delivery, Pickup, Events Inquiry, and Something Else. `Events Inquiry` replaces `Event Package` and is the package-planning path for larger, multi-piece purchases. Delivery and Pickup do not use "Only" labels. `/book` redirects to `/contact?intent=quick`, and `/balloon-twisting-and-face-painting` routes interested customers to guided contact URLs instead of embedding a separate form.

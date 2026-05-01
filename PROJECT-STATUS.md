@@ -41,6 +41,7 @@
 - **Storefront correction pass shipped 2026-05-01:** header/footer IA cleaned to match current routes (`What We Make`, `About Us`, `Book an Event` removed; `All Products` kept), menu dropdowns contained, mobile cart/hamburger visible at 390px/430px, footer centered without shrinking below accessible sizes.
 - **Navigation/routing cleanup shipped 2026-05-01:** primary nav is `Shop Balloon Decor`, `Plan by Occasion`, `Balloon Twisting & Face Painting`, `FAQ`, `Blog`, search. The top utility bar owns the only `Contact Us` CTA. `Plan by Occasion` routes to product/category pages, not contact shortcuts. `/book` redirects to `/contact?intent=quick`; `/shop-items` and `/all-products` alias to `/shop-by-category`.
 - **Contact/BTFP inquiry consolidation shipped 2026-05-01:** `/contact` is the canonical inquiry form with stackable service choices, guided prefill URLs, service-specific conditional panels, Events Inquiry package planning, Pickup, and Delivery/Pickup labels without "Only." `/balloon-twisting-and-face-painting` is now a contact-led service page that sends customers to `/contact?service=btfp`, `/contact?service=twisting`, or `/contact?service=face-painting`. `/book` redirects to `/contact?intent=quick`.
+- **Backend Lead/CRM intake parity shipped 2026-05-01:** `LT Service Type` records now match the public form (`Delivery`, `Pickup`, `Events Inquiry`; no `Delivery Only` / `Event Package`). Lead Custom Field labels/depends_on logic match the revised taxonomy, and web submissions populate `custom_event_type` child rows so Desk sections open from real inquiries.
 - **Privacy and Terms routes added 2026-05-01:** `/privacy` and `/terms-of-service` return HTTP 200 locally. Treat as plain-language drafts for Stripe readiness; Stripe Dashboard URL wiring and any legal review remain follow-ups.
 - **Layout-fit gate restored 2026-05-01:** `scripts/verify/layout_fit.spec.js` checks 15 public/shop/cart routes across 320px, 375px, tablet, and desktop viewports. Latest verified command: `npm run test:layout-fit` -> 60 passed after fixing `.lt-contact__icon` sizing on `/contact`.
 - **Product listing/detail corrections shipped 2026-05-01:** item detail/configure sales-pitch blocks removed; `/shop-items/arches` fixed by preserving Webshop's `.item-group-content` wrapper contract; listing cards now receive `lt_brand_description` through `locally_twisted.api.product_listing` and prefer it in card copy.
@@ -52,7 +53,6 @@
 
 **What's next (in order):**
 - **Stripe Dashboard URL wiring for `/privacy` and `/terms-of-service`** after GL/legal approval; dashboard still has placeholder URLs until changed.
-- **Backend CRM/Lead form parity for revised contact intake taxonomy** — verify/update the ERPNext Desk Lead presentation for stackable services, Events Inquiry notes, Pickup/Delivery wording, and live-artist shade logic.
 - **Sample data for backend tour** — realistic Lead records, paid SO, upcoming event for Jeff's desk demo.
 - **Item Group imagery** — each Item Group has empty `image` field. Adding category images would make `/shop-by-category` and a future image-rich mega menu feel more designed.
 
@@ -70,6 +70,7 @@ See `locally-twisted-decisions.md` for the full reasoned log. Summary:
 
 | Date | Decision | Why |
 |------|----------|-----|
+| 2026-05-01 | Website inquiries populate Lead `custom_event_type` child rows | Desk conditional sections depend on the Table MultiSelect, so CSV/text-only service storage is not enough for backend CRM usability. |
 | 2026-05-01 | Contact service choices are stackable; Events Inquiry is the package planning path | "Only" implies mutual exclusion. GL wants large multi-piece/corporate event packages to be the ideal path, with structured package-piece choices and fewer irrelevant conditional questions. |
 | 2026-04-30 | Frame revised: "migration of business intent + catalog data into a fresh ERPNext install" | Supersedes the 2026-04-26 reframe. Catalog port + form intent + policies + domain cutover are migration shape. Jeff-disclosure stealth and hand-build-not-auto-translate survive as constraints, not as a denial of migration reality. (See decisions log 2026-04-30 frame entry.) |
 | 2026-04-26 | Earlier reframe: "first professional business platform," not "Odoo migration" | Was motivated by Jeff-disclosure concerns and avoiding too-mechanical translation framing. Superseded 2026-04-30. |
@@ -150,6 +151,7 @@ Canonical resources for the migration destination live in `_resources/` and are 
 - **BTFP page refreshed:** `/balloon-twisting-and-face-painting` is now a contact-led service page using actual Hetzner content and current LT styling. Service CTAs prefill `/contact`.
 - **Book route retired:** `/book` redirects to `/contact?intent=quick`; it is not a separate public form and not a legacy alias to preserve as its own experience.
 - **Service taxonomy cleaned:** `Event Package` became `Events Inquiry`; `Delivery Only` and `Pickup Only` became stackable `Delivery` and `Pickup`.
+- **Backend CRM parity synced:** the live ERPNext Lead form now uses the revised service records and conditional logic, and public submissions populate the Lead `custom_event_type` Table MultiSelect.
 - **Events Inquiry structured:** package-piece checkboxes mirror homepage custom categories, color prompt is more fun/customer-facing, and details aggregate into existing Lead text fields.
 - **Conditional form logic corrected:** live-artist shade/environment questions appear only for Balloon Twisting and Face Painting; Something Else, Delivery, Pickup, and outside balloon decor do not get irrelevant dropdowns.
 - **Pickup added:** pickup customers get a location prompt below the form, and Riverdale now reads `Northern Utah Location (Residential Address)`.

@@ -26,6 +26,8 @@ Run the layout-fit gate from the project root: `npm run test:layout-fit`.
 | `install_webshop.py` | Historical/fallback installer for `frappe/webshop` + `frappe/payments` on a fresh bind-mount style stack. Current local runtime uses the custom `locally-twisted-erpnext:v15` image with `payments` and `webshop` image-owned, plus a live-edit bind mount for `locally_twisted`. | Do not run as a routine post-recreate step. Use only when deliberately rebuilding a bind-mount install path, then verify `installed_apps` order keeps `locally_twisted` last. |
 | `export_odoo_catalog.py` | One-shot HTML scraper for the live LT Odoo catalog (`http://5.78.136.133/`). Outputs `_resources/odoo-export/catalog.json` (51 products with attributes + variant data) and downloads product images to `_resources/odoo-export/images/`. Idempotent — re-running overwrites JSON, skips already-downloaded images. Also a candidate agency-tier capability (cross-client Odoo migration pattern). | (a) Once at session 2026-04-26 — already run. (b) Re-run before Hetzner Odoo is decommissioned to refresh image set. |
 
+| `sync_contact_intake_backend.py` | Runs the in-app `locally_twisted.seed.sync_contact_intake_backend.execute` sync so ERPNext Lead/CRM metadata matches the current `/contact` service taxonomy. | After changing public contact service labels or backend Lead conditional logic |
+
 ### `dev/`
 
 | Script | Purpose | Run when |
@@ -54,6 +56,7 @@ Run the layout-fit gate from the project root: `npm run test:layout-fit`.
 | `layout_fit.spec.js` | Playwright Test gate for 15 public/shop/cart routes across 320px, 375px, tablet, and desktop. Fails on HTTP errors, document horizontal overflow, visible element overflow, and direct text overflow. | Before visual claims, after customer-facing CSS/Jinja/template changes |
 | `contact_service_logic.py` | Verifies `/contact` service-specific conditional logic: stackable services, Events Inquiry labels, live-artist-only shade/environment fields, Pickup/Delivery wording, and absence of stale `Event Package` / `Only` labels. | After editing contact form labels, service choices, conditionals, or Lead payload mapping |
 | `contact_prefill.py` | Verifies guided contact URLs preselect the intended service checkboxes and reveal the matching panels for BTFP, twisting, and face painting. | After editing service-page CTAs or `/contact?service=...` parsing |
+| `lead_backend_intake_parity.py` | Verifies live ERPNext Lead/CRM metadata matches `/contact`: service type records, Lead Custom Field labels/depends_on logic, and submit helper mapping into `custom_event_type`. | After editing backend Lead fields or public service taxonomy |
 | `smoke_forms.py` | Browser smoke test for public forms. Use `--form-path /contact --skip-newsletter` for the current canonical inquiry form; set `LT_ADMIN_PASSWORD` when backend Lead/Communication verification is required. | Before claiming form submissions work end-to-end |
 | `playwright_home_screenshot.py` | Real-Chromium full-page screenshot capture at desktop + mobile viewports + DOM facts dump | Before declaring any visible change "done." Mandatory per `anti-gl-patterns.md` section 0. |
 

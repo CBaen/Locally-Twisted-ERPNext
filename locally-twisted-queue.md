@@ -28,7 +28,6 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 
 **Remaining (in priority order):**
 
-- [P0] **Backend CRM/Lead form parity for revised contact intake taxonomy.** Public `/contact` now uses stackable services, Events Inquiry package planning, Pickup/Delivery without "Only", and live-artist-only shade logic. Verify/update the ERPNext Desk Lead form/CRM presentation so backend labels and sections match the public intake. Do not claim backend CRM parity until visually checked in the running Desk.
 - [P0] **Mirror Rebuild Phase 2 — page rebuilds, in priority order:**
   1. `/refund-policy` Hetzner-faithful refresh. Mirror source: `pages/refund-policy.html`.
   2. `/accessibility` Hetzner-faithful refresh. Mirror source: `pages/accessibility.html`.
@@ -77,8 +76,6 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 ### Phase 2 — Form-handling depth (reframed 2026-04-27)
 
 `/contact` is the primary inquiry route. `/book` is retired and redirects to `/contact?intent=quick`. Phase 2 now covers depth around all forms:
-
-- [P0] Verify CRM/Lead Desk layout parity for the revised public `/contact` taxonomy before treating the backend mapping as done. Customer submissions currently land in existing Lead fields through `lead_cascade.py`; the remaining question is operator-facing presentation, labels, and whether additional custom fields are worth the schema churn.
 
 - [P0] Verify Contact dedup logic now in `apps/locally_twisted/locally_twisted/lead_cascade.py` (Lead → existing Contact match by email/phone, else create new). Queue previously listed this as unbuilt; confirm with a smoke record before deleting.
 - [P0] Verify customer acknowledgment email automation now in `apps/locally_twisted/locally_twisted/lead_cascade.py` (`after_insert`, queued `frappe.sendmail`). Queue previously listed this as unbuilt; confirm mail queue behavior before deleting.
