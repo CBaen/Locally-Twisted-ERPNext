@@ -43,6 +43,12 @@ Use a consistent, premium LT-compatible background system:
 
 All generated images should be treated as illustrative unless they are explicitly real LT installs. Do not use generated images as proof images.
 
+## GL Feedback Incorporated: Classic Arch Density
+
+Classic arch scale changes the span and opening, not the default construction density. A parade-clearance classic arch should usually be the same classic quad/spiral build logic as a doorway classic arch, only larger and properly anchored.
+
+Dense layered rainbow arches are a separate custom/high-density direction unless the customer explicitly orders that density. Do not use the dense rainbow wall look as the default `classic-arch` render for large sizes.
+
 ## Prompt 1: Classic Arch, Single-Door Scale
 
 Product target:
@@ -55,18 +61,19 @@ Product target:
 Prompt:
 
 ```text
-Create a realistic premium product render of a classic balloon arch for Locally Twisted, built for a single standard doorway or narrow event entrance. The arch is a classic spiral construction made from tightly packed 4-balloon latex clusters on a concealed monofilament/frame line. Use uniform 11-inch round balloons, with each cluster packed solidly against the next. The spiral pattern must be readable: each cluster advances the contrast color by one quarter turn, creating a clean diagonal candy-stripe effect across the arch, not random color scatter.
+Create a realistic premium product render of a classic balloon arch for Locally Twisted, built for a single standard doorway or narrow event entrance. The arch is a traditional classic spiral construction made from repeated 4-balloon latex clusters on a concealed monofilament/frame line. Use uniform 11-inch round balloons. The arch should read as one standard classic arch row, not a thick wall of balloons. The spiral pattern must be readable: each cluster advances the contrast color by one quarter turn, creating a clean diagonal candy-stripe effect across the arch, not random color scatter.
 
 Use 3 or 4 coordinated colors from a polished event palette: teal, soft cream, blush pink, and reflex gold. Keep balloon size uniform because this is classic, not organic. Show subtle but believable support logic at the two bases: small low-profile weighted bases or plates, partially hidden by balloon clusters. The arch opening should clearly fit one standard doorway with comfortable head clearance.
 
 Set the arch in a clean professional venue mockup with a warm white wall, simple doorway outline, pale neutral floor, and soft commercial catalog lighting. Product centered, straight-on three-quarter camera, enough negative space around the arch for ecommerce cropping. The image should feel more polished and business-capable than a casual party photo while still looking physically buildable by a professional balloon decorator.
 
-Negative constraints: no floating unsupported arch, no organic mixed-size balloons, no random confetti color placement, no impossible twisting, no toy plastic shine, no tiny doorway opening, no messy background, no fake brand text, no people.
+Negative constraints: no floating unsupported arch, no organic mixed-size balloons, no thick multi-row balloon wall, no random confetti color placement, no impossible twisting, no toy plastic shine, no tiny doorway opening, no messy background, no fake brand text, no people.
 ```
 
 Hard review checks:
 
 - The arch must read as classic quad/spiral work, not organic garland.
+- It must not be thicker than the default classic product.
 - Door scale must be obvious without feeling miniature.
 - Bases/support must be believable but not visually dominant.
 
@@ -76,25 +83,25 @@ Product target:
 
 - `classic-arch`
 - Size interpretation: the highest-scale option, visually equivalent to parade/truck-clearance usage.
-- Design: Layered/rainbow bands.
+- Design: Swirl, up to 4 colors. Layered/rainbow density belongs to custom/high-density work, not the default classic-arch size render.
 - Use: size-specific variant image, not generic template lead.
 
 Prompt:
 
 ```text
-Create a realistic premium product render of a very large classic balloon arch for Locally Twisted, scaled for a parade route or vehicle-clearance entrance where two trucks could pass under it. The arch is a professional air-filled classic balloon structure, not helium floating. It uses repeated rows of tightly packed uniform latex balloon clusters on a strong hidden frame, with clearly anchored feet on both sides.
+Create a realistic premium product render of a very large classic balloon arch for Locally Twisted, scaled for a parade route or vehicle-clearance entrance where two trucks could pass under it. The arch is a professional air-filled classic balloon structure, not helium floating. It uses the same default classic quad/spiral build logic as a doorway classic arch, scaled wider and taller on a strong hidden frame, with clearly anchored feet on both sides. It should not become a dense multi-row rainbow wall unless ordered as custom high-density decor.
 
-Use a layered rainbow-band design inspired by Jeff's real large outdoor arch: clean concentric bands of turquoise, green, yellow, orange, red, and blush-pink balloons. Each band should have consistent spacing and uniform balloon size. The opening must be very wide and tall, with a subtle scale cue such as a marked parade street, distant curb, or small neutral traffic cones near the base. Do not include readable event signage or brand text.
+Use a clean classic spiral pattern with 3 or 4 coordinated colors such as teal, soft cream, blush pink, and reflex gold. Each cluster should look like a uniform 4-balloon quad and rotate one quarter turn per cluster. The opening must be very wide and tall, with a subtle scale cue such as a marked parade street, distant curb, or small neutral traffic cones near the base. Do not include readable event signage or brand text.
 
 Set the scene in a controlled professional outdoor venue mockup: clean parade street or school/city event approach, bright but soft daylight, pale neutral sky, minimal background distraction. The arch should dominate the frame, centered and symmetrical, with enough margin for ecommerce crop. Support plates, sandbagged bases, or low frame anchors should be visible enough to make the structure believable.
 
-Negative constraints: no unsupported floating arch, no narrow doorway scale, no random balloon sizes, no chaotic confetti colors, no ambiguous arch opening, no crowd, no vehicles blocking the product, no generated text, no impossible wind-blown structure.
+Negative constraints: no unsupported floating arch, no narrow doorway scale, no dense rainbow wall unless custom, no random balloon sizes, no chaotic confetti colors, no ambiguous arch opening, no crowd, no vehicles blocking the product, no generated text, no impossible wind-blown structure.
 ```
 
 Hard review checks:
 
 - The scale must not be confused with a doorway arch.
-- The layered bands must stay clean and consistent.
+- The large arch must keep default classic-arch build density unless explicitly custom.
 - Anchoring must be visible enough that Jeff would not reject the physics.
 
 ## Prompt 3: Classic Column, Spiral With Topper
