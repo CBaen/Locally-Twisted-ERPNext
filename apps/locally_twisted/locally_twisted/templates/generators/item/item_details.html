@@ -54,15 +54,41 @@
         {% include "templates/generators/item/item_add_to_cart.html" %}
     {% endif %}
 
-    {# Description — Quiet Confidence prose. #}
-    {% if frappe.utils.strip_html(doc.web_long_description or '') %}
-        <div class="lt-product__description" itemprop="description">
-            {{ _(doc.web_long_description) | safe }}
+    {# Two-field discipline (GL directive 2026-04-30):
+       lt_brand_description = Quiet Confidence voice copy (the "why")
+       lt_product_details   = plain-language factual specs (the "what")
+       Both render on every product page as distinct sections. The legacy
+       web_long_description / description fields are honored only as a
+       fallback for items not yet migrated to the two-field shape. #}
+    {% set _brand = frappe.utils.strip_html(doc.lt_brand_description or '') %}
+    {% set _details = frappe.utils.strip_html(doc.lt_product_details or '') %}
+
+    {% if _brand %}
+        <div class="lt-product__brand-description" itemprop="description">
+            {{ doc.lt_brand_description | safe }}
         </div>
-    {% elif frappe.utils.strip_html(doc.description or '') %}
-        <div class="lt-product__description" itemprop="description">
-            {{ _(doc.description) | safe }}
-        </div>
+    {% endif %}
+
+    {% if _details %}
+        <section class="lt-product__details-section" aria-labelledby="lt-product-details-heading">
+            <h2 id="lt-product-details-heading" class="lt-product__details-heading">{{ _("What's Included") }}</h2>
+            <div class="lt-product__details-body">
+                {{ doc.lt_product_details | safe }}
+            </div>
+        </section>
+    {% endif %}
+
+    {% if not _brand and not _details %}
+        {# Legacy fallback for any Website Item not yet migrated. #}
+        {% if frappe.utils.strip_html(doc.web_long_description or '') %}
+            <div class="lt-product__description" itemprop="description">
+                {{ _(doc.web_long_description) | safe }}
+            </div>
+        {% elif frappe.utils.strip_html(doc.description or '') %}
+            <div class="lt-product__description" itemprop="description">
+                {{ _(doc.description) | safe }}
+            </div>
+        {% endif %}
     {% endif %}
 
     {# Custom-decor inquiry cross-link — for items where "the cart isn't the answer". #}
