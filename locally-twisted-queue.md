@@ -10,6 +10,8 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 ## Active
 
+**Reconciliation note (2026-05-01):** `scripts/verify/layout_fit.spec.js` has been restored and verified through `npm run test:layout-fit` (60 passed). Treat `.planning/phases/01-customer-site-and-storefront/PLAN.md` as historical; `/contact` is the primary inquiry route and `/book` is alias-only.
+
 ### Phase 1 — Customer site (lookbook-forward, with small shop)
 
 See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slice list. Highlights:
@@ -77,8 +79,8 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 
 `/contact` is the primary inquiry route. `/book` is retired and aliases to `/contact`. Phase 2 now covers depth around all forms:
 
-- [P0] Contact dedup logic (Lead → existing Contact match by email/phone, else create new)
-- [P0] Customer acknowledgment email automation (Server Script on Lead `before_insert` or similar)
+- [P0] Verify Contact dedup logic now in `apps/locally_twisted/locally_twisted/lead_cascade.py` (Lead → existing Contact match by email/phone, else create new). Queue previously listed this as unbuilt; confirm with a smoke record before deleting.
+- [P0] Verify customer acknowledgment email automation now in `apps/locally_twisted/locally_twisted/lead_cascade.py` (`after_insert`, queued `frappe.sendmail`). Queue previously listed this as unbuilt; confirm mail queue behavior before deleting.
 - [P0] Loud-failure compliance audit across every form on Phase 1 surfaces
 - [P1] Monitor alerts (Better Stack or equivalent) — fire if `/contact` form-creation rate drops to zero for >24 hours
 
@@ -95,8 +97,6 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 - [P3] Replace the `HERO_CYCLING_TITLES` placeholder list in `home.py` with `frappe.get_list("Blog Post", ...)` once Slice 14 (blog framework) ships.
 
 ### Cross-cutting / housekeeping
-
-- [P2] **Persist the nginx Origin patch across container recreation.** Currently applied via `docker exec` in `scripts/fix/patch_nginx_socketio_origin.py` and only survives until the frontend container is recreated. Cleaner long-term: docker-compose override that mounts a custom `frappe.conf` with the pass-through line.
 
 - ~~**Sweep `scripts/verify/_screenshots/` accumulated bloat.**~~ DONE 2026-04-30: added `scripts/verify/_screenshots/` to `.gitignore` (option B). 127MB of accumulated diagnostic captures no longer reach git. Existing on-disk dirs not auto-deleted but gitignored — GL or future instance can `rm -rf scripts/verify/_screenshots/*` to reclaim disk space when desired.
 

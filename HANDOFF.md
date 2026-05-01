@@ -17,7 +17,7 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 - `/book` is retired as a customer-facing page and aliases to `/contact`; CTAs now use `/contact`.
 - `/shop-items` and `/all-products` alias to `/shop-by-category` because the root Item Group page is too thin.
 - `/privacy` and `/terms-of-service` now exist and return HTTP 200 locally. Treat as plain-language drafts for Stripe readiness; Dashboard wiring/legal approval still separate.
-- `scripts/verify/layout_fit.spec.js` now checks actual fit across 15 public/shop/cart routes at 320, 375, tablet, and desktop widths. Latest run: 60 passed. It catches document overflow, visible element overflow, and text overflow while ignoring intentionally clipped carousel internals.
+- `scripts/verify/layout_fit.spec.js` is restored and verified. Latest command: `npm run test:layout-fit` -> 60 passed after the gate caught and Codex fixed `.lt-contact__icon` text overflow on `/contact`.
 - Playwright is installed as Node/CLI tooling in npm's npx cache, not as Python `playwright` for `C:\Python314\python.exe`. Working direct CLI path: `C:\Users\baenb\AppData\Local\npm-cache\_npx\420ff84f11983ee5\node_modules\.bin\playwright.cmd` (v1.59.1).
 - `scripts/verify/nav_ia.py` now guards nav order, no duplicate Contact, no retired `/book` nav links, and product-backed occasion links.
 - Footer centering/balance was fixed through content/layout cleanup, not by shrinking below accessible sizes.
@@ -50,7 +50,7 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 
 ## Three things that matter most on day one
 
-**1. Layout fit now has an automated gate, but GL's real browser remains the ship gate.** The previous desktop chrome complaint is not currently reproducing on `/` at 1366px: logo is contained, tagline stays one line, and the expanded layout-fit spec passes 60 route/viewport cases. Keep using the spec before visual claims, then have GL open the actual pages because screenshots and DOM checks are still preconditions, not verdicts.
+**1. Layout fit now has a restored automated gate, but GL's real browser remains the ship gate.** Use `npm run test:layout-fit` before visual claims, then inspect desktop/mobile screenshots and have GL open the actual pages because screenshots and DOM checks are still preconditions, not verdicts.
 
 **2. Triadic-construction-v2 is heavy but it earned its keep.** I dispatched it for the chrome rebuild and it caught real defects. The skill's discipline (3 builders, 3 reviewers with distinct personas, mandatory GL Proxy, Selective Re-Validation) ate significant context but the fix-round was mechanical because the defects were named clearly with file:line. **For Phase 2 page rebuilds, you can probably go lighter** — page-by-page work has less interdependency than chrome. Single focused builder per page + audit pass at the end is probably the right shape. Reserve triadic for things touching every page.
 
@@ -114,7 +114,7 @@ Each page: read mirror source → build Frappe controller + template → atomic 
 | Edited Jinja/CSS/Web Page | `python scripts/dev/clear_website_cache.py` |
 | Edited `hooks.py` / new module / fixture | `docker restart locally-twisted-erpnext-v15-backend-1 && sleep 12 && python scripts/dev/clear_website_cache.py` |
 | Edited nav IA | `python scripts/verify/nav_ia.py` plus route checks for new links |
-| Check customer-site layout fit | `& 'C:\Users\baenb\AppData\Local\npm-cache\_npx\420ff84f11983ee5\node_modules\.bin\playwright.cmd' test scripts/verify/layout_fit.spec.js --reporter=line` |
+| Check customer-site layout fit | `npm run test:layout-fit` |
 | **Backend restarted, frontend now 502** | `docker restart locally-twisted-erpnext-v15-frontend-1` (nginx upstream IP cached at startup; flush by restart) — this gotcha cost me an hour today; documented in agency auto-behaviors |
 | Re-mirror Hetzner | `python scripts/mirror/mirror_hetzner.py` |
 | Capture chrome audit screenshots | `python scripts/verify/_oneshot_chrome_audit.py` (writes to `_resources/audit-2026-04-30-chrome/`) |
@@ -176,8 +176,8 @@ I read this as: **autonomous ownership inside the migration frame.** GL doesn't 
 - I wrote the `lt-megamenu.js` file path in the brief but didn't enumerate the inner content classes for mega panels. Builder Jinja used `lt-megamenu__inner`/`__col`/`__heading` etc. while CSS had `lt-header__mega-inner`/`__link`. Required a final orchestrator-level rename pass after fix round. **For you:** specify INNER content class names too, not just block-level.
 
 **Open trust state:**
-- All technical work verified via Playwright viewport-only screenshots + script-extracted DOM facts.
-- The current fit gate is `scripts/verify/layout_fit.spec.js`; latest run covered 60 route/viewport cases and passed.
+- All visible work still needs route checks plus inspected desktop/mobile screenshots before visual claims.
+- The current layout-fit gate is `scripts/verify/layout_fit.spec.js`; latest run via `npm run test:layout-fit` passed 60 checks.
 - I read the current homepage desktop/mobile screenshots after the fit pass; the older desktop chrome bleed complaint is not currently reproducing at 1366px.
 - GL has done partial real-browser confirmation; gave green light on "usable."
 - Mobile chrome and the reported shop/product overflow pages look contained in the latest verification screenshots.

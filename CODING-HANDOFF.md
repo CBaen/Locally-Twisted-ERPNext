@@ -38,6 +38,7 @@ Verified or updated during the 2026-05-01 storefront correction pass:
 - `/book` is retired as a customer-facing page and aliases to `/contact`. Current CTAs should use `/contact`; old `/book` traffic is compatibility only.
 - `/privacy` and `/terms-of-service` exist as static Frappe routes and return HTTP 200 locally. They are plain-language drafts for Stripe readiness; legal review and Stripe Dashboard URL wiring are still separate follow-ups.
 - Product listing cards can display `lt_brand_description` through the local Webshop API wrapper in `locally_twisted.api.product_listing`.
+- `scripts/verify/layout_fit.spec.js` has been restored as a committed Playwright Test gate. Latest verified command: `npm run test:layout-fit` -> 60 passed after fixing `.lt-contact__icon` sizing on `/contact`.
 - Website cache was cleared after Jinja/CSS changes; `hooks.py` CSS cache-bust was bumped to the current session version.
 
 Claims from older docs still need re-verification before being repeated:
@@ -101,4 +102,10 @@ Navigation IA regression check:
 python scripts/verify/nav_ia.py
 ```
 
-Before declaring visible work done, capture and inspect desktop and mobile screenshots. Use the repo's existing Playwright scripts where possible.
+Layout fit regression check:
+
+```powershell
+npm run test:layout-fit
+```
+
+Before declaring visible work done, capture and inspect desktop and mobile screenshots. Use the repo's existing Playwright scripts where possible; the layout-fit gate is necessary but does not replace screenshot review.

@@ -1,0 +1,10 @@
+{
+  "name": "locally-twisted-erpnext",
+  "private": true,
+  "scripts": {
+    "test:layout-fit": "playwright test scripts/verify/layout_fit.spec.js --reporter=line"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.59.1"
+  }
+}

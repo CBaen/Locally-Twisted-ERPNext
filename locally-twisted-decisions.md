@@ -8,6 +8,48 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-01 - Runtime packaging clarified: custom image plus LT live-edit overlay
+
+**Decision:** Current local runtime uses the custom image `locally-twisted-erpnext:v15` for Frappe, ERPNext, payments, webshop, build tooling, assets, and the nginx Origin pass-through patch. It also still bind-mounts `apps/locally_twisted` into Frappe services as a development live-edit overlay. Payments and Webshop are image-owned upstream apps, not host bind-mounted.
+
+**Reasoning:** A prior decision entry said all three app bind-mounts were removed. The important durable change was removing the fragile post-recreate editable-install pattern for upstream apps and baking the stack into the image. The LT app overlay remains useful for local development and is visible in both `pwd.yml` and `docker inspect`.
+
+**Verification receipt:** `Locally-Twisted-Backend/frappe_docker/pwd.yml` uses `image: locally-twisted-erpnext:v15` and mounts `../../apps/locally_twisted:/home/frappe/frappe-bench/apps/locally_twisted`. `docker inspect locally-twisted-erpnext-v15-backend-1` and frontend show the same bind mount. `docker exec locally-twisted-erpnext-v15-frontend-1 grep -n -E "proxy_set_header Origin|http_origin|Origin" /etc/nginx/conf.d/frappe.conf` returned `proxy_set_header Origin $http_origin;`.
+
+**Operational impact:** Do not run `scripts/setup/install_webshop.py` or `scripts/fix/patch_nginx_socketio_origin.py` as routine post-recreate rituals on the current stack. Keep them only as historical/fallback tools.
+
+**Decided by:** Codex reconciliation pass under GL directive to clean stale claims before moving forward.
+
+---
+
+## 2026-05-01 - Layout-fit gate restored and verified
+
+**Decision:** `scripts/verify/layout_fit.spec.js` is now a real committed Playwright Test gate, with a local Node project wrapper in `package.json`. Use `npm run test:layout-fit` for the customer-site layout fit check.
+
+**Reasoning:** The earlier layout-fit gate reference was a valid need but an invalid claim: the file was missing. Recreating the spec turns that claim back into executable evidence. The gate checks 15 public/shop/cart routes at 320px, 375px, tablet, and desktop widths for HTTP availability, document horizontal overflow, visible element overflow outside the viewport, and direct text overflow.
+
+**Verification receipt:** TDD red run: `npx playwright test scripts/verify/layout_fit.spec.js --reporter=line` failed with "No tests found" before the file existed. First green attempt produced 52 passed / 8 failed, catching real text overflow in `.lt-contact__icon` on `/contact` and `/book`. After widening the icon slot in `apps/locally_twisted/locally_twisted/www/contact.html` and clearing website cache, `npm run test:layout-fit` passed all 60 checks.
+
+**Decided by:** GL directive to reconcile the claim first; implemented by Codex.
+
+---
+
+## 2026-05-01 - Historical red check before layout-fit restoration
+
+**Superseded later on 2026-05-01:** the gate was restored as `scripts/verify/layout_fit.spec.js` and verified via `npm run test:layout-fit` with 60 passing checks. Keep this entry only as the receipt that the earlier doc claim was properly challenged before restoration.
+
+**Decision at that point in the session:** the prior `scripts/verify/layout_fit.spec.js` claim had to be challenged before anyone relied on it. Verification at that moment found no matching file in the working tree and no git history for `layout_fit` / layout-fit spec paths.
+
+**Reasoning:** A future agent could otherwise believe a browser-fit gate exists and skip screenshots or real browser checks. The project trust rule is stricter: a claimed gate that cannot be found is not a gate.
+
+**Verification receipt:** `rg --files -g '*layout*' -g '*fit*' -g '*.spec.js' -g 'package.json' -g 'playwright.config.*'` found only `_resources/design-guide/synthesis/layout.tsx`; `git log --all --name-status -- '*layout_fit*' '*fit*.spec.js' '*layout*.spec.js'` returned no matching file history.
+
+**Follow-up:** Either recreate and commit the intended Playwright layout-fit spec, or remove remaining operational references to it. Until then, visible work still requires route checks plus desktop/mobile screenshots inspected by the agent and, for customer-facing claims, real-browser confirmation.
+
+**Decided by:** GL directive to reconcile the claim first; implemented by Codex.
+
+---
+
 ## 2026-05-01 - Codex project capabilities are routed through AGENTS.md
 
 **Decision:** LT now has a project-level Codex capability install at `.codex/capabilities/`, routed from `AGENTS.md`. Codex should read `.codex/capabilities/INDEX.md` when a task depends on local tools, reusable workflows, operating knowledge, or prior lessons, then open only the specific capability files needed.
@@ -21,6 +63,8 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 ---
 
 ## 2026-05-01 - Layout fit is a browser-gated contract, not a visual impression
+
+**Correction 2026-05-01:** The gate named below was missing when challenged earlier in the session, then restored later the same day. Use the newer "Layout-fit gate restored and verified" entry above for current state.
 
 **Decision:** Customer-facing fit checks now live in `scripts/verify/layout_fit.spec.js`. The gate covers the main public pages, the new policy pages, shop/category/product routes, and cart at 320px, 375px, tablet, and desktop widths. The check fails on horizontal document overflow, visible element overflow outside the viewport, and text overflow inside visible elements. It intentionally ignores descendants clipped by an overflow-hidden/scroll/auto ancestor, so carousels can keep offscreen track content without creating false positives.
 
@@ -148,11 +192,13 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ## 2026-04-30 (late evening) — Container reversion: bind-mount + post-recreate-reinstall pattern replaced by self-contained custom Docker image
 
-**Decision:** Replace the bind-mount-and-pip-install-after-every-recreate pattern with a custom Docker image (`locally-twisted-erpnext:v15`, built from `docker/Dockerfile`) that bakes everything into the image: frappe + erpnext (from base `frappe/erpnext:v15.105.0`), payments + webshop (cloned from upstream), locally_twisted (COPYed from local source), Node 18 + yarn, compiled bench assets, and the nginx Origin pass-through patch. The compose file (`Locally-Twisted-Backend/frappe_docker/pwd.yml`) now references the new image and has all bind-mounts for the three apps removed. `scripts/setup/install_webshop.py` and `scripts/fix/patch_nginx_socketio_origin.py` are marked deprecated; both kept on disk for historical reference, neither runs against the current stack.
+**Correction 2026-05-01:** the current compose file uses the custom image and still bind-mounts `apps/locally_twisted` as a local live-edit overlay. Payments and Webshop are image-owned. The intended current rule is "no fragile upstream-app bind-mount plus post-recreate reinstall ritual."
+
+**Decision:** Replace the fragile upstream-app bind-mount-and-pip-install-after-every-recreate pattern with a custom Docker image (`locally-twisted-erpnext:v15`, built from `docker/Dockerfile`). The image bakes in frappe + erpnext (from base `frappe/erpnext:v15.105.0`), payments + webshop (cloned from upstream), locally_twisted image content, Node 18 + yarn, compiled bench assets, and the nginx Origin pass-through patch. The compose file (`Locally-Twisted-Backend/frappe_docker/pwd.yml`) references the custom image. Current local development still overlays `apps/locally_twisted` with a bind mount for live edits; `payments` and `webshop` do not need host bind mounts. `scripts/setup/install_webshop.py` and `scripts/fix/patch_nginx_socketio_origin.py` are historical/fallback scripts, not routine steps against the current stack.
 
 **Reasoning:** GL directive: *"There's constantly breaking of containers because ERPNext naturally contains everything. We need to revert to that. An instance said that they made a 'structural change' so that container issue wouldn't happen and all it did was break everything. We need to fix that first and revert back to frappe's native containers."* The structural change was the bind-mount pattern: apps lived on the host, were mounted into the container, and an editable pip install + Node + yarn install + nginx patch had to be replayed in the container's writable layer after every `docker compose up --force-recreate` (because the writable layer is destroyed on recreate). The previous instance who shipped webshop documented this in the install script's own docstring: *"Long-term fix: bake Node + yarn into a custom Docker image."* That long-term fix is now done. Verified: a `--force-recreate` round-trip produces a fully-working stack with all 5 apps registered, all key URLs returning HTTP 200, and the nginx Origin pass-through line correctly rendered into `/etc/nginx/conf.d/frappe.conf` — with NO post-recreate scripts.
 
-**Trade-off accepted:** Editing `apps/locally_twisted/` source files no longer takes effect at runtime; image rebuild + recreate is required for changes to be served. The image rebuild is fast (heavy layers cache; only the diff is rebuilt), and the trade is worth it for eliminating the recurring breakage that prompted the reversion.
+**Trade-off accepted:** Payments/Webshop/runtime patches are image-owned, so those changes need an image rebuild. `apps/locally_twisted/` remains live-editable through the local development bind mount. The trade is worth it for eliminating recurring upstream-app reinstall and nginx repatch rituals while keeping LT app iteration fast.
 
 **Alternatives considered:** (a) Keep bind-mount but auto-run `install_webshop.py` from the configurator service's command — would still leave Node + yarn in the writable layer (broken on recreate) and still leave editable pip installs vulnerable; not actually native. (b) Push locally_twisted to a private GitHub repo and use upstream `images/custom/Containerfile` with apps.json — required GL to set up GitHub plumbing, rejected per the global "don't make GL the engineer" rule.
 
@@ -798,7 +844,7 @@ The GL Proxy flagged the convergence's tendency to route past the platform quest
 
 **Decision:** Three reinforcing decisions taken in one session.
 
-1. **`frappe/webshop` and `frappe/payments` are installed on the LT site as durable infrastructure** — bind-mounted in `pwd.yml` into all 8 frappe-image services, gitignored at the project level (the install script is the source-of-truth for HOW we installed them, not the upstream code itself). Reproducible via `python scripts/setup/install_webshop.py`. Phase 1 Slices 7-9 (products + cart + checkout) and Phase 4 (payments) are unblocked.
+1. **`frappe/webshop` and `frappe/payments` are installed on the LT site as durable infrastructure.** Historical install path used host clones plus bind mounts. Current runtime supersedes that with the custom image: payments and webshop are image-owned, and `scripts/setup/install_webshop.py` is fallback/history only. Phase 1 Slices 7-9 (products + cart + checkout) and Phase 4 (payments) are unblocked.
 
 2. **"Work within Frappe, don't fight it" is the standing principle for all UI/template work.** GL directive 2026-04-26: *"I don't want to fight Frappe or ERPNext and their code. I want to work within it."* Operationalized as: use Jinja partial overrides (templates/includes/...) as the primary surface for header/footer/page customization; use `web_include_css` (loads after the bundle) or `website_theme_scss` (compiles into the bundle) for theme CSS; refuse `!important` chains as the receipt of fighting the framework; use Webshop's existing hooks for cart/checkout customization rather than replacing the cart pipeline.
 

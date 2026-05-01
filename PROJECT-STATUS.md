@@ -12,11 +12,11 @@
 **What works:**
 - ERPNext v15.105.0 running locally at `http://localhost:8081` (9 containers, compose project `locally-twisted-erpnext-v15`)
 - WSL2 tuned: 8 GB RAM, 4 CPU, swap 2 GB, dropcache (`C:\Users\baenb\.wslconfig`)
-- `pwd.yml` pinned to `frappe/erpnext:v15.105.0`; bind-mount of `apps/locally_twisted/` to `/home/frappe/frappe-bench/apps/locally_twisted/` on all 8 frappe-image services
+- `pwd.yml` uses the custom baked image `locally-twisted-erpnext:v15` built from `docker/Dockerfile`, with `apps/locally_twisted` still bind-mounted into the Frappe services for local development. Verified by `docker inspect` on 2026-05-01.
 - LT Company record + Fiscal Year 2026 + Services domain + Standard with Numbers chart of accounts
 - 3 LT-specific DocTypes: `Dashboard Reviewed Item`, `LT Service Type` (+ `LT Lead Service Type` child + `LT Lead Photo` child)
 - `Lead` DocType extended with 45+ Custom Fields, plain-language relabels, "Additional Information" tab hidden, 25 MB upload
-- nginx Origin pass-through patched on the LT frontend container (re-apply via `scripts/fix/patch_nginx_socketio_origin.py` after container recreation)
+- nginx Origin pass-through is present in the running LT frontend container and baked into the current custom image; `scripts/fix/patch_nginx_socketio_origin.py` is historical/fallback, not a routine post-recreate step.
 - **Custom Frappe app `locally_twisted` installed**. **`installed_apps` order: `[frappe, erpnext, payments, webshop, locally_twisted]`** — locally_twisted MUST stay LAST so its template overrides win Frappe's reversed-app-order ChoiceLoader. Re-set via `db.set_global("installed_apps", json.dumps([...]))` if any new app installs append after locally_twisted.
 - **Brand foundation theme** at `/assets/locally_twisted/css/lt-theme.css` (registered via `web_include_css`, cache-bust query string `?v=YYYYMMDD-N`).
 - **Stripe end-to-end live (test mode).** `/checkout` → Stripe Checkout Session → `/payment-success` → `/thank-you`. ERPNext cascade: PR Paid → SI created → receipt + operator + welcome emails. GL completed real `4242` purchase 2026-04-29.
@@ -29,7 +29,7 @@
 - **Old live Odoo test shop catalog rebuilt in ERPNext webshop end-to-end.** Catalog source/reference: `http://5.78.136.133/shop`, captured to `_resources/odoo-live/catalog.json` via `scripts/setup/scrape_odoo_live.py`. This was a catalog-data port into a new ERPNext build, not an Odoo business-system migration.
 - **Verified DB counts: 53 Website Items, 10,631 Items total, 49 variant templates, 4 single-SKU templates, 10,578 variants, 10,613 Item Prices on Standard Selling, 32,002 Item Variant Attribute child rows, 26 Item Attributes.**
 - Item Group hierarchy: `Shop Items` (parent, `is_group=1`) → 11 children with `show_in_website=1`: Arches (10), Columns (10), Bouquets (16), Get-Well Bouquets (3), Garlands (4), Drops (1), Grab & Go (2), Table Decor (3), Stands & Easels (2), Deliveries (1), Seasonal & Specialty (1). Captured as fixture at `apps/locally_twisted/locally_twisted/fixtures/item_group.json`.
-- Item Attribute records: 24 attributes, 195 values, all collision-free abbrs (per ERPNext variant naming requirement). Fixture at `apps/locally_twisted/locally_twisted/fixtures/item_attribute.json`.
+- Item Attribute records: verified DB count is 26 as of 2026-05-01. Older docs that say 24 attributes are stale; fixture scope and the extra two DB records should be inspected before changing seed/fixture logic. Fixture at `apps/locally_twisted/locally_twisted/fixtures/item_attribute.json`.
 - Webshop Settings flags: `enable_variants=1`, `enable_attribute_filters=1`, `show_attribute_dropdowns=1` (set via `scripts/setup/enable_webshop_variants.py`, NOT fixtured per fixture-discipline — Singles doctype with operator-edited fields).
 - Bulk import: `apps/locally_twisted/locally_twisted/seed/seed_catalog.py` (idempotent, loud-fail, runs in-process via `bench execute locally_twisted.seed.seed_catalog.execute`). Honors Odoo's `data-attribute-exclusions` to filter forbidden combinations from the cartesian product.
 - **Mega menu** in navbar (desktop dropdown + mobile drawer accordion) sourced live from Item Group children via `update_website_context` hook (`apps/locally_twisted/locally_twisted/navbar_context.py`).
@@ -41,7 +41,7 @@
 - **Storefront correction pass shipped 2026-05-01:** header/footer IA cleaned to match current routes (`What We Make`, `About Us`, `Book an Event` removed; `All Products` kept), menu dropdowns contained, mobile cart/hamburger visible at 390px/430px, footer centered without shrinking below accessible sizes.
 - **Navigation/routing cleanup shipped 2026-05-01:** primary nav is `Shop Balloon Decor`, `Plan by Occasion`, `Balloon Twisting & Face Painting`, `FAQ`, `Blog`, search. The top utility bar owns the only `Contact Us` CTA. `Plan by Occasion` routes to product/category pages, not contact shortcuts. `/book` aliases to `/contact`; `/shop-items` and `/all-products` alias to `/shop-by-category`.
 - **Privacy and Terms routes added 2026-05-01:** `/privacy` and `/terms-of-service` return HTTP 200 locally. Treat as plain-language drafts for Stripe readiness; Stripe Dashboard URL wiring and any legal review remain follow-ups.
-- **Actual-fit browser gate added 2026-05-01:** `scripts/verify/layout_fit.spec.js` checks 15 public/shop/cart routes across 320px, 375px, tablet, and desktop viewports for document overflow, visible element overflow, and text overflow. Latest run: 60 passed using the located Node Playwright CLI.
+- **Layout-fit gate restored 2026-05-01:** `scripts/verify/layout_fit.spec.js` checks 15 public/shop/cart routes across 320px, 375px, tablet, and desktop viewports. Latest verified command: `npm run test:layout-fit` -> 60 passed after fixing `.lt-contact__icon` sizing on `/contact`.
 - **Product listing/detail corrections shipped 2026-05-01:** item detail/configure sales-pitch blocks removed; `/shop-items/arches` fixed by preserving Webshop's `.item-group-content` wrapper contract; listing cards now receive `lt_brand_description` through `locally_twisted.api.product_listing` and prefer it in card copy.
 - **Project-level Codex capabilities installed 2026-05-01:** `.codex/capabilities/` is routed from `AGENTS.md`. Ephemeral Codex validation found `.codex/capabilities/INDEX.md` and read the `screenshot` ingredient on demand.
 
@@ -127,7 +127,7 @@ Canonical resources for the migration destination live in `_resources/` and are 
 | `.planning/phases/01-customer-site-and-storefront/PLAN.md` | Phase 1 slice plan (all gates resolved) |
 | `scripts/setup/setup_lt_company.py` | One-shot wizard completion + LT Company seeding (reusable on fresh installs) |
 | `scripts/translate/translate_crm_lead.py` + 4 fix scripts | Built the active Lead schema (done; reference for how to use Frappe API) |
-| `scripts/fix/patch_nginx_socketio_origin.py` | nginx Origin pass-through patch (re-run after container recreation) |
+| `scripts/fix/patch_nginx_socketio_origin.py` | Historical/fallback nginx Origin pass-through patch; only use if a rebuilt image is verified missing the Origin header line |
 
 ## Rules
 
@@ -142,6 +142,8 @@ Canonical resources for the migration destination live in `_resources/` and are 
 
 ## Updates
 
+**Current-state warning:** dated updates below are historical receipts. Older entries still describe bind-mounts, `/book` as primary, or unseeded catalog states that were later superseded by the 2026-04-30 custom Docker image/catalog port and the 2026-05-01 `/contact` route decision. Use the Current State section plus `CODING-HANDOFF.md` for live operating facts.
+
 ### 2026-05-01 (storefront correction pass) — header/footer/menu cleanup + product listing/detail fixes
 
 - **Header/footer IA corrected:** removed `What We Make`, `About Us`, and `Book an Event` from customer chrome. `All Products` remains. Footer columns were re-centered through layout/content cleanup, not by shrinking text below accessibility expectations.
@@ -150,7 +152,7 @@ Canonical resources for the migration destination live in `_resources/` and are 
 - **Occasion nav is product-backed:** `Plan by Occasion` links now route to real product/category pages (`Birthday Deliveries`, `Baby Shower Garland`, `Graduation Grab n Go`, `Get-Well Bouquets`, `Large head Missionary`, etc.) instead of `/contact?occasion=...`. The nav IA verifier now fails if occasion links regress to contact shortcuts.
 - **Retired routes handled:** `/book` aliases to `/contact`; customer CTAs now point to `/contact`. `/shop-items` and `/all-products` alias to `/shop-by-category`.
 - **Policy routes added:** `/privacy` and `/terms-of-service` are static Frappe routes for Stripe readiness. Both return HTTP 200 locally; Stripe Dashboard wiring remains separate.
-- **Layout fit verifier added:** `scripts/verify/layout_fit.spec.js` covers `/`, `/book`, `/contact`, `/balloon-twisting-and-face-painting`, `/faq`, `/privacy`, `/terms-of-service`, `/refund-policy`, `/accessibility`, `/shop`, `/shop-by-category`, two product routes, the Seasonal category, and `/cart` at 4 viewports. Latest run: 60 passed.
+- **Layout fit verifier restored:** `scripts/verify/layout_fit.spec.js` is present and runnable through `npm run test:layout-fit`. Latest run: 60 passed.
 - **Product detail pitches removed:** stripped "Start a conversation" from `item_configure.html` and "Tell us what you're imagining" from `item_details.html`.
 - **`/shop-items/arches` bug fixed:** root cause was missing Webshop `.item-group-content` class in the LT Item Group wrapper. Restored the framework contract so the Webshop listing JS scopes results to the active Item Group. Verified Arches API response returns only Arches.
 - **Brand descriptions on listing cards:** added `locally_twisted.api.product_listing.get_product_filter_data` as a local wrapper for Webshop's product filter API and registered it with `override_whitelisted_methods`; listing cards now prefer `lt_brand_description` with existing description fallbacks.
@@ -277,7 +279,7 @@ Canonical resources for the migration destination live in `_resources/` and are 
 - Slice 7 — Lookbook (full portfolio, organized by event type)
 - Slice 8 — Service category pages (×5: Corporate, Weddings, Birthdays, Schools, Seasonal)
 - Slice 9 — Color Chart (`/color-chart`, static reference, 70 balloon colors)
-- Slice 10 — `/book` form page (the deep 45-field intake; primary inquiry conversion)
+- Slice 10 — `/book` form page is retired as a customer-facing route; `/contact` is the surviving inquiry surface and `/book` aliases there.
 - Slice 11 — Small Shop browse + detail
 - Slice 12 — Cart + checkout shell
 - Slice 13 — Blog framework (when shipped, replaces the `HERO_CYCLING_TITLES` placeholder list with a `frappe.get_list("Blog Post", ...)` call)
@@ -285,7 +287,7 @@ Canonical resources for the migration destination live in `_resources/` and are 
 
 **Standing rules added/refined this session:**
 - Reviews carousel > client logo crawl as primary social proof. Words from real customers persuade more than corporate logos for high-touch event services.
-- `/book` is THE primary inquiry conversion path — every CTA on the lookbook-forward site routes there.
+- `/contact` is the primary inquiry conversion path. Older `/book`-primary claims are stale; `/book` is alias-only.
 - Bouquets join the customizable categories list (6 total). Originally only 5 in the approved Odoo XML; bouquets are also customizable in Jeff's actual business.
 - About page deferred until Jeff is ready — no pressure.
 
@@ -310,7 +312,7 @@ Canonical resources for the migration destination live in `_resources/` and are 
 - **Slice 6 partial — `/accessibility`** — first portal page shipped via the meal. Static, ~15 minutes mechanical work. GL confirmed: *"the content in the middle of the page looked good!"*
 - **Slice 5 — `/contact`** — full form-bearing portal page. AJAX submit to whitelisted controller method → Lead + Communication. Lead Source ensure-or-create gotcha caught at smoke test. GL confirmed: *"Holy shit! You did it!"*
 - **Slice 4 — `/balloon-twisting-and-face-painting`** — second form-bearing portal page (10-field form). Aliased from underscored filename via `website_route_rules`. First-ship MVP — carousels, event-crawl, modal deliberately deferred.
-- **Webshop bundles compile.** Node 18 + yarn installed in backend container; symlinked to `/usr/local/bin` for `/bin/sh` subprocesses. `bench build` produces real bundles. `install_webshop.py --build-assets` flag wraps the install + symlink + build sequence for reproducibility after container recreation. `/all-products` renders cleanly with zero console errors.
+- **Webshop bundles compile.** Historical receipt: Node 18 + yarn were first installed in the backend container and wrapped by `install_webshop.py --build-assets`. Current runtime supersedes that path with the custom image, where build tooling and webshop assets are image-owned. `/all-products` renders cleanly with zero console errors.
 - **Platform direction RESOLVED.** Frappe-native confirmed by demonstration. Logged at `locally-twisted-decisions.md` 2026-04-26 (later, after Slice 2 + accessibility + contact build).
 
 **What's NOT done (next session candidates):**
@@ -349,7 +351,7 @@ Canonical resources for the migration destination live in `_resources/` and are 
 ### 2026-04-26 (closing session — long, mixed outcomes) — Webshop durable + catalog exported + Step 0 done + Jinja path validated; landing build FAILED for the second time; expedition surfaced platform-direction question now on GL's desk
 
 **What landed:**
-- **Webshop foundation locked.** `frappe/payments` + `frappe/webshop` cloned to `apps/`, bind-mounted in `pwd.yml` across 8 services, gitignored. `install_webshop.py` is reproducible after any `docker compose --force-recreate`. Webshop public routes live (`/all-products` 200, `/cart` 301).
+- **Webshop foundation locked.** Historical install path: `frappe/payments` + `frappe/webshop` were first cloned to `apps/`, bind-mounted in `pwd.yml` across 8 services, and gitignored. Current runtime supersedes that with the custom image; do not use `install_webshop.py` as a routine post-recreate step. Webshop public routes live (`/all-products` 200, `/cart` 301).
 - **Odoo catalog exported.** 51 products / 47 with attributes / 48 with images. `_resources/odoo-export/catalog.json` + 48 image files. `export_odoo_catalog.py` is idempotent and re-runnable.
 - **Step 0 fully completed.** Stripped the broken navbar toggler block (lines 388-415 — used a `data:image/svg+xml;utf8,...` data URI that silently failed in real browsers). Replaced with a real SVG file at `apps/locally_twisted/locally_twisted/public/icons/menu.svg`. lt-theme.css now 608 lines (was 770). Two `!important` blocks intentionally retired this session.
 - **Jinja override path validated.** Two prior HANDOFFs claimed it would work; nobody had verified. This session: dropped one test file, confirmed it resolved in served HTML, removed the test. Slice 2 redo path is now unblocked architecturally (only relevant if GL's platform direction stays Frappe).
@@ -395,15 +397,15 @@ Canonical resources for the migration destination live in `_resources/` and are 
 - **Webshop installed durably.** `frappe/webshop` + hard dependency `frappe/payments` cloned to `apps/`, bind-mounted into all 8 frappe-image services via `pwd.yml`, installed on the `frontend` site. `/all-products` returns HTTP 200; `/cart` returns HTTP 301 (redirect to login — expected for anonymous). Phase 1 Slices 7-9 + Phase 4 unblocked.
 - **Framework verification done.** Read Frappe's actual website module source in the running container (`apps/frappe/frappe/templates/includes/{footer,navbar}/`, `public/scss/website/`). Confirmed agency `frappe-conventions.md` claims; **resolved the `.web-footer` height "constraint" myth** (no `max-height` rule in Frappe's footer.scss — the previous observation came from `lt-theme.css`'s `!important` chain interacting with body's flex-column sticky-footer pattern). Slice 2 redo now unblocked.
 - **Webshop module mapped.** Documented which Jinja files to override for Slices 7-9 visual customization; cart-to-Quotation-to-Sales-Order-to-Payment-Request flow noted for Phase 4 Stripe wiring. All in the agency conventions doc.
-- **Reproducible scripts.** `scripts/setup/install_webshop.py` (handles fresh install, post-recreate re-pip-install, and verification). `scripts/dev/clear_website_cache.py` (cache-clear after editing Jinja/CSS). `scripts/README.md` indexes the full scripts dir.
+- **Reproducible scripts.** Historical receipt: `scripts/setup/install_webshop.py` handled the first fresh install and post-recreate editable re-install path. Current runtime supersedes that path with the custom image; keep the script as fallback/history only. `scripts/dev/clear_website_cache.py` remains active after editing Jinja/CSS. `scripts/README.md` indexes the full scripts dir.
 - **Bookkeeping cleanup.** `CLAUDE.md` "Currently working on" updated. `STATE.md` reflects actual progress (Slice 1 done, Slice 2 in flight). Queue's stale "Waiting on GL" section trimmed (Phase 1 gates were already resolved).
 - **Standing principle codified.** Per GL directive 2026-04-26: *"work WITHIN Frappe, don't fight it."* Captured in `locally-twisted-decisions.md` as the operating principle for all UI/template work going forward.
 
 **Code/infrastructure changes:**
-- `apps/payments/` and `apps/webshop/` cloned from upstream into project (gitignored — install script is source-of-truth for HOW we installed them)
-- `Locally-Twisted-Backend/frappe_docker/pwd.yml` — added bind-mount lines for `payments` + `webshop` next to existing `locally_twisted` lines (8 services × 2 apps = 16 new lines)
+- Historical: `apps/payments/` and `apps/webshop/` were cloned from upstream into the project and ignored. Current runtime is image-owned for these upstream apps; do not treat host clones as current source.
+- Historical: `Locally-Twisted-Backend/frappe_docker/pwd.yml` added bind-mount lines for `payments` + `webshop` next to existing `locally_twisted` lines. Current runtime removed the upstream app bind mounts and keeps only the LT app live-edit overlay.
 - `.gitignore` updated for `apps/webshop/` and `apps/payments/`
-- nginx Origin patch re-applied post-recreate
+- Historical: nginx Origin patch was re-applied post-recreate. Current runtime has the Origin pass-through baked into the custom image.
 
 **Documentation added/updated:**
 - `Built_by_Cameron/.claude/capabilities/recipes/frappe-conventions.md` — added `payments` dependency note, `--skip-assets` install pattern, "Customizing webshop pages" primitive map, "Verified against source — 2026-04-26" appendix (with `.web-footer` myth correction)

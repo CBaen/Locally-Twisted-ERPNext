@@ -1,5 +1,7 @@
 # Phase 1 Plan — Customer Site (Lookbook-Forward, with Small Shop)
 
+> **Stale planning snapshot.** This file is retained as planning history, not as the current work queue. Current route decisions supersede several sections below: `/contact` is the primary inquiry path, `/book` is alias-only, current nav has no Gallery/About/Book Event surface, and completed slice state must be verified against git/files/routes plus `CODING-HANDOFF.md` and `locally-twisted-queue.md`.
+
 **Phase goal (from ROADMAP.md):** A first-time visitor lands on the site, immediately understands LT does custom event balloon decor at the level visible in the portfolio, knows how to inquire for custom work, and can browse a small set of pre-configured themed items if they're shopping for a casual celebration. Jeff sees the result and says *"yes — show this to my next corporate prospect."*
 
 **Off-ramp gate:** if any slice exposes that Frappe / ERPNext can't deliver the visual / UX bar, GL pivots before building further.

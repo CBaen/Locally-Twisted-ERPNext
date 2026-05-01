@@ -24,10 +24,12 @@ __pycache__/
 *.egg-info/
 .pytest_cache/
 
-# Node (if Frontend folder grows)
+# Node / Playwright
 node_modules/
 dist/
 build/
+test-results/
+playwright-report/
 
 # Frappe / ERPNext temporary
 *.log
@@ -37,13 +39,13 @@ sites/*/public/files/
 # Cookie jars created by translation scripts (curl -c /tmp/lt_cookies)
 *_cookies
 
-# Upstream frappe_docker clone (reproducible from upstream + v15.105.0 pin in CLAUDE.md)
-# Has its own .git/; nginx Origin patch lives in scripts/fix/patch_nginx_socketio_origin.py
+# Upstream frappe_docker clone plus LT compose file. Current runtime uses the
+# custom locally-twisted-erpnext:v15 image and a live-edit bind mount for the
+# LT app. The old nginx Origin patch script is historical/fallback only.
 Locally-Twisted-Backend/
 
-# Upstream Frappe apps (installed via scripts/setup/install_webshop.py).
-# Source-of-truth for HOW we install them lives in that script.
-# We bind-mount these into the docker stack so each frappe-image service can import them.
+# Upstream Frappe apps are image-owned in the current custom-image stack.
+# Keep host clones ignored if old setup scripts or exploratory work recreate them.
 apps/webshop/
 apps/payments/
 
