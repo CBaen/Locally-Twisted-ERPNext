@@ -382,7 +382,7 @@ def main():
     )
     parser.add_argument("--base-url", required=True, help="http://localhost:8081")
     parser.add_argument("--form-path", action="append", default=None,
-                        help="path to a form to smoke (repeatable). Default: /book + /contact")
+                        help="path to a form to smoke (repeatable). Default: /contact")
     parser.add_argument("--shape-only", action="store_true",
                         help="Only verify form structure; do not submit (for CI without prod access)")
     parser.add_argument("--skip-book", action="store_true",
@@ -391,11 +391,9 @@ def main():
                         help="Skip the newsletter API smoke test")
     args = parser.parse_args()
 
-    # Both /book and /contact render the same shared inquiry form (per GL
-    # directive 2026-04-30 — one form, two URL surfaces). Smoke both by
-    # default so a partial-include regression on either page fails the
-    # deploy. Override with one or more --form-path flags.
-    form_paths = args.form_path or ["/book", "/contact"]
+    # /contact is the canonical inquiry form. /book redirects to
+    # /contact?intent=quick and is not a separate form surface.
+    form_paths = args.form_path or ["/contact"]
 
     failures = 0
 

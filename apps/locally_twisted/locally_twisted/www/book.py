@@ -89,22 +89,8 @@ ALLOWED_PHOTO_EXTS = {".jpg", ".jpeg", ".png", ".gif", ".webp", ".heic", ".heif"
 
 
 def get_context(context):
-    context.title = "Book Your Event - Locally Twisted | Utah's Balloon Specialists"
-    context.metatags = {
-        "description": (
-            "Tell us about your celebration. Custom balloon arches, garlands, "
-            "twisting, face painting, and event decor across the Wasatch Front."
-        ),
-        "og:title": "Book Your Event - Locally Twisted",
-        "og:description": "Share a few details and we take it from there.",
-        "og:type": "website",
-    }
-    context.occasion_options = OCCASION_OPTIONS
-    context.selected_occasion = frappe.form_dict.get("occasion") or ""
-    context.service_options = SERVICE_OPTIONS
-    context.max_photos = MAX_PHOTOS
-    context.max_photo_mb = MAX_PHOTO_BYTES // (1024 * 1024)
-    return context
+    frappe.local.flags.redirect_location = "/contact?intent=quick"
+    raise frappe.Redirect
 
 
 @frappe.whitelist(allow_guest=True)

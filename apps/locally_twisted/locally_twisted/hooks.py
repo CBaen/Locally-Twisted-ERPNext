@@ -90,8 +90,6 @@ website_route_rules = [
     # at /contactus throughout the navbar. Redirect to our /contact.
     {"from_route": "/contactus",
      "to_route": "contact"},
-    {"from_route": "/book",
-     "to_route": "contact"},
     # ERPNext's root Item Group page is too thin for customers; send root
     # browse traffic to LT's category landing page instead.
     {"from_route": "/shop-items",
