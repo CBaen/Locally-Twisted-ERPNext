@@ -3001,3 +3001,21 @@ body.lt-filter-open {
     width: auto;
     white-space: nowrap;
 }
+
+/* ─── BTFP page ─────────────────────────────────────────────────────────── */
+
+.lt-btfp__banner-link {
+    color: var(--lt-near-black);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+}
+
+.lt-btfp__banner-link:hover,
+.lt-btfp__banner-link:focus-visible {
+    color: var(--lt-teal);
+    outline-offset: 2px;
+}
+
+.lt-btfp__process-number {
+    color: var(--lt-near-black);
+}

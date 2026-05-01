@@ -21,6 +21,9 @@
       9. Twisting & Face Painting spotlight (moved to bottom)
 #}
 
+{# --- 0. Visually-hidden page title for screen readers (no visible h1 on this page) --- #}
+<h1 id="lt-page-heading" class="visually-hidden">Locally Twisted — Custom Balloon Decor for Utah Events</h1>
+
 {# --- 1. Hero --- #}
 <section class="lt-hero lt-fullbleed" aria-labelledby="lt-hero-tagline">
     <div class="lt-hero__image" aria-hidden="true"></div>
@@ -69,7 +72,7 @@
             infinite loop; the duplicate set is aria-hidden so screen
             readers only read each review once. Pauses on hover/focus.
         #}
-        <div class="lt-reviews-block__quotes" aria-label="Customer reviews carousel">
+        <section class="lt-reviews-block__quotes" aria-label="Customer reviews carousel">
             <div class="lt-reviews-block__track">
                 {% for quote in review_quotes %}
                     {% if quote %}
@@ -113,7 +116,7 @@
                     {% endfor %}
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 </section>
 
