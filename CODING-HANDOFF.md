@@ -1,6 +1,6 @@
 # Locally Twisted - Coding Handoff
 
-Last updated: 2026-04-30 by Codex after DB verification.
+Last updated: 2026-05-01 by Codex after storefront correction pass.
 
 ## State Of Reality
 
@@ -25,13 +25,21 @@ Docs that still mention `10,613 Items`, `8,925 Item Prices`, or `10,560 variants
 
 ## Actually Working, Pending Re-Verification
 
-Claims from existing docs say these work:
+Verified or updated during the 2026-05-01 storefront correction pass:
+
+- Header/menu no longer exposes `What We Make`; desktop dropdown panels are contained, and mobile cart/hamburger controls are visible at 390px and 430px with accessible target sizing.
+- Footer no longer exposes `What We Make`, `About Us`, or `Book an Event`; `All Products` remains.
+- Product detail/configure templates no longer include the "Start a conversation" or "Tell us what you're imagining" sales-pitch blocks.
+- `/shop-items/arches` now scopes to Arches. Root cause was missing Webshop `.item-group-content` class in the custom Item Group wrapper, not catalog data.
+- Product listing cards can display `lt_brand_description` through the local Webshop API wrapper in `locally_twisted.api.product_listing`.
+- Website cache was cleared after Jinja/CSS changes; `hooks.py` CSS cache-bust was bumped to the current session version.
+
+Claims from older docs still need re-verification before being repeated:
 
 - ERPNext v15.105.0 stack on port `8081`.
 - `locally_twisted` custom app installed.
 - Webshop + payments installed.
 - 53 Website Items published.
-- Shop mega menu and product detail inline variant selectors.
 - `/shop-by-category` custom landing page.
 - Local guest cart and Stripe test-mode checkout flow.
 - Existing pages including `/`, `/lookbook`, `/shop`, `/contact`, `/faq`, `/refund-policy`, `/accessibility`, `/cart`, `/checkout`, `/payment-success`, `/thank-you`.

@@ -38,6 +38,8 @@
 - **`/shop`** updated: filter pills sourced from Item Group children (12 pills = All + 11 categories). Drops the keyword categorizer.
 - **CSS hide of `.product-code`** in lt-theme.css strips the "Item Code" jargon from compiled-JS-rendered listing cards (only `display: none !important` we kept; webshop's product_ui/list.js bakes the jargon at compile time; can't be Jinja-overridden).
 - **All 7 shop smoke checks pass:** `scripts/verify/smoke_shop.py` validates mega menu, /shop pills, /shop-by-category cards, all 11 category routes 200 + no jargon, variant detail inline, single-SKU clean, mobile drawer accordion.
+- **Storefront correction pass shipped 2026-05-01:** header/footer IA cleaned to match current routes (`What We Make`, `About Us`, `Book an Event` removed; `All Products` kept), menu dropdowns contained, mobile cart/hamburger visible at 390px/430px, footer centered without shrinking below accessible sizes.
+- **Product listing/detail corrections shipped 2026-05-01:** item detail/configure sales-pitch blocks removed; `/shop-items/arches` fixed by preserving Webshop's `.item-group-content` wrapper contract; listing cards now receive `lt_brand_description` through `locally_twisted.api.product_listing` and prefer it in card copy.
 
 **What's broken / pending:**
 - **Pre-existing Frappe asset-map bug** on product detail console: `Cannot read properties of undefined (reading 'file_uploader.bundle.js')`. Not from our work; page renders fine. P2.
@@ -135,6 +137,15 @@ Canonical resources for the migration destination live in `_resources/` and are 
 ---
 
 ## Updates
+
+### 2026-05-01 (storefront correction pass) — header/footer/menu cleanup + product listing/detail fixes
+
+- **Header/footer IA corrected:** removed `What We Make`, `About Us`, and `Book an Event` from customer chrome. `All Products` remains. Footer columns were re-centered through layout/content cleanup, not by shrinking text below accessibility expectations.
+- **Menu containment corrected:** desktop dropdowns are contained under the nav; mobile drawer/cart/hamburger visibility verified at narrow mobile widths with accessible touch sizing preserved.
+- **Product detail pitches removed:** stripped "Start a conversation" from `item_configure.html` and "Tell us what you're imagining" from `item_details.html`.
+- **`/shop-items/arches` bug fixed:** root cause was missing Webshop `.item-group-content` class in the LT Item Group wrapper. Restored the framework contract so the Webshop listing JS scopes results to the active Item Group. Verified Arches API response returns only Arches.
+- **Brand descriptions on listing cards:** added `locally_twisted.api.product_listing.get_product_filter_data` as a local wrapper for Webshop's product filter API and registered it with `override_whitelisted_methods`; listing cards now prefer `lt_brand_description` with existing description fallbacks.
+- **Cleanup:** generated browser profile/screenshot output from local verification is ignored/deleted instead of treated as project source. Canonical state is source + docs + git history.
 
 ### 2026-04-30 (evening, autonomous nap session) — Mirror rebuild Phase 1 chrome shipped via /triadic-construction-v2
 

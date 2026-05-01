@@ -41,7 +41,7 @@ app_license = "mit"
 # Receipt: 2026-04-29 — drawer overlay edit shipped server-side but old
 # CSS stayed cached in GL's browser; drawer rendered inline on every page
 # because the cached rules didn't have `position: fixed`.
-web_include_css = "/assets/locally_twisted/css/lt-theme.css?v=20260430-25"
+web_include_css = "/assets/locally_twisted/css/lt-theme.css?v=20260501-4"
 
 # Guest cart engine — overrides webshop's broken-for-guest cart functions
 # at runtime, exposes window.LT_CART, and keeps cart count badges live.
@@ -88,6 +88,14 @@ website_route_rules = [
     # at /contactus throughout the navbar. Redirect to our /contact.
     {"from_route": "/contactus",
      "to_route": "contact"},
+    {"from_route": "/book",
+     "to_route": "contact"},
+    # ERPNext's root Item Group page is too thin for customers; send root
+    # browse traffic to LT's category landing page instead.
+    {"from_route": "/shop-items",
+     "to_route": "shop-by-category"},
+    {"from_route": "/all-products",
+     "to_route": "shop-by-category"},
 ]
 
 # ---------------------------------------------------------------
@@ -108,6 +116,10 @@ doc_events = {
 # Source: 2026-04-30 mega-menu build
 # ---------------------------------------------------------------
 update_website_context = ["locally_twisted.navbar_context.update_website_context"]
+
+override_whitelisted_methods = {
+    "webshop.webshop.api.get_product_filter_data": "locally_twisted.api.product_listing.get_product_filter_data",
+}
 
 # ---------------------------------------------------------------
 # Fixtures — code-owned schema records that travel with the app.

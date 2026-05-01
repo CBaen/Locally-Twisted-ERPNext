@@ -8,6 +8,54 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-01 — Customer chrome IA cleanup: no `What We Make`, no About, no Book an Event links
+
+**Decision:** The current header/footer navigation does not include `What We Make`, `About Us`, or `Book an Event`. The footer Shop column keeps `All Products`; Company links stay limited to real, currently supported surfaces.
+
+**Reasoning:** GL explicitly corrected the footer and menu: `What We Make` is no longer a menu item, there is no About Us page, and there is no Book an Event page. Leaving links to nonexistent pages creates broken navigation and makes the footer look like copied site furniture rather than the current ERPNext storefront.
+
+**Alternatives considered:** Keep the Hetzner mirror's historical menu labels as placeholders for future Phase 2 pages. Rejected because current navigation must only expose real or intentionally active routes.
+
+**Decided by:** GL directive during the 2026-04-30/2026-05-01 storefront correction session.
+
+---
+
+## 2026-05-01 — Product listing cards use `lt_brand_description` surfaced through a local Webshop API override
+
+**Decision:** Product listing cards should show the product's brand description, not only the product title and not generic sales-pitch copy. The implementation wraps Webshop's `webshop.webshop.api.get_product_filter_data` via Frappe `override_whitelisted_methods`, delegates to the stock API, then appends `lt_brand_description` for returned Website Items. Listing JavaScript prefers `lt_brand_description`, with fallback to existing Webshop description fields.
+
+**Reasoning:** GL asked for the brand description on the listing card, not just the detail page. The least invasive path is a local app override that preserves Webshop's filtering/sorting behavior while adding one LT-specific field to the response. Editing Webshop core or replacing the listing endpoint would increase maintenance risk.
+
+**Alternatives considered:** Patch Webshop source directly; rejected because Webshop is an upstream app and this project has a standing "work within Frappe/ERPNext" rule. Rebuild the whole listing pipeline; rejected because the needed behavior is a small data enrichment.
+
+**Decided by:** Codex implementation under GL directive.
+
+---
+
+## 2026-05-01 — `/shop-items/<group>` filtering depends on Webshop's `.item-group-content` wrapper contract
+
+**Decision:** Custom Item Group wrapper markup must keep Webshop's `item-group-content` class when rendering `/shop-items/<group>` pages.
+
+**Reasoning:** The Arches category bug was not a product-data issue. Webshop's `all-products/index.js` reads the active Item Group from `.item-group-content`; the LT override had moved the group value to a custom `.lt-shop` wrapper without the class Webshop's JavaScript expects. The result: `/shop-items/arches` fell back to unscoped product results and returned non-arches. Restoring the expected class fixes category filtering without touching catalog data.
+
+**Alternatives considered:** Add a second custom category-detection path in JavaScript. Rejected because preserving the framework contract is simpler and less fragile.
+
+**Decided by:** Codex implementation after debugging the actual Webshop listing behavior.
+
+---
+
+## 2026-05-01 — Accessibility sizing is a hard constraint, not a layout variable
+
+**Decision:** Layout fixes must preserve legal-accessibility-sized text, controls, and hit targets. Do not "fix" footer/header/listing density by shrinking text or interactive controls below accessible sizes. For touch/click targets, use at least 44px practical target height where controls are interactive.
+
+**Reasoning:** GL explicitly corrected the bad instinct to make the footer smaller by shrinking everything. The correct fix is layout, spacing, alignment, and content removal, not illegible text or undersized controls.
+
+**Alternatives considered:** Reduce font sizes and control heights to visually balance header/footer. Rejected as inaccessible and against GL's directive.
+
+**Decided by:** GL directive, promoted into local/global memory for future sessions.
+
+---
+
 ## 2026-04-30 (late evening) — Container reversion: bind-mount + post-recreate-reinstall pattern replaced by self-contained custom Docker image
 
 **Decision:** Replace the bind-mount-and-pip-install-after-every-recreate pattern with a custom Docker image (`locally-twisted-erpnext:v15`, built from `docker/Dockerfile`) that bakes everything into the image: frappe + erpnext (from base `frappe/erpnext:v15.105.0`), payments + webshop (cloned from upstream), locally_twisted (COPYed from local source), Node 18 + yarn, compiled bench assets, and the nginx Origin pass-through patch. The compose file (`Locally-Twisted-Backend/frappe_docker/pwd.yml`) now references the new image and has all bind-mounts for the three apps removed. `scripts/setup/install_webshop.py` and `scripts/fix/patch_nginx_socketio_origin.py` are marked deprecated; both kept on disk for historical reference, neither runs against the current stack.

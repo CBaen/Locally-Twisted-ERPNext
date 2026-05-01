@@ -1,12 +1,21 @@
 # HANDOFF — Locally Twisted
 
-**Last updated:** 2026-04-30 evening (Opus 4.7 — chrome rebuild session via /triadic-construction-v2; closed mid-mirror-rebuild before Phase 2 page rebuilds)
+**Last updated:** 2026-05-01 (Codex — storefront correction pass: footer/header/menu + product listing/detail fixes)
 
 Overwrite-not-append. Git is the changelog. Read this first; everything else as needed. **Audience: peer Opus 4.7 instance.** Read like I'd want to read before substantive work.
 
 ---
 
 ## State of the world (the load-bearing facts)
+
+**Current-session delta (2026-05-01):**
+- Header/footer IA has been corrected against current routes: `What We Make`, `About Us`, and `Book an Event` are removed. `All Products` remains.
+- Footer centering/balance was fixed through content/layout cleanup, not by shrinking below accessible sizes.
+- Desktop menu dropdowns are contained; mobile cart/hamburger controls are visible at 390px and 430px with accessible target sizing preserved.
+- Product detail/configure sales pitches are stripped: no "Start a conversation" or "Tell us what you're imagining" blocks.
+- `/shop-items/arches` returning non-arches was a real bug, but not a catalog-data bug. Root cause was the custom Item Group wrapper missing Webshop's `.item-group-content` class. Restoring that contract makes Arches scope correctly.
+- Listing cards now surface `lt_brand_description` through `locally_twisted.api.product_listing.get_product_filter_data`, registered via `override_whitelisted_methods`.
+- Generated verification screenshots/browser profiles are not source; `.gitignore` now excludes the local QA output paths.
 
 **1. The frame is now "migration."** Earlier today I parroted the prior reframe ("new build, not a migration") and GL stopped me cold: *"it is a migration, not a new build."* Project frame is **migration of business intent + catalog data into a fresh ERPNext install**. The 2026-04-26 reframe is superseded. Internal docs use migration framing freely; Jeff-disclosure stealth survives as a separate constraint (he doesn't yet know the prior Odoo attempt failed in testing). All docs updated. See `locally-twisted-decisions.md` 2026-04-30 frame entry.
 
@@ -43,8 +52,8 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 |---|---|
 | ERPNext v15.105.0 stack (9 containers) | Running |
 | Apps: frappe, erpnext, payments, webshop, locally_twisted (LAST) | Installed |
-| Hetzner-shaped header (utility bar + 3 mega menus + search trigger) | Shipped — desktop polish flagged |
-| Hetzner-shaped footer (newsletter + 3-col + social + legal) | Shipped |
+| Hetzner-shaped header (utility bar + current customer menu + search trigger) | Shipped; `What We Make` removed from current IA |
+| Hetzner-shaped footer (newsletter + 3-col + social + legal) | Shipped; obsolete/nonexistent links removed |
 | Mobile drawer with accordion-expand mega menus | Shipped + fixed (was always-visible at Round 1) |
 | Newsletter form + endpoint + DocType + smoke test | Shipped, rate-limited 10/hr per email |
 | `/book` form | LIVE (was 404 every prior session) |
@@ -62,16 +71,15 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 **P0 — Phase 2 page rebuilds (the big remaining bite).** From the rebuild plan, in priority order:
 1. `/contact` rebuild as Hetzner-style separate 6-field form (currently redirects to /book)
 2. `/balloon-twisting-and-face-painting` Hetzner-faithful refresh (replaces existing)
-3. `/about` (new build — doesn't exist today)
-4. `/privacy` (Stripe live-mode block)
-5. `/terms-of-service` (Stripe live-mode block)
-6. `/refund-policy` Hetzner refresh
-7. `/accessibility` Hetzner refresh
-8. `/gallery` (new build)
-9. `/blog` channel + posts (use Frappe's NATIVE `Blog Post` DocType, not custom — plan-deepen caught my mistake of planning a custom one). Two posts to port verbatim from mirror.
-10. Webshop `/shop` layout overhaul
-11. Webshop product detail layout overhaul
-12. Webshop category landing layout overhaul
+3. `/privacy` (Stripe live-mode block)
+4. `/terms-of-service` (Stripe live-mode block)
+5. `/refund-policy` Hetzner refresh
+6. `/accessibility` Hetzner refresh
+7. `/gallery` (new build)
+8. `/blog` channel + posts (use Frappe's NATIVE `Blog Post` DocType, not custom — plan-deepen caught my mistake of planning a custom one). Two posts to port verbatim from mirror.
+9. Webshop `/shop` layout overhaul
+10. Webshop product detail layout overhaul
+11. Webshop category landing layout overhaul
 
 Each page: read mirror source → build Frappe controller + template → atomic commit → audit screenshot. Faster than chrome because lower interdependency.
 
@@ -84,8 +92,6 @@ Each page: read mirror source → build Frappe controller + template → atomic 
 **P0 — Per-product variant correctness diff.** For each of 53 products, parse Hetzner's `data-attribute-exclusions` JSON from the mirror page and diff against ERPNext's variant set. Surfaces any data discrepancies from yesterday's catalog port. Plan section in `MIRROR-REBUILD-PLAN.md`.
 
 **P1 — Newsletter X-Forwarded-For strip at nginx layer (Option B).** Option A (email-keyed rate limit on newsletter) shipped this session. Option B would protect `/book`, `/checkout`, `/balloon-twisting-and-face-painting` too — they all use IP-based rate limit and share the same vulnerability. Ops/infra task.
-
-**P1 — Mega panel inner content polish.** `.lt-header__mega-col`, `.lt-header__mega-heading`, `.lt-header__mega-cta`, `.lt-header__mega-cta-wrap`, `.lt-header__mega-browse-row` exist in markup but no CSS rules. Bootstrap col-lg-* handles layout; default browser styling for the rest. Functional but unrefined when panels open.
 
 **P2 — Real photos for `/shop-by-category`.** Each Item Group has empty `image` field; cards show letter placeholders.
 
@@ -102,7 +108,7 @@ Each page: read mirror source → build Frappe controller + template → atomic 
 | Re-mirror Hetzner | `python scripts/mirror/mirror_hetzner.py` |
 | Capture chrome audit screenshots | `python scripts/verify/_oneshot_chrome_audit.py` (writes to `_resources/audit-2026-04-30-chrome/`) |
 | Run smoke tests (book + newsletter) | `PYTHONIOENCODING=utf-8 PYTHONUTF8=1 python scripts/verify/smoke_forms.py` |
-| Bump CSS cache-bust | edit `hooks.py` `web_include_css` query string `?v=YYYYMMDD-N` (currently `?v=20260430-5`) |
+| Bump CSS cache-bust | edit `hooks.py` `web_include_css` query string `?v=YYYYMMDD-N` (currently `?v=20260501-1`) |
 | Bump JS cache-bust | edit `hooks.py` `web_include_js` query strings (currently `?v=20260430-2` for megamenu + newsletter) |
 
 ## Hot direction

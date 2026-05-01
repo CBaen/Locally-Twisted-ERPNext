@@ -2,7 +2,7 @@
    Replaces apps/frappe/frappe/templates/includes/navbar/navbar.html
    via same-path resolution in Frappe's ChoiceLoader.
 
-   Structure: two-tier desktop (utility bar | primary nav with 3 mega menus)
+   Structure: two-tier desktop (utility bar | primary nav with 2 mega menus)
    + mobile single-row + custom offcanvas drawer (aside[role=dialog]).
 
    Context keys consumed (all provided by navbar_context.py):
@@ -13,7 +13,7 @@
      shop_root_route       — string (e.g. "shop-items")
      mega_special_occasions — list {label, route}
      mega_holidays_seasons  — list {label, route, column}
-     mega_what_we_make      — list {label, route, column}
+     mega_what_we_make      — legacy context, intentionally unused in nav
 
    JS contract (Builder JS owns lt-megamenu.js and lt-mobile-drawer.js):
      Desktop mega menus:
@@ -101,11 +101,130 @@
             </div>
         </div>
 
-        {# Tier 2: Primary nav — Balloon Twisting | 3 mega menus | overflow | search #}
+        {# Tier 2: Primary nav — Balloon Twisting | 2 mega menus | overflow | search #}
         <div class="lt-header__nav">
             <div class="container lt-header__nav-row">
 
                 <ul class="lt-header__nav-list" role="menubar">
+
+                    {# ---- Mega 1: Shop Balloon Decor ---- #}
+                    <li class="lt-header__has-mega" role="none">
+                        <button type="button"
+                                class="lt-header__nav-link lt-header__nav-trigger"
+                                data-lt-megamenu-trigger="lt-mega-shop-balloon-decor"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                                aria-controls="lt-mega-shop-balloon-decor"
+                                role="menuitem">
+                            Shop Balloon Decor
+                            <svg class="lt-header__nav-caret"
+                                 xmlns="http://www.w3.org/2000/svg"
+                                 width="10" height="10"
+                                 viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor"
+                                 stroke-width="2.5" stroke-linecap="round"
+                                 stroke-linejoin="round"
+                                 aria-hidden="true" focusable="false">
+                                <path d="m6 9 6 6 6-6"/>
+                            </svg>
+                        </button>
+                        <div class="lt-header__mega"
+                             id="lt-mega-shop-balloon-decor"
+                             role="region"
+                             aria-label="Shop Balloon Decor categories"
+                             hidden>
+                            <div class="container lt-header__mega-inner">
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-3 lt-header__mega-col text-center">
+                                        <p class="lt-header__mega-heading">Installations</p>
+                                        {%- if mega_shop_balloon_decor -%}
+                                            {%- for item in mega_shop_balloon_decor if item.column == "installations" -%}
+                                                <a class="lt-header__mega-link" href="/{{ item.route }}">{{ item.label }}</a>
+                                            {%- endfor -%}
+                                        {%- endif -%}
+                                    </div>
+                                    <div class="col-lg-3 lt-header__mega-col text-center">
+                                        <p class="lt-header__mega-heading">Grab-and-Go</p>
+                                        {%- if mega_shop_balloon_decor -%}
+                                            {%- for item in mega_shop_balloon_decor if item.column == "grab_go" -%}
+                                                <a class="lt-header__mega-link" href="/{{ item.route }}">{{ item.label }}</a>
+                                            {%- endfor -%}
+                                        {%- endif -%}
+                                    </div>
+                                    <div class="col-lg-3 lt-header__mega-col text-center">
+                                        <p class="lt-header__mega-heading">Details</p>
+                                        {%- if mega_shop_balloon_decor -%}
+                                            {%- for item in mega_shop_balloon_decor if item.column == "details" -%}
+                                                <a class="lt-header__mega-link" href="/{{ item.route }}">{{ item.label }}</a>
+                                            {%- endfor -%}
+                                        {%- endif -%}
+                                    </div>
+                                </div>
+                                <div class="row justify-content-center lt-header__mega-browse-row">
+                                    <div class="col-auto">
+                                        <a class="lt-header__mega-cta" href="/{{ shop_root_route or 'shop-by-category' }}">All Balloon Decor</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    {# ---- Mega 2: Plan by Occasion ---- #}
+                    <li class="lt-header__has-mega" role="none">
+                        <button type="button"
+                                class="lt-header__nav-link lt-header__nav-trigger"
+                                data-lt-megamenu-trigger="lt-mega-plan-by-occasion"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                                aria-controls="lt-mega-plan-by-occasion"
+                                role="menuitem">
+                            Plan by Occasion
+                            <svg class="lt-header__nav-caret"
+                                 xmlns="http://www.w3.org/2000/svg"
+                                 width="10" height="10"
+                                 viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor"
+                                 stroke-width="2.5" stroke-linecap="round"
+                                 stroke-linejoin="round"
+                                 aria-hidden="true" focusable="false">
+                                <path d="m6 9 6 6 6-6"/>
+                            </svg>
+                        </button>
+                        <div class="lt-header__mega"
+                             id="lt-mega-plan-by-occasion"
+                             role="region"
+                             aria-label="Plan by Occasion categories"
+                             hidden>
+                            <div class="container lt-header__mega-inner">
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-3 lt-header__mega-col text-center">
+                                        <p class="lt-header__mega-heading">Personal Celebrations</p>
+                                        {%- if mega_plan_by_occasion -%}
+                                            {%- for item in mega_plan_by_occasion if item.column == "personal" -%}
+                                                <a class="lt-header__mega-link" href="/{{ item.route }}">{{ item.label }}</a>
+                                            {%- endfor -%}
+                                        {%- endif -%}
+                                    </div>
+                                    <div class="col-lg-3 lt-header__mega-col text-center">
+                                        <p class="lt-header__mega-heading">Faith &amp; Milestones</p>
+                                        {%- if mega_plan_by_occasion -%}
+                                            {%- for item in mega_plan_by_occasion if item.column == "faith" -%}
+                                                <a class="lt-header__mega-link" href="/{{ item.route }}">{{ item.label }}</a>
+                                            {%- endfor -%}
+                                        {%- endif -%}
+                                    </div>
+                                    <div class="col-lg-3 lt-header__mega-col text-center">
+                                        <p class="lt-header__mega-heading">Hosted Events</p>
+                                        {%- if mega_plan_by_occasion -%}
+                                            {%- for item in mega_plan_by_occasion if item.column == "hosted" -%}
+                                                <a class="lt-header__mega-link" href="/{{ item.route }}">{{ item.label }}</a>
+                                            {%- endfor -%}
+                                        {%- endif -%}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
 
                     <li role="none">
                         <a class="lt-header__nav-link" href="/balloon-twisting-and-face-painting" role="menuitem">
@@ -113,175 +232,10 @@
                         </a>
                     </li>
 
-                    {# ---- Mega 1: Special Occasions ---- #}
-                    <li class="lt-header__has-mega" role="none">
-                        <button type="button"
-                                class="lt-header__nav-link lt-header__nav-trigger"
-                                data-lt-megamenu-trigger="lt-mega-special-occasions"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                                aria-controls="lt-mega-special-occasions"
-                                role="menuitem">
-                            Special Occasions
-                            <svg class="lt-header__nav-caret"
-                                 xmlns="http://www.w3.org/2000/svg"
-                                 width="10" height="10"
-                                 viewBox="0 0 24 24"
-                                 fill="none" stroke="currentColor"
-                                 stroke-width="2.5" stroke-linecap="round"
-                                 stroke-linejoin="round"
-                                 aria-hidden="true" focusable="false">
-                                <path d="m6 9 6 6 6-6"/>
-                            </svg>
-                        </button>
-                        <div class="lt-header__mega"
-                             id="lt-mega-special-occasions"
-                             role="region"
-                             aria-label="Special Occasions categories"
-                             hidden>
-                            <div class="container lt-header__mega-inner">
-                                <div class="row justify-content-center">
-                                    <div class="col-lg-4 lt-header__mega-col text-center">
-                                        <p class="lt-header__mega-heading">Life Events</p>
-                                        {%- if mega_special_occasions -%}
-                                            {%- for item in mega_special_occasions -%}
-                                                <a class="lt-header__mega-link" href="/{{ item.route }}">{{ item.label }}</a>
-                                            {%- endfor -%}
-                                        {%- endif -%}
-                                        <div class="lt-header__mega-cta-wrap">
-                                            <a class="lt-header__mega-cta" href="/{{ shop_root_route or 'shop-items' }}">Browse All</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <li role="none">
+                        <a class="lt-header__nav-link" href="/faq" role="menuitem">FAQ</a>
                     </li>
 
-                    {# ---- Mega 2: Holidays & Seasons ---- #}
-                    <li class="lt-header__has-mega" role="none">
-                        <button type="button"
-                                class="lt-header__nav-link lt-header__nav-trigger"
-                                data-lt-megamenu-trigger="lt-mega-holidays-seasons"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                                aria-controls="lt-mega-holidays-seasons"
-                                role="menuitem">
-                            Holidays &amp; Seasons
-                            <svg class="lt-header__nav-caret"
-                                 xmlns="http://www.w3.org/2000/svg"
-                                 width="10" height="10"
-                                 viewBox="0 0 24 24"
-                                 fill="none" stroke="currentColor"
-                                 stroke-width="2.5" stroke-linecap="round"
-                                 stroke-linejoin="round"
-                                 aria-hidden="true" focusable="false">
-                                <path d="m6 9 6 6 6-6"/>
-                            </svg>
-                        </button>
-                        <div class="lt-header__mega"
-                             id="lt-mega-holidays-seasons"
-                             role="region"
-                             aria-label="Holidays and Seasons categories"
-                             hidden>
-                            <div class="container lt-header__mega-inner">
-                                <div class="row justify-content-center">
-                                    <div class="col-lg-3 lt-header__mega-col text-center">
-                                        <p class="lt-header__mega-heading">Winter &amp; Spring</p>
-                                        {%- if mega_holidays_seasons -%}
-                                            {%- for item in mega_holidays_seasons if item.column == "winter_spring" -%}
-                                                <a class="lt-header__mega-link" href="/{{ item.route }}">{{ item.label }}</a>
-                                            {%- endfor -%}
-                                        {%- endif -%}
-                                    </div>
-                                    <div class="col-lg-3 lt-header__mega-col text-center">
-                                        <p class="lt-header__mega-heading">Spring &amp; Summer</p>
-                                        {%- if mega_holidays_seasons -%}
-                                            {%- for item in mega_holidays_seasons if item.column == "spring_summer" -%}
-                                                <a class="lt-header__mega-link" href="/{{ item.route }}">{{ item.label }}</a>
-                                            {%- endfor -%}
-                                        {%- endif -%}
-                                    </div>
-                                    <div class="col-lg-3 lt-header__mega-col text-center">
-                                        <p class="lt-header__mega-heading">Fall &amp; Winter</p>
-                                        {%- if mega_holidays_seasons -%}
-                                            {%- for item in mega_holidays_seasons if item.column == "fall_winter" -%}
-                                                <a class="lt-header__mega-link" href="/{{ item.route }}">{{ item.label }}</a>
-                                            {%- endfor -%}
-                                        {%- endif -%}
-                                    </div>
-                                </div>
-                                <div class="row justify-content-center lt-header__mega-browse-row">
-                                    <div class="col-auto">
-                                        <a class="lt-header__mega-cta" href="/{{ shop_root_route or 'shop-items' }}">Browse All Holidays</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-
-                    {# ---- Mega 3: What We Make ---- #}
-                    <li class="lt-header__has-mega" role="none">
-                        <button type="button"
-                                class="lt-header__nav-link lt-header__nav-trigger"
-                                data-lt-megamenu-trigger="lt-mega-what-we-make"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                                aria-controls="lt-mega-what-we-make"
-                                role="menuitem">
-                            What We Make
-                            <svg class="lt-header__nav-caret"
-                                 xmlns="http://www.w3.org/2000/svg"
-                                 width="10" height="10"
-                                 viewBox="0 0 24 24"
-                                 fill="none" stroke="currentColor"
-                                 stroke-width="2.5" stroke-linecap="round"
-                                 stroke-linejoin="round"
-                                 aria-hidden="true" focusable="false">
-                                <path d="m6 9 6 6 6-6"/>
-                            </svg>
-                        </button>
-                        <div class="lt-header__mega"
-                             id="lt-mega-what-we-make"
-                             role="region"
-                             aria-label="What We Make categories"
-                             hidden>
-                            <div class="container lt-header__mega-inner">
-                                <div class="row justify-content-center">
-                                    <div class="col-lg-3 lt-header__mega-col text-center">
-                                        <p class="lt-header__mega-heading">Arrangements</p>
-                                        {%- if mega_what_we_make -%}
-                                            {%- for item in mega_what_we_make if item.column == "arrangements" -%}
-                                                <a class="lt-header__mega-link" href="/{{ item.route }}">{{ item.label }}</a>
-                                            {%- endfor -%}
-                                        {%- endif -%}
-                                    </div>
-                                    <div class="col-lg-3 lt-header__mega-col text-center">
-                                        <p class="lt-header__mega-heading">Installations</p>
-                                        {%- if mega_what_we_make -%}
-                                            {%- for item in mega_what_we_make if item.column == "installations" -%}
-                                                <a class="lt-header__mega-link" href="/{{ item.route }}">{{ item.label }}</a>
-                                            {%- endfor -%}
-                                        {%- endif -%}
-                                    </div>
-                                    <div class="col-lg-3 lt-header__mega-col text-center">
-                                        <p class="lt-header__mega-heading">Accents</p>
-                                        {%- if mega_what_we_make -%}
-                                            {%- for item in mega_what_we_make if item.column == "accents" -%}
-                                                <a class="lt-header__mega-link" href="/{{ item.route }}">{{ item.label }}</a>
-                                            {%- endfor -%}
-                                        {%- endif -%}
-                                    </div>
-                                </div>
-                                <div class="row justify-content-center lt-header__mega-browse-row">
-                                    <div class="col-auto">
-                                        <a class="lt-header__mega-cta" href="/{{ shop_root_route or 'shop-items' }}">Shop All Products</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-
-                    {# ---- Overflow: Blog (Contact removed — header CTA covers it) ---- #}
                     <li class="lt-header__overflow" role="none">
                         <a class="lt-header__nav-link" href="/blog" role="menuitem">Blog</a>
                     </li>
@@ -426,6 +380,65 @@
     <nav aria-label="Mobile navigation">
         <ul class="lt-header__mobile-nav-list">
 
+            {# ---- Mobile accordion 1: Shop Balloon Decor ---- #}
+            <li class="lt-header__mobile-accordion-item">
+                <button type="button"
+                        class="lt-header__mobile-nav-link lt-header__mobile-accordion-toggle"
+                        data-lt-drawer-accordion-trigger="lt-mob-shop-balloon-decor"
+                        aria-expanded="false"
+                        aria-controls="lt-mob-shop-balloon-decor">
+                    Shop Balloon Decor
+                    <svg class="lt-header__mobile-caret"
+                         xmlns="http://www.w3.org/2000/svg"
+                         width="14" height="14"
+                         viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor"
+                         stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                         aria-hidden="true" focusable="false">
+                        <path d="m6 9 6 6 6-6"/>
+                    </svg>
+                </button>
+                <ul class="lt-header__mobile-accordion-panel"
+                    id="lt-mob-shop-balloon-decor"
+                    hidden>
+                    {%- if mega_shop_balloon_decor -%}
+                        {%- for item in mega_shop_balloon_decor -%}
+                            <li><a class="lt-header__mobile-nav-sublink" href="/{{ item.route }}">{{ item.label }}</a></li>
+                        {%- endfor -%}
+                    {%- endif -%}
+                    <li><a class="lt-header__mobile-nav-sublink lt-header__mobile-nav-sublink--all" href="/{{ shop_root_route or 'shop-by-category' }}">All Balloon Decor</a></li>
+                </ul>
+            </li>
+
+            {# ---- Mobile accordion 2: Plan by Occasion ---- #}
+            <li class="lt-header__mobile-accordion-item">
+                <button type="button"
+                        class="lt-header__mobile-nav-link lt-header__mobile-accordion-toggle"
+                        data-lt-drawer-accordion-trigger="lt-mob-plan-by-occasion"
+                        aria-expanded="false"
+                        aria-controls="lt-mob-plan-by-occasion">
+                    Plan by Occasion
+                    <svg class="lt-header__mobile-caret"
+                         xmlns="http://www.w3.org/2000/svg"
+                         width="14" height="14"
+                         viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor"
+                         stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                         aria-hidden="true" focusable="false">
+                        <path d="m6 9 6 6 6-6"/>
+                    </svg>
+                </button>
+                <ul class="lt-header__mobile-accordion-panel"
+                    id="lt-mob-plan-by-occasion"
+                    hidden>
+                    {%- if mega_plan_by_occasion -%}
+                        {%- for item in mega_plan_by_occasion -%}
+                            <li><a class="lt-header__mobile-nav-sublink" href="/{{ item.route }}">{{ item.label }}</a></li>
+                        {%- endfor -%}
+                    {%- endif -%}
+                </ul>
+            </li>
+
             <li class="lt-header__mobile-nav-item">
                 <a class="lt-header__mobile-nav-link"
                    href="/balloon-twisting-and-face-painting">
@@ -433,94 +446,8 @@
                 </a>
             </li>
 
-            {# ---- Mobile accordion 1: Special Occasions ---- #}
-            <li class="lt-header__mobile-accordion-item">
-                <button type="button"
-                        class="lt-header__mobile-nav-link lt-header__mobile-accordion-toggle"
-                        data-lt-drawer-accordion-trigger="lt-mob-special-occasions"
-                        aria-expanded="false"
-                        aria-controls="lt-mob-special-occasions">
-                    Special Occasions
-                    <svg class="lt-header__mobile-caret"
-                         xmlns="http://www.w3.org/2000/svg"
-                         width="14" height="14"
-                         viewBox="0 0 24 24"
-                         fill="none" stroke="currentColor"
-                         stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
-                         aria-hidden="true" focusable="false">
-                        <path d="m6 9 6 6 6-6"/>
-                    </svg>
-                </button>
-                <ul class="lt-header__mobile-accordion-panel"
-                    id="lt-mob-special-occasions"
-                    hidden>
-                    {%- if mega_special_occasions -%}
-                        {%- for item in mega_special_occasions -%}
-                            <li><a class="lt-header__mobile-nav-sublink" href="/{{ item.route }}">{{ item.label }}</a></li>
-                        {%- endfor -%}
-                    {%- endif -%}
-                    <li><a class="lt-header__mobile-nav-sublink lt-header__mobile-nav-sublink--all" href="/{{ shop_root_route or 'shop-items' }}">Browse All</a></li>
-                </ul>
-            </li>
-
-            {# ---- Mobile accordion 2: Holidays & Seasons ---- #}
-            <li class="lt-header__mobile-accordion-item">
-                <button type="button"
-                        class="lt-header__mobile-nav-link lt-header__mobile-accordion-toggle"
-                        data-lt-drawer-accordion-trigger="lt-mob-holidays-seasons"
-                        aria-expanded="false"
-                        aria-controls="lt-mob-holidays-seasons">
-                    Holidays &amp; Seasons
-                    <svg class="lt-header__mobile-caret"
-                         xmlns="http://www.w3.org/2000/svg"
-                         width="14" height="14"
-                         viewBox="0 0 24 24"
-                         fill="none" stroke="currentColor"
-                         stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
-                         aria-hidden="true" focusable="false">
-                        <path d="m6 9 6 6 6-6"/>
-                    </svg>
-                </button>
-                <ul class="lt-header__mobile-accordion-panel"
-                    id="lt-mob-holidays-seasons"
-                    hidden>
-                    {%- if mega_holidays_seasons -%}
-                        {%- for item in mega_holidays_seasons -%}
-                            <li><a class="lt-header__mobile-nav-sublink" href="/{{ item.route }}">{{ item.label }}</a></li>
-                        {%- endfor -%}
-                    {%- endif -%}
-                    <li><a class="lt-header__mobile-nav-sublink lt-header__mobile-nav-sublink--all" href="/{{ shop_root_route or 'shop-items' }}">Browse All Holidays</a></li>
-                </ul>
-            </li>
-
-            {# ---- Mobile accordion 3: What We Make ---- #}
-            <li class="lt-header__mobile-accordion-item">
-                <button type="button"
-                        class="lt-header__mobile-nav-link lt-header__mobile-accordion-toggle"
-                        data-lt-drawer-accordion-trigger="lt-mob-what-we-make"
-                        aria-expanded="false"
-                        aria-controls="lt-mob-what-we-make">
-                    What We Make
-                    <svg class="lt-header__mobile-caret"
-                         xmlns="http://www.w3.org/2000/svg"
-                         width="14" height="14"
-                         viewBox="0 0 24 24"
-                         fill="none" stroke="currentColor"
-                         stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
-                         aria-hidden="true" focusable="false">
-                        <path d="m6 9 6 6 6-6"/>
-                    </svg>
-                </button>
-                <ul class="lt-header__mobile-accordion-panel"
-                    id="lt-mob-what-we-make"
-                    hidden>
-                    {%- if mega_what_we_make -%}
-                        {%- for item in mega_what_we_make -%}
-                            <li><a class="lt-header__mobile-nav-sublink" href="/{{ item.route }}">{{ item.label }}</a></li>
-                        {%- endfor -%}
-                    {%- endif -%}
-                    <li><a class="lt-header__mobile-nav-sublink lt-header__mobile-nav-sublink--all" href="/{{ shop_root_route or 'shop-items' }}">Shop All Products</a></li>
-                </ul>
+            <li class="lt-header__mobile-nav-item">
+                <a class="lt-header__mobile-nav-link" href="/faq">FAQ</a>
             </li>
 
             <li class="lt-header__mobile-nav-item">
@@ -538,12 +465,6 @@
                     <a class="lt-header__mobile-nav-link" href="/me">My Account</a>
                 </li>
             {% endif %}
-
-            <li class="lt-header__mobile-nav-item">
-                <a class="lt-header__mobile-nav-link lt-header__mobile-nav-link--cta btn btn-primary" href="/contact">
-                    Contact Us
-                </a>
-            </li>
 
         </ul>
     </nav>

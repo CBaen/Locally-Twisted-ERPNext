@@ -91,14 +91,6 @@
         {% endif %}
     {% endif %}
 
-    {# Custom-decor inquiry cross-link — for items where "the cart isn't the answer". #}
-    {% if cart_settings.show_contact_us_button %}
-        <p class="lt-product__inquiry">
-            {{ _("Want this in your colors, your scale, your story?") }}
-            <a href="/contact?subject={{ doc.web_item_name | urlencode }}">{{ _("Tell us what you're imagining.") }}</a>
-        </p>
-    {% endif %}
-
 </div>
 
 {% block base_scripts %}

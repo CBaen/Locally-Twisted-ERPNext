@@ -6,6 +6,26 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-01 — Storefront correction pass: preserve framework contracts and accessibility
+
+### Lesson 1 — Category listing bugs can be wrapper-contract bugs, not catalog bugs.
+
+`/shop-items/arches` returned non-arches because the LT Item Group template override removed Webshop's expected `.item-group-content` class. Webshop's listing JavaScript reads that wrapper to find the active Item Group; without it, the listing fell back to broader product results. **Counter-move:** before changing catalog data, inspect the stock Webshop template/JS contract and keep framework semantic classes even when adding LT BEM classes.
+
+### Lesson 2 — Add listing-card fields by wrapping Webshop APIs, not patching upstream.
+
+GL wanted brand descriptions visible on product listing cards. Webshop's stock product filter response did not include LT's brand-description field. The clean fix was a local `override_whitelisted_methods` wrapper around `webshop.webshop.api.get_product_filter_data`: delegate to stock Webshop, then append `lt_brand_description`. **Counter-move:** for small Webshop data enrichments, preserve framework behavior and add the missing field locally instead of editing upstream app code.
+
+### Lesson 3 — Accessibility sizing is not a compression knob.
+
+Footer/header balance must not be solved by shrinking text or controls below accessible sizes. GL explicitly rejected that direction. **Counter-move:** fix density through content removal, centering, grid/flex layout, and responsive wrapping. Preserve readable text and practical 44px interactive targets.
+
+### Lesson 4 — Verification screenshots are receipts, not source.
+
+Header/footer/menu/product verification generated many Chrome/Edge profile folders and screenshots. Those are useful during QA but not canonical project artifacts. **Counter-move:** summarize verified results in docs, keep only intentionally promoted reference assets, and ignore/delete generated browser profiles and throwaway verification captures.
+
+---
+
 ## 2026-04-30 (evening) — Mirror rebuild Phase 1 chrome via /triadic-construction-v2
 
 ### Context

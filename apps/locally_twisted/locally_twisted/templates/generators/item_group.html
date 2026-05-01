@@ -16,14 +16,14 @@
 {# Patch webshop's card builder BEFORE all-products/index.js calls it. The
    default builder hardcodes item.item_group into a .product-category div
    (renders as a category sub-tag like "Columns"). We swap it for the item's
-   short_description so cards match the Hetzner spec. #}
+   LT brand description, with legacy description fields as fallbacks. #}
 <script>
   (function patchProductGridForLT() {
     if (typeof webshop !== 'undefined' && webshop.ProductGrid && webshop.ProductGrid.prototype.get_card_body_html) {
       var orig = webshop.ProductGrid.prototype.get_card_body_html;
       webshop.ProductGrid.prototype.get_card_body_html = function(item, title, settings) {
         var html = orig.call(this, item, title, settings);
-        var rawDesc = (item.short_description || item.web_long_description || '').replace(/<[^>]*>/g, '').trim();
+        var rawDesc = (item.lt_brand_description || item.short_description || item.web_long_description || '').replace(/<[^>]*>/g, '').trim();
         var name = (item.web_item_name || item.item_name || '').trim();
         // If the description equals the item name (catalog import oversight),
         // treat it as empty — don't duplicate the title under itself.
@@ -44,7 +44,7 @@
 {% endblock %}
 
 {% block page_content %}
-<div class="lt-shop" data-item-group="{{ name }}" itemscope itemtype="http://schema.org/ItemList">
+<div class="lt-shop item-group-content" data-item-group="{{ name }}" itemscope itemtype="http://schema.org/ItemList">
 
   {# ── Page hero ─────────────────────────────────────────────────────── #}
   <div class="lt-shop__hero">
@@ -248,6 +248,36 @@ frappe.ready(() => {
     });
     const listing = document.getElementById('product-listing');
     if (listing) obs.observe(listing, { childList: true, subtree: false });
+  })();
+
+  /* Remove webshop's injected Prev/Next row.
+   * The themed pagination lives outside #product-listing. Webshop appends a
+   * second Bootstrap row inside #product-listing, with inline float styles
+   * that push buttons to the viewport edges on narrow screens.
+   */
+  (function removeWebshopPagination() {
+    const listing = document.getElementById('product-listing');
+    if (!listing) return;
+
+    function tryRemove() {
+      listing.querySelectorAll('.btn-prev, .btn-next').forEach(btn => {
+        const row = btn.closest('.row');
+        if (row) {
+          row.remove();
+        } else {
+          btn.remove();
+        }
+      });
+    }
+
+    tryRemove();
+
+    const obs = new MutationObserver(() => {
+      if (listing.querySelector('.btn-prev, .btn-next')) {
+        tryRemove();
+      }
+    });
+    obs.observe(listing, { childList: true, subtree: true });
   })();
 
   /* ── Result count label update ───────────────────────────────── */

@@ -30,16 +30,15 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 - [P0] **Mirror Rebuild Phase 2 — page rebuilds, in priority order:**
   1. `/contact` rebuild as Hetzner-style separate 6-field form (currently redirects to /book). Mirror source: `_resources/odoo-live-mirror/pages/contact.html`.
   2. `/balloon-twisting-and-face-painting` Hetzner-faithful refresh (replaces existing). Mirror source: `pages/balloon-twisting-and-face-painting.html`.
-  3. `/about` (new build — does not exist today). Mirror source: `pages/about.html`.
-  4. `/privacy` page (Stripe live-mode block). Mirror source: `pages/privacy.html`.
-  5. `/terms-of-service` page (Stripe live-mode block). Hetzner doesn't have one — draft fresh OR copy `/privacy` shape and adapt; legal review separate.
-  6. `/refund-policy` Hetzner-faithful refresh. Mirror source: `pages/refund-policy.html`.
-  7. `/accessibility` Hetzner-faithful refresh. Mirror source: `pages/accessibility.html`.
-  8. `/gallery` (new build). Mirror source: `pages/gallery.html`.
-  9. `/blog` channel index + 2 ported posts. Use Frappe's NATIVE `Blog Post` DocType (NOT a custom one — plan-deepen 2026-04-30 caught the regression). Add `tags` field via `Customize Form` linking to a tiny `LT Blog Tag` DocType. Override `templates/pages/blog_post.html` for SEO meta tags Frappe's native template doesn't emit.
-  10. Webshop `/shop` layout overhaul (against the new design guide).
-  11. Webshop product detail layout overhaul.
-  12. Webshop category landing layout overhaul.
+  3. `/privacy` page (Stripe live-mode block). Mirror source: `pages/privacy.html`.
+  4. `/terms-of-service` page (Stripe live-mode block). Hetzner doesn't have one — draft fresh OR copy `/privacy` shape and adapt; legal review separate.
+  5. `/refund-policy` Hetzner-faithful refresh. Mirror source: `pages/refund-policy.html`.
+  6. `/accessibility` Hetzner-faithful refresh. Mirror source: `pages/accessibility.html`.
+  7. `/gallery` (new build). Mirror source: `pages/gallery.html`.
+  8. `/blog` channel index + 2 ported posts. Use Frappe's NATIVE `Blog Post` DocType (NOT a custom one — plan-deepen 2026-04-30 caught the regression). Add `tags` field via `Customize Form` linking to a tiny `LT Blog Tag` DocType. Override `templates/pages/blog_post.html` for SEO meta tags Frappe's native template doesn't emit.
+  9. Webshop `/shop` layout overhaul (against the new design guide).
+  10. Webshop product detail layout overhaul.
+  11. Webshop category landing layout overhaul.
 - [P0] **Per-product variant correctness diff.** For each of 53 products, parse mirror's `data-attribute-exclusions` JSON from the captured page HTML and compare to ERPNext's variant set. Surfaces any data discrepancies from the catalog port. Run BEFORE webshop layout overhauls. Plan section in `MIRROR-REBUILD-PLAN.md`.
 - [P0] **5 latent webshop bugs to fix during Phase 2 layout overhaul** (caught by SecOps/Execution reviewers; same files as the layout work):
   1. Variant items grid "Add to cart" calls `LT_CART.add(templateCode)` — template codes not purchasable (functional bug).
@@ -48,8 +47,6 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
   4. `valid_options_for_attributes` not consumed — combination errors only show after all attributes selected. Hetzner pre-disables invalid combos progressively.
   5. Latex-color "checkbox swatches" must be radio inputs under the hood (single-select); variant API expects exactly one value per attribute.
 - [P1] **Newsletter X-Forwarded-For strip at nginx layer (Option B).** Option A (email-keyed rate limit) shipped on `/api/method/locally_twisted.api.newsletter.signup` this session. Option B would protect `/book`, `/checkout`, `/balloon-twisting-and-face-painting` too — they all use IP-based `@rate_limit` and share the same XFF-spoofing vulnerability. Ops/infra task: edit nginx config to strip/overwrite X-Forwarded-For before forwarding to gunicorn. See `Built_by_Cameron/built-by-cameron-decisions.md` 2026-04-30 entry "Frappe `@rate_limit` IP+key combine into ONE identity, not two."
-- [P1] **Mega panel inner content polish.** `.lt-header__mega-col`, `.lt-header__mega-heading`, `.lt-header__mega-cta`, `.lt-header__mega-cta-wrap`, `.lt-header__mega-browse-row` exist in markup but no CSS rules. Bootstrap col-lg-* handles layout; default browser styling for the rest. Functional but unrefined when panels open.
-- [P1] **Real-browser confirmation of mega menu hover behavior** by GL. Playwright DOM check confirms 3 panels exist + Execution Engine reviewer traced control flow + verified querySelectorAll. Hover behavior was not visually tested — needs real-browser eye.
 - [P1] **`/privacy` + `/terms-of-service` Stripe Dashboard wiring.** After Phase 2 builds them, update Stripe Dashboard's "Privacy policy URL" + "Terms of service URL" (currently `example.com/...` placeholders blocking live-mode activation).
 - [P0] **Spec table data on BTFP service cards.** Currently `Lorem ipsum` placeholders for BEST AT / DURATION / TEAM SIZE-or-ARTISTS / GOOD FOR. Jeff needs to confirm the actual numbers/lists. Replace lorem when confirmed.
 - [P0] **Spec table data on BTFP service cards.** Currently `Lorem ipsum` placeholders for BEST AT / DURATION / TEAM SIZE-or-ARTISTS / GOOD FOR. Jeff needs to confirm the actual numbers/lists. Replace lorem when confirmed.
