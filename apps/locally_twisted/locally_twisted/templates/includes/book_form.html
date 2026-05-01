@@ -372,7 +372,8 @@ every deploy.
                         <input type="checkbox" id="{{ cb_id }}"
                                name="x_services"
                                value="{{ value }}"
-                               class="lt-book__service-checkbox"/>
+                               class="lt-book__service-checkbox"
+                               {% if value in (preselected_services or []) %}checked{% endif %}/>
                         <span>{{ label }}</span>
                     </label>
                     {% endfor %}
