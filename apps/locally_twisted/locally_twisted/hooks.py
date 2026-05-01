@@ -41,7 +41,7 @@ app_license = "mit"
 # Receipt: 2026-04-29 — drawer overlay edit shipped server-side but old
 # CSS stayed cached in GL's browser; drawer rendered inline on every page
 # because the cached rules didn't have `position: fixed`.
-web_include_css = "/assets/locally_twisted/css/lt-theme.css?v=20260430-22"
+web_include_css = "/assets/locally_twisted/css/lt-theme.css?v=20260430-25"
 
 # Guest cart engine — overrides webshop's broken-for-guest cart functions
 # at runtime, exposes window.LT_CART, and keeps cart count badges live.
@@ -60,7 +60,7 @@ web_include_js = [
     "/assets/locally_twisted/js/lt-guest-cart.js?v=20260429-1",
     "/assets/locally_twisted/js/lt-megamenu.js?v=20260430-2",
     "/assets/locally_twisted/js/lt-newsletter.js?v=20260430-2",
-    "/assets/locally_twisted/js/lt-webshop-a11y.js?v=20260430-1",
+    "/assets/locally_twisted/js/lt-webshop-a11y.js?v=20260430-2",
 ]
 
 # Friendly-URL aliases. Frappe's www/ router doesn't auto-translate

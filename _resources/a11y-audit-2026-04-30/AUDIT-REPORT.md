@@ -5,7 +5,55 @@
 **Tool:** axe-core 4.11.4 (chrome-headless 148)
 **Coverage caveat:** axe detects ~57% of WCAG criteria; manual review still required for the rest.
 
-Raw JSON results: `full-{slug}.json` per page.
+Raw JSON results: `full-{slug}.json` (baseline) and `post-fix-{slug}.json` (after fixes) per page.
+
+---
+
+## ✅ POST-FIX STATUS — 2026-04-30 (same day, after dispatch of 4 parallel builder agents)
+
+| Page | Baseline violations | Post-fix violations | Status |
+|---|---|---|---|
+| `/` | 1 | 0 | ✅ CLEAN |
+| `/book` | 0 | 0 | ✅ CLEAN (no regression) |
+| `/contact` | 1 | 0 | ✅ CLEAN |
+| `/all-products` | 3 | 0 | ✅ CLEAN |
+| `/shop-items/arches` | 0 | 0 | ✅ CLEAN (no regression) |
+| `/cart` | 0 | 0 | ✅ CLEAN (no regression) |
+| `/balloon-twisting-and-face-painting` | 4 | 0 | ✅ CLEAN |
+
+**9 confirmed violations → 0.** No regressions on the 3 originally-clean pages.
+
+### Fixes that landed
+
+- **BTFP** (`apps/locally_twisted/locally_twisted/www/balloon_twisting_and_face_painting.html` + `balloon_twisting_and_face_painting.py` `PAGE_CSS`): carousels changed from `<div>` to `<section>`; `<aside class="lt-btfp__expect-wrap">` got `aria-label="What to expect"`; `.lt-btfp__banner-link` and `.lt-btfp__process-number` colors raised to `var(--lt-near-black)`; inline "policies" links underlined.
+- **Homepage** (`www/home.html`): visually-hidden `<h1>` added; `.lt-reviews-block__quotes` `<div>` → `<section>`; `.lt-reviews-block__quote-stars` `<div>` → `<span role="img">`.
+- **Webshop pages** (new `public/js/lt-webshop-a11y.js` + `hooks.py` + `lt-theme.css`): MutationObserver-driven aria-label injection for webshop's icon-only `#list` / `#image-view` view-toggle buttons; visually-hidden `<h1>All Products</h1>` injected on `/all-products`; breadcrumb contrast rule added scoped to `.breadcrumb span[itemprop="name"]`.
+- **Contact** (`www/contact.html`): `<aside class="lt-contact__info-wrap">` got `aria-label="Contact details"`.
+
+### Notes from the run
+
+- The first regression sweep flagged `/all-products` as still having `button-name` violations even after Unit C reported clean — webshop's view-toggle buttons render asynchronously; the original setTimeout-based re-apply was racing axe-core. Fixed by switching `lt-webshop-a11y.js` to a MutationObserver that applies labels the instant the buttons appear in the DOM.
+- The BTFP color fixes had to land in the page's `PAGE_CSS` (rendered as inline `<style>`) because that block wins the cascade over `lt-theme.css`. Container backend restart was required for Python module re-import.
+- Unit D (contact aside) hit an agency-gate hook bug — the gate's `transcript_path` was being routed to a sibling agent's transcript instead of the calling agent's own, so it couldn't see the calling agent's skill invocations. The edit was completed from the parent context where the gate had the full session. This is an infrastructure issue worth flagging to GL: hook `transcript_path` routing in PreToolUse needs investigation.
+
+### Remaining incomplete items (manual verify, not violations)
+
+axe couldn't auto-determine pass/fail for these — they remain after the fix pass:
+- `aria-allowed-role` on `#lt-mobile-nav` (the mobile drawer; reviewed by Explore agent — already labeled correctly via `aria-labelledby`, axe is uncertain about `aria-modal` on `<aside>`)
+- Per-page color-contrast incompletes (1-2 per page; CSS-variable resolution issue, not actual failures)
+- `frame-tested` on `/contact` (an iframe — likely Maps if present)
+
+### Manual checks still owed (out of scope for this fix pass)
+
+- Keyboard tab order across all pages
+- Focus management when mobile drawer / mega menu open / close
+- Alt-text accuracy on imagery
+- 200% zoom behavior
+- Screen-reader announcement of `/book` form submission errors
+
+---
+
+## Original audit (preserved below)
 
 ---
 
