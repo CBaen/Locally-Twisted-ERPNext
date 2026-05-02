@@ -1,6 +1,7 @@
 /* ============================================================
    Locally Twisted — Brand Foundation Theme
-   Source of truth: _resources/STYLE-GUIDE.md
+   Source of truth: _resources/STYLE-GUIDE.md plus
+   workstreams/brand-audience-style-reset.md
    Phase 1, Slices 1 + 2
 
    Applied to ERPNext Website Settings.head_html.
@@ -14,29 +15,31 @@
 /* ── Color tokens (CSS custom properties) ── */
 :root {
   /* Core palette */
-  --lt-teal: #008080;
-  --lt-soft-gray: #595A5C;
-  --lt-near-black: #1A1A1A;
+  --lt-teal: #0F3D3E;
+  --lt-slate: #263446;
+  --lt-berry: #8A1E3F;
+  --lt-brass: #B89158;
+  --lt-soft-gray: #4F5661;
+  --lt-near-black: #101820;
   --lt-white: #FFFFFF;
-  --lt-near-white: #fffcfc;
+  --lt-near-white: #FAF7F2;
 
   /* Accent palette — backgrounds, bands, slider panels.
-     Aqua and lime-pastel were removed from the design system on 2026-04-29
-     after GL flagged them as the wrong register for LT (cyan/lime-green
-     are too candy-pop for the brand). The 2026-04-28 ribbon decision
-     already restricted bands to blush + soft-blue; this commits the
-     deletion to the token layer too. */
-  --lt-blush: #F4DFD7;
-  --lt-soft-lemon: #F9F871;
-  --lt-seafoam: #88FED0;
-  --lt-sky-cyan: #A0E9FF;
-  --lt-soft-blue: #C3DCF3;
+     Variable names remain for compatibility with existing CSS. Values now
+     follow the 2026-05-02 brand reset: professional event authority with
+     warm paper, slate, brass, muted berry, and deep teal. Balloon color
+     should come from photography, product imagery, and customer palettes. */
+  --lt-blush: #E8DDD2;
+  --lt-soft-lemon: #D8BE86;
+  --lt-seafoam: #7D8A7A;
+  --lt-sky-cyan: #D6DDE6;
+  --lt-soft-blue: #BFC9D6;
 
   /* Surface tints — inputs, menus, subtle backgrounds */
-  --lt-blush-tint: #FBF5F2;
-  --lt-blue-tint: #EEF4FB;
-  --lt-mint-tint: #EEFEF5;
-  --lt-lemon-tint: #FDFDE3;
+  --lt-blush-tint: #F7F1EB;
+  --lt-blue-tint: #F0F3F7;
+  --lt-mint-tint: #F1F3EF;
+  --lt-lemon-tint: #F7F1E4;
 
   /* Spacing scale (8px increments) */
   --lt-space-1: 0.25rem;
@@ -95,7 +98,7 @@ h6, .h6 {
 }
 
 /* ── Buttons ── */
-/* Primary CTA: Teal solid (the only place Teal appears) */
+/* Primary CTA: deep teal solid */
 .btn-primary {
   background-color: var(--lt-teal);
   border-color: var(--lt-teal);
@@ -108,8 +111,8 @@ h6, .h6 {
 
 .btn-primary:hover,
 .btn-primary:focus {
-  background-color: #006666;
-  border-color: #006666;
+  background-color: #0A2E30;
+  border-color: #0A2E30;
   color: var(--lt-white);
 }
 
@@ -626,11 +629,11 @@ p {
     --bs-btn-bg: var(--lt-teal);
     --bs-btn-border-color: var(--lt-teal);
     --bs-btn-color: var(--lt-white);
-    --bs-btn-hover-bg: #006666;
-    --bs-btn-hover-border-color: #006666;
+    --bs-btn-hover-bg: #0A2E30;
+    --bs-btn-hover-border-color: #0A2E30;
     --bs-btn-hover-color: var(--lt-white);
-    --bs-btn-active-bg: #006666;
-    --bs-btn-active-border-color: #006666;
+    --bs-btn-active-bg: #0A2E30;
+    --bs-btn-active-border-color: #0A2E30;
     font-size: 1rem;
     font-weight: 600;
     line-height: 1.2;
@@ -644,8 +647,8 @@ p {
 
 .lt-utility-bar__cta:hover,
 .lt-utility-bar__cta:focus-visible {
-    background-color: #006666;
-    border-color: #006666;
+    background-color: #0A2E30;
+    border-color: #0A2E30;
     color: var(--lt-white);
 }
 
@@ -1790,8 +1793,8 @@ body.lt-nav-open {
 }
 .lt-product__cta--primary:hover:not([disabled]),
 .lt-product__cta--primary:focus-visible {
-    background-color: #006666;
-    border-color: #006666;
+    background-color: #0A2E30;
+    border-color: #0A2E30;
     color: var(--lt-white);
     text-decoration: none;
 }
@@ -2061,8 +2064,8 @@ body.product-page {
 
 .lt-footer-newsletter__button:hover,
 .lt-footer-newsletter__button:focus-visible {
-    background-color: #006666;
-    border-color: #006666;
+    background-color: #0A2E30;
+    border-color: #0A2E30;
     color: var(--lt-white);
     outline: none;
 }

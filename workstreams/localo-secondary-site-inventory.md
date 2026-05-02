@@ -4,7 +4,9 @@ Last checked: 2026-05-02
 
 Source: `https://locally-twisted.localo.site/`
 
-This workstream records what was mined from the public Localo microsite for Locally Twisted. Treat this site as an external proof/resource surface, not as the main source of truth for the ERPNext launch.
+Primary review-reference URL: `https://locally-twisted.localo.site/reviews`
+
+This workstream records what was mined from the public Localo microsite for Locally Twisted. Treat this site as a resource mine and external review-trust reference, not as Locally Twisted's brand surface, main website, or customer destination.
 
 ## Ownership And Use Status
 
@@ -13,7 +15,9 @@ GL confirmed on 2026-05-02 that this Localo site is managed through Jeff's marke
 Operational impact:
 
 - Localo is now a usable marketing resource for the ERPNext launch, not just a suspicious duplicate site.
-- The prior permission blocker is cleared for project operations: future agents may mine Localo for photos, proof themes, service language, social links, and SEO clues.
+- It is not the brand. The ERPNext site is the customer destination.
+- If the ERPNext site links to Localo, use the `/reviews` page only as an external trust reference showing review/rating convergence. Do not link to the Localo landing page, blog, contact page, or gallery as customer-facing destinations.
+- The prior permission blocker is cleared for project operations: future agents may mine Localo for photos, review themes, service language, social links, and SEO clues.
 - Still keep a source log for any asset or copy pulled from Localo.
 - Do not hotlink Localo/Google-hosted images into ERPNext; copy, optimize, and serve approved assets locally.
 - Verify business facts before publishing because ownership rights do not guarantee the phone, address, hours, links, or service claims are current.
@@ -25,7 +29,7 @@ Note: this is recorded as GL/Jeff-provided contract status, not independent lega
 
 Localo is a real secondary website for Locally Twisted, not just a review badge.
 
-Do not take it down yet. Mine it first, then decide whether to leave it live after the ERPNext launch.
+Do not position it as part of the Locally Twisted brand experience. Mine it for resources, and use only the `/reviews` page as a possible public trust reference.
 
 ## What Localo Says This Is
 
@@ -87,6 +91,8 @@ Visible proof/contact data:
 - Social links: Facebook, Instagram, Twitter/X
 - Contact-page hours: Sunday closed, Monday closed, Tuesday closed, Wednesday 12-6, Thursday 12-6, Friday 12-6, Saturday 10-4
 
+Known stale fact: Jeff confirmed on 2026-05-02 that Locally Twisted is open on Tuesdays. The Localo Tuesday-closed state appears to be stale from a short period about a year and a half earlier. Do not copy Localo hours into ERPNext.
+
 Launch caution: verify phone, address, hours, website link, and service-area copy against Jeff/Google Business Profile before relying on Localo.
 
 ## Blog Mining
@@ -136,6 +142,8 @@ Useful launch-site lessons from blog topics:
 
 `/reviews` has public customer-review proof and lists the page title as `Clients reviews about Locally Twisted`.
 
+This is the only Localo page currently approved as a customer-facing outbound trust reference. Use it to support multi-website convergence on high-quality reviews/ratings, alongside Google and other review surfaces.
+
 Strong proof themes found:
 
 - Personal, community, and corporate event use cases.
@@ -179,17 +187,16 @@ Use rules:
 
 ## Launch Risk
 
-Leaving Localo live can help if:
+Using Localo can help if:
 
-- it routes users to the real main site
-- it has correct phone/address/hours
-- it supports Google trust without competing with checkout/inquiry flow
-- it stays accurate after launch
+- it is mined for photos, review proof, and SEO clues
+- the `/reviews` page is used carefully as one trust reference
+- business facts are checked before they are reused
+- it does not compete with the ERPNext shop/contact flow
 
-Leaving Localo live can hurt if:
+Using Localo can hurt if:
 
-- it becomes the page customers land on instead of the ERPNext site
-- it lacks links to the new shop/contact flow
+- its landing page, blog, contact page, or gallery are linked from the main site as customer destinations
 - it publishes stale hours, old messaging, or wrong service promises
 - it suggests Localo is the official main site
 - it continues creating low-quality AI/profile-fed blog posts that conflict with the new brand voice
@@ -201,9 +208,10 @@ Leaving Localo live can hurt if:
 3. Build a source log for any Localo asset used on the ERPNext site.
 4. Prefer original/highest-quality source files from the marketing company, Google Business Profile owner view, Drive, or Jeff's archive.
 5. Rewrite Localo blog/service copy before using it on the main site.
-6. Before launch, set Google Business Profile's website link to the final ERPNext site.
-7. If Localo allows a main-site link or button through profile data, route it to the new ERPNext site.
-8. After launch, decide whether to leave Localo as a secondary citation or disable it.
+6. Do not link customers to the Localo landing page, blog, contact page, or gallery from ERPNext.
+7. If a public Localo link is used, link only to `https://locally-twisted.localo.site/reviews` as an external review-trust reference.
+8. Before launch, set Google Business Profile's website link to the final ERPNext site.
+9. After launch, decide whether to leave Localo as a review citation/resource mine or disable it.
 
 ## Previous Suggested Message To Jeff
 

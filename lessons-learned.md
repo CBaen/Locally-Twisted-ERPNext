@@ -6,6 +6,14 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-02 - Inventory existing cascades before adding new stage automation
+
+ERPNext may already be doing part of the business workflow through checkout, payment success, webhooks, or native document helpers. In LT, `/checkout` already creates Customer/Contact, Sales Order, and Payment Request records, while `/payment-success` and the Stripe webhook reconcile paid orders into Sales Invoices and transactional emails.
+
+**Counter-move:** before connecting a CRM stage to finance or accounting, run a live backend inventory and map existing document creators first. Add automation only where it coordinates with the existing path instead of creating a parallel path.
+
+---
+
 ## 2026-05-02 - Wire uncertain stage cascades to reversible operations first
 
 Stage movement needs to do real work, but not every stage is ready to carry finance meaning. The CRM pipeline is now safe because `Archive` is off-board only; the next risk would be letting early automation create Sales Orders, invoices, payment requests, or win/loss stats before the business threshold is settled.

@@ -68,6 +68,17 @@ Built before the frame reset; some still active, some legacy reference.
 | `Locally-Twisted-Backend/frappe_docker/` | LT's ERPNext v15.105.0 install (cloned from frappe/frappe_docker, pwd.yml pinned + port `8081:8080`); compose project `locally-twisted-erpnext-v15` running on `:8081`. Gitignored. |
 | `Locally-Twisted-Frontend/` | Reserved for LT decoupled frontend if needed (empty). Gitignored. |
 | `_resources/` | Canonical resources — see Resources section above |
+| `workstreams/` | Feature/outcome handoffs for multi-agent work. Start with `website-launch.md` and `launch-v1-success-contract.md` for current website launch scope. |
+
+## Active workstream anchors
+
+| File | Purpose |
+|------|---------|
+| `workstreams/launch-v1-success-contract.md` | V1 launch scope contract: website-first quality, buyer priority, commercial lanes, quality targets, deferred 10-year ERPNext maturity, and immediate redesign sequence. |
+| `workstreams/website-launch.md` | Launch controller board and verification gates. |
+| `workstreams/brand-audience-style-reset.md` | Brand/audience reset, proof inventory, and reference-site lessons. |
+| `workstreams/shop.md` | Shop, catalog, product, variant, media, and ecommerce confidence lane. |
+| `workstreams/policy-trust.md` | Policy, trust, Stripe/legal readiness lane. |
 
 ## Reference Disposition (READ before citing anything outside this folder)
 

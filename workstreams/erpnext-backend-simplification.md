@@ -178,6 +178,42 @@ Next cascade work should be explicit about the business threshold:
 - Customer email/text sequences.
 - Accounting/payment/deposit triggers.
 
+## 2026-05-02 Backend Schema Inventory And Trigger Map
+
+Read-only inventory is now repeatable through `scripts/verify/backend_schema_inventory.py`.
+
+Latest live inventory receipt:
+
+- `Lead`: 12, all in `custom_pipeline_stage = New Inquiry`.
+- `Contact`: 25.
+- `Customer`: 4.
+- `Sales Order`: 8, all currently on `delivery_date = 2026-05-06`.
+- `Payment Request`: 8.
+- `Sales Invoice`: 1.
+- `Task`: 0.
+- `Communication`: 14.
+- `LT Service Type`: 7.
+- `LT Lead Service Type`: 0.
+- `LT Lead Photo`: 0.
+- `LT Newsletter Signup`: 16.
+- `Custom Field`: 94 total; 47 are on Lead, 3 are on Task.
+- `Property Setter`: 102 total; 4 are on Lead.
+- Custom/LT DocTypes found: `Dashboard Reviewed Item`, `LT Lead Photo`, `LT Lead Service Type`, `LT Service Type`, and `LT Newsletter Signup`.
+- The inventory classifies 28 Custom Fields as code-owned by current fixtures/setup code and 66 as unclassified DB/app-owned records that need deliberate keep/hide/export decisions before production hardening.
+- Stale service labels are not present as active stale code in the inventory scan. The remaining old-label references are intentional guardrails in rename maps or negative verifiers.
+
+Current trigger map:
+
+- `New Inquiry`: website Lead insert creates/links Contact, queues customer auto-ack email, sets the LT pipeline stage, and creates the first operational Task.
+- `Quote Sent/Awaiting Approval`: currently Task-only. Do not create a Quote automatically until the quote creation/sent threshold is decided.
+- `Approved`: currently Task-only. Do not attach Sales Order/payment automation here until the existing checkout flow is reconciled with manual/custom inquiry approvals.
+- `In Production`: currently Task-only. Candidate future trigger is production job/project/checklist/calendar/staff coordination after the booking/deposit threshold is explicit.
+- `Event/Post Event`: currently Task-only. Candidate future trigger is review/thank-you/post-event closeout after event date.
+- `Archive`: off-board only. It closes open stage Tasks and must not imply won/lost/finance state.
+- Existing `/checkout` is already a finance path: it creates/reuses Customer/Contact, creates Sales Order, creates Payment Request, and sends the customer to Stripe Checkout. `/payment-success` and the Stripe webhook reconcile paid orders by marking the Payment Request paid, creating Sales Invoice, and sending receipt/operator/welcome emails.
+
+Important next-risk note: checkout currently has its own Lead conversion path when a checkout email matches a Contact linked to a Lead. That path sets native `Lead.status = Converted` and backfills `Lead.customer`, but the next slice should verify and align the custom LT pipeline stage too. Do this before adding manual stage-to-Sales-Order automation, so the same business event does not create duplicate or contradictory records.
+
 ## Reusable Pattern
 
 This work exposed a repeatable ERPNext/Frappe trap: a simplified role must be verified as a full operator chain, not as isolated admin settings.
@@ -197,6 +233,7 @@ Specific lessons:
 - Served Desk assets must be verified because Frappe/browser cache can keep old JS active.
 - Client-friendly CRM stages should use a custom business field when native ERPNext statuses may affect conversion, reporting, finance, or workflow behavior.
 - Stage cascades should start with reversible operational records when the finance threshold is not fully agreed yet.
+- Inventory existing finance paths before wiring a stage to finance. This repo already has checkout/payment-success cascades, so stage automation must coordinate with them instead of creating parallel records.
 
 These patterns are now promoted to `.codex/capabilities/recipes/erpnext-simplified-role-verification.md` and `.codex/capabilities/recipes/erpnext-crm-pipeline-safety.md`, and both are indexed in `.codex/capabilities/INDEX.md`.
 
@@ -213,10 +250,10 @@ These patterns are now promoted to `.codex/capabilities/recipes/erpnext-simplifi
 
 The next agent should do this in small verified slices:
 
-1. Inventory the actual live ERPNext backend schema.
+1. Inventory the actual live ERPNext backend schema. Done 2026-05-02.
    - Count LT custom DocTypes, Lead Custom Fields, Property Setters, Custom Fields on Customer/Website Item, and fixtures.
    - Compare DB state to `hooks.py`, `scripts/translate/`, and `scripts/fix/`.
-   - Mark scripts that are historical and unsafe to rerun. First stale Lead-script cleanup and workspace idempotent-sync pass completed 2026-05-02; remaining inventory should focus on DB-only schema and fixture/export decisions.
+   - Mark scripts that are historical and unsafe to rerun. First stale Lead-script cleanup and workspace idempotent-sync pass completed 2026-05-02; repeatable backend inventory now lives at `scripts/verify/backend_schema_inventory.py`.
 
 2. Decide the simplest Jeff-facing Lead layout.
    - Keep fields that receive real website data or support immediate follow-up.
@@ -261,6 +298,7 @@ python scripts/setup/sync_backend_workspaces.py
 python scripts/verify/lead_backend_intake_parity.py
 python scripts/verify/crm_pipeline_parity.py
 python scripts/verify/crm_stage_cascade.py
+python scripts/verify/backend_schema_inventory.py
 python scripts/verify/backend_workspace_parity.py
 $env:LT_DESK_TEST_USER='lt-owner-temp@example.com'; $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner
 python scripts/verify/contact_service_logic.py --base-url http://localhost:8081
@@ -308,20 +346,23 @@ Relevant code:
 - `apps/locally_twisted/locally_twisted/seed/sync_backend_workspaces.py`
 - `scripts/setup/sync_contact_intake_backend.py`
 - `scripts/setup/sync_backend_workspaces.py`
+- `scripts/verify/backend_schema_inventory.py`
+- `scripts/verify/backend_schema_inventory_contract.py`
 - `scripts/verify/lead_backend_intake_parity.py`
 - `scripts/verify/backend_workspace_parity.py`
 - `scripts/verify/owner_desk_routes.spec.js`
 
 ## Next Handoff Stage
 
-Continue with a read-only backend inventory.
+Continue with checkout/Lead conversion parity before adding any manual stage-to-finance automation.
 
 Recommended first command set:
 
 ```powershell
 git status --short
-Select-String -Path .\scripts\fix\*.py,.\scripts\setup\*.py,.\apps\locally_twisted\locally_twisted\seed\*.py -Pattern 'Event Package','Delivery Only','Pickup Only','custom_event_type','LT Lead Photo','Custom Field'
-docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute frappe.client.get_count --kwargs "{'doctype':'Custom Field','filters':{'dt':'Lead'}}"
+python scripts/verify/backend_schema_inventory.py
+python scripts/verify/crm_pipeline_parity.py
+python scripts/verify/crm_stage_cascade.py
 ```
 
-Then write down what is code-owned, what is DB-only, what still needs fixture/export decisions, and what Jeff actually needs for the first backend walkthrough.
+Then verify what happens when checkout reuses a Contact linked to a Lead: native `Lead.status`, `Lead.customer`, `Lead.custom_pipeline_stage`, related Tasks, Sales Order, Payment Request, and paid-order reconciliation must tell one coherent story.

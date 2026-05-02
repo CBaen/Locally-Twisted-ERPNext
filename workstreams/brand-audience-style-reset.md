@@ -130,7 +130,10 @@ Localo secondary site checked 2026-05-02:
 - Visible sections include Home, Reviews, Blog, Gallery, Contact, customer reviews, blog posts, contact information, gallery, and social links.
 - Visible contact info: `+1 801-644-9312`, `8969 South 2700 West West Jordan 84088`, and limited store hours.
 - Social links include Facebook, Instagram, and Twitter/X.
-- It currently appears to be useful as a review/photo/resource mirror, but risky as an uncontrolled duplicate website if it competes with the main launch site or captures visitors without sending them to the ERPNext storefront.
+- Localo is not the brand and should not be treated as a customer destination. The ERPNext site is where customers should land.
+- It is useful as a photo/review/resource mine and as a possible external review trust reference through `https://locally-twisted.localo.site/reviews`.
+- Do not link to the Localo landing page, blog, contact page, or gallery from the ERPNext site.
+- Known stale fact: Localo shows Tuesday closed, but Jeff confirmed on 2026-05-02 that Locally Twisted is open on Tuesdays. The Tuesday-closed state was from a short period about a year and a half earlier. Do not reuse Localo hours.
 - GL confirmed on 2026-05-02 that Localo is connected to Jeff's marketing company and that the material there is Locally Twisted's to use per contract. Treat this as GL/Jeff-provided contract status, not independent legal review.
 
 Localo handling recommendation:
@@ -140,8 +143,9 @@ Localo handling recommendation:
 3. Use Localo assets as contract-cleared marketing-company material, but keep a source log and prefer originals from the marketing company, Google Business Profile owner view, Drive, or Jeff's archive.
 4. Do not hotlink Localo or Google-hosted image URLs from ERPNext. Copy, optimize, and serve selected assets locally.
 5. Do not copy Localo auto-blog copy verbatim into the main site. Treat it as source material and rewrite it into the Locally Twisted brand voice.
-6. Before ERPNext launch, verify whether the Google Business Profile `Website` field points to the real `locallytwisted.com` replacement and not the Localo microsite.
-7. After launch, leave Localo live only if it accurately routes people to the main site and does not publish stale/wrong business facts. Disable it if it cannot be made accurate, creates confusion, or competes with the main sales funnel.
+6. Do not link to Localo as a site/brand destination. If used publicly, link only to `https://locally-twisted.localo.site/reviews` for multi-site review convergence.
+7. Before ERPNext launch, verify whether the Google Business Profile `Website` field points to the real `locallytwisted.com` replacement and not the Localo microsite.
+8. After launch, leave Localo live only if it does not compete with the ERPNext storefront and does not publish stale/wrong business facts.
 
 Evidence not fully inventoried yet:
 
@@ -233,6 +237,66 @@ Important difference from the references:
 - Locally Twisted should not force every proof image into a uniform crop. Use layout rhythm instead of crop sameness.
 - Full-piece visibility matters more than card uniformity for arches, columns, organic garlands, photo ops, parade work, and large installs.
 
+## Zurchers And Retail Clarity
+
+GL paused the brand direction on 2026-05-02 because Jeff has referenced Zurchers as a sales model. Treat that as useful business signal, not as final visual direction.
+
+What Zurchers can teach this build:
+
+- Clear category labels help people buy quickly.
+- Visible prices and simple add-to-cart behavior matter for ready-to-order products.
+- Retail customers need obvious pickup/delivery and product-option confidence.
+- A shop page should reduce friction, not turn simple products into a consultation.
+
+What should not carry over:
+
+- Sterile party-store visual language as the main company identity.
+- Commodity retail framing for high-value custom event installations.
+- UI that makes Locally Twisted feel interchangeable with a party supply store.
+- A design system where product cards and price grids are the only proof of business quality.
+
+Decision:
+
+- Use Zurchers-style clarity only inside `Ready to Order` shopping flows.
+- Do not make the homepage, gallery, custom decor, or company brand look like Zurchers.
+- Use consultative event authority as the main brand posture.
+- Keep `Plan Custom Decor` and large-install paths premium, guided, and proof-led.
+
+Working phrase:
+
+> Retail clarity inside an authority-led event brand.
+
+## Accepted Visual Synthesis
+
+Current preferred direction from GL on 2026-05-02:
+
+- Civic/professional Utah authority.
+- Slate blue and berry photo-treatment energy.
+- Black, deep slate, warm white, and brass/gold professionalism.
+- Mountain/territory cues when they support Utah-rooted authority.
+- Gold balloon/icon details when they feel polished, not novelty.
+- Mentor warmth: experienced, consultative, calm, and capable.
+
+Do not use pastel/rainbow-first UI as the company identity. Balloon colors should come from the work, photos, product choices, and customer palettes. The site chrome should provide confidence, contrast, and structure.
+
+Recommended brand token direction for the next style-guide pass:
+
+| Role | Direction | Notes |
+|---|---|---|
+| Foundation | ink black, deep slate, warm white | Professional base for corporate/civic buyers |
+| Trust accent | muted brass/gold | Use for icons, dividers, proof highlights, and premium CTAs |
+| Primary color | deep teal or slate blue | Choose after checking current CSS and image behavior |
+| Secondary accent | muted berry | Useful for CTA contrast and event-energy moments |
+| Balloon color | comes from photos/products | Avoid turning the UI itself into a pastel/rainbow palette |
+| BTFP lane | warmer and more family-friendly | Still organized, not childish |
+
+Segmented design behavior:
+
+- Homepage, gallery, custom decor, corporate, school, civic, and venue pages should feel premium, image-led, consultative, and locally authoritative.
+- `Ready to Order` shop pages should be cleaner and more retail-functional: filters, clear prices, option confidence, pickup/delivery clarity, and direct cart behavior.
+- Balloon twisting and face painting can be warmer and more family/private-event oriented, while staying visually connected to the main brand.
+- `Plan Custom Decor` should eventually feel like a guided planning studio, not a game or checkout page.
+
 ## Copy Rules
 
 Use:
@@ -271,4 +335,4 @@ Before rewriting colors or UI tokens, define:
 
 The likely visual direction is "professional event authority with colorful work," not "party-store color system."
 
-Open question for future rounds: whether the current teal/blush/lemon/seafoam/cyan/blue palette supports corporate and large-scale authority, or whether the website needs a more neutral professional base with balloon colors handled through photography.
+Resolved direction from 2026-05-02: the current pastel-heavy teal/blush/lemon/seafoam/cyan/blue palette should not remain the main company color system. Move toward a more neutral professional base with brass/gold, slate/blue, and restrained berry/deep-teal accents, while letting balloon colors live primarily in photography, product imagery, and customer-selected palettes.

@@ -8,6 +8,8 @@ Launch the Locally Twisted website as a polished business card and sales path: c
 
 This is the launch coordination lane. It does not replace `locally-twisted-queue.md`, `workstreams/shop.md`, or `workstreams/erpnext-backend-simplification.md`; it sequences the launch-critical parts of those lanes.
 
+Launch scope contract: `workstreams/launch-v1-success-contract.md`. Use that file to keep V1 focused on the public website, customer trust, inquiry/checkout readiness, and measurable quality gates while preserving, but not prematurely building, the 10-year saleability infrastructure vision.
+
 ## Current Stage
 
 Active launch lane. Baseline pass started 2026-05-02.
@@ -35,6 +37,7 @@ Latest verified controller baseline:
 - Browser console baseline after the Webshop generated asset-map correction passed across `/`, `/shop`, `/shop-items/arches`, `/shop-items/arches/classic-arch`, `/cart`, `/checkout?item=6-color-rainbow-arch-20F&qty=1`, `/privacy`, `/refund-policy`, and `/accessibility`: all routes returned 200 with 0 console errors and 0 warnings. Report: `output/playwright/launch-baseline-20260502/console-report-after-asset-map-fix.json`.
 - Webshop asset rebuild note: no Yarn package install was needed. Existing Yarn works when `/home/frappe/.nvm/versions/node/v20.19.2/bin` is added to `PATH`; build from the frontend/nginx container last so shared `assets.json` points to files nginx can actually serve.
 - Final layout-fit rerun found and fixed a 320px overflow on `/shop-items/seasonal-specialty`; Webshop's stock `.item-card { min-width: 300px; }` needed the LT grid override `min-width: 0`. `npm run test:layout-fit` now passes 60/60 again.
+- First brand-token reset pass completed 2026-05-02: `lt-theme.css` remaps the old pastel-heavy token values toward deep teal, slate, warm white, brass/gold, muted berry, and restrained supporting tints while preserving variable names for compatibility. Cache cleared, `nav_ia.py` passed, `npm run test:layout-fit` passed 60/60, and screenshots for `/`, `/shop`, `/contact`, and `/shop-items/arches/classic-arch` passed under `output/playwright/brand-token-20260502/`.
 
 ## Owner
 
@@ -132,7 +135,7 @@ Primary coordination file: `workstreams/erpnext-backend-simplification.md`.
 | Form audit | Owned by separate agent | Do not edit `/contact` or Lead schema from this lane yet | Wait for form audit handoff before inquiry-path changes |
 | Policy/trust | Routes load, content not launch-approved | Policy audit found `/privacy`, `/terms-of-service`, `/refund-policy`, `/accessibility` exist; source trace lives in `workstreams/policy-trust.md` | Get GL/legal decisions on unresolved privacy, cookie, shipping/delivery, and refund terms before Stripe URL wiring |
 | Shop/media | Variant cart contract fixed; broad browse routes use `/shop`; first variant-media pass, variant correctness diff, and option UX P0 pass completed | `cart_checkout_contract.py`, `variant_media_contract.py`, `catalog_variant_contract.py`, and `smoke_shop.py` passed; 1,712 variant images mapped; detailed media report generated; `/shop-by-category` redirects to `/shop`; exact variant checkout URL returns 200 while template checkout URL is blocked | Review the 45 flagged products / 6,831 skipped assignments, select category browse imagery for 11 empty Item Groups, then continue product/category visual polish |
-| Visual/accessibility QA | Automated layout/nav baseline passing; screenshot and console baseline captured | Visual/accessibility audit confirmed route set and no current axe/pa11y maintained command; `output/playwright/launch-baseline-20260502/` has desktop/mobile screenshots and post-asset-map console report | Do manual keyboard/focus/alt/zoom checks after the next visual/content changes |
+| Visual/accessibility QA | Automated layout/nav baseline passing; screenshot and console baseline captured; brand-token screenshot pass captured | Visual/accessibility audit confirmed route set and no current axe/pa11y maintained command; `output/playwright/launch-baseline-20260502/` has desktop/mobile screenshots and post-asset-map console report; `output/playwright/brand-token-20260502/` has screenshots after the first palette reset | Do manual keyboard/focus/alt/zoom checks after the next visual/content changes |
 | Backend readiness | Pending | Backend workstream exists | Keep separate from public form audit; simplify after schema/source reality is clear |
 | Release gate | Not started | No integrated launch report yet | Run final route, form, shop, visual, accessibility, and policy-source gates after implementation lanes land |
 

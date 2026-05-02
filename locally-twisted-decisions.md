@@ -8,6 +8,34 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-02 - Stage-to-finance automation must coordinate with existing checkout/payment cascades
+
+**Decision:** Do not wire manual CRM stage movement directly to Quotes, Sales Orders, Sales Invoices, Payment Requests, Customers, or payment/accounting state until the existing checkout/payment-success cascade is explicitly mapped and protected from duplication.
+
+**Reasoning:** The backend inventory confirmed that LT already has a finance path outside manual CRM stage movement: `/checkout` creates/reuses Customer/Contact records, creates a Sales Order and Payment Request, and sends the customer to Stripe; `/payment-success` and the Stripe webhook reconcile paid orders by marking the Payment Request paid, creating a Sales Invoice, and sending paid-order emails. Adding stage-to-finance automation without coordinating with that path could create duplicate records or contradictory Lead state.
+
+**Implementation:** Added `scripts/verify/backend_schema_inventory.py` and its contract test. The backend simplification workstream now records the current trigger map and flags checkout/Lead conversion parity as the next slice before manual stage-to-finance automation.
+
+**Verification receipt:** `python scripts/verify/backend_schema_inventory_contract.py`, `python -B -m py_compile scripts/verify/backend_schema_inventory.py scripts/verify/backend_schema_inventory_contract.py`, and `python scripts/verify/backend_schema_inventory.py` passed against the live local ERPNext stack.
+
+**Decided by:** Codex made this as a safety boundary after GL approved continuing backend wiring and asked for the next work to be committed and pushed.
+
+---
+
+## 2026-05-02 - Brand palette moves from pastel catalog energy to professional event authority
+
+**Decision:** Locally Twisted's main website chrome should move away from the pastel-heavy teal/blush/lemon/seafoam/cyan direction as the company-level color system. The working launch direction is a more neutral professional base with deep teal, slate, warm white, brass/gold, muted berry, and restrained supporting tints. Balloon color should come primarily from real photography, product imagery, and customer-selected palettes.
+
+**Reasoning:** GL clarified that the target buyer priority is corporate, school, civic, venue, large-scale, and premium private event work, not only small catalog purchases. Jeff's Zurchers reference is useful for retail clarity in `Ready to Order`, but the company brand should not look like a sterile party-supply catalog. The site needs consultative event authority with enough warmth to show experience, trust, and Utah-specific scale.
+
+**Implementation:** `workstreams/brand-audience-style-reset.md` now records the Zurchers comparison, the accepted visual synthesis, and the segmented behavior for homepage/custom decor/shop/BTFP lanes. `apps/locally_twisted/locally_twisted/public/css/lt-theme.css` keeps existing variable names for compatibility but remaps the token values toward the accepted direction.
+
+**Verification receipt:** `python scripts/dev/clear_website_cache.py`, `python scripts/verify/nav_ia.py`, `npm run test:layout-fit`, and `python scripts/verify/playwright_screenshot.py --base-url http://localhost:8081 --paths /,/shop,/contact,/shop-items/arches/classic-arch --output-dir output/playwright/brand-token-20260502` passed. Screenshot artifacts are in `output/playwright/brand-token-20260502/`.
+
+**Decided by:** GL approved moving away from the old pastel direction and accepted the professional Utah event authority synthesis; Codex made the first token-level implementation pass.
+
+---
+
 ## 2026-05-02 - CRM stage cascades start with operational Tasks only
 
 **Decision:** The first LT CRM stage cascade should create and close ERPNext `Task` records for operator follow-up. It should not create or modify Quotes, Sales Orders, Sales Invoices, Payment Requests, Customers, or win/loss reporting state.
@@ -19,6 +47,20 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 **Verification receipt:** `python scripts/setup/sync_crm_pipeline.py`, `python scripts/dev/clear_website_cache.py --restart`, `python scripts/verify/crm_stage_cascade.py`, `python scripts/verify/crm_pipeline_parity.py`, `python scripts/verify/backend_workspace_parity.py`, `python scripts/verify/lead_backend_intake_parity.py`, `python scripts/verify/contact_service_logic.py --base-url http://localhost:8081`, `python scripts/verify/contact_prefill.py --base-url http://localhost:8081`, `python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --shape-only --skip-newsletter`, and `npm run test:desk-owner` passed. The cascade verifier also confirmed test records were cleaned up and Sales Order, Sales Invoice, and Payment Request counts did not change during stage movement.
 
 **Decided by:** GL asked to continue with wiring after accepting the finance-safe pipeline separation; Codex implemented the first safe operational cascade.
+
+---
+
+## 2026-05-02 - V1 launch prioritizes the public website while preserving the 10-year saleability path
+
+**Decision:** V1 launch work should prioritize a high-quality public website, customer trust, inquiry/checkout readiness, policy visibility, SEO/local/AEO foundations, and visual quality. The longer ERPNext goal is to support a saleable, less founder-dependent company over the next 10 years, but that full operating-system maturity must not delay the website unless it directly protects launch trust, payments, policies, inquiry handling, or handoff safety.
+
+**Reasoning:** LT currently carries several valid goals at once: ecommerce, custom event decor, balloon twisting/face painting, reviews/proof, backend operations, future saleability, and ERPNext adoption. Trying to mature all of ERPNext before launch creates too much scope and slows the immediate need: a credible website geared toward the right demographics with strong measurable quality.
+
+**Implementation:** Added `workstreams/launch-v1-success-contract.md` and linked it from the website launch workstream and project index. The contract defines buyer priority, commercial lanes, quality targets, launch blockers, deferred post-launch work, and the immediate redesign sequence.
+
+**Alternatives considered:** Keep working from broad queue items only. Rejected because broad items allow future agents to drift into the entire 10-year system before the public website is ready. Freeze backend work entirely. Rejected because inquiry, checkout, payment, policy, and handoff safety still need enough backend support for launch.
+
+**Decided by:** GL approved the website-first / future-safe framing; Codex documented it as the launch scope contract.
 
 ---
 
