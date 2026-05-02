@@ -79,6 +79,8 @@ OWNER_HOME_TEXT = {
     "Update products only when needed",
 }
 
+CONTRACTOR_TEMP_USER = "lt-contractor-temp@example.com"
+
 
 def bench_execute(method: str, *, kwargs: dict[str, Any] | None = None) -> Any:
     cmd = [
@@ -234,12 +236,36 @@ def check_owner_command_center() -> list[str]:
     return failures
 
 
+def check_contractor_has_no_backend_login() -> list[str]:
+    failures = []
+    user = try_get_doc("User", CONTRACTOR_TEMP_USER)
+    if not user:
+        return failures
+
+    if user.get("enabled"):
+        failures.append(f"{CONTRACTOR_TEMP_USER} should be disabled; contractors do not have a backend login")
+    if user.get("role_profile_name"):
+        failures.append(
+            f"{CONTRACTOR_TEMP_USER} should not have a role profile, found {user.get('role_profile_name')!r}"
+        )
+    if user.get("module_profile"):
+        failures.append(
+            f"{CONTRACTOR_TEMP_USER} should not have a module profile, found {user.get('module_profile')!r}"
+        )
+    roles = {row.get("role") for row in user.get("roles", [])}
+    if "Desk User" in roles:
+        failures.append(f"{CONTRACTOR_TEMP_USER} should not have Desk User access")
+
+    return failures
+
+
 def main() -> int:
     failures = []
     failures.extend(check_calendar_view())
     for name, expected in EXPECTED_WORKSPACE_SHORTCUTS.items():
         failures.extend(check_workspace(name, expected))
     failures.extend(check_owner_command_center())
+    failures.extend(check_contractor_has_no_backend_login())
 
     if failures:
         print("[BACKEND WORKSPACE PARITY] FAIL")

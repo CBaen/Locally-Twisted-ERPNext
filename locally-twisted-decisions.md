@@ -8,6 +8,18 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-02 - Irregular contractors do not get backend accounts by default
+
+**Decision:** Locally Twisted contractors who help irregularly should not have an ERPNext Desk/backend login by default. They should receive job information through text, email, and calendar invites unless a future workflow proves they need direct system access.
+
+**Reasoning:** Contractors are not a daily operating tier like Owner, Manager, Employee, or Accountant. A backend profile for them adds account-management burden and exposes confusing ERPNext surfaces without a clear benefit. The simpler and safer workflow is to automate or manually send only the information they need for a job.
+
+**Implementation:** The temporary contractor login `lt-contractor-temp@example.com` was disabled in the local ERPNext database. `scripts/verify/backend_workspace_parity.py` now fails if that temp user exists and is enabled, has a role/module profile, or has `Desk User` access.
+
+**Decided by:** GL clarified the contractor workflow during ERPNext backend simplification; Codex disabled the temp login and added the parity guard.
+
+---
+
 ## 2026-05-02 - Lead estimated times use plain text, not Frappe Time controls
 
 **Decision:** Customer-facing inquiry time fields should ask for start/end estimates in friendly text, while ERPNext Lead Desk fields should use plain internal labels and `Data` fieldtype text inputs. Do not put customer helper copy such as "(even an estimate is helpful!)" into backend employee labels.

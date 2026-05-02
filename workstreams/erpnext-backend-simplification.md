@@ -87,6 +87,7 @@ Live local ERPNext DB changes made for the temporary owner walkthrough:
 - `LT Manager Home` and `LT Employee Home` were normalized to the same current booking/contact language so they no longer show the stale `Event Calendar`, `Clients & Customers`, or `Contacts` shortcuts.
 - `apps/locally_twisted/locally_twisted/seed/sync_backend_workspaces.py` and `scripts/setup/sync_backend_workspaces.py` now recreate those workspace/calendar fixes idempotently.
 - `Owner Home` now combines the basic command-center overview with Jeff's guided action flow: live Number Cards for `New Inquiries`, `Bookings`, `Customers`, and `Overdue Follow-ups`; a small `LT Incoming Inquiries` chart; and a plain "What Jeff does next" section before secondary catalog tools.
+- Contractors are not a backend tier by default. Irregular contractor coordination should use text, email, and calendar invites unless a future workflow proves a direct ERPNext login is needed. The temporary contractor login `lt-contractor-temp@example.com` was disabled after inventory showed it could authenticate.
 
 Verification as `lt-owner-temp@example.com` on 2026-05-02:
 
@@ -98,6 +99,7 @@ Verification as `lt-owner-temp@example.com` on 2026-05-02:
 - The route guard asset was served at `/assets/locally_twisted/js/lt-desk-workspace-router.js?v=20260502-1` with the pageview guard present. The Desk HTML still referenced `v=20260502-1` until a server reload picks up the hook query-string bump, so browser hard-refresh may be needed after changes.
 - `python scripts/verify/backend_workspace_parity.py` failed before the workspace sync on Manager/Employee stale labels, then passed after `python scripts/setup/sync_backend_workspaces.py`. A second sync run no-opped.
 - `python scripts/verify/backend_workspace_parity.py` now also verifies the Owner Home command-center Number Cards, the `LT Incoming Inquiries` Dashboard Chart, and the guided action text.
+- `python scripts/verify/backend_workspace_parity.py` now also verifies that the temporary contractor login stays disabled and has no Desk/module/profile access.
 - `npm run test:desk-owner` passed with `lt-owner-temp@example.com` and verifies `/app/home`, `/app/owner-home`, and `/app/Workspaces` all land on the Owner Home command center.
 - Owner API login check after sync showed `Owner Home` first, with live counts: `Lead` 12, `Sales Order` 8, `Customer` 4, `Task` 0.
 - The Lead `Inspiration Photos` empty-section bug was fixed by adding `custom_inspiration_photos` as a Table field pointing at `LT Lead Photo`. `python scripts/setup/sync_contact_intake_backend.py` now recreates that field idempotently, and `python scripts/verify/lead_backend_intake_parity.py` verifies the child table wiring.

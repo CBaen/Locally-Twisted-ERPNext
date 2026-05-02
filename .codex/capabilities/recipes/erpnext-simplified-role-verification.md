@@ -20,6 +20,8 @@ Check the whole chain in this order:
 
    Write down what the person should do in the system, using business words. Example: Jeff should see new inquiries, customers, bookings, products, job boards, and the booking calendar without ERPNext module clutter.
 
+   If the person only needs job details occasionally, consider whether they need a backend login at all. Contractors may be better served by text, email, and calendar invites unless they have a real operator workflow inside ERPNext.
+
 2. Verify with the actual non-admin login.
 
    Admin success does not prove the simplified role works. Log in as the target user or use that user's session through the API.
