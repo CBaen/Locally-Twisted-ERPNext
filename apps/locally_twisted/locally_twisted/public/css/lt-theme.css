@@ -1029,10 +1029,10 @@ body.lt-nav-open {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  background-color: var(--lt-white);
+  background-color: transparent;
   text-decoration: none;
   transition: transform 0.15s ease;
 }
@@ -1045,8 +1045,8 @@ body.lt-nav-open {
 }
 
 .lt-footer__social-link img {
-  width: 22px;
-  height: 22px;
+  width: 40px;
+  height: 40px;
   display: block;
 }
 
