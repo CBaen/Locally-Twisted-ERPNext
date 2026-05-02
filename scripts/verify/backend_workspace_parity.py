@@ -36,7 +36,7 @@ OWNER_HOME_NUMBER_CARDS = {
         "label": "New Inquiries",
         "document_type": "Lead",
         "function": "Count",
-        "filters_json": [["Lead", "status", "=", "Open"]],
+        "filters_json": [["Lead", "custom_pipeline_stage", "=", "New Inquiry"]],
     },
     "Bookings": {
         "label": "Bookings",

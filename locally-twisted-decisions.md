@@ -8,6 +8,20 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-02 - LT CRM stages use a custom business field, not Lead.status
+
+**Decision:** Translate the approved six-stage Odoo CRM concept into ERPNext as `Lead.custom_pipeline_stage` with these values: `New Inquiry`, `Quote Sent/Awaiting Approval`, `Approved`, `In Production`, `Event/Post Event`, and `Archive`. Keep ERPNext's native `Lead.status` intact.
+
+**Reasoning:** GL clarified that Odoo's `Archive` was meant to remove a lead from the active Kanban, not necessarily to mark revenue, win rate, or accounting state. Repurposing ERPNext `Lead.status` would risk fighting ERPNext's own conversion/reporting behavior. A custom business-stage field gives Jeff the simple board he needs while leaving finance/reporting triggers to be wired deliberately at the correct business threshold later.
+
+**Implementation:** `locally_twisted.seed.sync_crm_pipeline` now creates/updates `custom_pipeline_stage`, normalizes existing Leads, and points `LT Inquiry Board` at that field. The `Archive` column is archived/off-board. Website inquiries still use native `status = Open` and now also set `custom_pipeline_stage = New Inquiry`. Owner Home inquiry counts use the custom field.
+
+**Verification receipt:** `python scripts/setup/sync_crm_pipeline.py`, `python scripts/verify/crm_pipeline_parity.py`, `python scripts/setup/sync_backend_workspaces.py`, `python scripts/verify/backend_workspace_parity.py`, `python scripts/verify/lead_backend_intake_parity.py`, `python scripts/verify/contact_service_logic.py --base-url http://localhost:8081`, `python scripts/verify/contact_prefill.py --base-url http://localhost:8081`, `python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --shape-only --skip-newsletter`, and `npm run test:desk-owner` passed.
+
+**Decided by:** GL accepted the integration approach after clarifying the purpose of Archive; Codex implemented the safe custom-field pipeline.
+
+---
+
 ## 2026-05-02 - Irregular contractors do not get backend accounts by default
 
 **Decision:** Locally Twisted contractors who help irregularly should not have an ERPNext Desk/backend login by default. They should receive job information through text, email, and calendar invites unless a future workflow proves they need direct system access.

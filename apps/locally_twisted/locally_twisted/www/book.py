@@ -185,6 +185,7 @@ def submit_book_inquiry():
         "company_name": company or None,
         "source": "Website",
         "status": "Open",
+        "custom_pipeline_stage": "New Inquiry",
         "custom_occasion_type": _occasion_label(occasion),
         "custom_event_date": event_date,
         "custom_event_time": event_time or None,

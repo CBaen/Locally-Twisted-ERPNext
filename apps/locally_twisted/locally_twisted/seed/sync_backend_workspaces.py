@@ -9,6 +9,8 @@ import json
 
 import frappe
 
+from locally_twisted.seed import sync_crm_pipeline
+
 
 OWNER_HOME = "LT Owner Home"
 
@@ -62,7 +64,7 @@ OWNER_NUMBER_CARDS = {
         "label": "New Inquiries",
         "document_type": "Lead",
         "function": "Count",
-        "filters_json": [["Lead", "status", "=", "Open"]],
+        "filters_json": [["Lead", "custom_pipeline_stage", "=", "New Inquiry"]],
         "color": "#155e75",
         "background_color": "#ecfeff",
     },
@@ -118,9 +120,9 @@ OWNER_HOME_SHORTCUTS = [
         "type": "DocType",
         "link_to": "Lead",
         "doc_view": "List",
-        "stats_filter": {"status": "Open"},
+        "stats_filter": {"custom_pipeline_stage": "New Inquiry"},
         "color": "Blue",
-        "format": "{} Open",
+        "format": "{} New",
     },
     {
         "label": "Inquiry Board",
@@ -218,9 +220,11 @@ def execute() -> str:
         "ensured_calendar_views": [],
         "ensured_dashboard_charts": [],
         "ensured_number_cards": [],
+        "synced_crm_pipeline": {},
         "updated_role_profiles": [],
         "updated_workspaces": [],
     }
+    summary["synced_crm_pipeline"] = sync_crm_pipeline.sync()
     _ensure_booking_calendar(summary)
     _ensure_owner_roles(summary)
     _ensure_owner_home_building_blocks(summary)

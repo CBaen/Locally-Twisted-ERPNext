@@ -65,6 +65,9 @@ Verify these before editing DB/schema, but they are the latest documented workin
 - `/book` redirects to `/contact?intent=quick`; do not rebuild a separate public `/book` form.
 - Public service taxonomy is `Balloon Decor`, `Balloon Twisting`, `Face Painting`, `Delivery`, `Pickup`, `Events Inquiry`, `Something Else`.
 - Website submissions now populate Lead `custom_event_type` child rows, not only legacy text.
+- The LT inquiry Kanban uses `Lead.custom_pipeline_stage` for the six business stages, while native `Lead.status` stays available for ERPNext internals.
+- Approved business stages are `New Inquiry`, `Quote Sent/Awaiting Approval`, `Approved`, `In Production`, `Event/Post Event`, and `Archive`.
+- `Archive` means closed/off the active LT board. It is not wired as a financial win/loss or accounting trigger.
 - `LT Service Type` was synced on 2026-05-01 to remove `Delivery Only` and `Event Package` and add `Delivery`, `Pickup`, `Events Inquiry`.
 - `lead_cascade.py` hooks on Lead insert to create/link Contact and queue the customer acknowledgment email.
 - `/payment-success` marks Payment Requests paid, creates Sales Invoices, sends receipt/operator/welcome emails, and redirects customers even if backend follow-up fails.
@@ -107,6 +110,33 @@ Verification as `lt-owner-temp@example.com` on 2026-05-02:
 
 Important: these workspace, Number Card, Dashboard Chart, Role Profile, and Calendar View records are recreated by idempotent setup code, not exported fixtures. Before production/cutover, decide whether that remains the preferred ownership model or whether any records should also be exported.
 
+## 2026-05-02 CRM Pipeline Translation
+
+Odoo reference check found the approved six-stage CRM concept:
+
+`New Inquiry -> Quote Sent/Awaiting Approval -> Approved -> In Production -> Event/Post Event -> Archive`
+
+ERPNext implementation deliberately does not overwrite `Lead.status`. The LT business board is backed by `Lead.custom_pipeline_stage`, created by `apps/locally_twisted/locally_twisted/seed/sync_crm_pipeline.py` and applied with `scripts/setup/sync_crm_pipeline.py`.
+
+Current behavior:
+
+- New website inquiries keep ERPNext native `status = Open`.
+- New website inquiries also set `custom_pipeline_stage = New Inquiry`.
+- `LT Inquiry Board` points at `custom_pipeline_stage`.
+- The `Archive` board column is archived/off-board, matching GL's intent to remove archived inquiries from the active Kanban.
+- Owner Home `New Inquiries` count now filters `custom_pipeline_stage = New Inquiry`.
+- No finance, Sales Order, Sales Invoice, Payment Request, or win-rate cascade is tied to `Archive` in this slice.
+
+Verification:
+
+- `python scripts/setup/sync_crm_pipeline.py` passed and created/updated the custom field and board.
+- `python scripts/verify/crm_pipeline_parity.py` passed and confirms native `Lead.status` remains intact.
+- `python scripts/setup/sync_backend_workspaces.py` passed after the Owner Home inquiry filter moved to the custom stage.
+- `python scripts/verify/backend_workspace_parity.py` passed.
+- `python scripts/verify/lead_backend_intake_parity.py`, `python scripts/verify/contact_service_logic.py --base-url http://localhost:8081`, `python scripts/verify/contact_prefill.py --base-url http://localhost:8081`, `python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --shape-only --skip-newsletter`, and `npm run test:desk-owner` passed.
+
+Next cascade work should decide which stage creates or updates a Quote, Sales Order, Project/Task, Calendar invite, email/text follow-up, and finance record. Do not infer those triggers from stage labels alone.
+
 ## Reusable Pattern
 
 This work exposed a repeatable ERPNext/Frappe trap: a simplified role must be verified as a full operator chain, not as isolated admin settings.
@@ -124,8 +154,9 @@ Specific lessons:
 - Direct workspace slugs such as `/app/owner-home` can hit Frappe Desk `getpage` 404; start from `/app/Workspaces`.
 - Socket origin warnings can appear beside the route error, but the route error is the page blocker.
 - Served Desk assets must be verified because Frappe/browser cache can keep old JS active.
+- Client-friendly CRM stages should use a custom business field when native ERPNext statuses may affect conversion, reporting, finance, or workflow behavior.
 
-This pattern is now promoted to `.codex/capabilities/recipes/erpnext-simplified-role-verification.md` and indexed in `.codex/capabilities/INDEX.md`.
+These patterns are now promoted to `.codex/capabilities/recipes/erpnext-simplified-role-verification.md` and `.codex/capabilities/recipes/erpnext-crm-pipeline-safety.md`, and both are indexed in `.codex/capabilities/INDEX.md`.
 
 ## Dependencies And Collision Points
 
@@ -149,6 +180,7 @@ The next agent should do this in small verified slices:
    - Keep fields that receive real website data or support immediate follow-up.
    - Hide or demote stale Odoo-era fields that no current form populates.
    - Preserve plain-language labels from project rules.
+   - Keep the six-stage business board on `custom_pipeline_stage`; do not repurpose native `Lead.status`.
 
 3. Fix the Lead photos gap or deliberately remove the empty section. Done 2026-05-02.
    - `custom_inspiration_photos` now connects Lead to `LT Lead Photo`.
@@ -181,8 +213,10 @@ Minimum checks after backend simplification edits:
 
 ```powershell
 python scripts/setup/sync_contact_intake_backend.py
+python scripts/setup/sync_crm_pipeline.py
 python scripts/setup/sync_backend_workspaces.py
 python scripts/verify/lead_backend_intake_parity.py
+python scripts/verify/crm_pipeline_parity.py
 python scripts/verify/backend_workspace_parity.py
 $env:LT_DESK_TEST_USER='lt-owner-temp@example.com'; $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner
 python scripts/verify/contact_service_logic.py --base-url http://localhost:8081
