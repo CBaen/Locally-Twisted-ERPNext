@@ -53,12 +53,11 @@ Built before the frame reset; some still active, some legacy reference.
 | Path | Purpose | Status |
 |------|---------|--------|
 | `scripts/setup/setup_lt_company.py` | One-shot LT setup wizard completion + Company seeding | Done; reusable on fresh installs |
-| `scripts/translate/translate_crm_lead.py` | Initial 42 Custom Fields on Lead | Done; produced the active Lead schema |
-| `scripts/fix/fix_crm_lead_multiselect.py` | iter 2: Table MultiSelect + depends_on | Done |
-| `scripts/fix/fix_crm_lead_match_book_form.py` | iter 3: align with live /book form | Done |
-| `scripts/fix/fix_crm_lead_iteration_3.py` | iter 3 follow-on: reorder, AM/PM, Delivery Window | Done |
-| `scripts/fix/fix_crm_lead_iteration_4.py` | iter 4: Time fieldtype, photos, label renames, hide Additional Info, +25MB | Done |
-| `scripts/fix/fix_lead_photo_thumbnail.py` | Attempted thumbnail (blocked by Frappe; reverted; offering 3 paths to GL) | Reverted; UX path TBD |
+| Retired Lead schema scripts | Old one-off `translate_crm_lead.py` and `fix_crm_lead_*` scripts were removed because they contained stale `/book` and service-taxonomy logic. | Git history only |
+| `scripts/setup/sync_contact_intake_backend.py` | Current idempotent sync for Lead service taxonomy, conditional fields, and Inspiration Photos table wiring | Active |
+| `scripts/verify/lead_backend_intake_parity.py` | Current verifier for Lead service taxonomy, conditional fields, submit mapping, and LT Lead Photo wiring | Active |
+| `scripts/setup/sync_backend_workspaces.py` | Current idempotent sync for simplified Owner/Manager/Employee workspace labels and Sales Order booking calendar | Active |
+| `scripts/verify/backend_workspace_parity.py` | Current verifier for simplified workspace labels and booking calendar wiring | Active |
 | `scripts/fix/patch_nginx_socketio_origin.py` | nginx /socket.io/ Origin pass-through patch | Active; persistence via compose override is P2 backlog |
 | `scripts/translate/translate_dashboard_review.py` | Dashboard Reviewed Item DocType (early proof-of-pattern) | Done; no current Phase depends on it |
 

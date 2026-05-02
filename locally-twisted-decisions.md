@@ -8,6 +8,58 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-02 - Lead estimated times use plain text, not Frappe Time controls
+
+**Decision:** Customer-facing inquiry time fields should ask for start/end estimates in friendly text, while ERPNext Lead Desk fields should use plain internal labels and `Data` fieldtype text inputs. Do not put customer helper copy such as "(even an estimate is helpful!)" into backend employee labels.
+
+**Reasoning:** Frappe renders `Time` Custom Fields in Desk with an awkward time control/slider. That is too much friction for Jeff and staff when the value is only an estimate. Existing Time fields also held machine-style values with seconds/microseconds, which looked authoritative but were not customer intent.
+
+**Implementation:** `locally_twisted.seed.sync_contact_intake_backend` now converts the relevant Lead time Custom Fields from `Time` to `Data` through a guarded safe conversion, updates labels/descriptions, normalizes old machine-style Lead values to blank or readable text, and clears Lead cache. The public `/contact` form now has `Event Start Time` and `Event End Time` text fields with the customer helper copy.
+
+**Verification receipt:** `python scripts/setup/sync_contact_intake_backend.py`, `python scripts/verify/lead_backend_intake_parity.py`, a Playwright browser check against `/app/lead/CRM-LEAD-2026-00013`, `python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --shape-only --skip-newsletter`, `python scripts/verify/contact_service_logic.py --base-url http://localhost:8081`, and `python scripts/verify/contact_prefill.py --base-url http://localhost:8081` passed. The writing smoke test also passed; its test Lead/newsletter records were deleted afterward.
+
+**Decided by:** GL identified the confusing Lead time controls and clarified customer copy versus employee copy; Codex implemented the backend/form parity fix.
+
+---
+
+## 2026-05-02 - Owner Home combines command center with guided next actions
+
+**Decision:** Jeff's Owner Home should use a basic command-center overview with the guided checklist built into the same first screen. The workspace should show live cards for `New Inquiries`, `Bookings`, `Customers`, and `Overdue Follow-ups`, one small incoming-inquiries chart, and a plain-language "What Jeff does next" flow before secondary catalog tools.
+
+**Reasoning:** GL liked the basic overview but clarified that Jeff lives in the checklist/action layer. The Owner Home still needs enough visual context to prevent disorientation, but it should not become a full analytics dashboard. This keeps Jeff focused on the next operating action while still showing what is happening in the business.
+
+**Implementation:** `locally_twisted.seed.sync_backend_workspaces` now creates the Owner Home Number Cards, the `LT Incoming Inquiries` Dashboard Chart, and the Workspace content blocks. `scripts/setup/sync_backend_workspaces.py` applies the sync to the running site.
+
+**Verification receipt:** `python scripts/setup/sync_backend_workspaces.py`, `python scripts/verify/backend_workspace_parity.py`, and `npm run test:desk-owner` passed on 2026-05-02. The owner API login check showed `Owner Home` first and live counts of 12 Leads, 8 Sales Orders, 4 Customers, and 0 Tasks.
+
+**Decided by:** GL approved the A+C visual direction; Codex implemented it as native ERPNext Workspace records.
+
+---
+
+## 2026-05-02 - Simplified workspaces use one booking calendar language
+
+**Decision:** Owner, Manager, and Employee workspaces should use the same business labels for shared actions: `Booking Calendar` points at `Sales Order` Calendar view by `delivery_date`, `Customers` points at Customer records, and `People to Contact` points at Contact records. Accountant remains finance-focused and does not inherit operational workspace clutter.
+
+**Reasoning:** The owner account was fixed first, but Manager and Employee still showed the old `Event Calendar`, `Clients & Customers`, and `Contacts` labels. That recreated the same confusion Jeff hit: bookings existed as Sales Orders, while the visible calendar could point to empty Event records.
+
+**Verification receipt:** `python scripts/verify/backend_workspace_parity.py` failed before the sync on Manager/Employee stale labels, `python scripts/setup/sync_backend_workspaces.py` updated those workspaces, the verifier passed after, and a second sync no-opped.
+
+**Decided by:** Codex during ERPNext backend simplification after GL asked to continue fixing the backend.
+
+---
+
+## 2026-05-02 - Lead photo wiring lives in the current backend sync
+
+**Decision:** The Lead `Inspiration Photos` section should remain, but it must be backed by the `custom_inspiration_photos` Table field pointing at the `LT Lead Photo` child DocType. The current idempotent backend sync owns that wiring. Old one-off Lead translation/fix scripts are not operational code and were removed.
+
+**Reasoning:** The live Lead form had an empty `Inspiration Photos` section because the child DocType existed but the Table field was missing. Keeping executable historical scripts that still referenced `/book`, `Delivery Only`, and `Event Package` made the backend fragile for future handoffs.
+
+**Verification receipt:** `python scripts/setup/sync_contact_intake_backend.py` created `custom_inspiration_photos`; `python scripts/verify/lead_backend_intake_parity.py` passed and confirmed the `LT Lead Photo` child table wiring.
+
+**Decided by:** Codex during the ERPNext backend simplification cleanup after GL asked to continue fixing the backend.
+
+---
+
 ## 2026-05-02 - Variant media maps only when the source label is defensible
 
 **Decision:** Product detail pages should switch the main image when the selected ERPNext variant has its own `Item.image`. The first media sync maps scraped Odoo extra images onto variants only when the image URL/filename label clearly matches an option such as size, height, length, design, LED lights, topper, or theme. Generic or ambiguous gallery images remain unmapped until GL/Jeff review.

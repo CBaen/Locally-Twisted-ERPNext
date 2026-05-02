@@ -51,15 +51,27 @@ Check the whole chain in this order:
 
    Counts and calendar/list endpoints should agree with the user's mental model. Example: if there are 8 bookings, the booking calendar should show those 8 Sales Orders on their delivery date, not an empty Event calendar.
 
-8. Separate console noise from the blocker.
+8. Verify Workspace dashboard widgets as linked backend records.
+
+   A Workspace card or chart needs both the backend document and the Workspace child/content reference. For Number Cards, Frappe names the record from the card label/autoname; the Workspace row must point at the actual Number Card name. For Dashboard Charts, verify the `Dashboard Chart` document, the `Workspace Chart` child row, and the `chart` content block.
+
+9. Separate console noise from the blocker.
 
    `socketio_client.js: Invalid origin` is a socket/realtime warning. It is worth fixing, but it is not the route blocker if `frappe.desk.desk_page.getpage` is returning 404.
 
-9. Confirm browser/cache state after code changes.
+10. Confirm browser/cache state after code changes.
 
    Frappe Desk can serve cached assets. Verify the changed JS/CSS is present in the served Desk HTML or static asset before claiming the browser has the fix.
 
-Useful verification skeleton:
+For LT's current simplified backend lane, run the durable repo checks first:
+
+```powershell
+python scripts/setup/sync_backend_workspaces.py
+python scripts/verify/backend_workspace_parity.py
+$env:LT_DESK_TEST_USER='lt-owner-temp@example.com'; $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner
+```
+
+Useful manual verification skeleton:
 
 ```powershell
 @'
@@ -107,9 +119,15 @@ for doctype in ["Lead", "Sales Order", "Event", "Customer", "Contact", "Item"]:
 - Testing only as Administrator hides missing permissions and hidden workspace problems.
 - Naming a shortcut clearly does not prove it opens the right DocType.
 - Adding a `New` shortcut without create permission creates a dead end for the operator.
+- Creating Number Card or Dashboard Chart documents is not enough; the Workspace also needs matching child rows and content blocks.
+- Number Card names follow Frappe naming rules. If the sync uses an internal name that differs from the label, link validation can fail when saving the Workspace.
 - A Desk route returning HTTP 200 can still fail client-side after Frappe calls `desk_page.getpage`.
 - Browser cache can make a fixed file behave like the old file until the served asset is verified or the browser is hard-refreshed.
 
 ## Examples
 
 On 2026-05-02, the LT owner account had `Products` but no `Add Product`, and the owner role could read Items without the native `Item Manager` create permission. The workspace also showed 8 `Bookings` from Sales Orders while the calendar was empty because it pointed at the `Event` DocType. The fix added `Add Product`, granted `Item Manager`, renamed customer/contact labels, and changed the calendar to Sales Orders by `delivery_date`.
+
+The same trap later appeared in `LT Manager Home` and `LT Employee Home`: Owner had been fixed, but Manager/Employee still used `Event Calendar` and `Contacts`. `scripts/setup/sync_backend_workspaces.py` now normalizes those labels and `scripts/verify/backend_workspace_parity.py` guards against regression.
+
+Later on 2026-05-02, Owner Home became a command center with live Number Cards (`New Inquiries`, `Bookings`, `Customers`, `Overdue Follow-ups`), the `LT Incoming Inquiries` Dashboard Chart, and a guided "What Jeff does next" flow. The first sync attempt used internal Number Card names that did not match Frappe's label-based naming, so Workspace link validation failed. The durable fix made the card names match their labels and extended `backend_workspace_parity.py` plus `owner_desk_routes.spec.js` to verify the cards, chart, and visible owner text.

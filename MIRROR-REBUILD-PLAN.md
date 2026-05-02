@@ -267,7 +267,7 @@ Five parallel research agents stress-tested the plan; GL Proxy reviewed and corr
 
 These are discrete, atomic fixes the proxy flagged. Each gets one commit. Run in this order:
 
-1. **Verify `System Settings.max_file_size = 25 MB`** (per `fix_crm_lead_iteration_4.py` step H). If still at default 10 MB, file uploads on `/book` silently fail at framework level. `bench --site frontend execute frappe.db.get_single_value --kwargs '{"doctype":"System Settings","fieldname":"max_file_size"}'`.
+1. **Verify `System Settings.max_file_size = 25 MB`** before relying on public form uploads. If still at default 10 MB, file uploads on `/contact` can fail at framework level. `bench --site frontend execute frappe.db.get_single_value --kwargs '{"doctype":"System Settings","fieldname":"max_file_size"}'`.
 2. **Fix smoke test selector mismatch.** `scripts/verify/smoke_forms.py:84` uses `input[name='lead_name']`; `/book` form has `name="contact_name"`. One-line fix.
 3. **Wrap `lead.insert()` in `submit_book_inquiry`** (`apps/locally_twisted/locally_twisted/www/book.py` ~line 205) with `try/except Exception as e: frappe.log_error(...)` capturing payload + remote IP + form URL. Loud-failure rule, non-negotiable.
 4. **Add `/contactus` → `/contact` redirect** to `hooks.py` `website_route_rules`.

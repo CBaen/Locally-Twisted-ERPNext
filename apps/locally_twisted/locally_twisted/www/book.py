@@ -135,6 +135,7 @@ def submit_book_inquiry():
     occasion = (fd.get("x_occasion_type") or "").strip()
     event_date = (fd.get("x_event_date") or "").strip() or None
     event_time = (fd.get("x_event_time") or "").strip()
+    event_end_time = (fd.get("x_event_end_time") or "").strip()
     event_location = (fd.get("x_event_location") or "").strip()
     guest_count = _parse_int(fd.get("x_guest_count"))
 
@@ -187,6 +188,7 @@ def submit_book_inquiry():
         "custom_occasion_type": _occasion_label(occasion),
         "custom_event_date": event_date,
         "custom_event_time": event_time or None,
+        "custom_event_end_time": event_end_time or None,
         "custom_event_location": event_location or None,
         "custom_guest_count": guest_count,
         "custom_event_type": _service_child_rows(services),
@@ -267,7 +269,7 @@ def submit_book_inquiry():
     # the customer's submission verbatim.
     _record_inquiry_communication(
         lead, first_name, email, phone, company, occasion, event_date,
-        event_time, event_location, guest_count, services, indoor_outdoor,
+        event_time, event_end_time, event_location, guest_count, services, indoor_outdoor,
         shade_required, colors, decor_types, setup_arrival, decor_notes,
         num_twisters, artist_start, artist_end, twisting_notes,
         num_painters, painter_start, painter_end, painting_notes,
@@ -409,7 +411,7 @@ def _file_size(f):
 
 def _record_inquiry_communication(
     lead, first_name, email, phone, company, occasion, event_date,
-    event_time, event_location, guest_count, services, indoor_outdoor,
+    event_time, event_end_time, event_location, guest_count, services, indoor_outdoor,
     shade_required, colors, decor_types, setup_arrival, decor_notes,
     num_twisters, artist_start, artist_end, twisting_notes,
     num_painters, painter_start, painter_end, painting_notes,
@@ -428,7 +430,8 @@ def _record_inquiry_communication(
     line("Company", company)
     line("Occasion", _occasion_label(occasion))
     line("Event date", event_date)
-    line("Event time", event_time)
+    line("Event start time", event_time)
+    line("Event end time", event_end_time)
     line("Location", event_location)
     line("Estimated guests", guest_count)
     if services:

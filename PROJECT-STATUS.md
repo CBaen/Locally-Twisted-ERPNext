@@ -45,7 +45,8 @@
 - **Storefront correction pass shipped 2026-05-01:** header/footer IA cleaned to match current routes (`What We Make`, `About Us`, `Book an Event` removed; `All Products` kept), menu dropdowns contained, mobile cart/hamburger visible at 390px/430px, footer centered without shrinking below accessible sizes.
 - **Navigation/routing cleanup shipped 2026-05-02:** primary nav is `Balloon Decor`, `Plan by Occasion`, `Balloon Twisting & Face Painting`, `FAQ`, `Blog`, search. The top utility bar owns the only `Contact Us` CTA. `Plan by Occasion` routes to product/category pages, not contact shortcuts. `/book` redirects to `/contact?intent=quick`; `/shop-items`, `/all-products`, and `/shop-by-category` send broad browse traffic to `/shop`.
 - **Contact/BTFP inquiry consolidation shipped 2026-05-01:** `/contact` is the canonical inquiry form with stackable service choices, guided prefill URLs, service-specific conditional panels, Events Inquiry package planning, Pickup, and Delivery/Pickup labels without "Only." `/balloon-twisting-and-face-painting` is now a contact-led service page that sends customers to `/contact?service=btfp`, `/contact?service=twisting`, or `/contact?service=face-painting`. `/book` redirects to `/contact?intent=quick`.
-- **Backend Lead/CRM intake parity shipped 2026-05-01:** `LT Service Type` records now match the public form (`Delivery`, `Pickup`, `Events Inquiry`; no `Delivery Only` / `Event Package`). Lead Custom Field labels/depends_on logic match the revised taxonomy, and web submissions populate `custom_event_type` child rows so Desk sections open from real inquiries.
+- **Backend Lead/CRM intake parity shipped 2026-05-01; photo and time-entry wiring fixed 2026-05-02:** `LT Service Type` records now match the public form (`Delivery`, `Pickup`, `Events Inquiry`; no `Delivery Only` / `Event Package`). Lead Custom Field labels/depends_on logic match the revised taxonomy, web submissions populate `custom_event_type` child rows, Lead time fields are plain text entry for staff, and the Lead `Inspiration Photos` section is connected to the `LT Lead Photo` child table through `custom_inspiration_photos`.
+- **Simplified backend workspace sync added 2026-05-02:** Owner, Manager, and Employee workspaces use current business labels (`Booking Calendar`, `Customers`, `People to Contact`) and the booking calendar opens Sales Orders by `delivery_date`. Owner Home is now an ADHD-friendly command center with Number Cards (`New Inquiries`, `Bookings`, `Customers`, `Overdue Follow-ups`), an incoming-inquiries chart, and a guided "What Jeff does next" flow. `scripts/setup/sync_backend_workspaces.py` recreates this idempotently; `scripts/verify/backend_workspace_parity.py` and `npm run test:desk-owner` verify it.
 - **Privacy and Terms routes added 2026-05-01:** `/privacy` and `/terms-of-service` return HTTP 200 locally. Treat as plain-language drafts for Stripe readiness; Stripe Dashboard URL wiring and any legal review remain follow-ups.
 - **Layout-fit gate restored 2026-05-01:** `scripts/verify/layout_fit.spec.js` checks 15 public/shop/cart routes across 320px, 375px, tablet, and desktop viewports. Latest verified command: `npm run test:layout-fit` -> 60 passed after fixing `.lt-contact__icon` sizing on `/contact`.
 - **Product listing/detail corrections shipped 2026-05-01:** item detail/configure sales-pitch blocks removed; `/shop-items/arches` fixed by preserving Webshop's `.item-group-content` wrapper contract; listing cards now receive `lt_brand_description` through `locally_twisted.api.product_listing` and prefer it in card copy.
@@ -56,7 +57,7 @@
 - Routes changed from `/shop/<item>` to `/shop-items/<group>/<item>`. Pre-launch — no public bookmarks broken.
 
 **What's next (in order):**
-- **ERPNext Backend simplification workstream** — new multi-handoff lane at `workstreams/erpnext-backend-simplification.md`; start with read-only backend inventory, then simplify the Jeff-facing Lead/Contact/order Desk flow.
+- **ERPNext Backend simplification workstream** — multi-handoff lane at `workstreams/erpnext-backend-simplification.md`; owner/manager/employee Desk first pass, Owner Home command center, workspace sync, and Lead photo wiring are done. Next: full backend inventory, Contact/Customer/order flow simplification, then backend-tour sample data.
 - **Stripe Dashboard URL wiring for `/privacy` and `/terms-of-service`** after GL/legal approval; dashboard still has placeholder URLs until changed.
 - **Sample data for backend tour** — realistic Lead records, paid SO, upcoming event for Jeff's desk demo.
 - **Category browse imagery** — each Item Group has empty `image` field. Use representative category media for `/shop-items/<group>` pages or a future image-rich mega menu; do not revive the retired `/shop-by-category` card index for launch.
@@ -65,7 +66,7 @@
 - **Remove operator-state-sensitive Item Attribute fixtures from `hooks.py fixtures = [...]` BEFORE Jeff's first post-takeover deploy.** Especially the `latex colors` Item Attribute (51 values — the most likely category Jeff edits as his supplier inventory shifts). Otherwise BBC fixture sync silently overwrites his renames on every `bench migrate`. See `locally-twisted-decisions.md` 2026-04-30 entry "Phase 6 cutover work item." Document in `NOUPDATE-DRIFT.md` (TBD).
 
 **Known bugs (carry-overs):**
-- `LT Lead Photo` child DocType exists and `lt_section_photos` Section Break exists on Lead, BUT the Table field connecting them was never created (iter 4 step F failed silently). Still unaddressed.
+- No current P0 backend schema bug is documented here. Use the queue and `workstreams/erpnext-backend-simplification.md` for the active backend lane.
 
 ---
 
@@ -133,7 +134,7 @@ Canonical resources for the migration destination live in `_resources/` and are 
 | `.planning/decisions/accessibility-statement.md` | Phase 1 decision brief — option B chosen |
 | `.planning/phases/01-customer-site-and-storefront/PLAN.md` | Phase 1 slice plan (all gates resolved) |
 | `scripts/setup/setup_lt_company.py` | One-shot wizard completion + LT Company seeding (reusable on fresh installs) |
-| `scripts/translate/translate_crm_lead.py` + 4 fix scripts | Built the active Lead schema (done; reference for how to use Frappe API) |
+| `scripts/setup/sync_contact_intake_backend.py` + `scripts/verify/lead_backend_intake_parity.py` | Current Lead backend sync and parity verifier. Old one-off Lead translation/fix scripts were removed; use git history only if researching them. |
 | `scripts/fix/patch_nginx_socketio_origin.py` | Historical/fallback nginx Origin pass-through patch; only use if a rebuilt image is verified missing the Origin header line |
 
 ## Rules
@@ -485,7 +486,7 @@ This session produced more documentation than working code, by design. The insta
 
 ### 2026-04-26 — Lead schema customization complete (carried into the new framing)
 
-- 45+ Custom Fields on Lead with sectioned layout, Table MultiSelect for Service Type, conditional sub-section visibility, Time fieldtype for time fields, +Delivery Window Start/End, +Internal Only Notes, +Inspiration Photos child table (table field connection bug — see Known Bugs), label renames via Property Setter, hidden "Additional Information" tab, max upload 25 MB
+- 45+ Custom Fields on Lead with sectioned layout, Table MultiSelect for Service Type, conditional sub-section visibility, plain-text time entry for estimated event times, +Delivery Window Start/End, +Internal Only Notes, +Inspiration Photos child table connected through `custom_inspiration_photos`, label renames via Property Setter, hidden "Additional Information" tab, max upload 25 MB
 - nginx /socket.io/ Origin pass-through patched
 
 ### 2026-04-25 — ERPNext install + setup wizard

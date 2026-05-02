@@ -18,7 +18,7 @@ The target backend is not "all possible ERPNext modules." It is a small operatin
 
 ## Current Stage
 
-Active handoff lane. First Jeff-facing Desk simplification edits have been made in the live local ERPNext database.
+Active handoff lane. First Jeff-facing Desk simplification edits have been made in the live local ERPNext database and are now recreated by idempotent setup scripts.
 
 This file is the job sheet for future handoffs. Keep `locally-twisted-queue.md` as the active task source, and update this file when the backend simplification lane changes stage.
 
@@ -68,7 +68,7 @@ Verify these before editing DB/schema, but they are the latest documented workin
 - `LT Service Type` was synced on 2026-05-01 to remove `Delivery Only` and `Event Package` and add `Delivery`, `Pickup`, `Events Inquiry`.
 - `lead_cascade.py` hooks on Lead insert to create/link Contact and queue the customer acknowledgment email.
 - `/payment-success` marks Payment Requests paid, creates Sales Invoices, sends receipt/operator/welcome emails, and redirects customers even if backend follow-up fails.
-- `LT Lead Photo` and a Lead photos section exist, but the queue says the connecting Table field is missing. Treat that as unverified but likely still open.
+- `LT Lead Photo`, the Lead photos section, and the connecting `custom_inspiration_photos` Table field now exist. The current sync recreates the missing field if needed.
 - `hooks.py` currently fixtures Item Groups and Item Attributes. Phase 6 must prune operator-state-sensitive fixture coverage before Jeff edits backend catalog values.
 - There are old `scripts/translate/` and `scripts/fix/` Lead-schema scripts with stale labels like `Event Package` and `Delivery Only`. Do not rerun them blindly.
 
@@ -84,6 +84,9 @@ Live local ERPNext DB changes made for the temporary owner walkthrough:
 - `Contacts` was renamed to `People to Contact`.
 - `Event Calendar` was renamed to `Booking Calendar` and now opens `Sales Order` in Calendar view.
 - A `Sales Order` Calendar View was added using `customer_name` as the subject and `delivery_date` as the calendar date.
+- `LT Manager Home` and `LT Employee Home` were normalized to the same current booking/contact language so they no longer show the stale `Event Calendar`, `Clients & Customers`, or `Contacts` shortcuts.
+- `apps/locally_twisted/locally_twisted/seed/sync_backend_workspaces.py` and `scripts/setup/sync_backend_workspaces.py` now recreate those workspace/calendar fixes idempotently.
+- `Owner Home` now combines the basic command-center overview with Jeff's guided action flow: live Number Cards for `New Inquiries`, `Bookings`, `Customers`, and `Overdue Follow-ups`; a small `LT Incoming Inquiries` chart; and a plain "What Jeff does next" section before secondary catalog tools.
 
 Verification as `lt-owner-temp@example.com` on 2026-05-02:
 
@@ -93,8 +96,14 @@ Verification as `lt-owner-temp@example.com` on 2026-05-02:
 - Owner could load Item metadata with `Item Manager` create/write permission.
 - Calendar events endpoint for `Sales Order` returned the 8 existing orders on `2026-05-06`.
 - The route guard asset was served at `/assets/locally_twisted/js/lt-desk-workspace-router.js?v=20260502-1` with the pageview guard present. The Desk HTML still referenced `v=20260502-1` until a server reload picks up the hook query-string bump, so browser hard-refresh may be needed after changes.
+- `python scripts/verify/backend_workspace_parity.py` failed before the workspace sync on Manager/Employee stale labels, then passed after `python scripts/setup/sync_backend_workspaces.py`. A second sync run no-opped.
+- `python scripts/verify/backend_workspace_parity.py` now also verifies the Owner Home command-center Number Cards, the `LT Incoming Inquiries` Dashboard Chart, and the guided action text.
+- `npm run test:desk-owner` passed with `lt-owner-temp@example.com` and verifies `/app/home`, `/app/owner-home`, and `/app/Workspaces` all land on the Owner Home command center.
+- Owner API login check after sync showed `Owner Home` first, with live counts: `Lead` 12, `Sales Order` 8, `Customer` 4, `Task` 0.
+- The Lead `Inspiration Photos` empty-section bug was fixed by adding `custom_inspiration_photos` as a Table field pointing at `LT Lead Photo`. `python scripts/setup/sync_contact_intake_backend.py` now recreates that field idempotently, and `python scripts/verify/lead_backend_intake_parity.py` verifies the child table wiring.
+- Stale one-off Lead schema scripts with old `/book`, `Delivery Only`, and `Event Package` assumptions were removed from `scripts/fix/`, `scripts/translate/`, and `scripts/setup/`. Use git history for archaeology; use `sync_contact_intake_backend.py` for current backend sync.
 
-Important: these are live DB changes, not fixtures yet. Before production/cutover, decide which workspace, role profile, and Calendar View records should be exported or recreated by an idempotent setup script.
+Important: these workspace, Number Card, Dashboard Chart, Role Profile, and Calendar View records are recreated by idempotent setup code, not exported fixtures. Before production/cutover, decide whether that remains the preferred ownership model or whether any records should also be exported.
 
 ## Reusable Pattern
 
@@ -132,16 +141,16 @@ The next agent should do this in small verified slices:
 1. Inventory the actual live ERPNext backend schema.
    - Count LT custom DocTypes, Lead Custom Fields, Property Setters, Custom Fields on Customer/Website Item, and fixtures.
    - Compare DB state to `hooks.py`, `scripts/translate/`, and `scripts/fix/`.
-   - Mark scripts that are historical and unsafe to rerun.
+   - Mark scripts that are historical and unsafe to rerun. First stale Lead-script cleanup and workspace idempotent-sync pass completed 2026-05-02; remaining inventory should focus on DB-only schema and fixture/export decisions.
 
 2. Decide the simplest Jeff-facing Lead layout.
    - Keep fields that receive real website data or support immediate follow-up.
    - Hide or demote stale Odoo-era fields that no current form populates.
    - Preserve plain-language labels from project rules.
 
-3. Fix the Lead photos gap or deliberately remove the empty section.
-   - If photos are still needed: add the missing Table field to connect `LT Lead Photo`.
-   - If photos are not part of the next backend tour: remove/hide the empty section and log why.
+3. Fix the Lead photos gap or deliberately remove the empty section. Done 2026-05-02.
+   - `custom_inspiration_photos` now connects Lead to `LT Lead Photo`.
+   - Thumbnail UX is still a separate product choice; the backend table wiring is no longer the blocker.
 
 4. Verify Lead cascade behavior.
    - Create a controlled test Lead through the same endpoint used by `/contact`.
@@ -170,7 +179,10 @@ Minimum checks after backend simplification edits:
 
 ```powershell
 python scripts/setup/sync_contact_intake_backend.py
+python scripts/setup/sync_backend_workspaces.py
 python scripts/verify/lead_backend_intake_parity.py
+python scripts/verify/backend_workspace_parity.py
+$env:LT_DESK_TEST_USER='lt-owner-temp@example.com'; $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner
 python scripts/verify/contact_service_logic.py --base-url http://localhost:8081
 python scripts/verify/contact_prefill.py --base-url http://localhost:8081
 ```
@@ -213,19 +225,23 @@ Relevant code:
 - `apps/locally_twisted/locally_twisted/www/checkout.py`
 - `apps/locally_twisted/locally_twisted/www/payment_success.py`
 - `apps/locally_twisted/locally_twisted/seed/sync_contact_intake_backend.py`
+- `apps/locally_twisted/locally_twisted/seed/sync_backend_workspaces.py`
 - `scripts/setup/sync_contact_intake_backend.py`
+- `scripts/setup/sync_backend_workspaces.py`
 - `scripts/verify/lead_backend_intake_parity.py`
+- `scripts/verify/backend_workspace_parity.py`
+- `scripts/verify/owner_desk_routes.spec.js`
 
 ## Next Handoff Stage
 
-Start with a read-only backend inventory.
+Continue with a read-only backend inventory.
 
 Recommended first command set:
 
 ```powershell
 git status --short
-Select-String -Path .\scripts\translate\*.py,.\scripts\fix\*.py,.\scripts\setup\*.py -Pattern 'Event Package','Delivery Only','Pickup Only','custom_event_type','LT Lead Photo','Custom Field'
+Select-String -Path .\scripts\fix\*.py,.\scripts\setup\*.py,.\apps\locally_twisted\locally_twisted\seed\*.py -Pattern 'Event Package','Delivery Only','Pickup Only','custom_event_type','LT Lead Photo','Custom Field'
 docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute frappe.client.get_count --kwargs "{'doctype':'Custom Field','filters':{'dt':'Lead'}}"
 ```
 
-Then write down what is code-owned, what is DB-only, what is stale historical scaffolding, and what Jeff actually needs for the first backend walkthrough.
+Then write down what is code-owned, what is DB-only, what still needs fixture/export decisions, and what Jeff actually needs for the first backend walkthrough.

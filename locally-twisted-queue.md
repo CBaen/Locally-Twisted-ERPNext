@@ -29,7 +29,7 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 **Remaining (in priority order):**
 
 - [P0] **Website launch workstream.** Active launch coordination lane at `workstreams/website-launch.md`. Goal: launch the site with inquiry, trust/policy, shop, visual/accessibility, and quality gates passing while avoiding collision with the separate form audit.
-- [P0] **ERPNext Backend simplification workstream.** Multi-handoff lane at `workstreams/erpnext-backend-simplification.md`. First owner-desk pass now has simplified temp roles/workspaces, `Add Product`, clearer Customer/Contact labels, and `Booking Calendar` on Sales Orders by delivery date. Next: full backend inventory, audit stale Lead scripts before any rerun, resolve the `LT Lead Photo` empty-section/table-field gap, and build backend-tour sample data only after the schema is cleaned up.
+- [P0] **ERPNext Backend simplification workstream.** Multi-handoff lane at `workstreams/erpnext-backend-simplification.md`. First owner/manager/employee desk pass now has simplified temp roles/workspaces, `Add Product` for owner, clearer Customer/Contact labels, `Booking Calendar` on Sales Orders by delivery date, and an Owner Home command center with live cards, a chart, and Jeff's guided next-action flow. Lead photo table wiring, first stale Lead-script cleanup, and idempotent workspace sync are done. Next: full backend inventory, decide which remaining DB-only records need fixture/export, simplify the Contact/Customer/order flow, and build backend-tour sample data only after the schema is cleaned up.
 - [P0] **Mirror Rebuild Phase 2 — page rebuilds, in priority order:**
   1. `/refund-policy` Hetzner-faithful refresh. Mirror source: `pages/refund-policy.html`.
   2. `/accessibility` Hetzner-faithful refresh. Mirror source: `pages/accessibility.html`.
@@ -66,7 +66,6 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 
 - [P1] **Inspiration Photos thumbnail UX decision.** Frappe blocks `in_list_view` on Attach Image AND Image fieldtypes in child tables. GL hasn't picked among: (a) click-to-expand (current state), (b) Frappe Client Script for inline gallery rendering, (c) drop child table for built-in attachments sidebar. Resume after GL chooses.
 - [P1] **GL's "this is one Lead!" realization.** GL was thinking each tab was a Lead category; reality is sections of one Lead form. GL hasn't said what they actually wanted to model differently. Don't redesign without their explicit direction. Resume conversation when GL is ready.
-- [P0] **Connect the missing Inspiration Photos Table field.** The `LT Lead Photo` child DocType exists and the Section Break exists, but the Table field that connects them was never created — iter 4's step F failed silently. Right now there's an empty section heading on the Lead form. Tied to the thumbnail UX decision above.
 
 ### Phase 2 — Form-handling depth (reframed 2026-04-27)
 

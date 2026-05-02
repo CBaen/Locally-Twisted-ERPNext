@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -22,6 +23,20 @@ EXPECTED_SERVICES = {
     "Something Else",
 }
 STALE_SERVICES = {"Delivery Only", "Event Package"}
+STALE_INTERNAL_COPY = {"even an estimate is helpful"}
+TIME_TEXT_DESCRIPTION = "Plain text time entry. Examples: 3 PM, 3:30 PM, afternoon, TBD."
+TIME_TEXT_FIELDS = (
+    "custom_event_time",
+    "custom_event_end_time",
+    "custom_setup_time_arrival",
+    "custom_artist_start",
+    "custom_artist_end",
+    "custom_painter_start",
+    "custom_painter_end",
+    "custom_delivery_window_start",
+    "custom_delivery_window_end",
+)
+MACHINE_TIME_RE = re.compile(r"^\d{1,2}:\d{2}:\d{2}(?:\.\d+)?$")
 
 
 def selected(values: list[str]) -> str:
@@ -63,9 +78,55 @@ EXPECTED_CUSTOM_FIELDS = {
         "label": "Something Else Notes",
         "depends_on": selected(["Something Else"]),
     },
-    "custom_event_time": {"depends_on": None},
-    "custom_event_end_time": {"depends_on": None},
+    "custom_event_time": {
+        "label": "Event Start Time",
+        "fieldtype": "Data",
+        "description": TIME_TEXT_DESCRIPTION,
+        "depends_on": None,
+    },
+    "custom_event_end_time": {
+        "label": "Event End Time",
+        "fieldtype": "Data",
+        "description": TIME_TEXT_DESCRIPTION,
+        "depends_on": None,
+    },
     "custom_guest_count": {"depends_on": None},
+    "custom_setup_time_arrival": {
+        "fieldtype": "Data",
+        "description": TIME_TEXT_DESCRIPTION,
+    },
+    "custom_artist_start": {
+        "fieldtype": "Data",
+        "description": TIME_TEXT_DESCRIPTION,
+    },
+    "custom_artist_end": {
+        "fieldtype": "Data",
+        "description": TIME_TEXT_DESCRIPTION,
+    },
+    "custom_painter_start": {
+        "fieldtype": "Data",
+        "description": TIME_TEXT_DESCRIPTION,
+    },
+    "custom_painter_end": {
+        "fieldtype": "Data",
+        "description": TIME_TEXT_DESCRIPTION,
+    },
+    "custom_delivery_window_start": {
+        "fieldtype": "Data",
+        "description": TIME_TEXT_DESCRIPTION,
+    },
+    "custom_delivery_window_end": {
+        "fieldtype": "Data",
+        "description": TIME_TEXT_DESCRIPTION,
+    },
+    "lt_section_photos": {
+        "label": "Inspiration Photos",
+    },
+    "custom_inspiration_photos": {
+        "label": "Inspiration Photos",
+        "fieldtype": "Table",
+        "options": "LT Lead Photo",
+    },
 }
 
 
@@ -130,7 +191,7 @@ def check_lead_custom_fields() -> list[str]:
     rows = get_list(
         "Custom Field",
         filters={"dt": "Lead"},
-        fields=["fieldname", "label", "depends_on", "options"],
+        fields=["fieldname", "label", "fieldtype", "description", "depends_on", "options"],
         limit_page_length=250,
         order_by="idx asc",
     )
@@ -149,10 +210,55 @@ def check_lead_custom_fields() -> list[str]:
                 )
 
     for row in rows:
-        haystack = "\n".join(str(row.get(key) or "") for key in ("label", "depends_on", "options"))
+        haystack = "\n".join(
+            str(row.get(key) or "")
+            for key in ("label", "description", "depends_on", "options")
+        )
         for stale in sorted(STALE_SERVICES):
             if stale in haystack:
                 failures.append(f"{row['fieldname']} still references stale service {stale!r}")
+        for stale in sorted(STALE_INTERNAL_COPY):
+            if stale.lower() in haystack.lower():
+                failures.append(f"{row['fieldname']} still has customer-only copy in backend metadata")
+    return failures
+
+
+def check_lead_photo_doctype() -> list[str]:
+    failures = []
+    rows = get_list(
+        "DocType",
+        filters={"name": "LT Lead Photo"},
+        fields=["name", "istable"],
+        limit_page_length=1,
+    )
+    if not rows:
+        return ["LT Lead Photo child DocType is missing"]
+    if rows[0].get("istable") != 1:
+        failures.append("LT Lead Photo exists but is not a child table")
+
+    meta = bench_execute("frappe.client.get", kwargs={"doctype": "DocType", "name": "LT Lead Photo"})
+    fieldnames = {field.get("fieldname") for field in meta.get("fields", [])}
+    for fieldname in ("photo", "caption"):
+        if fieldname not in fieldnames:
+            failures.append(f"LT Lead Photo missing child field: {fieldname}")
+    return failures
+
+
+def check_existing_time_text_values() -> list[str]:
+    failures = []
+    rows = get_list(
+        "Lead",
+        fields=["name", *TIME_TEXT_FIELDS],
+        limit_page_length=10000,
+        order_by="name asc",
+    )
+    for row in rows:
+        for fieldname in TIME_TEXT_FIELDS:
+            value = row.get(fieldname)
+            if value and MACHINE_TIME_RE.match(str(value).strip()):
+                failures.append(
+                    f"{row['name']}.{fieldname} still has machine-style time text: {value!r}"
+                )
     return failures
 
 
@@ -179,11 +285,32 @@ def check_submit_mapping_helper() -> list[str]:
     return failures
 
 
+def check_public_form_time_copy() -> list[str]:
+    failures = []
+    source = Path("apps/locally_twisted/locally_twisted/templates/includes/book_form.html").read_text(
+        encoding="utf-8"
+    )
+    required_snippets = [
+        "Event Start Time",
+        "Event End Time",
+        "(even an estimate is helpful!)",
+        'type="text" id="book_time" name="x_event_time"',
+        'type="text" id="book_end_time" name="x_event_end_time"',
+    ]
+    for snippet in required_snippets:
+        if snippet not in source:
+            failures.append(f"public inquiry form missing time-field snippet: {snippet}")
+    return failures
+
+
 def main() -> int:
     failures = []
     failures.extend(check_service_types())
     failures.extend(check_lead_custom_fields())
+    failures.extend(check_lead_photo_doctype())
+    failures.extend(check_existing_time_text_values())
     failures.extend(check_submit_mapping_helper())
+    failures.extend(check_public_form_time_copy())
 
     if failures:
         print("[LEAD BACKEND INTAKE PARITY] FAIL")

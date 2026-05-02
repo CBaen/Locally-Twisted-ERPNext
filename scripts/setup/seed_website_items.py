@@ -26,7 +26,7 @@ Writes: 1 Item Group ("Shop Items"), 33 Item records, 33 Website Item
         records, 33 Item Price records, 33 File attachments to Item.image.
 
 Stdlib only — no `pip install` required. Pattern follows
-scripts/translate/translate_crm_lead.py.
+retired one-off Lead translation scripts that are preserved in git history.
 """
 
 import html
@@ -58,7 +58,7 @@ STOCK_UOM = "Nos"
 
 
 # ──────────────────────────────────────────────────────────────────────
-# HTTP plumbing — same shape as scripts/translate/translate_crm_lead.py
+# HTTP plumbing - same shape as the retired one-off Lead translation scripts
 # ──────────────────────────────────────────────────────────────────────
 
 

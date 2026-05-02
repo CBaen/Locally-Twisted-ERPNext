@@ -6,6 +6,22 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-02 - Estimated event times should not be Frappe Time fields
+
+Frappe `Time` Custom Fields render as awkward time controls in Desk and can make estimated event times look overly precise. In this repo, the Lead time fields also carried customer helper copy inside employee-facing labels and old records displayed machine-style values with seconds/microseconds.
+
+**Counter-move:** for estimated times that staff need to edit quickly, use `Data` fields with plain labels and a short example description. Keep customer helper copy on the public form. If an existing Custom Field must move from `Time` to `Data`, use a guarded sync/migration path and verify the actual Desk route, because Frappe blocks that fieldtype change through normal validation.
+
+---
+
+## 2026-05-02 - ERPNext Workspace widgets are two-part wiring
+
+The Owner Home command center needed Number Cards and a Dashboard Chart, but creating the backend widget records was not enough. Frappe Workspaces also need matching child rows (`Workspace Number Card` / `Workspace Chart`) and matching content blocks in `Workspace.content`. The first sync attempt also used internal Number Card names that differed from their labels; Frappe's Number Card naming followed the label/autoname, so Workspace link validation failed.
+
+**Counter-move:** when building Desk dashboards, verify all layers together: widget document exists, Workspace child row points to the actual widget name, Workspace content has the block, and the non-admin role can see it in Desk. Keep widget names and displayed labels aligned unless there is a verified reason to separate them.
+
+---
+
 ## 2026-05-01 - Desk conditionals need the real child-table field, not a text echo
 
 The public `/contact` form looked correct, but the ERPNext Desk form still depended on `custom_event_type`, a Table MultiSelect. The submit handler was only echoing services into text-style data, so real inquiries could arrive without the Desk conditional sections opening. **Counter-move:** when a public form feeds a Desk workflow, verify the exact backend field that drives Desk behavior, not just that the submission created a Lead.

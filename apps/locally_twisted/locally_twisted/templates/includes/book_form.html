@@ -351,23 +351,34 @@ every deploy.
                     </div>
                 </div>
 
-                {# Row 4: Event Time + City/Location #}
+                {# Row 4: Event Start + End #}
                 <div class="lt-book__row lt-book__row--two">
                     <div class="lt-book__field">
-                        <label for="book_time">Preferred Event Time</label>
-                        <input type="time" id="book_time" name="x_event_time"
-                               class="lt-book__input"/>
+                        <label for="book_time">
+                            Event Start Time <span class="lt-book__optional">(even an estimate is helpful!)</span>
+                        </label>
+                        <input type="text" id="book_time" name="x_event_time"
+                               class="lt-book__input"
+                               placeholder="e.g. 3 PM, afternoon, TBD"/>
                     </div>
+                    <div class="lt-book__field">
+                        <label for="book_end_time">
+                            Event End Time <span class="lt-book__optional">(even an estimate is helpful!)</span>
+                        </label>
+                        <input type="text" id="book_end_time" name="x_event_end_time"
+                               class="lt-book__input"
+                               placeholder="e.g. 5 PM, evening, not sure yet"/>
+                    </div>
+                </div>
+
+                {# Row 5: City/Location + Guest count #}
+                <div class="lt-book__row lt-book__row--two">
                     <div class="lt-book__field">
                         <label for="book_location">City / Location</label>
                         <input type="text" id="book_location" name="x_event_location"
                                class="lt-book__input"
                                placeholder="Address, venue name, or city"/>
                     </div>
-                </div>
-
-                {# Row 5: Guest count #}
-                <div class="lt-book__row lt-book__row--two">
                     <div class="lt-book__field">
                         <label for="book_guests">Estimated Guests</label>
                         <input type="number" id="book_guests" name="x_guest_count"
@@ -410,8 +421,9 @@ every deploy.
                     </div>
                     <div class="lt-book__field" style="margin-top: 0.75rem;">
                         <label for="book_setup_arrival">What time can we arrive to set up?</label>
-                        <input type="time" id="book_setup_arrival" name="x_setup_time_arrival"
+                        <input type="text" id="book_setup_arrival" name="x_setup_time_arrival"
                                class="lt-book__input"
+                               placeholder="e.g. 10 AM, morning, TBD"
                                disabled/>
                     </div>
                     <div class="lt-book__field" style="margin-top: 0.75rem;">
@@ -446,14 +458,16 @@ every deploy.
                     <div class="lt-book__row lt-book__row--two" style="margin-top: 0.75rem;">
                         <div class="lt-book__field">
                             <label for="book_artist_start">Start time</label>
-                            <input type="time" id="book_artist_start" name="x_artist_start"
+                            <input type="text" id="book_artist_start" name="x_artist_start"
                                    class="lt-book__input"
+                                   placeholder="e.g. 1 PM"
                                    disabled/>
                         </div>
                         <div class="lt-book__field">
                             <label for="book_artist_end">End time</label>
-                            <input type="time" id="book_artist_end" name="x_artist_end"
+                            <input type="text" id="book_artist_end" name="x_artist_end"
                                    class="lt-book__input"
+                                   placeholder="e.g. 3 PM"
                                    disabled/>
                         </div>
                     </div>
@@ -482,14 +496,16 @@ every deploy.
                     <div class="lt-book__row lt-book__row--two" style="margin-top: 0.75rem;">
                         <div class="lt-book__field">
                             <label for="book_painter_start">Start time</label>
-                            <input type="time" id="book_painter_start" name="x_painter_start"
+                            <input type="text" id="book_painter_start" name="x_painter_start"
                                    class="lt-book__input"
+                                   placeholder="e.g. 1 PM"
                                    disabled/>
                         </div>
                         <div class="lt-book__field">
                             <label for="book_painter_end">End time</label>
-                            <input type="time" id="book_painter_end" name="x_painter_end"
+                            <input type="text" id="book_painter_end" name="x_painter_end"
                                    class="lt-book__input"
+                                   placeholder="e.g. 3 PM"
                                    disabled/>
                         </div>
                     </div>

@@ -6,6 +6,7 @@ Run in-process:
 from __future__ import annotations
 
 import json
+import re
 
 import frappe
 
@@ -24,6 +25,21 @@ SERVICE_RENAMES = {
     "Delivery Only": "Delivery",
     "Event Package": "Events Inquiry",
 }
+
+TIME_TEXT_DESCRIPTION = "Plain text time entry. Examples: 3 PM, 3:30 PM, afternoon, TBD."
+SAFE_FIELDTYPE_CONVERSIONS = {("Time", "Data")}
+TIME_TEXT_FIELDS = (
+    "custom_event_time",
+    "custom_event_end_time",
+    "custom_setup_time_arrival",
+    "custom_artist_start",
+    "custom_artist_end",
+    "custom_painter_start",
+    "custom_painter_end",
+    "custom_delivery_window_start",
+    "custom_delivery_window_end",
+)
+TIME_TEXT_RE = re.compile(r"^(\d{1,2}):(\d{2})(?::(\d{2})(?:\.(\d+))?)?$")
 
 
 def _selected(values: list[str]) -> str:
@@ -65,21 +81,106 @@ CUSTOM_FIELD_UPDATES = {
         "label": "Something Else Notes",
         "depends_on": _selected(["Something Else"]),
     },
-    "custom_event_time": {"depends_on": None},
-    "custom_event_end_time": {"depends_on": None},
+    "custom_event_time": {
+        "label": "Event Start Time",
+        "fieldtype": "Data",
+        "description": TIME_TEXT_DESCRIPTION,
+        "depends_on": None,
+    },
+    "custom_event_end_time": {
+        "label": "Event End Time",
+        "fieldtype": "Data",
+        "description": TIME_TEXT_DESCRIPTION,
+        "depends_on": None,
+    },
     "custom_guest_count": {"depends_on": None},
+    "custom_setup_time_arrival": {
+        "fieldtype": "Data",
+        "description": TIME_TEXT_DESCRIPTION,
+    },
+    "custom_artist_start": {
+        "fieldtype": "Data",
+        "description": TIME_TEXT_DESCRIPTION,
+    },
+    "custom_artist_end": {
+        "fieldtype": "Data",
+        "description": TIME_TEXT_DESCRIPTION,
+    },
+    "custom_painter_start": {
+        "fieldtype": "Data",
+        "description": TIME_TEXT_DESCRIPTION,
+    },
+    "custom_painter_end": {
+        "fieldtype": "Data",
+        "description": TIME_TEXT_DESCRIPTION,
+    },
+    "custom_delivery_window_start": {
+        "fieldtype": "Data",
+        "description": TIME_TEXT_DESCRIPTION,
+    },
+    "custom_delivery_window_end": {
+        "fieldtype": "Data",
+        "description": TIME_TEXT_DESCRIPTION,
+    },
+    "custom_inspiration_photos": {
+        "label": "Inspiration Photos",
+        "fieldtype": "Table",
+        "options": "LT Lead Photo",
+        "insert_after": "lt_section_photos",
+    },
+}
+
+LEAD_PHOTO_DOCTYPE = {
+    "doctype": "DocType",
+    "name": "LT Lead Photo",
+    "module": "Custom",
+    "custom": 1,
+    "istable": 1,
+    "editable_grid": 1,
+    "fields": [
+        {
+            "fieldname": "photo",
+            "label": "Photo",
+            "fieldtype": "Attach Image",
+            "reqd": 1,
+        },
+        {
+            "fieldname": "caption",
+            "label": "Caption",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+        },
+    ],
+}
+
+ENSURED_LEAD_CUSTOM_FIELDS = {
+    "custom_inspiration_photos": {
+        "doctype": "Custom Field",
+        "dt": "Lead",
+        "fieldname": "custom_inspiration_photos",
+        "label": "Inspiration Photos",
+        "fieldtype": "Table",
+        "options": "LT Lead Photo",
+        "insert_after": "lt_section_photos",
+    },
 }
 
 
 def execute() -> str:
     summary = {
+        "ensured_doctypes": [],
         "renamed_services": [],
         "ensured_services": [],
+        "ensured_custom_fields": [],
         "updated_custom_fields": [],
+        "normalized_time_values": 0,
         "updated_leads": 0,
     }
     _sync_service_types(summary)
+    _ensure_lead_photo_doctype(summary)
+    _ensure_lead_custom_fields(summary)
     _sync_lead_custom_fields(summary)
+    summary["normalized_time_values"] = _normalize_existing_lead_time_text()
     summary["updated_leads"] = _rewrite_existing_lead_service_csv()
     frappe.clear_cache(doctype="Lead")
     frappe.db.commit()
@@ -126,6 +227,21 @@ def _sync_service_types(summary: dict) -> None:
         summary["ensured_services"].append(service)
 
 
+def _ensure_lead_photo_doctype(summary: dict) -> None:
+    if frappe.db.exists("DocType", "LT Lead Photo"):
+        return
+    frappe.get_doc(LEAD_PHOTO_DOCTYPE).insert(ignore_permissions=True)
+    summary["ensured_doctypes"].append("LT Lead Photo")
+
+
+def _ensure_lead_custom_fields(summary: dict) -> None:
+    for fieldname, field in ENSURED_LEAD_CUSTOM_FIELDS.items():
+        if frappe.db.exists("Custom Field", {"dt": "Lead", "fieldname": fieldname}):
+            continue
+        frappe.get_doc(field).insert(ignore_permissions=True)
+        summary["ensured_custom_fields"].append(fieldname)
+
+
 def _sync_lead_custom_fields(summary: dict) -> None:
     for fieldname, updates in CUSTOM_FIELD_UPDATES.items():
         name = frappe.db.get_value(
@@ -137,13 +253,71 @@ def _sync_lead_custom_fields(summary: dict) -> None:
             raise RuntimeError(f"Lead Custom Field missing: {fieldname}")
         doc = frappe.get_doc("Custom Field", name)
         changed = False
+        safe_fieldtype_conversion = False
         for key, value in updates.items():
-            if getattr(doc, key) != value:
+            current = getattr(doc, key)
+            if current != value:
+                if key == "fieldtype":
+                    conversion = (current, value)
+                    if conversion not in SAFE_FIELDTYPE_CONVERSIONS:
+                        raise RuntimeError(
+                            f"Refusing unsafe fieldtype conversion for Lead.{fieldname}: "
+                            f"{current!r} to {value!r}"
+                        )
+                    safe_fieldtype_conversion = True
                 setattr(doc, key, value)
                 changed = True
         if changed:
+            if safe_fieldtype_conversion:
+                doc.flags.ignore_validate = True
             doc.save(ignore_permissions=True)
             summary["updated_custom_fields"].append(fieldname)
+
+
+def _normalize_existing_lead_time_text() -> int:
+    updated = 0
+    fields = ["name", *TIME_TEXT_FIELDS]
+    for lead in frappe.get_all(
+        "Lead",
+        fields=fields,
+        limit_page_length=10000,
+    ):
+        for fieldname in TIME_TEXT_FIELDS:
+            current = lead.get(fieldname)
+            normalized = _friendly_time_text(current)
+            if normalized != current:
+                frappe.db.set_value(
+                    "Lead",
+                    lead.name,
+                    fieldname,
+                    normalized,
+                    update_modified=False,
+                )
+                updated += 1
+    return updated
+
+
+def _friendly_time_text(value: object) -> str | None:
+    if value is None or value == "":
+        return None
+    text = str(value).strip()
+    match = TIME_TEXT_RE.match(text)
+    if not match:
+        return text
+
+    hour = int(match.group(1))
+    minute = match.group(2)
+    seconds = match.group(3)
+    microseconds = match.group(4)
+
+    # Values with real seconds/microseconds came from the old Time-field widget,
+    # not from a human choosing an estimated event time.
+    if (seconds and seconds != "00") or (microseconds and int(microseconds) != 0):
+        return None
+
+    suffix = "AM" if hour < 12 else "PM"
+    display_hour = hour % 12 or 12
+    return f"{display_hour}:{minute} {suffix}"
 
 
 def _rewrite_existing_lead_service_csv() -> int:
