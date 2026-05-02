@@ -32,6 +32,11 @@ follow-up.
 import frappe
 from frappe.utils import escape_html, flt
 
+from locally_twisted.payments.settings import (
+    DEFAULT_OPERATOR_EMAIL,
+    get_operator_email,
+)
+
 
 no_cache = 1
 sitemap = 0
@@ -346,7 +351,7 @@ def _send_receipt_email(so_name):
     frappe.db.commit()
 
 
-OPERATOR_EMAIL = "locallytwisted@gmail.com"
+OPERATOR_EMAIL = DEFAULT_OPERATOR_EMAIL
 # Jeff's operator inbox. Update via site_config.json
 # (`bench --site frontend set-config lt_operator_email <addr>`) when LT
 # wants to route notifications elsewhere; the lookup falls through to
@@ -360,7 +365,7 @@ def _send_operator_notification(so_name):
     the same subject on this SO.
     """
     so = frappe.get_doc("Sales Order", so_name)
-    recipient = frappe.conf.get("lt_operator_email") or OPERATOR_EMAIL
+    recipient = get_operator_email()
 
     subject = f"New paid order — {so.name} — ${flt(so.grand_total):,.2f}"
 

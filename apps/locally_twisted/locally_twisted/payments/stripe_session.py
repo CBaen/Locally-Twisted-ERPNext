@@ -27,6 +27,11 @@ import frappe
 from frappe import _
 from frappe.utils import flt, get_url
 
+from locally_twisted.payments.settings import (
+    get_stripe_payment_method_configuration,
+    get_stripe_settings,
+)
+
 
 def create_session_for_sales_order(
     sales_order: str,
@@ -45,7 +50,7 @@ def create_session_for_sales_order(
     """
     import stripe
 
-    stripe_settings = frappe.get_doc("Stripe Settings", "Test")
+    stripe_settings = get_stripe_settings()
     api_key = stripe_settings.get_password("secret_key", raise_exception=True)
 
     so = frappe.get_doc("Sales Order", sales_order)
@@ -88,22 +93,28 @@ def create_session_for_sales_order(
     # NOT passed alongside because Stripe rejects the combination — when
     # a configuration is set, the configuration owns the method list.
     #
+    # Live mode can override this through lt_stripe_payment_method_configuration
+    # in site_config.json without changing this checkout code.
+    #
     # GL's product reason: *"I hate Link, it's not going to gatekeep our
     # checkout."* Apple Pay + Google Pay still work — they're card wallets
     # that surface automatically on device-supported browsers, independent
     # of whether Link is on the configuration.
-    session = stripe.checkout.Session.create(
-        api_key=api_key,
-        mode="payment",
-        line_items=line_items,
-        success_url=success_url,
-        cancel_url=cancel_url,
-        customer_email=customer_email,
-        client_reference_id=so.name,
-        metadata=metadata,
-        payment_intent_data={"metadata": metadata},
-        payment_method_configuration="pmc_1TRZH2DfnlZQv66ncb001soG",
-    )
+    session_kwargs = {
+        "mode": "payment",
+        "line_items": line_items,
+        "success_url": success_url,
+        "cancel_url": cancel_url,
+        "customer_email": customer_email,
+        "client_reference_id": so.name,
+        "metadata": metadata,
+        "payment_intent_data": {"metadata": metadata},
+    }
+    payment_method_configuration = get_stripe_payment_method_configuration()
+    if payment_method_configuration:
+        session_kwargs["payment_method_configuration"] = payment_method_configuration
+
+    session = stripe.checkout.Session.create(api_key=api_key, **session_kwargs)
 
     return session.url
 
@@ -112,6 +123,6 @@ def retrieve_session(session_id: str):
     """Retrieve a Checkout Session for verification on /payment-success."""
     import stripe
 
-    stripe_settings = frappe.get_doc("Stripe Settings", "Test")
+    stripe_settings = get_stripe_settings()
     api_key = stripe_settings.get_password("secret_key", raise_exception=True)
     return stripe.checkout.Session.retrieve(session_id, api_key=api_key)

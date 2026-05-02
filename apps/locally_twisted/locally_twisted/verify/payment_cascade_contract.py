@@ -14,7 +14,6 @@ from frappe.utils import add_days, flt, nowdate
 
 ITEM_CODE = "easter-arch"
 PRICE_LIST = "Standard Selling"
-PAYMENT_GATEWAY_ACCOUNT = "Stripe-Test - USD - LT"
 NOTES = "Gate code 1234. Please call on arrival."
 
 
@@ -171,15 +170,18 @@ def _create_sales_order(customer_name, address_name):
 
 
 def _create_payment_request(sales_order_name, customer_name, email):
-    if not frappe.db.exists("Payment Gateway Account", PAYMENT_GATEWAY_ACCOUNT):
-        raise ContractFail(f"missing Payment Gateway Account {PAYMENT_GATEWAY_ACCOUNT}")
+    from locally_twisted.payments.settings import get_payment_gateway_account
+
+    payment_gateway_account = get_payment_gateway_account()
+    if not frappe.db.exists("Payment Gateway Account", payment_gateway_account):
+        raise ContractFail(f"missing Payment Gateway Account {payment_gateway_account}")
 
     sales_order = frappe.get_doc("Sales Order", sales_order_name)
     payment_request = frappe.get_doc(
         {
             "doctype": "Payment Request",
             "payment_request_type": "Inward",
-            "payment_gateway_account": PAYMENT_GATEWAY_ACCOUNT,
+            "payment_gateway_account": payment_gateway_account,
             "party_type": "Customer",
             "party": customer_name,
             "reference_doctype": "Sales Order",

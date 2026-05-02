@@ -566,10 +566,12 @@ def submit_guest_order(item_code="", qty=1, items_json="",
     # mute_email=1 + order_type="Shopping Cart" together suppress the
     # auto-email + wkhtmltopdf render that fails inside Docker. The
     # transactional receipt email fires later on Payment Entry submit.
+    from locally_twisted.payments.settings import get_payment_gateway_account
+
     pr = frappe.get_doc({
         "doctype": "Payment Request",
         "payment_request_type": "Inward",
-        "payment_gateway_account": "Stripe-Test - USD - LT",
+        "payment_gateway_account": get_payment_gateway_account(),
         "party_type": "Customer",
         "party": customer_name,
         "reference_doctype": "Sales Order",
