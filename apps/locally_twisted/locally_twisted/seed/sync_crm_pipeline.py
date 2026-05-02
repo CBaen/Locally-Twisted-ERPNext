@@ -9,24 +9,10 @@ import json
 
 import frappe
 
+from locally_twisted.crm_pipeline import PIPELINE_COLUMNS, PIPELINE_FIELD, PIPELINE_OPTIONS
+from locally_twisted.seed import sync_stage_cascade
 
-PIPELINE_FIELD = "custom_pipeline_stage"
-PIPELINE_OPTIONS = [
-    "New Inquiry",
-    "Quote Sent/Awaiting Approval",
-    "Approved",
-    "In Production",
-    "Event/Post Event",
-    "Archive",
-]
-PIPELINE_COLUMNS = [
-    ("New Inquiry", "Blue", "Active"),
-    ("Quote Sent/Awaiting Approval", "Cyan", "Active"),
-    ("Approved", "Green", "Active"),
-    ("In Production", "Orange", "Active"),
-    ("Event/Post Event", "Purple", "Active"),
-    ("Archive", "Gray", "Archived"),
-]
+
 PIPELINE_FIELD_SPEC = {
     "doctype": "Custom Field",
     "dt": "Lead",
@@ -65,11 +51,13 @@ def sync() -> dict:
         "ensured_custom_fields": [],
         "updated_custom_fields": [],
         "removed_status_property_setters": [],
+        "synced_stage_cascade": {},
         "updated_leads": 0,
         "ensured_kanban_boards": [],
     }
     _remove_lt_status_property_setters(summary)
     _ensure_pipeline_custom_field(summary)
+    summary["synced_stage_cascade"] = sync_stage_cascade.sync()
     frappe.clear_cache(doctype="Lead")
     summary["updated_leads"] = _normalize_existing_leads()
     _ensure_inquiry_kanban_board(summary)

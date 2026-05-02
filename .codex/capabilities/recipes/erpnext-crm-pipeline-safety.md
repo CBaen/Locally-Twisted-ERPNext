@@ -30,7 +30,11 @@ Use this when translating a client's approved sales stages into ERPNext, especia
 
    Use setup code to create/update the custom field, normalize existing records, recreate the Kanban board, and preserve useful card order where possible.
 
-5. Verify the guardrails.
+5. Start cascade wiring with reversible operations when thresholds are unsettled.
+
+   If the finance/accounting threshold is not fully approved, wire stage movement to operational records such as Tasks first. Do not create Customer, Sales Order, Sales Invoice, Payment Request, or win/loss state until the business meaning is explicit.
+
+6. Verify the guardrails.
 
    A verifier should confirm the custom field exists, the Kanban board points at that custom field, stale native-status columns are gone, existing records have valid values, and no Property Setter repurposes `Lead.status` with the custom pipeline values.
 
@@ -39,6 +43,7 @@ Use this when translating a client's approved sales stages into ERPNext, especia
 ```powershell
 python scripts/setup/sync_crm_pipeline.py
 python scripts/verify/crm_pipeline_parity.py
+python scripts/verify/crm_stage_cascade.py
 python scripts/setup/sync_backend_workspaces.py
 python scripts/verify/backend_workspace_parity.py
 ```
@@ -49,3 +54,4 @@ python scripts/verify/backend_workspace_parity.py
 - Treating an old `Archive` or folded stage as a win can inflate win rate or trigger the wrong cascade.
 - A Kanban board can visually look right while still pointing at the wrong field.
 - Updating only the board leaves new website Leads without the correct business stage.
+- Stage-change automation can look helpful while quietly creating financial records at the wrong threshold.

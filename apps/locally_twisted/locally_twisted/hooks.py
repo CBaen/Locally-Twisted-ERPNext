@@ -107,6 +107,7 @@ doc_events = {
     "Lead": {
         "before_insert": "locally_twisted.lead_cascade.before_insert",
         "after_insert": "locally_twisted.lead_cascade.after_insert",
+        "on_update": "locally_twisted.stage_cascade.on_update",
     },
 }
 

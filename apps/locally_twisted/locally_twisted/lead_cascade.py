@@ -29,6 +29,8 @@ applied to Leads on customer-form submission.
 import frappe
 from frappe.utils import escape_html
 
+from locally_twisted import stage_cascade
+
 
 WEBSITE_LEAD_SOURCE = "Website"
 
@@ -97,6 +99,8 @@ def after_insert(doc, method=None):
             title=f"Lead cascade: Auto-ack email failed for {doc.name}",
             message=f"{type(e).__name__}: {e}\nLead: {doc.name}\nemail: {doc.email_id}",
         )
+
+    stage_cascade.after_insert(doc)
 
 
 def _format_services_label(doc):

@@ -68,6 +68,7 @@ Verify these before editing DB/schema, but they are the latest documented workin
 - The LT inquiry Kanban uses `Lead.custom_pipeline_stage` for the six business stages, while native `Lead.status` stays available for ERPNext internals.
 - Approved business stages are `New Inquiry`, `Quote Sent/Awaiting Approval`, `Approved`, `In Production`, `Event/Post Event`, and `Archive`.
 - `Archive` means closed/off the active LT board. It is not wired as a financial win/loss or accounting trigger.
+- Stage movement now creates and closes operational `Task` records through `locally_twisted.stage_cascade`. This is intentionally non-financial wiring.
 - `LT Service Type` was synced on 2026-05-01 to remove `Delivery Only` and `Event Package` and add `Delivery`, `Pickup`, `Events Inquiry`.
 - `lead_cascade.py` hooks on Lead insert to create/link Contact and queue the customer acknowledgment email.
 - `/payment-success` marks Payment Requests paid, creates Sales Invoices, sends receipt/operator/welcome emails, and redirects customers even if backend follow-up fails.
@@ -137,6 +138,46 @@ Verification:
 
 Next cascade work should decide which stage creates or updates a Quote, Sales Order, Project/Task, Calendar invite, email/text follow-up, and finance record. Do not infer those triggers from stage labels alone.
 
+## 2026-05-02 Stage-To-Task Cascade
+
+The first cascade layer is now operational only.
+
+Current behavior:
+
+- New Lead insert/update runs `locally_twisted.stage_cascade`.
+- Stage `New Inquiry` creates/reopens a Task beginning `Reply to new inquiry`.
+- Stage `Quote Sent/Awaiting Approval` creates/reopens `Follow up on quote`.
+- Stage `Approved` creates/reopens `Confirm booking details`.
+- Stage `In Production` creates/reopens `Prepare event production plan`.
+- Stage `Event/Post Event` creates/reopens `Send post-event follow-up`.
+- Moving to a new non-Archive stage closes prior open cascade Tasks for that Lead.
+- Moving to `Archive` closes open cascade Tasks for that Lead and does not create a new Task.
+- The Tasks are linked to the Lead by `Task.custom_lt_lead`, stage by `Task.custom_pipeline_stage`, and idempotency key by hidden `Task.custom_lt_cascade_key`.
+- The cascade does not create or modify Sales Orders, Sales Invoices, Payment Requests, Customers, Quotes, or win/loss status.
+
+Setup and code:
+
+- `apps/locally_twisted/locally_twisted/stage_cascade.py`
+- `apps/locally_twisted/locally_twisted/seed/sync_stage_cascade.py`
+- `scripts/setup/sync_stage_cascade.py`
+- `scripts/verify/crm_stage_cascade.py`
+- `scripts/setup/sync_crm_pipeline.py` also syncs the Task cascade fields.
+
+Verification:
+
+- `python scripts/verify/crm_stage_cascade.py` creates a temporary Lead, moves it through the stages, verifies Task creation/closure, verifies financial document counts are unchanged, and deletes its test Lead/Tasks.
+- A follow-up cleanup check confirmed zero `CASCADE-TEST` Leads and zero `CASCADE-TEST` Tasks remained after the verifier.
+
+Next cascade work should be explicit about the business threshold:
+
+- Quote creation/sent state.
+- Customer creation.
+- Sales Order / booking creation.
+- Project/production job creation.
+- Calendar invite creation.
+- Customer email/text sequences.
+- Accounting/payment/deposit triggers.
+
 ## Reusable Pattern
 
 This work exposed a repeatable ERPNext/Frappe trap: a simplified role must be verified as a full operator chain, not as isolated admin settings.
@@ -155,6 +196,7 @@ Specific lessons:
 - Socket origin warnings can appear beside the route error, but the route error is the page blocker.
 - Served Desk assets must be verified because Frappe/browser cache can keep old JS active.
 - Client-friendly CRM stages should use a custom business field when native ERPNext statuses may affect conversion, reporting, finance, or workflow behavior.
+- Stage cascades should start with reversible operational records when the finance threshold is not fully agreed yet.
 
 These patterns are now promoted to `.codex/capabilities/recipes/erpnext-simplified-role-verification.md` and `.codex/capabilities/recipes/erpnext-crm-pipeline-safety.md`, and both are indexed in `.codex/capabilities/INDEX.md`.
 
@@ -214,9 +256,11 @@ Minimum checks after backend simplification edits:
 ```powershell
 python scripts/setup/sync_contact_intake_backend.py
 python scripts/setup/sync_crm_pipeline.py
+python scripts/setup/sync_stage_cascade.py
 python scripts/setup/sync_backend_workspaces.py
 python scripts/verify/lead_backend_intake_parity.py
 python scripts/verify/crm_pipeline_parity.py
+python scripts/verify/crm_stage_cascade.py
 python scripts/verify/backend_workspace_parity.py
 $env:LT_DESK_TEST_USER='lt-owner-temp@example.com'; $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner
 python scripts/verify/contact_service_logic.py --base-url http://localhost:8081

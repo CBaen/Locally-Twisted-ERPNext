@@ -8,6 +8,20 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-02 - CRM stage cascades start with operational Tasks only
+
+**Decision:** The first LT CRM stage cascade should create and close ERPNext `Task` records for operator follow-up. It should not create or modify Quotes, Sales Orders, Sales Invoices, Payment Requests, Customers, or win/loss reporting state.
+
+**Reasoning:** GL wants stage movement to cascade into the rest of the business system, but the exact financial threshold still needs deliberate mapping. Tasks are safe operational wiring: they help Jeff and staff know what to do next without silently creating revenue, accounting, or conversion stats. This keeps the CRM useful immediately while protecting finance/reporting from wrong assumptions.
+
+**Implementation:** `locally_twisted.stage_cascade` now runs from Lead insert/update. It creates one idempotent Task for the active non-Archive stage, closes prior stage cascade Tasks as the Lead advances, and closes open cascade Tasks when the Lead moves to `Archive`. Task records link back to the Lead through code-owned Task Custom Fields synced by `locally_twisted.seed.sync_stage_cascade`.
+
+**Verification receipt:** `python scripts/setup/sync_crm_pipeline.py`, `python scripts/dev/clear_website_cache.py --restart`, `python scripts/verify/crm_stage_cascade.py`, `python scripts/verify/crm_pipeline_parity.py`, `python scripts/verify/backend_workspace_parity.py`, `python scripts/verify/lead_backend_intake_parity.py`, `python scripts/verify/contact_service_logic.py --base-url http://localhost:8081`, `python scripts/verify/contact_prefill.py --base-url http://localhost:8081`, `python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --shape-only --skip-newsletter`, and `npm run test:desk-owner` passed. The cascade verifier also confirmed test records were cleaned up and Sales Order, Sales Invoice, and Payment Request counts did not change during stage movement.
+
+**Decided by:** GL asked to continue with wiring after accepting the finance-safe pipeline separation; Codex implemented the first safe operational cascade.
+
+---
+
 ## 2026-05-02 - LT CRM stages use a custom business field, not Lead.status
 
 **Decision:** Translate the approved six-stage Odoo CRM concept into ERPNext as `Lead.custom_pipeline_stage` with these values: `New Inquiry`, `Quote Sent/Awaiting Approval`, `Approved`, `In Production`, `Event/Post Event`, and `Archive`. Keep ERPNext's native `Lead.status` intact.

@@ -6,6 +6,14 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-02 - Wire uncertain stage cascades to reversible operations first
+
+Stage movement needs to do real work, but not every stage is ready to carry finance meaning. The CRM pipeline is now safe because `Archive` is off-board only; the next risk would be letting early automation create Sales Orders, invoices, payment requests, or win/loss stats before the business threshold is settled.
+
+**Counter-move:** when a cascade is directionally right but the finance/accounting threshold is not approved yet, start with reversible operational records such as Tasks. Verify that moving stages does not change financial document counts, and make the next finance-trigger decision explicit instead of hidden inside a stage label.
+
+---
+
 ## 2026-05-02 - Client CRM stages should not hijack ERPNext native status
 
 The Odoo reference used `Archive` to remove cards from the active Kanban, but its local stage data also marked Archive like a won/folded stage. Copying those values into ERPNext `Lead.status` would risk distorting conversion logic, finance/reporting assumptions, or future workflow triggers.
