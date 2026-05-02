@@ -1,10 +1,12 @@
 """Stripe webhook receiver for guest checkout completion.
 
-Stripe POSTs events to this endpoint. We care about
-`checkout.session.completed` — that's our cue to mark the linked Payment
-Request paid, create/submit the Sales Invoice, and queue the paid-order
-emails. This mirrors the browser `/payment-success` path so the order
-still reconciles if the customer closes the tab before returning.
+Stripe POSTs events to this endpoint. We reconcile paid orders on
+`checkout.session.completed` only when payment_status is paid, and on
+`checkout.session.async_payment_succeeded` for delayed payment methods.
+Those are our cues to mark the linked Payment Request paid, create/submit
+the Sales Invoice, and queue the paid-order emails. This mirrors the browser
+`/payment-success` path so the order still reconciles if the customer closes
+the tab before returning.
 
 URL Stripe sends to:
     /api/method/locally_twisted.payments.stripe_webhook.stripe_webhook
@@ -58,17 +60,29 @@ def stripe_webhook():
         return {"error": "invalid signature"}
 
     event_type = event.get("type", "")
-    if event_type != "checkout.session.completed":
+    if event_type not in {
+        "checkout.session.completed",
+        "checkout.session.async_payment_succeeded",
+    }:
         return {"ok": True, "ignored": event_type}
 
     session = (event.get("data") or {}).get("object") or {}
     metadata = session.get("metadata") or {}
     pr_name = metadata.get("payment_request")
     so_name = session.get("client_reference_id") or metadata.get("sales_order")
+    payment_status = (session.get("payment_status") or "").lower()
+
+    if payment_status != "paid":
+        return {
+            "ok": True,
+            "skipped": f"payment_status {payment_status or 'unknown'}",
+            "payment_request": pr_name,
+            "sales_order": so_name,
+        }
 
     if not pr_name:
         frappe.log_error(
-            f"checkout.session.completed without payment_request metadata: {session.get('id')}",
+            f"{event_type} without payment_request metadata: {session.get('id')}",
             "Stripe webhook: missing PR metadata",
         )
         return {"ok": True, "skipped": "no payment_request metadata"}
