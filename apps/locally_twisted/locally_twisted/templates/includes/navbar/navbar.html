@@ -10,7 +10,7 @@
      home_page             — injected by Frappe
      frappe.session.user   — injected by Frappe
      shop_categories       — list {name, item_group_name, route, weightage}
-     shop_root_route       — string (e.g. "shop-items")
+     shop_root_route       — string (e.g. "shop")
      mega_special_occasions — list {label, route}
      mega_holidays_seasons  — list {label, route, column}
      mega_what_we_make      — legacy context, intentionally unused in nav
@@ -107,7 +107,7 @@
 
                 <ul class="lt-header__nav-list" role="menubar">
 
-                    {# ---- Mega 1: Shop Balloon Decor ---- #}
+                    {# ---- Mega 1: Balloon Decor ---- #}
                     <li class="lt-header__has-mega" role="none">
                         <button type="button"
                                 class="lt-header__nav-link lt-header__nav-trigger"
@@ -116,7 +116,7 @@
                                 aria-expanded="false"
                                 aria-controls="lt-mega-shop-balloon-decor"
                                 role="menuitem">
-                            Shop Balloon Decor
+                            Balloon Decor
                             <svg class="lt-header__nav-caret"
                                  xmlns="http://www.w3.org/2000/svg"
                                  width="10" height="10"
@@ -131,7 +131,7 @@
                         <div class="lt-header__mega"
                              id="lt-mega-shop-balloon-decor"
                              role="region"
-                             aria-label="Shop Balloon Decor categories"
+                             aria-label="Balloon Decor categories"
                              hidden>
                             <div class="container lt-header__mega-inner">
                                 <div class="row justify-content-center">
@@ -162,7 +162,7 @@
                                 </div>
                                 <div class="row justify-content-center lt-header__mega-browse-row">
                                     <div class="col-auto">
-                                        <a class="lt-header__mega-cta" href="/{{ shop_root_route or 'shop-by-category' }}">All Balloon Decor</a>
+                                        <a class="lt-header__mega-cta" href="/{{ shop_root_route or 'shop' }}">All Balloon Decor</a>
                                     </div>
                                 </div>
                             </div>
@@ -380,14 +380,14 @@
     <nav aria-label="Mobile navigation">
         <ul class="lt-header__mobile-nav-list">
 
-            {# ---- Mobile accordion 1: Shop Balloon Decor ---- #}
+            {# ---- Mobile accordion 1: Balloon Decor ---- #}
             <li class="lt-header__mobile-accordion-item">
                 <button type="button"
                         class="lt-header__mobile-nav-link lt-header__mobile-accordion-toggle"
                         data-lt-drawer-accordion-trigger="lt-mob-shop-balloon-decor"
                         aria-expanded="false"
                         aria-controls="lt-mob-shop-balloon-decor">
-                    Shop Balloon Decor
+                    Balloon Decor
                     <svg class="lt-header__mobile-caret"
                          xmlns="http://www.w3.org/2000/svg"
                          width="14" height="14"
@@ -406,7 +406,7 @@
                             <li><a class="lt-header__mobile-nav-sublink" href="/{{ item.route }}">{{ item.label }}</a></li>
                         {%- endfor -%}
                     {%- endif -%}
-                    <li><a class="lt-header__mobile-nav-sublink lt-header__mobile-nav-sublink--all" href="/{{ shop_root_route or 'shop-by-category' }}">All Balloon Decor</a></li>
+                    <li><a class="lt-header__mobile-nav-sublink lt-header__mobile-nav-sublink--all" href="/{{ shop_root_route or 'shop' }}">All Balloon Decor</a></li>
                 </ul>
             </li>
 

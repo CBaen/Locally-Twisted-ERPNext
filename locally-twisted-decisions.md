@@ -8,6 +8,93 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-02 - Variant media maps only when the source label is defensible
+
+**Decision:** Product detail pages should switch the main image when the selected ERPNext variant has its own `Item.image`. The first media sync maps scraped Odoo extra images onto variants only when the image URL/filename label clearly matches an option such as size, height, length, design, LED lights, topper, or theme. Generic or ambiguous gallery images remain unmapped until GL/Jeff review.
+
+**Reasoning:** GL clarified that multiple photos usually belong to the size/variant option and that balloon decor images must respect the real product structure rather than random color/photo assignment. The Odoo scrape includes many extra images, but not all filenames describe a variant. A conservative mapper preserves customer trust: use specific evidence, fall back to the parent product image when uncertain, and leave the rest for human/business review.
+
+**Implementation:** `scripts/setup/sync_variant_media.py` stages `_resources/odoo-live/images/` into Docker and runs `locally_twisted.seed.sync_variant_media`. The first pass set 1,712 variant `Item.image` values. Product detail JS calls `locally_twisted.api.variant_media.get_variant_media` after exact option selection. Cart/checkout use variant images when present and otherwise fall back to the parent Website Item image.
+
+**Verification receipt:** `python scripts/verify/variant_media_contract.py`, `python scripts/verify/cart_checkout_contract.py`, `python scripts/verify/smoke_shop.py`, `python scripts/verify/nav_ia.py`, and `npm run test:layout-fit` passed. Visual receipts: `output/playwright/variant-media-classic-arch-desktop.png` and `output/playwright/variant-media-classic-arch-mobile.png`.
+
+**Decided by:** GL approved continuing with variant media implementation; Codex chose the conservative auto-map boundary and logged the remaining review work.
+
+---
+
+## 2026-05-02 - Owner Desk uses business labels and booking calendar on Sales Orders
+
+**Decision:** Jeff's simplified Owner Desk should expose business actions, not ERPNext internals. `Customer` is labeled `Customers`, `Contact` is labeled `People to Contact`, product creation is exposed only when the owner role has native `Item Manager` permission, and the visible booking calendar uses `Sales Order.delivery_date` rather than the generic `Event` DocType.
+
+**Reasoning:** In ERPNext, Customers are the billable/client records used by orders and invoices; Contacts are individual people, phone numbers, and emails that can attach to a customer. For Locally Twisted, this distinction matters most for corporate events where the customer may be a company and the contacts may be the planner, accounts payable person, or day-of contact. The prior Owner Home showed `Bookings` as Sales Orders but `Event Calendar` as empty Event records, creating the confusing state of 8 bookings and no calendar entries.
+
+**Verification receipt:** As `lt-owner-temp@example.com`, `/app/Workspaces` returned 200, the sidebar showed `Owner Home` then `Home`, Item metadata loaded with `Item Manager` create/write permission, and the Sales Order calendar endpoint returned the 8 current bookings on `2026-05-06`. The generic `Event` count remained 0, confirming the old calendar target was the mismatch.
+
+**Operational impact:** These are live local DB changes, not exported fixtures yet. Before production/cutover, decide whether Role Profile, Workspace, and Calendar View records should be exported or recreated by an idempotent setup script.
+
+**Decided by:** GL raised the owner-account confusion during backend simplification; implemented by Codex.
+
+---
+
+## 2026-05-02 - `/shop` is the all-decor hub; `/shop-by-category` is retired
+
+**Decision:** The visible customer browse hub is `/shop`. Header, mobile drawer, footer, `/shop-items`, and `/all-products` should send broad browse traffic to `/shop`. `/shop-by-category` stays only as a compatibility route and redirects to `/shop`; it should not render the old category-card index.
+
+**Reasoning:** GL reviewed the category-card page and called the cards unacceptable. Live inspection confirmed the page looked placeholder-like and even displayed broken count copy, while `/shop` already had a stronger product grid plus category filters. For launch, a thin category-index page creates a worse first impression than sending customers straight to the all-product shop and preserving individual category pages under `/shop-items/<group>`.
+
+**Alternatives considered:** Redesign `/shop-by-category` immediately; rejected for launch because it duplicates `/shop` and would require real category imagery/content before it helps. Keep the page for SEO; rejected as a primary surface because individual category and product pages carry the useful SEO value without exposing a low-quality index.
+
+**Verification receipt:** `python scripts/verify/nav_ia.py`, `python scripts/verify/smoke_shop.py`, and `npm run test:layout-fit` passed after the change. Fresh desktop and mobile screenshots were captured at `output/playwright/nav-balloon-decor-desktop.png` and `output/playwright/nav-balloon-decor-mobile.png`.
+
+**Decided by:** GL approved Codex's recommendation to implement the launch-safe route/nav cleanup.
+
+---
+
+## 2026-05-02 - Variant cart contract uses sellable Item codes with parent Website Item display
+
+**Decision:** Guest cart and checkout use the actual sellable `Item.item_code` for pricing and Sales Order lines. For variants that do not have their own Website Item row, cart display resolves the parent Website Item for customer-facing name, image, and route. Variant template codes are not directly purchasable from `/shop`.
+
+**Reasoning:** A shop/media audit found variant templates were visible but not purchase-trustworthy: `/shop` card buttons could add unpriced template codes, while configured variant codes such as `6-color-rainbow-arch-20F` existed and had prices but were rejected by the cart API because they lacked Website Item rows. The correct boundary is: variants are what ERPNext sells; parent Website Items are what the website uses to display the product page.
+
+**Verification:** `python scripts/verify/cart_checkout_contract.py` passes. `python scripts/verify/smoke_shop.py` now includes a real option-selection add-to-cart check for `6-color-rainbow-arch-20F`. Exact route checks confirmed `/checkout?item=6-color-rainbow-arch-20F&qty=1` returns 200 and `/checkout?item=6-color-rainbow-arch&qty=1` is blocked.
+
+**Decided by:** Codex implementation after 2026-05-02 shop/media audit; aligned with launch goal that customers must not be able to believe an unreconciled purchase path.
+
+---
+
+## 2026-05-02 - Odoo folder is the business source of truth, not an app build target
+
+**Decision:** `C:\Users\baenb\projects\locally-twisted-odoo\` is the source of truth for Locally Twisted business details. The ERPNext repo remains the app build target for launch.
+
+**Reasoning:** The Odoo project drive contains the business discovery, catalog detail, policy detail, voice, and historical business context. The ERPNext repo may contain copied or rewritten business content, but that content is suspect unless it can be traced back to the Odoo business-detail source, current `_resources/` material that was pulled from it, or GL/legal approval. Keeping business truth separate from app builds prevents agents from treating accidental ERPNext copy as authoritative.
+
+**Operational impact:** Agents may read the Odoo directory when business details are needed, but must not modify it from this ERPNext project. When customer-facing copy, policies, product/service claims, or business positioning matter, prefer the Odoo business-detail source over app-build prose. Verify implementation behavior in ERPNext separately; Odoo is business truth, not current app-state truth.
+
+**Decided by:** GL clarified the source boundary during the take-live coordination pass; implemented by Codex.
+
+---
+
+## 2026-05-02 - Documentation ownership moves to queue plus workstreams
+
+**Decision:** Full parity across `HANDOFF.md`, `PROJECT-STATUS.md`, and `locally-twisted-queue.md` is no longer the operating goal. The project will use single ownership by kind of truth:
+
+- `AGENTS.md` - project rules, source routing, and verification rules.
+- `locally-twisted-queue.md` - active work lanes only.
+- `workstreams/<feature>.md` - feature-specific current state and multi-handoff coordination.
+- `locally-twisted-decisions.md` - durable decisions and why they were made.
+- `CODING-HANDOFF.md` - compact technical bootstrap for a new coding agent.
+- `HANDOFF.md` and `PROJECT-STATUS.md` - legacy whole-project surfaces, kept as historical/contextual references until deliberately retired or extracted.
+
+**Reasoning:** Multiple instances can work in the repo at the same time, and the project has too many facets for a single monolithic status file to stay current. Trying to keep every doc in full parity creates stale authority and wastes effort. A feature-lane model makes parity possible inside each workstream without forcing every global file to restate the same facts.
+
+**Operational impact:** Do not rewrite old global handoff/status files to chase complete parity. Update the one file that owns the fact: queue for active lanes, workstream file for feature state, decisions log for durable reasoning, and `CODING-HANDOFF.md` for compact technical startup. If a legacy file is useful, add a short pointer/banner rather than duplicating live state.
+
+**Alternatives considered:** Keep `PROJECT-STATUS.md` as the active README/status/handoff hybrid; rejected because it is already part current map, part historical receipt, and part stale project detail. Delete `PROJECT-STATUS.md` or `HANDOFF.md` immediately; rejected because they still contain useful historical receipts. Future cleanup can extract stable architecture into a smaller `PROJECT-MAP.md` if needed.
+
+**Decided by:** GL approved the documentation architecture pivot; implemented by Codex.
+
+---
+
 ## 2026-05-01 - Public service selections populate Lead `custom_event_type`
 
 **Decision:** Website inquiry submissions populate the Lead `custom_event_type` Table MultiSelect child rows, not only text notes. `custom_event_type` is the backend source of truth for selected services because Lead Desk conditional sections depend on those child rows.
@@ -149,6 +236,8 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 ---
 
 ## 2026-05-01 - Root shop browse routes alias to `/shop-by-category`
+
+**Superseded 2026-05-02:** `/shop` is now the all-decor hub and `/shop-by-category` is a compatibility redirect to `/shop`. Keep this entry as historical context only; do not use it as current routing guidance.
 
 **Decision:** `/shop-items` and `/all-products` route to `/shop-by-category`. The far-left primary nav label is `Shop Balloon Decor`, and its "All Balloon Decor" CTA also uses `/shop-by-category`.
 
@@ -383,6 +472,8 @@ The CSS-hide is `display: none !important` — the only such chain we kept. It's
 ---
 
 ## 2026-04-30 — Variant selectors render INLINE, not behind a dialog
+
+**Superseded implementation detail 2026-05-02:** inline selectors remain, but the template no longer performs per-attribute `frappe.get_all` calls from Jinja. It now uses `get_variant_attribute_options`, consumes `valid_options_for_attributes` for progressive disabling, and renders single-select options as radio controls rather than checkbox inputs.
 
 **Decision:** Override webshop's `item_configure.html` to render attribute selectors inline (chips for ≤8 values, dropdown for 9+) via Jinja iteration over `doc.attributes` × `frappe.get_all("Item Attribute Value", parent=<attr>)`. JS validates selection via `webshop.webshop.variant_selector.utils.get_next_attribute_and_values` and updates Add-to-Cart with the matched variant + price.
 

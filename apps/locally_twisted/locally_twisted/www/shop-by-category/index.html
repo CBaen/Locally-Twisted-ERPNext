@@ -1,67 +1,16 @@
-{# Locally Twisted /shop-by-category override.
-   Replaces apps/webshop/webshop/www/shop-by-category/index.html.
-
-   LT register: hero with eyebrow + DM Serif headline + lede, blush band,
-   3-column card grid (responsive), each card linking to /<route> for that
-   Item Group. Mobile: 1 column.
-#}
+{# Fallback template only. The controller redirects /shop-by-category to /shop. #}
 {% extends "templates/web.html" %}
 
-{% block title %}{{ _("Shop by Category") }} | Locally Twisted{% endblock %}
+{% block title %}{{ _("All Balloon Decor") }} | Locally Twisted{% endblock %}
 
 {% block page_content %}
 <section class="lt-fullbleed lt-by-cat__hero">
     <div class="lt-by-cat__hero-inner">
-        <p class="lt-by-cat__eyebrow">{{ _("BROWSE") }}</p>
-        <h1 class="lt-by-cat__title">{{ _("Everything we make.") }}</h1>
+        <p class="lt-by-cat__eyebrow">{{ _("SHOP") }}</p>
+        <h1 class="lt-by-cat__title">{{ _("All Balloon Decor") }}</h1>
         <p class="lt-by-cat__lede">
-            {{ _("Pick a category to see what's in it. For something custom — a different scale, a specific palette, an unusual venue —") }}
-            <a href="/contact">{{ _("start a conversation.") }}</a>
+            <a href="/shop">{{ _("Continue to all balloon decor.") }}</a>
         </p>
     </div>
 </section>
-
-<div class="lt-fullbleed lt-by-cat__band"></div>
-
-<section class="lt-by-cat__grid-wrap">
-    <div class="lt-by-cat__grid">
-        {% for cat in shop_categories %}
-            <a href="/{{ cat.route }}" class="lt-by-cat__card">
-                <div class="lt-by-cat__card-image">
-                    {% if cat.image %}
-                        <img src="{{ cat.image }}" alt="{{ cat.item_group_name or cat.name }}" loading="lazy">
-                    {% else %}
-                        {# Placeholder block: blush-tint ground with the first letter,
-                           in DM Serif Display. Avoids broken-image icon. #}
-                        <div class="lt-by-cat__card-placeholder">
-                            {{ (cat.item_group_name or cat.name)[:1] | upper }}
-                        </div>
-                    {% endif %}
-                </div>
-                <div class="lt-by-cat__card-body">
-                    <h2 class="lt-by-cat__card-title">{{ cat.item_group_name or cat.name }}</h2>
-                    <p class="lt-by-cat__card-count">
-                        {% if cat.product_count == 1 %}
-                            {{ cat.product_count }} {{ _("item") }}
-                        {% else %}
-                            {{ cat.product_count }} {{ _("items") }}
-                        {% endif %}
-                    </p>
-                </div>
-            </a>
-        {% endfor %}
-    </div>
-</section>
-
-<section class="lt-fullbleed lt-by-cat__cta-band">
-    <div class="lt-by-cat__cta-inner">
-        <p class="lt-by-cat__cta-eyebrow">{{ _("FOR SOMETHING LARGER") }}</p>
-        <h2 class="lt-by-cat__cta-title">{{ _("Custom decor starts with a conversation, not a cart.") }}</h2>
-        <div class="lt-by-cat__cta-actions">
-            <a href="/portfolio" class="lt-by-cat__cta-btn lt-by-cat__cta-btn--secondary">{{ _("See the portfolio") }}</a>
-            <a href="/contact" class="lt-by-cat__cta-btn lt-by-cat__cta-btn--primary">{{ _("Tell us what you're imagining") }}</a>
-        </div>
-    </div>
-</section>
-
 {% endblock %}

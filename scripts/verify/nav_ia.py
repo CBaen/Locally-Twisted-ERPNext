@@ -12,6 +12,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 NAVBAR = ROOT / "apps/locally_twisted/locally_twisted/templates/includes/navbar/navbar.html"
+FOOTER = ROOT / "apps/locally_twisted/locally_twisted/templates/includes/footer/footer.html"
 CONTEXT = ROOT / "apps/locally_twisted/locally_twisted/navbar_context.py"
 
 
@@ -24,7 +25,7 @@ def _line_index(text: str, needle: str) -> int:
 
 def test_desktop_nav_order(navbar: str) -> None:
     expected = [
-        "Shop Balloon Decor",
+        "Balloon Decor",
         "Plan by Occasion",
         "Balloon Twisting &amp; Face Painting",
         "/faq",
@@ -33,7 +34,7 @@ def test_desktop_nav_order(navbar: str) -> None:
     positions = [_line_index(navbar, needle) for needle in expected]
     if positions != sorted(positions):
         raise AssertionError(
-            "Primary nav order must be Shop Balloon Decor, Plan by Occasion, "
+            "Primary nav order must be Balloon Decor, Plan by Occasion, "
             "Balloon Twisting & Face Painting, FAQ, Blog"
         )
 
@@ -48,6 +49,12 @@ def test_nav_does_not_link_to_retired_book_route(navbar: str, context: str) -> N
     combined = f"{navbar}\n{context}"
     if 'href="/book"' in combined or '"route": "book?' in combined:
         raise AssertionError("Navigation must use /contact, not retired /book links")
+
+
+def test_nav_does_not_link_to_retired_category_index(navbar: str, footer: str, context: str) -> None:
+    combined = f"{navbar}\n{footer}\n{context}"
+    if "shop-by-category" in combined:
+        raise AssertionError("Header/footer navigation must use /shop, not retired /shop-by-category links")
 
 
 def test_context_exports_real_menu_groups(context: str) -> None:
@@ -78,10 +85,12 @@ def test_occasion_menu_links_to_product_discovery(context: str) -> None:
 
 def main() -> None:
     navbar = NAVBAR.read_text(encoding="utf-8")
+    footer = FOOTER.read_text(encoding="utf-8")
     context = CONTEXT.read_text(encoding="utf-8")
     test_desktop_nav_order(navbar)
     test_no_duplicate_contact_in_mobile_drawer(navbar)
     test_nav_does_not_link_to_retired_book_route(navbar, context)
+    test_nav_does_not_link_to_retired_category_index(navbar, footer, context)
     test_context_exports_real_menu_groups(context)
     test_occasion_menu_links_to_product_discovery(context)
     print("Nav IA checks passed")

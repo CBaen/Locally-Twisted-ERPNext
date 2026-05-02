@@ -20,6 +20,10 @@ The smallest reusable units. One tool, one command, one MCP server, or a thin co
 
 Workflows. Multi-step. Clear start and finish.
 
+- [claude-reference-library](recipes/claude-reference-library.md) - safely consult older Claude skills/rules as reference material without treating them as truth or copying them wholesale.
+- [erpnext-simplified-role-verification](recipes/erpnext-simplified-role-verification.md) - verify a simplified ERPNext backend role from login through workspace, shortcuts, permissions, and real records.
+- [take-live-coordinated-workflows](recipes/take-live-coordinated-workflows.md) - coordinate multi-agent launch lanes with controller ownership, review gates, and release verification.
+
 - [visual-debugging](recipes/visual-debugging.md) — see what the user sees without asking them to describe it.
 - [deploy-static-site-to-cloudflare](recipes/deploy-static-site-to-cloudflare.md) — get a Hugo/Astro/Next-static site live on a custom domain.
 

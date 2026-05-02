@@ -21,14 +21,14 @@ Build pattern for every new portal page: the meal at `Built_by_Cameron/.claude/c
 | 4 | BTFP service page (with embedded pricing calculator) | DONE | `/balloon-twisting-and-face-painting` | Form-bearing; carries forward |
 | 5 | Contact page | DONE | `/contact` | Form-bearing; AJAX → Lead + Communication |
 | 6a | Accessibility statement | DONE | `/accessibility` | Static portal page |
-| **3** | **Homepage (lookbook-forward)** | TODO | `/` | The demo-to-Jeff page |
-| **7** | **Lookbook** | TODO | `/lookbook` | Full portfolio, organized by event type |
+| **3** | **Homepage (lookbook-forward)** | DONE | `/` | The demo-to-Jeff page |
+| **7** | **Lookbook** | DONE | `/lookbook` | Full portfolio, organized by event type |
 | **8** | **Service category pages** | TODO | `/services/<event-type>` (×5) | Corporate, Weddings, Birthdays, Schools, Seasonal |
 | **9** | **Color Chart** | TODO | `/color-chart` | Static reference page |
-| **10** | **`/book` form page** | TODO | `/book` | Primary inquiry conversion form (45-field Lead schema) |
-| **11** | **Small Shop browse + detail** | TODO | `/shop` (webshop default routes) | Sub-$200 themed bouquets + gift items |
-| **12** | **Cart + checkout shell** | TODO | webshop default routes | Stripe stubbed until Phase 4 |
-| **13** | **Refund Policy + FAQ pages** | TODO | `/refund-policy`, `/faq` | Small static portal pages |
+| **10** | **`/book` form page** | RETIRED | `/book` -> `/contact?intent=quick` | `/contact` is the primary inquiry route; `/book` redirects only |
+| **11** | **Small Shop browse + detail** | DONE | `/shop` (webshop default routes) | Sub-$200 themed bouquets + gift items |
+| **12** | **Cart + checkout shell** | DONE | webshop default routes | Stripe Checkout Sessions live in test mode |
+| **13** | **Refund Policy + FAQ pages** | DONE | `/refund-policy`, `/faq` | Small static portal pages |
 | **14** | **Blog framework + 2-3 posts** | TODO (deferrable) | `/blog/...` | "Kindergarten Teacher" voice |
 
 ## What changed from the prior PLAN.md (2026-04-26 morning version)
@@ -38,7 +38,7 @@ The prior plan had Slices 7–9 as "Products listing / Individual product pages 
 - The old "Products listing" page becomes the **Lookbook** (Slice 7) — visual portfolio organized by event type, not a product catalog.
 - The old "Individual product pages" become the **Service category pages** (Slice 8) — depth by what LT *makes* (decor for corporate / weddings / etc.), not by SKU. These are inquiry-bound, not cart-bound.
 - The **small shop** lives at the same webshop URL (`/shop`) but is a deliberate sidebar — sub-$200 pre-configured items only. Configurator UI is explicitly out of scope.
-- The **`/book` form** moves up from Phase 2 because the lookbook-forward shape makes it the primary conversion surface; the inquiry CTAs across the site need a destination that exists.
+- The **`/book` form** was later retired as a standalone customer surface; `/contact` is the primary inquiry path and `/book` redirects to `/contact?intent=quick`.
 - Phase 2 reframes from "build /book" to "form-handling depth" (dedup, ack email, loud-failure audit, monitor alerts).
 
 ## Slice 3 — Homepage (lookbook-forward)

@@ -2,6 +2,8 @@
 
 This is the agent-neutral entrypoint for Codex / ChatGPT / other coding agents working in this repo.
 
+This project inherits the machine-wide Guiding Light Codex communication protocol from `C:\Users\baenb\AGENTS.md` and the global Codex framework. Use that protocol for communication, tangent handling, plain-language explanations, verification discipline, and deciding what to ask Guiding Light versus what the agent should own.
+
 Do not treat old handoff files as truth. Treat them as claims, then verify important facts against git, files, and the running ERPNext database before relying on them.
 
 ## Project Reality
@@ -12,6 +14,7 @@ Do not treat old handoff files as truth. Treat them as claims, then verify impor
 - "Fresh install" — destination is greenfield ERPNext; no auto-translated Odoo modules or DB dumps.
 - "Migration" — catalog records, form intent, policies, voice/brand were carried across from the prior Odoo attempt and the legacy `locallytwisted.com` site, and the new storefront replaces `locallytwisted.com` at cutover.
 - The failed Odoo test deployment is reference material only. It never served customers.
+- `C:\Users\baenb\projects\locally-twisted-odoo\` is the separate source of truth for Locally Twisted business details. Treat customer-facing business claims, policy terms, product/service details, voice, and legacy decisions inside this ERPNext repo/site as suspect unless traced back to the Odoo business-detail folder or GL/legal approval.
 - The live Odoo test shop at `http://5.78.136.133/shop` was the catalog source/reference for the 2026-04-30 catalog port.
 - Do not modify `C:\Users\baenb\projects\locally-twisted-odoo\` from this project.
 
@@ -64,6 +67,15 @@ If another app is installed, re-set `installed_apps` so LT template overrides st
 
 Claude-era files such as `CLAUDE.md`, `HANDOFF.md`, and `PROJECT-STATUS.md` may contain useful operational history, but they are not authoritative unless verified.
 
+## Multi-Handoff Framing
+
+This project supports multi-agent / multi-handoff work. Active handoffs should be organized by the feature or customer-facing outcome being worked on, not by generic frontend/backend ownership.
+
+- Use the queue for active work selection.
+- Use feature-specific `workstreams/<feature-slug>.md` files for live coordination when multiple agents are active on different slices.
+- Treat `PROJECT-STATUS.md` as a broad project map only when it is current. Do not treat it as the active source of truth by default.
+- Treat `HANDOFF.md` as still valid reference guidance, not the only active handoff surface. Read it for context, then verify against the current feature lane, git state, files, and the running ERPNext site before acting.
+
 ## Capabilities
 
 Project-level Codex capability docs live at `.codex/capabilities/INDEX.md`.
@@ -71,6 +83,8 @@ Project-level Codex capability docs live at `.codex/capabilities/INDEX.md`.
 Read the index when a task depends on local tools, reusable workflows, project-specific operating knowledge, or prior lessons. Then open only the specific capability files needed for the current task.
 
 Treat `last_verified` dates older than about 90 days as stale until rechecked.
+
+Older Claude skills and rules under `C:\Users\baenb\.claude\` are a read-only reference library, not project truth. The useful entrypoints are `C:\Users\baenb\.claude\skills\README.md`, specific `SKILL.md` files, and `C:\Users\baenb\.claude\rules\reach-paths.md`. For Frappe/ERPNext launch work, especially consider the older `frappe-payment-safety`, `frappe-form-integrity`, `frappe-fixture-discipline`, `frappe-migration-guard`, and `frappe-deploy-safety` skills as checklists for what to verify. Do not read secrets, runtime state, logs, caches, sessions, or token files there, and do not copy Claude-era files wholesale into this repo.
 
 ## Frappe / ERPNext Rules
 
@@ -83,6 +97,7 @@ Work within Frappe and ERPNext.
 - Avoid `head_html` CSS injection and avoid `!important` chains. The known exception is the contained `.product-code` hide for Webshop's compiled product-card JS.
 - After Jinja/CSS/Web Page edits, run `python scripts/dev/clear_website_cache.py`.
 - Before declaring visual work done, verify with browser screenshots at desktop and mobile widths.
+- Browser verification is repo-local. `playwright.config.js` prefers installed Chrome/Edge on Windows when Playwright's bundled Chromium is missing. Use `npm run test:layout-fit` for public layout checks and `npm run test:desk-owner` with `LT_DESK_TEST_USER` / `LT_DESK_TEST_PASSWORD` for the owner Desk route check.
 
 ## Voice And UI Language
 

@@ -26,7 +26,7 @@ app_license = "mit"
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/locally_twisted/css/locally_twisted.css"
-# app_include_js = "/assets/locally_twisted/js/locally_twisted.js"
+app_include_js = "/assets/locally_twisted/js/lt-desk-workspace-router.js?v=20260502-2"
 
 # include js, css files in header of web template
 # Brand foundation theme — sourced at apps/locally_twisted/locally_twisted/public/css/lt-theme.css
@@ -41,7 +41,7 @@ app_license = "mit"
 # Receipt: 2026-04-29 — drawer overlay edit shipped server-side but old
 # CSS stayed cached in GL's browser; drawer rendered inline on every page
 # because the cached rules didn't have `position: fixed`.
-web_include_css = "/assets/locally_twisted/css/lt-theme.css?v=20260501-5"
+web_include_css = "/assets/locally_twisted/css/lt-theme.css?v=20260502-3"
 
 # Guest cart engine — overrides webshop's broken-for-guest cart functions
 # at runtime, exposes window.LT_CART, and keeps cart count badges live.
@@ -90,12 +90,12 @@ website_route_rules = [
     # at /contactus throughout the navbar. Redirect to our /contact.
     {"from_route": "/contactus",
      "to_route": "contact"},
-    # ERPNext's root Item Group page is too thin for customers; send root
-    # browse traffic to LT's category landing page instead.
+    # ERPNext's root Item Group page and the old all-products alias are too
+    # thin for customers; send root browse traffic to LT's full shop instead.
     {"from_route": "/shop-items",
-     "to_route": "shop-by-category"},
+     "to_route": "shop"},
     {"from_route": "/all-products",
-     "to_route": "shop-by-category"},
+     "to_route": "shop"},
 ]
 
 # ---------------------------------------------------------------
@@ -226,10 +226,9 @@ fixtures = [
 # ----------
 
 # add methods and filters to jinja environment
-# jinja = {
-# 	"methods": "locally_twisted.utils.jinja_methods",
-# 	"filters": "locally_twisted.utils.jinja_filters"
-# }
+jinja = {
+    "methods": ["locally_twisted.product_options"],
+}
 
 # Installation
 # ------------

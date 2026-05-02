@@ -171,6 +171,14 @@
         return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
     }
 
+    function optionSummary(server) {
+        var options = server && Array.isArray(server.variant_options) ? server.variant_options : [];
+        if (!options.length) return '';
+        return options.map(function (opt) {
+            return opt.attribute + ': ' + opt.attribute_value;
+        }).join(' - ');
+    }
+
     /* Safe DOM-construction helper — same pattern as /cart page. Avoids
      * innerHTML so user-controlled strings can't escape the markup. */
     function el(tag, opts, children) {
@@ -305,6 +313,11 @@
             var name = el('p', { 'class': 'lt-checkout__line-name', text: server.web_item_name || server.item_code });
             var meta = el('p', { 'class': 'lt-checkout__line-meta',
                                  text: 'Qty ' + line.qty + ' · ' + fmtMoney(server.price_list_rate) + ' each' });
+            var metaParts = ['Qty ' + line.qty];
+            var optionsText = optionSummary(server);
+            if (optionsText) metaParts.push(optionsText);
+            metaParts.push(fmtMoney(server.price_list_rate) + ' each');
+            meta.textContent = metaParts.join(' - ');
             var body = el('div', { 'class': 'lt-checkout__line-body' }, [name, meta]);
             var amount = el('p', { 'class': 'lt-checkout__line-amount', text: fmtMoney(lineTotal) });
             sumLines.appendChild(el('div', { 'class': 'lt-checkout__line' }, [img, body, amount]));

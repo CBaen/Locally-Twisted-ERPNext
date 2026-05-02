@@ -270,29 +270,18 @@ def get_context(context):
 
     if item_code:
         # Buy-now: server-render the single line.
-        website_item = frappe.db.get_value(
-            "Website Item",
-            {"item_code": item_code, "published": 1},
-            ["name", "item_code", "web_item_name", "website_image", "route"],
-            as_dict=True,
-        )
-        if not website_item:
+        from locally_twisted.api.cart import resolve_cart_item_for_sale
+
+        cart_item = resolve_cart_item_for_sale(item_code, raise_on_missing=False)
+        if not cart_item:
             raise frappe.PageDoesNotExistError(_("Item not found."))
 
-        item_price = frappe.db.get_value(
-            "Item Price",
-            {"item_code": item_code, "price_list": PRICE_LIST},
-            ["price_list_rate"],
-        )
-        if not item_price:
-            frappe.throw(_("This item doesn't have a price set."), frappe.ValidationError)
-
         context.mode = "buy_now"
-        context.title = f"Checkout — {website_item.web_item_name} | Locally Twisted"
-        context.item = website_item
+        context.title = f"Checkout - {cart_item['web_item_name']} | Locally Twisted"
+        context.item = frappe._dict(cart_item)
         context.qty = qty
-        context.unit_price = flt(item_price)
-        context.line_total = flt(item_price) * qty
+        context.unit_price = flt(cart_item["price_list_rate"])
+        context.line_total = flt(cart_item["price_list_rate"]) * qty
     else:
         # Cart mode: empty shell, JS hydrates from localStorage.
         context.mode = "cart"
@@ -398,32 +387,20 @@ def submit_guest_order(item_code="", qty=1, items_json="",
     # sent. Unpublished or unpriced items abort the order — the cart UI
     # already prunes those at /cart load, so reaching here means the
     # state changed between cart load and submit (rare, but possible).
+    from locally_twisted.api.cart import resolve_cart_item_for_sale
+
     so_line_items = []
     for line in cart_items:
-        wi = frappe.db.get_value(
-            "Website Item",
-            {"item_code": line["item_code"], "published": 1},
-            ["item_code", "web_item_name"], as_dict=True,
-        )
-        if not wi:
+        resolved = resolve_cart_item_for_sale(line["item_code"], raise_on_missing=False)
+        if not resolved:
             frappe.throw(
                 _("'{0}' is no longer available. Please remove it and try again.").format(line["item_code"]),
                 frappe.ValidationError,
             )
-        rate = frappe.db.get_value(
-            "Item Price",
-            {"item_code": line["item_code"], "price_list": PRICE_LIST},
-            ["price_list_rate"],
-        )
-        if not rate:
-            frappe.throw(
-                _("'{0}' doesn't have a price right now. Please remove it and try again.").format(line["item_code"]),
-                frappe.ValidationError,
-            )
         so_line_items.append({
-            "item_code": line["item_code"],
+            "item_code": resolved["item_code"],
             "qty": int(line["qty"]),
-            "rate": flt(rate),
+            "rate": flt(resolved["price_list_rate"]),
         })
 
     safe_name = escape_html(name)

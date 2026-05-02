@@ -68,6 +68,9 @@ scripts/verify/_edge-profile*/
 _resources/webshop-redesign-verify/
 output/
 
+# Local Superpowers visual companion sessions.
+.superpowers/
+
 # Generated local audit/mirror payloads. Keep committed reports/inventories and
 # capture scripts, but do not track bulky re-creatable HTML/assets/screenshots.
 _resources/a11y-audit-2026-04-30/*.json

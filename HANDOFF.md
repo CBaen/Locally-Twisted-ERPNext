@@ -1,12 +1,20 @@
 # HANDOFF — Locally Twisted
 
-**Last updated:** 2026-05-01 (Codex - backend Lead/CRM intake parity sync)
+> **Deprecated for active coordination as of 2026-05-02.** This file is now a legacy whole-project handoff/context record, not the active coordination surface. For current work, use `locally-twisted-queue.md` for active lanes, `workstreams/<feature>.md` for feature-specific handoffs, `locally-twisted-decisions.md` for durable decisions, and `CODING-HANDOFF.md` for compact technical startup. Do not try to force this file into full parity with every active workstream.
+
+**Last updated:** 2026-05-02 (Codex - shop hub routing cleanup)
 
 Overwrite-not-append. Git is the changelog. Read this first; everything else as needed. **Audience: peer Opus 4.7 instance.** Read like I'd want to read before substantive work.
 
 ---
 
 ## State of the world (the load-bearing facts)
+
+**Current-session delta (2026-05-02):**
+- `/shop` is now the all-decor hub. Header, mobile drawer, footer, `/shop-items`, and `/all-products` send broad browse traffic to `/shop`.
+- `/shop-by-category` is retired as a customer-facing category-card page and redirects to `/shop` for compatibility. Do not rebuild the old placeholder-card index for launch.
+- Primary nav order is now `Balloon Decor`, `Plan by Occasion`, `Balloon Twisting & Face Painting`, `FAQ`, `Blog`, search. `Balloon Decor` stays far-left.
+- `scripts/verify/smoke_shop.py` now verifies the `/shop-by-category` redirect and desktop/mobile `All Balloon Decor` links to `/shop`.
 
 **Current-session delta (2026-05-01):**
 - `/contact` is the canonical inquiry form and now carries the revised service taxonomy: Balloon Decor, Balloon Twisting, Face Painting, Delivery, Pickup, Events Inquiry, Something Else.
@@ -19,12 +27,12 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 - Pickup has its own panel and points customers to the location information below the form. The Riverdale badge now reads `Northern Utah Location (Residential Address)`.
 - Backend Lead/CRM parity is synced for the revised intake taxonomy. `LT Service Type` now has `Delivery`, `Pickup`, and `Events Inquiry`; stale `Delivery Only` / `Event Package` records are gone; Lead Custom Field labels/depends_on logic match the public form; website submissions populate the Desk Table MultiSelect `custom_event_type`.
 - Header/footer IA has been corrected against current routes: `What We Make`, `About Us`, and `Book an Event` are removed. `All Products` remains.
-- Primary nav order is now `Shop Balloon Decor`, `Plan by Occasion`, `Balloon Twisting & Face Painting`, `FAQ`, `Blog`, search. `Shop Balloon Decor` stays far-left.
+- Primary nav order was `Shop Balloon Decor`; superseded 2026-05-02 by `Balloon Decor`.
 - Top utility bar keeps the only `Contact Us` CTA. No lower-nav Contact duplicate and no mobile-drawer Contact duplicate.
 - `Plan by Occasion` routes to product/category pages, not `/contact?occasion=...` shortcuts. Verified current links: Birthday Deliveries, Baby Shower Garland, Graduation Grab n Go, Get-Well Bouquets, Large head Missionary, Garlands, Easter Arch, Logo 3 layered bouquet, Basketball Arch, Seasonal & Specialty.
 - No Gallery link in current nav.
 - `/book` is retired as a customer-facing page and redirects to `/contact?intent=quick`; CTAs now use `/contact`.
-- `/shop-items` and `/all-products` alias to `/shop-by-category` because the root Item Group page is too thin.
+- `/shop-items` and `/all-products` previously aliased to `/shop-by-category`; superseded 2026-05-02. They now route to `/shop`.
 - `/privacy` and `/terms-of-service` now exist and return HTTP 200 locally. Treat as plain-language drafts for Stripe readiness; Dashboard wiring/legal approval still separate.
 - `scripts/verify/layout_fit.spec.js` is restored and verified. Latest command: `npm run test:layout-fit` -> 60 passed after the gate caught and Codex fixed `.lt-contact__icon` text overflow on `/contact`.
 - Playwright is installed as Node/CLI tooling in npm's npx cache, not as Python `playwright` for `C:\Python314\python.exe`. Working direct CLI path: `C:\Users\baenb\AppData\Local\npm-cache\_npx\420ff84f11983ee5\node_modules\.bin\playwright.cmd` (v1.59.1).
@@ -35,6 +43,13 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 - `/shop-items/arches` returning non-arches was a real bug, but not a catalog-data bug. Root cause was the custom Item Group wrapper missing Webshop's `.item-group-content` class. Restoring that contract makes Arches scope correctly.
 - Listing cards now surface `lt_brand_description` through `locally_twisted.api.product_listing.get_product_filter_data`, registered via `override_whitelisted_methods`.
 - Generated verification screenshots/browser profiles are not source; `.gitignore` now excludes the local QA output paths.
+
+**Completed after the 2026-05-01 handoff, before the next handoff pivot:**
+- Balloon render direction moved from idea to showable pilot artifacts. Completed commits: `67ff66a` render bible spec, `8db6acc` pilot prompt pack, `e18d545` first pilot drafts, `b708511` revised classic-arch direction.
+- Showable pilot sheet lives at `_resources/generated-renders/pilot/pilot-contact-sheet.png`; review notes live at `_resources/generated-renders/pilot/README.md`.
+- The render pilot plan at `docs/superpowers/plans/2026-05-01-balloon-render-pilot.md` now marks Tasks 1-2 complete. Task 3, ERPNext media import/mapping, remains intentionally unchecked and unbuilt.
+- GL review feedback is captured: the column is closest; organic garland is possible but not assumed approved; the first arch drafts were rejected/misaligned; classic arch scale changes span/opening, not default density. Dense rainbow/multi-row arch work is custom/high-density, not the default `classic-arch` product.
+- No generated pilot images have been attached to ERPNext products or Website Items.
 
 **1. The frame is now "migration."** Earlier today I parroted the prior reframe ("new build, not a migration") and GL stopped me cold: *"it is a migration, not a new build."* Project frame is **migration of business intent + catalog data into a fresh ERPNext install**. The 2026-04-26 reframe is superseded. Internal docs use migration framing freely; Jeff-disclosure stealth survives as a separate constraint (he doesn't yet know the prior Odoo attempt failed in testing). All docs updated. See `locally-twisted-decisions.md` 2026-04-30 frame entry.
 
@@ -79,7 +94,7 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 | `/contactus` → `/contact` redirect | Live |
 | `/contact` | Primary customer inquiry form with stackable service taxonomy, guided prefill, Events Inquiry package path, Pickup, and service-specific conditional fields |
 | `/balloon-twisting-and-face-painting` | Contact-led service page refreshed from Hetzner source; CTAs use guided `/contact?service=...` links |
-| `/shop-items` + `/all-products` | Alias to `/shop-by-category` |
+| `/shop-items` + `/all-products` | Route to `/shop` |
 | `Plan by Occasion` | Product/category links only; no contact shortcuts |
 | `/privacy` + `/terms-of-service` | Static policy routes live; Stripe Dashboard wiring still pending |
 | Shop catalog | Same 53 Website Items / 10,578 variants / 10,613 Item Prices from yesterday |
@@ -95,23 +110,24 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 3. `/blog` channel + posts (use Frappe's NATIVE `Blog Post` DocType, not custom — plan-deepen caught my mistake of planning a custom one). Two posts to port verbatim from mirror.
 4. Webshop `/shop` layout overhaul
 5. Webshop product detail layout overhaul
-6. Webshop category landing layout overhaul
+6. Webshop category detail page layout overhaul (`/shop-items/<group>`)
 
 No Gallery for now per GL 2026-05-01.
 
 Each page: read mirror source → build Frappe controller + template → atomic commit → audit screenshot. Faster than chrome because lower interdependency.
 
-**P0 — 5 latent webshop bugs** (caught by SecOps reviewer, parked for Phase 2 since they touch the same files):
-- Variant items grid "Add to cart" calls `LT_CART.add(templateCode)` — template codes not purchasable (functional bug)
-- Configure form calls `webshop.webshop.shopping_cart.update_cart` for variants — redirects guests to login (split-cart inconsistency)
-- `frappe.get_all` inside Jinja in `item_configure.html` — DB hit per render
-- `valid_options_for_attributes` not consumed (combination errors only show after all attributes selected; Hetzner pre-disables invalid combos)
+**P0 — Webshop behavior bugs resolved 2026-05-02.**
+- `/shop` no longer adds unpriced variant template codes; variant-template cards go to "Choose options" and single-SKU cards can still add directly.
+- Configured variants add the actual sellable variant code to the guest cart instead of using Webshop's logged-in cart path.
+- `item_configure.html` no longer runs per-attribute `frappe.get_all` lookups from Jinja; it uses the project Jinja helper `get_variant_attribute_options`.
+- Partial option selections now consume `valid_options_for_attributes` and disable invalid later choices.
+- Verification receipts: `python scripts/verify/smoke_shop.py`, `python scripts/verify/cart_checkout_contract.py`, `python scripts/verify/variant_media_contract.py`, and `python scripts/verify/catalog_variant_contract.py`.
 
-**P0 — Per-product variant correctness diff.** For each of 53 products, parse Hetzner's `data-attribute-exclusions` JSON from the mirror page and diff against ERPNext's variant set. Surfaces any data discrepancies from yesterday's catalog port. Plan section in `MIRROR-REBUILD-PLAN.md`.
+**P0 — Per-product variant correctness diff resolved 2026-05-02.** `scripts/verify/catalog_variant_contract.py` compares normalized `_resources/odoo-live/catalog.json` `valid_variants` to live ERPNext `Item Variant Attribute` rows. Latest result: 53 products checked, 10,578 expected variants, 10,578 live variants, 4 single-SKU products, PASS.
 
 **P1 — Newsletter X-Forwarded-For strip at nginx layer (Option B).** Option A (email-keyed rate limit on newsletter) shipped this session. Option B would protect `/contact`, `/checkout`, `/balloon-twisting-and-face-painting` too — they all use IP-based rate limit and share the same vulnerability. Ops/infra task.
 
-**P2 — Real photos for `/shop-by-category`.** Each Item Group has empty `image` field; cards show letter placeholders.
+**P2 — Category browse imagery.** Each Item Group has empty `image` field. Use representative images for category detail pages or a future image-rich mega menu; do not revive the retired `/shop-by-category` card index for launch.
 
 ## Operational rituals
 

@@ -49,7 +49,7 @@ Recent decisions (full reasoned log in `locally-twisted-decisions.md`):
 - 2026-04-27: Bouquets added as 6th customizable category for the future Design Studio
 - 2026-04-27: Reviews carousel chosen over expanded client logo crawl as primary social proof
 - 2026-04-27: Twisting & Face Painting moved to bottom of homepage (de-emphasized strategically)
-- 2026-04-27: `/book` moved from Phase 2 → Phase 1 (Slice 10); Phase 2 reframed to "form-handling depth"
+- 2026-04-27: `/book` moved from Phase 2 → Phase 1 (Slice 10); later retired 2026-05-01 in favor of `/contact` as the primary inquiry route
 - 2026-04-27: About page deferred until Jeff is ready
 - 2026-04-27: Site shape locked — lookbook-forward + small shop sidebar; future Design Studio for customizable categories
 - 2026-04-26 (later): Platform direction RESOLVED — stay Frappe-native (decided by demonstration after 4 surfaces shipped)
@@ -57,16 +57,19 @@ Recent decisions (full reasoned log in `locally-twisted-decisions.md`):
 
 ### Pending Todos
 
-Phase 1 remaining slices (in priority order):
+Phase 1 remaining slices, reconciled 2026-05-02:
 
-- [P0] Slice 6b — Refund Policy + FAQ pages (small static portal pages, ~15-30 min each)
-- [P0] Slice 7 — Lookbook (`/lookbook`, full portfolio organized by event type)
 - [P0] Slice 8 — Service category pages (×5: Corporate, Weddings, Birthdays, Schools, Seasonal)
 - [P0] Slice 9 — Color Chart (`/color-chart`, static reference for the 70 balloon colors)
-- [P0] Slice 10 — `/book` form page (45-field Lead schema, primary inquiry conversion)
-- [P1] Slice 11 — Small Shop browse + detail (sub-$300 pre-configured items only)
-- [P1] Slice 12 — Cart + checkout shell (Stripe stubbed until Phase 4)
-- [P2] Slice 13 — Blog framework + 2-3 first posts (replaces hero placeholder titles)
+- [P2] Blog framework + 2-3 first posts (replaces hero placeholder titles)
+
+Completed or retired since the original list:
+
+- Slice 6b — Refund Policy + FAQ pages: DONE
+- Slice 7 — Lookbook (`/lookbook`): DONE
+- Slice 10 — `/book` form page: RETIRED; `/contact` is the inquiry route and `/book` redirects to `/contact?intent=quick`
+- Slice 11 — Small Shop browse + detail: DONE
+- Slice 12 — Cart + checkout shell: DONE
 
 Future scope (post-Phase-1):
 - Design Studio — interactive picker for arches/columns/garlands/backdrops/drops/bouquets

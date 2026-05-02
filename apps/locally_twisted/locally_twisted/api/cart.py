@@ -28,6 +28,101 @@ MAX_CART_LINES = 50
 PRICE_LIST = "Standard Selling"
 
 
+def _variant_options(item_code):
+    rows = frappe.get_all(
+        "Item Variant Attribute",
+        filters={"parent": item_code},
+        fields=["attribute", "attribute_value"],
+        order_by="idx asc",
+    )
+    return [
+        {
+            "attribute": row.get("attribute"),
+            "attribute_value": row.get("attribute_value"),
+        }
+        for row in rows
+        if row.get("attribute") and row.get("attribute_value")
+    ]
+
+
+def _missing_message(reason):
+    if reason == "choose_options":
+        return _("Please choose this item's options before adding it to cart.")
+    if reason == "unpriced":
+        return _("This item doesn't have a price right now. Please remove it and try again.")
+    return _("This item is no longer available. Please remove it and try again.")
+
+
+def _resolve_cart_item_for_sale(item_code):
+    """Resolve one client-provided item code into a purchasable cart line.
+
+    Variants are the sellable Item rows, but only the template usually has a
+    Website Item record. Resolve display fields from the parent Website Item
+    while preserving the variant item_code for pricing and Sales Order lines.
+    """
+    item_code = (item_code or "").strip()
+    if not item_code:
+        return None, "unavailable"
+
+    item = frappe.db.get_value(
+        "Item",
+        {"item_code": item_code, "disabled": 0},
+        ["item_code", "item_name", "variant_of", "has_variants", "image"],
+        as_dict=True,
+    )
+    if not item:
+        return None, "unavailable"
+
+    if item.get("has_variants"):
+        return None, "choose_options"
+
+    website_item_code = item.get("variant_of") or item["item_code"]
+    website_item = frappe.db.get_value(
+        "Website Item",
+        {"item_code": website_item_code, "published": 1},
+        [
+            "item_code",
+            "web_item_name",
+            "website_image",
+            "route",
+            "short_description",
+        ],
+        as_dict=True,
+    )
+    if not website_item:
+        return None, "unavailable"
+
+    rate = frappe.db.get_value(
+        "Item Price",
+        {"item_code": item["item_code"], "price_list": PRICE_LIST, "selling": 1},
+        ["price_list_rate"],
+    )
+    if not rate:
+        return None, "unpriced"
+
+    return {
+        "item_code": item["item_code"],
+        "website_item_code": website_item["item_code"],
+        "web_item_name": website_item.get("web_item_name") or item.get("item_name") or item["item_code"],
+        "website_image": item.get("image") or website_item.get("website_image") or None,
+        "route": website_item.get("route") or ("shop/" + website_item["item_code"]),
+        "short_description": website_item.get("short_description") or None,
+        "price_list_rate": flt(rate),
+        "available": True,
+        "is_variant": bool(item.get("variant_of")),
+        "variant_options": _variant_options(item["item_code"]) if item.get("variant_of") else [],
+    }, None
+
+
+def resolve_cart_item_for_sale(item_code, raise_on_missing=True):
+    """Return the server-trusted cart line for one purchasable Item code."""
+    resolved, reason = _resolve_cart_item_for_sale(item_code)
+    if resolved or not raise_on_missing:
+        return resolved
+
+    frappe.throw(_missing_message(reason), frappe.ValidationError)
+
+
 @frappe.whitelist(allow_guest=True)
 def get_cart_items(item_codes=None):
     """Return display details for a list of item_codes.
@@ -98,44 +193,13 @@ def get_cart_items(item_codes=None):
     if not clean_codes:
         return {"items": [], "missing": []}
 
-    # Fetch published Website Item rows for the requested codes.
-    rows = frappe.get_all(
-        "Website Item",
-        filters={"item_code": ("in", clean_codes), "published": 1},
-        fields=[
-            "item_code", "web_item_name", "website_image", "route",
-            "short_description",
-        ],
-    )
-    by_code = {r["item_code"]: r for r in rows}
-
-    # Look up prices in one shot.
-    price_rows = frappe.get_all(
-        "Item Price",
-        filters={"item_code": ("in", clean_codes), "price_list": PRICE_LIST},
-        fields=["item_code", "price_list_rate"],
-    )
-    prices = {p["item_code"]: flt(p["price_list_rate"]) for p in price_rows}
-
     items = []
     missing = []
     for code in clean_codes:
-        row = by_code.get(code)
+        row, reason = _resolve_cart_item_for_sale(code)
         if not row:
-            missing.append({"item_code": code, "reason": "unavailable"})
+            missing.append({"item_code": code, "reason": reason or "unavailable"})
             continue
-        rate = prices.get(code)
-        if not rate:
-            missing.append({"item_code": code, "reason": "unpriced"})
-            continue
-        items.append({
-            "item_code": row["item_code"],
-            "web_item_name": row.get("web_item_name") or row["item_code"],
-            "website_image": row.get("website_image") or None,
-            "route": row.get("route") or ("shop/" + row["item_code"]),
-            "short_description": row.get("short_description") or None,
-            "price_list_rate": rate,
-            "available": True,
-        })
+        items.append(row)
 
     return {"items": items, "missing": missing}

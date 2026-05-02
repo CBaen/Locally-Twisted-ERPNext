@@ -1,6 +1,6 @@
 # Locally Twisted - Coding Handoff
 
-Last updated: 2026-05-01 by Codex after backend Lead/CRM intake parity sync.
+Last updated: 2026-05-02 by Codex after shop navigation and variant-media cleanup.
 
 ## State Of Reality
 
@@ -36,17 +36,23 @@ Verified or updated during the 2026-05-01 storefront correction and contact clea
 - `Pickup` is stackable with other services and points customers to the locations section. Riverdale is labeled `Northern Utah Location (Residential Address)`.
 - Backend Lead/CRM parity is synced: `LT Service Type` now has `Delivery`, `Pickup`, and `Events Inquiry`; stale `Delivery Only` / `Event Package` records are gone; Lead Custom Field labels/depends_on logic match the public form; website submissions populate the Desk Table MultiSelect `custom_event_type`.
 - Header/menu no longer exposes `What We Make`; desktop dropdown panels are contained, and mobile cart/hamburger controls are visible at 390px and 430px with accessible target sizing.
-- Primary nav order is now `Shop Balloon Decor`, `Plan by Occasion`, `Balloon Twisting & Face Painting`, `FAQ`, `Blog`, search. The top utility bar keeps the only `Contact Us` CTA; lower nav and mobile drawer do not duplicate it.
+- Primary nav order is now `Balloon Decor`, `Plan by Occasion`, `Balloon Twisting & Face Painting`, `FAQ`, `Blog`, search. The top utility bar keeps the only `Contact Us` CTA; lower nav and mobile drawer do not duplicate it.
 - `Plan by Occasion` is product-discovery navigation, not inquiry navigation. Every current occasion link routes to a verified product/category page, including missionary/religious paths. Do not re-point the occasion dropdown to `/contact?occasion=...`.
-- Footer no longer exposes `What We Make`, `About Us`, or `Book an Event`; `All Balloon Decor` routes to `/shop-by-category`.
+- Footer no longer exposes `What We Make`, `About Us`, or `Book an Event`; `All Balloon Decor` routes to `/shop`.
 - Product detail/configure templates no longer include the "Start a conversation" or "Tell us what you're imagining" sales-pitch blocks.
 - `/shop-items/arches` now scopes to Arches. Root cause was missing Webshop `.item-group-content` class in the custom Item Group wrapper, not catalog data.
-- `/shop-items` and `/all-products` route to `/shop-by-category`; the ERPNext root Item Group page is too thin for customers.
+- `/shop` is the customer-facing all-decor hub. `/shop-items`, `/all-products`, and `/shop-by-category` route or redirect to `/shop`; individual category pages remain at `/shop-items/<group>`.
 - Project-level Codex capabilities are installed at `.codex/capabilities/` and routed from `AGENTS.md`; ephemeral Codex validation found the index and read the `screenshot` ingredient.
 - `/book` is retired as a customer-facing page and redirects to `/contact?intent=quick`. Current CTAs should use `/contact`; old `/book` traffic is compatibility only.
 - `/privacy` and `/terms-of-service` exist as static Frappe routes and return HTTP 200 locally. They are plain-language drafts for Stripe readiness; legal review and Stripe Dashboard URL wiring are still separate follow-ups.
 - Product listing cards can display `lt_brand_description` through the local Webshop API wrapper in `locally_twisted.api.product_listing`.
-- `scripts/verify/layout_fit.spec.js` has been restored as a committed Playwright Test gate. Latest verified command: `npm run test:layout-fit` -> 60 passed after fixing `.lt-contact__icon` sizing on `/contact`.
+- Variant media first pass completed 2026-05-02. ERPNext now has 1,712 variant `Item.image` values mapped from `_resources/odoo-live/images/` where Odoo image labels clearly matched product options. Product detail pages call `locally_twisted.api.variant_media.get_variant_media` after exact option selection and swap the main image when a variant image exists. Cart/checkout use the variant image when present and fall back to the parent Website Item image otherwise. The review command `python scripts/setup/sync_variant_media.py --dry-run --include-details --report output/catalog-media-review.json` currently reports 49 products checked, 35 with candidate image labels, 45 needing review, 1,712 unchanged mapped variants, and 6,831 skipped variant image assignments.
+- Category browse media is still empty in ERPNext: all 11 customer-facing child Item Groups under `Shop Items` have `image = null` as of the 2026-05-02 DB check. Do not revive `/shop-by-category`; choose representative category media for `/shop-items/<group>` or future menu treatment.
+- Product detail breadcrumbs now use `All Balloon Decor > category > product`; the retired `Shop by Category` label/link is blocked by `scripts/verify/smoke_shop.py`.
+- Per-product variant correctness passed on 2026-05-02. `scripts/verify/catalog_variant_contract.py` compared normalized Odoo `valid_variants` to live ERPNext `Item Variant Attribute` rows: 53 products checked, 10,578 expected variants, 10,578 live variants, 4 single-SKU products.
+- Product option UX P0 pass completed 2026-05-02. `item_configure.html` no longer runs per-attribute `frappe.get_all` lookups from Jinja; it uses `get_variant_attribute_options`, a project Jinja helper backed by Webshop's `get_attributes_and_values`. Partial selections now consume `valid_options_for_attributes` and disable invalid later options. Variant chips are verified as radio/single-select, not checkbox inputs.
+- Generated Webshop asset-map drift was corrected in the running ERPNext stack on 2026-05-02. The container already has Yarn Classic at `/home/frappe/.nvm/versions/node/v20.19.2/bin/yarn`, but non-interactive `docker exec` does not include that directory in `PATH`. Use `export PATH=/home/frappe/.nvm/versions/node/v20.19.2/bin:$PATH` before `bench build --app webshop`; no package install was needed. Important Docker nuance: the frontend/nginx container must be the final Webshop build target because `sites/assets/webshop` links to each container's own app-public files while `assets.json` is shared. Building only in the backend writes asset-map names nginx cannot serve. After rebuilding from the frontend container and clearing `assets_json` plus website cache, follow-up console checks returned 200s with 0 console errors/warnings.
+- `scripts/verify/layout_fit.spec.js` has been restored as a committed Playwright Test gate. Latest verified command: `npm run test:layout-fit` -> 60 passed after fixing the 320px category-grid overflow caused by Webshop's stock `.item-card { min-width: 300px; }` rule.
 - Catalog variant counts match the normalized Odoo source: the raw scrape has duplicate-case latex color values, but `_resources/odoo-live/value_normalize_map.json` collapses them and the normalized expected variant counts match ERPNext.
 - Website cache was cleared after Jinja/CSS changes; `hooks.py` CSS cache-bust was bumped to the current session version.
 
@@ -56,7 +62,7 @@ Claims from older docs still need re-verification before being repeated:
 - `locally_twisted` custom app installed.
 - Webshop + payments installed.
 - 53 Website Items published.
-- `/shop-by-category` custom landing page.
+- `/shop-by-category` compatibility redirect to `/shop`.
 - Local guest cart and Stripe test-mode checkout flow.
 - Existing pages including `/`, `/lookbook`, `/shop`, `/contact`, `/faq`, `/refund-policy`, `/accessibility`, `/cart`, `/checkout`, `/payment-success`, `/thank-you`.
 
@@ -76,9 +82,9 @@ P0 is no longer `/book`; GL retired that surface. The primary customer inquiry p
 Next safest slices:
 
 - Wire the Stripe Dashboard privacy/terms URLs to `/privacy` and `/terms-of-service` after GL/legal approval.
-- Reconcile catalog media: source has extra product images for 49 products and size-like options on 33 products, while current ERPNext variants have no per-variant images. Start with size/height/length/delivery-tied images before product layout polish.
+- Review skipped/unmatched catalog media with GL/Jeff: the automated pass only mapped photos whose Odoo labels clearly matched product options. Refresh `output/catalog-media-review.json` with the detailed dry-run command before assigning anything. Do not assign generic gallery images by guess.
 - Keep product navigation product-backed: use `scripts/verify/nav_ia.py` before touching header/footer IA.
-- Add Item Group imagery for `/shop-by-category` cards when representative photos are selected.
+- Reconcile product/category media without reviving the retired `/shop-by-category` card index; use `/shop` and `/shop-items/<group>` as the customer-facing browse surfaces.
 
 ## Verification Commands
 
@@ -105,10 +111,38 @@ After Jinja/CSS/Web Page changes:
 python scripts/dev/clear_website_cache.py
 ```
 
+If Webshop assets need a real rebuild, expose the existing Yarn path and build from the frontend container last:
+
+```powershell
+docker exec locally-twisted-erpnext-v15-frontend-1 bash -lc 'export PATH=/home/frappe/.nvm/versions/node/v20.19.2/bin:$PATH; cd /home/frappe/frappe-bench && bench build --app webshop'
+docker exec locally-twisted-erpnext-v15-redis-cache-1 redis-cli DEL assets_json
+python scripts/dev/clear_website_cache.py
+```
+
 Navigation IA regression check:
 
 ```powershell
 python scripts/verify/nav_ia.py
+```
+
+Variant media contract:
+
+```powershell
+python scripts/verify/variant_media_contract.py
+```
+
+Catalog variant contract:
+
+```powershell
+python scripts/verify/catalog_variant_contract.py
+```
+
+Variant media sync from the captured Odoo image files:
+
+```powershell
+python scripts/setup/sync_variant_media.py --dry-run
+python scripts/setup/sync_variant_media.py --dry-run --include-details --report output/catalog-media-review.json
+python scripts/setup/sync_variant_media.py
 ```
 
 Layout fit regression check:

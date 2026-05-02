@@ -101,6 +101,14 @@
         return "$" + n.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
     }
 
+    function optionSummary(server) {
+        var options = server && Array.isArray(server.variant_options) ? server.variant_options : [];
+        if (!options.length) return "";
+        return options.map(function (opt) {
+            return opt.attribute + ": " + opt.attribute_value;
+        }).join(" - ");
+    }
+
     /* DOM-construction helper: creates a node with attrs + text content.
      * Avoids innerHTML entirely so user-controlled strings can't escape
      * into the markup, even if a future change removes the escapeHtml
@@ -152,7 +160,11 @@
         var bodyName = el("h3", { "class": "lt-cart__line-name" }, [
             el("a", { href: routeHref, text: safeName }),
         ]);
-        var bodyMeta = el("p", { "class": "lt-cart__line-meta", text: fmtMoney(server.price_list_rate) + " each" });
+        var optionsText = optionSummary(server);
+        var metaParts = [];
+        if (optionsText) metaParts.push(optionsText);
+        metaParts.push(fmtMoney(server.price_list_rate) + " each");
+        var bodyMeta = el("p", { "class": "lt-cart__line-meta", text: metaParts.join(" - ") });
         var removeBtn = el("button", {
             type: "button",
             "class": "lt-cart__line-remove",

@@ -15,7 +15,7 @@
 **Files:**
 - Create: `docs/superpowers/specs/2026-05-01-balloon-render-pilot-show-pack.md`
 
-- [ ] **Step 1: Create the show pack doc**
+- [x] **Step 1: Create the show pack doc**
 
 Write `docs/superpowers/specs/2026-05-01-balloon-render-pilot-show-pack.md` with:
 
@@ -37,7 +37,7 @@ Create the first five render prompts that GL can review as Jeff's proxy before L
 5. `birthday-deliveries` premium studio catalog.
 ```
 
-- [ ] **Step 2: Verify the file exists**
+- [x] **Step 2: Verify the file exists**
 
 Run:
 
@@ -47,7 +47,7 @@ Test-Path docs\superpowers\specs\2026-05-01-balloon-render-pilot-show-pack.md
 
 Expected: `True`.
 
-- [ ] **Step 3: Commit the show pack**
+- [x] **Step 3: Commit the show pack**
 
 Run:
 
@@ -70,7 +70,7 @@ Expected: the commit includes only the show pack doc.
 - Create later: `_resources/generated-renders/pilot/README.md`
 - Create later: `_resources/generated-renders/pilot/*.png`
 
-- [ ] **Step 1: Create the pilot render folder**
+- [x] **Step 1: Create the pilot render folder**
 
 Run:
 
@@ -80,7 +80,7 @@ New-Item -ItemType Directory -Force _resources\generated-renders\pilot
 
 Expected: `_resources/generated-renders/pilot` exists.
 
-- [ ] **Step 2: Generate one image per pilot prompt**
+- [x] **Step 2: Generate one image per pilot prompt**
 
 Use the prompt text from the show pack exactly. Save draft images with these names:
 
@@ -92,7 +92,7 @@ classic-organic-garland-v1.png
 birthday-delivery-studio-v1.png
 ```
 
-- [ ] **Step 3: Create the pilot render README**
+- [x] **Step 3: Create the pilot render README**
 
 Write `_resources/generated-renders/pilot/README.md` with:
 
@@ -114,7 +114,7 @@ These images are generated illustrative drafts for GL/Jeff review. They are not 
 | birthday-delivery-studio-v1.png | pending GL review | Check foil/latex structure, readable intentional text only, studio consistency. |
 ```
 
-- [ ] **Step 4: Commit generated pilot drafts only after visual review**
+- [x] **Step 4: Commit generated pilot drafts only after visual review**
 
 Run:
 

@@ -10,27 +10,21 @@
    JS computes the matching variant on every change and updates Add-to-Cart.
 
    Server-side data: webshop.webshop.variant_selector.utils.get_attributes_and_values
-   already returns attribute → valid-values for this template (filtered to values
-   that have at least one variant). Reused.
+   returns attribute -> valid-values for this template in one prepared call.
+   Do not put per-attribute DB lookups in this template.
 #}
 {% if shopping_cart and shopping_cart.cart_settings.enabled and (cart_settings.enable_variants | int) %}
+{%- set lt_variant_attributes = get_variant_attribute_options(doc.item_code) or [] -%}
 
 <form class="lt-product__configure"
       data-template-item-code="{{ doc.item_code }}"
       aria-label="{{ _('Customize this item') }}">
 
-    {# Iterate the template's attribute child rows and look up each attribute's
-       valid value list from Item Attribute Value. frappe.get_all is whitelisted
-       in Jinja per Frappe's safe-globals; passes through standard permissions.
-    #}
-    {%- for row in doc.attributes -%}
+    {# Attribute values are prepared once by Webshop's variant utility. #}
+    {%- for row in lt_variant_attributes -%}
         {%- set attr_name = row.attribute -%}
         {%- set field_id = "lt-attr-" ~ loop.index -%}
-        {%- set values = frappe.get_all("Item Attribute Value",
-                                         filters={"parent": attr_name},
-                                         fields=["attribute_value"],
-                                         order_by="idx asc",
-                                         limit_page_length=0) -%}
+        {%- set values = row.get("values") or [] -%}
         {%- set is_chips = values | length <= 8 -%}
 
         <div class="lt-product__attr"
@@ -49,9 +43,9 @@
                             <input type="radio"
                                    class="lt-product__chip-input js-lt-attr-input"
                                    name="lt-attr-{{ attr_name | replace(' ', '-') }}"
-                                   value="{{ v.attribute_value }}"
+                                   value="{{ v }}"
                                    data-attribute-name="{{ attr_name }}">
-                            <span class="lt-product__chip-label">{{ v.attribute_value }}</span>
+                            <span class="lt-product__chip-label">{{ v }}</span>
                         </label>
                     {%- endfor -%}
                 </div>
@@ -62,7 +56,7 @@
                         data-attribute-name="{{ attr_name }}">
                     <option value="">{{ _("Choose a") }} {{ _(attr_name) | lower }}…</option>
                     {%- for v in values -%}
-                        <option value="{{ v.attribute_value }}">{{ v.attribute_value }}</option>
+                        <option value="{{ v }}">{{ v }}</option>
                     {%- endfor -%}
                 </select>
             {%- endif -%}
@@ -105,6 +99,8 @@
     var addBtn = document.getElementById('lt-add-to-cart-variant');
     var viewInCart = form.querySelector('.lt-view-in-cart');
     var attrEls = form.querySelectorAll('.lt-product__attr');
+    var mediaRequestSerial = 0;
+    var variantRequestSerial = 0;
 
     var msgChooseOptions = "{{ _('Pick a value for each option.') | replace("'", "\\'") }}";
     var msgIncomplete = "{{ _('Choose your options to add to cart') | replace("'", "\\'") }}";
@@ -113,6 +109,77 @@
     var msgPickValid = "{{ _('Choose a valid combination') | replace("'", "\\'") }}";
     var msgFrappeNotReady = "{{ _('Loading...') | replace("'", "\\'") }}";
     var msgPriceWaiting = "{{ _('Price shows when you choose your options') | replace("'", "\\'") }}";
+
+    function productImageEl() {
+        return document.querySelector('.product-image img.website-image') || document.querySelector('img.website-image');
+    }
+
+    function currentProductImage() {
+        var img = productImageEl();
+        if (!img) return { src: '', alt: '' };
+        return {
+            src: img.getAttribute('src') || '',
+            alt: img.getAttribute('alt') || ''
+        };
+    }
+
+    var defaultProductImage = currentProductImage();
+
+    function setProductImage(src, alt) {
+        var img = productImageEl();
+        if (!img || !src) return;
+
+        img.setAttribute('src', src);
+        if (alt) img.setAttribute('alt', alt);
+
+        var wrapper = img.closest('.product-image');
+        var link = wrapper ? wrapper.querySelector('a') : null;
+        if (link) link.setAttribute('href', src);
+
+        var matchedThumb = null;
+        document.querySelectorAll('.item-slideshow-image').forEach(function (thumb) {
+            var thumbSrc = thumb.getAttribute('src') || '';
+            var isMatch = src && (thumbSrc === src || thumbSrc.indexOf(src) !== -1 || src.indexOf(thumbSrc) !== -1);
+            thumb.classList.toggle('active', isMatch);
+            if (isMatch) matchedThumb = thumb;
+        });
+        if (!matchedThumb && src !== defaultProductImage.src) {
+            document.querySelectorAll('.item-slideshow-image.active').forEach(function (thumb) {
+                thumb.classList.remove('active');
+            });
+        }
+    }
+
+    function resetProductImage() {
+        mediaRequestSerial += 1;
+        setProductImage(defaultProductImage.src, defaultProductImage.alt);
+    }
+
+    function updateVariantImage(variantCode) {
+        var requestId = mediaRequestSerial + 1;
+        mediaRequestSerial = requestId;
+        frappe.call({
+            method: 'locally_twisted.api.variant_media.get_variant_media',
+            args: {
+                item_code: variantCode,
+                template_item_code: templateCode
+            },
+            callback: function (mr) {
+                if (requestId !== mediaRequestSerial) return;
+                var media = (mr && mr.message) || {};
+                if (media.image) {
+                    setProductImage(media.image, media.alt || '');
+                } else {
+                    resetProductImage();
+                }
+            },
+            error: function () {
+                if (requestId === mediaRequestSerial) {
+                    resetProductImage();
+                }
+            }
+        });
+    }
 
     function selectedAttrs() {
         var picks = {};
@@ -130,12 +197,81 @@
     }
 
     function showSelectedTags() {
+        var picks = selectedAttrs();
         attrEls.forEach(function (a) {
             var sel = a.querySelector('.lt-product__attr-selected');
             var name = a.getAttribute('data-attribute-name');
-            var picks = selectedAttrs();
-            sel.textContent = picks[name] ? '— ' + picks[name] : '';
+            sel.textContent = picks[name] ? ' - ' + picks[name] : '';
         });
+    }
+
+    function normalizeValidOptions(raw) {
+        if (raw === undefined || raw === null) return null;
+        if (Array.isArray(raw)) {
+            return raw.map(function (value) { return String(value); });
+        }
+        if (typeof raw === 'object') {
+            return Object.keys(raw).map(function (value) { return String(value); });
+        }
+        return [String(raw)];
+    }
+
+    function optionIsAvailable(validOptionsByAttribute, attrName, value) {
+        if (!value) return true;
+        var validOptions = normalizeValidOptions(validOptionsByAttribute && validOptionsByAttribute[attrName]);
+        if (validOptions === null) return true;
+        return validOptions.indexOf(String(value)) !== -1;
+    }
+
+    function setRadioAvailability(input, isAvailable) {
+        var chip = input.closest('.lt-product__chip');
+        input.disabled = !isAvailable;
+        input.setAttribute('aria-disabled', isAvailable ? 'false' : 'true');
+        if (chip) {
+            chip.classList.toggle('is-disabled', !isAvailable);
+            chip.setAttribute('aria-disabled', isAvailable ? 'false' : 'true');
+        }
+    }
+
+    function applyValidOptions(validOptionsByAttribute) {
+        attrEls.forEach(function (a) {
+            var attrName = a.getAttribute('data-attribute-name');
+            var select = a.querySelector('select.js-lt-attr-input');
+            if (select) {
+                Array.prototype.forEach.call(select.options, function (option) {
+                    option.disabled = !optionIsAvailable(validOptionsByAttribute, attrName, option.value);
+                });
+                return;
+            }
+
+            a.querySelectorAll('.js-lt-attr-input').forEach(function (input) {
+                setRadioAvailability(input, optionIsAvailable(validOptionsByAttribute, attrName, input.value));
+            });
+        });
+    }
+
+    function clearSelectionsAfter(changedAttrName) {
+        var shouldClear = false;
+        attrEls.forEach(function (a) {
+            var attrName = a.getAttribute('data-attribute-name');
+            if (shouldClear) {
+                var select = a.querySelector('select.js-lt-attr-input');
+                if (select) {
+                    select.value = '';
+                }
+                a.querySelectorAll('.js-lt-attr-input:checked').forEach(function (input) {
+                    input.checked = false;
+                });
+            }
+            if (attrName === changedAttrName) {
+                shouldClear = true;
+            }
+        });
+    }
+
+    function formattedPriceFromVariantMessage(msg) {
+        var pinfo = msg && msg.product_info && msg.product_info.price;
+        return pinfo && pinfo.formatted_price_sales_uom ? pinfo.formatted_price_sales_uom : '';
     }
 
     function setStatus(msg, isError) {
@@ -162,11 +298,15 @@
         var picks = selectedAttrs();
         var totalAttrs = attrEls.length;
         var pickedCount = Object.keys(picks).length;
+        var requestId = variantRequestSerial + 1;
+        variantRequestSerial = requestId;
 
-        if (pickedCount < totalAttrs) {
+        if (pickedCount === 0) {
+            applyValidOptions(null);
             setStatus(msgChooseOptions);
             disableAdd(msgIncomplete);
             priceTextEl.textContent = msgPriceWaiting;
+            resetProductImage();
             return;
         }
 
@@ -182,34 +322,49 @@
                 selected_attributes: picks
             },
             callback: function (r) {
+                if (requestId !== variantRequestSerial) return;
                 var msg = r && r.message ? r.message : {};
+                applyValidOptions(msg.valid_options_for_attributes || {});
                 var matches = msg.exact_match || [];
+                if (pickedCount < totalAttrs) {
+                    setStatus(msgChooseOptions);
+                    disableAdd(msgIncomplete);
+                    priceTextEl.textContent = msgPriceWaiting;
+                    resetProductImage();
+                    return;
+                }
+
                 if (matches.length === 1) {
                     var variantCode = matches[0];
-                    frappe.call({
-                        method: 'webshop.webshop.shopping_cart.product_info.get_product_info_for_website',
-                        args: { item_code: variantCode },
-                        callback: function (pr) {
-                            var pmsg = (pr && pr.message) || {};
-                            var pinfo = pmsg.product_info && pmsg.product_info.price;
-                            var fp = pinfo && pinfo.formatted_price_sales_uom ? pinfo.formatted_price_sales_uom : '';
-                            enableAdd(variantCode, fp);
-                            setStatus('');
-                        }
-                    });
+                    enableAdd(variantCode, formattedPriceFromVariantMessage(msg));
+                    updateVariantImage(variantCode);
+                    setStatus('');
                 } else if (matches.length === 0) {
                     setStatus(msgUnavailable, true);
                     disableAdd(msgPickValid);
+                    resetProductImage();
                 } else {
                     setStatus(msgChooseOptions);
                     disableAdd(msgIncomplete);
+                    resetProductImage();
                 }
+            },
+            error: function () {
+                if (requestId !== variantRequestSerial) return;
+                setStatus(msgUnavailable, true);
+                disableAdd(msgPickValid);
+                resetProductImage();
             }
         });
     }
 
-    form.addEventListener('change', refresh);
-    form.addEventListener('input', refresh);
+    form.addEventListener('change', function (event) {
+        var input = event.target && event.target.closest ? event.target.closest('.js-lt-attr-input') : null;
+        if (input) {
+            clearSelectionsAfter(input.getAttribute('data-attribute-name'));
+        }
+        refresh();
+    });
 
     addBtn.addEventListener('click', function () {
         var code = addBtn.getAttribute('data-item-code');

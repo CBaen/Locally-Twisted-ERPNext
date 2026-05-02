@@ -1237,7 +1237,7 @@ body.lt-nav-open {
    - Blush-tint hover state (no teal — teal is CTA-only)
    - Subtle drop shadow, 250ms fade
    - Caret rotates when expanded
-   2026-04-30 build.
+   Fallback only; the route redirects to /shop.
    ==================================================================== */
 
 /* The wrapper li and the trigger button */
@@ -1663,6 +1663,17 @@ body.lt-nav-open {
 .lt-product__chip:hover .lt-product__chip-label {
     border-color: var(--lt-near-black);
 }
+.lt-product__chip.is-disabled {
+    cursor: not-allowed;
+}
+.lt-product__chip-input:disabled + .lt-product__chip-label {
+    border-color: rgba(26, 26, 26, 0.1);
+    background-color: rgba(26, 26, 26, 0.04);
+    color: rgba(26, 26, 26, 0.42);
+}
+.lt-product__chip.is-disabled:hover .lt-product__chip-label {
+    border-color: rgba(26, 26, 26, 0.1);
+}
 .lt-product__chip-input:checked + .lt-product__chip-label {
     border-color: var(--lt-near-black);
     background-color: var(--lt-blush-tint);
@@ -1695,6 +1706,9 @@ body.lt-nav-open {
     outline: 2px solid var(--lt-teal);
     outline-offset: 2px;
     border-color: var(--lt-near-black);
+}
+.lt-product__select option:disabled {
+    color: rgba(26, 26, 26, 0.42);
 }
 
 .lt-product__configure-status {
@@ -1890,163 +1904,6 @@ body.product-page {
     text-decoration: underline;
     text-underline-offset: 0.2em;
 }
-.lt-by-cat__band {
-    height: 32px;
-    background-color: var(--lt-blush);
-}
-
-/* Card grid */
-.lt-by-cat__grid-wrap {
-    background-color: var(--lt-white);
-    padding: 3rem 1.25rem 4rem;
-}
-.lt-by-cat__grid {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.75rem 1.5rem;
-}
-@media (min-width: 600px) {
-    .lt-by-cat__grid { grid-template-columns: 1fr 1fr; }
-}
-@media (min-width: 992px) {
-    .lt-by-cat__grid { grid-template-columns: 1fr 1fr 1fr; }
-}
-
-.lt-by-cat__card {
-    display: flex;
-    flex-direction: column;
-    text-decoration: none;
-    color: inherit;
-    transition: transform 0.15s ease;
-}
-.lt-by-cat__card:hover,
-.lt-by-cat__card:focus-visible {
-    text-decoration: none;
-    color: inherit;
-    transform: translateY(-2px);
-    outline: none;
-}
-.lt-by-cat__card:focus-visible .lt-by-cat__card-image {
-    outline: 2px solid var(--lt-teal);
-    outline-offset: 4px;
-}
-.lt-by-cat__card-image {
-    aspect-ratio: 4 / 3;
-    background-color: var(--lt-blush-tint);
-    border-radius: 0.5rem;
-    overflow: hidden;
-    margin-bottom: 1rem;
-}
-.lt-by-cat__card-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-.lt-by-cat__card-placeholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 4rem;
-    color: var(--lt-near-black);
-    background-color: var(--lt-blush-tint);
-}
-.lt-by-cat__card-body {
-    padding: 0 0.25rem;
-}
-.lt-by-cat__card-title {
-    font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 1.5rem;
-    color: var(--lt-near-black);
-    margin: 0 0 0.25rem;
-    line-height: 1.2;
-}
-.lt-by-cat__card-count {
-    font-family: 'Raleway', sans-serif;
-    font-size: 0.875rem;
-    color: var(--lt-soft-gray);
-    margin: 0;
-}
-
-/* Bottom CTA band */
-.lt-by-cat__cta-band {
-    background-color: var(--lt-near-white);
-    padding: 4rem 1.25rem;
-    border-top: 1px solid rgba(26, 26, 26, 0.06);
-}
-.lt-by-cat__cta-inner {
-    max-width: 720px;
-    margin: 0 auto;
-    text-align: center;
-}
-.lt-by-cat__cta-eyebrow {
-    font-family: 'Raleway', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--lt-soft-gray);
-    margin: 0 0 0.75rem;
-}
-.lt-by-cat__cta-title {
-    font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 1.75rem;
-    color: var(--lt-near-black);
-    margin: 0 0 1.5rem;
-    line-height: 1.2;
-}
-@media (min-width: 768px) {
-    .lt-by-cat__cta-title { font-size: 2.25rem; }
-}
-.lt-by-cat__cta-actions {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.75rem;
-}
-.lt-by-cat__cta-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.85rem 1.75rem;
-    border-radius: 0.375rem;
-    font-family: 'Raleway', sans-serif;
-    font-weight: 600;
-    font-size: 0.95rem;
-    text-decoration: none;
-    border: 1px solid transparent;
-    min-height: 48px;
-}
-.lt-by-cat__cta-btn--primary {
-    background-color: var(--lt-teal);
-    color: var(--lt-white);
-    border-color: var(--lt-teal);
-}
-.lt-by-cat__cta-btn--primary:hover,
-.lt-by-cat__cta-btn--primary:focus-visible {
-    background-color: #006666;
-    border-color: #006666;
-    color: var(--lt-white);
-    text-decoration: none;
-}
-.lt-by-cat__cta-btn--secondary {
-    background-color: var(--lt-white);
-    color: var(--lt-near-black);
-    border-color: rgba(26, 26, 26, 0.18);
-}
-.lt-by-cat__cta-btn--secondary:hover,
-.lt-by-cat__cta-btn--secondary:focus-visible {
-    border-color: var(--lt-near-black);
-    background-color: var(--lt-blush-tint);
-    color: var(--lt-near-black);
-    text-decoration: none;
-}
-
 /* ====================================================================
    Cart count badge
    Rules moved here from the inline <style> block in navbar.html
@@ -2639,6 +2496,7 @@ body.lt-filter-open {
     padding-right: 0;
     width: 100%;
     max-width: 100%;
+    min-width: 0;
     flex: none;
 }
 

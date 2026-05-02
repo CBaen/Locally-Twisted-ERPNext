@@ -320,6 +320,9 @@ PAGE_CSS = """
     color: var(--lt-near-black);
 }
 .lt-shop__card-add {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background-color: var(--lt-teal);
     color: var(--lt-white);
     border: none;
@@ -331,10 +334,14 @@ PAGE_CSS = """
     cursor: pointer;
     min-height: 38px;
     transition: background-color 0.15s ease;
+    text-decoration: none;
+    text-align: center;
 }
 .lt-shop__card-add:hover,
 .lt-shop__card-add:focus-visible {
     background-color: #006666;
+    color: var(--lt-white);
+    text-decoration: none;
 }
 .lt-shop__card-add[disabled] {
     background-color: rgba(0, 128, 128, 0.3);

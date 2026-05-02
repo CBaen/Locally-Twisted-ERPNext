@@ -59,5 +59,5 @@ def update_website_context(context):
     ]
 
     context["shop_categories"] = children
-    context["shop_root_route"] = "shop-by-category"
+    context["shop_root_route"] = "shop"
     return context

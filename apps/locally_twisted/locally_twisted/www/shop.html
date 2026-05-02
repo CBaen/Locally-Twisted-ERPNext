@@ -59,6 +59,13 @@
 
                 <div class="lt-shop__card-footer">
                     <span class="lt-shop__card-price">{{ item.price_display }}</span>
+                    {% if item.has_variants %}
+                    <a class="lt-shop__card-add lt-shop__card-add--link"
+                       href="/{{ item.route }}"
+                       aria-label="Choose options for {{ item.web_item_name }}">
+                        Choose options
+                    </a>
+                    {% else %}
                     <button type="button"
                             class="lt-shop__card-add"
                             data-item-code="{{ item.item_code }}"
@@ -66,6 +73,7 @@
                             aria-label="Add {{ item.web_item_name }} to cart">
                         Add to cart
                     </button>
+                    {% endif %}
                 </div>
             </article>
             {% endfor %}
@@ -116,7 +124,7 @@
         c.addEventListener('click', function () { applyFilter(c.dataset.category); });
     });
 
-    // Add-to-cart — call webshop's existing endpoint, no parallel cart
+    // Single-SKU add-to-cart. Variant templates link to their option selector.
     var feedback = document.getElementById('lt-shop-feedback');
     function setFeedback(state, msg) {
         if (!feedback) return;
@@ -125,7 +133,7 @@
         feedback.textContent = msg || '';
     }
 
-    document.querySelectorAll('.lt-shop__card-add').forEach(function (btn) {
+    document.querySelectorAll('.lt-shop__card-add[data-item-code]').forEach(function (btn) {
         btn.addEventListener('click', function () {
             var itemCode = btn.dataset.itemCode;
             var itemName = btn.dataset.itemName;
