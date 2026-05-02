@@ -64,6 +64,7 @@ Claims from older docs still need re-verification before being repeated:
 - 53 Website Items published.
 - `/shop-by-category` compatibility redirect to `/shop`.
 - Local guest cart and Stripe test-mode checkout flow.
+- Payment backend launch-readiness now has a feature lane at `workstreams/payment-backend-launch-readiness.md`; use `scripts/verify/payment_launch_readiness.py` for non-secret structural checks. Local mode passes; live mode is expected to fail until production Stripe/site config exists.
 - Existing pages including `/`, `/lookbook`, `/shop`, `/contact`, `/faq`, `/refund-policy`, `/accessibility`, `/cart`, `/checkout`, `/payment-success`, `/thank-you`.
 
 Treat these as verified only after re-running smoke tests or checking the routes. Do not repeat a visual claim without screenshots.
@@ -82,6 +83,7 @@ P0 is no longer `/book`; GL retired that surface. The primary customer inquiry p
 Next safest slices:
 
 - Wire the Stripe Dashboard privacy/terms URLs to `/privacy` and `/terms-of-service` after GL/legal approval.
+- Finish payment live-mode configuration and run `python scripts/verify/payment_launch_readiness.py --mode live` before any real cutover claim.
 - Review skipped/unmatched catalog media with GL/Jeff: the automated pass only mapped photos whose Odoo labels clearly matched product options. Refresh `output/catalog-media-review.json` with the detailed dry-run command before assigning anything. Do not assign generic gallery images by guess.
 - Keep product navigation product-backed: use `scripts/verify/nav_ia.py` before touching header/footer IA.
 - Reconcile product/category media without reviving the retired `/shop-by-category` card index; use `/shop` and `/shop-items/<group>` as the customer-facing browse surfaces.
