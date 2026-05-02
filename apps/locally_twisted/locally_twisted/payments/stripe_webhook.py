@@ -70,6 +70,7 @@ def stripe_webhook():
     metadata = session.get("metadata") or {}
     pr_name = metadata.get("payment_request")
     so_name = session.get("client_reference_id") or metadata.get("sales_order")
+    origin = metadata.get("lt_origin")
     payment_status = (session.get("payment_status") or "").lower()
 
     if payment_status != "paid":
@@ -80,12 +81,21 @@ def stripe_webhook():
             "sales_order": so_name,
         }
 
+    if origin != "guest_checkout":
+        return {
+            "ok": True,
+            "skipped": "non_lt_checkout",
+            "payment_request": pr_name,
+            "sales_order": so_name,
+        }
+
     if not pr_name:
         frappe.log_error(
             f"{event_type} without payment_request metadata: {session.get('id')}",
             "Stripe webhook: missing PR metadata",
         )
-        return {"ok": True, "skipped": "no payment_request metadata"}
+        frappe.local.response.http_status_code = 500
+        return {"error": "missing payment_request metadata"}
 
     try:
         from locally_twisted.www.payment_success import reconcile_paid_sales_order

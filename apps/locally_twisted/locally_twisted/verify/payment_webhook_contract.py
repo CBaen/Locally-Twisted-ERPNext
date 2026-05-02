@@ -52,6 +52,7 @@ def _run_contract():
                     "payment_status": "paid",
                     "client_reference_id": "SO-PROBE-ASYNC",
                     "metadata": {
+                        "lt_origin": "guest_checkout",
                         "payment_request": "PR-PROBE-ASYNC",
                         "sales_order": "SO-PROBE-ASYNC",
                     },
@@ -73,6 +74,40 @@ def _run_contract():
     if ignored["result"].get("ignored") != "payment_intent.succeeded":
         failures.append(f"unexpected event was not ignored cleanly: {ignored['result']}")
 
+    non_lt_checkout = _invoke_webhook(
+        {
+            "type": "checkout.session.completed",
+            "data": {
+                "object": {
+                    "id": "cs_probe_other_checkout",
+                    "payment_status": "paid",
+                    "client_reference_id": "SO-OTHER",
+                    "metadata": {},
+                }
+            },
+        }
+    )
+    if non_lt_checkout["result"].get("skipped") != "non_lt_checkout":
+        failures.append(f"paid non-LT checkout was not ignored: {non_lt_checkout['result']}")
+
+    missing_pr = _invoke_webhook(
+        {
+            "type": "checkout.session.completed",
+            "data": {
+                "object": {
+                    "id": "cs_probe_missing_pr",
+                    "payment_status": "paid",
+                    "client_reference_id": "SO-MISSING-PR",
+                    "metadata": {"lt_origin": "guest_checkout", "sales_order": "SO-MISSING-PR"},
+                }
+            },
+        }
+    )
+    if missing_pr["status_code"] != 500:
+        failures.append(
+            f"paid LT checkout missing payment_request should return HTTP 500, got {missing_pr['status_code']}: {missing_pr['result']}"
+        )
+
     if failures:
         return {"ok": False, "failures": failures}
 
@@ -81,6 +116,8 @@ def _run_contract():
         "unpaid_completed": unpaid["result"],
         "async_payment_succeeded_calls": len(async_success_calls),
         "ignored_event": ignored["result"].get("ignored"),
+        "non_lt_checkout": non_lt_checkout["result"],
+        "missing_payment_request_status_code": missing_pr["status_code"],
     }
 
 

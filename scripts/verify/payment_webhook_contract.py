@@ -67,6 +67,8 @@ def main() -> int:
     print(f"  unpaid_completed: {result.get('unpaid_completed')}")
     print(f"  async_payment_succeeded_calls: {result.get('async_payment_succeeded_calls')}")
     print(f"  ignored_event: {result.get('ignored_event')}")
+    print(f"  non_lt_checkout: {result.get('non_lt_checkout')}")
+    print(f"  missing_payment_request_status_code: {result.get('missing_payment_request_status_code')}")
     return 0
 
 
