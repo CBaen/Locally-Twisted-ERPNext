@@ -95,64 +95,75 @@ def _handle_stripe_session(session_id):
     if not sales_order:
         _redirect("/")
 
-    pr_name = (session.get("metadata") or {}).get("payment_request")
-    if pr_name:
-        try:
-            _mark_payment_request_paid(pr_name)
-        except Exception:
-            # Don't block the customer's success landing on a backend
-            # reconciliation error. Logged for follow-up; the customer
-            # still sees /thank-you.
-            frappe.log_error(
-                frappe.get_traceback(),
-                f"payment_success: marking PR {pr_name} paid failed",
-            )
-
-    # Sales Invoice — convert the SO to an invoice so it lands in the
-    # accounting / invoicing surface, not just SO + Payment Entry.
-    try:
-        _ensure_sales_invoice(sales_order)
-    except Exception:
-        frappe.log_error(
-            frappe.get_traceback(),
-            f"payment_success: SI creation failed for SO {sales_order}",
-        )
-
-    # Transactional receipt email — fires once per paid order.
-    try:
-        _send_receipt_email(sales_order)
-    except Exception:
-        frappe.log_error(
-            frappe.get_traceback(),
-            f"payment_success: receipt email failed for SO {sales_order}",
-        )
-
-    # Operator notification — Jeff sees a new paid order land without
-    # refreshing his desk.
-    try:
-        _send_operator_notification(sales_order)
-    except Exception:
-        frappe.log_error(
-            frappe.get_traceback(),
-            f"payment_success: operator notification failed for SO {sales_order}",
-        )
-
-    # Welcome email — only fires for first-time customers.
-    try:
-        _send_welcome_email_if_first_order(sales_order)
-    except Exception:
-        frappe.log_error(
-            frappe.get_traceback(),
-            f"payment_success: welcome email failed for SO {sales_order}",
-        )
+    reconcile_paid_sales_order(
+        sales_order,
+        payment_request=(session.get("metadata") or {}).get("payment_request"),
+        source="payment_success",
+        raise_on_error=False,
+    )
 
     _redirect(f"/thank-you?order={sales_order}")
+
+
+class PaidOrderReconciliationError(Exception):
+    """Raised when the paid-order cascade fails in a retryable path."""
+
+
+def reconcile_paid_sales_order(
+    so_name=None,
+    *,
+    payment_request=None,
+    source="paid_order",
+    raise_on_error=False,
+):
+    """Run the idempotent paid-order cascade for a completed payment.
+
+    Browser redirects should call this with ``raise_on_error=False`` so the
+    customer still lands on /thank-you. Webhooks should call it with
+    ``raise_on_error=True`` so Stripe retries invoice/email failures.
+    """
+    errors = []
+
+    def run(label, func, *args):
+        try:
+            return func(*args)
+        except Exception:
+            message = f"{source}: {label} failed"
+            if args:
+                message = f"{message} for {', '.join(str(arg) for arg in args if arg)}"
+            frappe.log_error(frappe.get_traceback(), message)
+            errors.append(message)
+            return None
+
+    if payment_request:
+        run("marking Payment Request paid", _mark_payment_request_paid, payment_request)
+
+    if not so_name and payment_request:
+        so_name = frappe.db.get_value("Payment Request", payment_request, "reference_name")
+
+    if not so_name:
+        errors.append(f"{source}: missing Sales Order for paid-order cascade")
+    else:
+        run("Sales Invoice creation", _ensure_sales_invoice, so_name)
+        run("receipt email", _send_receipt_email, so_name)
+        run("operator notification", _send_operator_notification, so_name)
+        run("welcome email", _send_welcome_email_if_first_order, so_name)
+
+    if errors and raise_on_error:
+        raise PaidOrderReconciliationError("; ".join(errors))
+
+    return {
+        "ok": not errors,
+        "sales_order": so_name,
+        "payment_request": payment_request,
+        "errors": errors,
+    }
 
 
 def _mark_payment_request_paid(pr_name):
     """Mark a Payment Request paid + create Payment Entry. Idempotent."""
     if not frappe.db.exists("Payment Request", pr_name):
-        return
+        raise ValueError(f"Payment Request not found: {pr_name}")
     if frappe.db.get_value("Payment Request", pr_name, "status") == "Paid":
         return
 
@@ -161,6 +172,30 @@ def _mark_payment_request_paid(pr_name):
     pr.flags.mute_email = True
     pr.set_as_paid()
     frappe.db.commit()
+
+
+def _message_already_queued_or_sent(reference_doctype, reference_name, subject):
+    filters = {
+        "reference_doctype": reference_doctype,
+        "reference_name": reference_name,
+    }
+    email_queue_subject_probe = _email_queue_subject_probe(subject)
+    return bool(
+        frappe.get_all("Communication", filters={**filters, "subject": subject}, limit=1)
+        or frappe.get_all(
+            "Email Queue",
+            filters={**filters, "message": ("like", f"%Subject: {email_queue_subject_probe}%")},
+            limit=1,
+        )
+    )
+
+
+def _email_queue_subject_probe(subject):
+    """Return the stable part of a subject as stored in Email Queue MIME."""
+    for separator in (" — ", " - "):
+        if separator in subject:
+            return subject.split(separator, 1)[0]
+    return subject
 
 
 def _ensure_sales_invoice(so_name):
@@ -238,18 +273,9 @@ def _send_receipt_email(so_name):
 
     subject = f"Your Locally Twisted order is confirmed — {so.name}"
 
-    # Idempotency: if a Communication with this exact subject already
-    # exists for the SO, don't resend.
-    already_sent = frappe.get_all(
-        "Communication",
-        filters={
-            "reference_doctype": "Sales Order",
-            "reference_name": so_name,
-            "subject": subject,
-        },
-        limit=1,
-    )
-    if already_sent:
+    # Idempotency: check both Communication and Email Queue because this
+    # ERPNext install may queue mail without creating a Communication row.
+    if _message_already_queued_or_sent("Sales Order", so_name, subject):
         return
 
     # Build line items HTML — no innerHTML / template injection risk
@@ -330,24 +356,15 @@ OPERATOR_EMAIL = "locallytwisted@gmail.com"
 def _send_operator_notification(so_name):
     """Email Jeff (or whoever owns the operator inbox) when a new paid
     order lands. Plain HTML body — no PDF attachment (wkhtmltopdf trap).
-    Idempotent: looks for an existing Communication with the same subject
-    on this SO.
+    Idempotent: looks for an existing Communication or Email Queue row with
+    the same subject on this SO.
     """
     so = frappe.get_doc("Sales Order", so_name)
     recipient = frappe.conf.get("lt_operator_email") or OPERATOR_EMAIL
 
     subject = f"New paid order — {so.name} — ${flt(so.grand_total):,.2f}"
 
-    already_sent = frappe.get_all(
-        "Communication",
-        filters={
-            "reference_doctype": "Sales Order",
-            "reference_name": so_name,
-            "subject": subject,
-        },
-        limit=1,
-    )
-    if already_sent:
+    if _message_already_queued_or_sent("Sales Order", so_name, subject):
         return
 
     customer_email = None
@@ -402,6 +419,7 @@ def _send_operator_notification(so_name):
 
     site_url = frappe.utils.get_url().rstrip("/")
     desk_link = f"{site_url}/app/sales-order/{so.name}"
+    order_notes = _get_customer_order_notes_html(so.name)
 
     body = f"""
 <div style="font-family: Raleway, Helvetica, Arial, sans-serif; max-width:600px; color:#1a1a1a; line-height:1.55;">
@@ -425,6 +443,7 @@ def _send_operator_notification(so_name):
   {f'<p style="margin:0 0 6px;"><strong>Email:</strong> {escape_html(customer_email)}</p>' if customer_email else ''}
   {f'<p style="margin:0 0 6px;"><strong>Phone:</strong> {escape_html(customer_phone)}</p>' if customer_phone else ''}
   {f'<p style="margin:0 0 16px; white-space:pre-line;"><strong>Shipping:</strong><br>{shipping_addr}</p>' if shipping_addr else ''}
+  {f'<p style="margin:0 0 16px; white-space:pre-line;"><strong>Customer notes:</strong><br>{order_notes}</p>' if order_notes else ''}
 
   <p style="margin:24px 0 0;">
     <a href="{desk_link}" style="display:inline-block; padding:8px 16px; background:#107373; color:#fff; text-decoration:none; border-radius:4px; font-weight:600;">
@@ -445,6 +464,19 @@ def _send_operator_notification(so_name):
     frappe.db.commit()
 
 
+def _get_customer_order_notes_html(so_name):
+    subject = f"Customer checkout notes - {so_name}"
+    return frappe.db.get_value(
+        "Communication",
+        {
+            "reference_doctype": "Sales Order",
+            "reference_name": so_name,
+            "subject": subject,
+        },
+        "content",
+    )
+
+
 def _send_welcome_email_if_first_order(so_name):
     """Send a one-time welcome email to first-time customers.
 
@@ -452,7 +484,7 @@ def _send_welcome_email_if_first_order(so_name):
     Sales Order. If they have any other submitted SO (this one or
     earlier), they're a returning customer and we skip welcome.
 
-    Idempotent via Communication subject lookup.
+    Idempotent via Communication/Email Queue subject lookup.
     """
     so = frappe.get_doc("Sales Order", so_name)
     if not so.customer:
@@ -479,16 +511,7 @@ def _send_welcome_email_if_first_order(so_name):
 
     subject = "Welcome to Locally Twisted"
 
-    already_sent = frappe.get_all(
-        "Communication",
-        filters={
-            "reference_doctype": "Customer",
-            "reference_name": so.customer,
-            "subject": subject,
-        },
-        limit=1,
-    )
-    if already_sent:
+    if _message_already_queued_or_sent("Customer", so.customer, subject):
         return
 
     body = f"""

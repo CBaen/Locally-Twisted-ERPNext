@@ -2,7 +2,9 @@
 
 Stripe POSTs events to this endpoint. We care about
 `checkout.session.completed` — that's our cue to mark the linked Payment
-Request paid (which in turn creates a Payment Entry and updates the SO).
+Request paid, create/submit the Sales Invoice, and queue the paid-order
+emails. This mirrors the browser `/payment-success` path so the order
+still reconciles if the customer closes the tab before returning.
 
 URL Stripe sends to:
     /api/method/locally_twisted.payments.stripe_webhook.stripe_webhook
@@ -72,32 +74,20 @@ def stripe_webhook():
         return {"ok": True, "skipped": "no payment_request metadata"}
 
     try:
-        _mark_payment_request_paid(pr_name, so_name, session)
+        from locally_twisted.www.payment_success import reconcile_paid_sales_order
+
+        result = reconcile_paid_sales_order(
+            so_name,
+            payment_request=pr_name,
+            source="stripe_webhook",
+            raise_on_error=True,
+        )
     except Exception:
-        frappe.log_error(frappe.get_traceback(), f"Stripe webhook: marking PR {pr_name} paid failed")
+        frappe.log_error(
+            frappe.get_traceback(),
+            f"Stripe webhook: paid-order reconciliation failed for PR {pr_name}",
+        )
         frappe.local.response.http_status_code = 500
         return {"error": "internal error — Stripe will retry"}
 
-    return {"ok": True, "payment_request": pr_name}
-
-
-def _mark_payment_request_paid(pr_name: str, so_name: str | None, session: dict):
-    """Idempotently mark the Payment Request paid + create Payment Entry."""
-    if not frappe.db.exists("Payment Request", pr_name):
-        frappe.log_error(
-            f"Stripe webhook references non-existent Payment Request: {pr_name}",
-            "Stripe webhook: PR not found",
-        )
-        return
-
-    pr_status = frappe.db.get_value("Payment Request", pr_name, "status")
-    if pr_status == "Paid":
-        return
-
-    pr = frappe.get_doc("Payment Request", pr_name)
-
-    pr.flags.ignore_permissions = True
-    pr.flags.mute_email = True
-    pr.set_as_paid()
-
-    frappe.db.commit()
+    return {"ok": True, "payment_request": pr_name, "sales_order": result.get("sales_order")}

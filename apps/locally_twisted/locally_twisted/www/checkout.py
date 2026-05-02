@@ -363,6 +363,7 @@ def submit_guest_order(item_code="", qty=1, items_json="",
     state = (state or "").strip()
     postal_code = (postal_code or "").strip()
     country = (country or "United States").strip()
+    order_notes = (order_notes or "").strip()
     marketing_opt_in = cint(marketing_opt_in)
 
     # ── Resolve + validate cart ──────────────────────────────────────
@@ -547,6 +548,14 @@ def submit_guest_order(item_code="", qty=1, items_json="",
     so.insert(ignore_permissions=True)
     so.submit()
 
+    try:
+        _record_order_notes(so.name, order_notes, sender=email)
+    except Exception:
+        frappe.log_error(
+            frappe.get_traceback(),
+            f"submit_guest_order: checkout notes failed for SO {so.name}",
+        )
+
     # ── Payment Request (auditable record only) ──────────────────────
     # We still create the Payment Request because ERPNext uses it as the
     # auditable record linking SO → Payment Entry. But we DO NOT use its
@@ -604,3 +613,36 @@ def submit_guest_order(item_code="", qty=1, items_json="",
         "payment_request": pr.name,
         "stripe_redirect_url": stripe_url,
     }
+
+
+def _record_order_notes(so_name, notes, sender=None):
+    """Attach customer checkout notes to the Sales Order timeline."""
+    notes = (notes or "").strip()
+    if not notes:
+        return
+
+    subject = f"Customer checkout notes - {so_name}"
+    already_recorded = frappe.get_all(
+        "Communication",
+        filters={
+            "reference_doctype": "Sales Order",
+            "reference_name": so_name,
+            "subject": subject,
+        },
+        limit=1,
+    )
+    if already_recorded:
+        return
+
+    frappe.get_doc({
+        "doctype": "Communication",
+        "communication_type": "Communication",
+        "communication_medium": "Other",
+        "sent_or_received": "Received",
+        "reference_doctype": "Sales Order",
+        "reference_name": so_name,
+        "sender": sender,
+        "subject": subject,
+        "content": escape_html(notes),
+        "status": "Open",
+    }).insert(ignore_permissions=True)
