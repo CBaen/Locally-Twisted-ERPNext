@@ -8,6 +8,34 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-03 - Approved visual synthesis combines Civic Celebration structure with Brand Direction polish
+
+**Decision:** The public website's brand foundation should use the Civic Celebration direction for structure and buyer posture, then apply the higher-quality Locally Twisted Brand Direction typography, brass/gold line-icon treatment, and premium hierarchy. Civic's circular trust badges are not approved as-is; use premium brass line icons instead.
+
+**Reasoning:** GL rejected the first token-only pass because it still showed too much of the old pale/pastel site behavior. The approved target is Utah civic/event authority with city/mountain/territory confidence, but with the more professional font, icon, and brass detail quality from the Brand Direction board.
+
+**Implementation:** `_resources/STYLE-GUIDE.md`, `workstreams/brand-audience-style-reset.md`, the shared theme CSS, and the homepage hero/proof bar were updated toward the approved synthesis. The work keeps Zurchers-style clarity contained to ready-to-order shopping flows, not the company identity.
+
+**Verification receipt:** Pending screenshot and route verification for the implementation pass.
+
+**Decided by:** GL approved the corrected synthesis; Codex implemented the first foundation slice.
+
+---
+
+## 2026-05-03 - Finance operating system starts with inventory, review queues, and accountant approval gates
+
+**Decision:** Build LT's ERPNext finance layer as the business finance operating system, but keep automation controlled. ERPNext can surface unpaid invoices, overdue invoices, expected payments, paid-order review, bank reconciliation, QuickBooks cutover checklists, and payroll feasibility. It must not silently submit accounting documents, send reminders, import bank data, or run payroll/tax filing without GL/accountant approval of the exact rules.
+
+**Reasoning:** The existing checkout/payment-success/webhook path already creates real finance records, so adding more money automation from CRM stages can duplicate Customers, Sales Orders, Payment Requests, Sales Invoices, or emails if it is not coordinated. QuickBooks is the historical archive until the accountant approves the migration depth. HRMS payroll remains the preferred ERPNext direction, but the local stack currently has `Employee` only; payroll DocTypes are not installed.
+
+**Implementation:** Added `workstreams/finance-payroll-quickbooks-migration.md`, `scripts/verify/finance_inventory.py`, `scripts/verify/finance_inventory_contract.py`, `apps/locally_twisted/locally_twisted/seed/sync_finance_workspace.py`, `scripts/setup/sync_finance_workspace.py`, and `scripts/verify/finance_workspace_parity.py`. The live `LT Accountant Home` workspace now has finance cards for unpaid invoices, overdue invoices, expected payments, and recent paid orders, plus shortcuts for invoices, payment requests, payments, banking/reconciliation, suppliers, purchase invoices, employees, payment terms, statements, and chart of accounts.
+
+**Verification receipt:** `python scripts/verify/finance_inventory_contract.py`, `python -B -m py_compile scripts/verify/finance_inventory.py scripts/verify/finance_inventory_contract.py scripts/verify/finance_workspace_parity.py scripts/setup/sync_finance_workspace.py apps/locally_twisted/locally_twisted/seed/sync_finance_workspace.py`, `python scripts/setup/sync_finance_workspace.py`, `python scripts/verify/finance_workspace_parity.py`, and `python scripts/verify/finance_inventory.py` passed against the local ERPNext stack. The first pre-sync finance workspace parity run failed on the missing cards/shortcuts, then passed after the sync.
+
+**Decided by:** Codex implementing the finance/payroll/QuickBooks migration plan supplied by the previous agent, with existing LT finance safety decisions preserved.
+
+---
+
 ## 2026-05-02 - Stage-to-finance automation must coordinate with existing checkout/payment cascades
 
 **Decision:** Do not wire manual CRM stage movement directly to Quotes, Sales Orders, Sales Invoices, Payment Requests, Customers, or payment/accounting state until the existing checkout/payment-success cascade is explicitly mapped and protected from duplication.

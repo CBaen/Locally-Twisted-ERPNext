@@ -1,0 +1,228 @@
+#!/usr/bin/env python3
+"""Verify LT accountant finance workspace and cards."""
+from __future__ import annotations
+
+import json
+import subprocess
+import sys
+from typing import Any
+
+
+CONTAINER = "locally-twisted-erpnext-v15-backend-1"
+SITE = "frontend"
+ACCOUNTANT_HOME = "LT Accountant Home"
+ACCOUNTANT_ROLE = "LT Accountant Access"
+
+EXPECTED_NUMBER_CARDS = {
+    "Unpaid Invoices": {
+        "label": "Unpaid Invoices",
+        "document_type": "Sales Invoice",
+        "function": "Count",
+        "filters_json": [
+            ["Sales Invoice", "docstatus", "=", 1, False],
+            ["Sales Invoice", "outstanding_amount", ">", 0, False],
+        ],
+    },
+    "Overdue Invoices": {
+        "label": "Overdue Invoices",
+        "document_type": "Sales Invoice",
+        "function": "Count",
+        "filters_json": [
+            ["Sales Invoice", "docstatus", "=", 1, False],
+            ["Sales Invoice", "status", "=", "Overdue", False],
+        ],
+    },
+    "Expected Payments": {
+        "label": "Expected Payments",
+        "document_type": "Payment Request",
+        "function": "Count",
+        "filters_json": [
+            ["Payment Request", "payment_request_type", "=", "Inward", False],
+            ["Payment Request", "status", "in", ["Initiated", "Requested"], False],
+            ["Payment Request", "outstanding_amount", ">", 0, False],
+        ],
+    },
+    "Recent Paid Orders": {
+        "label": "Recent Paid Orders",
+        "document_type": "Payment Request",
+        "function": "Count",
+        "filters_json": [
+            ["Payment Request", "payment_request_type", "=", "Inward", False],
+            ["Payment Request", "status", "=", "Paid", False],
+            ["Payment Request", "modified", "Timespan", "this year", False],
+        ],
+    },
+}
+
+EXPECTED_SHORTCUTS = {
+    "Sales Invoices": ("Sales Invoice", "List"),
+    "Payment Requests": ("Payment Request", "List"),
+    "Payments": ("Payment Entry", "List"),
+    "Customers": ("Customer", "List"),
+    "Suppliers": ("Supplier", "List"),
+    "Purchase Invoices": ("Purchase Invoice", "List"),
+    "Bank Transactions": ("Bank Transaction", "List"),
+    "Bank Accounts": ("Bank Account", "List"),
+    "Journal Entries": ("Journal Entry", "List"),
+    "Chart of Accounts": ("Account", "Tree"),
+    "Payment Terms": ("Payment Terms Template", "List"),
+    "Statement Reminders": ("Process Statement Of Accounts", "List"),
+    "Employees": ("Employee", "List"),
+}
+
+EXPECTED_URL_SHORTCUTS = {
+    "Bank Reconciliation": "/app/bank-reconciliation-tool",
+}
+
+EXPECTED_TEXT = {
+    "Accountant Home",
+    "Money to collect",
+    "Banking and review",
+    "Vendors and payroll records",
+    "Accounting setup and statements",
+}
+
+
+def bench_execute(method: str, *, kwargs: dict[str, Any] | None = None) -> Any:
+    cmd = [
+        "docker",
+        "exec",
+        CONTAINER,
+        "bench",
+        "--site",
+        SITE,
+        "execute",
+        method,
+    ]
+    if kwargs is not None:
+        cmd.extend(["--kwargs", json.dumps(kwargs)])
+
+    proc = subprocess.run(cmd, text=True, capture_output=True, timeout=60)
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"bench execute failed for {method}\nSTDOUT:\n{proc.stdout}\nSTDERR:\n{proc.stderr}"
+        )
+    text = proc.stdout.strip()
+    return json.loads(text) if text else None
+
+
+def get_doc(doctype: str, name: str) -> dict[str, Any]:
+    return bench_execute("frappe.client.get", kwargs={"doctype": doctype, "name": name})
+
+
+def try_get_doc(doctype: str, name: str) -> dict[str, Any] | None:
+    try:
+        return get_doc(doctype, name)
+    except RuntimeError as exc:
+        if "DoesNotExistError" in str(exc):
+            return None
+        raise
+
+
+def decode_json(value: str | None) -> Any:
+    if not value:
+        return []
+    return json.loads(value)
+
+
+def check_workspace() -> list[str]:
+    failures = []
+    workspace = get_doc("Workspace", ACCOUNTANT_HOME)
+    content = json.loads(workspace.get("content") or "[]")
+    content_text = json.dumps(content)
+    shortcut_blocks = {
+        (block.get("data") or {}).get("shortcut_name")
+        for block in content
+        if block.get("type") == "shortcut"
+    }
+    card_blocks = {
+        (block.get("data") or {}).get("number_card_name")
+        for block in content
+        if block.get("type") == "number_card"
+    }
+    shortcuts = {row.get("label"): row for row in workspace.get("shortcuts", [])}
+    roles = {row.get("role") for row in workspace.get("roles", [])}
+    workspace_cards = {row.get("number_card_name") for row in workspace.get("number_cards", [])}
+
+    if ACCOUNTANT_ROLE not in roles:
+        failures.append(f"{ACCOUNTANT_HOME} missing role {ACCOUNTANT_ROLE!r}")
+
+    for text in EXPECTED_TEXT:
+        if text not in content_text:
+            failures.append(f"{ACCOUNTANT_HOME} content missing text {text!r}")
+
+    for label, (doctype, view) in EXPECTED_SHORTCUTS.items():
+        shortcut = shortcuts.get(label)
+        if not shortcut:
+            failures.append(f"{ACCOUNTANT_HOME} missing shortcut {label!r}")
+            continue
+        if label not in shortcut_blocks:
+            failures.append(f"{ACCOUNTANT_HOME} content missing shortcut block {label!r}")
+        if shortcut.get("link_to") != doctype or shortcut.get("doc_view") != view:
+            failures.append(
+                f"{ACCOUNTANT_HOME} {label!r} expected {doctype}/{view}, found "
+                f"{shortcut.get('link_to')}/{shortcut.get('doc_view')}"
+            )
+
+    for label, url in EXPECTED_URL_SHORTCUTS.items():
+        shortcut = shortcuts.get(label)
+        if not shortcut:
+            failures.append(f"{ACCOUNTANT_HOME} missing shortcut {label!r}")
+            continue
+        if label not in shortcut_blocks:
+            failures.append(f"{ACCOUNTANT_HOME} content missing shortcut block {label!r}")
+        if shortcut.get("type") != "URL" or shortcut.get("url") != url:
+            failures.append(
+                f"{ACCOUNTANT_HOME} {label!r} expected URL {url}, found "
+                f"{shortcut.get('type')} {shortcut.get('url')}"
+            )
+
+    for card_name in EXPECTED_NUMBER_CARDS:
+        if card_name not in workspace_cards:
+            failures.append(f"{ACCOUNTANT_HOME} missing number card child row {card_name!r}")
+        if card_name not in card_blocks:
+            failures.append(f"{ACCOUNTANT_HOME} content missing number card block {card_name!r}")
+
+    return failures
+
+
+def check_number_cards() -> list[str]:
+    failures = []
+    for name, expected in EXPECTED_NUMBER_CARDS.items():
+        card = try_get_doc("Number Card", name)
+        if not card:
+            failures.append(f"Missing Number Card {name!r}")
+            continue
+        for key in ("label", "document_type", "function"):
+            if card.get(key) != expected[key]:
+                failures.append(
+                    f"Number Card {name!r} {key} expected {expected[key]!r}, found {card.get(key)!r}"
+                )
+        if decode_json(card.get("filters_json")) != expected["filters_json"]:
+            failures.append(
+                f"Number Card {name!r} filters expected {expected['filters_json']!r}, "
+                f"found {decode_json(card.get('filters_json'))!r}"
+            )
+    return failures
+
+
+def main() -> int:
+    failures = []
+    try:
+        failures.extend(check_workspace())
+        failures.extend(check_number_cards())
+    except Exception as exc:
+        failures.append(str(exc))
+
+    if failures:
+        print("[FINANCE WORKSPACE PARITY] FAIL")
+        for failure in failures:
+            print(f"  - {failure}")
+        return 1
+
+    print("[FINANCE WORKSPACE PARITY] PASS")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
