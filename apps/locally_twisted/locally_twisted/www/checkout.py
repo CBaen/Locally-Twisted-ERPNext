@@ -242,6 +242,68 @@ PAGE_CSS = """
     border: 1px solid #c0392b;
     color: #842424;
 }
+
+/* Civic Celebration override */
+.lt-checkout {
+    background:
+        linear-gradient(135deg, rgba(250, 247, 242, 0.98) 0%, rgba(250, 247, 242, 0.94) 58%, rgba(217, 199, 179, 0.34) 100%);
+}
+.lt-checkout__title,
+.lt-checkout__order-heading,
+.lt-checkout__totals-row--grand {
+    font-family: var(--lt-font-heading);
+    font-weight: 700;
+    color: var(--lt-ink);
+}
+.lt-checkout__subtitle {
+    color: var(--lt-soft-gray);
+}
+.lt-checkout__order-card {
+    border: 1px solid rgba(14, 34, 64, 0.16);
+    border-radius: 4px;
+    box-shadow: 0 18px 36px rgba(10, 10, 11, 0.06);
+}
+.lt-checkout__line-name,
+.lt-checkout__line-amount,
+.lt-checkout__field label,
+.lt-checkout__input,
+.lt-checkout__submit {
+    font-family: var(--lt-font-body);
+}
+.lt-checkout__line-name,
+.lt-checkout__line-amount,
+.lt-checkout__totals-row--grand {
+    color: var(--lt-navy);
+}
+.lt-checkout__field label {
+    color: var(--lt-ink);
+    font-weight: 900;
+}
+.lt-checkout__input {
+    background: #fff;
+    border: 1px solid rgba(14, 34, 64, 0.18);
+    border-radius: 3px;
+}
+.lt-checkout__input:focus {
+    outline: 2px solid var(--lt-brass);
+    border-color: var(--lt-navy);
+}
+.lt-checkout__notice {
+    background-color: rgba(217, 199, 179, 0.3);
+    border-radius: 3px;
+}
+.lt-checkout__notice a {
+    color: var(--lt-navy);
+}
+.lt-checkout__submit {
+    background-color: var(--lt-crimson);
+    border-radius: 3px;
+}
+.lt-checkout__submit:hover,
+.lt-checkout__submit:focus-visible {
+    background-color: var(--lt-navy);
+    outline: 2px solid var(--lt-brass);
+}
 """
 
 

@@ -6,11 +6,11 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
-## 2026-05-03 - Engine comparisons need one payload truth source
+## 2026-05-03 - Sitewide visual passes need cache-bust plus screenshot proof
 
-The PlayCanvas/Babylon event-builder spike could have drifted into two separate demos with matching screenshots but different facts. That would be useless for a future sales/design tool because the payload, balloon counts, scale rules, and interaction behavior matter as much as the pixels.
+The Civic overhaul changed shared CSS, Jinja partials, Python controller constants, generated imagery, Webshop surfaces, and policy/success pages. Route 200 checks and layout tests were necessary, but they would not have caught the old header treatment, stale controller output, unreadable hero treatment, blank map embed, or mobile header overlap on their own.
 
-**Counter-move:** for renderer comparisons, put scene facts and payload construction in shared code first, then make each engine renderer consume the same scene objects. Verify payload parity between engines except for the explicit engine field, and test at least one interaction that mutates the payload. Screenshots prove the canvas rendered; shared facts prove the engine comparison did not change the business contract.
+**Counter-move:** for broad Frappe visual work, bump the CSS query string, clear website cache, restart the backend when controller constants changed, then verify with route checks, layout/contract checks, and real desktop/mobile screenshots. Treat screenshot inspection as part of the acceptance test, not polish.
 
 ---
 
@@ -27,6 +27,14 @@ Checkout already converted a Contact-linked Lead by setting native `Lead.status 
 A backend inventory pass briefly saw temporary records created by checkout/payment/cascade verification. Those records were real while the verifier was running, but they were not stable business state because the verifier rolled them back.
 
 **Counter-move:** run live DB inventory after mutating verifiers finish and their cleanup checks pass. If parallel verification is unavoidable, label counts as test-window counts and rerun the inventory sequentially before documenting them.
+
+---
+
+## 2026-05-03 - Engine comparisons need one payload truth source
+
+The PlayCanvas/Babylon event-builder spike could have drifted into two separate demos with matching screenshots but different facts. That would be useless for a future sales/design tool because the payload, balloon counts, scale rules, and interaction behavior matter as much as the pixels.
+
+**Counter-move:** for renderer comparisons, put scene facts and payload construction in shared code first, then make each engine renderer consume the same scene objects. Verify payload parity between engines except for the explicit engine field, and test at least one interaction that mutates the payload. Screenshots prove the canvas rendered; shared facts prove the engine comparison did not change the business contract.
 
 ---
 

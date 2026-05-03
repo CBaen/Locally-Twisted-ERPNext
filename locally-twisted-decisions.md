@@ -22,6 +22,20 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-03 - Civic Celebration overhaul becomes the site-wide V1 visual direction
+
+**Decision:** The V1 public site should use the Civic Celebration palette and Utah territory posture across customer-facing routes, with Brand Direction typography polish, brass line icons, a stronger `LOCALLY TWISTED` header wordmark, and company/team-centered copy.
+
+**Reasoning:** GL approved the synthesis of Civic Celebration as the foundation and Locally Twisted Brand Direction as the quality layer. The old pastel/small-catalog direction did not fit the priority buyers: corporate, school, civic, venue, public-event, and premium private-event customers. The company also needs to be saleable later, so the site should not make Jeff the irreplaceable brand character.
+
+**Implementation:** Updated the shared theme CSS, header, home hero, contact/book form styling, BTFP, portfolio, FAQ, policy/accessibility/thank-you/payment surfaces, shop, category pages, product detail, cart, and checkout. Added the generated city/Wasatch hero asset at `apps/locally_twisted/locally_twisted/public/images/home/hero-wasatch-city-20260503.png`. Replaced the external contact map iframe with a controlled service-area panel so the contact page does not depend on a blank third-party embed.
+
+**Verification receipt:** `python scripts/dev/clear_website_cache.py --restart`, route status checks for the main customer routes, `python scripts/verify/nav_ia.py`, `npm run test:layout-fit`, `python scripts/verify/smoke_shop.py`, `python scripts/verify/cart_checkout_contract.py`, `python scripts/verify/catalog_variant_contract.py`, `python scripts/verify/variant_media_contract.py`, `python scripts/verify/contact_prefill.py --base-url http://localhost:8081`, `python scripts/verify/contact_service_logic.py --base-url http://localhost:8081`, and `python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --shape-only --skip-newsletter` passed. Desktop/mobile screenshots were captured to `output/playwright/civic-overhaul-20260503-verified/`.
+
+**Decided by:** GL approved the Civic + Brand Direction synthesis; Codex implemented the site-wide pass and verified the rendered site.
+
+---
+
 ## 2026-05-03 - Checkout conversion moves matched Leads to Approved, not New Inquiry
 
 **Decision:** When guest checkout reuses a Contact that is linked to an existing Lead, checkout should continue converting native `Lead.status` and setting `Lead.customer`, and it should also move `Lead.custom_pipeline_stage` to `Approved`.
@@ -44,7 +58,7 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 **Implementation:** `_resources/STYLE-GUIDE.md`, `workstreams/brand-audience-style-reset.md`, the shared theme CSS, and the homepage hero/proof bar were updated toward the approved synthesis. The work keeps Zurchers-style clarity contained to ready-to-order shopping flows, not the company identity.
 
-**Verification receipt:** Pending screenshot and route verification for the implementation pass.
+**Verification receipt:** `python scripts/dev/clear_website_cache.py --restart`, `python scripts/verify/nav_ia.py`, `npm run test:layout-fit`, `python -B -m py_compile apps\locally_twisted\locally_twisted\www\home.py`, and `python scripts/verify/playwright_screenshot.py --base-url http://localhost:8081 --paths /,/shop,/contact,/shop-items/arches/classic-arch --output-dir output/playwright/brand-synthesis-20260503` passed. Screenshot artifacts are in `output/playwright/brand-synthesis-20260503/`. The first local screenshot revealed the authority SVGs rendering too large because the Python homepage controller had not reloaded; fixed with explicit SVG dimensions and a backend restart.
 
 **Decided by:** GL approved the corrected synthesis; Codex implemented the first foundation slice.
 
