@@ -55,6 +55,7 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 
 ### Future scope (post-Phase 1)
 
+- [P1] **Design Studio V2 hidden route decision after engine spike.** Research-only PlayCanvas/Babylon package is complete at `research/design-studio-v2/event-builder-spike/`; feature handoff is `workstreams/event-builder-spike.md`. Both engines passed, so the current recommendation is PlayCanvas. Next: review screenshots/payload with GL, then decide whether to build a hidden Frappe route. Keep save/share, Lead submission, checkout, pricing, and ERPNext writes out of scope until separately approved.
 - **Design Studio — interactive picker for the customizable categories** (arches, columns, garlands, backdrops, drops, bouquets). 6th category (Bouquets) added 2026-04-27 per GL — bouquets are also customizable. Pattern: SVG-based picker (NOT Remotion — wrong tool, video-rendering not interactive UI). Inputs: backdrop selection (indoor/outdoor presets) → balloon shape placement → 70-color palette pick. Output: an inquiry form pre-filled with the customer's "vision," NOT a checkout. Resolves Jeff's "customers want to see colors and pick options" instinct without the wrong checkout flow. Scoped post-Slice 9 once the lookbook surface lands.
 
 ### First-ship omissions to revisit (deliberate deferrals)

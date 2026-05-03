@@ -8,6 +8,19 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-03 - Event-builder engine spike defaults to PlayCanvas
+
+**Decision:** For the next research step of the Design Studio V2 event builder, use PlayCanvas as the default renderer if GL approves moving from the isolated spike to a hidden Frappe-route spike.
+
+**Reasoning:** The spike compared PlayCanvas and Babylon.js against the same corporate-stage scene, payload facts, fixed isometric camera requirement, 1 ft scale grid, draggable pieces, and desktop/mobile verification. Both engines passed. The pre-agreed rule says that when both pass, choose PlayCanvas because the long-term product is closer to a mini event-space game than a static renderer.
+
+**Implementation:** Added the research-only nested package at `research/design-studio-v2/event-builder-spike/`, with `playcanvas.html`, `babylon.html`, shared scene/payload code, engine-specific renderers, and `verify_spike.cjs`. The package is explicitly not a production Frappe route and does not touch `apps/`, Leads, checkout, save/share, or ERPNext data.
+
+**Verification receipt:** `npm run build` and `npm run verify` passed from the spike folder. The verifier checked both engines at desktop and mobile widths, no console/page errors, nonblank canvas output, fixed-camera runtime state, 1 ft grid facts, payload parity, arch math of 200 balloons / 50 clusters, organic garland math of 97 balloons with size layers, drag-updated placement, and mobile overflow. Screenshots were captured under `output/playwright/design-studio-v2-event-builder-spike/`.
+
+**Decided by:** Codex implemented the previous agent's approved spike plan and applied the engine decision rule supplied in that plan.
+
+---
 ## 2026-05-03 - Approved visual synthesis combines Civic Celebration structure with Brand Direction polish
 
 **Decision:** The public website's brand foundation should use the Civic Celebration direction for structure and buyer posture, then apply the higher-quality Locally Twisted Brand Direction typography, brass/gold line-icon treatment, and premium hierarchy. Civic's circular trust badges are not approved as-is; use premium brass line icons instead.

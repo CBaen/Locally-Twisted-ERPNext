@@ -1,0 +1,15 @@
+{
+  "name": "lt-event-builder-spike",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "verify": "node verify_spike.cjs"
+  },
+  "dependencies": {
+    "@babylonjs/core": "^8.38.0",
+    "playcanvas": "^2.12.3",
+    "vite": "^7.1.12"
+  }
+}

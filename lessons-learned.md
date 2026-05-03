@@ -6,6 +6,13 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-03 - Engine comparisons need one payload truth source
+
+The PlayCanvas/Babylon event-builder spike could have drifted into two separate demos with matching screenshots but different facts. That would be useless for a future sales/design tool because the payload, balloon counts, scale rules, and interaction behavior matter as much as the pixels.
+
+**Counter-move:** for renderer comparisons, put scene facts and payload construction in shared code first, then make each engine renderer consume the same scene objects. Verify payload parity between engines except for the explicit engine field, and test at least one interaction that mutates the payload. Screenshots prove the canvas rendered; shared facts prove the engine comparison did not change the business contract.
+
+---
 ## 2026-05-02 - Inventory existing cascades before adding new stage automation
 
 ERPNext may already be doing part of the business workflow through checkout, payment success, webhooks, or native document helpers. In LT, `/checkout` already creates Customer/Contact, Sales Order, and Payment Request records, while `/payment-success` and the Stripe webhook reconcile paid orders into Sales Invoices and transactional emails.

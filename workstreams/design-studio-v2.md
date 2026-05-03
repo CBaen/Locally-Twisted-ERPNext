@@ -243,6 +243,8 @@ Before this can move from prototype to production:
 
 ## Next Action
 
+Engine spike status: research-only PlayCanvas/Babylon.js event-builder comparison built under `research/design-studio-v2/event-builder-spike/`. See `workstreams/event-builder-spike.md` for the feature handoff and verification receipts. Both engines passed the verifier; under the agreed decision rule, PlayCanvas is the recommended default for a future hidden Frappe-route spike.
+
 Prototype status: dormant static prototype built under `research/design-studio-v2/prototype/`. It is not production-integrated and does not touch V1 launch routes.
 
 Next review should decide whether GL wants changes to the prototype interaction, renderer assumptions, disclaimer, color catalog, or customer-facing `Plan Custom Decor` naming before any production Frappe route work is considered.
