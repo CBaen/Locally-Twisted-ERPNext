@@ -1,5 +1,7 @@
 # Plan Custom Decor Dormant Prototype Implementation Plan
 
+> **Correction note, 2026-05-02:** This plan was the original narrow build plan. The implemented prototype has since been corrected after GL review to use product-family controls and construction engines for Classic arch, Classic column, Organic garland, Backdrop wall, and Balloon drop. Do not use the older "organic garland deferred" boundary below as current scope without re-checking `prototype/README.md` and `prototype/REVIEW-QA.md`.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development or an equivalent bounded worker flow to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Build a dormant, static, Frappe-compatible prototype of the future `Plan Custom Decor` experience without touching V1 launch routes or production Frappe app files.

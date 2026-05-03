@@ -40,7 +40,19 @@ Prototype folder:
 
 - `prototype/`
 
+Review QA notes:
+
+- `prototype/REVIEW-QA.md`
+
 The prototype is static research output. It is not a public Frappe route and does not prove production save/share/CRM behavior.
+
+Current correction:
+
+- The prototype now starts from customizable product families and construction engines, not only the original three-piece review shell.
+- Covered review states: Classic arch, Classic column, Organic garland, Backdrop wall, and Balloon drop.
+- The older build-plan boundary that deferred organic garland is superseded by GL feedback that variant-heavy customizable products belong in this quality step.
+- Classic arch math now uses the old physics-render reference density of 40 balloons per 5 ft for 11 inch structured arches and a two-color candy-cane spiral model.
+- Organic garland math now follows the Odoo construction reference: strip backbone, 11 inch body balloons, 16/24 inch anchors, 5 inch filler, and 10-15% planning overage.
 
 ## Rules
 

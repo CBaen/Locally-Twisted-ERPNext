@@ -35,10 +35,10 @@ sitemap = 1
 # (Slice 14), these get replaced by the latest blog post titles
 # pulled from `frappe.get_list("Blog Post", ...)`.
 HERO_CYCLING_TITLES = [
-    "Twenty-eight years, made by hand.",
-    "Every arch begins with a color conversation.",
-    "We make things people remember.",
-    "Custom balloon decor, Wasatch Front.",
+    "Big moments. Expertly executed.",
+    "Custom balloon decor for Utah events that matter.",
+    "City, campus, corporate, and community ready.",
+    "Designed with care. Built to perform.",
 ]
 
 
@@ -219,7 +219,7 @@ REVIEW_QUOTES = [
 PAGE_CSS = """
 /* ======================================================================
  * HOMEPAGE v2 — portfolio-forward shape (portfolio-led, twisting at bottom)
- * BEM blocks: lt-hero, lt-reviews-block, lt-divider, lt-categories,
+ * BEM blocks: lt-hero, lt-authority, lt-reviews-block, lt-divider, lt-categories,
  *             lt-featured, lt-crawl, lt-cta, lt-twisting-spotlight
  * Uses CSS variables from lt-theme.css (--lt-teal, --lt-near-black, etc.)
  * ====================================================================== */
@@ -266,56 +266,55 @@ PAGE_CSS = """
     width: 0.45rem;
     height: 0.45rem;
     border-radius: 50%;
-    background-color: var(--lt-teal);
-    opacity: 0.55;
+    background-color: var(--lt-brass);
+    opacity: 0.75;
 }
 
 /* --- Hero ------------------------------------------------------------ */
 .lt-hero {
     position: relative;
-    min-height: 580px;
-    background-color: var(--lt-blush-tint);
+    min-height: 470px;
+    background-color: var(--lt-navy);
     overflow: hidden;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
 }
 .lt-hero__image {
     position: absolute;
     inset: 0;
-    background-image: url('/assets/locally_twisted/images/home/hero.jpg');
+    background-image: url('/assets/locally_twisted/images/home/hero-wasatch-city-20260503.png');
     background-size: cover;
     background-position: center;
-    background-color: var(--lt-blush-tint);
+    background-color: var(--lt-navy);
 }
 .lt-hero__image::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0) 30%,
-        rgba(0, 0, 0, 0.65) 100%
-    );
+    background:
+        linear-gradient(90deg, rgba(10, 10, 11, 0.88) 0%, rgba(14, 34, 64, 0.72) 42%, rgba(14, 34, 64, 0.12) 100%),
+        linear-gradient(180deg, rgba(14, 34, 64, 0.05) 0%, rgba(10, 10, 11, 0.34) 100%);
 }
 .lt-hero__content {
     position: relative;
     z-index: 1;
     width: 100%;
-    max-width: 1200px;
+    max-width: 1280px;
     margin: 0 auto;
-    padding: 3rem 1.5rem 2.75rem;
-    text-align: center;
+    padding: 4rem 1.5rem;
+    text-align: left;
     color: var(--lt-white);
 }
 .lt-hero__eyebrow {
-    font-family: 'Raleway', sans-serif;
+    font-family: var(--lt-font-body);
     font-size: 0.875rem;
     font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     margin: 0 0 0.75rem;
-    opacity: 0.92;
-    text-align: center;
+    color: var(--lt-brass);
+    opacity: 0.95;
+    text-align: left;
 }
 .lt-hero__cycling {
     position: relative;
@@ -327,12 +326,13 @@ PAGE_CSS = """
     inset: 0;
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-family: 'DM Serif Display', Georgia, serif;
+    justify-content: flex-start;
+    font-family: var(--lt-font-heading);
+    font-weight: 700;
     font-size: 2.25rem;
     line-height: 1.1;
     color: var(--lt-white);
-    text-align: center;
+    text-align: left;
     margin: 0;
     opacity: 0;
     animation: lt-hero-cycle 32s infinite;
@@ -357,24 +357,24 @@ PAGE_CSS = """
     .lt-hero__title:nth-child(1) { opacity: 1; }
 }
 .lt-hero__tagline {
-    font-family: 'Raleway', sans-serif;
+    font-family: var(--lt-font-body);
     font-size: 1.0625rem;
-    margin: 0 auto 1.75rem;
+    margin: 0 0 1.75rem;
     max-width: 38ch;
-    font-weight: 300;
+    font-weight: 500;
     color: rgba(255, 255, 255, 0.96);
-    text-align: center;
-    letter-spacing: 0.01em;
+    text-align: left;
+    letter-spacing: 0;
 }
 .lt-hero__cta {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
     padding: 0.95rem 2rem;
-    background-color: var(--lt-teal);
+    background-color: var(--lt-crimson);
     color: var(--lt-white);
     text-decoration: none;
-    font-family: 'Raleway', sans-serif;
+    font-family: var(--lt-font-body);
     font-weight: 600;
     font-size: 1rem;
     border-radius: 0.375rem;
@@ -382,17 +382,70 @@ PAGE_CSS = """
 }
 .lt-hero__cta:hover,
 .lt-hero__cta:focus-visible {
-    background-color: #006666;
+    background-color: var(--lt-navy);
     color: var(--lt-white);
     outline: 2px solid var(--lt-white);
     outline-offset: 2px;
 }
 @media (min-width: 768px) {
-    .lt-hero { min-height: 680px; }
-    .lt-hero__content { padding: 4.5rem 2rem 4rem; }
+    .lt-hero { min-height: 560px; }
+    .lt-hero__content { padding: 5rem 2rem; }
     .lt-hero__cycling { min-height: 5.5rem; }
     .lt-hero__title { font-size: 3.75rem; }
     .lt-hero__tagline { font-size: 1.25rem; }
+}
+
+/* --- Authority proof bar -------------------------------------------- */
+.lt-authority {
+    background-color: var(--lt-ink);
+    color: var(--lt-near-white);
+    border-top: 1px solid rgba(184, 154, 91, 0.42);
+    border-bottom: 1px solid rgba(184, 154, 91, 0.42);
+    padding: 2.5rem 1.25rem;
+}
+.lt-authority__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+@media (min-width: 768px) {
+    .lt-authority__inner {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.75rem;
+    }
+}
+.lt-authority__item {
+    text-align: center;
+}
+.lt-authority__icon {
+    display: inline-flex;
+    width: 52px;
+    height: 52px;
+    color: var(--lt-brass);
+    margin-bottom: 0.75rem;
+}
+.lt-authority__icon svg {
+    width: 100%;
+    height: 100%;
+}
+.lt-authority__title {
+    font-family: var(--lt-font-body);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--lt-near-white);
+    margin: 0 0 0.45rem;
+}
+.lt-authority__text {
+    font-family: var(--lt-font-body);
+    font-size: 0.9rem;
+    line-height: 1.45;
+    color: rgba(250, 247, 242, 0.78);
+    max-width: 18rem;
+    margin: 0 auto;
 }
 
 /* --- Reviews block (replaces the prior trust strip) ----------------- */
@@ -402,7 +455,7 @@ PAGE_CSS = """
  * carousel viewport spans the full band so more cards are visible at
  * once and the mask fades into empty space, not readable text. */
 .lt-reviews-block {
-    background-color: var(--lt-blue-tint);
+    background-color: var(--lt-near-white);
     padding: 3rem 1rem 3.5rem;
 }
 .lt-reviews-block__inner {
@@ -418,21 +471,21 @@ PAGE_CSS = """
     gap: 0.4rem;
     margin: 0 0 2rem;
     text-decoration: none;
-    color: var(--lt-near-black);
+    color: var(--lt-navy);
 }
 .lt-reviews-block__stars {
-    color: #f5b400;
+    color: var(--lt-brass);
     font-size: 1.625rem;
     letter-spacing: 0.1em;
     line-height: 1;
 }
 .lt-reviews-block__score {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: var(--lt-font-heading);
     font-size: 2rem;
     color: var(--lt-near-black);
 }
 .lt-reviews-block__count {
-    font-family: 'Raleway', sans-serif;
+    font-family: var(--lt-font-body);
     font-size: 0.95rem;
     color: var(--lt-soft-gray);
 }
@@ -490,20 +543,21 @@ PAGE_CSS = """
     border-radius: 0.5rem;
     padding: 1.5rem 1.5rem 1.25rem;
     text-align: left;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(184, 154, 91, 0.22);
+    box-shadow: 0 10px 28px rgba(10, 10, 11, 0.06);
     display: flex;
     flex-direction: column;
 }
 .lt-reviews-block__quote-mark {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: var(--lt-font-heading);
     font-size: 2.5rem;
-    color: var(--lt-teal);
+    color: var(--lt-brass);
     line-height: 1;
     margin: 0 0 0.5rem;
     opacity: 0.6;
 }
 .lt-reviews-block__quote-text {
-    font-family: 'Raleway', sans-serif;
+    font-family: var(--lt-font-body);
     font-size: 0.95rem;
     color: var(--lt-near-black);
     line-height: 1.55;
@@ -511,13 +565,13 @@ PAGE_CSS = """
     min-height: 3.5rem;
 }
 .lt-reviews-block__quote-attr {
-    font-family: 'Raleway', sans-serif;
+    font-family: var(--lt-font-body);
     font-size: 0.8125rem;
     color: var(--lt-soft-gray);
     margin: 0 0 0.75rem;
 }
 .lt-reviews-block__quote-stars {
-    color: #f5b400;
+    color: var(--lt-brass);
     font-size: 1rem;
     letter-spacing: 0.12em;
     line-height: 1;
@@ -540,7 +594,7 @@ PAGE_CSS = """
     padding: 4rem 1.5rem;
 }
 .lt-categories__heading {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: var(--lt-font-heading);
     font-size: 2.25rem;
     text-align: center;
     color: var(--lt-near-black);
@@ -555,8 +609,8 @@ PAGE_CSS = """
 }
 .lt-categories__heading-link:hover,
 .lt-categories__heading-link:focus-visible {
-    color: var(--lt-teal);
-    border-bottom-color: var(--lt-teal);
+    color: var(--lt-berry);
+    border-bottom-color: var(--lt-brass);
     text-decoration: none;
 }
 .lt-categories__lede {
@@ -607,7 +661,8 @@ PAGE_CSS = """
     width: 130px;
     height: 130px;
     border-radius: 50%;
-    background-color: var(--lt-blush-tint);
+    background-color: var(--lt-near-white);
+    border: 1px solid rgba(184, 154, 91, 0.35);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -615,16 +670,16 @@ PAGE_CSS = """
 }
 .lt-categories__link:hover .lt-categories__circle,
 .lt-categories__link:focus-visible .lt-categories__circle {
-    background-color: var(--lt-blue-tint);
+    background-color: var(--lt-stone);
     transform: translateY(-3px);
 }
 .lt-categories__icon-svg {
     width: 56px;
     height: 56px;
-    color: var(--lt-near-black);
+    color: var(--lt-brass);
 }
 .lt-categories__name {
-    font-family: 'Raleway', sans-serif;
+    font-family: var(--lt-font-body);
     font-size: 1rem;
     font-weight: 600;
     line-height: 1.3;
@@ -649,7 +704,7 @@ PAGE_CSS = """
     .lt-featured__inner { max-width: none; }
 }
 .lt-featured__heading {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: var(--lt-font-heading);
     font-size: 2.25rem;
     text-align: center;
     color: var(--lt-near-black);
@@ -682,7 +737,8 @@ PAGE_CSS = """
     overflow: hidden;
     text-decoration: none;
     color: inherit;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(184, 154, 91, 0.22);
+    box-shadow: 0 10px 30px rgba(10, 10, 11, 0.07);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     display: block;
 }
@@ -710,16 +766,16 @@ PAGE_CSS = """
     .lt-featured__body { padding: 1.75rem 2rem 2rem; }
 }
 .lt-featured__category {
-    font-family: 'Raleway', sans-serif;
+    font-family: var(--lt-font-body);
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--lt-soft-gray);
+    color: var(--lt-berry);
     margin: 0 0 0.5rem;
 }
 .lt-featured__title {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: var(--lt-font-heading);
     font-size: 1.375rem;
     color: var(--lt-near-black);
     margin: 0;
@@ -736,7 +792,7 @@ PAGE_CSS = """
     text-decoration: none;
     border: 1px solid var(--lt-near-black);
     border-radius: 0.375rem;
-    font-family: 'Raleway', sans-serif;
+    font-family: var(--lt-font-body);
     font-weight: 600;
     font-size: 0.9375rem;
 }
@@ -748,12 +804,12 @@ PAGE_CSS = """
 
 /* --- Client Logo Crawl ---------------------------------------------- */
 .lt-crawl {
-    background-color: var(--lt-blush-tint);
+    background-color: var(--lt-stone);
     padding: 2.75rem 0 3.25rem;
     overflow: hidden;
 }
 .lt-crawl__heading {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: var(--lt-font-heading);
     font-size: 1.625rem;
     text-align: center;
     color: var(--lt-near-black);
@@ -792,7 +848,7 @@ PAGE_CSS = """
 .lt-crawl__item {
     flex: 0 0 auto;
     padding: 0 2rem;
-    font-family: 'Raleway', sans-serif;
+    font-family: var(--lt-font-body);
     font-size: 1rem;
     font-weight: 500;
     color: var(--lt-near-black);
@@ -815,7 +871,7 @@ PAGE_CSS = """
 
 /* --- Closing CTA ---------------------------------------------------- */
 .lt-cta {
-    background-color: var(--lt-soft-blue, var(--lt-blue-tint));
+    background-color: var(--lt-navy);
     padding: 4rem 1rem 4.5rem;
     text-align: center;
 }
@@ -824,17 +880,17 @@ PAGE_CSS = """
     margin: 0 auto;
 }
 .lt-cta__heading {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: var(--lt-font-heading);
     font-size: 2.5rem;
-    color: var(--lt-near-black);
+    color: var(--lt-near-white);
     margin: 0 0 1rem;
     line-height: 1.15;
     text-align: center;
 }
 .lt-cta__body {
-    font-family: 'Raleway', sans-serif;
+    font-family: var(--lt-font-body);
     font-size: 1.125rem;
-    color: var(--lt-near-black);
+    color: rgba(250, 247, 242, 0.82);
     max-width: 620px;
     margin: 0 auto 1.75rem;
     line-height: 1.55;
@@ -845,20 +901,20 @@ PAGE_CSS = """
     align-items: center;
     gap: 0.5rem;
     padding: 0.95rem 2rem;
-    background-color: var(--lt-teal);
+    background-color: var(--lt-berry);
     color: var(--lt-white);
     text-decoration: none;
     border-radius: 0.375rem;
-    font-family: 'Raleway', sans-serif;
+    font-family: var(--lt-font-body);
     font-weight: 600;
     font-size: 1rem;
     min-height: 48px;
 }
 .lt-cta__button:hover,
 .lt-cta__button:focus-visible {
-    background-color: #006666;
+    background-color: var(--lt-ink);
     color: var(--lt-white);
-    outline: 2px solid var(--lt-near-black);
+    outline: 2px solid var(--lt-brass);
     outline-offset: 2px;
 }
 @media (min-width: 768px) {
@@ -894,7 +950,7 @@ PAGE_CSS = """
     border-radius: 0.5rem;
 }
 .lt-twisting-spotlight__eyebrow {
-    font-family: 'Raleway', sans-serif;
+    font-family: var(--lt-font-body);
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -903,14 +959,14 @@ PAGE_CSS = """
     margin: 0 0 0.5rem;
 }
 .lt-twisting-spotlight__heading {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: var(--lt-font-heading);
     font-size: 1.875rem;
     color: var(--lt-near-black);
     margin: 0 0 1rem;
     line-height: 1.2;
 }
 .lt-twisting-spotlight__body p {
-    font-family: 'Raleway', sans-serif;
+    font-family: var(--lt-font-body);
     font-size: 1rem;
     color: var(--lt-near-black);
     margin: 0 0 1rem;
@@ -924,13 +980,13 @@ PAGE_CSS = """
     color: var(--lt-white);
     text-decoration: none;
     border-radius: 0.375rem;
-    font-family: 'Raleway', sans-serif;
+    font-family: var(--lt-font-body);
     font-weight: 600;
     margin-top: 0.5rem;
 }
 .lt-twisting-spotlight__cta:hover,
 .lt-twisting-spotlight__cta:focus-visible {
-    background-color: #006666;
+    background-color: var(--lt-navy);
     color: var(--lt-white);
 }
 """
@@ -955,15 +1011,14 @@ def _abbreviate_name(name):
 
 
 def get_context(context):
-    context.title = "Locally Twisted — Utah's Balloon Specialists | Custom Event Decor"
+    context.title = "Locally Twisted - Utah Balloon Event Decor & Installations"
     context.metatags = {
         "description": (
-            "Utah's premier balloon specialists for over 25 years. Custom arches, "
-            "garlands, drops, twisting, and face painting for weddings, birthdays, "
-            "and corporate events across the Wasatch Front."
+            "Professional balloon decor and event installations for corporate, "
+            "school, civic, community, and private events across the Wasatch Front."
         ),
-        "og:title": "Locally Twisted — Utah's Balloon Specialists",
-        "og:description": "Custom balloon decor for celebrations across the Wasatch Front since 1998.",
+        "og:title": "Locally Twisted - Utah Balloon Event Decor",
+        "og:description": "Custom balloon decor and event installations across the Wasatch Front since 1998.",
         "og:type": "website",
     }
     context.hero_cycling_titles = HERO_CYCLING_TITLES

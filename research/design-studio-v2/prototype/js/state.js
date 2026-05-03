@@ -1,27 +1,36 @@
 (function () {
-  const initialState = {
-    schema_version: "design-studio-prototype-v1",
+  const { normalizeState } = window.LTDesignStudio;
+
+  const initialState = normalizeState({
+    schema_version: "design-studio-prototype-v2",
+    review_scenario: "classic_arch",
     event_context: "Corporate",
-    piece_type: "classic_arch",
-    style: "spiral",
-    scale: "door",
-    selected_color_names: ["Reflex Gold", "Deep Teal"],
-    pieces_considered: ["classic_columns"],
+    product_family: "arch",
+    design_id: "arch_swirl",
+    dimension_id: "arch_25",
+    balloon_size_id: "eleven_inch",
+    density_tier_id: "standard",
+    selected_color_names: ["Reflex Gold", "Deep Teal", "White"],
+    pieces_considered: ["column"],
     disclaimer: "Planning visualization. Final design and installation details are confirmed by Locally Twisted."
-  };
+  });
+
+  function cloneState(state) {
+    return {
+      ...state,
+      selected_color_names: [...state.selected_color_names],
+      pieces_considered: [...state.pieces_considered]
+    };
+  }
 
   function createStore(initial = initialState) {
-    let state = { ...initial };
+    let state = normalizeState(initial);
     const listeners = new Set();
     return {
-      getState: () => ({
-        ...state,
-        selected_color_names: [...state.selected_color_names],
-        pieces_considered: [...state.pieces_considered]
-      }),
+      getState: () => cloneState(state),
       setState: (patch) => {
-        state = { ...state, ...patch };
-        listeners.forEach((listener) => listener(state));
+        state = normalizeState({ ...state, ...patch });
+        listeners.forEach((listener) => listener(cloneState(state)));
       },
       subscribe: (listener) => {
         listeners.add(listener);

@@ -105,6 +105,10 @@
         <div class="lt-header__nav">
             <div class="container lt-header__nav-row">
 
+                <a class="lt-header__brand lt-header__brand--desktop" href="{{ home_page or '/' }}" aria-label="Locally Twisted — go to homepage">
+                    <span class="lt-header__brand-wordmark">Locally Twisted</span>
+                </a>
+
                 <ul class="lt-header__nav-list" role="menubar">
 
                     {# ---- Mega 1: Balloon Decor ---- #}
@@ -260,6 +264,25 @@
                     </svg>
                 </a>
 
+                <ul class="lt-header__actions" aria-label="Account and checkout links">
+                    {% if frappe.session.user == "Guest" %}
+                        <li><a class="lt-header__action-link" href="/login">Sign In</a></li>
+                    {% else %}
+                        <li><a class="lt-header__action-link" href="/me">My Account</a></li>
+                    {% endif %}
+                    <li>
+                        <a class="lt-header__action-cart"
+                           href="/cart"
+                           aria-label="Shopping cart">
+                            <img src="/assets/locally_twisted/icons/cart.svg"
+                                 alt="" aria-hidden="true"
+                                 width="18" height="18">
+                            <span class="lt-cart-count" aria-live="polite" aria-atomic="true"></span>
+                        </a>
+                    </li>
+                    <li><a class="lt-header__action-cta" href="/contact">Contact Us</a></li>
+                </ul>
+
             </div>
         </div>
 
@@ -275,14 +298,7 @@
         <div class="container lt-header__mobile-row">
 
             <a class="lt-header__mobile-brand" href="{{ home_page or '/' }}" aria-label="Locally Twisted — go to homepage">
-                {%- if brand_html -%}
-                    {{ brand_html | safe }}
-                {%- else -%}
-                    <img src="/assets/locally_twisted/icons/lt-logo.png"
-                         alt="Locally Twisted"
-                         class="lt-header__mobile-logo"
-                         width="95" height="40">
-                {%- endif -%}
+                <span class="lt-header__brand-wordmark lt-header__brand-wordmark--mobile">Locally Twisted</span>
             </a>
 
             <div class="lt-header__mobile-actions">

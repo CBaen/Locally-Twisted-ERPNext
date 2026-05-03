@@ -1,91 +1,107 @@
 (function () {
   const {
-    PIECES,
-    SCALES,
-    estimateArchClusters,
-    estimateBackdropClusters,
-    estimateColumnClusters,
+    ENGINE_LABELS,
+    PRODUCT_FAMILIES,
+    calculateRenderFacts,
+    designForId,
+    familyForId,
     labelFor,
-    pieceForId,
-    scaleForId
+    scenarioForId,
+    selectedVariantAxes,
+    sourceVariantCount
   } = window.LTDesignStudio;
 
-  function labelsForPieceIds(pieceIds) {
-    return pieceIds.map((pieceId) => labelFor(PIECES, pieceId));
+  function escapeHtml(value) {
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
   }
 
-  function renderFactsFor(state) {
-    const scale = scaleForId(state.scale);
-    if (state.piece_type === "classic_columns") {
-      const heightFt = scale.id === "gym" ? 10 : scale.id === "stage" ? 8 : 7;
-      return {
-        construction_engine: "structured_cluster",
-        count_basis: "minimum_estimate",
-        estimated_clusters: estimateColumnClusters(heightFt) * 2,
-        customer_visible_precision: "planning_visual"
-      };
-    }
-    if (state.piece_type === "backdrop_wall") {
-      const dimensions = scale.id === "gym" ? [12, 8] : scale.id === "stage" ? [10, 8] : [8, 8];
-      return {
-        construction_engine: "structured_cluster",
-        count_basis: "prototype_grid",
-        estimated_clusters: estimateBackdropClusters(dimensions[0], dimensions[1]),
-        customer_visible_precision: "planning_visual"
-      };
-    }
+  function labelsForFamilyIds(familyIds) {
+    return familyIds.map((familyId) => labelFor(PRODUCT_FAMILIES, familyId));
+  }
+
+  function buildSelectedPiece(state) {
+    const family = familyForId(state.product_family);
+    const design = designForId(family.id, state.design_id);
+    const renderFacts = calculateRenderFacts(state);
     return {
-      construction_engine: "structured_cluster",
-      count_basis: "prototype_length",
-      estimated_clusters: estimateArchClusters(scale.feet),
-      customer_visible_precision: "planning_visual"
+      product_family: family.id,
+      display_label: family.label,
+      product_label: family.product_label,
+      source_products: family.source_products.map((product) => ({ ...product })),
+      variant_count: sourceVariantCount(family),
+      selected_variant_axes: selectedVariantAxes(state),
+      design: design.label,
+      selected_color_names: [...state.selected_color_names],
+      render_facts: {
+        ...renderFacts,
+        construction_basis: renderFacts.construction_basis,
+        engine_label: ENGINE_LABELS[renderFacts.render_engine] || renderFacts.render_engine
+      }
     };
   }
 
   function buildDesignPayload(state) {
-    const selectedPiece = pieceForId(state.piece_type);
-    const consideredLabels = labelsForPieceIds(state.pieces_considered);
+    const scenario = scenarioForId(state.review_scenario);
+    const selectedPiece = buildSelectedPiece(state);
+    const consideredLabels = labelsForFamilyIds(state.pieces_considered);
+
     return {
       schema_version: state.schema_version,
       source: "research_prototype",
       customer_facing_path: "Plan Custom Decor",
+      review_scenario: scenario ? scenario.id : "custom_review_state",
+      review_scenario_label: scenario ? scenario.label : "Custom review state",
       event_context: state.event_context,
-      selected_pieces: [
-        {
-          piece_type: state.piece_type,
-          display_label: selectedPiece.label,
-          style: state.style,
-          scale: labelFor(SCALES, state.scale),
-          selected_color_names: state.selected_color_names,
-          render_facts: renderFactsFor(state)
-        }
-      ],
-      pieces_considered: state.pieces_considered,
-      declined_suggestions: state.pieces_considered.map((pieceId) => ({
-        piece_type: pieceId,
-        display_label: labelFor(PIECES, pieceId),
+      selected_pieces: [selectedPiece],
+      pieces_considered: [...state.pieces_considered],
+      declined_suggestions: state.pieces_considered.map((familyId) => ({
+        product_family: familyId,
+        display_label: labelFor(PRODUCT_FAMILIES, familyId),
         reason: "Shown as a complementary planning option in the prototype."
       })),
       render_summary: {
         type: "planning_visualization",
-        disclaimer: state.disclaimer
+        disclaimer: state.disclaimer,
+        renderer: "inline_svg_2d_construction_model"
       },
-      sales_summary: `${state.event_context} decor starting point with ${selectedPiece.label} using ${state.selected_color_names.join(", ")}.`,
-      customer_summary: `Selected ${selectedPiece.label}. Also considered: ${consideredLabels.join(", ") || "none yet"}.`
+      sales_summary: `${state.event_context} decor starting point with ${selectedPiece.display_label} using ${selectedPiece.selected_color_names.join(", ")}.`,
+      customer_summary: `Selected ${selectedPiece.display_label}. Also considered: ${consideredLabels.join(", ") || "none yet"}.`
     };
+  }
+
+  function formatAxes(axes) {
+    return Object.entries(axes)
+      .map(([key, value]) => `${key.replaceAll("_", " ")}: ${value}`)
+      .join("; ");
   }
 
   function renderSummaryHtml(state) {
     const payload = buildDesignPayload(state);
     const selected = payload.selected_pieces[0];
-    const consideredLabels = labelsForPieceIds(payload.pieces_considered);
+    const facts = selected.render_facts;
+    const consideredLabels = labelsForFamilyIds(payload.pieces_considered);
+    const clusterText = facts.estimated_clusters === null
+      ? "Not a fixed-cluster build"
+      : `${facts.estimated_clusters} clusters`;
+    const variantText = selected.variant_count > 0
+      ? `${selected.variant_count} catalog variants represented`
+      : "Rule-based custom size from product specs";
+
     return `
       <dl class="summary-list">
-        <dt>Event context</dt><dd>${payload.event_context}</dd>
-        <dt>Starting piece</dt><dd>${selected.display_label}</dd>
-        <dt>Style and scale</dt><dd>${selected.style}; ${selected.scale}</dd>
-        <dt>Colors</dt><dd>${selected.selected_color_names.join(", ")}</dd>
-        <dt>Pieces considered</dt><dd>${consideredLabels.join(", ") || "None yet"}</dd>
+        <dt>Event context</dt><dd>${escapeHtml(payload.event_context)}</dd>
+        <dt>Product family</dt><dd>${escapeHtml(selected.display_label)}</dd>
+        <dt>Source variants</dt><dd>${escapeHtml(variantText)}</dd>
+        <dt>Design axes</dt><dd>${escapeHtml(formatAxes(selected.selected_variant_axes))}</dd>
+        <dt>Construction</dt><dd>${escapeHtml(selected.render_facts.engine_label)}; ${escapeHtml(clusterText)}</dd>
+        <dt>Balloon estimate</dt><dd>${escapeHtml(selected.render_facts.estimated_balloons)} balloons before final production review</dd>
+        <dt>Colors</dt><dd>${escapeHtml(selected.selected_color_names.join(", "))}</dd>
+        <dt>Pieces considered</dt><dd>${escapeHtml(consideredLabels.join(", ") || "None yet")}</dd>
         <dt>Status</dt><dd>Prototype only. No Lead, quote, save, or share action is created.</dd>
       </dl>
     `;

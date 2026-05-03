@@ -8,9 +8,12 @@
    another page reuses the pattern. */
 
 .lt-contact__intro {
-    background-color: var(--lt-blue-tint);
-    padding: 3rem 1rem 2.5rem;
+    background:
+        linear-gradient(135deg, rgba(14, 34, 64, 0.96), rgba(10, 10, 11, 0.94)),
+        linear-gradient(90deg, rgba(179, 27, 52, 0.18), rgba(217, 199, 179, 0.08));
+    padding: 3.75rem 1rem 3rem;
     text-align: center;
+    border-bottom: 4px solid #B31B34;
 }
 .lt-contact__intro > .container,
 .lt-contact__intro h1,
@@ -19,20 +22,25 @@
 }
 .lt-contact__intro h1 {
     font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 2.25rem;
-    color: var(--lt-near-black);
-    margin: 0 auto 0.5rem;
-    line-height: 1.15;
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    color: #FAF7F2;
+    margin: 0 auto 0.65rem;
+    line-height: 1.02;
+    font-weight: 700;
+    letter-spacing: 0;
 }
 .lt-contact__intro-lede {
     font-size: 1.125rem;
-    color: var(--lt-soft-gray);
+    color: rgba(250, 247, 242, 0.86);
     margin: 0 auto;
-    font-weight: 300;
+    font-weight: 400;
+    max-width: 720px;
+    line-height: 1.65;
 }
 
 .lt-contact {
-    padding: 2.5rem 1rem 3rem;
+    background-color: #FAF7F2;
+    padding: 3rem 1rem 3.5rem;
 }
 .lt-contact__grid {
     display: grid;
@@ -54,10 +62,12 @@
 }
 .lt-contact__form-wrap > h2 {
     font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 1.625rem;
-    color: var(--lt-near-black);
-    margin: 0 0 1rem;
+    font-size: 2rem;
+    color: #0A0A0B;
+    margin: 0 0 1.1rem;
     text-align: center;
+    line-height: 1.1;
+    font-weight: 700;
 }
 @media (min-width: 992px) {
     .lt-contact__form-wrap > h2 { text-align: left; }
@@ -81,28 +91,32 @@
     min-width: 0;
 }
 .lt-contact__info-card {
-    background-color: var(--lt-near-white);
-    border-radius: 0.75rem;
+    background-color: #fffdfa;
+    border-radius: 0.375rem;
     padding: 1.75rem;
-    border: 1px solid rgba(26, 26, 26, 0.06);
+    border: 1px solid rgba(14, 34, 64, 0.16);
+    box-shadow: 0 18px 42px rgba(10, 10, 11, 0.07);
 }
 .lt-contact__info-card h3 {
     font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 1.375rem;
-    color: var(--lt-near-black);
+    font-size: 1.55rem;
+    color: #0A0A0B;
     margin: 0 0 1rem;
+    line-height: 1.1;
+    font-weight: 700;
 }
 .lt-contact__info-card h4 {
     font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 1.125rem;
-    color: var(--lt-near-black);
+    font-size: 1.2rem;
+    color: #0A0A0B;
     margin: 0 0 0.5rem;
+    font-weight: 700;
 }
 .lt-contact__info-card p {
     font-size: 0.95rem;
-    color: var(--lt-soft-gray);
+    color: rgba(10, 10, 11, 0.72);
     margin: 0 0 1rem;
-    line-height: 1.5;
+    line-height: 1.6;
 }
 .lt-contact__info-list {
     list-style: none;
@@ -117,16 +131,16 @@
     font-size: 1rem;
 }
 .lt-contact__info-list a {
-    color: var(--lt-near-black);
+    color: #0E2240;
     text-decoration: none;
-    font-weight: 600;
+    font-weight: 700;
 }
 .lt-contact__info-list a:hover,
 .lt-contact__info-list a:focus-visible {
     text-decoration: underline;
 }
 .lt-contact__icon {
-    color: var(--lt-teal);
+    color: #B31B34;
     font-size: 1.1rem;
     line-height: 1.25;
     flex-shrink: 0;
@@ -136,18 +150,18 @@
 }
 .lt-contact__divider {
     border: none;
-    border-top: 1px solid rgba(26, 26, 26, 0.1);
+    border-top: 1px solid rgba(14, 34, 64, 0.14);
     margin: 1.25rem 0;
 }
 .lt-contact__call-btn {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    background-color: var(--lt-teal);
-    color: var(--lt-white);
+    background-color: #B31B34;
+    color: #FAF7F2;
     text-decoration: none;
     padding: 0.65rem 1.25rem;
-    border-radius: 0.375rem;
+    border-radius: 0.25rem;
     font-family: 'Raleway', sans-serif;
     font-weight: 600;
     font-size: 0.95rem;
@@ -155,22 +169,27 @@
 }
 .lt-contact__call-btn:hover,
 .lt-contact__call-btn:focus-visible {
-    background-color: #006666;
-    color: var(--lt-white);
+    background-color: #0E2240;
+    color: #FAF7F2;
     text-decoration: none;
+    outline: 2px solid #D9C7B3;
+    outline-offset: 2px;
 }
 
 .lt-contact__social-block {
-    background-color: var(--lt-blush-tint);
-    border-radius: 0.75rem;
+    background-color: #0E2240;
+    border-radius: 0.375rem;
     padding: 1.5rem 1.75rem;
     text-align: center;
+    border: 1px solid rgba(217, 199, 179, 0.28);
+    box-shadow: 0 18px 42px rgba(10, 10, 11, 0.08);
 }
 .lt-contact__social-block h4 {
     font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 1.125rem;
-    color: var(--lt-near-black);
+    font-size: 1.2rem;
+    color: #FAF7F2;
     margin: 0 0 0.85rem;
+    font-weight: 700;
 }
 .lt-contact__social-row {
     display: flex;
@@ -181,7 +200,7 @@
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background-color: transparent;
+    background-color: rgba(250, 247, 242, 0.94);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -190,7 +209,7 @@
 .lt-contact__social-row a:hover,
 .lt-contact__social-row a:focus-visible {
     transform: translateY(-2px);
-    outline: 2px solid var(--lt-teal);
+    outline: 2px solid #D9C7B3;
     outline-offset: 2px;
 }
 .lt-contact__social-row img {
@@ -201,8 +220,9 @@
 
 /* Locations section */
 .lt-locations {
-    background-color: var(--lt-near-white);
+    background-color: #F1E8DC;
     padding: 3rem 1rem 3.5rem;
+    border-top: 1px solid rgba(14, 34, 64, 0.12);
 }
 .lt-locations > .container {
     max-width: 1140px;
@@ -210,14 +230,16 @@
 }
 .lt-locations h2 {
     font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 2rem;
-    color: var(--lt-near-black);
+    font-size: 2.35rem;
+    color: #0A0A0B;
     text-align: center;
     margin: 0 0 0.5rem;
+    line-height: 1.08;
+    font-weight: 700;
 }
 .lt-locations__subtitle {
     text-align: center;
-    color: var(--lt-soft-gray);
+    color: rgba(10, 10, 11, 0.72);
     font-size: 1rem;
     margin: 0 0 2rem;
 }
@@ -231,33 +253,36 @@
     .lt-locations__grid { grid-template-columns: 1fr 1fr; }
 }
 .lt-location-card {
-    background-color: var(--lt-white);
-    border-radius: 0.75rem;
+    background-color: #fffdfa;
+    border-radius: 0.375rem;
     padding: 1.75rem;
-    border: 1px solid rgba(26, 26, 26, 0.06);
+    border: 1px solid rgba(14, 34, 64, 0.16);
+    box-shadow: 0 16px 34px rgba(10, 10, 11, 0.06);
 }
 .lt-location-card__badge {
     display: inline-block;
-    background-color: var(--lt-blue-tint);
-    color: var(--lt-near-black);
+    background-color: rgba(179, 27, 52, 0.1);
+    color: #B31B34;
     font-family: 'Raleway', sans-serif;
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.05em;
     text-transform: uppercase;
     padding: 0.25rem 0.65rem;
-    border-radius: 0.25rem;
+    border-radius: 0.1875rem;
     margin-bottom: 0.85rem;
 }
 .lt-location-card h3 {
     font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 1.5rem;
-    color: var(--lt-near-black);
+    font-size: 1.65rem;
+    color: #0A0A0B;
     margin: 0 0 0.5rem;
+    font-weight: 700;
+    line-height: 1.12;
 }
 .lt-location-card__desc {
     font-size: 0.95rem;
-    color: var(--lt-soft-gray);
+    color: rgba(10, 10, 11, 0.72);
     line-height: 1.55;
     margin: 0 0 1rem;
 }
@@ -272,10 +297,10 @@
     gap: 0.65rem;
     padding: 0.4rem 0;
     font-size: 0.95rem;
-    color: var(--lt-near-black);
+    color: #0A0A0B;
 }
 .lt-location-card__details a {
-    color: var(--lt-near-black);
+    color: #0E2240;
     text-decoration: none;
     font-weight: 600;
 }
@@ -284,33 +309,65 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    color: var(--lt-near-black);
+    color: #0E2240;
     font-weight: 600;
     text-decoration: none;
     font-size: 0.95rem;
-    border: 1px solid var(--lt-near-black);
+    border: 1px solid #0E2240;
     padding: 0.5rem 1rem;
-    border-radius: 0.375rem;
+    border-radius: 0.25rem;
     min-height: 44px;
 }
 .lt-location-card__directions:hover,
 .lt-location-card__directions:focus-visible {
-    background-color: var(--lt-near-black);
-    color: var(--lt-white);
+    background-color: #0E2240;
+    color: #FAF7F2;
     text-decoration: none;
+    outline: 2px solid #B31B34;
+    outline-offset: 2px;
 }
 
 .lt-locations__map {
     margin-top: 1rem;
-    border-radius: 0.5rem;
+    border-radius: 0.375rem;
     overflow: hidden;
-    border: 1px solid rgba(26, 26, 26, 0.08);
+    border: 1px solid rgba(14, 34, 64, 0.18);
+    box-shadow: 0 16px 34px rgba(10, 10, 11, 0.06);
+    background:
+        linear-gradient(135deg, rgba(14, 34, 64, 0.92), rgba(10, 10, 11, 0.92)),
+        radial-gradient(circle at 78% 24%, rgba(217, 199, 179, 0.42), transparent 30%);
 }
-.lt-locations__map iframe {
-    display: block;
-    width: 100%;
-    height: 350px;
-    border: 0;
+.lt-locations__service-area {
+    min-height: 260px;
+    display: grid;
+    align-items: center;
+    padding: 2.25rem;
+    color: #FAF7F2;
+}
+.lt-locations__service-area h3 {
+    margin: 0.4rem 0 0.75rem;
+    max-width: 720px;
+    color: #FAF7F2;
+    font-family: var(--lt-font-heading);
+    font-size: 2.35rem;
+    line-height: 1.05;
+}
+.lt-locations__service-area p {
+    max-width: 680px;
+    margin: 0;
+    color: rgba(250, 247, 242, 0.84);
+    line-height: 1.6;
+}
+.lt-locations__service-area-label {
+    color: #D9C7B3;
+    font-size: 0.78rem;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+@media (max-width: 575px) {
+    .lt-locations__service-area { padding: 1.5rem; }
+    .lt-locations__service-area h3 { font-size: 1.8rem; }
 }
 </style>
 
@@ -429,12 +486,17 @@
         </div>
 
         <div class="lt-locations__map">
-            <iframe
-                src="https://maps.google.com/maps?q=8969%20S%202700%20W%20West%20Jordan%20Utah%2084088&t=m&z=10&ie=UTF8&iwloc=&output=embed"
-                loading="lazy"
-                title="Map showing Locally Twisted locations in Utah"
-                aria-label="Map showing Locally Twisted locations">
-            </iframe>
+            <div class="lt-locations__service-area" aria-label="Locally Twisted Utah service area">
+                <div>
+                    <span class="lt-locations__service-area-label">Wasatch Front Service Area</span>
+                    <h3>West Jordan studio. Riverdale pickup. Events across Utah.</h3>
+                    <p>
+                        Use the directions buttons above for pickup visits. For installs, deliveries,
+                        and event entertainment, tell us the venue and date so we can confirm timing,
+                        access, and crew needs.
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 </section>

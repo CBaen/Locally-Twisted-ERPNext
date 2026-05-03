@@ -3,9 +3,9 @@
 {% block title %}{{ _("Payment Success") }}{% endblock %}
 
 {%- block page_content -%}
-<div style="text-align:center; padding:4rem 1.5rem;">
-  <p>{{ _("Redirecting to your order…") }}</p>
-  <p><a href="/">{{ _("Continue") }}</a></p>
+<div style="min-height:55vh; text-align:center; padding:4rem 1.5rem; background:#FAF7F2; color:#0A0A0B;">
+  <p style="margin:0 auto; max-width:34rem; color:#0E2240; font-family:'DM Serif Display', Georgia, serif; font-size:2rem; line-height:1.15;">{{ _("Redirecting to your order...") }}</p>
+  <p style="margin:1rem auto 0; max-width:34rem;"><a href="/" style="color:#0A0A0B; font-weight:700; text-decoration:underline; text-underline-offset:0.2em;">{{ _("Continue") }}</a></p>
 </div>
 <script>
   // Reaching this page means the server-side handler verified the

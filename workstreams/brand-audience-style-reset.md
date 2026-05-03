@@ -1,10 +1,10 @@
 # Brand, Audience, and Style Reset
 
-Last updated: 2026-05-02
+Last updated: 2026-05-03
 
-This workstream is the brand strategy lane for the current ERPNext build. It exists because the current `_resources/STYLE-GUIDE.md` and design artifacts still reflect earlier Claude-era decisions and need to be re-evaluated against Locally Twisted's actual business goals, buyer types, and long-term saleability.
+This workstream is the brand strategy lane for the current ERPNext build. It records the research, GL direction, and implementation history behind the current `_resources/STYLE-GUIDE.md`.
 
-Do not treat this file as final visual direction yet. Treat it as the working surface for the brand reset that will eventually produce a revised style guide.
+Use `_resources/STYLE-GUIDE.md` as the current visual authority. Use this workstream for rationale, unresolved proof/media work, and future refinements.
 
 ## Core Brand Rule
 
@@ -270,12 +270,21 @@ Working phrase:
 
 Current preferred direction from GL on 2026-05-02:
 
-- Civic/professional Utah authority.
-- Slate blue and berry photo-treatment energy.
-- Black, deep slate, warm white, and brass/gold professionalism.
-- Mountain/territory cues when they support Utah-rooted authority.
-- Gold balloon/icon details when they feel polished, not novelty.
-- Mentor warmth: experienced, consultative, calm, and capable.
+- Use `Civic Celebration` as the foundation: Utah territory, civic/event scale, city/mountain authority, community confidence, and bold public-event posture.
+- Use `Locally Twisted Brand Direction` as the polish layer: higher-quality serif type, brass/gold linework, premium icon handling, and cleaner professional hierarchy.
+- Keep Civic's trust-badge concept, but not Civic's lower-quality circular badge execution. Use premium brass line icons instead.
+- Use black/ink, deep navy, warm white, brass/gold, and restrained crimson/berry. Do not let pale blue, pastels, or rainbow UI become the company identity.
+- Mountain/territory cues are preferred when they support Utah-rooted authority.
+- Gold balloon/icon details are welcome when they feel polished, not novelty.
+- Mentor warmth remains important: experienced, consultative, calm, and capable.
+
+Implementation status as of 2026-05-03:
+
+- Applied site-wide across shared header/footer/theme CSS, homepage, `/contact`, `/book` redirect surface, BTFP, portfolio, FAQ, policy pages, accessibility, thank-you/payment success surfaces, shop, category pages, product detail, cart, and checkout.
+- Added the Civic Celebration city/Wasatch hero asset at `apps/locally_twisted/locally_twisted/public/images/home/hero-wasatch-city-20260503.png`.
+- Replaced the old script header logo treatment with a stronger `LOCALLY TWISTED` wordmark in the shared header.
+- Removed founder-centered public copy from the BTFP and portfolio pages where it was not a direct review quote.
+- Verified with cache clear, backend restart, route checks, layout-fit checks, shop smoke, contact form checks, checkout/catalog/variant contracts, and desktop/mobile Playwright screenshots in `output/playwright/civic-overhaul-20260503-verified/`.
 
 Do not use pastel/rainbow-first UI as the company identity. Balloon colors should come from the work, photos, product choices, and customer palettes. The site chrome should provide confidence, contrast, and structure.
 

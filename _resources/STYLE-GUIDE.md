@@ -1,7 +1,7 @@
 # Locally Twisted - ERPNext/Frappe Style Guide
 
-**Version:** 3.0
-**Last Updated:** 2026-05-02
+**Version:** 3.2
+**Last Updated:** 2026-05-03
 **Build Target:** ERPNext v15.105.0 + Frappe v15 / Webshop
 **Primary Viewport:** Mobile-first, 375px base
 
@@ -18,13 +18,14 @@ coding agents.
 
 ## Quick Rules
 
-1. **Photography is the star.** The website frames the work; balloons bring the color.
-2. **Teal is earned.** `#008080` appears only as solid fill on primary CTA buttons.
-3. **White space dominates.** Most surfaces are white or near-white.
-4. **Accent color is light-touch.** Use it for thin bands, panels, tints, and small chips.
-5. **Quiet confidence.** Copy invites, explains, and states facts without hype.
-6. **ERPNext first.** Work with Frappe/Webshop templates, hooks, and route rules.
-7. **Verify visible work.** Do not claim a route, layout, or visual state works without checking it.
+1. **Civic authority first.** The brand should feel like Utah event infrastructure, not a small party catalog.
+2. **Photography brings the color.** The UI uses restraint; balloons, installs, and customer palettes carry the visual color.
+3. **Warm white and ink dominate.** Use deep navy, brass, and crimson for authority, proof, and action.
+4. **Brass line icons, not weak badges.** Trust marks should feel premium and drawn, not generic sticker badges.
+5. **Locally Twisted is the brand.** Jeff can be founder/context; public copy should make the company and team own the promise.
+6. **Quiet confidence.** Copy invites, explains, and states facts without hype.
+7. **ERPNext first.** Work with Frappe/Webshop templates, hooks, and route rules.
+8. **Verify visible work.** Do not claim a route, layout, or visual state works without checking it.
 
 ---
 
@@ -82,10 +83,10 @@ Use plain customer labels. Avoid backend CRM language in public copy.
 
 ## Design Principles
 
-1. **Photography is the star.** The site is a quiet frame for real balloon work.
-2. **Color is used sparingly.** Thin bands, text panels, input tints, and chips only.
-3. **Teal is earned.** One color, one job: primary CTA fill.
-4. **Soft, never harsh.** No pure black body text. No loud backgrounds.
+1. **Civic Celebration is the foundation.** Lead with Utah territory, event scale, and public/corporate reliability.
+2. **Brand Direction is the polish layer.** Use premium serif hierarchy, brass/gold linework, and clean proof structure.
+3. **Photography is proof.** Use real installed work for credibility; use generated visuals only as labeled concepts or product visualization.
+4. **Retail clarity is contained.** Ready-to-order shopping can be simple and practical; the company identity stays event-authority led.
 5. **Mobile-first, always.** Start at 375px; desktop enhances.
 6. **Specificity beats salesmanship.** Details, service areas, process, and constraints build trust.
 
@@ -97,45 +98,41 @@ Use plain customer labels. Avoid backend CRM language in public copy.
 
 | Name | Hex | Role |
 |---|---:|---|
-| Teal | `#008080` | Primary CTA button fill only |
-| Soft Gray | `#595A5C` | Body text |
-| Near Black | `#1A1A1A` | Headings, nav labels, emphasis |
-| White | `#FFFFFF` | Content and card surfaces |
-| Near White | `#FBFBFB` | Page background |
+| Ink | `#0A0A0B` | Highest-contrast headings, dark bands, premium footer |
+| Deep Navy | `#0E2240` | Civic authority panels, header/nav emphasis, proof bands |
+| Warm White | `#FAF7F2` | Main page background and warm content surfaces |
+| Brass | `#B89A5B` | Line icons, dividers, proof highlights, secondary premium accents |
+| Crimson | `#B31B34` | Select CTA contrast and civic/event energy moments |
+| Stone | `#E7E5E1` | Borders, subtle panels, neutral backgrounds |
+| Sandstone | `#D9C7B3` | Warm section separation and secondary soft backgrounds |
+| Deep Teal | `#0F3D3E` | Primary CTA fill where teal remains appropriate |
 
 ### Accent Palette
 
-Use accents for thin bands, partial panels, tints, and small UI elements. Do not
-use them as full-section backgrounds unless the section is a trust bar or footer.
+Use accents for thin rules, icon strokes, small chips, and deliberate CTA contrast.
+Do not build the company identity from pastel UI colors. Balloon colors belong
+primarily in photography, product imagery, and customer-selected palettes.
 
-| Name | Hex | Temperature | Primary Use |
-|---|---:|---|---|
-| Blush | `#F4DFD7` | Warm | Bands, soft SVG illustration fills |
-| Soft Lemon | `#F9F871` | Warm | Highlights and occasional bands |
-| Seafoam | `#88FED0` | Cool-neutral | Bands and success-adjacent accents |
-| Sky Cyan | `#A0E9FF` | Cool | Bands and small accents |
-| Soft Blue | `#C3DCF3` | Cool | Footer, trust/value bar, secondary borders |
-
-Removed colors: Aqua `#80F5F3` and Lime Pastel `#B8FF9E` were removed on
-2026-04-29 because they read too candy-pop for the current LT brand.
+Removed colors: the earlier pastel-heavy teal/blush/lemon/seafoam/cyan system is
+retired as the main company palette because it reads too small-catalog for the
+current buyer priority.
 
 ### Surface Tints
 
 | Name | Hex | Derived From | Use |
 |---|---:|---|---|
-| Blush Tint | `#FBF5F2` | Blush | Search bars, newsletter inputs, menu backgrounds |
-| Blue Tint | `#EEF4FB` | Soft Blue | Form fields and dropdowns |
-| Mint Tint | `#EEFEF5` | Seafoam | Success-adjacent surfaces |
-| Lemon Tint | `#FDFDE3` | Soft Lemon | Highlight backgrounds and promo bars |
+| Warm Tint | `#F6F0E8` | Sandstone | Search bars, newsletter inputs, menu backgrounds |
+| Stone Tint | `#F2F3F5` | Stone | Form fields and dropdowns |
+| Sage Tint | `#F1F3EF` | Sage | Success-adjacent surfaces |
+| Brass Tint | `#F7F1E4` | Brass | Highlight backgrounds and promo bars |
 
 ### Color Rules
 
-- Teal appears only as solid fill on primary CTA buttons.
-- Do not use teal for links, borders, focus rings, headings, icons, or decorative fills.
-- Body text is Soft Gray on light surfaces.
-- Headings and emphasis are Near Black.
-- Accent colors are not body text on white or near-white; they do not pass contrast.
-- Near Black text works on Soft Blue, Blush, and most light accent bands.
+- Use ink, deep navy, and warm white as the main site structure.
+- Use brass for premium line icons, dividers, proof highlights, and small details.
+- Use deep teal or crimson for clear CTAs; do not use both heavily in the same component.
+- Body text uses a controlled gray on light surfaces; headings use ink.
+- Avoid pale-blue header/footer dominance.
 - Never stack two different colored full-width sections back-to-back.
 
 Pattern:
@@ -150,19 +147,20 @@ White content -> thin accent band -> White content -> image + partial color pane
 
 | Role | Font | Fallback | Weight |
 |---|---|---|---|
-| Headings | DM Serif Display | Georgia, serif | 400 |
-| Body/UI | Raleway | system sans-serif | 300, 400, 500, 600, 700 |
+| Brand Wordmark | Cinzel | Georgia, serif | 700 |
+| Headings | Cormorant Garamond | Georgia, serif | 600, 700 |
+| Body/UI | Lato | system sans-serif | 400, 700, 900 |
 
 ### Type Scale
 
 | Level | Mobile | Desktop | Font | Color | Use |
 |---|---:|---:|---|---|---|
-| H1 | 28px | 48px | DM Serif Display | Near Black | Page hero titles |
-| H2 | 24px | 36px | DM Serif Display | Near Black | Section headings |
-| H3 | 20px | 28px | DM Serif Display | Near Black | Card/service titles |
-| Label | 14px | 16px | Raleway 600 | Near Black | Labels and short UI headings |
-| Body | 16px | 18px | Raleway 400 | Soft Gray | Paragraphs |
-| Small | 12px | 13px | Raleway 400 | Soft Gray | Captions and fine print |
+| H1 | 28px | 48px | Cormorant Garamond | Ink | Page hero titles |
+| H2 | 24px | 36px | Cormorant Garamond | Ink | Section headings |
+| H3 | 20px | 28px | Cormorant Garamond | Ink | Card/service titles |
+| Label | 14px | 16px | Lato 700/900 | Ink | Labels and short UI headings |
+| Body | 16px | 18px | Lato 400 | Soft Gray | Paragraphs |
+| Small | 12px | 13px | Lato 400 | Soft Gray | Captions and fine print |
 
 Rules:
 
@@ -217,8 +215,8 @@ Avoid avoidable orphan rows such as 3+1 or 5+1.
 
 | Type | Background | Text | Border | Use |
 |---|---|---|---|---|
-| Primary | Teal | White | none | Main CTAs: Contact Us, Add to Cart, Continue |
-| Secondary | Transparent | Near Black | 1px Soft Blue | Supporting actions |
+| Primary | Deep Navy, Deep Teal, or Crimson | White | none | Main CTAs: Contact Us, Add to Cart, Continue |
+| Secondary | Transparent | Ink | 1px Stone or Brass | Supporting actions |
 | Tertiary | Transparent | Soft Gray | 1px Soft Gray | Low-emphasis actions |
 
 Rules:
@@ -230,9 +228,9 @@ Rules:
 
 ### Forms
 
-- Field backgrounds use Blush Tint or Blue Tint, not plain white.
+- Field backgrounds use Warm Tint or Stone Tint, not harsh white.
 - Borders are subtle: light gray or none.
-- Focus states use a visible Near Black outline or Soft Blue border/ring.
+- Focus states use a visible Ink outline or Brass border/ring.
 - Placeholder text is lighter gray.
 - Group related inputs with fieldsets and legends where appropriate.
 - Public form copy should be plain and customer-friendly.
@@ -274,21 +272,18 @@ Do not reintroduce `Delivery Only`, `Pickup Only`, or `Event Package`.
 
 ### Footer
 
-- Background: Soft Blue `#C3DCF3`.
-- Text and links: Near Black.
-- Brand name can use DM Serif Display.
+- Background: Deep Navy or Ink.
+- Text and links: Warm White with Brass section labels.
+- Brand name uses Playfair Display.
 - Social icons need 44px targets.
 - Footer should link to `/privacy`, `/terms-of-service`, and `/accessibility`.
 
 ### Trust/Value Bar
 
-- Soft Blue band, not a chunky section.
+- Ink or Deep Navy band with brass line icons.
 - Titles use styled non-heading elements when they are decorative/repeated.
-- Descriptions use Near Black or sufficiently contrasting text.
-- Custom blush-toned SVG illustrations may use:
-  - Fill: `#F4DFD7`
-  - Mid: `#D4A899`
-  - Outline: `#B8877A`
+- Descriptions use Warm White on dark bands or Ink on light bands.
+- Use premium line icons for mountains/local roots, balloons/design, shield/professionalism, and partner/trust.
 
 ### Hero / Featured Media
 
@@ -390,7 +385,7 @@ Target WCAG 2.1 AA.
 Avoid:
 
 - Accent color text on white or near-white.
-- Soft Gray small text on Soft Blue.
+- Low-contrast small text on Stone, Deep Navy, or Ink.
 - Low-contrast placeholder-only labels.
 
 ### Structure
@@ -467,14 +462,14 @@ route check, database check, or screenshot review actually happened.
 
 | Building | Background | Text | Button |
 |---|---|---|---|
-| Hero/feature panel | Accent panel or image | Near Black / White if verified | Primary Teal |
-| Trust/value bar | Soft Blue | Near Black | None |
+| Hero/feature panel | Image with Ink/Navy overlay | Warm White if verified | Crimson or Deep Navy |
+| Trust/value bar | Ink or Deep Navy | Warm White with Brass icons | None |
 | Product grid | White cards on Near White | Soft Gray, Near Black links | Transactional only |
-| Category section | White/Near White | Soft Gray, Near Black links | Secondary |
-| Contact form | White with tinted fields | Soft Gray labels, Near Black headings | Primary Teal |
-| CTA section | White or thin accent band | Soft Gray / Near Black | Primary Teal |
-| Footer | Soft Blue | Near Black | None |
-| Search/menu | Blush Tint or Blue Tint | Soft Gray, Near Black active | None |
+| Category section | White/Warm White | Soft Gray, Ink links | Secondary |
+| Contact form | White with warm/stone fields | Soft Gray labels, Ink headings | Deep Navy or Deep Teal |
+| CTA section | Deep Navy or Warm White | Warm White on dark / Ink on light | Crimson or Deep Navy |
+| Footer | Deep Navy | Warm White with Brass labels | None |
+| Search/menu | Warm Tint or Stone Tint | Soft Gray, Ink active | None |
 | General content | White/Near White | Soft Gray body, Near Black headings | Secondary |
 
 ---

@@ -119,15 +119,17 @@ Preferred frontend technology for the first prototype:
 
 ## First Prototype Boundary
 
-The first interactive prototype should be narrow.
+The first interactive prototype started narrow, then was corrected after GL review.
 
-Recommended initial pieces:
+Corrected prototype coverage:
 
 1. Classic arch
-2. Pair of classic columns
-3. Backdrop or photo-op wall
+2. Classic column
+3. Organic garland
+4. Backdrop wall
+5. Balloon drop
 
-Organic garland should wait for a later controlled expansion unless GL/controller explicitly approves it earlier. It is valuable, but the first prototype should prove the structured renderer before adding artist-led organic placement.
+Reason for correction: the studio quality step must represent customizable product families with large variant spaces and their construction rules. Organic garland and balloon drop cannot be faked or deferred if the review question is whether the design surface respects base products and balloon construction math.
 
 Recommended initial capabilities:
 
@@ -177,8 +179,8 @@ The five specs agree on the major direction:
 - `Plan Custom Decor` should be the customer-facing path unless GL chooses another name; `Design Studio` can remain the internal feature name.
 - V1 should not expose a half-working studio. If V1 references this idea, it should be a polished guided-inquiry path, not a live configurator promise.
 - `Ready to Order` and `Plan Custom Decor` must stay separate in navigation, copy, payloads, and customer expectations.
-- First prototype scope should be classic arch, pair of classic columns, and backdrop/photo-op wall.
-- Organic garland, balloon drops, bouquets, pricing, quote generation, full catalog integration, photo uploads, and save-to-account should wait.
+- Corrected prototype scope should cover variant-heavy product families with distinct construction engines: classic arch, classic column, organic garland, backdrop wall, and balloon drop.
+- Bouquets, pricing, quote generation, full catalog integration, photo uploads, and save-to-account should wait.
 - The renderer must start from construction rules, especially 4-balloon cluster/quads for classic arches, columns, and backdrops.
 - Color names are the production truth. Hex values are visual approximations until approved.
 - Visual direction should be `Utah Event Authority Studio`: professional, civic, premium, restrained UI, with joy carried by the balloon work and event imagery.
@@ -234,7 +236,7 @@ Before this can move from prototype to production:
 
 - Customer-facing name: `Plan Custom Decor`, `Design Studio`, or another label.
 - Whether V1 should mention the future studio or only provide a polished guided-inquiry path.
-- Whether first prototype excludes organic garland until classic arch/columns/backdrop are proven.
+- Which corrected product families should move beyond prototype quality review.
 - Whether share links should be public token links, account-only saved designs, or both.
 - Which Locally Twisted balloon color hex approximations are approved for customer-facing matching.
 - Which scale references are acceptable for corporate, school, civic, parade, venue, church, and private event contexts.
@@ -243,8 +245,16 @@ Before this can move from prototype to production:
 
 ## Next Action
 
+Prototype status: corrected review-grade dormant static prototype built under `research/design-studio-v2/prototype/`. It is not production-integrated and does not touch V1 launch routes.
+
 Engine spike status: research-only PlayCanvas/Babylon.js event-builder comparison built under `research/design-studio-v2/event-builder-spike/`. See `workstreams/event-builder-spike.md` for the feature handoff and verification receipts. Both engines passed the verifier; under the agreed decision rule, PlayCanvas is the recommended default for a future hidden Frappe-route spike.
 
-Prototype status: dormant static prototype built under `research/design-studio-v2/prototype/`. It is not production-integrated and does not touch V1 launch routes.
+Current review package:
 
-Next review should decide whether GL wants changes to the prototype interaction, renderer assumptions, disclaimer, color catalog, or customer-facing `Plan Custom Decor` naming before any production Frappe route work is considered.
+- `research/design-studio-v2/prototype/index.html`
+- `research/design-studio-v2/prototype/REVIEW-QA.md`
+- `research/design-studio-v2/prototype/verify_review_grade.js`
+
+Latest correction: renderer physics were tightened after GL feedback. Classic arch now uses 200-balloon / 50-cluster math for a 25 ft 11 inch structured arch, and the default spiral is a two-color candy-cane band model. Organic garland now uses strip-backbone density with 11 inch body balloons, 16/24 inch anchors, 5 inch filler, and 10-15% planning overage.
+
+Next review should decide whether the product-family model, corrected construction engines, renderer assumptions, disclaimer, color catalog, size limits, and customer-facing `Plan Custom Decor` naming are strong enough for a hidden Frappe-route spike. Production save/share/Lead behavior remains out of scope until approved separately.

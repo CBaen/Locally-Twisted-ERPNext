@@ -103,8 +103,10 @@ PAGE_CSS = """
    ============================================================ */
 
 .lt-shop__hero {
-    background-color: var(--lt-near-white);
-    padding: 3rem 1rem 2rem;
+    background:
+        linear-gradient(135deg, rgba(250, 247, 242, 0.98) 0%, rgba(250, 247, 242, 0.92) 48%, rgba(217, 199, 179, 0.42) 100%);
+    border-bottom: 1px solid rgba(14, 34, 64, 0.16);
+    padding: 3rem 1rem 2.4rem;
 }
 .lt-shop__hero-inner {
     max-width: 1100px;
@@ -116,24 +118,25 @@ PAGE_CSS = """
     gap: 1.5rem;
 }
 .lt-shop__hero-eyebrow {
-    font-family: 'Raleway', sans-serif;
+    font-family: var(--lt-font-body);
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--lt-soft-gray);
+    color: var(--lt-crimson);
     margin: 0 0 0.75rem;
 }
 .lt-shop__hero-title {
-    font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 2.25rem;
-    color: var(--lt-near-black);
+    font-family: var(--lt-font-heading);
+    font-size: 2.45rem;
+    font-weight: 700;
+    color: var(--lt-ink);
     margin: 0 0 1rem;
     line-height: 1.1;
     max-width: 22ch;
 }
 .lt-shop__hero-lede {
-    font-family: 'Raleway', sans-serif;
+    font-family: var(--lt-font-body);
     font-size: 1rem;
     color: var(--lt-soft-gray);
     margin: 0;
@@ -155,7 +158,7 @@ PAGE_CSS = """
     border: 1px solid rgba(26, 26, 26, 0.18);
     border-radius: 0.375rem;
     color: var(--lt-near-black);
-    font-family: 'Raleway', sans-serif;
+    font-family: var(--lt-font-body);
     font-size: 0.875rem;
     font-weight: 500;
     text-decoration: none;
@@ -180,11 +183,11 @@ PAGE_CSS = """
     height: 32px;
     width: 100%;
 }
-.lt-shop__band--blush { background-color: var(--lt-blush); }
+.lt-shop__band--blush { background-color: var(--lt-sandstone); height: 18px; }
 
 /* Filter + grid */
 .lt-shop__listing {
-    background: var(--lt-white);
+    background: var(--lt-warm-white);
     padding: 2rem 1rem 4rem;
 }
 .lt-shop__listing-inner {
@@ -197,7 +200,7 @@ PAGE_CSS = """
     gap: 0.5rem;
     padding-bottom: 1.25rem;
     margin-bottom: 1.25rem;
-    border-bottom: 1px solid rgba(26, 26, 26, 0.08);
+    border-bottom: 1px solid rgba(14, 34, 64, 0.14);
 }
 .lt-shop__chip {
     appearance: none;
@@ -205,11 +208,11 @@ PAGE_CSS = """
     border: 1px solid rgba(26, 26, 26, 0.18);
     background: var(--lt-white);
     color: var(--lt-near-black);
-    font-family: 'Raleway', sans-serif;
+    font-family: var(--lt-font-body);
     font-size: 0.875rem;
     font-weight: 500;
     padding: 0.5rem 1rem;
-    border-radius: 999px;
+    border-radius: 0;
     cursor: pointer;
     transition: background-color 0.15s ease, border-color 0.15s ease;
     min-height: 36px;
@@ -219,11 +222,12 @@ PAGE_CSS = """
     border-color: var(--lt-near-black);
 }
 .lt-shop__chip[aria-pressed="true"] {
-    border-color: var(--lt-near-black);
-    background-color: var(--lt-blush-tint);
+    border-color: var(--lt-navy);
+    background-color: var(--lt-navy);
+    color: var(--lt-white);
 }
 .lt-shop__count {
-    font-family: 'Raleway', sans-serif;
+    font-family: var(--lt-font-body);
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.08em;
@@ -253,8 +257,8 @@ PAGE_CSS = """
     position: relative;
     width: 100%;
     aspect-ratio: 3 / 4;
-    background-color: var(--lt-blush-tint);
-    border-radius: 0.375rem;
+    background-color: rgba(217, 199, 179, 0.34);
+    border-radius: 4px;
     overflow: hidden;
     margin-bottom: 1rem;
     display: block;
@@ -266,7 +270,7 @@ PAGE_CSS = """
     display: block;
 }
 .lt-shop__card-image--placeholder {
-    background-color: var(--lt-blush-tint);
+    background-color: rgba(217, 199, 179, 0.34);
 }
 .lt-shop__oos-badge {
     position: absolute;
@@ -274,7 +278,7 @@ PAGE_CSS = """
     left: 0.75rem;
     background-color: var(--lt-near-black);
     color: var(--lt-white);
-    font-family: 'Raleway', sans-serif;
+    font-family: var(--lt-font-body);
     font-size: 0.6875rem;
     font-weight: 600;
     letter-spacing: 0.06em;
@@ -283,7 +287,8 @@ PAGE_CSS = """
     border-radius: 2px;
 }
 .lt-shop__card-name {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: var(--lt-font-heading);
+    font-weight: 700;
     font-size: 1.125rem;
     color: var(--lt-near-black);
     margin: 0 0 0.5rem;
@@ -300,7 +305,7 @@ PAGE_CSS = """
     text-underline-offset: 0.2em;
 }
 .lt-shop__card-desc {
-    font-family: 'Raleway', sans-serif;
+    font-family: var(--lt-font-body);
     font-size: 0.875rem;
     color: var(--lt-soft-gray);
     line-height: 1.5;
@@ -314,7 +319,7 @@ PAGE_CSS = """
     margin-top: auto;
 }
 .lt-shop__card-price {
-    font-family: 'Raleway', sans-serif;
+    font-family: var(--lt-font-body);
     font-size: 1.125rem;
     font-weight: 600;
     color: var(--lt-near-black);
@@ -323,12 +328,12 @@ PAGE_CSS = """
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--lt-teal);
+    background-color: var(--lt-navy);
     color: var(--lt-white);
     border: none;
-    border-radius: 0.375rem;
+    border-radius: 3px;
     padding: 0.55rem 1rem;
-    font-family: 'Raleway', sans-serif;
+    font-family: var(--lt-font-body);
     font-size: 0.8125rem;
     font-weight: 600;
     cursor: pointer;
@@ -339,18 +344,18 @@ PAGE_CSS = """
 }
 .lt-shop__card-add:hover,
 .lt-shop__card-add:focus-visible {
-    background-color: #006666;
+    background-color: var(--lt-ink);
     color: var(--lt-white);
     text-decoration: none;
 }
 .lt-shop__card-add[disabled] {
-    background-color: rgba(0, 128, 128, 0.3);
+    background-color: rgba(14, 34, 64, 0.28);
     cursor: not-allowed;
 }
 
 /* Cross-sell CTA */
 .lt-shop__cta {
-    background-color: var(--lt-near-white);
+    background-color: var(--lt-navy);
     padding: 3rem 1rem;
     border-top: 1px solid rgba(26, 26, 26, 0.06);
 }
@@ -360,9 +365,10 @@ PAGE_CSS = """
     max-width: 540px;
 }
 .lt-shop__cta h2 {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: var(--lt-font-heading);
+    font-weight: 700;
     font-size: 2rem;
-    color: var(--lt-near-black);
+    color: var(--lt-white);
     margin: 0 0 1rem;
     line-height: 1.15;
 }
@@ -376,7 +382,7 @@ PAGE_CSS = """
     align-items: center;
     padding: 0.75rem 1.5rem;
     border-radius: 0.375rem;
-    font-family: 'Raleway', sans-serif;
+    font-family: var(--lt-font-body);
     font-weight: 600;
     font-size: 0.95rem;
     text-decoration: none;
@@ -395,14 +401,14 @@ PAGE_CSS = """
     text-decoration: none;
 }
 .lt-shop__cta-btn--primary {
-    background-color: var(--lt-teal);
+    background-color: var(--lt-crimson);
     color: var(--lt-white);
-    border: 1px solid var(--lt-teal);
+    border: 1px solid var(--lt-crimson);
 }
 .lt-shop__cta-btn--primary:hover,
 .lt-shop__cta-btn--primary:focus-visible {
-    background-color: #006666;
-    border-color: #006666;
+    background-color: var(--lt-ink);
+    border-color: var(--lt-ink);
     color: var(--lt-white);
     text-decoration: none;
 }

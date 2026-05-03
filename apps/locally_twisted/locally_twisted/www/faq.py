@@ -140,6 +140,61 @@ PAGE_CSS = """
         font-size: 1.125rem;
     }
 }
+
+/* Civic Celebration redesign for secondary editorial pages. */
+.lt-faq {
+    background-color: #faf7f2;
+    color: #0a0a0b;
+}
+.lt-faq__inner {
+    background-color: #fffdf9;
+    border: 1px solid rgba(14, 34, 64, 0.16);
+    border-top: 8px solid #b31b34;
+    border-radius: 0.375rem;
+    box-shadow: 0 18px 50px rgba(14, 34, 64, 0.08);
+    padding: 2rem;
+}
+.lt-faq h1 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    color: #0e2240;
+    letter-spacing: 0;
+}
+.lt-faq__lede,
+.lt-faq__answer,
+.lt-faq__answer p,
+.lt-faq__contact {
+    color: rgba(10, 10, 11, 0.72);
+}
+.lt-faq__group-title {
+    color: #0e2240;
+    border-bottom-color: rgba(14, 34, 64, 0.18);
+}
+.lt-faq__item {
+    border-bottom-color: rgba(14, 34, 64, 0.14);
+}
+.lt-faq__item summary,
+.lt-faq__answer strong,
+.lt-faq__link {
+    color: #0a0a0b;
+}
+.lt-faq__item summary::after,
+.lt-faq__item summary:hover,
+.lt-faq__link:hover,
+.lt-faq__link:focus {
+    color: #b31b34;
+}
+.lt-faq__item summary:focus-visible,
+.lt-faq__link:focus-visible {
+    outline-color: #b31b34;
+}
+.lt-faq__answer li::before {
+    color: #b31b34;
+}
+@media (max-width: 480px) {
+    .lt-faq__inner {
+        padding: 1.25rem;
+    }
+}
 """
 
 

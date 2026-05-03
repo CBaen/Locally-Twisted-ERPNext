@@ -4,23 +4,27 @@
    workstreams/brand-audience-style-reset.md
    Phase 1, Slices 1 + 2
 
-   Applied to ERPNext Website Settings.head_html.
-   Survives until container recreation. Promote to packaged
-   Frappe app when there's a critical mass of customizations.
+   Loaded from the locally_twisted Frappe app through web_include_css.
+   Customer-facing CSS should live here or in page-scoped controllers,
+   not in Website Settings head_html.
    ============================================================ */
 
 /* ── Fonts ── */
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Raleway:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:wght@500;600;700&family=Lato:wght@400;700;900&display=swap');
 
 /* ── Color tokens (CSS custom properties) ── */
 :root {
   /* Core palette */
-  --lt-teal: #0F3D3E;
-  --lt-slate: #263446;
-  --lt-berry: #8A1E3F;
-  --lt-brass: #B89158;
+  --lt-teal: #0E2240;
+  --lt-slate: #0E2240;
+  --lt-berry: #B31B34;
+  --lt-brass: #B89A5B;
+  --lt-ink: #0A0A0B;
+  --lt-navy: #0E2240;
+  --lt-stone: #E7E5E1;
+  --lt-sandstone: #D9C7B3;
   --lt-soft-gray: #4F5661;
-  --lt-near-black: #101820;
+  --lt-near-black: #0A0A0B;
   --lt-white: #FFFFFF;
   --lt-near-white: #FAF7F2;
 
@@ -29,15 +33,15 @@
      follow the 2026-05-02 brand reset: professional event authority with
      warm paper, slate, brass, muted berry, and deep teal. Balloon color
      should come from photography, product imagery, and customer palettes. */
-  --lt-blush: #E8DDD2;
-  --lt-soft-lemon: #D8BE86;
+  --lt-blush: #D9C7B3;
+  --lt-soft-lemon: #B89A5B;
   --lt-seafoam: #7D8A7A;
-  --lt-sky-cyan: #D6DDE6;
-  --lt-soft-blue: #BFC9D6;
+  --lt-sky-cyan: #E7E5E1;
+  --lt-soft-blue: #E7E5E1;
 
   /* Surface tints — inputs, menus, subtle backgrounds */
-  --lt-blush-tint: #F7F1EB;
-  --lt-blue-tint: #F0F3F7;
+  --lt-blush-tint: #F6F0E8;
+  --lt-blue-tint: #F2F3F5;
   --lt-mint-tint: #F1F3EF;
   --lt-lemon-tint: #F7F1E4;
 
@@ -55,7 +59,7 @@
 
 /* ── Typography ── */
 body, .web-page-content, .website-content {
-  font-family: 'Raleway', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   font-weight: 400;
   color: var(--lt-soft-gray);
   background-color: var(--lt-near-white);
@@ -63,8 +67,8 @@ body, .web-page-content, .website-content {
 }
 
 h1, h2, h3, .h1, .h2, .h3 {
-  font-family: 'DM Serif Display', Georgia, serif;
-  font-weight: 400;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 700;
   color: var(--lt-near-black);
   line-height: 1.2;
 }
@@ -84,7 +88,7 @@ h3, .h3 { font-size: 1.25rem; }
 
 /* H6 = bold label style */
 h6, .h6 {
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 600;
   color: var(--lt-near-black);
   font-size: 0.875rem;
@@ -92,8 +96,8 @@ h6, .h6 {
 
 /* Lead paragraphs */
 .lead {
-  font-family: 'Raleway', sans-serif;
-  font-weight: 300;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
   color: var(--lt-soft-gray);
 }
 
@@ -105,18 +109,18 @@ h6, .h6 {
   color: var(--lt-white);
   min-height: 44px;
   padding: 0.75rem 1.5rem;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 600;
 }
 
 .btn-primary:hover,
 .btn-primary:focus {
-  background-color: #0A2E30;
-  border-color: #0A2E30;
+  background-color: var(--lt-navy);
+  border-color: var(--lt-navy);
   color: var(--lt-white);
 }
 
-/* Secondary: outlined Soft Blue, Near Black text */
+/* Secondary: outlined stone, ink text */
 .btn-secondary,
 .btn-outline-secondary {
   background-color: transparent;
@@ -124,7 +128,7 @@ h6, .h6 {
   border: 1px solid var(--lt-soft-blue);
   min-height: 44px;
   padding: 0.75rem 1.5rem;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 600;
 }
 
@@ -167,7 +171,7 @@ select,
   background-color: var(--lt-blush-tint);
   border: 1px solid #e5e5e5;
   border-radius: 0.375rem;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   color: var(--lt-near-black);
   min-height: 44px;
 }
@@ -367,7 +371,7 @@ p {
 }
 
 .lt-header__utility-left {
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   /* 17.5px (16px + 1.5px) bold per GL 2026-04-29 — emphasis + readability.
    * Text wraps to two lines via explicit <br> in navbar.html. Content
    * stays at far-left of the column (default justify-self: start) —
@@ -414,7 +418,7 @@ p {
 }
 
 .lt-header__brand-fallback {
-  font-family: 'DM Serif Display', Georgia, serif;
+  font-family: 'Playfair Display', Georgia, serif;
   font-size: 1.5rem;
   color: var(--lt-near-black);
 }
@@ -431,7 +435,7 @@ p {
 }
 
 .lt-header__util-link {
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   /* 17.5px bold per GL 2026-04-29 — matches the left utility text
    * (Bringing celebration...) at the same scale and weight. */
   font-size: 17.5px;
@@ -461,8 +465,8 @@ p {
 
 /* Container */
 .lt-utility-bar {
-    background-color: var(--lt-soft-blue);
-    border-bottom: 1px solid rgba(26, 26, 26, 0.06);
+    background-color: var(--lt-near-white);
+    border-bottom: 1px solid rgba(184, 154, 91, 0.38);
     width: 100%;
 }
 
@@ -482,11 +486,11 @@ p {
     align-items: center;
     gap: 0.5rem;
     min-width: 0;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 17.5px;
     font-weight: 700;
     line-height: 1.4;
-    color: var(--lt-soft-gray);
+    color: var(--lt-navy);
     /* Hide on small mobile; show at 480px+ */
     display: none;
 }
@@ -510,10 +514,10 @@ p {
 
 /* Tagline text */
 .lt-utility-bar__tagline {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.95rem;
     font-weight: 700;
-    color: var(--lt-soft-gray);
+    color: var(--lt-navy);
     line-height: 1.35;
     max-width: 21rem;
 }
@@ -564,10 +568,10 @@ p {
 
 /* Sign-in / My Account link */
 .lt-utility-bar__sign-in {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 1rem;
     font-weight: 500;
-    color: var(--lt-soft-gray);
+    color: var(--lt-navy);
     text-decoration: none;
     display: inline-flex;
     align-items: center;
@@ -575,7 +579,7 @@ p {
     gap: 0.35rem;
     min-height: 44px;
     padding: 0 0.85rem;
-    border: 1px solid rgba(26, 26, 26, 0.16);
+    border: 1px solid rgba(14, 34, 64, 0.22);
     border-radius: 0.25rem;
     line-height: 1.25;
 }
@@ -626,29 +630,29 @@ p {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    --bs-btn-bg: var(--lt-teal);
-    --bs-btn-border-color: var(--lt-teal);
+    --bs-btn-bg: var(--lt-navy);
+    --bs-btn-border-color: var(--lt-navy);
     --bs-btn-color: var(--lt-white);
-    --bs-btn-hover-bg: #0A2E30;
-    --bs-btn-hover-border-color: #0A2E30;
+    --bs-btn-hover-bg: var(--lt-ink);
+    --bs-btn-hover-border-color: var(--lt-ink);
     --bs-btn-hover-color: var(--lt-white);
-    --bs-btn-active-bg: #0A2E30;
-    --bs-btn-active-border-color: #0A2E30;
+    --bs-btn-active-bg: var(--lt-ink);
+    --bs-btn-active-border-color: var(--lt-ink);
     font-size: 1rem;
     font-weight: 600;
     line-height: 1.2;
     min-height: 44px;
     padding: 0.65rem 1.15rem;
-    background-color: var(--lt-teal);
-    border-color: var(--lt-teal);
+    background-color: var(--lt-navy);
+    border-color: var(--lt-navy);
     color: var(--lt-white);
     border-radius: 0.375rem;
 }
 
 .lt-utility-bar__cta:hover,
 .lt-utility-bar__cta:focus-visible {
-    background-color: #0A2E30;
-    border-color: #0A2E30;
+    background-color: var(--lt-ink);
+    border-color: var(--lt-ink);
     color: var(--lt-white);
 }
 
@@ -661,7 +665,7 @@ p {
 /* Tier 2 — main nav */
 .lt-header__nav {
   background-color: var(--lt-white);
-  border-bottom: 1px solid rgba(26, 26, 26, 0.08);
+  border-bottom: 2px solid var(--lt-navy);
   position: relative;
 }
 
@@ -684,7 +688,7 @@ p {
 }
 
 .lt-header__nav-link {
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
   font-weight: 500;
   letter-spacing: 0;
@@ -700,15 +704,15 @@ p {
 }
 
 .lt-header__nav-link:hover {
-  color: var(--lt-teal);
+  color: var(--lt-berry);
   text-decoration: none;
 }
 
 /* Keyboard focus needs a visible indicator (WCAG 2.4.7).
  * Mouse hover is color-only — no underline. */
 .lt-header__nav-link:focus-visible {
-  color: var(--lt-teal);
-  outline: 2px solid var(--lt-teal);
+  color: var(--lt-berry);
+  outline: 2px solid var(--lt-brass);
   outline-offset: 4px;
   border-radius: 2px;
 }
@@ -727,12 +731,12 @@ p {
 
 .lt-header__search-btn:hover,
 .lt-header__search-btn:focus-visible {
-  color: var(--lt-teal);
+  color: var(--lt-berry);
   text-decoration: none;
 }
 
 .lt-header__search-btn:focus-visible {
-  outline: 2px solid var(--lt-teal);
+  outline: 2px solid var(--lt-brass);
   outline-offset: 3px;
 }
 
@@ -827,11 +831,11 @@ p {
 }
 
 .lt-header__mobile-strip {
-  background-color: var(--lt-blue-tint);
+  background-color: var(--lt-navy);
   text-align: center;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.8125rem;
-  color: var(--lt-soft-gray);
+  color: var(--lt-near-white);
   padding: 0.4rem 0.75rem;
   display: flex;
   align-items: center;
@@ -946,7 +950,7 @@ body.lt-nav-open {
 .lt-header__mobile-nav-link {
   display: block;
   padding: 0.875rem 1.25rem;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
   font-weight: 500;
   color: var(--lt-near-black);
@@ -982,9 +986,9 @@ body.lt-nav-open {
    ============================================================ */
 
 .lt-footer {
-  background-color: var(--lt-soft-blue);
-  color: var(--lt-near-black);
-  font-family: 'Raleway', sans-serif;
+  background-color: var(--lt-navy);
+  color: var(--lt-near-white);
+  font-family: 'Montserrat', sans-serif;
   margin-top: auto;
 }
 
@@ -992,6 +996,7 @@ body.lt-nav-open {
 .lt-footer__brand-band {
   padding: 1.75rem 1rem 1.25rem;
   text-align: center;
+  border-top: 1px solid rgba(184, 154, 91, 0.32);
 }
 
 .lt-footer__brand-inner {
@@ -1007,16 +1012,16 @@ body.lt-nav-open {
 }
 
 .lt-footer__brand-name {
-  font-family: 'DM Serif Display', Georgia, serif;
+  font-family: 'Playfair Display', Georgia, serif;
   font-size: 1.75rem;
-  color: var(--lt-near-black);
+  color: var(--lt-near-white);
   margin: 0 0 0.25rem;
   line-height: 1.1;
 }
 
 .lt-footer__brand-tagline {
   font-size: 1rem;
-  color: var(--lt-soft-gray);
+  color: rgba(250, 247, 242, 0.76);
   margin: 0 0 1.25rem;
 }
 
@@ -1043,7 +1048,7 @@ body.lt-nav-open {
 .lt-footer__social-link:hover,
 .lt-footer__social-link:focus-visible {
   transform: translateY(-2px);
-  outline: 2px solid var(--lt-teal);
+  outline: 2px solid var(--lt-brass);
   outline-offset: 2px;
 }
 
@@ -1069,6 +1074,7 @@ body.lt-nav-open {
 .lt-footer__links {
   padding: 0 1rem 1.5rem;
   text-align: center;
+  border-top: 1px solid rgba(184, 154, 91, 0.18);
 }
 
 .lt-footer__links-row {
@@ -1084,12 +1090,12 @@ body.lt-nav-open {
 }
 
 .lt-footer__col-title {
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 700;
   font-size: 0.875rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--lt-near-black);
+  color: var(--lt-brass);
   margin: 0 0 0.85rem;
 }
 
@@ -1108,13 +1114,13 @@ body.lt-nav-open {
 }
 
 .lt-footer__col-list a {
-  color: var(--lt-soft-gray);
+  color: rgba(250, 247, 242, 0.78);
   text-decoration: none;
 }
 
 .lt-footer__col-list a:hover,
 .lt-footer__col-list a:focus-visible {
-  color: var(--lt-near-black);
+  color: var(--lt-white);
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
@@ -1124,7 +1130,7 @@ body.lt-nav-open {
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
-  color: var(--lt-soft-gray);
+  color: rgba(250, 247, 242, 0.78);
   text-align: center;
 }
 
@@ -1142,11 +1148,10 @@ body.lt-nav-open {
 }
 
 /* Section 3 — copyright bar
-   Uses the new base white token (--lt-near-white = #fffcfc as of 2026-04-27)
-   to break visually from the soft-blue band above it. */
+   Uses warm white to break from the deep navy authority footer above it. */
 .lt-footer__bar {
   background-color: var(--lt-near-white);
-  border-top: 1px solid rgba(26, 26, 26, 0.08);
+  border-top: 1px solid rgba(184, 154, 91, 0.32);
   padding: 0.75rem 1rem;
 }
 
@@ -1163,7 +1168,7 @@ body.lt-nav-open {
 
 .lt-footer__legal a:hover,
 .lt-footer__legal a:focus-visible {
-  color: var(--lt-near-black);
+  color: var(--lt-navy);
 }
 
 .lt-footer__sep {
@@ -1236,7 +1241,7 @@ body.lt-nav-open {
    Shop mega menu — desktop dropdown sourced from Item Group children
    via update_website_context hook. Per design guide register:
    - White surface on near-white ground
-   - Near-black labels (DM Serif Display for the wrapper, Raleway for items)
+   - Near-black labels (Playfair Display for the wrapper, Montserrat for items)
    - Blush-tint hover state (no teal — teal is CTA-only)
    - Subtle drop shadow, 250ms fade
    - Caret rotates when expanded
@@ -1252,7 +1257,7 @@ body.lt-nav-open {
     border: none;
     padding: 0.5rem 0.5rem;
     color: var(--lt-near-black);
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 1rem;
     font-weight: 500;
     cursor: pointer;
@@ -1325,7 +1330,7 @@ body.lt-nav-open {
 .lt-header__mega-heading {
     margin: 0 0 0.85rem;
     color: var(--lt-near-black);
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.875rem;
     font-weight: 700;
     letter-spacing: 0.06em;
@@ -1340,7 +1345,7 @@ body.lt-nav-open {
     padding: 0.65rem 0.875rem;
     border-radius: 0.375rem;
     color: var(--lt-near-black);
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 1rem;
     font-weight: 500;
     text-decoration: none;
@@ -1371,7 +1376,7 @@ body.lt-nav-open {
     border-radius: 0.375rem;
     color: var(--lt-near-black);
     background-color: var(--lt-white);
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 1rem;
     font-weight: 600;
     line-height: 1.25;
@@ -1395,14 +1400,14 @@ body.lt-nav-open {
 }
 .lt-header__mega-link-label {
     display: block;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.95rem;
     font-weight: 500;
     color: var(--lt-near-black);
 }
 .lt-header__mega-link-hint {
     display: block;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.75rem;
     color: var(--lt-soft-gray);
     margin-top: 0.125rem;
@@ -1416,7 +1421,7 @@ body.lt-nav-open {
     border-radius: 0.375rem 0.375rem 0 0;
 }
 .lt-header__mega-link--all .lt-header__mega-link-label {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Playfair Display', Georgia, serif;
     font-size: 1.125rem;
     font-weight: 400;
 }
@@ -1465,7 +1470,7 @@ body.lt-nav-open {
     padding: 0.65rem 1rem 0.65rem 2rem;
     color: var(--lt-near-black);
     text-decoration: none;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 1rem;
     line-height: 1.4;
 }
@@ -1496,7 +1501,7 @@ body.lt-nav-open {
     padding: 0 1.25rem;
 }
 .lt-product__eyebrow {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.08em;
@@ -1512,7 +1517,7 @@ body.lt-nav-open {
     margin-bottom: 1rem;
 }
 .lt-product__title {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Playfair Display', Georgia, serif;
     font-size: 2rem;
     line-height: 1.15;
     color: var(--lt-near-black);
@@ -1532,7 +1537,7 @@ body.lt-nav-open {
 }
 .lt-product__wishlist:hover { color: var(--lt-near-black); }
 .lt-product__description {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 1rem;
     line-height: 1.6;
     color: var(--lt-near-black);
@@ -1540,7 +1545,7 @@ body.lt-nav-open {
 }
 /* Two-field product copy: brand description (voice) + details (specs). */
 .lt-product__brand-description {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 1.0625rem;
     line-height: 1.65;
     color: var(--lt-near-black);
@@ -1555,7 +1560,7 @@ body.lt-nav-open {
     border-top: 1px solid rgba(26, 26, 26, 0.08);
 }
 .lt-product__details-heading {
-    font-family: 'DM Serif Display', serif;
+    font-family: 'Playfair Display', serif;
     font-size: 1.375rem;
     line-height: 1.2;
     color: var(--lt-near-black);
@@ -1563,7 +1568,7 @@ body.lt-nav-open {
     letter-spacing: 0.005em;
 }
 .lt-product__details-body {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.9875rem;
     line-height: 1.6;
     color: var(--lt-near-black);
@@ -1590,7 +1595,7 @@ body.lt-nav-open {
     border-radius: 50%;
 }
 .lt-product__inquiry {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.95rem;
     color: var(--lt-soft-gray);
     margin-top: 1.5rem;
@@ -1617,7 +1622,7 @@ body.lt-nav-open {
     display: flex;
     align-items: baseline;
     gap: 0.5rem;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.8125rem;
     font-weight: 600;
     letter-spacing: 0.04em;
@@ -1656,7 +1661,7 @@ body.lt-nav-open {
     border-radius: 999px;
     background-color: var(--lt-white);
     color: var(--lt-near-black);
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.875rem;
     font-weight: 500;
     line-height: 1.2;
@@ -1695,7 +1700,7 @@ body.lt-nav-open {
     border-radius: 0.375rem;
     background-color: var(--lt-white);
     color: var(--lt-near-black);
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.95rem;
     line-height: 1.4;
     appearance: none;
@@ -1715,7 +1720,7 @@ body.lt-nav-open {
 }
 
 .lt-product__configure-status {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.875rem;
     color: var(--lt-soft-gray);
     margin: 0.75rem 0 1rem;
@@ -1737,19 +1742,19 @@ body.lt-nav-open {
     margin-bottom: 0.75rem;
 }
 .lt-product__price-current {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Playfair Display', Georgia, serif;
     font-size: 1.875rem;
     color: var(--lt-near-black);
 }
 .lt-product__price-mrp {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.95rem;
     color: var(--lt-soft-gray);
     margin-left: 0.5rem;
 }
 .lt-product__stock {
     margin-bottom: 1rem;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.875rem;
 }
 .lt-product__stock-flag--in {
@@ -1776,7 +1781,7 @@ body.lt-nav-open {
     justify-content: center;
     padding: 0.85rem 1.5rem;
     border-radius: 0.375rem;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-weight: 600;
     font-size: 0.95rem;
     text-decoration: none;
@@ -1793,14 +1798,14 @@ body.lt-nav-open {
 }
 .lt-product__cta--primary:hover:not([disabled]),
 .lt-product__cta--primary:focus-visible {
-    background-color: #0A2E30;
-    border-color: #0A2E30;
+    background-color: var(--lt-navy);
+    border-color: var(--lt-navy);
     color: var(--lt-white);
     text-decoration: none;
 }
 .lt-product__cta--primary[disabled] {
-    background-color: rgba(0, 128, 128, 0.3);
-    border-color: rgba(0, 128, 128, 0.3);
+    background-color: rgba(15, 61, 62, 0.3);
+    border-color: rgba(15, 61, 62, 0.3);
     cursor: not-allowed;
 }
 .lt-product__cta--secondary {
@@ -1819,7 +1824,7 @@ body.lt-nav-open {
 
 .lt-product__inquiry-cross {
     margin: 0.75rem 0 0;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.85rem;
     color: var(--lt-soft-gray);
     line-height: 1.45;
@@ -1854,7 +1859,7 @@ body.product-page {
 /* Page title typography (the h2 above the product grid) */
 .item-group-content h2,
 .page-content-wrapper h2 {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Playfair Display', Georgia, serif;
     font-weight: 400;
 }
 
@@ -1873,7 +1878,7 @@ body.product-page {
     text-align: left;
 }
 .lt-by-cat__eyebrow {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.08em;
@@ -1882,7 +1887,7 @@ body.product-page {
     margin: 0 0 0.75rem;
 }
 .lt-by-cat__title {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Playfair Display', Georgia, serif;
     font-size: 2.5rem;
     color: var(--lt-near-black);
     margin: 0 0 1.25rem;
@@ -1894,7 +1899,7 @@ body.product-page {
     .lt-by-cat__hero { padding: 5rem 2rem 4rem; }
 }
 .lt-by-cat__lede {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 1.05rem;
     color: var(--lt-soft-gray);
     margin: 0;
@@ -1950,7 +1955,7 @@ body.product-page {
     background-color: #c0392b;
     color: #ffffff;
     border-radius: 9px;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 10px;
     font-weight: 700;
     line-height: 18px;
@@ -1980,7 +1985,7 @@ body.product-page {
    ==================================================================== */
 
 .lt-footer-newsletter {
-    background-color: var(--lt-blush-tint);
+    background-color: var(--lt-near-white);
     padding: 2.5rem 1rem;
     text-align: center;
     border-bottom: 1px solid rgba(26, 26, 26, 0.06);
@@ -1993,7 +1998,7 @@ body.product-page {
 }
 
 .lt-footer-newsletter__heading {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Playfair Display', Georgia, serif;
     font-size: 1.5rem;
     font-weight: 400;
     color: var(--lt-near-black);
@@ -2008,7 +2013,7 @@ body.product-page {
 }
 
 .lt-footer-newsletter__subhead {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.95rem;
     color: var(--lt-soft-gray);
     margin: 0 0 1.5rem;
@@ -2032,15 +2037,15 @@ body.product-page {
     border-radius: 0.375rem;
     background-color: var(--lt-white);
     color: var(--lt-near-black);
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.95rem;
     min-height: 44px;
 }
 
 .lt-footer-newsletter__input:focus-visible {
-    outline: 2px solid var(--lt-teal);
+    outline: 2px solid var(--lt-brass);
     outline-offset: 1px;
-    border-color: var(--lt-teal);
+    border-color: var(--lt-brass);
 }
 
 .lt-footer-newsletter__input::placeholder {
@@ -2049,11 +2054,11 @@ body.product-page {
 
 .lt-footer-newsletter__button {
     padding: 0.75rem 1.5rem;
-    background-color: var(--lt-teal);
+    background-color: var(--lt-navy);
     color: var(--lt-white);
-    border: 1px solid var(--lt-teal);
+    border: 1px solid var(--lt-navy);
     border-radius: 0.375rem;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.95rem;
     font-weight: 600;
     cursor: pointer;
@@ -2064,14 +2069,14 @@ body.product-page {
 
 .lt-footer-newsletter__button:hover,
 .lt-footer-newsletter__button:focus-visible {
-    background-color: #0A2E30;
-    border-color: #0A2E30;
+    background-color: var(--lt-ink);
+    border-color: var(--lt-ink);
     color: var(--lt-white);
     outline: none;
 }
 
 .lt-footer-newsletter__button:focus-visible {
-    outline: 2px solid var(--lt-teal);
+    outline: 2px solid var(--lt-brass);
     outline-offset: 2px;
 }
 
@@ -2085,7 +2090,7 @@ body.product-page {
 .lt-footer-newsletter__error,
 .lt-footer-newsletter__success {
     margin-top: 0.75rem;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.875rem;
     line-height: 1.45;
 }
@@ -2145,7 +2150,7 @@ body.product-page {
 }
 
 .lt-shop__eyebrow {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.08em;
@@ -2155,7 +2160,7 @@ body.product-page {
 }
 
 .lt-shop__title {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Playfair Display', Georgia, serif;
     font-size: 2rem;
     color: var(--lt-near-black);
     margin: 0;
@@ -2203,7 +2208,7 @@ body.product-page {
 }
 
 .lt-shop__sidebar-heading {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.6875rem;
     font-weight: 700;
     letter-spacing: 0.1em;
@@ -2224,7 +2229,7 @@ body.product-page {
 
 .lt-shop__sidebar-link {
     display: block;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 1rem;
     color: var(--lt-soft-gray);
     text-decoration: none;
@@ -2253,7 +2258,7 @@ body.product-page {
 }
 
 .lt-shop__filters-heading {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.6875rem;
     font-weight: 700;
     letter-spacing: 0.1em;
@@ -2264,7 +2269,7 @@ body.product-page {
 
 .lt-shop__clear-link {
     display: inline-block;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.8125rem;
     color: var(--lt-soft-gray);
     text-decoration: underline;
@@ -2369,7 +2374,7 @@ body.lt-filter-open {
 }
 
 .lt-shop__toolbar-count {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 1rem;
     color: var(--lt-soft-gray);
     margin: 0;
@@ -2390,7 +2395,7 @@ body.lt-filter-open {
     border: 1px solid rgba(26, 26, 26, 0.18);
     border-radius: 0.375rem;
     padding: 0.55rem 0.875rem;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 1rem;
     font-weight: 500;
     color: var(--lt-near-black);
@@ -2417,7 +2422,7 @@ body.lt-filter-open {
 }
 
 .lt-shop__sort-label {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.875rem;
     color: var(--lt-soft-gray);
     white-space: nowrap;
@@ -2429,7 +2434,7 @@ body.lt-filter-open {
     border-radius: 0.375rem;
     background-color: var(--lt-white);
     color: var(--lt-near-black);
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.875rem;
     appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%231a1a1a' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
@@ -2505,7 +2510,7 @@ body.lt-filter-open {
 
 .lt-shop__loading {
     grid-column: 1 / -1;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.9rem;
     color: var(--lt-soft-gray);
     text-align: center;
@@ -2589,7 +2594,7 @@ body.lt-filter-open {
 }
 
 #products-grid-area .product-title {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.9375rem;
     font-weight: 600;
     color: var(--lt-near-black);
@@ -2609,14 +2614,14 @@ body.lt-filter-open {
 
 /* Category label — de-emphasise */
 #products-grid-area .product-category {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.75rem;
     color: var(--lt-soft-gray);
     margin: 0.125rem 0 0;
 }
 
 #products-grid-area .product-price {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Playfair Display', Georgia, serif;
     font-size: 1.125rem;
     color: var(--lt-near-black);
     margin: 0.375rem 0 0;
@@ -2651,7 +2656,7 @@ body.lt-filter-open {
 }
 
 .lt-shop__page-btn {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.875rem;
     font-weight: 600;
     color: var(--lt-near-black);
@@ -2685,7 +2690,7 @@ body.lt-filter-open {
 
 .lt-shop__sidebar .filter-label,
 .lt-shop__filters--mobile .filter-label {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.8125rem;
     font-weight: 600;
     color: var(--lt-near-black);
@@ -2747,7 +2752,7 @@ body.lt-filter-open {
 
 /* Description line — Hetzner's muted small text under the title */
 #products-grid-area .lt-card-desc {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 1rem;
     line-height: 1.5;
     color: var(--lt-soft-gray, #6c757d);
@@ -2765,7 +2770,7 @@ body.lt-filter-open {
 }
 
 #products-grid-area .product-price {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 1rem;
     font-weight: 700;
     color: var(--lt-near-black);
@@ -3000,7 +3005,7 @@ body.lt-filter-open {
 .lt-product__configure .lt-product__price-current {
   display: block;
   max-width: 100%;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
   font-weight: 600;
   line-height: 1.35;
@@ -3073,6 +3078,486 @@ body.lt-filter-open {
 
 @supports selector(:has(*)) {
   .lt-shop__pagination:has(.btn-prev[disabled]):has(.btn-next[disabled]) {
+    display: none;
+  }
+}
+
+/* ============================================================
+   2026-05-03 Civic Celebration site-wide overhaul
+
+   Goal: Civic Celebration structure and colors, with the more premium
+   Locally Twisted typography/icon polish. This section intentionally
+   overrides earlier launch-slice styling while keeping the existing
+   Frappe/Webshop route behavior intact.
+   ============================================================ */
+
+:root {
+  --lt-ink: #0A0A0B;
+  --lt-near-black: #0A0A0B;
+  --lt-navy: #0E2240;
+  --lt-slate: #0E2240;
+  --lt-teal: #0E2240;
+  --lt-berry: #B31B34;
+  --lt-crimson: #B31B34;
+  --lt-warm-white: #FAF7F2;
+  --lt-near-white: #FAF7F2;
+  --lt-sandstone: #D9C7B3;
+  --lt-stone: #E7E5E1;
+  --lt-brass: #B89A5B;
+  --lt-soft-gray: #4E5662;
+  --lt-font-brand: 'Cinzel', Georgia, serif;
+  --lt-font-heading: 'Cormorant Garamond', Georgia, serif;
+  --lt-font-body: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+html,
+body {
+  background: var(--lt-warm-white);
+}
+
+body,
+.web-page-content,
+.website-content,
+p,
+li,
+input,
+textarea,
+select,
+button {
+  font-family: var(--lt-font-body);
+}
+
+h1,
+h2,
+h3,
+.h1,
+.h2,
+.h3,
+.lt-page-title,
+.lt-section-title {
+  font-family: var(--lt-font-heading);
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.btn-primary,
+.lt-button,
+.lt-primary-action,
+.lt-shop__card-add,
+.lt-product__cta,
+.lt-footer-newsletter__button {
+  background: var(--lt-navy);
+  border-color: var(--lt-navy);
+  color: #fff;
+}
+
+.btn-primary:hover,
+.btn-primary:focus-visible,
+.lt-button:hover,
+.lt-button:focus-visible,
+.lt-primary-action:hover,
+.lt-primary-action:focus-visible,
+.lt-shop__card-add:hover,
+.lt-shop__card-add:focus-visible,
+.lt-product__cta:hover,
+.lt-product__cta:focus-visible,
+.lt-footer-newsletter__button:hover,
+.lt-footer-newsletter__button:focus-visible {
+  background: var(--lt-ink);
+  border-color: var(--lt-ink);
+  color: #fff;
+  outline: 2px solid var(--lt-brass);
+  outline-offset: 2px;
+}
+
+/* Thin civic header */
+.lt-header {
+  background: var(--lt-warm-white);
+  border-bottom: 2px solid var(--lt-navy);
+  box-shadow: 0 1px 0 rgba(10, 10, 11, 0.06);
+  position: relative;
+  z-index: 100;
+}
+
+.lt-utility-bar {
+  display: none;
+}
+
+.lt-header__nav {
+  background: var(--lt-warm-white);
+  border-bottom: 0;
+}
+
+.lt-header__nav-row {
+  min-height: 58px;
+  display: grid;
+  grid-template-columns: minmax(190px, 260px) minmax(0, 1fr) auto auto;
+  gap: 1.1rem;
+  align-items: center;
+  padding-block: 0.35rem;
+}
+
+.lt-header__brand {
+  display: inline-flex;
+  align-items: center;
+  color: var(--lt-ink);
+  text-decoration: none;
+  min-width: 0;
+}
+
+.lt-header__brand img,
+.lt-header__brand .lt-logo {
+  max-height: 42px;
+  width: auto;
+}
+
+.lt-header__brand-wordmark {
+  font-family: var(--lt-font-brand);
+  font-size: 1.52rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.lt-header__brand-wordmark--mobile {
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+}
+
+.lt-header__mobile-brand {
+  flex: 0 0 auto;
+  max-width: calc(100% - 112px);
+  overflow: visible;
+}
+
+.lt-header__mobile-actions {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.lt-header__nav-list {
+  justify-content: flex-end;
+  gap: 1.25rem;
+}
+
+.lt-header__nav-link,
+.lt-header__nav-trigger {
+  font-family: var(--lt-font-body);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--lt-ink);
+  padding: 0.55rem 0;
+}
+
+.lt-header__nav-link:hover,
+.lt-header__nav-link:focus-visible,
+.lt-header__nav-trigger:hover,
+.lt-header__nav-trigger:focus-visible {
+  color: var(--lt-crimson);
+}
+
+.lt-header__search-btn {
+  color: var(--lt-ink);
+}
+
+.lt-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+}
+
+.lt-header__action-link,
+.lt-header__action-cart,
+.lt-header__action-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  font-family: var(--lt-font-body);
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.lt-header__action-link {
+  color: var(--lt-ink);
+}
+
+.lt-header__action-cart {
+  color: var(--lt-ink);
+  position: relative;
+}
+
+.lt-header__action-cta {
+  background: var(--lt-crimson);
+  border: 1px solid var(--lt-crimson);
+  color: #fff;
+  padding: 0.55rem 1rem;
+}
+
+.lt-header__action-cta:hover,
+.lt-header__action-cta:focus-visible {
+  background: var(--lt-navy);
+  border-color: var(--lt-navy);
+  color: #fff;
+}
+
+.lt-header__mega {
+  border-top: 1px solid rgba(14, 34, 64, 0.18);
+  border-bottom: 1px solid rgba(14, 34, 64, 0.18);
+  box-shadow: 0 22px 40px rgba(10, 10, 11, 0.12);
+}
+
+.lt-header__mega-heading {
+  color: var(--lt-crimson);
+}
+
+.lt-header__mobile {
+  background: var(--lt-warm-white);
+  border-bottom: 2px solid var(--lt-navy);
+}
+
+.lt-header__mobile-row {
+  min-height: 58px;
+}
+
+.lt-header__mobile-brand img,
+.lt-header__mobile-brand .lt-logo {
+  max-height: 40px;
+  width: auto;
+}
+
+.lt-header__mobile-strip {
+  display: none;
+}
+
+.lt-header__mobile-nav-collapse {
+  background: var(--lt-warm-white);
+}
+
+.lt-header__mobile-nav-link,
+.lt-header__mobile-nav-sublink {
+  font-family: var(--lt-font-body);
+  color: var(--lt-ink);
+}
+
+.lt-header__mobile-caret {
+  transition: transform 0.18s ease;
+}
+
+/* Page-scoped CSS from earlier slices may still name old fonts. These
+   route-family overrides keep the visible typography unified without
+   changing route behavior or form contracts. */
+.lt-contact h1,
+.lt-contact h2,
+.lt-contact h3,
+.lt-contact__intro h1,
+.lt-contact__form-wrap > h2,
+.lt-book h1,
+.lt-book h2,
+.lt-book h3,
+.lt-btfp h1,
+.lt-btfp h2,
+.lt-btfp h3,
+.lt-btfp__intro-title,
+.lt-btfp__service-card h2,
+.lt-btfp__form-wrap h2,
+.lt-btfp__expect-card h3,
+.lt-btfp__faq-heading,
+.lt-btfp__service-title,
+.lt-btfp__process-title,
+.lt-btfp__process-number,
+.lt-btfp__events-title,
+.lt-btfp__contact-cta h2,
+.lt-portfolio h1,
+.lt-portfolio h2,
+.lt-portfolio h3,
+.lt-portfolio-hero__title,
+.lt-portfolio-card__title,
+.lt-portfolio-empty__heading,
+.lt-portfolio-modal__title,
+.lt-faq h1,
+.lt-faq h2,
+.lt-policy h1,
+.lt-policy h2,
+.lt-accessibility h1,
+.lt-accessibility h2,
+.lt-thanks__title,
+.lt-thanks__order-id,
+.lt-cart__title,
+.lt-checkout__title,
+.lt-checkout__order-heading {
+  font-family: var(--lt-font-heading) !important;
+  font-weight: 700;
+}
+
+.lt-contact,
+.lt-contact *,
+.lt-book,
+.lt-book *,
+.lt-btfp,
+.lt-btfp *,
+.lt-portfolio,
+.lt-portfolio *,
+.lt-faq,
+.lt-faq *,
+.lt-policy,
+.lt-policy *,
+.lt-accessibility,
+.lt-accessibility *,
+.lt-thanks,
+.lt-thanks *,
+.lt-cart,
+.lt-cart *,
+.lt-checkout,
+.lt-checkout * {
+  font-family: var(--lt-font-body);
+}
+
+/* Footer: dark civic authority with brass details. */
+.lt-footer {
+  background: var(--lt-navy);
+  color: var(--lt-warm-white);
+}
+
+.lt-footer-newsletter {
+  background: var(--lt-warm-white);
+  border-top: 1px solid rgba(14, 34, 64, 0.14);
+}
+
+.lt-footer-newsletter__heading,
+.lt-footer__brand-name {
+  font-family: var(--lt-font-heading);
+  font-weight: 700;
+}
+
+.lt-footer__brand-name {
+  color: #fff;
+  font-size: 2rem;
+}
+
+.lt-footer__col-title {
+  color: var(--lt-brass);
+}
+
+.lt-footer__bar {
+  background: var(--lt-warm-white);
+}
+
+/* Shared page surfaces */
+.lt-page-hero,
+.lt-policy-hero,
+.lt-faq-hero,
+.lt-contact__hero,
+.lt-shop__hero {
+  background: linear-gradient(135deg, var(--lt-warm-white) 0%, #fff 62%, rgba(217, 199, 179, 0.34) 100%);
+  border-bottom: 1px solid rgba(14, 34, 64, 0.14);
+}
+
+.lt-page-eyebrow,
+.lt-shop__hero-eyebrow,
+.lt-contact__eyebrow,
+.lt-btfp__eyebrow,
+.lt-portfolio__eyebrow {
+  font-family: var(--lt-font-body);
+  color: var(--lt-crimson);
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Cards and forms should feel like working event documents, not party tiles. */
+.card,
+.lt-card,
+.lt-contact__card,
+.lt-book__card,
+.lt-location-card,
+.lt-policy-card,
+.lt-faq-card,
+.lt-shop__card,
+.lt-product__details,
+.lt-product__configure,
+.cart-container,
+.product-container {
+  border: 1px solid rgba(14, 34, 64, 0.14);
+  border-radius: 4px;
+  box-shadow: 0 14px 32px rgba(10, 10, 11, 0.06);
+}
+
+/* Shop and product visual system */
+#products-grid-area .card,
+.lt-shop__card {
+  background: #fff;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+#products-grid-area .card-img-container,
+.lt-shop__card-image {
+  background: rgba(217, 199, 179, 0.28);
+}
+
+#products-grid-area .product-title,
+.lt-shop__card-name,
+.lt-product__title {
+  font-family: var(--lt-font-heading);
+  font-weight: 700;
+  color: var(--lt-ink);
+}
+
+#products-grid-area .product-price,
+.lt-shop__card-price,
+.lt-product__price-current {
+  color: var(--lt-navy);
+  font-family: var(--lt-font-body);
+  font-weight: 900;
+}
+
+.lt-shop__chip {
+  border-radius: 0;
+  border-color: rgba(14, 34, 64, 0.28);
+  color: var(--lt-ink);
+}
+
+.lt-shop__chip[aria-pressed="true"] {
+  background: var(--lt-navy);
+  border-color: var(--lt-navy);
+  color: #fff;
+}
+
+.lt-shop__cta,
+.lt-cta {
+  background: var(--lt-navy);
+  color: var(--lt-warm-white);
+}
+
+.lt-shop__cta h2,
+.lt-cta__heading {
+  color: #fff;
+}
+
+.lt-shop__cta p,
+.lt-cta__body {
+  color: rgba(250, 247, 242, 0.82);
+}
+
+@media (max-width: 1199px) {
+  .lt-header__nav-row {
+    grid-template-columns: minmax(170px, 220px) minmax(0, 1fr) auto;
+    gap: 0.8rem;
+  }
+
+  .lt-header__action-link {
     display: none;
   }
 }

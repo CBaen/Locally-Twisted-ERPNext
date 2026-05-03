@@ -735,6 +735,132 @@ PAGE_CSS = """.lt-btfp__intro {
     color: var(--lt-near-black);
     text-decoration: none;
 }
+
+/* Civic Celebration redesign for secondary editorial pages. */
+.lt-btfp__intro {
+    background: linear-gradient(135deg, #0e2240 0%, #0a0a0b 100%);
+    border-bottom: 10px solid #b31b34;
+}
+.lt-btfp__intro-title,
+.lt-btfp__intro-lede,
+.lt-btfp__intro .lt-btfp__kicker {
+    color: #faf7f2;
+}
+.lt-btfp__intro .lt-btfp__kicker,
+.lt-btfp__service-kicker,
+.lt-btfp__process .lt-btfp__kicker,
+.lt-btfp__events .lt-btfp__kicker,
+.lt-btfp__contact-cta .lt-btfp__kicker {
+    color: #b31b34;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+}
+.lt-btfp__banner {
+    background-color: #d9c7b3;
+    border-color: rgba(10, 10, 11, 0.16);
+}
+.lt-btfp__banner-copy,
+.lt-btfp__banner-link {
+    color: #0a0a0b;
+}
+.lt-btfp__services,
+.lt-btfp__events,
+.lt-btfp__faq {
+    background-color: #faf7f2;
+}
+.lt-btfp__service-card,
+.lt-btfp__contact-cta-inner,
+.lt-btfp__faq-inner {
+    background-color: #fffdf9;
+    border: 1px solid rgba(14, 34, 64, 0.16);
+    box-shadow: 0 18px 50px rgba(14, 34, 64, 0.08);
+}
+.lt-btfp__contact-cta-inner,
+.lt-btfp__faq-inner {
+    padding: 2rem;
+}
+.lt-btfp__service-title,
+.lt-btfp__service-card h2,
+.lt-btfp__process-title,
+.lt-btfp__events-title,
+.lt-btfp__contact-cta h2,
+.lt-btfp__faq-heading,
+.lt-btfp__process-number {
+    color: #0e2240;
+}
+.lt-btfp__intro-title,
+.lt-btfp__service-title,
+.lt-btfp__process-title,
+.lt-btfp__events-title,
+.lt-btfp__contact-cta h2,
+.lt-btfp__faq-heading {
+    letter-spacing: 0;
+}
+.lt-btfp__intro-lede,
+.lt-btfp__service-body,
+.lt-btfp__service-spec-row dd,
+.lt-btfp__process-content p,
+.lt-btfp__events-row dd,
+.lt-btfp__contact-cta p,
+.lt-btfp__faq-answer {
+    color: rgba(10, 10, 11, 0.72);
+}
+.lt-btfp__intro .lt-btfp__intro-lede {
+    color: #faf7f2;
+}
+.lt-btfp__service-spec,
+.lt-btfp__service-spec-row,
+.lt-btfp__process-item,
+.lt-btfp__events-row,
+.lt-btfp__faq-item {
+    border-color: rgba(14, 34, 64, 0.14);
+}
+.lt-btfp__service-spec-row dt,
+.lt-btfp__process-step-title,
+.lt-btfp__events-row dt,
+.lt-btfp__faq-item summary {
+    color: #0a0a0b;
+}
+.lt-btfp__ribbon--blush,
+.lt-btfp__ribbon--soft-blue {
+    background-color: #b31b34;
+}
+.lt-btfp__process,
+.lt-btfp__contact-cta {
+    background-color: #f1e8dc;
+}
+.lt-btfp__contact-primary,
+.lt-btfp__submit {
+    background-color: #b31b34;
+    border-color: #b31b34;
+    color: #faf7f2;
+}
+.lt-btfp__contact-primary:hover,
+.lt-btfp__contact-primary:focus-visible,
+.lt-btfp__submit:hover,
+.lt-btfp__submit:focus-visible {
+    background-color: #0e2240;
+    border-color: #0e2240;
+    color: #faf7f2;
+}
+.lt-btfp__contact-secondary {
+    background-color: #faf7f2;
+    border-color: rgba(14, 34, 64, 0.25);
+    color: #0e2240;
+}
+.lt-btfp__contact-secondary:hover,
+.lt-btfp__contact-secondary:focus-visible {
+    background-color: #d9c7b3;
+    border-color: #0e2240;
+    color: #0a0a0b;
+}
+.lt-btfp__banner-link:focus-visible,
+.lt-btfp__faq-item summary:focus-visible {
+    outline-color: #b31b34;
+}
+.lt-btfp__carousel {
+    background-color: #d9c7b3;
+}
 """
 
 

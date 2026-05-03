@@ -52,6 +52,53 @@ PAGE_CSS = """
         font-size: 1.625rem;
     }
 }
+
+/* Civic Celebration redesign for secondary editorial pages. */
+.lt-accessibility {
+    background-color: #faf7f2;
+    color: #0a0a0b;
+}
+.lt-accessibility__inner {
+    background-color: #fffdf9;
+    border: 1px solid rgba(14, 34, 64, 0.16);
+    border-top: 8px solid #b31b34;
+    border-radius: 0.375rem;
+    box-shadow: 0 18px 50px rgba(14, 34, 64, 0.08);
+    padding: 2rem;
+}
+.lt-accessibility__eyebrow {
+    color: #b31b34;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    margin: 0 0 0.75rem;
+    text-transform: uppercase;
+}
+.lt-accessibility h1 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    color: #0e2240;
+    letter-spacing: 0;
+}
+.lt-accessibility__lede,
+.lt-accessibility p,
+.lt-accessibility__contact {
+    color: rgba(10, 10, 11, 0.72);
+}
+.lt-accessibility__link {
+    color: #0a0a0b;
+}
+.lt-accessibility__link:hover,
+.lt-accessibility__link:focus {
+    color: #b31b34;
+}
+.lt-accessibility__link:focus-visible {
+    outline-color: #b31b34;
+}
+@media (max-width: 480px) {
+    .lt-accessibility__inner {
+        padding: 1.25rem;
+    }
+}
 """
 
 

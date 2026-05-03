@@ -748,6 +748,105 @@ body.lt-modal-open { overflow: hidden; }
     .lt-portfolio-modal { animation: none; }
     .lt-portfolio-modal__close { transition: none; }
 }
+
+/* Civic Celebration redesign for secondary editorial pages. */
+.lt-portfolio-hero {
+    background: linear-gradient(135deg, #0e2240 0%, #0a0a0b 100%);
+    border-bottom: 10px solid #b31b34;
+}
+.lt-portfolio-hero__eyebrow,
+.lt-portfolio-hero__title,
+.lt-portfolio-hero__body {
+    color: #faf7f2;
+}
+.lt-portfolio-hero__eyebrow,
+.lt-portfolio-card__category,
+.lt-portfolio-modal__category,
+.lt-portfolio-filter__dropdown label,
+.lt-portfolio-filter__count {
+    color: #b31b34;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+}
+.lt-portfolio-ribbon {
+    background-color: #b31b34;
+}
+.lt-portfolio-filter {
+    background-color: #faf7f2;
+    border-bottom-color: rgba(14, 34, 64, 0.16);
+}
+.lt-portfolio-filter__pill button,
+.lt-portfolio-filter__dropdown select {
+    background-color: #fffdf9;
+    border-color: rgba(14, 34, 64, 0.24);
+    color: #0a0a0b;
+    border-radius: 0.25rem;
+}
+.lt-portfolio-filter__pill button:hover,
+.lt-portfolio-filter__dropdown select:hover {
+    border-color: #0e2240;
+}
+.lt-portfolio-filter__pill button[aria-pressed="true"] {
+    background-color: #0e2240;
+    border-color: #0e2240;
+    color: #faf7f2;
+}
+.lt-portfolio-filter__clear,
+.lt-portfolio-card__title,
+.lt-portfolio-empty__heading,
+.lt-portfolio-modal__title,
+.lt-cta__heading {
+    color: #0e2240;
+}
+.lt-portfolio-grid {
+    background-color: #f1e8dc;
+}
+.lt-portfolio-card,
+.lt-portfolio-modal__panel {
+    background-color: #fffdf9;
+    border: 1px solid rgba(14, 34, 64, 0.16);
+    border-radius: 0.375rem;
+    box-shadow: 0 16px 42px rgba(14, 34, 64, 0.1);
+}
+.lt-portfolio-card:hover,
+.lt-portfolio-card:focus-visible {
+    box-shadow: 0 22px 52px rgba(14, 34, 64, 0.18);
+}
+.lt-portfolio-card__image,
+.lt-portfolio-modal__image {
+    background-color: #d9c7b3;
+}
+.lt-portfolio-empty__body,
+.lt-cta__body {
+    color: rgba(10, 10, 11, 0.72);
+}
+.lt-portfolio-empty__cta,
+.lt-cta__button {
+    background-color: #b31b34;
+    color: #faf7f2;
+    border: 1px solid #b31b34;
+    border-radius: 0.25rem;
+}
+.lt-portfolio-empty__cta:hover,
+.lt-portfolio-empty__cta:focus-visible,
+.lt-cta__button:hover,
+.lt-cta__button:focus-visible {
+    background-color: #0e2240;
+    border-color: #0e2240;
+    color: #faf7f2;
+}
+.lt-cta {
+    background-color: #d9c7b3;
+}
+.lt-portfolio-modal__backdrop {
+    background-color: rgba(10, 10, 11, 0.88);
+}
+.lt-portfolio-modal__caption {
+    border-top-color: rgba(14, 34, 64, 0.14);
+}
+.lt-portfolio-modal__close {
+    background-color: #0e2240;
+}
 """
 
 

@@ -113,6 +113,65 @@ PAGE_CSS = """
     text-decoration: underline;
     text-underline-offset: 0.2em;
 }
+
+/* Civic Celebration redesign for secondary editorial pages. */
+.lt-thanks {
+    background-color: #faf7f2;
+    color: #0a0a0b;
+}
+.lt-thanks__inner {
+    background-color: #fffdf9;
+    border: 1px solid rgba(14, 34, 64, 0.16);
+    border-top: 8px solid #b31b34;
+    border-radius: 0.375rem;
+    box-shadow: 0 18px 50px rgba(14, 34, 64, 0.08);
+    padding: 2rem;
+}
+.lt-thanks__eyebrow {
+    color: #b31b34;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    margin: 0 0 0.75rem;
+    text-transform: uppercase;
+}
+.lt-thanks__title,
+.lt-thanks__order-id {
+    color: #0e2240;
+    letter-spacing: 0;
+}
+.lt-thanks__lede,
+.lt-thanks__contact {
+    color: rgba(10, 10, 11, 0.72);
+}
+.lt-thanks__order {
+    background-color: #faf7f2;
+    border-color: rgba(14, 34, 64, 0.16);
+    border-radius: 0.375rem;
+}
+.lt-thanks__order-meta {
+    color: #b31b34;
+    font-weight: 800;
+}
+.lt-thanks__order-line {
+    border-bottom-color: rgba(14, 34, 64, 0.12);
+}
+.lt-thanks__order-line--total {
+    border-top-color: rgba(14, 34, 64, 0.28);
+    color: #0a0a0b;
+}
+.lt-thanks__cta {
+    background-color: #b31b34;
+    border: 1px solid #b31b34;
+    color: #faf7f2;
+    border-radius: 0.25rem;
+}
+.lt-thanks__cta:hover,
+.lt-thanks__cta:focus-visible {
+    background-color: #0e2240;
+    border-color: #0e2240;
+    color: #faf7f2;
+}
 """
 
 

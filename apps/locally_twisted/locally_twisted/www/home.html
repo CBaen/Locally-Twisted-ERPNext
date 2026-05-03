@@ -11,14 +11,15 @@
     Order (v3 — GL 2026-04-27 round 2: Recent Celebrations BEFORE Custom
     Creations; both bands span the full monitor width on desktop):
       1. Hero — cycling headline + stable tagline
-      2. Reviews block (replaces prior trust strip)
-      3. 3-dot divider
-      4. Recent Celebrations — big photos, 4:5 aspect, 3-up at desktop
-      5. Custom Creations (6 categories — bouquets added)
-      6. 3-dot divider
-      7. Client Logo Crawl — slowed to 270s
-      8. Closing CTA
-      9. Twisting & Face Painting spotlight (moved to bottom)
+      2. Authority proof bar
+      3. Reviews block (replaces prior trust strip)
+      4. 3-dot divider
+      5. Recent Celebrations — big photos, 4:5 aspect, 3-up at desktop
+      6. Custom Creations (6 categories — bouquets added)
+      7. 3-dot divider
+      8. Client Logo Crawl — slowed to 270s
+      9. Closing CTA
+      10. Twisting & Face Painting spotlight (moved to bottom)
 #}
 
 {# --- 0. Visually-hidden page title for screen readers (no visible h1 on this page) --- #}
@@ -43,16 +44,70 @@
         </div>
 
         <p id="lt-hero-tagline" class="lt-hero__tagline">
-            Making celebrations unforgettable since 1998.
+            Trusted across the Wasatch Front since 1998.
         </p>
         <a href="/contact" class="lt-hero__cta">
-            Tell us about your event
+            Request a quote
             <span aria-hidden="true">&rarr;</span>
         </a>
     </div>
 </section>
 
-{# --- 2. Reviews block (replaces the old "Since 1998 / Custom Designs / Made with Love" trust strip) --- #}
+{# --- 2. Authority proof bar --- #}
+<section class="lt-authority lt-fullbleed" aria-labelledby="lt-authority-heading">
+    <h2 id="lt-authority-heading" class="visually-hidden">Why Utah event teams trust Locally Twisted</h2>
+    <div class="lt-authority__inner">
+        <article class="lt-authority__item">
+            <span class="lt-authority__icon" aria-hidden="true">
+                <svg width="52" height="52" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                    <path d="M6 46 24 22l10 13 8-10 16 21"/>
+                    <path d="M24 22l5 8"/>
+                    <path d="M42 25l5 8"/>
+                </svg>
+            </span>
+            <p class="lt-authority__title">Locally Rooted</p>
+            <p class="lt-authority__text">Utah event experience and venue-aware installs across the Wasatch Front.</p>
+        </article>
+        <article class="lt-authority__item">
+            <span class="lt-authority__icon" aria-hidden="true">
+                <svg width="52" height="52" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                    <path d="M21 44c-6-4-9-9-9-15a10 10 0 0 1 19-4"/>
+                    <path d="M43 44c6-4 9-9 9-15a10 10 0 0 0-19-4"/>
+                    <path d="M28 42h8"/>
+                    <path d="M32 42v12"/>
+                    <path d="M26 54h12"/>
+                </svg>
+            </span>
+            <p class="lt-authority__title">Design Driven</p>
+            <p class="lt-authority__text">Custom color and structure choices planned around the space.</p>
+        </article>
+        <article class="lt-authority__item">
+            <span class="lt-authority__icon" aria-hidden="true">
+                <svg width="52" height="52" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                    <path d="M32 7 52 15v14c0 13-8 23-20 28C20 52 12 42 12 29V15l20-8z"/>
+                    <path d="m23 32 6 6 13-15"/>
+                </svg>
+            </span>
+            <p class="lt-authority__title">Professional</p>
+            <p class="lt-authority__text">Clear communication, careful setup, and reliable event-day delivery.</p>
+        </article>
+        <article class="lt-authority__item">
+            <span class="lt-authority__icon" aria-hidden="true">
+                <svg width="52" height="52" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                    <path d="M19 34 29 44c3 3 7 3 10 0l9-9"/>
+                    <path d="M16 31l8-8 11 11"/>
+                    <path d="M48 31l-8-8-8 8"/>
+                    <path d="M8 25l8-8 11 11"/>
+                    <path d="M56 25l-8-8-9 9"/>
+                </svg>
+            </span>
+            <p class="lt-authority__title">Trusted Partner</p>
+            <p class="lt-authority__text">From concept to celebration, our team helps the details land cleanly.</p>
+        </article>
+    </div>
+</section>
+
+{# --- 3. Reviews block (replaces the old "Since 1998 / Custom Designs / Made with Love" trust strip) --- #}
 <section class="lt-reviews-block lt-fullbleed" aria-labelledby="lt-reviews-heading">
     <div class="lt-reviews-block__inner">
         <h2 id="lt-reviews-heading" class="visually-hidden">What people say</h2>
