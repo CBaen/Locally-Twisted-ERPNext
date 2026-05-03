@@ -1,7 +1,7 @@
 ---
 name: ERPNext CRM pipeline safety
 level: recipe
-last_verified: 2026-05-02
+last_verified: 2026-05-03
 ---
 
 ## What it does
@@ -38,7 +38,11 @@ Use this when translating a client's approved sales stages into ERPNext, especia
 
    ERPNext/Frappe sites often already create financial records through checkout, payment success, webhooks, or native document helpers. Run a read-only backend inventory and inspect existing checkout/payment code before wiring a CRM stage to Quotes, Sales Orders, Sales Invoices, Payment Requests, or Customer conversion.
 
-7. Verify the guardrails.
+7. Align conversion paths with the business board.
+
+   A native ERPNext conversion path can update `Lead.status`, `Lead.customer`, Customer, Sales Order, or Payment Request records without updating the client-facing custom pipeline. Add a verifier for any checkout/import/manual path that converts a Lead so the native status, custom stage, Tasks, and finance documents tell one coherent story.
+
+8. Verify the guardrails.
 
    A verifier should confirm the custom field exists, the Kanban board points at that custom field, stale native-status columns are gone, existing records have valid values, and no Property Setter repurposes `Lead.status` with the custom pipeline values.
 
@@ -48,6 +52,7 @@ Use this when translating a client's approved sales stages into ERPNext, especia
 python scripts/setup/sync_crm_pipeline.py
 python scripts/verify/crm_pipeline_parity.py
 python scripts/verify/crm_stage_cascade.py
+python scripts/verify/checkout_lead_conversion_contract.py
 python scripts/verify/backend_schema_inventory.py
 python scripts/setup/sync_backend_workspaces.py
 python scripts/verify/backend_workspace_parity.py
@@ -61,3 +66,4 @@ python scripts/verify/backend_workspace_parity.py
 - Updating only the board leaves new website Leads without the correct business stage.
 - Stage-change automation can look helpful while quietly creating financial records at the wrong threshold.
 - Existing checkout/payment-success/webhook flows can already create the financial records a stage automation is about to create. Map those first or the CRM can double-create Customers, Sales Orders, Payment Requests, invoices, or paid-order emails.
+- Native Lead conversion can look complete while the custom business board still shows `New Inquiry`; verify both native ERPNext fields and the client-facing pipeline state.

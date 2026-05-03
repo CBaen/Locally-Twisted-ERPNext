@@ -21,6 +21,21 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 **Decided by:** Codex implemented the previous agent's approved spike plan and applied the engine decision rule supplied in that plan.
 
 ---
+
+## 2026-05-03 - Checkout conversion moves matched Leads to Approved, not New Inquiry
+
+**Decision:** When guest checkout reuses a Contact that is linked to an existing Lead, checkout should continue converting native `Lead.status` and setting `Lead.customer`, and it should also move `Lead.custom_pipeline_stage` to `Approved`.
+
+**Reasoning:** Checkout already creates the operational money path: Customer, Sales Order, and Payment Request. Leaving the LT board at `New Inquiry` after that made Jeff's board contradict the ERPNext checkout records and kept the old "reply to new inquiry" Task open. `Approved` is the safest current business-stage match for "customer has moved from inquiry into an order/payment path"; it keeps the stage cascade operational only and does not create additional finance records.
+
+**Implementation:** Added `apps/locally_twisted/locally_twisted/verify/checkout_lead_conversion_contract.py` and `scripts/verify/checkout_lead_conversion_contract.py`. The verifier first failed with the Lead still in `New Inquiry`; `apps/locally_twisted/locally_twisted/www/checkout.py` now sets the shared CRM pipeline field to `Approved` during the existing Lead conversion save, letting `stage_cascade` close the New Inquiry task and open the Approved task.
+
+**Verification receipt:** `python scripts/verify/checkout_lead_conversion_contract.py` failed before the code change on the stale `New Inquiry` stage/task state, then passed after the code change with rollback evidence for the generated Lead, Contact, Customer, Sales Order, and Payment Request.
+
+**Decided by:** GL agreed the next workflow step was checkout/Lead conversion parity; Codex implemented the smallest verified alignment.
+
+---
+
 ## 2026-05-03 - Approved visual synthesis combines Civic Celebration structure with Brand Direction polish
 
 **Decision:** The public website's brand foundation should use the Civic Celebration direction for structure and buyer posture, then apply the higher-quality Locally Twisted Brand Direction typography, brass/gold line-icon treatment, and premium hierarchy. Civic's circular trust badges are not approved as-is; use premium brass line icons instead.

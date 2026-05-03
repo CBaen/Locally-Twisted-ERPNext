@@ -1,6 +1,6 @@
 # Locally Twisted - Coding Handoff
 
-Last updated: 2026-05-02 by Codex after backend schema inventory and CRM cascade trigger mapping.
+Last updated: 2026-05-03 by Codex after finance inventory, Accountant Home sync, checkout/Lead conversion parity, Civic sitewide redesign, and Design Studio V2 engine spike closeout.
 
 ## State Of Reality
 
@@ -39,6 +39,7 @@ Verified or updated during the 2026-05-01 storefront correction and contact clea
 - LT CRM stage movement now creates/closes operational Tasks only. `stage_cascade.py` creates the next Task for non-Archive stages and closes open cascade Tasks on `Archive`; it does not create quotes, orders, invoices, payments, customers, or win/loss reporting state.
 - Backend schema inventory is now repeatable with `python scripts/verify/backend_schema_inventory.py`. Latest live pass found 12 Leads, 25 Contacts, 4 Customers, 8 Sales Orders, 8 Payment Requests, 1 Sales Invoice, 0 Tasks, 94 Custom Fields, 102 Property Setters, and 5 custom/LT DocTypes. The inventory classifies 28 Custom Fields as code-owned and 66 as unclassified DB/app-owned records that still need keep/hide/export decisions.
 - Existing `/checkout` is already the finance path: it creates/reuses Customer/Contact, creates Sales Order, creates Payment Request, and sends the customer to Stripe. `/payment-success` and the Stripe webhook reconcile paid orders by marking Payment Request paid, creating Sales Invoice, and sending paid-order emails. Do not add manual stage-to-finance automation until this existing path is coordinated with the custom LT pipeline.
+- Checkout/Lead conversion parity is now coordinated with the custom LT pipeline. If checkout uses an email already tied to a Contact linked to a Lead, it converts native `Lead.status`, fills `Lead.customer`, moves `Lead.custom_pipeline_stage` to `Approved`, closes the old New Inquiry Task, and opens the Approved follow-up Task. Verified by `python scripts/verify/checkout_lead_conversion_contract.py`, which rolls back its generated records.
 - Header/menu no longer exposes `What We Make`; desktop dropdown panels are contained, and mobile cart/hamburger controls are visible at 390px and 430px with accessible target sizing.
 - Primary nav order is now `Balloon Decor`, `Plan by Occasion`, `Balloon Twisting & Face Painting`, `FAQ`, `Blog`, search. The top utility bar keeps the only `Contact Us` CTA; lower nav and mobile drawer do not duplicate it.
 - `Plan by Occasion` is product-discovery navigation, not inquiry navigation. Every current occasion link routes to a verified product/category page, including missionary/religious paths. Do not re-point the occasion dropdown to `/contact?occasion=...`.
@@ -53,6 +54,8 @@ Verified or updated during the 2026-05-01 storefront correction and contact clea
 - Variant media first pass completed 2026-05-02. ERPNext now has 1,712 variant `Item.image` values mapped from `_resources/odoo-live/images/` where Odoo image labels clearly matched product options. Product detail pages call `locally_twisted.api.variant_media.get_variant_media` after exact option selection and swap the main image when a variant image exists. Cart/checkout use the variant image when present and fall back to the parent Website Item image otherwise. The review command `python scripts/setup/sync_variant_media.py --dry-run --include-details --report output/catalog-media-review.json` currently reports 49 products checked, 35 with candidate image labels, 45 needing review, 1,712 unchanged mapped variants, and 6,831 skipped variant image assignments.
 - Category browse media is still empty in ERPNext: all 11 customer-facing child Item Groups under `Shop Items` have `image = null` as of the 2026-05-02 DB check. Do not revive `/shop-by-category`; choose representative category media for `/shop-items/<group>` or future menu treatment.
 - Product detail breadcrumbs now use `All Balloon Decor > category > product`; the retired `Shop by Category` label/link is blocked by `scripts/verify/smoke_shop.py`.
+- Civic Celebration is now the V1 visual direction across the public site. See `_resources/STYLE-GUIDE.md`, `workstreams/brand-audience-style-reset.md`, and `workstreams/civic-sitewide-redesign.md`. The pass covers shared header/footer/theme CSS, homepage, contact/book form, BTFP, portfolio, FAQ, policies, accessibility, thank-you/payment success, shop, category pages, product detail, cart, and checkout. The generated Wasatch/city hero asset is `apps/locally_twisted/locally_twisted/public/images/home/hero-wasatch-city-20260503.png`.
+- The contact page no longer depends on an external map iframe for the main service-area proof; it uses a controlled service-area panel.
 - Per-product variant correctness passed on 2026-05-02. `scripts/verify/catalog_variant_contract.py` compared normalized Odoo `valid_variants` to live ERPNext `Item Variant Attribute` rows: 53 products checked, 10,578 expected variants, 10,578 live variants, 4 single-SKU products.
 - Product option UX P0 pass completed 2026-05-02. `item_configure.html` no longer runs per-attribute `frappe.get_all` lookups from Jinja; it uses `get_variant_attribute_options`, a project Jinja helper backed by Webshop's `get_attributes_and_values`. Partial selections now consume `valid_options_for_attributes` and disable invalid later options. Variant chips are verified as radio/single-select, not checkbox inputs.
 - Generated Webshop asset-map drift was corrected in the running ERPNext stack on 2026-05-02. The container already has Yarn Classic at `/home/frappe/.nvm/versions/node/v20.19.2/bin/yarn`, but non-interactive `docker exec` does not include that directory in `PATH`. Use `export PATH=/home/frappe/.nvm/versions/node/v20.19.2/bin:$PATH` before `bench build --app webshop`; no package install was needed. Important Docker nuance: the frontend/nginx container must be the final Webshop build target because `sites/assets/webshop` links to each container's own app-public files while `assets.json` is shared. Building only in the backend writes asset-map names nginx cannot serve. After rebuilding from the frontend container and clearing `assets_json` plus website cache, follow-up console checks returned 200s with 0 console errors/warnings.
@@ -87,12 +90,14 @@ P0 is no longer `/book`; GL retired that surface. The primary customer inquiry p
 Next safest slices:
 
 - Design and wire the remaining stage cascades deliberately: decide which LT CRM stage should create/update Quote, Sales Order, Project/job, Calendar invite, customer email/text follow-up, Customer record, and finance records. The Task-only layer is done; do not infer finance triggers from `Archive`.
-- Before manual stage-to-finance automation, verify checkout/Lead conversion parity: checkout can convert a Contact-linked Lead through native `Lead.status` and `Lead.customer`; the next slice should align `Lead.custom_pipeline_stage` and Tasks so Jeff's board does not contradict ERPNext's checkout/payment records.
+- Before manual stage-to-finance automation, decide exact stage thresholds for Quote, Sales Order, Project/job, Calendar invite, customer follow-up, Customer record, invoice, and Payment Request changes. Checkout/Lead conversion parity is done; do not duplicate its Customer/Sales Order/Payment Request creation from stage movement.
 - Wire the Stripe Dashboard privacy/terms URLs to `/privacy` and `/terms-of-service` after GL/legal approval.
 - Finish payment live-mode configuration and run `python scripts/verify/payment_launch_readiness.py --mode live` before any real cutover claim.
 - Review skipped/unmatched catalog media with GL/Jeff: the automated pass only mapped photos whose Odoo labels clearly matched product options. Refresh `output/catalog-media-review.json` with the detailed dry-run command before assigning anything. Do not assign generic gallery images by guess.
 - Keep product navigation product-backed: use `scripts/verify/nav_ia.py` before touching header/footer IA.
 - Reconcile product/category media without reviving the retired `/shop-by-category` card index; use `/shop` and `/shop-items/<group>` as the customer-facing browse surfaces.
+- Complete the blog channel and two ported posts.
+- Review the Design Studio V2 research package only as future scope. The event-builder spike lives under `research/design-studio-v2/event-builder-spike/`; both PlayCanvas and Babylon passed, with PlayCanvas recommended for a hidden-route spike if GL approves.
 
 ## Verification Commands
 
@@ -176,6 +181,7 @@ python scripts/setup/sync_stage_cascade.py
 python scripts/verify/lead_backend_intake_parity.py
 python scripts/verify/crm_pipeline_parity.py
 python scripts/verify/crm_stage_cascade.py
+python scripts/verify/checkout_lead_conversion_contract.py
 python scripts/verify/backend_schema_inventory.py
 ```
 

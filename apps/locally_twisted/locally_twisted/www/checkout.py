@@ -26,6 +26,8 @@ from frappe import _
 from frappe.rate_limiter import rate_limit
 from frappe.utils import escape_html, validate_email_address, flt, cint
 
+from locally_twisted.crm_pipeline import PIPELINE_FIELD
+
 no_cache = 1
 sitemap = 0  # don't index the checkout page
 
@@ -480,6 +482,8 @@ def submit_guest_order(item_code="", qty=1, items_json="",
                     lead.status = "Converted"
                 if not lead.get("customer"):
                     lead.customer = customer_name
+                if lead.meta.has_field(PIPELINE_FIELD):
+                    lead.set(PIPELINE_FIELD, "Approved")
                 lead.flags.ignore_permissions = True
                 lead.save(ignore_permissions=True)
             except Exception:

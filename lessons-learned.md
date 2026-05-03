@@ -13,6 +13,23 @@ The PlayCanvas/Babylon event-builder spike could have drifted into two separate 
 **Counter-move:** for renderer comparisons, put scene facts and payload construction in shared code first, then make each engine renderer consume the same scene objects. Verify payload parity between engines except for the explicit engine field, and test at least one interaction that mutates the payload. Screenshots prove the canvas rendered; shared facts prove the engine comparison did not change the business contract.
 
 ---
+
+## 2026-05-03 - Lead conversion has to update both ERPNext status and the LT board
+
+Checkout already converted a Contact-linked Lead by setting native `Lead.status = Converted` and filling `Lead.customer`, but Jeff's LT board still showed the Lead as `New Inquiry` and kept the old follow-up Task open. ERPNext's native conversion fields and the client-facing business stage are separate contracts.
+
+**Counter-move:** when a checkout, import, or manual process converts a Lead, verify native ERPNext fields, the custom pipeline stage, related Tasks, and finance records together. A conversion is not operationally complete if the owner board still tells staff to treat it as a fresh inquiry.
+
+---
+
+## 2026-05-03 - Live inventory should not overlap rollback-based verifiers
+
+A backend inventory pass briefly saw temporary records created by checkout/payment/cascade verification. Those records were real while the verifier was running, but they were not stable business state because the verifier rolled them back.
+
+**Counter-move:** run live DB inventory after mutating verifiers finish and their cleanup checks pass. If parallel verification is unavoidable, label counts as test-window counts and rerun the inventory sequentially before documenting them.
+
+---
+
 ## 2026-05-02 - Inventory existing cascades before adding new stage automation
 
 ERPNext may already be doing part of the business workflow through checkout, payment success, webhooks, or native document helpers. In LT, `/checkout` already creates Customer/Contact, Sales Order, and Payment Request records, while `/payment-success` and the Stripe webhook reconcile paid orders into Sales Invoices and transactional emails.

@@ -1,6 +1,6 @@
 # ERPNext Backend Simplification Workstream
 
-Last updated: 2026-05-02 by Codex.
+Last updated: 2026-05-03 by Codex after checkout/Lead conversion parity.
 
 ## Outcome
 
@@ -72,6 +72,7 @@ Verify these before editing DB/schema, but they are the latest documented workin
 - `LT Service Type` was synced on 2026-05-01 to remove `Delivery Only` and `Event Package` and add `Delivery`, `Pickup`, `Events Inquiry`.
 - `lead_cascade.py` hooks on Lead insert to create/link Contact and queue the customer acknowledgment email.
 - `/payment-success` marks Payment Requests paid, creates Sales Invoices, sends receipt/operator/welcome emails, and redirects customers even if backend follow-up fails.
+- Checkout/Lead conversion parity is verified: when checkout reuses a Contact linked to a Lead, native `Lead.status` becomes `Converted`, `Lead.customer` is set, `Lead.custom_pipeline_stage` moves to `Approved`, the old New Inquiry task closes, and the Approved follow-up task becomes active. The verifier rolls back its generated Customer, Sales Order, and Payment Request.
 - `LT Lead Photo`, the Lead photos section, and the connecting `custom_inspiration_photos` Table field now exist. The current sync recreates the missing field if needed.
 - `hooks.py` currently fixtures Item Groups and Item Attributes. Phase 6 must prune operator-state-sensitive fixture coverage before Jeff edits backend catalog values.
 - There are old `scripts/translate/` and `scripts/fix/` Lead-schema scripts with stale labels like `Event Package` and `Delivery Only`. Do not rerun them blindly.
@@ -211,8 +212,9 @@ Current trigger map:
 - `Event/Post Event`: currently Task-only. Candidate future trigger is review/thank-you/post-event closeout after event date.
 - `Archive`: off-board only. It closes open stage Tasks and must not imply won/lost/finance state.
 - Existing `/checkout` is already a finance path: it creates/reuses Customer/Contact, creates Sales Order, creates Payment Request, and sends the customer to Stripe Checkout. `/payment-success` and the Stripe webhook reconcile paid orders by marking the Payment Request paid, creating Sales Invoice, and sending receipt/operator/welcome emails.
+- Checkout/Lead conversion parity is now covered by `scripts/verify/checkout_lead_conversion_contract.py`. The checkout path sets native `Lead.status = Converted`, backfills `Lead.customer`, moves the custom LT pipeline stage to `Approved`, and lets the existing operational Task cascade close New Inquiry follow-up and open the Approved follow-up. This does not add stage-to-finance automation; checkout itself remains the finance path that creates the Customer, Sales Order, and Payment Request.
 
-Important next-risk note: checkout currently has its own Lead conversion path when a checkout email matches a Contact linked to a Lead. That path sets native `Lead.status = Converted` and backfills `Lead.customer`, but the next slice should verify and align the custom LT pipeline stage too. Do this before adding manual stage-to-Sales-Order automation, so the same business event does not create duplicate or contradictory records.
+Important next-risk note: manual stage-to-finance automation still needs explicit threshold design. Do not create another stage-driven Customer, Sales Order, Payment Request, or invoice path until it is mapped against checkout and paid-order reconciliation.
 
 ## Reusable Pattern
 
@@ -354,15 +356,16 @@ Relevant code:
 
 ## Next Handoff Stage
 
-Continue with checkout/Lead conversion parity before adding any manual stage-to-finance automation.
+Continue with explicit stage-threshold design before adding any manual stage-to-finance automation.
 
 Recommended first command set:
 
 ```powershell
 git status --short
 python scripts/verify/backend_schema_inventory.py
+python scripts/verify/checkout_lead_conversion_contract.py
 python scripts/verify/crm_pipeline_parity.py
 python scripts/verify/crm_stage_cascade.py
 ```
 
-Then verify what happens when checkout reuses a Contact linked to a Lead: native `Lead.status`, `Lead.customer`, `Lead.custom_pipeline_stage`, related Tasks, Sales Order, Payment Request, and paid-order reconciliation must tell one coherent story.
+Then decide which manual stages, if any, should create or update Quote, Sales Order, Project/job, Calendar invite, customer follow-up, or finance records. Do not infer those triggers from stage labels alone.
