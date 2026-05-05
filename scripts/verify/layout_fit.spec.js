@@ -15,6 +15,9 @@ const ROUTES = [
 	{ name: "home", path: "/" },
 	{ name: "book-alias", path: "/book" },
 	{ name: "contact", path: "/contact" },
+	{ name: "event-balloons", path: "/event-balloons" },
+	{ name: "portfolio", path: "/portfolio" },
+	{ name: "process", path: "/process" },
 	{ name: "btfp", path: "/balloon-twisting-and-face-painting" },
 	{ name: "faq", path: "/faq" },
 	{ name: "privacy", path: "/privacy" },
@@ -27,6 +30,8 @@ const ROUTES = [
 	{ name: "single-product", path: "/shop-items/seasonal-specialty/easter-balloon-cups" },
 	{ name: "seasonal-category", path: "/shop-items/seasonal-specialty" },
 	{ name: "cart", path: "/cart" },
+	{ name: "checkout", path: "/checkout" },
+	{ name: "thank-you", path: "/thank-you" },
 ];
 
 test.describe("Locally Twisted layout fit", () => {

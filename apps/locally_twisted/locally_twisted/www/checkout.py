@@ -62,7 +62,7 @@ PAGE_CSS = """
     .lt-checkout__aside { position: sticky; top: 1rem; align-self: start; }
 }
 .lt-checkout__title {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 2rem;
     color: var(--lt-near-black);
     margin: 0 0 0.5rem;
@@ -81,7 +81,7 @@ PAGE_CSS = """
     padding: 1.5rem;
 }
 .lt-checkout__order-heading {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.25rem;
     color: var(--lt-near-black);
     margin: 0 0 1rem;
@@ -99,14 +99,14 @@ PAGE_CSS = """
     width: 64px;
     height: 64px;
     border-radius: 0.375rem;
-    background-color: var(--lt-blush-tint);
+    background-color: var(--lt-warm-tint);
     background-size: cover;
     background-position: center;
     flex-shrink: 0;
 }
 .lt-checkout__line-body { flex: 1 1 auto; min-width: 0; }
 .lt-checkout__line-name {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-weight: 600;
     color: var(--lt-near-black);
     margin: 0 0 0.2rem;
@@ -116,7 +116,7 @@ PAGE_CSS = """
 }
 .lt-checkout__line-meta { font-size: 0.8rem; color: var(--lt-soft-gray); margin: 0; }
 .lt-checkout__line-amount {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-weight: 600;
     color: var(--lt-near-black);
     font-size: 1rem;
@@ -131,7 +131,7 @@ PAGE_CSS = """
     padding: 0.35rem 0;
 }
 .lt-checkout__totals-row--grand {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.25rem;
     border-top: 1px solid rgba(26, 26, 26, 0.12);
     margin-top: 0.5rem;
@@ -150,7 +150,7 @@ PAGE_CSS = """
 .lt-checkout__field { margin-bottom: 1rem; }
 .lt-checkout__field label {
     display: block;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 0.875rem;
     font-weight: 600;
     color: var(--lt-near-black);
@@ -174,7 +174,7 @@ PAGE_CSS = """
     border-radius: 0.375rem;
     background-color: var(--lt-white);
     color: var(--lt-near-black);
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 1rem;
     min-height: 44px;
     box-sizing: border-box;
@@ -185,7 +185,7 @@ PAGE_CSS = """
     border-color: var(--lt-teal);
 }
 .lt-checkout__notice {
-    background-color: var(--lt-blue-tint);
+    background-color: var(--lt-stone-tint);
     border-radius: 0.375rem;
     padding: 0.75rem 1rem;
     font-size: 0.875rem;
@@ -204,7 +204,7 @@ PAGE_CSS = """
     border: none;
     border-radius: 0.375rem;
     padding: 0.875rem 2rem;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;

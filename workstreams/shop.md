@@ -72,7 +72,7 @@ Reference and verification files:
 - `HANDOFF.md`
 - `MIRROR-REBUILD-PLAN.md`
 - `_resources/STYLE-GUIDE.md`
-- `_resources/design-guide/`
+- `_resources/STYLE-GUIDE.md` version 4.2 or newer for all current visual guidance; the old `_resources/design-guide/` synthesis was deleted on 2026-05-05 and must not be used.
 - `_resources/odoo-live/catalog.json`
 - `_resources/odoo-live/images/`
 - `_resources/odoo-live/value_normalize_map.json`
@@ -115,7 +115,7 @@ Reference and verification files:
 
 ## Dependencies And Collision Points
 
-- Shop design work depends on `_resources/design-guide/` and `_resources/STYLE-GUIDE.md`.
+- Shop design work depends on `_resources/STYLE-GUIDE.md`. Do not use the deleted `_resources/design-guide/` synthesis, old pastel screenshots, DM Serif/Raleway rules, or light-blue/blush treatment as current shop guidance.
 - Variant correctness is verified; remaining media review should happen before final product-detail layout polish so the design work is based on real product states.
 - Cart/checkout changes can collide with payment cascade, sales invoice creation, and email behavior. Treat those as customer purchase-flow boundaries, not just frontend work.
 - Backend simplification and shop work may touch shared ERPNext doctypes, fixtures, or seed scripts. Check `PROJECT-STATUS.md` and other `workstreams/*.md` before changing shared catalog or checkout data.

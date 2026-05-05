@@ -61,9 +61,8 @@ If another app is installed, re-set `installed_apps` so LT template overrides st
 2. `.planning/PROJECT.md` - project frame and requirements.
 3. `locally-twisted-queue.md` - active queue, but verify because it can drift.
 4. `locally-twisted-decisions.md` - decision log; read newest entries first.
-5. `_resources/STYLE-GUIDE.md` - brand, voice, accessibility.
-6. `_resources/design-guide/README.md` plus `synthesis/voice.md`, `synthesis/mood.md`, `synthesis/rationale.md` before frontend work.
-7. `git log --oneline -20`.
+5. `_resources/STYLE-GUIDE.md` - the only current visual style guide: brand, page treatments, components, icons, photography, voice, and accessibility.
+6. `git log --oneline -20`.
 
 Claude-era files such as `CLAUDE.md`, `HANDOFF.md`, and `PROJECT-STATUS.md` may contain useful operational history, but they are not authoritative unless verified.
 
@@ -126,11 +125,12 @@ Do not invent business facts, policy terms, product details, or legal language. 
 ## Canonical Resources
 
 - Style guide: `_resources/STYLE-GUIDE.md`
-- Design guide: `_resources/design-guide/`
 - Business policies: `_resources/policies/`
 - Utah tax research: `_resources/utah-tax-rates-2026q2.md`
 - Live Odoo catalog scrape output: `_resources/odoo-live/`
 - `/book` and `/contact` snapshots: `_resources/odoo-live-snapshot/hetzner-book.html` and `hetzner-contact.html`
+
+The old `_resources/design-guide/` design-competition synthesis was deleted on 2026-05-05 because it conflicted with the approved Civic Celebration + Slate Blue/Berry + Brand Direction visual contract and kept reintroducing light-blue/blush styling. Do not recreate it or treat old screenshots/TSX from that direction as current design guidance.
 
 The Odoo snapshots are canonical for the rebuilt `/book` and `/contact` form shape where explicitly stated. They are not blanket authority for the rest of the system.
 

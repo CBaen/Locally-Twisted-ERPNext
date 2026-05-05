@@ -8,6 +8,62 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-05 - Premium two-level mega menu is active and must be verified as served
+
+**Decision:** The public header uses the deliberate two-level premium mega-menu architecture: full-height Locally Twisted logo image treatment, desktop event/product mega panels, accessible mobile drawer accordions, top proof row, and `/contact` as the quote path. The menu assets are live only when `hooks.py` serves `lt-mega-menu.css`, `lt-page-containment.css`, `lt-product-polish.css`, and `lt-megamenu.js`.
+
+**Reasoning:** GL explicitly rejected the too-small/simple nav and preferred restoring/building the mega menu deliberately. The broken state was not only taste; the restored menu source existed but was not loaded, desktop click behavior closed hover-open panels, product pages still read like old Webshop, and several mobile components were cramped or clipped.
+
+**Implementation:** Restored the mega-menu context and template, loaded the new CSS/JS assets through `web_include_css`/`web_include_js`, made clicked desktop mega menus pin open until outside click/Escape/another menu, kept `/contact` as quote conversion, added page containment and product/shop polish layers, fixed mobile hero/reviews/portfolio/newsletter containment, and expanded the layout-fit route list to include `/checkout` and `/thank-you`.
+
+**Verification receipt:** Served asset checks found the new CSS/JS in the homepage HTML and returned HTTP 200 for each asset. `python scripts/verify/nav_ia.py`, `python scripts/verify/smoke_shop.py`, and `npm run test:layout-fit` passed; layout-fit now covers 80 route/viewport checks. A Playwright post-fix screenshot/interaction pass covered 13 routes across 320, 375, and 1366 widths, plus open desktop event/product mega menus and the mobile drawer, with no reported failures. Screenshots and `post-fix-report.json` are under `output/playwright/full-site-fix-20260505-post/`.
+
+**Decided by:** GL explicitly chose the deliberate mega-menu restore; Codex implemented and verified the rendered Frappe site.
+
+---
+
+## 2026-05-05 - Deleted old design guide; expanded icon suite must be balloon-local-event specific
+
+**Decision:** `_resources/design-guide/` is deleted and must not be recreated as a current design reference. `_resources/STYLE-GUIDE.md` version 4.2 is the sole current visual contract. The professional SVG icon system now needs Utah/local proof, event-context proof, and multiple balloon-specific options, not only four generic proof marks.
+
+**Reasoning:** GL rejected the first icon direction as too generic and explicitly called out that Locally Twisted is a balloon company. The old light-blue/blush design synthesis also kept conflicting with the approved Civic Celebration + Slate Blue/Berry + Brand Direction rebrand. Keeping it in active reading paths made future design agents likely to repeat the wrong font, spacing, color, and icon choices.
+
+**Implementation:** Removed the tracked `_resources/design-guide/` tree and deleted stale shop/design comparison references that pointed at the retired look (`_resources/shop-recon-2026-04-29.md`, `_resources/webshop-state-vs-spec-2026-04-30.md`, its capture scripts, and its generated screenshot folder). Removed the old `_resources/icon-comparison-2026-04-27/` generic icon comparison because it conflicts with the new custom brass-line direction. Updated active agent/planning/workstream references to point to `_resources/STYLE-GUIDE.md` only. Replaced legacy active CSS font references with Cormorant Garamond + Lato, retired old pastel token names in active app code, and expanded `apps/locally_twisted/locally_twisted/public/icons/brand/` with a broader brass-line SVG suite: Utah rooted, design driven, professional, trusted partner, event stage, delivery/install, civic parade, corporate entrance, school spirit, premium private event, balloon pair, balloon cluster, balloon arch, organic garland, balloon column, and balloon bouquet.
+
+**Verification receipt:** Active app source search found no remaining `DM Serif`, `Raleway`, `Montserrat`, `Playfair`, `lt-blush`, `lt-soft-blue`, `soft blue`, `light blue`, `--lt-primary`, or UI `blush` references after the cleanup. The current non-Odoo `_resources` search only finds explicit "deleted/do not use" notes in `_resources/STYLE-GUIDE.md`. SVG XML parse validation passed for all 16 brand icons. Python compile passed for `apps/locally_twisted/locally_twisted`, and LT CSS token usage had no missing `--lt-*` variables.
+
+**Decided by:** GL required deletion of conflicting style guides/references and rejected the first generic icon pass in favor of a higher-quality Utah/local/events/balloon-specific icon suite.
+
+---
+
+## 2026-05-05 - Page-level style guide and professional proof icons are required before the rebrand swarm
+
+**Decision:** `_resources/STYLE-GUIDE.md` version 4.1 now maps the approved Civic Celebration + Slate Blue/Berry + Brand Direction synthesis to every existing public page family and reusable element. The Image #3 proof-icon direction is no longer only a reference image; the repo now includes a first reusable brass-line SVG set under `apps/locally_twisted/locally_twisted/public/icons/brand/`.
+
+**Reasoning:** GL clarified that the site needs an actual style guide for all existing pages and elements, including the professional icon quality from the Brand Direction banner. Without a route/component matrix, agents can pass layout checks while still making unrelated font, spacing, icon, photo, and page-treatment choices.
+
+**Implementation:** Added the existing route/template coverage table, reusable element map, professional icon system, core icon asset manifest, drawing rules, and future trust-icon slots to `_resources/STYLE-GUIDE.md`. Added original SVG assets for `utah-rooted`, `design-driven`, `professional`, and `trusted-partner`.
+
+**Verification receipt:** Documentation and asset-source change only. No route behavior, CSS, templates, or running ERPNext state were changed in this slice.
+
+**Decided by:** GL requested a combined style guide across all pages and explicitly called out the need for the professional Image #3 icon treatment.
+
+---
+
+## 2026-05-05 - Style guide locks to Civic Celebration plus Brand Direction quality
+
+**Decision:** `_resources/STYLE-GUIDE.md` is now the implementation-grade visual contract for the next rebrand pass. The approved target is Civic Celebration for Americana/Utah authority imagery, Slate Blue and Berry for restrained corporate palette discipline, and the Locally Twisted Brand Direction banner for premium typography, spacing, and crisp brass icon quality.
+
+**Reasoning:** GL clarified that the current site is missing the concept, not only individual CSS details. Before sending multiple agents to fix pages, the guide needs to explain the actual target: civic-scale authority, premium corporate finish, real installation proof, Cormorant Garamond and Lato typography, brass line icons, and edited photos that feel crisp and trustworthy rather than generic or small-party-catalog.
+
+**Implementation:** Updated `_resources/STYLE-GUIDE.md` to version 4.0 with a new approved visual target section, stronger rules for typography, color, buttons, navigation, trust icons, hero treatment, and a detailed photography/editing treatment. The guide explicitly de-emphasizes pastel/teal drift, generic webapp fonts, circular badge clutter, and photo crops that hide scale.
+
+**Verification receipt:** Documentation-only change. No site route behavior or running ERPNext state was changed.
+
+**Decided by:** GL supplied the board direction and requested the style-guide correction before the rebrand swarm.
+
+---
+
 ## 2026-05-03 - Event-builder engine spike defaults to PlayCanvas
 
 **Decision:** For the next research step of the Design Studio V2 event builder, use PlayCanvas as the default renderer if GL approves moving from the isolated spike to a hidden Frappe-route spike.

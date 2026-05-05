@@ -1,10 +1,36 @@
 # Brand, Audience, and Style Reset
 
-Last updated: 2026-05-03
+Last updated: 2026-05-05
 
 This workstream is the brand strategy lane for the current ERPNext build. It records the research, GL direction, and implementation history behind the current `_resources/STYLE-GUIDE.md`.
 
 Use `_resources/STYLE-GUIDE.md` as the current visual authority. Use this workstream for rationale, unresolved proof/media work, and future refinements.
+
+## 2026-05-05 Visual Target Lock
+
+GL clarified the durable rebrand target before a broader design-fix swarm:
+
+- Civic Celebration supplies the Americana/Utah authority posture: mountains, city/civic context, schools, universities, parades, public events, corporate entrances, and premium private installs.
+- Slate Blue and Berry supplies the restrained corporate palette: ink, deep navy, slate, warm white, brass, and crimson/berry action.
+- The Locally Twisted Brand Direction banner supplies the premium finish: large elegant wordmark, tasteful corporate typography, crisp brass line icons, controlled spacing, and dark authority bands.
+
+The issue GL flagged is conceptual, not only component-level. The current site can pass route checks and still miss the approved concept if typography, icon quality, photo selection, or spatial rhythm feels generic. `_resources/STYLE-GUIDE.md` version 4.1 is the source of truth for the next implementation pass.
+
+## 2026-05-05 Page And Icon Contract
+
+GL asked for the three approved visual elements to become an actual style guide
+for every existing page and element, including the professional icon quality
+from the Brand Direction banner.
+
+`_resources/STYLE-GUIDE.md` version 4.1 now adds:
+
+- a route/template matrix covering the current header, mobile drawer, footer, home, shop, category, product, cart, checkout, payment, thank-you, contact/book, portfolio, BTFP, FAQ, policy, accessibility, search, and utility surfaces;
+- a reusable element map for proof bars, heroes, photo cards, filters/chips, forms, CTAs, accordions, drawers/modals, reviews, client proof, and empty/loading/error states;
+- a professional icon system with required drawing rules and first reusable SVG assets in `apps/locally_twisted/locally_twisted/public/icons/brand/`;
+- a clear instruction that the Civic Celebration trust-badge concepts must be redrawn in the Image #3 brass-line style before public use.
+
+This was a documentation/source-asset slice only. It did not wire the new icons
+into rendered templates and did not change CSS or route behavior.
 
 ## Core Brand Rule
 
@@ -345,3 +371,11 @@ Before rewriting colors or UI tokens, define:
 The likely visual direction is "professional event authority with colorful work," not "party-store color system."
 
 Resolved direction from 2026-05-02: the current pastel-heavy teal/blush/lemon/seafoam/cyan/blue palette should not remain the main company color system. Move toward a more neutral professional base with brass/gold, slate/blue, and restrained berry/deep-teal accents, while letting balloon colors live primarily in photography, product imagery, and customer-selected palettes.
+
+## 2026-05-05 Style Guide Consolidation
+
+The old `_resources/design-guide/` synthesis is deleted and is no longer a reference path for frontend agents. It conflicted with the current visual direction and kept pulling the site back toward light-blue/blush, old font, and weak spatial choices.
+
+Current authority is `_resources/STYLE-GUIDE.md` version 4.2 or newer. The guide now requires Cormorant Garamond + Lato, civic/Utah authority imagery, Slate Blue/Berry palette discipline, and the Brand Direction banner's premium typography, spacing, and brass-line icon quality.
+
+The first rejected icon pass was too generic. The required icon system is now a wider Utah/local/events/balloon suite under `apps/locally_twisted/locally_twisted/public/icons/brand/`, including multiple balloon forms: pair, cluster, arch, organic garland, column, and bouquet.

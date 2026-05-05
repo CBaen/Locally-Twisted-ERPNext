@@ -40,7 +40,7 @@ PAGE_CSS = """
     margin: 0 auto;
 }
 .lt-cart__title {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 2rem;
     color: var(--lt-near-black);
     margin: 0 0 0.5rem;
@@ -74,7 +74,7 @@ PAGE_CSS = """
     color: var(--lt-soft-gray);
 }
 .lt-cart__empty h2 {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.5rem;
     color: var(--lt-near-black);
     margin: 0 0 0.5rem;
@@ -142,7 +142,7 @@ PAGE_CSS = """
     width: 80px;
     height: 80px;
     border-radius: 0.375rem;
-    background-color: var(--lt-blush-tint);
+    background-color: var(--lt-warm-tint);
     background-size: cover;
     background-position: center;
     flex-shrink: 0;
@@ -153,7 +153,7 @@ PAGE_CSS = """
 }
 .lt-cart__line-body { min-width: 0; }
 .lt-cart__line-name {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-weight: 600;
     color: var(--lt-near-black);
     margin: 0 0 0.25rem;
@@ -170,7 +170,7 @@ PAGE_CSS = """
     background: none;
     border: none;
     color: var(--lt-soft-gray);
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 0.8rem;
     padding: 0.25rem 0;
     margin-top: 0.5rem;
@@ -200,7 +200,7 @@ PAGE_CSS = """
     line-height: 1;
 }
 .lt-cart__qty-btn:hover, .lt-cart__qty-btn:focus-visible {
-    background-color: var(--lt-blush-tint);
+    background-color: var(--lt-warm-tint);
 }
 .lt-cart__qty-btn[disabled] {
     color: rgba(26, 26, 26, 0.3);
@@ -213,7 +213,7 @@ PAGE_CSS = """
     border-left: 1px solid rgba(26, 26, 26, 0.12);
     border-right: 1px solid rgba(26, 26, 26, 0.12);
     text-align: center;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 0.95rem;
     color: var(--lt-near-black);
     background: var(--lt-white);
@@ -226,7 +226,7 @@ PAGE_CSS = """
     margin: 0;
 }
 .lt-cart__line-amount {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-weight: 600;
     color: var(--lt-near-black);
     font-size: 1rem;
@@ -250,7 +250,7 @@ PAGE_CSS = """
     .lt-cart__summary { position: sticky; top: 1rem; }
 }
 .lt-cart__summary h2 {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.25rem;
     color: var(--lt-near-black);
     margin: 0 0 1rem;
@@ -264,7 +264,7 @@ PAGE_CSS = """
     padding: 0.4rem 0;
 }
 .lt-cart__summary-row--grand {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.25rem;
     border-top: 1px solid rgba(26, 26, 26, 0.12);
     margin-top: 0.5rem;
@@ -282,7 +282,7 @@ PAGE_CSS = """
     border: none;
     border-radius: 0.375rem;
     padding: 0.875rem 2rem;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
@@ -308,7 +308,7 @@ PAGE_CSS = """
     color: var(--lt-near-black);
     border: 1px solid rgba(26, 26, 26, 0.18);
     border-radius: 0.375rem;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-weight: 500;
     font-size: 0.9rem;
     text-decoration: none;
@@ -316,14 +316,14 @@ PAGE_CSS = """
 }
 .lt-cart__continue:hover, .lt-cart__continue:focus-visible {
     border-color: var(--lt-near-black);
-    background-color: var(--lt-blush-tint);
+    background-color: var(--lt-warm-tint);
     color: var(--lt-near-black);
     text-decoration: none;
 }
 
 /* Removed/missing notice */
 .lt-cart__notice {
-    background-color: var(--lt-blush-tint);
+    background-color: var(--lt-warm-tint);
     border-radius: 0.375rem;
     padding: 0.75rem 1rem;
     margin-bottom: 1rem;

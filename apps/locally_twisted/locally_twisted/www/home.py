@@ -35,10 +35,10 @@ sitemap = 1
 # (Slice 14), these get replaced by the latest blog post titles
 # pulled from `frappe.get_list("Blog Post", ...)`.
 HERO_CYCLING_TITLES = [
-    "Big moments. Expertly executed.",
-    "Custom balloon decor for Utah events that matter.",
-    "City, campus, corporate, and community ready.",
-    "Designed with care. Built to perform.",
+    "Professional balloon decor for Utah events that matter.",
+    "Corporate, school, civic, and community ready.",
+    "Designed professionally. Installed cleanly.",
+    "Prepared event work across the Wasatch Front.",
 ]
 
 
@@ -90,21 +90,21 @@ CUSTOM_CATEGORIES = [
 FEATURED_WORK = [
     {
         "category": "Balloon Arches",
-        "title": "Knight & Dragon Birthday Arch",
-        "image": "/assets/locally_twisted/images/home/featured-arches.png",
-        "alt": "Custom themed balloon arch for a children's birthday party",
+        "title": "Corporate Brand Entrance",
+        "image": "/assets/locally_twisted/images/portfolio/corporate-logo-arch.png",
+        "alt": "Corporate brand balloon arch installed at an event entrance",
     },
     {
-        "category": "Garlands",
-        "title": "Wedding Ceremony Garland",
-        "image": "/assets/locally_twisted/images/home/featured-garlands.png",
-        "alt": "Soft organic balloon garland framing a wedding ceremony space",
+        "category": "Schools",
+        "title": "Back-to-School Stage",
+        "image": "/assets/locally_twisted/images/portfolio/school-back-to-school-stage.png",
+        "alt": "Large balloon stage display for a school event",
     },
     {
         "category": "Corporate Decor",
-        "title": "Brand Logo Arch",
-        "image": "/assets/locally_twisted/images/home/featured-corporate.png",
-        "alt": "Custom corporate event arch incorporating brand colors and logo",
+        "title": "Festival Photo Moment",
+        "image": "/assets/locally_twisted/images/portfolio/corporate-weberstock-photo-opt.png",
+        "alt": "Large event balloon photo backdrop for a branded festival",
     },
 ]
 
@@ -151,7 +151,7 @@ REVIEW_QUOTES = [
     {
         "name": "Leslie Barcus", "rating": 5, "date": "2025-12",
         "source": "Google", "event": "balloon twisting + face painting",
-        "text": "Lovely balloon display, excellent balloon twisting into all kinds of interesting animals and shapes — and a really talented face painter for our event. Very fun!",
+        "text": "Lovely balloon display, excellent balloon twisting into all kinds of interesting animals and shapes, plus a really talented face painter for our event. Very fun!",
     },
     {
         "name": "Hannah Hinde", "rating": 5, "date": "2025-09",
@@ -166,7 +166,7 @@ REVIEW_QUOTES = [
     {
         "name": "Sara Mejeur", "rating": 5, "date": "2025-07",
         "source": "Google", "event": "longtime client",
-        "text": "I LOVE Locally Twisted! Jeff has been listed in my phone for 7-ish years as “balloon guy” and has been my go-to for that long. I know I can trust him and his team to always exceed my expectations. They make every event I plan easier and extra special!!",
+        "text": "I LOVE Locally Twisted! Jeff has been listed in my phone for 7-ish years as \"balloon guy\" and has been my go-to for that long. I know I can trust him and his team to always exceed my expectations. They make every event I plan easier and extra special!!",
     },
     {
         "name": "Matt Tipton", "rating": 5, "date": "2025-07",
@@ -206,7 +206,7 @@ REVIEW_QUOTES = [
     {
         "name": "Em Cebrowski", "rating": 5, "date": "2025-04",
         "source": "Google", "event": "church picnic",
-        "text": "Our balloon artist was Marianne — she was kind, organized, creative, and worked for two hours straight in the blazing heat. We hired her for a church picnic; all the children were delighted with their balloons, and so were several adults. Thank you Locally Twisted for making our party extra special.",
+        "text": "Our balloon artist was Marianne; she was kind, organized, creative, and worked for two hours straight in the blazing heat. We hired her for a church picnic; all the children were delighted with their balloons, and so were several adults. Thank you Locally Twisted for making our party extra special.",
     },
     {
         "name": "Alisha", "rating": 5, "date": "2025-04",
@@ -250,6 +250,11 @@ PAGE_CSS = """
     right: 50%;
     margin-left: -50vw;
     margin-right: -50vw;
+}
+body[data-path="home"] main.container.my-4 {
+    /* Beat Frappe's Bootstrap .my-4 wrapper so the full-bleed hero sits flush under the nav. */
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
 }
 
 /* --- 3-dot divider --------------------------------------------------- */
@@ -380,6 +385,13 @@ PAGE_CSS = """
     border-radius: 0.375rem;
     min-height: 48px;
 }
+.lt-hero__cta + .lt-hero__cta {
+    margin-left: 0.75rem;
+}
+.lt-hero__cta--secondary {
+    background-color: transparent;
+    border: 1px solid rgba(250, 247, 242, 0.74);
+}
 .lt-hero__cta:hover,
 .lt-hero__cta:focus-visible {
     background-color: var(--lt-navy);
@@ -393,6 +405,36 @@ PAGE_CSS = """
     .lt-hero__cycling { min-height: 5.5rem; }
     .lt-hero__title { font-size: 3.75rem; }
     .lt-hero__tagline { font-size: 1.25rem; }
+}
+@media (max-width: 575.98px) {
+    .lt-hero {
+        min-height: auto;
+        align-items: stretch;
+    }
+    .lt-hero__content {
+        padding: 3rem 1rem;
+    }
+    .lt-hero__cycling {
+        min-height: 10.5rem;
+    }
+    .lt-hero__title {
+        align-items: flex-start;
+        font-size: clamp(2rem, 10.5vw, 2.45rem);
+        line-height: 1.04;
+    }
+    .lt-hero__tagline {
+        max-width: none;
+        font-size: 1rem;
+        line-height: 1.55;
+    }
+    .lt-hero__cta {
+        width: 100%;
+        justify-content: center;
+    }
+    .lt-hero__cta + .lt-hero__cta {
+        margin-left: 0;
+        margin-top: 0.75rem;
+    }
 }
 
 /* --- Authority proof bar -------------------------------------------- */
@@ -516,9 +558,15 @@ PAGE_CSS = """
 .lt-reviews-block__track {
     display: flex;
     align-items: stretch;
-    gap: 1rem;
     width: max-content;
     animation: lt-reviews-scroll 360s linear infinite;
+}
+.lt-reviews-block__group {
+    display: flex;
+    align-items: stretch;
+    flex: 0 0 auto;
+    gap: 1rem;
+    padding-right: 1rem;
 }
 .lt-reviews-block__quotes:hover .lt-reviews-block__track,
 .lt-reviews-block__track:focus-within {
@@ -531,10 +579,28 @@ PAGE_CSS = """
 @media (prefers-reduced-motion: reduce) {
     .lt-reviews-block__quotes { mask-image: none; -webkit-mask-image: none; }
     .lt-reviews-block__track {
-        animation: none;
-        flex-wrap: wrap;
-        justify-content: center;
+        animation: lt-reviews-scroll 360s linear infinite;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        width: max-content;
+    }
+}
+@media (max-width: 575.98px) {
+    .lt-reviews-block__quotes {
+        left: auto;
+        right: auto;
         width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        mask-image: none;
+        -webkit-mask-image: none;
+    }
+    .lt-reviews-block__group {
+        gap: 0.75rem;
+        padding-right: 0.75rem;
+    }
+    .lt-reviews-block__quote {
+        padding: 1.2rem;
     }
 }
 .lt-reviews-block__quote {
@@ -750,7 +816,7 @@ PAGE_CSS = """
 .lt-featured__image {
     width: 100%;
     aspect-ratio: 4 / 5;
-    background-color: var(--lt-blush-tint);
+    background-color: var(--lt-warm-tint);
     background-size: cover;
     background-position: center;
 }
@@ -943,7 +1009,7 @@ PAGE_CSS = """
 .lt-twisting-spotlight__image {
     width: 100%;
     aspect-ratio: 4 / 3;
-    background-color: var(--lt-blue-tint);
+    background-color: var(--lt-stone-tint);
     background-image: url('/assets/locally_twisted/images/home/twisting.jpg');
     background-size: cover;
     background-position: center;

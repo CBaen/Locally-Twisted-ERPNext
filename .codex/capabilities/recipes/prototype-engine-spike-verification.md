@@ -1,3 +1,27 @@
+---
+id: prototype-engine-spike-verification
+name: Prototype Engine Spike Verification
+schema_version: 2.0
+level: recipe
+maturity: candidate
+scope: Locally Twisted browser rendering research spikes
+currently_true: unknown
+verification_level: 1
+last_verified: 2026-05-03
+evidence_quality: direct
+successful_uses: 1
+failed_uses: 0
+regressions: 0
+depends_on: []
+used_by: []
+tags:
+  - Locally Twisted
+  - prototype
+  - PlayCanvas
+  - Babylon
+  - browser verification
+---
+
 # Prototype Engine Spike Verification
 
 Use this recipe when comparing browser rendering engines for a future LT feature while keeping the work out of production routes.

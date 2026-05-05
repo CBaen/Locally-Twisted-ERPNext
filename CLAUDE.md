@@ -111,8 +111,8 @@ The four reference surfaces above (failed Hetzner site, Odoo GitHub repo, local 
 
 **This project stands on its own.** Anything from the Odoo dir that applies has been **copied here, scrubbed of Odoo references, and integrated into this folder's structure**. The canonical sources for the migration destination are:
 
-- **Style guide:** `_resources/STYLE-GUIDE.md` — design system, color palette, typography, components, voice (Quiet Confidence + blog Kindergarten Teacher), accessibility (WCAG 2.1 AA)
-- **Design guide:** `_resources/design-guide/` — synthesis output from the 2026-04-26 LT design competition (7 designers, GL picked a hybrid synthesis). Reference inspiration / taste calibration for visual hierarchy, typography, spacing, page shapes. Read `README.md` first; treat as guide, not gospel. Brought into this directory 2026-04-29 from `zoho-locally-twisted/gallery/` (which was deleted) so future instances find it via the standard reading order.
+- **Style guide:** `_resources/STYLE-GUIDE.md` - the only current visual authority: Civic Celebration + Slate Blue/Berry + Brand Direction, page treatments, components, icon system, photography, voice, and accessibility.
+- **Deleted legacy design guide:** `_resources/design-guide/` was removed on 2026-05-05 because the old synthesis conflicted with the approved visual contract and kept reintroducing light-blue/blush styling. Do not recreate it or use those old screenshots/TSX files as current guidance.
 - **Business policies:** `_resources/policies/` — full set of LT's confirmed business rules + the legal interview answers (sufficient for attorney to draft v1 contract)
 - **Tax data + research:** `_resources/utah-tax-rates-2026q2.md` — Utah destination-based sales tax research, per-jurisdiction rates
 
@@ -135,24 +135,12 @@ The Odoo deployment at `http://5.78.136.133` is the source of truth for the ERPN
 3. **This file**
 4. `HANDOFF.md` (last instance's continuity notes)
 5. `.planning\PROJECT.md` (GSD project source-of-truth)
-6. `_resources/design-guide/README.md` + skim `synthesis/voice.md`, `synthesis/mood.md`, `synthesis/rationale.md` — taste calibration before any frontend work
-7. `locally-twisted-decisions.md` (LT decisions with reasoning)
-8. `git log --oneline -20`
+6. `locally-twisted-decisions.md` (LT decisions with reasoning)
+7. `git log --oneline -20`
 
-## Design guide — where it is, why it's here, and why it must stay
+## Deleted legacy design guide
 
-**Location:** `_resources/design-guide/` in this directory. Contains:
-- `README.md` — framing (guide, not gospel) + per-file purpose
-- `synthesis/` — Next.js TSX + globals.css + 5 markdown docs (rationale, mood, voice, menu, SYNTHESIS-BRIEF, SYNTHESIS-COMPLETE) from the synthesis instance that hybridized D3 + D5 + D7 onto LT's existing visual language
-- `screenshots/` — 8 GL-approved screenshots (4 pages × 2 viewports) + RENDER-REPORT.md
-
-**Why it's here:** Originally the synthesis lived at `C:\Users\baenb\projects\zoho-locally-twisted\gallery\` — a separate project directory outside this client's working tree. Multiple build instances failed to find it. Phase 1 PLAN.md referenced "Opus Competition Redesign concept" as a placeholder TBD with no path. The standard arrival reading order led every instance through every artifact and not one of them pointed at the gallery. Instances either skipped the design reference entirely or worked without it — measurable trust cost on the resulting customer-facing pages. GL had to point an instance at it explicitly on 2026-04-29 to break the cycle.
-
-The fix was structural: copy the synthesis + approved screenshots into this client's `_resources/`, signpost from this CLAUDE.md and from the reading order, log the receipt in `locally-twisted-decisions.md` (2026-04-29). Now any arriving instance encounters it during normal arrival.
-
-**Why it must stay here:** The agency client-isolation rule says every client folder is self-contained for transfer. A design contract that lives outside the client folder is a transferability bug — it would break the moment Jeff takes ownership, and it broke for us long before that. **Do not move the design guide back into a parent project directory or any external location.** If the synthesis is ever updated (new round, refinement, new winner), update it in place at `_resources/design-guide/` and append a note to the decisions log.
-
-**Status (it's a guide, not gospel):** Per GL 2026-04-29, *"they should live in our directory as a design guide, not as gospel."* Treat the synthesis as taste calibration and structural inspiration — not a literal port target. The brand foundation in `_resources/STYLE-GUIDE.md` remains the source of truth for tokens (colors, fonts, spacing). When the synthesis suggests a structural pattern (eyebrow caps, generous whitespace, full-bleed bands, soft cards) and the LT pages don't have it, the synthesis is the right reference to reach for. When the synthesis and LT's accessibility / brand / business constraints conflict, the constraints win.
+The old `_resources/design-guide/` folder was deleted on 2026-05-05. The current visual contract is `_resources/STYLE-GUIDE.md` only. Do not send agents to the deleted design-competition synthesis, old screenshots, old TSX files, or light-blue/blush palette references for frontend taste calibration.
 
 ## Loud Failure Coverage
 

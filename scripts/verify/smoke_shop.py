@@ -1,12 +1,11 @@
 """End-to-end smoke test for the LT shop surfaces.
 
-Validates the catalog port, shop hub, mega menu, and variant selectors via a
+Validates the catalog port, shop hub, public nav, and variant selectors via a
 real Chromium browser. This should pass on every deploy and fail loudly on
 customer-facing regressions.
 
 Coverage:
-  1. Homepage navbar contains the Balloon Decor mega-menu trigger, /shop CTA,
-     and 11 category links.
+  1. Homepage navbar exposes the current authority-first primary links and /shop CTA.
   2. /shop renders 11 filter pills + 53 product cards.
   3. /shop-by-category redirects to /shop instead of rendering the retired
      category-card index.
@@ -17,8 +16,7 @@ Coverage:
   6. Product detail (single SKU) renders price + add-to-cart button.
   7. No "Item Code" jargon appears anywhere customer-facing.
   8. No "/Nos" UoM display anywhere.
-  9. Mega menu opens on click + closes on Escape, ARIA-correct.
- 10. Mobile drawer Balloon Decor accordion expands.
+  9. Mobile drawer exposes the same primary links and /contact quote CTA.
 
 Run:
   PYTHONIOENCODING=utf-8 PYTHONUTF8=1 python scripts/verify/smoke_shop.py
@@ -58,9 +56,6 @@ EXPECTED_CATEGORIES = [
     "Deliveries",
     "Seasonal & Specialty",
 ]
-MENU_LABEL_OVERRIDES = {
-    "Drops": "Balloon Drops",
-}
 PRODUCT_VARIANT_URL = f"{BASE}/shop-items/garlands/baby-shower-garland"
 PRODUCT_VARIANT_EXPECTED_ATTRS = ["Garland Length", "latex colors"]
 PRODUCT_PROGRESSIVE_URL = f"{BASE}/shop-items/arches/classic-arch"
@@ -97,44 +92,40 @@ def check_variant_template_contract():
 
 
 def check_homepage(page):
-    print("-> Homepage navbar mega-menu trigger")
+    print("-> Homepage authority-first mega navigation")
     page.goto(f"{BASE}/", wait_until="networkidle", timeout=15000)
-    trigger = page.locator('[data-lt-megamenu-trigger="lt-mega-shop-balloon-decor"]')
-    assert_(trigger.count() == 1, "Balloon Decor mega-menu trigger missing on homepage")
+
+    assert_(page.locator(".lt-mega-brand__logo").count() >= 1, "Mega header missing logo image")
+    event_trigger = page.locator("[data-lt-megamenu-trigger='lt-mega-events']")
+    product_trigger = page.locator("[data-lt-megamenu-trigger='lt-mega-products']")
+    assert_(event_trigger.count() == 1, "Desktop header missing Event Balloons mega trigger")
+    assert_(product_trigger.count() == 1, "Desktop header missing Ready-to-Order mega trigger")
+
+    for label, href in (("Portfolio", "/portfolio"), ("Process", "/process"), ("FAQ", "/faq")):
+        link = page.locator(".lt-mega-nav__link", has_text=label)
+        assert_(link.count() == 1, f"Desktop header missing {label} link")
+        assert_(link.first.get_attribute("href") == href, f"{label} should link to {href}")
+
+    event_trigger.click()
+    assert_(page.locator("#lt-mega-events").is_visible(), "Event mega menu did not open")
     assert_(
-        trigger.inner_text().strip().startswith("Balloon Decor"),
-        "Mega-menu trigger label must be Balloon Decor",
+        page.locator("#lt-mega-events a[href='/event-balloons']").count() >= 1,
+        "Event mega menu should link to /event-balloons",
     )
-    assert_(trigger.get_attribute("aria-haspopup") == "true", "Shop trigger missing aria-haspopup=true")
-
-    trigger.click()
-    page.wait_for_timeout(200)
+    product_trigger.click()
+    assert_(page.locator("#lt-mega-products").is_visible(), "Ready-to-Order mega menu did not open")
     assert_(
-        trigger.get_attribute("aria-expanded") == "true",
-        "Shop trigger aria-expanded didn't flip to true on click",
+        page.locator("#lt-mega-products a[href='/shop-items/arches']").count() >= 1,
+        "Product mega menu should link to /shop-items/arches",
     )
-    panel = page.locator("#lt-mega-shop-balloon-decor")
-    assert_(not panel.is_hidden(), "Shop mega panel still hidden after click")
 
-    all_decor = panel.locator(".lt-header__mega-cta", has_text="All Balloon Decor")
-    assert_(all_decor.count() == 1, "Mega menu missing All Balloon Decor CTA")
-    assert_(all_decor.first.get_attribute("href") == "/shop", "All Balloon Decor CTA must link to /shop")
-    footer_all_decor = page.locator("footer .lt-footer__col-link", has_text="All Balloon Decor")
-    assert_(footer_all_decor.count() == 1, "Footer missing All Balloon Decor link")
-    assert_(footer_all_decor.first.get_attribute("href") == "/shop", "Footer All Balloon Decor link must use /shop")
-
-    mega_links_text = [el.inner_text().strip() for el in panel.locator(".lt-header__mega-link").all()]
-    for cat_name in EXPECTED_CATEGORIES:
-        label = MENU_LABEL_OVERRIDES.get(cat_name, cat_name)
-        assert_(label in mega_links_text, f"Mega menu missing category label {label!r} (have: {mega_links_text})")
-
-    page.keyboard.press("Escape")
-    page.wait_for_timeout(200)
-    assert_(
-        trigger.get_attribute("aria-expanded") == "false",
-        "Shop trigger aria-expanded didn't flip back on Escape",
-    )
-    print("  OK mega menu open/close + /shop CTA + 11 categories present")
+    quote_cta = page.locator(".lt-mega-header__cta", has_text="Free Event Quote")
+    assert_(quote_cta.count() == 1, "Desktop header missing Free Event Quote CTA")
+    assert_(quote_cta.first.get_attribute("href") == "/contact", "Free Event Quote CTA must link to /contact")
+    footer_all_decor = page.locator("footer .lt-footer__col-link", has_text="All Ready-to-Order")
+    assert_(footer_all_decor.count() == 1, "Footer missing All Ready-to-Order link")
+    assert_(footer_all_decor.first.get_attribute("href") == "/shop", "Footer All Ready-to-Order link must use /shop")
+    print("  OK mega triggers, key links, /contact quote CTA, and footer /shop link")
 
 
 def check_shop_page(page):
@@ -307,7 +298,7 @@ def check_product_single_page(page):
 
 
 def check_mobile_drawer(p):
-    print("-> Mobile drawer Balloon Decor accordion")
+    print("-> Mobile drawer mega links")
     browser = p.chromium.launch(headless=True)
     ctx = browser.new_context(
         viewport={"width": 375, "height": 812},
@@ -320,24 +311,31 @@ def check_mobile_drawer(p):
     page = ctx.new_page()
     page.goto(f"{BASE}/", wait_until="networkidle", timeout=15000)
     page.click("#lt-mobile-toggle")
-    page.wait_for_timeout(200)
+    page.wait_for_function(
+        """() => {
+            const drawer = document.querySelector('#lt-mobile-nav');
+            return drawer && drawer.classList.contains('is-open') && drawer.getAttribute('aria-hidden') === 'false';
+        }""",
+        timeout=10000,
+    )
 
-    accordion = page.locator('[data-lt-drawer-accordion-trigger="lt-mob-shop-balloon-decor"]')
-    assert_(accordion.count() == 1, "Mobile Balloon Decor accordion toggle missing")
-    assert_(accordion.inner_text().strip().startswith("Balloon Decor"), "Mobile accordion label must be Balloon Decor")
-    accordion.click()
-    page.wait_for_timeout(200)
-    panel = page.locator("#lt-mob-shop-balloon-decor")
-    assert_(not panel.is_hidden(), "Mobile Balloon Decor accordion didn't expand on click")
+    for panel_id in ("lt-mobile-events", "lt-mobile-products", "lt-mobile-help"):
+        page.locator(f"[data-lt-drawer-accordion-trigger='{panel_id}']").click()
+        assert_(page.locator(f"#{panel_id}").is_visible(), f"Mobile drawer panel {panel_id} did not open")
 
-    sublinks_text = [el.inner_text().strip() for el in panel.locator(".lt-header__mobile-nav-sublink").all()]
-    for cat_name in EXPECTED_CATEGORIES:
-        label = MENU_LABEL_OVERRIDES.get(cat_name, cat_name)
-        assert_(label in sublinks_text, f"Mobile drawer missing sublink {label!r} (have: {sublinks_text})")
-    assert_("All Balloon Decor" in sublinks_text, "Mobile drawer missing All Balloon Decor sublink")
-    all_decor_href = panel.locator(".lt-header__mobile-nav-sublink--all").first.get_attribute("href")
-    assert_(all_decor_href == "/shop", "Mobile All Balloon Decor sublink must link to /shop")
-    print(f"  OK accordion expands, all {len(EXPECTED_CATEGORIES)} categories and /shop CTA present")
+    expected_links = {
+        "Event Balloons": "/event-balloons",
+        "Portfolio": "/portfolio",
+        "Process": "/process",
+        "Shop All": "/shop",
+        "Frequently Asked Questions": "/faq",
+        "Free Event Quote": "/contact",
+    }
+    for label, href in expected_links.items():
+        link = page.locator("#lt-mobile-nav a", has_text=label).first
+        assert_(link.count() == 1, f"Mobile drawer missing {label}")
+        assert_(link.get_attribute("href") == href, f"Mobile drawer {label} should link to {href}")
+    print("  OK drawer opens, accordions expose links, and /contact quote CTA")
     browser.close()
 
 

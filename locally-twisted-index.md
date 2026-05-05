@@ -22,7 +22,7 @@ Pointer index. Links to artifacts that live elsewhere or that are easy to lose t
 
 | File | Purpose |
 |------|---------|
-| `_resources/STYLE-GUIDE.md` | Design system: color palette, typography, components, "Quiet Confidence" voice, blog "Kindergarten Teacher" voice, accessibility (WCAG 2.1 AA), photography rules |
+| `_resources/STYLE-GUIDE.md` | Current visual authority: Civic Celebration + Slate Blue/Berry + Brand Direction, Cormorant Garamond + Lato, page treatments, professional icon suite, photo rules, voice, accessibility |
 | `_resources/utah-tax-rates-2026q2.md` | Utah destination-based sales tax research, per-jurisdiction rates |
 | `_resources/policies/INDEX.md` | Pointer to the 6 business policy files |
 | `_resources/policies/legal-interview-answers.md` | Master legal interview — sufficient for attorney to draft v1 contract |
@@ -77,6 +77,7 @@ Built before the frame reset; some still active, some legacy reference.
 | `workstreams/launch-v1-success-contract.md` | V1 launch scope contract: website-first quality, buyer priority, commercial lanes, quality targets, deferred 10-year ERPNext maturity, and immediate redesign sequence. |
 | `workstreams/website-launch.md` | Launch controller board and verification gates. |
 | `workstreams/brand-audience-style-reset.md` | Brand/audience reset, proof inventory, and reference-site lessons. |
+| `workstreams/brand-style-guide-consolidation.md` | Current feature handoff for the 2026-05-05 style-guide cleanup, deleted conflicting references, and new icon-suite direction. |
 | `workstreams/shop.md` | Shop, catalog, product, variant, media, and ecommerce confidence lane. |
 | `workstreams/policy-trust.md` | Policy, trust, Stripe/legal readiness lane. |
 

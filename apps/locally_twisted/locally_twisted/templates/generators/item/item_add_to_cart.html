@@ -5,9 +5,9 @@
    - Stripped the "({{ price_info.formatted_price }} / {{ product_info.uom }})"
      suffix line (the awkward "$ 150.00 / Nos" UoM display GL flagged).
    - Stripped the unused offers block (LT doesn't use ERPNext Offer doctype).
-   - Reorganized: price prominent at top in DM Serif Display, then stock indicator,
+   - Reorganized: price prominent at top in Cormorant Garamond, then stock indicator,
      then the action buttons.
-   - LT register: teal "Add to cart" CTA (per design guide rule "teal is earned").
+   - LT register: navy/crimson rectangular CTA per style guide v4.2.
    - Inquiry button is secondary outlined style.
 #}
 {% if shopping_cart and shopping_cart.cart_settings.enabled %}
@@ -17,7 +17,7 @@
 
 <div class="lt-product__cart" data-variant-item-code="{{ item_code }}">
 
-    {# Price — DM Serif Display, no UoM suffix. #}
+    {# Price — Cormorant Garamond, no UoM suffix. #}
     {% if cart_settings.show_price and product_info.price %}
         {% set price_info = product_info.price %}
         <div class="lt-product__price"

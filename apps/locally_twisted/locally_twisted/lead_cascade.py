@@ -255,9 +255,9 @@ def _send_auto_ack_email(doc):
 
     safe_name = escape_html(customer_name)
     body_html = f"""
-<div style="max-width: 600px; margin: 0 auto; font-family: 'Raleway', Arial, sans-serif; color: #595A5C;">
+<div style="max-width: 600px; margin: 0 auto; font-family: 'Lato', Arial, sans-serif; color: #595A5C;">
     <div style="background-color: #FBF5F2; padding: 24px 32px; text-align: center;">
-        <h2 style="font-family: Georgia, 'DM Serif Display', serif; color: #1A1A1A; margin: 0; font-size: 24px;">
+        <h2 style="font-family: Georgia, 'Cormorant Garamond', serif; color: #1A1A1A; margin: 0; font-size: 24px;">
             Locally Twisted
         </h2>
     </div>

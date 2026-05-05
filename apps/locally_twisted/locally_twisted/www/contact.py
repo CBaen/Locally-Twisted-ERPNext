@@ -30,17 +30,16 @@ def get_context(context):
     elif service_param in {"face-painting", "face_painting", "painting"}:
         preselected_services = ["Face Painting"]
 
-    context.title = "Contact Locally Twisted"
+    context.title = "Free Event Quote - Locally Twisted"
     context.metatags = {
-        "title": "Contact Locally Twisted",
+        "title": context.title,
         "description": (
-            "Tell us about your celebration. Balloon decor, twisting, "
-            "and face painting along the Wasatch Front."
+            "Request a quote for Utah event balloon decor, delivery, install support, "
+            "balloon twisting, and face painting from Locally Twisted."
         ),
-        "og:title": "Contact Locally Twisted",
+        "og:title": context.title,
         "og:description": (
-            "Tell us about your celebration. Balloon decor, twisting, "
-            "and face painting along the Wasatch Front."
+            "Request a quote for Utah event balloon decor and event support from Locally Twisted."
         ),
         "og:type": "website",
         "twitter:card": "summary_large_image",
@@ -52,14 +51,14 @@ def get_context(context):
     context.preselected_services = preselected_services
     context.contact_intent = intent_param
     context.contact_intro_title = (
-        "Tell us about your celebration"
+        "Tell us about the event"
         if intent_param == "quick"
-        else "Let's create something beautiful"
+        else "Request a free event quote"
     )
     context.contact_intro_lede = (
         "A few details are enough to get started."
         if intent_param == "quick"
-        else "Tell us about your celebration."
+        else "One form handles business, school, civic, community, venue, private-event, and ready-to-order questions. We will route the inquiry from here."
     )
     context.max_photos = MAX_PHOTOS
     context.max_photo_mb = MAX_PHOTO_BYTES // (1024 * 1024)

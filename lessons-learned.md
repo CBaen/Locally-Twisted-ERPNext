@@ -6,6 +6,38 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-05 - Disk source is not proof that Frappe is serving the design
+
+The restored mega-menu, page-containment CSS, and product-polish CSS existed in the repo, but the running site was still missing the menu behavior and product/page styling because the assets were not wired through `hooks.py` and the Frappe processes/cache had not been refreshed. That made the site look like agents were editing against each other even when useful source changes existed.
+
+**Counter-move:** for Frappe visual work, verify the served HTML and asset URLs after editing `hooks.py`, not just the file tree. Restart backend/frontend when hooks change, clear website cache after restart, confirm the cache-busted URLs appear in page HTML, and then run browser checks.
+
+---
+
+## 2026-05-05 - Mega menus need separate hover-open and click-pin behavior
+
+The desktop mega menu technically opened on hover, but Playwright click exposed a real interaction flaw: moving over the trigger opened the panel, and the click then interpreted the open state as a request to close it. That made the menu feel broken for users who click instead of hover.
+
+**Counter-move:** treat hover as preview and click as pin. A click on a hover-open menu should keep it open and set `aria-expanded=true`; only a second click on an already pinned menu, outside click, Escape, or another menu should close it. Verify this with a real browser, not only source inspection.
+
+---
+
+## 2026-05-05 - Retired design references must be deleted, not politely deprioritized
+
+The old `_resources/design-guide/` and several shop/icon comparison artifacts were still present after the visual direction changed. Even with a stronger style guide, those files could keep training future agents back toward light-blue/blush UI, old fonts, weak generic icons, and stale shop mockups.
+
+**Counter-move:** when GL explicitly rejects a visual direction, delete the conflicting tracked references if they are no longer current source material. Then update the active reading paths, workstream, queue, decisions, lessons, and capability recipe in the same closeout. Keep true catalog/business evidence, but separate it from style authority.
+
+---
+
+## 2026-05-05 - Icon quality has to match the business, not just the proof-bar slot
+
+The first professional icon pass still acted like Locally Twisted needed four generic proof marks. GL rejected that correctly: this is a balloon company, and the icon system needs Utah/local proof, event context, and multiple balloon forms.
+
+**Counter-move:** for brand icon systems, start from the customer's actual business vocabulary. LT now has balloon pair, cluster, arch, organic garland, column, bouquet, civic parade, corporate entrance, school spirit, premium private event, delivery/install, and proof icons. Balloon pages should use balloon-form icons before abstract trust icons.
+
+---
+
 ## 2026-05-03 - Sitewide visual passes need cache-bust plus screenshot proof
 
 The Civic overhaul changed shared CSS, Jinja partials, Python controller constants, generated imagery, Webshop surfaces, and policy/success pages. Route 200 checks and layout tests were necessary, but they would not have caught the old header treatment, stale controller output, unreadable hero treatment, blank map embed, or mobile header overlap on their own.

@@ -44,11 +44,14 @@
         </div>
 
         <p id="lt-hero-tagline" class="lt-hero__tagline">
-            Trusted across the Wasatch Front since 1998.
+            Prepared design, clean install, and quote-led support for Utah business, school, civic, community, venue, and private events.
         </p>
         <a href="/contact" class="lt-hero__cta">
-            Request a quote
+            Free Event Quote
             <span aria-hidden="true">&rarr;</span>
+        </a>
+        <a href="/event-balloons" class="lt-hero__cta lt-hero__cta--secondary">
+            Event Balloons
         </a>
     </div>
 </section>
@@ -109,16 +112,42 @@
 
 {# --- 3. Reviews block (replaces the old "Since 1998 / Custom Designs / Made with Love" trust strip) --- #}
 <section class="lt-reviews-block lt-fullbleed" aria-labelledby="lt-reviews-heading">
+    <style>
+        .lt-reviews-block__quotes {
+            overflow: hidden !important;
+            max-height: 440px;
+        }
+        .lt-reviews-block__track {
+            display: flex !important;
+            flex-wrap: nowrap !important;
+            align-items: stretch !important;
+            gap: 0 !important;
+            width: max-content !important;
+            animation: lt-reviews-scroll 360s linear infinite !important;
+        }
+        .lt-reviews-block__group {
+            display: flex !important;
+            flex-wrap: nowrap !important;
+            align-items: stretch !important;
+            flex: 0 0 auto !important;
+            gap: 1rem !important;
+            padding-right: 1rem !important;
+        }
+        .lt-reviews-block__quote {
+            flex: 0 0 min(320px, calc(100vw - 2rem)) !important;
+            max-width: min(320px, calc(100vw - 2rem)) !important;
+        }
+    </style>
     <div class="lt-reviews-block__inner">
         <h2 id="lt-reviews-heading" class="visually-hidden">What people say</h2>
 
         <a href="https://www.google.com/search?q=Locally+Twisted+Reviews"
            target="_blank" rel="noopener noreferrer"
            class="lt-reviews-block__badge"
-           aria-label="Locally Twisted Google reviews: 4.9 stars from 114 reviews (opens in new tab)">
+           aria-label="Locally Twisted Google reviews: 4.9 rating with 100+ reviews (opens in new tab)">
             <span class="lt-reviews-block__stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-            <span class="lt-reviews-block__score">4.9 out of 5</span>
-            <span class="lt-reviews-block__count">114 Google reviews</span>
+            <span class="lt-reviews-block__score">4.9 Google rating</span>
+            <span class="lt-reviews-block__count">100+ Google reviews</span>
         </a>
 
         {#
@@ -129,34 +158,36 @@
         #}
         <section class="lt-reviews-block__quotes" aria-label="Customer reviews carousel">
             <div class="lt-reviews-block__track">
-                {% for quote in review_quotes %}
-                    {% if quote %}
-                    <article class="lt-reviews-block__quote" tabindex="0">
-                        <p class="lt-reviews-block__quote-mark" aria-hidden="true">&ldquo;</p>
-                        <p class="lt-reviews-block__quote-text">{{ quote.text }}</p>
-                        <p class="lt-reviews-block__quote-attr">
-                            &mdash; {{ quote.display_name or quote.name }}{% if quote.event %}, {{ quote.event }}{% endif %}
-                        </p>
-                        <span class="lt-reviews-block__quote-stars" role="img"
-                             aria-label="{{ quote.rating or 5 }} out of 5 stars">
-                            {% for _ in range(quote.rating or 5) %}&#9733;{% endfor %}
-                        </span>
-                    </article>
-                    {% else %}
-                    <article class="lt-reviews-block__quote lt-reviews-block__quote--placeholder">
-                        <p class="lt-reviews-block__quote-mark" aria-hidden="true">&ldquo;</p>
-                        <p class="lt-reviews-block__quote-text">Real Google review pending&hellip;</p>
-                        <p class="lt-reviews-block__quote-attr">&mdash; coming soon</p>
-                    </article>
-                    {% endif %}
-                {% endfor %}
+                <div class="lt-reviews-block__group">
+                    {% for quote in review_quotes %}
+                        {% if quote %}
+                        <article class="lt-reviews-block__quote" tabindex="0">
+                            <p class="lt-reviews-block__quote-mark" aria-hidden="true">&ldquo;</p>
+                            <p class="lt-reviews-block__quote-text">{{ quote.text | replace("Totally Twisted", "Locally Twisted") }}</p>
+                            <p class="lt-reviews-block__quote-attr">
+                                &mdash; {{ quote.display_name or quote.name }}{% if quote.event %}, {{ quote.event }}{% endif %}
+                            </p>
+                            <span class="lt-reviews-block__quote-stars" role="img"
+                                 aria-label="{{ quote.rating or 5 }} out of 5 stars">
+                                {% for _ in range(quote.rating or 5) %}&#9733;{% endfor %}
+                            </span>
+                        </article>
+                        {% else %}
+                        <article class="lt-reviews-block__quote lt-reviews-block__quote--placeholder">
+                            <p class="lt-reviews-block__quote-mark" aria-hidden="true">&ldquo;</p>
+                            <p class="lt-reviews-block__quote-text">Real Google review pending&hellip;</p>
+                            <p class="lt-reviews-block__quote-attr">&mdash; coming soon</p>
+                        </article>
+                        {% endif %}
+                    {% endfor %}
+                </div>
                 {# Duplicate set for seamless loop, aria-hidden so screen readers don't double-read. #}
-                <div aria-hidden="true" style="display: contents;">
+                <div class="lt-reviews-block__group" aria-hidden="true">
                     {% for quote in review_quotes %}
                         {% if quote %}
                         <article class="lt-reviews-block__quote">
                             <p class="lt-reviews-block__quote-mark" aria-hidden="true">&ldquo;</p>
-                            <p class="lt-reviews-block__quote-text">{{ quote.text }}</p>
+                            <p class="lt-reviews-block__quote-text">{{ quote.text | replace("Totally Twisted", "Locally Twisted") }}</p>
                             <p class="lt-reviews-block__quote-attr">
                                 &mdash; {{ quote.display_name or quote.name }}{% if quote.event %}, {{ quote.event }}{% endif %}
                             </p>

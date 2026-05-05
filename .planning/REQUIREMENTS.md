@@ -10,8 +10,8 @@
 
 ### Customer-Facing Site (SITE) — Phase 1
 
-- [~] **SITE-01**: Brand foundation. ERPNext theme installed with full LT design system: DM Serif Display + Raleway fonts, color palette as CSS variables, 8px spacing scale, button + form + card patterns, focus indicators, reduced-motion. Verified by opening any page at `:8081` and inspecting the head. **DONE 2026-04-26 (Slice 1).**
-- [ ] **SITE-02**: Site-wide header and footer. Header navigation per Option B (single "What We Make" mega-menu + occasion landing pages). Footer with Soft Blue background, brand columns, social icons, accessibility link, copyright. Mobile-responsive.
+- [~] **SITE-01**: Brand foundation. ERPNext theme installed with the current LT design system: Cormorant Garamond + Lato fonts, Civic Celebration + Slate Blue/Berry + Brand Direction palette, 8px spacing scale, button + form + card patterns, focus indicators, reduced-motion, and premium brass-line icon rules. Verified by opening any page at `:8081` and inspecting the head. **DONE 2026-04-26 (Slice 1); rebrand contract superseded 2026-05-05.**
+- [ ] **SITE-02**: Site-wide header and footer. Header navigation must follow the current two-level accessible nav direction with the approved Locally Twisted logo asset, large nav labels, and dark/navy/ink/brass treatment. Footer uses the same premium brand system with legal links, social icons, accessibility link, and copyright. Mobile-responsive.
 - [ ] **SITE-03**: Landing page. Hero, services snapshot (3 cards), featured products, social proof, closing CTA. Style-guide-driven build with placeholder photography from `_resources/images/`.
 - [ ] **SITE-04**: Balloon Twisting + Face Painting service page WITH embedded pricing calculator. Per-artist live math, "Why no combination discount?" expander, "Get a quote" CTA with pre-filled inputs.
 - [ ] **SITE-05**: Contact page with brief about summary embedded. Service area display, business hours, contact form (form-action stubbed until SITE-12 wires it).

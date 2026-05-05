@@ -75,7 +75,7 @@ PAGE_CSS = """
     text-transform: uppercase;
 }
 .lt-accessibility h1 {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     color: #0e2240;
     letter-spacing: 0;
 }

@@ -91,7 +91,7 @@ def get_context(context):
     context.items = items
     context.categories = categories
     context.total_items = len(items)
-    context.title = "Shop"
+    context.title = "Ready-to-Order Balloon Decor"
     context.page_css = PAGE_CSS
 
     return context
@@ -170,7 +170,7 @@ PAGE_CSS = """
     color: var(--lt-near-black);
     border-color: var(--lt-near-black);
     text-decoration: none;
-    background-color: var(--lt-blush-tint);
+    background-color: var(--lt-warm-tint);
 }
 .lt-shop__cart-btn svg { flex-shrink: 0; }
 @media (min-width: 992px) {
@@ -183,7 +183,7 @@ PAGE_CSS = """
     height: 32px;
     width: 100%;
 }
-.lt-shop__band--blush { background-color: var(--lt-sandstone); height: 18px; }
+.lt-shop__band--sandstone { background-color: var(--lt-sandstone); height: 18px; }
 
 /* Filter + grid */
 .lt-shop__listing {
@@ -396,7 +396,7 @@ PAGE_CSS = """
 .lt-shop__cta-btn--secondary:hover,
 .lt-shop__cta-btn--secondary:focus-visible {
     border-color: var(--lt-near-black);
-    background-color: var(--lt-blush-tint);
+    background-color: var(--lt-warm-tint);
     color: var(--lt-near-black);
     text-decoration: none;
 }
@@ -421,4 +421,110 @@ PAGE_CSS = """
     min-height: 1.5em;
 }
 .lt-shop__feedback.is-error { color: #c0392b; }
+
+/* v4.2 product polish: keep /shop premium even before the global CSS include
+   is wired by the parent integration pass. */
+.lt-shop--landing {
+    background: var(--lt-warm-white);
+    color: var(--lt-soft-gray);
+    font-family: var(--lt-font-body);
+}
+.lt-shop--landing .lt-shop__hero {
+    background: var(--lt-navy);
+    border-bottom: 4px solid var(--lt-brass);
+    color: var(--lt-white);
+    padding: 0;
+}
+.lt-shop--landing .lt-shop__hero-inner {
+    padding: clamp(2.25rem, 6vw, 4.5rem) clamp(1rem, 4vw, 2rem);
+}
+.lt-shop--landing .lt-shop__hero-eyebrow,
+.lt-shop--landing .lt-shop__count {
+    color: var(--lt-brass);
+    font-weight: 900;
+    letter-spacing: 0.1em;
+}
+.lt-shop--landing .lt-shop__hero-title {
+    color: var(--lt-white);
+    font-size: clamp(2.35rem, 7vw, 4.4rem);
+    line-height: 1.04;
+    max-width: 12ch;
+}
+.lt-shop--landing .lt-shop__hero-lede {
+    color: rgba(250, 247, 242, 0.86);
+    max-width: 56ch;
+}
+.lt-shop--landing .lt-shop__band--sandstone {
+    background: var(--lt-brass);
+    height: 4px;
+}
+.lt-shop--landing .lt-shop__listing {
+    background: var(--lt-warm-white);
+}
+.lt-shop--landing .lt-shop__listing-inner,
+.lt-shop--landing .lt-shop__hero-inner,
+.lt-shop--landing .lt-shop__cta-inner {
+    width: min(100%, 1200px);
+    max-width: none;
+    margin-inline: auto;
+}
+.lt-shop--landing .lt-shop__card {
+    min-width: 0;
+    overflow: hidden;
+    background: var(--lt-white);
+    border: 1px solid rgba(14, 34, 64, 0.12);
+    border-radius: 4px;
+    box-shadow: none;
+    padding: 1rem;
+}
+.lt-shop--landing .lt-shop__card-name,
+.lt-shop--landing .lt-shop__card-name a {
+    color: var(--lt-ink);
+    font-family: var(--lt-font-heading);
+    overflow-wrap: anywhere;
+}
+.lt-shop--landing .lt-shop__card-desc {
+    color: var(--lt-soft-gray);
+    overflow-wrap: anywhere;
+}
+.lt-shop--landing .lt-shop__card-price {
+    color: var(--lt-navy);
+    font-weight: 900;
+}
+.lt-shop--landing .lt-shop__chip,
+.lt-shop--landing .lt-shop__card-add,
+.lt-shop--landing .lt-shop__cta-btn {
+    border-radius: 3px;
+    min-height: 44px;
+    font-weight: 900;
+}
+.lt-shop--landing .lt-shop__chip[aria-pressed="true"],
+.lt-shop--landing .lt-shop__card-add,
+.lt-shop--landing .lt-shop__cta-btn--primary {
+    background: var(--lt-navy);
+    border-color: var(--lt-navy);
+    color: var(--lt-white);
+}
+.lt-shop--landing .lt-shop__card-add:hover,
+.lt-shop--landing .lt-shop__card-add:focus-visible,
+.lt-shop--landing .lt-shop__cta-btn--primary:hover,
+.lt-shop--landing .lt-shop__cta-btn--primary:focus-visible {
+    background: var(--lt-crimson);
+    border-color: var(--lt-crimson);
+    color: var(--lt-white);
+}
+.lt-shop--landing .lt-shop__cta {
+    background: var(--lt-navy);
+    border-top: 4px solid var(--lt-brass);
+}
+.lt-shop--landing .lt-shop__cta h2 {
+    max-width: 16ch;
+    color: var(--lt-white);
+    font-size: clamp(2rem, 5vw, 3.2rem);
+}
+.lt-shop--landing .lt-shop__cta-btn--secondary {
+    background: transparent;
+    border-color: rgba(250, 247, 242, 0.5);
+    color: var(--lt-white);
+}
 """

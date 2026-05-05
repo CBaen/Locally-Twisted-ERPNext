@@ -41,26 +41,25 @@ app_include_js = "/assets/locally_twisted/js/lt-desk-workspace-router.js?v=20260
 # Receipt: 2026-04-29 — drawer overlay edit shipped server-side but old
 # CSS stayed cached in GL's browser; drawer rendered inline on every page
 # because the cached rules didn't have `position: fixed`.
-web_include_css = "/assets/locally_twisted/css/lt-theme.css?v=20260503-civic-3"
+web_include_css = [
+    "/assets/locally_twisted/css/lt-theme.css?v=20260505-authority-4",
+    "/assets/locally_twisted/css/lt-page-containment.css?v=20260505-containment-1",
+    "/assets/locally_twisted/css/lt-mega-menu.css?v=20260505-mega-1",
+    "/assets/locally_twisted/css/lt-product-polish.css?v=20260505-product-1",
+]
 
 # Guest cart engine — overrides webshop's broken-for-guest cart functions
 # at runtime, exposes window.LT_CART, and keeps cart count badges live.
 # Loaded on every website page so cart actions work from anywhere.
 # Cache-bust query string follows the same convention as web_include_css.
-#
-# lt-megamenu.js — desktop hover mega menu + mobile drawer accordion engine.
-#   Replaces the inline <script> block removed from navbar.html.
-#   Exposes window.LT.megamenu (init, openPanel, closePanel, closeAll)
-#   and window.LT.drawer (open, close).
-#
 # lt-newsletter.js — footer newsletter form auto-binder + loud-failure handler.
 #   Exposes window.LT.newsletter.submit(email) → Promise.
 #   Auto-binds to form[data-lt-newsletter] on DOMContentLoaded.
 web_include_js = [
     "/assets/locally_twisted/js/lt-guest-cart.js?v=20260429-1",
-    "/assets/locally_twisted/js/lt-megamenu.js?v=20260430-2",
     "/assets/locally_twisted/js/lt-newsletter.js?v=20260430-2",
     "/assets/locally_twisted/js/lt-webshop-a11y.js?v=20260430-2",
+    "/assets/locally_twisted/js/lt-megamenu.js?v=20260505-mega-4",
 ]
 
 # Friendly-URL aliases. Frappe's www/ router doesn't auto-translate
@@ -68,6 +67,8 @@ web_include_js = [
 # explicitly. Python module names (used for the @whitelist API path)
 # stay underscored.
 website_route_rules = [
+    {"from_route": "/event-balloons",
+     "to_route": "event_balloons"},
     {"from_route": "/balloon-twisting-and-face-painting",
      "to_route": "balloon_twisting_and_face_painting"},
     {"from_route": "/refund-policy",
@@ -111,16 +112,15 @@ doc_events = {
     },
 }
 
-# ---------------------------------------------------------------
-# Website context — inject Shop categories into the navbar template
-# Module: locally_twisted/navbar_context.py
-# Source: 2026-04-30 mega-menu build
-# ---------------------------------------------------------------
-update_website_context = ["locally_twisted.navbar_context.update_website_context"]
-
 override_whitelisted_methods = {
     "webshop.webshop.api.get_product_filter_data": "locally_twisted.api.product_listing.get_product_filter_data",
 }
+
+# Shared website context for shop sidebars/footer defaults and the public mega menu.
+update_website_context = [
+    "locally_twisted.website_context.update_website_context",
+    "locally_twisted.navbar_context.update_website_context",
+]
 
 # ---------------------------------------------------------------
 # Fixtures — code-owned schema records that travel with the app.

@@ -301,8 +301,8 @@ def _send_receipt_email(so_name):
         )
 
     body = f"""
-<div style="font-family: Raleway, Helvetica, Arial, sans-serif; max-width:560px; margin:0 auto; color:#1a1a1a; line-height:1.55;">
-  <h1 style="font-family: 'DM Serif Display', Georgia, serif; font-size:28px; margin:0 0 12px;">
+<div style="font-family: Lato, Helvetica, Arial, sans-serif; max-width:560px; margin:0 auto; color:#1a1a1a; line-height:1.55;">
+  <h1 style="font-family: 'Cormorant Garamond', Georgia, serif; font-size:28px; margin:0 0 12px;">
     Thank you for your order.
   </h1>
   <p style="font-size:15px; color:#5a5a5a; margin:0 0 24px;">
@@ -311,10 +311,10 @@ def _send_receipt_email(so_name):
   </p>
 
   <div style="background:#fffcfc; border:1px solid rgba(26,26,26,0.08); border-radius:6px; padding:20px; margin:0 0 24px;">
-    <p style="font-family:'Raleway',sans-serif; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:#7a7a7a; margin:0 0 6px;">
+    <p style="font-family:'Lato',sans-serif; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:#7a7a7a; margin:0 0 6px;">
       Order
     </p>
-    <p style="font-family:'DM Serif Display', Georgia, serif; font-size:22px; margin:0 0 16px; word-break:break-all;">
+    <p style="font-family:'Cormorant Garamond', Georgia, serif; font-size:22px; margin:0 0 16px; word-break:break-all;">
       {escape_html(so.name)}
     </p>
     <table style="width:100%; border-collapse:collapse; font-size:14px;">
@@ -427,8 +427,8 @@ def _send_operator_notification(so_name):
     order_notes = _get_customer_order_notes_html(so.name)
 
     body = f"""
-<div style="font-family: Raleway, Helvetica, Arial, sans-serif; max-width:600px; color:#1a1a1a; line-height:1.55;">
-  <h1 style="font-family:'DM Serif Display', Georgia, serif; font-size:22px; margin:0 0 4px;">
+<div style="font-family: Lato, Helvetica, Arial, sans-serif; max-width:600px; color:#1a1a1a; line-height:1.55;">
+  <h1 style="font-family:'Cormorant Garamond', Georgia, serif; font-size:22px; margin:0 0 4px;">
     A new paid order just landed.
   </h1>
   <p style="margin:0 0 16px; color:#5a5a5a;">{escape_html(so.name)} &middot; ${flt(so.grand_total):,.2f} {escape_html(so.currency or "USD")}</p>
@@ -520,8 +520,8 @@ def _send_welcome_email_if_first_order(so_name):
         return
 
     body = f"""
-<div style="font-family: Raleway, Helvetica, Arial, sans-serif; max-width:560px; margin:0 auto; color:#1a1a1a; line-height:1.6;">
-  <h1 style="font-family:'DM Serif Display', Georgia, serif; font-size:30px; margin:0 0 16px;">
+<div style="font-family: Lato, Helvetica, Arial, sans-serif; max-width:560px; margin:0 auto; color:#1a1a1a; line-height:1.6;">
+  <h1 style="font-family:'Cormorant Garamond', Georgia, serif; font-size:30px; margin:0 0 16px;">
     Welcome to Locally Twisted.
   </h1>
   <p style="font-size:16px; color:#3a3a3a; margin:0 0 20px;">
@@ -529,7 +529,7 @@ def _send_welcome_email_if_first_order(so_name):
     along the Wasatch Front since 1998, and we&rsquo;re glad you&rsquo;re part of it now.
   </p>
 
-  <h2 style="font-family:'DM Serif Display', Georgia, serif; font-size:20px; margin:24px 0 8px;">
+  <h2 style="font-family:'Cormorant Garamond', Georgia, serif; font-size:20px; margin:24px 0 8px;">
     What happens next
   </h2>
   <ul style="font-size:15px; color:#3a3a3a; padding-left:20px; margin:0 0 20px;">

@@ -46,7 +46,7 @@ The prior plan had Slices 7–9 as "Products listing / Individual product pages 
 **Goal:** First-time visitor lands and immediately understands LT does custom event balloon decor at the level visible in the portfolio. Single primary CTA above the fold: *"Request a Quote."* No featured products, no configurator, no shopping cart in the header above the fold.
 
 **Source content:**
-- Hero copy + tagline: review `_resources/design-guide/synthesis/landing/page.tsx`, `synthesis/voice.md`, and `screenshots/landing-desktop.png` first. The synthesis is reference inspiration, not gospel — voice anchor stays "Quiet Confidence" per `_resources/STYLE-GUIDE.md`. Some copy carries from the synthesis, some carries from the approved Odoo XML, some is GL-confirmed fresh.
+- Hero copy + tagline: review `_resources/STYLE-GUIDE.md` first. The deleted `_resources/design-guide/` synthesis is no longer a valid visual reference because it conflicted with the approved Civic Celebration + Slate Blue/Berry + Brand Direction system. Some copy carries from approved Odoo XML, some is GL-confirmed fresh.
 - Hero imagery: from `_resources/images/` (placeholders) until Jeff provides real photography.
 - Corporate logos for trust strip: TBD — needs a list of corporate clients Jeff has served (LinkedIn, Microsoft, etc. — Atlanta Balloon Designer's pattern is the reference).
 

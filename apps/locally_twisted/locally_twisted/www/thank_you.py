@@ -29,7 +29,7 @@ PAGE_CSS = """
     margin: 0 auto;
 }
 .lt-thanks__title {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 2.5rem;
     color: var(--lt-near-black);
     margin: 0 0 1rem;
@@ -50,7 +50,7 @@ PAGE_CSS = """
     text-align: left;
 }
 .lt-thanks__order-meta {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.1em;
@@ -59,7 +59,7 @@ PAGE_CSS = """
     margin: 0 0 0.5rem;
 }
 .lt-thanks__order-id {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.5rem;
     color: var(--lt-near-black);
     margin: 0 0 1rem;
@@ -87,7 +87,7 @@ PAGE_CSS = """
     background-color: var(--lt-teal);
     color: var(--lt-white);
     padding: 0.875rem 2rem;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 1rem;
     font-weight: 600;
     text-decoration: none;

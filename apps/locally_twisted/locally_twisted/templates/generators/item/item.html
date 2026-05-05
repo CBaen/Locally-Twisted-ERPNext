@@ -21,12 +21,12 @@
 {% endblock %}
 
 {% block page_content %}
-<div class="product-container item-main">
+<div class="product-container item-main lt-product-page__main">
 	{% from "webshop/templates/includes/macros.html" import product_image %}
-	<div class="item-content">
+	<div class="item-content lt-product-page__content">
 		<div class="product-page-content" itemscope itemtype="http://schema.org/Product">
 			<!-- Image, Description, Add to Cart -->
-			<div class="row mb-5">
+			<div class="row mb-5 lt-product__summary-row">
 				{% include "templates/generators/item/item_image.html" %}
 				{% include "templates/generators/item/item_details.html" %}
 			</div>
@@ -35,14 +35,14 @@
 </div>
 
 <!-- Additional Info/Reviews, Recommendations -->
-<div class="d-flex">
+<div class="lt-product__more">
 	{% set show_recommended_items = recommended_items and shopping_cart.cart_settings.enable_recommendations %}
-	{% set info_col = 'col-9' if show_recommended_items else 'col-12' %}
+	{% set info_col = 'col-lg-9 col-12' if show_recommended_items else 'col-12' %}
 
 	{% set padding_top = 'pt-0' if (show_tabs and tabs) else '' %}
 
-	<div class="product-container mt-4 {{ padding_top }} {{ info_col }}">
-		<div class="item-content {{ 'mt-minus-2' if (show_tabs and tabs) else '' }}">
+	<div class="product-container lt-product__info-panel mt-4 {{ padding_top }} {{ info_col }}">
+		<div class="item-content lt-product__info-content {{ 'mt-minus-2' if (show_tabs and tabs) else '' }}">
 			<div class="product-page-content" itemscope itemtype="http://schema.org/Product">
 				<!-- Product Specifications Table Section -->
 				{% if show_tabs and tabs %}
@@ -69,7 +69,7 @@
 
 	<!-- Recommended Items -->
 	{% if show_recommended_items %}
-		<div class="mt-4 col-3 recommended-item-section">
+		<div class="mt-4 col-lg-3 col-12 recommended-item-section lt-product__recommendations">
 			<span class="recommendation-header">{{ _("Recommended") }}</span>
 			<div class="product-container mt-2 recommendation-container">
 				{% for item in recommended_items %}

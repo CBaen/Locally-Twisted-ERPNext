@@ -10,7 +10,7 @@ sitemap = 1
 
 
 PAGE_CSS = """.lt-btfp__intro {
-    background-color: var(--lt-blush-tint);
+    background-color: var(--lt-warm-tint);
     padding: 4rem 1.5rem 3.5rem;
     text-align: left;
 }
@@ -20,7 +20,7 @@ PAGE_CSS = """.lt-btfp__intro {
     text-align: left;
 }
 .lt-btfp__intro-title {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 2.25rem;
     color: var(--lt-near-black);
     margin: 0 0 1.25rem;
@@ -47,7 +47,7 @@ PAGE_CSS = """.lt-btfp__intro {
 }
 
 .lt-btfp__banner {
-    background-color: var(--lt-blue-tint);
+    background-color: var(--lt-stone-tint);
     padding: 1.25rem 1rem;
     border-top: 1px solid rgba(26, 26, 26, 0.06);
     border-bottom: 1px solid rgba(26, 26, 26, 0.06);
@@ -69,7 +69,7 @@ PAGE_CSS = """.lt-btfp__intro {
     }
 }
 .lt-btfp__banner-copy {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 1rem;
     color: var(--lt-near-black);
     margin: 0;
@@ -86,7 +86,7 @@ PAGE_CSS = """.lt-btfp__intro {
     align-items: center;
 }
 .lt-btfp__banner-link {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 0.95rem;
     font-weight: 600;
     color: var(--lt-near-black);
@@ -125,7 +125,7 @@ PAGE_CSS = """.lt-btfp__intro {
     padding: 1.75rem;
 }
 .lt-btfp__service-card h2 {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.5rem;
     margin: 0 0 0.85rem;
     color: var(--lt-near-black);
@@ -149,7 +149,7 @@ PAGE_CSS = """.lt-btfp__intro {
     aspect-ratio: 3 / 4;
     border-radius: 0.375rem;
     margin-bottom: 1rem;
-    background-color: var(--lt-blush-tint);
+    background-color: var(--lt-warm-tint);
     position: relative;
     overflow: hidden;
 }
@@ -198,7 +198,7 @@ PAGE_CSS = """.lt-btfp__intro {
     }
 }
 .lt-btfp__form-wrap h2 {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.75rem;
     color: var(--lt-near-black);
     margin: 0 0 0.4rem;
@@ -223,7 +223,7 @@ PAGE_CSS = """.lt-btfp__intro {
     flex-direction: column;
 }
 .lt-btfp__field label {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 0.875rem;
     font-weight: 600;
     color: var(--lt-near-black);
@@ -236,7 +236,7 @@ PAGE_CSS = """.lt-btfp__intro {
 .lt-btfp__input,
 .lt-btfp__select,
 .lt-btfp__textarea {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 1rem;
     padding: 0.65rem 0.85rem;
     border: 1px solid rgba(26, 26, 26, 0.18);
@@ -272,7 +272,7 @@ PAGE_CSS = """.lt-btfp__intro {
     border: none;
     border-radius: 0.375rem;
     padding: 0.875rem 2rem;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
@@ -310,18 +310,18 @@ PAGE_CSS = """.lt-btfp__intro {
 }
 
 .lt-btfp__expect-card {
-    background-color: var(--lt-blush-tint);
+    background-color: var(--lt-warm-tint);
     border-radius: 0.5rem;
     padding: 1.75rem;
 }
 .lt-btfp__expect-card h3 {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.375rem;
     color: var(--lt-near-black);
     margin: 0 0 0.85rem;
 }
 .lt-btfp__expect-card h4 {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 1rem;
     font-weight: 600;
     color: var(--lt-near-black);
@@ -389,7 +389,7 @@ PAGE_CSS = """.lt-btfp__intro {
     margin: 0 auto;
 }
 .lt-btfp__faq-heading {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.75rem;
     color: var(--lt-near-black);
     margin: 0 0 1.5rem;
@@ -403,7 +403,7 @@ PAGE_CSS = """.lt-btfp__intro {
     cursor: pointer;
     padding: 1rem 2.5rem 1rem 0;
     position: relative;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 1rem;
     font-weight: 600;
     line-height: 1.4;
@@ -475,7 +475,7 @@ PAGE_CSS = """.lt-btfp__intro {
    ============================================================ */
 
 .lt-btfp__kicker {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.15em;
@@ -491,7 +491,7 @@ PAGE_CSS = """.lt-btfp__intro {
     margin-bottom: 0.5rem;
 }
 .lt-btfp__service-title {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.5rem;
     color: var(--lt-near-black);
     margin: 0 0 1rem;
@@ -519,7 +519,7 @@ PAGE_CSS = """.lt-btfp__intro {
     border-bottom: none;
 }
 .lt-btfp__service-spec-row dt {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.1em;
@@ -547,11 +547,11 @@ PAGE_CSS = """.lt-btfp__intro {
     margin-top: 0;
     margin-bottom: 0;
 }
-.lt-btfp__ribbon--blush {
-    background-color: var(--lt-blush);
+.lt-btfp__ribbon--sandstone {
+    background-color: var(--lt-sandstone-accent);
 }
-.lt-btfp__ribbon--soft-blue {
-    background-color: var(--lt-soft-blue);
+.lt-btfp__ribbon--stone {
+    background-color: var(--lt-stone-accent);
 }
 @media (min-width: 992px) {
     .lt-btfp__ribbon {
@@ -569,7 +569,7 @@ PAGE_CSS = """.lt-btfp__intro {
     margin: 0 auto;
 }
 .lt-btfp__process-title {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 2rem;
     color: var(--lt-near-black);
     margin: 0 0 2rem;
@@ -597,14 +597,14 @@ PAGE_CSS = """.lt-btfp__intro {
     border-bottom: none;
 }
 .lt-btfp__process-number {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.5rem;
     color: var(--lt-near-black);
     line-height: 1;
     padding-top: 0.15rem;
 }
 .lt-btfp__process-step-title {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 1rem;
     font-weight: 600;
     color: var(--lt-near-black);
@@ -628,7 +628,7 @@ PAGE_CSS = """.lt-btfp__intro {
     margin: 0 auto;
 }
 .lt-btfp__events-title {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 2rem;
     color: var(--lt-near-black);
     margin: 0 0 2rem;
@@ -661,7 +661,7 @@ PAGE_CSS = """.lt-btfp__intro {
     border-bottom: none;
 }
 .lt-btfp__events-row dt {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 1rem;
     font-weight: 600;
     color: var(--lt-near-black);
@@ -683,7 +683,7 @@ PAGE_CSS = """.lt-btfp__intro {
     margin: 0 auto;
 }
 .lt-btfp__contact-cta h2 {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 2rem;
     color: var(--lt-near-black);
     margin: 0 0 1rem;
@@ -707,7 +707,7 @@ PAGE_CSS = """.lt-btfp__intro {
     min-height: 44px;
     border-radius: 0.375rem;
     padding: 0.75rem 1.25rem;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-weight: 600;
     text-decoration: none;
 }
@@ -730,7 +730,7 @@ PAGE_CSS = """.lt-btfp__intro {
 }
 .lt-btfp__contact-secondary:hover,
 .lt-btfp__contact-secondary:focus-visible {
-    background-color: var(--lt-blush-tint);
+    background-color: var(--lt-warm-tint);
     border-color: var(--lt-near-black);
     color: var(--lt-near-black);
     text-decoration: none;
@@ -821,8 +821,8 @@ PAGE_CSS = """.lt-btfp__intro {
 .lt-btfp__faq-item summary {
     color: #0a0a0b;
 }
-.lt-btfp__ribbon--blush,
-.lt-btfp__ribbon--soft-blue {
+.lt-btfp__ribbon--sandstone,
+.lt-btfp__ribbon--stone {
     background-color: #b31b34;
 }
 .lt-btfp__process,

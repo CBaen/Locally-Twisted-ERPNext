@@ -16,6 +16,8 @@ Active launch lane. Baseline pass started 2026-05-02.
 
 Known collision: another agent is auditing the form. Do not make contact/form schema changes unless that audit is handed off or explicitly merged into this lane.
 
+Live menu/content coordination now lives in `workstreams/menu-content-coordination.md`. Agents touching menu, header, footer, public page content, or nav/content verifiers must update that file before editing so overlapping sessions do not overwrite each other.
+
 Latest verified controller baseline:
 
 - Docker stack is running at `http://localhost:8081`.
@@ -23,8 +25,8 @@ Latest verified controller baseline:
 - `/book` redirects to `/contact?intent=quick`.
 - `python scripts/verify/nav_ia.py` passed.
 - `npm run test:layout-fit` passed with 60 tests.
-- `python scripts/verify/smoke_shop.py` passed after updating stale chrome selectors to the current mega-menu/mobile-drawer markup and retiring the category-card index.
-- `smoke_shop.py` now verifies current `lt-mega-shop-balloon-decor` and `lt-mob-shop-balloon-decor` controls, the `Balloon Decor` label, `/shop` All Balloon Decor links, and the `/shop-by-category` redirect.
+- `python scripts/verify/smoke_shop.py` passed after updating stale chrome selectors to the current authority-first header/mobile drawer and retiring the category-card index.
+- `smoke_shop.py` now verifies the desktop/mobile `Event Balloons`, `Portfolio`, `Process`, `Ready-to-Order`, `FAQ`, and `/contact` quote paths, plus the `/shop-by-category` redirect and product/variant shop contracts.
 - `python scripts/verify/cart_checkout_contract.py` passed after the cart/checkout item-code contract fix.
 - `python scripts/verify/variant_media_contract.py` passed after the first variant-media reconciliation pass.
 - `python scripts/verify/catalog_variant_contract.py` passed: 53 products checked, 10,578 expected variants, 10,578 live variants, 4 single-SKU products.
@@ -39,6 +41,7 @@ Latest verified controller baseline:
 - Final layout-fit rerun found and fixed a 320px overflow on `/shop-items/seasonal-specialty`; Webshop's stock `.item-card { min-width: 300px; }` needed the LT grid override `min-width: 0`. `npm run test:layout-fit` now passes 60/60 again.
 - First brand-token reset pass completed 2026-05-02: `lt-theme.css` remaps the old pastel-heavy token values toward deep teal, slate, warm white, brass/gold, muted berry, and restrained supporting tints while preserving variable names for compatibility. Cache cleared, `nav_ia.py` passed, `npm run test:layout-fit` passed 60/60, and screenshots for `/`, `/shop`, `/contact`, and `/shop-items/arches/classic-arch` passed under `output/playwright/brand-token-20260502/`.
 - Civic Celebration site-wide overhaul completed 2026-05-03. The current V1 visual direction is documented in `_resources/STYLE-GUIDE.md` and `workstreams/civic-sitewide-redesign.md`. The pass covers shared chrome, homepage, contact/book form, BTFP, portfolio, FAQ, policy/accessibility/success pages, shop, category/product pages, cart, and checkout. Screenshots were captured under `output/playwright/civic-overhaul-20260503-verified/`.
+- Style-guide consolidation completed 2026-05-05. `_resources/design-guide/` was deleted because it conflicted with the approved Civic Celebration + Slate Blue/Berry + Brand Direction contract and kept reintroducing light-blue/blush styling. Current launch visuals must use `_resources/STYLE-GUIDE.md` only.
 
 ## Owner
 
@@ -261,7 +264,7 @@ Primary references:
 - `workstreams/shop.md`
 - `workstreams/erpnext-backend-simplification.md`
 - `_resources/STYLE-GUIDE.md`
-- `_resources/design-guide/`
+- `_resources/STYLE-GUIDE.md` version 4.2 or newer. The old `_resources/design-guide/` synthesis was deleted on 2026-05-05 and must not be used.
 - `_resources/policies/`
 - `_resources/odoo-live/`
 - `C:\Users\baenb\projects\locally-twisted-odoo\` as the read-only business-detail source of truth for customer-facing business claims, policies, product/service details, voice, and legacy business decisions

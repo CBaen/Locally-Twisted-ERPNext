@@ -33,17 +33,17 @@
      follow the 2026-05-02 brand reset: professional event authority with
      warm paper, slate, brass, muted berry, and deep teal. Balloon color
      should come from photography, product imagery, and customer palettes. */
-  --lt-blush: #D9C7B3;
-  --lt-soft-lemon: #B89A5B;
-  --lt-seafoam: #7D8A7A;
-  --lt-sky-cyan: #E7E5E1;
-  --lt-soft-blue: #E7E5E1;
+  --lt-sandstone-accent: #D9C7B3;
+  --lt-brass-accent: #B89A5B;
+  --lt-olive-accent: #7D8A7A;
+  --lt-stone-muted: #E7E5E1;
+  --lt-stone-accent: #E7E5E1;
 
   /* Surface tints — inputs, menus, subtle backgrounds */
-  --lt-blush-tint: #F6F0E8;
-  --lt-blue-tint: #F2F3F5;
-  --lt-mint-tint: #F1F3EF;
-  --lt-lemon-tint: #F7F1E4;
+  --lt-warm-tint: #F6F0E8;
+  --lt-stone-tint: #F2F3F5;
+  --lt-slate-tint: #F1F3EF;
+  --lt-brass-tint: #F7F1E4;
 
   /* Spacing scale (8px increments) */
   --lt-space-1: 0.25rem;
@@ -88,7 +88,7 @@ h3, .h3 { font-size: 1.25rem; }
 
 /* H6 = bold label style */
 h6, .h6 {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   font-weight: 600;
   color: var(--lt-near-black);
   font-size: 0.875rem;
@@ -96,7 +96,7 @@ h6, .h6 {
 
 /* Lead paragraphs */
 .lead {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   font-weight: 400;
   color: var(--lt-soft-gray);
 }
@@ -109,7 +109,7 @@ h6, .h6 {
   color: var(--lt-white);
   min-height: 44px;
   padding: 0.75rem 1.5rem;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   font-weight: 600;
 }
 
@@ -125,17 +125,17 @@ h6, .h6 {
 .btn-outline-secondary {
   background-color: transparent;
   color: var(--lt-near-black);
-  border: 1px solid var(--lt-soft-blue);
+  border: 1px solid var(--lt-stone-accent);
   min-height: 44px;
   padding: 0.75rem 1.5rem;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   font-weight: 600;
 }
 
 .btn-secondary:hover,
 .btn-outline-secondary:hover {
-  background-color: var(--lt-blue-tint);
-  border-color: var(--lt-soft-blue);
+  background-color: var(--lt-stone-tint);
+  border-color: var(--lt-stone-accent);
   color: var(--lt-near-black);
 }
 
@@ -168,10 +168,10 @@ input[type="password"],
 textarea,
 select,
 .form-control {
-  background-color: var(--lt-blush-tint);
+  background-color: var(--lt-warm-tint);
   border: 1px solid #e5e5e5;
   border-radius: 0.375rem;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   color: var(--lt-near-black);
   min-height: 44px;
 }
@@ -181,9 +181,9 @@ textarea:focus,
 select:focus,
 .form-control:focus {
   outline: none;
-  border-color: var(--lt-soft-blue);
-  box-shadow: 0 0 0 2px var(--lt-soft-blue);
-  background-color: var(--lt-blush-tint);
+  border-color: var(--lt-stone-accent);
+  box-shadow: 0 0 0 2px var(--lt-stone-accent);
+  background-color: var(--lt-warm-tint);
 }
 
 input::placeholder,
@@ -254,11 +254,11 @@ section,
   }
 }
 
-.lt-band--blush { background-color: var(--lt-blush); color: var(--lt-near-black); }
-.lt-band--soft-blue { background-color: var(--lt-soft-blue); color: var(--lt-near-black); }
-.lt-band--seafoam { background-color: var(--lt-seafoam); color: var(--lt-near-black); }
-.lt-band--lemon { background-color: var(--lt-soft-lemon); color: var(--lt-near-black); }
-.lt-band--sky-cyan { background-color: var(--lt-sky-cyan); color: var(--lt-near-black); }
+.lt-band--sandstone { background-color: var(--lt-sandstone-accent); color: var(--lt-near-black); }
+.lt-band--stone { background-color: var(--lt-stone-accent); color: var(--lt-near-black); }
+.lt-band--olive { background-color: var(--lt-olive-accent); color: var(--lt-near-black); }
+.lt-band--brass { background-color: var(--lt-brass-accent); color: var(--lt-near-black); }
+.lt-band--stone-muted { background-color: var(--lt-stone-muted); color: var(--lt-near-black); }
 
 /* ── Body text rules ── */
 p {
@@ -353,7 +353,7 @@ p {
    ============================================================ */
 
 .lt-header {
-  background-color: var(--lt-soft-blue);
+  background-color: var(--lt-stone-accent);
   border-bottom: 1px solid rgba(26, 26, 26, 0.08);
 }
 
@@ -371,7 +371,7 @@ p {
 }
 
 .lt-header__utility-left {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   /* 17.5px (16px + 1.5px) bold per GL 2026-04-29 — emphasis + readability.
    * Text wraps to two lines via explicit <br> in navbar.html. Content
    * stays at far-left of the column (default justify-self: start) —
@@ -418,7 +418,7 @@ p {
 }
 
 .lt-header__brand-fallback {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 1.5rem;
   color: var(--lt-near-black);
 }
@@ -435,7 +435,7 @@ p {
 }
 
 .lt-header__util-link {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   /* 17.5px bold per GL 2026-04-29 — matches the left utility text
    * (Bringing celebration...) at the same scale and weight. */
   font-size: 17.5px;
@@ -486,7 +486,7 @@ p {
     align-items: center;
     gap: 0.5rem;
     min-width: 0;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 17.5px;
     font-weight: 700;
     line-height: 1.4;
@@ -514,7 +514,7 @@ p {
 
 /* Tagline text */
 .lt-utility-bar__tagline {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.95rem;
     font-weight: 700;
     color: var(--lt-navy);
@@ -568,7 +568,7 @@ p {
 
 /* Sign-in / My Account link */
 .lt-utility-bar__sign-in {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 1rem;
     font-weight: 500;
     color: var(--lt-navy);
@@ -688,7 +688,7 @@ p {
 }
 
 .lt-header__nav-link {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 1rem;
   font-weight: 500;
   letter-spacing: 0;
@@ -833,7 +833,7 @@ p {
 .lt-header__mobile-strip {
   background-color: var(--lt-navy);
   text-align: center;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 0.8125rem;
   color: var(--lt-near-white);
   padding: 0.4rem 0.75rem;
@@ -950,7 +950,7 @@ body.lt-nav-open {
 .lt-header__mobile-nav-link {
   display: block;
   padding: 0.875rem 1.25rem;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 1rem;
   font-weight: 500;
   color: var(--lt-near-black);
@@ -960,7 +960,7 @@ body.lt-nav-open {
 
 .lt-header__mobile-nav-link:hover,
 .lt-header__mobile-nav-link:focus-visible {
-  background-color: var(--lt-blue-tint);
+  background-color: var(--lt-stone-tint);
   color: var(--lt-teal);
 }
 
@@ -988,7 +988,7 @@ body.lt-nav-open {
 .lt-footer {
   background-color: var(--lt-navy);
   color: var(--lt-near-white);
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   margin-top: auto;
 }
 
@@ -1012,7 +1012,7 @@ body.lt-nav-open {
 }
 
 .lt-footer__brand-name {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 1.75rem;
   color: var(--lt-near-white);
   margin: 0 0 0.25rem;
@@ -1090,7 +1090,7 @@ body.lt-nav-open {
 }
 
 .lt-footer__col-title {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   font-weight: 700;
   font-size: 0.875rem;
   text-transform: uppercase;
@@ -1238,257 +1238,6 @@ body.lt-nav-open {
 }
 
 /* ====================================================================
-   Shop mega menu — desktop dropdown sourced from Item Group children
-   via update_website_context hook. Per design guide register:
-   - White surface on near-white ground
-   - Near-black labels (Playfair Display for the wrapper, Montserrat for items)
-   - Blush-tint hover state (no teal — teal is CTA-only)
-   - Subtle drop shadow, 250ms fade
-   - Caret rotates when expanded
-   Fallback only; the route redirects to /shop.
-   ==================================================================== */
-
-/* The wrapper li and the trigger button */
-.lt-header__has-mega {
-    position: static;
-}
-.lt-header__nav-trigger {
-    background: none;
-    border: none;
-    padding: 0.5rem 0.5rem;
-    color: var(--lt-near-black);
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.35rem;
-    min-height: 44px;
-    line-height: 1.25;
-    transition: color 0.15s ease;
-}
-.lt-header__nav-trigger:hover,
-.lt-header__nav-trigger:focus-visible,
-.lt-header__has-mega.is-open .lt-header__nav-trigger {
-    color: var(--lt-teal);
-    text-decoration: none;
-}
-.lt-header__nav-trigger:focus-visible {
-    outline: 2px solid var(--lt-teal);
-    outline-offset: 3px;
-    border-radius: 2px;
-}
-.lt-header__nav-caret {
-    transition: transform 0.2s ease;
-    flex-shrink: 0;
-    margin-top: 1px;
-}
-.lt-header__has-mega.is-open .lt-header__nav-caret {
-    transform: rotate(180deg);
-}
-
-/* The dropdown panel */
-.lt-header__mega {
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: min(92vw, 980px);
-    min-width: min(540px, calc(100vw - 2rem));
-    max-width: calc(100vw - 2rem);
-    background: var(--lt-white);
-    border: 1px solid rgba(26, 26, 26, 0.08);
-    border-radius: 0 0 0.5rem 0.5rem;
-    box-shadow: 0 8px 28px rgba(26, 26, 26, 0.12), 0 2px 6px rgba(26, 26, 26, 0.04);
-    z-index: 1000;
-    opacity: 0;
-    transition: opacity 0.18s ease;
-    pointer-events: none;
-}
-.lt-header__mega[hidden] {
-    display: none;
-}
-.lt-header__has-mega.is-open .lt-header__mega:not([hidden]) {
-    opacity: 1;
-    pointer-events: auto;
-}
-.lt-header__mega-inner {
-    display: block;
-    max-width: 100%;
-    padding: 0;
-}
-.lt-header__mega-inner > .row {
-    margin-left: 0;
-    margin-right: 0;
-}
-.lt-header__mega-col {
-    min-width: 0;
-    padding: 1.5rem 1rem;
-}
-.lt-header__mega-heading {
-    margin: 0 0 0.85rem;
-    color: var(--lt-near-black);
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.875rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    line-height: 1.25;
-    text-transform: uppercase;
-}
-.lt-header__mega-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 44px;
-    padding: 0.65rem 0.875rem;
-    border-radius: 0.375rem;
-    color: var(--lt-near-black);
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1rem;
-    font-weight: 500;
-    text-decoration: none;
-    transition: background-color 0.15s ease;
-    line-height: 1.3;
-    text-align: center;
-}
-.lt-header__mega-link:hover,
-.lt-header__mega-link:focus-visible {
-    background-color: var(--lt-blush-tint);
-    color: var(--lt-near-black);
-    text-decoration: none;
-    outline: none;
-}
-.lt-header__mega-link:focus-visible {
-    box-shadow: inset 0 0 0 2px var(--lt-near-black);
-}
-.lt-header__mega-cta-wrap {
-    margin-top: 0.75rem;
-}
-.lt-header__mega-cta {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 44px;
-    padding: 0.65rem 1.25rem;
-    border: 1px solid rgba(26, 26, 26, 0.18);
-    border-radius: 0.375rem;
-    color: var(--lt-near-black);
-    background-color: var(--lt-white);
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1rem;
-    font-weight: 600;
-    line-height: 1.25;
-    text-align: center;
-    text-decoration: none;
-}
-.lt-header__mega-cta:hover,
-.lt-header__mega-cta:focus-visible {
-    background-color: var(--lt-blush-tint);
-    color: var(--lt-near-black);
-    text-decoration: none;
-}
-.lt-header__mega-cta:focus-visible {
-    outline: 2px solid var(--lt-near-black);
-    outline-offset: 2px;
-}
-.lt-header__mega-browse-row {
-    margin-left: 0;
-    margin-right: 0;
-    padding: 0 0 1.25rem;
-}
-.lt-header__mega-link-label {
-    display: block;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: var(--lt-near-black);
-}
-.lt-header__mega-link-hint {
-    display: block;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.75rem;
-    color: var(--lt-soft-gray);
-    margin-top: 0.125rem;
-}
-/* The "All items" link spans the first row width and looks like a header */
-.lt-header__mega-link--all {
-    grid-column: 1 / -1;
-    padding: 0.75rem 0.875rem 0.875rem;
-    border-bottom: 1px solid rgba(26, 26, 26, 0.06);
-    margin-bottom: 0.25rem;
-    border-radius: 0.375rem 0.375rem 0 0;
-}
-.lt-header__mega-link--all .lt-header__mega-link-label {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 1.125rem;
-    font-weight: 400;
-}
-
-/* ====================================================================
-   Mobile drawer — Shop accordion sub-list of categories.
-   Tap toggle expands the panel inline; ARIA-correct.
-   ==================================================================== */
-.lt-header__mobile-accordion {
-    /* The wrapper li — no special layout, inherits from mobile-nav-list */
-}
-.lt-header__mobile-accordion-toggle {
-    background: none;
-    border: none;
-    width: 100%;
-    text-align: left;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    /* Inherits .lt-header__mobile-nav-link sizing from existing styles */
-}
-.lt-header__mobile-accordion-caret {
-    margin-left: 0.5rem;
-    flex-shrink: 0;
-    transition: transform 0.2s ease;
-    color: var(--lt-soft-gray);
-}
-.lt-header__mobile-accordion-toggle[aria-expanded="true"] .lt-header__mobile-accordion-caret {
-    transform: rotate(180deg);
-}
-.lt-header__mobile-accordion-panel {
-    list-style: none;
-    margin: 0;
-    padding: 0.25rem 0 0.5rem 0;
-    background-color: rgba(195, 220, 243, 0.18); /* soft-blue tint */
-    border-radius: 0.375rem;
-}
-.lt-header__mobile-accordion-panel[hidden] {
-    display: none;
-}
-.lt-header__mobile-nav-sublink {
-    display: flex;
-    align-items: center;
-    min-height: 44px;
-    padding: 0.65rem 1rem 0.65rem 2rem;
-    color: var(--lt-near-black);
-    text-decoration: none;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1rem;
-    line-height: 1.4;
-}
-.lt-header__mobile-nav-sublink:hover,
-.lt-header__mobile-nav-sublink:focus-visible {
-    background-color: var(--lt-blush-tint);
-    color: var(--lt-near-black);
-    text-decoration: none;
-    outline: none;
-}
-
-@media (max-width: 540px) {
-    .lt-header__mega {
-        min-width: 320px;
-    }
-}
-
-/* ====================================================================
    Product detail page (/shop-items/<group>/<slug>)
    Overrides webshop's stock layout. Replaces "Item Code" jargon, the
    "/ Nos" UoM display, and the dialog-hidden variant selector with an
@@ -1501,7 +1250,7 @@ body.lt-nav-open {
     padding: 0 1.25rem;
 }
 .lt-product__eyebrow {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.08em;
@@ -1517,7 +1266,7 @@ body.lt-nav-open {
     margin-bottom: 1rem;
 }
 .lt-product__title {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 2rem;
     line-height: 1.15;
     color: var(--lt-near-black);
@@ -1537,7 +1286,7 @@ body.lt-nav-open {
 }
 .lt-product__wishlist:hover { color: var(--lt-near-black); }
 .lt-product__description {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 1rem;
     line-height: 1.6;
     color: var(--lt-near-black);
@@ -1545,7 +1294,7 @@ body.lt-nav-open {
 }
 /* Two-field product copy: brand description (voice) + details (specs). */
 .lt-product__brand-description {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 1.0625rem;
     line-height: 1.65;
     color: var(--lt-near-black);
@@ -1560,7 +1309,7 @@ body.lt-nav-open {
     border-top: 1px solid rgba(26, 26, 26, 0.08);
 }
 .lt-product__details-heading {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.375rem;
     line-height: 1.2;
     color: var(--lt-near-black);
@@ -1568,7 +1317,7 @@ body.lt-nav-open {
     letter-spacing: 0.005em;
 }
 .lt-product__details-body {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.9875rem;
     line-height: 1.6;
     color: var(--lt-near-black);
@@ -1591,11 +1340,11 @@ body.lt-nav-open {
     top: 0.65em;
     width: 0.4rem;
     height: 0.4rem;
-    background: var(--lt-primary, #f47b20);
+    background: var(--lt-berry);
     border-radius: 50%;
 }
 .lt-product__inquiry {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.95rem;
     color: var(--lt-soft-gray);
     margin-top: 1.5rem;
@@ -1622,7 +1371,7 @@ body.lt-nav-open {
     display: flex;
     align-items: baseline;
     gap: 0.5rem;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.8125rem;
     font-weight: 600;
     letter-spacing: 0.04em;
@@ -1661,7 +1410,7 @@ body.lt-nav-open {
     border-radius: 999px;
     background-color: var(--lt-white);
     color: var(--lt-near-black);
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.875rem;
     font-weight: 500;
     line-height: 1.2;
@@ -1684,7 +1433,7 @@ body.lt-nav-open {
 }
 .lt-product__chip-input:checked + .lt-product__chip-label {
     border-color: var(--lt-near-black);
-    background-color: var(--lt-blush-tint);
+    background-color: var(--lt-warm-tint);
 }
 .lt-product__chip-input:focus-visible + .lt-product__chip-label {
     outline: 2px solid var(--lt-teal);
@@ -1700,7 +1449,7 @@ body.lt-nav-open {
     border-radius: 0.375rem;
     background-color: var(--lt-white);
     color: var(--lt-near-black);
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.95rem;
     line-height: 1.4;
     appearance: none;
@@ -1720,7 +1469,7 @@ body.lt-nav-open {
 }
 
 .lt-product__configure-status {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.875rem;
     color: var(--lt-soft-gray);
     margin: 0.75rem 0 1rem;
@@ -1742,19 +1491,19 @@ body.lt-nav-open {
     margin-bottom: 0.75rem;
 }
 .lt-product__price-current {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.875rem;
     color: var(--lt-near-black);
 }
 .lt-product__price-mrp {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.95rem;
     color: var(--lt-soft-gray);
     margin-left: 0.5rem;
 }
 .lt-product__stock {
     margin-bottom: 1rem;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.875rem;
 }
 .lt-product__stock-flag--in {
@@ -1781,7 +1530,7 @@ body.lt-nav-open {
     justify-content: center;
     padding: 0.85rem 1.5rem;
     border-radius: 0.375rem;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-weight: 600;
     font-size: 0.95rem;
     text-decoration: none;
@@ -1816,7 +1565,7 @@ body.lt-nav-open {
 .lt-product__cta--secondary:hover,
 .lt-product__cta--secondary:focus-visible {
     border-color: var(--lt-near-black);
-    background-color: var(--lt-blush-tint);
+    background-color: var(--lt-warm-tint);
     color: var(--lt-near-black);
     text-decoration: none;
 }
@@ -1824,7 +1573,7 @@ body.lt-nav-open {
 
 .lt-product__inquiry-cross {
     margin: 0.75rem 0 0;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.85rem;
     color: var(--lt-soft-gray);
     line-height: 1.45;
@@ -1859,7 +1608,7 @@ body.product-page {
 /* Page title typography (the h2 above the product grid) */
 .item-group-content h2,
 .page-content-wrapper h2 {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-weight: 400;
 }
 
@@ -1878,7 +1627,7 @@ body.product-page {
     text-align: left;
 }
 .lt-by-cat__eyebrow {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.08em;
@@ -1887,7 +1636,7 @@ body.product-page {
     margin: 0 0 0.75rem;
 }
 .lt-by-cat__title {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 2.5rem;
     color: var(--lt-near-black);
     margin: 0 0 1.25rem;
@@ -1899,7 +1648,7 @@ body.product-page {
     .lt-by-cat__hero { padding: 5rem 2rem 4rem; }
 }
 .lt-by-cat__lede {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 1.05rem;
     color: var(--lt-soft-gray);
     margin: 0;
@@ -1955,7 +1704,7 @@ body.product-page {
     background-color: #c0392b;
     color: #ffffff;
     border-radius: 9px;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 10px;
     font-weight: 700;
     line-height: 18px;
@@ -1998,7 +1747,7 @@ body.product-page {
 }
 
 .lt-footer-newsletter__heading {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.5rem;
     font-weight: 400;
     color: var(--lt-near-black);
@@ -2013,7 +1762,7 @@ body.product-page {
 }
 
 .lt-footer-newsletter__subhead {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.95rem;
     color: var(--lt-soft-gray);
     margin: 0 0 1.5rem;
@@ -2037,7 +1786,7 @@ body.product-page {
     border-radius: 0.375rem;
     background-color: var(--lt-white);
     color: var(--lt-near-black);
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.95rem;
     min-height: 44px;
 }
@@ -2058,7 +1807,7 @@ body.product-page {
     color: var(--lt-white);
     border: 1px solid var(--lt-navy);
     border-radius: 0.375rem;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.95rem;
     font-weight: 600;
     cursor: pointer;
@@ -2090,7 +1839,7 @@ body.product-page {
 .lt-footer-newsletter__error,
 .lt-footer-newsletter__success {
     margin-top: 0.75rem;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.875rem;
     line-height: 1.45;
 }
@@ -2150,7 +1899,7 @@ body.product-page {
 }
 
 .lt-shop__eyebrow {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.08em;
@@ -2160,7 +1909,7 @@ body.product-page {
 }
 
 .lt-shop__title {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 2rem;
     color: var(--lt-near-black);
     margin: 0;
@@ -2208,7 +1957,7 @@ body.product-page {
 }
 
 .lt-shop__sidebar-heading {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.6875rem;
     font-weight: 700;
     letter-spacing: 0.1em;
@@ -2229,7 +1978,7 @@ body.product-page {
 
 .lt-shop__sidebar-link {
     display: block;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 1rem;
     color: var(--lt-soft-gray);
     text-decoration: none;
@@ -2241,7 +1990,7 @@ body.product-page {
 
 .lt-shop__sidebar-link:hover,
 .lt-shop__sidebar-link:focus-visible {
-    background-color: var(--lt-blush-tint);
+    background-color: var(--lt-warm-tint);
     color: var(--lt-near-black);
     text-decoration: none;
     outline: none;
@@ -2252,13 +2001,13 @@ body.product-page {
 }
 
 .lt-shop__sidebar-link.is-active {
-    background-color: var(--lt-blush-tint);
+    background-color: var(--lt-warm-tint);
     color: var(--lt-near-black);
     font-weight: 600;
 }
 
 .lt-shop__filters-heading {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.6875rem;
     font-weight: 700;
     letter-spacing: 0.1em;
@@ -2269,7 +2018,7 @@ body.product-page {
 
 .lt-shop__clear-link {
     display: inline-block;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.8125rem;
     color: var(--lt-soft-gray);
     text-decoration: underline;
@@ -2374,7 +2123,7 @@ body.lt-filter-open {
 }
 
 .lt-shop__toolbar-count {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 1rem;
     color: var(--lt-soft-gray);
     margin: 0;
@@ -2395,7 +2144,7 @@ body.lt-filter-open {
     border: 1px solid rgba(26, 26, 26, 0.18);
     border-radius: 0.375rem;
     padding: 0.55rem 0.875rem;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 1rem;
     font-weight: 500;
     color: var(--lt-near-black);
@@ -2422,7 +2171,7 @@ body.lt-filter-open {
 }
 
 .lt-shop__sort-label {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.875rem;
     color: var(--lt-soft-gray);
     white-space: nowrap;
@@ -2434,7 +2183,7 @@ body.lt-filter-open {
     border-radius: 0.375rem;
     background-color: var(--lt-white);
     color: var(--lt-near-black);
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.875rem;
     appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%231a1a1a' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
@@ -2510,7 +2259,7 @@ body.lt-filter-open {
 
 .lt-shop__loading {
     grid-column: 1 / -1;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.9rem;
     color: var(--lt-soft-gray);
     text-align: center;
@@ -2554,7 +2303,7 @@ body.lt-filter-open {
 #products-grid-area .card-img-container {
     aspect-ratio: 1 / 1;
     overflow: hidden;
-    background-color: var(--lt-blush-tint);
+    background-color: var(--lt-warm-tint);
     flex-shrink: 0;
     display: block;
 }
@@ -2594,7 +2343,7 @@ body.lt-filter-open {
 }
 
 #products-grid-area .product-title {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.9375rem;
     font-weight: 600;
     color: var(--lt-near-black);
@@ -2614,14 +2363,14 @@ body.lt-filter-open {
 
 /* Category label — de-emphasise */
 #products-grid-area .product-category {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.75rem;
     color: var(--lt-soft-gray);
     margin: 0.125rem 0 0;
 }
 
 #products-grid-area .product-price {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.125rem;
     color: var(--lt-near-black);
     margin: 0.375rem 0 0;
@@ -2656,7 +2405,7 @@ body.lt-filter-open {
 }
 
 .lt-shop__page-btn {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.875rem;
     font-weight: 600;
     color: var(--lt-near-black);
@@ -2672,7 +2421,7 @@ body.lt-filter-open {
 .lt-shop__page-btn:hover:not([disabled]),
 .lt-shop__page-btn:focus-visible:not([disabled]) {
     border-color: var(--lt-near-black);
-    background-color: var(--lt-blush-tint);
+    background-color: var(--lt-warm-tint);
     outline: none;
 }
 
@@ -2690,7 +2439,7 @@ body.lt-filter-open {
 
 .lt-shop__sidebar .filter-label,
 .lt-shop__filters--mobile .filter-label {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.8125rem;
     font-weight: 600;
     color: var(--lt-near-black);
@@ -2752,7 +2501,7 @@ body.lt-filter-open {
 
 /* Description line — Hetzner's muted small text under the title */
 #products-grid-area .lt-card-desc {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 1rem;
     line-height: 1.5;
     color: var(--lt-soft-gray, #6c757d);
@@ -2770,7 +2519,7 @@ body.lt-filter-open {
 }
 
 #products-grid-area .product-price {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 1rem;
     font-weight: 700;
     color: var(--lt-near-black);
@@ -2892,6 +2641,17 @@ body.lt-filter-open {
     white-space: nowrap;
 }
 
+@media (max-width: 400px) {
+    .lt-footer-newsletter .lt-footer-newsletter__input-group {
+        flex-direction: column;
+    }
+
+    .lt-footer-newsletter .lt-footer-newsletter__input-group .lt-footer-newsletter__input,
+    .lt-footer-newsletter .lt-footer-newsletter__input-group .lt-footer-newsletter__button {
+        width: 100%;
+    }
+}
+
 /* ─── BTFP page ─────────────────────────────────────────────────────────── */
 
 .lt-btfp__banner-link {
@@ -3005,7 +2765,7 @@ body.lt-filter-open {
 .lt-product__configure .lt-product__price-current {
   display: block;
   max-width: 100%;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 1rem;
   font-weight: 600;
   line-height: 1.35;
@@ -3170,31 +2930,127 @@ h3,
   outline-offset: 2px;
 }
 
-/* Thin civic header */
+/* Two-level civic header */
 .lt-header {
   background: var(--lt-warm-white);
-  border-bottom: 2px solid var(--lt-navy);
+  border-bottom: 0;
   box-shadow: 0 1px 0 rgba(10, 10, 11, 0.06);
   position: relative;
   z-index: 100;
 }
 
+.lt-header__desktop-shell {
+  display: grid;
+  grid-template-columns: minmax(330px, 390px) minmax(0, 1fr);
+  grid-template-rows: minmax(72px, auto) minmax(60px, auto);
+  align-items: stretch;
+  min-height: 132px;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  border-bottom: 2px solid var(--lt-navy);
+}
+
+.lt-header__logo-rail {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 132px;
+  padding: 0.5rem 1rem 0.5rem 0;
+  text-decoration: none;
+  color: var(--lt-ink);
+  text-align: center;
+}
+
+.lt-header__logo-rail-img {
+  display: block;
+  width: auto;
+  height: clamp(98px, 8.2vw, 118px);
+  max-width: 100%;
+  object-fit: contain;
+}
+
 .lt-utility-bar {
-  display: none;
+  grid-column: 2;
+  grid-row: 1;
+  display: block;
+  align-self: stretch;
+  background: var(--lt-warm-white);
+  border-bottom: 1px solid rgba(14, 34, 64, 0.18);
+}
+
+.lt-header__desktop-shell > .lt-utility-bar .lt-utility-bar__inner {
+  width: 100%;
+  max-width: none;
+  min-height: 72px;
+  margin: 0;
+  padding: 0 0 0 1.25rem;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1.25rem;
+}
+
+.lt-header__desktop-shell .lt-utility-bar__tagline,
+.lt-header__desktop-shell .lt-utility-bar__sign-in,
+.lt-header__desktop-shell .lt-utility-bar__cta {
+  font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.lt-header__desktop-shell .lt-utility-bar__tagline {
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.28;
+  color: var(--lt-ink);
+  max-width: 27rem;
+}
+
+.lt-header__desktop-shell .lt-utility-bar__right {
+  gap: 1.25rem;
+}
+
+.lt-header__desktop-shell .lt-utility-bar__sign-in {
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--lt-ink);
+}
+
+.lt-header__desktop-shell .lt-utility-bar__cta,
+.lt-header__desktop-shell .lt-utility-bar__cta.btn {
+  min-height: 44px;
+  padding: 0.65rem 1rem;
+  border-radius: 0;
+  background-color: var(--lt-crimson);
+  border-color: var(--lt-crimson);
+  font-size: 0.92rem;
+  font-weight: 800;
+  line-height: 1.15;
+  color: #fff;
 }
 
 .lt-header__nav {
+  grid-column: 2;
+  grid-row: 2;
   background: var(--lt-warm-white);
   border-bottom: 0;
+  align-self: stretch;
 }
 
 .lt-header__nav-row {
-  min-height: 58px;
-  display: grid;
-  grid-template-columns: minmax(190px, 260px) minmax(0, 1fr) auto auto;
-  gap: 1.1rem;
+  min-height: 60px;
+  display: flex;
   align-items: center;
-  padding-block: 0.35rem;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0.35rem 0 0.35rem 1.25rem;
 }
 
 .lt-header__brand {
@@ -3221,9 +3077,386 @@ h3,
   white-space: nowrap;
 }
 
+.lt-header__brand-wordmark--rail {
+  display: block;
+  font-size: clamp(1.75rem, 2.1vw, 2.35rem);
+  letter-spacing: 0.06em;
+}
+
 .lt-header__brand-wordmark--mobile {
-  font-size: 0.82rem;
-  letter-spacing: 0.02em;
+  font-size: clamp(1.05rem, 5.5vw, 1.45rem);
+  letter-spacing: 0.06em;
+}
+
+.lt-header__brand-subline {
+  display: block;
+  margin-top: 0.55rem;
+  font-family: var(--lt-font-body);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  color: var(--lt-crimson);
+}
+
+.lt-header__mobile-nav-link--cta {
+  background: var(--lt-crimson);
+  color: #fff;
+  font-weight: 900;
+}
+
+.lt-header__mobile-nav-link--cta:hover,
+.lt-header__mobile-nav-link--cta:focus-visible {
+  background: var(--lt-navy);
+  color: #fff;
+}
+
+.lt-icon-mask {
+  --lt-icon-url: none;
+  display: inline-block;
+  width: var(--lt-icon-size, 3rem);
+  height: var(--lt-icon-size, 3rem);
+  background-color: currentColor;
+  -webkit-mask: var(--lt-icon-url) center / contain no-repeat;
+  mask: var(--lt-icon-url) center / contain no-repeat;
+}
+
+/* Authority-first editorial pages: /event-balloons and /process. */
+.lt-authority-page {
+  background: var(--lt-warm-white);
+  color: var(--lt-ink);
+  font-family: var(--lt-font-body);
+}
+
+.lt-authority-page .lt-fullbleed {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+
+.lt-authority-hero {
+  background:
+    linear-gradient(105deg, rgba(10, 10, 11, 0.92) 0%, rgba(14, 34, 64, 0.86) 52%, rgba(14, 34, 64, 0.34) 100%),
+    var(--lt-navy);
+  color: var(--lt-warm-white);
+  padding: clamp(4rem, 8vw, 7rem) 1rem;
+}
+
+.lt-authority-hero__inner,
+.lt-authority-section__inner,
+.lt-authority-proof__inner,
+.lt-authority-cta__inner {
+  width: min(1160px, calc(100% - 2rem));
+  margin: 0 auto;
+}
+
+.lt-authority-hero__content {
+  max-width: 760px;
+}
+
+.lt-authority-eyebrow {
+  margin: 0 0 0.8rem;
+  font-family: var(--lt-font-body);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  line-height: 1.35;
+  text-transform: uppercase;
+  color: var(--lt-brass);
+}
+
+.lt-authority-hero h1,
+.lt-authority-section h2,
+.lt-authority-cta h2 {
+  font-family: var(--lt-font-heading);
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.lt-authority-hero h1 {
+  max-width: 11.5ch;
+  margin: 0 0 1.25rem;
+  color: #fff;
+  font-size: clamp(2.65rem, 8vw, 5.25rem);
+  line-height: 0.98;
+}
+
+.lt-authority-hero__lede {
+  max-width: 640px;
+  margin: 0;
+  color: rgba(250, 247, 242, 0.88);
+  font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+  line-height: 1.62;
+}
+
+.lt-authority-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 1.8rem;
+}
+
+.lt-authority-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0.78rem 1.15rem;
+  border: 1px solid var(--lt-crimson);
+  background: var(--lt-crimson);
+  color: #fff;
+  font-family: var(--lt-font-body);
+  font-size: 0.9rem;
+  font-weight: 900;
+  line-height: 1.15;
+  text-decoration: none;
+}
+
+.lt-authority-button:hover,
+.lt-authority-button:focus-visible {
+  background: var(--lt-ink);
+  border-color: var(--lt-brass);
+  color: #fff;
+  text-decoration: none;
+  outline: 2px solid var(--lt-brass);
+  outline-offset: 2px;
+}
+
+.lt-authority-button--secondary {
+  background: transparent;
+  border-color: rgba(250, 247, 242, 0.72);
+  color: var(--lt-warm-white);
+}
+
+.lt-authority-proof {
+  background: var(--lt-ink);
+  border-top: 1px solid rgba(184, 154, 91, 0.34);
+  border-bottom: 1px solid rgba(184, 154, 91, 0.34);
+  color: var(--lt-warm-white);
+  padding: 1.5rem 1rem;
+}
+
+.lt-authority-proof__inner {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1px;
+  background: rgba(184, 154, 91, 0.32);
+}
+
+.lt-authority-proof__item {
+  min-height: 112px;
+  padding: 1rem;
+  background: var(--lt-ink);
+}
+
+.lt-authority-proof__label {
+  margin: 0 0 0.35rem;
+  color: var(--lt-brass);
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+}
+
+.lt-authority-proof__text {
+  margin: 0;
+  color: rgba(250, 247, 242, 0.82);
+  line-height: 1.5;
+}
+
+.lt-authority-section {
+  padding: clamp(3rem, 6vw, 5rem) 1rem;
+}
+
+.lt-authority-section--dark {
+  background: var(--lt-navy);
+  color: var(--lt-warm-white);
+}
+
+.lt-authority-section--dark h2,
+.lt-authority-section--dark h3 {
+  color: #fff;
+}
+
+.lt-authority-section--dark p,
+.lt-authority-section--dark li {
+  color: rgba(250, 247, 242, 0.82);
+}
+
+.lt-authority-section h2 {
+  max-width: 760px;
+  margin: 0 0 0.9rem;
+  color: var(--lt-ink);
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  line-height: 1.05;
+}
+
+.lt-authority-section.lt-authority-section--dark h2,
+.lt-authority-section.lt-authority-section--dark h3 {
+  color: #fff;
+}
+
+.lt-authority-section__lede {
+  max-width: 720px;
+  margin: 0 0 2rem;
+  color: var(--lt-soft-gray);
+  font-size: 1.05rem;
+  line-height: 1.65;
+}
+
+.lt-authority-section--dark .lt-authority-section__lede {
+  color: rgba(250, 247, 242, 0.82);
+}
+
+.lt-authority-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1rem;
+}
+
+.lt-authority-card {
+  min-width: 0;
+  padding: 1.35rem;
+  background: #fff;
+  border: 1px solid rgba(14, 34, 64, 0.14);
+  border-radius: 4px;
+  box-shadow: 0 14px 32px rgba(10, 10, 11, 0.06);
+}
+
+.lt-authority-section--dark .lt-authority-card {
+  background: rgba(250, 247, 242, 0.07);
+  border-color: rgba(184, 154, 91, 0.28);
+  box-shadow: none;
+}
+
+.lt-authority-card__icon {
+  color: var(--lt-brass);
+  --lt-icon-size: 3.2rem;
+  margin-bottom: 1rem;
+}
+
+.lt-authority-card h3 {
+  margin: 0 0 0.55rem;
+  font-family: var(--lt-font-heading);
+  font-size: 1.55rem;
+  line-height: 1.15;
+}
+
+.lt-authority-section--dark .lt-authority-card h3 {
+  color: #fff;
+}
+
+.lt-authority-card p {
+  margin: 0;
+  color: var(--lt-soft-gray);
+  line-height: 1.6;
+}
+
+.lt-authority-section--dark .lt-authority-card p {
+  color: rgba(250, 247, 242, 0.82);
+}
+
+.lt-authority-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.lt-authority-photo {
+  display: block;
+  min-height: 270px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--lt-stone);
+  box-shadow: 0 16px 34px rgba(10, 10, 11, 0.12);
+}
+
+.lt-authority-photo img {
+  width: 100%;
+  height: 100%;
+  min-height: 270px;
+  object-fit: cover;
+  display: block;
+}
+
+.lt-authority-steps {
+  display: grid;
+  gap: 1rem;
+  counter-reset: lt-step;
+}
+
+.lt-authority-step {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 1rem;
+  padding: 1.25rem;
+  background: #fff;
+  border: 1px solid rgba(14, 34, 64, 0.14);
+  border-radius: 4px;
+}
+
+.lt-authority-step::before {
+  counter-increment: lt-step;
+  content: counter(lt-step, decimal-leading-zero);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  background: var(--lt-navy);
+  color: var(--lt-brass);
+  font-family: var(--lt-font-body);
+  font-size: 0.85rem;
+  font-weight: 900;
+}
+
+.lt-authority-step h3 {
+  margin: 0 0 0.35rem;
+  font-family: var(--lt-font-heading);
+  font-size: 1.45rem;
+  line-height: 1.15;
+}
+
+.lt-authority-step p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.lt-authority-cta {
+  padding: clamp(3rem, 6vw, 4.5rem) 1rem;
+  background: var(--lt-navy);
+  color: var(--lt-warm-white);
+  text-align: center;
+}
+
+.lt-authority-cta h2 {
+  margin: 0 auto 0.8rem;
+  color: #fff;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  line-height: 1.05;
+}
+
+.lt-authority-cta p {
+  max-width: 650px;
+  margin: 0 auto;
+  color: rgba(250, 247, 242, 0.82);
+  line-height: 1.6;
+}
+
+.lt-authority-cta .lt-authority-actions {
+  justify-content: center;
+}
+
+@media (max-width: 575.98px) {
+  .lt-authority-step {
+    grid-template-columns: 1fr;
+  }
 }
 
 .lt-header__mobile-brand {
@@ -3238,30 +3471,40 @@ h3,
 }
 
 .lt-header__nav-list {
-  justify-content: flex-end;
-  gap: 1.25rem;
+  flex: 1 1 auto;
+  justify-content: flex-start;
+  gap: clamp(0.75rem, 1.55vw, 1.5rem);
+  min-width: 0;
 }
 
-.lt-header__nav-link,
-.lt-header__nav-trigger {
-  font-family: var(--lt-font-body);
-  font-size: 0.78rem;
-  font-weight: 900;
-  letter-spacing: 0.02em;
+.lt-header__nav-link {
+  font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0;
   text-transform: none;
   color: var(--lt-ink);
-  padding: 0.55rem 0;
+  min-height: 48px;
+  padding: 0.75rem 0.2rem;
+  line-height: 1.25;
+  white-space: nowrap;
 }
 
 .lt-header__nav-link:hover,
-.lt-header__nav-link:focus-visible,
-.lt-header__nav-trigger:hover,
-.lt-header__nav-trigger:focus-visible {
+.lt-header__nav-link:focus-visible {
   color: var(--lt-crimson);
 }
 
 .lt-header__search-btn {
   color: var(--lt-ink);
+  min-width: 48px;
+  min-height: 48px;
+}
+
+.lt-header__util-link--cart {
+  min-width: 48px;
+  min-height: 48px;
+  justify-content: center;
 }
 
 .lt-header__actions {
@@ -3312,28 +3555,19 @@ h3,
   color: #fff;
 }
 
-.lt-header__mega {
-  border-top: 1px solid rgba(14, 34, 64, 0.18);
-  border-bottom: 1px solid rgba(14, 34, 64, 0.18);
-  box-shadow: 0 22px 40px rgba(10, 10, 11, 0.12);
-}
-
-.lt-header__mega-heading {
-  color: var(--lt-crimson);
-}
-
 .lt-header__mobile {
   background: var(--lt-warm-white);
   border-bottom: 2px solid var(--lt-navy);
 }
 
 .lt-header__mobile-row {
-  min-height: 58px;
+  min-height: 76px;
 }
 
 .lt-header__mobile-brand img,
-.lt-header__mobile-brand .lt-logo {
-  max-height: 40px;
+.lt-header__mobile-brand .lt-logo,
+.lt-header__mobile-logo {
+  max-height: 52px;
   width: auto;
 }
 

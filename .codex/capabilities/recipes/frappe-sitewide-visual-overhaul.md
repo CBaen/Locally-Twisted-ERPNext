@@ -1,3 +1,27 @@
+---
+id: frappe-sitewide-visual-overhaul
+name: Frappe Sitewide Visual Overhaul
+schema_version: 2.0
+level: recipe
+maturity: candidate
+scope: Locally Twisted ERPNext/Frappe public site visual work
+currently_true: yes
+verification_level: 2
+last_verified: 2026-05-05
+evidence_quality: direct
+successful_uses: 2
+failed_uses: 0
+regressions: 0
+depends_on: []
+used_by: []
+tags:
+  - Locally Twisted
+  - Frappe
+  - Webshop
+  - visual overhaul
+  - launch verification
+---
+
 # Frappe Sitewide Visual Overhaul
 
 Use this recipe when changing the shared look of the LT public site across Frappe, Jinja, and Webshop routes.
@@ -17,17 +41,20 @@ Use this recipe when changing the shared look of the LT public site across Frapp
    - Jinja partial overrides for header/footer,
    - route controllers under `apps/locally_twisted/locally_twisted/www/`,
    - Webshop hooks/templates where Webshop owns the flow.
-4. Bump the theme CSS query string in `hooks.py`.
-5. Clear the website cache after Jinja/CSS edits.
-6. Restart the backend if Python controller constants changed.
-7. Verify routes by status and behavior.
-8. Run layout and contract checks that cover the touched route families.
-9. Capture desktop and mobile screenshots and inspect them before claiming the visual pass is ready.
-10. Update the relevant workstream, queue, decisions, lessons, and handoff docs in the same closeout.
+4. Wire every new public asset in `hooks.py`; do not assume files under `public/` are being served.
+5. Bump cache keys for every changed CSS/JS asset in `hooks.py`.
+6. Clear the website cache after Jinja/CSS edits.
+7. Restart backend/frontend if `hooks.py`, Python controllers, or website context hooks changed, then clear cache again.
+8. Verify the served page HTML contains the expected cache-busted CSS/JS URLs.
+9. Verify routes by status and behavior.
+10. Run layout and contract checks that cover the touched route families.
+11. Capture desktop and mobile screenshots and inspect them before claiming the visual pass is ready.
+12. Update the relevant workstream, queue, decisions, lessons, and handoff docs in the same closeout.
 
 ## Verification Checklist
 
-- `python scripts/dev/clear_website_cache.py --restart`
+- Restart backend/frontend when hooks changed, then `python scripts/dev/clear_website_cache.py`
+- Served HTML/asset checks for cache-busted CSS and JS URLs.
 - Main route status checks, including `/`, `/contact`, `/shop`, product detail, `/cart`, `/checkout`, policies, and success pages.
 - `python scripts/verify/nav_ia.py`
 - `npm run test:layout-fit`
@@ -35,6 +62,8 @@ Use this recipe when changing the shared look of the LT public site across Frapp
 - Cart, checkout, catalog, variant media, and contact/form contract checks when those surfaces changed.
 - Desktop and mobile screenshots saved under `output/playwright/<feature-slug>/`.
 
-## LT Receipt
+## LT Receipts
 
 The first complete use was the 2026-05-03 Civic Celebration site-wide overhaul. It produced the current V1 visual direction, added `hero-wasatch-city-20260503.png`, replaced the old script header treatment with a stronger wordmark, and verified the customer-facing route set with route checks, layout checks, contracts, and screenshots.
+
+The second complete use was the 2026-05-05 mega-menu/product-containment takeover. It restored the deliberate two-level premium header, served `lt-mega-menu.css`, `lt-page-containment.css`, `lt-product-polish.css`, and `lt-megamenu.js` through hooks, fixed hover/click menu semantics, repaired mobile containment issues, and verified with `nav_ia.py`, `smoke_shop.py`, `layout_fit` 80/80, served asset checks, and post-fix Playwright screenshots.

@@ -6,7 +6,7 @@ surface — full portfolio organized by event type, with a secondary product-typ
 filter for visitors thinking about a specific kind of decor.
 
 Architecture:
-- Hero band → blush ribbon divider → filter row (dual-axis: event × product)
+- Hero band → sandstone divider → filter row (dual-axis: event × product)
   → gallery grid → closing CTA. Mirrors the homepage's full-bleed band pattern.
 - Photos are SCAFFOLDING for the architecture — what's being designed is the
   surface, the dual-axis filter behavior, the empty state, the URL state, and
@@ -39,10 +39,10 @@ sitemap = 1
 # "All" is rendered first by the template; not in this list.
 EVENT_TYPES = [
     {"slug": "corporate", "name": "Corporate"},
-    {"slug": "weddings", "name": "Weddings"},
-    {"slug": "birthdays", "name": "Birthdays"},
     {"slug": "schools", "name": "Schools"},
-    {"slug": "seasonal", "name": "Seasonal"},
+    {"slug": "civic-community", "name": "Civic & Community"},
+    {"slug": "venues-public", "name": "Venues & Public Installs"},
+    {"slug": "private-events", "name": "Private Events"},
 ]
 
 
@@ -77,7 +77,7 @@ GALLERY_ITEMS = [
         "slug": "corporate-logo-arch",
         "title": "Corporate Brand Logo Arch",
         "category": "balloon-arches",
-        "event_type": "corporate",
+        "event_type": "schools",
         "year": "2024",
         "image": "corporate-logo-arch.png",
         "alt": "Custom corporate brand logo balloon arch installed at a company event entrance",
@@ -104,7 +104,7 @@ GALLERY_ITEMS = [
         "slug": "wedding-floral-half-arch",
         "title": "Floral Half-Arch with White Blooms",
         "category": "picture-perfect-backdrops",
-        "event_type": "weddings",
+        "event_type": "private-events",
         "year": "2024",
         "image": "wedding-floral-half-arch.png",
         "alt": "Wedding ceremony half-arch combining balloons and white floral arrangements",
@@ -113,7 +113,7 @@ GALLERY_ITEMS = [
         "slug": "wedding-foil-heart-arch",
         "title": "Foil Heart Wedding Arch",
         "category": "balloon-arches",
-        "event_type": "weddings",
+        "event_type": "private-events",
         "year": "2024",
         "image": "wedding-foil-heart-arch.png",
         "alt": "Wedding arch composed of foil heart balloons in soft metallic tones",
@@ -122,7 +122,7 @@ GALLERY_ITEMS = [
         "slug": "wedding-organic-half-arch",
         "title": "Organic White Floral Half-Arch",
         "category": "garlands",
-        "event_type": "weddings",
+        "event_type": "private-events",
         "year": "2025",
         "image": "wedding-organic-half-arch.png",
         "alt": "Soft organic balloon garland forming a half-arch with white flower accents at a wedding ceremony",
@@ -131,7 +131,7 @@ GALLERY_ITEMS = [
         "slug": "birthday-smurfs-arch",
         "title": "Smurfs Birthday Arch",
         "category": "balloon-arches",
-        "event_type": "birthdays",
+        "event_type": "private-events",
         "year": "2024",
         "image": "birthday-smurfs-arch.png",
         "alt": "Smurfs-themed balloon arch in blue and white at a child's birthday party",
@@ -140,7 +140,7 @@ GALLERY_ITEMS = [
         "slug": "birthday-pirate-column",
         "title": "Pirate-Themed Balloon Column",
         "category": "columns",
-        "event_type": "birthdays",
+        "event_type": "private-events",
         "year": "2023",
         "image": "birthday-pirate-column.jpg",
         "alt": "Custom pirate-themed balloon column at a children's birthday party",
@@ -149,7 +149,7 @@ GALLERY_ITEMS = [
         "slug": "birthday-dolphin-backdrop",
         "title": "Under-the-Sea Dolphin Backdrop",
         "category": "picture-perfect-backdrops",
-        "event_type": "birthdays",
+        "event_type": "private-events",
         "year": "2024",
         "image": "birthday-dolphin-backdrop.png",
         "alt": "Ocean-themed birthday photo backdrop featuring a balloon dolphin",
@@ -158,7 +158,7 @@ GALLERY_ITEMS = [
         "slug": "birthday-balloon-bouquets",
         "title": "Birthday Helium Bouquets",
         "category": "balloon-bouquets",
-        "event_type": "birthdays",
+        "event_type": "private-events",
         "year": "2025",
         "image": "birthday-balloon-bouquets.png",
         "alt": "Five-balloon helium bouquets in birthday colors arranged for a party table",
@@ -185,7 +185,7 @@ GALLERY_ITEMS = [
         "slug": "seasonal-easter-rabbit-arch",
         "title": "Easter Rabbit-Ears Arch",
         "category": "balloon-arches",
-        "event_type": "seasonal",
+        "event_type": "civic-community",
         "year": "2024",
         "image": "seasonal-easter-rabbit-arch.png",
         "alt": "Twenty-foot Easter balloon arch with sculpted rabbit ears at the top",
@@ -194,7 +194,7 @@ GALLERY_ITEMS = [
         "slug": "seasonal-halloween-tombstone",
         "title": "Halloween Tombstone Backdrop",
         "category": "picture-perfect-backdrops",
-        "event_type": "seasonal",
+        "event_type": "venues-public",
         "year": "2024",
         "image": "seasonal-halloween-tombstone.png",
         "alt": "Halloween balloon backdrop styled as a graveyard with sculpted tombstones",
@@ -203,7 +203,7 @@ GALLERY_ITEMS = [
         "slug": "seasonal-pride-columns",
         "title": "Pride Rainbow Columns",
         "category": "balloon-arches",  # rainbow columns are paired arch-y; could also be columns
-        "event_type": "seasonal",
+        "event_type": "civic-community",
         "year": "2024",
         "image": "seasonal-pride-columns.png",
         "alt": "Pair of rainbow balloon columns for a Pride event entrance",
@@ -247,7 +247,7 @@ PAGE_CSS = """
  * PORTFOLIO — /portfolio — Slice 7
  * BEM blocks: lt-portfolio-hero, lt-portfolio-filter, lt-portfolio-grid,
  *             lt-portfolio-card, lt-portfolio-empty
- * Reuses from lt-theme.css: --lt-* color tokens, .lt-band--blush,
+ * Reuses from lt-theme.css: --lt-* color tokens, .lt-band--sandstone,
  * .lt-divider, .lt-cta, and the .lt-fullbleed primitive (defined inline
  * here too for self-containment per the homepage pattern).
  * ====================================================================== */
@@ -277,7 +277,7 @@ PAGE_CSS = """
 
 /* --- Hero band ------------------------------------------------------- */
 .lt-portfolio-hero {
-    background-color: var(--lt-blush-tint);
+    background-color: var(--lt-warm-tint);
     padding: 4rem 1.5rem 3.5rem;
 }
 .lt-portfolio-hero__inner {
@@ -286,7 +286,7 @@ PAGE_CSS = """
     text-align: left;
 }
 .lt-portfolio-hero__eyebrow {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 0.8125rem;
     font-weight: 600;
     letter-spacing: 0.16em;
@@ -295,7 +295,7 @@ PAGE_CSS = """
     margin: 0 0 1rem;
 }
 .lt-portfolio-hero__title {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 2.75rem;
     line-height: 1.05;
     color: var(--lt-near-black);
@@ -308,7 +308,7 @@ PAGE_CSS = """
     .lt-portfolio-hero__title { font-size: 4rem; }
 }
 .lt-portfolio-hero__body {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 1.0625rem;
     line-height: 1.55;
     color: var(--lt-near-black);
@@ -316,12 +316,12 @@ PAGE_CSS = """
     margin: 0;
 }
 
-/* --- Pink ribbon divider (between hero and filter) ------------------ */
-/* Saturated brand blush (#F4DFD7), structural separator at the same
+/* --- Sandstone divider (between hero and filter) ------------------ */
+/* Saturated sandstone (#F4DFD7), structural separator at the same
  * weight as the homepage's 3-dot dividers in their respective bands. */
 .lt-portfolio-ribbon {
     height: 28px;
-    background-color: var(--lt-blush);
+    background-color: var(--lt-sandstone-accent);
 }
 
 /* --- Filter row ------------------------------------------------------ */
@@ -348,12 +348,13 @@ PAGE_CSS = """
 /* Pill chips: horizontal-scroll on mobile, inline on desktop. */
 .lt-portfolio-filter__pills {
     display: flex;
+    flex-wrap: wrap;
     gap: 0.5rem;
-    overflow-x: auto;
+    overflow-x: visible;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    scroll-snap-type: x mandatory;
+    scroll-snap-type: none;
     padding: 0.25rem 0;
     margin: 0;
     list-style: none;
@@ -369,12 +370,12 @@ PAGE_CSS = """
     border: 1px solid #d6d6d6;
     border-radius: 999px;
     padding: 0.5rem 1rem;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 0.875rem;
     font-weight: 500;
     color: var(--lt-near-black);
     cursor: pointer;
-    white-space: nowrap;
+    white-space: normal;
     min-height: 40px;
     transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
@@ -399,7 +400,7 @@ PAGE_CSS = """
     flex: 0 0 auto;
 }
 .lt-portfolio-filter__dropdown label {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 0.8125rem;
     font-weight: 600;
     letter-spacing: 0.08em;
@@ -414,7 +415,7 @@ PAGE_CSS = """
     border: 1px solid #d6d6d6;
     border-radius: 0.375rem;
     padding: 0.5rem 2rem 0.5rem 0.875rem;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 0.875rem;
     color: var(--lt-near-black);
     cursor: pointer;
@@ -437,7 +438,7 @@ PAGE_CSS = """
     gap: 1rem;
 }
 .lt-portfolio-filter__count {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 0.8125rem;
     font-weight: 600;
     letter-spacing: 0.1em;
@@ -449,7 +450,7 @@ PAGE_CSS = """
     background: transparent;
     border: none;
     padding: 0.25rem 0.5rem;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 0.8125rem;
     color: var(--lt-near-black);
     text-decoration: underline;
@@ -534,7 +535,7 @@ PAGE_CSS = """
 .lt-portfolio-card__image {
     width: 100%;
     aspect-ratio: 4 / 5;
-    background-color: var(--lt-blush-tint);
+    background-color: var(--lt-warm-tint);
     background-size: cover;
     background-position: center;
 }
@@ -545,7 +546,7 @@ PAGE_CSS = """
     .lt-portfolio-card__body { padding: 1.125rem 1.375rem 1.5rem; }
 }
 .lt-portfolio-card__category {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 0.6875rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -554,7 +555,7 @@ PAGE_CSS = """
     margin: 0 0 0.375rem;
 }
 .lt-portfolio-card__title {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.125rem;
     color: var(--lt-near-black);
     margin: 0;
@@ -573,13 +574,13 @@ PAGE_CSS = """
 }
 .lt-portfolio-grid[data-empty="true"] .lt-portfolio-empty { display: block; }
 .lt-portfolio-empty__heading {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.75rem;
     color: var(--lt-near-black);
     margin: 0 0 0.5rem;
 }
 .lt-portfolio-empty__body {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     color: var(--lt-soft-gray);
     margin: 0 0 1.5rem;
     font-size: 1rem;
@@ -591,7 +592,7 @@ PAGE_CSS = """
     color: var(--lt-white);
     text-decoration: none;
     border-radius: 0.375rem;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-weight: 600;
     font-size: 0.9375rem;
     min-height: 44px;
@@ -603,20 +604,20 @@ PAGE_CSS = """
 
 /* --- Closing CTA (mirrors homepage .lt-cta) ------------------------- */
 .lt-cta {
-    background-color: var(--lt-soft-blue, var(--lt-blue-tint));
+    background-color: var(--lt-stone-accent, var(--lt-stone-tint));
     padding: 4rem 1rem 4.5rem;
     text-align: center;
 }
 .lt-cta__inner { max-width: 1200px; margin: 0 auto; }
 .lt-cta__heading {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 2.5rem;
     color: var(--lt-near-black);
     margin: 0 0 1rem;
     line-height: 1.15;
 }
 .lt-cta__body {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 1.125rem;
     color: var(--lt-near-black);
     max-width: 620px;
@@ -632,7 +633,7 @@ PAGE_CSS = """
     color: var(--lt-white);
     text-decoration: none;
     border-radius: 0.375rem;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-weight: 600;
     font-size: 1rem;
     min-height: 48px;
@@ -718,7 +719,7 @@ PAGE_CSS = """
     background-color: var(--lt-white);
 }
 .lt-portfolio-modal__category {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -727,7 +728,7 @@ PAGE_CSS = """
     margin: 0 0 0.375rem;
 }
 .lt-portfolio-modal__title {
-    font-family: 'DM Serif Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.5rem;
     color: var(--lt-near-black);
     margin: 0;
@@ -1093,19 +1094,18 @@ def get_context(context):
     label = _filter_label(items=GALLERY_ITEMS, event_slug=event_slug, category_slug=category_slug)
 
     if label:
-        context.title = f"{label} Balloon Decor — Locally Twisted Portfolio"
+        context.title = f"{label} Balloon Decor - Locally Twisted Portfolio"
     else:
-        context.title = "Portfolio — Locally Twisted Custom Balloon Decor"
+        context.title = "Portfolio - Locally Twisted Event Balloon Proof"
 
     description = (
-        "Browse Locally Twisted's portfolio of custom balloon decor — "
-        "weddings, corporate events, birthdays, and milestone celebrations "
-        "across Utah's Wasatch Front. Inquire for your event."
+        "Browse Locally Twisted's proof gallery for Utah corporate, school, civic, "
+        "community, venue, public, and supporting private event balloon work."
     )
     if label:
         description = (
             f"Browse Locally Twisted's {label.lower()} balloon decor portfolio "
-            "across Utah's Wasatch Front. Custom installations for every event."
+            "across Utah's Wasatch Front. Quote-led installations for event clients."
         )
 
     context.metatags = {

@@ -1,488 +1,255 @@
-{# Locally Twisted navbar override — Round 1 Chrome Rebuild 2026-04-30
-   Replaces apps/frappe/frappe/templates/includes/navbar/navbar.html
-   via same-path resolution in Frappe's ChoiceLoader.
+{# Locally Twisted premium two-level public header.
 
-   Structure: two-tier desktop (utility bar | primary nav with 2 mega menus)
-   + mobile single-row + custom offcanvas drawer (aside[role=dialog]).
-
-   Context keys consumed (all provided by navbar_context.py):
-     brand_html            — injected by Frappe's website context
-     home_page             — injected by Frappe
-     frappe.session.user   — injected by Frappe
-     shop_categories       — list {name, item_group_name, route, weightage}
-     shop_root_route       — string (e.g. "shop")
-     mega_special_occasions — list {label, route}
-     mega_holidays_seasons  — list {label, route, column}
-     mega_what_we_make      — legacy context, intentionally unused in nav
-
-   JS contract (Builder JS owns lt-megamenu.js and lt-mobile-drawer.js):
-     Desktop mega menus:
-       - Trigger element: <button data-lt-megamenu-trigger="<panel-id>">
-       - Panel element:   <div id="<panel-id>" hidden>
-       - JS reads data-lt-megamenu-trigger to map trigger→panel
-       - JS toggles `hidden` attribute (NOT class) on the panel
-       - JS sets aria-expanded on the trigger
-
-     Mobile drawer:
-       - Drawer:   <aside id="lt-mobile-nav" role="dialog" aria-modal="true">
-       - Toggle:   <button id="lt-mobile-toggle">
-       - Backdrop: <div id="lt-mobile-backdrop">
-       - Close:    <button id="lt-mobile-close">
-       - Mobile accordion triggers: data-lt-drawer-accordion-trigger="<panel-id>"
-       - Mobile accordion panels:   id="<panel-id>" hidden
-
-   Cart badge:
-     <span class="lt-cart-count"> — populated by lt-guest-cart.js paintBadges().
-     Shown when .is-populated is present. Two instances: desktop utility bar
-     and mobile drawer.
-
-   CSS classes: all BEM-namespaced lt-* (lt-header__, lt-utility-bar__,
-   lt-header__mega-). NO inline <style> blocks. NO inline <script> blocks.
-   NO data-bs-* attributes. NO Bootstrap 5 utilities (gap-*, ms-*, me-*).
+   JS contract:
+   - [data-lt-megamenu-trigger] toggles matching .lt-megamenu__panel by id.
+   - #lt-mobile-toggle opens #lt-mobile-nav.
+   - #lt-mobile-backdrop and #lt-mobile-close close the drawer.
+   - [data-lt-drawer-accordion-trigger] toggles same-id drawer panels.
+   - .lt-cart-count is populated by lt-guest-cart.js.
 #}
 
-{# ================================================================
-   DESKTOP NAV — hidden on mobile via d-none d-lg-block
-   ================================================================ #}
-<header class="lt-header">
+{% set product_links = lt_nav_product_links or [
+    {"label": "Arches", "route": "shop-items/arches", "icon": "balloon-arch"},
+    {"label": "Garlands", "route": "shop-items/garlands", "icon": "organic-garland"},
+    {"label": "Columns", "route": "shop-items/columns", "icon": "balloon-column"},
+    {"label": "Balloon Drops", "route": "shop-items/drops", "icon": "event-stage"},
+    {"label": "Bouquets", "route": "shop-items/bouquets", "icon": "balloon-bouquet"},
+    {"label": "Grab & Go", "route": "shop-items/grab-go", "icon": "balloon-cluster"}
+] %}
+{% set event_links = lt_nav_event_links or [
+    {"label": "Civic and Community", "route": "event-balloons", "icon": "civic-parade", "description": "Parades, city events, school entrances, and public-facing installs."},
+    {"label": "Corporate Entrances", "route": "portfolio", "icon": "corporate-entrance", "description": "Brand-safe decor for offices, launches, open houses, and venues."},
+    {"label": "Schools and Campuses", "route": "event-balloons", "icon": "school-spirit", "description": "Assemblies, graduations, games, spirit weeks, and campus moments."},
+    {"label": "Private Celebrations", "route": "event-balloons", "icon": "premium-private-event", "description": "Polished birthdays, showers, weddings, and hosted home events."}
+] %}
+{% set service_links = lt_nav_service_links or [
+    {"label": "How the Process Works", "route": "process"},
+    {"label": "Balloon Twisting and Face Painting", "route": "balloon-twisting-and-face-painting"},
+    {"label": "Frequently Asked Questions", "route": "faq"},
+    {"label": "Start a Quote", "route": "contact"}
+] %}
 
-    <nav class="lt-header__desktop d-none d-lg-block" aria-label="Main navigation">
-
-        {# Tier 1: Utility bar — truck tagline | logo | sign-in + cart + CTA #}
-        <div class="lt-utility-bar">
-            <div class="container lt-utility-bar__inner">
-
-                <div class="lt-utility-bar__left">
-                    <img src="/assets/locally_twisted/icons/truck.svg"
-                         alt="" aria-hidden="true"
-                         class="lt-utility-bar__truck-icon"
-                         width="18" height="18">
-                    <span class="lt-utility-bar__tagline">Bringing celebration to the Wasatch Front since 1998</span>
+<header class="lt-header lt-mega-header">
+    <div class="lt-mega-header__desktop d-none d-lg-block">
+        <div class="lt-mega-header__top">
+            <div class="container lt-mega-header__top-row">
+                <div class="lt-mega-header__proof">
+                    <img src="/assets/locally_twisted/icons/brand/delivery-install.svg" alt="" width="20" height="20">
+                    <span>Prepared design, clean installs, and invoiced event support across Utah.</span>
                 </div>
 
-                <a class="lt-utility-bar__brand" href="{{ home_page or '/' }}" aria-label="Locally Twisted — go to homepage">
-                    {%- if brand_html -%}
-                        {{ brand_html | safe }}
-                    {%- else -%}
-                        <img src="/assets/locally_twisted/icons/lt-logo.png"
-                             alt="Locally Twisted"
-                             class="lt-utility-bar__logo"
-                             width="210" height="60">
-                    {%- endif -%}
-                </a>
-
-                <ul class="lt-utility-bar__right">
+                <ul class="lt-mega-header__top-links">
+                    <li><a href="/portfolio">Recent Work</a></li>
+                    <li><a href="/process">How It Works</a></li>
                     {% if frappe.session.user == "Guest" %}
-                        <li>
-                            <a class="lt-utility-bar__sign-in" href="/login">Sign In</a>
-                        </li>
+                        <li><a href="/login">Sign In</a></li>
                     {% else %}
-                        <li>
-                            <a class="lt-utility-bar__sign-in" href="/me">My Account</a>
-                        </li>
+                        <li><a href="/me">My Account</a></li>
                     {% endif %}
-
-                    <li>
-                        <a class="lt-header__util-link--cart"
-                           href="/cart"
-                           aria-label="Shopping cart">
-                            <img src="/assets/locally_twisted/icons/cart.svg"
-                                 alt="" aria-hidden="true"
-                                 width="20" height="20">
-                            <span class="lt-cart-count" aria-live="polite" aria-atomic="true"></span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a class="lt-utility-bar__cta btn btn-primary" href="/contact">Contact Us</a>
-                    </li>
                 </ul>
-
             </div>
         </div>
 
-        {# Tier 2: Primary nav — Balloon Twisting | 2 mega menus | overflow | search #}
-        <div class="lt-header__nav">
-            <div class="container lt-header__nav-row">
-
-                <a class="lt-header__brand lt-header__brand--desktop" href="{{ home_page or '/' }}" aria-label="Locally Twisted — go to homepage">
-                    <span class="lt-header__brand-wordmark">Locally Twisted</span>
-                </a>
-
-                <ul class="lt-header__nav-list" role="menubar">
-
-                    {# ---- Mega 1: Balloon Decor ---- #}
-                    <li class="lt-header__has-mega" role="none">
-                        <button type="button"
-                                class="lt-header__nav-link lt-header__nav-trigger"
-                                data-lt-megamenu-trigger="lt-mega-shop-balloon-decor"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                                aria-controls="lt-mega-shop-balloon-decor"
-                                role="menuitem">
-                            Balloon Decor
-                            <svg class="lt-header__nav-caret"
-                                 xmlns="http://www.w3.org/2000/svg"
-                                 width="10" height="10"
-                                 viewBox="0 0 24 24"
-                                 fill="none" stroke="currentColor"
-                                 stroke-width="2.5" stroke-linecap="round"
-                                 stroke-linejoin="round"
-                                 aria-hidden="true" focusable="false">
-                                <path d="m6 9 6 6 6-6"/>
-                            </svg>
-                        </button>
-                        <div class="lt-header__mega"
-                             id="lt-mega-shop-balloon-decor"
-                             role="region"
-                             aria-label="Balloon Decor categories"
-                             hidden>
-                            <div class="container lt-header__mega-inner">
-                                <div class="row justify-content-center">
-                                    <div class="col-lg-3 lt-header__mega-col text-center">
-                                        <p class="lt-header__mega-heading">Installations</p>
-                                        {%- if mega_shop_balloon_decor -%}
-                                            {%- for item in mega_shop_balloon_decor if item.column == "installations" -%}
-                                                <a class="lt-header__mega-link" href="/{{ item.route }}">{{ item.label }}</a>
-                                            {%- endfor -%}
-                                        {%- endif -%}
-                                    </div>
-                                    <div class="col-lg-3 lt-header__mega-col text-center">
-                                        <p class="lt-header__mega-heading">Grab-and-Go</p>
-                                        {%- if mega_shop_balloon_decor -%}
-                                            {%- for item in mega_shop_balloon_decor if item.column == "grab_go" -%}
-                                                <a class="lt-header__mega-link" href="/{{ item.route }}">{{ item.label }}</a>
-                                            {%- endfor -%}
-                                        {%- endif -%}
-                                    </div>
-                                    <div class="col-lg-3 lt-header__mega-col text-center">
-                                        <p class="lt-header__mega-heading">Details</p>
-                                        {%- if mega_shop_balloon_decor -%}
-                                            {%- for item in mega_shop_balloon_decor if item.column == "details" -%}
-                                                <a class="lt-header__mega-link" href="/{{ item.route }}">{{ item.label }}</a>
-                                            {%- endfor -%}
-                                        {%- endif -%}
-                                    </div>
-                                </div>
-                                <div class="row justify-content-center lt-header__mega-browse-row">
-                                    <div class="col-auto">
-                                        <a class="lt-header__mega-cta" href="/{{ shop_root_route or 'shop' }}">All Balloon Decor</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-
-                    {# ---- Mega 2: Plan by Occasion ---- #}
-                    <li class="lt-header__has-mega" role="none">
-                        <button type="button"
-                                class="lt-header__nav-link lt-header__nav-trigger"
-                                data-lt-megamenu-trigger="lt-mega-plan-by-occasion"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                                aria-controls="lt-mega-plan-by-occasion"
-                                role="menuitem">
-                            Plan by Occasion
-                            <svg class="lt-header__nav-caret"
-                                 xmlns="http://www.w3.org/2000/svg"
-                                 width="10" height="10"
-                                 viewBox="0 0 24 24"
-                                 fill="none" stroke="currentColor"
-                                 stroke-width="2.5" stroke-linecap="round"
-                                 stroke-linejoin="round"
-                                 aria-hidden="true" focusable="false">
-                                <path d="m6 9 6 6 6-6"/>
-                            </svg>
-                        </button>
-                        <div class="lt-header__mega"
-                             id="lt-mega-plan-by-occasion"
-                             role="region"
-                             aria-label="Plan by Occasion categories"
-                             hidden>
-                            <div class="container lt-header__mega-inner">
-                                <div class="row justify-content-center">
-                                    <div class="col-lg-3 lt-header__mega-col text-center">
-                                        <p class="lt-header__mega-heading">Personal Celebrations</p>
-                                        {%- if mega_plan_by_occasion -%}
-                                            {%- for item in mega_plan_by_occasion if item.column == "personal" -%}
-                                                <a class="lt-header__mega-link" href="/{{ item.route }}">{{ item.label }}</a>
-                                            {%- endfor -%}
-                                        {%- endif -%}
-                                    </div>
-                                    <div class="col-lg-3 lt-header__mega-col text-center">
-                                        <p class="lt-header__mega-heading">Faith &amp; Milestones</p>
-                                        {%- if mega_plan_by_occasion -%}
-                                            {%- for item in mega_plan_by_occasion if item.column == "faith" -%}
-                                                <a class="lt-header__mega-link" href="/{{ item.route }}">{{ item.label }}</a>
-                                            {%- endfor -%}
-                                        {%- endif -%}
-                                    </div>
-                                    <div class="col-lg-3 lt-header__mega-col text-center">
-                                        <p class="lt-header__mega-heading">Hosted Events</p>
-                                        {%- if mega_plan_by_occasion -%}
-                                            {%- for item in mega_plan_by_occasion if item.column == "hosted" -%}
-                                                <a class="lt-header__mega-link" href="/{{ item.route }}">{{ item.label }}</a>
-                                            {%- endfor -%}
-                                        {%- endif -%}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-
-                    <li role="none">
-                        <a class="lt-header__nav-link" href="/balloon-twisting-and-face-painting" role="menuitem">
-                            Balloon Twisting &amp; Face Painting
-                        </a>
-                    </li>
-
-                    <li role="none">
-                        <a class="lt-header__nav-link" href="/faq" role="menuitem">FAQ</a>
-                    </li>
-
-                    <li class="lt-header__overflow" role="none">
-                        <a class="lt-header__nav-link" href="/blog" role="menuitem">Blog</a>
-                    </li>
-
-                </ul>
-
-                {# Search — Frappe website search modal trigger.
-                   Frappe ships a search modal at #o_search_modal via the website bundle.
-                   We link to /search as a graceful fallback if the modal isn't active. #}
-                <a href="/search"
-                   class="lt-header__search-btn"
-                   aria-label="Search the site"
-                   title="Search">
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                         width="18" height="18"
-                         viewBox="0 0 24 24"
-                         fill="none" stroke="currentColor"
-                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                         aria-hidden="true" focusable="false">
-                        <circle cx="11" cy="11" r="8"/>
-                        <path d="m21 21-4.3-4.3"/>
-                    </svg>
-                </a>
-
-                <ul class="lt-header__actions" aria-label="Account and checkout links">
-                    {% if frappe.session.user == "Guest" %}
-                        <li><a class="lt-header__action-link" href="/login">Sign In</a></li>
-                    {% else %}
-                        <li><a class="lt-header__action-link" href="/me">My Account</a></li>
-                    {% endif %}
-                    <li>
-                        <a class="lt-header__action-cart"
-                           href="/cart"
-                           aria-label="Shopping cart">
-                            <img src="/assets/locally_twisted/icons/cart.svg"
-                                 alt="" aria-hidden="true"
-                                 width="18" height="18">
-                            <span class="lt-cart-count" aria-live="polite" aria-atomic="true"></span>
-                        </a>
-                    </li>
-                    <li><a class="lt-header__action-cta" href="/contact">Contact Us</a></li>
-                </ul>
-
-            </div>
-        </div>
-
-    </nav>
-
-    {# ================================================================
-       MOBILE NAV — visible only on mobile via d-lg-none
-       Single row: logo left | cart + hamburger right
-       Delivery strip appears below the nav row.
-       ================================================================ #}
-    <div class="lt-header__mobile d-lg-none">
-
-        <div class="container lt-header__mobile-row">
-
-            <a class="lt-header__mobile-brand" href="{{ home_page or '/' }}" aria-label="Locally Twisted — go to homepage">
-                <span class="lt-header__brand-wordmark lt-header__brand-wordmark--mobile">Locally Twisted</span>
+        <div class="container lt-mega-header__main-row">
+            <a class="lt-mega-brand" href="{{ home_page or '/' }}" aria-label="Locally Twisted - go to homepage">
+                <img class="lt-mega-brand__logo"
+                     src="/assets/locally_twisted/icons/lt-logo.png"
+                     alt=""
+                     width="104"
+                     height="86">
             </a>
 
-            <div class="lt-header__mobile-actions">
-                <a class="lt-header__mobile-cart"
-                   href="/cart"
-                   aria-label="Shopping cart">
-                    <img src="/assets/locally_twisted/icons/cart.svg"
-                         alt="" aria-hidden="true"
-                         width="22" height="22">
-                    <span class="lt-cart-count lt-cart-count--mobile" aria-live="polite" aria-atomic="true"></span>
+            <nav class="lt-mega-nav" aria-label="Main navigation">
+                <ul class="lt-mega-nav__list">
+                    <li class="lt-mega-nav__item">
+                        <button class="lt-mega-nav__button"
+                                type="button"
+                                data-lt-megamenu-trigger="lt-mega-events"
+                                aria-expanded="false">
+                            Event Balloons
+                            <span class="lt-mega-nav__chevron" aria-hidden="true"></span>
+                        </button>
+
+                        <div class="lt-megamenu__panel" id="lt-mega-events" hidden>
+                            <p class="lt-megamenu__eyebrow">Event planning</p>
+                            <h2 class="lt-megamenu__title">Built for Utah gatherings that need to look ready.</h2>
+                            <p class="lt-megamenu__summary">Browse by event setting, then use the quote path when the install needs custom sizing, delivery, or venue coordination.</p>
+
+                            <div class="lt-megamenu__grid">
+                                {% for item in event_links %}
+                                    <a class="lt-megamenu__card" href="/{{ item.route }}">
+                                        <img src="/assets/locally_twisted/icons/brand/{{ item.icon }}.svg" alt="" width="30" height="30">
+                                        <strong>{{ item.label }}</strong>
+                                        <span>{{ item.description }}</span>
+                                    </a>
+                                {% endfor %}
+                            </div>
+
+                            <div class="lt-megamenu__footer">
+                                <span>Custom decor, delivery, and install questions belong in the quote request.</span>
+                                <a href="/contact">Start a quote</a>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="lt-mega-nav__item"><a class="lt-mega-nav__link" href="/portfolio">Portfolio</a></li>
+                    <li class="lt-mega-nav__item"><a class="lt-mega-nav__link" href="/process">Process</a></li>
+
+                    <li class="lt-mega-nav__item">
+                        <button class="lt-mega-nav__button"
+                                type="button"
+                                data-lt-megamenu-trigger="lt-mega-products"
+                                aria-expanded="false">
+                            Ready-to-Order
+                            <span class="lt-mega-nav__chevron" aria-hidden="true"></span>
+                        </button>
+
+                        <div class="lt-megamenu__panel" id="lt-mega-products" hidden>
+                            <p class="lt-megamenu__eyebrow">Product discovery</p>
+                            <h2 class="lt-megamenu__title">Shop the product families customers ask for most.</h2>
+                            <p class="lt-megamenu__summary">These links point to the current ERPNext shop and item-group routes where available.</p>
+
+                            <div class="lt-megamenu__grid">
+                                {% for item in product_links %}
+                                    <a class="lt-megamenu__card" href="/{{ item.route }}">
+                                        <img src="/assets/locally_twisted/icons/brand/{{ item.icon }}.svg" alt="" width="30" height="30">
+                                        <strong>{{ item.label }}</strong>
+                                        <span>View ready-to-order options and product details.</span>
+                                    </a>
+                                {% endfor %}
+                            </div>
+
+                            <div class="lt-megamenu__footer">
+                                <span>Need sizing, venue timing, or an install plan?</span>
+                                <a href="/contact">Request event help</a>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="lt-mega-nav__item"><a class="lt-mega-nav__link" href="/faq">FAQ</a></li>
+                </ul>
+            </nav>
+
+            <div class="lt-mega-header__actions">
+                <a class="lt-mega-header__search" href="/search" aria-label="Search">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.3-4.3"></path>
+                    </svg>
                 </a>
-                <button type="button"
-                        class="lt-header__toggle"
+                <a class="lt-mega-header__cart" href="/cart" aria-label="Shopping cart">
+                    <img src="/assets/locally_twisted/icons/cart.svg" alt="" width="20" height="20">
+                    <span class="lt-cart-count" aria-live="polite" aria-atomic="true"></span>
+                </a>
+                <a class="lt-mega-header__cta" href="/contact">Free Event Quote</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="lt-mega-header__mobile d-lg-none">
+        <div class="container lt-mega-header__mobile-row">
+            <a class="lt-mega-brand lt-mega-brand--mobile" href="{{ home_page or '/' }}" aria-label="Locally Twisted - go to homepage">
+                <img class="lt-mega-header__mobile-logo" src="/assets/locally_twisted/icons/lt-logo.png" alt="" width="86" height="70">
+            </a>
+
+            <div class="lt-mega-header__mobile-actions">
+                <a class="lt-mega-header__mobile-action" href="/cart" aria-label="Shopping cart">
+                    <img src="/assets/locally_twisted/icons/cart.svg" alt="" width="22" height="22">
+                    <span class="lt-cart-count" aria-live="polite" aria-atomic="true"></span>
+                </a>
+                <button class="lt-mega-header__mobile-action"
+                        type="button"
                         id="lt-mobile-toggle"
                         aria-controls="lt-mobile-nav"
                         aria-expanded="false"
                         aria-label="Open navigation menu">
-                    <img src="/assets/locally_twisted/icons/menu.svg"
-                         alt="" aria-hidden="true"
-                         width="24" height="24">
+                    <img src="/assets/locally_twisted/icons/menu.svg" alt="" width="22" height="22">
                 </button>
             </div>
-
         </div>
-
-        <div class="lt-header__mobile-strip">
-            <img src="/assets/locally_twisted/icons/truck.svg"
-                 alt="" aria-hidden="true"
-                 class="lt-utility-bar__truck-icon"
-                 width="14" height="14">
-            <small>Bringing celebration to the Wasatch Front since 1998</small>
-        </div>
-
     </div>
-
 </header>
 
-{# ================================================================
-   MOBILE DRAWER — positioned outside <header> stacking context
-   so it overlays the full page. Hidden on desktop via CSS.
-   JS: lt-megamenu.js handles drawer open/close + accordion expand.
-   ================================================================ #}
-<div class="lt-header__backdrop"
-     id="lt-mobile-backdrop"
-     aria-hidden="true"></div>
+<div class="lt-header__backdrop" id="lt-mobile-backdrop" aria-hidden="true"></div>
 
-<aside class="lt-header__mobile-nav-collapse"
+<aside class="lt-header__mobile-nav-collapse lt-mega-drawer"
        id="lt-mobile-nav"
        role="dialog"
        aria-modal="true"
        aria-labelledby="lt-mobile-nav-heading"
        aria-hidden="true">
-
     <div class="lt-header__drawer-head">
-        <h2 id="lt-mobile-nav-heading" class="visually-hidden">Navigation menu</h2>
-        <button type="button"
-                class="lt-header__close"
-                id="lt-mobile-close"
-                aria-label="Close navigation menu">
-            <svg width="22" height="22" viewBox="0 0 24 24"
-                 fill="none" stroke="currentColor"
-                 stroke-width="2" stroke-linecap="round"
-                 aria-hidden="true" focusable="false">
-                <path d="M6 6L18 18M18 6L6 18"/>
+        <div class="lt-mega-drawer__brand">
+            <img src="/assets/locally_twisted/icons/lt-logo.png" alt="" width="86" height="70">
+            <span id="lt-mobile-nav-heading">Locally Twisted</span>
+        </div>
+        <button type="button" class="lt-header__close" id="lt-mobile-close" aria-label="Close navigation menu">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M18 6 6 18"></path>
+                <path d="m6 6 12 12"></path>
             </svg>
         </button>
     </div>
 
-    {# Mobile search — inline form at top of drawer #}
-    <div class="lt-header__drawer-search">
-        <form method="get" action="/search" role="search">
-            <div class="lt-header__search-group">
-                <input type="search"
-                       name="q"
-                       class="lt-header__search-input"
-                       placeholder="Search…"
-                       aria-label="Search the site">
-                <button type="submit"
-                        class="lt-header__search-submit"
-                        aria-label="Submit search">
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                         width="16" height="16"
-                         viewBox="0 0 24 24"
-                         fill="none" stroke="currentColor"
-                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                         aria-hidden="true" focusable="false">
-                        <circle cx="11" cy="11" r="8"/>
-                        <path d="m21 21-4.3-4.3"/>
-                    </svg>
-                </button>
-            </div>
-        </form>
-    </div>
-
     <nav aria-label="Mobile navigation">
-        <ul class="lt-header__mobile-nav-list">
+        <div class="lt-mega-drawer__section">
+            <button class="lt-mega-drawer__toggle"
+                    type="button"
+                    data-lt-drawer-accordion-trigger="lt-mobile-events"
+                    aria-controls="lt-mobile-events"
+                    aria-expanded="false">
+                Event Balloons
+                <span aria-hidden="true">+</span>
+            </button>
+            <div class="lt-mega-drawer__panel" id="lt-mobile-events" hidden>
+                <a href="/event-balloons">Event Balloons</a>
+                {% for item in event_links %}
+                    <a href="/{{ item.route }}">{{ item.label }}</a>
+                {% endfor %}
+            </div>
+        </div>
 
-            {# ---- Mobile accordion 1: Balloon Decor ---- #}
-            <li class="lt-header__mobile-accordion-item">
-                <button type="button"
-                        class="lt-header__mobile-nav-link lt-header__mobile-accordion-toggle"
-                        data-lt-drawer-accordion-trigger="lt-mob-shop-balloon-decor"
-                        aria-expanded="false"
-                        aria-controls="lt-mob-shop-balloon-decor">
-                    Balloon Decor
-                    <svg class="lt-header__mobile-caret"
-                         xmlns="http://www.w3.org/2000/svg"
-                         width="14" height="14"
-                         viewBox="0 0 24 24"
-                         fill="none" stroke="currentColor"
-                         stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
-                         aria-hidden="true" focusable="false">
-                        <path d="m6 9 6 6 6-6"/>
-                    </svg>
-                </button>
-                <ul class="lt-header__mobile-accordion-panel"
-                    id="lt-mob-shop-balloon-decor"
-                    hidden>
-                    {%- if mega_shop_balloon_decor -%}
-                        {%- for item in mega_shop_balloon_decor -%}
-                            <li><a class="lt-header__mobile-nav-sublink" href="/{{ item.route }}">{{ item.label }}</a></li>
-                        {%- endfor -%}
-                    {%- endif -%}
-                    <li><a class="lt-header__mobile-nav-sublink lt-header__mobile-nav-sublink--all" href="/{{ shop_root_route or 'shop' }}">All Balloon Decor</a></li>
-                </ul>
-            </li>
+        <a class="lt-mega-drawer__single" href="/portfolio">Portfolio</a>
+        <a class="lt-mega-drawer__single" href="/process">Process</a>
 
-            {# ---- Mobile accordion 2: Plan by Occasion ---- #}
-            <li class="lt-header__mobile-accordion-item">
-                <button type="button"
-                        class="lt-header__mobile-nav-link lt-header__mobile-accordion-toggle"
-                        data-lt-drawer-accordion-trigger="lt-mob-plan-by-occasion"
-                        aria-expanded="false"
-                        aria-controls="lt-mob-plan-by-occasion">
-                    Plan by Occasion
-                    <svg class="lt-header__mobile-caret"
-                         xmlns="http://www.w3.org/2000/svg"
-                         width="14" height="14"
-                         viewBox="0 0 24 24"
-                         fill="none" stroke="currentColor"
-                         stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
-                         aria-hidden="true" focusable="false">
-                        <path d="m6 9 6 6 6-6"/>
-                    </svg>
-                </button>
-                <ul class="lt-header__mobile-accordion-panel"
-                    id="lt-mob-plan-by-occasion"
-                    hidden>
-                    {%- if mega_plan_by_occasion -%}
-                        {%- for item in mega_plan_by_occasion -%}
-                            <li><a class="lt-header__mobile-nav-sublink" href="/{{ item.route }}">{{ item.label }}</a></li>
-                        {%- endfor -%}
-                    {%- endif -%}
-                </ul>
-            </li>
+        <div class="lt-mega-drawer__section">
+            <button class="lt-mega-drawer__toggle"
+                    type="button"
+                    data-lt-drawer-accordion-trigger="lt-mobile-products"
+                    aria-controls="lt-mobile-products"
+                    aria-expanded="false">
+                Ready-to-Order
+                <span aria-hidden="true">+</span>
+            </button>
+            <div class="lt-mega-drawer__panel" id="lt-mobile-products" hidden>
+                <a href="/shop">Shop All</a>
+                {% for item in product_links %}
+                    <a href="/{{ item.route }}">{{ item.label }}</a>
+                {% endfor %}
+            </div>
+        </div>
 
-            <li class="lt-header__mobile-nav-item">
-                <a class="lt-header__mobile-nav-link"
-                   href="/balloon-twisting-and-face-painting">
-                    Balloon Twisting &amp; Face Painting
-                </a>
-            </li>
+        <div class="lt-mega-drawer__section">
+            <button class="lt-mega-drawer__toggle"
+                    type="button"
+                    data-lt-drawer-accordion-trigger="lt-mobile-help"
+                    aria-controls="lt-mobile-help"
+                    aria-expanded="false">
+                Help and Details
+                <span aria-hidden="true">+</span>
+            </button>
+            <div class="lt-mega-drawer__panel" id="lt-mobile-help" hidden>
+                {% for item in service_links %}
+                    <a href="/{{ item.route }}">{{ item.label }}</a>
+                {% endfor %}
+                {% if frappe.session.user == "Guest" %}
+                    <a href="/login">Sign In</a>
+                {% else %}
+                    <a href="/me">My Account</a>
+                {% endif %}
+            </div>
+        </div>
 
-            <li class="lt-header__mobile-nav-item">
-                <a class="lt-header__mobile-nav-link" href="/faq">FAQ</a>
-            </li>
-
-            <li class="lt-header__mobile-nav-item">
-                <a class="lt-header__mobile-nav-link" href="/blog">Blog</a>
-            </li>
-
-            <li class="lt-header__mobile-nav-divider" role="separator"></li>
-
-            {% if frappe.session.user == "Guest" %}
-                <li class="lt-header__mobile-nav-item">
-                    <a class="lt-header__mobile-nav-link" href="/login">Sign In</a>
-                </li>
-            {% else %}
-                <li class="lt-header__mobile-nav-item">
-                    <a class="lt-header__mobile-nav-link" href="/me">My Account</a>
-                </li>
-            {% endif %}
-
-        </ul>
+        <a class="lt-mega-drawer__cta" href="/contact">Free Event Quote</a>
     </nav>
-
 </aside>

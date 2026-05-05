@@ -2,7 +2,7 @@
 
 > **Deprecated for active coordination as of 2026-05-02.** This file is now a legacy whole-project handoff/context record, not the active coordination surface. For current work, use `locally-twisted-queue.md` for active lanes, `workstreams/<feature>.md` for feature-specific handoffs, `locally-twisted-decisions.md` for durable decisions, and `CODING-HANDOFF.md` for compact technical startup. Do not try to force this file into full parity with every active workstream.
 
-**Last updated:** 2026-05-02 (Codex - shop hub routing cleanup)
+**Last updated:** 2026-05-05 (Codex - mega-menu/product containment takeover)
 
 Overwrite-not-append. Git is the changelog. Read this first; everything else as needed. **Audience: peer Opus 4.7 instance.** Read like I'd want to read before substantive work.
 
@@ -10,11 +10,21 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 
 ## State of the world (the load-bearing facts)
 
+**Current-session delta (2026-05-05):**
+- `_resources/STYLE-GUIDE.md` v4.2 is the only current visual authority for the LT rebrand.
+- `_resources/design-guide/`, stale shop/spec comparison docs, stale generated comparison screenshots, and the old generic icon-comparison resource were deleted. Do not recreate them or use their old screenshots/TSX/font/palette direction for current design work.
+- Active app source was cleaned away from old visible brand fonts and UI-pastel tokens: no active `DM Serif`, `Raleway`, `Montserrat`, `Playfair`, `lt-blush`, `lt-soft-blue`, old `soft-blue`/`light-blue`, UI `blush`, or unresolved `--lt-primary` references remain.
+- The professional icon direction now has a 16-file custom brass-line suite under `apps/locally_twisted/locally_twisted/public/icons/brand/`, including multiple balloon forms plus Utah/local/event proof icons.
+- The current header uses the deliberate premium two-level mega menu: full-height Locally Twisted logo image, desktop event/product mega panels, mobile drawer accordions, top proof row, and `Free Event Quote` to `/contact`.
+- The mega-menu layer is active, not stale cleanup: `navbar_context.py`, `lt-megamenu.js`, `lt-mega-menu.css`, `lt-page-containment.css`, and `lt-product-polish.css` are served through `hooks.py` and verified against the running site.
+- Feature handoffs for this work are `workstreams/brand-style-guide-consolidation.md` and `workstreams/menu-content-coordination.md`.
+- Verification receipts: website cache clear/restart passed, served asset checks passed, `python scripts/verify/nav_ia.py` passed, `python scripts/verify/smoke_shop.py` passed, `npm run test:layout-fit` passed 80/80, all SVGs parse, app Python compiles, LT CSS token scan found no missing `--lt-*` variables, and post-fix screenshots/report live at `output/playwright/full-site-fix-20260505-post/`.
+
 **Current-session delta (2026-05-02):**
 - `/shop` is now the all-decor hub. Header, mobile drawer, footer, `/shop-items`, and `/all-products` send broad browse traffic to `/shop`.
 - `/shop-by-category` is retired as a customer-facing category-card page and redirects to `/shop` for compatibility. Do not rebuild the old placeholder-card index for launch.
-- Primary nav order is now `Balloon Decor`, `Plan by Occasion`, `Balloon Twisting & Face Painting`, `FAQ`, `Blog`, search. `Balloon Decor` stays far-left.
-- `scripts/verify/smoke_shop.py` now verifies the `/shop-by-category` redirect and desktop/mobile `All Balloon Decor` links to `/shop`.
+- Primary nav order from this slice was superseded on 2026-05-05 by the authority-first header: `Event Balloons`, `Portfolio`, `Process`, `Ready-to-Order`, `FAQ`, search.
+- `scripts/verify/smoke_shop.py` now verifies the `/shop-by-category` redirect, desktop/mobile authority-first nav, and `/shop` product contracts.
 
 **Current-session delta (2026-05-01):**
 - `/contact` is the canonical inquiry form and now carries the revised service taxonomy: Balloon Decor, Balloon Twisting, Face Painting, Delivery, Pickup, Events Inquiry, Something Else.
@@ -34,7 +44,7 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 - `/book` is retired as a customer-facing page and redirects to `/contact?intent=quick`; CTAs now use `/contact`.
 - `/shop-items` and `/all-products` previously aliased to `/shop-by-category`; superseded 2026-05-02. They now route to `/shop`.
 - `/privacy` and `/terms-of-service` now exist and return HTTP 200 locally. Treat as plain-language drafts for Stripe readiness; Dashboard wiring/legal approval still separate.
-- `scripts/verify/layout_fit.spec.js` is restored and verified. Latest command: `npm run test:layout-fit` -> 60 passed after the gate caught and Codex fixed `.lt-contact__icon` text overflow on `/contact`.
+- `scripts/verify/layout_fit.spec.js` is restored and verified. Latest command: `npm run test:layout-fit` -> 80 passed across 20 routes and 4 viewport families, including `/checkout` and `/thank-you`.
 - Playwright is installed as Node/CLI tooling in npm's npx cache, not as Python `playwright` for `C:\Python314\python.exe`. Working direct CLI path: `C:\Users\baenb\AppData\Local\npm-cache\_npx\420ff84f11983ee5\node_modules\.bin\playwright.cmd` (v1.59.1).
 - `scripts/verify/nav_ia.py` now guards nav order, no duplicate Contact, no retired `/book` nav links, and product-backed occasion links.
 - Footer centering/balance was fixed through content/layout cleanup, not by shrinking below accessible sizes.
@@ -171,7 +181,7 @@ I read this as: **autonomous ownership inside the migration frame.** GL doesn't 
 4. **This file**
 5. `MIRROR-REBUILD-PLAN.md` — full rebuild plan with Research Notes from /plan-deepen + GL Proxy review
 6. `MIRROR-REBUILD-COMPLETE.md` — last session's wrap report
-7. `_resources/design-guide/README.md` + `synthesis/voice.md` for taste calibration if doing visual work
+7. `_resources/STYLE-GUIDE.md` for all current visual guidance. The old `_resources/design-guide/` synthesis was deleted on 2026-05-05 and must not be used for taste calibration.
 8. `lessons-learned.md` newest entries (chrome rebuild + catalog port stacked at top)
 9. `locally-twisted-decisions.md` newest entries
 10. `git log --oneline -50`

@@ -72,7 +72,7 @@ Brand and launch context:
 - `workstreams/launch-v1-success-contract.md`
 - `workstreams/website-launch.md`
 - `_resources/STYLE-GUIDE.md`
-- `_resources/design-guide/`
+- `_resources/STYLE-GUIDE.md` version 4.2 or newer for the current Civic Celebration + Slate Blue/Berry + Brand Direction visual contract. The old `_resources/design-guide/` synthesis was deleted on 2026-05-05 and must not be used.
 
 Use these files as evidence and source material, not automatic truth. If a claim affects build behavior, verify it against current files, business approval, or the running ERPNext app.
 
