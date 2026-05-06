@@ -6,6 +6,14 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-06 - Portfolio edge bleed is the design, not an overflow bug
+
+The strict portfolio rework exposed the real failure in the first translation: Codex tried to make the designer's collage safer by moving photos into fully visible rows. That protected the layout in a generic web sense, but it destroyed the portfolio concept GL wanted. The portfolio is supposed to feel like an intentional scrolling collage of whole installed-work photos, not a card grid with larger images.
+
+**Counter-move:** when a visual reference intentionally uses edge anchoring, overlap, bleed, or asymmetric motion, preserve that behavior first and verify it in the browser before applying generic container instincts. In LT, the Frappe shell owns the header/footer and route lifecycle, but the portfolio reel owns its full-bleed photo field. Tests must fail a static row, fail visible text over gallery photos, and prove Chrome/Brave show the same placement pattern.
+
+---
+
 ## 2026-05-06 - Product showcase rows need symmetry, not just fit
 
 The first shop showroom pass made `/shop`, `/shop-items`, and `/shop-items/<group>` larger and more responsive, but GL correctly rejected the result as cheap because the category controls were ragged text-width chips and some category grids left a lone product card hanging on the last desktop row. The page technically fit in the viewport, but it did not meet the visual bar for showing off products.

@@ -5,13 +5,13 @@ schema_version: 2.0
 level: recipe
 maturity: candidate
 scope: Locally Twisted ERPNext/Frappe portfolio and proof-gallery visual work
-currently_true: unknown
+currently_true: true
 verification_level: 2
 last_verified: 2026-05-06
 evidence_quality: direct
-successful_uses: 1
-failed_uses: 0
-regressions: 0
+successful_uses: 2
+failed_uses: 1
+regressions: 1
 depends_on:
   - external-design-reference-translation
   - frappe-public-container-contract
@@ -46,6 +46,17 @@ while the kept production source is the Frappe implementation.
 8. Keep the reference folder in `research/` while external critique is active. Delete it only after GL approves cleanup.
 9. Verify browser behavior, not just source shape. A row of images is a failed translation even if the assets load.
 
+## Locked Reel Contract
+
+For the approved LT portfolio reel, the left/right edge-anchor math is part of the design contract. Do not clamp left/right photos into safe containers and do not center them just to avoid intentional viewport bleed.
+
+Use the approved side/scale rhythm in photo-array order:
+
+- sides: `left, right, left, center, left, right, left, right, center, right, left, right, left, right, left, center, left, right, left, right`
+- scales: `0.62, 0.74, 0.58, 0.92, 0.60, 0.64, 0.74, 0.58, 0.96, 0.55, 0.62, 0.76, 0.60, 0.62, 0.72, 0.94, 0.56, 0.60, 0.62, 0.78`
+
+The durable lesson from the failed translation is that "protecting" photos from edge clipping can destroy this design. Frappe's normal header/footer stay native, but the portfolio reel itself is intentionally full-bleed inside the Frappe page shell.
+
 ## Verification Checklist
 
 Run these after editing portfolio layout, image metadata, source/reference translation, or the proof-gallery CSS/JS:
@@ -57,9 +68,9 @@ npm run test:layout-fit -- --grep portfolio
 npm run test:interactive-layout -- --grep portfolio
 ```
 
-Also inspect desktop and mobile screenshots before launch claims, especially after photo-order or image-quality changes.
+Also inspect desktop and mobile screenshots before launch claims, especially after photo-order or image-quality changes. For this reel, include Chrome and Brave captures when the failure report or user feedback mentions cross-browser differences.
 
-The latest verified use passed `npm run test:portfolio-reel` (4/4), `npm run test:layout-fit -- --grep portfolio` (13/13), and `npm run test:interactive-layout -- --grep portfolio` (3/3). The route-specific verifier now checks the approved staggered side/scale rhythm and scroll-driven reveal so a static row cannot pass as a successful translation.
+The latest verified use passed `npm run test:portfolio-reel` (4/4), `npm run test:layout-fit -- --grep portfolio` (13/13), and `npm run test:interactive-layout -- --grep portfolio` (3/3). Fresh Chrome/Brave screenshots and metrics were captured under `output/playwright/portfolio-strict-v5/`. The route-specific verifier now checks the approved staggered side/scale rhythm, hidden-by-default captions, mobile full-width stream, and scroll-driven reveal so a static row cannot pass as a successful translation.
 
 ## LT Receipt
 

@@ -36,7 +36,8 @@ CATEGORIES = [
 GALLERY_ITEMS = [
     {
         "slug": "corporate-logo-arch",
-        "title": "Corporate Brand Logo Arch",
+        "title": "School Entrance Arch",
+        "client": "School event",
         "category": "balloon-arches",
         "event_type": "schools",
         "year": "2024",
@@ -46,6 +47,7 @@ GALLERY_ITEMS = [
     {
         "slug": "corporate-weberstock-photo-opt",
         "title": "Weberstock Festival Photo Backdrop",
+        "client": "Weber State University",
         "category": "picture-perfect-backdrops",
         "event_type": "corporate",
         "year": "2025",
@@ -55,6 +57,7 @@ GALLERY_ITEMS = [
     {
         "slug": "corporate-wsu-arch-bouquets",
         "title": "WSU Welcome Bouquets",
+        "client": "Weber State University",
         "category": "balloon-bouquets",
         "event_type": "corporate",
         "year": "2024",
@@ -64,6 +67,7 @@ GALLERY_ITEMS = [
     {
         "slug": "wedding-floral-half-arch",
         "title": "Floral Half-Arch with White Blooms",
+        "client": "Private event",
         "category": "picture-perfect-backdrops",
         "event_type": "private-events",
         "year": "2024",
@@ -73,6 +77,7 @@ GALLERY_ITEMS = [
     {
         "slug": "wedding-foil-heart-arch",
         "title": "Foil Heart Wedding Arch",
+        "client": "Private event",
         "category": "balloon-arches",
         "event_type": "private-events",
         "year": "2024",
@@ -81,9 +86,10 @@ GALLERY_ITEMS = [
     },
     {
         "slug": "wedding-organic-half-arch",
-        "title": "Organic White Floral Half-Arch",
+        "title": "Intermountain Health Photo Moment",
+        "client": "Intermountain Health",
         "category": "garlands",
-        "event_type": "private-events",
+        "event_type": "corporate",
         "year": "2025",
         "image": "wedding-organic-half-arch.png",
         "alt": "Soft organic balloon garland forming a half-arch with white flower accents at a wedding ceremony",
@@ -91,6 +97,7 @@ GALLERY_ITEMS = [
     {
         "slug": "birthday-smurfs-arch",
         "title": "Smurfs Birthday Arch",
+        "client": "Private event",
         "category": "balloon-arches",
         "event_type": "private-events",
         "year": "2024",
@@ -100,6 +107,7 @@ GALLERY_ITEMS = [
     {
         "slug": "birthday-pirate-column",
         "title": "Pirate-Themed Balloon Column",
+        "client": "Private event",
         "category": "columns",
         "event_type": "private-events",
         "year": "2023",
@@ -109,6 +117,7 @@ GALLERY_ITEMS = [
     {
         "slug": "birthday-dolphin-backdrop",
         "title": "Under-the-Sea Dolphin Backdrop",
+        "client": "Private event",
         "category": "picture-perfect-backdrops",
         "event_type": "private-events",
         "year": "2024",
@@ -118,6 +127,7 @@ GALLERY_ITEMS = [
     {
         "slug": "birthday-balloon-bouquets",
         "title": "Birthday Helium Bouquets",
+        "client": "Private event",
         "category": "balloon-bouquets",
         "event_type": "private-events",
         "year": "2025",
@@ -127,6 +137,7 @@ GALLERY_ITEMS = [
     {
         "slug": "school-back-to-school-stage",
         "title": "Back-to-School Stage Display",
+        "client": "School event",
         "category": "picture-perfect-backdrops",
         "event_type": "schools",
         "year": "2024",
@@ -136,6 +147,7 @@ GALLERY_ITEMS = [
     {
         "slug": "school-grad-garland",
         "title": "Graduation Organic Garland",
+        "client": "School event",
         "category": "garlands",
         "event_type": "schools",
         "year": "2025",
@@ -145,6 +157,7 @@ GALLERY_ITEMS = [
     {
         "slug": "seasonal-easter-rabbit-arch",
         "title": "Easter Rabbit-Ears Arch",
+        "client": "Community event",
         "category": "balloon-arches",
         "event_type": "civic-community",
         "year": "2024",
@@ -154,6 +167,7 @@ GALLERY_ITEMS = [
     {
         "slug": "seasonal-halloween-tombstone",
         "title": "Halloween Tombstone Backdrop",
+        "client": "Venue install",
         "category": "picture-perfect-backdrops",
         "event_type": "venues-public",
         "year": "2024",
@@ -163,6 +177,7 @@ GALLERY_ITEMS = [
     {
         "slug": "seasonal-pride-columns",
         "title": "Pride Rainbow Columns",
+        "client": "Gallivan Center",
         "category": "columns",
         "event_type": "civic-community",
         "year": "2024",
@@ -190,24 +205,29 @@ APPROVED_COLLAGE_SLOTS = [
     {"side": "left", "scale": 0.60},
     {"side": "right", "scale": 0.62},
     {"side": "left", "scale": 0.72},
+    {"side": "center", "scale": 0.94},
+    {"side": "left", "scale": 0.56},
+    {"side": "right", "scale": 0.60},
+    {"side": "left", "scale": 0.62},
+    {"side": "right", "scale": 0.78},
 ]
 
 PORTFOLIO_DISPLAY_ORDER = [
-    "birthday-pirate-column",
-    "corporate-weberstock-photo-opt",
     "wedding-organic-half-arch",
-    "birthday-dolphin-backdrop",
+    "corporate-weberstock-photo-opt",
     "seasonal-halloween-tombstone",
-    "wedding-floral-half-arch",
     "corporate-logo-arch",
     "seasonal-pride-columns",
+    "corporate-wsu-arch-bouquets",
+    "school-back-to-school-stage",
     "school-grad-garland",
+    "birthday-dolphin-backdrop",
+    "wedding-floral-half-arch",
     "wedding-foil-heart-arch",
     "birthday-smurfs-arch",
-    "corporate-wsu-arch-bouquets",
     "seasonal-easter-rabbit-arch",
     "birthday-balloon-bouquets",
-    "school-back-to-school-stage",
+    "birthday-pirate-column",
 ]
 
 PORTFOLIO_REEL_META = {
@@ -276,6 +296,7 @@ def _photo_payload(items):
             {
                 "id": item["slug"],
                 "title": item["title"],
+                "client": item.get("client", "Locally Twisted"),
                 "alt": item["alt"],
                 "category": item["category"],
                 "event_type": item["event_type"],

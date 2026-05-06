@@ -12,7 +12,7 @@ async function expectSuccessfulResponse(response, path) {
 
 test.describe("portfolio proof reel", () => {
 	test("desktop renders the approved whole-photo reel with optimized assets", async ({ page }) => {
-		await page.setViewportSize({ width: 1366, height: 900 });
+		await page.setViewportSize({ width: 1366, height: 768 });
 		const response = await gotoAndSettle(page, "/portfolio");
 		await expectSuccessfulResponse(response, "/portfolio");
 		await page.waitForSelector(".lt-photo");
@@ -32,12 +32,15 @@ test.describe("portfolio proof reel", () => {
 			return {
 				hasRoot: Boolean(root),
 				hasReel: Boolean(reel),
-				headingText: document.querySelector(".lt-portfolio__title")?.textContent || "",
-				metaCount: document.querySelectorAll(".lt-portfolio__meta > div").length,
+				headingText: document.querySelector(".lt-title")?.textContent || "",
+				metaCount: document.querySelectorAll(".lt-meta > div").length,
 				photoCount: photos.length,
 				firstPosition: firstStyle ? firstStyle.position : null,
 				firstWidth: rect ? Math.round(rect.width) : 0,
 				firstHeight: rect ? Math.round(rect.height) : 0,
+				firstLeftStyle: first ? first.style.left : "",
+				firstTop: rect ? Math.round(rect.top) : 9999,
+				firstLeft: rect ? Math.round(rect.left) : 9999,
 				secondWidth: second ? Math.round(second.getBoundingClientRect().width) : 0,
 				thirdTop: third ? Math.round(parseFloat(third.style.top || "0")) : 0,
 				firstSide: first ? first.dataset.side : "",
@@ -47,14 +50,18 @@ test.describe("portfolio proof reel", () => {
 				imageSrc: firstImage ? firstImage.currentSrc || firstImage.src : "",
 				imageWidthAttr: firstImage ? firstImage.getAttribute("width") : null,
 				imageHeightAttr: firstImage ? firstImage.getAttribute("height") : null,
-				visibleCaptionCount: document.querySelectorAll(".lt-cap").length,
+				visibleCaptionCount: Array.from(document.querySelectorAll(".lt-cap"))
+					.filter((caption) => {
+						const style = window.getComputedStyle(caption);
+						return style.visibility !== "hidden" && Number.parseFloat(style.opacity || "0") > 0.5;
+					}).length,
 			};
 		});
 
 		expect(facts.hasRoot).toBe(true);
 		expect(facts.hasReel).toBe(true);
-		expect(facts.headingText).toContain("Sculptural balloon installations");
-		expect(facts.headingText).toContain("for serious rooms.");
+		expect(facts.headingText).toContain("Balloon installations");
+		expect(facts.headingText).toContain("for the room you remember.");
 		expect(facts.metaCount).toBe(3);
 		expect(facts.photoCount).toBeGreaterThanOrEqual(15);
 		expect(facts.firstPosition).toBe("absolute");
@@ -63,6 +70,10 @@ test.describe("portfolio proof reel", () => {
 		expect(facts.thirdSide).toBe("left");
 		expect(facts.firstWidth).toBeGreaterThan(390);
 		expect(facts.firstWidth).toBeLessThan(500);
+		expect(Number.parseFloat(facts.firstLeftStyle)).toBeGreaterThanOrEqual(1);
+		expect(Number.parseFloat(facts.firstLeftStyle)).toBeLessThanOrEqual(14);
+		expect(facts.firstTop).toBeLessThan(768);
+		expect(facts.firstLeft).toBeLessThan(80);
 		expect(facts.secondWidth - facts.firstWidth).toBeGreaterThan(60);
 		expect(facts.thirdTop).toBeGreaterThan(360);
 		expect(facts.imageObjectFit).toBe("contain");
@@ -74,6 +85,7 @@ test.describe("portfolio proof reel", () => {
 
 		await page.locator(".lt-photo").first().click({ force: true });
 		await expect(page.locator(".lt-photo.is-front")).toHaveCount(1);
+		await expect(page.locator(".lt-photo.is-front .lt-cap")).toHaveCSS("visibility", "visible");
 
 		const result = await auditPageLayout(page, {
 			targetSelectors: [".lt-photo.is-front"],
@@ -107,7 +119,8 @@ test.describe("portfolio proof reel", () => {
 		});
 
 		expect(facts.photoPosition).toBe("relative");
-		expect(facts.photoWidth).toBeGreaterThanOrEqual(370);
+		expect(facts.photoWidth).toBeGreaterThanOrEqual(facts.viewportWidth - 42);
+		expect(facts.photoWidth).toBeLessThanOrEqual(facts.viewportWidth - 38);
 		expect(facts.imageObjectFit).toBe("contain");
 		expect(facts.docWidth).toBeLessThanOrEqual(facts.viewportWidth + 2);
 
@@ -141,8 +154,8 @@ test.describe("portfolio proof reel", () => {
 		await expect(page.locator(".lt-photo")).toHaveCount(0);
 	});
 
-	test("desktop scroll reveals a staggered collage instead of a static row", async ({ page }) => {
-		await page.setViewportSize({ width: 1366, height: 900 });
+	test("desktop scroll preserves reference edge-bleed collage instead of safe rows", async ({ page }) => {
+		await page.setViewportSize({ width: 1366, height: 768 });
 		const response = await gotoAndSettle(page, "/portfolio");
 		await expectSuccessfulResponse(response, "/portfolio");
 		await page.waitForSelector(".lt-photo");
@@ -171,12 +184,16 @@ test.describe("portfolio proof reel", () => {
 						visible: rect.bottom > 0 && rect.top < window.innerHeight,
 						transform: photo.style.transform,
 						opacity: Number.parseFloat(photo.style.opacity || "0"),
+						side: photo.dataset.side,
 					};
 				})
 				.filter((photo) => photo.visible);
 			return {
 				firstTransform: photos[0] ? photos[0].style.transform : "",
 				firstOpacity: photos[0] ? Number.parseFloat(photos[0].style.opacity || "0") : 0,
+				firstLeft: photos[0] ? Math.round(photos[0].getBoundingClientRect().left) : 9999,
+				secondLeft: photos[1] ? Math.round(photos[1].getBoundingClientRect().left) : 0,
+				thirdLeft: photos[2] ? Math.round(photos[2].getBoundingClientRect().left) : 9999,
 				visible,
 			};
 		});
@@ -186,9 +203,11 @@ test.describe("portfolio proof reel", () => {
 		expect(after.visible.length).toBeGreaterThanOrEqual(3);
 		expect(Math.max(...after.visible.map((photo) => photo.width))).toBeLessThan(760);
 		expect(new Set(after.visible.map((photo) => photo.top)).size).toBeGreaterThan(2);
-		expect(Math.min(...after.visible.map((photo) => photo.left))).toBeGreaterThanOrEqual(-8);
+		expect(after.firstLeft).toBeLessThan(40);
+		expect(after.secondLeft).toBeGreaterThan(780);
+		expect(after.thirdLeft).toBeLessThan(20);
 		expectNoLayoutFailures(expect, await auditPageLayout(page, {
-			targetSelectors: [".lt-photo"],
+			targetSelectors: [".lt-portfolio", ".lt-reel"],
 		}), "portfolio staggered scroll state");
 	});
 });

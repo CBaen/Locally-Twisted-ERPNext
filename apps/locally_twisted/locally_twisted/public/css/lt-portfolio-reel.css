@@ -3,26 +3,27 @@
   --lt-portfolio-paper: #fffdf9;
   --lt-portfolio-ink: #151515;
   --lt-portfolio-soft: rgba(21, 21, 21, 0.64);
+  --lt-portfolio-mute: rgba(21, 21, 21, 0.52);
   --lt-portfolio-rule: rgba(184, 154, 91, 0.36);
-  --lt-portfolio-accent: #b31b34;
-}
-
-.lt-portfolio {
-  position: relative;
-  width: 100vw;
-  max-width: none;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-  padding-left: 0;
-  padding-right: 0;
-  overflow: hidden;
+  --lt-portfolio-accent: #6f2527;
+  --lt-portfolio-serif: var(--lt-font-heading, "Cormorant Garamond", Georgia, serif);
+  --lt-portfolio-sans: var(--lt-font-body, "Lato", system-ui, sans-serif);
 }
 
 .lt-portfolio {
   background: var(--lt-portfolio-bg);
   color: var(--lt-portfolio-ink);
   cursor: none;
+  font-family: var(--lt-portfolio-sans);
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  max-width: none;
   min-height: 100vh;
+  overflow: hidden;
+  padding-left: 0;
+  padding-right: 0;
+  position: relative;
+  width: 100vw;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -30,96 +31,80 @@
 .lt-portfolio *::before,
 .lt-portfolio *::after {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-.lt-portfolio__intro {
+.lt-hero {
+  max-width: 1280px;
+  padding: 36px 0 12px 48px;
   position: relative;
-  z-index: 3;
-  min-height: calc(100vh - 150px);
-  padding: 3.5rem max(1.25rem, env(safe-area-inset-left)) 2.75rem;
+  z-index: 5;
 }
 
-.lt-portfolio__eyebrow {
-  color: var(--lt-portfolio-accent);
-  font-family: var(--lt-font-body, system-ui, sans-serif);
-  font-size: 0.75rem;
-  font-weight: 900;
-  letter-spacing: 0.14em;
-  margin: 0 0 1rem;
+.lt-eyebrow {
+  color: var(--lt-portfolio-mute);
+  font-family: var(--lt-portfolio-sans);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  margin-bottom: 32px;
   text-transform: uppercase;
 }
 
-.lt-portfolio__title {
+.lt-title {
   color: var(--lt-portfolio-ink);
-  font-family: var(--lt-font-heading, Georgia, serif);
-  font-size: 3.75rem;
-  font-weight: 400;
-  line-height: 0.98;
+  font-family: var(--lt-portfolio-serif);
+  font-size: clamp(56px, 7.6vw, 108px);
+  font-weight: 300;
   letter-spacing: 0;
-  margin: 0;
-  max-width: 920px;
+  line-height: 0.96;
 }
 
-.lt-portfolio__title em {
-  color: #6f2527;
+.lt-title em {
+  color: var(--lt-portfolio-accent);
   font-style: italic;
   font-weight: 400;
 }
 
-.lt-portfolio__meta {
+.lt-meta {
   border-top: 1px solid var(--lt-portfolio-rule);
   display: grid;
-  gap: 1.5rem;
-  margin-top: 3rem;
-  max-width: 920px;
-  padding-top: 1.25rem;
+  gap: 40px;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 28px;
+  max-width: 880px;
+  padding-top: 20px;
 }
 
-.lt-portfolio__meta > div {
+.lt-meta > div {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 6px;
 }
 
-.lt-portfolio__meta-label,
-.lt-portfolio__scroll-cue span {
-  color: rgba(21, 21, 21, 0.52);
-  font-family: var(--lt-font-body, system-ui, sans-serif);
-  font-size: 0.68rem;
+.lt-meta-label,
+.lt-cap-meta {
+  color: var(--lt-portfolio-mute);
+  font-family: var(--lt-portfolio-sans);
+  font-size: 10px;
   font-weight: 800;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 
-.lt-portfolio__meta-value {
+.lt-meta-value {
   color: var(--lt-portfolio-ink);
-  font-family: var(--lt-font-heading, Georgia, serif);
-  font-size: 1.15rem;
+  font-family: var(--lt-portfolio-serif);
+  font-size: 18px;
   font-style: italic;
+  font-weight: 400;
   line-height: 1.25;
-}
-
-.lt-portfolio__scroll-cue {
-  align-items: center;
-  bottom: 3rem;
-  color: rgba(21, 21, 21, 0.52);
-  display: none;
-  flex-direction: column;
-  gap: 1rem;
-  position: absolute;
-  right: 3rem;
-}
-
-.lt-portfolio__scroll-cue line,
-.lt-portfolio__scroll-cue polyline {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1;
 }
 
 .lt-reel {
   margin-top: 0;
-  padding: 60px 0 200px;
+  padding: 0 0 200px;
   position: relative;
 }
 
@@ -145,7 +130,7 @@
 }
 
 .lt-photo:focus-visible .lt-frame {
-  outline: 3px solid var(--lt-portfolio-accent);
+  outline: 3px solid #b31b34;
   outline-offset: 8px;
 }
 
@@ -176,14 +161,56 @@
   width: 100%;
 }
 
+.lt-cap {
+  align-items: baseline;
+  border-top: 1px solid var(--lt-portfolio-rule);
+  bottom: -42px;
+  color: var(--lt-portfolio-soft);
+  display: flex;
+  font-size: 12px;
+  gap: 16px;
+  left: 0;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  padding-top: 12px;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  transform: translateY(4px);
+  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
+  visibility: hidden;
+}
+
+.lt-photo.is-front .lt-cap,
+.lt-photo:focus-within .lt-cap {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+}
+
+.lt-cap-num {
+  color: var(--lt-portfolio-accent);
+  font-family: var(--lt-portfolio-serif);
+  font-size: 14px;
+  font-style: italic;
+  min-width: 28px;
+}
+
+.lt-cap-title {
+  color: var(--lt-portfolio-ink);
+  flex: 1;
+  font-family: var(--lt-portfolio-serif);
+  font-size: 18px;
+  font-style: italic;
+}
+
 .lt-cursor-dot,
 .lt-cursor-ring {
   left: 0;
-  opacity: 0;
+  mix-blend-mode: multiply;
   pointer-events: none;
   position: fixed;
   top: 0;
-  transition: opacity 0.18s ease;
   will-change: transform;
   z-index: 9999;
 }
@@ -202,11 +229,6 @@
   height: 38px;
   transform: translate(-50%, -50%);
   width: 38px;
-}
-
-.lt-cursor-dot.is-visible,
-.lt-cursor-ring.is-visible {
-  opacity: 1;
 }
 
 .lt-portfolio__noscript {
@@ -232,48 +254,18 @@
 
 .lt-portfolio__empty h2 {
   color: var(--lt-portfolio-ink);
-  font-family: var(--lt-font-heading, Georgia, serif);
+  font-family: var(--lt-portfolio-serif);
   font-size: 2rem;
   line-height: 1.1;
   margin: 0 0 1rem;
 }
 
 .lt-portfolio__empty a {
-  color: var(--lt-portfolio-accent);
-  font-family: var(--lt-font-body, system-ui, sans-serif);
+  color: #b31b34;
+  font-family: var(--lt-portfolio-sans);
   font-weight: 900;
   text-decoration: underline;
   text-underline-offset: 0.16em;
-}
-
-@media (min-width: 768px) {
-  .lt-portfolio__intro {
-    padding-left: 3rem;
-    padding-top: 4rem;
-  }
-
-  .lt-portfolio__title {
-    font-size: 5.75rem;
-  }
-
-  .lt-portfolio__meta {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1200px) {
-  .lt-portfolio__intro {
-    padding-left: 4rem;
-    padding-top: 4.25rem;
-  }
-
-  .lt-portfolio__title {
-    font-size: 6.75rem;
-  }
-
-  .lt-portfolio__scroll-cue {
-    display: flex;
-  }
 }
 
 @media (max-width: 768px) {
@@ -286,19 +278,26 @@
     display: none;
   }
 
-  .lt-portfolio__intro {
-    min-height: auto;
-    padding: 3rem 1rem 2rem;
+  .lt-hero {
+    min-height: calc(100svh - 76px);
+    padding: 40px 20px 56px;
   }
 
-  .lt-portfolio__title {
-    font-size: 3rem;
+  .lt-eyebrow {
+    margin-bottom: 22px;
+  }
+
+  .lt-title {
+    font-size: clamp(48px, 13vw, 56px);
     max-width: 100%;
-    overflow-wrap: anywhere;
+    overflow-wrap: normal;
+    word-break: normal;
   }
 
-  .lt-portfolio__meta {
-    margin-top: 2rem;
+  .lt-meta {
+    gap: 18px;
+    grid-template-columns: 1fr;
+    margin-top: 32px;
   }
 
   .lt-reel {
@@ -310,21 +309,28 @@
   }
 
   .lt-photo {
-    aspect-ratio: var(--ar, 1);
+    aspect-ratio: var(--ar, 1) !important;
     height: auto !important;
     left: 0 !important;
-    margin: 0 0 80px !important;
+    margin: 0 20px 80px !important;
     opacity: 1 !important;
     position: relative !important;
     top: 0 !important;
     transform: none !important;
-    width: 100% !important;
+    width: calc(100vw - 40px) !important;
   }
 
-  .lt-frame {
-    height: auto;
+  .lt-cap {
+    bottom: -38px;
+    font-size: 11px;
+    gap: 10px;
   }
 
+  .lt-cap-title {
+    font-size: 16px;
+  }
+
+  .lt-frame,
   .lt-frame img {
     height: auto;
   }
@@ -341,27 +347,24 @@
   }
 
   .lt-reel {
-    align-items: center;
     display: flex;
     flex-direction: column;
-    gap: 64px;
     height: auto !important;
     margin-top: 20px;
     padding: 30px 0 100px;
   }
 
   .lt-photo {
-    aspect-ratio: var(--ar, 1);
+    aspect-ratio: var(--ar, 1) !important;
     height: auto !important;
     left: 0 !important;
-    margin: 0 !important;
-    max-width: min(960px, calc(100% - 48px));
+    margin: 0 20px 80px !important;
     opacity: 1 !important;
     position: relative !important;
     top: 0 !important;
     transform: none !important;
     transition: none;
-    width: 100% !important;
+    width: calc(100vw - 40px) !important;
   }
 
   .lt-frame,

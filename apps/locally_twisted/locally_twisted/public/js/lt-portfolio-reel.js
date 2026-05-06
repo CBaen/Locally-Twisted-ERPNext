@@ -30,15 +30,6 @@
     let rx = mx;
     let ry = my;
 
-    root.addEventListener("mouseenter", () => {
-      dot.classList.add("is-visible");
-      ring.classList.add("is-visible");
-    });
-    root.addEventListener("mouseleave", () => {
-      dot.classList.remove("is-visible");
-      ring.classList.remove("is-visible");
-    });
-
     window.addEventListener("mousemove", (event) => {
       mx = event.clientX;
       my = event.clientY;
@@ -81,8 +72,8 @@
 
   function anchorPercent(photo, index, viewportWidth) {
     if (photo.side === "center") return 50 - (photo._w / viewportWidth) * 50;
-    if (photo.side === "left") return 24 + ((index * 3) % 6);
-    return 100 - (photo._w / viewportWidth) * 100 - (6 + ((index * 5) % 6));
+    if (photo.side === "left") return 2 + ((index * 5) % 12);
+    return 100 - (photo._w / viewportWidth) * 100 - (2 + ((index * 9) % 12));
   }
 
   function makePhotoEl(photo, index, viewportWidth) {
@@ -118,6 +109,26 @@
     image.height = Math.round(photo.h);
     frame.appendChild(image);
     figure.appendChild(frame);
+
+    const caption = document.createElement("figcaption");
+    caption.className = "lt-cap";
+
+    const number = document.createElement("span");
+    number.className = "lt-cap-num";
+    number.textContent = String(index + 1).padStart(2, "0");
+
+    const title = document.createElement("span");
+    title.className = "lt-cap-title";
+    title.textContent = photo.title;
+
+    const meta = document.createElement("span");
+    meta.className = "lt-cap-meta";
+    meta.textContent = [photo.client, photo.year].filter(Boolean).join(" \u00b7 ");
+
+    caption.appendChild(number);
+    caption.appendChild(title);
+    caption.appendChild(meta);
+    figure.appendChild(caption);
 
     return figure;
   }

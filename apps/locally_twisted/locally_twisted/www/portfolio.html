@@ -1,40 +1,33 @@
 {% extends "templates/web.html" %}
 
 {% block head_include %}
-<link rel="stylesheet" href="/assets/locally_twisted/css/lt-portfolio-reel.css?v=20260506-3">
+<link rel="stylesheet" href="/assets/locally_twisted/css/lt-portfolio-reel.css?v=20260506-4">
 {% endblock %}
 
 {% block page_content %}
 
-<section class="lt-portfolio" data-portfolio aria-labelledby="lt-portfolio-title">
-    <header class="lt-portfolio__intro">
-        <p class="lt-portfolio__eyebrow">Selected work - 2024-2025</p>
-        <h1 id="lt-portfolio-title" class="lt-portfolio__title">
-            {{ portfolio_heading_line_1 }}<br>
-            <em>{{ portfolio_heading_line_2 }}</em>
+<div class="lt-portfolio" data-portfolio aria-labelledby="lt-portfolio-title">
+    <section class="lt-hero">
+        <p class="lt-eyebrow">Selected work &middot; Wasatch Front &middot; 2024 &mdash; 2025</p>
+        <h1 id="lt-portfolio-title" class="lt-title">
+            Balloon installations<br>
+            <em>for the room you remember.</em>
         </h1>
-        <div class="lt-portfolio__meta" aria-label="Portfolio context">
+        <div class="lt-meta" aria-label="Portfolio context">
             <div>
-                <span class="lt-portfolio__meta-label">Studio</span>
-                <span class="lt-portfolio__meta-value">Wasatch Front, Utah</span>
+                <span class="lt-meta-label">Studio</span>
+                <span class="lt-meta-value">Wasatch Front</span>
             </div>
             <div>
-                <span class="lt-portfolio__meta-label">Practice</span>
-                <span class="lt-portfolio__meta-value">Corporate, school, civic, and private-event installs</span>
+                <span class="lt-meta-label">Practice</span>
+                <span class="lt-meta-value">Corporate, civic, school, venue, private</span>
             </div>
             <div>
-                <span class="lt-portfolio__meta-label">Index</span>
-                <span class="lt-portfolio__meta-value">{{ portfolio_count }} works</span>
+                <span class="lt-meta-label">Index</span>
+                <span class="lt-meta-value">{{ portfolio_count }} works</span>
             </div>
         </div>
-        <div class="lt-portfolio__scroll-cue" aria-hidden="true">
-            <span>Scroll</span>
-            <svg width="10" height="40" viewBox="0 0 10 40" focusable="false">
-                <line x1="5" y1="0" x2="5" y2="38"></line>
-                <polyline points="1,32 5,38 9,32"></polyline>
-            </svg>
-        </div>
-    </header>
+    </section>
 
     {% if portfolio_count %}
     <main class="lt-reel" data-reel aria-label="Portfolio photos"></main>
@@ -57,12 +50,12 @@
         <a href="/portfolio">View the full portfolio</a>
     </div>
     {% endif %}
-</section>
+</div>
 
 <script>
 window.LT_PORTFOLIO_PHOTOS = {{ portfolio_photos_json | safe }};
 </script>
-<script src="/assets/locally_twisted/js/lt-portfolio-reel.js?v=20260506-3"></script>
+<script src="/assets/locally_twisted/js/lt-portfolio-reel.js?v=20260506-4" defer></script>
 <script type="application/ld+json">
 {{ itemlist_jsonld | safe }}
 </script>
