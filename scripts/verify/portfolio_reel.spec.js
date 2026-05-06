@@ -23,6 +23,8 @@ test.describe("portfolio proof reel", () => {
 			const reel = document.querySelector("[data-reel]");
 			const photos = Array.from(document.querySelectorAll(".lt-photo"));
 			const first = photos[0];
+			const second = photos[1];
+			const third = photos[2];
 			const firstImage = first ? first.querySelector("img") : null;
 			const firstStyle = first ? window.getComputedStyle(first) : null;
 			const imageStyle = firstImage ? window.getComputedStyle(firstImage) : null;
@@ -30,10 +32,17 @@ test.describe("portfolio proof reel", () => {
 			return {
 				hasRoot: Boolean(root),
 				hasReel: Boolean(reel),
+				headingText: document.querySelector(".lt-portfolio__title")?.textContent || "",
+				metaCount: document.querySelectorAll(".lt-portfolio__meta > div").length,
 				photoCount: photos.length,
 				firstPosition: firstStyle ? firstStyle.position : null,
 				firstWidth: rect ? Math.round(rect.width) : 0,
 				firstHeight: rect ? Math.round(rect.height) : 0,
+				secondWidth: second ? Math.round(second.getBoundingClientRect().width) : 0,
+				thirdTop: third ? Math.round(parseFloat(third.style.top || "0")) : 0,
+				firstSide: first ? first.dataset.side : "",
+				secondSide: second ? second.dataset.side : "",
+				thirdSide: third ? third.dataset.side : "",
 				imageObjectFit: imageStyle ? imageStyle.objectFit : null,
 				imageSrc: firstImage ? firstImage.currentSrc || firstImage.src : "",
 				imageWidthAttr: firstImage ? firstImage.getAttribute("width") : null,
@@ -44,10 +53,18 @@ test.describe("portfolio proof reel", () => {
 
 		expect(facts.hasRoot).toBe(true);
 		expect(facts.hasReel).toBe(true);
+		expect(facts.headingText).toContain("Sculptural balloon installations");
+		expect(facts.headingText).toContain("for serious rooms.");
+		expect(facts.metaCount).toBe(3);
 		expect(facts.photoCount).toBeGreaterThanOrEqual(15);
 		expect(facts.firstPosition).toBe("absolute");
-		expect(facts.firstWidth).toBeGreaterThan(600);
-		expect(facts.firstHeight).toBeGreaterThan(400);
+		expect(facts.firstSide).toBe("left");
+		expect(facts.secondSide).toBe("right");
+		expect(facts.thirdSide).toBe("left");
+		expect(facts.firstWidth).toBeGreaterThan(390);
+		expect(facts.firstWidth).toBeLessThan(500);
+		expect(facts.secondWidth - facts.firstWidth).toBeGreaterThan(60);
+		expect(facts.thirdTop).toBeGreaterThan(360);
 		expect(facts.imageObjectFit).toBe("contain");
 		expect(facts.imageSrc).toContain("/optimized/");
 		expect(facts.imageSrc).toContain(".webp");
@@ -122,5 +139,56 @@ test.describe("portfolio proof reel", () => {
 		await expectSuccessfulResponse(emptyResponse, "/portfolio?category=balloon-drops");
 		await expect(page.locator(".lt-portfolio__empty")).toBeVisible();
 		await expect(page.locator(".lt-photo")).toHaveCount(0);
+	});
+
+	test("desktop scroll reveals a staggered collage instead of a static row", async ({ page }) => {
+		await page.setViewportSize({ width: 1366, height: 900 });
+		const response = await gotoAndSettle(page, "/portfolio");
+		await expectSuccessfulResponse(response, "/portfolio");
+		await page.waitForSelector(".lt-photo");
+
+		const before = await page.evaluate(() => {
+			const first = document.querySelector(".lt-photo");
+			return {
+				transform: first ? first.style.transform : "",
+				opacity: first ? Number.parseFloat(first.style.opacity || "0") : 0,
+			};
+		});
+
+		await page.mouse.wheel(0, 700);
+		await page.waitForTimeout(1200);
+
+		const after = await page.evaluate(() => {
+			const photos = Array.from(document.querySelectorAll(".lt-photo"));
+			const visible = photos
+				.map((photo) => {
+					const rect = photo.getBoundingClientRect();
+					return {
+						left: Math.round(rect.left),
+						top: Math.round(rect.top),
+						width: Math.round(rect.width),
+						height: Math.round(rect.height),
+						visible: rect.bottom > 0 && rect.top < window.innerHeight,
+						transform: photo.style.transform,
+						opacity: Number.parseFloat(photo.style.opacity || "0"),
+					};
+				})
+				.filter((photo) => photo.visible);
+			return {
+				firstTransform: photos[0] ? photos[0].style.transform : "",
+				firstOpacity: photos[0] ? Number.parseFloat(photos[0].style.opacity || "0") : 0,
+				visible,
+			};
+		});
+
+		expect(after.firstTransform).not.toBe(before.transform);
+		expect(after.firstOpacity).toBeGreaterThan(before.opacity);
+		expect(after.visible.length).toBeGreaterThanOrEqual(3);
+		expect(Math.max(...after.visible.map((photo) => photo.width))).toBeLessThan(760);
+		expect(new Set(after.visible.map((photo) => photo.top)).size).toBeGreaterThan(2);
+		expect(Math.min(...after.visible.map((photo) => photo.left))).toBeGreaterThanOrEqual(-8);
+		expectNoLayoutFailures(expect, await auditPageLayout(page, {
+			targetSelectors: [".lt-photo"],
+		}), "portfolio staggered scroll state");
 	});
 });

@@ -172,46 +172,68 @@ GALLERY_ITEMS = [
 ]
 
 
+# The reference design depends on mixed scales and a left/right/center rhythm.
+# Do not normalize these values; that collapses the page into a static row.
+APPROVED_COLLAGE_SLOTS = [
+    {"side": "left", "scale": 0.62},
+    {"side": "right", "scale": 0.74},
+    {"side": "left", "scale": 0.58},
+    {"side": "center", "scale": 0.92},
+    {"side": "left", "scale": 0.60},
+    {"side": "right", "scale": 0.64},
+    {"side": "left", "scale": 0.74},
+    {"side": "right", "scale": 0.58},
+    {"side": "center", "scale": 0.96},
+    {"side": "right", "scale": 0.55},
+    {"side": "left", "scale": 0.62},
+    {"side": "right", "scale": 0.76},
+    {"side": "left", "scale": 0.60},
+    {"side": "right", "scale": 0.62},
+    {"side": "left", "scale": 0.72},
+]
+
 PORTFOLIO_DISPLAY_ORDER = [
-    "corporate-logo-arch",
-    "corporate-wsu-arch-bouquets",
-    "wedding-floral-half-arch",
-    "birthday-dolphin-backdrop",
-    "corporate-weberstock-photo-opt",
-    "wedding-foil-heart-arch",
-    "wedding-organic-half-arch",
-    "birthday-smurfs-arch",
-    "seasonal-easter-rabbit-arch",
-    "school-grad-garland",
-    "seasonal-pride-columns",
     "birthday-pirate-column",
+    "corporate-weberstock-photo-opt",
+    "wedding-organic-half-arch",
+    "birthday-dolphin-backdrop",
     "seasonal-halloween-tombstone",
+    "wedding-floral-half-arch",
+    "corporate-logo-arch",
+    "seasonal-pride-columns",
+    "school-grad-garland",
+    "wedding-foil-heart-arch",
+    "birthday-smurfs-arch",
+    "corporate-wsu-arch-bouquets",
+    "seasonal-easter-rabbit-arch",
     "birthday-balloon-bouquets",
     "school-back-to-school-stage",
 ]
 
 PORTFOLIO_REEL_META = {
-    "corporate-logo-arch": {"w": 2000, "h": 1500, "side": "left", "scale": 0.96},
-    "corporate-wsu-arch-bouquets": {"w": 2000, "h": 1500, "side": "right", "scale": 0.92},
-    "wedding-floral-half-arch": {"w": 2000, "h": 1500, "side": "left", "scale": 0.88},
-    "birthday-dolphin-backdrop": {"w": 2000, "h": 1500, "side": "right", "scale": 0.96},
-    "corporate-weberstock-photo-opt": {"w": 2000, "h": 1500, "side": "center", "scale": 1.0},
-    "wedding-foil-heart-arch": {"w": 2000, "h": 1500, "side": "left", "scale": 0.9},
-    "wedding-organic-half-arch": {"w": 1500, "h": 2000, "side": "right", "scale": 0.74},
-    "birthday-smurfs-arch": {"w": 2000, "h": 1500, "side": "left", "scale": 0.92},
-    "seasonal-easter-rabbit-arch": {"w": 2000, "h": 1500, "side": "right", "scale": 0.96},
-    "school-grad-garland": {"w": 2000, "h": 1500, "side": "center", "scale": 1.0},
-    "seasonal-pride-columns": {"w": 2000, "h": 1500, "side": "left", "scale": 0.9},
-    "birthday-pirate-column": {"w": 1440, "h": 1800, "side": "right", "scale": 0.72},
-    "seasonal-halloween-tombstone": {"w": 1284, "h": 1595, "side": "left", "scale": 0.72},
-    "birthday-balloon-bouquets": {"w": 2000, "h": 1500, "side": "right", "scale": 0.84},
-    "school-back-to-school-stage": {"w": 746, "h": 573, "side": "left", "scale": 0.78},
+    "wedding-organic-half-arch": {"w": 1500, "h": 2000},
+    "corporate-weberstock-photo-opt": {"w": 2000, "h": 1500},
+    "birthday-pirate-column": {"w": 1440, "h": 1800},
+    "birthday-dolphin-backdrop": {"w": 2000, "h": 1500},
+    "seasonal-halloween-tombstone": {"w": 1284, "h": 1595},
+    "wedding-floral-half-arch": {"w": 2000, "h": 1500},
+    "corporate-logo-arch": {"w": 2000, "h": 1500},
+    "seasonal-pride-columns": {"w": 2000, "h": 1500},
+    "school-grad-garland": {"w": 2000, "h": 1500},
+    "wedding-foil-heart-arch": {"w": 2000, "h": 1500},
+    "birthday-smurfs-arch": {"w": 2000, "h": 1500},
+    "corporate-wsu-arch-bouquets": {"w": 2000, "h": 1500},
+    "seasonal-easter-rabbit-arch": {"w": 2000, "h": 1500},
+    "birthday-balloon-bouquets": {"w": 2000, "h": 1500},
+    "school-back-to-school-stage": {"w": 746, "h": 573},
 }
 
 _portfolio_order = {slug: index for index, slug in enumerate(PORTFOLIO_DISPLAY_ORDER)}
 GALLERY_ITEMS.sort(key=lambda item: _portfolio_order.get(item["slug"], len(_portfolio_order)))
-for item in GALLERY_ITEMS:
+for index, item in enumerate(GALLERY_ITEMS):
+    slot = APPROVED_COLLAGE_SLOTS[index % len(APPROVED_COLLAGE_SLOTS)]
     item.update(PORTFOLIO_REEL_META.get(item["slug"], {}))
+    item.update(slot)
 
 
 def _known_slug(slug, options):
@@ -308,10 +330,12 @@ def get_context(context):
 
     if label:
         context.title = f"{label} - Locally Twisted Portfolio"
-        context.portfolio_heading = label
+        context.portfolio_heading_line_1 = label
+        context.portfolio_heading_line_2 = "installed with scale."
     else:
         context.title = "Portfolio - Locally Twisted"
-        context.portfolio_heading = "Portfolio"
+        context.portfolio_heading_line_1 = "Sculptural balloon installations"
+        context.portfolio_heading_line_2 = "for serious rooms."
 
     description = "Browse Locally Twisted's installed balloon decor portfolio across Utah."
     if label:

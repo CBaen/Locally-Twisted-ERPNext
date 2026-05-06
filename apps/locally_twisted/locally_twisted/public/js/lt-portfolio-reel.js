@@ -81,8 +81,8 @@
 
   function anchorPercent(photo, index, viewportWidth) {
     if (photo.side === "center") return 50 - (photo._w / viewportWidth) * 50;
-    if (photo.side === "left") return 2 + ((index * 5) % 12);
-    return 100 - (photo._w / viewportWidth) * 100 - (2 + ((index * 9) % 12));
+    if (photo.side === "left") return 24 + ((index * 3) % 6);
+    return 100 - (photo._w / viewportWidth) * 100 - (6 + ((index * 5) % 6));
   }
 
   function makePhotoEl(photo, index, viewportWidth) {

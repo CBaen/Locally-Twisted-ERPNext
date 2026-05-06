@@ -245,8 +245,10 @@ test.describe("Locally Twisted interactive layout states", () => {
 				await page.setViewportSize({ width: viewport.width, height: viewport.height });
 				const response = await gotoAndSettle(page, "/portfolio");
 				await expectSuccessfulResponse(response, "/portfolio");
+				await dismissCookieNotice(page);
 
 				await page.waitForSelector(".lt-photo");
+				await page.locator(".lt-photo").first().scrollIntoViewIfNeeded();
 				await page.locator(".lt-photo").first().click({ force: true });
 				await expect(page.locator(".lt-photo.is-front")).toHaveCount(1);
 

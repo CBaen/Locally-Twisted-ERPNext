@@ -44,7 +44,7 @@ while the kept production source is the Frappe implementation.
 6. Use optimized derivatives for the public reel, but do not crop proof photos to satisfy layout convenience.
 7. Mobile should become a full-width natural-ratio stream, not a tiny desktop reel squeezed into a phone viewport.
 8. Keep the reference folder in `research/` while external critique is active. Delete it only after GL approves cleanup.
-9. Verify browser behavior, not just source shape.
+9. Verify browser behavior, not just source shape. A row of images is a failed translation even if the assets load.
 
 ## Verification Checklist
 
@@ -59,7 +59,7 @@ npm run test:interactive-layout -- --grep portfolio
 
 Also inspect desktop and mobile screenshots before launch claims, especially after photo-order or image-quality changes.
 
-The latest verified use passed `npm run test:portfolio-reel` (3/3), `npm run test:layout-fit -- --grep portfolio` (13/13), and `npm run test:interactive-layout -- --grep portfolio` (3/3). The current production route also returned `200`, and the portfolio CSS/JS/optimized image assets returned `200`.
+The latest verified use passed `npm run test:portfolio-reel` (4/4), `npm run test:layout-fit -- --grep portfolio` (13/13), and `npm run test:interactive-layout -- --grep portfolio` (3/3). The route-specific verifier now checks the approved staggered side/scale rhythm and scroll-driven reveal so a static row cannot pass as a successful translation.
 
 ## LT Receipt
 

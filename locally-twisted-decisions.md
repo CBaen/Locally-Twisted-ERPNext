@@ -16,7 +16,7 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 **Implementation:** Production source is `www/portfolio.html`, `www/portfolio.py`, `public/css/lt-portfolio-reel.css`, `public/js/lt-portfolio-reel.js`, optimized images under `public/images/portfolio/optimized/`, and `scripts/verify/portfolio_reel.spec.js`. The current page uses large natural-ratio photos and click-to-front behavior; category query links still filter the photo payload server-side, but there is no visible filter bar or lightbox modal in the current translation.
 
-**Verification receipt:** Latest focused checks passed on the running local Frappe site: `/portfolio` returned `200`; page CSS, JS, and optimized image assets returned `200`; `npm run test:portfolio-reel` passed 3/3; `npm run test:layout-fit -- --grep portfolio` passed 13/13; and `npm run test:interactive-layout -- --grep portfolio` passed 3/3.
+**Verification receipt:** Latest focused checks passed on the running local Frappe site: `/portfolio` returned `200`; page CSS, JS, and optimized image assets returned `200`; `npm run test:portfolio-reel` passed 4/4, including the staggered side/scale rhythm and scroll-driven reveal guard; `npm run test:layout-fit -- --grep portfolio` passed 13/13; and `npm run test:interactive-layout -- --grep portfolio` passed 3/3.
 
 **Decided by:** GL clarified that Claude/designer code should be used for photo placement and design critique; Codex translated and documented the Frappe-owned implementation.
 
