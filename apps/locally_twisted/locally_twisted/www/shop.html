@@ -24,20 +24,13 @@
 <section class="lt-shop__listing" aria-label="Product grid">
     <div class="lt-shop__listing-inner">
 
-        <div class="lt-shop__filters" role="group" aria-label="Filter by category">
-            {% for cat in categories %}
-            <button type="button"
-                    class="lt-shop__chip"
-                    data-category="{{ cat.id }}"
-                    aria-pressed="{{ 'true' if cat.id == 'all' else 'false' }}">
-                {{ cat.label }}
-            </button>
-            {% endfor %}
-        </div>
+        <div class="lt-shop__browse-layout">
+            {% include "locally_twisted/templates/includes/shop_category_nav.html" %}
 
-        <p class="lt-shop__count" id="lt-shop-count">{{ total_items }} item{% if total_items != 1 %}s{% endif %}</p>
+            <div class="lt-shop__product-area">
+                <p class="lt-shop__count" id="lt-shop-count">{{ total_items }} item{% if total_items != 1 %}s{% endif %}</p>
 
-        <div class="lt-shop__grid" id="lt-shop-grid">
+                <div class="lt-shop__grid" id="lt-shop-grid">
             {% for item in items %}
             <article class="lt-shop__card"
                      data-category="{{ item.category_slug }}"
@@ -85,9 +78,11 @@
                 </div>
             </article>
             {% endfor %}
-        </div>
+                </div>
 
-        <div class="lt-shop__feedback" id="lt-shop-feedback" role="status" aria-live="polite"></div>
+                <div class="lt-shop__feedback" id="lt-shop-feedback" role="status" aria-live="polite"></div>
+            </div>
+        </div>
 
     </div>
 </section>
@@ -105,40 +100,15 @@
 
 <script>
 (function () {
-    // Category filter — client-side, no roundtrip
-    var chips = document.querySelectorAll('.lt-shop__chip');
     var cards = document.querySelectorAll('.lt-shop__card');
     var grid = document.getElementById('lt-shop-grid');
-    var countEl = document.getElementById('lt-shop-count');
-    var labelById = {};
-    chips.forEach(function (c) { labelById[c.dataset.category] = c.textContent.trim(); });
 
     function applyGridBalance(visible) {
         if (!grid) return;
         grid.dataset.ltGridBalance = (visible > 1 && visible % 3 !== 0 && visible % 2 === 0) ? 'two' : 'three';
     }
 
-    function applyFilter(category) {
-        var visible = 0;
-        cards.forEach(function (card) {
-            var match = (category === 'all' || card.dataset.category === category);
-            card.hidden = !match;
-            if (match) visible++;
-        });
-        chips.forEach(function (c) {
-            c.setAttribute('aria-pressed', c.dataset.category === category ? 'true' : 'false');
-        });
-        if (countEl) {
-            var label = (category === 'all') ? '' : (' in ' + labelById[category]);
-            countEl.textContent = visible + ' item' + (visible !== 1 ? 's' : '') + label;
-        }
-        applyGridBalance(visible);
-    }
-
-    chips.forEach(function (c) {
-        c.addEventListener('click', function () { applyFilter(c.dataset.category); });
-    });
-    applyFilter('all');
+    applyGridBalance(cards.length);
 
     // Single-SKU add-to-cart. Variant templates link to their option selector.
     var feedback = document.getElementById('lt-shop-feedback');

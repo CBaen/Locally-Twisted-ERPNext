@@ -152,21 +152,24 @@ test.describe("Locally Twisted interactive layout states", () => {
 			{ name: "820", width: 820, height: 1180 },
 			{ name: "1200", width: 1200, height: 900 },
 		]) {
-			test(`/shop filtered grid fits at ${viewport.name}px`, async ({ page }) => {
+			test(`/shop category navigation and grid fit at ${viewport.name}px`, async ({ page }) => {
 				await page.setViewportSize({ width: viewport.width, height: viewport.height });
 				const response = await gotoAndSettle(page, "/shop");
 				await expectSuccessfulResponse(response, "/shop");
 
-				const secondChip = page.locator(".lt-shop__chip").nth(1);
-				if ((await secondChip.count()) > 0) {
-					await secondChip.click();
+				await expect(page.locator(".lt-shop__chip")).toHaveCount(0);
+				await expect(page.locator(".lt-shop__category-select")).toHaveCount(1);
+				if (viewport.width >= 992) {
+					await expect(page.locator(".lt-shop__category-rail nav")).toBeVisible();
+				} else {
+					await expect(page.locator(".lt-shop__category-select")).toBeVisible();
 				}
 
 				const result = await auditPageLayout(page, {
-					containerSelectors: [".lt-shop__filters", ".lt-shop__grid", ".lt-shop__card"],
-					targetSelectors: [".lt-shop__chip", ".lt-shop__card-add", ".lt-shop__cta-btn"],
+					containerSelectors: [".lt-shop__category-rail", ".lt-shop__grid", ".lt-shop__card"],
+					targetSelectors: [".lt-shop__category-link", ".lt-shop__category-select", ".lt-shop__card-add", ".lt-shop__cta-btn"],
 				});
-				expectNoLayoutFailures(expect, result, `/shop filtered at ${viewport.name}px`);
+				expectNoLayoutFailures(expect, result, `/shop category navigation at ${viewport.name}px`);
 			});
 
 			test(`variant product selectors fit at ${viewport.name}px`, async ({ page }) => {

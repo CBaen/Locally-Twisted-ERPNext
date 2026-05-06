@@ -54,33 +54,11 @@
     </div>
   </div>
 
-  {# ── Main layout: top controls + grid ──────────────────────────────── #}
-  <div class="lt-shop__layout">
+  {# Main layout: category rail + grid #}
+  <div class="lt-shop__layout lt-shop__browse-layout">
 
-    {# ── Category controls ──────────────────────────────────────────── #}
-    <section class="lt-shop__toolbar lt-shop__toolbar--categories" aria-label="Shop categories">
-      <div>
-        <p class="lt-shop__filters-heading">Categories</p>
-        <nav aria-label="Product categories">
-          <ul class="lt-shop__category-list">
-            <li class="lt-shop__category-item">
-              <a href="/shop" class="lt-shop__category-link">
-                All Ready-to-Order
-              </a>
-            </li>
-            {% for cat in shop_categories %}
-            <li class="lt-shop__category-item">
-              <a href="/{{ cat.route }}"
-                 class="lt-shop__category-link{% if cat.item_group_name == item_group_name %} is-active{% endif %}"
-                 {% if cat.item_group_name == item_group_name %}aria-current="page"{% endif %}>
-                {{ cat.item_group_name }}
-              </a>
-            </li>
-            {% endfor %}
-          </ul>
-        </nav>
-      </div>
-    </section>
+    {# Category rail/dropdown navigation #}
+    {% include "locally_twisted/templates/includes/shop_category_nav.html" %}
 
     {# ── Product grid area ─────────────────────────────────────────── #}
     <div class="lt-shop__main">

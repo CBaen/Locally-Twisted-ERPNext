@@ -1,0 +1,58 @@
+{% if current_shop_category is defined %}
+  {% set lt_current_category = current_shop_category %}
+{% else %}
+  {% set lt_current_category = item_group_name|default("") %}
+{% endif %}
+
+<aside class="lt-shop__category-rail" aria-label="Ready-to-order categories">
+  <div class="lt-shop__category-mobile">
+    <label class="lt-shop__category-select-label" for="lt-shop-category-select">Browse category</label>
+    <select class="lt-shop__category-select" id="lt-shop-category-select" aria-label="Browse ready-to-order category">
+      <option value="/shop" {% if lt_current_category in ("", "all") %}selected{% endif %}>All Ready-to-Order</option>
+      {% for cat in shop_categories %}
+      {% set cat_name = cat.item_group_name or cat.name %}
+      <option value="/{{ cat.route }}" {% if cat_name == lt_current_category %}selected{% endif %}>{{ cat_name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="lt-shop__category-rail-head">
+    <p class="lt-shop__category-kicker">Ready-to-order</p>
+    <h2 class="lt-shop__category-title">Browse by category</h2>
+  </div>
+
+  <nav aria-label="Ready-to-order category list">
+    <ul class="lt-shop__category-list">
+      <li class="lt-shop__category-item">
+        <a href="/shop"
+           class="lt-shop__category-link{% if lt_current_category in ('', 'all') %} is-active{% endif %}"
+           {% if lt_current_category in ("", "all") %}aria-current="page"{% endif %}>
+          All Ready-to-Order
+        </a>
+      </li>
+      {% for cat in shop_categories %}
+      {% set cat_name = cat.item_group_name or cat.name %}
+      <li class="lt-shop__category-item">
+        <a href="/{{ cat.route }}"
+           class="lt-shop__category-link{% if cat_name == lt_current_category %} is-active{% endif %}"
+           {% if cat_name == lt_current_category %}aria-current="page"{% endif %}>
+          {{ cat_name }}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </nav>
+</aside>
+
+<script>
+(function () {
+  var select = document.getElementById('lt-shop-category-select');
+  if (!select || select.dataset.ltReady === '1') return;
+  select.dataset.ltReady = '1';
+  select.addEventListener('change', function () {
+    if (select.value && select.value !== window.location.pathname) {
+      window.location.href = select.value;
+    }
+  });
+})();
+</script>

@@ -5,9 +5,9 @@ Website Item records for inventory, Item Price for pricing, and webshop's
 own cart endpoint + update_cart RPC for cart actions. We do NOT rebuild
 cart logic — webshop owns that. This page is purely the visual shell.
 
-Updated 2026-04-30: filter pills now source from Item Group children of
-"Shop Items" (Arches, Columns, Bouquets, etc.) instead of the old keyword
-categorizer. Driven by item.item_group field after the catalog port.
+Updated 2026-05-06: category browse uses a desktop category rail and mobile
+select instead of the old chip wall. Item Group children still come from
+ERPNext's "Shop Items" hierarchy.
 """
 import frappe
 
@@ -60,7 +60,7 @@ def get_context(context):
                 item["price_list_rate"] = min_price[0][0]
                 item["price_is_from"] = True
 
-        # Slug for filter pill data attribute (Item Group "Get-Well Bouquets" → "get-well-bouquets")
+        # Slug retained for analytics/debugging; navigation now links to category routes.
         item["category_slug"] = frappe.scrub(item.get("item_group") or "all").replace("_", "-")
         item["checkout_lane"] = checkout_lane_for_item_group(item.get("item_group"))
         rate = item.get("price_list_rate")
@@ -77,11 +77,11 @@ def get_context(context):
                 item["item_code"],
             )
 
-    # Sourced live from Item Group children of "Shop Items" — order by weightage.
+    # Sourced live from Item Group children of "Shop Items"; order by weightage.
     children = frappe.db.get_all(
         "Item Group",
         filters={"parent_item_group": "Shop Items", "show_in_website": 1},
-        fields=["name", "item_group_name", "weightage"],
+        fields=["name", "item_group_name", "route", "weightage"],
         order_by="weightage asc, item_group_name asc",
     )
     categories = [{"id": "all", "label": "All items"}]
@@ -93,6 +93,8 @@ def get_context(context):
 
     context.items = items
     context.categories = categories
+    context.shop_categories = children
+    context.current_shop_category = "all"
     context.total_items = len(items)
     context.title = "Ready-to-Order Balloon Decor"
     context.page_css = PAGE_CSS
@@ -188,7 +190,7 @@ PAGE_CSS = """
 }
 .lt-shop__band--sandstone { background-color: var(--lt-sandstone); height: 18px; }
 
-/* Filter + grid */
+/* Browse layout + grid */
 .lt-shop__listing {
     background: var(--lt-warm-white);
     padding: 2rem 1rem 4rem;
@@ -196,38 +198,6 @@ PAGE_CSS = """
 .lt-shop__listing-inner {
     max-width: 1100px;
     margin: 0 auto;
-}
-.lt-shop__filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    padding-bottom: 1.25rem;
-    margin-bottom: 1.25rem;
-    border-bottom: 1px solid rgba(14, 34, 64, 0.14);
-}
-.lt-shop__chip {
-    appearance: none;
-    -webkit-appearance: none;
-    border: 1px solid rgba(26, 26, 26, 0.18);
-    background: var(--lt-white);
-    color: var(--lt-near-black);
-    font-family: var(--lt-font-body);
-    font-size: 0.875rem;
-    font-weight: 500;
-    padding: 0.5rem 1rem;
-    border-radius: 0;
-    cursor: pointer;
-    transition: background-color 0.15s ease, border-color 0.15s ease;
-    min-height: 36px;
-}
-.lt-shop__chip:hover,
-.lt-shop__chip:focus-visible {
-    border-color: var(--lt-near-black);
-}
-.lt-shop__chip[aria-pressed="true"] {
-    border-color: var(--lt-navy);
-    background-color: var(--lt-navy);
-    color: var(--lt-white);
 }
 .lt-shop__count {
     font-family: var(--lt-font-body);
@@ -467,7 +437,7 @@ PAGE_CSS = """
 .lt-shop--landing .lt-shop__listing-inner,
 .lt-shop--landing .lt-shop__hero-inner,
 .lt-shop--landing .lt-shop__cta-inner {
-    width: min(100%, 1200px);
+    width: min(100%, 1500px);
     max-width: none;
     margin-inline: auto;
 }
@@ -494,14 +464,12 @@ PAGE_CSS = """
     color: var(--lt-navy);
     font-weight: 900;
 }
-.lt-shop--landing .lt-shop__chip,
 .lt-shop--landing .lt-shop__card-add,
 .lt-shop--landing .lt-shop__cta-btn {
     border-radius: 3px;
     min-height: 44px;
     font-weight: 900;
 }
-.lt-shop--landing .lt-shop__chip[aria-pressed="true"],
 .lt-shop--landing .lt-shop__card-add,
 .lt-shop--landing .lt-shop__cta-btn--primary {
     background: var(--lt-navy);
@@ -538,13 +506,13 @@ PAGE_CSS = """
 }
 .lt-shop--landing .lt-shop__listing-inner {
     box-sizing: border-box;
-    width: min(100%, 1280px);
-    padding-inline: clamp(1rem, 3vw, 2rem);
+    width: min(100%, 1500px);
+    padding-inline: 1rem;
 }
 .lt-shop--landing .lt-shop__grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: clamp(1.25rem, 3vw, 2rem);
+    gap: clamp(1rem, 2vw, 1.25rem);
     align-items: stretch;
 }
 .lt-shop--landing .lt-shop__card {
@@ -587,7 +555,7 @@ PAGE_CSS = """
     }
 }
 
-@media (min-width: 1180px) {
+@media (min-width: 1320px) {
     .lt-shop--landing .lt-shop__grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }

@@ -6,7 +6,7 @@ every deploy and fail loudly on customer-facing regressions.
 
 Coverage:
   1. Homepage navbar exposes the current authority-first primary links and /shop CTA.
-  2. /shop renders 11 filter pills + 53 product cards.
+  2. /shop renders the ready-to-order category rail/dropdown + 53 product cards.
   3. /shop and category pages use the approved product-showroom card contract.
   4. /shop-by-category redirects to /shop instead of rendering the retired
      category-card index.
@@ -196,13 +196,20 @@ def check_homepage(page):
 def check_shop_page(page):
     print(f"-> {BASE}/shop")
     page.goto(f"{BASE}/shop", wait_until="networkidle", timeout=15000)
-    chips = page.locator(".lt-shop__chip")
-    chip_count = chips.count()
-    assert_(chip_count == 12, f"/shop expected 12 pills (All + 11 categories), got {chip_count}")
+    assert_(
+        page.locator(".lt-shop__chip").count() == 0,
+        "/shop must not use the old category chip wall",
+    )
+    rail_links = page.locator(".lt-shop__category-rail .lt-shop__category-link")
+    rail_count = rail_links.count()
+    assert_(rail_count == 12, f"/shop expected 12 category rail links (All + 11 categories), got {rail_count}")
+    category_select = page.locator(".lt-shop__category-select")
+    assert_(category_select.count() == 1, "/shop should expose one mobile category select")
+    assert_(category_select.locator("option").count() == 12, "/shop mobile category select should include All + 11 categories")
 
     body = page.content()
     assert_("53 ITEMS" in body or "53&nbsp;ITEMS" in body or ">53" in body, "/shop should show 53 items count")
-    print(f"  OK {chip_count} pills rendered, 53 items")
+    print(f"  OK {rail_count} category rail links rendered, 53 items")
 
 
 def check_shop_showroom_contract(page):
@@ -236,8 +243,12 @@ def check_category_showroom_contract(page):
     page.set_viewport_size(DESKTOP_VIEWPORT)
     page.goto(SHOP_CATEGORY_SHOWCASE_URL, wait_until="networkidle", timeout=15000)
     assert_(
-        page.locator(".lt-shop__sidebar").count() == 0,
-        "Category showcase pages must use top controls, not a desktop sidebar",
+        page.locator(".lt-shop__toolbar--categories").count() == 0,
+        "Category showcase pages must not repeat the old top category button wall",
+    )
+    assert_(
+        page.locator(".lt-shop__category-rail").count() == 1,
+        "Category showcase pages must use the desktop category rail",
     )
     layout = _box(page, ".lt-shop__layout")
     assert_(layout is not None, "Category page missing .lt-shop__layout")
@@ -268,7 +279,7 @@ def check_category_showroom_contract(page):
         (mobile_card["imageWidth"] or 0) > MAX_MOBILE_THUMBNAIL_WIDTH,
         f"Category mobile cards must not use thumbnail treatment: got image width {mobile_card['imageWidth']:.1f}px",
     )
-    print("  OK category page uses top controls and showroom cards")
+    print("  OK category page uses side category rail/dropdown and showroom cards")
 
 
 def _visible_rect_rows(page, selector: str):
@@ -301,44 +312,54 @@ def _visible_rect_rows(page, selector: str):
     )
 
 
-def check_category_nav_symmetry_contract(page):
-    print("-> /shop-items/<group> category nav symmetry contract")
-    for viewport, expected_per_row in ((MOBILE_VIEWPORT, 2), (DESKTOP_VIEWPORT, 4)):
-        page.set_viewport_size(viewport)
-        page.goto(f"{BASE}/shop-items/get-well-bouquets", wait_until="networkidle", timeout=15000)
-        rows = _visible_rect_rows(page, ".lt-shop__toolbar--categories .lt-shop__category-link")
-        total_links = sum(row["count"] for row in rows)
-        assert_(total_links == 12, f"Category nav must include 12 equal tiles including All Ready-to-Order, got {total_links}")
-        for row in rows:
-            assert_(
-                row["count"] == expected_per_row,
-                f"Category nav rows must be symmetrical at {viewport['width']}px: got row {row['texts']} with {row['count']} cells, expected {expected_per_row}",
-            )
-            widths = row["widths"]
-            heights = row["heights"]
-            assert_(
-                max(widths) - min(widths) <= 2,
-                f"Category nav row widths must match at {viewport['width']}px: got {widths} for {row['texts']}",
-            )
-            assert_(
-                max(heights) - min(heights) <= 2,
-                f"Category nav row heights must match at {viewport['width']}px: got {heights} for {row['texts']}",
-            )
-    print("  OK category nav uses equal-width symmetrical rows")
+def check_category_nav_rail_contract(page):
+    print("-> shop category rail/dropdown navigation contract")
+    for url in (f"{BASE}/shop", f"{BASE}/shop-items/get-well-bouquets"):
+        page.set_viewport_size(DESKTOP_VIEWPORT)
+        page.goto(url, wait_until="networkidle", timeout=15000)
+        assert_(page.locator(".lt-shop__chip").count() == 0, f"{url} must not render category chips")
+        rail = page.locator(".lt-shop__category-rail")
+        assert_(rail.count() == 1, f"{url} missing desktop category rail")
+        assert_(rail.is_visible(), f"{url} category rail should be visible on desktop")
+        links = page.locator(".lt-shop__category-rail .lt-shop__category-link")
+        assert_(links.count() == 12, f"{url} category rail must include All + 11 categories")
+        active = page.locator(".lt-shop__category-rail .lt-shop__category-link.is-active")
+        assert_(active.count() == 1, f"{url} category rail should have exactly one active link")
+        rail_rows = _visible_rect_rows(page, ".lt-shop__category-rail .lt-shop__category-link")
+        assert_(
+            all(row["count"] == 1 for row in rail_rows),
+            f"{url} desktop rail must be a vertical list, got rows {rail_rows}",
+        )
+
+        page.set_viewport_size(MOBILE_VIEWPORT)
+        page.goto(url, wait_until="networkidle", timeout=15000)
+        select = page.locator(".lt-shop__category-select")
+        assert_(select.count() == 1, f"{url} missing mobile category select")
+        assert_(select.is_visible(), f"{url} category select should be visible on mobile")
+        assert_(select.locator("option").count() == 12, f"{url} mobile select must include All + 11 categories")
+        target_value = "/shop-items/arches" if url.endswith("/shop") else "/shop"
+        target_url = f"{BASE}{target_value}"
+        with page.expect_navigation(url=target_url, wait_until="networkidle", timeout=15000):
+            select.select_option(target_value)
+        assert_(page.url.rstrip("/") == target_url, f"{url} mobile select did not navigate to {target_url}")
+        assert_(
+            not page.locator(".lt-shop__category-rail nav").is_visible(),
+            f"{url} desktop rail list should be hidden on mobile",
+        )
+    print("  OK category navigation uses desktop rail and mobile select")
 
 
-def check_shop_filtered_grid_symmetry_contract(page):
-    print("-> /shop filtered product grid symmetry contract")
+def check_shop_product_grid_symmetry_contract(page):
+    print("-> /shop product grid symmetry contract")
     page.set_viewport_size(DESKTOP_VIEWPORT)
     page.goto(f"{BASE}/shop", wait_until="networkidle", timeout=15000)
-    page.locator(".lt-shop__chip[data-category='arches']").click()
     rows = _visible_rect_rows(page, "#lt-shop-grid .lt-shop__card")
-    assert_(rows, "/shop Arches filter did not render visible cards")
+    assert_(rows, "/shop did not render visible cards")
     assert_(
         rows[-1]["count"] != 1,
-        f"/shop filtered grid must not leave one orphan card on desktop: final row has {rows[-1]['texts']}",
+        f"/shop product grid must not leave one orphan card on desktop: final row has {rows[-1]['texts']}",
     )
-    print("  OK /shop filtered grid avoids desktop orphan rows")
+    print("  OK /shop product grid avoids desktop orphan rows")
 
 
 def check_category_product_grid_symmetry_contract(page):
@@ -620,12 +641,12 @@ def main() -> int:
             check_homepage,
             check_shop_page,
             check_shop_showroom_contract,
-            check_shop_filtered_grid_symmetry_contract,
+            check_shop_product_grid_symmetry_contract,
             check_shop_items_broad_route,
             check_shop_by_category_redirect,
             check_category_pages,
             check_category_showroom_contract,
-            check_category_nav_symmetry_contract,
+            check_category_nav_rail_contract,
             check_category_product_grid_symmetry_contract,
             check_fixed_price_product_pages_do_not_show_product_quote_gate,
             check_product_variant_page,

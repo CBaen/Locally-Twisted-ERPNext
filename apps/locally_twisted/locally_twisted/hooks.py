@@ -46,7 +46,7 @@ web_include_css = [
     "/assets/locally_twisted/css/lt-page-containment.css?v=20260505-containment-1",
     "/assets/locally_twisted/css/lt-mega-menu.css?v=20260506-mega-5",
     "/assets/locally_twisted/css/lt-product-polish.css?v=20260505-product-2",
-    "/assets/locally_twisted/css/lt-shop-showroom.css?v=20260506-showroom-3",
+    "/assets/locally_twisted/css/lt-shop-showroom.css?v=20260506-showroom-5",
     "/assets/locally_twisted/css/lt-event-playground.css?v=20260506-event-playground-1",
 ]
 
