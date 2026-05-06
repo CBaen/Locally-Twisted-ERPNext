@@ -33,7 +33,7 @@ def run() -> dict[str, object]:
     failures: list[str] = []
 
     status = paperwork_status.run()
-    automation = business_automation_index.run(include_digest=False)
+    automation = business_automation_index.run(include_digest=False, include_synthetic=False)
     invoice_review = unpaid_invoice_review.run()
     draft_packets = unpaid_invoice_draft_packet.run()
 
@@ -52,10 +52,10 @@ def run() -> dict[str, object]:
             "Unpaid invoice packets",
             _unpaid_packet_items(draft_packets),
         ),
-        "live_payment_blockers": _section(
-            "live_payment_blockers",
-            "Live payment blockers",
-            _live_payment_blockers(status),
+        "cutover_deferred_not_blocking": _section(
+            "cutover_deferred_not_blocking",
+            "Cutover deferred, not blocking synthetic readiness",
+            _cutover_deferred_items(status),
         ),
         "setup_gaps": _section(
             "setup_gaps",
@@ -175,14 +175,10 @@ def _unpaid_packet_items(draft_packets: dict[str, Any]) -> list[dict[str, Any]]:
     return items
 
 
-def _live_payment_blockers(status: dict[str, Any]) -> list[dict[str, str]]:
-    live_payment = status.get("live_payment_readiness") or {}
+def _cutover_deferred_items(status: dict[str, Any]) -> list[dict[str, str]]:
     return [
-        {
-            "label": str(failure),
-            "source": "payment_launch_readiness --mode live",
-        }
-        for failure in live_payment.get("failures") or []
+        dict(item)
+        for item in status.get("cutover_deferred_not_blocking") or []
     ]
 
 
@@ -210,7 +206,9 @@ def _next_safe_actions(
     if draft_packets.get("packet_count"):
         actions.append("Review unpaid invoice draft packets internally before any customer reminder or statement.")
     if status.get("attention_items"):
-        actions.append("Resolve setup gaps that block launch readiness: bank account, supplier/vendor, payroll, and live payment configuration.")
+        actions.append("Resolve non-live setup gaps that affect operational readiness: bank account, supplier/vendor, and payroll.")
+    if status.get("cutover_deferred_not_blocking"):
+        actions.append("Keep live Stripe keys, webhook secrets, production host checks, and real operator/customer data out of synthetic pipeline work until cutover.")
     if automation.get("exists_but_not_connected"):
         actions.append("Keep partially connected surfaces visible; do not describe quote/proposal, vendor packet, bank reconciliation, or payroll paths as operational.")
     actions.append("Do not send reminders, submit accounting records, or wire CRM stages to finance without an explicit approval path.")

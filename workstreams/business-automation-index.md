@@ -1,6 +1,6 @@
 # Business Automation Index
 
-Last updated: 2026-05-06 by Codex after adding the internal paperwork review digest and wiring it into the business automation index.
+Last updated: 2026-05-06 by Codex after adding the no-live synthetic business pipeline audit and separating synthetic readiness from live cutover readiness.
 
 ## Outcome
 
@@ -13,7 +13,7 @@ Make Locally Twisted's business system inspectable before it is trusted in Frapp
 - payment and document paths fail loudly instead of silently drifting
 - fake-data test paths are explicit and safe to run during development
 
-This workstream is the cross-system map. It coordinates with `paperwork-backend-automation.md`, `payment-backend-launch-readiness.md`, `finance-payroll-quickbooks-migration.md`, `erpnext-backend-simplification.md`, and `website-launch.md`.
+This workstream is the cross-system map. It coordinates with `paperwork-backend-automation.md`, `synthetic-business-pipeline.md`, `payment-backend-launch-readiness.md`, `finance-payroll-quickbooks-migration.md`, `erpnext-backend-simplification.md`, and `website-launch.md`.
 
 ## Current Verified Result
 
@@ -26,9 +26,9 @@ python scripts/verify/business_automation_index.py --report output/business-auto
 Current result on 2026-05-06:
 
 - `ok: true`
-- 19 total surfaces indexed
-- 11 launch-required surfaces
-- 15 surfaces exist and are connected
+- 20 total surfaces indexed
+- 12 launch-required surfaces
+- 16 surfaces exist and are connected
 - 4 surfaces exist but are not connected
 - 0 launch-required missing surfaces
 - 0 useful future surfaces missing
@@ -40,12 +40,13 @@ Fresh closeout verification also confirmed:
 
 - `/contact` smoke submission verified backend Lead creation and cleanup with marker `SMOKE-TEST-1778091063`.
 - Frappe's hook registry includes `locally_twisted.verify.business_automation_index.scheduled_checkup` under `daily`.
-- `payment_launch_readiness.py --mode live` fails for the expected cutover blockers: live Stripe keys, explicit site config keys, operator email config, and production host.
-- `paperwork_status.py` reports 30 sent Email Queue rows, 1 unpaid/overdue Sales Invoice, 8 expected Payment Requests, and no pending email queue rows.
+- Live Stripe keys, webhook secrets, production host checks, and real operator/customer data are cutover-only and are not part of the current synthetic readiness gate.
+- `paperwork_status.py` reports 30 sent Email Queue rows, 1 unpaid/overdue Sales Invoice, 8 expected Payment Requests, no pending email queue rows, and `live_cutover_checked: False`.
 - `unpaid_invoice_review.py` reports 1 overdue-review candidate and creates draft-only reminder/statement candidate data without sending or mutating records.
 - `unpaid_invoice_draft_packet.py` renders the overdue-review candidate into draft-only reminder and statement packet sections without sending or mutating records.
 - `unpaid_invoice_draft_packet_contract.py` verifies normal/outlier packet behavior with fake data, including missing payment links and malformed approval gates.
 - `paperwork_review_digest.py` combines the paperwork status, automation index, unpaid review, and draft packets into one internal read-only review payload.
+- `synthetic_business_pipeline.py` runs 8 no-live synthetic contracts with 0 broken piping and keeps 3 live cutover items deferred.
 
 ## Connected Launch Spine
 
@@ -64,6 +65,7 @@ These are currently classified as existing and connected:
 - draft-only unpaid/overdue invoice review candidates
 - draft-only unpaid invoice reminder/statement packet rendering
 - internal paperwork review digest
+- no-live synthetic business pipeline audit
 - scheduled daily business automation checkup
 - Accountant Home workspace parity
 
@@ -90,12 +92,13 @@ Important current guardrails:
 - Frappe scheduler runs `locally_twisted.verify.business_automation_index.scheduled_checkup` daily.
 - The scheduled checkup writes a Frappe Error Log when launch-required failures, missing required connections, or loud-failure gaps appear.
 - `stripe_line_items_for_sales_order()` now raises `frappe.ValidationError` if Stripe line items would charge less or more than the ERPNext Sales Order grand total.
-- Live payment readiness is expected to fail until production Stripe keys, explicit site config, operator email, and production host are configured.
+- Live payment readiness is cutover-only. Do not use live keys, real operator details, or real customer data as blockers for synthetic pipeline work.
 
 ## Fake Data Contracts
 
 Safe fake-data verifiers are part of the operating model:
 
+- `synthetic_business_pipeline.py` runs the current no-live operating-readiness suite and fails if broken piping appears.
 - `smoke_forms.py` creates and deletes a test Lead and linked cascade Task.
 - `checkout_lead_conversion_contract.py` creates rollback-only checkout/Lead conversion records.
 - `payment_cascade_contract.py` creates rollback-only paid-order cascade records.
@@ -110,6 +113,7 @@ Core automation map:
 
 ```powershell
 python scripts/verify/business_automation_index.py --report output/business-automation-index.json
+python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json
 python scripts/verify/stripe_amount_parity_contract.py
 python scripts/verify/paperwork_status.py --report output/paperwork-status.json
 python scripts/verify/unpaid_invoice_review.py --report output/unpaid-invoice-review.json
@@ -123,9 +127,9 @@ Launch money path:
 ```powershell
 python scripts/verify/payment_backend_config_contract.py
 python scripts/verify/payment_webhook_contract.py
-python scripts/verify/payment_launch_readiness.py
 python scripts/verify/payment_cascade_contract.py
 python scripts/verify/checkout_lead_conversion_contract.py
+python scripts/verify/checkout_fulfillment_contract.py
 ```
 
 Public intake and CRM:
@@ -156,7 +160,7 @@ Cutover-only check:
 python scripts/verify/payment_launch_readiness.py --mode live
 ```
 
-Expected current result: fail until live Stripe/site configuration is set.
+Run this only during cutover work. It is intentionally not part of the current synthetic readiness gate.
 
 ## Next Safe Slice
 

@@ -8,15 +8,29 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-06 - Synthetic readiness is separate from live cutover readiness
+
+**Decision:** Fake-data and rollback-safe backend audits must not require live Stripe keys, real operator details, or real customer information. Current operating readiness is verified through synthetic contracts. Live Stripe keys, webhook secrets, production host checks, and real contact data are cutover-only and must be labeled as deferred, not as current blockers.
+
+**Reasoning:** GL explicitly barred live keys and user information from the current work. Mixing live cutover checks into fake-data pipeline work creates false blockers, raises cognitive load, and distracts from the real current goal: finding broken cascading data, missing connections, cleanup leaks, and silent failures before Frappe Cloud trust.
+
+**Implementation:** Added `locally_twisted.verify.synthetic_business_pipeline.run` and host verifier `scripts/verify/synthetic_business_pipeline.py`. Updated `paperwork_status.run` so it no longer runs `payment_launch_readiness --mode live` during synthetic paperwork/backend review. Updated the paperwork digest to use `cutover_deferred_not_blocking` instead of `live_payment_blockers`. Updated `payment_webhook_contract.py` to intercept expected loud-failure logging so mocked webhook tests do not leave persistent `Error Log` rows.
+
+**Verification receipt:** `python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json` passed with 8 synthetic contracts, 8 passing, 0 broken piping, 9 inefficiencies/partial connections, and 3 cutover-deferred items. `python scripts/verify/paperwork_status.py --report output/paperwork-status.json` passed with `operating_mode: synthetic_without_live_credentials` and `live_cutover_checked: False`. `python scripts/verify/paperwork_review_digest.py --report output/paperwork-review-digest.json --markdown output/paperwork-review-digest.md` passed with 1 unpaid invoice packet, 3 cutover-deferred items, 5 setup gaps, and 4 partial connections. `python scripts/verify/business_automation_index.py --report output/business-automation-index.json` passed with 20 indexed surfaces, 16 connected, 4 exists-but-not-connected, and 0 loud-failure gaps.
+
+**Decided by:** GL set the no-live-input constraint; Codex implemented the separation and verifier-backed synthetic pipeline.
+
+---
+
 ## 2026-05-06 - Paperwork review digest is internal visibility, not customer delivery
 
 **Decision:** The next paperwork coordination surface is a read-only internal digest. It can combine paperwork status, business automation index results, unpaid invoice review, and draft packet output into one review payload. It must not create Email Queue, Communication, Payment Request, Payment Entry, Journal Entry, Sales Invoice mutations, Error Log entries, or any customer delivery.
 
-**Reasoning:** GL asked for coordinated backend automation that reduces cognitive load and fails loudly, but the system still lacks approved reminder cadence, recipient rules, bank setup, vendor setup, payroll readiness, and live payment configuration. A digest gives Jeff/accounting a single review surface without crossing into sending or accounting automation.
+**Reasoning:** GL asked for coordinated backend automation that reduces cognitive load and fails loudly, but the system still lacks approved reminder cadence, recipient rules, bank setup, vendor setup, and payroll readiness. Live payment configuration is tracked separately as cutover-only. A digest gives Jeff/accounting a single review surface without crossing into sending or accounting automation.
 
 **Implementation:** Added `locally_twisted.paperwork.paperwork_review_digest.run`, host verifier `scripts/verify/paperwork_review_digest.py`, fake scenario verifier `scripts/verify/unpaid_invoice_draft_packet_contract.py`, and automation index wiring. `business_automation_index.run` now supports `include_digest=False` so the digest can summarize the index without recursively checking itself.
 
-**Verification receipt:** `python scripts/verify/unpaid_invoice_draft_packet_contract.py` passed with 6 fake normal/outlier scenarios. `python scripts/verify/paperwork_review_digest.py --report output/paperwork-review-digest.json --markdown output/paperwork-review-digest.md` passed with 1 unpaid invoice packet, 6 live payment blockers, 6 setup gaps, and 4 partial connections. `python scripts/verify/business_automation_index.py --report output/business-automation-index.json` passed with 19 indexed surfaces, 15 connected, 4 exists-but-not-connected, and 0 loud-failure gaps.
+**Verification receipt:** Current verification moved live payment setup into `cutover_deferred_not_blocking`. `python scripts/verify/paperwork_review_digest.py --report output/paperwork-review-digest.json --markdown output/paperwork-review-digest.md` passed with 1 unpaid invoice packet, 3 cutover-deferred items, 5 setup gaps, and 4 partial connections. `python scripts/verify/business_automation_index.py --report output/business-automation-index.json` passed with 20 indexed surfaces, 16 connected, 4 exists-but-not-connected, and 0 loud-failure gaps.
 
 **Decided by:** Codex implemented the approved no-Jeff/no-GL paperwork coordination slice under GL's no-silent-failure and no-unapproved-customer-send constraints.
 
@@ -56,7 +70,7 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 **Reasoning:** GL explicitly called out that silent failures kill business relationships and reputation. The LT system is becoming an all-in-one business-management platform, so it needs a repeatable map of cascading information before moving to Frappe Cloud. A template, DocType, or native ERPNext feature is not operational just because it exists.
 
-**Implementation:** Added `locally_twisted.verify.business_automation_index`, host wrapper `scripts/verify/business_automation_index.py`, workstream `workstreams/business-automation-index.md`, project capability `erpnext-business-automation-index`, and a daily scheduler hook for `locally_twisted.verify.business_automation_index.scheduled_checkup`. After the unpaid invoice review slice, the current report indexes 17 surfaces: 13 connected, 4 exists-but-not-connected, 0 launch-required missing, 0 useful future surfaces missing, and 0 loud-failure gaps.
+**Implementation:** Added `locally_twisted.verify.business_automation_index`, host wrapper `scripts/verify/business_automation_index.py`, workstream `workstreams/business-automation-index.md`, project capability `erpnext-business-automation-index`, and a daily scheduler hook for `locally_twisted.verify.business_automation_index.scheduled_checkup`. At the original unpaid-invoice-review slice the report indexed 17 surfaces; newer entries above record the current expanded count.
 
 **Verification receipt:** `python scripts/verify/business_automation_index.py --report output/business-automation-index.json` passed. Frappe's hook registry showed the daily scheduled checkup. The final closeout suite also verified contact intake, payment/webhook readiness, checkout conversion, payment cascade, CRM cascade, paperwork status, outbound documents, and invoice branding.
 

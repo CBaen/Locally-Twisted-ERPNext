@@ -14,9 +14,9 @@ ROOT = Path(frappe.get_app_path("locally_twisted")).parent.parent
 APP_ROOT = Path(frappe.get_app_path("locally_twisted"))
 
 
-def run(include_digest: bool = True) -> dict[str, object]:
+def run(include_digest: bool = True, include_synthetic: bool = True) -> dict[str, object]:
     """Return a JSON-safe automation map that fails loudly on broken required links."""
-    surfaces = _surfaces(include_digest=include_digest)
+    surfaces = _surfaces(include_digest=include_digest, include_synthetic=include_synthetic)
     rows = [_evaluate(surface) for surface in surfaces]
     failures = _required_failures(rows)
 
@@ -109,7 +109,7 @@ def _run_check(check: Callable[[], list[str]] | object) -> list[str]:
         return [f"{type(exc).__name__}: {exc}"]
 
 
-def _surfaces(include_digest: bool = True) -> list[dict[str, object]]:
+def _surfaces(include_digest: bool = True, include_synthetic: bool = True) -> list[dict[str, object]]:
     surfaces = [
         {
             "id": "public_contact_to_lead",
@@ -281,7 +281,7 @@ def _surfaces(include_digest: bool = True) -> list[dict[str, object]]:
         {
             "id": "paperwork_status_checkup",
             "lane": "checkups",
-            "summary": "Read-only paperwork status reports invoices, payment requests, email queue state, live payment blockers, and setup gaps.",
+            "summary": "Read-only paperwork status reports invoices, payment requests, email queue state, setup gaps, and cutover-deferred live payment items.",
             "required_for_launch": True,
             "exists": lambda: _files_exist("locally_twisted/verify/paperwork_status.py"),
             "connected": _paperwork_status_connected,
@@ -359,6 +359,25 @@ def _surfaces(include_digest: bool = True) -> list[dict[str, object]]:
             ],
         },
         {
+            "id": "synthetic_business_pipeline",
+            "lane": "checkups",
+            "summary": "Synthetic no-live audit runs fake-data/rollback-safe contracts and separates current operating readiness from live cutover readiness.",
+            "required_for_launch": True,
+            "exists": lambda: _files_exist(
+                "locally_twisted/verify/synthetic_business_pipeline.py",
+            ),
+            "connected": _synthetic_business_pipeline_connected,
+            "loud_failure": lambda: [],
+            "evidence": [
+                "apps/locally_twisted/locally_twisted/verify/synthetic_business_pipeline.py",
+                "scripts/verify/synthetic_business_pipeline.py",
+            ],
+            "verifiers": [
+                "python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json"
+            ],
+            "creates_fake_data": True,
+        },
+        {
             "id": "quote_proposal_generation",
             "lane": "paperwork",
             "summary": "Quote/proposal source templates exist, but no Quotation-to-PDF generation or approval queue is wired yet.",
@@ -405,6 +424,8 @@ def _surfaces(include_digest: bool = True) -> list[dict[str, object]]:
     ]
     if not include_digest:
         surfaces = [surface for surface in surfaces if surface["id"] != "paperwork_review_digest"]
+    if not include_synthetic:
+        surfaces = [surface for surface in surfaces if surface["id"] != "synthetic_business_pipeline"]
     return surfaces
 
 
@@ -627,9 +648,25 @@ def _paperwork_status_connected() -> list[str]:
     result = frappe.get_attr("locally_twisted.verify.paperwork_status.run")()
     if not result.get("ok"):
         failures.append("paperwork_status.run returned not ok")
-    for key in ("invoice_review", "payment_request_review", "email_queue_review", "live_payment_readiness"):
+    for key in (
+        "invoice_review",
+        "payment_request_review",
+        "email_queue_review",
+        "synthetic_readiness",
+        "live_payment_readiness",
+        "cutover_deferred_not_blocking",
+    ):
         if key not in result:
             failures.append(f"paperwork_status missing {key}")
+    if result.get("operating_mode") != "synthetic_without_live_credentials":
+        failures.append("paperwork_status is not in synthetic_without_live_credentials mode")
+    if result.get("synthetic_readiness", {}).get("live_inputs_required") is not False:
+        failures.append("paperwork_status synthetic readiness requires live inputs")
+    if result.get("live_payment_readiness", {}).get("checked") is not False:
+        failures.append("paperwork_status should defer live payment checks during synthetic review")
+    for item in result.get("attention_items") or []:
+        if "live" in str(item).lower() and "block" in str(item).lower():
+            failures.append("paperwork_status attention items still treat live readiness as a current blocker")
     return failures
 
 
@@ -720,18 +757,36 @@ def _paperwork_review_digest_connected() -> list[str]:
     sections = result.get("sections") or {}
     for key in (
         "unpaid_invoice_packets",
-        "live_payment_blockers",
+        "cutover_deferred_not_blocking",
         "setup_gaps",
         "partial_connections",
         "next_safe_actions",
     ):
         if key not in sections:
             failures.append(f"paperwork_review_digest missing section {key}")
+    if "live_payment_blockers" in sections:
+        failures.append("paperwork_review_digest still labels live payment readiness as a current blocker")
     for packet in sections.get("unpaid_invoice_packets", {}).get("items", []):
         if packet.get("send_status") != "draft_only_not_sent":
             failures.append(f"{packet.get('invoice')} digest packet is not draft-only")
         if packet.get("human_approval_required") is not True:
             failures.append(f"{packet.get('invoice')} digest packet does not require human approval")
+    return failures
+
+
+def _synthetic_business_pipeline_connected() -> list[str]:
+    failures = []
+    failures.extend(_callables_exist("locally_twisted.verify.synthetic_business_pipeline.run"))
+    source = _read("locally_twisted/verify/synthetic_business_pipeline.py")
+    for marker in (
+        "synthetic_only",
+        "live_inputs_required",
+        "uses_real_customer_data",
+        "cutover_deferred_not_blocking",
+        "broken_piping",
+    ):
+        if marker not in source:
+            failures.append(f"synthetic_business_pipeline.py missing marker {marker}")
     return failures
 
 
@@ -774,6 +829,7 @@ def _manual_checkups_exist() -> list[str]:
     return _files_exist(
         "locally_twisted/verify/business_automation_index.py",
         "locally_twisted/verify/paperwork_status.py",
+        "locally_twisted/verify/synthetic_business_pipeline.py",
     )
 
 
@@ -868,10 +924,19 @@ def _checkups() -> list[dict[str, object]]:
             "id": "money_path",
             "commands": [
                 "python scripts/verify/payment_backend_config_contract.py",
+                "python scripts/verify/stripe_amount_parity_contract.py",
                 "python scripts/verify/payment_webhook_contract.py",
                 "python scripts/verify/checkout_lead_conversion_contract.py",
+                "python scripts/verify/checkout_fulfillment_contract.py",
                 "python scripts/verify/payment_cascade_contract.py",
-                "python scripts/verify/payment_launch_readiness.py",
+            ],
+        },
+        {
+            "id": "synthetic_pipeline",
+            "commands": [
+                "python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json",
+                "python scripts/verify/unpaid_invoice_draft_packet_contract.py",
+                "python scripts/verify/render_outbound_document_previews.py --slug synthetic-pipeline-audit --no-open",
             ],
         },
         {
@@ -896,11 +961,34 @@ def _checkups() -> list[dict[str, object]]:
                 "python scripts/verify/finance_workspace_parity.py",
             ],
         },
+        {
+            "id": "cutover_deferred_not_blocking",
+            "commands": [
+                "python scripts/verify/payment_launch_readiness.py --mode live",
+            ],
+        },
     ]
 
 
 def _fake_data_contracts() -> list[dict[str, object]]:
     return [
+        {
+            "command": "python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json",
+            "creates": [
+                "Lead",
+                "Contact",
+                "Customer",
+                "Address",
+                "Sales Order",
+                "Sales Invoice",
+                "Payment Request",
+                "Payment Entry",
+                "Task",
+                "Email Queue",
+                "Communication",
+            ],
+            "cleanup": "runs in-memory or rollback-safe fake-data contracts; live cutover checks are deferred",
+        },
         {
             "command": "python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --form-path /contact --skip-newsletter",
             "creates": ["Lead", "Contact", "Task"],

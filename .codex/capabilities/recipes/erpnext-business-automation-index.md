@@ -52,6 +52,7 @@ Current connected launch spine:
 - draft-only unpaid invoice review candidates
 - draft-only unpaid invoice reminder/statement packet renderer
 - internal paperwork review digest
+- no-live synthetic business pipeline audit
 - scheduled daily business automation checkup
 - Accountant Home parity
 
@@ -61,7 +62,8 @@ Current connected launch spine:
 2. Scheduled checkups should create visible backend attention, such as Frappe Error Log entries, when required links break.
 3. Existing-but-not-connected surfaces must stay visible in the report. Do not imply proposals, vendor packets, bank reconciliation, payroll, reminders, or statements are operational just because templates or native DocTypes exist. A reminder/statement surface can count as connected only when it is explicitly draft-only, review-gated, mutation-guarded, and tested through its review, packet renderer, or internal digest.
 4. Fake-data verifiers must clean up generated business records or explicitly mark rollback behavior.
-5. Amount parity and customer communication paths must fail loudly. A silent skipped email, undercharged checkout, or disconnected document generator is a business relationship risk.
+5. Synthetic operating readiness and live cutover readiness must stay separate. Do not require live keys, real operator details, or real customer records to flush out fake-data pipeline bugs.
+6. Amount parity and customer communication paths must fail loudly. A silent skipped email, undercharged checkout, or disconnected document generator is a business relationship risk.
 
 ## Common failure modes
 
@@ -69,6 +71,7 @@ Current connected launch spine:
 - Treating an ERPNext DocType as ready just because it exists.
 - Adding CRM-stage finance automation while checkout already owns the money path.
 - Letting hosted checkout line items differ from the ERPNext grand total.
+- Letting live cutover checks appear as current blockers in a fake-data/synthetic audit.
 - Running status/inventory checks while rollback-based verifiers are still creating temporary records.
-- Letting an aggregate digest call the full automation index recursively after the digest itself is indexed.
+- Letting an aggregate digest or synthetic pipeline call the full automation index recursively after the aggregate itself is indexed.
 - Leaving missing future surfaces in prose docs instead of a machine-readable verifier report.

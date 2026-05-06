@@ -59,11 +59,11 @@ Before live cutover:
 python scripts\verify\payment_launch_readiness.py --mode live
 ```
 
-Expected current local result: fail until live Stripe keys, live site config, and production host values are configured.
+Run this only during cutover work. It is intentionally outside the current fake-data/synthetic backend readiness gate.
 
-## Current Live-Mode Blockers
+## Cutover-Only Deferred Items
 
-The local verifier currently reports these live-mode blockers:
+The live-mode verifier is the right tool later, after GL/Jeff/accounting are ready to configure production payment details. The deferred cutover checklist is:
 
 - Stripe Settings are still test mode (`Test`, `pk_test_...` / `sk_test_...`).
 - `lt_stripe_settings_name` is not explicitly set in site config.

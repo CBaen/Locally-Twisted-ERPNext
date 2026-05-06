@@ -57,6 +57,7 @@ def main() -> int:
 
     try:
         report = bench_execute()
+        failures = _contract_failures(report)
     except PaperworkStatusFail as exc:
         print(f"[PAPERWORK STATUS] FAIL\n  - {exc}")
         return 1
@@ -71,11 +72,25 @@ def main() -> int:
     if args.json:
         print(rendered)
     else:
-        _print_summary(report)
-    return 0
+        _print_summary(report, failures)
+    return 0 if not failures else 1
 
 
-def _print_summary(report: dict[str, Any]) -> None:
+def _contract_failures(report: dict[str, Any]) -> list[str]:
+    failures: list[str] = []
+    if report.get("operating_mode") != "synthetic_without_live_credentials":
+        failures.append("paperwork status is not in synthetic_without_live_credentials mode")
+    if report.get("synthetic_readiness", {}).get("live_inputs_required") is not False:
+        failures.append("synthetic readiness requires live inputs")
+    if report.get("live_payment_readiness", {}).get("checked") is not False:
+        failures.append("live payment readiness was checked during synthetic paperwork status")
+    for item in report.get("attention_items") or []:
+        if "live" in str(item).lower() and "block" in str(item).lower():
+            failures.append("attention_items still labels live readiness as a current blocker")
+    return failures
+
+
+def _print_summary(report: dict[str, Any], contract_failures: list[str]) -> None:
     counts = report.get("counts") or {}
     invoices = report.get("invoice_review") or {}
     payment_requests = report.get("payment_request_review") or {}
@@ -83,8 +98,9 @@ def _print_summary(report: dict[str, Any]) -> None:
     live = report.get("live_payment_readiness") or {}
     attention = report.get("attention_items") or []
 
-    print("[PAPERWORK STATUS] OK")
+    print("[PAPERWORK STATUS] " + ("OK" if not contract_failures else "FAIL"))
     print(f"  generated_at: {report.get('generated_at')}")
+    print(f"  operating_mode: {report.get('operating_mode')}")
     print(f"  sales_orders: {counts.get('Sales Order', 0)}")
     print(f"  sales_invoices: {counts.get('Sales Invoice', 0)}")
     print(f"  unpaid_invoices: {invoices.get('unpaid_count', 0)}")
@@ -92,11 +108,16 @@ def _print_summary(report: dict[str, Any]) -> None:
     print(f"  payment_requests_expected: {payment_requests.get('expected_count', 0)}")
     print(f"  payment_requests_paid: {payment_requests.get('paid_count', 0)}")
     print(f"  email_queue_status_counts: {email_queue.get('status_counts', {})}")
-    print(f"  live_payment_ready: {live.get('ok')}")
+    print(f"  live_cutover_checked: {live.get('checked')}")
+    print(f"  cutover_deferred_not_blocking: {len(report.get('cutover_deferred_not_blocking') or [])}")
     if attention:
         print("  attention_items:")
         for item in attention:
             print(f"    - {item}")
+    if contract_failures:
+        print("  failures:")
+        for failure in contract_failures:
+            print(f"    - {failure}")
 
 
 def _rooted(path: str) -> Path:

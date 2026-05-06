@@ -7,14 +7,20 @@ from frappe.utils import now_datetime, nowdate
 
 def run() -> dict[str, object]:
     """Return JSON-safe paperwork status without mutating ERPNext."""
-    live_payment = _live_payment_readiness()
     counts = _counts()
-    setup_gaps = _setup_gaps(counts, live_payment)
+    setup_gaps = _setup_gaps(counts)
 
     return {
         "ok": True,
         "generated_at": now_datetime().isoformat(),
         "read_only": True,
+        "operating_mode": "synthetic_without_live_credentials",
+        "synthetic_readiness": {
+            "ok": True,
+            "live_inputs_required": False,
+            "uses_real_customer_data": False,
+            "live_cutover_is_current_blocker": False,
+        },
         "counts": counts,
         "invoice_review": _invoice_review(),
         "payment_request_review": _payment_request_review(),
@@ -25,8 +31,10 @@ def run() -> dict[str, object]:
             "reminders": "Customer reminders are not approved for automatic sending.",
             "banking": "No bank sync or Plaid setup is approved for launch.",
             "payroll": "Payroll is feasibility-only until HRMS/payroll DocTypes and provider/accountant approval exist.",
+            "live_cutover": "Live Stripe keys, webhook secrets, production host checks, and real operator/customer data are cutover-only and are not required for synthetic pipeline verification.",
         },
-        "live_payment_readiness": live_payment,
+        "live_payment_readiness": _live_payment_cutover_deferred(),
+        "cutover_deferred_not_blocking": _cutover_deferred_items(),
         "attention_items": setup_gaps,
     }
 
@@ -154,25 +162,43 @@ def _customer_document_policy() -> dict[str, object]:
     }
 
 
-def _live_payment_readiness() -> dict[str, object]:
-    from locally_twisted.verify import payment_launch_readiness
-
-    result = payment_launch_readiness.run(mode="live")
+def _live_payment_cutover_deferred() -> dict[str, object]:
     return {
-        "ok": bool(result.get("ok")),
-        "failures": result.get("failures") or [],
-        "warnings": result.get("warnings") or [],
-        "stripe_mode": result.get("stripe_mode"),
-        "stripe_settings_name": result.get("stripe_settings_name"),
-        "payment_gateway_account": result.get("payment_gateway_account"),
-        "webshop_checkout_enabled": result.get("webshop_checkout_enabled"),
-        "operator_email": result.get("operator_email"),
-        "webhook_secret_configured": result.get("webhook_secret_configured"),
-        "outgoing_email_account": result.get("outgoing_email_account"),
+        "ok": None,
+        "checked": False,
+        "deferred": True,
+        "blocking_current_work": False,
+        "reason": "Live payment readiness is a cutover-only check and is not run during synthetic paperwork/backend automation work.",
+        "manual_cutover_command": "python scripts/verify/payment_launch_readiness.py --mode live",
+        "live_inputs_required": True,
+        "uses_real_customer_data": False,
     }
 
 
-def _setup_gaps(counts: dict[str, int], live_payment: dict[str, object]) -> list[str]:
+def _cutover_deferred_items() -> list[dict[str, str]]:
+    return [
+        {
+            "id": "live_stripe_keys",
+            "label": "Live Stripe publishable/secret keys",
+            "source": "payment_launch_readiness --mode live",
+            "current_status": "cutover_only_not_checked",
+        },
+        {
+            "id": "live_stripe_webhook_secret",
+            "label": "Live Stripe webhook signing secret",
+            "source": "payment_launch_readiness --mode live",
+            "current_status": "cutover_only_not_checked",
+        },
+        {
+            "id": "production_host_and_operator_email",
+            "label": "Production host, checkout URL, operator email, and outgoing email account",
+            "source": "payment_launch_readiness --mode live",
+            "current_status": "cutover_only_not_checked",
+        },
+    ]
+
+
+def _setup_gaps(counts: dict[str, int]) -> list[str]:
     gaps = []
     if counts.get("Bank Account", 0) == 0:
         gaps.append("No Bank Account records found; banking/reconciliation cannot be launch-ready.")
@@ -190,8 +216,6 @@ def _setup_gaps(counts: dict[str, int], live_payment: dict[str, object]) -> list
     company_default_bank = frappe.db.get_value("Company", "Locally Twisted", "default_bank_account")
     if not company_default_bank:
         gaps.append("Company default bank account is not set.")
-    if not live_payment.get("ok"):
-        gaps.append("Live payment readiness is blocked; see live_payment_readiness.failures.")
     return gaps
 
 

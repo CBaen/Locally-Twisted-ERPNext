@@ -6,11 +6,19 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-06 - Synthetic audits must not inherit live cutover blockers
+
+The paperwork/backend lane started mixing two very different questions: "Can fake data safely flush out broken cascading information?" and "Are live Stripe keys and production site settings ready?" The live checks were not needed for the current work and made a fake-data audit look blocked by credentials GL explicitly barred.
+
+**Counter-move:** keep synthetic operating readiness and live cutover readiness separate in code, verifier output, and docs. For LT, `paperwork_status.py` now runs in `synthetic_without_live_credentials` mode, `paperwork_review_digest.py` reports `cutover_deferred_not_blocking`, and `synthetic_business_pipeline.py` fails if live payment readiness is labeled as a current blocker. Run live Stripe readiness only when cutover work begins.
+
+---
+
 ## 2026-05-06 - Aggregate digests need recursion and mutation boundaries
 
 The paperwork review digest needed to summarize the business automation index, and the automation index also needed to classify the digest. Calling the full index from the digest would create a self-check loop once the digest was indexed.
 
-**Counter-move:** aggregate review surfaces should call index/report helpers in a scoped mode that excludes the aggregate itself, and they need their own mutation guard. For LT, `business_automation_index.run(include_digest=False)` lets `paperwork_review_digest.run` summarize partial connections without recursively checking the digest surface. The digest also guards Email Queue, Communication, Payment Request, Payment Entry, Journal Entry, Sales Invoice, and Error Log counts.
+**Counter-move:** aggregate review surfaces should call index/report helpers in a scoped mode that excludes the aggregate itself, and they need their own mutation guard. For LT, `business_automation_index.run(include_digest=False, include_synthetic=False)` lets `paperwork_review_digest.run` summarize partial connections without recursively checking the digest or synthetic pipeline surface. The digest also guards Email Queue, Communication, Payment Request, Payment Entry, Journal Entry, Sales Invoice, and Error Log counts.
 
 ---
 

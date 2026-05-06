@@ -107,6 +107,8 @@ def _run_contract():
         failures.append(
             f"paid LT checkout missing payment_request should return HTTP 500, got {missing_pr['status_code']}: {missing_pr['result']}"
         )
+    if missing_pr["log_error_calls"] < 1:
+        failures.append("paid LT checkout missing payment_request did not call frappe.log_error")
 
     if failures:
         return {"ok": False, "failures": failures}
@@ -118,6 +120,7 @@ def _run_contract():
         "ignored_event": ignored["result"].get("ignored"),
         "non_lt_checkout": non_lt_checkout["result"],
         "missing_payment_request_status_code": missing_pr["status_code"],
+        "missing_payment_request_log_error_calls": missing_pr["log_error_calls"],
     }
 
 
@@ -132,6 +135,8 @@ def _invoke_webhook(event, reconcile_calls=None):
     original_secret = frappe.conf.get("stripe_webhook_signing_secret")
     original_response = getattr(frappe.local, "response", None)
     original_reconcile = payment_success.reconcile_paid_sales_order
+    original_log_error = frappe.log_error
+    log_error_calls = []
 
     class Request:
         data = b"{}"
@@ -150,21 +155,27 @@ def _invoke_webhook(event, reconcile_calls=None):
             "errors": [],
         }
 
+    def log_error(*args, **kwargs):
+        log_error_calls.append({"args": args, "kwargs": kwargs})
+
     try:
         frappe.request = Request()
         frappe.local.response = frappe._dict()
         frappe.conf.stripe_webhook_signing_secret = "whsec_probe"
         stripe.Webhook.construct_event = construct_event
         payment_success.reconcile_paid_sales_order = reconcile_paid_sales_order
+        frappe.log_error = log_error
 
         result = webhook_module.stripe_webhook()
         return {
             "result": result or {},
             "status_code": int(frappe.local.response.get("http_status_code") or 200),
+            "log_error_calls": len(log_error_calls),
         }
     finally:
         stripe.Webhook.construct_event = original_construct_event
         payment_success.reconcile_paid_sales_order = original_reconcile
+        frappe.log_error = original_log_error
         if original_request is None:
             try:
                 delattr(frappe, "request")

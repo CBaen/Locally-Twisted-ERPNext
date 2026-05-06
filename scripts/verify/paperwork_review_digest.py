@@ -116,13 +116,15 @@ def _contract_failures(result: dict[str, Any]) -> list[str]:
         return failures
     for key in (
         "unpaid_invoice_packets",
-        "live_payment_blockers",
+        "cutover_deferred_not_blocking",
         "setup_gaps",
         "partial_connections",
         "next_safe_actions",
     ):
         if key not in sections:
             failures.append(f"sections missing {key}")
+    if "live_payment_blockers" in sections:
+        failures.append("live payment readiness is still labeled as a current blocker")
 
     for packet in sections.get("unpaid_invoice_packets", {}).get("items", []):
         if packet.get("send_status") != "draft_only_not_sent":
@@ -139,7 +141,7 @@ def _print_summary(result: dict[str, Any], contract_failures: list[str]) -> None
     print(f"  send_allowed: {result.get('send_allowed')}")
     print(f"  mutation_allowed: {result.get('mutation_allowed')}")
     sections = result.get("sections") or {}
-    for key in ("unpaid_invoice_packets", "live_payment_blockers", "setup_gaps", "partial_connections"):
+    for key in ("unpaid_invoice_packets", "cutover_deferred_not_blocking", "setup_gaps", "partial_connections"):
         section = sections.get(key) or {}
         print(f"  {key}: {section.get('count')}")
     failures = list(result.get("failures") or []) + contract_failures
@@ -162,7 +164,7 @@ def _markdown(result: dict[str, Any]) -> str:
     ]
     for key, title in (
         ("unpaid_invoice_packets", "Unpaid Invoice Packets"),
-        ("live_payment_blockers", "Live Payment Blockers"),
+        ("cutover_deferred_not_blocking", "Cutover Deferred, Not Blocking"),
         ("setup_gaps", "Setup Gaps"),
         ("partial_connections", "Partial Connections"),
         ("next_safe_actions", "Next Safe Actions"),

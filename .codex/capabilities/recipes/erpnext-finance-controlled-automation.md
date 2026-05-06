@@ -63,7 +63,7 @@ python scripts/verify/payment_backend_config_contract.py
 python scripts/verify/payment_webhook_contract.py
 python scripts/verify/payment_cascade_contract.py
 python scripts/verify/cart_checkout_contract.py
-python scripts/verify/payment_launch_readiness.py
+python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json
 python scripts/verify/business_automation_index.py --report output/business-automation-index.json
 python scripts/verify/unpaid_invoice_review.py --report output/unpaid-invoice-review.json
 python scripts/verify/unpaid_invoice_draft_packet.py --report output/unpaid-invoice-draft-packet.json
@@ -71,6 +71,8 @@ python scripts/verify/unpaid_invoice_draft_packet_contract.py
 python scripts/verify/paperwork_review_digest.py --report output/paperwork-review-digest.json
 python scripts/verify/stripe_amount_parity_contract.py
 ```
+
+Keep `python scripts/verify/payment_launch_readiness.py --mode live` as a cutover-only command. It is not a prerequisite for fake-data pipeline audits.
 
 Run live inventory after mutating verifiers finish and rollback, not in parallel with them, if the count will be documented as stable state.
 
@@ -86,3 +88,4 @@ Run live inventory after mutating verifiers finish and rollback, not in parallel
 - Draft reminder or statement helpers can become collections automation if they do not prove `send_allowed: false`, `mutation_allowed: false`, and unchanged guarded record counts.
 - Draft packet renderers can accidentally become delivery automation if they create Email Queue, Communication, Payment Request, Payment Entry, Journal Entry, or invoice mutations while preparing review output.
 - Review digests can look harmless while hiding setup blockers or recursively triggering indexed checks; keep them read-only, mutation-guarded, and explicit about partially connected finance surfaces.
+- Synthetic finance audits can lose focus if live credentials become current blockers. Keep live Stripe/bank/provider credentials out of fake-data readiness work until cutover.
