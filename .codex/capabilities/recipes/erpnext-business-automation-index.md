@@ -52,6 +52,7 @@ Current connected launch spine:
 - draft-only unpaid invoice review candidates
 - draft-only unpaid invoice reminder/statement packet renderer
 - internal paperwork review digest
+- no-live customer reminder dry-run queue
 - no-live synthetic business pipeline audit
 - scheduled daily business automation checkup
 - Accountant Home parity
@@ -60,7 +61,7 @@ Current connected launch spine:
 
 1. Required surfaces fail the verifier if files, hooks, setup records, methods, or connections are missing.
 2. Scheduled checkups should create visible backend attention, such as Frappe Error Log entries, when required links break.
-3. Existing-but-not-connected surfaces must stay visible in the report. Do not imply proposals, vendor packets, bank reconciliation, payroll, reminders, or statements are operational just because templates or native DocTypes exist. A reminder/statement surface can count as connected only when it is explicitly draft-only, review-gated, mutation-guarded, and tested through its review, packet renderer, or internal digest.
+3. Existing-but-not-connected surfaces must stay visible in the report. Do not imply proposals, vendor packets, bank reconciliation, payroll, reminders, or statements are operational just because templates or native DocTypes exist. A reminder/statement surface can count as connected only when it is explicitly draft-only, review-gated, mutation-guarded, and tested through its review, packet renderer, internal digest, or no-live reminder dry run.
 4. Fake-data verifiers must clean up generated business records or explicitly mark rollback behavior.
 5. Synthetic operating readiness and live cutover readiness must stay separate. Do not require live keys, real operator details, or real customer records to flush out fake-data pipeline bugs.
 6. Amount parity and customer communication paths must fail loudly. A silent skipped email, undercharged checkout, or disconnected document generator is a business relationship risk.
@@ -73,5 +74,5 @@ Current connected launch spine:
 - Letting hosted checkout line items differ from the ERPNext grand total.
 - Letting live cutover checks appear as current blockers in a fake-data/synthetic audit.
 - Running status/inventory checks while rollback-based verifiers are still creating temporary records.
-- Letting an aggregate digest or synthetic pipeline call the full automation index recursively after the aggregate itself is indexed.
+- Letting an aggregate digest, reminder dry run, or synthetic pipeline call the full automation index recursively after the aggregate itself is indexed.
 - Leaving missing future surfaces in prose docs instead of a machine-readable verifier report.

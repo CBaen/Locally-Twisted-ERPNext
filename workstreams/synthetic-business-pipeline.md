@@ -1,6 +1,6 @@
 # Synthetic Business Pipeline
 
-Last updated: 2026-05-06 by Codex after adding the no-live synthetic backend audit.
+Last updated: 2026-05-06 by Codex after adding no-live customer reminder dry-run coverage.
 
 ## Outcome
 
@@ -22,8 +22,8 @@ Current result on 2026-05-06:
 - `synthetic_only: true`
 - `live_inputs_required: false`
 - `uses_real_customer_data: false`
-- 8 synthetic contracts run
-- 8 synthetic contracts passing
+- 9 synthetic contracts run
+- 9 synthetic contracts passing
 - 0 broken piping items
 - 9 inefficiencies / partial connections surfaced
 - 3 cutover-deferred items surfaced
@@ -40,6 +40,7 @@ The report writes ignored JSON to `output/synthetic-business-pipeline.json`.
 - Customer policy document anchors and inquiry acknowledgment policy blocks.
 - Outbound document registry/template contract.
 - Unpaid invoice packet normal/outlier fake-data scenarios.
+- Customer reminder dry-run normal/outlier fake-data scenarios, including missing payment path and malformed send-enabled packets.
 
 ## Current Inefficiencies / Partial Connections
 
@@ -67,8 +68,9 @@ Do not turn this verifier into customer sending or accounting mutation. Rollback
 - `scripts/verify/synthetic_business_pipeline.py`
 - `apps/locally_twisted/locally_twisted/verify/paperwork_status.py`
 - `apps/locally_twisted/locally_twisted/paperwork/paperwork_review_digest.py`
+- `apps/locally_twisted/locally_twisted/paperwork/customer_reminder_dry_run.py`
 - `apps/locally_twisted/locally_twisted/verify/business_automation_index.py`
 
 ## Next Safe Slice
 
-Use the synthetic audit as the regression gate while building the reviewed paperwork Desk queue or scheduled internal-only digest. Add new fake-data scenarios when a new backend pipe is connected, then keep live cutover checks separate.
+Use the synthetic audit as the regression gate while building the reviewed reminder Desk page or scheduled internal-only digest. Add new fake-data scenarios when a new backend pipe is connected, then keep live cutover checks separate.

@@ -6,6 +6,14 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-06 - No-live reminder setup still needs send blockers
+
+Customer reminders can feel safe when the code only builds an internal queue. They are still one step away from customer-facing collections, so every queue item needs explicit blockers for approval, recipient, invoice status, cadence, copy, and payment path.
+
+**Counter-move:** keep the reminder surface `internal_review_only` and `draft_only_not_sent`, and test malformed send-enabled packets with fake data. For LT, `customer_reminder_dry_run_contract.py` proves overdue/current/missing-payment-path/malformed scenarios without creating database records, while the live dry-run verifier proves no Email Queue, Communication, Error Log, invoice, payment, or journal counts change.
+
+---
+
 ## 2026-05-06 - Synthetic audits must not inherit live cutover blockers
 
 The paperwork/backend lane started mixing two very different questions: "Can fake data safely flush out broken cascading information?" and "Are live Stripe keys and production site settings ready?" The live checks were not needed for the current work and made a fake-data audit look blocked by credentials GL explicitly barred.

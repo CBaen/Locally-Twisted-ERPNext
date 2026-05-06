@@ -35,6 +35,7 @@ Workflows. Multi-step. Clear start and finish.
 - [event-playground-construction-truth](recipes/event-playground-construction-truth.md) - keep Event Playground balloon geometry tied to tested construction facts, including classic quad tie-center neck/knot orientation.
 - [erpnext-business-automation-index](recipes/erpnext-business-automation-index.md) - index ERPNext/Frappe business automations by connected, partially connected, required-missing, useful-missing, fake-data, and loud-failure status.
 - [erpnext-finance-controlled-automation](recipes/erpnext-finance-controlled-automation.md) - build ERPNext finance/payroll migration surfaces with review queues and accountant approval gates before automation.
+- [erpnext-no-live-customer-reminders](recipes/erpnext-no-live-customer-reminders.md) - prepare customer reminder review queues, cadence suggestions, and blockers without live sending or accounting mutation.
 - [external-document-audience-contract](recipes/external-document-audience-contract.md) - build invoices, receipts, proposals, and external packets around the recipient's workflow before brand flourish.
 - [erpnext-category-media-approval](recipes/erpnext-category-media-approval.md) - prepare, approve, dry-run, and apply ERPNext Item Group category images without assigning browse media by guess.
 - [erpnext-checkout-commerce-rules](recipes/erpnext-checkout-commerce-rules.md) - keep mixed goods/service checkout, delivery fees, deposits, and taxable-line rules aligned in ERPNext/Frappe.

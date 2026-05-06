@@ -33,7 +33,11 @@ def run() -> dict[str, object]:
     failures: list[str] = []
 
     status = paperwork_status.run()
-    automation = business_automation_index.run(include_digest=False, include_synthetic=False)
+    automation = business_automation_index.run(
+        include_digest=False,
+        include_synthetic=False,
+        include_customer_reminders=False,
+    )
     invoice_review = unpaid_invoice_review.run()
     draft_packets = unpaid_invoice_draft_packet.run()
 

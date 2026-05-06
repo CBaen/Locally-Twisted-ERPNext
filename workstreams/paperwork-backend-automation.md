@@ -1,6 +1,6 @@
 # Paperwork And Backend Automation
 
-Last updated: 2026-05-06 by Codex after adding the no-live synthetic business pipeline audit and separating live cutover from fake-data/backend readiness.
+Last updated: 2026-05-06 by Codex after adding the no-live customer reminder dry-run queue.
 
 ## Outcome
 
@@ -10,11 +10,12 @@ Make Locally Twisted's paperwork path reliable enough for launch and simple enou
 - paid ready-to-order checkout creates the expected ERPNext records
 - receipts, operator notifications, and welcome emails are queued once
 - invoices and payment requests are visible for review
+- customer reminders can be prepared as an internal dry-run queue without going live
 - Sales Invoice print output is branded and policy-aligned
 - corporate/event invoice language stays aligned with public policy pages
 - backend automation creates reviewable work, not surprise accounting entries
 
-This lane coordinates paperwork, receipts, invoices, payment records, customer emails, and backend automation boundaries. It does not replace `workstreams/finance-payroll-quickbooks-migration.md`, `workstreams/synthetic-business-pipeline.md`, `workstreams/payment-backend-launch-readiness.md`, `workstreams/customer-document-policy-lanes.md`, or `workstreams/erpnext-backend-simplification.md`; it sequences the launch-critical parts of those lanes.
+This lane coordinates paperwork, receipts, invoices, payment records, customer emails, reminder dry runs, and backend automation boundaries. It does not replace `workstreams/finance-payroll-quickbooks-migration.md`, `workstreams/synthetic-business-pipeline.md`, `workstreams/customer-reminder-dry-run.md`, `workstreams/payment-backend-launch-readiness.md`, `workstreams/customer-document-policy-lanes.md`, or `workstreams/erpnext-backend-simplification.md`; it sequences the launch-critical parts of those lanes.
 
 ## Current Verified Baseline
 
@@ -33,12 +34,14 @@ Fresh local verification on 2026-05-06:
 - `python scripts/verify/finance_inventory_contract.py` passed.
 - Live Stripe keys, webhook secret, production host, and real operator/customer data are cutover-only and were not used as current fake-data/backend readiness gates.
 - `python scripts/verify/paperwork_status.py --report output/paperwork-status.json` passed in `synthetic_without_live_credentials` mode and generated a read-only paperwork status report with `live_cutover_checked: False`.
-- `python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json` passed with 8 no-live synthetic contracts, 0 broken piping, 9 inefficiencies/partial connections, and 3 cutover-deferred items.
-- `python scripts/verify/business_automation_index.py --report output/business-automation-index.json` passed and now maps 20 surfaces indexed, 12 launch-required, 16 connected, 4 exists-but-not-connected, 0 launch-required missing, 0 useful future surfaces missing, and 0 loud-failure gaps.
+- `python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json` passed with 9 no-live synthetic contracts, 0 broken piping, 9 inefficiencies/partial connections, and 3 cutover-deferred items.
+- `python scripts/verify/business_automation_index.py --report output/business-automation-index.json` passed and now maps 21 surfaces indexed, 12 launch-required, 17 connected, 4 exists-but-not-connected, 0 launch-required missing, 0 useful future surfaces missing, and 0 loud-failure gaps.
 - `python scripts/verify/unpaid_invoice_review.py --report output/unpaid-invoice-review.json` passed and generated 1 overdue-review candidate for `ACC-SINV-2026-00001`. The candidate includes draft-only `payment_reminder_draft` and `statement_of_account` data, requires human review, and proves no customer send or accounting mutation happens.
 - `python scripts/verify/unpaid_invoice_draft_packet.py --report output/unpaid-invoice-draft-packet.json --markdown output/unpaid-invoice-draft-packet.md` passed and rendered that candidate into draft-only `payment_reminder_draft` and `statement_of_account` packet sections for human review, while proving no customer send or accounting mutation happens.
 - `python scripts/verify/unpaid_invoice_draft_packet_contract.py` passed and now covers fake normal/outlier packet behavior without touching ERPNext records, including PO references, multiple open invoices, missing payment requests, paid-invoice exclusion, and malformed human-approval gates.
 - `python scripts/verify/paperwork_review_digest.py --report output/paperwork-review-digest.json` passed and combines paperwork status, business automation index, unpaid invoice review, and draft packet output into one internal read-only review payload with live payment setup labeled as `cutover_deferred_not_blocking`.
+- `python scripts/verify/customer_reminder_dry_run_contract.py` passed and now covers no-live reminder queue behavior with fake overdue/current/missing-payment-path/malformed-send scenarios.
+- `python scripts/verify/customer_reminder_dry_run.py --report output/customer-reminder-dry-run.json --markdown output/customer-reminder-dry-run.md` passed and generated 1 internal-review-only queue item for `ACC-SINV-2026-00001`, with `send_allowed: false`, `customer_delivery_enabled: false`, and `automatic_delivery_enabled: false`.
 - `python scripts/verify/stripe_amount_parity_contract.py` passed. Stripe Checkout line items now include a tax/charges adjustment when needed and must equal the ERPNext Sales Order grand total.
 - `python scripts/verify/invoice_branding_contract.py` passed after syncing the branded Sales Invoice print format and Letter Head. The contract now requires gray vertical callouts for secondary/AP information, the exact black customer-service support bar, and no gold, navy, berry, soft promo colors, dog-logo markers, or old W-9/vendor wording in Sales Invoice print output.
 - `python scripts/verify/outbound_documents_contract.py` passed after creating the standard outbound document source folder and templates. The contract now requires every outbound template to include `## Answer First`, and rendered previews put `Key fields to review` where the internal automation metadata used to appear.
@@ -121,6 +124,15 @@ Current live-data facts from the fresh finance inventory:
 - It does not create Email Queue rows, Communications, Payment Entries, Journal Entries, Payment Requests, or Sales Invoice mutations.
 - Current local output: 1 draft-only packet for `ACC-SINV-2026-00001`, with `send_status: draft_only_not_sent`, `human_approval_required: true`, and a review checklist for invoice status, recipient, cadence, copy, and payment path.
 
+### Customer reminder dry run
+
+- `locally_twisted.paperwork.customer_reminder_dry_run.run` is the no-live customer reminder queue surface.
+- The host verifier is `scripts/verify/customer_reminder_dry_run.py`.
+- Fake normal/outlier behavior is covered by `scripts/verify/customer_reminder_dry_run_contract.py`.
+- It reads the paperwork digest and unpaid invoice draft packets, then builds internal review queue items with cadence suggestions, draft sections, and explicit blockers.
+- It does not create Email Queue rows, Communications, Payment Entries, Journal Entries, Payment Requests, Error Logs, or Sales Invoice mutations.
+- Current local output: 1 internal-review-only queue item for `ACC-SINV-2026-00001`, with recommended cadence `review_now_payment_reminder`, `send_status: draft_only_not_sent`, `customer_delivery_enabled: false`, and blockers for human approval, recipient, invoice status, cadence, copy, and payment path where needed.
+
 ### Business automation index
 
 - `workstreams/business-automation-index.md` is the cross-system map for intake, CRM, checkout, payment, paperwork, finance, and checkup surfaces.
@@ -129,7 +141,7 @@ Current live-data facts from the fresh finance inventory:
 - `hooks.py` now includes a daily Frappe scheduler entry for `locally_twisted.verify.business_automation_index.scheduled_checkup`.
 - The scheduled checkup writes a Frappe Error Log if a launch-required connection breaks or a loud-failure gap appears.
 - Current exists-but-not-connected surfaces are quote/proposal generation, vendor setup/W-9 packet generation, bank reconciliation cutover, and payroll/HRMS.
-- No currently indexed useful surface is missing; unpaid/overdue invoice review and unpaid invoice packet rendering are connected as draft-only paperwork surfaces.
+- No currently indexed useful surface is missing; unpaid/overdue invoice review, unpaid invoice packet rendering, paperwork digest, and customer reminder dry-run queue are connected as draft-only/no-live paperwork surfaces.
 
 ### Accountant and finance workspace
 
@@ -151,14 +163,15 @@ Current live-data facts from the fresh finance inventory:
 
 1. **Business automation index.** First pass done. `scripts/verify/business_automation_index.py` is the launch spine map and daily checkup source. Keep this green before adding new automations.
 2. **Paperwork status report.** First pass done. `scripts/verify/paperwork_status.py` summarizes current invoices, payment requests, email queues, overdue records, and bank/supplier/payroll gaps without printing secrets or mutating ERPNext. It reports live payment setup as cutover-deferred and does not run live readiness in synthetic mode.
-3. **Synthetic business pipeline audit.** First pass done. `scripts/verify/synthetic_business_pipeline.py` runs no-live fake-data/rollback-safe contracts for checkout-to-Lead, checkout fulfillment, payment cascade, mocked webhook behavior, document policy, outbound templates, and unpaid invoice outliers. It fails on broken piping or fake-data cleanup leaks.
+3. **Synthetic business pipeline audit.** First pass done. `scripts/verify/synthetic_business_pipeline.py` runs no-live fake-data/rollback-safe contracts for checkout-to-Lead, checkout fulfillment, payment cascade, mocked webhook behavior, document policy, outbound templates, unpaid invoice outliers, and customer reminder dry-run outliers. It fails on broken piping or fake-data cleanup leaks.
 4. **Unpaid invoice review queue.** First pass done as a draft-only report surface. Draft packet rendering is also done. Next is reviewed Desk UX or scheduled internal review digest, still no reminder sending.
 5. **Paperwork review digest.** First pass done as a read-only internal review payload. Next is a real reviewed Desk queue or scheduled internal-only report UI, still no customer sending.
-6. **Receipt/operator email audit.** Extend verifier coverage so receipt, operator, welcome, and inquiry acknowledgment email bodies keep the right policy lanes and do not attach PDFs.
-7. **Outbound document template registry.** Done for the first standard set. Extend this folder before creating any new outbound document family elsewhere.
+6. **Customer reminder dry run.** First pass done as a no-live internal review queue payload. Next is a real Desk page or scheduled internal-only report using this queue, still no customer sending.
+7. **Receipt/operator email audit.** Extend verifier coverage so receipt, operator, welcome, and inquiry acknowledgment email bodies keep the right policy lanes and do not attach PDFs.
+8. **Outbound document template registry.** Done for the first standard set. Extend this folder before creating any new outbound document family elsewhere.
    - Standing rule: every outbound document is answer-first. The recipient should see the practical fields they care about before internal automation notes or policy mechanics.
-8. **Corporate invoice packet design.** Source template exists. Remaining work is generator/rendering design for larger events without creating an ERPNext Terms record yet.
-9. **Stage threshold design.** Document which stage should create/update Quote, Sales Order, Project/job, Calendar invite, customer follow-up, invoice, or payment request. Do not implement until the threshold is explicit.
+9. **Corporate invoice packet design.** Source template exists. Remaining work is generator/rendering design for larger events without creating an ERPNext Terms record yet.
+10. **Stage threshold design.** Document which stage should create/update Quote, Sales Order, Project/job, Calendar invite, customer follow-up, invoice, or payment request. Do not implement until the threshold is explicit.
 
 ## Do Not Do
 
@@ -193,6 +206,8 @@ python scripts/verify/unpaid_invoice_review.py --report output/unpaid-invoice-re
 python scripts/verify/unpaid_invoice_draft_packet.py --report output/unpaid-invoice-draft-packet.json
 python scripts/verify/unpaid_invoice_draft_packet_contract.py
 python scripts/verify/paperwork_review_digest.py --report output/paperwork-review-digest.json
+python scripts/verify/customer_reminder_dry_run.py --report output/customer-reminder-dry-run.json
+python scripts/verify/customer_reminder_dry_run_contract.py
 python scripts/setup/sync_invoice_branding.py
 python scripts/verify/invoice_branding_contract.py
 python scripts/verify/outbound_documents_contract.py
@@ -209,4 +224,4 @@ Run this only during cutover work. It is not part of the current synthetic/backe
 
 ## Next Handoff Stage
 
-Next no-approval slice: turn the paperwork review digest into a reviewed Desk queue or scheduled internal-only report for Jeff/accounting. It should show candidate invoices, rendered reminder/statement sections, setup gaps, cutover-deferred items, and review checkboxes for recipient/status/cadence/copy. It must not send reminders, submit/cancel accounting records, or use live credentials/real customer data.
+Next no-approval slice: turn the customer reminder dry-run queue into a reviewed Desk page or scheduled internal-only report for Jeff/accounting. It should show candidate invoices, rendered reminder/statement sections, setup gaps, cutover-deferred items, and review checkboxes for recipient/status/cadence/copy/payment path. It must not send reminders, submit/cancel accounting records, or use live credentials/real customer data.

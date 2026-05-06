@@ -8,6 +8,20 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-06 - Customer reminders can be set up only as no-live internal dry runs
+
+**Decision:** Customer reminder setup may now build an internal review queue with cadence suggestions, draft sections, and send blockers, but it must remain no-live. It must not send customer email/SMS, create Email Queue or Communication rows, enable automatic cadence, mutate invoices/payment/accounting records, or depend on live Stripe/production cutover data.
+
+**Reasoning:** GL explicitly said "we aren't going live." The useful work is preparing Jeff/accounting to review reminders with less cognitive load, not crossing into collections automation before recipient, cadence, copy, and payment-path rules are approved.
+
+**Implementation:** Added `locally_twisted.paperwork.customer_reminder_dry_run.run`, host verifier `scripts/verify/customer_reminder_dry_run.py`, fake-data verifier `scripts/verify/customer_reminder_dry_run_contract.py`, workstream `workstreams/customer-reminder-dry-run.md`, and capability recipe `.codex/capabilities/recipes/erpnext-no-live-customer-reminders.md`. The automation index now supports `include_customer_reminders=False` so digest/synthetic aggregation can avoid recursive self-checks.
+
+**Verification receipt:** `python scripts/verify/customer_reminder_dry_run_contract.py` passed 6 fake scenarios. `python scripts/verify/customer_reminder_dry_run.py --report output/customer-reminder-dry-run.json --markdown output/customer-reminder-dry-run.md` passed with 1 internal-review-only queue item for `ACC-SINV-2026-00001`. `python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json` passed with 9 synthetic contracts and 0 broken piping. `python scripts/verify/business_automation_index.py --report output/business-automation-index.json` passed with 21 indexed surfaces, 17 connected, and 0 loud-failure gaps.
+
+**Decided by:** GL requested customer reminder setup while explicitly ruling out going live; Codex implemented the no-live/review-only boundary.
+
+---
+
 ## 2026-05-06 - Synthetic readiness is separate from live cutover readiness
 
 **Decision:** Fake-data and rollback-safe backend audits must not require live Stripe keys, real operator details, or real customer information. Current operating readiness is verified through synthetic contracts. Live Stripe keys, webhook secrets, production host checks, and real contact data are cutover-only and must be labeled as deferred, not as current blockers.

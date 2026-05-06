@@ -69,6 +69,8 @@ python scripts/verify/unpaid_invoice_review.py --report output/unpaid-invoice-re
 python scripts/verify/unpaid_invoice_draft_packet.py --report output/unpaid-invoice-draft-packet.json
 python scripts/verify/unpaid_invoice_draft_packet_contract.py
 python scripts/verify/paperwork_review_digest.py --report output/paperwork-review-digest.json
+python scripts/verify/customer_reminder_dry_run.py --report output/customer-reminder-dry-run.json
+python scripts/verify/customer_reminder_dry_run_contract.py
 python scripts/verify/stripe_amount_parity_contract.py
 ```
 
@@ -88,4 +90,5 @@ Run live inventory after mutating verifiers finish and rollback, not in parallel
 - Draft reminder or statement helpers can become collections automation if they do not prove `send_allowed: false`, `mutation_allowed: false`, and unchanged guarded record counts.
 - Draft packet renderers can accidentally become delivery automation if they create Email Queue, Communication, Payment Request, Payment Entry, Journal Entry, or invoice mutations while preparing review output.
 - Review digests can look harmless while hiding setup blockers or recursively triggering indexed checks; keep them read-only, mutation-guarded, and explicit about partially connected finance surfaces.
+- Customer reminder dry runs can accidentally become customer delivery if queue items are not explicitly `internal_review_only`, `draft_only_not_sent`, and blocked on human approval, recipient, invoice status, cadence, copy, and payment path.
 - Synthetic finance audits can lose focus if live credentials become current blockers. Keep live Stripe/bank/provider credentials out of fake-data readiness work until cutover.

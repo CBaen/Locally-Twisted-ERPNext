@@ -95,6 +95,15 @@ SYNTHETIC_CONTRACTS = (
         "creates": [],
         "cleanup": "uses in-memory fake review payloads only",
     },
+    {
+        "id": "customer_reminder_dry_run_outliers",
+        "lane": "paperwork",
+        "runner": "locally_twisted.verify.customer_reminder_dry_run_contract.run",
+        "command": "python scripts/verify/customer_reminder_dry_run_contract.py",
+        "data_mode": "in_memory_fake_reminder_queue_scenarios",
+        "creates": [],
+        "cleanup": "uses in-memory fake reminder queue payloads only",
+    },
 )
 
 GUARD_DOCTYPES = (
@@ -125,7 +134,11 @@ def run() -> dict[str, object]:
     broken_piping = [item for item in contract_items if not item["ok"]]
 
     status = paperwork_status.run()
-    automation = business_automation_index.run(include_digest=False, include_synthetic=False)
+    automation = business_automation_index.run(
+        include_digest=False,
+        include_synthetic=False,
+        include_customer_reminders=False,
+    )
     digest = paperwork_review_digest.run()
 
     after = _guard_counts()
