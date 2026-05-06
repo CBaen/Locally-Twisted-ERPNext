@@ -8,7 +8,23 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-06 - Portfolio designer reference remains critique input until GL closes it
+
+**Decision:** The current `/portfolio` production source is the Frappe translation, not the Claude/designer research folder. The research folder remains available while GL sends the code back for designer critique. Do not claim it was deleted, and do not commit it as production source unless GL explicitly changes its status.
+
+**Reasoning:** The reference code is useful because it defines the photo-placement design. It is not useful as a second production implementation. The first Codex translation mixed that reference with older local portfolio assumptions, including filters/modal language and stale cleanup claims. That confused ownership: the designer needs to critique the production translation, while Codex needs to keep the Frappe route, assets, tests, and cache behavior correct.
+
+**Implementation:** Production source is `www/portfolio.html`, `www/portfolio.py`, `public/css/lt-portfolio-reel.css`, `public/js/lt-portfolio-reel.js`, optimized images under `public/images/portfolio/optimized/`, and `scripts/verify/portfolio_reel.spec.js`. The current page uses large natural-ratio photos and click-to-front behavior; category query links still filter the photo payload server-side, but there is no visible filter bar or lightbox modal in the current translation.
+
+**Verification receipt:** Latest focused checks passed on the running local Frappe site: `/portfolio` returned `200`; page CSS, JS, and optimized image assets returned `200`; `npm run test:portfolio-reel` passed 3/3; `npm run test:layout-fit -- --grep portfolio` passed 13/13; and `npm run test:interactive-layout -- --grep portfolio` passed 3/3.
+
+**Decided by:** GL clarified that Claude/designer code should be used for photo placement and design critique; Codex translated and documented the Frappe-owned implementation.
+
+---
+
 ## 2026-05-06 - Portfolio proof uses natural-ratio floating photos, not card captions
+
+**Current status:** superseded for the active designer critique loop by the entry above, "Portfolio designer reference remains critique input until GL closes it." The current production translation does **not** include a visible filter bar or lightbox modal, and the reference folder has **not** been deleted.
 
 **Decision:** `/portfolio` should sell trust through installed-work photos first. The V1 portfolio surface uses a floating natural-ratio photo reel with quiet filters and a modal, not cropped product-card tiles or visible captions over the work. Text remains available to screen readers and in the modal, but the main gallery should let the photos carry scale and proof.
 

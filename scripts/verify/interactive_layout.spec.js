@@ -241,19 +241,19 @@ test.describe("Locally Twisted interactive layout states", () => {
 			{ name: "820", width: 820, height: 1180 },
 			{ name: "1366", width: 1366, height: 768 },
 		]) {
-			test(`portfolio modal fits at ${viewport.name}px`, async ({ page }) => {
+			test(`portfolio front-photo state fits at ${viewport.name}px`, async ({ page }) => {
 				await page.setViewportSize({ width: viewport.width, height: viewport.height });
 				const response = await gotoAndSettle(page, "/portfolio");
 				await expectSuccessfulResponse(response, "/portfolio");
 
-				await page.locator("[data-portfolio-card]").first().click();
-				await expect(page.locator("[data-portfolio-modal]")).toBeVisible();
+				await page.waitForSelector(".lt-photo");
+				await page.locator(".lt-photo").first().click({ force: true });
+				await expect(page.locator(".lt-photo.is-front")).toHaveCount(1);
 
 				const result = await auditPageLayout(page, {
-					containerSelectors: ["[data-portfolio-modal]", ".lt-portfolio-modal__panel", ".lt-portfolio-modal__caption"],
-					targetSelectors: [".lt-portfolio-modal__close"],
+					targetSelectors: [".lt-photo.is-front"],
 				});
-				expectNoLayoutFailures(expect, result, `portfolio modal at ${viewport.name}px`);
+				expectNoLayoutFailures(expect, result, `portfolio front-photo state at ${viewport.name}px`);
 			});
 		}
 	});

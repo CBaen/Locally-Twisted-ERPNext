@@ -6,7 +6,17 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-06 - Designer reference code is a contract, not a suggestion pile
+
+Claude produced a useful portfolio design reference, but the first translation failed the ownership handoff: Codex blended the reference with old local portfolio assumptions, kept stale claims in docs, and made the result harder for the designer to critique. The important distinction is that external design code can own the visual contract, while Codex owns the Frappe translation.
+
+**Counter-move:** when GL brings code from Claude, a designer, or another agent, first write down what must survive visually and what should be ignored. For the LT portfolio, the preserved contract is large whole photos, left/right/center drifting placement, no cropped cards, no text covering the product, optimized real images, and mobile full-width natural-ratio stacking. Do not add filters, modal behavior, captions, Frappe boxing, or other "helpful" local patterns unless GL explicitly accepts them. Keep the reference folder while critique is active, but label production source as the Frappe route, CSS/JS, optimized assets, and verifier.
+
+---
+
 ## 2026-05-06 - Translate design references into kept source, then delete the raw reference
+
+**Current status:** superseded while the portfolio designer critique loop is active. Keep the raw reference folder available for critique until GL explicitly closes it; delete only after that approval.
 
 The portfolio reel used a generated/reference folder as a temporary design source. Keeping that folder after translation would train the next agent on the wrong artifact and leave another stale path to reconcile.
 
