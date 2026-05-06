@@ -78,6 +78,7 @@ export const PIECE_DEFINITIONS = Object.freeze([
     render_facts: {
       balloon_size_in: 11,
       construction_basis: "classic_4_balloon_quad_cluster",
+      orientation_basis: "neck_and_knot_point_to_shared_quad_tie_center",
       estimated_clusters: 50,
       estimated_balloons: 200,
       knots_visible: true
@@ -98,6 +99,7 @@ export const PIECE_DEFINITIONS = Object.freeze([
     render_facts: {
       balloon_size_in: 11,
       construction_basis: "classic_4_balloon_quad_cluster",
+      orientation_basis: "neck_and_knot_point_to_shared_quad_tie_center",
       estimated_clusters: 32,
       estimated_balloons: 128,
       knots_visible: true
@@ -118,6 +120,7 @@ export const PIECE_DEFINITIONS = Object.freeze([
     render_facts: {
       balloon_size_in: 11,
       construction_basis: "packed_grid",
+      orientation_basis: "not_modeled_for_public_manufacturing_yet",
       estimated_clusters: 45,
       estimated_balloons: 180,
       knots_visible: true
@@ -138,6 +141,7 @@ export const PIECE_DEFINITIONS = Object.freeze([
     render_facts: {
       balloon_size_in: 11,
       construction_basis: "small_cluster",
+      orientation_basis: "neck_and_knot_point_to_shared_quad_tie_center",
       estimated_clusters: 3,
       estimated_balloons: 12,
       knots_visible: true
@@ -158,6 +162,7 @@ export const PIECE_DEFINITIONS = Object.freeze([
     render_facts: {
       balloon_size_in: 11,
       construction_basis: "sign_cluster",
+      orientation_basis: "neck_and_knot_point_to_shared_quad_tie_center",
       estimated_clusters: 7,
       estimated_balloons: 28,
       knots_visible: true

@@ -12,9 +12,16 @@ The isolated PlayCanvas prototype lives in `research/design-studio-v2/event-buil
 
 - PlayCanvas/Vite owns the interactive game runtime.
 - Frappe owns only the hidden route shell, iframe boundary, and contact-form handoff.
+- Balloon construction truth lives in pure source modules before PlayCanvas renders it. For classic quad slots, use `research/design-studio-v2/event-builder-spike/src/event-playground-construction.js`.
 - The iframe sends a `LT_EVENT_PLAYGROUND_CONTACT_HANDOFF` message to the Frappe wrapper.
 - The wrapper stores `lt_event_playground_handoff_v1` in Frappe-site `sessionStorage` and redirects to `/contact?intent=quote&source=event-playground`.
 - `/contact` pre-fills the existing inquiry form with customer contact details, Balloon Decor / Events Inquiry services, colors, decor type, package notes, and the free-text design summary.
+
+## Construction Capability
+
+Use `.codex/capabilities/recipes/event-playground-construction-truth.md` before changing Event Playground geometry, renderer code, payload facts, or visual verification.
+
+Current captured regression: arch balloons were rendering with generic downward neck/knot orientation. That is not a manufacturing-faithful classic quad. The current rule is that each classic quad slot points the balloon neck and knot toward the shared tie center, and the PlayCanvas renderer consumes that tested slot data instead of inventing orientation inline.
 
 ## Explicit Non-Goals
 

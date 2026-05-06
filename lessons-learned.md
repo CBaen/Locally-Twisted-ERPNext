@@ -22,6 +22,13 @@ The PlayCanvas game, Frappe wrapper, contact-form prefill, and browser tests all
 
 ---
 
+## 2026-05-06 - Event Playground construction truth must be tested before rendering
+
+GL caught the arch balloons pointing down. That was a real manufacturing mistake, not a styling preference: a classic quad cluster is tied/twisted at a shared center, so each balloon neck/knot points into that tie point. The renderer defaulted all balloon necks downward and still passed canvas tests because those tests only proved "nonblank and interactive."
+
+**Counter-move:** use `.codex/capabilities/recipes/event-playground-construction-truth.md` before any Event Playground geometry work. Put construction slots in pure modules first, test neck/knot vectors against the shared tie center, and make PlayCanvas consume those slots. A nonblank canvas is never enough proof for balloon construction.
+
+---
 ## 2026-05-06 - Frappe container work needs an explicit contract
 
 Older notes correctly found that Frappe wraps normal web pages in `.page-content-wrapper > main.container.my-4`, and LT later neutralized that stock visual box so full-width brand bands could span the viewport. The missing piece was that "break out of Frappe" became too easy to treat as a general page-building move. GL saw the real effect: some sections felt detached from the Frappe page rhythm, while crawls/reviews broke differently across browsers and cache states.

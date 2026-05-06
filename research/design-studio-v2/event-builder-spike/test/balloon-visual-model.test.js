@@ -19,6 +19,14 @@ const nearlyEqual = (actual, expected, tolerance = 0.0001) => {
   );
 };
 
+const normalizedToward = (from, to = [0, 0, 0]) => {
+  const vector = to.map((value, index) => value - from[index]);
+  const length = Math.hypot(...vector);
+  return vector.map((value) => value / length);
+};
+
+const dot = (a, b) => a.reduce((total, value, index) => total + value * b[index], 0);
+
 describe("balloon visual model", () => {
   it("models an 11 inch round latex balloon as a sized, tension-aware object", () => {
     const balloon = createRoundLatexBalloonVisual({
@@ -116,7 +124,11 @@ describe("classic balloon cluster geometry", () => {
     assert.ok(quad.center_pressure > 0);
     assert.ok(quad.balloons.every((balloon) => balloon.contacts.length >= 3));
     assert.ok(quad.balloons.every((balloon) => balloon.tension.center_pressure === quad.center_pressure));
-    assert.ok(quad.balloons.every((balloon) => balloon.knot_axis[1] < 0));
+    assert.ok(quad.balloons.every((balloon) => {
+      const expectedAxis = normalizedToward(balloon.local_position, quad.cluster_center);
+      return dot(balloon.knot_axis, expectedAxis) > 0.999;
+    }));
+    assert.equal(quad.balloons.every((balloon) => balloon.knot_axis[1] < 0), false);
   });
 
   it("nests classic quads with alternating phase and adjacency hints", () => {

@@ -14,6 +14,26 @@ import {
   acceptSuggestion,
   ignoreSuggestion
 } from "../src/event-playground-state.js";
+import {
+  EVENT_PLAYGROUND_CONSTRUCTION_VERSION,
+  createClassicQuadRenderSlots
+} from "../src/event-playground-construction.js";
+
+const dot = (a, b) => a.x * b.x + a.y * b.y + a.z * b.z;
+
+const normalizedToward = (from, to = { x: 0, y: 0, z: 0 }) => {
+  const vector = {
+    x: to.x - from.x,
+    y: to.y - from.y,
+    z: to.z - from.z
+  };
+  const length = Math.hypot(vector.x, vector.y, vector.z);
+  return {
+    x: vector.x / length,
+    y: vector.y / length,
+    z: vector.z / length
+  };
+};
 
 test("event playground starts with V1 venues, honest decor families, context props, and suggestions", () => {
   const state = createEventPlaygroundState();
@@ -24,6 +44,10 @@ test("event playground starts with V1 venues, honest decor families, context pro
     ["school_gym", "corporate_lobby", "backyard_patio", "community_room", "car_dealership_lite"]
   );
   assert.ok(state.palette.pieces.some((piece) => piece.id === "classic_arch"));
+  assert.equal(
+    state.palette.pieces.find((piece) => piece.id === "classic_arch").render_facts.orientation_basis,
+    "neck_and_knot_point_to_shared_quad_tie_center"
+  );
   assert.ok(state.palette.pieces.some((piece) => piece.id === "column_pair"));
   assert.ok(state.palette.pieces.some((piece) => piece.id === "balloon_wall"));
   assert.ok(state.palette.pieces.some((piece) => piece.id === "table_centerpiece"));
@@ -32,6 +56,24 @@ test("event playground starts with V1 venues, honest decor families, context pro
   assert.ok(state.palette.props.some((prop) => prop.id === "linen_table"));
   assert.ok(state.palette.props.some((prop) => prop.id === "display_car"));
   assert.ok(state.suggestions.some((suggestion) => suggestion.id === "complete_entrance"));
+});
+
+test("event playground classic quad render slots point knots to the tie center", () => {
+  const slots = createClassicQuadRenderSlots({ phaseDeg: 42, radius: 0.31, zOffset: 0.08 });
+
+  assert.equal(EVENT_PLAYGROUND_CONSTRUCTION_VERSION, "event-playground-construction-0.1.0");
+  assert.equal(slots.length, 4);
+  assert.equal(new Set(slots.map((slot) => slot.slot)).size, 4);
+  assert.equal(
+    slots.every((slot) => slot.orientation_basis === "neck_and_knot_point_to_shared_quad_tie_center"),
+    true
+  );
+  assert.equal(slots.every((slot) => slot.neck_direction.y < 0), false);
+  assert.ok(slots.some((slot) => slot.neck_direction.y > 0));
+  assert.ok(slots.every((slot) => {
+    const expectedDirection = normalizedToward(slot.local_position, slot.tie_center);
+    return dot(slot.neck_direction, expectedDirection) > 0.999;
+  }));
 });
 
 test("event playground payload keeps Frappe handoff schema stable", () => {

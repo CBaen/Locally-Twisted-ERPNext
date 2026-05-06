@@ -20,6 +20,13 @@ const slotOffset = (radiusFt, degrees) => {
 
 const repeatedColor = (colors, index) => colors[index % colors.length] || "Red";
 
+const axisToward = (fromPosition, toPosition = [0, 0, 0]) =>
+  roundVector(normalize([
+    toPosition[0] - fromPosition[0],
+    toPosition[1] - fromPosition[1],
+    toPosition[2] - fromPosition[2],
+  ]));
+
 const contactTo = (fromPosition, toBalloon) => {
   const normal = normalize([
     toBalloon.local_position[0] - fromPosition[0],
@@ -43,7 +50,8 @@ function createClusterBalloon({
   contacts = [],
   centerPressure = 0,
   slot,
-  knotAxis = [0, -1, 0],
+  tiePoint = [0, 0, 0],
+  knotAxis = axisToward(localPosition, tiePoint),
 }) {
   const balloon = createRoundLatexBalloonVisual({
     balloonId,
@@ -61,7 +69,7 @@ function createClusterBalloon({
     slot,
     local_position: roundVector(localPosition),
     knot_axis: knotAxis,
-    tie_point: roundVector([0, -balloon.dimensions.radius_ft * 0.42, 0]),
+    tie_point: roundVector(tiePoint),
   };
 }
 
@@ -98,6 +106,7 @@ export function createDupletVisual(options = {}) {
       localPosition: shell.local_position,
       centerPressure: contactPressure,
       slot: index + 1,
+      tiePoint: [0, 0, 0],
       contacts: [
         {
           withBalloonId: other.balloon_id,
@@ -154,6 +163,7 @@ export function createQuadClusterVisual(options = {}) {
       contacts,
       centerPressure,
       slot: shell.slot,
+      tiePoint: clusterCenter,
     });
   });
 

@@ -22,6 +22,7 @@ import {
   ignoreSuggestion,
   getColorHex
 } from "./event-playground-state.js";
+import { createClassicQuadRenderSlots } from "./event-playground-construction.js";
 
 const COLORS = {
   ink: "#0a0a0b",
@@ -414,22 +415,33 @@ function buildDisplayCar(root, color) {
 
 function quadCluster(name, colors, phaseDeg) {
   const root = new pc.Entity(name);
-  const phase = phaseDeg * Math.PI / 180;
-  [0, Math.PI / 2, Math.PI, Math.PI * 1.5].forEach((angle, index) => {
-    const x = Math.cos(angle + phase) * 0.31;
-    const y = Math.sin(angle + phase) * 0.31;
-    const balloon = balloonEntity(`${name}-balloon-${index}`, colors[index % colors.length]);
-    balloon.setLocalPosition(x, y, index % 2 ? 0.08 : -0.08);
+  createClassicQuadRenderSlots({ phaseDeg, radius: 0.31, zOffset: 0.08 }).forEach((slot, index) => {
+    const balloon = balloonEntity(`${name}-balloon-${index}`, colors[index % colors.length], slot.neck_direction);
+    balloon.setLocalPosition(slot.local_position.x, slot.local_position.y, slot.local_position.z);
     root.addChild(balloon);
   });
   return root;
 }
 
-function balloonEntity(name, color) {
+function balloonEntity(name, color, neckDirection = { x: 0, y: -1, z: 0 }) {
   const root = new pc.Entity(name);
   root.addChild(sphere(`${name}-body`, [0, 0, 0], [0.82, 0.9, 0.82], color, true));
-  root.addChild(sphere(`${name}-neck`, [0, -0.48, 0], [0.16, 0.23, 0.16], color, true));
-  root.addChild(sphere(`${name}-knot`, [0, -0.62, 0], [0.17, 0.09, 0.17], color, true));
+  root.addChild(sphere(
+    `${name}-neck`,
+    vectorScale(neckDirection, 0.48),
+    [0.16, 0.23, 0.16],
+    color,
+    true,
+    neckDirection
+  ));
+  root.addChild(sphere(
+    `${name}-knot`,
+    vectorScale(neckDirection, 0.62),
+    [0.17, 0.09, 0.17],
+    color,
+    true,
+    neckDirection
+  ));
   return root;
 }
 
@@ -629,10 +641,11 @@ function createSelectionMarker() {
   return root;
 }
 
-function sphere(name, position, scale, color, balloon = false) {
+function sphere(name, position, scale, color, balloon = false, localYAxis = null) {
   const entity = new pc.Entity(name);
   entity.setLocalPosition(position[0], position[1], position[2]);
   entity.setLocalScale(scale[0], scale[1], scale[2]);
+  if (localYAxis) alignLocalYAxis(entity, localYAxis);
   entity.addComponent("render", { type: "sphere", material: material(color, balloon) });
   return entity;
 }
@@ -668,6 +681,23 @@ function collectMeshes(entity, itemId) {
 
 function clearChildren(entity) {
   [...entity.children].forEach((child) => child.destroy());
+}
+
+function vectorScale(vector, scale) {
+  return [
+    (vector?.x || 0) * scale,
+    (vector?.y || 0) * scale,
+    (vector?.z || 0) * scale
+  ];
+}
+
+function alignLocalYAxis(entity, direction) {
+  const target = new pc.Vec3(direction.x || 0, direction.y || 0, direction.z || 0);
+  if (target.length() < 0.0001) return;
+  target.normalize();
+  const rotation = new pc.Quat();
+  rotation.setFromDirections(new pc.Vec3(0, 1, 0), target);
+  entity.setLocalRotation(rotation);
 }
 
 function toColor(hex) {
