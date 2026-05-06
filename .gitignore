@@ -90,3 +90,11 @@ apps/locally_twisted/locally_twisted/seed/_data/
 
 # Throwaway HTML fetched during scraper development. Re-fetchable; not source-of-truth.
 _resources/_tmp_odoo_sample.html
+
+# Local-only design/research packets kept for active critique or OpenClaw handoff.
+# Do not track these as LT production source; keep production translation in app files.
+research/a unique portfolio page for a high end corporate balloon events_.zip
+research/a unique portfolio page for a high end corporate balloon events_/
+research/design_handoff_locally_twisted_portfolio/
+research/portfolio-design-cla/
+research/balloon physics/
