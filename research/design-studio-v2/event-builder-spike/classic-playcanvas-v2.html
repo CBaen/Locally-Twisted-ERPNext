@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Locally Twisted Classic Stage Builder V2</title>
+  </head>
+  <body>
+    <main class="builder-shell" data-builder-ready="false">
+      <canvas id="application-canvas" aria-label="Locally Twisted balloon event builder"></canvas>
+
+      <header class="topbar">
+        <div>
+          <p>Locally Twisted</p>
+          <h1>Classic Stage Builder</h1>
+        </div>
+        <nav class="mode-bar" aria-label="Builder tools">
+          <button type="button" data-mode="view" aria-pressed="true">View</button>
+          <button type="button" data-mode="stage" aria-pressed="false">Stage</button>
+          <button type="button" data-mode="move" aria-pressed="false">Move</button>
+          <button type="button" data-mode="spin" aria-pressed="false">Spin</button>
+        </nav>
+      </header>
+
+      <section class="action-rail" aria-label="Decor actions">
+        <button type="button" data-action="add-arch">Arch</button>
+        <button type="button" data-action="add-columns">Columns</button>
+        <button type="button" data-action="duplicate">Duplicate</button>
+        <button type="button" data-action="delete">Delete</button>
+        <button type="button" data-action="reset-view">Reset</button>
+      </section>
+
+      <aside class="status-panel" aria-live="polite">
+        <dl>
+          <div>
+            <dt>Selected</dt>
+            <dd data-status="selected">None</dd>
+          </div>
+          <div>
+            <dt>Tool</dt>
+            <dd data-status="mode">View</dd>
+          </div>
+          <div>
+            <dt>Pieces</dt>
+            <dd data-status="count">0</dd>
+          </div>
+          <div>
+            <dt>Stage Turn</dt>
+            <dd data-status="stage">0 deg</dd>
+          </div>
+        </dl>
+      </aside>
+    </main>
+
+    <script type="module" src="/src/main-classic-playcanvas-v2.js"></script>
+  </body>
+</html>

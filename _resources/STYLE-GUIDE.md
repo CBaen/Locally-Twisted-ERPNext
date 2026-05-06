@@ -31,7 +31,7 @@ so the rebrand has an implementation map, not only a mood target.
 
 1. **Civic Celebration is the base.** The site should feel like Utah civic/event authority: city, mountains, schools, public events, corporate entrances, and premium private celebrations.
 2. **Brand Direction is the quality bar.** Use the premium banner feel: elegant wordmark scale, crisp brass line icons, disciplined spacing, and quiet corporate confidence.
-3. **Slate Blue and Berry sharpen the palette.** Deep navy/slate, ink, warm white, brass, and crimson/berry are the working system. Do not drift back to pastel catalog energy.
+3. **Slate Blue and Berry sharpen the palette.** Deep navy/slate, ink, warm white, brass, and crimson/berry are the working system. Balloon color belongs in photography, product choices, and customer-selected palettes.
 4. **Typography is part of the premium signal.** Cormorant Garamond and Lato are the approved public-site pair. Do not replace them with a generic webapp font in visible brand surfaces.
 5. **Photography proves authority.** Show real installed work in civic, school, corporate, venue, and upscale event contexts. The image should explain the scale before the copy does.
 6. **Crisp brass line icons, not badge clutter.** Trust marks should look like Image #3's premium icon set, not clip-art circles or sticker badges. Use the new `public/icons/brand/` SVG suite for proof pillars, local/event context, and multiple balloon forms.
@@ -57,7 +57,7 @@ Practical translation:
 - The site should read as **premium Utah event infrastructure**, not a generic ecommerce theme.
 - The first impression should say **experienced, local, corporate-safe, civic-scale, and tasteful**.
 - The visual energy should come from **real balloon installations and Americana/Utah context**, not decorative UI color.
-- The UI should feel **crisp, rectangular, editorial, and controlled**. It should not feel bubbly, pastel, childish, or template-driven.
+- The UI should feel **crisp, rectangular, editorial, and controlled**, matching the current professional homepage framework.
 - The Brand Direction banner is the standard for icon quality, not just a decorative reference.
 
 ---
@@ -101,7 +101,7 @@ component is added, append it here before a broad implementation swarm begins.
 | Footer/newsletter | `templates/includes/footer/footer.html` | Closing brand trust and legal wayfinding | Deep navy/ink ground, warm text, brass labels, clean newsletter states, legal links visible. Use the logo/approved wordmark, not a random font fallback. |
 | Home | `/`, `www/home.html`, `www/home.py` | Highest brand authority page | Civic/Utah hero image, Cormorant hero type, Image #3 proof bar icons, reviews as support, large recent-work photos, custom decor discovery, client proof, closing CTA. |
 | Shop landing | `/shop`, `www/shop.html` | Ready-to-order retail lane | Still premium but more practical. Keep filters, product cards, and add-to-cart clear; use restrained surfaces so product color carries the page. |
-| Category / item group listing | `/shop-items/<group>`, Item Group generator | Product discovery | Use editorial shop header, left/sidebar filters on desktop, drawer filters on mobile, stable grid cards, visible count/sort state, no pastel catalog takeover. |
+| Category / item group listing | `/shop-items/<group>`, Item Group generator | Product discovery | Use editorial shop header, left/sidebar filters on desktop, drawer filters on mobile, stable grid cards, visible count/sort state, and product color as the visual accent. |
 | Product detail/configure | Webshop item overrides under `templates/generators/item/` | Conversion and product clarity | Product image first, Cormorant product name, Lato specs/options, clear price and stock. Fixed-price products stay cartable; product group alone must not create a quote-only failure. Out-of-area delivery redirects to a prefilled `/contact` quote path. |
 | Cart | `/cart` -> `www/lt_cart.html` | Review before checkout | Quiet transactional page with order-summary hierarchy, stable quantity controls, clear empty/error/loading states, and contact fallback. |
 | Checkout | `/checkout`, `www/checkout.html` | Payment trust | Most restrained surface: secure, plain, readable, minimal ornament. Keep form labels clear, required states visible, summary grounded, and trust language factual. If delivery ZIP is outside the configured zone, show a delivery quote request path and carry checkout details into `/contact`; do not imply the product itself became unpurchasable. |
@@ -128,7 +128,7 @@ Current primary navigation is `Event Balloons`, `Portfolio`, `Process`,
 | Premium proof bar | `lt-authority`, future trust/value bars | Dark ink/navy/slate band, brass line icons, short uppercase Lato titles, compact proof text. Use the Image #3 icon standard. |
 | Hero sections | `lt-hero`, `lt-shop__hero`, `lt-portfolio-hero`, page intros | Cormorant headings, Lato labels, real proof imagery where possible, dark authority bands for civic/company pages, warmer light headers for product/legal pages. |
 | Photo cards | Featured work, portfolio cards, product cards, BTFP service cards | Preserve real work. Product cards can crop tighter; proof/portfolio cards need context and scale. |
-| Filters/chips | Shop chips, portfolio pills, category filters, product option chips | Rectangular or lightly rounded, Lato 700, visible selected state, no pastel pill garden. |
+| Filters/chips | Shop chips, portfolio pills, category filters, product option chips | Rectangular or lightly rounded, Lato 700, visible selected state, and restrained selected/hover states. |
 | Forms | Contact/book form, checkout, newsletter | Lato labels, warm/stone inputs, visible focus, clear required text, loud error state, no placeholder-only labels. |
 | CTAs | Hero/contact/shop/cart/checkout buttons | Primary is berry/crimson or deep navy. Secondary is transparent outline. Keep labels plain and short. |
 | Accordions/details | FAQ, BTFP FAQ, mobile nav accordions | Large hit areas, clear expanded state, keyboard support, no tiny chevrons as the only signal. |
@@ -154,7 +154,7 @@ Use plain customer labels. Avoid backend CRM language in public copy.
 
 1. **Civic Celebration sets the subject matter.** Lead with Utah territory, event scale, civic/public proof, school spirit, corporate entrances, and premium private-event installs.
 2. **Brand Direction sets the finish.** Use the premium banner's serif presence, letterspaced labels, brass linework, dark authority bands, and clean icon hierarchy.
-3. **Slate Blue and Berry sets restraint.** The site should lean ink/navy/slate/warm-white with berry/crimson action moments. Avoid pastel-heavy UI and excessive teal.
+3. **Slate Blue and Berry sets restraint.** The site should lean ink/navy/slate/warm-white with berry/crimson action moments. Keep the interface structured and let product/media color carry the celebratory range.
 4. **Photography is proof.** Use real installed work for credibility; use generated visuals only as labeled concepts or product visualization.
 5. **Americana should be implied, not costume.** Mountains, city skylines, school colors, civic arches, parade routes, formal entrances, and public venues are the right imagery. Avoid flag-wall cliches or novelty patriot graphics unless they are real client work.
 6. **Retail clarity is contained.** Ready-to-order shopping can be simple and practical; the company identity stays event-authority led.
@@ -189,12 +189,12 @@ photos provide most color.
 ### Accent Palette
 
 Use accents for thin rules, icon strokes, small chips, and deliberate CTA contrast.
-Do not build the company identity from pastel UI colors. Balloon colors belong
+Do not build the company identity from color noise. Balloon colors belong
 primarily in photography, product imagery, and customer-selected palettes.
 
-Removed colors: the earlier pastel-heavy catalog system is retired as the main
-company palette because it reads too small-catalog for the current buyer
-priority.
+Retired color behavior: the earlier small-catalog color system is no longer the
+main company palette because the current buyer priority needs professional event
+authority first.
 
 ### Surface Tints
 
@@ -213,7 +213,7 @@ priority.
 - Use crimson/berry for the strongest public CTAs. Use deep navy for quieter CTAs. Use deep teal only where an existing transactional/product pattern specifically calls for it.
 - Body text uses a controlled gray on light surfaces; headings use ink.
 - Avoid pale-blue header/footer dominance.
-- Avoid soft pastel palettes, candy colors, and playful color blocking in company-level chrome.
+- Avoid low-contrast color systems and playful color blocking in company-level chrome.
 - Never stack two different colored full-width sections back-to-back.
 
 Pattern:

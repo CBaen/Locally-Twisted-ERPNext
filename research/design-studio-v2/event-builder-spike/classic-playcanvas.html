@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Classic Stage Builder - PlayCanvas</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="/src/classic-styles.css" />
+  </head>
+  <body>
+    <main class="classic-shell" data-classic-render-ready="false">
+      <section class="stage-panel" aria-label="Corporate stage planner">
+        <header class="stage-header">
+          <div>
+            <p class="eyebrow">Corporate stage</p>
+            <h1>Classic stage builder</h1>
+          </div>
+          <div class="stage-meta" aria-label="Stage facts">
+            <span>24 ft x 12 ft</span>
+            <span>1 ft grid</span>
+            <span>PlayCanvas</span>
+          </div>
+          <label class="stage-spin-control">
+            Turn stage
+            <input type="range" min="0" max="359" step="1" data-stage-rotation-input />
+            <output data-stage-rotation-output>0 deg</output>
+          </label>
+          <div class="drag-mode-group" aria-label="Stage drag mode">
+            <span>Stage drag</span>
+            <button type="button" data-stage-drag-mode="turn" aria-pressed="true">Turn</button>
+            <button type="button" data-stage-drag-mode="move" aria-pressed="false">Move</button>
+          </div>
+        </header>
+
+        <div class="stage-frame">
+          <canvas data-classic-canvas aria-label="Fixed isometric corporate stage"></canvas>
+          <div class="floating-actions" data-floating-actions aria-label="Selected piece actions">
+            <label class="spin-control spin-control--floating">
+              Spin
+              <input type="range" min="0" max="359" step="1" data-rotation-input />
+            </label>
+            <button type="button" data-action="duplicate">Duplicate</button>
+            <button type="button" data-action="delete">Delete</button>
+          </div>
+        </div>
+      </section>
+
+      <aside class="inspector-panel" data-mobile-sheet aria-label="Selected piece planner">
+        <section class="selected-card">
+          <p class="eyebrow">Selected piece</p>
+          <h2 data-selected-name>Classic arch</h2>
+          <p data-selected-summary class="selected-summary"></p>
+        </section>
+
+        <section class="control-group" aria-label="Piece actions">
+          <button type="button" data-action="duplicate">Duplicate</button>
+          <button type="button" data-action="delete">Delete</button>
+        </section>
+
+        <section class="drag-mode-group drag-mode-group--panel" aria-label="Piece drag mode">
+          <span>Piece drag</span>
+          <button type="button" data-piece-drag-mode="move" aria-pressed="true">Move</button>
+          <button type="button" data-piece-drag-mode="spin" aria-pressed="false">Spin</button>
+        </section>
+
+        <section class="field-grid" aria-label="Piece settings">
+          <label>
+            Pattern
+            <select data-pattern-select>
+              <option value="two_color_spiral">Two-color spiral</option>
+              <option value="solid">Solid</option>
+              <option value="band">Bands</option>
+            </select>
+          </label>
+          <label>
+            Spin
+            <input type="range" min="0" max="359" step="1" data-rotation-input />
+            <output data-rotation-output>0 deg</output>
+          </label>
+          <label>
+            Color 1
+            <select data-color-slot="0"></select>
+          </label>
+          <label>
+            Color 2
+            <select data-color-slot="1"></select>
+          </label>
+        </section>
+
+        <section class="facts-panel" aria-label="Construction facts">
+          <h3>Build facts</h3>
+          <dl data-selected-facts></dl>
+        </section>
+
+        <section class="warnings-panel" aria-label="Layout warnings">
+          <h3>Warnings</h3>
+          <ul data-warning-list></ul>
+        </section>
+
+        <section class="payload-panel" aria-label="Scene summary">
+          <h3>Summary</h3>
+          <p data-scene-summary></p>
+          <pre data-classic-payload aria-label="Scene payload"></pre>
+        </section>
+      </aside>
+    </main>
+    <script type="module" src="/src/main-classic-playcanvas.js"></script>
+  </body>
+</html>

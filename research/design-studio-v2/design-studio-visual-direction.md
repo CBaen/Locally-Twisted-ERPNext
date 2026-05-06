@@ -33,7 +33,7 @@ Verified from current repo sources:
 
 - The future surface should be `Plan Custom Decor`, not a replacement for `Ready to Order`.
 - The studio is for larger consultative event installations and should help produce useful CRM/inquiry context.
-- The project direction is moving away from pastel/rainbow-first company identity toward premium, professional, Utah-rooted event authority.
+- The project direction follows the current professional homepage framework: premium, professional, Utah-rooted event authority with balloon color coming from the work and customer-selected palettes.
 - The contest synthesis keeps C4 visual thumbnails, C2 palette-aware cascading suggestions, C3 dual-audience completion summary, and C1 pieces-considered sales context.
 - Balloon renderings must respect construction differences: classic arches, columns, and backdrops use 4-balloon cluster logic; organic garlands and organic installs use controlled mixed-size placement, not evenly spaced cartoon dots.
 - The customer-facing color payload must preserve Locally Twisted balloon color names. Hex values are only approximations until Jeff supplies approved mappings.
@@ -68,7 +68,7 @@ Interface tone:
 Color and material direction:
 
 - Base: warm white, soft paper, ink black, deep slate, restrained blue, muted berry, and small gold/brass accents.
-- Avoid pastel backgrounds as the default shell. Pastels belong in customer-selected balloon palettes, not the company frame.
+- Avoid color-noise backgrounds as the default shell. Customer-selected balloon palettes belong on the designs, not the company frame.
 - Use slate/blue/berry photo treatment for proof images and preview scenes where color grading is needed.
 - Use black and gold sparingly for completion, quote-readiness, and saved-plan surfaces.
 
@@ -155,16 +155,16 @@ Tradeoff:
 
 ## What To Reject From The Contest Renders
 
-- Reject rainbow/pastel-first brand framing as the main company identity.
+- Reject color-first brand framing as the main company identity.
 - Reject large rounded toy cards as the default design language.
-- Reject childish "coloring book" framing in customer-facing naming, even if some coloring mechanics survive internally.
+- Reject weak "coloring book" framing in customer-facing naming, even if some palette mechanics survive internally.
 - Reject renders where balloons are simple same-size dots without construction logic.
 - Reject "Send this to Jeff" as public-facing final language. Use "Send this plan to Locally Twisted" or "Talk with Locally Twisted" unless GL deliberately chooses a founder-specific moment.
 - Reject ecommerce cues that imply exact pricing, instant checkout, or guaranteed engineering accuracy for custom installs.
 
 ## Premium But Interactive
 
-The studio can stay approachable without becoming childish by using these rules:
+The studio can stay approachable and professional by using these rules:
 
 - Use large, obvious controls for core choices, but style them like planning controls rather than toy tiles.
 - Let the first interaction be visual and low-risk: choose event context or starting piece.
@@ -208,7 +208,7 @@ Output:
    Bright yellow/blue retail UI, price-first cards, add-to-cart framing, and coupon energy make custom installations feel like commodity products.
 
 2. Kids' coloring game.
-   Oversized pastel cards, cartoon balloons, rainbow headers, playful stickers, and "coloring book" language undercut the professional/civic buyer strategy.
+   Oversized color cards, cartoon balloons, rainbow headers, stickers, and "coloring book" language undercut the professional/civic buyer strategy.
 
 3. Fake engineering blueprint.
    Over-precise renderings, exact quantities, or AR-style claims can imply installation guarantees the planning tool cannot safely make.
@@ -248,5 +248,5 @@ Output:
 - `workstreams/brand-audience-style-reset.md` establishes the premium/civic/professional direction, Locally Twisted as the brand, and the priority buyer order.
 - `FINAL-SURFACE.md` identifies the contest synthesis pipeline: C4 visual thumbnails, C2 cascading palette-aware suggestions, C3 dual-audience completion card, and C1 pieces-considered payload.
 - `PRODUCT-DETAILS.md` provides the load-bearing balloon construction and color-name rules.
-- Render review confirmed the contest mechanics are strongest where they reduce cognitive load and preserve sales context, while the visual language often remains pastel, rounded, and toy-like.
+- Render review confirmed the contest mechanics are strongest where they reduce cognitive load and preserve sales context, while the older visual language no longer matches the current professional homepage framework.
 - Render review also confirmed the physics-reference render is useful for construction believability but not yet sufficient as final premium visual style.

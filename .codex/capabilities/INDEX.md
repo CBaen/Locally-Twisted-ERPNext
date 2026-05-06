@@ -31,6 +31,7 @@ combination.
 Workflows. Multi-step. Clear start and finish.
 
 - [claude-reference-library](recipes/claude-reference-library.md) - safely consult older Claude skills/rules as reference material without treating them as truth or copying them wholesale.
+- [balloon-material-visual-physics](recipes/balloon-material-visual-physics.md) - model balloons as sized latex objects with inflation, finish, tension, contact, knots, and construction-unit deformation instead of generic spheres.
 - [erpnext-finance-controlled-automation](recipes/erpnext-finance-controlled-automation.md) - build ERPNext finance/payroll migration surfaces with review queues and accountant approval gates before automation.
 - [erpnext-checkout-commerce-rules](recipes/erpnext-checkout-commerce-rules.md) - keep mixed goods/service checkout, delivery fees, deposits, and taxable-line rules aligned in ERPNext/Frappe.
 - [erpnext-crm-pipeline-safety](recipes/erpnext-crm-pipeline-safety.md) - translate client-friendly CRM/Kanban stages without corrupting ERPNext native status, finance, or reporting behavior.
@@ -40,6 +41,7 @@ Workflows. Multi-step. Clear start and finish.
 - [frappe-sitewide-visual-overhaul](recipes/frappe-sitewide-visual-overhaul.md) - ship a Frappe/Webshop visual redesign with cache-busts, route checks, screenshots, and launch-safe receipts.
 - [lt-brand-style-guide-consolidation](recipes/lt-brand-style-guide-consolidation.md) - consolidate LT visual authority, delete conflicting style references, and verify old font/pastel/icon drift is gone.
 - [cross-browser-motion-visual-verification](recipes/cross-browser-motion-visual-verification.md) - verify animated, marquee, carousel, reduced-motion, and browser-session visual behavior across Chrome/Brave and media-query branches.
+- [playcanvas-event-builder-stage-physics](recipes/playcanvas-event-builder-stage-physics.md) - keep the PlayCanvas event-builder game anchored through stage-root and piece-root hierarchy, transform math, pointer input, and browser verification.
 - [prototype-engine-spike-verification](recipes/prototype-engine-spike-verification.md) - compare browser rendering engines in isolated research packages with shared payload facts and real browser verification.
 - [responsive-container-audit](recipes/responsive-container-audit.md) - audit public routes and stateful UI across breakpoint edges so text, controls, menus, forms, cards, and product selectors stay inside their containers.
 - [take-live-coordinated-workflows](recipes/take-live-coordinated-workflows.md) - coordinate multi-agent launch lanes with controller ownership, review gates, and release verification.
