@@ -5,10 +5,11 @@
     "test:nav-ia": "python scripts/verify/nav_ia.py",
     "test:layout-fit": "playwright test scripts/verify/layout_fit.spec.js --reporter=line",
     "test:interactive-layout": "playwright test scripts/verify/interactive_layout.spec.js --reporter=line",
+    "test:portfolio-reel": "playwright test scripts/verify/portfolio_reel.spec.js --reporter=line",
     "test:event-playground": "playwright test scripts/verify/event_playground.spec.js --reporter=line",
     "test:checkout-experience": "playwright test scripts/verify/checkout_experience.spec.js --reporter=line",
     "test:shop-smoke": "python scripts/verify/smoke_shop.py",
-    "test:public-verify": "npm run test:nav-ia && playwright test scripts/verify/layout_fit.spec.js --reporter=dot && playwright test scripts/verify/interactive_layout.spec.js --reporter=dot && playwright test scripts/verify/checkout_experience.spec.js --reporter=dot && npm run test:shop-smoke",
+    "test:public-verify": "npm run test:nav-ia && playwright test scripts/verify/layout_fit.spec.js --reporter=dot && playwright test scripts/verify/interactive_layout.spec.js --reporter=dot && playwright test scripts/verify/event_playground.spec.js --reporter=dot && playwright test scripts/verify/checkout_experience.spec.js --reporter=dot && npm run test:shop-smoke",
     "test:desk-owner": "playwright test scripts/verify/owner_desk_routes.spec.js --reporter=line"
   },
   "devDependencies": {

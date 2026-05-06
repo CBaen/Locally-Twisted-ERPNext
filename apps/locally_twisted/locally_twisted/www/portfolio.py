@@ -6,11 +6,13 @@ surface — full portfolio organized by event type, with a secondary product-typ
 filter for visitors thinking about a specific kind of decor.
 
 Architecture:
-- Hero band → sandstone divider → filter row (dual-axis: event × product)
-  → gallery grid → closing CTA. Mirrors the homepage's full-bleed band pattern.
-- Photos are SCAFFOLDING for the architecture — what's being designed is the
-  surface, the dual-axis filter behavior, the empty state, the URL state, and
-  the responsive grid. Photos will rotate as Jeff's archive is curated.
+- Hero band -> sandstone divider -> filter row (dual-axis: event x product)
+  -> floating photo reel -> closing CTA. Mirrors the homepage's full-bleed
+  band pattern while letting the portfolio intentionally break out of boxed
+  page-card behavior.
+- Photos are the product proof on this route. The reel preserves full source
+  aspect ratios, uses left/right/center placement metadata, and avoids captions
+  or card text covering the work.
 - Filter logic is client-side JS only (no whitelisted endpoint, no AJAX).
   Reads `data-event-type` and `data-category` on each card; AND-logic
   intersection between axes; "All" = no filter on that axis.
@@ -211,6 +213,53 @@ GALLERY_ITEMS = [
 ]
 # Re-tag the Pride one to columns category (more accurate).
 GALLERY_ITEMS[14]["category"] = "columns"
+
+
+PORTFOLIO_DISPLAY_ORDER = [
+    "corporate-logo-arch",
+    "corporate-wsu-arch-bouquets",
+    "wedding-floral-half-arch",
+    "birthday-dolphin-backdrop",
+    "corporate-weberstock-photo-opt",
+    "wedding-foil-heart-arch",
+    "wedding-organic-half-arch",
+    "birthday-smurfs-arch",
+    "seasonal-easter-rabbit-arch",
+    "school-grad-garland",
+    "seasonal-pride-columns",
+    "birthday-pirate-column",
+    "seasonal-halloween-tombstone",
+    "birthday-balloon-bouquets",
+    "school-back-to-school-stage",
+]
+_portfolio_order = {slug: index for index, slug in enumerate(PORTFOLIO_DISPLAY_ORDER)}
+GALLERY_ITEMS.sort(key=lambda item: _portfolio_order.get(item["slug"], len(_portfolio_order)))
+
+
+# Portfolio photo-reel metadata. This translates the approved reference's
+# left / right / center floating-photo reel into deterministic Frappe data.
+# Dimensions are the real source asset dimensions, used to preserve natural
+# aspect ratio and prevent the old cropped-card behavior.
+PORTFOLIO_REEL_META = {
+    "corporate-logo-arch": {"w": 4032, "h": 3024, "side": "left", "scale": 0.96},
+    "corporate-wsu-arch-bouquets": {"w": 4032, "h": 3024, "side": "right", "scale": 0.92},
+    "wedding-floral-half-arch": {"w": 4032, "h": 3024, "side": "left", "scale": 0.88},
+    "birthday-dolphin-backdrop": {"w": 4032, "h": 3024, "side": "right", "scale": 0.96},
+    "corporate-weberstock-photo-opt": {"w": 4032, "h": 3024, "side": "center", "scale": 1.0},
+    "wedding-foil-heart-arch": {"w": 4032, "h": 3024, "side": "left", "scale": 0.9},
+    "wedding-organic-half-arch": {"w": 3024, "h": 4032, "side": "right", "scale": 0.74},
+    "birthday-smurfs-arch": {"w": 4032, "h": 3024, "side": "left", "scale": 0.92},
+    "seasonal-easter-rabbit-arch": {"w": 4032, "h": 3024, "side": "right", "scale": 0.96},
+    "school-grad-garland": {"w": 4032, "h": 3024, "side": "center", "scale": 1.0},
+    "seasonal-pride-columns": {"w": 4032, "h": 3024, "side": "left", "scale": 0.9},
+    "birthday-pirate-column": {"w": 1440, "h": 1800, "side": "right", "scale": 0.72},
+    "seasonal-halloween-tombstone": {"w": 1284, "h": 1595, "side": "left", "scale": 0.72},
+    "birthday-balloon-bouquets": {"w": 4032, "h": 3024, "side": "right", "scale": 0.84},
+    "school-back-to-school-stage": {"w": 746, "h": 573, "side": "left", "scale": 0.78},
+}
+
+for item in GALLERY_ITEMS:
+    item.update(PORTFOLIO_REEL_META.get(item["slug"], {}))
 
 
 def _filter_label(items, event_slug, category_slug):
@@ -848,6 +897,243 @@ body.lt-modal-open { overflow: hidden; }
 .lt-portfolio-modal__close {
     background-color: #0e2240;
 }
+
+/* --- Floating photo reel ------------------------------------------- */
+.lt-portfolio-hero {
+    background: #f8f4ed;
+    border-bottom: 0;
+    padding: clamp(4.5rem, 11vw, 9rem) clamp(1.25rem, 5vw, 5rem) clamp(3rem, 7vw, 6rem);
+}
+.lt-portfolio-hero__inner {
+    max-width: 1180px;
+}
+.lt-portfolio-hero__eyebrow {
+    color: #b31b34;
+    margin-bottom: 1.5rem;
+}
+.lt-portfolio-hero__title {
+    max-width: 920px;
+    color: #151515;
+    font-size: clamp(4rem, 10vw, 9.5rem);
+    font-weight: 300;
+    line-height: 0.86;
+    letter-spacing: 0;
+}
+.lt-portfolio-hero__body {
+    max-width: 640px;
+    color: rgba(21, 21, 21, 0.68);
+    font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+}
+.lt-portfolio-ribbon {
+    height: 1px;
+    background: rgba(184, 154, 91, 0.38);
+}
+.lt-portfolio-filter {
+    position: sticky;
+    top: 0;
+    z-index: 18;
+    background: rgba(248, 244, 237, 0.94);
+    border-top: 1px solid rgba(184, 154, 91, 0.24);
+    border-bottom: 1px solid rgba(184, 154, 91, 0.3);
+    padding: 0.85rem clamp(1rem, 4vw, 4rem);
+    backdrop-filter: blur(18px);
+}
+.lt-portfolio-filter__inner {
+    width: 100%;
+    max-width: none;
+    gap: 1rem;
+}
+.lt-portfolio-filter__pill button,
+.lt-portfolio-filter__dropdown select {
+    min-height: 44px;
+    border-radius: 0;
+    border-color: rgba(14, 34, 64, 0.24);
+    background: #fffdf9;
+    color: #0e2240;
+    font-size: 0.75rem;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+.lt-portfolio-filter__clear {
+    align-items: center;
+    display: inline-flex;
+    min-height: 44px;
+}
+.lt-portfolio-grid {
+    overflow: hidden;
+    background: #f8f4ed;
+    padding: 0;
+}
+.lt-portfolio-grid.lt-fullbleed {
+    padding-left: 0;
+    padding-right: 0;
+}
+.lt-portfolio-grid .lt-portfolio-grid__inner {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+}
+.lt-portfolio-grid__intro {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: clamp(1.5rem, 4vw, 4rem) clamp(1.25rem, 5vw, 5rem) 0;
+    color: rgba(21, 21, 21, 0.56);
+    font-family: 'Lato', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+.lt-portfolio-grid__cards {
+    position: relative;
+    display: block;
+    width: 100%;
+    min-height: 100vh;
+    padding: 3rem 0 8rem;
+}
+.lt-portfolio-card {
+    appearance: none;
+    -webkit-appearance: none;
+    position: absolute;
+    display: block;
+    width: var(--reel-width, 640px);
+    height: var(--reel-height, 480px);
+    left: var(--reel-left, 0);
+    top: var(--reel-top, 0);
+    border: 0;
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+    color: inherit;
+    cursor: zoom-in;
+    opacity: 0;
+    overflow: visible;
+    text-align: left;
+    transform: translate3d(var(--reel-enter-x, 0), 64px, 0);
+    transform-origin: center center;
+    transition: opacity 0.18s linear, filter 0.2s ease, box-shadow 0.2s ease;
+    will-change: transform, opacity;
+}
+.lt-portfolio-card:hover,
+.lt-portfolio-card:focus-visible {
+    box-shadow: none;
+    outline: none;
+}
+.lt-portfolio-card:focus-visible .lt-portfolio-card__image img {
+    outline: 3px solid #b31b34;
+    outline-offset: 8px;
+}
+.lt-portfolio-card[hidden] {
+    display: none !important;
+}
+.lt-portfolio-card__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+    background: transparent;
+}
+.lt-portfolio-card__image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: transparent;
+    box-shadow:
+        0 1px 0 rgba(40, 30, 20, 0.04),
+        0 34px 68px -34px rgba(40, 30, 20, 0.24),
+        0 80px 140px -80px rgba(40, 30, 20, 0.18);
+}
+.lt-portfolio-card:hover .lt-portfolio-card__image img {
+    filter: brightness(1.035);
+}
+.lt-portfolio-empty {
+    position: relative;
+    width: min(720px, calc(100% - 2rem));
+    margin: 0 auto;
+    color: #151515;
+    background: #fffdf9;
+    border: 1px solid rgba(14, 34, 64, 0.16);
+}
+.lt-portfolio-grid[data-empty="true"] .lt-portfolio-grid__cards {
+    min-height: auto;
+    padding: 4rem 0;
+}
+.lt-cta {
+    background: #d9c7b3;
+}
+@media (max-width: 768px) {
+    .lt-portfolio-hero {
+        padding: 4rem 1.25rem 3rem;
+    }
+    .lt-portfolio-hero__title {
+        font-size: clamp(3.25rem, 18vw, 5.75rem);
+    }
+    .lt-portfolio-filter {
+        position: static;
+        padding: 0.9rem 1rem;
+    }
+    .lt-portfolio-filter__inner {
+        align-items: stretch;
+    }
+    .lt-portfolio-filter__pills {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+    }
+    .lt-portfolio-filter__dropdown,
+    .lt-portfolio-filter__meta {
+        margin-left: 0;
+    }
+    .lt-portfolio-filter__dropdown {
+        align-items: stretch;
+        flex-direction: column;
+        width: 100%;
+        gap: 0.35rem;
+    }
+    .lt-portfolio-filter__dropdown select {
+        width: 100%;
+        min-width: 0;
+    }
+    .lt-portfolio-filter__meta {
+        justify-content: space-between;
+        width: 100%;
+    }
+    .lt-portfolio-grid__intro {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 1.5rem 1.25rem 0;
+    }
+    .lt-portfolio-grid__cards {
+        display: flex;
+        flex-direction: column;
+        gap: 3.5rem;
+        height: auto !important;
+        min-height: auto;
+        padding: 2rem 0 4rem;
+    }
+    .lt-portfolio-card {
+        position: relative;
+        inset: auto;
+        width: 100vw !important;
+        max-width: 100vw;
+        margin-left: calc(-1 * max(var(--lt-page-gutter), env(safe-area-inset-left)));
+        height: auto !important;
+        aspect-ratio: var(--reel-aspect, 4 / 3);
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lt-portfolio-card {
+        transition: none;
+        opacity: 1;
+        transform: none;
+    }
+}
 """
 
 
@@ -951,6 +1237,10 @@ PAGE_JS = """
                 window.history.replaceState({}, '', newUrl);
             } catch (e) { /* noop */ }
         }
+
+        window.dispatchEvent(new CustomEvent('lt:portfolio-filtered', {
+            detail: { visibleCount: visibleCount }
+        }));
     }
 
     // Wire pill clicks
@@ -986,6 +1276,147 @@ PAGE_JS = """
     // Initial render
     const initial = readInitialState();
     applyFilter(initial.event, initial.category);
+})();
+
+
+/* Floating photo reel.
+ * Desktop uses left / right / center tracks with natural-ratio images.
+ * Mobile falls back to a single full-width stream in source order.
+ */
+(function () {
+    'use strict';
+
+    const reel = document.querySelector('[data-portfolio-reel]');
+    if (!reel) return;
+
+    const cards = Array.from(reel.querySelectorAll('[data-portfolio-card]'));
+    if (!cards.length) return;
+
+    const mobileQuery = window.matchMedia('(max-width: 768px)');
+    let raf = 0;
+    let layoutRaf = 0;
+
+    function numberAttr(el, name, fallback) {
+        const raw = parseFloat(el.getAttribute(name));
+        return Number.isFinite(raw) ? raw : fallback;
+    }
+
+    function visibleCards() {
+        return cards.filter((card) => !card.hasAttribute('hidden'));
+    }
+
+    function clearDesktopStyles() {
+        reel.style.height = '';
+        cards.forEach((card) => {
+            card.style.removeProperty('--reel-width');
+            card.style.removeProperty('--reel-height');
+            card.style.removeProperty('--reel-left');
+            card.style.removeProperty('--reel-top');
+            card.style.removeProperty('--reel-enter-x');
+            card.style.removeProperty('--reel-aspect');
+            card.style.transform = '';
+            card.style.opacity = '';
+        });
+    }
+
+    function layout() {
+        window.cancelAnimationFrame(layoutRaf);
+        layoutRaf = window.requestAnimationFrame(function () {
+            if (mobileQuery.matches) {
+                clearDesktopStyles();
+                return;
+            }
+
+            const active = visibleCards();
+            const vw = Math.max(reel.clientWidth, window.innerWidth);
+            const baseUnit = Math.max(540, Math.min(760, vw * 0.5));
+            const sideGutter = Math.max(28, vw * 0.035);
+            const verticalSpacing = Math.max(96, Math.min(132, vw * 0.075));
+            const overlap = 0.78;
+            const centerBreath = Math.max(140, Math.min(220, vw * 0.12));
+
+            let leftY = 0;
+            let rightY = 90;
+            let maxBottom = 0;
+
+            active.forEach((card, index) => {
+                const side = card.getAttribute('data-reel-side') || (index % 2 ? 'right' : 'left');
+                const scale = numberAttr(card, 'data-reel-scale', 0.88);
+                const aspect = numberAttr(card, 'data-reel-aspect', 4 / 3);
+                const maxWidth = side === 'center' ? vw * 0.78 : vw * 0.56;
+                const minWidth = Math.min(vw - sideGutter * 2, side === 'center' ? 650 : 510);
+                const width = Math.max(Math.min(baseUnit * scale, maxWidth), Math.min(minWidth, maxWidth));
+                const height = width / aspect;
+                let top;
+                let left;
+
+                if (side === 'center') {
+                    top = Math.max(leftY, rightY) + centerBreath;
+                    left = (vw - width) / 2;
+                    const nextY = top + height + centerBreath;
+                    leftY = nextY;
+                    rightY = nextY;
+                } else if (side === 'right') {
+                    top = rightY;
+                    left = vw - width - sideGutter - ((index * 37) % 88);
+                    rightY = top + height * overlap + verticalSpacing;
+                } else {
+                    top = leftY;
+                    left = sideGutter + ((index * 43) % 92);
+                    leftY = top + height * overlap + verticalSpacing;
+                }
+
+                maxBottom = Math.max(maxBottom, top + height);
+                card.style.setProperty('--reel-width', width + 'px');
+                card.style.setProperty('--reel-height', height + 'px');
+                card.style.setProperty('--reel-left', Math.max(16, left) + 'px');
+                card.style.setProperty('--reel-top', top + 'px');
+                card.style.setProperty('--reel-enter-x', side === 'center' ? '0px' : (side === 'left' ? '-240px' : '240px'));
+                card.style.setProperty('--reel-aspect', aspect);
+            });
+
+            reel.style.height = Math.ceil(maxBottom + 220) + 'px';
+            updateScrollState();
+        });
+    }
+
+    function updateScrollState() {
+        if (mobileQuery.matches) return;
+        const viewportHeight = window.innerHeight || 900;
+        visibleCards().forEach((card) => {
+            const rect = card.getBoundingClientRect();
+            const center = rect.top + rect.height / 2;
+            const progress = Math.max(0, Math.min(1, (viewportHeight - center) / viewportHeight * 1.45 + 0.22));
+            const side = card.getAttribute('data-reel-side') || 'left';
+            const entryX = side === 'center' ? 0 : (side === 'left' ? -240 : 240);
+            const x = entryX * (1 - progress);
+            const y = 64 * (1 - progress);
+            const opacity = progress <= 0.02 ? 0 : 1;
+            card.style.transform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
+            card.style.opacity = opacity;
+        });
+    }
+
+    function onScroll() {
+        window.cancelAnimationFrame(raf);
+        raf = window.requestAnimationFrame(updateScrollState);
+    }
+
+    window.addEventListener('resize', layout, { passive: true });
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('lt:portfolio-filtered', layout);
+    if (mobileQuery.addEventListener) {
+        mobileQuery.addEventListener('change', layout);
+    }
+
+    cards.forEach((card) => {
+        const img = card.querySelector('img');
+        if (img && !img.complete) {
+            img.addEventListener('load', layout, { once: true });
+        }
+    });
+
+    layout();
 })();
 
 

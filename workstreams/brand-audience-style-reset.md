@@ -307,6 +307,7 @@ Current preferred direction from GL on 2026-05-02:
 Implementation status as of 2026-05-03:
 
 - Applied site-wide across shared header/footer/theme CSS, homepage, `/contact`, `/book` redirect surface, BTFP, portfolio, FAQ, policy pages, accessibility, thank-you/payment success surfaces, shop, category pages, product detail, cart, and checkout.
+- Updated `/portfolio` from a captioned card grid into a proof-first floating photo reel that preserves installed-work aspect ratios and keeps visible text off the work.
 - Added the Civic Celebration city/Wasatch hero asset at `apps/locally_twisted/locally_twisted/public/images/home/hero-wasatch-city-20260503.png`.
 - Replaced the old script header logo treatment with a stronger `LOCALLY TWISTED` wordmark in the shared header.
 - Removed founder-centered public copy from the BTFP and portfolio pages where it was not a direct review quote.
@@ -330,7 +331,8 @@ Segmented design behavior:
 - Homepage, gallery, custom decor, corporate, school, civic, and venue pages should feel premium, image-led, consultative, and locally authoritative.
 - `Ready to Order` shop pages should be cleaner and more retail-functional: filters, clear prices, option confidence, pickup/delivery clarity, and direct cart behavior.
 - Balloon twisting and face painting can be warmer and more family/private-event oriented, while staying visually connected to the main brand.
-- `Plan Custom Decor` should eventually feel like a guided planning studio, not a game or checkout page.
+- The custom-decor planner can be game-like and playful, but it should feel like a premium guided planning studio, not CAD, checkout, or a kids' coloring game.
+- Portfolio proof galleries should prioritize large natural-ratio installed-work photos over card captions, overlays, or decorative frames.
 
 ## Copy Rules
 

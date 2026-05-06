@@ -8,6 +8,20 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-06 - Portfolio proof uses natural-ratio floating photos, not card captions
+
+**Decision:** `/portfolio` should sell trust through installed-work photos first. The V1 portfolio surface uses a floating natural-ratio photo reel with quiet filters and a modal, not cropped product-card tiles or visible captions over the work. Text remains available to screen readers and in the modal, but the main gallery should let the photos carry scale and proof.
+
+**Reasoning:** LT is trying to look like an established event partner, not a small ecommerce catalog. Cropped cards and caption blocks make real installs feel smaller. Full natural-ratio photos better support the event-authority positioning and avoid hiding the balloon work behind UI. The temporary generated/reference folder used to translate the reel is not retained; Git history and the implemented route are the archive.
+
+**Implementation:** Updated `www/portfolio.html` and `www/portfolio.py` with display order metadata, natural image dimensions, left/right/center reel placement, mobile full-width stacking, filter-triggered relayout, and a dedicated `portfolio_reel.spec.js` verifier. Added `disabled: 0` to Item Attribute fixtures so fixture sync/migrate is not blocked by required ERPNext fields.
+
+**Verification receipt:** Verified locally with `python scripts/dev/clear_website_cache.py --restart`, `npm run test:portfolio-reel` (3 passed), `npm run test:layout-fit` (260 passed), `npm run test:interactive-layout` (42 passed), `python -m json.tool apps/locally_twisted/locally_twisted/fixtures/item_attribute.json`, and `bench --site frontend migrate`. The migrate run also deleted the orphaned local `LT Event Playground Design` DocType because no committed DocType file owns it.
+
+**Decided by:** Codex implemented from the approved proof-gallery direction; GL/Jeff still need to review final photo order and image quality before launch.
+
+---
+
 ## 2026-05-06 - Customer document policy copy uses anchored lanes and code-owned helpers
 
 **Decision:** Customer-facing receipts, inquiry acknowledgments, and future custom invoice/document copy should not each carry their own independent policy copy. The canonical public policy pages remain `/terms-of-service` and `/refund-policy`, split into anchored lanes for event balloon decor, ready-to-order pickup/delivery, face painting/balloon twisting, and corporate invoicing. Transactional emails and customer documents link to the exact lane that applies. Do not add ERPNext Terms and Conditions or Email Template records unless a verified customer-facing invoice path truly requires them.

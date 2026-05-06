@@ -39,6 +39,7 @@ Workflows. Multi-step. Clear start and finish.
 - [erpnext-intake-form-parity](recipes/erpnext-intake-form-parity.md) - keep public inquiry forms, ERPNext Lead fields, submit mapping, and Desk operator UX aligned.
 - [erpnext-simplified-role-verification](recipes/erpnext-simplified-role-verification.md) - verify a simplified ERPNext backend role from login through workspace, shortcuts, permissions, and real records.
 - [frappe-public-container-contract](recipes/frappe-public-container-contract.md) - keep Frappe/Webshop page lifecycle while making every LT public section choose contained workflow/reading mode or deliberate full-bleed band mode.
+- [frappe-portfolio-proof-reel](recipes/frappe-portfolio-proof-reel.md) - translate a proof-gallery design reference into a Frappe-native natural-ratio portfolio reel, then delete raw reference artifacts.
 - [frappe-sitewide-visual-overhaul](recipes/frappe-sitewide-visual-overhaul.md) - ship a Frappe/Webshop visual redesign with cache-busts, route checks, screenshots, and launch-safe receipts.
 - [lt-brand-style-guide-consolidation](recipes/lt-brand-style-guide-consolidation.md) - consolidate LT visual authority, delete conflicting style references, and verify old font/pastel/icon drift is gone.
 - [cross-browser-motion-visual-verification](recipes/cross-browser-motion-visual-verification.md) - verify animated, marquee, carousel, reduced-motion, and browser-session visual behavior across Chrome/Brave and media-query branches.

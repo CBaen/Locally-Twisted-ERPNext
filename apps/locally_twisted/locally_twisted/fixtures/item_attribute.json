@@ -18,7 +18,8 @@
     "abbr": "7BA"
    }
   ],
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-04-30 12:00:00.000000",
+  "disabled": 0
  },
  {
   "doctype": "Item Attribute",
@@ -67,7 +68,8 @@
     "abbr": "02"
    }
   ],
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-04-30 12:00:00.000000",
+  "disabled": 0
  },
  {
   "doctype": "Item Attribute",
@@ -88,7 +90,8 @@
     "abbr": "NON"
    }
   ],
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-04-30 12:00:00.000000",
+  "disabled": 0
  },
  {
   "doctype": "Item Attribute",
@@ -113,7 +116,8 @@
     "abbr": "35F"
    }
   ],
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-04-30 12:00:00.000000",
+  "disabled": 0
  },
  {
   "doctype": "Item Attribute",
@@ -130,7 +134,8 @@
     "abbr": "PIN"
    }
   ],
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-04-30 12:00:00.000000",
+  "disabled": 0
  },
  {
   "doctype": "Item Attribute",
@@ -151,7 +156,8 @@
     "abbr": "LAR"
    }
   ],
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-04-30 12:00:00.000000",
+  "disabled": 0
  },
  {
   "doctype": "Item Attribute",
@@ -276,7 +282,8 @@
     "abbr": "NAV"
    }
   ],
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-04-30 12:00:00.000000",
+  "disabled": 0
  },
  {
   "doctype": "Item Attribute",
@@ -309,7 +316,8 @@
     "abbr": "10F"
    }
   ],
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-04-30 12:00:00.000000",
+  "disabled": 0
  },
  {
   "doctype": "Item Attribute",
@@ -330,7 +338,8 @@
     "abbr": "LAR"
    }
   ],
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-04-30 12:00:00.000000",
+  "disabled": 0
  },
  {
   "doctype": "Item Attribute",
@@ -447,7 +456,8 @@
     "abbr": "TOY"
    }
   ],
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-04-30 12:00:00.000000",
+  "disabled": 0
  },
  {
   "doctype": "Item Attribute",
@@ -464,7 +474,8 @@
     "abbr": "LAY"
    }
   ],
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-04-30 12:00:00.000000",
+  "disabled": 0
  },
  {
   "doctype": "Item Attribute",
@@ -485,7 +496,8 @@
     "abbr": "100"
    }
   ],
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-04-30 12:00:00.000000",
+  "disabled": 0
  },
  {
   "doctype": "Item Attribute",
@@ -522,7 +534,8 @@
     "abbr": "TUR"
    }
   ],
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-04-30 12:00:00.000000",
+  "disabled": 0
  },
  {
   "doctype": "Item Attribute",
@@ -543,7 +556,8 @@
     "abbr": "12F"
    }
   ],
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-04-30 12:00:00.000000",
+  "disabled": 0
  },
  {
   "doctype": "Item Attribute",
@@ -560,7 +574,8 @@
     "abbr": "YAY"
    }
   ],
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-04-30 12:00:00.000000",
+  "disabled": 0
  },
  {
   "doctype": "Item Attribute",
@@ -589,7 +604,8 @@
     "abbr": "DAR"
    }
   ],
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-04-30 12:00:00.000000",
+  "disabled": 0
  },
  {
   "doctype": "Item Attribute",
@@ -606,7 +622,8 @@
     "abbr": "ADD"
    }
   ],
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-04-30 12:00:00.000000",
+  "disabled": 0
  },
  {
   "doctype": "Item Attribute",
@@ -623,7 +640,8 @@
     "abbr": "SIS"
    }
   ],
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-04-30 12:00:00.000000",
+  "disabled": 0
  },
  {
   "doctype": "Item Attribute",
@@ -660,7 +678,8 @@
     "abbr": "BLA"
    }
   ],
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-04-30 12:00:00.000000",
+  "disabled": 0
  },
  {
   "doctype": "Item Attribute",
@@ -709,7 +728,8 @@
     "abbr": "BLUEM"
    }
   ],
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-04-30 12:00:00.000000",
+  "disabled": 0
  },
  {
   "doctype": "Item Attribute",
@@ -726,7 +746,8 @@
     "abbr": "TED"
    }
   ],
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-04-30 12:00:00.000000",
+  "disabled": 0
  },
  {
   "doctype": "Item Attribute",
@@ -939,7 +960,8 @@
     "abbr": "EMP"
    }
   ],
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-04-30 12:00:00.000000",
+  "disabled": 0
  },
  {
   "doctype": "Item Attribute",
@@ -960,7 +982,8 @@
     "abbr": "BRO"
    }
   ],
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-04-30 12:00:00.000000",
+  "disabled": 0
  },
  {
   "doctype": "Item Attribute",
@@ -993,6 +1016,7 @@
     "abbr": "LOG"
    }
   ],
-  "modified": "2026-04-30 12:00:00.000000"
+  "modified": "2026-04-30 12:00:00.000000",
+  "disabled": 0
  }
 ]

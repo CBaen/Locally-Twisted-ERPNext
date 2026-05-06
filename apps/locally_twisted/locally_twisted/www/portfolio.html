@@ -3,39 +3,30 @@
 {% block page_content %}
 
 {#
-    Portfolio — /portfolio — Slice 7
-    Sections that should read as full-width bands wear the .lt-fullbleed class.
-
-    Order:
-      1. Hero band (eyebrow + H1 + body)
-      2. Sandstone divider
-      3. Filter row (event-type pills + category dropdown + count + clear)
-      4. Gallery grid (cards + empty state)
-      5. Closing CTA
+    Portfolio — /portfolio.
+    The visual model is a Frappe-native translation of the approved floating
+    photo reel reference: large natural-ratio photos placed in
+    left / right / center tracks. Photos are the proof; visible descriptions
+    stay out of the gallery.
 #}
 
-{# --- 1. Hero band --- #}
 <section class="lt-portfolio-hero lt-fullbleed" aria-labelledby="lt-portfolio-title">
     <div class="lt-portfolio-hero__inner">
-        <p class="lt-portfolio-hero__eyebrow">Proof by context</p>
-        <h1 id="lt-portfolio-title" class="lt-portfolio-hero__title">Installed work for Utah events.</h1>
+        <p class="lt-portfolio-hero__eyebrow">Selected work</p>
+        <h1 id="lt-portfolio-title" class="lt-portfolio-hero__title">Installed work, shown whole.</h1>
         <p class="lt-portfolio-hero__body">
-            Corporate, school, civic, community, venue, public, and supporting private event installs
-            across the Wasatch Front. Photos are grouped by the kind of event pressure they solve.
+            Corporate, school, civic, venue, and private event installs across Utah.
+            No cropped cards. No labels covering the product. The photo is the proof.
         </p>
     </div>
 </section>
 
-{# --- 2. Sandstone divider (saturated sandstone) --- #}
 <div class="lt-portfolio-ribbon lt-fullbleed" role="presentation" aria-hidden="true"></div>
 
-{# --- 3. Filter row --- #}
 <section class="lt-portfolio-filter lt-fullbleed"
          data-portfolio-filter
          aria-label="Filter portfolio">
     <div class="lt-portfolio-filter__inner">
-
-        {# Event-type pill chips. "All" is rendered inline as the first pill. #}
         <ul class="lt-portfolio-filter__pills" role="list">
             <li class="lt-portfolio-filter__pill">
                 <button type="button"
@@ -55,7 +46,6 @@
             {% endfor %}
         </ul>
 
-        {# Category dropdown #}
         <div class="lt-portfolio-filter__dropdown">
             <label for="lt-portfolio-category-select">Category</label>
             <select id="lt-portfolio-category-select"
@@ -71,7 +61,6 @@
             </select>
         </div>
 
-        {# Count + clear #}
         <div class="lt-portfolio-filter__meta">
             <span class="lt-portfolio-filter__count"
                   data-portfolio-count
@@ -86,43 +75,53 @@
                 Clear
             </button>
         </div>
-
     </div>
 </section>
 
-{# --- 4. Gallery grid --- #}
 <section class="lt-portfolio-grid lt-fullbleed"
          data-portfolio-grid
          data-empty="false"
          aria-label="Portfolio gallery">
     <div class="lt-portfolio-grid__inner">
-        <div class="lt-portfolio-grid__cards">
+        <div class="lt-portfolio-grid__intro" aria-hidden="true">
+            <span>Scroll the work</span>
+            <span>Tap any image for the full photo</span>
+        </div>
+
+        <div class="lt-portfolio-grid__cards" data-portfolio-reel>
             {% for item in gallery_items %}
             {%- set category_label %}{%- for cat in categories -%}{%- if cat.slug == item.category -%}{{ cat.name }}{%- endif -%}{%- endfor -%}{% endset -%}
             <button type="button" class="lt-portfolio-card"
                     data-portfolio-card
                     data-event-type="{{ item.event_type }}"
                     data-category="{{ item.category }}"
+                    data-reel-side="{{ item.side | default('left') }}"
+                    data-reel-scale="{{ item.scale | default(0.88) }}"
+                    data-reel-aspect="{{ (item.w | default(4)) / (item.h | default(3)) }}"
                     data-modal-image="/assets/locally_twisted/images/portfolio/{{ item.image }}"
                     data-modal-title="{{ item.title }}"
                     data-modal-category-label="{{ category_label | trim }}"
                     data-modal-alt="{{ item.alt }}"
                     aria-label="{{ item.title }} — view full photo">
-                <span class="lt-portfolio-card__image"
-                      style="background-image: url('/assets/locally_twisted/images/portfolio/{{ item.image }}');"
-                      role="img" aria-label="{{ item.alt }}"></span>
-                <span class="lt-portfolio-card__body">
+                <span class="lt-portfolio-card__image">
+                    <img src="/assets/locally_twisted/images/portfolio/{{ item.image }}"
+                         alt="{{ item.alt }}"
+                         width="{{ item.w | default(1200) }}"
+                         height="{{ item.h | default(900) }}"
+                         loading="{{ 'eager' if loop.index <= 2 else 'lazy' }}"
+                         decoding="async">
+                </span>
+                <span class="lt-portfolio-card__body visually-hidden">
                     <span class="lt-portfolio-card__category">{{ category_label | trim }}</span>
                     <span class="lt-portfolio-card__title">{{ item.title }}</span>
                 </span>
             </button>
             {% endfor %}
 
-            {# Empty state — visible only when grid[data-empty="true"] (set by JS). #}
             <div class="lt-portfolio-empty" role="status">
                 <h2 class="lt-portfolio-empty__heading">No work matches that filter yet.</h2>
                 <p class="lt-portfolio-empty__body">
-                    The portfolio is growing — try adjusting the occasion or category, or start a conversation about your event.
+                    The portfolio is growing. Try adjusting the filters, or start a conversation about your event.
                 </p>
                 <a href="/contact" class="lt-portfolio-empty__cta">Start a conversation</a>
             </div>
@@ -130,7 +129,6 @@
     </div>
 </section>
 
-{# --- 5. Closing CTA --- #}
 <section class="lt-cta lt-fullbleed" aria-labelledby="lt-portfolio-cta-heading">
     <div class="lt-cta__inner">
         <h2 id="lt-portfolio-cta-heading" class="lt-cta__heading">Something else in mind?</h2>
@@ -145,7 +143,6 @@
     </div>
 </section>
 
-{# --- Lightbox modal (single instance, reused for every card) --- #}
 <div class="lt-portfolio-modal"
      data-portfolio-modal
      hidden
@@ -170,7 +167,6 @@
     </div>
 </div>
 
-{# --- ItemList JSON-LD schema (validates against schema.org) --- #}
 <script type="application/ld+json">
 {{ itemlist_jsonld | safe }}
 </script>
