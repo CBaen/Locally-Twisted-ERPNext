@@ -6,6 +6,14 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-06 - Report rows can become a hidden send surface
+
+The customer reminder report looked like a harmless display layer because it only turned dry-run queue items into table rows. In a business system, a table row can still become the surface a future agent wires to a send button or schedule.
+
+**Counter-move:** carry no-live flags into the report payload and every row, not just the source queue. For LT, `customer_reminder_review_report.py` marks the whole report `send_allowed: false`, `customer_delivery_enabled: false`, and `mutation_allowed: false`, and `customer_reminder_review_report_contract.py` rejects malformed send-enabled source rows before a Desk UI exists.
+
+---
+
 ## 2026-05-06 - No-live reminder setup still needs send blockers
 
 Customer reminders can feel safe when the code only builds an internal queue. They are still one step away from customer-facing collections, so every queue item needs explicit blockers for approval, recipient, invoice status, cadence, copy, and payment path.

@@ -1,6 +1,6 @@
 # Business Automation Index
 
-Last updated: 2026-05-06 by Codex after adding the no-live customer reminder dry-run surface to the automation index.
+Last updated: 2026-05-06 by Codex after adding the no-live customer reminder review report surface to the automation index.
 
 ## Outcome
 
@@ -26,9 +26,9 @@ python scripts/verify/business_automation_index.py --report output/business-auto
 Current result on 2026-05-06:
 
 - `ok: true`
-- 21 total surfaces indexed
+- 22 total surfaces indexed
 - 12 launch-required surfaces
-- 17 surfaces exist and are connected
+- 18 surfaces exist and are connected
 - 4 surfaces exist but are not connected
 - 0 launch-required missing surfaces
 - 0 useful future surfaces missing
@@ -48,7 +48,9 @@ Fresh closeout verification also confirmed:
 - `paperwork_review_digest.py` combines the paperwork status, automation index, unpaid review, and draft packets into one internal read-only review payload.
 - `customer_reminder_dry_run.py` builds 1 internal-review-only reminder queue item locally, with no customer delivery enabled.
 - `customer_reminder_dry_run_contract.py` verifies no-live reminder queue behavior with fake overdue/current/missing-payment-path/malformed-send scenarios.
-- `synthetic_business_pipeline.py` runs 9 no-live synthetic contracts with 0 broken piping and keeps 3 live cutover items deferred.
+- `customer_reminder_review_report.py` turns the dry-run queue into 1 internal review report row grouped under `review_now`, with no customer delivery enabled.
+- `customer_reminder_review_report_contract.py` verifies report rows/groups with fake mixed/empty/malformed-send source scenarios.
+- `synthetic_business_pipeline.py` runs 10 no-live synthetic contracts with 0 broken piping and keeps 3 live cutover items deferred.
 
 ## Connected Launch Spine
 
@@ -68,6 +70,7 @@ These are currently classified as existing and connected:
 - draft-only unpaid invoice reminder/statement packet rendering
 - internal paperwork review digest
 - no-live customer reminder dry-run queue
+- no-live customer reminder review report rows
 - no-live synthetic business pipeline audit
 - scheduled daily business automation checkup
 - Accountant Home workspace parity
@@ -108,6 +111,7 @@ Safe fake-data verifiers are part of the operating model:
 - `crm_stage_cascade.py` creates rollback-only CRM/Task cascade records.
 - outbound document preview rendering uses fake normal and outlier data under ignored `output/`.
 - `customer_reminder_dry_run_contract.py` uses in-memory fake reminder queue payloads and creates no database records.
+- `customer_reminder_review_report_contract.py` uses in-memory fake reminder report payloads and creates no database records.
 
 Use fake data aggressively in local verification, but do not leave generated business records behind.
 
@@ -126,6 +130,8 @@ python scripts/verify/unpaid_invoice_draft_packet_contract.py
 python scripts/verify/paperwork_review_digest.py --report output/paperwork-review-digest.json
 python scripts/verify/customer_reminder_dry_run.py --report output/customer-reminder-dry-run.json
 python scripts/verify/customer_reminder_dry_run_contract.py
+python scripts/verify/customer_reminder_review_report.py --report output/customer-reminder-review-report.json
+python scripts/verify/customer_reminder_review_report_contract.py
 ```
 
 Launch money path:
@@ -158,6 +164,8 @@ python scripts/verify/unpaid_invoice_draft_packet_contract.py
 python scripts/verify/paperwork_review_digest.py --report output/paperwork-review-digest.json
 python scripts/verify/customer_reminder_dry_run.py --report output/customer-reminder-dry-run.json
 python scripts/verify/customer_reminder_dry_run_contract.py
+python scripts/verify/customer_reminder_review_report.py --report output/customer-reminder-review-report.json
+python scripts/verify/customer_reminder_review_report_contract.py
 python scripts/verify/finance_workspace_parity.py
 python scripts/verify/backend_workspace_parity.py
 ```
@@ -172,12 +180,13 @@ Run this only during cutover work. It is intentionally not part of the current s
 
 ## Next Safe Slice
 
-Build a reviewed UX around the customer reminder dry-run queue:
+Build a reviewed UX around the customer reminder review report rows:
 
 - keep `unpaid_invoice_review.py` as the read-only source
 - keep `unpaid_invoice_draft_packet.py` as the draft renderer
 - keep `paperwork_review_digest.py` as the read-only internal rollup
 - keep `customer_reminder_dry_run.py` as the no-live queue source
+- keep `customer_reminder_review_report.py` as the no-live report-row source
 - let Jeff/accounting review invoice status, recipient, cadence, and copy
 - show rendered `payment_reminder_draft` and `statement_of_account` sections in an internal Desk queue or scheduled internal digest
 - keep the first version draft-only with no customer send

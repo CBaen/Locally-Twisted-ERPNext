@@ -104,6 +104,15 @@ SYNTHETIC_CONTRACTS = (
         "creates": [],
         "cleanup": "uses in-memory fake reminder queue payloads only",
     },
+    {
+        "id": "customer_reminder_review_report_outliers",
+        "lane": "paperwork",
+        "runner": "locally_twisted.verify.customer_reminder_review_report_contract.run",
+        "command": "python scripts/verify/customer_reminder_review_report_contract.py",
+        "data_mode": "in_memory_fake_reminder_report_scenarios",
+        "creates": [],
+        "cleanup": "uses in-memory fake reminder report payloads only",
+    },
 )
 
 GUARD_DOCTYPES = (
@@ -138,6 +147,7 @@ def run() -> dict[str, object]:
         include_digest=False,
         include_synthetic=False,
         include_customer_reminders=False,
+        include_customer_reminder_report=False,
     )
     digest = paperwork_review_digest.run()
 

@@ -18,12 +18,14 @@ def run(
     include_digest: bool = True,
     include_synthetic: bool = True,
     include_customer_reminders: bool = True,
+    include_customer_reminder_report: bool = True,
 ) -> dict[str, object]:
     """Return a JSON-safe automation map that fails loudly on broken required links."""
     surfaces = _surfaces(
         include_digest=include_digest,
         include_synthetic=include_synthetic,
         include_customer_reminders=include_customer_reminders,
+        include_customer_reminder_report=include_customer_reminder_report,
     )
     rows = [_evaluate(surface) for surface in surfaces]
     failures = _required_failures(rows)
@@ -121,6 +123,7 @@ def _surfaces(
     include_digest: bool = True,
     include_synthetic: bool = True,
     include_customer_reminders: bool = True,
+    include_customer_reminder_report: bool = True,
 ) -> list[dict[str, object]]:
     surfaces = [
         {
@@ -389,6 +392,24 @@ def _surfaces(
             ],
         },
         {
+            "id": "customer_reminder_review_report",
+            "lane": "paperwork",
+            "summary": "No-live customer reminder review report exposes table rows and groups for a future Desk page or internal-only schedule.",
+            "required_for_launch": False,
+            "exists": lambda: _files_exist("locally_twisted/paperwork/customer_reminder_review_report.py"),
+            "connected": _customer_reminder_review_report_connected,
+            "loud_failure": lambda: [],
+            "evidence": [
+                "apps/locally_twisted/locally_twisted/paperwork/customer_reminder_review_report.py",
+                "scripts/verify/customer_reminder_review_report.py",
+                "scripts/verify/customer_reminder_review_report_contract.py",
+            ],
+            "verifiers": [
+                "python scripts/verify/customer_reminder_review_report.py --report output/customer-reminder-review-report.json",
+                "python scripts/verify/customer_reminder_review_report_contract.py",
+            ],
+        },
+        {
             "id": "synthetic_business_pipeline",
             "lane": "checkups",
             "summary": "Synthetic no-live audit runs fake-data/rollback-safe contracts and separates current operating readiness from live cutover readiness.",
@@ -458,6 +479,8 @@ def _surfaces(
         surfaces = [surface for surface in surfaces if surface["id"] != "synthetic_business_pipeline"]
     if not include_customer_reminders:
         surfaces = [surface for surface in surfaces if surface["id"] != "customer_reminder_dry_run"]
+    if not include_customer_reminder_report:
+        surfaces = [surface for surface in surfaces if surface["id"] != "customer_reminder_review_report"]
     return surfaces
 
 
@@ -842,6 +865,59 @@ def _customer_reminder_dry_run_connected() -> list[str]:
     return failures
 
 
+def _customer_reminder_review_report_connected() -> list[str]:
+    failures = []
+    failures.extend(_callables_exist("locally_twisted.paperwork.customer_reminder_review_report.run"))
+    result = frappe.get_attr("locally_twisted.paperwork.customer_reminder_review_report.run")()
+    if not result.get("ok"):
+        failures.extend(result.get("failures") or ["customer_reminder_review_report.run returned not ok"])
+    if result.get("read_only") is not True:
+        failures.append("customer_reminder_review_report is not marked read_only")
+    if result.get("send_allowed") is not False:
+        failures.append("customer_reminder_review_report allows customer sending")
+    if result.get("mutation_allowed") is not False:
+        failures.append("customer_reminder_review_report allows mutations")
+    if result.get("customer_delivery_enabled") is not False:
+        failures.append("customer_reminder_review_report enables customer delivery")
+    if result.get("automatic_delivery_enabled") is not False:
+        failures.append("customer_reminder_review_report enables automatic delivery")
+    if result.get("report_type") != "customer_reminder_review_report":
+        failures.append("customer_reminder_review_report returned the wrong report_type")
+    if result.get("source_surface") != "customer_reminder_dry_run":
+        failures.append("customer_reminder_review_report returned the wrong source_surface")
+    if result.get("operating_mode") != "no_live_internal_review":
+        failures.append("customer_reminder_review_report returned the wrong operating_mode")
+    if result.get("mutation_guard", {}).get("changed"):
+        failures.append("customer_reminder_review_report mutation guard changed")
+
+    columns = {column.get("fieldname") for column in result.get("columns") or []}
+    for fieldname in (
+        "invoice",
+        "customer_name",
+        "recommended_cadence",
+        "send_status",
+        "blocked_customer_send_until",
+    ):
+        if fieldname not in columns:
+            failures.append(f"customer_reminder_review_report missing column {fieldname}")
+
+    groups = result.get("groups") or {}
+    for key in ("review_now", "hold", "blocked_send"):
+        if key not in groups:
+            failures.append(f"customer_reminder_review_report missing group {key}")
+
+    for row in result.get("rows") or []:
+        if row.get("delivery_mode") != "internal_review_only":
+            failures.append(f"{row.get('invoice')} reminder report row is not internal-review-only")
+        if row.get("send_status") != "draft_only_not_sent":
+            failures.append(f"{row.get('invoice')} reminder report row is not draft-only")
+        if row.get("customer_delivery_enabled") is not False:
+            failures.append(f"{row.get('invoice')} reminder report row enables customer delivery")
+        if row.get("automatic_delivery_enabled") is not False:
+            failures.append(f"{row.get('invoice')} reminder report row enables automatic delivery")
+    return failures
+
+
 def _synthetic_business_pipeline_connected() -> list[str]:
     failures = []
     failures.extend(_callables_exist("locally_twisted.verify.synthetic_business_pipeline.run"))
@@ -1005,6 +1081,7 @@ def _checkups() -> list[dict[str, object]]:
                 "python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json",
                 "python scripts/verify/unpaid_invoice_draft_packet_contract.py",
                 "python scripts/verify/customer_reminder_dry_run_contract.py",
+                "python scripts/verify/customer_reminder_review_report_contract.py",
                 "python scripts/verify/render_outbound_document_previews.py --slug synthetic-pipeline-audit --no-open",
             ],
         },
@@ -1021,6 +1098,7 @@ def _checkups() -> list[dict[str, object]]:
                 "python scripts/verify/unpaid_invoice_draft_packet_contract.py",
                 "python scripts/verify/paperwork_review_digest.py --report output/paperwork-review-digest.json",
                 "python scripts/verify/customer_reminder_dry_run.py --report output/customer-reminder-dry-run.json",
+                "python scripts/verify/customer_reminder_review_report.py --report output/customer-reminder-review-report.json",
             ],
         },
         {
@@ -1093,6 +1171,11 @@ def _fake_data_contracts() -> list[dict[str, object]]:
             "command": "python scripts/verify/customer_reminder_dry_run_contract.py",
             "creates": [],
             "cleanup": "uses in-memory fake reminder queue payloads only",
+        },
+        {
+            "command": "python scripts/verify/customer_reminder_review_report_contract.py",
+            "creates": [],
+            "cleanup": "uses in-memory fake reminder report payloads only",
         },
     ]
 

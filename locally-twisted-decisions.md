@@ -8,6 +8,20 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-06 - Customer reminder review reports are internal display data, not delivery
+
+**Decision:** Customer reminder dry-run queue items can now be shaped into an internal report with rows, columns, and review/hold/blocked groups. The report may feed a Desk page or internal-only scheduled review later, but it must remain no-live: no customer sending, no Email Queue or Communication creation, no automatic cadence, no payment/accounting mutation, and no approval implied by appearing in the report.
+
+**Reasoning:** GL asked to continue automations while explicitly staying away from going live. A report view reduces Jeff/accounting cognitive load, but report rows can easily become a send surface if delivery flags and blockers are hidden. The safer shape is a report source that carries the no-live flags in every row and is covered by fake-data malformed-send scenarios.
+
+**Implementation:** Added `locally_twisted.paperwork.customer_reminder_review_report.run`, host verifier `scripts/verify/customer_reminder_review_report.py`, fake-data verifier `scripts/verify/customer_reminder_review_report_contract.py`, and workstream `workstreams/customer-reminder-review-report.md`. The business automation index now supports `include_customer_reminder_report=False` so digest/synthetic aggregation avoids recursive self-checks.
+
+**Verification receipt:** `python scripts/verify/customer_reminder_review_report_contract.py` passed 3 fake scenarios. `python scripts/verify/customer_reminder_review_report.py --report output/customer-reminder-review-report.json --markdown output/customer-reminder-review-report.md --csv output/customer-reminder-review-report.csv` passed with 1 internal-review-only report row for `ACC-SINV-2026-00001`. `python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json` passed with 10 synthetic contracts and 0 broken piping. `python scripts/verify/business_automation_index.py --report output/business-automation-index.json` passed with 22 indexed surfaces, 18 connected, and 0 loud-failure gaps.
+
+**Decided by:** Codex implemented the next no-live automation slice under GL's direction to continue automations and keep documentation in parity.
+
+---
+
 ## 2026-05-06 - Customer reminders can be set up only as no-live internal dry runs
 
 **Decision:** Customer reminder setup may now build an internal review queue with cadence suggestions, draft sections, and send blockers, but it must remain no-live. It must not send customer email/SMS, create Email Queue or Communication rows, enable automatic cadence, mutate invoices/payment/accounting records, or depend on live Stripe/production cutover data.

@@ -118,6 +118,8 @@ def _contract_failures(result: dict[str, Any]) -> list[str]:
         "customer_document_policy",
         "outbound_document_templates",
         "unpaid_invoice_draft_packet_outliers",
+        "customer_reminder_dry_run_outliers",
+        "customer_reminder_review_report_outliers",
     }
     contract_ids = {
         item.get("id")

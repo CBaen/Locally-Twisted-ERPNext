@@ -37,6 +37,7 @@ def run() -> dict[str, object]:
         include_digest=False,
         include_synthetic=False,
         include_customer_reminders=False,
+        include_customer_reminder_report=False,
     )
     invoice_review = unpaid_invoice_review.run()
     draft_packets = unpaid_invoice_draft_packet.run()
