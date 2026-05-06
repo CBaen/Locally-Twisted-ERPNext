@@ -51,6 +51,7 @@ Current connected launch spine:
 - paperwork status checkup
 - draft-only unpaid invoice review candidates
 - draft-only unpaid invoice reminder/statement packet renderer
+- internal paperwork review digest
 - scheduled daily business automation checkup
 - Accountant Home parity
 
@@ -58,7 +59,7 @@ Current connected launch spine:
 
 1. Required surfaces fail the verifier if files, hooks, setup records, methods, or connections are missing.
 2. Scheduled checkups should create visible backend attention, such as Frappe Error Log entries, when required links break.
-3. Existing-but-not-connected surfaces must stay visible in the report. Do not imply proposals, vendor packets, bank reconciliation, payroll, reminders, or statements are operational just because templates or native DocTypes exist. A reminder/statement surface can count as connected only when it is explicitly draft-only, review-gated, mutation-guarded, and tested through its review or packet renderer.
+3. Existing-but-not-connected surfaces must stay visible in the report. Do not imply proposals, vendor packets, bank reconciliation, payroll, reminders, or statements are operational just because templates or native DocTypes exist. A reminder/statement surface can count as connected only when it is explicitly draft-only, review-gated, mutation-guarded, and tested through its review, packet renderer, or internal digest.
 4. Fake-data verifiers must clean up generated business records or explicitly mark rollback behavior.
 5. Amount parity and customer communication paths must fail loudly. A silent skipped email, undercharged checkout, or disconnected document generator is a business relationship risk.
 
@@ -69,4 +70,5 @@ Current connected launch spine:
 - Adding CRM-stage finance automation while checkout already owns the money path.
 - Letting hosted checkout line items differ from the ERPNext grand total.
 - Running status/inventory checks while rollback-based verifiers are still creating temporary records.
+- Letting an aggregate digest call the full automation index recursively after the digest itself is indexed.
 - Leaving missing future surfaces in prose docs instead of a machine-readable verifier report.

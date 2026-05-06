@@ -1,6 +1,6 @@
 # Paperwork And Backend Automation
 
-Last updated: 2026-05-06 by Codex after adding the draft-only unpaid invoice packet renderer.
+Last updated: 2026-05-06 by Codex after adding the internal paperwork review digest.
 
 ## Outcome
 
@@ -33,9 +33,11 @@ Fresh local verification on 2026-05-06:
 - `python scripts/verify/finance_inventory_contract.py` passed.
 - `python scripts/verify/payment_launch_readiness.py --mode live` failed as expected because live Stripe/site configuration is not in place.
 - `python scripts/verify/paperwork_status.py --report output/paperwork-status.json` passed and generated the first read-only paperwork status report.
-- `python scripts/verify/business_automation_index.py --report output/business-automation-index.json` passed and now maps 18 surfaces indexed, 11 launch-required, 14 connected, 4 exists-but-not-connected, 0 launch-required missing, 0 useful future surfaces missing, and 0 loud-failure gaps.
+- `python scripts/verify/business_automation_index.py --report output/business-automation-index.json` passed and now maps 19 surfaces indexed, 11 launch-required, 15 connected, 4 exists-but-not-connected, 0 launch-required missing, 0 useful future surfaces missing, and 0 loud-failure gaps.
 - `python scripts/verify/unpaid_invoice_review.py --report output/unpaid-invoice-review.json` passed and generated 1 overdue-review candidate for `ACC-SINV-2026-00001`. The candidate includes draft-only `payment_reminder_draft` and `statement_of_account` data, requires human review, and proves no customer send or accounting mutation happens.
 - `python scripts/verify/unpaid_invoice_draft_packet.py --report output/unpaid-invoice-draft-packet.json --markdown output/unpaid-invoice-draft-packet.md` passed and rendered that candidate into draft-only `payment_reminder_draft` and `statement_of_account` packet sections for human review, while proving no customer send or accounting mutation happens.
+- `python scripts/verify/unpaid_invoice_draft_packet_contract.py` passed and now covers fake normal/outlier packet behavior without touching ERPNext records, including PO references, multiple open invoices, missing payment requests, paid-invoice exclusion, and malformed human-approval gates.
+- `python scripts/verify/paperwork_review_digest.py --report output/paperwork-review-digest.json` passed and combines paperwork status, business automation index, unpaid invoice review, and draft packet output into one internal read-only review payload.
 - `python scripts/verify/stripe_amount_parity_contract.py` passed. Stripe Checkout line items now include a tax/charges adjustment when needed and must equal the ERPNext Sales Order grand total.
 - `python scripts/verify/invoice_branding_contract.py` passed after syncing the branded Sales Invoice print format and Letter Head. The contract now requires gray vertical callouts for secondary/AP information, the exact black customer-service support bar, and no gold, navy, berry, soft promo colors, dog-logo markers, or old W-9/vendor wording in Sales Invoice print output.
 - `python scripts/verify/outbound_documents_contract.py` passed after creating the standard outbound document source folder and templates. The contract now requires every outbound template to include `## Answer First`, and rendered previews put `Key fields to review` where the internal automation metadata used to appear.
@@ -113,6 +115,7 @@ Current live-data facts from the fresh finance inventory:
 
 - `locally_twisted.paperwork.unpaid_invoice_draft_packet.run` is the first renderer for the unpaid invoice review surface.
 - The host verifier is `scripts/verify/unpaid_invoice_draft_packet.py`.
+- Fake normal/outlier behavior is covered by `scripts/verify/unpaid_invoice_draft_packet_contract.py`.
 - It reads the unpaid invoice review result, renders internal review packet sections for `payment_reminder_draft` and `statement_of_account`, and can write ignored JSON/Markdown review artifacts under `output/`.
 - It does not create Email Queue rows, Communications, Payment Entries, Journal Entries, Payment Requests, or Sales Invoice mutations.
 - Current local output: 1 draft-only packet for `ACC-SINV-2026-00001`, with `send_status: draft_only_not_sent`, `human_approval_required: true`, and a review checklist for invoice status, recipient, cadence, copy, and payment path.
@@ -148,11 +151,12 @@ Current live-data facts from the fresh finance inventory:
 1. **Business automation index.** First pass done. `scripts/verify/business_automation_index.py` is the launch spine map and daily checkup source. Keep this green before adding new automations.
 2. **Paperwork status report.** First pass done. `scripts/verify/paperwork_status.py` summarizes current invoices, payment requests, email queues, overdue records, bank/supplier/payroll gaps, and live-mode payment blockers without printing secrets or mutating ERPNext.
 3. **Unpaid invoice review queue.** First pass done as a draft-only report surface. Draft packet rendering is also done. Next is reviewed Desk UX or scheduled internal review digest, still no reminder sending.
-4. **Receipt/operator email audit.** Extend verifier coverage so receipt, operator, welcome, and inquiry acknowledgment email bodies keep the right policy lanes and do not attach PDFs.
-5. **Outbound document template registry.** Done for the first standard set. Extend this folder before creating any new outbound document family elsewhere.
+4. **Paperwork review digest.** First pass done as a read-only internal review payload. Next is a real reviewed Desk queue or scheduled internal-only report UI, still no customer sending.
+5. **Receipt/operator email audit.** Extend verifier coverage so receipt, operator, welcome, and inquiry acknowledgment email bodies keep the right policy lanes and do not attach PDFs.
+6. **Outbound document template registry.** Done for the first standard set. Extend this folder before creating any new outbound document family elsewhere.
    - Standing rule: every outbound document is answer-first. The recipient should see the practical fields they care about before internal automation notes or policy mechanics.
-6. **Corporate invoice packet design.** Source template exists. Remaining work is generator/rendering design for larger events without creating an ERPNext Terms record yet.
-7. **Stage threshold design.** Document which stage should create/update Quote, Sales Order, Project/job, Calendar invite, customer follow-up, invoice, or payment request. Do not implement until the threshold is explicit.
+7. **Corporate invoice packet design.** Source template exists. Remaining work is generator/rendering design for larger events without creating an ERPNext Terms record yet.
+8. **Stage threshold design.** Document which stage should create/update Quote, Sales Order, Project/job, Calendar invite, customer follow-up, invoice, or payment request. Do not implement until the threshold is explicit.
 
 ## Do Not Do
 
@@ -184,6 +188,8 @@ python scripts/verify/finance_inventory_contract.py
 python scripts/verify/paperwork_status.py --report output/paperwork-status.json
 python scripts/verify/unpaid_invoice_review.py --report output/unpaid-invoice-review.json
 python scripts/verify/unpaid_invoice_draft_packet.py --report output/unpaid-invoice-draft-packet.json
+python scripts/verify/unpaid_invoice_draft_packet_contract.py
+python scripts/verify/paperwork_review_digest.py --report output/paperwork-review-digest.json
 python scripts/setup/sync_invoice_branding.py
 python scripts/verify/invoice_branding_contract.py
 python scripts/verify/outbound_documents_contract.py
@@ -200,4 +206,4 @@ Expected current result: fail until live Stripe/site configuration is set.
 
 ## Next Handoff Stage
 
-Next no-approval slice: turn the unpaid invoice draft packets into a reviewed Desk queue or scheduled internal review digest for Jeff/accounting. It should show candidate invoices, rendered reminder/statement sections, and review checkboxes for recipient/status/cadence/copy. It must not send reminders or submit/cancel accounting records.
+Next no-approval slice: turn the paperwork review digest into a reviewed Desk queue or scheduled internal-only report for Jeff/accounting. It should show candidate invoices, rendered reminder/statement sections, setup blockers, and review checkboxes for recipient/status/cadence/copy. It must not send reminders or submit/cancel accounting records.

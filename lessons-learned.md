@@ -6,6 +6,14 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-06 - Aggregate digests need recursion and mutation boundaries
+
+The paperwork review digest needed to summarize the business automation index, and the automation index also needed to classify the digest. Calling the full index from the digest would create a self-check loop once the digest was indexed.
+
+**Counter-move:** aggregate review surfaces should call index/report helpers in a scoped mode that excludes the aggregate itself, and they need their own mutation guard. For LT, `business_automation_index.run(include_digest=False)` lets `paperwork_review_digest.run` summarize partial connections without recursively checking the digest surface. The digest also guards Email Queue, Communication, Payment Request, Payment Entry, Journal Entry, Sales Invoice, and Error Log counts.
+
+---
+
 ## 2026-05-06 - Rendering a draft is still an automation boundary
 
 The unpaid invoice draft packet renderer feels safer than reminder sending because it only produces review output. It still touches a dangerous business boundary: customer communication and invoice follow-up. If a renderer quietly creates an Email Queue row, Communication, Payment Request, Payment Entry, Journal Entry, or invoice mutation, it has become delivery or accounting automation without approval.

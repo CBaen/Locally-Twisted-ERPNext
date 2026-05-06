@@ -1,6 +1,6 @@
 # Business Automation Index
 
-Last updated: 2026-05-06 by Codex after adding the draft-only unpaid invoice packet renderer and wiring it into the business automation index.
+Last updated: 2026-05-06 by Codex after adding the internal paperwork review digest and wiring it into the business automation index.
 
 ## Outcome
 
@@ -26,9 +26,9 @@ python scripts/verify/business_automation_index.py --report output/business-auto
 Current result on 2026-05-06:
 
 - `ok: true`
-- 18 total surfaces indexed
+- 19 total surfaces indexed
 - 11 launch-required surfaces
-- 14 surfaces exist and are connected
+- 15 surfaces exist and are connected
 - 4 surfaces exist but are not connected
 - 0 launch-required missing surfaces
 - 0 useful future surfaces missing
@@ -44,6 +44,8 @@ Fresh closeout verification also confirmed:
 - `paperwork_status.py` reports 30 sent Email Queue rows, 1 unpaid/overdue Sales Invoice, 8 expected Payment Requests, and no pending email queue rows.
 - `unpaid_invoice_review.py` reports 1 overdue-review candidate and creates draft-only reminder/statement candidate data without sending or mutating records.
 - `unpaid_invoice_draft_packet.py` renders the overdue-review candidate into draft-only reminder and statement packet sections without sending or mutating records.
+- `unpaid_invoice_draft_packet_contract.py` verifies normal/outlier packet behavior with fake data, including missing payment links and malformed approval gates.
+- `paperwork_review_digest.py` combines the paperwork status, automation index, unpaid review, and draft packets into one internal read-only review payload.
 
 ## Connected Launch Spine
 
@@ -61,6 +63,7 @@ These are currently classified as existing and connected:
 - read-only paperwork status checkup
 - draft-only unpaid/overdue invoice review candidates
 - draft-only unpaid invoice reminder/statement packet rendering
+- internal paperwork review digest
 - scheduled daily business automation checkup
 - Accountant Home workspace parity
 
@@ -111,6 +114,8 @@ python scripts/verify/stripe_amount_parity_contract.py
 python scripts/verify/paperwork_status.py --report output/paperwork-status.json
 python scripts/verify/unpaid_invoice_review.py --report output/unpaid-invoice-review.json
 python scripts/verify/unpaid_invoice_draft_packet.py --report output/unpaid-invoice-draft-packet.json
+python scripts/verify/unpaid_invoice_draft_packet_contract.py
+python scripts/verify/paperwork_review_digest.py --report output/paperwork-review-digest.json
 ```
 
 Launch money path:
@@ -139,6 +144,8 @@ python scripts/verify/invoice_branding_contract.py
 python scripts/verify/outbound_documents_contract.py
 python scripts/verify/unpaid_invoice_review.py --report output/unpaid-invoice-review.json
 python scripts/verify/unpaid_invoice_draft_packet.py --report output/unpaid-invoice-draft-packet.json
+python scripts/verify/unpaid_invoice_draft_packet_contract.py
+python scripts/verify/paperwork_review_digest.py --report output/paperwork-review-digest.json
 python scripts/verify/finance_workspace_parity.py
 python scripts/verify/backend_workspace_parity.py
 ```
@@ -153,10 +160,11 @@ Expected current result: fail until live Stripe/site configuration is set.
 
 ## Next Safe Slice
 
-Build a reviewed UX around the unpaid/overdue invoice draft packets:
+Build a reviewed UX around the paperwork review digest and unpaid/overdue invoice draft packets:
 
 - keep `unpaid_invoice_review.py` as the read-only source
 - keep `unpaid_invoice_draft_packet.py` as the draft renderer
+- keep `paperwork_review_digest.py` as the read-only internal rollup
 - let Jeff/accounting review invoice status, recipient, cadence, and copy
 - show rendered `payment_reminder_draft` and `statement_of_account` sections in an internal Desk queue or scheduled internal digest
 - keep the first version draft-only with no customer send

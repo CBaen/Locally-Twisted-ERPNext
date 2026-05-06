@@ -17,14 +17,31 @@ from locally_twisted.paperwork import unpaid_invoice_review
 
 PACKET_TYPE = "unpaid_invoice_draft_packet"
 SOURCE_REVIEW_SURFACE = "unpaid_invoice_review"
+EXPECTED_DOCUMENT_IDS = {"payment_reminder_draft", "statement_of_account"}
 
 
 def run() -> dict[str, object]:
     """Render unpaid invoice reminder/statement draft packets without mutations."""
     before = _guard_counts()
+    review = unpaid_invoice_review.run()
+    return render_from_review(review, guard_counts_before=before)
+
+
+def render_from_review(
+    review: dict[str, Any],
+    *,
+    guard_counts_before: dict[str, int] | None = None,
+    guard_counts_after: dict[str, int] | None = None,
+    generated_at: str | None = None,
+) -> dict[str, object]:
+    """Render packets from an unpaid invoice review payload.
+
+    Kept separate from ``run`` so fake-data contracts can exercise normal and
+    outlier packet behavior without creating ERPNext accounting records.
+    """
+    before = guard_counts_before if guard_counts_before is not None else {}
     failures: list[str] = []
 
-    review = unpaid_invoice_review.run()
     if not review.get("ok"):
         failures.extend(review.get("failures") or ["unpaid_invoice_review.run returned not ok"])
     if review.get("read_only") is not True:
@@ -36,16 +53,23 @@ def run() -> dict[str, object]:
 
     packets = [_packet(candidate) for candidate in review.get("review_candidates") or []]
 
-    after = _guard_counts()
+    if guard_counts_after is not None:
+        after = guard_counts_after
+    elif guard_counts_before is not None:
+        after = _guard_counts()
+    else:
+        after = before
+
     if before != after:
         failures.append("mutation guard changed while rendering unpaid invoice draft packets")
 
     if not _all_packets_are_draft_only(packets):
         failures.append("one or more unpaid invoice packets are not marked draft-only")
+    failures.extend(_packet_shape_failures(packets))
 
     return {
         "ok": not failures,
-        "generated_at": now_datetime().isoformat(),
+        "generated_at": generated_at or now_datetime().isoformat(),
         "read_only": True,
         "send_allowed": False,
         "mutation_allowed": False,
@@ -199,3 +223,18 @@ def _all_packets_are_draft_only(packets: list[dict[str, Any]]) -> bool:
             if "human_approval" not in str(section.get("do_not_send_without") or ""):
                 return False
     return True
+
+
+def _packet_shape_failures(packets: list[dict[str, Any]]) -> list[str]:
+    failures = []
+    for packet in packets:
+        invoice = packet.get("invoice") or "<missing invoice>"
+        section_ids = {section.get("document_id") for section in packet.get("sections") or []}
+        if section_ids != EXPECTED_DOCUMENT_IDS:
+            failures.append(f"{invoice} packet sections are wrong: {sorted(section_ids)}")
+        for section in packet.get("sections") or []:
+            document_id = section.get("document_id") or "<missing document>"
+            for key in ("subject", "answer_first", "body_preview", "key_fields_to_review"):
+                if not section.get(key):
+                    failures.append(f"{invoice} {document_id} missing {key}")
+    return failures

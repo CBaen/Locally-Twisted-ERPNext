@@ -14,9 +14,9 @@ ROOT = Path(frappe.get_app_path("locally_twisted")).parent.parent
 APP_ROOT = Path(frappe.get_app_path("locally_twisted"))
 
 
-def run() -> dict[str, object]:
+def run(include_digest: bool = True) -> dict[str, object]:
     """Return a JSON-safe automation map that fails loudly on broken required links."""
-    surfaces = _surfaces()
+    surfaces = _surfaces(include_digest=include_digest)
     rows = [_evaluate(surface) for surface in surfaces]
     failures = _required_failures(rows)
 
@@ -109,8 +109,8 @@ def _run_check(check: Callable[[], list[str]] | object) -> list[str]:
         return [f"{type(exc).__name__}: {exc}"]
 
 
-def _surfaces() -> list[dict[str, object]]:
-    return [
+def _surfaces(include_digest: bool = True) -> list[dict[str, object]]:
+    surfaces = [
         {
             "id": "public_contact_to_lead",
             "lane": "intake",
@@ -346,6 +346,19 @@ def _surfaces() -> list[dict[str, object]]:
             ],
         },
         {
+            "id": "paperwork_review_digest",
+            "lane": "paperwork",
+            "summary": "Read-only internal digest combines paperwork status, automation index, unpaid review, and draft packets into one review surface.",
+            "required_for_launch": False,
+            "exists": lambda: _files_exist("locally_twisted/paperwork/paperwork_review_digest.py"),
+            "connected": _paperwork_review_digest_connected,
+            "loud_failure": lambda: [],
+            "evidence": ["apps/locally_twisted/locally_twisted/paperwork/paperwork_review_digest.py"],
+            "verifiers": [
+                "python scripts/verify/paperwork_review_digest.py --report output/paperwork-review-digest.json"
+            ],
+        },
+        {
             "id": "quote_proposal_generation",
             "lane": "paperwork",
             "summary": "Quote/proposal source templates exist, but no Quotation-to-PDF generation or approval queue is wired yet.",
@@ -390,6 +403,9 @@ def _surfaces() -> list[dict[str, object]]:
             "verifiers": ["python scripts/verify/finance_inventory.py --json"],
         },
     ]
+    if not include_digest:
+        surfaces = [surface for surface in surfaces if surface["id"] != "paperwork_review_digest"]
+    return surfaces
 
 
 def _contact_connected() -> list[str]:
@@ -676,6 +692,49 @@ def _unpaid_invoice_draft_packet_connected() -> list[str]:
     return failures
 
 
+def _paperwork_review_digest_connected() -> list[str]:
+    failures = []
+    failures.extend(_callables_exist("locally_twisted.paperwork.paperwork_review_digest.run"))
+    result = frappe.get_attr("locally_twisted.paperwork.paperwork_review_digest.run")()
+    if not result.get("ok"):
+        failures.extend(result.get("failures") or ["paperwork_review_digest.run returned not ok"])
+    if result.get("read_only") is not True:
+        failures.append("paperwork_review_digest is not marked read_only")
+    if result.get("send_allowed") is not False:
+        failures.append("paperwork_review_digest allows customer sending")
+    if result.get("mutation_allowed") is not False:
+        failures.append("paperwork_review_digest allows mutations")
+    if result.get("digest_type") != "paperwork_review_digest":
+        failures.append("paperwork_review_digest returned the wrong digest_type")
+    if result.get("mutation_guard", {}).get("changed"):
+        failures.append("paperwork_review_digest mutation guard changed")
+    expected_sources = {
+        "paperwork_status",
+        "business_automation_index",
+        "unpaid_invoice_review",
+        "unpaid_invoice_draft_packet",
+    }
+    missing_sources = sorted(expected_sources - set(result.get("source_surfaces") or []))
+    if missing_sources:
+        failures.append("paperwork_review_digest missing source surfaces: " + ", ".join(missing_sources))
+    sections = result.get("sections") or {}
+    for key in (
+        "unpaid_invoice_packets",
+        "live_payment_blockers",
+        "setup_gaps",
+        "partial_connections",
+        "next_safe_actions",
+    ):
+        if key not in sections:
+            failures.append(f"paperwork_review_digest missing section {key}")
+    for packet in sections.get("unpaid_invoice_packets", {}).get("items", []):
+        if packet.get("send_status") != "draft_only_not_sent":
+            failures.append(f"{packet.get('invoice')} digest packet is not draft-only")
+        if packet.get("human_approval_required") is not True:
+            failures.append(f"{packet.get('invoice')} digest packet does not require human approval")
+    return failures
+
+
 def _finance_workspace_connected() -> list[str]:
     failures = []
     if not frappe.db.exists("Workspace", "LT Accountant Home"):
@@ -825,6 +884,8 @@ def _checkups() -> list[dict[str, object]]:
                 "python scripts/verify/paperwork_status.py --report output/paperwork-status.json",
                 "python scripts/verify/unpaid_invoice_review.py --report output/unpaid-invoice-review.json",
                 "python scripts/verify/unpaid_invoice_draft_packet.py --report output/unpaid-invoice-draft-packet.json",
+                "python scripts/verify/unpaid_invoice_draft_packet_contract.py",
+                "python scripts/verify/paperwork_review_digest.py --report output/paperwork-review-digest.json",
             ],
         },
         {
@@ -864,6 +925,11 @@ def _fake_data_contracts() -> list[dict[str, object]]:
             "command": "python scripts/verify/customer_documents_contract.py",
             "creates": ["Lead", "Communication", "Email Queue"],
             "cleanup": "rolls back generated records",
+        },
+        {
+            "command": "python scripts/verify/unpaid_invoice_draft_packet_contract.py",
+            "creates": [],
+            "cleanup": "uses in-memory fake review payloads only",
         },
     ]
 

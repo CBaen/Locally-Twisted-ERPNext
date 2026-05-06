@@ -94,11 +94,13 @@ For the standard outbound document source folder:
 ```powershell
 python scripts/verify/outbound_documents_contract.py
 python scripts/verify/unpaid_invoice_draft_packet.py --report output/unpaid-invoice-draft-packet.json
+python scripts/verify/unpaid_invoice_draft_packet_contract.py
+python scripts/verify/paperwork_review_digest.py --report output/paperwork-review-digest.json
 ```
 
 Source lives at `apps/locally_twisted/locally_twisted/outbound_documents/`. Extend that registry before adding a new external invoice, receipt, quote, proposal, packet, statement, reminder, work order, contract summary, or follow-up document elsewhere.
 
-The outbound registry verifier requires each source template to include `## Answer First`. The preview renderer should place `Key fields to review` in the high-visibility slot, not automation metadata. Draft renderers that prepare reminder or statement packets must remain internal-review output until an explicit send approval path exists.
+The outbound registry verifier requires each source template to include `## Answer First`. The preview renderer should place `Key fields to review` in the high-visibility slot, not automation metadata. Draft renderers and digest surfaces that prepare reminder or statement packets must remain internal-review output until an explicit send approval path exists.
 
 For customer-policy text touched by documents:
 

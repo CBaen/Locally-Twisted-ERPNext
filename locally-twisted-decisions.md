@@ -8,6 +8,20 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-06 - Paperwork review digest is internal visibility, not customer delivery
+
+**Decision:** The next paperwork coordination surface is a read-only internal digest. It can combine paperwork status, business automation index results, unpaid invoice review, and draft packet output into one review payload. It must not create Email Queue, Communication, Payment Request, Payment Entry, Journal Entry, Sales Invoice mutations, Error Log entries, or any customer delivery.
+
+**Reasoning:** GL asked for coordinated backend automation that reduces cognitive load and fails loudly, but the system still lacks approved reminder cadence, recipient rules, bank setup, vendor setup, payroll readiness, and live payment configuration. A digest gives Jeff/accounting a single review surface without crossing into sending or accounting automation.
+
+**Implementation:** Added `locally_twisted.paperwork.paperwork_review_digest.run`, host verifier `scripts/verify/paperwork_review_digest.py`, fake scenario verifier `scripts/verify/unpaid_invoice_draft_packet_contract.py`, and automation index wiring. `business_automation_index.run` now supports `include_digest=False` so the digest can summarize the index without recursively checking itself.
+
+**Verification receipt:** `python scripts/verify/unpaid_invoice_draft_packet_contract.py` passed with 6 fake normal/outlier scenarios. `python scripts/verify/paperwork_review_digest.py --report output/paperwork-review-digest.json --markdown output/paperwork-review-digest.md` passed with 1 unpaid invoice packet, 6 live payment blockers, 6 setup gaps, and 4 partial connections. `python scripts/verify/business_automation_index.py --report output/business-automation-index.json` passed with 19 indexed surfaces, 15 connected, 4 exists-but-not-connected, and 0 loud-failure gaps.
+
+**Decided by:** Codex implemented the approved no-Jeff/no-GL paperwork coordination slice under GL's no-silent-failure and no-unapproved-customer-send constraints.
+
+---
+
 ## 2026-05-06 - Unpaid invoice packets render drafts, not delivery
 
 **Decision:** Unpaid invoice follow-up can now render review packets from candidate data, but the renderer is still an internal draft surface. It may produce `payment_reminder_draft` and `statement_of_account` sections for Jeff/accounting review. It must not create Email Queue, Communication, Payment Request, Payment Entry, Journal Entry, Sales Invoice mutations, or any customer delivery.
