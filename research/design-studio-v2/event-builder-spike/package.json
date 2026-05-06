@@ -9,7 +9,8 @@
     "verify": "node verify_spike.cjs",
     "test:classic": "node --test test/*.test.js",
     "verify:classic": "node verify_classic.cjs",
-    "verify:v2": "node verify_v2.cjs"
+    "verify:v2": "node verify_v2.cjs",
+    "verify:event-playground": "node verify_event_playground.cjs"
   },
   "dependencies": {
     "@babylonjs/core": "^8.38.0",

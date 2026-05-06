@@ -14,6 +14,14 @@ LT policy copy now appears in several places: public Terms/Refund pages, checkou
 
 ---
 
+## 2026-05-06 - Event Playground handoff needs one payload contract
+
+The PlayCanvas game, Frappe wrapper, contact-form prefill, and browser tests all depend on the same design facts: venue preset, placed balloon pieces, props, positions/rotations/scales, colors/materials/patterns, screenshot reference, suggestions, and contact handoff state. If those facts drift between the game and contact handoff, the route can look playable while sending weak or misleading inquiry text to LT.
+
+**Counter-move:** keep Event Playground state and payload construction in a pure module first, then have the renderer and route verifier consume that schema. Browser checks must prove the canvas and controls are usable and that Submit Inquiry lands on `/contact` with the same design summary prefilled. Do not add a DocType, backend save API, Lead creation, or migration until persistence is deliberately approved.
+
+---
+
 ## 2026-05-06 - Frappe container work needs an explicit contract
 
 Older notes correctly found that Frappe wraps normal web pages in `.page-content-wrapper > main.container.my-4`, and LT later neutralized that stock visual box so full-width brand bands could span the viewport. The missing piece was that "break out of Frappe" became too easy to treat as a general page-building move. GL saw the real effect: some sections felt detached from the Frappe page rhythm, while crawls/reviews broke differently across browsers and cache states.

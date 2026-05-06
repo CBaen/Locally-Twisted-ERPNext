@@ -24,6 +24,22 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-06 - Event Playground starts as a hidden internal PlayCanvas preview
+
+**Decision:** The first playable decor-planning route is hidden at `/event-playground`, branded as `Event Playground` for review. PlayCanvas/Vite owns the local game preview, while Frappe owns only the hidden route shell, iframe boundary, and contact-form handoff. It is not in public navigation and does not add saved design records, backend save APIs, automatic Lead creation, pricing, checkout, or a production PlayCanvas bundle.
+
+**Reasoning:** The prior engine comparison and classic PlayCanvas prototype established PlayCanvas as the better default for a game-like event-space planner. GL's accepted direction is closer to Animal Crossing: Happy Home Paradise for event decor than CAD or a product configurator, but LT still needs honest balloon construction and plain customer expectations. An iframe-mounted local preview keeps Frappe/Webshop CSS from corrupting the canvas surface while avoiding premature persistence, Desk UX, privacy, and production-deploy decisions.
+
+**Implementation:** Added a PlayCanvas/Vite Event Playground entry under `research/design-studio-v2/event-builder-spike/`, added the Frappe route shell at `www/event_playground.html` and `www/event_playground.py`, registered `/event-playground` in `hooks.py`, and added route-shell CSS. The game runs from the local Vite preview at `127.0.0.1:4306`. Submit Inquiry sends a `postMessage` to the Frappe wrapper; the wrapper stores `lt_event_playground_handoff_v1` in `sessionStorage` and redirects to `/contact?intent=quote&source=event-playground`, where the existing contact form is prefilled with customer details and a design summary. V1 includes school gym, corporate lobby, backyard patio, community room, and car dealership-lite levels; classic arch, column pair, balloon wall/photo moment, table centerpiece, and welcome sign balloon pieces; and context props including tables, chairs, easel/sign, scale person, and display car. Organic/twisting complexity is deferred until the renderer can model it honestly.
+
+**Verification receipt:** The feature added pure state tests, a nested Vite build/verifier, and the root `/event-playground` Playwright route spec. The root spec starts the local Vite preview, verifies the iframe canvas is nonblank at mobile and desktop widths, exercises the core controls, and verifies Submit Inquiry lands on `/contact` with the design summary prefilled. No migration is required because this slice adds no DocType.
+
+**Alternatives considered:** Keep the work research-only until another review. Rejected because the accepted implementation plan called for a polished playable prototype mounted into Frappe for internal review. Add save/share, Lead submission, or a DocType immediately. Rejected because those production behaviors need privacy, Desk review, and business-process decisions first. Build the planner directly inside Frappe page CSS/JS. Rejected for V1 because the game needs a protected canvas/runtime surface. Include organic garland or twisting-balloon physics as approximations. Rejected because this route should not fake physically meaningful balloon behavior.
+
+**Decided by:** User approved the internal-preview implementation plan; Codex implemented the first hidden PlayCanvas/Frappe slice and verifier.
+
+---
+
 ## 2026-05-06 - Policy copy follows GL business-proxy answers until legal review
 
 **Decision:** Delivery policy stays inside Terms/FAQ rather than a standalone route. Pickup/delivery windows are requested until LT confirms them. If LT cannot complete delivery/setup because the customer cannot be contacted or access information is wrong, the customer remains responsible. Delivered product damage must be reported the same day. Ready-to-order products have no returns once prepared, delivered, or picked up. Out-of-area delivery is available for quote. Privacy contact remains `hi@locallytwisted.com`. Launch expects analytics/ads/tracking plus cart/session storage. Inspiration photos are used for event planning. Event photos use an opt-out release model for photos/video taken by LT staff/representatives and public social/review photos LT can access. Invoice payment counts as acceptance of booking terms for now. Personal balloon decor cancellations less than 7 days before the event receive no cash refund; any funds paid transfer to another event date or product.

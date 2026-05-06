@@ -1,12 +1,12 @@
 # Event Builder Spike Workstream
 
-Last updated: 2026-05-03 by Codex.
+Last updated: 2026-05-06 by Codex.
 
 ## Status
 
-Complete as a research-only engine comparison spike.
+Complete as a research-only engine comparison spike. The follow-on internal preview is now `Event Playground` at hidden `/event-playground`; use `workstreams/event-playground.md` for the active route, non-goals, and verification lane.
 
-This is not a production Frappe route. It does not touch `apps/`, customer routes, Leads, checkout, save/share, or ERPNext data.
+This original spike is not a production Frappe route. It does not touch `apps/`, customer routes, Leads, checkout, save/share, or ERPNext data. Later files in the same nested package now include separate Event Playground and classic PlayCanvas prototypes; do not confuse those with this engine-comparison receipt.
 
 ## Purpose
 
@@ -86,7 +86,7 @@ Babylon remains viable as a fallback if future PlayCanvas work fails on producti
 
 ## Next Actions
 
-- Review the screenshot set and payload shape with GL before building a hidden Frappe route.
-- If approved, keep the first Frappe route hidden/research-only and use PlayCanvas as the default renderer.
-- Do not add save/share, Lead submission, checkout, pricing, or ERPNext writes until those production behaviors are separately approved.
+- Historical next action has been completed for the first route: PlayCanvas was chosen and hidden `/event-playground` now mounts the local Event Playground Vite preview in a Frappe iframe.
+- Continue from `workstreams/event-playground.md`, not from the engine-comparison spike, for current implementation work.
+- Do not add pricing, checkout, or full organic/twisting physics until those production behaviors are separately approved and can be represented honestly.
 - Keep balloon construction facts in shared code or shared data; do not duplicate arch/garland math separately per renderer.

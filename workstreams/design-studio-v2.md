@@ -1,12 +1,12 @@
 # Design Studio V2 Workstream
 
-Last updated: 2026-05-02 by Codex.
+Last updated: 2026-05-06 by Codex.
 
 ## Status
 
-Background V2 planning lane. First read-only/spec wave completed 2026-05-02.
+Background planning lane for the broader custom-decor design surface. First read-only/spec wave completed 2026-05-02. The first hidden PlayCanvas/Frappe internal preview is now branded `Event Playground` and lives at `/event-playground`; use `workstreams/event-playground.md` for the active implementation lane.
 
-This is not a V1 launch blocker. Keep launch-critical website, shop, payment, policy, and inquiry work moving separately. This lane exists so the future `Plan Custom Decor` experience can be designed in the background without creating last-minute launch risk.
+This is not a V1 launch blocker. Keep launch-critical website, shop, payment, policy, and inquiry work moving separately. This lane now preserves the larger concept history around Design Studio / Plan Custom Decor / Event Playground without treating old names as current UI labels.
 
 ## Outcome
 
@@ -94,28 +94,47 @@ Replace:
 - simplified balloon illustrations that do not respect professional construction
 - any UX that makes a complex corporate installation feel like a casual kids' coloring page
 
+## Current Implementation Direction
+
+Current review name for the first playable route: `Event Playground`.
+
+Current hidden route: `/event-playground`.
+
+Architecture now in use:
+
+- PlayCanvas/Vite owns the game runtime and interaction surface.
+- Frappe owns the route shell, iframe boundary, contact-form handoff, cache, and route verification.
+- The game is isolated from public-site CSS through a local Vite iframe preview.
+- The payload says final quote, install method, onsite measurements, weather limits, and availability are confirmed by Locally Twisted.
+- There is no public navigation, production bundle, saved-design DocType, backend save API, or automatic Lead/Quote/Sales Order creation in the current slice.
+
+The older `Plan Custom Decor` name remains useful strategic language, but it is no longer the active review label unless GL changes the naming again.
+
 ## Frappe-Native North Star
 
 The production implementation should stay inside the Locally Twisted Frappe app.
 
-Probable production shape:
+Current internal-preview shape:
 
-- Public route: `/plan-custom-decor`
-- Frappe page file: `apps/locally_twisted/locally_twisted/www/plan_custom_decor.html`
-- Optional controller: `apps/locally_twisted/locally_twisted/www/plan_custom_decor.py`
-- Optional route alias in `website_route_rules` from `/plan-custom-decor` to `plan_custom_decor`
-- Public JS: `apps/locally_twisted/locally_twisted/public/js/design_studio/`
-- Public CSS: app CSS included through hooks, not ad hoc `head_html` injection
-- Backend methods: whitelisted Frappe methods for save, share, and submit
-- Data model: a future `LT Decor Design` or similar DocType with child rows for pieces, colors, scale, organization palette, considered pieces, and stakeholder/share state
-- CRM handoff: on submission, create or update an ERPNext Lead with a plain-language design summary and structured design payload
+- Hidden route: `/event-playground`
+- Frappe page file: `apps/locally_twisted/locally_twisted/www/event_playground.html`
+- Controller: `apps/locally_twisted/locally_twisted/www/event_playground.py`
+- Route alias in `website_route_rules` from `/event-playground` to `event_playground`
+- PlayCanvas/Vite source: `research/design-studio-v2/event-builder-spike/`
+- Runtime: local Vite preview at `127.0.0.1:4306` loaded in the Frappe iframe
+- Route-shell CSS: app CSS included through hooks, not ad hoc `head_html` injection
+- Backend methods: none
+- Data model: none
+- Contact handoff: on Submit Inquiry, iframe `postMessage` -> Frappe-site `sessionStorage` -> `/contact?intent=quote&source=event-playground` prefilled with a plain-language design summary
 
-Preferred frontend technology for the first prototype:
+Current frontend technology:
 
-- vanilla JavaScript
-- Frappe/jQuery only where it matches local app patterns
-- inline SVG or canvas only where useful for rendering
-- no React or separate build pipeline unless explicitly approved later
+- Vite
+- PlayCanvas
+- vanilla JavaScript modules
+- no React
+- no checkout/pricing engine
+- no production asset bundle until deliberately approved
 
 ## First Prototype Boundary
 
@@ -176,7 +195,7 @@ First read-only/spec wave dispatched and completed 2026-05-02 by Codex.
 
 The five specs agree on the major direction:
 
-- `Plan Custom Decor` should be the customer-facing path unless GL chooses another name; `Design Studio` can remain the internal feature name.
+- `Event Playground` is now the review path for the first playable route. `Design Studio` remains historical/internal concept language only.
 - V1 should not expose a half-working studio. If V1 references this idea, it should be a polished guided-inquiry path, not a live configurator promise.
 - `Ready to Order` and `Plan Custom Decor` must stay separate in navigation, copy, payloads, and customer expectations.
 - Corrected prototype scope should cover variant-heavy product families with distinct construction engines: classic arch, classic column, organic garland, backdrop wall, and balloon drop.
@@ -195,7 +214,7 @@ Main contradictions resolved:
 - The contest's Frappe-recreatable claims prove only feasibility of simple mockups, not production persistence, permissions, share links, privacy, or CRM integration.
 - Frappe file naming should use `plan_custom_decor.html` with a route alias for `/plan-custom-decor`, rather than a hyphenated file name.
 
-Prototype should not start until GL/controller accepts this reconciliation.
+The first playable prototype has moved forward as a hidden `/event-playground` internal preview. Future expansion should still respect this reconciliation: inquiry/planning first, honest construction rules, and no persistence, pricing, or checkout behavior without separate business decisions.
 
 ## Agent Rules
 
@@ -234,8 +253,8 @@ Before this can move from prototype to production:
 
 ## Open Decisions
 
-- Customer-facing name: `Plan Custom Decor`, `Design Studio`, or another label.
-- Whether V1 should mention the future studio or only provide a polished guided-inquiry path.
+- Whether `/event-playground` should enter public nav, become sales-shared only, or remain internal after GL/Jeff review.
+- Whether `Event Playground` remains the customer-facing name after review.
 - Which corrected product families should move beyond prototype quality review.
 - Whether share links should be public token links, account-only saved designs, or both.
 - Which Locally Twisted balloon color hex approximations are approved for customer-facing matching.
@@ -247,7 +266,9 @@ Before this can move from prototype to production:
 
 Prototype status: corrected review-grade dormant static prototype built under `research/design-studio-v2/prototype/`. It is not production-integrated and does not touch V1 launch routes.
 
-Engine spike status: research-only PlayCanvas/Babylon.js event-builder comparison built under `research/design-studio-v2/event-builder-spike/`. See `workstreams/event-builder-spike.md` for the feature handoff and verification receipts. Both engines passed the verifier; under the agreed decision rule, PlayCanvas is the recommended default for a future hidden Frappe-route spike.
+Engine spike status: research-only PlayCanvas/Babylon.js event-builder comparison built under `research/design-studio-v2/event-builder-spike/`. See `workstreams/event-builder-spike.md` for the historical engine handoff and verification receipts. Both engines passed; PlayCanvas was chosen for the first hidden Frappe preview route.
+
+Event Playground status: first hidden PlayCanvas/Frappe internal preview built at `/event-playground`. See `workstreams/event-playground.md` for current files, non-goals, verification, and next steps.
 
 Current review package:
 
@@ -257,4 +278,4 @@ Current review package:
 
 Latest correction: renderer physics were tightened after GL feedback. Classic arch now uses 200-balloon / 50-cluster math for a 25 ft 11 inch structured arch, and the default spiral is a two-color candy-cane band model. Organic garland now uses strip-backbone density with 11 inch body balloons, 16/24 inch anchors, 5 inch filler, and 10-15% planning overage.
 
-Next review should decide whether the product-family model, corrected construction engines, renderer assumptions, disclaimer, color catalog, size limits, and customer-facing `Plan Custom Decor` naming are strong enough for a hidden Frappe-route spike. Production save/share/Lead behavior remains out of scope until approved separately.
+Next review should focus on the actual `/event-playground` route: whether the experience is clear enough for GL/Jeff, whether the route should be surfaced publicly, whether saved designs need persistence/Desk review at all, and which V1.1/V2 venue, prop, and balloon families are worth adding without faking construction physics.

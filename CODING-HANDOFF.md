@@ -1,6 +1,6 @@
 # Locally Twisted - Coding Handoff
 
-Last updated: 2026-05-06 by Codex after checkout commerce-rule reconciliation, header color repair, responsive/public verification, and prior responsive container audit gate.
+Last updated: 2026-05-06 by Codex after Event Playground build, checkout commerce-rule reconciliation, header color repair, responsive/public verification, and prior responsive container audit gate.
 
 ## State Of Reality
 
@@ -56,6 +56,7 @@ Verified or updated during the 2026-05-01 storefront correction and contact clea
 - `/privacy` and `/terms-of-service` exist as static Frappe routes and return HTTP 200 locally. Current copy reflects GL business-proxy answers from 2026-05-06 for delivery, returns, tax wording, cookies/tracking, children/privacy, opt-out event photo use, invoice acceptance, and temporary balloon/service limitations. A sitewide cookie/tracking accept/decline notice stores `lt_cookie_consent`; future optional analytics/ads/tracking must honor that stored choice. Legal/accounting review and Stripe Dashboard URL wiring are still separate follow-ups.
 - Customer-facing policy documents now use anchored lanes on `/terms-of-service` and `/refund-policy`: event balloon decor, ready-to-order pickup/delivery, face painting/balloon twisting, and corporate invoicing. `locally_twisted.policy_documents` owns reusable policy blocks for code-owned receipt/inquiry emails. Do not add ERPNext Terms/Email Template records unless a verified customer-facing invoice path truly requires them; LT should stay as whitelabel/code-owned as possible. Run `python scripts/verify/customer_documents_contract.py` after changing customer document copy.
 - Legal/accounting review packet lives at `_resources/policies/legal-accounting-review-packet-2026-05-06.md`.
+- `/event-playground` is now a hidden internal-preview route for the first PlayCanvas decor planner. The PlayCanvas/Vite game source lives under `research/design-studio-v2/event-builder-spike/`; the Frappe route shell is `www/event_playground.html`/`.py`; and the route wraps the local Vite preview at `127.0.0.1:4306` in an iframe. Submit Inquiry hands the design to `/contact?intent=quote&source=event-playground` through `postMessage` + `sessionStorage` and pre-fills the existing contact form. There is no public nav entry, committed production bundle, DocType, backend save API, automatic Lead/Quote/Sales Order creation, pricing, checkout, CAD, room scanning, or full organic/twisting physics in this slice.
 - Product listing cards can display `lt_brand_description` through the local Webshop API wrapper in `locally_twisted.api.product_listing`.
 - Variant media first pass completed 2026-05-02. ERPNext now has 1,712 variant `Item.image` values mapped from `_resources/odoo-live/images/` where Odoo image labels clearly matched product options. Product detail pages call `locally_twisted.api.variant_media.get_variant_media` after exact option selection and swap the main image when a variant image exists. Cart/checkout use the variant image when present and fall back to the parent Website Item image otherwise. The review command `python scripts/setup/sync_variant_media.py --dry-run --include-details --report output/catalog-media-review.json` currently reports 49 products checked, 35 with candidate image labels, 45 needing review, 1,712 unchanged mapped variants, and 6,831 skipped variant image assignments.
 - Category browse media is still empty in ERPNext: all 11 customer-facing child Item Groups under `Shop Items` have `image = null` as of the 2026-05-02 DB check. Do not revive `/shop-by-category`; choose representative category media for `/shop-items/<group>` or future menu treatment.
@@ -114,7 +115,7 @@ Next safest slices:
 - Keep the responsive container gate green for any new public UI. Add route-specific interactive checks when a change introduces a new drawer, modal, accordion, filter, product control, or breakpoint state.
 - Reconcile product/category media without reviving the retired `/shop-by-category` card index; use `/shop` and `/shop-items/<group>` as the customer-facing browse surfaces.
 - Complete the blog channel and two ported posts.
-- Review the Design Studio V2 research package only as future scope. The event-builder spike lives under `research/design-studio-v2/event-builder-spike/`; both PlayCanvas and Babylon passed, with PlayCanvas recommended for a hidden-route spike if GL approves.
+- Continue Event Playground after reviewing the hidden local-preview route with GL/Jeff: decide whether it becomes public, sales-shared only, or remains internal; decide whether saved designs need a DocType, Frappe File screenshots, private share links, and Desk review; then add richer venue/prop packs and any V2 organic/twisting physics that can be modeled honestly. Do not add backend saves, automatic Lead/Quote/Sales Order creation, pricing, or checkout behavior until those workflows are deliberately approved.
 
 ## Verification Commands
 
@@ -180,9 +181,21 @@ Public layout and interaction regression checks:
 ```powershell
 npm run test:layout-fit
 npm run test:interactive-layout
+npm run test:event-playground
 npm run test:checkout-experience
 python scripts/verify/smoke_shop.py
 npm run test:public-verify
+```
+
+Event Playground source, browser, and Frappe handoff checks:
+
+```powershell
+cd research/design-studio-v2/event-builder-spike
+npm run test:classic
+npm run build
+npm run verify:event-playground
+cd ..\..\..
+npm run test:event-playground
 ```
 
 Contact form logic regression checks:

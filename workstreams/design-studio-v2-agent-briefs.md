@@ -1,6 +1,8 @@
 # Design Studio V2 Agent Briefs
 
-Last updated: 2026-05-02 by Codex.
+Last updated: 2026-05-06 by Codex.
+
+Status note: these are historical first-wave research prompts. The active internal preview is now `Event Playground` at hidden `/event-playground`; use `workstreams/event-playground.md` for current implementation work before reusing any prompt below.
 
 Use these prompts for background agents working on the future `Plan Custom Decor` design studio.
 

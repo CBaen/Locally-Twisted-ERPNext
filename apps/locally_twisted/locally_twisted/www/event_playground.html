@@ -1,0 +1,55 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+<section class="lt-event-playground lt-fullbleed">
+  <div class="lt-event-playground__intro">
+    <p class="lt-event-playground__eyebrow">Internal preview</p>
+    <h1>Event Playground</h1>
+    <p>
+      Build a quick event-decor scene with classic balloon pieces, venue context, props, colors, and design suggestions.
+    </p>
+    <p class="lt-event-playground__note">
+      This hidden route expects the local Vite preview at {{ event_playground_origin }}. It does not save designs to ERPNext.
+      Final quote, install method, availability, onsite measurements, and weather limits are confirmed by Locally Twisted before booking.
+    </p>
+  </div>
+
+  <div class="lt-event-playground__shell">
+    <iframe
+      class="lt-event-playground__frame"
+      data-event-playground-frame
+      title="Locally Twisted Event Playground"
+      src="{{ event_playground_asset }}"
+      loading="eager"
+      allow="clipboard-write"
+      sandbox="allow-scripts allow-forms allow-same-origin allow-top-navigation-by-user-activation"
+      referrerpolicy="same-origin"
+    ></iframe>
+  </div>
+
+  <div class="lt-event-playground__footer">
+    <a class="lt-event-playground__link" href="/contact">Talk with Locally Twisted</a>
+  </div>
+</section>
+
+<script>
+(function () {
+  var HANDOFF_KEY = "lt_event_playground_handoff_v1";
+  var expectedOrigin = "{{ event_playground_origin }}";
+
+  window.addEventListener("message", function (event) {
+    if (event.origin !== expectedOrigin) return;
+    var data = event.data || {};
+    if (data.type !== "LT_EVENT_PLAYGROUND_CONTACT_HANDOFF") return;
+    if (!data.payload || data.payload.source !== "event-playground") return;
+
+    try {
+      window.sessionStorage.setItem(HANDOFF_KEY, JSON.stringify(data.payload));
+    } catch (err) {
+      return;
+    }
+    window.location.href = "/contact?intent=quote&source=event-playground";
+  });
+})();
+</script>
+{% endblock %}

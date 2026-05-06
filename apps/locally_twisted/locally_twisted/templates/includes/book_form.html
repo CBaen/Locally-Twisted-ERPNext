@@ -856,7 +856,80 @@ every deploy.
         } catch (err) {}
     }
 
+    /* --- 1c. Event Playground internal-preview handoff prefill ------- */
+    var EVENT_PLAYGROUND_HANDOFF_KEY = 'lt_event_playground_handoff_v1';
+
+    function listLabels(values) {
+        if (!Array.isArray(values)) return '';
+        return values.filter(Boolean).join(', ');
+    }
+
+    function summarizeEventPlayground(payload, summary) {
+        payload = payload || {};
+        summary = summary || {};
+        var pieces = summary.pieces || (payload.placed_balloon_pieces || []).map(function (piece) {
+            return piece.label;
+        });
+        var props = summary.props || (payload.placed_props || []).map(function (prop) {
+            return prop.label;
+        });
+        var colors = summary.colors || [];
+        var suggestions = summary.suggestions || [];
+        return [
+            'Event Playground design preview',
+            summary.venue ? 'Venue: ' + summary.venue : '',
+            listLabels(pieces) ? 'Balloon pieces: ' + listLabels(pieces) : '',
+            listLabels(props) ? 'Context props: ' + listLabels(props) : '',
+            listLabels(colors) ? 'Colors: ' + listLabels(colors) : '',
+            listLabels(suggestions) ? 'Suggestions accepted: ' + listLabels(suggestions) : '',
+            summary.note || payload.customer_note || '',
+            'This came from the internal Event Playground preview. Final quote, install method, onsite measurements, weather limits, and availability still need Locally Twisted review.'
+        ].filter(Boolean).join('\n');
+    }
+
+    function applyEventPlaygroundHandoff() {
+        var raw = null;
+        try {
+            raw = window.sessionStorage.getItem(EVENT_PLAYGROUND_HANDOFF_KEY);
+        } catch (err) {
+            return;
+        }
+        if (!raw) return;
+
+        var handoff = null;
+        try {
+            handoff = JSON.parse(raw);
+        } catch (err) {
+            return;
+        }
+        if (!handoff || handoff.source !== 'event-playground') return;
+
+        var customer = handoff.customer || {};
+        var payload = handoff.payload || {};
+        var summary = handoff.summary || {};
+        var description = summarizeEventPlayground(payload, summary);
+
+        setNamedValue('contact_name', customer.name);
+        setNamedValue('phone', customer.phone);
+        setNamedValue('email_from', customer.email);
+
+        checkService('Balloon Decor');
+        checkService('Events Inquiry');
+        updateConditionals();
+
+        setNamedValue('x_decor_types', listLabels(summary.pieces));
+        setNamedValue('x_colors', listLabels(summary.colors));
+        setNamedValue('x_package_colors', listLabels(summary.colors));
+        setNamedValue('x_package_notes', description);
+        setNamedValue('description', description);
+
+        try {
+            window.sessionStorage.removeItem(EVENT_PLAYGROUND_HANDOFF_KEY);
+        } catch (err) {}
+    }
+
     applyCheckoutQuoteHandoff();
+    applyEventPlaygroundHandoff();
 
     /* --- 2. Photo file count + size validation ----------------------- */
     var fileInput = document.getElementById('book_photos');

@@ -1,0 +1,127 @@
+/* Hidden Event Playground route shell. The PlayCanvas game itself is served
+   from the local Vite preview during internal QA; do not treat this as a
+   production asset bundle until that workflow is deliberately approved. */
+.lt-event-playground {
+  background:
+    linear-gradient(180deg, rgba(14, 34, 64, 0.98), rgba(47, 58, 74, 0.92)),
+    #0e2240;
+  color: #faf7f2;
+  padding: 32px 0 40px;
+}
+
+.lt-event-playground__intro,
+.lt-event-playground__shell,
+.lt-event-playground__footer {
+  width: min(1320px, calc(100% - 32px));
+  margin-inline: auto;
+}
+
+.lt-event-playground__intro {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.lt-event-playground__eyebrow {
+  margin: 0;
+  color: #b89a5b;
+  font-family: Lato, system-ui, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.lt-event-playground h1 {
+  margin: 0;
+  color: #faf7f2;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(2.35rem, 6vw, 4.7rem);
+  line-height: 0.95;
+}
+
+.lt-event-playground__intro p {
+  max-width: 780px;
+  margin: 0;
+  color: rgba(250, 247, 242, 0.84);
+  font-family: Lato, system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.lt-event-playground__intro .lt-event-playground__note {
+  color: #f7f1e4;
+  font-size: 0.92rem;
+  max-width: 920px;
+}
+
+.lt-event-playground__shell {
+  height: min(790px, calc(100vh - 140px));
+  min-height: 660px;
+  overflow: hidden;
+  border: 1px solid rgba(184, 154, 91, 0.55);
+  border-radius: 6px;
+  background: #d8ddd8;
+  box-shadow: 0 24px 60px rgba(10, 10, 11, 0.32);
+}
+
+.lt-event-playground__frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #d8ddd8;
+}
+
+.lt-event-playground__footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.lt-event-playground__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  border: 1px solid #b89a5b;
+  border-radius: 4px;
+  background: #b31b34;
+  color: #ffffff;
+  padding: 12px 18px;
+  font-family: Lato, system-ui, sans-serif;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.lt-event-playground__link:hover,
+.lt-event-playground__link:focus {
+  color: #ffffff;
+  text-decoration: none;
+  background: #8f1328;
+}
+
+@media (max-width: 760px) {
+  .lt-event-playground {
+    padding: 24px 0 30px;
+  }
+
+  .lt-event-playground__intro,
+  .lt-event-playground__shell,
+  .lt-event-playground__footer {
+    width: min(100% - 18px, 1320px);
+  }
+
+  .lt-event-playground__shell {
+    height: 780px;
+    min-height: 720px;
+  }
+
+  .lt-event-playground__footer {
+    justify-content: stretch;
+  }
+
+  .lt-event-playground__link {
+    width: 100%;
+  }
+}

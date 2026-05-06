@@ -5,13 +5,15 @@ import { defineConfig } from "vite";
 const rootDir = fileURLToPath(new URL(".", import.meta.url));
 
 export default defineConfig({
+  base: "./",
   build: {
     rollupOptions: {
       input: {
         playcanvas: resolve(rootDir, "playcanvas.html"),
         babylon: resolve(rootDir, "babylon.html"),
         classicPlaycanvas: resolve(rootDir, "classic-playcanvas.html"),
-        classicPlaycanvasV2: resolve(rootDir, "classic-playcanvas-v2.html")
+        classicPlaycanvasV2: resolve(rootDir, "classic-playcanvas-v2.html"),
+        eventPlayground: resolve(rootDir, "event-playground.html")
       }
     }
   }
