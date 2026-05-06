@@ -1,48 +1,18 @@
-/* Locally Twisted portfolio reel. Translated from the approved vanilla JS
-   reference in research/portfolio-design-cla/frappe/portfolio.js. */
+/* Locally Twisted portfolio reel. */
 (function () {
   "use strict";
 
   const SETTINGS = {
-    density: 1.10,
+    density: 1.08,
     variant: "drift",
     driftSmoothing: 0.02,
     opacitySpeed: 4.0,
   };
 
-  const BASE_UNIT = 640;
-  const VERTICAL_SPACING = 80;
-  const OVERLAP = 0.55;
-  const CENTER_BREATH = 140;
-
-  function mountCursor(root) {
-    if (window.matchMedia("(max-width: 768px)").matches) return;
-
-    const dot = document.createElement("div");
-    dot.className = "lt-cursor-dot";
-    const ring = document.createElement("div");
-    ring.className = "lt-cursor-ring";
-    document.body.appendChild(dot);
-    document.body.appendChild(ring);
-
-    let mx = window.innerWidth / 2;
-    let my = window.innerHeight / 2;
-    let rx = mx;
-    let ry = my;
-
-    window.addEventListener("mousemove", (event) => {
-      mx = event.clientX;
-      my = event.clientY;
-    });
-
-    (function tick() {
-      rx += (mx - rx) * 0.18;
-      ry += (my - ry) * 0.18;
-      dot.style.transform = `translate(${mx}px,${my}px) translate(-50%,-50%)`;
-      ring.style.transform = `translate(${rx}px,${ry}px) translate(-50%,-50%)`;
-      window.requestAnimationFrame(tick);
-    })();
-  }
+  const BASE_UNIT = 760;
+  const VERTICAL_SPACING = 62;
+  const OVERLAP = 0.62;
+  const CENTER_BREATH = 72;
 
   function layoutPhotos(photos, density) {
     let leftY = 0;
@@ -137,8 +107,6 @@
     const photos = window.LT_PORTFOLIO_PHOTOS || [];
     const reel = root.querySelector("[data-reel]");
     if (!photos.length || !reel) return;
-
-    mountCursor(root);
 
     let viewportWidth = window.innerWidth;
     let viewportHeight = window.innerHeight;
@@ -236,9 +204,9 @@
 
         if (SETTINGS.variant === "drift") {
           const eased = Math.max(0, Math.min(1, smoothProgress * 1.4));
-          tx = side * (1 - eased) * 320;
-          ty = (1 - eased) * (side === 0 ? 120 : 60);
-          opacity = Math.max(0, Math.min(1, smoothProgress * SETTINGS.opacitySpeed));
+          tx = side * (1 - eased) * 72;
+          ty = (1 - eased) * (side === 0 ? 48 : 24);
+          opacity = 1;
         } else if (SETTINGS.variant === "snap") {
           const eased = Math.max(0, Math.min(1, peakProgress * 1.6));
           ty = (1 - eased) * 80;

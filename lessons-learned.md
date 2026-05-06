@@ -6,6 +6,14 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-06 - Keep the useful prototype behavior, not the whole prototype
+
+The portfolio correction after the exact-handoff pass showed a second failure mode: once a reference is rendered correctly, it can still be wrong for production if Codex carries over the whole prototype instead of the part GL actually wants. GL wanted the overlapping collage and stronger center balance. She did not want the tall hero, copied font imports, custom cursor, fake shell, or small production photos.
+
+**Counter-move:** after matching a visual reference, immediately ask what belongs to production and encode that boundary in source and verifiers. For LT `/portfolio`, the current rule is: compact `What We Do` hero, native LT shell/global typography, large whole installed-work images, frequent center-column photos, no portfolio-specific Google font imports, no custom cursor artifacts, and warm page-matched image frames. The verifier should fail if the page regresses into either a small safe row or a wholesale prototype copy.
+
+---
+
 ## 2026-05-06 - Automation needs a machine-readable map, not only a handoff paragraph
 
 The paperwork/backend lane had many working pieces: contact intake, Lead cascade, checkout, payment success, receipts, invoice branding, outbound templates, and finance visibility. The risk was that future agents could treat "exists" as "connected" or treat a native ERPNext DocType as operational readiness. That is exactly how silent failures slip into business systems.
@@ -38,11 +46,19 @@ The `/shop` console showed `ERR_BLOCKED_BY_CLIENT` for `lt-cookie-consent.js`. T
 
 ---
 
+## 2026-05-06 - The exact folder matters when a designer handoff exists
+
+The second portfolio failure happened because the implementation was judged against a copied/derived reference path instead of the exact folder GL named: `research/a unique portfolio page for a high end corporate balloon events_/design_handoff_locally_twisted_portfolio/`. That lost important details: the huge editorial hero, oklch palette, Cormorant/Inter Tight pairing, visible captions below photos, and the approved aspect sequence.
+
+**Counter-move:** when GL provides a design handoff path, render that exact folder first, compare production to it, and translate only the intentional production differences. For this LT page, keep the real Frappe header/footer and real LT photos, but otherwise treat the handoff's Frappe files as the visual baseline until GL closes the critique loop.
+
+---
+
 ## 2026-05-06 - Portfolio edge bleed is the design, not an overflow bug
 
 The strict portfolio rework exposed the real failure in the first translation: Codex tried to make the designer's collage safer by moving photos into fully visible rows. That protected the layout in a generic web sense, but it destroyed the portfolio concept GL wanted. The portfolio is supposed to feel like an intentional scrolling collage of whole installed-work photos, not a card grid with larger images.
 
-**Counter-move:** when a visual reference intentionally uses edge anchoring, overlap, bleed, or asymmetric motion, preserve that behavior first and verify it in the browser before applying generic container instincts. In LT, the Frappe shell owns the header/footer and route lifecycle, but the portfolio reel owns its full-bleed photo field. Tests must fail a static row, fail visible text over gallery photos, and prove Chrome/Brave show the same placement pattern.
+**Counter-move:** when a visual reference intentionally uses edge anchoring, overlap, bleed, or asymmetric motion, preserve that behavior first and verify it in the browser before applying generic container instincts. In LT, the Frappe shell owns the header/footer and route lifecycle, but the portfolio reel owns its full-bleed photo field. Tests must fail a static row, fail text covering gallery photos, and prove Chrome/Brave show the same placement pattern.
 
 ---
 
@@ -58,7 +74,7 @@ The first shop showroom pass made `/shop`, `/shop-items`, and `/shop-items/<grou
 
 Claude produced a useful portfolio design reference, but the first translation failed the ownership handoff: Codex blended the reference with old local portfolio assumptions, kept stale claims in docs, and made the result harder for the designer to critique. The important distinction is that external design code can own the visual contract, while Codex owns the Frappe translation.
 
-**Counter-move:** when GL brings code from Claude, a designer, or another agent, first write down what must survive visually and what should be ignored. For the LT portfolio, the preserved contract is large whole photos, left/right/center drifting placement, no cropped cards, no text covering the product, optimized real images, and mobile full-width natural-ratio stacking. Do not add filters, modal behavior, captions, Frappe boxing, or other "helpful" local patterns unless GL explicitly accepts them. Keep the reference folder while critique is active, but label production source as the Frappe route, CSS/JS, optimized assets, and verifier.
+**Counter-move:** when GL brings code from Claude, a designer, or another agent, first write down what must survive visually and what should be ignored. For the LT portfolio, the preserved contract is large whole photos, left/right/center drifting placement, no cropped cards, no text covering the product, visible reference captions below photos, optimized real images, and mobile full-width natural-ratio stacking. Do not add filters, modal behavior, Frappe boxing, or other "helpful" local patterns unless GL explicitly accepts them. Keep the reference folder while critique is active, but label production source as the Frappe route, CSS/JS, optimized assets, and verifier.
 
 ---
 

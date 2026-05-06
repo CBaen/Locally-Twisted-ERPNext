@@ -1,8 +1,8 @@
 """Portfolio page controller for `/portfolio`.
 
 The portfolio intentionally breaks out of card-grid behavior. It keeps the
-Frappe website shell, but the page body is a full-bleed photo reel based on the
-approved reference in `research/portfolio-design-cla/frappe`.
+Frappe website shell, but the page body is a full-bleed photo reel using real
+installed-work photos.
 """
 
 import json
@@ -187,29 +187,29 @@ GALLERY_ITEMS = [
 ]
 
 
-# The reference design depends on mixed scales and a left/right/center rhythm.
-# Do not normalize these values; that collapses the page into a static row.
+# The reel depends on mixed scales and an edge/center rhythm. Keep center
+# placements frequent enough that desktop scroll states feel balanced.
 APPROVED_COLLAGE_SLOTS = [
-    {"side": "left", "scale": 0.62},
-    {"side": "right", "scale": 0.74},
-    {"side": "left", "scale": 0.58},
-    {"side": "center", "scale": 0.92},
-    {"side": "left", "scale": 0.60},
-    {"side": "right", "scale": 0.64},
-    {"side": "left", "scale": 0.74},
-    {"side": "right", "scale": 0.58},
-    {"side": "center", "scale": 0.96},
-    {"side": "right", "scale": 0.55},
-    {"side": "left", "scale": 0.62},
-    {"side": "right", "scale": 0.76},
-    {"side": "left", "scale": 0.60},
-    {"side": "right", "scale": 0.62},
-    {"side": "left", "scale": 0.72},
-    {"side": "center", "scale": 0.94},
-    {"side": "left", "scale": 0.56},
-    {"side": "right", "scale": 0.60},
-    {"side": "left", "scale": 0.62},
-    {"side": "right", "scale": 0.78},
+    {"side": "left", "scale": 0.70, "w": 4, "h": 5},
+    {"side": "right", "scale": 0.84, "w": 3, "h": 2},
+    {"side": "center", "scale": 1.02, "w": 16, "h": 10},
+    {"side": "left", "scale": 0.66, "w": 2, "h": 3},
+    {"side": "right", "scale": 0.72, "w": 3, "h": 4},
+    {"side": "center", "scale": 0.98, "w": 16, "h": 9},
+    {"side": "left", "scale": 0.78, "w": 5, "h": 4},
+    {"side": "right", "scale": 0.66, "w": 3, "h": 4},
+    {"side": "center", "scale": 1.00, "w": 16, "h": 10},
+    {"side": "left", "scale": 0.72, "w": 4, "h": 5},
+    {"side": "right", "scale": 0.84, "w": 3, "h": 2},
+    {"side": "center", "scale": 0.96, "w": 16, "h": 9},
+    {"side": "left", "scale": 0.70, "w": 4, "h": 5},
+    {"side": "right", "scale": 0.74, "w": 3, "h": 4},
+    {"side": "center", "scale": 0.98, "w": 16, "h": 10},
+    {"side": "left", "scale": 0.66, "w": 2, "h": 3},
+    {"side": "right", "scale": 0.70, "w": 3, "h": 4},
+    {"side": "center", "scale": 0.96, "w": 16, "h": 9},
+    {"side": "left", "scale": 0.72, "w": 4, "h": 5},
+    {"side": "right", "scale": 0.86, "w": 3, "h": 2},
 ]
 
 PORTFOLIO_DISPLAY_ORDER = [
@@ -252,7 +252,6 @@ _portfolio_order = {slug: index for index, slug in enumerate(PORTFOLIO_DISPLAY_O
 GALLERY_ITEMS.sort(key=lambda item: _portfolio_order.get(item["slug"], len(_portfolio_order)))
 for index, item in enumerate(GALLERY_ITEMS):
     slot = APPROVED_COLLAGE_SLOTS[index % len(APPROVED_COLLAGE_SLOTS)]
-    item.update(PORTFOLIO_REEL_META.get(item["slug"], {}))
     item.update(slot)
 
 
@@ -351,14 +350,14 @@ def get_context(context):
 
     if label:
         context.title = f"{label} - Locally Twisted Portfolio"
-        context.portfolio_heading_line_1 = label
-        context.portfolio_heading_line_2 = "installed with scale."
+        context.portfolio_eyebrow = f"{label} portfolio"
+        context.portfolio_intro = f"Utah {label.lower()} balloon decor for events, schools, venues, and company celebrations."
     else:
-        context.title = "Portfolio - Locally Twisted"
-        context.portfolio_heading_line_1 = "Sculptural balloon installations"
-        context.portfolio_heading_line_2 = "for serious rooms."
+        context.title = "Utah Balloon Decor Portfolio - Locally Twisted"
+        context.portfolio_eyebrow = "Utah balloon decor portfolio"
+        context.portfolio_intro = "Utah balloon decor for corporate events, schools, photo backdrops, and private celebrations."
 
-    description = "Browse Locally Twisted's installed balloon decor portfolio across Utah."
+    description = "See Locally Twisted's Utah balloon decor portfolio for corporate events, schools, community celebrations, photo backdrops, and private parties."
     if label:
         description = f"Browse Locally Twisted's {label.lower()} balloon decor portfolio across Utah."
 

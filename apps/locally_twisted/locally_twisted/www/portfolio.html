@@ -1,32 +1,18 @@
 {% extends "templates/web.html" %}
 
+{% block title %}Locally Twisted - Selected Work{% endblock %}
+
 {% block head_include %}
-<link rel="stylesheet" href="/assets/locally_twisted/css/lt-portfolio-reel.css?v=20260506-4">
+<link rel="stylesheet" href="/assets/locally_twisted/css/lt-portfolio-reel.css?v=20260506-8">
 {% endblock %}
 
 {% block page_content %}
 
 <div class="lt-portfolio" data-portfolio aria-labelledby="lt-portfolio-title">
     <section class="lt-hero">
-        <p class="lt-eyebrow">Selected work &middot; Wasatch Front &middot; 2024 &mdash; 2025</p>
-        <h1 id="lt-portfolio-title" class="lt-title">
-            Balloon installations<br>
-            <em>for the room you remember.</em>
-        </h1>
-        <div class="lt-meta" aria-label="Portfolio context">
-            <div>
-                <span class="lt-meta-label">Studio</span>
-                <span class="lt-meta-value">Wasatch Front</span>
-            </div>
-            <div>
-                <span class="lt-meta-label">Practice</span>
-                <span class="lt-meta-value">Corporate, civic, school, venue, private</span>
-            </div>
-            <div>
-                <span class="lt-meta-label">Index</span>
-                <span class="lt-meta-value">{{ portfolio_count }} works</span>
-            </div>
-        </div>
+        <p class="lt-eyebrow">{{ portfolio_eyebrow }}</p>
+        <h1 id="lt-portfolio-title" class="lt-title">What We Do</h1>
+        <p class="lt-hero-copy">{{ portfolio_intro }}</p>
     </section>
 
     {% if portfolio_count %}
@@ -55,7 +41,7 @@
 <script>
 window.LT_PORTFOLIO_PHOTOS = {{ portfolio_photos_json | safe }};
 </script>
-<script src="/assets/locally_twisted/js/lt-portfolio-reel.js?v=20260506-4" defer></script>
+<script src="/assets/locally_twisted/js/lt-portfolio-reel.js?v=20260506-8" defer></script>
 <script type="application/ld+json">
 {{ itemlist_jsonld | safe }}
 </script>

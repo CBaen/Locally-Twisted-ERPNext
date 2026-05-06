@@ -36,6 +36,38 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-06 - Shop category navigation uses a rail and mobile select
+
+**Decision:** `/shop` and `/shop-items/<group>` use the shared `templates/includes/shop_category_nav.html` component for category navigation. Desktop uses a slim left rail beside the product showcase. Mobile uses a native select above the products. `/shop` no longer uses an in-place chip filter wall, and category pages must not restore the top button/tile wall.
+
+**Reasoning:** GL chose option B after rejecting the category buttons as horrible, cheap, and too cognitively heavy. The earlier symmetry pass fixed row math, but it preserved the wrong interaction pattern. These are product-showcase pages; customers need an obvious browse path that leaves the photos room to sell the product.
+
+**Implementation:** Commit `b82eaf9` replaced the duplicated `/shop` chip wall and `/shop-items/<group>` category tile wall with the shared rail/select include, updated `/shop` and category templates, and cache-busted `lt-shop-showroom.css` to `v=20260506-showroom-5`.
+
+**Verification receipt:** `python scripts/verify/smoke_shop.py` passed. Focused checks passed: `npm run test:interactive-layout -- --grep "/shop category navigation"` 4/4, `npm run test:layout-fit -- --grep shop` 26/26, and `npm run test:layout-fit -- --grep "variant-product|single-product|seasonal-category"` 39/39. Browser geometry confirmed desktop rail/mobile select behavior on `/shop` and `/shop-items/get-well-bouquets`, with no `.lt-shop__chip` controls and no old `.lt-shop__toolbar--categories` wall.
+
+**Alternatives considered:** Keep the symmetrical button grid. Rejected because GL had already rejected the button-control treatment as unusable. Replace the whole entry with a photo category gateway. Deferred until category imagery is approved. Keep `/shop` as in-page filtering. Rejected for this pass because the chosen simple/intuitive path is category navigation to real category pages.
+
+**Decided by:** GL chose option B; Codex implemented, verified, committed, and pushed it.
+
+---
+
+## 2026-05-06 - Consent UI assets must avoid blocklist-style filenames
+
+**Decision:** The sitewide preference/consent script is named `lt-site-preferences.js`, not `lt-cookie-consent.js`. Future optional analytics, ads, and preference assets should avoid filenames that look like common blocker targets while still honoring the stored `lt_cookie_consent` choice.
+
+**Reasoning:** GL reported `ERR_BLOCKED_BY_CLIENT` on `/shop`. The server-side asset path was not the real failure; the browser extension blocked a filename containing `cookie-consent`. Keeping that name would make the site look broken for customers using common privacy tooling.
+
+**Implementation:** Commit `dc562e7` renamed the source asset, updated the Frappe hook include, updated the policy workstream note, and deleted the stale `lt-cookie-consent.js` source file.
+
+**Verification receipt:** The local `/shop` page referenced `lt-site-preferences.js`, the new asset returned 200, the old asset returned 404, and browser verification no longer showed `ERR_BLOCKED_BY_CLIENT` for the consent script.
+
+**Alternatives considered:** Keep the old filename and ignore extension noise. Rejected because the user saw it as a visible page problem. Disable the preload only. Rejected because the blocked request was filename-based and would still leave extension-console failures.
+
+**Decided by:** GL reported the symptom; Codex traced and fixed the actual asset contract.
+
+---
+
 ## 2026-05-06 - Sales Invoices are AP documents with gray callouts
 
 **Decision:** The default Sales Invoice is an accounts-payable document, not marketing collateral. Secondary invoice information can use the approved gray vertical callout treatment: light neutral gray background, thin gray left rule, and compact spacing. The bottom support message stays a solid black bar with white text:
@@ -70,35 +102,33 @@ No dog logo, gold bar, gold rule, navy/berry/promo accent treatment, or marketin
 
 ---
 
-## 2026-05-06 - Shop category navigation uses a rail and mobile select
+## 2026-05-06 - Portfolio keeps the collage, not the full prototype styling
 
-**Decision:** `/shop` and `/shop-items/<group>` use the shared `templates/includes/shop_category_nav.html` component for category navigation. Desktop uses a slim left rail beside the product showcase. Mobile uses a native select above the products. `/shop` no longer uses an in-place chip filter wall, and category pages must not restore the top button/tile wall.
+**Decision:** `/portfolio` should keep the large floating collage of installed-work imagery, but it should not carry over the full Claude/designer prototype page styling. The hero is compact, uses the native LT shell and global site typography, and defaults to `What We Do` with Utah balloon decor supporting copy. Desktop photos should be larger and more confident than the first production pass, with frequent center-column statement photos. Proof photos stay whole with `object-fit: contain`; any empty frame area should match the warm page background instead of showing as gray boxes.
 
-**Reasoning:** GL chose option B after rejecting the category buttons as horrible, cheap, and too cognitively heavy. The earlier symmetry pass fixed row math, but it preserved the wrong interaction pattern. These are product-showcase pages; customers need an obvious browse path that leaves the photos room to sell the product.
+**Reasoning:** GL liked the overlapping image field and especially the centered balance from the reference, but rejected the tall prototype hero, copied font treatment, custom cursor/interaction artifacts, and small sad production images. The useful part of the external reference is the collage behavior, not the whole page shell.
 
-**Implementation:** Commit `b82eaf9` replaced the duplicated `/shop` chip wall and `/shop-items/<group>` category tile wall with the shared rail/select include, updated `/shop` and category templates, and cache-busted `lt-shop-showroom.css` to `v=20260506-showroom-5`.
+**Implementation:** Updated `www/portfolio.html`, `www/portfolio.py`, `public/css/lt-portfolio-reel.css`, `public/js/lt-portfolio-reel.js`, and `scripts/verify/portfolio_reel.spec.js`. The route now uses the compact `What We Do` intro, removes portfolio-specific Google font links and custom cursor artifacts, increases desktop image sizing, repeats center slots more often, keeps whole optimized WebP photos, matches frame/image backgrounds to the page background, stacks mobile captions, and cache-busts the portfolio assets at `?v=20260506-8`.
 
-**Verification receipt:** `python scripts/verify/smoke_shop.py` passed. Focused checks passed: `npm run test:interactive-layout -- --grep "/shop category navigation"` 4/4, `npm run test:layout-fit -- --grep shop` 26/26, and `npm run test:layout-fit -- --grep "variant-product|single-product|seasonal-category"` 39/39. Browser geometry confirmed desktop rail/mobile select behavior on `/shop` and `/shop-items/get-well-bouquets`, with no `.lt-shop__chip` controls and no old `.lt-shop__toolbar--categories` wall.
+**Verification receipt:** `python scripts/dev/clear_website_cache.py --restart` completed. `npm run test:portfolio-reel` passed 4/4, `npm run test:layout-fit -- --grep portfolio` passed 13/13, and `npm run test:interactive-layout -- --grep portfolio` passed 3/3. Fresh visual evidence from the running local Frappe site was captured under `output/playwright/portfolio-what-we-do-v6/`; the facts file confirms `What We Do`, 0 portfolio Google font links, 0 custom cursor artifacts, matched page/frame/image backgrounds, 15 photos, 5 center slots, no horizontal overflow, and `lt-portfolio-reel.css?v=20260506-8`.
 
-**Alternatives considered:** Keep the symmetrical button grid. Rejected because GL had already rejected the button-control treatment as unusable. Replace the whole entry with a photo category gateway. Deferred until category imagery is approved. Keep `/shop` as in-page filtering. Rejected for this pass because the chosen simple/intuitive path is category navigation to real category pages.
-
-**Decided by:** GL chose option B; Codex implemented, verified, committed, and pushed it.
+**Decided by:** GL rejected the prototype carryover and small production-image feel while approving the collage direction and stronger center-column balance; Codex encoded that into source, verifiers, and handoff docs.
 
 ---
 
-## 2026-05-06 - Consent UI assets must avoid blocklist-style filenames
+## 2026-05-06 - Portfolio must match the exact designer handoff, not the derived copy
 
-**Decision:** The sitewide preference/consent script is named `lt-site-preferences.js`, not `lt-cookie-consent.js`. Future optional analytics, ads, and preference assets should avoid filenames that look like common blocker targets while still honoring the stored `lt_cookie_consent` choice.
+**Current status:** superseded by the entry above, "Portfolio keeps the collage, not the full prototype styling." Keep this entry as history for why the page moved away from a generic grid, but do not use it to reintroduce prototype fonts, tall hero treatment, custom cursor behavior, or exact full-page styling.
 
-**Reasoning:** GL reported `ERR_BLOCKED_BY_CLIENT` on `/shop`. The server-side asset path was not the real failure; the browser extension blocked a filename containing `cookie-consent`. Keeping that name would make the site look broken for customers using common privacy tooling.
+**Decision:** The active portfolio visual reference is `research/a unique portfolio page for a high end corporate balloon events_/design_handoff_locally_twisted_portfolio/`. The Frappe files in that folder define the approved photo placement, hero typography, palette, motion constants, visible captions, side/scale rhythm, and aspect sequence. The production route keeps LT's real Frappe header/footer and real LT optimized photos, but the portfolio field itself should match the handoff.
 
-**Implementation:** Commit `dc562e7` renamed the source asset, updated the Frappe hook include, updated the policy workstream note, and deleted the stale `lt-cookie-consent.js` source file.
+**Reasoning:** GL caught that the prior implementation was a static row/softened derivative, not the design she supplied. The mistake was treating the reference as inspiration and mixing it with older local assumptions. For this page, that changes the product: a high-end events portfolio needs an editorial, full-photo scroll field, not photos trapped in a grid or hidden by generic site containers.
 
-**Verification receipt:** The local `/shop` page referenced `lt-site-preferences.js`, the new asset returned 200, the old asset returned 404, and browser verification no longer showed `ERR_BLOCKED_BY_CLIENT` for the consent script.
+**Implementation:** Updated `www/portfolio.html`, `www/portfolio.py`, `public/css/lt-portfolio-reel.css`, `public/js/lt-portfolio-reel.js`, and `scripts/verify/portfolio_reel.spec.js` to use the exact handoff hero copy, oklch cream/oxblood palette, Cormorant/Inter Tight type pairing, visible below-photo captions, locked motion constants, approved side/scale rhythm, and approved aspect sequence. The page still uses real LT optimized WebP images and the native LT Frappe shell.
 
-**Alternatives considered:** Keep the old filename and ignore extension noise. Rejected because the user saw it as a visible page problem. Disable the preload only. Rejected because the blocked request was filename-based and would still leave extension-console failures.
+**Verification receipt:** `python scripts/dev/clear_website_cache.py --restart` completed. `npm run test:portfolio-reel` passed 4/4, `npm run test:layout-fit -- --grep portfolio` passed 13/13, and `npm run test:interactive-layout -- --grep portfolio` passed 3/3. Chrome and Brave live screenshots plus geometry facts were captured under `output/playwright/portfolio-exact-handoff-v1/`.
 
-**Decided by:** GL reported the symptom; Codex traced and fixed the actual asset contract.
+**Decided by:** GL supplied the exact handoff folder and rejected the derived implementation; Codex retranslated and verified against the live Frappe route.
 
 ---
 
@@ -124,9 +154,9 @@ No dog logo, gold bar, gold rule, navy/berry/promo accent treatment, or marketin
 
 **Reasoning:** The reference code is useful because it defines the photo-placement design. It is not useful as a second production implementation. The first Codex translation mixed that reference with older local portfolio assumptions, including filters/modal language and stale cleanup claims. That confused ownership: the designer needs to critique the production translation, while Codex needs to keep the Frappe route, assets, tests, and cache behavior correct.
 
-**Implementation:** Production source is `www/portfolio.html`, `www/portfolio.py`, `public/css/lt-portfolio-reel.css`, `public/js/lt-portfolio-reel.js`, optimized images under `public/images/portfolio/optimized/`, and `scripts/verify/portfolio_reel.spec.js`. The current page uses the strict edge-anchor reel math from the designer reply: left/right photos are allowed to bleed past the viewport, center photos are sparse statement moments, mobile resets to a full-width natural-ratio stream, and captions remain hidden by default so text does not cover the gallery photos. Category query links still filter the photo payload server-side, but there is no visible filter bar or lightbox modal in the current translation.
+**Implementation:** Production source is `www/portfolio.html`, `www/portfolio.py`, `public/css/lt-portfolio-reel.css`, `public/js/lt-portfolio-reel.js`, optimized images under `public/images/portfolio/optimized/`, and `scripts/verify/portfolio_reel.spec.js`. The current page uses the strict edge-anchor reel math from the designer reply: left/right photos are allowed to bleed past the viewport, center photos are sparse statement moments, mobile resets to a full-width natural-ratio stream, and captions are visible below the photos without covering the gallery photos. Category query links still filter the photo payload server-side, but there is no visible filter bar or lightbox modal in the current translation.
 
-**Verification receipt:** Latest focused checks passed on the running local Frappe site: `/portfolio` returned `200`; page CSS, JS, and optimized image assets returned `200`; `npm run test:portfolio-reel` passed 4/4, including the edge-anchored side/scale rhythm, hidden-by-default captions, mobile stream, and scroll-driven reveal guard; `npm run test:layout-fit -- --grep portfolio` passed 13/13; and `npm run test:interactive-layout -- --grep portfolio` passed 3/3. Chrome and Brave screenshot evidence was captured under `output/playwright/portfolio-strict-v5/`.
+**Verification receipt:** Latest focused checks passed on the running local Frappe site: `/portfolio` returned `200`; page CSS, JS, and optimized image assets returned `200`; `npm run test:portfolio-reel` passed 4/4, including the edge-anchored side/scale/aspect rhythm, visible below-photo captions, mobile stream, and scroll-driven reveal guard; `npm run test:layout-fit -- --grep portfolio` passed 13/13; and `npm run test:interactive-layout -- --grep portfolio` passed 3/3. Chrome and Brave screenshot evidence was captured under `output/playwright/portfolio-exact-handoff-v1/`.
 
 **Decided by:** GL clarified that Claude/designer code should be used for photo placement and design critique; Codex translated and documented the Frappe-owned implementation.
 

@@ -31,31 +31,35 @@ tags:
 Use this recipe when `/portfolio` or another proof-gallery route is being redesigned from a visual reference or prototype.
 
 First read `external-design-reference-translation`. The portfolio reel is a
-special case of that broader rule: the designer reference is the visual contract,
-while the kept production source is the Frappe implementation.
+special case of that broader rule: the external reference is useful for the
+floating image-collage behavior, but the kept production source is the Frappe
+implementation and the current LT site shell. Do not copy prototype fonts,
+custom cursors, fake headers/footers, or full-page styling into production.
 
 ## Pattern
 
-1. Preserve the approved photo-placement behavior before preserving older local UI.
-2. Do not reintroduce cards, boxed grids, visible captions over photos, or modal/filter UI unless GL explicitly asks for them.
-3. Translate into Frappe-owned files: route template, route controller, metadata, CSS, JS, optimized images, and verifiers.
-4. Keep the real site header/footer from Frappe/LT partials. Ignore designer header/footer code unless the task specifically asks for shell changes.
-5. Preserve real installed-work aspect ratios through image width/height metadata.
-6. Use optimized derivatives for the public reel, but do not crop proof photos to satisfy layout convenience.
-7. Mobile should become a full-width natural-ratio stream, not a tiny desktop reel squeezed into a phone viewport.
-8. Keep the reference folder in `research/` while external critique is active. Delete it only after GL approves cleanup.
-9. Verify browser behavior, not just source shape. A row of images is a failed translation even if the assets load.
+1. Preserve the approved floating photo-collage behavior before preserving older local grid/card UI.
+2. Keep the hero compact and SEO-useful. Current default H1 is `What We Do`; supporting copy should say Utah balloon decor plainly.
+3. Do not reintroduce the full prototype hero, prototype font imports, custom cursor, fake shell, marketing-page decoration, boxed grids, captions that cover photos, or modal/filter UI unless GL explicitly asks for them.
+4. Translate into Frappe-owned files: route template, route controller, metadata, CSS, JS, optimized images, and verifiers.
+5. Keep the real site header/footer and global LT typography from Frappe/LT partials.
+6. Display real installed-work photos with `object-fit: contain`; keep frame and image backgrounds matched to the page background so mismatched aspect ratios do not read as gray boxes.
+7. Use optimized derivatives for the public reel, but do not crop proof photos to satisfy layout convenience.
+8. Mobile should become a full-width natural-ratio stream with stacked captions, not a tiny desktop reel squeezed into a phone viewport.
+9. Keep the reference folder in `research/` while external critique is active. Delete it only after GL approves cleanup.
+10. Verify browser behavior, not just source shape. A row of images is a failed translation even if the assets load.
 
 ## Locked Reel Contract
 
-For the approved LT portfolio reel, the left/right edge-anchor math is part of the design contract. Do not clamp left/right photos into safe containers and do not center them just to avoid intentional viewport bleed.
+For the approved LT portfolio reel, large left/right photos can sit close to or slightly past the viewport edge, and center photos should appear frequently enough to balance the field. Do not shrink the desktop photos back into small safe cards. Do not make the page feel like the full external prototype; use only the collage behavior.
 
 Use the approved side/scale rhythm in photo-array order:
 
-- sides: `left, right, left, center, left, right, left, right, center, right, left, right, left, right, left, center, left, right, left, right`
-- scales: `0.62, 0.74, 0.58, 0.92, 0.60, 0.64, 0.74, 0.58, 0.96, 0.55, 0.62, 0.76, 0.60, 0.62, 0.72, 0.94, 0.56, 0.60, 0.62, 0.78`
+- sides: `left, right, center, left, right, center, left, right, center, left, right, center, left, right, center, left, right, center, left, right`
+- scales: `0.70, 0.84, 1.02, 0.66, 0.72, 0.98, 0.78, 0.66, 1.00, 0.72, 0.84, 0.96, 0.70, 0.74, 0.98, 0.66, 0.70, 0.96, 0.72, 0.86`
+- aspect sequence: `4:5, 3:2, 16:10, 2:3, 3:4, 16:9, 5:4, 3:4, 16:10, 4:5, 3:2, 16:9, 4:5, 3:4, 16:10, 2:3, 3:4, 16:9, 4:5, 3:2`
 
-The durable lesson from the failed translation is that "protecting" photos from edge clipping can destroy this design. Frappe's normal header/footer stay native, but the portfolio reel itself is intentionally full-bleed inside the Frappe page shell.
+The durable lesson from the failed translation is that over-protecting photos from edge placement makes them look small and sad, while copying the whole external page makes the route feel off-brand. Keep the native LT shell and compact intro; let the image collage carry the page.
 
 ## Verification Checklist
 
@@ -70,10 +74,10 @@ npm run test:interactive-layout -- --grep portfolio
 
 Also inspect desktop and mobile screenshots before launch claims, especially after photo-order or image-quality changes. For this reel, include Chrome and Brave captures when the failure report or user feedback mentions cross-browser differences.
 
-The latest verified use passed `npm run test:portfolio-reel` (4/4), `npm run test:layout-fit -- --grep portfolio` (13/13), and `npm run test:interactive-layout -- --grep portfolio` (3/3). Fresh Chrome/Brave screenshots and metrics were captured under `output/playwright/portfolio-strict-v5/`. The route-specific verifier now checks the approved staggered side/scale rhythm, hidden-by-default captions, mobile full-width stream, and scroll-driven reveal so a static row cannot pass as a successful translation.
+The latest verified use passed `npm run test:portfolio-reel` (4/4), `npm run test:layout-fit -- --grep portfolio` (13/13), and `npm run test:interactive-layout -- --grep portfolio` (3/3). Fresh screenshots and metrics were captured under `output/playwright/portfolio-what-we-do-v6/`. The route-specific verifier now checks the compact `What We Do` hero, no portfolio-specific Google font imports, no custom cursor artifacts, matched page/frame/image backgrounds, larger desktop left/right/center rhythm, optimized whole-photo assets, mobile full-width stream, and scroll-driven layout so a static row cannot pass as a successful translation.
 
 ## LT Receipt
 
-On 2026-05-06, `/portfolio` moved from a cropped card grid toward a proof-first floating photo reel. The kept production source is `apps/locally_twisted/locally_twisted/www/portfolio.html`, `apps/locally_twisted/locally_twisted/www/portfolio.py`, `apps/locally_twisted/locally_twisted/public/css/lt-portfolio-reel.css`, `apps/locally_twisted/locally_twisted/public/js/lt-portfolio-reel.js`, optimized images under `apps/locally_twisted/locally_twisted/public/images/portfolio/optimized/`, and `scripts/verify/portfolio_reel.spec.js`.
+On 2026-05-06, `/portfolio` moved from a cropped card grid toward a proof-first floating photo reel, then GL narrowed the standard: keep the collage of imagery, but do not carry over the full Claude/designer page styling. The kept production source is `apps/locally_twisted/locally_twisted/www/portfolio.html`, `apps/locally_twisted/locally_twisted/www/portfolio.py`, `apps/locally_twisted/locally_twisted/public/css/lt-portfolio-reel.css`, `apps/locally_twisted/locally_twisted/public/js/lt-portfolio-reel.js`, optimized images under `apps/locally_twisted/locally_twisted/public/images/portfolio/optimized/`, and `scripts/verify/portfolio_reel.spec.js`.
 
-The active reference source is still under `research/portfolio-design-cla/` and `research/design_handoff_locally_twisted_portfolio/` while GL sends the implementation back for designer critique. Do not claim it was deleted, and do not commit it as production source unless GL explicitly changes its status.
+The active reference source remains useful as critique input for collage behavior only. The fake reference header/footer, prototype typography, custom cursor, oversized hero, and placeholder photo feed are not production source unless GL explicitly changes their status.
