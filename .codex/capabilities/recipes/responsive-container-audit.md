@@ -1,0 +1,116 @@
+---
+id: responsive-container-audit
+name: Responsive Container Audit
+schema_version: 2.0
+level: recipe
+maturity: candidate
+scope: Locally Twisted ERPNext/Frappe public-site responsive layout, containment, and stateful UI checks
+currently_true: yes
+verification_level: 2
+last_verified: 2026-05-05
+evidence_quality: direct
+successful_uses: 1
+failed_uses: 0
+regressions: 0
+depends_on: []
+used_by:
+  - lt-brand-style-guide-consolidation
+tags:
+  - Locally Twisted
+  - responsive layout
+  - container integrity
+  - Playwright
+  - accessibility
+  - Frappe
+  - Webshop
+---
+
+# Responsive Container Audit
+
+Use this recipe when changing any public page layout, container, card grid, nav, drawer, modal, form, product selector, cart/checkout surface, or shared CSS that can affect how content fits at different widths.
+
+## When To Use
+
+- Text, controls, images, chips, cards, menus, or form fields appear tight against a container edge.
+- A component changes layout across mobile, tablet, desktop, or near a breakpoint.
+- Header/nav/drawer/mega-menu behavior changes.
+- Product, category, cart, checkout, contact, portfolio, FAQ, policy, or homepage containers change.
+- A fix passed one mobile width but may still fail at 320px, 390px, 414px, tablet, or desktop breakpoint edges.
+
+## Core Rule
+
+Every visible container is at risk until verified. Do not assume a page is stable because the default mobile and desktop screenshots look acceptable.
+
+The current LT gate uses:
+
+- `scripts/verify/layout_helpers.js` for shared route/viewport/layout audit logic.
+- `scripts/verify/layout_fit.spec.js` for passive public route fit.
+- `scripts/verify/interactive_layout.spec.js` for stateful UI: header breakpoints, desktop mega panels, mobile drawer accordions, shop filters/product selectors, contact conditionals, portfolio modal, and reduced-motion homepage checks.
+- `scripts/verify/checkout_experience.spec.js` for checkout state behavior and preview consistency.
+- `npm run test:public-verify` for the aggregate public verification chain.
+
+## Required Viewport Families
+
+Use the helper viewport set before claiming a broad visual fix:
+
+- 320px small phone pressure check.
+- 360px Android.
+- 375px iPhone baseline.
+- 390px modern iPhone.
+- 414px large phone.
+- 768px tablet portrait.
+- 820px tablet modern.
+- 991px just below the legacy desktop breakpoint.
+- 992px legacy breakpoint edge.
+- 1024px tablet landscape.
+- 1199px just below the active desktop nav breakpoint.
+- 1200px active desktop nav breakpoint.
+- 1366px common laptop.
+
+Add route-specific widths when the changed surface has its own breakpoint.
+
+## What The Audit Flags
+
+- Document-level horizontal overflow.
+- Visible elements extending outside the viewport unless inside an intentional clipping container.
+- Direct text overflow inside its own box.
+- Optional container-internal overflow for known risk areas.
+- Small interactive targets where selectors are supplied.
+- Stateful failures after drawers, accordions, mega panels, modals, filters, or option controls are opened.
+
+## Implementation Pattern
+
+1. Read `_resources/STYLE-GUIDE.md`, especially the layout and verification sections.
+2. Identify all route families touched by the change.
+3. Add or update route-specific checks in `interactive_layout.spec.js` when the problem only appears after interaction.
+4. Keep helper changes in `layout_helpers.js`; do not duplicate viewport lists or overflow logic in multiple specs.
+5. Fix the actual container math: grid tracks, `min-width: 0`, `box-sizing`, padding, wrapping, max-width, image aspect ratios, and stable control dimensions.
+6. Avoid body-wide `overflow-x: hidden` as the primary fix.
+7. Run cache clear after Frappe/Jinja/CSS changes.
+8. Verify with the commands below.
+9. Update the workstream/queue/decision/lesson docs if the fix changes the project standard.
+
+## Verification Commands
+
+```powershell
+python scripts/dev/clear_website_cache.py
+npm run test:layout-fit
+npm run test:interactive-layout
+npm run test:checkout-experience
+python scripts/verify/smoke_shop.py
+npm run test:public-verify
+```
+
+Use `npm run test:public-verify` when closing a broad public-site visual change. It runs nav IA, passive layout fit, interactive layout fit, checkout experience, and shop smoke with quieter Playwright output.
+
+## Triage Notes
+
+- If only one route fails, inspect that route's rendered DOM and container hierarchy before changing shared CSS.
+- If several pages fail at the same width, suspect shared chrome, section wrappers, global grid rules, or Webshop defaults.
+- If a carousel/track reports overflow but the document does not scroll and an ancestor clips it intentionally, tune the allowlist rather than hiding real failures.
+- If native checkboxes/radios are small by design but the label is the actual target, audit the wrapper target instead.
+- If a verifier fails because the business contract changed, update the verifier to the new source-of-truth behavior and preserve coverage for the old risk in the correct lane.
+
+## LT Receipt
+
+The first use on 2026-05-05 expanded `npm run test:layout-fit` from a narrow route/viewport pass to 260 checks across 20 public routes and 13 viewport families. It also added `npm run test:interactive-layout` with 39 checks for header breakpoint behavior, desktop mega panels, mobile drawer accordions, shop/product controls, contact conditionals, portfolio modal, and reduced-motion homepage states. `python scripts/verify/smoke_shop.py` was corrected to respect the quote-required custom install lane while still verifying retail inline variant selection and cart writes.

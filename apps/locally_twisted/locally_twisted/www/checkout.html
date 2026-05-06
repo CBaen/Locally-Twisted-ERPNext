@@ -35,6 +35,49 @@
                 <input type="email" id="co-email" name="email" class="lt-checkout__input" required autocomplete="email">
             </div>
 
+            <fieldset class="lt-checkout__fieldset">
+                <legend>Pickup or delivery</legend>
+                <div class="lt-checkout__choice-row" role="radiogroup" aria-label="Pickup or delivery">
+                    <label class="lt-checkout__choice">
+                        <input type="radio" name="fulfillment_method" value="delivery" checked>
+                        <span>Delivery</span>
+                    </label>
+                    <label class="lt-checkout__choice">
+                        <input type="radio" name="fulfillment_method" value="pickup">
+                        <span>Pickup</span>
+                    </label>
+                </div>
+                <p class="lt-checkout__hint">
+                    Pickup and delivery windows are requested until Locally Twisted confirms timing.
+                </p>
+            </fieldset>
+
+            <div id="co-pickup-fields" hidden>
+                <div class="lt-checkout__field">
+                    <label for="co-pickup-location">Pickup location <span class="lt-checkout__required" aria-hidden="true">*</span></label>
+                    <select id="co-pickup-location" name="pickup_location" class="lt-checkout__input">
+                        <option value="">Choose a pickup location</option>
+                        <option value="West Jordan">West Jordan</option>
+                        <option value="Riverdale">Riverdale</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="lt-checkout__row">
+                <div class="lt-checkout__field">
+                    <label for="co-date">Requested date <span class="lt-checkout__required" aria-hidden="true">*</span></label>
+                    <input type="date" id="co-date" name="requested_fulfillment_date" class="lt-checkout__input" required>
+                </div>
+                <div class="lt-checkout__field">
+                    <label for="co-window-start">Requested 30-minute window <span class="lt-checkout__required" aria-hidden="true">*</span></label>
+                    <select id="co-window-start" name="requested_window_start" class="lt-checkout__input" required>
+                        <option value="">Choose a window</option>
+                    </select>
+                    <input type="hidden" id="co-window-end" name="requested_window_end" value="">
+                </div>
+            </div>
+
+            <div id="co-delivery-fields">
             <div class="lt-checkout__field">
                 <label for="co-addr1">Delivery address <span class="lt-checkout__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></label>
                 <input type="text" id="co-addr1" name="address_line1" class="lt-checkout__input" required autocomplete="address-line1" placeholder="Street address">
@@ -57,6 +100,7 @@
                     <label for="co-zip">ZIP <span class="lt-checkout__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></label>
                     <input type="text" id="co-zip" name="postal_code" class="lt-checkout__input" required autocomplete="postal-code" inputmode="numeric">
                 </div>
+            </div>
             </div>
 
             <div class="lt-checkout__field">
@@ -103,11 +147,19 @@
                 </div>
                 <div class="lt-checkout__totals-row">
                     <span>Subtotal</span>
-                    <span>${{ "%.2f"|format(line_total) }}</span>
+                    <span id="lt-checkout-summary-subtotal">${{ "%.2f"|format(line_total) }}</span>
+                </div>
+                <div class="lt-checkout__totals-row" id="lt-checkout-summary-delivery-row">
+                    <span>Delivery</span>
+                    <span id="lt-checkout-summary-delivery">Choose pickup or delivery</span>
+                </div>
+                <div class="lt-checkout__totals-row" id="lt-checkout-summary-tax-row">
+                    <span>Estimated tax</span>
+                    <span id="lt-checkout-summary-tax">Calculated after location</span>
                 </div>
                 <div class="lt-checkout__totals-row lt-checkout__totals-row--grand">
                     <span>Total</span>
-                    <span>${{ "%.2f"|format(line_total) }}</span>
+                    <span id="lt-checkout-summary-grand">${{ "%.2f"|format(line_total) }}</span>
                 </div>
                 {% else %}
                 {# Cart mode: JS hydrates from localStorage on page load. #}
@@ -124,6 +176,14 @@
                 <div class="lt-checkout__totals-row" id="lt-checkout-summary-subtotal-row" hidden>
                     <span>Subtotal</span>
                     <span id="lt-checkout-summary-subtotal">$0</span>
+                </div>
+                <div class="lt-checkout__totals-row" id="lt-checkout-summary-delivery-row" hidden>
+                    <span>Delivery</span>
+                    <span id="lt-checkout-summary-delivery">Choose pickup or delivery</span>
+                </div>
+                <div class="lt-checkout__totals-row" id="lt-checkout-summary-tax-row" hidden>
+                    <span>Estimated tax</span>
+                    <span id="lt-checkout-summary-tax">Calculated after location</span>
                 </div>
                 <div class="lt-checkout__totals-row lt-checkout__totals-row--grand" id="lt-checkout-summary-grand-row" hidden>
                     <span>Total</span>
@@ -157,8 +217,21 @@
     var sumLines    = document.getElementById('lt-checkout-summary-lines');
     var sumSubRow   = document.getElementById('lt-checkout-summary-subtotal-row');
     var sumSub      = document.getElementById('lt-checkout-summary-subtotal');
+    var sumDeliveryRow = document.getElementById('lt-checkout-summary-delivery-row');
+    var sumDelivery = document.getElementById('lt-checkout-summary-delivery');
+    var sumTaxRow = document.getElementById('lt-checkout-summary-tax-row');
+    var sumTax = document.getElementById('lt-checkout-summary-tax');
     var sumGrandRow = document.getElementById('lt-checkout-summary-grand-row');
     var sumGrand    = document.getElementById('lt-checkout-summary-grand');
+    var deliveryFields = document.getElementById('co-delivery-fields');
+    var pickupFields = document.getElementById('co-pickup-fields');
+    var pickupLocation = document.getElementById('co-pickup-location');
+    var windowStart = document.getElementById('co-window-start');
+    var windowEnd = document.getElementById('co-window-end');
+    var dateInput = document.getElementById('co-date');
+    var currentSubtotal = {% if mode == "buy_now" %}{{ "%.2f"|format(line_total) }}{% else %}0{% endif %};
+    var currentQuoteRequired = false;
+    var totalsRequestSerial = 0;
 
     function setFeedback(state, msg) {
         feedback.classList.remove('is-success', 'is-error');
@@ -168,7 +241,50 @@
 
     function fmtMoney(n) {
         if (typeof n !== 'number' || !isFinite(n)) return '$0';
-        return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+        return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function addMinutes(time, minutes) {
+        if (!time || time.indexOf(':') === -1) return '';
+        var parts = time.split(':');
+        var total = parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10) + minutes;
+        var h = Math.floor(total / 60);
+        var m = total % 60;
+        return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+    }
+
+    function populateWindows() {
+        if (!windowStart) return;
+        for (var h = 8; h <= 20; h++) {
+            for (var m = 0; m < 60; m += 30) {
+                if (h === 20 && m > 30) continue;
+                var value = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+                var end = addMinutes(value, 30);
+                var label = value.replace(/^0/, '') + ' - ' + end.replace(/^0/, '');
+                windowStart.appendChild(el('option', { value: value, text: label }));
+            }
+        }
+    }
+
+    function selectedFulfillment() {
+        var checked = form.querySelector('input[name="fulfillment_method"]:checked');
+        return checked ? checked.value : 'delivery';
+    }
+
+    function syncFulfillmentFields() {
+        var method = selectedFulfillment();
+        var isPickup = method === 'pickup';
+        if (pickupFields) pickupFields.hidden = !isPickup;
+        if (deliveryFields) deliveryFields.hidden = isPickup;
+        currentQuoteRequired = false;
+        if (sumDelivery) sumDelivery.textContent = isPickup ? '$0.00' : 'Calculated after ZIP';
+        if (sumTax) sumTax.textContent = 'Calculated after location';
+        if (sumGrand) sumGrand.textContent = fmtMoney(currentSubtotal || 0);
+        updateTotals();
+    }
+
+    function syncWindowEnd() {
+        if (windowEnd && windowStart) windowEnd.value = addMinutes(windowStart.value, 30);
     }
 
     function optionSummary(server) {
@@ -211,6 +327,8 @@
         sumEmpty.hidden    = which !== 'empty';
         sumError.hidden    = which !== 'error';
         sumSubRow.hidden   = which !== 'populated';
+        if (sumDeliveryRow) sumDeliveryRow.hidden = which !== 'populated';
+        if (sumTaxRow) sumTaxRow.hidden = which !== 'populated';
         sumGrandRow.hidden = which !== 'populated';
     }
 
@@ -323,12 +441,66 @@
             sumLines.appendChild(el('div', { 'class': 'lt-checkout__line' }, [img, body, amount]));
         }
 
+        currentSubtotal = subtotal;
         sumSub.textContent = fmtMoney(subtotal);
         sumGrand.textContent = fmtMoney(subtotal);
         showSummaryState('populated');
 
         if (itemsJsonInput) itemsJsonInput.value = JSON.stringify(itemsForSubmit);
         enableSubmit();
+        updateTotals();
+    }
+
+    function hasTotalsInputs() {
+        var fd = new FormData(form);
+        var method = selectedFulfillment();
+        if (mode === 'cart') {
+            var itemsJson = (fd.get('items_json') || '').toString();
+            if (!itemsJson || itemsJson === '[]') return false;
+        }
+        if (!dateInput || !dateInput.value || !windowStart || !windowStart.value) return false;
+        if (method === 'pickup') return !!(pickupLocation && pickupLocation.value);
+        return !!((fd.get('city') || '').toString().trim() && (fd.get('postal_code') || '').toString().trim());
+    }
+
+    function updateTotals() {
+        var requestId = ++totalsRequestSerial;
+        syncWindowEnd();
+        if (!hasTotalsInputs()) return;
+
+        var fd = new FormData(form);
+        fetch('/api/method/locally_twisted.www.checkout.preview_checkout_totals', {
+            method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            body: fd,
+            credentials: 'same-origin'
+        })
+        .then(function (resp) { return resp.json(); })
+        .then(function (json) {
+            if (requestId !== totalsRequestSerial) return;
+            var msg = json && json.message;
+            if (!msg) return;
+            if (msg.status === 'quote_required') {
+                currentQuoteRequired = true;
+                if (sumDelivery) sumDelivery.textContent = 'Quote needed';
+                if (sumTax) sumTax.textContent = 'Reviewed with quote';
+                if (sumGrand) sumGrand.textContent = fmtMoney(msg.subtotal || currentSubtotal || 0);
+                submit.textContent = 'Send delivery quote request';
+                setFeedback('error', msg.message || 'Delivery quote needed for this location.');
+                return;
+            }
+            if (!msg.ok) return;
+            currentQuoteRequired = false;
+            if (sumDelivery) sumDelivery.textContent = fmtMoney(msg.delivery_fee || 0);
+            if (sumTax) sumTax.textContent = fmtMoney(msg.tax_amount || 0);
+            if (sumGrand) sumGrand.textContent = fmtMoney(msg.total || currentSubtotal || 0);
+            submit.textContent = 'Continue to payment';
+            setFeedback(null, '');
+        })
+        .catch(function (err) {
+            if (requestId !== totalsRequestSerial) return;
+            if (window.console && console.error) console.error('Checkout totals preview failed', err);
+        });
     }
 
     /* SUBMIT handler — works for both modes. */
@@ -344,9 +516,23 @@
         var city = (fd.get('city') || '').toString().trim();
         var state = (fd.get('state') || '').toString().trim();
         var zip = (fd.get('postal_code') || '').toString().trim();
+        var method = selectedFulfillment();
+        var pickup = (fd.get('pickup_location') || '').toString().trim();
+        var requestedDate = (fd.get('requested_fulfillment_date') || '').toString().trim();
+        var requestedStart = (fd.get('requested_window_start') || '').toString().trim();
+        syncWindowEnd();
+        fd = new FormData(form);
 
-        if (!name || !email || !phone || !addr1 || !city || !state || !zip) {
+        if (!name || !email || !phone || !requestedDate || !requestedStart) {
             setFeedback('error', 'Please fill in all required fields.');
+            return;
+        }
+        if (method === 'pickup' && !pickup) {
+            setFeedback('error', 'Please choose a pickup location.');
+            return;
+        }
+        if (method === 'delivery' && (!addr1 || !city || !state || !zip)) {
+            setFeedback('error', 'Please give us a complete delivery address.');
             return;
         }
 
@@ -360,7 +546,7 @@
 
         submit.disabled = true;
         var originalLabel = submit.textContent;
-        submit.textContent = 'Creating your order...';
+        submit.textContent = currentQuoteRequired ? 'Sending quote request...' : 'Creating your order...';
 
         fetch('/api/method/locally_twisted.www.checkout.submit_guest_order', {
             method: 'POST',
@@ -372,8 +558,15 @@
         .then(function (result) {
             submit.disabled = false;
             submit.textContent = originalLabel;
-            if (result.status >= 200 && result.status < 300 && result.body && result.body.message && result.body.message.ok) {
-                var msg = result.body.message;
+            var msg = result.body && result.body.message;
+            if (result.status >= 200 && result.status < 300 && msg && msg.status === 'quote_required') {
+                setFeedback('success',
+                    "Thanks. We've received your cart and will follow up about delivery for this location.");
+                submit.textContent = 'Quote request sent';
+                submit.disabled = true;
+                return;
+            }
+            if (result.status >= 200 && result.status < 300 && msg && msg.ok) {
                 /* DON'T clear LT_CART here. The customer is about to be
                  * redirected to Stripe; if they back out without paying,
                  * we want their cart intact so they can retry. The cart
@@ -406,10 +599,31 @@
         });
     });
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', hydrateCartSummary);
-    } else {
+    form.querySelectorAll('input[name="fulfillment_method"]').forEach(function (radio) {
+        radio.addEventListener('change', syncFulfillmentFields);
+    });
+    [pickupLocation, windowStart, dateInput].forEach(function (node) {
+        if (node) node.addEventListener('change', updateTotals);
+    });
+    ['co-city', 'co-zip'].forEach(function (id) {
+        var node = document.getElementById(id);
+        if (node) {
+            node.addEventListener('change', updateTotals);
+            node.addEventListener('blur', updateTotals);
+        }
+    });
+
+    function initCheckout() {
+        populateWindows();
+        syncFulfillmentFields();
         hydrateCartSummary();
+        if (mode !== 'cart') updateTotals();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCheckout);
+    } else {
+        initCheckout();
     }
 })();
 </script>

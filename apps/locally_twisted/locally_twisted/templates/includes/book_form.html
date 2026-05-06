@@ -232,6 +232,19 @@ every deploy.
     border: 1px solid #B31B34;
     color: #7d1224;
 }
+.lt-book__prefill {
+    background-color: rgba(14, 34, 64, 0.06);
+    border: 1px solid rgba(14, 34, 64, 0.14);
+    border-radius: 0.25rem;
+    color: rgba(10, 10, 11, 0.76);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    padding: 0.85rem 1rem;
+}
+.lt-book__prefill strong {
+    color: #0A0A0B;
+}
 
 /* Confirmation modal */
 .lt-book__modal {
@@ -310,6 +323,13 @@ every deploy.
         <form id="lt-book-form" novalidate enctype="multipart/form-data">
             <fieldset>
                 <legend class="visually-hidden">Event Booking Request</legend>
+                {% if requested_item_code %}
+                <input type="hidden" name="lt_requested_item_code" value="{{ requested_item_code }}">
+                <input type="hidden" name="lt_requested_item_name" value="{{ requested_item_name }}">
+                <div class="lt-book__prefill">
+                    <strong>Quote request:</strong> {{ requested_item_name }}
+                </div>
+                {% endif %}
 
                 {# Row 1: Name + Phone #}
                 <div class="lt-book__row lt-book__row--two">

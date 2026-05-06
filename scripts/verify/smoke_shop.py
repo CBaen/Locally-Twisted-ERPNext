@@ -1,8 +1,8 @@
 """End-to-end smoke test for the LT shop surfaces.
 
-Validates the catalog port, shop hub, public nav, and variant selectors via a
-real Chromium browser. This should pass on every deploy and fail loudly on
-customer-facing regressions.
+Validates the catalog port, shop hub, public nav, quote-required product lane,
+and retail variant selectors via a real Chromium browser. This should pass on
+every deploy and fail loudly on customer-facing regressions.
 
 Coverage:
   1. Homepage navbar exposes the current authority-first primary links and /shop CTA.
@@ -10,13 +10,14 @@ Coverage:
   3. /shop-by-category redirects to /shop instead of rendering the retired
      category-card index.
   4. Each child group's category page returns 200.
-  5. Product detail (variant template) renders inline chips/select for every
-     attribute, chips are radio/single-select, and partial selections can
+  5. Quote-required custom products route to /contact instead of cart checkout.
+  6. Retail product detail (variant template) renders inline chips/select for
+     every attribute, chips are radio/single-select, and partial selections can
      disable invalid later options.
-  6. Product detail (single SKU) renders price + add-to-cart button.
-  7. No "Item Code" jargon appears anywhere customer-facing.
-  8. No "/Nos" UoM display anywhere.
-  9. Mobile drawer exposes the same primary links and /contact quote CTA.
+  7. Product detail (single SKU) renders price + add-to-cart button.
+  8. No "Item Code" jargon appears anywhere customer-facing.
+  9. No "/Nos" UoM display anywhere.
+  10. Mobile drawer exposes the same primary links and /contact quote CTA.
 
 Run:
   PYTHONIOENCODING=utf-8 PYTHONUTF8=1 python scripts/verify/smoke_shop.py
@@ -56,12 +57,15 @@ EXPECTED_CATEGORIES = [
     "Deliveries",
     "Seasonal & Specialty",
 ]
-PRODUCT_VARIANT_URL = f"{BASE}/shop-items/garlands/baby-shower-garland"
-PRODUCT_VARIANT_EXPECTED_ATTRS = ["Garland Length", "latex colors"]
-PRODUCT_PROGRESSIVE_URL = f"{BASE}/shop-items/arches/classic-arch"
-PRODUCT_CART_VARIANT_URL = f"{BASE}/shop-items/arches/6-color-rainbow-arch"
-PRODUCT_CART_VARIANT_EXPECTED_CODE = "6-color-rainbow-arch-20F"
-PRODUCT_SINGLE_URL = f"{BASE}/shop-items/arches/easter-arch"
+QUOTE_REQUIRED_URLS = [
+    (f"{BASE}/shop-items/garlands/baby-shower-garland", "Baby Shower Garland", "baby-shower-garland"),
+    (f"{BASE}/shop-items/arches/classic-arch", "Classic Arch", "classic-arch"),
+]
+PRODUCT_VARIANT_URL = f"{BASE}/shop-items/bouquets/unicorn-bouquet"
+PRODUCT_VARIANT_EXPECTED_ATTRS = ["Bouquet Size", "Add Foil Number"]
+PRODUCT_PROGRESSIVE_URL = PRODUCT_VARIANT_URL
+PRODUCT_CART_VARIANT_URL = PRODUCT_VARIANT_URL
+PRODUCT_SINGLE_URL = f"{BASE}/shop-items/bouquets/mothers-day-bouquet"
 
 
 class SmokeFail(Exception):
@@ -170,14 +174,43 @@ def check_category_pages(page):
         print(f"  OK /{cat_name}")
 
 
+def check_quote_required_product_pages(page):
+    print("-> Quote-required custom product pages")
+    for url, expected_title, item_code in QUOTE_REQUIRED_URLS:
+        page.goto(url, wait_until="networkidle", timeout=15000)
+        title = page.locator(".lt-product__title").inner_text()
+        assert_(expected_title in title, f"Product title wrong for {url}: {title!r}")
+
+        body = page.content()
+        assert_(f"Item Code: {item_code}" not in body, f"{url} still leaks 'Item Code:' jargon")
+        assert_("/ Nos" not in body and " / Nos" not in body, f"{url} still leaks '/Nos' UoM")
+        assert_("Shop by Category" not in body, f"{url} breadcrumb still shows retired 'Shop by Category' label")
+        assert_("/shop-by-category" not in body, f"{url} breadcrumb still links to retired /shop-by-category route")
+        assert_(
+            page.locator(".lt-product__configure").count() == 0,
+            f"{url} should not expose cart variant selectors in the quote-required lane",
+        )
+        assert_(
+            page.locator("#lt-add-to-cart-variant").count() == 0,
+            f"{url} should not expose add-to-cart in the quote-required lane",
+        )
+        quote = page.locator(".lt-product__cta--primary", has_text="Request a Quote")
+        assert_(quote.count() >= 1, f"{url} should expose Request a Quote CTA")
+        assert_(
+            quote.first.get_attribute("href") == f"/contact?item={item_code}",
+            f"{url} quote CTA should prefill /contact for {item_code}",
+        )
+    print("  OK custom install products stay quote-required and clean")
+
+
 def check_product_variant_page(page):
     print(f"-> {PRODUCT_VARIANT_URL}")
     page.goto(PRODUCT_VARIANT_URL, wait_until="networkidle", timeout=15000)
     title = page.locator(".lt-product__title").inner_text()
-    assert_("Baby Shower Garland" in title, f"Product title wrong: {title!r}")
+    assert_("Unicorn Bouquet" in title, f"Product title wrong: {title!r}")
 
     body = page.content()
-    assert_("Item Code: baby-shower-garland" not in body, "Product detail still leaks 'Item Code:' jargon")
+    assert_("Item Code: unicorn-bouquet" not in body, "Product detail still leaks 'Item Code:' jargon")
     assert_("/ Nos" not in body and " / Nos" not in body, "Product detail still leaks '/Nos' UoM")
     assert_("Shop by Category" not in body, "Product breadcrumb still shows retired 'Shop by Category' label")
     assert_("/shop-by-category" not in body, "Product breadcrumb still links to retired /shop-by-category route")
@@ -193,7 +226,7 @@ def check_product_variant_page(page):
     radio_count = page.locator(".lt-product__configure input[type='radio']").count()
     assert_(checkbox_count == 0, "Variant chips must not use checkbox inputs")
     assert_(radio_count > 0, "Variant chips should use radio inputs for single-choice options")
-    print("  OK inline variants render, jargon stripped, CTA disabled until selection")
+    print("  OK retail inline variants render, jargon stripped, CTA disabled until selection")
 
 
 def check_progressive_variant_option_disabling(page):
@@ -217,14 +250,12 @@ def check_progressive_variant_option_disabling(page):
                 ) {
                     window.__ltProgressiveCalls.push(selected);
                     window.setTimeout(() => {
+                        const valid = Object.assign({}, selected, {
+                            'Add Foil Number': ['1']
+                        });
                         options.callback && options.callback({
                             message: {
-                                valid_options_for_attributes: {
-                                    'Arch Size': ['20ft'],
-                                    'latex colors': ['black'],
-                                    'Design': ['Layered'],
-                                    'LED Lights': ['Do Not Add LED Lights']
-                                },
+                                valid_options_for_attributes: valid,
                                 exact_match: [],
                                 filtered_items_count: 1,
                                 filtered_items: []
@@ -239,12 +270,12 @@ def check_progressive_variant_option_disabling(page):
     )
 
     try:
-        page.locator(".lt-product__attr[data-attribute-name='Arch Size'] .lt-product__chip", has_text="20ft").click()
+        page.locator(".lt-product__attr[data-attribute-name='Bouquet Size'] .lt-product__chip").first.click()
         page.wait_for_function(
             """() => {
-                const black = document.querySelector("select[data-attribute-name='latex colors'] option[value='black']");
-                const white = document.querySelector("select[data-attribute-name='latex colors'] option[value='White']");
-                return black && white && !black.disabled && white.disabled;
+                const one = document.querySelector("select[data-attribute-name='Add Foil Number'] option[value='1']");
+                const two = document.querySelector("select[data-attribute-name='Add Foil Number'] option[value='2']");
+                return one && two && !one.disabled && two.disabled;
             }""",
             timeout=10000,
         )
@@ -260,7 +291,8 @@ def check_variant_add_to_cart_ui(page):
     print(f"-> {PRODUCT_CART_VARIANT_URL} variant add-to-cart")
     page.goto(PRODUCT_CART_VARIANT_URL, wait_until="networkidle", timeout=15000)
     page.evaluate("window.LT_CART && window.LT_CART.clear && window.LT_CART.clear()")
-    page.locator(".lt-product__chip").first.click()
+    page.locator(".lt-product__attr[data-attribute-name='Bouquet Size'] .lt-product__chip").first.click()
+    page.select_option("select[data-attribute-name='Add Foil Number']", index=1)
     btn = page.locator("#lt-add-to-cart-variant")
     btn.wait_for(state="visible", timeout=10000)
     page.wait_for_function(
@@ -271,19 +303,16 @@ def check_variant_add_to_cart_ui(page):
         timeout=10000,
     )
     variant_code = btn.get_attribute("data-item-code")
-    assert_(
-        variant_code == PRODUCT_CART_VARIANT_EXPECTED_CODE,
-        f"Expected configured variant {PRODUCT_CART_VARIANT_EXPECTED_CODE}, got {variant_code!r}",
-    )
+    assert_(variant_code and variant_code.startswith("unicorn-bouquet-"), f"Unexpected variant code {variant_code!r}")
     btn.click()
     page.wait_for_timeout(500)
     cart = page.evaluate("window.LT_CART && window.LT_CART.getCart()")
     codes = [line["item_code"] for line in (cart or {}).get("items", [])]
     assert_(
-        PRODUCT_CART_VARIANT_EXPECTED_CODE in codes,
+        variant_code in codes,
         f"Configured variant was not written to LT_CART (codes: {codes})",
     )
-    print(f"  OK option selection adds purchasable variant {PRODUCT_CART_VARIANT_EXPECTED_CODE}")
+    print(f"  OK option selection adds purchasable variant {variant_code}")
 
 
 def check_product_single_page(page):
@@ -293,8 +322,9 @@ def check_product_single_page(page):
         print(f"  skipped (HTTP {resp.status})")
         return
     body = page.content()
-    assert_("Item Code: easter-arch" not in body, "Single SKU still leaks Item Code jargon")
-    print("  OK single SKU page clean")
+    assert_("Item Code: mothers-day-bouquet" not in body, "Single SKU still leaks Item Code jargon")
+    assert_(page.locator(".btn-add-to-cart").count() >= 1, "Retail single-SKU page missing add-to-cart button")
+    print("  OK retail single SKU page clean with add-to-cart")
 
 
 def check_mobile_drawer(p):
@@ -356,6 +386,7 @@ def main() -> int:
             check_shop_page,
             check_shop_by_category_redirect,
             check_category_pages,
+            check_quote_required_product_pages,
             check_product_variant_page,
             check_progressive_variant_option_disabling,
             check_variant_add_to_cart_ui,

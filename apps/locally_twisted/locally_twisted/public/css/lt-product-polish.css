@@ -212,6 +212,41 @@
   border-top: 1px solid rgba(184, 154, 91, 0.42);
 }
 
+.lt-product__fulfillment {
+  margin-top: 1.25rem;
+  padding: 1rem 1.1rem;
+  background: rgba(217, 199, 179, 0.26);
+  border: 1px solid rgba(14, 34, 64, 0.14);
+  border-radius: 3px;
+}
+
+.lt-product__fulfillment-heading {
+  margin: 0 0 0.35rem;
+  font-family: var(--lt-font-body);
+  font-size: 0.92rem;
+  font-weight: 900;
+  color: var(--lt-polish-navy);
+  line-height: 1.25;
+}
+
+.lt-product__fulfillment p {
+  margin: 0;
+  font-family: var(--lt-font-body);
+  color: var(--lt-polish-ink);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.lt-product__fulfillment-link {
+  display: inline-flex;
+  margin-top: 0.75rem;
+  color: var(--lt-polish-navy);
+  font-family: var(--lt-font-body);
+  font-weight: 900;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
 .lt-product__brand-description,
 .lt-product__description,
 .lt-product__details-body {

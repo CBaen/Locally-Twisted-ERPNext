@@ -23,6 +23,8 @@ import frappe
 from frappe import _
 from frappe.utils import flt
 
+from locally_twisted.commerce_rules import checkout_lane_for_item_group
+
 
 MAX_CART_LINES = 50
 PRICE_LIST = "Standard Selling"
@@ -86,6 +88,7 @@ def _resolve_cart_item_for_sale(item_code):
             "website_image",
             "route",
             "short_description",
+            "item_group",
         ],
         as_dict=True,
     )
@@ -107,6 +110,8 @@ def _resolve_cart_item_for_sale(item_code):
         "website_image": item.get("image") or website_item.get("website_image") or None,
         "route": website_item.get("route") or ("shop/" + website_item["item_code"]),
         "short_description": website_item.get("short_description") or None,
+        "item_group": website_item.get("item_group"),
+        "checkout_lane": checkout_lane_for_item_group(website_item.get("item_group")),
         "price_list_rate": flt(rate),
         "available": True,
         "is_variant": bool(item.get("variant_of")),

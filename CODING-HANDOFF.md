@@ -1,6 +1,6 @@
 # Locally Twisted - Coding Handoff
 
-Last updated: 2026-05-05 by Codex after mega-menu takeover, product/page containment repair, and rendered-site verification.
+Last updated: 2026-05-05 by Codex after responsive container audit gate, mega-menu takeover, product/page containment repair, and rendered-site verification.
 
 ## State Of Reality
 
@@ -57,13 +57,15 @@ Verified or updated during the 2026-05-01 storefront correction and contact clea
 - Civic Celebration is now the V1 visual direction across the public site. See `_resources/STYLE-GUIDE.md`, `workstreams/brand-audience-style-reset.md`, and `workstreams/civic-sitewide-redesign.md`. The pass covers shared header/footer/theme CSS, homepage, contact/book form, BTFP, portfolio, FAQ, policies, accessibility, thank-you/payment success, shop, category pages, product detail, cart, and checkout. The generated Wasatch/city hero asset is `apps/locally_twisted/locally_twisted/public/images/home/hero-wasatch-city-20260503.png`.
 - `_resources/STYLE-GUIDE.md` version 4.2 is the only current visual authority. The old `_resources/design-guide/`, stale shop/spec comparison docs, and generic icon-comparison resources were deleted on 2026-05-05 because they conflicted with Civic Celebration + Slate Blue/Berry + Brand Direction and kept reintroducing light-blue/blush, old-font, and weak-icon choices.
 - Rendered site repair pass completed 2026-05-05: mega-menu assets are served through hooks, desktop click pins mega menus open, mobile drawer opens accordions, product/shop pages use `lt-product-polish.css`, broad route containment uses `lt-page-containment.css`, and the homepage/portfolio/newsletter mobile clipping issues were fixed.
+- Responsive container integrity is now a standing launch gate, not a one-off fix. `scripts/verify/layout_helpers.js` centralizes public routes, breakpoint-edge viewports, and overflow/text-fit checks. `npm run test:layout-fit` now covers 260 passive route/viewport checks across 20 routes and 13 viewport families; `npm run test:interactive-layout` covers 39 stateful checks for header breakpoint behavior, desktop mega panels, mobile drawer accordions, shop/product controls, contact conditionals, portfolio modal, and reduced-motion homepage states.
+- `npm run test:public-verify` runs nav IA, the passive layout spec, the interactive layout spec, checkout experience, and shop smoke with quieter Playwright output. Use it before closing broad public-site visual/layout work.
 - The active theme/app source has been cleaned away from old font and UI-pastel references. Do not reintroduce `DM Serif`, `Raleway`, `Montserrat`, `Playfair`, `lt-blush`, `lt-soft-blue`, old `soft-blue`/`light-blue`, UI `blush`, or unresolved `--lt-primary` in customer-facing source.
 - A 16-asset custom brass-line icon suite now lives at `apps/locally_twisted/locally_twisted/public/icons/brand/`. Balloon-specific surfaces should use balloon-form icons first: pair, cluster, arch, organic garland, column, and bouquet.
 - The contact page no longer depends on an external map iframe for the main service-area proof; it uses a controlled service-area panel.
 - Per-product variant correctness passed on 2026-05-02. `scripts/verify/catalog_variant_contract.py` compared normalized Odoo `valid_variants` to live ERPNext `Item Variant Attribute` rows: 53 products checked, 10,578 expected variants, 10,578 live variants, 4 single-SKU products.
-- Product option UX P0 pass completed 2026-05-02. `item_configure.html` no longer runs per-attribute `frappe.get_all` lookups from Jinja; it uses `get_variant_attribute_options`, a project Jinja helper backed by Webshop's `get_attributes_and_values`. Partial selections now consume `valid_options_for_attributes` and disable invalid later options. Variant chips are verified as radio/single-select, not checkbox inputs.
+- Product option UX P0 pass completed 2026-05-02 and was reconciled with the current commerce lane on 2026-05-05. `item_configure.html` no longer runs per-attribute `frappe.get_all` lookups from Jinja; it uses `get_variant_attribute_options`, a project Jinja helper backed by Webshop's `get_attributes_and_values`. Quote-required custom installs such as Arches and Garlands intentionally show a `/contact?item=...` quote CTA instead of cart selectors. Retail variants such as `unicorn-bouquet` still render inline single-select chips/selects, consume `valid_options_for_attributes`, and write selected variant codes to `LT_CART`.
 - Generated Webshop asset-map drift was corrected in the running ERPNext stack on 2026-05-02. The container already has Yarn Classic at `/home/frappe/.nvm/versions/node/v20.19.2/bin/yarn`, but non-interactive `docker exec` does not include that directory in `PATH`. Use `export PATH=/home/frappe/.nvm/versions/node/v20.19.2/bin:$PATH` before `bench build --app webshop`; no package install was needed. Important Docker nuance: the frontend/nginx container must be the final Webshop build target because `sites/assets/webshop` links to each container's own app-public files while `assets.json` is shared. Building only in the backend writes asset-map names nginx cannot serve. After rebuilding from the frontend container and clearing `assets_json` plus website cache, follow-up console checks returned 200s with 0 console errors/warnings.
-- `scripts/verify/layout_fit.spec.js` is the committed Playwright Test gate. Latest verified command: `npm run test:layout-fit` -> 80 passed across 20 routes and 4 viewport families, including `/checkout` and `/thank-you`.
+- `scripts/verify/layout_fit.spec.js` is the committed passive Playwright Test gate. Latest verified command: `npm run test:layout-fit` -> 260 passed across 20 routes and 13 viewport families, including `/checkout` and `/thank-you`. `scripts/verify/interactive_layout.spec.js` is the stateful layout gate; latest verified command: `npm run test:interactive-layout` -> 39 passed.
 - Catalog variant counts match the normalized Odoo source: the raw scrape has duplicate-case latex color values, but `_resources/odoo-live/value_normalize_map.json` collapses them and the normalized expected variant counts match ERPNext.
 - Website cache was cleared after Jinja/CSS changes; `hooks.py` CSS cache-bust was bumped to the current session version.
 
@@ -100,6 +102,7 @@ Next safest slices:
 - Review skipped/unmatched catalog media with GL/Jeff: the automated pass only mapped photos whose Odoo labels clearly matched product options. Refresh `output/catalog-media-review.json` with the detailed dry-run command before assigning anything. Do not assign generic gallery images by guess.
 - Keep product navigation product-backed: use `scripts/verify/nav_ia.py` before touching header/footer IA.
 - Continue brand review from `workstreams/brand-style-guide-consolidation.md`. The emergency menu/container/product repair is verified; remaining visual work is GL/Jeff review of photos, proof hierarchy, exact review/trust counts, and category/product imagery.
+- Keep the responsive container gate green for any new public UI. Add route-specific interactive checks when a change introduces a new drawer, modal, accordion, filter, product control, or breakpoint state.
 - Reconcile product/category media without reviving the retired `/shop-by-category` card index; use `/shop` and `/shop-items/<group>` as the customer-facing browse surfaces.
 - Complete the blog channel and two ported posts.
 - Review the Design Studio V2 research package only as future scope. The event-builder spike lives under `research/design-studio-v2/event-builder-spike/`; both PlayCanvas and Babylon passed, with PlayCanvas recommended for a hidden-route spike if GL approves.
@@ -163,10 +166,14 @@ python scripts/setup/sync_variant_media.py --dry-run --include-details --report 
 python scripts/setup/sync_variant_media.py
 ```
 
-Layout fit regression check:
+Public layout and interaction regression checks:
 
 ```powershell
 npm run test:layout-fit
+npm run test:interactive-layout
+npm run test:checkout-experience
+python scripts/verify/smoke_shop.py
+npm run test:public-verify
 ```
 
 Contact form logic regression checks:
@@ -190,4 +197,4 @@ python scripts/verify/checkout_lead_conversion_contract.py
 python scripts/verify/backend_schema_inventory.py
 ```
 
-Before declaring visible work done, capture and inspect desktop and mobile screenshots. Use the repo's existing Playwright scripts where possible; the layout-fit gate is necessary but does not replace screenshot review.
+Before declaring visible work done, run the passive and interactive layout gates, then capture and inspect desktop and mobile screenshots. Use the repo's existing Playwright scripts where possible; automated fit gates are necessary but do not replace screenshot review.

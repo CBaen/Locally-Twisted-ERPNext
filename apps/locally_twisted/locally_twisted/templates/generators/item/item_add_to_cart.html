@@ -14,6 +14,7 @@
 
 {% set cart_settings = shopping_cart.cart_settings %}
 {% set product_info = shopping_cart.product_info %}
+{% set lt_checkout_lane = checkout_lane_for_item_group(doc.item_group) %}
 
 <div class="lt-product__cart" data-variant-item-code="{{ item_code }}">
 
@@ -60,7 +61,12 @@
 
     {# Add to Cart — teal earned CTA. #}
     <div class="lt-product__actions">
-        {% if product_info.price and (cart_settings.allow_items_not_in_stock or product_info.get("in_stock")) %}
+        {% if lt_checkout_lane == "quote_required" %}
+            <a href="/contact?item={{ doc.item_code }}"
+               class="lt-product__cta lt-product__cta--primary">
+                {{ _("Request a Quote") }}
+            </a>
+        {% elif product_info.price and (cart_settings.allow_items_not_in_stock or product_info.get("in_stock")) %}
             <button data-item-code="{{ item_code }}"
                     class="lt-product__cta lt-product__cta--primary btn-add-to-cart">
                 {{ _("Add to Cart") if cart_settings.enable_checkout else _("Add to Quote") }}

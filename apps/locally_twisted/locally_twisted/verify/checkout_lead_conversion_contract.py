@@ -11,7 +11,7 @@ import time
 import frappe
 
 
-ITEM_CODE = "easter-arch"
+ITEM_CODE = "mothers-day-bouquet"
 
 
 class ContractFail(Exception):
@@ -135,6 +135,10 @@ def _submit_checkout(email: str, name: str):
             state="UT",
             postal_code="84088",
             country="United States",
+            fulfillment_method="delivery",
+            requested_fulfillment_date="2026-06-01",
+            requested_window_start="13:00",
+            requested_window_end="13:30",
             order_notes="Checkout Lead conversion contract.",
             marketing_opt_in=0,
         )

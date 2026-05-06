@@ -54,6 +54,20 @@
         {% include "templates/generators/item/item_add_to_cart.html" %}
     {% endif %}
 
+    {% set lt_fulfillment_panel = public_fulfillment_panel(doc.item_group) %}
+    <section class="lt-product__fulfillment" aria-labelledby="lt-product-fulfillment-heading">
+        <h2 id="lt-product-fulfillment-heading" class="lt-product__fulfillment-heading">
+            {{ _(lt_fulfillment_panel.heading) }}
+        </h2>
+        <p>{{ _(lt_fulfillment_panel.body) }}</p>
+        {% if lt_fulfillment_panel.lane == "quote_required" %}
+            <a href="{{ lt_fulfillment_panel.cta_href }}?item={{ doc.item_code }}"
+               class="lt-product__fulfillment-link">
+                {{ _(lt_fulfillment_panel.cta_label) }}
+            </a>
+        {% endif %}
+    </section>
+
     {# Two-field discipline (GL directive 2026-04-30):
        lt_brand_description = Quiet Confidence voice copy (the "why")
        lt_product_details   = plain-language factual specs (the "what")

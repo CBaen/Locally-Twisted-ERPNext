@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    var DESKTOP_QUERY = "(min-width: 992px)";
+    var DESKTOP_QUERY = "(min-width: 1200px)";
     var desktopMedia = window.matchMedia ? window.matchMedia(DESKTOP_QUERY) : null;
     var closeDelay = 180;
     var timers = {};
@@ -100,6 +100,12 @@
                     scheduleClose(entry);
                 }
             });
+
+            entry.panel.addEventListener("click", function (event) {
+                if (event.target.closest("a[href]")) {
+                    closeAll();
+                }
+            });
         });
 
         document.addEventListener("click", function (event) {
@@ -126,6 +132,10 @@
                 closeAll();
             });
         }
+
+        window.addEventListener("scroll", function () {
+            closeAll();
+        }, { passive: true });
     }
 
     function initDrawer() {

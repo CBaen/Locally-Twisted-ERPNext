@@ -21,6 +21,7 @@ sitemap = 1
 def get_context(context):
     service_param = (frappe.form_dict.get("service") or "").strip().lower()
     intent_param = (frappe.form_dict.get("intent") or "").strip().lower()
+    item_param = (frappe.form_dict.get("item") or "").strip()
 
     preselected_services = []
     if service_param == "btfp":
@@ -29,6 +30,10 @@ def get_context(context):
         preselected_services = ["Balloon Twisting"]
     elif service_param in {"face-painting", "face_painting", "painting"}:
         preselected_services = ["Face Painting"]
+
+    requested_item = _requested_item(item_param)
+    if requested_item and "Balloon Decor" not in preselected_services:
+        preselected_services.append("Balloon Decor")
 
     context.title = "Free Event Quote - Locally Twisted"
     context.metatags = {
@@ -49,6 +54,8 @@ def get_context(context):
     context.service_options = SERVICE_OPTIONS
     context.package_item_options = PACKAGE_ITEM_OPTIONS
     context.preselected_services = preselected_services
+    context.requested_item_code = requested_item.get("item_code") if requested_item else ""
+    context.requested_item_name = requested_item.get("web_item_name") if requested_item else ""
     context.contact_intent = intent_param
     context.contact_intro_title = (
         "Tell us about the event"
@@ -63,3 +70,14 @@ def get_context(context):
     context.max_photos = MAX_PHOTOS
     context.max_photo_mb = MAX_PHOTO_BYTES // (1024 * 1024)
     return context
+
+
+def _requested_item(item_code):
+    if not item_code:
+        return None
+    return frappe.db.get_value(
+        "Website Item",
+        {"item_code": item_code, "published": 1},
+        ["item_code", "web_item_name"],
+        as_dict=True,
+    )

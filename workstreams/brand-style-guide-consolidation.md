@@ -4,7 +4,7 @@ Last updated: 2026-05-05 by Codex.
 
 ## Status
 
-Source-of-truth consolidation is complete. The first rendered-site repair pass is complete and verified against the running Frappe site. Final photo/trust-count/content taste approval is still a GL/Jeff review item.
+Source-of-truth consolidation is complete. The rendered-site repair pass and responsive container gate are complete and verified against the running Frappe site. Final photo/trust-count/content taste approval is still a GL/Jeff review item.
 
 This lane exists so the next design agents do not reopen the retired light-blue/blush design system or the weak generic icon direction while they update the actual pages.
 
@@ -37,6 +37,8 @@ The approved target is:
 - Added `/event-balloons` and `/process` as lightweight authority pages so the current primary nav has no dead links.
 - Reinstated `navbar_context.py` for menu data and kept `website_context.py` for shop/sidebar defaults.
 - Fixed mobile hero spacing, reviews carousel clipping, dark-section heading contrast, portfolio chip wrapping, footer newsletter mobile stacking, product/shop panel spacing, and shop-card mobile density.
+- Added the standing responsive container audit gate so future visual work checks breakpoint edges and open UI states, not only one mobile and one desktop screenshot.
+- Corrected shop smoke coverage to match the current commerce lane: quote-required custom installs route to `/contact`, and retail variants still prove inline option selection and cart writes.
 
 ## Icon Suite
 
@@ -66,6 +68,7 @@ The first four-icon pass was not enough. Balloon pages should use balloon-form i
 - Review the generated post-fix screenshots with GL/Jeff for taste, photos, and proof hierarchy; layout/container regressions are currently green.
 - Replace or edit photos toward the Image #3 quality bar: crisp, premium, high-contrast, real scale, civic/Utah/corporate/school/private-event authority.
 - Verify exact review/trust claims before launch copy is treated as final.
+- Keep `workstreams/responsive-container-integrity.md` and `.codex/capabilities/recipes/responsive-container-audit.md` current when new public containers or stateful UI are added.
 - Keep catalog color names such as product `Blush` intact. The retired `blush` rule applies to UI styling and design references, not supplier/product data.
 - Do not use deleted `_resources/design-guide/` screenshots, TSX files, or the old shop/spec comparison docs as current taste calibration.
 - Do not remove or simplify the restored mega-menu unless GL explicitly changes the navigation decision again.
@@ -74,8 +77,11 @@ The first four-icon pass was not enough. Balloon pages should use balloon-form i
 
 - `python scripts/dev/clear_website_cache.py` passed.
 - `python scripts/verify/nav_ia.py` passed.
-- `python scripts/verify/smoke_shop.py` passed with the current mega-menu contract.
-- `npm run test:layout-fit` passed 80/80 with `/checkout` and `/thank-you` included.
+- `python scripts/verify/smoke_shop.py` passed with the current mega-menu, quote-required custom install, and retail variant contracts.
+- `npm run test:layout-fit` passed 260/260 across 20 public routes and 13 viewport families.
+- `npm run test:interactive-layout` passed 39/39 across header breakpoints, desktop mega panels, mobile drawer accordions, shop/product controls, contact conditionals, portfolio modal, and reduced-motion homepage behavior.
+- `npm run test:checkout-experience` passed 1/1.
+- `npm run test:public-verify` passed with quieter Playwright output.
 - Post-fix screenshot/interaction report passed with no failures: `output/playwright/full-site-fix-20260505-post/post-fix-report.json`.
 - All 16 SVGs parsed as valid XML.
 - `python -B -m py_compile` passed for the LT app Python files.
@@ -85,6 +91,7 @@ The first four-icon pass was not enough. Balloon pages should use balloon-form i
 ## Files To Read Next
 
 - `_resources/STYLE-GUIDE.md`
+- `workstreams/responsive-container-integrity.md`
 - `workstreams/brand-audience-style-reset.md`
 - `workstreams/website-launch.md`
 - `locally-twisted-decisions.md`

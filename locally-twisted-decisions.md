@@ -8,6 +8,20 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-05 - Responsive container integrity is a launch gate
+
+**Decision:** Public-site visual work must pass breakpoint-edge and stateful-container checks before it is called complete. This includes text, images, buttons, nav, drawers, mega panels, cards, forms, product controls, modals, carousels, cart, checkout, policy pages, and Webshop route wrappers. The approved gate is `npm run test:layout-fit`, `npm run test:interactive-layout`, and, for broad public-site changes, `npm run test:public-verify`.
+
+**Reasoning:** GL's complaint was not only that one menu looked bad. The failure mode was systemic: content pushed against or outside containers, mid-breakpoints were untested, product pages could keep old behavior, and stateful UI could look fine while closed but fail once opened. This is a design requirement and accessibility risk, not a cosmetic preference.
+
+**Implementation:** Added `scripts/verify/layout_helpers.js` as the shared route/viewport/layout audit helper. Expanded `scripts/verify/layout_fit.spec.js` to 20 public routes across 13 viewport families for 260 passive checks. Added `scripts/verify/interactive_layout.spec.js` with 39 checks for desktop/mobile nav breakpoints, desktop mega panels, mobile drawer accordions, shop/product controls, contact conditionals, portfolio modal state, and reduced-motion homepage behavior. Added package scripts `test:interactive-layout`, `test:checkout-experience`, `test:shop-smoke`, and `test:public-verify`. Corrected `smoke_shop.py` so quote-required custom installs are verified as quote-led while retail variants still prove inline option selection and cart writes.
+
+**Verification receipt:** `node --check` passed for the new/rewritten Playwright specs, `python -B -m py_compile scripts\verify\smoke_shop.py` passed, `python scripts/verify/commerce_rules_contract.py` passed, `python scripts/verify/smoke_shop.py` passed, `npm run test:interactive-layout` passed 39/39, `npm run test:layout-fit` passed 260/260, `npm run test:checkout-experience` passed 1/1, and `npm run test:public-verify` passed with quieter Playwright output.
+
+**Decided by:** GL made breakpoint/container integrity a hard design requirement; Codex implemented the standing verification gate.
+
+---
+
 ## 2026-05-05 - Premium two-level mega menu is active and must be verified as served
 
 **Decision:** The public header uses the deliberate two-level premium mega-menu architecture: full-height Locally Twisted logo image treatment, desktop event/product mega panels, accessible mobile drawer accordions, top proof row, and `/contact` as the quote path. The menu assets are live only when `hooks.py` serves `lt-mega-menu.css`, `lt-page-containment.css`, `lt-product-polish.css`, and `lt-megamenu.js`.
@@ -16,7 +30,7 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 **Implementation:** Restored the mega-menu context and template, loaded the new CSS/JS assets through `web_include_css`/`web_include_js`, made clicked desktop mega menus pin open until outside click/Escape/another menu, kept `/contact` as quote conversion, added page containment and product/shop polish layers, fixed mobile hero/reviews/portfolio/newsletter containment, and expanded the layout-fit route list to include `/checkout` and `/thank-you`.
 
-**Verification receipt:** Served asset checks found the new CSS/JS in the homepage HTML and returned HTTP 200 for each asset. `python scripts/verify/nav_ia.py`, `python scripts/verify/smoke_shop.py`, and `npm run test:layout-fit` passed; layout-fit now covers 80 route/viewport checks. A Playwright post-fix screenshot/interaction pass covered 13 routes across 320, 375, and 1366 widths, plus open desktop event/product mega menus and the mobile drawer, with no reported failures. Screenshots and `post-fix-report.json` are under `output/playwright/full-site-fix-20260505-post/`.
+**Verification receipt:** Served asset checks found the new CSS/JS in the homepage HTML and returned HTTP 200 for each asset. `python scripts/verify/nav_ia.py`, `python scripts/verify/smoke_shop.py`, and `npm run test:layout-fit` passed; the later same-day responsive gate expanded layout-fit to 260 route/viewport checks. A Playwright post-fix screenshot/interaction pass covered 13 routes across 320, 375, and 1366 widths, plus open desktop event/product mega menus and the mobile drawer, with no reported failures. Screenshots and `post-fix-report.json` are under `output/playwright/full-site-fix-20260505-post/`.
 
 **Decided by:** GL explicitly chose the deliberate mega-menu restore; Codex implemented and verified the rendered Frappe site.
 
@@ -314,9 +328,11 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 **Decision:** Guest cart and checkout use the actual sellable `Item.item_code` for pricing and Sales Order lines. For variants that do not have their own Website Item row, cart display resolves the parent Website Item for customer-facing name, image, and route. Variant template codes are not directly purchasable from `/shop`.
 
+**2026-05-05 update:** This cart contract still applies to checkout-enabled retail variants. Custom install groups such as Arches and Garlands are now quote-required under `commerce_rules.py`, so old 6-color-arch direct-checkout examples are historical evidence, not current retail smoke targets.
+
 **Reasoning:** A shop/media audit found variant templates were visible but not purchase-trustworthy: `/shop` card buttons could add unpriced template codes, while configured variant codes such as `6-color-rainbow-arch-20F` existed and had prices but were rejected by the cart API because they lacked Website Item rows. The correct boundary is: variants are what ERPNext sells; parent Website Items are what the website uses to display the product page.
 
-**Verification:** `python scripts/verify/cart_checkout_contract.py` passes. `python scripts/verify/smoke_shop.py` now includes a real option-selection add-to-cart check for `6-color-rainbow-arch-20F`. Exact route checks confirmed `/checkout?item=6-color-rainbow-arch-20F&qty=1` returns 200 and `/checkout?item=6-color-rainbow-arch&qty=1` is blocked.
+**Verification:** `python scripts/verify/cart_checkout_contract.py` passes. At the time, `python scripts/verify/smoke_shop.py` included a real option-selection add-to-cart check for `6-color-rainbow-arch-20F`. Current smoke coverage has moved that retail add-to-cart check to `unicorn-bouquet` and verifies Arches/Garlands as quote-required.
 
 **Decided by:** Codex implementation after 2026-05-02 shop/media audit; aligned with launch goal that customers must not be able to believe an unreconciled purchase path.
 

@@ -49,13 +49,15 @@ For this nav/content lane, stay inside these rules:
 
 - Route sweep returned 200 for `/`, `/event-balloons`, `/portfolio`, `/process`, `/contact`, `/shop`, `/faq`, `/balloon-twisting-and-face-painting`, `/privacy`, `/terms-of-service`, `/refund-policy`, `/accessibility`, `/cart`, `/checkout`, `/payment-success`, `/thank-you`, `/shop-items/arches`, and `/shop-items/garlands/baby-shower-garland`.
 - `python scripts/verify/nav_ia.py` passed after the authority-first nav update.
-- `npm run test:layout-fit` passed 80/80 after the header/product/page containment repair.
+- `npm run test:layout-fit` initially passed 80/80 after the header/product/page containment repair; this is superseded by the 260/260 responsive follow-up below.
 - `python scripts/verify/contact_service_logic.py --base-url http://localhost:8081` passed.
 - `python scripts/verify/contact_prefill.py --base-url http://localhost:8081` passed.
 - `python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --shape-only --skip-newsletter` passed.
 - `python scripts/verify/cart_checkout_contract.py` passed.
 - `python scripts/verify/smoke_shop.py` passed after updating the verifier to the restored mega-menu contract.
-- `npm run test:layout-fit` passed 80/80 after adding `/checkout` and `/thank-you`.
+- `npm run test:layout-fit` initially passed 80/80 after adding `/checkout` and `/thank-you`; this is superseded by the 260/260 responsive follow-up below.
+- Responsive follow-up expanded the passive layout gate to 260/260 and added `npm run test:interactive-layout` at 39/39. Future menu/content work should use the responsive-container workstream instead of relying on the old 80-check gate.
+- `python scripts/verify/smoke_shop.py` now verifies quote-required custom install product pages separately from retail variant add-to-cart pages.
 - Served asset check found `lt-mega-menu.css`, `lt-page-containment.css`, `lt-product-polish.css`, and `lt-megamenu.js?v=20260505-mega-4` in the running page.
 - Post-fix Playwright screenshot/interaction pass saved to `output/playwright/full-site-fix-20260505-post/` and reported no failures across 13 routes at 320, 375, and 1366 widths, plus desktop event/product mega menus and the mobile drawer.
 
@@ -112,5 +114,13 @@ Lane: Nav/chrome, containment, and product/shop visual repair.
 Files: `hooks.py`, `navbar.html`, `navbar_context.py`, `website_context.py`, `lt-megamenu.js`, `lt-mega-menu.css`, `lt-page-containment.css`, `lt-product-polish.css`, `lt-theme.css`, `home.*`, `portfolio.py`, product/shop templates, `layout_fit.spec.js`, `nav_ia.py`, `smoke_shop.py`, and related docs.
 Intent: Take over after the prior agent stopped, restore the deliberate premium mega-menu, fix served assets, repair cramped/overflowing mobile sections, and bring product/category/shop pages onto the current style guide.
 Conflicts: Resolved for this lane. Future agents must not replace the mega-menu with a simple header without a fresh GL decision.
-Verification: `python scripts/verify/nav_ia.py` passed; `python scripts/verify/smoke_shop.py` passed; `npm run test:layout-fit` passed 80/80; served asset checks returned 200; post-fix Playwright screenshot/interaction pass reported no failures.
+Verification: `python scripts/verify/nav_ia.py` passed; `python scripts/verify/smoke_shop.py` passed; initial `npm run test:layout-fit` passed 80/80 and was later expanded to 260/260; served asset checks returned 200; post-fix Playwright screenshot/interaction pass reported no failures.
 Status: Complete for takeover. Remaining visual work is curated imagery/trust-count review, not broken container/menu repair.
+
+### 2026-05-05 - Codex responsive container closeout
+Lane: Responsive container integrity and public verification gates.
+Files: `layout_helpers.js`, `layout_fit.spec.js`, `interactive_layout.spec.js`, `smoke_shop.py`, `package.json`, `_resources/STYLE-GUIDE.md`, `.codex/capabilities/recipes/responsive-container-audit.md`, and docs.
+Intent: Make breakpoint-edge and stateful container fit a standing gate for menu/content/product/page work.
+Conflicts: Does not reopen the restored mega-menu decision. The product smoke update follows the current commerce rule: custom installs quote, retail variants cart.
+Verification: `npm run test:layout-fit` passed 260/260; `npm run test:interactive-layout` passed 39/39; `npm run test:checkout-experience` passed 1/1; `python scripts/verify/smoke_shop.py` passed; `npm run test:public-verify` passed with quieter Playwright output.
+Status: Complete. Use `npm run test:public-verify` for broad public-site closeout.

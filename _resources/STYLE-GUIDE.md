@@ -39,7 +39,8 @@ so the rebrand has an implementation map, not only a mood target.
 8. **Locally Twisted is the brand.** Jeff can be founder/context; public copy should make the company and team own the promise.
 9. **Every route has a treatment.** Home, shop, product, cart, checkout, contact, portfolio, BTFP, FAQ, policy, payment, header, footer, and drawer surfaces are all covered below.
 10. **ERPNext first.** Work with Frappe/Webshop templates, hooks, and route rules.
-11. **Verify visible work.** Do not claim a route, layout, or visual state works without checking it.
+11. **Containers are launch-critical.** Text, images, controls, menus, cards, forms, chips, drawers, and modals must stay inside their containers at breakpoint edges and in open/expanded states.
+12. **Verify visible work.** Do not claim a route, layout, or visual state works without checking it.
 
 ---
 
@@ -81,7 +82,7 @@ Practical translation:
 - Avoid `head_html` CSS injection.
 - Avoid `!important` chains. The known exception is the contained `.product-code` hide for Webshop's compiled product-card JS.
 - After Jinja, CSS, or Web Page edits, run `python scripts/dev/clear_website_cache.py`.
-- Before declaring visual work done, run the layout-fit gate and inspect desktop/mobile screenshots.
+- Before declaring visual work done, run the layout-fit and interactive-layout gates and inspect desktop/mobile screenshots.
 
 ---
 
@@ -101,7 +102,7 @@ component is added, append it here before a broad implementation swarm begins.
 | Home | `/`, `www/home.html`, `www/home.py` | Highest brand authority page | Civic/Utah hero image, Cormorant hero type, Image #3 proof bar icons, reviews as support, large recent-work photos, custom decor discovery, client proof, closing CTA. |
 | Shop landing | `/shop`, `www/shop.html` | Ready-to-order retail lane | Still premium but more practical. Keep filters, product cards, and add-to-cart clear; use restrained surfaces so product color carries the page. |
 | Category / item group listing | `/shop-items/<group>`, Item Group generator | Product discovery | Use editorial shop header, left/sidebar filters on desktop, drawer filters on mobile, stable grid cards, visible count/sort state, no pastel catalog takeover. |
-| Product detail/configure | Webshop item overrides under `templates/generators/item/` | Conversion and product clarity | Product image first, Cormorant product name, Lato specs/options, clear price and stock, rectangular cart buttons, accessible option chips and selects. |
+| Product detail/configure | Webshop item overrides under `templates/generators/item/` | Conversion and product clarity | Product image first, Cormorant product name, Lato specs/options, clear price and stock. Quote-required custom installs use a clear `/contact?item=...` CTA; retail variants use accessible option chips/selects and rectangular cart buttons. |
 | Cart | `/cart` -> `www/lt_cart.html` | Review before checkout | Quiet transactional page with order-summary hierarchy, stable quantity controls, clear empty/error/loading states, and contact fallback. |
 | Checkout | `/checkout`, `www/checkout.html` | Payment trust | Most restrained surface: secure, plain, readable, minimal ornament. Keep form labels clear, required states visible, summary grounded, and trust language factual. |
 | Payment success | `/payment-success`, `www/payment_success.html` | Transitional utility page | Use the same typography and colors as thank-you; avoid inline one-off font/color styles in future cleanup. |
@@ -273,8 +274,11 @@ Use 8px increments.
 - Mobile-first CSS only; base styles target 375px.
 - Use `min-width` media queries.
 - Breakpoints: 768px tablet, 992px desktop, 1200px wide.
+- Verification widths include 320, 360, 375, 390, 414, 768, 820, 991, 992, 1024, 1199, 1200, and 1366px. These catch tight containers that normal phone/desktop screenshots miss.
 - Stable fixed-format UI needs stable dimensions: boards, grids, icon buttons, counters, swatches, and form controls should not shift when states change.
-- Text must not overflow or overlap on 320px, 375px, tablet, or desktop widths.
+- Text must not overflow, overlap, or sit against container edges on 320px, 375px, tablet, desktop, or breakpoint-edge widths.
+- Containers need real internal breathing room. If content touches the border, fix padding, grid tracks, wrapping, min-width, max-width, or state dimensions.
+- Stateful UI must be checked while open: desktop mega panels, mobile drawer accordions, portfolio modal, contact conditionals, shop filters, and product option controls.
 - Avoid body-wide `overflow-x: hidden` as a substitute for fixing layout.
 
 ### Balanced Collections
@@ -636,16 +640,23 @@ Before claiming visual/frontend work is complete:
 
 1. Clear website cache after Jinja/CSS/Web Page edits.
 2. Run relevant route or form checks.
-3. Run `npm run test:layout-fit` for customer-site layout fit.
-4. Capture and inspect desktop and mobile screenshots.
-5. Verify the actual route or user flow, not a proxy page.
+3. Run `npm run test:layout-fit` for passive customer-site layout fit.
+4. Run `npm run test:interactive-layout` for open menus, drawers, modals, forms, filters, product controls, and breakpoint behavior.
+5. Run `npm run test:checkout-experience` when checkout layout or fulfillment preview behavior is in scope.
+6. Run `npm run test:public-verify` before closing a broad public-site visual change.
+7. Capture and inspect desktop and mobile screenshots.
+8. Verify the actual route or user flow, not a proxy page.
 
 Useful commands:
 
 ```powershell
 python scripts/dev/clear_website_cache.py
 npm run test:layout-fit
+npm run test:interactive-layout
+npm run test:checkout-experience
+npm run test:public-verify
 python scripts/verify/nav_ia.py
+python scripts/verify/smoke_shop.py
 python scripts/verify/contact_service_logic.py --base-url http://localhost:8081
 python scripts/verify/contact_prefill.py --base-url http://localhost:8081
 ```

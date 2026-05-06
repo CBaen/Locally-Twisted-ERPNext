@@ -577,12 +577,30 @@ body[data-path="home"] main.container.my-4 {
     to   { transform: translateX(-50%); }
 }
 @media (prefers-reduced-motion: reduce) {
-    .lt-reviews-block__quotes { mask-image: none; -webkit-mask-image: none; }
+    .lt-reviews-block__quotes {
+        left: auto;
+        right: auto;
+        margin-left: 0;
+        margin-right: 0;
+        mask-image: none;
+        -webkit-mask-image: none;
+        width: 100%;
+    }
     .lt-reviews-block__track {
-        animation: lt-reviews-scroll 360s linear infinite;
-        flex-wrap: nowrap;
-        justify-content: flex-start;
-        width: max-content;
+        animation: none;
+        flex-wrap: wrap;
+        justify-content: center;
+        transform: none;
+        width: 100%;
+    }
+    .lt-reviews-block__group {
+        flex-wrap: wrap;
+        justify-content: center;
+        padding-right: 0;
+        width: 100%;
+    }
+    .lt-reviews-block__group[aria-hidden="true"] {
+        display: none;
     }
 }
 @media (max-width: 575.98px) {

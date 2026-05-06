@@ -83,6 +83,8 @@ Read the index when a task depends on local tools, reusable workflows, project-s
 
 Treat `last_verified` dates older than about 90 days as stale until rechecked.
 
+For public layout, container, breakpoint, nav, drawer, modal, form, product selector, cart, checkout, or broad visual work, read `.codex/capabilities/recipes/responsive-container-audit.md` before editing. Container fit is a launch requirement, not polish.
+
 Older Claude skills and rules under `C:\Users\baenb\.claude\` are a read-only reference library, not project truth. The useful entrypoints are `C:\Users\baenb\.claude\skills\README.md`, specific `SKILL.md` files, and `C:\Users\baenb\.claude\rules\reach-paths.md`. For Frappe/ERPNext launch work, especially consider the older `frappe-payment-safety`, `frappe-form-integrity`, `frappe-fixture-discipline`, `frappe-migration-guard`, and `frappe-deploy-safety` skills as checklists for what to verify. Do not read secrets, runtime state, logs, caches, sessions, or token files there, and do not copy Claude-era files wholesale into this repo.
 
 ## Frappe / ERPNext Rules
@@ -95,8 +97,8 @@ Work within Frappe and ERPNext.
 - Webshop pages should use Webshop/Frappe override hooks and templates instead of replacing the cart pipeline.
 - Avoid `head_html` CSS injection and avoid `!important` chains. The known exception is the contained `.product-code` hide for Webshop's compiled product-card JS.
 - After Jinja/CSS/Web Page edits, run `python scripts/dev/clear_website_cache.py`.
-- Before declaring visual work done, verify with browser screenshots at desktop and mobile widths.
-- Browser verification is repo-local. `playwright.config.js` prefers installed Chrome/Edge on Windows when Playwright's bundled Chromium is missing. Use `npm run test:layout-fit` for public layout checks and `npm run test:desk-owner` with `LT_DESK_TEST_USER` / `LT_DESK_TEST_PASSWORD` for the owner Desk route check.
+- Before declaring visual work done, verify with browser screenshots at desktop and mobile widths, plus the layout gates below.
+- Browser verification is repo-local. `playwright.config.js` prefers installed Chrome/Edge on Windows when Playwright's bundled Chromium is missing. Use `npm run test:layout-fit` for passive public route layout checks, `npm run test:interactive-layout` for stateful menus/drawers/modals/forms/product controls, `npm run test:public-verify` for broad public-site closeout, and `npm run test:desk-owner` with `LT_DESK_TEST_USER` / `LT_DESK_TEST_PASSWORD` for the owner Desk route check.
 
 ## Voice And UI Language
 

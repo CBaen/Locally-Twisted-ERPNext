@@ -86,15 +86,20 @@
     justify-content: flex-end;
 }
 
-.lt-mega-header__top-links a,
+.lt-mega-header__top-links a {
+    font: 900 13px/1 Lato, system-ui, sans-serif;
+    text-transform: uppercase;
+}
+
 .lt-mega-nav__link,
 .lt-mega-nav__button {
-    font: 900 13px/1 Lato, system-ui, sans-serif;
+    font: 900 15px/1.1 Lato, system-ui, sans-serif;
     text-transform: uppercase;
 }
 
 .lt-mega-header__main-row {
     min-height: 108px;
+    position: relative;
 }
 
 .lt-mega-brand {
@@ -136,7 +141,7 @@
 .lt-mega-nav__item {
     align-items: center;
     display: flex;
-    position: relative;
+    position: static;
 }
 
 .lt-mega-nav__link,
@@ -148,6 +153,8 @@
     display: inline-flex;
     gap: 7px;
     min-height: 44px;
+    min-width: 44px;
+    justify-content: center;
     padding: 0 3px;
     text-decoration: none;
     white-space: nowrap;
@@ -184,7 +191,7 @@
 .lt-mega-header__cta {
     background: var(--lt-mega-berry);
     color: #fff;
-    font: 900 13px/1 Lato, system-ui, sans-serif;
+    font: 900 14px/1 Lato, system-ui, sans-serif;
     min-height: 44px;
     padding: 15px 18px;
     text-decoration: none;
@@ -211,6 +218,12 @@
 
 .lt-megamenu__panel[hidden] {
     display: none;
+}
+
+#lt-mega-products {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
 }
 
 .lt-megamenu__eyebrow {
@@ -402,9 +415,34 @@
 }
 
 @media (max-width: 1199.98px) {
+    .lt-mega-header__desktop {
+        display: none !important;
+    }
+
+    .lt-mega-header__mobile {
+        display: block !important;
+    }
+}
+
+@media (min-width: 1200px) {
+    .lt-mega-header__desktop {
+        display: block !important;
+    }
+
+    .lt-mega-header__mobile {
+        display: none !important;
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1279.98px) {
+    .lt-mega-header__main-row {
+        gap: 12px;
+        min-height: 100px;
+    }
+
     .lt-mega-brand__logo {
         height: 80px;
-        max-width: min(288px, 28vw);
+        max-width: min(230px, 20vw);
     }
 
     .lt-mega-nav__list {
@@ -412,7 +450,7 @@
     }
 
     .lt-mega-header__actions {
-        gap: 10px;
+        gap: 8px;
     }
 
     .lt-mega-header__cta {
@@ -420,8 +458,17 @@
     }
 }
 
-@media (max-width: 991.98px) {
-    .lt-mega-header__desktop {
-        display: none;
+@media (min-width: 1280px) and (max-width: 1399.98px) {
+    .lt-mega-header__main-row {
+        gap: 14px;
+    }
+
+    .lt-mega-brand__logo {
+        max-width: min(250px, 21vw);
+    }
+
+    .lt-mega-nav__list,
+    .lt-mega-header__actions {
+        gap: 10px;
     }
 }

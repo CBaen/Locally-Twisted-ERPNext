@@ -6,6 +6,14 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-05 - Container stability fails at breakpoint edges and open states
+
+The site looked acceptable in some default screenshots while real containers were still at risk: nav between legacy and active desktop breakpoints, mobile drawer accordions, product selectors, contact conditionals, portfolio modal state, and text sitting too close to panels. A 320/375/1366 check alone was not enough for the design requirement GL was reacting to.
+
+**Counter-move:** treat every public container as unsafe until checked across breakpoint edges and stateful UI. The LT gate now uses `scripts/verify/layout_helpers.js`, expands `npm run test:layout-fit` to 260 passive route/viewport checks, adds `npm run test:interactive-layout` for 39 open-state checks, keeps checkout preview behavior under `npm run test:checkout-experience`, and exposes `npm run test:public-verify` for broad closeout. New containers need either coverage in those specs or a deliberate reason they are out of scope.
+
+---
+
 ## 2026-05-05 - Disk source is not proof that Frappe is serving the design
 
 The restored mega-menu, page-containment CSS, and product-polish CSS existed in the repo, but the running site was still missing the menu behavior and product/page styling because the assets were not wired through `hooks.py` and the Frappe processes/cache had not been refreshed. That made the site look like agents were editing against each other even when useful source changes existed.

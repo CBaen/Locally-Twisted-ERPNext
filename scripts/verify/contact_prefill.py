@@ -15,6 +15,7 @@ CASES = [
     ("/contact?service=twisting", ["Balloon Twisting"]),
     ("/contact?service=face-painting", ["Face Painting"]),
 ]
+ITEM_CASE = ("/contact?item=easter-arch", "easter-arch", "Easter Arch")
 
 
 def main() -> int:
@@ -59,6 +60,29 @@ def main() -> int:
                 if painting_panel.count() != 1 or not painting_panel.first.is_visible():
                     print("  FAIL - Face Painting details panel is not visible")
                     failures += 1
+
+        item_path, item_code, item_name = ITEM_CASE
+        item_url = base_url + item_path
+        print(f"[PREFILL] {item_url}")
+        try:
+            page.goto(item_url, wait_until="networkidle", timeout=30000)
+        except PlaywrightTimeout:
+            print("  FAIL - item prefill page did not load")
+            failures += 1
+        else:
+            decor = page.locator('input[name="x_services"][value="Balloon Decor"]')
+            if decor.count() != 1 or not decor.first.is_checked():
+                print("  FAIL - Balloon Decor should be checked for product quote links")
+                failures += 1
+            hidden = page.locator(f'input[name="lt_requested_item_code"][value="{item_code}"]')
+            if hidden.count() != 1:
+                print("  FAIL - requested item hidden field missing")
+                failures += 1
+            if page.locator(".lt-book__prefill", has_text=item_name).count() != 1:
+                print("  FAIL - requested item prefill banner missing")
+                failures += 1
+            else:
+                print(f"  OK - product quote prefilled for {item_name}")
 
         browser.close()
 

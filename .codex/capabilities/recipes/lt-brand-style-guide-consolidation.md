@@ -14,6 +14,7 @@ failed_uses: 0
 regressions: 0
 depends_on:
   - frappe-sitewide-visual-overhaul
+  - responsive-container-audit
 used_by: []
 tags:
   - Locally Twisted
@@ -45,7 +46,7 @@ Use this recipe when a Locally Twisted visual direction changes enough that old 
 6. Add or update the feature-specific workstream handoff.
 7. Update queue, decisions, lessons, and index docs in the same closeout.
 8. Run searches that separate active UI/source files from historical Odoo/catalog evidence.
-9. Run syntax, token, cache, nav, and layout checks before claiming the consolidation is ready for implementation agents.
+9. Run syntax, token, cache, nav, layout, interactive layout, and shop smoke checks before claiming the consolidation is ready for implementation agents.
 
 ## Verification Checklist
 
@@ -58,7 +59,12 @@ Use this recipe when a Locally Twisted visual direction changes enough that old 
 - `python scripts/dev/clear_website_cache.py`
 - `python scripts/verify/nav_ia.py`
 - `npm run test:layout-fit`
+- `npm run test:interactive-layout`
+- `python scripts/verify/smoke_shop.py`
+- `npm run test:public-verify` for broad public-site visual changes.
 
 ## LT Receipt
 
 The 2026-05-05 consolidation deleted `_resources/design-guide/`, old shop/spec comparison references, and the old generic icon comparison. `_resources/STYLE-GUIDE.md` version 4.2 became the sole current visual authority. The active app moved to Cormorant Garamond + Lato and non-pastel LT token names. A 16-file custom brass-line icon suite was added under `apps/locally_twisted/locally_twisted/public/icons/brand/`.
+
+The same day, the responsive/container requirement was added as a standing style-guide quality gate. Future page or component styling work must check breakpoint-edge containers and stateful UI, not only one mobile screenshot.

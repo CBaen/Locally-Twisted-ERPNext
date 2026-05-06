@@ -1,28 +1,25 @@
-# Service Area & Travel Fees
+# Service Area, Pickup, and Delivery Fees
 
-Confirmed by Jeff Kimber 2026-04-16.
+Confirmed by Odoo policy reference and Guiding Light on 2026-05-05.
 
-## Free service area (no travel fee)
+## Ready-to-order checkout
 
-- Davis County
-- Weber County
-- Salt Lake County
-- Utah County
+- **Pickup:** free. Customer chooses West Jordan or Riverdale, then requests a date and 30-minute pickup window. The request is not confirmed until Locally Twisted follows up.
+- **Standard Delivery:** $15 for the standard local delivery zone covering Davis, Weber, Salt Lake, and Utah counties.
+- **Park City Delivery:** $50 for ZIP codes 84060, 84068, and 84098.
+- **Out-of-area delivery:** quote required before payment. The checkout should not send these customers to Stripe.
 
-These are the four counties along the Wasatch Front where Locally Twisted delivers without an additional travel charge.
+## Event and service quotes
 
-## Travel fee applies
-
-- Any location **outside** these four counties gets a travel fee
-- **Travel fee amount: not yet set** — currently negotiated case-by-case until Jeff sets a flat rate or per-mile
+Custom decor, installs, face painting, balloon twisting, corporate, school, civic, venue, and larger event work should start through `/contact`, not the cart. Delivery, setup, venue access, travel, timing, tax, deposit, and payment terms are handled on the quote.
 
 ## Why this matters
 
-Customers who book from the website need to see this upfront. Surprise travel fees at invoice time = lost trust.
+Customers need delivery cost and payment timing before they commit. Surprise delivery fees after checkout create distrust and should be avoided.
 
 ## How it lands in the build
 
-- **Booking form address field:** detect county on zip code entry, warn if outside service area
-- **Service page copy:** "Free delivery in Davis, Weber, Salt Lake, and Utah counties. Events outside these counties: travel fee applies — contact us for a quote."
-- **Quote sheet:** travel fee as a visible line item when applicable
-- **Tagline copy:** "Happily delivering along the Wasatch Front" stays — accurate to the free zone
+- **Checkout:** detects pickup, standard delivery, Park City delivery, and out-of-area delivery by ZIP/city.
+- **Out-of-area checkout:** creates a CRM Lead with the cart contents and customer details instead of creating a Sales Order or Stripe session.
+- **Product pages:** retail products explain pickup/delivery; quote-lane products route to `/contact`.
+- **Terms/FAQ/service pages:** repeat the same pickup/$15/$50/out-of-area quote model.

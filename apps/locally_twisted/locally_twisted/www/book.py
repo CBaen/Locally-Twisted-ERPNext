@@ -171,6 +171,12 @@ def submit_book_inquiry():
 
     # Free-form catch-all
     description = (fd.get("description") or "").strip()
+    requested_item = _requested_item_note(
+        (fd.get("lt_requested_item_code") or "").strip(),
+        (fd.get("lt_requested_item_name") or "").strip(),
+    )
+    if requested_item:
+        description = _combine_text_values(requested_item, description)
 
     # Lead Source: ensure "Website" exists (idempotent)
     _ensure_lead_source("Website")
@@ -334,6 +340,27 @@ def _indoor_outdoor_label(value):
 
 def _combine_text_values(*values):
     return "; ".join(str(v).strip() for v in values if str(v).strip())
+
+
+def _requested_item_note(item_code, fallback_name):
+    if not item_code and not fallback_name:
+        return ""
+    item = None
+    if item_code:
+        item = frappe.db.get_value(
+            "Website Item",
+            {"item_code": item_code, "published": 1},
+            ["item_code", "web_item_name"],
+            as_dict=True,
+        )
+    if item:
+        return "Requested product quote: {} ({})".format(
+            item.get("web_item_name") or item.get("item_code"),
+            item.get("item_code"),
+        )
+    if fallback_name:
+        return "Requested product quote: {}".format(fallback_name)
+    return "Requested product quote: {}".format(item_code)
 
 
 def _service_child_rows(services):

@@ -11,6 +11,8 @@ categorizer. Driven by item.item_group field after the catalog port.
 """
 import frappe
 
+from locally_twisted.commerce_rules import checkout_lane_for_item_group
+
 no_cache = 0
 sitemap = 1
 
@@ -60,6 +62,7 @@ def get_context(context):
 
         # Slug for filter pill data attribute (Item Group "Get-Well Bouquets" → "get-well-bouquets")
         item["category_slug"] = frappe.scrub(item.get("item_group") or "all").replace("_", "-")
+        item["checkout_lane"] = checkout_lane_for_item_group(item.get("item_group"))
         rate = item.get("price_list_rate")
         if rate:
             item["price_display"] = (

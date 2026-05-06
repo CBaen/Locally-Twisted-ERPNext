@@ -26,6 +26,7 @@ from frappe import _
 from frappe.rate_limiter import rate_limit
 from frappe.utils import escape_html, validate_email_address, flt, cint
 
+from locally_twisted import commerce_rules
 from locally_twisted.crm_pipeline import PIPELINE_FIELD
 
 no_cache = 1
@@ -147,6 +148,50 @@ PAGE_CSS = """
 }
 .lt-checkout__secure strong { color: var(--lt-near-black); font-weight: 600; }
 .lt-checkout__form { margin: 0; }
+.lt-checkout__fieldset {
+    border: 1px solid rgba(14, 34, 64, 0.16);
+    border-radius: 3px;
+    padding: 1rem;
+    margin: 0 0 1rem;
+    background: rgba(255, 255, 255, 0.68);
+}
+.lt-checkout__fieldset legend {
+    font-family: var(--lt-font-body);
+    color: var(--lt-ink);
+    font-weight: 900;
+    font-size: 0.875rem;
+    padding: 0 0.25rem;
+}
+.lt-checkout__choice-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+}
+@media (min-width: 640px) {
+    .lt-checkout__choice-row { grid-template-columns: 1fr 1fr; }
+}
+.lt-checkout__choice {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    border: 1px solid rgba(14, 34, 64, 0.18);
+    border-radius: 3px;
+    padding: 0.7rem 0.85rem;
+    background: #fff;
+    cursor: pointer;
+}
+.lt-checkout__choice input { margin: 0; }
+.lt-checkout__choice span {
+    font-family: var(--lt-font-body);
+    color: var(--lt-ink);
+    font-weight: 800;
+}
+.lt-checkout__hint {
+    margin: 0.75rem 0 0;
+    color: var(--lt-soft-gray);
+    font-size: 0.85rem;
+    line-height: 1.45;
+}
 .lt-checkout__field { margin-bottom: 1rem; }
 .lt-checkout__field label {
     display: block;
@@ -398,12 +443,146 @@ def _resolve_cart_items(item_code, qty, items_json):
     return []
 
 
+def _resolve_sale_lines(cart_items):
+    """Resolve cart items into server-priced Sales Order lines.
+
+    This also blocks quote-lane product groups from the paid checkout path.
+    Product pages should not expose direct cart buttons for those groups, but
+    the server still enforces the boundary.
+    """
+    from locally_twisted.api.cart import resolve_cart_item_for_sale
+
+    so_line_items = []
+    resolved_items = []
+    for line in cart_items:
+        resolved = resolve_cart_item_for_sale(line["item_code"], raise_on_missing=False)
+        if not resolved:
+            frappe.throw(
+                _("'{0}' is no longer available. Please remove it and try again.").format(line["item_code"]),
+                frappe.ValidationError,
+            )
+        if resolved.get("checkout_lane") == "quote_required":
+            frappe.throw(
+                _("{0} starts with a quote so delivery, setup, and timing are planned correctly.").format(
+                    resolved.get("web_item_name") or resolved["item_code"]
+                ),
+                frappe.ValidationError,
+            )
+        qty_value = int(line["qty"])
+        rate = flt(resolved["price_list_rate"])
+        so_line_items.append({
+            "item_code": resolved["item_code"],
+            "qty": qty_value,
+            "rate": rate,
+        })
+        resolved_items.append({**resolved, "qty": qty_value, "line_total": rate * qty_value})
+    return so_line_items, resolved_items
+
+
+def _validate_requested_date(value):
+    value = (value or "").strip()
+    if not value:
+        frappe.throw(_("Please choose a requested pickup or delivery date."), frappe.ValidationError)
+    try:
+        return frappe.utils.getdate(value)
+    except Exception:
+        frappe.throw(_("Requested date is not valid."), frappe.ValidationError)
+
+
+def _validate_window(start, end):
+    result = commerce_rules.validate_requested_window(start, end)
+    if not result.ok:
+        frappe.throw(_(result.message), frappe.ValidationError)
+    return (start or "").strip(), (end or "").strip()
+
+
+def _fulfillment_for_request(
+    *,
+    fulfillment_method,
+    pickup_location,
+    city,
+    postal_code,
+):
+    method = (fulfillment_method or "delivery").strip().lower()
+    if method not in {"pickup", "delivery"}:
+        frappe.throw(_("Please choose pickup or delivery."), frappe.ValidationError)
+    if method == "pickup" and pickup_location not in commerce_rules.PICKUP_LOCATIONS:
+        frappe.throw(_("Please choose a pickup location."), frappe.ValidationError)
+    return commerce_rules.resolve_fulfillment(
+        method=method,
+        postal_code=postal_code,
+        city=city,
+        pickup_location=pickup_location,
+    )
+
+
+def _tax_for_fulfillment(fulfillment, *, pickup_location, city, postal_code):
+    if fulfillment.method == "pickup":
+        location = commerce_rules.PICKUP_LOCATIONS[pickup_location]
+        return commerce_rules.resolve_tax_rate(
+            postal_code=location["postal_code"],
+            city=location["city"],
+        )
+    return commerce_rules.resolve_tax_rate(postal_code=postal_code, city=city)
+
+
+def _build_totals(so_line_items, fulfillment, tax):
+    subtotal = commerce_rules.money(sum(flt(row["rate"]) * int(row["qty"]) for row in so_line_items))
+    delivery_fee = commerce_rules.money(fulfillment.delivery_fee)
+    taxable_total = commerce_rules.money(subtotal + delivery_fee)
+    tax_amount = commerce_rules.money(taxable_total * tax.rate / commerce_rules.Decimal("100"))
+    total = commerce_rules.money(taxable_total + tax_amount)
+    return {
+        "subtotal": float(subtotal),
+        "delivery_fee": float(delivery_fee),
+        "tax_rate": float(tax.rate),
+        "tax_amount": float(tax_amount),
+        "total": float(total),
+    }
+
+
+@frappe.whitelist(allow_guest=True)
+@rate_limit(limit=60, seconds=60 * 60)
+def preview_checkout_totals(item_code="", qty=1, items_json="",
+                            fulfillment_method="delivery", pickup_location="",
+                            city="", postal_code=""):
+    """Return server-trusted checkout totals for the visible order summary."""
+    cart_items = _resolve_cart_items(item_code, qty, items_json)
+    if not cart_items:
+        return {"ok": False, "status": "empty_cart", "message": _("Please pick at least one item.")}
+    so_line_items, _resolved_items = _resolve_sale_lines(cart_items)
+    fulfillment = _fulfillment_for_request(
+        fulfillment_method=fulfillment_method,
+        pickup_location=(pickup_location or "").strip(),
+        city=(city or "").strip(),
+        postal_code=(postal_code or "").strip(),
+    )
+    if not fulfillment.can_checkout:
+        subtotal = sum(flt(row["rate"]) * int(row["qty"]) for row in so_line_items)
+        return {
+            "ok": False,
+            "status": "quote_required",
+            "message": fulfillment.message,
+            "subtotal": float(commerce_rules.money(subtotal)),
+        }
+    tax = _tax_for_fulfillment(
+        fulfillment,
+        pickup_location=(pickup_location or "").strip(),
+        city=(city or "").strip(),
+        postal_code=(postal_code or "").strip(),
+    )
+    return {"ok": True, "fulfillment": fulfillment.__dict__, **_build_totals(so_line_items, fulfillment, tax)}
+
+
 @frappe.whitelist(allow_guest=True)
 @rate_limit(limit=10, seconds=60 * 60)
 def submit_guest_order(item_code="", qty=1, items_json="",
                        name="", email="", phone="",
                        address_line1="", address_line2="", city="", state="",
                        postal_code="", country="United States",
+                       fulfillment_method="delivery", pickup_location="",
+                       requested_fulfillment_date="",
+                       requested_window_start="", requested_window_end="",
                        order_notes="", marketing_opt_in=0):
     """Create Customer + Contact + Sales Order for a guest checkout.
 
@@ -423,10 +602,15 @@ def submit_guest_order(item_code="", qty=1, items_json="",
     email = (email or "").strip()
     phone = (phone or "").strip()
     address_line1 = (address_line1 or "").strip()
+    address_line2 = (address_line2 or "").strip()
     city = (city or "").strip()
     state = (state or "").strip()
     postal_code = (postal_code or "").strip()
     country = (country or "United States").strip()
+    pickup_location = (pickup_location or "").strip()
+    requested_fulfillment_date = (requested_fulfillment_date or "").strip()
+    requested_window_start = (requested_window_start or "").strip()
+    requested_window_end = (requested_window_end or "").strip()
     order_notes = (order_notes or "").strip()
     marketing_opt_in = cint(marketing_opt_in)
 
@@ -442,30 +626,68 @@ def submit_guest_order(item_code="", qty=1, items_json="",
         frappe.throw(_("Please give us an email so we can send your receipt."), frappe.ValidationError)
     if not phone:
         frappe.throw(_("Please give us a phone number for delivery coordination."), frappe.ValidationError)
-    if not address_line1 or not city or not state or not postal_code:
-        frappe.throw(_("Please give us a complete delivery address."), frappe.ValidationError)
 
     email = validate_email_address(email, throw=True)
+    requested_date = _validate_requested_date(requested_fulfillment_date)
+    requested_window_start, requested_window_end = _validate_window(
+        requested_window_start,
+        requested_window_end,
+    )
+    fulfillment = _fulfillment_for_request(
+        fulfillment_method=fulfillment_method,
+        pickup_location=pickup_location,
+        city=city,
+        postal_code=postal_code,
+    )
+    if fulfillment.method == "delivery" and (not address_line1 or not city or not state or not postal_code):
+        frappe.throw(_("Please give us a complete delivery address."), frappe.ValidationError)
 
     # ── Validate each cart line; build SO line list with server prices.
     # Pricing comes from Item Price here, never from anything the client
     # sent. Unpublished or unpriced items abort the order — the cart UI
     # already prunes those at /cart load, so reaching here means the
     # state changed between cart load and submit (rare, but possible).
-    from locally_twisted.api.cart import resolve_cart_item_for_sale
+    so_line_items, resolved_items = _resolve_sale_lines(cart_items)
 
-    so_line_items = []
-    for line in cart_items:
-        resolved = resolve_cart_item_for_sale(line["item_code"], raise_on_missing=False)
-        if not resolved:
-            frappe.throw(
-                _("'{0}' is no longer available. Please remove it and try again.").format(line["item_code"]),
-                frappe.ValidationError,
-            )
+    if not fulfillment.can_checkout:
+        lead_name = _create_checkout_quote_lead(
+            name=name,
+            email=email,
+            phone=phone,
+            fulfillment=fulfillment,
+            address_line1=address_line1,
+            address_line2=address_line2,
+            city=city,
+            state=state,
+            postal_code=postal_code,
+            requested_fulfillment_date=requested_fulfillment_date,
+            requested_window_start=requested_window_start,
+            requested_window_end=requested_window_end,
+            order_notes=order_notes,
+            resolved_items=resolved_items,
+        )
+        frappe.db.commit()
+        return {
+            "ok": False,
+            "status": "quote_required",
+            "message": fulfillment.message,
+            "lead": lead_name,
+            "email": email,
+        }
+
+    tax = _tax_for_fulfillment(
+        fulfillment,
+        pickup_location=pickup_location,
+        city=city,
+        postal_code=postal_code,
+    )
+    totals = _build_totals(so_line_items, fulfillment, tax)
+
+    if fulfillment.delivery_item_code and fulfillment.delivery_fee:
         so_line_items.append({
-            "item_code": resolved["item_code"],
-            "qty": int(line["qty"]),
-            "rate": flt(resolved["price_list_rate"]),
+            "item_code": fulfillment.delivery_item_code,
+            "qty": 1,
+            "rate": float(fulfillment.delivery_fee),
         })
 
     safe_name = escape_html(name)
@@ -578,21 +800,23 @@ def submit_guest_order(item_code="", qty=1, items_json="",
         contact_doc.insert(ignore_permissions=True)
 
     # ── Address (always create a fresh shipping address per order) ───
-    address_doc = frappe.get_doc({
-        "doctype": "Address",
-        "address_title": safe_name,
-        "address_type": "Shipping",
-        "address_line1": escape_html(address_line1),
-        "address_line2": escape_html(address_line2 or ""),
-        "city": escape_html(city),
-        "state": escape_html(state),
-        "pincode": escape_html(postal_code),
-        "country": country,
-        "email_id": email,
-        "phone": safe_phone,
-        "links": [{"link_doctype": "Customer", "link_name": customer_name}],
-    })
-    address_doc.insert(ignore_permissions=True)
+    address_doc = None
+    if fulfillment.method == "delivery":
+        address_doc = frappe.get_doc({
+            "doctype": "Address",
+            "address_title": safe_name,
+            "address_type": "Shipping",
+            "address_line1": escape_html(address_line1),
+            "address_line2": escape_html(address_line2 or ""),
+            "city": escape_html(city),
+            "state": escape_html(state),
+            "pincode": escape_html(postal_code),
+            "country": country,
+            "email_id": email,
+            "phone": safe_phone,
+            "links": [{"link_doctype": "Customer", "link_name": customer_name}],
+        })
+        address_doc.insert(ignore_permissions=True)
 
     # ── Sales Order ──────────────────────────────────────────────────
     # order_type="Shopping Cart" matters: ERPNext's Payment Request on_submit
@@ -600,22 +824,49 @@ def submit_guest_order(item_code="", qty=1, items_json="",
     # the wkhtmltopdf PDF render runs and fails inside Docker because it
     # can't reach localhost:8081. Setting Shopping Cart is also semantically
     # accurate for guest webshop purchases.
-    so = frappe.get_doc({
+    so_doc = {
         "doctype": "Sales Order",
         "customer": customer_name,
         "order_type": "Shopping Cart",
         "transaction_date": frappe.utils.nowdate(),
-        "delivery_date": frappe.utils.add_days(frappe.utils.nowdate(), 7),
+        "delivery_date": requested_date,
         "currency": "USD",
         "selling_price_list": PRICE_LIST,
-        "shipping_address_name": address_doc.name,
         "items": so_line_items,
-    })
+        "taxes": [{
+            "charge_type": "On Net Total",
+            "account_head": commerce_rules.TAX_ACCOUNT_HEAD,
+            "description": f"Utah sales tax ({tax.label})",
+            "rate": float(tax.rate),
+        }],
+    }
+    if address_doc:
+        so_doc["shipping_address_name"] = address_doc.name
+    so_doc.update(_sales_order_custom_fields(
+        fulfillment=fulfillment,
+        pickup_location=pickup_location,
+        requested_fulfillment_date=requested_fulfillment_date,
+        requested_window_start=requested_window_start,
+        requested_window_end=requested_window_end,
+    ))
+    so = frappe.get_doc(so_doc)
     so.insert(ignore_permissions=True)
     so.submit()
 
     try:
-        _record_order_notes(so.name, order_notes, sender=email)
+        _record_order_notes(
+            so.name,
+            _compose_checkout_notes(
+                order_notes=order_notes,
+                fulfillment=fulfillment,
+                pickup_location=pickup_location,
+                requested_fulfillment_date=requested_fulfillment_date,
+                requested_window_start=requested_window_start,
+                requested_window_end=requested_window_end,
+                totals=totals,
+            ),
+            sender=email,
+        )
     except Exception:
         frappe.log_error(
             frappe.get_traceback(),
@@ -677,10 +928,143 @@ def submit_guest_order(item_code="", qty=1, items_json="",
         "ok": True,
         "sales_order": so.name,
         "customer": customer_name,
-        "address": address_doc.name,
+        "address": address_doc.name if address_doc else None,
         "payment_request": pr.name,
         "stripe_redirect_url": stripe_url,
+        "fulfillment": fulfillment.__dict__,
+        "totals": totals,
     }
+
+
+def _sales_order_custom_fields(
+    *,
+    fulfillment,
+    pickup_location,
+    requested_fulfillment_date,
+    requested_window_start,
+    requested_window_end,
+):
+    meta = frappe.get_meta("Sales Order")
+    fields = {
+        "custom_lt_fulfillment_method": "Pickup" if fulfillment.method == "pickup" else "Delivery",
+        "custom_lt_delivery_zone": fulfillment.zone,
+        "custom_lt_pickup_location": pickup_location if fulfillment.method == "pickup" else None,
+        "custom_lt_requested_fulfillment_date": requested_fulfillment_date,
+        "custom_lt_requested_window_start": requested_window_start,
+        "custom_lt_requested_window_end": requested_window_end,
+        "custom_lt_fulfillment_status": "Requested - Not Confirmed",
+    }
+    return {fieldname: value for fieldname, value in fields.items() if meta.has_field(fieldname)}
+
+
+def _compose_checkout_notes(
+    *,
+    order_notes,
+    fulfillment,
+    pickup_location,
+    requested_fulfillment_date,
+    requested_window_start,
+    requested_window_end,
+    totals,
+):
+    parts = [
+        f"Fulfillment: {fulfillment.label}",
+        f"Requested date: {requested_fulfillment_date}",
+        f"Requested window: {requested_window_start}-{requested_window_end} (requested, not confirmed)",
+    ]
+    if fulfillment.method == "pickup":
+        parts.append(f"Pickup location: {pickup_location}")
+    if fulfillment.delivery_fee:
+        parts.append(f"Delivery fee: ${totals['delivery_fee']:.2f}")
+    parts.append(f"Estimated tax: ${totals['tax_amount']:.2f}")
+    if order_notes:
+        parts.append("")
+        parts.append(order_notes)
+    return "\n".join(parts)
+
+
+def _create_checkout_quote_lead(
+    *,
+    name,
+    email,
+    phone,
+    fulfillment,
+    address_line1,
+    address_line2,
+    city,
+    state,
+    postal_code,
+    requested_fulfillment_date,
+    requested_window_start,
+    requested_window_end,
+    order_notes,
+    resolved_items,
+):
+    _ensure_lead_source("Website")
+    item_lines = [
+        f"- {row.get('web_item_name') or row['item_code']} x {row['qty']} (${float(row['line_total']):.2f})"
+        for row in resolved_items
+    ]
+    address = ", ".join(
+        part for part in [address_line1, address_line2, city, state, postal_code] if part
+    )
+    summary = "\n".join([
+        "Checkout cart needs delivery quote.",
+        fulfillment.message,
+        "",
+        "Cart:",
+        *item_lines,
+        "",
+        f"Requested date: {requested_fulfillment_date}",
+        f"Requested window: {requested_window_start}-{requested_window_end}",
+        f"Delivery address: {address}",
+        "",
+        order_notes or "",
+    ]).strip()
+
+    lead_doc = {
+        "doctype": "Lead",
+        "first_name": name,
+        "lead_name": name,
+        "email_id": email,
+        "mobile_no": phone or None,
+        "source": "Website",
+        "status": "Open",
+        "custom_pipeline_stage": "New Inquiry",
+        "custom_delivery_notes": summary,
+        "custom_anything_else": summary,
+        "custom_source_channel": "Website Form",
+    }
+    if frappe.get_meta("Lead").has_field("custom_event_type"):
+        lead_doc["custom_event_type"] = [{"service_type": "Delivery"}]
+    lead = frappe.get_doc(lead_doc)
+    lead.insert(ignore_permissions=True)
+
+    frappe.get_doc({
+        "doctype": "Communication",
+        "communication_type": "Communication",
+        "communication_medium": "Other",
+        "sent_or_received": "Received",
+        "reference_doctype": "Lead",
+        "reference_name": lead.name,
+        "sender": email,
+        "subject": f"Delivery quote needed - checkout cart - {lead.name}",
+        "content": escape_html(summary).replace("\n", "<br>"),
+        "status": "Open",
+    }).insert(ignore_permissions=True)
+    return lead.name
+
+
+def _ensure_lead_source(source_name):
+    if frappe.db.exists("Lead Source", source_name):
+        return
+    try:
+        frappe.get_doc({
+            "doctype": "Lead Source",
+            "source_name": source_name,
+        }).insert(ignore_permissions=True, ignore_if_duplicate=True)
+    except frappe.DuplicateEntryError:
+        pass
 
 
 def _record_order_notes(so_name, notes, sender=None):

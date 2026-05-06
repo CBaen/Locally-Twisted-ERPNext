@@ -686,8 +686,8 @@ PAGE_CSS = """
     background-color: rgba(0, 0, 0, 0.55);
     color: var(--lt-white);
     border: none;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     cursor: pointer;
     font-size: 1.5rem;

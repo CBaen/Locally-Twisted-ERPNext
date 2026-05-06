@@ -7,7 +7,7 @@ Confirmed by Jeff Kimber 2026-04-16 (SpongeBob booking call).
 - **Balloon twister:** $130 first hour + $115 each additional hour
 - **Face painter:** $130 first hour + $115 each additional hour
 - **Each artist priced independently** — no bundle discount when combining services
-- Example: 1 twister + 1 painter × 2 hrs = (2 × $245) = **$490 subtotal**, tax added at checkout
+- Example: 1 twister + 1 painter × 2 hrs = (2 × $245) = **$490 subtotal**, tax added on the quote or invoice
 
 ## Why no combination discount
 

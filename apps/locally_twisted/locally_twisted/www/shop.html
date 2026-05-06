@@ -11,7 +11,8 @@
             <p class="lt-shop__hero-eyebrow">Ready to order</p>
             <h1 class="lt-shop__hero-title">Ready-to-order decor for pickup and delivery.</h1>
             <p class="lt-shop__hero-lede">
-                Smaller pieces available for pickup or delivery along the Wasatch Front.
+                Smaller pieces are available for pickup requests, $15 Standard Delivery, and $50 Park City Delivery.
+                Addresses outside the current delivery zones start with a quote.
                 For business, school, civic, venue, or larger custom event work, start with a quote.
             </p>
         </div>
@@ -60,7 +61,13 @@
 
                 <div class="lt-shop__card-footer">
                     <span class="lt-shop__card-price">{{ item.price_display }}</span>
-                    {% if item.has_variants %}
+                    {% if item.checkout_lane == "quote_required" %}
+                    <a class="lt-shop__card-add lt-shop__card-add--link"
+                       href="/contact?item={{ item.item_code }}"
+                       aria-label="Request a quote for {{ item.web_item_name }}">
+                        Request quote
+                    </a>
+                    {% elif item.has_variants %}
                     <a class="lt-shop__card-add lt-shop__card-add--link"
                        href="/{{ item.route }}"
                        aria-label="Choose options for {{ item.web_item_name }}">

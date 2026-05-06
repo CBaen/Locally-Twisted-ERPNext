@@ -12,7 +12,8 @@ evidence_quality: direct
 successful_uses: 2
 failed_uses: 0
 regressions: 0
-depends_on: []
+depends_on:
+  - responsive-container-audit
 used_by: []
 tags:
   - Locally Twisted
@@ -48,8 +49,9 @@ Use this recipe when changing the shared look of the LT public site across Frapp
 8. Verify the served page HTML contains the expected cache-busted CSS/JS URLs.
 9. Verify routes by status and behavior.
 10. Run layout and contract checks that cover the touched route families.
-11. Capture desktop and mobile screenshots and inspect them before claiming the visual pass is ready.
-12. Update the relevant workstream, queue, decisions, lessons, and handoff docs in the same closeout.
+11. For broad public-site changes, run the responsive container audit gate, including stateful UI checks.
+12. Capture desktop and mobile screenshots and inspect them before claiming the visual pass is ready.
+13. Update the relevant workstream, queue, decisions, lessons, and handoff docs in the same closeout.
 
 ## Verification Checklist
 
@@ -58,6 +60,8 @@ Use this recipe when changing the shared look of the LT public site across Frapp
 - Main route status checks, including `/`, `/contact`, `/shop`, product detail, `/cart`, `/checkout`, policies, and success pages.
 - `python scripts/verify/nav_ia.py`
 - `npm run test:layout-fit`
+- `npm run test:interactive-layout`
+- `npm run test:public-verify` for broad public-site visual changes.
 - `python scripts/verify/smoke_shop.py`
 - Cart, checkout, catalog, variant media, and contact/form contract checks when those surfaces changed.
 - Desktop and mobile screenshots saved under `output/playwright/<feature-slug>/`.
@@ -66,4 +70,6 @@ Use this recipe when changing the shared look of the LT public site across Frapp
 
 The first complete use was the 2026-05-03 Civic Celebration site-wide overhaul. It produced the current V1 visual direction, added `hero-wasatch-city-20260503.png`, replaced the old script header treatment with a stronger wordmark, and verified the customer-facing route set with route checks, layout checks, contracts, and screenshots.
 
-The second complete use was the 2026-05-05 mega-menu/product-containment takeover. It restored the deliberate two-level premium header, served `lt-mega-menu.css`, `lt-page-containment.css`, `lt-product-polish.css`, and `lt-megamenu.js` through hooks, fixed hover/click menu semantics, repaired mobile containment issues, and verified with `nav_ia.py`, `smoke_shop.py`, `layout_fit` 80/80, served asset checks, and post-fix Playwright screenshots.
+The second complete use was the 2026-05-05 mega-menu/product-containment takeover. It restored the deliberate two-level premium header, served `lt-mega-menu.css`, `lt-page-containment.css`, `lt-product-polish.css`, and `lt-megamenu.js` through hooks, fixed hover/click menu semantics, repaired mobile containment issues, and verified with `nav_ia.py`, `smoke_shop.py`, `layout_fit`, served asset checks, and post-fix Playwright screenshots.
+
+The responsive-container follow-up on 2026-05-05 promoted breakpoint/container stability into a standing gate: `layout_fit` now covers 260 passive route/viewport checks, `interactive_layout` covers 39 stateful checks, and `test:public-verify` runs nav IA, passive layout, interactive layout, checkout experience, and shop smoke with quieter Playwright output.

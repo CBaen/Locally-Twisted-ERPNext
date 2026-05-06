@@ -31,7 +31,7 @@ COPY = {
     },
     "WEB-ITM-0002": {  # Graduation Grab n Go — Grab & Go
         "brand": "<p>Two columns in school colors with a graduation-cap topper that does the talking. Anchors the front door for the open house, the photo spot at the family dinner, or the side of the stage at the ceremony.</p>",
-        "details": "<ul><li>Pickup-ready set: two columns plus a foil cap topper</li><li>School colors of your choice</li><li>Built ahead and ready to go on your day</li><li>Pickup at our West Jordan location</li></ul>",
+        "details": "<ul><li>Pickup-ready set: two columns plus a foil cap topper</li><li>School colors of your choice</li><li>Built ahead and ready to go on your day</li><li>Pickup requested through checkout</li></ul>",
     },
     "WEB-ITM-0003": {  # Premium Organic Column — Columns
         "brand": "<p>Balloons up to 24 inches stacked into a single column. The scale makes a difference you feel before you read — a piece that holds the room without trying to.</p>",
@@ -47,43 +47,43 @@ COPY = {
     },
     "WEB-ITM-0006": {  # Unicorn Bouquet — Bouquets
         "brand": "<p>A bouquet built around a unicorn foil — pastels, sparkle, a little bit of magic. Makes its way into birthday photos and memory boxes alike.</p>",
-        "details": "<ul><li>Hand-tied bouquet with a unicorn foil topper</li><li>Latex balloons in coordinating pastels</li><li>Pickup or delivered locally</li></ul>",
+        "details": "<ul><li>Hand-tied bouquet with a unicorn foil topper</li><li>Latex balloons in coordinating pastels</li><li>Pickup or local delivery available through checkout</li></ul>",
     },
     "WEB-ITM-0007": {  # Mickey Mouse Bouquet — Bouquets
         "brand": "<p>Red, black, and yellow around a Mickey foil — a small thing that lights up the kid who already loves him.</p>",
-        "details": "<ul><li>Hand-tied bouquet with a Mickey Mouse foil topper</li><li>Classic Mickey palette</li><li>Pickup or delivered locally</li></ul>",
+        "details": "<ul><li>Hand-tied bouquet with a Mickey Mouse foil topper</li><li>Classic Mickey palette</li><li>Pickup or local delivery available through checkout</li></ul>",
     },
     "WEB-ITM-0008": {  # Minion Bouquet — Bouquets
         "brand": "<p>Yellow, blue, and just enough goggles. The kind of bouquet that earns a real laugh before it earns a thank-you.</p>",
-        "details": "<ul><li>Hand-tied bouquet with a Minion foil topper</li><li>Yellow, blue, and white latex</li><li>Pickup or delivered locally</li></ul>",
+        "details": "<ul><li>Hand-tied bouquet with a Minion foil topper</li><li>Yellow, blue, and white latex</li><li>Pickup or local delivery available through checkout</li></ul>",
     },
     "WEB-ITM-0009": {  # Encanto Bouquet — Bouquets
         "brand": "<p>Soft pinks, butterflies, and a Mirabel foil — the family the song is about, the way she'd want to be welcomed.</p>",
-        "details": "<ul><li>Hand-tied bouquet with an Encanto foil topper</li><li>Pinks, yellows, and accent colors</li><li>Pickup or delivered locally</li></ul>",
+        "details": "<ul><li>Hand-tied bouquet with an Encanto foil topper</li><li>Pinks, yellows, and accent colors</li><li>Pickup or local delivery available through checkout</li></ul>",
     },
     "WEB-ITM-0010": {  # Stitch Bouquet — Bouquets
         "brand": "<p>Blue, white, and a little chaos in the best way. For the kid who knows every line.</p>",
-        "details": "<ul><li>Hand-tied bouquet with a Stitch foil topper</li><li>Blues, whites, and accent latex</li><li>Pickup or delivered locally</li></ul>",
+        "details": "<ul><li>Hand-tied bouquet with a Stitch foil topper</li><li>Blues, whites, and accent latex</li><li>Pickup or local delivery available through checkout</li></ul>",
     },
     "WEB-ITM-0011": {  # Flamingo Bouquet — Bouquets
         "brand": "<p>A flamingo foil with pinks and corals around it — beach-day energy in any season.</p>",
-        "details": "<ul><li>Hand-tied bouquet with a flamingo foil topper</li><li>Pink and coral palette</li><li>Pickup or delivered locally</li></ul>",
+        "details": "<ul><li>Hand-tied bouquet with a flamingo foil topper</li><li>Pink and coral palette</li><li>Pickup or local delivery available through checkout</li></ul>",
     },
     "WEB-ITM-0012": {  # Football Bouquet — Bouquets
         "brand": "<p>A bouquet that knows the score. Built around a football foil with the team colors you actually wear.</p>",
-        "details": "<ul><li>Hand-tied bouquet with a football foil topper</li><li>Tell us your team and we'll match the palette</li><li>Pickup or delivered locally</li></ul>",
+        "details": "<ul><li>Hand-tied bouquet with a football foil topper</li><li>Tell us your team and we'll match the palette</li><li>Pickup or local delivery available through checkout</li></ul>",
     },
     "WEB-ITM-0013": {  # Soccer Bouquet — Bouquets
         "brand": "<p>Black and white around a soccer-ball foil, with whatever team colors travel with you. The one for the post-game dinner.</p>",
-        "details": "<ul><li>Hand-tied bouquet with a soccer-ball foil topper</li><li>Team colors on request</li><li>Pickup or delivered locally</li></ul>",
+        "details": "<ul><li>Hand-tied bouquet with a soccer-ball foil topper</li><li>Team colors on request</li><li>Pickup or local delivery available through checkout</li></ul>",
     },
     "WEB-ITM-0014": {  # Over the Hill Bouquet — Bouquets
         "brand": "<p>Black, gray, and the kind of humor that survives every birthday after the round numbers stop sounding fun. Makes the moment lighter.</p>",
-        "details": "<ul><li>Hand-tied bouquet with an Over the Hill foil topper</li><li>Black and gray palette with accent colors of your choice</li><li>Pickup or delivered locally</li></ul>",
+        "details": "<ul><li>Hand-tied bouquet with an Over the Hill foil topper</li><li>Black and gray palette with accent colors of your choice</li><li>Pickup or local delivery available through checkout</li></ul>",
     },
     "WEB-ITM-0015": {  # Space Bouquet — Bouquets
         "brand": "<p>Astronaut-and-rocket foils with deep blues and silvers around them. For the kid who already knows the names of the planets.</p>",
-        "details": "<ul><li>Hand-tied bouquet with space-themed foil topper</li><li>Blues, silvers, and accent latex</li><li>Pickup or delivered locally</li></ul>",
+        "details": "<ul><li>Hand-tied bouquet with space-themed foil topper</li><li>Blues, silvers, and accent latex</li><li>Pickup or local delivery available through checkout</li></ul>",
     },
     "WEB-ITM-0016": {  # 7' Butterfly Column — Columns
         "brand": "<p>A seven-foot column woven through with butterfly accents. Light, almost weightless to look at — the kind of piece that makes someone stop and say <em>oh</em>.</p>",
@@ -95,11 +95,11 @@ COPY = {
     },
     "WEB-ITM-0018": {  # Organic Grab n' Go — Grab & Go
         "brand": "<p>A pickup-ready piece in the organic style — varied sizes, soft palette, no setup required on your end. The easy yes.</p>",
-        "details": "<ul><li>Pickup-ready organic balloon piece</li><li>Choose your palette</li><li>Built ahead and ready to go on your day</li><li>Pickup at our West Jordan location</li></ul>",
+        "details": "<ul><li>Pickup-ready organic balloon piece</li><li>Choose your palette</li><li>Built ahead and ready to go on your day</li><li>Pickup requested through checkout</li></ul>",
     },
     "WEB-ITM-0019": {  # Easter Balloon Cups — Seasonal & Specialty
         "brand": "<p>Pastel mini-clusters in cup arrangements — small enough for a brunch table, soft enough for a basket, exactly seasonal.</p>",
-        "details": "<ul><li>Set of pastel balloon cups</li><li>Easter palette: pinks, lavenders, mints, soft yellows</li><li>Pickup or delivered locally</li></ul>",
+        "details": "<ul><li>Set of pastel balloon cups</li><li>Easter palette: pinks, lavenders, mints, soft yellows</li><li>Pickup or local delivery available through checkout</li></ul>",
     },
     "WEB-ITM-0020": {  # Baby Table Decor — Table Decor
         "brand": "<p>A centerpiece in the colors of the shower — soft, hand-built, the kind that fits between the cake and the cards without taking either's place.</p>",
@@ -107,7 +107,7 @@ COPY = {
     },
     "WEB-ITM-0021": {  # Logo 3 Layered Bouquet — Bouquets
         "brand": "<p>A three-tier bouquet in your brand colors. The detail that turns a corporate event into one people actually remember.</p>",
-        "details": "<ul><li>Hand-tied three-layer bouquet</li><li>Your brand palette — share hex codes or a logo and we'll match</li><li>Latex only; foil topper add-on available on request</li><li>Pickup or delivered locally</li></ul>",
+        "details": "<ul><li>Hand-tied three-layer bouquet</li><li>Your brand palette — share hex codes or a logo and we'll match</li><li>Latex only; foil topper add-on available on request</li><li>Pickup or local delivery available through checkout</li></ul>",
     },
     "WEB-ITM-0022": {  # Mother's Day front yard 7' Column — Columns
         "brand": "<p>A seven-foot column on the front lawn for Mother's Day morning. Soft palette, balloons that catch the breeze — the kind of welcome that lives in the photo before she's even out of the car.</p>",
@@ -119,27 +119,27 @@ COPY = {
     },
     "WEB-ITM-0024": {  # Paw Patrol Bouquet — Bouquets
         "brand": "<p>A bouquet around a Paw Patrol foil — bright, primary, exactly what the kid asks for by name.</p>",
-        "details": "<ul><li>Hand-tied bouquet with a Paw Patrol foil topper</li><li>Reds, blues, yellows in the cast palette</li><li>Pickup or delivered locally</li></ul>",
+        "details": "<ul><li>Hand-tied bouquet with a Paw Patrol foil topper</li><li>Reds, blues, yellows in the cast palette</li><li>Pickup or local delivery available through checkout</li></ul>",
     },
     "WEB-ITM-0025": {  # Elsa Bouquet — Bouquets
         "brand": "<p>Icy blues and whites around an Elsa foil — winter the whole year, for the kid who already knows the words.</p>",
-        "details": "<ul><li>Hand-tied bouquet with an Elsa foil topper</li><li>Blues, whites, and silver accents</li><li>Pickup or delivered locally</li></ul>",
+        "details": "<ul><li>Hand-tied bouquet with an Elsa foil topper</li><li>Blues, whites, and silver accents</li><li>Pickup or local delivery available through checkout</li></ul>",
     },
     "WEB-ITM-0026": {  # Holy COW!! Bouquet — Bouquets
         "brand": "<p>Black, white, and the kind of milestone-birthday humor that earns the laugh before the candles. For the round number nobody saw coming.</p>",
-        "details": "<ul><li>Hand-tied bouquet with a milestone foil topper</li><li>Black and white palette with accent colors of your choice</li><li>Pickup or delivered locally</li></ul>",
+        "details": "<ul><li>Hand-tied bouquet with a milestone foil topper</li><li>Black and white palette with accent colors of your choice</li><li>Pickup or local delivery available through checkout</li></ul>",
     },
     "WEB-ITM-0027": {  # Butterfly GET WELL — Get-Well Bouquets
         "brand": "<p>A bouquet for the hospital room — butterflies, soft colors, no latex. The kind of small thing that lands in the day someone needs it most.</p>",
-        "details": "<ul><li>Hand-tied get-well bouquet with butterfly foil topper</li><li>Foil only — fully latex-free, hospital-safe</li><li>Pickup or delivered locally</li></ul>",
+        "details": "<ul><li>Hand-tied get-well bouquet with butterfly foil topper</li><li>Foil only — fully latex-free, hospital-safe</li><li>Pickup or local delivery available through checkout</li></ul>",
     },
     "WEB-ITM-0028": {  # Bandage GET WELL — Get-Well Bouquets
         "brand": "<p>A bandage foil with a smile drawn on, surrounded by foils that earn one back. Fully latex-free for hospital rooms.</p>",
-        "details": "<ul><li>Hand-tied get-well bouquet with a bandage foil topper</li><li>Foil only — no latex</li><li>Pickup or delivered locally</li></ul>",
+        "details": "<ul><li>Hand-tied get-well bouquet with a bandage foil topper</li><li>Foil only — no latex</li><li>Pickup or local delivery available through checkout</li></ul>",
     },
     "WEB-ITM-0029": {  # Shooting Star GET WELL — Get-Well Bouquets
         "brand": "<p>A shooting-star foil and the foils that travel with it — bright, hopeful, hospital-safe.</p>",
-        "details": "<ul><li>Hand-tied get-well bouquet with a shooting star foil topper</li><li>Foil only — no latex</li><li>Pickup or delivered locally</li></ul>",
+        "details": "<ul><li>Hand-tied get-well bouquet with a shooting star foil topper</li><li>Foil only — no latex</li><li>Pickup or local delivery available through checkout</li></ul>",
     },
     "WEB-ITM-0030": {  # 6' Graduation Stands — Stands & Easels
         "brand": "<p>Six-foot stands flanking the photo wall — caps, school colors, names if you want them. The frame the cap-and-gown photos deserve.</p>",
@@ -151,7 +151,7 @@ COPY = {
     },
     "WEB-ITM-0032": {  # Mother's Day Bouquet — Bouquets
         "brand": "<p>Soft pinks, lavenders, and whites in a bouquet that says what flowers say — and lasts longer.</p>",
-        "details": "<ul><li>Hand-tied Mother's Day bouquet</li><li>Pinks, lavenders, whites — or pick another palette</li><li>Foil topper add-on available on request</li><li>Pickup or delivered locally</li></ul>",
+        "details": "<ul><li>Hand-tied Mother's Day bouquet</li><li>Pinks, lavenders, whites — or pick another palette</li><li>Foil topper add-on available on request</li><li>Pickup or local delivery available through checkout</li></ul>",
     },
     "WEB-ITM-0033": {  # Large Organic Column — Columns
         "brand": "<p>Balloons up to 24 inches stacked into a column. The scale brings presence that a standard column doesn't.</p>",
@@ -179,7 +179,7 @@ COPY = {
     },
     "WEB-ITM-0039": {  # Large Head Missionary — Bouquets
         "brand": "<p>A bouquet for the day someone leaves on a mission — a foil head with the colors and details that match where they're going. A send-off they'll see in every picture.</p>",
-        "details": "<ul><li>Hand-tied missionary send-off bouquet with a large foil head topper</li><li>Customize the palette and accents to match the mission</li><li>Pickup or delivered locally</li></ul>",
+        "details": "<ul><li>Hand-tied missionary send-off bouquet with a large foil head topper</li><li>Customize the palette and accents to match the mission</li><li>Pickup or local delivery available through checkout</li></ul>",
     },
     "WEB-ITM-0040": {  # Premium Organic Garland — Garlands
         "brand": "<p>Balloons up to 24 inches — bolder, more dramatic. The scale creates depth and dimension that a standard garland can't.</p>",
@@ -211,7 +211,7 @@ COPY = {
     },
     "WEB-ITM-0047": {  # Birthday Deliveries — Deliveries
         "brand": "<p>A pickup-or-delivery birthday set — balloons, a topper, and a card if you want one — left on the doorstep, the desk, or the dinner table. The little thing that becomes the picture of the day.</p>",
-        "details": "<ul><li>Birthday delivery set</li><li>Choose the theme and palette</li><li>Local delivery along the Wasatch Front, or pickup at our West Jordan location</li></ul>",
+        "details": "<ul><li>Birthday delivery set</li><li>Choose the theme and palette</li><li>Pickup request or local delivery available through checkout</li></ul>",
     },
     "WEB-ITM-0048": {  # Star Column — Columns
         "brand": "<p>A column with star foils integrated — bright, structured, the kind of piece that earns a second look on the way in.</p>",
