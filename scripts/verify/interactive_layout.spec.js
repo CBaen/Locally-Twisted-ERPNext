@@ -47,6 +47,25 @@ test.describe("Locally Twisted interactive layout states", () => {
 					expect(modes.mobileVisible).toBe(true);
 				}
 
+				const colorContract = await page.evaluate(() => {
+					function background(selector) {
+						const element = document.querySelector(selector);
+						return element ? window.getComputedStyle(element).backgroundColor : null;
+					}
+					return {
+						header: background(".lt-mega-header"),
+						top: background(".lt-mega-header__top"),
+						mobile: background(".lt-mega-header__mobile"),
+					};
+				});
+				expect(colorContract.header, "header shell should use the warm-white style-guide surface").toBe("rgb(250, 247, 242)");
+				expect(colorContract.header, "header shell should not regress to the black ink band").not.toBe("rgb(10, 10, 11)");
+				if (viewport.expectedMode === "desktop") {
+					expect(colorContract.top, "desktop proof row should keep the deep-navy authority band").toBe("rgb(14, 34, 64)");
+				} else {
+					expect(colorContract.mobile, "mobile header should use the warm-white style-guide surface").toBe("rgb(250, 247, 242)");
+				}
+
 				const result = await auditPageLayout(page, {
 					containerSelectors: [".lt-mega-header", ".lt-mega-header__main-row", ".lt-mega-header__mobile-row"],
 					targetSelectors: [".lt-mega-header__mobile-action", ".lt-mega-header__cart", ".lt-mega-header__search", ".lt-mega-header__cta"],
@@ -225,6 +244,48 @@ test.describe("Locally Twisted interactive layout states", () => {
 					targetSelectors: [".lt-portfolio-modal__close"],
 				});
 				expectNoLayoutFailures(expect, result, `portfolio modal at ${viewport.name}px`);
+			});
+		}
+	});
+
+	test.describe("homepage review marquee", () => {
+		for (const viewport of [
+			{ name: "mobile", width: 375, height: 900 },
+			{ name: "desktop", width: 1366, height: 900 },
+		]) {
+			test(`reviews crawl left-to-right and stay unstacked on ${viewport.name}`, async ({ page }) => {
+				await page.setViewportSize({ width: viewport.width, height: viewport.height });
+				await page.emulateMedia({ reducedMotion: "no-preference" });
+				const response = await gotoAndSettle(page, "/");
+				await expectSuccessfulResponse(response, "/");
+
+				const before = await page.evaluate(() => {
+					const track = document.querySelector(".lt-reviews-block__track");
+					const cards = Array.from(document.querySelectorAll(".lt-reviews-block__quote")).slice(0, 4);
+					const matrix = new DOMMatrixReadOnly(window.getComputedStyle(track).transform);
+					const tops = cards.map((card) => Math.round(card.getBoundingClientRect().top));
+					return {
+						x: matrix.m41,
+						topDelta: Math.max(...tops) - Math.min(...tops),
+						cardCount: cards.length,
+						animationName: window.getComputedStyle(track).animationName,
+						animationDuration: window.getComputedStyle(track).animationDuration,
+					};
+				});
+
+				await page.waitForTimeout(1200);
+
+				const after = await page.evaluate(() => {
+					const track = document.querySelector(".lt-reviews-block__track");
+					const matrix = new DOMMatrixReadOnly(window.getComputedStyle(track).transform);
+					return { x: matrix.m41 };
+				});
+
+				expect(before.cardCount).toBeGreaterThanOrEqual(4);
+				expect(before.animationName).toBe("lt-reviews-scroll");
+				expect(before.animationDuration).toBe("540s");
+				expect(before.topDelta, "first review cards should share one horizontal row").toBeLessThanOrEqual(1);
+				expect(after.x, "review track should move right over time").toBeGreaterThan(before.x);
 			});
 		}
 	});

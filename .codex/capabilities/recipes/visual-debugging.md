@@ -1,7 +1,7 @@
 ---
 name: Visual Debugging
 level: recipe
-last_verified: 2026-04-25
+last_verified: 2026-05-06
 ---
 
 ## What it does
@@ -13,6 +13,7 @@ Lets the agent see what the user sees without asking them to describe it. Combin
 - The user says "the button looks wrong" / "the layout is broken" / "it's not lining up."
 - After making any frontend change where the result has a visual component.
 - Before declaring frontend work done.
+- When screenshots from Chrome, Brave, or another browser disagree with automated checks. If animation, reduced-motion, scrollbars, or browser-specific session state is involved, also use [cross-browser-motion-visual-verification](cross-browser-motion-visual-verification.md).
 
 ## How to use it
 
@@ -31,6 +32,10 @@ The loop is the point. One screenshot is not visual debugging — *iterating aga
 
 - **Hidden state.** A screenshot shows the rendered page, not the React tree, network panel, or console. If the bug is interaction-driven, you also need devtools — see `browser-devtools-debugging` (when added).
 - **The user moved the window.** A screenshot taken seconds ago may not match the current state. Take a fresh one before claiming a fix worked.
+
+## Cross-Browser Note
+
+A headless or fresh-profile browser can pass while the user's persistent Chrome/Brave session shows stale CSS, reduced-motion behavior, extension effects, or cache state. For motion-dependent UI, verify the media query branch and browser session, not only computed CSS in one automated run.
 
 ## Examples
 

@@ -35,7 +35,7 @@ For this nav/content lane, stay inside these rules:
 
 | Lane | Owner | Files / Surface | Status |
 |---|---|---|---|
-| Nav/chrome and live menu assets | Codex current session | `templates/includes/navbar/navbar.html`, `navbar_context.py`, header portions of `public/css/lt-theme.css`, `hooks.py`, `public/js/lt-megamenu.js`, `public/css/lt-mega-menu.css`, `scripts/verify/nav_ia.py`, `scripts/verify/smoke_shop.py` | Complete for current takeover. Mega-menu is restored deliberately, served through hooks, and verified with desktop click-pin behavior plus mobile drawer accordions. Reopen only with a new claim. |
+| Nav/chrome and live menu assets | Codex current session | `templates/includes/navbar/navbar.html`, `navbar_context.py`, header portions of `public/css/lt-theme.css`, `hooks.py`, `public/js/lt-megamenu.js`, `public/css/lt-mega-menu.css`, `scripts/verify/nav_ia.py`, `scripts/verify/smoke_shop.py` | Complete for current takeover. Mega-menu is restored deliberately, served through hooks, and verified with desktop click-pin behavior plus mobile drawer accordions. 2026-05-06 color repair moved the all-black header to a style-guide split: deep-navy proof row, warm-white main/mobile header, berry CTA, brass rules. Reopen only with a new claim. |
 | Authority page content and route pages | Codex current session | `www/home.*`, `www/event_balloons.*`, `www/process.*`, `www/portfolio.*`, `www/contact.*`, `www/shop.*`, supporting public content pages | Current containment pass complete. Remaining work is photo/trust-count/content review, not emergency container overflow repair. |
 | Owner package and screenshots | Unclaimed | `_resources/brand-direction-architecture-2026-05/`, desktop/mobile renders, route map, builder notes | Pending. Use screenshots from the actual Frappe pages after route/content replacement, not disconnected mockups. |
 
@@ -57,7 +57,7 @@ For this nav/content lane, stay inside these rules:
 - `python scripts/verify/smoke_shop.py` passed after updating the verifier to the restored mega-menu contract.
 - `npm run test:layout-fit` initially passed 80/80 after adding `/checkout` and `/thank-you`; this is superseded by the 260/260 responsive follow-up below.
 - Responsive follow-up expanded the passive layout gate to 260/260 and added `npm run test:interactive-layout` at 39/39. Future menu/content work should use the responsive-container workstream instead of relying on the old 80-check gate.
-- `python scripts/verify/smoke_shop.py` now verifies quote-required custom install product pages separately from retail variant add-to-cart pages.
+- `python scripts/verify/smoke_shop.py` now verifies fixed-price product pages do not invent product-level quote gates, and still checks retail variant add-to-cart pages.
 - Served asset check found `lt-mega-menu.css`, `lt-page-containment.css`, `lt-product-polish.css`, and `lt-megamenu.js?v=20260505-mega-4` in the running page.
 - Post-fix Playwright screenshot/interaction pass saved to `output/playwright/full-site-fix-20260505-post/` and reported no failures across 13 routes at 320, 375, and 1366 widths, plus desktop event/product mega menus and the mobile drawer.
 
@@ -76,6 +76,22 @@ Status:
 ```
 
 ## Session Notes
+
+### 2026-05-06 - Codex current session review marquee repair
+Lane: Homepage reviews visual behavior.
+Files: `www/home.py`, `interactive_layout.spec.js`, `workstreams/menu-content-coordination.md`, `CODING-HANDOFF.md`.
+Intent: Respond to GL's direction that homepage reviews should crawl slowly left-to-right, not stack. Keep the existing duplicate-track marquee structure and accessibility pause/reduced-motion behavior, but remove the mobile stacked fallback and reverse the normal animation direction.
+Conflicts: Staying out of checkout/commerce/design-studio dirty files. This does not reopen nav/chrome structure.
+Verification: `python -m py_compile apps\locally_twisted\locally_twisted\www\home.py` passed; `node --check scripts\verify\interactive_layout.spec.js` passed; after `python scripts/dev/clear_website_cache.py --restart`, live Playwright check showed `lt-reviews-scroll` at `540s`, `topDelta=0`, and transform moving right on 375px and 1366px. `npx playwright test scripts/verify/interactive_layout.spec.js --reporter=line` passed 42/42. `npm run test:layout-fit` passed 260/260.
+Status: Complete.
+
+### 2026-05-06 - Codex current session header color repair
+Lane: Nav/chrome visual repair.
+Files: `lt-mega-menu.css`, `hooks.py`, `interactive_layout.spec.js`, `workstreams/menu-content-coordination.md`, `CODING-HANDOFF.md`.
+Intent: Respond to GL's live observation that the header reads black and does not fit the style guide. Keep the deliberate premium mega-menu contract, but move the chrome to a Civic/Slate/Berry treatment with a slim deep-navy proof row, warm-white main nav, berry CTA, brass rules, and warm-white mobile header.
+Conflicts: Staying inside the existing mega-menu decision. Not editing checkout/commerce or design-studio files already dirty in the worktree.
+Verification: Served page after `python scripts/dev/clear_website_cache.py --restart` loaded `lt-mega-menu.css?v=20260506-mega-5`; desktop/mobile computed `.lt-mega-header` as `rgb(250, 247, 242)` and desktop `.lt-mega-header__top` as `rgb(14, 34, 64)`. `node --check scripts/verify/interactive_layout.spec.js` passed; `python scripts/verify/nav_ia.py` passed; `npm run test:public-verify` passed with nav IA, layout-fit 260/260, interactive-layout 40/40, checkout-experience 1/1, and shop smoke.
+Status: Complete.
 
 ### 2026-05-05 - Worker A
 Lane: Mega-menu header restoration.

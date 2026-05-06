@@ -6,6 +6,16 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-06 - Frappe container work needs an explicit contract
+
+Older notes correctly found that Frappe wraps normal web pages in `.page-content-wrapper > main.container.my-4`, and LT later neutralized that stock visual box so full-width brand bands could span the viewport. The missing piece was that "break out of Frappe" became too easy to treat as a general page-building move. GL saw the real effect: some sections felt detached from the Frappe page rhythm, while crawls/reviews broke differently across browsers and cache states.
+
+Research against the installed local stack confirmed the current contract: Frappe/Webshop still owns the website lifecycle, route templates, header/footer hooks, product/listing/cart selectors, and asset loading. LT owns the visual containment inside that lifecycle through `lt-theme.css` and `lt-page-containment.css`. That means every public section must choose a mode before CSS work starts: contained workflow/reading surface, or deliberate full-bleed band with its own inner wrapper and browser-verified clipping.
+
+**Counter-move:** before changing public layout, `.lt-fullbleed`, crawls, review tracks, Webshop pages, or shared CSS, read `.codex/capabilities/recipes/frappe-public-container-contract.md`. Classify the section, preserve Frappe/Webshop hooks and selectors, use LT inner containment instead of relying on the neutralized parent container, and verify no document overflow, visible unintended scrollbar, or browser-specific fallback.
+
+---
+
 ## 2026-05-06 - Do not turn cartable products into quote-only failures
 
 The checkout rule briefly treated product groups like Arches and Garlands as `quote_required`, which meant a priced product already in the cart could disappear from checkout or be described as not purchasable. GL caught the customer logic problem: putting something in a cart means "I can buy this." The only clear system-configured checkout quote fallback is fulfillment, especially a delivery ZIP outside the standard zone.
@@ -19,6 +29,14 @@ The checkout rule briefly treated product groups like Arches and Garlands as `qu
 The checkout code already knew how to pick a Utah tax rate from ZIP/city, but that did not mean the whole order should be taxed. GL clarified the actual LT rule: only goods are taxable. Services, face painting, balloon twisting, deposits for those services, and delivery charges are not taxable. The failure was visible only when the Sales Order contract compared expected goods-only tax to ERPNext's submitted tax rows; West Jordan delivery produced `$5.96` tax instead of the expected `$4.84` because delivery was being included in the taxable base.
 
 **Counter-move:** for ERPNext checkout work, test two contracts separately: jurisdiction/rate selection and taxable-line classification. Use a real 0 percent Item Tax Template for non-taxable service/deposit/delivery lines because ERPNext can recalculate Sales Order tax from templates, not just raw preview math. Verify both preview totals and submitted Sales Order tax rows. Keep service deposits as Lead/payment guidance until an approved service money path exists.
+
+---
+
+## 2026-05-06 - Fresh headless checks can miss persistent-browser motion state
+
+The homepage review marquee was checked in Playwright and the computed CSS said it was animating. GL then showed two real browser screenshots with different failures: Chrome exposed the horizontal scrollbar from the reduced-motion fallback, while Brave showed the older stacked-card fallback. The code path existed, but the verification did not cover the states GL was actually seeing: persistent browser sessions, stale rendered CSS, and the `prefers-reduced-motion` branch.
+
+**Counter-move:** when a visual behavior depends on animation, overflow, media queries, or browser preferences, verify more than the happy-path computed style in one fresh browser. Check the served HTML/CSS, then run Chrome and Brave with fresh profiles and inspect the user-visible state: `matchMedia('(prefers-reduced-motion: reduce)')`, animation name/duration/play state, overflow/scrollbar behavior, and element positions over time. Also force both `no-preference` and `reduce` in Playwright. A reduced-motion fallback still has to match the intended visual contract; it cannot quietly become a stacked grid or visible scrollbar unless GL explicitly accepts that.
 
 ---
 

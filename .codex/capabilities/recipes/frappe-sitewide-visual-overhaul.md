@@ -13,6 +13,7 @@ successful_uses: 2
 failed_uses: 0
 regressions: 0
 depends_on:
+  - frappe-public-container-contract
   - responsive-container-audit
 used_by: []
 tags:
@@ -36,22 +37,23 @@ Use this recipe when changing the shared look of the LT public site across Frapp
 ## Pattern
 
 1. Read `_resources/STYLE-GUIDE.md` and the active visual workstream before editing.
-2. Identify every route family affected: static pages, Webshop listings, product detail, cart, checkout, contact, success pages.
-3. Keep the implementation Frappe-native:
+2. Read `frappe-public-container-contract.md` and classify the affected sections as contained workflow/reading surfaces or deliberate full-bleed bands.
+3. Identify every route family affected: static pages, Webshop listings, product detail, cart, checkout, contact, success pages.
+4. Keep the implementation Frappe-native:
    - shared CSS in the app asset bundle,
    - Jinja partial overrides for header/footer,
    - route controllers under `apps/locally_twisted/locally_twisted/www/`,
    - Webshop hooks/templates where Webshop owns the flow.
-4. Wire every new public asset in `hooks.py`; do not assume files under `public/` are being served.
-5. Bump cache keys for every changed CSS/JS asset in `hooks.py`.
-6. Clear the website cache after Jinja/CSS edits.
-7. Restart backend/frontend if `hooks.py`, Python controllers, or website context hooks changed, then clear cache again.
-8. Verify the served page HTML contains the expected cache-busted CSS/JS URLs.
-9. Verify routes by status and behavior.
-10. Run layout and contract checks that cover the touched route families.
-11. For broad public-site changes, run the responsive container audit gate, including stateful UI checks.
-12. Capture desktop and mobile screenshots and inspect them before claiming the visual pass is ready.
-13. Update the relevant workstream, queue, decisions, lessons, and handoff docs in the same closeout.
+5. Wire every new public asset in `hooks.py`; do not assume files under `public/` are being served.
+6. Bump cache keys for every changed CSS/JS asset in `hooks.py`.
+7. Clear the website cache after Jinja/CSS edits.
+8. Restart backend/frontend if `hooks.py`, Python controllers, or website context hooks changed, then clear cache again.
+9. Verify the served page HTML contains the expected cache-busted CSS/JS URLs.
+10. Verify routes by status and behavior.
+11. Run layout and contract checks that cover the touched route families.
+12. For broad public-site changes, run the responsive container audit gate, including stateful UI checks.
+13. Capture desktop and mobile screenshots and inspect them before claiming the visual pass is ready.
+14. Update the relevant workstream, queue, decisions, lessons, and handoff docs in the same closeout.
 
 ## Verification Checklist
 

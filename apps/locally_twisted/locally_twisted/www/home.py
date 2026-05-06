@@ -533,8 +533,8 @@ body[data-path="home"] main.container.my-4 {
 }
 /* Reviews carousel — horizontal-scrolling marquee of customer praise.
  * Pattern mirrors .lt-crawl but with full review cards instead of
- * client names. Speed is much slower (360s vs 180s) because the
- * cards need reading time. Pauses on hover/focus.
+ * client names. The crawl moves left-to-right slowly so cards read
+ * as a moving proof line, not a stacked testimonial grid. Pauses on hover/focus.
  * Per GL 2026-04-27: "carousel review of praise that matter more
  * than the carousel of businesses at the bottom." */
 .lt-reviews-block__quotes {
@@ -559,7 +559,7 @@ body[data-path="home"] main.container.my-4 {
     display: flex;
     align-items: stretch;
     width: max-content;
-    animation: lt-reviews-scroll 360s linear infinite;
+    animation: lt-reviews-scroll 540s linear infinite;
 }
 .lt-reviews-block__group {
     display: flex;
@@ -573,8 +573,8 @@ body[data-path="home"] main.container.my-4 {
     animation-play-state: paused;
 }
 @keyframes lt-reviews-scroll {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
+    from { transform: translateX(-50%); }
+    to   { transform: translateX(0); }
 }
 @media (prefers-reduced-motion: reduce) {
     .lt-reviews-block__quotes {
@@ -584,20 +584,19 @@ body[data-path="home"] main.container.my-4 {
         margin-right: 0;
         mask-image: none;
         -webkit-mask-image: none;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
         width: 100%;
     }
     .lt-reviews-block__track {
         animation: none;
-        flex-wrap: wrap;
-        justify-content: center;
         transform: none;
-        width: 100%;
+        width: max-content;
     }
     .lt-reviews-block__group {
-        flex-wrap: wrap;
-        justify-content: center;
+        flex-wrap: nowrap;
         padding-right: 0;
-        width: 100%;
+        width: auto;
     }
     .lt-reviews-block__group[aria-hidden="true"] {
         display: none;

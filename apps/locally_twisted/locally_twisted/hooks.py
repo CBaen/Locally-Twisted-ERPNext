@@ -44,7 +44,7 @@ app_include_js = "/assets/locally_twisted/js/lt-desk-workspace-router.js?v=20260
 web_include_css = [
     "/assets/locally_twisted/css/lt-theme.css?v=20260505-authority-4",
     "/assets/locally_twisted/css/lt-page-containment.css?v=20260505-containment-1",
-    "/assets/locally_twisted/css/lt-mega-menu.css?v=20260505-mega-4",
+    "/assets/locally_twisted/css/lt-mega-menu.css?v=20260506-mega-5",
     "/assets/locally_twisted/css/lt-product-polish.css?v=20260505-product-2",
 ]
 

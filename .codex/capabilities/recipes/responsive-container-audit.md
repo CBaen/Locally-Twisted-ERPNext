@@ -12,7 +12,8 @@ evidence_quality: direct
 successful_uses: 1
 failed_uses: 0
 regressions: 0
-depends_on: []
+depends_on:
+  - frappe-public-container-contract
 used_by:
   - lt-brand-style-guide-consolidation
 tags:
@@ -28,6 +29,8 @@ tags:
 # Responsive Container Audit
 
 Use this recipe when changing any public page layout, container, card grid, nav, drawer, modal, form, product selector, cart/checkout surface, or shared CSS that can affect how content fits at different widths.
+
+Read `frappe-public-container-contract.md` first when the work touches Frappe's page shell, `.lt-fullbleed`, Webshop surfaces, crawls, marquees, or route-level containment. The audit verifies the chosen contract; it does not decide whether a section should be contained or full-bleed.
 
 ## When To Use
 
@@ -81,14 +84,16 @@ Add route-specific widths when the changed surface has its own breakpoint.
 ## Implementation Pattern
 
 1. Read `_resources/STYLE-GUIDE.md`, especially the layout and verification sections.
-2. Identify all route families touched by the change.
-3. Add or update route-specific checks in `interactive_layout.spec.js` when the problem only appears after interaction.
-4. Keep helper changes in `layout_helpers.js`; do not duplicate viewport lists or overflow logic in multiple specs.
-5. Fix the actual container math: grid tracks, `min-width: 0`, `box-sizing`, padding, wrapping, max-width, image aspect ratios, and stable control dimensions.
-6. Avoid body-wide `overflow-x: hidden` as the primary fix.
-7. Run cache clear after Frappe/Jinja/CSS changes.
-8. Verify with the commands below.
-9. Update the workstream/queue/decision/lesson docs if the fix changes the project standard.
+2. Read `frappe-public-container-contract.md` when the work touches the Frappe shell, full-bleed bands, Webshop surfaces, or shared containment.
+3. Identify all route families touched by the change.
+4. Classify each changed section as contained workflow/reading surface or deliberate full-bleed band before writing CSS.
+5. Add or update route-specific checks in `interactive_layout.spec.js` when the problem only appears after interaction.
+6. Keep helper changes in `layout_helpers.js`; do not duplicate viewport lists or overflow logic in multiple specs.
+7. Fix the actual container math: grid tracks, `min-width: 0`, `box-sizing`, padding, wrapping, max-width, image aspect ratios, and stable control dimensions.
+8. Avoid body-wide `overflow-x: hidden` as the primary fix.
+9. Run cache clear after Frappe/Jinja/CSS changes.
+10. Verify with the commands below.
+11. Update the workstream/queue/decision/lesson docs if the fix changes the project standard.
 
 ## Verification Commands
 
