@@ -6,6 +6,14 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-06 - Customer document policy copy needs one lane helper
+
+LT policy copy now appears in several places: public Terms/Refund pages, checkout notices, paid-order receipts, and inquiry auto-ack emails. When those surfaces are edited independently, the checkout/legal story can drift or accidentally imply the wrong tax/refund rule for services, deposits, delivery, or ready-to-order products.
+
+**Counter-move:** keep customer-document policy language behind `locally_twisted.policy_documents` and anchored public policy lanes. Do not add ERPNext Terms and Conditions or Email Template sync records unless a real customer-facing invoice path requires them; LT should stay whitelabel/code-owned where practical. After changing customer-facing document copy, run `python scripts/verify/customer_documents_contract.py` and the paid-order cascade verifier. Decode/normalize Frappe `Email Queue.message` content in verifiers because queued mail may be quoted-printable encoded.
+
+---
+
 ## 2026-05-06 - Frappe container work needs an explicit contract
 
 Older notes correctly found that Frappe wraps normal web pages in `.page-content-wrapper > main.container.my-4`, and LT later neutralized that stock visual box so full-width brand bands could span the viewport. The missing piece was that "break out of Frappe" became too easy to treat as a general page-building move. GL saw the real effect: some sections felt detached from the Frappe page rhythm, while crawls/reviews broke differently across browsers and cache states.

@@ -7,6 +7,8 @@ paths, verifies the downstream ERPNext records, then rolls everything back.
 from __future__ import annotations
 
 import time
+from html import unescape
+from quopri import decodestring
 
 import frappe
 from frappe.utils import add_days, flt, nowdate
@@ -221,6 +223,18 @@ def _collect_evidence(sales_order_name, customer_name, payment_request_name, con
     )
     if not receipt_queue:
         failures.append("missing customer receipt Email Queue row")
+    else:
+        receipt_message = _readable_message(receipt_queue.get("message") or "")
+        for expected in (
+            "/terms-of-service#ready-to-order-pickup-delivery",
+            "/refund-policy#ready-to-order-pickup-delivery",
+            "/privacy",
+            "Pickup and delivery windows are requests until confirmed",
+            "not returnable once they are prepared, delivered, or picked up",
+            "same day",
+        ):
+            if expected not in receipt_message:
+                failures.append(f"customer receipt email missing policy text/link: {expected}")
 
     operator_queue = _email_queue_for("Sales Order", sales_order_name, "New paid order")
     if not operator_queue:
@@ -264,6 +278,11 @@ def _payment_entry_for_payment_request(payment_request_name):
         limit=1,
     )
     return rows[0]["name"] if rows else None
+
+
+def _readable_message(message: str) -> str:
+    decoded = decodestring(message.encode("utf-8", errors="ignore")).decode("utf-8", errors="ignore")
+    return unescape(f"{message}\n{decoded}")
 
 
 def _sales_invoice_for_sales_order(sales_order_name):

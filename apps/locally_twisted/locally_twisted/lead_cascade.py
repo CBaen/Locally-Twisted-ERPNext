@@ -29,6 +29,7 @@ applied to Leads on customer-form submission.
 import frappe
 from frappe.utils import escape_html
 
+from locally_twisted import policy_documents
 from locally_twisted import stage_cascade
 
 
@@ -254,6 +255,11 @@ def _send_auto_ack_email(doc):
         return
 
     safe_name = escape_html(customer_name)
+    policy_block = policy_documents.customer_policy_block(
+        policy_documents.lanes_for_lead(doc),
+        include_privacy=True,
+        heading="Before you book",
+    )
     body_html = f"""
 <div style="max-width: 600px; margin: 0 auto; font-family: 'Lato', Arial, sans-serif; color: #595A5C;">
     <div style="background-color: #FBF5F2; padding: 24px 32px; text-align: center;">
@@ -272,6 +278,7 @@ def _send_auto_ack_email(doc):
             <a href="/shop" style="color: #1A1A1A; text-decoration: underline;">shop</a>
             for inspiration.
         </p>
+        {policy_block}
         <p style="font-size: 15px; line-height: 1.6; margin-top: 24px;">
             Warmly,<br/>
             The Locally Twisted Family

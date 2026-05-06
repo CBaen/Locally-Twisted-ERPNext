@@ -32,6 +32,7 @@ follow-up.
 import frappe
 from frappe.utils import escape_html, flt
 
+from locally_twisted import policy_documents
 from locally_twisted.payments.settings import (
     DEFAULT_OPERATOR_EMAIL,
     get_operator_email,
@@ -327,6 +328,8 @@ def _send_receipt_email(so_name):
       </tr>
     </table>
   </div>
+
+  {policy_documents.customer_policy_block([policy_documents.LANE_READY_TO_ORDER], include_privacy=True)}
 
   <p style="font-size:14px; color:#5a5a5a; margin:0 0 8px;">
     Questions about your order? Reply to this email or call (801) 285-0860.

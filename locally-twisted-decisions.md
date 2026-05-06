@@ -8,6 +8,22 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-06 - Customer document policy copy uses anchored lanes and code-owned helpers
+
+**Decision:** Customer-facing receipts, inquiry acknowledgments, and future custom invoice/document copy should not each carry their own independent policy copy. The canonical public policy pages remain `/terms-of-service` and `/refund-policy`, split into anchored lanes for event balloon decor, ready-to-order pickup/delivery, face painting/balloon twisting, and corporate invoicing. Transactional emails and customer documents link to the exact lane that applies. Do not add ERPNext Terms and Conditions or Email Template records unless a verified customer-facing invoice path truly requires them.
+
+**Reasoning:** LT is a mixed event-service and ecommerce business. A generic "policies" link hides important differences between invoiced decor, ready-to-order products, artist-service deposits, and corporate Net 30 invoices. Shared helpers reduce copy drift and keep customer emails from implying that services, service deposits, or delivery are taxable. GL also wants the system to stay as whitelabel/code-owned as possible instead of filling ERPNext setup doctypes that are not needed by the current customer flow.
+
+**Implementation:** Added `locally_twisted.policy_documents` as the shared policy lane helper, updated `/terms-of-service` and `/refund-policy` anchors, added policy blocks to inquiry auto-acknowledgments and paid-order receipts, and updated the checkout notice. An initial ERPNext Terms/Email Template sync path was removed after GL clarified the whitelabel preference; the local DB records/template block created during that pass were cleaned up.
+
+**Verification receipt:** `customer_documents_contract.py` first failed on missing helper/anchors/email links, then passed. `payment_cascade_contract.py` first failed on missing receipt policy links/text, then passed. Supporting checks passed: py_compile, commerce rules, checkout fulfillment, payment webhook, cart checkout, route checks, `git diff --check`, and `npm run test:layout-fit` with 273/273 passing.
+
+**Alternatives considered:** Create separate standalone legal pages per lane. Rejected because a single canonical Terms/Refund pair with anchors is easier to maintain and link precisely. Put full legal text in every receipt email. Rejected for ecommerce receipts; they get concise plain-language summaries plus exact links. Sync ERPNext Terms and Conditions records. Rejected after GL clarified that unnecessary ERPNext additions work against the whitelabel goal.
+
+**Decided by:** GL approved the lane structure; Codex implemented and verified the first customer-document policy slice.
+
+---
+
 ## 2026-05-06 - Policy copy follows GL business-proxy answers until legal review
 
 **Decision:** Delivery policy stays inside Terms/FAQ rather than a standalone route. Pickup/delivery windows are requested until LT confirms them. If LT cannot complete delivery/setup because the customer cannot be contacted or access information is wrong, the customer remains responsible. Delivered product damage must be reported the same day. Ready-to-order products have no returns once prepared, delivered, or picked up. Out-of-area delivery is available for quote. Privacy contact remains `hi@locallytwisted.com`. Launch expects analytics/ads/tracking plus cart/session storage. Inspiration photos are used for event planning. Event photos use an opt-out release model for photos/video taken by LT staff/representatives and public social/review photos LT can access. Invoice payment counts as acceptance of booking terms for now. Personal balloon decor cancellations less than 7 days before the event receive no cash refund; any funds paid transfer to another event date or product.
