@@ -31,7 +31,8 @@ test.describe("portfolio proof reel", () => {
 			const frame = first ? first.querySelector(".lt-frame") : null;
 			const frameStyle = frame ? window.getComputedStyle(frame) : null;
 			const rect = first ? first.getBoundingClientRect() : null;
-			const heroRect = document.querySelector(".lt-hero")?.getBoundingClientRect();
+			const heroRect = document.querySelector(".lt-portfolio-hero")?.getBoundingClientRect();
+			const headerRect = document.querySelector(".navbar, header, .web-header")?.getBoundingClientRect();
 			const bodyFontFamily = window.getComputedStyle(document.body).fontFamily;
 			const rootStyle = root ? window.getComputedStyle(root) : null;
 			return {
@@ -40,6 +41,7 @@ test.describe("portfolio proof reel", () => {
 				headingText: document.querySelector(".lt-title")?.textContent || "",
 				heroCopy: document.querySelector(".lt-hero-copy")?.textContent || "",
 				heroHeight: heroRect ? Math.round(heroRect.height) : 0,
+				headerHeight: headerRect ? Math.round(headerRect.height) : 0,
 				fontLinkCount: document.querySelectorAll('link[href*="fonts.googleapis"]').length,
 				cursorDotCount: document.querySelectorAll(".lt-cursor-dot, .lt-cursor-ring").length,
 				rootCursor: rootStyle ? rootStyle.cursor : "",
@@ -77,7 +79,8 @@ test.describe("portfolio proof reel", () => {
 		expect(facts.headingText.trim()).toBe("What We Do");
 		expect(facts.heroCopy).toContain("Utah");
 		expect(facts.heroCopy).toContain("balloon decor");
-		expect(facts.heroHeight).toBeLessThan(175);
+		expect(facts.heroHeight).toBeGreaterThan(225);
+		expect(facts.heroHeight).toBeLessThanOrEqual(Math.max(330, facts.headerHeight * 3));
 		expect(facts.fontLinkCount).toBe(0);
 		expect(facts.cursorDotCount).toBe(0);
 		expect(facts.rootCursor).not.toBe("none");
@@ -91,20 +94,21 @@ test.describe("portfolio proof reel", () => {
 		expect(facts.firstSide).toBe("left");
 		expect(facts.secondSide).toBe("right");
 		expect(facts.thirdSide).toBe("center");
-		expect(facts.firstWidth).toBeGreaterThan(500);
-		expect(facts.firstWidth).toBeLessThan(620);
-		expect(Number.parseFloat(facts.firstLeftStyle)).toBeGreaterThanOrEqual(1);
-		expect(Number.parseFloat(facts.firstLeftStyle)).toBeLessThanOrEqual(14);
+		expect(facts.firstWidth).toBeGreaterThan(830);
+		expect(facts.firstWidth).toBeLessThan(900);
+		expect(Number.parseFloat(facts.firstLeftStyle)).toBeGreaterThanOrEqual(-4);
+		expect(Number.parseFloat(facts.firstLeftStyle)).toBeLessThanOrEqual(8);
 		expect(facts.firstHeight / facts.firstWidth).toBeCloseTo(1.25, 1);
 		expect(facts.firstOpacity).toBeGreaterThan(0.85);
-		expect(facts.firstLeft).toBeGreaterThan(-90);
-		expect(facts.firstLeft).toBeLessThan(80);
-		expect(facts.firstTop).toBeLessThan(430);
-		expect(facts.secondWidth - facts.firstWidth).toBeGreaterThan(60);
-		expect(facts.thirdWidth).toBeGreaterThan(700);
-		expect(facts.thirdLeft).toBeGreaterThan(240);
-		expect(facts.thirdLeft).toBeLessThan(380);
-		expect(facts.thirdTop).toBeGreaterThan(360);
+		expect(facts.firstLeft).toBeGreaterThan(-80);
+		expect(facts.firstLeft).toBeLessThan(60);
+		expect(facts.firstTop).toBeLessThan(540);
+		expect(facts.secondWidth - facts.firstWidth).toBeGreaterThan(140);
+		expect(facts.thirdWidth).toBeGreaterThan(1200);
+		expect(facts.thirdWidth).toBeLessThan(1300);
+		expect(facts.thirdLeft).toBeGreaterThan(20);
+		expect(facts.thirdLeft).toBeLessThan(90);
+		expect(facts.thirdTop).toBeLessThan(90);
 		expect(facts.imageObjectFit).toBe("contain");
 		expect(facts.imageSrc).toContain("/optimized/");
 		expect(facts.imageSrc).toContain(".webp");
@@ -232,7 +236,7 @@ test.describe("portfolio proof reel", () => {
 		expect(before.opacity).toBe(1);
 		expect(after.firstOpacity).toBe(1);
 		expect(after.visible.length).toBeGreaterThanOrEqual(3);
-		expect(Math.max(...after.visible.map((photo) => photo.width))).toBeGreaterThan(700);
+		expect(Math.max(...after.visible.map((photo) => photo.width))).toBeGreaterThan(850);
 		expect(after.visible.some((photo) => photo.side === "center")).toBe(true);
 		expect(after.visible.some((photo) => photo.side === "left")).toBe(true);
 		expect(after.visible.some((photo) => photo.side === "right")).toBe(true);

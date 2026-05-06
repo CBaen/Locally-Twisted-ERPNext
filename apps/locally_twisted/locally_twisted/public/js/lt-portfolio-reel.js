@@ -3,47 +3,51 @@
   "use strict";
 
   const SETTINGS = {
-    density: 1.08,
+    density: 1.5,
     variant: "drift",
     driftSmoothing: 0.02,
     opacitySpeed: 4.0,
   };
 
-  const BASE_UNIT = 760;
-  const VERTICAL_SPACING = 62;
-  const OVERLAP = 0.62;
-  const CENTER_BREATH = 72;
+  const BASE_UNIT = 820;
+  const VERTICAL_SPACING = 44;
+  const OVERLAP = 0.56;
+  const COLUMN_CENTERS = {
+    left: 34,
+    center: 50,
+    right: 66,
+  };
+  const COLUMN_STAGGER = {
+    left: 0,
+    center: 40,
+    right: 18,
+  };
 
   function layoutPhotos(photos, density) {
-    let leftY = 0;
-    let rightY = 0;
+    const columnY = {
+      left: 0,
+      center: 0,
+      right: 0,
+    };
     const verticalSpacing = VERTICAL_SPACING * (2 - density);
 
-    return photos.map((photo) => {
+    return photos.map((photo, index) => {
       const width = BASE_UNIT * photo.scale * density;
       const height = width / (photo.w / photo.h);
+      const side = photo.side || (index % 3 === 1 ? "center" : index % 3 === 2 ? "right" : "left");
+      const y = columnY[side] || 0;
+      const stagger = COLUMN_STAGGER[side] || 0;
+      const yOffset = y + stagger;
+      columnY[side] = y + height * OVERLAP + verticalSpacing;
 
-      if (photo.side === "center") {
-        const startY = Math.max(leftY, rightY) + CENTER_BREATH;
-        const endY = startY + height + CENTER_BREATH;
-        leftY = endY;
-        rightY = endY;
-        return Object.assign({}, photo, { yOffset: startY, _w: width, _h: height });
-      }
-
-      const isLeft = photo.side === "left";
-      const y = isLeft ? leftY : rightY;
-      const next = y + height * OVERLAP + verticalSpacing;
-      if (isLeft) leftY = next;
-      else rightY = next;
-      return Object.assign({}, photo, { yOffset: y, _w: width, _h: height });
+      return Object.assign({}, photo, { side, yOffset, _w: width, _h: height });
     });
   }
 
   function anchorPercent(photo, index, viewportWidth) {
-    if (photo.side === "center") return 50 - (photo._w / viewportWidth) * 50;
-    if (photo.side === "left") return 2 + ((index * 5) % 12);
-    return 100 - (photo._w / viewportWidth) * 100 - (2 + ((index * 9) % 12));
+    const baseCenter = COLUMN_CENTERS[photo.side] || 50;
+    const jitter = photo.side === "center" ? ((index % 2) ? 0.9 : -0.9) : ((index % 3) - 1) * 1.25;
+    return baseCenter + jitter - (photo._w / viewportWidth) * 50;
   }
 
   function makePhotoEl(photo, index, viewportWidth) {
@@ -62,7 +66,7 @@
     const anchor = anchorPercent(photo, index, viewportWidth);
     figure.style.width = `${photo._w}px`;
     figure.style.height = `${photo._h}px`;
-    figure.style.left = `${Math.max(1, anchor)}%`;
+    figure.style.left = `${Math.max(-8, Math.min(76, anchor))}%`;
     figure.style.top = `${photo.yOffset}px`;
     figure.style.setProperty("--ar", photo.w / photo.h);
 
@@ -142,7 +146,7 @@
         const anchor = anchorPercent(photo, index, viewportWidth);
         element.style.width = `${photo._w}px`;
         element.style.height = `${photo._h}px`;
-        element.style.left = `${Math.max(1, anchor)}%`;
+        element.style.left = `${Math.max(-8, Math.min(76, anchor))}%`;
         element.style.top = `${photo.yOffset}px`;
       });
 
@@ -204,8 +208,8 @@
 
         if (SETTINGS.variant === "drift") {
           const eased = Math.max(0, Math.min(1, smoothProgress * 1.4));
-          tx = side * (1 - eased) * 72;
-          ty = (1 - eased) * (side === 0 ? 48 : 24);
+          tx = side * (1 - eased) * 42;
+          ty = (1 - eased) * (side === 0 ? 38 : 18);
           opacity = 1;
         } else if (SETTINGS.variant === "snap") {
           const eased = Math.max(0, Math.min(1, peakProgress * 1.6));

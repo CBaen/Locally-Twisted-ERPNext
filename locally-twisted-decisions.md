@@ -8,6 +8,20 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-06 - Portfolio uses compact hero plus larger three-column proof reel
+
+**Decision:** `/portfolio` should keep a compact `What We Do` hero band and a large proof-first photo reel. The hero should not become a giant hero image; it should stay roughly within 2.5-3x the live menu/header height. Desktop portfolio photos should be materially larger than the earlier small reel, settle into left/right/center columns immediately, and stay tighter to the center while preserving full installed-work photos and natural aspect ratios.
+
+**Reasoning:** GL rejected the small, edge-biased version as visually cheap and unusable. Portfolio is a proof page: the product is the installed work, so the route needs large photos, breathing room, and immediate three-column visual rhythm. The previous no-giant-hero feel was directionally right, but it still needed a real compact page hero so the route does not look shrunken or unfinished.
+
+**Implementation:** Updated `www/portfolio.html`, `public/css/lt-portfolio-reel.css`, `public/js/lt-portfolio-reel.js`, and `scripts/verify/portfolio_reel.spec.js`. The reel now uses a larger base photo unit, true three-column y-placement, tighter column centers, reduced outward drift, and a cache-busted route asset version.
+
+**Verification receipt:** `python scripts/dev/clear_website_cache.py` passed. Live desktop metrics at `1366x768` showed a 150px header, 262px portfolio hero, first left photo about 861px wide, opening center photo about 1255px wide, and no horizontal document overflow. `npm run test:portfolio-reel` passed 4/4, `npm run test:layout-fit -- --grep portfolio` passed 13/13, and `npm run test:interactive-layout -- --grep portfolio` passed 4/4.
+
+**Decided by:** GL directed the correction; Codex implemented and verified the route-specific contract.
+
+---
+
 ## 2026-05-06 - Customer reminder review reports are internal display data, not delivery
 
 **Decision:** Customer reminder dry-run queue items can now be shaped into an internal report with rows, columns, and review/hold/blocked groups. The report may feed a Desk page or internal-only scheduled review later, but it must remain no-live: no customer sending, no Email Queue or Communication creation, no automatic cadence, no payment/accounting mutation, and no approval implied by appearing in the report.

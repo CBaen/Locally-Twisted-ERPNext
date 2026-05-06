@@ -51,7 +51,9 @@ custom cursors, fake headers/footers, or full-page styling into production.
 
 ## Locked Reel Contract
 
-For the approved LT portfolio reel, large left/right photos can sit close to or slightly past the viewport edge, and center photos should appear frequently enough to balance the field. Do not shrink the desktop photos back into small safe cards. Do not make the page feel like the full external prototype; use only the collage behavior.
+For the approved LT portfolio reel, the page starts with a compact `What We Do` hero band, not a giant hero image and not a collapsed no-hero stub. Keep the hero within roughly 2.5-3x the live menu/header height, then let the photo reel carry the page.
+
+Desktop photos must use a true left/right/center three-column rhythm immediately from the first viewport. Keep the columns closer to the center than the old edge-biased version, but allow large photos to overlap or slightly exceed the viewport when that preserves scale. The current desktop baseline is intentionally about 1.5x the earlier small reel: at 1366px wide, the first left photo measures about 861px wide and the opening center photo measures about 1255px wide. Do not shrink the desktop photos back into small safe cards. Do not make the page feel like the full external prototype; use only the collage behavior.
 
 Use the approved side/scale rhythm in photo-array order:
 
@@ -59,7 +61,7 @@ Use the approved side/scale rhythm in photo-array order:
 - scales: `0.70, 0.84, 1.02, 0.66, 0.72, 0.98, 0.78, 0.66, 1.00, 0.72, 0.84, 0.96, 0.70, 0.74, 0.98, 0.66, 0.70, 0.96, 0.72, 0.86`
 - aspect sequence: `4:5, 3:2, 16:10, 2:3, 3:4, 16:9, 5:4, 3:4, 16:10, 4:5, 3:2, 16:9, 4:5, 3:4, 16:10, 2:3, 3:4, 16:9, 4:5, 3:2`
 
-The durable lesson from the failed translation is that over-protecting photos from edge placement makes them look small and sad, while copying the whole external page makes the route feel off-brand. Keep the native LT shell and compact intro; let the image collage carry the page.
+The durable lesson from the failed translation is that over-protecting photos from edge placement makes them look small and cheap, while copying the whole external page makes the route feel off-brand. Keep the native LT shell and compact intro; let the image collage carry the page.
 
 ## Verification Checklist
 
@@ -74,7 +76,7 @@ npm run test:interactive-layout -- --grep portfolio
 
 Also inspect desktop and mobile screenshots before launch claims, especially after photo-order or image-quality changes. For this reel, include Chrome and Brave captures when the failure report or user feedback mentions cross-browser differences.
 
-The latest verified use passed `npm run test:portfolio-reel` (4/4), `npm run test:layout-fit -- --grep portfolio` (13/13), and `npm run test:interactive-layout -- --grep portfolio` (3/3). Fresh screenshots and metrics were captured under `output/playwright/portfolio-what-we-do-v6/`. The route-specific verifier now checks the compact `What We Do` hero, no portfolio-specific Google font imports, no custom cursor artifacts, matched page/frame/image backgrounds, larger desktop left/right/center rhythm, optimized whole-photo assets, mobile full-width stream, and scroll-driven layout so a static row cannot pass as a successful translation.
+The latest verified use passed `npm run test:portfolio-reel` (4/4), `npm run test:layout-fit -- --grep portfolio` (13/13), and `npm run test:interactive-layout -- --grep portfolio` (4/4). Fresh screenshots and metrics were captured under `output/playwright/portfolio-tight-after-desktop.png` and `output/playwright/portfolio-tight-after-mobile.png`. The route-specific verifier now checks the compact `What We Do` hero against the live menu height, no portfolio-specific Google font imports, no custom cursor artifacts, matched page/frame/image backgrounds, larger desktop left/right/center rhythm, optimized whole-photo assets, mobile full-width stream, and scroll-driven layout so a static row cannot pass as a successful translation.
 
 ## LT Receipt
 

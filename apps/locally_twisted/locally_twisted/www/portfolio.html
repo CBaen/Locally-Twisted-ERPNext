@@ -3,16 +3,18 @@
 {% block title %}Locally Twisted - Selected Work{% endblock %}
 
 {% block head_include %}
-<link rel="stylesheet" href="/assets/locally_twisted/css/lt-portfolio-reel.css?v=20260506-8">
+<link rel="stylesheet" href="/assets/locally_twisted/css/lt-portfolio-reel.css?v=20260506-10">
 {% endblock %}
 
 {% block page_content %}
 
 <div class="lt-portfolio" data-portfolio aria-labelledby="lt-portfolio-title">
-    <section class="lt-hero">
-        <p class="lt-eyebrow">{{ portfolio_eyebrow }}</p>
-        <h1 id="lt-portfolio-title" class="lt-title">What We Do</h1>
-        <p class="lt-hero-copy">{{ portfolio_intro }}</p>
+    <section class="lt-portfolio-hero" aria-labelledby="lt-portfolio-title">
+        <div class="lt-portfolio-hero__inner">
+            <p class="lt-eyebrow">{{ portfolio_eyebrow }}</p>
+            <h1 id="lt-portfolio-title" class="lt-title">What We Do</h1>
+            <p class="lt-hero-copy">{{ portfolio_intro }}</p>
+        </div>
     </section>
 
     {% if portfolio_count %}
@@ -41,7 +43,7 @@
 <script>
 window.LT_PORTFOLIO_PHOTOS = {{ portfolio_photos_json | safe }};
 </script>
-<script src="/assets/locally_twisted/js/lt-portfolio-reel.js?v=20260506-8" defer></script>
+<script src="/assets/locally_twisted/js/lt-portfolio-reel.js?v=20260506-10" defer></script>
 <script type="application/ld+json">
 {{ itemlist_jsonld | safe }}
 </script>

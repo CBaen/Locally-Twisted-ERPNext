@@ -26,12 +26,20 @@
   text-decoration: none;
 }
 
-.lt-hero {
-  margin: 0 auto;
-  max-width: 1180px;
-  padding: clamp(18px, 2.2vw, 28px) 24px clamp(8px, 1.2vw, 14px);
+.lt-portfolio-hero {
+  align-items: center;
+  border-bottom: 1px solid var(--portfolio-rule);
+  display: flex;
+  min-height: clamp(250px, 25vh, 340px);
+  padding: clamp(28px, 4.2vw, 58px) 24px;
   position: relative;
   z-index: 5;
+}
+
+.lt-portfolio-hero__inner {
+  margin: 0 auto;
+  max-width: 1120px;
+  width: 100%;
 }
 
 .lt-eyebrow {
@@ -45,23 +53,23 @@
 
 .lt-title {
   color: var(--portfolio-ink);
-  font-size: clamp(2rem, 3vw, 2.85rem);
+  font-size: clamp(3rem, 6.6vw, 6.2rem);
   letter-spacing: 0;
-  line-height: 1;
+  line-height: 0.92;
   margin: 0;
 }
 
 .lt-hero-copy {
   color: var(--portfolio-muted);
-  font-size: clamp(0.98rem, 1.16vw, 1.08rem);
+  font-size: clamp(1rem, 1.25vw, 1.18rem);
   line-height: 1.5;
-  margin: 0.48rem 0 0;
-  max-width: 880px;
+  margin: 0.8rem 0 0;
+  max-width: 760px;
 }
 
 .lt-reel {
   margin-top: 0;
-  padding: 0 0 180px;
+  padding: 42px 0 180px;
   position: relative;
 }
 
@@ -190,12 +198,13 @@
 }
 
 @media (max-width: 768px) {
-  .lt-hero {
-    padding: 44px 20px 26px;
+  .lt-portfolio-hero {
+    min-height: clamp(210px, 34vh, 300px);
+    padding: 38px 20px 32px;
   }
 
   .lt-title {
-    font-size: clamp(2.35rem, 14vw, 4rem);
+    font-size: clamp(3rem, 18vw, 5rem);
     max-width: calc(100vw - 40px);
   }
 
