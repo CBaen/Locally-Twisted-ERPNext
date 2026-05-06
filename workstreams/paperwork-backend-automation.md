@@ -1,0 +1,182 @@
+# Paperwork And Backend Automation
+
+Last updated: 2026-05-06 by Codex after adding the business automation index, daily backend checkup, and Stripe amount-parity guard.
+
+## Outcome
+
+Make Locally Twisted's paperwork path reliable enough for launch and simple enough for Jeff to run:
+
+- customer inquiries get clear acknowledgment emails
+- paid ready-to-order checkout creates the expected ERPNext records
+- receipts, operator notifications, and welcome emails are queued once
+- invoices and payment requests are visible for review
+- Sales Invoice print output is branded and policy-aligned
+- corporate/event invoice language stays aligned with public policy pages
+- backend automation creates reviewable work, not surprise accounting entries
+
+This lane coordinates paperwork, receipts, invoices, payment records, customer emails, and backend automation boundaries. It does not replace `workstreams/finance-payroll-quickbooks-migration.md`, `workstreams/payment-backend-launch-readiness.md`, `workstreams/customer-document-policy-lanes.md`, or `workstreams/erpnext-backend-simplification.md`; it sequences the launch-critical parts of those lanes.
+
+## Current Verified Baseline
+
+Fresh local verification on 2026-05-06:
+
+- `python scripts/verify/finance_inventory.py --json` passed.
+- `python scripts/verify/customer_documents_contract.py` passed.
+- `python scripts/verify/payment_cascade_contract.py` passed and rolled back generated records.
+- `python scripts/verify/crm_stage_cascade.py` passed.
+- `python scripts/verify/backend_schema_inventory.py` passed.
+- `python scripts/verify/payment_backend_config_contract.py` passed.
+- `python scripts/verify/payment_webhook_contract.py` passed.
+- `python scripts/verify/payment_launch_readiness.py` passed in local/test mode.
+- `python scripts/verify/checkout_lead_conversion_contract.py` passed and rolled back generated records.
+- `python scripts/verify/finance_workspace_parity.py` passed.
+- `python scripts/verify/finance_inventory_contract.py` passed.
+- `python scripts/verify/payment_launch_readiness.py --mode live` failed as expected because live Stripe/site configuration is not in place.
+- `python scripts/verify/paperwork_status.py --report output/paperwork-status.json` passed and generated the first read-only paperwork status report.
+- `python scripts/verify/business_automation_index.py --report output/business-automation-index.json` passed and generated the first cross-system automation map: 17 surfaces indexed, 11 launch-required, 12 connected, 4 exists-but-not-connected, 0 launch-required missing, 1 useful future surface missing, and 0 loud-failure gaps.
+- `python scripts/verify/stripe_amount_parity_contract.py` passed. Stripe Checkout line items now include a tax/charges adjustment when needed and must equal the ERPNext Sales Order grand total.
+- `python scripts/verify/invoice_branding_contract.py` passed after syncing the branded Sales Invoice print format and Letter Head. The contract now requires gray vertical callouts for secondary/AP information, the exact black customer-service support bar, and no gold, navy, berry, soft promo colors, dog-logo markers, or old W-9/vendor wording in Sales Invoice print output.
+- `python scripts/verify/outbound_documents_contract.py` passed after creating the standard outbound document source folder and templates. The contract now requires every outbound template to include `## Answer First`, and rendered previews put `Key fields to review` where the internal automation metadata used to appear.
+- `python scripts/verify/render_outbound_document_previews.py --slug outbound-documents-answer-first-20260506 --no-open` rendered 20 fake-data review previews as HTML, PDF, and PNG under ignored `output/playwright/outbound-documents-answer-first-20260506/`.
+
+Current live-data facts from the fresh finance inventory:
+
+- Installed apps: `frappe`, `erpnext`, `payments`, `webshop`, `locally_twisted`.
+- Counts: 4 Customers, 8 Sales Orders, 1 Sales Invoice, 8 Payment Requests, 0 Payment Entries, 0 Journal Entries, 0 Bank Accounts, 0 Bank Transactions, 0 Suppliers, 0 Employees.
+- Collections: 1 unpaid Sales Invoice, 1 overdue Sales Invoice, 8 expected Payment Requests, 0 paid Payment Requests.
+- Payment Terms now exist locally: 2 Payment Terms and 2 Payment Terms Templates.
+- Email Queue status counts: 30 Sent, 0 pending in the latest paperwork status report.
+- Company default bank account is not set.
+- Payroll is not ready: HRMS is not installed and `Payroll Entry`, `Salary Slip`, and `Salary Structure` are missing.
+- Sales Invoices now default to the code-owned `Locally Twisted Sales Invoice` print format. The format itself includes the visible logo/contact header so the normal default print view is branded; the branded `Locally Twisted` Letter Head also exists as a reusable setup record. The default invoice is intentionally restrained, black/white/gray, and accounts-payable friendly: one-line invoice number, a title-associated date/due/status/balance summary, padded item headers, PO/reference, expense category, itemized lines, clear totals, invoice/receipt terms, gray vertical callouts for secondary information, and a solid black customer-service/repeat-order support banner.
+- The first AP-friendly pass still looked container-heavy because Frappe's print stylesheet imposed generous table padding and the custom format used a large boxed title/terms treatment. The current format flattens the document with horizontal rules, tighter scoped table padding, smaller logo/title sizing, fewer outlined containers, and neutral gray left-rule callouts so ordinary invoices fit a one-page PDF.
+
+## Current Paperwork Map
+
+### Inquiry paperwork
+
+- Public `/contact` creates Leads.
+- `lead_cascade.py` creates or links Contact records and queues customer acknowledgment emails.
+- Inquiry acknowledgment emails include code-owned policy blocks from `locally_twisted.policy_documents`.
+- Lead payment guidance fields exist for service/deposit timing, but they do not create money records.
+
+### Ready-to-order checkout paperwork
+
+- `/checkout` creates or reuses Customer, Contact, Address, Sales Order, and Payment Request records.
+- Stripe checkout is the payment surface.
+- `/payment-success` and the Stripe webhook reconcile paid orders.
+- Paid-order cascade creates Payment Entry, submitted Sales Invoice, receipt email queue, operator notification queue, and first-order welcome email queue.
+- The cascade is idempotent and covered by `payment_cascade_contract.py`.
+
+### CRM and backend automation
+
+- The LT business pipeline uses `Lead.custom_pipeline_stage`.
+- Stage movement creates/closes operational Tasks only.
+- Stage movement does not create or modify Customers, Quotes, Sales Orders, Sales Invoices, Payment Requests, Payment Entries, or win/loss reporting.
+- Checkout-to-Lead conversion is coordinated: checkout can convert a matched Lead, move the custom stage to `Approved`, and keep the operational Task cascade aligned.
+
+### Customer document policy blocks
+
+- `policy_documents.py` owns reusable customer-facing policy blocks for inquiry emails and receipt emails.
+- Public anchors are covered by `customer_documents_contract.py`.
+- No ERPNext Terms and Conditions or Email Template records are currently added for these policy blocks.
+- The branded Sales Invoice print format embeds the corporate invoicing lane and links to `/terms-of-service#corporate-invoicing`, `/refund-policy#corporate-invoicing`, and `/privacy`.
+
+### Invoice print output
+
+- `locally_twisted.seed.sync_invoice_branding` owns the `Locally Twisted Sales Invoice` Print Format, `Locally Twisted` Letter Head, and Sales Invoice `default_print_format` Property Setter.
+- `scripts/setup/sync_invoice_branding.py` is idempotent and safe to re-run after invoice copy or style changes.
+- `scripts/verify/invoice_branding_contract.py` verifies the setup records, default print-format resolution, visible logo/contact header, AP-friendly fields, gray callout treatment, black support-banner copy/treatment, forbidden gold/dog/promo markers, item-header padding, served logo asset, title-associated invoice summary placement, and rendered invoice HTML against the current sample Sales Invoice.
+- External document standards now live in `.codex/capabilities/recipes/external-document-audience-contract.md`: every invoice, receipt, proposal, packet, and accounting document should be designed around the recipient's workflow before brand flourish.
+
+### Outbound document source folder
+
+- `apps/locally_twisted/locally_twisted/outbound_documents/` is the standard app-owned folder for external document source.
+- `registry.py` lists the supported document families, record sources, delivery channels, and review gates.
+- `templates/` now has source templates for Sales Invoice, Payment Receipt, Quote / Estimate, Event Proposal Packet, Vendor Setup / W-9 Packet, Statement Of Account, Payment Reminder Draft, Event Install Work Order, Contract Acceptance Summary, and Post-event Reorder Follow-up.
+- These templates are generator-ready with review gates; they do not authorize automatic sending. Future automation should consume the registry to create drafts, PDFs, or review candidates before any live delivery.
+- `scripts/verify/outbound_documents_contract.py` verifies the registry, required frontmatter, required body sections, no-auto-send boundary, placeholder presence, and unregistered-template guard.
+- `scripts/verify/render_outbound_document_previews.py` renders normal and outlier fake-data previews for every registered document type. The current review set lives at `output/playwright/outbound-documents-20260506/index.html` and includes HTML, PDF, and PNG artifacts for each scenario.
+
+### Business automation index
+
+- `workstreams/business-automation-index.md` is the cross-system map for intake, CRM, checkout, payment, paperwork, finance, and checkup surfaces.
+- `locally_twisted.verify.business_automation_index.run` classifies each surface as `exists_and_connected`, `exists_but_not_connected`, `missing_needs_connection`, or `missing_should_connect`.
+- The host wrapper is `scripts/verify/business_automation_index.py`.
+- `hooks.py` now includes a daily Frappe scheduler entry for `locally_twisted.verify.business_automation_index.scheduled_checkup`.
+- The scheduled checkup writes a Frappe Error Log if a launch-required connection breaks or a loud-failure gap appears.
+- Current exists-but-not-connected surfaces are quote/proposal generation, vendor setup/W-9 packet generation, bank reconciliation cutover, and payroll/HRMS.
+- Current missing-but-useful surface is an unpaid/overdue invoice review queue.
+
+### Accountant and finance workspace
+
+- Accountant Home parity is verified.
+- It exposes unpaid invoices, overdue invoices, expected payments, recent paid orders, Sales Invoices, Payment Requests, and Payments.
+- This is visibility and review, not automatic collections.
+
+## Active Risks
+
+- Live Stripe cutover is not configured. Local mode passes, live mode fails until live Stripe keys, explicit site config keys, operator email config, and production host are set.
+- Bank setup is missing: no Bank Account records and no Company default bank account.
+- Supplier/vendor setup is missing, so contractor/1099 paperwork is not operational.
+- Payroll is feasibility-only until HRMS/payroll DocTypes exist and accountant/provider approval is in place.
+- One unpaid and overdue Sales Invoice exists in local data. Treat it as a review target, not as approval to send reminders.
+- Automated customer reminders are not approved. Copy, cadence, audience, edge cases, and opt-out handling need approval before sending.
+- Manual stage-to-finance automation still needs explicit threshold design. Do not duplicate the checkout money path from CRM stage movement.
+
+## First Safe Slices
+
+1. **Business automation index.** First pass done. `scripts/verify/business_automation_index.py` is the launch spine map and daily checkup source. Keep this green before adding new automations.
+2. **Paperwork status report.** First pass done. `scripts/verify/paperwork_status.py` summarizes current invoices, payment requests, email queues, overdue records, bank/supplier/payroll gaps, and live-mode payment blockers without printing secrets or mutating ERPNext.
+3. **Unpaid invoice review queue.** Add a read-only or draft-only review surface for unpaid/overdue invoices. No reminder sending.
+4. **Receipt/operator email audit.** Extend verifier coverage so receipt, operator, welcome, and inquiry acknowledgment email bodies keep the right policy lanes and do not attach PDFs.
+5. **Outbound document template registry.** Done for the first standard set. Extend this folder before creating any new outbound document family elsewhere.
+   - Standing rule: every outbound document is answer-first. The recipient should see the practical fields they care about before internal automation notes or policy mechanics.
+6. **Corporate invoice packet design.** Source template exists. Remaining work is generator/rendering design for larger events without creating an ERPNext Terms record yet.
+7. **Stage threshold design.** Document which stage should create/update Quote, Sales Order, Project/job, Calendar invite, customer follow-up, invoice, or payment request. Do not implement until the threshold is explicit.
+
+## Do Not Do
+
+- Do not auto-submit Sales Invoices, Purchase Invoices, Journal Entries, Payment Entries, payroll records, or write-offs from CRM stages.
+- Do not send customer reminders from overdue invoices until the exact copy, timing, audience, and approval path are accepted.
+- Do not enable bank sync or Plaid credentials during ordinary launch work.
+- Do not claim payroll readiness from the `Employee` DocType alone.
+- Do not import QuickBooks transaction history beyond accountant-approved active cutover data.
+- Do not add ERPNext Terms/Email Template records unless a verified customer-facing invoice path truly needs them.
+
+## Verification
+
+Core paperwork/backend baseline:
+
+```powershell
+python scripts/verify/finance_inventory.py --json
+python scripts/verify/customer_documents_contract.py
+python scripts/verify/payment_cascade_contract.py
+python scripts/verify/crm_stage_cascade.py
+python scripts/verify/backend_schema_inventory.py
+python scripts/verify/payment_backend_config_contract.py
+python scripts/verify/payment_webhook_contract.py
+python scripts/verify/payment_launch_readiness.py
+python scripts/verify/business_automation_index.py --report output/business-automation-index.json
+python scripts/verify/stripe_amount_parity_contract.py
+python scripts/verify/checkout_lead_conversion_contract.py
+python scripts/verify/finance_workspace_parity.py
+python scripts/verify/finance_inventory_contract.py
+python scripts/verify/paperwork_status.py --report output/paperwork-status.json
+python scripts/setup/sync_invoice_branding.py
+python scripts/verify/invoice_branding_contract.py
+python scripts/verify/outbound_documents_contract.py
+python scripts/verify/render_outbound_document_previews.py --slug outbound-documents-20260506
+```
+
+Cutover-only payment check:
+
+```powershell
+python scripts/verify/payment_launch_readiness.py --mode live
+```
+
+Expected current result: fail until live Stripe/site configuration is set.
+
+## Next Handoff Stage
+
+Next no-approval slice: turn the read-only paperwork status into an unpaid/overdue invoice review surface for Jeff/accounting. It should show what needs attention and produce draft/review candidates only, using the outbound document registry as the source for reminder drafts and statements; it must not send reminders or submit/cancel accounting records. Update `workstreams/business-automation-index.md` and the automation index verifier when that surface exists.

@@ -33,6 +33,61 @@ from locally_twisted.payments.settings import (
 )
 
 
+def stripe_line_items_for_sales_order(so) -> list[dict]:
+    """Build Stripe line items that exactly match ERPNext grand_total."""
+    currency = (so.currency or "USD").lower()
+    line_items = []
+
+    for item in so.items:
+        item_name = (item.item_name or item.item_code).strip()
+        qty = int(item.qty)
+        unit_amount_cents = _money_to_cents(item.rate)
+        line_items.append({
+            "price_data": {
+                "currency": currency,
+                "product_data": {"name": item_name},
+                "unit_amount": unit_amount_cents,
+            },
+            "quantity": qty,
+        })
+
+    expected_cents = _money_to_cents(so.grand_total)
+    line_item_cents = _stripe_line_items_total_cents(line_items)
+    adjustment_cents = expected_cents - line_item_cents
+
+    if adjustment_cents < 0:
+        frappe.throw(
+            _(
+                "Stripe checkout amount would exceed ERPNext order total. "
+                "Please review the order before taking payment."
+            ),
+            frappe.ValidationError,
+        )
+
+    if adjustment_cents > 0:
+        line_items.append({
+            "price_data": {
+                "currency": currency,
+                "product_data": {"name": "Sales tax and charges"},
+                "unit_amount": adjustment_cents,
+            },
+            "quantity": 1,
+        })
+
+    return line_items
+
+
+def _stripe_line_items_total_cents(line_items: list[dict]) -> int:
+    return sum(
+        int(row["price_data"]["unit_amount"]) * int(row.get("quantity") or 1)
+        for row in line_items
+    )
+
+
+def _money_to_cents(value) -> int:
+    return int(round(flt(value) * 100))
+
+
 def create_session_for_sales_order(
     sales_order: str,
     payment_request: str,
@@ -54,19 +109,7 @@ def create_session_for_sales_order(
     api_key = stripe_settings.get_password("secret_key", raise_exception=True)
 
     so = frappe.get_doc("Sales Order", sales_order)
-
-    line_items = []
-    for item in so.items:
-        item_name = (item.item_name or item.item_code).strip()
-        unit_amount_cents = int(round(flt(item.rate) * 100))
-        line_items.append({
-            "price_data": {
-                "currency": (so.currency or "USD").lower(),
-                "product_data": {"name": item_name},
-                "unit_amount": unit_amount_cents,
-            },
-            "quantity": int(item.qty),
-        })
+    line_items = stripe_line_items_for_sales_order(so)
 
     site_url = get_url().rstrip("/")
     success_url = f"{site_url}/payment-success?session_id={{CHECKOUT_SESSION_ID}}"
@@ -76,6 +119,7 @@ def create_session_for_sales_order(
         "sales_order": so.name,
         "payment_request": payment_request,
         "lt_origin": "guest_checkout",
+        "amount_expected_cents": str(_money_to_cents(so.grand_total)),
     }
 
     # Link is disabled at the ACCOUNT LEVEL via a custom Payment Method

@@ -1,7 +1,7 @@
 ---
 name: ERPNext finance controlled automation
 level: recipe
-last_verified: 2026-05-03
+last_verified: 2026-05-06
 ---
 
 ## What it does
@@ -42,6 +42,10 @@ Use this when a client repo starts handling QuickBooks migration, invoicing, pay
 
    Contractors belong as Suppliers/vendors with payment history and tax identity support unless they have a proven backend operator workflow. Do not claim automated 1099 filing without a verified filing path.
 
+8. Keep the automation map current.
+
+   Cross-system finance work should have one index that says what exists, what is connected, what exists but is not connected, what is missing and required, and what is missing but useful. For LT, `business_automation_index.py` is that index and should fail nonzero when launch-required links break.
+
 ## LT verification commands
 
 ```powershell
@@ -60,6 +64,8 @@ python scripts/verify/payment_webhook_contract.py
 python scripts/verify/payment_cascade_contract.py
 python scripts/verify/cart_checkout_contract.py
 python scripts/verify/payment_launch_readiness.py
+python scripts/verify/business_automation_index.py --report output/business-automation-index.json
+python scripts/verify/stripe_amount_parity_contract.py
 ```
 
 Run live inventory after mutating verifiers finish and rollback, not in parallel with them, if the count will be documented as stable state.
@@ -72,3 +78,4 @@ Run live inventory after mutating verifiers finish and rollback, not in parallel
 - Plaid setup can turn a technical spike into a credential/security decision if it is not gated.
 - QuickBooks history can become messy operational data if imported deeper than accountant-approved cutover scope.
 - `Employee` records can be mistaken for payroll readiness when HRMS/payroll DocTypes are not installed.
+- Stripe hosted-checkout line items can silently omit ERPNext taxes or charges if amount parity is not checked before redirect.

@@ -6,6 +6,22 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-06 - Automation needs a machine-readable map, not only a handoff paragraph
+
+The paperwork/backend lane had many working pieces: contact intake, Lead cascade, checkout, payment success, receipts, invoice branding, outbound templates, and finance visibility. The risk was that future agents could treat "exists" as "connected" or treat a native ERPNext DocType as operational readiness. That is exactly how silent failures slip into business systems.
+
+**Counter-move:** create a verifier-backed automation index for cross-system business work. The index should separate connected surfaces, partial surfaces, required missing surfaces, useful future surfaces, fake-data test paths, and loud-failure gaps. Keep it scheduled in Frappe when the site is expected to operate as a business system, and update the index whenever a new automation surface is added.
+
+---
+
+## 2026-05-06 - Hosted checkout amount parity is not implied by ERPNext totals
+
+The money-path audit found that Stripe Checkout line items could be generated from Sales Order item rates while ERPNext `grand_total` includes taxes or charges. That means the ERPNext order can be right while hosted checkout charges the wrong amount. A local payment-readiness check is not enough proof for amount parity.
+
+**Counter-move:** contract-test the Stripe payload builder directly. Convert money to cents, compare line-item totals to the ERPNext `grand_total`, add an explicit tax/charges adjustment when needed, and raise before redirect when the item lines exceed the ERPNext total. Any future checkout/payment refactor must rerun `python scripts/verify/stripe_amount_parity_contract.py`.
+
+---
+
 ## 2026-05-06 - Symmetry does not rescue the wrong category-control pattern
 
 The first shop repair responded to GL's symmetry rule by turning category controls into equal tiles. That fixed ragged rows, but it still left customers facing a button wall. GL's rejection was not just about spacing; it was about the product showcase feeling cheap and unintuitive.

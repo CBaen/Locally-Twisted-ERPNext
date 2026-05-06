@@ -8,6 +8,68 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-06 - Business automation must be indexed and scheduled before Frappe Cloud trust
+
+**Decision:** LT's backend automation is now governed by a code-owned automation index, not by prose handoff memory. The index classifies every important intake, CRM, checkout, payment, paperwork, finance, and checkup surface as `exists_and_connected`, `exists_but_not_connected`, `missing_needs_connection`, or `missing_should_connect`. Launch-required breakage must fail the verifier loudly, and the daily Frappe scheduler runs the checkup so failures can become visible backend attention.
+
+**Reasoning:** GL explicitly called out that silent failures kill business relationships and reputation. The LT system is becoming an all-in-one business-management platform, so it needs a repeatable map of cascading information before moving to Frappe Cloud. A template, DocType, or native ERPNext feature is not operational just because it exists.
+
+**Implementation:** Added `locally_twisted.verify.business_automation_index`, host wrapper `scripts/verify/business_automation_index.py`, workstream `workstreams/business-automation-index.md`, project capability `erpnext-business-automation-index`, and a daily scheduler hook for `locally_twisted.verify.business_automation_index.scheduled_checkup`. The current report indexes 17 surfaces: 12 connected, 4 exists-but-not-connected, 0 launch-required missing, 1 useful future surface missing, and 0 loud-failure gaps.
+
+**Verification receipt:** `python scripts/verify/business_automation_index.py --report output/business-automation-index.json` passed. Frappe's hook registry showed the daily scheduled checkup. The final closeout suite also verified contact intake, payment/webhook readiness, checkout conversion, payment cascade, CRM cascade, paperwork status, outbound documents, and invoice branding.
+
+**Decided by:** GL required fail-loud backend automation inventory; Codex implemented the indexed/scheduled contract.
+
+---
+
+## 2026-05-06 - Stripe hosted checkout must match ERPNext grand total exactly
+
+**Decision:** Stripe Checkout line items must equal the ERPNext Sales Order grand total before the customer is redirected. Tax and charges can be represented as an explicit Stripe adjustment line, but Stripe must not silently omit ERPNext taxes/charges or charge more/less than the order.
+
+**Reasoning:** The subagent money-path audit found a real risk: Stripe Session line items were built from Sales Order item rates, while ERPNext totals can include taxes and charges. That could undercharge hosted checkout while ERPNext records a higher total. Money mismatches must fail before the customer sees checkout.
+
+**Implementation:** Added `stripe_line_items_for_sales_order()` in `locally_twisted.payments.stripe_session`. It adds a `Sales tax and charges` line when ERPNext `grand_total` is higher than the item-line total, stores `amount_expected_cents` metadata, and raises `frappe.ValidationError` if item lines would exceed the ERPNext total.
+
+**Verification receipt:** `python scripts/verify/stripe_amount_parity_contract.py` passed for taxable, nontaxable, and negative-adjustment cases.
+
+**Decided by:** Codex surfaced the parity risk during the backend automation audit and encoded the fail-loud payment contract.
+
+---
+
+## 2026-05-06 - Sales Invoices are AP documents with gray callouts
+
+**Decision:** The default Sales Invoice is an accounts-payable document, not marketing collateral. Secondary invoice information can use the approved gray vertical callout treatment: light neutral gray background, thin gray left rule, and compact spacing. The bottom support message stays a solid black bar with white text:
+
+`Customer Service, Continued Event Support, and Repeat Orders:`
+
+`Reply to this invoice and we will route the request to the right person.`
+
+No dog logo, gold bar, gold rule, navy/berry/promo accent treatment, or marketing-style decoration belongs on ordinary Sales Invoices.
+
+**Reasoning:** Sales Invoices are for bookkeepers and AP teams to enter, route, approve, and pay without friction. The gray callout treatment highlights review information without making the invoice feel like a sales packet. Richer gold/dog-logo brand treatment can still belong in proposals, event packets, reorder follow-ups, and customer-support documents where the audience expects context and relationship-building.
+
+**Implementation:** Updated the code-owned Sales Invoice Print Format source in `locally_twisted.seed.sync_invoice_branding` to use shared `lt-callout` gray left-rule blocks for the AP summary, policy block, and AP note. The `lt-support-banner` remains solid black with the approved service/repeat-order copy. Updated the invoice branding verifier and external document guidance so the standard is guarded by code and docs.
+
+**Verification receipt:** `python scripts/setup/sync_invoice_branding.py` updated the Frappe Print Format. `python scripts/verify/invoice_branding_contract.py` passed against `ACC-SINV-2026-00001`, including default print rendering.
+
+**Decided by:** GL locked the no-gold/no-dog invoice choice; Codex encoded it into the print source, verifier, and durable guidance.
+
+---
+
+## 2026-05-06 - Outbound paperwork must be answer-first, not automation-first
+
+**Decision:** Every outbound document must lead with the recipient's practical answer. The visible first-pass block should identify the fields the audience cares about, such as invoice number, due date, balance, PO/reference, payment status, event date, location, approval path, next step, or reconciliation contact. Internal automation metadata must not take the high-visibility customer-facing slot.
+
+**Reasoning:** GL approved the visual direction but caught that the preview's `Automation contract` section put our internal system concerns ahead of the recipient. That is the wrong posture for corporate-standard paperwork. Good outbound paperwork should make the recipient feel that LT understands their workflow and gave them the answer first.
+
+**Implementation:** The outbound preview renderer now shows `Key fields to review` in the upper facts grid where `Automation contract` used to appear. The source registry now requires every outbound template to include `## Answer First` before automation notes. All current outbound templates were updated with document-specific answer-first guidance. The project capability `external-document-audience-contract` and paperwork lane now carry the standing rule.
+
+**Verification receipt:** `python scripts/verify/outbound_documents_contract.py` passed for all 10 outbound document families. `python scripts/verify/render_outbound_document_previews.py --slug outbound-documents-answer-first-20260506 --no-open` rendered 20 fake-data review previews as HTML, PDF, and PNG. Rendered preview search confirmed no `Automation contract` label remains, and every template has `## Answer First`.
+
+**Decided by:** GL defined the standard; Codex encoded it into source templates, verifier expectations, and project guidance.
+
+---
+
 ## 2026-05-06 - Shop category navigation uses a rail and mobile select
 
 **Decision:** `/shop` and `/shop-items/<group>` use the shared `templates/includes/shop_category_nav.html` component for category navigation. Desktop uses a slim left rail beside the product showcase. Mobile uses a native select above the products. `/shop` no longer uses an in-place chip filter wall, and category pages must not restore the top button/tile wall.

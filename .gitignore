@@ -67,6 +67,7 @@ scripts/verify/_chrome-profile*/
 scripts/verify/_edge-profile*/
 _resources/webshop-redesign-verify/
 output/
+test invoices/
 
 # Local Superpowers visual companion sessions.
 .superpowers/

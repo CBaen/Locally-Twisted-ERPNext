@@ -1,6 +1,6 @@
 # Locally Twisted - Coding Handoff
 
-Last updated: 2026-05-06 by Codex after the website launch reset, portfolio proof-gallery reel, Event Playground handoff to OpenClaw, checkout commerce-rule reconciliation, header color repair, category-media candidate packet, responsive/public verification, and prior responsive container audit gate.
+Last updated: 2026-05-06 by Codex after adding the business automation index, daily Frappe backend checkup, Stripe amount-parity guard, outbound document template registry, and branded Sales Invoice output to the paperwork/backend lane; parking the category-media approval/sync path as the current stopping point; and preserving the website launch reset, portfolio proof-gallery reel, Event Playground handoff to OpenClaw, checkout commerce-rule reconciliation, header color repair, responsive/public verification, and prior responsive container audit gate.
 
 ## State Of Reality
 
@@ -23,6 +23,12 @@ Verified DB counts on 2026-04-30:
 
 Docs that still mention `10,613 Items`, `8,925 Item Prices`, or `10,560 variants` are stale.
 
+## Current Stopping Point
+
+Category browse media is parked as of 2026-05-06. The safe prep work is done: candidate report generation, approval-template generation, dry-run Frappe sync, and unapproved-apply refusal are available. No live Item Group images were assigned, and the latest DB check still showed all 11 customer-facing child Item Groups under `Shop Items` with `image = null`.
+
+Resume this lane only after GL/Jeff approve the category image selections. The resume path is: regenerate `output/category-media-candidates.md`, create or update the approval file, mark only approved rows with `approved: true`, dry-run `scripts/setup/sync_category_media.py`, then use `--apply` only for approved selections. Do not assign category media by judgment and do not revive `/shop-by-category`.
+
 ## Actually Working, Pending Re-Verification
 
 Verified or updated during the 2026-05-01 storefront correction and contact cleanup passes:
@@ -30,7 +36,7 @@ Verified or updated during the 2026-05-01 storefront correction and contact clea
 - `/contact` is the canonical customer inquiry form. `/book` returns a 301 to `/contact?intent=quick`; do not rebuild `/book` as a separate public page.
 - `/balloon-twisting-and-face-painting` is now a contact-led editorial service page using real BTFP information. It has no embedded form and no public deposit-checkout CTA.
 - `/contact` supports guided prefill for `?service=btfp`, `?service=twisting`, and `?service=face-painting`.
-- `scripts/verify/smoke_forms.py` now verifies localhost `/contact` submissions through the local Docker/Frappe bench container and cleans up the generated smoke Lead plus linked LT cascade Task. Latest run on 2026-05-06 created marker `SMOKE-TEST-1778071648`, verified it, deleted it, and follow-up DB checks found no matching Lead or Task.
+- `scripts/verify/smoke_forms.py` now verifies localhost `/contact` submissions through the local Docker/Frappe bench container and cleans up the generated smoke Lead plus linked LT cascade Task. Latest run on 2026-05-06 created marker `SMOKE-TEST-1778091063`, verified it, and reported cleanup OK.
 - The contact form service taxonomy is current: `Balloon Decor`, `Balloon Twisting`, `Face Painting`, `Delivery`, `Pickup`, `Events Inquiry`, `Something Else`. Do not reintroduce `Delivery Only`, `Pickup Only`, or `Event Package`.
 - `Events Inquiry` is the high-value package planning path. It shows "Let's build a memory", package-piece checkboxes from the homepage custom categories, color prompt, and one planning text area. The server aggregates those values into `custom_package_notes`; no new ERPNext fields were added in this slice.
 - `Event Environment` and "Shade is required for outdoor events" only appear for live artist services: Balloon Twisting and Face Painting.
@@ -57,6 +63,10 @@ Verified or updated during the 2026-05-01 storefront correction and contact clea
 - `/book` is retired as a customer-facing page and redirects to `/contact?intent=quick`. Current CTAs should use `/contact`; old `/book` traffic is compatibility only.
 - `/privacy` and `/terms-of-service` exist as static Frappe routes and return HTTP 200 locally. Current copy reflects GL business-proxy answers from 2026-05-06 for delivery, returns, tax wording, cookies/tracking, children/privacy, opt-out event photo use, invoice acceptance, and temporary balloon/service limitations. A sitewide cookie/tracking accept/decline notice stores `lt_cookie_consent`; future optional analytics/ads/tracking must honor that stored choice. Legal/accounting review and Stripe Dashboard URL wiring are still separate follow-ups.
 - Customer-facing policy documents now use anchored lanes on `/terms-of-service` and `/refund-policy`: event balloon decor, ready-to-order pickup/delivery, face painting/balloon twisting, and corporate invoicing. `locally_twisted.policy_documents` owns reusable policy blocks for code-owned receipt/inquiry emails. Do not add ERPNext Terms/Email Template records unless a verified customer-facing invoice path truly requires them; LT should stay as whitelabel/code-owned as possible. Run `python scripts/verify/customer_documents_contract.py` after changing customer document copy.
+- Branded Sales Invoice output is now code-owned. `scripts/setup/sync_invoice_branding.py` creates/updates the `Locally Twisted Sales Invoice` Print Format, `Locally Twisted` Letter Head, and the Sales Invoice `default_print_format` Property Setter. The Print Format itself carries the visible logo/contact header so the normal default print view is branded. The default invoice is intentionally black/white/gray and accounts-payable friendly; gray vertical callouts are allowed for secondary AP/terms information, and the bottom support banner stays solid black with the approved customer-service/repeat-order copy. Keep dog-logo, gold, patriotic/civic proof, and marketing-style decoration for proposals, event packets, reorder follow-ups, portfolio, and client-facing marketing surfaces, not ordinary Sales Invoices. The current format uses smaller sizing, scoped table padding, fewer outlined containers, horizontal rules, and neutral gray left-rule callouts so ordinary invoices fit one PDF page. `scripts/verify/invoice_branding_contract.py` verifies the records, default print render, logo asset, AP fields, gray callouts, black support-banner treatment, forbidden gold/dog/promo markers, and rendered invoice HTML against `ACC-SINV-2026-00001`.
+- Standard outbound document source now lives at `apps/locally_twisted/locally_twisted/outbound_documents/`. It includes an automation registry plus source templates for Sales Invoice, Payment Receipt, Quote / Estimate, Event Proposal Packet, Vendor Setup / W-9 Packet, Statement Of Account, Payment Reminder Draft, Event Install Work Order, Contract Acceptance Summary, and Post-event Reorder Follow-up. These are generator-ready with review gates; they do not authorize automatic sending. The standing outbound standard is answer-first: customer-facing document previews should show `Key fields to review` before internal automation concerns, and every source template must include `## Answer First`. `scripts/verify/outbound_documents_contract.py` guards the registry and required template fields. `scripts/verify/render_outbound_document_previews.py` renders fake-data normal/outlier HTML, PDF, and PNG review artifacts; the current answer-first set is at `output/playwright/outbound-documents-answer-first-20260506/index.html`.
+- Business automation indexing is now code-owned and scheduled. `workstreams/business-automation-index.md` is the cross-system map; `locally_twisted.verify.business_automation_index.run` classifies intake, CRM, checkout, payment, paperwork, finance, and checkup surfaces as connected, partially connected, missing-required, or missing-useful. `scripts/verify/business_automation_index.py --report output/business-automation-index.json` currently passes with 17 surfaces indexed, 11 launch-required, 12 connected, 4 exists-but-not-connected, 0 launch-required missing, 1 useful future surface missing, and 0 loud-failure gaps. `hooks.py` runs `locally_twisted.verify.business_automation_index.scheduled_checkup` daily; if a launch-required connection breaks or a loud-failure gap appears, it writes a Frappe Error Log.
+- Stripe Checkout amount parity now has a contract. `stripe_line_items_for_sales_order()` builds hosted-checkout line items from the ERPNext Sales Order and adds a `Sales tax and charges` adjustment when needed so Stripe totals match `Sales Order.grand_total`. If item lines would exceed the ERPNext total, it raises `frappe.ValidationError` instead of under/overcharging silently. `scripts/verify/stripe_amount_parity_contract.py` covers taxable, nontaxable, and negative-adjustment cases.
 - Legal/accounting review packet lives at `_resources/policies/legal-accounting-review-packet-2026-05-06.md`.
 - `/event-playground` is now a hidden internal-preview route for the first PlayCanvas decor planner, but GL has moved the next PlayCanvas/Event Playground pass to OpenClaw. Keep it out of the ASAP website launch lane unless GL explicitly reopens it here. The PlayCanvas/Vite game source lives under `research/design-studio-v2/event-builder-spike/`; the Frappe route shell is `www/event_playground.html`/`.py`; and the route wraps the local Vite preview at `127.0.0.1:4306` in an iframe. Submit Inquiry hands the design to `/contact?intent=quote&source=event-playground` through `postMessage` + `sessionStorage` and pre-fills the existing contact form. There is no public nav entry, committed production bundle, DocType, backend save API, automatic Lead/Quote/Sales Order creation, pricing, checkout, CAD, room scanning, or full organic/twisting physics in this slice.
 - Product listing cards can display `lt_brand_description` through the local Webshop API wrapper in `locally_twisted.api.product_listing`.
@@ -92,6 +102,30 @@ Claims from older docs still need re-verification before being repeated:
 
 Treat these as verified only after re-running smoke tests or checking the routes. Do not repeat a visual claim without screenshots.
 
+## Paperwork / Backend Automation Focus
+
+Current coordination lanes: `workstreams/paperwork-backend-automation.md` and `workstreams/business-automation-index.md`.
+
+Fresh baseline on 2026-05-06:
+
+- `finance_inventory.py --json`, `customer_documents_contract.py`, `payment_cascade_contract.py`, `crm_stage_cascade.py`, `backend_schema_inventory.py`, `payment_backend_config_contract.py`, `payment_webhook_contract.py`, `payment_launch_readiness.py`, `checkout_lead_conversion_contract.py`, `finance_workspace_parity.py`, and `finance_inventory_contract.py` passed locally.
+- `paperwork_status.py --report output/paperwork-status.json` passed and generated the first read-only paperwork status report.
+- `business_automation_index.py --report output/business-automation-index.json` passed and generated the first cross-system automation report.
+- `stripe_amount_parity_contract.py` passed and now guards Stripe hosted-checkout totals against ERPNext Sales Order totals.
+- `sync_invoice_branding.py` passed and is idempotent; `invoice_branding_contract.py` passed against rendered Sales Invoice HTML and now guards the gray invoice callouts plus black support-banner/no-gold/no-dog standard.
+- `outbound_documents_contract.py` passed against the answer-first standard outbound document registry and templates.
+- `render_outbound_document_previews.py --slug outbound-documents-20260506` generated 20 fake-data normal/outlier document previews for review.
+- `payment_launch_readiness.py --mode live` failed for expected cutover reasons: live Stripe keys, explicit site config keys, operator email config, and production host are not in place.
+- Local finance inventory found 4 Customers, 8 Sales Orders, 1 Sales Invoice, 8 Payment Requests, 0 Payment Entries, 0 Bank Accounts, 0 Suppliers, and 0 Employees. Payment Terms exist locally; bank/supplier/payroll setup remains incomplete.
+- The paperwork status report currently flags 1 unpaid/overdue Sales Invoice, 8 expected Payment Requests, Email Queue status counts of 30 Sent, and no pending email queue rows.
+- The business automation index currently classifies quote/proposal generation, vendor setup/W-9 packets, bank reconciliation, and payroll/HRMS as existing but not connected. It classifies the unpaid/overdue invoice review surface as missing but useful. These are not silent unknowns anymore.
+- Customer document policy blocks, paid-order receipt/operator/welcome email cascade, and inquiry acknowledgment policy lanes are covered by verifiers.
+- Sales Invoice print output defaults to the branded Locally Twisted format and includes the corporate invoicing policy lane.
+- External document audience standards started at `.codex/capabilities/recipes/external-document-audience-contract.md`, with source templates in `locally_twisted/outbound_documents/`. Use those before building invoices, receipts, proposals, event packets, vendor setup/W-9 packets, statements, or other documents that leave the company.
+- CRM stage movement remains operational Task-only and must not create finance records until thresholds are explicitly decided.
+
+Next safe paperwork slice: build an unpaid/overdue invoice review surface from the read-only paperwork status. This should create visibility and draft/review candidates only, not send reminders or auto-submit accounting records. Update `business_automation_index.py` and `workstreams/business-automation-index.md` when that surface exists.
+
 ## Known Incorrect Or Risky Docs
 
 - `CLAUDE.md`, `HANDOFF.md`, `PROJECT-STATUS.md`, `lessons-learned.md`, `locally-twisted-decisions.md`, and `locally-twisted-queue.md` contain stale catalog counts in places.
@@ -108,6 +142,7 @@ Next safest slices:
 - Design and wire the remaining stage cascades deliberately: decide which LT CRM stage should create/update Quote, Sales Order, Project/job, Calendar invite, customer email/text follow-up, Customer record, and finance records. The Task-only layer is done; do not infer finance triggers from `Archive`.
 - Before manual stage-to-finance automation, decide exact stage thresholds for Quote, Sales Order, Project/job, Calendar invite, customer follow-up, Customer record, invoice, and Payment Request changes. Checkout/Lead conversion parity is done; do not duplicate its Customer/Sales Order/Payment Request creation from stage movement.
 - Finish the checkout/policy approval loop: GL business-proxy answers are reflected in current Terms/FAQ/Refund/Privacy/tax copy, receipt/inquiry emails, and a basic cookie/tracking notice. Legal/accounting review and future analytics/ads tracking integration remain before final live-readiness claims.
+- Continue the paperwork/backend automation lane from `workstreams/paperwork-backend-automation.md` and `workstreams/business-automation-index.md`: the read-only paperwork status report, branded invoice output, outbound document registry, automation index, daily scheduler checkup, and Stripe amount-parity guard exist, so the next slice is an unpaid/overdue invoice review surface. Do not send reminders, create live bank sync, auto-submit accounting records, or wire CRM stages to finance while doing that.
 - Send `_resources/policies/legal-accounting-review-packet-2026-05-06.md` to Jeff/legal/accounting before treating the public policy set as final.
 - Wire the Stripe Dashboard privacy/terms URLs to `/privacy` and `/terms-of-service` after GL/legal approval.
 - Finish payment live-mode configuration and run `python scripts/verify/payment_launch_readiness.py --mode live` before any real cutover claim.
@@ -169,6 +204,16 @@ Catalog variant contract:
 
 ```powershell
 python scripts/verify/catalog_variant_contract.py
+```
+
+Business automation and paperwork launch spine:
+
+```powershell
+python scripts/verify/business_automation_index.py --report output/business-automation-index.json
+python scripts/verify/stripe_amount_parity_contract.py
+python scripts/verify/paperwork_status.py --report output/paperwork-status.json
+python scripts/verify/payment_launch_readiness.py
+python scripts/verify/payment_launch_readiness.py --mode live
 ```
 
 Variant media sync from the captured Odoo image files:

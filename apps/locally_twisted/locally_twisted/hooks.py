@@ -305,6 +305,12 @@ jinja = {
 # Scheduled Tasks
 # ---------------
 
+scheduler_events = {
+    "daily": [
+        "locally_twisted.verify.business_automation_index.scheduled_checkup",
+    ],
+}
+
 # scheduler_events = {
 # 	"all": [
 # 		"locally_twisted.tasks.all"
