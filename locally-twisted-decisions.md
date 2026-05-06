@@ -8,6 +8,38 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-06 - Shop category navigation uses a rail and mobile select
+
+**Decision:** `/shop` and `/shop-items/<group>` use the shared `templates/includes/shop_category_nav.html` component for category navigation. Desktop uses a slim left rail beside the product showcase. Mobile uses a native select above the products. `/shop` no longer uses an in-place chip filter wall, and category pages must not restore the top button/tile wall.
+
+**Reasoning:** GL chose option B after rejecting the category buttons as horrible, cheap, and too cognitively heavy. The earlier symmetry pass fixed row math, but it preserved the wrong interaction pattern. These are product-showcase pages; customers need an obvious browse path that leaves the photos room to sell the product.
+
+**Implementation:** Commit `b82eaf9` replaced the duplicated `/shop` chip wall and `/shop-items/<group>` category tile wall with the shared rail/select include, updated `/shop` and category templates, and cache-busted `lt-shop-showroom.css` to `v=20260506-showroom-5`.
+
+**Verification receipt:** `python scripts/verify/smoke_shop.py` passed. Focused checks passed: `npm run test:interactive-layout -- --grep "/shop category navigation"` 4/4, `npm run test:layout-fit -- --grep shop` 26/26, and `npm run test:layout-fit -- --grep "variant-product|single-product|seasonal-category"` 39/39. Browser geometry confirmed desktop rail/mobile select behavior on `/shop` and `/shop-items/get-well-bouquets`, with no `.lt-shop__chip` controls and no old `.lt-shop__toolbar--categories` wall.
+
+**Alternatives considered:** Keep the symmetrical button grid. Rejected because GL had already rejected the button-control treatment as unusable. Replace the whole entry with a photo category gateway. Deferred until category imagery is approved. Keep `/shop` as in-page filtering. Rejected for this pass because the chosen simple/intuitive path is category navigation to real category pages.
+
+**Decided by:** GL chose option B; Codex implemented, verified, committed, and pushed it.
+
+---
+
+## 2026-05-06 - Consent UI assets must avoid blocklist-style filenames
+
+**Decision:** The sitewide preference/consent script is named `lt-site-preferences.js`, not `lt-cookie-consent.js`. Future optional analytics, ads, and preference assets should avoid filenames that look like common blocker targets while still honoring the stored `lt_cookie_consent` choice.
+
+**Reasoning:** GL reported `ERR_BLOCKED_BY_CLIENT` on `/shop`. The server-side asset path was not the real failure; the browser extension blocked a filename containing `cookie-consent`. Keeping that name would make the site look broken for customers using common privacy tooling.
+
+**Implementation:** Commit `dc562e7` renamed the source asset, updated the Frappe hook include, updated the policy workstream note, and deleted the stale `lt-cookie-consent.js` source file.
+
+**Verification receipt:** The local `/shop` page referenced `lt-site-preferences.js`, the new asset returned 200, the old asset returned 404, and browser verification no longer showed `ERR_BLOCKED_BY_CLIENT` for the consent script.
+
+**Alternatives considered:** Keep the old filename and ignore extension noise. Rejected because the user saw it as a visible page problem. Disable the preload only. Rejected because the blocked request was filename-based and would still leave extension-console failures.
+
+**Decided by:** GL reported the symptom; Codex traced and fixed the actual asset contract.
+
+---
+
 ## 2026-05-06 - Shop category pages must use showroom symmetry, not ragged Webshop rows
 
 **Decision:** `/shop`, `/shop-items`, and `/shop-items/<group>` are product-showcase pages. They may get longer to give products room, but category controls and product rows must stay symmetrical at each breakpoint. `/shop-items/<group>` category controls use equal tile rows, not variable-width chips, and include `All Ready-to-Order` so the category matrix has 12 tiles. Category tiles must match by width and height within each row. `/shop` filtered grids and category product grids must not leave a single desktop orphan card when an even 2-up split is available.

@@ -6,6 +6,22 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-06 - Symmetry does not rescue the wrong category-control pattern
+
+The first shop repair responded to GL's symmetry rule by turning category controls into equal tiles. That fixed ragged rows, but it still left customers facing a button wall. GL's rejection was not just about spacing; it was about the product showcase feeling cheap and unintuitive.
+
+**Counter-move:** when GL rejects a category or product-control surface, question the interaction pattern before polishing spacing. For LT, the current contract is a desktop category rail plus mobile native select, with product cards and large photos given the main space. Verifiers should prove the old chip/button walls are absent, not merely symmetrical.
+
+---
+
+## 2026-05-06 - Privacy-extension blocks can be filename-triggered
+
+The `/shop` console showed `ERR_BLOCKED_BY_CLIENT` for `lt-cookie-consent.js`. The local server could serve the file, but the customer's browser environment treated the filename as a blocker target. The bug was not solved by explaining the extension; the visible site contract needed a less blocklist-prone asset name.
+
+**Counter-move:** when a required public-site helper is blocked by a browser extension, inspect the URL and filename as part of the root cause. Keep consent behavior honest, but avoid shipping asset names that look like common ad/tracker/cookie blocker patterns. For LT, the kept asset is `lt-site-preferences.js`; the deleted name is `lt-cookie-consent.js`.
+
+---
+
 ## 2026-05-06 - Portfolio edge bleed is the design, not an overflow bug
 
 The strict portfolio rework exposed the real failure in the first translation: Codex tried to make the designer's collage safer by moving photos into fully visible rows. That protected the layout in a generic web sense, but it destroyed the portfolio concept GL wanted. The portfolio is supposed to feel like an intentional scrolling collage of whole installed-work photos, not a card grid with larger images.
