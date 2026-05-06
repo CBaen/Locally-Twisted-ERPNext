@@ -17,6 +17,7 @@ Drives:
 | [service-area.md](service-area.md) | Pickup, Standard Delivery $15, Park City Delivery $50, out-of-area delivery quote gate, no-access/no-contact rule, damage report window, and no-return rule |
 | [tax.md](tax.md) | Utah sales tax behavior - location-based rate selection for taxable goods; services, service deposits, and delivery are non-taxable under the current LT business rule |
 | [theme-and-character-rules.md](theme-and-character-rules.md) | "Any character, any request" - no theme limits on artist services; brand differentiator |
+| [legal-accounting-review-packet-2026-05-06.md](legal-accounting-review-packet-2026-05-06.md) | Review packet for Jeff, legal counsel, and accounting/CPA before Stripe/live launch claims |
 
 ## Open items
 

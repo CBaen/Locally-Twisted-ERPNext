@@ -54,6 +54,7 @@ Primary Odoo business-source files:
 - `4-20-25-jeff-cameron/05-legal-async-questionnaire-for-jeff.md` - lists launch-needed website legal docs and recommended defaults.
 - `4-20-25-jeff-cameron/live-interview-answers.md` - completed Jeff answers for contract/payment/cancellation topics.
 - `4-20-25-jeff-cameron/04-legal-live-interview.md` - interview prompt file; use carefully because unchecked items are prompts, not Jeff answers.
+- `_resources/policies/legal-accounting-review-packet-2026-05-06.md` - current review packet for Jeff, legal counsel, and accounting/CPA.
 
 Current ERPNext page files:
 
@@ -86,7 +87,7 @@ Current ERPNext page files:
 Prepare the legal/accounting approval packet and future analytics wiring rules:
 
 1. Present the matrix above with GL business-proxy answers already captured.
-2. Get legal/accounting review for public policy/live-readiness claims.
+2. Send `_resources/policies/legal-accounting-review-packet-2026-05-06.md` for legal/accounting review of public policy/live-readiness claims.
 3. When analytics/ads/tracking are wired, load optional trackers only after `window.LT_COOKIE_CONSENT.hasAcceptedOptional()` returns true.
 4. Re-run route and layout checks.
 
