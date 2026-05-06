@@ -1,6 +1,6 @@
 """End-to-end smoke test for the LT shop surfaces.
 
-Validates the catalog port, shop hub, public nav, quote-required product lane,
+Validates the catalog port, shop hub, public nav, fixed-price product lane,
 and retail variant selectors via a real Chromium browser. This should pass on
 every deploy and fail loudly on customer-facing regressions.
 
@@ -10,7 +10,7 @@ Coverage:
   3. /shop-by-category redirects to /shop instead of rendering the retired
      category-card index.
   4. Each child group's category page returns 200.
-  5. Quote-required custom products route to /contact instead of cart checkout.
+  5. Product detail pages do not invent product-level quote gates.
   6. Retail product detail (variant template) renders inline chips/select for
      every attribute, chips are radio/single-select, and partial selections can
      disable invalid later options.
@@ -57,7 +57,7 @@ EXPECTED_CATEGORIES = [
     "Deliveries",
     "Seasonal & Specialty",
 ]
-QUOTE_REQUIRED_URLS = [
+FIXED_PRICE_PRODUCT_URLS = [
     (f"{BASE}/shop-items/garlands/baby-shower-garland", "Baby Shower Garland", "baby-shower-garland"),
     (f"{BASE}/shop-items/arches/classic-arch", "Classic Arch", "classic-arch"),
 ]
@@ -174,9 +174,9 @@ def check_category_pages(page):
         print(f"  OK /{cat_name}")
 
 
-def check_quote_required_product_pages(page):
-    print("-> Quote-required custom product pages")
-    for url, expected_title, item_code in QUOTE_REQUIRED_URLS:
+def check_fixed_price_product_pages_do_not_show_product_quote_gate(page):
+    print("-> Fixed-price product pages avoid product-level quote gate")
+    for url, expected_title, item_code in FIXED_PRICE_PRODUCT_URLS:
         page.goto(url, wait_until="networkidle", timeout=15000)
         title = page.locator(".lt-product__title").inner_text()
         assert_(expected_title in title, f"Product title wrong for {url}: {title!r}")
@@ -187,20 +187,20 @@ def check_quote_required_product_pages(page):
         assert_("Shop by Category" not in body, f"{url} breadcrumb still shows retired 'Shop by Category' label")
         assert_("/shop-by-category" not in body, f"{url} breadcrumb still links to retired /shop-by-category route")
         assert_(
-            page.locator(".lt-product__configure").count() == 0,
-            f"{url} should not expose cart variant selectors in the quote-required lane",
+            page.locator(".lt-product__cta--primary", has_text="Request a Quote").count() == 0,
+            f"{url} should not say the product itself requires a quote",
         )
-        assert_(
-            page.locator("#lt-add-to-cart-variant").count() == 0,
-            f"{url} should not expose add-to-cart in the quote-required lane",
-        )
-        quote = page.locator(".lt-product__cta--primary", has_text="Request a Quote")
-        assert_(quote.count() >= 1, f"{url} should expose Request a Quote CTA")
-        assert_(
-            quote.first.get_attribute("href") == f"/contact?item={item_code}",
-            f"{url} quote CTA should prefill /contact for {item_code}",
-        )
-    print("  OK custom install products stay quote-required and clean")
+        if page.locator(".lt-product__configure").count():
+            assert_(
+                page.locator("#lt-add-to-cart-variant").count() == 1,
+                f"{url} should expose add-to-cart after option selection",
+            )
+        else:
+            assert_(
+                page.locator(".btn-add-to-cart").count() >= 1,
+                f"{url} should expose add-to-cart when it is a fixed-price single SKU",
+            )
+    print("  OK fixed-price products stay checkoutable; delivery ZIP owns quote fallback")
 
 
 def check_product_variant_page(page):
@@ -386,7 +386,7 @@ def main() -> int:
             check_shop_page,
             check_shop_by_category_redirect,
             check_category_pages,
-            check_quote_required_product_pages,
+            check_fixed_price_product_pages_do_not_show_product_quote_gate,
             check_product_variant_page,
             check_progressive_variant_option_disabling,
             check_variant_add_to_cart_ui,

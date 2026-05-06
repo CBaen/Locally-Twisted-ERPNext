@@ -1,6 +1,6 @@
 # Website Launch Workstream
 
-Last updated: 2026-05-05 by Codex.
+Last updated: 2026-05-06 by Codex.
 
 ## Outcome
 
@@ -30,20 +30,20 @@ Latest verified controller baseline:
 - `python scripts/verify/cart_checkout_contract.py` passed after the cart/checkout item-code contract fix.
 - `python scripts/verify/variant_media_contract.py` passed after the first variant-media reconciliation pass.
 - `python scripts/verify/catalog_variant_contract.py` passed: 53 products checked, 10,578 expected variants, 10,578 live variants, 4 single-SKU products.
-- Current commerce rules make custom install groups such as Arches and Garlands quote-required, so old 6-color-arch direct checkout examples are no longer the right retail verifier. Current smoke coverage verifies quote-required Arches/Garlands product pages and retail `unicorn-bouquet` option selection writing a selected variant into `LT_CART`.
+- Current commerce rules no longer make product group the quote gate. Fixed-price products stay cartable; out-of-area delivery ZIPs redirect to a prefilled `/contact` quote path instead of Stripe. Current smoke coverage verifies product pages do not invent product-level quote gates and retail `unicorn-bouquet` option selection writes a selected variant into `LT_CART`.
 - ERPNext now has 1,712 variant `Item.image` mappings from `_resources/odoo-live/images/` where Odoo image labels clearly matched product options; product detail pages swap to selected variant media when present.
 - Detailed media review can be refreshed with `python scripts/setup/sync_variant_media.py --dry-run --include-details --report output/catalog-media-review.json`; latest report checked 49 products, flagged 45 for review, and skipped 6,831 unsafe-to-infer image assignments.
 - Category browse imagery is not ready yet: all 11 customer-facing child Item Groups under `Shop Items` have empty image fields.
 - Product option UX P0 pass completed 2026-05-02 and was reconciled with quote/retail lane rules on 2026-05-05: no per-attribute Jinja DB lookup, progressive invalid-option disabling is verified on a retail variant, and variant chips are radio/single-select where the product is checkout-enabled.
 - Desktop/mobile launch screenshot baseline captured under `output/playwright/launch-baseline-20260502/`.
-- Historical browser console baseline after the Webshop generated asset-map correction passed across `/`, `/shop`, `/shop-items/arches`, `/shop-items/arches/classic-arch`, `/cart`, `/checkout?item=6-color-rainbow-arch-20F&qty=1`, `/privacy`, `/refund-policy`, and `/accessibility`: all routes returned 200 with 0 console errors and 0 warnings. That checkout URL predates the current quote-required Arches lane; use current `smoke_shop.py` for launch retail/quote behavior. Report: `output/playwright/launch-baseline-20260502/console-report-after-asset-map-fix.json`.
+- Historical browser console baseline after the Webshop generated asset-map correction passed across `/`, `/shop`, `/shop-items/arches`, `/shop-items/arches/classic-arch`, `/cart`, `/checkout?item=6-color-rainbow-arch-20F&qty=1`, `/privacy`, `/refund-policy`, and `/accessibility`: all routes returned 200 with 0 console errors and 0 warnings. Current commerce behavior is governed by the 2026-05-06 delivery-zone decision: fixed-price product groups are not quote gates, and out-of-area delivery redirects to `/contact`. Report: `output/playwright/launch-baseline-20260502/console-report-after-asset-map-fix.json`.
 - Webshop asset rebuild note: no Yarn package install was needed. Existing Yarn works when `/home/frappe/.nvm/versions/node/v20.19.2/bin` is added to `PATH`; build from the frontend/nginx container last so shared `assets.json` points to files nginx can actually serve.
 - Final layout-fit rerun found and fixed a 320px overflow on `/shop-items/seasonal-specialty`; Webshop's stock `.item-card { min-width: 300px; }` needed the LT grid override `min-width: 0`. `npm run test:layout-fit` now passes 60/60 again.
 - First brand-token reset pass completed 2026-05-02: `lt-theme.css` remaps the old pastel-heavy token values toward deep teal, slate, warm white, brass/gold, muted berry, and restrained supporting tints while preserving variable names for compatibility. Cache cleared, `nav_ia.py` passed, `npm run test:layout-fit` passed 60/60, and screenshots for `/`, `/shop`, `/contact`, and `/shop-items/arches/classic-arch` passed under `output/playwright/brand-token-20260502/`.
 - Civic Celebration site-wide overhaul completed 2026-05-03. The current V1 visual direction is documented in `_resources/STYLE-GUIDE.md` and `workstreams/civic-sitewide-redesign.md`. The pass covers shared chrome, homepage, contact/book form, BTFP, portfolio, FAQ, policy/accessibility/success pages, shop, category/product pages, cart, and checkout. Screenshots were captured under `output/playwright/civic-overhaul-20260503-verified/`.
 - Style-guide consolidation completed 2026-05-05. `_resources/design-guide/` was deleted because it conflicted with the approved Civic Celebration + Slate Blue/Berry + Brand Direction contract and kept reintroducing light-blue/blush styling. Current launch visuals must use `_resources/STYLE-GUIDE.md` only.
 - Responsive container integrity gate completed 2026-05-05. `npm run test:layout-fit` now checks 20 public routes across 13 viewport families (260 checks), `npm run test:interactive-layout` checks 39 stateful UI cases, and `npm run test:public-verify` runs nav IA, passive layout, interactive layout, checkout experience, and shop smoke with quieter Playwright output.
-- `smoke_shop.py` now matches the current commerce split: custom install groups such as Arches and Garlands are quote-required and route to `/contact?item=...`; retail variants still prove inline option selection and cart writes.
+- `smoke_shop.py` now matches the current commerce split: fixed-price product pages stay checkoutable, and the delivery ZIP/city gate owns the quote fallback. Retail variants still prove inline option selection and cart writes.
 
 ## Owner
 

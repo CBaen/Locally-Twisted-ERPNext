@@ -26,7 +26,10 @@ For the current LT contract:
 - Balloon twisting and face painting are services.
 - Deposits for those services are non-taxable.
 - Delivery charges are non-taxable.
+- Product group is not a quote gate for fixed-price products. If a product has a valid fixed price and is otherwise checkoutable, it stays cartable.
 - Out-of-area delivery requires a quote, even if the typed city name resembles a standard service city.
+- Out-of-area delivery redirects the customer to `/contact` with the checkout/customer/cart context prefilled as an interested-item quote request.
+- Checkout must not create duplicate Lead records for the out-of-area delivery fallback before the customer reaches `/contact`.
 
 ## Source Files
 
@@ -53,6 +56,7 @@ Run the focused contract first:
 python scripts/verify/commerce_rules_contract.py
 python scripts/verify/checkout_fulfillment_contract.py
 python scripts/verify/cart_checkout_contract.py
+python scripts/verify/contact_prefill.py --base-url http://localhost:8081
 python scripts/verify/lead_backend_intake_parity.py
 npm run test:checkout-experience
 ```
@@ -79,6 +83,9 @@ docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute 
 
 - A delivery line changes Sales Order tax.
 - A face-painting, balloon-twisting, or deposit Item lands outside `Services`.
+- A priced product becomes uncartable only because it belongs to an arches, columns, garlands, drops, or similar product group.
 - A ZIP that is outside the standard/Park City zones still gets a delivery fee instead of quote-required behavior.
+- An out-of-area checkout creates a Lead, Sales Order, Payment Request, or Stripe session before redirecting to `/contact`.
+- `/contact` loses the customer's checkout contact details, delivery location, notes, or interested item after the delivery-quote redirect.
 - Public policy copy says tax/legal/payment terms are final before GL/legal/accountant approval.
 - A checkout test checks preview totals only and never checks the submitted Sales Order tax rows.

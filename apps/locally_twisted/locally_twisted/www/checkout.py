@@ -392,6 +392,14 @@ def get_context(context):
         context.qty = qty
         context.unit_price = flt(cart_item["price_list_rate"])
         context.line_total = flt(cart_item["price_list_rate"]) * qty
+        context.checkout_items_payload_json = _json_for_script([
+            {
+                "item_code": cart_item["item_code"],
+                "website_item_code": cart_item.get("website_item_code"),
+                "name": cart_item.get("web_item_name") or cart_item["item_code"],
+                "qty": qty,
+            }
+        ])
     else:
         # Cart mode: empty shell, JS hydrates from localStorage.
         context.mode = "cart"
@@ -400,7 +408,12 @@ def get_context(context):
         context.qty = 0
         context.unit_price = 0.0
         context.line_total = 0.0
+        context.checkout_items_payload_json = "[]"
     return context
+
+
+def _json_for_script(value):
+    return json.dumps(value).replace("</", "<\\/")
 
 
 def _normalize_line_qty(qty):
@@ -457,9 +470,8 @@ def _resolve_cart_items(item_code, qty, items_json):
 def _resolve_sale_lines(cart_items):
     """Resolve cart items into server-priced Sales Order lines.
 
-    This also blocks quote-lane product groups from the paid checkout path.
-    Product pages should not expose direct cart buttons for those groups, but
-    the server still enforces the boundary.
+    Delivery-zone quote handling is resolved later through fulfillment rules;
+    product group alone does not make a priced cart line quote-only.
     """
     from locally_twisted.api.cart import resolve_cart_item_for_sale
 
@@ -470,13 +482,6 @@ def _resolve_sale_lines(cart_items):
         if not resolved:
             frappe.throw(
                 _("'{0}' is no longer available. Please remove it and try again.").format(line["item_code"]),
-                frappe.ValidationError,
-            )
-        if resolved.get("checkout_lane") == "quote_required":
-            frappe.throw(
-                _("{0} starts with a quote so delivery, setup, and timing are planned correctly.").format(
-                    resolved.get("web_item_name") or resolved["item_code"]
-                ),
                 frappe.ValidationError,
             )
         qty_value = int(line["qty"])
@@ -700,29 +705,20 @@ def submit_guest_order(item_code="", qty=1, items_json="",
     so_line_items, resolved_items = _resolve_sale_lines(cart_items)
 
     if not fulfillment.can_checkout:
-        lead_name = _create_checkout_quote_lead(
-            name=name,
-            email=email,
-            phone=phone,
-            fulfillment=fulfillment,
-            address_line1=address_line1,
-            address_line2=address_line2,
-            city=city,
-            state=state,
-            postal_code=postal_code,
-            requested_fulfillment_date=requested_fulfillment_date,
-            requested_window_start=requested_window_start,
-            requested_window_end=requested_window_end,
-            order_notes=order_notes,
-            resolved_items=resolved_items,
-        )
-        frappe.db.commit()
         return {
             "ok": False,
             "status": "quote_required",
             "message": fulfillment.message,
-            "lead": lead_name,
             "email": email,
+            "fulfillment": fulfillment.__dict__,
+            "items": [
+                {
+                    "item_code": row["item_code"],
+                    "name": row.get("web_item_name") or row["item_code"],
+                    "qty": row["qty"],
+                }
+                for row in resolved_items
+            ],
         }
 
     tax = _tax_for_fulfillment(
@@ -1034,90 +1030,6 @@ def _compose_checkout_notes(
         parts.append("")
         parts.append(order_notes)
     return "\n".join(parts)
-
-
-def _create_checkout_quote_lead(
-    *,
-    name,
-    email,
-    phone,
-    fulfillment,
-    address_line1,
-    address_line2,
-    city,
-    state,
-    postal_code,
-    requested_fulfillment_date,
-    requested_window_start,
-    requested_window_end,
-    order_notes,
-    resolved_items,
-):
-    _ensure_lead_source("Website")
-    item_lines = [
-        f"- {row.get('web_item_name') or row['item_code']} x {row['qty']} (${float(row['line_total']):.2f})"
-        for row in resolved_items
-    ]
-    address = ", ".join(
-        part for part in [address_line1, address_line2, city, state, postal_code] if part
-    )
-    summary = "\n".join([
-        "Checkout cart needs delivery quote.",
-        fulfillment.message,
-        "",
-        "Cart:",
-        *item_lines,
-        "",
-        f"Requested date: {requested_fulfillment_date}",
-        f"Requested window: {requested_window_start}-{requested_window_end}",
-        f"Delivery address: {address}",
-        "",
-        order_notes or "",
-    ]).strip()
-
-    lead_doc = {
-        "doctype": "Lead",
-        "first_name": name,
-        "lead_name": name,
-        "email_id": email,
-        "mobile_no": phone or None,
-        "source": "Website",
-        "status": "Open",
-        "custom_pipeline_stage": "New Inquiry",
-        "custom_delivery_notes": summary,
-        "custom_anything_else": summary,
-        "custom_source_channel": "Website Form",
-    }
-    if frappe.get_meta("Lead").has_field("custom_event_type"):
-        lead_doc["custom_event_type"] = [{"service_type": "Delivery"}]
-    lead = frappe.get_doc(lead_doc)
-    lead.insert(ignore_permissions=True)
-
-    frappe.get_doc({
-        "doctype": "Communication",
-        "communication_type": "Communication",
-        "communication_medium": "Other",
-        "sent_or_received": "Received",
-        "reference_doctype": "Lead",
-        "reference_name": lead.name,
-        "sender": email,
-        "subject": f"Delivery quote needed - checkout cart - {lead.name}",
-        "content": escape_html(summary).replace("\n", "<br>"),
-        "status": "Open",
-    }).insert(ignore_permissions=True)
-    return lead.name
-
-
-def _ensure_lead_source(source_name):
-    if frappe.db.exists("Lead Source", source_name):
-        return
-    try:
-        frappe.get_doc({
-            "doctype": "Lead Source",
-            "source_name": source_name,
-        }).insert(ignore_permissions=True, ignore_if_duplicate=True)
-    except frappe.DuplicateEntryError:
-        pass
 
 
 def _record_order_notes(so_name, notes, sender=None):

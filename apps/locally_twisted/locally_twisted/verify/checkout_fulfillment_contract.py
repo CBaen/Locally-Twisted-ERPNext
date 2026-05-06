@@ -162,8 +162,9 @@ def _submit_paid_pickup():
 
 
 def _submit_out_of_area_quote():
+    email = f"lt-outarea-{int(time.time())}@example.invalid"
     result = _submit_checkout(
-        email=f"lt-outarea-{int(time.time())}@example.invalid",
+        email=email,
         fulfillment_method="delivery",
         address_line1="123 Red Rock Road",
         city="St. George",
@@ -177,13 +178,14 @@ def _submit_out_of_area_quote():
         raise ContractFail("out-of-area delivery should not create a paid checkout")
     if result.get("status") != "quote_required":
         raise ContractFail(f"out-of-area expected quote_required status, found {result!r}")
-    lead_name = result.get("lead")
-    if not lead_name or not frappe.db.exists("Lead", lead_name):
-        raise ContractFail("out-of-area quote path should create a Lead")
+    if result.get("lead"):
+        raise ContractFail("checkout quote fallback should not create a Lead before /contact submit")
+    if frappe.db.exists("Lead", {"email_id": email}):
+        raise ContractFail("checkout quote fallback should leave Lead creation to /contact")
     counts = _money_counts_for_email(result["email"])
     if any(counts.values()):
         raise ContractFail(f"out-of-area quote path should not create money records: {counts}")
-    return {"lead": lead_name}
+    return {"contact_handoff": True}
 
 
 def _submit_past_date_rejected():

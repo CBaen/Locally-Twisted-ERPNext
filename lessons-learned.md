@@ -6,6 +6,14 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-06 - Do not turn cartable products into quote-only failures
+
+The checkout rule briefly treated product groups like Arches and Garlands as `quote_required`, which meant a priced product already in the cart could disappear from checkout or be described as not purchasable. GL caught the customer logic problem: putting something in a cart means "I can buy this." The only clear system-configured checkout quote fallback is fulfillment, especially a delivery ZIP outside the standard zone.
+
+**Counter-move:** keep product CTA rules and fulfillment quote rules separate. If a product should not be sold online, do not let it enter the cart. If a priced product is in the cart, do not mark it `quote_required` because of item group. Use delivery-zone preview/submit contracts to route out-of-area customers to `/contact` with cart and customer details prefilled.
+
+---
+
 ## 2026-05-06 - Tax jurisdiction is not the taxable base
 
 The checkout code already knew how to pick a Utah tax rate from ZIP/city, but that did not mean the whole order should be taxed. GL clarified the actual LT rule: only goods are taxable. Services, face painting, balloon twisting, deposits for those services, and delivery charges are not taxable. The failure was visible only when the Sales Order contract compared expected goods-only tax to ERPNext's submitted tax rows; West Jordan delivery produced `$5.96` tax instead of the expected `$4.84` because delivery was being included in the taxable base.

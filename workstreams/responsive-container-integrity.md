@@ -52,7 +52,7 @@ The standing viewport families are:
 - Kept desktop mega panels inside the header/container instead of anchoring narrow product panels to individual nav item widths.
 - Fixed reduced-motion homepage carousel/review behavior so tracks do not animate or force overflow when reduced motion is requested.
 - Raised the portfolio modal close target to 44px.
-- Reconciled `smoke_shop.py` with the commerce lane: Arches/Garlands are quote-required, while retail products such as `unicorn-bouquet` still verify inline variant controls and cart writes.
+- Reconciled `smoke_shop.py` with the commerce lane. 2026-05-06 correction: fixed-price products must not invent product-level quote gates; out-of-area delivery ZIP owns the quote fallback, while retail products such as `unicorn-bouquet` still verify inline variant controls and cart writes.
 
 ## Verification Receipts
 

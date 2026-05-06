@@ -8,6 +8,22 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-06 - Delivery zone, not product group, owns checkout quote fallback
+
+**Decision:** A priced product that is in the cart should not become quote-only because of its Item Group. Product group is no longer the source of `quote_required` cart behavior. The system-configured customer-facing quote fallback for checkout is fulfillment, especially a delivery ZIP outside the configured delivery zones. Out-of-area delivery redirects the customer to `/contact` with checkout details and the interested item carried forward.
+
+**Reasoning:** GL challenged the earlier assumption directly: if a customer can put something in the cart, they reasonably expect it can be purchased. The only clear system-configurable reason for standard checkout to stop is that delivery is outside the configured service zone. Custom event/service work can still start through `/contact`, but that is a CTA and intake choice, not a stale cart failure for priced products.
+
+**Implementation:** `commerce_rules.checkout_lane_for_item_group` now returns `retail_checkout` for product groups. `api/cart.py` no longer returns `missing: quote_required` for priced products. `/checkout` stores an out-of-area delivery handoff in `sessionStorage` and redirects to `/contact?intent=quote&source=checkout-delivery`; the contact form preloads name, phone, email, date, time window, delivery address, Delivery service, delivery notes, cart item lines as `Interested item`, and checkout notes. Lead creation belongs to `/contact` submit; checkout's out-of-area fallback avoids Sales Order, Payment Request, Stripe session, and duplicate Lead creation.
+
+**Verification receipt:** The revised contracts first failed on the stale assumption, then passed after implementation: `commerce_rules_contract.py`, `cart_checkout_contract.py`, `contact_prefill.py --base-url http://localhost:8081`, and `npm run test:checkout-experience`.
+
+**Alternatives considered:** Keep product-group quote gates and show a modal for quote-only cart items. Rejected because it reinforced the wrong customer assumption. Remove all quote handling from checkout. Rejected because out-of-area delivery still needs a manual quote path and must not send customers to Stripe.
+
+**Decided by:** GL clarified the customer/business rule; Codex implemented and verified the checkout/contact handoff.
+
+---
+
 ## 2026-05-06 - Checkout tax rate and taxable base are separate contracts
 
 **Decision:** Checkout chooses the Utah tax rate from fulfillment ZIP/city, but applies that rate only to taxable goods. Services are not taxable. Face painting, balloon twisting, deposits for those services, and delivery charges are non-taxable. Out-of-area delivery stays quote-required instead of using a local delivery fee.
@@ -30,7 +46,7 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 **Reasoning:** GL's complaint was not only that one menu looked bad. The failure mode was systemic: content pushed against or outside containers, mid-breakpoints were untested, product pages could keep old behavior, and stateful UI could look fine while closed but fail once opened. This is a design requirement and accessibility risk, not a cosmetic preference.
 
-**Implementation:** Added `scripts/verify/layout_helpers.js` as the shared route/viewport/layout audit helper. Expanded `scripts/verify/layout_fit.spec.js` to 20 public routes across 13 viewport families for 260 passive checks. Added `scripts/verify/interactive_layout.spec.js` with 39 checks for desktop/mobile nav breakpoints, desktop mega panels, mobile drawer accordions, shop/product controls, contact conditionals, portfolio modal state, and reduced-motion homepage behavior. Added package scripts `test:interactive-layout`, `test:checkout-experience`, `test:shop-smoke`, and `test:public-verify`. Corrected `smoke_shop.py` so quote-required custom installs are verified as quote-led while retail variants still prove inline option selection and cart writes.
+**Implementation:** Added `scripts/verify/layout_helpers.js` as the shared route/viewport/layout audit helper. Expanded `scripts/verify/layout_fit.spec.js` to 20 public routes across 13 viewport families for 260 passive checks. Added `scripts/verify/interactive_layout.spec.js` with 39 checks for desktop/mobile nav breakpoints, desktop mega panels, mobile drawer accordions, shop/product controls, contact conditionals, portfolio modal state, and reduced-motion homepage behavior. Added package scripts `test:interactive-layout`, `test:checkout-experience`, `test:shop-smoke`, and `test:public-verify`. 2026-05-06 correction: `smoke_shop.py` now verifies that fixed-price products do not invent product-level quote gates while retail variants still prove inline option selection and cart writes.
 
 **Verification receipt:** `node --check` passed for the new/rewritten Playwright specs, `python -B -m py_compile scripts\verify\smoke_shop.py` passed, `python scripts/verify/commerce_rules_contract.py` passed, `python scripts/verify/smoke_shop.py` passed, `npm run test:interactive-layout` passed 39/39, `npm run test:layout-fit` passed 260/260, `npm run test:checkout-experience` passed 1/1, and `npm run test:public-verify` passed with quieter Playwright output.
 
@@ -344,11 +360,11 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 **Decision:** Guest cart and checkout use the actual sellable `Item.item_code` for pricing and Sales Order lines. For variants that do not have their own Website Item row, cart display resolves the parent Website Item for customer-facing name, image, and route. Variant template codes are not directly purchasable from `/shop`.
 
-**2026-05-05 update:** This cart contract still applies to checkout-enabled retail variants. Custom install groups such as Arches and Garlands are now quote-required under `commerce_rules.py`, so old 6-color-arch direct-checkout examples are historical evidence, not current retail smoke targets.
+**2026-05-05 update, superseded 2026-05-06:** This cart contract still applies to checkout-enabled retail variants. A short-lived follow-up treated custom install groups such as Arches and Garlands as quote-required under `commerce_rules.py`; the 2026-05-06 delivery-zone decision supersedes that product-group gate.
 
 **Reasoning:** A shop/media audit found variant templates were visible but not purchase-trustworthy: `/shop` card buttons could add unpriced template codes, while configured variant codes such as `6-color-rainbow-arch-20F` existed and had prices but were rejected by the cart API because they lacked Website Item rows. The correct boundary is: variants are what ERPNext sells; parent Website Items are what the website uses to display the product page.
 
-**Verification:** `python scripts/verify/cart_checkout_contract.py` passes. At the time, `python scripts/verify/smoke_shop.py` included a real option-selection add-to-cart check for `6-color-rainbow-arch-20F`. Current smoke coverage has moved that retail add-to-cart check to `unicorn-bouquet` and verifies Arches/Garlands as quote-required.
+**Verification:** `python scripts/verify/cart_checkout_contract.py` passes. At the time, `python scripts/verify/smoke_shop.py` included a real option-selection add-to-cart check for `6-color-rainbow-arch-20F`. Current smoke coverage uses `unicorn-bouquet` for the retail variant add-to-cart proof and checks that fixed-price product pages do not present product-level quote gates.
 
 **Decided by:** Codex implementation after 2026-05-02 shop/media audit; aligned with launch goal that customers must not be able to believe an unreconciled purchase path.
 

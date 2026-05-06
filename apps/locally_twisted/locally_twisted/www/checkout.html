@@ -231,6 +231,8 @@
     var dateInput = document.getElementById('co-date');
     var currentSubtotal = {% if mode == "buy_now" %}{{ "%.2f"|format(line_total) }}{% else %}0{% endif %};
     var currentQuoteRequired = false;
+    var checkoutQuoteHandoffKey = 'lt_checkout_quote_handoff_v1';
+    var currentCheckoutItems = {{ (checkout_items_payload_json or "[]") | safe }};
     var totalsRequestSerial = 0;
 
     function setFeedback(state, msg) {
@@ -419,6 +421,7 @@
 
         var subtotal = 0;
         var itemsForSubmit = [];
+        currentCheckoutItems = [];
 
         for (var k = 0; k < cart.items.length; k++) {
             var line = cart.items[k];
@@ -427,6 +430,14 @@
             var lineTotal = server.price_list_rate * line.qty;
             subtotal += lineTotal;
             itemsForSubmit.push({ item_code: server.item_code, qty: line.qty });
+            currentCheckoutItems.push({
+                item_code: server.item_code,
+                website_item_code: server.website_item_code || '',
+                name: server.web_item_name || server.item_code,
+                qty: line.qty,
+                options: optionSummary(server),
+                unit_price: server.price_list_rate
+            });
 
             var img = el('div', { 'class': 'lt-checkout__line-img', 'aria-hidden': 'true' });
             if (server.website_image) {
@@ -456,6 +467,48 @@
         if (itemsJsonInput) itemsJsonInput.value = JSON.stringify(itemsForSubmit);
         enableSubmit();
         updateTotals();
+    }
+
+    function buildQuoteHandoffPayload(fd, reasonMessage) {
+        fd = fd || new FormData(form);
+        syncWindowEnd();
+        fd = new FormData(form);
+        return {
+            version: 1,
+            source: 'checkout',
+            reason: 'out_of_area_delivery',
+            message: reasonMessage || '',
+            created_at: new Date().toISOString(),
+            customer: {
+                name: (fd.get('name') || '').toString().trim(),
+                phone: (fd.get('phone') || '').toString().trim(),
+                email: (fd.get('email') || '').toString().trim()
+            },
+            fulfillment: {
+                method: selectedFulfillment(),
+                pickup_location: (fd.get('pickup_location') || '').toString().trim(),
+                requested_date: (fd.get('requested_fulfillment_date') || '').toString().trim(),
+                window_start: (fd.get('requested_window_start') || '').toString().trim(),
+                window_end: (fd.get('requested_window_end') || '').toString().trim(),
+                address_line1: (fd.get('address_line1') || '').toString().trim(),
+                address_line2: (fd.get('address_line2') || '').toString().trim(),
+                city: (fd.get('city') || '').toString().trim(),
+                state: (fd.get('state') || '').toString().trim(),
+                postal_code: (fd.get('postal_code') || '').toString().trim()
+            },
+            items: currentCheckoutItems.slice(),
+            notes: (fd.get('order_notes') || '').toString().trim()
+        };
+    }
+
+    function redirectToDeliveryQuote(fd, reasonMessage) {
+        var payload = buildQuoteHandoffPayload(fd, reasonMessage);
+        try {
+            window.sessionStorage.setItem(checkoutQuoteHandoffKey, JSON.stringify(payload));
+        } catch (err) {
+            if (window.console && console.warn) console.warn('Could not store delivery quote handoff', err);
+        }
+        window.location.href = '/contact?intent=quote&source=checkout-delivery';
     }
 
     function hasTotalsInputs() {
@@ -492,7 +545,7 @@
                 if (sumDelivery) sumDelivery.textContent = 'Quote needed';
                 if (sumTax) sumTax.textContent = 'Reviewed with quote';
                 if (sumGrand) sumGrand.textContent = fmtMoney(msg.subtotal || currentSubtotal || 0);
-                submit.textContent = 'Send delivery quote request';
+                submit.textContent = 'Request delivery quote';
                 setFeedback('error', msg.message || 'Delivery quote needed for this location.');
                 return;
             }
@@ -551,6 +604,11 @@
             }
         }
 
+        if (currentQuoteRequired) {
+            redirectToDeliveryQuote(fd, 'Standard checkout is not available for this delivery ZIP.');
+            return;
+        }
+
         submit.disabled = true;
         var originalLabel = submit.textContent;
         submit.textContent = currentQuoteRequired ? 'Sending quote request...' : 'Creating your order...';
@@ -567,10 +625,7 @@
             submit.textContent = originalLabel;
             var msg = result.body && result.body.message;
             if (result.status >= 200 && result.status < 300 && msg && msg.status === 'quote_required') {
-                setFeedback('success',
-                    "Thanks. We've received your cart and will follow up about delivery for this location.");
-                submit.textContent = 'Quote request sent';
-                submit.disabled = true;
+                redirectToDeliveryQuote(new FormData(form), msg.message || 'Delivery quote needed for this location.');
                 return;
             }
             if (result.status >= 200 && result.status < 300 && msg && msg.ok) {

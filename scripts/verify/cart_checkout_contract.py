@@ -7,9 +7,9 @@ purchase contract:
 - Retail single-SKU products still resolve normally.
 - Retail variant item codes can be summarized for cart display, using the
   parent Website Item for display route/image and the variant Item Price.
-- Quote-lane item codes are excluded from checkout cart display so stale
-  localStorage cannot render a cart line that checkout later rejects.
-- Variant templates and quote-lane products are not added directly from /shop.
+- Product groups do not create a quote-only cart failure. Delivery ZIP/city is
+  the checkout quote gate, not the product group by itself.
+- Variant templates are not added directly from /shop.
 - Server checkout rejects direct POST quantities above the browser cart cap.
 
 Run:
@@ -113,7 +113,7 @@ def by_item_code(items: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
     return {item["item_code"]: item for item in items}
 
 
-def check_cart_api_resolves_retail_items_and_excludes_quote_lane() -> None:
+def check_cart_api_resolves_priced_items_without_product_quote_gate() -> None:
     data = bench_execute(
         "locally_twisted.api.cart.get_cart_items",
         kwargs={"item_codes": [RETAIL_VARIANT_ITEM, QUOTE_VARIANT_ITEM, SINGLE_SKU_ITEM, QUOTE_VARIANT_TEMPLATE]},
@@ -125,8 +125,8 @@ def check_cart_api_resolves_retail_items_and_excludes_quote_lane() -> None:
     assert_true(SINGLE_SKU_ITEM in items, f"{SINGLE_SKU_ITEM} should still resolve as a cart item")
     assert_true(RETAIL_VARIANT_ITEM in items, f"{RETAIL_VARIANT_ITEM} should resolve as a retail variant cart item")
     assert_true(
-        QUOTE_VARIANT_ITEM in missing and missing[QUOTE_VARIANT_ITEM] == "quote_required",
-        f"{QUOTE_VARIANT_ITEM} should be excluded from checkout cart display as quote_required",
+        QUOTE_VARIANT_ITEM in items,
+        f"{QUOTE_VARIANT_ITEM} is priced and should not be rejected by product group as quote_required",
     )
     assert_true(
         QUOTE_VARIANT_TEMPLATE in missing,
@@ -151,6 +151,12 @@ def check_cart_api_resolves_retail_items_and_excludes_quote_lane() -> None:
     assert_true(
         variant.get("checkout_lane") == "retail_checkout",
         f"{RETAIL_VARIANT_ITEM} should be marked retail_checkout, found {variant.get('checkout_lane')!r}",
+    )
+
+    quoted_before = items[QUOTE_VARIANT_ITEM]
+    assert_true(
+        quoted_before.get("checkout_lane") == "retail_checkout",
+        f"{QUOTE_VARIANT_ITEM} should be retail_checkout unless fulfillment details require a quote, found {quoted_before.get('checkout_lane')!r}",
     )
 
 
@@ -183,33 +189,28 @@ def check_checkout_rejects_over_limit_quantities() -> None:
     )
 
 
-def check_shop_cards_do_not_add_templates() -> None:
+def check_shop_cards_keep_priced_products_cartable_and_do_not_add_templates() -> None:
     html = get_url("/shop")
     assert_true(
         f'data-item-code="{QUOTE_VARIANT_TEMPLATE}"' not in html,
         f"/shop must not expose an add-to-cart button for template {QUOTE_VARIANT_TEMPLATE}",
     )
     assert_true(
-        f'data-item-code="{QUOTE_SINGLE_SKU_ITEM}"' not in html,
-        f"/shop must not expose an add-to-cart button for quote-lane item {QUOTE_SINGLE_SKU_ITEM}",
-    )
-    assert_true(
-        f'href="/contact?item={QUOTE_SINGLE_SKU_ITEM}"' in html,
-        f"/shop should send quote-lane item {QUOTE_SINGLE_SKU_ITEM} to /contact",
+        f'data-item-code="{QUOTE_SINGLE_SKU_ITEM}"' in html,
+        f"/shop should keep priced single-SKU product {QUOTE_SINGLE_SKU_ITEM} cartable",
     )
     assert_true(
         f'data-item-code="{SINGLE_SKU_ITEM}"' in html,
         f"/shop should keep add-to-cart available for single SKU {SINGLE_SKU_ITEM}",
     )
-    assert_true("Request quote" in html, "/shop should label quote-lane products")
 
 
 def main() -> int:
     checks = [
-        check_cart_api_resolves_retail_items_and_excludes_quote_lane,
+        check_cart_api_resolves_priced_items_without_product_quote_gate,
         check_checkout_resolver_accepts_retail_variant,
         check_checkout_rejects_over_limit_quantities,
-        check_shop_cards_do_not_add_templates,
+        check_shop_cards_keep_priced_products_cartable_and_do_not_add_templates,
     ]
 
     failures = []

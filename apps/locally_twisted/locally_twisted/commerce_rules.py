@@ -26,14 +26,9 @@ RETAIL_CHECKOUT_GROUPS = {
     "Grab & Go",
     "Seasonal & Specialty",
 }
-QUOTE_REQUIRED_GROUPS = {
-    "Arches",
-    "Columns",
-    "Drops",
-    "Garlands",
-    "Stands & Easels",
-    "Table Decor",
-}
+# Product group alone must not make a cart item quote-only. A customer-facing
+# quote fallback is a fulfillment rule, currently driven by delivery zone.
+QUOTE_REQUIRED_GROUPS = set()
 
 PICKUP_LOCATIONS = {
     "West Jordan": {
@@ -189,8 +184,6 @@ def normalize_city(city: str | None) -> str:
 
 
 def checkout_lane_for_item_group(item_group: str | None) -> str:
-    if item_group in QUOTE_REQUIRED_GROUPS:
-        return "quote_required"
     return "retail_checkout"
 
 

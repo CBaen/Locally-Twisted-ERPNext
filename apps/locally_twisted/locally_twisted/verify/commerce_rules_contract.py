@@ -72,10 +72,10 @@ def _check_product_lanes(rules) -> list[str]:
         "Get-Well Bouquets": "retail_checkout",
         "Grab & Go": "retail_checkout",
         "Deliveries": "retail_checkout",
-        "Arches": "quote_required",
-        "Columns": "quote_required",
-        "Garlands": "quote_required",
-        "Drops": "quote_required",
+        "Arches": "retail_checkout",
+        "Columns": "retail_checkout",
+        "Garlands": "retail_checkout",
+        "Drops": "retail_checkout",
     }
     for item_group, lane in expected.items():
         actual = rules.checkout_lane_for_item_group(item_group)

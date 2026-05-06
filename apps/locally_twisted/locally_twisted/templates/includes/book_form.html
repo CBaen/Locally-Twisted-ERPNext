@@ -757,6 +757,107 @@ every deploy.
     });
     updateConditionals();
 
+    /* --- 1b. Checkout delivery-quote handoff prefill ---------------- */
+    var QUOTE_HANDOFF_KEY = 'lt_checkout_quote_handoff_v1';
+
+    function setNamedValue(name, value) {
+        if (value == null || value === '') return;
+        var root = document.getElementById('lt-book-form') || document;
+        var field = root.querySelector('[name="' + name + '"]');
+        if (field) field.value = String(value);
+    }
+
+    function checkService(value) {
+        var box = document.querySelector('input[name="x_services"][value="' + value + '"]');
+        if (box) box.checked = true;
+    }
+
+    function joinParts(parts, separator) {
+        return parts.filter(function (part) {
+            return part != null && String(part).trim();
+        }).map(function (part) {
+            return String(part).trim();
+        }).join(separator || ', ');
+    }
+
+    function deliveryAddressLine(fulfillment) {
+        if (!fulfillment) return '';
+        return joinParts([
+            fulfillment.address_line1,
+            fulfillment.address_line2,
+            fulfillment.city,
+            fulfillment.state,
+            fulfillment.postal_code
+        ]);
+    }
+
+    function itemLines(items) {
+        if (!Array.isArray(items)) return [];
+        return items.map(function (item) {
+            var label = item.name || item.web_item_name || item.item_code || 'Item';
+            var code = item.item_code ? ' (' + item.item_code + ')' : '';
+            var qty = item.qty ? ', qty ' + item.qty : '';
+            var options = item.options ? ', ' + item.options : '';
+            return 'Interested item: ' + label + code + qty + options;
+        });
+    }
+
+    function applyCheckoutQuoteHandoff() {
+        var raw = null;
+        try {
+            raw = window.sessionStorage.getItem(QUOTE_HANDOFF_KEY);
+        } catch (err) {
+            return;
+        }
+        if (!raw) return;
+
+        var payload = null;
+        try {
+            payload = JSON.parse(raw);
+        } catch (err) {
+            return;
+        }
+        if (!payload || payload.source !== 'checkout') return;
+
+        var customer = payload.customer || {};
+        var fulfillment = payload.fulfillment || {};
+        var address = deliveryAddressLine(fulfillment);
+
+        setNamedValue('contact_name', customer.name);
+        setNamedValue('phone', customer.phone);
+        setNamedValue('email_from', customer.email);
+        setNamedValue('partner_name', customer.company);
+        setNamedValue('x_event_date', fulfillment.requested_date);
+        setNamedValue('x_event_time', fulfillment.window_start);
+        setNamedValue('x_event_end_time', fulfillment.window_end);
+        setNamedValue('x_event_location', address);
+
+        checkService('Delivery');
+        updateConditionals();
+
+        var deliveryNotes = [
+            'Out of standard delivery area; customer is requesting a delivery quote.',
+            payload.message,
+            fulfillment.requested_date ? 'Requested date: ' + fulfillment.requested_date : '',
+            (fulfillment.window_start || fulfillment.window_end)
+                ? 'Requested window: ' + joinParts([fulfillment.window_start, fulfillment.window_end], '-')
+                : '',
+            address ? 'Delivery address: ' + address : ''
+        ].filter(Boolean).join('\n');
+        setNamedValue('x_delivery_notes', deliveryNotes);
+
+        var notes = itemLines(payload.items || []);
+        if (payload.notes) notes.push('Checkout note: ' + payload.notes);
+        if (deliveryNotes) notes.push(deliveryNotes);
+        setNamedValue('description', notes.join('\n'));
+
+        try {
+            window.sessionStorage.removeItem(QUOTE_HANDOFF_KEY);
+        } catch (err) {}
+    }
+
+    applyCheckoutQuoteHandoff();
+
     /* --- 2. Photo file count + size validation ----------------------- */
     var fileInput = document.getElementById('book_photos');
     var hintEl = document.getElementById('book_photos_hint');

@@ -38,7 +38,7 @@ The approved target is:
 - Reinstated `navbar_context.py` for menu data and kept `website_context.py` for shop/sidebar defaults.
 - Fixed mobile hero spacing, reviews carousel clipping, dark-section heading contrast, portfolio chip wrapping, footer newsletter mobile stacking, product/shop panel spacing, and shop-card mobile density.
 - Added the standing responsive container audit gate so future visual work checks breakpoint edges and open UI states, not only one mobile and one desktop screenshot.
-- Corrected shop smoke coverage to match the current commerce lane: quote-required custom installs route to `/contact`, and retail variants still prove inline option selection and cart writes.
+- Corrected shop smoke coverage again after the checkout-rule clarification: fixed-price product pages must not invent product-level quote gates, and retail variants still prove inline option selection and cart writes. Out-of-area delivery ZIP is the customer-facing checkout quote fallback.
 
 ## Icon Suite
 
@@ -77,7 +77,7 @@ The first four-icon pass was not enough. Balloon pages should use balloon-form i
 
 - `python scripts/dev/clear_website_cache.py` passed.
 - `python scripts/verify/nav_ia.py` passed.
-- `python scripts/verify/smoke_shop.py` passed with the current mega-menu, quote-required custom install, and retail variant contracts.
+- `python scripts/verify/smoke_shop.py` passed with the current mega-menu and retail variant contracts; 2026-05-06 follow-up changed the shop smoke contract so fixed-price products do not invent product-level quote gates.
 - `npm run test:layout-fit` passed 260/260 across 20 public routes and 13 viewport families.
 - `npm run test:interactive-layout` passed 39/39 across header breakpoints, desktop mega panels, mobile drawer accordions, shop/product controls, contact conditionals, portfolio modal, and reduced-motion homepage behavior.
 - `npm run test:checkout-experience` passed 1/1.

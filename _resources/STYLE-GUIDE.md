@@ -1,7 +1,7 @@
 # Locally Twisted - ERPNext/Frappe Style Guide
 
 **Version:** 4.2
-**Last Updated:** 2026-05-05
+**Last Updated:** 2026-05-06
 **Build Target:** ERPNext v15.105.0 + Frappe v15 / Webshop
 **Primary Viewport:** Mobile-first, 375px base
 
@@ -102,9 +102,9 @@ component is added, append it here before a broad implementation swarm begins.
 | Home | `/`, `www/home.html`, `www/home.py` | Highest brand authority page | Civic/Utah hero image, Cormorant hero type, Image #3 proof bar icons, reviews as support, large recent-work photos, custom decor discovery, client proof, closing CTA. |
 | Shop landing | `/shop`, `www/shop.html` | Ready-to-order retail lane | Still premium but more practical. Keep filters, product cards, and add-to-cart clear; use restrained surfaces so product color carries the page. |
 | Category / item group listing | `/shop-items/<group>`, Item Group generator | Product discovery | Use editorial shop header, left/sidebar filters on desktop, drawer filters on mobile, stable grid cards, visible count/sort state, no pastel catalog takeover. |
-| Product detail/configure | Webshop item overrides under `templates/generators/item/` | Conversion and product clarity | Product image first, Cormorant product name, Lato specs/options, clear price and stock. Quote-required custom installs use a clear `/contact?item=...` CTA; retail variants use accessible option chips/selects and rectangular cart buttons. |
+| Product detail/configure | Webshop item overrides under `templates/generators/item/` | Conversion and product clarity | Product image first, Cormorant product name, Lato specs/options, clear price and stock. Fixed-price products stay cartable; product group alone must not create a quote-only failure. Out-of-area delivery redirects to a prefilled `/contact` quote path. |
 | Cart | `/cart` -> `www/lt_cart.html` | Review before checkout | Quiet transactional page with order-summary hierarchy, stable quantity controls, clear empty/error/loading states, and contact fallback. |
-| Checkout | `/checkout`, `www/checkout.html` | Payment trust | Most restrained surface: secure, plain, readable, minimal ornament. Keep form labels clear, required states visible, summary grounded, and trust language factual. |
+| Checkout | `/checkout`, `www/checkout.html` | Payment trust | Most restrained surface: secure, plain, readable, minimal ornament. Keep form labels clear, required states visible, summary grounded, and trust language factual. If delivery ZIP is outside the configured zone, show a delivery quote request path and carry checkout details into `/contact`; do not imply the product itself became unpurchasable. |
 | Payment success | `/payment-success`, `www/payment_success.html` | Transitional utility page | Use the same typography and colors as thank-you; avoid inline one-off font/color styles in future cleanup. |
 | Thank you | `/thank-you`, `www/thank_you.html` | Post-payment reassurance | Calm, premium confirmation with order facts, no confetti energy, clear next step. |
 | Contact/inquiry | `/contact`, `templates/includes/book_form.html` | Main custom-work conversion | Dark civic intro, two-column form/info layout on desktop, large Cormorant heading, warm form fields, brass or berry focus, company/team copy. |

@@ -7,7 +7,9 @@ Last updated: 2026-05-06 by Codex.
 Make checkout reflect Locally Twisted's mixed business model:
 
 - ready-to-order goods can be purchased through cart/checkout
-- custom decor and out-of-area delivery move to quote/Lead flow
+- custom event/service work starts through `/contact`
+- product group alone does not make a priced cart item quote-only
+- out-of-area delivery moves to the `/contact` quote flow with checkout details carried forward and no checkout-created Lead
 - local delivery and Park City delivery can be charged in checkout
 - service inquiries carry deposit/payment guidance on Leads without creating money records
 - Utah tax rate is selected by fulfillment ZIP/city, but tax applies only to taxable goods
@@ -17,7 +19,10 @@ Make checkout reflect Locally Twisted's mixed business model:
 Verified against the local ERPNext/Frappe stack at `http://localhost:8081`:
 
 - Standard local delivery is `$15`; Park City delivery is `$50`.
-- Out-of-area ZIPs create a quote Lead instead of a paid checkout, even if the city text names a standard-delivery city.
+- Out-of-area ZIPs stop paid checkout even if the city text names a standard-delivery city.
+- Customer-facing out-of-area delivery now redirects from checkout to `/contact?intent=quote&source=checkout-delivery` with the cart item, contact fields, requested date/window, address, ZIP, and notes prefilled.
+- Lead creation for this branch belongs to the `/contact` submit, not checkout, so fast-submit/race cases do not create duplicate Leads.
+- Product groups no longer create a `quote_required` cart missing reason. If a product is priced and in the cart, fulfillment details decide whether standard checkout can continue.
 - Checkout rejects past pickup/delivery dates server-side and sets the browser date minimum to today.
 - Ready-to-order retail goods remain taxable using the ZIP/city tax rate.
 - Delivery fee lines are non-taxable.
@@ -49,6 +54,7 @@ Primary verifier files:
 - `apps/locally_twisted/locally_twisted/verify/checkout_lead_conversion_contract.py`
 - `scripts/verify/cart_checkout_contract.py`
 - `scripts/verify/checkout_experience.spec.js`
+- `scripts/verify/contact_prefill.py`
 - `scripts/verify/lead_backend_intake_parity.py`
 
 ## Verification Receipts
@@ -93,6 +99,7 @@ Observed tax regression receipt:
 - Run `python scripts/verify/payment_launch_readiness.py --mode live` before any real cutover claim.
 - If service/deposit Items are added later, keep them in Item Group `Services` or explicitly add their item codes to the non-taxable rule.
 - If a future service becomes taxable, do not change this globally; add a narrower taxable-service classification and contract test first.
+- If a future product should never be cartable, do not overload `quote_required`; give it a clear product availability/CTA rule and add a contract that proves it never enters cart in the first place.
 
 ## Trust Boundary
 
