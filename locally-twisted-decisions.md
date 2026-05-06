@@ -8,6 +8,20 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-06 - Unpaid invoice packets render drafts, not delivery
+
+**Decision:** Unpaid invoice follow-up can now render review packets from candidate data, but the renderer is still an internal draft surface. It may produce `payment_reminder_draft` and `statement_of_account` sections for Jeff/accounting review. It must not create Email Queue, Communication, Payment Request, Payment Entry, Journal Entry, Sales Invoice mutations, or any customer delivery.
+
+**Reasoning:** The user asked for paperwork and backend automation that helps accounting, avoids unnecessary contact, and fails loudly. Rendering the packet reduces Jeff/accounting's review burden, but sending it would cross into collections/customer communication and needs approved recipient, cadence, copy, and status rules first.
+
+**Implementation:** Added `locally_twisted.paperwork.unpaid_invoice_draft_packet.run`, host verifier `scripts/verify/unpaid_invoice_draft_packet.py`, automation index wiring, and updated paperwork/business-automation docs plus finance/document capabilities.
+
+**Verification receipt:** The verifier was written first and failed red because Frappe could not import `locally_twisted.paperwork.unpaid_invoice_draft_packet`. After implementation, `python scripts/verify/unpaid_invoice_draft_packet.py --report output/unpaid-invoice-draft-packet.json --markdown output/unpaid-invoice-draft-packet.md` passed with 1 draft-only packet for `ACC-SINV-2026-00001`. `python scripts/verify/business_automation_index.py --report output/business-automation-index.json` passed with 18 indexed surfaces, 14 connected, 4 exists-but-not-connected, and 0 loud-failure gaps.
+
+**Decided by:** Codex advanced the documented no-approval paperwork slice under GL's fail-loud and no-unapproved-customer-send constraints.
+
+---
+
 ## 2026-05-06 - Unpaid invoice review is a draft surface, not collections automation
 
 **Decision:** Unpaid and overdue invoices can now generate review candidates, but the surface is draft-only. It may show invoice status, balance, recipient/cadence review fields, and suggested `payment_reminder_draft` / `statement_of_account` documents. It must not send customer reminders, create Communications, queue emails, submit/cancel accounting records, or modify Sales Invoices, Payment Requests, Payment Entries, or Journal Entries.

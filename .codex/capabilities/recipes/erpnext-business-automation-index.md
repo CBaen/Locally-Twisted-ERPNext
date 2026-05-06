@@ -50,6 +50,7 @@ Current connected launch spine:
 - outbound document registry
 - paperwork status checkup
 - draft-only unpaid invoice review candidates
+- draft-only unpaid invoice reminder/statement packet renderer
 - scheduled daily business automation checkup
 - Accountant Home parity
 
@@ -57,7 +58,7 @@ Current connected launch spine:
 
 1. Required surfaces fail the verifier if files, hooks, setup records, methods, or connections are missing.
 2. Scheduled checkups should create visible backend attention, such as Frappe Error Log entries, when required links break.
-3. Existing-but-not-connected surfaces must stay visible in the report. Do not imply proposals, vendor packets, bank reconciliation, payroll, reminders, or statements are operational just because templates or native DocTypes exist. A reminder/statement surface can count as connected only when it is explicitly draft-only, review-gated, and mutation-guarded.
+3. Existing-but-not-connected surfaces must stay visible in the report. Do not imply proposals, vendor packets, bank reconciliation, payroll, reminders, or statements are operational just because templates or native DocTypes exist. A reminder/statement surface can count as connected only when it is explicitly draft-only, review-gated, mutation-guarded, and tested through its review or packet renderer.
 4. Fake-data verifiers must clean up generated business records or explicitly mark rollback behavior.
 5. Amount parity and customer communication paths must fail loudly. A silent skipped email, undercharged checkout, or disconnected document generator is a business relationship risk.
 

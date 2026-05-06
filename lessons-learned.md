@@ -6,6 +6,14 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-06 - Rendering a draft is still an automation boundary
+
+The unpaid invoice draft packet renderer feels safer than reminder sending because it only produces review output. It still touches a dangerous business boundary: customer communication and invoice follow-up. If a renderer quietly creates an Email Queue row, Communication, Payment Request, Payment Entry, Journal Entry, or invoice mutation, it has become delivery or accounting automation without approval.
+
+**Counter-move:** draft renderers need the same negative proof as review queues. The unpaid invoice packet verifier now confirms `read_only`, `send_allowed: false`, `mutation_allowed: false`, draft-only packet/section status, human approval gates, and unchanged guarded counts. Use that pattern before building Desk queues, scheduled digests, statement generators, or reminder send paths.
+
+---
+
 ## 2026-05-06 - A draft-only reminder still needs a mutation guard
 
 The unpaid invoice review surface looked safe because it only reads invoices and returns candidate data. That is not enough proof in a business system. If a future helper accidentally queues an email, creates a Communication, or changes a Payment Request while building the review list, the surface becomes collections automation without approval.

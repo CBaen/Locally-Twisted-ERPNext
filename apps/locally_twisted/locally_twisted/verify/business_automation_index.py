@@ -333,6 +333,19 @@ def _surfaces() -> list[dict[str, object]]:
             "verifiers": ["python scripts/verify/unpaid_invoice_review.py --report output/unpaid-invoice-review.json"],
         },
         {
+            "id": "unpaid_invoice_draft_packet",
+            "lane": "paperwork",
+            "summary": "Unpaid invoice review candidates render draft-only reminder and statement packets for human review.",
+            "required_for_launch": False,
+            "exists": lambda: _files_exist("locally_twisted/paperwork/unpaid_invoice_draft_packet.py"),
+            "connected": _unpaid_invoice_draft_packet_connected,
+            "loud_failure": lambda: [],
+            "evidence": ["apps/locally_twisted/locally_twisted/paperwork/unpaid_invoice_draft_packet.py"],
+            "verifiers": [
+                "python scripts/verify/unpaid_invoice_draft_packet.py --report output/unpaid-invoice-draft-packet.json"
+            ],
+        },
+        {
             "id": "quote_proposal_generation",
             "lane": "paperwork",
             "summary": "Quote/proposal source templates exist, but no Quotation-to-PDF generation or approval queue is wired yet.",
@@ -629,6 +642,40 @@ def _unpaid_invoice_review_connected() -> list[str]:
     return failures
 
 
+def _unpaid_invoice_draft_packet_connected() -> list[str]:
+    failures = []
+    failures.extend(_callables_exist("locally_twisted.paperwork.unpaid_invoice_draft_packet.run"))
+    result = frappe.get_attr("locally_twisted.paperwork.unpaid_invoice_draft_packet.run")()
+    if not result.get("ok"):
+        failures.extend(result.get("failures") or ["unpaid_invoice_draft_packet.run returned not ok"])
+    if result.get("read_only") is not True:
+        failures.append("unpaid_invoice_draft_packet is not marked read_only")
+    if result.get("send_allowed") is not False:
+        failures.append("unpaid_invoice_draft_packet allows sending")
+    if result.get("mutation_allowed") is not False:
+        failures.append("unpaid_invoice_draft_packet allows mutations")
+    if result.get("packet_type") != "unpaid_invoice_draft_packet":
+        failures.append("unpaid_invoice_draft_packet returned the wrong packet_type")
+    if result.get("source_review_surface") != "unpaid_invoice_review":
+        failures.append("unpaid_invoice_draft_packet is not linked to unpaid_invoice_review")
+    if result.get("mutation_guard", {}).get("changed"):
+        failures.append("unpaid_invoice_draft_packet mutation guard changed")
+    for packet in result.get("packets") or []:
+        if packet.get("send_status") != "draft_only_not_sent":
+            failures.append(f"{packet.get('invoice')} packet is not draft-only")
+        if packet.get("human_approval_required") is not True:
+            failures.append(f"{packet.get('invoice')} packet does not require human approval")
+        section_ids = {section.get("document_id") for section in packet.get("sections") or []}
+        if section_ids != {"payment_reminder_draft", "statement_of_account"}:
+            failures.append(f"{packet.get('invoice')} packet sections are wrong: {sorted(section_ids)}")
+        for section in packet.get("sections") or []:
+            if section.get("send_status") != "draft_only_not_sent":
+                failures.append(f"{packet.get('invoice')} {section.get('document_id')} is not draft-only")
+            if "human_approval" not in str(section.get("do_not_send_without") or ""):
+                failures.append(f"{packet.get('invoice')} {section.get('document_id')} lacks human approval gate")
+    return failures
+
+
 def _finance_workspace_connected() -> list[str]:
     failures = []
     if not frappe.db.exists("Workspace", "LT Accountant Home"):
@@ -777,6 +824,7 @@ def _checkups() -> list[dict[str, object]]:
                 "python scripts/verify/outbound_documents_contract.py",
                 "python scripts/verify/paperwork_status.py --report output/paperwork-status.json",
                 "python scripts/verify/unpaid_invoice_review.py --report output/unpaid-invoice-review.json",
+                "python scripts/verify/unpaid_invoice_draft_packet.py --report output/unpaid-invoice-draft-packet.json",
             ],
         },
         {
