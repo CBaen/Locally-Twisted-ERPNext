@@ -85,6 +85,10 @@ Everything below feeds directly into the attorney-prep contract templates and in
 - **No late cancellation fee** for consistent clients.
 - Relationship over enforcement.
 
+### 2026-05-06 business-proxy clarification
+- Personal balloon decor cancellations less than 7 days before the event: no cash refund. Any funds paid transfer to another event date or product.
+- This resolves the prior gap between 72 hours and 7 days.
+
 ### Note for the lawyer (non-decision, just flagged)
 - The "7-14 days out = full refund" for personal decor doesn't account for materials Jeff has already purchased on a custom job. Lawyer may draft as "full refund minus documented materials cost" — Jeff can waive materials in practice if he wants. Don't need Jeff's attention on this now.
 

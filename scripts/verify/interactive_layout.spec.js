@@ -12,6 +12,14 @@ async function expectSuccessfulResponse(response, path) {
 	expect(response.status(), `${path} HTTP status`).toBeLessThan(400);
 }
 
+async function dismissCookieNotice(page) {
+	const banner = page.locator(".lt-cookie-consent");
+	if ((await banner.count()) === 0) return;
+	if (!(await banner.isVisible().catch(() => false))) return;
+	await page.locator(".lt-cookie-consent__button--secondary").click();
+	await expect(banner).toHaveCount(0);
+}
+
 test.describe("Locally Twisted interactive layout states", () => {
 	test.describe("header breakpoint contract", () => {
 		for (const viewport of HEADER_VIEWPORTS) {
@@ -113,6 +121,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 				await page.setViewportSize({ width: viewport.width, height: viewport.height });
 				const response = await gotoAndSettle(page, "/");
 				await expectSuccessfulResponse(response, "/");
+				await dismissCookieNotice(page);
 
 				await page.locator("#lt-mobile-toggle").click();
 				await expect(page.locator("#lt-mobile-nav")).toBeVisible();
@@ -201,6 +210,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 				await page.setViewportSize({ width: viewport.width, height: viewport.height });
 				const response = await gotoAndSettle(page, "/contact");
 				await expectSuccessfulResponse(response, "/contact");
+				await dismissCookieNotice(page);
 
 				for (const value of ["Balloon Decor", "Events Inquiry", "Balloon Twisting"]) {
 					await page.locator(`input[name="x_services"][value="${value}"]`).check({ force: true });

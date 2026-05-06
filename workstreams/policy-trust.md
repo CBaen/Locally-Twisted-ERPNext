@@ -12,9 +12,26 @@ Do not treat current ERPNext policy pages as authoritative until each claim is t
 
 ## Current Stage
 
-Source-trace pass started. Routes load, but content is not launch-approved.
+Source-trace pass started. Routes load, and GL has supplied business-proxy answers for the main policy-copy blockers. Legal/accounting approval is still separate from business approval.
 
-Checkout now has a verified local commerce-rule contract, but policy copy still needs approval before it becomes customer/legal language. Current local behavior: goods are taxable by fulfillment ZIP/city rate; services, face painting, balloon twisting, deposits for those services, and delivery charges are non-taxable; local delivery is `$15`, Park City delivery is `$50`, and out-of-area delivery requires a quote.
+Checkout now has a verified local commerce-rule contract. Current local behavior: goods are taxable by fulfillment ZIP/city rate; services, face painting, balloon twisting, deposits for those services, and delivery charges are non-taxable; local delivery is `$15`, Park City delivery is `$50`, and out-of-area delivery is available for quote.
+
+2026-05-06 GL business-proxy answers now captured in copy/source docs:
+
+- Delivery policy stays in Terms/FAQ, not a standalone route.
+- Pickup/delivery windows are requested until confirmed.
+- If LT cannot deliver/setup because the customer cannot be contacted or access info is wrong, the customer remains responsible.
+- Delivered product damage must be reported the same day.
+- Ready-to-order products have no returns once prepared, delivered, or picked up.
+- Launch expects analytics/ads/tracking plus cart/session storage.
+- Privacy contact remains `hi@locallytwisted.com`.
+- The children/minors privacy rule is narrow online-data language: adults submit forms/orders; LT does not knowingly collect directly from children under 13.
+- Inspiration photos are for event planning.
+- Event photos use an opt-out release model for photos/video taken by LT staff/representatives and public social/review photos LT can access.
+- Invoice payment counts as acceptance of booking terms for now.
+- Terms should cover temporary balloon/service limits including weather, heat, cold, wind, sunlight, altitude, venue conditions, handling, intended use, guest interaction, interference, third-party movement, and changes after setup.
+- Personal balloon decor cancellations less than 7 days before the event receive no cash refund; any funds paid transfer to another event date or product.
+- A sitewide cookie/tracking notice now stores `lt_cookie_consent` as `accepted` or `declined` and exposes `window.LT_COOKIE_CONSENT` for future analytics/ads wiring.
 
 Verified route status from controller baseline:
 
@@ -49,31 +66,28 @@ Current ERPNext page files:
 
 | Page | Current route/file state | Traced source | Launch status |
 |---|---|---|---|
-| Privacy | Route exists. Page claims data collection, uses, sharing, cookies, security, choices, and `hi@locallytwisted.com` contact. | Questionnaire says Privacy Policy is launch-blocking and provides defaults/questions for data collected, tracking, selling, sharing, retention, privacy contact, marketing consent, children. The questionnaire appears unanswered. | Not content-approved. Needs GL/legal decision on privacy defaults, tracking, retention, privacy contact email, and cookie posture. |
+| Privacy | Route exists. Page claims data collection, uses, sharing, analytics/advertising/tracking cookies, security, choices, children-under-13 online-data language, and `hi@locallytwisted.com` contact. | Questionnaire says Privacy Policy is launch-blocking and provides defaults/questions for data collected, tracking, selling, sharing, retention, privacy contact, marketing consent, children. GL business-proxy answers chose `hi@locallytwisted.com`, analytics/ads/tracking plus cart/session, and narrow children-under-13 language. | Business-approved for current copy; legal review still recommended. |
 | Terms of Service | Route exists. Page claims booking confirmation rules, payment terms, cancellation reference, service area, weather, client responsibilities, website-use rules, and `hi@locallytwisted.com`. | Payment of invoice as signature, contract scope, deposits, Net 30, and 10% simple late fee trace to completed `live-interview-answers.md`. Broader ToS topics such as minimum age, customer uploads, dispute venue, class action, liability cap, warranty disclaimer, and change notices are in the unanswered questionnaire. | Partially sourced. Payment terms are strong; broader ToS legal terms need GL/legal approval or intentionally narrower launch language. |
-| Refund / Cancellation | Route exists. Page claims deposits, personal decor refund windows, reschedule window, weather/no partial refund, LT cancellation goodwill, corporate late payments. | Most payment/deposit/cancellation/weather/reschedule/corporate late-fee content traces to completed `live-interview-answers.md`. Materials-cost deduction traces to a lawyer drafting note, not a direct final Jeff policy. | Mostly sourced, but needs legal/GL review for decor cancellation gap between 72 hours and 7 days and for materials-cost deduction wording. |
+| Refund / Cancellation | Route exists. Page claims deposits, personal decor refund windows, reschedule window, weather/no partial refund, LT cancellation goodwill, corporate late payments, ready-to-order no-return rule, and same-day damage report window. | Most payment/deposit/cancellation/weather/reschedule/corporate late-fee content traces to completed `live-interview-answers.md`. The less-than-7-days decor transfer/no-refund rule traces to GL business-proxy clarification on 2026-05-06. | Business-approved for current copy; legal review still recommended. |
 | Accessibility | Route exists. Page says LT works to keep the site usable and uses `accessibility@locallytwisted.com`. | Questionnaire says Accessibility Statement exists and should be verified; default target is WCAG 2.1 AA and default contact is `accessibility@locallytwisted.com`. The answer appears not completed. | Low-risk but not final. Needs GL/legal approval on accessibility contact email and whether to state WCAG target/features. |
-| Cookie policy/banner | No separate route found. Privacy page has a cookies/tools section. `lt-guest-cart.js` writes a `cart_count` cookie. | Questionnaire lists Cookie Consent Banner + Policy as launch-blocking and says essential-only cookies can use a simple one-line banner if no third-party tracking is used. | Open blocker. Need decide whether launch uses essential cookies only and whether a separate banner/policy is required. |
-| Shipping / Delivery | No separate route found in the ERPNext policy set. Terms page has service area and travel-fee text. Local checkout contract now supports `$15` standard delivery, `$50` Park City delivery, non-taxable delivery lines, and out-of-area quote-required behavior. | Questionnaire lists Shipping & Delivery Policy as launch-blocking and has unanswered delivery-zone/logistics questions. `04-legal-live-interview.md` includes a prompt line for free delivery in Davis, Weber, Salt Lake, and Utah counties, but that file is a prompt, not completed answers. Current checkout behavior traces to GL clarification in the 2026-05-06 commerce-rules session, not legal approval. | Open blocker. Need source-traced delivery policy or GL/legal/accountant approval before Stripe/live-readiness claims. |
-| Tax / service deposits | Checkout code now treats goods as taxable and services, BTFP, service deposits, and delivery charges as non-taxable. Contact Lead records store artist-service deposit/payment guidance without creating money records. | GL clarified the non-taxable service/deposit/delivery rule in the 2026-05-06 commerce-rules session. Accountant/legal approval is still required before the website presents this as final tax/legal policy language. | Code verified locally; copy not launch-approved. |
+| Cookie policy/banner | No separate route found. Privacy page has a cookies/tools section and now discloses analytics, advertising, tracking, cart, and session storage. Sitewide `lt-cookie-consent.js` shows an accept/decline notice and stores `lt_cookie_consent`; `lt-guest-cart.js` writes a `cart_count` cookie. | GL business-proxy answer says launch expects analytics/ads/tracking plus cart/session storage. | Basic consent surface implemented; legal review and future analytics/ads wiring still need to honor the stored choice. |
+| Shipping / Delivery | No separate route by design. Terms/FAQ carry delivery policy. Local checkout contract supports `$15` standard delivery, `$50` Park City delivery, non-taxable delivery lines, and out-of-area quote behavior. | GL business-proxy answer says delivery policy belongs in Terms/FAQ; windows are requested until confirmed; no-access/no-contact remains customer responsibility; damage report window is same day; out-of-area delivery is available for quote. | Business-approved for current copy; legal review still recommended. |
+| Tax / service deposits | Checkout code treats goods as taxable and services, BTFP, service deposits, and delivery charges as non-taxable. Contact Lead records store artist-service deposit/payment guidance without creating money records. | GL clarified the non-taxable service/deposit/delivery rule in the 2026-05-06 commerce-rules session. Customer-facing copy should not add service tax language. Accountant/legal approval is still appropriate before final live tax-policy claims. | Code verified locally; copy corrected away from service-tax claims. |
 
 ## Immediate Blockers
 
-- Privacy answers are not completed or approved.
-- Shipping/delivery policy is missing or folded into Terms without completed source answers.
-- Tax/service/deposit language is now implemented in checkout but not approved as public legal/accounting copy.
-- Cookie banner/policy posture is not implemented or approved.
-- Terms page contains broader legal topics that are not fully sourced.
-- Refund page has a decor cancellation ambiguity: completed answers cover 14+ days, 7-14 days, and <72 hours, leaving 72 hours to 7 days unclear.
+- Future analytics/ads/tracking code must honor `window.LT_COOKIE_CONSENT.hasAcceptedOptional()` before loading optional tracking.
+- Terms page contains broader legal topics that are business-approved only, not attorney-approved.
+- Tax/service/deposit language is implemented in checkout and corrected in current copy, but accountant/legal review is still appropriate before final live tax-policy claims.
 - Do not wire Stripe Dashboard URLs until the policy set is approved.
 
 ## Safe Next Slice
 
-Prepare a GL/legal approval packet instead of editing policy copy blind:
+Prepare the legal/accounting approval packet and future analytics wiring rules:
 
-1. Present the matrix above.
-2. Ask GL/legal/accountant to choose privacy defaults, tracking/cookie stance, privacy contact email, delivery policy, tax/service/deposit wording, and decor 72-hour-to-7-day cancellation rule.
-3. After approval, update only the policy page copy and footer links needed for launch.
+1. Present the matrix above with GL business-proxy answers already captured.
+2. Get legal/accounting review for public policy/live-readiness claims.
+3. When analytics/ads/tracking are wired, load optional trackers only after `window.LT_COOKIE_CONSENT.hasAcceptedOptional()` returns true.
 4. Re-run route and layout checks.
 
 ## Do Not Do

@@ -8,6 +8,20 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-06 - Policy copy follows GL business-proxy answers until legal review
+
+**Decision:** Delivery policy stays inside Terms/FAQ rather than a standalone route. Pickup/delivery windows are requested until LT confirms them. If LT cannot complete delivery/setup because the customer cannot be contacted or access information is wrong, the customer remains responsible. Delivered product damage must be reported the same day. Ready-to-order products have no returns once prepared, delivered, or picked up. Out-of-area delivery is available for quote. Privacy contact remains `hi@locallytwisted.com`. Launch expects analytics/ads/tracking plus cart/session storage. Inspiration photos are used for event planning. Event photos use an opt-out release model for photos/video taken by LT staff/representatives and public social/review photos LT can access. Invoice payment counts as acceptance of booking terms for now. Personal balloon decor cancellations less than 7 days before the event receive no cash refund; any funds paid transfer to another event date or product.
+
+**Reasoning:** GL offered to act as the business proxy for policy questions except proof-of-insurance. These decisions unblock the current public copy while preserving the separate need for attorney/accountant review before final legal/live readiness claims.
+
+**Implementation:** Updated FAQ, BTFP service copy, Terms, Privacy, Refund Policy, and `_resources/policies/` source docs so service pages show service totals instead of a service-tax line, so delivery/returns/photo/cookie/children language reflects the proxy decisions, and so the refund gap between 72 hours and 7 days is closed. Added a sitewide cookie/tracking notice that stores `lt_cookie_consent` and exposes `window.LT_COOKIE_CONSENT` for future analytics/ads wiring.
+
+**Alternatives considered:** Create a standalone Shipping/Delivery Policy route. Rejected because GL chose Terms/FAQ. Require opt-in photo releases. Rejected because GL chose an opt-out release for LT-taken event photos and public social/review photos LT can access. Leave the decor cancellation gap for legal review only. Rejected because GL supplied the business decision.
+
+**Decided by:** GL as business proxy; legal/accounting approval still separate where needed.
+
+---
+
 ## 2026-05-06 - Delivery zone, not product group, owns checkout quote fallback
 
 **Decision:** A priced product that is in the cart should not become quote-only because of its Item Group. Product group is no longer the source of `quote_required` cart behavior. The system-configured customer-facing quote fallback for checkout is fulfillment, especially a delivery ZIP outside the configured delivery zones. Out-of-area delivery redirects the customer to `/contact` with checkout details and the interested item carried forward.
