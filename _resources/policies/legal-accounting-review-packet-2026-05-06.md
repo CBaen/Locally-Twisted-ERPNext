@@ -178,7 +178,7 @@ Accounting questions:
 
 These checks passed during the policy/trust implementation pass:
 
-- `node --check apps\locally_twisted\locally_twisted\public\js\lt-cookie-consent.js`
+- `node --check apps\locally_twisted\locally_twisted\public\js\lt-site-preferences.js`
 - `python scripts\verify\commerce_rules_contract.py`
 - `python scripts\verify\checkout_fulfillment_contract.py`
 - `python scripts\verify\cart_checkout_contract.py`
