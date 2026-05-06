@@ -8,6 +8,22 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-06 - Shop category pages must use showroom symmetry, not ragged Webshop rows
+
+**Decision:** `/shop`, `/shop-items`, and `/shop-items/<group>` are product-showcase pages. They may get longer to give products room, but category controls and product rows must stay symmetrical at each breakpoint. `/shop-items/<group>` category controls use equal tile rows, not variable-width chips, and include `All Ready-to-Order` so the category matrix has 12 tiles. Category tiles must match by width and height within each row. `/shop` filtered grids and category product grids must not leave a single desktop orphan card when an even 2-up split is available.
+
+**Reasoning:** GL rejected the first showroom pass because it was technically responsive but visually cheap. Product pages need to sell the decor with large photos and breathing room; a ragged control row or isolated final card makes the product presentation feel accidental and low quality. This is a design contract, not optional polish.
+
+**Implementation:** Updated `item_group.html` to add the neutral `All Ready-to-Order` category tile and preserve Webshop listing/update hooks. Updated `lt-shop-showroom.css` so category controls render as equal grid tiles: 2-up mobile, 3-up tablet, and 4-up desktop. Added scoped balancing logic for both `/shop` filtered grids and `/shop-items/<group>` category grids, marking even visible product counts for a desktop 2-up layout when a 3-up layout would leave one orphan card. Bumped the shop showroom CSS cache key in `hooks.py`.
+
+**Verification receipt:** `python scripts/verify/smoke_shop.py` now checks category-control width/height symmetry, `/shop` filtered-grid orphan prevention, and category-grid orphan prevention, and passed after the repair. Focused route checks also passed: `npm run test:layout-fit -- --grep shop` 26/26, `npm run test:layout-fit -- --grep "variant-product|single-product|seasonal-category"` 39/39, and `npm run test:interactive-layout -- --grep "/shop filtered grid fits"` 4/4. Fresh browser geometry checks measured mobile Get-Well as six equal 2-tile category rows, desktop Get-Well as a 4x3 category-control grid, and desktop Arches as paired 2-card product rows on both `/shop` filtered view and `/shop-items/arches`; transient screenshot folders were not kept as source.
+
+**Alternatives considered:** Leave category controls as flexible chips. Rejected because the row shape looked cheap and violated GL's standing symmetry rule. Keep desktop product grids always 3-up. Rejected for even 10-item categories because it leaves one orphan card. Force every category to 2-up on desktop. Rejected because 3-up still works for counts that divide cleanly and gives some categories stronger density.
+
+**Decided by:** GL set the standing symmetry rule and rejected the first pass; Codex implemented and verified the revised showroom contract.
+
+---
+
 ## 2026-05-06 - Portfolio designer reference remains critique input until GL closes it
 
 **Decision:** The current `/portfolio` production source is the Frappe translation, not the Claude/designer research folder. The research folder remains available while GL sends the code back for designer critique. Do not claim it was deleted, and do not commit it as production source unless GL explicitly changes its status.

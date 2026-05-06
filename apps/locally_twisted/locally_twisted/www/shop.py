@@ -530,4 +530,84 @@ PAGE_CSS = """
     border-color: rgba(250, 247, 242, 0.5);
     color: var(--lt-white);
 }
+
+/* /shop showroom contract. This route-local block intentionally
+   reinforces the broad showroom layout after shared product polish CSS. */
+.lt-shop--landing .lt-shop__listing {
+    padding-inline: 0;
+}
+.lt-shop--landing .lt-shop__listing-inner {
+    box-sizing: border-box;
+    width: min(100%, 1280px);
+    padding-inline: clamp(1rem, 3vw, 2rem);
+}
+.lt-shop--landing .lt-shop__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(1.25rem, 3vw, 2rem);
+    align-items: stretch;
+}
+.lt-shop--landing .lt-shop__card {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    padding: clamp(1rem, 2vw, 1.25rem);
+    min-width: 0;
+}
+.lt-shop--landing .lt-shop__card-image {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    margin-bottom: 0;
+    background: var(--lt-white);
+    border: 1px solid rgba(14, 34, 64, 0.1);
+}
+.lt-shop--landing .lt-shop__card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+}
+.lt-shop--landing .lt-shop__card-name,
+.lt-shop--landing .lt-shop__card-desc {
+    margin: 0;
+}
+.lt-shop--landing .lt-shop__card-desc {
+    display: block;
+    -webkit-line-clamp: initial;
+    overflow: visible;
+}
+.lt-shop--landing .lt-shop__card-footer {
+    margin-top: auto;
+}
+
+@media (min-width: 720px) {
+    .lt-shop--landing .lt-shop__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1180px) {
+    .lt-shop--landing .lt-shop__grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 575px) {
+    .lt-shop--landing .lt-shop__grid {
+        grid-template-columns: 1fr;
+    }
+    .lt-shop--landing .lt-shop__card {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .lt-shop--landing .lt-shop__card-footer {
+        align-items: stretch;
+        flex-direction: column;
+    }
+    .lt-shop--landing .lt-shop__card-add {
+        width: 100%;
+    }
+}
 """

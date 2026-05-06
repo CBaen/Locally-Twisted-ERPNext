@@ -15,6 +15,7 @@ regressions: 0
 depends_on: []
 used_by:
   - responsive-container-audit
+  - frappe-shop-showroom-symmetry
   - frappe-sitewide-visual-overhaul
   - cross-browser-motion-visual-verification
 tags:
@@ -83,6 +84,7 @@ Use this only for intentional visual bands: hero, proof ribbon, image band, revi
 - Header/footer changes should use Jinja partial overrides, not page-local hacks.
 - Webshop product, listing, cart, checkout, and add-to-cart behavior depends on existing Webshop templates, selectors, and JS hooks. Do not remove or rename native classes just to make styling easier.
 - Webshop product detail uses `.product-container`; bundled cart uses `.cart-container`; LT's custom guest cart uses `.lt-cart__container`. These surfaces need explicit max-width containment because LT removed the stock Frappe wrapper width.
+- Webshop shop/category pages must preserve listing, filter, product-card, and product-list update hooks. Visual repairs should rebalance rows and containment around those hooks instead of replacing the product pipeline.
 - Dashed customer URLs that map to underscored Python modules belong in `website_route_rules`.
 - After `hooks.py`, Jinja, controller, or CSS edits, clear Frappe website cache and restart the affected containers when hook/controller import state changed.
 
@@ -116,6 +118,8 @@ Checked on 2026-05-06 against the running local stack:
 - A Webshop route looks fixed after removing native classes or replacing bundled structure.
 - A page looks "boxed" because it accidentally fell back to Frappe's stock container while neighboring LT sections are full-bleed.
 - A page looks "broken out" because a full-bleed exception became the default section pattern.
+- Product/category controls become text-width chip rows with ragged edges when the page is meant to show off products.
+- A desktop product grid ends with one isolated orphan card when the same item count can be split into balanced rows.
 
 ## LT Receipt
 

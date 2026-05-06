@@ -108,9 +108,15 @@
     // Category filter — client-side, no roundtrip
     var chips = document.querySelectorAll('.lt-shop__chip');
     var cards = document.querySelectorAll('.lt-shop__card');
+    var grid = document.getElementById('lt-shop-grid');
     var countEl = document.getElementById('lt-shop-count');
     var labelById = {};
     chips.forEach(function (c) { labelById[c.dataset.category] = c.textContent.trim(); });
+
+    function applyGridBalance(visible) {
+        if (!grid) return;
+        grid.dataset.ltGridBalance = (visible > 1 && visible % 3 !== 0 && visible % 2 === 0) ? 'two' : 'three';
+    }
 
     function applyFilter(category) {
         var visible = 0;
@@ -126,11 +132,13 @@
             var label = (category === 'all') ? '' : (' in ' + labelById[category]);
             countEl.textContent = visible + ' item' + (visible !== 1 ? 's' : '') + label;
         }
+        applyGridBalance(visible);
     }
 
     chips.forEach(function (c) {
         c.addEventListener('click', function () { applyFilter(c.dataset.category); });
     });
+    applyFilter('all');
 
     // Single-SKU add-to-cart. Variant templates link to their option selector.
     var feedback = document.getElementById('lt-shop-feedback');

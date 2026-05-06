@@ -6,6 +6,14 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-06 - Product showcase rows need symmetry, not just fit
+
+The first shop showroom pass made `/shop`, `/shop-items`, and `/shop-items/<group>` larger and more responsive, but GL correctly rejected the result as cheap because the category controls were ragged text-width chips and some category grids left a lone product card hanging on the last desktop row. The page technically fit in the viewport, but it did not meet the visual bar for showing off products.
+
+**Counter-move:** for LT shop/category/product showcase pages, test symmetry as part of the design contract. Category controls should use equal-width and equal-height grid tracks, not variable-width chips. Add a neutral "all" tile when it creates an even category matrix. Product grids should avoid single-card orphan rows in both category pages and filtered `/shop` states; when a 3-up layout leaves one card and the count can be split evenly, use paired 2-up rows. Verify with browser geometry checks, not only generic overflow tests.
+
+---
+
 ## 2026-05-06 - Designer reference code is a contract, not a suggestion pile
 
 Claude produced a useful portfolio design reference, but the first translation failed the ownership handoff: Codex blended the reference with old local portfolio assumptions, kept stale claims in docs, and made the result harder for the designer to critique. The important distinction is that external design code can own the visual contract, while Codex owns the Frappe translation.

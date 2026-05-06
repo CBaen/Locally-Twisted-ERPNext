@@ -54,35 +54,33 @@
     </div>
   </div>
 
-  {# ── Main layout: sidebar + grid ───────────────────────────────────── #}
+  {# ── Main layout: top controls + grid ──────────────────────────────── #}
   <div class="lt-shop__layout">
 
-    {# ── Left sidebar ──────────────────────────────────────────────── #}
-    <aside class="lt-shop__sidebar" aria-label="Shop categories">
-      <p class="lt-shop__sidebar-heading">Categories</p>
-      <nav aria-label="Product categories">
-        <ul class="lt-shop__sidebar-list">
-          {% for cat in shop_categories %}
-          <li class="lt-shop__sidebar-item">
-            <a href="/{{ cat.route }}"
-               class="lt-shop__sidebar-link{% if cat.item_group_name == item_group_name %} is-active{% endif %}">
-              {{ cat.item_group_name }}
-            </a>
-          </li>
-          {% endfor %}
-        </ul>
-      </nav>
-
-      {# ── Filters (desktop: in sidebar) ───────────────────────────── #}
-      {% if field_filters or attribute_filters %}
-      <div class="lt-shop__filters lt-shop__filters--desktop" id="product-filters">
-        <p class="lt-shop__filters-heading">Filter</p>
-        {{ field_filter_section(field_filters) }}
-        {{ attribute_filter_section(attribute_filters) }}
-        <a href="/{{ doc.route }}" class="lt-shop__clear-link">Clear all</a>
+    {# ── Category controls ──────────────────────────────────────────── #}
+    <section class="lt-shop__toolbar lt-shop__toolbar--categories" aria-label="Shop categories">
+      <div>
+        <p class="lt-shop__filters-heading">Categories</p>
+        <nav aria-label="Product categories">
+          <ul class="lt-shop__category-list">
+            <li class="lt-shop__category-item">
+              <a href="/shop" class="lt-shop__category-link">
+                All Ready-to-Order
+              </a>
+            </li>
+            {% for cat in shop_categories %}
+            <li class="lt-shop__category-item">
+              <a href="/{{ cat.route }}"
+                 class="lt-shop__category-link{% if cat.item_group_name == item_group_name %} is-active{% endif %}"
+                 {% if cat.item_group_name == item_group_name %}aria-current="page"{% endif %}>
+                {{ cat.item_group_name }}
+              </a>
+            </li>
+            {% endfor %}
+          </ul>
+        </nav>
       </div>
-      {% endif %}
-    </aside>
+    </section>
 
     {# ── Product grid area ─────────────────────────────────────────── #}
     <div class="lt-shop__main">
@@ -117,6 +115,17 @@
           </div>
         </div>
       </div>
+
+      {% if field_filters or attribute_filters %}
+      <section class="lt-shop__toolbar lt-shop__toolbar--filters" aria-label="Product filters">
+        <div class="lt-shop__filters lt-shop__filters--desktop w-100" id="product-filters">
+          <p class="lt-shop__filters-heading">Filter</p>
+          {{ field_filter_section(field_filters) }}
+          {{ attribute_filter_section(attribute_filters) }}
+          <a href="/{{ doc.route }}" class="lt-shop__clear-link">Clear all</a>
+        </div>
+      </section>
+      {% endif %}
 
       {# ── Mobile filter panel (slides open on filter button tap) ──── #}
       {% if field_filters or attribute_filters %}
@@ -281,6 +290,28 @@ frappe.ready(() => {
   })();
 
   /* ── Result count label update ───────────────────────────────── */
+  /* Balance category grids so desktop rows do not end with one orphan card. */
+  (function balanceShowroomGrid() {
+    const listing = document.getElementById('product-listing');
+    if (!listing) return;
+
+    function applyBalance() {
+      const grid = document.getElementById('products-grid-area');
+      if (!grid) return;
+      const cards = grid.querySelectorAll('.item-card');
+      const count = cards.length;
+      if (!count) return;
+      grid.dataset.ltItemCount = String(count);
+      grid.dataset.ltGridBalance = (count > 1 && count % 3 !== 0 && count % 2 === 0) ? 'two' : 'three';
+    }
+
+    applyBalance();
+    document.addEventListener('product_list_update', applyBalance);
+
+    const obs = new MutationObserver(applyBalance);
+    obs.observe(listing, { childList: true, subtree: true });
+  })();
+
   // Webshop fires a product_list_update custom event when results load.
   // Listen and update our count label.
   document.addEventListener('product_list_update', e => {

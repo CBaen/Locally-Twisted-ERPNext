@@ -10,13 +10,12 @@ This is the active feature-lane handoff for shop work. `HANDOFF.md` remains vali
 
 ## Current Stage
 
-Active handoff lane. The guest cart/checkout item-code contract, broad browse routing, first variant-media reconciliation pass, per-product variant correctness diff, and category-media candidate packet are in place. The 2026-05-06 commerce-rules checkout slice now has its own lane at `workstreams/commerce-rules-checkout.md`; keep shop layout/media work coordinated with that checkout contract. The next shop work should continue with Jeff/GL media approval before broad layout overhaul.
+Active handoff lane. The guest cart/checkout item-code contract, broad browse routing, first variant-media reconciliation pass, per-product variant correctness diff, category-media candidate packet, 2026-05-06 shop showroom container redesign, and same-day symmetry repair are in place. The 2026-05-06 commerce-rules checkout slice now has its own lane at `workstreams/commerce-rules-checkout.md`; keep shop layout/media work coordinated with that checkout contract. The next shop work should continue with Jeff/GL media approval before assigning category/product media.
 
 Priority order from the current queue:
 
 1. Review skipped/unmatched catalog media and approve category browse imagery from `output/category-media-candidates.md` after regenerating it.
-2. Webshop layout overhaul for `/shop`, product group pages, and product detail pages.
-3. Remaining configure-option UX fixes where they affect customer purchase flow.
+2. Remaining configure-option UX fixes where they affect customer purchase flow.
 
 ## Owner
 
@@ -63,6 +62,8 @@ Primary files:
 - `apps/locally_twisted/locally_twisted/public/js/lt-guest-cart.js`
 - `apps/locally_twisted/locally_twisted/public/js/lt-webshop-a11y.js`
 - `apps/locally_twisted/locally_twisted/public/css/lt-theme.css`
+- `apps/locally_twisted/locally_twisted/public/css/lt-shop-showroom.css`
+- `apps/locally_twisted/locally_twisted/hooks.py`
 - `apps/locally_twisted/locally_twisted/seed/seed_catalog.py`
 
 Reference and verification files:
@@ -94,11 +95,14 @@ Reference and verification files:
 - Product listing cards use `lt_brand_description` through `locally_twisted.api.product_listing`.
 - `/shop` is the all-decor hub. `/shop-items`, `/all-products`, and `/shop-by-category` route or redirect to `/shop`; category detail pages stay at `/shop-items/<group>`.
 - `/shop-items/arches` previously required restoring `.item-group-content`; do not remove that structure without retesting group pages.
+- Shop showroom container redesign completed 2026-05-06: `/shop` uses large photo-first ready-to-order cards; `/shop-items` aliases to the `/shop` showroom contract; `/shop-items/<group>` uses top category/filter controls instead of a desktop sidebar; product detail pages use a wider contained image/detail layout. The shared override is `lt-shop-showroom.css`, loaded after `lt-product-polish.css`.
+- Shop showroom symmetry repair completed 2026-05-06: `/shop-items/<group>` category controls are not text-width flex chips. They are a 12-tile equal grid with `All Ready-to-Order` plus the 11 customer categories, arranged 2-up on mobile, 3-up on tablet, and 4-up on desktop with matching tile width and height. `/shop` filtered product grids and category product grids must not leave a single desktop orphan card; even 10-item Arches states use the `data-lt-grid-balance="two"` 2-up layout so every product row stays paired.
+- Verified showroom measurements on 2026-05-06: `/shop` desktop card about `406.8px` wide with `359.6px` contained image, `/shop` mobile card about `343px` wide with `307px` contained image, `/shop-items/arches` desktop card about `406.8px` wide with a `361.6px x 271.2px` contained image, and the representative product detail image about `622.6px` wide on desktop.
 - The guest cart is localStorage-based at `/cart`, supports multi-item checkout, and connects to Stripe Checkout Sessions in test mode.
 - Current checkout commerce rules: ready-to-order goods can check out and are taxable by fulfillment ZIP/city rate; services, BTFP, service deposits, and delivery charges are non-taxable; standard local delivery is `$15`; Park City delivery is `$50`; out-of-area delivery redirects to a prefilled `/contact` quote path. Product group alone is not a checkout quote gate. See `workstreams/commerce-rules-checkout.md` before changing cart, checkout, delivery, service, or deposit behavior.
 - Cart/checkout now sells actual Item codes and uses the parent Website Item for route/name display when the item is a variant. If the variant has its own `Item.image`, cart/checkout use that selected-variant image; otherwise they fall back to the parent Website Item image. Fixed-price products stay cartable unless fulfillment details, especially out-of-area delivery ZIP, require a quote path.
 - `/shop` cards for variant templates link to "Choose options" instead of adding an unpriced template code. Single-SKU cards add directly when priced.
-- `smoke_shop.py` now verifies fixed-price product pages do not invent product-level quote gates and still proves a real retail option-selection add-to-cart flow for `unicorn-bouquet`. `cart_checkout_contract.py` verifies the shared API/checkout contract.
+- `smoke_shop.py` now verifies fixed-price product pages do not invent product-level quote gates, proves a real retail option-selection add-to-cart flow for `unicorn-bouquet`, and checks the showroom contracts for `/shop`, `/shop-items`, `/shop-items/<group>`, product detail image scale/containment, category-control width/height symmetry, `/shop` filtered-grid orphan prevention, and category-product-grid orphan prevention. `cart_checkout_contract.py` verifies the shared API/checkout contract.
 - Variant media first pass completed 2026-05-02: 1,712 variant `Item.image` values are set from `_resources/odoo-live/images/` where Odoo image labels clearly matched product options. Product pages call `locally_twisted.api.variant_media.get_variant_media` after exact option selection and swap the main image when a variant image exists.
 - Detailed media review is now reproducible with `python scripts/setup/sync_variant_media.py --dry-run --include-details --report output/catalog-media-review.json`. Latest refreshed report on 2026-05-06: 49 products checked, 35 with candidate image labels, 45 needing review, 1,712 unchanged mapped variants, and 6,831 skipped variant image assignments.
 - Category browse media review is now reproducible with `python scripts/verify/category_media_candidates.py`. Latest generated packet on 2026-05-06 found first-pass product-source quick picks for all 11 empty customer-facing Item Groups and wrote ignored local reports to `output/category-media-candidates.json` and `output/category-media-candidates.md`. `python scripts/setup/sync_category_media.py --write-template` creates an approval template, and the dry-run helper stages approved selections through Frappe without writing unless `--apply` is used. No ERPNext image fields were changed.
@@ -154,6 +158,16 @@ After route, template, CSS, or JS edits:
 - `python scripts/setup/sync_category_media.py --selection output/category-media-selection.template.json`
 - `python scripts/verify/nav_ia.py`
 - `npm run test:layout-fit`
+- `npm run test:interactive-layout`
+
+Latest showroom-focused verification on 2026-05-06:
+
+- `python scripts/verify/smoke_shop.py` passed.
+- `npm run test:layout-fit -- --grep shop` passed 26/26.
+- `npm run test:layout-fit -- --grep "variant-product|single-product|seasonal-category"` passed 39/39.
+- `npm run test:interactive-layout -- --grep "/shop filtered grid fits"` passed 4/4.
+- Browser screenshot and geometry checks were refreshed for `/shop`, `/shop-items/arches`, `/shop-items/get-well-bouquets`, and `/shop-items/garlands/baby-shower-garland`; transient screenshot folders were not kept as source.
+- The final symmetry repair measured mobile Get-Well category controls as six equal 2-tile rows at 375px; desktop Get-Well as a 4x3 category-control grid; and desktop Arches as five paired 2-card product rows on both `/shop` filtered view and `/shop-items/arches`.
 
 For cache-sensitive Website Route or template changes:
 

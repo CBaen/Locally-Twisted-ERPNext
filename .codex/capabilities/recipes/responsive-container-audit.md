@@ -16,6 +16,7 @@ depends_on:
   - frappe-public-container-contract
 used_by:
   - lt-brand-style-guide-consolidation
+  - frappe-shop-showroom-symmetry
 tags:
   - Locally Twisted
   - responsive layout
@@ -90,10 +91,11 @@ Add route-specific widths when the changed surface has its own breakpoint.
 5. Add or update route-specific checks in `interactive_layout.spec.js` when the problem only appears after interaction.
 6. Keep helper changes in `layout_helpers.js`; do not duplicate viewport lists or overflow logic in multiple specs.
 7. Fix the actual container math: grid tracks, `min-width: 0`, `box-sizing`, padding, wrapping, max-width, image aspect ratios, and stable control dimensions.
-8. Avoid body-wide `overflow-x: hidden` as the primary fix.
-9. Run cache clear after Frappe/Jinja/CSS changes.
-10. Verify with the commands below.
-11. Update the workstream/queue/decision/lesson docs if the fix changes the project standard.
+8. For showcase rows, verify symmetry as well as fit. Equal-width category tiles, balanced card rows, and no single-card orphan row are part of the layout contract when products are being shown.
+9. Avoid body-wide `overflow-x: hidden` as the primary fix.
+10. Run cache clear after Frappe/Jinja/CSS changes.
+11. Verify with the commands below.
+12. Update the workstream/queue/decision/lesson docs if the fix changes the project standard.
 
 ## Verification Commands
 
@@ -119,3 +121,5 @@ Use `npm run test:public-verify` when closing a broad public-site visual change.
 ## LT Receipt
 
 The first use on 2026-05-05 expanded `npm run test:layout-fit` from a narrow route/viewport pass to 260 checks across 20 public routes and 13 viewport families. It also added `npm run test:interactive-layout` with stateful checks for header breakpoint behavior, desktop mega panels, mobile drawer accordions, shop/product controls, contact conditionals, portfolio state, and reduced-motion homepage states. On 2026-05-06, the portfolio state check moved from the superseded modal behavior to the current proof-reel front-photo behavior. `python scripts/verify/smoke_shop.py` was corrected to respect the quote-required custom install lane while still verifying retail inline variant selection and cart writes.
+
+The 2026-05-06 shop showroom repair added a symmetry-specific supplement: category controls on `/shop-items/<group>` must be equal grid tiles at each breakpoint, and category product grids must not leave a single desktop orphan card when a balanced 2-up split is available.

@@ -7,17 +7,18 @@ every deploy and fail loudly on customer-facing regressions.
 Coverage:
   1. Homepage navbar exposes the current authority-first primary links and /shop CTA.
   2. /shop renders 11 filter pills + 53 product cards.
-  3. /shop-by-category redirects to /shop instead of rendering the retired
+  3. /shop and category pages use the approved product-showroom card contract.
+  4. /shop-by-category redirects to /shop instead of rendering the retired
      category-card index.
-  4. Each child group's category page returns 200.
-  5. Product detail pages do not invent product-level quote gates.
-  6. Retail product detail (variant template) renders inline chips/select for
+  5. Each child group's category page returns 200.
+  6. Product detail pages do not invent product-level quote gates.
+  7. Retail product detail (variant template) renders inline chips/select for
      every attribute, chips are radio/single-select, and partial selections can
      disable invalid later options.
-  7. Product detail (single SKU) renders price + add-to-cart button.
-  8. No "Item Code" jargon appears anywhere customer-facing.
-  9. No "/Nos" UoM display anywhere.
-  10. Mobile drawer exposes the same primary links and /contact quote CTA.
+  8. Product detail (single SKU) renders price + add-to-cart button.
+  9. No "Item Code" jargon appears anywhere customer-facing.
+  10. No "/Nos" UoM display anywhere.
+  11. Mobile drawer exposes the same primary links and /contact quote CTA.
 
 Run:
   PYTHONIOENCODING=utf-8 PYTHONUTF8=1 python scripts/verify/smoke_shop.py
@@ -66,6 +67,15 @@ PRODUCT_VARIANT_EXPECTED_ATTRS = ["Bouquet Size", "Add Foil Number"]
 PRODUCT_PROGRESSIVE_URL = PRODUCT_VARIANT_URL
 PRODUCT_CART_VARIANT_URL = PRODUCT_VARIANT_URL
 PRODUCT_SINGLE_URL = f"{BASE}/shop-items/bouquets/mothers-day-bouquet"
+SHOP_CATEGORY_SHOWCASE_URL = f"{BASE}/shop-items/arches"
+PRODUCT_DETAIL_SHOWCASE_URL = f"{BASE}/shop-items/garlands/baby-shower-garland"
+
+DESKTOP_VIEWPORT = {"width": 1366, "height": 900}
+MOBILE_VIEWPORT = {"width": 375, "height": 812}
+MIN_DESKTOP_CARD_WIDTH = 340
+MIN_DESKTOP_CARD_IMAGE_WIDTH = 300
+MAX_MOBILE_THUMBNAIL_WIDTH = 130
+MIN_PRODUCT_DETAIL_IMAGE_WIDTH = 480
 
 
 class SmokeFail(Exception):
@@ -75,6 +85,57 @@ class SmokeFail(Exception):
 def assert_(cond, msg):
     if not cond:
         raise SmokeFail(msg)
+
+
+def _box(page, selector: str, index: int = 0):
+    return page.evaluate(
+        """({selector, index}) => {
+            const el = document.querySelectorAll(selector)[index];
+            if (!el) return null;
+            const rect = el.getBoundingClientRect();
+            const style = window.getComputedStyle(el);
+            return {
+                width: rect.width,
+                height: rect.height,
+                left: rect.left,
+                top: rect.top,
+                display: style.display,
+                gridTemplateColumns: style.gridTemplateColumns,
+            };
+        }""",
+        {"selector": selector, "index": index},
+    )
+
+
+def _visible_boxes(page, selector: str, limit: int = 6):
+    return page.evaluate(
+        """({selector, limit}) => Array.from(document.querySelectorAll(selector))
+            .map((el) => {
+                const rect = el.getBoundingClientRect();
+                const img = el.querySelector('img');
+                const imgRect = img ? img.getBoundingClientRect() : null;
+                const style = window.getComputedStyle(el);
+                const imgStyle = img ? window.getComputedStyle(img) : null;
+                return {
+                    width: rect.width,
+                    height: rect.height,
+                    display: style.display,
+                    className: el.className,
+                    text: (el.textContent || '').replace(/\\s+/g, ' ').trim().slice(0, 80),
+                    imageWidth: imgRect ? imgRect.width : null,
+                    imageHeight: imgRect ? imgRect.height : null,
+                    imageObjectFit: imgStyle ? imgStyle.objectFit : null,
+                };
+            })
+            .filter((box) => box.width > 0 && box.height > 0)
+            .slice(0, limit)""",
+        {"selector": selector, "limit": limit},
+    )
+
+
+def _first_visible_box(page, selector: str):
+    boxes = _visible_boxes(page, selector, 1)
+    return boxes[0] if boxes else None
 
 
 def check_variant_template_contract():
@@ -142,6 +203,167 @@ def check_shop_page(page):
     body = page.content()
     assert_("53 ITEMS" in body or "53&nbsp;ITEMS" in body or ">53" in body, "/shop should show 53 items count")
     print(f"  OK {chip_count} pills rendered, 53 items")
+
+
+def check_shop_showroom_contract(page):
+    print("-> /shop showroom card contract")
+    page.set_viewport_size(DESKTOP_VIEWPORT)
+    page.goto(f"{BASE}/shop", wait_until="networkidle", timeout=15000)
+    card = _first_visible_box(page, ".lt-shop__card")
+    assert_(card is not None, "/shop did not render visible product cards")
+    assert_(
+        card["width"] >= MIN_DESKTOP_CARD_WIDTH,
+        f"/shop desktop cards must be showroom sized: got {card['width']:.1f}px, expected >= {MIN_DESKTOP_CARD_WIDTH}px",
+    )
+    assert_(
+        (card["imageWidth"] or 0) >= MIN_DESKTOP_CARD_IMAGE_WIDTH,
+        f"/shop desktop card image must be large: got {card['imageWidth']:.1f}px, expected >= {MIN_DESKTOP_CARD_IMAGE_WIDTH}px",
+    )
+
+    page.set_viewport_size(MOBILE_VIEWPORT)
+    page.goto(f"{BASE}/shop", wait_until="networkidle", timeout=15000)
+    mobile_card = _first_visible_box(page, ".lt-shop__card")
+    assert_(mobile_card is not None, "/shop mobile did not render visible product cards")
+    assert_(
+        (mobile_card["imageWidth"] or 0) > MAX_MOBILE_THUMBNAIL_WIDTH,
+        f"/shop mobile cards must not use thumbnail treatment: got image width {mobile_card['imageWidth']:.1f}px",
+    )
+    print("  OK /shop desktop and mobile cards meet showroom sizing")
+
+
+def check_category_showroom_contract(page):
+    print("-> /shop-items/<group> showroom contract")
+    page.set_viewport_size(DESKTOP_VIEWPORT)
+    page.goto(SHOP_CATEGORY_SHOWCASE_URL, wait_until="networkidle", timeout=15000)
+    assert_(
+        page.locator(".lt-shop__sidebar").count() == 0,
+        "Category showcase pages must use top controls, not a desktop sidebar",
+    )
+    layout = _box(page, ".lt-shop__layout")
+    assert_(layout is not None, "Category page missing .lt-shop__layout")
+    assert_(
+        "px 0px" not in layout["gridTemplateColumns"],
+        f"Category grid has collapsed columns: {layout['gridTemplateColumns']!r}",
+    )
+    card = _first_visible_box(page, "#product-listing .item-card, #product-listing .lt-shop__card")
+    assert_(card is not None, "Category page did not render visible product cards")
+    assert_(
+        card["width"] >= MIN_DESKTOP_CARD_WIDTH,
+        f"Category desktop cards must be showroom sized: got {card['width']:.1f}px, expected >= {MIN_DESKTOP_CARD_WIDTH}px",
+    )
+    assert_(
+        (card["imageWidth"] or 0) >= MIN_DESKTOP_CARD_IMAGE_WIDTH,
+        f"Category desktop card image must be large: got {card['imageWidth']:.1f}px, expected >= {MIN_DESKTOP_CARD_IMAGE_WIDTH}px",
+    )
+    assert_(
+        card["imageObjectFit"] in ("contain", "scale-down"),
+        f"Category card images must show the whole product, got object-fit {card['imageObjectFit']!r}",
+    )
+
+    page.set_viewport_size(MOBILE_VIEWPORT)
+    page.goto(SHOP_CATEGORY_SHOWCASE_URL, wait_until="networkidle", timeout=15000)
+    mobile_card = _first_visible_box(page, "#product-listing .item-card, #product-listing .lt-shop__card")
+    assert_(mobile_card is not None, "Category mobile did not render visible product cards")
+    assert_(
+        (mobile_card["imageWidth"] or 0) > MAX_MOBILE_THUMBNAIL_WIDTH,
+        f"Category mobile cards must not use thumbnail treatment: got image width {mobile_card['imageWidth']:.1f}px",
+    )
+    print("  OK category page uses top controls and showroom cards")
+
+
+def _visible_rect_rows(page, selector: str):
+    return page.evaluate(
+        """(selector) => {
+            const rows = new Map();
+            for (const el of Array.from(document.querySelectorAll(selector))) {
+                const rect = el.getBoundingClientRect();
+                if (rect.width <= 0 || rect.height <= 0) continue;
+                const top = Math.round(rect.top);
+                if (!rows.has(top)) rows.set(top, []);
+                rows.get(top).push({
+                    text: (el.textContent || '').replace(/\\s+/g, ' ').trim(),
+                    width: rect.width,
+                    height: rect.height,
+                    left: rect.left,
+                });
+            }
+            return Array.from(rows.entries())
+                .sort((a, b) => a[0] - b[0])
+                .map(([top, cells]) => ({
+                    top,
+                    count: cells.length,
+                    widths: cells.map((cell) => cell.width),
+                    heights: cells.map((cell) => cell.height),
+                    texts: cells.map((cell) => cell.text),
+                }));
+        }""",
+        selector,
+    )
+
+
+def check_category_nav_symmetry_contract(page):
+    print("-> /shop-items/<group> category nav symmetry contract")
+    for viewport, expected_per_row in ((MOBILE_VIEWPORT, 2), (DESKTOP_VIEWPORT, 4)):
+        page.set_viewport_size(viewport)
+        page.goto(f"{BASE}/shop-items/get-well-bouquets", wait_until="networkidle", timeout=15000)
+        rows = _visible_rect_rows(page, ".lt-shop__toolbar--categories .lt-shop__category-link")
+        total_links = sum(row["count"] for row in rows)
+        assert_(total_links == 12, f"Category nav must include 12 equal tiles including All Ready-to-Order, got {total_links}")
+        for row in rows:
+            assert_(
+                row["count"] == expected_per_row,
+                f"Category nav rows must be symmetrical at {viewport['width']}px: got row {row['texts']} with {row['count']} cells, expected {expected_per_row}",
+            )
+            widths = row["widths"]
+            heights = row["heights"]
+            assert_(
+                max(widths) - min(widths) <= 2,
+                f"Category nav row widths must match at {viewport['width']}px: got {widths} for {row['texts']}",
+            )
+            assert_(
+                max(heights) - min(heights) <= 2,
+                f"Category nav row heights must match at {viewport['width']}px: got {heights} for {row['texts']}",
+            )
+    print("  OK category nav uses equal-width symmetrical rows")
+
+
+def check_shop_filtered_grid_symmetry_contract(page):
+    print("-> /shop filtered product grid symmetry contract")
+    page.set_viewport_size(DESKTOP_VIEWPORT)
+    page.goto(f"{BASE}/shop", wait_until="networkidle", timeout=15000)
+    page.locator(".lt-shop__chip[data-category='arches']").click()
+    rows = _visible_rect_rows(page, "#lt-shop-grid .lt-shop__card")
+    assert_(rows, "/shop Arches filter did not render visible cards")
+    assert_(
+        rows[-1]["count"] != 1,
+        f"/shop filtered grid must not leave one orphan card on desktop: final row has {rows[-1]['texts']}",
+    )
+    print("  OK /shop filtered grid avoids desktop orphan rows")
+
+
+def check_category_product_grid_symmetry_contract(page):
+    print("-> /shop-items/<group> product grid symmetry contract")
+    page.set_viewport_size(DESKTOP_VIEWPORT)
+    page.goto(SHOP_CATEGORY_SHOWCASE_URL, wait_until="networkidle", timeout=15000)
+    rows = _visible_rect_rows(page, "#products-grid-area .item-card")
+    assert_(rows, "Category product grid did not render visible cards")
+    assert_(
+        rows[-1]["count"] != 1,
+        f"Category product grid must not leave one orphan card on desktop: final row has {rows[-1]['texts']}",
+    )
+    print("  OK category product grid avoids desktop orphan rows")
+
+
+def check_shop_items_broad_route(page):
+    print(f"-> {BASE}/shop-items")
+    page.goto(f"{BASE}/shop-items", wait_until="networkidle", timeout=15000)
+    assert_(
+        page.url.rstrip("/") in (f"{BASE}/shop", f"{BASE}/shop-items"),
+        f"/shop-items should redirect or alias to /shop, landed on {page.url!r}",
+    )
+    assert_(page.locator(".lt-shop--landing #lt-shop-grid .lt-shop__card").count() >= 1, "/shop-items should land on the broad showroom")
+    assert_(page.locator("body[data-path='shop']").count() == 1, "/shop-items alias should render the /shop page contract")
+    print("  OK /shop-items aliases to /shop showroom")
 
 
 def check_shop_by_category_redirect(page):
@@ -227,6 +449,19 @@ def check_product_variant_page(page):
     assert_(checkbox_count == 0, "Variant chips must not use checkbox inputs")
     assert_(radio_count > 0, "Variant chips should use radio inputs for single-choice options")
     print("  OK retail inline variants render, jargon stripped, CTA disabled until selection")
+
+
+def check_product_detail_showroom_contract(page):
+    print("-> Product detail showroom image contract")
+    page.set_viewport_size(DESKTOP_VIEWPORT)
+    page.goto(PRODUCT_DETAIL_SHOWCASE_URL, wait_until="networkidle", timeout=15000)
+    image_box = _box(page, ".lt-product__summary-row .website-image")
+    assert_(image_box is not None, "Product detail missing main product image")
+    assert_(
+        image_box["width"] >= MIN_PRODUCT_DETAIL_IMAGE_WIDTH,
+        f"Product detail desktop image must be showcase sized: got {image_box['width']:.1f}px, expected >= {MIN_PRODUCT_DETAIL_IMAGE_WIDTH}px",
+    )
+    print("  OK product detail main image is showcase sized")
 
 
 def check_progressive_variant_option_disabling(page):
@@ -384,10 +619,17 @@ def main() -> int:
         for fn in (
             check_homepage,
             check_shop_page,
+            check_shop_showroom_contract,
+            check_shop_filtered_grid_symmetry_contract,
+            check_shop_items_broad_route,
             check_shop_by_category_redirect,
             check_category_pages,
+            check_category_showroom_contract,
+            check_category_nav_symmetry_contract,
+            check_category_product_grid_symmetry_contract,
             check_fixed_price_product_pages_do_not_show_product_quote_gate,
             check_product_variant_page,
+            check_product_detail_showroom_contract,
             check_progressive_variant_option_disabling,
             check_variant_add_to_cart_ui,
             check_product_single_page,
