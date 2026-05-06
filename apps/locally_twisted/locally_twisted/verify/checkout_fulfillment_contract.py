@@ -1,6 +1,7 @@
 """Checkout fulfillment contracts for delivery fees, pickup requests, and quote gate."""
 from __future__ import annotations
 
+from datetime import date, timedelta
 import time
 
 import frappe
@@ -37,12 +38,69 @@ def run():
 
 def _run_contract():
     results = {
+        "setup_records": _check_setup_records(),
         "standard_delivery": _submit_paid_delivery("84088", "West Jordan", 15.0),
+        "standard_delivery_utah_county": _submit_paid_delivery("84003", "American Fork", 15.0),
         "park_city_delivery": _submit_paid_delivery("84060", "Park City", 50.0),
         "pickup": _submit_paid_pickup(),
         "out_of_area_quote": _submit_out_of_area_quote(),
+        "past_date_rejected": _submit_past_date_rejected(),
     }
     return {"ok": True, "results": results}
+
+
+def _check_setup_records():
+    from locally_twisted import commerce_rules
+
+    required_so_fields = {
+        "custom_lt_fulfillment_method",
+        "custom_lt_delivery_zone",
+        "custom_lt_pickup_location",
+        "custom_lt_requested_fulfillment_date",
+        "custom_lt_requested_window_start",
+        "custom_lt_requested_window_end",
+        "custom_lt_fulfillment_status",
+    }
+    meta = frappe.get_meta("Sales Order")
+    missing_fields = sorted(field for field in required_so_fields if not meta.has_field(field))
+    if missing_fields:
+        raise ContractFail(f"Sales Order is missing checkout fulfillment fields: {missing_fields}")
+
+    delivery_items = {
+        commerce_rules.DELIVERY_STANDARD_ITEM,
+        commerce_rules.DELIVERY_PARK_CITY_ITEM,
+    }
+    company = frappe.defaults.get_user_default("Company") or frappe.db.get_value("Company", {}, "name")
+    if not frappe.db.exists(
+        "Item Tax Template",
+        {"title": commerce_rules.NON_TAXABLE_ITEM_TAX_TEMPLATE, "company": company},
+    ):
+        raise ContractFail(
+            f"missing non-taxable item tax template: {commerce_rules.NON_TAXABLE_ITEM_TAX_TEMPLATE}"
+        )
+    missing_items = sorted(item for item in delivery_items if not frappe.db.exists("Item", item))
+    if missing_items:
+        raise ContractFail(f"missing checkout delivery items: {missing_items}")
+
+    missing_prices = sorted(
+        item
+        for item in delivery_items
+        if not frappe.db.exists(
+            "Item Price",
+            {"item_code": item, "price_list": commerce_rules.PRICE_LIST, "selling": 1},
+        )
+    )
+    if missing_prices:
+        raise ContractFail(f"missing checkout delivery item prices: {missing_prices}")
+
+    return {
+        "sales_order_fields": len(required_so_fields),
+        "delivery_items": len(delivery_items),
+    }
+
+
+def _future_date() -> str:
+    return (date.today() + timedelta(days=30)).isoformat()
 
 
 def _submit_paid_delivery(postal_code: str, city: str, expected_fee: float):
@@ -53,7 +111,7 @@ def _submit_paid_delivery(postal_code: str, city: str, expected_fee: float):
         city=city,
         state="UT",
         postal_code=postal_code,
-        requested_fulfillment_date="2026-06-01",
+        requested_fulfillment_date=_future_date(),
         requested_window_start="13:00",
         requested_window_end="13:30",
     )
@@ -67,6 +125,15 @@ def _submit_paid_delivery(postal_code: str, city: str, expected_fee: float):
         raise ContractFail(f"{postal_code} Sales Order did not record Delivery fulfillment")
     if not so.taxes:
         raise ContractFail(f"{postal_code} Sales Order should include a tax row")
+    if not delivery_lines[0].item_tax_rate:
+        raise ContractFail(f"{postal_code} delivery line should carry a non-taxable item tax override")
+    product_subtotal = sum(row.net_amount for row in so.items if not row.item_code.startswith("DELIVERY-"))
+    expected_tax = round(float(product_subtotal) * float(so.taxes[0].rate) / 100, 2)
+    actual_tax = round(float(so.total_taxes_and_charges), 2)
+    if actual_tax != expected_tax:
+        raise ContractFail(
+            f"{postal_code} tax should apply to goods only; expected {expected_tax}, found {actual_tax}"
+        )
     return {"sales_order": so.name, "grand_total": float(so.grand_total)}
 
 
@@ -75,7 +142,7 @@ def _submit_paid_pickup():
         email=f"lt-pickup-{int(time.time())}@example.invalid",
         fulfillment_method="pickup",
         pickup_location="Riverdale",
-        requested_fulfillment_date="2026-06-01",
+        requested_fulfillment_date=_future_date(),
         requested_window_start="18:00",
         requested_window_end="18:30",
         address_line1="",
@@ -102,7 +169,7 @@ def _submit_out_of_area_quote():
         city="St. George",
         state="UT",
         postal_code="84770",
-        requested_fulfillment_date="2026-06-01",
+        requested_fulfillment_date=_future_date(),
         requested_window_start="13:00",
         requested_window_end="13:30",
     )
@@ -117,6 +184,26 @@ def _submit_out_of_area_quote():
     if any(counts.values()):
         raise ContractFail(f"out-of-area quote path should not create money records: {counts}")
     return {"lead": lead_name}
+
+
+def _submit_past_date_rejected():
+    try:
+        _submit_checkout(
+            email=f"lt-past-date-{int(time.time())}@example.invalid",
+            fulfillment_method="delivery",
+            address_line1="123 Old Date Road",
+            city="West Jordan",
+            state="UT",
+            postal_code="84088",
+            requested_fulfillment_date="2000-01-01",
+            requested_window_start="13:00",
+            requested_window_end="13:30",
+        )
+    except frappe.ValidationError as exc:
+        if "future" not in str(exc).lower() and "today" not in str(exc).lower():
+            raise ContractFail(f"past date rejected with unexpected message: {exc}")
+        return {"rejected": True}
+    raise ContractFail("past requested fulfillment date should be rejected before checkout records are created")
 
 
 def _submit_checkout(**kwargs):

@@ -15,6 +15,9 @@ PRICE_LIST = "Standard Selling"
 DELIVERY_STANDARD_ITEM = "DELIVERY-STANDARD"
 DELIVERY_PARK_CITY_ITEM = "DELIVERY-PARK-CITY"
 TAX_ACCOUNT_HEAD = "2300 - Duties and Taxes - LT"
+NON_TAXABLE_ITEM_TAX_TEMPLATE = "LT Non-Taxable Sales"
+NON_TAXABLE_ITEM_CODES = {DELIVERY_STANDARD_ITEM, DELIVERY_PARK_CITY_ITEM}
+NON_TAXABLE_ITEM_GROUPS = {"services"}
 
 RETAIL_CHECKOUT_GROUPS = {
     "Bouquets",
@@ -88,7 +91,10 @@ STANDARD_DELIVERY_CITIES = {
 
 CITY_TAX_RATES = {
     "alta": Decimal("9.05"),
+    "alpine": Decimal("7.45"),
+    "american fork": Decimal("7.45"),
     "bountiful": Decimal("7.25"),
+    "bluffdale": Decimal("7.45"),
     "centerville": Decimal("7.25"),
     "clearfield": Decimal("7.25"),
     "cottonwood heights": Decimal("7.45"),
@@ -100,6 +106,7 @@ CITY_TAX_RATES = {
     "layton": Decimal("7.25"),
     "lehi": Decimal("7.45"),
     "lindon": Decimal("7.45"),
+    "magna": Decimal("7.45"),
     "midvale": Decimal("7.45"),
     "millcreek": Decimal("7.45"),
     "murray": Decimal("7.65"),
@@ -111,6 +118,7 @@ CITY_TAX_RATES = {
     "provo": Decimal("7.45"),
     "riverdale": Decimal("7.45"),
     "riverton": Decimal("7.45"),
+    "roy": Decimal("7.25"),
     "salt lake city": Decimal("8.45"),
     "sandy": Decimal("7.45"),
     "south jordan": Decimal("7.45"),
@@ -120,6 +128,7 @@ CITY_TAX_RATES = {
     "springville": Decimal("7.45"),
     "syracuse": Decimal("7.25"),
     "taylorsville": Decimal("7.45"),
+    "west bountiful": Decimal("7.25"),
     "west jordan": Decimal("7.45"),
     "west valley city": Decimal("7.45"),
     "woods cross": Decimal("7.25"),
@@ -185,6 +194,14 @@ def checkout_lane_for_item_group(item_group: str | None) -> str:
     return "retail_checkout"
 
 
+def is_taxable_item(*, item_code: str | None = "", item_group: str | None = "") -> bool:
+    if str(item_code or "").strip() in NON_TAXABLE_ITEM_CODES:
+        return False
+    if normalize_city(item_group) in NON_TAXABLE_ITEM_GROUPS:
+        return False
+    return True
+
+
 def resolve_fulfillment(
     *,
     method: str,
@@ -217,7 +234,30 @@ def resolve_fulfillment(
             can_checkout=True,
             message="Park City delivery is added at checkout.",
         )
-    if zip5 in STANDARD_DELIVERY_ZIPS or city_key in STANDARD_DELIVERY_CITIES:
+    if zip5:
+        if zip5 in STANDARD_DELIVERY_ZIPS:
+            return FulfillmentResult(
+                method="delivery",
+                zone="standard_delivery",
+                label="Standard Delivery",
+                delivery_fee=money(15),
+                delivery_item_code=DELIVERY_STANDARD_ITEM,
+                can_checkout=True,
+                message="Standard local delivery is added at checkout.",
+            )
+        return FulfillmentResult(
+            method="delivery",
+            zone="out_of_area_quote",
+            label="Delivery Quote Needed",
+            delivery_fee=money(0),
+            delivery_item_code=None,
+            can_checkout=False,
+            message=(
+                "We do not currently have standard delivery set up for this location, "
+                "but we would love to talk with you about what you are looking for and how we can help."
+            ),
+        )
+    if city_key in STANDARD_DELIVERY_CITIES:
         return FulfillmentResult(
             method="delivery",
             zone="standard_delivery",

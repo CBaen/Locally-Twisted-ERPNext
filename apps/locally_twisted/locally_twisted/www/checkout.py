@@ -33,6 +33,7 @@ no_cache = 1
 sitemap = 0  # don't index the checkout page
 
 MAX_CART_LINES = 50  # mirrors locally_twisted.api.cart.MAX_CART_LINES
+MAX_QTY_PER_LINE = 99  # mirrors lt-guest-cart.js MAX_QTY_PER_LINE
 PRICE_LIST = "Standard Selling"
 
 
@@ -402,6 +403,16 @@ def get_context(context):
     return context
 
 
+def _normalize_line_qty(qty):
+    qty_value = max(1, cint(qty or 1))
+    if qty_value > MAX_QTY_PER_LINE:
+        frappe.throw(
+            _("Cart line quantity cannot exceed {0}.").format(MAX_QTY_PER_LINE),
+            frappe.ValidationError,
+        )
+    return qty_value
+
+
 def _resolve_cart_items(item_code, qty, items_json):
     """Resolve buy-now params OR items_json payload into one canonical list.
 
@@ -429,7 +440,7 @@ def _resolve_cart_items(item_code, qty, items_json):
             if not isinstance(entry, dict):
                 continue
             ic = (entry.get("item_code") or "").strip()
-            q = max(1, cint(entry.get("qty") or 1))
+            q = _normalize_line_qty(entry.get("qty") or 1)
             if not ic:
                 continue
             if ic not in seen:
@@ -438,7 +449,7 @@ def _resolve_cart_items(item_code, qty, items_json):
         return [{"item_code": ic, "qty": seen[ic]} for ic in order]
 
     if item_code:
-        return [{"item_code": item_code.strip(), "qty": max(1, cint(qty))}]
+        return [{"item_code": item_code.strip(), "qty": _normalize_line_qty(qty)}]
 
     return []
 
@@ -470,13 +481,40 @@ def _resolve_sale_lines(cart_items):
             )
         qty_value = int(line["qty"])
         rate = flt(resolved["price_list_rate"])
-        so_line_items.append({
+        so_line = {
             "item_code": resolved["item_code"],
+            "item_group": resolved.get("item_group"),
             "qty": qty_value,
             "rate": rate,
-        })
+        }
+        so_line.update(_item_tax_override(so_line))
+        so_line_items.append(so_line)
         resolved_items.append({**resolved, "qty": qty_value, "line_total": rate * qty_value})
     return so_line_items, resolved_items
+
+
+def _item_tax_override(line):
+    if commerce_rules.is_taxable_item(
+        item_code=line.get("item_code"),
+        item_group=line.get("item_group"),
+    ):
+        return {}
+    return {
+        "item_tax_template": _non_taxable_item_tax_template(),
+        "item_tax_rate": json.dumps({commerce_rules.TAX_ACCOUNT_HEAD: 0}),
+    }
+
+
+def _non_taxable_item_tax_template():
+    company = frappe.defaults.get_user_default("Company") or frappe.db.get_value("Company", {}, "name")
+    return (
+        frappe.db.get_value(
+            "Item Tax Template",
+            {"title": commerce_rules.NON_TAXABLE_ITEM_TAX_TEMPLATE, "company": company},
+            "name",
+        )
+        or commerce_rules.NON_TAXABLE_ITEM_TAX_TEMPLATE
+    )
 
 
 def _validate_requested_date(value):
@@ -484,9 +522,12 @@ def _validate_requested_date(value):
     if not value:
         frappe.throw(_("Please choose a requested pickup or delivery date."), frappe.ValidationError)
     try:
-        return frappe.utils.getdate(value)
+        requested_date = frappe.utils.getdate(value)
     except Exception:
         frappe.throw(_("Requested date is not valid."), frappe.ValidationError)
+    if requested_date < frappe.utils.getdate(frappe.utils.nowdate()):
+        frappe.throw(_("Please choose today or a future pickup or delivery date."), frappe.ValidationError)
+    return requested_date
 
 
 def _validate_window(start, end):
@@ -529,9 +570,18 @@ def _tax_for_fulfillment(fulfillment, *, pickup_location, city, postal_code):
 def _build_totals(so_line_items, fulfillment, tax):
     subtotal = commerce_rules.money(sum(flt(row["rate"]) * int(row["qty"]) for row in so_line_items))
     delivery_fee = commerce_rules.money(fulfillment.delivery_fee)
-    taxable_total = commerce_rules.money(subtotal + delivery_fee)
+    taxable_total = commerce_rules.money(
+        sum(
+            flt(row["rate"]) * int(row["qty"])
+            for row in so_line_items
+            if commerce_rules.is_taxable_item(
+                item_code=row.get("item_code"),
+                item_group=row.get("item_group"),
+            )
+        )
+    )
     tax_amount = commerce_rules.money(taxable_total * tax.rate / commerce_rules.Decimal("100"))
-    total = commerce_rules.money(taxable_total + tax_amount)
+    total = commerce_rules.money(subtotal + delivery_fee + tax_amount)
     return {
         "subtotal": float(subtotal),
         "delivery_fee": float(delivery_fee),
@@ -684,11 +734,14 @@ def submit_guest_order(item_code="", qty=1, items_json="",
     totals = _build_totals(so_line_items, fulfillment, tax)
 
     if fulfillment.delivery_item_code and fulfillment.delivery_fee:
-        so_line_items.append({
+        delivery_line = {
             "item_code": fulfillment.delivery_item_code,
+            "item_group": "Services",
             "qty": 1,
             "rate": float(fulfillment.delivery_fee),
-        })
+        }
+        delivery_line.update(_item_tax_override(delivery_line))
+        so_line_items.append(delivery_line)
 
     safe_name = escape_html(name)
     safe_phone = escape_html(phone)

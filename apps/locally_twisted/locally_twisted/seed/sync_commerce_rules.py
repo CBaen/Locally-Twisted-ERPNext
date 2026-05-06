@@ -12,7 +12,9 @@ import frappe
 from locally_twisted.commerce_rules import (
     DELIVERY_PARK_CITY_ITEM,
     DELIVERY_STANDARD_ITEM,
+    NON_TAXABLE_ITEM_TAX_TEMPLATE,
     PRICE_LIST,
+    TAX_ACCOUNT_HEAD,
 )
 
 
@@ -96,19 +98,22 @@ PAYMENT_TERMS = {
 }
 
 
-def execute() -> str:
+def execute(commit: bool = True) -> str:
     summary = {
         "custom_fields": [],
         "items": [],
         "item_prices": [],
+        "item_tax_templates": [],
         "payment_terms": [],
         "payment_terms_templates": [],
     }
     _ensure_sales_order_fields(summary)
+    _ensure_item_tax_templates(summary)
     _ensure_delivery_items(summary)
     _ensure_payment_terms(summary)
     frappe.clear_cache(doctype="Sales Order")
-    frappe.db.commit()
+    if commit:
+        frappe.db.commit()
     print(json.dumps(summary, indent=2, sort_keys=True))
     return json.dumps(summary, sort_keys=True)
 
@@ -132,8 +137,58 @@ def _ensure_sales_order_fields(summary: dict) -> None:
         summary["custom_fields"].append(f"created:{spec['fieldname']}")
 
 
+def _company_name() -> str | None:
+    return frappe.defaults.get_user_default("Company") or frappe.db.get_value("Company", {}, "name")
+
+
+def _ensure_item_tax_templates(summary: dict) -> None:
+    company = _company_name()
+    if not company:
+        return
+    existing_name = (
+        frappe.db.exists(
+            "Item Tax Template",
+            {"title": NON_TAXABLE_ITEM_TAX_TEMPLATE, "company": company},
+        )
+        or frappe.db.exists("Item Tax Template", NON_TAXABLE_ITEM_TAX_TEMPLATE)
+    )
+    if existing_name:
+        template = frappe.get_doc("Item Tax Template", existing_name)
+        changed = False
+        if template.title != NON_TAXABLE_ITEM_TAX_TEMPLATE:
+            template.title = NON_TAXABLE_ITEM_TAX_TEMPLATE
+            changed = True
+        if template.company != company:
+            template.company = company
+            changed = True
+        desired_taxes = [{"tax_type": TAX_ACCOUNT_HEAD, "tax_rate": 0}]
+        current_taxes = [
+            {"tax_type": row.tax_type, "tax_rate": float(row.tax_rate or 0)}
+            for row in template.taxes
+        ]
+        if current_taxes != desired_taxes:
+            template.set("taxes", desired_taxes)
+            changed = True
+        if changed:
+            template.save(ignore_permissions=True)
+            summary["item_tax_templates"].append(f"updated:{NON_TAXABLE_ITEM_TAX_TEMPLATE}")
+        return
+
+    template = frappe.get_doc(
+        {
+            "doctype": "Item Tax Template",
+            "name": NON_TAXABLE_ITEM_TAX_TEMPLATE,
+            "title": NON_TAXABLE_ITEM_TAX_TEMPLATE,
+            "company": company,
+            "taxes": [{"tax_type": TAX_ACCOUNT_HEAD, "tax_rate": 0}],
+        }
+    )
+    template.insert(ignore_permissions=True)
+    summary["item_tax_templates"].append(f"created:{NON_TAXABLE_ITEM_TAX_TEMPLATE}")
+
+
 def _ensure_delivery_items(summary: dict) -> None:
-    company = frappe.defaults.get_user_default("Company") or frappe.db.get_value("Company", {}, "name")
+    company = _company_name()
     income_account = frappe.db.get_value("Company", company, "default_income_account")
     for item_code, spec in DELIVERY_ITEMS.items():
         if frappe.db.exists("Item", item_code):

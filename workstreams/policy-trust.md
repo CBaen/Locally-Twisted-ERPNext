@@ -1,6 +1,6 @@
 # Policy And Trust Workstream
 
-Last updated: 2026-05-02 by Codex.
+Last updated: 2026-05-06 by Codex.
 
 ## Outcome
 
@@ -13,6 +13,8 @@ Do not treat current ERPNext policy pages as authoritative until each claim is t
 ## Current Stage
 
 Source-trace pass started. Routes load, but content is not launch-approved.
+
+Checkout now has a verified local commerce-rule contract, but policy copy still needs approval before it becomes customer/legal language. Current local behavior: goods are taxable by fulfillment ZIP/city rate; services, face painting, balloon twisting, deposits for those services, and delivery charges are non-taxable; local delivery is `$15`, Park City delivery is `$50`, and out-of-area delivery requires a quote.
 
 Verified route status from controller baseline:
 
@@ -52,12 +54,14 @@ Current ERPNext page files:
 | Refund / Cancellation | Route exists. Page claims deposits, personal decor refund windows, reschedule window, weather/no partial refund, LT cancellation goodwill, corporate late payments. | Most payment/deposit/cancellation/weather/reschedule/corporate late-fee content traces to completed `live-interview-answers.md`. Materials-cost deduction traces to a lawyer drafting note, not a direct final Jeff policy. | Mostly sourced, but needs legal/GL review for decor cancellation gap between 72 hours and 7 days and for materials-cost deduction wording. |
 | Accessibility | Route exists. Page says LT works to keep the site usable and uses `accessibility@locallytwisted.com`. | Questionnaire says Accessibility Statement exists and should be verified; default target is WCAG 2.1 AA and default contact is `accessibility@locallytwisted.com`. The answer appears not completed. | Low-risk but not final. Needs GL/legal approval on accessibility contact email and whether to state WCAG target/features. |
 | Cookie policy/banner | No separate route found. Privacy page has a cookies/tools section. `lt-guest-cart.js` writes a `cart_count` cookie. | Questionnaire lists Cookie Consent Banner + Policy as launch-blocking and says essential-only cookies can use a simple one-line banner if no third-party tracking is used. | Open blocker. Need decide whether launch uses essential cookies only and whether a separate banner/policy is required. |
-| Shipping / Delivery | No separate route found in the ERPNext policy set. Terms page has service area and travel-fee text. | Questionnaire lists Shipping & Delivery Policy as launch-blocking and has unanswered delivery-zone/logistics questions. `04-legal-live-interview.md` includes a prompt line for free delivery in Davis, Weber, Salt Lake, and Utah counties, but that file is a prompt, not completed answers. | Open blocker. Need source-traced delivery policy or GL/legal approval before Stripe/live-readiness claims. |
+| Shipping / Delivery | No separate route found in the ERPNext policy set. Terms page has service area and travel-fee text. Local checkout contract now supports `$15` standard delivery, `$50` Park City delivery, non-taxable delivery lines, and out-of-area quote-required behavior. | Questionnaire lists Shipping & Delivery Policy as launch-blocking and has unanswered delivery-zone/logistics questions. `04-legal-live-interview.md` includes a prompt line for free delivery in Davis, Weber, Salt Lake, and Utah counties, but that file is a prompt, not completed answers. Current checkout behavior traces to GL clarification in the 2026-05-06 commerce-rules session, not legal approval. | Open blocker. Need source-traced delivery policy or GL/legal/accountant approval before Stripe/live-readiness claims. |
+| Tax / service deposits | Checkout code now treats goods as taxable and services, BTFP, service deposits, and delivery charges as non-taxable. Contact Lead records store artist-service deposit/payment guidance without creating money records. | GL clarified the non-taxable service/deposit/delivery rule in the 2026-05-06 commerce-rules session. Accountant/legal approval is still required before the website presents this as final tax/legal policy language. | Code verified locally; copy not launch-approved. |
 
 ## Immediate Blockers
 
 - Privacy answers are not completed or approved.
 - Shipping/delivery policy is missing or folded into Terms without completed source answers.
+- Tax/service/deposit language is now implemented in checkout but not approved as public legal/accounting copy.
 - Cookie banner/policy posture is not implemented or approved.
 - Terms page contains broader legal topics that are not fully sourced.
 - Refund page has a decor cancellation ambiguity: completed answers cover 14+ days, 7-14 days, and <72 hours, leaving 72 hours to 7 days unclear.
@@ -68,7 +72,7 @@ Current ERPNext page files:
 Prepare a GL/legal approval packet instead of editing policy copy blind:
 
 1. Present the matrix above.
-2. Ask GL/legal to choose privacy defaults, tracking/cookie stance, privacy contact email, delivery policy, and decor 72-hour-to-7-day cancellation rule.
+2. Ask GL/legal/accountant to choose privacy defaults, tracking/cookie stance, privacy contact email, delivery policy, tax/service/deposit wording, and decor 72-hour-to-7-day cancellation rule.
 3. After approval, update only the policy page copy and footer links needed for launch.
 4. Re-run route and layout checks.
 

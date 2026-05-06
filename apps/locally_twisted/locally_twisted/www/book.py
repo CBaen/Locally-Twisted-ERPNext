@@ -35,6 +35,8 @@ from frappe import _
 from frappe.rate_limiter import rate_limit
 from frappe.utils import escape_html, validate_email_address
 
+from locally_twisted import commerce_rules
+
 
 no_cache = 1
 sitemap = 1
@@ -177,6 +179,7 @@ def submit_book_inquiry():
     )
     if requested_item:
         description = _combine_text_values(requested_item, description)
+    payment_rule = _payment_rule_for_inquiry(services, num_twisters, num_painters)
 
     # Lead Source: ensure "Website" exists (idempotent)
     _ensure_lead_source("Website")
@@ -219,6 +222,7 @@ def submit_book_inquiry():
         "custom_anything_else": description or None,
         "custom_source_channel": "Website Form",
     }
+    lead_doc.update(_lead_payment_fields(payment_rule))
     lead = frappe.get_doc(lead_doc)
     try:
         lead.insert(ignore_permissions=True)
@@ -280,7 +284,7 @@ def submit_book_inquiry():
         shade_required, colors, decor_types, setup_arrival, decor_notes,
         num_twisters, artist_start, artist_end, twisting_notes,
         num_painters, painter_start, painter_end, painting_notes,
-        delivery_notes, package_notes, other_notes, description, attached,
+        delivery_notes, package_notes, other_notes, description, attached, payment_rule,
     )
 
     frappe.db.commit()
@@ -340,6 +344,53 @@ def _indoor_outdoor_label(value):
 
 def _combine_text_values(*values):
     return "; ".join(str(v).strip() for v in values if str(v).strip())
+
+
+def _payment_rule_for_inquiry(services, num_twisters=None, num_painters=None):
+    services = set(services or [])
+    artist_services = {"Balloon Twisting", "Face Painting"} & services
+    quote_services = {"Balloon Decor", "Delivery", "Pickup", "Events Inquiry", "Something Else"} & services
+    if artist_services:
+        artist_count = 0
+        if "Balloon Twisting" in services:
+            artist_count += num_twisters or 1
+        if "Face Painting" in services:
+            artist_count += num_painters or 1
+        rule = commerce_rules.payment_rule_for_lane("artist_service", artist_count=artist_count)
+        timing = "Deposit then balance"
+        balance_timing = rule.balance_timing
+        payment_notes = rule.label
+        if quote_services:
+            quote_note = "Quoted decor or event work is paid in full before prep starts."
+            balance_timing = f"{balance_timing} {quote_note}"
+            payment_notes = f"{payment_notes} {quote_note}"
+    elif quote_services:
+        rule = commerce_rules.payment_rule_for_lane("quote_required")
+        timing = "Full payment before prep"
+        balance_timing = rule.balance_timing
+        payment_notes = "Quoted event work is paid in full before prep starts."
+    else:
+        rule = commerce_rules.payment_rule_for_lane("retail_checkout")
+        timing = "Paid in full at checkout"
+        balance_timing = rule.balance_timing
+        payment_notes = rule.label
+    return {
+        "payment_timing": timing,
+        "deposit_due": float(rule.deposit_amount),
+        "balance_timing": balance_timing,
+        "payment_notes": payment_notes,
+    }
+
+
+def _lead_payment_fields(payment_rule):
+    meta = frappe.get_meta("Lead")
+    fields = {
+        "custom_lt_payment_timing": payment_rule.get("payment_timing"),
+        "custom_lt_deposit_due": payment_rule.get("deposit_due"),
+        "custom_lt_balance_timing": payment_rule.get("balance_timing"),
+        "custom_lt_payment_notes": payment_rule.get("payment_notes"),
+    }
+    return {fieldname: value for fieldname, value in fields.items() if meta.has_field(fieldname)}
 
 
 def _requested_item_note(item_code, fallback_name):
@@ -443,7 +494,7 @@ def _record_inquiry_communication(
     shade_required, colors, decor_types, setup_arrival, decor_notes,
     num_twisters, artist_start, artist_end, twisting_notes,
     num_painters, painter_start, painter_end, painting_notes,
-    delivery_notes, package_notes, other_notes, description, photo_count,
+    delivery_notes, package_notes, other_notes, description, photo_count, payment_rule,
 ):
     """Build a readable HTML summary of the form submission and post it
     as a Communication on the Lead's timeline."""
@@ -482,6 +533,10 @@ def _record_inquiry_communication(
     line("Delivery notes", delivery_notes)
     line("Events inquiry notes", package_notes)
     line("Other notes", other_notes)
+    line("Payment timing", payment_rule.get("payment_timing"))
+    if payment_rule.get("deposit_due"):
+        line("Deposit due", "${:.2f}".format(payment_rule["deposit_due"]))
+    line("Balance timing", payment_rule.get("balance_timing"))
     if photo_count:
         line("Inspiration photos", f"{photo_count} attached")
 

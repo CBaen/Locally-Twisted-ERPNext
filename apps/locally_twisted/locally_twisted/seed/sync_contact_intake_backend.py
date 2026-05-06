@@ -128,6 +128,27 @@ CUSTOM_FIELD_UPDATES = {
         "options": "LT Lead Photo",
         "insert_after": "lt_section_photos",
     },
+    "custom_lt_payment_timing": {
+        "label": "Payment Timing",
+        "fieldtype": "Select",
+        "options": "\nFull payment before prep\nDeposit then balance\nNet 30\nPaid in full at checkout",
+        "insert_after": "custom_internal_notes",
+    },
+    "custom_lt_deposit_due": {
+        "label": "Deposit Due",
+        "fieldtype": "Currency",
+        "insert_after": "custom_lt_payment_timing",
+    },
+    "custom_lt_balance_timing": {
+        "label": "Balance Timing",
+        "fieldtype": "Data",
+        "insert_after": "custom_lt_deposit_due",
+    },
+    "custom_lt_payment_notes": {
+        "label": "Payment Notes",
+        "fieldtype": "Small Text",
+        "insert_after": "custom_lt_balance_timing",
+    },
 }
 
 LEAD_PHOTO_DOCTYPE = {
@@ -163,10 +184,43 @@ ENSURED_LEAD_CUSTOM_FIELDS = {
         "options": "LT Lead Photo",
         "insert_after": "lt_section_photos",
     },
+    "custom_lt_payment_timing": {
+        "doctype": "Custom Field",
+        "dt": "Lead",
+        "fieldname": "custom_lt_payment_timing",
+        "label": "Payment Timing",
+        "fieldtype": "Select",
+        "options": "\nFull payment before prep\nDeposit then balance\nNet 30\nPaid in full at checkout",
+        "insert_after": "custom_internal_notes",
+    },
+    "custom_lt_deposit_due": {
+        "doctype": "Custom Field",
+        "dt": "Lead",
+        "fieldname": "custom_lt_deposit_due",
+        "label": "Deposit Due",
+        "fieldtype": "Currency",
+        "insert_after": "custom_lt_payment_timing",
+    },
+    "custom_lt_balance_timing": {
+        "doctype": "Custom Field",
+        "dt": "Lead",
+        "fieldname": "custom_lt_balance_timing",
+        "label": "Balance Timing",
+        "fieldtype": "Data",
+        "insert_after": "custom_lt_deposit_due",
+    },
+    "custom_lt_payment_notes": {
+        "doctype": "Custom Field",
+        "dt": "Lead",
+        "fieldname": "custom_lt_payment_notes",
+        "label": "Payment Notes",
+        "fieldtype": "Small Text",
+        "insert_after": "custom_lt_balance_timing",
+    },
 }
 
 
-def execute() -> str:
+def execute(commit: bool = True) -> str:
     summary = {
         "ensured_doctypes": [],
         "renamed_services": [],
@@ -183,7 +237,8 @@ def execute() -> str:
     summary["normalized_time_values"] = _normalize_existing_lead_time_text()
     summary["updated_leads"] = _rewrite_existing_lead_service_csv()
     frappe.clear_cache(doctype="Lead")
-    frappe.db.commit()
+    if commit:
+        frappe.db.commit()
     print(json.dumps(summary, indent=2, sort_keys=True))
     return json.dumps(summary, sort_keys=True)
 

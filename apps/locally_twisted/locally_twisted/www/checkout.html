@@ -266,6 +266,13 @@
         }
     }
 
+    function syncDateMinimum() {
+        if (!dateInput) return;
+        var now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        dateInput.min = now.toISOString().slice(0, 10);
+    }
+
     function selectedFulfillment() {
         var checked = form.querySelector('input[name="fulfillment_method"]:checked');
         return checked ? checked.value : 'delivery';
@@ -614,6 +621,7 @@
     });
 
     function initCheckout() {
+        syncDateMinimum();
         populateWindows();
         syncFulfillmentFields();
         hydrateCartSummary();

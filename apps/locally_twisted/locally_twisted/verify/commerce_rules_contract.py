@@ -15,6 +15,7 @@ def run():
         failures.extend(_check_pickup_windows(commerce_rules))
         failures.extend(_check_product_lanes(commerce_rules))
         failures.extend(_check_tax_rates(commerce_rules))
+        failures.extend(_check_taxable_item_rules(commerce_rules))
         failures.extend(_check_payment_terms(commerce_rules))
 
         if failures:
@@ -29,10 +30,12 @@ def _check_delivery_zones(rules) -> list[str]:
     cases = [
         ("84088", "West Jordan", "standard_delivery", 15.0),
         ("84405", "Riverdale", "standard_delivery", 15.0),
+        ("84003", "American Fork", "standard_delivery", 15.0),
         ("84060", "Park City", "park_city_delivery", 50.0),
         ("84068", "Park City", "park_city_delivery", 50.0),
         ("84098", "Park City", "park_city_delivery", 50.0),
         ("84770", "St. George", "out_of_area_quote", None),
+        ("84770", "West Jordan", "out_of_area_quote", None),
     ]
     for postal_code, city, expected_zone, expected_fee in cases:
         result = rules.resolve_fulfillment(
@@ -86,6 +89,8 @@ def _check_tax_rates(rules) -> list[str]:
     expected = [
         ("84088", "West Jordan", 7.45),
         ("84405", "Riverdale", 7.45),
+        ("84003", "American Fork", 7.45),
+        ("84004", "Alpine", 7.45),
         ("84060", "Park City", 9.55),
         ("84098", "Park City", 9.05),
     ]
@@ -93,6 +98,28 @@ def _check_tax_rates(rules) -> list[str]:
         result = rules.resolve_tax_rate(postal_code=postal_code, city=city)
         if round(float(result.rate), 2) != rate:
             failures.append(f"{postal_code} expected tax {rate}, found {result.rate}")
+    for city in sorted(rules.STANDARD_DELIVERY_CITIES):
+        try:
+            rules.resolve_tax_rate(postal_code="", city=city)
+        except ValueError:
+            failures.append(f"{city} is a standard delivery city but has no city tax rate")
+    return failures
+
+
+def _check_taxable_item_rules(rules) -> list[str]:
+    failures = []
+    cases = [
+        ("mothers-day-bouquet", "Bouquets", True),
+        ("unicorn-bouquet-SMA-12", "Bouquets", True),
+        ("DELIVERY-STANDARD", "Services", False),
+        ("DELIVERY-PARK-CITY", "Services", False),
+        ("face-painting-deposit", "Services", False),
+        ("balloon-twisting-deposit", "Services", False),
+    ]
+    for item_code, item_group, expected in cases:
+        taxable = rules.is_taxable_item(item_code=item_code, item_group=item_group)
+        if taxable is not expected:
+            failures.append(f"{item_code} in {item_group} expected taxable={expected}, found {taxable}")
     return failures
 
 

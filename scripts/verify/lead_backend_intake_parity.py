@@ -127,6 +127,23 @@ EXPECTED_CUSTOM_FIELDS = {
         "fieldtype": "Table",
         "options": "LT Lead Photo",
     },
+    "custom_lt_payment_timing": {
+        "label": "Payment Timing",
+        "fieldtype": "Select",
+        "options": "\nFull payment before prep\nDeposit then balance\nNet 30\nPaid in full at checkout",
+    },
+    "custom_lt_deposit_due": {
+        "label": "Deposit Due",
+        "fieldtype": "Currency",
+    },
+    "custom_lt_balance_timing": {
+        "label": "Balance Timing",
+        "fieldtype": "Data",
+    },
+    "custom_lt_payment_notes": {
+        "label": "Payment Notes",
+        "fieldtype": "Small Text",
+    },
 }
 
 
@@ -282,6 +299,45 @@ def check_submit_mapping_helper() -> list[str]:
     source = Path("apps/locally_twisted/locally_twisted/www/book.py").read_text(encoding="utf-8")
     if '"custom_event_type": _service_child_rows(services)' not in source:
         failures.append("submit_book_inquiry does not populate Lead.custom_event_type from services")
+
+    try:
+        artist_rule = bench_execute(
+            "locally_twisted.www.book._payment_rule_for_inquiry",
+            kwargs={
+                "services": ["Balloon Twisting", "Face Painting"],
+                "num_twisters": 1,
+                "num_painters": 1,
+            },
+        )
+        decor_rule = bench_execute(
+            "locally_twisted.www.book._payment_rule_for_inquiry",
+            kwargs={"services": ["Balloon Decor"]},
+        )
+        other_rule = bench_execute(
+            "locally_twisted.www.book._payment_rule_for_inquiry",
+            kwargs={"services": ["Something Else"]},
+        )
+        mixed_rule = bench_execute(
+            "locally_twisted.www.book._payment_rule_for_inquiry",
+            kwargs={
+                "services": ["Balloon Decor", "Balloon Twisting"],
+                "num_twisters": 2,
+            },
+        )
+    except RuntimeError as exc:
+        return [*failures, f"payment rule helper missing or failed: {exc}"]
+    if artist_rule.get("deposit_due") != 100.0:
+        failures.append(f"twisting + painting should require $100 deposit, found {artist_rule!r}")
+    if artist_rule.get("payment_timing") != "Deposit then balance":
+        failures.append(f"artist services should use deposit timing, found {artist_rule!r}")
+    if decor_rule.get("payment_timing") != "Full payment before prep":
+        failures.append(f"decor quote should use full-before-prep timing, found {decor_rule!r}")
+    if other_rule.get("payment_timing") != "Full payment before prep":
+        failures.append(f"miscellaneous inquiries should stay quote-aware, found {other_rule!r}")
+    if mixed_rule.get("deposit_due") != 100.0:
+        failures.append(f"two-artist mixed decor inquiry should require $100 deposit, found {mixed_rule!r}")
+    if "prep" not in (mixed_rule.get("payment_notes") or "").lower():
+        failures.append(f"mixed decor + artist inquiry should mention prep payment timing, found {mixed_rule!r}")
     return failures
 
 

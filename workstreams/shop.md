@@ -1,6 +1,6 @@
 # Shop Workstream
 
-Last updated: 2026-05-02 by Codex.
+Last updated: 2026-05-06 by Codex.
 
 ## Outcome
 
@@ -10,7 +10,7 @@ This is the active feature-lane handoff for shop work. `HANDOFF.md` remains vali
 
 ## Current Stage
 
-Active handoff lane. The guest cart/checkout item-code contract, broad browse routing, first variant-media reconciliation pass, and per-product variant correctness diff were completed on 2026-05-02. The next shop work should continue with remaining media review before broad layout overhaul.
+Active handoff lane. The guest cart/checkout item-code contract, broad browse routing, first variant-media reconciliation pass, and per-product variant correctness diff were completed on 2026-05-02. The 2026-05-06 commerce-rules checkout slice now has its own lane at `workstreams/commerce-rules-checkout.md`; keep shop layout/media work coordinated with that checkout contract. The next shop work should continue with remaining media review before broad layout overhaul.
 
 Priority order from the current queue:
 
@@ -95,6 +95,7 @@ Reference and verification files:
 - `/shop` is the all-decor hub. `/shop-items`, `/all-products`, and `/shop-by-category` route or redirect to `/shop`; category detail pages stay at `/shop-items/<group>`.
 - `/shop-items/arches` previously required restoring `.item-group-content`; do not remove that structure without retesting group pages.
 - The guest cart is localStorage-based at `/cart`, supports multi-item checkout, and connects to Stripe Checkout Sessions in test mode.
+- Current checkout commerce rules: ready-to-order goods can check out and are taxable by fulfillment ZIP/city rate; services, BTFP, service deposits, and delivery charges are non-taxable; standard local delivery is `$15`; Park City delivery is `$50`; out-of-area delivery remains quote-required. See `workstreams/commerce-rules-checkout.md` before changing cart, checkout, delivery, service, or deposit behavior.
 - Cart/checkout now sells actual Item codes and uses the parent Website Item for route/name display when the item is a variant. If the variant has its own `Item.image`, cart/checkout use that selected-variant image; otherwise they fall back to the parent Website Item image. Custom install groups such as Arches and Garlands are quote-required under the current commerce rules; retail variant groups such as Bouquets still use inline selectors and cart checkout.
 - `/shop` cards for variant templates link to "Choose options" instead of adding an unpriced template code. Quote-required product pages show `Request a Quote`; retail single-SKU cards still add directly.
 - `smoke_shop.py` now verifies quote-required custom install pages and a real retail option-selection add-to-cart flow for `unicorn-bouquet`. `cart_checkout_contract.py` verifies the shared API/checkout contract.
@@ -142,6 +143,8 @@ After route, template, CSS, or JS edits:
 
 - `python scripts/verify/smoke_shop.py`
 - `python scripts/verify/cart_checkout_contract.py`
+- `python scripts/verify/commerce_rules_contract.py`
+- `python scripts/verify/checkout_fulfillment_contract.py`
 - `python scripts/verify/variant_media_contract.py`
 - `python scripts/verify/catalog_variant_contract.py`
 - `python scripts/setup/sync_variant_media.py --dry-run --include-details --report output/catalog-media-review.json`

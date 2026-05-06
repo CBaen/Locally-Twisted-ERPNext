@@ -6,6 +6,14 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-06 - Tax jurisdiction is not the taxable base
+
+The checkout code already knew how to pick a Utah tax rate from ZIP/city, but that did not mean the whole order should be taxed. GL clarified the actual LT rule: only goods are taxable. Services, face painting, balloon twisting, deposits for those services, and delivery charges are not taxable. The failure was visible only when the Sales Order contract compared expected goods-only tax to ERPNext's submitted tax rows; West Jordan delivery produced `$5.96` tax instead of the expected `$4.84` because delivery was being included in the taxable base.
+
+**Counter-move:** for ERPNext checkout work, test two contracts separately: jurisdiction/rate selection and taxable-line classification. Use a real 0 percent Item Tax Template for non-taxable service/deposit/delivery lines because ERPNext can recalculate Sales Order tax from templates, not just raw preview math. Verify both preview totals and submitted Sales Order tax rows. Keep service deposits as Lead/payment guidance until an approved service money path exists.
+
+---
+
 ## 2026-05-05 - Container stability fails at breakpoint edges and open states
 
 The site looked acceptable in some default screenshots while real containers were still at risk: nav between legacy and active desktop breakpoints, mobile drawer accordions, product selectors, contact conditionals, portfolio modal state, and text sitting too close to panels. A 320/375/1366 check alone was not enough for the design requirement GL was reacting to.

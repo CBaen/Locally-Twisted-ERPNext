@@ -6,6 +6,7 @@ then rolls the transaction back.
 """
 from __future__ import annotations
 
+from datetime import date, timedelta
 import time
 
 import frappe
@@ -38,6 +39,10 @@ def run():
     finally:
         frappe.db.commit = original_commit
         frappe.db.rollback()
+
+
+def _future_date() -> str:
+    return (date.today() + timedelta(days=30)).isoformat()
 
 
 def _run_contract():
@@ -136,7 +141,7 @@ def _submit_checkout(email: str, name: str):
             postal_code="84088",
             country="United States",
             fulfillment_method="delivery",
-            requested_fulfillment_date="2026-06-01",
+            requested_fulfillment_date=_future_date(),
             requested_window_start="13:00",
             requested_window_end="13:30",
             order_notes="Checkout Lead conversion contract.",

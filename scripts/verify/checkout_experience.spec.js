@@ -4,6 +4,12 @@ const { BASE_URL, gotoAndSettle } = require("./layout_helpers");
 const CART_KEY = "lt_cart";
 const RETAIL_ITEM = "mothers-day-bouquet";
 
+function futureDate(days = 30) {
+	const date = new Date();
+	date.setDate(date.getDate() + days);
+	return date.toISOString().slice(0, 10);
+}
+
 async function seedRetailCart(page) {
 	await gotoAndSettle(page, "/shop");
 	await page.evaluate(
@@ -26,7 +32,7 @@ async function seedRetailCart(page) {
 }
 
 async function chooseRequestedWindow(page) {
-	await page.fill("#co-date", "2026-06-01");
+	await page.fill("#co-date", futureDate());
 	await page.selectOption("#co-window-start", "13:00");
 }
 

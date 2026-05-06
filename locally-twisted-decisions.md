@@ -8,6 +8,22 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-06 - Checkout tax rate and taxable base are separate contracts
+
+**Decision:** Checkout chooses the Utah tax rate from fulfillment ZIP/city, but applies that rate only to taxable goods. Services are not taxable. Face painting, balloon twisting, deposits for those services, and delivery charges are non-taxable. Out-of-area delivery stays quote-required instead of using a local delivery fee.
+
+**Reasoning:** GL clarified that the business rule is not "tax everything in the order." The location still matters because Utah sales tax rates vary by jurisdiction, but the taxable base must exclude service, service-deposit, and delivery lines. ERPNext's normal Sales Order tax calculation can tax the whole net total unless non-taxable lines carry a real Item Tax Template override, so the checkout contract must verify both preview totals and the submitted Sales Order rows.
+
+**Implementation:** `commerce_rules.py` now separates fulfillment zoning/rate lookup from `is_taxable_item`. `sync_commerce_rules` creates a 0 percent `LT Non-Taxable Sales` Item Tax Template and keeps delivery fee Items/Prices synced. `/checkout` assigns item tax templates to non-taxable lines, excludes delivery from tax, rejects past fulfillment dates, caps line quantity, and treats out-of-area ZIPs as quote-required. `/contact`/`/book` Lead handling stores payment/deposit guidance without creating service/deposit money records.
+
+**Verification receipt:** A pre-fix checkout fulfillment contract caught West Jordan delivery taxing goods plus delivery: expected `$4.84`, found `$5.96`. After the fix, `preview_checkout_totals` for `mothers-day-bouquet` delivered to ZIP `84088` returned `$65.00` goods, `$15.00` delivery, `$4.84` tax, and `$84.84` total. The focused contracts passed for commerce rules, checkout fulfillment, cart checkout, checkout Lead conversion, Lead backend intake parity, checkout experience, payment cascade, and payment launch readiness in local/test mode.
+
+**Alternatives considered:** Tax the whole order after selecting a ZIP rate. Rejected because service, service deposit, and delivery lines are not taxable under the clarified LT rule. Handle service deposits as checkout products immediately. Rejected for this slice because services remain inquiry/Lead-guided until the approved money flow is deliberately mapped.
+
+**Decided by:** GL clarified the taxable/non-taxable business rule; Codex implemented and verified the ERPNext checkout contract.
+
+---
+
 ## 2026-05-05 - Responsive container integrity is a launch gate
 
 **Decision:** Public-site visual work must pass breakpoint-edge and stateful-container checks before it is called complete. This includes text, images, buttons, nav, drawers, mega panels, cards, forms, product controls, modals, carousels, cart, checkout, policy pages, and Webshop route wrappers. The approved gate is `npm run test:layout-fit`, `npm run test:interactive-layout`, and, for broad public-site changes, `npm run test:public-verify`.

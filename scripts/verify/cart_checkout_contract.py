@@ -5,9 +5,12 @@ This is intentionally narrower than smoke_shop.py. It checks the launch-critical
 purchase contract:
 
 - Retail single-SKU products still resolve normally.
-- Quote-lane variant item codes can be summarized for cart display, using the
+- Retail variant item codes can be summarized for cart display, using the
   parent Website Item for display route/image and the variant Item Price.
+- Quote-lane item codes are excluded from checkout cart display so stale
+  localStorage cannot render a cart line that checkout later rejects.
 - Variant templates and quote-lane products are not added directly from /shop.
+- Server checkout rejects direct POST quantities above the browser cart cap.
 
 Run:
   python scripts/verify/cart_checkout_contract.py
@@ -28,8 +31,11 @@ BASE = "http://localhost:8081"
 QUOTE_VARIANT_TEMPLATE = "6-color-rainbow-arch"
 QUOTE_VARIANT_ITEM = "6-color-rainbow-arch-20F"
 QUOTE_SINGLE_SKU_ITEM = "easter-arch"
+RETAIL_VARIANT_TEMPLATE = "unicorn-bouquet"
+RETAIL_VARIANT_ITEM = "unicorn-bouquet-SMA-12"
 SINGLE_SKU_ITEM = "mothers-day-bouquet"
 PRICE_LIST = "Standard Selling"
+MAX_QTY_PER_LINE = 99
 
 
 class ContractFail(Exception):
@@ -64,6 +70,29 @@ def bench_execute(method: str, *, kwargs: dict[str, Any] | None = None) -> Any:
         raise ContractFail(f"{method} returned non-JSON output: {text}") from exc
 
 
+def bench_execute_expect_error(method: str, *, kwargs: dict[str, Any], expected: str) -> None:
+    cmd = [
+        "docker",
+        "exec",
+        CONTAINER,
+        "bench",
+        "--site",
+        SITE,
+        "execute",
+        method,
+        "--kwargs",
+        json.dumps(kwargs),
+    ]
+    proc = subprocess.run(cmd, text=True, capture_output=True, timeout=60)
+    if proc.returncode == 0:
+        raise ContractFail(f"{method} should have failed for {kwargs}, returned {proc.stdout.strip()!r}")
+    combined = f"{proc.stdout}\n{proc.stderr}"
+    if expected not in combined:
+        raise ContractFail(
+            f"{method} failed, but did not include {expected!r}\nSTDOUT:\n{proc.stdout}\nSTDERR:\n{proc.stderr}"
+        )
+
+
 def get_url(path: str) -> str:
     req = urllib.request.Request(
         f"{BASE}{path}",
@@ -84,21 +113,21 @@ def by_item_code(items: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
     return {item["item_code"]: item for item in items}
 
 
-def check_cart_api_resolves_variant_and_single_sku() -> None:
+def check_cart_api_resolves_retail_items_and_excludes_quote_lane() -> None:
     data = bench_execute(
         "locally_twisted.api.cart.get_cart_items",
-        kwargs={"item_codes": [QUOTE_VARIANT_ITEM, SINGLE_SKU_ITEM, QUOTE_VARIANT_TEMPLATE]},
-    )
-    variant_media = bench_execute(
-        "locally_twisted.api.variant_media.get_variant_media",
-        kwargs={"item_code": QUOTE_VARIANT_ITEM, "template_item_code": QUOTE_VARIANT_TEMPLATE},
+        kwargs={"item_codes": [RETAIL_VARIANT_ITEM, QUOTE_VARIANT_ITEM, SINGLE_SKU_ITEM, QUOTE_VARIANT_TEMPLATE]},
     )
 
     items = by_item_code(data.get("items") or [])
     missing = {row["item_code"]: row.get("reason") for row in data.get("missing") or []}
 
     assert_true(SINGLE_SKU_ITEM in items, f"{SINGLE_SKU_ITEM} should still resolve as a cart item")
-    assert_true(QUOTE_VARIANT_ITEM in items, f"{QUOTE_VARIANT_ITEM} should resolve as a quote-lane variant cart item")
+    assert_true(RETAIL_VARIANT_ITEM in items, f"{RETAIL_VARIANT_ITEM} should resolve as a retail variant cart item")
+    assert_true(
+        QUOTE_VARIANT_ITEM in missing and missing[QUOTE_VARIANT_ITEM] == "quote_required",
+        f"{QUOTE_VARIANT_ITEM} should be excluded from checkout cart display as quote_required",
+    )
     assert_true(
         QUOTE_VARIANT_TEMPLATE in missing,
         f"{QUOTE_VARIANT_TEMPLATE} should not resolve as a directly purchasable template",
@@ -110,34 +139,48 @@ def check_cart_api_resolves_variant_and_single_sku() -> None:
         f"{SINGLE_SKU_ITEM} should stay in retail checkout lane, found {single.get('checkout_lane')!r}",
     )
 
-    variant = items[QUOTE_VARIANT_ITEM]
+    variant = items[RETAIL_VARIANT_ITEM]
     assert_true(
-        variant.get("route") == "shop-items/arches/6-color-rainbow-arch",
-        f"{QUOTE_VARIANT_ITEM} should use parent Website Item route, found {variant.get('route')!r}",
+        variant.get("route") == "shop-items/bouquets/unicorn-bouquet",
+        f"{RETAIL_VARIANT_ITEM} should use parent Website Item route, found {variant.get('route')!r}",
     )
     assert_true(
-        variant.get("website_image") == variant_media.get("image"),
-        f"{QUOTE_VARIANT_ITEM} should use selected variant image when present, found {variant.get('website_image')!r}",
+        float(variant.get("price_list_rate") or 0) == 35.0,
+        f"{RETAIL_VARIANT_ITEM} should use its variant price 35.0, found {variant.get('price_list_rate')!r}",
     )
     assert_true(
-        float(variant.get("price_list_rate") or 0) == 340.0,
-        f"{QUOTE_VARIANT_ITEM} should use its variant price 340.0, found {variant.get('price_list_rate')!r}",
-    )
-    assert_true(
-        variant.get("checkout_lane") == "quote_required",
-        f"{QUOTE_VARIANT_ITEM} should be marked quote_required, found {variant.get('checkout_lane')!r}",
+        variant.get("checkout_lane") == "retail_checkout",
+        f"{RETAIL_VARIANT_ITEM} should be marked retail_checkout, found {variant.get('checkout_lane')!r}",
     )
 
 
-def check_checkout_resolver_accepts_variant() -> None:
+def check_checkout_resolver_accepts_retail_variant() -> None:
     line = bench_execute(
         "locally_twisted.api.cart.resolve_cart_item_for_sale",
-        kwargs={"item_code": QUOTE_VARIANT_ITEM},
+        kwargs={"item_code": RETAIL_VARIANT_ITEM},
     )
-    assert_true(line.get("item_code") == QUOTE_VARIANT_ITEM, "checkout resolver should preserve variant item code")
-    assert_true(float(line.get("price_list_rate") or 0) == 340.0, "checkout resolver should use variant price")
-    assert_true(line.get("website_item_code") == QUOTE_VARIANT_TEMPLATE, "checkout resolver should point at parent Website Item")
-    assert_true(line.get("checkout_lane") == "quote_required", "checkout resolver should expose quote lane")
+    assert_true(line.get("item_code") == RETAIL_VARIANT_ITEM, "checkout resolver should preserve retail variant item code")
+    assert_true(float(line.get("price_list_rate") or 0) == 35.0, "checkout resolver should use retail variant price")
+    assert_true(line.get("website_item_code") == RETAIL_VARIANT_TEMPLATE, "checkout resolver should point at parent Website Item")
+    assert_true(line.get("checkout_lane") == "retail_checkout", "checkout resolver should expose retail lane")
+
+
+def check_checkout_rejects_over_limit_quantities() -> None:
+    expected = f"Cart line quantity cannot exceed {MAX_QTY_PER_LINE}"
+    bench_execute_expect_error(
+        "locally_twisted.www.checkout._resolve_cart_items",
+        kwargs={"item_code": SINGLE_SKU_ITEM, "qty": MAX_QTY_PER_LINE + 1, "items_json": ""},
+        expected=expected,
+    )
+    bench_execute_expect_error(
+        "locally_twisted.www.checkout._resolve_cart_items",
+        kwargs={
+            "item_code": "",
+            "qty": 1,
+            "items_json": json.dumps([{"item_code": SINGLE_SKU_ITEM, "qty": MAX_QTY_PER_LINE + 1}]),
+        },
+        expected=expected,
+    )
 
 
 def check_shop_cards_do_not_add_templates() -> None:
@@ -163,8 +206,9 @@ def check_shop_cards_do_not_add_templates() -> None:
 
 def main() -> int:
     checks = [
-        check_cart_api_resolves_variant_and_single_sku,
-        check_checkout_resolver_accepts_variant,
+        check_cart_api_resolves_retail_items_and_excludes_quote_lane,
+        check_checkout_resolver_accepts_retail_variant,
+        check_checkout_rejects_over_limit_quantities,
         check_shop_cards_do_not_add_templates,
     ]
 

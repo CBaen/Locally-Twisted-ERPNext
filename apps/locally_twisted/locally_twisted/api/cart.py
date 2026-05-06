@@ -48,6 +48,8 @@ def _variant_options(item_code):
 
 
 def _missing_message(reason):
+    if reason == "quote_required":
+        return _("This item starts with a quote instead of cart checkout.")
     if reason == "choose_options":
         return _("Please choose this item's options before adding it to cart.")
     if reason == "unpriced":
@@ -95,6 +97,10 @@ def _resolve_cart_item_for_sale(item_code):
     if not website_item:
         return None, "unavailable"
 
+    checkout_lane = checkout_lane_for_item_group(website_item.get("item_group"))
+    if checkout_lane == "quote_required":
+        return None, "quote_required"
+
     rate = frappe.db.get_value(
         "Item Price",
         {"item_code": item["item_code"], "price_list": PRICE_LIST, "selling": 1},
@@ -111,7 +117,7 @@ def _resolve_cart_item_for_sale(item_code):
         "route": website_item.get("route") or ("shop/" + website_item["item_code"]),
         "short_description": website_item.get("short_description") or None,
         "item_group": website_item.get("item_group"),
-        "checkout_lane": checkout_lane_for_item_group(website_item.get("item_group")),
+        "checkout_lane": checkout_lane,
         "price_list_rate": flt(rate),
         "available": True,
         "is_variant": bool(item.get("variant_of")),

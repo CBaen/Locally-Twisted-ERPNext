@@ -1,0 +1,8 @@
+"""Install/update LT contact-intake backend records."""
+from __future__ import annotations
+
+from locally_twisted.seed.sync_contact_intake_backend import execute as sync_contact_intake
+
+
+def execute():
+    sync_contact_intake(commit=False)
