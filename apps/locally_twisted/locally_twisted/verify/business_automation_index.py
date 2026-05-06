@@ -324,13 +324,13 @@ def _surfaces() -> list[dict[str, object]]:
         {
             "id": "unpaid_invoice_review_surface",
             "lane": "paperwork",
-            "summary": "A dedicated review surface should turn unpaid/overdue invoice status into draft reminder/statement candidates.",
+            "summary": "Unpaid/overdue invoices become draft-only reminder and statement review candidates without sending or accounting mutations.",
             "required_for_launch": False,
-            "exists": lambda: ["No dedicated unpaid/overdue invoice review surface exists yet."],
-            "connected": lambda: ["No review queue is connected to outbound reminder/statement templates yet."],
+            "exists": lambda: _files_exist("locally_twisted/paperwork/unpaid_invoice_review.py"),
+            "connected": _unpaid_invoice_review_connected,
             "loud_failure": lambda: [],
-            "future_connection": "Use paperwork_status + outbound document registry; create drafts only, no sending.",
-            "verifiers": ["python scripts/verify/paperwork_status.py --report output/paperwork-status.json"],
+            "evidence": ["apps/locally_twisted/locally_twisted/paperwork/unpaid_invoice_review.py"],
+            "verifiers": ["python scripts/verify/unpaid_invoice_review.py --report output/unpaid-invoice-review.json"],
         },
         {
             "id": "quote_proposal_generation",
@@ -604,6 +604,31 @@ def _paperwork_status_connected() -> list[str]:
     return failures
 
 
+def _unpaid_invoice_review_connected() -> list[str]:
+    failures = []
+    failures.extend(_callables_exist("locally_twisted.paperwork.unpaid_invoice_review.run"))
+    result = frappe.get_attr("locally_twisted.paperwork.unpaid_invoice_review.run")()
+    if not result.get("ok"):
+        failures.extend(result.get("failures") or ["unpaid_invoice_review.run returned not ok"])
+    if result.get("read_only") is not True:
+        failures.append("unpaid_invoice_review is not marked read_only")
+    if result.get("send_allowed") is not False:
+        failures.append("unpaid_invoice_review allows sending")
+    if result.get("mutation_allowed") is not False:
+        failures.append("unpaid_invoice_review allows mutations")
+    if result.get("mutation_guard", {}).get("changed"):
+        failures.append("unpaid_invoice_review mutation guard changed")
+    template_ids = set(result.get("template_ids") or [])
+    for document_id in ("payment_reminder_draft", "statement_of_account"):
+        if document_id not in template_ids:
+            failures.append(f"unpaid_invoice_review missing template id {document_id}")
+    for candidate in result.get("review_candidates") or []:
+        for document in candidate.get("draft_documents") or []:
+            if document.get("send_status") != "draft_only_not_sent":
+                failures.append(f"{candidate.get('invoice')} has non-draft document {document.get('document_id')}")
+    return failures
+
+
 def _finance_workspace_connected() -> list[str]:
     failures = []
     if not frappe.db.exists("Workspace", "LT Accountant Home"):
@@ -751,6 +776,7 @@ def _checkups() -> list[dict[str, object]]:
                 "python scripts/verify/invoice_branding_contract.py",
                 "python scripts/verify/outbound_documents_contract.py",
                 "python scripts/verify/paperwork_status.py --report output/paperwork-status.json",
+                "python scripts/verify/unpaid_invoice_review.py --report output/unpaid-invoice-review.json",
             ],
         },
         {

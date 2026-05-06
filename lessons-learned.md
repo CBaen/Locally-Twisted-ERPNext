@@ -6,6 +6,14 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-06 - A draft-only reminder still needs a mutation guard
+
+The unpaid invoice review surface looked safe because it only reads invoices and returns candidate data. That is not enough proof in a business system. If a future helper accidentally queues an email, creates a Communication, or changes a Payment Request while building the review list, the surface becomes collections automation without approval.
+
+**Counter-move:** finance review helpers should prove the negative. The unpaid invoice verifier now checks `read_only`, `send_allowed: false`, `mutation_allowed: false`, draft-only document status, and guarded counts for Email Queue, Communication, Sales Invoice, Payment Request, Payment Entry, and Journal Entry. Use that pattern before adding any reminder, statement, or collections-related review queue.
+
+---
+
 ## 2026-05-06 - Keep the useful prototype behavior, not the whole prototype
 
 The portfolio correction after the exact-handoff pass showed a second failure mode: once a reference is rendered correctly, it can still be wrong for production if Codex carries over the whole prototype instead of the part GL actually wants. GL wanted the overlapping collage and stronger center balance. She did not want the tall hero, copied font imports, custom cursor, fake shell, or small production photos.

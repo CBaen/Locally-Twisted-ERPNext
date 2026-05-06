@@ -65,6 +65,7 @@ python scripts/verify/payment_cascade_contract.py
 python scripts/verify/cart_checkout_contract.py
 python scripts/verify/payment_launch_readiness.py
 python scripts/verify/business_automation_index.py --report output/business-automation-index.json
+python scripts/verify/unpaid_invoice_review.py --report output/unpaid-invoice-review.json
 python scripts/verify/stripe_amount_parity_contract.py
 ```
 
@@ -79,3 +80,4 @@ Run live inventory after mutating verifiers finish and rollback, not in parallel
 - QuickBooks history can become messy operational data if imported deeper than accountant-approved cutover scope.
 - `Employee` records can be mistaken for payroll readiness when HRMS/payroll DocTypes are not installed.
 - Stripe hosted-checkout line items can silently omit ERPNext taxes or charges if amount parity is not checked before redirect.
+- Draft reminder or statement helpers can become collections automation if they do not prove `send_allowed: false`, `mutation_allowed: false`, and unchanged guarded record counts.

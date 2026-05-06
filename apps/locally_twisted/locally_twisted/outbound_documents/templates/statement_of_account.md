@@ -11,7 +11,7 @@ delivery_channel: PDF | reviewed email
 record_source: Customer | Sales Invoice | Payment Entry | Payment Request
 policy_lanes: corporate_invoicing | privacy
 required_fields: customer_name | statement_date | date_range | open_invoices | payments | credits | total_balance | reconciliation_contact
-do_not_send_without: verified_customer_ledger | date_range | reviewed_balance | recipient_check
+do_not_send_without: human_approval | verified_customer_ledger | date_range | reviewed_balance | recipient_check
 verification: outbound_documents_contract | paperwork_status
 template_type: outbound_markdown_v1
 ---

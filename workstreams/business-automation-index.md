@@ -1,6 +1,6 @@
 # Business Automation Index
 
-Last updated: 2026-05-06 by Codex after creating the first read-only automation index, adding the daily Frappe scheduler checkup, wiring the Stripe amount-parity contract, and completing the closeout verification pass.
+Last updated: 2026-05-06 by Codex after adding the draft-only unpaid invoice review surface and wiring it into the business automation index.
 
 ## Outcome
 
@@ -28,10 +28,10 @@ Current result on 2026-05-06:
 - `ok: true`
 - 17 total surfaces indexed
 - 11 launch-required surfaces
-- 12 surfaces exist and are connected
+- 13 surfaces exist and are connected
 - 4 surfaces exist but are not connected
 - 0 launch-required missing surfaces
-- 1 useful future surface missing
+- 0 useful future surfaces missing
 - 0 loud-failure gaps
 
 The report is read-only and writes the current JSON snapshot to `output/business-automation-index.json`.
@@ -42,6 +42,7 @@ Fresh closeout verification also confirmed:
 - Frappe's hook registry includes `locally_twisted.verify.business_automation_index.scheduled_checkup` under `daily`.
 - `payment_launch_readiness.py --mode live` fails for the expected cutover blockers: live Stripe keys, explicit site config keys, operator email config, and production host.
 - `paperwork_status.py` reports 30 sent Email Queue rows, 1 unpaid/overdue Sales Invoice, 8 expected Payment Requests, and no pending email queue rows.
+- `unpaid_invoice_review.py` reports 1 overdue-review candidate and creates draft-only reminder/statement candidate data without sending or mutating records.
 
 ## Connected Launch Spine
 
@@ -57,6 +58,7 @@ These are currently classified as existing and connected:
 - branded Sales Invoice print output
 - outbound document registry and source templates
 - read-only paperwork status checkup
+- draft-only unpaid/overdue invoice review candidates
 - scheduled daily business automation checkup
 - Accountant Home workspace parity
 
@@ -71,7 +73,7 @@ These should not be described as operational yet:
 
 ## Missing But Should Connect
 
-- Unpaid/overdue invoice review surface: this should turn `paperwork_status.py` output into a review queue and draft reminder/statement candidates. It must not send reminders or submit accounting records.
+No currently indexed useful surface is missing. Future useful surfaces should be added here deliberately instead of buried in handoff prose.
 
 ## Loud Failure Contract
 
@@ -105,6 +107,7 @@ Core automation map:
 python scripts/verify/business_automation_index.py --report output/business-automation-index.json
 python scripts/verify/stripe_amount_parity_contract.py
 python scripts/verify/paperwork_status.py --report output/paperwork-status.json
+python scripts/verify/unpaid_invoice_review.py --report output/unpaid-invoice-review.json
 ```
 
 Launch money path:
@@ -131,6 +134,7 @@ Paperwork and finance visibility:
 python scripts/verify/customer_documents_contract.py
 python scripts/verify/invoice_branding_contract.py
 python scripts/verify/outbound_documents_contract.py
+python scripts/verify/unpaid_invoice_review.py --report output/unpaid-invoice-review.json
 python scripts/verify/finance_workspace_parity.py
 python scripts/verify/backend_workspace_parity.py
 ```
@@ -145,10 +149,10 @@ Expected current result: fail until live Stripe/site configuration is set.
 
 ## Next Safe Slice
 
-Build the unpaid/overdue invoice review surface:
+Build a reviewed UX around the unpaid/overdue invoice candidates:
 
-- read from `paperwork_status.py`
-- show invoices needing attention
-- create draft reminder or statement candidates from the outbound document registry
-- require review before any customer-facing send
-- add a verifier that proves no reminders or accounting mutations happen without approval
+- keep `unpaid_invoice_review.py` as the read-only source
+- let Jeff/accounting review invoice status, recipient, cadence, and copy
+- render drafts from `payment_reminder_draft` and `statement_of_account`
+- keep the first version draft-only with no customer send
+- add a verifier that proves no reminders or accounting mutations happen without explicit approval

@@ -8,13 +8,27 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-06 - Unpaid invoice review is a draft surface, not collections automation
+
+**Decision:** Unpaid and overdue invoices can now generate review candidates, but the surface is draft-only. It may show invoice status, balance, recipient/cadence review fields, and suggested `payment_reminder_draft` / `statement_of_account` documents. It must not send customer reminders, create Communications, queue emails, submit/cancel accounting records, or modify Sales Invoices, Payment Requests, Payment Entries, or Journal Entries.
+
+**Reasoning:** The next useful paperwork step is visibility for Jeff/accounting, not collections automation. Sending a reminder to the wrong corporate AP contact or from stale invoice data is a relationship risk. Draft candidates reduce cognitive load while preserving human judgment.
+
+**Implementation:** Added `locally_twisted.paperwork.unpaid_invoice_review.run`, `scripts/verify/unpaid_invoice_review.py`, business automation index wiring, and docs. Tightened `statement_of_account.md` so it explicitly includes `human_approval` in `do_not_send_without`.
+
+**Verification receipt:** `python scripts/verify/unpaid_invoice_review.py --report output/unpaid-invoice-review.json` passed with 1 overdue-review candidate for `ACC-SINV-2026-00001`. The report marks `read_only: true`, `send_allowed: false`, `mutation_allowed: false`, and shows unchanged guard counts for Email Queue, Communication, Sales Invoice, Payment Request, Payment Entry, and Journal Entry. `python scripts/verify/business_automation_index.py --report output/business-automation-index.json` passed with 13 connected surfaces and 0 useful future surfaces missing.
+
+**Decided by:** Codex advanced the documented next safe paperwork slice under GL's no-silent-failure and no-unapproved-sending constraints.
+
+---
+
 ## 2026-05-06 - Business automation must be indexed and scheduled before Frappe Cloud trust
 
 **Decision:** LT's backend automation is now governed by a code-owned automation index, not by prose handoff memory. The index classifies every important intake, CRM, checkout, payment, paperwork, finance, and checkup surface as `exists_and_connected`, `exists_but_not_connected`, `missing_needs_connection`, or `missing_should_connect`. Launch-required breakage must fail the verifier loudly, and the daily Frappe scheduler runs the checkup so failures can become visible backend attention.
 
 **Reasoning:** GL explicitly called out that silent failures kill business relationships and reputation. The LT system is becoming an all-in-one business-management platform, so it needs a repeatable map of cascading information before moving to Frappe Cloud. A template, DocType, or native ERPNext feature is not operational just because it exists.
 
-**Implementation:** Added `locally_twisted.verify.business_automation_index`, host wrapper `scripts/verify/business_automation_index.py`, workstream `workstreams/business-automation-index.md`, project capability `erpnext-business-automation-index`, and a daily scheduler hook for `locally_twisted.verify.business_automation_index.scheduled_checkup`. The current report indexes 17 surfaces: 12 connected, 4 exists-but-not-connected, 0 launch-required missing, 1 useful future surface missing, and 0 loud-failure gaps.
+**Implementation:** Added `locally_twisted.verify.business_automation_index`, host wrapper `scripts/verify/business_automation_index.py`, workstream `workstreams/business-automation-index.md`, project capability `erpnext-business-automation-index`, and a daily scheduler hook for `locally_twisted.verify.business_automation_index.scheduled_checkup`. After the unpaid invoice review slice, the current report indexes 17 surfaces: 13 connected, 4 exists-but-not-connected, 0 launch-required missing, 0 useful future surfaces missing, and 0 loud-failure gaps.
 
 **Verification receipt:** `python scripts/verify/business_automation_index.py --report output/business-automation-index.json` passed. Frappe's hook registry showed the daily scheduled checkup. The final closeout suite also verified contact intake, payment/webhook readiness, checkout conversion, payment cascade, CRM cascade, paperwork status, outbound documents, and invoice branding.
 
