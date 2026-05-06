@@ -28,6 +28,7 @@ Run the layout-fit gate from the project root: `npm run test:layout-fit`.
 | `sync_stage_cascade.py` | Runs the in-app `locally_twisted.seed.sync_stage_cascade.execute` sync so Task has the Lead/stage fields required by safe CRM stage cascades. `sync_crm_pipeline.py` also runs this sync. | After changing CRM stage-to-Task cascade fields |
 | `sync_backend_workspaces.py` | Runs the in-app `locally_twisted.seed.sync_backend_workspaces.execute` sync so simplified Owner, Manager, and Employee workspaces use current business labels, the Sales Order booking calendar, and the Owner Home command-center cards/chart/checklist. | After changing simplified backend workspaces, role profiles, number cards, charts, or calendar shortcuts |
 | `sync_variant_media.py` | Stages Odoo product images and applies conservative variant image mappings. | After reviewing or refreshing catalog media mappings |
+| `sync_category_media.py` | Writes an approval template from category candidates, then stages and dry-runs or applies approved Item Group image selections through Frappe. `--apply` refuses unapproved selections. | After Jeff/GL approve category browse images |
 
 ## dev/
 
@@ -66,7 +67,8 @@ Run the layout-fit gate from the project root: `npm run test:layout-fit`.
 | `backend_schema_inventory_contract.py` | Unit contract for `backend_schema_inventory.py` helper logic. | After editing the backend inventory classifier or stale-term scanner |
 | `backend_workspace_parity.py` | Verifies simplified backend workspaces no longer show stale ERPNext labels, booking calendars point at Sales Orders by delivery date, and Owner Home includes the command-center number cards/chart/checklist. | After editing workspaces, role profiles, number cards, charts, or Desk calendar behavior |
 | `customer_documents_contract.py` | Verifies policy lane anchors and code-owned customer email policy blocks without creating ERPNext setup records. | After editing customer emails, receipts, checkout notices, or policy pages |
-| `smoke_forms.py` | Browser smoke test for public forms. Use `--form-path /contact --skip-newsletter` for the current canonical inquiry form; set `LT_ADMIN_PASSWORD` when backend Lead/Communication verification is required. | Before claiming form submissions work end-to-end |
+| `smoke_forms.py` | Browser smoke test for public forms. Use `--form-path /contact --skip-newsletter` for the current canonical inquiry form. Local localhost runs verify the Lead through the Docker/Frappe bench container and delete the generated smoke Lead plus linked LT cascade Task; non-local authenticated runs can use `LT_ADMIN_PASSWORD`. | Before claiming form submissions work end-to-end |
+| `category_media_candidates.py` | Builds a no-mutation JSON/Markdown approval packet for empty customer-facing Item Group images from existing Odoo product-source and portfolio-proof media. Outputs to ignored `output/category-media-candidates.*`. | When preparing category browse imagery for Jeff/GL review before assigning live Item Group images |
 | `playwright_home_screenshot.py` | Real-Chromium full-page screenshot capture at desktop + mobile viewports + DOM facts dump. | Before declaring a visible change done |
 
 ## Standing Rules

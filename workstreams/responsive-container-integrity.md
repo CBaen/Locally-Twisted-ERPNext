@@ -1,6 +1,6 @@
 # Responsive Container Integrity Workstream
 
-Last updated: 2026-05-05 by Codex.
+Last updated: 2026-05-06 by Codex after the portfolio proof-reel state check replaced the old modal check.
 
 ## Status
 
@@ -18,7 +18,7 @@ GL identified a systemic failure: the site could pass narrow checks while still 
 
 - `scripts/verify/layout_helpers.js` centralizes route lists, viewport families, page-settle behavior, and overflow/text-fit audits.
 - `scripts/verify/layout_fit.spec.js` runs passive layout checks across 20 public routes and 13 viewport families.
-- `scripts/verify/interactive_layout.spec.js` checks stateful UI across header breakpoints, desktop mega panels, mobile drawer accordions, shop filters/product selectors, contact expanded conditionals, portfolio modal, and reduced-motion homepage behavior.
+- `scripts/verify/interactive_layout.spec.js` checks stateful UI across header breakpoints, desktop mega panels, mobile drawer accordions, shop filters/product selectors, contact expanded conditionals, portfolio front-photo state, and reduced-motion homepage behavior.
 - `package.json` exposes:
   - `npm run test:layout-fit`
   - `npm run test:interactive-layout`
@@ -51,7 +51,7 @@ The standing viewport families are:
 - Fixed the 992-1199 header breakpoint mismatch by making the desktop/mobile CSS and JS agree on 1200px.
 - Kept desktop mega panels inside the header/container instead of anchoring narrow product panels to individual nav item widths.
 - Fixed reduced-motion homepage carousel/review behavior so tracks do not animate or force overflow when reduced motion is requested.
-- Raised the portfolio modal close target to 44px.
+- Added the portfolio state check; 2026-05-06 follow-up now checks the current proof-reel front-photo behavior instead of the superseded modal behavior.
 - Reconciled `smoke_shop.py` with the commerce lane. 2026-05-06 correction: fixed-price products must not invent product-level quote gates; out-of-area delivery ZIP owns the quote fallback, while retail products such as `unicorn-bouquet` still verify inline variant controls and cart writes.
 
 ## Verification Receipts
@@ -62,7 +62,7 @@ The standing viewport families are:
 - `python -B -m py_compile scripts\verify\smoke_shop.py` passed.
 - `python scripts/verify/commerce_rules_contract.py` passed.
 - `python scripts/verify/smoke_shop.py` passed.
-- `npm run test:interactive-layout` passed 39/39.
+- `npm run test:interactive-layout` passed 42/42 after the portfolio proof-reel update.
 - `npm run test:layout-fit` passed 260/260.
 - `npm run test:checkout-experience` passed 1/1.
 - `npm run test:public-verify` passed with quieter Playwright output.

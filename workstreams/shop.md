@@ -10,11 +10,11 @@ This is the active feature-lane handoff for shop work. `HANDOFF.md` remains vali
 
 ## Current Stage
 
-Active handoff lane. The guest cart/checkout item-code contract, broad browse routing, first variant-media reconciliation pass, and per-product variant correctness diff were completed on 2026-05-02. The 2026-05-06 commerce-rules checkout slice now has its own lane at `workstreams/commerce-rules-checkout.md`; keep shop layout/media work coordinated with that checkout contract. The next shop work should continue with remaining media review before broad layout overhaul.
+Active handoff lane. The guest cart/checkout item-code contract, broad browse routing, first variant-media reconciliation pass, per-product variant correctness diff, and category-media candidate packet are in place. The 2026-05-06 commerce-rules checkout slice now has its own lane at `workstreams/commerce-rules-checkout.md`; keep shop layout/media work coordinated with that checkout contract. The next shop work should continue with Jeff/GL media approval before broad layout overhaul.
 
 Priority order from the current queue:
 
-1. Review skipped/unmatched catalog media and category browse imagery.
+1. Review skipped/unmatched catalog media and approve category browse imagery from `output/category-media-candidates.md` after regenerating it.
 2. Webshop layout overhaul for `/shop`, product group pages, and product detail pages.
 3. Remaining configure-option UX fixes where they affect customer purchase flow.
 
@@ -100,7 +100,8 @@ Reference and verification files:
 - `/shop` cards for variant templates link to "Choose options" instead of adding an unpriced template code. Single-SKU cards add directly when priced.
 - `smoke_shop.py` now verifies fixed-price product pages do not invent product-level quote gates and still proves a real retail option-selection add-to-cart flow for `unicorn-bouquet`. `cart_checkout_contract.py` verifies the shared API/checkout contract.
 - Variant media first pass completed 2026-05-02: 1,712 variant `Item.image` values are set from `_resources/odoo-live/images/` where Odoo image labels clearly matched product options. Product pages call `locally_twisted.api.variant_media.get_variant_media` after exact option selection and swap the main image when a variant image exists.
-- Detailed media review is now reproducible with `python scripts/setup/sync_variant_media.py --dry-run --include-details --report output/catalog-media-review.json`. Latest report: 49 products checked, 35 with candidate image labels, 45 needing review, 1,712 unchanged mapped variants, and 6,831 skipped variant image assignments.
+- Detailed media review is now reproducible with `python scripts/setup/sync_variant_media.py --dry-run --include-details --report output/catalog-media-review.json`. Latest refreshed report on 2026-05-06: 49 products checked, 35 with candidate image labels, 45 needing review, 1,712 unchanged mapped variants, and 6,831 skipped variant image assignments.
+- Category browse media review is now reproducible with `python scripts/verify/category_media_candidates.py`. Latest generated packet on 2026-05-06 found first-pass product-source quick picks for all 11 empty customer-facing Item Groups and wrote ignored local reports to `output/category-media-candidates.json` and `output/category-media-candidates.md`. `python scripts/setup/sync_category_media.py --write-template` creates an approval template, and the dry-run helper stages approved selections through Frappe without writing unless `--apply` is used. No ERPNext image fields were changed.
 - Product breadcrumbs on detail pages now start at `All Balloon Decor` instead of the retired `Shop by Category` route.
 - Per-product variant correctness passed on 2026-05-02: `scripts/verify/catalog_variant_contract.py` checked all 53 catalog products, comparing normalized Odoo `valid_variants` to live ERPNext `Item Variant Attribute` rows. Result: 10,578 expected variants, 10,578 live variants, 4 single-SKU products, PASS.
 - Product option UX P0 pass completed 2026-05-02: no per-attribute Jinja DB lookup, progressive invalid-option disabling wired to `valid_options_for_attributes`, and chip inputs verified as radio/single-select.
@@ -111,7 +112,7 @@ Reference and verification files:
 
 ## Active Risks
 
-- Category browse media is still incomplete because all 11 customer-facing child Item Groups under `Shop Items` have `image = null`; do not restore the retired `/shop-by-category` card index as a shortcut.
+- Category browse media is still unassigned in ERPNext. Rechecked live DB on 2026-05-06 after the sync-helper safety test: all 11 customer-facing child Item Groups under `Shop Items` have `image = null` (`Arches`, `Columns`, `Bouquets`, `Get-Well Bouquets`, `Garlands`, `Drops`, `Grab & Go`, `Table Decor`, `Stands & Easels`, `Deliveries`, `Seasonal & Specialty`). `scripts/verify/category_media_candidates.py` now creates a no-mutation approval packet, but Jeff/GL still need to approve selected images before live assignment. Do not restore the retired `/shop-by-category` card index as a shortcut.
 - Catalog media remains incomplete where the Odoo image labels were too generic to map safely. Do not assign skipped images by guess; review them with GL/Jeff or add explicit mapping rules.
 
 ## Dependencies And Collision Points
@@ -148,6 +149,9 @@ After route, template, CSS, or JS edits:
 - `python scripts/verify/variant_media_contract.py`
 - `python scripts/verify/catalog_variant_contract.py`
 - `python scripts/setup/sync_variant_media.py --dry-run --include-details --report output/catalog-media-review.json`
+- `python scripts/verify/category_media_candidates.py`
+- `python scripts/setup/sync_category_media.py --write-template`
+- `python scripts/setup/sync_category_media.py --selection output/category-media-selection.template.json`
 - `python scripts/verify/nav_ia.py`
 - `npm run test:layout-fit`
 

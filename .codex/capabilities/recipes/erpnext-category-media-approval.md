@@ -1,0 +1,91 @@
+---
+id: erpnext-category-media-approval
+name: ERPNext Category Media Approval
+schema_version: 2.0
+level: recipe
+maturity: candidate
+scope: Locally Twisted ERPNext/Frappe Item Group category image selection and assignment
+currently_true: unknown
+verification_level: 2
+last_verified: 2026-05-06
+evidence_quality: direct
+successful_uses: 1
+failed_uses: 0
+regressions: 0
+depends_on:
+  - frappe-public-container-contract
+used_by: []
+tags:
+  - Locally Twisted
+  - ERPNext
+  - Frappe
+  - category media
+  - approval gate
+---
+
+# ERPNext Category Media Approval
+
+Use this recipe when selecting representative images for customer-facing Item
+Groups under `Shop Items`.
+
+## Contract
+
+Category browse images are not product truth. They are visual wayfinding, so do
+not assign them by agent judgment alone.
+
+The safe pattern is:
+
+1. Generate a no-mutation candidate packet from existing approved source pools.
+2. Review quick picks with GL/Jeff.
+3. Mark only explicit approvals in the selection template.
+4. Dry-run the Frappe-backed update path.
+5. Apply only approved rows.
+6. Recheck the live DB before claiming Item Group images changed.
+
+## Source Pools
+
+Current candidate inputs are:
+
+- `_resources/odoo-live/slug_to_group.json`
+- `_resources/odoo-live/catalog.json`
+- `_resources/odoo-live/images/`
+- `apps/locally_twisted/locally_twisted/www/portfolio.py`
+- `apps/locally_twisted/locally_twisted/public/images/portfolio/optimized/`
+
+Product-source images are safer for exact shop category representation.
+Portfolio-proof images can be stronger visually, but use them only when the
+category surface should show installed proof rather than a literal product photo.
+
+## Commands
+
+```powershell
+python scripts/verify/category_media_candidates.py
+python -m json.tool output/category-media-candidates.json
+python scripts/setup/sync_category_media.py --write-template
+python scripts/setup/sync_category_media.py --selection output/category-media-selection.template.json
+```
+
+After GL/Jeff approval, copy or edit the template into an approved selection
+file and set `approved: true` only on approved rows:
+
+```powershell
+python scripts/setup/sync_category_media.py --selection output/category-media-selection.approved.json --apply
+```
+
+## Guardrails
+
+- Never revive `/shop-by-category` as a shortcut for missing Item Group media.
+- Never bulk-assign category images from generic gallery photos without approval.
+- Keep generated reports and selection files under ignored `output/` unless GL
+  explicitly wants a reviewed packet committed.
+- `--apply` is not approval. The selection JSON is the approval record.
+- Recheck the live DB after apply because Frappe file attachment and Item Group
+  image state are separate records.
+
+## LT Receipt
+
+On 2026-05-06, the live DB still had empty `image` fields for all 11 direct
+customer-facing Item Groups under `Shop Items`. `scripts/verify/category_media_candidates.py`
+generated quick picks for all 11 categories without changing ERPNext data.
+`scripts/setup/sync_category_media.py` wrote a selection template, dry-ran 11
+would-update rows, and an unapproved apply safety check made 0 live updates.

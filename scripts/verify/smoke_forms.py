@@ -18,7 +18,10 @@ Contains two independent smoke tests:
 Self-contained: no imports outside the standard library + playwright.
 """
 import argparse
+import base64
 import json
+import os
+import subprocess
 import sys
 import time
 import urllib.error
@@ -57,10 +60,17 @@ def verify_record_in_backend_frappe(test_marker: str, base_url: str) -> bool:
 
     admin_password = os.environ.get("LT_ADMIN_PASSWORD", "")
     if not admin_password:
-        print(f"       backend verification SKIPPED — set LT_ADMIN_PASSWORD env var to enable")
-        # Return True so the smoke doesn't fail when the success modal
-        # rendered but admin creds weren't available. Modal-visibility +
-        # 2xx response from the server is strong evidence the Lead landed.
+        records = _get_list_via_local_bench(
+            "Lead",
+            [["first_name", "=", test_marker]],
+            ["name", "first_name"],
+            base_url,
+        )
+        if records is not None:
+            return len(records) > 0
+        print("       backend verification SKIPPED - set LT_ADMIN_PASSWORD or run against local Docker stack")
+        # Return True so the smoke doesn't fail when the success modal rendered
+        # but an authenticated/local backend check is not available.
         return True
 
     filters = json.dumps([["first_name", "=", test_marker]])
@@ -87,6 +97,102 @@ def verify_record_in_backend_frappe(test_marker: str, base_url: str) -> bool:
         return False
 
 VERIFY_BACKEND = verify_record_in_backend_frappe   # swap for other stacks
+
+
+def cleanup_record_in_backend_frappe(test_marker: str, base_url: str) -> bool | None:
+    """Delete smoke Leads and linked LT cascade Tasks for this exact marker."""
+    leads = _get_list_via_local_bench(
+        "Lead",
+        [["first_name", "=", test_marker]],
+        ["name", "first_name"],
+        base_url,
+    )
+    if leads is None:
+        return None
+
+    ok = True
+    for lead in leads:
+        lead_name = lead.get("name")
+        if not lead_name:
+            continue
+        tasks = _get_list_via_local_bench(
+            "Task",
+            [["custom_lt_lead", "=", lead_name]],
+            ["name"],
+            base_url,
+        )
+        if tasks is None:
+            ok = False
+            continue
+        for task in tasks:
+            task_name = task.get("name")
+            if task_name:
+                ok = _delete_doc_via_local_bench("Task", task_name, base_url) and ok
+        ok = _delete_doc_via_local_bench("Lead", lead_name, base_url) and ok
+    return ok
+
+
+def _get_list_via_local_bench(doctype: str, filters: list, fields: list[str], base_url: str) -> list[dict] | None:
+    if not _is_local_base_url(base_url):
+        return None
+    kwargs = {
+        "doctype": doctype,
+        "filters": filters,
+        "fields": fields,
+        "limit_page_length": 100,
+    }
+    output = _bench_execute("frappe.client.get_list", kwargs)
+    if output is None:
+        return None
+    try:
+        return json.loads(output) if output else []
+    except json.JSONDecodeError:
+        print(f"       local bench returned non-JSON for {doctype}: {output[:200]}")
+        return None
+
+
+def _delete_doc_via_local_bench(doctype: str, name: str, base_url: str) -> bool:
+    if not _is_local_base_url(base_url):
+        return False
+    return _bench_execute("frappe.client.delete", {"doctype": doctype, "name": name}) is not None
+
+
+def _bench_execute(method: str, kwargs: dict) -> str | None:
+    container = os.environ.get("LT_FRAPPE_BACKEND_CONTAINER", "locally-twisted-erpnext-v15-backend-1")
+    site = os.environ.get("LT_FRAPPE_SITE", "frontend")
+    command = [
+        "docker",
+        "exec",
+        container,
+        "bench",
+        "--site",
+        site,
+        "execute",
+        method,
+        "--kwargs",
+        json.dumps(kwargs),
+    ]
+    try:
+        result = subprocess.run(
+            command,
+            check=False,
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+    except (OSError, subprocess.SubprocessError) as exc:
+        print(f"       local bench unavailable: {exc}")
+        return None
+    if result.returncode != 0:
+        print(f"       local bench command failed: {result.stderr.strip()[:300]}")
+        return None
+    return result.stdout.strip()
+
+
+def _is_local_base_url(base_url: str) -> bool:
+    host = urllib.parse.urlparse(base_url).hostname
+    return host in {"localhost", "127.0.0.1", "::1"}
+
 
 # =============================================================================
 # Smoke test
@@ -201,8 +307,13 @@ def smoke_test(base_url: str, form_path: str, shape_only: bool = False) -> int:
     print(f"        BACKEND VERIFIED — record exists")
 
     # Step 8: cleanup (best-effort; failure here is a warning not a fail)
-    # Implement record deletion via API if possible.
-    print(f"        TODO: delete test record '{test_marker}' from backend")
+    cleanup = cleanup_record_in_backend_frappe(test_marker, base_url)
+    if cleanup is True:
+        print(f"        CLEANUP OK — test Lead and linked smoke Tasks deleted")
+    elif cleanup is False:
+        print(f"        WARN — cleanup failed for test marker '{test_marker}'")
+    else:
+        print(f"        CLEANUP SKIPPED — no authenticated/local backend cleanup path available")
     print(f"        SMOKE TEST PASS")
     return 0
 

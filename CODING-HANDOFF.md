@@ -1,6 +1,6 @@
 # Locally Twisted - Coding Handoff
 
-Last updated: 2026-05-06 by Codex after the website launch reset, portfolio proof-gallery reel, Event Playground handoff to OpenClaw, checkout commerce-rule reconciliation, header color repair, responsive/public verification, and prior responsive container audit gate.
+Last updated: 2026-05-06 by Codex after the website launch reset, portfolio proof-gallery reel, Event Playground handoff to OpenClaw, checkout commerce-rule reconciliation, header color repair, category-media candidate packet, responsive/public verification, and prior responsive container audit gate.
 
 ## State Of Reality
 
@@ -60,7 +60,7 @@ Verified or updated during the 2026-05-01 storefront correction and contact clea
 - `/event-playground` is now a hidden internal-preview route for the first PlayCanvas decor planner, but GL has moved the next PlayCanvas/Event Playground pass to OpenClaw. Keep it out of the ASAP website launch lane unless GL explicitly reopens it here. The PlayCanvas/Vite game source lives under `research/design-studio-v2/event-builder-spike/`; the Frappe route shell is `www/event_playground.html`/`.py`; and the route wraps the local Vite preview at `127.0.0.1:4306` in an iframe. Submit Inquiry hands the design to `/contact?intent=quote&source=event-playground` through `postMessage` + `sessionStorage` and pre-fills the existing contact form. There is no public nav entry, committed production bundle, DocType, backend save API, automatic Lead/Quote/Sales Order creation, pricing, checkout, CAD, room scanning, or full organic/twisting physics in this slice.
 - Product listing cards can display `lt_brand_description` through the local Webshop API wrapper in `locally_twisted.api.product_listing`.
 - Variant media first pass completed 2026-05-02. ERPNext now has 1,712 variant `Item.image` values mapped from `_resources/odoo-live/images/` where Odoo image labels clearly matched product options. Product detail pages call `locally_twisted.api.variant_media.get_variant_media` after exact option selection and swap the main image when a variant image exists. Cart/checkout use the variant image when present and fall back to the parent Website Item image otherwise. The review command `python scripts/setup/sync_variant_media.py --dry-run --include-details --report output/catalog-media-review.json` currently reports 49 products checked, 35 with candidate image labels, 45 needing review, 1,712 unchanged mapped variants, and 6,831 skipped variant image assignments.
-- Category browse media is still empty in ERPNext: all 11 customer-facing child Item Groups under `Shop Items` have `image = null` as of the 2026-05-02 DB check. Do not revive `/shop-by-category`; choose representative category media for `/shop-items/<group>` or future menu treatment.
+- Category browse media is still empty in ERPNext: all 11 customer-facing child Item Groups under `Shop Items` have `image = null` as of the 2026-05-06 DB recheck. `python scripts/verify/category_media_candidates.py` now creates a no-mutation approval packet from existing product-source and portfolio-proof media, with quick picks for all 11 categories in ignored local `output/category-media-candidates.md`. `scripts/setup/sync_category_media.py` creates the approval template and dry-runs the Frappe-backed Item Group image update path; `--apply` only writes rows marked `approved: true`. Do not revive `/shop-by-category`; choose representative category media for `/shop-items/<group>` or future menu treatment only after Jeff/GL approval.
 - Product detail breadcrumbs now use `All Balloon Decor > category > product`; the retired `Shop by Category` label/link is blocked by `scripts/verify/smoke_shop.py`.
 - Civic Celebration is now the V1 visual direction across the public site. See `_resources/STYLE-GUIDE.md`, `workstreams/brand-audience-style-reset.md`, and `workstreams/civic-sitewide-redesign.md`. The pass covers shared header/footer/theme CSS, homepage, contact/book form, BTFP, portfolio, FAQ, policies, accessibility, thank-you/payment success, shop, category pages, product detail, cart, and checkout. The generated Wasatch/city hero asset is `apps/locally_twisted/locally_twisted/public/images/home/hero-wasatch-city-20260503.png`.
 - Homepage review cards crawl left-to-right slowly as a horizontal proof line. The normal animation is `lt-reviews-scroll` at `540s`; reduced-motion mode disables animation but keeps the cards in a horizontal scroll row instead of stacking.
@@ -110,12 +110,12 @@ Next safest slices:
 - Send `_resources/policies/legal-accounting-review-packet-2026-05-06.md` to Jeff/legal/accounting before treating the public policy set as final.
 - Wire the Stripe Dashboard privacy/terms URLs to `/privacy` and `/terms-of-service` after GL/legal approval.
 - Finish payment live-mode configuration and run `python scripts/verify/payment_launch_readiness.py --mode live` before any real cutover claim.
-- Review skipped/unmatched catalog media with GL/Jeff: the automated pass only mapped photos whose Odoo labels clearly matched product options. Refresh `output/catalog-media-review.json` with the detailed dry-run command before assigning anything. Do not assign generic gallery images by guess.
+- Review skipped/unmatched catalog media with GL/Jeff: the automated pass only mapped photos whose Odoo labels clearly matched product options. Refresh `output/catalog-media-review.json` with the detailed dry-run command before assigning anything. Regenerate `output/category-media-candidates.md` for the 11 category quick picks before the approval conversation. Do not assign generic gallery images by guess.
 - Keep product navigation product-backed: use `scripts/verify/nav_ia.py` before touching header/footer IA.
 - Continue brand review from `workstreams/brand-style-guide-consolidation.md`. The emergency menu/container/product repair is verified; remaining visual work is GL/Jeff review of photos, proof hierarchy, exact review/trust counts, and category/product imagery.
 - Keep the responsive container gate green for any new public UI. Add route-specific interactive checks when a change introduces a new drawer, modal, accordion, filter, product control, or breakpoint state.
 - Review the new `/portfolio` proof reel with GL/Jeff/designer for photo order, photo quality, and whether any images should be removed before launch. Use the production files listed in `workstreams/portfolio-proof-gallery.md` for critique. Keep the raw generated/reference folder only while critique is active; do not delete or commit it without GL approval. Restart/clear cache after controller edits and run `npm run test:portfolio-reel`.
-- Reconcile product/category media without reviving the retired `/shop-by-category` card index; use `/shop` and `/shop-items/<group>` as the customer-facing browse surfaces.
+- Reconcile product/category media without reviving the retired `/shop-by-category` card index; use `/shop` and `/shop-items/<group>` as the customer-facing browse surfaces. The next implementation after approval should mark explicit selections approved and run `scripts/setup/sync_category_media.py --apply`, not a judgment-based bulk assignment.
 - Complete the blog channel and two ported posts.
 - Leave Event Playground with OpenClaw unless GL explicitly reassigns it back into this repo lane. Do not make it a launch blocker for the public website.
 
@@ -176,6 +176,15 @@ Variant media sync from the captured Odoo image files:
 python scripts/setup/sync_variant_media.py --dry-run
 python scripts/setup/sync_variant_media.py --dry-run --include-details --report output/catalog-media-review.json
 python scripts/setup/sync_variant_media.py
+```
+
+Category media candidate packet:
+
+```powershell
+python scripts/verify/category_media_candidates.py
+python -m json.tool output/category-media-candidates.json
+python scripts/setup/sync_category_media.py --write-template
+python scripts/setup/sync_category_media.py --selection output/category-media-selection.template.json
 ```
 
 Public layout and interaction regression checks:

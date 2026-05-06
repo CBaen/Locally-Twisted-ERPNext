@@ -92,7 +92,7 @@ The homepage review marquee was checked in Playwright and the computed CSS said 
 
 ## 2026-05-05 - Container stability fails at breakpoint edges and open states
 
-The site looked acceptable in some default screenshots while real containers were still at risk: nav between legacy and active desktop breakpoints, mobile drawer accordions, product selectors, contact conditionals, portfolio modal state, and text sitting too close to panels. A 320/375/1366 check alone was not enough for the design requirement GL was reacting to.
+The site looked acceptable in some default screenshots while real containers were still at risk: nav between legacy and active desktop breakpoints, mobile drawer accordions, product selectors, contact conditionals, portfolio state, and text sitting too close to panels. A 320/375/1366 check alone was not enough for the design requirement GL was reacting to.
 
 **Counter-move:** treat every public container as unsafe until checked across breakpoint edges and stateful UI. The LT gate now uses `scripts/verify/layout_helpers.js`, expands `npm run test:layout-fit` to 260 passive route/viewport checks, adds `npm run test:interactive-layout` for 39 open-state checks, keeps checkout preview behavior under `npm run test:checkout-experience`, and exposes `npm run test:public-verify` for broad closeout. New containers need either coverage in those specs or a deliberate reason they are out of scope.
 

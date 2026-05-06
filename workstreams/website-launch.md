@@ -18,6 +18,18 @@ Known collision: another agent is auditing the form. Do not make contact/form sc
 
 Live menu/content coordination now lives in `workstreams/menu-content-coordination.md`. Agents touching menu, header, footer, public page content, or nav/content verifiers must update that file before editing so overlapping sessions do not overwrite each other.
 
+2026-05-06 status reset after Event Playground handoff:
+
+- Event Playground / PlayCanvas is no longer part of the immediate website launch path; OpenClaw is taking over that project. Keep `/event-playground` out of public launch decisions unless GL explicitly brings it back.
+- Use `workstreams/website-launch.md` as the ASAP website launch lane.
+- Website-specific launch gates verified on 2026-05-06: route sweep for `/`, `/contact`, policy pages, `/portfolio`, `/shop`, `/cart`, and `/checkout` returned 200; `/book` returned a 301 to `/contact?intent=quick`; `test:nav-ia` passed; `test:layout-fit` passed 260/260 after a portfolio mobile title fit patch; `test:interactive-layout` passed 42/42; `test:checkout-experience` passed 2/2; `test:portfolio-reel` passed 3/3; `test:shop-smoke` passed; contact prefill, service logic, and smoke form checks passed.
+- Payment posture: `payment_launch_readiness.py --mode local` passes in Stripe test mode. `--mode live` fails as expected because live Stripe keys, explicit live site config, payment method configuration, operator email config, and production host name are not in place.
+- `npm run test:website-verify` is the website-only closeout gate. `npm run test:public-verify` now aliases to the same website-only gate. Event Playground remains separately available through `npm run test:event-playground` for the OpenClaw lane.
+- Current worktree is not clean because other shop/media and reference artifacts may still be local. The production portfolio proof-reel slice is committed and pushed; raw portfolio reference folders remain untracked only for active designer critique. Do not treat those raw folders as production source or launch evidence.
+- `scripts/verify/smoke_forms.py` now verifies localhost `/contact` submissions through the local Docker/Frappe bench container and cleans up the generated smoke Lead plus linked LT cascade Task. Latest run on 2026-05-06 created marker `SMOKE-TEST-1778073366`, verified it, and reported cleanup OK.
+- `scripts/verify/category_media_candidates.py` now generates a no-mutation approval packet for the 11 empty customer-facing category images. Latest run on 2026-05-06 wrote ignored local reports to `output/category-media-candidates.json` and `output/category-media-candidates.md`; the quick picks are ready for Jeff/GL approval before any live assignment.
+- `scripts/setup/sync_category_media.py` now handles the post-approval path: write a selection template, dry-run Frappe Item Group image updates, and apply only rows marked `approved: true`. Safety proof on 2026-05-06: dry-run found 11 would-update rows; `--apply` with the unapproved template returned `not_approved: 11` and made 0 updates; live DB recheck still showed all 11 images as `null`.
+
 Latest verified controller baseline:
 
 - Docker stack is running at `http://localhost:8081`.
@@ -32,8 +44,8 @@ Latest verified controller baseline:
 - `python scripts/verify/catalog_variant_contract.py` passed: 53 products checked, 10,578 expected variants, 10,578 live variants, 4 single-SKU products.
 - Current commerce rules no longer make product group the quote gate. Fixed-price products stay cartable; out-of-area delivery ZIPs redirect to a prefilled `/contact` quote path instead of Stripe. Current smoke coverage verifies product pages do not invent product-level quote gates and retail `unicorn-bouquet` option selection writes a selected variant into `LT_CART`.
 - ERPNext now has 1,712 variant `Item.image` mappings from `_resources/odoo-live/images/` where Odoo image labels clearly matched product options; product detail pages swap to selected variant media when present.
-- Detailed media review can be refreshed with `python scripts/setup/sync_variant_media.py --dry-run --include-details --report output/catalog-media-review.json`; latest report checked 49 products, flagged 45 for review, and skipped 6,831 unsafe-to-infer image assignments.
-- Category browse imagery is not ready yet: all 11 customer-facing child Item Groups under `Shop Items` have empty image fields.
+- Detailed media review was refreshed on 2026-05-06 with `python scripts/setup/sync_variant_media.py --dry-run --include-details --report output/catalog-media-review.json`; latest report checked 49 products, flagged 45 for review, left 1,712 variant images unchanged, and skipped 6,831 unsafe-to-infer image assignments.
+- Category browse imagery is not assigned yet: live DB recheck on 2026-05-06 found all 11 customer-facing child Item Groups under `Shop Items` still have empty image fields. The no-mutation category candidate packet now has first-pass product-source quick picks for all 11 categories, and the post-approval sync helper is dry-run-first.
 - Product option UX P0 pass completed 2026-05-02 and was reconciled with quote/retail lane rules on 2026-05-05: no per-attribute Jinja DB lookup, progressive invalid-option disabling is verified on a retail variant, and variant chips are radio/single-select where the product is checkout-enabled.
 - Desktop/mobile launch screenshot baseline captured under `output/playwright/launch-baseline-20260502/`.
 - Historical browser console baseline after the Webshop generated asset-map correction passed across `/`, `/shop`, `/shop-items/arches`, `/shop-items/arches/classic-arch`, `/cart`, `/checkout?item=6-color-rainbow-arch-20F&qty=1`, `/privacy`, `/refund-policy`, and `/accessibility`: all routes returned 200 with 0 console errors and 0 warnings. Current commerce behavior is governed by the 2026-05-06 delivery-zone decision: fixed-price product groups are not quote gates, and out-of-area delivery redirects to `/contact`. Report: `output/playwright/launch-baseline-20260502/console-report-after-asset-map-fix.json`.
@@ -137,10 +149,10 @@ Primary coordination file: `workstreams/erpnext-backend-simplification.md`.
 
 | Lane | Status | Current evidence | Blocker / next action |
 |---|---|---|---|
-| Controller baseline | Passing after verifier update | Route sweep 200s, `/book` redirect verified, `nav_ia.py` passed, `layout-fit` 60 passed, `smoke_shop.py` passed | Keep this file current after every lane return |
+| Controller baseline | Passing after verifier update | Route sweep 200s, `/book` redirect verified, `nav_ia.py` passed, `layout-fit` 260 passed, `interactive-layout` 42 passed, `checkout-experience` 2 passed, `portfolio-reel` 3 passed, `smoke_shop.py` passed | Keep this file current after every lane return |
 | Form audit | Owned by separate agent | Do not edit `/contact` or Lead schema from this lane yet | Wait for form audit handoff before inquiry-path changes |
 | Policy/trust | Routes load, content not launch-approved | Policy audit found `/privacy`, `/terms-of-service`, `/refund-policy`, `/accessibility` exist; source trace lives in `workstreams/policy-trust.md` | Get GL/legal decisions on unresolved privacy, cookie, shipping/delivery, and refund terms before Stripe URL wiring |
-| Shop/media | Variant cart contract fixed; broad browse routes use `/shop`; first variant-media pass, variant correctness diff, and option UX P0 pass completed | `cart_checkout_contract.py`, `variant_media_contract.py`, `catalog_variant_contract.py`, and `smoke_shop.py` passed; 1,712 variant images mapped; detailed media report generated; `/shop-by-category` redirects to `/shop`; exact variant checkout URL returns 200 while template checkout URL is blocked | Review the 45 flagged products / 6,831 skipped assignments, select category browse imagery for 11 empty Item Groups, then continue product/category visual polish |
+| Shop/media | Variant cart contract fixed; broad browse routes use `/shop`; first variant-media pass, variant correctness diff, option UX P0 pass, category-media candidate packet, and dry-run-first category sync helper completed | `smoke_shop.py` passed; refreshed media report on 2026-05-06 found 1,712 unchanged mapped variant images, 45 products needing review, and 6,831 skipped unsafe assignments; `/shop-by-category` redirects to `/shop`; live DB still has 11 empty child Item Group images; `category_media_candidates.py` generated quick picks for all 11; unapproved apply safety check made 0 updates | Review the 45 flagged products / 6,831 skipped assignments, get Jeff/GL approval on category quick picks, then mark approved selections and run the helper with `--apply` |
 | Visual/accessibility QA | Civic site-wide visual pass implemented and locally verified; `/portfolio` proof-gallery reel added as a route-specific visual slice | `output/playwright/launch-baseline-20260502/`, `output/playwright/brand-token-20260502/`, and `output/playwright/civic-overhaul-20260503-verified/` have desktop/mobile evidence; `nav_ia.py`, `layout-fit`, shop/cart/checkout/catalog/variant/contact checks passed in the Civic pass; `npm run test:portfolio-reel` verifies the portfolio reel contract | Do manual keyboard/focus/alt/zoom checks and rerun screenshots after final media/content changes; review portfolio photo order/quality with GL/Jeff |
 | Backend readiness | Pending | Backend workstream exists | Keep separate from public form audit; simplify after schema/source reality is clear |
 | Release gate | Not started | No integrated launch report yet | Run final route, form, shop, visual, accessibility, and policy-source gates after implementation lanes land |
@@ -150,7 +162,7 @@ Primary coordination file: `workstreams/erpnext-backend-simplification.md`.
 These are the best "more professional, more big business" upgrades before launch:
 
 1. Review skipped/unmatched product/category media from `output/catalog-media-review.json` where source photos exist but labels were not safe enough to auto-map.
-2. Representative category media for `/shop-items/<group>` pages or a future image-rich mega menu, without reviving the retired category-card index.
+2. Representative category media for `/shop-items/<group>` pages or a future image-rich mega menu, using `python scripts/verify/category_media_candidates.py` to regenerate the current approval packet without reviving the retired category-card index.
 3. Hetzner-faithful refresh of `/refund-policy` and `/accessibility`.
 4. Webshop product-detail/layout cleanup after variant/media correctness.
 5. Visual QA pass across homepage, portfolio, contact, policy pages, shop, category, product detail, cart, and checkout.
@@ -301,8 +313,9 @@ python scripts/verify/nav_ia.py
 npm run test:layout-fit
 npm run test:interactive-layout
 npm run test:checkout-experience
+npm run test:portfolio-reel
 python scripts/verify/smoke_shop.py
-npm run test:public-verify
+npm run test:website-verify
 ```
 
 Form path verification, coordinated with the form audit:
@@ -358,5 +371,5 @@ First non-colliding launch slice:
 
 1. Do a read-only launch baseline across route availability, queue/workstreams, and current git state.
 2. Confirm form audit ownership and avoid `/contact` edits unless handed off.
-3. Work on policy/trust or shop/media quality while the form audit continues.
+3. Work on policy/trust or shop/media quality while the form audit continues. For category media, use the generated `output/category-media-candidates.md` quick picks as the review packet, then `output/category-media-selection.template.json` as the approval file; neither is approval to mutate live Item Group images until rows are explicitly marked approved.
 4. Update this file with exact changed surfaces, verification commands, and remaining launch blockers.

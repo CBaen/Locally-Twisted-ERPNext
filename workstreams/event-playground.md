@@ -1,10 +1,12 @@
 # Event Playground Internal Preview Workstream
 
-Last updated: 2026-05-06 by Codex.
+Last updated: 2026-05-06 by Codex after GL assigned PlayCanvas/Event Playground follow-up to OpenClaw.
 
 ## Status
 
 `/event-playground` is a hidden internal-preview route for the PlayCanvas event-decor planner. It is not in public navigation and is not a customer launch surface yet.
+
+OpenClaw now owns the next PlayCanvas/Event Playground pass. For the Locally Twisted website launch lane, treat this workstream as parked unless GL explicitly brings it back into scope.
 
 The isolated PlayCanvas prototype lives in `research/design-studio-v2/event-builder-spike/`. The Frappe route wraps the local Vite preview in an iframe so GL/Jeff can review the experience without deciding production bundle storage, save/share persistence, pricing, checkout, or Lead automation.
 
@@ -52,6 +54,8 @@ npm run test:event-playground
 The root Playwright spec starts the local Vite preview on `127.0.0.1:4306`, loads `/event-playground`, verifies the iframe canvas is nonblank at mobile and desktop widths, exercises basic controls, and verifies Submit Inquiry lands on `/contact` with the design summary prefilled.
 
 ## Next Decisions
+
+Owned by OpenClaw unless GL reassigns this lane:
 
 - Whether `Event Playground` is the final customer-facing name.
 - Whether the route should become public, sales-shared only, or remain internal.

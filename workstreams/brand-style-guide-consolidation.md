@@ -79,7 +79,7 @@ The first four-icon pass was not enough. Balloon pages should use balloon-form i
 - `python scripts/verify/nav_ia.py` passed.
 - `python scripts/verify/smoke_shop.py` passed with the current mega-menu and retail variant contracts; 2026-05-06 follow-up changed the shop smoke contract so fixed-price products do not invent product-level quote gates.
 - `npm run test:layout-fit` passed 260/260 across 20 public routes and 13 viewport families.
-- `npm run test:interactive-layout` passed 39/39 across header breakpoints, desktop mega panels, mobile drawer accordions, shop/product controls, contact conditionals, portfolio modal, and reduced-motion homepage behavior.
+- `npm run test:interactive-layout` passed 42/42 across header breakpoints, desktop mega panels, mobile drawer accordions, shop/product controls, contact conditionals, portfolio front-photo state, and reduced-motion homepage behavior after the portfolio proof-reel follow-up.
 - `npm run test:checkout-experience` passed 1/1.
 - `npm run test:public-verify` passed with quieter Playwright output.
 - Post-fix screenshot/interaction report passed with no failures: `output/playwright/full-site-fix-20260505-post/post-fix-report.json`.

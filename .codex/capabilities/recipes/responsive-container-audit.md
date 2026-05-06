@@ -5,9 +5,9 @@ schema_version: 2.0
 level: recipe
 maturity: candidate
 scope: Locally Twisted ERPNext/Frappe public-site responsive layout, containment, and stateful UI checks
-currently_true: yes
+currently_true: unknown
 verification_level: 2
-last_verified: 2026-05-05
+last_verified: 2026-05-06
 evidence_quality: direct
 successful_uses: 1
 failed_uses: 0
@@ -48,7 +48,7 @@ The current LT gate uses:
 
 - `scripts/verify/layout_helpers.js` for shared route/viewport/layout audit logic.
 - `scripts/verify/layout_fit.spec.js` for passive public route fit.
-- `scripts/verify/interactive_layout.spec.js` for stateful UI: header breakpoints, desktop mega panels, mobile drawer accordions, shop filters/product selectors, contact conditionals, portfolio modal, and reduced-motion homepage checks.
+- `scripts/verify/interactive_layout.spec.js` for stateful UI: header breakpoints, desktop mega panels, mobile drawer accordions, shop filters/product selectors, contact conditionals, portfolio front-photo state, and reduced-motion homepage checks.
 - `scripts/verify/checkout_experience.spec.js` for checkout state behavior and preview consistency.
 - `npm run test:public-verify` for the aggregate public verification chain.
 
@@ -118,4 +118,4 @@ Use `npm run test:public-verify` when closing a broad public-site visual change.
 
 ## LT Receipt
 
-The first use on 2026-05-05 expanded `npm run test:layout-fit` from a narrow route/viewport pass to 260 checks across 20 public routes and 13 viewport families. It also added `npm run test:interactive-layout` with 39 checks for header breakpoint behavior, desktop mega panels, mobile drawer accordions, shop/product controls, contact conditionals, portfolio modal, and reduced-motion homepage states. `python scripts/verify/smoke_shop.py` was corrected to respect the quote-required custom install lane while still verifying retail inline variant selection and cart writes.
+The first use on 2026-05-05 expanded `npm run test:layout-fit` from a narrow route/viewport pass to 260 checks across 20 public routes and 13 viewport families. It also added `npm run test:interactive-layout` with stateful checks for header breakpoint behavior, desktop mega panels, mobile drawer accordions, shop/product controls, contact conditionals, portfolio state, and reduced-motion homepage states. On 2026-05-06, the portfolio state check moved from the superseded modal behavior to the current proof-reel front-photo behavior. `python scripts/verify/smoke_shop.py` was corrected to respect the quote-required custom install lane while still verifying retail inline variant selection and cart writes.
