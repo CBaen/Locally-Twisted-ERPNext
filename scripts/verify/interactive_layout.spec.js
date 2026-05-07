@@ -490,7 +490,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 			{ name: "mobile", width: 375, height: 900 },
 			{ name: "desktop", width: 1366, height: 900 },
 		]) {
-			test(`reviews crawl right-to-left and stay full-stage on ${viewport.name}`, async ({ page }) => {
+			test(`reviews crawl left-to-right and stay full-stage on ${viewport.name}`, async ({ page }) => {
 				await page.setViewportSize({ width: viewport.width, height: viewport.height });
 				await page.emulateMedia({ reducedMotion: "no-preference" });
 				const response = await gotoAndSettle(page, "/");
@@ -528,7 +528,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 				expect(Math.round(before.quotesRect.left), "review banner should start at the viewport edge").toBeLessThanOrEqual(1);
 				expect(Math.round(before.quotesRect.right), "review banner should reach the viewport edge").toBeGreaterThanOrEqual(viewport.width - 1);
 				expect(before.overflowX).toBe("hidden");
-				expect(after.x, "review track should move right-to-left over time").toBeLessThan(before.x);
+				expect(after.x, "review track should move left-to-right over time").toBeGreaterThan(before.x);
 			});
 		}
 	});
@@ -585,7 +585,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 				expect(Math.round(before.bannerLeft), "trusted-business banner should start at the viewport edge").toBeLessThanOrEqual(1);
 				expect(Math.round(before.bannerRight), "trusted-business banner should reach the viewport edge").toBeGreaterThanOrEqual(viewport.width - 1);
 				expect(before.overflowX).toBe("hidden");
-				expect(crawlDelta, "trusted-business track should move right-to-left like review cards").toBeLessThan(0);
+				expect(crawlDelta, "trusted-business track should move left-to-right like review cards").toBeGreaterThan(0);
 				expect(Math.abs(Math.abs(crawlDelta) - Math.abs(reviewDelta)), "trusted-business crawl should match review-card pixel speed").toBeLessThanOrEqual(2.5);
 			});
 		}
@@ -676,8 +676,8 @@ test.describe("Locally Twisted interactive layout states", () => {
 		expect(Math.round(before.clientBanner.right), "client banner should reach the viewport edge").toBeGreaterThanOrEqual(389);
 		expect(before.reviewBanner.overflowX).toBe("hidden");
 		expect(before.clientBanner.overflowX).toBe("hidden");
-		expect(reviewDelta, "review track should continue right-to-left in reduced-motion mode").toBeLessThan(0);
-		expect(crawlDelta, "client track should continue right-to-left in reduced-motion mode").toBeLessThan(0);
+		expect(reviewDelta, "review track should continue left-to-right in reduced-motion mode").toBeGreaterThan(0);
+		expect(crawlDelta, "client track should continue left-to-right in reduced-motion mode").toBeGreaterThan(0);
 		expect(Math.abs(Math.abs(crawlDelta) - Math.abs(reviewDelta)), "client crawl should match review-card speed in reduced-motion mode").toBeLessThanOrEqual(2.5);
 	});
 

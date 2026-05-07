@@ -17,7 +17,7 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slice list. Highlights:
 
 **Done / current launch proof state:**
-- Slice 3 — Homepage (launch proof shape, repaired 2026-05-07). Stable visible H1 hero over a real optimized balloon-install photo, Google reviews immediately after the hero, inline cookie band after reviews, no homepage trust/authority bar for now, Recent Celebrations after reviews, review and client crawls moving right-to-left at matched visible speed, Custom Event Decor grid, corporate/school/civic-first closing CTA, and secondary Twisting & Face Painting spotlight. Feature handoff: `workstreams/landing-page-repair.md`; capability contract: `.codex/capabilities/recipes/homepage-launch-proof-contract.md`.
+- Slice 3 — Homepage (launch proof shape, repaired 2026-05-07). Stable visible H1 hero over a real optimized balloon-install photo, Google reviews immediately after the hero, inline cookie band after reviews, no homepage trust/authority bar for now, Recent Celebrations after reviews, review and client crawls moving left-to-right at matched visible speed, Custom Event Decor grid, corporate/school/civic-first closing CTA, and secondary Twisting & Face Painting spotlight. Feature handoff: `workstreams/landing-page-repair.md`; capability contract: `.codex/capabilities/recipes/homepage-launch-proof-contract.md`.
 - Site shape decision: lookbook-forward + small shop sidebar, with future "Design Studio" interactive experience for arches/columns/garlands/backdrops/drops/bouquets categories (captures customer vision → routes to inquiry, NOT a checkout). See `.planning/decisions/site-shape.md`.
 
 **Already DONE in prior sessions:**

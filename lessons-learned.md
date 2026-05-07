@@ -112,7 +112,7 @@ and the cookie notice could cover mobile CTAs.
 
 **Counter-move:** treat homepage proof crawls as one shared banner contract, not
 two decorative widgets. Both review cards and trusted-business names must span
-the stage and move right-to-left. The review-card crawl owns the canonical
+the stage and move left-to-right. The review-card crawl owns the canonical
 `540s` loop; the trusted-business crawl must be measured and assigned a
 proportional duration so its visible pixel speed matches the reviews. For these
 two proof bands only, the reduced-motion branch is a slow-crawl exception:

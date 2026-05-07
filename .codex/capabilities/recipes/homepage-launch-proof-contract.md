@@ -9,7 +9,7 @@ currently_true: yes
 verification_level: 2
 last_verified: 2026-05-07
 evidence_quality: direct
-successful_uses: 2
+successful_uses: 3
 failed_uses: 1
 regressions: 1
 depends_on:
@@ -56,7 +56,7 @@ review crawl, trusted-client crawl, cookie notice placement, or launch CTAs.
   still important, but the launch homepage now leads with social proof under the
   hero.
 - Review cards and trusted-business names are full-stage crawls. Both move
-  right-to-left. Review cards use the canonical `540s` loop, and the
+  left-to-right. Review cards use the canonical `540s` loop, and the
   trusted-business crawl is measured in the browser so its pixel speed matches
   the review-card crawl even though its track width is different.
 - The homepage proof crawls are a project-specific reduced-motion exception:
@@ -104,7 +104,7 @@ before marking the homepage ready for GL review.
 - Review cards expose a native horizontal scrollbar.
 - Trusted-business names stack instead of crawling.
 - The two crawls differ in direction or speed.
-- Either crawl moves left-to-right.
+- Either crawl moves right-to-left.
 - Reduced-motion mode stops either proof crawl, exposes a scrollbar, stacks the
   cards/names, or lets one proof band diverge from the other.
 - The hero reintroduces hidden H1 plus visible rotating headings.
@@ -123,17 +123,20 @@ before marking the homepage ready for GL review.
 
 On 2026-05-07, GL reported that review cards were a scrollbar on one platform
 and stacked on another, while trusted-business proof was not crawling. The first
-repair accidentally documented/protected a left-to-right/static reduced-motion
-contract. The follow-up repair changed both proof banners to right-to-left,
-kept the review crawl at the canonical `540s`, synced the trusted-business crawl
-to the review-card pixel speed with a homepage-only measurement script, and made
-the reduced-motion branch keep both proof crawls slow, horizontal, and
-scrollbar-free. Verification passed: crawl regression 5/5, home layout 13/13,
+repair accidentally documented/protected a static reduced-motion fallback. The
+follow-up repair added the correct speed-sync and no-scrollbar mechanics, then
+GL clarified the intended direction: both crawls should move left-to-right. The
+current contract keeps the review crawl at the canonical `540s`, syncs the
+trusted-business crawl to the review-card pixel speed with a homepage-only
+measurement script, and makes the reduced-motion branch keep both proof crawls
+slow, horizontal, moving, and scrollbar-free. Final corrected-direction
+verification passed: left-to-right red run failed 5/5 against the previous
+direction, then focused crawl regression 5/5, home layout 13/13,
 homepage/cookie 12/12, compact hero 14/14, full `npm run test:website-verify`,
-and live Playwright diagnostics for `no-preference` and `reduce` showed both
-crawls moving right-to-left with hidden overflow and near-zero speed delta. Screenshots are in
-`output/playwright/home-crawl-regression-20260507/`. The same-day proof-order correction removed the homepage trust/authority
-bar, made Google reviews the first post-hero band, moved the cookie notice after
-reviews, and moved Recent Celebrations after the reviews block. Do not carry
-forward the earlier temporary portfolio-blocked caveat unless a fresh run fails
-again.
+and live diagnostics showed positive left-to-right deltas with hidden overflow
+and matched visible speed in `no-preference` and `reduce`. Screenshots are in
+`output/playwright/home-crawl-left-to-right-20260507/`. The same-day proof-order
+correction removed the homepage trust/authority bar, made Google reviews the
+first post-hero band, moved the cookie notice after reviews, and moved Recent
+Celebrations after the reviews block. Do not carry forward the earlier temporary
+portfolio-blocked caveat unless a fresh run fails again.

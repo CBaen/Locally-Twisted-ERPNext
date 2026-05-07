@@ -166,7 +166,7 @@ Current primary navigation is `Event Balloons`, `Portfolio`,
 | Accordions/details | FAQ, BTFP FAQ, mobile nav accordions | Large hit areas, clear expanded state, keyboard support, no tiny chevrons as the only signal. |
 | Drawers/modals | Mobile nav, portfolio modal, cart/filter drawers | Dark/warm brand surfaces, focusable close buttons, trapped/managed focus where modal, no visual jump or hidden overflow. |
 | Reviews | Home review block, future testimonials | Support proof, do not lead the brand. Verify current rating/count before publishing numbers. |
-| Logo/client crawl | Home client proof | Use text/category proof unless logo permission is confirmed. Homepage proof crawls move right-to-left at matched visible speed; keep movement slow, linear, pauseable, and scrollbar-free in normal and reduced-motion states unless the business-proof contract changes. |
+| Logo/client crawl | Home client proof | Use text/category proof unless logo permission is confirmed. Homepage proof crawls move left-to-right at matched visible speed; keep movement slow, linear, pauseable, and scrollbar-free in normal and reduced-motion states unless the business-proof contract changes. |
 | Empty/loading/error states | Cart, checkout, shop, forms, filters | Plain language, calm hierarchy, phone/contact fallback for customer blockers. |
 
 Use plain customer labels. Avoid backend CRM language in public copy.
