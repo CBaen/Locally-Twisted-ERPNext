@@ -867,6 +867,8 @@ every deploy.
     function summarizeEventPlayground(payload, summary) {
         payload = payload || {};
         summary = summary || {};
+        var contractEvent = summary.design_studio_contract && summary.design_studio_contract.event ? summary.design_studio_contract.event : {};
+        var payloadContact = payload.customer_contact || {};
         var pieces = summary.pieces || (payload.placed_balloon_pieces || []).map(function (piece) {
             return piece.label;
         });
@@ -878,6 +880,8 @@ every deploy.
         return [
             'Event Playground design preview',
             summary.venue ? 'Venue: ' + summary.venue : '',
+            (payloadContact.event_date || contractEvent.event_date) ? 'Event date: ' + (payloadContact.event_date || contractEvent.event_date) : '',
+            (payloadContact.event_city || contractEvent.event_city) ? 'Event city / venue: ' + (payloadContact.event_city || contractEvent.event_city) : '',
             listLabels(pieces) ? 'Balloon pieces: ' + listLabels(pieces) : '',
             listLabels(props) ? 'Context props: ' + listLabels(props) : '',
             listLabels(colors) ? 'Colors: ' + listLabels(colors) : '',
@@ -907,11 +911,19 @@ every deploy.
         var customer = handoff.customer || {};
         var payload = handoff.payload || {};
         var summary = handoff.summary || {};
+        var contractEvent = summary.design_studio_contract && summary.design_studio_contract.event ? summary.design_studio_contract.event : {};
+        var payloadContact = payload.customer_contact || {};
+        var eventDate = customer.event_date || payloadContact.event_date || contractEvent.event_date || '';
+        var eventCity = customer.event_city || payloadContact.event_city || contractEvent.event_city || '';
         var description = summarizeEventPlayground(payload, summary);
 
         setNamedValue('contact_name', customer.name);
         setNamedValue('phone', customer.phone);
         setNamedValue('email_from', customer.email);
+        if (/^\d{4}-\d{2}-\d{2}$/.test(eventDate)) {
+            setNamedValue('x_event_date', eventDate);
+        }
+        setNamedValue('x_event_location', eventCity);
 
         checkService('Balloon Decor');
         checkService('Events Inquiry');

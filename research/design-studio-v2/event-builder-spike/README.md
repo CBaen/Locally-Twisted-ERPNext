@@ -7,6 +7,10 @@ This folder now contains:
 - `playcanvas.html` and `babylon.html`: the original engine-comparison spike.
 - `classic-playcanvas.html`: the first classic-only PlayCanvas corporate-stage builder slice.
 - `classic-playcanvas-v2.html`: the rebuilt classic stage-builder route using official PlayCanvas camera controls, a real `stageRoot`, piece roots, and push-apart balloon packing.
+- `event-playground.html`: the hidden-route/OpenClaw handoff preview. It uses
+  `Plan Custom Decor` copy, emits `event-playground-v2`, includes a nested
+  `design-studio-v1` future Frappe adapter contract, and keeps quote math
+  gated behind LT review.
 
 This is not a Frappe route. It does not create Leads, save designs, share links, quote prices, touch checkout, or write ERPNext data.
 
@@ -25,6 +29,7 @@ Open:
 - `http://127.0.0.1:5173/babylon.html`
 - `http://127.0.0.1:5173/classic-playcanvas.html`
 - `http://127.0.0.1:5173/classic-playcanvas-v2.html`
+- `http://127.0.0.1:5173/event-playground.html`
 
 ## Verify
 
@@ -36,6 +41,7 @@ npm run verify
 npm run test:classic
 npm run verify:classic
 npm run verify:v2
+npm run verify:event-playground
 ```
 
 The original verifier starts Vite, checks both engine-comparison pages at desktop and mobile widths, verifies the shared sales payload, drags the arch, and writes screenshots under:
@@ -54,6 +60,17 @@ The v2 verifier checks `classic-playcanvas-v2.html` at desktop and mobile widths
 
 ```text
 ../../../output/playwright/design-studio-v2-classic-stage-builder-v2/
+```
+
+The Event Playground verifier checks `event-playground.html` at desktop and
+mobile widths, verifies nonblank and visually varied PlayCanvas output, confirms
+no horizontal overflow, checks the `event-playground-v2` payload and
+`design-studio-v1` adapter contract, verifies the quote-honesty warning, and
+exercises rotate, duplicate, delete, and color update behavior. It writes
+screenshots under:
+
+```text
+../../../output/playwright/event-playground/
 ```
 
 ## Decision Rule
@@ -87,6 +104,25 @@ Deferred:
 - Balloon drop.
 - AR/photo overlay.
 - Save/share, Lead writes, Quote writes, pricing, checkout, and production route exposure.
+- Customer-visible final balloon counts from render density.
+
+## Event Playground / Plan Custom Decor Contract
+
+`event-playground.html` is the forward OpenClaw handoff preview. It is still a
+research preview. It is not a production route, not a save/share flow, and not a
+quote engine.
+
+Rules:
+
+- Local schema is `event-playground-v2`.
+- Nested future Frappe contract is `design-studio-v1`.
+- Render counts are visual planning density only.
+- Production estimates are candidate-only, internal, `quote_ready: false`, and
+  `customer_visible: false`.
+- Final balloon count, install method, safety, pricing, and availability are
+  confirmed by Locally Twisted before booking.
+- Future Frappe submit must validate server-side and create exactly one Lead
+  only after required contact and design facts pass validation.
 
 ## Balloon Visual Model
 

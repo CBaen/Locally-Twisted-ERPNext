@@ -1,10 +1,16 @@
 # Design Studio V2 Research
 
-Last updated: 2026-05-02 by Codex.
+Last updated: 2026-05-07 by Codex.
 
 This folder is the background research/spec home for the future `Plan Custom Decor` design studio.
 
 This is not a V1 launch blocker. Do not use this folder as proof that the production site has a working design studio.
+
+Current implementation handoff: the hidden PlayCanvas route remains
+`/event-playground`, but the browser preview now uses `Plan Custom Decor`
+customer language. The latest source contract is `event-playground-v2` with a
+nested `design-studio-v1` adapter payload for a future Frappe implementation.
+Render counts are planning visuals, not quote or production math.
 
 ## Controller
 
@@ -29,6 +35,18 @@ Prototype build plan:
 | `design-studio-visual-direction.md` | Visual Brand | Premium LT visual direction for the studio |
 | `frappe-native-design-studio-architecture.md` | Frappe Architecture | Route, JS/CSS, DocType, API, save/share, and CRM handoff shape |
 | `design-studio-risk-audit.md` | QA/Audit | Scope, launch, accessibility, privacy, and misleading-render risks |
+
+## Current Audit Packet
+
+OpenClaw and future Codex agents should also read:
+
+- `audits/visual-gameplay-mobile-desktop-audit.md`
+- `audits/frappe-cloud-integration-audit.md`
+- `audits/manufacturer-physics-audit.md`
+- `audits/next-version-build-notes-2026-05-07.md`
+
+These are research handoff notes, not production proof. Re-verify Frappe fields,
+DocTypes, endpoints, and live route behavior before implementation.
 
 ## Dormant Prototype
 

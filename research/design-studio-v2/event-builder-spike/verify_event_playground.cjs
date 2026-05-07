@@ -104,7 +104,10 @@ async function verifyViewport(browser, baseUrl, viewport) {
   await assertCanvasNonblank(page, viewport.name);
 
   const payload = await page.evaluate(() => window.eventPlayground.getPayload());
-  assert(payload.schema_version === "event-playground-v1", `${viewport.name}: wrong payload schema`);
+  assert(payload.schema_version === "event-playground-v2", `${viewport.name}: wrong payload schema`);
+  assert(payload.integration_adapter?.target_contract === "design-studio-v1", `${viewport.name}: missing Frappe adapter contract`);
+  assert(payload.design_studio_contract?.schema_version === "design-studio-v1", `${viewport.name}: missing design-studio contract`);
+  assert(payload.warnings?.some((warning) => warning.code === "quote_math_pending_lt_approval"), `${viewport.name}: missing quote honesty warning`);
   assert(payload.level_id === "school_gym", `${viewport.name}: wrong default level`);
   assert(payload.placed_balloon_pieces.length >= 2, `${viewport.name}: expected balloon pieces`);
   assert(payload.placed_props.some((prop) => prop.product_family === "linen_table"), `${viewport.name}: expected linen table prop`);

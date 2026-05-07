@@ -8,6 +8,54 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-07 - Event Playground/OpenClaw handoff uses a planning-only contract
+
+**Decision:** The committed Event Playground/OpenClaw source remains a hidden
+research/internal-preview lane, not a launch website surface. The browser
+preview copy can use `Plan Custom Decor`, but the route and workstream stay
+`/event-playground` / Event Playground until OpenClaw or GL deliberately
+renames the production path. The payload is upgraded to `event-playground-v2`
+and includes a nested `design-studio-v1` adapter contract for a future Frappe
+integration. Render balloon counts are visual planning density only.
+Production estimates are candidate-only, internal, `quote_ready: false`, and
+not customer-visible until Locally Twisted approves formulas, fill method,
+support/anchor assumptions, overage, venue review, pricing, and safety.
+
+**Reasoning:** The manufacturer/physics audit found that the fuller on-screen
+11-inch classic arch/column density is useful for a visual planning preview but
+unsafe as quote or materials math. GL also moved the next PlayCanvas work to
+OpenClaw and refocused Codex on the website launch. Future agents need the
+source committed, but they must not mistake a playable preview for a public
+Frappe Cloud save/share/Lead/quote implementation.
+
+**Implementation:** Updated the Event Playground source under
+`research/design-studio-v2/event-builder-spike/` with the planning guide,
+event date/city contact fields, quote-honesty warning panel, render-count
+status, `event-playground-v2` payload, `design-studio-v1` adapter contract,
+split render/production estimate fields, and contact handoff prefill for ISO
+event date plus event city/location. Added audit handoff files under
+`research/design-studio-v2/audits/` and documented the boundary in
+`workstreams/event-playground.md`, `workstreams/design-studio-v2.md`, the queue,
+the handoff, lessons, and capabilities.
+
+**Verification receipt:** Nested tests and browser verifiers are the required
+proof for this lane: `npm run test:classic`, `npm run build`,
+`npm run verify:event-playground`, and `npm run verify:v2` from
+`research/design-studio-v2/event-builder-spike/`. The Frappe wrapper handoff
+remains covered separately by root `npm run test:event-playground`.
+
+**Alternatives considered:** Commit the visual changes without the quote gate.
+Rejected because future pricing/ERPNext agents could reuse render density as
+production math. Move this into ASAP launch. Rejected because GL parked
+PlayCanvas with OpenClaw and the route still lacks production persistence,
+DocTypes, save/share, server validation, automatic Lead creation, pricing, and
+public navigation approval.
+
+**Decided by:** GL reassigned the PlayCanvas/OpenClaw lane and asked Codex to
+commit/push it; Codex documented the planning-only and quote-honesty boundary.
+
+---
+
 ## 2026-05-07 - Homepage proof order and portfolio shell clarified
 
 **Decision:** The homepage hero is followed immediately by Google reviews. The

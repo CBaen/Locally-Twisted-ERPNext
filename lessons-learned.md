@@ -6,6 +6,23 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-07 - Render density is not quote math
+
+The Event Playground preview looked plausible with fuller 11-inch classic arch
+and column density, but the manufacturer/physics audit showed those render
+counts are too risky to treat as production quantities. A future automation
+could accidentally turn a pretty planning count into an ERPNext quote, material
+plan, or customer promise.
+
+**Counter-move:** keep visual planning facts and production estimate facts in
+separate payload fields. Render counts can support the canvas, but production
+estimates must be candidate-only, internal, `quote_ready: false`, and clearly
+blocked on LT approval for formulas, overage, fill/support method, venue review,
+safety, and pricing. Any Frappe adapter must fail loudly if a customer-facing
+or quote path tries to use unapproved render density.
+
+---
+
 ## 2026-05-07 - Design references can be partially approved
 
 The portfolio route copied too much from the Claude/Frappe design reference.

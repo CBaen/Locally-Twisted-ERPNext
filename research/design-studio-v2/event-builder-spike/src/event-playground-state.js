@@ -1,4 +1,8 @@
-export const EVENT_PLAYGROUND_SCHEMA_VERSION = "event-playground-v1";
+export const EVENT_PLAYGROUND_SCHEMA_VERSION = "event-playground-v2";
+export const DESIGN_STUDIO_CONTRACT_VERSION = "design-studio-v1";
+
+export const PLANNING_DISCLAIMER =
+  "Planning visualization only. Balloon counts, install method, pricing, and safety details are confirmed by Locally Twisted before booking.";
 
 export const LEVELS = Object.freeze([
   {
@@ -79,9 +83,26 @@ export const PIECE_DEFINITIONS = Object.freeze([
       balloon_size_in: 11,
       construction_basis: "classic_4_balloon_quad_cluster",
       orientation_basis: "neck_and_knot_point_to_shared_quad_tie_center",
+      render_cluster_count: 50,
+      render_balloon_count: 200,
+      visual_density_basis: "8 balloons/ft render density; not quote math",
       estimated_clusters: 50,
       estimated_balloons: 200,
       knots_visible: true
+    },
+    production_estimate: {
+      status: "candidate_pending_lt_approval",
+      quote_ready: false,
+      customer_visible: false,
+      formula_basis: "candidate_11in_classic_spiral_arch_6_balloons_per_ft",
+      production_balloons_per_foot: 6,
+      base_balloon_count: 152,
+      overage_rate: 0.12,
+      planning_balloon_count_with_overage: 172,
+      fill_method: "air",
+      support_required: "frame_or_monofilament_with_weights",
+      venue_review_required: true,
+      disclaimer: PLANNING_DISCLAIMER
     }
   },
   {
@@ -100,9 +121,26 @@ export const PIECE_DEFINITIONS = Object.freeze([
       balloon_size_in: 11,
       construction_basis: "classic_4_balloon_quad_cluster",
       orientation_basis: "neck_and_knot_point_to_shared_quad_tie_center",
+      render_cluster_count: 32,
+      render_balloon_count: 128,
+      visual_density_basis: "8 balloons/ft render density; not quote math",
       estimated_clusters: 32,
       estimated_balloons: 128,
       knots_visible: true
+    },
+    production_estimate: {
+      status: "candidate_pending_lt_approval",
+      quote_ready: false,
+      customer_visible: false,
+      formula_basis: "candidate_11in_column_4_balloons_per_ft_per_column",
+      production_balloons_per_foot: 4,
+      base_balloon_count: 64,
+      overage_rate: 0.12,
+      planning_balloon_count_with_overage: 72,
+      fill_method: "air",
+      support_required: "pole_base_and_weight",
+      venue_review_required: true,
+      disclaimer: PLANNING_DISCLAIMER
     }
   },
   {
@@ -121,9 +159,22 @@ export const PIECE_DEFINITIONS = Object.freeze([
       balloon_size_in: 11,
       construction_basis: "packed_grid",
       orientation_basis: "not_modeled_for_public_manufacturing_yet",
+      render_cluster_count: 45,
+      render_balloon_count: 180,
+      visual_density_basis: "packed visual wall density; not quote math",
       estimated_clusters: 45,
       estimated_balloons: 180,
       knots_visible: true
+    },
+    production_estimate: {
+      status: "lt_recipe_required",
+      quote_ready: false,
+      customer_visible: false,
+      formula_basis: "wall_recipe_pending_lt_approval",
+      fill_method: "air",
+      support_required: "backdrop_frame_or_wall_system",
+      venue_review_required: true,
+      disclaimer: PLANNING_DISCLAIMER
     }
   },
   {
@@ -142,9 +193,22 @@ export const PIECE_DEFINITIONS = Object.freeze([
       balloon_size_in: 11,
       construction_basis: "small_cluster",
       orientation_basis: "neck_and_knot_point_to_shared_quad_tie_center",
+      render_cluster_count: 3,
+      render_balloon_count: 12,
+      visual_density_basis: "small cluster visual count; not quote math",
       estimated_clusters: 3,
       estimated_balloons: 12,
       knots_visible: true
+    },
+    production_estimate: {
+      status: "lt_recipe_required",
+      quote_ready: false,
+      customer_visible: false,
+      formula_basis: "centerpiece_recipe_pending_lt_approval",
+      fill_method: "air",
+      support_required: "table_safe_base",
+      venue_review_required: true,
+      disclaimer: PLANNING_DISCLAIMER
     }
   },
   {
@@ -163,9 +227,22 @@ export const PIECE_DEFINITIONS = Object.freeze([
       balloon_size_in: 11,
       construction_basis: "sign_cluster",
       orientation_basis: "neck_and_knot_point_to_shared_quad_tie_center",
+      render_cluster_count: 7,
+      render_balloon_count: 28,
+      visual_density_basis: "sign cluster visual count; not quote math",
       estimated_clusters: 7,
       estimated_balloons: 28,
       knots_visible: true
+    },
+    production_estimate: {
+      status: "lt_recipe_required",
+      quote_ready: false,
+      customer_visible: false,
+      formula_basis: "sign_cluster_recipe_pending_lt_approval",
+      fill_method: "air",
+      support_required: "weighted_easel_or_sign_base",
+      venue_review_required: true,
+      disclaimer: PLANNING_DISCLAIMER
     }
   }
 ]);
@@ -303,6 +380,7 @@ export function moveSelectedItem(state, deltaXFt, deltaZFt) {
   const halfDepth = level.dimensions_ft.depth / 2;
   item.placement.x_ft = round(clamp(item.placement.x_ft + deltaXFt, -halfWidth + 0.8, halfWidth - 0.8));
   item.placement.z_ft = round(clamp(item.placement.z_ft + deltaZFt, -halfDepth + 0.8, halfDepth - 0.8));
+  updateWarnings(state);
   return item;
 }
 
@@ -407,14 +485,14 @@ export function ignoreSuggestion(state, suggestionId) {
 }
 
 export function createEventPlaygroundPayload(state, options = {}) {
+  updateWarnings(state);
   const level = getCurrentLevel(state);
   const contact = options.contact || {};
   const screenshotReference = options.screenshotReference || null;
   const handoffState = options.handoffState || "not_started";
   const placedBalloonPieces = state.placedItems.filter((item) => item.kind === "balloon_piece");
   const placedProps = state.placedItems.filter((item) => item.kind === "prop");
-
-  return {
+  const payload = {
     schema_version: EVENT_PLAYGROUND_SCHEMA_VERSION,
     level_id: state.level_id,
     venue_dimensions: clone(level.dimensions_ft),
@@ -452,10 +530,20 @@ export function createEventPlaygroundPayload(state, options = {}) {
       event_date: contact.event_date || "",
       event_city: contact.event_city || ""
     },
-    customer_note:
-      "Final quote, engineering details, onsite measurements, weather limits, install method, and availability are confirmed by Locally Twisted before booking.",
+    customer_note: PLANNING_DISCLAIMER,
+    warnings: collectWarnings(state),
+    integration_adapter: {
+      target_contract: DESIGN_STUDIO_CONTRACT_VERSION,
+      frappe_route_recommendation: "/plan-custom-decor",
+      submit_endpoint_recommendation: "locally_twisted.api.design_studio.submit_design_inquiry",
+      save_endpoint_recommendation: "locally_twisted.api.design_studio.save_design",
+      lead_creation_policy: "create_exactly_one_lead_after_server_validation",
+      source_channel: "Plan Custom Decor"
+    },
     generated_at: new Date().toISOString()
   };
+  payload.design_studio_contract = createDesignStudioContract(payload, contact, level);
+  return payload;
 }
 
 function addItemFromDefinition(state, definitionId, placement = {}) {
@@ -479,6 +567,7 @@ function addItemFromDefinition(state, definitionId, placement = {}) {
     scale: definition.default_size === "small" ? 0.78 : definition.default_size === "large" ? 1.18 : 1,
     dimensions_ft: clone(definition.dimensions_ft),
     render_facts: clone(definition.render_facts || {}),
+    production_estimate: clone(definition.production_estimate || { status: "not_applicable", quote_ready: false }),
     placement: {
       x_ft: round(placement.x_ft ?? 0),
       z_ft: round(placement.z_ft ?? 0),
@@ -505,6 +594,7 @@ function payloadForItem(item) {
     size: item.size,
     dimensions_ft: clone(item.dimensions_ft),
     render_facts: clone(item.render_facts),
+    production_estimate: clone(item.production_estimate),
     placement: {
       x_ft: round(item.placement.x_ft),
       z_ft: round(item.placement.z_ft),
@@ -513,6 +603,117 @@ function payloadForItem(item) {
     scale: round(item.scale, 2),
     warnings: [...(item.warnings || [])]
   };
+}
+
+export function updateWarnings(state) {
+  const level = getCurrentLevel(state);
+  const halfWidth = level.dimensions_ft.width / 2;
+  const halfDepth = level.dimensions_ft.depth / 2;
+  state.placedItems.forEach((item) => {
+    const warnings = [];
+    const nearEdge = Math.abs(item.placement.x_ft) > halfWidth - 2.5 || Math.abs(item.placement.z_ft) > halfDepth - 2.5;
+    if (nearEdge) {
+      warnings.push({
+        code: "venue_edge_review",
+        severity: "review",
+        message: "Close to a venue edge; Locally Twisted should confirm walkways, exits, weights, and install clearance."
+      });
+    }
+    if (item.kind === "balloon_piece" && item.production_estimate?.quote_ready === false) {
+      warnings.push({
+        code: "quote_math_pending_lt_approval",
+        severity: "info",
+        message: "Render density is separate from quote math; final balloon count and install method require LT approval."
+      });
+    }
+    item.warnings = warnings;
+  });
+  return collectWarnings(state);
+}
+
+function collectWarnings(state) {
+  const byCode = new Map();
+  state.placedItems.forEach((item) => {
+    (item.warnings || []).forEach((warning) => {
+      const key = `${warning.code}:${warning.message}`;
+      if (!byCode.has(key)) byCode.set(key, { ...warning, item_ids: [] });
+      byCode.get(key).item_ids.push(item.id);
+    });
+  });
+  return [...byCode.values()];
+}
+
+function createDesignStudioContract(payload, contact, level) {
+  return {
+    schema_version: DESIGN_STUDIO_CONTRACT_VERSION,
+    source: "event-playground-preview",
+    event: {
+      venue_preset: payload.level_id,
+      venue_label: payload.preset.label,
+      venue_dimensions_ft: payload.venue_dimensions,
+      audience: payload.preset.audience,
+      event_date: contact.event_date || "",
+      event_city: contact.event_city || "",
+      indoor_outdoor: level.id === "backyard_patio" ? "outdoor_review_required" : "indoor_or_covered"
+    },
+    customer: {
+      name: contact.customer_name || "",
+      email: contact.email || "",
+      phone: contact.phone || ""
+    },
+    palette: {
+      selected_color_names: unique(payload.selected_colors_materials_patterns.flatMap((entry) => entry.colors || [])),
+      colors_are_supplier_actionable_names: true,
+      hex_values_are_approximate: true
+    },
+    pieces: payload.placed_balloon_pieces.map((piece) => ({
+      piece_id: piece.id,
+      piece_type: piece.product_family,
+      display_label: piece.label,
+      dimensions_ft: piece.dimensions_ft,
+      style: piece.pattern,
+      selected_colors: piece.selected_colors,
+      material: piece.material,
+      placement: piece.placement,
+      rules_summary: {
+        construction_engine: piece.construction_engine,
+        render_facts: piece.render_facts,
+        production_estimate: piece.production_estimate
+      },
+      warnings: piece.warnings
+    })),
+    suggestions: payload.upsell_suggestions,
+    render: {
+      renderer: "playcanvas-preview",
+      screenshot_reference: payload.screenshot_reference,
+      alt_summary: summarizePieces(payload.placed_balloon_pieces)
+    },
+    sales_summary: {
+      short_summary: summarizePieces(payload.placed_balloon_pieces),
+      props_considered: payload.placed_props.map((prop) => prop.label),
+      warnings: payload.warnings,
+      follow_up_questions: [
+        "Confirm event date, venue access, and indoor/outdoor conditions.",
+        "Confirm approved color matches and whether quote should include install, strike, and weights.",
+        "Confirm final production formulas with Locally Twisted before pricing."
+      ]
+    },
+    disclaimers: {
+      planning_visualization_only: true,
+      quote_requires_lt_review: true,
+      no_customer_visible_final_balloon_count: true,
+      text: PLANNING_DISCLAIMER
+    }
+  };
+}
+
+function summarizePieces(pieces) {
+  if (!pieces.length) return "No balloon decor pieces selected yet.";
+  return pieces.map((piece) => `${piece.label} (${piece.selected_colors.join(" + ")})`).join("; ");
+}
+
+function unique(values) {
+  return [...new Set(values.filter(Boolean))];
 }
 
 function findDefinition(definitionId) {

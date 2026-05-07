@@ -35,10 +35,10 @@ const normalizedToward = (from, to = { x: 0, y: 0, z: 0 }) => {
   };
 };
 
-test("event playground starts with V1 venues, honest decor families, context props, and suggestions", () => {
+test("event playground starts with V2 venues, honest decor families, context props, and suggestions", () => {
   const state = createEventPlaygroundState();
 
-  assert.equal(EVENT_PLAYGROUND_SCHEMA_VERSION, "event-playground-v1");
+  assert.equal(EVENT_PLAYGROUND_SCHEMA_VERSION, "event-playground-v2");
   assert.deepEqual(
     state.levels.map((level) => level.id),
     ["school_gym", "corporate_lobby", "backyard_patio", "community_room", "car_dealership_lite"]
@@ -91,16 +91,20 @@ test("event playground payload keeps Frappe handoff schema stable", () => {
     contact: {
       customer_name: "Avery Planner",
       email: "avery@example.com",
-      phone: "801-555-0100"
+      phone: "801-555-0100",
+      event_date: "2026-06-14",
+      event_city: "Ogden"
     },
     handoffState: "draft"
   });
 
-  assert.equal(payload.schema_version, "event-playground-v1");
+  assert.equal(payload.schema_version, "event-playground-v2");
   assert.equal(payload.level_id, "community_room");
   assert.equal(payload.screenshot_reference, "data:image/png;base64,preview");
   assert.equal(payload.customer_contact.customer_name, "Avery Planner");
   assert.equal(payload.customer_contact.email, "avery@example.com");
+  assert.equal(payload.customer_contact.event_date, "2026-06-14");
+  assert.equal(payload.customer_contact.event_city, "Ogden");
   assert.equal(payload.customer_contact_handoff_state, "draft");
   assert.ok(payload.placed_balloon_pieces.length >= 2);
   assert.ok(payload.placed_props.some((prop) => prop.product_family === "linen_table"));
@@ -110,6 +114,16 @@ test("event playground payload keeps Frappe handoff schema stable", () => {
   );
   assert.deepEqual(payload.upsell_suggestions.accepted, ["add_matching_columns"]);
   assert.deepEqual(payload.upsell_suggestions.ignored, ["add_photo_moment"]);
+  assert.equal(payload.integration_adapter.target_contract, "design-studio-v1");
+  assert.equal(payload.design_studio_contract.schema_version, "design-studio-v1");
+  assert.equal(payload.design_studio_contract.event.event_date, "2026-06-14");
+  assert.equal(payload.design_studio_contract.event.event_city, "Ogden");
+  assert.equal(payload.design_studio_contract.disclaimers.quote_requires_lt_review, true);
+  assert.equal(
+    payload.placed_balloon_pieces.every((piece) => piece.production_estimate?.quote_ready === false),
+    true
+  );
+  assert.ok(payload.warnings.some((warning) => warning.code === "quote_math_pending_lt_approval"));
 });
 
 test("duplicate and delete operate on the selected whole piece", () => {

@@ -88,7 +88,8 @@ test.describe("Event Playground route", () => {
 
 			const frame = page.frameLocator("[data-event-playground-frame]");
 			await expect(frame.locator("[data-event-playground-ready='true']")).toBeVisible({ timeout: 20000 });
-			await expect(frame.locator("text=Event Playground")).toBeVisible();
+			await expect(frame.locator("text=Plan Custom Decor")).toBeVisible();
+			await expect(frame.locator("text=planning visualization")).toBeVisible();
 			await expect(frame.locator("[data-action='save-draft']")).toBeVisible();
 			await expect(frame.locator("[data-action='submit-inquiry']")).toBeVisible();
 			await expectCanvasNonblank(page);
@@ -117,9 +118,13 @@ test.describe("Event Playground route", () => {
 		await frame.locator("[data-color='Pearl White']").click();
 
 		const payload = await page.frameLocator("[data-event-playground-frame]").locator("body").evaluate(() => window.eventPlayground.getPayload());
-		expect(payload.schema_version).toBe("event-playground-v1");
+		expect(payload.schema_version).toBe("event-playground-v2");
+		expect(payload.integration_adapter.target_contract).toBe("design-studio-v1");
+		expect(payload.design_studio_contract.schema_version).toBe("design-studio-v1");
+		expect(payload.warnings.some((warning) => warning.code === "quote_math_pending_lt_approval")).toBe(true);
 		expect(payload.placed_balloon_pieces.length).toBeGreaterThanOrEqual(2);
 		expect(payload.placed_balloon_pieces.some((piece) => piece.selected_colors.includes("Pearl White"))).toBe(true);
+		expect(payload.placed_balloon_pieces.every((piece) => piece.production_estimate.quote_ready === false)).toBe(true);
 	});
 
 	test("submit inquiry hands the design to the contact form without backend writes", async ({ page }) => {
@@ -132,13 +137,19 @@ test.describe("Event Playground route", () => {
 		await frame.locator("input[name='customer_name']").fill("Avery Planner");
 		await frame.locator("input[name='email']").fill("avery@example.invalid");
 		await frame.locator("input[name='phone']").fill("801-555-0198");
+		await frame.locator("input[name='event_date']").fill("2026-06-14");
+		await frame.locator("input[name='event_city']").fill("Ogden Union Station");
 		await frame.locator("[data-action='submit-inquiry']").click();
 
 		await page.waitForURL(/\/contact\?intent=quote&source=event-playground/, { timeout: 15000 });
 		await expect(page.locator("#book_name")).toHaveValue("Avery Planner");
 		await expect(page.locator("#book_email")).toHaveValue("avery@example.invalid");
 		await expect(page.locator("#book_phone")).toHaveValue("801-555-0198");
+		await expect(page.locator("#book_date")).toHaveValue("2026-06-14");
+		await expect(page.locator("#book_location")).toHaveValue("Ogden Union Station");
 		await expect(page.locator("input[name='x_services'][value='Balloon Decor']")).toBeChecked();
 		await expect(page.locator("#book_notes")).toHaveValue(/Event Playground design preview/);
+		await expect(page.locator("#book_notes")).toHaveValue(/Event date: 2026-06-14/);
+		await expect(page.locator("#book_notes")).toHaveValue(/Event city \/ venue: Ogden Union Station/);
 	});
 });

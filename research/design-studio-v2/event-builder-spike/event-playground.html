@@ -12,7 +12,8 @@
       <header class="epg-topbar">
         <div class="epg-brand">
           <p>Locally Twisted</p>
-          <h1>Event Playground</h1>
+          <h1>Plan Custom Decor</h1>
+          <small>Guided planning preview. Final recipe confirmed by LT.</small>
         </div>
         <label class="epg-level">
           <span>Venue</span>
@@ -26,13 +27,23 @@
         </nav>
       </header>
 
+      <section class="epg-guide" aria-label="Planning steps">
+        <ol>
+          <li class="is-active"><span>1</span> Pick venue</li>
+          <li><span>2</span> Choose pieces</li>
+          <li><span>3</span> Name colors</li>
+          <li><span>4</span> Send plan</li>
+        </ol>
+        <p>Mobile-first guided flow on top of the PlayCanvas preview. The canvas stays a planning board, not a quote engine.</p>
+      </section>
+
       <section class="epg-palette" aria-label="Decor and props">
         <div>
-          <p>Decor</p>
+          <p>Decor recipes</p>
           <div class="epg-button-grid" data-palette="pieces"></div>
         </div>
         <div>
-          <p>Props</p>
+          <p>Scale cues + props</p>
           <div class="epg-button-grid" data-palette="props"></div>
         </div>
       </section>
@@ -48,8 +59,16 @@
             <dd data-status="piece-count">3</dd>
           </div>
           <div>
-            <dt>Stage</dt>
+            <dt>View</dt>
             <dd data-status="stage-turn">0 deg</dd>
+          </div>
+          <div>
+            <dt>Render count</dt>
+            <dd data-status="render-count">—</dd>
+          </div>
+          <div>
+            <dt>Quote gate</dt>
+            <dd data-status="quote-gate">LT review</dd>
           </div>
         </dl>
 
@@ -85,6 +104,11 @@
         </div>
 
         <div class="epg-section">
+          <p>Warnings + honesty gate</p>
+          <ul class="epg-warnings" data-status="warnings"></ul>
+        </div>
+
+        <div class="epg-section">
           <p>Suggestions</p>
           <div class="epg-suggestions" data-control="suggestions"></div>
         </div>
@@ -93,12 +117,14 @@
           <input name="customer_name" type="text" autocomplete="name" placeholder="Name" />
           <input name="email" type="email" autocomplete="email" placeholder="Email" />
           <input name="phone" type="tel" autocomplete="tel" placeholder="Phone" />
+          <input name="event_date" type="text" autocomplete="off" placeholder="Event date / timing" />
+          <input name="event_city" type="text" autocomplete="address-level2" placeholder="Event city / venue" />
           <div class="epg-actions">
             <button type="button" data-action="save-draft">Save Draft</button>
             <button type="button" data-action="submit-inquiry">Submit Inquiry</button>
           </div>
         </form>
-        <p class="epg-note" data-status="api">Final quote and install details are confirmed by Locally Twisted.</p>
+        <p class="epg-note" data-status="api">Planning visualization only. Balloon counts, install method, pricing, and safety details are confirmed by Locally Twisted before booking.</p>
       </aside>
     </main>
     <script type="module" src="/src/main-event-playground.js"></script>

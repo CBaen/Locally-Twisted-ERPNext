@@ -7,7 +7,7 @@ maturity: candidate
 scope: Locally Twisted Event Playground and PlayCanvas balloon-construction rendering
 currently_true: true
 verification_level: 2
-last_verified: 2026-05-06
+last_verified: 2026-05-07
 evidence_quality: direct
 successful_uses: 1
 failed_uses: 0
@@ -35,6 +35,11 @@ The renderer must not invent manufacturing facts.
 
 For classic balloon structures, the smallest visible construction unit is a tied/twisted quad. Every balloon in that quad has a body, neck, and knot/nozzle direction. The neck and knot point toward the shared quad tie center, not generically downward.
 
+Render density is not production math. A visually full PlayCanvas arch or column
+may keep a denser render count, but the payload must label it as render density
+and keep production estimates separate, candidate-only, and not quote-ready until
+Locally Twisted approves the formula.
+
 ## Procedure
 
 1. Read `research/design-studio-v2/design-studio-physics-rules.md`.
@@ -45,8 +50,9 @@ For classic balloon structures, the smallest visible construction unit is a tied
 6. For shared/lab cluster truth, use `src/classic-cluster-geometry.js`.
 7. Keep PlayCanvas functions as consumers of construction slots; they may place meshes but must not own tie-center rules.
 8. Add or update pure tests before judging the canvas.
-9. Run the nested package tests and Event Playground browser verifier.
-10. Capture screenshots for GL/Jeff when the change is visual.
+9. Keep render counts separate from `production_estimate`.
+10. Run the nested package tests and Event Playground browser verifier.
+11. Capture screenshots for GL/Jeff when the change is visual.
 
 ## Required Construction Invariants
 
@@ -65,6 +71,7 @@ For classic balloon structures, the smallest visible construction unit is a tied
 - The renderer calculates construction orientation inline instead of consuming tested construction slots.
 - A visual bug can pass tests because tests only check canvas nonblank output.
 - Payload says `production-plausible` while render facts omit construction basis or orientation basis.
+- Payload exposes render balloon counts as quote-ready production counts.
 
 ## Verification
 
@@ -74,6 +81,7 @@ From `research/design-studio-v2/event-builder-spike/`:
 npm run test:classic
 npm run build
 npm run verify:event-playground
+npm run verify:v2
 ```
 
 From the repo root:

@@ -23,8 +23,16 @@ const BALLOON_PRESETS = Object.freeze({
   11: {
     label: "11_in",
     diameter_ft: 0.9167,
-    balloons_per_foot: 8,
-    clusters_per_foot: 2
+    render_balloons_per_foot: 8,
+    render_clusters_per_foot: 2,
+    production_arch_balloons_per_foot: 6,
+    production_column_balloons_per_foot: 4,
+    production_overage_rate: 0.12,
+    production_formula_status: "candidate_pending_lt_approval",
+    production_formula_sources: [
+      "burton_and_burton_spiral_arch_11in_6_per_ft",
+      "public_column_guidance_11in_4_per_tier_1_tier_per_ft"
+    ]
   }
 });
 
@@ -41,8 +49,13 @@ export function createClassicArch({
   placement = { x_ft: 0, y_ft: -3.2, rotation_deg: 0 }
 }) {
   const preset = getBalloonPreset(balloonSizeIn);
-  const estimatedBalloons = wholeQuadBalloonCount(lengthFt * preset.balloons_per_foot);
-  const estimatedClusters = estimatedBalloons / CLUSTER_SIZE;
+  const renderBalloons = wholeQuadBalloonCount(lengthFt * preset.render_balloons_per_foot);
+  const renderClusters = renderBalloons / CLUSTER_SIZE;
+  const productionEstimate = createProductionEstimate({
+    pieceType: "classic_arch",
+    measureFt: lengthFt,
+    preset
+  });
 
   return {
     id,
@@ -63,13 +76,18 @@ export function createClassicArch({
       construction_basis: QUAD_BASIS,
       length_ft: round(lengthFt, 2),
       balloon_diameter_ft: preset.diameter_ft,
-      estimated_balloons: estimatedBalloons,
-      estimated_clusters: estimatedClusters,
+      render_balloon_count: renderBalloons,
+      render_cluster_count: renderClusters,
+      visual_density_basis: "render_density_not_quote_math",
+      render_balloons_per_foot: preset.render_balloons_per_foot,
+      estimated_balloons: renderBalloons,
+      estimated_clusters: renderClusters,
       cluster_size: CLUSTER_SIZE,
-      balloons_per_foot: preset.balloons_per_foot,
+      balloons_per_foot: preset.render_balloons_per_foot,
       pattern,
       pattern_basis: pattern === "two_color_spiral" ? "one_slot_phase_advance" : "piece_level_classic_pattern"
-    }
+    },
+    production_estimate: productionEstimate
   };
 }
 
@@ -82,9 +100,15 @@ export function createClassicColumnPair({
   placement = { x_ft: 0, y_ft: 1.8, rotation_deg: 0 }
 }) {
   const preset = getBalloonPreset(balloonSizeIn);
-  const estimatedBalloonsPerColumn = wholeQuadBalloonCount(heightFt * preset.balloons_per_foot);
-  const estimatedClustersPerColumn = estimatedBalloonsPerColumn / CLUSTER_SIZE;
+  const renderBalloonsPerColumn = wholeQuadBalloonCount(heightFt * preset.render_balloons_per_foot);
+  const renderClustersPerColumn = renderBalloonsPerColumn / CLUSTER_SIZE;
   const columns = 2;
+  const productionEstimate = createProductionEstimate({
+    pieceType: "classic_column_pair",
+    measureFt: heightFt,
+    preset,
+    columns
+  });
 
   return {
     id,
@@ -108,15 +132,50 @@ export function createClassicColumnPair({
       height_ft: round(heightFt, 2),
       columns,
       balloon_diameter_ft: preset.diameter_ft,
-      estimated_balloons_per_column: estimatedBalloonsPerColumn,
-      estimated_clusters_per_column: estimatedClustersPerColumn,
-      estimated_balloons: estimatedBalloonsPerColumn * columns,
-      estimated_clusters: estimatedClustersPerColumn * columns,
+      render_balloons_per_column: renderBalloonsPerColumn,
+      render_clusters_per_column: renderClustersPerColumn,
+      render_balloon_count: renderBalloonsPerColumn * columns,
+      render_cluster_count: renderClustersPerColumn * columns,
+      visual_density_basis: "render_density_not_quote_math",
+      estimated_balloons_per_column: renderBalloonsPerColumn,
+      estimated_clusters_per_column: renderClustersPerColumn,
+      estimated_balloons: renderBalloonsPerColumn * columns,
+      estimated_clusters: renderClustersPerColumn * columns,
       cluster_size: CLUSTER_SIZE,
-      balloons_per_foot: preset.balloons_per_foot,
+      render_balloons_per_foot: preset.render_balloons_per_foot,
+      balloons_per_foot: preset.render_balloons_per_foot,
       pattern,
       pattern_basis: pattern === "two_color_spiral" ? "quarter_turn_phase_advance" : "piece_level_classic_pattern"
-    }
+    },
+    production_estimate: productionEstimate
+  };
+}
+
+function createProductionEstimate({ pieceType, measureFt, preset, columns = 1 }) {
+  const density = pieceType === "classic_column_pair"
+    ? preset.production_column_balloons_per_foot
+    : preset.production_arch_balloons_per_foot;
+  const baseBalloonsEach = wholeQuadBalloonCount(measureFt * density);
+  const baseBalloons = baseBalloonsEach * columns;
+  const overageBalloons = wholeQuadBalloonCount(baseBalloons * preset.production_overage_rate);
+  return {
+    status: preset.production_formula_status,
+    quote_ready: false,
+    customer_visible: false,
+    formula_basis: pieceType === "classic_column_pair"
+      ? "candidate_11in_column_4_balloons_per_ft_per_column"
+      : "candidate_11in_classic_spiral_arch_6_balloons_per_ft",
+    formula_sources: [...preset.production_formula_sources],
+    production_balloons_per_foot: density,
+    base_balloon_count: baseBalloons,
+    overage_rate: preset.production_overage_rate,
+    overage_balloon_count: overageBalloons,
+    planning_balloon_count_with_overage: baseBalloons + overageBalloons,
+    cluster_size: CLUSTER_SIZE,
+    fill_method: "air",
+    support_required: pieceType === "classic_column_pair" ? "pole_base_and_weight" : "frame_or_monofilament_with_weights",
+    venue_review_required: true,
+    disclaimer: "Planning visualization only. Balloon counts, install method, pricing, and safety details are confirmed by Locally Twisted before booking."
   };
 }
 

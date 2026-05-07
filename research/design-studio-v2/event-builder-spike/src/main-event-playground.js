@@ -47,6 +47,9 @@ const materialSelect = document.querySelector('[data-control="material"]');
 const selectedLabel = document.querySelector('[data-status="selected"]');
 const pieceCount = document.querySelector('[data-status="piece-count"]');
 const stageStatus = document.querySelector('[data-status="stage-turn"]');
+const renderCountStatus = document.querySelector('[data-status="render-count"]');
+const quoteGateStatus = document.querySelector('[data-status="quote-gate"]');
+const warningsStatus = document.querySelector('[data-status="warnings"]');
 const apiStatus = document.querySelector('[data-status="api"]');
 const contactForm = document.querySelector("[data-contact-form]");
 const LOCAL_DRAFT_KEY = "lt_event_playground_draft_v1";
@@ -232,6 +235,11 @@ function syncUi() {
   selectedLabel.textContent = selected?.label || "None";
   pieceCount.textContent = String(state.placedItems.length);
   stageStatus.textContent = `${Math.round(state.view.stage_rotation_deg)} deg`;
+  renderCountStatus.textContent = selected?.render_facts?.render_balloon_count
+    ? `${selected.render_facts.render_balloon_count} visual`
+    : "context";
+  quoteGateStatus.textContent = selected?.production_estimate?.quote_ready ? "Ready" : "LT review";
+  renderWarnings(selected);
   levelSelect.value = state.level_id;
   materialSelect.value = selected?.material || "standard_latex";
 
@@ -249,6 +257,21 @@ function syncUi() {
   });
   document.querySelectorAll("[data-suggestion]").forEach((button) => {
     button.classList.toggle("is-active", state.accepted_suggestions.includes(button.dataset.suggestion));
+  });
+}
+
+function renderWarnings(selected) {
+  warningsStatus.innerHTML = "";
+  const warnings = selected?.warnings?.length ? selected.warnings : [{
+    code: "planning_visual_only",
+    severity: "info",
+    message: "Use this as a planning board; final quote and install recipe stay with Locally Twisted."
+  }];
+  warnings.forEach((warning) => {
+    const item = document.createElement("li");
+    item.textContent = warning.message;
+    item.dataset.severity = warning.severity || "info";
+    warningsStatus.appendChild(item);
   });
 }
 
@@ -552,7 +575,9 @@ async function saveDesign(mode) {
     customer: {
       name: contact.customer_name || "",
       email: contact.email || "",
-      phone: contact.phone || ""
+      phone: contact.phone || "",
+      event_date: contact.event_date || "",
+      event_city: contact.event_city || ""
     },
     summary: summarizeHandoff(payload),
     payload
@@ -584,6 +609,8 @@ function summarizeHandoff(payload) {
     props: props.map((prop) => prop.label).filter(Boolean),
     colors,
     suggestions: accepted,
+    warnings: payload.warnings || [],
+    design_studio_contract: payload.design_studio_contract,
     note: payload.customer_note || ""
   };
 }
