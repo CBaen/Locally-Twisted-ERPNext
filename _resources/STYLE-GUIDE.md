@@ -1,7 +1,7 @@
 # Locally Twisted - ERPNext/Frappe Style Guide
 
-**Version:** 4.2
-**Last Updated:** 2026-05-06
+**Version:** 4.3
+**Last Updated:** 2026-05-07
 **Build Target:** ERPNext v15.105.0 + Frappe v15.106.0 / Webshop
 **Primary Viewport:** Mobile-first, 375px base
 
@@ -20,10 +20,9 @@ styling.
 
 Use this guide when writing customer-facing copy, building Frappe/Jinja pages,
 styling Webshop surfaces, reviewing visual work, making image selections, drawing
-icons, or briefing GPT/Codex-style coding agents. Version 4.2 adds page-by-page
-coverage, deletes the old conflicting design-guide reference path, and expands
-the professional SVG system into Utah/local, events, and balloon-specific icons
-so the rebrand has an implementation map, not only a mood target.
+icons, or briefing GPT/Codex-style coding agents. Version 4.3 adds the
+non-negotiable compact hero contract so every page hero uses the same approved
+height, padding budget, and title scale instead of page-local oversized guesses.
 
 ---
 
@@ -41,6 +40,7 @@ so the rebrand has an implementation map, not only a mood target.
 10. **ERPNext first.** Work with Frappe/Webshop templates, hooks, and route rules.
 11. **Containers are launch-critical.** Text, images, controls, menus, cards, forms, chips, drawers, and modals must stay inside their containers at breakpoint edges and in open/expanded states.
 12. **Verify visible work.** Do not claim a route, layout, or visual state works without checking it.
+13. **Heroes are compact and standardized.** A hero labels the page; it is not the page. Use the hero height contract below and do not add page-local hero padding or giant title clamps without a documented exception.
 
 ---
 
@@ -83,6 +83,35 @@ Practical translation:
 - Avoid `!important` chains. The known exception is the contained `.product-code` hide for Webshop's compiled product-card JS.
 - After Jinja, CSS, or Web Page edits, run `python scripts/dev/clear_website_cache.py`.
 - Before declaring visual work done, run the layout-fit and interactive-layout gates and inspect desktop/mobile screenshots.
+
+---
+
+## Hero Height Contract
+
+This rule is non-negotiable for LT and rolls up to the Built by Cameron agency
+standard. Product proof, forms, photos, and useful content sell the site; giant
+heroes and repeated page-local padding do not.
+
+| Viewport family | Standard hero height | Hard max | Vertical padding cap | Hero title cap |
+|---|---:|---:|---:|---:|
+| Mobile `< 768px` | 220px | 280px | 24px top / 24px bottom | 32px |
+| Tablet `768px-1199px` | 250px | 300px | 28px top / 28px bottom | 40px |
+| Desktop `>= 1200px` | 280px | 320px | 32px top / 32px bottom | 44px |
+
+Expectations:
+
+- If a page has a hero, it uses the same standard height as other heroes in
+  that viewport family.
+- A hero may include an eyebrow, one H1, and one short lede at most.
+- CTAs are allowed only if they fit inside the contract without crowding; move
+  extra proof, delivery terms, route explanations, and secondary content below
+  the hero.
+- Do not use `section` defaults, route-local min-heights, large clamps, or
+  oversized padding to make a hero fill the first viewport.
+- On normal laptop viewports, the next section should be visible without the
+  hero pretending to be the entire website.
+- The verifier lives in `scripts/verify/interactive_layout.spec.js` under
+  `compact hero height contract`.
 
 ---
 

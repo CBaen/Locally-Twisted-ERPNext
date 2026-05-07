@@ -51,6 +51,7 @@ Workflows. Multi-step. Clear start and finish.
 - [frappe-sitewide-visual-overhaul](recipes/frappe-sitewide-visual-overhaul.md) - ship a Frappe/Webshop visual redesign with cache-busts, route checks, screenshots, and launch-safe receipts.
 - [lt-brand-style-guide-consolidation](recipes/lt-brand-style-guide-consolidation.md) - consolidate LT visual authority, delete conflicting style references, and verify old font/pastel/icon drift is gone.
 - [cross-browser-motion-visual-verification](recipes/cross-browser-motion-visual-verification.md) - verify animated, marquee, carousel, reduced-motion, and browser-session visual behavior across Chrome/Brave and media-query branches.
+- [compact-hero-contract](recipes/compact-hero-contract.md) - keep public page heroes compact, same-height per viewport family, and protected by Playwright checks instead of route-local oversized padding.
 - [playcanvas-event-builder-stage-physics](recipes/playcanvas-event-builder-stage-physics.md) - keep the PlayCanvas event-builder game anchored through stage-root and piece-root hierarchy, transform math, pointer input, and browser verification.
 - [prototype-engine-spike-verification](recipes/prototype-engine-spike-verification.md) - compare browser rendering engines in isolated research packages with shared payload facts and real browser verification.
 - [responsive-container-audit](recipes/responsive-container-audit.md) - audit public routes and stateful UI across breakpoint edges so text, controls, menus, forms, cards, and product selectors stay inside their containers.

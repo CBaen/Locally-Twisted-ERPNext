@@ -241,8 +241,11 @@ body[data-path="home"] main.container.my-4 {
 /* --- Hero ------------------------------------------------------------ */
 .lt-hero {
     position: relative;
-    min-height: 470px;
+    min-height: 220px;
+    height: 220px;
+    max-height: 220px;
     background-color: var(--lt-navy);
+    padding: 0;
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -269,17 +272,18 @@ body[data-path="home"] main.container.my-4 {
     width: 100%;
     max-width: 1280px;
     margin: 0 auto;
-    padding: 3.35rem 1.5rem;
+    padding: 1.5rem 1rem;
     text-align: left;
     color: var(--lt-white);
 }
 .lt-hero__eyebrow {
     font-family: var(--lt-font-body);
-    font-size: 0.875rem;
+    font-size: 0.76rem;
     font-weight: 600;
     letter-spacing: 0.14em;
+    line-height: 1.12;
     text-transform: uppercase;
-    margin: 0 0 0.75rem;
+    margin: 0 0 0.3rem;
     color: var(--lt-brass);
     opacity: 0.95;
     text-align: left;
@@ -287,16 +291,17 @@ body[data-path="home"] main.container.my-4 {
 .lt-hero__title {
     font-family: var(--lt-font-heading);
     font-weight: 700;
-    font-size: 2.25rem;
-    line-height: 1.1;
+    font-size: 1.92rem;
+    line-height: 1.02;
     color: var(--lt-white);
     text-align: left;
-    margin: 0 0 0.65rem;
+    margin: 0 0 0.5rem;
     max-width: 18ch;
     animation: none;
 }
 .lt-hero__proofline {
-    margin: 0 0 0.9rem;
+    display: none;
+    margin: 0;
     color: var(--lt-brass);
     font-family: var(--lt-font-body);
     font-size: 0.95rem;
@@ -307,9 +312,10 @@ body[data-path="home"] main.container.my-4 {
 }
 .lt-hero__tagline {
     font-family: var(--lt-font-body);
-    font-size: 1.0625rem;
-    margin: 0 0 1.75rem;
-    max-width: 38ch;
+    font-size: 0.92rem;
+    line-height: 1.3;
+    margin: 0 0 0.65rem;
+    max-width: 60ch;
     font-weight: 500;
     color: rgba(255, 255, 255, 0.96);
     text-align: left;
@@ -319,18 +325,19 @@ body[data-path="home"] main.container.my-4 {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.95rem 2rem;
+    padding: 0.58rem 0.8rem;
     background-color: var(--lt-crimson);
     color: var(--lt-white);
     text-decoration: none;
     font-family: var(--lt-font-body);
     font-weight: 600;
-    font-size: 1rem;
+    font-size: 0.84rem;
     border-radius: 0.375rem;
-    min-height: 48px;
+    min-height: 44px;
+    line-height: 1.1;
 }
 .lt-hero__cta + .lt-hero__cta {
-    margin-left: 0.75rem;
+    margin-left: 0.5rem;
 }
 .lt-hero__cta--secondary {
     background-color: transparent;
@@ -344,23 +351,40 @@ body[data-path="home"] main.container.my-4 {
     outline-offset: 2px;
 }
 @media (min-width: 768px) {
-    .lt-hero { min-height: 520px; }
-    .lt-hero__content { padding: 3.5rem 2rem; }
-    .lt-hero__title { font-size: 3.35rem; }
-    .lt-hero__proofline { font-size: 1.05rem; }
-    .lt-hero__tagline { font-size: 1.25rem; }
+    .lt-hero {
+        min-height: 280px;
+        height: 280px;
+        max-height: 280px;
+    }
+    .lt-hero__content { padding: 2rem; }
+    .lt-hero__title {
+        font-size: 2.55rem;
+        line-height: 1;
+        max-width: 32ch;
+    }
+    .lt-hero__tagline {
+        font-size: 1rem;
+        line-height: 1.25;
+        margin-bottom: 0.55rem;
+    }
+    .lt-hero__cta {
+        font-size: 0.94rem;
+        padding-inline: 1.1rem;
+    }
 }
 @media (max-width: 575.98px) {
     .lt-hero {
-        min-height: auto;
-        align-items: stretch;
+        min-height: 220px;
+        height: 220px;
+        max-height: 220px;
+        align-items: center;
     }
     .lt-hero__content {
-        padding: 2.2rem 1rem;
+        padding: 1.5rem 1rem;
     }
     .lt-hero__title {
-        font-size: clamp(1.9rem, 9.75vw, 2.18rem);
-        line-height: 1.04;
+        font-size: clamp(1.58rem, 7.3vw, 1.75rem);
+        line-height: 1;
         max-width: none;
     }
     .lt-hero__proofline {
@@ -368,18 +392,16 @@ body[data-path="home"] main.container.my-4 {
         font-size: 0.88rem;
     }
     .lt-hero__tagline {
-        max-width: none;
-        font-size: 0.95rem;
-        line-height: 1.45;
-        margin-bottom: 1.35rem;
+        display: none;
     }
     .lt-hero__cta {
-        width: 100%;
+        width: calc(50% - 0.35rem);
         justify-content: center;
+        padding-inline: 0.35rem;
     }
     .lt-hero__cta + .lt-hero__cta {
-        margin-left: 0;
-        margin-top: 0.75rem;
+        margin-left: 0.45rem;
+        margin-top: 0;
     }
 }
 

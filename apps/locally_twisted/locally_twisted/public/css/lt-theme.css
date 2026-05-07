@@ -55,6 +55,27 @@
   --lt-space-12: 3rem;
   --lt-space-16: 4rem;
   --lt-space-20: 5rem;
+
+  /* Hero contract: a hero is an orientation label, not the page. */
+  --lt-hero-standard-height: 220px;
+  --lt-hero-padding-y: 1.5rem;
+  --lt-hero-title-max: 2rem;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --lt-hero-standard-height: 250px;
+    --lt-hero-padding-y: 1.75rem;
+    --lt-hero-title-max: 2.5rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  :root {
+    --lt-hero-standard-height: 280px;
+    --lt-hero-padding-y: 2rem;
+    --lt-hero-title-max: 2.75rem;
+  }
 }
 
 /* ── Typography ── */
@@ -1889,13 +1910,21 @@ body.product-page {
 /* ── Page hero ─────────────────────────────────────────────────────── */
 .lt-shop__hero {
     background-color: var(--lt-near-white);
-    padding: 2.5rem 1.25rem 2rem;
+    min-height: var(--lt-hero-standard-height);
+    height: var(--lt-hero-standard-height);
+    max-height: var(--lt-hero-standard-height);
+    padding: 0 1.25rem;
     border-bottom: 1px solid rgba(26, 26, 26, 0.06);
+    display: flex;
+    align-items: center;
+    overflow: hidden;
 }
 
 .lt-shop__hero-inner {
     max-width: 1200px;
     margin: 0 auto;
+    width: 100%;
+    padding-block: var(--lt-hero-padding-y);
 }
 
 .lt-shop__eyebrow {
@@ -1910,7 +1939,7 @@ body.product-page {
 
 .lt-shop__title {
     font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 2rem;
+    font-size: min(2rem, var(--lt-hero-title-max));
     color: var(--lt-near-black);
     margin: 0;
     line-height: 1.15;
@@ -1918,10 +1947,10 @@ body.product-page {
 
 @media (min-width: 992px) {
     .lt-shop__hero {
-        padding: 3rem 2rem 2.5rem;
+        padding-inline: 2rem;
     }
     .lt-shop__title {
-        font-size: 2.75rem;
+        font-size: var(--lt-hero-title-max);
     }
 }
 
@@ -3143,7 +3172,13 @@ h3,
     linear-gradient(105deg, rgba(10, 10, 11, 0.92) 0%, rgba(14, 34, 64, 0.86) 52%, rgba(14, 34, 64, 0.34) 100%),
     var(--lt-navy);
   color: var(--lt-warm-white);
-  padding: clamp(4rem, 8vw, 7rem) 1rem;
+  min-height: var(--lt-hero-standard-height);
+  height: var(--lt-hero-standard-height);
+  max-height: var(--lt-hero-standard-height);
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
 }
 
 .lt-authority-hero__inner,
@@ -3155,11 +3190,12 @@ h3,
 }
 
 .lt-authority-hero__content {
-  max-width: 760px;
+  max-width: 860px;
+  padding-block: var(--lt-hero-padding-y);
 }
 
 .lt-authority-eyebrow {
-  margin: 0 0 0.8rem;
+  margin: 0 0 0.45rem;
   font-family: var(--lt-font-body);
   font-size: 0.78rem;
   font-weight: 900;
@@ -3178,34 +3214,34 @@ h3,
 }
 
 .lt-authority-hero h1 {
-  max-width: 11.5ch;
-  margin: 0 0 1.25rem;
+  max-width: 24ch;
+  margin: 0 0 0.55rem;
   color: #fff;
-  font-size: clamp(2.65rem, 8vw, 5.25rem);
-  line-height: 0.98;
+  font-size: var(--lt-hero-title-max);
+  line-height: 1.02;
 }
 
 .lt-authority-hero__lede {
-  max-width: 640px;
+  max-width: 760px;
   margin: 0;
   color: rgba(250, 247, 242, 0.88);
-  font-size: clamp(1.05rem, 2.2vw, 1.25rem);
-  line-height: 1.62;
+  font-size: clamp(0.9rem, 1.6vw, 1rem);
+  line-height: 1.35;
 }
 
 .lt-authority-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.8rem;
-  margin-top: 1.8rem;
+  gap: 0.55rem;
+  margin-top: 0.7rem;
 }
 
 .lt-authority-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 46px;
-  padding: 0.78rem 1.15rem;
+  min-height: 44px;
+  padding: 0.65rem 0.95rem;
   border: 1px solid var(--lt-crimson);
   background: var(--lt-crimson);
   color: #fff;
@@ -3214,6 +3250,17 @@ h3,
   font-weight: 900;
   line-height: 1.15;
   text-decoration: none;
+}
+
+@media (max-width: 575.98px) {
+  .lt-authority-hero__lede {
+    display: none;
+  }
+
+  .lt-authority-button {
+    flex: 1 1 calc(50% - 0.35rem);
+    padding-inline: 0.5rem;
+  }
 }
 
 .lt-authority-button:hover,

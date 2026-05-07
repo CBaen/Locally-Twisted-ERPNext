@@ -22,6 +22,23 @@ Git cannot fully prevent branch creation before checkout completes.
 
 ---
 
+## 2026-05-07 - Heroes became layout debt because every route guessed
+
+LT had no enforceable hero contract. Home, Event Balloons, Portfolio, BTFP,
+Contact, Shop, and category pages each carried different hero min-heights,
+section padding, title clamps, and inner spacing. Some routes made the hero
+larger than the first laptop viewport, so the actual products, proof, forms, and
+booking content were pushed out of view.
+
+**Counter-move:** treat heroes as standardized orientation surfaces. Use the
+compact hero contract everywhere: 220px mobile, 250px tablet, 280px desktop;
+padding caps of 24/28/32px; title caps of 32/40/44px. Add or update Playwright
+coverage before claiming a route is visually ready. If a hero needs more room,
+the page content is too dense for a hero and the extra material belongs below
+it.
+
+---
+
 ## 2026-05-07 - Verification caveats expire after broader gates pass
 
 The homepage handoff and capability receipt still carried a temporary caveat

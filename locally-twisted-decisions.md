@@ -22,6 +22,20 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-07 - Public page heroes use one compact height contract
+
+**Decision:** Every LT public page hero must use the shared compact hero contract instead of route-local oversized hero guesses. The implemented standard is 220px mobile, 250px tablet, and 280px desktop, with hard caps of 280px mobile, 300px tablet, and 320px desktop. Vertical padding is capped at 24px mobile, 28px tablet, and 32px desktop; hero H1 size is capped at 32px mobile, 40px tablet, and 44px desktop. The current Playwright verifier covers `/`, `/event-balloons`, `/portfolio`, `/balloon-twisting-and-face-painting`, `/contact`, `/shop`, and `/shop-items/seasonal-specialty`.
+
+**Reasoning:** GL rejected the inconsistent and oversized hero pattern as a recurring agency-level failure. The live LT routes proved the problem: home, event-balloons, portfolio, BTFP, contact, shop, and category pages all had different min-heights, section padding, title clamps, and inner padding. Several heroes consumed most or all of the first viewport, hiding products, proof, forms, and useful content.
+
+**Implementation:** Added shared hero tokens to `lt-theme.css`, repaired route-specific hero CSS in `home.py`, `shop.py`, `balloon_twisting_and_face_painting.py`, `contact.html`, `lt-portfolio-reel.css`, `lt-product-polish.css`, and `lt-page-containment.css`, shortened the `/shop` hero lede, and added `compact hero height contract` coverage to `scripts/verify/interactive_layout.spec.js`. Added the project capability recipe `.codex/capabilities/recipes/compact-hero-contract.md` and updated the style guide, queue, workstreams, lessons, and agency-level docs.
+
+**Verification receipt:** The first TDD run failed 14/14 compact hero checks with live heights from 247px to 846px desktop and 254px to 818px mobile. After implementation, `docker restart locally-twisted-erpnext-v15-backend-1`, `python scripts/dev/clear_website_cache.py`, and `npm run test:interactive-layout -- --grep "compact hero height contract"` passed 14/14. Closeout component gates also passed: `node --check scripts/verify/interactive_layout.spec.js`, impacted-route layout fit 91/91, full `npm run test:layout-fit` 247/247, full `npm run test:interactive-layout` 88/88, `npm run test:portfolio-reel` 4/4 after updating stale portfolio-hero expectations, `npm run test:checkout-experience` 2/2, `npm run test:shop-smoke`, and `python scripts/verify/nav_ia.py`. Screenshots were captured under `output/playwright/compact-heroes-20260507/`.
+
+**Decided by:** GL approved Codex's recommendation to solidify the compact hero contract as non-negotiable from agency level down to each client; Codex implemented and verified the LT slice.
+
+---
+
 ## 2026-05-07 - Homepage is launch proof, not an animated concept wall
 
 **Decision:** The public homepage hero must use one visible stable H1 over a real optimized Locally Twisted install photo. The review-card crawl and trusted-business crawl are both full-stage proof banners moving left-to-right at the same `540s` speed in normal motion, with a matching horizontal/static fallback in the reduced-motion branch. The homepage cookie notice is inline after the hero instead of a fixed overlay. Event Playground and rotating blog/title concepts stay out of the launch hero unless GL explicitly reopens them.

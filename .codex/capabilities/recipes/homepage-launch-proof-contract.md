@@ -15,6 +15,7 @@ regressions: 0
 depends_on:
   - frappe-public-container-contract
   - responsive-container-audit
+  - compact-hero-contract
   - cross-browser-motion-visual-verification
 used_by:
   - website-launch
@@ -40,6 +41,9 @@ review crawl, trusted-client crawl, cookie notice placement, or launch CTAs.
   `/assets/locally_twisted/images/portfolio/optimized/corporate-weberstock-photo-opt.webp`.
 - The first viewport must leave a hint of the next band visible on desktop and
   small mobile widths.
+- The hero must obey the compact hero contract: 220px mobile, 250px tablet, and
+  280px desktop standard heights, with no route-local oversized padding or title
+  scale.
 - The cookie notice is inline after `.lt-hero` on the homepage. It must not be a
   fixed overlay covering CTAs there. Other pages may still use the fixed banner.
 - The authority proof band uses approved brand mask SVGs, not ad hoc inline
@@ -70,6 +74,7 @@ Run after homepage/Jinja/CSS/JS changes:
 python scripts/dev/clear_website_cache.py
 npx playwright test scripts/verify/layout_fit.spec.js --reporter=dot --grep "home fits"
 npm run test:interactive-layout -- --grep "homepage|cookie notice"
+npm run test:interactive-layout -- --grep "compact hero height contract"
 ```
 
 If `home.py` route-controller constants such as `PAGE_CSS` changed, restart the
@@ -90,6 +95,8 @@ before marking the homepage ready for GL review.
 - The two crawls differ in direction or speed.
 - Reduced-motion mode changes one proof band but not the other.
 - The hero reintroduces hidden H1 plus visible rotating headings.
+- The hero grows back into a first-viewport wall or uses page-local min-height,
+  oversized padding, or giant title clamps.
 - The cookie notice blocks primary CTAs on mobile.
 - Event Playground, blog-title cycling, or design-studio language returns to the
   launch hero without a fresh GL decision.
@@ -105,5 +112,6 @@ behavior, stabilized the reduced-motion fallback, stabilized the hero around a
 single visible H1 and real install photo, moved the cookie notice inline after
 the hero, and added homepage/cookie Playwright coverage. Focused homepage checks
 passed first; follow-up full-site closeout then passed `npm run test:website-verify`
-with `layout-fit` 247/247 and `interactive-layout` 74/74. Do not carry forward
+with `layout-fit` 247/247 and `interactive-layout` 88/88 after the compact hero
+contract was added. Do not carry forward
 the earlier temporary portfolio-blocked caveat unless a fresh run fails again.

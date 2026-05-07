@@ -1,6 +1,6 @@
 # Landing Page Repair Workstream
 
-Last updated: 2026-05-07 by Codex.
+Last updated: 2026-05-07 by Codex after the compact hero contract repair.
 
 ## Outcome
 
@@ -14,6 +14,9 @@ company, and avoid platform-specific crawl or cookie-overlay failures.
 Completed on 2026-05-07:
 
 - The hero has one visible stable H1 over a real optimized installed-work photo.
+- The hero now obeys the sitewide compact hero contract: 220px mobile and 280px
+  desktop in the current verifier, with the tablet standard documented at
+  250px.
 - The first viewport shows a hint of the next band on desktop and 320px mobile.
 - The homepage cookie notice is inline after the hero, not covering primary CTAs.
 - Authority proof icons use approved brand mask SVGs.
@@ -24,6 +27,8 @@ Completed on 2026-05-07:
   static instead of letting one stack, scroll oddly, or diverge from the other.
 - Event Playground/design-studio and rotating blog-title language are out of the
   launch hero.
+- The hero no longer inherits global `section` vertical padding or local
+  oversized min-height behavior.
 
 ## Source Files
 
@@ -43,6 +48,7 @@ Passed:
 python scripts/dev/clear_website_cache.py
 npx playwright test scripts/verify/layout_fit.spec.js --reporter=dot --grep "home fits"
 npm run test:interactive-layout -- --grep "homepage|cookie notice"
+npm run test:interactive-layout -- --grep "compact hero height contract"
 ```
 
 The homepage internal-link check inspected 37 links with no failures.
@@ -51,9 +57,13 @@ band are in `output/playwright/landing-fixes-20260507/`.
 
 Follow-up closeout on 2026-05-07 reconciled the earlier portfolio caveat:
 `npm run test:website-verify` passed, including `layout-fit` 247/247,
-`interactive-layout` 74/74, checkout 2/2, portfolio reel 4/4, and shop smoke.
+`interactive-layout` 88/88, checkout 2/2, portfolio reel 4/4, and shop smoke.
 Do not reintroduce the older "broad layout gate blocked by portfolio" caveat
 unless a fresh failing run proves it again.
+
+The compact hero contract was added after this repair because GL escalated the
+same-height hero rule to agency level. First red run failed 14/14; after CSS
+and copy-density changes the focused compact-hero gate passed 14/14.
 
 ## Next Safe Moves
 
@@ -65,3 +75,5 @@ unless a fresh failing run proves it again.
   headlines.
 - Do not change the crawl speed or direction without updating the capability
   contract and the Playwright checks in the same slice.
+- Do not grow the homepage hero to carry proof/copy that belongs in the next
+  section.

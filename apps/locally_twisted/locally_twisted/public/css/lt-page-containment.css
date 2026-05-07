@@ -310,6 +310,12 @@
     grid-template-columns: 1fr;
   }
 
+  .lt-authority-hero .lt-authority-actions {
+    display: flex;
+    flex-wrap: nowrap;
+    grid-template-columns: none;
+  }
+
   .lt-checkout__row,
   .lt-checkout__row--3,
   .lt-book__row,

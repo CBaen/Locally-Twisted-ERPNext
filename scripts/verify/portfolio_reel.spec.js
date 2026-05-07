@@ -83,8 +83,7 @@ test.describe("portfolio proof reel", () => {
 		expect(facts.headingText).toContain("for serious rooms.");
 		expect(facts.metaText).toContain("Wasatch Front, Utah");
 		expect(facts.metaText).toContain("15 works");
-		expect(facts.heroHeight).toBeGreaterThan(760);
-		expect(facts.heroHeight).toBeLessThan(930);
+		expect(facts.heroHeight).toBe(280);
 		expect(facts.fontLinkCount).toBe(2);
 		expect(facts.cursorDotCount).toBe(2);
 		expect(facts.rootCursor).toBe("none");
@@ -106,7 +105,8 @@ test.describe("portfolio proof reel", () => {
 		expect(facts.firstHeight / facts.firstWidth).toBeCloseTo(1.25, 1);
 		expect(facts.firstOpacity).toBeLessThan(0.1);
 		expect(facts.firstLeft).toBeLessThan(-250);
-		expect(facts.firstTop).toBeGreaterThan(1100);
+		expect(facts.firstTop).toBeGreaterThan(620);
+		expect(facts.firstTop).toBeLessThan(740);
 		expect(facts.secondWidth - facts.firstWidth).toBeGreaterThan(70);
 		expect(facts.thirdWidth).toBeGreaterThan(395);
 		expect(facts.thirdWidth).toBeLessThan(425);

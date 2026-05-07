@@ -11,38 +11,48 @@ sitemap = 1
 
 PAGE_CSS = """.lt-btfp__intro {
     background-color: var(--lt-warm-tint);
-    padding: 4rem 1.5rem 3.5rem;
+    min-height: var(--lt-hero-standard-height);
+    height: var(--lt-hero-standard-height);
+    max-height: var(--lt-hero-standard-height);
+    padding: 0 1.5rem;
     text-align: left;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
 }
 .lt-btfp__intro-inner {
     max-width: 1100px;
     margin: 0 auto;
     text-align: left;
+    width: 100%;
+    padding-block: var(--lt-hero-padding-y);
 }
 .lt-btfp__intro-title {
     font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 2.25rem;
+    font-size: var(--lt-hero-title-max);
     color: var(--lt-near-black);
-    margin: 0 0 1.25rem;
-    line-height: 1.1;
+    margin: 0 0 0.55rem;
+    line-height: 1.04;
     text-align: left;
-    max-width: 30rem;
+    max-width: 26rem;
 }
 .lt-btfp__intro-lede {
-    font-size: 1.0625rem;
+    font-size: 0.96rem;
     color: var(--lt-soft-gray);
     margin: 0;
     font-weight: 300;
     text-align: left;
-    max-width: 32rem;
-    line-height: 1.6;
+    max-width: 46rem;
+    line-height: 1.35;
 }
 @media (min-width: 992px) {
     .lt-btfp__intro {
-        padding: 5rem 2rem 4rem;
+        padding-inline: 2rem;
     }
-    .lt-btfp__intro-title {
-        font-size: 3.25rem;
+}
+@media (max-width: 575.98px) {
+    .lt-btfp__intro-lede {
+        display: none;
     }
 }
 

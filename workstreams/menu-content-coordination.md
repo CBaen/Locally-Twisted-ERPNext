@@ -51,7 +51,7 @@ Feature handoff for the BTFP/Process correction: `workstreams/nav-btfp-process-c
 ## Evidence Recorded This Session
 
 - 2026-05-07 BTFP/Process correction: direct route check returned 200 for `/`, `/event-balloons`, `/portfolio`, `/balloon-twisting-and-face-painting`, `/contact`, `/shop`, and `/faq`; `/process` returned 404.
-- 2026-05-07 BTFP/Process correction: `python scripts/verify/nav_ia.py` passed; `python scripts/verify/smoke_shop.py` passed; `npm run test:portfolio-reel` passed 4/4; `npm run test:checkout-experience` passed 2/2; `npm run test:interactive-layout` passed 74/74; `npm run test:layout-fit` passed 247/247.
+- 2026-05-07 compact hero follow-up: `python scripts/verify/nav_ia.py` passed; `python scripts/verify/smoke_shop.py` passed; `npm run test:portfolio-reel` passed 4/4; `npm run test:checkout-experience` passed 2/2; `npm run test:interactive-layout` passed 88/88; `npm run test:layout-fit` passed 247/247.
 - 2026-05-07 BTFP/Process correction: manual Playwright audit saved screenshots to `output/playwright/nav-btfp-restored-20260507/`, checked desktop/mobile BTFP nav links, 32 BTFP page images, 19 chrome/footer internal links, and no Process anchors in inspected chrome or BTFP page.
 - Route sweep returned 200 for `/`, `/event-balloons`, `/portfolio`, `/contact`, `/shop`, `/faq`, `/balloon-twisting-and-face-painting`, `/privacy`, `/terms-of-service`, `/refund-policy`, `/accessibility`, `/cart`, `/checkout`, `/payment-success`, `/thank-you`, `/shop-items/arches`, and `/shop-items/garlands/baby-shower-garland`.
 - `python scripts/verify/nav_ia.py` passed after the authority-first nav update.
@@ -62,7 +62,7 @@ Feature handoff for the BTFP/Process correction: `workstreams/nav-btfp-process-c
 - `python scripts/verify/cart_checkout_contract.py` passed.
 - `python scripts/verify/smoke_shop.py` passed after updating the verifier to the restored mega-menu contract.
 - `npm run test:layout-fit` initially passed 80/80 after adding `/checkout` and `/thank-you`; this is superseded by the 260/260 responsive follow-up below.
-- Responsive follow-up originally expanded the passive layout gate to 260/260 and added `npm run test:interactive-layout` at 39/39. After the 2026-05-07 Process removal and homepage/nav proof checks, the current website gate is `layout-fit` 247/247 and `interactive-layout` 74/74. Future menu/content work should use the responsive-container workstream and `npm run test:website-verify`, not the old 80-check gate.
+- Responsive follow-up originally expanded the passive layout gate to 260/260 and added `npm run test:interactive-layout` at 39/39. After the 2026-05-07 Process removal, homepage/nav proof checks, and compact hero contract, the current website gate is `layout-fit` 247/247 and `interactive-layout` 88/88. Future menu/content work should use the responsive-container workstream and `npm run test:website-verify`, not the old 80-check gate.
 - `python scripts/verify/smoke_shop.py` now verifies fixed-price product pages do not invent product-level quote gates, and still checks retail variant add-to-cart pages.
 - Served asset check found `lt-mega-menu.css`, `lt-page-containment.css`, `lt-product-polish.css`, and `lt-megamenu.js?v=20260505-mega-4` in the running page.
 - Post-fix Playwright screenshot/interaction pass saved to `output/playwright/full-site-fix-20260505-post/` and reported no failures across 13 routes at 320, 375, and 1366 widths, plus desktop event/product mega menus and the mobile drawer.

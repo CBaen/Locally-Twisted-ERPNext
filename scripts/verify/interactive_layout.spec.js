@@ -10,6 +10,63 @@ const {
 
 const PLATFORM_WORDS = /\b(?:ERPNext|Frappe)\b/i;
 
+const COMPACT_HERO_VIEWPORTS = [
+	{ name: "mobile", width: 390, height: 844, expectedHeight: 220, maxPadding: 24, maxTitle: 32 },
+	{ name: "desktop", width: 1366, height: 768, expectedHeight: 280, maxPadding: 32, maxTitle: 44 },
+];
+
+const COMPACT_HERO_ROUTES = [
+	{
+		name: "home",
+		path: "/",
+		heroSelector: ".lt-hero",
+		contentSelector: ".lt-hero__content",
+		titleSelector: ".lt-hero__title",
+	},
+	{
+		name: "event balloons",
+		path: "/event-balloons",
+		heroSelector: ".lt-authority-hero",
+		contentSelector: ".lt-authority-hero__content",
+		titleSelector: ".lt-authority-hero h1",
+	},
+	{
+		name: "portfolio",
+		path: "/portfolio",
+		heroSelector: ".lt-portfolio .lt-hero",
+		contentSelector: ".lt-portfolio .lt-hero",
+		titleSelector: ".lt-title",
+	},
+	{
+		name: "twisting and face painting",
+		path: "/balloon-twisting-and-face-painting",
+		heroSelector: ".lt-btfp__intro",
+		contentSelector: ".lt-btfp__intro-inner",
+		titleSelector: ".lt-btfp__intro-title",
+	},
+	{
+		name: "contact",
+		path: "/contact",
+		heroSelector: ".lt-contact__intro",
+		contentSelector: ".lt-contact__intro .container",
+		titleSelector: ".lt-contact__intro h1",
+	},
+	{
+		name: "shop",
+		path: "/shop",
+		heroSelector: ".lt-shop__hero",
+		contentSelector: ".lt-shop__hero-inner",
+		titleSelector: ".lt-shop__hero-title",
+	},
+	{
+		name: "shop category",
+		path: "/shop-items/seasonal-specialty",
+		heroSelector: ".lt-shop__hero",
+		contentSelector: ".lt-shop__hero-inner",
+		titleSelector: ".lt-shop__title",
+	},
+];
+
 async function expectSuccessfulResponse(response, path) {
 	expect(response, `${path} should return a response`).not.toBeNull();
 	expect(response.status(), `${path} HTTP status`).toBeLessThan(400);
@@ -24,6 +81,70 @@ async function dismissCookieNotice(page) {
 }
 
 test.describe("Locally Twisted interactive layout states", () => {
+	test.describe("compact hero height contract", () => {
+		for (const viewport of COMPACT_HERO_VIEWPORTS) {
+			for (const route of COMPACT_HERO_ROUTES) {
+				test(`${route.name} hero uses the ${viewport.name} standard`, async ({ page }) => {
+					await page.setViewportSize({ width: viewport.width, height: viewport.height });
+					const response = await gotoAndSettle(page, route.path);
+					await expectSuccessfulResponse(response, route.path);
+
+					const result = await page.evaluate(({ route, viewport }) => {
+						const hero = document.querySelector(route.heroSelector);
+						const content = document.querySelector(route.contentSelector);
+						const title = document.querySelector(route.titleSelector);
+						if (!hero || !content || !title) {
+							return {
+								found: false,
+								missing: {
+									hero: !hero,
+									content: !content,
+									title: !title,
+								},
+							};
+						}
+
+						const heroStyle = window.getComputedStyle(hero);
+						const contentStyle = window.getComputedStyle(content);
+						const titleStyle = window.getComputedStyle(title);
+						const heroRect = hero.getBoundingClientRect();
+						const titleRect = title.getBoundingClientRect();
+						const next = hero.nextElementSibling;
+						const nextRect = next ? next.getBoundingClientRect() : null;
+						const paddingTop = Math.max(parseFloat(heroStyle.paddingTop), parseFloat(contentStyle.paddingTop));
+						const paddingBottom = Math.max(parseFloat(heroStyle.paddingBottom), parseFloat(contentStyle.paddingBottom));
+
+						return {
+							found: true,
+							height: Math.round(heroRect.height),
+							expectedHeight: viewport.expectedHeight,
+							paddingTop,
+							paddingBottom,
+							maxPadding: viewport.maxPadding,
+							titleFontSize: parseFloat(titleStyle.fontSize),
+							maxTitle: viewport.maxTitle,
+							contentFitsHero: hero.scrollHeight <= hero.clientHeight + 2,
+							titleFitsHero: titleRect.bottom <= heroRect.bottom + 1,
+							nextBandTop: nextRect ? nextRect.top : null,
+							viewportHeight: window.innerHeight,
+						};
+					}, { route, viewport });
+
+					expect(result.found, `${route.path} should expose the named hero contract elements`).toBe(true);
+					expect(result.height, `${route.path} hero height should match the approved ${viewport.name} standard`).toBe(result.expectedHeight);
+					expect(result.paddingTop, `${route.path} hero top padding should not exceed the approved ${viewport.name} cap`).toBeLessThanOrEqual(result.maxPadding);
+					expect(result.paddingBottom, `${route.path} hero bottom padding should not exceed the approved ${viewport.name} cap`).toBeLessThanOrEqual(result.maxPadding);
+					expect(result.titleFontSize, `${route.path} hero title should not overwhelm the page`).toBeLessThanOrEqual(result.maxTitle);
+					expect(result.contentFitsHero, `${route.path} hero content should fit inside the standard height`).toBe(true);
+					expect(result.titleFitsHero, `${route.path} hero title should not spill below the hero`).toBe(true);
+					if (viewport.name === "desktop" && result.nextBandTop !== null) {
+						expect(result.nextBandTop, `${route.path} should show the next section in the first laptop viewport`).toBeLessThan(result.viewportHeight - 16);
+					}
+				});
+			}
+		}
+	});
+
 	test.describe("white-label platform leakage", () => {
 		for (const route of [...PUBLIC_ROUTES, { name: "login", path: "/login" }]) {
 			test(`${route.name} has no platform names in visible text`, async ({ page }) => {

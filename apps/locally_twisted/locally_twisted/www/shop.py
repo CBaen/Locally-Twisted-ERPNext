@@ -111,11 +111,19 @@ PAGE_CSS = """
     background:
         linear-gradient(135deg, rgba(250, 247, 242, 0.98) 0%, rgba(250, 247, 242, 0.92) 48%, rgba(217, 199, 179, 0.42) 100%);
     border-bottom: 1px solid rgba(14, 34, 64, 0.16);
-    padding: 3rem 1rem 2.4rem;
+    min-height: var(--lt-hero-standard-height);
+    height: var(--lt-hero-standard-height);
+    max-height: var(--lt-hero-standard-height);
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
 }
 .lt-shop__hero-inner {
     max-width: 1100px;
     margin: 0 auto;
+    width: 100%;
+    padding-block: var(--lt-hero-padding-y);
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -133,20 +141,20 @@ PAGE_CSS = """
 }
 .lt-shop__hero-title {
     font-family: var(--lt-font-heading);
-    font-size: 2.45rem;
+    font-size: var(--lt-hero-title-max);
     font-weight: 700;
     color: var(--lt-ink);
-    margin: 0 0 1rem;
-    line-height: 1.1;
-    max-width: 22ch;
+    margin: 0 0 0.55rem;
+    line-height: 1.04;
+    max-width: 24ch;
 }
 .lt-shop__hero-lede {
     font-family: var(--lt-font-body);
-    font-size: 1rem;
+    font-size: 0.95rem;
     color: var(--lt-soft-gray);
     margin: 0;
-    max-width: 50ch;
-    line-height: 1.55;
+    max-width: 64ch;
+    line-height: 1.35;
 }
 .lt-shop__hero-lede a {
     color: var(--lt-near-black);
@@ -179,8 +187,7 @@ PAGE_CSS = """
 }
 .lt-shop__cart-btn svg { flex-shrink: 0; }
 @media (min-width: 992px) {
-    .lt-shop__hero { padding: 4rem 2rem 3rem; }
-    .lt-shop__hero-title { font-size: 3rem; }
+    .lt-shop__hero { padding-inline: 2rem; }
 }
 
 /* Thin accent bands */
@@ -409,7 +416,7 @@ PAGE_CSS = """
     padding: 0;
 }
 .lt-shop--landing .lt-shop__hero-inner {
-    padding: clamp(2.25rem, 6vw, 4.5rem) clamp(1rem, 4vw, 2rem);
+    padding: var(--lt-hero-padding-y) clamp(1rem, 4vw, 2rem);
 }
 .lt-shop--landing .lt-shop__hero-eyebrow,
 .lt-shop--landing .lt-shop__count {
@@ -419,13 +426,14 @@ PAGE_CSS = """
 }
 .lt-shop--landing .lt-shop__hero-title {
     color: var(--lt-white);
-    font-size: clamp(2.35rem, 7vw, 4.4rem);
+    font-size: var(--lt-hero-title-max);
     line-height: 1.04;
-    max-width: 12ch;
+    max-width: 24ch;
 }
 .lt-shop--landing .lt-shop__hero-lede {
     color: rgba(250, 247, 242, 0.86);
-    max-width: 56ch;
+    max-width: 64ch;
+    line-height: 1.35;
 }
 .lt-shop--landing .lt-shop__band--sandstone {
     background: var(--lt-brass);

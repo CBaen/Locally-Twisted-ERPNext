@@ -11,31 +11,40 @@
     background:
         linear-gradient(135deg, rgba(14, 34, 64, 0.96), rgba(10, 10, 11, 0.94)),
         linear-gradient(90deg, rgba(179, 27, 52, 0.18), rgba(217, 199, 179, 0.08));
-    padding: 3.75rem 1rem 3rem;
+    min-height: var(--lt-hero-standard-height);
+    height: var(--lt-hero-standard-height);
+    max-height: var(--lt-hero-standard-height);
+    padding: 0 1rem;
     text-align: center;
     border-bottom: 4px solid #B31B34;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
 }
 .lt-contact__intro > .container,
 .lt-contact__intro h1,
 .lt-contact__intro p {
     text-align: center;
 }
+.lt-contact__intro > .container {
+    padding-block: var(--lt-hero-padding-y);
+}
 .lt-contact__intro h1 {
     font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: clamp(2.4rem, 5vw, 4rem);
+    font-size: var(--lt-hero-title-max);
     color: #FAF7F2;
-    margin: 0 auto 0.65rem;
-    line-height: 1.02;
+    margin: 0 auto 0.5rem;
+    line-height: 1.04;
     font-weight: 700;
     letter-spacing: 0;
 }
 .lt-contact__intro-lede {
-    font-size: 1.125rem;
+    font-size: 0.96rem;
     color: rgba(250, 247, 242, 0.86);
     margin: 0 auto;
     font-weight: 400;
     max-width: 720px;
-    line-height: 1.65;
+    line-height: 1.35;
 }
 
 .lt-contact {

@@ -1,6 +1,6 @@
 # Responsive Container Integrity Workstream
 
-Last updated: 2026-05-07 by Codex after the Process route removal and full website verification parity pass.
+Last updated: 2026-05-07 by Codex after adding the compact hero height contract to the public visual gate.
 
 ## Status
 
@@ -19,6 +19,7 @@ GL identified a systemic failure: the site could pass narrow checks while still 
 - `scripts/verify/layout_helpers.js` centralizes route lists, viewport families, page-settle behavior, and overflow/text-fit audits.
 - `scripts/verify/layout_fit.spec.js` runs passive layout checks across the current launch public route list and 13 viewport families.
 - `scripts/verify/interactive_layout.spec.js` checks stateful UI across platform-name leakage, header breakpoints, desktop mega panels, mobile drawer accordions, shop filters/product selectors, contact expanded conditionals, portfolio front-photo state, homepage proof crawls, cookie placement, and reduced-motion homepage behavior.
+- `scripts/verify/interactive_layout.spec.js` also enforces the compact hero contract across the current named hero routes: 220px mobile, 250px tablet, and 280px desktop standard heights with padding/title caps.
 - `package.json` exposes:
   - `npm run test:layout-fit`
   - `npm run test:interactive-layout`
@@ -52,6 +53,7 @@ The standing viewport families are:
 - Kept desktop mega panels inside the header/container instead of anchoring narrow product panels to individual nav item widths.
 - Fixed reduced-motion homepage carousel/review behavior so tracks do not animate or force overflow when reduced motion is requested.
 - Added the portfolio state check; 2026-05-06 follow-up now checks the current proof-reel front-photo behavior instead of the superseded modal behavior.
+- Added the compact hero contract after GL rejected oversized/inconsistent page heroes. The first red run failed 14/14; the implemented pass is green at 14/14 for home, event balloons, portfolio, BTFP, contact, shop, and category heroes.
 - Reconciled `smoke_shop.py` with the commerce lane. 2026-05-06 correction: fixed-price products must not invent product-level quote gates; out-of-area delivery ZIP owns the quote fallback, while retail products such as `unicorn-bouquet` still verify inline variant controls and cart writes.
 
 ## Verification Receipts
@@ -62,14 +64,16 @@ The standing viewport families are:
 - `python -B -m py_compile scripts\verify\smoke_shop.py` passed.
 - `python scripts/verify/commerce_rules_contract.py` passed.
 - `python scripts/verify/smoke_shop.py` passed.
-- `npm run test:interactive-layout` passed 74/74 after the homepage/nav proof update.
+- `npm run test:interactive-layout` passed 88/88 after the compact hero repair.
 - `npm run test:layout-fit` passed 247/247 after `/process` was removed from the public route list.
 - `npm run test:checkout-experience` passed 2/2.
 - `npm run test:website-verify` passed; `npm run test:public-verify` aliases to the same website-only gate.
+- `npm run test:interactive-layout -- --grep "compact hero height contract"` passed 14/14 after the compact hero repair.
 
 ## Rules For Future Work
 
 - Do not solve layout by hiding body overflow unless the real container math is already fixed.
+- Do not let heroes grow by page-local padding, `min-height`, or large title clamps. A hero is a compact page label, not the page.
 - Any new public route or component must be added to `PUBLIC_ROUTES` or a route-specific interactive check when it becomes launch-critical.
 - Any new drawer, modal, accordion, filter, product selector, or breakpoint-specific behavior needs an open-state check.
 - Use `.codex/capabilities/recipes/responsive-container-audit.md` before touching public containers.

@@ -406,6 +406,12 @@
   background: var(--lt-polish-navy);
   border-bottom: 4px solid var(--lt-polish-brass);
   color: #fff;
+  min-height: var(--lt-hero-standard-height);
+  height: var(--lt-hero-standard-height);
+  max-height: var(--lt-hero-standard-height);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
 }
 
 .lt-shop--category .lt-shop__hero-inner,
@@ -420,7 +426,7 @@
 
 .lt-shop--category .lt-shop__hero-inner,
 .lt-shop--landing .lt-shop__hero-inner {
-  padding-block: clamp(2.25rem, 6vw, 4.5rem);
+  padding-block: var(--lt-hero-padding-y);
 }
 
 .lt-shop--category .lt-shop__eyebrow,
@@ -448,16 +454,16 @@
 
 .lt-shop--category .lt-shop__title,
 .lt-shop--landing .lt-shop__hero-title {
-  max-width: 12ch;
-  font-size: clamp(2.35rem, 7vw, 4.4rem);
+  max-width: 24ch;
+  font-size: var(--lt-hero-title-max);
 }
 
 .lt-shop--landing .lt-shop__hero-lede {
   max-width: 56ch;
   color: rgba(250, 247, 242, 0.86);
   font-family: var(--lt-polish-body);
-  font-size: 1.06rem;
-  line-height: 1.65;
+  font-size: 0.95rem;
+  line-height: 1.35;
 }
 
 .lt-shop--category .lt-shop__layout {

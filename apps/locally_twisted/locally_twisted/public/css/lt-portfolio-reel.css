@@ -123,26 +123,33 @@
 }
 
 .lt-hero {
+  min-height: var(--lt-hero-standard-height, 220px);
+  height: var(--lt-hero-standard-height, 220px);
+  max-height: var(--lt-hero-standard-height, 220px);
   max-width: 1280px;
-  padding: 110px 0 140px 48px;
+  padding: 28px 0 28px 48px;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .lt-eyebrow {
   color: var(--portfolio-ink-mute);
   font-size: 11px;
   letter-spacing: 0.18em;
-  margin-bottom: 32px;
+  margin-bottom: 10px;
   text-transform: uppercase;
 }
 
 .lt-title {
   color: var(--portfolio-ink);
   font-family: var(--portfolio-serif);
-  font-size: clamp(56px, 9vw, 132px);
+  font-size: min(44px, var(--lt-hero-title-max, 44px));
   font-weight: 300;
-  letter-spacing: -0.015em;
-  line-height: 0.96;
+  letter-spacing: 0;
+  line-height: 0.98;
 }
 
 .lt-title em {
@@ -154,11 +161,11 @@
 .lt-meta {
   border-top: 1px solid var(--portfolio-rule);
   display: grid;
-  gap: 40px;
+  gap: 20px;
   grid-template-columns: repeat(3, 1fr);
-  margin-top: 80px;
+  margin-top: 12px;
   max-width: 880px;
-  padding-top: 24px;
+  padding-top: 12px;
 }
 
 .lt-meta > div {
@@ -373,19 +380,19 @@
   }
 
   .lt-hero {
-    padding: 70px 0 90px 20px;
+    min-height: 220px;
+    height: 220px;
+    max-height: 220px;
+    padding: 24px 0 24px 20px;
   }
 
   .lt-title {
-    font-size: clamp(48px, 18vw, 76px);
+    font-size: 32px;
     max-width: calc(100vw - 40px);
   }
 
   .lt-meta {
-    gap: 18px;
-    grid-template-columns: 1fr;
-    margin-top: 50px;
-    max-width: calc(100vw - 40px);
+    display: none;
   }
 
   .lt-reel {

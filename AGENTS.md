@@ -92,7 +92,7 @@ Read the index when a task depends on local tools, reusable workflows, project-s
 
 Treat `last_verified` dates older than about 90 days as stale until rechecked.
 
-For public layout, Frappe container, `.lt-fullbleed`, Webshop surface, crawl/marquee, breakpoint, nav, drawer, modal, form, product selector, cart, checkout, or broad visual work, read `.codex/capabilities/recipes/frappe-public-container-contract.md` and `.codex/capabilities/recipes/responsive-container-audit.md` before editing. Container fit is a launch requirement, not polish.
+For public layout, Frappe container, `.lt-fullbleed`, Webshop surface, crawl/marquee, breakpoint, nav, drawer, modal, form, product selector, cart, checkout, or broad visual work, read `.codex/capabilities/recipes/frappe-public-container-contract.md` and `.codex/capabilities/recipes/responsive-container-audit.md` before editing. If the work touches a hero, intro, masthead, or page-header treatment, also read `.codex/capabilities/recipes/compact-hero-contract.md`. Container fit and compact same-height heroes are launch requirements, not polish.
 
 Older Claude skills and rules under `C:\Users\baenb\.claude\` are a read-only reference library, not project truth. The useful entrypoints are `C:\Users\baenb\.claude\skills\README.md`, specific `SKILL.md` files, and `C:\Users\baenb\.claude\rules\reach-paths.md`. For Frappe/ERPNext launch work, especially consider the older `frappe-payment-safety`, `frappe-form-integrity`, `frappe-fixture-discipline`, `frappe-migration-guard`, and `frappe-deploy-safety` skills as checklists for what to verify. Do not read secrets, runtime state, logs, caches, sessions, or token files there, and do not copy Claude-era files wholesale into this repo.
 

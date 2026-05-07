@@ -14,6 +14,7 @@ failed_uses: 0
 regressions: 0
 depends_on:
   - frappe-public-container-contract
+  - compact-hero-contract
 used_by:
   - lt-brand-style-guide-consolidation
   - frappe-shop-showroom-symmetry
@@ -37,6 +38,7 @@ Read `frappe-public-container-contract.md` first when the work touches Frappe's 
 ## When To Use
 
 - Text, controls, images, chips, cards, menus, or form fields appear tight against a container edge.
+- A page hero, intro, masthead, or marketing header changes height, padding, copy density, or title scale.
 - A component changes layout across mobile, tablet, desktop, or near a breakpoint.
 - Header/nav/drawer/mega-menu behavior changes.
 - Product, category, cart, checkout, contact, portfolio, FAQ, policy, or homepage containers change.
@@ -117,10 +119,13 @@ Use `npm run test:public-verify` when closing a broad public-site visual change.
 - If several pages fail at the same width, suspect shared chrome, section wrappers, global grid rules, or Webshop defaults.
 - If a carousel/track reports overflow but the document does not scroll and an ancestor clips it intentionally, tune the allowlist rather than hiding real failures.
 - If native checkboxes/radios are small by design but the label is the actual target, audit the wrapper target instead.
+- If a hero changes, run the `compact hero height contract` grep in
+  `interactive_layout.spec.js`; route-local hero sizing is not allowed to drift
+  outside the approved viewport-family standard.
 - If a verifier fails because the business contract changed, update the verifier to the new source-of-truth behavior and preserve coverage for the old risk in the correct lane.
 
 ## LT Receipt
 
-The first use on 2026-05-05 expanded `npm run test:layout-fit` from a narrow route/viewport pass to 260 checks across 20 public routes and 13 viewport families. It also added `npm run test:interactive-layout` with stateful checks for header breakpoint behavior, desktop mega panels, mobile drawer accordions, shop/product controls, contact conditionals, portfolio state, and reduced-motion homepage states. On 2026-05-06, the portfolio state check moved from the superseded modal behavior to the current proof-reel front-photo behavior. On 2026-05-07, the unapproved `/process` route was removed and homepage/nav proof checks expanded the current gate to `layout-fit` 247/247 and `interactive-layout` 74/74. `python scripts/verify/smoke_shop.py` was corrected to respect the quote-required custom install lane while still verifying retail inline variant selection and cart writes.
+The first use on 2026-05-05 expanded `npm run test:layout-fit` from a narrow route/viewport pass to 260 checks across 20 public routes and 13 viewport families. It also added `npm run test:interactive-layout` with stateful checks for header breakpoint behavior, desktop mega panels, mobile drawer accordions, shop/product controls, contact conditionals, portfolio state, and reduced-motion homepage states. On 2026-05-06, the portfolio state check moved from the superseded modal behavior to the current proof-reel front-photo behavior. On 2026-05-07, the unapproved `/process` route was removed and homepage/nav proof checks expanded the gate to `layout-fit` 247/247 and `interactive-layout` 74/74; the compact hero contract then expanded the current interactive gate to 88/88. `python scripts/verify/smoke_shop.py` was corrected to respect the quote-required custom install lane while still verifying retail inline variant selection and cart writes.
 
 The 2026-05-06 shop showroom repair added a symmetry-specific supplement, then the same-day UX repair superseded the button-grid category controls: `/shop` and `/shop-items/<group>` now use a desktop category rail plus native mobile select, and category/product grids must not leave a single desktop orphan card when a balanced 2-up split is available.
