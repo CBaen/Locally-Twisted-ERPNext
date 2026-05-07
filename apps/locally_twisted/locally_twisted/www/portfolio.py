@@ -187,29 +187,29 @@ GALLERY_ITEMS = [
 ]
 
 
-# The reel depends on mixed scales and an edge/center rhythm. Keep center
-# placements frequent enough that desktop scroll states feel balanced.
+# Keep this side/scale/aspect rhythm aligned with the approved Frappe design
+# handoff in research/design_handoff_locally_twisted_portfolio/frappe/.
 APPROVED_COLLAGE_SLOTS = [
-    {"side": "left", "scale": 0.70, "w": 4, "h": 5},
-    {"side": "right", "scale": 0.84, "w": 3, "h": 2},
-    {"side": "center", "scale": 1.02, "w": 16, "h": 10},
-    {"side": "left", "scale": 0.66, "w": 2, "h": 3},
-    {"side": "right", "scale": 0.72, "w": 3, "h": 4},
-    {"side": "center", "scale": 0.98, "w": 16, "h": 9},
-    {"side": "left", "scale": 0.78, "w": 5, "h": 4},
-    {"side": "right", "scale": 0.66, "w": 3, "h": 4},
-    {"side": "center", "scale": 1.00, "w": 16, "h": 10},
-    {"side": "left", "scale": 0.72, "w": 4, "h": 5},
-    {"side": "right", "scale": 0.84, "w": 3, "h": 2},
+    {"side": "left", "scale": 0.62, "w": 4, "h": 5},
+    {"side": "right", "scale": 0.74, "w": 3, "h": 2},
+    {"side": "left", "scale": 0.58, "w": 2, "h": 3},
+    {"side": "center", "scale": 0.92, "w": 16, "h": 10},
+    {"side": "left", "scale": 0.60, "w": 4, "h": 5},
+    {"side": "right", "scale": 0.64, "w": 3, "h": 4},
+    {"side": "left", "scale": 0.74, "w": 5, "h": 4},
+    {"side": "right", "scale": 0.58, "w": 2, "h": 3},
     {"side": "center", "scale": 0.96, "w": 16, "h": 9},
-    {"side": "left", "scale": 0.70, "w": 4, "h": 5},
-    {"side": "right", "scale": 0.74, "w": 3, "h": 4},
-    {"side": "center", "scale": 0.98, "w": 16, "h": 10},
-    {"side": "left", "scale": 0.66, "w": 2, "h": 3},
-    {"side": "right", "scale": 0.70, "w": 3, "h": 4},
-    {"side": "center", "scale": 0.96, "w": 16, "h": 9},
-    {"side": "left", "scale": 0.72, "w": 4, "h": 5},
-    {"side": "right", "scale": 0.86, "w": 3, "h": 2},
+    {"side": "right", "scale": 0.55, "w": 3, "h": 4},
+    {"side": "left", "scale": 0.62, "w": 4, "h": 5},
+    {"side": "right", "scale": 0.76, "w": 3, "h": 2},
+    {"side": "left", "scale": 0.60, "w": 4, "h": 5},
+    {"side": "right", "scale": 0.62, "w": 3, "h": 4},
+    {"side": "left", "scale": 0.72, "w": 5, "h": 4},
+    {"side": "center", "scale": 0.94, "w": 16, "h": 10},
+    {"side": "left", "scale": 0.56, "w": 2, "h": 3},
+    {"side": "right", "scale": 0.60, "w": 3, "h": 4},
+    {"side": "left", "scale": 0.62, "w": 4, "h": 5},
+    {"side": "right", "scale": 0.78, "w": 3, "h": 2},
 ]
 
 PORTFOLIO_DISPLAY_ORDER = [

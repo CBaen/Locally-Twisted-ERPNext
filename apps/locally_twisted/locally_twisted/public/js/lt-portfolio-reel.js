@@ -3,51 +3,77 @@
   "use strict";
 
   const SETTINGS = {
-    density: 1.5,
+    density: 1.10,
     variant: "drift",
     driftSmoothing: 0.02,
     opacitySpeed: 4.0,
   };
 
-  const BASE_UNIT = 820;
-  const VERTICAL_SPACING = 44;
-  const OVERLAP = 0.56;
-  const COLUMN_CENTERS = {
-    left: 34,
-    center: 50,
-    right: 66,
-  };
-  const COLUMN_STAGGER = {
-    left: 0,
-    center: 40,
-    right: 18,
-  };
+  const BASE_UNIT = 640;
+  const VERTICAL_SPACING = 80;
+  const OVERLAP = 0.55;
+  const CENTER_BREATH = 140;
+
+  function mountCursor() {
+    if (window.matchMedia("(max-width: 768px)").matches) return;
+    const dot = document.createElement("div");
+    dot.className = "lt-cursor-dot";
+    const ring = document.createElement("div");
+    ring.className = "lt-cursor-ring";
+    document.body.appendChild(dot);
+    document.body.appendChild(ring);
+
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let ringX = mouseX;
+    let ringY = mouseY;
+
+    window.addEventListener("mousemove", (event) => {
+      mouseX = event.clientX;
+      mouseY = event.clientY;
+    });
+
+    function tick() {
+      ringX += (mouseX - ringX) * 0.18;
+      ringY += (mouseY - ringY) * 0.18;
+      dot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
+      ring.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
+      window.requestAnimationFrame(tick);
+    }
+
+    window.requestAnimationFrame(tick);
+  }
 
   function layoutPhotos(photos, density) {
-    const columnY = {
-      left: 0,
-      center: 0,
-      right: 0,
-    };
+    let leftY = 0;
+    let rightY = 0;
     const verticalSpacing = VERTICAL_SPACING * (2 - density);
 
-    return photos.map((photo, index) => {
+    return photos.map((photo) => {
       const width = BASE_UNIT * photo.scale * density;
       const height = width / (photo.w / photo.h);
-      const side = photo.side || (index % 3 === 1 ? "center" : index % 3 === 2 ? "right" : "left");
-      const y = columnY[side] || 0;
-      const stagger = COLUMN_STAGGER[side] || 0;
-      const yOffset = y + stagger;
-      columnY[side] = y + height * OVERLAP + verticalSpacing;
 
-      return Object.assign({}, photo, { side, yOffset, _w: width, _h: height });
+      if (photo.side === "center") {
+        const startY = Math.max(leftY, rightY) + CENTER_BREATH;
+        const endY = startY + height + CENTER_BREATH;
+        leftY = endY;
+        rightY = endY;
+        return Object.assign({}, photo, { yOffset: startY, _w: width, _h: height });
+      }
+
+      const isLeft = photo.side === "left";
+      const y = isLeft ? leftY : rightY;
+      const next = y + height * OVERLAP + verticalSpacing;
+      if (isLeft) leftY = next;
+      else rightY = next;
+      return Object.assign({}, photo, { yOffset: y, _w: width, _h: height });
     });
   }
 
   function anchorPercent(photo, index, viewportWidth) {
-    const baseCenter = COLUMN_CENTERS[photo.side] || 50;
-    const jitter = photo.side === "center" ? ((index % 2) ? 0.9 : -0.9) : ((index % 3) - 1) * 1.25;
-    return baseCenter + jitter - (photo._w / viewportWidth) * 50;
+    if (photo.side === "center") return 50 - (photo._w / viewportWidth) * 50;
+    if (photo.side === "left") return 2 + ((index * 5) % 12);
+    return 100 - (photo._w / viewportWidth) * 100 - (2 + ((index * 9) % 12));
   }
 
   function makePhotoEl(photo, index, viewportWidth) {
@@ -66,7 +92,7 @@
     const anchor = anchorPercent(photo, index, viewportWidth);
     figure.style.width = `${photo._w}px`;
     figure.style.height = `${photo._h}px`;
-    figure.style.left = `${Math.max(-8, Math.min(76, anchor))}%`;
+    figure.style.left = `${Math.max(1, anchor)}%`;
     figure.style.top = `${photo.yOffset}px`;
     figure.style.setProperty("--ar", photo.w / photo.h);
 
@@ -112,6 +138,8 @@
     const reel = root.querySelector("[data-reel]");
     if (!photos.length || !reel) return;
 
+    mountCursor();
+
     let viewportWidth = window.innerWidth;
     let viewportHeight = window.innerHeight;
     let positioned = layoutPhotos(photos, SETTINGS.density);
@@ -146,7 +174,7 @@
         const anchor = anchorPercent(photo, index, viewportWidth);
         element.style.width = `${photo._w}px`;
         element.style.height = `${photo._h}px`;
-        element.style.left = `${Math.max(-8, Math.min(76, anchor))}%`;
+        element.style.left = `${Math.max(1, anchor)}%`;
         element.style.top = `${photo.yOffset}px`;
       });
 
@@ -208,9 +236,9 @@
 
         if (SETTINGS.variant === "drift") {
           const eased = Math.max(0, Math.min(1, smoothProgress * 1.4));
-          tx = side * (1 - eased) * 42;
-          ty = (1 - eased) * (side === 0 ? 38 : 18);
-          opacity = 1;
+          tx = side * (1 - eased) * 320;
+          ty = (1 - eased) * (side === 0 ? 120 : 60);
+          opacity = Math.max(0, Math.min(1, smoothProgress * SETTINGS.opacitySpeed));
         } else if (SETTINGS.variant === "snap") {
           const eased = Math.max(0, Math.min(1, peakProgress * 1.6));
           ty = (1 - eased) * 80;

@@ -6,7 +6,17 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-06 - Exact design exports are source, not mood boards
+
+The portfolio page failed because Codex treated a Frappe-ready design export as a loose reference. The shipped correction used tests and numeric constraints to produce "bigger photos, three columns, compact hero," but it stripped the actual exported design language: editorial serif hero, portfolio row, muted paper/ink system, custom cursor, slow drift/fade, approved scales, and center-photo rhythm.
+
+**Counter-move:** when a handoff says the Frappe export is approved and deviations are bugs, diff production against that export first and restore its locked values before inventing any local design solution. Translate only fake business details and production hazards. Add verifiers for the exported constants and visual behavior so tests protect fidelity, not the agent's reinterpretation.
+
+---
+
 ## 2026-05-06 - Portfolio proof pages fail when the center column starts late
+
+**Status:** Superseded for `/portfolio` by the approved-export lesson above. This remains useful for generic proof galleries, but it was the wrong priority for the approved LT export.
 
 The first portfolio correction made photos bigger than cards but still let the layout behave like two edge columns with occasional center statements. That read cheap because the opening viewport did not immediately establish the intended left/right/center rhythm, and the images were still too small for a page whose job is to sell installed visual work.
 

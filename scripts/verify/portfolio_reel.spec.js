@@ -25,23 +25,22 @@ test.describe("portfolio proof reel", () => {
 			const first = photos[0];
 			const second = photos[1];
 			const third = photos[2];
+			const fourth = photos[3];
 			const firstImage = first ? first.querySelector("img") : null;
 			const firstStyle = first ? window.getComputedStyle(first) : null;
 			const imageStyle = firstImage ? window.getComputedStyle(firstImage) : null;
 			const frame = first ? first.querySelector(".lt-frame") : null;
 			const frameStyle = frame ? window.getComputedStyle(frame) : null;
 			const rect = first ? first.getBoundingClientRect() : null;
-			const heroRect = document.querySelector(".lt-portfolio-hero")?.getBoundingClientRect();
-			const headerRect = document.querySelector(".navbar, header, .web-header")?.getBoundingClientRect();
+			const heroRect = document.querySelector(".lt-hero")?.getBoundingClientRect();
 			const bodyFontFamily = window.getComputedStyle(document.body).fontFamily;
 			const rootStyle = root ? window.getComputedStyle(root) : null;
 			return {
 				hasRoot: Boolean(root),
 				hasReel: Boolean(reel),
 				headingText: document.querySelector(".lt-title")?.textContent || "",
-				heroCopy: document.querySelector(".lt-hero-copy")?.textContent || "",
+				metaText: document.querySelector(".lt-meta")?.textContent || "",
 				heroHeight: heroRect ? Math.round(heroRect.height) : 0,
-				headerHeight: headerRect ? Math.round(headerRect.height) : 0,
 				fontLinkCount: document.querySelectorAll('link[href*="fonts.googleapis"]').length,
 				cursorDotCount: document.querySelectorAll(".lt-cursor-dot, .lt-cursor-ring").length,
 				rootCursor: rootStyle ? rootStyle.cursor : "",
@@ -66,6 +65,10 @@ test.describe("portfolio proof reel", () => {
 				thirdSide: third ? third.dataset.side : "",
 				thirdWidth: third ? Math.round(third.getBoundingClientRect().width) : 0,
 				thirdLeft: third ? Math.round(third.getBoundingClientRect().left) : 0,
+				fourthSide: fourth ? fourth.dataset.side : "",
+				fourthWidth: fourth ? Math.round(fourth.getBoundingClientRect().width) : 0,
+				fourthLeft: fourth ? Math.round(fourth.getBoundingClientRect().left) : 0,
+				fourthTop: fourth ? Math.round(Number.parseFloat(fourth.style.top || "0")) : 0,
 				imageObjectFit: imageStyle ? imageStyle.objectFit : null,
 				imageSrc: firstImage ? firstImage.currentSrc || firstImage.src : "",
 				imageWidthAttr: firstImage ? firstImage.getAttribute("width") : null,
@@ -76,39 +79,43 @@ test.describe("portfolio proof reel", () => {
 
 		expect(facts.hasRoot).toBe(true);
 		expect(facts.hasReel).toBe(true);
-		expect(facts.headingText.trim()).toBe("What We Do");
-		expect(facts.heroCopy).toContain("Utah");
-		expect(facts.heroCopy).toContain("balloon decor");
-		expect(facts.heroHeight).toBeGreaterThan(225);
-		expect(facts.heroHeight).toBeLessThanOrEqual(Math.max(330, facts.headerHeight * 3));
-		expect(facts.fontLinkCount).toBe(0);
-		expect(facts.cursorDotCount).toBe(0);
-		expect(facts.rootCursor).not.toBe("none");
-		expect(facts.rootFontFamily).toBe(facts.bodyFontFamily);
-		expect(facts.backgroundColor).not.toBe("rgb(248, 244, 237)");
-		expect(facts.frameBackgroundColor).toBe(facts.backgroundColor);
-		expect(facts.imageBackgroundColor).toBe(facts.backgroundColor);
+		expect(facts.headingText).toContain("Sculptural balloon installations");
+		expect(facts.headingText).toContain("for serious rooms.");
+		expect(facts.metaText).toContain("Wasatch Front, Utah");
+		expect(facts.metaText).toContain("15 works");
+		expect(facts.heroHeight).toBeGreaterThan(760);
+		expect(facts.heroHeight).toBeLessThan(930);
+		expect(facts.fontLinkCount).toBe(2);
+		expect(facts.cursorDotCount).toBe(2);
+		expect(facts.rootCursor).toBe("none");
+		expect(facts.rootFontFamily).not.toBe(facts.bodyFontFamily);
+		expect(facts.backgroundColor).toContain("oklch");
+		expect(facts.frameBackgroundColor).toContain("oklch");
+		expect(facts.imageBackgroundColor).toContain("oklch");
 		expect(facts.photoCount).toBeGreaterThanOrEqual(15);
-		expect(facts.centerCount).toBeGreaterThanOrEqual(4);
+		expect(facts.centerCount).toBeGreaterThanOrEqual(2);
 		expect(facts.firstPosition).toBe("absolute");
 		expect(facts.firstSide).toBe("left");
 		expect(facts.secondSide).toBe("right");
-		expect(facts.thirdSide).toBe("center");
-		expect(facts.firstWidth).toBeGreaterThan(830);
-		expect(facts.firstWidth).toBeLessThan(900);
-		expect(Number.parseFloat(facts.firstLeftStyle)).toBeGreaterThanOrEqual(-4);
-		expect(Number.parseFloat(facts.firstLeftStyle)).toBeLessThanOrEqual(8);
+		expect(facts.thirdSide).toBe("left");
+		expect(facts.fourthSide).toBe("center");
+		expect(facts.firstWidth).toBeGreaterThan(420);
+		expect(facts.firstWidth).toBeLessThan(455);
+		expect(Number.parseFloat(facts.firstLeftStyle)).toBeGreaterThanOrEqual(1);
+		expect(Number.parseFloat(facts.firstLeftStyle)).toBeLessThanOrEqual(3);
 		expect(facts.firstHeight / facts.firstWidth).toBeCloseTo(1.25, 1);
-		expect(facts.firstOpacity).toBeGreaterThan(0.85);
-		expect(facts.firstLeft).toBeGreaterThan(-80);
-		expect(facts.firstLeft).toBeLessThan(60);
-		expect(facts.firstTop).toBeLessThan(540);
-		expect(facts.secondWidth - facts.firstWidth).toBeGreaterThan(140);
-		expect(facts.thirdWidth).toBeGreaterThan(1200);
-		expect(facts.thirdWidth).toBeLessThan(1300);
-		expect(facts.thirdLeft).toBeGreaterThan(20);
-		expect(facts.thirdLeft).toBeLessThan(90);
-		expect(facts.thirdTop).toBeLessThan(90);
+		expect(facts.firstOpacity).toBeLessThan(0.1);
+		expect(facts.firstLeft).toBeLessThan(-250);
+		expect(facts.firstTop).toBeGreaterThan(1100);
+		expect(facts.secondWidth - facts.firstWidth).toBeGreaterThan(70);
+		expect(facts.thirdWidth).toBeGreaterThan(395);
+		expect(facts.thirdWidth).toBeLessThan(425);
+		expect(facts.thirdTop).toBeGreaterThan(350);
+		expect(facts.fourthWidth).toBeGreaterThan(630);
+		expect(facts.fourthWidth).toBeLessThan(670);
+		expect(facts.fourthLeft).toBeGreaterThan(330);
+		expect(facts.fourthLeft).toBeLessThan(390);
+		expect(facts.fourthTop).toBeGreaterThan(880);
 		expect(facts.imageObjectFit).toBe("contain");
 		expect(facts.imageSrc).toContain("/optimized/");
 		expect(facts.imageSrc).toContain(".webp");
@@ -233,10 +240,10 @@ test.describe("portfolio proof reel", () => {
 		});
 
 		expect(after.firstTransform).not.toBe(before.transform);
-		expect(before.opacity).toBe(1);
+		expect(before.opacity).toBeLessThan(0.1);
 		expect(after.firstOpacity).toBe(1);
 		expect(after.visible.length).toBeGreaterThanOrEqual(3);
-		expect(Math.max(...after.visible.map((photo) => photo.width))).toBeGreaterThan(850);
+		expect(Math.max(...after.visible.map((photo) => photo.width))).toBeGreaterThan(500);
 		expect(after.visible.some((photo) => photo.side === "center")).toBe(true);
 		expect(after.visible.some((photo) => photo.side === "left")).toBe(true);
 		expect(after.visible.some((photo) => photo.side === "right")).toBe(true);

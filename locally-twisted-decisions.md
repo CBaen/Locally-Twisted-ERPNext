@@ -8,7 +8,23 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-06 - Portfolio approved Frappe export overrides Codex reinterpretations
+
+**Decision:** The approved portfolio source is the Claude/Frappe export at `research/design_handoff_locally_twisted_portfolio/frappe/`. Production may translate fake placeholder details into LT reality, but the visual system itself should follow the export: editorial portfolio row, large serif hero, Google font pairing, muted paper/ink palette, custom desktop cursor, small italic captions, and the locked reel constants (`density 1.10`, `BASE_UNIT 640`, `VERTICAL_SPACING 80`, `OVERLAP 0.55`, `CENTER_BREATH 140`, drift smoothing `0.02`, opacity speed `4.0`).
+
+**Reasoning:** GL rejected the previous Codex correction because it produced a technically verified page that was nothing like the exact Frappe design export. The failure was not a missing breakpoint or bad image math; it was treating the export as inspiration instead of source. For this route, fidelity to the export matters more than Codex's earlier compact-hero interpretation.
+
+**Implementation:** Restored the export-style portfolio row, large serif hero, meta strip, route contact band, typography, cursor, paper/ink color system, locked JS motion constants, approved side/scale/aspect rhythm, and slow drift/fade behavior while keeping real LT links, real LT phone/contact path, real optimized install images, server-side filtering, no-script fallback, and JSON-LD.
+
+**Verification receipt:** `python scripts/dev/clear_website_cache.py` passed. `npm run test:portfolio-reel` passed 4/4, `npm run test:layout-fit -- --grep portfolio` passed 13/13, and `npm run test:interactive-layout -- --grep portfolio` passed 4/4. Screenshots were captured at `output/playwright/portfolio-export-port-desktop.png`, `output/playwright/portfolio-export-port-scroll.png`, and `output/playwright/portfolio-export-port-mobile.png`.
+
+**Decided by:** GL's correction that the exact Frappe export is the expected design source; Codex implemented the high-fidelity translation.
+
+---
+
 ## 2026-05-06 - Portfolio uses compact hero plus larger three-column proof reel
+
+**Status:** Superseded the same day by the approved-Frappe-export decision above. This entry records the rejected Codex interpretation so future agents do not repeat it.
 
 **Decision:** `/portfolio` should keep a compact `What We Do` hero band and a large proof-first photo reel. The hero should not become a giant hero image; it should stay roughly within 2.5-3x the live menu/header height. Desktop portfolio photos should be materially larger than the earlier small reel, settle into left/right/center columns immediately, and stay tighter to the center while preserving full installed-work photos and natural aspect ratios.
 
