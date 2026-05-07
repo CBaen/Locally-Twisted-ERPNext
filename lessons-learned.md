@@ -112,11 +112,14 @@ and the cookie notice could cover mobile CTAs.
 
 **Counter-move:** treat homepage proof crawls as one shared banner contract, not
 two decorative widgets. Both review cards and trusted-business names must span
-the stage, move left-to-right, use the same `540s` duration in normal motion,
-and keep the same horizontal/full-stage fallback in reduced-motion conditions.
-The homepage cookie notice should sit inline after the hero so accounting,
-corporate, school, and civic visitors can see the primary CTAs without
-dismissing an overlay first.
+the stage and move right-to-left. The review-card crawl owns the canonical
+`540s` loop; the trusted-business crawl must be measured and assigned a
+proportional duration so its visible pixel speed matches the reviews. For these
+two proof bands only, the reduced-motion branch is a slow-crawl exception:
+it must remain horizontal, moving, and scrollbar-free unless GL explicitly
+changes the business-proof contract. The homepage cookie notice should sit
+inline after the review band so accounting, corporate, school, and civic
+visitors can see the primary CTAs without dismissing an overlay first.
 
 ---
 
@@ -368,7 +371,7 @@ The checkout code already knew how to pick a Utah tax rate from ZIP/city, but th
 
 The homepage review marquee was checked in Playwright and the computed CSS said it was animating. GL then showed two real browser screenshots with different failures: Chrome exposed the horizontal scrollbar from the reduced-motion fallback, while Brave showed the older stacked-card fallback. The code path existed, but the verification did not cover the states GL was actually seeing: persistent browser sessions, stale rendered CSS, and the `prefers-reduced-motion` branch.
 
-**Counter-move:** when a visual behavior depends on animation, overflow, media queries, or browser preferences, verify more than the happy-path computed style in one fresh browser. Check the served HTML/CSS, then run Chrome and Brave with fresh profiles and inspect the user-visible state: `matchMedia('(prefers-reduced-motion: reduce)')`, animation name/duration/play state, overflow/scrollbar behavior, and element positions over time. Also force both `no-preference` and `reduce` in Playwright. A reduced-motion fallback still has to match the intended visual contract; it cannot quietly become a stacked grid or visible scrollbar unless GL explicitly accepts that.
+**Counter-move:** when a visual behavior depends on animation, overflow, media queries, or browser preferences, verify more than the happy-path computed style in one fresh browser. Check the served HTML/CSS, then run Chrome and Brave with fresh profiles and inspect the user-visible state: `matchMedia('(prefers-reduced-motion: reduce)')`, animation name/duration/play state, overflow/scrollbar behavior, and element positions over time. Also force both `no-preference` and `reduce` in Playwright. A reduced-motion fallback still has to match the intended visual contract; it cannot quietly become a stacked grid, visible scrollbar, wrong direction, or different speed unless GL explicitly accepts that.
 
 ---
 
@@ -1287,7 +1290,10 @@ GL pivoted reviews from 5-inline-cards to a horizontal-scrolling carousel of all
 - Items: `flex: 0 0 320px;` (fixed card width, no shrink)
 - Track has duplicate set (aria-hidden) for seamless loop
 - `.viewport:hover .track { animation-play-state: paused; }` for reading-on-hover
-- `prefers-reduced-motion` falls back to flex-wrap (cards stack)
+- Original `prefers-reduced-motion` behavior fell back to flex-wrap (cards
+  stack), but that was superseded on 2026-05-07 for homepage proof crawls:
+  they now stay slow, moving, horizontal, and scrollbar-free in the reduced
+  branch.
 
 **Speed scaling:** text crawl = 270s for 54 names; card carousel = 360s for 19 cards. Cards are bigger and need reading time.
 

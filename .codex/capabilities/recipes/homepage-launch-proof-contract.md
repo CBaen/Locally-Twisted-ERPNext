@@ -9,9 +9,9 @@ currently_true: yes
 verification_level: 2
 last_verified: 2026-05-07
 evidence_quality: direct
-successful_uses: 1
-failed_uses: 0
-regressions: 0
+successful_uses: 2
+failed_uses: 1
+regressions: 1
 depends_on:
   - frappe-public-container-contract
   - responsive-container-audit
@@ -56,8 +56,13 @@ review crawl, trusted-client crawl, cookie notice placement, or launch CTAs.
   still important, but the launch homepage now leads with social proof under the
   hero.
 - Review cards and trusted-business names are full-stage crawls. Both move
-  left-to-right at `540s` in normal motion; reduced-motion checks preserve a
-  matched horizontal/static fallback so neither banner stacks or diverges.
+  right-to-left. Review cards use the canonical `540s` loop, and the
+  trusted-business crawl is measured in the browser so its pixel speed matches
+  the review-card crawl even though its track width is different.
+- The homepage proof crawls are a project-specific reduced-motion exception:
+  they stay slow, linear, full-stage, and scrollbar-free in both
+  `no-preference` and `reduce` media states unless GL explicitly changes the
+  business-proof contract. Do not restore the static/scrollbar fallback.
 - Homepage launch copy should speak to corporate, school, civic, community,
   venue, and private-event buyers without turning the page into technical
   planner language.
@@ -77,6 +82,7 @@ Run after homepage/Jinja/CSS/JS changes:
 
 ```powershell
 python scripts/dev/clear_website_cache.py
+npm run test:interactive-layout -- --grep "homepage review marquee|homepage client crawl banner|homepage reduced motion keeps"
 npx playwright test scripts/verify/layout_fit.spec.js --reporter=dot --grep "home fits"
 npm run test:interactive-layout -- --grep "homepage|cookie notice"
 npm run test:interactive-layout -- --grep "compact hero height contract"
@@ -98,7 +104,9 @@ before marking the homepage ready for GL review.
 - Review cards expose a native horizontal scrollbar.
 - Trusted-business names stack instead of crawling.
 - The two crawls differ in direction or speed.
-- Reduced-motion mode changes one proof band but not the other.
+- Either crawl moves left-to-right.
+- Reduced-motion mode stops either proof crawl, exposes a scrollbar, stacks the
+  cards/names, or lets one proof band diverge from the other.
 - The hero reintroduces hidden H1 plus visible rotating headings.
 - The hero grows back into a first-viewport wall or uses page-local min-height,
   oversized padding, or giant title clamps.
@@ -114,15 +122,18 @@ before marking the homepage ready for GL review.
 ## LT Receipt
 
 On 2026-05-07, GL reported that review cards were a scrollbar on one platform
-and stacked on another, while trusted-business proof was not crawling. The repair
-gave both proof banners the same full-stage left-to-right `540s` normal-motion
-behavior, stabilized the reduced-motion fallback, stabilized the hero around a
-single visible H1 and real install photo, moved the cookie notice inline, and
-added homepage/cookie Playwright coverage. A later same-day correction removed
-the homepage trust/authority bar, made Google reviews the first post-hero band,
-moved the cookie notice after reviews, and moved Recent Celebrations after the
-reviews block. Focused homepage checks passed first; follow-up full-site closeout
-then passed `npm run test:website-verify` with `layout-fit` 247/247 and
-`interactive-layout` 88/88 after the compact hero contract was added. Do not
-carry forward the earlier temporary portfolio-blocked caveat unless a fresh run
-fails again.
+and stacked on another, while trusted-business proof was not crawling. The first
+repair accidentally documented/protected a left-to-right/static reduced-motion
+contract. The follow-up repair changed both proof banners to right-to-left,
+kept the review crawl at the canonical `540s`, synced the trusted-business crawl
+to the review-card pixel speed with a homepage-only measurement script, and made
+the reduced-motion branch keep both proof crawls slow, horizontal, and
+scrollbar-free. Verification passed: crawl regression 5/5, home layout 13/13,
+homepage/cookie 12/12, compact hero 14/14, full `npm run test:website-verify`,
+and live Playwright diagnostics for `no-preference` and `reduce` showed both
+crawls moving right-to-left with hidden overflow and near-zero speed delta. Screenshots are in
+`output/playwright/home-crawl-regression-20260507/`. The same-day proof-order correction removed the homepage trust/authority
+bar, made Google reviews the first post-hero band, moved the cookie notice after
+reviews, and moved Recent Celebrations after the reviews block. Do not carry
+forward the earlier temporary portfolio-blocked caveat unless a fresh run fails
+again.

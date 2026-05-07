@@ -89,7 +89,7 @@ Files: `www/home.py`, `interactive_layout.spec.js`, `workstreams/menu-content-co
 Intent: Respond to GL's direction that homepage reviews should crawl slowly left-to-right, not stack. Keep the existing duplicate-track marquee structure and accessibility pause/reduced-motion behavior, but remove the mobile stacked fallback and reverse the normal animation direction.
 Conflicts: Staying out of checkout/commerce/design-studio dirty files. This does not reopen nav/chrome structure.
 Verification: `python -m py_compile apps\locally_twisted\locally_twisted\www\home.py` passed; `node --check scripts\verify\interactive_layout.spec.js` passed; after `python scripts/dev/clear_website_cache.py --restart`, live Playwright check showed `lt-reviews-scroll` at `540s`, `topDelta=0`, and transform moving right on 375px and 1366px. `npx playwright test scripts/verify/interactive_layout.spec.js --reporter=line` passed 42/42. `npm run test:layout-fit` passed 260/260.
-Status: Complete.
+Status: Superseded on 2026-05-07. Current homepage proof crawls move right-to-left, the trusted-business crawl is speed-synced to the review cards, and reduced-motion keeps both proof crawls slow, moving, horizontal, and scrollbar-free.
 
 ### 2026-05-06 - Codex current session header color repair
 Lane: Nav/chrome visual repair.

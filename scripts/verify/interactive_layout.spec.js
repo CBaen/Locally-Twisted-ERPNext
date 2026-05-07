@@ -490,11 +490,12 @@ test.describe("Locally Twisted interactive layout states", () => {
 			{ name: "mobile", width: 375, height: 900 },
 			{ name: "desktop", width: 1366, height: 900 },
 		]) {
-			test(`reviews crawl left-to-right and stay full-stage on ${viewport.name}`, async ({ page }) => {
+			test(`reviews crawl right-to-left and stay full-stage on ${viewport.name}`, async ({ page }) => {
 				await page.setViewportSize({ width: viewport.width, height: viewport.height });
 				await page.emulateMedia({ reducedMotion: "no-preference" });
 				const response = await gotoAndSettle(page, "/");
 				await expectSuccessfulResponse(response, "/");
+				await page.waitForFunction(() => document.documentElement.dataset.ltCrawlSpeed === "synced", null, { timeout: 5000 });
 
 				const before = await page.evaluate(() => {
 					const track = document.querySelector(".lt-reviews-block__track");
@@ -527,7 +528,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 				expect(Math.round(before.quotesRect.left), "review banner should start at the viewport edge").toBeLessThanOrEqual(1);
 				expect(Math.round(before.quotesRect.right), "review banner should reach the viewport edge").toBeGreaterThanOrEqual(viewport.width - 1);
 				expect(before.overflowX).toBe("hidden");
-				expect(after.x, "review track should move right over time").toBeGreaterThan(before.x);
+				expect(after.x, "review track should move right-to-left over time").toBeLessThan(before.x);
 			});
 		}
 	});
@@ -542,15 +543,19 @@ test.describe("Locally Twisted interactive layout states", () => {
 				await page.emulateMedia({ reducedMotion: "no-preference" });
 				const response = await gotoAndSettle(page, "/");
 				await expectSuccessfulResponse(response, "/");
+				await page.waitForFunction(() => document.documentElement.dataset.ltCrawlSpeed === "synced", null, { timeout: 5000 });
 
 				const before = await page.evaluate(() => {
+					const reviewTrack = document.querySelector(".lt-reviews-block__track");
 					const track = document.querySelector(".lt-crawl__track");
 					const viewport = document.querySelector(".lt-crawl__viewport");
 					const items = Array.from(document.querySelectorAll(".lt-crawl__item")).slice(0, 6);
+					const reviewMatrix = new DOMMatrixReadOnly(window.getComputedStyle(reviewTrack).transform);
 					const matrix = new DOMMatrixReadOnly(window.getComputedStyle(track).transform);
 					const tops = items.map((item) => Math.round(item.getBoundingClientRect().top));
 					const rect = viewport.getBoundingClientRect();
 					return {
+						reviewX: reviewMatrix.m41,
 						x: matrix.m41,
 						topDelta: Math.max(...tops) - Math.min(...tops),
 						itemCount: items.length,
@@ -565,28 +570,33 @@ test.describe("Locally Twisted interactive layout states", () => {
 				await page.waitForTimeout(1200);
 
 				const after = await page.evaluate(() => {
+					const reviewTrack = document.querySelector(".lt-reviews-block__track");
 					const track = document.querySelector(".lt-crawl__track");
+					const reviewMatrix = new DOMMatrixReadOnly(window.getComputedStyle(reviewTrack).transform);
 					const matrix = new DOMMatrixReadOnly(window.getComputedStyle(track).transform);
-					return { x: matrix.m41 };
+					return { reviewX: reviewMatrix.m41, x: matrix.m41 };
 				});
+				const reviewDelta = after.reviewX - before.reviewX;
+				const crawlDelta = after.x - before.x;
 
 				expect(before.itemCount).toBeGreaterThanOrEqual(6);
 				expect(before.animationName).toBe("lt-crawl-scroll");
-				expect(before.animationDuration).toBe("540s");
 				expect(before.topDelta, "trusted-business names should share one horizontal row").toBeLessThanOrEqual(1);
 				expect(Math.round(before.bannerLeft), "trusted-business banner should start at the viewport edge").toBeLessThanOrEqual(1);
 				expect(Math.round(before.bannerRight), "trusted-business banner should reach the viewport edge").toBeGreaterThanOrEqual(viewport.width - 1);
 				expect(before.overflowX).toBe("hidden");
-				expect(after.x, "trusted-business track should move right over time like review cards").toBeGreaterThan(before.x);
+				expect(crawlDelta, "trusted-business track should move right-to-left like review cards").toBeLessThan(0);
+				expect(Math.abs(Math.abs(crawlDelta) - Math.abs(reviewDelta)), "trusted-business crawl should match review-card pixel speed").toBeLessThanOrEqual(2.5);
 			});
 		}
 	});
 
-	test("homepage reduced motion makes review and client banners static", async ({ page }) => {
+	test("homepage reduced motion keeps proof crawls moving without scrollbars", async ({ page }) => {
 		await page.setViewportSize({ width: 390, height: 844 });
 		await page.emulateMedia({ reducedMotion: "reduce" });
 		const response = await gotoAndSettle(page, "/");
 		await expectSuccessfulResponse(response, "/");
+		await page.waitForFunction(() => document.documentElement.dataset.ltCrawlSpeed === "synced", null, { timeout: 5000 });
 
 		const before = await page.evaluate(() => {
 			function transformX(value) {
@@ -650,9 +660,12 @@ test.describe("Locally Twisted interactive layout states", () => {
 			};
 		});
 
+		const reviewDelta = after.reviewsX - before.reviews.x;
+		const crawlDelta = after.crawlX - before.crawl.x;
 		expect(before.hero && before.hero.animationName).toBe("none");
-		expect(before.reviews && before.reviews.animationName).toBe("none");
-		expect(before.crawl && before.crawl.animationName).toBe("none");
+		expect(before.reviews && before.reviews.animationName).toBe("lt-reviews-scroll");
+		expect(before.reviews && before.reviews.animationDuration).toBe("540s");
+		expect(before.crawl && before.crawl.animationName).toBe("lt-crawl-scroll");
 		expect(before.reviewRow.count).toBeGreaterThanOrEqual(4);
 		expect(before.clientRow.count).toBeGreaterThanOrEqual(4);
 		expect(before.reviewRow.topDelta, "review cards should not stack in reduced-motion environments").toBeLessThanOrEqual(1);
@@ -661,10 +674,11 @@ test.describe("Locally Twisted interactive layout states", () => {
 		expect(Math.round(before.reviewBanner.right), "review banner should reach the viewport edge").toBeGreaterThanOrEqual(389);
 		expect(Math.round(before.clientBanner.left), "client banner should start at the viewport edge").toBeLessThanOrEqual(1);
 		expect(Math.round(before.clientBanner.right), "client banner should reach the viewport edge").toBeGreaterThanOrEqual(389);
-		expect(before.reviewBanner.overflowX).toBe("auto");
-		expect(before.clientBanner.overflowX).toBe("auto");
-		expect(Math.abs(after.reviewsX - before.reviews.x), "review track should not animate for reduced-motion users").toBeLessThanOrEqual(0.5);
-		expect(Math.abs(after.crawlX - before.crawl.x), "client track should not animate for reduced-motion users").toBeLessThanOrEqual(0.5);
+		expect(before.reviewBanner.overflowX).toBe("hidden");
+		expect(before.clientBanner.overflowX).toBe("hidden");
+		expect(reviewDelta, "review track should continue right-to-left in reduced-motion mode").toBeLessThan(0);
+		expect(crawlDelta, "client track should continue right-to-left in reduced-motion mode").toBeLessThan(0);
+		expect(Math.abs(Math.abs(crawlDelta) - Math.abs(reviewDelta)), "client crawl should match review-card speed in reduced-motion mode").toBeLessThanOrEqual(2.5);
 	});
 
 	test("homepage leads with Google review proof immediately after the hero", async ({ page }) => {

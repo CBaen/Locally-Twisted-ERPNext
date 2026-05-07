@@ -1,7 +1,7 @@
 # Landing Page Repair Workstream
 
-Last updated: 2026-05-07 by Codex after removing the homepage trust bar and
-moving Google reviews directly under the hero.
+Last updated: 2026-05-07 by Codex after repairing the homepage proof-crawl
+regression to right-to-left, speed-synced motion.
 
 ## Outcome
 
@@ -25,10 +25,13 @@ Completed on 2026-05-07:
 - The homepage cookie notice is inline after the Google reviews band, not
   covering primary CTAs and not sitting between the hero and reviews.
 - Recent Celebrations now appears after review cards.
-- Review cards and trusted-business names both crawl full-stage, left-to-right,
-  at `540s` in normal motion.
-- Reduced-motion verification keeps both proof bands horizontal/full-stage and
-  static instead of letting one stack, scroll oddly, or diverge from the other.
+- Review cards and trusted-business names both crawl full-stage, right-to-left.
+  Review cards keep the canonical `540s` loop; trusted-business names are
+  measured in the browser and assigned a proportional duration so the visible
+  pixel speed matches the review-card crawl.
+- Reduced-motion verification keeps both proof bands slow, moving,
+  horizontal/full-stage, and scrollbar-free. The old static/scrollbar fallback
+  is superseded because it is the failure mode GL kept seeing in real browsers.
 - Event Playground/design-studio and rotating blog-title language are out of the
   launch hero.
 - The hero no longer inherits global `section` vertical padding or local
@@ -85,6 +88,35 @@ The compact hero contract was added after this repair because GL escalated the
 same-height hero rule to agency level. First red run failed 14/14; after CSS
 and copy-density changes the focused compact-hero gate passed 14/14.
 
+Same-day crawl regression follow-up: the old verifier protected left-to-right
+motion and a static reduced-motion fallback. The current contract now fails if
+either proof crawl moves left-to-right, if either exposes a scrollbar, if either
+stops in reduced-motion mode, or if the trusted-business crawl differs from the
+review-card pixel speed.
+
+Current crawl verification:
+
+```powershell
+python -m py_compile apps\locally_twisted\locally_twisted\www\home.py
+node --check scripts\verify\interactive_layout.spec.js
+python scripts/dev/clear_website_cache.py --restart
+npm run test:interactive-layout -- --grep "homepage review marquee|homepage client crawl banner|homepage reduced motion keeps"
+npx playwright test scripts/verify/layout_fit.spec.js --reporter=dot --grep "home fits"
+npm run test:interactive-layout -- --grep "homepage|cookie notice"
+npm run test:interactive-layout -- --grep "compact hero height contract"
+```
+
+Results: syntax checks passed; crawl regression 5/5, home layout 13/13,
+homepage/cookie 12/12, compact hero 14/14. Live diagnostics at 1366px showed
+`lt-reviews-scroll` and `lt-crawl-scroll` in both `no-preference` and `reduce`,
+hidden overflow for both banners, right-to-left deltas, and near-zero speed
+difference. Desktop/mobile screenshots are in
+`output/playwright/home-crawl-regression-20260507/`.
+
+Full closeout also passed: `npm run test:website-verify` completed nav IA,
+`layout-fit` 247/247, `interactive-layout` 88/88, checkout 2/2, portfolio reel
+4/4, and shop smoke.
+
 ## Next Safe Moves
 
 - Review the homepage screenshots with GL/Jeff/designer for proof hierarchy and
@@ -93,8 +125,8 @@ and copy-density changes the focused compact-hero gate passed 14/14.
   keep stable non-count language.
 - Keep future blog work out of the hero unless GL explicitly reopens rotating
   headlines.
-- Do not change the crawl speed or direction without updating the capability
-  contract and the Playwright checks in the same slice.
+- Do not change crawl speed, direction, or reduced-motion behavior without
+  updating the capability contract and Playwright checks in the same slice.
 - Do not grow the homepage hero to carry proof/copy that belongs in the next
   section.
 - Do not restore the homepage trust bar or put Recent Celebrations above Google

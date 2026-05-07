@@ -51,7 +51,7 @@ The standing viewport families are:
 - Added 39 stateful layout checks, then refreshed the stateful gate to 74 checks after platform-name, homepage proof-crawl, cookie, and nav/BTFP guards were added.
 - Fixed the 992-1199 header breakpoint mismatch by making the desktop/mobile CSS and JS agree on 1200px.
 - Kept desktop mega panels inside the header/container instead of anchoring narrow product panels to individual nav item widths.
-- Fixed reduced-motion homepage carousel/review behavior so tracks do not animate or force overflow when reduced motion is requested.
+- Fixed reduced-motion homepage proof-crawl behavior so the two business-proof tracks keep the accepted slow crawl, stay horizontal/full-stage, and do not force overflow when reduced motion is requested.
 - Added the portfolio state check; 2026-05-06 follow-up now checks the current proof-reel front-photo behavior instead of the superseded modal behavior.
 - Added the compact hero contract after GL rejected oversized/inconsistent page heroes. The first red run failed 14/14; the implemented pass is green at 14/14 for home, event balloons, portfolio, BTFP, contact, shop, and category heroes.
 - Reconciled `smoke_shop.py` with the commerce lane. 2026-05-06 correction: fixed-price products must not invent product-level quote gates; out-of-area delivery ZIP owns the quote fallback, while retail products such as `unicorn-bouquet` still verify inline variant controls and cart writes.

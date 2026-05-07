@@ -7,11 +7,11 @@ maturity: candidate
 scope: Locally Twisted ERPNext/Frappe public-site animated or stateful visual behavior
 currently_true: yes
 verification_level: 2
-last_verified: 2026-05-06
+last_verified: 2026-05-07
 evidence_quality: direct
-successful_uses: 1
-failed_uses: 0
-regressions: 0
+successful_uses: 2
+failed_uses: 1
+regressions: 1
 depends_on:
   - frappe-public-container-contract
   - responsive-container-audit
@@ -89,8 +89,10 @@ For crawl/marquee behavior, prove all of these:
 - the track transform changes in the intended direction over time
 - the first visible cards share one row when the contract says no stacking
 - the viewport hides the offscreen track without exposing a scrollbar unless that is intentionally accepted
-- reduced-motion mode still has an acceptable visual layout
+- reduced-motion mode still has the accepted visual layout for that component
+  and does not silently introduce stacking, scrollbar fallback, or one-sided
+  behavior changes
 
 ## LT Receipt
 
-On 2026-05-06, the homepage review marquee initially passed a fresh Playwright normal-motion check, but GL showed Chrome exposing a horizontal scrollbar and Brave showing stacked cards. The cause was a verification gap around real browser sessions, stale rendered state, and the reduced-motion fallback. The durable lesson is to verify motion-dependent UI across Chrome, Brave, `no-preference`, and `reduce`, and to inspect visible scrollbars/wrapping, not only computed animation values.
+On 2026-05-06, the homepage review marquee initially passed a fresh Playwright normal-motion check, but GL showed Chrome exposing a horizontal scrollbar and Brave showing stacked cards. The cause was a verification gap around real browser sessions, stale rendered state, and the reduced-motion fallback. On 2026-05-07, the same surface regressed again because tests and docs were protecting the old left-to-right/static fallback instead of GL's active right-to-left crawl requirement. The durable lesson is to verify motion-dependent UI across Chrome, Brave, `no-preference`, and `reduce`, and to inspect visible scrollbars/wrapping, direction, and pixel speed, not only computed animation names.

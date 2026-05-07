@@ -447,7 +447,7 @@ body[data-path="home"] main.container.my-4 {
 }
 /* Reviews carousel - horizontal-scrolling marquee of customer praise.
  * Pattern mirrors .lt-crawl but with full review cards instead of
- * client names. The crawl moves left-to-right slowly so cards read
+ * client names. The crawl moves right-to-left slowly so cards read
  * as a moving proof line, not a stacked testimonial grid. Pauses on hover/focus. */
 .lt-reviews-block__quotes {
     /* Break out of the narrow badge column so the crawl spans the full stage. */
@@ -469,7 +469,7 @@ body[data-path="home"] main.container.my-4 {
     display: flex;
     align-items: stretch;
     width: max-content;
-    animation: lt-reviews-scroll 540s linear infinite;
+    animation: lt-reviews-scroll var(--lt-reviews-crawl-duration, 540s) linear infinite;
 }
 .lt-reviews-block__group {
     display: flex;
@@ -483,8 +483,8 @@ body[data-path="home"] main.container.my-4 {
     animation-play-state: paused;
 }
 @keyframes lt-reviews-scroll {
-    from { transform: translateX(-50%); }
-    to   { transform: translateX(0); }
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
 }
 @media (max-width: 575.98px) {
     .lt-reviews-block__group {
@@ -800,7 +800,7 @@ body[data-path="home"] main.container.my-4 {
     display: flex;
     align-items: center;
     width: max-content;
-    animation: lt-crawl-scroll 540s linear infinite;
+    animation: lt-crawl-scroll var(--lt-crawl-duration, var(--lt-reviews-crawl-duration, 540s)) linear infinite;
 }
 .lt-crawl__item {
     flex: 0 0 auto;
@@ -813,23 +813,25 @@ body[data-path="home"] main.container.my-4 {
     opacity: 0.7;
 }
 @keyframes lt-crawl-scroll {
-    from { transform: translateX(-50%); }
-    to   { transform: translateX(0); }
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
 }
 @media (prefers-reduced-motion: reduce) {
     .lt-reviews-block__quotes,
     .lt-crawl__viewport {
-        overflow-x: auto;
-        -webkit-mask-image: none;
-        mask-image: none;
+        overflow-x: hidden;
     }
     .lt-reviews-block__track {
-        animation: none !important;
-        transform: none !important;
+        animation-name: lt-reviews-scroll !important;
+        animation-duration: var(--lt-reviews-crawl-duration, 540s) !important;
+        animation-timing-function: linear !important;
+        animation-iteration-count: infinite !important;
     }
     .lt-crawl__track {
-        animation: none !important;
-        transform: none !important;
+        animation-name: lt-crawl-scroll !important;
+        animation-duration: var(--lt-crawl-duration, var(--lt-reviews-crawl-duration, 540s)) !important;
+        animation-timing-function: linear !important;
+        animation-iteration-count: infinite !important;
     }
 }
 /* --- Closing CTA ---------------------------------------------------- */
