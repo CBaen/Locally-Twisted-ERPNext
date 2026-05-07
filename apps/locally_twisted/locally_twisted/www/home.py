@@ -405,59 +405,6 @@ body[data-path="home"] main.container.my-4 {
     }
 }
 
-/* --- Authority proof bar -------------------------------------------- */
-.lt-authority {
-    background-color: var(--lt-ink);
-    color: var(--lt-near-white);
-    border-top: 1px solid rgba(184, 154, 91, 0.42);
-    border-bottom: 1px solid rgba(184, 154, 91, 0.42);
-    padding: 2.5rem 1.25rem;
-}
-.lt-authority__inner {
-    max-width: 1280px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
-}
-@media (min-width: 768px) {
-    .lt-authority__inner {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 1.75rem;
-    }
-}
-.lt-authority__item {
-    text-align: center;
-}
-.lt-authority__icon {
-    display: inline-flex;
-    width: 52px;
-    height: 52px;
-    color: var(--lt-brass);
-    margin-bottom: 0.75rem;
-}
-.lt-authority__icon svg {
-    width: 100%;
-    height: 100%;
-}
-.lt-authority__title {
-    font-family: var(--lt-font-body);
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--lt-near-white);
-    margin: 0 0 0.45rem;
-}
-.lt-authority__text {
-    font-family: var(--lt-font-body);
-    font-size: 0.9rem;
-    line-height: 1.45;
-    color: rgba(250, 247, 242, 0.78);
-    max-width: 18rem;
-    margin: 0 auto;
-}
-
 /* --- Reviews block -------------------------------------------------- */
 /* The review carousel uses a full-stage viewport so the fade-mask does
  * not clip readable card text on wide monitors. The badge stays centered;

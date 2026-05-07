@@ -32,15 +32,21 @@ test.describe("portfolio proof reel", () => {
 			const frame = first ? first.querySelector(".lt-frame") : null;
 			const frameStyle = frame ? window.getComputedStyle(frame) : null;
 			const rect = first ? first.getBoundingClientRect() : null;
-			const heroRect = document.querySelector(".lt-hero")?.getBoundingClientRect();
+			const heroRect = document.querySelector(".lt-portfolio__hero")?.getBoundingClientRect();
+			const reelRect = reel ? reel.getBoundingClientRect() : null;
 			const bodyFontFamily = window.getComputedStyle(document.body).fontFamily;
 			const rootStyle = root ? window.getComputedStyle(root) : null;
+			const primaryButton = document.querySelector(".lt-portfolio__button:not(.lt-portfolio__button--secondary)");
+			const primaryButtonStyle = primaryButton ? window.getComputedStyle(primaryButton) : null;
 			return {
 				hasRoot: Boolean(root),
 				hasReel: Boolean(reel),
-				headingText: document.querySelector(".lt-title")?.textContent || "",
-				metaText: document.querySelector(".lt-meta")?.textContent || "",
+				headingText: document.querySelector(".lt-portfolio__title")?.textContent || "",
+				heroText: document.querySelector(".lt-portfolio__hero")?.innerText.replace(/\s+/g, " ").trim() || "",
 				heroHeight: heroRect ? Math.round(heroRect.height) : 0,
+				heroBottom: heroRect ? Math.round(heroRect.bottom) : 0,
+				reelTop: reelRect ? Math.round(reelRect.top) : 0,
+				internalNavCount: document.querySelectorAll(".lt-head, .lt-nav").length,
 				fontLinkCount: document.querySelectorAll('link[href*="fonts.googleapis"]').length,
 				cursorDotCount: document.querySelectorAll(".lt-cursor-dot, .lt-cursor-ring").length,
 				rootCursor: rootStyle ? rootStyle.cursor : "",
@@ -49,6 +55,10 @@ test.describe("portfolio proof reel", () => {
 				backgroundColor: window.getComputedStyle(root).backgroundColor,
 				frameBackgroundColor: frameStyle ? frameStyle.backgroundColor : "",
 				imageBackgroundColor: imageStyle ? imageStyle.backgroundColor : "",
+				primaryButtonText: primaryButton ? primaryButton.innerText.trim() : "",
+				primaryButtonColor: primaryButtonStyle ? primaryButtonStyle.color : "",
+				primaryButtonTextFill: primaryButtonStyle ? primaryButtonStyle.webkitTextFillColor : "",
+				primaryButtonBackground: primaryButtonStyle ? primaryButtonStyle.backgroundColor : "",
 				photoCount: photos.length,
 				centerCount: photos.filter((photo) => photo.dataset.side === "center").length,
 				firstPosition: firstStyle ? firstStyle.position : null,
@@ -79,18 +89,23 @@ test.describe("portfolio proof reel", () => {
 
 		expect(facts.hasRoot).toBe(true);
 		expect(facts.hasReel).toBe(true);
-		expect(facts.headingText).toContain("Sculptural balloon installations");
-		expect(facts.headingText).toContain("for serious rooms.");
-		expect(facts.metaText).toContain("Wasatch Front, Utah");
-		expect(facts.metaText).toContain("15 works");
+		expect(facts.headingText).toContain("Real balloon installs for Utah events.");
+		expect(facts.heroText).toContain("Corporate entrances, school stages, civic celebrations, and private moments");
+		expect(facts.heroText).toMatch(/start an event inquiry/i);
 		expect(facts.heroHeight).toBe(280);
-		expect(facts.fontLinkCount).toBe(2);
-		expect(facts.cursorDotCount).toBe(2);
-		expect(facts.rootCursor).toBe("none");
-		expect(facts.rootFontFamily).not.toBe(facts.bodyFontFamily);
-		expect(facts.backgroundColor).toContain("oklch");
-		expect(facts.frameBackgroundColor).toContain("oklch");
-		expect(facts.imageBackgroundColor).toContain("oklch");
+		expect(facts.internalNavCount, "the portfolio should use the shared site chrome, not a copied internal page shell").toBe(0);
+		expect(facts.fontLinkCount, "portfolio should rely on the sitewide LT brand fonts").toBe(0);
+		expect(facts.cursorDotCount, "portfolio should not mount prototype cursor artifacts").toBe(0);
+		expect(facts.rootCursor).not.toBe("none");
+		expect(facts.rootFontFamily).toContain("Lato");
+		expect(facts.bodyFontFamily).toContain("Lato");
+		expect(facts.backgroundColor).toBe("rgb(250, 247, 242)");
+		expect(facts.frameBackgroundColor).toBe("rgb(255, 255, 255)");
+		expect(facts.imageBackgroundColor).toBe("rgb(250, 247, 242)");
+		expect(facts.primaryButtonText).toMatch(/start an event inquiry/i);
+		expect(facts.primaryButtonColor, "primary portfolio CTA text should contrast against its white background").toBe("rgb(14, 34, 64)");
+		expect(facts.primaryButtonTextFill, "primary portfolio CTA should not inherit white text-fill from the dark hero").toBe("rgb(14, 34, 64)");
+		expect(facts.primaryButtonBackground).toBe("rgb(255, 255, 255)");
 		expect(facts.photoCount).toBeGreaterThanOrEqual(15);
 		expect(facts.centerCount).toBeGreaterThanOrEqual(2);
 		expect(facts.firstPosition).toBe("absolute");
@@ -105,8 +120,9 @@ test.describe("portfolio proof reel", () => {
 		expect(facts.firstHeight / facts.firstWidth).toBeCloseTo(1.25, 1);
 		expect(facts.firstOpacity).toBeLessThan(0.1);
 		expect(facts.firstLeft).toBeLessThan(-250);
-		expect(facts.firstTop).toBeGreaterThan(620);
-		expect(facts.firstTop).toBeLessThan(740);
+		expect(facts.reelTop, "the collage should begin immediately after the compact branded portfolio hero").toBeGreaterThanOrEqual(facts.heroBottom - 1);
+		expect(facts.firstTop).toBeGreaterThan(facts.reelTop);
+		expect(facts.firstTop).toBeLessThan(facts.reelTop + 160);
 		expect(facts.secondWidth - facts.firstWidth).toBeGreaterThan(70);
 		expect(facts.thirdWidth).toBeGreaterThan(395);
 		expect(facts.thirdWidth).toBeLessThan(425);

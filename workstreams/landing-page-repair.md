@@ -1,6 +1,7 @@
 # Landing Page Repair Workstream
 
-Last updated: 2026-05-07 by Codex after the compact hero contract repair.
+Last updated: 2026-05-07 by Codex after removing the homepage trust bar and
+moving Google reviews directly under the hero.
 
 ## Outcome
 
@@ -18,9 +19,12 @@ Completed on 2026-05-07:
   desktop in the current verifier, with the tablet standard documented at
   250px.
 - The first viewport shows a hint of the next band on desktop and 320px mobile.
-- The homepage cookie notice is inline after the hero, not covering primary CTAs.
-- Authority proof icons use approved brand mask SVGs.
-- Recent Celebrations now appears before review cards.
+- Google reviews are the first band immediately after the hero.
+- The homepage trust/authority bar is removed for now. The approved brand icon
+  assets remain available for future proof sections.
+- The homepage cookie notice is inline after the Google reviews band, not
+  covering primary CTAs and not sitting between the hero and reviews.
+- Recent Celebrations now appears after review cards.
 - Review cards and trusted-business names both crawl full-stage, left-to-right,
   at `540s` in normal motion.
 - Reduced-motion verification keeps both proof bands horizontal/full-stage and
@@ -51,6 +55,22 @@ npm run test:interactive-layout -- --grep "homepage|cookie notice"
 npm run test:interactive-layout -- --grep "compact hero height contract"
 ```
 
+Same-day correction after GL clarified the proof order:
+
+```powershell
+docker restart locally-twisted-erpnext-v15-backend-1
+python scripts/dev/clear_website_cache.py
+npm run test:interactive-layout -- --grep "homepage leads with Google review|homepage hero uses one visible|small mobile homepage|mobile cookie notice|desktop homepage cookie|site-preferences"
+```
+
+Result: 7/7 passed. This verifies no homepage trust bar, Google reviews directly
+after the hero, cookie placement after reviews, and mobile/desktop CTA safety.
+
+Broader follow-up after the portfolio mobile hero fix also passed:
+`npm run test:interactive-layout` 88/88 and
+`npm run test:layout-fit -- --grep "home fits|portfolio fits"` 26/26. Visual
+evidence is in `output/playwright/home-portfolio-corrections-20260507/`.
+
 The homepage internal-link check inspected 37 links with no failures.
 Screenshots for desktop, 375px mobile, 320px mobile, and the first after-hero
 band are in `output/playwright/landing-fixes-20260507/`.
@@ -77,3 +97,5 @@ and copy-density changes the focused compact-hero gate passed 14/14.
   contract and the Playwright checks in the same slice.
 - Do not grow the homepage hero to carry proof/copy that belongs in the next
   section.
+- Do not restore the homepage trust bar or put Recent Celebrations above Google
+  reviews unless GL explicitly changes the launch proof order again.

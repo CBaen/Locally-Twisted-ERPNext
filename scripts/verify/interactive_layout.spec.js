@@ -33,9 +33,9 @@ const COMPACT_HERO_ROUTES = [
 	{
 		name: "portfolio",
 		path: "/portfolio",
-		heroSelector: ".lt-portfolio .lt-hero",
-		contentSelector: ".lt-portfolio .lt-hero",
-		titleSelector: ".lt-title",
+		heroSelector: ".lt-portfolio__hero",
+		contentSelector: ".lt-portfolio__hero-inner",
+		titleSelector: ".lt-portfolio__title",
 	},
 	{
 		name: "twisting and face painting",
@@ -237,7 +237,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 				.locator('script[src*="lt-site-preferences.js"]')
 				.evaluateAll((scripts) => scripts.map((script) => script.getAttribute("src") || ""));
 			expect(
-				scriptSrcs.some((src) => src.includes("lt-site-preferences.js?v=20260507-policy-1")),
+				scriptSrcs.some((src) => src.includes("lt-site-preferences.js?v=20260507-reviews-1")),
 				"site-preferences script should be cache-busted when inline notice behavior changes"
 			).toBe(true);
 		});
@@ -667,32 +667,38 @@ test.describe("Locally Twisted interactive layout states", () => {
 		expect(Math.abs(after.crawlX - before.crawl.x), "client track should not animate for reduced-motion users").toBeLessThanOrEqual(0.5);
 	});
 
-	test("homepage leads with installed-work proof before review cards", async ({ page }) => {
+	test("homepage leads with Google review proof immediately after the hero", async ({ page }) => {
 		await page.setViewportSize({ width: 1366, height: 900 });
 		const response = await gotoAndSettle(page, "/");
 		await expectSuccessfulResponse(response, "/");
 
 		const result = await page.evaluate(() => {
-			const authority = document.querySelector(".lt-authority");
+			const hero = document.querySelector(".lt-hero");
 			const featured = document.querySelector(".lt-featured");
 			const reviews = document.querySelector(".lt-reviews-block");
-			const iconCount = document.querySelectorAll(".lt-authority__icon.lt-icon-mask").length;
-			const inlineIconCount = document.querySelectorAll(".lt-authority__icon svg").length;
+			const heroNext = hero ? hero.nextElementSibling : null;
+			const authorityCount = document.querySelectorAll(".lt-authority").length;
+			const authorityIconCount = document.querySelectorAll(".lt-authority__icon").length;
+			const badge = document.querySelector(".lt-reviews-block__badge");
 			const ctaBody = document.querySelector(".lt-cta__body");
 			return {
-				authorityTop: authority.getBoundingClientRect().top + window.scrollY,
+				heroBottom: hero.getBoundingClientRect().bottom + window.scrollY,
 				featuredTop: featured.getBoundingClientRect().top + window.scrollY,
 				reviewsTop: reviews.getBoundingClientRect().top + window.scrollY,
-				iconCount,
-				inlineIconCount,
+				heroNextIsReviews: heroNext ? heroNext.classList.contains("lt-reviews-block") : false,
+				authorityCount,
+				authorityIconCount,
+				badgeText: badge ? badge.innerText.replace(/\s+/g, " ").trim() : "",
 				ctaText: ctaBody ? ctaBody.innerText.replace(/\s+/g, " ").trim() : "",
 			};
 		});
 
-		expect(result.featuredTop, "recent installed-work photos should appear after the authority bar").toBeGreaterThan(result.authorityTop);
-		expect(result.featuredTop, "installed-work photo proof should appear before the review card crawl").toBeLessThan(result.reviewsTop);
-		expect(result.iconCount, "homepage authority proof should use the approved brand icon suite").toBe(4);
-		expect(result.inlineIconCount, "homepage authority proof should not keep old inline SVG icons").toBe(0);
+		expect(result.heroNextIsReviews, "Google reviews should be the first homepage band after the hero").toBe(true);
+		expect(result.reviewsTop, "Google reviews should start after the hero").toBeGreaterThanOrEqual(result.heroBottom - 1);
+		expect(result.reviewsTop, "Google review proof should appear before Recent Celebrations").toBeLessThan(result.featuredTop);
+		expect(result.authorityCount, "homepage should not render a trust/authority bar right now").toBe(0);
+		expect(result.authorityIconCount, "trust bar icons should stay as assets, not render as a homepage bar").toBe(0);
+		expect(result.badgeText, "the first post-hero proof band should be clearly Google reviews").toMatch(/Google reviews/i);
 		expect(result.ctaText, "closing CTA should lead with corporate, school, civic, and community work").toMatch(/corporate, school, civic, and community/i);
 		expect(result.ctaText, "closing CTA should keep private celebrations secondary").toMatch(/private celebrations/i);
 	});
@@ -707,13 +713,11 @@ test.describe("Locally Twisted interactive layout states", () => {
 			const headings = Array.from(document.querySelectorAll("h1"));
 			const heroTitle = document.querySelector(".lt-hero__title");
 			const heroImage = document.querySelector(".lt-hero__image");
-			const cookie = document.querySelector(".lt-cookie-consent");
-			const authority = document.querySelector(".lt-authority");
+			const reviews = document.querySelector(".lt-reviews-block");
 			const titleStyle = heroTitle ? window.getComputedStyle(heroTitle) : null;
 			const heroImageStyle = heroImage ? window.getComputedStyle(heroImage) : null;
 			const titleRect = heroTitle ? heroTitle.getBoundingClientRect() : null;
-			const cookieRect = cookie ? cookie.getBoundingClientRect() : null;
-			const authorityRect = authority ? authority.getBoundingClientRect() : null;
+			const reviewsRect = reviews ? reviews.getBoundingClientRect() : null;
 			return {
 				h1Count: headings.length,
 				h1Text: headings.map((heading) => heading.innerText.trim()),
@@ -722,7 +726,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 				animationName: titleStyle ? titleStyle.animationName : null,
 				heroImage: heroImageStyle ? heroImageStyle.backgroundImage : "",
 				cyclingCount: document.querySelectorAll(".lt-hero__cycling .lt-hero__title").length,
-				nextBandTop: Math.min(cookieRect ? cookieRect.top : Number.POSITIVE_INFINITY, authorityRect ? authorityRect.top : Number.POSITIVE_INFINITY),
+				nextBandTop: reviewsRect ? reviewsRect.top : Number.POSITIVE_INFINITY,
 				viewportHeight: window.innerHeight,
 			};
 		});
@@ -742,10 +746,13 @@ test.describe("Locally Twisted interactive layout states", () => {
 		await expectSuccessfulResponse(response, "/");
 
 		const result = await page.evaluate(() => {
+			const reviews = document.querySelector(".lt-reviews-block");
 			const cookie = document.querySelector(".lt-cookie-consent");
 			const buttons = Array.from(document.querySelectorAll(".lt-hero__cta"));
+			const reviewsRect = reviews ? reviews.getBoundingClientRect() : null;
 			const cookieRect = cookie ? cookie.getBoundingClientRect() : null;
 			return {
+				reviewsTop: reviewsRect ? reviewsRect.top : null,
 				cookieTop: cookieRect ? cookieRect.top : null,
 				viewportHeight: window.innerHeight,
 				buttonBottoms: buttons.map((button) => button.getBoundingClientRect().bottom),
@@ -754,8 +761,9 @@ test.describe("Locally Twisted interactive layout states", () => {
 		});
 
 		expect(result.buttonCount, "small mobile homepage should keep both hero CTAs visible").toBe(2);
-		expect(Math.max(...result.buttonBottoms), "small mobile hero CTAs should fit before the next band").toBeLessThan(result.cookieTop);
-		expect(result.cookieTop, "small mobile first viewport should show the inline cookie/next band hint").toBeLessThan(result.viewportHeight - 16);
+		expect(Math.max(...result.buttonBottoms), "small mobile hero CTAs should fit before the Google reviews band").toBeLessThan(result.reviewsTop);
+		expect(result.reviewsTop, "small mobile first viewport should show the Google reviews band hint").toBeLessThan(result.viewportHeight - 16);
+		expect(result.cookieTop, "homepage cookie notice should sit after the Google reviews band").toBeGreaterThan(result.reviewsTop);
 	});
 
 	for (const viewport of [
@@ -808,7 +816,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 				hasNotice: Boolean(notice),
 				isInline: notice ? notice.classList.contains("lt-cookie-consent--inline") : false,
 				position: style ? style.position : null,
-				previousIsHero: previous ? previous.classList.contains("lt-hero") : false,
+				previousIsReviews: previous ? previous.classList.contains("lt-reviews-block") : false,
 				left: rect ? rect.left : null,
 				right: rect ? rect.right : null,
 			};
@@ -817,7 +825,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 		expect(result.hasNotice, "homepage should render the cookie notice when no choice is stored").toBe(true);
 		expect(result.isInline, "desktop homepage cookie notice should use the same inline document band as mobile").toBe(true);
 		expect(result.position, "inline homepage cookie notice should not float over content").not.toBe("fixed");
-		expect(result.previousIsHero, "inline homepage cookie notice should sit immediately after the hero").toBe(true);
+		expect(result.previousIsReviews, "inline homepage cookie notice should sit after the Google review proof band").toBe(true);
 		expect(Math.round(result.left), "inline cookie band should start at the viewport edge").toBeLessThanOrEqual(1);
 		expect(Math.round(result.right), "inline cookie band should reach the viewport edge").toBeGreaterThanOrEqual(1365);
 	});

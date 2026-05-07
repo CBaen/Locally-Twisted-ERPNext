@@ -17,7 +17,6 @@
 
 :is(
   .lt-hero,
-  .lt-authority,
   .lt-reviews-block,
   .lt-featured,
   .lt-categories,
@@ -31,6 +30,7 @@
   .lt-authority-section,
   .lt-authority-cta,
   .lt-portfolio-hero,
+  .lt-portfolio__hero,
   .lt-portfolio-filter,
   .lt-portfolio-grid,
   .lt-btfp__intro,
@@ -57,13 +57,13 @@
 
 :is(
   .lt-hero,
-  .lt-authority,
   .lt-reviews-block,
   .lt-featured,
   .lt-categories,
   .lt-crawl,
   .lt-cta,
   .lt-portfolio-hero,
+  .lt-portfolio__hero,
   .lt-portfolio-ribbon,
   .lt-portfolio-filter,
   .lt-portfolio-grid,
@@ -103,7 +103,6 @@
 
 :is(
   .lt-hero__content,
-  .lt-authority__inner,
   .lt-reviews-block__inner,
   .lt-featured__inner,
   .lt-crawl__heading,
@@ -115,6 +114,7 @@
   .lt-authority-proof__inner,
   .lt-authority-cta__inner,
   .lt-portfolio-hero__inner,
+  .lt-portfolio__hero-inner,
   .lt-portfolio-filter__inner,
   .lt-portfolio-grid__inner,
   .lt-btfp__intro-inner,

@@ -3,48 +3,25 @@
 {% block title %}Locally Twisted - Selected Work{% endblock %}
 
 {% block head_include %}
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/locally_twisted/css/lt-portfolio-reel.css?v=20260507-export-1">
+<link rel="stylesheet" href="/assets/locally_twisted/css/lt-portfolio-reel.css?v=20260507-brand-3">
 {% endblock %}
 
 {% block page_content %}
 
 <div class="lt-portfolio" data-portfolio aria-labelledby="lt-portfolio-title">
-    <header class="lt-head">
-        <div class="lt-row">
-            <div class="lt-mark">
-                <span class="lt-glyph" aria-hidden="true">&#9679;</span>
-                <span class="lt-name">Locally&nbsp;Twisted</span>
+    <section class="lt-portfolio__hero lt-fullbleed" aria-labelledby="lt-portfolio-title">
+        <div class="lt-portfolio__hero-inner">
+            <p class="lt-portfolio__eyebrow">Locally Twisted Portfolio</p>
+            <h1 id="lt-portfolio-title" class="lt-portfolio__title">Real balloon installs for Utah events.</h1>
+            <p class="lt-portfolio__lede">
+                Corporate entrances, school stages, civic celebrations, and private moments from the Wasatch Front.
+            </p>
+            <div class="lt-portfolio__actions" aria-label="Portfolio actions">
+                <a class="lt-portfolio__button" href="/contact">Start an event inquiry</a>
+                <a class="lt-portfolio__button lt-portfolio__button--secondary" href="/event-balloons">Event Balloons</a>
             </div>
-            <nav class="lt-nav" aria-label="Portfolio links">
-                <a href="#work" class="active">Work</a>
-                <a href="/event-balloons">Events</a>
-                <a href="/shop">Ready-to-Order</a>
-                <a href="/contact" class="inquire">Inquire</a>
-            </nav>
         </div>
-
-        <section class="lt-hero" aria-labelledby="lt-portfolio-title">
-            <div class="lt-eyebrow">{{ portfolio_eyebrow }}</div>
-            <h1 id="lt-portfolio-title" class="lt-title">Sculptural balloon installations<br><em>for serious rooms.</em></h1>
-            <div class="lt-meta" aria-label="Portfolio details">
-                <div>
-                    <span class="lt-meta-label">Studio</span>
-                    <span class="lt-meta-value">Wasatch Front, Utah</span>
-                </div>
-                <div>
-                    <span class="lt-meta-label">Practice</span>
-                    <span class="lt-meta-value">Corporate events, schools, civic celebrations</span>
-                </div>
-                <div>
-                    <span class="lt-meta-label">Index</span>
-                    <span class="lt-meta-value">{{ portfolio_count }} works</span>
-                </div>
-            </div>
-        </section>
-    </header>
+    </section>
 
     {% if portfolio_count %}
     <main id="work" class="lt-reel" data-reel aria-label="Portfolio photos"></main>
@@ -97,7 +74,7 @@
 <script>
 window.LT_PORTFOLIO_PHOTOS = {{ portfolio_photos_json | safe }};
 </script>
-<script src="/assets/locally_twisted/js/lt-portfolio-reel.js?v=20260507-export-1" defer></script>
+<script src="/assets/locally_twisted/js/lt-portfolio-reel.js?v=20260507-brand-3" defer></script>
 <script type="application/ld+json">
 {{ itemlist_jsonld | safe }}
 </script>

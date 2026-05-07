@@ -14,36 +14,6 @@
   const OVERLAP = 0.55;
   const CENTER_BREATH = 140;
 
-  function mountCursor() {
-    if (window.matchMedia("(max-width: 768px)").matches) return;
-    const dot = document.createElement("div");
-    dot.className = "lt-cursor-dot";
-    const ring = document.createElement("div");
-    ring.className = "lt-cursor-ring";
-    document.body.appendChild(dot);
-    document.body.appendChild(ring);
-
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-    let ringX = mouseX;
-    let ringY = mouseY;
-
-    window.addEventListener("mousemove", (event) => {
-      mouseX = event.clientX;
-      mouseY = event.clientY;
-    });
-
-    function tick() {
-      ringX += (mouseX - ringX) * 0.18;
-      ringY += (mouseY - ringY) * 0.18;
-      dot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
-      ring.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
-      window.requestAnimationFrame(tick);
-    }
-
-    window.requestAnimationFrame(tick);
-  }
-
   function layoutPhotos(photos, density) {
     let leftY = 0;
     let rightY = 0;
@@ -137,8 +107,6 @@
     const photos = window.LT_PORTFOLIO_PHOTOS || [];
     const reel = root.querySelector("[data-reel]");
     if (!photos.length || !reel) return;
-
-    mountCursor();
 
     let viewportWidth = window.innerWidth;
     let viewportHeight = window.innerHeight;

@@ -44,12 +44,17 @@ review crawl, trusted-client crawl, cookie notice placement, or launch CTAs.
 - The hero must obey the compact hero contract: 220px mobile, 250px tablet, and
   280px desktop standard heights, with no route-local oversized padding or title
   scale.
-- The cookie notice is inline after `.lt-hero` on the homepage. It must not be a
-  fixed overlay covering CTAs there. Other pages may still use the fixed banner.
-- The authority proof band uses approved brand mask SVGs, not ad hoc inline
-  SVGs.
-- Recent Celebrations appears before review cards so real installed work leads
-  the proof story.
+- Google reviews are the first homepage band immediately after `.lt-hero`.
+- The homepage currently does not render a trust/authority bar. Keep the
+  approved brand SVG icon assets for future proof sections, but do not put the
+  trust bar back into the homepage unless GL explicitly reopens that choice.
+- The cookie notice is inline after `.lt-reviews-block` on the homepage. It must
+  not be a fixed overlay covering CTAs there, and it must not sit between the
+  hero and the Google review proof band. Other pages may still use the fixed
+  banner.
+- Recent Celebrations appears after Google reviews. Real installed-work proof is
+  still important, but the launch homepage now leads with social proof under the
+  hero.
 - Review cards and trusted-business names are full-stage crawls. Both move
   left-to-right at `540s` in normal motion; reduced-motion checks preserve a
   matched horizontal/static fallback so neither banner stacks or diverges.
@@ -97,7 +102,10 @@ before marking the homepage ready for GL review.
 - The hero reintroduces hidden H1 plus visible rotating headings.
 - The hero grows back into a first-viewport wall or uses page-local min-height,
   oversized padding, or giant title clamps.
-- The cookie notice blocks primary CTAs on mobile.
+- A trust/authority bar appears between the hero and reviews.
+- Recent Celebrations appears before reviews.
+- The cookie notice blocks primary CTAs on mobile or sits between the hero and
+  Google reviews.
 - Event Playground, blog-title cycling, or design-studio language returns to the
   launch hero without a fresh GL decision.
 - The homepage relies on generic/generated scenery when a real optimized install
@@ -109,9 +117,12 @@ On 2026-05-07, GL reported that review cards were a scrollbar on one platform
 and stacked on another, while trusted-business proof was not crawling. The repair
 gave both proof banners the same full-stage left-to-right `540s` normal-motion
 behavior, stabilized the reduced-motion fallback, stabilized the hero around a
-single visible H1 and real install photo, moved the cookie notice inline after
-the hero, and added homepage/cookie Playwright coverage. Focused homepage checks
-passed first; follow-up full-site closeout then passed `npm run test:website-verify`
-with `layout-fit` 247/247 and `interactive-layout` 88/88 after the compact hero
-contract was added. Do not carry forward
-the earlier temporary portfolio-blocked caveat unless a fresh run fails again.
+single visible H1 and real install photo, moved the cookie notice inline, and
+added homepage/cookie Playwright coverage. A later same-day correction removed
+the homepage trust/authority bar, made Google reviews the first post-hero band,
+moved the cookie notice after reviews, and moved Recent Celebrations after the
+reviews block. Focused homepage checks passed first; follow-up full-site closeout
+then passed `npm run test:website-verify` with `layout-fit` 247/247 and
+`interactive-layout` 88/88 after the compact hero contract was added. Do not
+carry forward the earlier temporary portfolio-blocked caveat unless a fresh run
+fails again.

@@ -8,6 +8,57 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-07 - Homepage proof order and portfolio shell clarified
+
+**Decision:** The homepage hero is followed immediately by Google reviews. The
+homepage trust/authority bar is removed for now, while the approved brand icon
+assets remain available for future use. The cookie notice sits inline after the
+reviews block, not between the hero and reviews. Recent Celebrations follows the
+reviews. On `/portfolio`, the approved Claude/Frappe reference means the
+collage/movement and photo rhythm, not the entire copied page shell; the route
+uses the native LT/Frappe site chrome and branded compact portfolio hero.
+
+**Reasoning:** GL clarified two launch hierarchy issues. First, social proof
+should be the immediate post-hero proof on the homepage, not a trust bar or
+Recent Celebrations. Second, the portfolio page had over-preserved a Claude page
+design: internal nav, local Google font imports, custom cursor, and hero copy
+that did not match the current LT brand. The useful part was the motion/collage
+proof behavior.
+
+**Implementation:** Updated `www/home.html`, `www/home.py`,
+`lt-site-preferences.js`, `lt-page-containment.css`, `hooks.py`,
+`www/portfolio.html`, `lt-portfolio-reel.css`, `lt-portfolio-reel.js`,
+`interactive_layout.spec.js`, and `portfolio_reel.spec.js`. Removed the
+homepage trust-bar markup and CSS, moved reviews directly under the hero, moved
+cookie insertion to after reviews, moved Recent Celebrations after reviews,
+removed portfolio-specific Google font imports, removed the copied portfolio
+internal nav and custom cursor mount, added branded LT portfolio hero copy, and
+kept the existing whole-photo drift/collage reel.
+
+**Verification receipt:** The initial TDD run failed exactly on the old contract:
+site-preferences cache bust, hero-next-band order, first viewport review
+position, cookie previous sibling, and portfolio branded-hero expectations. After
+implementation, `docker restart locally-twisted-erpnext-v15-backend-1` and
+`python scripts/dev/clear_website_cache.py` passed. Focused homepage checks
+passed 7/7 with `npm run test:interactive-layout -- --grep "homepage leads with
+Google review|homepage hero uses one visible|small mobile homepage|mobile cookie
+notice|desktop homepage cookie|site-preferences"`. Focused portfolio branded
+shell check passed with `npm run test:portfolio-reel -- --grep "desktop
+renders"`. The first aggregate `npm run test:website-verify` attempt passed
+Nav IA and `layout-fit` 247/247, then failed 1/88 interactive checks because the
+portfolio mobile hero content was too dense for the 220px contract. After
+tightening the mobile portfolio hero and adding a CTA contrast assertion,
+follow-up verification passed: full `npm run test:interactive-layout` 88/88,
+`npm run test:layout-fit -- --grep "home fits|portfolio fits"` 26/26,
+`npm run test:portfolio-reel` 4/4, `npm run test:checkout-experience` 2/2,
+`python scripts/verify/nav_ia.py`, and `python scripts/verify/smoke_shop.py`.
+Screenshots are in `output/playwright/home-portfolio-corrections-20260507/`.
+
+**Decided by:** GL clarified the homepage proof order and portfolio reference
+scope; Codex implemented and verified the site slice.
+
+---
+
 ## 2026-05-07 - LT repo is main-only; branch workflow is forbidden
 
 **Decision:** Locally Twisted development happens on `main` only. Feature, codex, topic, experiment, and PR-stack branches are not approved coordination tools for this repo.
@@ -37,6 +88,11 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 ---
 
 ## 2026-05-07 - Homepage is launch proof, not an animated concept wall
+
+**Status:** Partially superseded by the 2026-05-07 homepage/portfolio
+clarification above. The stable hero and crawl rules remain current; the
+homepage cookie notice now sits after Google reviews, the trust/authority bar is
+removed for now, and Recent Celebrations follows reviews.
 
 **Decision:** The public homepage hero must use one visible stable H1 over a real optimized Locally Twisted install photo. The review-card crawl and trusted-business crawl are both full-stage proof banners moving left-to-right at the same `540s` speed in normal motion, with a matching horizontal/static fallback in the reduced-motion branch. The homepage cookie notice is inline after the hero instead of a fixed overlay. Event Playground and rotating blog/title concepts stay out of the launch hero unless GL explicitly reopens them.
 
@@ -273,6 +329,10 @@ No dog logo, gold bar, gold rule, navy/berry/promo accent treatment, or marketin
 ---
 
 ## 2026-05-06 - Portfolio keeps the collage, not the full prototype styling
+
+**Status:** Superseded in copy specifics by the 2026-05-07 homepage/portfolio
+clarification above. Keep the collage/movement boundary, but the current hero
+copy is `Real balloon installs for Utah events.`, not `What We Do`.
 
 **Decision:** `/portfolio` should keep the large floating collage of installed-work imagery, but it should not carry over the full Claude/designer prototype page styling. The hero is compact, uses the native LT shell and global site typography, and defaults to `What We Do` with Utah balloon decor supporting copy. Desktop photos should be larger and more confident than the first production pass, with frequent center-column statement photos. Proof photos stay whole with `object-fit: contain`; any empty frame area should match the warm page background instead of showing as gray boxes.
 

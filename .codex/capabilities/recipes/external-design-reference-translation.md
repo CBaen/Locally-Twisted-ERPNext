@@ -47,6 +47,8 @@ the approved visual behavior.
    - what behavior, spacing, motion, sizing, and image treatment must survive;
    - what should be ignored, such as wrong header, footer, copy, placeholders, or fake data;
    - what data/assets must be replaced with real LT source.
+   Be explicit when GL approves only one part of a reference. "Use the collage
+   and movement" does not mean "copy the entire page shell."
 3. State any deliberate deviations before implementation. Do not silently add
    local "improvements" such as cards, filters, modals, captions, boxed grids, or
    Frappe containment if they fight the approved design.

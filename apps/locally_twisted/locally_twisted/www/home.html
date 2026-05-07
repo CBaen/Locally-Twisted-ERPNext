@@ -29,65 +29,7 @@
     </div>
 </section>
 
-{# --- 2. Authority proof bar --- #}
-<section class="lt-authority lt-fullbleed" aria-labelledby="lt-authority-heading">
-    <h2 id="lt-authority-heading" class="visually-hidden">Why Utah event teams trust Locally Twisted</h2>
-    <div class="lt-authority__inner">
-        <article class="lt-authority__item">
-            <span class="lt-authority__icon lt-icon-mask" style="--lt-icon-url: url('/assets/locally_twisted/icons/brand/utah-rooted.svg')" aria-hidden="true"></span>
-            <p class="lt-authority__title">Locally Rooted</p>
-            <p class="lt-authority__text">Utah event experience and venue-aware installs across the Wasatch Front.</p>
-        </article>
-        <article class="lt-authority__item">
-            <span class="lt-authority__icon lt-icon-mask" style="--lt-icon-url: url('/assets/locally_twisted/icons/brand/design-driven.svg')" aria-hidden="true"></span>
-            <p class="lt-authority__title">Design Driven</p>
-            <p class="lt-authority__text">Custom color and structure choices planned around the space.</p>
-        </article>
-        <article class="lt-authority__item">
-            <span class="lt-authority__icon lt-icon-mask" style="--lt-icon-url: url('/assets/locally_twisted/icons/brand/professional.svg')" aria-hidden="true"></span>
-            <p class="lt-authority__title">Professional</p>
-            <p class="lt-authority__text">Clear communication, careful setup, and reliable event-day delivery.</p>
-        </article>
-        <article class="lt-authority__item">
-            <span class="lt-authority__icon lt-icon-mask" style="--lt-icon-url: url('/assets/locally_twisted/icons/brand/trusted-partner.svg')" aria-hidden="true"></span>
-            <p class="lt-authority__title">Trusted Partner</p>
-            <p class="lt-authority__text">From concept to celebration, our team helps the details land cleanly.</p>
-        </article>
-    </div>
-</section>
-
-{# --- 3. 3-dot divider --- #}
-<div class="lt-divider" role="presentation" aria-hidden="true">
-    <span></span><span></span><span></span>
-</div>
-
-{# --- 4. Recent Celebrations — installed-work proof before reviews --- #}
-<section class="lt-featured lt-fullbleed" aria-labelledby="lt-featured-heading">
-    <div class="lt-featured__inner">
-        <h2 id="lt-featured-heading" class="lt-featured__heading">Recent Celebrations</h2>
-        <p class="lt-featured__lede">
-            A small slice of what we've made for Utah's events. See more installed work in the portfolio.
-        </p>
-        <div class="lt-featured__grid">
-            {% for piece in featured_work %}
-            <a class="lt-featured__card" href="/portfolio" aria-label="View {{ piece.title }} in our portfolio">
-                <div class="lt-featured__image"
-                     style="background-image: url('{{ piece.image }}');"
-                     role="img" aria-label="{{ piece.alt }}"></div>
-                <div class="lt-featured__body">
-                    <p class="lt-featured__category">{{ piece.category }}</p>
-                    <h3 class="lt-featured__title">{{ piece.title }}</h3>
-                </div>
-            </a>
-            {% endfor %}
-        </div>
-        <p class="lt-featured__viewall">
-            <a href="/portfolio">See the full portfolio</a>
-        </p>
-    </div>
-</section>
-
-{# --- 5. Review proof crawl --- #}
+{# --- 2. Google review proof crawl --- #}
 <section class="lt-reviews-block lt-fullbleed" aria-labelledby="lt-reviews-heading">
     <div class="lt-reviews-block__inner">
         <h2 id="lt-reviews-heading" class="visually-hidden">What people say</h2>
@@ -160,6 +102,32 @@
 {# --- 6. Custom Event Decor — 8 customizable categories (full-bleed band).
      Heading links to the current Event Balloons authority route;
      consultative work, NOT in the shop. #}
+{# --- 3. Recent Celebrations: installed-work proof after reviews --- #}
+<section class="lt-featured lt-fullbleed" aria-labelledby="lt-featured-heading">
+    <div class="lt-featured__inner">
+        <h2 id="lt-featured-heading" class="lt-featured__heading">Recent Celebrations</h2>
+        <p class="lt-featured__lede">
+            A small slice of what we've made for Utah's events. See more installed work in the portfolio.
+        </p>
+        <div class="lt-featured__grid">
+            {% for piece in featured_work %}
+            <a class="lt-featured__card" href="/portfolio" aria-label="View {{ piece.title }} in our portfolio">
+                <div class="lt-featured__image"
+                     style="background-image: url('{{ piece.image }}');"
+                     role="img" aria-label="{{ piece.alt }}"></div>
+                <div class="lt-featured__body">
+                    <p class="lt-featured__category">{{ piece.category }}</p>
+                    <h3 class="lt-featured__title">{{ piece.title }}</h3>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        <p class="lt-featured__viewall">
+            <a href="/portfolio">See the full portfolio</a>
+        </p>
+    </div>
+</section>
+
 <section class="lt-categories lt-fullbleed" aria-labelledby="lt-categories-heading">
     <h2 id="lt-categories-heading" class="lt-categories__heading">
         <a class="lt-categories__heading-link" href="/event-balloons">Custom Event Decor</a>

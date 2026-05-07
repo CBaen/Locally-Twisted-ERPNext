@@ -90,10 +90,10 @@
             return;
         }
         var banner = buildBanner();
-        var homeHero = document.querySelector('.lt-hero');
-        if (homeHero) {
+        var homeReviews = document.querySelector('.lt-reviews-block');
+        if (homeReviews) {
             banner.classList.add('lt-cookie-consent--inline');
-            homeHero.insertAdjacentElement('afterend', banner);
+            homeReviews.insertAdjacentElement('afterend', banner);
             return;
         }
         document.body.appendChild(banner);

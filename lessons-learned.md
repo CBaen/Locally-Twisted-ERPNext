@@ -6,6 +6,37 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-07 - Design references can be partially approved
+
+The portfolio route copied too much from the Claude/Frappe design reference.
+GL wanted the collage and movement, not the whole page shell. Preserving the
+reference's internal nav, custom cursor, route-local font imports, and off-brand
+hero made the page feel disconnected from the current Locally Twisted site even
+though the moving photo reel was useful.
+
+**Counter-move:** extract the approved part of a visual reference before coding.
+Write tests for both sides: what must survive and what must be excluded. For
+LT `/portfolio`, the protected behavior is the large whole-photo drift/collage
+reel; the excluded behavior is copied internal page chrome, custom cursor,
+portfolio-specific Google font imports, and prototype hero copy.
+
+---
+
+## 2026-05-07 - Homepage proof order is a launch contract
+
+The homepage briefly had multiple plausible proof paths competing directly
+under the hero: trust/authority bar, Recent Celebrations, Google reviews, and
+cookie notice. Technically each could be defended, but launch hierarchy matters:
+GL clarified that Google reviews belong immediately below the hero right now.
+
+**Counter-move:** make first post-hero content an explicit contract, not a local
+layout preference. For LT launch, the order is hero, Google reviews, inline
+cookie notice, Recent Celebrations. Do not restore the homepage trust bar or put
+Recent Celebrations above reviews without a fresh GL decision and matching
+tests.
+
+---
+
 ## 2026-05-07 - Branch stacks break GL's operating model
 
 Multiple Codex branches and stacked draft PRs accumulated even though GL does
@@ -173,7 +204,14 @@ The unpaid invoice review surface looked safe because it only reads invoices and
 
 The portfolio correction after the exact-handoff pass showed a second failure mode: once a reference is rendered correctly, it can still be wrong for production if Codex carries over the whole prototype instead of the part GL actually wants. GL wanted the overlapping collage and stronger center balance. She did not want the tall hero, copied font imports, custom cursor, fake shell, or small production photos.
 
-**Counter-move:** after matching a visual reference, immediately ask what belongs to production and encode that boundary in source and verifiers. For LT `/portfolio`, the current rule is: compact `What We Do` hero, native LT shell/global typography, large whole installed-work images, frequent center-column photos, no portfolio-specific Google font imports, no custom cursor artifacts, and warm page-matched image frames. The verifier should fail if the page regresses into either a small safe row or a wholesale prototype copy.
+**Counter-move:** after matching a visual reference, immediately identify what
+belongs to production and encode that boundary in source and verifiers. For LT
+`/portfolio`, the current rule is: branded compact portfolio hero, native LT
+shell/global typography, large whole installed-work images, frequent
+center-column photos, no portfolio-specific Google font imports, no custom
+cursor artifacts, no copied internal nav, and warm page-matched image frames.
+The verifier should fail if the page regresses into either a small safe row or a
+wholesale prototype copy.
 
 ---
 
