@@ -80,6 +80,14 @@ OWNER_HOME_TEXT = {
 }
 
 CONTRACTOR_TEMP_USER = "lt-contractor-temp@example.com"
+OWNER_HOME = "LT Owner Home"
+OWNER_ROLE_PROFILE = "LT Owner"
+OWNER_WORKSPACE_ROLE = "LT Owner Access"
+OWNER_DEFAULT_WORKSPACE_USERS = {
+    "cameron@builtbycameron.com": {"System Manager", "Website Manager"},
+    "locallytwisted@gmail.com": set(),
+}
+OWNER_OPERATOR_ROLES = {"Item Manager", OWNER_WORKSPACE_ROLE}
 
 
 def bench_execute(method: str, *, kwargs: dict[str, Any] | None = None) -> Any:
@@ -259,6 +267,30 @@ def check_contractor_has_no_backend_login() -> list[str]:
     return failures
 
 
+def check_owner_default_users_preserve_roles() -> list[str]:
+    failures = []
+    for user_name, protected_roles in OWNER_DEFAULT_WORKSPACE_USERS.items():
+        user = try_get_doc("User", user_name)
+        if not user:
+            continue
+
+        if user.get("default_workspace") != OWNER_HOME:
+            failures.append(
+                f"{user_name} default workspace expected {OWNER_HOME!r}, found {user.get('default_workspace')!r}"
+            )
+        if user.get("role_profile_name"):
+            failures.append(
+                f"{user_name} should not have a role profile because Frappe clears manual roles from role profiles"
+            )
+
+        roles = {row.get("role") for row in user.get("roles", [])}
+        for role in sorted(OWNER_OPERATOR_ROLES | protected_roles):
+            if role not in roles:
+                failures.append(f"{user_name} missing preserved role {role!r}")
+
+    return failures
+
+
 def main() -> int:
     failures = []
     failures.extend(check_calendar_view())
@@ -266,6 +298,7 @@ def main() -> int:
         failures.extend(check_workspace(name, expected))
     failures.extend(check_owner_command_center())
     failures.extend(check_contractor_has_no_backend_login())
+    failures.extend(check_owner_default_users_preserve_roles())
 
     if failures:
         print("[BACKEND WORKSPACE PARITY] FAIL")

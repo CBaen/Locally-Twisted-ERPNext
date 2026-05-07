@@ -2,10 +2,13 @@ const { test, expect } = require("@playwright/test");
 const {
 	HEADER_VIEWPORTS,
 	MOBILE_DRAWER_VIEWPORTS,
+	PUBLIC_ROUTES,
 	gotoAndSettle,
 	auditPageLayout,
 	expectNoLayoutFailures,
 } = require("./layout_helpers");
+
+const PLATFORM_WORDS = /\b(?:ERPNext|Frappe)\b/i;
 
 async function expectSuccessfulResponse(response, path) {
 	expect(response, `${path} should return a response`).not.toBeNull();
@@ -21,6 +24,104 @@ async function dismissCookieNotice(page) {
 }
 
 test.describe("Locally Twisted interactive layout states", () => {
+	test.describe("white-label platform leakage", () => {
+		for (const route of [...PUBLIC_ROUTES, { name: "login", path: "/login" }]) {
+			test(`${route.name} has no platform names in visible text`, async ({ page }) => {
+				await page.setViewportSize({ width: 1200, height: 900 });
+				const response = await gotoAndSettle(page, route.path);
+				await expectSuccessfulResponse(response, route.path);
+				const visibleText = await page.locator("body").innerText();
+				expect(visibleText, `${route.path} visible body text should stay white-labeled`).not.toMatch(PLATFORM_WORDS);
+			});
+		}
+
+		test("desktop and mobile menu states keep platform names out of visible text", async ({ page }) => {
+			await page.setViewportSize({ width: 1200, height: 900 });
+			const desktopResponse = await gotoAndSettle(page, "/");
+			await expectSuccessfulResponse(desktopResponse, "/");
+
+			for (const trigger of ["lt-mega-events", "lt-mega-products"]) {
+				await page.locator(`[data-lt-megamenu-trigger="${trigger}"]`).click();
+				await expect(page.locator(`#${trigger}`)).toBeVisible();
+				const visibleText = await page.locator("body").innerText();
+				expect(visibleText, `${trigger} visible menu text should stay white-labeled`).not.toMatch(PLATFORM_WORDS);
+				await page.locator(`[data-lt-megamenu-trigger="${trigger}"]`).click();
+			}
+
+			await page.setViewportSize({ width: 390, height: 844 });
+			const mobileResponse = await gotoAndSettle(page, "/");
+			await expectSuccessfulResponse(mobileResponse, "/");
+			await dismissCookieNotice(page);
+
+			await page.locator("#lt-mobile-toggle").click();
+			await expect(page.locator("#lt-mobile-nav")).toBeVisible();
+			for (const panel of ["lt-mobile-events", "lt-mobile-products", "lt-mobile-help"]) {
+				await page.locator(`[data-lt-drawer-accordion-trigger="${panel}"]`).click();
+				await expect(page.locator(`#${panel}`)).toBeVisible();
+			}
+			const drawerText = await page.locator("body").innerText();
+			expect(drawerText, "expanded mobile drawer text should stay white-labeled").not.toMatch(PLATFORM_WORDS);
+		});
+
+		for (const route of ["/", "/login"]) {
+			test(`${route} uses Locally Twisted favicon and login logo chrome`, async ({ page }) => {
+				await page.setViewportSize({ width: 1200, height: 900 });
+				const response = await gotoAndSettle(page, route);
+				await expectSuccessfulResponse(response, route);
+
+				const html = await page.content();
+				expect(html, `${route} source should not expose the platform generator banner`).not.toContain("Built on Frappe");
+				expect(html, `${route} source should not expose the platform generator meta tag`).not.toContain('name="generator" content="frappe"');
+				expect(html, `${route} source should not expose LT-authored framework comments`).not.toContain("custom Frappe app");
+
+				const iconHrefs = await page
+					.locator('link[rel*="icon"]')
+					.evaluateAll((links) => links.map((link) => link.getAttribute("href") || ""));
+				expect(iconHrefs.length, `${route} should declare an icon`).toBeGreaterThan(0);
+				for (const href of iconHrefs) {
+					expect(href, `${route} icon href should not expose ERPNext/Frappe default branding`).not.toMatch(/\/assets\/(?:erpnext|frappe)\//i);
+					const iconUrl = new URL(href, response.url()).toString();
+					const iconResponse = await page.request.get(iconUrl);
+					expect(iconResponse.status(), `${route} icon ${iconUrl} should be served`).toBeLessThan(400);
+					const iconBody = await iconResponse.body();
+					expect(iconBody.length, `${route} favicon should be a small browser icon, not a full-size brand asset`).toBeLessThanOrEqual(50_000);
+					const dimensions = await page.evaluate(async (source) => {
+						const image = new Image();
+						image.src = source;
+						await image.decode();
+						return {
+							width: image.naturalWidth,
+							height: image.naturalHeight,
+						};
+					}, iconUrl);
+					expect(dimensions.width, `${route} favicon width should be favicon-sized`).toBeLessThanOrEqual(128);
+					expect(dimensions.height, `${route} favicon height should be favicon-sized`).toBeLessThanOrEqual(128);
+				}
+
+				const appLogoSrcs = await page
+					.locator("img.app-logo")
+					.evaluateAll((images) => images.map((image) => image.getAttribute("src") || ""));
+				for (const src of appLogoSrcs) {
+					expect(src, `${route} login/app logo should not use default platform artwork`).not.toMatch(/(?:erpnext|frappe)-(?:logo|favicon)|\/assets\/(?:erpnext|frappe)\//i);
+				}
+			});
+		}
+
+		test("homepage serves the current site-preferences cache buster", async ({ page }) => {
+			await page.setViewportSize({ width: 1200, height: 900 });
+			const response = await gotoAndSettle(page, "/");
+			await expectSuccessfulResponse(response, "/");
+
+			const scriptSrcs = await page
+				.locator('script[src*="lt-site-preferences.js"]')
+				.evaluateAll((scripts) => scripts.map((script) => script.getAttribute("src") || ""));
+			expect(
+				scriptSrcs.some((src) => src.includes("lt-site-preferences.js?v=20260507-policy-1")),
+				"site-preferences script should be cache-busted when inline notice behavior changes"
+			).toBe(true);
+		});
+	});
+
 	test.describe("header breakpoint contract", () => {
 		for (const viewport of HEADER_VIEWPORTS) {
 			test(`header uses ${viewport.expectedMode} mode at ${viewport.name}px`, async ({ page }) => {
@@ -268,7 +369,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 			{ name: "mobile", width: 375, height: 900 },
 			{ name: "desktop", width: 1366, height: 900 },
 		]) {
-			test(`reviews crawl left-to-right and stay unstacked on ${viewport.name}`, async ({ page }) => {
+			test(`reviews crawl left-to-right and stay full-stage on ${viewport.name}`, async ({ page }) => {
 				await page.setViewportSize({ width: viewport.width, height: viewport.height });
 				await page.emulateMedia({ reducedMotion: "no-preference" });
 				const response = await gotoAndSettle(page, "/");
@@ -283,6 +384,8 @@ test.describe("Locally Twisted interactive layout states", () => {
 						x: matrix.m41,
 						topDelta: Math.max(...tops) - Math.min(...tops),
 						cardCount: cards.length,
+						quotesRect: document.querySelector(".lt-reviews-block__quotes").getBoundingClientRect(),
+						overflowX: window.getComputedStyle(document.querySelector(".lt-reviews-block__quotes")).overflowX,
 						animationName: window.getComputedStyle(track).animationName,
 						animationDuration: window.getComputedStyle(track).animationDuration,
 					};
@@ -300,18 +403,75 @@ test.describe("Locally Twisted interactive layout states", () => {
 				expect(before.animationName).toBe("lt-reviews-scroll");
 				expect(before.animationDuration).toBe("540s");
 				expect(before.topDelta, "first review cards should share one horizontal row").toBeLessThanOrEqual(1);
+				expect(Math.round(before.quotesRect.left), "review banner should start at the viewport edge").toBeLessThanOrEqual(1);
+				expect(Math.round(before.quotesRect.right), "review banner should reach the viewport edge").toBeGreaterThanOrEqual(viewport.width - 1);
+				expect(before.overflowX).toBe("hidden");
 				expect(after.x, "review track should move right over time").toBeGreaterThan(before.x);
 			});
 		}
 	});
 
-	test("homepage reduced motion disables moving headline and marquee tracks", async ({ page }) => {
+	test.describe("homepage client crawl banner", () => {
+		for (const viewport of [
+			{ name: "mobile", width: 375, height: 900 },
+			{ name: "desktop", width: 1366, height: 900 },
+		]) {
+			test(`trusted-business crawl moves and stays full-stage on ${viewport.name}`, async ({ page }) => {
+				await page.setViewportSize({ width: viewport.width, height: viewport.height });
+				await page.emulateMedia({ reducedMotion: "no-preference" });
+				const response = await gotoAndSettle(page, "/");
+				await expectSuccessfulResponse(response, "/");
+
+				const before = await page.evaluate(() => {
+					const track = document.querySelector(".lt-crawl__track");
+					const viewport = document.querySelector(".lt-crawl__viewport");
+					const items = Array.from(document.querySelectorAll(".lt-crawl__item")).slice(0, 6);
+					const matrix = new DOMMatrixReadOnly(window.getComputedStyle(track).transform);
+					const tops = items.map((item) => Math.round(item.getBoundingClientRect().top));
+					const rect = viewport.getBoundingClientRect();
+					return {
+						x: matrix.m41,
+						topDelta: Math.max(...tops) - Math.min(...tops),
+						itemCount: items.length,
+						bannerLeft: rect.left,
+						bannerRight: rect.right,
+						overflowX: window.getComputedStyle(viewport).overflowX,
+						animationName: window.getComputedStyle(track).animationName,
+						animationDuration: window.getComputedStyle(track).animationDuration,
+					};
+				});
+
+				await page.waitForTimeout(1200);
+
+				const after = await page.evaluate(() => {
+					const track = document.querySelector(".lt-crawl__track");
+					const matrix = new DOMMatrixReadOnly(window.getComputedStyle(track).transform);
+					return { x: matrix.m41 };
+				});
+
+				expect(before.itemCount).toBeGreaterThanOrEqual(6);
+				expect(before.animationName).toBe("lt-crawl-scroll");
+				expect(before.animationDuration).toBe("540s");
+				expect(before.topDelta, "trusted-business names should share one horizontal row").toBeLessThanOrEqual(1);
+				expect(Math.round(before.bannerLeft), "trusted-business banner should start at the viewport edge").toBeLessThanOrEqual(1);
+				expect(Math.round(before.bannerRight), "trusted-business banner should reach the viewport edge").toBeGreaterThanOrEqual(viewport.width - 1);
+				expect(before.overflowX).toBe("hidden");
+				expect(after.x, "trusted-business track should move right over time like review cards").toBeGreaterThan(before.x);
+			});
+		}
+	});
+
+	test("homepage reduced motion makes review and client banners static", async ({ page }) => {
 		await page.setViewportSize({ width: 390, height: 844 });
 		await page.emulateMedia({ reducedMotion: "reduce" });
 		const response = await gotoAndSettle(page, "/");
 		await expectSuccessfulResponse(response, "/");
 
-		const motion = await page.evaluate(() => {
+		const before = await page.evaluate(() => {
+			function transformX(value) {
+				if (!value || value === "none") return 0;
+				return new DOMMatrixReadOnly(value).m41;
+			}
 			function animation(selector) {
 				const element = document.querySelector(selector);
 				if (!element) return null;
@@ -319,17 +479,225 @@ test.describe("Locally Twisted interactive layout states", () => {
 				return {
 					animationName: style.animationName,
 					animationDuration: style.animationDuration,
+					x: transformX(style.transform),
+				};
+			}
+			function banner(selector) {
+				const element = document.querySelector(selector);
+				const style = window.getComputedStyle(element);
+				const rect = element.getBoundingClientRect();
+				return {
+					left: rect.left,
+					right: rect.right,
+					overflowX: style.overflowX,
+					width: rect.width,
+				};
+			}
+			function rowDelta(selector) {
+				const items = Array.from(document.querySelectorAll(selector)).slice(0, 4);
+				const tops = items.map((item) => Math.round(item.getBoundingClientRect().top));
+				return {
+					count: items.length,
+					topDelta: Math.max(...tops) - Math.min(...tops),
 				};
 			}
 			return {
 				hero: animation(".lt-hero__title"),
 				reviews: animation(".lt-reviews-block__track"),
 				crawl: animation(".lt-crawl__track"),
+				reviewBanner: banner(".lt-reviews-block__quotes"),
+				clientBanner: banner(".lt-crawl__viewport"),
+				reviewRow: rowDelta(".lt-reviews-block__quote"),
+				clientRow: rowDelta(".lt-crawl__item"),
 			};
 		});
 
-		expect(motion.hero && motion.hero.animationName).toBe("none");
-		expect(motion.reviews && motion.reviews.animationName).toBe("none");
-		expect(motion.crawl && motion.crawl.animationName).toBe("none");
+		await page.waitForTimeout(1200);
+
+		const after = await page.evaluate(() => {
+			function transformX(value) {
+				if (!value || value === "none") return 0;
+				return new DOMMatrixReadOnly(value).m41;
+			}
+			function x(selector) {
+				const element = document.querySelector(selector);
+				return transformX(window.getComputedStyle(element).transform);
+			}
+			return {
+				reviewsX: x(".lt-reviews-block__track"),
+				crawlX: x(".lt-crawl__track"),
+			};
+		});
+
+		expect(before.hero && before.hero.animationName).toBe("none");
+		expect(before.reviews && before.reviews.animationName).toBe("none");
+		expect(before.crawl && before.crawl.animationName).toBe("none");
+		expect(before.reviewRow.count).toBeGreaterThanOrEqual(4);
+		expect(before.clientRow.count).toBeGreaterThanOrEqual(4);
+		expect(before.reviewRow.topDelta, "review cards should not stack in reduced-motion environments").toBeLessThanOrEqual(1);
+		expect(before.clientRow.topDelta, "client names should not stack in reduced-motion environments").toBeLessThanOrEqual(1);
+		expect(Math.round(before.reviewBanner.left), "review banner should start at the viewport edge").toBeLessThanOrEqual(1);
+		expect(Math.round(before.reviewBanner.right), "review banner should reach the viewport edge").toBeGreaterThanOrEqual(389);
+		expect(Math.round(before.clientBanner.left), "client banner should start at the viewport edge").toBeLessThanOrEqual(1);
+		expect(Math.round(before.clientBanner.right), "client banner should reach the viewport edge").toBeGreaterThanOrEqual(389);
+		expect(before.reviewBanner.overflowX).toBe("auto");
+		expect(before.clientBanner.overflowX).toBe("auto");
+		expect(Math.abs(after.reviewsX - before.reviews.x), "review track should not animate for reduced-motion users").toBeLessThanOrEqual(0.5);
+		expect(Math.abs(after.crawlX - before.crawl.x), "client track should not animate for reduced-motion users").toBeLessThanOrEqual(0.5);
+	});
+
+	test("homepage leads with installed-work proof before review cards", async ({ page }) => {
+		await page.setViewportSize({ width: 1366, height: 900 });
+		const response = await gotoAndSettle(page, "/");
+		await expectSuccessfulResponse(response, "/");
+
+		const result = await page.evaluate(() => {
+			const authority = document.querySelector(".lt-authority");
+			const featured = document.querySelector(".lt-featured");
+			const reviews = document.querySelector(".lt-reviews-block");
+			const iconCount = document.querySelectorAll(".lt-authority__icon.lt-icon-mask").length;
+			const inlineIconCount = document.querySelectorAll(".lt-authority__icon svg").length;
+			const ctaBody = document.querySelector(".lt-cta__body");
+			return {
+				authorityTop: authority.getBoundingClientRect().top + window.scrollY,
+				featuredTop: featured.getBoundingClientRect().top + window.scrollY,
+				reviewsTop: reviews.getBoundingClientRect().top + window.scrollY,
+				iconCount,
+				inlineIconCount,
+				ctaText: ctaBody ? ctaBody.innerText.replace(/\s+/g, " ").trim() : "",
+			};
+		});
+
+		expect(result.featuredTop, "recent installed-work photos should appear after the authority bar").toBeGreaterThan(result.authorityTop);
+		expect(result.featuredTop, "installed-work photo proof should appear before the review card crawl").toBeLessThan(result.reviewsTop);
+		expect(result.iconCount, "homepage authority proof should use the approved brand icon suite").toBe(4);
+		expect(result.inlineIconCount, "homepage authority proof should not keep old inline SVG icons").toBe(0);
+		expect(result.ctaText, "closing CTA should lead with corporate, school, civic, and community work").toMatch(/corporate, school, civic, and community/i);
+		expect(result.ctaText, "closing CTA should keep private celebrations secondary").toMatch(/private celebrations/i);
+	});
+
+	test("homepage hero uses one visible stable headline", async ({ page }) => {
+		await page.setViewportSize({ width: 1366, height: 900 });
+		await page.emulateMedia({ reducedMotion: "no-preference" });
+		const response = await gotoAndSettle(page, "/");
+		await expectSuccessfulResponse(response, "/");
+
+		const result = await page.evaluate(() => {
+			const headings = Array.from(document.querySelectorAll("h1"));
+			const heroTitle = document.querySelector(".lt-hero__title");
+			const heroImage = document.querySelector(".lt-hero__image");
+			const cookie = document.querySelector(".lt-cookie-consent");
+			const authority = document.querySelector(".lt-authority");
+			const titleStyle = heroTitle ? window.getComputedStyle(heroTitle) : null;
+			const heroImageStyle = heroImage ? window.getComputedStyle(heroImage) : null;
+			const titleRect = heroTitle ? heroTitle.getBoundingClientRect() : null;
+			const cookieRect = cookie ? cookie.getBoundingClientRect() : null;
+			const authorityRect = authority ? authority.getBoundingClientRect() : null;
+			return {
+				h1Count: headings.length,
+				h1Text: headings.map((heading) => heading.innerText.trim()),
+				heroTitleText: heroTitle ? heroTitle.innerText.trim() : "",
+				titleVisible: Boolean(titleRect && titleRect.width > 0 && titleRect.height > 0 && titleStyle.display !== "none" && titleStyle.visibility !== "hidden"),
+				animationName: titleStyle ? titleStyle.animationName : null,
+				heroImage: heroImageStyle ? heroImageStyle.backgroundImage : "",
+				cyclingCount: document.querySelectorAll(".lt-hero__cycling .lt-hero__title").length,
+				nextBandTop: Math.min(cookieRect ? cookieRect.top : Number.POSITIVE_INFINITY, authorityRect ? authorityRect.top : Number.POSITIVE_INFINITY),
+				viewportHeight: window.innerHeight,
+			};
+		});
+
+		expect(result.h1Count, "homepage should expose exactly one page-level H1").toBe(1);
+		expect(result.h1Text[0], "homepage H1 should be the visible hero headline").toBe(result.heroTitleText);
+		expect(result.titleVisible, "homepage H1 should be visible, not screen-reader-only").toBe(true);
+		expect(result.animationName, "homepage H1 should not rotate or fade").toBe("none");
+		expect(result.heroImage, "homepage hero should prove a real balloon install, not only a scenic Utah background").toContain("corporate-weberstock-photo-opt.webp");
+		expect(result.cyclingCount, "homepage should not render hidden rotating H2/H1 headline copies").toBe(0);
+		expect(result.nextBandTop, "desktop first viewport should show the next band below the hero").toBeLessThan(result.viewportHeight - 16);
+	});
+
+	test("small mobile homepage hero leaves a next-band hint without hiding CTAs", async ({ page }) => {
+		await page.setViewportSize({ width: 320, height: 700 });
+		const response = await gotoAndSettle(page, "/");
+		await expectSuccessfulResponse(response, "/");
+
+		const result = await page.evaluate(() => {
+			const cookie = document.querySelector(".lt-cookie-consent");
+			const buttons = Array.from(document.querySelectorAll(".lt-hero__cta"));
+			const cookieRect = cookie ? cookie.getBoundingClientRect() : null;
+			return {
+				cookieTop: cookieRect ? cookieRect.top : null,
+				viewportHeight: window.innerHeight,
+				buttonBottoms: buttons.map((button) => button.getBoundingClientRect().bottom),
+				buttonCount: buttons.length,
+			};
+		});
+
+		expect(result.buttonCount, "small mobile homepage should keep both hero CTAs visible").toBe(2);
+		expect(Math.max(...result.buttonBottoms), "small mobile hero CTAs should fit before the next band").toBeLessThan(result.cookieTop);
+		expect(result.cookieTop, "small mobile first viewport should show the inline cookie/next band hint").toBeLessThan(result.viewportHeight - 16);
+	});
+
+	for (const viewport of [
+		{ name: "320", width: 320, height: 700 },
+		{ name: "375", width: 375, height: 812 },
+	]) {
+		test(`mobile cookie notice does not cover hero CTAs at ${viewport.name}px`, async ({ page }) => {
+			await page.setViewportSize({ width: viewport.width, height: viewport.height });
+			const response = await gotoAndSettle(page, "/");
+			await expectSuccessfulResponse(response, "/");
+
+			const result = await page.evaluate(() => {
+				const notice = document.querySelector(".lt-cookie-consent");
+				const buttons = Array.from(document.querySelectorAll(".lt-hero__cta"));
+				function rect(element) {
+					const box = element.getBoundingClientRect();
+					return {
+						top: box.top,
+						right: box.right,
+						bottom: box.bottom,
+						left: box.left,
+					};
+				}
+				function overlaps(a, b) {
+					return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+				}
+				const noticeRect = rect(notice);
+				return buttons.map((button) => ({
+					text: button.innerText.trim(),
+					overlap: overlaps(noticeRect, rect(button)),
+				}));
+			});
+
+			expect(result, "homepage should render hero buttons").toHaveLength(2);
+			expect(result.filter((item) => item.overlap), "cookie notice should not cover either hero button").toHaveLength(0);
+		});
+	}
+
+	test("desktop homepage cookie notice is an inline band instead of a floating overlay", async ({ page }) => {
+		await page.setViewportSize({ width: 1366, height: 900 });
+		const response = await gotoAndSettle(page, "/");
+		await expectSuccessfulResponse(response, "/");
+
+		const result = await page.evaluate(() => {
+			const notice = document.querySelector(".lt-cookie-consent");
+			const previous = notice && notice.previousElementSibling;
+			const style = notice && window.getComputedStyle(notice);
+			const rect = notice && notice.getBoundingClientRect();
+			return {
+				hasNotice: Boolean(notice),
+				isInline: notice ? notice.classList.contains("lt-cookie-consent--inline") : false,
+				position: style ? style.position : null,
+				previousIsHero: previous ? previous.classList.contains("lt-hero") : false,
+				left: rect ? rect.left : null,
+				right: rect ? rect.right : null,
+			};
+		});
+
+		expect(result.hasNotice, "homepage should render the cookie notice when no choice is stored").toBe(true);
+		expect(result.isInline, "desktop homepage cookie notice should use the same inline document band as mobile").toBe(true);
+		expect(result.position, "inline homepage cookie notice should not float over content").not.toBe("fixed");
+		expect(result.previousIsHero, "inline homepage cookie notice should sit immediately after the hero").toBe(true);
+		expect(Math.round(result.left), "inline cookie band should start at the viewport edge").toBeLessThanOrEqual(1);
+		expect(Math.round(result.right), "inline cookie band should reach the viewport edge").toBeGreaterThanOrEqual(1365);
 	});
 });

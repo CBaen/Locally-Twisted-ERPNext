@@ -139,7 +139,7 @@
   min-width: 0;
 }
 
-.lt-fullbleed > :is(:not(.lt-hero__image):not(style):not(script)) {
+.lt-fullbleed > :is(:not(.lt-hero__image):not(.lt-crawl__viewport):not(style):not(script)) {
   max-width: 100%;
   min-width: 0;
 }

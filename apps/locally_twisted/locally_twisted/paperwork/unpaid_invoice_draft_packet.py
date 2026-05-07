@@ -117,7 +117,7 @@ def _packet(candidate: dict[str, Any]) -> dict[str, Any]:
         "review_gate": "Human approval of invoice status, recipient, cadence, balance, and copy",
         "sections": sections,
         "internal_review_checklist": [
-            "Confirm the Sales Invoice is still unpaid in ERPNext.",
+            "Confirm the invoice is still unpaid before anything is sent.",
             "Confirm the recipient is the right accounts-payable or customer accounting contact.",
             "Confirm the cadence is appropriate and there is no recent payment or reconciliation dispute.",
             "Confirm the payment link or reply path is correct before anything is sent.",

@@ -1,45 +1,13 @@
-"""Homepage controller — `/` route. v2.
+"""Homepage controller for the public `/` route.
 
-v2 changes (per GL feedback 2026-04-27):
-- Hero: cycling headline (placeholder for future blog post titles) +
-  stable tagline below + single CTA. Photo stays static.
-- Reviews block replaces the prior trust strip ("Since 1998 / Custom
-  Designs / Made with Love"). Shows stars + count + placeholder slot
-  for 3 real Google review quotes.
-- Three-dot divider element between key sections, brand-Teal.
-- Recent Celebrations photos significantly bigger (taller aspect, wider
-  container).
-- Twisting & Face Painting spotlight moved to bottom of page (per
-  business strategy: big-event work leads, twisting/face painting is
-  a smaller revenue line).
-- About snippet removed (defer until Jeff is ready, per GL 2026-04-27).
-- Client crawl slowed 50% (90s -> 180s).
-- Sections that should read as bands now use the .lt-fullbleed pattern
-  to break out of Frappe's constraining parent .container.
-- Inner content max-widths bumped to ~1200px so the page feels grand
-  on desktop.
-
-Voice and copy carry from the approved Odoo XML (homepage.xml +
-snippet templates) where they exist; cycling headline lines are pulled
-from the gallery/ design competition voice docs (designer-1, -3, -5
-all converge on the same Quiet Confidence rules from BRIEF.md).
+Current launch shape: civic/Utah hero, authority proof bar, installed-work
+photos, full-stage review and client proof crawls, custom decor discovery,
+a contact CTA, and secondary twisting/face-painting support.
 """
 import frappe
 
 no_cache = 1
 sitemap = 1
-
-
-# Cycling hero headlines. These rotate via CSS animation in the hero —
-# stable tagline below stays put. When the blog framework ships
-# (Slice 14), these get replaced by the latest blog post titles
-# pulled from `frappe.get_list("Blog Post", ...)`.
-HERO_CYCLING_TITLES = [
-    "Professional balloon decor for Utah events that matter.",
-    "Corporate, school, civic, and community ready.",
-    "Designed professionally. Installed cleanly.",
-    "Prepared event work across the Wasatch Front.",
-]
 
 
 # Real client list from the approved homepage XML's s_lt_client_crawl
@@ -64,13 +32,14 @@ CLIENT_CRAWL = [
 ]
 
 
-# The 8 customizable categories — items Jeff actually customizes for events.
-# These point at the Portfolio (current) and the future Event Decor / Design
-# Studio interactive experience (post-Phase 1). Updated 2026-04-28 per GL:
+# The 8 customizable categories - items Jeff actually customizes for events.
+# These point at the Portfolio and current Event Balloons route while the
+# interactive Event Playground work remains outside the ASAP launch lane.
+# Updated 2026-04-28 per GL:
 # Columns is the canonical name; Garlands replaces "Organic Garlands"
-# (organic is a custom option, not a separate product); Centerpieces and
+# (organic remains an option, not a separate product); Centerpieces and
 # Custom Sculptures added (Sculptures = the "anything you imagine" bucket
-# — characters, themed shapes, one-off builds; distinct from balloon
+# - characters, themed shapes, one-off builds; distinct from balloon
 # twisting entertainment which lives at /balloon-twisting-and-face-painting).
 CUSTOM_CATEGORIES = [
     {"slug": "balloon-arches", "name": "Balloon Arches", "icon": "arch"},
@@ -84,9 +53,8 @@ CUSTOM_CATEGORIES = [
 ]
 
 
-# Featured work — 3 case-study cards (odd ≤ 3 → single row per GL's
-# symmetry rule). Photos and event names are placeholder until GL
-# surfaces real ones from Jeff's archive.
+# Featured work - 3 curated launch proof cards. Review and replace when the
+# next approved photo packet is selected.
 FEATURED_WORK = [
     {
         "category": "Balloon Arches",
@@ -109,14 +77,8 @@ FEATURED_WORK = [
 ]
 
 
-# Reviews carousel — horizontal-scrolling marquee of customer praise.
-# Per GL 2026-04-27: 28 years in business deserves a carousel of real
-# reviews, not just 5 inline cards. Words matter more than client logos
-# for an event-decor business. When GL pastes the JSON from the
-# browser-Claude prompt, REVIEW_QUOTES becomes a list of dicts:
-#   {"name": "Sarah K.", "rating": 5, "date": "2025-11", "source": "Google",
-#    "event": "wedding", "text": "Full review verbatim..."}
-# Until then, None entries render as clearly-marked placeholder cards.
+# Reviews carousel - horizontal-scrolling proof from customer praise. Keep
+# rating/count claims out of the visible badge unless they are reverified.
 REVIEW_QUOTES = [
     {
         "name": "Bobbie Weyland", "rating": 5, "date": "2026-04",
@@ -218,9 +180,10 @@ REVIEW_QUOTES = [
 
 PAGE_CSS = """
 /* ======================================================================
- * HOMEPAGE v2 — portfolio-forward shape (portfolio-led, twisting at bottom)
- * BEM blocks: lt-hero, lt-authority, lt-reviews-block, lt-divider, lt-categories,
- *             lt-featured, lt-crawl, lt-cta, lt-twisting-spotlight
+ * Launch homepage - proof-first event decor shape
+ * BEM blocks: lt-hero, lt-authority, lt-featured, lt-reviews-block,
+ *             lt-divider, lt-categories, lt-crawl, lt-cta,
+ *             lt-twisting-spotlight
  * Uses CSS variables from lt-theme.css (--lt-teal, --lt-near-black, etc.)
  * ====================================================================== */
 
@@ -239,7 +202,7 @@ PAGE_CSS = """
 }
 
 /* --- Full-bleed helper ---------------------------------------------- */
-/* Frappe's templates/web.html wraps content in a max-width .container.
+/* The shared page shell wraps content in a max-width .container.
  * Sections that should read as full-width horizontal bands need to
  * break out via this technique. Used on hero, reviews, featured, crawl,
  * twisting spotlight, and the closing CTA. */
@@ -252,7 +215,7 @@ PAGE_CSS = """
     margin-right: -50vw;
 }
 body[data-path="home"] main.container.my-4 {
-    /* Beat Frappe's Bootstrap .my-4 wrapper so the full-bleed hero sits flush under the nav. */
+    /* Beat the default .my-4 wrapper so the full-bleed hero sits flush under the nav. */
     margin-top: 0 !important;
     margin-bottom: 0 !important;
 }
@@ -287,7 +250,7 @@ body[data-path="home"] main.container.my-4 {
 .lt-hero__image {
     position: absolute;
     inset: 0;
-    background-image: url('/assets/locally_twisted/images/home/hero-wasatch-city-20260503.png');
+    background-image: url('/assets/locally_twisted/images/portfolio/optimized/corporate-weberstock-photo-opt.webp');
     background-size: cover;
     background-position: center;
     background-color: var(--lt-navy);
@@ -306,7 +269,7 @@ body[data-path="home"] main.container.my-4 {
     width: 100%;
     max-width: 1280px;
     margin: 0 auto;
-    padding: 4rem 1.5rem;
+    padding: 3.35rem 1.5rem;
     text-align: left;
     color: var(--lt-white);
 }
@@ -321,45 +284,26 @@ body[data-path="home"] main.container.my-4 {
     opacity: 0.95;
     text-align: left;
 }
-.lt-hero__cycling {
-    position: relative;
-    min-height: 4.4rem;
-    margin: 0 0 0.75rem;
-}
 .lt-hero__title {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
     font-family: var(--lt-font-heading);
     font-weight: 700;
     font-size: 2.25rem;
     line-height: 1.1;
     color: var(--lt-white);
     text-align: left;
-    margin: 0;
-    opacity: 0;
-    animation: lt-hero-cycle 32s infinite;
+    margin: 0 0 0.65rem;
+    max-width: 18ch;
+    animation: none;
 }
-/* Stagger 4 titles — each visible ~6.5s out of 32s */
-.lt-hero__title:nth-child(1) { animation-delay: 0s; }
-.lt-hero__title:nth-child(2) { animation-delay: 8s; }
-.lt-hero__title:nth-child(3) { animation-delay: 16s; }
-.lt-hero__title:nth-child(4) { animation-delay: 24s; }
-@keyframes lt-hero-cycle {
-    0%   { opacity: 0; }
-    3%   { opacity: 1; }
-    22%  { opacity: 1; }
-    25%  { opacity: 0; }
-    100% { opacity: 0; }
-}
-@media (prefers-reduced-motion: reduce) {
-    .lt-hero__title {
-        animation: none;
-        opacity: 0;
-    }
-    .lt-hero__title:nth-child(1) { opacity: 1; }
+.lt-hero__proofline {
+    margin: 0 0 0.9rem;
+    color: var(--lt-brass);
+    font-family: var(--lt-font-body);
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    line-height: 1.35;
+    text-transform: uppercase;
 }
 .lt-hero__tagline {
     font-family: var(--lt-font-body);
@@ -400,10 +344,10 @@ body[data-path="home"] main.container.my-4 {
     outline-offset: 2px;
 }
 @media (min-width: 768px) {
-    .lt-hero { min-height: 560px; }
-    .lt-hero__content { padding: 5rem 2rem; }
-    .lt-hero__cycling { min-height: 5.5rem; }
-    .lt-hero__title { font-size: 3.75rem; }
+    .lt-hero { min-height: 520px; }
+    .lt-hero__content { padding: 3.5rem 2rem; }
+    .lt-hero__title { font-size: 3.35rem; }
+    .lt-hero__proofline { font-size: 1.05rem; }
     .lt-hero__tagline { font-size: 1.25rem; }
 }
 @media (max-width: 575.98px) {
@@ -412,20 +356,22 @@ body[data-path="home"] main.container.my-4 {
         align-items: stretch;
     }
     .lt-hero__content {
-        padding: 3rem 1rem;
-    }
-    .lt-hero__cycling {
-        min-height: 10.5rem;
+        padding: 2.2rem 1rem;
     }
     .lt-hero__title {
-        align-items: flex-start;
-        font-size: clamp(2rem, 10.5vw, 2.45rem);
+        font-size: clamp(1.9rem, 9.75vw, 2.18rem);
         line-height: 1.04;
+        max-width: none;
+    }
+    .lt-hero__proofline {
+        margin-bottom: 0.65rem;
+        font-size: 0.88rem;
     }
     .lt-hero__tagline {
         max-width: none;
-        font-size: 1rem;
-        line-height: 1.55;
+        font-size: 0.95rem;
+        line-height: 1.45;
+        margin-bottom: 1.35rem;
     }
     .lt-hero__cta {
         width: 100%;
@@ -490,11 +436,10 @@ body[data-path="home"] main.container.my-4 {
     margin: 0 auto;
 }
 
-/* --- Reviews block (replaces the prior trust strip) ----------------- */
-/* Per GL 2026-04-27 round 3: reviews carousel was visually constrained
- * inside a 1200px column on a 1920px band — the fade-mask was clipping
- * the text of the edge cards. The badge stays centered/narrow; the
- * carousel viewport spans the full band so more cards are visible at
+/* --- Reviews block -------------------------------------------------- */
+/* The review carousel uses a full-stage viewport so the fade-mask does
+ * not clip readable card text on wide monitors. The badge stays centered;
+ * the carousel viewport spans the full band so more cards are visible at
  * once and the mask fades into empty space, not readable text. */
 .lt-reviews-block {
     background-color: var(--lt-near-white);
@@ -531,16 +476,12 @@ body[data-path="home"] main.container.my-4 {
     font-size: 0.95rem;
     color: var(--lt-soft-gray);
 }
-/* Reviews carousel — horizontal-scrolling marquee of customer praise.
+/* Reviews carousel - horizontal-scrolling marquee of customer praise.
  * Pattern mirrors .lt-crawl but with full review cards instead of
  * client names. The crawl moves left-to-right slowly so cards read
- * as a moving proof line, not a stacked testimonial grid. Pauses on hover/focus.
- * Per GL 2026-04-27: "carousel review of praise that matter more
- * than the carousel of businesses at the bottom." */
+ * as a moving proof line, not a stacked testimonial grid. Pauses on hover/focus. */
 .lt-reviews-block__quotes {
-    /* Carousel viewport breaks out of the .lt-reviews-block__inner 1200px
-     * column to span the full band — otherwise on a 1920px monitor the
-     * mask would clip readable text on edge cards. Per GL 2026-04-27 r3. */
+    /* Break out of the narrow badge column so the crawl spans the full stage. */
     overflow: hidden;
     width: 100vw;
     position: relative;
@@ -576,42 +517,7 @@ body[data-path="home"] main.container.my-4 {
     from { transform: translateX(-50%); }
     to   { transform: translateX(0); }
 }
-@media (prefers-reduced-motion: reduce) {
-    .lt-reviews-block__quotes {
-        left: auto;
-        right: auto;
-        margin-left: 0;
-        margin-right: 0;
-        mask-image: none;
-        -webkit-mask-image: none;
-        overflow-x: auto;
-        padding-bottom: 0.5rem;
-        width: 100%;
-    }
-    .lt-reviews-block__track {
-        animation: none;
-        transform: none;
-        width: max-content;
-    }
-    .lt-reviews-block__group {
-        flex-wrap: nowrap;
-        padding-right: 0;
-        width: auto;
-    }
-    .lt-reviews-block__group[aria-hidden="true"] {
-        display: none;
-    }
-}
 @media (max-width: 575.98px) {
-    .lt-reviews-block__quotes {
-        left: auto;
-        right: auto;
-        width: 100%;
-        margin-left: 0;
-        margin-right: 0;
-        mask-image: none;
-        -webkit-mask-image: none;
-    }
     .lt-reviews-block__group {
         gap: 0.75rem;
         padding-right: 0.75rem;
@@ -660,7 +566,7 @@ body[data-path="home"] main.container.my-4 {
     line-height: 1;
     margin-top: auto;        /* push to bottom of flex-column card */
     padding-top: 0.75rem;
-    text-align: center;      /* GL 2026-04-27 r3: stars must be centered */
+    text-align: center;
 }
 .lt-reviews-block__quote--placeholder {
     background-color: rgba(255, 255, 255, 0.5);
@@ -671,7 +577,7 @@ body[data-path="home"] main.container.my-4 {
     font-style: italic;
 }
 
-/* --- Custom Creations categories ------------------------------------ */
+/* --- Custom Event Decor categories ---------------------------------- */
 .lt-categories {
     background-color: var(--lt-white);
     padding: 4rem 1.5rem;
@@ -769,11 +675,7 @@ body[data-path="home"] main.container.my-4 {
     max-width: 9rem;
 }
 
-/* --- Featured Work (Recent Celebrations) — full-width hero band ----- */
-/* Per GL 2026-04-27 (round 2): Recent Celebrations should occupy the
- * width of a desktop monitor — currently feels small/contained. Strategy:
- * remove inner max-width on widescreen, edge-pad with viewport-relative
- * padding so cards scale up naturally on big screens. */
+/* --- Featured Work (Recent Celebrations) - full-width proof band ----- */
 .lt-featured {
     background-color: var(--lt-near-white);
     padding: 4rem 1.25rem 4.5rem;
@@ -904,7 +806,12 @@ body[data-path="home"] main.container.my-4 {
 }
 .lt-crawl__viewport {
     overflow: hidden;
-    width: 100%;
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
     mask-image: linear-gradient(
         to right,
         transparent 0,
@@ -924,9 +831,7 @@ body[data-path="home"] main.container.my-4 {
     display: flex;
     align-items: center;
     width: max-content;
-    /* v2: 90s -> 180s per GL feedback (was moving way too fast)
-     * v3: 180s -> 270s — still too fast at 180s. */
-    animation: lt-crawl-scroll 270s linear infinite;
+    animation: lt-crawl-scroll 540s linear infinite;
 }
 .lt-crawl__item {
     flex: 0 0 auto;
@@ -939,19 +844,25 @@ body[data-path="home"] main.container.my-4 {
     opacity: 0.7;
 }
 @keyframes lt-crawl-scroll {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
+    from { transform: translateX(-50%); }
+    to   { transform: translateX(0); }
 }
 @media (prefers-reduced-motion: reduce) {
-    .lt-crawl__track {
-        animation: none;
-        flex-wrap: wrap;
-        justify-content: center;
-        width: 100%;
+    .lt-reviews-block__quotes,
+    .lt-crawl__viewport {
+        overflow-x: auto;
+        -webkit-mask-image: none;
+        mask-image: none;
     }
-    .lt-crawl__item { padding: 0.4rem 1rem; }
+    .lt-reviews-block__track {
+        animation: none !important;
+        transform: none !important;
+    }
+    .lt-crawl__track {
+        animation: none !important;
+        transform: none !important;
+    }
 }
-
 /* --- Closing CTA ---------------------------------------------------- */
 .lt-cta {
     background-color: var(--lt-navy);
@@ -1076,7 +987,7 @@ body[data-path="home"] main.container.my-4 {
 
 
 def _abbreviate_name(name):
-    """Privacy-friendly review attribution per GL 2026-04-27 r3.
+    """Privacy-friendly review attribution for homepage testimonials.
 
     "Mary DeMann"            -> "Mary D."
     "Sarah Johnston-Powell"  -> "Sarah J."
@@ -1104,7 +1015,6 @@ def get_context(context):
         "og:description": "Custom balloon decor and event installations across the Wasatch Front since 1998.",
         "og:type": "website",
     }
-    context.hero_cycling_titles = HERO_CYCLING_TITLES
     context.client_crawl = CLIENT_CRAWL
     context.custom_categories = CUSTOM_CATEGORIES
     context.featured_work = FEATURED_WORK

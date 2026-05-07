@@ -89,7 +89,14 @@
         if (choice === 'accepted' || choice === 'declined') {
             return;
         }
-        document.body.appendChild(buildBanner());
+        var banner = buildBanner();
+        var homeHero = document.querySelector('.lt-hero');
+        if (homeHero) {
+            banner.classList.add('lt-cookie-consent--inline');
+            homeHero.insertAdjacentElement('afterend', banner);
+            return;
+        }
+        document.body.appendChild(banner);
     }
 
     if (document.readyState === 'loading') {

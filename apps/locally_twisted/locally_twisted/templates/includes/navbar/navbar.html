@@ -23,8 +23,6 @@
     {"label": "Private Celebrations", "route": "event-balloons", "icon": "premium-private-event", "description": "Polished birthdays, showers, weddings, and hosted home events."}
 ] %}
 {% set service_links = lt_nav_service_links or [
-    {"label": "How the Process Works", "route": "process"},
-    {"label": "Balloon Twisting and Face Painting", "route": "balloon-twisting-and-face-painting"},
     {"label": "Frequently Asked Questions", "route": "faq"},
     {"label": "Start a Quote", "route": "contact"}
 ] %}
@@ -40,7 +38,7 @@
 
                 <ul class="lt-mega-header__top-links">
                     <li><a href="/portfolio">Recent Work</a></li>
-                    <li><a href="/process">How It Works</a></li>
+                    <li><a href="/balloon-twisting-and-face-painting">Twisting &amp; Face Painting</a></li>
                     {% if frappe.session.user == "Guest" %}
                         <li><a href="/login">Sign In</a></li>
                     {% else %}
@@ -93,7 +91,7 @@
                     </li>
 
                     <li class="lt-mega-nav__item"><a class="lt-mega-nav__link" href="/portfolio">Portfolio</a></li>
-                    <li class="lt-mega-nav__item"><a class="lt-mega-nav__link" href="/process">Process</a></li>
+                    <li class="lt-mega-nav__item"><a class="lt-mega-nav__link lt-mega-nav__link--btfp" href="/balloon-twisting-and-face-painting">Twisting &amp; Face Painting</a></li>
 
                     <li class="lt-mega-nav__item">
                         <button class="lt-mega-nav__button"
@@ -107,7 +105,7 @@
                         <div class="lt-megamenu__panel" id="lt-mega-products" hidden>
                             <p class="lt-megamenu__eyebrow">Product discovery</p>
                             <h2 class="lt-megamenu__title">Shop the product families customers ask for most.</h2>
-                            <p class="lt-megamenu__summary">These links point to the current ERPNext shop and item-group routes where available.</p>
+                            <p class="lt-megamenu__summary">Browse ready-to-order balloon decor by product family, then choose options or request event help.</p>
 
                             <div class="lt-megamenu__grid">
                                 {% for item in product_links %}
@@ -210,7 +208,7 @@
         </div>
 
         <a class="lt-mega-drawer__single" href="/portfolio">Portfolio</a>
-        <a class="lt-mega-drawer__single" href="/process">Process</a>
+        <a class="lt-mega-drawer__single" href="/balloon-twisting-and-face-painting">Twisting &amp; Face Painting</a>
 
         <div class="lt-mega-drawer__section">
             <button class="lt-mega-drawer__toggle"

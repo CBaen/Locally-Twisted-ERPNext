@@ -1,8 +1,9 @@
-"""Verify the Locally Twisted primary nav information architecture.
+"""Verify the Locally Twisted public navigation and key IA links.
 
 This is intentionally a source-level check: Frappe template rendering is
 covered separately by route screenshots/cache smoke tests, while this catches
-the regression where the template order itself drifts.
+the regression where the template order itself drifts or a homepage CTA points
+at a route that is no longer part of the launch surface.
 """
 from __future__ import annotations
 
@@ -12,6 +13,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 NAVBAR = ROOT / "apps/locally_twisted/locally_twisted/templates/includes/navbar/navbar.html"
 FOOTER = ROOT / "apps/locally_twisted/locally_twisted/templates/includes/footer/footer.html"
+HOME = ROOT / "apps/locally_twisted/locally_twisted/www/home.html"
 
 
 def _line_index(text: str, needle: str) -> int:
@@ -29,7 +31,7 @@ def test_desktop_nav_order(navbar: str) -> None:
         "data-lt-megamenu-trigger=\"lt-mega-events\"",
         "Event Balloons",
         "/portfolio",
-        "/process",
+        "/balloon-twisting-and-face-painting",
         "data-lt-megamenu-trigger=\"lt-mega-products\"",
         "Ready-to-Order",
         "/faq",
@@ -37,7 +39,8 @@ def test_desktop_nav_order(navbar: str) -> None:
     positions = [_line_index(primary_nav, needle) for needle in expected]
     if positions != sorted(positions):
         raise AssertionError(
-            "Primary nav order must be Event Balloons, Portfolio, Process, "
+            "Primary nav order must be Event Balloons, Portfolio, "
+            "Twisting & Face Painting, "
             "Ready-to-Order, FAQ, with deliberate mega-menu triggers"
         )
 
@@ -58,6 +61,20 @@ def test_nav_does_not_link_to_retired_category_index(navbar: str, footer: str) -
         raise AssertionError("Header/footer navigation must use /shop, not retired /shop-by-category links")
 
 
+def test_nav_does_not_expose_process_page(navbar: str, footer: str) -> None:
+    combined = f"{navbar}\n{footer}"
+    retired = (
+        'href="/process"',
+        '"route": "process"',
+        "How the Process Works",
+        "How It Works",
+        ">Process<",
+    )
+    for needle in retired:
+        if needle in combined:
+            raise AssertionError(f"Public nav/footer must not expose the unapproved Process page: {needle}")
+
+
 def test_mega_menu_contract(navbar: str) -> None:
     required = (
         'src="/assets/locally_twisted/icons/lt-logo.png"',
@@ -66,6 +83,7 @@ def test_mega_menu_contract(navbar: str) -> None:
         'id="lt-mega-products"',
         'class="lt-megamenu__panel"',
         'href="/event-balloons"',
+        'href="/balloon-twisting-and-face-painting"',
         '"route": "shop-items/arches"',
         '"route": "shop-items/garlands"',
         '"route": "shop-items/columns"',
@@ -88,6 +106,8 @@ def test_no_retired_nav_contract(navbar: str) -> None:
         "lt-shop-trigger",
         "lt-shop-mega",
         "lt-mobile-drawer",
+        "current ERPNext shop",
+        "item-group routes",
     )
     for label in retired:
         if label in navbar:
@@ -106,16 +126,35 @@ def test_supporting_assets_exist() -> None:
             raise AssertionError(f"Missing nav support asset: {path.relative_to(ROOT)}")
 
 
+def test_homepage_launch_links(home: str) -> None:
+    if "/customizable-event-decor" in home:
+        raise AssertionError("Homepage must not link to retired /customizable-event-decor route")
+    if 'href="/event-balloons"' not in home:
+        raise AssertionError("Homepage Custom Event Decor heading must point at /event-balloons")
+    retired_exact_counts = (
+        "4.9 Google rating",
+        "100+ Google reviews",
+        "The full portfolio is coming",
+        "design your event",
+    )
+    for text in retired_exact_counts:
+        if text in home:
+            raise AssertionError(f"Homepage still contains stale launch copy: {text}")
+
+
 def main() -> None:
     navbar = NAVBAR.read_text(encoding="utf-8")
     footer = FOOTER.read_text(encoding="utf-8")
+    home = HOME.read_text(encoding="utf-8")
     test_desktop_nav_order(navbar)
     test_quote_cta_is_contact(navbar)
     test_nav_does_not_link_to_retired_book_route(navbar)
     test_nav_does_not_link_to_retired_category_index(navbar, footer)
+    test_nav_does_not_expose_process_page(navbar, footer)
     test_mega_menu_contract(navbar)
     test_no_retired_nav_contract(navbar)
     test_supporting_assets_exist()
+    test_homepage_launch_links(home)
     print("Nav IA checks passed")
 
 

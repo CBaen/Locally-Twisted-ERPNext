@@ -32,7 +32,7 @@ Paste this block at the top of each agent prompt.
 You are working in:
 C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted
 
-Project: Locally Twisted ERPNext v15.105.0 + Frappe v15 website and business system.
+Project: Locally Twisted ERPNext v15.105.0 + Frappe v15.106.0 website and business system.
 
 You are working on a background V2 concept called "Design Studio" or "Plan Custom Decor." This is not a V1 launch blocker. Do not edit V1 launch-critical files or routes.
 

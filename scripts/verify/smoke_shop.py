@@ -5,7 +5,7 @@ and retail variant selectors via a real Chromium browser. This should pass on
 every deploy and fail loudly on customer-facing regressions.
 
 Coverage:
-  1. Homepage navbar exposes the current authority-first primary links and /shop CTA.
+  1. Homepage navbar exposes the current primary links and /shop CTA.
   2. /shop renders the ready-to-order category rail/dropdown + 53 product cards.
   3. /shop and category pages use the approved product-showroom card contract.
   4. /shop-by-category redirects to /shop instead of rendering the retired
@@ -166,10 +166,15 @@ def check_homepage(page):
     assert_(event_trigger.count() == 1, "Desktop header missing Event Balloons mega trigger")
     assert_(product_trigger.count() == 1, "Desktop header missing Ready-to-Order mega trigger")
 
-    for label, href in (("Portfolio", "/portfolio"), ("Process", "/process"), ("FAQ", "/faq")):
+    for label, href in (
+        ("Portfolio", "/portfolio"),
+        ("Twisting & Face Painting", "/balloon-twisting-and-face-painting"),
+        ("FAQ", "/faq"),
+    ):
         link = page.locator(".lt-mega-nav__link", has_text=label)
         assert_(link.count() == 1, f"Desktop header missing {label} link")
         assert_(link.first.get_attribute("href") == href, f"{label} should link to {href}")
+    assert_(page.locator(".lt-mega-nav__link", has_text="Process").count() == 0, "Desktop header must not expose Process")
 
     event_trigger.click()
     assert_(page.locator("#lt-mega-events").is_visible(), "Event mega menu did not open")
@@ -612,7 +617,7 @@ def check_mobile_drawer(p):
     expected_links = {
         "Event Balloons": "/event-balloons",
         "Portfolio": "/portfolio",
-        "Process": "/process",
+        "Twisting & Face Painting": "/balloon-twisting-and-face-painting",
         "Shop All": "/shop",
         "Frequently Asked Questions": "/faq",
         "Free Event Quote": "/contact",

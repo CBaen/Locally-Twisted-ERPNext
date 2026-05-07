@@ -1,7 +1,7 @@
 app_name = "locally_twisted"
 app_title = "Locally Twisted"
 app_publisher = "Built by Cameron"
-app_description = "ERPNext customizations and theme for Locally Twisted (BBC client)"
+app_description = "Business system customizations and theme for Locally Twisted (BBC client)"
 app_email = "cameron@builtbycameron.com"
 app_license = "mit"
 
@@ -26,7 +26,7 @@ app_license = "mit"
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/locally_twisted/css/locally_twisted.css"
-app_include_js = "/assets/locally_twisted/js/lt-desk-workspace-router.js?v=20260502-2"
+app_include_js = "/assets/locally_twisted/js/lt-desk-workspace-router.js?v=20260506-3"
 
 # include js, css files in header of web template
 # Brand foundation theme — sourced at apps/locally_twisted/locally_twisted/public/css/lt-theme.css
@@ -42,9 +42,9 @@ app_include_js = "/assets/locally_twisted/js/lt-desk-workspace-router.js?v=20260
 # CSS stayed cached in GL's browser; drawer rendered inline on every page
 # because the cached rules didn't have `position: fixed`.
 web_include_css = [
-    "/assets/locally_twisted/css/lt-theme.css?v=20260506-policy-1",
+    "/assets/locally_twisted/css/lt-theme.css?v=20260507-nav-1",
     "/assets/locally_twisted/css/lt-page-containment.css?v=20260505-containment-1",
-    "/assets/locally_twisted/css/lt-mega-menu.css?v=20260506-mega-5",
+    "/assets/locally_twisted/css/lt-mega-menu.css?v=20260507-mega-2",
     "/assets/locally_twisted/css/lt-product-polish.css?v=20260505-product-2",
     "/assets/locally_twisted/css/lt-shop-showroom.css?v=20260506-showroom-5",
     "/assets/locally_twisted/css/lt-event-playground.css?v=20260506-event-playground-1",
@@ -61,7 +61,7 @@ web_include_js = [
     "/assets/locally_twisted/js/lt-guest-cart.js?v=20260429-1",
     "/assets/locally_twisted/js/lt-newsletter.js?v=20260430-2",
     "/assets/locally_twisted/js/lt-webshop-a11y.js?v=20260430-2",
-    "/assets/locally_twisted/js/lt-site-preferences.js?v=20260506-policy-2",
+    "/assets/locally_twisted/js/lt-site-preferences.js?v=20260507-policy-1",
     "/assets/locally_twisted/js/lt-megamenu.js?v=20260505-mega-6",
 ]
 

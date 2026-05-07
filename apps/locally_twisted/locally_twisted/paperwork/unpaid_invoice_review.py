@@ -1,7 +1,7 @@
 """Draft-only unpaid invoice review surface.
 
 This module creates visibility for unpaid or overdue invoices. It does not send
-email, create reminders, submit accounting records, or mutate ERPNext records.
+email, create reminders, submit accounting records, or mutate live records.
 """
 from __future__ import annotations
 
@@ -31,7 +31,7 @@ MUTATION_GUARD_DOCTYPES = (
 
 
 def run() -> dict[str, object]:
-    """Return review candidates for unpaid invoices without mutating ERPNext."""
+    """Return review candidates for unpaid invoices without mutating live records."""
     before = _guard_counts()
     failures: list[str] = []
 

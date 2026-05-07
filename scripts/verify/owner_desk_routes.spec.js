@@ -3,6 +3,7 @@ const { test, expect } = require("@playwright/test");
 const BASE_URL = process.env.LT_BASE_URL || "http://localhost:8081";
 const DESK_USER = process.env.LT_DESK_TEST_USER;
 const DESK_PASSWORD = process.env.LT_DESK_TEST_PASSWORD;
+const PLATFORM_WORDS = /\b(?:ERPNext|Frappe)\b/i;
 
 test.describe("Owner Desk route recovery", () => {
 	test.skip(!DESK_USER || !DESK_PASSWORD, "Set LT_DESK_TEST_USER and LT_DESK_TEST_PASSWORD.");
@@ -53,6 +54,8 @@ test.describe("Owner Desk route recovery", () => {
 			await expect(body).toContainText("New Inquiries");
 			await expect(body).toContainText("Overdue Follow-ups");
 			await expect(body).toContainText("Add Product");
+			const visibleText = await body.innerText();
+			expect(visibleText, `${route} owner-visible text should stay white-labeled`).not.toMatch(PLATFORM_WORDS);
 			await expect(body).not.toContainText("Page not found");
 			expect(page.url()).toContain("/app/Workspaces");
 		}

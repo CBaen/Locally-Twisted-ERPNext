@@ -29,7 +29,7 @@ BASE_SEND_BLOCKERS = (
 
 
 def run() -> dict[str, object]:
-    """Return an internal-only reminder queue without mutating ERPNext."""
+    """Return an internal-only reminder queue without mutating live records."""
     before = _guard_counts()
     digest = paperwork_review_digest.run()
     draft_packets = unpaid_invoice_draft_packet.run()

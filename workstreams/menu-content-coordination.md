@@ -1,6 +1,6 @@
 # Menu And Content Coordination
 
-Last updated: 2026-05-05 by Codex.
+Last updated: 2026-05-07 by Codex.
 
 ## Purpose
 
@@ -14,6 +14,7 @@ Before editing any nav, chrome, public page hero/body copy, footer links, or nav
 - Do not edit another active lane's files without adding a note here first.
 - Treat `workstreams/website-launch.md` as the broader launch lane; use this file for menu/content collisions.
 - Keep `/contact` as the shared conversion path unless Guiding Light explicitly changes the architecture.
+- Keep `Twisting & Face Painting` in the primary public nav where the unapproved Process link had been. Do not restore a standalone `/process` page or top-level Process link without explicit GL approval.
 - Do not claim a route, drawer, form, or verifier is fixed without recording the command and result.
 
 ## Style-Guide Alignment Note For Menu/Content Agents
@@ -35,9 +36,11 @@ For this nav/content lane, stay inside these rules:
 
 | Lane | Owner | Files / Surface | Status |
 |---|---|---|---|
-| Nav/chrome and live menu assets | Codex current session | `templates/includes/navbar/navbar.html`, `navbar_context.py`, header portions of `public/css/lt-theme.css`, `hooks.py`, `public/js/lt-megamenu.js`, `public/css/lt-mega-menu.css`, `scripts/verify/nav_ia.py`, `scripts/verify/smoke_shop.py` | Complete for current takeover. Mega-menu is restored deliberately, served through hooks, and verified with desktop click-pin behavior plus mobile drawer accordions. 2026-05-06 color repair moved the all-black header to a style-guide split: deep-navy proof row, warm-white main/mobile header, berry CTA, brass rules. Reopen only with a new claim. |
-| Authority page content and route pages | Codex current session | `www/home.*`, `www/event_balloons.*`, `www/process.*`, `www/portfolio.*`, `www/contact.*`, `www/shop.*`, supporting public content pages | Current containment pass complete. Remaining work is photo/trust-count/content review, not emergency container overflow repair. |
+| Nav/chrome and live menu assets | Codex current session | `templates/includes/navbar/navbar.html`, `navbar_context.py`, header portions of `public/css/lt-theme.css`, `hooks.py`, `public/js/lt-megamenu.js`, `public/css/lt-mega-menu.css`, `scripts/verify/nav_ia.py`, `scripts/verify/smoke_shop.py` | Complete 2026-05-07: Twisting & Face Painting is restored to primary public nav; Process is removed from customer-facing chrome. |
+| Authority page content and route pages | Codex current session | `www/home.*`, `www/event_balloons.*`, `www/balloon_twisting_and_face_painting.*`, `www/portfolio.*`, `www/contact.*`, `www/shop.*`, supporting public content pages | Complete 2026-05-07: standalone Process route files were removed; BTFP remains the approved live-service route. |
 | Owner package and screenshots | Unclaimed | `_resources/brand-direction-architecture-2026-05/`, desktop/mobile renders, route map, builder notes | Pending. Use screenshots from the actual Frappe pages after route/content replacement, not disconnected mockups. |
+
+Feature handoff for the BTFP/Process correction: `workstreams/nav-btfp-process-correction.md`.
 
 ## Current Conflict Notes
 
@@ -47,7 +50,10 @@ For this nav/content lane, stay inside these rules:
 
 ## Evidence Recorded This Session
 
-- Route sweep returned 200 for `/`, `/event-balloons`, `/portfolio`, `/process`, `/contact`, `/shop`, `/faq`, `/balloon-twisting-and-face-painting`, `/privacy`, `/terms-of-service`, `/refund-policy`, `/accessibility`, `/cart`, `/checkout`, `/payment-success`, `/thank-you`, `/shop-items/arches`, and `/shop-items/garlands/baby-shower-garland`.
+- 2026-05-07 BTFP/Process correction: direct route check returned 200 for `/`, `/event-balloons`, `/portfolio`, `/balloon-twisting-and-face-painting`, `/contact`, `/shop`, and `/faq`; `/process` returned 404.
+- 2026-05-07 BTFP/Process correction: `python scripts/verify/nav_ia.py` passed; `python scripts/verify/smoke_shop.py` passed; `npm run test:portfolio-reel` passed 4/4; `npm run test:checkout-experience` passed 2/2; `npm run test:interactive-layout` passed 74/74; `npm run test:layout-fit` passed 247/247.
+- 2026-05-07 BTFP/Process correction: manual Playwright audit saved screenshots to `output/playwright/nav-btfp-restored-20260507/`, checked desktop/mobile BTFP nav links, 32 BTFP page images, 19 chrome/footer internal links, and no Process anchors in inspected chrome or BTFP page.
+- Route sweep returned 200 for `/`, `/event-balloons`, `/portfolio`, `/contact`, `/shop`, `/faq`, `/balloon-twisting-and-face-painting`, `/privacy`, `/terms-of-service`, `/refund-policy`, `/accessibility`, `/cart`, `/checkout`, `/payment-success`, `/thank-you`, `/shop-items/arches`, and `/shop-items/garlands/baby-shower-garland`.
 - `python scripts/verify/nav_ia.py` passed after the authority-first nav update.
 - `npm run test:layout-fit` initially passed 80/80 after the header/product/page containment repair; this is superseded by the 260/260 responsive follow-up below.
 - `python scripts/verify/contact_service_logic.py --base-url http://localhost:8081` passed.

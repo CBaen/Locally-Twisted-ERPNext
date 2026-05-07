@@ -34,7 +34,7 @@ The approved target is:
 - Restored the deliberate premium two-level mega menu after GL chose that direction over the simple header.
 - Added/served `lt-mega-menu.css`, `lt-page-containment.css`, `lt-product-polish.css`, and `lt-megamenu.js` through `hooks.py`.
 - Bumped the theme CSS cache key in `hooks.py` to `20260505-authority-4`.
-- Added `/event-balloons` and `/process` as lightweight authority pages so the current primary nav has no dead links.
+- Added `/event-balloons` during the authority-page pass. Later correction removed the unapproved standalone `/process` page from the customer-facing nav contract and restored `/balloon-twisting-and-face-painting` as the primary live-service route.
 - Reinstated `navbar_context.py` for menu data and kept `website_context.py` for shop/sidebar defaults.
 - Fixed mobile hero spacing, reviews carousel clipping, dark-section heading contrast, portfolio chip wrapping, footer newsletter mobile stacking, product/shop panel spacing, and shop-card mobile density.
 - Added the standing responsive container audit gate so future visual work checks breakpoint edges and open UI states, not only one mobile and one desktop screenshot.

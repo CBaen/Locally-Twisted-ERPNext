@@ -98,7 +98,7 @@ Verification as `lt-owner-temp@example.com` on 2026-05-02:
 
 - `/app/Workspaces` returned 200.
 - Owner sidebar showed `Owner Home`, then `Home`.
-- Owner counts: `Sales Order` 8, `Event` 0, `Customer` 4, `Contact` 25, `Item` 10,631.
+- Owner counts: `Sales Order` 8, `Event` 0, `Customer` 4, `Contact` 25, `Item` 10,633.
 - Owner could load Item metadata with `Item Manager` create/write permission.
 - Calendar events endpoint for `Sales Order` returned the 8 existing orders on `2026-05-06`.
 - The route guard asset was served at `/assets/locally_twisted/js/lt-desk-workspace-router.js?v=20260502-1` with the pageview guard present. The Desk HTML still referenced `v=20260502-1` until a server reload picks up the hook query-string bump, so browser hard-refresh may be needed after changes.

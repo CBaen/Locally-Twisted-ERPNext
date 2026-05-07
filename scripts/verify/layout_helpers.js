@@ -9,7 +9,6 @@ const PUBLIC_ROUTES = [
 	{ name: "contact", path: "/contact" },
 	{ name: "event-balloons", path: "/event-balloons" },
 	{ name: "portfolio", path: "/portfolio" },
-	{ name: "process", path: "/process" },
 	{ name: "btfp", path: "/balloon-twisting-and-face-painting" },
 	{ name: "faq", path: "/faq" },
 	{ name: "privacy", path: "/privacy" },

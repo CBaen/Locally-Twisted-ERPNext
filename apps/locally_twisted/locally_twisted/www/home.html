@@ -3,45 +3,18 @@
 {% block page_content %}
 
 {#
-    Homepage v2 — portfolio-forward, twisting moved to bottom.
-    Sections that should read as full-width bands wear the .lt-fullbleed
-    class to break out of Frappe's parent .container constraint (the
-    "banners cut off" issue from Image #5).
-
-    Order (v3 — GL 2026-04-27 round 2: Recent Celebrations BEFORE Custom
-    Creations; both bands span the full monitor width on desktop):
-      1. Hero — cycling headline + stable tagline
-      2. Authority proof bar
-      3. Reviews block (replaces prior trust strip)
-      4. 3-dot divider
-      5. Recent Celebrations — big photos, 4:5 aspect, 3-up at desktop
-      6. Custom Creations (6 categories — bouquets added)
-      7. 3-dot divider
-      8. Client Logo Crawl — slowed to 270s
-      9. Closing CTA
-      10. Twisting & Face Painting spotlight (moved to bottom)
+    Launch homepage. Full-width bands use .lt-fullbleed so proof banners,
+    imagery, and CTAs can break out of the framework parent container.
 #}
 
-{# --- 0. Visually-hidden page title for screen readers (no visible h1 on this page) --- #}
-<h1 id="lt-page-heading" class="visually-hidden">Locally Twisted — Custom Balloon Decor for Utah Events</h1>
-
 {# --- 1. Hero --- #}
-<section class="lt-hero lt-fullbleed" aria-labelledby="lt-hero-tagline">
+<section class="lt-hero lt-fullbleed" aria-labelledby="lt-page-heading">
     <div class="lt-hero__image" aria-hidden="true"></div>
     <div class="lt-hero__content">
         <p class="lt-hero__eyebrow">Utah's Wasatch Front · Since 1998</p>
 
-        {#
-            Cycling headline — placeholder until the blog framework
-            ships and we pull real Blog Post titles. The tagline below
-            is the stable anchor; titles cycle every ~8s. Reduced-motion
-            users see only the first title.
-        #}
-        <div class="lt-hero__cycling" aria-live="off">
-            {% for title in hero_cycling_titles %}
-            <h2 class="lt-hero__title">{{ title }}</h2>
-            {% endfor %}
-        </div>
+        <h1 id="lt-page-heading" class="lt-hero__title">Professional balloon decor for Utah events that matter.</h1>
+        <p class="lt-hero__proofline">Corporate, school, civic, and community ready.</p>
 
         <p id="lt-hero-tagline" class="lt-hero__tagline">
             Prepared design, clean install, and quote-led support for Utah business, school, civic, community, venue, and private events.
@@ -61,56 +34,60 @@
     <h2 id="lt-authority-heading" class="visually-hidden">Why Utah event teams trust Locally Twisted</h2>
     <div class="lt-authority__inner">
         <article class="lt-authority__item">
-            <span class="lt-authority__icon" aria-hidden="true">
-                <svg width="52" height="52" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" focusable="false">
-                    <path d="M6 46 24 22l10 13 8-10 16 21"/>
-                    <path d="M24 22l5 8"/>
-                    <path d="M42 25l5 8"/>
-                </svg>
-            </span>
+            <span class="lt-authority__icon lt-icon-mask" style="--lt-icon-url: url('/assets/locally_twisted/icons/brand/utah-rooted.svg')" aria-hidden="true"></span>
             <p class="lt-authority__title">Locally Rooted</p>
             <p class="lt-authority__text">Utah event experience and venue-aware installs across the Wasatch Front.</p>
         </article>
         <article class="lt-authority__item">
-            <span class="lt-authority__icon" aria-hidden="true">
-                <svg width="52" height="52" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" focusable="false">
-                    <path d="M21 44c-6-4-9-9-9-15a10 10 0 0 1 19-4"/>
-                    <path d="M43 44c6-4 9-9 9-15a10 10 0 0 0-19-4"/>
-                    <path d="M28 42h8"/>
-                    <path d="M32 42v12"/>
-                    <path d="M26 54h12"/>
-                </svg>
-            </span>
+            <span class="lt-authority__icon lt-icon-mask" style="--lt-icon-url: url('/assets/locally_twisted/icons/brand/design-driven.svg')" aria-hidden="true"></span>
             <p class="lt-authority__title">Design Driven</p>
             <p class="lt-authority__text">Custom color and structure choices planned around the space.</p>
         </article>
         <article class="lt-authority__item">
-            <span class="lt-authority__icon" aria-hidden="true">
-                <svg width="52" height="52" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" focusable="false">
-                    <path d="M32 7 52 15v14c0 13-8 23-20 28C20 52 12 42 12 29V15l20-8z"/>
-                    <path d="m23 32 6 6 13-15"/>
-                </svg>
-            </span>
+            <span class="lt-authority__icon lt-icon-mask" style="--lt-icon-url: url('/assets/locally_twisted/icons/brand/professional.svg')" aria-hidden="true"></span>
             <p class="lt-authority__title">Professional</p>
             <p class="lt-authority__text">Clear communication, careful setup, and reliable event-day delivery.</p>
         </article>
         <article class="lt-authority__item">
-            <span class="lt-authority__icon" aria-hidden="true">
-                <svg width="52" height="52" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" focusable="false">
-                    <path d="M19 34 29 44c3 3 7 3 10 0l9-9"/>
-                    <path d="M16 31l8-8 11 11"/>
-                    <path d="M48 31l-8-8-8 8"/>
-                    <path d="M8 25l8-8 11 11"/>
-                    <path d="M56 25l-8-8-9 9"/>
-                </svg>
-            </span>
+            <span class="lt-authority__icon lt-icon-mask" style="--lt-icon-url: url('/assets/locally_twisted/icons/brand/trusted-partner.svg')" aria-hidden="true"></span>
             <p class="lt-authority__title">Trusted Partner</p>
             <p class="lt-authority__text">From concept to celebration, our team helps the details land cleanly.</p>
         </article>
     </div>
 </section>
 
-{# --- 3. Reviews block (replaces the old "Since 1998 / Custom Designs / Made with Love" trust strip) --- #}
+{# --- 3. 3-dot divider --- #}
+<div class="lt-divider" role="presentation" aria-hidden="true">
+    <span></span><span></span><span></span>
+</div>
+
+{# --- 4. Recent Celebrations — installed-work proof before reviews --- #}
+<section class="lt-featured lt-fullbleed" aria-labelledby="lt-featured-heading">
+    <div class="lt-featured__inner">
+        <h2 id="lt-featured-heading" class="lt-featured__heading">Recent Celebrations</h2>
+        <p class="lt-featured__lede">
+            A small slice of what we've made for Utah's events. See more installed work in the portfolio.
+        </p>
+        <div class="lt-featured__grid">
+            {% for piece in featured_work %}
+            <a class="lt-featured__card" href="/portfolio" aria-label="View {{ piece.title }} in our portfolio">
+                <div class="lt-featured__image"
+                     style="background-image: url('{{ piece.image }}');"
+                     role="img" aria-label="{{ piece.alt }}"></div>
+                <div class="lt-featured__body">
+                    <p class="lt-featured__category">{{ piece.category }}</p>
+                    <h3 class="lt-featured__title">{{ piece.title }}</h3>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        <p class="lt-featured__viewall">
+            <a href="/portfolio">See the full portfolio</a>
+        </p>
+    </div>
+</section>
+
+{# --- 5. Review proof crawl --- #}
 <section class="lt-reviews-block lt-fullbleed" aria-labelledby="lt-reviews-heading">
     <div class="lt-reviews-block__inner">
         <h2 id="lt-reviews-heading" class="visually-hidden">What people say</h2>
@@ -118,10 +95,10 @@
         <a href="https://www.google.com/search?q=Locally+Twisted+Reviews"
            target="_blank" rel="noopener noreferrer"
            class="lt-reviews-block__badge"
-           aria-label="Locally Twisted Google reviews: 4.9 rating with 100+ reviews (opens in new tab)">
+           aria-label="Locally Twisted Google reviews (opens in new tab)">
             <span class="lt-reviews-block__stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-            <span class="lt-reviews-block__score">4.9 Google rating</span>
-            <span class="lt-reviews-block__count">100+ Google reviews</span>
+            <span class="lt-reviews-block__score">Google reviews</span>
+            <span class="lt-reviews-block__count">Read what customers say</span>
         </a>
 
         {#
@@ -180,47 +157,15 @@
     </div>
 </section>
 
-{# --- 3. 3-dot divider --- #}
-<div class="lt-divider" role="presentation" aria-hidden="true">
-    <span></span><span></span><span></span>
-</div>
-
-{# --- 4. Recent Celebrations — big, dominant photos (now BEFORE Custom Creations) --- #}
-<section class="lt-featured lt-fullbleed" aria-labelledby="lt-featured-heading">
-    <div class="lt-featured__inner">
-        <h2 id="lt-featured-heading" class="lt-featured__heading">Recent Celebrations</h2>
-        <p class="lt-featured__lede">
-            A small slice of what we've made for Utah's events. The full portfolio is coming &mdash; for now, a glimpse.
-        </p>
-        <div class="lt-featured__grid">
-            {% for piece in featured_work %}
-            <a class="lt-featured__card" href="/portfolio" aria-label="View {{ piece.title }} in our portfolio">
-                <div class="lt-featured__image"
-                     style="background-image: url('{{ piece.image }}');"
-                     role="img" aria-label="{{ piece.alt }}"></div>
-                <div class="lt-featured__body">
-                    <p class="lt-featured__category">{{ piece.category }}</p>
-                    <h3 class="lt-featured__title">{{ piece.title }}</h3>
-                </div>
-            </a>
-            {% endfor %}
-        </div>
-        <p class="lt-featured__viewall">
-            <a href="/portfolio">See the full portfolio</a>
-        </p>
-    </div>
-</section>
-
-{# --- 5. Custom Event Decor — 8 customizable categories (full-bleed band).
-     Heading is a link to /customizable-event-decor (the Event Decor page;
-     consultative work, NOT in the shop). Renamed from "Custom Creations"
-     per GL r4; URL extended to /customizable-event-decor per GL 2026-04-28. #}
+{# --- 6. Custom Event Decor — 8 customizable categories (full-bleed band).
+     Heading links to the current Event Balloons authority route;
+     consultative work, NOT in the shop. #}
 <section class="lt-categories lt-fullbleed" aria-labelledby="lt-categories-heading">
     <h2 id="lt-categories-heading" class="lt-categories__heading">
-        <a class="lt-categories__heading-link" href="/customizable-event-decor">Custom Event Decor</a>
+        <a class="lt-categories__heading-link" href="/event-balloons">Custom Event Decor</a>
     </h2>
     <p class="lt-categories__lede">
-        Eight custom pieces in your colors. Mix, match, and layer them &mdash; design your event.
+        Eight custom pieces in your colors. Choose the pieces that fit your event, then send us the details.
     </p>
     <div class="lt-categories__grid">
         {% for cat in custom_categories %}
@@ -303,11 +248,9 @@
                         <line x1="12" y1="54" x2="52" y2="54" stroke-linecap="round"/>
                     </svg>
                     {% elif cat.icon == 'sculpture' %}
-                    {# Custom Sculptures: 4-point sparkle/star plus two small
-                       accent circles, signaling "anything you imagine, sculpted
-                       from balloons." Same stroke aesthetic as siblings. The
-                       sparkle reads as bespoke / special — placeholder until
-                       a more sculptural icon is sourced if GL wants one. #}
+                    {# Custom Sculptures: sparkle/star plus two small accent
+                       circles, signaling bespoke work in the same stroke
+                       aesthetic as the sibling icons. #}
                     <svg class="lt-categories__icon-svg" viewBox="0 0 64 64" fill="none"
                          stroke="currentColor" stroke-width="3" aria-hidden="true">
                         <path d="M32 8 L36 28 L56 32 L36 36 L32 56 L28 36 L8 32 L28 28 Z"
@@ -324,12 +267,12 @@
     </div>
 </section>
 
-{# --- 6. 3-dot divider --- #}
+{# --- 7. 3-dot divider --- #}
 <div class="lt-divider" role="presentation" aria-hidden="true">
     <span></span><span></span><span></span>
 </div>
 
-{# --- 7. Client Logo Crawl --- #}
+{# --- 8. Client Logo Crawl --- #}
 <section class="lt-crawl lt-fullbleed" aria-labelledby="lt-crawl-heading">
     <h2 id="lt-crawl-heading" class="lt-crawl__heading">Trusted by Utah's Best Since 1998</h2>
     <div class="lt-crawl__viewport" role="presentation">
@@ -346,13 +289,13 @@
     </div>
 </section>
 
-{# --- 8. Closing CTA --- #}
+{# --- 9. Closing CTA --- #}
 <section class="lt-cta lt-fullbleed" aria-labelledby="lt-cta-heading">
     <div class="lt-cta__inner">
         <h2 id="lt-cta-heading" class="lt-cta__heading">Make Your Celebration Unforgettable</h2>
         <p class="lt-cta__body">
-            From birthdays to weddings, baby showers to corporate events &mdash;
-            we've been part of Utah celebrations since 1998. Yours is next.
+            From corporate, school, civic, and community events to polished private celebrations,
+            we've helped Utah gatherings feel finished since 1998. Yours is next.
         </p>
         <a href="/contact" class="lt-cta__button">
             Tell us about your event
@@ -361,9 +304,7 @@
     </div>
 </section>
 
-{# --- 9. Twisting & Face Painting spotlight (moved to bottom — strategic
-    de-emphasis per GL 2026-04-27: big-event work leads, twisting/face
-    painting is a smaller revenue line) --- #}
+{# --- 10. Twisting & Face Painting spotlight — secondary support path --- #}
 <section class="lt-twisting-spotlight lt-fullbleed" aria-labelledby="lt-twisting-heading">
     <div class="lt-twisting-spotlight__inner">
         <div class="lt-twisting-spotlight__image"
@@ -381,7 +322,7 @@
                 their favorite characters.
             </p>
             <p>
-                Perfect for birthday parties, school events, corporate family days, and festivals.
+                A strong fit for school events, company family days, festivals, birthdays, and community gatherings.
             </p>
             <a class="lt-twisting-spotlight__cta" href="/balloon-twisting-and-face-painting">
                 Book Entertainment

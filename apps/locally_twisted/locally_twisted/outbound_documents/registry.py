@@ -75,7 +75,7 @@ OUTBOUND_DOCUMENTS: dict[str, OutboundDocumentSpec] = {
         stage="issued_invoice",
         template_name="sales_invoice.md",
         record_sources=("Sales Invoice", "Customer", "Contact", "Address", "Payment Terms Template"),
-        delivery_channels=("ERPNext Print Format", "PDF", "reviewed email"),
+        delivery_channels=("branded invoice print format", "PDF", "reviewed email"),
         review_gate="Submitted Sales Invoice with approved terms",
     ),
     "payment_receipt": OutboundDocumentSpec(

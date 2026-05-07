@@ -7,13 +7,14 @@ maturity: candidate
 scope: Locally Twisted ERPNext/Frappe public site visual work
 currently_true: yes
 verification_level: 2
-last_verified: 2026-05-05
+last_verified: 2026-05-07
 evidence_quality: direct
-successful_uses: 2
+successful_uses: 3
 failed_uses: 0
 regressions: 0
 depends_on:
   - frappe-public-container-contract
+  - frappe-public-nav-business-route-contract
   - responsive-container-audit
 used_by: []
 tags:
@@ -75,3 +76,9 @@ The first complete use was the 2026-05-03 Civic Celebration site-wide overhaul. 
 The second complete use was the 2026-05-05 mega-menu/product-containment takeover. It restored the deliberate two-level premium header, served `lt-mega-menu.css`, `lt-page-containment.css`, `lt-product-polish.css`, and `lt-megamenu.js` through hooks, fixed hover/click menu semantics, repaired mobile containment issues, and verified with `nav_ia.py`, `smoke_shop.py`, `layout_fit`, served asset checks, and post-fix Playwright screenshots.
 
 The responsive-container follow-up on 2026-05-05 promoted breakpoint/container stability into a standing gate: `layout_fit` now covers 260 passive route/viewport checks, `interactive_layout` covers 39 stateful checks, and `test:public-verify` runs nav IA, passive layout, interactive layout, checkout experience, and shop smoke with quieter Playwright output.
+
+The 2026-05-07 BTFP/Process correction showed that broad visual work must treat
+navigation as business IA, not only layout chrome. The approved `Twisting & Face
+Painting` service route was restored to the primary nav, the unapproved
+standalone `/process` route files were deleted, and `nav_ia.py`/`smoke_shop.py`
+now guard the replacement.

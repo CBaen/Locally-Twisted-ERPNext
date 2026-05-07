@@ -41,8 +41,6 @@ EVENT_LINKS = [
 ]
 
 SERVICE_LINKS = [
-    {"label": "How the Process Works", "route": "process"},
-    {"label": "Balloon Twisting and Face Painting", "route": "balloon-twisting-and-face-painting"},
     {"label": "Frequently Asked Questions", "route": "faq"},
     {"label": "Start a Quote", "route": "contact"},
 ]

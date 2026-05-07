@@ -8,6 +8,34 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-07 - Homepage is launch proof, not an animated concept wall
+
+**Decision:** The public homepage hero must use one visible stable H1 over a real optimized Locally Twisted install photo. The review-card crawl and trusted-business crawl are both full-stage proof banners moving left-to-right at the same `540s` speed in normal motion, with a matching horizontal/static fallback in the reduced-motion branch. The homepage cookie notice is inline after the hero instead of a fixed overlay. Event Playground and rotating blog/title concepts stay out of the launch hero unless GL explicitly reopens them.
+
+**Reasoning:** GL flagged that the review cards behaved like a scrollbar on one platform and stacked on another, while the trusted-business crawl was not moving. They also redirected the launch path away from PlayCanvas/Event Playground and toward fixing the website. The launch homepage needs to reassure business, school, civic, and corporate visitors quickly with real work, clear proof, readable CTAs, and no browser-specific motion surprises.
+
+**Implementation:** Updated `www/home.html`, `www/home.py`, `lt-theme.css`, `lt-page-containment.css`, `lt-site-preferences.js`, and homepage-focused Playwright coverage. The repair removed the hidden/rotating H1 pattern, promoted Recent Celebrations before reviews, used approved brand icon masks in the authority band, kept both crawls aligned by direction and duration, and moved cookie consent into the document flow on the homepage.
+
+**Verification receipt:** `python scripts/dev/clear_website_cache.py` passed. The backend container was restarted after controller CSS changes so `PAGE_CSS` was re-imported. Homepage internal links checked 37 links with no failures. `npx playwright test scripts/verify/layout_fit.spec.js --reporter=dot --grep "home fits"` passed 13/13. `npm run test:interactive-layout -- --grep "homepage|cookie notice"` passed 11/11. Screenshots were captured under `output/playwright/landing-fixes-20260507/`. A broad `layout_fit` run is still blocked by unrelated `/portfolio` work, not by homepage changes.
+
+**Decided by:** GL directed the homepage crawl repair and ASAP website focus; Codex implemented the launch-proof homepage contract and verifier coverage.
+
+---
+
+## 2026-05-07 - Twisting & Face Painting restored; standalone Process removed
+
+**Decision:** The primary public navigation must include `Twisting & Face Painting` at `/balloon-twisting-and-face-painting` where the unapproved `Process` link had been. The standalone `/process` page and top-level Process label are not approved customer-facing surfaces and should not be restored without a fresh explicit GL decision.
+
+**Reasoning:** Balloon twisting and face painting are an approved, vital Locally Twisted line of business. Replacing that path with a generic Process page cut out a major service lane and made the menu less truthful to the business. The public chrome should expose real lines of business and quote paths, not invented explanatory pages.
+
+**Implementation:** Updated the desktop header, top proof links, mobile drawer, footer, navbar context, nav IA verifier, shop smoke verifier, public route list, style guide, queue, handoff, and menu coordination docs. Deleted `www/process.html` and `www/process.py`. Kept `/balloon-twisting-and-face-painting` as the live approved service route.
+
+**Verification receipt:** `python scripts/dev/clear_website_cache.py` passed. `python scripts/verify/nav_ia.py`, `python scripts/verify/smoke_shop.py`, `npm run test:portfolio-reel`, `npm run test:checkout-experience`, `npm run test:interactive-layout`, and `npm run test:layout-fit` all passed. Direct route check returned 200 for `/`, `/event-balloons`, `/portfolio`, `/balloon-twisting-and-face-painting`, `/contact`, `/shop`, and `/faq`; `/process` returned 404. Manual Playwright audit saved screenshots to `output/playwright/nav-btfp-restored-20260507/`, checked 32 BTFP images, 19 chrome/footer internal links, desktop/mobile BTFP nav links, and confirmed no Process anchors in the inspected chrome or BTFP page.
+
+**Decided by:** GL corrected the nav/business priority; Codex implemented and verified the route, chrome, docs, and tests.
+
+---
+
 ## 2026-05-06 - Portfolio approved Frappe export overrides Codex reinterpretations
 
 **Decision:** The approved portfolio source is the Claude/Frappe export at `research/design_handoff_locally_twisted_portfolio/frappe/`. Production may translate fake placeholder details into LT reality, but the visual system itself should follow the export: editorial portfolio row, large serif hero, Google font pairing, muted paper/ink palette, custom desktop cursor, small italic captions, and the locked reel constants (`density 1.10`, `BASE_UNIT 640`, `VERTICAL_SPACING 80`, `OVERLAP 0.55`, `CENTER_BREATH 140`, drift smoothing `0.02`, opacity speed `4.0`).

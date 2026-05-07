@@ -89,7 +89,7 @@ Reference and verification files:
 ## Known Current Facts
 
 - Phase 1 shop surfaces are live or compatibility-safe: `/shop`, `/shop-by-category` redirecting to `/shop`, `/shop-items/<group>`, `/shop-items/<group>/<slug>`, `/cart`, `/checkout`, `/payment-success`, and `/thank-you`.
-- Current documented catalog state is 53 Website Items, 10,631 Items, 49 variant templates, 4 single-SKU templates, 10,578 variants, 10,613 Item Prices, 32,002 Item Variant Attribute rows, and 26 Item Attributes. Re-check live DB counts before changing seed logic or making claims from these numbers.
+- Current live DB state verified 2026-05-06 is 53 Website Items, 10,633 Items, 49 variant templates, 6 non-variant root Items, 10,578 variants, 10,615 Item Prices, 32,002 Item Variant Attribute rows, and 26 Item Attributes. The 6 non-variant root Items are 4 catalog single-SKU products plus 2 delivery service Items. Re-check live DB counts before changing seed logic or making claims from these numbers.
 - Item Group hierarchy under `Shop Items` has 11 customer-facing children: Arches, Columns, Bouquets, Get-Well Bouquets, Garlands, Drops, Grab & Go, Table Decor, Stands & Easels, Deliveries, and Seasonal & Specialty.
 - Webshop settings are documented with variants and attribute filters enabled.
 - Bulk catalog import lives in `seed_catalog.py` and honors captured Odoo `data-attribute-exclusions`.

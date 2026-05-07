@@ -38,7 +38,7 @@
  * if an asset dropped — in that case we keep going silently.
  *
  * Receipt: 2026-04-29 — moved here from payment_success.html after
- * realizing payment_success.py raises frappe.Redirect before the
+ * realizing payment_success.py redirects before the
  * template renders, so JS in that file never executes. */
 (function () {
     try {

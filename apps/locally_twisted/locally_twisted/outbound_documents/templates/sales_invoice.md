@@ -7,7 +7,7 @@ stage: issued_invoice
 status: source_template_ready
 automation_ready: generator_ready_review_required
 trigger: Sales Invoice submitted or printed
-delivery_channel: ERPNext Print Format | PDF | reviewed email
+delivery_channel: branded invoice print format | PDF | reviewed email
 record_source: Sales Invoice | Customer | Contact | Address | Payment Terms Template
 policy_lanes: corporate_invoicing | refund_policy | privacy
 required_fields: invoice_number | invoice_date | due_date | bill_to | po_reference | expense_category | itemized_lines | taxes | total | balance_due | payment_contact
@@ -40,7 +40,7 @@ The bookkeeper can enter the invoice, route it for approval, pay it, and reply t
 
 ## Automation Notes
 
-The current production source is the ERPNext `Locally Twisted Sales Invoice` Print Format owned by `locally_twisted.seed.sync_invoice_branding`.
+The current production source is the `Locally Twisted Sales Invoice` print format owned by `locally_twisted.seed.sync_invoice_branding`.
 
 Do not auto-send from this registry. A future sender must confirm the Sales Invoice is real, terms are approved, the recipient is correct, and the generated PDF passes the invoice branding contract.
 

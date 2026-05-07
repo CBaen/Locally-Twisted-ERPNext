@@ -3122,7 +3122,7 @@ h3,
   mask: var(--lt-icon-url) center / contain no-repeat;
 }
 
-/* Authority-first editorial pages: /event-balloons and /process. */
+/* Authority-first editorial page system used by approved public service pages. */
 .lt-authority-page {
   background: var(--lt-warm-white);
   color: var(--lt-ink);
@@ -3865,9 +3865,30 @@ h3,
   outline-offset: 3px;
 }
 
+.lt-cookie-consent--inline {
+  position: relative;
+  left: 50%;
+  right: 50%;
+  bottom: auto;
+  width: 100vw;
+  max-width: none;
+  margin: 0 -50vw;
+  grid-template-columns: minmax(0, 720px) auto;
+  justify-content: center;
+  padding: 0.9rem clamp(1rem, 4vw, 2rem);
+  border-right: 0;
+  border-left: 0;
+  border-radius: 0;
+  box-shadow: 0 12px 24px rgba(10, 10, 11, 0.08);
+}
+
 @media (max-width: 640px) {
   .lt-cookie-consent {
     grid-template-columns: 1fr;
+  }
+
+  .lt-cookie-consent--inline {
+    justify-content: stretch;
   }
 
   .lt-cookie-consent__actions {

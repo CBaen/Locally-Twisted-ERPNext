@@ -6,6 +6,55 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-07 - Homepage proof motion needs one contract
+
+The homepage had two proof banners that behaved differently by platform: review
+cards could become a scrollbar, trusted-business names could stack instead of
+crawling, and reduced-motion branches did not preserve GL's requested visual
+behavior. At the same time, the hero still carried old rotating-title thinking
+and the cookie notice could cover mobile CTAs.
+
+**Counter-move:** treat homepage proof crawls as one shared banner contract, not
+two decorative widgets. Both review cards and trusted-business names must span
+the stage, move left-to-right, use the same `540s` duration in normal motion,
+and keep the same horizontal/full-stage fallback in reduced-motion conditions.
+The homepage cookie notice should sit inline after the hero so accounting,
+corporate, school, and civic visitors can see the primary CTAs without
+dismissing an overlay first.
+
+---
+
+## 2026-05-07 - Frappe controller CSS constants may outlive cache clears
+
+Changing `PAGE_CSS` inside a Python route controller did not fully update the
+homepage after `python scripts/dev/clear_website_cache.py`. The website cache was
+clear, but the running backend process still held the imported controller module
+and its string constants.
+
+**Counter-move:** after changing route-controller constants such as `PAGE_CSS`,
+clear the website cache and restart the affected Frappe backend container before
+declaring the browser view current. Use this especially when a CSS fix appears
+correct in source but not in the rendered page.
+
+---
+
+## 2026-05-07 - Navigation can erase a business line
+
+The public menu had replaced the approved `Twisting & Face Painting` service
+lane with an unapproved generic `Process` page. Technically the new page loaded,
+but business-wise it cut a major Locally Twisted service out of the primary
+customer path and made the nav less truthful.
+
+**Counter-move:** treat nav labels and route presence as business facts, not
+decoration. When a top-level route changes, verify that it represents an
+approved line of business, add negative tests for removed labels/routes, delete
+unapproved route files, and update the style guide, queue, handoff, workstream,
+decision log, and capability docs in the same slice. For LT, `nav_ia.py` now
+fails if Process returns to public chrome, and `/process` should stay 404 unless
+GL explicitly reopens it.
+
+---
+
 ## 2026-05-06 - Exact design exports are source, not mood boards
 
 The portfolio page failed because Codex treated a Frappe-ready design export as a loose reference. The shipped correction used tests and numeric constraints to produce "bigger photos, three columns, compact hero," but it stripped the actual exported design language: editorial serif hero, portfolio row, muted paper/ink system, custom cursor, slow drift/fade, approved scales, and center-photo rhythm.

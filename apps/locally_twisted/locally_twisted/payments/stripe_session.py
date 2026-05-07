@@ -58,7 +58,7 @@ def stripe_line_items_for_sales_order(so) -> list[dict]:
     if adjustment_cents < 0:
         frappe.throw(
             _(
-                "Stripe checkout amount would exceed ERPNext order total. "
+                "Stripe checkout amount would exceed the order total. "
                 "Please review the order before taking payment."
             ),
             frappe.ValidationError,

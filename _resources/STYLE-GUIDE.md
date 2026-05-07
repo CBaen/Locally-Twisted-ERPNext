@@ -2,7 +2,7 @@
 
 **Version:** 4.2
 **Last Updated:** 2026-05-06
-**Build Target:** ERPNext v15.105.0 + Frappe v15 / Webshop
+**Build Target:** ERPNext v15.105.0 + Frappe v15.106.0 / Webshop
 **Primary Viewport:** Mobile-first, 375px base
 
 This is the canonical style guide for the current Locally Twisted ERPNext build.
@@ -111,7 +111,7 @@ component is added, append it here before a broad implementation swarm begins.
 | Contact/inquiry | `/contact`, `templates/includes/book_form.html` | Main custom-work conversion | Dark civic intro, two-column form/info layout on desktop, large Cormorant heading, warm form fields, brass or berry focus, company/team copy. |
 | Legacy book | `/book` | Compatibility path | Redirect or visually match contact if rendered. Do not make `/book` the primary public CTA unless the route decision changes. |
 | Portfolio | `/portfolio`, `www/portfolio.html` | Proof gallery | Photos are the product. Use filter controls quietly, preserve full installs and natural aspect ratios, show context, and avoid visible text over busy photos. |
-| Balloon twisting / face painting | `/balloon-twisting-and-face-painting` | Family/live-service exception lane | Can be warmer and more playful in photos, but still structured: editorial intro, service cards, spec rows, process, events list, FAQ, contact CTA. |
+| Balloon twisting / face painting | `/balloon-twisting-and-face-painting` | First-class live-service lane | Can be warmer and more playful in photos, but still structured: editorial intro, service cards, spec rows, booking steps, events list, FAQ, contact CTA. |
 | FAQ | `/faq` | Objection handling | Clean grouped questions, generous line height, details/accordion states accessible, CTA to contact. No decorative clutter. |
 | Policies | `/privacy`, `/terms-of-service`, `/refund-policy`, `/accessibility` | Legal and trust surface | Warm-white document layout, narrow readable measure, Cormorant H1/H2, Lato body, brass/berry links only where useful. |
 | Search and Frappe utility pages | `/search`, login/account flows where Frappe owns chrome | Utility wayfinding | Keep global shell consistent. Do not invent a separate visual language for low-frequency utility screens. |
@@ -119,8 +119,10 @@ component is added, append it here before a broad implementation swarm begins.
 `/contact` is the canonical inquiry page. `/book` is legacy compatibility only
 and should redirect to `/contact?intent=quick` unless a later route decision
 changes that. Customer CTAs should normally point to `/contact`, not `/book`.
-Current primary navigation is `Event Balloons`, `Portfolio`, `Process`,
-`Ready-to-Order`, and `FAQ`, with `Free Event Quote` pointing to `/contact`.
+Current primary navigation is `Event Balloons`, `Portfolio`,
+`Twisting & Face Painting`, `Ready-to-Order`, and `FAQ`, with
+`Free Event Quote` pointing to `/contact`. Do not add a standalone
+`Process` page or top-level nav link unless GL explicitly approves it.
 
 ### Reusable Element Map
 
@@ -427,7 +429,7 @@ Do not reintroduce `Delivery Only`, `Pickup Only`, or `Event Package`.
 - Primary nav order is currently:
   - Event Balloons
   - Portfolio
-  - Process
+  - Twisting & Face Painting
   - Ready-to-Order
   - FAQ
   - Search

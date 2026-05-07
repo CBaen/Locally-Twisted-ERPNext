@@ -4,7 +4,7 @@
 
 Locally Twisted is a 27-year-old Utah balloon-decor and event-services business owned by Jeff Kimber. Until now, LT has run on improvisation — manual records, paper notes, QuickBooks for accounting, a website built years ago that customers still reach but that has degraded beyond practical repair. A prior attempt to give LT a backend (an Odoo build) failed in testing — never went live to customers and Jeff was never told the audit's verdict.
 
-**This project is a migration of LT's business intent + catalog data into a fresh ERPNext v15 install** (frame revised 2026-04-30 — see `locally-twisted-decisions.md`; supersedes the 2026-04-26 "first professional business platform / new build, not a migration" reframe). "Fresh install" because ERPNext was greenfield — no auto-translated Odoo modules, no DB dumps imported, no Odoo configuration carried across; everything was hand-built informed by Odoo discovery. "Migration" because the catalog data (53 Website Items / 10,578 variants / 10,613 Item Prices, ported 2026-04-30), the 45-field Lead schema, the `/book` and `/contact` form intent, the business policies, the brand identity, and the voice rules were all carried across from the Odoo attempt — and at cutover (Phase 6), the new ERPNext storefront replaces `locallytwisted.com` at the same domain.
+**This project is a migration of LT's business intent + catalog data into a fresh ERPNext v15 install** (frame revised 2026-04-30 — see `locally-twisted-decisions.md`; supersedes the 2026-04-26 "first professional business platform / new build, not a migration" reframe). "Fresh install" because ERPNext was greenfield — no auto-translated Odoo modules, no DB dumps imported, no Odoo configuration carried across; everything was hand-built informed by Odoo discovery. "Migration" because the catalog data (53 Website Items / 10,578 variants / 10,613 original catalog Item Prices, ported 2026-04-30; current live DB totals should be rechecked before use), the 45-field Lead schema, the `/book` and `/contact` form intent, the business policies, the brand identity, and the voice rules were all carried across from the Odoo attempt — and at cutover (Phase 6), the new ERPNext storefront replaces `locallytwisted.com` at the same domain.
 
 End-to-end destination scope: customer-facing website + ecommerce storefront + lead intake forms + operator workflow (lead → quote → booking → calendar → project) + invoicing + Stripe payments + Utah tax compliance + native ERPNext accounting + native ERPNext HRMS payroll + customer self-service portal.
 
@@ -62,7 +62,7 @@ The Odoo work informs this build (forms, models, copy, business policies all cam
 
 ## Constraints
 
-- **Stack:** ERPNext v15.105.0 + Frappe v15 (bundled). Pinned tag, no rolling.
+- **Stack:** ERPNext v15.105.0 + Frappe v15.106.0 in the current local bench. Pinned ERPNext v15 image, no rolling major line.
 - **Local environment:** Windows 11 + Docker Desktop (WSL2 backend, 8 GB / 4 CPU). LT's stack runs on `:8081`.
 - **Cost:** $0 during build. Frappe Cloud Sites plan ($5/mo) only at deployment. Bill follows site ownership after transfer.
 - **Stealth on the verdict:** Jeff knows there's an audit; he does not yet know the audit's conclusion. No artifact on disk should leak that conclusion in a way that would surprise him. Internal planning docs (this file included) stay in BBC's hands.

@@ -1,4 +1,4 @@
-"""Sync simplified ERPNext Desk workspaces for Locally Twisted operators.
+"""Sync simplified Desk workspaces for Locally Twisted operators.
 
 Run in-process:
   bench --site frontend execute locally_twisted.seed.sync_backend_workspaces.execute
@@ -13,6 +13,15 @@ from locally_twisted.seed import sync_crm_pipeline
 
 
 OWNER_HOME = "LT Owner Home"
+OWNER_WORKSPACE_ROLE = "LT Owner Access"
+OWNER_DEFAULT_WORKSPACE_USERS = [
+    "cameron@builtbycameron.com",
+    "locallytwisted@gmail.com",
+]
+PLATFORM_NAMED_WORKSPACES_TO_HIDE = [
+    "ERPNext Settings",
+    "ERPNext Integrations",
+]
 
 BOOKING_CALENDAR = {
     "doctype": "Calendar View",
@@ -58,6 +67,10 @@ WORKSPACES_TO_NORMALIZE = [
 ]
 
 OWNER_REQUIRED_ROLES = ["Item Manager"]
+OWNER_ROLE_PROFILE = "LT Owner"
+OWNER_PROTECTED_USER_ROLES = {
+    "cameron@builtbycameron.com": ["System Manager", "Website Manager"],
+}
 
 OWNER_NUMBER_CARDS = {
     "New Inquiries": {
@@ -222,7 +235,10 @@ def execute() -> str:
         "ensured_number_cards": [],
         "synced_crm_pipeline": {},
         "updated_role_profiles": [],
+        "updated_user_roles": [],
+        "updated_users": [],
         "updated_workspaces": [],
+        "white_label_hidden_workspaces": [],
     }
     summary["synced_crm_pipeline"] = sync_crm_pipeline.sync()
     _ensure_booking_calendar(summary)
@@ -231,6 +247,8 @@ def execute() -> str:
     for workspace in WORKSPACES_TO_NORMALIZE:
         _normalize_workspace(workspace, summary)
     _set_owner_home_command_center(summary)
+    _ensure_default_owner_workspace(summary)
+    _hide_platform_named_workspaces(summary)
     frappe.clear_cache()
     frappe.db.commit()
     print(json.dumps(summary, indent=2, sort_keys=True))
@@ -415,6 +433,71 @@ def _set_owner_home_command_center(summary: dict) -> None:
         summary["updated_workspaces"].append(
             {"workspace": OWNER_HOME, "layout": "command-center-with-start-here"}
         )
+
+
+def _ensure_default_owner_workspace(summary: dict) -> None:
+    if not frappe.db.exists("Workspace", OWNER_HOME):
+        return
+
+    for user_name in OWNER_DEFAULT_WORKSPACE_USERS:
+        if not frappe.db.exists("User", user_name):
+            continue
+
+        doc = frappe.get_doc("User", user_name)
+        changed = False
+
+        if doc.default_workspace != OWNER_HOME:
+            doc.default_workspace = OWNER_HOME
+            changed = True
+
+        if getattr(doc, "role_profile_name", None):
+            doc.role_profile_name = None
+            changed = True
+
+        existing_roles = {row.role for row in doc.roles}
+        desired_roles = set(_get_owner_operator_roles())
+        desired_roles.update(
+            role
+            for role in OWNER_PROTECTED_USER_ROLES.get(user_name, [])
+            if frappe.db.exists("Role", role)
+        )
+        for role in sorted(desired_roles):
+            if role in existing_roles:
+                continue
+
+            doc.append("roles", {"role": role})
+            existing_roles.add(role)
+            changed = True
+            summary["updated_user_roles"].append({"user": user_name, "role": role})
+
+        if changed:
+            doc.save(ignore_permissions=True)
+            summary["updated_users"].append(
+                {"user": user_name, "default_workspace": OWNER_HOME}
+            )
+
+
+def _get_owner_operator_roles() -> list[str]:
+    roles = {OWNER_WORKSPACE_ROLE, *OWNER_REQUIRED_ROLES}
+    if frappe.db.exists("Role Profile", OWNER_ROLE_PROFILE):
+        profile = frappe.get_doc("Role Profile", OWNER_ROLE_PROFILE)
+        roles.update(row.role for row in profile.roles)
+
+    return sorted(role for role in roles if frappe.db.exists("Role", role))
+
+
+def _hide_platform_named_workspaces(summary: dict) -> None:
+    for workspace_name in PLATFORM_NAMED_WORKSPACES_TO_HIDE:
+        if not frappe.db.exists("Workspace", workspace_name):
+            continue
+
+        doc = frappe.get_doc("Workspace", workspace_name)
+        if doc.is_hidden:
+            continue
+
+        doc.is_hidden = 1
+        doc.save(ignore_permissions=True)
+        summary["white_label_hidden_workspaces"].append(workspace_name)
 
 
 def _owner_home_content() -> list[dict]:

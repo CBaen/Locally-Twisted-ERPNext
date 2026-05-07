@@ -20,20 +20,20 @@ Do not treat old handoff files as truth. Treat them as claims, then verify impor
 
 ## Current Verified State
 
-Verified against the ERPNext database on 2026-04-30:
+Verified against the ERPNext database on 2026-05-06:
 
 | Record | Count |
 |---|---:|
 | Website Items | 53 |
-| Items total | 10,631 |
+| Items total | 10,633 |
 | Variant templates | 49 |
-| Single-SKU templates | 4 |
+| Non-variant root Items | 6 |
 | Variants | 10,578 |
-| Item Prices | 10,613 |
+| Item Prices | 10,615 |
 | Item Variant Attribute rows | 32,002 |
 | Item Attributes | 26 |
 
-Important correction: older files may claim `10,613 Items`, `8,925 Item Prices`, or `10,560 variants`. Those counts are stale. Re-check DB before changing catalog docs or seed logic.
+Important correction: older files may claim `10,631 Items`, `10,613 Items`, `10,613 Item Prices`, `8,925 Item Prices`, `4 single-SKU templates`, or `10,560 variants`. Those counts are stale as current DB totals. The 6 non-variant root Items are 4 catalog single-SKU products plus 2 delivery service Items. Re-check DB before changing catalog docs or seed logic.
 
 ## Local Stack
 
