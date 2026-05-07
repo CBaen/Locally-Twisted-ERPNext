@@ -6,6 +6,22 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-07 - Branch stacks break GL's operating model
+
+Multiple Codex branches and stacked draft PRs accumulated even though GL does
+not use branches and relies on GitHub/main history as the rollback archive. The
+result was not safer collaboration; it made it unclear what was real, what had
+landed, and what still needed a decision.
+
+**Counter-move:** LT work is main-only. Before editing, verify `HEAD` is on
+`main`; commit and push directly to `origin/main`; do not create feature,
+codex, topic, experiment, or PR-stack branches. Use workstream docs and
+uncommitted work review for coordination, not branch names. Machine-wide hooks
+block non-main commits and pushes, but agents must still obey the rule because
+Git cannot fully prevent branch creation before checkout completes.
+
+---
+
 ## 2026-05-07 - Verification caveats expire after broader gates pass
 
 The homepage handoff and capability receipt still carried a temporary caveat

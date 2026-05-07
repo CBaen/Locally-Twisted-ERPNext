@@ -8,6 +8,20 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-07 - LT repo is main-only; branch workflow is forbidden
+
+**Decision:** Locally Twisted development happens on `main` only. Feature, codex, topic, experiment, and PR-stack branches are not approved coordination tools for this repo.
+
+**Reasoning:** GL is a team of one and uses GitHub as the rollback/archive layer. Branch stacks made it unclear what was real, what was approved, and what had actually landed. For this project, scattering work across branches created more operational risk than it solved.
+
+**Implementation:** Fast-forwarded `origin/main` from `30f5d90` to `a73ef49`, switched the local checkout to `main`, closed or allowed GitHub to mark obsolete draft PRs #1-#5, deleted all local and remote non-main branches, and added the main-only rule to `AGENTS.md`. The stale `codex/erpnext-playwright-verification` branch was inspected before deletion; its files already existed in the current stack and applying that older branch directly would have regressed newer verification scripts.
+
+**Verification receipt:** `git branch -vv --all` showed only `main`, `origin/main`, and `origin/HEAD -> origin/main`. `gh pr list --state open` returned `[]`. The checkout is `main` tracking `origin/main`; existing uncommitted active work was preserved and not folded into this policy decision.
+
+**Decided by:** GL explicitly set the global main-only rule; Codex consolidated the LT branch stack and removed the branch refs.
+
+---
+
 ## 2026-05-07 - Homepage is launch proof, not an animated concept wall
 
 **Decision:** The public homepage hero must use one visible stable H1 over a real optimized Locally Twisted install photo. The review-card crawl and trusted-business crawl are both full-stage proof banners moving left-to-right at the same `540s` speed in normal motion, with a matching horizontal/static fallback in the reduced-motion branch. The homepage cookie notice is inline after the hero instead of a fixed overlay. Event Playground and rotating blog/title concepts stay out of the launch hero unless GL explicitly reopens them.

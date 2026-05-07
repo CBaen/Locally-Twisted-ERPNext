@@ -6,6 +6,15 @@ This project inherits the machine-wide Guiding Light Codex communication protoco
 
 Do not treat old handoff files as truth. Treat them as claims, then verify important facts against git, files, and the running ERPNext database before relying on them.
 
+## Git Policy - Main Only
+
+Branches are forbidden in this repo. Work on `main` only.
+
+- Do not create, switch to, commit on, push to, or open PRs from feature, codex, topic, or experiment branches.
+- Before editing, run `git rev-parse --abbrev-ref HEAD`; it must print `main`. If it does not, stop and switch to `main` without discarding work.
+- Push completed commits directly to `origin/main`. GitHub is the archive; branches are not holding areas, queues, or coordination lanes.
+- Machine-wide hooks live at `C:\Users\baenb\.codex\git-hooks\no-branches` and block non-main commits and pushes. Git has no pre-hook that can fully prevent branch creation before it happens, so agents must obey this file as the primary rule.
+
 ## Project Reality
 
 - Client: Locally Twisted, owned by Jeff Kimber.
