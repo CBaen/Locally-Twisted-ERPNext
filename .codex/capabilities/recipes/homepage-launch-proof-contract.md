@@ -104,4 +104,6 @@ gave both proof banners the same full-stage left-to-right `540s` normal-motion
 behavior, stabilized the reduced-motion fallback, stabilized the hero around a
 single visible H1 and real install photo, moved the cookie notice inline after
 the hero, and added homepage/cookie Playwright coverage. Focused homepage checks
-passed; a broad layout gate remained blocked by unrelated `/portfolio` work.
+passed first; follow-up full-site closeout then passed `npm run test:website-verify`
+with `layout-fit` 247/247 and `interactive-layout` 74/74. Do not carry forward
+the earlier temporary portfolio-blocked caveat unless a fresh run fails again.

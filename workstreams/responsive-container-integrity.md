@@ -1,6 +1,6 @@
 # Responsive Container Integrity Workstream
 
-Last updated: 2026-05-06 by Codex after the portfolio proof-reel state check replaced the old modal check.
+Last updated: 2026-05-07 by Codex after the Process route removal and full website verification parity pass.
 
 ## Status
 
@@ -17,8 +17,8 @@ GL identified a systemic failure: the site could pass narrow checks while still 
 ## Current Gate
 
 - `scripts/verify/layout_helpers.js` centralizes route lists, viewport families, page-settle behavior, and overflow/text-fit audits.
-- `scripts/verify/layout_fit.spec.js` runs passive layout checks across 20 public routes and 13 viewport families.
-- `scripts/verify/interactive_layout.spec.js` checks stateful UI across header breakpoints, desktop mega panels, mobile drawer accordions, shop filters/product selectors, contact expanded conditionals, portfolio front-photo state, and reduced-motion homepage behavior.
+- `scripts/verify/layout_fit.spec.js` runs passive layout checks across the current launch public route list and 13 viewport families.
+- `scripts/verify/interactive_layout.spec.js` checks stateful UI across platform-name leakage, header breakpoints, desktop mega panels, mobile drawer accordions, shop filters/product selectors, contact expanded conditionals, portfolio front-photo state, homepage proof crawls, cookie placement, and reduced-motion homepage behavior.
 - `package.json` exposes:
   - `npm run test:layout-fit`
   - `npm run test:interactive-layout`
@@ -46,8 +46,8 @@ The standing viewport families are:
 
 ## Completed This Session
 
-- Expanded passive layout coverage to 260 route/viewport checks.
-- Added 39 stateful layout checks.
+- Expanded passive layout coverage to 260 route/viewport checks, then refreshed it to 247 checks after the unapproved `/process` route was removed.
+- Added 39 stateful layout checks, then refreshed the stateful gate to 74 checks after platform-name, homepage proof-crawl, cookie, and nav/BTFP guards were added.
 - Fixed the 992-1199 header breakpoint mismatch by making the desktop/mobile CSS and JS agree on 1200px.
 - Kept desktop mega panels inside the header/container instead of anchoring narrow product panels to individual nav item widths.
 - Fixed reduced-motion homepage carousel/review behavior so tracks do not animate or force overflow when reduced motion is requested.
@@ -62,10 +62,10 @@ The standing viewport families are:
 - `python -B -m py_compile scripts\verify\smoke_shop.py` passed.
 - `python scripts/verify/commerce_rules_contract.py` passed.
 - `python scripts/verify/smoke_shop.py` passed.
-- `npm run test:interactive-layout` passed 42/42 after the portfolio proof-reel update.
-- `npm run test:layout-fit` passed 260/260.
-- `npm run test:checkout-experience` passed 1/1.
-- `npm run test:public-verify` passed with quieter Playwright output.
+- `npm run test:interactive-layout` passed 74/74 after the homepage/nav proof update.
+- `npm run test:layout-fit` passed 247/247 after `/process` was removed from the public route list.
+- `npm run test:checkout-experience` passed 2/2.
+- `npm run test:website-verify` passed; `npm run test:public-verify` aliases to the same website-only gate.
 
 ## Rules For Future Work
 

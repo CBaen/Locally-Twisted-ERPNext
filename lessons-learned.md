@@ -6,6 +6,21 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-07 - Verification caveats expire after broader gates pass
+
+The homepage handoff and capability receipt still carried a temporary caveat
+that broad layout verification was blocked by unrelated portfolio work even
+after a later full `npm run test:website-verify` pass was green. That would send
+the next Codex agent chasing a resolved blocker.
+
+**Counter-move:** when a focused feature handoff records "full gate blocked,"
+revisit that caveat after the broader gate is rerun. If the full gate later
+passes, update the feature handoff, launch workstream, queue, decision receipt,
+and capability receipt in the same documentation parity slice. Verification
+notes are operational state for agents, not historical prose.
+
+---
+
 ## 2026-05-07 - Homepage proof motion needs one contract
 
 The homepage had two proof banners that behaved differently by platform: review

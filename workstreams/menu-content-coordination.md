@@ -62,7 +62,7 @@ Feature handoff for the BTFP/Process correction: `workstreams/nav-btfp-process-c
 - `python scripts/verify/cart_checkout_contract.py` passed.
 - `python scripts/verify/smoke_shop.py` passed after updating the verifier to the restored mega-menu contract.
 - `npm run test:layout-fit` initially passed 80/80 after adding `/checkout` and `/thank-you`; this is superseded by the 260/260 responsive follow-up below.
-- Responsive follow-up expanded the passive layout gate to 260/260 and added `npm run test:interactive-layout` at 39/39. Future menu/content work should use the responsive-container workstream instead of relying on the old 80-check gate.
+- Responsive follow-up originally expanded the passive layout gate to 260/260 and added `npm run test:interactive-layout` at 39/39. After the 2026-05-07 Process removal and homepage/nav proof checks, the current website gate is `layout-fit` 247/247 and `interactive-layout` 74/74. Future menu/content work should use the responsive-container workstream and `npm run test:website-verify`, not the old 80-check gate.
 - `python scripts/verify/smoke_shop.py` now verifies fixed-price product pages do not invent product-level quote gates, and still checks retail variant add-to-cart pages.
 - Served asset check found `lt-mega-menu.css`, `lt-page-containment.css`, `lt-product-polish.css`, and `lt-megamenu.js?v=20260505-mega-4` in the running page.
 - Post-fix Playwright screenshot/interaction pass saved to `output/playwright/full-site-fix-20260505-post/` and reported no failures across 13 routes at 320, 375, and 1366 widths, plus desktop event/product mega menus and the mobile drawer.

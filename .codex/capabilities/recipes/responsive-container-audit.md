@@ -5,11 +5,11 @@ schema_version: 2.0
 level: recipe
 maturity: candidate
 scope: Locally Twisted ERPNext/Frappe public-site responsive layout, containment, and stateful UI checks
-currently_true: unknown
+currently_true: yes
 verification_level: 2
-last_verified: 2026-05-06
+last_verified: 2026-05-07
 evidence_quality: direct
-successful_uses: 1
+successful_uses: 2
 failed_uses: 0
 regressions: 0
 depends_on:
@@ -17,6 +17,7 @@ depends_on:
 used_by:
   - lt-brand-style-guide-consolidation
   - frappe-shop-showroom-symmetry
+  - website-launch
 tags:
   - Locally Twisted
   - responsive layout
@@ -120,6 +121,6 @@ Use `npm run test:public-verify` when closing a broad public-site visual change.
 
 ## LT Receipt
 
-The first use on 2026-05-05 expanded `npm run test:layout-fit` from a narrow route/viewport pass to 260 checks across 20 public routes and 13 viewport families. It also added `npm run test:interactive-layout` with stateful checks for header breakpoint behavior, desktop mega panels, mobile drawer accordions, shop/product controls, contact conditionals, portfolio state, and reduced-motion homepage states. On 2026-05-06, the portfolio state check moved from the superseded modal behavior to the current proof-reel front-photo behavior. `python scripts/verify/smoke_shop.py` was corrected to respect the quote-required custom install lane while still verifying retail inline variant selection and cart writes.
+The first use on 2026-05-05 expanded `npm run test:layout-fit` from a narrow route/viewport pass to 260 checks across 20 public routes and 13 viewport families. It also added `npm run test:interactive-layout` with stateful checks for header breakpoint behavior, desktop mega panels, mobile drawer accordions, shop/product controls, contact conditionals, portfolio state, and reduced-motion homepage states. On 2026-05-06, the portfolio state check moved from the superseded modal behavior to the current proof-reel front-photo behavior. On 2026-05-07, the unapproved `/process` route was removed and homepage/nav proof checks expanded the current gate to `layout-fit` 247/247 and `interactive-layout` 74/74. `python scripts/verify/smoke_shop.py` was corrected to respect the quote-required custom install lane while still verifying retail inline variant selection and cart writes.
 
 The 2026-05-06 shop showroom repair added a symmetry-specific supplement, then the same-day UX repair superseded the button-grid category controls: `/shop` and `/shop-items/<group>` now use a desktop category rail plus native mobile select, and category/product grids must not leave a single desktop orphan card when a balanced 2-up split is available.

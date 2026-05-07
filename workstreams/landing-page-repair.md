@@ -49,10 +49,11 @@ The homepage internal-link check inspected 37 links with no failures.
 Screenshots for desktop, 375px mobile, 320px mobile, and the first after-hero
 band are in `output/playwright/landing-fixes-20260507/`.
 
-Important caveat: a broad `layout_fit` run is not green right now because
-unrelated `/portfolio` work is failing at breakpoint-edge widths. Do not treat
-that as a homepage regression, but do not call the full site gate green until
-portfolio is reconciled.
+Follow-up closeout on 2026-05-07 reconciled the earlier portfolio caveat:
+`npm run test:website-verify` passed, including `layout-fit` 247/247,
+`interactive-layout` 74/74, checkout 2/2, portfolio reel 4/4, and shop smoke.
+Do not reintroduce the older "broad layout gate blocked by portfolio" caveat
+unless a fresh failing run proves it again.
 
 ## Next Safe Moves
 
