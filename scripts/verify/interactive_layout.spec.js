@@ -399,7 +399,9 @@ test.describe("Locally Twisted interactive layout states", () => {
 				const response = await gotoAndSettle(page, "/shop-items/bouquets/unicorn-bouquet");
 				await expectSuccessfulResponse(response, "/shop-items/bouquets/unicorn-bouquet");
 				await expect(page.locator(".lt-product__configure")).toHaveCount(1);
-				await expect(page.locator(".lt-product__attr")).not.toHaveCount(0);
+				await expect(page.locator(".lt-product__attr")).toHaveCount(1);
+				await expect(page.locator(".lt-product__attr[data-attribute-name='Bouquet Size']")).toHaveCount(1);
+				await expect(page.locator("text=Add Foil Number")).toHaveCount(0);
 
 				const result = await auditPageLayout(page, {
 					containerSelectors: [".lt-product__configure", ".lt-product__attr", ".lt-product__actions", ".lt-product__details"],
@@ -420,7 +422,8 @@ test.describe("Locally Twisted interactive layout states", () => {
 			await expect(page.locator("#lt-mega-products")).toBeHidden();
 
 			await page.locator(".lt-product__attr[data-attribute-name='Bouquet Size'] .lt-product__chip").first().click();
-			await expect(page.locator("#lt-add-to-cart-variant")).toBeDisabled();
+			await expect(page.locator("#lt-add-to-cart-variant")).toBeEnabled();
+			await expect(page.locator("#lt-add-to-cart-variant")).toHaveAttribute("data-item-code", /unicorn-bouquet-SMA/);
 		});
 	});
 

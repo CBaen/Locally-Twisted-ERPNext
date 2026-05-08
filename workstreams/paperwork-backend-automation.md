@@ -14,6 +14,8 @@ Make Locally Twisted's paperwork path reliable enough for launch and simple enou
 - Sales Invoice print output is branded and policy-aligned
 - corporate/event invoice language stays aligned with public policy pages
 - backend automation creates reviewable work, not surprise accounting entries
+- every handoff fails loudly when a required record, recipient, approval,
+  payment path, send blocker, or mutation guard is missing
 
 This lane coordinates paperwork, receipts, invoices, payment records, customer emails, reminder dry runs, reminder review reports, and backend automation boundaries. It does not replace `workstreams/finance-payroll-quickbooks-migration.md`, `workstreams/synthetic-business-pipeline.md`, `workstreams/customer-reminder-dry-run.md`, `workstreams/customer-reminder-review-report.md`, `workstreams/payment-backend-launch-readiness.md`, `workstreams/customer-document-policy-lanes.md`, or `workstreams/erpnext-backend-simplification.md`; it sequences the launch-critical parts of those lanes.
 

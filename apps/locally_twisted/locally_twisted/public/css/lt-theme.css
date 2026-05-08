@@ -1426,35 +1426,39 @@ body.lt-nav-open {
 }
 .lt-product__chip-label {
     display: inline-block;
-    padding: 0.55rem 1rem;
-    border: 1px solid rgba(26, 26, 26, 0.18);
-    border-radius: 999px;
-    background-color: var(--lt-white);
+    padding: 0.55rem 0;
+    border: 0;
+    border-radius: 0;
+    background-color: transparent;
     color: var(--lt-near-black);
     font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.875rem;
     font-weight: 500;
     line-height: 1.2;
-    transition: border-color 0.15s ease, background-color 0.15s ease;
+    transition: color 0.15s ease, text-decoration-color 0.15s ease;
     user-select: none;
 }
 .lt-product__chip:hover .lt-product__chip-label {
-    border-color: var(--lt-near-black);
+    color: var(--lt-near-black);
+    text-decoration: underline;
+    text-underline-offset: 0.32em;
 }
 .lt-product__chip.is-disabled {
     cursor: not-allowed;
 }
 .lt-product__chip-input:disabled + .lt-product__chip-label {
-    border-color: rgba(26, 26, 26, 0.1);
-    background-color: rgba(26, 26, 26, 0.04);
+    background-color: transparent;
     color: rgba(26, 26, 26, 0.42);
 }
 .lt-product__chip.is-disabled:hover .lt-product__chip-label {
-    border-color: rgba(26, 26, 26, 0.1);
+    text-decoration: none;
 }
 .lt-product__chip-input:checked + .lt-product__chip-label {
-    border-color: var(--lt-near-black);
-    background-color: var(--lt-warm-tint);
+    background-color: transparent;
+    color: var(--lt-near-black);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 0.32em;
 }
 .lt-product__chip-input:focus-visible + .lt-product__chip-label {
     outline: 2px solid var(--lt-teal);
@@ -1465,10 +1469,10 @@ body.lt-nav-open {
 .lt-product__select {
     width: 100%;
     max-width: 340px;
-    padding: 0.65rem 2.25rem 0.65rem 1rem;
-    border: 1px solid rgba(26, 26, 26, 0.18);
-    border-radius: 0.375rem;
-    background-color: var(--lt-white);
+    padding: 0.65rem 2.25rem 0.65rem 0;
+    border: 0;
+    border-radius: 0;
+    background-color: transparent;
     color: var(--lt-near-black);
     font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.95rem;
@@ -1483,7 +1487,6 @@ body.lt-nav-open {
 .lt-product__select:focus-visible {
     outline: 2px solid var(--lt-teal);
     outline-offset: 2px;
-    border-color: var(--lt-near-black);
 }
 .lt-product__select option:disabled {
     color: rgba(26, 26, 26, 0.42);
@@ -1504,9 +1507,10 @@ body.lt-nav-open {
 
 .lt-product__cart {
     margin-top: 1.25rem;
-    padding: 1.25rem;
-    background-color: var(--lt-near-white);
-    border-radius: 0.5rem;
+    padding: 0;
+    background-color: transparent;
+    border-radius: 0;
+    box-shadow: none;
 }
 .lt-product__price {
     margin-bottom: 0.75rem;
@@ -3766,8 +3770,6 @@ h3,
 .lt-policy-card,
 .lt-faq-card,
 .lt-shop__card,
-.lt-product__details,
-.lt-product__configure,
 .cart-container,
 .product-container {
   border: 1px solid rgba(14, 34, 64, 0.14);

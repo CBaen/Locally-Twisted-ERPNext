@@ -12,8 +12,7 @@
 .lt-shop.lt-shop--landing,
 .lt-shop.lt-shop--category,
 .lt-product-breadcrumbs,
-.product-container.item-main.lt-product-page__main,
-.lt-product__more {
+.product-container.item-main.lt-product-page__main {
   width: 100%;
   max-width: none;
   margin-inline: auto;
@@ -25,7 +24,6 @@
 .lt-shop.lt-shop--category .lt-shop__hero-inner,
 .lt-shop.lt-shop--category .lt-shop__layout,
 .product-container.item-main.lt-product-page__main,
-.lt-product__more,
 .lt-product-breadcrumbs {
   width: min(100%, var(--lt-showroom-max));
   max-width: var(--lt-showroom-max);
@@ -265,7 +263,7 @@
 
 .product-container.item-main.lt-product-page__main .lt-product__summary-row {
   gap: var(--lt-showroom-gap);
-  padding: clamp(1rem, 3vw, 2rem);
+  padding: clamp(0.75rem, 2vw, 1.5rem) 0;
 }
 
 .product-container.item-main.lt-product-page__main .product-image {

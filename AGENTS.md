@@ -15,6 +15,33 @@ Branches are forbidden in this repo. Work on `main` only.
 - Push completed commits directly to `origin/main`. GitHub is the archive; branches are not holding areas, queues, or coordination lanes.
 - Machine-wide hooks live at `C:\Users\baenb\.codex\git-hooks\no-branches` and block non-main commits and pushes. Git has no pre-hook that can fully prevent branch creation before it happens, so agents must obey this file as the primary rule.
 
+## Fail Loudly Law
+
+Mantra: **If it can fail, it must fail loudly.**
+
+This is the operating law for forms, automations, payments, checkout, documents,
+customer messages, backend handoffs, route/layout contracts, containers,
+verification, and agent communication. Silent failure is not a degraded state;
+it is a business trust failure.
+
+Failing loudly means:
+
+- The customer or operator must not see false success. No success toast, receipt,
+  invoice, quote, saved design, submitted form, or clean layout claim unless the
+  downstream record/path actually exists.
+- The developer must get an actionable failure: exception, nonzero verifier,
+  failed test, explicit blocker field, or reproducible report row.
+- The system monitor must get evidence when the failure is operational: Frappe
+  Error Log, scheduler report, audit JSON, mutation guard, or equivalent.
+- The source contract must name the missing connection, not hide it in prose.
+  Forms map to fields, automations map to records, documents map to recipients,
+  and containers map to executable route contracts.
+
+Violations include swallowed exceptions, console-only errors, skipped fields,
+fallback content that looks successful, hidden horizontal scrollbars, native
+scrollbars on crawls, stale docs treated as proof, customer emails that silently
+do not queue, and agent replies that imply success without verification.
+
 ## Project Reality
 
 - Client: Locally Twisted, owned by Jeff Kimber.
@@ -29,20 +56,22 @@ Branches are forbidden in this repo. Work on `main` only.
 
 ## Current Verified State
 
-Verified against the ERPNext database on 2026-05-06:
+Verified against the ERPNext database on 2026-05-08:
 
 | Record | Count |
 |---|---:|
 | Website Items | 53 |
-| Items total | 10,633 |
+| Items total | 10,672 |
 | Variant templates | 49 |
 | Non-variant root Items | 6 |
-| Variants | 10,578 |
-| Item Prices | 10,615 |
-| Item Variant Attribute rows | 32,002 |
+| Active customer-facing variants | 10,227 |
+| Disabled legacy optional-add-on variants | 390 |
+| All variant records | 10,617 |
+| Item Prices | 10,654 |
+| Item Variant Attribute rows | 32,028 |
 | Item Attributes | 26 |
 
-Important correction: older files may claim `10,631 Items`, `10,613 Items`, `10,613 Item Prices`, `8,925 Item Prices`, `4 single-SKU templates`, or `10,560 variants`. Those counts are stale as current DB totals. The 6 non-variant root Items are 4 catalog single-SKU products plus 2 delivery service Items. Re-check DB before changing catalog docs or seed logic.
+Important correction: older files may claim `10,631 Items`, `10,613 Items`, `10,633 Items`, `10,613 Item Prices`, `10,615 Item Prices`, `8,925 Item Prices`, `4 single-SKU templates`, `10,560 variants`, or `10,578 variants`. Those counts are stale as current DB totals. The 6 non-variant root Items are 4 catalog single-SKU products plus 2 delivery service Items. Active variants dropped from the old customer-facing `10,578` baseline because `Add Foil Number` is no longer a required variant axis for bouquet-size products; the old add-on variants remain disabled as history. Re-check DB before changing catalog docs or seed logic.
 
 ## Local Stack
 

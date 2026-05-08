@@ -16,9 +16,11 @@ Coverage:
      every attribute, chips are radio/single-select, and partial selections can
      disable invalid later options.
   8. Product detail (single SKU) renders price + add-to-cart button.
-  9. No "Item Code" jargon appears anywhere customer-facing.
-  10. No "/Nos" UoM display anywhere.
-  11. Mobile drawer exposes the same primary links and /contact quote CTA.
+  9. Product detail pages do not render empty additional/recommendation panels.
+  10. Product option and price/add-to-cart controls stay clear, not boxed.
+  11. No "Item Code" jargon appears anywhere customer-facing.
+  12. No "/Nos" UoM display anywhere.
+  13. Mobile drawer exposes the same primary links and /contact quote CTA.
 
 Run:
   PYTHONIOENCODING=utf-8 PYTHONUTF8=1 python scripts/verify/smoke_shop.py
@@ -63,12 +65,14 @@ FIXED_PRICE_PRODUCT_URLS = [
     (f"{BASE}/shop-items/arches/classic-arch", "Classic Arch", "classic-arch"),
 ]
 PRODUCT_VARIANT_URL = f"{BASE}/shop-items/bouquets/unicorn-bouquet"
-PRODUCT_VARIANT_EXPECTED_ATTRS = ["Bouquet Size", "Add Foil Number"]
+PRODUCT_VARIANT_EXPECTED_ATTRS = ["Bouquet Size"]
 PRODUCT_PROGRESSIVE_URL = PRODUCT_VARIANT_URL
 PRODUCT_CART_VARIANT_URL = PRODUCT_VARIANT_URL
 PRODUCT_SINGLE_URL = f"{BASE}/shop-items/bouquets/mothers-day-bouquet"
 SHOP_CATEGORY_SHOWCASE_URL = f"{BASE}/shop-items/arches"
 PRODUCT_DETAIL_SHOWCASE_URL = f"{BASE}/shop-items/garlands/baby-shower-garland"
+VARIANT_STARTING_PRICE_URL = f"{BASE}/shop-items/columns/classic-column"
+VARIANT_STARTING_PRICE_ROUTE = "/shop-items/columns/classic-column"
 
 DESKTOP_VIEWPORT = {"width": 1366, "height": 900}
 MOBILE_VIEWPORT = {"width": 375, "height": 812}
@@ -136,6 +140,34 @@ def _visible_boxes(page, selector: str, limit: int = 6):
 def _first_visible_box(page, selector: str):
     boxes = _visible_boxes(page, selector, 1)
     return boxes[0] if boxes else None
+
+
+def _computed_style(page, selector: str):
+    return page.evaluate(
+        """(selector) => {
+            const el = document.querySelector(selector);
+            if (!el) return null;
+            const style = window.getComputedStyle(el);
+            return {
+                backgroundColor: style.backgroundColor,
+                borderTopWidth: style.borderTopWidth,
+                borderRightWidth: style.borderRightWidth,
+                borderBottomWidth: style.borderBottomWidth,
+                borderLeftWidth: style.borderLeftWidth,
+                borderRadius: style.borderRadius,
+                boxShadow: style.boxShadow
+            };
+        }""",
+        selector,
+    )
+
+
+def _px(value: str) -> float:
+    return float((value or "0").replace("px", "") or 0)
+
+
+def _is_transparent(color: str) -> bool:
+    return color in ("transparent", "rgba(0, 0, 0, 0)")
 
 
 def check_variant_template_contract():
@@ -380,6 +412,152 @@ def check_category_product_grid_symmetry_contract(page):
     print("  OK category product grid avoids desktop orphan rows")
 
 
+def _card_price_for_route(page, card_selector: str, route: str) -> str | None:
+    return page.evaluate(
+        """({cardSelector, route}) => {
+            const cards = Array.from(document.querySelectorAll(cardSelector));
+            const card = cards.find((candidate) => {
+                const link = candidate.querySelector(`a[href="${route}"]`);
+                return !!link;
+            });
+            if (!card) return null;
+            const price = card.querySelector('.lt-shop__card-price, .product-price');
+            return price ? price.textContent.replace(/\\s+/g, ' ').trim() : '';
+        }""",
+        {"cardSelector": card_selector, "route": route},
+    )
+
+
+def check_variant_template_starting_price_display(page):
+    print("-> Variant template starting price display")
+    page.set_viewport_size(DESKTOP_VIEWPORT)
+
+    page.goto(f"{BASE}/shop", wait_until="networkidle", timeout=15000)
+    shop_price = _card_price_for_route(page, ".lt-shop__card", VARIANT_STARTING_PRICE_ROUTE)
+    assert_(shop_price is not None, "/shop missing Classic Column card")
+    assert_(
+        shop_price.lower().startswith("from $"),
+        f"/shop Classic Column card should show a public starting price, got {shop_price!r}",
+    )
+
+    page.goto(f"{BASE}/shop-items/columns", wait_until="networkidle", timeout=15000)
+    category_price = _card_price_for_route(page, ".item-card", VARIANT_STARTING_PRICE_ROUTE)
+    assert_(category_price is not None, "/shop-items/columns missing Classic Column card")
+    assert_(
+        category_price.lower().startswith("from $"),
+        f"/shop-items/columns Classic Column card should show a public starting price, got {category_price!r}",
+    )
+
+    page.goto(VARIANT_STARTING_PRICE_URL, wait_until="networkidle", timeout=15000)
+    detail_price = page.locator("#lt-product-price-text").inner_text().strip()
+    assert_(
+        detail_price.lower().startswith("from $"),
+        f"Variant detail page should show a starting price before option selection, got {detail_price!r}",
+    )
+    print("  OK variant templates expose a starting price before options are chosen")
+
+
+def check_product_detail_no_auxiliary_ecommerce_panels(page):
+    print("-> Product detail auxiliary ecommerce panels")
+    page.set_viewport_size(DESKTOP_VIEWPORT)
+
+    for url in (PRODUCT_VARIANT_URL, PRODUCT_DETAIL_SHOWCASE_URL, PRODUCT_SINGLE_URL):
+        page.goto(url, wait_until="networkidle", timeout=15000)
+        for selector in (
+            ".lt-product__more",
+            ".lt-product__info-panel",
+            ".lt-product__info-content",
+            ".lt-product__recommendations",
+            ".recommended-item-section",
+            ".recommendation-container",
+        ):
+            assert_(
+                page.locator(selector).count() == 0,
+                f"{url} should not render auxiliary product panel {selector}",
+            )
+
+    print("  OK product detail pages do not render empty additional/recommendation panels")
+
+
+def check_product_detail_clear_option_box_contract(page):
+    print("-> Product detail clear option box contract")
+
+    disallowed_box_selectors = (
+        ".lt-product__configure",
+        ".lt-product__cart",
+        ".lt-product__attr",
+        ".lt-product__chip-label",
+    )
+    optional_disallowed_box_selectors = (".lt-product__select",)
+    no_side_box_selectors = (
+        ".lt-product__details-section",
+    )
+
+    for viewport in (DESKTOP_VIEWPORT, MOBILE_VIEWPORT):
+        page.set_viewport_size(viewport)
+        page.goto(PRODUCT_VARIANT_URL, wait_until="networkidle", timeout=15000)
+
+        for selector in disallowed_box_selectors:
+            assert_(page.locator(selector).count() > 0, f"{selector} missing on product option page")
+            style = _computed_style(page, selector)
+            assert_(style is not None, f"{selector} style missing")
+            assert_(
+                _is_transparent(style["backgroundColor"]),
+                f"{selector} must not have a boxed background; got {style['backgroundColor']}",
+            )
+            assert_(
+                _px(style["borderTopWidth"]) == 0
+                and _px(style["borderRightWidth"]) == 0
+                and _px(style["borderBottomWidth"]) == 0
+                and _px(style["borderLeftWidth"]) == 0,
+                f"{selector} must not render a product option box; got borders {style}",
+            )
+            assert_(style["boxShadow"] == "none", f"{selector} must not render a boxed shadow")
+
+        for selector in optional_disallowed_box_selectors:
+            if page.locator(selector).count() == 0:
+                continue
+            style = _computed_style(page, selector)
+            assert_(style is not None, f"{selector} style missing")
+            assert_(
+                _is_transparent(style["backgroundColor"]),
+                f"{selector} must not have a boxed background; got {style['backgroundColor']}",
+            )
+            assert_(
+                _px(style["borderTopWidth"]) == 0
+                and _px(style["borderRightWidth"]) == 0
+                and _px(style["borderBottomWidth"]) == 0
+                and _px(style["borderLeftWidth"]) == 0,
+                f"{selector} must not render a product option box; got borders {style}",
+            )
+            assert_(style["boxShadow"] == "none", f"{selector} must not render a boxed shadow")
+
+        for selector in no_side_box_selectors:
+            style = _computed_style(page, selector)
+            assert_(style is not None, f"{selector} style missing")
+            assert_(
+                _is_transparent(style["backgroundColor"]),
+                f"{selector} must stay clear; got {style['backgroundColor']}",
+            )
+            assert_(
+                _px(style["borderRightWidth"]) == 0
+                and _px(style["borderBottomWidth"]) == 0
+                and _px(style["borderLeftWidth"]) == 0,
+                f"{selector} may use only a section divider, not a box; got borders {style}",
+            )
+            assert_(style["boxShadow"] == "none", f"{selector} must not render a boxed shadow")
+
+        fulfillment_style = _computed_style(page, ".lt-product__fulfillment")
+        assert_(fulfillment_style is not None, "Pickup/delivery panel missing")
+        assert_(
+            not _is_transparent(fulfillment_style["backgroundColor"])
+            and _px(fulfillment_style["borderTopWidth"]) > 0,
+            "Pickup/delivery is the one allowed framed product-page container",
+        )
+
+    print("  OK product options and price/add-to-cart stay clear; pickup/delivery remains framed")
+
+
 def check_shop_items_broad_route(page):
     print(f"-> {BASE}/shop-items")
     page.goto(f"{BASE}/shop-items", wait_until="networkidle", timeout=15000)
@@ -466,6 +644,10 @@ def check_product_variant_page(page):
     for attr in PRODUCT_VARIANT_EXPECTED_ATTRS:
         loc = page.locator(f".lt-product__attr[data-attribute-name='{attr}']")
         assert_(loc.count() == 1, f"Variant attr {attr!r} not rendered inline")
+    assert_(
+        page.locator(".lt-product__attr[data-attribute-name='Add Foil Number']").count() == 0,
+        "Add Foil Number must not render as a required variant option",
+    )
 
     btn = page.locator("#lt-add-to-cart-variant")
     assert_(btn.count() == 1, "Add-to-cart button missing")
@@ -491,61 +673,41 @@ def check_product_detail_showroom_contract(page):
 
 
 def check_progressive_variant_option_disabling(page):
-    print(f"-> {PRODUCT_PROGRESSIVE_URL} progressive option disabling")
+    print(f"-> {PRODUCT_PROGRESSIVE_URL} size variants update media and remain changeable")
     page.goto(PRODUCT_PROGRESSIVE_URL, wait_until="networkidle", timeout=15000)
-    page.evaluate(
-        """() => {
-            const original = window.frappe.call.bind(window.frappe);
-            window.__ltProgressiveCalls = [];
-            window.__ltRestoreFrappeCall = () => {
-                window.frappe.call = original;
-                delete window.__ltRestoreFrappeCall;
-            };
-            window.frappe.call = (options) => {
-                const args = options && options.args ? options.args : {};
-                const selected = args.selected_attributes || {};
-                if (
-                    options &&
-                    options.method === 'webshop.webshop.variant_selector.utils.get_next_attribute_and_values' &&
-                    Object.keys(selected).length === 1
-                ) {
-                    window.__ltProgressiveCalls.push(selected);
-                    window.setTimeout(() => {
-                        const valid = Object.assign({}, selected, {
-                            'Add Foil Number': ['1']
-                        });
-                        options.callback && options.callback({
-                            message: {
-                                valid_options_for_attributes: valid,
-                                exact_match: [],
-                                filtered_items_count: 1,
-                                filtered_items: []
-                            }
-                        });
-                    }, 0);
-                    return { then() { return this; }, fail() { return this; } };
-                }
-                return original(options);
-            };
-        }"""
+    assert_(
+        page.locator(".lt-product__attr[data-attribute-name='Add Foil Number']").count() == 0,
+        "Foil numbers should not block size selection",
     )
 
-    try:
-        page.locator(".lt-product__attr[data-attribute-name='Bouquet Size'] .lt-product__chip").first.click()
-        page.wait_for_function(
-            """() => {
-                const one = document.querySelector("select[data-attribute-name='Add Foil Number'] option[value='1']");
-                const two = document.querySelector("select[data-attribute-name='Add Foil Number'] option[value='2']");
-                return one && two && !one.disabled && two.disabled;
-            }""",
-            timeout=10000,
-        )
-        calls = page.evaluate("window.__ltProgressiveCalls || []")
-        assert_(calls, "Partial option selection did not call the variant option API")
-    finally:
-        page.evaluate("window.__ltRestoreFrappeCall && window.__ltRestoreFrappeCall()")
+    page.locator(".lt-product__attr[data-attribute-name='Bouquet Size'] .lt-product__chip").nth(1).click()
+    page.wait_for_function(
+        """() => {
+            const btn = document.querySelector('#lt-add-to-cart-variant');
+            const img = document.querySelector('.product-image img.website-image');
+            return btn && !btn.disabled
+                && btn.getAttribute('data-item-code')
+                && img && /medium/i.test(img.getAttribute('src') || '');
+        }""",
+        timeout=10000,
+    )
+    medium_code = page.locator("#lt-add-to-cart-variant").get_attribute("data-item-code")
 
-    print("  OK partial selection consumes valid_options_for_attributes and disables invalid options")
+    page.locator(".lt-product__attr[data-attribute-name='Bouquet Size'] .lt-product__chip").nth(2).click()
+    page.wait_for_function(
+        """(previousCode) => {
+            const btn = document.querySelector('#lt-add-to-cart-variant');
+            const img = document.querySelector('.product-image img.website-image');
+            return btn && !btn.disabled
+                && btn.getAttribute('data-item-code')
+                && btn.getAttribute('data-item-code') !== previousCode
+                && img && /large/i.test(img.getAttribute('src') || '');
+        }""",
+        arg=medium_code,
+        timeout=10000,
+    )
+
+    print("  OK bouquet size alone resolves a variant, swaps image, and stays changeable")
 
 
 def check_variant_add_to_cart_ui(page):
@@ -553,7 +715,6 @@ def check_variant_add_to_cart_ui(page):
     page.goto(PRODUCT_CART_VARIANT_URL, wait_until="networkidle", timeout=15000)
     page.evaluate("window.LT_CART && window.LT_CART.clear && window.LT_CART.clear()")
     page.locator(".lt-product__attr[data-attribute-name='Bouquet Size'] .lt-product__chip").first.click()
-    page.select_option("select[data-attribute-name='Add Foil Number']", index=1)
     btn = page.locator("#lt-add-to-cart-variant")
     btn.wait_for(state="visible", timeout=10000)
     page.wait_for_function(
@@ -653,9 +814,12 @@ def main() -> int:
             check_category_showroom_contract,
             check_category_nav_rail_contract,
             check_category_product_grid_symmetry_contract,
+            check_variant_template_starting_price_display,
             check_fixed_price_product_pages_do_not_show_product_quote_gate,
             check_product_variant_page,
             check_product_detail_showroom_contract,
+            check_product_detail_no_auxiliary_ecommerce_panels,
+            check_product_detail_clear_option_box_contract,
             check_progressive_variant_option_disabling,
             check_variant_add_to_cart_ui,
             check_product_single_page,

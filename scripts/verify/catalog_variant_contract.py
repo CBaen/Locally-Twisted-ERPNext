@@ -19,6 +19,10 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "apps" / "locally_twisted"))
+
+from locally_twisted.catalog_variant_rules import dedupe_required_variant_rows
+
 CATALOG_PATH = ROOT / "_resources" / "odoo-live" / "catalog.json"
 NORMALIZE_PATH = ROOT / "_resources" / "odoo-live" / "value_normalize_map.json"
 CONTAINER = "locally-twisted-erpnext-v15-backend-1"
@@ -55,7 +59,7 @@ def expected_variants(catalog: dict[str, Any], normalize_map: dict[str, dict[str
         slug = prod.get("slug")
         if not slug:
             continue
-        valid = prod.get("valid_variants") or []
+        valid = dedupe_required_variant_rows(prod.get("valid_variants") or [])
         expected[slug] = {combo_key(row.get("combo") or {}, normalize_map) for row in valid}
     return expected
 
@@ -96,6 +100,7 @@ from tabItem i
 left join `tabItem Variant Attribute` iva on iva.parent = i.name
 where i.variant_of is not null
   and i.variant_of != ''
+  and i.disabled = 0
 order by i.variant_of, i.name, iva.idx;
 """.strip()
     rows = run_mariadb(query)
@@ -113,7 +118,7 @@ order by i.variant_of, i.name, iva.idx;
 
 
 def live_templates() -> set[str]:
-    rows = run_mariadb("select name from tabItem where has_variants = 1 order by name;")
+    rows = run_mariadb("select name from tabItem where has_variants = 1 and disabled = 0 order by name;")
     return {line.strip() for line in rows.splitlines() if line.strip()}
 
 

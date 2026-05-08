@@ -14,6 +14,12 @@ Use this when changing a public `/contact` or `/book` style form, Lead Custom Fi
 
 ## How to use it
 
+Mantra: if it can fail, it must fail loudly. A public form must not show a
+success state unless the backend mapping it promises is actually reachable. If
+the public fields, submit handler, Lead fields, Desk conditionals, or
+acknowledgment path drift, the verifier should fail instead of leaving a
+customer-facing success message over broken intake.
+
 1. Start with the public form contract.
 
    Record the customer-facing labels, field names, and which fields are conditional. Customer helper copy belongs here, not automatically in ERPNext Desk labels.

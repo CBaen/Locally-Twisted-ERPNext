@@ -34,17 +34,26 @@ every deploy.
     border: 0;
 }
 
-.lt-book {
-    padding: 2.5rem 1rem 3rem;
+.lt-book,
+.lt-book__modal {
+    --lt-form-ink: #0A0A0B;
+    --lt-form-navy: #0E2240;
+    --lt-form-brass: #B89A5B;
+    --lt-form-berry: #B31B34;
+    --lt-form-paper: #FFFFFF;
+    --lt-form-warm: #FAF7F2;
+    --lt-form-stone: #E7E5E1;
+    padding: 0;
 }
 .lt-book__form-wrap {
-    max-width: 760px;
+    max-width: 860px;
     margin: 0 auto;
-    background-color: #fffdfa;
+    background-color: var(--lt-form-paper);
     border: 1px solid rgba(14, 34, 64, 0.16);
-    border-radius: 0.375rem;
-    box-shadow: 0 20px 46px rgba(10, 10, 11, 0.08);
-    padding: clamp(1.25rem, 3vw, 2rem);
+    border-top: 4px solid var(--lt-form-navy);
+    border-radius: 0.5rem;
+    box-shadow: 0 14px 34px rgba(10, 10, 11, 0.06);
+    padding: clamp(1rem, 2.5vw, 1.6rem);
 }
 .lt-book__form-wrap fieldset {
     border: 0;
@@ -55,8 +64,8 @@ every deploy.
 .lt-book__row {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1rem;
-    margin-bottom: 1rem;
+    gap: 0.9rem 1rem;
+    margin-bottom: 0.95rem;
 }
 @media (min-width: 768px) {
     .lt-book__row--two { grid-template-columns: 1fr 1fr; }
@@ -69,13 +78,15 @@ every deploy.
 .lt-book__field label,
 .lt-book__field .lt-book__label {
     font-family: 'Lato', sans-serif;
-    font-size: 0.875rem;
-    font-weight: 700;
-    color: #0A0A0B;
-    margin-bottom: 0.35rem;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.045em;
+    color: var(--lt-form-ink);
+    margin-bottom: 0.38rem;
+    text-transform: uppercase;
 }
 .lt-book__required {
-    color: #B31B34;
+    color: var(--lt-form-berry);
     margin-left: 0.15rem;
 }
 .lt-book__optional {
@@ -89,22 +100,23 @@ every deploy.
 .lt-book__textarea {
     font-family: 'Lato', sans-serif;
     font-size: 1rem;
-    padding: 0.7rem 0.85rem;
+    padding: 0.72rem 0.82rem;
     border: 1px solid rgba(14, 34, 64, 0.22);
-    border-radius: 0.25rem;
-    background-color: #FAF7F2;
-    color: #0A0A0B;
+    border-radius: 0.375rem;
+    background-color: var(--lt-form-warm);
+    color: var(--lt-form-ink);
     width: 100%;
     min-height: 44px;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    box-shadow: none;
+    transition: background-color 0.15s ease, border-color 0.15s ease, outline-color 0.15s ease;
 }
 .lt-book__input:focus,
 .lt-book__select:focus,
 .lt-book__textarea:focus {
-    outline: 2px solid #B31B34;
+    outline: 3px solid rgba(184, 154, 91, 0.34);
     outline-offset: 1px;
-    border-color: #0E2240;
-    background-color: #fffdfa;
+    border-color: var(--lt-form-navy);
+    background-color: #FFFFFF;
 }
 .lt-book__textarea {
     min-height: 96px;
@@ -113,15 +125,21 @@ every deploy.
 }
 
 .lt-book__services {
-    margin: 1.5rem 0;
+    background-color: rgba(14, 34, 64, 0.035);
+    border: 1px solid rgba(14, 34, 64, 0.12);
+    border-radius: 0.5rem;
+    margin: 1.35rem 0;
+    padding: 1rem;
 }
 .lt-book__services-legend {
     font-family: 'Lato', sans-serif;
-    font-size: 0.875rem;
-    font-weight: 700;
-    color: #0A0A0B;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.045em;
+    color: var(--lt-form-ink);
     margin-bottom: 0.65rem;
     display: block;
+    text-transform: uppercase;
 }
 .lt-book__services-hint {
     font-weight: 400;
@@ -133,34 +151,50 @@ every deploy.
     display: flex;
     align-items: center;
     gap: 0.6rem;
-    padding: 0.5rem 0;
+    background-color: #FFFFFF;
+    border: 1px solid rgba(14, 34, 64, 0.14);
+    border-radius: 0.375rem;
+    margin: 0 0 0.5rem;
+    padding: 0.58rem 0.7rem;
     font-size: 1rem;
-    color: #0A0A0B;
+    color: var(--lt-form-ink);
     cursor: pointer;
     min-height: 44px;
+}
+.lt-book__check:last-child {
+    margin-bottom: 0;
 }
 .lt-book__check input[type="checkbox"] {
     width: 1.1rem;
     height: 1.1rem;
-    accent-color: #B31B34;
+    accent-color: var(--lt-form-navy);
     flex-shrink: 0;
+}
+@supports selector(:has(*)) {
+    .lt-book__check:has(input:checked) {
+        background-color: rgba(14, 34, 64, 0.06);
+        border-color: var(--lt-form-navy);
+        box-shadow: inset 4px 0 0 var(--lt-form-brass);
+    }
+    .lt-book__check:has(input:focus-visible) {
+        outline: 3px solid rgba(184, 154, 91, 0.34);
+        outline-offset: 2px;
+    }
 }
 
 .lt-book__conditional {
-    background-color: #F1E8DC;
-    border-left: 3px solid #B31B34;
-    border-top: 1px solid rgba(14, 34, 64, 0.12);
-    border-right: 1px solid rgba(14, 34, 64, 0.12);
-    border-bottom: 1px solid rgba(14, 34, 64, 0.12);
-    padding: 1.25rem 1.25rem 1rem;
+    background-color: #FFFFFF;
+    border: 1px solid rgba(14, 34, 64, 0.14);
+    border-left: 4px solid var(--lt-form-navy);
+    padding: 1.15rem 1.15rem 1rem;
     margin: 1rem 0;
-    border-radius: 0 0.25rem 0.25rem 0;
+    border-radius: 0.5rem;
 }
 .lt-book__conditional[hidden] { display: none !important; }
 .lt-book__conditional-title {
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.35rem;
-    color: #0A0A0B;
+    color: var(--lt-form-ink);
     margin: 0 0 0.85rem;
     line-height: 1.2;
     font-weight: 700;
@@ -186,7 +220,7 @@ every deploy.
     margin-top: 0.35rem;
 }
 .lt-book__photos-hint--error {
-    color: #B31B34;
+    color: var(--lt-form-berry);
 }
 
 .lt-book__privacy {
@@ -196,10 +230,10 @@ every deploy.
 }
 
 .lt-book__submit {
-    background-color: #B31B34;
-    color: #FAF7F2;
+    background-color: var(--lt-form-navy);
+    color: var(--lt-form-warm);
     border: none;
-    border-radius: 0.25rem;
+    border-radius: 0.375rem;
     padding: 0.875rem 2rem;
     font-family: 'Lato', sans-serif;
     font-size: 1rem;
@@ -210,8 +244,8 @@ every deploy.
 }
 .lt-book__submit:hover,
 .lt-book__submit:focus-visible {
-    background-color: #0E2240;
-    outline: 2px solid #D9C7B3;
+    background-color: var(--lt-form-berry);
+    outline: 3px solid rgba(184, 154, 91, 0.34);
     outline-offset: 2px;
 }
 .lt-book__submit[disabled] {
@@ -222,20 +256,20 @@ every deploy.
 .lt-book__feedback {
     margin-top: 1rem;
     padding: 0.85rem 1rem;
-    border-radius: 0.25rem;
+    border-radius: 0.375rem;
     font-size: 0.95rem;
     display: none;
 }
 .lt-book__feedback.is-error {
     display: block;
     background-color: rgba(179, 27, 52, 0.08);
-    border: 1px solid #B31B34;
+    border: 1px solid var(--lt-form-berry);
     color: #7d1224;
 }
 .lt-book__prefill {
     background-color: rgba(14, 34, 64, 0.06);
     border: 1px solid rgba(14, 34, 64, 0.14);
-    border-radius: 0.25rem;
+    border-radius: 0.375rem;
     color: rgba(10, 10, 11, 0.76);
     font-size: 0.95rem;
     line-height: 1.5;
@@ -265,8 +299,8 @@ every deploy.
 }
 .lt-book__modal-card {
     position: relative;
-    background-color: #fffdfa;
-    border-radius: 0.375rem;
+    background-color: #FFFFFF;
+    border-radius: 0.5rem;
     max-width: 440px;
     width: calc(100% - 2rem);
     padding: 2.5rem 2rem 2rem;
@@ -278,8 +312,8 @@ every deploy.
     width: 56px;
     height: 56px;
     border-radius: 50%;
-    background-color: #B31B34;
-    color: #FAF7F2;
+    background-color: var(--lt-form-navy);
+    color: var(--lt-form-warm);
     margin: 0 auto 1rem;
     display: flex;
     align-items: center;
@@ -289,7 +323,7 @@ every deploy.
 .lt-book__modal-card h2 {
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.75rem;
-    color: #0A0A0B;
+    color: var(--lt-form-ink);
     margin: 0 0 0.5rem;
     font-weight: 700;
 }
@@ -300,9 +334,9 @@ every deploy.
 }
 .lt-book__modal-close {
     background-color: transparent;
-    border: 1px solid #0E2240;
-    color: #0E2240;
-    border-radius: 0.25rem;
+    border: 1px solid var(--lt-form-navy);
+    color: var(--lt-form-navy);
+    border-radius: 0.375rem;
     padding: 0.55rem 1.25rem;
     font-family: 'Lato', sans-serif;
     font-weight: 600;
@@ -311,16 +345,16 @@ every deploy.
 }
 .lt-book__modal-close:hover,
 .lt-book__modal-close:focus-visible {
-    background-color: #0E2240;
-    color: #FAF7F2;
-    outline: 2px solid #B31B34;
+    background-color: var(--lt-form-navy);
+    color: var(--lt-form-warm);
+    outline: 3px solid rgba(184, 154, 91, 0.34);
     outline-offset: 2px;
 }
 </style>
 
-<section class="lt-book">
+<section class="lt-book" data-form-contract="inquiry-v1">
     <div class="lt-book__form-wrap">
-        <form id="lt-book-form" novalidate enctype="multipart/form-data">
+        <form id="lt-book-form" data-form-contract="inquiry-v1" novalidate enctype="multipart/form-data">
             <fieldset>
                 <legend class="visually-hidden">Event Booking Request</legend>
                 {% if requested_item_code %}

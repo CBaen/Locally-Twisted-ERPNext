@@ -12,6 +12,7 @@ ERPNext's "Shop Items" hierarchy.
 import frappe
 
 from locally_twisted.commerce_rules import checkout_lane_for_item_group
+from locally_twisted.product_options import apply_variant_starting_price
 
 no_cache = 0
 sitemap = 1
@@ -42,29 +43,16 @@ def get_context(context):
         as_dict=True,
     )
 
-    # For variant templates we don't have an Item Price on the template (validate_item_template
-    # blocks that). Pull a representative variant price (the lowest) so the card shows a
-    # "from $X" baseline.
     for item in items:
-        if item.get("has_variants") and not item.get("price_list_rate"):
-            min_price = frappe.db.sql(
-                """SELECT MIN(ip.price_list_rate)
-                   FROM `tabItem` it
-                   JOIN `tabItem Price` ip ON ip.item_code = it.item_code
-                   WHERE it.variant_of = %s
-                     AND ip.price_list = 'Standard Selling'
-                     AND ip.selling = 1""",
-                (item["item_code"],),
-            )
-            if min_price and min_price[0] and min_price[0][0]:
-                item["price_list_rate"] = min_price[0][0]
-                item["price_is_from"] = True
+        apply_variant_starting_price(item)
 
         # Slug retained for analytics/debugging; navigation now links to category routes.
         item["category_slug"] = frappe.scrub(item.get("item_group") or "all").replace("_", "-")
         item["checkout_lane"] = checkout_lane_for_item_group(item.get("item_group"))
         rate = item.get("price_list_rate")
-        if rate:
+        if item.get("price_is_from") and item.get("formatted_price"):
+            item["price_display"] = item["formatted_price"]
+        elif rate:
             item["price_display"] = (
                 "from ${:g}".format(float(rate)) if item.get("price_is_from")
                 else "${:g}".format(float(rate))

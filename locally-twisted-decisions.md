@@ -8,13 +8,93 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-07 - Current LT records are fake-data automation substrate, not business truth
+
+**Decision:** Treat all current Locally Twisted ERPNext/Frappe data as fake/test data for automation testing until GL explicitly says otherwise. Fake data should be used aggressively to prove fields, cascades, documents, payments, reminders, and checkups. It must not be treated as real customer/business truth.
+
+**Decision:** Any field or automation that can or should happen must either happen or fail loudly with record-level evidence. The next implementation slice is a reusable backend failure recorder wired into Lead cascade partial failures, checkout note/Lead-conversion failures, paid-order receipt failures, and record-level business automation index rows.
+
+**Reasoning:** Codex identified the highest-risk quiet-failure paths: skipped inquiry photos can lose customer context; Lead cascade failures can hide missing Contacts, acknowledgments, Tasks, or stage movement; checkout can continue while Lead conversion or notes silently fail; paid orders can miss receipt delivery; invoices/documents can appear send-ready while missing recipient, balance, terms, payment path, branding, or bookkeeping fields. GL clarified the data is fake because it exists to exercise these paths. The point of fake data is to catch broken automation early, not to let partial success pass.
+
+**Implementation:** Added `workstreams/fail-loud-record-level-hardening.md`, updated `locally-twisted-queue.md`, created `.codex/capabilities/recipes/erpnext-record-level-failure-recorder.md`, and strengthened `.codex/capabilities/recipes/fail-loud-operating-law.md` with the fake-data clarification and first record-level hardening slice.
+
+**Alternatives considered:** Continue relying on Error Log-only evidence for partial backend failures. Rejected because the business record/report itself must surface the issue for operators and future agents. Treat skipped files/notes/receipt emails as acceptable non-critical cleanup. Rejected because those failures can hide customer intent, payment context, or customer communication state.
+
+**Decided by:** GL clarified fake-data status and fail-loud expectation; Codex supplied the concrete implementation points; OpenClaw/Moji documented the operating decision and queue lane.
+
+---
+
+## 2026-05-08 - Shared inquiry form contract and BTFP calculator
+
+**Decision:** Public inquiry forms use one shared form contract:
+`templates/includes/book_form.html` with `data-form-contract="inquiry-v1"`.
+Service pages can scope the choices and preselected services through controller
+context, but they must not fork a second customer intake form. The visual
+contract is white form surface, warm/stone fields, visible labels, Deep Navy
+primary action/focus, Brass focus ring, and Berry only for required/error
+states.
+
+**Decision:** `/balloon-twisting-and-face-painting` can show a customer-facing
+artist-time calculator as pricing transparency, not as checkout. The calculator
+uses the page's published equation: $130 first hour per artist, $115 each
+additional hour per artist, half-hour increments only at or above one hour, and
+$50 deposit per artist. It shows no discounts and does not create a public
+deposit purchase path.
+
+**Reasoning:** GL rejected the returned Process content and then flagged the
+embedded form as visually unacceptable. The problem was not a BTFP-only form;
+the page reused the shared inquiry partial, so the repair needed a durable form
+contract future agents can recognize. The calculator answers customer math
+questions without splitting the intake or reopening the old public deposit CTA.
+
+**Alternatives considered:** Keep page-local BTFP form styling (rejected because
+it would drift from `/contact`), make a separate BTFP intake form (rejected
+because GL wants one intake path), or connect the calculator to checkout
+(rejected because availability and final booking still require LT confirmation).
+
+**Decided by:** GL directive 2026-05-08; implemented by Codex in the BTFP/form
+repair slice.
+
+---
+
+## 2026-05-08 - Fail loudly is the operating law
+
+**Decision:** Locally Twisted work uses one law across forms, automations,
+documents, customer communication, containers, route contracts, verification,
+and agent handoffs: if it can fail, it must fail loudly.
+
+**Reasoning:** The same failure pattern kept appearing in different clothes:
+forms can look submitted while backend mapping is wrong, automations can skip a
+handoff quietly, customer documents can look send-ready while approval/payment
+paths are missing, and containers can appear acceptable in one browser while
+breaking in another. The business risk is the same every time: false success
+creates customer, accounting, or operator trust damage.
+
+**Implementation:** Added the Fail Loudly Law to `AGENTS.md`, `_resources/STYLE-GUIDE.md`,
+the LT capability index, and `.codex/capabilities/recipes/fail-loud-operating-law.md`.
+Linked the law into the automation, intake-form, external-document, and public
+container recipes/workstreams so future agents see it as a cross-surface rule,
+not a narrow automation preference. The agency-level rule was also strengthened
+in the parent Built by Cameron docs.
+
+**Operating standard:** a failure is loud only when it blocks false success and
+leaves actionable evidence for the user/operator, developer, and monitor:
+visible failure or blocked state, exception/nonzero verifier/report row, and
+Error Log/audit JSON/mutation guard/scheduled report when operational.
+
+**Decided by:** GL directive that fail-loud behavior is the mantra for
+automations, rules, form communication, general communication, and container
+contracts.
+
+---
+
 ## 2026-05-08 - Portfolio photos have no captions, no frames, no route footer, and larger desktop scale
 
-**Decision:** `/portfolio` photos render as the photos themselves: no captions,
-no visible frame wrappers, no card backgrounds, no forced aspect boxes that
-create white or cream stripes, and no route-specific Inquire/Studio/Index footer
-block. Desktop photo size is increased 1.5x, but reel density stays at the
-original `density = 1.10`; `photoScale = 1.5` owns size only. Mobile uses
+**Decision:** `/portfolio` photos should render as the photos themselves: no
+captions, no visible frame wrappers, no card backgrounds, no forced aspect boxes
+that create white or cream stripes, and no route-specific Inquire/Studio/Index
+footer block. Desktop photo size is increased 1.5x, but reel density stays at
+the original `density 1.10`; `photoScale 1.5` owns size only. Mobile uses
 full-viewport-width photos with slide-in reveal so the Brave/mobile view has a
 visible change and does not fall back to a narrow static stack.
 
@@ -28,24 +108,39 @@ after the photo field, not proof.
 
 **Implementation:** Removed generated caption markup from
 `lt-portfolio-reel.js`, removed `.lt-frame` wrappers, stopped assigning explicit
-figure heights, made images direct transparent full-width children of
-`.lt-photo`, made mobile photos `100vw`, applied real optimized-image dimensions
-from `PORTFOLIO_REEL_META` after the side/scale slots in `portfolio.py`, and
-bumped `/portfolio` assets to `20260508-no-captions-scale-2`. Split the JS
-controls so `density` returned to `1.10` and new `photoScale` holds the 1.5x
-size increase. Tightened `portfolio_reel.spec.js` so it fails if captions, frame
-wrappers, photo backgrounds, old desktop widths, side-gutter mobile photos,
-image/photo rect mismatches, compressed higher-density vertical rhythm, or the
-route-specific portfolio footer return.
+figure heights, changed the CSS so images are direct transparent full-width
+children of `.lt-photo`, made mobile photos `100vw`, applied real
+optimized-image dimensions from `PORTFOLIO_REEL_META` after the side/scale slots
+in `portfolio.py`, and bumped `/portfolio` assets to
+`20260508-no-captions-scale-2`. After GL rejected the higher-density side
+effect, split the JS controls so `density` returned to `1.10` and new
+`photoScale` holds the 1.5x size increase. Tightened `portfolio_reel.spec.js`
+so it fails if captions, frame wrappers, photo backgrounds, old desktop widths,
+side-gutter mobile photos, image/photo rect mismatches, or compressed
+higher-density vertical rhythm return. Removed the route-specific
+Inquire/Studio/Index footer block from `portfolio.html`, removed the matching
+`.lt-foot*` CSS, and removed `.lt-foot` from `CONTAINER_CONTRACT_ROUTES`.
 
-**Verification receipt:** `python scripts/dev/clear_website_cache.py --restart`
-passed. `npm run test:portfolio-reel` passed 4/4. `npm run test:layout-fit --
---grep "portfolio fits"` passed 13/13. `npm run test:interactive-layout --
---grep portfolio` passed 6/6. A clean Brave mobile check returned 200 with 15
-photos, 0 frame wrappers, 0 captions, first photo visible at 390px wide, second
-photo waiting for scroll, no document overflow, and no page errors. Live DOM
-evidence found `.lt-foot` count 0, no `Portfolio contact` landmark, and none of
-the rejected footer labels.
+**Verification receipt:** The intentional red run failed 3/3 against the old
+state: 15 frame wrappers still existed, mobile photos were only 335px wide on a
+375px viewport, and the largest visible desktop photo was still 648px. After
+implementation, `python scripts/dev/clear_website_cache.py --restart` passed,
+`npm run test:portfolio-reel` passed 4/4, `npm run test:layout-fit -- --grep
+"portfolio fits"` passed 13/13, and `npm run test:interactive-layout -- --grep
+portfolio` passed 6/6. A clean Brave mobile check returned 200 with 15 photos,
+0 frame wrappers, 0 captions, first photo visible at 390px wide, second photo
+waiting for scroll, no document overflow, and no page errors. A follow-up TDD
+guard failed against the accidental high-density rhythm, then passed after
+separating `density` from `photoScale`. Screenshots:
+`output/playwright/portfolio-brave-mobile-no-captions.png`,
+`output/playwright/portfolio-desktop-no-captions-scale.png`, and
+`output/playwright/portfolio-desktop-no-captions-scroll.png`. The footer-block
+removal pass added a verifier guard, passed `npm run test:portfolio-reel` 4/4,
+`npm run test:layout-fit -- --grep "portfolio fits"` 13/13, `npm run
+test:interactive-layout -- --grep portfolio` 6/6, and `npm run
+test:container-contract -- --grep portfolio` 3/3. Live DOM evidence found
+`.lt-foot` count 0, no `Portfolio contact` landmark, and none of the rejected
+footer labels.
 
 **Decided by:** GL rejected captions, containers, white stripes, the old desktop
 scale, the unchanged Brave/mobile experience, higher reel density as the size
@@ -53,6 +148,165 @@ lever, and the route-specific portfolio footer block.
 
 ---
 
+## 2026-05-08 - Portfolio captions sit on photos and mobile must move
+
+**Status:** Superseded later on 2026-05-08 by the no-captions/no-frame-wrapper
+portfolio decision above.
+
+**Decision:** `/portfolio` keeps the approved collage/movement and whole-photo
+proof reel, but the caption contract is now on-photo text with a readable
+gradient overlay. Mobile must not flatten the reel into a static stack; it uses
+a full-width natural-ratio slide-in reveal so the page still feels like a
+designed proof gallery.
+
+**Reasoning:** GL rejected the shipped portfolio state as static and not close
+enough to the desktop movement. The page also failed the intended proof behavior
+because the text sat away from the photos instead of being integrated with the
+collage. Earlier docs that protected captions below the photos are superseded
+by this clarification.
+
+**Implementation:** Updated `lt-portfolio-reel.css` so captions overlay the
+photo frame, converted mobile photos from forced static stacking to a slide-in
+state, added `IntersectionObserver` reveal behavior in `lt-portfolio-reel.js`,
+bumped `/portfolio` asset cache keys in `www/portfolio.html`, and tightened
+`portfolio_reel.spec.js` so it fails captions outside the photo frame or a
+static mobile stack.
+
+**Verification receipt:** The first focused TDD run failed 2/2 against the old
+caption/mobile behavior. After implementation, `python
+scripts/dev/clear_website_cache.py --restart` passed, `npm run
+test:portfolio-reel` passed 4/4, `npm run test:layout-fit -- --grep
+"portfolio fits"` passed 13/13, and `npm run test:interactive-layout -- --grep
+portfolio` passed 6/6. Screenshots were captured at
+`output/playwright/portfolio-slide-caption-desktop-scroll.png`,
+`output/playwright/portfolio-slide-caption-mobile-first.png`, and
+`output/playwright/portfolio-slide-caption-mobile-second.png`.
+
+**Decided by:** GL rejected the static mobile/captions-below implementation and
+asked for the portfolio to move like the design handoff while showing text on
+the photos.
+
+---
+
+## 2026-05-07 - Product option controls stay clear, not boxed
+
+**Decision:** Product detail option controls, including size, latex color,
+add-on selects, variant chips, and the price/add-to-cart grouping, must not
+render as nested boxes or card-like containers. The pickup/delivery panel is
+the current approved framed exception on product pages.
+
+**Reasoning:** GL clarified that removing the lower recommendation panel was not
+enough. The product page still felt tacky and unlike the reference pages because
+the actual option area was ruled by bordered boxes: the configure form, size
+chips, select/dropdown, and price/add-to-cart group. The product page can have a
+major layout container and a clear product-photo stage; variant controls should
+feel like part of the editorial product detail, not a stack of ecommerce cards.
+
+**Implementation:** Added a smoke-test product clear-control contract, removed
+boxed product-control styling from both `lt-theme.css` and
+`lt-product-polish.css`, bumped the theme/product CSS cache keys in `hooks.py`,
+kept `.lt-product__fulfillment` framed, and added the reusable capability
+`.codex/capabilities/recipes/frappe-product-clear-control-contract.md`.
+
+**Verification receipt:** The first red run of `python scripts/verify/smoke_shop.py`
+failed on the live Unicorn Bouquet route because `.lt-product__configure` had
+1px borders, 4px radius, and a box shadow. After the fix,
+`python scripts/dev/clear_website_cache.py --restart` passed and
+`python scripts/verify/smoke_shop.py` passed. Desktop/mobile screenshots were
+captured at `output/playwright/product-page-clear-options-unicorn-1366.png` and
+`output/playwright/product-page-clear-options-unicorn-390.png`; computed styles
+showed product controls with transparent backgrounds, 0 borders, and no shadows,
+while pickup/delivery remained framed.
+
+**Decided by:** GL explicitly rejected boxed product options and asked for the
+contract/capability/lesson to prevent recurrence.
+
+---
+
+## 2026-05-07 - Public route containers are an executable contract
+
+**Decision:** Locally Twisted public pages must declare their route-level
+container structure in code. Every visible direct child of `.page_content` on a
+launch public route must be listed in `CONTAINER_CONTRACT_ROUTES` with an
+explicit mode (`band`, `fullbleed`, `contained`, `clip`, `raw-band`, `root`, or
+`visual-field`). The gate is `npm run test:container-contract`, and it is part
+of `npm run test:website-verify` / `npm run test:public-verify`.
+
+**Reasoning:** GL repeatedly had to call out broken containers because the old
+standard was mostly prose plus scattered CSS. `lt-page-containment.css` existed,
+but it was loaded before later product/shop layers and did not prove route
+ownership. The new gate makes missing top-level surfaces, uncontained inners,
+wrong full-bleed behavior, native crawl scrollbars, and Frappe wrapper drift
+fail loudly.
+
+**Implementation:** Added `scripts/verify/container_contract.spec.js`, expanded
+`scripts/verify/layout_helpers.js` with `CONTAINER_CONTRACT_ROUTES`,
+`CONTAINER_CONTRACT_VIEWPORTS`, and `auditContainerContract`, added
+`npm run test:container-contract`, and inserted it into the website/public
+verification chain. Moved `lt-page-containment.css` later in `web_include_css`
+so it is the final public containment layer after theme/product/shop CSS.
+Repaired real drift caught by the gate: homepage twisting spotlight containment,
+portfolio footer inner wrapper, contact/location raw Bootstrap containers,
+document narrow-width selector specificity, current BTFP route surfaces, and the
+BTFP event crawl context handoff.
+
+**Verification receipt:** First red check failed because the new helper exports
+did not exist. After implementation and repairs, `npm run
+test:container-contract` passed 57/57 across 19 public routes at 320px, 820px,
+and 1366px.
+
+**Alternatives considered:** Keep the rule only in the style guide/capability
+docs. Rejected because prose did not stop repeated regressions. Force every
+section into one max width. Rejected because shop/product showcase and portfolio
+visual-field surfaces need declared exceptions, not accidental one-size layout.
+
+**Decided by:** GL directive to establish a valid container contract everywhere
+after repeated container drift became unmanageable.
+
+---
+
+## 2026-05-07 - Product detail pages do not render ecommerce recommendation panels
+
+**Decision:** Locally Twisted product detail pages should not render Webshop's
+lower Additional Info, Reviews, or Recommended Items panel by default. Product
+pages are supporting retail surfaces for the company, not generic ecommerce
+recommendation pages.
+
+**Reasoning:** GL flagged the `/shop-items/bouquets/unicorn-bouquet` page as
+boxed-in and ecommerce-led, with a random white container under the product
+card. The rendered cause was the Webshop auxiliary product section, styled by
+the product polish layer even when it had no useful customer content. The site
+should sell Locally Twisted's company authority and balloon work; empty product
+recommendation or review containers make the shop feel like the product.
+
+**Implementation:** Removed the Additional Info/Reviews/Recommendations block
+from `templates/generators/item/item.html`, deleted the matching product
+selectors from `lt-product-polish.css` and `lt-shop-showroom.css`, softened the
+primary product detail shell so it is less visibly boxed, bumped the product
+CSS cache keys in `hooks.py`, added a project capability recipe, and added a
+`smoke_shop.py` guard for the removed auxiliary/recommendation selectors.
+
+**Verification receipt:** `python scripts/dev/clear_website_cache.py
+--restart` passed. `python scripts/verify/smoke_shop.py` passed, including
+the new no-auxiliary/recommendation-panel guard and the existing configured
+Unicorn Bouquet add-to-cart flow. `npm run test:layout-fit -- --grep
+"variant-product|single-product|seasonal-category"` passed 39/39. Fresh
+screenshots for `/shop-items/bouquets/unicorn-bouquet` were captured at
+`output/playwright/product-page-company-first-unicorn-1366.png` and
+`output/playwright/product-page-company-first-unicorn-390.png`; the auxiliary
+selector count was 0 in both captures.
+
+**Alternatives considered:** Keep the panel and hide only empty content.
+Rejected because the section still frames product detail as a generic retail
+recommendation surface. Replace it with custom company copy. Deferred because
+company proof belongs in product copy, portfolio, homepage proof, and contact
+surfaces unless GL asks for a product-specific proof module.
+
+**Decided by:** GL asked to delete the product-page recommendation/additional
+panel from every place it existed and document the lesson/capability so it does
+not return.
+
+---
 
 ## 2026-05-07 - Event Playground/OpenClaw handoff uses a planning-only contract
 

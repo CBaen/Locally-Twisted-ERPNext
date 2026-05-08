@@ -48,6 +48,10 @@ import time
 from pathlib import Path
 
 import frappe
+from locally_twisted.catalog_variant_rules import (
+    dedupe_required_variant_rows,
+    required_variant_attribute_names,
+)
 
 # Catalog and mapping paths — relative to bench-bench dir or /workspace mount
 WORKSPACE_PATHS = [
@@ -171,7 +175,8 @@ def _upsert_item_price(item_code: str, price: float):
 def _upsert_template_item(prod: dict, item_group: str, file_url: str | None) -> str:
     """Find-or-create the parent template Item. Returns the item_code."""
     slug = prod["slug"]
-    has_attrs = bool(prod.get("attributes"))
+    variant_attributes = required_variant_attribute_names(prod.get("attributes") or {})
+    has_attrs = bool(variant_attributes)
     item_name = prod["name"][:140]
     description = prod.get("description") or item_name
     base_price = prod.get("base_price")
@@ -193,7 +198,7 @@ def _upsert_template_item(prod: dict, item_group: str, file_url: str | None) -> 
         # Reset attributes child rows to match catalog
         if has_attrs:
             item.attributes = []
-            for attr_name in prod["attributes"].keys():
+            for attr_name in variant_attributes:
                 item.append("attributes", {"attribute": attr_name})
         item.save(ignore_permissions=True)
         return item.name
@@ -213,7 +218,7 @@ def _upsert_template_item(prod: dict, item_group: str, file_url: str | None) -> 
         "image": file_url or "",
         "has_variants": 1 if has_attrs else 0,
         "variant_based_on": "Item Attribute" if has_attrs else None,
-        "attributes": [{"attribute": an} for an in prod["attributes"].keys()] if has_attrs else [],
+        "attributes": [{"attribute": an} for an in variant_attributes] if has_attrs else [],
     })
     item.insert(ignore_permissions=True)
     return item.name
@@ -282,7 +287,7 @@ def _seed_variants(template_code: str, prod: dict, normalize_map: dict, log) -> 
     Returns: number of variants created (excluding existing).
     """
     base_price = prod.get("base_price")
-    valid = prod.get("valid_variants", [])
+    valid = dedupe_required_variant_rows(prod.get("valid_variants", []))
     if not valid:
         return 0
 

@@ -1,6 +1,6 @@
 # Locally Twisted - ERPNext/Frappe Style Guide
 
-**Version:** 4.4
+**Version:** 4.5
 **Last Updated:** 2026-05-08
 **Build Target:** ERPNext v15.105.0 + Frappe v15.106.0 / Webshop
 **Primary Viewport:** Mobile-first, 375px base
@@ -20,7 +20,7 @@ styling.
 
 Use this guide when writing customer-facing copy, building Frappe/Jinja pages,
 styling Webshop surfaces, reviewing visual work, making image selections, drawing
-icons, or briefing GPT/Codex-style coding agents. Version 4.4 keeps the
+icons, or briefing GPT/Codex-style coding agents. Version 4.5 keeps the
 non-negotiable compact hero contract and updates the portfolio correction:
 portfolio photos carry the proof alone, without captions or visible frame
 wrappers, while mobile keeps slide-in motion instead of becoming a static stack.
@@ -39,9 +39,10 @@ wrappers, while mobile keeps slide-in motion instead of becoming a static stack.
 8. **Locally Twisted is the brand.** Jeff can be founder/context; public copy should make the company and team own the promise.
 9. **Every route has a treatment.** Home, shop, product, cart, checkout, contact, portfolio, BTFP, FAQ, policy, payment, header, footer, and drawer surfaces are all covered below.
 10. **ERPNext first.** Work with Frappe/Webshop templates, hooks, and route rules.
-11. **Containers are launch-critical.** Text, images, controls, menus, cards, forms, chips, drawers, and modals must stay inside their containers at breakpoint edges and in open/expanded states.
-12. **Verify visible work.** Do not claim a route, layout, or visual state works without checking it.
-13. **Heroes are compact and standardized.** A hero labels the page; it is not the page. Use the hero height contract below and do not add page-local hero padding or giant title clamps without a documented exception.
+11. **Fail loudly. Always.** Forms, automations, documents, customer messages, route contracts, containers, and agent claims must block false success and leave actionable evidence.
+12. **Containers are launch-critical.** Text, images, controls, menus, cards, forms, chips, drawers, and modals must stay inside their containers at breakpoint edges and in open/expanded states.
+13. **Verify visible work.** Do not claim a route, layout, or visual state works without checking it.
+14. **Heroes are compact and standardized.** A hero labels the page; it is not the page. Use the hero height contract below and do not add page-local hero padding or giant title clamps without a documented exception.
 
 ---
 
@@ -68,6 +69,9 @@ Practical translation:
 ### For GPT/Codex Agents
 
 - Treat this file as the brand and UI source of truth.
+- Treat `If it can fail, it must fail loudly` as the operating law. A route,
+  form, document, automation, container, or claim is not done if failure can
+  look like success.
 - Treat old Odoo, Claude, handoff, and design-competition files as claims to verify.
 - Do not copy implementation language from the Odoo guide into ERPNext work.
 - When this file conflicts with current verified route/form decisions, check
@@ -83,7 +87,7 @@ Practical translation:
 - Avoid `head_html` CSS injection.
 - Avoid `!important` chains. The known exception is the contained `.product-code` hide for Webshop's compiled product-card JS.
 - After Jinja, CSS, or Web Page edits, run `python scripts/dev/clear_website_cache.py`.
-- Before declaring visual work done, run the layout-fit and interactive-layout gates and inspect desktop/mobile screenshots.
+- Before declaring visual work done, run the layout-fit, container-contract, and interactive-layout gates and inspect desktop/mobile screenshots.
 
 ---
 
@@ -116,6 +120,38 @@ Expectations:
 
 ---
 
+## Public Container Contract
+
+Every visible top-level customer-route section must have an explicit container
+mode. This is launch-critical, not polish. The executable source is
+`CONTAINER_CONTRACT_ROUTES` in `scripts/verify/layout_helpers.js`; the gate is
+`npm run test:container-contract`.
+
+Use these modes:
+
+- `band`: normal section with a contained inner wrapper.
+- `fullbleed`: deliberate full-stage visual band using `.lt-fullbleed`; readable
+  content still needs an inner wrapper unless the surface is only a clipped
+  track or visual field.
+- `contained`: the element itself owns the readable/container width.
+- `clip`: crawl/marquee viewport that clips overflow and never exposes a native
+  scrollbar.
+- `raw-band`: simple rule/cookie/support band that stays inside the viewport.
+- `visual-field`: intentional visual exception such as the portfolio reel.
+
+Rules:
+
+- Do not depend on Frappe's `main.container` to create the visual page width.
+  LT neutralizes it so each route owns its containers explicitly.
+- Do not add a public route or direct `.page_content` child without adding it to
+  the route contract.
+- Do not add a full-bleed section without `.lt-fullbleed` and either an inner
+  wrapper, a clipped track, or a documented `visual-field` exception.
+- Keep the shared containment layer late in `web_include_css` so it remains the
+  final public-site safety layer after theme/product/shop CSS.
+
+---
+
 ## Existing Page And Element Coverage
 
 This guide covers the customer-visible routes and reusable elements currently
@@ -132,16 +168,16 @@ component is added, append it here before a broad implementation swarm begins.
 | Home | `/`, `www/home.html`, `www/home.py` | Highest brand authority page | Civic/Utah hero image, Cormorant hero type, Google reviews immediately after the hero, no homepage trust bar unless GL reopens it, large recent-work photos after reviews, custom decor discovery, client proof, closing CTA. |
 | Shop landing | `/shop`, `www/shop.html` | Ready-to-order retail lane | Still premium but more practical. Keep filters, product cards, and add-to-cart clear; use restrained surfaces so product color carries the page. |
 | Category / item group listing | `/shop-items/<group>`, Item Group generator | Product discovery | Use editorial shop header, left/sidebar filters on desktop, drawer filters on mobile, stable grid cards, visible count/sort state, and product color as the visual accent. |
-| Product detail/configure | Webshop item overrides under `templates/generators/item/` | Conversion and product clarity | Product image first, Cormorant product name, Lato specs/options, clear price and stock. Fixed-price products stay cartable; product group alone must not create a quote-only failure. Out-of-area delivery redirects to a prefilled `/contact` quote path. |
+| Product detail/configure | Webshop item overrides under `templates/generators/item/` | Conversion and product clarity | Product image first, Cormorant product name, Lato specs/options, clear price and stock. Fixed-price products stay cartable; product group alone must not create a quote-only failure. Out-of-area delivery redirects to a prefilled `/contact` quote path. Do not render generic Additional Info, Reviews, or Recommended Items panels unless GL explicitly reopens that ecommerce decision. Product option controls must be clear, not boxed; pickup/delivery is the approved framed product-detail exception. |
 | Cart | `/cart` -> `www/lt_cart.html` | Review before checkout | Quiet transactional page with order-summary hierarchy, stable quantity controls, clear empty/error/loading states, and contact fallback. |
 | Checkout | `/checkout`, `www/checkout.html` | Payment trust | Most restrained surface: secure, plain, readable, minimal ornament. Keep form labels clear, required states visible, summary grounded, and trust language factual. If delivery ZIP is outside the configured zone, show a delivery quote request path and carry checkout details into `/contact`; do not imply the product itself became unpurchasable. |
 | Event Playground / Plan Custom Decor | Hidden `/event-playground`, `www/event_playground.html`, local Vite PlayCanvas iframe | Internal decor-planning preview and contact-form handoff; parked for OpenClaw | Game-like but premium. Keep the Frappe shell in Civic/Slate/Berry styling, isolate the local canvas preview from site CSS, keep mobile controls 44px+, and clearly say final quote, install method, measurements, weather limits, and availability are confirmed by Locally Twisted before booking. Browser-preview copy can say `Plan Custom Decor`; the workstream/route remain Event Playground until renamed by decision. Render counts are planning visuals, not quote math. Do not add public navigation, a production bundle, backend saves, automatic Lead/Quote/Sales Order creation, share links, pricing, or checkout behavior until approved. |
 | Payment success | `/payment-success`, `www/payment_success.html` | Transitional utility page | Use the same typography and colors as thank-you; avoid inline one-off font/color styles in future cleanup. |
 | Thank you | `/thank-you`, `www/thank_you.html` | Post-payment reassurance | Calm, premium confirmation with order facts, no confetti energy, clear next step. |
-| Contact/inquiry | `/contact`, `templates/includes/book_form.html` | Main custom-work conversion | Dark civic intro, two-column form/info layout on desktop, large Cormorant heading, warm form fields, brass or berry focus, company/team copy. |
+| Contact/inquiry | `/contact`, `templates/includes/book_form.html` | Main custom-work conversion | Dark civic intro, two-column form/info layout on desktop, large Cormorant heading, white form surface, warm/stone fields, Deep Navy primary action/focus, Brass focus ring, Berry only for required/error states, company/team copy. |
 | Legacy book | `/book` | Compatibility path | Redirect or visually match contact if rendered. Do not make `/book` the primary public CTA unless the route decision changes. |
 | Portfolio | `/portfolio`, `www/portfolio.html` | Proof gallery | Photos are the product. Keep the approved collage/movement and whole-photo reel, but use the native LT shell, sitewide Cormorant/Lato typography, and branded compact hero copy. Do not render captions, visible frame wrappers, letterbox bands, card containers, or a route-specific Inquire/Studio/Index footer block on the photos/page field. Mobile must reveal full-width photos with slide-in motion instead of becoming a static stack. Do not copy prototype page chrome, custom cursor, route-local Google font imports, or off-brand hero copy. |
-| Balloon twisting / face painting | `/balloon-twisting-and-face-painting` | First-class live-service lane | Can be warmer and more playful in photos, but still structured: editorial intro, service cards, spec rows, booking steps, events list, FAQ, contact CTA. |
+| Balloon twisting / face painting | `/balloon-twisting-and-face-painting` | First-class live-service lane | Can be warmer and more playful in photos, but still structured: editorial intro, service cards, event-type crawl, shared inquiry section, and expectation card. |
 | FAQ | `/faq` | Objection handling | Clean grouped questions, generous line height, details/accordion states accessible, CTA to contact. No decorative clutter. |
 | Policies | `/privacy`, `/terms-of-service`, `/refund-policy`, `/accessibility` | Legal and trust surface | Warm-white document layout, narrow readable measure, Cormorant H1/H2, Lato body, brass/berry links only where useful. |
 | Search and Frappe utility pages | `/search`, login/account flows where Frappe owns chrome | Utility wayfinding | Keep global shell consistent. Do not invent a separate visual language for low-frequency utility screens. |
@@ -162,9 +198,9 @@ Current primary navigation is `Event Balloons`, `Portfolio`,
 | Hero sections | `lt-hero`, `lt-shop__hero`, `lt-portfolio-hero`, page intros | Cormorant headings, Lato labels, real proof imagery where possible, dark authority bands for civic/company pages, warmer light headers for product/legal pages. |
 | Photo cards / proof reels | Featured work, portfolio reel, product cards, BTFP service cards | Preserve real work. Product cards can crop tighter; proof/portfolio surfaces need context, scale, natural image ratios, and movement where the route contract calls for it. Portfolio photos are not caption cards; use the image itself with no visible frame wrapper. |
 | Filters/chips | Shop chips, portfolio pills, category filters, product option chips | Rectangular or lightly rounded, Lato 700, visible selected state, and restrained selected/hover states. |
-| Forms | Contact/book form, checkout, newsletter | Lato labels, warm/stone inputs, visible focus, clear required text, loud error state, no placeholder-only labels. |
+| Forms | Contact/book form, checkout, newsletter | Lato labels, white form surface, warm/stone inputs, visible Deep Navy/Brass focus, clear required text, loud Berry error state, no placeholder-only labels, no duplicate page-specific form systems. |
 | CTAs | Hero/contact/shop/cart/checkout buttons | Primary is berry/crimson or deep navy. Secondary is transparent outline. Keep labels plain and short. |
-| Accordions/details | FAQ, BTFP FAQ, mobile nav accordions | Large hit areas, clear expanded state, keyboard support, no tiny chevrons as the only signal. |
+| Accordions/details | FAQ and mobile nav accordions | Large hit areas, clear expanded state, keyboard support, no tiny chevrons as the only signal. |
 | Drawers/modals | Mobile nav, portfolio modal, cart/filter drawers | Dark/warm brand surfaces, focusable close buttons, trapped/managed focus where modal, no visual jump or hidden overflow. |
 | Reviews | Home review block, future testimonials | Support proof, do not lead the brand. Verify current rating/count before publishing numbers. |
 | Logo/client crawl | Home client proof | Use text/category proof unless logo permission is confirmed. Homepage proof crawls move left-to-right at matched visible speed; keep movement slow, linear, pauseable, and scrollbar-free in normal and reduced-motion states unless the business-proof contract changes. |
@@ -422,10 +458,21 @@ Rules:
 
 ### Forms
 
-- Field backgrounds use Warm Tint or Stone Tint, not harsh white.
-- Borders are subtle: light gray or none.
-- Focus states use a visible Ink outline or Brass border/ring.
-- Placeholder text is lighter gray.
+- Shared inquiry forms use `templates/includes/book_form.html` and declare
+  `data-form-contract="inquiry-v1"`. Do not fork a second public inquiry form
+  for a service page; pass scoped context into the shared partial instead.
+- The form surface is white with a thin Deep Navy top rule, restrained border,
+  and no nested card-inside-card styling. Page sections own surrounding layout.
+- Field backgrounds use Warm White or Stone, not blue-tinted inputs and not
+  placeholder-only labels.
+- Labels are visible, Lato, compact, and clear. Required markers use Berry;
+  errors use Berry and must fail loudly.
+- Focus states use Deep Navy with a Brass ring so keyboard users can see the
+  active field without the form turning decorative.
+- Service choices are structured options with selected state, not a loose list
+  of raw checkboxes. Conditional panels use a Deep Navy left rule.
+- Primary form actions are Deep Navy; Berry is reserved for hover/action energy,
+  required marks, and loud failure states.
 - Group related inputs with fieldsets and legends where appropriate.
 - Public form copy should be plain and customer-friendly.
 
@@ -449,6 +496,10 @@ Do not reintroduce `Delivery Only`, `Pickup Only`, or `Event Package`.
 - Card names use Ink.
 - Body copy uses Soft Gray.
 - Border radius: 8px unless an existing Frappe/Webshop component requires otherwise.
+- Product detail pages are not card stacks. Product options such as size, latex
+  color, add-on numbers, chips, selects, and price/add-to-cart groups must not
+  be boxed. Keep the pickup/delivery notice as the approved framed exception;
+  do not add recommendation or empty auxiliary product panels.
 
 ### Header And Navigation
 
@@ -674,17 +725,19 @@ Before claiming visual/frontend work is complete:
 1. Clear website cache after Jinja/CSS/Web Page edits.
 2. Run relevant route or form checks.
 3. Run `npm run test:layout-fit` for passive customer-site layout fit.
-4. Run `npm run test:interactive-layout` for open menus, drawers, modals, forms, filters, product controls, and breakpoint behavior.
-5. Run `npm run test:checkout-experience` when checkout layout or fulfillment preview behavior is in scope.
-6. Run `npm run test:public-verify` before closing a broad public-site visual change.
-7. Capture and inspect desktop and mobile screenshots.
-8. Verify the actual route or user flow, not a proxy page.
+4. Run `npm run test:container-contract` for route-level section ownership, full-bleed/contained modes, and crawl clipping.
+5. Run `npm run test:interactive-layout` for open menus, drawers, modals, forms, filters, product controls, and breakpoint behavior.
+6. Run `npm run test:checkout-experience` when checkout layout or fulfillment preview behavior is in scope.
+7. Run `npm run test:public-verify` before closing a broad public-site visual change.
+8. Capture and inspect desktop and mobile screenshots.
+9. Verify the actual route or user flow, not a proxy page.
 
 Useful commands:
 
 ```powershell
 python scripts/dev/clear_website_cache.py
 npm run test:layout-fit
+npm run test:container-contract
 npm run test:interactive-layout
 npm run test:checkout-experience
 npm run test:public-verify

@@ -1,6 +1,6 @@
 # Shop Workstream
 
-Last updated: 2026-05-06 by Codex.
+Last updated: 2026-05-07 by Codex.
 
 ## Outcome
 
@@ -10,7 +10,7 @@ This is the active feature-lane handoff for shop work. `HANDOFF.md` remains vali
 
 ## Current Stage
 
-Active handoff lane. The guest cart/checkout item-code contract, broad browse routing, first variant-media reconciliation pass, per-product variant correctness diff, category-media candidate packet, 2026-05-06 shop showroom container redesign, and same-day symmetry repair are in place. The 2026-05-06 commerce-rules checkout slice now has its own lane at `workstreams/commerce-rules-checkout.md`; keep shop layout/media work coordinated with that checkout contract. The next shop work should continue with Jeff/GL media approval before assigning category/product media.
+Active handoff lane. The guest cart/checkout item-code contract, broad browse routing, first variant-media reconciliation pass, per-product variant correctness diff, category-media candidate packet, 2026-05-06 shop showroom container redesign, same-day symmetry repair, and 2026-05-07 product-detail company-first/clear-control cleanup are in place. Product detail pages no longer render Webshop's lower Additional Info/Reviews/Recommendations panel, and product option controls no longer render as nested boxes. `smoke_shop.py` guards against both the auxiliary/recommendation selectors and boxed product controls returning. The 2026-05-06 commerce-rules checkout slice now has its own lane at `workstreams/commerce-rules-checkout.md`; keep shop layout/media work coordinated with that checkout contract. The next shop work should continue with Jeff/GL media approval before assigning category/product media, then product photo/options polish from real product states.
 
 Priority order from the current queue:
 
@@ -85,11 +85,13 @@ Reference and verification files:
 - `scripts/setup/sync_variant_media.py`
 - `scripts/verify/nav_ia.py`
 - `scripts/verify/layout_fit.spec.js`
+- `.codex/capabilities/recipes/frappe-product-page-company-first.md`
+- `.codex/capabilities/recipes/frappe-product-clear-control-contract.md`
 
 ## Known Current Facts
 
 - Phase 1 shop surfaces are live or compatibility-safe: `/shop`, `/shop-by-category` redirecting to `/shop`, `/shop-items/<group>`, `/shop-items/<group>/<slug>`, `/cart`, `/checkout`, `/payment-success`, and `/thank-you`.
-- Current live DB state verified 2026-05-06 is 53 Website Items, 10,633 Items, 49 variant templates, 6 non-variant root Items, 10,578 variants, 10,615 Item Prices, 32,002 Item Variant Attribute rows, and 26 Item Attributes. The 6 non-variant root Items are 4 catalog single-SKU products plus 2 delivery service Items. Re-check live DB counts before changing seed logic or making claims from these numbers.
+- Current live DB state verified 2026-05-08 is 53 Website Items, 10,672 Items, 49 variant templates, 6 non-variant root Items, 10,227 active customer-facing variants, 390 disabled legacy optional-add-on variants, 10,617 all variant records, 10,654 Item Prices, 32,028 Item Variant Attribute rows, and 26 Item Attributes. The 6 non-variant root Items are 4 catalog single-SKU products plus 2 delivery service Items. Re-check live DB counts before changing seed logic or making claims from these numbers.
 - Item Group hierarchy under `Shop Items` has 11 customer-facing children: Arches, Columns, Bouquets, Get-Well Bouquets, Garlands, Drops, Grab & Go, Table Decor, Stands & Easels, Deliveries, and Seasonal & Specialty.
 - Webshop settings are documented with variants and attribute filters enabled.
 - Bulk catalog import lives in `seed_catalog.py` and honors captured Odoo `data-attribute-exclusions`.
@@ -97,6 +99,7 @@ Reference and verification files:
 - `/shop` is the all-decor hub. `/shop-items`, `/all-products`, and `/shop-by-category` route or redirect to `/shop`; category detail pages stay at `/shop-items/<group>`.
 - `/shop-items/arches` previously required restoring `.item-group-content`; do not remove that structure without retesting group pages.
 - Shop showroom container redesign completed 2026-05-06: `/shop` uses large photo-first ready-to-order cards; `/shop-items` aliases to the `/shop` showroom contract; `/shop-items/<group>` keeps Webshop/Frappe product listing behavior while using the LT showroom shell; product detail pages use a wider contained image/detail layout. The shared override is `lt-shop-showroom.css`, loaded after `lt-product-polish.css`.
+- Product detail company-first cleanup completed 2026-05-07: the Webshop lower Additional Info/Reviews/Recommended Items panel is removed from product detail pages, the old auxiliary/recommendation CSS selectors are gone, and the primary product shell is less visibly boxed. The same-day clear-control correction removed boxed styling from product options, variant chips, select/dropdowns, and price/add-to-cart groups; pickup/delivery is the approved framed product-detail exception. Do not restore recommendation panels, empty reviews/spec tabs, generic upsell sections, or boxed product controls unless GL explicitly reopens the decision. Capabilities: `.codex/capabilities/recipes/frappe-product-page-company-first.md` and `.codex/capabilities/recipes/frappe-product-clear-control-contract.md`.
 - Shop category navigation UX repair completed 2026-05-06: the old `/shop` chip filter wall and `/shop-items/<group>` 12-button tile wall are retired. Both `/shop` and category pages use the shared `shop_category_nav.html` component: a slim desktop left rail and a native mobile category select. `/shop` category choices now navigate to category pages instead of filtering in place; product grids still avoid a single desktop orphan card where the rendered count makes that possible.
 - Verified showroom measurements on 2026-05-06: `/shop` desktop cards remain above the `340px` card and `300px` image minimums with the category rail present, `/shop` mobile cards remain non-thumbnail, `/shop-items/arches` desktop cards remain showroom-sized in paired rows, and the representative product detail image remains above the desktop image-size contract.
 - The guest cart is localStorage-based at `/cart`, supports multi-item checkout, and connects to Stripe Checkout Sessions in test mode.
@@ -108,8 +111,8 @@ Reference and verification files:
 - Detailed media review is now reproducible with `python scripts/setup/sync_variant_media.py --dry-run --include-details --report output/catalog-media-review.json`. Latest refreshed report on 2026-05-06: 49 products checked, 35 with candidate image labels, 45 needing review, 1,712 unchanged mapped variants, and 6,831 skipped variant image assignments.
 - Category browse media review is now reproducible with `python scripts/verify/category_media_candidates.py`. Latest generated packet on 2026-05-06 found first-pass product-source quick picks for all 11 empty customer-facing Item Groups and wrote ignored local reports to `output/category-media-candidates.json` and `output/category-media-candidates.md`. `python scripts/setup/sync_category_media.py --write-template` creates an approval template, and the dry-run helper stages approved selections through Frappe without writing unless `--apply` is used. No ERPNext image fields were changed.
 - Product breadcrumbs on detail pages now start at `All Balloon Decor` instead of the retired `Shop by Category` route.
-- Per-product variant correctness passed on 2026-05-02: `scripts/verify/catalog_variant_contract.py` checked all 53 catalog products, comparing normalized Odoo `valid_variants` to live ERPNext `Item Variant Attribute` rows. Result: 10,578 expected variants, 10,578 live variants, 4 single-SKU products, PASS.
-- Product option UX P0 pass completed 2026-05-02: no per-attribute Jinja DB lookup, progressive invalid-option disabling wired to `valid_options_for_attributes`, and chip inputs verified as radio/single-select.
+- Per-product variant correctness now compares normalized Odoo `valid_variants` to active, required-choice ERPNext variants. Current pass on 2026-05-08: `scripts/verify/catalog_variant_contract.py` checked all 53 catalog products with 10,227 expected active variants, 10,227 live active variants, 4 single-SKU products, PASS. Disabled legacy optional-add-on variants are intentionally ignored by this customer-facing contract.
+- Product option UX P0 pass completed 2026-05-02: no per-attribute Jinja DB lookup, progressive invalid-option disabling wired to `valid_options_for_attributes`, and chip inputs verified as radio/single-select. Active uncommitted work may also be refining variant starting-price display; verify before claiming that slice complete.
 - `.product-code` CSS hiding is the known intentional `!important` exception.
 - The stale Webshop generated asset map was corrected in the running ERPNext stack on 2026-05-02. No package install was needed: Yarn Classic exists at `/home/frappe/.nvm/versions/node/v20.19.2/bin/yarn`, but non-interactive `docker exec` does not include it in `PATH`. Build Webshop assets with `export PATH=/home/frappe/.nvm/versions/node/v20.19.2/bin:$PATH`. The frontend/nginx container must be built last because shared `assets.json` points to files served from that container's app-public symlink. Current rendered `/shop` references `/assets/webshop/dist/css/webshop-web.bundle.C4VO6TJ6.css` and `/assets/webshop/dist/css-rtl/webshop-web.bundle.JDOEFDY5.css`, both returning `200 text/css`; Playwright console sweeps returned 0 errors/warnings.
 - A 320px category-grid overflow on `/shop-items/seasonal-specialty` was fixed by overriding Webshop's stock `.item-card { min-width: 300px; }` with `min-width: 0` inside `#products-grid-area .item-card`; `npm run test:layout-fit` passes 60/60 after the fix.
@@ -134,6 +137,7 @@ Reference and verification files:
 - Do not remove ERPNext structures needed by Website Item, Item Group, cart, checkout, or payment cascade without verifying the whole purchase flow.
 - Do not split work by generic frontend/backend ownership. Keep this lane organized around the customer-facing shop outcome.
 - Do not make broad visual changes before checking variant validity and media completeness for the products being redesigned.
+- Do not restore Webshop recommendation panels, empty auxiliary product detail boxes, or boxed product option controls as a substitute for company proof.
 
 ## Verification
 
@@ -169,6 +173,24 @@ Latest showroom-focused verification on 2026-05-06:
 - `npm run test:interactive-layout -- --grep "/shop category navigation"` passed 4/4.
 - Browser screenshot and geometry checks were refreshed for `/shop`, `/shop-items/arches`, `/shop-items/get-well-bouquets`, and `/shop-items/garlands/baby-shower-garland`; transient screenshot folders were not kept as source.
 - The category navigation repair verified no `.lt-shop__chip` controls on `/shop`, no old `.lt-shop__toolbar--categories` button wall on category pages, one 12-link desktop category rail, one 12-option mobile category select, and paired Arches product rows on `/shop-items/arches`.
+
+Product-detail company-first verification on 2026-05-07:
+
+- `python scripts/dev/clear_website_cache.py --restart` passed.
+- `python scripts/verify/smoke_shop.py` passed, including the new
+  no-auxiliary/recommendation-panel guard.
+- `npm run test:layout-fit -- --grep "variant-product|single-product|seasonal-category"`
+  passed 39/39.
+- Fresh Unicorn Bouquet desktop/mobile screenshots were captured at
+  `output/playwright/product-page-company-first-unicorn-1366.png` and
+  `output/playwright/product-page-company-first-unicorn-390.png`.
+- Same-day clear-control verification added a red/green smoke guard: the first
+  `python scripts/verify/smoke_shop.py` run failed on `.lt-product__configure`
+  because the live route still had borders/radius/shadow; after clearing the
+  product controls in CSS, `python scripts/dev/clear_website_cache.py --restart`
+  and `python scripts/verify/smoke_shop.py` passed. Fresh screenshots are in
+  `output/playwright/product-page-clear-options-unicorn-1366.png` and
+  `output/playwright/product-page-clear-options-unicorn-390.png`.
 
 For cache-sensitive Website Route or template changes:
 

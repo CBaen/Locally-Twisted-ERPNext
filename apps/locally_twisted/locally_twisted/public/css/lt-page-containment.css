@@ -22,6 +22,7 @@
   .lt-categories,
   .lt-crawl,
   .lt-cta,
+  .lt-twisting-spotlight,
   .lt-contact__intro,
   .lt-contact,
   .lt-authority-page,
@@ -36,10 +37,8 @@
   .lt-btfp__intro,
   .lt-btfp__banner,
   .lt-btfp__services,
-  .lt-btfp__process,
-  .lt-btfp__events,
-  .lt-btfp__contact-cta,
-  .lt-btfp__faq,
+  .lt-btfp__event-crawl,
+  .lt-btfp__booking,
   .lt-faq,
   .lt-policy,
   .lt-accessibility,
@@ -62,6 +61,7 @@
   .lt-categories,
   .lt-crawl,
   .lt-cta,
+  .lt-twisting-spotlight,
   .lt-portfolio-hero,
   .lt-portfolio__hero,
   .lt-portfolio-ribbon,
@@ -69,7 +69,7 @@
   .lt-portfolio-grid,
   .lt-btfp__intro,
   .lt-btfp__banner,
-  .lt-btfp__faq,
+  .lt-btfp__event-crawl,
   .lt-authority-page .lt-fullbleed,
   .lt-fullbleed
 ) {
@@ -86,9 +86,7 @@
   .lt-contact__intro,
   .lt-contact,
   .lt-btfp__services,
-  .lt-btfp__process,
-  .lt-btfp__events,
-  .lt-btfp__contact-cta,
+  .lt-btfp__booking,
   .lt-faq,
   .lt-policy,
   .lt-accessibility,
@@ -107,7 +105,10 @@
   .lt-featured__inner,
   .lt-crawl__heading,
   .lt-cta__inner,
+  .lt-twisting-spotlight__inner,
   .lt-contact__intro > .container,
+  .lt-contact > .container,
+  .lt-locations > .container,
   .lt-contact__grid,
   .lt-authority-hero__inner,
   .lt-authority-section__inner,
@@ -120,10 +121,7 @@
   .lt-btfp__intro-inner,
   .lt-btfp__banner-inner,
   .lt-btfp__services-grid,
-  .lt-btfp__process-inner,
-  .lt-btfp__events-inner,
-  .lt-btfp__contact-cta-inner,
-  .lt-btfp__faq-inner,
+  .lt-btfp__booking-grid,
   .lt-faq__inner,
   .lt-policy__inner,
   .lt-accessibility__inner,
@@ -139,14 +137,13 @@
   min-width: 0;
 }
 
-.lt-fullbleed > :is(:not(.lt-hero__image):not(.lt-crawl__viewport):not(style):not(script)) {
+.lt-fullbleed > :is(:not(.lt-hero__image):not(.lt-crawl__viewport):not(.lt-btfp__event-crawl-viewport):not(style):not(script)) {
   max-width: 100%;
   min-width: 0;
 }
 
 .lt-categories > :is(.lt-categories__heading, .lt-categories__lede, .lt-categories__grid),
-.lt-portfolio-ribbon > *,
-.lt-btfp__ribbon > * {
+.lt-portfolio-ribbon > * {
   box-sizing: border-box;
   width: min(var(--lt-page-max), 100%);
   max-width: 100%;
@@ -155,7 +152,9 @@
   min-width: 0;
 }
 
-:is(.lt-policy__inner, .lt-accessibility__inner, .lt-faq__inner) {
+.lt-policy .lt-policy__inner,
+.lt-accessibility .lt-accessibility__inner,
+.lt-faq .lt-faq__inner {
   width: min(var(--lt-page-narrow), 100%);
 }
 
@@ -179,13 +178,13 @@
   .lt-book__services,
   .lt-locations__grid,
   .lt-featured__grid,
+  .lt-twisting-spotlight__inner,
   .lt-categories__grid,
   .lt-portfolio-filter__inner,
   .lt-portfolio-filter__pills,
   .lt-portfolio-grid__cards,
   .lt-btfp__services-grid,
-  .lt-btfp__process-list,
-  .lt-btfp__events-list,
+  .lt-btfp__booking-grid,
   .lt-cart__layout,
   .lt-checkout__container,
   .lt-checkout__row
@@ -204,12 +203,15 @@
   .lt-book__form-wrap,
   .lt-book__field,
   .lt-featured__card,
+  .lt-twisting-spotlight__body,
   .lt-categories__item,
   .lt-portfolio-card,
   .lt-portfolio-filter__pill,
   .lt-btfp__service-card,
-  .lt-btfp__process-item,
-  .lt-btfp__events-row,
+  .lt-btfp__form-wrap,
+  .lt-btfp__side,
+  .lt-btfp__calculator,
+  .lt-btfp__expect-card,
   .lt-faq__group,
   .lt-faq__item,
   .lt-policy__list,

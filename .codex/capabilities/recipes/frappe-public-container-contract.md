@@ -7,9 +7,9 @@ maturity: candidate
 scope: Locally Twisted ERPNext/Frappe public page shell, full-bleed sections, Webshop containment, and container ownership
 currently_true: yes
 verification_level: 2
-last_verified: 2026-05-06
+last_verified: 2026-05-07
 evidence_quality: direct
-successful_uses: 1
+successful_uses: 2
 failed_uses: 0
 regressions: 0
 depends_on: []
@@ -54,9 +54,39 @@ Those rules set the page wrapper to `max-width: 100%` and zero horizontal paddin
 
 `lt-page-containment.css` is the active LT containment layer. It defines gutters, max widths, full-bleed breakouts, and inner wrappers for LT pages.
 
+Mantra: if it can fail, it must fail loudly. For containers, that means missing
+top-level route sections, wrong full-bleed modes, missing inner wrappers,
+uncontained readable content, native crawl scrollbars, and document overflow
+must fail the route contract. Do not rely on body-level overflow hiding,
+browser luck, or screenshots alone.
+
+The executable route contract lives in `scripts/verify/layout_helpers.js` as
+`CONTAINER_CONTRACT_ROUTES`, and the Playwright gate is
+`scripts/verify/container_contract.spec.js`. Every visible direct child of
+`.page_content` on a launch public route must be declared there, and every
+declared surface must use one of the measured modes below. New public routes or
+new top-level sections are not complete until this contract is updated and
+`npm run test:container-contract` passes.
+
 ## Layout Modes
 
 Every public section must choose one of these modes before CSS is written.
+
+Executable mode names:
+
+- `root`: route root that owns its descendants and must stay inside the viewport.
+- `band`: normal route band with a declared contained inner wrapper.
+- `fullbleed`: full-stage visual band using `.lt-fullbleed`; readable content
+  must still have declared inner containment unless the surface is purely
+  visual or a clipping track.
+- `contained`: the element itself is the contained surface.
+- `clip`: crawl/marquee viewport that must use `overflow-x: hidden` or `clip`
+  and, when marked `clipMustSpan`, span the full stage.
+- `raw-band`: simple band/rule/cookie surface that must stay inside the
+  viewport and must not expose a native scrollbar.
+- `visual-field`: intentionally unusual visual field, such as the portfolio
+  reel, where document overflow is still forbidden but an inner content wrapper
+  is not the right model.
 
 **Contained workflow or reading surface**
 
@@ -107,8 +137,12 @@ Checked on 2026-05-06 against the running local stack:
 3. Classify each changed section as contained workflow/reading surface or deliberate full-bleed band.
 4. Preserve Frappe/Webshop hooks first; wrap or style around them.
 5. Use the LT containment layer for gutters and inner width. Avoid one-off negative margins or viewport-width tricks unless they match the shared `.lt-fullbleed` pattern.
-6. Run the responsive container audit and motion verification when the change involves animated crawls, carousels, clipping, or media-query fallbacks.
-7. Capture desktop and mobile screenshots before claiming the page is ready for GL review.
+6. Add or update `CONTAINER_CONTRACT_ROUTES` for new top-level sections before
+   declaring the route complete.
+7. Run `npm run test:container-contract` after any route, Jinja, Webshop,
+   full-bleed, crawl, or shared containment change.
+8. Run the responsive container audit and motion verification when the change involves animated crawls, carousels, clipping, or media-query fallbacks.
+9. Capture desktop and mobile screenshots before claiming the page is ready for GL review.
 
 ## Red Flags
 
@@ -124,3 +158,12 @@ Checked on 2026-05-06 against the running local stack:
 ## LT Receipt
 
 On 2026-05-06, GL flagged a mismatch between Frappe-native boxing, LT full-bleed sections, the business crawl, and the review carousel. Local research confirmed that LT had intentionally neutralized Frappe's stock `main.container` and moved visual containment into LT CSS, but that contract was scattered across old lessons and inline comments. This recipe makes the standard explicit: keep Frappe/Webshop lifecycle and hooks, but require every LT public section to choose either contained workflow/reading mode or deliberate full-bleed band mode with its own inner containment and browser verification.
+
+On 2026-05-07, the prose contract became executable. The first red run caught
+the missing helper export; the full route matrix then exposed real drift:
+homepage twisting spotlight missing shared containment, portfolio footer lacking
+an inner wrapper, contact using raw Bootstrap containers, document pages losing
+their narrow-width override through selector specificity, BTFP contract drift
+after the event-crawl/inquiry page change, and the BTFP event crawl data not
+rendering. The repaired gate now passes 57/57 checks across 19 public routes at
+320px, 820px, and 1366px.

@@ -52,6 +52,10 @@ The current LT gate uses:
 
 - `scripts/verify/layout_helpers.js` for shared route/viewport/layout audit logic.
 - `scripts/verify/layout_fit.spec.js` for passive public route fit.
+- `scripts/verify/container_contract.spec.js` for the executable route-level
+  container contract: visible top-level `.page_content` children, full-bleed
+  declarations, inner wrapper max widths, clipping surfaces, and Frappe wrapper
+  neutralization.
 - `scripts/verify/interactive_layout.spec.js` for stateful UI: header breakpoints, desktop mega panels, mobile drawer accordions, shop filters/product selectors, contact conditionals, portfolio front-photo state, and reduced-motion homepage checks.
 - `scripts/verify/checkout_experience.spec.js` for checkout state behavior and preview consistency.
 - `npm run test:public-verify` for the aggregate public verification chain.
@@ -105,13 +109,14 @@ Add route-specific widths when the changed surface has its own breakpoint.
 ```powershell
 python scripts/dev/clear_website_cache.py
 npm run test:layout-fit
+npm run test:container-contract
 npm run test:interactive-layout
 npm run test:checkout-experience
 python scripts/verify/smoke_shop.py
 npm run test:public-verify
 ```
 
-Use `npm run test:public-verify` when closing a broad public-site visual change. It runs nav IA, passive layout fit, interactive layout fit, checkout experience, and shop smoke with quieter Playwright output.
+Use `npm run test:public-verify` when closing a broad public-site visual change. It runs nav IA, passive layout fit, the route-level container contract, interactive layout fit, checkout experience, portfolio reel, and shop smoke with quieter Playwright output.
 
 ## Triage Notes
 
@@ -129,3 +134,9 @@ Use `npm run test:public-verify` when closing a broad public-site visual change.
 The first use on 2026-05-05 expanded `npm run test:layout-fit` from a narrow route/viewport pass to 260 checks across 20 public routes and 13 viewport families. It also added `npm run test:interactive-layout` with stateful checks for header breakpoint behavior, desktop mega panels, mobile drawer accordions, shop/product controls, contact conditionals, portfolio state, and reduced-motion homepage states. On 2026-05-06, the portfolio state check moved from the superseded modal behavior to the current proof-reel front-photo behavior. On 2026-05-07, the unapproved `/process` route was removed and homepage/nav proof checks expanded the gate to `layout-fit` 247/247 and `interactive-layout` 74/74; the compact hero contract then expanded the current interactive gate to 88/88. `python scripts/verify/smoke_shop.py` was corrected to respect the quote-required custom install lane while still verifying retail inline variant selection and cart writes.
 
 The 2026-05-06 shop showroom repair added a symmetry-specific supplement, then the same-day UX repair superseded the button-grid category controls: `/shop` and `/shop-items/<group>` now use a desktop category rail plus native mobile select, and category/product grids must not leave a single desktop orphan card when a balanced 2-up split is available.
+
+On 2026-05-07, the route-level container contract became executable via
+`scripts/verify/container_contract.spec.js` and `npm run
+test:container-contract`. The gate currently passes 57/57 checks across the
+launch public route list at 320px, 820px, and 1366px, and is now part of
+`npm run test:website-verify` / `npm run test:public-verify`.

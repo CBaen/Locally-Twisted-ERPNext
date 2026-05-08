@@ -16,6 +16,7 @@
 {% if shopping_cart and shopping_cart.cart_settings.enabled and (cart_settings.enable_variants | int) %}
 {%- set lt_checkout_lane = checkout_lane_for_item_group(doc.item_group) -%}
 {%- set lt_variant_attributes = get_variant_attribute_options(doc.item_code) or [] -%}
+{%- set lt_starting_price_display = get_variant_starting_price_display(doc.item_code) -%}
 
 {% if lt_checkout_lane == "quote_required" %}
 <div class="lt-product__cart" data-variant-item-code="">
@@ -79,7 +80,9 @@
     {# Price + Add-to-Cart, populated by JS once a complete combination is selected #}
     <div class="lt-product__cart" data-variant-item-code="">
         <div class="lt-product__price">
-            <span class="lt-product__price-current" id="lt-product-price-text">{{ _("Price shows when you choose your options") }}</span>
+            <span class="lt-product__price-current" id="lt-product-price-text">
+                {{ lt_starting_price_display or _("Price shows when you choose your options") }}
+            </span>
         </div>
         <div class="lt-product__actions">
             <button type="button"
@@ -119,7 +122,8 @@
     var msgUnavailable = "{{ _('That combination is not available. Try a different option.') | replace("'", "\\'") }}";
     var msgPickValid = "{{ _('Choose a valid combination') | replace("'", "\\'") }}";
     var msgFrappeNotReady = "{{ _('Loading...') | replace("'", "\\'") }}";
-    var msgPriceWaiting = "{{ _('Price shows when you choose your options') | replace("'", "\\'") }}";
+    var msgStartingPrice = "{{ (lt_starting_price_display or '') | replace("'", "\\'") }}";
+    var msgPriceWaiting = msgStartingPrice || "{{ _('Price shows when you choose your options') | replace("'", "\\'") }}";
 
     function productImageEl() {
         return document.querySelector('.product-image img.website-image') || document.querySelector('img.website-image');
@@ -245,18 +249,20 @@
     }
 
     function applyValidOptions(validOptionsByAttribute) {
+        var picks = selectedAttrs();
         attrEls.forEach(function (a) {
             var attrName = a.getAttribute('data-attribute-name');
+            var keepAttributeChangeable = !!picks[attrName];
             var select = a.querySelector('select.js-lt-attr-input');
             if (select) {
                 Array.prototype.forEach.call(select.options, function (option) {
-                    option.disabled = !optionIsAvailable(validOptionsByAttribute, attrName, option.value);
+                    option.disabled = !keepAttributeChangeable && !optionIsAvailable(validOptionsByAttribute, attrName, option.value);
                 });
                 return;
             }
 
             a.querySelectorAll('.js-lt-attr-input').forEach(function (input) {
-                setRadioAvailability(input, optionIsAvailable(validOptionsByAttribute, attrName, input.value));
+                setRadioAvailability(input, keepAttributeChangeable || optionIsAvailable(validOptionsByAttribute, attrName, input.value));
             });
         });
     }

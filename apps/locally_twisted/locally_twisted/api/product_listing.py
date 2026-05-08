@@ -1,5 +1,6 @@
 import frappe
 
+from locally_twisted.product_options import apply_variant_starting_price
 from webshop.webshop.api import get_product_filter_data as webshop_get_product_filter_data
 
 
@@ -21,6 +22,7 @@ def get_product_filter_data(query_args=None):
     brand_by_name = {row.name: row.lt_brand_description for row in brand_rows}
 
     for item in items:
+        apply_variant_starting_price(item)
         item["lt_brand_description"] = brand_by_name.get(item.get("name")) or ""
 
     return result

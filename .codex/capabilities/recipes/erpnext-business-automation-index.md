@@ -60,6 +60,12 @@ Current connected launch spine:
 
 ## Rules
 
+Mantra: if it can fail, it must fail loudly. For automation indexing, that means
+missing launch-required links, missing verifier paths, amount drift, disabled
+scheduler hooks, or broken document/customer-message handoffs must create a
+nonzero verifier result or Frappe Error Log/report evidence. A disconnected
+surface is allowed only when the report names it as disconnected.
+
 1. Required surfaces fail the verifier if files, hooks, setup records, methods, or connections are missing.
 2. Scheduled checkups should create visible backend attention, such as Frappe Error Log entries, when required links break.
 3. Existing-but-not-connected surfaces must stay visible in the report. Do not imply proposals, vendor packets, bank reconciliation, payroll, reminders, or statements are operational just because templates or native DocTypes exist. A reminder/statement surface can count as connected only when it is explicitly draft-only, review-gated, mutation-guarded, and tested through its review, packet renderer, internal digest, no-live reminder dry run, or no-live reminder review report.

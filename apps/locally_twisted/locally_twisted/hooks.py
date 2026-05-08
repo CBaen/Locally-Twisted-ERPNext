@@ -42,11 +42,11 @@ app_include_js = "/assets/locally_twisted/js/lt-desk-workspace-router.js?v=20260
 # CSS stayed cached in GL's browser; drawer rendered inline on every page
 # because the cached rules didn't have `position: fixed`.
 web_include_css = [
-    "/assets/locally_twisted/css/lt-theme.css?v=20260507-nav-1",
-    "/assets/locally_twisted/css/lt-page-containment.css?v=20260507-containment-2",
+    "/assets/locally_twisted/css/lt-theme.css?v=20260507-product-clear-options",
     "/assets/locally_twisted/css/lt-mega-menu.css?v=20260507-mega-2",
-    "/assets/locally_twisted/css/lt-product-polish.css?v=20260505-product-2",
-    "/assets/locally_twisted/css/lt-shop-showroom.css?v=20260506-showroom-5",
+    "/assets/locally_twisted/css/lt-product-polish.css?v=20260507-product-clear-options",
+    "/assets/locally_twisted/css/lt-shop-showroom.css?v=20260507-showroom-company-first",
+    "/assets/locally_twisted/css/lt-page-containment.css?v=20260507-containment-5",
     "/assets/locally_twisted/css/lt-event-playground.css?v=20260506-event-playground-1",
 ]
 

@@ -6,6 +6,14 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-07 - Fake data is useful only when fake success is impossible
+
+GL clarified that all current LT data is fake/test data for automation testing. That means agents should stop hesitating around fake-data contracts and use them as the safe proving ground for the business system. It also means fake records cannot be used as proof that the business is operational.
+
+**Counter-move:** when testing LT, distinguish synthetic readiness from live cutover readiness. Fake/test data should prove every field, cascade, document, payment handoff, reminder surface, and checkup path. If something can/should happen and does not, the affected Lead, Sales Order, Payment Request, Sales Invoice, report, or verifier must expose the failure. Error Log-only evidence is not enough for business-critical customer intent, payment context, or paperwork readiness.
+
+---
+
 ## 2026-05-08 - Portfolio does not need a route-local contact/index footer
 
 The portfolio page kept a route-specific footer block after the photo field:
@@ -18,8 +26,25 @@ focused photo field inside the real LT site chrome.
 contact paths. `/portfolio` owns only the compact branded hero, proof reel,
 empty state, JSON-LD, and no-script image fallback. Do not restore `.lt-foot`,
 `Portfolio contact`, Inquire/Studio/Index labels, phone/index rows, or
-route-local contact/footer CSS. The route verifier must fail if that block
-returns.
+route-local contact/footer CSS. The route verifier and container contract must
+fail if that block returns.
+
+---
+
+## 2026-05-08 - Fail loudly is one law, not one feature
+
+LT had separate fail-loud ideas for forms, automation indexes, payment parity,
+invoice/reminder drafts, and container contracts. Treating them as separate
+rules made the project depend on GL noticing the same pattern again under a
+different name.
+
+**Counter-move:** use one operating mantra everywhere: if it can fail, it must
+fail loudly. For LT, that means no false success states, no swallowed backend
+errors, no unverified customer messages, no document output that hides missing
+approval/payment paths, no silent automation skips, no hidden container
+overflow, and no agent completion claims without current evidence. Encode the
+rule as a verifier, report row, Error Log, blocker field, or route contract
+wherever possible.
 
 ---
 
@@ -48,11 +73,82 @@ each real optimized photo by its real dimensions.
 
 **Counter-move:** for LT `/portfolio`, the photo is the surface. Do not add
 captions, visible frame wrappers, card backgrounds, or forced aspect boxes.
-Desktop proof photos now use `photoScale = 1.5` while preserving
-`density = 1.10`; mobile photos are full viewport width and slide in. The route
-verifier must fail if `.lt-frame`, `.lt-cap`, `figcaption`, old desktop widths,
-mobile side gutters, image/photo rect mismatches, or compressed higher-density
-spacing return.
+Desktop proof photos now use `photoScale 1.5` while preserving `density 1.10`;
+mobile photos are full viewport width and slide in. The route verifier must fail
+if `.lt-frame`, `.lt-cap`, `figcaption`, old desktop widths, mobile side
+gutters, image/photo rect mismatches, or compressed higher-density spacing
+return.
+
+---
+
+## 2026-05-08 - Portfolio mobile cannot lose the collage motion
+
+**Status:** Superseded later on 2026-05-08 for caption treatment. Keep the
+mobile-motion lesson, but the current portfolio contract has no photo captions
+at all.
+
+The portfolio page technically had a proof reel, but mobile CSS forced the
+photos into a static stack and captions sat below the frames. That stripped the
+movement GL approved from the design handoff and made the page feel like a
+plain gallery instead of a game-like, sliding collage of installed work.
+
+**Counter-move:** protect the portfolio as a motion surface, not just a layout.
+The current LT `/portfolio` contract is large whole-photo collage movement,
+desktop drift/click-to-front behavior, mobile slide-in reveal, and no photo
+captions at all. Tests must fail any returned caption/frame treatment and must
+fail a static mobile stack.
+
+---
+
+## 2026-05-07 - Container contracts must be executable, not advisory
+
+LT already had prose saying Frappe's stock `main.container` is neutralized and
+public sections must own their own containment. That did not stop drift:
+homepage twisting content exceeded the page max, contact/location reused raw
+Bootstrap containers, document pages lost narrow widths to selector specificity,
+the portfolio footer declared an inner wrapper that did not exist, and the BTFP
+route contract was stale after the page changed.
+
+**Counter-move:** treat public containers as a route-level contract in code.
+Every visible direct child of `.page_content` on a launch route must be listed
+in `CONTAINER_CONTRACT_ROUTES` with an explicit mode. Keep
+`lt-page-containment.css` late in `web_include_css`, update the route contract
+when route markup changes, and run `npm run test:container-contract` before
+claiming public layout work is done. If a route adds a crawl/marquee, the
+viewport must clip instead of exposing a native scrollbar.
+
+---
+
+## 2026-05-07 - Product options are controls, not containers
+
+After the recommendation panel was removed, product detail pages still looked
+cheap because the variant form, size chips, select/dropdown, and price/add-cart
+group were styled as little bordered boxes. The pickup/delivery notice was the
+only framed product-page element GL wanted to keep.
+
+**Counter-move:** do not style product options as cards, pills, or boxed
+selection panels. Size, latex color, add-on numbers, and other variant controls
+should be clear text-level controls with selected-state emphasis, not nested
+containers. Keep the pickup/delivery panel as the framed exception. Guard this
+with `scripts/verify/smoke_shop.py` and
+`.codex/capabilities/recipes/frappe-product-clear-control-contract.md`.
+
+---
+
+## 2026-05-07 - Product pages cannot become generic ecommerce pages
+
+The product detail template kept Webshop's lower Additional Info, Reviews, and
+Recommended Items area even when it had no useful customer content. Once LT CSS
+made that wrapper visible, customers saw a random white box under the product
+area, and the page felt like ecommerce itself was the product.
+
+**Counter-move:** ready-to-order shopping supports the company; it does not lead
+the brand. Product pages should show the photo, name, price, useful options,
+fulfillment notes, product copy, and a clear cart/contact path. Do not restore
+recommendation panels, generic upsells, empty reviews tabs, or visible boxes
+that exist only because the Webshop template offered a section. Guard this with
+`scripts/verify/smoke_shop.py` and the
+`.codex/capabilities/recipes/frappe-product-page-company-first.md` contract.
 
 ---
 
@@ -319,9 +415,9 @@ The `/shop` console showed `ERR_BLOCKED_BY_CLIENT` for `lt-cookie-consent.js`. T
 
 ## 2026-05-06 - The exact folder matters when a designer handoff exists
 
-The second portfolio failure happened because the implementation was judged against a copied/derived reference path instead of the exact folder GL named: `research/a unique portfolio page for a high end corporate balloon events_/design_handoff_locally_twisted_portfolio/`. That lost important details from the reference at the time: the huge editorial hero, oklch palette, Cormorant/Inter Tight pairing, caption treatment, and the approved aspect sequence. The caption part is now superseded by the 2026-05-08 no-caption/no-frame portfolio contract.
+The second portfolio failure happened because the implementation was judged against a copied/derived reference path instead of the exact folder GL named: `research/a unique portfolio page for a high end corporate balloon events_/design_handoff_locally_twisted_portfolio/`. That lost important details: the huge editorial hero, oklch palette, Cormorant/Inter Tight pairing, visible captions below photos, and the approved aspect sequence.
 
-**Counter-move:** when GL provides a design handoff path, render that exact folder first, compare production to it, and translate only the intentional production differences. For this LT page, keep the real Frappe header/footer and real LT photos, preserve the motion/collage behavior, and follow the current no-caption/no-frame contract where it supersedes the old handoff details.
+**Counter-move:** when GL provides a design handoff path, render that exact folder first, compare production to it, and translate only the intentional production differences. For this LT page, keep the real Frappe header/footer and real LT photos, but otherwise treat the handoff's Frappe files as the visual baseline until GL closes the critique loop.
 
 ---
 

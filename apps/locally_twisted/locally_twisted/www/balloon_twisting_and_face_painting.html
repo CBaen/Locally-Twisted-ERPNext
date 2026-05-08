@@ -98,132 +98,212 @@
     </div>
 </section>
 
-<div class="lt-btfp__ribbon lt-btfp__ribbon--sandstone lt-fullbleed" aria-hidden="true"></div>
-
-<section class="lt-btfp__process">
-    <div class="lt-btfp__process-inner">
-        <p class="lt-btfp__kicker">THE PROCESS</p>
-        <h2 class="lt-btfp__process-title">Booking is straightforward.</h2>
-        <ol class="lt-btfp__process-list">
-            <li class="lt-btfp__process-item">
-                <span class="lt-btfp__process-number" aria-hidden="true">01</span>
-                <div class="lt-btfp__process-content">
-                    <h3 class="lt-btfp__process-step-title">Tell us about your event</h3>
-                    <p>Date, location, guest count, and what you&rsquo;re imagining. Use the form below or call. We respond same day on weekdays.</p>
-                </div>
-            </li>
-            <li class="lt-btfp__process-item">
-                <span class="lt-btfp__process-number" aria-hidden="true">02</span>
-                <div class="lt-btfp__process-content">
-                    <h3 class="lt-btfp__process-step-title">We confirm availability and scope</h3>
-                    <p>We&rsquo;ll let you know if the date works and recommend the right team size for your crowd. A quote follows.</p>
-                </div>
-            </li>
-            <li class="lt-btfp__process-item">
-                <span class="lt-btfp__process-number" aria-hidden="true">03</span>
-                <div class="lt-btfp__process-content">
-                    <h3 class="lt-btfp__process-step-title">Deposit holds your date</h3>
-                    <p>A $50 deposit per artist secures the date after availability and scope are confirmed. Your quote shows the remaining balance and event-specific needs before payment.</p>
-                </div>
-            </li>
-            <li class="lt-btfp__process-item">
-                <span class="lt-btfp__process-number" aria-hidden="true">04</span>
-                <div class="lt-btfp__process-content">
-                    <h3 class="lt-btfp__process-step-title">We show up and work the room</h3>
-                    <p>We arrive early, set up, and run for the agreed duration. You don&rsquo;t manage us &mdash; that&rsquo;s not your job at the party.</p>
-                </div>
-            </li>
-        </ol>
-    </div>
-</section>
-
-<section class="lt-btfp__events">
-    <div class="lt-btfp__events-inner">
-        <p class="lt-btfp__kicker">WORKS FOR</p>
-        <h2 class="lt-btfp__events-title">Any Event. Any Size.</h2>
-        <dl class="lt-btfp__events-list">
-            <div class="lt-btfp__events-row">
-                <dt>Birthday Parties</dt>
-                <dd>The most requested. Works for ages 2&ndash;102.</dd>
+<section class="lt-btfp__event-crawl lt-fullbleed" aria-labelledby="lt-btfp-event-crawl-heading">
+    <h2 id="lt-btfp-event-crawl-heading" class="visually-hidden">Good fits for balloon twisting and face painting</h2>
+    <div class="lt-btfp__event-crawl-viewport" role="presentation">
+        <div class="lt-btfp__event-crawl-track">
+            <div class="lt-btfp__event-crawl-group">
+                {% for event_type in btfp_event_types %}
+                <span class="lt-btfp__event-crawl-item">{{ event_type }}</span>
+                {% endfor %}
             </div>
-            <div class="lt-btfp__events-row">
-                <dt>Corporate Events</dt>
-                <dd>Mixers, galas, team celebrations.</dd>
+            <div class="lt-btfp__event-crawl-group" aria-hidden="true">
+                {% for event_type in btfp_event_types %}
+                <span class="lt-btfp__event-crawl-item">{{ event_type }}</span>
+                {% endfor %}
             </div>
-            <div class="lt-btfp__events-row">
-                <dt>School &amp; Community</dt>
-                <dd>Fairs, fundraisers, end-of-year events.</dd>
-            </div>
-            <div class="lt-btfp__events-row">
-                <dt>Festivals</dt>
-                <dd>High-volume, outdoor &mdash; we&rsquo;re built for it.</dd>
-            </div>
-            <div class="lt-btfp__events-row">
-                <dt>Church Events</dt>
-                <dd>Family-friendly entertainment for picnics, fellowship nights, and gatherings.</dd>
-            </div>
-            <div class="lt-btfp__events-row">
-                <dt>Holiday Parties</dt>
-                <dd>Office parties, neighborhood events, HOA.</dd>
-            </div>
-        </dl>
-    </div>
-</section>
-
-<div class="lt-btfp__ribbon lt-btfp__ribbon--stone lt-fullbleed" aria-hidden="true"></div>
-
-<section class="lt-btfp__contact-cta">
-    <div class="lt-btfp__contact-cta-inner">
-        <p class="lt-btfp__kicker">START HERE</p>
-        <h2>Tell us about your event.</h2>
-        <p>
-            A rough picture is enough to start. Share the date, location,
-            guest count, and whether you want balloon twisting, face painting,
-            or both. We will follow up with availability and the right team size.
-        </p>
-        <div class="lt-btfp__contact-actions">
-            <a class="lt-btfp__contact-primary" href="/contact?service=btfp">Start the inquiry</a>
-            <a class="lt-btfp__contact-secondary" href="tel:+18012850860">(801) 285-0860</a>
         </div>
     </div>
 </section>
 
-<section class="lt-btfp__faq lt-fullbleed" aria-labelledby="lt-btfp__faq-heading">
-    <div class="lt-btfp__faq-inner">
-        <h2 id="lt-btfp__faq-heading" class="lt-btfp__faq-heading">Common questions</h2>
+<section id="btfp-inquiry" class="lt-btfp__booking">
+    <div class="lt-btfp__booking-grid">
+        <div class="lt-btfp__form-wrap">
+            <p class="lt-btfp__kicker">INQUIRY</p>
+            <h2>Tell us about your event</h2>
+            <p class="lt-btfp__form-subtitle">Share a few details and we take it from there.</p>
+            {% include "templates/includes/book_form.html" %}
+        </div>
 
-        <details class="lt-btfp__faq-item" open>
-            <summary>How many kids can one artist serve per hour?</summary>
-            <div class="lt-btfp__faq-answer">
-                <p>A balloon artist typically serves 15&ndash;20 children per hour. Face painting is a separate skill, and we book dedicated face painters &mdash; not the same people who twist balloons. For larger events or events that want both at once, we staff one of each so nobody waits in line.</p>
-            </div>
-        </details>
+        <aside class="lt-btfp__side" aria-label="Pricing and event details">
+            <section
+                class="lt-btfp__calculator"
+                data-btfp-calculator
+                data-first-hour="130"
+                data-additional-hour="115"
+                data-deposit="50"
+                aria-labelledby="btfp-calculator-heading"
+            >
+                <p class="lt-btfp__calculator-kicker">PRICE CHECK</p>
+                <h3 id="btfp-calculator-heading">Estimate artist time</h3>
 
-        <details class="lt-btfp__faq-item">
-            <summary>Do you do outdoor events?</summary>
-            <div class="lt-btfp__faq-answer">
-                <p>Yes. We handle outdoor events regularly including festivals, school carnivals, and backyard parties. For balloon twisting and face painting, shade is required for outdoor events so artists and guests have a comfortable setup.</p>
-            </div>
-        </details>
+                <fieldset class="lt-btfp__calc-fieldset">
+                    <legend>Services</legend>
+                    <div class="lt-btfp__calc-options" role="group" aria-label="Services to estimate">
+                        <label class="lt-btfp__calc-option" for="btfp_calc_service_twisting">
+                            <input type="radio" id="btfp_calc_service_twisting" name="btfp_calc_artists" value="1">
+                            <span>Twisting</span>
+                        </label>
+                        <label class="lt-btfp__calc-option" for="btfp_calc_service_painting">
+                            <input type="radio" id="btfp_calc_service_painting" name="btfp_calc_artists" value="1">
+                            <span>Face Painting</span>
+                        </label>
+                        <label class="lt-btfp__calc-option" for="btfp_calc_service_both">
+                            <input type="radio" id="btfp_calc_service_both" name="btfp_calc_artists" value="2" checked>
+                            <span>Both</span>
+                        </label>
+                    </div>
+                </fieldset>
 
-        <details class="lt-btfp__faq-item">
-            <summary>How far in advance should I book?</summary>
-            <div class="lt-btfp__faq-answer">
-                <p>We recommend booking at least 2&ndash;3 weeks in advance for standard events. For weddings and large corporate events, 4&ndash;6 weeks is ideal. Last-minute bookings are sometimes possible.</p>
-            </div>
-        </details>
+                <label class="lt-btfp__calc-label" for="btfp_calc_hours">Hours per artist</label>
+                <input
+                    class="lt-btfp__calc-input"
+                    type="number"
+                    id="btfp_calc_hours"
+                    min="1"
+                    step="0.5"
+                    value="1"
+                    inputmode="decimal"
+                >
+                <p class="lt-btfp__calc-help">Half-hours start after the first hour and use the same additional-hour rate.</p>
 
-        <details class="lt-btfp__faq-item">
-            <summary>What is your service area?</summary>
-            <div class="lt-btfp__faq-answer">
-                <p>We serve the Wasatch Front including Salt Lake City, Provo, Ogden, Park City, and surrounding areas, and quote other Utah locations as needed. Artist services are quoted by event location; checkout delivery fees only apply to ready-to-order products.</p>
-            </div>
-        </details>
+                <dl class="lt-btfp__calc-results" aria-live="polite">
+                    <div class="lt-btfp__calc-total-row">
+                        <dt>Estimated service total</dt>
+                        <dd data-btfp-calc-total>$260</dd>
+                    </div>
+                    <div>
+                        <dt>Deposit to hold date</dt>
+                        <dd data-btfp-calc-deposit>$100</dd>
+                    </div>
+                    <div>
+                        <dt>Remaining balance</dt>
+                        <dd data-btfp-calc-balance>$160</dd>
+                    </div>
+                </dl>
+                <p class="lt-btfp__calc-formula" data-btfp-calc-formula>
+                    2 artists x $130 first hour. No discounts.
+                </p>
+            </section>
 
-        <p style="margin-top: 1.5rem; font-size: 0.95rem;">
-            More questions? See our full <a href="/faq" style="font-weight: 600; text-decoration: underline; text-underline-offset: 0.2em;">FAQ</a> or call <a href="tel:+18012850860" style="font-weight: 600; text-decoration: underline; text-underline-offset: 0.2em;">(801) 285-0860</a>.
-        </p>
+            <section class="lt-btfp__expect-card" aria-label="What to expect">
+                <h3>What to Expect</h3>
+                <ul class="lt-btfp__expect-list">
+                    <li>
+                        <span class="lt-btfp__expect-icon" aria-hidden="true">&#x21A9;</span>
+                        <span>We reach out within 24 hours.</span>
+                    </li>
+                    <li>
+                        <span class="lt-btfp__expect-icon" aria-hidden="true">&#x1F4C5;</span>
+                        <span>A $50 deposit per artist secures your date after availability is confirmed.</span>
+                    </li>
+                    <li>
+                        <span class="lt-btfp__expect-icon" aria-hidden="true">&#x1F4B3;</span>
+                        <span>The remaining balance is due before your event.</span>
+                    </li>
+                </ul>
+
+                <hr class="lt-btfp__expect-divider">
+
+                <h4>Pricing</h4>
+                <ul class="lt-btfp__expect-list">
+                    <li>
+                        <span class="lt-btfp__expect-icon" aria-hidden="true">&#x23F1;</span>
+                        <span>$130 first hour, $115 each additional hour &mdash; per artist.</span>
+                    </li>
+                    <li>
+                        <span class="lt-btfp__expect-icon" aria-hidden="true">$</span>
+                        <span>$50 deposit per artist at booking.</span>
+                    </li>
+                </ul>
+
+                <hr class="lt-btfp__expect-divider">
+
+                <h4>Cancellation</h4>
+                <p>48 hours&rsquo; notice required. Deposits are non-refundable.</p>
+
+                <hr class="lt-btfp__expect-divider">
+
+                <h4>Prefer to talk?</h4>
+                <ul class="lt-btfp__expect-contact">
+                    <li>
+                        <span class="lt-btfp__expect-icon" aria-hidden="true">&#x260E;</span>
+                        <a href="tel:+18012850860">(801) 285-0860</a>
+                    </li>
+                    <li>
+                        <span class="lt-btfp__expect-icon" aria-hidden="true">&#x2709;</span>
+                        <a href="mailto:hi@locallytwisted.com">hi@locallytwisted.com</a>
+                    </li>
+                </ul>
+            </section>
+        </aside>
     </div>
 </section>
+
+<script>
+(function () {
+    var root = document.querySelector("[data-btfp-calculator]");
+    if (!root) return;
+
+    var firstHour = Number(root.dataset.firstHour || 130);
+    var additionalHour = Number(root.dataset.additionalHour || 115);
+    var depositEach = Number(root.dataset.deposit || 50);
+    var hoursInput = root.querySelector("#btfp_calc_hours");
+    var artistInputs = root.querySelectorAll('input[name="btfp_calc_artists"]');
+    var totalEl = root.querySelector("[data-btfp-calc-total]");
+    var depositEl = root.querySelector("[data-btfp-calc-deposit]");
+    var balanceEl = root.querySelector("[data-btfp-calc-balance]");
+    var formulaEl = root.querySelector("[data-btfp-calc-formula]");
+
+    function money(value) {
+        var rounded = Math.round(value * 100) / 100;
+        return rounded % 1 === 0 ? "$" + rounded.toFixed(0) : "$" + rounded.toFixed(2);
+    }
+
+    function selectedArtists() {
+        var selected = root.querySelector('input[name="btfp_calc_artists"]:checked');
+        return Math.max(1, Number(selected ? selected.value : 1));
+    }
+
+    function selectedHours() {
+        var raw = Number(hoursInput.value);
+        if (!Number.isFinite(raw)) raw = 1;
+        return Math.max(1, Math.round(raw * 2) / 2);
+    }
+
+    function render() {
+        var hours = selectedHours();
+        var artists = selectedArtists();
+        if (String(hoursInput.value) !== String(hours)) {
+            hoursInput.value = String(hours);
+        }
+
+        var additionalHours = Math.max(0, hours - 1);
+        var perArtist = firstHour + additionalHours * additionalHour;
+        var total = artists * perArtist;
+        var deposit = artists * depositEach;
+        var balance = Math.max(0, total - deposit);
+        var artistLabel = artists === 1 ? "artist" : "artists";
+        var formula = artists + " " + artistLabel + " x (" + money(firstHour) + " first hour";
+
+        if (additionalHours > 0) {
+            formula += " + " + money(additionalHours * additionalHour) + " additional time";
+        }
+        formula += "). No discounts.";
+
+        totalEl.textContent = money(total);
+        depositEl.textContent = money(deposit);
+        balanceEl.textContent = money(balance);
+        formulaEl.textContent = formula;
+    }
+
+    hoursInput.addEventListener("input", render);
+    hoursInput.addEventListener("change", render);
+    artistInputs.forEach(function (input) {
+        input.addEventListener("change", render);
+    });
+    render();
+})();
+</script>
 
 {% endblock %}

@@ -13,6 +13,18 @@ Make Locally Twisted's business system inspectable before it is trusted in Frapp
 - payment and document paths fail loudly instead of silently drifting
 - fake-data test paths are explicit and safe to run during development
 
+Operating law: if it can fail, it must fail loudly. In this lane, "loud" means
+the index, scheduled checkup, synthetic pipeline, or surface-specific verifier
+names the broken connection and exits nonzero or writes operational evidence
+instead of letting a missing handoff look connected.
+
+GL clarified on 2026-05-07 that all current LT records are fake/test data for
+automation testing. Keep using fake data aggressively, but do not treat it as
+business truth. The next index upgrade is record-level health rows from
+`workstreams/fail-loud-record-level-hardening.md`: exact Leads, Sales Orders,
+Payment Requests, Sales Invoices, Email Queue rows, and documents whose
+expected downstream automation failed or is blocked.
+
 This workstream is the cross-system map. It coordinates with `paperwork-backend-automation.md`, `synthetic-business-pipeline.md`, `payment-backend-launch-readiness.md`, `finance-payroll-quickbooks-migration.md`, `erpnext-backend-simplification.md`, and `website-launch.md`.
 
 ## Current Verified Result

@@ -16,6 +16,7 @@ CASES = [
     ("/contact?service=twisting", ["Balloon Twisting"]),
     ("/contact?service=face-painting", ["Face Painting"]),
 ]
+BTFP_PAGE = "/balloon-twisting-and-face-painting"
 ITEM_CASE = ("/contact?item=easter-arch", "easter-arch", "Easter Arch")
 QUOTE_HANDOFF_KEY = "lt_checkout_quote_handoff_v1"
 
@@ -62,6 +63,125 @@ def main() -> int:
                 if painting_panel.count() != 1 or not painting_panel.first.is_visible():
                     print("  FAIL - Face Painting details panel is not visible")
                     failures += 1
+
+        btfp_url = base_url + BTFP_PAGE
+        print(f"[PREFILL] {btfp_url}")
+        try:
+            page.goto(btfp_url, wait_until="networkidle", timeout=30000)
+        except PlaywrightTimeout:
+            print("  FAIL - BTFP page did not load")
+            failures += 1
+        else:
+            body_text = page.locator("body").inner_text(timeout=10000)
+            if "THE PROCESS" in body_text or "Booking is straightforward" in body_text:
+                print("  FAIL - BTFP page still contains the unapproved process section")
+                failures += 1
+            if page.locator("#lt-book-form").count() != 1:
+                print("  FAIL - BTFP page should reuse the shared intake form")
+                failures += 1
+
+            service_values = page.locator('input[name="x_services"]').evaluate_all(
+                "(nodes) => nodes.map((node) => node.value)"
+            )
+            expected_values = ["Balloon Twisting", "Face Painting"]
+            if service_values != expected_values:
+                print(f"  FAIL - BTFP page should expose only live-service choices, found {service_values!r}")
+                failures += 1
+            else:
+                print("  OK - BTFP page shows only live-service choices")
+
+            for service in expected_values:
+                locator = page.locator(f'input[name="x_services"][value="{service}"]')
+                if locator.count() != 1 or not locator.first.is_checked():
+                    print(f"  FAIL - BTFP page should preselect {service!r}")
+                    failures += 1
+            for hidden_service in ["Balloon Decor", "Delivery", "Pickup", "Events Inquiry", "Something Else"]:
+                if page.locator(f'input[name="x_services"][value="{hidden_service}"]').count() != 0:
+                    print(f"  FAIL - BTFP page should not expose {hidden_service!r}")
+                    failures += 1
+
+            crawl = page.locator(".lt-btfp__event-crawl")
+            if crawl.count() != 1:
+                print("  FAIL - BTFP page should include the event-type crawl")
+                failures += 1
+            else:
+                background = crawl.first.evaluate("node => getComputedStyle(node).backgroundColor")
+                if background != "rgb(14, 34, 64)":
+                    print(f"  FAIL - BTFP crawl banner should use brand blue, found {background}")
+                    failures += 1
+                color = crawl.first.evaluate("node => getComputedStyle(node).color")
+                if color != "rgb(250, 247, 242)" and color != "rgb(255, 255, 255)":
+                    print(f"  FAIL - BTFP crawl text should be light on brand blue, found {color}")
+                    failures += 1
+                before = page.evaluate(
+                    """() => {
+                        const track = document.querySelector('.lt-btfp__event-crawl-track');
+                        if (!track) return null;
+                        const style = getComputedStyle(track);
+                        const matrix = new DOMMatrixReadOnly(style.transform);
+                        return { x: matrix.m41, animationName: style.animationName };
+                    }"""
+                )
+                page.wait_for_timeout(650)
+                after = page.evaluate(
+                    """() => {
+                        const track = document.querySelector('.lt-btfp__event-crawl-track');
+                        if (!track) return null;
+                        const matrix = new DOMMatrixReadOnly(getComputedStyle(track).transform);
+                        return { x: matrix.m41 };
+                    }"""
+                )
+                if not before or not after or before.get("animationName") != "lt-btfp-event-crawl-scroll":
+                    print(f"  FAIL - BTFP event crawl should animate, found {before!r}")
+                    failures += 1
+                elif after.get("x") <= before.get("x"):
+                    print(f"  FAIL - BTFP event crawl should move left-to-right, before={before!r} after={after!r}")
+                    failures += 1
+            if page.locator('a[href="/shop/event-booking-deposit-32"]').count() != 0:
+                print("  FAIL - BTFP page should not restore the old public deposit checkout CTA")
+                failures += 1
+
+            calculator = page.locator(".lt-btfp__calculator")
+            if calculator.count() != 1:
+                print("  FAIL - BTFP page should include the customer pricing calculator")
+                failures += 1
+            else:
+                page.locator("#btfp_calc_hours").fill("1.5")
+                page.locator("#btfp_calc_service_both").check()
+                calc_state = page.evaluate(
+                    """() => ({
+                        total: document.querySelector('[data-btfp-calc-total]')?.textContent?.trim(),
+                        deposit: document.querySelector('[data-btfp-calc-deposit]')?.textContent?.trim(),
+                        balance: document.querySelector('[data-btfp-calc-balance]')?.textContent?.trim(),
+                        formula: document.querySelector('[data-btfp-calc-formula]')?.textContent?.trim(),
+                    })"""
+                )
+                if calc_state.get("total") != "$375":
+                    print(f"  FAIL - 1.5 hours for both services should total $375, found {calc_state!r}")
+                    failures += 1
+                if calc_state.get("deposit") != "$100":
+                    print(f"  FAIL - both services should show $100 deposit, found {calc_state!r}")
+                    failures += 1
+                if calc_state.get("balance") != "$275":
+                    print(f"  FAIL - both services at 1.5 hours should show $275 balance, found {calc_state!r}")
+                    failures += 1
+                if "No discounts" not in (calc_state.get("formula") or ""):
+                    print(f"  FAIL - calculator formula should state no discounts, found {calc_state!r}")
+                    failures += 1
+                page.locator("#btfp_calc_hours").fill("0.5")
+                min_state = page.evaluate(
+                    """() => ({
+                        hours: document.querySelector('#btfp_calc_hours')?.value,
+                        total: document.querySelector('[data-btfp-calc-total]')?.textContent?.trim(),
+                    })"""
+                )
+                if min_state.get("hours") != "1" or min_state.get("total") != "$260":
+                    print(f"  FAIL - BTFP calculator should not allow less than 1 hour, found {min_state!r}")
+                    failures += 1
+
+            if page.locator('.lt-book[data-form-contract="inquiry-v1"] #lt-book-form[data-form-contract="inquiry-v1"]').count() != 1:
+                print("  FAIL - shared inquiry form should declare the form design contract")
+                failures += 1
 
         item_path, item_code, item_name = ITEM_CASE
         item_url = base_url + item_path

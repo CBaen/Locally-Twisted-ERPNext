@@ -30,6 +30,20 @@ For every outbound document, the first scannable block should answer what the re
 
 Do not put an `Automation Contract`, integration metadata, generator notes, or internal review mechanics in that first customer-facing slot. Internal automation belongs in source templates, review queues, and verifier evidence. The audience-facing document should make the next useful answer obvious first.
 
+## Fail-loud rule
+
+Mantra: if it can fail, it must fail loudly. An outbound document must not look
+send-ready when the recipient, amount, status, approval path, payment path,
+policy lane, or source record is missing or contradictory.
+
+- Invoices and receipts must not imply paid, unpaid, approved terms, or
+  corporate billing status unless the source record proves it.
+- Reminder, statement, proposal, and contract packets must stay draft/review
+  gated until recipient, cadence, copy, payment link, and approval state are
+  explicit.
+- Missing data should become a blocker in the review packet or verifier output,
+  not a blank field in a customer-facing PDF.
+
 ## Layout rules
 
 1. Make bookkeeping easy first.
