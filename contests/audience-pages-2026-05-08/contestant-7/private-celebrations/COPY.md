@@ -20,6 +20,8 @@
 
 **Body:** Private celebrations carry weight that corporate events don't. A birthday milestone only happens once. A wedding ceremony can't be redone. A memorial needs to feel exactly right. Locally Twisted takes that seriously — the palette, the scale, the timing, and the teardown are all planned around the moment, not around the vendor's convenience. And what happens at your private event stays private.
 
+If you're here for a celebration of life, you're in the right place. The same care that goes into a wedding arch goes into a tribute arrangement — and the process is quiet, direct, and doesn't add to what you're already carrying.
+
 ---
 
 ## Section 3 — Category proof

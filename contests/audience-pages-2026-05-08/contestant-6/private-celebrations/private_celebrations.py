@@ -264,6 +264,12 @@ PAGE_CSS = """
     padding: 3rem 0;
     border-bottom: 1px solid var(--lt-stone);
 }
+.lt-page-private .lt-private-moment__rule {
+    border: none;
+    border-top: 1px solid var(--lt-stone);
+    margin: 0;
+    opacity: 0.5;
+}
 .lt-page-private .lt-private-moment:last-child {
     border-bottom: none;
     padding-bottom: 0;

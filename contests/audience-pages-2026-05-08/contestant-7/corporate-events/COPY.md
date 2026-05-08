@@ -30,11 +30,11 @@
 
 ### Financial Services
 **Clients:** Zions Bank · America First Credit Union · Fidelity · Morgan Stanley
-**Note:** Brand-controlled color matching for regulated environments.
+**Note:** Community days, branch grand openings, and annual company events.
 
 ### Media & Broadcast
 **Clients:** KSL · KUTV · FOX13 · Paramount · Megaplex
-**Note:** On-camera installations with broadcast-safe palettes.
+**Note:** Broadcast studio events, premiere screenings, and on-air installations.
 
 ### Hospitality & Dining
 **Clients:** Chick-Fil-A · Texas Roadhouse · Applebee's · Chili's · Honey Baked Ham · PotBelly
@@ -42,7 +42,7 @@
 
 ### Healthcare
 **Clients:** IHC · Mountain Star Medical
-**Note:** Professional-grade installations for patient-visible and community events.
+**Note:** Community health events, staff celebrations, and facility grand openings.
 
 ---
 

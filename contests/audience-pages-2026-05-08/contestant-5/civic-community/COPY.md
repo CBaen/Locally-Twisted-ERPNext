@@ -14,36 +14,22 @@
 
 **Section heading (label style):** Organizations we've served
 
-**Client list (26 entries):**
+**Client list — organized by civic type:**
 
-| Name | Category |
-|---|---|
-| SLC Pride | Pride & Equality |
-| Pride Center | Pride & Equality |
-| Equality Utah | Pride & Equality |
-| LGBT Chamber | Pride & Equality |
-| Ogden City | Municipal |
-| Sandy City | Municipal |
-| Herriman City | Municipal |
-| Kearns | Municipal |
-| Hooper City | Municipal |
-| Syracuse City | Municipal |
-| West Point City | Municipal |
-| Clinton City | Municipal |
-| SLC County | County & Regional |
-| Ogden Weber Chamber | Chamber & Civic Org |
-| Gallivan Center | Public Venue |
-| UDOT | State Agency |
-| Ogden Airport | Public Infrastructure |
-| Utah Art Alliance | Arts & Culture |
-| Safe Kids Fair | Community Health |
-| Tree House Museum | Family & Community |
-| Western Sports Park | Recreation |
-| Station Park | Public Venue |
-| Downtown Daybreak | Community District |
-| Live Daybreak | Community District |
-| Shops at Southtown | Community Retail |
-| Newgate Mall | Community Retail |
+**Pride & Equality** *(parade arches, columns, stage installs)*
+SLC Pride · Pride Center · Equality Utah · LGBT Chamber
+
+**Wasatch Front Municipalities** *(ribbon cuttings, city celebrations, outdoor civic events)*
+Ogden City · Sandy City · Herriman City · Kearns · Hooper City · Syracuse City · West Point City · Clinton City · SLC County
+
+**Chambers & Civic Organizations** *(chamber anniversary events, business community gatherings)*
+Ogden Weber Chamber
+
+**Public Venues & Institutions** *(venue events, institutional celebrations, public programming)*
+Gallivan Center · UDOT · Ogden Airport · Utah Art Alliance · Safe Kids Fair · Tree House Museum · Western Sports Park · Station Park
+
+**Community Districts & Retail Centers** *(community event series, seasonal activations, public-facing retail events)*
+Downtown Daybreak · Live Daybreak · Shops at Southtown · Newgate Mall
 
 ---
 

@@ -289,48 +289,63 @@
 }
 .lt-page-school__gallery-photo:hover img { transform: scale(1.04); }
 
-/* --- Client roster ------------------------------------------------- */
+/* --- Client roster — editorial ledger ------------------------------ */
+/* Schools roster is short; each named relationship gets room to be
+   substantial. A ledger communicates depth, not breadth. */
 .lt-page-school__clients {
     background-color: #E7E5E1;
-    padding: 2.75rem 1rem;
+    padding: 3.5rem 1rem;
 }
 .lt-page-school__clients-inner {
-    max-width: 900px;
+    max-width: 760px;
     margin: 0 auto;
-    text-align: center;
 }
 .lt-page-school__clients-heading {
     font-family: var(--lt-font-heading);
     font-size: 1.75rem;
     color: #0A0A0B;
-    margin: 0 0 0.4rem;
+    margin: 0 0 0.35rem;
 }
 .lt-page-school__clients-subhead {
     font-family: var(--lt-font-body);
     font-size: 0.92rem;
     color: #595A5C;
-    margin: 0 0 1.5rem;
+    margin: 0 0 2rem;
 }
-/* Named relationship cards — schools roster is short; display as named
-   cards with context, not a chip list, per brief guidance. */
-.lt-page-school__client-list {
+/* Ledger — each named relationship as a full row */
+.lt-page-school__client-ledger {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 0.75rem;
-    justify-content: center;
+    border-top: 1px solid rgba(14, 34, 64, 0.18);
 }
-.lt-page-school__client-item {
-    font-family: var(--lt-font-body);
-    font-size: 0.92rem;
-    font-weight: 600;
+.lt-page-school__client-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(14, 34, 64, 0.12);
+}
+.lt-page-school__client-name {
+    font-family: var(--lt-font-heading);
+    font-size: 1.25rem;
     color: #0E2240;
-    padding: 0.4rem 0.85rem;
-    background-color: rgba(255, 255, 255, 0.65);
-    border: 1px solid rgba(184, 154, 91, 0.32);
-    border-radius: 2px;
+    margin: 0;
+    line-height: 1.2;
+}
+.lt-page-school__client-context {
+    font-family: var(--lt-font-body);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #B89A5B;
+    white-space: nowrap;
+    margin: 0;
+}
+@media (min-width: 768px) {
+    .lt-page-school__client-name { font-size: 1.45rem; }
 }
 
 /* --- Services two-col ---------------------------------------------- */
@@ -546,9 +561,12 @@
         <p class="lt-page-school__clients-subhead">
             Named relationships across Utah's higher education and secondary school communities.
         </p>
-        <ul class="lt-page-school__client-list" aria-label="School client list">
+        <ul class="lt-page-school__client-ledger" aria-label="School and university client relationships">
             {% for client in school_clients %}
-            <li class="lt-page-school__client-item">{{ client }}</li>
+            <li class="lt-page-school__client-row">
+                <p class="lt-page-school__client-name">{{ client.name }}</p>
+                <p class="lt-page-school__client-context">{{ client.context }}</p>
+            </li>
             {% endfor %}
         </ul>
     </div>

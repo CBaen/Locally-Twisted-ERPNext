@@ -501,6 +501,11 @@ PAGE_CSS = """
     line-height: 1.6;
     max-width: 66ch;
 }
+.lt-page-corp .lt-corp-trust__body--human {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--lt-stone);
+}
 
 /* --- CTA ------------------------------------------------------------ */
 .lt-page-corp .lt-corp-cta {

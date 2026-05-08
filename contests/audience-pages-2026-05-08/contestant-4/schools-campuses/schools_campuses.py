@@ -13,11 +13,11 @@ sitemap = 1
 # Note: roster is intentionally short; per brief, lean into named
 # relationships and named contexts rather than padding.
 SCHOOL_CLIENTS = [
-    "University of Utah",
-    "Weber State University",
-    "St. Joseph's High School",
-    "Ogden City (school events)",
-    "Tree House Museum (education days)",
+    {"name": "University of Utah", "context": "Graduation & Ceremonies"},
+    {"name": "Weber State University", "context": "Back-to-School & Orientation"},
+    {"name": "St. Joseph's High School", "context": "Spirit Events & Athletics"},
+    {"name": "Ogden City", "context": "School-Sponsored Community Events"},
+    {"name": "Tree House Museum", "context": "Education Days & Family Programs"},
 ]
 
 # Context moments — the recurring job types schools hire for.

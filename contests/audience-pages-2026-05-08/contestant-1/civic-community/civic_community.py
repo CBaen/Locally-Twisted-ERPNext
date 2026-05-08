@@ -101,6 +101,40 @@ AUDIENCE_SERVICES = [
     },
 ]
 
+# Operational buyer notes for civic/government coordinators.
+# Mirrors the corporate "buyer notes" pattern: answers the procurement questions
+# a Sandy City events coordinator or Pride operations director actually has.
+CIVIC_BUYER_NOTES = [
+    {
+        "heading": "Vendor Documentation",
+        "body": (
+            "We can provide a W-9, vendor registration form, or Certificate of "
+            "Insurance (COI) for city procurement. Ask when you reach out."
+        ),
+    },
+    {
+        "heading": "Permit-Friendly Coordination",
+        "body": (
+            "We work within your event permit timeline — setup windows, strike "
+            "deadlines, and public-space restrictions. Tell us the constraints."
+        ),
+    },
+    {
+        "heading": "Invoicing for Government Accounts",
+        "body": (
+            "We invoice on your terms: purchase order reference, net-30, or "
+            "department billing. We've worked with city accounts before."
+        ),
+    },
+    {
+        "heading": "Multi-Venue or Annual Events",
+        "body": (
+            "Recurring events — annual Pride, city parades, seasonal festivals — "
+            "get consistent specs year over year. We keep the notes."
+        ),
+    },
+]
+
 
 def get_context(context):
     context.title = "Civic & Community Events — Locally Twisted"

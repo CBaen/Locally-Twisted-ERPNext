@@ -6,6 +6,23 @@ The four pages share a single structural discipline and a single voice register,
 
 ---
 
+## Architectural Skeleton — What "Made For You" Actually Means
+
+The single most distinctive structural commitment across all four pages: **anxiety-first architecture**. Every page names the buyer's specific fear before it names any credential. The credential exists to answer the fear — not the other way around.
+
+| Page | Buyer anxiety named first | Credential that answers it |
+|------|--------------------------|---------------------------|
+| Civic | Scale + weather + photographability | 26+ orgs / since 1998 / outdoor-capable |
+| Corporate | Brand approximation / AP-invoice friction | Hex-matched, documented, AP-invoiceable |
+| Schools | Late vendors / schedule disruption | "Shows up, installs, disappears cleanly" |
+| Private | Personal weight / fear of generic | "Craft at personal scale" / specific occasion grid |
+
+The test: a reviewer should be able to point to the anxiety-naming move on every page without being told where to look. If they can't, the architecture has failed.
+
+This is what Contestant 8's version of "Made For You" cannot claim without doing the same editorial work. Generic "Made For You" concepts personalize the selling copy. This concept personalizes the *worry* first and lets the proof answer it.
+
+---
+
 ## Suite Signature
 
 **Structure:** Hero → Band(s) → Visual-field gallery → Dark authority band → CTA. The dark authority band changes position and color depending on the audience (slate for civic, slate for corporate, navy for schools, navy for private). No two adjacent full-width colored sections on any page.

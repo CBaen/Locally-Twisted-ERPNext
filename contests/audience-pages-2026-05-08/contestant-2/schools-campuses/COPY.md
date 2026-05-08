@@ -12,12 +12,12 @@
 **Heading:** Schools & campuses we've worked with
 **Lede:** The school roster is intentionally short — Locally Twisted builds deep relationships with the institutions it serves, not a long shallow list.
 
-**Clients listed:**
-- University of Utah (University)
-- Weber State University (University)
-- St. Joseph's High School (High School)
-- Tree House Museum (Education / Community)
-- Safe Kids Fair (Education / Community)
+**Clients listed (each pill carries its own specific detail):**
+- University of Utah (University) — graduation ceremony arches and entrance garlands, color-matched to crimson and white
+- Weber State University (University) — spirit event arch and bouquet cluster, purple and white, photographed for university event coverage
+- St. Joseph's High School (High School) — school assembly stage decor and pep rally columns, returning client each year
+- Tree House Museum (Education / Community) — children's event balloon installations, recurring seasonal work
+- Safe Kids Fair (Education / Community) — community safety fair balloon decor, family-appropriate builds
 
 **Note below list:** Each relationship involves multiple events per year, color-matched builds, and a coordinator who already has our number saved.
 

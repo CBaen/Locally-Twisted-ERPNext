@@ -53,10 +53,11 @@ CELEBRATION_TYPES = [
         "icon": "balloon-pair",
         "title": "Memorials & Celebrations of Life",
         "body": (
-            "Tasteful, meaningful arrangements for celebration-of-life services. "
-            "Sports themes, favorite colors, and personal tributes handled with care."
+            "You tell us what they loved — a team, a color, a place, a thing that was "
+            "theirs. We make it visible. Sports themes, favorite colors, and personal "
+            "tributes: we've done this, and we know what it means to get it right."
         ),
-        "proof": "Verified by customer reviews",
+        "proof": "“They captured my vision, delivered on time, very tasteful and meaningful.” — KJSCOTT",
     },
 ]
 

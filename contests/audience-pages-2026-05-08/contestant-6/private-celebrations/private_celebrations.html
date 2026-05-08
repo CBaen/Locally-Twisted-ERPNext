@@ -50,6 +50,7 @@
         <h2 id="lt-private-moments-h2" class="visually-hidden">Private celebration types</h2>
 
         {% for moment in private_event_moments %}
+        {% if not loop.first %}<hr class="lt-private-moment__rule" aria-hidden="true">{% endif %}
         <div class="lt-private-moment">
             <div class="lt-private-moment__inner">
                 <div class="lt-private-moment__copy">

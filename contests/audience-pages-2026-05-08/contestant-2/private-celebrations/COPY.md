@@ -17,21 +17,25 @@
 **Headline:** The party that felt like you planned it for a year.
 **Body:** Custom arches, themed columns, balloon drops, and organic garlands for birthday parties that feel worth remembering. From a first birthday to a fiftieth.
 **Stat:** 300+ birthday installs
+**Proof anchor (inline, below stat):** "Jeff was super nice and helpful, helped me figure out the perfect thing for our son's birthday." — Sarah
 
 ### Panel 2 — Weddings
 **Category label:** Weddings
 **Headline:** Elegant enough for the photographs. Personal enough for the couple.
 **Body:** Organic half arches, floral accents, foil heart structures, and ceremony entrance decor for weddings across the Wasatch Front. The goal is always that the balloons feel intentional, not added.
+**Proof anchor (inline, below body):** "We were seriously blown away." — Mark, wedding guest
 
 ### Panel 3 — Baby & Bridal Showers
 **Category label:** Baby & Bridal Showers
 **Headline:** A room that earns its own photos.
 **Body:** Organic garlands, balloon walls, centerpieces, and custom photo backdrops for showers that go beyond balloons-and-streamers. Palette-matched to the shower's color story.
+**Proof anchor (inline, below body):** Palette-matched to the shower's color story. "They are now my go-to easy decorating plan for any of my family events." — Tiffiny
 
 ### Panel 4 — Celebrations of Life
 **Category label:** Celebrations of Life
 **Headline:** Something beautiful for a hard day.
 **Body:** Balloon decor for memorial services and celebrations of life — dignified, personal, and handled with care. Locally Twisted has walked families through this. It is not a department. It is part of the work.
+**Proof anchor (inline, below body):** "I told them what I needed, they captured my vision, delivered on time, very reasonable." — KJ
 
 ---
 

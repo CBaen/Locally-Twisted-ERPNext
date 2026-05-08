@@ -21,6 +21,7 @@ Colors + schedule. These are the two things an activity director worries about w
 ### Client proof
 - Small roster presented honestly. A flex-wrap pill list rather than a full column table — appropriate for the size.
 - Each pill shows the school name and type (University, High School, Education / Community).
+- **Per pill specifics added after Proxy Loop 1-2:** Each pill now carries one specific detail about the relationship — what kind of event, what colors, whether they're a returning client. The names were doing name-level work; they now do relationship-level work. The explanatory note below still reads correctly as a framing statement, but it's no longer carrying an argument the names couldn't make on their own. A Sandy City activity director reading WSU's pill sees "spirit event arch and bouquet cluster, purple and white, photographed for university event coverage" — that's a credential, not a list entry.
 - The copy below the list turns the short roster into a trust signal: "multiple events per year, color-matched builds, a coordinator who already has our number saved." This is honest and specific.
 - Contrast with the corporate page's 30+ client table — the school page leans into depth over breadth.
 

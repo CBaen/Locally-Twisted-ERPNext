@@ -183,6 +183,93 @@
     margin: 0;
 }
 
+/* --- Brand color strip — corporate-only furniture ------------------ */
+/* Only a corporate buyer brings a brand kit. This section exists
+   nowhere else in the suite — it speaks to the marketing director
+   who cannot afford a color mistake on a filmed grand opening. */
+.lt-page-corp__color-strip {
+    background-color: #0A0A0B;
+    padding: 2.25rem 1rem;
+    border-top: 1px solid rgba(184, 154, 91, 0.15);
+}
+.lt-page-corp__color-strip-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    text-align: center;
+}
+@media (min-width: 768px) {
+    .lt-page-corp__color-strip-inner {
+        flex-direction: row;
+        justify-content: space-between;
+        text-align: left;
+        gap: 3rem;
+    }
+}
+.lt-page-corp__color-strip-copy { flex: 1; }
+.lt-page-corp__color-strip-eyebrow {
+    font-family: var(--lt-font-body);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #B89A5B;
+    margin: 0 0 0.5rem;
+}
+.lt-page-corp__color-strip-heading {
+    font-family: var(--lt-font-heading);
+    font-size: 1.65rem;
+    color: #FAF7F2;
+    margin: 0 0 0.45rem;
+    line-height: 1.2;
+}
+.lt-page-corp__color-strip-body {
+    font-family: var(--lt-font-body);
+    font-size: 0.92rem;
+    color: rgba(250, 247, 242, 0.65);
+    line-height: 1.6;
+    margin: 0;
+    max-width: 52ch;
+}
+/* Color swatch row — visual demonstration of brand-color matching */
+.lt-page-corp__color-swatches {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    align-items: center;
+}
+.lt-page-corp__swatch {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid rgba(250, 247, 242, 0.12);
+    position: relative;
+}
+.lt-page-corp__swatch-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+}
+/* Brand-color swatch samples — representative of real client palettes */
+.lt-page-corp__swatch--ksl   { background-color: #003087; } /* KSL navy */
+.lt-page-corp__swatch--zions { background-color: #B22222; } /* Zions red */
+.lt-page-corp__swatch--cfa   { background-color: #DD0031; } /* Chick-fil-A red */
+.lt-page-corp__swatch--afc   { background-color: #004B8D; } /* America First blue */
+.lt-page-corp__swatch--wsu   { background-color: #4F2D7F; } /* WSU purple */
+.lt-page-corp__swatch-plus {
+    font-family: var(--lt-font-body);
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: rgba(250, 247, 242, 0.45);
+    padding-left: 0.25rem;
+}
+
 /* --- Case intro ----------------------------------------------------- */
 .lt-page-corp__cases-intro {
     background-color: #FAF7F2;
@@ -520,7 +607,47 @@
 </section>
 
 {# ===================================================================
-   3. CASE INTRO
+   3. BRAND COLOR STRIP — corporate-only furniture
+   Only corporate buyers bring a brand kit. This section cannot be
+   transplanted to schools, civic, or private without feeling wrong.
+   =================================================================== #}
+<section class="lt-page-corp__color-strip lt-fullbleed" aria-labelledby="corp-color-heading">
+    <div class="lt-page-corp__color-strip-inner">
+        <div class="lt-page-corp__color-strip-copy">
+            <p class="lt-page-corp__color-strip-eyebrow">Color matching</p>
+            <h2 id="corp-color-heading" class="lt-page-corp__color-strip-heading">
+                Your brand colors. Precisely.
+            </h2>
+            <p class="lt-page-corp__color-strip-body">
+                Locally Twisted matches balloon palettes to corporate brand
+                standards — not close enough, exactly. KSL navy. Zions red.
+                Chick-fil-A's specific shade. If it's in your brand kit,
+                it's in the install.
+            </p>
+        </div>
+        <div class="lt-page-corp__color-swatches" aria-label="Sample brand color matches">
+            <div class="lt-page-corp__swatch lt-page-corp__swatch--ksl">
+                <span class="lt-page-corp__swatch-label">KSL navy</span>
+            </div>
+            <div class="lt-page-corp__swatch lt-page-corp__swatch--zions">
+                <span class="lt-page-corp__swatch-label">Zions Bank red</span>
+            </div>
+            <div class="lt-page-corp__swatch lt-page-corp__swatch--cfa">
+                <span class="lt-page-corp__swatch-label">Chick-fil-A red</span>
+            </div>
+            <div class="lt-page-corp__swatch lt-page-corp__swatch--afc">
+                <span class="lt-page-corp__swatch-label">America First blue</span>
+            </div>
+            <div class="lt-page-corp__swatch lt-page-corp__swatch--wsu">
+                <span class="lt-page-corp__swatch-label">WSU purple</span>
+            </div>
+            <span class="lt-page-corp__swatch-plus" aria-hidden="true">+25</span>
+        </div>
+    </div>
+</section>
+
+{# ===================================================================
+   4. CASE INTRO (renumbered)
    =================================================================== #}
 <div class="lt-page-corp__cases-intro">
     <div class="lt-page-corp__cases-intro-inner">

@@ -52,12 +52,12 @@ CORPORATE_SECTORS = [
     {
         "sector": "Financial Services",
         "clients": ["Zions Bank", "America First Credit Union", "Fidelity", "Morgan Stanley"],
-        "note": "Brand-controlled color matching for regulated environments.",
+        "note": "Community days, branch grand openings, and annual company events.",
     },
     {
         "sector": "Media & Broadcast",
         "clients": ["KSL", "KUTV", "FOX13", "Paramount", "Megaplex"],
-        "note": "On-camera installations with broadcast-safe palettes.",
+        "note": "Broadcast studio events, premiere screenings, and on-air installations.",
     },
     {
         "sector": "Hospitality & Dining",
@@ -67,7 +67,7 @@ CORPORATE_SECTORS = [
     {
         "sector": "Healthcare",
         "clients": ["IHC", "Mountain Star Medical"],
-        "note": "Professional-grade installations for patient-visible and community events.",
+        "note": "Community health events, staff celebrations, and facility grand openings.",
     },
 ]
 
