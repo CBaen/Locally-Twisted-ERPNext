@@ -1,6 +1,6 @@
 # Nav BTFP / Process Correction
 
-Last updated: 2026-05-07 by Codex.
+Last updated: 2026-05-08 by Codex after linking the BTFP service-page handoff.
 
 ## Outcome
 
@@ -11,6 +11,10 @@ customer-facing chrome and route contracts.
 ## Status
 
 Complete for the current public website.
+
+Follow-up BTFP service-page/form/calculator details live in
+`workstreams/btfp-service-page.md`. Keep this file focused on the nav and
+unapproved Process route correction.
 
 ## Source-Of-Truth Decision
 
@@ -40,6 +44,7 @@ Current rule:
 - `scripts/verify/layout_helpers.js`
 - `apps/locally_twisted/locally_twisted/www/process.html` deleted
 - `apps/locally_twisted/locally_twisted/www/process.py` deleted
+- BTFP page follow-up owned by `workstreams/btfp-service-page.md`
 
 Docs updated:
 

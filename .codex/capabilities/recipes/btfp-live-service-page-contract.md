@@ -1,0 +1,107 @@
+---
+id: btfp-live-service-page-contract
+name: BTFP Live Service Page Contract
+schema_version: 2.0
+level: recipe
+maturity: candidate
+scope: Locally Twisted Balloon Twisting and Face Painting public route, shared inquiry form, and customer pricing calculator
+currently_true: yes
+verification_level: 2
+last_verified: 2026-05-08
+evidence_quality: direct
+successful_uses: 1
+failed_uses: 1
+regressions: 0
+depends_on:
+  - erpnext-intake-form-parity
+  - erpnext-checkout-commerce-rules
+  - frappe-public-container-contract
+  - responsive-container-audit
+used_by:
+  - website-launch
+tags:
+  - Locally Twisted
+  - BTFP
+  - service page
+  - calculator
+  - inquiry form
+  - accessibility
+---
+
+# BTFP Live Service Page Contract
+
+Use this before changing `/balloon-twisting-and-face-painting`, the embedded
+public inquiry form on that page, the artist-time calculator, or any public
+copy that describes Balloon Twisting and Face Painting pricing.
+
+## Contract
+
+- This route is an approved, vital Locally Twisted business lane.
+- The public nav label is `Twisting & Face Painting`.
+- `/process` is not an approved route or replacement for this service lane.
+- The route uses the shared `inquiry-v1` form contract instead of a forked BTFP
+  intake form.
+- Visible service choices on the page are only `Balloon Twisting` and
+  `Face Painting`; both are preselected for the combined route.
+- The customer calculator is transparency only. It does not create checkout,
+  deposit, Quote, Sales Order, Payment Request, or Stripe state.
+- Published math is `$130` first hour per artist, `$115` each additional hour
+  per artist, half-hour increments only after each artist's first hour, `$50`
+  deposit per artist, no discounts.
+- Calculator inputs are row-based: one row per artist, with independent service
+  and hours. Never flatten mixed artists into one shared hours value.
+- Support/event bands stay brand blue. Do not restore the red/tan Process-era
+  divider/banner treatment.
+
+## Source Files
+
+- `apps/locally_twisted/locally_twisted/www/balloon_twisting_and_face_painting.html`
+- `apps/locally_twisted/locally_twisted/www/balloon_twisting_and_face_painting.py`
+- `apps/locally_twisted/locally_twisted/templates/includes/book_form.html`
+- `scripts/verify/contact_prefill.py`
+- `scripts/verify/manual_a11y_probe.js`
+- `scripts/verify/layout_helpers.js`
+
+## Verification
+
+Focused route contract:
+
+```powershell
+python scripts/dev/clear_website_cache.py --restart
+python scripts/verify/contact_prefill.py --base-url http://localhost:8081
+```
+
+Public layout and accessibility:
+
+```powershell
+npm run test:a11y
+npm run test:a11y-manual
+npm run test:layout-fit
+npx playwright test scripts/verify/interactive_layout.spec.js --reporter=dot --workers=1
+```
+
+Use `npm run test:public-verify` for broad public-site closeout when the change
+also touches chrome, containers, Webshop surfaces, or shared CSS.
+
+## Red Flags
+
+- A service page rebuild mentions Process, links to `/process`, or removes the
+  BTFP nav lane.
+- Calculator UI has one global `hours` input plus an artist count.
+- The formula cannot show one twisting artist at one duration and one face
+  painter at another duration.
+- A public deposit checkout CTA returns on the BTFP route.
+- The page forks a second customer intake form instead of using the shared
+  inquiry partial.
+- Brand-blue support/event bands are replaced with red, tan, blush, or a
+  Process-era treatment.
+- Decorative crawls/carousels are keyboard focusable while offscreen or hidden.
+
+## Receipt
+
+On 2026-05-08, GL flagged that the first calculator did not handle multiple
+artists with different services and rental hours. The first verifier update
+failed because the page only exposed one shared hours input and one aggregate
+artist count. The repair changed the calculator to per-artist rows, then
+`contact_prefill.py`, `test:a11y`, `test:a11y-manual`, `test:layout-fit`, and
+`interactive_layout.spec.js` passed against the live local route.

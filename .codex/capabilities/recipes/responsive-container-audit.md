@@ -142,6 +142,13 @@ The first use on 2026-05-05 expanded `npm run test:layout-fit` from a narrow rou
 
 The 2026-05-06 shop showroom repair added a symmetry-specific supplement, then the same-day UX repair superseded the button-grid category controls: `/shop` and `/shop-items/<group>` now use a desktop category rail plus native mobile select, and category/product grids must not leave a single desktop orphan card when a balanced 2-up split is available.
 
+On 2026-05-08, the BTFP calculator changed from one global hours value to
+row-based per-artist controls. The same closeout gate stayed required because
+service controls now sit inside a narrow side panel: `contact_prefill.py`
+guarded the mixed-duration math, `test:a11y` passed 38 route/viewport axe
+checks, `test:a11y-manual` passed keyboard/focus/image checks, `layout-fit`
+passed 247/247, and `interactive_layout.spec.js` passed 88/88.
+
 On 2026-05-07, the route-level container contract became executable via
 `scripts/verify/container_contract.spec.js` and `npm run
 test:container-contract`. The gate currently passes 57/57 checks across the

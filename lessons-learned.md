@@ -6,6 +6,21 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-08 - Service calculators cannot flatten independent workers
+
+The first BTFP price-check calculator used one hours input and multiplied it by
+one artist count. That looked workable for "both services for the same time,"
+but it could not represent the real booking shape: multiple artists, different
+services, different durations, and half-hours applying only after each
+individual artist's first hour.
+
+**Counter-move:** if pricing is per worker, rental, room, vehicle, or other
+independent unit, model the calculator as one row per unit. Each row owns its
+own type and duration; totals are the sum of row prices. Write the verifier
+against a mixed-duration case, not only the symmetric easy case.
+
+---
+
 ## 2026-05-08 - Odoo page base price is not variant price
 
 The Unicorn Bouquet repair proved the catalog importer had flattened dynamic

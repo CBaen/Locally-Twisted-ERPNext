@@ -2,7 +2,7 @@
 
 Status: project recipe
 Scope: Locally Twisted ERPNext/Frappe checkout, cart, service intake, and payment-rule verification.
-Last verified: 2026-05-06
+Last verified: 2026-05-08
 
 ## Use When
 
@@ -26,6 +26,9 @@ For the current LT contract:
 - Balloon twisting and face painting are services.
 - Deposits for those services are non-taxable.
 - Delivery charges are non-taxable.
+- The BTFP public calculator is pricing transparency only. It must not create a
+  public deposit checkout CTA, Sales Order, Payment Request, Stripe session, or
+  shortcut around the shared inquiry path.
 - Product group is not a quote gate for fixed-price products. If a product has a valid fixed price and is otherwise checkoutable, it stays cartable.
 - Out-of-area delivery requires a quote, even if the typed city name resembles a standard service city.
 - Out-of-area delivery redirects the customer to `/contact` with the checkout/customer/cart context prefilled as an interested-item quote request.
@@ -83,6 +86,7 @@ docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute 
 
 - A delivery line changes Sales Order tax.
 - A face-painting, balloon-twisting, or deposit Item lands outside `Services`.
+- A service pricing calculator starts acting like checkout or deposit purchase.
 - A priced product becomes uncartable only because it belongs to an arches, columns, garlands, drops, or similar product group.
 - A ZIP that is outside the standard/Park City zones still gets a delivery fee instead of quote-required behavior.
 - An out-of-area checkout creates a Lead, Sales Order, Payment Request, or Stripe session before redirecting to `/contact`.

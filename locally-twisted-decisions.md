@@ -8,6 +8,36 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-08 - BTFP pricing calculator uses per-artist rows
+
+**Decision:** The public BTFP calculator on
+`/balloon-twisting-and-face-painting` models each artist as a separate row with
+its own service and hours. It must not use one shared hours value multiplied by
+an aggregate artist count.
+
+**Reasoning:** Real Balloon Twisting and Face Painting bookings can have
+multiple artists working different service types and different durations. A
+single shared duration is misleading: one twisting artist for 1.5 hours plus
+one face painter for 2.5 hours is not the same shape as two artists for the
+same time. Each artist also gets their own first hour before additional-hour or
+half-hour pricing applies.
+
+**Implementation:** `balloon_twisting_and_face_painting.html` now renders a
+row-based calculator with add/remove artist behavior. `contact_prefill.py`
+guards mixed-duration math, add-artist math, the per-row minimum one-hour
+clamp, no-discount formula copy, no public deposit checkout CTA, and the shared
+`inquiry-v1` form contract.
+
+**Alternatives considered:** Keep the simpler service radio plus one hours
+input. Rejected because it cannot represent mixed services or different hours
+per artist. Add a full quote engine. Rejected because this page is pricing
+transparency only; final quote and availability remain inquiry-led.
+
+**Decided by:** GL bug report on 2026-05-08; implemented and verified by
+Codex.
+
+---
+
 ## 2026-05-08 - Product and project files must not become monoliths
 
 **Decision:** LT inherits the machine-wide no-monolith law. Hand-authored

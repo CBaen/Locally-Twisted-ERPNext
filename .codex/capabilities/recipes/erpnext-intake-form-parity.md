@@ -1,7 +1,7 @@
 ---
 name: ERPNext intake form parity
 level: recipe
-last_verified: 2026-05-02
+last_verified: 2026-05-08
 ---
 
 ## What it does
@@ -11,6 +11,11 @@ Keeps a public inquiry form, ERPNext Lead metadata, submit mapping, and the oper
 ## When to reach for it
 
 Use this when changing a public `/contact` or `/book` style form, Lead Custom Fields, service taxonomy, conditional Desk sections, uploaded photo fields, or any field label that differs between customer copy and employee copy.
+
+Current LT public form contract is `inquiry-v1`. Service routes can scope and
+preselect service choices through controller context, but they must not fork a
+second customer intake form unless GL explicitly approves a separate form
+contract.
 
 ## How to use it
 
@@ -44,6 +49,13 @@ customer-facing success message over broken intake.
 
    Backend metadata passing is not enough when the complaint is visual. Open the actual Desk route and confirm the field renders as the intended input type with the intended label.
 
+7. Keep service-page pricing helpers separate from form submission.
+
+   A calculator on a service page can help the customer estimate scope, but it
+   is not a Lead schema field or checkout shortcut unless that is deliberately
+   approved. For BTFP, the calculator is row-based pricing transparency while
+   the shared inquiry form still owns the customer request.
+
 ## LT verification commands
 
 ```powershell
@@ -63,3 +75,5 @@ If running the full writing smoke test, delete the generated test Lead/newslette
 - Employee-facing labels can accidentally inherit customer helper copy and make Desk feel noisy.
 - `Time` fields can create slider/time-picker friction for simple estimates.
 - Existing `Time` values can turn into machine-style strings with seconds or microseconds after conversion; clean those up so staff do not treat junk timestamps as real event times.
+- A service page forks a new customer form because it needs scoped choices,
+  when controller context on the shared form would preserve one intake path.

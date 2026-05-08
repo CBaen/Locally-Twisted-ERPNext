@@ -14,6 +14,7 @@ failed_uses: 0
 regressions: 0
 depends_on: []
 used_by:
+  - btfp-live-service-page-contract
   - responsive-container-audit
   - frappe-shop-showroom-symmetry
   - frappe-sitewide-visual-overhaul
