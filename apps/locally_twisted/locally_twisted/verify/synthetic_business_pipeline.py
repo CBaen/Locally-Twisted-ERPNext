@@ -123,6 +123,15 @@ SYNTHETIC_CONTRACTS = (
         "cleanup": "uses in-memory fake payloads and rolls back record-level blocker evidence",
     },
     {
+        "id": "quote_proposal_draft_packets",
+        "lane": "paperwork",
+        "runner": "locally_twisted.verify.quote_proposal_draft_packet_contract.run",
+        "command": "python scripts/verify/quote_proposal_draft_packet_contract.py",
+        "data_mode": "in_memory_fake_quote_proposal_scenarios",
+        "creates": [],
+        "cleanup": "uses in-memory fake quote/proposal payloads only",
+    },
+    {
         "id": "unpaid_invoice_draft_packet_outliers",
         "lane": "paperwork",
         "runner": "locally_twisted.verify.unpaid_invoice_draft_packet_contract.run",

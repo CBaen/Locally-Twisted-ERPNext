@@ -118,6 +118,7 @@ def _contract_failures(result: dict[str, Any]) -> list[str]:
         "customer_document_policy",
         "outbound_document_templates",
         "outbound_document_send_readiness",
+        "quote_proposal_draft_packets",
         "unpaid_invoice_draft_packet_outliers",
         "customer_reminder_dry_run_outliers",
         "customer_reminder_review_report_outliers",

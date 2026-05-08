@@ -32,8 +32,8 @@ Current result:
 - `customer_reminder_review_report.py` passed against local ERPNext with 1 row for `ACC-SINV-2026-00001`.
 - The report row is `internal_review_only`, `draft_only_not_sent`, and `customer_delivery_enabled: false`.
 - The row is grouped under `review_now` with cadence `review_now_payment_reminder`.
-- The synthetic pipeline now runs 10 no-live contracts, all passing, with 0 broken piping.
-- The business automation index now maps 22 surfaces, 18 connected, 4 exists-but-not-connected, and 0 loud-failure gaps.
+- The synthetic pipeline now runs 15 no-live contracts, all passing, with 0 broken piping.
+- The business automation index now maps 24 surfaces, 21 connected, 3 exists-but-not-connected, and 0 loud-failure gaps.
 
 ## Source Files
 

@@ -509,13 +509,25 @@ def _surfaces(
         {
             "id": "quote_proposal_generation",
             "lane": "paperwork",
-            "summary": "Quote/proposal source templates exist, but no Quotation-to-PDF generation or approval queue is wired yet.",
+            "summary": "Lead/Quotation-style quote and proposal data can render draft-only internal review packets without sending or finance mutations.",
             "required_for_launch": False,
-            "exists": _quote_templates_exist,
-            "connected": lambda: ["No Quotation/proposal generator is connected to ERPNext records yet."],
-            "loud_failure": lambda: [],
-            "future_connection": "Wire Lead/Quotation to quote_estimate and event_proposal_packet review drafts.",
-            "verifiers": ["python scripts/verify/outbound_documents_contract.py"],
+            "exists": lambda: [
+                *_quote_templates_exist(),
+                *_files_exist(
+                    "locally_twisted/paperwork/quote_proposal_draft_packet.py",
+                    "locally_twisted/verify/quote_proposal_draft_packet_contract.py",
+                ),
+            ],
+            "connected": _quote_proposal_connected,
+            "loud_failure": _quote_proposal_loud_failure,
+            "evidence": [
+                "apps/locally_twisted/locally_twisted/paperwork/quote_proposal_draft_packet.py",
+                "apps/locally_twisted/locally_twisted/verify/quote_proposal_draft_packet_contract.py",
+            ],
+            "verifiers": [
+                "python scripts/verify/quote_proposal_draft_packet.py --report output/quote-proposal-draft-packet.json",
+                "python scripts/verify/quote_proposal_draft_packet_contract.py",
+            ],
         },
         {
             "id": "vendor_setup_packet_generation",
@@ -1124,6 +1136,65 @@ def _customer_reminder_review_report_connected() -> list[str]:
     return failures
 
 
+def _quote_proposal_connected() -> list[str]:
+    failures = []
+    failures.extend(
+        _callables_exist(
+            "locally_twisted.paperwork.quote_proposal_draft_packet.run",
+            "locally_twisted.verify.quote_proposal_draft_packet_contract.run",
+        )
+    )
+    result = frappe.get_attr("locally_twisted.paperwork.quote_proposal_draft_packet.run")()
+    if not result.get("ok"):
+        failures.extend(result.get("failures") or ["quote_proposal_draft_packet.run returned not ok"])
+    if result.get("read_only") is not True:
+        failures.append("quote_proposal_draft_packet is not marked read_only")
+    if result.get("send_allowed") is not False:
+        failures.append("quote_proposal_draft_packet allows sending")
+    if result.get("mutation_allowed") is not False:
+        failures.append("quote_proposal_draft_packet allows mutations")
+    if result.get("customer_delivery_enabled") is not False:
+        failures.append("quote_proposal_draft_packet enables customer delivery")
+    if result.get("packet_type") != "quote_proposal_draft_packet":
+        failures.append("quote_proposal_draft_packet returned the wrong packet_type")
+    if result.get("mutation_guard", {}).get("changed"):
+        failures.append("quote_proposal_draft_packet mutation guard changed")
+
+    contract = frappe.get_attr("locally_twisted.verify.quote_proposal_draft_packet_contract.run")()
+    if not contract.get("ok"):
+        failures.extend(contract.get("failures") or ["quote_proposal_draft_packet_contract.run returned not ok"])
+    expected = {
+        "normal_quote_review_packet",
+        "corporate_proposal_review_packet",
+        "missing_acceptance_path_blocks_readiness",
+        "empty_review_ok",
+        "malformed_send_ready_source_fails",
+    }
+    scenario_ids = {scenario.get("id") for scenario in contract.get("scenarios") or []}
+    missing = sorted(expected - scenario_ids)
+    if missing:
+        failures.append("quote/proposal contract missing scenarios: " + ", ".join(missing))
+    for scenario in contract.get("scenarios") or []:
+        if scenario.get("passed") is not True:
+            failures.append(f"quote/proposal scenario failed: {scenario.get('id')}")
+    return failures
+
+
+def _quote_proposal_loud_failure() -> list[str]:
+    failures = []
+    source = _read("locally_twisted/paperwork/quote_proposal_draft_packet.py")
+    for marker in (
+        "draft_only_not_sent",
+        "evaluate_send_readiness",
+        "human_review_required",
+        "no_customer_send",
+        "no_sales_invoice",
+    ):
+        if marker not in source:
+            failures.append(f"quote_proposal_draft_packet.py missing marker {marker}")
+    return failures
+
+
 def _synthetic_business_pipeline_connected() -> list[str]:
     failures = []
     failures.extend(_callables_exist("locally_twisted.verify.synthetic_business_pipeline.run"))
@@ -1291,6 +1362,7 @@ def _checkups() -> list[dict[str, object]]:
                 "python scripts/verify/customer_reminder_dry_run_contract.py",
                 "python scripts/verify/customer_reminder_review_report_contract.py",
                 "python scripts/verify/outbound_document_send_readiness_contract.py",
+                "python scripts/verify/quote_proposal_draft_packet_contract.py",
                 "python scripts/verify/render_outbound_document_previews.py --slug synthetic-pipeline-audit --no-open",
             ],
         },
@@ -1302,6 +1374,8 @@ def _checkups() -> list[dict[str, object]]:
                 "python scripts/verify/invoice_branding_contract.py",
                 "python scripts/verify/outbound_documents_contract.py",
                 "python scripts/verify/outbound_document_send_readiness_contract.py",
+                "python scripts/verify/quote_proposal_draft_packet.py --report output/quote-proposal-draft-packet.json",
+                "python scripts/verify/quote_proposal_draft_packet_contract.py",
                 "python scripts/verify/paperwork_status.py --report output/paperwork-status.json",
                 "python scripts/verify/unpaid_invoice_review.py --report output/unpaid-invoice-review.json",
                 "python scripts/verify/unpaid_invoice_draft_packet.py --report output/unpaid-invoice-draft-packet.json",
@@ -1406,6 +1480,11 @@ def _fake_data_contracts() -> list[dict[str, object]]:
             "command": "python scripts/verify/outbound_document_send_readiness_contract.py",
             "creates": ["Lead", "Comment", "Error Log"],
             "cleanup": "uses in-memory fake send-readiness payloads and rolls back record-level blocker evidence",
+        },
+        {
+            "command": "python scripts/verify/quote_proposal_draft_packet_contract.py",
+            "creates": [],
+            "cleanup": "uses in-memory fake quote/proposal payloads only",
         },
     ]
 

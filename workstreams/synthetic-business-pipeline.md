@@ -1,6 +1,6 @@
 # Synthetic Business Pipeline
 
-Last updated: 2026-05-08 by Codex after adding external document send-readiness blockers.
+Last updated: 2026-05-08 by Codex after adding quote/proposal draft packets.
 
 ## Outcome
 
@@ -22,10 +22,10 @@ Current result on 2026-05-08:
 - `synthetic_only: true`
 - `live_inputs_required: false`
 - `uses_real_customer_data: false`
-- 14 synthetic contracts run
-- 14 synthetic contracts passing
+- 15 synthetic contracts run
+- 15 synthetic contracts passing
 - 0 broken piping items
-- 9 inefficiencies / partial connections surfaced
+- 8 inefficiencies / partial connections surfaced
 - 3 cutover-deferred items surfaced
 
 The report writes ignored JSON to `output/synthetic-business-pipeline.json`.
@@ -43,6 +43,7 @@ The report writes ignored JSON to `output/synthetic-business-pipeline.json`.
 - Customer policy document anchors and inquiry acknowledgment policy blocks.
 - Outbound document registry/template contract.
 - Outbound document send-readiness blockers for missing required fields, recipient confirmation, payment path, branding, human approval, sensitive attachments, and record-level blocker evidence.
+- Quote/proposal draft packets with fake Quotation/Lead-style scenarios, including missing acceptance path and malformed send-ready source rows.
 - Unpaid invoice packet normal/outlier fake-data scenarios.
 - Customer reminder dry-run normal/outlier fake-data scenarios, including missing payment path and malformed send-enabled packets.
 - Customer reminder review-report normal/outlier fake-data scenarios, including grouped rows, empty queues, and malformed send-enabled source rows.
@@ -56,7 +57,6 @@ The synthetic audit currently surfaces, but does not fail on, these non-live gap
 - no Supplier/vendor records
 - no Employee records
 - missing payroll DocTypes / HRMS
-- quote/proposal templates exist but no Quotation-to-PDF approval generator is wired
 - vendor setup/W-9 template exists but no approved W-9/Supplier/secure-send flow is wired
 - bank reconciliation exists as ERPNext capability but no LT bank setup is connected
 - payroll is future feasibility, not operational
@@ -82,6 +82,8 @@ Do not turn this verifier into customer sending or accounting mutation. Rollback
 - `apps/locally_twisted/locally_twisted/verify/customer_reminder_review_report_contract.py`
 - `apps/locally_twisted/locally_twisted/outbound_documents/send_readiness.py`
 - `apps/locally_twisted/locally_twisted/verify/outbound_document_send_readiness_contract.py`
+- `apps/locally_twisted/locally_twisted/paperwork/quote_proposal_draft_packet.py`
+- `apps/locally_twisted/locally_twisted/verify/quote_proposal_draft_packet_contract.py`
 - `apps/locally_twisted/locally_twisted/verify/business_automation_index.py`
 
 ## Next Safe Slice
