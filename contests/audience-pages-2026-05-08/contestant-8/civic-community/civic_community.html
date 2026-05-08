@@ -1,0 +1,184 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+<div class="lt-page-civic">
+
+{# ===================================================================
+   Section 1 — Hero (fullbleed)
+   Container mode: fullbleed
+   Height contract: mobile 220px / tablet 250px / desktop 280px
+=================================================================== #}
+<section class="lt-civic-hero lt-fullbleed" aria-labelledby="lt-civic-page-heading">
+    <div class="lt-civic-hero__image" aria-hidden="true"></div>
+    <div class="lt-civic-hero__content">
+        <p class="lt-civic-hero__eyebrow">Wasatch Front · Civic &amp; Community Events</p>
+        <h1 id="lt-civic-page-heading" class="lt-civic-hero__title">
+            Balloon decor built for Utah's civic scale.
+        </h1>
+        <p class="lt-civic-hero__lede">
+            From SLC Pride to Sandy City to the Gallivan Center — custom arches, columns, and
+            parade installations for public events that deserve real presence.
+        </p>
+        <a href="/contact?intent=civic" class="lt-civic-hero__cta">
+            Request a civic quote <span aria-hidden="true">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+{# ===================================================================
+   Section 2 — Client Proof Band (fullbleed)
+   Container mode: fullbleed, inner wrapper for readable content
+=================================================================== #}
+<section class="lt-civic-clients lt-fullbleed" aria-labelledby="lt-civic-clients-heading">
+    <div class="lt-civic-clients__inner">
+        <p id="lt-civic-clients-heading" class="lt-civic-clients__heading">
+            Trusted by Utah's cities, counties, and community organizations
+        </p>
+        <ul class="lt-civic-clients__list" role="list">
+            {% for client in civic_clients %}
+            <li>{{ client }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>
+
+{# ===================================================================
+   Section 3 — Installed-Work Photos (band)
+   Container mode: band
+=================================================================== #}
+<section class="lt-civic-photos" aria-labelledby="lt-civic-photos-heading">
+    <div class="lt-civic-photos__inner">
+        <h2 id="lt-civic-photos-heading" class="lt-civic-photos__heading">Work That Shows Up</h2>
+        <p class="lt-civic-photos__lede">
+            Civic events are photographed, shared, and remembered. The installation should look
+            as good in the background of a city photo as it does in person.
+        </p>
+        <div class="lt-civic-photos__grid">
+            {% for photo in civic_photos %}
+            <div class="lt-civic-photos__item">
+                <img src="{{ photo.src }}"
+                     alt="{{ photo.alt }}"
+                     loading="lazy"
+                     width="800" height="600">
+                <p class="lt-civic-photos__label">{{ photo.label }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{# ===================================================================
+   Section 4 — Case Study / Story Block (band)
+   Container mode: band
+=================================================================== #}
+<section class="lt-civic-case" aria-labelledby="lt-civic-case-heading">
+    <div class="lt-civic-case__inner">
+        <p class="lt-civic-case__eyebrow">In the Work</p>
+        <h2 id="lt-civic-case-heading" class="lt-civic-case__heading">
+            Utah's Pride events. Multiple years running.
+        </h2>
+        <div class="lt-civic-case__body">
+            <p>
+                SLC Pride, Pride Center, Equality Utah, and the LGBT Chamber have all worked with
+                Locally Twisted for balloon installations that anchor parade routes, frame event
+                entrances, and create the photo moments that appear in coverage the next day.
+                The work needs to hold for full outdoor days in Utah's variable summer weather — and
+                it does.
+            </p>
+            <p>
+                The same full-service approach — quote, design, deliver, install, strike — scales from a
+                single arch at a neighborhood block party to multi-piece parade and plaza installations
+                for city-scale events. Twelve Utah cities across Salt Lake, Davis, and Weber counties
+                have relied on that same approach.
+            </p>
+        </div>
+    </div>
+</section>
+
+{# ===================================================================
+   Section 5 — Service Notes (band)
+   Container mode: band
+=================================================================== #}
+<section class="lt-civic-services" aria-labelledby="lt-civic-services-heading">
+    <div class="lt-civic-services__inner">
+        <h2 id="lt-civic-services-heading" class="lt-civic-services__heading">What Civic Events Need</h2>
+        <p class="lt-civic-services__lede">
+            Public events have different requirements than private venues. These are the specifics.
+        </p>
+        <div class="lt-civic-services__grid" role="list">
+            <article class="lt-civic-services__card" role="listitem">
+                <p class="lt-civic-services__card-name">Parade &amp; Outdoor Arches</p>
+                <p class="lt-civic-services__card-desc">
+                    Full balloon arches designed for parade routes, park entrances, and outdoor plazas.
+                    Weighted and anchored for Utah summer conditions.
+                </p>
+            </article>
+            <article class="lt-civic-services__card" role="listitem">
+                <p class="lt-civic-services__card-name">Civic Entrance Columns</p>
+                <p class="lt-civic-services__card-desc">
+                    Matching column pairs for event entry points, stage flanks, and public-space
+                    installations. Available in custom color palettes including Pride, city colors,
+                    and event branding.
+                </p>
+            </article>
+            <article class="lt-civic-services__card" role="listitem">
+                <p class="lt-civic-services__card-name">Photo Ops &amp; Backdrops</p>
+                <p class="lt-civic-services__card-desc">
+                    Branded photo moments for community events — garlands, organic walls, flag-shaped
+                    builds, and custom sculptures that become the photo destination.
+                </p>
+            </article>
+            <article class="lt-civic-services__card" role="listitem">
+                <p class="lt-civic-services__card-name">Full-Service Install</p>
+                <p class="lt-civic-services__card-desc">
+                    Delivery, setup, and teardown included. No coordination of separate vendors.
+                    One call covers the decor for the event.
+                </p>
+            </article>
+        </div>
+    </div>
+</section>
+
+{# ===================================================================
+   Section 6 — Proof Icons (fullbleed)
+   Container mode: fullbleed, inner wrapper
+=================================================================== #}
+<section class="lt-civic-icons lt-fullbleed" aria-labelledby="lt-civic-icons-heading">
+    <h2 id="lt-civic-icons-heading" class="visually-hidden">Why civic buyers choose Locally Twisted</h2>
+    <div class="lt-civic-icons__inner">
+        {% for icon in civic_icons %}
+        <div class="lt-civic-icons__item">
+            <img class="lt-civic-icons__img"
+                 src="{{ icon.asset }}"
+                 alt=""
+                 aria-hidden="true"
+                 width="48" height="48">
+            <span class="lt-civic-icons__label">{{ icon.label }}</span>
+            <p class="lt-civic-icons__desc">{{ icon.desc }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{# ===================================================================
+   Section 7 — CTA (fullbleed)
+   Container mode: fullbleed
+=================================================================== #}
+<section class="lt-civic-cta lt-fullbleed" aria-labelledby="lt-civic-cta-heading">
+    <div class="lt-civic-cta__inner">
+        <h2 id="lt-civic-cta-heading" class="lt-civic-cta__heading">
+            Tell us what you're planning.
+        </h2>
+        <p class="lt-civic-cta__body">
+            Civic events book early. If you're coordinating a city event, Pride event, parade,
+            community gathering, or public venue installation, reach out with the date, location,
+            and what you're imagining — and we'll come back with a quote.
+        </p>
+        <a href="/contact?intent=civic" class="lt-civic-cta__button">
+            Request a civic event quote <span aria-hidden="true">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+</div>{# .lt-page-civic #}
+{% endblock %}

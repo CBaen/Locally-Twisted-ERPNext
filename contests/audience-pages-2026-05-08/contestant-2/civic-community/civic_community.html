@@ -1,0 +1,677 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+{#
+  /civic-community — Audience page for city events coordinators, Pride organizers,
+  chambers, county events, and community organizations.
+
+  Sections (container mode declared per the Public Container Contract):
+  1. Hero                     [fullbleed]
+  2. Client proof grid        [band]
+  3. Brass-rule divider       [raw-band]
+  4. Proof stories            [band]
+  5. Trust pillars            [fullbleed — dark authority band]
+  6. Audience service notes   [band]
+  7. Photo gallery            [visual-field]
+  8. Closing CTA              [fullbleed — dark]
+#}
+
+<style>
+/* =====================================================================
+   /civic-community page styles — scoped to .lt-page-civic
+   All colors from lt-theme.css tokens. No !important.
+   ===================================================================== */
+
+/* --- Hero ----------------------------------------------------------- */
+.lt-page-civic .lt-hero {
+    position: relative;
+    min-height: 220px;
+    height: 220px;
+    max-height: 220px;
+    background-color: var(--lt-navy);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+@media (min-width: 768px) {
+    .lt-page-civic .lt-hero { min-height: 250px; height: 250px; max-height: 250px; }
+}
+@media (min-width: 1200px) {
+    .lt-page-civic .lt-hero { min-height: 280px; height: 280px; max-height: 280px; }
+}
+.lt-page-civic .lt-hero__bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('/assets/locally_twisted/images/portfolio/optimized/seasonal-pride-columns.webp');
+    background-size: cover;
+    background-position: center top;
+}
+.lt-page-civic .lt-hero__bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(10,10,11,0.90) 0%, rgba(14,34,64,0.72) 45%, rgba(14,34,64,0.10) 100%),
+                linear-gradient(180deg, rgba(14,34,64,0.04) 0%, rgba(10,10,11,0.30) 100%);
+}
+.lt-page-civic .lt-hero__content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem;
+    color: var(--lt-warm-white);
+}
+@media (min-width: 768px) {
+    .lt-page-civic .lt-hero__content { padding: 2rem; }
+}
+@media (min-width: 1200px) {
+    .lt-page-civic .lt-hero__content { padding: 2rem 3rem; }
+}
+.lt-page-civic .lt-hero__eyebrow {
+    font-family: var(--lt-font-body);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--lt-brass);
+    margin: 0 0 0.35rem;
+}
+.lt-page-civic .lt-hero__title {
+    font-family: var(--lt-font-heading);
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1.05;
+    color: var(--lt-warm-white);
+    margin: 0 0 0.55rem;
+    max-width: 20ch;
+}
+@media (min-width: 768px) {
+    .lt-page-civic .lt-hero__title { font-size: 2.6rem; }
+}
+@media (min-width: 1200px) {
+    .lt-page-civic .lt-hero__title { font-size: 3rem; }
+}
+.lt-page-civic .lt-hero__lede {
+    font-family: var(--lt-font-body);
+    font-size: 0.95rem;
+    line-height: 1.4;
+    color: rgba(250,247,242,0.90);
+    margin: 0 0 0.85rem;
+    max-width: 50ch;
+}
+.lt-page-civic .lt-hero__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1.1rem;
+    background-color: var(--lt-crimson);
+    color: var(--lt-warm-white);
+    font-family: var(--lt-font-body);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-decoration: none;
+    min-height: 44px;
+}
+.lt-page-civic .lt-hero__cta:hover,
+.lt-page-civic .lt-hero__cta:focus-visible {
+    background-color: var(--lt-ink);
+    outline: 2px solid var(--lt-brass);
+    outline-offset: 2px;
+}
+
+/* --- Client proof grid ---------------------------------------------- */
+.lt-civic-clients {
+    background-color: var(--lt-warm-white);
+    padding: 3.5rem 1rem 3rem;
+}
+.lt-civic-clients__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.lt-civic-clients__heading {
+    font-family: var(--lt-font-heading);
+    font-size: 2rem;
+    color: var(--lt-ink);
+    text-align: center;
+    margin: 0 0 0.5rem;
+}
+@media (min-width: 1200px) {
+    .lt-civic-clients__heading { font-size: 2.5rem; }
+}
+.lt-civic-clients__lede {
+    font-family: var(--lt-font-body);
+    font-size: 1rem;
+    color: var(--lt-soft-gray);
+    text-align: center;
+    max-width: 56ch;
+    margin: 0 auto 2.5rem;
+    line-height: 1.5;
+}
+.lt-civic-clients__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem 1rem;
+}
+@media (min-width: 768px) {
+    .lt-civic-clients__grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2rem 1.5rem;
+    }
+}
+.lt-civic-clients__group-label {
+    font-family: var(--lt-font-body);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--lt-brass);
+    margin: 0 0 0.65rem;
+    border-bottom: 1px solid rgba(184,154,91,0.3);
+    padding-bottom: 0.4rem;
+}
+.lt-civic-clients__names {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.lt-civic-clients__names li {
+    font-family: var(--lt-font-body);
+    font-size: 0.9rem;
+    color: var(--lt-slate);
+    line-height: 1.7;
+}
+
+/* --- Brass divider -------------------------------------------------- */
+.lt-civic-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1.25rem 0;
+    background-color: var(--lt-warm-white);
+}
+.lt-civic-divider__line {
+    flex: 1;
+    max-width: 120px;
+    height: 1px;
+    background-color: rgba(184,154,91,0.35);
+}
+.lt-civic-divider__dot {
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 50%;
+    background-color: var(--lt-brass);
+    opacity: 0.7;
+}
+
+/* --- Proof stories -------------------------------------------------- */
+.lt-civic-stories {
+    background-color: var(--lt-warm-white);
+    padding: 3rem 1rem 4rem;
+}
+.lt-civic-stories__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.lt-civic-stories__heading {
+    font-family: var(--lt-font-heading);
+    font-size: 1.875rem;
+    color: var(--lt-ink);
+    text-align: center;
+    margin: 0 0 2.5rem;
+}
+@media (min-width: 1200px) {
+    .lt-civic-stories__heading { font-size: 2.25rem; }
+}
+.lt-civic-stories__list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+}
+@media (min-width: 768px) {
+    .lt-civic-stories__list {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+    }
+}
+.lt-civic-story {
+    display: flex;
+    flex-direction: column;
+}
+.lt-civic-story__image {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    background-color: var(--lt-stone);
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 1.25rem;
+}
+.lt-civic-story__client {
+    font-family: var(--lt-font-body);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--lt-crimson);
+    margin: 0 0 0.35rem;
+}
+.lt-civic-story__headline {
+    font-family: var(--lt-font-heading);
+    font-size: 1.375rem;
+    color: var(--lt-ink);
+    margin: 0 0 0.6rem;
+    line-height: 1.25;
+}
+.lt-civic-story__body {
+    font-family: var(--lt-font-body);
+    font-size: 0.95rem;
+    color: var(--lt-soft-gray);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* --- Trust pillars (dark authority band) ---------------------------- */
+.lt-civic-trust {
+    background-color: var(--lt-navy);
+    padding: 3rem 1rem;
+}
+.lt-civic-trust__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.lt-civic-trust__heading {
+    font-family: var(--lt-font-heading);
+    font-size: 1.5rem;
+    color: var(--lt-warm-white);
+    text-align: center;
+    margin: 0 0 2rem;
+    letter-spacing: 0.01em;
+}
+.lt-civic-trust__pillars {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem 1rem;
+}
+@media (min-width: 768px) {
+    .lt-civic-trust__pillars {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem 2rem;
+    }
+}
+.lt-civic-trust__pillar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.75rem;
+}
+.lt-civic-trust__icon {
+    width: 48px;
+    height: 48px;
+    color: var(--lt-brass);
+    flex-shrink: 0;
+}
+.lt-civic-trust__label {
+    font-family: var(--lt-font-body);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--lt-brass);
+    margin: 0;
+}
+.lt-civic-trust__detail {
+    font-family: var(--lt-font-body);
+    font-size: 0.875rem;
+    color: rgba(250,247,242,0.78);
+    margin: 0;
+    line-height: 1.45;
+}
+
+/* --- Service notes -------------------------------------------------- */
+.lt-civic-services {
+    background-color: var(--lt-stone);
+    padding: 3.5rem 1rem;
+}
+.lt-civic-services__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.lt-civic-services__heading {
+    font-family: var(--lt-font-heading);
+    font-size: 1.875rem;
+    color: var(--lt-ink);
+    text-align: center;
+    margin: 0 0 0.5rem;
+}
+.lt-civic-services__lede {
+    font-family: var(--lt-font-body);
+    font-size: 1rem;
+    color: var(--lt-soft-gray);
+    text-align: center;
+    max-width: 54ch;
+    margin: 0 auto 2.5rem;
+    line-height: 1.5;
+}
+.lt-civic-services__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+}
+@media (min-width: 768px) {
+    .lt-civic-services__grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
+    }
+}
+.lt-civic-service-card {
+    background-color: var(--lt-warm-white);
+    padding: 1.5rem 1.25rem;
+    border-left: 3px solid var(--lt-brass);
+}
+.lt-civic-service-card__icon {
+    width: 40px;
+    height: 40px;
+    color: var(--lt-brass);
+    margin-bottom: 0.75rem;
+}
+.lt-civic-service-card__label {
+    font-family: var(--lt-font-body);
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--lt-ink);
+    margin: 0 0 0.4rem;
+    line-height: 1.3;
+}
+.lt-civic-service-card__detail {
+    font-family: var(--lt-font-body);
+    font-size: 0.85rem;
+    color: var(--lt-soft-gray);
+    margin: 0;
+    line-height: 1.45;
+}
+
+/* --- Photo gallery -------------------------------------------------- */
+.lt-civic-gallery {
+    background-color: var(--lt-warm-white);
+    padding: 3rem 1rem;
+}
+.lt-civic-gallery__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.lt-civic-gallery__heading {
+    font-family: var(--lt-font-heading);
+    font-size: 1.75rem;
+    color: var(--lt-ink);
+    text-align: center;
+    margin: 0 0 1.75rem;
+}
+.lt-civic-gallery__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+}
+@media (min-width: 768px) {
+    .lt-civic-gallery__grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.625rem;
+    }
+}
+.lt-civic-gallery__item {
+    aspect-ratio: 1 / 1;
+    background-size: cover;
+    background-position: center;
+    background-color: var(--lt-stone);
+}
+
+/* --- Closing CTA ---------------------------------------------------- */
+.lt-civic-cta {
+    background-color: var(--lt-slate);
+    padding: 4rem 1rem 4.5rem;
+    text-align: center;
+}
+.lt-civic-cta__inner {
+    max-width: 700px;
+    margin: 0 auto;
+}
+.lt-civic-cta__heading {
+    font-family: var(--lt-font-heading);
+    font-size: 2.25rem;
+    color: var(--lt-warm-white);
+    margin: 0 0 1rem;
+    line-height: 1.15;
+}
+@media (min-width: 768px) {
+    .lt-civic-cta__heading { font-size: 2.75rem; }
+}
+.lt-civic-cta__body {
+    font-family: var(--lt-font-body);
+    font-size: 1rem;
+    color: rgba(250,247,242,0.82);
+    margin: 0 auto 1.75rem;
+    max-width: 52ch;
+    line-height: 1.6;
+}
+.lt-civic-cta__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    background-color: var(--lt-crimson);
+    color: var(--lt-warm-white);
+    font-family: var(--lt-font-body);
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    min-height: 48px;
+}
+.lt-civic-cta__btn:hover,
+.lt-civic-cta__btn:focus-visible {
+    background-color: var(--lt-ink);
+    outline: 2px solid var(--lt-brass);
+    outline-offset: 2px;
+}
+</style>
+
+<div class="lt-page-civic">
+
+{# ── 1. Hero [fullbleed] ─────────────────────────────────────────── #}
+<section class="lt-hero lt-fullbleed" aria-labelledby="civic-page-heading">
+    <div class="lt-hero__bg" aria-hidden="true"></div>
+    <div class="lt-hero__content">
+        <p class="lt-hero__eyebrow">Civic &amp; Community Events · Wasatch Front</p>
+        <h1 id="civic-page-heading" class="lt-hero__title">
+            Built for public events. Designed to photograph.
+        </h1>
+        <p class="lt-hero__lede">
+            Parade arches, civic plaza moments, Pride installations, and
+            community-fair decor for Utah cities and organizations.
+        </p>
+        <a href="/contact?intent=civic-community" class="lt-hero__cta">
+            Plan Your Event <span aria-hidden="true">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+{# ── 2. Client proof grid [band] ─────────────────────────────────── #}
+<section class="lt-civic-clients" aria-labelledby="civic-clients-heading">
+    <div class="lt-civic-clients__inner">
+        <h2 id="civic-clients-heading" class="lt-civic-clients__heading">
+            Trusted by Utah communities
+        </h2>
+        <p class="lt-civic-clients__lede">
+            From city halls to civic plazas, Locally Twisted has installed
+            at public events across the Wasatch Front for over two decades.
+        </p>
+        <div class="lt-civic-clients__grid" role="list">
+            {% for group_name, names in civic_clients.items() %}
+            <div role="listitem">
+                <p class="lt-civic-clients__group-label">{{ group_name }}</p>
+                <ul class="lt-civic-clients__names" aria-label="{{ group_name }} clients">
+                    {% for name in names %}
+                    <li>{{ name }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{# ── 3. Brass divider [raw-band] ─────────────────────────────────── #}
+<div class="lt-civic-divider lt-fullbleed" aria-hidden="true">
+    <span class="lt-civic-divider__line"></span>
+    <span class="lt-civic-divider__dot"></span>
+    <span class="lt-civic-divider__dot"></span>
+    <span class="lt-civic-divider__dot"></span>
+    <span class="lt-civic-divider__line"></span>
+</div>
+
+{# ── 4. Proof stories [band] ─────────────────────────────────────── #}
+<section class="lt-civic-stories" aria-labelledby="civic-stories-heading">
+    <div class="lt-civic-stories__inner">
+        <h2 id="civic-stories-heading" class="lt-civic-stories__heading">
+            Work that holds up in public
+        </h2>
+        <div class="lt-civic-stories__list">
+            {% for story in civic_proof_stories %}
+            <article class="lt-civic-story">
+                <div class="lt-civic-story__image"
+                     style="background-image: url('{{ story.image }}')"
+                     role="img"
+                     aria-label="{{ story.image_alt }}"></div>
+                <p class="lt-civic-story__client">{{ story.client }}</p>
+                <h3 class="lt-civic-story__headline">{{ story.headline }}</h3>
+                <p class="lt-civic-story__body">{{ story.body }}</p>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{# ── 5. Trust pillars [fullbleed — dark authority band] ──────────── #}
+<section class="lt-civic-trust lt-fullbleed" aria-labelledby="civic-trust-heading">
+    <div class="lt-civic-trust__inner">
+        <h2 id="civic-trust-heading" class="lt-civic-trust__heading">
+            What public-event coordinators need from a balloon vendor
+        </h2>
+        <div class="lt-civic-trust__pillars">
+            <div class="lt-civic-trust__pillar">
+                <img class="lt-civic-trust__icon"
+                     src="/assets/locally_twisted/icons/brand/civic-parade.svg"
+                     alt="" aria-hidden="true" width="48" height="48">
+                <p class="lt-civic-trust__label">Parade &amp; Street Events</p>
+                <p class="lt-civic-trust__detail">
+                    Arches built for clearance and wind. Coordinated drop-off and post-event strike.
+                </p>
+            </div>
+            <div class="lt-civic-trust__pillar">
+                <img class="lt-civic-trust__icon"
+                     src="/assets/locally_twisted/icons/brand/event-stage.svg"
+                     alt="" aria-hidden="true" width="48" height="48">
+                <p class="lt-civic-trust__label">Stage &amp; Ribbon-Cutting</p>
+                <p class="lt-civic-trust__detail">
+                    Podium backdrops, column pairs, and formal entrance arches for official moments.
+                </p>
+            </div>
+            <div class="lt-civic-trust__pillar">
+                <img class="lt-civic-trust__icon"
+                     src="/assets/locally_twisted/icons/brand/professional.svg"
+                     alt="" aria-hidden="true" width="48" height="48">
+                <p class="lt-civic-trust__label">Professionally Invoiced</p>
+                <p class="lt-civic-trust__detail">
+                    Invoicing for city, county, and chamber accounts. COI available on request.
+                </p>
+            </div>
+            <div class="lt-civic-trust__pillar">
+                <img class="lt-civic-trust__icon"
+                     src="/assets/locally_twisted/icons/brand/utah-rooted.svg"
+                     alt="" aria-hidden="true" width="48" height="48">
+                <p class="lt-civic-trust__label">Utah Rooted Since 1998</p>
+                <p class="lt-civic-trust__detail">
+                    Based on the Wasatch Front. Every install is local to the communities we serve.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# ── 6. Audience service notes [band] ────────────────────────────── #}
+<section class="lt-civic-services" aria-labelledby="civic-services-heading">
+    <div class="lt-civic-services__inner">
+        <h2 id="civic-services-heading" class="lt-civic-services__heading">
+            How civic installs work
+        </h2>
+        <p class="lt-civic-services__lede">
+            Public events have different constraints than private ones.
+            Permitting windows, shared spaces, public safety clearances,
+            and all-weather durability — Locally Twisted plans for all of it.
+        </p>
+        <div class="lt-civic-services__grid">
+            {% for note in civic_service_notes %}
+            <div class="lt-civic-service-card">
+                <img class="lt-civic-service-card__icon"
+                     src="/assets/locally_twisted/icons/brand/{{ note.icon }}.svg"
+                     alt="" aria-hidden="true" width="40" height="40">
+                <p class="lt-civic-service-card__label">{{ note.label }}</p>
+                <p class="lt-civic-service-card__detail">{{ note.detail }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{# ── 7. Photo gallery [visual-field] ─────────────────────────────── #}
+<section class="lt-civic-gallery" aria-labelledby="civic-gallery-heading">
+    <div class="lt-civic-gallery__inner">
+        <h2 id="civic-gallery-heading" class="lt-civic-gallery__heading">
+            Installed work
+        </h2>
+        <div class="lt-civic-gallery__grid" role="list">
+            <div class="lt-civic-gallery__item" role="listitem"
+                 style="background-image: url('/assets/locally_twisted/images/portfolio/optimized/seasonal-pride-columns.webp')"
+                 aria-label="Rainbow balloon columns at a civic Pride event"></div>
+            <div class="lt-civic-gallery__item" role="listitem"
+                 style="background-image: url('/assets/locally_twisted/images/portfolio/optimized/corporate-weberstock-photo-opt.webp')"
+                 aria-label="Large photo-moment balloon installation at a public event"></div>
+            <div class="lt-civic-gallery__item" role="listitem"
+                 style="background-image: url('/assets/locally_twisted/images/portfolio/optimized/corporate-logo-arch.webp')"
+                 aria-label="Branded balloon arch for a civic or corporate entrance"></div>
+            <div class="lt-civic-gallery__item" role="listitem"
+                 style="background-image: url('/assets/locally_twisted/images/portfolio/optimized/seasonal-easter-rabbit-arch.webp')"
+                 aria-label="Decorative balloon arch for a community seasonal event"></div>
+        </div>
+        <p style="text-align:center; margin-top:1.5rem;">
+            <a href="/portfolio"
+               style="font-family: var(--lt-font-body); font-size:0.9rem; font-weight:700;
+                      color:var(--lt-ink); text-decoration:none;
+                      border-bottom: 1px solid rgba(184,154,91,0.5); padding-bottom:0.1rem;">
+                View full portfolio &rarr;
+            </a>
+        </p>
+    </div>
+</section>
+
+{# ── 8. Closing CTA [fullbleed — dark] ───────────────────────────── #}
+<section class="lt-civic-cta lt-fullbleed" aria-labelledby="civic-cta-heading">
+    <div class="lt-civic-cta__inner">
+        <h2 id="civic-cta-heading" class="lt-civic-cta__heading">
+            Planning a community event?
+        </h2>
+        <p class="lt-civic-cta__body">
+            Tell us the venue, the scale, and the occasion.
+            Locally Twisted handles the design, delivery, install, and strike —
+            so your team can focus on the event itself.
+        </p>
+        <a href="/contact?intent=civic-community" class="lt-civic-cta__btn">
+            Request an Event Quote <span aria-hidden="true">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+</div>{# end .lt-page-civic #}
+
+{% endblock %}
