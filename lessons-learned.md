@@ -6,6 +6,20 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-08 - Public accessibility is a launch gate, not a visual polish pass
+
+The full-site axe scan caught issues that looked small in isolation but are
+real launch blockers together: nested `<main>` landmarks inside Frappe's own
+page-level main, low-contrast labels, product-card heading jumps, a nested
+category-rail landmark, breadcrumb region/contrast drift, a hidden unnamed
+Explore link, and a color-only checkout link.
+
+**Counter-move:** route templates must not add page-level `<main>` landmarks
+inside Frappe's existing `main.container`. Public route closeout now needs
+`npm run test:a11y` alongside layout/container/interactive checks. Treat
+contrast, landmarks, link names, heading order, breadcrumb regions, and
+keyboard/screen-reader semantics as launch blockers, not after-the-fact polish.
+
 ## 2026-05-08 - Delight motion still needs a settle point
 
 The portfolio reel felt better after the no-caption/no-frame correction, but

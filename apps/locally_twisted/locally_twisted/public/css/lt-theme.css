@@ -2409,7 +2409,10 @@ body.lt-filter-open {
     margin: 0.375rem 0 0;
 }
 
-/* Hide "Explore" button — actual class is btn-explore-variants */
+/* Hide Webshop's duplicate Explore link/button from LT category cards.
+   Hide the wrapping anchor too so axe does not see an empty focusable link. */
+#products-grid-area .card-body > a:has(.btn-explore-variants),
+#products-grid-area .card-body > a:has(.btn-explore),
 #products-grid-area .btn-explore-variants,
 #products-grid-area .btn-explore {
     display: none;
@@ -3206,6 +3209,11 @@ h3,
   letter-spacing: 0.14em;
   line-height: 1.35;
   text-transform: uppercase;
+  color: #6f511a;
+}
+
+.lt-authority-hero .lt-authority-eyebrow,
+.lt-authority-section--dark .lt-authority-eyebrow {
   color: var(--lt-brass);
 }
 

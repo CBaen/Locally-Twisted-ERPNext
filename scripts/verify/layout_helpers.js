@@ -222,8 +222,9 @@ const CONTAINER_CONTRACT_ROUTES = [
 	{
 		name: "variant-product",
 		path: "/shop-items/garlands/baby-shower-garland",
-		topLevel: [".product-container.item-main.lt-product-page__main"],
+		topLevel: [".lt-product-breadcrumbs", ".product-container.item-main.lt-product-page__main"],
 		surfaces: [
+			{ selector: ".lt-product-breadcrumbs", mode: "contained", maxWidth: SHOP_MAX },
 			{ selector: ".product-container.item-main", mode: "band", inner: ".lt-product-page__content", maxWidth: SHOP_MAX },
 			{ selector: ".lt-product__configure", mode: "contained", maxWidth: SHOP_MAX },
 		],
@@ -231,8 +232,9 @@ const CONTAINER_CONTRACT_ROUTES = [
 	{
 		name: "single-product",
 		path: "/shop-items/seasonal-specialty/easter-balloon-cups",
-		topLevel: [".product-container.item-main.lt-product-page__main"],
+		topLevel: [".lt-product-breadcrumbs", ".product-container.item-main.lt-product-page__main"],
 		surfaces: [
+			{ selector: ".lt-product-breadcrumbs", mode: "contained", maxWidth: SHOP_MAX },
 			{ selector: ".product-container.item-main", mode: "band", inner: ".lt-product-page__content", maxWidth: SHOP_MAX },
 		],
 	},

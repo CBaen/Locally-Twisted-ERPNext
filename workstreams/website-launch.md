@@ -16,6 +16,8 @@ Active launch lane. Baseline pass started 2026-05-02.
 
 Known collision: another agent is auditing the form. Do not make contact/form schema changes unless that audit is handed off or explicitly merged into this lane.
 
+2026-05-08 accessibility closeout: the saved local axe scan findings were fixed across `/event-balloons`, `/portfolio`, `/shop`, product detail/category pages, and `/checkout`. `npm run test:a11y` now regenerates desktop/mobile axe reports for the 19 public launch routes and fails on any violation. Durable rule: Frappe already provides the page-level main landmark, so route templates must not add nested page-level `<main>` landmarks inside `page_content`.
+
 Live menu/content coordination now lives in `workstreams/menu-content-coordination.md`. Agents touching menu, header, footer, public page content, or nav/content verifiers must update that file before editing so overlapping sessions do not overwrite each other.
 
 2026-05-06 status reset after Event Playground handoff:
@@ -143,6 +145,7 @@ Launch blocker if customer-facing:
 - Header/footer/navigation are consistent.
 - Core pages feel like one brand, not stitched-together ERPNext defaults.
 - Important buttons, links, forms, and menus are keyboard and screen-reader reasonable.
+- Axe checks pass for the public launch route set at desktop and mobile widths with `npm run test:a11y`.
 - Images have usable alt text or are clearly decorative.
 
 ### Gate 6 - Backend Readiness For Jeff

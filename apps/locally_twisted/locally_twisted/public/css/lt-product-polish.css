@@ -417,14 +417,27 @@
 .lt-shop--category .lt-shop__eyebrow,
 .lt-shop--landing .lt-shop__hero-eyebrow,
 .lt-shop--category .lt-shop__sidebar-heading,
-.lt-shop--category .lt-shop__filters-heading,
-.lt-shop--landing .lt-shop__count {
+.lt-shop--category .lt-shop__filters-heading {
   color: var(--lt-polish-brass);
   font-family: var(--lt-polish-body);
   font-size: 0.78rem;
   font-weight: 900;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+}
+
+.lt-shop--landing .lt-shop__count,
+.lt-shop--landing #lt-shop-count.lt-shop__count {
+  color: var(--lt-polish-navy);
+  font-family: var(--lt-polish-body);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.lt-product-breadcrumbs [aria-current="page"] {
+  color: var(--lt-polish-ink);
 }
 
 .lt-shop--category .lt-shop__title,

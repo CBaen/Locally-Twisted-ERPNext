@@ -58,6 +58,7 @@ The current LT gate uses:
   neutralization.
 - `scripts/verify/interactive_layout.spec.js` for stateful UI: header breakpoints, desktop mega panels, mobile drawer accordions, shop filters/product selectors, contact conditionals, portfolio front-photo state, and reduced-motion homepage checks.
 - `scripts/verify/checkout_experience.spec.js` for checkout state behavior and preview consistency.
+- `scripts/verify/a11y_audit.js` / `npm run test:a11y` for axe-core public route checks at desktop and mobile widths.
 - `npm run test:public-verify` for the aggregate public verification chain.
 
 ## Required Viewport Families
@@ -100,14 +101,16 @@ Add route-specific widths when the changed surface has its own breakpoint.
 7. Fix the actual container math: grid tracks, `min-width: 0`, `box-sizing`, padding, wrapping, max-width, image aspect ratios, and stable control dimensions.
 8. For showcase rows, verify symmetry as well as fit. Equal-width category tiles, balanced card rows, and no single-card orphan row are part of the layout contract when products are being shown.
 9. Avoid body-wide `overflow-x: hidden` as the primary fix.
-10. Run cache clear after Frappe/Jinja/CSS changes.
-11. Verify with the commands below.
-12. Update the workstream/queue/decision/lesson docs if the fix changes the project standard.
+10. Treat accessibility failures as layout closeout blockers too: color contrast, nested landmarks, unnamed links, heading order, and breadcrumb regions must be fixed before launch claims.
+11. Run cache clear after Frappe/Jinja/CSS changes.
+12. Verify with the commands below.
+13. Update the workstream/queue/decision/lesson docs if the fix changes the project standard.
 
 ## Verification Commands
 
 ```powershell
 python scripts/dev/clear_website_cache.py
+npm run test:a11y
 npm run test:layout-fit
 npm run test:container-contract
 npm run test:interactive-layout

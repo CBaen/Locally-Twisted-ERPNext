@@ -50,6 +50,8 @@ In installed Frappe v15, normal website pages extend `templates/web.html` and re
 - `.page_content`
 - `.page-footer`
 
+Accessibility rule: Frappe already owns the page-level `<main>` landmark. Route templates must not add another page-level `<main>` inside `{% block page_content %}`. Use `section`, `div`, or a correctly scoped landmark (`nav`, etc.) for route-owned surfaces so axe does not report nested/duplicate main landmarks.
+
 Frappe's website SCSS gives `.container` responsive horizontal padding and adds `.page-content-wrapper .container` padding at widths below the `lg` breakpoint.
 
 LT currently neutralizes the stock Frappe visual box in `lt-theme.css`:
@@ -117,6 +119,7 @@ Use this only for intentional visual bands: hero, proof ribbon, image band, revi
 ## Frappe And ERPNext Contracts To Preserve
 
 - Website pages should keep using Frappe/Jinja routes under `apps/locally_twisted/locally_twisted/www/` unless a specific Frappe hook says otherwise.
+- Do not place route-level `<main>` elements in page templates. Frappe's wrapper is the page main; LT route roots should be non-main wrappers unless the Frappe wrapper is deliberately removed by a verified shell change.
 - Shared website CSS and JS belong in the app and must be wired through `web_include_css` / `web_include_js` in `hooks.py`.
 - Header/footer changes should use Jinja partial overrides, not page-local hacks.
 - Webshop product, listing, cart, checkout, and add-to-cart behavior depends on existing Webshop templates, selectors, and JS hooks. Do not remove or rename native classes just to make styling easier.
@@ -149,7 +152,8 @@ Checked on 2026-05-06 against the running local stack:
 7. Run `npm run test:container-contract` after any route, Jinja, Webshop,
    full-bleed, crawl, or shared containment change.
 8. Run the responsive container audit and motion verification when the change involves animated crawls, carousels, clipping, or media-query fallbacks.
-9. Capture desktop and mobile screenshots before claiming the page is ready for GL review.
+9. Run the public axe gate (`npm run test:a11y`) before closing public route/template changes; contrast, landmarks, link names, heading order, and breadcrumb regions are launch blockers, not polish.
+10. Capture desktop and mobile screenshots before claiming the page is ready for GL review.
 
 ## Red Flags
 

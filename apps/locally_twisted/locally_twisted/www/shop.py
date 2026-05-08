@@ -200,7 +200,7 @@ PAGE_CSS = """
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--lt-soft-gray);
+    color: var(--lt-navy);
     margin: 0 0 1.5rem;
 }
 
@@ -406,9 +406,13 @@ PAGE_CSS = """
 .lt-shop--landing .lt-shop__hero-inner {
     padding: var(--lt-hero-padding-y) clamp(1rem, 4vw, 2rem);
 }
-.lt-shop--landing .lt-shop__hero-eyebrow,
-.lt-shop--landing .lt-shop__count {
+.lt-shop--landing .lt-shop__hero-eyebrow {
     color: var(--lt-brass);
+    font-weight: 900;
+    letter-spacing: 0.1em;
+}
+.lt-shop--landing .lt-shop__count {
+    color: var(--lt-navy);
     font-weight: 900;
     letter-spacing: 0.1em;
 }

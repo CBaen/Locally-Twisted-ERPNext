@@ -19,13 +19,14 @@
 
 <div class="lt-shop__band lt-shop__band--sandstone" aria-hidden="true"></div>
 
-<section class="lt-shop__listing" aria-label="Product grid">
+<section class="lt-shop__listing" aria-labelledby="lt-shop-products-title">
     <div class="lt-shop__listing-inner">
 
         <div class="lt-shop__browse-layout">
             {% include "locally_twisted/templates/includes/shop_category_nav.html" %}
 
             <div class="lt-shop__product-area">
+                <h2 class="visually-hidden" id="lt-shop-products-title">Ready-to-order products</h2>
                 <p class="lt-shop__count" id="lt-shop-count">{{ total_items }} item{% if total_items != 1 %}s{% endif %}</p>
 
                 <div class="lt-shop__grid" id="lt-shop-grid">

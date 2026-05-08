@@ -1,6 +1,13 @@
 {% extends "templates/web.html" %}
 
 {% block page_content %}
+<style>
+.lt-checkout__text-link {
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+    text-decoration-thickness: 0.08em;
+}
+</style>
 <section class="lt-checkout">
     <div class="lt-checkout__container">
         <div class="lt-checkout__main">
@@ -170,7 +177,7 @@
                 <div id="lt-checkout-summary-loading" class="lt-checkout__line-meta" role="status" aria-live="polite"
                      style="padding: 0.5rem 0;">Loading your cart&hellip;</div>
                 <div id="lt-checkout-summary-empty" class="lt-checkout__line-meta" role="status" hidden>
-                    Your cart is empty. <a href="/shop">Continue shopping</a>.
+                    Your cart is empty. <a class="lt-checkout__text-link" href="/shop">Continue shopping</a>.
                 </div>
                 <div id="lt-checkout-summary-error" role="alert" hidden
                      style="background-color: #fdecec; border: 1px solid #c0392b; color: #842424; padding: 0.75rem 1rem; border-radius: 0.375rem; font-size: 0.85rem; line-height: 1.45;">

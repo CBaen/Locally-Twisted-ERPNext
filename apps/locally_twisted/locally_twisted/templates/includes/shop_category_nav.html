@@ -4,7 +4,7 @@
   {% set lt_current_category = item_group_name|default("") %}
 {% endif %}
 
-<aside class="lt-shop__category-rail" aria-label="Ready-to-order categories">
+<div class="lt-shop__category-rail" aria-label="Ready-to-order categories">
   <div class="lt-shop__category-mobile">
     <label class="lt-shop__category-select-label" for="lt-shop-category-select">Browse category</label>
     <select class="lt-shop__category-select" id="lt-shop-category-select" aria-label="Browse ready-to-order category">
@@ -42,7 +42,7 @@
       {% endfor %}
     </ul>
   </nav>
-</aside>
+</div>
 
 <script>
 (function () {

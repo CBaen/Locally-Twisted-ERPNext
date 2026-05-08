@@ -216,9 +216,10 @@
     color: var(--lt-mega-berry);
 }
 
-.lt-mega-header__cta {
+.lt-mega-header .lt-mega-header__cta {
     background: var(--lt-mega-berry);
     color: #fff;
+    -webkit-text-fill-color: #fff;
     font: 900 14px/1 Lato, system-ui, sans-serif;
     min-height: 44px;
     padding: 15px 18px;
