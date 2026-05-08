@@ -6,6 +6,56 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-08 - Portfolio does not need a route-local contact/index footer
+
+The portfolio page kept a route-specific footer block after the photo field:
+Inquire, Studio, Index, phone number, install count, and a Locally Twisted mark.
+That was leftover page furniture from the external portfolio reference, not
+necessary proof. It made the portfolio feel like a copied section instead of a
+focused photo field inside the real LT site chrome.
+
+**Counter-move:** let the global Frappe/LT header and footer own navigation and
+contact paths. `/portfolio` owns only the compact branded hero, proof reel,
+empty state, JSON-LD, and no-script image fallback. Do not restore `.lt-foot`,
+`Portfolio contact`, Inquire/Studio/Index labels, phone/index rows, or
+route-local contact/footer CSS. The route verifier must fail if that block
+returns.
+
+---
+
+## 2026-05-08 - Photo scale is not reel density
+
+The portfolio correction used `density = 1.65` to make desktop photos 1.5x
+larger. That was the wrong lever because the same value also feeds vertical
+spacing: `VERTICAL_SPACING * (2 - density)`. The photos got bigger, but the
+collage rhythm tightened and felt worse.
+
+**Counter-move:** keep visual controls separate. In `/portfolio`,
+`density = 1.10` owns the approved reel rhythm and `photoScale = 1.5` owns the
+larger image size. Tests must guard both: desktop photos stay enlarged, and
+early reel offsets keep the looser spacing instead of collapsing into higher
+density.
+
+---
+
+## 2026-05-08 - Portfolio proof photos are not caption cards
+
+The portfolio reel regressed because Codex treated captions and frames as a
+safer way to explain the photos. GL rejected that outright. The white/cream
+stripes were not mysterious browser paint; they came from forcing design-slot
+aspect ratios and `object-fit: contain` inside a light wrapper instead of sizing
+each real optimized photo by its real dimensions.
+
+**Counter-move:** for LT `/portfolio`, the photo is the surface. Do not add
+captions, visible frame wrappers, card backgrounds, or forced aspect boxes.
+Desktop proof photos now use `photoScale = 1.5` while preserving
+`density = 1.10`; mobile photos are full viewport width and slide in. The route
+verifier must fail if `.lt-frame`, `.lt-cap`, `figcaption`, old desktop widths,
+mobile side gutters, image/photo rect mismatches, or compressed higher-density
+spacing return.
+
+---
+
 ## 2026-05-07 - Render density is not quote math
 
 The Event Playground preview looked plausible with fuller 11-inch classic arch
@@ -269,9 +319,9 @@ The `/shop` console showed `ERR_BLOCKED_BY_CLIENT` for `lt-cookie-consent.js`. T
 
 ## 2026-05-06 - The exact folder matters when a designer handoff exists
 
-The second portfolio failure happened because the implementation was judged against a copied/derived reference path instead of the exact folder GL named: `research/a unique portfolio page for a high end corporate balloon events_/design_handoff_locally_twisted_portfolio/`. That lost important details: the huge editorial hero, oklch palette, Cormorant/Inter Tight pairing, visible captions below photos, and the approved aspect sequence.
+The second portfolio failure happened because the implementation was judged against a copied/derived reference path instead of the exact folder GL named: `research/a unique portfolio page for a high end corporate balloon events_/design_handoff_locally_twisted_portfolio/`. That lost important details from the reference at the time: the huge editorial hero, oklch palette, Cormorant/Inter Tight pairing, caption treatment, and the approved aspect sequence. The caption part is now superseded by the 2026-05-08 no-caption/no-frame portfolio contract.
 
-**Counter-move:** when GL provides a design handoff path, render that exact folder first, compare production to it, and translate only the intentional production differences. For this LT page, keep the real Frappe header/footer and real LT photos, but otherwise treat the handoff's Frappe files as the visual baseline until GL closes the critique loop.
+**Counter-move:** when GL provides a design handoff path, render that exact folder first, compare production to it, and translate only the intentional production differences. For this LT page, keep the real Frappe header/footer and real LT photos, preserve the motion/collage behavior, and follow the current no-caption/no-frame contract where it supersedes the old handoff details.
 
 ---
 

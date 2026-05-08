@@ -7,9 +7,9 @@ maturity: candidate
 scope: Locally Twisted ERPNext/Frappe portfolio and proof-gallery visual work
 currently_true: true
 verification_level: 2
-last_verified: 2026-05-07
+last_verified: 2026-05-08
 evidence_quality: direct
-successful_uses: 4
+successful_uses: 5
 failed_uses: 1
 regressions: 3
 depends_on:
@@ -41,13 +41,13 @@ native Frappe shell and current style guide.
 ## Pattern
 
 1. Preserve the approved collage/movement behavior before preserving older local grid/card UI or later Codex reinterpretations.
-2. Keep the slow drift, click-to-front behavior, large whole-photo sizing, side/scale rhythm, mobile full-width stream, and small captions below the photos.
-3. Replace what is fake, unsafe, or not LT-owned: placeholder image URLs, fake Brooklyn/contact copy, copied internal navigation, page-local Google font imports, custom cursor artifacts, prototype-only palette choices, and broken asset paths.
+2. Keep the slow drift, click-to-front behavior, large whole-photo sizing, side/scale rhythm, no-captions photo proof, and mobile full-width slide-in stream.
+3. Replace what is fake, unsafe, or not LT-owned: placeholder image URLs, fake Brooklyn/contact copy, copied internal navigation, page-local Google font imports, custom cursor artifacts, prototype-only palette choices, route-specific Inquire/Studio/Index footer blocks, and broken asset paths.
 4. Translate into Frappe-owned files: route template, route controller, metadata, CSS, JS, optimized images, and verifiers.
-5. The real public site header/footer wrap the Frappe page. Do not add a second internal page header/nav copied from the prototype.
-6. Display real installed-work photos with `object-fit: contain`; use LT's approved warm-white, navy, brass, berry, Cormorant, and Lato system for the branded route shell.
+5. The real public site header/footer wrap the Frappe page. Do not add a second internal page header/nav copied from the prototype, and do not add a second route-local contact/index footer inside the portfolio field.
+6. Display real installed-work photos as the image itself. Do not add visible frame wrappers, card backgrounds, caption overlays, or forced aspect boxes that create letterbox stripes. Use LT's approved warm-white, navy, brass, berry, Cormorant, and Lato system for the branded route shell around the reel.
 7. Use optimized derivatives for the public reel, but do not crop proof photos to satisfy layout convenience.
-8. Mobile should become a full-width natural-ratio stream with stacked captions, not a tiny desktop reel squeezed into a phone viewport.
+8. Mobile should become a full-width natural-ratio slide-in stream with no captions and no side gutters, not a static stack and not a tiny desktop reel squeezed into a phone viewport.
 9. Keep the reference folder in `research/` while external critique is active. Delete it only after GL approves cleanup.
 10. Verify browser behavior, not just source shape. A row of images is a failed translation even if the assets load.
 
@@ -59,6 +59,7 @@ scale, side rhythm, and whole-photo proof behavior are locked from that
 reference. The page shell is LT-owned. The locked reel settings are:
 
 - `SETTINGS.density = 1.10`
+- `SETTINGS.photoScale = 1.5`
 - `SETTINGS.variant = "drift"`
 - `SETTINGS.driftSmoothing = 0.02`
 - `SETTINGS.opacitySpeed = 4.0`
@@ -68,17 +69,19 @@ reference. The page shell is LT-owned. The locked reel settings are:
 - `CENTER_BREATH = 140`
 
 At 1366px wide, the current production baseline has the first left photo around
-436px wide, the first right photo around 521px wide, and the first center photo
-around 648px wide. Photos begin below the branded compact hero and drift/fade in from
-the edges as the visitor scrolls. Do not "improve" this into an immediate
-three-column masonry grid, copied prototype shell, custom cursor experience, or
-generic full-opacity card wall.
+655px wide, the first right photo around 781px wide, and the first center photo
+around 972px wide. The larger photo size is controlled by `photoScale`, not by
+raising `density`; `density` stays at 1.10 so the older looser vertical rhythm
+survives. Photos begin below the branded compact hero and drift/fade in
+from the edges as the visitor scrolls. Do not "improve" this into an immediate
+three-column masonry grid, copied prototype shell, custom cursor experience,
+captioned card wall, or generic full-opacity card wall.
 
 Use the approved side/scale rhythm in photo-array order:
 
 - sides: `left, right, left, center, left, right, left, right, center, right, left, right, left, right, left, center, left, right, left, right`
 - scales: `0.62, 0.74, 0.58, 0.92, 0.60, 0.64, 0.74, 0.58, 0.96, 0.55, 0.62, 0.76, 0.60, 0.62, 0.72, 0.94, 0.56, 0.60, 0.62, 0.78`
-- aspect sequence: `4:5, 3:2, 2:3, 16:10, 4:5, 3:4, 5:4, 2:3, 16:9, 3:4, 4:5, 3:2, 4:5, 3:4, 5:4, 16:10, 2:3, 3:4, 4:5, 3:2`
+- image aspect ratios come from `PORTFOLIO_REEL_META`, which must match the optimized image assets. The old handoff aspect sequence is not allowed to override real photo dimensions because that creates visible stripes.
 
 The durable lesson from the failed translation is that "productionizing" a
 design reference by preserving the wrong parts produces a technically passing
@@ -100,15 +103,24 @@ npm run test:interactive-layout -- --grep portfolio
 Also inspect desktop and mobile screenshots before launch claims, especially after photo-order or image-quality changes. For this reel, include Chrome and Brave captures when the failure report or user feedback mentions cross-browser differences.
 
 The latest verified use passed full `npm run test:portfolio-reel` 4/4,
-`npm run test:interactive-layout` 88/88, and
-`npm run test:layout-fit -- --grep "portfolio fits"` 13/13 after a first
-aggregate run exposed an over-dense mobile portfolio hero. The route-specific
-verifier now checks the current contract: no portfolio-specific Google font
-links, no custom cursor artifacts, no copied internal page nav, branded compact
-hero copy, readable primary CTA contrast, LT warm-white/navy/brass/berry
-surfaces, locked first/second/fourth photo sizes from the `640 * scale * 1.10`
-math, optimized whole-photo assets, initial fade-in state, scroll-driven
-drift/opacity, click-to-front behavior, and mobile full-width stream.
+`npm run test:interactive-layout -- --grep portfolio` 6/6, and
+`npm run test:layout-fit -- --grep "portfolio fits"` 13/13 after GL rejected
+all photo captions, visible photo frame wrappers, old desktop sizing, the
+route-specific Inquire/Studio/Index footer block, and the mobile view not
+visibly changing in Brave. The route-specific portfolio verifier guards the
+removed footer block directly. A clean Brave mobile pass returned
+200 with the cache-busted `20260508-no-captions-scale-2` assets, 15 photos, 0
+frame wrappers, 0 captions, first photo visible at full viewport width, second
+photo waiting for scroll, and no page errors. The route-specific verifier now
+checks the current contract: no portfolio-specific Google font links, no custom
+cursor artifacts, no copied internal page nav, branded compact hero copy,
+readable primary CTA contrast, no caption/frame wrappers, transparent photo
+backgrounds, image rect equals photo rect, locked first/second/fourth photo
+sizes from the `640 * scale * 1.10 * 1.5` math, original-density vertical
+spacing, optimized whole-photo assets, initial
+fade-in state, scroll-driven desktop drift/opacity, click-to-front behavior,
+no route-specific portfolio contact/index footer, and mobile full-width slide-in
+reveal instead of a static stack.
 
 ## LT Receipt
 
@@ -117,6 +129,14 @@ floating photo reel. A later correction over-preserved the Claude/Frappe export
 and copied too much of the page design: internal nav, page-local font imports,
 custom cursor, and hero copy that did not match LT. On 2026-05-07, GL clarified
 that the approved part was the collage and movement, not the entire page shell.
+On 2026-05-08, GL rejected the static mobile stream and captions-below-photo
+treatment. Later the same day GL rejected captions entirely, rejected visible
+photo containers, asked for desktop photos 1.5x larger, and identified the
+white bands as unacceptable. GL then clarified that larger photos must not mean
+higher reel density. The current protected behavior is no captions, no frame
+wrappers, actual image dimensions, desktop `photoScale = 1.5` with
+`density = 1.10`, no route-specific Inquire/Studio/Index footer block, and
+mobile full-width slide-in reveal.
 The kept production source is now the live Frappe translation into
 `apps/locally_twisted/locally_twisted/www/portfolio.html`,
 `apps/locally_twisted/locally_twisted/www/portfolio.py`,

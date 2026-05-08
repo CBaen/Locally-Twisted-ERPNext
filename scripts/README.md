@@ -58,7 +58,7 @@ Run the layout-fit gate from the project root: `npm run test:layout-fit`.
 | Script | Purpose | Run when |
 |--------|---------|----------|
 | `layout_fit.spec.js` | Playwright Test gate for public/shop/cart routes across mobile, tablet, and desktop widths. | Before visual claims, after customer-facing CSS/Jinja/template changes |
-| `portfolio_reel.spec.js` | Playwright Test gate for `/portfolio` floating proof-reel behavior: natural-ratio images, quiet card text, desktop/mobile layout, filter relayout, and empty state. | After editing portfolio layout, image metadata, filters, or modal behavior |
+| `portfolio_reel.spec.js` | Playwright Test gate for `/portfolio` floating proof-reel behavior: natural-ratio images, no photo captions/frame wrappers, no route-specific portfolio contact/index footer, larger desktop drift/click-to-front behavior, mobile full-width slide-in reveal, filter relayout, and empty state. | After editing portfolio layout, image metadata, filters, or modal behavior |
 | `owner_desk_routes.spec.js` | Playwright Test gate for owner Desk route recovery and Owner Home content. | After Desk JS, workspace, or simplified owner role changes |
 | `contact_service_logic.py` | Verifies `/contact` service-specific conditional logic and absence of stale service labels. | After editing contact form labels, choices, conditionals, or Lead payload mapping |
 | `contact_prefill.py` | Verifies guided contact URLs preselect the intended service checkboxes and panels. | After editing service-page CTAs or `/contact?service=...` parsing |

@@ -29,9 +29,8 @@ test.describe("portfolio proof reel", () => {
 			const firstImage = first ? first.querySelector("img") : null;
 			const firstStyle = first ? window.getComputedStyle(first) : null;
 			const imageStyle = firstImage ? window.getComputedStyle(firstImage) : null;
-			const frame = first ? first.querySelector(".lt-frame") : null;
-			const frameStyle = frame ? window.getComputedStyle(frame) : null;
 			const rect = first ? first.getBoundingClientRect() : null;
+			const imageRect = firstImage ? firstImage.getBoundingClientRect() : null;
 			const heroRect = document.querySelector(".lt-portfolio__hero")?.getBoundingClientRect();
 			const reelRect = reel ? reel.getBoundingClientRect() : null;
 			const bodyFontFamily = window.getComputedStyle(document.body).fontFamily;
@@ -53,8 +52,10 @@ test.describe("portfolio proof reel", () => {
 				rootFontFamily: rootStyle ? rootStyle.fontFamily : "",
 				bodyFontFamily,
 				backgroundColor: window.getComputedStyle(root).backgroundColor,
-				frameBackgroundColor: frameStyle ? frameStyle.backgroundColor : "",
 				imageBackgroundColor: imageStyle ? imageStyle.backgroundColor : "",
+				photoBackgroundColor: firstStyle ? firstStyle.backgroundColor : "",
+				photoBoxShadow: firstStyle ? firstStyle.boxShadow : "",
+				frameCount: document.querySelectorAll(".lt-frame").length,
 				primaryButtonText: primaryButton ? primaryButton.innerText.trim() : "",
 				primaryButtonColor: primaryButtonStyle ? primaryButtonStyle.color : "",
 				primaryButtonTextFill: primaryButtonStyle ? primaryButtonStyle.webkitTextFillColor : "",
@@ -80,10 +81,24 @@ test.describe("portfolio proof reel", () => {
 				fourthLeft: fourth ? Math.round(fourth.getBoundingClientRect().left) : 0,
 				fourthTop: fourth ? Math.round(Number.parseFloat(fourth.style.top || "0")) : 0,
 				imageObjectFit: imageStyle ? imageStyle.objectFit : null,
+				imageParentClass: firstImage?.parentElement?.className || "",
+				imageFillsPhoto:
+					rect && imageRect
+						? Math.abs(rect.left - imageRect.left) <= 1 &&
+							Math.abs(rect.top - imageRect.top) <= 1 &&
+							Math.abs(rect.width - imageRect.width) <= 1 &&
+							Math.abs(rect.height - imageRect.height) <= 1
+						: false,
 				imageSrc: firstImage ? firstImage.currentSrc || firstImage.src : "",
 				imageWidthAttr: firstImage ? firstImage.getAttribute("width") : null,
 				imageHeightAttr: firstImage ? firstImage.getAttribute("height") : null,
-				visibleCaptionCount: document.querySelectorAll(".lt-cap").length,
+				visibleCaptionCount: document.querySelectorAll(".lt-cap, figcaption").length,
+				portfolioFooterCount: document.querySelectorAll(".lt-foot").length,
+				forbiddenPortfolioFooterText: root
+					? ["Inquire", "Studio", "Index", "Selected work", "15 installs", "(801) 285-0860", "Utah events and venues"].filter((text) =>
+							root.innerText.includes(text),
+						)
+					: [],
 			};
 		});
 
@@ -100,8 +115,10 @@ test.describe("portfolio proof reel", () => {
 		expect(facts.rootFontFamily).toContain("Lato");
 		expect(facts.bodyFontFamily).toContain("Lato");
 		expect(facts.backgroundColor).toBe("rgb(250, 247, 242)");
-		expect(facts.frameBackgroundColor).toBe("rgb(255, 255, 255)");
-		expect(facts.imageBackgroundColor).toBe("rgb(250, 247, 242)");
+		expect(facts.frameCount, "portfolio photos should not sit inside visible frame/container wrappers").toBe(0);
+		expect(facts.photoBackgroundColor, "portfolio photos should not expose white/cream frame stripes").toBe("rgba(0, 0, 0, 0)");
+		expect(facts.photoBoxShadow, "portfolio photos should read as the image itself, not a framed card").toBe("none");
+		expect(facts.imageBackgroundColor, "image elements should not paint a stripe behind transparent space").toBe("rgba(0, 0, 0, 0)");
 		expect(facts.primaryButtonText).toMatch(/start an event inquiry/i);
 		expect(facts.primaryButtonColor, "primary portfolio CTA text should contrast against its white background").toBe("rgb(14, 34, 64)");
 		expect(facts.primaryButtonTextFill, "primary portfolio CTA should not inherit white text-fill from the dark hero").toBe("rgb(14, 34, 64)");
@@ -113,31 +130,36 @@ test.describe("portfolio proof reel", () => {
 		expect(facts.secondSide).toBe("right");
 		expect(facts.thirdSide).toBe("left");
 		expect(facts.fourthSide).toBe("center");
-		expect(facts.firstWidth).toBeGreaterThan(420);
-		expect(facts.firstWidth).toBeLessThan(455);
+		expect(facts.firstWidth).toBeGreaterThan(640);
+		expect(facts.firstWidth).toBeLessThan(670);
 		expect(Number.parseFloat(facts.firstLeftStyle)).toBeGreaterThanOrEqual(1);
 		expect(Number.parseFloat(facts.firstLeftStyle)).toBeLessThanOrEqual(3);
-		expect(facts.firstHeight / facts.firstWidth).toBeCloseTo(1.25, 1);
+		expect(facts.firstHeight / facts.firstWidth).toBeCloseTo(4 / 3, 1);
 		expect(facts.firstOpacity).toBeLessThan(0.1);
 		expect(facts.firstLeft).toBeLessThan(-250);
 		expect(facts.reelTop, "the collage should begin immediately after the compact branded portfolio hero").toBeGreaterThanOrEqual(facts.heroBottom - 1);
 		expect(facts.firstTop).toBeGreaterThan(facts.reelTop);
 		expect(facts.firstTop).toBeLessThan(facts.reelTop + 160);
-		expect(facts.secondWidth - facts.firstWidth).toBeGreaterThan(70);
-		expect(facts.thirdWidth).toBeGreaterThan(395);
-		expect(facts.thirdWidth).toBeLessThan(425);
-		expect(facts.thirdTop).toBeGreaterThan(350);
-		expect(facts.fourthWidth).toBeGreaterThan(630);
-		expect(facts.fourthWidth).toBeLessThan(670);
-		expect(facts.fourthLeft).toBeGreaterThan(330);
-		expect(facts.fourthLeft).toBeLessThan(390);
-		expect(facts.fourthTop).toBeGreaterThan(880);
-		expect(facts.imageObjectFit).toBe("contain");
+		expect(facts.secondWidth - facts.firstWidth).toBeGreaterThan(110);
+		expect(facts.thirdWidth).toBeGreaterThan(600);
+		expect(facts.thirdWidth).toBeLessThan(630);
+		expect(facts.thirdTop, "larger photos should keep the older looser reel spacing instead of using higher visual density").toBeGreaterThan(540);
+		expect(facts.thirdTop).toBeLessThan(570);
+		expect(facts.fourthWidth).toBeGreaterThan(950);
+		expect(facts.fourthWidth).toBeLessThan(995);
+		expect(facts.fourthLeft).toBeGreaterThan(170);
+		expect(facts.fourthLeft).toBeLessThan(230);
+		expect(facts.fourthTop, "center statements should keep breathing room after photo scale is increased").toBeGreaterThan(1160);
+		expect(facts.fourthTop).toBeLessThan(1210);
+		expect(facts.imageParentClass).toContain("lt-photo");
+		expect(facts.imageFillsPhoto, "image rect should be the photo rect, with no letterbox frame around it").toBe(true);
 		expect(facts.imageSrc).toContain("/optimized/");
 		expect(facts.imageSrc).toContain(".webp");
 		expect(Number(facts.imageWidthAttr)).toBeGreaterThan(0);
 		expect(Number(facts.imageHeightAttr)).toBeGreaterThan(0);
-		expect(facts.visibleCaptionCount).toBe(facts.photoCount);
+		expect(facts.visibleCaptionCount, "GL rejected captions on portfolio photos").toBe(0);
+		expect(facts.portfolioFooterCount, "GL rejected the extra portfolio footer/contact/index section").toBe(0);
+		expect(facts.forbiddenPortfolioFooterText, "portfolio should not render the removed footer section labels").toEqual([]);
 
 		await page.locator(".lt-photo").first().click({ force: true });
 		await expect(page.locator(".lt-photo.is-front")).toHaveCount(1);
@@ -148,36 +170,75 @@ test.describe("portfolio proof reel", () => {
 		expectNoLayoutFailures(expect, result, "portfolio proof reel desktop");
 	});
 
-	test("mobile stacks full-width natural-ratio photos without horizontal overflow", async ({ page }) => {
+	test("mobile slides full-width natural-ratio photos into view without horizontal overflow", async ({ page }) => {
 		await page.setViewportSize({ width: 375, height: 812 });
 		const response = await gotoAndSettle(page, "/portfolio");
 		await expectSuccessfulResponse(response, "/portfolio");
 		await page.waitForSelector(".lt-photo");
-		await page.waitForTimeout(250);
+		await page.waitForTimeout(350);
 
 		const facts = await page.evaluate(() => {
 			const first = document.querySelector(".lt-photo");
+			const second = document.querySelectorAll(".lt-photo")[1];
 			const firstImage = first ? first.querySelector("img") : null;
 			const photoStyle = first ? window.getComputedStyle(first) : null;
+			const secondStyle = second ? window.getComputedStyle(second) : null;
 			const imageStyle = firstImage ? window.getComputedStyle(firstImage) : null;
+			const imageRect = firstImage ? firstImage.getBoundingClientRect() : null;
+			const firstRect = first ? first.getBoundingClientRect() : null;
 			const docWidth = Math.max(
 				document.documentElement.scrollWidth,
 				document.body ? document.body.scrollWidth : 0,
 			);
 			return {
 				photoPosition: photoStyle ? photoStyle.position : null,
-				photoWidth: first ? Math.round(first.getBoundingClientRect().width) : 0,
+				photoWidth: firstRect ? Math.round(firstRect.width) : 0,
+				firstVisible: first ? first.classList.contains("is-visible") : false,
+				firstTransition: photoStyle ? photoStyle.transitionProperty : "",
+				secondVisible: second ? second.classList.contains("is-visible") : false,
+				secondOpacity: secondStyle ? Number.parseFloat(secondStyle.opacity || "0") : 1,
+				secondTransform: secondStyle ? secondStyle.transform : "",
 				imageObjectFit: imageStyle ? imageStyle.objectFit : null,
+				frameCount: document.querySelectorAll(".lt-frame").length,
+				captionCount: document.querySelectorAll(".lt-cap, figcaption").length,
+				imageFillsPhoto:
+					firstRect && imageRect
+						? Math.abs(firstRect.left - imageRect.left) <= 1 &&
+							Math.abs(firstRect.top - imageRect.top) <= 1 &&
+							Math.abs(firstRect.width - imageRect.width) <= 1 &&
+							Math.abs(firstRect.height - imageRect.height) <= 1
+						: false,
 				docWidth,
 				viewportWidth: document.documentElement.clientWidth,
 			};
 		});
 
 		expect(facts.photoPosition).toBe("relative");
-		expect(facts.photoWidth).toBeGreaterThanOrEqual(facts.viewportWidth - 42);
-		expect(facts.photoWidth).toBeLessThanOrEqual(facts.viewportWidth - 38);
-		expect(facts.imageObjectFit).toBe("contain");
+		expect(facts.photoWidth).toBeGreaterThanOrEqual(facts.viewportWidth - 1);
+		expect(facts.photoWidth).toBeLessThanOrEqual(facts.viewportWidth + 1);
+		expect(facts.firstVisible, "the first mobile portfolio photo should animate into visible state").toBe(true);
+		expect(facts.firstTransition).toContain("transform");
+		expect(facts.secondVisible, "later mobile portfolio photos should wait for scroll before becoming visible").toBe(false);
+		expect(facts.secondOpacity).toBeLessThan(0.35);
+		expect(facts.secondTransform).not.toBe("none");
+		expect(facts.frameCount, "mobile portfolio photos should not render frame wrappers").toBe(0);
+		expect(facts.captionCount, "mobile portfolio photos should not render captions").toBe(0);
+		expect(facts.imageFillsPhoto, "mobile image rect should equal the photo rect").toBe(true);
 		expect(facts.docWidth).toBeLessThanOrEqual(facts.viewportWidth + 2);
+
+		await page.locator(".lt-photo").nth(1).scrollIntoViewIfNeeded();
+		await page.waitForTimeout(650);
+		const secondAfterScroll = await page.evaluate(() => {
+			const second = document.querySelectorAll(".lt-photo")[1];
+			const style = second ? window.getComputedStyle(second) : null;
+			return {
+				visible: second ? second.classList.contains("is-visible") : false,
+				opacity: style ? Number.parseFloat(style.opacity || "0") : 0,
+				transform: style ? style.transform : "",
+			};
+		});
+		expect(secondAfterScroll.visible).toBe(true);
+		expect(secondAfterScroll.opacity).toBeGreaterThan(0.8);
 
 		const result = await auditPageLayout(page, {
 			targetSelectors: [".lt-photo"],
@@ -223,7 +284,7 @@ test.describe("portfolio proof reel", () => {
 			};
 		});
 
-		await page.evaluate(() => window.scrollTo(0, 1500));
+		await page.evaluate(() => window.scrollTo(0, 2200));
 		await page.waitForTimeout(1400);
 
 		const after = await page.evaluate(() => {
@@ -259,7 +320,7 @@ test.describe("portfolio proof reel", () => {
 		expect(before.opacity).toBeLessThan(0.1);
 		expect(after.firstOpacity).toBe(1);
 		expect(after.visible.length).toBeGreaterThanOrEqual(3);
-		expect(Math.max(...after.visible.map((photo) => photo.width))).toBeGreaterThan(500);
+		expect(Math.max(...after.visible.map((photo) => photo.width))).toBeGreaterThan(800);
 		expect(after.visible.some((photo) => photo.side === "center")).toBe(true);
 		expect(after.visible.some((photo) => photo.side === "left")).toBe(true);
 		expect(after.visible.some((photo) => photo.side === "right")).toBe(true);

@@ -1,7 +1,7 @@
 # Locally Twisted - ERPNext/Frappe Style Guide
 
-**Version:** 4.3
-**Last Updated:** 2026-05-07
+**Version:** 4.4
+**Last Updated:** 2026-05-08
 **Build Target:** ERPNext v15.105.0 + Frappe v15.106.0 / Webshop
 **Primary Viewport:** Mobile-first, 375px base
 
@@ -20,9 +20,10 @@ styling.
 
 Use this guide when writing customer-facing copy, building Frappe/Jinja pages,
 styling Webshop surfaces, reviewing visual work, making image selections, drawing
-icons, or briefing GPT/Codex-style coding agents. Version 4.3 adds the
-non-negotiable compact hero contract so every page hero uses the same approved
-height, padding budget, and title scale instead of page-local oversized guesses.
+icons, or briefing GPT/Codex-style coding agents. Version 4.4 keeps the
+non-negotiable compact hero contract and updates the portfolio correction:
+portfolio photos carry the proof alone, without captions or visible frame
+wrappers, while mobile keeps slide-in motion instead of becoming a static stack.
 
 ---
 
@@ -139,7 +140,7 @@ component is added, append it here before a broad implementation swarm begins.
 | Thank you | `/thank-you`, `www/thank_you.html` | Post-payment reassurance | Calm, premium confirmation with order facts, no confetti energy, clear next step. |
 | Contact/inquiry | `/contact`, `templates/includes/book_form.html` | Main custom-work conversion | Dark civic intro, two-column form/info layout on desktop, large Cormorant heading, warm form fields, brass or berry focus, company/team copy. |
 | Legacy book | `/book` | Compatibility path | Redirect or visually match contact if rendered. Do not make `/book` the primary public CTA unless the route decision changes. |
-| Portfolio | `/portfolio`, `www/portfolio.html` | Proof gallery | Photos are the product. Keep the approved collage/movement and whole-photo reel, but use the native LT shell, sitewide Cormorant/Lato typography, and branded compact hero copy. Do not copy prototype page chrome, custom cursor, route-local Google font imports, or off-brand hero copy. |
+| Portfolio | `/portfolio`, `www/portfolio.html` | Proof gallery | Photos are the product. Keep the approved collage/movement and whole-photo reel, but use the native LT shell, sitewide Cormorant/Lato typography, and branded compact hero copy. Do not render captions, visible frame wrappers, letterbox bands, card containers, or a route-specific Inquire/Studio/Index footer block on the photos/page field. Mobile must reveal full-width photos with slide-in motion instead of becoming a static stack. Do not copy prototype page chrome, custom cursor, route-local Google font imports, or off-brand hero copy. |
 | Balloon twisting / face painting | `/balloon-twisting-and-face-painting` | First-class live-service lane | Can be warmer and more playful in photos, but still structured: editorial intro, service cards, spec rows, booking steps, events list, FAQ, contact CTA. |
 | FAQ | `/faq` | Objection handling | Clean grouped questions, generous line height, details/accordion states accessible, CTA to contact. No decorative clutter. |
 | Policies | `/privacy`, `/terms-of-service`, `/refund-policy`, `/accessibility` | Legal and trust surface | Warm-white document layout, narrow readable measure, Cormorant H1/H2, Lato body, brass/berry links only where useful. |
@@ -159,7 +160,7 @@ Current primary navigation is `Event Balloons`, `Portfolio`,
 |---|---|---|
 | Premium proof bar | Future trust/value bars | Dark ink/navy/slate band, brass line icons, short uppercase Lato titles, compact proof text. Use the Image #3 icon standard, but do not render a homepage trust bar in the current launch layout. |
 | Hero sections | `lt-hero`, `lt-shop__hero`, `lt-portfolio-hero`, page intros | Cormorant headings, Lato labels, real proof imagery where possible, dark authority bands for civic/company pages, warmer light headers for product/legal pages. |
-| Photo cards / proof reels | Featured work, portfolio reel, product cards, BTFP service cards | Preserve real work. Product cards can crop tighter; proof/portfolio surfaces need context, scale, and natural image ratios. |
+| Photo cards / proof reels | Featured work, portfolio reel, product cards, BTFP service cards | Preserve real work. Product cards can crop tighter; proof/portfolio surfaces need context, scale, natural image ratios, and movement where the route contract calls for it. Portfolio photos are not caption cards; use the image itself with no visible frame wrapper. |
 | Filters/chips | Shop chips, portfolio pills, category filters, product option chips | Rectangular or lightly rounded, Lato 700, visible selected state, and restrained selected/hover states. |
 | Forms | Contact/book form, checkout, newsletter | Lato labels, warm/stone inputs, visible focus, clear required text, loud error state, no placeholder-only labels. |
 | CTAs | Hero/contact/shop/cart/checkout buttons | Primary is berry/crimson or deep navy. Secondary is transparent outline. Keep labels plain and short. |

@@ -8,6 +8,52 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-08 - Portfolio photos have no captions, no frames, no route footer, and larger desktop scale
+
+**Decision:** `/portfolio` photos render as the photos themselves: no captions,
+no visible frame wrappers, no card backgrounds, no forced aspect boxes that
+create white or cream stripes, and no route-specific Inquire/Studio/Index footer
+block. Desktop photo size is increased 1.5x, but reel density stays at the
+original `density = 1.10`; `photoScale = 1.5` owns size only. Mobile uses
+full-viewport-width photos with slide-in reveal so the Brave/mobile view has a
+visible change and does not fall back to a narrow static stack.
+
+**Reasoning:** GL rejected captions on the pictures entirely and called out
+white stripes above and beside photos. The root cause was concrete: production
+used design-slot aspect ratios with `object-fit: contain` inside a light frame
+wrapper, so real image dimensions could produce letterbox space. The older
+desktop scale also underplayed the proof-gallery reference. GL then rejected
+the route-specific portfolio footer block because it was extra page furniture
+after the photo field, not proof.
+
+**Implementation:** Removed generated caption markup from
+`lt-portfolio-reel.js`, removed `.lt-frame` wrappers, stopped assigning explicit
+figure heights, made images direct transparent full-width children of
+`.lt-photo`, made mobile photos `100vw`, applied real optimized-image dimensions
+from `PORTFOLIO_REEL_META` after the side/scale slots in `portfolio.py`, and
+bumped `/portfolio` assets to `20260508-no-captions-scale-2`. Split the JS
+controls so `density` returned to `1.10` and new `photoScale` holds the 1.5x
+size increase. Tightened `portfolio_reel.spec.js` so it fails if captions, frame
+wrappers, photo backgrounds, old desktop widths, side-gutter mobile photos,
+image/photo rect mismatches, compressed higher-density vertical rhythm, or the
+route-specific portfolio footer return.
+
+**Verification receipt:** `python scripts/dev/clear_website_cache.py --restart`
+passed. `npm run test:portfolio-reel` passed 4/4. `npm run test:layout-fit --
+--grep "portfolio fits"` passed 13/13. `npm run test:interactive-layout --
+--grep portfolio` passed 6/6. A clean Brave mobile check returned 200 with 15
+photos, 0 frame wrappers, 0 captions, first photo visible at 390px wide, second
+photo waiting for scroll, no document overflow, and no page errors. Live DOM
+evidence found `.lt-foot` count 0, no `Portfolio contact` landmark, and none of
+the rejected footer labels.
+
+**Decided by:** GL rejected captions, containers, white stripes, the old desktop
+scale, the unchanged Brave/mobile experience, higher reel density as the size
+lever, and the route-specific portfolio footer block.
+
+---
+
+
 ## 2026-05-07 - Event Playground/OpenClaw handoff uses a planning-only contract
 
 **Decision:** The committed Event Playground/OpenClaw source remains a hidden

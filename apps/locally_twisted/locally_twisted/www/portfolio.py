@@ -187,8 +187,10 @@ GALLERY_ITEMS = [
 ]
 
 
-# Keep this side/scale/aspect rhythm aligned with the approved Frappe design
-# handoff in research/design_handoff_locally_twisted_portfolio/frappe/.
+# Keep this side/scale rhythm aligned with the approved Frappe design handoff in
+# research/design_handoff_locally_twisted_portfolio/frappe/. Photo dimensions
+# are applied from the optimized assets below so the reel does not create
+# artificial letterbox stripes around real images.
 APPROVED_COLLAGE_SLOTS = [
     {"side": "left", "scale": 0.62, "w": 4, "h": 5},
     {"side": "right", "scale": 0.74, "w": 3, "h": 2},
@@ -253,6 +255,7 @@ GALLERY_ITEMS.sort(key=lambda item: _portfolio_order.get(item["slug"], len(_port
 for index, item in enumerate(GALLERY_ITEMS):
     slot = APPROVED_COLLAGE_SLOTS[index % len(APPROVED_COLLAGE_SLOTS)]
     item.update(slot)
+    item.update(PORTFOLIO_REEL_META.get(item["slug"], {}))
 
 
 def _known_slug(slug, options):

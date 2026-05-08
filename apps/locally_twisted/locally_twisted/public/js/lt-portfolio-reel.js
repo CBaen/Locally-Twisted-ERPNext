@@ -4,6 +4,7 @@
 
   const SETTINGS = {
     density: 1.10,
+    photoScale: 1.5,
     variant: "drift",
     driftSmoothing: 0.02,
     opacitySpeed: 4.0,
@@ -20,7 +21,7 @@
     const verticalSpacing = VERTICAL_SPACING * (2 - density);
 
     return photos.map((photo) => {
-      const width = BASE_UNIT * photo.scale * density;
+      const width = BASE_UNIT * photo.scale * density * SETTINGS.photoScale;
       const height = width / (photo.w / photo.h);
 
       if (photo.side === "center") {
@@ -61,13 +62,9 @@
 
     const anchor = anchorPercent(photo, index, viewportWidth);
     figure.style.width = `${photo._w}px`;
-    figure.style.height = `${photo._h}px`;
     figure.style.left = `${Math.max(1, anchor)}%`;
     figure.style.top = `${photo.yOffset}px`;
     figure.style.setProperty("--ar", photo.w / photo.h);
-
-    const frame = document.createElement("div");
-    frame.className = "lt-frame";
 
     const image = document.createElement("img");
     image.loading = index < 2 ? "eager" : "lazy";
@@ -77,30 +74,64 @@
     image.src = photo.image_url;
     image.width = Math.round(photo.w);
     image.height = Math.round(photo.h);
-    frame.appendChild(image);
-    figure.appendChild(frame);
-
-    const caption = document.createElement("figcaption");
-    caption.className = "lt-cap";
-
-    const number = document.createElement("span");
-    number.className = "lt-cap-num";
-    number.textContent = String(index + 1).padStart(2, "0");
-
-    const title = document.createElement("span");
-    title.className = "lt-cap-title";
-    title.textContent = photo.title;
-
-    const meta = document.createElement("span");
-    meta.className = "lt-cap-meta";
-    meta.textContent = [photo.client, photo.year].filter(Boolean).join(" \u00b7 ");
-
-    caption.appendChild(number);
-    caption.appendChild(title);
-    caption.appendChild(meta);
-    figure.appendChild(caption);
+    figure.appendChild(image);
 
     return figure;
+  }
+
+  function setupMobileReveal(elements) {
+    const media = window.matchMedia("(max-width: 768px)");
+    let observer = null;
+
+    function disconnect() {
+      if (observer) {
+        observer.disconnect();
+        observer = null;
+      }
+    }
+
+    function apply() {
+      disconnect();
+
+      elements.forEach((element, index) => {
+        const side = element.dataset.side || (index % 2 ? "right" : "left");
+        const offset = side === "right" ? "34px" : side === "center" ? "0px" : "-34px";
+        element.style.setProperty("--mobile-start-x", offset);
+        element.classList.remove("is-visible");
+      });
+
+      if (!media.matches) return;
+
+      if (!("IntersectionObserver" in window)) {
+        elements.forEach((element) => element.classList.add("is-visible"));
+        return;
+      }
+
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          });
+        },
+        {
+          root: null,
+          rootMargin: "0px 0px -18% 0px",
+          threshold: 0.28,
+        }
+      );
+
+      elements.forEach((element) => observer.observe(element));
+    }
+
+    apply();
+
+    if (typeof media.addEventListener === "function") {
+      media.addEventListener("change", apply);
+    } else if (typeof media.addListener === "function") {
+      media.addListener(apply);
+    }
   }
 
   function mount(root) {
@@ -122,6 +153,7 @@
       frontUntil: 0,
     }));
     const elements = Array.from(reel.querySelectorAll(".lt-photo"));
+    setupMobileReveal(elements);
     let frontIndex = -1;
     let mouseX = 0;
     let mouseY = 0;
@@ -141,7 +173,6 @@
         if (!element) return;
         const anchor = anchorPercent(photo, index, viewportWidth);
         element.style.width = `${photo._w}px`;
-        element.style.height = `${photo._h}px`;
         element.style.left = `${Math.max(1, anchor)}%`;
         element.style.top = `${photo.yOffset}px`;
       });
