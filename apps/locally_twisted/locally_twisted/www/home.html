@@ -54,7 +54,7 @@
                 <div class="lt-reviews-block__group">
                     {% for quote in review_quotes %}
                         {% if quote %}
-                        <article class="lt-reviews-block__quote" tabindex="0">
+                        <article class="lt-reviews-block__quote">
                             <p class="lt-reviews-block__quote-mark" aria-hidden="true">&ldquo;</p>
                             <p class="lt-reviews-block__quote-text">{{ quote.text | replace("Totally Twisted", "Locally Twisted") }}</p>
                             <p class="lt-reviews-block__quote-attr">

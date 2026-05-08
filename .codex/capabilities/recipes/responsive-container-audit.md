@@ -7,7 +7,7 @@ maturity: candidate
 scope: Locally Twisted ERPNext/Frappe public-site responsive layout, containment, and stateful UI checks
 currently_true: yes
 verification_level: 2
-last_verified: 2026-05-07
+last_verified: 2026-05-08
 evidence_quality: direct
 successful_uses: 2
 failed_uses: 0
@@ -59,6 +59,7 @@ The current LT gate uses:
 - `scripts/verify/interactive_layout.spec.js` for stateful UI: header breakpoints, desktop mega panels, mobile drawer accordions, shop filters/product selectors, contact conditionals, portfolio front-photo state, and reduced-motion homepage checks.
 - `scripts/verify/checkout_experience.spec.js` for checkout state behavior and preview consistency.
 - `scripts/verify/a11y_audit.js` / `npm run test:a11y` for axe-core public route checks at desktop and mobile widths.
+- `scripts/verify/manual_a11y_probe.js` / `npm run test:a11y-manual` for manual-style keyboard focus, visible-focus proxy, image-load, landmark, H1, and zoom-pressure checks across public routes.
 - `npm run test:public-verify` for the aggregate public verification chain.
 
 ## Required Viewport Families
@@ -89,6 +90,7 @@ Add route-specific widths when the changed surface has its own breakpoint.
 - Optional container-internal overflow for known risk areas.
 - Small interactive targets where selectors are supplied.
 - Stateful failures after drawers, accordions, mega panels, modals, filters, or option controls are opened.
+- Hidden or offscreen focused elements, especially in crawls, carousels, portfolio reels, and label-proxied product selectors.
 
 ## Implementation Pattern
 
@@ -101,7 +103,7 @@ Add route-specific widths when the changed surface has its own breakpoint.
 7. Fix the actual container math: grid tracks, `min-width: 0`, `box-sizing`, padding, wrapping, max-width, image aspect ratios, and stable control dimensions.
 8. For showcase rows, verify symmetry as well as fit. Equal-width category tiles, balanced card rows, and no single-card orphan row are part of the layout contract when products are being shown.
 9. Avoid body-wide `overflow-x: hidden` as the primary fix.
-10. Treat accessibility failures as layout closeout blockers too: color contrast, nested landmarks, unnamed links, heading order, and breadcrumb regions must be fixed before launch claims.
+10. Treat accessibility failures as layout closeout blockers too: color contrast, nested landmarks, unnamed links, heading order, breadcrumb regions, hidden focused elements, and offscreen tab stops must be fixed before launch claims.
 11. Run cache clear after Frappe/Jinja/CSS changes.
 12. Verify with the commands below.
 13. Update the workstream/queue/decision/lesson docs if the fix changes the project standard.
@@ -111,6 +113,7 @@ Add route-specific widths when the changed surface has its own breakpoint.
 ```powershell
 python scripts/dev/clear_website_cache.py
 npm run test:a11y
+npm run test:a11y-manual
 npm run test:layout-fit
 npm run test:container-contract
 npm run test:interactive-layout
@@ -126,7 +129,8 @@ Use `npm run test:public-verify` when closing a broad public-site visual change.
 - If only one route fails, inspect that route's rendered DOM and container hierarchy before changing shared CSS.
 - If several pages fail at the same width, suspect shared chrome, section wrappers, global grid rules, or Webshop defaults.
 - If a carousel/track reports overflow but the document does not scroll and an ancestor clips it intentionally, tune the allowlist rather than hiding real failures.
-- If native checkboxes/radios are small by design but the label is the actual target, audit the wrapper target instead.
+- If native checkboxes/radios are visually hidden but the label/chip is the actual target, the visible label must receive the focus style and the manual a11y probe should treat it as the focus proxy.
+- If a moving crawl/carousel item is not interactive, do not put it in the tab order. If it is interactive, it must not become focusable until it is visible.
 - If a hero changes, run the `compact hero height contract` grep in
   `interactive_layout.spec.js`; route-local hero sizing is not allowed to drift
   outside the approved viewport-family standard.

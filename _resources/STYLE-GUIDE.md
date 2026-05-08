@@ -177,7 +177,7 @@ component is added, append it here before a broad implementation swarm begins.
 | Contact/inquiry | `/contact`, `templates/includes/book_form.html` | Main custom-work conversion | Dark civic intro, two-column form/info layout on desktop, large Cormorant heading, white form surface, warm/stone fields, Deep Navy primary action/focus, Brass focus ring, Berry only for required/error states, company/team copy. |
 | Legacy book | `/book` | Compatibility path | Redirect or visually match contact if rendered. Do not make `/book` the primary public CTA unless the route decision changes. |
 | Portfolio | `/portfolio`, `www/portfolio.html` | Proof gallery | Photos are the product. Keep the approved collage/movement and whole-photo reel, but use the native LT shell, sitewide Cormorant/Lato typography, and branded compact hero copy. Do not render captions, visible frame wrappers, letterbox bands, card containers, or a route-specific Inquire/Studio/Index footer block on the photos/page field. A subtle desktop edge fade and shadow are allowed only as image treatment, not as a visible container, and clicked desktop photos must not cover the hero. Mobile must reveal full-width photos with slide-in motion instead of becoming a static stack. Do not copy prototype page chrome, custom cursor, route-local Google font imports, or off-brand hero copy. |
-| Balloon twisting / face painting | `/balloon-twisting-and-face-painting` | First-class live-service lane | Can be warmer and more playful in photos, but still structured: editorial intro, service cards, event-type crawl, shared inquiry section, and expectation card. |
+| Balloon twisting / face painting | `/balloon-twisting-and-face-painting` | First-class live-service lane | Can be warmer and more playful in photos, but still structured: editorial intro, service cards, brand-blue support/event-type bands, shared inquiry section, calculator, and expectation card. No red Process-era divider/banner. |
 | FAQ | `/faq` | Objection handling | Clean grouped questions, generous line height, details/accordion states accessible, CTA to contact. No decorative clutter. |
 | Policies | `/privacy`, `/terms-of-service`, `/refund-policy`, `/accessibility` | Legal and trust surface | Warm-white document layout, narrow readable measure, Cormorant H1/H2, Lato body, brass/berry links only where useful. |
 | Search and Frappe utility pages | `/search`, login/account flows where Frappe owns chrome | Utility wayfinding | Keep global shell consistent. Do not invent a separate visual language for low-frequency utility screens. |
@@ -196,14 +196,14 @@ Current primary navigation is `Event Balloons`, `Portfolio`,
 |---|---|---|
 | Premium proof bar | Future trust/value bars | Dark ink/navy/slate band, brass line icons, short uppercase Lato titles, compact proof text. Use the Image #3 icon standard, but do not render a homepage trust bar in the current launch layout. |
 | Hero sections | `lt-hero`, `lt-shop__hero`, `lt-portfolio-hero`, page intros | Cormorant headings, Lato labels, real proof imagery where possible, dark authority bands for civic/company pages, warmer light headers for product/legal pages. |
-| Photo cards / proof reels | Featured work, portfolio reel, product cards, BTFP service cards | Preserve real work. Product cards can crop tighter; proof/portfolio surfaces need context, scale, natural image ratios, and movement where the route contract calls for it. Portfolio photos are not caption cards; use the image itself with no visible frame wrapper. |
+| Photo cards / proof reels | Featured work, portfolio reel, product cards, BTFP service cards | Preserve real work. Product cards can crop tighter; proof/portfolio surfaces need context, scale, natural image ratios, and movement where the route contract calls for it. Portfolio photos are not caption cards; use the image itself with no visible frame wrapper. Hidden/offscreen moving items must not be keyboard focusable. |
 | Filters/chips | Shop chips, portfolio pills, category filters, product option chips | Rectangular or lightly rounded, Lato 700, visible selected state, and restrained selected/hover states. |
 | Forms | Contact/book form, checkout, newsletter | Lato labels, white form surface, warm/stone inputs, visible Deep Navy/Brass focus, clear required text, loud Berry error state, no placeholder-only labels, no duplicate page-specific form systems. |
 | CTAs | Hero/contact/shop/cart/checkout buttons | Primary is berry/crimson or deep navy. Secondary is transparent outline. Keep labels plain and short. |
 | Accordions/details | FAQ and mobile nav accordions | Large hit areas, clear expanded state, keyboard support, no tiny chevrons as the only signal. |
 | Drawers/modals | Mobile nav, portfolio modal, cart/filter drawers | Dark/warm brand surfaces, focusable close buttons, trapped/managed focus where modal, no visual jump or hidden overflow. |
 | Reviews | Home review block, future testimonials | Support proof, do not lead the brand. Verify current rating/count before publishing numbers. |
-| Logo/client crawl | Home client proof | Use text/category proof unless logo permission is confirmed. Homepage proof crawls move left-to-right at matched visible speed; keep movement slow, linear, pauseable, and scrollbar-free in normal and reduced-motion states unless the business-proof contract changes. |
+| Logo/client crawl | Home client proof | Use text/category proof unless logo permission is confirmed. Homepage proof crawls move left-to-right at matched visible speed; keep movement slow, linear, pauseable, scrollbar-free, and out of the tab order when items are not interactive unless the business-proof contract changes. |
 | Empty/loading/error states | Cart, checkout, shop, forms, filters | Plain language, calm hierarchy, phone/contact fallback for customer blockers. |
 
 Use plain customer labels. Avoid backend CRM language in public copy.
@@ -727,10 +727,11 @@ Before claiming visual/frontend work is complete:
 3. Run `npm run test:layout-fit` for passive customer-site layout fit.
 4. Run `npm run test:container-contract` for route-level section ownership, full-bleed/contained modes, and crawl clipping.
 5. Run `npm run test:interactive-layout` for open menus, drawers, modals, forms, filters, product controls, and breakpoint behavior.
-6. Run `npm run test:checkout-experience` when checkout layout or fulfillment preview behavior is in scope.
-7. Run `npm run test:public-verify` before closing a broad public-site visual change.
-8. Capture and inspect desktop and mobile screenshots.
-9. Verify the actual route or user flow, not a proxy page.
+6. Run `npm run test:a11y` and `npm run test:a11y-manual` when public route accessibility, keyboard focus, moving proof surfaces, or form controls are in scope.
+7. Run `npm run test:checkout-experience` when checkout layout or fulfillment preview behavior is in scope.
+8. Run `npm run test:public-verify` before closing a broad public-site visual change.
+9. Capture and inspect desktop and mobile screenshots.
+10. Verify the actual route or user flow, not a proxy page.
 
 Useful commands:
 
@@ -739,6 +740,8 @@ python scripts/dev/clear_website_cache.py
 npm run test:layout-fit
 npm run test:container-contract
 npm run test:interactive-layout
+npm run test:a11y
+npm run test:a11y-manual
 npm run test:checkout-experience
 npm run test:public-verify
 python scripts/verify/nav_ia.py

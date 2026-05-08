@@ -273,7 +273,7 @@ PAGE_CSS = """.lt-btfp__intro {
 }
 .lt-btfp__intro {
     background: linear-gradient(135deg, #0e2240 0%, #0a0a0b 100%);
-    border-bottom: 10px solid #b31b34;
+    border-bottom: 0;
 }
 .lt-btfp__intro-title,
 .lt-btfp__intro-lede,
@@ -288,12 +288,13 @@ PAGE_CSS = """.lt-btfp__intro {
     letter-spacing: 0.16em;
 }
 .lt-btfp__banner {
-    background-color: #d9c7b3;
-    border-color: rgba(10, 10, 11, 0.16);
+    background-color: #0e2240;
+    border-color: rgba(184, 154, 91, 0.28);
+    color: #faf7f2;
 }
 .lt-btfp__banner-copy,
 .lt-btfp__banner-link {
-    color: #0a0a0b;
+    color: #faf7f2;
 }
 .lt-btfp__services {
     background-color: #faf7f2;
@@ -313,7 +314,7 @@ PAGE_CSS = """.lt-btfp__intro {
     color: #faf7f2;
 }
 .lt-btfp__banner-link:focus-visible {
-    outline-color: #b31b34;
+    outline-color: #b89a5b;
 }
 .lt-btfp__carousel {
     background-color: #d9c7b3;

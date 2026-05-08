@@ -100,6 +100,20 @@ def main() -> int:
                     print(f"  FAIL - BTFP page should not expose {hidden_service!r}")
                     failures += 1
 
+            support_banner = page.locator(".lt-btfp__banner")
+            if support_banner.count() != 1:
+                print("  FAIL - BTFP page should include the last-minute support banner")
+                failures += 1
+            else:
+                support_background = support_banner.first.evaluate("node => getComputedStyle(node).backgroundColor")
+                if support_background != "rgb(14, 34, 64)":
+                    print(f"  FAIL - BTFP support banner should use brand blue, found {support_background}")
+                    failures += 1
+                support_color = support_banner.first.evaluate("node => getComputedStyle(node).color")
+                if support_color not in {"rgb(250, 247, 242)", "rgb(255, 255, 255)"}:
+                    print(f"  FAIL - BTFP support banner text should be light on brand blue, found {support_color}")
+                    failures += 1
+
             crawl = page.locator(".lt-btfp__event-crawl")
             if crawl.count() != 1:
                 print("  FAIL - BTFP page should include the event-type crawl")

@@ -8,6 +8,58 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-08 - Manual public accessibility gate covers focus exposure
+
+**Decision:** Public accessibility closeout now includes a reusable manual-style
+keyboard/focus probe, `npm run test:a11y-manual`, in addition to the axe gate.
+The probe checks public routes at desktop, mobile, and zoom-pressure widths for
+load success, one page main landmark, at least one H1, broken images,
+keyboard-focused elements outside the viewport, hidden focused elements, and
+weak focus indicators.
+
+**Reasoning:** Axe did not catch two visible keyboard failures: homepage review
+crawl cards could receive focus while offscreen, and portfolio photo buttons
+could receive focus while visually hidden. These are accessibility defects even
+when the layout and contrast gates are green.
+
+**Implementation:** Removed `tabindex` from non-interactive homepage review
+cards. Updated the portfolio reel so photo figures start `tabindex="-1"` and
+`aria-hidden="true"`, then become reachable only when visible. The manual probe
+accepts visually hidden native inputs only when their visible label/chip proxy
+has the focus state.
+
+**Alternatives considered:** Rely on axe plus visual layout gates. Rejected
+because motion/focus exposure failed outside axe's default checks.
+
+**Decided by:** Codex verification after GL asked to continue with manual
+accessibility and BTFP closeout on 2026-05-08.
+
+---
+
+## 2026-05-08 - BTFP service support bands stay brand blue
+
+**Decision:** `/balloon-twisting-and-face-painting` uses brand-blue support
+bands below the hero and for the event-type crawl. Do not restore a red divider
+or red/tan "banner" treatment in that service flow.
+
+**Reasoning:** GL explicitly rejected the returned Process content and asked
+for the BTFP lower page restored with a brand-blue banner. The line of business
+needs to feel first-class and consistent with the current Civic/Slate/Berry
+brand system, without the old red Process-era visual interruption.
+
+**Implementation:** The BTFP support banner now uses `#0e2240` with warm-light
+text, the hero red divider is removed, and `contact_prefill.py` guards the
+support banner color alongside the event crawl, shared form contract, service
+preselection, calculator math, and no public deposit checkout CTA.
+
+**Alternatives considered:** Leave the tan support band because the event crawl
+was already blue. Rejected because the screenshot review still showed a visible
+non-blue band at the exact BTFP handoff point.
+
+**Decided by:** GL directive on 2026-05-08; implemented by Codex.
+
+---
+
 ## 2026-05-08 - Maintenance checkups are sanitized, not broad admin access
 
 **Decision:** Client operations checkups can write and report sanitized

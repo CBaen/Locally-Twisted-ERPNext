@@ -7,7 +7,7 @@ maturity: candidate
 scope: Locally Twisted ERPNext/Frappe public page shell, full-bleed sections, Webshop containment, and container ownership
 currently_true: yes
 verification_level: 2
-last_verified: 2026-05-07
+last_verified: 2026-05-08
 evidence_quality: direct
 successful_uses: 2
 failed_uses: 0
@@ -153,7 +153,8 @@ Checked on 2026-05-06 against the running local stack:
    full-bleed, crawl, or shared containment change.
 8. Run the responsive container audit and motion verification when the change involves animated crawls, carousels, clipping, or media-query fallbacks.
 9. Run the public axe gate (`npm run test:a11y`) before closing public route/template changes; contrast, landmarks, link names, heading order, and breadcrumb regions are launch blockers, not polish.
-10. Capture desktop and mobile screenshots before claiming the page is ready for GL review.
+10. Run the manual-style public accessibility probe (`npm run test:a11y-manual`) when the change touches crawls, carousels, portfolio/photo reels, form controls, product selectors, or any surface where hidden/offscreen focus can happen.
+11. Capture desktop and mobile screenshots before claiming the page is ready for GL review.
 
 ## Red Flags
 
@@ -165,6 +166,7 @@ Checked on 2026-05-06 against the running local stack:
 - A page looks "broken out" because a full-bleed exception became the default section pattern.
 - Product/category controls become text-width chip rows with ragged edges when the page is meant to show off products.
 - A desktop product grid ends with one isolated orphan card when the same item count can be split into balanced rows.
+- A moving proof surface makes non-interactive cards focusable, or leaves opacity-hidden/offscreen interactive items in the tab order.
 
 ## LT Receipt
 

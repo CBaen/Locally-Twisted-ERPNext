@@ -6,6 +6,23 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-08 - Moving proof surfaces must not leak hidden keyboard focus
+
+The axe pass was clean, but the manual keyboard/zoom probe found two real
+focus failures: homepage review crawl cards were non-interactive articles with
+`tabindex="0"` and could receive focus while translated offscreen, and
+portfolio photo figures were focusable while still opacity-hidden by the
+entry animation. Both looked fine visually until Tab exposed them.
+
+**Counter-move:** moving/collage/proof surfaces must keep hidden or offscreen
+items out of the tab order. Non-interactive moving cards should not have
+`tabindex`. JS-driven photo buttons should start at `tabindex="-1"` with
+`aria-hidden="true"` and become keyboard reachable only when actually visible.
+Run `npm run test:a11y-manual` after changing crawls, carousels, portfolio
+reels, product selectors, or other motion-heavy public surfaces.
+
+---
+
 ## 2026-05-08 - Public accessibility is a launch gate, not a visual polish pass
 
 The full-site axe scan caught issues that looked small in isolation but are
@@ -19,6 +36,8 @@ inside Frappe's existing `main.container`. Public route closeout now needs
 `npm run test:a11y` alongside layout/container/interactive checks. Treat
 contrast, landmarks, link names, heading order, breadcrumb regions, and
 keyboard/screen-reader semantics as launch blockers, not after-the-fact polish.
+Follow it with `npm run test:a11y-manual` when motion, focus order, image
+loading, or zoom-pressure behavior is in scope.
 
 ## 2026-05-08 - Delight motion still needs a settle point
 

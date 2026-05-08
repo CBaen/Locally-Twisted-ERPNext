@@ -57,7 +57,8 @@
     figure.dataset.category = photo.category || "";
     figure.dataset.eventType = photo.event_type || "";
     figure.setAttribute("role", "button");
-    figure.setAttribute("tabindex", "0");
+    figure.setAttribute("tabindex", "-1");
+    figure.setAttribute("aria-hidden", "true");
     figure.setAttribute("aria-label", `Bring ${photo.title} forward`);
 
     const anchor = anchorPercent(photo, index, viewportWidth);
@@ -79,6 +80,17 @@
     return figure;
   }
 
+  function setPhotoKeyboardState(element, isReachable) {
+    if (!element) return;
+    if (isReachable) {
+      element.tabIndex = 0;
+      element.removeAttribute("aria-hidden");
+    } else {
+      element.tabIndex = -1;
+      element.setAttribute("aria-hidden", "true");
+    }
+  }
+
   function setupMobileReveal(elements) {
     const media = window.matchMedia("(max-width: 768px)");
     let observer = null;
@@ -98,12 +110,16 @@
         const offset = side === "right" ? "34px" : side === "center" ? "0px" : "-34px";
         element.style.setProperty("--mobile-start-x", offset);
         element.classList.remove("is-visible");
+        setPhotoKeyboardState(element, false);
       });
 
       if (!media.matches) return;
 
       if (!("IntersectionObserver" in window)) {
-        elements.forEach((element) => element.classList.add("is-visible"));
+        elements.forEach((element) => {
+          element.classList.add("is-visible");
+          setPhotoKeyboardState(element, true);
+        });
         return;
       }
 
@@ -112,6 +128,7 @@
           entries.forEach((entry) => {
             if (!entry.isIntersecting) return;
             entry.target.classList.add("is-visible");
+            setPhotoKeyboardState(entry.target, true);
             observer.unobserve(entry.target);
           });
         },
@@ -152,6 +169,7 @@
       frontUntil: 0,
     }));
     const elements = Array.from(reel.querySelectorAll(".lt-photo"));
+    const mobileMedia = window.matchMedia("(max-width: 768px)");
     setupMobileReveal(elements);
     let frontIndex = -1;
 
@@ -251,6 +269,16 @@
           `rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(${frontScale})`;
         element.style.opacity = opacity;
         element.style.zIndex = isFront ? 50 : 1;
+
+        if (!mobileMedia.matches) {
+          const reachable =
+            opacity >= 0.55 &&
+            rect.bottom >= -2 &&
+            rect.top <= viewportHeight + 2 &&
+            rect.right >= -2 &&
+            rect.left <= viewportWidth + 2;
+          setPhotoKeyboardState(element, reachable);
+        }
       }
       window.requestAnimationFrame(frame);
     }
