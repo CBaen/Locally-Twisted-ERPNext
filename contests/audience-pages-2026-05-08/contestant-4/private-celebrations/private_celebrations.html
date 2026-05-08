@@ -1,0 +1,615 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+{#
+  /private-celebrations — Audience page for birthday parents, wedding
+  planners, baby shower hosts, milestone families, and memorial organizers.
+  No named clients (privacy). Proof is category-level + real review quotes.
+
+  Container modes (for test:container-contract):
+    1. lt-page-priv__hero         → fullbleed
+    2. lt-page-priv__celebration-types → band (warm-white, 4 cards)
+    3. lt-page-priv__gallery      → visual-field (fullbleed)
+    4. lt-page-priv__pillars-band → band (slate blue)
+    5. lt-page-priv__testimonials → band (sandstone/warm)
+    6. lt-page-priv__service-note → band (warm-white)
+    7. lt-page-priv__cta          → fullbleed (ink/dark)
+#}
+
+<style>
+/* =====================================================================
+   /private-celebrations — Scoped page styles
+   Root: .lt-page-priv
+   This page is warmer in tone than civic/corporate. Sandstone and
+   organic palette choices reflect the personal, milestone context.
+   ===================================================================== */
+
+/* --- Hero ----------------------------------------------------------- */
+.lt-page-priv__hero {
+    position: relative;
+    min-height: 220px;
+    height: 220px;
+    max-height: 220px;
+    background-color: #0E2240;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+.lt-page-priv__hero-image {
+    position: absolute;
+    inset: 0;
+    background-image: url('/assets/locally_twisted/images/portfolio/optimized/wedding-organic-half-arch.webp');
+    background-size: cover;
+    background-position: center;
+}
+.lt-page-priv__hero-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(90deg, rgba(10, 10, 11, 0.88) 0%, rgba(14, 34, 64, 0.70) 45%, rgba(14, 34, 64, 0.10) 100%),
+        linear-gradient(180deg, rgba(10, 10, 11, 0.04) 0%, rgba(10, 10, 11, 0.28) 100%);
+}
+.lt-page-priv__hero-content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem;
+}
+.lt-page-priv__hero-eyebrow {
+    font-family: var(--lt-font-body);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #B89A5B;
+    margin: 0 0 0.35rem;
+}
+.lt-page-priv__hero-title {
+    font-family: var(--lt-font-heading);
+    font-size: 1.9rem;
+    font-weight: 700;
+    line-height: 1.06;
+    color: #FAF7F2;
+    margin: 0 0 0.55rem;
+    max-width: 22ch;
+}
+.lt-page-priv__hero-lede {
+    font-family: var(--lt-font-body);
+    font-size: 0.9rem;
+    line-height: 1.38;
+    color: rgba(250, 247, 242, 0.9);
+    margin: 0 0 0.7rem;
+    max-width: 50ch;
+}
+.lt-page-priv__hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.6rem 1.1rem;
+    background-color: #B31B34;
+    color: #FAF7F2;
+    text-decoration: none;
+    font-family: var(--lt-font-body);
+    font-weight: 700;
+    font-size: 0.85rem;
+    border-radius: 2px;
+    min-height: 44px;
+}
+.lt-page-priv__hero-cta:hover,
+.lt-page-priv__hero-cta:focus-visible {
+    background-color: #0E2240;
+    outline: 2px solid #B89A5B;
+    outline-offset: 2px;
+}
+@media (min-width: 768px) {
+    .lt-page-priv__hero {
+        min-height: 250px;
+        height: 250px;
+        max-height: 250px;
+    }
+    .lt-page-priv__hero-content { padding: 2rem; }
+    .lt-page-priv__hero-title { font-size: 2.45rem; }
+}
+@media (min-width: 1200px) {
+    .lt-page-priv__hero {
+        min-height: 280px;
+        height: 280px;
+        max-height: 280px;
+    }
+    .lt-page-priv__hero-title { font-size: 2.85rem; max-width: 24ch; }
+}
+
+/* --- Celebration types (4-card grid) ------------------------------- */
+.lt-page-priv__celebration-types {
+    background-color: #FAF7F2;
+    padding: 3.5rem 1rem;
+}
+.lt-page-priv__celebration-types-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.lt-page-priv__section-eyebrow {
+    font-family: var(--lt-font-body);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #B89A5B;
+    text-align: center;
+    margin: 0 0 0.55rem;
+}
+.lt-page-priv__section-heading {
+    font-family: var(--lt-font-heading);
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: #0A0A0B;
+    text-align: center;
+    margin: 0 0 0.6rem;
+    line-height: 1.15;
+}
+.lt-page-priv__section-body {
+    font-family: var(--lt-font-body);
+    font-size: 0.97rem;
+    color: #595A5C;
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.6;
+}
+/* 4 cards: 1-col mobile → 2×2 tablet → 4-wide desktop */
+.lt-page-priv__type-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+@media (min-width: 600px) {
+    .lt-page-priv__type-grid { grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+}
+@media (min-width: 1100px) {
+    .lt-page-priv__type-grid { grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+}
+.lt-page-priv__type-card {
+    background-color: #FFFFFF;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid rgba(184, 154, 91, 0.18);
+    box-shadow: 0 4px 16px rgba(10, 10, 11, 0.06);
+}
+.lt-page-priv__type-image {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    display: block;
+    background-color: #E7E5E1;
+}
+.lt-page-priv__type-body {
+    padding: 1.1rem 1.25rem 1.4rem;
+}
+.lt-page-priv__type-icon {
+    width: 28px;
+    height: 28px;
+    color: #B89A5B;
+    margin: 0 0 0.5rem;
+    display: block;
+}
+.lt-page-priv__type-label {
+    font-family: var(--lt-font-body);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #B31B34;
+    margin: 0 0 0.25rem;
+}
+.lt-page-priv__type-heading {
+    font-family: var(--lt-font-heading);
+    font-size: 1.2rem;
+    color: #0A0A0B;
+    margin: 0 0 0.35rem;
+    line-height: 1.25;
+}
+.lt-page-priv__type-proof {
+    font-family: var(--lt-font-body);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #B89A5B;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin: 0 0 0.4rem;
+}
+.lt-page-priv__type-text {
+    font-family: var(--lt-font-body);
+    font-size: 0.88rem;
+    color: #595A5C;
+    line-height: 1.58;
+    margin: 0;
+}
+
+/* --- Gallery (visual-field) ---------------------------------------- */
+.lt-page-priv__gallery {
+    background-color: #0A0A0B;
+    overflow: hidden;
+}
+.lt-page-priv__gallery-strip {
+    display: flex;
+    height: 200px;
+    gap: 2px;
+}
+@media (min-width: 768px) { .lt-page-priv__gallery-strip { height: 260px; } }
+@media (min-width: 1200px) { .lt-page-priv__gallery-strip { height: 320px; } }
+.lt-page-priv__gallery-photo {
+    flex: 1 1 0;
+    overflow: hidden;
+}
+.lt-page-priv__gallery-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+.lt-page-priv__gallery-photo:hover img { transform: scale(1.04); }
+
+/* --- Proof pillars (slate blue) ------------------------------------ */
+.lt-page-priv__pillars-band {
+    background-color: #2F3A4A;
+    padding: 2.75rem 1rem;
+}
+.lt-page-priv__pillars-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+.lt-page-priv__pillars-label {
+    font-family: var(--lt-font-body);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+    color: #B89A5B;
+    text-align: center;
+    margin: 0 0 1.5rem;
+}
+.lt-page-priv__pillars {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+@media (min-width: 768px) {
+    .lt-page-priv__pillars { grid-template-columns: repeat(4, 1fr); }
+}
+.lt-page-priv__pillar { text-align: center; }
+.lt-page-priv__pillar-icon {
+    width: 44px;
+    height: 44px;
+    color: #B89A5B;
+    margin: 0 auto 0.6rem;
+    display: block;
+}
+.lt-page-priv__pillar-label {
+    font-family: var(--lt-font-body);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #FAF7F2;
+    margin: 0 0 0.3rem;
+}
+.lt-page-priv__pillar-body {
+    font-family: var(--lt-font-body);
+    font-size: 0.84rem;
+    color: rgba(250, 247, 242, 0.62);
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* --- Testimonials (sandstone/warm) --------------------------------- */
+.lt-page-priv__testimonials {
+    background-color: #D9C7B3;
+    padding: 3rem 1rem;
+}
+.lt-page-priv__testimonials-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+.lt-page-priv__testimonials-heading {
+    font-family: var(--lt-font-heading);
+    font-size: 1.75rem;
+    color: #0A0A0B;
+    text-align: center;
+    margin: 0 0 2rem;
+    line-height: 1.2;
+}
+.lt-page-priv__testimonial-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+}
+@media (min-width: 768px) {
+    .lt-page-priv__testimonial-grid { grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+}
+.lt-page-priv__testimonial {
+    background-color: rgba(255, 255, 255, 0.55);
+    border: 1px solid rgba(184, 154, 91, 0.28);
+    border-radius: 4px;
+    padding: 1.5rem 1.5rem 1.25rem;
+}
+.lt-page-priv__testimonial-mark {
+    font-family: var(--lt-font-heading);
+    font-size: 2.25rem;
+    color: #B89A5B;
+    line-height: 1;
+    margin: 0 0 0.4rem;
+    opacity: 0.65;
+}
+.lt-page-priv__testimonial-text {
+    font-family: var(--lt-font-body);
+    font-size: 0.95rem;
+    color: #0A0A0B;
+    line-height: 1.58;
+    margin: 0 0 0.75rem;
+}
+.lt-page-priv__testimonial-attr {
+    font-family: var(--lt-font-body);
+    font-size: 0.8rem;
+    color: #595A5C;
+    margin: 0;
+}
+
+/* --- Service note -------------------------------------------------- */
+.lt-page-priv__service-note {
+    background-color: #FAF7F2;
+    padding: 3rem 1rem;
+    border-top: 1px solid #E7E5E1;
+}
+.lt-page-priv__service-note-inner {
+    max-width: 800px;
+    margin: 0 auto;
+}
+.lt-page-priv__service-note-heading {
+    font-family: var(--lt-font-heading);
+    font-size: 1.85rem;
+    color: #0A0A0B;
+    margin: 0 0 0.75rem;
+    line-height: 1.2;
+}
+.lt-page-priv__service-note-body {
+    font-family: var(--lt-font-body);
+    font-size: 0.97rem;
+    color: #595A5C;
+    line-height: 1.65;
+    margin: 0 0 0.65rem;
+}
+.lt-page-priv__service-note-body a {
+    color: #0E2240;
+    text-underline-offset: 2px;
+}
+
+/* --- CTA ----------------------------------------------------------- */
+.lt-page-priv__cta {
+    background-color: #0A0A0B;
+    padding: 4rem 1rem;
+    text-align: center;
+}
+.lt-page-priv__cta-inner {
+    max-width: 820px;
+    margin: 0 auto;
+}
+.lt-page-priv__cta-heading {
+    font-family: var(--lt-font-heading);
+    font-size: 2.4rem;
+    color: #FAF7F2;
+    margin: 0 0 0.75rem;
+    line-height: 1.1;
+}
+.lt-page-priv__cta-body {
+    font-family: var(--lt-font-body);
+    font-size: 1rem;
+    color: rgba(250, 247, 242, 0.75);
+    line-height: 1.6;
+    max-width: 580px;
+    margin: 0 auto 1.75rem;
+}
+.lt-page-priv__cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.9rem 2rem;
+    background-color: #B31B34;
+    color: #FAF7F2;
+    text-decoration: none;
+    font-family: var(--lt-font-body);
+    font-weight: 700;
+    font-size: 0.95rem;
+    border-radius: 2px;
+    min-height: 48px;
+}
+.lt-page-priv__cta-btn:hover,
+.lt-page-priv__cta-btn:focus-visible {
+    background-color: #0E2240;
+    outline: 2px solid #B89A5B;
+    outline-offset: 2px;
+}
+.lt-page-priv__cta-secondary {
+    display: block;
+    margin-top: 1.2rem;
+    font-family: var(--lt-font-body);
+    font-size: 0.86rem;
+    color: rgba(250, 247, 242, 0.55);
+}
+.lt-page-priv__cta-secondary a { color: #B89A5B; }
+
+@media (min-width: 768px) {
+    .lt-page-priv__cta-heading { font-size: 2.85rem; }
+    .lt-page-priv__section-heading { font-size: 2.6rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lt-page-priv__gallery-photo img { transition: none; }
+}
+</style>
+
+{# ===================================================================
+   1. HERO
+   =================================================================== #}
+<section class="lt-page-priv__hero lt-fullbleed" aria-labelledby="priv-page-title">
+    <div class="lt-page-priv__hero-image" aria-hidden="true"></div>
+    <div class="lt-page-priv__hero-content">
+        <p class="lt-page-priv__hero-eyebrow">Private Celebrations &mdash; Wasatch Front</p>
+        <h1 id="priv-page-title" class="lt-page-priv__hero-title">
+            Custom balloon decor for the moments that matter most.
+        </h1>
+        <p class="lt-page-priv__hero-lede">
+            Birthdays, weddings, baby showers, milestones, and celebrations
+            of life — designed with care, delivered cleanly.
+        </p>
+        <a href="/contact?intent=private" class="lt-page-priv__hero-cta">
+            Tell us what you're imagining <span aria-hidden="true">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+{# ===================================================================
+   2. CELEBRATION TYPES — 4-card grid
+   =================================================================== #}
+<section class="lt-page-priv__celebration-types" aria-labelledby="priv-types-heading">
+    <div class="lt-page-priv__celebration-types-inner">
+        <p class="lt-page-priv__section-eyebrow">What we do for private celebrations.</p>
+        <h2 id="priv-types-heading" class="lt-page-priv__section-heading">
+            Every milestone has its own design.
+        </h2>
+        <p class="lt-page-priv__section-body">
+            Locally Twisted has produced custom balloon decor for hundreds
+            of private celebrations across the Wasatch Front — from
+            first birthdays to elegant weddings to celebrations of life.
+            Each one is built from your vision, not a template.
+        </p>
+        <div class="lt-page-priv__type-grid">
+            {% for ctype in celebration_types %}
+            <article class="lt-page-priv__type-card">
+                <img class="lt-page-priv__type-image"
+                     src="{{ ctype.image }}"
+                     alt="{{ ctype.alt }}"
+                     loading="lazy"
+                     width="600" height="450">
+                <div class="lt-page-priv__type-body">
+                    <img class="lt-page-priv__type-icon"
+                         src="{{ ctype.icon }}"
+                         alt="" aria-hidden="true"
+                         width="28" height="28">
+                    <p class="lt-page-priv__type-label">{{ ctype.label }}</p>
+                    <h3 class="lt-page-priv__type-heading">{{ ctype.label }}</h3>
+                    <p class="lt-page-priv__type-proof">{{ ctype.proof }}</p>
+                    <p class="lt-page-priv__type-text">{{ ctype.body }}</p>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{# ===================================================================
+   3. GALLERY STRIP
+   =================================================================== #}
+<section class="lt-page-priv__gallery lt-fullbleed" aria-label="Private celebration photo gallery">
+    <div class="lt-page-priv__gallery-strip">
+        {% for photo in gallery_images %}
+        <div class="lt-page-priv__gallery-photo">
+            <img src="{{ photo.src }}"
+                 alt="{{ photo.alt }}"
+                 loading="lazy"
+                 width="400" height="260">
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{# ===================================================================
+   4. PROOF PILLARS — slate blue
+   =================================================================== #}
+<section class="lt-page-priv__pillars-band" aria-label="Why families choose Locally Twisted">
+    <div class="lt-page-priv__pillars-inner">
+        <p class="lt-page-priv__pillars-label">How Locally Twisted works for private events</p>
+        <div class="lt-page-priv__pillars" role="list">
+            {% for pillar in proof_pillars %}
+            <div class="lt-page-priv__pillar" role="listitem">
+                <img class="lt-page-priv__pillar-icon"
+                     src="{{ pillar.icon }}"
+                     alt="" aria-hidden="true"
+                     width="44" height="44">
+                <p class="lt-page-priv__pillar-label">{{ pillar.label }}</p>
+                <p class="lt-page-priv__pillar-body">{{ pillar.body }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{# ===================================================================
+   5. TESTIMONIALS — sandstone/warm ground
+   =================================================================== #}
+<section class="lt-page-priv__testimonials" aria-labelledby="priv-testimonials-heading">
+    <div class="lt-page-priv__testimonials-inner">
+        <h2 id="priv-testimonials-heading" class="lt-page-priv__testimonials-heading">
+            What families say.
+        </h2>
+        <div class="lt-page-priv__testimonial-grid">
+            {% for t in testimonials %}
+            <blockquote class="lt-page-priv__testimonial">
+                <p class="lt-page-priv__testimonial-mark" aria-hidden="true">&ldquo;</p>
+                <p class="lt-page-priv__testimonial-text">{{ t.text }}</p>
+                <footer class="lt-page-priv__testimonial-attr">{{ t.attr }}</footer>
+            </blockquote>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{# ===================================================================
+   6. SERVICE NOTE — audience-specific
+   =================================================================== #}
+<section class="lt-page-priv__service-note" aria-labelledby="priv-service-heading">
+    <div class="lt-page-priv__service-note-inner">
+        <h2 id="priv-service-heading" class="lt-page-priv__service-note-heading">
+            How private celebrations work with Locally Twisted.
+        </h2>
+        <p class="lt-page-priv__service-note-body">
+            Start by telling us what you're imagining — the event type,
+            date, color palette, and any themes or specific requests.
+            Jeff and his team will work with you to figure out the right
+            scope and send a quote. Most private celebrations are quoted
+            within one to two business days.
+        </p>
+        <p class="lt-page-priv__service-note-body">
+            Delivery and setup are available for most private events.
+            Latex-free options are available for allergy-sensitive
+            celebrations. For events that need same-day service, call
+            <a href="tel:+18012850860">(801) 285-0860</a> directly.
+        </p>
+    </div>
+</section>
+
+{# ===================================================================
+   7. CTA
+   =================================================================== #}
+<section class="lt-page-priv__cta lt-fullbleed" aria-labelledby="priv-cta-heading">
+    <div class="lt-page-priv__cta-inner">
+        <h2 id="priv-cta-heading" class="lt-page-priv__cta-heading">
+            Tell us what you're imagining.
+        </h2>
+        <p class="lt-page-priv__cta-body">
+            Every private celebration starts with a conversation.
+            A quote is free — and usually back within two business days.
+        </p>
+        <a href="/contact?intent=private" class="lt-page-priv__cta-btn">
+            Start a Private Celebration Quote <span aria-hidden="true">&rarr;</span>
+        </a>
+        <p class="lt-page-priv__cta-secondary">
+            Questions? Call <a href="tel:+18012850860">(801) 285-0860</a>
+            or <a href="mailto:hi@locallytwisted.com">hi@locallytwisted.com</a>
+        </p>
+    </div>
+</section>
+
+{% endblock %}

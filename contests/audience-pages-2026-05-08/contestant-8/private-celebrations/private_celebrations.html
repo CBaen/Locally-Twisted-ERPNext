@@ -1,0 +1,154 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+<div class="lt-page-private">
+
+{# ===================================================================
+   Section 1 — Hero (fullbleed)
+   Container mode: fullbleed
+   Height contract: mobile 220px / tablet 250px / desktop 280px
+   Image: wedding organic half arch — tasteful, premium, warm
+=================================================================== #}
+<section class="lt-private-hero lt-fullbleed" aria-labelledby="lt-private-page-heading">
+    <div class="lt-private-hero__image" aria-hidden="true"></div>
+    <div class="lt-private-hero__content">
+        <p class="lt-private-hero__eyebrow">Private Celebrations · Wasatch Front</p>
+        <h1 id="lt-private-page-heading" class="lt-private-hero__title">
+            Every detail matters.
+        </h1>
+        <p class="lt-private-hero__lede">
+            Custom balloon decor for birthdays, weddings, baby showers, milestones,
+            and celebrations of all kinds — designed for the moment, installed for the day.
+        </p>
+        <a href="/contact?intent=private" class="lt-private-hero__cta">
+            Tell us what you're imagining <span aria-hidden="true">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+{# ===================================================================
+   Section 2 — Celebration categories (band)
+   Container mode: band
+   No named-client roster — private buyers expect privacy.
+   Category-level proof with numbers where honest.
+=================================================================== #}
+<section class="lt-private-cats" aria-labelledby="lt-private-cats-heading">
+    <div class="lt-private-cats__inner">
+        <h2 id="lt-private-cats-heading" class="lt-private-cats__heading">For Every Kind of Celebration</h2>
+        <p class="lt-private-cats__lede">
+            From a child's first birthday to a wedding ceremony to a life remembered —
+            the decor should feel made for that specific moment.
+        </p>
+        <div class="lt-private-cats__grid" role="list">
+            {% for cat in celebration_categories %}
+            <article class="lt-private-cats__card" role="listitem">
+                <span class="lt-private-cats__icon" aria-hidden="true">&#10022;</span>
+                <h3 class="lt-private-cats__name">{{ cat.name }}</h3>
+                <p class="lt-private-cats__desc">{{ cat.desc }}</p>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{# ===================================================================
+   Section 3 — Photo grid (visual-field, 4 images in portrait)
+   Container mode: visual-field (wider inner max)
+   Portrait aspect for wedding/birthday photos shows full piece.
+=================================================================== #}
+<section class="lt-private-photos" aria-labelledby="lt-private-photos-heading">
+    <div class="lt-private-photos__inner">
+        <h2 id="lt-private-photos-heading" class="lt-private-photos__heading">The Work</h2>
+        <p class="lt-private-photos__lede">
+            Installed for real events. The photos show what actually showed up on the day.
+        </p>
+        <div class="lt-private-photos__grid">
+            {% for photo in private_photos %}
+            <div class="lt-private-photos__item">
+                <img src="{{ photo.src }}"
+                     alt="{{ photo.alt }}"
+                     loading="lazy"
+                     width="600" height="800">
+                <p class="lt-private-photos__label">{{ photo.label }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{# ===================================================================
+   Section 4 — Memorial / celebration-of-life (band)
+   Container mode: band
+   Distinctive move: naming this audience with the dignity it deserves.
+   One verified review quote in a brass-left-rule callout.
+=================================================================== #}
+<section class="lt-private-memorial" aria-labelledby="lt-private-memorial-heading">
+    <div class="lt-private-memorial__inner">
+        <p class="lt-private-memorial__eyebrow">When It Matters Most</p>
+        <h2 id="lt-private-memorial-heading" class="lt-private-memorial__heading">
+            Memorial services and celebrations of life.
+        </h2>
+        <div class="lt-private-memorial__body">
+            <p>
+                Not every celebration is a party. Sometimes balloon decor is the right choice
+                for a memorial service or celebration of life — a tasteful arrangement that
+                honors the person and the moment without feeling out of place. Jeff and the
+                team have helped families do this work. They take it seriously.
+            </p>
+            <p>
+                If you're planning a memorial and wondering whether balloons are right for it —
+                reach out. Share what you have in mind. The quote comes with no pressure.
+            </p>
+        </div>
+        {% if memorial_review %}
+        <blockquote class="lt-private-memorial__review">
+            <p class="lt-private-memorial__review-text">&ldquo;{{ memorial_review.text }}&rdquo;</p>
+            <footer class="lt-private-memorial__review-attr">{{ memorial_review.attr }}</footer>
+        </blockquote>
+        {% endif %}
+    </div>
+</section>
+
+{# ===================================================================
+   Section 5 — Proof Icons (fullbleed)
+   Container mode: fullbleed, inner wrapper
+=================================================================== #}
+<section class="lt-private-icons lt-fullbleed" aria-labelledby="lt-private-icons-heading">
+    <h2 id="lt-private-icons-heading" class="visually-hidden">What Locally Twisted brings to private celebrations</h2>
+    <div class="lt-private-icons__inner">
+        {% for icon in private_icons %}
+        <div class="lt-private-icons__item">
+            <img class="lt-private-icons__img"
+                 src="{{ icon.asset }}"
+                 alt=""
+                 aria-hidden="true"
+                 width="48" height="48">
+            <span class="lt-private-icons__label">{{ icon.label }}</span>
+            <p class="lt-private-icons__desc">{{ icon.desc }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{# ===================================================================
+   Section 6 — CTA (fullbleed)
+   Container mode: fullbleed
+=================================================================== #}
+<section class="lt-private-cta lt-fullbleed" aria-labelledby="lt-private-cta-heading">
+    <div class="lt-private-cta__inner">
+        <h2 id="lt-private-cta-heading" class="lt-private-cta__heading">
+            Tell us what you're imagining.
+        </h2>
+        <p class="lt-private-cta__body">
+            Share the occasion, the colors you have in mind, the venue if you know it,
+            and the date. LT will come back with a quote. No pressure, no commitment.
+            Just a clear picture of what's possible.
+        </p>
+        <a href="/contact?intent=private" class="lt-private-cta__button">
+            Start a conversation <span aria-hidden="true">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+</div>{# .lt-page-private #}
+{% endblock %}
