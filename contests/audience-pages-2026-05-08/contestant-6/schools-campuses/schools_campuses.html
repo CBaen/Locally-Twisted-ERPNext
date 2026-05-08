@@ -1,0 +1,132 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+{#
+  Schools & Campuses page — /schools-campuses
+  Audience: Activity directors, athletic depts, PTAs, college student life, graduation organizers
+  Container map:
+    1. lt-school-hero      — fullbleed (220/250/280px)
+    2. lt-school-stats     — fullbleed (slate blue authority band)
+    3. lt-school-photos    — band (warm-white photo grid 2×3)
+    4. lt-school-clients   — fullbleed (navy, named institution cards)
+    5. lt-school-events    — band (warm-white, event type cards)
+    6. lt-school-note      — band (sandstone, practical scheduling note)
+    7. lt-school-cta       — fullbleed (navy, closing CTA)
+#}
+
+<div class="lt-page-school">
+
+{# ── 1. Hero ─────────────────────────────────────────── fullbleed #}
+<section class="lt-school-hero lt-fullbleed" aria-labelledby="lt-school-h1">
+    <div class="lt-school-hero__bg" aria-hidden="true"></div>
+    <div class="lt-school-hero__content">
+        <p class="lt-school-hero__eyebrow">Schools &amp; Campuses</p>
+        <h1 id="lt-school-h1" class="lt-school-hero__h1">School spirit, on your colors.</h1>
+        <p class="lt-school-hero__lede">Graduation stages, back-to-school backdrops, athletic arches, and spirit events — custom-matched to your school palette from K–12 to university level.</p>
+        <a href="/contact?service=Balloon+Decor&intent=school" class="lt-school-hero__cta">
+            Request a school quote <span aria-hidden="true">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+{# ── 2. Proof stats — slate authority band ───────────── fullbleed #}
+<section class="lt-school-stats lt-fullbleed" aria-label="School service proof">
+    <div class="lt-school-stats__inner">
+        {% for stat in school_proof_stats %}
+        <div class="lt-school-stat">
+            <img class="lt-school-stat__icon"
+                 src="/assets/locally_twisted/icons/brand/{{ stat.icon }}.svg"
+                 alt="" aria-hidden="true" />
+            <p class="lt-school-stat__label">{{ stat.label }}</p>
+            <p class="lt-school-stat__value">{{ stat.value }}</p>
+            <p class="lt-school-stat__sub">{{ stat.sub }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{# ── 3. Photo proof grid ─────────────────────────────── band #}
+<section class="lt-school-photos" aria-labelledby="lt-school-photos-h2">
+    <div class="lt-school-photos__inner">
+        <h2 id="lt-school-photos-h2" class="lt-school-photos__heading">Installed at Utah schools and universities.</h2>
+        <p class="lt-school-photos__lede">Weber State, the University of Utah, and St. Joseph's — real school events, real installs. Every photo below is actual Locally Twisted work.</p>
+
+        <div class="lt-school-photos__grid">
+            {% for photo in school_photo_proof %}
+            <figure class="lt-school-photo">
+                <img src="{{ photo.image }}"
+                     alt="{{ photo.alt }}"
+                     loading="{{ 'eager' if loop.index <= 2 else 'lazy' }}"
+                     decoding="async" />
+                <figcaption class="lt-school-photo__caption">{{ photo.caption }}</figcaption>
+            </figure>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{# ── 4. Named institutions ─────────────────────────── fullbleed #}
+<section class="lt-school-clients lt-fullbleed" aria-labelledby="lt-school-clients-h2">
+    <div class="lt-school-clients__inner">
+        <p class="lt-school-clients__eyebrow">Named Institutional Clients</p>
+        <h2 id="lt-school-clients-h2" class="lt-school-clients__heading">Utah schools that trust Locally Twisted.</h2>
+        <p class="lt-school-clients__sub">The school roster is focused — Locally Twisted builds deep, returning relationships with each institution rather than spreading thin. Returning clients at WSU and UofU bring the same team back season after season.</p>
+
+        <ul class="lt-school-clients__list" role="list">
+            {% for client in school_clients %}
+            <li class="lt-school-client-card">
+                <p class="lt-school-client-card__type">{{ client.type }}</p>
+                <h3 class="lt-school-client-card__name">{{ client.name }}</h3>
+                <p class="lt-school-client-card__context">{{ client.context }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>
+
+{# ── 5. Event type cards ─────────────────────────────── band #}
+<section class="lt-school-events" aria-labelledby="lt-school-events-h2">
+    <div class="lt-school-events__inner">
+        <h2 id="lt-school-events-h2" class="lt-school-events__heading">What school events use.</h2>
+        <p class="lt-school-events__lede">Every format matched to what schools actually need — stage-ready for ceremonies, spirit-appropriate for athletics, and practical for tight load-in windows.</p>
+
+        <div class="lt-school-events__grid">
+            {% for etype in school_event_types %}
+            <div class="lt-school-event-card">
+                <img class="lt-school-event-card__icon"
+                     src="/assets/locally_twisted/icons/brand/{{ etype.icon }}.svg"
+                     alt="" aria-hidden="true" />
+                <div>
+                    <h3 class="lt-school-event-card__name">{{ etype.name }}</h3>
+                    <p class="lt-school-event-card__desc">{{ etype.desc }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{# ── 6. Practical scheduling note ───────────────── band (sandstone) #}
+<aside class="lt-school-note" aria-label="Scheduling note for school events">
+    <div class="lt-school-note__inner">
+        <h2 class="lt-school-note__heading">Bell schedules, gym access, and AV setups — we work around them.</h2>
+        <p class="lt-school-note__body">
+            School events run on strict timelines. Locally Twisted coordinates load-in and strike around bell schedules, custodial windows, and athletic department access requirements. Tell us your event time, venue, and any access restrictions in the quote request — the installation should be invisible to your event logistics, not an added variable.
+        </p>
+    </div>
+</aside>
+
+{# ── 7. Closing CTA ───────────────────────────────── fullbleed #}
+<section class="lt-school-cta lt-fullbleed" aria-labelledby="lt-school-cta-h2">
+    <div class="lt-school-cta__inner">
+        <h2 id="lt-school-cta-h2" class="lt-school-cta__heading">Plan your school event.</h2>
+        <p class="lt-school-cta__body">Graduation season, back-to-school, homecoming, athletic events — the quote starts with your event date and venue.</p>
+        <a href="/contact?service=Balloon+Decor&intent=school" class="lt-school-cta__btn">
+            Request a school quote <span aria-hidden="true">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+</div>{# /lt-page-school #}
+
+{% endblock %}
