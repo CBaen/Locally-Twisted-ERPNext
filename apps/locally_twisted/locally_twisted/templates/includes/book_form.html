@@ -732,7 +732,7 @@ every deploy.
     <div class="lt-book__modal-card" tabindex="-1">
         <div class="lt-book__modal-check" aria-hidden="true">&#x2713;</div>
         <h2>Request received</h2>
-        <p>We'll get back to you as soon as possible.</p>
+        <p id="received_message">We'll get back to you as soon as possible.</p>
         <button type="button" class="lt-book__modal-close" aria-label="Close and return to homepage">
             Back to home
         </button>
@@ -1011,6 +1011,8 @@ every deploy.
     var form = document.getElementById('lt-book-form');
     var submitBtn = document.getElementById('book_submit');
     var feedback = document.getElementById('book_feedback');
+    var receivedMessage = document.getElementById('received_message');
+    var defaultReceivedMessage = receivedMessage ? receivedMessage.textContent : '';
     if (!form || !submitBtn || !feedback) return;
 
     function showError(message) {
@@ -1061,6 +1063,10 @@ every deploy.
             submitBtn.disabled = false;
             submitBtn.textContent = originalLabel;
             if (result.status >= 200 && result.status < 300 && result.body && result.body.message && result.body.message.ok) {
+                var uploadSummary = result.body.message.photo_uploads || {};
+                if (receivedMessage) {
+                    receivedMessage.textContent = uploadSummary.customer_message || defaultReceivedMessage;
+                }
                 form.reset();
                 updateConditionals();
                 window.location.hash = '#received';

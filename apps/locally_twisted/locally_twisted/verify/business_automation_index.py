@@ -112,6 +112,9 @@ def _required_failures(rows: list[dict[str, object]]) -> list[str]:
         if row["status"] != "exists_and_connected":
             details = row["exists_failures"] or row["connection_failures"]
             failures.append(f"{row['id']}: {row['status']} ({'; '.join(details)})")
+        if row["loud_failure_gap"]:
+            details = row["loud_failure_notes"] or ["missing loud-failure evidence"]
+            failures.append(f"{row['id']}: loud_failure_gap ({'; '.join(details)})")
     return failures
 
 
@@ -169,22 +172,28 @@ def _surfaces(
         {
             "id": "public_contact_to_lead",
             "lane": "intake",
-            "summary": "/contact exists and maps customer inquiry values into ERPNext Lead fields.",
+            "summary": "/contact exists, maps customer inquiry values into ERPNext Lead fields, and makes rejected inspiration uploads visible.",
             "required_for_launch": True,
             "exists": lambda: _files_exist(
                 "locally_twisted/www/contact.py",
                 "locally_twisted/www/contact.html",
+                "locally_twisted/www/book.py",
+                "locally_twisted/templates/includes/book_form.html",
             ),
             "connected": _contact_connected,
             "loud_failure": _contact_loud_failure,
             "evidence": [
                 "apps/locally_twisted/locally_twisted/www/contact.py",
                 "apps/locally_twisted/locally_twisted/www/contact.html",
+                "apps/locally_twisted/locally_twisted/www/book.py",
+                "apps/locally_twisted/locally_twisted/templates/includes/book_form.html",
+                "apps/locally_twisted/locally_twisted/verify/inquiry_upload_failure_contract.py",
             ],
             "verifiers": [
                 "python scripts/verify/lead_backend_intake_parity.py",
                 "python scripts/verify/contact_service_logic.py --base-url http://localhost:8081",
                 "python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --form-path /contact --skip-newsletter",
+                "python scripts/verify/inquiry_upload_failure_contract.py",
             ],
             "creates_fake_data": True,
         },
@@ -576,6 +585,7 @@ def _record_level_failure_loud_failure() -> list[str]:
 
 def _contact_connected() -> list[str]:
     failures = []
+    failures.extend(_callables_exist("locally_twisted.verify.inquiry_upload_failure_contract.run"))
     failures.extend(_doctype_presence(["Lead", "LT Service Type", "LT Lead Service Type", "LT Lead Photo"]))
     expected_services = {
         "Balloon Decor",
@@ -612,6 +622,10 @@ def _contact_connected() -> list[str]:
     for marker in ("custom_event_type", "custom_package_notes", "custom_lt_payment_timing"):
         if marker not in contact_source:
             failures.append(f"contact.py does not write/read {marker}")
+    if not failures:
+        result = frappe.get_attr("locally_twisted.verify.inquiry_upload_failure_contract.run")()
+        if not result.get("ok"):
+            failures.extend(result.get("failures") or ["inquiry upload failure contract failed"])
     return failures
 
 
@@ -619,6 +633,7 @@ def _contact_loud_failure() -> list[str]:
     source = "\n".join([
         _read("locally_twisted/www/contact.py"),
         _read("locally_twisted/www/book.py"),
+        _read("locally_twisted/templates/includes/book_form.html"),
     ])
     failures = []
     if "frappe.throw" not in source:
@@ -626,6 +641,9 @@ def _contact_loud_failure() -> list[str]:
     for marker in ("email_id", "custom_event_type"):
         if marker not in source:
             failures.append(f"contact.py source missing required mapping marker {marker}")
+    for marker in ("record_backend_failure", "photo_rejected_unsupported_type", "customer_message", "received_message"):
+        if marker not in source:
+            failures.append(f"contact upload path missing loud-failure marker {marker}")
     return failures
 
 
@@ -1145,6 +1163,7 @@ def _checkups() -> list[dict[str, object]]:
                 "python scripts/verify/contact_service_logic.py --base-url http://localhost:8081",
                 "python scripts/verify/contact_prefill.py --base-url http://localhost:8081",
                 "python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --form-path /contact --skip-newsletter",
+                "python scripts/verify/inquiry_upload_failure_contract.py",
             ],
         },
         {
@@ -1231,6 +1250,11 @@ def _fake_data_contracts() -> list[dict[str, object]]:
         {
             "command": "python scripts/verify/record_level_failure_contract.py",
             "creates": ["Lead", "Comment", "Error Log"],
+            "cleanup": "rolls back transaction and intercepts commit calls",
+        },
+        {
+            "command": "python scripts/verify/inquiry_upload_failure_contract.py",
+            "creates": ["Lead", "Communication", "Comment", "Error Log"],
             "cleanup": "rolls back transaction and intercepts commit calls",
         },
         {

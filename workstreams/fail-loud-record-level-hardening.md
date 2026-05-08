@@ -1,6 +1,6 @@
 # Fail-Loud Record-Level Hardening
 
-Last updated: 2026-05-07 by Codex after implementing the first record-level failure recorder slice.
+Last updated: 2026-05-08 by Codex after wiring inquiry upload failures into the recorder/checkup path.
 
 ## 2026-05-07 Implementation Update
 
@@ -18,22 +18,34 @@ Wired:
 - `business_automation_index.py` now includes `record_level_failure_recorder` as a launch-required surface and fails/report-lists open record-level backend blockers.
 - `synthetic_business_pipeline.py` now runs the rollback-safe record-level failure contract.
 
+## 2026-05-08 Inquiry Upload Update
+
+Implemented:
+
+- `www/book.py` now returns a `photo_uploads` summary when inspiration files are rejected, skipped, or fail after validation.
+- `templates/includes/book_form.html` now surfaces the upload summary in the customer success modal instead of showing plain success when files were not attached.
+- `www/book.py` writes record-level Lead evidence for unsupported type, too-large, too-many-files, and attach-failed photo paths.
+- `_record_inquiry_communication` adds photo upload issues to the Lead timeline summary.
+- `apps/locally_twisted/locally_twisted/verify/inquiry_upload_failure_contract.py` and `scripts/verify/inquiry_upload_failure_contract.py` prove invalid upload handling with rollback-safe fake data.
+- `business_automation_index.py` and `synthetic_business_pipeline.py` now include the inquiry upload failure contract.
+
 Verification from this implementation pass:
 
 ```powershell
 python scripts/verify/record_level_failure_contract.py --report output/record-level-failure-contract.json
+python scripts/verify/inquiry_upload_failure_contract.py --report output/inquiry-upload-failure-contract.json
 python scripts/verify/business_automation_index.py --report output/business-automation-index.json
 python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json
+python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --form-path /contact --skip-newsletter
 python scripts/verify/checkout_lead_conversion_contract.py
 python scripts/verify/payment_cascade_contract.py
 python scripts/verify/payment_webhook_contract.py
 python scripts/verify/customer_documents_contract.py
-python -m compileall apps\locally_twisted\locally_twisted\failure_recorder.py apps\locally_twisted\locally_twisted\lead_cascade.py apps\locally_twisted\locally_twisted\www\checkout.py apps\locally_twisted\locally_twisted\www\payment_success.py apps\locally_twisted\locally_twisted\verify\record_level_failure_contract.py apps\locally_twisted\locally_twisted\verify\business_automation_index.py apps\locally_twisted\locally_twisted\verify\synthetic_business_pipeline.py
+python -m compileall apps\locally_twisted\locally_twisted\failure_recorder.py apps\locally_twisted\locally_twisted\lead_cascade.py apps\locally_twisted\locally_twisted\www\book.py apps\locally_twisted\locally_twisted\www\checkout.py apps\locally_twisted\locally_twisted\www\payment_success.py apps\locally_twisted\locally_twisted\verify\record_level_failure_contract.py apps\locally_twisted\locally_twisted\verify\inquiry_upload_failure_contract.py apps\locally_twisted\locally_twisted\verify\business_automation_index.py apps\locally_twisted\locally_twisted\verify\synthetic_business_pipeline.py
 ```
 
 Still open:
 
-- Inquiry upload failures in `www/book.py` still need customer-visible upload summaries plus Lead timeline evidence.
 - Thank-you page copy still does not explicitly distinguish payment received from invoice/receipt finalization pending.
 - External document send-readiness needs the same recorder/checkup treatment before any send automation.
 
@@ -64,7 +76,7 @@ No quiet skip. No “logged somewhere” as the only signal for business-critica
 
 ## Recommended First Implementation Slice
 
-Status: first critical slice implemented 2026-05-07. Keep this section as the design contract for future extensions.
+Status: first critical slice implemented 2026-05-07; inquiry upload failure slice implemented 2026-05-08. Keep this section as the design contract for future extensions.
 
 Build one reusable backend failure recorder, then wire it into the highest-value partial-failure paths.
 

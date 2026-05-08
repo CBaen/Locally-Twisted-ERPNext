@@ -7,9 +7,9 @@ maturity: candidate
 scope: Locally Twisted backend partial-failure evidence on Leads, Sales Orders, Payment Requests, Sales Invoices, Email Queue rows, documents, and automation reports
 currently_true: true
 verification_level: 2
-last_verified: 2026-05-07
+last_verified: 2026-05-08
 evidence_quality: direct
-successful_uses: 1
+successful_uses: 2
 failed_uses: 0
 regressions: 0
 depends_on:
@@ -35,11 +35,14 @@ Implemented source:
 
 - `apps/locally_twisted/locally_twisted/failure_recorder.py`
 - `apps/locally_twisted/locally_twisted/verify/record_level_failure_contract.py`
+- `apps/locally_twisted/locally_twisted/verify/inquiry_upload_failure_contract.py`
 - `scripts/verify/record_level_failure_contract.py`
+- `scripts/verify/inquiry_upload_failure_contract.py`
 
 First wiring is active in:
 
 - `lead_cascade.py`: Contact linking, acknowledgment email, and initial Task cascade failures.
+- `www/book.py`: invalid, oversized, excess, or failed inspiration uploads.
 - `www/checkout.py`: Lead conversion and checkout notes transfer failures.
 - `www/payment_success.py`: paid-order receipt missing-recipient failures.
 - `verify/business_automation_index.py`: record-level failure rows become checkup failures with exact record IDs.
@@ -82,9 +85,9 @@ Source workstream: `workstreams/fail-loud-record-level-hardening.md`.
 1. `lead_cascade.py` partial failures: Contact creation, acknowledgment email,
    Task creation, stage cascade.
 2. `checkout.py` partial failures: Lead conversion and checkout note transfer.
-3. Paid-order reconciliation: missing receipt email and thank-you page backend
+3. Inquiry upload failures: rejected/failed/oversized/excess inspiration photos.
+4. Paid-order reconciliation: missing receipt email and thank-you page backend
    reconciliation state.
-4. Inquiry upload failures: rejected/failed/oversized/excess inspiration photos.
 5. Outbound document readiness: recipient, invoice number, bill-to, balance,
    due date, terms, payment path, branding, bookkeeping fields.
 

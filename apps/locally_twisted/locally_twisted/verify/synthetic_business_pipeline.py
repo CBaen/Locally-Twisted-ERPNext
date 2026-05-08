@@ -24,6 +24,15 @@ SYNTHETIC_CONTRACTS = (
         "cleanup": "intercepts commits and rolls back generated failure evidence",
     },
     {
+        "id": "inquiry_upload_failure_evidence",
+        "lane": "intake",
+        "runner": "locally_twisted.verify.inquiry_upload_failure_contract.run",
+        "command": "python scripts/verify/inquiry_upload_failure_contract.py",
+        "data_mode": "rollback_fake_invalid_upload",
+        "creates": ["Lead", "Communication", "Comment", "Error Log"],
+        "cleanup": "intercepts commits and rolls back generated upload-failure evidence",
+    },
+    {
         "id": "stripe_amount_parity",
         "lane": "money",
         "runner": "locally_twisted.verify.stripe_amount_parity_contract.run",

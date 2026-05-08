@@ -21,7 +21,8 @@ Submit flow:
   6. Each uploaded photo becomes a File record attached_to_doctype="Lead"
   7. Controller posts a Communication so the inquiry message lands on
      the Lead's timeline (Frappe's standard "communication on inbound")
-  8. Returns JSON {ok: true, lead: <name>} -> client shows the received modal
+  8. Returns JSON {ok: true, lead: <name>, photo_uploads: {...}} -> client
+     shows the received modal with any upload notes
 
 Loud-failure compliance (per project CLAUDE.md + global loud-failure rule):
   - User: visible error banner with retry; never blank page on failure
@@ -36,6 +37,7 @@ from frappe.rate_limiter import rate_limit
 from frappe.utils import escape_html, validate_email_address
 
 from locally_twisted import commerce_rules
+from locally_twisted.failure_recorder import record_backend_failure
 
 
 no_cache = 1
@@ -101,6 +103,12 @@ ALLOWED_PHOTO_MIMES = {
     "image/jpeg", "image/png", "image/gif", "image/webp", "image/heic", "image/heif",
 }
 ALLOWED_PHOTO_EXTS = {".jpg", ".jpeg", ".png", ".gif", ".webp", ".heic", ".heif"}
+PHOTO_UPLOAD_FAILURE_STEPS = {
+    "unsupported_type": "photo_rejected_unsupported_type",
+    "too_large": "photo_rejected_too_large",
+    "too_many_files": "photo_rejected_too_many_files",
+    "upload_failed": "photo_upload_failed",
+}
 
 
 def get_context(context):
@@ -247,17 +255,39 @@ def submit_book_inquiry():
         )
         raise
 
-    # Attach photos as File records linked to the Lead. Each File becomes
-    # a row in the Lead's Attachments sidebar. Hard-cap MAX_PHOTOS files
-    # and MAX_PHOTO_BYTES per file -- silently drop excess so a malicious
-    # form submission can't blow up storage.
+    # Attach photos as File records linked to the Lead. Invalid, oversized,
+    # excess, or failed files do not block the inquiry, but they must be visible
+    # to the customer response and on the Lead timeline.
     photo_files = _files_from_request("ufile")
+    photo_uploads = _photo_upload_summary(len(photo_files))
     attached = 0
+    for f in photo_files[MAX_PHOTOS:]:
+        _record_photo_upload_issue(
+            lead,
+            photo_uploads,
+            f,
+            reason="too_many_files",
+            message=f"Only the first {MAX_PHOTOS} inspiration photos can be attached.",
+        )
     for f in photo_files[:MAX_PHOTOS]:
         if not _is_allowed_photo(f):
+            _record_photo_upload_issue(
+                lead,
+                photo_uploads,
+                f,
+                reason="unsupported_type",
+                message="File type is not one of JPEG, PNG, GIF, WebP, HEIC, or HEIF.",
+            )
             continue
         size = _file_size(f)
         if size > MAX_PHOTO_BYTES:
+            _record_photo_upload_issue(
+                lead,
+                photo_uploads,
+                f,
+                reason="too_large",
+                message=f"File is over {MAX_PHOTO_BYTES // (1024 * 1024)} MB.",
+            )
             continue
         try:
             frappe.get_doc({
@@ -270,10 +300,17 @@ def submit_book_inquiry():
             }).insert(ignore_permissions=True)
             attached += 1
         except Exception as e:
-            frappe.log_error(
-                title=f"/book photo upload failed for {lead.name}",
-                message=f"{type(e).__name__}: {e}\nfilename: {f.filename}",
+            _record_photo_upload_issue(
+                lead,
+                photo_uploads,
+                f,
+                reason="upload_failed",
+                message="File passed validation but could not be attached.",
+                exception=e,
+                severity="error",
             )
+    photo_uploads["attached"] = attached
+    photo_uploads["customer_message"] = _photo_upload_customer_message(photo_uploads)
 
     # Inbound Communication on the Lead's timeline. Captures the
     # message body + the structured summary so Jeff has one place to read
@@ -285,10 +322,11 @@ def submit_book_inquiry():
         num_twisters, artist_start, artist_end, twisting_notes,
         num_painters, painter_start, painter_end, painting_notes,
         delivery_notes, package_notes, other_notes, description, attached, payment_rule,
+        photo_uploads,
     )
 
     frappe.db.commit()
-    return {"ok": True, "lead": lead.name, "photos": attached}
+    return {"ok": True, "lead": lead.name, "photos": attached, "photo_uploads": photo_uploads}
 
 
 # -------------------------- helpers ---------------------------------- #
@@ -488,6 +526,73 @@ def _file_size(f):
         return 0
 
 
+def _photo_upload_summary(submitted):
+    return {
+        "submitted": submitted,
+        "attached": 0,
+        "rejected": [],
+        "failed": [],
+        "customer_message": "",
+    }
+
+
+def _record_photo_upload_issue(
+    lead,
+    summary,
+    file_obj,
+    *,
+    reason,
+    message,
+    exception=None,
+    severity="warning",
+):
+    filename = _uploaded_filename(file_obj)
+    issue = {
+        "filename": filename,
+        "reason": reason,
+        "message": message,
+    }
+    bucket = "failed" if reason == "upload_failed" else "rejected"
+    summary[bucket].append(issue)
+    step = PHOTO_UPLOAD_FAILURE_STEPS.get(reason, f"photo_rejected_{reason}")
+    record_backend_failure(
+        surface="public_contact_to_lead",
+        step=step,
+        severity=severity,
+        primary_doctype="Lead",
+        primary_name=lead.name,
+        customer_visible_impact=(
+            f"The inquiry was received, but inspiration photo {filename} was not attached: {message}"
+        ),
+        internal_next_action=(
+            "Review the Lead with the customer before relying on inspiration photos."
+        ),
+        exception=exception or message,
+        grouping_key=f"public_contact_to_lead:{step}:{lead.name}:{filename}",
+    )
+
+
+def _uploaded_filename(file_obj):
+    filename = (getattr(file_obj, "filename", "") or "").strip()
+    return filename or "unnamed upload"
+
+
+def _photo_upload_customer_message(summary):
+    issue_count = len(summary.get("rejected") or []) + len(summary.get("failed") or [])
+    if not issue_count:
+        return ""
+    attached = summary.get("attached") or 0
+    if attached:
+        return (
+            f"We received your request and attached {attached} inspiration photo(s). "
+            f"{issue_count} file(s) could not be attached, and we noted that for follow-up."
+        )
+    return (
+        "We received your request, but the inspiration photo file(s) could not be attached. "
+        "We noted that for follow-up."
+    )
+
+
 def _record_inquiry_communication(
     lead, first_name, email, phone, company, occasion, event_date,
     event_time, event_end_time, event_location, guest_count, services, indoor_outdoor,
@@ -495,6 +600,7 @@ def _record_inquiry_communication(
     num_twisters, artist_start, artist_end, twisting_notes,
     num_painters, painter_start, painter_end, painting_notes,
     delivery_notes, package_notes, other_notes, description, photo_count, payment_rule,
+    photo_uploads=None,
 ):
     """Build a readable HTML summary of the form submission and post it
     as a Communication on the Lead's timeline."""
@@ -539,6 +645,14 @@ def _record_inquiry_communication(
     line("Balance timing", payment_rule.get("balance_timing"))
     if photo_count:
         line("Inspiration photos", f"{photo_count} attached")
+    upload_issues = []
+    if photo_uploads:
+        for item in (photo_uploads.get("rejected") or []) + (photo_uploads.get("failed") or []):
+            upload_issues.append(
+                f"{item.get('filename') or 'unnamed upload'}: {item.get('message') or item.get('reason')}"
+            )
+    if upload_issues:
+        line("Photo upload issues", "; ".join(upload_issues))
 
     body_html = "<br>".join(parts) if parts else "(no additional details provided)"
     if description:
