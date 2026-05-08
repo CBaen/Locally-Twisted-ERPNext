@@ -24,9 +24,11 @@ Coverage:
 
 Run:
   PYTHONIOENCODING=utf-8 PYTHONUTF8=1 python scripts/verify/smoke_shop.py
+  python scripts/verify/smoke_shop.py --help
 """
 from __future__ import annotations
 
+import argparse
 import sys
 from pathlib import Path
 
@@ -805,7 +807,18 @@ def check_mobile_drawer(p):
     browser.close()
 
 
-def main() -> int:
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description=(
+            "Run the end-to-end LT shop smoke test against the local Frappe site. "
+            "This launches a real Chromium browser and may take longer than small contract tests."
+        )
+    )
+    return parser.parse_args(argv)
+
+
+def main(argv: list[str] | None = None) -> int:
+    parse_args(argv)
     failures = []
     try:
         check_variant_template_contract()
@@ -869,4 +882,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(sys.argv[1:]))
