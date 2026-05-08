@@ -1,0 +1,144 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+{#
+  Corporate Events page — /corporate-events
+  Audience: Marketing teams, brand activations, store openings, broadcasters, banks, corporate parties
+  Container map:
+    1. lt-corp-hero     — fullbleed (slate/ink ground, 220/250/280px)
+    2. lt-corp-stats    — fullbleed (ink authority band)
+    3. lt-corp-photos   — band (near-white, hero + secondary grid layout)
+    4. lt-corp-roster   — fullbleed (navy, 2-col: copy + client grid)
+    5. lt-corp-services — band (warm-white, service cards)
+    6. lt-corp-trust    — contained (slate-tint, AP/admin note)
+    7. lt-corp-cta      — fullbleed (slate, closing CTA)
+#}
+
+<div class="lt-page-corp">
+
+{# ── 1. Hero ─────────────────────────────────────────── fullbleed #}
+<section class="lt-corp-hero lt-fullbleed" aria-labelledby="lt-corp-h1">
+    <div class="lt-corp-hero__bg" aria-hidden="true"></div>
+    <div class="lt-corp-hero__content">
+        <p class="lt-corp-hero__eyebrow">Corporate Events &amp; Brand Activations</p>
+        <h1 id="lt-corp-h1" class="lt-corp-hero__h1">On-color, on-brand, on time.</h1>
+        <p class="lt-corp-hero__lede">Branded balloon installs for Utah corporate events — grand openings, broadcaster events, bank community days, and activation experiences. Professional from quote to strike.</p>
+        <a href="/contact?service=Balloon+Decor&intent=corporate" class="lt-corp-hero__cta">
+            Request a corporate quote <span aria-hidden="true">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+{# ── 2. Proof stats — ink authority band ─────────────── fullbleed #}
+<section class="lt-corp-stats lt-fullbleed" aria-label="Corporate service proof">
+    <div class="lt-corp-stats__inner">
+        {% for stat in corp_proof_stats %}
+        <div class="lt-corp-stat">
+            <img class="lt-corp-stat__icon"
+                 src="/assets/locally_twisted/icons/brand/{{ stat.icon }}.svg"
+                 alt="" aria-hidden="true" />
+            <p class="lt-corp-stat__label">{{ stat.label }}</p>
+            <p class="lt-corp-stat__value">{{ stat.value }}</p>
+            <p class="lt-corp-stat__sub">{{ stat.sub }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{# ── 3. Photo proof ─────────────────────────────────────── band #}
+<section class="lt-corp-photos" aria-labelledby="lt-corp-photos-h2">
+    <div class="lt-corp-photos__inner">
+        <h2 id="lt-corp-photos-h2" class="lt-corp-photos__heading">The work speaks for itself.</h2>
+        <p class="lt-corp-photos__lede">Every photo below is an actual corporate install — branded arches, broadcast-ready backdrops, and activation experiences at real Utah venues and events.</p>
+
+        <div class="lt-corp-photos__layout">
+            {# Hero photo — featured #}
+            {% set hero_photo = corp_photo_proof[0] %}
+            <figure class="lt-corp-photo lt-corp-photo--hero">
+                <img src="{{ hero_photo.image }}"
+                     alt="{{ hero_photo.alt }}"
+                     loading="eager" decoding="async" />
+                <figcaption class="lt-corp-photo__caption">{{ hero_photo.caption }}</figcaption>
+            </figure>
+
+            {# Secondary grid — remaining 4 photos #}
+            <div class="lt-corp-photos__secondary">
+                {% for photo in corp_photo_proof[1:] %}
+                <figure class="lt-corp-photo">
+                    <img src="{{ photo.image }}"
+                         alt="{{ photo.alt }}"
+                         loading="lazy" decoding="async" />
+                    <figcaption class="lt-corp-photo__caption">{{ photo.caption }}</figcaption>
+                </figure>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{# ── 4. Client roster ─────────────────────────────────── fullbleed #}
+<section class="lt-corp-roster lt-fullbleed" aria-labelledby="lt-corp-roster-h2">
+    <div class="lt-corp-roster__inner">
+        <div class="lt-corp-roster__intro">
+            <p class="lt-corp-roster__eyebrow">Named Corporate Clients</p>
+            <h2 id="lt-corp-roster-h2" class="lt-corp-roster__heading">30 corporate clients across Utah industries.</h2>
+            <p class="lt-corp-roster__sub">From KSL to Zions Bank to Chick-Fil-A — across broadcast media, financial services, healthcare, hospitality, tech, and entertainment.</p>
+        </div>
+
+        <ul class="lt-corp-roster__grid" role="list">
+            {% for client in corp_clients %}
+            <li class="lt-corp-roster__item">
+                {{ client.name }}
+                <span class="lt-corp-roster__cat">{{ client.category }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>
+
+{# ── 5. Service cards ─────────────────────────────────────── band #}
+<section class="lt-corp-services" aria-labelledby="lt-corp-services-h2">
+    <div class="lt-corp-services__inner">
+        <h2 id="lt-corp-services-h2" class="lt-corp-services__heading">What corporate events use.</h2>
+        <p class="lt-corp-services__lede">Standard corporate balloon formats — each designed to read at scale, stay on brand, and give your photographer something to work with.</p>
+
+        <div class="lt-corp-services__grid">
+            {% for card in corp_service_cards %}
+            <div class="lt-corp-service-card">
+                <img class="lt-corp-service-card__icon"
+                     src="/assets/locally_twisted/icons/brand/{{ card.icon }}.svg"
+                     alt="" aria-hidden="true" />
+                <div>
+                    <h3 class="lt-corp-service-card__name">{{ card.name }}</h3>
+                    <p class="lt-corp-service-card__desc">{{ card.desc }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{# ── 6. AP / admin trust note ─────────────────────────── contained #}
+<aside class="lt-corp-trust" aria-label="Accounts payable and vendor setup note">
+    <div class="lt-corp-trust__inner">
+        <h2 class="lt-corp-trust__heading">Clean invoicing for your AP team.</h2>
+        <p class="lt-corp-trust__body">
+            Corporate vendors require documentation — Locally Twisted works with purchase orders, Net-30 terms for established clients, W-9s on request, and vendor registration forms. If your AP team has a setup process, contact us first and we'll work through it before the event date gets close.
+        </p>
+    </div>
+</aside>
+
+{# ── 7. Closing CTA ───────────────────────────────────── fullbleed #}
+<section class="lt-corp-cta lt-fullbleed" aria-labelledby="lt-corp-cta-h2">
+    <div class="lt-corp-cta__inner">
+        <h2 id="lt-corp-cta-h2" class="lt-corp-cta__heading">Plan your corporate install.</h2>
+        <p class="lt-corp-cta__body">Brand activations, grand openings, employee events, broadcast moments — tell us what you're building and we'll scope it.</p>
+        <a href="/contact?service=Balloon+Decor&intent=corporate" class="lt-corp-cta__btn">
+            Request a corporate quote <span aria-hidden="true">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+</div>{# /lt-page-corp #}
+
+{% endblock %}
