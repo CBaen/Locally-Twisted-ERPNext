@@ -6,6 +6,45 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-08 - Frappe templates can emit raw route data
+
+`/shop?q=` proved that the current route template path did not protect a
+query-string value by default. The search summary rendered the raw payload and
+a browser-executed marker confirmed the XSS path.
+
+**Counter-move:** escape at the exact Jinja sink for every customer-controlled
+value, even when the value looks harmless or is only being shown inside text.
+For JavaScript/DOM work, create nodes or set attributes through safe APIs
+instead of interpolating HTML strings from route or database values.
+
+---
+
+## 2026-05-08 - ERPNext document names are not receipt secrets
+
+The thank-you page used `?order=<Sales Order>` as the only proof for showing
+order details. Sales Order names are sequential enough to guess, and the page
+showed line items and totals without a customer/session proof.
+
+**Counter-move:** payment-return pages need a receipt token, paid Stripe
+Session proof, or equivalent nonce tied to the actual customer flow. If the
+token is missing or invalid, show a generic payment-check page and leave
+operator evidence, not order details.
+
+---
+
+## 2026-05-08 - Customer inspiration uploads are private by default
+
+The contact form accepted inspiration photos and attached them to Leads as
+public `File` records. Even when the customer intends to share a photo with LT,
+the image can include homes, venues, kids, event details, or private planning
+context.
+
+**Counter-move:** set public inquiry uploads to `is_private = 1` unless GL
+explicitly approves a public gallery/publication path. Existing public Lead
+files need a migration/review; fixing the upload default only protects new
+submissions.
+
+---
 
 ## 2026-05-08 - Mobile chrome has a control budget
 
@@ -33,6 +72,35 @@ sizing contract for the exact proof section. For moving review/proof cards,
 guard block height, badge height, track padding, card width/height, and card
 padding across small mobile widths. Broad layout-fit tests are necessary but
 not enough for perceived mobile density.
+
+---
+
+## 2026-05-08 - Delight is optional; brand clarity is not
+
+The red balloon cursor was technically bounded and verified, but GL quickly
+asked to remove it. The useful brand move was not the cursor; it was using the
+red balloon dog as a small favicon where it supports recognition without
+changing basic site interaction.
+
+**Counter-move:** retire decorative interaction experiments promptly when they
+do not serve the launch surface. Keep the reusable behavior that reduces
+friction, such as whole-card product navigation, and move brand marks into
+stable UI assets like the favicon or logo.
+
+---
+
+## 2026-05-08 - Wide proof bands need equal or higher containment specificity
+
+The homepage featured-work CSS tried to make the three photo cards wide, but
+the shared containment layer still capped `.lt-featured__inner` at the normal
+1160px page max. A later simple `.lt-featured__inner` override did not win
+because the grouped `:is(...)` containment selector had higher specificity.
+
+**Counter-move:** when a Frappe public section is intentionally a visual proof
+band rather than a reading/workflow surface, put the width decision in the
+containment layer with matching specificity, for example
+`.lt-featured .lt-featured__inner`. Then verify rendered widths at desktop
+sizes, not just the stylesheet text.
 
 ---
 
@@ -79,6 +147,22 @@ individual artist's first hour.
 independent unit, model the calculator as one row per unit. Each row owns its
 own type and duration; totals are the sum of row prices. Write the verifier
 against a mixed-duration case, not only the symmetric easy case.
+
+---
+
+## 2026-05-08 - A product-family repair is not a catalog pricing certificate
+
+After the bouquet-size prices were repaired, a fresh audit question exposed the
+next risk: the system had proof for the repaired bouquet family, not for every
+product. Live ERPNext still had 36 non-bouquet variant templates with one price
+point each, and quick Odoo resolver probes proved several longer arch variants
+were still underpriced.
+
+**Counter-move:** phrase pricing closeout by family and verifier. "Bouquet
+size pricing is repaired and guarded" is true after `npm run
+test:product-prices`; "all product pricing is correct" is not true until the
+remaining product families have resolver dry-runs, reviewed repairs, and
+price-contract coverage.
 
 ---
 
@@ -345,15 +429,15 @@ portfolio-specific Google font imports, and prototype hero copy.
 ## 2026-05-07 - Homepage proof order is a launch contract
 
 The homepage briefly had multiple plausible proof paths competing directly
-under the hero: trust/authority bar, Recent Celebrations, Google reviews, and
+under the hero: trust/authority bar, installed-work proof, Google reviews, and
 cookie notice. Technically each could be defended, but launch hierarchy matters:
 GL clarified that Google reviews belong immediately below the hero right now.
 
 **Counter-move:** make first post-hero content an explicit contract, not a local
 layout preference. For LT launch, the order is hero, Google reviews, inline
-cookie notice, Recent Celebrations. Do not restore the homepage trust bar or put
-Recent Celebrations above reviews without a fresh GL decision and matching
-tests.
+cookie notice, then the installed-work proof band currently labeled `One of a
+Kind Designs`. Do not restore the homepage trust bar or put installed-work
+proof above reviews without a fresh GL decision and matching tests.
 
 ---
 

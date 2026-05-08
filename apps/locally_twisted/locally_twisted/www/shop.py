@@ -14,7 +14,9 @@ import frappe
 from locally_twisted.commerce_rules import checkout_lane_for_item_group
 from locally_twisted.product_options import apply_variant_starting_price
 
-no_cache = 0
+# /shop handles query-string search from the header overlay. Frappe's website
+# cache can ignore query-specific output, so this page must stay dynamic.
+no_cache = 1
 sitemap = 1
 
 
@@ -65,6 +67,25 @@ def get_context(context):
                 item["item_code"],
             )
 
+    search_query = str(frappe.form_dict.get("q") or "").strip()
+    if search_query:
+        terms = [term for term in search_query.casefold().split() if term]
+
+        def matches_search(item):
+            haystack = " ".join(
+                str(item.get(field) or "")
+                for field in (
+                    "web_item_name",
+                    "item_code",
+                    "item_group",
+                    "short_description",
+                    "price_display",
+                )
+            ).casefold()
+            return all(term in haystack for term in terms)
+
+        items = [item for item in items if matches_search(item)]
+
     # Sourced live from Item Group children of "Shop Items"; order by weightage.
     children = frappe.db.get_all(
         "Item Group",
@@ -84,6 +105,7 @@ def get_context(context):
     context.shop_categories = children
     context.current_shop_category = "all"
     context.total_items = len(items)
+    context.search_query = search_query
     context.title = "Ready-to-Order Balloon Decor"
     context.page_css = PAGE_CSS
 
@@ -202,6 +224,45 @@ PAGE_CSS = """
     text-transform: uppercase;
     color: var(--lt-navy);
     margin: 0 0 1.5rem;
+}
+.lt-shop__search-summary {
+    color: var(--lt-soft-gray);
+    font-family: var(--lt-font-body);
+    font-size: 0.95rem;
+    line-height: 1.45;
+    margin: -0.8rem 0 1.5rem;
+}
+.lt-shop__search-summary a {
+    color: var(--lt-navy);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+}
+.lt-shop__empty {
+    border-top: 1px solid rgba(14, 34, 64, 0.16);
+    max-width: 36rem;
+    padding: 2rem 0;
+}
+.lt-shop__empty h3 {
+    color: var(--lt-near-black);
+    font-family: var(--lt-font-heading);
+    font-size: 1.55rem;
+    line-height: 1.15;
+    margin: 0 0 0.6rem;
+}
+.lt-shop__empty p {
+    color: var(--lt-soft-gray);
+    font-family: var(--lt-font-body);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0 0 1rem;
+}
+.lt-shop__empty a {
+    color: var(--lt-crimson);
+    font-family: var(--lt-font-body);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
 }
 
 .lt-shop__grid {

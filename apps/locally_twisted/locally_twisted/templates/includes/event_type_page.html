@@ -1,0 +1,78 @@
+{% set page = event_page %}
+
+<style>{{ page_css }}</style>
+
+<div class="lt-authority-page lt-event-type-page">
+    <section class="lt-authority-hero lt-fullbleed" aria-labelledby="{{ page.route }}-title">
+        <div class="lt-authority-hero__inner">
+            <div class="lt-authority-hero__content">
+                <p class="lt-authority-eyebrow">{{ page.eyebrow }}</p>
+                <h1 id="{{ page.route }}-title">{{ page.title }}</h1>
+                <p class="lt-authority-hero__lede">{{ page.lede }}</p>
+                <div class="lt-authority-actions">
+                    <a class="lt-authority-button" href="/contact">Free Event Quote</a>
+                    <a class="lt-authority-button lt-authority-button--secondary" href="/portfolio">See Proof</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="lt-authority-proof lt-fullbleed" aria-label="{{ page.title }} proof">
+        <div class="lt-authority-proof__inner">
+            {% for label, text in page.proof %}
+            <div class="lt-authority-proof__item">
+                <p class="lt-authority-proof__label">{{ label }}</p>
+                <p class="lt-authority-proof__text">{{ text }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="lt-authority-section" aria-labelledby="{{ page.route }}-client-title">
+        <div class="lt-authority-section__inner">
+            <p class="lt-authority-eyebrow">Proof from the site crawl</p>
+            <h2 id="{{ page.route }}-client-title">The Utah proof behind this event lane.</h2>
+            <p class="lt-authority-section__lede">
+                The homepage crawl already names these Utah organizations and venues. This page gives that proof the right context instead of sending every event buyer to the same generic page.
+            </p>
+            <ul class="lt-event-client-cloud" aria-label="Relevant client proof names">
+                {% for client in page.clients %}
+                <li>{{ client }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </section>
+
+    <section class="lt-authority-section lt-authority-section--dark lt-fullbleed" aria-labelledby="{{ page.route }}-plan-title">
+        <div class="lt-authority-section__inner">
+            <p class="lt-authority-eyebrow">Event fit</p>
+            <h2 id="{{ page.route }}-plan-title">{{ page.plan_title }}</h2>
+            <div class="lt-authority-steps">
+                {% for item in page.plan %}
+                <article class="lt-authority-step">
+                    <div>
+                        <h3>{{ item.title }}</h3>
+                        <p>{{ item.text }}</p>
+                        <ul>
+                            {% for bullet in item.bullets %}
+                            <li>{{ bullet }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section class="lt-authority-cta lt-fullbleed" aria-labelledby="{{ page.route }}-cta-title">
+        <div class="lt-authority-cta__inner">
+            <h2 id="{{ page.route }}-cta-title">Planning this kind of event?</h2>
+            <p>Send the date, venue, audience, and rough idea. We will help shape the right balloon piece.</p>
+            <div class="lt-authority-actions">
+                <a class="lt-authority-button" href="/contact">Free Event Quote</a>
+                <a class="lt-authority-button lt-authority-button--secondary" href="/event-balloons">All Event Balloons</a>
+            </div>
+        </div>
+    </section>
+</div>

@@ -104,7 +104,11 @@ def test_mega_menu_contract(navbar: str) -> None:
         'id="lt-mega-events"',
         'id="lt-mega-products"',
         'class="lt-megamenu__panel"',
-        'href="/event-balloons"',
+        '"route": "civic-community"',
+        '"route": "corporate-events"',
+        '"route": "schools-campuses"',
+        '"route": "private-celebrations"',
+        "Corporate Events",
         'href="/balloon-twisting-and-face-painting"',
         '"route": "shop-items/arches"',
         '"route": "shop-items/garlands"',
@@ -120,6 +124,14 @@ def test_mega_menu_contract(navbar: str) -> None:
     for needle in required:
         if needle not in navbar:
             raise AssertionError(f"Missing deliberate mega-menu contract markup: {needle}")
+    retired_event_menu = (
+        "Corporate Entrances",
+        'class="lt-megamenu__card" href="/portfolio"',
+        'class="lt-megamenu__card" href="/event-balloons"',
+    )
+    for needle in retired_event_menu:
+        if needle in navbar:
+            raise AssertionError(f"Event mega menu still exposes generic or wrong route: {needle}")
 
 
 def test_mobile_nav_matches_primary_order(navbar: str) -> None:
@@ -171,6 +183,12 @@ def test_supporting_assets_exist() -> None:
         ROOT / "apps/locally_twisted/locally_twisted/public/js/lt-megamenu.js",
         ROOT / "apps/locally_twisted/locally_twisted/public/css/lt-mega-menu.css",
         ROOT / "apps/locally_twisted/locally_twisted/public/icons/lt-logo.png",
+        ROOT / "apps/locally_twisted/locally_twisted/www/event_type_pages.py",
+        ROOT / "apps/locally_twisted/locally_twisted/templates/includes/event_type_page.html",
+        ROOT / "apps/locally_twisted/locally_twisted/www/civic_community.py",
+        ROOT / "apps/locally_twisted/locally_twisted/www/corporate_events.py",
+        ROOT / "apps/locally_twisted/locally_twisted/www/schools_campuses.py",
+        ROOT / "apps/locally_twisted/locally_twisted/www/private_celebrations.py",
     )
     for path in expected:
         if not path.exists():

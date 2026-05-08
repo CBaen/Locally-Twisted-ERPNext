@@ -4,7 +4,7 @@ name: Public Site Microinteraction Contract
 schema_version: 2.0
 level: recipe
 maturity: candidate
-scope: Locally Twisted ERPNext/Frappe public-site cursor, card-click, and small interaction flourishes
+scope: Locally Twisted ERPNext/Frappe public-site card-click and small interaction flourishes
 currently_true: true
 verification_level: 2
 last_verified: 2026-05-08
@@ -24,14 +24,13 @@ tags:
   - Frappe
   - Webshop
   - microinteractions
-  - cursor
   - product cards
   - launch verification
 ---
 
 # Public Site Microinteraction Contract
 
-Use this recipe when adding small public-site interactions such as a custom cursor, click flourish, card-wide navigation, hover affordance, or other motion/behavior that is not core checkout/form logic but still ships to customers.
+Use this recipe when adding small public-site interactions such as card-wide navigation, hover affordance, or other motion/behavior that is not core checkout/form logic but still ships to customers.
 
 ## Contract
 
@@ -45,11 +44,12 @@ Production behavior belongs in focused app assets loaded through Frappe hooks:
 
 Do not paste prototype/demo pages into route templates. Extract the useful behavior, then delete transient reference files unless they are intentionally kept under `_resources/` as approved source material.
 
-## Cursor And Motion Rules
+## Retired Cursor And Motion Rules
 
-- Hide the system cursor only for fine-pointer desktop users.
-- Do not run custom cursors on touch/coarse-pointer devices.
-- Keep cursor elements `aria-hidden` and `pointer-events: none`.
+- The red balloon cursor is retired. Do not re-enable it without a fresh GL decision.
+- If a future custom cursor is approved, hide the system cursor only for fine-pointer desktop users.
+- Do not run future custom cursors on touch/coarse-pointer devices.
+- Keep any future cursor elements `aria-hidden` and `pointer-events: none`.
 - Respect `prefers-reduced-motion`; remove decorative animations that are not needed for use.
 - Clamp decorative cursor and click-ring positions inside the viewport. Layout gates treat offscreen decorative elements as real overflow.
 - Keep motion restrained. If fast pointer movement makes the cursor whip or jitter, lower spring response, reduce sway force, increase return, and cap rotation.
@@ -71,9 +71,8 @@ After microinteraction changes:
 2. Clear website cache with `python scripts/dev/clear_website_cache.py`.
 3. Verify served HTML contains the cache-busted asset URLs and each asset URL returns `200`.
 4. Use a browser check for the actual behavior:
-   - cursor appears only on desktop/fine pointer,
-   - touch mode skips cursor behavior,
-   - decorative elements stay inside the viewport,
+   - retired cursor assets are absent unless a new cursor has been explicitly approved,
+   - any approved decorative elements stay inside the viewport,
    - product-card body clicks navigate,
    - add-to-cart/quote/options controls still do their original action,
    - no console or page errors.
@@ -88,6 +87,6 @@ Use `npm run test:public-verify` or `npm run test:launch-verify` when the change
 
 ## Receipt
 
-On 2026-05-08, a red balloon cursor demo was translated into focused production assets, loaded sitewide through Frappe hooks, limited to desktop/fine-pointer users, and cleaned up by deleting the transient demo HTML. The first browser/layout run caught two real issues: the click ring could overflow near the viewport edge, and the floaty cursor could lag offscreen during form interaction. Both were fixed by clamping decorative positions before closeout.
+On 2026-05-08, a red balloon cursor demo was briefly translated into focused production assets, then retired the same day at GL's request. The transient demo HTML stayed deleted, and the production cursor CSS/JS plus hook entries were removed so the site uses the normal system cursor.
 
 The same slice added delegated whole-card navigation for `/shop` and Webshop category cards. The implementation preserved `Add to cart`, `Choose options`, and `Request quote` behavior instead of wrapping cards in invalid nested anchors. Verification proved 53 `/shop` cards clickable, category cards clickable after Webshop render, add-to-cart still working, `shop-smoke` passing, `layout-fit` 247/247, `interactive-layout` 88/88, axe 38 route/viewport results with 0 violations, and manual accessibility passing.

@@ -10,7 +10,7 @@ import frappe
 
 APP_NAME = "Locally Twisted"
 LOGO_PATH = "/assets/locally_twisted/icons/lt-logo.png"
-FAVICON_PATH = "/assets/locally_twisted/icons/lt-favicon.png"
+FAVICON_PATH = "/assets/locally_twisted/icons/lt-favicon.png?v=20260508-red-dog-1"
 BRAND_HTML = f'<img src="{LOGO_PATH}?v=20260429-2" alt="{APP_NAME}" class="lt-logo">'
 
 WEBSITE_FIELDS = {

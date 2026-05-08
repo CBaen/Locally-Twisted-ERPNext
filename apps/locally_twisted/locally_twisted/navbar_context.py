@@ -15,28 +15,28 @@ FALLBACK_PRODUCT_LINKS = [
 
 EVENT_LINKS = [
     {
-        "label": "Civic and Community",
-        "route": "event-balloons",
+        "label": "Civic & Community",
+        "route": "civic-community",
         "icon": "civic-parade",
-        "description": "Parades, city events, school entrances, and public-facing installs.",
+        "description": "City, county, chamber, Pride, and public-facing community installs.",
     },
     {
-        "label": "Corporate Entrances",
-        "route": "portfolio",
+        "label": "Corporate Events",
+        "route": "corporate-events",
         "icon": "corporate-entrance",
-        "description": "Brand-safe decor for offices, launches, open houses, and venues.",
+        "description": "Brand-safe decor for launches, offices, media events, restaurants, and customer activations.",
     },
     {
-        "label": "Schools and Campuses",
-        "route": "event-balloons",
+        "label": "Schools & Campuses",
+        "route": "schools-campuses",
         "icon": "school-spirit",
-        "description": "Assemblies, graduations, games, spirit weeks, and campus moments.",
+        "description": "Graduations, assemblies, athletics, dances, family nights, and campus moments.",
     },
     {
         "label": "Private Celebrations",
-        "route": "event-balloons",
+        "route": "private-celebrations",
         "icon": "premium-private-event",
-        "description": "Polished birthdays, showers, weddings, and hosted home events.",
+        "description": "Birthdays, weddings, showers, memorials, venues, and family milestones.",
     },
 ]
 

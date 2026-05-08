@@ -1,6 +1,7 @@
 """Repair ERPNext variant Item Prices from Odoo's dynamic combination prices.
 
 Run in-process:
+    python scripts/setup/stage_seed_data.py
     bench --site frontend execute locally_twisted.seed.repair_variant_prices_from_odoo.execute --kwargs '{"slug_filter":"unicorn-bouquet"}'
     bench --site frontend execute locally_twisted.seed.repair_variant_prices_from_odoo.execute --kwargs '{"dry_run": true}'
 

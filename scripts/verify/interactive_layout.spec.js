@@ -1,5 +1,6 @@
 const { test, expect } = require("@playwright/test");
 const {
+	BASE_URL,
 	HEADER_VIEWPORTS,
 	MOBILE_DRAWER_VIEWPORTS,
 	PUBLIC_ROUTES,
@@ -26,6 +27,34 @@ const COMPACT_HERO_ROUTES = [
 	{
 		name: "event balloons",
 		path: "/event-balloons",
+		heroSelector: ".lt-authority-hero",
+		contentSelector: ".lt-authority-hero__content",
+		titleSelector: ".lt-authority-hero h1",
+	},
+	{
+		name: "civic community",
+		path: "/civic-community",
+		heroSelector: ".lt-authority-hero",
+		contentSelector: ".lt-authority-hero__content",
+		titleSelector: ".lt-authority-hero h1",
+	},
+	{
+		name: "corporate events",
+		path: "/corporate-events",
+		heroSelector: ".lt-authority-hero",
+		contentSelector: ".lt-authority-hero__content",
+		titleSelector: ".lt-authority-hero h1",
+	},
+	{
+		name: "schools campuses",
+		path: "/schools-campuses",
+		heroSelector: ".lt-authority-hero",
+		contentSelector: ".lt-authority-hero__content",
+		titleSelector: ".lt-authority-hero h1",
+	},
+	{
+		name: "private celebrations",
+		path: "/private-celebrations",
 		heroSelector: ".lt-authority-hero",
 		contentSelector: ".lt-authority-hero__content",
 		titleSelector: ".lt-authority-hero h1",
@@ -107,7 +136,9 @@ test.describe("Locally Twisted interactive layout states", () => {
 						const heroStyle = window.getComputedStyle(hero);
 						const contentStyle = window.getComputedStyle(content);
 						const titleStyle = window.getComputedStyle(title);
+						const header = document.querySelector(".lt-mega-header, .navbar");
 						const heroRect = hero.getBoundingClientRect();
+						const headerRect = header ? header.getBoundingClientRect() : null;
 						const titleRect = title.getBoundingClientRect();
 						const next = hero.nextElementSibling;
 						const nextRect = next ? next.getBoundingClientRect() : null;
@@ -125,6 +156,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 							maxTitle: viewport.maxTitle,
 							contentFitsHero: hero.scrollHeight <= hero.clientHeight + 2,
 							titleFitsHero: titleRect.bottom <= heroRect.bottom + 1,
+							headerToHeroGap: headerRect ? Math.round(heroRect.top - headerRect.bottom) : null,
 							nextBandTop: nextRect ? nextRect.top : null,
 							viewportHeight: window.innerHeight,
 						};
@@ -137,6 +169,8 @@ test.describe("Locally Twisted interactive layout states", () => {
 					expect(result.titleFontSize, `${route.path} hero title should not overwhelm the page`).toBeLessThanOrEqual(result.maxTitle);
 					expect(result.contentFitsHero, `${route.path} hero content should fit inside the standard height`).toBe(true);
 					expect(result.titleFitsHero, `${route.path} hero title should not spill below the hero`).toBe(true);
+					expect(result.headerToHeroGap, `${route.path} hero should sit flush under the public header`).not.toBeNull();
+					expect(Math.abs(result.headerToHeroGap), `${route.path} should not expose a Frappe wrapper gap above the hero`).toBeLessThanOrEqual(1);
 					if (viewport.name === "desktop" && result.nextBandTop !== null) {
 						expect(result.nextBandTop, `${route.path} should show the next section in the first laptop viewport`).toBeLessThan(result.viewportHeight - 16);
 					}
@@ -376,9 +410,70 @@ test.describe("Locally Twisted interactive layout states", () => {
 			});
 		}
 
+		test("search query submits to shop results", async ({ page }) => {
+			await page.setViewportSize({ width: 1366, height: 768 });
+			const response = await gotoAndSettle(page, "/");
+			await expectSuccessfulResponse(response, "/");
+
+			await page.locator(".lt-mega-header__search").click();
+			await page.locator("#lt-site-search-input").fill("arches");
+			await Promise.all([
+				page.waitForURL(/\/shop\?q=arches$/),
+				page.keyboard.press("Enter"),
+			]);
+			await page.waitForLoadState("networkidle", { timeout: 10000 }).catch(() => {});
+
+			await expect(page.locator(".lt-shop__search-summary")).toContainText('Showing matches for "arches".');
+			await expect(page.locator(".lt-shop__card", { hasText: "Classic Arch" })).toBeVisible();
+		});
+
+		test("shop query results are not served from the broad shop cache", async ({ page }) => {
+			await page.setViewportSize({ width: 1366, height: 768 });
+			const shopResponse = await gotoAndSettle(page, "/shop");
+			await expectSuccessfulResponse(shopResponse, "/shop");
+			await expect(page.locator("#lt-shop-count")).toContainText("53 items");
+
+			const queryResponse = await gotoAndSettle(page, "/shop?q=zzznothing");
+			await expectSuccessfulResponse(queryResponse, "/shop?q=zzznothing");
+			await expect(page.locator(".lt-shop__search-summary")).toContainText('Showing matches for "zzznothing".');
+			await expect(page.locator(".lt-shop__empty")).toBeVisible();
+			await expect(page.locator("#lt-shop-grid")).toHaveCount(0);
+		});
+
+		test("/search is not a public page", async ({ page }) => {
+			const response = await page.goto(new URL("/search", BASE_URL).toString(), {
+				waitUntil: "domcontentloaded",
+			});
+			expect(response, "/search should return a response").not.toBeNull();
+			expect(response.status(), "/search should return 404").toBe(404);
+		});
 	});
 
 	test.describe("desktop mega panels", () => {
+		test("event mega panel links to specialized event pages", async ({ page }) => {
+			await page.setViewportSize({ width: 1366, height: 768 });
+			const response = await gotoAndSettle(page, "/");
+			await expectSuccessfulResponse(response, "/");
+
+			await page.locator('[data-lt-megamenu-trigger="lt-mega-events"]').click();
+			await expect(page.locator("#lt-mega-events")).toBeVisible();
+
+			const expectedLinks = [
+				["Civic & Community", "/civic-community"],
+				["Corporate Events", "/corporate-events"],
+				["Schools & Campuses", "/schools-campuses"],
+				["Private Celebrations", "/private-celebrations"],
+			];
+			for (const [label, href] of expectedLinks) {
+				const link = page.locator("#lt-mega-events a", { hasText: label });
+				await expect(link, `${label} menu link should exist`).toHaveCount(1);
+				await expect(link, `${label} menu link route`).toHaveAttribute("href", href);
+			}
+			await expect(page.locator("#lt-mega-events", { hasText: "Corporate Entrances" })).toHaveCount(0);
+			await expect(page.locator("#lt-mega-events .lt-megamenu__card[href='/portfolio']")).toHaveCount(0);
+			await expect(page.locator("#lt-mega-events .lt-megamenu__card[href='/event-balloons']")).toHaveCount(0);
+		});
+
 		for (const viewport of HEADER_VIEWPORTS.filter((item) => item.expectedMode === "desktop")) {
 			for (const trigger of ["lt-mega-events", "lt-mega-products"]) {
 				test(`${trigger} panel fits at ${viewport.name}px`, async ({ page }) => {
@@ -498,6 +593,83 @@ test.describe("Locally Twisted interactive layout states", () => {
 			await page.locator(".lt-product__attr[data-attribute-name='Bouquet Size'] .lt-product__chip").first().click();
 			await expect(page.locator("#lt-add-to-cart-variant")).toBeEnabled();
 			await expect(page.locator("#lt-add-to-cart-variant")).toHaveAttribute("data-item-code", /unicorn-bouquet-SMA/);
+		});
+
+		test("multi-photo product gallery avoids horizontal scrollbars and supports mobile swipe", async ({ page }) => {
+			await page.setViewportSize({ width: 390, height: 844 });
+			const response = await gotoAndSettle(page, "/shop-items/arches/classic-arch");
+			await expectSuccessfulResponse(response, "/shop-items/arches/classic-arch");
+			await expect(page.locator(".lt-product__thumbnail-button")).toHaveCount(5);
+
+			const before = await page.locator(".product-image img.website-image").first().getAttribute("src");
+			await page.locator(".product-image").dispatchEvent("pointerdown", {
+				pointerId: 1,
+				pointerType: "touch",
+				clientX: 340,
+				clientY: 300,
+				isPrimary: true,
+			});
+			await page.locator(".product-image").dispatchEvent("pointerup", {
+				pointerId: 1,
+				pointerType: "touch",
+				clientX: 80,
+				clientY: 304,
+				isPrimary: true,
+			});
+			await expect.poll(async () => page.locator(".product-image img.website-image").first().getAttribute("src")).not.toBe(before);
+
+			const mobile = await page.evaluate(() => {
+				const rail = document.querySelector(".lt-product__thumbnail-rail");
+				const doc = document.documentElement;
+				const offenders = Array.from(document.querySelectorAll("body *"))
+					.map((element) => {
+						const style = window.getComputedStyle(element);
+						return {
+							className: String(element.className || ""),
+							overflowX: style.overflowX,
+							scrollbarWidth: style.scrollbarWidth,
+							scrollWidth: element.scrollWidth,
+							clientWidth: element.clientWidth,
+						};
+					})
+					.filter((item) => ["auto", "scroll"].includes(item.overflowX) && item.scrollWidth > item.clientWidth + 1 && item.scrollbarWidth !== "none");
+				return {
+					documentOverflow: doc.scrollWidth - doc.clientWidth,
+					railOverflowX: rail ? window.getComputedStyle(rail).overflowX : null,
+					railScrollbarWidth: rail ? window.getComputedStyle(rail).scrollbarWidth : null,
+					railScrollSnapType: rail ? window.getComputedStyle(rail).scrollSnapType : null,
+					offenders,
+				};
+			});
+			expect(Math.abs(mobile.documentOverflow), "product page must not create document-level horizontal overflow").toBeLessThanOrEqual(1);
+			expect(mobile.railOverflowX, "mobile gallery may be swipeable, but not with a visible native scrollbar").toBe("auto");
+			expect(mobile.railScrollbarWidth, "mobile gallery must hide native scrollbar chrome").toBe("none");
+			expect(mobile.railScrollSnapType, "mobile gallery should use a swipe/snap photo strip").toContain("x");
+			expect(mobile.offenders, "no visible internal horizontal scrollbars are allowed").toEqual([]);
+
+			await page.setViewportSize({ width: 1366, height: 900 });
+			await gotoAndSettle(page, "/shop-items/arches/classic-arch");
+			const desktop = await page.evaluate(() => {
+				const doc = document.documentElement;
+				const offenders = Array.from(document.querySelectorAll("body *"))
+					.map((element) => {
+						const style = window.getComputedStyle(element);
+						return {
+							className: String(element.className || ""),
+							overflowX: style.overflowX,
+							scrollbarWidth: style.scrollbarWidth,
+							scrollWidth: element.scrollWidth,
+							clientWidth: element.clientWidth,
+						};
+					})
+					.filter((item) => ["auto", "scroll"].includes(item.overflowX) && item.scrollWidth > item.clientWidth + 1 && item.scrollbarWidth !== "none");
+				return {
+					documentOverflow: doc.scrollWidth - doc.clientWidth,
+					offenders,
+				};
+			});
+			expect(Math.abs(desktop.documentOverflow), "desktop product page must not create horizontal overflow").toBeLessThanOrEqual(1);
+			expect(desktop.offenders, "desktop product gallery must not expose internal horizontal scrollbars").toEqual([]);
 		});
 	});
 
@@ -660,7 +832,6 @@ test.describe("Locally Twisted interactive layout states", () => {
 			expect(result.card.paddingLeft, "mobile review card horizontal padding should stay tight").toBeLessThanOrEqual(17);
 			expect(result.card.paddingRight, "mobile review card horizontal padding should stay tight").toBeLessThanOrEqual(17);
 		});
-
 	});
 
 	test.describe("homepage client crawl banner", () => {
@@ -839,12 +1010,52 @@ test.describe("Locally Twisted interactive layout states", () => {
 
 		expect(result.heroNextIsReviews, "Google reviews should be the first homepage band after the hero").toBe(true);
 		expect(result.reviewsTop, "Google reviews should start after the hero").toBeGreaterThanOrEqual(result.heroBottom - 1);
-		expect(result.reviewsTop, "Google review proof should appear before Recent Celebrations").toBeLessThan(result.featuredTop);
+		expect(result.reviewsTop, "Google review proof should appear before the installed-work proof band").toBeLessThan(result.featuredTop);
 		expect(result.authorityCount, "homepage should not render a trust/authority bar right now").toBe(0);
 		expect(result.authorityIconCount, "trust bar icons should stay as assets, not render as a homepage bar").toBe(0);
 		expect(result.badgeText, "the first post-hero proof band should be clearly Google reviews").toMatch(/Google reviews/i);
 		expect(result.ctaText, "closing CTA should lead with corporate, school, civic, and community work").toMatch(/corporate, school, civic, and community/i);
 		expect(result.ctaText, "closing CTA should keep private celebrations secondary").toMatch(/private celebrations/i);
+	});
+
+	test("homepage installed-work proof uses a wide custom-install gallery", async ({ page }) => {
+		await page.setViewportSize({ width: 1366, height: 900 });
+		const response = await gotoAndSettle(page, "/");
+		await expectSuccessfulResponse(response, "/");
+
+		const result = await page.evaluate(() => {
+			const featured = document.querySelector(".lt-featured");
+			const inner = document.querySelector(".lt-featured__inner");
+			const heading = document.querySelector(".lt-featured__heading");
+			const grid = document.querySelector(".lt-featured__grid");
+			const cards = Array.from(document.querySelectorAll(".lt-featured__card"));
+			const images = Array.from(document.querySelectorAll(".lt-featured__image"));
+			const rect = (el) => {
+				if (!el) return null;
+				const r = el.getBoundingClientRect();
+				return { left: Math.round(r.left), right: Math.round(r.right), width: Math.round(r.width), height: Math.round(r.height) };
+			};
+			const gridStyle = grid ? window.getComputedStyle(grid) : null;
+			return {
+				headingText: heading ? heading.textContent.trim() : "",
+				featured: rect(featured),
+				inner: rect(inner),
+				grid: rect(grid),
+				cardRects: cards.map(rect),
+				imageRects: images.map(rect),
+				gridColumnCount: gridStyle ? gridStyle.gridTemplateColumns.split(" ").filter(Boolean).length : 0,
+				gridGap: gridStyle ? Number.parseFloat(gridStyle.columnGap) : null,
+				documentOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+			};
+		});
+
+		expect(result.headingText).toBe("One of a Kind Designs");
+		expect(result.inner.width, "featured work should use the visual proof width instead of the narrow reading max").toBeGreaterThanOrEqual(1300);
+		expect(result.gridColumnCount, "featured work should remain a three-photo desktop row").toBe(3);
+		expect(Math.max(...result.cardRects.map((card) => card.width)), "featured cards should stretch wider than the old cramped cards").toBeGreaterThanOrEqual(420);
+		expect(result.gridGap, "featured gallery gap should be restrained").toBeLessThanOrEqual(24);
+		expect(result.imageRects.every((image) => image.height < image.width), "featured images should use landscape installation crops").toBe(true);
+		expect(Math.abs(result.documentOverflow), "wide featured gallery should not create document overflow").toBeLessThanOrEqual(1);
 	});
 
 	test("homepage hero uses one visible stable headline", async ({ page }) => {

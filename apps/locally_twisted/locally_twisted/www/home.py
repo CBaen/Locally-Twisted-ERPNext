@@ -1,8 +1,9 @@
 """Homepage controller for the public `/` route.
 
-Current launch shape: civic/Utah hero, authority proof bar, installed-work
-photos, full-stage review and client proof crawls, custom decor discovery,
-a contact CTA, and secondary twisting/face-painting support.
+Current launch shape: civic/Utah hero, Google review proof crawl,
+wide installed-work proof photos, full-stage client proof crawl,
+custom decor discovery, a contact CTA, and secondary twisting/face-painting
+support.
 """
 import frappe
 
@@ -53,8 +54,8 @@ CUSTOM_CATEGORIES = [
 ]
 
 
-# Featured work - 3 curated launch proof cards. Review and replace when the
-# next approved photo packet is selected.
+# Featured work - 3 curated custom-install proof cards. Review and replace
+# when the next approved one-of-a-kind photo packet is selected.
 FEATURED_WORK = [
     {
         "category": "Balloon Arches",
@@ -214,12 +215,6 @@ PAGE_CSS = """
     margin-left: -50vw;
     margin-right: -50vw;
 }
-body[data-path="home"] main.container.my-4 {
-    /* Beat the default .my-4 wrapper so the full-bleed hero sits flush under the nav. */
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-}
-
 /* --- 3-dot divider --------------------------------------------------- */
 .lt-divider {
     display: flex;
@@ -701,18 +696,14 @@ body[data-path="home"] main.container.my-4 {
     max-width: 9rem;
 }
 
-/* --- Featured Work (Recent Celebrations) - full-width proof band ----- */
+/* --- Featured Work (One of a Kind Designs) - full-width proof band --- */
 .lt-featured {
     background-color: var(--lt-near-white);
-    padding: 4rem 1.25rem 4.5rem;
+    padding: 3.25rem 1.25rem 3.75rem;
 }
 .lt-featured__inner {
     max-width: 1700px;
     margin: 0 auto;
-}
-@media (min-width: 1400px) {
-    .lt-featured { padding-left: 4vw; padding-right: 4vw; }
-    .lt-featured__inner { max-width: none; }
 }
 .lt-featured__heading {
     font-family: var(--lt-font-heading);
@@ -727,8 +718,8 @@ body[data-path="home"] main.container.my-4 {
 .lt-featured__lede {
     text-align: center;
     color: var(--lt-soft-gray);
-    max-width: 580px;
-    margin: 0 auto 3rem;
+    max-width: 680px;
+    margin: 0 auto 2.25rem;
     font-size: 1rem;
 }
 .lt-featured__grid {
@@ -737,10 +728,10 @@ body[data-path="home"] main.container.my-4 {
     gap: 1.5rem;
 }
 @media (min-width: 768px) {
-    .lt-featured__grid { grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+    .lt-featured__grid { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
 }
 @media (min-width: 1200px) {
-    .lt-featured__grid { gap: 2.5rem; }
+    .lt-featured__grid { gap: 1.25rem; }
 }
 .lt-featured__card {
     background-color: var(--lt-white);
@@ -760,21 +751,13 @@ body[data-path="home"] main.container.my-4 {
 }
 .lt-featured__image {
     width: 100%;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 4 / 3;
     background-color: var(--lt-warm-tint);
     background-size: cover;
     background-position: center;
 }
-@media (min-width: 1200px) {
-    /* Slightly wider crop on big monitors — photos scale up the full
-     * width of the band; 4:5 stays portrait, just bigger. */
-    .lt-featured__image { aspect-ratio: 5 / 6; }
-}
 .lt-featured__body {
     padding: 1.25rem 1.5rem 1.5rem;
-}
-@media (min-width: 1200px) {
-    .lt-featured__body { padding: 1.75rem 2rem 2rem; }
 }
 .lt-featured__category {
     font-family: var(--lt-font-body);

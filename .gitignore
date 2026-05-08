@@ -55,6 +55,7 @@ Locally-Twisted-Frontend/
 # Scratch / one-off scaffolding (image generator script, throwaway HTML pulls)
 # The IMAGES go in _resources/images/ which IS committed.
 .scratch/
+.tmp/
 
 # Raw client/photo drops are source material, not repo source. Curated/optimized
 # production assets belong in committed app/_resources paths with explicit names.

@@ -8,6 +8,10 @@ const PUBLIC_ROUTES = [
 	{ name: "book-alias", path: "/book" },
 	{ name: "contact", path: "/contact" },
 	{ name: "event-balloons", path: "/event-balloons" },
+	{ name: "civic-community", path: "/civic-community" },
+	{ name: "corporate-events", path: "/corporate-events" },
+	{ name: "schools-campuses", path: "/schools-campuses" },
+	{ name: "private-celebrations", path: "/private-celebrations" },
 	{ name: "portfolio", path: "/portfolio" },
 	{ name: "btfp", path: "/balloon-twisting-and-face-painting" },
 	{ name: "faq", path: "/faq" },
@@ -90,6 +94,14 @@ const SHOP_LANDING_SURFACES = [
 	{ selector: ".lt-shop__cta", mode: "band", inner: ".lt-shop__cta-inner", maxWidth: SHOP_MAX },
 ];
 
+const EVENT_TYPE_SURFACES = [
+	{ selector: ".lt-authority-page", mode: "root" },
+	{ selector: ".lt-authority-hero", mode: "fullbleed", inner: ".lt-authority-hero__inner", maxWidth: PAGE_MAX },
+	{ selector: ".lt-authority-proof", mode: "fullbleed", inner: ".lt-authority-proof__inner", maxWidth: PAGE_MAX },
+	{ selector: ".lt-authority-section", mode: "band", inner: ".lt-authority-section__inner", maxWidth: PAGE_MAX, allowMultiple: true },
+	{ selector: ".lt-authority-cta", mode: "fullbleed", inner: ".lt-authority-cta__inner", maxWidth: PAGE_MAX },
+];
+
 const CONTAINER_CONTRACT_ROUTES = [
 	{
 		name: "home",
@@ -140,13 +152,31 @@ const CONTAINER_CONTRACT_ROUTES = [
 		name: "event-balloons",
 		path: "/event-balloons",
 		topLevel: [".lt-authority-page"],
-		surfaces: [
-			{ selector: ".lt-authority-page", mode: "root" },
-			{ selector: ".lt-authority-hero", mode: "fullbleed", inner: ".lt-authority-hero__inner", maxWidth: PAGE_MAX },
-			{ selector: ".lt-authority-proof", mode: "fullbleed", inner: ".lt-authority-proof__inner", maxWidth: PAGE_MAX },
-			{ selector: ".lt-authority-section", mode: "band", inner: ".lt-authority-section__inner", maxWidth: PAGE_MAX, allowMultiple: true },
-			{ selector: ".lt-authority-cta", mode: "fullbleed", inner: ".lt-authority-cta__inner", maxWidth: PAGE_MAX },
-		],
+		surfaces: EVENT_TYPE_SURFACES,
+	},
+	{
+		name: "civic-community",
+		path: "/civic-community",
+		topLevel: [".lt-authority-page.lt-event-type-page"],
+		surfaces: EVENT_TYPE_SURFACES,
+	},
+	{
+		name: "corporate-events",
+		path: "/corporate-events",
+		topLevel: [".lt-authority-page.lt-event-type-page"],
+		surfaces: EVENT_TYPE_SURFACES,
+	},
+	{
+		name: "schools-campuses",
+		path: "/schools-campuses",
+		topLevel: [".lt-authority-page.lt-event-type-page"],
+		surfaces: EVENT_TYPE_SURFACES,
+	},
+	{
+		name: "private-celebrations",
+		path: "/private-celebrations",
+		topLevel: [".lt-authority-page.lt-event-type-page"],
+		surfaces: EVENT_TYPE_SURFACES,
 	},
 	{
 		name: "portfolio",

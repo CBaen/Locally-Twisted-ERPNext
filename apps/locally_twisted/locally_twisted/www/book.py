@@ -293,7 +293,7 @@ def submit_book_inquiry():
             frappe.get_doc({
                 "doctype": "File",
                 "file_name": f.filename,
-                "is_private": 0,
+                "is_private": 1,
                 "content": f.stream.read() if hasattr(f, "stream") else f.read(),
                 "attached_to_doctype": "Lead",
                 "attached_to_name": lead.name,

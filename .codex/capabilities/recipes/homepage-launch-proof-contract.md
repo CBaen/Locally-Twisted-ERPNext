@@ -56,9 +56,9 @@ review crawl, trusted-client crawl, cookie notice placement, or launch CTAs.
   not be a fixed overlay covering CTAs there, and it must not sit between the
   hero and the Google review proof band. Other pages may still use the fixed
   banner.
-- Recent Celebrations appears after Google reviews. Real installed-work proof is
-  still important, but the launch homepage now leads with social proof under the
-  hero.
+- `One of a Kind Designs` appears after Google reviews as a wide installed-work
+  proof band. Real custom installation proof is still important, but the launch
+  homepage now leads with social proof under the hero.
 - Review cards and trusted-business names are full-stage crawls. Both move
   left-to-right. Review cards use the canonical `540s` loop, and the
   trusted-business crawl is measured in the browser so its pixel speed matches
@@ -118,7 +118,7 @@ before marking the homepage ready for GL review.
 - The hero grows back into a first-viewport wall or uses page-local min-height,
   oversized padding, or giant title clamps.
 - A trust/authority bar appears between the hero and reviews.
-- Recent Celebrations appears before reviews.
+- The installed-work proof band appears before reviews.
 - The cookie notice blocks primary CTAs on mobile or sits between the hero and
   Google reviews.
 - Event Playground, blog-title cycling, or design-studio language returns to the
@@ -148,7 +148,15 @@ first post-hero band, moved the cookie notice after reviews, and moved Recent
 Celebrations after the reviews block. Do not carry forward the earlier temporary
 portfolio-blocked caveat unless a fresh run fails again.
 
-On 2026-05-08, GL flagged that the mobile Google review section, cards,
+On 2026-05-08, GL reframed the installed-work band as custom art instead of
+ecommerce-adjacent cards. `Recent Celebrations` became `One of a Kind Designs`,
+and `.lt-featured__inner` was given a wider visual-proof containment override
+so the three desktop photos stretch across the stage while mobile remains a
+single readable column. The focused homepage verifier now guards the heading,
+three-wide desktop row, restrained gap, landscape image crop, and zero document
+overflow.
+
+Later on 2026-05-08, GL flagged that the mobile Google review section, cards,
 and padding were too large. Live 320px measurement showed the review band at
 about 693px tall. The repair tightened mobile review typography/padding,
 neutralized inherited global `section` padding on `.lt-reviews-block__quotes`,

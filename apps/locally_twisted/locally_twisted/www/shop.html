@@ -28,7 +28,13 @@
             <div class="lt-shop__product-area">
                 <h2 class="visually-hidden" id="lt-shop-products-title">Ready-to-order products</h2>
                 <p class="lt-shop__count" id="lt-shop-count">{{ total_items }} item{% if total_items != 1 %}s{% endif %}</p>
+                {% if search_query %}
+                <p class="lt-shop__search-summary">
+                    Showing matches for "{{ search_query | e }}". <a href="/shop">Clear search</a>
+                </p>
+                {% endif %}
 
+                {% if items %}
                 <div class="lt-shop__grid" id="lt-shop-grid">
             {% for item in items %}
             <article class="lt-shop__card"
@@ -78,6 +84,13 @@
             </article>
             {% endfor %}
                 </div>
+                {% else %}
+                <div class="lt-shop__empty" role="status">
+                    <h3>No matching products yet.</h3>
+                    <p>Try arches, garlands, bouquets, columns, or event help.</p>
+                    <a href="/contact">Ask for event help</a>
+                </div>
+                {% endif %}
 
                 <div class="lt-shop__feedback" id="lt-shop-feedback" role="status" aria-live="polite"></div>
             </div>

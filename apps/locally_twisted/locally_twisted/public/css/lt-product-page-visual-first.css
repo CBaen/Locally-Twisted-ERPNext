@@ -1,0 +1,425 @@
+﻿/* Locally Twisted product page visual-first pass.
+   Focus: GL's 2026-05-08 markup — gallery rail beside image, product story up
+   near title/options, What’s Included before pickup/delivery, calmer option
+   cards. Keep this focused instead of growing older catch-all CSS files. */
+
+.product-container.item-main.lt-product-page__main .lt-product__summary-row {
+  align-items: flex-start;
+}
+
+.lt-product__media-column {
+  min-width: 0;
+}
+
+.lt-product__media-shell {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(0.75rem, 1.8vw, 1rem);
+  width: 100%;
+}
+
+.lt-product__media-shell.has-thumbnails {
+  grid-template-columns: minmax(74px, 92px) minmax(0, 1fr);
+  align-items: start;
+}
+
+.lt-product__thumbnail-rail {
+  gap: 0.55rem;
+  margin-right: 0 !important;
+}
+
+.lt-product__thumbnail-heading {
+  color: var(--lt-polish-navy, #0e2240);
+  font-family: var(--lt-polish-body, Lato, system-ui, sans-serif);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.lt-product__thumbnail-button {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 1px solid rgba(14, 34, 64, 0.16);
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.lt-product__thumbnail-button:focus-visible {
+  outline: 3px solid rgba(184, 154, 91, 0.5);
+  outline-offset: 2px;
+}
+
+.lt-product__thumbnail-button .item-slideshow-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  height: auto;
+  margin: 0 !important;
+  border: 0;
+  border-radius: 3px;
+  object-fit: cover;
+  opacity: 0.74;
+}
+
+.lt-product__thumbnail-button .item-slideshow-image.active {
+  box-shadow: 0 0 0 3px var(--lt-polish-brass, #b89a5b);
+  opacity: 1;
+}
+
+.lt-product__brand-description--lead {
+  margin-top: clamp(0.85rem, 2vw, 1.1rem);
+  padding: clamp(0.9rem, 2vw, 1.1rem) 0 0;
+  border-top: 1px solid rgba(184, 154, 91, 0.34);
+  color: var(--lt-polish-slate, #2f3a4a);
+  font-size: clamp(1rem, 1.8vw, 1.12rem);
+}
+
+.lt-product__brand-description--lead p:last-child {
+  margin-bottom: 0;
+}
+
+.lt-product__copy-panel {
+  margin-top: clamp(1.5rem, 3vw, 2rem);
+}
+
+.lt-product__copy-panel .lt-product__details-section {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.lt-product__fulfillment {
+  margin-top: clamp(1rem, 2.5vw, 1.35rem);
+}
+
+.lt-product__configure {
+  display: grid;
+  gap: clamp(0.85rem, 1.8vw, 1.15rem);
+}
+
+.lt-product__attr {
+  margin-bottom: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.lt-product__attr-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.45rem;
+}
+
+.lt-product__chips {
+  gap: 0.5rem;
+}
+
+.lt-product__chip-label {
+  display: block;
+  width: 100%;
+  padding: 0.72rem 0.85rem;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  outline: 1px solid rgba(14, 34, 64, 0.16);
+  color: var(--lt-polish-navy, #0e2240);
+  line-height: 1.2;
+  text-align: center;
+}
+
+.lt-product__chip-input:checked + .lt-product__chip-label {
+  background: transparent;
+  outline: 2px solid var(--lt-polish-brass, #b89a5b);
+  color: var(--lt-polish-ink, #191817);
+  text-decoration: none;
+}
+
+.lt-product__select {
+  width: 100%;
+  max-width: 100%;
+  padding: 0.72rem 0.8rem;
+  border: 1px solid rgba(14, 34, 64, 0.22);
+  border-radius: 4px;
+  background: #fff;
+}
+
+.lt-product__price {
+  margin-bottom: 0.75rem;
+}
+
+.lt-product__actions .lt-product__cta {
+  flex: 1 1 190px;
+}
+
+@media (max-width: 767px) {
+  .lt-product__media-shell.has-thumbnails {
+    grid-template-columns: 1fr;
+  }
+
+  .lt-product__thumbnail-rail {
+    order: 2;
+    display: grid !important;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(66px, 78px);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    padding-bottom: 0.2rem;
+    scroll-padding-inline: 0.25rem;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .lt-product__thumbnail-rail::-webkit-scrollbar {
+    display: none;
+    height: 0;
+    width: 0;
+  }
+
+  .lt-product__thumbnail-button {
+    scroll-snap-align: center;
+  }
+
+  .lt-product__thumbnail-heading {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Classic Arch proof pass: simple symmetrical required choices + drawer-based color selection. */
+.lt-product__attr[data-display-type="chips"] .lt-product__chips {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.lt-product__attr[data-display-type="chips"] .lt-product__chip {
+  display: flex;
+  margin: 0;
+  min-width: 0;
+}
+
+.lt-product__attr[data-attribute-name="Arch Size"] .lt-product__chips {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.lt-product__attr[data-attribute-name="Design"] .lt-product__chip-label,
+.lt-product__attr[data-attribute-name="LED Lights"] .lt-product__chip-label {
+  min-height: 3.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 575.98px) {
+  .lt-product__attr[data-attribute-name="Arch Size"] .lt-product__chips {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.lt-product__select--hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  white-space: nowrap !important;
+}
+
+.lt-product__color-help {
+  margin: 0 0 0.75rem;
+  color: #6b5f58;
+  font-size: 0.95rem;
+}
+
+.lt-product__color-drawers {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.lt-product__color-drawer {
+  border: 1px solid rgba(60, 44, 34, 0.16);
+  border-radius: 16px;
+  background: rgba(255, 250, 246, 0.92);
+  overflow: hidden;
+}
+
+.lt-product__color-drawer-summary {
+  cursor: pointer;
+  list-style: none;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.8rem 1rem;
+  font-weight: 800;
+  color: #3c2c22;
+}
+
+.lt-product__color-drawer-summary::-webkit-details-marker { display: none; }
+
+.lt-product__color-drawer-summary:focus-visible {
+  outline: 3px solid rgba(184, 154, 91, 0.7);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px rgba(184, 154, 91, 0.18);
+}
+
+.lt-product__color-group-name {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.lt-product__drawer-toggle {
+  min-width: 4.5rem;
+  border: 1px solid rgba(60, 44, 34, 0.18);
+  border-radius: 999px;
+  background: #fff;
+  color: #5b4a40;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  padding: 0.38rem 0.62rem;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.lt-product__color-drawer[open] .lt-product__drawer-toggle {
+  background: #3c2c22;
+  border-color: #3c2c22;
+  color: #fff;
+}
+
+.lt-product__drawer-toggle-closed,
+.lt-product__color-drawer[open] .lt-product__drawer-toggle-open {
+  display: inline;
+}
+
+.lt-product__drawer-toggle-open,
+.lt-product__color-drawer[open] .lt-product__drawer-toggle-closed {
+  display: none;
+}
+
+.lt-product__color-count {
+  min-width: 2rem;
+  border-radius: 999px;
+  background: rgba(227, 71, 95, 0.12);
+  color: #b52f48;
+  text-align: center;
+  font-size: 0.82rem;
+  padding: 0.15rem 0.45rem;
+}
+
+.lt-product__color-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+  min-width: 0;
+  padding: 0 1rem 1rem;
+}
+
+.lt-product__color-card {
+  display: grid;
+  grid-template-columns: auto 1.65rem minmax(0, 1fr);
+  align-items: center;
+  min-width: 0;
+  gap: 0.55rem;
+  min-height: 3rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid rgba(60, 44, 34, 0.14);
+  border-radius: 13px;
+  background: #fff;
+  box-shadow: 0 6px 16px rgba(60, 44, 34, 0.06);
+}
+
+.lt-product__color-card:has(input:checked) {
+  border-color: #e3475f;
+  box-shadow: 0 0 0 2px rgba(227, 71, 95, 0.12);
+}
+
+.lt-product__color-swatch {
+  --lt-balloon-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 84'%3E%3Cpath fill='black' d='M32 2C17.1 2 6 14.6 6 31.4c0 16.2 9.7 29.3 22.3 32.2l-5.1 9.6c-.9 1.7.3 3.8 2.2 3.8h13.2c1.9 0 3.1-2.1 2.2-3.8l-5.1-9.6C48.3 60.7 58 47.6 58 31.4C58 14.6 46.9 2 32 2Z'/%3E%3C/svg%3E");
+  position: relative;
+  width: 1.8rem;
+  height: 2.35rem;
+  border: 0;
+  background:
+    radial-gradient(circle at 35% 21%, rgba(255,255,255,0.86) 0 10%, transparent 22%),
+    linear-gradient(145deg, rgba(255,255,255,0.28), rgba(0,0,0,0.12)),
+    var(--lt-color-swatch, #d8c7b8);
+  -webkit-mask: var(--lt-balloon-mask) center / contain no-repeat;
+  mask: var(--lt-balloon-mask) center / contain no-repeat;
+  filter: drop-shadow(0 1px 0 rgba(60, 44, 34, 0.18)) drop-shadow(0 3px 4px rgba(60, 44, 34, 0.12));
+}
+
+.lt-product__color-swatch::after {
+  content: none;
+}
+
+.lt-product__color-name {
+  color: #4b4039;
+  display: grid;
+  font-weight: 650;
+  line-height: 1.15;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+.lt-product__color-hex {
+  color: #74665c;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.76rem;
+  font-weight: 750;
+  letter-spacing: 0.01em;
+}
+
+@media (min-width: 992px) {
+  .lt-product__attr[data-display-type="chips"] .lt-product__chips {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .lt-product__color-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 575.98px) {
+  .lt-product__color-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Under-photo customization well: color UX belongs with the visual arch photo. */
+.lt-product__media-column {
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.lt-product__under-media-options {
+  width: 100%;
+}
+
+.lt-product__under-media-options:empty {
+  display: none;
+}
+
+.lt-product__under-media-options .lt-product__attr {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.lt-product__under-media-options .lt-product__attr-label {
+  margin-bottom: 0.55rem;
+}

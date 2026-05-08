@@ -85,7 +85,6 @@ Status:
 
 ## Session Notes
 
-
 ### 2026-05-08 - Codex current session mobile search relocation
 Lane: Mobile public chrome, drawer search, and nav verifier parity.
 Files: `navbar.html`, `lt-mega-menu.css`, `lt-megamenu.js`, `www/search.*`, `nav_ia.py`, `smoke_shop.py`, `interactive_layout.spec.js`, and this coordination note.
@@ -93,6 +92,30 @@ Intent: Remove search from the cramped mobile header action row, keep logo/cart/
 Conflicts: Worktree contains unrelated event-menu, product-page, and catalog changes; do not broad-stage this file set without reviewing scope.
 Verification: `python scripts/verify/nav_ia.py` passed; targeted interactive Playwright mobile/header/search/drawer checks passed 5/5 within the focused 8-test run; focused mobile drawer smoke helper passed.
 Status: Complete. Source feature handoff is `workstreams/mobile-nav-review-compactness.md`.
+
+### 2026-05-08 - Codex current session event-menu specialization
+Lane: Event Balloons mega-menu IA, event-type landing pages, and header proof-row readability.
+Files: `navbar.html`, `navbar_context.py`, `lt-mega-menu.css`, `hooks.py`, `www/event_type_pages.py`, `www/*event-type*`, `layout_helpers.js`, `interactive_layout.spec.js`, `nav_ia.py`, `smoke_shop.py`, and this coordination note.
+Intent: Move Portfolio after Ready-to-Order and before FAQ, give each Event Balloons dropdown item its own route/page, rename Corporate Entrances to Corporate Events, connect page proof to the approved homepage client crawl, and make the blue top proof banner readable.
+Conflicts: Staying out of catalog recovery, product visual-first styling, and unrelated homepage proof-crawl mechanics already dirty in the worktree.
+Verification: `python -m py_compile` for touched Python files passed; `node --check` for touched verifier JS passed; route sweep returned 200 for `/`, `/civic-community`, `/corporate-events`, `/schools-campuses`, and `/private-celebrations`; `python scripts/dev/clear_website_cache.py --restart` passed; `python scripts/verify/nav_ia.py` passed; focused interactive Playwright event-menu/compact-hero checks passed 23/23; `npm run test:container-contract -- --workers=1` passed 69/69; `npm run test:layout-fit -- --workers=4` passed 299/299. Browser metric pass showed the top proof strip at 17.16:1 contrast, 15px/900 text, 49px height, nav order `Event Balloons`, `Twisting & Face Painting`, `Ready-to-Order`, `Portfolio`, `FAQ`, and four event cards linking only to the specialized routes. `python scripts/verify/smoke_shop.py` verified this menu/event/search/drawer slice but still exits 1 on unrelated product-detail contracts: variant checkbox markup, desktop product image size, and boxed option background.
+Status: Complete for menu/event specialization; product-detail smoke failures remain out of scope.
+
+### 2026-05-08 - Codex current session homepage featured-work width repair
+Lane: Homepage installed-work proof band below reviews.
+Files: `home.html`, `home.py`, `hooks.py`, `lt-page-containment.css`, `interactive_layout.spec.js`, `homepage-launch-proof-contract.md`, `landing-page-repair.md`, `website-launch.md`, `locally-twisted-queue.md`, `locally-twisted-decisions.md`, `lessons-learned.md`, `workstreams/menu-content-coordination.md`.
+Intent: Rename `Recent Celebrations` to a custom-art installation frame and widen the three featured photos so they read as a full desktop proof band instead of isolated cards.
+Conflicts: Staying out of catalog recovery, product visual-first work, and the existing homepage review/client crawl mechanics.
+Verification: `python -m py_compile apps\locally_twisted\locally_twisted\www\home.py`, `node --check scripts\verify\interactive_layout.spec.js`, and `git diff --check` passed. `python scripts/dev/clear_website_cache.py --restart` passed. Live Playwright measurements on `/` showed `One of a Kind Designs`, `lt-page-containment.css?v=20260508-featured-2`, zero document overflow, and featured card/image widths of 426/424px at 1366, 504/502px at 1600, and 553/551px at 1920; mobile stayed single-column at 375 and 320. Focused homepage interactive checks passed 8/8, homepage layout-fit passed 13/13, homepage crawl plus compact-hero checks passed 19/19, container contract passed 57/57, and axe passed 38 route/viewport results with 0 violations. Screenshots saved under `output/playwright/home-featured-work-20260508/`.
+Status: Complete.
+
+### 2026-05-08 - Codex current session header-to-hero gap repair
+Lane: Public shell spacing between restored mega-menu chrome and first hero/content band.
+Files: `lt-theme.css`, `home.py`, `hooks.py`, `interactive_layout.spec.js`, `workstreams/menu-content-coordination.md`.
+Intent: Remove the default Frappe/Bootstrap `main.container.my-4` top gap that appears above non-home heroes and guard it across the compact hero route set.
+Conflicts: Staying out of catalog recovery and product visual-first files currently dirty in the worktree. This keeps the existing premium mega-menu architecture.
+Verification: `python -m py_compile apps\locally_twisted\locally_twisted\www\home.py` passed; `node --check scripts\verify\interactive_layout.spec.js` passed; `python scripts/dev/clear_website_cache.py --restart` passed. Live Playwright measurement across `/`, `/event-balloons`, `/portfolio`, `/balloon-twisting-and-face-painting`, `/contact`, `/shop`, `/shop-items/arches`, `/faq`, `/privacy`, `/cart`, and `/checkout` showed `gapHeaderToMain=0`, `gapHeaderToHero=0`, and `mainMarginTop=0px` using `lt-theme.css?v=20260508-shell-gap-2`. `npx playwright test scripts/verify/interactive_layout.spec.js --reporter=line --grep "compact hero height contract" --workers=1` passed 14/14. `npm run test:container-contract` passed 57/57. Targeted `layout_fit.spec.js` for affected public routes passed 104/104; full `npm run test:layout-fit` was attempted but hit the shell timeout before completion, so it is not counted as passing.
+Status: Complete.
 
 ### 2026-05-06 - Codex current session review marquee repair
 Lane: Homepage reviews visual behavior.

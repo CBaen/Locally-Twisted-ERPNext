@@ -37,18 +37,68 @@
         {%- set attr_name = row.attribute -%}
         {%- set field_id = "lt-attr-" ~ loop.index -%}
         {%- set values = row.get("values") or [] -%}
-        {%- set is_chips = values | length <= 8 -%}
+        {%- set is_color_drawer = is_balloon_color_attribute(attr_name) -%}
+        {%- set is_chips = (values | length <= 8) and not is_color_drawer -%}
 
         <div class="lt-product__attr"
              data-attribute-name="{{ attr_name }}"
-             data-display-type="{{ 'chips' if is_chips else 'select' }}">
+             data-display-type="{{ 'color-drawer' if is_color_drawer else ('chips' if is_chips else 'select') }}">
 
             <label for="{{ field_id }}" class="lt-product__attr-label">
                 {{ _(attr_name) }}
                 <span class="lt-product__attr-selected" id="{{ field_id }}-selected"></span>
             </label>
 
-            {%- if is_chips -%}
+            {%- if is_color_drawer -%}
+                {%- set color_groups = get_balloon_color_groups(values) -%}
+                <select class="lt-product__select lt-product__select--hidden js-lt-attr-input js-lt-color-hidden"
+                        id="{{ field_id }}"
+                        name="lt-attr-{{ attr_name | replace(' ', '-') }}"
+                        data-attribute-name="{{ attr_name }}"
+                        aria-hidden="true"
+                        tabindex="-1">
+                    <option value="">{{ _("Choose colors") }}</option>
+                    {%- for v in values -%}
+                        <option value="{{ v }}">{{ v }}</option>
+                    {%- endfor -%}
+                </select>
+                <div class="lt-product__color-drawers"
+                     data-hidden-select-id="{{ field_id }}"
+                     aria-label="{{ _(attr_name) }}">
+                    <p class="lt-product__color-help">
+                        {{ _("Choose one balloon color for current pricing. Multi-color recipes will be handled in the rebuilt catalog contract.") }}
+                    </p>
+                    {%- for group in color_groups -%}
+                        <details class="lt-product__color-drawer" {% if loop.first %}open{% endif %}>
+                            <summary class="lt-product__color-drawer-summary">
+                                <span class="lt-product__color-group-name">{{ _(group.group) }}</span>
+                                <span class="lt-product__drawer-toggle" aria-hidden="true">
+                                    <span class="lt-product__drawer-toggle-open">{{ _("Close") }}</span>
+                                    <span class="lt-product__drawer-toggle-closed">{{ _("Open") }}</span>
+                                </span>
+                                <span class="lt-product__color-count">{{ group.options | length }}</span>
+                            </summary>
+                            <div class="lt-product__color-grid">
+                                {%- for color in group.options -%}
+                                    <label class="lt-product__color-card">
+                                        <input type="radio"
+                                               class="lt-product__color-input js-lt-color-radio"
+                                               name="lt-color-{{ attr_name | replace(' ', '-') }}"
+                                               value="{{ color.name }}"
+                                               data-attribute-name="{{ attr_name }}"
+                                               data-hidden-select-id="{{ field_id }}">
+                                        <span class="lt-product__color-swatch" style="--lt-color-swatch: {{ color.hex_value or '#d8c7b8' }}" aria-hidden="true"></span>
+                                        <span class="lt-product__color-name">
+                                            <span>{{ color.name }}</span>
+                                            {% if color.hex_value %}<span class="lt-product__color-hex">({{ color.hex_value }})</span>{% endif %}
+                                        </span>
+                                    </label>
+                                {%- endfor -%}
+                            </div>
+                        </details>
+                    {%- endfor -%}
+                </div>
+            {%- elif is_chips -%}
                 <div class="lt-product__chips" id="{{ field_id }}" role="radiogroup" aria-label="{{ _(attr_name) }}">
                     {%- for v in values -%}
                         <label class="lt-product__chip">
@@ -66,7 +116,7 @@
                         id="{{ field_id }}"
                         name="lt-attr-{{ attr_name | replace(' ', '-') }}"
                         data-attribute-name="{{ attr_name }}">
-                    <option value="">{{ _("Choose a") }} {{ _(attr_name) | lower }}…</option>
+                    <option value="">{{ _("Choose a") }} {{ _(attr_name) | lower }}.</option>
                     {%- for v in values -%}
                         <option value="{{ v }}">{{ v }}</option>
                     {%- endfor -%}
@@ -124,6 +174,15 @@
     var msgFrappeNotReady = "{{ _('Loading...') | replace("'", "\\'") }}";
     var msgStartingPrice = "{{ (lt_starting_price_display or '') | replace("'", "\\'") }}";
     var msgPriceWaiting = msgStartingPrice || "{{ _('Price shows when you choose your options') | replace("'", "\\'") }}";
+    var msgLedPriceMissing = "{{ _('LED Lights are an upgrade, but the imported catalog has no LED surcharge yet. Choose No Lights or request a quote so we do not sell it as free.') | replace("'", "\\'") }}";
+    var msgLedPriceReview = "{{ _('LED price needs review') | replace("'", "\\'") }}";
+
+    function moveColorDrawersUnderMedia() {
+        var mediaTarget = document.querySelector('.lt-product__under-media-options');
+        var colorAttr = form.querySelector('.lt-product__attr[data-display-type="color-drawer"]');
+        if (!mediaTarget || !colorAttr || colorAttr.parentNode === mediaTarget) return;
+        mediaTarget.appendChild(colorAttr);
+    }
 
     function productImageEl() {
         return document.querySelector('.product-image img.website-image') || document.querySelector('img.website-image');
@@ -139,6 +198,7 @@
     }
 
     var defaultProductImage = currentProductImage();
+    moveColorDrawersUnderMedia();
 
     function setProductImage(src, alt) {
         var img = productImageEl();
@@ -211,11 +271,38 @@
         return picks;
     }
 
+    function colorRadiosFor(a) {
+        return Array.prototype.slice.call(a.querySelectorAll('.js-lt-color-radio'));
+    }
+
+    function syncColorDrawer(drawerInput) {
+        var attr = drawerInput.closest('.lt-product__attr');
+        if (!attr) return;
+        var hidden = attr.querySelector('.js-lt-color-hidden');
+        var checked = colorRadiosFor(attr).filter(function (input) { return input.checked; });
+        if (hidden) {
+            // Temporary bridge for the current ERPNext variant model: one color maps
+            // to the SKU used for price/cart lookup. The purge/rebuild will move
+            // multi-color recipes out of SKU axes.
+            hidden.value = checked.length ? checked[0].value : '';
+        }
+    }
+
+    function selectedColorName(a) {
+        var checked = colorRadiosFor(a).filter(function (input) { return input.checked; });
+        return checked.length ? checked[0].value : "";
+    }
+
     function showSelectedTags() {
         var picks = selectedAttrs();
         attrEls.forEach(function (a) {
             var sel = a.querySelector('.lt-product__attr-selected');
             var name = a.getAttribute('data-attribute-name');
+            var colorName = selectedColorName(a);
+            if (colorName) {
+                sel.textContent = ' - ' + colorName;
+                return;
+            }
             sel.textContent = picks[name] ? ' - ' + picks[name] : '';
         });
     }
@@ -291,6 +378,11 @@
         return pinfo && pinfo.formatted_price_sales_uom ? pinfo.formatted_price_sales_uom : '';
     }
 
+    function selectedLedNeedsPriceReview(picks) {
+        var ledChoice = picks && picks['LED Lights'];
+        return ledChoice && ledChoice.toLowerCase().indexOf('add led') !== -1;
+    }
+
     function setStatus(msg, isError) {
         statusEl.textContent = msg || '';
         statusEl.classList.toggle('is-error', !!isError);
@@ -353,6 +445,13 @@
 
                 if (matches.length === 1) {
                     var variantCode = matches[0];
+                    if (selectedLedNeedsPriceReview(picks)) {
+                        priceTextEl.textContent = msgLedPriceReview;
+                        disableAdd(msgLedPriceReview);
+                        updateVariantImage(variantCode);
+                        setStatus(msgLedPriceMissing, true);
+                        return;
+                    }
                     enableAdd(variantCode, formattedPriceFromVariantMessage(msg));
                     updateVariantImage(variantCode);
                     setStatus('');
@@ -375,7 +474,16 @@
         });
     }
 
+    document.addEventListener('change', function (event) {
+        var colorInput = event.target && event.target.closest ? event.target.closest('.js-lt-color-radio') : null;
+        if (!colorInput) return;
+        syncColorDrawer(colorInput);
+        refresh();
+    });
+
     form.addEventListener('change', function (event) {
+        var colorInput = event.target && event.target.closest ? event.target.closest('.js-lt-color-radio') : null;
+        if (colorInput) return;
         var input = event.target && event.target.closest ? event.target.closest('.js-lt-attr-input') : null;
         if (input) {
             clearSelectionsAfter(input.getAttribute('data-attribute-name'));

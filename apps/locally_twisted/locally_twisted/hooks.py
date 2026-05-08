@@ -1,4 +1,4 @@
-app_name = "locally_twisted"
+﻿app_name = "locally_twisted"
 app_title = "Locally Twisted"
 app_publisher = "Built by Cameron"
 app_description = "Business system customizations and theme for Locally Twisted (BBC client)"
@@ -29,34 +29,34 @@ app_license = "mit"
 app_include_js = "/assets/locally_twisted/js/lt-desk-workspace-router.js?v=20260506-3"
 
 # include js, css files in header of web template
-# Brand foundation theme — sourced at apps/locally_twisted/locally_twisted/public/css/lt-theme.css
+# Brand foundation theme â€” sourced at apps/locally_twisted/locally_twisted/public/css/lt-theme.css
 # Symlinked into sites/assets/locally_twisted/ by Frappe install-app, served by nginx.
 #
-# CACHE-BUST QUERY STRING — bump this on every lt-theme.css edit.
+# CACHE-BUST QUERY STRING â€” bump this on every lt-theme.css edit.
 # Frappe's `web_include_css` injects a static URL; nginx serves it with
 # Last-Modified / ETag, but browsers cache aggressively and often serve
 # stale CSS even after a server-side update. The version param invalidates
 # the browser cache for everyone, no hard-refresh required.
 # Format: YYYYMMDD-N (date + edit-number-that-day).
-# Receipt: 2026-04-29 — drawer overlay edit shipped server-side but old
+# Receipt: 2026-04-29 â€” drawer overlay edit shipped server-side but old
 # CSS stayed cached in GL's browser; drawer rendered inline on every page
 # because the cached rules didn't have `position: fixed`.
 web_include_css = [
-    "/assets/locally_twisted/css/lt-theme.css?v=20260508-a11y-1",
-    "/assets/locally_twisted/css/lt-mega-menu.css?v=20260508-mobile-nav-review-1",
+    "/assets/locally_twisted/css/lt-theme.css?v=20260508-shell-gap-2",
+    "/assets/locally_twisted/css/lt-mega-menu.css?v=20260508-event-menu-1",
     "/assets/locally_twisted/css/lt-product-polish.css?v=20260508-a11y-1",
     "/assets/locally_twisted/css/lt-shop-showroom.css?v=20260508-card-click-1",
-    "/assets/locally_twisted/css/lt-balloon-cursor.css?v=20260508-1",
-    "/assets/locally_twisted/css/lt-page-containment.css?v=20260507-containment-5",
+    "/assets/locally_twisted/css/lt-product-page-visual-first.css?v=20260508-classic-arch-9",
+    "/assets/locally_twisted/css/lt-page-containment.css?v=20260508-featured-2",
     "/assets/locally_twisted/css/lt-event-playground.css?v=20260506-event-playground-1",
 ]
 
-# Guest cart engine — overrides webshop's broken-for-guest cart functions
+# Guest cart engine â€” overrides webshop's broken-for-guest cart functions
 # at runtime, exposes window.LT_CART, and keeps cart count badges live.
 # Loaded on every website page so cart actions work from anywhere.
 # Cache-bust query string follows the same convention as web_include_css.
-# lt-newsletter.js — footer newsletter form auto-binder + loud-failure handler.
-#   Exposes window.LT.newsletter.submit(email) → Promise.
+# lt-newsletter.js â€” footer newsletter form auto-binder + loud-failure handler.
+#   Exposes window.LT.newsletter.submit(email) â†’ Promise.
 #   Auto-binds to form[data-lt-newsletter] on DOMContentLoaded.
 web_include_js = [
     "/assets/locally_twisted/js/lt-guest-cart.js?v=20260429-1",
@@ -65,7 +65,6 @@ web_include_js = [
     "/assets/locally_twisted/js/lt-site-preferences.js?v=20260507-reviews-1",
     "/assets/locally_twisted/js/lt-megamenu.js?v=20260508-search-2",
     "/assets/locally_twisted/js/lt-product-card-click.js?v=20260508-1",
-    "/assets/locally_twisted/js/lt-balloon-cursor.js?v=20260508-4",
 ]
 
 # Friendly-URL aliases. Frappe's www/ router doesn't auto-translate
@@ -75,6 +74,14 @@ web_include_js = [
 website_route_rules = [
     {"from_route": "/event-balloons",
      "to_route": "event_balloons"},
+    {"from_route": "/civic-community",
+     "to_route": "civic_community"},
+    {"from_route": "/corporate-events",
+     "to_route": "corporate_events"},
+    {"from_route": "/schools-campuses",
+     "to_route": "schools_campuses"},
+    {"from_route": "/private-celebrations",
+     "to_route": "private_celebrations"},
     {"from_route": "/event-playground",
      "to_route": "event_playground"},
     {"from_route": "/balloon-twisting-and-face-painting",
@@ -85,17 +92,17 @@ website_route_rules = [
      "to_route": "terms_of_service"},
     {"from_route": "/thank-you",
      "to_route": "thank_you"},
-    # Override Frappe payments' /payment-success — see www/payment_success.py
+    # Override Frappe payments' /payment-success â€” see www/payment_success.py
     # for why (upstream URL malformation + guest 403 on Payment Request read).
     {"from_route": "/payment-success",
      "to_route": "payment_success"},
-    # Override webshop's bundled /cart — webshop's requires login, ours
+    # Override webshop's bundled /cart â€” webshop's requires login, ours
     # is localStorage-backed and works for guests. Renamed to lt_cart to
     # avoid a name collision with webshop's templates/pages/cart.html
     # that was winning resolution even with the route rule in place.
     {"from_route": "/cart",
      "to_route": "lt_cart"},
-    # Odoo's default contact route — the Hetzner mirror has links pointing
+    # Odoo's default contact route â€” the Hetzner mirror has links pointing
     # at /contactus throughout the navbar. Redirect to our /contact.
     {"from_route": "/contactus",
      "to_route": "contact"},
@@ -108,7 +115,7 @@ website_route_rules = [
 ]
 
 # ---------------------------------------------------------------
-# Lead create cascade — auto-title + Contact dedup + auto-ack email.
+# Lead create cascade â€” auto-title + Contact dedup + auto-ack email.
 # Module: locally_twisted/lead_cascade.py
 # Receipts: 2026-04-29 Hetzner /book spec session.
 # ---------------------------------------------------------------
@@ -131,7 +138,7 @@ update_website_context = [
 ]
 
 # ---------------------------------------------------------------
-# Fixtures — code-owned schema records that travel with the app.
+# Fixtures â€” code-owned schema records that travel with the app.
 # Per BBC fixture-discipline: Item Group children + Item Attribute
 # records are SEED state. At Phase 6 cutover the operator-owned
 # subset gets removed from this list (per NOUPDATE-DRIFT.md, TBD).

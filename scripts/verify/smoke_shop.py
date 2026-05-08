@@ -205,6 +205,28 @@ def check_homepage(page):
     assert_(event_trigger.count() == 1, "Desktop header missing Event Balloons mega trigger")
     assert_(product_trigger.count() == 1, "Desktop header missing Ready-to-Order mega trigger")
 
+    nav_links = page.locator(".lt-mega-nav__link, .lt-mega-nav__button")
+    nav_text = [
+        nav_links.nth(i).inner_text().replace("\n", " ").strip()
+        for i in range(nav_links.count())
+    ]
+
+    def nav_index(label: str) -> int:
+        label_key = label.casefold()
+        for index, text in enumerate(nav_text):
+            if text.casefold() == label_key:
+                return index
+        assert_(False, f"Primary nav missing {label}; got {nav_text}")
+        return -1
+
+    portfolio_index = nav_index("Portfolio")
+    ready_index = nav_index("Ready-to-Order")
+    faq_index = nav_index("FAQ")
+    assert_(
+        ready_index < portfolio_index < faq_index,
+        f"Primary nav should place Portfolio between Ready-to-Order and FAQ, got {nav_text}",
+    )
+
     for label, href in (
         ("Portfolio", "/portfolio"),
         ("Twisting & Face Painting", "/balloon-twisting-and-face-painting"),
@@ -215,12 +237,34 @@ def check_homepage(page):
         assert_(link.first.get_attribute("href") == href, f"{label} should link to {href}")
     assert_(page.locator(".lt-mega-nav__link", has_text="Process").count() == 0, "Desktop header must not expose Process")
 
+    search_button = page.locator(".lt-mega-header__search")
+    assert_(search_button.count() == 1, "Desktop header missing search overlay button")
+    assert_(search_button.first.get_attribute("href") is None, "Search control must not link to /search")
+    search_button.click()
+    assert_(page.locator("#lt-site-search-panel").is_visible(), "Search overlay did not open")
+    assert_(page.url.rstrip("/") == BASE, "Opening search overlay must not navigate away from the current page")
+    page.locator("#lt-site-search-input").fill("arches")
+    assert_(
+        page.locator("#lt-site-search-panel a[href='/shop-items/arches']").is_visible(),
+        "Search overlay should filter quick product-family links",
+    )
+    page.keyboard.press("Escape")
+    assert_(not page.locator("#lt-site-search-panel").is_visible(), "Search overlay did not close on Escape")
+
     event_trigger.click()
     assert_(page.locator("#lt-mega-events").is_visible(), "Event mega menu did not open")
-    assert_(
-        page.locator("#lt-mega-events a[href='/event-balloons']").count() >= 1,
-        "Event mega menu should link to /event-balloons",
-    )
+    for label, href in (
+        ("Civic & Community", "/civic-community"),
+        ("Corporate Events", "/corporate-events"),
+        ("Schools & Campuses", "/schools-campuses"),
+        ("Private Celebrations", "/private-celebrations"),
+    ):
+        link = page.locator("#lt-mega-events a", has_text=label)
+        assert_(link.count() == 1, f"Event mega menu missing {label}")
+        assert_(link.first.get_attribute("href") == href, f"Event mega menu {label} should link to {href}")
+    assert_(page.locator("#lt-mega-events", has_text="Corporate Entrances").count() == 0, "Event mega menu must say Corporate Events, not Corporate Entrances")
+    assert_(page.locator("#lt-mega-events .lt-megamenu__card[href='/event-balloons']").count() == 0, "Event mega cards must not all link to /event-balloons")
+    assert_(page.locator("#lt-mega-events .lt-megamenu__card[href='/portfolio']").count() == 0, "Corporate event mega card must not link to /portfolio")
     product_trigger.click()
     assert_(page.locator("#lt-mega-products").is_visible(), "Ready-to-Order mega menu did not open")
     assert_(
@@ -235,6 +279,24 @@ def check_homepage(page):
     assert_(footer_all_decor.count() == 1, "Footer missing All Ready-to-Order link")
     assert_(footer_all_decor.first.get_attribute("href") == "/shop", "Footer All Ready-to-Order link must use /shop")
     print("  OK mega triggers, key links, /contact quote CTA, and footer /shop link")
+
+
+def check_event_type_pages(page):
+    print("-> Event type pages")
+    expectations = {
+        "/civic-community": ("Civic and community balloon decor", ["Ogden City", "SLC County", "Equality Utah"]),
+        "/corporate-events": ("Corporate event balloons", ["Ancestry", "Zions Bank", "KSL"]),
+        "/schools-campuses": ("School and campus balloon decor", ["University of Utah", "Weber State", "St. Joseph's"]),
+        "/private-celebrations": ("Private celebration balloons", ["Alpine Events", "Ogden Country Club", "Tree House Museum"]),
+    }
+    for route, (title_text, proof_names) in expectations.items():
+        page.goto(f"{BASE}{route}", wait_until="networkidle", timeout=15000)
+        assert_(page.locator(".lt-event-type-page").count() == 1, f"{route} missing event-type page wrapper")
+        assert_(page.locator("h1", has_text=title_text).count() == 1, f"{route} missing focused page title")
+        body = page.locator("body").inner_text()
+        for proof_name in proof_names:
+            assert_(proof_name in body, f"{route} must mention proof client {proof_name}")
+    print("  OK event menu routes render focused proof pages with relevant client names")
 
 
 def check_shop_page(page):
@@ -254,6 +316,14 @@ def check_shop_page(page):
     body = page.content()
     assert_("53 ITEMS" in body or "53&nbsp;ITEMS" in body or ">53" in body, "/shop should show 53 items count")
     print(f"  OK {rail_count} category rail links rendered, 53 items")
+
+
+def check_search_page_retired(page):
+    print(f"-> {BASE}/search retired route")
+    response = page.goto(f"{BASE}/search", wait_until="domcontentloaded", timeout=15000)
+    assert_(response is not None, "/search did not return a response")
+    assert_(response.status == 404, f"/search must return 404, got HTTP {response.status}")
+    print("  OK /search returns 404 instead of Frappe's bundled search page")
 
 
 def check_shop_showroom_contract(page):
@@ -787,23 +857,43 @@ def check_mobile_drawer(p):
         timeout=10000,
     )
 
-    for panel_id in ("lt-mobile-events", "lt-mobile-products", "lt-mobile-help"):
+    for panel_id in ("lt-mobile-events", "lt-mobile-products"):
         page.locator(f"[data-lt-drawer-accordion-trigger='{panel_id}']").click()
         assert_(page.locator(f"#{panel_id}").is_visible(), f"Mobile drawer panel {panel_id} did not open")
 
     expected_links = {
         "Event Balloons": "/event-balloons",
-        "Portfolio": "/portfolio",
         "Twisting & Face Painting": "/balloon-twisting-and-face-painting",
         "Shop All": "/shop",
-        "Frequently Asked Questions": "/faq",
+        "Portfolio": "/portfolio",
+        "FAQ": "/faq",
+        "Sign In": "/login",
         "Free Event Quote": "/contact",
     }
     for label, href in expected_links.items():
         link = page.locator("#lt-mobile-nav a", has_text=label).first
         assert_(link.count() == 1, f"Mobile drawer missing {label}")
         assert_(link.get_attribute("href") == href, f"Mobile drawer {label} should link to {href}")
-    print("  OK drawer opens, accordions expose links, and /contact quote CTA")
+    for label, href in (
+        ("Civic & Community", "/civic-community"),
+        ("Corporate Events", "/corporate-events"),
+        ("Schools & Campuses", "/schools-campuses"),
+        ("Private Celebrations", "/private-celebrations"),
+    ):
+        link = page.locator("#lt-mobile-events a", has_text=label).first
+        assert_(link.count() == 1, f"Mobile event drawer missing {label}")
+        assert_(link.get_attribute("href") == href, f"Mobile event drawer {label} should link to {href}")
+    assert_(page.locator("#lt-mobile-nav a[href='/search']").count() == 0, "Mobile drawer must not link to /search")
+    search_button = page.locator("#lt-mobile-nav .lt-mega-drawer__search").first
+    assert_(search_button.count() == 1, "Mobile drawer missing bottom search button")
+    assert_(search_button.get_attribute("href") is None, "Mobile drawer search must open the overlay, not link to /search")
+    search_button.click()
+    page.wait_for_selector("#lt-site-search-panel", state="visible", timeout=10000)
+    assert_(
+        not page.locator("#lt-mobile-nav").evaluate("drawer => drawer.classList.contains('is-open')"),
+        "Opening drawer search should close the mobile menu before focusing search",
+    )
+    print("  OK drawer opens, accordions expose links, hides /search, keeps /contact quote CTA, and puts search at the bottom")
     browser.close()
 
 
@@ -834,7 +924,9 @@ def main(argv: list[str] | None = None) -> int:
         page.on("pageerror", lambda error: page_errors.append(str(error)))
         for fn in (
             check_homepage,
+            check_event_type_pages,
             check_shop_page,
+            check_search_page_retired,
             check_shop_showroom_contract,
             check_shop_product_grid_symmetry_contract,
             check_shop_items_broad_route,

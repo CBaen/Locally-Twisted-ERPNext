@@ -10,15 +10,19 @@ This is the active feature-lane handoff for shop work. `HANDOFF.md` remains vali
 
 ## Current Stage
 
-Active handoff lane. The guest cart/checkout item-code contract, broad browse routing, first variant-media reconciliation pass, per-product variant correctness diff, category-media candidate packet, 2026-05-06 shop showroom container redesign, same-day symmetry repair, and 2026-05-07 product-detail company-first/clear-control cleanup are in place. Product detail pages no longer render Webshop's lower Additional Info/Reviews/Recommendations panel, and product option controls no longer render as nested boxes. `smoke_shop.py` guards against both the auxiliary/recommendation selectors and boxed product controls returning. The 2026-05-06 commerce-rules checkout slice now has its own lane at `workstreams/commerce-rules-checkout.md`; keep shop layout/media work coordinated with that checkout contract. The next shop work should continue with Jeff/GL media approval before assigning category/product media, then product photo/options polish from real product states.
+Active handoff lane. The guest cart/checkout item-code contract, broad browse routing, first variant-media reconciliation pass, per-product variant correctness diff, category-media candidate packet, 2026-05-06 shop showroom container redesign, same-day symmetry repair, 2026-05-07 product-detail company-first/clear-control cleanup, 2026-05-08 bouquet-size price repair, and 2026-05-08 whole-card product navigation are in place. Product detail pages no longer render Webshop's lower Additional Info/Reviews/Recommendations panel, product option controls no longer render as nested boxes, and product listing cards navigate from non-interactive card areas while preserving real buttons and links. `smoke_shop.py` guards against auxiliary/recommendation selectors, boxed product controls, and current shop/category behavior; latest 2026-05-08 rerun passed after the product-card click slice. The 2026-05-06 commerce-rules checkout slice has its own lane at `workstreams/commerce-rules-checkout.md`; catalog price recovery now has its own lane at `workstreams/catalog-variant-price-recovery.md`; public microinteractions now have their own lane at `workstreams/public-site-microinteractions.md`. Keep shop layout/media work coordinated with checkout, price-parity, and microinteraction contracts. The next shop work should continue with full non-bouquet price audit, Jeff/GL media approval before assigning category/product media, then product photo/options polish from real product states.
 
-2026-05-08 microinteraction closeout: product listing cards on `/shop` and Webshop-rendered category pages navigate from non-interactive card areas while preserving real buttons and links. The source lane is `workstreams/public-site-microinteractions.md`; the capability contract is `.codex/capabilities/recipes/public-site-microinteraction-contract.md`.
-
+Security note from 2026-05-08: `/shop?q=` reflected XSS was reproduced through
+the real local site and patched by escaping `search_query`. Product-gallery
+image rendering was also hardened. The broader public storefront security lane
+is `workstreams/public-site-security-hardening.md`; shop agents must keep public
+input/output escaping in scope when changing listing/search/product templates.
 
 Priority order from the current queue:
 
-1. Review skipped/unmatched catalog media and approve category browse imagery from `output/category-media-candidates.md` after regenerating it.
-2. Remaining configure-option UX fixes where they affect customer purchase flow.
+1. Finish catalog variant price recovery for non-bouquet templates from `workstreams/catalog-variant-price-recovery.md`.
+2. Review skipped/unmatched catalog media and approve category browse imagery from `output/category-media-candidates.md` after regenerating it.
+3. Remaining configure-option UX fixes where they affect customer purchase flow.
 
 ## Owner
 
@@ -58,6 +62,7 @@ Primary files:
 - `apps/locally_twisted/locally_twisted/api/cart.py`
 - `apps/locally_twisted/locally_twisted/api/variant_media.py`
 - `apps/locally_twisted/locally_twisted/seed/sync_variant_media.py`
+- `apps/locally_twisted/locally_twisted/seed/repair_variant_prices_from_odoo.py`
 - `apps/locally_twisted/locally_twisted/templates/generators/item/item.html`
 - `apps/locally_twisted/locally_twisted/templates/includes/shop_category_nav.html`
 - `apps/locally_twisted/locally_twisted/www/lt_cart.html`
@@ -70,6 +75,7 @@ Primary files:
 - `apps/locally_twisted/locally_twisted/public/css/lt-shop-showroom.css`
 - `apps/locally_twisted/locally_twisted/hooks.py`
 - `apps/locally_twisted/locally_twisted/seed/seed_catalog.py`
+- `scripts/setup/stage_seed_data.py`
 
 Reference and verification files:
 
@@ -84,6 +90,7 @@ Reference and verification files:
 - `_resources/odoo-live/value_normalize_map.json`
 - `scripts/verify/smoke_shop.py`
 - `scripts/verify/cart_checkout_contract.py`
+- `scripts/verify/product_variant_price_contract.py`
 - `scripts/verify/variant_media_contract.py`
 - `scripts/verify/catalog_variant_contract.py`
 - `scripts/setup/sync_variant_media.py`
@@ -117,7 +124,8 @@ Reference and verification files:
 - Detailed media review is now reproducible with `python scripts/setup/sync_variant_media.py --dry-run --include-details --report output/catalog-media-review.json`. Latest refreshed report on 2026-05-06: 49 products checked, 35 with candidate image labels, 45 needing review, 1,712 unchanged mapped variants, and 6,831 skipped variant image assignments.
 - Category browse media review is now reproducible with `python scripts/verify/category_media_candidates.py`. Latest generated packet on 2026-05-06 found first-pass product-source quick picks for all 11 empty customer-facing Item Groups and wrote ignored local reports to `output/category-media-candidates.json` and `output/category-media-candidates.md`. `python scripts/setup/sync_category_media.py --write-template` creates an approval template, and the dry-run helper stages approved selections through Frappe without writing unless `--apply` is used. No ERPNext image fields were changed.
 - Product breadcrumbs on detail pages now start at `All Balloon Decor` instead of the retired `Shop by Category` route.
-- Per-product variant correctness now compares normalized Odoo `valid_variants` to active, required-choice ERPNext variants. Current pass on 2026-05-08: `scripts/verify/catalog_variant_contract.py` checked all 53 catalog products with 10,227 expected active variants, 10,227 live active variants, 4 single-SKU products, PASS. Disabled legacy optional-add-on variants are intentionally ignored by this customer-facing contract.
+- Per-product variant correctness now compares normalized Odoo `valid_variants` to active, required-choice ERPNext variants. Current pass on 2026-05-08: `scripts/verify/catalog_variant_contract.py` checked all 53 catalog products with 10,227 expected active variants, 10,227 live active variants, 4 single-SKU products, PASS. Disabled legacy optional-add-on variants are intentionally ignored by this customer-facing contract. This is variant-shape parity, not price parity.
+- Catalog variant price parity is partial. The 2026-05-08 emergency repair recovered Odoo dynamic prices for the bouquet-size family through `/website_sale/get_combination_info`: Small `$35`, Medium `$70`, Large `$85`. `npm run test:product-prices` guards those bouquet templates. Full catalog pricing is not certified; sampled non-bouquet templates already show wrong flat prices for 25ft arches and longer Pride arch variants. Continue in `workstreams/catalog-variant-price-recovery.md`.
 - Product option UX P0 pass completed 2026-05-02: no per-attribute Jinja DB lookup, progressive invalid-option disabling wired to `valid_options_for_attributes`, and chip inputs verified as radio/single-select. Active uncommitted work may also be refining variant starting-price display; verify before claiming that slice complete.
 - `.product-code` CSS hiding is the known intentional `!important` exception.
 - The stale Webshop generated asset map was corrected in the running ERPNext stack on 2026-05-02. No package install was needed: Yarn Classic exists at `/home/frappe/.nvm/versions/node/v20.19.2/bin/yarn`, but non-interactive `docker exec` does not include it in `PATH`. Build Webshop assets with `export PATH=/home/frappe/.nvm/versions/node/v20.19.2/bin:$PATH`. The frontend/nginx container must be built last because shared `assets.json` points to files served from that container's app-public symlink. Current rendered `/shop` references `/assets/webshop/dist/css/webshop-web.bundle.C4VO6TJ6.css` and `/assets/webshop/dist/css-rtl/webshop-web.bundle.JDOEFDY5.css`, both returning `200 text/css`; Playwright console sweeps returned 0 errors/warnings.
@@ -132,7 +140,7 @@ Reference and verification files:
 ## Dependencies And Collision Points
 
 - Shop design work depends on `_resources/STYLE-GUIDE.md`. Do not use the deleted `_resources/design-guide/` synthesis, old pastel screenshots, DM Serif/Raleway rules, or light-blue/blush treatment as current shop guidance.
-- Variant correctness is verified; remaining media review should happen before final product-detail layout polish so the design work is based on real product states.
+- Variant shape correctness is verified; variant price correctness is only partially repaired. Finish the price audit before final product-detail/layout polish that would imply purchase readiness.
 - Cart/checkout changes can collide with payment cascade, sales invoice creation, and email behavior. Treat those as customer purchase-flow boundaries, not just frontend work.
 - Backend simplification and shop work may touch shared ERPNext doctypes, fixtures, or seed scripts. Check `PROJECT-STATUS.md` and other `workstreams/*.md` before changing shared catalog or checkout data.
 
@@ -159,6 +167,7 @@ After route, template, CSS, or JS edits:
 
 - `python scripts/verify/smoke_shop.py`
 - `python scripts/verify/cart_checkout_contract.py`
+- `npm run test:product-prices`
 - `python scripts/verify/commerce_rules_contract.py`
 - `python scripts/verify/checkout_fulfillment_contract.py`
 - `python scripts/verify/variant_media_contract.py`
@@ -170,7 +179,6 @@ After route, template, CSS, or JS edits:
 - `python scripts/verify/nav_ia.py`
 - `npm run test:layout-fit`
 - `npm run test:interactive-layout`
-
 
 Whole-card product navigation verification on 2026-05-08:
 

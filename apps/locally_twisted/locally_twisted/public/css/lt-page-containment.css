@@ -137,6 +137,11 @@
   min-width: 0;
 }
 
+.lt-featured .lt-featured__inner {
+  /* Homepage custom-install proof is a visual band, wider than reading/workflow surfaces. */
+  width: min(1700px, 100%);
+}
+
 .lt-fullbleed > :is(:not(.lt-hero__image):not(.lt-crawl__viewport):not(.lt-btfp__event-crawl-viewport):not(style):not(script)) {
   max-width: 100%;
   min-width: 0;

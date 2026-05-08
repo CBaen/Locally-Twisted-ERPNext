@@ -8,6 +8,45 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-08 - Public storefront security needs token and privacy boundaries
+
+**Decision:** Public LT routes must not treat ERPNext document names, route
+query strings, database image paths, customer-uploaded files, or local preview
+ports as safe identity/security boundaries. Customer-supplied text and catalog
+paths must be escaped at render sinks; contact uploads default to private;
+receipt/order details need token-bound proof; internal preview routes need a
+dev/auth gate before launch.
+
+**Reasoning:** The parallel Codex Security review reproduced real `/shop?q=`
+reflected XSS because Frappe route templates on this site emitted the search
+query raw. It also reproduced unauthenticated `/thank-you?order=<Sales Order>`
+order-summary exposure, found a public Lead attachment URL, flagged tracked
+local credentials in docs, traced pre-payment guest checkout Lead conversion,
+and identified `/event-playground?port=` as a public local-preview bridge.
+
+**Implementation:** Escaped `/shop` search output, escaped product-gallery
+thumbnail `src`/`alt` values, changed zoom preview image creation to a safe
+attribute API, and changed new inquiry-upload `File` records to
+`is_private = 1`. Created `workstreams/public-site-security-hardening.md` and
+`.codex/capabilities/recipes/frappe-public-storefront-security.md` for the
+remaining hardening lane.
+
+**Open boundary:** This decision is not complete launch security approval.
+Token-bound receipt pages, existing public file migration/review, credential
+rotation/doc cleanup, checkout Lead-conversion timing, and Event Playground
+route gating remain open P0 work.
+
+**Alternatives considered:** Leave the findings as report-only. Rejected for
+the low-risk XSS/gallery/upload fixes because they were direct and launch
+relevant. Patch `/thank-you` by hiding all order details immediately. Deferred
+because the correct customer experience needs a receipt token generated from
+the paid Stripe/Payment Request path, not a half-fix that breaks legitimate
+post-payment confirmation.
+
+**Decided by:** Codex Security review on 2026-05-08; first safe fixes by
+Codex. Remaining boundaries require the next implementation slice.
+
+---
 
 ## 2026-05-08 - Mobile search belongs in the drawer; review proof needs its own compact contract
 
@@ -48,14 +87,79 @@ height and inherited padding, not document overflow.
 **Decided by:** GL request on 2026-05-08; implemented and verified by Codex.
 
 ---
+
+## 2026-05-08 - Red balloon cursor retired; red dog favicon approved
+
+**Decision:** The site uses the normal system cursor again. The red balloon dog
+image is now the public favicon, resized into the existing
+`lt-favicon.png` asset with a cache-busted branding path.
+
+**Reasoning:** GL asked to remove the red balloon cursor and then supplied the
+red balloon dog image for the favicon. The dog works as a small brand mark;
+the cursor was a fun experiment but not needed for launch.
+
+**Implementation:** Removed `lt-balloon-cursor.css` and
+`lt-balloon-cursor.js`, removed their Frappe hook entries, resized
+`assets/logos/balloon dog logo/Red Dog Logo PNG Cartoon.png` to a transparent
+64x64 favicon at `apps/locally_twisted/locally_twisted/public/icons/lt-favicon.png`,
+and updated `sync_site_branding.py` plus the base template fallback to use the
+cache-busted favicon URL.
+
+**Verification:** Frappe cache clear/restart completed, the served homepage
+returned the favicon at `/assets/locally_twisted/icons/lt-favicon.png?v=20260508-red-dog-1`
+with status `200`, and no `lt-balloon-cursor` assets or cursor DOM remained.
+The focused favicon/site-preferences Playwright gate passed. A targeted `/shop`
+browser check still navigated from card text to the product route.
+
+**Decided by:** GL direction on 2026-05-08; implemented by Codex.
+
+---
+
+## 2026-05-08 - Homepage installed-work proof is custom art, not ecommerce
+
+**Decision:** The homepage featured-work band now reads `One of a Kind Designs`
+instead of `Recent Celebrations`, and it uses a wide three-photo desktop proof
+layout. This band is for custom event installations and one-off art direction,
+not for products that should be merchandised like ready-to-order ecommerce
+items.
+
+**Reasoning:** GL flagged that the old section felt cramped, over-padded, and
+too isolated. The business truth is that large balloon installs are custom art
+pieces: they should help visitors trust the company and then move toward
+portfolio/contact, not imply that every impressive installation belongs on the
+shop page.
+
+**Implementation:** Updated the homepage section label and lede, widened the
+`.lt-featured__inner` containment to the visual-proof width, tightened the
+desktop grid gap, and changed the featured images to landscape installation
+crops.
+
+**Verification:** Live Playwright measurements showed the band heading as `One
+of a Kind Designs`, the featured-card image width growing to 424px at 1366px,
+502px at 1600px, and 551px at 1920px with zero document overflow. Focused
+homepage checks, homepage layout-fit, homepage crawl/compact-hero checks,
+container contract, and axe all passed.
+
+**Alternatives considered:** `A Few Favorites` was considered, but `One of a
+Kind Designs` better separates bespoke installs from ready-to-order shopping.
+
+**Decided by:** GL direction on 2026-05-08; implemented by Codex.
+
+---
+
 ## 2026-05-08 - Public microinteractions must stay launch-safe
 
 **Decision:** Small public-site microinteractions are allowed when they improve
 customer feel or browsing ease, but they must stay in focused Frappe app assets,
-respect accessibility/device boundaries, and preserve business actions. The
-sitewide red balloon cursor is desktop/fine-pointer-only production CSS/JS, not
-a kept demo page. Product cards may be whole-card clickable through delegated
-JavaScript, but real controls keep their own behavior.
+respect accessibility/device boundaries, and preserve business actions. At the
+time, the red balloon cursor was implemented as desktop/fine-pointer-only
+production CSS/JS, not a kept demo page. Product cards may be whole-card
+clickable through delegated JavaScript, but real controls keep their own
+behavior.
+
+**Superseded note:** The cursor part of this decision was retired later on
+2026-05-08 at GL's request. Keep the product-card navigation contract; do not
+restore the red balloon cursor without a fresh decision.
 
 **Reasoning:** GL wanted the website mouse to feel playful and wanted product
 cards selectable from anywhere, not only the photo. Both are launch-friendly
@@ -92,6 +196,45 @@ buttons and links that must keep independent behavior.
 
 ---
 
+## 2026-05-08 - Odoo dynamic resolver is the price source for catalog variants
+
+**Decision:** LT catalog variant prices must be imported, audited, and repaired
+from Odoo's dynamic `/website_sale/get_combination_info` resolver, not from the
+product page base price, JSON-LD offer price, listing card price, or old
+snapshot `valid_variants[].price` values.
+
+**Reasoning:** Unicorn Bouquet exposed the failure. Live ERPNext had Small,
+Medium, and Large all at `$35`. Odoo's resolver returned Small `$35`, Medium
+`$70`, and Large `$85`. The original scraper and seed path flattened variant
+prices because they copied the page base price into each variant row. Full Odoo
+optional combinations can have different add-on prices again; those are not the
+same as the ERPNext required variant price when optional axes are intentionally
+dropped.
+
+**Implementation:** `scripts/setup/scrape_odoo_live.py` now resolves dynamic
+prices through Odoo's resolver. `seed_catalog.py` prefers
+`erpnext_variant_price` for Item Prices. `repair_variant_prices_from_odoo.py`
+can dry-run or apply live ERPNext Item Price repairs, with
+`scripts/setup/stage_seed_data.py` staging ignored source data for container
+commands. `product_variant_price_contract.py` currently guards the repaired
+bouquet-size family through `npm run test:product-prices`.
+
+**Current boundary:** This decision does not mean all product pricing is
+certified. As of 2026-05-08, the bouquet-size family is repaired and guarded.
+The remaining non-bouquet variant templates still require dry-run audit,
+bounded repair, and product-family price contracts before anyone can claim
+catalog-wide price correctness.
+
+**Alternatives considered:** Manually edit only Unicorn Bouquet prices.
+Rejected because the source importer would keep the false base-price
+assumption. Bulk-update every variant from Odoo immediately. Rejected because
+some flat prices are legitimate and a 10k+ variant mass update needs a reviewed
+dry-run report first.
+
+**Decided by:** GL bug report on 2026-05-08; root-cause investigation and
+bounded repair by Codex.
+
+---
 
 ## 2026-05-08 - BTFP pricing calculator uses per-artist rows
 

@@ -16,15 +16,24 @@ route is `/balloon-twisting-and-face-painting`; `/process` stays gone. The
 BTFP calculator is row-based: one row per artist, each with its own service and
 hours. Do not return to one shared hours input multiplied by artist count.
 
+Codex update on 2026-05-08: catalog variant pricing now has a dedicated
+handoff at `workstreams/catalog-variant-price-recovery.md` and capability
+recipe at `.codex/capabilities/recipes/erpnext-catalog-variant-price-parity.md`.
+The bouquet-size family was repaired from Odoo's dynamic resolver and is
+guarded by `npm run test:product-prices`, but full catalog pricing is not
+certified. Do not claim all product pricing is correct until the remaining
+non-bouquet variant templates are audited and covered by price contracts.
+
 Codex update on 2026-05-08: website launch verification and public
 microinteractions now have a focused closeout. `npm run test:website-verify`
 runs `scripts/verify/website_launch_verify.py` with serialized Playwright
 workers by default; `npm run test:launch-verify` adds accessibility and
-contact smoke. Balloon cursor and whole-card product navigation are covered by
+contact smoke. Whole-card product navigation is covered by
 `workstreams/public-site-microinteractions.md` and
-`.codex/capabilities/recipes/public-site-microinteraction-contract.md`. The
-old demo HTML at `assets/balloon cursor/Red Balloon Cursor.html` was deleted
-after the production CSS/JS was extracted.
+`.codex/capabilities/recipes/public-site-microinteraction-contract.md`. The red
+balloon cursor was retired on 2026-05-08 at GL's request; its CSS/JS assets and
+Frappe hook entries are removed. The public favicon is now the red balloon dog
+asset at `/assets/locally_twisted/icons/lt-favicon.png?v=20260508-red-dog-1`.
 
 Codex update on 2026-05-08: mobile public chrome and homepage review compactness
 are covered by `workstreams/mobile-nav-review-compactness.md`. Mobile search
@@ -33,6 +42,17 @@ header must stay logo plus cart/menu only. The homepage Google review band now
 has a compact mobile sizing contract in `interactive_layout.spec.js`; do not
 change review card copy, padding, or marquee structure without rerunning that
 contract.
+
+Codex update on 2026-05-08: public storefront security has an active P0
+handoff at `workstreams/public-site-security-hardening.md` and capability
+recipe at `.codex/capabilities/recipes/frappe-public-storefront-security.md`.
+The first patch escaped the live `/shop?q=` XSS path, hardened product-gallery
+image rendering, and made new inquiry uploads private. Do not call the launch
+security lane complete yet: `/thank-you?order=<Sales Order>` still needs a
+token-bound receipt design, existing public Lead files need migration/review,
+tracked local credentials need rotation/removal from tracked docs, guest
+checkout Lead conversion needs payment-boundary review, and `/event-playground`
+needs a dev/auth gate or production removal.
 
 ## State Of Reality
 
@@ -96,7 +116,7 @@ Verified or updated during the 2026-05-01 storefront correction and contact clea
 - Product detail/configure templates no longer include the "Start a conversation" or "Tell us what you're imagining" sales-pitch blocks.
 - `/shop-items/arches` now scopes to Arches. Root cause was missing Webshop `.item-group-content` class in the custom Item Group wrapper, not catalog data.
 - `/shop` is the customer-facing all-decor hub. `/shop-items`, `/all-products`, and `/shop-by-category` route or redirect to `/shop`; individual category pages remain at `/shop-items/<group>`.
-- Public microinteractions are production app assets, not demo pages: the sitewide red balloon cursor runs only for desktop/fine-pointer users, is clamped inside the viewport, and is skipped on touch/coarse-pointer devices. Product cards on `/shop` and Webshop-rendered category pages are whole-card clickable from non-interactive card areas, while `Add to cart`, `Choose options`, `Request quote`, selectors, links, modified clicks, and text selection keep their normal behavior.
+- Public microinteractions are production app assets, not demo pages. The red balloon cursor is retired and should not be reintroduced without a fresh GL decision. Product cards on `/shop` and Webshop-rendered category pages are whole-card clickable from non-interactive card areas, while `Add to cart`, `Choose options`, `Request quote`, selectors, links, modified clicks, and text selection keep their normal behavior.
 - Shop category navigation was repaired 2026-05-06 after GL rejected the button/tile treatment: `/shop` and `/shop-items/<group>` now share `templates/includes/shop_category_nav.html`; desktop uses a slim left rail, mobile uses a native select, and future work must not restore `/shop` chips or the category-page button wall.
 - Project-level Codex capabilities are installed at `.codex/capabilities/` and routed from `AGENTS.md`; ephemeral Codex validation found the index and read the `screenshot` ingredient.
 - `/book` is retired as a customer-facing page and redirects to `/contact?intent=quick`. Current CTAs should use `/contact`; old `/book` traffic is compatibility only.
@@ -128,7 +148,8 @@ Verified or updated during the 2026-05-01 storefront correction and contact clea
 - The active theme/app source has been cleaned away from old font and UI-pastel references. Do not reintroduce `DM Serif`, `Raleway`, `Montserrat`, `Playfair`, `lt-blush`, `lt-soft-blue`, old `soft-blue`/`light-blue`, UI `blush`, or unresolved `--lt-primary` in customer-facing source.
 - A 16-asset custom brass-line icon suite now lives at `apps/locally_twisted/locally_twisted/public/icons/brand/`. Balloon-specific surfaces should use balloon-form icons first: pair, cluster, arch, organic garland, column, and bouquet.
 - The contact page no longer depends on an external map iframe for the main service-area proof; it uses a controlled service-area panel.
-- Per-product variant correctness now compares normalized Odoo `valid_variants` to active, required-choice ERPNext variants. Current pass on 2026-05-08: 53 products checked, 10,227 expected active variants, 10,227 live active variants, 4 single-SKU products. Disabled legacy optional-add-on variants are intentionally ignored by this customer-facing contract.
+- Per-product variant correctness now compares normalized Odoo `valid_variants` to active, required-choice ERPNext variants. Current pass on 2026-05-08: 53 products checked, 10,227 expected active variants, 10,227 live active variants, 4 single-SKU products. Disabled legacy optional-add-on variants are intentionally ignored by this customer-facing contract. This is shape parity only, not price parity.
+- Catalog variant price parity is partially repaired, not complete. `c7f9da3` fixed the bouquet-size family from Odoo's dynamic `/website_sale/get_combination_info` resolver and added `npm run test:product-prices`, but a later sample dry-run proved non-bouquet templates still have wrong flat prices, including 25ft arches and longer Pride arch variants. Use `workstreams/catalog-variant-price-recovery.md` before any catalog price claim or repair.
 - Product option UX P0 pass completed 2026-05-02 and was reconciled with the current commerce lane on 2026-05-05. `item_configure.html` no longer runs per-attribute `frappe.get_all` lookups from Jinja; it uses `get_variant_attribute_options`, a project Jinja helper backed by Webshop's `get_attributes_and_values`. Quote-required custom installs such as Arches and Garlands intentionally show a `/contact?item=...` quote CTA instead of cart selectors. Retail variants such as `unicorn-bouquet` still render inline single-select chips/selects, consume `valid_options_for_attributes`, and write selected variant codes to `LT_CART`.
 - Generated Webshop asset-map drift was corrected in the running ERPNext stack on 2026-05-02. The container already has Yarn Classic at `/home/frappe/.nvm/versions/node/v20.19.2/bin/yarn`, but non-interactive `docker exec` does not include that directory in `PATH`. Use `export PATH=/home/frappe/.nvm/versions/node/v20.19.2/bin:$PATH` before `bench build --app webshop`; no package install was needed. Important Docker nuance: the frontend/nginx container must be the final Webshop build target because `sites/assets/webshop` links to each container's own app-public files while `assets.json` is shared. Building only in the backend writes asset-map names nginx cannot serve. After rebuilding from the frontend container and clearing `assets_json` plus website cache, follow-up console checks returned 200s with 0 console errors/warnings.
 - `scripts/verify/layout_fit.spec.js` is the committed passive Playwright Test gate. Latest full verified command: `npm run test:layout-fit` -> 247 passed across the current route list and 13 viewport families, including `/checkout` and `/thank-you`; latest impacted rerun after the portfolio mobile fix was `npm run test:layout-fit -- --grep "home fits|portfolio fits"` -> 26 passed. `scripts/verify/container_contract.spec.js` is the route-level public container contract; latest verified command: `npm run test:container-contract` -> 57 passed. `scripts/verify/interactive_layout.spec.js` is the stateful layout gate; latest verified command: `npm run test:interactive-layout` -> 88 passed. `scripts/verify/portfolio_reel.spec.js` is the route-specific proof-gallery gate; latest verified command: `npm run test:portfolio-reel` -> 4 passed.
@@ -256,6 +277,14 @@ Catalog variant contract:
 
 ```powershell
 python scripts/verify/catalog_variant_contract.py
+```
+
+Catalog price contract and repair path:
+
+```powershell
+npm run test:product-prices
+python scripts/setup/stage_seed_data.py
+docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.repair_variant_prices_from_odoo.execute --kwargs "{'slug_filter':'unicorn-bouquet','dry_run':True}"
 ```
 
 Business automation and paperwork launch spine:

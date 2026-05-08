@@ -347,6 +347,12 @@ p {
   max-width: 100%;
 }
 
+.page-content-wrapper main.container.my-4 {
+  /* Remove Bootstrap's vertical wrapper gap so first hero/content bands sit flush under the LT header. */
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
 /* Webshop product detail and cart pages were designed to live inside
    Frappe's centered .container max-width. Our structural override above
    gives sections full viewport (so LT-designed bands span edge-to-edge);

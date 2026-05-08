@@ -8,6 +8,7 @@ import frappe
 from frappe.utils import flt, fmt_money
 
 from locally_twisted.catalog_variant_rules import required_variant_attribute_names
+from locally_twisted.catalog_contract.color_rules import grouped_colors, is_balloon_color_axis
 from locally_twisted.commerce_rules import PRICE_LIST
 from webshop.webshop.variant_selector.utils import get_attributes_and_values
 
@@ -83,3 +84,62 @@ def apply_variant_starting_price(item: dict[str, Any], price_list: str = PRICE_L
     item["formatted_price_sales_uom"] = item["formatted_price"]
     item["price_is_from"] = True
     return item
+
+
+
+def is_balloon_color_attribute(attribute: str | None) -> bool:
+    """Return whether an attribute should render as visual multi-select colors."""
+    return is_balloon_color_axis(attribute)
+
+
+def get_balloon_color_groups(values) -> list[dict[str, Any]]:
+    """Group high-cardinality balloon colors for drawer/accordion rendering."""
+    clean_values: list[str] = []
+    for value in values or []:
+        if isinstance(value, dict):
+            value = value.get("name") or value.get("attribute_value") or value.get("value")
+        if value:
+            clean_values.append(str(value))
+    return grouped_colors(clean_values)
+
+
+def get_product_gallery_slides(item_code: str | None, primary_image: str | None = None, limit: int = 12) -> list[dict[str, str]]:
+    """Return distinct product/variant image slides for a product template.
+
+    Current ERPNext has no Website Item slideshows, but many imported variants
+    already carry source alternate images. This helper exposes those as a
+    temporary product-page gallery while the rebuild pipeline learns to create
+    proper Website Slideshow records.
+    """
+    if not item_code:
+        return []
+
+    rows = frappe.db.sql(
+        """
+        SELECT item_code, item_name, image
+        FROM `tabItem`
+        WHERE disabled = 0
+          AND image IS NOT NULL
+          AND image != ''
+          AND (item_code = %(item_code)s OR variant_of = %(item_code)s)
+        ORDER BY CASE WHEN item_code = %(item_code)s THEN 0 ELSE 1 END, item_code ASC
+        """,
+        {"item_code": item_code},
+        as_dict=True,
+    )
+
+    seen: set[str] = set()
+    slides: list[dict[str, str]] = []
+
+    def add_slide(image: str | None, heading: str) -> None:
+        image = str(image or "").strip()
+        if not image or image in seen or len(slides) >= limit:
+            return
+        seen.add(image)
+        slides.append({"image": image, "heading": heading})
+
+    add_slide(primary_image, "Main product photo")
+    for row in rows:
+        add_slide(row.get("image"), row.get("item_name") or row.get("item_code") or "Product photo")
+
+    return slides

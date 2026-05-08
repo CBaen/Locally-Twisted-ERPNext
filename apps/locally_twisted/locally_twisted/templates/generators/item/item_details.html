@@ -1,27 +1,25 @@
-{# Locally Twisted override of webshop's item_details.html.
+﻿{# Locally Twisted override of webshop's item_details.html.
    Replaces apps/webshop/webshop/templates/generators/item/item_details.html
    via same-path resolution in Frappe's ChoiceLoader (locally_twisted is last
    in installed_apps so its template wins).
 
-   What changed vs webshop's stock template:
-   - Stripped the "Shop Items | Item Code: <slug>" jargon block (line 32-39 in stock).
-     Customer-facing surface should never expose internal item codes.
-   - Added an eyebrow with the Item Group as kicker (e.g., ARCHES) — design guide register.
-   - Switched body title to Cormorant Garamond via .lt-product CSS classes.
-   - Kept the wishlist icon include where it was useful.
-
-   Inclusions still flow through the original webshop partials; we only override
-   THIS file. item_configure.html and item_add_to_cart.html are also overridden
-   in this directory.
+   Visual-first pass 2026-05-08:
+   - Product story moves up near title/options.
+   - What’s Included stays below the purchase controls.
+   - Pickup/delivery moves below What’s Included.
+   - Add-ons/color/full-gallery work remains data-aware and does not stage
+     Odoo source data into the container.
 #}
 {% set width_class = "expand" if not slides else "" %}
 {% set cart_settings = shopping_cart.cart_settings %}
 {% set product_info = shopping_cart.product_info %}
 {% set price_info = product_info.get('price') or {} %}
+{% set _brand = frappe.utils.strip_html(doc.lt_brand_description or '') %}
+{% set _details = frappe.utils.strip_html(doc.lt_product_details or '') %}
 
 <div class="col-md-7 lt-product__details {{ width_class }}">
 
-    {# Eyebrow — Item Group as kicker. Design guide register. #}
+    {# Eyebrow — Item Group as design-guide kicker. #}
     {% if doc.item_group and doc.item_group != "Shop Items" %}
         <div class="lt-product__eyebrow">{{ _(doc.item_group) }}</div>
     {% endif %}
@@ -47,6 +45,14 @@
     <div itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating"></div>
     <div itemprop="review" itemscope itemtype="https://schema.org/Review"></div>
 
+    {# GL visual-first request: fun product story belongs next to the product image,
+       close to title/sizing, not buried below logistics. #}
+    {% if _brand %}
+        <div class="lt-product__brand-description lt-product__brand-description--lead" itemprop="description">
+            {{ doc.lt_brand_description | safe }}
+        </div>
+    {% endif %}
+
     {# Variant selector OR add-to-cart, per webshop #}
     {% if has_variants %}
         {% include "templates/generators/item/item_configure.html" %}
@@ -54,36 +60,7 @@
         {% include "templates/generators/item/item_add_to_cart.html" %}
     {% endif %}
 
-    {% set lt_fulfillment_panel = public_fulfillment_panel(doc.item_group) %}
-    <section class="lt-product__fulfillment" aria-labelledby="lt-product-fulfillment-heading">
-        <h2 id="lt-product-fulfillment-heading" class="lt-product__fulfillment-heading">
-            {{ _(lt_fulfillment_panel.heading) }}
-        </h2>
-        <p>{{ _(lt_fulfillment_panel.body) }}</p>
-        {% if lt_fulfillment_panel.lane == "quote_required" %}
-            <a href="{{ lt_fulfillment_panel.cta_href }}?item={{ doc.item_code }}"
-               class="lt-product__fulfillment-link">
-                {{ _(lt_fulfillment_panel.cta_label) }}
-            </a>
-        {% endif %}
-    </section>
-
-    {# Two-field discipline (GL directive 2026-04-30):
-       lt_brand_description = Quiet Confidence voice copy (the "why")
-       lt_product_details   = plain-language factual specs (the "what")
-       Both render on every product page as distinct sections. The legacy
-       web_long_description / description fields are honored only as a
-       fallback for items not yet migrated to the two-field shape. #}
-    {% set _brand = frappe.utils.strip_html(doc.lt_brand_description or '') %}
-    {% set _details = frappe.utils.strip_html(doc.lt_product_details or '') %}
-
     <div class="lt-product__copy-panel">
-        {% if _brand %}
-            <div class="lt-product__brand-description" itemprop="description">
-                {{ doc.lt_brand_description | safe }}
-            </div>
-        {% endif %}
-
         {% if _details %}
             <section class="lt-product__details-section" aria-labelledby="lt-product-details-heading">
                 <h2 id="lt-product-details-heading" class="lt-product__details-heading">{{ _("What's Included") }}</h2>
@@ -106,6 +83,20 @@
             {% endif %}
         {% endif %}
     </div>
+
+    {% set lt_fulfillment_panel = public_fulfillment_panel(doc.item_group) %}
+    <section class="lt-product__fulfillment" aria-labelledby="lt-product-fulfillment-heading">
+        <h2 id="lt-product-fulfillment-heading" class="lt-product__fulfillment-heading">
+            {{ _(lt_fulfillment_panel.heading) }}
+        </h2>
+        <p>{{ _(lt_fulfillment_panel.body) }}</p>
+        {% if lt_fulfillment_panel.lane == "quote_required" %}
+            <a href="{{ lt_fulfillment_panel.cta_href }}?item={{ doc.item_code }}"
+               class="lt-product__fulfillment-link">
+                {{ _(lt_fulfillment_panel.cta_label) }}
+            </a>
+        {% endif %}
+    </section>
 
 </div>
 
