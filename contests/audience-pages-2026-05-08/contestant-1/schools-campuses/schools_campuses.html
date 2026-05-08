@@ -1,0 +1,580 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+
+{#
+  Schools & Campuses audience page — /schools-campuses
+  Container modes (per public container contract):
+    .lt-page-school                → page root class
+    .lt-school-hero                → fullbleed  (hero)
+    .lt-school-clients             → band       (named school proof)
+    .lt-school-story               → band       (case study)
+    .lt-school-gallery             → visual-field (photo proof grid)
+    .lt-school-services            → band       (service cards)
+    .lt-school-buyer-notes         → band       (scheduling / color / budget notes)
+    .lt-school-cta                 → fullbleed  (closing CTA)
+#}
+
+<style>
+/* =====================================================================
+   Schools & Campuses page — scoped to .lt-page-school
+   Mobile-first. 8px increment spacing. No !important.
+   ===================================================================== */
+
+.lt-page-school {
+  font-family: var(--lt-font-body, 'Lato', system-ui, sans-serif);
+  color: var(--lt-near-black, #0A0A0B);
+}
+
+/* --- Hero (fullbleed) ---
+   Mobile: 220px | Tablet: 250px | Desktop: 280px
+   -------------------------------------------------------------------- */
+.lt-school-hero {
+  position: relative;
+  height: 220px;
+  min-height: 220px;
+  max-height: 220px;
+  background-color: var(--lt-slate, #2F3A4A);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+.lt-school-hero__image {
+  position: absolute;
+  inset: 0;
+  background-image: url('/assets/locally_twisted/images/portfolio/optimized/school-back-to-school-stage.webp');
+  background-size: cover;
+  background-position: center 20%;
+}
+.lt-school-hero__image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(47,58,74,0.92) 0%, rgba(47,58,74,0.70) 45%, rgba(47,58,74,0.08) 100%),
+    linear-gradient(180deg, rgba(47,58,74,0.04) 0%, rgba(10,10,11,0.36) 100%);
+}
+.lt-school-hero__content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px 1rem;
+}
+.lt-school-hero__eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--lt-brass, #B89A5B);
+  margin: 0 0 0.35rem;
+}
+.lt-school-hero__title {
+  font-family: var(--lt-font-heading, 'Cormorant Garamond', Georgia, serif);
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1.04;
+  color: var(--lt-white, #FAF7F2);
+  margin: 0 0 0.45rem;
+  max-width: 22ch;
+}
+.lt-school-hero__lede {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: rgba(250,247,242,0.90);
+  margin: 0 0 0.75rem;
+  max-width: 52ch;
+}
+.lt-school-hero__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.1rem;
+  min-height: 44px;
+  background-color: var(--lt-crimson, #B31B34);
+  color: var(--lt-white, #FAF7F2);
+  font-family: var(--lt-font-body, 'Lato', sans-serif);
+  font-weight: 700;
+  font-size: 0.84rem;
+  text-decoration: none;
+  border-radius: 3px;
+}
+.lt-school-hero__cta:hover,
+.lt-school-hero__cta:focus-visible {
+  background-color: var(--lt-navy, #0E2240);
+  outline: 2px solid var(--lt-brass, #B89A5B);
+  outline-offset: 2px;
+}
+@media (min-width: 768px) {
+  .lt-school-hero { height: 250px; min-height: 250px; max-height: 250px; }
+  .lt-school-hero__content { padding: 28px 2rem; }
+  .lt-school-hero__title { font-size: 2.5rem; }
+  .lt-school-hero__lede { font-size: 1rem; }
+}
+@media (min-width: 1200px) {
+  .lt-school-hero { height: 280px; min-height: 280px; max-height: 280px; }
+  .lt-school-hero__content { padding: 32px 2rem; }
+  .lt-school-hero__title { font-size: 2.9rem; max-width: 26ch; }
+}
+
+/* --- Named school clients (band) --- */
+.lt-school-clients {
+  background-color: var(--lt-warm-white, #FAF7F2);
+  padding: 3.5rem 1.25rem;
+  border-bottom: 1px solid var(--lt-stone, #E7E5E1);
+}
+.lt-school-clients__inner {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.lt-school-clients__eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lt-brass, #B89A5B);
+  margin: 0 0 0.5rem;
+  text-align: center;
+}
+.lt-school-clients__heading {
+  font-family: var(--lt-font-heading, 'Cormorant Garamond', Georgia, serif);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--lt-near-black, #0A0A0B);
+  text-align: center;
+  margin: 0 0 2rem;
+}
+.lt-school-clients__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+@media (min-width: 600px) {
+  .lt-school-clients__grid { grid-template-columns: repeat(3, 1fr); }
+}
+.lt-school-clients__card {
+  background-color: var(--lt-white, #FFFFFF);
+  border: 1px solid var(--lt-stone, #E7E5E1);
+  border-top: 4px solid var(--lt-navy, #0E2240);
+  padding: 1.5rem;
+  border-radius: 0 0 4px 4px;
+  text-align: center;
+}
+.lt-school-clients__name {
+  font-family: var(--lt-font-heading, 'Cormorant Garamond', Georgia, serif);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--lt-near-black, #0A0A0B);
+  margin: 0 0 0.25rem;
+}
+.lt-school-clients__short {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--lt-brass, #B89A5B);
+  margin: 0 0 0.4rem;
+}
+.lt-school-clients__note {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--lt-soft-gray, #595A5C);
+  margin: 0;
+}
+
+/* --- Case story (band) --- */
+.lt-school-story {
+  background-color: var(--lt-white, #FFFFFF);
+  padding: 4rem 1.25rem;
+}
+.lt-school-story__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+@media (min-width: 768px) {
+  .lt-school-story__inner { grid-template-columns: 1fr 1fr; gap: 4rem; }
+}
+.lt-school-story__image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background-image: url('/assets/locally_twisted/images/portfolio/optimized/corporate-wsu-arch-bouquets.webp');
+  background-size: cover;
+  background-position: center;
+  border-radius: 4px;
+}
+.lt-school-story__eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lt-brass, #B89A5B);
+  margin: 0 0 0.5rem;
+}
+.lt-school-story__heading {
+  font-family: var(--lt-font-heading, 'Cormorant Garamond', Georgia, serif);
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--lt-near-black, #0A0A0B);
+  margin: 0 0 0.75rem;
+}
+@media (min-width: 1200px) { .lt-school-story__heading { font-size: 2.25rem; } }
+.lt-school-story__body {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--lt-soft-gray, #595A5C);
+  margin: 0 0 0.75rem;
+}
+.lt-school-story__tag {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lt-crimson, #B31B34);
+  border-left: 3px solid var(--lt-crimson, #B31B34);
+  padding: 0.1rem 0 0.1rem 0.6rem;
+  margin-bottom: 1rem;
+}
+
+/* --- Photo gallery (visual-field) --- */
+.lt-school-gallery {
+  background-color: var(--lt-stone, #E7E5E1);
+  padding: 3rem 0;
+}
+.lt-school-gallery__heading {
+  font-family: var(--lt-font-heading, 'Cormorant Garamond', Georgia, serif);
+  font-size: 1.75rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--lt-near-black, #0A0A0B);
+  margin: 0 0 1.5rem;
+  padding: 0 1.25rem;
+}
+.lt-school-gallery__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 4px;
+}
+@media (min-width: 768px) {
+  .lt-school-gallery__grid { grid-template-columns: repeat(4, 1fr); }
+}
+.lt-school-gallery__item {
+  aspect-ratio: 1;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--lt-sandstone, #D9C7B3);
+}
+
+/* --- Services (band) --- */
+.lt-school-services {
+  background-color: var(--lt-near-white, #FBFBFB);
+  padding: 4rem 1.25rem;
+}
+.lt-school-services__inner { max-width: 1100px; margin: 0 auto; }
+.lt-school-services__heading {
+  font-family: var(--lt-font-heading, 'Cormorant Garamond', Georgia, serif);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--lt-near-black, #0A0A0B);
+  text-align: center;
+  margin: 0 0 0.4rem;
+}
+.lt-school-services__sub {
+  font-size: 0.9rem;
+  color: var(--lt-soft-gray, #595A5C);
+  text-align: center;
+  margin: 0 auto 2.5rem;
+  max-width: 56ch;
+}
+.lt-school-services__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+@media (min-width: 600px) { .lt-school-services__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 992px) { .lt-school-services__grid { grid-template-columns: repeat(4, 1fr); } }
+.lt-school-services__card {
+  background-color: var(--lt-white, #FFFFFF);
+  border: 1px solid var(--lt-stone, #E7E5E1);
+  border-bottom: 3px solid var(--lt-brass, #B89A5B);
+  padding: 1.5rem;
+  border-radius: 4px 4px 0 0;
+}
+.lt-school-services__icon {
+  width: 44px;
+  height: 44px;
+  color: var(--lt-brass, #B89A5B);
+  margin: 0 0 1rem;
+}
+.lt-school-services__title {
+  font-family: var(--lt-font-heading, 'Cormorant Garamond', Georgia, serif);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--lt-near-black, #0A0A0B);
+  margin: 0 0 0.4rem;
+}
+.lt-school-services__body {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--lt-soft-gray, #595A5C);
+  margin: 0;
+}
+
+/* --- Buyer notes (band) --- */
+.lt-school-buyer-notes {
+  background-color: var(--lt-slate, #2F3A4A);
+  padding: 3.5rem 1.25rem;
+}
+.lt-school-buyer-notes__inner { max-width: 1000px; margin: 0 auto; }
+.lt-school-buyer-notes__heading {
+  font-family: var(--lt-font-heading, 'Cormorant Garamond', Georgia, serif);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--lt-white, #FAF7F2);
+  text-align: center;
+  margin: 0 0 2rem;
+}
+.lt-school-buyer-notes__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+@media (min-width: 600px) { .lt-school-buyer-notes__grid { grid-template-columns: repeat(2, 1fr); } }
+.lt-school-buyer-notes__item {
+  background-color: rgba(255,255,255,0.07);
+  border: 1px solid rgba(184,154,91,0.25);
+  padding: 1.25rem 1.5rem;
+  border-radius: 4px;
+}
+.lt-school-buyer-notes__heading-item {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--lt-brass, #B89A5B);
+  margin: 0 0 0.4rem;
+}
+.lt-school-buyer-notes__body {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: rgba(250,247,242,0.75);
+  margin: 0;
+}
+
+/* --- Closing CTA (fullbleed) --- */
+.lt-school-cta {
+  background-color: var(--lt-navy, #0E2240);
+  padding: 4rem 1.25rem 4.5rem;
+  text-align: center;
+}
+.lt-school-cta__inner { max-width: 700px; margin: 0 auto; }
+.lt-school-cta__eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lt-brass, #B89A5B);
+  margin: 0 0 0.75rem;
+}
+.lt-school-cta__heading {
+  font-family: var(--lt-font-heading, 'Cormorant Garamond', Georgia, serif);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--lt-white, #FAF7F2);
+  margin: 0 0 1rem;
+  line-height: 1.15;
+}
+@media (min-width: 768px) { .lt-school-cta__heading { font-size: 2.5rem; } }
+.lt-school-cta__body {
+  font-size: 1rem;
+  line-height: 1.55;
+  color: rgba(250,247,242,0.78);
+  margin: 0 auto 1.75rem;
+  max-width: 52ch;
+}
+.lt-school-cta__button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.9rem 2rem;
+  min-height: 48px;
+  background-color: var(--lt-crimson, #B31B34);
+  color: var(--lt-white, #FAF7F2);
+  text-decoration: none;
+  font-family: var(--lt-font-body, 'Lato', sans-serif);
+  font-weight: 700;
+  font-size: 0.95rem;
+  border-radius: 3px;
+}
+.lt-school-cta__button:hover,
+.lt-school-cta__button:focus-visible {
+  background-color: var(--lt-ink, #0A0A0B);
+  outline: 2px solid var(--lt-brass, #B89A5B);
+  outline-offset: 2px;
+}
+</style>
+
+<div class="lt-page-school">
+
+  {# 1. Hero — fullbleed #}
+  <section class="lt-school-hero lt-fullbleed" aria-labelledby="lt-school-h1">
+    <div class="lt-school-hero__image" role="img"
+         aria-label="Large balloon stage display for a Utah school back-to-school event"></div>
+    <div class="lt-school-hero__content">
+      <p class="lt-school-hero__eyebrow">Schools &amp; Campuses · Utah Wasatch Front</p>
+      <h1 id="lt-school-h1" class="lt-school-hero__title">
+        School spirit, graduation, and campus events — designed for the moment.
+      </h1>
+      <p class="lt-school-hero__lede">
+        School colors, fast installs, and clean strikes. From university
+        campuses to high school gyms, Locally Twisted handles the decor
+        while your team handles the event.
+      </p>
+      <a href="/contact?service=school" class="lt-school-hero__cta">
+        Request a School Event Quote
+        <span aria-hidden="true">&rarr;</span>
+      </a>
+    </div>
+  </section>
+
+  {# 2. Named school clients — band #}
+  <section class="lt-school-clients" aria-labelledby="lt-school-clients-heading">
+    <div class="lt-school-clients__inner">
+      <p class="lt-school-clients__eyebrow">Schools &amp; Universities Served</p>
+      <h2 id="lt-school-clients-heading" class="lt-school-clients__heading">
+        Named school and university relationships
+      </h2>
+      <div class="lt-school-clients__grid">
+        {% for school in school_clients %}
+        <div class="lt-school-clients__card">
+          <p class="lt-school-clients__short">{{ school.short }}</p>
+          <p class="lt-school-clients__name">{{ school.name }}</p>
+          <p class="lt-school-clients__note">{{ school.note }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  {# 3. Case story — band #}
+  <section class="lt-school-story" aria-labelledby="lt-school-story-heading">
+    <div class="lt-school-story__inner">
+      <div class="lt-school-story__image" role="img"
+           aria-label="Weber State University arch and balloon bouquets, Weberstock festival campus event"></div>
+
+      <div>
+        <p class="lt-school-story__eyebrow">Proof of Work</p>
+        <span class="lt-school-story__tag">{{ case_story.client }} · {{ case_story.context }}</span>
+        <h2 id="lt-school-story-heading" class="lt-school-story__heading">
+          School-color precision for events that students photograph.
+        </h2>
+        <p class="lt-school-story__body">
+          {{ case_story.challenge }}
+        </p>
+        <p class="lt-school-story__body">
+          {{ case_story.outcome }}
+        </p>
+        <p class="lt-school-story__body">
+          Schools have tight windows. Gyms are in use until the hour before the event.
+          Hallways can't be disrupted during passing periods. Locally Twisted coordinates
+          around those constraints and installs on schedule — no surprises for the activities
+          office, no mess for custodial staff.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {# 4. Gallery — visual-field #}
+  <section class="lt-school-gallery" aria-labelledby="lt-school-gallery-heading">
+    <h2 id="lt-school-gallery-heading" class="lt-school-gallery__heading">
+      Installed school and campus work
+    </h2>
+    <div class="lt-school-gallery__grid" role="list">
+      <div class="lt-school-gallery__item" role="listitem"
+           style="background-image: url('/assets/locally_twisted/images/portfolio/optimized/school-back-to-school-stage.webp');"
+           aria-label="Back-to-school stage balloon display, school event"></div>
+      <div class="lt-school-gallery__item" role="listitem"
+           style="background-image: url('/assets/locally_twisted/images/portfolio/optimized/school-grad-garland.webp');"
+           aria-label="Graduation garland, school ceremony decor"></div>
+      <div class="lt-school-gallery__item" role="listitem"
+           style="background-image: url('/assets/locally_twisted/images/portfolio/optimized/corporate-wsu-arch-bouquets.webp');"
+           aria-label="Weber State University arch and balloon bouquets"></div>
+      <div class="lt-school-gallery__item" role="listitem"
+           style="background-image: url('/assets/locally_twisted/images/portfolio/optimized/corporate-weberstock-photo-opt.webp');"
+           aria-label="Large photo opportunity backdrop at Weber State campus festival"></div>
+    </div>
+    {# Odoo backup references (implementation phase):
+       /locally-twisted-odoo/assets/image assets/photos for website/WSU arch and bouquets #}
+  </section>
+
+  {# 5. Services — band #}
+  <section class="lt-school-services" aria-labelledby="lt-school-services-heading">
+    <div class="lt-school-services__inner">
+      <h2 id="lt-school-services-heading" class="lt-school-services__heading">
+        Common school event service configurations
+      </h2>
+      <p class="lt-school-services__sub">
+        Graduation arches, spirit rally decor, back-to-school stage setups,
+        and hallway garland runs — sized for school spaces.
+      </p>
+      <div class="lt-school-services__grid">
+        {% for svc in audience_services %}
+        <div class="lt-school-services__card">
+          <img src="/assets/locally_twisted/icons/brand/{{ svc.icon }}.svg"
+               class="lt-school-services__icon"
+               alt="" aria-hidden="true" width="44" height="44">
+          <h3 class="lt-school-services__title">{{ svc.title }}</h3>
+          <p class="lt-school-services__body">{{ svc.body }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  {# 6. Buyer notes — band (slate dark band between two lighter bands) #}
+  <section class="lt-school-buyer-notes lt-fullbleed" aria-labelledby="lt-school-buyer-heading">
+    <div class="lt-school-buyer-notes__inner">
+      <h2 id="lt-school-buyer-heading" class="lt-school-buyer-notes__heading">
+        What school buyers need to know
+      </h2>
+      <div class="lt-school-buyer-notes__grid">
+        {% for note in buyer_notes %}
+        <div class="lt-school-buyer-notes__item">
+          <p class="lt-school-buyer-notes__heading-item">{{ note.heading }}</p>
+          <p class="lt-school-buyer-notes__body">{{ note.body }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  {# 7. Closing CTA — fullbleed #}
+  <section class="lt-school-cta lt-fullbleed" aria-labelledby="lt-school-cta-heading">
+    <div class="lt-school-cta__inner">
+      <p class="lt-school-cta__eyebrow">Plan Your School Event</p>
+      <h2 id="lt-school-cta-heading" class="lt-school-cta__heading">
+        Tell us what you need.
+      </h2>
+      <p class="lt-school-cta__body">
+        Graduation ceremonies, spirit rallies, back-to-school stages, and
+        campus celebrations. Start with a free quote — no commitment required.
+      </p>
+      <a href="/contact?service=school" class="lt-school-cta__button">
+        Request a School Event Quote
+        <span aria-hidden="true">&rarr;</span>
+      </a>
+    </div>
+  </section>
+
+</div>
+
+{% endblock %}
