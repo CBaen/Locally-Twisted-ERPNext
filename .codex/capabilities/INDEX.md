@@ -30,6 +30,7 @@ combination.
 
 Workflows. Multi-step. Clear start and finish.
 
+- Agency reference: `C:\Users\baenb\projects\Built_by_Cameron\.codex\capabilities\recipes\frappe-default-surface-map.md` maps Frappe/Webshop native spacing, wrappers, headings, chrome, and CMS defaults to the usual BBC override moves.
 - [claude-reference-library](recipes/claude-reference-library.md) - safely consult older Claude skills/rules as reference material without treating them as truth or copying them wholesale.
 - [balloon-material-visual-physics](recipes/balloon-material-visual-physics.md) - model balloons as sized latex objects with inflation, finish, tension, contact, knots, and construction-unit deformation instead of generic spheres.
 - [event-playground-construction-truth](recipes/event-playground-construction-truth.md) - keep Event Playground balloon geometry tied to tested construction facts, including classic quad tie-center neck/knot orientation.

@@ -31,6 +31,13 @@ tags:
 
 Use this recipe before changing public layout, full-bleed sections, crawls, carousels, Webshop surfaces, route templates, or shared CSS that changes how a page sits inside Frappe.
 
+Before diagnosing a Frappe-native gap, heading, breadcrumb, Webshop panel,
+cart/card padding, navbar/footer default, or CMS-style issue, read the agency
+conversion chart at
+`C:\Users\baenb\projects\Built_by_Cameron\.codex\capabilities\recipes\frappe-default-surface-map.md`.
+That card maps native Frappe/Webshop defaults to the usual BBC override moves.
+This LT recipe then decides the local route/container contract.
+
 ## Current Contract
 
 Frappe provides the website lifecycle and wrapper. LT owns the visual containment inside that wrapper.
