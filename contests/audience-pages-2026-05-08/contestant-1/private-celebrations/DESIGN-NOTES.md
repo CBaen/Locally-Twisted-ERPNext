@@ -93,3 +93,26 @@ not a party supply store, not a sales funnel.
 The palette alternation on this page is the warmest in the suite:
 warm-white → near-white → white → stone → navy. No slate, no ink bands.
 The private celebrations page feels like warm paper, not civic concrete.
+
+## Loop 1-1 change: Memorial card rewritten
+
+Proxy-Loop-1-1 identified that the memorial card's proof line — "Verified by
+customer reviews" — read like a Yelp disclaimer. This is the one card in the
+suite where a real human is in grief, searching at midnight, needing to feel
+that LT has done this before and knows what it means.
+
+Two changes made:
+
+1. **Card body copy rewritten** from generic "Sports themes, favorite colors,
+   and personal tributes handled with care" to second-person address: "You tell
+   us what they loved — a team, a color, a place, a thing that was theirs. We
+   make it visible." This speaks to the person planning, not a category label.
+   It acknowledges they have knowledge (what the person loved) and LT's job is
+   to make that visible.
+
+2. **Proof line replaced** with the KJSCOTT review excerpt verbatim:
+   `"They captured my vision, delivered on time, very tasteful and meaningful."
+   — KJSCOTT`. The real review is the proof. The disclaimer was not.
+
+The KJSCOTT review still appears in the testimonials grid below, but the card
+itself now carries human evidence rather than institutional reassurance.
