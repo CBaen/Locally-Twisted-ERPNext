@@ -55,8 +55,10 @@ Grid layout: 1-col mobile → 2×2 at 600px → 4-wide at 1100px. This is the on
 4 testimonials from the real Google review set in `home.py`. Selected specifically for private-event relevance:
 - Wedding (mark Taylor's review)
 - Birthday (Sarah Johnston-Powell's review)
-- Memorial (KJSCOTT's review — the most emotionally resonant in the entire review set)
 - Repeat family client (Tiffiny Lipscomb's review)
+- Milestone celebration (general positive review)
+
+**Round 2 note:** KJSCOTT's memorial review was moved out of the testimonials grid and elevated to the pre-grid callout (Section 2). It now lands before the buyer reaches the category grid, which is the correct structural position for claiming the grief buyer. The testimonials grid retains 4 slots with different reviews.
 
 Using `<blockquote>` with `<footer>` — semantically correct for testimonials. Sandstone ground creates warmth without being decorative or distracting.
 

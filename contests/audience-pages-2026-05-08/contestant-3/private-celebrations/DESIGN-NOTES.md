@@ -17,11 +17,13 @@ The critical distinction: this buyer doesn't want the best price — they want t
 
 **Section 2 — Intro + stats (warm white):** Three paragraphs. First names the weight: "A first birthday only happens once. A wedding is the photograph people return to. A memorial is how a community says goodbye." The celebration-of-life buyer needs to know this is a safe vendor for a hard moment. Second paragraph promises the same craft at private scale. Stats strip uses `<dl>` semantics: "300+ birthday installs," "Wasatch Front weddings," "Every detail matters." The third stat is intentionally not a number — it's a value statement.
 
-**Section 3 — Occasions grid (stone, 6-up with photos):** Six cards, each with a real portfolio photo. This is the most photo-rich section of any page because private buyers are buying by visual fit. 3-column on desktop (3+3 — balanced), 2-column on tablet (2+2+2), 1-column on mobile. Each card: photo → occasion name → short description. Photos chosen for taste elevation: organic half-arch, foil heart arch, floral arch, dolphin backdrop, smurfs arch (custom theme), birthday bouquets.
+**Section 3 — Memorial / Celebration of Life band (slate, Round 2 addition):** A dedicated band that claims the grief buyer BEFORE the occasions grid. This is the anxiety-first architecture fully executed: the memorial buyer's specific weight is named ("When a celebration carries grief, the decor has to hold both"), their need is answered in prose ("Locally Twisted has helped families do this work"), and KJSCOTT's review anchors the section as structural proof — one home, full weight, not repeated below. The CTA in this section is softer: "Start a conversation" rather than "Request a quote." Two-column layout on desktop: prose left, KJSCOTT quote right with left brass-rule callout. Slate ground separates visually from warm white above and stone below.
 
-**Section 4 — Testimonials (white):** Four real Google reviews selected for private celebration relevance — the "balloon guy for 7 years" (loyalty), the "sports themed funeral stand" (celebration of life), the "blown away" wedding/birthday (milestone quality), the delivery fix (service recovery/care). 2-column grid. `<blockquote>` with `<footer>` for semantic correctness. Privacy-friendly attribution (abbreviated).
+**Section 4 — Occasions grid (stone, 5-up with photos):** Five cards (memorial removed — that buyer has been claimed above). 3-column on desktop with cards 4-5 centered in the second row, 2-column tablet, 1-column mobile. Each card: photo → name → body. Photos chosen for taste elevation: birthday bouquets, organic half-arch (wedding), floral half-arch (showers), dolphin backdrop (milestones), smurfs arch (custom themes).
 
-**Section 5 — CTA (navy):** CTA is "Tell us what you're imagining" — same phrasing as the hero CTA, reinforcing the invitation posture. Body copy: "Share the occasion, date, and palette — or just the feeling you're going for." The phrase "or just the feeling you're going for" is the key differentiator — it tells the buyer they don't need to know exactly what they want, which reduces purchase anxiety for private buyers.
+**Section 5 — Testimonials (white):** Three reviews (KJSCOTT removed — it lives in the memorial band). Sara M. (loyalty/longevity), Mark T. (milestone quality), LuAnn K. (care/service recovery). 3-column grid. `<blockquote>` with `<footer>` semantics. Privacy-friendly attribution.
+
+**Section 6 — CTA (navy):** Same invitation posture as hero CTA. "Or just the feeling you're going for" — the key phrase that reduces purchase barrier for buyers who can't articulate what they want.
 
 ## Color Sequence
 
@@ -47,12 +49,19 @@ No two adjacent full-width colored sections. Warm white / stone / white are thre
 - "Or just the feeling you're going for" — radically reduces the barrier for buyers who don't speak design
 - Stats: the third "stat" is "Every detail matters" — not a number. That's intentional. Numbers would cheapen this page.
 
-## Container Contract
+## Container Contract (Round 2 — 6 sections)
 
 | Section | Mode |
 |---------|------|
 | Hero | fullbleed |
-| Intro + stats | band (contained inner) |
-| Occasions | visual-field (fullbleed wrapper, inner max-width) |
-| Testimonials | band (contained inner) |
-| CTA | fullbleed (inner max-width) |
+| Intro + stats | band (warm white, contained inner) |
+| Memorial band | band (slate, 2-col inner on desktop) |
+| Occasions grid | visual-field (stone, fullbleed wrapper, inner max-width) |
+| Testimonials | band (white, contained inner) |
+| CTA | fullbleed (navy, inner max-width) |
+
+## Color Sequence (Round 2)
+
+Ink hero → warm white intro → slate memorial → stone occasions → white testimonials → navy CTA
+
+No two adjacent full-width colored sections. Warm white / slate / stone / white / navy — each section breaks from the prior surface.

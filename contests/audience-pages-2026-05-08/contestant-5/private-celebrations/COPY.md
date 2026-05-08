@@ -1,12 +1,35 @@
-# Copy — Private Celebrations
+# Copy — Private Celebrations (Round 2 revised)
 
 ## Hero
 
-**Eyebrow:** Birthdays · Weddings · Showers · Milestones
+**Eyebrow:** Birthdays · Weddings · Showers · Milestones · Remembrance
 
 **H1:** Balloon decor for life's milestone moments.
 
-**Lede:** Personal, custom, and elevated. The decor that makes the room feel like the occasion deserves it.
+**Lede:** The celebrations that call for something beautiful. And the days that need it most.
+
+*Round 2 change: Lede revised from "Personal, custom, and elevated. The decor that makes the room feel like the occasion deserves it." → "The celebrations that call for something beautiful. And the days that need it most." The new lede implicitly claims the grief buyer in the hero without naming them. "The days that need it most" includes memorials without becoming a memorial-specific page.*
+
+---
+
+## Opening act (NEW SECTION — immediately after hero)
+
+**No heading.** Two paragraphs of editorial prose + pull-quote.
+
+**Paragraph 1:**
+Some occasions announce themselves months in advance. Others arrive without warning and need the same care, the same custom attention, the same thoughtfulness that any milestone deserves. Locally Twisted handles the full range — birthdays and baby showers and weddings, yes, but also the quiet ones: the 60th anniversary for someone who has been the center of their family for decades, the retirement send-off, the celebration-of-life for someone who meant everything to the people in that room.
+
+**Paragraph 2:**
+If you're here planning a memorial or celebration of life, you're in the right place. The team has done this work, and they take it seriously.
+
+**Pull-quote (KJSCOTT):**
+"I needed a sports themed funeral stand. I told them what I needed, they captured my vision, delivered on time, very reasonable, and had many compliments. Very tasteful and meaningful."
+*— Verified customer, memorial service*
+
+**Paragraph 3 (after pull-quote):**
+For every other kind of personal celebration — from children's birthday arches to organic wedding installations to anniversary garlands — the approach is the same: start with what you're imagining, not with a catalog. The category guide below shows the range of work the team has handled across the Wasatch Front.
+
+*Structural purpose: Claims all buyer types — including grief buyers — BEFORE the category grid. KJSCOTT's review appears at scroll position 2 (immediately after hero), not after birthday and wedding proof.*
 
 ---
 
@@ -71,37 +94,21 @@ Delivery, setup, and teardown are included in private event quotes so the host c
 
 ---
 
-## Testimonials
+## Memorial section (standalone, full-weight)
 
-**H2:** What people say
+**Eyebrow:** Memorial & Celebration of Life
 
-**Quote 1:**
-"Jeff and the team are amazing. I am not local to the area so I really needed their assistance and they were simply brilliant. They provided an amazing product and went above and beyond. Top service."
-*— Out-of-town client*
-
-**Quote 2:**
-"You made this sick girl smile with this big unicorn balloon. Very professional and wanted to give me exactly what I wanted. We spent a few days texting back and forth and you came through with exactly what I wanted."
-*— Personal celebration*
-
-**Quote 3:**
-"I needed a sports themed funeral stand. I told them what I needed, they captured my vision, delivered on time, very reasonable, and had many compliments. Very tasteful and meaningful."
-*— Memorial service*
-
-**Quote 4:**
-"Jeff was super nice and helpful, helped me figure out the perfect thing for our son's birthday. Prompt, accommodating, great communication and friendly!"
-*— Children's birthday*
-
----
-
-## Memorial note
-
-**H2:** Memorial and celebration-of-life events.
+**H2:** Some occasions ask for something different.
 
 **Body paragraph 1:**
-Balloon decor for a memorial service is handled differently than a birthday install. The color choices are meaningful rather than festive. The scale is restrained. The approach is careful. The team has done this work — a sports-themed funeral stand for one family, a tribute install for another — and brought the same attention and professionalism to those events as to any other.
+Balloon decor for a memorial service is handled differently than a birthday install. The color choices are meaningful rather than festive. The scale is restrained. The approach is careful. The team has done this work — a sports-themed funeral stand for one family, a tribute install for another — and brought the same precision and professionalism to those events as to any other.
 
 **Body paragraph 2:**
-If you're planning a celebration-of-life event and considering balloon decor as part of the tribute, share the context when you reach out. The conversation will be handled accordingly.
+A celebration-of-life installation isn't a product from a menu. It starts with a conversation. Share the context — who this was for, what mattered to them, what the family is imagining — and the team will respond accordingly. No upsell, no script. Just the work done right.
+
+**CTA link (soft):** Start a conversation →
+
+*This section is the second time the memorial buyer is addressed on this page. The first was in the opening act (section 2). The duplication signals that memorial work is a real part of the business, not a courtesy mention. The dedicated CTA link uses "Start a conversation" (softer register) vs. the page-wide CTA "Start a free quote."*
 
 ---
 

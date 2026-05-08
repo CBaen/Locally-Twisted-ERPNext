@@ -31,11 +31,25 @@
 **Body:** Organic garlands, balloon walls, centerpieces, and custom photo backdrops for showers that go beyond balloons-and-streamers. Palette-matched to the shower's color story.
 **Proof anchor (inline, below body):** Palette-matched to the shower's color story. "They are now my go-to easy decorating plan for any of my family events." — Tiffiny
 
-### Panel 4 — Celebrations of Life
-**Category label:** Celebrations of Life
-**Headline:** Something beautiful for a hard day.
-**Body:** Balloon decor for memorial services and celebrations of life — dignified, personal, and handled with care. Locally Twisted has walked families through this. It is not a department. It is part of the work.
-**Proof anchor (inline, below body):** "I told them what I needed, they captured my vision, delivered on time, very reasonable." — KJ
+*(Celebration of Life has been elevated to its own standalone section — see below. The 2×2 grid is now 3 panels: Birthdays, Weddings, Baby & Bridal Showers.)*
+
+---
+
+## Celebrations of Life — Standalone Section (ROUND 2 ADDITION)
+
+**Section label:** Celebrations of Life
+**H2:** Something beautiful for a hard day.
+
+**Body paragraph 1:** If you're here planning a memorial or celebration of life, you're in the right place. Locally Twisted has walked families through this — the decor, the logistics, the timeline.
+
+**Body paragraph 2:** It is not a department. It is part of the work. The team approaches every celebration of life with the same care given to any install, and with the understanding that this one carries more weight. Tell us what you're imagining — dignified, personal, and handled with care.
+
+**CTA:** Start a conversation →
+
+**Proof block (left-brass-rule callout):**
+> "I needed a sports themed funeral stand. I reached out to Locally Twisted. I told them what I needed, they captured my vision, delivered on time, very reasonable, and had many complements. Very tasteful and meaningful."
+— KJ
+*Celebration of life · sports-themed memorial stand · Wasatch Front*
 
 ---
 

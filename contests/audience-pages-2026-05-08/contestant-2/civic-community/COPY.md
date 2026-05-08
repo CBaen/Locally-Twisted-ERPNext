@@ -46,6 +46,28 @@ Safe Kids Fair, Tree House Museum, Western Sports Park, Station Park, Downtown D
 
 ---
 
+## Civic Procurement Notes (ROUND 2 ADDITION)
+**Heading:** What city coordinators need to know
+**Lede:** Public-event procurement has its own requirements. Locally Twisted is set up to meet them — documentation, invoicing, and logistics handled before you ask.
+
+**Card 1 — Invoicing**
+*City & County Accounts*
+Invoices issued to organizations, not individuals. Net-30 terms available for returning municipal clients. Remit-to address provided on request.
+
+**Card 2 — Insurance**
+*COI on Request*
+Certificate of Insurance available for venues, city parks departments, and events requiring vendor documentation. Named additional insured available.
+
+**Card 3 — Logistics**
+*Documented Delivery Windows*
+Arrival time, install window, and strike window confirmed in writing before the event date. Coordinated with your venue contact or public works team.
+
+**Card 4 — Permitting**
+*Permit-Ready Specs*
+Arch dimensions, anchoring method, and wind-load notes provided for permit applications when required by city or county public works offices.
+
+---
+
 ## Trust pillars
 **Heading:** What public-event coordinators need from a balloon vendor
 
