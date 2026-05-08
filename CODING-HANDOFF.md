@@ -2,6 +2,13 @@
 
 Last updated: 2026-05-08 by OpenClaw/Moji after GL clarified all current LT data is fake/test data and Codex identified the first record-level fail-loud hardening slice. Current peer handoff: fake data is allowed and useful; fake success is forbidden. Start backend automation work at `workstreams/fail-loud-record-level-hardening.md` before any reminder-send, Frappe Cloud trust, or live-data claim.
 
+Codex update on 2026-05-08: GL also made no monoliths a system-wide law. The
+LT lane is `workstreams/no-monolith-operating-contract.md`. Do not expand large
+hand-authored source, template, CSS, verifier, script, or project-doc files
+without checking whether the new concern should become a module, partial,
+helper, recipe, or focused verifier first. Research/reference artifacts are the
+intentional long-form exception.
+
 ## State Of Reality
 
 The ERPNext build is active at `http://localhost:8081`. The project is **a migration of Locally Twisted's business intent + catalog data into a fresh ERPNext install** (frame revised 2026-04-30 — see `locally-twisted-decisions.md`). "Fresh install" — destination is greenfield ERPNext; no auto-translated Odoo modules or DB dumps. "Migration" — catalog records (53 Website Items / 10,578 original variants / 10,613 original catalog Item Prices, ported 2026-04-30), form intent, policies, voice/brand all carried across from the prior Odoo attempt and the legacy `locallytwisted.com` site, and the new storefront replaces `locallytwisted.com` at cutover. The current live DB now has 10,672 Items and 10,654 Item Prices after delivery service Items and the optional-add-on variant repair.
