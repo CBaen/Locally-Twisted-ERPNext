@@ -8,6 +8,8 @@ import sys
 import time
 from typing import Any
 
+from _cli import parse_noop_args
+
 
 CONTAINER = "locally-twisted-erpnext-v15-backend-1"
 SITE = "frontend"
@@ -257,6 +259,7 @@ def _safe_delete(doctype: str, name: str) -> None:
 
 
 def main() -> int:
+    parse_noop_args(__doc__)
     failures = []
     failures.extend(check_task_custom_fields())
     failures.extend(check_hook_source())

@@ -17,6 +17,8 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
+from _cli import parse_noop_args
+
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "apps" / "locally_twisted"))
@@ -195,6 +197,7 @@ def compare() -> tuple[list[dict[str, Any]], dict[str, int]]:
 
 
 def main() -> int:
+    parse_noop_args(__doc__)
     try:
         failures, totals = compare()
     except CatalogVariantFail as exc:

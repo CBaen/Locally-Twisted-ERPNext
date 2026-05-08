@@ -6,12 +6,15 @@ import json
 import subprocess
 import sys
 
+from _cli import parse_noop_args
+
 
 CONTAINER = "locally-twisted-erpnext-v15-backend-1"
 SITE = "frontend"
 
 
 def main() -> int:
+    parse_noop_args(__doc__)
     proc = subprocess.run(
         [
             "docker",

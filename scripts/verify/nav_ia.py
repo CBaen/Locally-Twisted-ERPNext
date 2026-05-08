@@ -9,6 +9,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from _cli import parse_noop_args
+
 
 ROOT = Path(__file__).resolve().parents[2]
 NAVBAR = ROOT / "apps/locally_twisted/locally_twisted/templates/includes/navbar/navbar.html"
@@ -143,6 +145,7 @@ def test_homepage_launch_links(home: str) -> None:
 
 
 def main() -> None:
+    parse_noop_args(__doc__)
     navbar = NAVBAR.read_text(encoding="utf-8")
     footer = FOOTER.read_text(encoding="utf-8")
     home = HOME.read_text(encoding="utf-8")

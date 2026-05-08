@@ -7,6 +7,8 @@ import subprocess
 import sys
 from typing import Any
 
+from _cli import parse_noop_args
+
 
 CONTAINER = "locally-twisted-erpnext-v15-backend-1"
 SITE = "frontend"
@@ -40,6 +42,7 @@ def bench_execute(method: str) -> Any:
 
 
 def main() -> int:
+    parse_noop_args(__doc__)
     try:
         result = bench_execute(METHOD)
     except ContractFail as exc:

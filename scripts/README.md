@@ -5,6 +5,14 @@ Operational scripts for the LT ERPNext build live here. Most scripts are self-co
 Run scripts from the project root: `python scripts/<dir>/<name>.py`.
 Run the layout-fit gate from the project root: `npm run test:layout-fit`.
 Run the public axe accessibility gate from the project root: `npm run test:a11y`.
+Run the verifier CLI contract from the project root: `python scripts/verify/verifier_cli_contract.py`.
+
+Verification scripts must treat `--help` as a safe, fast, non-mutating command.
+If a verifier needs a browser, Docker, ERPNext, fake-data writes, or network
+access for its normal run, its help path must exit before any of that work
+starts. The `verifier_cli_contract.py` gate enforces this for tracked,
+maintained Python verifiers. Throwaway `_oneshot_*` scripts are excluded and
+should not be used as launch proof.
 
 ## Layout
 
@@ -70,6 +78,7 @@ Run the public axe accessibility gate from the project root: `npm run test:a11y`
 | `crm_stage_cascade.py` | Verifies stage movement creates/closes only operational Tasks, leaves Sales Orders, Sales Invoices, and Payment Requests unchanged, and cleans up its temporary test records. | After editing `stage_cascade.py`, Lead hooks, or CRM stage-to-Task behavior |
 | `backend_schema_inventory.py` | Read-only live ERPNext backend inventory: counts core records/schema records, classifies Custom Fields as code-owned vs unclassified DB/app-owned, maps current CRM/checkout cascade surfaces, and separates intentional old-label guardrails from stale references. | Before deciding backend fixture/export ownership, Lead layout simplification, or new stage-to-finance cascades |
 | `backend_schema_inventory_contract.py` | Unit contract for `backend_schema_inventory.py` helper logic. | After editing the backend inventory classifier or stale-term scanner |
+| `verifier_cli_contract.py` | Fast meta-contract proving tracked maintained Python verifiers expose safe `--help` output instead of launching browser/backend work. | After adding or changing Python verifier entrypoints, and before trusting a timeout as a product failure |
 | `backend_workspace_parity.py` | Verifies simplified backend workspaces no longer show stale ERPNext labels, booking calendars point at Sales Orders by delivery date, and Owner Home includes the command-center number cards/chart/checklist. | After editing workspaces, role profiles, number cards, charts, or Desk calendar behavior |
 | `customer_documents_contract.py` | Verifies policy lane anchors and code-owned customer email policy blocks without creating ERPNext setup records. | After editing customer emails, receipts, checkout notices, or policy pages |
 | `paperwork_status.py` | Read-only paperwork/backend status report for invoices, payment requests, email queues, non-live setup gaps, and cutover-deferred payment items. It does not run live payment readiness in synthetic mode. Outputs optional JSON to ignored `output/`. | When reviewing back-office launch readiness before adding finance automation |

@@ -14,6 +14,7 @@ import subprocess
 import sys
 from typing import Any
 
+from _cli import parse_noop_args
 from playwright.sync_api import sync_playwright
 
 
@@ -131,6 +132,7 @@ def check_product_page_swaps_image(media: dict[str, Any]) -> None:
 
 
 def main() -> int:
+    parse_noop_args(__doc__)
     failures = []
     try:
         media = check_variant_media_api()

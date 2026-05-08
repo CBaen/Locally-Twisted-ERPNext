@@ -17,6 +17,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from _cli import parse_noop_args
+
 from playwright.sync_api import sync_playwright
 
 URL = "http://localhost:8081/"
@@ -72,6 +74,7 @@ def capture(p, viewport, output_path, *, is_mobile=False):
 
 
 def main():
+    parse_noop_args(__doc__)
     with sync_playwright() as p:
         print("→ Capturing desktop view (1366x900)...")
         d = capture(p, {"width": 1366, "height": 900}, OUT_DIR / "lt-playwright-desktop.png")

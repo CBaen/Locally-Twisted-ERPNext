@@ -24,6 +24,8 @@ import sys
 import urllib.request
 from typing import Any
 
+from _cli import parse_noop_args
+
 
 CONTAINER = "locally-twisted-erpnext-v15-backend-1"
 SITE = "frontend"
@@ -207,6 +209,7 @@ def check_shop_cards_keep_priced_products_cartable_and_do_not_add_templates() ->
 
 
 def main() -> int:
+    parse_noop_args(__doc__)
     checks = [
         check_cart_api_resolves_priced_items_without_product_quote_gate,
         check_checkout_resolver_accepts_retail_variant,

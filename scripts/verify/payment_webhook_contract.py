@@ -11,6 +11,8 @@ import subprocess
 import sys
 from typing import Any
 
+from _cli import parse_noop_args
+
 
 CONTAINER = "locally-twisted-erpnext-v15-backend-1"
 SITE = "frontend"
@@ -51,6 +53,7 @@ def bench_execute(method: str, *, kwargs: dict[str, Any] | None = None) -> Any:
 
 
 def main() -> int:
+    parse_noop_args(__doc__)
     try:
         result = bench_execute("locally_twisted.verify.payment_webhook_contract.run")
     except ContractFail as exc:

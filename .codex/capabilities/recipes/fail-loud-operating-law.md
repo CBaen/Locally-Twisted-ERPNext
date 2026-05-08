@@ -130,6 +130,13 @@ Agent communication:
   without current verification evidence.
 - If a check was not run, say that plainly.
 
+Verifier scripts:
+
+- `--help` is part of the contract. It must print usage quickly and must not
+  launch browser checks, Docker/Frappe calls, fake-data writes, or customer-path
+  probes.
+- Guard this with `python scripts/verify/verifier_cli_contract.py`.
+
 ## First Record-Level Hardening Slice
 
 The next high-value implementation slice is:
@@ -162,6 +169,8 @@ customer-facing layout/navigation/checkout closeout.
 - Customer-facing copy that says only "Something went wrong" or exposes
   exception/webhook/DocType/API language.
 - Email helper catches and logs only to console.
+- A verifier timeout is dismissed as incidental before checking whether the
+  verifier CLI accidentally ran live work.
 - Scheduler silently skips because a method path changed.
 - Document generator omits a payment link but still renders a send-ready packet.
 - Form field is renamed in HTML but not in the Lead mapping.

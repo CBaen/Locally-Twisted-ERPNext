@@ -9,7 +9,7 @@ Run:
 """
 from __future__ import annotations
 
-import sys
+import argparse
 from pathlib import Path
 
 from playwright.sync_api import sync_playwright
@@ -53,12 +53,13 @@ def capture(p, url: str, viewport: dict, output_path: Path, *, is_mobile: bool =
 
 
 def main():
-    if len(sys.argv) < 2:
-        print("Usage: playwright_route_screenshot.py <route> [base_url]")
-        print("Example: playwright_route_screenshot.py /contact")
-        sys.exit(2)
-    route = sys.argv[1]
-    base = sys.argv[2] if len(sys.argv) > 2 else DEFAULT_BASE
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("route", help="Route path to capture, for example /contact")
+    parser.add_argument("base_url", nargs="?", default=DEFAULT_BASE, help=f"Base URL. Default: {DEFAULT_BASE}")
+    args = parser.parse_args()
+
+    route = args.route
+    base = args.base_url
     url = f"{base.rstrip('/')}/{route.lstrip('/')}"
     slug = slugify(route)
 

@@ -12,6 +12,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from _cli import parse_noop_args
+
 
 CONTAINER = "locally-twisted-erpnext-v15-backend-1"
 SITE = "frontend"
@@ -235,6 +237,7 @@ def check_public_intake_mapping() -> list[str]:
 
 
 def main() -> int:
+    parse_noop_args(__doc__)
     failures = []
     failures.extend(check_pipeline_custom_field())
     failures.extend(check_standard_status_is_preserved())
