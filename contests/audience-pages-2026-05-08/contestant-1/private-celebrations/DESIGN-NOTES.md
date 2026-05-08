@@ -21,7 +21,23 @@ not a party supply store, not a sales funnel.
 - Eyebrow: "Private Celebrations · Wasatch Front" — no named clients, just
   geography and occasion type.
 
-### 2. Celebration types
+### 2. Memorial entry (Round 2 addition)
+- Slate-blue fullbleed band immediately after the hero — the grief buyer finds herself
+  in the first scroll, before she has to scan through birthday and wedding cards.
+- Two-column on desktop: invitation copy left, KJSCOTT blockquote right.
+- Heading: "If you're here for a celebration of life, you're in the right place."
+  — direct address, no euphemism, no ceremony. Claims the buyer by name before
+  anything else on the page does.
+- Body copy: names the things families bring (a sports theme, a color, a place)
+  rather than listing service capabilities. The buyer recognizes her own situation.
+- KJSCOTT blockquote in structural position: brass left-rule, dark inset panel,
+  italic Cormorant Garamond. This is the proof that earns the invitation — real
+  words from a real family, at the top of the page, not buried in a testimonial grid.
+- The types grid still includes the memorial card in position 5 for discovery
+  completeness, but the grief buyer is no longer required to filter through four
+  other occasion types to find herself.
+
+### 3. Celebration types
 - Warm White band. Five cards in a grid (3+2 on desktop — accepted orphan
   because the types are intrinsically odd-count and the card design accommodates it).
 - Each card: icon + title + body description + proof line.
@@ -84,15 +100,20 @@ not a party supply store, not a sales funnel.
 
 ## Container discipline
 - Hero: fullbleed
+- Memorial entry: fullbleed (slate-blue) — the one dark band on this page; creates
+  structural weight for the memorial buyer without making the whole page cold
 - Types: band (warm white)
 - Gallery: visual-field (near-white)
 - Testimonials: band (white)
 - Buyer notes: band (stone) — lighter than slate, warmer register
 - CTA: fullbleed (navy)
 
-The palette alternation on this page is the warmest in the suite:
-warm-white → near-white → white → stone → navy. No slate, no ink bands.
-The private celebrations page feels like warm paper, not civic concrete.
+The palette alternation is: warm-white hero → slate memorial entry → warm-white types
+→ near-white gallery → white testimonials → stone buyer notes → navy CTA.
+The slate memorial band is a deliberate interruption — it signals "this is different,
+this is serious" before returning to the warmer register for the rest of the page.
+No two adjacent same-color fullbleed sections. The hero image darkens to near-navy;
+the slate band reads as a visual step, not an adjacency violation.
 
 ## Loop 1-1 change: Memorial card rewritten
 

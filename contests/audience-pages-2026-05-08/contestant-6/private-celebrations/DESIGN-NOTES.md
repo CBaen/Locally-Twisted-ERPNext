@@ -60,6 +60,16 @@ Adjacent fullbleed color check:
 - Moments (warm-white) → Notes (navy): ✅
 - Notes (navy) → CTA (sandstone): ✅
 
+## Round 2 Changes
+
+**Hero lede rewritten** to claim the grief buyer in the first sentence, before the scroll begins. Original lede listed occasion types; revised lede names the full emotional range — including celebrations of life — and closes with "Whatever brought you here, you're in the right place." The grief buyer is claimed before they have to self-select through birthday and wedding content.
+
+**KJSCOTT review moved into the Milestones & Memorials block** as a brass-ruled blockquote inside the moment's prose. Previously referenced in design notes only; now structurally present in the HTML. The review is placed in the exact section that answers what that buyer came to find — not in a generic testimonials band. The blockquote format (brass left rule, italic) signals editorial weight without sentimental decoration.
+
+**Milestones & Memorials desc_extended** adds a second paragraph that speaks directly to the grief buyer without euphemism, contextualizes the KJSCOTT review in narrative form, and names Jeff specifically — making it personal, not institutional.
+
+These three changes together complete what the field summary identified as the unclosed memorial test: early claim (hero lede), structural proof position (KJSCOTT in the memorial block), and commensurate container (four-prose-block architecture, unchanged).
+
 ## What makes this page feel specifically private/personal
 1. Hero CTA: "Tell us what you're imagining" — not "request a quote"
 2. No named clients anywhere on the page

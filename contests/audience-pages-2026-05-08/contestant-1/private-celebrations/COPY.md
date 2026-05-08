@@ -24,6 +24,19 @@ designed for the moment, delivered to your venue or home.
 
 ---
 
+## Memorial entry (slate-blue band — appears immediately after hero)
+
+**Eyebrow:** Memorial & Celebration of Life
+
+**H2:** If you're here for a celebration of life, you're in the right place.
+
+**Body:** Locally Twisted has helped families do this work. A sports theme. A favorite color. A place they loved, made visible for the people who loved them. Reach out and share the context — the team will handle it with care.
+
+**Blockquote:** "I needed a sports themed funeral stand. I told them what I needed, they captured my vision, delivered on time, very reasonable, and had many complements. Very tasteful and meaningful."
+**Attribution:** KJSCOTT — Celebration of Life
+
+---
+
 ## Celebration types
 
 **H2:** Private celebrations, every kind

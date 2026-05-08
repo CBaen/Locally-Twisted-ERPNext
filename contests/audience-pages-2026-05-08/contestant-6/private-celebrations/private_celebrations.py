@@ -77,7 +77,8 @@ PRIVATE_EVENT_MOMENTS = [
     },
     {
         "type": "Milestones & Memorials",
-        "desc": "Retirements, anniversary years, celebration-of-life gatherings. Balloon decor can carry weight when it needs to — tasteful, considered, and built around what matters to the people in that room.",
+        "desc": "Retirements, anniversary years, and celebrations of life. Balloon decor can carry weight when it needs to — tasteful, considered, and built around what matters to the people in that room.",
+        "desc_extended": "If you're planning a celebration of life, you're in the right place. Jeff and the team have done this work. A customer who lost her husband asked for a sports-themed memorial stand — and later wrote: \"Very tasteful and meaningful. He would have loved it.\" That is the standard for every install.",
         "photos": [
             {
                 "image": "C:/Users/baenb/projects/locally-twisted-odoo/assets/image assets/photos for website/Organic decor/Organic step and repeat.png",
@@ -312,6 +313,21 @@ PAGE_CSS = """
     line-height: 1.65;
     max-width: 52ch;
 }
+/* memorial blockquote — only appears in the Milestones & Memorials block */
+.lt-page-private .lt-private-moment__memorial-note {
+    border-left: 3px solid var(--lt-brass);
+    margin: 0 0 1.5rem;
+    padding: 0.75rem 0 0.75rem 1.25rem;
+}
+.lt-page-private .lt-private-moment__memorial-note p {
+    font-family: var(--lt-font-body);
+    font-size: 0.9rem;
+    color: var(--lt-soft-gray);
+    line-height: 1.6;
+    margin: 0;
+    font-style: italic;
+}
+
 .lt-page-private .lt-private-moment__cta-link {
     font-family: var(--lt-font-body);
     font-size: 0.9rem;

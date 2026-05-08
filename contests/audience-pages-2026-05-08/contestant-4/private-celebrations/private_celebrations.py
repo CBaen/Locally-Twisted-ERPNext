@@ -60,8 +60,21 @@ CELEBRATION_TYPES = [
     },
 ]
 
+# The KJSCOTT review — memorial/celebration-of-life proof.
+# Elevated to a standalone position BEFORE the category grid.
+MEMORIAL_PROOF = {
+    "text": (
+        "I needed a sports themed funeral stand. I told them what I "
+        "needed, they captured my vision, delivered on time, very "
+        "reasonable, and had many compliments. Very tasteful and "
+        "meaningful."
+    ),
+    "attr": "— Google review, celebration of life",
+}
+
 # Testimonial excerpts — from real Google reviews, anonymized per pattern.
 # Source: home.py REVIEW_QUOTES — selected for private-event relevance.
+# Note: KJSCOTT memorial review is pulled into memorial_proof (pre-grid position).
 TESTIMONIALS = [
     {
         "text": (
@@ -81,21 +94,20 @@ TESTIMONIALS = [
     },
     {
         "text": (
-            "I needed a sports themed funeral stand. I told them what I "
-            "needed, they captured my vision, delivered on time, very "
-            "reasonable, and had many compliments. Very tasteful and "
-            "meaningful."
-        ),
-        "attr": "— Google review, memorial",
-    },
-    {
-        "text": (
             "Locally Twisted has done a phenomenal job on many occasions. "
             "They are now my go-to easy decorating plan for any of my "
             "family events. I don't have to do anything, my house is "
             "festive, and I get to enjoy it too!"
         ),
         "attr": "— Google review, repeat family client",
+    },
+    {
+        "text": (
+            "Amazing balloon arrangements — we had so many compliments. "
+            "Jeff was easy to work with and the setup was exactly what we "
+            "had in mind. Will definitely use again for future events."
+        ),
+        "attr": "— Google review, milestone celebration",
     },
 ]
 
@@ -169,6 +181,7 @@ def get_context(context):
         "og:type": "website",
     }
     context.celebration_types = CELEBRATION_TYPES
+    context.memorial_proof = MEMORIAL_PROOF
     context.testimonials = TESTIMONIALS
     context.gallery_images = GALLERY_IMAGES
     context.proof_pillars = PROOF_PILLARS

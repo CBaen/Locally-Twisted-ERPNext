@@ -57,6 +57,11 @@
                     <p class="lt-private-moment__type">{{ moment.type }}</p>
                     <h3 class="lt-private-moment__heading">{{ moment.type }}</h3>
                     <p class="lt-private-moment__desc">{{ moment.desc }}</p>
+                    {% if moment.desc_extended %}
+                    <blockquote class="lt-private-moment__memorial-note">
+                        <p>{{ moment.desc_extended }}</p>
+                    </blockquote>
+                    {% endif %}
                     <a href="/contact?service=Balloon+Decor&intent=private&occasion={{ moment.type | urlencode }}"
                        class="lt-private-moment__cta-link">
                         Get a quote for {{ moment.type | lower }} decor <span aria-hidden="true">&rarr;</span>

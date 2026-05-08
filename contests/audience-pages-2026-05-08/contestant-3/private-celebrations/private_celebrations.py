@@ -7,6 +7,11 @@ Buyer posture: Personal, milestone-emotional, taste-elevated, gift-feeling.
 
 No named-client roster — private celebrations expect privacy.
 Proof is category-level: count claims, testimonial phrasing, photo proof.
+
+Round 2 structural change: The memorial/celebration-of-life buyer is now claimed in
+a dedicated section (lt-priv-memorial) BEFORE the occasions grid. KJSCOTT's review
+anchors that section as the structural proof. The occasions grid is 5 cards
+(memorial removed — that buyer has already been claimed above the fold).
 """
 import frappe
 
@@ -20,60 +25,85 @@ PRIVATE_PROOF_STATS = [
     {"number": "Every\ndetail", "label": "matters"},
 ]
 
-# Testimonials - privacy-friendly (abbreviated last name, no venue/location)
+# KJSCOTT anchors the memorial section — one structural home, full weight.
+KJSCOTT_REVIEW = {
+    "text": (
+        "I needed a sports themed funeral stand. They captured my vision, delivered on time, "
+        "very reasonable, and had many complements. Very tasteful and meaningful."
+    ),
+    "attr": "KJSCOTT",
+    "context": "Celebration of Life",
+}
+
+# Remaining testimonials for the general testimonials band (KJSCOTT not repeated here).
 PRIVATE_TESTIMONIALS = [
     {
-        "text": "Jeff has been listed in my phone for 7-ish years as 'balloon guy' and has been my go-to for that long. I know I can trust him and his team to always exceed my expectations.",
+        "text": (
+            "Jeff has been listed in my phone for 7-ish years as 'balloon guy' and has been "
+            "my go-to for that long. I know I can trust him and his team to always exceed my expectations."
+        ),
         "attr": "Sara M., longtime client",
     },
     {
-        "text": "I needed a sports themed funeral stand. They captured my vision, delivered on time, very reasonable, and had many complements. Very tasteful and meaningful.",
-        "attr": "KJSCOTT, celebration of life",
-    },
-    {
-        "text": "We were seriously blown away and my kids were delighted. My oldest son requested they come to his birthday party. They were fantastic!",
+        "text": (
+            "We were seriously blown away and my kids were delighted. My oldest son requested "
+            "they come to his birthday party. They were fantastic!"
+        ),
         "attr": "Mark T., wedding + birthday",
     },
     {
-        "text": "They went above and beyond what they needed to do for my mom's Mother's Day gift. I made a mistake on the delivery date and they fixed it and made the delivery.",
+        "text": (
+            "They went above and beyond what they needed to do for my mom's Mother's Day gift. "
+            "I made a mistake on the delivery date and they fixed it and made the delivery."
+        ),
         "attr": "LuAnn K., gift delivery",
     },
 ]
 
+# 5 occasions — memorial removed, claimed above in its own section.
 PRIVATE_OCCASIONS = [
     {
         "name": "Birthdays",
-        "body": "From a first birthday backdrop to a milestone 50th — arches, columns, organic garlands, and photo ops in any palette.",
+        "body": (
+            "From a first birthday backdrop to a milestone 50th — arches, columns, "
+            "organic garlands, and photo ops in any palette."
+        ),
         "image": "/assets/locally_twisted/images/portfolio/optimized/birthday-balloon-bouquets.webp",
         "image_alt": "Colorful birthday balloon bouquets for a milestone celebration",
     },
     {
         "name": "Weddings",
-        "body": "Ceremony arches, reception garlands, and organic decor in your exact palette. Venue coordination included.",
+        "body": (
+            "Ceremony arches, reception garlands, and organic decor in your exact palette. "
+            "Venue coordination included."
+        ),
         "image": "/assets/locally_twisted/images/portfolio/optimized/wedding-organic-half-arch.webp",
         "image_alt": "Elegant organic balloon half arch for a wedding ceremony",
     },
     {
         "name": "Baby & Bridal Showers",
-        "body": "Soft, elevated decor that matches the invitation aesthetic. Balloon garlands, photo ops, and table decor.",
+        "body": (
+            "Soft, elevated decor that matches the invitation aesthetic. "
+            "Balloon garlands, photo ops, and table decor."
+        ),
         "image": "/assets/locally_twisted/images/portfolio/optimized/wedding-floral-half-arch.webp",
-        "image_alt": "Floral balloon arch for an elegant baby or bridal shower celebration",
+        "image_alt": "Floral balloon arch for an elegant baby or bridal shower",
     },
     {
         "name": "Milestones",
-        "body": "Quinceañera, retirement, anniversary, graduation — the pieces that make a milestone feel finished.",
+        "body": (
+            "Quinceañera, retirement, anniversary, graduation — the pieces that "
+            "make a milestone feel finished."
+        ),
         "image": "/assets/locally_twisted/images/portfolio/optimized/birthday-dolphin-backdrop.webp",
-        "image_alt": "Custom themed balloon backdrop for a special milestone celebration",
-    },
-    {
-        "name": "Celebration of Life",
-        "body": "Tasteful, meaningful decor for memorials and celebrations of life. Every tribute deserves care.",
-        "image": "/assets/locally_twisted/images/portfolio/optimized/wedding-foil-heart-arch.webp",
-        "image_alt": "Elegant foil heart balloon arch for a memorial or celebration of life",
+        "image_alt": "Custom themed balloon backdrop for a milestone celebration",
     },
     {
         "name": "Custom Themes",
-        "body": "Characters, sculptural pieces, themed backdrops — if you can imagine it, bring us the brief.",
+        "body": (
+            "Characters, sculptural pieces, themed backdrops — if you can imagine it, "
+            "bring us the brief."
+        ),
         "image": "/assets/locally_twisted/images/portfolio/optimized/birthday-smurfs-arch.webp",
         "image_alt": "Custom character-themed balloon arch for a birthday celebration",
     },
@@ -82,7 +112,7 @@ PRIVATE_OCCASIONS = [
 PAGE_CSS = """
 /* =====================================================================
  * Private Celebrations audience page — lt-page-private namespace
- * Sections: hero, intro, occasions, testimonials, cta
+ * Sections: hero, intro, memorial, occasions, testimonials, cta
  * ===================================================================== */
 
 /* --- Private hero (fullbleed) --------------------------------------- */
@@ -246,6 +276,108 @@ PAGE_CSS = """
     white-space: pre-line;
 }
 
+/* --- Memorial / Celebration of Life band (contained / slate) ------- */
+.lt-page-private .lt-priv-memorial {
+    background-color: var(--lt-slate);
+    padding: 3.5rem 1.25rem;
+}
+.lt-page-private .lt-priv-memorial__inner {
+    max-width: 860px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+@media (min-width: 768px) {
+    .lt-page-private .lt-priv-memorial__inner {
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        align-items: start;
+    }
+}
+.lt-page-private .lt-priv-memorial__label {
+    font-family: var(--lt-font-body);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--lt-brass);
+    margin: 0 0 0.75rem;
+}
+.lt-page-private .lt-priv-memorial__h2 {
+    font-family: var(--lt-font-heading);
+    font-size: clamp(1.4rem, 3.5vw, 2rem);
+    color: var(--lt-warm-white);
+    line-height: 1.1;
+    margin: 0 0 1rem;
+}
+.lt-page-private .lt-priv-memorial__body {
+    font-family: var(--lt-font-body);
+    font-size: 1rem;
+    color: rgba(250,247,242,0.82);
+    line-height: 1.65;
+    margin: 0 0 1.5rem;
+}
+.lt-page-private .lt-priv-memorial__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.7rem 1.5rem;
+    border: 1.5px solid var(--lt-brass);
+    color: var(--lt-warm-white);
+    font-family: var(--lt-font-body);
+    font-weight: 700;
+    font-size: 0.88rem;
+    text-decoration: none;
+    border-radius: 2px;
+    min-height: 44px;
+    letter-spacing: 0.04em;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+.lt-page-private .lt-priv-memorial__cta:hover,
+.lt-page-private .lt-priv-memorial__cta:focus-visible {
+    background-color: var(--lt-brass);
+    color: var(--lt-ink);
+    outline: 2px solid var(--lt-brass);
+    outline-offset: 2px;
+}
+/* KJSCOTT review quote block */
+.lt-page-private .lt-priv-memorial__quote {
+    border-left: 3px solid var(--lt-brass);
+    padding-left: 1.5rem;
+}
+.lt-page-private .lt-priv-memorial__quote-mark {
+    font-family: var(--lt-font-heading);
+    font-size: 2.5rem;
+    color: var(--lt-brass);
+    line-height: 1;
+    margin: 0 0 0.5rem;
+    opacity: 0.55;
+}
+.lt-page-private .lt-priv-memorial__quote-text {
+    font-family: var(--lt-font-body);
+    font-size: 1.0625rem;
+    color: var(--lt-warm-white);
+    line-height: 1.65;
+    font-style: italic;
+    margin: 0 0 1rem;
+}
+.lt-page-private .lt-priv-memorial__quote-attr {
+    font-family: var(--lt-font-body);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--lt-brass);
+    margin: 0 0 0.2rem;
+}
+.lt-page-private .lt-priv-memorial__quote-context {
+    font-family: var(--lt-font-body);
+    font-size: 0.8125rem;
+    color: rgba(250,247,242,0.5);
+    margin: 0;
+}
+
 /* --- Occasions grid (visual-field / stone) -------------------------- */
 .lt-page-private .lt-priv-occasions {
     background-color: var(--lt-stone);
@@ -277,7 +409,30 @@ PAGE_CSS = """
     .lt-page-private .lt-priv-occasions__grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (min-width: 992px) {
-    .lt-page-private .lt-priv-occasions__grid { grid-template-columns: repeat(3, 1fr); }
+    /* 5 cards: 3 on top row, 2 centred on bottom */
+    .lt-page-private .lt-priv-occasions__grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .lt-page-private .lt-priv-occasions__card:nth-child(4) {
+        grid-column: 1 / 2;
+        margin-left: calc(50% + 0.75rem);
+        margin-left: 50%;
+    }
+}
+/* Simpler 5-card layout: 3+2 with auto centering */
+@media (min-width: 992px) {
+    .lt-page-private .lt-priv-occasions__grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+    }
+    .lt-page-private .lt-priv-occasions__card {
+        flex: 0 1 calc(33.333% - 1rem);
+    }
+    /* Push cards 4-5 to appear centered in second row */
+    .lt-page-private .lt-priv-occasions__card:nth-child(4) {
+        margin-left: calc(16.666% + 0.5rem);
+    }
 }
 .lt-page-private .lt-priv-occasions__card {
     background-color: var(--lt-white);
@@ -330,7 +485,7 @@ PAGE_CSS = """
     gap: 1.25rem;
 }
 @media (min-width: 600px) {
-    .lt-page-private .lt-priv-testimonials__grid { grid-template-columns: repeat(2, 1fr); }
+    .lt-page-private .lt-priv-testimonials__grid { grid-template-columns: repeat(3, 1fr); }
 }
 .lt-page-private .lt-priv-testimonials__card {
     padding: 1.5rem;
@@ -436,6 +591,7 @@ def get_context(context):
         "og:type": "website",
     }
     context.private_proof_stats = PRIVATE_PROOF_STATS
+    context.kjscott = KJSCOTT_REVIEW
     context.private_testimonials = PRIVATE_TESTIMONIALS
     context.private_occasions = PRIVATE_OCCASIONS
     context.colocated_css = PAGE_CSS

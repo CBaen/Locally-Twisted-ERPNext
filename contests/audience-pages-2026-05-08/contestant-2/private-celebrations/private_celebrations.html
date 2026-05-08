@@ -584,7 +584,8 @@
         </h1>
         <p class="lt-hero__lede">
             Custom balloon decor for birthdays, weddings, baby showers,
-            milestones, and celebrations of life across Utah.
+            milestones, and celebrations of life — every private occasion,
+            designed from scratch for the moment.
         </p>
         <a href="/contact?intent=private-celebrations" class="lt-hero__cta">
             Tell us what you're imagining <span aria-hidden="true">&rarr;</span>
@@ -592,7 +593,7 @@
     </div>
 </section>
 
-{# ── 2. Celebration type panels [band] ───────────────────────────── #}
+{# ── 2. Celebration type panels — birthdays, weddings, showers [band] #}
 <section class="lt-private-types" aria-labelledby="private-types-heading">
     <div class="lt-private-types__inner">
         <h2 id="private-types-heading" class="lt-private-types__heading">
@@ -618,13 +619,55 @@
                     <span class="lt-private-type__stat-label">{{ ct.stat_label }}</span>
                 </div>
                 {% endif %}
+                {% if ct.proof_anchor %}
+                <p class="lt-private-type__anchor">{{ ct.proof_anchor }}</p>
+                {% endif %}
             </article>
             {% endfor %}
         </div>
     </div>
 </section>
 
-{# ── 3. Brass divider [raw-band] ─────────────────────────────────── #}
+{# ── 3. Memorial / Celebration of Life — standalone section [band — sandstone] #}
+<section class="lt-private-memorial" aria-labelledby="private-memorial-heading">
+    <div class="lt-private-memorial__inner">
+        <div class="lt-private-memorial__text">
+            <p class="lt-private-memorial__label">Celebrations of Life</p>
+            <h2 id="private-memorial-heading" class="lt-private-memorial__heading">
+                Something beautiful for a hard day.
+            </h2>
+            <p class="lt-private-memorial__body">
+                If you're here planning a memorial or celebration of life,
+                you're in the right place. Locally Twisted has walked families
+                through this — the decor, the logistics, the timeline.
+            </p>
+            <p class="lt-private-memorial__body">
+                It is not a department. It is part of the work. The team
+                approaches every celebration of life with the same care given
+                to any install, and with the understanding that this one
+                carries more weight. Tell us what you're imagining —
+                dignified, personal, and handled with care.
+            </p>
+            <a href="/contact?intent=celebration-of-life" class="lt-private-memorial__cta">
+                Start a conversation <span aria-hidden="true">&rarr;</span>
+            </a>
+        </div>
+        <div class="lt-private-memorial__proof">
+            <p class="lt-private-memorial__quote-mark" aria-hidden="true">&ldquo;</p>
+            <blockquote class="lt-private-memorial__quote">
+                I needed a sports themed funeral stand. I reached out to Locally Twisted.
+                I told them what I needed, they captured my vision, delivered on time,
+                very reasonable, and had many complements. Very tasteful and meaningful.
+            </blockquote>
+            <p class="lt-private-memorial__attr">— KJ</p>
+            <p class="lt-private-memorial__context">
+                Celebration of life · sports-themed memorial stand · Wasatch Front
+            </p>
+        </div>
+    </div>
+</section>
+
+{# ── 4. Brass divider [raw-band] ─────────────────────────────────── #}
 <div class="lt-private-divider lt-fullbleed" aria-hidden="true">
     <span class="lt-private-divider__line"></span>
     <span class="lt-private-divider__dot"></span>
@@ -633,7 +676,7 @@
     <span class="lt-private-divider__line"></span>
 </div>
 
-{# ── 4. Customer voice [band] ────────────────────────────────────── #}
+{# ── 5. Customer voice [band] ────────────────────────────────────── #}
 <section class="lt-private-voice" aria-labelledby="private-voice-heading">
     <div class="lt-private-voice__inner">
         <h2 id="private-voice-heading" class="lt-private-voice__heading">
@@ -651,7 +694,7 @@
     </div>
 </section>
 
-{# ── 5. Trust pillars [fullbleed — navy] ─────────────────────────── #}
+{# ── 6. Trust pillars [fullbleed — navy] ─────────────────────────── #}
 <section class="lt-private-trust lt-fullbleed" aria-labelledby="private-trust-heading">
     <div class="lt-private-trust__inner">
         <h2 id="private-trust-heading" class="lt-private-trust__heading">
@@ -671,7 +714,7 @@
     </div>
 </section>
 
-{# ── 6. Service notes [band] ─────────────────────────────────────── #}
+{# ── 7. Service notes [band] ─────────────────────────────────────── #}
 <section class="lt-private-services" aria-labelledby="private-services-heading">
     <div class="lt-private-services__inner">
         <h2 id="private-services-heading" class="lt-private-services__heading">
@@ -695,7 +738,7 @@
     </div>
 </section>
 
-{# ── 7. Photo gallery [visual-field] ─────────────────────────────── #}
+{# ── 8. Photo gallery [visual-field] ─────────────────────────────── #}
 <section class="lt-private-gallery" aria-labelledby="private-gallery-heading">
     <div class="lt-private-gallery__inner">
         <h2 id="private-gallery-heading" class="lt-private-gallery__heading">
@@ -726,7 +769,7 @@
     </div>
 </section>
 
-{# ── 8. Closing CTA [fullbleed — slate] ──────────────────────────── #}
+{# ── 9. Closing CTA [fullbleed — slate] ──────────────────────────── #}
 <section class="lt-private-cta lt-fullbleed" aria-labelledby="private-cta-heading">
     <div class="lt-private-cta__inner">
         <h2 id="private-cta-heading" class="lt-private-cta__heading">

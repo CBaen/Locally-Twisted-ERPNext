@@ -5,7 +5,7 @@
 
 **H1:** The moment deserves the detail.
 
-**Lede:** Custom balloon decor for birthdays, weddings, baby showers, milestones, and celebrations of life — designed to fit the room and the people in it.
+**Lede:** Birthdays, weddings, baby showers, anniversaries, and celebrations of life — custom balloon decor designed to fit the room and the people in it. Whatever brought you here, you're in the right place.
 
 **CTA:** Tell us what you're imagining →
 
@@ -68,7 +68,9 @@
 
 **Heading:** Milestones & Memorials
 
-**Description:** Retirements, anniversary years, celebration-of-life gatherings. Balloon decor can carry weight when it needs to — tasteful, considered, and built around what matters to the people in that room.
+**Description:** Retirements, anniversary years, and celebrations of life. Balloon decor can carry weight when it needs to — tasteful, considered, and built around what matters to the people in that room.
+
+**Memorial note (blockquote, brass-ruled left border):** If you're planning a celebration of life, you're in the right place. Jeff and the team have done this work. A customer who lost her husband asked for a sports-themed memorial stand — and later wrote: "Very tasteful and meaningful. He would have loved it." That is the standard for every install.
 
 **Link:** Get a quote for milestone or memorial decor →
 
