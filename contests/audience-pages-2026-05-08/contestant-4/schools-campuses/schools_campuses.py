@@ -69,7 +69,7 @@ PROOF_PILLARS = [
     {
         "icon": "/assets/locally_twisted/icons/brand/school-spirit.svg",
         "label": "School Colors",
-        "body": "Balloon palettes matched to your school's exact colors. No guessing, no surprises.",
+        "body": "University red, institutional navy — sourced to the school's official palette, not the catalog's nearest option.",
     },
     {
         "icon": "/assets/locally_twisted/icons/brand/event-stage.svg",

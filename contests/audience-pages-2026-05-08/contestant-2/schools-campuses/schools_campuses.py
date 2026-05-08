@@ -60,26 +60,43 @@ SCHOOL_PROOF_STORIES = [
 ]
 
 # Notes specific to what school/campus buyers need.
+# Round 2: tightened detail copy to match the specificity of the pill ledger.
 SCHOOL_SERVICE_NOTES = [
     {
         "icon": "school-spirit",
         "label": "School Colors. Exactly.",
-        "detail": "Latex and foil matched to your school's actual color system. No close-enough.",
+        "detail": (
+            "University crimson, institutional navy, school gold — sourced to your "
+            "school's official palette reference, not the catalog's nearest option. "
+            "Latex and foil matched so every piece reads right in your school's own photography."
+        ),
     },
     {
         "icon": "event-stage",
         "label": "On Schedule for School Logistics",
-        "detail": "Installed before the event starts, cleared before the custodians need the space.",
+        "detail": (
+            "Installed before the first student arrives, cleared before the custodians "
+            "need the space. Install and strike windows confirmed in writing so your "
+            "facilities team knows exactly when we're on-site."
+        ),
     },
     {
         "icon": "professional",
         "label": "Family-Friendly and Safe",
-        "detail": "Appropriate for all ages. Professional install crew — background-checked, on time.",
+        "detail": (
+            "Appropriate for all ages, K–12 through university. Professional install "
+            "crew — background-checked, uniformed, on time. No unsupervised access "
+            "to student spaces."
+        ),
     },
     {
         "icon": "delivery-install",
         "label": "Budget-Aware Builds",
-        "detail": "School budgets are real. Tell us the ceiling and we'll design to it.",
+        "detail": (
+            "School budgets have ceilings. Tell us yours and we'll design to it — "
+            "full arch or targeted column pair, the color discipline stays the same "
+            "regardless of scale."
+        ),
     },
 ]
 

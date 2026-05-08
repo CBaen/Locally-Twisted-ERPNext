@@ -52,6 +52,20 @@
 
 ---
 
+## Standalone Memorial Section
+
+**Eyebrow:** Celebrations of Life
+
+**H2:** If you're here for a celebration of life, you're in the right place.
+
+**Body P1:** Jeff and his team have helped families honor people they love. A sports theme. A favorite color. A tribute to something the person cared about. Whatever the context, the install is approached with care — and it arrives on time.
+
+**Body P2:** There's no standard package for this kind of event. Share what you're imagining when you reach out. You don't need to have it figured out before you call.
+
+**CTA (soft):** Start a conversation →
+
+---
+
 ## Proof Pillars Band
 
 **Section label:** How Locally Twisted works for private events
@@ -85,12 +99,14 @@ Jeff and his team work directly with you. No order-and-wait experience.
 — Google review, birthday
 
 **Testimonial 3:**
-"I needed a sports themed funeral stand. I told them what I needed, they captured my vision, delivered on time, very reasonable, and had many compliments. Very tasteful and meaningful."
-— Google review, memorial
-
-**Testimonial 4:**
 "Locally Twisted has done a phenomenal job on many occasions. They are now my go-to easy decorating plan for any of my family events. I don't have to do anything, my house is festive, and I get to enjoy it too!"
 — Google review, repeat family client
+
+**Testimonial 4:**
+"Amazing balloon arrangements — we had so many compliments. Jeff was easy to work with and the setup was exactly what we had in mind. Will definitely use again for future events."
+— Google review, milestone celebration
+
+*(Note: The KJSCOTT memorial review moved to the pre-grid callout band where it lands before the buyer reaches the category grid.)*
 
 ---
 

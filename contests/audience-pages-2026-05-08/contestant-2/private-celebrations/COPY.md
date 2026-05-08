@@ -3,7 +3,7 @@
 ## Hero
 **Eyebrow:** Private Celebrations · Wasatch Front
 **H1:** Designed for the moment. Made to last in the photos.
-**Lede:** Custom balloon decor for birthdays, weddings, baby showers, milestones, and celebrations of life across Utah.
+**Lede:** Custom balloon decor for birthdays, weddings, baby showers, milestones, and celebrations of life — every private occasion, designed from scratch for the moment.
 **CTA:** Tell us what you're imagining →
 
 ---

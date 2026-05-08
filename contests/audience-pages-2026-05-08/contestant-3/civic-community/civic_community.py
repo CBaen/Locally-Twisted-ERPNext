@@ -11,14 +11,39 @@ no_cache = 1
 sitemap = 1
 
 
-CIVIC_CLIENTS = [
-    "SLC Pride", "Pride Center", "Equality Utah", "LGBT Chamber",
-    "Ogden City", "Sandy City", "Herriman City", "Kearns", "Hooper City",
-    "Syracuse City", "West Point City", "Clinton City",
-    "SLC County", "Ogden Weber Chamber", "Gallivan Center",
-    "UDOT", "Ogden Airport", "Utah Art Alliance", "Safe Kids Fair",
-    "Tree House Museum", "Western Sports Park", "Station Park",
-    "Downtown Daybreak", "Live Daybreak", "Shops at Southtown", "Newgate Mall",
+# Grouped roster — category-first so the civic coordinator's eye can scan
+# by type rather than reading a wall of names. Matches what C1/C2 learned
+# in round 1: category-grouped rosters carry more proof weight than flat tags.
+CIVIC_CLIENT_GROUPS = [
+    {
+        "label": "Cities & Counties",
+        "clients": [
+            "Ogden City", "Sandy City", "Herriman City", "Kearns",
+            "Hooper City", "Syracuse City", "West Point City", "Clinton City",
+            "SLC County",
+        ],
+    },
+    {
+        "label": "Pride & Equity Organizations",
+        "clients": [
+            "SLC Pride", "Pride Center", "Equality Utah", "LGBT Chamber",
+        ],
+    },
+    {
+        "label": "Chambers & Economic Organizations",
+        "clients": [
+            "Ogden Weber Chamber", "Gallivan Center", "UDOT", "Ogden Airport",
+        ],
+    },
+    {
+        "label": "Community Venues & Events",
+        "clients": [
+            "Utah Art Alliance", "Safe Kids Fair", "Tree House Museum",
+            "Western Sports Park", "Station Park",
+            "Downtown Daybreak", "Live Daybreak",
+            "Shops at Southtown", "Newgate Mall",
+        ],
+    },
 ]
 
 CIVIC_PROOF_STATS = [
@@ -374,6 +399,44 @@ PAGE_CSS = """
     line-height: 1.3;
 }
 
+/* --- Client roster grouped layout ---------------------------------- */
+.lt-page-civic .lt-civic-roster__groups {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+@media (min-width: 600px) {
+    .lt-page-civic .lt-civic-roster__groups { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 992px) {
+    .lt-page-civic .lt-civic-roster__groups { grid-template-columns: repeat(4, 1fr); }
+}
+.lt-page-civic .lt-civic-roster__group-label {
+    font-family: var(--lt-font-body);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--lt-brass);
+    margin: 0 0 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(184,154,91,0.35);
+}
+.lt-page-civic .lt-civic-roster__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.lt-page-civic .lt-civic-roster__item {
+    font-family: var(--lt-font-body);
+    font-size: 0.9375rem;
+    color: rgba(250,247,242,0.82);
+    padding: 0.3rem 0;
+    border-bottom: 1px solid rgba(184,154,91,0.1);
+    line-height: 1.3;
+}
+.lt-page-civic .lt-civic-roster__item:last-child { border-bottom: none; }
+
 /* --- Services (band mode) ------------------------------------------ */
 .lt-page-civic .lt-civic-services {
     background-color: var(--lt-warm-white);
@@ -508,7 +571,7 @@ def get_context(context):
         ),
         "og:type": "website",
     }
-    context.civic_clients = CIVIC_CLIENTS
+    context.civic_client_groups = CIVIC_CLIENT_GROUPS
     context.civic_proof_stats = CIVIC_PROOF_STATS
     context.civic_installs = CIVIC_INSTALLS
     context.civic_services = CIVIC_SERVICES

@@ -88,18 +88,25 @@
     </div>
 </section>
 
-{# --- 5. Client roster (band / navy) --------------------------------- #}
+{# --- 5. Client roster (band / navy) — grouped by category ----------- #}
 <section class="lt-civic-roster lt-fullbleed" aria-labelledby="lt-civic-roster-h2">
     <div class="lt-civic-roster__inner">
         <p class="lt-civic-roster__eyebrow">Who we've worked with</p>
         <h2 id="lt-civic-roster-h2" class="lt-civic-roster__h2">
             Utah cities, organizations, and public venues that trust Locally Twisted.
         </h2>
-        <ul class="lt-civic-roster__grid" role="list">
-            {% for client in civic_clients %}
-            <li class="lt-civic-roster__item">{{ client }}</li>
+        <div class="lt-civic-roster__groups">
+            {% for group in civic_client_groups %}
+            <div class="lt-civic-roster__group">
+                <p class="lt-civic-roster__group-label">{{ group.label }}</p>
+                <ul class="lt-civic-roster__list" role="list">
+                    {% for client in group.clients %}
+                    <li class="lt-civic-roster__item">{{ client }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
             {% endfor %}
-        </ul>
+        </div>
     </div>
 </section>
 

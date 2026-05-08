@@ -13,34 +13,38 @@ import frappe
 no_cache = 1
 sitemap = 1
 
-# Real civic/community clients from the approved roster.
-CIVIC_CLIENTS = [
-    "SLC Pride",
-    "Pride Center",
-    "Equality Utah",
-    "LGBT Chamber",
-    "Ogden City",
-    "Sandy City",
-    "Herriman City",
-    "Kearns City",
-    "Hooper City",
-    "Syracuse City",
-    "West Point City",
-    "Clinton City",
-    "SLC County",
-    "Ogden Weber Chamber",
-    "Gallivan Center",
-    "UDOT",
-    "Ogden Airport",
-    "Utah Art Alliance",
-    "Safe Kids Fair",
-    "Tree House Museum",
-    "Western Sports Park",
-    "Station Park",
-    "Downtown Daybreak",
-    "Live Daybreak",
-    "Shops at Southtown",
-    "Newgate Mall",
+# Real civic/community clients — grouped by type so a coordinator scans
+# for peer organizations, not just names.
+CIVIC_CLIENT_GROUPS = [
+    {
+        "group": "Cities & Counties",
+        "clients": [
+            "Ogden City", "Sandy City", "Herriman City", "Kearns City",
+            "Hooper City", "Syracuse City", "West Point City", "Clinton City",
+            "SLC County",
+        ],
+    },
+    {
+        "group": "Pride & Equality",
+        "clients": [
+            "SLC Pride", "Pride Center", "Equality Utah", "LGBT Chamber",
+        ],
+    },
+    {
+        "group": "Chambers & Civic Venues",
+        "clients": [
+            "Ogden Weber Chamber", "Gallivan Center", "UDOT", "Ogden Airport",
+            "Utah Art Alliance",
+        ],
+    },
+    {
+        "group": "Community & Family Events",
+        "clients": [
+            "Safe Kids Fair", "Tree House Museum", "Western Sports Park",
+            "Station Park", "Downtown Daybreak", "Live Daybreak",
+            "Shops at Southtown", "Newgate Mall",
+        ],
+    },
 ]
 
 # Proof installs — specific named civic contexts for the story block.
@@ -112,7 +116,7 @@ def get_context(context):
         ),
         "og:type": "website",
     }
-    context.civic_clients = CIVIC_CLIENTS
+    context.civic_client_groups = CIVIC_CLIENT_GROUPS
     context.civic_proof_stories = CIVIC_PROOF_STORIES
     context.civic_capabilities = CIVIC_CAPABILITIES
     return context

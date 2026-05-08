@@ -24,9 +24,23 @@ If you're here for a celebration of life, you're in the right place. The same ca
 
 ---
 
-## Section 3 — Category proof
+## Section 3 — Memorial & Celebration of Life (standalone section)
 
-**H2:** Every kind of occasion
+**Label:** Memorial & Celebration of Life
+
+**H2:** When the occasion asks for something different.
+
+**Body:** Planning a celebration of life is already a lot to carry. The decor shouldn't be an additional burden. Locally Twisted works directly with families and memorial organizers — no layers, no pitch process. Share what you have in mind, and a quiet conversation starts from there. The work is done with care, and nothing is shared publicly without your permission.
+
+**Pull quote (KJ, memorial client):**
+"I reached out with a vision for a sports-themed funeral stand. They captured it, delivered on time, and the result was very tasteful and meaningful."
+— KJ, memorial client / Celebration of Life
+
+---
+
+## Section 4 — Category proof (birthdays, weddings, baby showers)
+
+**H2:** Every kind of celebration
 
 **Sub:** Balloon decor tailored to what the moment calls for.
 
@@ -48,15 +62,9 @@ If you're here for a celebration of life, you're in the right place. The same ca
 **Headline:** Baby showers and gender reveals
 **Detail:** Tasteful, photograph-ready decor for the moments that matter before the baby arrives.
 
-### Memorials
-**Icon:** balloon-bouquet
-**Category label:** Memorials
-**Headline:** Memorials and celebrations of life
-**Detail:** Respectful, personal balloon arrangements for tribute events. Previous clients have described it as exactly right.
-
 ---
 
-## Section 4 — Install proof
+## Section 5 — Install proof
 
 **H2:** Installed work
 

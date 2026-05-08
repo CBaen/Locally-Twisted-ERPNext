@@ -74,7 +74,7 @@ Every install is appropriate for student, family, and faculty audiences.
 
 **H2:** Decor that fits the school calendar.
 
-**Body P1:** School events run on tight schedules and tighter budgets. Locally Twisted quotes by scope, coordinates install windows around class and facility access, and produces decor in your school's exact colors — not close enough.
+**Body P1:** School events run on tight schedules and tighter budgets. Locally Twisted quotes by scope, coordinates install windows around class and facility access, and produces decor in your school's exact colors — university red, institutional navy, sourced to the official palette, not the catalog's nearest option.
 
 **Body P2:** From graduation arches at commencement to spirit-event backdrops in the gym, every install is appropriate for student, family, and faculty audiences.
 

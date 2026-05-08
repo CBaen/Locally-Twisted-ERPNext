@@ -15,15 +15,28 @@ Private celebrations deserve a warmer page than civic or corporate, but NOT a pa
 - CTA copy: "Tell us what you're imagining." — the most personal, warm CTA on any of the four pages, and explicitly on-voice per the style guide's copy examples.
 - Testimonials placed prominently (not buried at the bottom) — private buyers make decisions based on peer trust
 
-## Structure (7 sections)
+## Structure (9 sections — Round 2 expanded)
 
 1. Hero — fullbleed, wedding arch photo, most personal of the four hero copies
-2. Celebration types — 4-card grid, each card = a celebration category (no named clients)
-3. Gallery strip — visual-field, 6 photos from birthday + wedding portfolio
-4. Proof pillars — slate blue, 4 pillars designed for a milestone buyer
-5. Testimonials — sandstone ground, 4 Google review quotes (real, sourced from home.py)
-6. Service note — warm-white, explains how to start + latex-free + same-day option
-7. CTA — ink, personal framing
+2. Memorial proof callout — deep navy band with left brass border; KJSCOTT review elevated to pre-grid position so the grief buyer sees human proof BEFORE the category grid
+3. Celebration types — 4-card grid, each card = a celebration category (no named clients)
+4. Standalone memorial section — warm-white, named section claiming the grief buyer with invitation copy; room-specific furniture that cannot be moved to any other page
+5. Gallery strip — visual-field, 6 photos from birthday + wedding portfolio
+6. Proof pillars — slate blue, 4 pillars designed for a milestone buyer
+7. Testimonials — sandstone ground, 4 Google review quotes (real, sourced from home.py)
+8. Service note — warm-white, explains how to start + latex-free + same-day option
+9. CTA — ink, personal framing
+
+### Round 2 structural rationale
+
+The FIELD-AT-ROUND-1 identified that no contestant had simultaneously:
+1. Claimed the grief buyer early (before birthday/wedding content)
+2. Surfaced KJSCOTT in a structural position before the category grid
+3. Given memorial a container commensurate with its weight
+
+Round 2 addresses all three:
+- Section 2: KJSCOTT moves from the testimonials grid to a pre-grid deep navy callout with brass left border — the buyer sees this before they reach the category cards
+- Section 4: Standalone "Celebrations of Life" section with H2 that directly names the grief buyer ("If you're here for a celebration of life, you're in the right place"), two invitation paragraphs, and a soft CTA ("Start a conversation") calibrated to the emotional register
 
 ## Celebration Type Cards
 

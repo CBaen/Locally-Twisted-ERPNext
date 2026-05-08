@@ -30,8 +30,15 @@
 
 **Sub:** Organizations that have trusted Locally Twisted with public-facing events across the Wasatch Front.
 
-**Client list (as rendered tags):**
-SLC Pride · Pride Center · Equality Utah · LGBT Chamber · Ogden City · Sandy City · Herriman City · Kearns City · Hooper City · Syracuse City · West Point City · Clinton City · SLC County · Ogden Weber Chamber · Gallivan Center · UDOT · Ogden Airport · Utah Art Alliance · Safe Kids Fair · Tree House Museum · Western Sports Park · Station Park · Downtown Daybreak · Live Daybreak · Shops at Southtown · Newgate Mall
+**Client list (grouped by organization type — rendered as 4-column grid with brass-rule labels):**
+
+**Cities & Counties:** Ogden City · Sandy City · Herriman City · Kearns City · Hooper City · Syracuse City · West Point City · Clinton City · SLC County
+
+**Pride & Equality:** SLC Pride · Pride Center · Equality Utah · LGBT Chamber
+
+**Chambers & Civic Venues:** Ogden Weber Chamber · Gallivan Center · UDOT · Ogden Airport · Utah Art Alliance
+
+**Community & Family Events:** Safe Kids Fair · Tree House Museum · Western Sports Park · Station Park · Downtown Daybreak · Live Daybreak · Shops at Southtown · Newgate Mall
 
 ---
 
