@@ -52,6 +52,7 @@ Workflows. Multi-step. Clear start and finish.
 - [erpnext-simplified-role-verification](recipes/erpnext-simplified-role-verification.md) - verify a simplified ERPNext backend role from login through workspace, shortcuts, permissions, and real records.
 - [external-design-reference-translation](recipes/external-design-reference-translation.md) - translate Claude/designer/prototype reference code into Frappe-owned production files without silently changing the approved visual contract.
 - [fail-loud-operating-law](recipes/fail-loud-operating-law.md) - make forms, automations, documents, containers, and agent claims block false success with actionable failures and verifier evidence.
+- [large-source-document-intake](recipes/large-source-document-intake.md) - chunk and source-map large LT reference documents before using them for catalog, policy, checkout, or migration claims.
 - [erpnext-record-level-failure-recorder](recipes/erpnext-record-level-failure-recorder.md) - give partial backend failures one durable blocker/report contract on affected ERPNext records.
 - [frappe-public-container-contract](recipes/frappe-public-container-contract.md) - keep Frappe/Webshop page lifecycle while making every LT public section choose contained workflow/reading mode or deliberate full-bleed band mode.
 - [homepage-launch-proof-contract](recipes/homepage-launch-proof-contract.md) - keep the launch homepage stable, real-photo-led, full-stage proof-crawl driven, and free of overlay/cycling regressions.
