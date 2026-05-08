@@ -1,0 +1,170 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+
+{#
+  /civic-community — Audience: City events coordinators, Pride organizers,
+  chambers, county events, public-facing community organizations.
+
+  Sections (container mode noted per section):
+  1. Hero              — fullbleed
+  2. Proof stats       — band (slate authority band)
+  3. Intro prose       — band (warm white)
+  4. Installed work    — visual-field (stone, photo grid)
+  5. Client roster     — band (navy)
+  6. Services          — band (warm white, 4-up cards)
+  7. Closing CTA       — fullbleed (ink)
+#}
+
+<div class="lt-page-civic">
+
+{# --- 1. Hero (fullbleed) ------------------------------------------- #}
+<section class="lt-civic-hero lt-fullbleed" aria-labelledby="lt-civic-h1">
+    <div class="lt-civic-hero__image" aria-hidden="true"></div>
+    <div class="lt-civic-hero__content">
+        <p class="lt-civic-hero__eyebrow">Utah Civic &amp; Community Events</p>
+        <h1 id="lt-civic-h1" class="lt-civic-hero__h1">
+            Balloon decor built for Utah's public stage.
+        </h1>
+        <p class="lt-civic-hero__lede">
+            City events, Pride celebrations, chambers, county gatherings, and community milestones — installations that read from the street and photograph at every angle.
+        </p>
+        <a href="/contact?intent=civic" class="lt-civic-hero__cta">
+            Request a Civic Quote <span aria-hidden="true">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+{# --- 2. Proof stats band (band / slate) ----------------------------- #}
+<section class="lt-civic-stats lt-fullbleed" aria-label="Civic event proof">
+    <div class="lt-civic-stats__inner">
+        {% for stat in civic_proof_stats %}
+        <div class="lt-civic-stats__item">
+            <p class="lt-civic-stats__number">{{ stat.number }}</p>
+            <p class="lt-civic-stats__label">{{ stat.label }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{# --- 3. Intro prose (band / warm white) ----------------------------- #}
+<section class="lt-civic-intro" aria-labelledby="lt-civic-intro-h2">
+    <div class="lt-civic-intro__inner">
+        <p class="lt-civic-intro__label">Why Locally Twisted for civic work</p>
+        <h2 id="lt-civic-intro-h2" class="lt-civic-intro__h2">
+            Public events need installations that hold up — and stand out.
+        </h2>
+        <p class="lt-civic-intro__body">
+            A city ribbon cutting, a Pride parade float, a county fair entrance, a chamber gala — each one is a public statement. The balloon work isn't decoration; it's the backdrop for a thousand photos, the landmark attendees orient around, the visual proof that the event was worth attending.
+        </p>
+        <p class="lt-civic-intro__body">
+            Since 1998, Locally Twisted has installed civic-scale balloon work across the Wasatch Front: parades that travel five miles, stages that face thousands, and entrances that welcome every kind of community. Every install is engineered for outdoor conditions, built to photograph, and struck cleanly after.
+        </p>
+        <hr class="lt-civic-intro__brass-rule" aria-hidden="true">
+    </div>
+</section>
+
+{# --- 4. Installed work gallery (visual-field / stone) --------------- #}
+<section class="lt-civic-gallery lt-fullbleed" aria-labelledby="lt-civic-gallery-h2">
+    <div class="lt-civic-gallery__inner">
+        <h2 id="lt-civic-gallery-h2" class="lt-civic-gallery__heading">Utah Civic Work</h2>
+        <p class="lt-civic-gallery__subhead">Real installations. Real Utah communities. Real scale.</p>
+        <div class="lt-civic-gallery__grid">
+            {% for install in civic_installs %}
+            <figure class="lt-civic-gallery__item">
+                <img
+                    src="{{ install.image }}"
+                    alt="{{ install.alt }}"
+                    class="lt-civic-gallery__img"
+                    loading="lazy"
+                >
+                <figcaption class="lt-civic-gallery__caption">
+                    <p class="lt-civic-gallery__caption-cat">{{ install.category }}</p>
+                    <p class="lt-civic-gallery__caption-title">{{ install.title }}</p>
+                </figcaption>
+            </figure>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{# --- 5. Client roster (band / navy) --------------------------------- #}
+<section class="lt-civic-roster lt-fullbleed" aria-labelledby="lt-civic-roster-h2">
+    <div class="lt-civic-roster__inner">
+        <p class="lt-civic-roster__eyebrow">Who we've worked with</p>
+        <h2 id="lt-civic-roster-h2" class="lt-civic-roster__h2">
+            Utah cities, organizations, and public venues that trust Locally Twisted.
+        </h2>
+        <ul class="lt-civic-roster__grid" role="list">
+            {% for client in civic_clients %}
+            <li class="lt-civic-roster__item">{{ client }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>
+
+{# --- 6. Services (band / warm white) -------------------------------- #}
+<section class="lt-civic-services" aria-labelledby="lt-civic-services-h2">
+    <div class="lt-civic-services__inner">
+        <h2 id="lt-civic-services-h2" class="lt-civic-services__h2">What we install for civic events</h2>
+        <p class="lt-civic-services__lede">
+            Each piece is quoted and designed for your event scale, palette, and install conditions.
+        </p>
+        <div class="lt-civic-services__grid">
+            {% for svc in civic_services %}
+            <div class="lt-civic-services__card">
+                <svg class="lt-civic-services__icon" viewBox="0 0 64 64" fill="none"
+                     stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                     stroke-linejoin="round" aria-hidden="true">
+                    {% if svc.icon == 'arch' %}
+                    <path d="M10 54 V32 a22 22 0 0 1 44 0 V54"/>
+                    <circle cx="14" cy="22" r="3" fill="currentColor" stroke="none"/>
+                    <circle cx="32" cy="12" r="3" fill="currentColor" stroke="none"/>
+                    <circle cx="50" cy="22" r="3" fill="currentColor" stroke="none"/>
+                    {% elif svc.icon == 'column' %}
+                    <rect x="24" y="10" width="16" height="44" rx="2"/>
+                    <circle cx="32" cy="22" r="2.5" fill="currentColor" stroke="none"/>
+                    <circle cx="32" cy="34" r="2.5" fill="currentColor" stroke="none"/>
+                    <circle cx="32" cy="46" r="2.5" fill="currentColor" stroke="none"/>
+                    {% elif svc.icon == 'garland' %}
+                    <path d="M6 22 Q32 50 58 22"/>
+                    <circle cx="14" cy="28" r="3" fill="currentColor" stroke="none"/>
+                    <circle cx="24" cy="36" r="3" fill="currentColor" stroke="none"/>
+                    <circle cx="32" cy="38" r="3" fill="currentColor" stroke="none"/>
+                    <circle cx="40" cy="36" r="3" fill="currentColor" stroke="none"/>
+                    <circle cx="50" cy="28" r="3" fill="currentColor" stroke="none"/>
+                    {% elif svc.icon == 'backdrop' %}
+                    <rect x="8" y="12" width="48" height="32" rx="2"/>
+                    <path d="M14 36 L24 26 L32 32 L42 22 L50 30"/>
+                    <circle cx="42" cy="22" r="3" fill="currentColor" stroke="none"/>
+                    {% endif %}
+                </svg>
+                <h3 class="lt-civic-services__card-title">{{ svc.title }}</h3>
+                <p class="lt-civic-services__card-body">{{ svc.body }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{# --- 7. Closing CTA (fullbleed / ink) ------------------------------- #}
+<section class="lt-civic-cta lt-fullbleed" aria-labelledby="lt-civic-cta-h2">
+    <div class="lt-civic-cta__inner">
+        <h2 id="lt-civic-cta-h2" class="lt-civic-cta__h2">
+            Tell us about your event.
+        </h2>
+        <p class="lt-civic-cta__body">
+            City-scale or neighborhood-scale, indoor or outdoor, one piece or a full venue treatment — start with a quote and we'll design from there.
+        </p>
+        <a href="/contact?intent=civic" class="lt-civic-cta__btn">
+            Request a Civic Quote <span aria-hidden="true">&rarr;</span>
+        </a>
+        <p class="lt-civic-cta__sub">
+            Or call us directly: <a href="tel:8012850860">(801) 285-0860</a>
+        </p>
+    </div>
+</section>
+
+</div>{# end .lt-page-civic #}
+
+{% endblock %}
