@@ -6,12 +6,14 @@ last_verified: 2026-05-08
 
 ## What It Does
 
-Creates a client-safe maintenance heartbeat for ERPNext/Frappe systems without
-turning the maintenance lane into broad backend access.
+Documents the Locally Twisted implementation of the agency maintenance
+heartbeat standard at
+`C:\Users\baenb\projects\Built_by_Cameron\.codex\capabilities\recipes\erpnext-maintenance-heartbeat-boundary.md`.
+This file is the client receipt layer: exact LT role names, DocTypes, scripts,
+verification commands, and expected current states live here.
 
-Use it when a client site needs scheduled health checks, owner-facing status,
-agent-facing handoff evidence, or a narrow maintenance role after ownership
-transfer.
+Do not use this file as the reusable template for another client. Promote
+cross-client rules back to the agency recipe and keep LT-specific wiring here.
 
 ## Contract
 
@@ -37,10 +39,10 @@ The heartbeat must not expose:
 
 Maintenance access is a role, not a role profile.
 
-Use a narrow role such as `LT Maintenance Admin Access` and expose only
-sanitized maintenance DocTypes, reports, and workspaces. Do not grant System
-Manager, Website Manager, Accounts, Sales, Inbox, Item Manager, owner, or
-accountant roles to the maintenance actor by default.
+LT uses the narrow `LT Maintenance Admin Access` role and exposes only sanitized
+maintenance DocTypes, reports, and workspaces. Do not grant System Manager,
+Website Manager, Accounts, Sales, Inbox, Item Manager, owner, or accountant
+roles to the maintenance actor by default.
 
 ## Action Tiers
 

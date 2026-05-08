@@ -8,6 +8,31 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-08 - Product and project files must not become monoliths
+
+**Decision:** LT inherits the machine-wide no-monolith law. Hand-authored
+production Python, Jinja, CSS, JavaScript, verifier, script, test, and
+project-doc files should have one clear job. Research/reference artifacts are
+the only intentional long-form exception.
+
+**Reasoning:** LT has repeated high-risk surfaces where giant files hide
+unrelated behavior: Webshop templates, public CSS, product pages, portfolio
+motion, verifiers, and feature handoffs. Monolith files make agents miss
+context, over-edit, and weaken verification.
+
+**Implementation:** Added the local rule to `AGENTS.md` and the reusable
+machine-wide capability at
+`C:\Users\baenb\.codex\capabilities\principles\no-monolith-files.md`.
+Future LT work should split new concerns into modules, partials, helpers,
+recipes, workstream docs, or focused verifiers instead of expanding broad files.
+
+**Alternatives considered:** Rely on agent judgment case by case. Rejected
+because the failure mode is predictable and costly.
+
+**Decided by:** GL directive on 2026-05-08.
+
+---
+
 ## 2026-05-08 - Manual public accessibility gate covers focus exposure
 
 **Decision:** Public accessibility closeout now includes a reusable manual-style

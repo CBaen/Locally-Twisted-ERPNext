@@ -19,6 +19,10 @@ This root follows the machine-wide capability schema v2.0. Older files remain
 usable as legacy cards, but `currently_true`, `verified`, and `staple` require
 new evidence in the stated scope. Do not promote old LT cards from memory alone.
 
+## Principles
+
+- Global rule: `C:\Users\baenb\.codex\capabilities\principles\no-monolith-files.md` - do not create or expand hand-authored production monoliths; split by clear responsibility unless the file is research/reference material.
+
 ## Ingredients
 
 The smallest reusable units. One tool, one command, one MCP server, or a thin

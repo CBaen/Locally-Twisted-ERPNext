@@ -15,6 +15,17 @@ Branches are forbidden in this repo. Work on `main` only.
 - Push completed commits directly to `origin/main`. GitHub is the archive; branches are not holding areas, queues, or coordination lanes.
 - Machine-wide hooks live at `C:\Users\baenb\.codex\git-hooks\no-branches` and block non-main commits and pushes. Git has no pre-hook that can fully prevent branch creation before it happens, so agents must obey this file as the primary rule.
 
+## No Monoliths
+
+Source of truth:
+`C:\Users\baenb\.codex\capabilities\principles\no-monolith-files.md`.
+
+Apply it here as: one hand-authored production file, one clear job. Split
+cross-concern LT changes into named modules, partials, helpers, recipes,
+workstream docs, or focused verifiers instead of expanding catch-all files.
+Research/reference artifacts may be long-form; generated, vendor, lock, cache,
+and export files are artifacts, not design precedent.
+
 ## Fail Loudly Law
 
 Mantra: **If it can fail, it must fail loudly.**

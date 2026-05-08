@@ -6,6 +6,21 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-08 - Monolith files make product fixes worse
+
+Large catch-all files turn simple LT fixes into risky broad edits. Product page
+containers, portfolio motion, Frappe overrides, public CSS, and verification
+logic all need readable boundaries so agents can work on one concern without
+dragging unrelated behavior into the change.
+
+**Counter-move:** before adding to a broad hand-authored file, name the file's
+current job. If the new work is a separate concern, split it into a module,
+partial, helper, recipe, workstream doc, or focused verifier. Research/reference
+artifacts may be long-form. Generated/vendor/lock/cache/export files are not a
+model for production structure.
+
+---
+
 ## 2026-05-08 - Moving proof surfaces must not leak hidden keyboard focus
 
 The axe pass was clean, but the manual keyboard/zoom probe found two real
