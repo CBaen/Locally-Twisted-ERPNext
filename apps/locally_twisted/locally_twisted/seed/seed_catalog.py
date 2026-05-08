@@ -22,8 +22,8 @@ Behavior — applies to EVERY product:
   3. For products WITH attributes: generate every valid combination (Odoo's exclusions
      applied at scrape time; we receive valid_variants directly from catalog.json).
      - Each variant: erpnext.controllers.item_variant.create_variant + .save()
-     - Each variant: Item Price on 'Standard Selling' at base_price (Odoo doesn't
-       expose per-variant pricing for LT's products — base price applies to all combos).
+     - Each variant: Item Price on 'Standard Selling' from the scraped row's
+       ERPNext variant price, falling back to row price and then base price.
   4. For products WITHOUT attributes: Item Price on the template directly.
   5. Attach image: docker-host-side-copied to sites/frontend/public/files/<slug>.png,
      File doc created, Item.image set.
@@ -281,10 +281,9 @@ def _upsert_website_item(template_code: str, prod: dict, item_group: str, file_u
 def _seed_variants(template_code: str, prod: dict, normalize_map: dict, log) -> int:
     """Generate Item Variants for every valid combination Odoo encoded.
 
-    Each variant gets its own Item Price on Standard Selling at base_price. (Odoo
-    doesn't expose per-variant pricing in JSON-LD for LT's catalog; base price
-    applies to all combos. If Jeff later sets variant-specific prices, edit them
-    via UI — they are operator-state from that point on.)
+    Each variant gets its own Item Price on Standard Selling from the scraped
+    variant row. Odoo's JSON-LD page price is only the base page price; dynamic
+    variant prices come from /website_sale/get_combination_info.
 
     Returns: number of variants created (excluding existing).
     """
@@ -306,9 +305,9 @@ def _seed_variants(template_code: str, prod: dict, normalize_map: dict, log) -> 
             existing = get_variant(template_code, args=args)
         except Exception:
             existing = None
+        variant_price = v.get("erpnext_variant_price", v.get("price", base_price))
         if existing:
-            # Ensure price exists
-            _upsert_item_price(existing, base_price)
+            _upsert_item_price(existing, variant_price)
             continue
 
         try:
@@ -319,10 +318,10 @@ def _seed_variants(template_code: str, prod: dict, normalize_map: dict, log) -> 
             # Race or stale flag; treat as already-created
             existing = get_variant(template_code, args=args)
             if existing:
-                _upsert_item_price(existing, base_price)
+                _upsert_item_price(existing, variant_price)
             continue
 
-        _upsert_item_price(new_variant.name, base_price)
+        _upsert_item_price(new_variant.name, variant_price)
 
         # Per-variant image: leave Item.image inherited from template (auto-copied
         # from template by create_variant).

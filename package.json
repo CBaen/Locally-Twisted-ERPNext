@@ -12,8 +12,9 @@
     "test:portfolio-reel": "playwright test scripts/verify/portfolio_reel.spec.js --reporter=line",
     "test:event-playground": "playwright test scripts/verify/event_playground.spec.js --reporter=line",
     "test:checkout-experience": "playwright test scripts/verify/checkout_experience.spec.js --reporter=line",
+    "test:product-prices": "python scripts/verify/product_variant_price_contract.py",
     "test:shop-smoke": "python scripts/verify/smoke_shop.py",
-    "test:website-verify": "npm run test:verifier-cli && npm run test:nav-ia && npm run test:layout-fit && npm run test:container-contract && npm run test:interactive-layout && npm run test:checkout-experience && npm run test:portfolio-reel && npm run test:shop-smoke",
+    "test:website-verify": "npm run test:verifier-cli && npm run test:nav-ia && npm run test:layout-fit && npm run test:container-contract && npm run test:interactive-layout && npm run test:checkout-experience && npm run test:portfolio-reel && npm run test:product-prices && npm run test:shop-smoke",
     "test:public-verify": "npm run test:website-verify",
     "test:desk-owner": "playwright test scripts/verify/owner_desk_routes.spec.js --reporter=line"
   },

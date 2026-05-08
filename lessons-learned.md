@@ -6,6 +6,24 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-08 - Odoo page base price is not variant price
+
+The Unicorn Bouquet repair proved the catalog importer had flattened dynamic
+Odoo variant prices into the page base price. The page JSON-LD/base price showed
+$35, but Odoo's `/website_sale/get_combination_info` returned the real bouquet
+size prices: Small $35, Medium $70, Large $85. Full combos with the optional
+foil-number add-on returned a different number again, so optional add-ons must
+not be confused with the ERPNext-required variant price.
+
+**Counter-move:** any Odoo-to-ERPNext product import that touches variants must
+resolve prices through Odoo's combination endpoint, not the product page base
+price. If optional axes are intentionally dropped from ERPNext variants, query
+Odoo with only the required attribute IDs for the ERPNext Item Price. Guard
+launch-critical products with `npm run test:product-prices` or an equivalent
+price contract.
+
+---
+
 ## 2026-05-08 - Monolith files make product fixes worse
 
 Large catch-all files turn simple LT fixes into risky broad edits. Product page

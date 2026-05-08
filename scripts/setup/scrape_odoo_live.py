@@ -3,7 +3,9 @@ scrape_odoo_live.py — Fresh scrape of LT's live Odoo at 5.78.136.133.
 
 Source of truth per GL 2026-04-30: the LIVE Odoo site is the only catalog truth.
 Captures EVERY product, EVERY attribute, EVERY value, the full exclusion graph,
-and computes EVERY valid attribute combination per product.
+and computes EVERY valid attribute combination per product. Variant prices are
+resolved through Odoo's dynamic /website_sale/get_combination_info endpoint; the
+page's JSON-LD/base price is not trusted as the variant price.
 
 Output:
   _resources/odoo-live/catalog.json
@@ -43,7 +45,8 @@ Output:
             {
               "ptav_ids": [1293, 1345],
               "combo": {"Garland Length": "6ft", "latex colors": "White"},
-              "price": 150.00
+              "price": 150.00,
+              "erpnext_variant_price": 150.00
             },
             ...
           ]
@@ -69,6 +72,7 @@ import sys
 import time
 import urllib.error
 import urllib.request
+from http.cookiejar import CookieJar
 from pathlib import Path
 from typing import Any
 from urllib.parse import urljoin
@@ -76,10 +80,18 @@ from urllib.parse import urljoin
 ODOO_BASE = "http://5.78.136.133"
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(PROJECT_ROOT / "apps" / "locally_twisted"))
+
+from locally_twisted.catalog_variant_rules import (  # noqa: E402
+    is_required_variant_attribute,
+    project_required_variant_combo,
+)
+
 EXPORT_DIR = PROJECT_ROOT / "_resources" / "odoo-live"
 IMAGES_DIR = EXPORT_DIR / "images"
 TIMEOUT_S = 30
 INTER_REQUEST_DELAY_S = 0.15  # be polite
+ODOO_COMBINATION_ROUTE = f"{ODOO_BASE}/website_sale/get_combination_info"
 
 CATEGORY_ROOTS = [
     "/shop/category/what-we-make-3",
@@ -90,9 +102,14 @@ CATEGORY_ROOTS = [
 
 # ── HTTP plumbing ─────────────────────────────────────────────────────
 
-def fetch(url: str) -> str:
+def new_opener() -> urllib.request.OpenerDirector:
+    return urllib.request.build_opener(urllib.request.HTTPCookieProcessor(CookieJar()))
+
+
+def fetch(url: str, opener: urllib.request.OpenerDirector | None = None) -> str:
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    with urllib.request.urlopen(req, timeout=TIMEOUT_S) as resp:
+    open_url = opener.open if opener else urllib.request.urlopen
+    with open_url(req, timeout=TIMEOUT_S) as resp:
         return resp.read().decode("utf-8", errors="replace")
 
 
@@ -148,6 +165,7 @@ PRICE_RE = re.compile(r'<span[^>]*class="[^"]*oe_currency_value[^"]*"[^>]*>([\d.
 JSONLD_RE = re.compile(r'<script type="application/ld\+json">\s*(\{.+?\})\s*</script>', re.DOTALL)
 DESC_RE = re.compile(r'<div[^>]*itemprop="description"[^>]*>(.*?)</div>', re.DOTALL)
 EXCL_RE = re.compile(r'data-attribute-exclusions="([^"]+)"', re.DOTALL)
+CSRF_RE = re.compile(r'csrf_token:\s*"([^"]+)"')
 ATTR_BLOCK_RE = re.compile(
     r'<li\s+name="variant_attribute"\s+data-attribute-id="(\d+)"\s+data-attribute-name="([^"]+)"\s+data-attribute-display-type="([^"]+)"[^>]*>(.*?)</li>\s*</li>?',
     re.DOTALL,
@@ -350,6 +368,124 @@ def compute_valid_variants(
     return valid
 
 
+def extract_csrf_token(html: str) -> str | None:
+    match = CSRF_RE.search(html)
+    return match.group(1) if match else None
+
+
+def ptav_attribute_lookup(attributes: dict[str, dict]) -> dict[int, str]:
+    lookup: dict[int, str] = {}
+    for attr_name, attr_data in attributes.items():
+        for value in attr_data.get("values") or []:
+            lookup[int(value["ptav_id"])] = attr_name
+    return lookup
+
+
+def required_ptav_ids_for_seed(row: dict, attributes: dict[str, dict]) -> list[int]:
+    """Return the Odoo ptav ids that match the ERPNext required variant combo."""
+    full_ptav_ids = [int(value) for value in row.get("ptav_ids") or []]
+    combo = row.get("combo") or {}
+    projected_combo = project_required_variant_combo(combo)
+    if len(projected_combo) == len(combo):
+        return full_ptav_ids
+
+    lookup = ptav_attribute_lookup(attributes)
+    required_names = set(projected_combo)
+    required_ids = [
+        ptav_id
+        for ptav_id in full_ptav_ids
+        if lookup.get(ptav_id) in required_names and is_required_variant_attribute(lookup.get(ptav_id))
+    ]
+    if not required_ids:
+        raise RuntimeError(f"Could not project ERPNext ptav ids from row: {row}")
+    return required_ids
+
+
+def fetch_combination_price(
+    opener: urllib.request.OpenerDirector,
+    csrf_token: str,
+    product_template_id: int,
+    ptav_ids: list[int],
+) -> dict:
+    payload = json.dumps(
+        {
+            "jsonrpc": "2.0",
+            "method": "call",
+            "params": {
+                "product_template_id": product_template_id,
+                "product_id": 0,
+                "combination": ptav_ids,
+                "add_qty": 1,
+                "parent_combination": [],
+            },
+        }
+    ).encode("utf-8")
+    req = urllib.request.Request(
+        ODOO_COMBINATION_ROUTE,
+        data=payload,
+        headers={
+            "Content-Type": "application/json",
+            "User-Agent": USER_AGENT,
+            "X-CSRFToken": csrf_token,
+        },
+    )
+    with opener.open(req, timeout=TIMEOUT_S) as resp:
+        body = resp.read().decode("utf-8", errors="replace")
+    data = json.loads(body)
+    if data.get("error"):
+        raise RuntimeError(f"Odoo combination price error for {ptav_ids}: {data['error']}")
+    result = data.get("result") or {}
+    if not result.get("is_combination_possible"):
+        raise RuntimeError(f"Odoo says combination is not possible: {ptav_ids}")
+    if result.get("price") is None:
+        raise RuntimeError(f"Odoo returned no price for combination: {ptav_ids}")
+    return result
+
+
+def enrich_variant_prices_from_odoo(
+    *,
+    opener: urllib.request.OpenerDirector,
+    csrf_token: str | None,
+    product_template_id: int | None,
+    attributes: dict[str, dict],
+    valid_variants: list[dict],
+) -> None:
+    if not product_template_id or not valid_variants:
+        return
+    if not csrf_token:
+        raise RuntimeError(f"Odoo page did not expose csrf_token for product {product_template_id}")
+
+    full_price_cache: dict[tuple[int, ...], dict] = {}
+    erpnext_price_cache: dict[tuple[int, ...], dict] = {}
+
+    for row in valid_variants:
+        full_key = tuple(int(value) for value in row.get("ptav_ids") or [])
+        erpnext_key = tuple(required_ptav_ids_for_seed(row, attributes))
+        if full_key not in full_price_cache:
+            full_price_cache[full_key] = fetch_combination_price(
+                opener,
+                csrf_token,
+                int(product_template_id),
+                list(full_key),
+            )
+            time.sleep(INTER_REQUEST_DELAY_S)
+        if erpnext_key not in erpnext_price_cache:
+            erpnext_price_cache[erpnext_key] = fetch_combination_price(
+                opener,
+                csrf_token,
+                int(product_template_id),
+                list(erpnext_key),
+            )
+            time.sleep(INTER_REQUEST_DELAY_S)
+
+        full_result = full_price_cache[full_key]
+        erpnext_result = erpnext_price_cache[erpnext_key]
+        row["price"] = float(full_result["price"])
+        row["odoo_product_id"] = full_result.get("product_id")
+        row["erpnext_variant_price"] = float(erpnext_result["price"])
+        row["erpnext_odoo_product_id"] = erpnext_result.get("product_id")
+
+
 def slug_from_path(product_path: str) -> tuple[str, int | None]:
     """`/shop/what-we-make-3/baby-shower-garland-71` → ('baby-shower-garland', 71)."""
     last = product_path.rsplit("/", 1)[-1]
@@ -361,7 +497,8 @@ def slug_from_path(product_path: str) -> tuple[str, int | None]:
 
 def export_product(product_path: str, name: str, odoo_id: int) -> dict[str, Any]:
     url = f"{ODOO_BASE}{product_path}"
-    html = fetch(url)
+    opener = new_opener()
+    html = fetch(url, opener=opener)
     jsonld = extract_jsonld_product(html)
     base_price = extract_base_price(html, jsonld)
     description = extract_description(html, jsonld)
@@ -370,10 +507,18 @@ def export_product(product_path: str, name: str, odoo_id: int) -> dict[str, Any]
     main_img, extra_imgs = extract_image_urls(html, jsonld)
     valid_variants = compute_valid_variants(attributes, exclusions_data, base_price)
     slug, parsed_id = slug_from_path(product_path)
+    product_template_id = odoo_id or parsed_id
+    enrich_variant_prices_from_odoo(
+        opener=opener,
+        csrf_token=extract_csrf_token(html),
+        product_template_id=product_template_id,
+        attributes=attributes,
+        valid_variants=valid_variants,
+    )
 
     return {
         "slug": slug,
-        "odoo_id": odoo_id or parsed_id,
+        "odoo_id": product_template_id,
         "url": url,
         "name": name,
         "base_price": base_price,
