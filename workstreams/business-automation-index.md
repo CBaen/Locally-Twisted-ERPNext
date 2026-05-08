@@ -1,6 +1,6 @@
 # Business Automation Index
 
-Last updated: 2026-05-08 by Codex after adding record-level backend failure evidence and inquiry upload failure evidence to the automation index.
+Last updated: 2026-05-08 by Codex after adding external document send-readiness blockers to the automation index.
 
 ## Outcome
 
@@ -38,9 +38,9 @@ python scripts/verify/business_automation_index.py --report output/business-auto
 Current result on 2026-05-08:
 
 - `ok: true`
-- 23 total surfaces indexed
-- 13 launch-required surfaces
-- 19 surfaces exist and are connected
+- 24 total surfaces indexed
+- 14 launch-required surfaces
+- 20 surfaces exist and are connected
 - 4 surfaces exist but are not connected
 - 0 launch-required missing surfaces
 - 0 useful future surfaces missing
@@ -64,7 +64,7 @@ Fresh closeout verification also confirmed:
 - `customer_reminder_dry_run_contract.py` verifies no-live reminder queue behavior with fake overdue/current/missing-payment-path/malformed-send scenarios.
 - `customer_reminder_review_report.py` turns the dry-run queue into 1 internal review report row grouped under `review_now`, with no customer delivery enabled.
 - `customer_reminder_review_report_contract.py` verifies report rows/groups with fake mixed/empty/malformed-send source scenarios.
-- `synthetic_business_pipeline.py` runs 13 no-live synthetic contracts with 0 broken piping and keeps 3 live cutover items deferred.
+- `synthetic_business_pipeline.py` runs 14 no-live synthetic contracts with 0 broken piping and keeps 3 live cutover items deferred.
 
 ## Connected Launch Spine
 
@@ -79,6 +79,7 @@ These are currently classified as existing and connected:
 - Stripe webhook reconciliation through the paid-order helper
 - branded Sales Invoice print output
 - outbound document registry and source templates
+- outbound document send-readiness blockers
 - read-only paperwork status checkup
 - draft-only unpaid/overdue invoice review candidates
 - draft-only unpaid invoice reminder/statement packet rendering
@@ -129,6 +130,7 @@ Safe fake-data verifiers are part of the operating model:
 - `payment_cascade_contract.py` creates rollback-only paid-order cascade records.
 - `crm_stage_cascade.py` creates rollback-only CRM/Task cascade records.
 - outbound document preview rendering uses fake normal and outlier data under ignored `output/`.
+- outbound document send-readiness uses fake payloads and rollback-safe record-level blocker evidence.
 - `customer_reminder_dry_run_contract.py` uses in-memory fake reminder queue payloads and creates no database records.
 - `customer_reminder_review_report_contract.py` uses in-memory fake reminder report payloads and creates no database records.
 
@@ -144,6 +146,7 @@ python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-b
 python scripts/verify/record_level_failure_contract.py --report output/record-level-failure-contract.json
 python scripts/verify/inquiry_upload_failure_contract.py --report output/inquiry-upload-failure-contract.json
 python scripts/verify/payment_success_reconciliation_contract.py --report output/payment-success-reconciliation-contract.json
+python scripts/verify/outbound_document_send_readiness_contract.py
 python scripts/verify/stripe_amount_parity_contract.py
 python scripts/verify/paperwork_status.py --report output/paperwork-status.json
 python scripts/verify/unpaid_invoice_review.py --report output/unpaid-invoice-review.json
@@ -180,6 +183,7 @@ Paperwork and finance visibility:
 python scripts/verify/customer_documents_contract.py
 python scripts/verify/invoice_branding_contract.py
 python scripts/verify/outbound_documents_contract.py
+python scripts/verify/outbound_document_send_readiness_contract.py
 python scripts/verify/unpaid_invoice_review.py --report output/unpaid-invoice-review.json
 python scripts/verify/unpaid_invoice_draft_packet.py --report output/unpaid-invoice-draft-packet.json
 python scripts/verify/unpaid_invoice_draft_packet_contract.py
@@ -202,5 +206,5 @@ Run this only during cutover work. It is intentionally not part of the current s
 
 ## Next Safe Slices
 
-- Apply the same record-level recorder/checkup treatment to external document send-readiness before any reminder-send or Frappe Cloud trust step.
-- After that failure surface is visible, build a reviewed internal UX around customer reminder report rows while keeping it draft-only and no-send.
+- Build a reviewed internal UX around customer reminder report rows while keeping it draft-only and no-send.
+- Keep quote/proposal generation, vendor/W-9 generation, bank reconciliation cutover, payroll/HRMS, and stage-to-finance automation explicitly disconnected until their approval/setup gates are real.

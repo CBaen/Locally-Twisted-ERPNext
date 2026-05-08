@@ -1,6 +1,6 @@
 # Synthetic Business Pipeline
 
-Last updated: 2026-05-08 by Codex after adding record-level backend failure and inquiry upload failure evidence.
+Last updated: 2026-05-08 by Codex after adding external document send-readiness blockers.
 
 ## Outcome
 
@@ -22,8 +22,8 @@ Current result on 2026-05-08:
 - `synthetic_only: true`
 - `live_inputs_required: false`
 - `uses_real_customer_data: false`
-- 13 synthetic contracts run
-- 13 synthetic contracts passing
+- 14 synthetic contracts run
+- 14 synthetic contracts passing
 - 0 broken piping items
 - 9 inefficiencies / partial connections surfaced
 - 3 cutover-deferred items surfaced
@@ -42,6 +42,7 @@ The report writes ignored JSON to `output/synthetic-business-pipeline.json`.
 - Stripe webhook behavior with mocked Stripe events and intercepted expected `frappe.log_error` calls.
 - Customer policy document anchors and inquiry acknowledgment policy blocks.
 - Outbound document registry/template contract.
+- Outbound document send-readiness blockers for missing required fields, recipient confirmation, payment path, branding, human approval, sensitive attachments, and record-level blocker evidence.
 - Unpaid invoice packet normal/outlier fake-data scenarios.
 - Customer reminder dry-run normal/outlier fake-data scenarios, including missing payment path and malformed send-enabled packets.
 - Customer reminder review-report normal/outlier fake-data scenarios, including grouped rows, empty queues, and malformed send-enabled source rows.
@@ -79,8 +80,10 @@ Do not turn this verifier into customer sending or accounting mutation. Rollback
 - `apps/locally_twisted/locally_twisted/paperwork/customer_reminder_dry_run.py`
 - `apps/locally_twisted/locally_twisted/paperwork/customer_reminder_review_report.py`
 - `apps/locally_twisted/locally_twisted/verify/customer_reminder_review_report_contract.py`
+- `apps/locally_twisted/locally_twisted/outbound_documents/send_readiness.py`
+- `apps/locally_twisted/locally_twisted/verify/outbound_document_send_readiness_contract.py`
 - `apps/locally_twisted/locally_twisted/verify/business_automation_index.py`
 
 ## Next Safe Slice
 
-Use the synthetic audit as the regression gate while adding the next fail-loud slice: external document send-readiness blockers. Add new fake-data scenarios when a new backend pipe is connected, and keep live cutover checks separate.
+Use the synthetic audit as the regression gate while adding the next no-send paperwork slice: reviewed internal UX for customer reminder report rows. Add new fake-data scenarios when a new backend pipe is connected, and keep live cutover checks separate.

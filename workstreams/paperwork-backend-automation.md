@@ -1,6 +1,6 @@
 # Paperwork And Backend Automation
 
-Last updated: 2026-05-08 by Codex after record-level backend blockers and inquiry upload failure evidence were added to the paperwork/automation spine.
+Last updated: 2026-05-08 by Codex after outbound document send-readiness blockers were added to the paperwork/automation spine.
 
 ## Outcome
 
@@ -39,8 +39,8 @@ Fresh local verification on 2026-05-06:
 - `python scripts/verify/record_level_failure_contract.py --report output/record-level-failure-contract.json` passed and proved rollback-safe record-level backend blocker evidence.
 - `python scripts/verify/inquiry_upload_failure_contract.py --report output/inquiry-upload-failure-contract.json` passed and proved rejected inquiry inspiration photos produce customer-visible and Lead-level evidence.
 - `python scripts/verify/payment_success_reconciliation_contract.py --report output/payment-success-reconciliation-contract.json` passed and proved browser-return reconciliation errors show pending receipt/invoice copy on `/thank-you`.
-- `python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json` passed with 13 no-live synthetic contracts, 0 broken piping, 9 inefficiencies/partial connections, and 3 cutover-deferred items.
-- `python scripts/verify/business_automation_index.py --report output/business-automation-index.json` passed and now maps 23 surfaces indexed, 13 launch-required, 19 connected, 4 exists-but-not-connected, 0 launch-required missing, 0 useful future surfaces missing, and 0 loud-failure gaps.
+- `python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json` passed with 14 no-live synthetic contracts, 0 broken piping, 9 inefficiencies/partial connections, and 3 cutover-deferred items.
+- `python scripts/verify/business_automation_index.py --report output/business-automation-index.json` passed and now maps 24 surfaces indexed, 14 launch-required, 20 connected, 4 exists-but-not-connected, 0 launch-required missing, 0 useful future surfaces missing, and 0 loud-failure gaps.
 - `python scripts/verify/unpaid_invoice_review.py --report output/unpaid-invoice-review.json` passed and generated 1 overdue-review candidate for `ACC-SINV-2026-00001`. The candidate includes draft-only `payment_reminder_draft` and `statement_of_account` data, requires human review, and proves no customer send or accounting mutation happens.
 - `python scripts/verify/unpaid_invoice_draft_packet.py --report output/unpaid-invoice-draft-packet.json --markdown output/unpaid-invoice-draft-packet.md` passed and rendered that candidate into draft-only `payment_reminder_draft` and `statement_of_account` packet sections for human review, while proving no customer send or accounting mutation happens.
 - `python scripts/verify/unpaid_invoice_draft_packet_contract.py` passed and now covers fake normal/outlier packet behavior without touching ERPNext records, including PO references, multiple open invoices, missing payment requests, paid-invoice exclusion, and malformed human-approval gates.
@@ -52,6 +52,7 @@ Fresh local verification on 2026-05-06:
 - `python scripts/verify/stripe_amount_parity_contract.py` passed. Stripe Checkout line items now include a tax/charges adjustment when needed and must equal the ERPNext Sales Order grand total.
 - `python scripts/verify/invoice_branding_contract.py` passed after syncing the branded Sales Invoice print format and Letter Head. The contract now requires gray vertical callouts for secondary/AP information, the exact black customer-service support bar, and no gold, navy, berry, soft promo colors, dog-logo markers, or old W-9/vendor wording in Sales Invoice print output.
 - `python scripts/verify/outbound_documents_contract.py` passed after creating the standard outbound document source folder and templates. The contract now requires every outbound template to include `## Answer First`, and rendered previews put `Key fields to review` where the internal automation metadata used to appear.
+- `python scripts/verify/outbound_document_send_readiness_contract.py` passed and proves every registered external document family blocks missing required fields, recipient confirmation, company branding, payment path, sensitive attachments, and human approval before any customer delivery; blocked documents can write record-level evidence.
 - `python scripts/verify/render_outbound_document_previews.py --slug outbound-documents-answer-first-20260506 --no-open` rendered 20 fake-data review previews as HTML, PDF, and PNG under ignored `output/playwright/outbound-documents-answer-first-20260506/`.
 
 Current live-data facts from the fresh finance inventory:
@@ -108,9 +109,11 @@ Current live-data facts from the fresh finance inventory:
 
 - `apps/locally_twisted/locally_twisted/outbound_documents/` is the standard app-owned folder for external document source.
 - `registry.py` lists the supported document families, record sources, delivery channels, and review gates.
+- `send_readiness.py` is the no-send gate every future sender/review queue should call before treating an external document as ready.
 - `templates/` now has source templates for Sales Invoice, Payment Receipt, Quote / Estimate, Event Proposal Packet, Vendor Setup / W-9 Packet, Statement Of Account, Payment Reminder Draft, Event Install Work Order, Contract Acceptance Summary, and Post-event Reorder Follow-up.
 - These templates are generator-ready with review gates; they do not authorize automatic sending. Future automation should consume the registry to create drafts, PDFs, or review candidates before any live delivery.
 - `scripts/verify/outbound_documents_contract.py` verifies the registry, required frontmatter, required body sections, no-auto-send boundary, placeholder presence, and unregistered-template guard.
+- `scripts/verify/outbound_document_send_readiness_contract.py` verifies missing-field blockers, complete-payload readiness, payment-path blockers, vendor/W-9 secure-attachment blockers, and rollback-safe record-level blocker evidence.
 - `scripts/verify/render_outbound_document_previews.py` renders normal and outlier fake-data previews for every registered document type. The current review set lives at `output/playwright/outbound-documents-20260506/index.html` and includes HTML, PDF, and PNG artifacts for each scenario.
 
 ### Unpaid invoice review
@@ -157,7 +160,7 @@ Current live-data facts from the fresh finance inventory:
 - `hooks.py` now includes a daily Frappe scheduler entry for `locally_twisted.verify.business_automation_index.scheduled_checkup`.
 - The scheduled checkup writes a Frappe Error Log if a launch-required connection breaks or a loud-failure gap appears.
 - Current exists-but-not-connected surfaces are quote/proposal generation, vendor setup/W-9 packet generation, bank reconciliation cutover, and payroll/HRMS.
-- No currently indexed useful surface is missing; unpaid/overdue invoice review, unpaid invoice packet rendering, paperwork digest, customer reminder dry-run queue, and customer reminder review report are connected as draft-only/no-live paperwork surfaces.
+- No currently indexed useful surface is missing; outbound document send-readiness, unpaid/overdue invoice review, unpaid invoice packet rendering, paperwork digest, customer reminder dry-run queue, and customer reminder review report are connected as draft-only/no-live paperwork surfaces.
 
 ### Accountant and finance workspace
 
@@ -179,7 +182,7 @@ Current live-data facts from the fresh finance inventory:
 
 1. **Business automation index.** First pass done. `scripts/verify/business_automation_index.py` is the launch spine map and daily checkup source. Keep this green before adding new automations.
 2. **Paperwork status report.** First pass done. `scripts/verify/paperwork_status.py` summarizes current invoices, payment requests, email queues, overdue records, and bank/supplier/payroll gaps without printing secrets or mutating ERPNext. It reports live payment setup as cutover-deferred and does not run live readiness in synthetic mode.
-3. **Synthetic business pipeline audit.** First pass done. `scripts/verify/synthetic_business_pipeline.py` runs no-live fake-data/rollback-safe contracts for record-level backend evidence, inquiry upload failure evidence, checkout-to-Lead, checkout fulfillment, payment cascade, payment-success pending reconciliation, mocked webhook behavior, document policy, outbound templates, unpaid invoice outliers, customer reminder dry-run outliers, and customer reminder review-report outliers. It fails on broken piping or fake-data cleanup leaks.
+3. **Synthetic business pipeline audit.** First pass done. `scripts/verify/synthetic_business_pipeline.py` runs no-live fake-data/rollback-safe contracts for record-level backend evidence, inquiry upload failure evidence, checkout-to-Lead, checkout fulfillment, payment cascade, payment-success pending reconciliation, mocked webhook behavior, document policy, outbound templates, outbound send-readiness, unpaid invoice outliers, customer reminder dry-run outliers, and customer reminder review-report outliers. It fails on broken piping or fake-data cleanup leaks.
 4. **Unpaid invoice review queue.** First pass done as a draft-only report surface. Draft packet rendering is also done. Next is reviewed Desk UX or scheduled internal review digest, still no reminder sending.
 5. **Paperwork review digest.** First pass done as a read-only internal review payload. Next is a real reviewed Desk queue or scheduled internal-only report UI, still no customer sending.
 6. **Customer reminder dry run.** First pass done as a no-live internal review queue payload.
@@ -187,8 +190,9 @@ Current live-data facts from the fresh finance inventory:
 8. **Receipt/operator email audit.** Extend verifier coverage so receipt, operator, welcome, and inquiry acknowledgment email bodies keep the right policy lanes and do not attach PDFs.
 9. **Outbound document template registry.** Done for the first standard set. Extend this folder before creating any new outbound document family elsewhere.
    - Standing rule: every outbound document is answer-first. The recipient should see the practical fields they care about before internal automation notes or policy mechanics.
-10. **Corporate invoice packet design.** Source template exists. Remaining work is generator/rendering design for larger events without creating an ERPNext Terms record yet.
-11. **Stage threshold design.** Document which stage should create/update Quote, Sales Order, Project/job, Calendar invite, customer follow-up, invoice, or payment request. Do not implement until the threshold is explicit.
+10. **Outbound document send-readiness.** Done as a reusable no-send gate. Future senders must pass it before customer delivery.
+11. **Corporate invoice packet design.** Source template exists. Remaining work is generator/rendering design for larger events without creating an ERPNext Terms record yet.
+12. **Stage threshold design.** Document which stage should create/update Quote, Sales Order, Project/job, Calendar invite, customer follow-up, invoice, or payment request. Do not implement until the threshold is explicit.
 
 ## Do Not Do
 
@@ -230,6 +234,7 @@ python scripts/verify/customer_reminder_review_report_contract.py
 python scripts/setup/sync_invoice_branding.py
 python scripts/verify/invoice_branding_contract.py
 python scripts/verify/outbound_documents_contract.py
+python scripts/verify/outbound_document_send_readiness_contract.py
 python scripts/verify/render_outbound_document_previews.py --slug outbound-documents-20260506
 ```
 

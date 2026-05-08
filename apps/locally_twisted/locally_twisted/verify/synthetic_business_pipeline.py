@@ -114,6 +114,15 @@ SYNTHETIC_CONTRACTS = (
         "cleanup": "no database records created",
     },
     {
+        "id": "outbound_document_send_readiness",
+        "lane": "paperwork",
+        "runner": "locally_twisted.verify.outbound_document_send_readiness_contract.run",
+        "command": "python scripts/verify/outbound_document_send_readiness_contract.py",
+        "data_mode": "in_memory_and_rollback_fake_send_readiness",
+        "creates": ["Lead", "Comment", "Error Log"],
+        "cleanup": "uses in-memory fake payloads and rolls back record-level blocker evidence",
+    },
+    {
         "id": "unpaid_invoice_draft_packet_outliers",
         "lane": "paperwork",
         "runner": "locally_twisted.verify.unpaid_invoice_draft_packet_contract.run",

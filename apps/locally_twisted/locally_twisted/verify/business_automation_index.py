@@ -354,6 +354,24 @@ def _surfaces(
             ],
         },
         {
+            "id": "outbound_document_send_readiness",
+            "lane": "paperwork",
+            "summary": "External document families return field, recipient, approval, and record-level blockers before any customer delivery.",
+            "required_for_launch": True,
+            "exists": lambda: _files_exist(
+                "locally_twisted/outbound_documents/send_readiness.py",
+                "locally_twisted/verify/outbound_document_send_readiness_contract.py",
+            ),
+            "connected": _outbound_document_send_readiness_connected,
+            "loud_failure": _outbound_document_send_readiness_loud_failure,
+            "evidence": [
+                "apps/locally_twisted/locally_twisted/outbound_documents/send_readiness.py",
+                "apps/locally_twisted/locally_twisted/verify/outbound_document_send_readiness_contract.py",
+            ],
+            "verifiers": ["python scripts/verify/outbound_document_send_readiness_contract.py"],
+            "creates_fake_data": True,
+        },
+        {
             "id": "paperwork_status_checkup",
             "lane": "checkups",
             "summary": "Read-only paperwork status reports invoices, payment requests, email queue state, setup gaps, and cutover-deferred live payment items.",
@@ -836,6 +854,55 @@ def _outbound_documents_connected() -> list[str]:
     return failures
 
 
+def _outbound_document_send_readiness_connected() -> list[str]:
+    failures = []
+    failures.extend(
+        _callables_exist(
+            "locally_twisted.outbound_documents.send_readiness.evaluate_send_readiness",
+            "locally_twisted.verify.outbound_document_send_readiness_contract.run",
+        )
+    )
+    result = frappe.get_attr("locally_twisted.verify.outbound_document_send_readiness_contract.run")()
+    if not result.get("ok"):
+        failures.extend(result.get("failures") or ["outbound document send-readiness contract returned not ok"])
+    if result.get("read_only") is not True:
+        failures.append("outbound document send-readiness contract is not read-only")
+    if result.get("send_allowed") is not False:
+        failures.append("outbound document send-readiness contract allows sending")
+    if result.get("mutation_allowed") is not False:
+        failures.append("outbound document send-readiness contract allows mutations")
+    expected = {
+        "all_documents_block_without_required_fields",
+        "all_documents_ready_when_complete",
+        "payment_reminder_missing_payment_path_blocks_send",
+        "vendor_w9_missing_secure_attachment_blocks_send",
+        "record_level_blocker_writes_evidence",
+    }
+    scenario_ids = {scenario.get("id") for scenario in result.get("scenarios") or []}
+    missing = sorted(expected - scenario_ids)
+    if missing:
+        failures.append("send-readiness contract missing scenarios: " + ", ".join(missing))
+    for scenario in result.get("scenarios") or []:
+        if scenario.get("passed") is not True:
+            failures.append(f"send-readiness scenario failed: {scenario.get('id')}")
+    return failures
+
+
+def _outbound_document_send_readiness_loud_failure() -> list[str]:
+    failures = []
+    source = _read("locally_twisted/outbound_documents/send_readiness.py")
+    for marker in (
+        "blocked_send_until",
+        "record_backend_failure",
+        "correct_recipient_confirmed",
+        "company_branding_confirmed",
+        "payment_path",
+    ):
+        if marker not in source:
+            failures.append(f"send_readiness.py missing marker {marker}")
+    return failures
+
+
 def _paperwork_status_connected() -> list[str]:
     failures = []
     failures.extend(_callables_exist("locally_twisted.verify.paperwork_status.run"))
@@ -1223,6 +1290,7 @@ def _checkups() -> list[dict[str, object]]:
                 "python scripts/verify/unpaid_invoice_draft_packet_contract.py",
                 "python scripts/verify/customer_reminder_dry_run_contract.py",
                 "python scripts/verify/customer_reminder_review_report_contract.py",
+                "python scripts/verify/outbound_document_send_readiness_contract.py",
                 "python scripts/verify/render_outbound_document_previews.py --slug synthetic-pipeline-audit --no-open",
             ],
         },
@@ -1233,6 +1301,7 @@ def _checkups() -> list[dict[str, object]]:
                 "python scripts/setup/sync_invoice_branding.py",
                 "python scripts/verify/invoice_branding_contract.py",
                 "python scripts/verify/outbound_documents_contract.py",
+                "python scripts/verify/outbound_document_send_readiness_contract.py",
                 "python scripts/verify/paperwork_status.py --report output/paperwork-status.json",
                 "python scripts/verify/unpaid_invoice_review.py --report output/unpaid-invoice-review.json",
                 "python scripts/verify/unpaid_invoice_draft_packet.py --report output/unpaid-invoice-draft-packet.json",
@@ -1332,6 +1401,11 @@ def _fake_data_contracts() -> list[dict[str, object]]:
             "command": "python scripts/verify/customer_reminder_review_report_contract.py",
             "creates": [],
             "cleanup": "uses in-memory fake reminder report payloads only",
+        },
+        {
+            "command": "python scripts/verify/outbound_document_send_readiness_contract.py",
+            "creates": ["Lead", "Comment", "Error Log"],
+            "cleanup": "uses in-memory fake send-readiness payloads and rolls back record-level blocker evidence",
         },
     ]
 

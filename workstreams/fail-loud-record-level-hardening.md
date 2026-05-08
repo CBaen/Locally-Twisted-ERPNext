@@ -1,6 +1,6 @@
 # Fail-Loud Record-Level Hardening
 
-Last updated: 2026-05-08 by Codex after wiring inquiry upload failures and paid-return reconciliation state into the recorder/checkup path.
+Last updated: 2026-05-08 by Codex after adding external document send-readiness blockers to the recorder/checkup path.
 
 ## 2026-05-07 Implementation Update
 
@@ -38,12 +38,23 @@ Implemented:
 - `apps/locally_twisted/locally_twisted/verify/payment_success_reconciliation_contract.py` and `scripts/verify/payment_success_reconciliation_contract.py` prove this with fake Stripe/reconciliation responses only.
 - `business_automation_index.py` and `synthetic_business_pipeline.py` now include the payment-success reconciliation contract.
 
+## 2026-05-08 External Document Send-Readiness Update
+
+Implemented:
+
+- `outbound_documents/send_readiness.py` now evaluates every registered external document family for required fields, recipient confirmation, human approval, company branding, payment path, and document-specific business fields before any future sender can treat it as ready.
+- Missing send-readiness requirements return `blocked_send_until` entries instead of a vague not-ready state.
+- Blocked documents can write record-level failure evidence through `failure_recorder.py` when a primary record is supplied.
+- `apps/locally_twisted/locally_twisted/verify/outbound_document_send_readiness_contract.py` and `scripts/verify/outbound_document_send_readiness_contract.py` prove all document families block missing fields, complete fake payloads can pass, payment reminders block missing payment paths, vendor/W-9 packets block missing secure attachments, and record-level blocker evidence is queryable.
+- `business_automation_index.py` and `synthetic_business_pipeline.py` now include the outbound document send-readiness contract.
+
 Verification from this implementation pass:
 
 ```powershell
 python scripts/verify/record_level_failure_contract.py --report output/record-level-failure-contract.json
 python scripts/verify/inquiry_upload_failure_contract.py --report output/inquiry-upload-failure-contract.json
 python scripts/verify/payment_success_reconciliation_contract.py --report output/payment-success-reconciliation-contract.json
+python scripts/verify/outbound_document_send_readiness_contract.py
 python scripts/verify/business_automation_index.py --report output/business-automation-index.json
 python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json
 python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --form-path /contact --skip-newsletter
@@ -51,12 +62,13 @@ python scripts/verify/checkout_lead_conversion_contract.py
 python scripts/verify/payment_cascade_contract.py
 python scripts/verify/payment_webhook_contract.py
 python scripts/verify/customer_documents_contract.py
-python -m compileall apps\locally_twisted\locally_twisted\failure_recorder.py apps\locally_twisted\locally_twisted\lead_cascade.py apps\locally_twisted\locally_twisted\www\book.py apps\locally_twisted\locally_twisted\www\checkout.py apps\locally_twisted\locally_twisted\www\payment_success.py apps\locally_twisted\locally_twisted\www\thank_you.py apps\locally_twisted\locally_twisted\verify\record_level_failure_contract.py apps\locally_twisted\locally_twisted\verify\inquiry_upload_failure_contract.py apps\locally_twisted\locally_twisted\verify\payment_success_reconciliation_contract.py apps\locally_twisted\locally_twisted\verify\business_automation_index.py apps\locally_twisted\locally_twisted\verify\synthetic_business_pipeline.py
+python -m compileall apps\locally_twisted\locally_twisted\failure_recorder.py apps\locally_twisted\locally_twisted\lead_cascade.py apps\locally_twisted\locally_twisted\www\book.py apps\locally_twisted\locally_twisted\www\checkout.py apps\locally_twisted\locally_twisted\www\payment_success.py apps\locally_twisted\locally_twisted\www\thank_you.py apps\locally_twisted\locally_twisted\outbound_documents\send_readiness.py apps\locally_twisted\locally_twisted\verify\record_level_failure_contract.py apps\locally_twisted\locally_twisted\verify\inquiry_upload_failure_contract.py apps\locally_twisted\locally_twisted\verify\payment_success_reconciliation_contract.py apps\locally_twisted\locally_twisted\verify\outbound_document_send_readiness_contract.py apps\locally_twisted\locally_twisted\verify\business_automation_index.py apps\locally_twisted\locally_twisted\verify\synthetic_business_pipeline.py
 ```
 
-Still open:
+Still open after this slice:
 
-- External document send-readiness needs the same recorder/checkup treatment before any send automation.
+- The next no-approval paperwork step is internal reviewed UX for customer reminder report rows. It must stay no-send and review-only.
+- Quote/proposal generation, vendor/W-9 generation, bank reconciliation cutover, payroll/HRMS, and stage-to-finance thresholds remain not connected or approval-gated.
 
 ## Operating Truth
 
