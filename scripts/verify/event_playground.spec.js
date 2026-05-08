@@ -7,6 +7,9 @@ const { gotoAndSettle, auditPageLayout, expectNoLayoutFailures } = require("./la
 const EVENT_PLAYGROUND_PORT = Number(process.env.EVENT_PLAYGROUND_VERIFY_PORT || 4306);
 const EVENT_PLAYGROUND_BASE = `http://127.0.0.1:${EVENT_PLAYGROUND_PORT}`;
 const EVENT_PLAYGROUND_URL = `${EVENT_PLAYGROUND_BASE}/event-playground.html`;
+const BASE_URL = process.env.LT_BASE_URL || "http://localhost:8081";
+const DESK_USER = process.env.LT_DESK_TEST_USER;
+const DESK_PASSWORD = process.env.LT_DESK_TEST_PASSWORD;
 const SPIKE_DIR = path.resolve(__dirname, "../..", "research/design-studio-v2/event-builder-spike");
 let viteServer = null;
 
@@ -32,6 +35,7 @@ async function waitForPreview() {
 }
 
 test.beforeAll(async () => {
+	if (!DESK_USER || !DESK_PASSWORD) return;
 	if (await isPreviewReady()) return;
 	const viteEntry = path.join(SPIKE_DIR, "node_modules", "vite", "bin", "vite.js");
 	if (!fs.existsSync(viteEntry)) {
@@ -75,12 +79,46 @@ async function expectCanvasNonblank(page) {
 	expect(metrics.colorBuckets, "canvas should have visual variety").toBeGreaterThan(30);
 }
 
+async function loginAsSystemManager(page) {
+	const response = await page.goto(new URL("/login", BASE_URL).toString(), { waitUntil: "domcontentloaded" });
+	expect(response, "/login should respond").not.toBeNull();
+
+	const login = await page.evaluate(
+		async ({ user, password }) => {
+			const response = await fetch("/api/method/login", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					"X-Requested-With": "XMLHttpRequest",
+				},
+				body: JSON.stringify({ usr: user, pwd: password }),
+			});
+			return { status: response.status, body: await response.text() };
+		},
+		{ user: DESK_USER, password: DESK_PASSWORD },
+	);
+	expect(login.status, login.body).toBe(200);
+}
+
 test.describe("Event Playground route", () => {
+	test("blocks guests from the internal preview bridge", async ({ request }) => {
+		const response = await request.get(new URL("/event-playground?port=12345", BASE_URL).toString(), {
+			maxRedirects: 0,
+		});
+		expect([301, 302, 403], "guest should be redirected or denied").toContain(response.status());
+		if ([301, 302].includes(response.status())) {
+			expect(response.headers().location || "", "guest redirect should point at login").toContain("/login");
+		}
+		expect(await response.text()).not.toContain("127.0.0.1:12345/event-playground.html");
+	});
+
 	for (const viewport of [
 		{ name: "mobile", width: 375, height: 900 },
 		{ name: "desktop", width: 1366, height: 900 },
 	]) {
 		test(`loads isolated PlayCanvas game at ${viewport.name}`, async ({ page }) => {
+			test.skip(!DESK_USER || !DESK_PASSWORD, "Set LT_DESK_TEST_USER and LT_DESK_TEST_PASSWORD.");
+			await loginAsSystemManager(page);
 			await page.setViewportSize({ width: viewport.width, height: viewport.height });
 			const response = await gotoAndSettle(page, "/event-playground");
 			expect(response, "/event-playground should respond").not.toBeNull();
@@ -103,6 +141,8 @@ test.describe("Event Playground route", () => {
 	}
 
 	test("select, rotate, duplicate, delete, customize, and produce payload", async ({ page }) => {
+		test.skip(!DESK_USER || !DESK_PASSWORD, "Set LT_DESK_TEST_USER and LT_DESK_TEST_PASSWORD.");
+		await loginAsSystemManager(page);
 		await page.setViewportSize({ width: 1280, height: 860 });
 		const response = await gotoAndSettle(page, "/event-playground");
 		expect(response.status()).toBeLessThan(400);
@@ -128,6 +168,8 @@ test.describe("Event Playground route", () => {
 	});
 
 	test("submit inquiry hands the design to the contact form without backend writes", async ({ page }) => {
+		test.skip(!DESK_USER || !DESK_PASSWORD, "Set LT_DESK_TEST_USER and LT_DESK_TEST_PASSWORD.");
+		await loginAsSystemManager(page);
 		await page.setViewportSize({ width: 1280, height: 860 });
 		const response = await gotoAndSettle(page, "/event-playground");
 		expect(response.status()).toBeLessThan(400);

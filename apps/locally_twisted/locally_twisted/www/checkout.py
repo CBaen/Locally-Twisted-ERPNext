@@ -27,7 +27,6 @@ from frappe.rate_limiter import rate_limit
 from frappe.utils import escape_html, validate_email_address, flt, cint
 
 from locally_twisted import commerce_rules
-from locally_twisted.crm_pipeline import PIPELINE_FIELD
 from locally_twisted.failure_recorder import record_backend_failure
 
 no_cache = 1
@@ -757,14 +756,13 @@ def submit_guest_order(item_code="", qty=1, items_json="",
     #   A. Email matches an existing Contact already linked to a Customer
     #      → reuse that Customer (return customer)
     #   B. Email matches an existing Contact linked ONLY to a Lead (the
-    #      person filled /contact previously) → create Customer, attach
-    #      it to the same Contact, and convert the Lead so the records
-    #      stay one-source-of-truth instead of orphaning the inquiry
+    #      person filled /contact previously) -> create Customer and attach
+    #      it to the same Contact. The Lead remains pending until the paid
+    #      order cascade verifies payment and performs final CRM conversion.
     #   C. No match → create Customer + new Contact
     #
     # Lookup chain: Contact Email (child) → parent Contact → Dynamic Link.
     customer_name = None
-    checkout_partial_failures = []
     contact_name = frappe.db.get_value(
         "Contact Email", {"email_id": email}, "parent"
     )
@@ -785,8 +783,8 @@ def submit_guest_order(item_code="", qty=1, items_json="",
     elif contact_name:
         # Case B — Contact exists (likely from a Lead inquiry) but no
         # Customer linked yet. Promote the Contact: create the Customer,
-        # attach Customer to the existing Contact, and convert any
-        # linked Lead so the inquiry → order trail stays connected.
+        # attach Customer to the existing Contact, and leave any linked
+        # Lead in inquiry state until Stripe payment succeeds.
         customer_doc = frappe.get_doc({
             "doctype": "Customer",
             "customer_name": safe_name,
@@ -807,37 +805,6 @@ def submit_guest_order(item_code="", qty=1, items_json="",
             {"link_doctype": "Customer", "link_name": customer_name},
         )
         contact_doc.save(ignore_permissions=True)
-
-        # If the Contact is linked to a Lead, mark the Lead converted
-        # and back-fill its `customer` field. This closes the inquiry-
-        # to-purchase loop in CRM. Multiple Leads possible (rare); we
-        # convert all of them.
-        lead_links = [
-            ln for ln in contact_doc.links
-            if ln.link_doctype == "Lead" and ln.link_name
-        ]
-        for ln in lead_links:
-            try:
-                lead = frappe.get_doc("Lead", ln.link_name)
-                if lead.status != "Converted":
-                    lead.status = "Converted"
-                if not lead.get("customer"):
-                    lead.customer = customer_name
-                if lead.meta.has_field(PIPELINE_FIELD):
-                    lead.set(PIPELINE_FIELD, "Approved")
-                lead.flags.ignore_permissions = True
-                lead.save(ignore_permissions=True)
-            except Exception as exc:
-                checkout_partial_failures.append(
-                    {
-                        "step": "lead_conversion",
-                        "linked_doctype": "Lead",
-                        "linked_name": ln.link_name,
-                        "customer_visible_impact": "Checkout can continue, but the inquiry-to-order CRM trail did not fully connect.",
-                        "internal_next_action": "Review the linked Lead, mark it converted, and connect it to the checkout Customer.",
-                        "exception": exc,
-                    }
-                )
     else:
         # Case C — fresh customer, no prior Contact.
         customer_doc = frappe.get_doc({
@@ -914,21 +881,6 @@ def submit_guest_order(item_code="", qty=1, items_json="",
     so = frappe.get_doc(so_doc)
     so.insert(ignore_permissions=True)
     so.submit()
-
-    for failure in checkout_partial_failures:
-        record_backend_failure(
-            surface="guest_checkout_to_payment_request",
-            step=failure["step"],
-            severity="error",
-            primary_doctype="Sales Order",
-            primary_name=so.name,
-            linked_doctype=failure.get("linked_doctype"),
-            linked_name=failure.get("linked_name"),
-            customer_visible_impact=failure["customer_visible_impact"],
-            internal_next_action=failure["internal_next_action"],
-            exception=failure.get("exception"),
-            grouping_key=f"guest_checkout_to_payment_request:{failure['step']}:{so.name}",
-        )
 
     try:
         _record_order_notes(

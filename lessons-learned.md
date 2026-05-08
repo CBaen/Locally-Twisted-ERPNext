@@ -6,6 +6,32 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-08 - Fake data lowers disclosure urgency, not state-integrity standards
+
+The security review correctly found public-order and public-file exposure, but
+GL clarified that all current LT data is fake and the business context is not
+high sensitivity. Treating those fake-data disclosure findings as urgent launch
+blockers overstated the practical risk.
+
+**Counter-move:** separate disclosure severity from automation correctness.
+Fake public records can become cleanup or cutover-hardening work. False
+business state still needs a fix: checkout should not mark a Lead
+`Converted` / `Approved` until the paid-order cascade has verified payment.
+
+---
+
+## 2026-05-08 - Internal preview routes need real gates, not hidden navigation
+
+`/event-playground` was not linked in public navigation, but the route still
+accepted a guest request and embedded a visitor-local `127.0.0.1:<port>` iframe
+when the URL was known. "Hidden" did not mean access-controlled.
+
+**Counter-move:** internal Frappe preview routes should require an explicit
+role gate or be removed from the route set. Keep the guest gate verifier even
+if deeper authenticated preview tests are skipped without local credentials.
+
+---
+
 ## 2026-05-08 - Frappe templates can emit raw route data
 
 `/shop?q=` proved that the current route template path did not protect a

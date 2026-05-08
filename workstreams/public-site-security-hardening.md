@@ -1,6 +1,6 @@
 # Public Site Security Hardening
 
-Last updated: 2026-05-08 by Codex after parallel Codex Security review and first small fixes.
+Last updated: 2026-05-08 by Codex after GL blocker triage, paid-conversion repair, and Event Playground gating.
 
 ## Outcome
 
@@ -18,14 +18,20 @@ Fixed in this closeout:
 - Product-gallery thumbnail `src` and `alt` values are escaped in the Jinja template.
 - Product-gallery zoom preview now creates the `<img>` through jQuery attributes instead of an HTML template string.
 - New `/contact` inspiration-photo uploads are stored as private Frappe `File` records.
+- Guest checkout no longer marks an existing inquiry Lead as `Converted` / `Approved` before payment succeeds. The paid-order cascade now performs the final Lead conversion after the payment boundary.
+- `/event-playground?port=<port>` now redirects guests to login and requires `Administrator` or `System Manager` before exposing the internal local preview iframe.
 
-Open launch blockers:
+GL triage on 2026-05-08:
 
-- `/thank-you?order=<Sales Order>` still renders order id, line items, quantities, totals, currency, and status to an unauthenticated visitor who knows or guesses a Sales Order name. Replace this with a receipt token tied to the paid Stripe Session or Payment Request, then show only generic payment-check copy when the token is absent or invalid.
-- Tracked docs still contain local Administrator/dev login credentials in `AGENTS.md` and `CLAUDE.md`. Do not repeat the passwords in reports. Rotate those credentials before any broader sharing/cutover, then replace tracked docs with a local-vault/operator note.
-- Existing Lead attachments include at least one public `File` row under `/files/...`. New uploads are private after this patch, but existing customer/test uploads still need a migration/review to flip `is_private=1` or delete intentionally.
-- `submit_guest_order` can promote a Contact/Lead into Customer/Converted/Approved by email before Stripe payment completes. Review whether that CRM mutation should move after payment success or be marked pending until payment is verified.
-- `/event-playground?port=<port>` is an unauthenticated internal preview bridge to visitor-local `127.0.0.1:<port>`. Gate it to development/System Manager or remove it from the public production route set before launch.
+- Current LT records and files are fake/test data until GL says otherwise. Existing fake public Lead files are cleanup/review work, not current real-customer exposure.
+- `/thank-you?order=<Sales Order>` order-summary exposure is downgraded from immediate launch blocker for this business/fake-data state. Token-bound receipt proof is still the stronger production pattern before real customer cutover.
+- Tracked local credentials remain user-owned: GL said they will fix/rotate them. Do not repeat the passwords in reports.
+
+Remaining follow-ups:
+
+- Before real customer cutover, decide whether to add token-bound receipt proof to `/thank-you` or accept the current order-name flow for this low-sensitivity ready-to-order context.
+- Existing fake public Lead `File` rows can be deleted or flipped private during cleanup; new uploads already default private.
+- Rotate/remove tracked local credentials before broader sharing/cutover, then replace tracked docs with a local-vault/operator note.
 
 ## Evidence From Review
 
@@ -33,12 +39,22 @@ Open launch blockers:
 - Live `/thank-you?order=SAL-ORD-2026-00019` returned HTTP 200 and exposed the order id plus item/total details.
 - Live DB contained a Lead-attached public file at `/files/doc logo.png`, and the URL returned HTTP 200.
 - Static trace confirmed checkout Lead conversion happens inside the guest checkout submit path before the Stripe redirect/payment completion boundary.
+- `python scripts/verify/checkout_lead_conversion_contract.py` now proves checkout keeps the Lead in `Open` / `New Inquiry`, then the paid-order cascade converts it to `Converted` / `Approved`.
+- `python scripts/verify/event_playground_gate.py` now proves guest access redirects to `/login` and does not expose the local preview iframe URL.
 
 ## Files Touched By This Closeout
 
 - `apps/locally_twisted/locally_twisted/www/shop.html`
 - `apps/locally_twisted/locally_twisted/templates/generators/item/item_image.html`
 - `apps/locally_twisted/locally_twisted/www/book.py`
+- `apps/locally_twisted/locally_twisted/www/checkout.py`
+- `apps/locally_twisted/locally_twisted/www/payment_success.py`
+- `apps/locally_twisted/locally_twisted/www/event_playground.py`
+- `apps/locally_twisted/locally_twisted/verify/checkout_lead_conversion_contract.py`
+- `apps/locally_twisted/locally_twisted/verify/business_automation_index.py`
+- `scripts/verify/checkout_lead_conversion_contract.py`
+- `scripts/verify/event_playground_gate.py`
+- `scripts/verify/event_playground.spec.js`
 - `workstreams/public-site-security-hardening.md`
 - `.codex/capabilities/recipes/frappe-public-storefront-security.md`
 
@@ -48,14 +64,21 @@ After each security hardening change:
 
 ```powershell
 python scripts/dev/clear_website_cache.py
-python -m py_compile apps\locally_twisted\locally_twisted\www\book.py apps\locally_twisted\locally_twisted\www\shop.py apps\locally_twisted\locally_twisted\www\thank_you.py apps\locally_twisted\locally_twisted\www\payment_success.py
+python -m py_compile apps\locally_twisted\locally_twisted\www\book.py apps\locally_twisted\locally_twisted\www\shop.py apps\locally_twisted\locally_twisted\www\thank_you.py apps\locally_twisted\locally_twisted\www\checkout.py apps\locally_twisted\locally_twisted\www\payment_success.py apps\locally_twisted\locally_twisted\www\event_playground.py
 npm run test:shop-smoke
 npm run test:interactive-layout
+python scripts/verify/checkout_lead_conversion_contract.py
+python scripts/verify/payment_cascade_contract.py
+python scripts/verify/event_playground_gate.py
+npm run test:event-playground
+python scripts/verify/business_automation_index.py --report output\business-automation-index.json
+python scripts/verify/synthetic_business_pipeline.py --report output\synthetic-business-pipeline.json
 ```
 
 Also run targeted checks for the exact security symptom:
 
 - `/shop?q=<script>window.__lt_xss_marker="owned"</script>` must render escaped text and leave `window.__lt_xss_marker` unset.
-- A known Sales Order name must not expose order details without a valid receipt token.
+- If token-bound receipts are implemented, a known Sales Order name must not expose order details without a valid receipt token.
 - A new inquiry upload must create `tabFile.is_private = 1`.
 - A payment-not-complete checkout path must not mark an existing Lead as converted/approved.
+- A guest `/event-playground?port=<port>` request must redirect or deny access without exposing `127.0.0.1:<port>`.

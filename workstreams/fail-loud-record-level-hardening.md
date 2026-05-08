@@ -1,6 +1,6 @@
 # Fail-Loud Record-Level Hardening
 
-Last updated: 2026-05-08 by Codex after adding external document send-readiness blockers to the recorder/checkup path.
+Last updated: 2026-05-08 by Codex after moving checkout Lead conversion to the paid-order cascade.
 
 ## 2026-05-07 Implementation Update
 
@@ -13,8 +13,8 @@ Implemented:
 Wired:
 
 - `lead_cascade.py` now writes record-level Lead blockers for Contact linking, customer acknowledgment email, and initial Task cascade failures.
-- `www/checkout.py` now writes record-level Sales Order blockers for failed Lead conversion and checkout note transfer.
-- `www/payment_success.py` now writes a Sales Order blocker and raises reconciliation failure when a paid order cannot resolve a receipt email.
+- `www/checkout.py` now writes record-level Sales Order blockers for checkout note transfer failures.
+- `www/payment_success.py` now converts checkout-linked inquiry Leads only after payment succeeds, writes Sales Order blockers for failed paid-order Lead conversion, and raises reconciliation failure when a paid order cannot resolve a receipt email.
 - `business_automation_index.py` now includes `record_level_failure_recorder` as a launch-required surface and fails/report-lists open record-level backend blockers.
 - `synthetic_business_pipeline.py` now runs the rollback-safe record-level failure contract.
 
@@ -33,9 +33,11 @@ Implemented:
 
 Implemented:
 
+- Checkout no longer converts a linked inquiry Lead before the Stripe/payment-success boundary. `payment_success.py` now converts Contact-linked Leads during `reconcile_paid_sales_order`, after payment has been verified.
 - `payment_success.py` now checks the `reconcile_paid_sales_order` result on browser return and adds `reconciliation=pending` to `/thank-you` when invoice/receipt/email follow-up is not fully complete.
 - `thank_you.py` and `thank_you.html` now show a payment-received but receipt/invoice-reconciliation-pending state instead of promising final paperwork is already done.
 - `apps/locally_twisted/locally_twisted/verify/payment_success_reconciliation_contract.py` and `scripts/verify/payment_success_reconciliation_contract.py` prove this with fake Stripe/reconciliation responses only.
+- `apps/locally_twisted/locally_twisted/verify/checkout_lead_conversion_contract.py` and `scripts/verify/checkout_lead_conversion_contract.py` prove the Lead remains `Open` / `New Inquiry` after checkout, then becomes `Converted` / `Approved` after the paid-order cascade.
 - `business_automation_index.py` and `synthetic_business_pipeline.py` now include the payment-success reconciliation contract.
 
 ## 2026-05-08 External Document Send-Readiness Update
@@ -163,15 +165,16 @@ Required behavior:
 File:
 
 - `apps/locally_twisted/locally_twisted/www/checkout.py`
+- `apps/locally_twisted/locally_twisted/www/payment_success.py`
 
 Current concern:
 
-- Lead conversion and checkout notes can fail while order/payment continues with only Error Log evidence.
+- Checkout note transfer can fail while payment continues, and paid-order Lead conversion can fail after payment succeeds.
 
 Required behavior:
 
 - payment can continue;
-- Sales Order receives a visible internal blocker/comment for failed Lead conversion or note transfer;
+- Sales Order receives a visible internal blocker/comment for failed checkout note transfer or paid-order Lead conversion;
 - checkup reports exact Sales Order / Lead IDs.
 
 ### 5. Stripe and paid-order reconciliation

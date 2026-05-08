@@ -8,6 +8,53 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-08 - Security blocker triage follows business context and payment boundaries
+
+**Decision:** Current fake/test LT data changes the urgency of disclosure
+findings, but not the automation boundary. The unauthenticated
+`/thank-you?order=<Sales Order>` order-summary issue and existing public fake
+Lead files are hardening/cleanup follow-ups for this business/fake-data state,
+not immediate launch blockers. Tracked credential cleanup is GL-owned. Guest
+checkout must not finalize inquiry Lead conversion before payment succeeds.
+The internal Event Playground bridge must be gated.
+
+**Reasoning:** GL clarified that this is not a high-sensitivity business
+context, all current data is fake, and the previous security language
+overstated the risk of the order-summary/public-file items. The state boundary
+still matters: a customer should not become `Converted` / `Approved` just
+because their email matches an inquiry before payment has completed. The local
+preview bridge also should not expose internal tooling to guests.
+
+**Implementation:** Removed pre-payment Lead conversion from
+`www/checkout.py`. `www/payment_success.py` now converts Contact-linked inquiry
+Leads during `reconcile_paid_sales_order`, after the paid payment path, and
+writes record-level Sales Order failure evidence if conversion fails.
+`www/event_playground.py` now redirects guests to login and requires
+`Administrator` or `System Manager` before exposing the local preview iframe.
+The Event Playground Playwright spec now always checks the guest gate and skips
+authenticated canvas/control checks unless desk credentials are provided
+through env vars.
+
+**Verification receipt:** `python scripts/verify/checkout_lead_conversion_contract.py`
+passed with Lead state `Open` / `New Inquiry` after checkout and `Converted` /
+`Approved` after the paid cascade. `python scripts/verify/event_playground_gate.py`
+passed with guest redirect to `/login`. `npm run test:event-playground` passed
+the guest gate with authenticated preview checks skipped because credentials
+were not supplied. `python scripts/verify/payment_cascade_contract.py`,
+`python scripts/verify/business_automation_index.py --report output\business-automation-index.json`,
+and `python scripts/verify/synthetic_business_pipeline.py --report output\synthetic-business-pipeline.json`
+passed.
+
+**Alternatives considered:** Keep conversion in checkout because all current
+data is fake. Rejected because the payment boundary is cheap to preserve and
+prevents false operational state. Remove `/event-playground` entirely. Rejected
+because GL/OpenClaw still need the internal route, and auth gating matches the
+current preview purpose.
+
+**Decided by:** GL blocker triage on 2026-05-08; implemented by Codex.
+
+---
+
 ## 2026-05-08 - Public storefront security needs token and privacy boundaries
 
 **Decision:** Public LT routes must not treat ERPNext document names, route
@@ -32,9 +79,10 @@ attribute API, and changed new inquiry-upload `File` records to
 remaining hardening lane.
 
 **Open boundary:** This decision is not complete launch security approval.
-Token-bound receipt pages, existing public file migration/review, credential
-rotation/doc cleanup, checkout Lead-conversion timing, and Event Playground
-route gating remain open P0 work.
+As of the later 2026-05-08 blocker triage, checkout Lead-conversion timing and
+Event Playground route gating are fixed. Token-bound receipt pages and existing
+fake public-file cleanup are production-hardening follow-ups for real customer
+cutover, and credential rotation/doc cleanup remains GL-owned.
 
 **Alternatives considered:** Leave the findings as report-only. Rejected for
 the low-risk XSS/gallery/upload fixes because they were direct and launch
@@ -1396,6 +1444,12 @@ copy is `Real balloon installs for Utah events.`, not `What We Do`.
 **Implementation:** Added `apps/locally_twisted/locally_twisted/verify/checkout_lead_conversion_contract.py` and `scripts/verify/checkout_lead_conversion_contract.py`. The verifier first failed with the Lead still in `New Inquiry`; `apps/locally_twisted/locally_twisted/www/checkout.py` now sets the shared CRM pipeline field to `Approved` during the existing Lead conversion save, letting `stage_cascade` close the New Inquiry task and open the Approved task.
 
 **Verification receipt:** `python scripts/verify/checkout_lead_conversion_contract.py` failed before the code change on the stale `New Inquiry` stage/task state, then passed after the code change with rollback evidence for the generated Lead, Contact, Customer, Sales Order, and Payment Request.
+
+**Superseded boundary:** On 2026-05-08, GL chose to keep the same final
+conversion outcome but move it behind payment success. Checkout now links the
+matched Contact to the checkout Customer and leaves the Lead pending; the
+paid-order cascade performs the `Converted` / `Approved` transition after
+payment reconciliation.
 
 **Decided by:** GL agreed the next workflow step was checkout/Lead conversion parity; Codex implemented the smallest verified alignment.
 

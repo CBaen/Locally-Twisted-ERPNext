@@ -60,4 +60,6 @@ Public routes must not treat Frappe/ERPNext document names, template strings, lo
 
 Parallel Codex Security review found and reproduced `/shop?q=` reflected XSS, public Lead file exposure, unauthenticated order-summary exposure on `/thank-you?order=...`, tracked local credentials, pre-payment Lead conversion by guest checkout email, and an unauthenticated internal Event Playground preview bridge.
 
-The first safe patch escaped `/shop` search output, hardened the product gallery image rendering path, and made new inquiry uploads private. The token-bound thank-you receipt, existing public file migration, credential rotation/doc cleanup, checkout Lead-conversion timing, and Event Playground route gate remain active P0 follow-ups.
+The first safe patch escaped `/shop` search output, hardened the product gallery image rendering path, and made new inquiry uploads private. The follow-up patch moved final inquiry Lead conversion from guest checkout into the paid-order cascade and gated `/event-playground` behind login plus Administrator/System Manager access.
+
+GL clarified the current data/files are fake and this is a balloon business, so the unauthenticated order-summary and existing fake public-file findings are hardening/cleanup items rather than immediate launch blockers in the current fake-data state. Credential rotation/doc cleanup remains GL-owned before broader sharing or real customer cutover. Token-bound receipt proof remains the stronger production pattern if real customer data or higher-sensitivity order context enters the site.

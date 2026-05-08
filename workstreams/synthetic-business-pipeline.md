@@ -1,6 +1,6 @@
 # Synthetic Business Pipeline
 
-Last updated: 2026-05-08 by Codex after adding customer/operator email policy boundaries.
+Last updated: 2026-05-08 by Codex after adding checkout-to-paid-order Lead conversion gating.
 
 ## Outcome
 
@@ -36,7 +36,7 @@ The report writes ignored JSON to `output/synthetic-business-pipeline.json`.
 - Inquiry upload rejection/failure handling with customer-visible summary and Lead-level evidence.
 - Payment-success browser-return reconciliation errors with pending thank-you copy.
 - Stripe Checkout amount parity with in-memory fake Sales Orders.
-- Checkout-to-Lead conversion with a stubbed Stripe URL and rollback-only records.
+- Checkout-to-paid-order Lead conversion with a stubbed Stripe URL and rollback-only records: the Lead remains pending after checkout and converts only during the paid-order cascade.
 - Checkout fulfillment branches with stubbed Stripe session creation and rollback-only records.
 - Paid-order cascade through Payment Request, Payment Entry, Sales Invoice, receipt/operator/welcome emails, and rollback cleanup.
 - Stripe webhook behavior with mocked Stripe events and intercepted expected `frappe.log_error` calls.

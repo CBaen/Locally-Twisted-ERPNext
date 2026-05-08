@@ -645,11 +645,11 @@ def _record_level_failure_loud_failure() -> list[str]:
         ),
         "locally_twisted/www/checkout.py": (
             "record_backend_failure",
-            "lead_conversion",
             "checkout_notes_transfer",
         ),
         "locally_twisted/www/payment_success.py": (
             "record_backend_failure",
+            "lead_conversion",
             "receipt_email_missing_recipient",
             "PaidOrderReconciliationError",
         ),
@@ -792,7 +792,7 @@ def _checkout_connected() -> list[str]:
 def _checkout_loud_failure() -> list[str]:
     source = _read("locally_twisted/www/checkout.py")
     failures = []
-    for marker in ("frappe.throw", "record_backend_failure", "lead_conversion", "checkout_notes_transfer"):
+    for marker in ("frappe.throw", "record_backend_failure", "checkout_notes_transfer"):
         if marker not in source:
             failures.append(f"checkout.py missing loud failure marker {marker}")
     return failures

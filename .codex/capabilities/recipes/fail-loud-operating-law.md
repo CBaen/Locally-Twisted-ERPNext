@@ -143,7 +143,7 @@ The next high-value implementation slice is:
 
 1. Create a reusable backend failure recorder.
 2. Wire it into Lead cascade partial failures.
-3. Wire it into checkout note / Lead conversion partial failures.
+3. Wire it into checkout note and paid-order Lead conversion partial failures.
 4. Wire it into paid-order receipt delivery failures.
 5. Extend the business automation index with record-level health rows.
 

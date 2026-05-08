@@ -32,10 +32,13 @@ mobile component sizing contract. Feature handoff:
 `workstreams/public-site-security-hardening.md` with capability contract
 `.codex/capabilities/recipes/frappe-public-storefront-security.md`. First safe
 fixes are in place for `/shop?q=` XSS, product-gallery image rendering, and new
-private inquiry uploads. Do not treat launch security as closed until the
-token-bound thank-you receipt, existing public file migration/review, tracked
-credential cleanup/rotation, checkout Lead-conversion timing, and
-Event Playground route gate are resolved.
+private inquiry uploads. Follow-up closeout moved checkout Lead conversion to
+the paid-order cascade and gated `/event-playground` behind login plus
+Administrator/System Manager access. GL clarified current data/files are fake,
+so the order-summary and existing fake public-file findings are hardening and
+cleanup items rather than immediate launch blockers for the current fake-data
+state. Credential rotation/doc cleanup remains GL-owned before broader
+sharing/cutover.
 
 Live menu/content coordination now lives in `workstreams/menu-content-coordination.md`. Agents touching menu, header, footer, public page content, or nav/content verifiers must update that file before editing so overlapping sessions do not overwrite each other.
 

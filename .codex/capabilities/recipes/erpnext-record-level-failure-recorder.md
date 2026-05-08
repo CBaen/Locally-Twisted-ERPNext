@@ -43,8 +43,8 @@ First wiring is active in:
 
 - `lead_cascade.py`: Contact linking, acknowledgment email, and initial Task cascade failures.
 - `www/book.py`: invalid, oversized, excess, or failed inspiration uploads.
-- `www/checkout.py`: Lead conversion and checkout notes transfer failures.
-- `www/payment_success.py`: paid-order receipt missing-recipient failures.
+- `www/checkout.py`: checkout notes transfer failures.
+- `www/payment_success.py`: paid-order Lead conversion and receipt missing-recipient failures.
 - `verify/business_automation_index.py`: record-level failure rows become checkup failures with exact record IDs.
 
 ## Purpose
@@ -84,9 +84,9 @@ Source workstream: `workstreams/fail-loud-record-level-hardening.md`.
 
 1. `lead_cascade.py` partial failures: Contact creation, acknowledgment email,
    Task creation, stage cascade.
-2. `checkout.py` partial failures: Lead conversion and checkout note transfer.
+2. `checkout.py` partial failures: checkout note transfer.
 3. Inquiry upload failures: rejected/failed/oversized/excess inspiration photos.
-4. Paid-order reconciliation: missing receipt email and thank-you page backend
+4. Paid-order reconciliation: Lead conversion, missing receipt email, and thank-you page backend
    reconciliation state.
 5. Outbound document readiness: recipient, invoice number, bill-to, balance,
    due date, terms, payment path, branding, bookkeeping fields.

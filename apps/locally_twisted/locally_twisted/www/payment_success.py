@@ -37,6 +37,7 @@ import frappe
 from frappe.utils import escape_html, flt
 
 from locally_twisted import policy_documents
+from locally_twisted.crm_pipeline import PIPELINE_FIELD
 from locally_twisted.failure_recorder import record_backend_failure
 from locally_twisted.payments.settings import (
     DEFAULT_OPERATOR_EMAIL,
@@ -159,6 +160,7 @@ def reconcile_paid_sales_order(
     if not so_name:
         errors.append(f"{source}: missing Sales Order for paid-order cascade")
     else:
+        run("Lead conversion", _convert_checkout_leads_after_payment, so_name)
         run("Sales Invoice creation", _ensure_sales_invoice, so_name)
         run("receipt email", _send_receipt_email, so_name)
         run("operator notification", _send_operator_notification, so_name)
@@ -173,6 +175,82 @@ def reconcile_paid_sales_order(
         "payment_request": payment_request,
         "errors": errors,
     }
+
+
+def _convert_checkout_leads_after_payment(so_name):
+    """Convert Contact-linked inquiry Leads only after payment is verified."""
+    so = frappe.get_doc("Sales Order", so_name)
+    if not so.customer:
+        return []
+
+    lead_names = _lead_names_for_customer(so.customer)
+    converted = []
+    failures = []
+
+    for lead_name in lead_names:
+        try:
+            lead = frappe.get_doc("Lead", lead_name)
+            changed = False
+            if lead.status != "Converted":
+                lead.status = "Converted"
+                changed = True
+            if not lead.get("customer"):
+                lead.customer = so.customer
+                changed = True
+            if lead.meta.has_field(PIPELINE_FIELD) and lead.get(PIPELINE_FIELD) != "Approved":
+                lead.set(PIPELINE_FIELD, "Approved")
+                changed = True
+            if changed:
+                lead.flags.ignore_permissions = True
+                lead.save(ignore_permissions=True)
+            converted.append(lead.name)
+        except Exception as exc:
+            failures.append(f"{lead_name}: {type(exc).__name__}: {exc}")
+            record_backend_failure(
+                surface="payment_success_paid_order_cascade",
+                step="lead_conversion",
+                severity="error",
+                primary_doctype="Sales Order",
+                primary_name=so_name,
+                linked_doctype="Lead",
+                linked_name=lead_name,
+                customer_visible_impact="Payment was received, but the earlier inquiry did not fully move into the paid-order workflow.",
+                internal_next_action="Review the linked Lead, mark it converted, and connect it to the checkout Customer.",
+                exception=exc,
+                grouping_key=f"payment_success_paid_order_cascade:lead_conversion:{so_name}:{lead_name}",
+            )
+
+    if failures:
+        raise PaidOrderReconciliationError("; ".join(failures))
+    return converted
+
+
+def _lead_names_for_customer(customer_name):
+    contact_links = frappe.get_all(
+        "Dynamic Link",
+        filters={
+            "link_doctype": "Customer",
+            "link_name": customer_name,
+            "parenttype": "Contact",
+        },
+        fields=["parent"],
+        limit_page_length=100,
+    )
+    contact_names = sorted({row["parent"] for row in contact_links if row.get("parent")})
+    if not contact_names:
+        return []
+
+    lead_links = frappe.get_all(
+        "Dynamic Link",
+        filters={
+            "link_doctype": "Lead",
+            "parenttype": "Contact",
+            "parent": ("in", contact_names),
+        },
+        fields=["link_name"],
+        limit_page_length=100,
+    )
+    return sorted({row["link_name"] for row in lead_links if row.get("link_name")})
 
 
 def _mark_payment_request_paid(pr_name):

@@ -1,10 +1,10 @@
 # Event Playground Internal Preview Workstream
 
-Last updated: 2026-05-07 by Codex after committing the OpenClaw handoff source and planning-only payload contract.
+Last updated: 2026-05-08 by Codex after gating the internal Frappe preview route.
 
 ## Status
 
-`/event-playground` is a hidden internal-preview route for the PlayCanvas event-decor planner. It is not in public navigation and is not a customer launch surface yet.
+`/event-playground` is a hidden internal-preview route for the PlayCanvas event-decor planner. It is not in public navigation and is not a customer launch surface yet. The Frappe wrapper now redirects guests to `/login` and requires `Administrator` or `System Manager` before it exposes the local Vite iframe.
 
 OpenClaw now owns the next PlayCanvas/Event Playground pass. For the Locally Twisted website launch lane, treat this workstream as parked unless GL explicitly brings it back into scope.
 
@@ -82,10 +82,11 @@ Frappe wrapper and handoff check:
 
 ```powershell
 python scripts/dev/clear_website_cache.py --restart
+python scripts/verify/event_playground_gate.py
 npm run test:event-playground
 ```
 
-The root Playwright spec starts the local Vite preview on `127.0.0.1:4306`, loads `/event-playground`, verifies the iframe canvas is nonblank at mobile and desktop widths, exercises basic controls, and verifies Submit Inquiry lands on `/contact` with the design summary prefilled.
+`event_playground_gate.py` proves guest access redirects/denies without exposing the local iframe URL. The root Playwright spec always runs the guest gate. The authenticated canvas/control/handoff checks require `LT_DESK_TEST_USER` and `LT_DESK_TEST_PASSWORD`; without those env vars they are skipped instead of reopening guest access.
 
 ## Next Decisions
 

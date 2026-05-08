@@ -97,7 +97,7 @@ Current live-data facts from the fresh finance inventory:
 - The LT business pipeline uses `Lead.custom_pipeline_stage`.
 - Stage movement creates/closes operational Tasks only.
 - Stage movement does not create or modify Customers, Quotes, Sales Orders, Sales Invoices, Payment Requests, Payment Entries, or win/loss reporting.
-- Checkout-to-Lead conversion is coordinated: checkout can convert a matched Lead, move the custom stage to `Approved`, and keep the operational Task cascade aligned.
+- Checkout-to-Lead conversion is coordinated: guest checkout can link a matched inquiry Contact to the checkout Customer while leaving the Lead in `New Inquiry`; the paid-order cascade then converts the Lead, moves the custom stage to `Approved`, and keeps the operational Task cascade aligned.
 
 ### Customer document policy blocks
 
@@ -215,7 +215,7 @@ Current live-data facts from the fresh finance inventory:
 
 1. **Business automation index.** First pass done. `scripts/verify/business_automation_index.py` is the launch spine map and daily checkup source. Keep this green before adding new automations.
 2. **Paperwork status report.** First pass done. `scripts/verify/paperwork_status.py` summarizes current invoices, payment requests, email queues, overdue records, and bank/supplier/payroll gaps without printing secrets or mutating ERPNext. It reports live payment setup as cutover-deferred and does not run live readiness in synthetic mode.
-3. **Synthetic business pipeline audit.** First pass done. `scripts/verify/synthetic_business_pipeline.py` runs no-live fake-data/rollback-safe contracts for record-level backend evidence, inquiry upload failure evidence, checkout-to-Lead, checkout fulfillment, payment cascade, payment-success pending reconciliation, mocked webhook behavior, document policy, customer email policy boundaries, outbound templates, outbound send-readiness, quote/proposal outliers, unpaid invoice outliers, customer reminder dry-run outliers, and customer reminder review-report outliers. It fails on broken piping or fake-data cleanup leaks.
+3. **Synthetic business pipeline audit.** First pass done. `scripts/verify/synthetic_business_pipeline.py` runs no-live fake-data/rollback-safe contracts for record-level backend evidence, inquiry upload failure evidence, checkout-to-paid-order Lead conversion, checkout fulfillment, payment cascade, payment-success pending reconciliation, mocked webhook behavior, document policy, customer email policy boundaries, outbound templates, outbound send-readiness, quote/proposal outliers, unpaid invoice outliers, customer reminder dry-run outliers, and customer reminder review-report outliers. It fails on broken piping or fake-data cleanup leaks.
 4. **Unpaid invoice review queue.** First pass done as a draft-only report surface. Draft packet rendering is also done. Next is reviewed Desk UX or scheduled internal review digest, still no reminder sending.
 5. **Paperwork review digest.** First pass done as a read-only internal review payload. Next is a real reviewed Desk queue or scheduled internal-only report UI, still no customer sending.
 6. **Customer reminder dry run.** First pass done as a no-live internal review queue payload.

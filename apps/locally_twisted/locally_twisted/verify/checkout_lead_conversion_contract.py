@@ -1,7 +1,8 @@
-"""Checkout-to-Lead conversion contract for local launch checks.
+"""Checkout-to-paid-order Lead conversion contract for local launch checks.
 
 This creates a Lead and its linked Contact, submits the real guest checkout
-path with Stripe session creation stubbed, verifies the CRM/accounting story,
+path with Stripe session creation stubbed, verifies the Lead is still pending
+before payment, runs the paid-order cascade, verifies conversion after payment,
 then rolls the transaction back.
 """
 from __future__ import annotations
@@ -62,16 +63,25 @@ def _run_contract():
 
     result = _submit_checkout(email=email, name=marker)
 
-    lead_after = frappe.get_doc("Lead", lead.name)
+    lead_after_checkout = frappe.get_doc("Lead", lead.name)
     contact_after = frappe.get_doc("Contact", contact_name)
-    counts_after = _counts()
-    tasks_after = _tasks_for_lead(lead.name)
+    counts_after_checkout = _counts()
+    tasks_after_checkout = _tasks_for_lead(lead.name)
 
     failures = []
-    failures.extend(_check_counts(counts_before, counts_after))
-    failures.extend(_check_checkout_result(result, lead_after, contact_after, contact_name))
-    failures.extend(_check_lead_state(lead_after, result))
-    failures.extend(_check_task_state(tasks_after))
+    failures.extend(_check_counts(counts_before, counts_after_checkout))
+    failures.extend(_check_checkout_result(result, lead_after_checkout, contact_after, contact_name))
+    failures.extend(_check_pre_payment_lead_state(lead_after_checkout, result))
+    failures.extend(_check_pre_payment_task_state(tasks_after_checkout))
+
+    payment_result = _reconcile_paid_order(result)
+    if not payment_result.get("ok"):
+        failures.append(f"paid-order reconciliation returned errors: {payment_result.get('errors')}")
+
+    lead_after_payment = frappe.get_doc("Lead", lead.name)
+    tasks_after_payment = _tasks_for_lead(lead.name)
+    failures.extend(_check_paid_lead_state(lead_after_payment, result))
+    failures.extend(_check_paid_task_state(tasks_after_payment))
 
     if failures:
         raise ContractFail("; ".join(failures))
@@ -83,9 +93,12 @@ def _run_contract():
         "customer": result.get("customer"),
         "sales_order": result.get("sales_order"),
         "payment_request": result.get("payment_request"),
-        "lead_status": lead_after.status,
-        "pipeline_stage": lead_after.get("custom_pipeline_stage"),
-        "active_task_stage": _active_task_stage(tasks_after),
+        "lead_status_after_checkout": lead_after_checkout.status,
+        "pipeline_stage_after_checkout": lead_after_checkout.get("custom_pipeline_stage"),
+        "active_task_stage_after_checkout": _active_task_stage(tasks_after_checkout),
+        "lead_status": lead_after_payment.status,
+        "pipeline_stage": lead_after_payment.get("custom_pipeline_stage"),
+        "active_task_stage": _active_task_stage(tasks_after_payment),
     }
 
 
@@ -149,6 +162,38 @@ def _submit_checkout(email: str, name: str):
         )
     finally:
         stripe_session.create_session_for_sales_order = original_create_session
+
+
+def _reconcile_paid_order(result: dict):
+    from locally_twisted.www import payment_success
+
+    originals = {
+        "_mark_payment_request_paid": payment_success._mark_payment_request_paid,
+        "_ensure_sales_invoice": payment_success._ensure_sales_invoice,
+        "_send_receipt_email": payment_success._send_receipt_email,
+        "_send_operator_notification": payment_success._send_operator_notification,
+        "_send_welcome_email_if_first_order": payment_success._send_welcome_email_if_first_order,
+    }
+    try:
+        payment_success._mark_payment_request_paid = lambda payment_request: None
+        payment_success._ensure_sales_invoice = lambda so_name: f"STUB-SI-{so_name}"
+        payment_success._send_receipt_email = lambda so_name: None
+        payment_success._send_operator_notification = lambda so_name: None
+        payment_success._send_welcome_email_if_first_order = lambda so_name: None
+        return payment_success.reconcile_paid_sales_order(
+            result.get("sales_order"),
+            payment_request=result.get("payment_request"),
+            source="checkout_lead_conversion_contract",
+            raise_on_error=True,
+        )
+    finally:
+        payment_success._mark_payment_request_paid = originals["_mark_payment_request_paid"]
+        payment_success._ensure_sales_invoice = originals["_ensure_sales_invoice"]
+        payment_success._send_receipt_email = originals["_send_receipt_email"]
+        payment_success._send_operator_notification = originals["_send_operator_notification"]
+        payment_success._send_welcome_email_if_first_order = originals[
+            "_send_welcome_email_if_first_order"
+        ]
 
 
 def _counts() -> dict[str, int]:
@@ -215,28 +260,53 @@ def _check_checkout_result(result: dict, lead, contact, original_contact_name: s
     return failures
 
 
-def _check_lead_state(lead, result: dict) -> list[str]:
+def _check_pre_payment_lead_state(lead, result: dict) -> list[str]:
+    failures = []
+    if lead.status == "Converted":
+        failures.append("Lead.status should not be 'Converted' before payment succeeds")
+    if lead.get("customer"):
+        failures.append(
+            f"Lead.customer should stay empty before payment succeeds, found {lead.get('customer')!r}"
+        )
+    if lead.get("custom_pipeline_stage") != "New Inquiry":
+        failures.append(
+            "Lead.custom_pipeline_stage should remain 'New Inquiry' before payment succeeds, "
+            f"found {lead.get('custom_pipeline_stage')!r}"
+        )
+    return failures
+
+
+def _check_paid_lead_state(lead, result: dict) -> list[str]:
     failures = []
     if lead.status != "Converted":
-        failures.append(f"Lead.status expected 'Converted', found {lead.status!r}")
+        failures.append(f"Lead.status expected 'Converted' after paid cascade, found {lead.status!r}")
     if lead.get("customer") != result.get("customer"):
         failures.append(
             f"Lead.customer expected {result.get('customer')!r}, found {lead.get('customer')!r}"
         )
     if lead.get("custom_pipeline_stage") != "Approved":
         failures.append(
-            "Lead.custom_pipeline_stage expected 'Approved' after checkout conversion, "
+            "Lead.custom_pipeline_stage expected 'Approved' after paid cascade, "
             f"found {lead.get('custom_pipeline_stage')!r}"
         )
     return failures
 
 
-def _check_task_state(tasks: list[dict]) -> list[str]:
+def _check_pre_payment_task_state(tasks: list[dict]) -> list[str]:
+    failures = []
+    if not _task_for_stage(tasks, "New Inquiry", open_only=True):
+        failures.append("New Inquiry task should remain open before payment succeeds")
+    if _task_for_stage(tasks, "Approved", open_only=True):
+        failures.append("Approved task should not open before payment succeeds")
+    return failures
+
+
+def _check_paid_task_state(tasks: list[dict]) -> list[str]:
     failures = []
     if _task_for_stage(tasks, "New Inquiry", open_only=True):
-        failures.append("New Inquiry task should be closed after checkout conversion")
+        failures.append("New Inquiry task should be closed after paid conversion")
     if not _task_for_stage(tasks, "Approved", open_only=True):
-        failures.append("Approved task should be open after checkout conversion")
+        failures.append("Approved task should be open after paid conversion")
     return failures
 
 

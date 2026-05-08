@@ -1,6 +1,6 @@
 # Business Automation Index
 
-Last updated: 2026-05-08 by Codex after adding the sanitized client operations heartbeat and Maintenance Admin boundary to the automation index.
+Last updated: 2026-05-08 by Codex after moving checkout Lead conversion behind the paid-order cascade.
 
 ## Outcome
 
@@ -75,8 +75,8 @@ These are currently classified as existing and connected:
 - `/contact` public form to ERPNext Lead fields
 - Lead insert to Contact dedup/link, acknowledgment email, and operational Task
 - custom CRM stage movement to operational Tasks only
-- guest checkout to Customer, Contact, Address, Sales Order, Payment Request, and Stripe redirect
-- paid checkout reconciliation to Payment Request, Payment Entry, Sales Invoice, receipt email, operator notification, and welcome email
+- guest checkout to Customer, Contact, Address, Sales Order, Payment Request, and Stripe redirect without final Lead conversion before payment
+- paid checkout reconciliation to Lead conversion, Payment Request, Payment Entry, Sales Invoice, receipt email, operator notification, and welcome email
 - Stripe Checkout amount parity with ERPNext Sales Order grand total
 - Stripe webhook reconciliation through the paid-order helper
 - branded Sales Invoice print output
@@ -131,7 +131,7 @@ Safe fake-data verifiers are part of the operating model:
 - `record_level_failure_contract.py` creates rollback-safe record-level backend failure evidence.
 - `inquiry_upload_failure_contract.py` proves rejected inspiration photos produce customer-visible and Lead-level evidence.
 - `smoke_forms.py` creates and deletes a test Lead and linked cascade Task.
-- `checkout_lead_conversion_contract.py` creates rollback-only checkout/Lead conversion records.
+- `checkout_lead_conversion_contract.py` creates rollback-only checkout records, proves the Lead stays pending before payment, then proves paid-order conversion.
 - `payment_cascade_contract.py` creates rollback-only paid-order cascade records.
 - `crm_stage_cascade.py` creates rollback-only CRM/Task cascade records.
 - outbound document preview rendering uses fake normal and outlier data under ignored `output/`.
