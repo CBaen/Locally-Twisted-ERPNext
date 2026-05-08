@@ -46,6 +46,7 @@ from locally_twisted.payments.settings import (
 
 no_cache = 1
 sitemap = 0
+PAYMENT_CHECK_ROUTE = "/thank-you?status=payment-check"
 
 
 def get_context(context):
@@ -58,7 +59,7 @@ def get_context(context):
     docname = docname_raw.split("?", 1)[0] if docname_raw else ""
 
     if doctype != "Payment Request" or not docname:
-        _redirect("/")
+        _redirect(PAYMENT_CHECK_ROUTE)
 
     integration_status = frappe.db.get_value(
         "Integration Request",
@@ -66,11 +67,11 @@ def get_context(context):
         "status",
     )
     if integration_status != "Completed":
-        _redirect("/")
+        _redirect(PAYMENT_CHECK_ROUTE)
 
     sales_order = frappe.db.get_value("Payment Request", docname, "reference_name")
     if not sales_order:
-        _redirect("/")
+        _redirect(PAYMENT_CHECK_ROUTE)
 
     _redirect(f"/thank-you?order={sales_order}")
 
@@ -94,17 +95,17 @@ def _handle_stripe_session(session_id):
         session = retrieve_session(session_id)
     except Exception:
         frappe.log_error(frappe.get_traceback(), "Stripe session retrieval failed")
-        _redirect("/")
+        _redirect(PAYMENT_CHECK_ROUTE)
 
     if (session.get("payment_status") or "").lower() != "paid":
-        _redirect("/")
+        _redirect(PAYMENT_CHECK_ROUTE)
 
     sales_order = (
         session.get("client_reference_id")
         or (session.get("metadata") or {}).get("sales_order")
     )
     if not sales_order:
-        _redirect("/")
+        _redirect(PAYMENT_CHECK_ROUTE)
 
     result = reconcile_paid_sales_order(
         sales_order,

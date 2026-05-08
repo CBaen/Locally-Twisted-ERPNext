@@ -9,10 +9,11 @@ currently_true: unknown
 verification_level: 1
 last_verified: 2026-05-08
 evidence_quality: direct
-successful_uses: 0
+successful_uses: 1
 failed_uses: 0
 regressions: 0
-depends_on: []
+depends_on:
+  - customer-facing-failure-voice
 used_by:
   - erpnext-business-automation-index
   - erpnext-intake-form-parity
@@ -69,6 +70,23 @@ Minimum standard:
 - Source contract: the missing or broken connection is named in code, schema,
   payload, route contract, document registry, or verifier output.
 
+## Customer-Facing Failure Voice
+
+Global source: `C:\Users\baenb\.codex\capabilities\recipes\customer-facing-failure-voice.md`.
+
+Public/customer-facing failures must be warm, plain, and gently playful without
+turning into fake success. Use the "calm kindergarten teacher" test:
+
+- name the snag without blame or technical detail;
+- reassure only what is true;
+- give one safe next step;
+- include a real retry/contact path when the customer cannot fix it alone;
+- keep stack traces, DocTypes, webhook/API labels, and exact internal failures
+  out of public copy.
+
+Backend/operator evidence must still be exact: record ID, route, failing step,
+exception/report row, and next repair action.
+
 ## Required Behavior By Surface
 
 Forms and intake:
@@ -94,6 +112,9 @@ Documents and customer communication:
   it.
 - Missing payment paths, missing recipient data, stale policy copy, or malformed
   approval flags must block delivery.
+- Customer-visible document or email error states must be polite and useful:
+  explain the missing piece and route the customer to a reply, call, or human
+  review path instead of exposing internal automation language.
 
 Containers and public layout:
 
@@ -138,6 +159,8 @@ customer-facing layout/navigation/checkout closeout.
 ## Anti-Patterns
 
 - Success toast after a failed backend write.
+- Customer-facing copy that says only "Something went wrong" or exposes
+  exception/webhook/DocType/API language.
 - Email helper catches and logs only to console.
 - Scheduler silently skips because a method path changed.
 - Document generator omits a payment link but still renders a send-ready packet.

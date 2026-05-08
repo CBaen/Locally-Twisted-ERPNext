@@ -585,11 +585,11 @@ def _photo_upload_customer_message(summary):
     if attached:
         return (
             f"We received your request and attached {attached} inspiration photo(s). "
-            f"{issue_count} file(s) could not be attached, and we noted that for follow-up."
+            f"{issue_count} photo file(s) had a little trouble attaching, so we made a note for the team to follow up."
         )
     return (
-        "We received your request, but the inspiration photo file(s) could not be attached. "
-        "We noted that for follow-up."
+        "We received your request. The inspiration photo file(s) had a little trouble attaching, "
+        "so we made a note for the team to follow up."
     )
 
 

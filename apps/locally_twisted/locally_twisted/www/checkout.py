@@ -421,7 +421,7 @@ def _normalize_line_qty(qty):
     qty_value = max(1, cint(qty or 1))
     if qty_value > MAX_QTY_PER_LINE:
         frappe.throw(
-            _("Cart line quantity cannot exceed {0}.").format(MAX_QTY_PER_LINE),
+            _("Tiny snag: one cart line has more than {0} items. Please lower the quantity and try again.").format(MAX_QTY_PER_LINE),
             frappe.ValidationError,
         )
     return qty_value
@@ -440,12 +440,18 @@ def _resolve_cart_items(item_code, qty, items_json):
         try:
             parsed = json.loads(items_json)
         except (ValueError, TypeError):
-            frappe.throw(_("Cart payload is not valid JSON."), frappe.ValidationError)
+            frappe.throw(
+                _("Tiny snag: the cart details did not come through cleanly. Please refresh your cart and try again."),
+                frappe.ValidationError,
+            )
         if not isinstance(parsed, list):
-            frappe.throw(_("Cart payload must be a list."), frappe.ValidationError)
+            frappe.throw(
+                _("Tiny snag: the cart details did not come through cleanly. Please refresh your cart and try again."),
+                frappe.ValidationError,
+            )
         if len(parsed) > MAX_CART_LINES:
             frappe.throw(
-                _("Cart exceeds the {0}-item limit.").format(MAX_CART_LINES),
+                _("Tiny snag: your cart has more than {0} items. Please remove a few items and try again.").format(MAX_CART_LINES),
                 frappe.ValidationError,
             )
         seen = {}
@@ -482,7 +488,7 @@ def _resolve_sale_lines(cart_items):
         resolved = resolve_cart_item_for_sale(line["item_code"], raise_on_missing=False)
         if not resolved:
             frappe.throw(
-                _("'{0}' is no longer available. Please remove it and try again.").format(line["item_code"]),
+                _("Tiny snag: one cart item is no longer available. Please return to your cart and choose again."),
                 frappe.ValidationError,
             )
         qty_value = int(line["qty"])

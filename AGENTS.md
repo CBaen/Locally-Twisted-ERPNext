@@ -24,6 +24,12 @@ customer messages, backend handoffs, route/layout contracts, containers,
 verification, and agent communication. Silent failure is not a degraded state;
 it is a business trust failure.
 
+Customer-facing failures must follow the machine-wide warm-teacher voice rule:
+sound calm, plain, and gently playful, like a kindergarten teacher helping a
+student. Say what happened without blame or technical jargon, tell the customer
+the next safe step, and never imply full success when a downstream path is
+incomplete. Operator/developer evidence still needs the exact loud failure.
+
 Failing loudly means:
 
 - The customer or operator must not see false success. No success toast, receipt,

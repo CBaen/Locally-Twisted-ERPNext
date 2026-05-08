@@ -194,6 +194,7 @@ PAGE_CSS = """
 
 def get_context(context):
     so_name = (frappe.form_dict.get("order") or "").strip()
+    status = (frappe.form_dict.get("status") or "").strip().lower()
 
     context.title = "Thank you! | Locally Twisted"
     context.metatags = {
@@ -201,17 +202,30 @@ def get_context(context):
         "robots": "noindex, nofollow",
     }
     context.colocated_css = PAGE_CSS
-    context.reconciliation_pending = (
+    context.thank_you_eyebrow = "Payment Received"
+    reconciliation_pending = (
         (frappe.form_dict.get("reconciliation") or "").strip().lower() == "pending"
     )
-    if context.reconciliation_pending:
+    payment_check_needed = status == "payment-check" or not so_name
+    context.reconciliation_pending = reconciliation_pending or payment_check_needed
+
+    if payment_check_needed:
+        context.thank_you_eyebrow = "Payment Check"
         context.thank_you_lede = (
-            "Your payment came through. We have your order, and final receipt "
-            "or invoice paperwork is still being reconciled."
+            "Tiny snag: we could not confirm this payment return in the browser."
         )
         context.reconciliation_notice = (
-            "Payment is received. The final receipt or invoice details are being "
-            "checked in the background, and the team has an internal record to follow up."
+            "If you saw a card charge, please call (801) 285-0860 or email "
+            "hi@locallytwisted.com so we can match it up for you."
+        )
+    elif reconciliation_pending:
+        context.thank_you_lede = (
+            "Your payment came through. We have your order, and the final receipt "
+            "or invoice check is still finishing in the background."
+        )
+        context.reconciliation_notice = (
+            "Tiny snag: the final receipt or invoice details are still being checked. "
+            "The team has an internal record to follow up."
         )
     else:
         context.thank_you_lede = (

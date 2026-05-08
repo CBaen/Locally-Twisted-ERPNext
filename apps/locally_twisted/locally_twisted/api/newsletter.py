@@ -64,15 +64,15 @@ def signup(email=None):
     """
     # ── Input validation ───────────────────────────────────────────────
     if not email or not isinstance(email, str):
-        frappe.throw("Email is required.", frappe.ValidationError)
+        frappe.throw("Please add your email address so we can save your spot.", frappe.ValidationError)
 
     email = email.strip().lower()
 
     if len(email) > _MAX_EMAIL_LEN:
-        frappe.throw("That email address is too long.", frappe.ValidationError)
+        frappe.throw("Tiny snag: that email address is a little too long. Please use a shorter one.", frappe.ValidationError)
 
     if not _EMAIL_RE.match(email):
-        frappe.throw("That doesn't look like a valid email.", frappe.ValidationError)
+        frappe.throw("That email needs one more look. Please check it and try again.", frappe.ValidationError)
 
     # ── Idempotent insert ──────────────────────────────────────────────
     try:

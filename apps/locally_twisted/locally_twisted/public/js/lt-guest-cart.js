@@ -30,6 +30,7 @@
     var SCHEMA_VERSION = 1;
     var MAX_QTY_PER_LINE = 99;
     var CHANGE_EVENT = "lt-cart-change";
+    var ADD_TO_CART_FAILURE = "Tiny snag: we could not add that to your cart just now. Please try once more or call (801) 285-0860.";
 
     // In-memory fallback for when localStorage is unavailable
     // (Safari Private Mode, browsers with storage disabled). Cart persists
@@ -237,7 +238,7 @@
                 console.error("[lt-cart] add failed:", err);
                 if (typeof window.frappe !== "undefined" && window.frappe.show_alert) {
                     window.frappe.show_alert({
-                        message: "Couldn't add to cart. Please call (801) 285-0860.",
+                        message: ADD_TO_CART_FAILURE,
                         indicator: "red",
                     }, 5);
                 }
@@ -297,7 +298,7 @@
             console.error("[lt-cart] capture-phase add failed:", err);
             if (typeof window.frappe !== "undefined" && window.frappe.show_alert) {
                 window.frappe.show_alert({
-                    message: "Couldn't add to cart. Please call (801) 285-0860.",
+                    message: ADD_TO_CART_FAILURE,
                     indicator: "red",
                 }, 5);
             }

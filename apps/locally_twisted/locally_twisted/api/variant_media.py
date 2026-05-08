@@ -33,7 +33,7 @@ def get_variant_media(item_code: str, template_item_code: str | None = None) -> 
     item_code = (item_code or "").strip()
     template_item_code = (template_item_code or "").strip() or None
     if not item_code:
-        frappe.throw(_("Item code is required."), frappe.ValidationError)
+        frappe.throw(_("Please choose a product option first."), frappe.ValidationError)
 
     item = frappe.db.get_value(
         "Item",
@@ -42,11 +42,11 @@ def get_variant_media(item_code: str, template_item_code: str | None = None) -> 
         as_dict=True,
     )
     if not item:
-        frappe.throw(_("This item is no longer available."), frappe.ValidationError)
+        frappe.throw(_("Tiny snag: this item is no longer available. Please choose another option."), frappe.ValidationError)
 
     website_item_code = item.get("variant_of") or item["item_code"]
     if template_item_code and website_item_code != template_item_code:
-        frappe.throw(_("This option does not belong to the current product."), frappe.ValidationError)
+        frappe.throw(_("Tiny snag: that option does not match this product. Please choose again."), frappe.ValidationError)
 
     website_item = frappe.db.get_value(
         "Website Item",
@@ -55,7 +55,7 @@ def get_variant_media(item_code: str, template_item_code: str | None = None) -> 
         as_dict=True,
     )
     if not website_item:
-        frappe.throw(_("This product is no longer published."), frappe.ValidationError)
+        frappe.throw(_("Tiny snag: this product is not available right now. Please choose another option."), frappe.ValidationError)
 
     fallback_image = website_item.get("website_image") or None
     variant_image = item.get("image") or None

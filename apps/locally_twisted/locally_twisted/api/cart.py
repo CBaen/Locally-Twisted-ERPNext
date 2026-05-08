@@ -49,12 +49,12 @@ def _variant_options(item_code):
 
 def _missing_message(reason):
     if reason == "quote_required":
-        return _("Standard checkout needs a delivery quote for this request.")
+        return _("Tiny snag: this request needs a delivery quote before checkout.")
     if reason == "choose_options":
         return _("Please choose this item's options before adding it to cart.")
     if reason == "unpriced":
-        return _("This item doesn't have a price right now. Please remove it and try again.")
-    return _("This item is no longer available. Please remove it and try again.")
+        return _("Tiny snag: this item is missing its checkout price. Please remove it or call (801) 285-0860.")
+    return _("Tiny snag: this item is no longer available. Please remove it from your cart.")
 
 
 def _resolve_cart_item_for_sale(item_code):
@@ -175,14 +175,20 @@ def get_cart_items(item_codes=None):
         try:
             item_codes = json.loads(item_codes)
         except (ValueError, TypeError):
-            frappe.throw(_("Cart payload is not valid JSON."), frappe.ValidationError)
+            frappe.throw(
+                _("Tiny snag: the cart details did not come through cleanly. Please refresh your cart and try again."),
+                frappe.ValidationError,
+            )
 
     if not isinstance(item_codes, list):
-        frappe.throw(_("Cart payload must be a list of item codes."), frappe.ValidationError)
+        frappe.throw(
+            _("Tiny snag: the cart details did not come through cleanly. Please refresh your cart and try again."),
+            frappe.ValidationError,
+        )
 
     if len(item_codes) > MAX_CART_LINES:
         frappe.throw(
-            _("Cart exceeds the {0}-item limit.").format(MAX_CART_LINES),
+            _("Tiny snag: your cart has more than {0} items. Please remove a few items and try again.").format(MAX_CART_LINES),
             frappe.ValidationError,
         )
 

@@ -10,7 +10,8 @@ purchase contract:
 - Product groups do not create a quote-only cart failure. Delivery ZIP/city is
   the checkout quote gate, not the product group by itself.
 - Variant templates are not added directly from /shop.
-- Server checkout rejects direct POST quantities above the browser cart cap.
+- Server checkout rejects direct POST quantities above the browser cart cap
+  with customer-safe failure copy.
 
 Run:
   python scripts/verify/cart_checkout_contract.py
@@ -172,7 +173,7 @@ def check_checkout_resolver_accepts_retail_variant() -> None:
 
 
 def check_checkout_rejects_over_limit_quantities() -> None:
-    expected = f"Cart line quantity cannot exceed {MAX_QTY_PER_LINE}"
+    expected = f"Tiny snag: one cart line has more than {MAX_QTY_PER_LINE} items."
     bench_execute_expect_error(
         "locally_twisted.www.checkout._resolve_cart_items",
         kwargs={"item_code": SINGLE_SKU_ITEM, "qty": MAX_QTY_PER_LINE + 1, "items_json": ""},

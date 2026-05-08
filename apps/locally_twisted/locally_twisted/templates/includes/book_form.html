@@ -1013,6 +1013,7 @@ every deploy.
     var feedback = document.getElementById('book_feedback');
     var receivedMessage = document.getElementById('received_message');
     var defaultReceivedMessage = receivedMessage ? receivedMessage.textContent : '';
+    var BOOK_FALLBACK_ERROR = 'Tiny snag: we could not send your request just now. Please call (801) 285-0860 or email hi@locallytwisted.com and we will help.';
     if (!form || !submitBtn || !feedback) return;
 
     function showError(message) {
@@ -1072,16 +1073,23 @@ every deploy.
                 window.location.hash = '#received';
                 showModal();
             } else {
-                var msg = parseServerError(result.body) || 'Something went wrong. Please call (801) 285-0860 or email hi@locallytwisted.com.';
+                var msg = parseServerError(result.body) || BOOK_FALLBACK_ERROR;
                 showError(msg);
             }
         }).catch(function (err) {
             submitBtn.disabled = false;
             submitBtn.textContent = originalLabel;
-            showError("We couldn't send your request. Please call (801) 285-0860 or email hi@locallytwisted.com.");
+            showError(BOOK_FALLBACK_ERROR);
             if (window.console && console.error) console.error('Book form submit failed', err);
         });
     });
+
+    function isCustomerSafeMessage(message) {
+        if (typeof message !== 'string') return false;
+        var value = message.trim();
+        if (!value) return false;
+        return !/(Traceback|Exception|Error:|frappe\.|pymysql|DocType|doctype|SQL|stack)/i.test(value);
+    }
 
     function parseServerError(body) {
         if (!body) return null;
@@ -1090,12 +1098,11 @@ every deploy.
                 var msgs = JSON.parse(body._server_messages);
                 if (Array.isArray(msgs) && msgs.length) {
                     var first = JSON.parse(msgs[0]);
-                    return first.message || null;
+                    if (isCustomerSafeMessage(first.message)) return first.message;
                 }
             } catch (e) {}
         }
-        if (typeof body.exception === 'string' && body.exception) return body.exception;
-        if (typeof body.message === 'string' && body.message) return body.message;
+        if (isCustomerSafeMessage(body.message)) return body.message;
         return null;
     }
 

@@ -113,7 +113,7 @@
                 /* Unexpected shape — treat as soft failure */
                 return {
                     ok: false,
-                    error: "Something went wrong. Please call (801) 285-0860.",
+                    error: "Tiny snag: we could not add your email just now.",
                 };
             })
             .catch(function (err) {
@@ -129,7 +129,7 @@
                 console.error("[lt-newsletter] signup failed:", err && err.httpStatus ? "HTTP " + err.httpStatus : (err ? err.message : "unknown"));
                 return {
                     ok: false,
-                    error: "Something went wrong. Please call (801) 285-0860.",
+                    error: "Tiny snag: we could not add your email just now.",
                 };
             });
     }
@@ -199,7 +199,7 @@
                  * that precedes the tel: anchor inside the inner error-text span.
                  * The span structure from footer.html is:
                  *   <span class="lt-footer-newsletter__error-text">
-                 *     We couldn't add your email right now...
+                 *     Tiny snag: we could not add your email just now...
                  *     <a href="tel:+18012850860">(801) 285-0860</a>.
                  *   </span>
                  * We find the first Text node child of the span and update it,
@@ -299,11 +299,7 @@
                     form.reset();
                 } else {
                     /* Non-ok result: show error + phone fallback */
-                    var errMsg = result.error || "Something went wrong.";
-                    /* Append phone fallback if not already present in the message */
-                    if (errMsg.indexOf("801") < 0) {
-                        errMsg += " If this keeps happening, call (801) 285-0860.";
-                    }
+                    var errMsg = result.error || "Tiny snag: we could not add your email just now.";
                     showError(errMsg);
                 }
             }).catch(function (unexpectedErr) {
@@ -311,7 +307,7 @@
                 setSubmitting(false);
                 console.error("[lt-newsletter] unexpected rejection:", unexpectedErr);
                 showError(
-                    "Something went wrong. If this keeps happening, call (801) 285-0860."
+                    "Tiny snag: we could not add your email just now."
                 );
             });
         });
