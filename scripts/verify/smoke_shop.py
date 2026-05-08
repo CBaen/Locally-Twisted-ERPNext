@@ -640,6 +640,7 @@ def check_product_variant_page(page):
     assert_("/ Nos" not in body and " / Nos" not in body, "Product detail still leaks '/Nos' UoM")
     assert_("Shop by Category" not in body, "Product breadcrumb still shows retired 'Shop by Category' label")
     assert_("/shop-by-category" not in body, "Product breadcrumb still links to retired /shop-by-category route")
+    assert_("super shape" not in body.lower(), "Product detail still exposes super shape jargon")
 
     for attr in PRODUCT_VARIANT_EXPECTED_ATTRS:
         loc = page.locator(f".lt-product__attr[data-attribute-name='{attr}']")

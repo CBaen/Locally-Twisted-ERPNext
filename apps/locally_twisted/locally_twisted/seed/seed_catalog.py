@@ -50,6 +50,7 @@ from pathlib import Path
 import frappe
 from locally_twisted.catalog_variant_rules import (
     dedupe_required_variant_rows,
+    normalize_variant_value,
     required_variant_attribute_names,
 )
 
@@ -92,7 +93,8 @@ def _load_inputs():
 def _normalize_value(attr_name: str, raw_value: str, normalize_map: dict) -> str:
     """Map a raw Odoo value to its canonical case-deduped form."""
     key = " ".join(raw_value.split()).lower()
-    return normalize_map.get(attr_name, {}).get(key, raw_value)
+    value = normalize_map.get(attr_name, {}).get(key, raw_value)
+    return normalize_variant_value(attr_name, value)
 
 
 def _ensure_file_attached(item_code: str, slug: str, images_dir: Path) -> str | None:

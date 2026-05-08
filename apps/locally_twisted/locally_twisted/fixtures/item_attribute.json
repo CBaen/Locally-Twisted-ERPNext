@@ -144,15 +144,15 @@
   "numeric_values": 0,
   "item_attribute_values": [
    {
-    "attribute_value": "Small — 1 super shape, 2 foils, 7 latex",
+    "attribute_value": "Small — 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons",
     "abbr": "SMA"
    },
    {
-    "attribute_value": "Medium — 2 super shapes, 4 foils, 14 latex",
+    "attribute_value": "Medium — 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons",
     "abbr": "MED"
    },
    {
-    "attribute_value": "Large - 3 super shapes, 5 foil 16 latex",
+    "attribute_value": "Large — 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons",
     "abbr": "LAR"
    }
   ],

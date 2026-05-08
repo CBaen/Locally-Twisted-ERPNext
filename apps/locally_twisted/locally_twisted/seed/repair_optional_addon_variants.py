@@ -17,6 +17,7 @@ from urllib.request import Request, urlopen
 import frappe
 
 from locally_twisted.catalog_variant_rules import (
+    BOUQUET_SIZE_LABELS,
     OPTIONAL_ADDON_ATTRIBUTES,
     is_required_variant_attribute,
     project_required_variant_combo,
@@ -212,6 +213,28 @@ def _variant_templates_with_optional_axes() -> list[str]:
     return [row.variant_of for row in rows if row.variant_of]
 
 
+def _rename_bouquet_size_values() -> None:
+    for old_label, new_label in BOUQUET_SIZE_LABELS.items():
+        frappe.db.sql(
+            """
+            UPDATE `tabItem Attribute Value`
+            SET attribute_value = %s
+            WHERE parent = 'Bouquet Size'
+              AND attribute_value = %s
+            """,
+            (new_label, old_label),
+        )
+        frappe.db.sql(
+            """
+            UPDATE `tabItem Variant Attribute`
+            SET attribute_value = %s
+            WHERE attribute = 'Bouquet Size'
+              AND attribute_value = %s
+            """,
+            (new_label, old_label),
+        )
+
+
 def _repair_template(template_code: str) -> dict[str, object]:
     required_attrs = _template_required_attrs(template_code)
     if not required_attrs:
@@ -279,6 +302,7 @@ def _repair_template(template_code: str) -> dict[str, object]:
 
 def execute() -> str:
     frappe.flags.ignore_permissions = True
+    _rename_bouquet_size_values()
     results = [_repair_template(template) for template in _variant_templates_with_optional_axes()]
     frappe.db.commit()
     return json.dumps(

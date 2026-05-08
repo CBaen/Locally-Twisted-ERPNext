@@ -22,9 +22,21 @@ OPTIONAL_ADDON_CONTEXT_ATTRIBUTES = frozenset(
     }
 )
 
+BOUQUET_SIZE_LABELS = {
+    "Small — 1 super shape, 2 foils, 7 latex": "Small — 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons",
+    "Medium — 2 super shapes, 4 foils, 14 latex": "Medium — 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons",
+    "Large - 3 super shapes, 5 foil 16 latex": "Large — 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons",
+}
+
 
 def is_required_variant_attribute(attribute: str | None) -> bool:
     return bool(attribute) and attribute not in OPTIONAL_ADDON_ATTRIBUTES
+
+
+def normalize_variant_value(attribute: str | None, value: str | None) -> str | None:
+    if attribute == "Bouquet Size" and value:
+        return BOUQUET_SIZE_LABELS.get(value, value)
+    return value
 
 
 def _should_drop_optional_addons(attribute_names: Iterable[str]) -> bool:
@@ -47,7 +59,7 @@ def project_required_variant_combo(combo: Mapping[str, str] | None) -> dict[str,
         return {}
     drop_optional_addons = _should_drop_optional_addons(combo.keys())
     return {
-        str(attribute): value
+        str(attribute): normalize_variant_value(str(attribute), value)
         for attribute, value in combo.items()
         if not drop_optional_addons or is_required_variant_attribute(str(attribute))
     }
