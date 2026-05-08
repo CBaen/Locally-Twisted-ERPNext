@@ -1,0 +1,129 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+
+{#
+  /private-celebrations — Audience: Birthday parents, wedding planners,
+  baby shower hosts, milestone families, memorial/celebration-of-life organizers.
+
+  Buyer posture: Personal, milestone-emotional, taste-elevated, gift-feeling.
+  No named-client roster — private celebrations expect privacy.
+
+  Sections (container mode noted):
+  1. Hero              — fullbleed
+  2. Intro + stats     — band (warm white)
+  3. Occasions grid    — visual-field (stone, 6-up with photos)
+  4. Testimonials      — band (white)
+  5. Closing CTA       — fullbleed (navy)
+#}
+
+<div class="lt-page-private">
+
+{# --- 1. Hero (fullbleed) ------------------------------------------- #}
+<section class="lt-priv-hero lt-fullbleed" aria-labelledby="lt-priv-h1">
+    <div class="lt-priv-hero__image" aria-hidden="true"></div>
+    <div class="lt-priv-hero__content">
+        <p class="lt-priv-hero__eyebrow">Birthdays · Weddings · Milestones</p>
+        <h1 id="lt-priv-h1" class="lt-priv-hero__h1">
+            The moment deserves something beautiful.
+        </h1>
+        <p class="lt-priv-hero__lede">
+            Custom balloon decor for private celebrations that feel personal and considered — not templated. Wasatch Front delivery, design-led, palette-matched.
+        </p>
+        <a href="/contact?intent=celebration" class="lt-priv-hero__cta">
+            Tell us what you're imagining <span aria-hidden="true">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+{# --- 2. Intro + stats (band / warm white) -------------------------- #}
+<section class="lt-priv-intro" aria-labelledby="lt-priv-intro-h2">
+    <div class="lt-priv-intro__inner">
+        <p class="lt-priv-intro__label">Private celebrations, personal scale</p>
+        <h2 id="lt-priv-intro-h2" class="lt-priv-intro__h2">
+            Every detail matters, because this moment is one of a kind.
+        </h2>
+        <p class="lt-priv-intro__body">
+            Private celebrations carry different weight. A first birthday only happens once. A wedding is the photograph people return to. A memorial is how a community says goodbye. The decor should hold the feeling, not distract from it.
+        </p>
+        <p class="lt-priv-intro__body">
+            Locally Twisted brings the same craft to a backyard birthday as to a corporate brand activation — because what matters to you matters in the execution. Tell us what you're imagining. We'll design from there.
+        </p>
+        <dl class="lt-priv-intro__stats">
+            {% for stat in private_proof_stats %}
+            <div class="lt-priv-intro__stat">
+                <dt class="lt-priv-intro__stat-number">{{ stat.number }}</dt>
+                <dd class="lt-priv-intro__stat-label">{{ stat.label }}</dd>
+            </div>
+            {% endfor %}
+        </dl>
+    </div>
+</section>
+
+{# --- 3. Occasions grid (visual-field / stone, 6-up with photos) ---- #}
+<section class="lt-priv-occasions lt-fullbleed" aria-labelledby="lt-priv-occasions-h2">
+    <div class="lt-priv-occasions__inner">
+        <h2 id="lt-priv-occasions-h2" class="lt-priv-occasions__h2">What we build for</h2>
+        <p class="lt-priv-occasions__lede">
+            Custom work for every kind of private celebration. Each piece is designed around your occasion, palette, and venue.
+        </p>
+        <div class="lt-priv-occasions__grid">
+            {% for occ in private_occasions %}
+            <article class="lt-priv-occasions__card">
+                <img
+                    src="{{ occ.image }}"
+                    alt="{{ occ.image_alt }}"
+                    class="lt-priv-occasions__img"
+                    loading="lazy"
+                >
+                <div class="lt-priv-occasions__body">
+                    <h3 class="lt-priv-occasions__name">{{ occ.name }}</h3>
+                    <p class="lt-priv-occasions__desc">{{ occ.body }}</p>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{# --- 4. Testimonials (band / white) --------------------------------- #}
+<section class="lt-priv-testimonials" aria-labelledby="lt-priv-testimonials-h2">
+    <div class="lt-priv-testimonials__inner">
+        <h2 id="lt-priv-testimonials-h2" class="lt-priv-testimonials__h2">
+            What people say after their celebration
+        </h2>
+        <div class="lt-priv-testimonials__grid">
+            {% for testimonial in private_testimonials %}
+            <blockquote class="lt-priv-testimonials__card">
+                <p class="lt-priv-testimonials__mark" aria-hidden="true">&ldquo;</p>
+                <p class="lt-priv-testimonials__text">{{ testimonial.text }}</p>
+                <footer>
+                    <p class="lt-priv-testimonials__attr">&mdash; {{ testimonial.attr }}</p>
+                </footer>
+            </blockquote>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{# --- 5. Closing CTA (fullbleed / navy) ------------------------------ #}
+<section class="lt-priv-cta lt-fullbleed" aria-labelledby="lt-priv-cta-h2">
+    <div class="lt-priv-cta__inner">
+        <h2 id="lt-priv-cta-h2" class="lt-priv-cta__h2">
+            Tell us what you're imagining.
+        </h2>
+        <p class="lt-priv-cta__body">
+            Share the occasion, date, and palette — or just the feeling you're going for. Every design starts with a conversation.
+        </p>
+        <a href="/contact?intent=celebration" class="lt-priv-cta__btn">
+            Start with a free quote <span aria-hidden="true">&rarr;</span>
+        </a>
+        <p class="lt-priv-cta__sub">
+            Questions first? Call us: <a href="tel:8012850860">(801) 285-0860</a>
+        </p>
+    </div>
+</section>
+
+</div>{# end .lt-page-private #}
+
+{% endblock %}
