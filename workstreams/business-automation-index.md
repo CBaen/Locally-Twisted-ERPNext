@@ -1,6 +1,6 @@
 # Business Automation Index
 
-Last updated: 2026-05-08 by Codex after adding the internal customer reminder Desk report to the automation index.
+Last updated: 2026-05-08 by Codex after adding the customer/operator email policy boundary contract to the automation index.
 
 ## Outcome
 
@@ -64,7 +64,8 @@ Fresh closeout verification also confirmed:
 - `customer_reminder_dry_run_contract.py` verifies no-live reminder queue behavior with fake overdue/current/missing-payment-path/malformed-send scenarios.
 - `customer_reminder_review_report.py` turns the dry-run queue into 1 internal review report row grouped under `review_now`, with no customer delivery enabled.
 - `customer_reminder_review_report_contract.py` verifies report rows/groups with fake mixed/empty/malformed-send source scenarios.
-- `synthetic_business_pipeline.py` runs 15 no-live synthetic contracts with 0 broken piping and keeps 3 live cutover items deferred.
+- `customer_email_policy_contract.py` verifies inquiry acknowledgment, paid receipt, operator notification, first-order welcome, and paid-order email cascade policy/no-PDF boundaries without sending email or mutating records.
+- `synthetic_business_pipeline.py` runs 16 no-live synthetic contracts with 0 broken piping and keeps 3 live cutover items deferred.
 
 ## Connected Launch Spine
 
@@ -87,6 +88,7 @@ These are currently classified as existing and connected:
 - internal paperwork review digest
 - no-live customer reminder dry-run queue
 - no-live customer reminder Desk Script Report
+- no-live customer/operator email policy boundary contract
 - no-live synthetic business pipeline audit
 - scheduled daily business automation checkup
 - Accountant Home workspace parity
@@ -133,6 +135,7 @@ Safe fake-data verifiers are part of the operating model:
 - outbound document send-readiness uses fake payloads and rollback-safe record-level blocker evidence.
 - `customer_reminder_dry_run_contract.py` uses in-memory fake reminder queue payloads and creates no database records.
 - `customer_reminder_review_report_contract.py` uses in-memory fake reminder report payloads and creates no database records.
+- `customer_email_policy_contract.py` is a static source contract and creates no database records.
 
 Use fake data aggressively in local verification, but do not leave generated business records behind.
 
@@ -146,6 +149,7 @@ python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-b
 python scripts/verify/record_level_failure_contract.py --report output/record-level-failure-contract.json
 python scripts/verify/inquiry_upload_failure_contract.py --report output/inquiry-upload-failure-contract.json
 python scripts/verify/payment_success_reconciliation_contract.py --report output/payment-success-reconciliation-contract.json
+python scripts/verify/customer_email_policy_contract.py
 python scripts/verify/outbound_document_send_readiness_contract.py
 python scripts/verify/quote_proposal_draft_packet.py --report output/quote-proposal-draft-packet.json
 python scripts/verify/quote_proposal_draft_packet_contract.py
@@ -183,6 +187,7 @@ Paperwork and finance visibility:
 
 ```powershell
 python scripts/verify/customer_documents_contract.py
+python scripts/verify/customer_email_policy_contract.py
 python scripts/verify/invoice_branding_contract.py
 python scripts/verify/outbound_documents_contract.py
 python scripts/verify/outbound_document_send_readiness_contract.py

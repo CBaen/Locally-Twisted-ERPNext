@@ -116,6 +116,7 @@ def _contract_failures(result: dict[str, Any]) -> list[str]:
         "payment_success_paid_order_cascade",
         "stripe_webhook_reconciliation",
         "customer_document_policy",
+        "customer_email_policy_boundaries",
         "outbound_document_templates",
         "outbound_document_send_readiness",
         "quote_proposal_draft_packets",

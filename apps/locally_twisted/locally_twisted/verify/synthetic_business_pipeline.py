@@ -105,6 +105,15 @@ SYNTHETIC_CONTRACTS = (
         "cleanup": "intercepts commits and rolls back generated records",
     },
     {
+        "id": "customer_email_policy_boundaries",
+        "lane": "paperwork",
+        "runner": "locally_twisted.verify.customer_email_policy_contract.run",
+        "command": "python scripts/verify/customer_email_policy_contract.py",
+        "data_mode": "static_source_contract",
+        "creates": [],
+        "cleanup": "no database records created",
+    },
+    {
         "id": "outbound_document_templates",
         "lane": "paperwork",
         "runner": "locally_twisted.verify.outbound_documents_contract.run",

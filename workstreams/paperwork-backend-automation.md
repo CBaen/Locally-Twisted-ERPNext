@@ -1,6 +1,6 @@
 # Paperwork And Backend Automation
 
-Last updated: 2026-05-08 by Codex after wiring the customer reminder review report into Desk.
+Last updated: 2026-05-08 by Codex after adding the customer/operator email policy boundary contract.
 
 ## Outcome
 
@@ -21,10 +21,11 @@ This lane coordinates paperwork, receipts, invoices, payment records, customer e
 
 ## Current Verified Baseline
 
-Fresh local verification on 2026-05-06:
+Fresh local verification on 2026-05-08:
 
 - `python scripts/verify/finance_inventory.py --json` passed.
 - `python scripts/verify/customer_documents_contract.py` passed.
+- `python scripts/verify/customer_email_policy_contract.py` passed and proved inquiry acknowledgment, receipt, operator notification, welcome email, and payment-cascade email boundaries without sending email, creating Email Queue rows, attaching PDFs, or mutating invoices.
 - `python scripts/verify/payment_cascade_contract.py` passed and rolled back generated records.
 - `python scripts/verify/crm_stage_cascade.py` passed.
 - `python scripts/verify/backend_schema_inventory.py` passed.
@@ -40,7 +41,7 @@ Fresh local verification on 2026-05-06:
 - `python scripts/verify/record_level_failure_contract.py --report output/record-level-failure-contract.json` passed and proved rollback-safe record-level backend blocker evidence.
 - `python scripts/verify/inquiry_upload_failure_contract.py --report output/inquiry-upload-failure-contract.json` passed and proved rejected inquiry inspiration photos produce customer-visible and Lead-level evidence.
 - `python scripts/verify/payment_success_reconciliation_contract.py --report output/payment-success-reconciliation-contract.json` passed and proved browser-return reconciliation errors show pending receipt/invoice copy on `/thank-you`.
-- `python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json` passed with 15 no-live synthetic contracts, 0 broken piping, 8 inefficiencies/partial connections, and 3 cutover-deferred items.
+- `python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json` passed with 16 no-live synthetic contracts, 0 broken piping, 8 inefficiencies/partial connections, and 3 cutover-deferred items.
 - `python scripts/verify/business_automation_index.py --report output/business-automation-index.json` passed and now maps 24 surfaces indexed, 14 launch-required, 21 connected, 3 exists-but-not-connected, 0 launch-required missing, 0 useful future surfaces missing, and 0 loud-failure gaps.
 - `python scripts/verify/unpaid_invoice_review.py --report output/unpaid-invoice-review.json` passed and generated 1 overdue-review candidate for `ACC-SINV-2026-00001`. The candidate includes draft-only `payment_reminder_draft` and `statement_of_account` data, requires human review, and proves no customer send or accounting mutation happens.
 - `python scripts/verify/unpaid_invoice_draft_packet.py --report output/unpaid-invoice-draft-packet.json --markdown output/unpaid-invoice-draft-packet.md` passed and rendered that candidate into draft-only `payment_reminder_draft` and `statement_of_account` packet sections for human review, while proving no customer send or accounting mutation happens.
@@ -100,6 +101,13 @@ Current live-data facts from the fresh finance inventory:
 - Public anchors are covered by `customer_documents_contract.py`.
 - No ERPNext Terms and Conditions or Email Template records are currently added for these policy blocks.
 - The branded Sales Invoice print format embeds the corporate invoicing lane and links to `/terms-of-service#corporate-invoicing`, `/refund-policy#corporate-invoicing`, and `/privacy`.
+
+### Customer/operator email policy boundaries
+
+- `customer_email_policy_contract.py` statically checks inquiry acknowledgment, paid receipt, operator notification, and first-order welcome email functions.
+- The contract verifies queued `frappe.sendmail(..., now=False)` calls, required policy/customer-context copy, reference DocTypes, and the absence of PDF/attachment sendmail kwargs.
+- The contract also checks the dynamic paid-order cascade test still covers receipt policy text/link, operator checkout notes, first-order welcome queueing, and duplicate receipt prevention.
+- This is a no-send source contract: it does not create Email Queue rows, send customer messages, attach PDFs, or mutate invoices.
 
 ### Invoice print output
 
@@ -195,12 +203,12 @@ Current live-data facts from the fresh finance inventory:
 
 1. **Business automation index.** First pass done. `scripts/verify/business_automation_index.py` is the launch spine map and daily checkup source. Keep this green before adding new automations.
 2. **Paperwork status report.** First pass done. `scripts/verify/paperwork_status.py` summarizes current invoices, payment requests, email queues, overdue records, and bank/supplier/payroll gaps without printing secrets or mutating ERPNext. It reports live payment setup as cutover-deferred and does not run live readiness in synthetic mode.
-3. **Synthetic business pipeline audit.** First pass done. `scripts/verify/synthetic_business_pipeline.py` runs no-live fake-data/rollback-safe contracts for record-level backend evidence, inquiry upload failure evidence, checkout-to-Lead, checkout fulfillment, payment cascade, payment-success pending reconciliation, mocked webhook behavior, document policy, outbound templates, outbound send-readiness, quote/proposal outliers, unpaid invoice outliers, customer reminder dry-run outliers, and customer reminder review-report outliers. It fails on broken piping or fake-data cleanup leaks.
+3. **Synthetic business pipeline audit.** First pass done. `scripts/verify/synthetic_business_pipeline.py` runs no-live fake-data/rollback-safe contracts for record-level backend evidence, inquiry upload failure evidence, checkout-to-Lead, checkout fulfillment, payment cascade, payment-success pending reconciliation, mocked webhook behavior, document policy, customer email policy boundaries, outbound templates, outbound send-readiness, quote/proposal outliers, unpaid invoice outliers, customer reminder dry-run outliers, and customer reminder review-report outliers. It fails on broken piping or fake-data cleanup leaks.
 4. **Unpaid invoice review queue.** First pass done as a draft-only report surface. Draft packet rendering is also done. Next is reviewed Desk UX or scheduled internal review digest, still no reminder sending.
 5. **Paperwork review digest.** First pass done as a read-only internal review payload. Next is a real reviewed Desk queue or scheduled internal-only report UI, still no customer sending.
 6. **Customer reminder dry run.** First pass done as a no-live internal review queue payload.
 7. **Customer reminder review report.** First pass done as no-live report rows/groups and an internal Desk Script Report above the dry-run queue. Future review notes/status should stay no-send until approval gates exist.
-8. **Receipt/operator email audit.** Extend verifier coverage so receipt, operator, welcome, and inquiry acknowledgment email bodies keep the right policy lanes and do not attach PDFs.
+8. **Receipt/operator email audit.** First pass done as a static no-send contract. Keep this green before editing receipt, operator, welcome, or inquiry acknowledgment email bodies.
 9. **Outbound document template registry.** Done for the first standard set. Extend this folder before creating any new outbound document family elsewhere.
    - Standing rule: every outbound document is answer-first. The recipient should see the practical fields they care about before internal automation notes or policy mechanics.
 10. **Outbound document send-readiness.** Done as a reusable no-send gate. Future senders must pass it before customer delivery.
@@ -224,6 +232,7 @@ Core paperwork/backend baseline:
 ```powershell
 python scripts/verify/finance_inventory.py --json
 python scripts/verify/customer_documents_contract.py
+python scripts/verify/customer_email_policy_contract.py
 python scripts/verify/payment_cascade_contract.py
 python scripts/verify/crm_stage_cascade.py
 python scripts/verify/backend_schema_inventory.py
@@ -265,4 +274,4 @@ Run this only during cutover work. It is not part of the current synthetic/backe
 
 ## Next Handoff Stage
 
-Next no-approval slice: audit receipt/operator/welcome/inquiry acknowledgment email bodies so policy lanes, attachment boundaries, and no-PDF assumptions stay verified. It must not send new customer messages, submit/cancel accounting records, or use live credentials/real customer data.
+Next no-approval slice: keep the paperwork/backend verifiers green while reviewing any remaining read-only report surfaces. Vendor/W-9 packet generation, bank reconciliation, payroll/HRMS, and real reminder delivery remain approval-gated and must not send customer messages, submit/cancel accounting records, or use live credentials/real customer data without explicit approval.

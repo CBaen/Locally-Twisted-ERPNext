@@ -206,6 +206,7 @@ def _surfaces(
                 "locally_twisted/lead_cascade.py",
                 "locally_twisted/stage_cascade.py",
                 "locally_twisted/policy_documents.py",
+                "locally_twisted/verify/customer_email_policy_contract.py",
             ),
             "connected": _lead_cascade_connected,
             "loud_failure": _lead_cascade_loud_failure,
@@ -213,9 +214,11 @@ def _surfaces(
                 "apps/locally_twisted/locally_twisted/hooks.py",
                 "apps/locally_twisted/locally_twisted/lead_cascade.py",
                 "apps/locally_twisted/locally_twisted/stage_cascade.py",
+                "apps/locally_twisted/locally_twisted/verify/customer_email_policy_contract.py",
             ],
             "verifiers": [
                 "python scripts/verify/customer_documents_contract.py",
+                "python scripts/verify/customer_email_policy_contract.py",
                 "python scripts/verify/crm_stage_cascade.py",
             ],
             "creates_fake_data": True,
@@ -275,6 +278,7 @@ def _surfaces(
                 "locally_twisted/www/thank_you.py",
                 "locally_twisted/www/thank_you.html",
                 "locally_twisted/verify/payment_success_reconciliation_contract.py",
+                "locally_twisted/verify/customer_email_policy_contract.py",
             ),
             "connected": _payment_success_connected,
             "loud_failure": _payment_success_loud_failure,
@@ -283,11 +287,13 @@ def _surfaces(
                 "apps/locally_twisted/locally_twisted/www/thank_you.py",
                 "apps/locally_twisted/locally_twisted/www/thank_you.html",
                 "apps/locally_twisted/locally_twisted/verify/payment_success_reconciliation_contract.py",
+                "apps/locally_twisted/locally_twisted/verify/customer_email_policy_contract.py",
             ],
             "verifiers": [
                 "python scripts/verify/payment_cascade_contract.py",
                 "python scripts/verify/payment_success_reconciliation_contract.py",
                 "python scripts/verify/customer_documents_contract.py",
+                "python scripts/verify/customer_email_policy_contract.py",
             ],
             "creates_fake_data": True,
         },
@@ -714,6 +720,7 @@ def _lead_cascade_connected() -> list[str]:
         "locally_twisted.stage_cascade.after_insert",
         "locally_twisted.stage_cascade.on_update",
     ))
+    failures.extend(_customer_email_policy_connected())
     return failures
 
 
@@ -783,6 +790,40 @@ def _payment_success_connected() -> list[str]:
         result = frappe.get_attr("locally_twisted.verify.payment_success_reconciliation_contract.run")()
         if not result.get("ok"):
             failures.extend(result.get("failures") or ["payment success reconciliation contract failed"])
+    failures.extend(_customer_email_policy_connected())
+    return failures
+
+
+def _customer_email_policy_connected() -> list[str]:
+    failures = []
+    failures.extend(_callables_exist("locally_twisted.verify.customer_email_policy_contract.run"))
+    if failures:
+        return failures
+
+    result = frappe.get_attr("locally_twisted.verify.customer_email_policy_contract.run")()
+    if not result.get("ok"):
+        failures.extend(result.get("failures") or ["customer_email_policy_contract.run returned not ok"])
+    if result.get("read_only") is not True:
+        failures.append("customer_email_policy_contract is not read-only")
+    if result.get("send_allowed") is not False:
+        failures.append("customer_email_policy_contract allows sending")
+    if result.get("mutation_allowed") is not False:
+        failures.append("customer_email_policy_contract allows mutations")
+
+    expected = {
+        "lead_auto_ack",
+        "paid_order_receipt",
+        "paid_order_operator_notification",
+        "first_order_welcome",
+        "paid_order_dynamic_contract",
+    }
+    surface_ids = {surface.get("id") for surface in result.get("checked_surfaces") or []}
+    missing = sorted(expected - surface_ids)
+    if missing:
+        failures.append("customer email policy contract missing surfaces: " + ", ".join(missing))
+    for surface in result.get("checked_surfaces") or []:
+        if surface.get("passed") is not True:
+            failures.append(f"customer email policy surface failed: {surface.get('id')}")
     return failures
 
 
@@ -1424,6 +1465,7 @@ def _checkups() -> list[dict[str, object]]:
             "commands": [
                 "python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json",
                 "python scripts/verify/unpaid_invoice_draft_packet_contract.py",
+                "python scripts/verify/customer_email_policy_contract.py",
                 "python scripts/verify/customer_reminder_dry_run_contract.py",
                 "python scripts/verify/customer_reminder_review_report_contract.py",
                 "python scripts/verify/outbound_document_send_readiness_contract.py",
@@ -1435,6 +1477,7 @@ def _checkups() -> list[dict[str, object]]:
             "id": "paperwork_documents",
             "commands": [
                 "python scripts/verify/customer_documents_contract.py",
+                "python scripts/verify/customer_email_policy_contract.py",
                 "python scripts/setup/sync_invoice_branding.py",
                 "python scripts/verify/invoice_branding_contract.py",
                 "python scripts/verify/outbound_documents_contract.py",
@@ -1525,6 +1568,11 @@ def _fake_data_contracts() -> list[dict[str, object]]:
             "command": "python scripts/verify/customer_documents_contract.py",
             "creates": ["Lead", "Communication", "Email Queue"],
             "cleanup": "rolls back generated records",
+        },
+        {
+            "command": "python scripts/verify/customer_email_policy_contract.py",
+            "creates": [],
+            "cleanup": "static source contract; no database records created",
         },
         {
             "command": "python scripts/verify/unpaid_invoice_draft_packet_contract.py",

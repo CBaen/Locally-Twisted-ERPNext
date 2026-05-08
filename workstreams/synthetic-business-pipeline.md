@@ -1,6 +1,6 @@
 # Synthetic Business Pipeline
 
-Last updated: 2026-05-08 by Codex after adding quote/proposal draft packets.
+Last updated: 2026-05-08 by Codex after adding customer/operator email policy boundaries.
 
 ## Outcome
 
@@ -22,8 +22,8 @@ Current result on 2026-05-08:
 - `synthetic_only: true`
 - `live_inputs_required: false`
 - `uses_real_customer_data: false`
-- 15 synthetic contracts run
-- 15 synthetic contracts passing
+- 16 synthetic contracts run
+- 16 synthetic contracts passing
 - 0 broken piping items
 - 8 inefficiencies / partial connections surfaced
 - 3 cutover-deferred items surfaced
@@ -41,6 +41,7 @@ The report writes ignored JSON to `output/synthetic-business-pipeline.json`.
 - Paid-order cascade through Payment Request, Payment Entry, Sales Invoice, receipt/operator/welcome emails, and rollback cleanup.
 - Stripe webhook behavior with mocked Stripe events and intercepted expected `frappe.log_error` calls.
 - Customer policy document anchors and inquiry acknowledgment policy blocks.
+- Customer/operator email policy and no-PDF/no-attachment boundaries for inquiry acknowledgment, paid receipt, operator notification, first-order welcome, and paid-order cascade coverage.
 - Outbound document registry/template contract.
 - Outbound document send-readiness blockers for missing required fields, recipient confirmation, payment path, branding, human approval, sensitive attachments, and record-level blocker evidence.
 - Quote/proposal draft packets with fake Quotation/Lead-style scenarios, including missing acceptance path and malformed send-ready source rows.
@@ -74,6 +75,7 @@ Do not turn this verifier into customer sending or accounting mutation. Rollback
 - `apps/locally_twisted/locally_twisted/verify/record_level_failure_contract.py`
 - `apps/locally_twisted/locally_twisted/verify/inquiry_upload_failure_contract.py`
 - `apps/locally_twisted/locally_twisted/verify/payment_success_reconciliation_contract.py`
+- `apps/locally_twisted/locally_twisted/verify/customer_email_policy_contract.py`
 - `apps/locally_twisted/locally_twisted/failure_recorder.py`
 - `apps/locally_twisted/locally_twisted/verify/paperwork_status.py`
 - `apps/locally_twisted/locally_twisted/paperwork/paperwork_review_digest.py`
@@ -88,4 +90,4 @@ Do not turn this verifier into customer sending or accounting mutation. Rollback
 
 ## Next Safe Slice
 
-Use the synthetic audit as the regression gate while adding the next no-send paperwork slice: receipt/operator/welcome/inquiry acknowledgment email policy verification. Add new fake-data scenarios when a new backend pipe is connected, and keep live cutover checks separate.
+Use the synthetic audit as the regression gate while adding any remaining no-send paperwork/reporting slices. Vendor/W-9 packet generation, bank reconciliation, payroll/HRMS, and real reminder delivery are approval-gated and stay out of this lane until their owner/accountant inputs are available.
