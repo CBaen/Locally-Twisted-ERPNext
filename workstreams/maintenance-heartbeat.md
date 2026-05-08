@@ -16,13 +16,32 @@ Provide automated checkups that fail loudly without exposing customer data, raw 
 - `scripts/verify/maintenance_admin_boundary.py` verifies Maintenance Admin cannot read forbidden raw/customer/finance DocTypes.
 - Business automation index treats `client_operations_heartbeat` as launch-required.
 
+Latest published implementation commit: `125431d Add sanitized maintenance heartbeat`.
+Latest documentation handoff commit: `170ad21 Document backend automation safety surfaces`.
+
 ## Boundaries
 
 - This is not live customer delivery.
 - This is not a broad admin role.
 - This is not an auto-repair system yet.
+- This is not permission to read raw Frappe/GitHub/provider logs through the
+  Maintenance Admin role.
 - Yellow owner-setup rows are allowed visible attention signals; red rows fail the verifier.
 - Scheduled persisted rows must stay sanitized: safe summary, action needed, source, status, severity, and counts only.
+
+## Agent Handoff Notes
+
+- Treat this lane as a support surface for agents and owners, not as a general
+  observability stack.
+- If a future agent adds notification delivery, the change must start with
+  owner-selected topic, recipient, channel, cadence, billable provider status,
+  quiet-hours expectations, and immediate-vs-cadence thresholds.
+- If a future agent adds auto-fix behavior, it must use the action tiers in
+  `heartbeat.py`; explanation and audit rows are required, and live
+  customer/money/data actions stay approval-gated.
+- If a future agent needs raw `Error Log`, `Communication`, payment, customer,
+  or file data, that is an owner/admin investigation path outside Maintenance
+  Admin. Do not widen the maintenance role to make the investigation easier.
 
 ## Owner Files
 
@@ -42,10 +61,15 @@ Provide automated checkups that fail loudly without exposing customer data, raw 
 
 ```powershell
 python scripts/setup/sync_maintenance_package.py
+python scripts/verify/maintenance_heartbeat.py
 python scripts/verify/maintenance_heartbeat.py --heavy
 python scripts/verify/maintenance_admin_boundary.py
 python scripts/verify/business_automation_index.py --report output/business-automation-index.json
 ```
+
+Closeout verification on 2026-05-08 also ran `python scripts/verify/smoke_shop.py`
+and `python scripts/verify/variant_media_contract.py` because the same session
+had touched the public boot/product-page risk surface.
 
 ## Next Safe Slice
 
