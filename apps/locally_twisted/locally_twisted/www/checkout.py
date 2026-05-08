@@ -28,6 +28,7 @@ from frappe.utils import escape_html, validate_email_address, flt, cint
 
 from locally_twisted import commerce_rules
 from locally_twisted.crm_pipeline import PIPELINE_FIELD
+from locally_twisted.failure_recorder import record_backend_failure
 
 no_cache = 1
 sitemap = 0  # don't index the checkout page
@@ -757,6 +758,7 @@ def submit_guest_order(item_code="", qty=1, items_json="",
     #
     # Lookup chain: Contact Email (child) → parent Contact → Dynamic Link.
     customer_name = None
+    checkout_partial_failures = []
     contact_name = frappe.db.get_value(
         "Contact Email", {"email_id": email}, "parent"
     )
@@ -819,11 +821,16 @@ def submit_guest_order(item_code="", qty=1, items_json="",
                     lead.set(PIPELINE_FIELD, "Approved")
                 lead.flags.ignore_permissions = True
                 lead.save(ignore_permissions=True)
-            except Exception:
-                # Don't block the order on a Lead-conversion glitch.
-                frappe.log_error(
-                    frappe.get_traceback(),
-                    f"submit_guest_order: Lead conversion failed for {ln.link_name}",
+            except Exception as exc:
+                checkout_partial_failures.append(
+                    {
+                        "step": "lead_conversion",
+                        "linked_doctype": "Lead",
+                        "linked_name": ln.link_name,
+                        "customer_visible_impact": "Checkout can continue, but the inquiry-to-order CRM trail did not fully connect.",
+                        "internal_next_action": "Review the linked Lead, mark it converted, and connect it to the checkout Customer.",
+                        "exception": exc,
+                    }
                 )
     else:
         # Case C — fresh customer, no prior Contact.
@@ -902,6 +909,21 @@ def submit_guest_order(item_code="", qty=1, items_json="",
     so.insert(ignore_permissions=True)
     so.submit()
 
+    for failure in checkout_partial_failures:
+        record_backend_failure(
+            surface="guest_checkout_to_payment_request",
+            step=failure["step"],
+            severity="error",
+            primary_doctype="Sales Order",
+            primary_name=so.name,
+            linked_doctype=failure.get("linked_doctype"),
+            linked_name=failure.get("linked_name"),
+            customer_visible_impact=failure["customer_visible_impact"],
+            internal_next_action=failure["internal_next_action"],
+            exception=failure.get("exception"),
+            grouping_key=f"guest_checkout_to_payment_request:{failure['step']}:{so.name}",
+        )
+
     try:
         _record_order_notes(
             so.name,
@@ -916,10 +938,17 @@ def submit_guest_order(item_code="", qty=1, items_json="",
             ),
             sender=email,
         )
-    except Exception:
-        frappe.log_error(
-            frappe.get_traceback(),
-            f"submit_guest_order: checkout notes failed for SO {so.name}",
+    except Exception as exc:
+        record_backend_failure(
+            surface="guest_checkout_to_payment_request",
+            step="checkout_notes_transfer",
+            severity="error",
+            primary_doctype="Sales Order",
+            primary_name=so.name,
+            customer_visible_impact="Checkout can continue, but the customer's order notes did not attach to the Sales Order timeline.",
+            internal_next_action="Review the checkout payload and add the missing order notes before fulfillment.",
+            exception=exc,
+            grouping_key=f"guest_checkout_to_payment_request:checkout_notes_transfer:{so.name}",
         )
 
     # ── Payment Request (auditable record only) ──────────────────────

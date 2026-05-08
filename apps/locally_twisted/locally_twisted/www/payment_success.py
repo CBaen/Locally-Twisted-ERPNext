@@ -33,6 +33,7 @@ import frappe
 from frappe.utils import escape_html, flt
 
 from locally_twisted import policy_documents
+from locally_twisted.failure_recorder import record_backend_failure
 from locally_twisted.payments.settings import (
     DEFAULT_OPERATOR_EMAIL,
     get_operator_email,
@@ -271,11 +272,23 @@ def _send_receipt_email(so_name):
                 "Contact Email", {"parent": contact_name, "is_primary": 1}, "email_id"
             )
     if not email:
+        message = f"No email found for Sales Order {so_name}; receipt email cannot be sent."
+        record_backend_failure(
+            surface="payment_success_paid_order_cascade",
+            step="receipt_email_missing_recipient",
+            severity="error",
+            primary_doctype="Sales Order",
+            primary_name=so_name,
+            customer_visible_impact="Payment was received, but the customer receipt email could not be sent.",
+            internal_next_action="Add or repair the customer email on the Sales Order/Customer/Contact and resend the receipt.",
+            exception=message,
+            grouping_key=f"payment_success_paid_order_cascade:receipt_email_missing_recipient:{so_name}",
+        )
         frappe.log_error(
             f"No email found for SO {so_name} — skipping receipt",
             "payment_success: receipt email skipped",
         )
-        return
+        raise PaidOrderReconciliationError(message)
 
     subject = f"Your Locally Twisted order is confirmed — {so.name}"
 

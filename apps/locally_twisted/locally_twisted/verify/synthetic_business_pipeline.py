@@ -15,6 +15,15 @@ from frappe.utils import now_datetime
 
 SYNTHETIC_CONTRACTS = (
     {
+        "id": "record_level_failure_recorder",
+        "lane": "checkups",
+        "runner": "locally_twisted.verify.record_level_failure_contract.run",
+        "command": "python scripts/verify/record_level_failure_contract.py",
+        "data_mode": "rollback_fake_record_failure",
+        "creates": ["Lead", "Comment", "Error Log"],
+        "cleanup": "intercepts commits and rolls back generated failure evidence",
+    },
+    {
         "id": "stripe_amount_parity",
         "lane": "money",
         "runner": "locally_twisted.verify.stripe_amount_parity_contract.run",
@@ -128,6 +137,7 @@ GUARD_DOCTYPES = (
     "Email Queue",
     "Communication",
     "Error Log",
+    "Comment",
 )
 
 

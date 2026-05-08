@@ -28,7 +28,10 @@ def run(
         include_customer_reminder_report=include_customer_reminder_report,
     )
     rows = [_evaluate(surface) for surface in surfaces]
+    record_level_failures = _record_level_health_rows()
     failures = _required_failures(rows)
+    if record_level_failures:
+        failures.append(f"record_level_failures: {len(record_level_failures)} open backend failure blocker(s)")
 
     return {
         "ok": not failures,
@@ -45,6 +48,7 @@ def run(
         "missing_needs_connection": [row for row in rows if row["status"] == "missing_needs_connection"],
         "missing_should_connect": [row for row in rows if row["status"] == "missing_should_connect"],
         "loud_failure_gaps": [row for row in rows if row["loud_failure_gap"]],
+        "record_level_failures": record_level_failures,
         "checkups": _checkups(),
         "fake_data_contracts": _fake_data_contracts(),
         "failures": failures,
@@ -58,6 +62,7 @@ def scheduled_checkup() -> None:
         result.get("failures")
         or result.get("missing_needs_connection")
         or result.get("loud_failure_gaps")
+        or result.get("record_level_failures")
     )
     if attention:
         frappe.log_error(
@@ -119,6 +124,23 @@ def _run_check(check: Callable[[], list[str]] | object) -> list[str]:
         return [f"{type(exc).__name__}: {exc}"]
 
 
+def _record_level_health_rows() -> list[dict[str, object]]:
+    try:
+        from locally_twisted.failure_recorder import record_health_failures
+
+        return record_health_failures(limit=100)
+    except Exception as exc:
+        return [
+            {
+                "surface": "record_level_failure_recorder",
+                "step": "record_health_query",
+                "severity": "error",
+                "internal_next_action": "Fix record-level failure health reporting.",
+                "error": f"{type(exc).__name__}: {exc}",
+            }
+        ]
+
+
 def _surfaces(
     include_digest: bool = True,
     include_synthetic: bool = True,
@@ -126,6 +148,24 @@ def _surfaces(
     include_customer_reminder_report: bool = True,
 ) -> list[dict[str, object]]:
     surfaces = [
+        {
+            "id": "record_level_failure_recorder",
+            "lane": "checkups",
+            "summary": "Backend partial failures write Error Log evidence plus record-level blockers with exact affected record IDs.",
+            "required_for_launch": True,
+            "exists": lambda: _files_exist(
+                "locally_twisted/failure_recorder.py",
+                "locally_twisted/verify/record_level_failure_contract.py",
+            ),
+            "connected": _record_level_failure_connected,
+            "loud_failure": _record_level_failure_loud_failure,
+            "evidence": [
+                "apps/locally_twisted/locally_twisted/failure_recorder.py",
+                "apps/locally_twisted/locally_twisted/verify/record_level_failure_contract.py",
+            ],
+            "verifiers": ["python scripts/verify/record_level_failure_contract.py"],
+            "creates_fake_data": True,
+        },
         {
             "id": "public_contact_to_lead",
             "lane": "intake",
@@ -484,6 +524,56 @@ def _surfaces(
     return surfaces
 
 
+def _record_level_failure_connected() -> list[str]:
+    failures = []
+    failures.extend(_callables_exist(
+        "locally_twisted.failure_recorder.record_backend_failure",
+        "locally_twisted.failure_recorder.record_health_failures",
+        "locally_twisted.verify.record_level_failure_contract.run",
+    ))
+    source = _read("locally_twisted/failure_recorder.py")
+    for marker in (
+        "FAILURE_COMMENT_PREFIX",
+        "Error Log",
+        "Comment",
+        "record_health_failures",
+    ):
+        if marker not in source:
+            failures.append(f"failure_recorder.py missing marker {marker}")
+    if not failures:
+        result = frappe.get_attr("locally_twisted.verify.record_level_failure_contract.run")()
+        if not result.get("ok"):
+            failures.extend(result.get("failures") or ["record-level failure contract failed"])
+    return failures
+
+
+def _record_level_failure_loud_failure() -> list[str]:
+    failures = []
+    for path, markers in {
+        "locally_twisted/lead_cascade.py": (
+            "record_backend_failure",
+            "contact_dedup_link",
+            "customer_ack_email",
+            "initial_task_cascade",
+        ),
+        "locally_twisted/www/checkout.py": (
+            "record_backend_failure",
+            "lead_conversion",
+            "checkout_notes_transfer",
+        ),
+        "locally_twisted/www/payment_success.py": (
+            "record_backend_failure",
+            "receipt_email_missing_recipient",
+            "PaidOrderReconciliationError",
+        ),
+    }.items():
+        source = _read(path)
+        for marker in markers:
+            if marker not in source:
+                failures.append(f"{path} missing record-level failure marker {marker}")
+    return failures
+
+
 def _contact_connected() -> list[str]:
     failures = []
     failures.extend(_doctype_presence(["Lead", "LT Service Type", "LT Lead Service Type", "LT Lead Photo"]))
@@ -563,8 +653,9 @@ def _lead_cascade_connected() -> list[str]:
 def _lead_cascade_loud_failure() -> list[str]:
     source = _read("locally_twisted/lead_cascade.py")
     failures = []
-    if "frappe.log_error" not in source:
-        failures.append("lead_cascade does not log cascade exceptions")
+    for marker in ("record_backend_failure", "contact_dedup_link", "customer_ack_email", "initial_task_cascade"):
+        if marker not in source:
+            failures.append(f"lead_cascade missing record-level failure marker {marker}")
     return failures
 
 
@@ -604,11 +695,9 @@ def _checkout_connected() -> list[str]:
 def _checkout_loud_failure() -> list[str]:
     source = _read("locally_twisted/www/checkout.py")
     failures = []
-    for marker in ("frappe.throw", "raise", "frappe.log_error"):
-        if marker in source:
-            break
-    else:
-        failures.append("checkout.py has no visible throw/raise/log loud-failure path")
+    for marker in ("frappe.throw", "record_backend_failure", "lead_conversion", "checkout_notes_transfer"):
+        if marker not in source:
+            failures.append(f"checkout.py missing loud failure marker {marker}")
     return failures
 
 
@@ -625,9 +714,11 @@ def _payment_success_connected() -> list[str]:
 
 def _payment_success_loud_failure() -> list[str]:
     source = _read("locally_twisted/www/payment_success.py")
-    if "raise_on_error" not in source:
-        return ["payment_success reconciliation does not expose raise_on_error for contracts"]
-    return []
+    failures = []
+    for marker in ("raise_on_error", "record_backend_failure", "receipt_email_missing_recipient", "PaidOrderReconciliationError"):
+        if marker not in source:
+            failures.append(f"payment_success.py missing paid-order loud failure marker {marker}")
+    return failures
 
 
 def _stripe_webhook_connected() -> list[str]:
@@ -1138,6 +1229,11 @@ def _fake_data_contracts() -> list[dict[str, object]]:
             "cleanup": "runs in-memory or rollback-safe fake-data contracts; live cutover checks are deferred",
         },
         {
+            "command": "python scripts/verify/record_level_failure_contract.py",
+            "creates": ["Lead", "Comment", "Error Log"],
+            "cleanup": "rolls back transaction and intercepts commit calls",
+        },
+        {
             "command": "python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --form-path /contact --skip-newsletter",
             "creates": ["Lead", "Contact", "Task"],
             "cleanup": "deletes generated smoke Lead and linked cascade Task",
@@ -1193,6 +1289,7 @@ def _scheduled_log_payload(result: dict[str, object]) -> dict[str, object]:
             _row_summary(row)
             for row in result.get("loud_failure_gaps", [])  # type: ignore[arg-type]
         ],
+        "record_level_failures": result.get("record_level_failures"),
     }
 
 

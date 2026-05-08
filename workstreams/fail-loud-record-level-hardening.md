@@ -1,6 +1,41 @@
 # Fail-Loud Record-Level Hardening
 
-Last updated: 2026-05-07 by OpenClaw/Moji from GL + Codex direction.
+Last updated: 2026-05-07 by Codex after implementing the first record-level failure recorder slice.
+
+## 2026-05-07 Implementation Update
+
+Implemented:
+
+- `apps/locally_twisted/locally_twisted/failure_recorder.py`
+- `apps/locally_twisted/locally_twisted/verify/record_level_failure_contract.py`
+- `scripts/verify/record_level_failure_contract.py`
+
+Wired:
+
+- `lead_cascade.py` now writes record-level Lead blockers for Contact linking, customer acknowledgment email, and initial Task cascade failures.
+- `www/checkout.py` now writes record-level Sales Order blockers for failed Lead conversion and checkout note transfer.
+- `www/payment_success.py` now writes a Sales Order blocker and raises reconciliation failure when a paid order cannot resolve a receipt email.
+- `business_automation_index.py` now includes `record_level_failure_recorder` as a launch-required surface and fails/report-lists open record-level backend blockers.
+- `synthetic_business_pipeline.py` now runs the rollback-safe record-level failure contract.
+
+Verification from this implementation pass:
+
+```powershell
+python scripts/verify/record_level_failure_contract.py --report output/record-level-failure-contract.json
+python scripts/verify/business_automation_index.py --report output/business-automation-index.json
+python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json
+python scripts/verify/checkout_lead_conversion_contract.py
+python scripts/verify/payment_cascade_contract.py
+python scripts/verify/payment_webhook_contract.py
+python scripts/verify/customer_documents_contract.py
+python -m compileall apps\locally_twisted\locally_twisted\failure_recorder.py apps\locally_twisted\locally_twisted\lead_cascade.py apps\locally_twisted\locally_twisted\www\checkout.py apps\locally_twisted\locally_twisted\www\payment_success.py apps\locally_twisted\locally_twisted\verify\record_level_failure_contract.py apps\locally_twisted\locally_twisted\verify\business_automation_index.py apps\locally_twisted\locally_twisted\verify\synthetic_business_pipeline.py
+```
+
+Still open:
+
+- Inquiry upload failures in `www/book.py` still need customer-visible upload summaries plus Lead timeline evidence.
+- Thank-you page copy still does not explicitly distinguish payment received from invoice/receipt finalization pending.
+- External document send-readiness needs the same recorder/checkup treatment before any send automation.
 
 ## Operating Truth
 
@@ -28,6 +63,8 @@ Any customer-facing or operator-facing flow has only three acceptable outcomes:
 No quiet skip. No “logged somewhere” as the only signal for business-critical loss. No customer-visible success that hides lost customer intent, lost payment context, or unsafe paperwork.
 
 ## Recommended First Implementation Slice
+
+Status: first critical slice implemented 2026-05-07. Keep this section as the design contract for future extensions.
 
 Build one reusable backend failure recorder, then wire it into the highest-value partial-failure paths.
 

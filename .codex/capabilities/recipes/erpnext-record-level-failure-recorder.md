@@ -5,11 +5,11 @@ schema_version: 2.0
 level: recipe
 maturity: candidate
 scope: Locally Twisted backend partial-failure evidence on Leads, Sales Orders, Payment Requests, Sales Invoices, Email Queue rows, documents, and automation reports
-currently_true: unknown
-verification_level: 0
+currently_true: true
+verification_level: 2
 last_verified: 2026-05-07
 evidence_quality: direct
-successful_uses: 0
+successful_uses: 1
 failed_uses: 0
 regressions: 0
 depends_on:
@@ -28,6 +28,21 @@ tags:
 
 Use this when a backend operation can partially fail after the primary business
 record exists.
+
+## Current LT Implementation
+
+Implemented source:
+
+- `apps/locally_twisted/locally_twisted/failure_recorder.py`
+- `apps/locally_twisted/locally_twisted/verify/record_level_failure_contract.py`
+- `scripts/verify/record_level_failure_contract.py`
+
+First wiring is active in:
+
+- `lead_cascade.py`: Contact linking, acknowledgment email, and initial Task cascade failures.
+- `www/checkout.py`: Lead conversion and checkout notes transfer failures.
+- `www/payment_success.py`: paid-order receipt missing-recipient failures.
+- `verify/business_automation_index.py`: record-level failure rows become checkup failures with exact record IDs.
 
 ## Purpose
 

@@ -18,9 +18,9 @@ fire on Lead insert from a customer-facing form:
    "we got your message, 24 hours" copy. Idempotent via Communication-
    by-subject lookup so a manual rerun never double-sends.
 
-ALL helpers wrapped in try/except so a backend hiccup never blocks the
-form's success response. The customer's experience comes first; backend
-reconciliation can be backfilled by a re-run if anything fails.
+Helpers are isolated so the Lead can still exist for the customer, but partial
+failures must leave record-level evidence on the Lead. Error Log-only evidence
+is not enough for customer-intent handoffs.
 
 Wired in `hooks.py` `doc_events`. Source-of-truth for the cascade GL
 named: "everything should cascade" (2026-04-29 cart session) -> here
@@ -31,6 +31,7 @@ from frappe.utils import escape_html
 
 from locally_twisted import policy_documents
 from locally_twisted import stage_cascade
+from locally_twisted.failure_recorder import record_backend_failure
 
 
 WEBSITE_LEAD_SOURCE = "Website"
@@ -87,21 +88,48 @@ def after_insert(doc, method=None):
     try:
         _ensure_contact_link(doc)
     except Exception as e:
-        frappe.log_error(
-            title=f"Lead cascade: Contact dedup failed for {doc.name}",
-            message=f"{type(e).__name__}: {e}\nLead: {doc.name}\nemail: {doc.email_id}\nphone: {doc.mobile_no or doc.phone}",
+        record_backend_failure(
+            surface="lead_contact_ack_cascade",
+            step="contact_dedup_link",
+            severity="error",
+            primary_doctype="Lead",
+            primary_name=doc.name,
+            customer_visible_impact="The inquiry was received, but Contact linking failed.",
+            internal_next_action="Review the Lead and link/create the Contact before follow-up.",
+            exception=e,
+            grouping_key=f"lead_contact_ack_cascade:contact_dedup_link:{doc.name}",
         )
 
     try:
         if (doc.source or "").strip() == WEBSITE_LEAD_SOURCE:
             _send_auto_ack_email(doc)
     except Exception as e:
-        frappe.log_error(
-            title=f"Lead cascade: Auto-ack email failed for {doc.name}",
-            message=f"{type(e).__name__}: {e}\nLead: {doc.name}\nemail: {doc.email_id}",
+        record_backend_failure(
+            surface="lead_contact_ack_cascade",
+            step="customer_ack_email",
+            severity="error",
+            primary_doctype="Lead",
+            primary_name=doc.name,
+            customer_visible_impact="The inquiry was received, but the acknowledgment email did not queue.",
+            internal_next_action="Confirm the customer email and send or requeue the acknowledgment.",
+            exception=e,
+            grouping_key=f"lead_contact_ack_cascade:customer_ack_email:{doc.name}",
         )
 
-    stage_cascade.after_insert(doc)
+    try:
+        stage_cascade.after_insert(doc)
+    except Exception as e:
+        record_backend_failure(
+            surface="lead_contact_ack_cascade",
+            step="initial_task_cascade",
+            severity="error",
+            primary_doctype="Lead",
+            primary_name=doc.name,
+            customer_visible_impact="The inquiry was received, but the internal follow-up task did not finish.",
+            internal_next_action="Create or repair the first operational Task for this Lead.",
+            exception=e,
+            grouping_key=f"lead_contact_ack_cascade:initial_task_cascade:{doc.name}",
+        )
 
 
 def _format_services_label(doc):
