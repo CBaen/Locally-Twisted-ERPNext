@@ -8,6 +8,30 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-08 - Portfolio motion settles after click
+
+**Decision:** `/portfolio` no longer uses pointer-follow page/reel parallax or
+front-photo pointer tilt. Scroll can still introduce photos into the collage,
+and clicking a photo can still pop it forward with a short angle/scale
+animation. After that animation, the front photo must settle and ignore pointer
+movement.
+
+**Reasoning:** GL liked the stronger portfolio proof field and the
+click-to-front pop, but the whole page swaying while looking and the ongoing
+tilt behavior created an accessibility problem. Portfolio motion should support
+orientation and delight, not make the proof photos feel unstable.
+
+**Implementation:** Removed the global `mousemove` parallax state and the
+front-photo `pointermove` tilt handlers from `lt-portfolio-reel.js`. Kept the
+existing short click momentum animation, then forces settled front-photo angles
+back to zero. Added verifier coverage in `portfolio_reel.spec.js` proving the
+click pop changes the transform and later pointer movement does not change the
+settled front-photo transform.
+
+**Decided by:** GL requested the accessibility correction on 2026-05-08.
+
+---
+
 ## 2026-05-07 - Current LT records are fake-data automation substrate, not business truth
 
 **Decision:** Treat all current Locally Twisted ERPNext/Frappe data as fake/test data for automation testing until GL explicitly says otherwise. Fake data should be used aggressively to prove fields, cascades, documents, payments, reminders, and checkups. It must not be treated as real customer/business truth.

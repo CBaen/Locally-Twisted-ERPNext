@@ -9,7 +9,7 @@ currently_true: true
 verification_level: 2
 last_verified: 2026-05-08
 evidence_quality: direct
-successful_uses: 5
+successful_uses: 6
 failed_uses: 1
 regressions: 3
 depends_on:
@@ -41,7 +41,7 @@ native Frappe shell and current style guide.
 ## Pattern
 
 1. Preserve the approved collage/movement behavior before preserving older local grid/card UI or later Codex reinterpretations.
-2. Keep the slow drift, click-to-front behavior, large whole-photo sizing, side/scale rhythm, no-captions photo proof, and mobile full-width slide-in stream.
+2. Keep the scroll-triggered entry, click-to-front pop, large whole-photo sizing, side/scale rhythm, no-captions photo proof, and mobile full-width slide-in stream.
 3. Replace what is fake, unsafe, or not LT-owned: placeholder image URLs, fake Brooklyn/contact copy, copied internal navigation, page-local Google font imports, custom cursor artifacts, prototype-only palette choices, route-specific Inquire/Studio/Index footer blocks, and broken asset paths.
 4. Translate into Frappe-owned files: route template, route controller, metadata, CSS, JS, optimized images, and verifiers.
 5. The real public site header/footer wrap the Frappe page. Do not add a second internal page header/nav copied from the prototype, and do not add a second route-local contact/index footer inside the portfolio field.
@@ -73,7 +73,9 @@ At 1366px wide, the current production baseline has the first left photo around
 around 972px wide. The larger photo size is controlled by `photoScale`, not by
 raising `density`; `density` stays at 1.10 so the older looser vertical rhythm
 survives. Photos begin below the branded compact hero and drift/fade in
-from the edges as the visitor scrolls. Do not "improve" this into an immediate
+from the edges as the visitor scrolls, but they must not follow the pointer or
+keep swaying while the visitor is trying to look. Click-to-front motion is a
+short pop/angle animation that settles into a stable front photo. Do not "improve" this into an immediate
 three-column masonry grid, copied prototype shell, custom cursor experience,
 captioned card wall, or generic full-opacity card wall.
 
@@ -102,7 +104,7 @@ npm run test:interactive-layout -- --grep portfolio
 
 Also inspect desktop and mobile screenshots before launch claims, especially after photo-order or image-quality changes. For this reel, include Chrome and Brave captures when the failure report or user feedback mentions cross-browser differences.
 
-The latest verified use passed full `npm run test:portfolio-reel` 4/4,
+The latest verified use passed full `npm run test:portfolio-reel` 5/5,
 `npm run test:interactive-layout -- --grep portfolio` 6/6, and
 `npm run test:layout-fit -- --grep "portfolio fits"` 13/13 after GL rejected
 all photo captions, visible photo frame wrappers, old desktop sizing, the
@@ -117,10 +119,12 @@ cursor artifacts, no copied internal page nav, branded compact hero copy,
 readable primary CTA contrast, no caption/frame wrappers, transparent photo
 backgrounds, image rect equals photo rect, locked first/second/fourth photo
 sizes from the `640 * scale * 1.10 * 1.5` math, original-density vertical
-spacing, optimized whole-photo assets, initial
-fade-in state, scroll-driven desktop drift/opacity, click-to-front behavior,
-no route-specific portfolio contact/index footer, and mobile full-width slide-in
-reveal instead of a static stack.
+spacing, optimized whole-photo assets, initial fade-in state, scroll-triggered
+desktop entry/opacity, click-to-front pop behavior that settles and ignores
+later pointer movement, no route-specific portfolio contact/index footer, and
+mobile full-width slide-in reveal instead of a static stack. The fifth
+portfolio verifier proves the click-to-front pop still changes the transform,
+then the settled front photo does not change when the pointer moves.
 
 ## LT Receipt
 
@@ -137,6 +141,9 @@ higher reel density. The current protected behavior is no captions, no frame
 wrappers, actual image dimensions, desktop `photoScale = 1.5` with
 `density = 1.10`, no route-specific Inquire/Studio/Index footer block, and
 mobile full-width slide-in reveal.
+The latest accessibility correction removed pointer-follow parallax and
+front-photo pointer tilt. Keep the click pop, but the front photo must settle
+after the short animation.
 The kept production source is now the live Frappe translation into
 `apps/locally_twisted/locally_twisted/www/portfolio.html`,
 `apps/locally_twisted/locally_twisted/www/portfolio.py`,

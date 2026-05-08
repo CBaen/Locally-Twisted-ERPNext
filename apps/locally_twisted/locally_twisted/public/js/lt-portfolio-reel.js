@@ -149,19 +149,11 @@
       peak: 0,
       target: 0,
       smooth: 0,
-      tilt: { x: 0, y: 0 },
       frontUntil: 0,
     }));
     const elements = Array.from(reel.querySelectorAll(".lt-photo"));
     setupMobileReveal(elements);
     let frontIndex = -1;
-    let mouseX = 0;
-    let mouseY = 0;
-
-    window.addEventListener("mousemove", (event) => {
-      mouseX = (event.clientX / window.innerWidth - 0.5) * 2;
-      mouseY = (event.clientY / window.innerHeight - 0.5) * 2;
-    });
 
     window.addEventListener("resize", () => {
       viewportWidth = window.innerWidth;
@@ -194,17 +186,6 @@
         if (event.key !== "Enter" && event.key !== " ") return;
         event.preventDefault();
         bringForward();
-      });
-      element.addEventListener("pointermove", (event) => {
-        if (frontIndex !== index) return;
-        const rect = element.getBoundingClientRect();
-        const nx = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
-        const ny = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
-        state[index].tilt.x = -ny * 8;
-        state[index].tilt.y = nx * 10;
-      });
-      element.addEventListener("pointerleave", () => {
-        if (frontIndex === index) state[index].tilt = { x: 0, y: 0 };
       });
     });
 
@@ -252,9 +233,6 @@
           opacity = Math.max(0, Math.min(1, peakProgress * SETTINGS.opacitySpeed));
         }
 
-        const parallax = (1 - photo.scale) * 24 + 6;
-        const px = mouseX * parallax;
-        const py = mouseY * parallax;
         const isFront = frontIndex === index;
         let momentum = 0;
         if (isFront && now < current.frontUntil) {
@@ -264,11 +242,11 @@
 
         const frontScale = isFront ? 1.08 + momentum * 0.04 : 1;
         const frontLift = isFront ? -10 + momentum * -8 : 0;
-        const tiltX = isFront ? current.tilt.x + momentum * 4 : 0;
-        const tiltY = isFront ? current.tilt.y + momentum * 6 * side : 0;
+        const tiltX = isFront && now < current.frontUntil ? momentum * 4 : 0;
+        const tiltY = isFront && now < current.frontUntil ? momentum * 6 * side : 0;
 
         element.style.transform =
-          `translate3d(${tx + px}px, ${ty + py + frontLift}px, 0) ` +
+          `translate3d(${tx}px, ${ty + frontLift}px, 0) ` +
           `rotate(${rot}deg) perspective(1200px) ` +
           `rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(${frontScale})`;
         element.style.opacity = opacity;

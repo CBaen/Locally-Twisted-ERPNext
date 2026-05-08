@@ -6,6 +6,21 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-08 - Delight motion still needs a settle point
+
+The portfolio reel felt better after the no-caption/no-frame correction, but
+the pointer-follow sway and front-photo tilt made the whole page keep moving
+while the visitor was trying to look at proof photos. A delightful click pop can
+still become an accessibility problem if it never clearly settles.
+
+**Counter-move:** separate entrance/popup motion from ongoing motion. For LT
+`/portfolio`, keep scroll entry and click-to-front pop, but do not track pointer
+movement and do not keep tilting the front photo after the click animation.
+Tests should prove both sides: the click pop still changes the transform, and
+later pointer movement leaves the settled front photo unchanged.
+
+---
+
 ## 2026-05-07 - Fake data is useful only when fake success is impossible
 
 GL clarified that all current LT data is fake/test data for automation testing. That means agents should stop hesitating around fake-data contracts and use them as the safe proving ground for the business system. It also means fake records cannot be used as proof that the business is operational.

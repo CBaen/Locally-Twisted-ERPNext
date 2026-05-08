@@ -246,6 +246,33 @@ test.describe("portfolio proof reel", () => {
 		expectNoLayoutFailures(expect, result, "portfolio proof reel mobile");
 	});
 
+	test("front-photo pop animation settles and does not follow pointer movement", async ({ page }) => {
+		await page.setViewportSize({ width: 1366, height: 768 });
+		const response = await gotoAndSettle(page, "/portfolio");
+		await expectSuccessfulResponse(response, "/portfolio");
+		await page.waitForSelector(".lt-photo");
+		await page.evaluate(() => window.scrollTo(0, 2200));
+		await page.waitForTimeout(1400);
+
+		const target = page.locator(".lt-photo").nth(3);
+		await target.click({ force: true });
+		await expect(page.locator(".lt-photo.is-front")).toHaveCount(1);
+		await page.waitForTimeout(140);
+		const duringPop = await page.locator(".lt-photo.is-front").evaluate((photo) => photo.style.transform);
+
+		await page.waitForTimeout(1300);
+		const settled = await page.locator(".lt-photo.is-front").evaluate((photo) => photo.style.transform);
+
+		await page.mouse.move(60, 60);
+		await page.waitForTimeout(180);
+		await page.mouse.move(1300, 700);
+		await page.waitForTimeout(360);
+		const afterPointerMove = await page.locator(".lt-photo.is-front").evaluate((photo) => photo.style.transform);
+
+		expect(duringPop, "click-to-front should still have a visible pop/angle animation").not.toBe(settled);
+		expect(afterPointerMove, "front photo should settle instead of tilting around with pointer movement").toBe(settled);
+	});
+
 	test("category query links still filter the collage source", async ({ page }) => {
 		await page.setViewportSize({ width: 1280, height: 900 });
 		const response = await gotoAndSettle(page, "/portfolio?category=balloon-arches");
