@@ -8,15 +8,23 @@
   No named-client roster — buyer expects privacy. Category-level proof only.
   Emotional register is warmer than civic/corporate, but still quiet confidence.
 
+  ROUND 2 STRUCTURAL CHANGE:
+  Memorial/celebration-of-life has been elevated from a panel inside the 2×2 grid
+  to a standalone section (section 3) that claims the grief buyer BEFORE they reach
+  the birthday/wedding/shower content. The 2×2 grid becomes 3 panels (non-memorial
+  occasions). The KJSCOTT review is the structural proof anchor for the memorial section,
+  not a card in the general testimonials grid.
+
   Sections (container mode per the Public Container Contract):
-  1. Hero                       [fullbleed]
-  2. Celebration type panels    [band]
-  3. Brass divider              [raw-band]
-  4. Customer voice             [band]
-  5. Trust pillars              [fullbleed — dark navy]
-  6. Service notes              [band]
-  7. Photo gallery              [visual-field]
-  8. Closing CTA                [fullbleed — dark]
+  1. Hero                              [fullbleed]
+  2. Celebration type panels (3)       [band]
+  3. Memorial / Celebration of Life    [band — sandstone]
+  4. Brass divider                     [raw-band]
+  5. Customer voice                    [band — stone]
+  6. Trust pillars                     [fullbleed — dark navy]
+  7. Service notes                     [band]
+  8. Photo gallery                     [visual-field]
+  9. Closing CTA                       [fullbleed — dark]
 #}
 
 <style>
@@ -115,7 +123,7 @@
     outline-offset: 2px;
 }
 
-/* --- Celebration type panels --------------------------------------- */
+/* --- Celebration type panels (3 panels: birthdays, weddings, showers) -- */
 .lt-private-types {
     background-color: var(--lt-warm-white);
     padding: 4rem 1rem;
@@ -204,6 +212,105 @@
     font-family: var(--lt-font-body);
     font-size: 0.875rem;
     color: var(--lt-soft-gray);
+}
+
+/* --- Memorial / Celebration of Life section (standalone) ------------ */
+.lt-private-memorial {
+    background-color: var(--lt-sandstone);
+    padding: 4rem 1rem;
+}
+.lt-private-memorial__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+}
+@media (min-width: 900px) {
+    .lt-private-memorial__inner {
+        grid-template-columns: 1fr 1fr;
+        gap: 3.5rem;
+        align-items: start;
+    }
+}
+.lt-private-memorial__label {
+    font-family: var(--lt-font-body);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--lt-brass);
+    margin: 0 0 0.6rem;
+}
+.lt-private-memorial__heading {
+    font-family: var(--lt-font-heading);
+    font-size: 2rem;
+    color: var(--lt-ink);
+    margin: 0 0 1.25rem;
+    line-height: 1.15;
+}
+@media (min-width: 768px) {
+    .lt-private-memorial__heading { font-size: 2.4rem; }
+}
+.lt-private-memorial__body {
+    font-family: var(--lt-font-body);
+    font-size: 1rem;
+    color: var(--lt-ink);
+    line-height: 1.7;
+    margin: 0 0 1rem;
+}
+.lt-private-memorial__body + .lt-private-memorial__body {
+    margin-top: 0;
+}
+.lt-private-memorial__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 1.25rem;
+    font-family: var(--lt-font-body);
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--lt-ink);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(10,10,11,0.35);
+    padding-bottom: 0.1rem;
+}
+.lt-private-memorial__proof {
+    background-color: var(--lt-warm-white);
+    border-left: 3px solid var(--lt-brass);
+    padding: 2rem 1.75rem;
+}
+.lt-private-memorial__quote-mark {
+    font-family: var(--lt-font-heading);
+    font-size: 2.5rem;
+    color: var(--lt-brass);
+    opacity: 0.5;
+    line-height: 1;
+    margin: 0 0 0.75rem;
+}
+.lt-private-memorial__quote {
+    font-family: var(--lt-font-body);
+    font-size: 1rem;
+    color: var(--lt-ink);
+    line-height: 1.7;
+    margin: 0 0 1.25rem;
+    font-style: italic;
+}
+.lt-private-memorial__attr {
+    font-family: var(--lt-font-body);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--lt-soft-gray);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0;
+}
+.lt-private-memorial__context {
+    font-family: var(--lt-font-body);
+    font-size: 0.8rem;
+    color: var(--lt-soft-gray);
+    margin: 0.35rem 0 0;
+    line-height: 1.5;
 }
 
 /* --- Brass divider -------------------------------------------------- */

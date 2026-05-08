@@ -7,6 +7,7 @@
   Container modes (per public container contract):
     .lt-page-private               → page root class
     .lt-priv-hero                  → fullbleed  (hero)
+    .lt-priv-memorial              → fullbleed  (memorial/grief-buyer entry — slate-blue)
     .lt-priv-types                 → band       (celebration type cards)
     .lt-priv-gallery               → visual-field (photo proof)
     .lt-priv-testimonials          → band       (review excerpts — no full names)
@@ -115,6 +116,74 @@
   .lt-priv-hero { height: 280px; min-height: 280px; max-height: 280px; }
   .lt-priv-hero__content { padding: 32px 2rem; }
   .lt-priv-hero__title { font-size: 2.9rem; max-width: 24ch; }
+}
+
+/* --- Memorial entry (fullbleed — slate-blue) --- */
+.lt-priv-memorial {
+  background-color: var(--lt-slate, #2F3A4A);
+  padding: 2.75rem 1.25rem;
+}
+.lt-priv-memorial__inner {
+  max-width: 860px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.75rem;
+  align-items: start;
+}
+@media (min-width: 768px) {
+  .lt-priv-memorial__inner {
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+}
+.lt-priv-memorial__eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--lt-brass, #B89A5B);
+  margin: 0 0 0.5rem;
+}
+.lt-priv-memorial__heading {
+  font-family: var(--lt-font-heading, 'Cormorant Garamond', Georgia, serif);
+  font-size: 1.65rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--lt-white, #FAF7F2);
+  margin: 0 0 0.75rem;
+}
+@media (min-width: 768px) {
+  .lt-priv-memorial__heading { font-size: 1.9rem; }
+}
+.lt-priv-memorial__body {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: rgba(250,247,242,0.82);
+  margin: 0;
+}
+.lt-priv-memorial__quote {
+  border-left: 3px solid var(--lt-brass, #B89A5B);
+  padding: 1rem 1.25rem;
+  background-color: rgba(10,10,11,0.25);
+  border-radius: 0 4px 4px 0;
+}
+.lt-priv-memorial__quote-text {
+  font-family: var(--lt-font-heading, 'Cormorant Garamond', Georgia, serif);
+  font-size: 1.1rem;
+  font-style: italic;
+  line-height: 1.55;
+  color: var(--lt-white, #FAF7F2);
+  margin: 0 0 0.65rem;
+}
+.lt-priv-memorial__quote-attr {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lt-brass, #B89A5B);
+  margin: 0;
 }
 
 /* --- Celebration types (band) --- */
@@ -412,7 +481,33 @@
     </div>
   </section>
 
-  {# 2. Celebration types — band #}
+  {# 2. Memorial entry — fullbleed (slate-blue) — grief buyer finds herself before the grid #}
+  <section class="lt-priv-memorial lt-fullbleed" aria-labelledby="lt-priv-memorial-heading">
+    <div class="lt-priv-memorial__inner">
+      <div>
+        <p class="lt-priv-memorial__eyebrow">Memorial &amp; Celebration of Life</p>
+        <h2 id="lt-priv-memorial-heading" class="lt-priv-memorial__heading">
+          If you're here for a celebration of life, you're in the right place.
+        </h2>
+        <p class="lt-priv-memorial__body">
+          Locally Twisted has helped families do this work. A sports theme.
+          A favorite color. A place they loved, made visible for the people
+          who loved them. Reach out and share the context — the team will
+          handle it with care.
+        </p>
+      </div>
+      <blockquote class="lt-priv-memorial__quote">
+        <p class="lt-priv-memorial__quote-text">
+          "I needed a sports themed funeral stand. I told them what I needed,
+          they captured my vision, delivered on time, very reasonable,
+          and had many complements. Very tasteful and meaningful."
+        </p>
+        <footer class="lt-priv-memorial__quote-attr">KJSCOTT &mdash; Celebration of Life</footer>
+      </blockquote>
+    </div>
+  </section>
+
+  {# 4. Celebration types — band #}
   <section class="lt-priv-types" aria-labelledby="lt-priv-types-heading">
     <div class="lt-priv-types__inner">
       <h2 id="lt-priv-types-heading" class="lt-priv-types__heading">
@@ -437,7 +532,7 @@
     </div>
   </section>
 
-  {# 3. Photo gallery — visual-field #}
+  {# 5. Photo gallery — visual-field #}
   <section class="lt-priv-gallery" aria-labelledby="lt-priv-gallery-heading">
     <h2 id="lt-priv-gallery-heading" class="lt-priv-gallery__heading">
       Real installed celebration work
@@ -462,7 +557,7 @@
        /locally-twisted-odoo/assets/image assets/photos for website/Twisting Mirabel #}
   </section>
 
-  {# 4. Testimonials — band #}
+  {# 6. Testimonials — band #}
   <section class="lt-priv-testimonials" aria-labelledby="lt-priv-testimonials-heading">
     <div class="lt-priv-testimonials__inner">
       <h2 id="lt-priv-testimonials-heading" class="lt-priv-testimonials__heading">
@@ -484,7 +579,7 @@
     </div>
   </section>
 
-  {# 5. Buyer notes — band #}
+  {# 7. Buyer notes — band #}
   <section class="lt-priv-buyer-notes" aria-labelledby="lt-priv-buyer-heading">
     <div class="lt-priv-buyer-notes__inner">
       <h2 id="lt-priv-buyer-heading" class="lt-priv-buyer-notes__heading">
