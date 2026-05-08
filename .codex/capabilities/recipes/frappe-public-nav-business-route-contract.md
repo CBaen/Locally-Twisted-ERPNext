@@ -7,9 +7,9 @@ maturity: candidate
 scope: Locally Twisted ERPNext/Frappe public navigation, header/footer IA, and service-route parity
 currently_true: yes
 verification_level: 2
-last_verified: 2026-05-07
+last_verified: 2026-05-08
 evidence_quality: direct
-successful_uses: 1
+successful_uses: 2
 failed_uses: 0
 regressions: 0
 depends_on:
@@ -41,6 +41,10 @@ For the current LT site:
   `/balloon-twisting-and-face-painting`.
 - `Process` is not approved as a public top-level nav item or standalone route.
 - `/contact` remains the shared quote/conversion path.
+- Mobile search belongs at the bottom of the drawer, not in the mobile header
+  action row. The mobile header control budget is logo plus cart/menu.
+- Public navigation must not link to `/search`; the search overlay submits to
+  `/shop?q=...`, and `/search` is a no-cache 404 fallback.
 
 ## Pattern
 
@@ -83,3 +87,10 @@ restored `Twisting & Face Painting` to the primary public nav, deleted
 route coverage, added nav verifier guards against Process returning, and
 verified `/balloon-twisting-and-face-painting` as 200 while `/process` returned
 404.
+
+On 2026-05-08, GL reported that the mobile search button was smashing the cart
+button and covering the logo. Codex removed the mobile header search button,
+added `.lt-mega-drawer__search` at the bottom of the drawer, kept search as an
+overlay that submits to `/shop`, and added a `/search` no-cache 404 override.
+`nav_ia.py`, focused interactive header/search/drawer checks, and the focused
+mobile drawer smoke helper passed.

@@ -9,7 +9,7 @@ currently_true: yes
 verification_level: 2
 last_verified: 2026-05-08
 evidence_quality: direct
-successful_uses: 2
+successful_uses: 3
 failed_uses: 0
 regressions: 0
 depends_on:
@@ -41,6 +41,8 @@ Read `frappe-public-container-contract.md` first when the work touches Frappe's 
 - A page hero, intro, masthead, or marketing header changes height, padding, copy density, or title scale.
 - A component changes layout across mobile, tablet, desktop, or near a breakpoint.
 - Header/nav/drawer/mega-menu behavior changes.
+- A proof/review/card section feels too large on mobile even when it does not
+  create document overflow.
 - Product, category, cart, checkout, contact, portfolio, FAQ, policy, or homepage containers change.
 - A fix passed one mobile width but may still fail at 320px, 390px, 414px, tablet, or desktop breakpoint edges.
 
@@ -134,6 +136,9 @@ Use `npm run test:public-verify` when closing a broad public-site visual change.
 - If a hero changes, run the `compact hero height contract` grep in
   `interactive_layout.spec.js`; route-local hero sizing is not allowed to drift
   outside the approved viewport-family standard.
+- If a mobile proof section changes, add explicit component-size assertions for
+  the actual failure: block height, card height, card width, badge height,
+  padding, and inherited global section padding.
 - If a verifier fails because the business contract changed, update the verifier to the new source-of-truth behavior and preserve coverage for the old risk in the correct lane.
 
 ## LT Receipt
@@ -154,3 +159,10 @@ On 2026-05-07, the route-level container contract became executable via
 test:container-contract`. The gate currently passes 57/57 checks across the
 launch public route list at 320px, 820px, and 1366px, and is now part of
 `npm run test:website-verify` / `npm run test:public-verify`.
+
+On 2026-05-08, the mobile header/search and Google review compactness pass
+added a sharper component-size lesson: layout-fit did not catch the review
+section feeling too tall because the document still fit. The fix added 320px
+header control-budget assertions and a mobile review proof contract for block
+height, card dimensions, badge height, and inherited padding. Focused
+interactive checks passed 8/8, and targeted home layout-fit passed 3/3.

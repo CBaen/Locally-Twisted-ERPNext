@@ -7,6 +7,47 @@ Reasoning matters more than the decision itself. A future instance reading this 
 LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_by_Cameron/built-by-cameron-decisions.md`.
 
 ---
+
+
+## 2026-05-08 - Mobile search belongs in the drawer; review proof needs its own compact contract
+
+**Decision:** On mobile, public search lives at the bottom of the navigation
+drawer, not in the header action row. The mobile header must remain logo,
+cart, and menu only. The homepage Google review proof band also has an explicit
+mobile compactness contract; it is not covered well enough by the existing hero
+and container contracts alone.
+
+**Reasoning:** GL reported the mobile search button was smashing the cart and
+covering the company logo. Live 320px measurement confirmed the header action
+row had three square controls and overlapped the logo. GL also reported the
+mobile Google review section, cards, and padding were too large. Live 320px
+measurement showed the review band at about 693px tall before the repair.
+
+**Implementation:** Removed the mobile header search button, added
+`.lt-mega-drawer__search` at the bottom of the mobile drawer, kept search as an
+overlay that submits to `/shop`, and made drawer search close the menu before
+focusing the search panel. Added a no-cache `/search` 404 override so public
+navigation cannot fall back to Frappe's bundled search page. Tightened mobile
+review section/card typography and padding, neutralized global `section`
+padding on the review marquee, and added a compact mobile review sizing test in
+`interactive_layout.spec.js`.
+
+**Verification:** `nav_ia.py` passed; targeted interactive Playwright checks
+for the small mobile header, mobile/desktop search overlay, 320px and 390px
+drawer fit, review crawl, and compact mobile review contract passed 8/8;
+targeted homepage layout-fit passed 3/3; the focused mobile drawer smoke helper
+passed; and live browser measurements showed the mobile review block at about
+364px tall across 320px, 375px, 390px, and 414px widths.
+
+**Alternatives considered:** Keep search in the mobile header and shrink logo
+or icon sizes. Rejected because the logo is the brand signal and the mobile
+header should not carry three equal controls at 320px. Leave review compactness
+to broad container contracts. Rejected because the real failure was component
+height and inherited padding, not document overflow.
+
+**Decided by:** GL request on 2026-05-08; implemented and verified by Codex.
+
+---
 ## 2026-05-08 - Public microinteractions must stay launch-safe
 
 **Decision:** Small public-site microinteractions are allowed when they improve

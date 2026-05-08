@@ -7,9 +7,9 @@ maturity: candidate
 scope: Locally Twisted ERPNext/Frappe homepage hero, proof crawls, cookie placement, and launch CTAs
 currently_true: yes
 verification_level: 2
-last_verified: 2026-05-07
+last_verified: 2026-05-08
 evidence_quality: direct
-successful_uses: 3
+successful_uses: 4
 failed_uses: 1
 regressions: 1
 depends_on:
@@ -45,6 +45,10 @@ review crawl, trusted-client crawl, cookie notice placement, or launch CTAs.
   280px desktop standard heights, with no route-local oversized padding or title
   scale.
 - Google reviews are the first homepage band immediately after `.lt-hero`.
+- On mobile, the Google review band is intentionally compact. The current
+  interactive contract caps the total review block at 380px, the marquee at
+  240px, review cards at 270px wide and 240px high, and prevents global
+  `section` padding from leaking into `.lt-reviews-block__quotes`.
 - The homepage currently does not render a trust/authority bar. Keep the
   approved brand SVG icon assets for future proof sections, but do not put the
   trust bar back into the homepage unless GL explicitly reopens that choice.
@@ -83,6 +87,7 @@ Run after homepage/Jinja/CSS/JS changes:
 ```powershell
 python scripts/dev/clear_website_cache.py
 npm run test:interactive-layout -- --grep "homepage review marquee|homepage client crawl banner|homepage reduced motion keeps"
+npm run test:interactive-layout -- --grep "mobile review proof"
 npx playwright test scripts/verify/layout_fit.spec.js --reporter=dot --grep "home fits"
 npm run test:interactive-layout -- --grep "homepage|cookie notice"
 npm run test:interactive-layout -- --grep "compact hero height contract"
@@ -102,6 +107,8 @@ before marking the homepage ready for GL review.
 ## Red Flags
 
 - Review cards expose a native horizontal scrollbar.
+- Mobile review cards or padding grow until the Google review proof dominates
+  the first mobile scroll.
 - Trusted-business names stack instead of crawling.
 - The two crawls differ in direction or speed.
 - Either crawl moves right-to-left.
@@ -140,3 +147,12 @@ correction removed the homepage trust/authority bar, made Google reviews the
 first post-hero band, moved the cookie notice after reviews, and moved Recent
 Celebrations after the reviews block. Do not carry forward the earlier temporary
 portfolio-blocked caveat unless a fresh run fails again.
+
+On 2026-05-08, GL flagged that the mobile Google review section, cards,
+and padding were too large. Live 320px measurement showed the review band at
+about 693px tall. The repair tightened mobile review typography/padding,
+neutralized inherited global `section` padding on `.lt-reviews-block__quotes`,
+and added a compact mobile review sizing contract to
+`interactive_layout.spec.js`. After cache clear/restart, live measurements at
+320px, 375px, 390px, and 414px showed the review block at about 364px tall.
+Targeted interactive review checks and targeted home layout-fit passed.

@@ -1,6 +1,6 @@
 # Menu And Content Coordination
 
-Last updated: 2026-05-07 by Codex.
+Last updated: 2026-05-08 by Codex.
 
 ## Purpose
 
@@ -36,11 +36,13 @@ For this nav/content lane, stay inside these rules:
 
 | Lane | Owner | Files / Surface | Status |
 |---|---|---|---|
-| Nav/chrome and live menu assets | Codex current session | `templates/includes/navbar/navbar.html`, `navbar_context.py`, header portions of `public/css/lt-theme.css`, `hooks.py`, `public/js/lt-megamenu.js`, `public/css/lt-mega-menu.css`, `scripts/verify/nav_ia.py`, `scripts/verify/smoke_shop.py` | Complete 2026-05-07: Twisting & Face Painting is restored to primary public nav; Process is removed from customer-facing chrome. |
+| Nav/chrome and live menu assets | Codex current session | `templates/includes/navbar/navbar.html`, `navbar_context.py`, header portions of `public/css/lt-theme.css`, `hooks.py`, `public/js/lt-megamenu.js`, `public/css/lt-mega-menu.css`, `scripts/verify/nav_ia.py`, `scripts/verify/smoke_shop.py` | Complete 2026-05-08: Twisting & Face Painting is restored to primary public nav, Process is removed from customer-facing chrome, and mobile search now lives at the bottom of the drawer instead of the crowded mobile header row. |
 | Authority page content and route pages | Codex current session | `www/home.*`, `www/event_balloons.*`, `www/balloon_twisting_and_face_painting.*`, `www/portfolio.*`, `www/contact.*`, `www/shop.*`, supporting public content pages | Complete 2026-05-07: standalone Process route files were removed; BTFP remains the approved live-service route. |
 | Owner package and screenshots | Unclaimed | `_resources/brand-direction-architecture-2026-05/`, desktop/mobile renders, route map, builder notes | Pending. Use screenshots from the actual Frappe pages after route/content replacement, not disconnected mockups. |
 
 Feature handoff for the BTFP/Process correction: `workstreams/nav-btfp-process-correction.md`.
+Feature handoff for mobile search/review compactness:
+`workstreams/mobile-nav-review-compactness.md`.
 
 ## Current Conflict Notes
 
@@ -82,6 +84,15 @@ Status:
 ```
 
 ## Session Notes
+
+
+### 2026-05-08 - Codex current session mobile search relocation
+Lane: Mobile public chrome, drawer search, and nav verifier parity.
+Files: `navbar.html`, `lt-mega-menu.css`, `lt-megamenu.js`, `www/search.*`, `nav_ia.py`, `smoke_shop.py`, `interactive_layout.spec.js`, and this coordination note.
+Intent: Remove search from the cramped mobile header action row, keep logo/cart/menu clear at 320px, place search at the bottom of the drawer, keep `/search` retired as a no-cache 404, and guard the exact regression.
+Conflicts: Worktree contains unrelated event-menu, product-page, and catalog changes; do not broad-stage this file set without reviewing scope.
+Verification: `python scripts/verify/nav_ia.py` passed; targeted interactive Playwright mobile/header/search/drawer checks passed 5/5 within the focused 8-test run; focused mobile drawer smoke helper passed.
+Status: Complete. Source feature handoff is `workstreams/mobile-nav-review-compactness.md`.
 
 ### 2026-05-06 - Codex current session review marquee repair
 Lane: Homepage reviews visual behavior.

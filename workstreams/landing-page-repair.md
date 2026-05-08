@@ -1,7 +1,7 @@
 # Landing Page Repair Workstream
 
-Last updated: 2026-05-07 by Codex after correcting the homepage proof-crawl
-direction to left-to-right while preserving speed-synced motion.
+Last updated: 2026-05-08 by Codex after compacting the mobile Google review
+proof band and adding its sizing contract.
 
 ## Outcome
 
@@ -25,6 +25,10 @@ Completed on 2026-05-07:
 - The homepage cookie notice is inline after the Google reviews band, not
   covering primary CTAs and not sitting between the hero and reviews.
 - Recent Celebrations now appears after review cards.
+- Google review proof has a mobile compactness contract. The review block
+  should stay under 380px tall at 390px width, the marquee should stay under
+  240px, cards should stay under 270px wide and 240px high, and inherited
+  global `section` padding must not leak into `.lt-reviews-block__quotes`.
 - Review cards and trusted-business names both crawl full-stage, left-to-right.
   Review cards keep the canonical `540s` loop; trusted-business names are
   measured in the browser and assigned a proportional duration so the visible
@@ -48,6 +52,21 @@ Completed on 2026-05-07:
 - Capability contract: `.codex/capabilities/recipes/homepage-launch-proof-contract.md`
 
 ## Verification Receipt
+
+Mobile review compactness correction on 2026-05-08:
+
+```powershell
+python scripts/dev/clear_website_cache.py --restart
+python -m py_compile apps\locally_twisted\locally_twisted\www\home.py
+npx playwright test scripts/verify/interactive_layout.spec.js --grep "mobile review proof|reviews crawl left-to-right" --reporter=line --workers=1
+npx playwright test scripts/verify/layout_fit.spec.js --grep "home fits at mobile-320|home fits at mobile-390|home fits at desktop-1200" --reporter=line --workers=1
+```
+
+Result: live browser measurements showed the mobile review block at about
+364px tall across 320px, 375px, 390px, and 414px widths, down from about 693px
+at 320px before the repair. The targeted interactive review tests passed, and
+the targeted home layout-fit checks passed 3/3. Full feature details live in
+`workstreams/mobile-nav-review-compactness.md`.
 
 Passed:
 
@@ -137,6 +156,8 @@ overflow for both banners, and effectively identical speed deltas in
   headlines.
 - Do not change crawl speed, direction, or reduced-motion behavior without
   updating the capability contract and Playwright checks in the same slice.
+- Do not relax the mobile Google review compactness thresholds without a fresh
+  GL visual decision and new mobile measurements.
 - Do not grow the homepage hero to carry proof/copy that belongs in the next
   section.
 - Do not restore the homepage trust bar or put Recent Celebrations above Google

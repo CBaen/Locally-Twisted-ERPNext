@@ -5,6 +5,7 @@
    - #lt-mobile-toggle opens #lt-mobile-nav.
    - #lt-mobile-backdrop and #lt-mobile-close close the drawer.
    - [data-lt-drawer-accordion-trigger] toggles same-id drawer panels.
+   - [data-lt-search-toggle] opens #lt-site-search-panel without leaving the page.
    - .lt-cart-count is populated by lt-guest-cart.js.
 #}
 
@@ -90,7 +91,6 @@
                         </div>
                     </li>
 
-                    <li class="lt-mega-nav__item"><a class="lt-mega-nav__link" href="/portfolio">Portfolio</a></li>
                     <li class="lt-mega-nav__item"><a class="lt-mega-nav__link lt-mega-nav__link--btfp" href="/balloon-twisting-and-face-painting">Twisting &amp; Face Painting</a></li>
 
                     <li class="lt-mega-nav__item">
@@ -124,17 +124,23 @@
                         </div>
                     </li>
 
+                    <li class="lt-mega-nav__item"><a class="lt-mega-nav__link" href="/portfolio">Portfolio</a></li>
                     <li class="lt-mega-nav__item"><a class="lt-mega-nav__link" href="/faq">FAQ</a></li>
                 </ul>
             </nav>
 
             <div class="lt-mega-header__actions">
-                <a class="lt-mega-header__search" href="/search" aria-label="Search">
+                <button class="lt-mega-header__search"
+                        type="button"
+                        data-lt-search-toggle
+                        aria-controls="lt-site-search-panel"
+                        aria-expanded="false"
+                        aria-label="Open search">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
                         <circle cx="11" cy="11" r="8"></circle>
                         <path d="m21 21-4.3-4.3"></path>
                     </svg>
-                </a>
+                </button>
                 <a class="lt-mega-header__cart" href="/cart" aria-label="Shopping cart">
                     <img src="/assets/locally_twisted/icons/cart.svg" alt="" width="20" height="20">
                     <span class="lt-cart-count" aria-live="polite" aria-atomic="true"></span>
@@ -166,6 +172,61 @@
             </div>
         </div>
     </div>
+
+    <div class="lt-site-search-panel" id="lt-site-search-panel" hidden aria-labelledby="lt-site-search-title">
+        <form class="lt-site-search-panel__form" action="/shop" method="get" role="search">
+            <label class="lt-site-search-panel__label" id="lt-site-search-title" for="lt-site-search-input">Search Locally Twisted</label>
+            <div class="lt-site-search-panel__field">
+                <input id="lt-site-search-input"
+                       name="q"
+                       type="search"
+                       autocomplete="off"
+                       placeholder="Arches, garlands, bouquets, face painting"
+                       data-lt-search-input>
+                <button type="submit">Search</button>
+            </div>
+        </form>
+
+        <div class="lt-site-search-panel__quick" data-lt-search-list>
+            <a href="/shop" data-lt-search-entry data-lt-search-keywords="ready order shop pickup delivery products balloon decor">
+                <strong>Ready-to-Order Decor</strong>
+                <span>Pickup and delivery pieces</span>
+            </a>
+            <a href="/event-balloons" data-lt-search-entry data-lt-search-keywords="custom event balloons install civic school corporate private">
+                <strong>Event Balloons</strong>
+                <span>Custom installs and event work</span>
+            </a>
+            {% for item in event_links %}
+                <a href="/{{ item.route }}" data-lt-search-entry data-lt-search-keywords="event balloons {{ item.label | lower }}">
+                    <strong>{{ item.label }}</strong>
+                    <span>{{ item.description }}</span>
+                </a>
+            {% endfor %}
+            <a href="/portfolio" data-lt-search-entry data-lt-search-keywords="recent work photos examples gallery inspiration">
+                <strong>Portfolio</strong>
+                <span>Recent balloon work</span>
+            </a>
+            <a href="/balloon-twisting-and-face-painting" data-lt-search-entry data-lt-search-keywords="balloon twisting face painting entertainment party">
+                <strong>Twisting &amp; Face Painting</strong>
+                <span>Party entertainment services</span>
+            </a>
+            <a href="/contact" data-lt-search-entry data-lt-search-keywords="quote contact help event custom request">
+                <strong>Free Event Quote</strong>
+                <span>Ask for sizing or event help</span>
+            </a>
+            <a href="/faq" data-lt-search-entry data-lt-search-keywords="faq questions delivery pickup timing policies">
+                <strong>FAQ</strong>
+                <span>Common questions</span>
+            </a>
+            {% for item in product_links %}
+                <a href="/{{ item.route }}" data-lt-search-entry data-lt-search-keywords="ready order product {{ item.label | lower }}">
+                    <strong>{{ item.label }}</strong>
+                    <span>Ready-to-order product family</span>
+                </a>
+            {% endfor %}
+        </div>
+        <p class="lt-site-search-panel__empty" data-lt-search-empty hidden>No quick match yet.</p>
+    </div>
 </header>
 
 <div class="lt-header__backdrop" id="lt-mobile-backdrop" aria-hidden="true"></div>
@@ -174,12 +235,11 @@
        id="lt-mobile-nav"
        role="dialog"
        aria-modal="true"
-       aria-labelledby="lt-mobile-nav-heading"
+       aria-label="Navigation menu"
        aria-hidden="true">
     <div class="lt-header__drawer-head">
         <div class="lt-mega-drawer__brand">
             <img src="/assets/locally_twisted/icons/lt-logo.png" alt="" width="86" height="70">
-            <span id="lt-mobile-nav-heading">Locally Twisted</span>
         </div>
         <button type="button" class="lt-header__close" id="lt-mobile-close" aria-label="Close navigation menu">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
@@ -207,7 +267,6 @@
             </div>
         </div>
 
-        <a class="lt-mega-drawer__single" href="/portfolio">Portfolio</a>
         <a class="lt-mega-drawer__single" href="/balloon-twisting-and-face-painting">Twisting &amp; Face Painting</a>
 
         <div class="lt-mega-drawer__section">
@@ -227,27 +286,26 @@
             </div>
         </div>
 
-        <div class="lt-mega-drawer__section">
-            <button class="lt-mega-drawer__toggle"
-                    type="button"
-                    data-lt-drawer-accordion-trigger="lt-mobile-help"
-                    aria-controls="lt-mobile-help"
-                    aria-expanded="false">
-                Help and Details
-                <span aria-hidden="true">+</span>
-            </button>
-            <div class="lt-mega-drawer__panel" id="lt-mobile-help" hidden>
-                {% for item in service_links %}
-                    <a href="/{{ item.route }}">{{ item.label }}</a>
-                {% endfor %}
-                {% if frappe.session.user == "Guest" %}
-                    <a href="/login">Sign In</a>
-                {% else %}
-                    <a href="/me">My Account</a>
-                {% endif %}
-            </div>
-        </div>
+        <a class="lt-mega-drawer__single" href="/portfolio">Portfolio</a>
+        <a class="lt-mega-drawer__single" href="/faq">FAQ</a>
+        {% if frappe.session.user == "Guest" %}
+            <a class="lt-mega-drawer__single" href="/login">Sign In</a>
+        {% else %}
+            <a class="lt-mega-drawer__single" href="/me">My Account</a>
+        {% endif %}
 
         <a class="lt-mega-drawer__cta" href="/contact">Free Event Quote</a>
+        <button class="lt-mega-drawer__search"
+                type="button"
+                data-lt-search-toggle
+                aria-controls="lt-site-search-panel"
+                aria-expanded="false"
+                aria-label="Open search">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.3-4.3"></path>
+            </svg>
+            <span>Search</span>
+        </button>
     </nav>
 </aside>

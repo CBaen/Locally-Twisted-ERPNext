@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parents[2]
 NAVBAR = ROOT / "apps/locally_twisted/locally_twisted/templates/includes/navbar/navbar.html"
 FOOTER = ROOT / "apps/locally_twisted/locally_twisted/templates/includes/footer/footer.html"
 HOME = ROOT / "apps/locally_twisted/locally_twisted/www/home.html"
+SEARCH_ROUTE = ROOT / "apps/locally_twisted/locally_twisted/www/search.py"
 
 
 def _line_index(text: str, needle: str) -> int:
@@ -32,18 +33,17 @@ def test_desktop_nav_order(navbar: str) -> None:
     expected = [
         "data-lt-megamenu-trigger=\"lt-mega-events\"",
         "Event Balloons",
-        "/portfolio",
         "/balloon-twisting-and-face-painting",
         "data-lt-megamenu-trigger=\"lt-mega-products\"",
         "Ready-to-Order",
+        "/portfolio",
         "/faq",
     ]
     positions = [_line_index(primary_nav, needle) for needle in expected]
     if positions != sorted(positions):
         raise AssertionError(
-            "Primary nav order must be Event Balloons, Portfolio, "
-            "Twisting & Face Painting, "
-            "Ready-to-Order, FAQ, with deliberate mega-menu triggers"
+            "Primary nav order must be Event Balloons, Twisting & Face Painting, "
+            "Ready-to-Order, Portfolio, FAQ, with deliberate mega-menu triggers"
         )
 
 
@@ -77,10 +77,30 @@ def test_nav_does_not_expose_process_page(navbar: str, footer: str) -> None:
             raise AssertionError(f"Public nav/footer must not expose the unapproved Process page: {needle}")
 
 
+def test_search_is_overlay_not_public_page(navbar: str, footer: str, search_route: str) -> None:
+    combined = f"{navbar}\n{footer}"
+    if 'href="/search"' in combined:
+        raise AssertionError("Public navigation must not link to Frappe's bundled /search page")
+    required = (
+        "data-lt-search-toggle",
+        'id="lt-site-search-panel"',
+        'action="/shop"',
+        'name="q"',
+    )
+    for needle in required:
+        if needle not in navbar:
+            raise AssertionError(f"Header search overlay contract is missing: {needle}")
+    if "lt-mega-header__mobile-search" in navbar:
+        raise AssertionError("Mobile search must live in the drawer, not the crowded header action row")
+    if "context.http_status_code = 404" not in search_route or "no_cache = 1" not in search_route:
+        raise AssertionError("/search must override Frappe's bundled page with a no-cache 404")
+
+
 def test_mega_menu_contract(navbar: str) -> None:
     required = (
         'src="/assets/locally_twisted/icons/lt-logo.png"',
         'class="lt-mega-brand__logo"',
+        'aria-label="Navigation menu"',
         'id="lt-mega-events"',
         'id="lt-mega-products"',
         'class="lt-megamenu__panel"',
@@ -93,12 +113,41 @@ def test_mega_menu_contract(navbar: str) -> None:
         'id="lt-mobile-toggle"',
         'id="lt-mobile-nav"',
         'data-lt-drawer-accordion-trigger="lt-mobile-products"',
+        'data-lt-search-toggle',
         'aria-expanded="false"',
         "hidden",
     )
     for needle in required:
         if needle not in navbar:
             raise AssertionError(f"Missing deliberate mega-menu contract markup: {needle}")
+
+
+def test_mobile_nav_matches_primary_order(navbar: str) -> None:
+    drawer_start = _line_index(navbar, '<aside class="lt-header__mobile-nav-collapse')
+    drawer = navbar[drawer_start:]
+    expected = [
+        'data-lt-drawer-accordion-trigger="lt-mobile-events"',
+        "Event Balloons",
+        'href="/balloon-twisting-and-face-painting"',
+        'data-lt-drawer-accordion-trigger="lt-mobile-products"',
+        "Ready-to-Order",
+        'href="/portfolio"',
+        'href="/faq"',
+        'href="/contact">Free Event Quote',
+        'class="lt-mega-drawer__search"',
+    ]
+    positions = [_line_index(drawer, needle) for needle in expected]
+    if positions != sorted(positions):
+        raise AssertionError(
+            "Mobile drawer must follow desktop primary order: Event Balloons, "
+            "Twisting & Face Painting, Ready-to-Order, Portfolio, FAQ, Free Event Quote, Search"
+        )
+    if 'href="/search"' in drawer:
+        raise AssertionError("Mobile drawer must not expose the retired /search page")
+    if "lt-mobile-help" in drawer or "Help and Details" in drawer:
+        raise AssertionError("Mobile drawer must not hide FAQ behind the retired Help and Details panel")
+    if "lt-mobile-nav-heading" in drawer or ">Locally Twisted</span>" in drawer:
+        raise AssertionError("Mobile drawer brand must show the logo only, without duplicate Locally Twisted text")
 
 
 def test_no_retired_nav_contract(navbar: str) -> None:
@@ -149,12 +198,15 @@ def main() -> None:
     navbar = NAVBAR.read_text(encoding="utf-8")
     footer = FOOTER.read_text(encoding="utf-8")
     home = HOME.read_text(encoding="utf-8")
+    search_route = SEARCH_ROUTE.read_text(encoding="utf-8")
     test_desktop_nav_order(navbar)
     test_quote_cta_is_contact(navbar)
     test_nav_does_not_link_to_retired_book_route(navbar)
     test_nav_does_not_link_to_retired_category_index(navbar, footer)
     test_nav_does_not_expose_process_page(navbar, footer)
+    test_search_is_overlay_not_public_page(navbar, footer, search_route)
     test_mega_menu_contract(navbar)
+    test_mobile_nav_matches_primary_order(navbar)
     test_no_retired_nav_contract(navbar)
     test_supporting_assets_exist()
     test_homepage_launch_links(home)

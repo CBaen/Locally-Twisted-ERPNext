@@ -6,6 +6,36 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+
+## 2026-05-08 - Mobile chrome has a control budget
+
+The mobile header failed because it tried to carry logo, cart, search, and menu
+inside a 320px row. The search control was reasonable on desktop, but on mobile
+it collided with the cart and logo. Shrinking the logo would have protected the
+extra control by weakening the brand signal.
+
+**Counter-move:** mobile chrome needs a hard control budget. Keep the primary
+brand mark plus the actions that must be available instantly, and move
+secondary actions into the drawer or another intentional surface. Guard the
+budget with a 320px browser check, not a desktop mental model.
+
+---
+
+## 2026-05-08 - Component sizing contracts must cover proof sections, not only heroes
+
+The project already had compact hero, container, and stateful layout contracts,
+but the Google review block still became huge on mobile. It did not fail from
+document overflow; it failed from inherited global `section` padding plus
+oversized proof-card spacing and height.
+
+**Counter-move:** when GL flags "cards and padding are huge," add a component
+sizing contract for the exact proof section. For moving review/proof cards,
+guard block height, badge height, track padding, card width/height, and card
+padding across small mobile widths. Broad layout-fit tests are necessary but
+not enough for perceived mobile density.
+
+---
+
 ## 2026-05-08 - Microinteraction demos are not production sources
 
 The balloon cursor started from a standalone HTML demo. It was useful as a

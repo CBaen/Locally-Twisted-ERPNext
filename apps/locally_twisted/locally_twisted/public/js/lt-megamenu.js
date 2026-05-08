@@ -138,6 +138,126 @@
         }, { passive: true });
     }
 
+    function initSearchOverlay() {
+        var panel = document.getElementById("lt-site-search-panel");
+        var toggles = Array.prototype.slice.call(document.querySelectorAll("[data-lt-search-toggle]"));
+        if (!panel || !toggles.length) return;
+
+        var form = panel.querySelector("form");
+        var input = panel.querySelector("[data-lt-search-input]");
+        var entries = Array.prototype.slice.call(panel.querySelectorAll("[data-lt-search-entry]"));
+        var empty = panel.querySelector("[data-lt-search-empty]");
+        var lastToggle = null;
+
+        function setExpanded(open) {
+            toggles.forEach(function (toggle) {
+                toggle.setAttribute("aria-expanded", open ? "true" : "false");
+            });
+        }
+
+        function isOpen() {
+            return !panel.hasAttribute("hidden");
+        }
+
+        function filterEntries() {
+            var query = input ? input.value.trim().toLowerCase() : "";
+            var terms = query.split(/\s+/).filter(Boolean);
+            var visible = 0;
+
+            entries.forEach(function (entry) {
+                var text = (
+                    (entry.textContent || "") + " " + (entry.getAttribute("data-lt-search-keywords") || "")
+                ).toLowerCase();
+                var matched = !terms.length || terms.every(function (term) {
+                    return text.indexOf(term) !== -1;
+                });
+                entry.toggleAttribute("hidden", !matched);
+                if (matched) visible += 1;
+            });
+
+            if (empty) empty.toggleAttribute("hidden", visible > 0);
+        }
+
+        function openSearch(toggle) {
+            lastToggle = toggle || lastToggle;
+            closeAll();
+            var drawer = document.getElementById("lt-mobile-nav");
+            if (
+                drawer &&
+                drawer.classList.contains("is-open") &&
+                window.LT &&
+                window.LT.drawer &&
+                typeof window.LT.drawer.close === "function"
+            ) {
+                window.LT.drawer.close(false);
+            }
+            panel.removeAttribute("hidden");
+            setExpanded(true);
+            filterEntries();
+            window.setTimeout(function () {
+                if (input) input.focus();
+            }, 30);
+        }
+
+        function closeSearch(returnFocus) {
+            panel.setAttribute("hidden", "");
+            setExpanded(false);
+            if (returnFocus !== false && lastToggle) {
+                lastToggle.focus();
+            }
+        }
+
+        toggles.forEach(function (toggle) {
+            toggle.addEventListener("click", function (event) {
+                event.preventDefault();
+                if (isOpen()) {
+                    closeSearch(true);
+                } else {
+                    openSearch(toggle);
+                }
+            });
+        });
+
+        if (input) {
+            input.addEventListener("input", filterEntries);
+        }
+
+        if (form) {
+            form.addEventListener("submit", function (event) {
+                if (input && !input.value.trim()) {
+                    event.preventDefault();
+                    openSearch(lastToggle);
+                }
+            });
+        }
+
+        panel.addEventListener("click", function (event) {
+            if (event.target.closest("a[href]")) {
+                closeSearch(false);
+            }
+        });
+
+        document.addEventListener("click", function (event) {
+            if (!isOpen()) return;
+            var target = event.target;
+            var clickedToggle = toggles.some(function (toggle) {
+                return toggle.contains(target);
+            });
+            if (!clickedToggle && !panel.contains(target)) {
+                closeSearch(false);
+            }
+        });
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape" && isOpen()) {
+                closeSearch(true);
+            }
+        });
+
+        setExpanded(false);
+        filterEntries();
+    }
+
     function initDrawer() {
         var toggle = document.getElementById("lt-mobile-toggle");
         var drawer = document.getElementById("lt-mobile-nav");
@@ -226,6 +346,7 @@
 
     function init() {
         initMegaMenus();
+        initSearchOverlay();
         initDrawer();
     }
 

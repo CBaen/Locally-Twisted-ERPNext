@@ -176,7 +176,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 
 			await page.locator("#lt-mobile-toggle").click();
 			await expect(page.locator("#lt-mobile-nav")).toBeVisible();
-			for (const panel of ["lt-mobile-events", "lt-mobile-products", "lt-mobile-help"]) {
+			for (const panel of ["lt-mobile-events", "lt-mobile-products"]) {
 				await page.locator(`[data-lt-drawer-accordion-trigger="${panel}"]`).click();
 				await expect(page.locator(`#${panel}`)).toBeVisible();
 			}
@@ -303,6 +303,79 @@ test.describe("Locally Twisted interactive layout states", () => {
 				expectNoLayoutFailures(expect, result, `header at ${viewport.name}px`);
 			});
 		}
+
+		test("small mobile header keeps logo clear of cart and menu controls", async ({ page }) => {
+			await page.setViewportSize({ width: 320, height: 812 });
+			const response = await gotoAndSettle(page, "/");
+			await expectSuccessfulResponse(response, "/");
+
+			const result = await page.evaluate(() => {
+				const logo = document.querySelector(".lt-mega-header__mobile-logo");
+				const actions = document.querySelector(".lt-mega-header__mobile-actions");
+				const logoRect = logo ? logo.getBoundingClientRect() : null;
+				const actionsRect = actions ? actions.getBoundingClientRect() : null;
+				return {
+					found: Boolean(logo && actions),
+					mobileActionCount: document.querySelectorAll(".lt-mega-header__mobile-actions .lt-mega-header__mobile-action").length,
+					mobileSearchCount: document.querySelectorAll(".lt-mega-header__mobile-search").length,
+					logoRight: logoRect ? logoRect.right : null,
+					actionsLeft: actionsRect ? actionsRect.left : null,
+				};
+			});
+
+			expect(result.found, "mobile header should expose the logo and action group").toBe(true);
+			expect(result.mobileActionCount, "mobile header should only carry cart and menu controls").toBe(2);
+			expect(result.mobileSearchCount, "mobile search belongs at the bottom of the drawer").toBe(0);
+			expect(result.logoRight, "logo should not collide with cart/menu controls").toBeLessThanOrEqual(result.actionsLeft - 8);
+		});
+	});
+
+	test.describe("header search overlay", () => {
+		for (const viewport of [
+			{ name: "mobile", width: 390, height: 844, toggle: ".lt-mega-drawer__search", openDrawer: true },
+			{ name: "desktop", width: 1366, height: 768, toggle: ".lt-mega-header__search" },
+		]) {
+			test(`search opens as an overlay on ${viewport.name}`, async ({ page }) => {
+				await page.setViewportSize({ width: viewport.width, height: viewport.height });
+				const response = await gotoAndSettle(page, "/");
+				await expectSuccessfulResponse(response, "/");
+				await dismissCookieNotice(page);
+
+				const beforeUrl = page.url();
+				if (viewport.openDrawer) {
+					await page.locator("#lt-mobile-toggle").click();
+					await expect(page.locator("#lt-mobile-nav")).toHaveClass(/is-open/);
+				}
+				const toggle = page.locator(viewport.toggle);
+				await expect(toggle).toHaveCount(1);
+				await expect(toggle).not.toHaveAttribute("href", /.+/);
+				await toggle.click();
+				if (viewport.openDrawer) {
+					await expect(page.locator("#lt-mobile-nav")).not.toHaveClass(/is-open/);
+				}
+
+				const panel = page.locator("#lt-site-search-panel");
+				await expect(panel).toBeVisible();
+				await expect(page.locator("#lt-site-search-input")).toBeFocused();
+				expect(page.url(), "search overlay should not navigate").toBe(beforeUrl);
+
+				await page.locator("#lt-site-search-input").fill("arches");
+				await expect(page.locator("#lt-site-search-panel a[href='/shop-items/arches']")).toBeVisible();
+				await expect(page.locator("#lt-site-search-panel a[href='/portfolio']")).toBeHidden();
+
+				const result = await auditPageLayout(page, {
+					containerSelectors: [".lt-mega-header", "#lt-site-search-panel", ".lt-site-search-panel__field"],
+					targetSelectors: [
+						viewport.toggle,
+						"#lt-site-search-input",
+						".lt-site-search-panel__field button",
+						"#lt-site-search-panel a",
+					],
+				});
+				expectNoLayoutFailures(expect, result, `search overlay at ${viewport.name}`);
+			});
+		}
+
 	});
 
 	test.describe("desktop mega panels", () => {
@@ -348,7 +421,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 				await page.locator("#lt-mobile-toggle").click();
 				await expect(page.locator("#lt-mobile-nav")).toBeVisible();
 
-				for (const panel of ["lt-mobile-events", "lt-mobile-products", "lt-mobile-help"]) {
+				for (const panel of ["lt-mobile-events", "lt-mobile-products"]) {
 					await page.locator(`[data-lt-drawer-accordion-trigger="${panel}"]`).click();
 					await expect(page.locator(`#${panel}`)).toBeVisible();
 				}
@@ -360,6 +433,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 						".lt-mega-header__mobile-action",
 						".lt-mega-drawer__toggle",
 						".lt-mega-drawer__cta",
+						".lt-mega-drawer__search",
 					],
 				});
 				expectNoLayoutFailures(expect, result, `expanded drawer at ${viewport.name}px`);
@@ -534,6 +608,59 @@ test.describe("Locally Twisted interactive layout states", () => {
 				expect(after.x, "review track should move left-to-right over time").toBeGreaterThan(before.x);
 			});
 		}
+
+		test("mobile review proof keeps the compact sizing contract", async ({ page }) => {
+			await page.setViewportSize({ width: 390, height: 844 });
+			const response = await gotoAndSettle(page, "/");
+			await expectSuccessfulResponse(response, "/");
+
+			const result = await page.evaluate(() => {
+				function box(selector) {
+					const element = document.querySelector(selector);
+					if (!element) return null;
+					const rect = element.getBoundingClientRect();
+					const style = window.getComputedStyle(element);
+					return {
+						height: rect.height,
+						width: rect.width,
+						paddingTop: parseFloat(style.paddingTop),
+						paddingBottom: parseFloat(style.paddingBottom),
+						paddingLeft: parseFloat(style.paddingLeft),
+						paddingRight: parseFloat(style.paddingRight),
+					};
+				}
+
+				const cards = Array.from(document.querySelectorAll(".lt-reviews-block__quote")).map((card) => {
+					const rect = card.getBoundingClientRect();
+					return { height: rect.height, width: rect.width };
+				});
+
+				return {
+					block: box(".lt-reviews-block"),
+					badge: box(".lt-reviews-block__badge"),
+					quotes: box(".lt-reviews-block__quotes"),
+					card: box(".lt-reviews-block__quote"),
+					cardCount: cards.length,
+					maxCardHeight: Math.max(...cards.map((card) => card.height)),
+					maxCardWidth: Math.max(...cards.map((card) => card.width)),
+				};
+			});
+
+			expect(result.block, "reviews block should render").not.toBeNull();
+			expect(result.cardCount, "reviews crawl should include customer cards").toBeGreaterThanOrEqual(4);
+			expect(result.block.height, "mobile Google review section should not dominate the first scroll").toBeLessThanOrEqual(380);
+			expect(result.block.paddingTop, "mobile review section top padding should stay compact").toBeLessThanOrEqual(26);
+			expect(result.block.paddingBottom, "mobile review section bottom padding should stay compact").toBeLessThanOrEqual(30);
+			expect(result.badge.height, "mobile Google rating badge should stay compact").toBeLessThanOrEqual(76);
+			expect(result.quotes.height, "mobile review marquee should not be a tall card stack").toBeLessThanOrEqual(240);
+			expect(result.quotes.paddingTop, "global section padding must not leak into mobile review marquee").toBe(0);
+			expect(result.quotes.paddingBottom, "global section padding must not leak into mobile review marquee").toBe(0);
+			expect(result.maxCardWidth, "mobile review cards should stay narrower than the viewport").toBeLessThanOrEqual(270);
+			expect(result.maxCardHeight, "mobile review cards should stay compact").toBeLessThanOrEqual(240);
+			expect(result.card.paddingLeft, "mobile review card horizontal padding should stay tight").toBeLessThanOrEqual(17);
+			expect(result.card.paddingRight, "mobile review card horizontal padding should stay tight").toBeLessThanOrEqual(17);
+		});
+
 	});
 
 	test.describe("homepage client crawl banner", () => {

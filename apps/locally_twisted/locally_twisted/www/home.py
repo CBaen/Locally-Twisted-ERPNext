@@ -546,6 +546,63 @@ body[data-path="home"] main.container.my-4 {
     font-style: italic;
 }
 
+@media (max-width: 575.98px) {
+    .lt-reviews-block {
+        padding: 1.55rem 0.75rem 1.75rem;
+    }
+    .lt-reviews-block__badge {
+        gap: 0.25rem;
+        margin-bottom: 0.85rem;
+    }
+    .lt-reviews-block__stars {
+        font-size: 1.2rem;
+    }
+    .lt-reviews-block__score {
+        font-size: 1.45rem;
+        line-height: 1.05;
+    }
+    .lt-reviews-block__count {
+        font-size: 0.82rem;
+        line-height: 1.25;
+    }
+    .lt-reviews-block__quotes {
+        mask-image: linear-gradient(
+            to right, transparent 0, #000 8%, #000 92%, transparent 100%
+        );
+        -webkit-mask-image: linear-gradient(
+            to right, transparent 0, #000 8%, #000 92%, transparent 100%
+        );
+        padding: 0;
+    }
+    .lt-reviews-block__quote {
+        flex-basis: min(260px, calc(100vw - 3rem));
+        padding: 0.95rem 1rem 0.9rem;
+    }
+    .lt-reviews-block__quote-mark {
+        font-size: 1.55rem;
+        margin-bottom: 0.35rem;
+    }
+    .lt-reviews-block__quote-text {
+        display: -webkit-box;
+        font-size: 0.86rem;
+        line-height: 1.45;
+        margin-bottom: 0.55rem;
+        min-height: 0;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 5;
+    }
+    .lt-reviews-block__quote-attr {
+        font-size: 0.76rem;
+        line-height: 1.25;
+        margin-bottom: 0.4rem;
+    }
+    .lt-reviews-block__quote-stars {
+        font-size: 0.82rem;
+        padding-top: 0.45rem;
+    }
+}
+
 /* --- Custom Event Decor categories ---------------------------------- */
 .lt-categories {
     background-color: var(--lt-white);
