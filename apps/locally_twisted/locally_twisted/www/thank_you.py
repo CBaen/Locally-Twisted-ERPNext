@@ -41,6 +41,23 @@ PAGE_CSS = """
     line-height: 1.6;
     margin: 0 0 2rem;
 }
+.lt-thanks__notice {
+    background-color: #fffdf9;
+    border: 1px solid rgba(179, 27, 52, 0.22);
+    border-left: 4px solid #b31b34;
+    border-radius: 0.375rem;
+    color: #0a0a0b;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    margin: -0.75rem 0 2rem;
+    padding: 1rem;
+    text-align: left;
+}
+.lt-thanks__notice strong {
+    color: #0e2240;
+    display: block;
+    margin-bottom: 0.25rem;
+}
 .lt-thanks__order {
     background-color: var(--lt-white);
     border: 1px solid rgba(26, 26, 26, 0.08);
@@ -184,6 +201,24 @@ def get_context(context):
         "robots": "noindex, nofollow",
     }
     context.colocated_css = PAGE_CSS
+    context.reconciliation_pending = (
+        (frappe.form_dict.get("reconciliation") or "").strip().lower() == "pending"
+    )
+    if context.reconciliation_pending:
+        context.thank_you_lede = (
+            "Your payment came through. We have your order, and final receipt "
+            "or invoice paperwork is still being reconciled."
+        )
+        context.reconciliation_notice = (
+            "Payment is received. The final receipt or invoice details are being "
+            "checked in the background, and the team has an internal record to follow up."
+        )
+    else:
+        context.thank_you_lede = (
+            "Your payment came through. We have your order and will send a confirmation "
+            "receipt to the email you gave us."
+        )
+        context.reconciliation_notice = ""
 
     context.so = None
     context.line_items = []

@@ -6,8 +6,14 @@
         <p class="lt-thanks__eyebrow">Payment Received</p>
         <h1 class="lt-thanks__title">Thank you.</h1>
         <p class="lt-thanks__lede">
-            Your payment came through. We&rsquo;ve got your order and we&rsquo;ll send a confirmation receipt to the email you gave us.
+            {{ thank_you_lede }}
         </p>
+        {% if reconciliation_pending %}
+        <div class="lt-thanks__notice" role="status">
+            <strong>Receipt status</strong>
+            <span>{{ reconciliation_notice }}</span>
+        </div>
+        {% endif %}
 
         {% if so %}
         <div class="lt-thanks__order">

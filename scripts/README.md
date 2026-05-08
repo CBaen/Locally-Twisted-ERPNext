@@ -4,6 +4,7 @@ Operational scripts for the LT ERPNext build live here. Most scripts are self-co
 
 Run scripts from the project root: `python scripts/<dir>/<name>.py`.
 Run the layout-fit gate from the project root: `npm run test:layout-fit`.
+Run the public axe accessibility gate from the project root: `npm run test:a11y`.
 
 ## Layout
 
@@ -57,6 +58,7 @@ Run the layout-fit gate from the project root: `npm run test:layout-fit`.
 
 | Script | Purpose | Run when |
 |--------|---------|----------|
+| `a11y_audit.js` | Playwright + axe-core gate for the public launch route list at desktop and mobile widths. Writes `output/a11y/a11y-desktop.json`, `output/a11y/a11y-mobile.json`, and `output/a11y/a11y-summary.json`; fails nonzero on any axe violation. | Before closing public route/template changes, especially landmarks, headings, links, forms, breadcrumbs, checkout, shop, or customer-facing CSS |
 | `layout_fit.spec.js` | Playwright Test gate for public/shop/cart routes across mobile, tablet, and desktop widths. | Before visual claims, after customer-facing CSS/Jinja/template changes |
 | `portfolio_reel.spec.js` | Playwright Test gate for `/portfolio` floating proof-reel behavior: natural-ratio images, no photo captions/frame wrappers, no route-specific portfolio contact/index footer, larger desktop entry/click-to-front behavior that settles without pointer-follow sway, mobile full-width slide-in reveal, filter relayout, and empty state. | After editing portfolio layout, image metadata, filters, or modal behavior |
 | `owner_desk_routes.spec.js` | Playwright Test gate for owner Desk route recovery and Owner Home content. | After Desk JS, workspace, or simplified owner role changes |
@@ -80,8 +82,9 @@ Run the layout-fit gate from the project root: `npm run test:layout-fit`.
 | `customer_reminder_review_report_contract.py` | Fake-data contract for customer reminder report rows/groups, including empty queues and malformed send-enabled source rows. | After changing reminder report columns, groups, or no-live row boundaries |
 | `record_level_failure_contract.py` | Rollback-safe fake-data contract proving backend partial failures create record-level Comments plus Error Log calls through the reusable failure recorder. | After changing fail-loud recorder behavior, Lead cascade failure handling, checkout partial-failure handling, paid-order receipt handling, or automation-index record health rows |
 | `inquiry_upload_failure_contract.py` | Rollback-safe fake-data contract proving invalid inspiration photo uploads return a customer-visible summary and create record-level Lead evidence. | After changing public inquiry upload handling, accepted file types, upload limits, success-modal copy, or record-level failure reporting |
+| `payment_success_reconciliation_contract.py` | No-live contract proving browser-return paid checkout shows a reconciliation-pending thank-you state when invoice/receipt/email follow-up is not fully complete. | After changing `/payment-success`, `/thank-you`, paid-order reconciliation, receipt email handling, or payment-success automation checks |
 | `business_automation_index.py` | Read-only cross-system automation map for intake, CRM, checkout, payment, paperwork, finance, and scheduled checkups. Fails nonzero when launch-required surfaces are missing or disconnected. | Before adding backend automation, before Frappe Cloud readiness claims, and when reviewing cascading information paths |
-| `synthetic_business_pipeline.py` | Synthetic no-live pipeline audit for fake-data and rollback-safe backend flows. It runs/currently indexes record-level failure evidence, inquiry upload failure evidence, Stripe amount parity, checkout-to-Lead conversion, checkout fulfillment, paid-order cascade, mocked Stripe webhook behavior, customer document policy, outbound document templates, unpaid invoice packet outliers, customer reminder dry-run outliers, and customer reminder review-report outliers while keeping live cutover checks deferred. | When flushing out cascading data, broken piping, fake-data cleanup, and no-live operating readiness |
+| `synthetic_business_pipeline.py` | Synthetic no-live pipeline audit for fake-data and rollback-safe backend flows. It runs/currently indexes record-level failure evidence, inquiry upload failure evidence, Stripe amount parity, checkout-to-Lead conversion, checkout fulfillment, paid-order cascade, payment-success reconciliation pending state, mocked Stripe webhook behavior, customer document policy, outbound document templates, unpaid invoice packet outliers, customer reminder dry-run outliers, and customer reminder review-report outliers while keeping live cutover checks deferred. | When flushing out cascading data, broken piping, fake-data cleanup, and no-live operating readiness |
 | `stripe_amount_parity_contract.py` | Contract test proving Stripe Checkout line items equal the ERPNext Sales Order grand total, including tax/charges adjustment and loud rejection when item lines exceed the expected total. | After editing Stripe checkout, Sales Order totals, taxes/charges, delivery fees, or payment request creation |
 | `invoice_branding_contract.py` | Verifies the branded Sales Invoice Print Format, default Sales Invoice print-format property, Letter Head, logo asset, and rendered invoice HTML against an existing Sales Invoice. | After editing `sync_invoice_branding.py`, invoice copy/styling, letterhead, or invoice setup records |
 | `outbound_documents_contract.py` | Verifies the answer-first standard outbound document registry and source templates under `locally_twisted/outbound_documents/`. | After adding or changing invoices, receipts, proposals, packets, statements, reminders, work orders, or other files sent outside the company |
@@ -93,6 +96,7 @@ Run the layout-fit gate from the project root: `npm run test:layout-fit`.
 ## Standing Rules
 
 - Layout fit is necessary but not sufficient. `npm run test:layout-fit` catches geometry regressions; it does not replace screenshot review or GL's real-browser check.
+- Axe is part of public-site closeout for route/template changes. Accessibility launch blockers include contrast, landmarks, link names, heading order, breadcrumb regions, and keyboard/screen-reader semantics — not only visible styling.
 - Idempotency over magic. Every script in `setup/` and `dev/` should check-then-act or no-op cleanly when state already exists.
 - Loud errors. If a script's API call returns an error, surface it.
 - No `deploy.py` yet. Frappe Cloud cutover is Phase 6. Until then, deployment-like operations live as discrete scripts in `setup/` or `dev/`.

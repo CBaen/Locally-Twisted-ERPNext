@@ -268,14 +268,25 @@ def _surfaces(
         {
             "id": "payment_success_paid_order_cascade",
             "lane": "money",
-            "summary": "Paid checkout reconciles Payment Request, Payment Entry, Sales Invoice, receipt email, operator notification, and welcome email.",
+            "summary": "Paid checkout reconciles Payment Request, Payment Entry, Sales Invoice, receipt email, operator notification, welcome email, and pending-reconciliation thank-you copy.",
             "required_for_launch": True,
-            "exists": lambda: _files_exist("locally_twisted/www/payment_success.py"),
+            "exists": lambda: _files_exist(
+                "locally_twisted/www/payment_success.py",
+                "locally_twisted/www/thank_you.py",
+                "locally_twisted/www/thank_you.html",
+                "locally_twisted/verify/payment_success_reconciliation_contract.py",
+            ),
             "connected": _payment_success_connected,
             "loud_failure": _payment_success_loud_failure,
-            "evidence": ["apps/locally_twisted/locally_twisted/www/payment_success.py"],
+            "evidence": [
+                "apps/locally_twisted/locally_twisted/www/payment_success.py",
+                "apps/locally_twisted/locally_twisted/www/thank_you.py",
+                "apps/locally_twisted/locally_twisted/www/thank_you.html",
+                "apps/locally_twisted/locally_twisted/verify/payment_success_reconciliation_contract.py",
+            ],
             "verifiers": [
                 "python scripts/verify/payment_cascade_contract.py",
+                "python scripts/verify/payment_success_reconciliation_contract.py",
                 "python scripts/verify/customer_documents_contract.py",
             ],
             "creates_fake_data": True,
@@ -721,19 +732,38 @@ def _checkout_loud_failure() -> list[str]:
 
 def _payment_success_connected() -> list[str]:
     failures = []
-    failures.extend(_callables_exist("locally_twisted.www.payment_success.reconcile_paid_sales_order"))
+    failures.extend(_callables_exist(
+        "locally_twisted.www.payment_success.reconcile_paid_sales_order",
+        "locally_twisted.verify.payment_success_reconciliation_contract.run",
+    ))
     failures.extend(_doctype_presence(["Payment Request", "Payment Entry", "Sales Invoice", "Email Queue"]))
     source = _read("locally_twisted/www/payment_success.py")
     for marker in ("Payment Entry", "Sales Invoice", "sendmail", "operator"):
         if marker not in source:
             failures.append(f"payment_success.py missing connection marker {marker}")
+    if not failures:
+        result = frappe.get_attr("locally_twisted.verify.payment_success_reconciliation_contract.run")()
+        if not result.get("ok"):
+            failures.extend(result.get("failures") or ["payment success reconciliation contract failed"])
     return failures
 
 
 def _payment_success_loud_failure() -> list[str]:
-    source = _read("locally_twisted/www/payment_success.py")
+    source = "\n".join([
+        _read("locally_twisted/www/payment_success.py"),
+        _read("locally_twisted/www/thank_you.py"),
+        _read("locally_twisted/www/thank_you.html"),
+    ])
     failures = []
-    for marker in ("raise_on_error", "record_backend_failure", "receipt_email_missing_recipient", "PaidOrderReconciliationError"):
+    for marker in (
+        "raise_on_error",
+        "record_backend_failure",
+        "receipt_email_missing_recipient",
+        "PaidOrderReconciliationError",
+        "reconciliation=pending",
+        "reconciliation_pending",
+        "Receipt status",
+    ):
         if marker not in source:
             failures.append(f"payment_success.py missing paid-order loud failure marker {marker}")
     return failures
@@ -1183,6 +1213,7 @@ def _checkups() -> list[dict[str, object]]:
                 "python scripts/verify/checkout_lead_conversion_contract.py",
                 "python scripts/verify/checkout_fulfillment_contract.py",
                 "python scripts/verify/payment_cascade_contract.py",
+                "python scripts/verify/payment_success_reconciliation_contract.py",
             ],
         },
         {
@@ -1276,6 +1307,11 @@ def _fake_data_contracts() -> list[dict[str, object]]:
             "command": "python scripts/verify/payment_cascade_contract.py",
             "creates": ["Customer", "Contact", "Address", "Sales Order", "Payment Request", "Payment Entry", "Sales Invoice", "Email Queue"],
             "cleanup": "rolls back transaction and intercepts commit calls",
+        },
+        {
+            "command": "python scripts/verify/payment_success_reconciliation_contract.py",
+            "creates": [],
+            "cleanup": "uses fake Stripe/reconciliation responses only",
         },
         {
             "command": "python scripts/verify/customer_documents_contract.py",

@@ -1,6 +1,6 @@
 # Business Automation Index
 
-Last updated: 2026-05-06 by Codex after adding the no-live customer reminder review report surface to the automation index.
+Last updated: 2026-05-08 by Codex after adding record-level backend failure evidence and inquiry upload failure evidence to the automation index.
 
 ## Outcome
 
@@ -35,12 +35,12 @@ Latest report:
 python scripts/verify/business_automation_index.py --report output/business-automation-index.json
 ```
 
-Current result on 2026-05-06:
+Current result on 2026-05-08:
 
 - `ok: true`
-- 22 total surfaces indexed
-- 12 launch-required surfaces
-- 18 surfaces exist and are connected
+- 23 total surfaces indexed
+- 13 launch-required surfaces
+- 19 surfaces exist and are connected
 - 4 surfaces exist but are not connected
 - 0 launch-required missing surfaces
 - 0 useful future surfaces missing
@@ -50,6 +50,8 @@ The report is read-only and writes the current JSON snapshot to `output/business
 
 Fresh closeout verification also confirmed:
 
+- record-level backend failure evidence writes rollback-safe Error Log and record blocker evidence.
+- rejected inquiry inspiration uploads now return a customer-visible upload summary and write Lead-level evidence.
 - `/contact` smoke submission verified backend Lead creation and cleanup with marker `SMOKE-TEST-1778091063`.
 - Frappe's hook registry includes `locally_twisted.verify.business_automation_index.scheduled_checkup` under `daily`.
 - Live Stripe keys, webhook secrets, production host checks, and real operator/customer data are cutover-only and are not part of the current synthetic readiness gate.
@@ -62,7 +64,7 @@ Fresh closeout verification also confirmed:
 - `customer_reminder_dry_run_contract.py` verifies no-live reminder queue behavior with fake overdue/current/missing-payment-path/malformed-send scenarios.
 - `customer_reminder_review_report.py` turns the dry-run queue into 1 internal review report row grouped under `review_now`, with no customer delivery enabled.
 - `customer_reminder_review_report_contract.py` verifies report rows/groups with fake mixed/empty/malformed-send source scenarios.
-- `synthetic_business_pipeline.py` runs 10 no-live synthetic contracts with 0 broken piping and keeps 3 live cutover items deferred.
+- `synthetic_business_pipeline.py` runs 13 no-live synthetic contracts with 0 broken piping and keeps 3 live cutover items deferred.
 
 ## Connected Launch Spine
 
@@ -86,6 +88,9 @@ These are currently classified as existing and connected:
 - no-live synthetic business pipeline audit
 - scheduled daily business automation checkup
 - Accountant Home workspace parity
+- record-level backend failure recorder
+- inquiry upload rejection/failure evidence
+- payment-success pending reconciliation copy
 
 ## Exists But Not Connected
 
@@ -117,6 +122,8 @@ Important current guardrails:
 Safe fake-data verifiers are part of the operating model:
 
 - `synthetic_business_pipeline.py` runs the current no-live operating-readiness suite and fails if broken piping appears.
+- `record_level_failure_contract.py` creates rollback-safe record-level backend failure evidence.
+- `inquiry_upload_failure_contract.py` proves rejected inspiration photos produce customer-visible and Lead-level evidence.
 - `smoke_forms.py` creates and deletes a test Lead and linked cascade Task.
 - `checkout_lead_conversion_contract.py` creates rollback-only checkout/Lead conversion records.
 - `payment_cascade_contract.py` creates rollback-only paid-order cascade records.
@@ -134,6 +141,9 @@ Core automation map:
 ```powershell
 python scripts/verify/business_automation_index.py --report output/business-automation-index.json
 python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json
+python scripts/verify/record_level_failure_contract.py --report output/record-level-failure-contract.json
+python scripts/verify/inquiry_upload_failure_contract.py --report output/inquiry-upload-failure-contract.json
+python scripts/verify/payment_success_reconciliation_contract.py --report output/payment-success-reconciliation-contract.json
 python scripts/verify/stripe_amount_parity_contract.py
 python scripts/verify/paperwork_status.py --report output/paperwork-status.json
 python scripts/verify/unpaid_invoice_review.py --report output/unpaid-invoice-review.json
@@ -190,16 +200,7 @@ python scripts/verify/payment_launch_readiness.py --mode live
 
 Run this only during cutover work. It is intentionally not part of the current synthetic readiness gate.
 
-## Next Safe Slice
+## Next Safe Slices
 
-Build a reviewed UX around the customer reminder review report rows:
-
-- keep `unpaid_invoice_review.py` as the read-only source
-- keep `unpaid_invoice_draft_packet.py` as the draft renderer
-- keep `paperwork_review_digest.py` as the read-only internal rollup
-- keep `customer_reminder_dry_run.py` as the no-live queue source
-- keep `customer_reminder_review_report.py` as the no-live report-row source
-- let Jeff/accounting review invoice status, recipient, cadence, and copy
-- show rendered `payment_reminder_draft` and `statement_of_account` sections in an internal Desk queue or scheduled internal digest
-- keep the first version draft-only with no customer send
-- add a verifier that proves no reminders or accounting mutations happen without explicit approval
+- Apply the same record-level recorder/checkup treatment to external document send-readiness before any reminder-send or Frappe Cloud trust step.
+- After that failure surface is visible, build a reviewed internal UX around customer reminder report rows while keeping it draft-only and no-send.

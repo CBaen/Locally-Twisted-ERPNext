@@ -1,6 +1,6 @@
 # Synthetic Business Pipeline
 
-Last updated: 2026-05-06 by Codex after adding no-live customer reminder review-report coverage.
+Last updated: 2026-05-08 by Codex after adding record-level backend failure and inquiry upload failure evidence.
 
 ## Outcome
 
@@ -16,14 +16,14 @@ Latest command:
 python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json
 ```
 
-Current result on 2026-05-06:
+Current result on 2026-05-08:
 
 - `ok: true`
 - `synthetic_only: true`
 - `live_inputs_required: false`
 - `uses_real_customer_data: false`
-- 10 synthetic contracts run
-- 10 synthetic contracts passing
+- 13 synthetic contracts run
+- 13 synthetic contracts passing
 - 0 broken piping items
 - 9 inefficiencies / partial connections surfaced
 - 3 cutover-deferred items surfaced
@@ -32,6 +32,9 @@ The report writes ignored JSON to `output/synthetic-business-pipeline.json`.
 
 ## What It Exercises
 
+- Record-level backend failure evidence with rollback-safe Lead blockers and Error Log evidence.
+- Inquiry upload rejection/failure handling with customer-visible summary and Lead-level evidence.
+- Payment-success browser-return reconciliation errors with pending thank-you copy.
 - Stripe Checkout amount parity with in-memory fake Sales Orders.
 - Checkout-to-Lead conversion with a stubbed Stripe URL and rollback-only records.
 - Checkout fulfillment branches with stubbed Stripe session creation and rollback-only records.
@@ -67,6 +70,10 @@ Do not turn this verifier into customer sending or accounting mutation. Rollback
 
 - `apps/locally_twisted/locally_twisted/verify/synthetic_business_pipeline.py`
 - `scripts/verify/synthetic_business_pipeline.py`
+- `apps/locally_twisted/locally_twisted/verify/record_level_failure_contract.py`
+- `apps/locally_twisted/locally_twisted/verify/inquiry_upload_failure_contract.py`
+- `apps/locally_twisted/locally_twisted/verify/payment_success_reconciliation_contract.py`
+- `apps/locally_twisted/locally_twisted/failure_recorder.py`
 - `apps/locally_twisted/locally_twisted/verify/paperwork_status.py`
 - `apps/locally_twisted/locally_twisted/paperwork/paperwork_review_digest.py`
 - `apps/locally_twisted/locally_twisted/paperwork/customer_reminder_dry_run.py`
@@ -76,4 +83,4 @@ Do not turn this verifier into customer sending or accounting mutation. Rollback
 
 ## Next Safe Slice
 
-Use the synthetic audit as the regression gate while building the reviewed reminder Desk page. The report-row source is now covered; the next UI must consume it without adding customer sending. Add new fake-data scenarios when a new backend pipe is connected, then keep live cutover checks separate.
+Use the synthetic audit as the regression gate while adding the next fail-loud slice: external document send-readiness blockers. Add new fake-data scenarios when a new backend pipe is connected, and keep live cutover checks separate.

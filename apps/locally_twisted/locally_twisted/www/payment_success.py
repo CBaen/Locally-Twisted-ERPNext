@@ -27,8 +27,12 @@ Side-effects on payment success (added 2026-04-29):
 - Transactional receipt email to the customer's address email_id.
 Both wrapped in try/except — a backend reconciliation glitch must not
 block the customer's /thank-you landing. Errors are logged for
-follow-up.
+follow-up. Browser-return reconciliation errors add a
+`reconciliation=pending` flag to the thank-you URL so the customer sees
+payment received without being told final receipt paperwork is already done.
 """
+from urllib.parse import urlencode
+
 import frappe
 from frappe.utils import escape_html, flt
 
@@ -102,14 +106,17 @@ def _handle_stripe_session(session_id):
     if not sales_order:
         _redirect("/")
 
-    reconcile_paid_sales_order(
+    result = reconcile_paid_sales_order(
         sales_order,
         payment_request=(session.get("metadata") or {}).get("payment_request"),
         source="payment_success",
         raise_on_error=False,
     )
 
-    _redirect(f"/thank-you?order={sales_order}")
+    query = {"order": sales_order}
+    if not result.get("ok"):
+        query["reconciliation"] = "pending"
+    _redirect(f"/thank-you?{urlencode(query)}")
 
 
 class PaidOrderReconciliationError(Exception):

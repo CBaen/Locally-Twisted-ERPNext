@@ -78,6 +78,15 @@ SYNTHETIC_CONTRACTS = (
         "cleanup": "intercepts commits and rolls back generated records",
     },
     {
+        "id": "payment_success_reconciliation_pending",
+        "lane": "money",
+        "runner": "locally_twisted.verify.payment_success_reconciliation_contract.run",
+        "command": "python scripts/verify/payment_success_reconciliation_contract.py",
+        "data_mode": "monkeypatched_browser_return",
+        "creates": [],
+        "cleanup": "uses fake Stripe/reconciliation responses only",
+    },
+    {
         "id": "stripe_webhook_reconciliation",
         "lane": "money",
         "runner": "locally_twisted.verify.payment_webhook_contract.run",

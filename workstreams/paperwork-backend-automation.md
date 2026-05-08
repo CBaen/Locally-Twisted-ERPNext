@@ -1,6 +1,6 @@
 # Paperwork And Backend Automation
 
-Last updated: 2026-05-06 by Codex after adding the no-live customer reminder review report.
+Last updated: 2026-05-08 by Codex after record-level backend blockers and inquiry upload failure evidence were added to the paperwork/automation spine.
 
 ## Outcome
 
@@ -36,8 +36,11 @@ Fresh local verification on 2026-05-06:
 - `python scripts/verify/finance_inventory_contract.py` passed.
 - Live Stripe keys, webhook secret, production host, and real operator/customer data are cutover-only and were not used as current fake-data/backend readiness gates.
 - `python scripts/verify/paperwork_status.py --report output/paperwork-status.json` passed in `synthetic_without_live_credentials` mode and generated a read-only paperwork status report with `live_cutover_checked: False`.
-- `python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json` passed with 10 no-live synthetic contracts, 0 broken piping, 9 inefficiencies/partial connections, and 3 cutover-deferred items.
-- `python scripts/verify/business_automation_index.py --report output/business-automation-index.json` passed and now maps 22 surfaces indexed, 12 launch-required, 18 connected, 4 exists-but-not-connected, 0 launch-required missing, 0 useful future surfaces missing, and 0 loud-failure gaps.
+- `python scripts/verify/record_level_failure_contract.py --report output/record-level-failure-contract.json` passed and proved rollback-safe record-level backend blocker evidence.
+- `python scripts/verify/inquiry_upload_failure_contract.py --report output/inquiry-upload-failure-contract.json` passed and proved rejected inquiry inspiration photos produce customer-visible and Lead-level evidence.
+- `python scripts/verify/payment_success_reconciliation_contract.py --report output/payment-success-reconciliation-contract.json` passed and proved browser-return reconciliation errors show pending receipt/invoice copy on `/thank-you`.
+- `python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json` passed with 13 no-live synthetic contracts, 0 broken piping, 9 inefficiencies/partial connections, and 3 cutover-deferred items.
+- `python scripts/verify/business_automation_index.py --report output/business-automation-index.json` passed and now maps 23 surfaces indexed, 13 launch-required, 19 connected, 4 exists-but-not-connected, 0 launch-required missing, 0 useful future surfaces missing, and 0 loud-failure gaps.
 - `python scripts/verify/unpaid_invoice_review.py --report output/unpaid-invoice-review.json` passed and generated 1 overdue-review candidate for `ACC-SINV-2026-00001`. The candidate includes draft-only `payment_reminder_draft` and `statement_of_account` data, requires human review, and proves no customer send or accounting mutation happens.
 - `python scripts/verify/unpaid_invoice_draft_packet.py --report output/unpaid-invoice-draft-packet.json --markdown output/unpaid-invoice-draft-packet.md` passed and rendered that candidate into draft-only `payment_reminder_draft` and `statement_of_account` packet sections for human review, while proving no customer send or accounting mutation happens.
 - `python scripts/verify/unpaid_invoice_draft_packet_contract.py` passed and now covers fake normal/outlier packet behavior without touching ERPNext records, including PO references, multiple open invoices, missing payment requests, paid-invoice exclusion, and malformed human-approval gates.
@@ -176,7 +179,7 @@ Current live-data facts from the fresh finance inventory:
 
 1. **Business automation index.** First pass done. `scripts/verify/business_automation_index.py` is the launch spine map and daily checkup source. Keep this green before adding new automations.
 2. **Paperwork status report.** First pass done. `scripts/verify/paperwork_status.py` summarizes current invoices, payment requests, email queues, overdue records, and bank/supplier/payroll gaps without printing secrets or mutating ERPNext. It reports live payment setup as cutover-deferred and does not run live readiness in synthetic mode.
-3. **Synthetic business pipeline audit.** First pass done. `scripts/verify/synthetic_business_pipeline.py` runs no-live fake-data/rollback-safe contracts for checkout-to-Lead, checkout fulfillment, payment cascade, mocked webhook behavior, document policy, outbound templates, unpaid invoice outliers, customer reminder dry-run outliers, and customer reminder review-report outliers. It fails on broken piping or fake-data cleanup leaks.
+3. **Synthetic business pipeline audit.** First pass done. `scripts/verify/synthetic_business_pipeline.py` runs no-live fake-data/rollback-safe contracts for record-level backend evidence, inquiry upload failure evidence, checkout-to-Lead, checkout fulfillment, payment cascade, payment-success pending reconciliation, mocked webhook behavior, document policy, outbound templates, unpaid invoice outliers, customer reminder dry-run outliers, and customer reminder review-report outliers. It fails on broken piping or fake-data cleanup leaks.
 4. **Unpaid invoice review queue.** First pass done as a draft-only report surface. Draft packet rendering is also done. Next is reviewed Desk UX or scheduled internal review digest, still no reminder sending.
 5. **Paperwork review digest.** First pass done as a read-only internal review payload. Next is a real reviewed Desk queue or scheduled internal-only report UI, still no customer sending.
 6. **Customer reminder dry run.** First pass done as a no-live internal review queue payload.
