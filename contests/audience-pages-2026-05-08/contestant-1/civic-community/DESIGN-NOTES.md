@@ -88,6 +88,24 @@ No two adjacent full-width colored sections — confirmed:
 - Services (near-white) → buyer notes (slate-blue) → CTA (navy): three distinct
   bands, no adjacency conflict.
 
+## Loop 2-1: Maintainer protection — vendor documentation terms
+
+**DO NOT PARAPHRASE OR SOFTEN the four civic buyer notes cards.** The exact terms
+used — W-9, COI (Certificate of Insurance), PO, net-30, multi-venue — are the
+language a Utah city accounts-payable department uses internally. A Sandy City
+coordinator, a West Jordan parks department buyer, or a Pride organization's
+finance chair will recognize these terms on sight. They are not marketing copy;
+they are the specific operational language of Utah civic procurement.
+
+If you are editing this page and feel tempted to replace "COI" with "insurance
+documentation," or "PO/net-30" with "flexible billing options," stop. Each
+substitution is individually defensible and collectively fatal. The specificity
+IS the proof. The moment these cards become generic, this section loses the
+thing that makes it different from any other balloon company's claim.
+
+If a term needs updating because procurement language has changed, document why
+in this file before changing the page — so the next instance knows the reasoning.
+
 ## Loop 1-2 change: Civic buyer notes section added
 
 Proxy-Loop-1-2 identified that the civic page had aesthetic differentiation from
