@@ -1,4 +1,4 @@
-# Copy — Private Celebrations Page
+# Copy — Private Celebrations Page (Round 2)
 
 ## Hero
 
@@ -18,14 +18,34 @@
 
 **H2:** Every detail matters, because this moment is one of a kind.
 
-**Body paragraph 1:** Private celebrations carry different weight. A first birthday only happens once. A wedding is the photograph people return to. A memorial is how a community says goodbye. The decor should hold the feeling, not distract from it.
+**Body paragraph 1:** Private celebrations carry different weight. A first birthday only happens once. A wedding is the photograph people return to. Locally Twisted brings the same craft to a backyard birthday as to a corporate brand activation — because what matters to you matters in the execution.
 
-**Body paragraph 2:** Locally Twisted brings the same craft to a backyard birthday as to a corporate brand activation — because what matters to you matters in the execution. Tell us what you're imagining. We'll design from there.
+**Body paragraph 2:** Tell us what you're imagining. We'll design from there.
 
 **Stats:**
 - 300+ / Birthday installs delivered
 - Wasatch Front / Weddings across the
 - Every detail / matters
+
+---
+
+## Memorial & Celebration of Life Band
+
+*(Dedicated section — arrives BEFORE the occasions grid. The grief buyer is claimed here, not in the card grid.)*
+
+**Label:** Memorial & Celebration of Life
+
+**H2:** When a celebration carries grief, the decor has to hold both.
+
+**Body paragraph 1:** A memorial is how a community says goodbye. The decor is part of that — it sets the tone for the room, gives people something to gather around, and makes the tribute feel finished.
+
+**Body paragraph 2:** Locally Twisted has helped families do this work. Every piece is designed with the occasion in full view. Share the context when you reach out — the design starts there.
+
+**CTA:** Start a conversation →
+
+**KJSCOTT review (structural anchor — left brass-rule callout):**
+> "I needed a sports themed funeral stand. They captured my vision, delivered on time, very reasonable, and had many complements. Very tasteful and meaningful."
+> — KJSCOTT / Celebration of Life
 
 ---
 
@@ -47,11 +67,10 @@ Soft, elevated decor that matches the invitation aesthetic. Balloon garlands, ph
 **Card 4 — Milestones**
 Quinceañera, retirement, anniversary, graduation — the pieces that make a milestone feel finished.
 
-**Card 5 — Celebration of Life**
-Tasteful, meaningful decor for memorials and celebrations of life. Every tribute deserves care.
-
-**Card 6 — Custom Themes**
+**Card 5 — Custom Themes**
 Characters, sculptural pieces, themed backdrops — if you can imagine it, bring us the brief.
+
+*(Memorial card removed — that buyer has already been claimed in the dedicated section above.)*
 
 ---
 
@@ -62,14 +81,13 @@ Characters, sculptural pieces, themed backdrops — if you can imagine it, bring
 **Testimonial 1 — Sara M., longtime client:**
 "Jeff has been listed in my phone for 7-ish years as 'balloon guy' and has been my go-to for that long. I know I can trust him and his team to always exceed my expectations."
 
-**Testimonial 2 — KJSCOTT, celebration of life:**
-"I needed a sports themed funeral stand. They captured my vision, delivered on time, very reasonable, and had many complements. Very tasteful and meaningful."
-
-**Testimonial 3 — Mark T., wedding + birthday:**
+**Testimonial 2 — Mark T., wedding + birthday:**
 "We were seriously blown away and my kids were delighted. My oldest son requested they come to his birthday party. They were fantastic!"
 
-**Testimonial 4 — LuAnn K., gift delivery:**
+**Testimonial 3 — LuAnn K., gift delivery:**
 "They went above and beyond what they needed to do for my mom's Mother's Day gift. I made a mistake on the delivery date and they fixed it and made the delivery."
+
+*(KJSCOTT not repeated here — one structural home in the memorial band above, full weight.)*
 
 ---
 

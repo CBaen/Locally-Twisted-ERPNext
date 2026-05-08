@@ -6,9 +6,19 @@
 
 **H1:** Custom balloon decor for the moments that matter most.
 
-**Lede:** Birthdays, weddings, baby showers, milestones, and celebrations of life — designed with care, delivered cleanly.
+**Lede:** Birthdays, weddings, baby showers, milestone celebrations, and celebrations of life. Each one designed with care for the moment it represents — delivered to your venue, installed, done.
 
 **CTA:** Tell us what you're imagining →
+
+---
+
+## Memorial Proof Callout (pre-grid, deep navy band)
+
+**Label:** Celebration of Life
+
+**Quote:** "I needed a sports themed funeral stand. I told them what I needed, they captured my vision, delivered on time, very reasonable, and had many compliments. Very tasteful and meaningful."
+
+**Attribution:** — Google review, celebration of life
 
 ---
 

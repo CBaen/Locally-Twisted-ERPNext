@@ -7,13 +7,15 @@
   No named clients (privacy). Proof is category-level + real review quotes.
 
   Container modes (for test:container-contract):
-    1. lt-page-priv__hero         → fullbleed
-    2. lt-page-priv__celebration-types → band (warm-white, 4 cards)
-    3. lt-page-priv__gallery      → visual-field (fullbleed)
-    4. lt-page-priv__pillars-band → band (slate blue)
-    5. lt-page-priv__testimonials → band (sandstone/warm)
-    6. lt-page-priv__service-note → band (warm-white)
-    7. lt-page-priv__cta          → fullbleed (ink/dark)
+    1. lt-page-priv__hero             → fullbleed
+    2. lt-page-priv__memorial-proof   → band (deep navy, left brass border)
+    3. lt-page-priv__celebration-types → band (warm-white, 4 cards)
+    4. lt-page-priv__memorial-section → band (warm-white, stone top border)
+    5. lt-page-priv__gallery          → visual-field (fullbleed)
+    6. lt-page-priv__pillars-band     → band (slate blue)
+    7. lt-page-priv__testimonials     → band (sandstone/warm)
+    8. lt-page-priv__service-note     → band (warm-white)
+    9. lt-page-priv__cta              → fullbleed (ink/dark)
 #}
 
 <style>
@@ -120,6 +122,103 @@
         max-height: 280px;
     }
     .lt-page-priv__hero-title { font-size: 2.85rem; max-width: 24ch; }
+}
+
+/* --- Memorial proof callout (pre-grid) ----------------------------- */
+.lt-page-priv__memorial-proof {
+    background-color: #0E2240;
+    padding: 2rem 1rem;
+    border-left: 4px solid #B89A5B;
+}
+.lt-page-priv__memorial-proof-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+}
+.lt-page-priv__memorial-proof-mark {
+    font-family: var(--lt-font-heading);
+    font-size: 3rem;
+    color: #B89A5B;
+    line-height: 1;
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+.lt-page-priv__memorial-proof-content {}
+.lt-page-priv__memorial-proof-label {
+    font-family: var(--lt-font-body);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #B89A5B;
+    margin: 0 0 0.4rem;
+}
+.lt-page-priv__memorial-proof-text {
+    font-family: var(--lt-font-body);
+    font-size: 1.05rem;
+    color: #FAF7F2;
+    line-height: 1.58;
+    margin: 0 0 0.5rem;
+    font-style: italic;
+}
+.lt-page-priv__memorial-proof-attr {
+    font-family: var(--lt-font-body);
+    font-size: 0.82rem;
+    color: rgba(250, 247, 242, 0.6);
+    margin: 0;
+}
+
+/* --- Standalone memorial section ----------------------------------- */
+.lt-page-priv__memorial-section {
+    background-color: #FAF7F2;
+    padding: 3.5rem 1rem;
+    border-top: 1px solid #E7E5E1;
+}
+.lt-page-priv__memorial-section-inner {
+    max-width: 800px;
+    margin: 0 auto;
+}
+.lt-page-priv__memorial-section-eyebrow {
+    font-family: var(--lt-font-body);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #B89A5B;
+    margin: 0 0 0.55rem;
+}
+.lt-page-priv__memorial-section-heading {
+    font-family: var(--lt-font-heading);
+    font-size: 2rem;
+    color: #0A0A0B;
+    margin: 0 0 1rem;
+    line-height: 1.15;
+}
+.lt-page-priv__memorial-section-body {
+    font-family: var(--lt-font-body);
+    font-size: 0.97rem;
+    color: #595A5C;
+    line-height: 1.68;
+    margin: 0 0 0.75rem;
+    max-width: 68ch;
+}
+.lt-page-priv__memorial-section-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+    font-family: var(--lt-font-body);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #0E2240;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.lt-page-priv__memorial-section-cta:hover,
+.lt-page-priv__memorial-section-cta:focus-visible {
+    color: #B31B34;
 }
 
 /* --- Celebration types (4-card grid) ------------------------------- */
@@ -472,7 +571,22 @@
 </section>
 
 {# ===================================================================
-   2. CELEBRATION TYPES — 4-card grid
+   2. MEMORIAL PROOF CALLOUT — pre-grid, claims the grief buyer early
+   Container mode: band (deep navy, left brass border)
+   =================================================================== #}
+<aside class="lt-page-priv__memorial-proof" aria-label="Celebration of life work">
+    <div class="lt-page-priv__memorial-proof-inner">
+        <span class="lt-page-priv__memorial-proof-mark" aria-hidden="true">&ldquo;</span>
+        <div class="lt-page-priv__memorial-proof-content">
+            <p class="lt-page-priv__memorial-proof-label">Celebration of Life</p>
+            <p class="lt-page-priv__memorial-proof-text">{{ memorial_proof.text }}</p>
+            <p class="lt-page-priv__memorial-proof-attr">{{ memorial_proof.attr }}</p>
+        </div>
+    </div>
+</aside>
+
+{# ===================================================================
+   3. CELEBRATION TYPES — 4-card grid
    =================================================================== #}
 <section class="lt-page-priv__celebration-types" aria-labelledby="priv-types-heading">
     <div class="lt-page-priv__celebration-types-inner">
@@ -511,7 +625,36 @@
 </section>
 
 {# ===================================================================
-   3. GALLERY STRIP
+   4. STANDALONE MEMORIAL SECTION
+   Container mode: band (warm-white, top stone border)
+   This section cannot be transplanted to civic, corporate, or schools
+   without feeling wrong. It exists because this buyer exists.
+   =================================================================== #}
+<section class="lt-page-priv__memorial-section" aria-labelledby="priv-memorial-heading">
+    <div class="lt-page-priv__memorial-section-inner">
+        <p class="lt-page-priv__memorial-section-eyebrow">Celebrations of Life</p>
+        <h2 id="priv-memorial-heading" class="lt-page-priv__memorial-section-heading">
+            If you're here for a celebration of life, you're in the right place.
+        </h2>
+        <p class="lt-page-priv__memorial-section-body">
+            Jeff and his team have helped families honor people they love.
+            A sports theme. A favorite color. A tribute to something the
+            person cared about. Whatever the context, the install is
+            approached with care — and it arrives on time.
+        </p>
+        <p class="lt-page-priv__memorial-section-body">
+            There's no standard package for this kind of event. Share what
+            you're imagining when you reach out. You don't need to have it
+            figured out before you call.
+        </p>
+        <a href="/contact?intent=private&amp;event=memorial" class="lt-page-priv__memorial-section-cta">
+            Start a conversation <span aria-hidden="true">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+{# ===================================================================
+   5. GALLERY STRIP
    =================================================================== #}
 <section class="lt-page-priv__gallery lt-fullbleed" aria-label="Private celebration photo gallery">
     <div class="lt-page-priv__gallery-strip">
@@ -527,7 +670,7 @@
 </section>
 
 {# ===================================================================
-   4. PROOF PILLARS — slate blue
+   6. PROOF PILLARS — slate blue
    =================================================================== #}
 <section class="lt-page-priv__pillars-band" aria-label="Why families choose Locally Twisted">
     <div class="lt-page-priv__pillars-inner">
@@ -548,7 +691,7 @@
 </section>
 
 {# ===================================================================
-   5. TESTIMONIALS — sandstone/warm ground
+   7. TESTIMONIALS — sandstone/warm ground
    =================================================================== #}
 <section class="lt-page-priv__testimonials" aria-labelledby="priv-testimonials-heading">
     <div class="lt-page-priv__testimonials-inner">
@@ -568,7 +711,7 @@
 </section>
 
 {# ===================================================================
-   6. SERVICE NOTE — audience-specific
+   8. SERVICE NOTE — audience-specific
    =================================================================== #}
 <section class="lt-page-priv__service-note" aria-labelledby="priv-service-heading">
     <div class="lt-page-priv__service-note-inner">
@@ -592,7 +735,7 @@
 </section>
 
 {# ===================================================================
-   7. CTA
+   9. CTA
    =================================================================== #}
 <section class="lt-page-priv__cta lt-fullbleed" aria-labelledby="priv-cta-heading">
     <div class="lt-page-priv__cta-inner">

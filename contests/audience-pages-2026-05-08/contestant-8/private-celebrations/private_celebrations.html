@@ -27,7 +27,42 @@
 </section>
 
 {# ===================================================================
-   Section 2 — Celebration categories (band)
+   Section 2 — Memorial / celebration-of-life (band)
+   Container mode: band
+   ROUND 2 MOVE: Memorial now Section 2 — grief buyer claimed before
+   birthday/wedding categories. Named promise: dignified acknowledgment
+   backed by KJSCOTT's words, before the buyer has to self-select
+   through party content.
+=================================================================== #}
+<section class="lt-private-memorial" aria-labelledby="lt-private-memorial-heading">
+    <div class="lt-private-memorial__inner">
+        <p class="lt-private-memorial__eyebrow">Memorial &amp; Celebration of Life</p>
+        <h2 id="lt-private-memorial-heading" class="lt-private-memorial__heading">
+            If you're here for a celebration of life, you're in the right place.
+        </h2>
+        <div class="lt-private-memorial__body">
+            <p>
+                Not every celebration is a party. Sometimes balloon decor is the right choice
+                for a memorial service or celebration of life — a tasteful arrangement that
+                honors the person and the moment without feeling out of place. Jeff and the
+                team have helped families do this work. They take it seriously.
+            </p>
+            <p>
+                If you're planning a memorial and wondering whether balloons are right for it —
+                reach out. Share what you have in mind. The quote comes with no pressure.
+            </p>
+        </div>
+        {% if memorial_review %}
+        <blockquote class="lt-private-memorial__review">
+            <p class="lt-private-memorial__review-text">&ldquo;{{ memorial_review.text }}&rdquo;</p>
+            <footer class="lt-private-memorial__review-attr">{{ memorial_review.attr }}</footer>
+        </blockquote>
+        {% endif %}
+    </div>
+</section>
+
+{# ===================================================================
+   Section 3 — Celebration categories (band)
    Container mode: band
    No named-client roster — private buyers expect privacy.
    Category-level proof with numbers where honest.
@@ -36,7 +71,7 @@
     <div class="lt-private-cats__inner">
         <h2 id="lt-private-cats-heading" class="lt-private-cats__heading">For Every Kind of Celebration</h2>
         <p class="lt-private-cats__lede">
-            From a child's first birthday to a wedding ceremony to a life remembered —
+            From a child's first birthday to a wedding ceremony —
             the decor should feel made for that specific moment.
         </p>
         <div class="lt-private-cats__grid" role="list">
@@ -52,7 +87,7 @@
 </section>
 
 {# ===================================================================
-   Section 3 — Photo grid (visual-field, 4 images in portrait)
+   Section 4 — Photo grid (visual-field, 4 images in portrait)
    Container mode: visual-field (wider inner max)
    Portrait aspect for wedding/birthday photos shows full piece.
 =================================================================== #}
@@ -73,39 +108,6 @@
             </div>
             {% endfor %}
         </div>
-    </div>
-</section>
-
-{# ===================================================================
-   Section 4 — Memorial / celebration-of-life (band)
-   Container mode: band
-   Distinctive move: naming this audience with the dignity it deserves.
-   One verified review quote in a brass-left-rule callout.
-=================================================================== #}
-<section class="lt-private-memorial" aria-labelledby="lt-private-memorial-heading">
-    <div class="lt-private-memorial__inner">
-        <p class="lt-private-memorial__eyebrow">When It Matters Most</p>
-        <h2 id="lt-private-memorial-heading" class="lt-private-memorial__heading">
-            Memorial services and celebrations of life.
-        </h2>
-        <div class="lt-private-memorial__body">
-            <p>
-                Not every celebration is a party. Sometimes balloon decor is the right choice
-                for a memorial service or celebration of life — a tasteful arrangement that
-                honors the person and the moment without feeling out of place. Jeff and the
-                team have helped families do this work. They take it seriously.
-            </p>
-            <p>
-                If you're planning a memorial and wondering whether balloons are right for it —
-                reach out. Share what you have in mind. The quote comes with no pressure.
-            </p>
-        </div>
-        {% if memorial_review %}
-        <blockquote class="lt-private-memorial__review">
-            <p class="lt-private-memorial__review-text">&ldquo;{{ memorial_review.text }}&rdquo;</p>
-            <footer class="lt-private-memorial__review-attr">{{ memorial_review.attr }}</footer>
-        </blockquote>
-        {% endif %}
     </div>
 </section>
 

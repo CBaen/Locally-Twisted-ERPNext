@@ -10,15 +10,29 @@ Buyer posture: Brand-safe, on-color, repeatable, professional, billable through 
 no_cache = 1
 sitemap = 1
 
-# Named corporate clients from the approved roster.
-CORPORATE_CLIENTS = [
-    "KSL", "KUTV", "FOX13", "Paramount", "Ancestry",
-    "Zions Bank", "America First Credit Union", "Fidelity", "Morgan Stanley",
-    "Utah Jazz", "Chick-Fil-A", "Texas Roadhouse", "Applebee's", "Chili's",
-    "Honey Baked Ham", "PotBelly", "IHC", "Mountain Star Medical",
-    "Young Automotive", "LVT", "Clear", "Henry Schein",
-    "Museum of Illusion", "Lux", "SeaQuest",
-    "Alpine Events", "In the Events", "FanX", "The Boiler Room",
+# Named corporate clients from the approved roster — grouped by sector.
+# Sector grouping signals breadth without overwhelming a flat list.
+CORPORATE_CLIENT_SECTORS = [
+    {
+        "sector": "Media & Broadcast",
+        "clients": ["KSL", "KUTV", "FOX13", "Paramount"],
+    },
+    {
+        "sector": "Financial & Professional",
+        "clients": ["Zions Bank", "America First Credit Union", "Fidelity", "Morgan Stanley", "Ancestry"],
+    },
+    {
+        "sector": "Restaurants & Hospitality",
+        "clients": ["Chick-Fil-A", "Texas Roadhouse", "Applebee's", "Chili's", "Honey Baked Ham", "PotBelly"],
+    },
+    {
+        "sector": "Healthcare & Corporate",
+        "clients": ["IHC", "Mountain Star Medical", "Henry Schein", "Young Automotive", "LVT", "Clear"],
+    },
+    {
+        "sector": "Entertainment & Events",
+        "clients": ["Utah Jazz", "Museum of Illusion", "SeaQuest", "Lux", "FanX", "The Boiler Room", "Alpine Events", "In the Events"],
+    },
 ]
 
 # Proof photos from portfolio libraries.
@@ -216,6 +230,29 @@ PAGE_CSS = """
     margin-right: 1.25rem;
     color: var(--lt-brass);
     opacity: 0.5;
+}
+.lt-page-corp .lt-corp-clients__sectors {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    text-align: left;
+}
+@media (min-width: 768px) {
+    .lt-page-corp .lt-corp-clients__sectors { grid-template-columns: repeat(3, 1fr); gap: 1.25rem 2rem; }
+}
+@media (min-width: 1100px) {
+    .lt-page-corp .lt-corp-clients__sectors { grid-template-columns: repeat(5, 1fr); }
+}
+.lt-page-corp .lt-corp-clients__sector-label {
+    font-family: var(--lt-font-body);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--lt-brass);
+    margin: 0 0 0.5rem;
+    border-bottom: 1px solid rgba(184,154,91,0.25);
+    padding-bottom: 0.35rem;
 }
 
 /* --- Photo row ------------------------------------------------------- */
@@ -478,7 +515,7 @@ def get_context(context):
         ),
         "og:type": "website",
     }
-    context.corporate_clients = CORPORATE_CLIENTS
+    context.corporate_client_sectors = CORPORATE_CLIENT_SECTORS
     context.corporate_photos = CORPORATE_PHOTOS
     context.corporate_icons = CORPORATE_ICONS
     context.colocated_css = PAGE_CSS

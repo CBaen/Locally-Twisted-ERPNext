@@ -11,8 +11,10 @@ import frappe
 no_cache = 1
 sitemap = 1
 
-# Category-level proof for the four types of private celebration.
-# No named clients — brief instructs privacy for this audience.
+# Category-level proof for three occasion types.
+# Celebration of Life has been elevated to a standalone section (section 3)
+# and is no longer a panel in this grid — it needs structural weight,
+# not card-level treatment.
 CELEBRATION_TYPES = [
     {
         "slug": "birthdays",
@@ -25,6 +27,7 @@ CELEBRATION_TYPES = [
         ),
         "stat": "300+",
         "stat_label": "birthday installs",
+        "proof_anchor": "“Jeff was super nice and helpful, helped me figure out the perfect thing for our son's birthday.” — Sarah",
         "image": "/assets/locally_twisted/images/portfolio/optimized/birthday-smurfs-arch.webp",
         "image_alt": "Themed balloon arch for a custom birthday celebration",
     },
@@ -39,6 +42,7 @@ CELEBRATION_TYPES = [
         ),
         "stat": None,
         "stat_label": None,
+        "proof_anchor": "“We were seriously blown away.” — Mark, wedding guest",
         "image": "/assets/locally_twisted/images/portfolio/optimized/wedding-organic-half-arch.webp",
         "image_alt": "Organic balloon half arch at a wedding ceremony",
     },
@@ -53,23 +57,9 @@ CELEBRATION_TYPES = [
         ),
         "stat": None,
         "stat_label": None,
+        "proof_anchor": "“They are now my go-to easy decorating plan for any of my family events.” — Tiffiny",
         "image": "/assets/locally_twisted/images/portfolio/optimized/wedding-floral-half-arch.webp",
         "image_alt": "Floral and balloon organic arch for a bridal or baby shower",
-    },
-    {
-        "slug": "memorials",
-        "label": "Celebrations of Life",
-        "headline": "Something beautiful for a hard day.",
-        "body": (
-            "Balloon decor for memorial services and celebrations of life — "
-            "dignified, personal, and handled with care. "
-            "Locally Twisted has walked families through this. "
-            "It is not a department. It is part of the work."
-        ),
-        "stat": None,
-        "stat_label": None,
-        "image": "/assets/locally_twisted/images/portfolio/optimized/birthday-dolphin-backdrop.webp",
-        "image_alt": "Custom themed balloon backdrop for a personal celebration",
     },
 ]
 

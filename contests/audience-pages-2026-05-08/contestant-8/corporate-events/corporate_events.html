@@ -35,11 +35,18 @@
         <p id="lt-corp-clients-heading" class="lt-corp-clients__heading">
             Trusted by Utah's corporate and media community
         </p>
-        <ul class="lt-corp-clients__list" role="list">
-            {% for client in corporate_clients %}
-            <li>{{ client }}</li>
+        <div class="lt-corp-clients__sectors">
+            {% for sector in corporate_client_sectors %}
+            <div class="lt-corp-clients__sector">
+                <p class="lt-corp-clients__sector-label">{{ sector.sector }}</p>
+                <ul class="lt-corp-clients__list" role="list">
+                    {% for client in sector.clients %}
+                    <li>{{ client }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
             {% endfor %}
-        </ul>
+        </div>
     </div>
 </section>
 

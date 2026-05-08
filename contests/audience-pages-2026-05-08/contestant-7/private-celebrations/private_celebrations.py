@@ -19,7 +19,8 @@ import frappe
 no_cache = 1
 sitemap = 1
 
-# Category-level proof claims — verified by business context, not invented.
+# Category-level proof claims — birthdays, weddings, baby showers.
+# Memorials are handled in their own standalone section above this grid.
 CATEGORY_PROOF = [
     {
         "category": "Birthdays",
@@ -38,12 +39,6 @@ CATEGORY_PROOF = [
         "icon": "/assets/locally_twisted/icons/brand/balloon-cluster.svg",
         "headline": "Baby showers and gender reveals",
         "detail": "Tasteful, photograph-ready decor for the moments that matter before the baby arrives.",
-    },
-    {
-        "category": "Memorials",
-        "icon": "/assets/locally_twisted/icons/brand/balloon-bouquet.svg",
-        "headline": "Memorials and celebrations of life",
-        "detail": "Respectful, personal balloon arrangements for tribute events. Previous clients have described it as exactly right.",
     },
 ]
 
@@ -73,6 +68,8 @@ PRIVATE_INSTALLS = [
 ]
 
 # Testimonial excerpts for private buyers — voice of the customer.
+# KJ's memorial review is now the primary structural anchor in the memorial section above.
+# It also appears here so the testimonial grid has a full emotional range.
 TESTIMONIALS = [
     {
         "text": "Jeff has been listed in my phone for 7-ish years as 'balloon guy' and has been my go-to for that long. They make every event I plan easier and extra special.",
@@ -80,14 +77,14 @@ TESTIMONIALS = [
         "event": "Family events",
     },
     {
-        "text": "I reached out with a vision for a sports-themed funeral stand. They captured it, delivered on time, and the result was very tasteful and meaningful.",
-        "attr": "KJ, memorial client",
-        "event": "Celebration of life",
-    },
-    {
         "text": "Jeff was super nice and helpful, helped me figure out the perfect thing for our son's birthday. Prompt, accommodating, great communication and friendly.",
         "attr": "Sarah, birthday parent",
         "event": "Birthday",
+    },
+    {
+        "text": "I reached out with a vision for a sports-themed funeral stand. They captured it, delivered on time, and the result was very tasteful and meaningful.",
+        "attr": "KJ, memorial client",
+        "event": "Celebration of life",
     },
 ]
 

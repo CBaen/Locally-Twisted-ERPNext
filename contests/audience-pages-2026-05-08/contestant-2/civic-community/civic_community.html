@@ -5,15 +5,23 @@
   /civic-community — Audience page for city events coordinators, Pride organizers,
   chambers, county events, and community organizations.
 
+  ROUND 2 STRUCTURAL CHANGE:
+  Added a civic procurement notes section (section 5) between proof stories and trust
+  pillars. Four cards surfacing permit language, government invoicing, COI availability,
+  and documented delivery windows — the four operational specifics a real Utah city events
+  coordinator needs to vet a vendor. These were named in copy before; now they have a
+  dedicated structural container that the buyer can screenshot and send to her supervisor.
+
   Sections (container mode declared per the Public Container Contract):
-  1. Hero                     [fullbleed]
-  2. Client proof grid        [band]
-  3. Brass-rule divider       [raw-band]
-  4. Proof stories            [band]
-  5. Trust pillars            [fullbleed — dark authority band]
-  6. Audience service notes   [band]
-  7. Photo gallery            [visual-field]
-  8. Closing CTA              [fullbleed — dark]
+  1. Hero                         [fullbleed]
+  2. Client proof grid            [band]
+  3. Brass-rule divider           [raw-band]
+  4. Proof stories                [band]
+  5. Civic procurement notes      [band — sandstone]
+  6. Trust pillars                [fullbleed — dark authority band]
+  7. Audience service notes       [band]
+  8. Photo gallery                [visual-field]
+  9. Closing CTA                  [fullbleed — dark]
 #}
 
 <style>
@@ -270,6 +278,71 @@
     color: var(--lt-soft-gray);
     line-height: 1.6;
     margin: 0;
+}
+
+/* --- Civic procurement notes ---------------------------------------- */
+.lt-civic-procurement {
+    background-color: var(--lt-sandstone);
+    padding: 3.5rem 1rem;
+}
+.lt-civic-procurement__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.lt-civic-procurement__heading {
+    font-family: var(--lt-font-heading);
+    font-size: 1.875rem;
+    color: var(--lt-ink);
+    text-align: center;
+    margin: 0 0 0.5rem;
+}
+.lt-civic-procurement__lede {
+    font-family: var(--lt-font-body);
+    font-size: 1rem;
+    color: var(--lt-soft-gray);
+    text-align: center;
+    max-width: 56ch;
+    margin: 0 auto 2.5rem;
+    line-height: 1.5;
+}
+.lt-civic-procurement__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+}
+@media (min-width: 600px) {
+    .lt-civic-procurement__grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+}
+@media (min-width: 1000px) {
+    .lt-civic-procurement__grid { grid-template-columns: repeat(4, 1fr); }
+}
+.lt-civic-procurement-card {
+    background-color: var(--lt-warm-white);
+    padding: 1.5rem 1.25rem;
+    border-left: 3px solid var(--lt-brass);
+}
+.lt-civic-procurement-card__label {
+    font-family: var(--lt-font-body);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--lt-brass);
+    margin: 0 0 0.5rem;
+}
+.lt-civic-procurement-card__headline {
+    font-family: var(--lt-font-heading);
+    font-size: 1.125rem;
+    color: var(--lt-ink);
+    margin: 0 0 0.5rem;
+    line-height: 1.25;
+}
+.lt-civic-procurement-card__detail {
+    font-family: var(--lt-font-body);
+    font-size: 0.875rem;
+    color: var(--lt-soft-gray);
+    margin: 0;
+    line-height: 1.55;
 }
 
 /* --- Trust pillars (dark authority band) ---------------------------- */
@@ -552,7 +625,59 @@
     </div>
 </section>
 
-{# ── 5. Trust pillars [fullbleed — dark authority band] ──────────── #}
+{# ── 5. Civic procurement notes [band — sandstone] ───────────────── #}
+<section class="lt-civic-procurement" aria-labelledby="civic-procurement-heading">
+    <div class="lt-civic-procurement__inner">
+        <h2 id="civic-procurement-heading" class="lt-civic-procurement__heading">
+            What city coordinators need to know
+        </h2>
+        <p class="lt-civic-procurement__lede">
+            Public-event procurement has its own requirements. Locally Twisted
+            is set up to meet them — documentation, invoicing, and logistics
+            handled before you ask.
+        </p>
+        <div class="lt-civic-procurement__grid">
+            <div class="lt-civic-procurement-card">
+                <p class="lt-civic-procurement-card__label">Invoicing</p>
+                <h3 class="lt-civic-procurement-card__headline">City &amp; County Accounts</h3>
+                <p class="lt-civic-procurement-card__detail">
+                    Invoices issued to organizations, not individuals. Net-30 terms
+                    available for returning municipal clients. Remit-to address
+                    provided on request.
+                </p>
+            </div>
+            <div class="lt-civic-procurement-card">
+                <p class="lt-civic-procurement-card__label">Insurance</p>
+                <h3 class="lt-civic-procurement-card__headline">COI on Request</h3>
+                <p class="lt-civic-procurement-card__detail">
+                    Certificate of Insurance available for venues, city parks
+                    departments, and events requiring vendor documentation.
+                    Named additional insured available.
+                </p>
+            </div>
+            <div class="lt-civic-procurement-card">
+                <p class="lt-civic-procurement-card__label">Logistics</p>
+                <h3 class="lt-civic-procurement-card__headline">Documented Delivery Windows</h3>
+                <p class="lt-civic-procurement-card__detail">
+                    Arrival time, install window, and strike window confirmed in
+                    writing before the event date. Coordinated with your venue
+                    contact or public works team.
+                </p>
+            </div>
+            <div class="lt-civic-procurement-card">
+                <p class="lt-civic-procurement-card__label">Permitting</p>
+                <h3 class="lt-civic-procurement-card__headline">Permit-Ready Specs</h3>
+                <p class="lt-civic-procurement-card__detail">
+                    Arch dimensions, anchoring method, and wind-load notes
+                    provided for permit applications when required by city
+                    or county public works offices.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# ── 6. Trust pillars [fullbleed — dark authority band] ──────────── #}
 <section class="lt-civic-trust lt-fullbleed" aria-labelledby="civic-trust-heading">
     <div class="lt-civic-trust__inner">
         <h2 id="civic-trust-heading" class="lt-civic-trust__heading">
