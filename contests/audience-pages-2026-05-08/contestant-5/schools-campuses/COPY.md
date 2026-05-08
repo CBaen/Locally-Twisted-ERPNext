@@ -99,7 +99,7 @@ Custom color palettes are available for student-run events, prom, and end-of-yea
 
 | Icon | Label | Note |
 |---|---|---|
-| school-spirit | School Spirit Ready | Color-matched installs for school athletics, graduation, and campus events |
+| school-spirit | School Spirit Ready | University red, institutional navy — sourced to the school's official palette, not the catalog's nearest option |
 | utah-rooted | Utah Campus Experience | Established relationships with University of Utah, Weber State, and Utah high schools |
 | event-stage | Stage & Assembly Ready | Large-format stage backdrops, graduation arches, and pep rally installs that read from the bleachers |
 | professional | Schedule Disciplined | School events run on tight windows. Setup is complete before students arrive, teardown before the next class period |
