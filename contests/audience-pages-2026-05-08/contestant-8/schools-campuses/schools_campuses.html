@@ -1,0 +1,185 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+<div class="lt-page-school">
+
+{# ===================================================================
+   Section 1 — Hero (fullbleed)
+   Container mode: fullbleed
+   Height contract: mobile 220px / tablet 250px / desktop 280px
+=================================================================== #}
+<section class="lt-school-hero lt-fullbleed" aria-labelledby="lt-school-page-heading">
+    <div class="lt-school-hero__image" aria-hidden="true"></div>
+    <div class="lt-school-hero__content">
+        <p class="lt-school-hero__eyebrow">Schools &amp; Campuses · Utah</p>
+        <h1 id="lt-school-page-heading" class="lt-school-hero__title">
+            Spirit events deserve the real thing.
+        </h1>
+        <p class="lt-school-hero__lede">
+            Graduation ceremonies, back-to-school kickoffs, homecoming, and campus events —
+            balloon installations in your exact school colors, installed before the first student arrives.
+        </p>
+        <a href="/contact?intent=school" class="lt-school-hero__cta">
+            Request a school event quote <span aria-hidden="true">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+{# ===================================================================
+   Section 2 — Client Proof Band (fullbleed)
+   Container mode: fullbleed, inner wrapper
+   Note: school roster is intentionally small — displayed larger.
+=================================================================== #}
+<section class="lt-school-clients lt-fullbleed" aria-labelledby="lt-school-clients-heading">
+    <div class="lt-school-clients__inner">
+        <p id="lt-school-clients-heading" class="lt-school-clients__heading">
+            Schools and campuses we've worked with
+        </p>
+        <ul class="lt-school-clients__list" role="list">
+            {% for client in school_clients %}
+            <li>{{ client }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>
+
+{# ===================================================================
+   Section 3 — Installed-Work Photos (band)
+   Container mode: band
+=================================================================== #}
+<section class="lt-school-photos" aria-labelledby="lt-school-photos-heading">
+    <div class="lt-school-photos__inner">
+        <h2 id="lt-school-photos-heading" class="lt-school-photos__heading">Real School Installs</h2>
+        <p class="lt-school-photos__lede">
+            Every piece is custom-built for the event. The scale is matched to the venue —
+            stage fills, entrance arches, and ceremony garlands at gymnasium and auditorium size.
+        </p>
+        <div class="lt-school-photos__grid">
+            {% for photo in school_photos %}
+            <div class="lt-school-photos__item">
+                <img src="{{ photo.src }}"
+                     alt="{{ photo.alt }}"
+                     loading="lazy"
+                     width="800" height="600">
+                <p class="lt-school-photos__label">{{ photo.label }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{# ===================================================================
+   Section 4 — School Colors Case Study (band)
+   Container mode: band
+   This is the distinctive "School Colors, Respected" block.
+=================================================================== #}
+<section class="lt-school-colors" aria-labelledby="lt-school-colors-heading">
+    <div class="lt-school-colors__inner">
+        <p class="lt-school-colors__eyebrow">School Colors, Respected</p>
+        <h2 id="lt-school-colors-heading" class="lt-school-colors__heading">
+            Not close enough. Exactly right.
+        </h2>
+        <div class="lt-school-colors__body">
+            <p>
+                When Weber State University needed balloon decor for a campus event, the request
+                was specific: Weber State purple and white, at entrance arch and bouquet scale.
+                Not a generic purple — Weber State purple. The University of Utah has had the
+                same expectation. So does every activity director working in school colors: the
+                decor should look like it belongs to the school, not like it was rented from a
+                generic vendor.
+            </p>
+            <p>
+                That's the approach here. Bring the school colors, or point at the brand guide —
+                LT sources balloon latex in the palette that matches. Installations reflect the
+                school, not the balloon company.
+            </p>
+        </div>
+    </div>
+</section>
+
+{# ===================================================================
+   Section 5 — Service Notes (band)
+   Container mode: band
+=================================================================== #}
+<section class="lt-school-services" aria-labelledby="lt-school-services-heading">
+    <div class="lt-school-services__inner">
+        <h2 id="lt-school-services-heading" class="lt-school-services__heading">What School Events Need</h2>
+        <p class="lt-school-services__lede">
+            School events run on strict timing and family-appropriate standards. These are the specifics.
+        </p>
+        <div class="lt-school-services__grid" role="list">
+            <article class="lt-school-services__card" role="listitem">
+                <p class="lt-school-services__card-name">Graduation Ceremonies</p>
+                <p class="lt-school-services__card-desc">
+                    Balloon garlands, arches, and column pairs for stage, entrance, and photo-moment
+                    locations. School colors matched. Installed before ceremony start.
+                </p>
+            </article>
+            <article class="lt-school-services__card" role="listitem">
+                <p class="lt-school-services__card-name">Spirit Events &amp; Homecoming</p>
+                <p class="lt-school-services__card-desc">
+                    School-spirit arches and backdrops for pep rallies, homecoming, spirit weeks,
+                    and athletic events. Installed and struck to fit the school's schedule.
+                </p>
+            </article>
+            <article class="lt-school-services__card" role="listitem">
+                <p class="lt-school-services__card-name">Back-to-School &amp; Campus Welcome</p>
+                <p class="lt-school-services__card-desc">
+                    Stage fills, entrance pieces, and photo-moment backdrops for orientation days,
+                    back-to-school kickoffs, and student life events at K-12 and university scale.
+                </p>
+            </article>
+            <article class="lt-school-services__card" role="listitem">
+                <p class="lt-school-services__card-name">PTA &amp; Family Events</p>
+                <p class="lt-school-services__card-desc">
+                    Family-friendly carnival arches, classroom decorations, and bouquet arrangements
+                    for school fairs, fundraisers, and PTA-organized events.
+                </p>
+            </article>
+        </div>
+    </div>
+</section>
+
+{# ===================================================================
+   Section 6 — Proof Icons (fullbleed)
+   Container mode: fullbleed, inner wrapper
+=================================================================== #}
+<section class="lt-school-icons lt-fullbleed" aria-labelledby="lt-school-icons-heading">
+    <h2 id="lt-school-icons-heading" class="visually-hidden">Why schools choose Locally Twisted</h2>
+    <div class="lt-school-icons__inner">
+        {% for icon in school_icons %}
+        <div class="lt-school-icons__item">
+            <img class="lt-school-icons__img"
+                 src="{{ icon.asset }}"
+                 alt=""
+                 aria-hidden="true"
+                 width="48" height="48">
+            <span class="lt-school-icons__label">{{ icon.label }}</span>
+            <p class="lt-school-icons__desc">{{ icon.desc }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{# ===================================================================
+   Section 7 — CTA (fullbleed)
+   Container mode: fullbleed
+=================================================================== #}
+<section class="lt-school-cta lt-fullbleed" aria-labelledby="lt-school-cta-heading">
+    <div class="lt-school-cta__inner">
+        <h2 id="lt-school-cta-heading" class="lt-school-cta__heading">
+            Tell us your colors and your event.
+        </h2>
+        <p class="lt-school-cta__body">
+            Share the school, the colors, the event type, and the date. LT will come back
+            with a quote that fits the event and the budget. Graduation season books early —
+            reach out before the calendar fills.
+        </p>
+        <a href="/contact?intent=school" class="lt-school-cta__button">
+            Request a school event quote <span aria-hidden="true">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+</div>{# .lt-page-school #}
+{% endblock %}

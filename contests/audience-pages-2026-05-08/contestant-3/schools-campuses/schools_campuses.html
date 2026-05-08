@@ -1,0 +1,138 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+
+{#
+  /schools-campuses — Audience: Activity directors, athletic departments, PTAs,
+  college student life, graduation organizers.
+
+  Buyer posture: Spirit-driven, schedule-tight, school colors disciplined, family-friendly.
+
+  Sections (container mode noted):
+  1. Hero              — fullbleed
+  2. Intro prose       — band (warm white)
+  3. Installed work    — visual-field (stone)
+  4. Occasions grid    — band (white, 6-up)
+  5. Client band       — band (navy)
+  6. Closing CTA       — fullbleed (ink)
+#}
+
+<div class="lt-page-schools">
+
+{# --- 1. Hero (fullbleed) ------------------------------------------- #}
+<section class="lt-school-hero lt-fullbleed" aria-labelledby="lt-school-h1">
+    <div class="lt-school-hero__image" aria-hidden="true"></div>
+    <div class="lt-school-hero__content">
+        <p class="lt-school-hero__eyebrow">Schools, Universities &amp; Campus Events</p>
+        <h1 id="lt-school-h1" class="lt-school-hero__h1">
+            School colors. Real installations. On your schedule.
+        </h1>
+        <p class="lt-school-hero__lede">
+            From back-to-school stage displays to graduation garlands and homecoming arches — matched to your colors, delivered on time, with clean strike after.
+        </p>
+        <a href="/contact?intent=school" class="lt-school-hero__cta">
+            Request a School Quote <span aria-hidden="true">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+{# --- 2. Intro prose (band / warm white) ----------------------------- #}
+<section class="lt-school-intro" aria-labelledby="lt-school-intro-h2">
+    <div class="lt-school-intro__inner">
+        <p class="lt-school-intro__label">Trusted by Utah schools and universities</p>
+        <h2 id="lt-school-intro-h2" class="lt-school-intro__h2">
+            Every school event has a schedule. We work around it.
+        </h2>
+        <p class="lt-school-intro__body">
+            Activity directors and graduation committees don't have margin for late vendors or last-minute surprises. Locally Twisted shows up, installs professionally, and disappears cleanly — so you can run your event without tracking down a balloon crew.
+        </p>
+        <p class="lt-school-intro__body">
+            We've installed for the University of Utah, Weber State, and St. Joseph's High School, plus back-to-school and community events across the Wasatch Front. School-color matching is precise: share your mascot colors and we'll come back with options that are actually on-palette.
+        </p>
+        <hr class="lt-school-intro__brass-rule" aria-hidden="true">
+    </div>
+</section>
+
+{# --- 3. Installed work gallery (visual-field / stone) --------------- #}
+<section class="lt-school-gallery lt-fullbleed" aria-labelledby="lt-school-gallery-h2">
+    <div class="lt-school-gallery__inner">
+        <h2 id="lt-school-gallery-h2" class="lt-school-gallery__heading">School &amp; Campus Work</h2>
+        <p class="lt-school-gallery__subhead">Real Utah school installs. From back-to-school stages to graduation garlands.</p>
+        <div class="lt-school-gallery__grid">
+            {% for install in school_installs %}
+            <figure class="lt-school-gallery__item">
+                <img
+                    src="{{ install.image }}"
+                    alt="{{ install.alt }}"
+                    class="lt-school-gallery__img"
+                    loading="lazy"
+                >
+                <figcaption class="lt-school-gallery__cap">
+                    <p class="lt-school-gallery__cap-cat">{{ install.category }}</p>
+                    <p class="lt-school-gallery__cap-title">{{ install.title }}</p>
+                </figcaption>
+            </figure>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{# --- 4. Occasions grid (band / white) ------------------------------- #}
+<section class="lt-school-occasions" aria-labelledby="lt-school-occasions-h2">
+    <div class="lt-school-occasions__inner">
+        <h2 id="lt-school-occasions-h2" class="lt-school-occasions__h2">School events we install for</h2>
+        <p class="lt-school-occasions__lede">
+            Each installation is designed for the specific event — not resized from a generic template.
+        </p>
+        <div class="lt-school-occasions__grid">
+            {% for occ in school_occasions %}
+            <div class="lt-school-occasions__card">
+                <h3 class="lt-school-occasions__card-name">{{ occ.name }}</h3>
+                <p class="lt-school-occasions__card-body">{{ occ.body }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{# --- 5. Client band (band / navy) ----------------------------------- #}
+<section class="lt-school-clients lt-fullbleed" aria-labelledby="lt-school-clients-h2">
+    <div class="lt-school-clients__inner">
+        <div>
+            <p class="lt-school-clients__label">Named school clients</p>
+            <h2 id="lt-school-clients-h2" class="lt-school-clients__h2">
+                Who we've installed for
+            </h2>
+        </div>
+        <ul class="lt-school-clients__list" role="list">
+            {% for client in school_clients %}
+            <li class="lt-school-clients__item">{{ client }}</li>
+            {% endfor %}
+            {% for evt in school_context_events %}
+            <li class="lt-school-clients__item">{{ evt }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>
+
+{# --- 6. Closing CTA (fullbleed / ink) ------------------------------- #}
+<section class="lt-school-cta lt-fullbleed" aria-labelledby="lt-school-cta-h2">
+    <div class="lt-school-cta__inner">
+        <h2 id="lt-school-cta-h2" class="lt-school-cta__h2">
+            Tell us your school colors.
+        </h2>
+        <p class="lt-school-cta__body">
+            Share your event date, install location, and mascot colors. We'll come back with a quote that matches your palette and fits your schedule.
+        </p>
+        <a href="/contact?intent=school" class="lt-school-cta__btn">
+            Request a School Quote <span aria-hidden="true">&rarr;</span>
+        </a>
+        <p class="lt-school-cta__sub">
+            Or call us: <a href="tel:8012850860">(801) 285-0860</a>
+        </p>
+    </div>
+</section>
+
+</div>{# end .lt-page-schools #}
+
+{% endblock %}
