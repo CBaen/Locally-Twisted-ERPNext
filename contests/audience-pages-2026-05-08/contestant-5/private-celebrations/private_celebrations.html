@@ -1,0 +1,592 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+
+{#
+    /private-celebrations — Private Celebrations audience landing page.
+    Container modes (per style guide):
+      Section 1 (hero):              fullbleed
+      Section 2 (category proof):    band
+      Section 3 (photo proof):       visual-field / band
+      Section 4 (story block):       band
+      Section 5 (testimonials):      fullbleed
+      Section 6 (memorial note):     band
+      Section 7 (icon bar):          fullbleed
+      Section 8 (CTA):               fullbleed
+#}
+
+<style>
+/* ===================================================================
+ * /private-celebrations page styles
+ * Root: .lt-page-priv
+ * This page is warmer and more editorial than the civic/corporate pages.
+ * Sandstone and warm white dominate light sections. The dark sections
+ * use Ink. No cool-blue anywhere.
+ * =================================================================== */
+
+/* --- Hero --------------------------------------------------------- */
+.lt-page-priv .lt-priv-hero {
+    position: relative;
+    min-height: 220px;
+    height: 220px;
+    max-height: 220px;
+    background-color: var(--lt-navy);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+.lt-page-priv .lt-priv-hero__image {
+    position: absolute;
+    inset: 0;
+    background-image: url('/assets/locally_twisted/images/portfolio/optimized/wedding-organic-half-arch.webp');
+    background-size: cover;
+    background-position: center;
+}
+.lt-page-priv .lt-priv-hero__image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(90deg, rgba(10,10,11,0.88) 0%, rgba(10,10,11,0.68) 42%, rgba(10,10,11,0.14) 100%),
+        linear-gradient(180deg, rgba(10,10,11,0.03) 0%, rgba(10,10,11,0.38) 100%);
+}
+.lt-page-priv .lt-priv-hero__content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem;
+}
+.lt-page-priv .lt-priv-hero__eyebrow {
+    font-family: var(--lt-font-body);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--lt-brass);
+    margin: 0 0 0.35rem;
+}
+.lt-page-priv .lt-priv-hero__title {
+    font-family: var(--lt-font-heading);
+    font-size: clamp(1.75rem, 5vw, 2rem);
+    font-weight: 700;
+    line-height: 1.05;
+    color: var(--lt-warm-white);
+    margin: 0 0 0.5rem;
+    max-width: 22ch;
+}
+.lt-page-priv .lt-priv-hero__lede {
+    font-family: var(--lt-font-body);
+    font-size: 0.94rem;
+    line-height: 1.35;
+    color: rgba(250,247,242,0.88);
+    margin: 0;
+    max-width: 52ch;
+}
+@media (min-width: 768px) {
+    .lt-page-priv .lt-priv-hero {
+        min-height: 250px;
+        height: 250px;
+        max-height: 250px;
+    }
+    .lt-page-priv .lt-priv-hero__content { padding: 2rem; }
+    .lt-page-priv .lt-priv-hero__title { font-size: 2.5rem; }
+    .lt-page-priv .lt-priv-hero__lede { font-size: 1rem; }
+}
+@media (min-width: 1200px) {
+    .lt-page-priv .lt-priv-hero {
+        min-height: 280px;
+        height: 280px;
+        max-height: 280px;
+    }
+    .lt-page-priv .lt-priv-hero__title { font-size: 2.75rem; }
+}
+
+/* --- Category proof (Warm White) ---------------------------------- */
+.lt-page-priv .lt-priv-cats {
+    background-color: var(--lt-warm-white);
+    padding: 4rem 1rem;
+}
+.lt-page-priv .lt-priv-cats__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+.lt-page-priv .lt-priv-cats__heading {
+    font-family: var(--lt-font-heading);
+    font-size: 2rem;
+    color: var(--lt-ink);
+    margin: 0 0 0.5rem;
+    text-align: center;
+}
+@media (min-width: 1200px) {
+    .lt-page-priv .lt-priv-cats__heading { font-size: 2.5rem; }
+}
+.lt-page-priv .lt-priv-cats__lede {
+    font-family: var(--lt-font-body);
+    font-size: 1rem;
+    color: var(--lt-soft-gray);
+    text-align: center;
+    max-width: 580px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.5;
+}
+.lt-page-priv .lt-priv-cats__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+}
+@media (min-width: 600px) {
+    .lt-page-priv .lt-priv-cats__grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 992px) {
+    .lt-page-priv .lt-priv-cats__grid { grid-template-columns: repeat(3, 1fr); }
+}
+.lt-page-priv .lt-priv-cats__card {
+    background-color: var(--lt-white);
+    border: 1px solid var(--lt-stone);
+    border-radius: 4px;
+    padding: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+.lt-page-priv .lt-priv-cats__icon {
+    width: 40px;
+    height: 40px;
+    color: var(--lt-brass);
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+}
+.lt-page-priv .lt-priv-cats__card-content {
+    flex: 1;
+}
+.lt-page-priv .lt-priv-cats__card-label {
+    font-family: var(--lt-font-body);
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--lt-ink);
+    margin: 0 0 0.35rem;
+}
+.lt-page-priv .lt-priv-cats__card-detail {
+    font-family: var(--lt-font-body);
+    font-size: 0.85rem;
+    line-height: 1.55;
+    color: var(--lt-soft-gray);
+    margin: 0;
+}
+
+/* --- Photo proof (Sandstone band) --------------------------------- */
+.lt-page-priv .lt-priv-photos {
+    background-color: var(--lt-sandstone);
+    padding: 4rem 1rem;
+}
+.lt-page-priv .lt-priv-photos__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.lt-page-priv .lt-priv-photos__heading {
+    font-family: var(--lt-font-heading);
+    font-size: 2rem;
+    color: var(--lt-ink);
+    margin: 0 0 0.5rem;
+    text-align: center;
+}
+@media (min-width: 1200px) {
+    .lt-page-priv .lt-priv-photos__heading { font-size: 2.5rem; }
+}
+.lt-page-priv .lt-priv-photos__lede {
+    font-family: var(--lt-font-body);
+    font-size: 1rem;
+    color: var(--lt-slate);
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.5;
+}
+.lt-page-priv .lt-priv-photos__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+@media (min-width: 768px) {
+    .lt-page-priv .lt-priv-photos__grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (min-width: 1200px) {
+    .lt-page-priv .lt-priv-photos__grid { grid-template-columns: repeat(6, 1fr); }
+}
+.lt-page-priv .lt-priv-photos__item { display: flex; flex-direction: column; gap: 0.5rem; }
+.lt-page-priv .lt-priv-photos__img {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    border-radius: 4px;
+    background-color: var(--lt-stone);
+}
+.lt-page-priv .lt-priv-photos__caption {
+    font-family: var(--lt-font-body);
+    font-size: 0.76rem;
+    color: var(--lt-slate);
+    letter-spacing: 0.04em;
+}
+
+/* --- Story block (Warm White) ------------------------------------- */
+.lt-page-priv .lt-priv-story {
+    background-color: var(--lt-warm-white);
+    padding: 4rem 1rem;
+}
+.lt-page-priv .lt-priv-story__inner {
+    max-width: 800px;
+    margin: 0 auto;
+}
+.lt-page-priv .lt-priv-story__eyebrow {
+    font-family: var(--lt-font-body);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--lt-soft-gray);
+    margin: 0 0 0.75rem;
+}
+.lt-page-priv .lt-priv-story__heading {
+    font-family: var(--lt-font-heading);
+    font-size: 1.75rem;
+    color: var(--lt-ink);
+    margin: 0 0 1.25rem;
+    line-height: 1.2;
+}
+@media (min-width: 768px) {
+    .lt-page-priv .lt-priv-story__heading { font-size: 2.25rem; }
+}
+.lt-page-priv .lt-priv-story__body p {
+    font-family: var(--lt-font-body);
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--lt-soft-gray);
+    margin: 0 0 1rem;
+    max-width: 65ch;
+}
+.lt-page-priv .lt-priv-story__body p:last-child { margin-bottom: 0; }
+
+/* --- Testimonials (Ink, dark, fullbleed) -------------------------- */
+.lt-page-priv .lt-priv-testimonials {
+    background-color: var(--lt-ink);
+    padding: 4rem 1rem;
+}
+.lt-page-priv .lt-priv-testimonials__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+.lt-page-priv .lt-priv-testimonials__heading {
+    font-family: var(--lt-font-heading);
+    font-size: 1.625rem;
+    color: var(--lt-warm-white);
+    text-align: center;
+    margin: 0 0 2.5rem;
+}
+@media (min-width: 768px) {
+    .lt-page-priv .lt-priv-testimonials__heading { font-size: 2rem; }
+}
+.lt-page-priv .lt-priv-testimonials__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+}
+@media (min-width: 600px) {
+    .lt-page-priv .lt-priv-testimonials__grid { grid-template-columns: repeat(2, 1fr); }
+}
+.lt-page-priv .lt-priv-testimonials__card {
+    background-color: rgba(255,255,255,0.05);
+    border: 1px solid rgba(184,154,91,0.2);
+    border-radius: 4px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+.lt-page-priv .lt-priv-testimonials__quote-mark {
+    font-family: var(--lt-font-heading);
+    font-size: 2rem;
+    color: var(--lt-brass);
+    opacity: 0.5;
+    line-height: 1;
+    margin: 0;
+}
+.lt-page-priv .lt-priv-testimonials__text {
+    font-family: var(--lt-font-body);
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: rgba(250,247,242,0.9);
+    margin: 0;
+    flex: 1;
+}
+.lt-page-priv .lt-priv-testimonials__attr {
+    font-family: var(--lt-font-body);
+    font-size: 0.76rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(184,154,91,0.65);
+    margin: 0;
+}
+
+/* --- Memorial note (Warm White) ----------------------------------- */
+.lt-page-priv .lt-priv-memorial {
+    background-color: var(--lt-warm-white);
+    padding: 3.5rem 1rem 4rem;
+}
+.lt-page-priv .lt-priv-memorial__inner {
+    max-width: 720px;
+    margin: 0 auto;
+}
+.lt-page-priv .lt-priv-memorial__heading {
+    font-family: var(--lt-font-heading);
+    font-size: 1.625rem;
+    color: var(--lt-ink);
+    margin: 0 0 1rem;
+    line-height: 1.2;
+}
+@media (min-width: 768px) {
+    .lt-page-priv .lt-priv-memorial__heading { font-size: 2rem; }
+}
+.lt-page-priv .lt-priv-memorial__body p {
+    font-family: var(--lt-font-body);
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--lt-soft-gray);
+    margin: 0 0 1rem;
+    max-width: 65ch;
+}
+.lt-page-priv .lt-priv-memorial__body p:last-child { margin-bottom: 0; }
+
+/* --- Icon bar (Navy) --------------------------------------------- */
+.lt-page-priv .lt-priv-icon-bar {
+    background-color: var(--lt-navy);
+    padding: 3.5rem 1rem;
+}
+.lt-page-priv .lt-priv-icon-bar__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem 1.5rem;
+}
+@media (min-width: 768px) {
+    .lt-page-priv .lt-priv-icon-bar__inner {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2rem;
+    }
+}
+.lt-page-priv .lt-priv-icon-bar__item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+}
+.lt-page-priv .lt-priv-icon-bar__icon {
+    width: 48px;
+    height: 48px;
+    color: var(--lt-brass);
+}
+.lt-page-priv .lt-priv-icon-bar__label {
+    font-family: var(--lt-font-body);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--lt-warm-white);
+}
+.lt-page-priv .lt-priv-icon-bar__note {
+    font-family: var(--lt-font-body);
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: rgba(250,247,242,0.65);
+}
+
+/* --- CTA (Ink) ---------------------------------------------------- */
+.lt-page-priv .lt-priv-cta {
+    background-color: var(--lt-ink);
+    padding: 4rem 1rem;
+    text-align: center;
+}
+.lt-page-priv .lt-priv-cta__inner {
+    max-width: 680px;
+    margin: 0 auto;
+}
+.lt-page-priv .lt-priv-cta__heading {
+    font-family: var(--lt-font-heading);
+    font-size: 2rem;
+    color: var(--lt-warm-white);
+    margin: 0 0 0.75rem;
+    line-height: 1.15;
+}
+@media (min-width: 768px) {
+    .lt-page-priv .lt-priv-cta__heading { font-size: 2.625rem; }
+}
+.lt-page-priv .lt-priv-cta__body {
+    font-family: var(--lt-font-body);
+    font-size: 1rem;
+    color: rgba(250,247,242,0.78);
+    line-height: 1.55;
+    margin: 0 auto 1.75rem;
+    max-width: 52ch;
+}
+.lt-page-priv .lt-priv-cta__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.9rem 2rem;
+    background-color: var(--lt-berry);
+    color: var(--lt-white);
+    text-decoration: none;
+    font-family: var(--lt-font-body);
+    font-weight: 700;
+    font-size: 0.95rem;
+    border-radius: 2px;
+    min-height: 48px;
+}
+.lt-page-priv .lt-priv-cta__btn:hover,
+.lt-page-priv .lt-priv-cta__btn:focus-visible {
+    background-color: var(--lt-warm-white);
+    color: var(--lt-ink);
+    outline: 2px solid var(--lt-brass);
+    outline-offset: 2px;
+}
+</style>
+
+<div class="lt-page-priv">
+
+{# --- 1. Hero (fullbleed) ----------------------------------------- #}
+<section class="lt-priv-hero lt-fullbleed" aria-labelledby="lt-priv-h1">
+    <div class="lt-priv-hero__image" aria-hidden="true"></div>
+    <div class="lt-priv-hero__content">
+        <p class="lt-priv-hero__eyebrow">Birthdays · Weddings · Showers · Milestones</p>
+        <h1 id="lt-priv-h1" class="lt-priv-hero__title">Balloon decor for life's milestone moments.</h1>
+        <p class="lt-priv-hero__lede">Personal, custom, and elevated. The decor that makes the room feel like the occasion deserves it.</p>
+    </div>
+</section>
+
+{# --- 2. Category proof (Warm White, band) ------------------------- #}
+<section class="lt-priv-cats" aria-labelledby="lt-priv-cats-heading">
+    <div class="lt-priv-cats__inner">
+        <h2 id="lt-priv-cats-heading" class="lt-priv-cats__heading">Every kind of personal celebration.</h2>
+        <p class="lt-priv-cats__lede">Names stay private. The work doesn't. Here's the range of private celebrations the team has handled across the Wasatch Front.</p>
+        <div class="lt-priv-cats__grid">
+            {% for cat in proof_categories %}
+            <div class="lt-priv-cats__card">
+                <img
+                    class="lt-priv-cats__icon"
+                    src="/assets/locally_twisted/icons/brand/{{ cat.icon }}.svg"
+                    alt=""
+                    aria-hidden="true"
+                    width="40"
+                    height="40"
+                />
+                <div class="lt-priv-cats__card-content">
+                    <p class="lt-priv-cats__card-label">{{ cat.label }}</p>
+                    <p class="lt-priv-cats__card-detail">{{ cat.detail }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{# --- 3. Photo proof (Sandstone band) ------------------------------ #}
+<section class="lt-priv-photos" aria-labelledby="lt-priv-photos-heading">
+    <div class="lt-priv-photos__inner">
+        <h2 id="lt-priv-photos-heading" class="lt-priv-photos__heading">Installed private work</h2>
+        <p class="lt-priv-photos__lede">Arches, garlands, backdrops, and bouquets for celebrations that matter to the people hosting them.</p>
+        <div class="lt-priv-photos__grid">
+            {% for photo in proof_photos %}
+            <figure class="lt-priv-photos__item">
+                <img
+                    class="lt-priv-photos__img"
+                    src="{{ photo.path }}"
+                    alt="{{ photo.alt }}"
+                    loading="lazy"
+                    decoding="async"
+                />
+                <figcaption class="lt-priv-photos__caption">{{ photo.caption }}</figcaption>
+            </figure>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{# --- 4. Story block (Warm White) ---------------------------------- #}
+<section class="lt-priv-story" aria-labelledby="lt-priv-story-heading">
+    <div class="lt-priv-story__inner">
+        <p class="lt-priv-story__eyebrow">How personal celebrations work differently</p>
+        <h2 id="lt-priv-story-heading" class="lt-priv-story__heading">The decor should feel like a gift, not a rental.</h2>
+        <div class="lt-priv-story__body">
+            <p>A wedding arch that took a month to plan shouldn't feel like a standard package. A 60th birthday arch for someone who's been the center of their family for six decades shouldn't look the same as the children's party arch across town. Private celebrations are personal — and the balloon decor is one of the few things that guests see, photograph, and remember before the celebration even begins.</p>
+            <p>The design conversation for a private event starts with what the host is imagining, not what's in a catalog. Color choices, balloon types, scale, and installation approach are all discussed before anything is quoted. The team has done 300+ birthday installs ranging from children's themed arches to milestone 50th and 60th arrangements that match the gravitas of the occasion. The work for weddings across the Wasatch Front includes organic half-arches, floral-accent installations, and ceremony backdrops at indoor and outdoor venues.</p>
+            <p>Delivery, setup, and teardown are included in private event quotes so the host can spend the morning getting ready, not managing vendors.</p>
+        </div>
+    </div>
+</section>
+
+{# --- 5. Testimonials (Ink, dark, fullbleed) ----------------------- #}
+<section class="lt-priv-testimonials lt-fullbleed" aria-labelledby="lt-priv-testimonials-heading">
+    <div class="lt-priv-testimonials__inner">
+        <h2 id="lt-priv-testimonials-heading" class="lt-priv-testimonials__heading">What people say</h2>
+        <div class="lt-priv-testimonials__grid">
+            {% for t in testimonials %}
+            <blockquote class="lt-priv-testimonials__card">
+                <p class="lt-priv-testimonials__quote-mark" aria-hidden="true">&ldquo;</p>
+                <p class="lt-priv-testimonials__text">{{ t.text }}</p>
+                <footer class="lt-priv-testimonials__attr">
+                    <cite>{{ t.attr }}</cite>
+                </footer>
+            </blockquote>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{# --- 6. Memorial note (Warm White) -------------------------------- #}
+<section class="lt-priv-memorial" aria-labelledby="lt-priv-memorial-heading">
+    <div class="lt-priv-memorial__inner">
+        <h2 id="lt-priv-memorial-heading" class="lt-priv-memorial__heading">Memorial and celebration-of-life events.</h2>
+        <div class="lt-priv-memorial__body">
+            <p>Balloon decor for a memorial service is handled differently than a birthday install. The color choices are meaningful rather than festive. The scale is restrained. The approach is careful. The team has done this work — a sports-themed funeral stand for one family, a tribute install for another — and brought the same attention and professionalism to those events as to any other.</p>
+            <p>If you're planning a celebration-of-life event and considering balloon decor as part of the tribute, share the context when you reach out. The conversation will be handled accordingly.</p>
+        </div>
+    </div>
+</section>
+
+{# --- 7. Icon bar (Navy, fullbleed) -------------------------------- #}
+<section class="lt-priv-icon-bar lt-fullbleed" aria-label="Why families choose Locally Twisted">
+    <div class="lt-priv-icon-bar__inner">
+        {% for icon in proof_icons %}
+        <div class="lt-priv-icon-bar__item">
+            <img
+                class="lt-priv-icon-bar__icon"
+                src="/assets/locally_twisted/icons/brand/{{ icon.svg }}.svg"
+                alt=""
+                aria-hidden="true"
+                width="48"
+                height="48"
+            />
+            <p class="lt-priv-icon-bar__label">{{ icon.label }}</p>
+            <p class="lt-priv-icon-bar__note">{{ icon.note }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{# --- 8. CTA (Ink, fullbleed) -------------------------------------- #}
+<section class="lt-priv-cta lt-fullbleed" aria-labelledby="lt-priv-cta-heading">
+    <div class="lt-priv-cta__inner">
+        <h2 id="lt-priv-cta-heading" class="lt-priv-cta__heading">Tell us what you're imagining.</h2>
+        <p class="lt-priv-cta__body">Every private celebration starts with a conversation. Share the occasion, the date, and the feel you're going for — the team takes it from there.</p>
+        <a href="/contact?intent=private" class="lt-priv-cta__btn">
+            Start a free quote
+            <span aria-hidden="true">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+</div>{# /.lt-page-priv #}
+
+{% endblock %}
