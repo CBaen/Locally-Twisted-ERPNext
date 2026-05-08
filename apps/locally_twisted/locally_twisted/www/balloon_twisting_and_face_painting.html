@@ -137,35 +137,64 @@
                 <p class="lt-btfp__calculator-kicker">PRICE CHECK</p>
                 <h3 id="btfp-calculator-heading">Estimate artist time</h3>
 
-                <fieldset class="lt-btfp__calc-fieldset">
-                    <legend>Services</legend>
-                    <div class="lt-btfp__calc-options" role="group" aria-label="Services to estimate">
-                        <label class="lt-btfp__calc-option" for="btfp_calc_service_twisting">
-                            <input type="radio" id="btfp_calc_service_twisting" name="btfp_calc_artists" value="1">
-                            <span>Twisting</span>
-                        </label>
-                        <label class="lt-btfp__calc-option" for="btfp_calc_service_painting">
-                            <input type="radio" id="btfp_calc_service_painting" name="btfp_calc_artists" value="1">
-                            <span>Face Painting</span>
-                        </label>
-                        <label class="lt-btfp__calc-option" for="btfp_calc_service_both">
-                            <input type="radio" id="btfp_calc_service_both" name="btfp_calc_artists" value="2" checked>
-                            <span>Both</span>
-                        </label>
+                <div class="lt-btfp__calc-roster" data-btfp-calc-roster aria-label="Artists to estimate">
+                    <div class="lt-btfp__calc-row" data-btfp-calc-row>
+                        <div class="lt-btfp__calc-row-head">
+                            <strong data-btfp-calc-row-label>Artist 1</strong>
+                            <button class="lt-btfp__calc-remove" type="button" data-btfp-calc-remove>Remove</button>
+                        </div>
+                        <div class="lt-btfp__calc-row-fields">
+                            <label class="lt-btfp__calc-control-label">
+                                Service
+                                <select class="lt-btfp__calc-input" data-btfp-calc-service>
+                                    <option value="Balloon Twisting" selected>Balloon Twisting</option>
+                                    <option value="Face Painting">Face Painting</option>
+                                </select>
+                            </label>
+                            <label class="lt-btfp__calc-control-label">
+                                Hours
+                                <input
+                                    class="lt-btfp__calc-input"
+                                    type="number"
+                                    min="1"
+                                    step="0.5"
+                                    value="1"
+                                    inputmode="decimal"
+                                    data-btfp-calc-hours
+                                >
+                            </label>
+                        </div>
                     </div>
-                </fieldset>
-
-                <label class="lt-btfp__calc-label" for="btfp_calc_hours">Hours per artist</label>
-                <input
-                    class="lt-btfp__calc-input"
-                    type="number"
-                    id="btfp_calc_hours"
-                    min="1"
-                    step="0.5"
-                    value="1"
-                    inputmode="decimal"
-                >
-                <p class="lt-btfp__calc-help">Half-hours start after the first hour and use the same additional-hour rate.</p>
+                    <div class="lt-btfp__calc-row" data-btfp-calc-row>
+                        <div class="lt-btfp__calc-row-head">
+                            <strong data-btfp-calc-row-label>Artist 2</strong>
+                            <button class="lt-btfp__calc-remove" type="button" data-btfp-calc-remove>Remove</button>
+                        </div>
+                        <div class="lt-btfp__calc-row-fields">
+                            <label class="lt-btfp__calc-control-label">
+                                Service
+                                <select class="lt-btfp__calc-input" data-btfp-calc-service>
+                                    <option value="Balloon Twisting">Balloon Twisting</option>
+                                    <option value="Face Painting" selected>Face Painting</option>
+                                </select>
+                            </label>
+                            <label class="lt-btfp__calc-control-label">
+                                Hours
+                                <input
+                                    class="lt-btfp__calc-input"
+                                    type="number"
+                                    min="1"
+                                    step="0.5"
+                                    value="1"
+                                    inputmode="decimal"
+                                    data-btfp-calc-hours
+                                >
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <button class="lt-btfp__calc-add" type="button" data-btfp-calc-add>Add another artist</button>
+                <p class="lt-btfp__calc-help">Use one row per artist. Each artist has their own first hour; half-hours start after that artist's first hour.</p>
 
                 <dl class="lt-btfp__calc-results" aria-live="polite">
                     <div class="lt-btfp__calc-total-row">
@@ -248,8 +277,8 @@
     var firstHour = Number(root.dataset.firstHour || 130);
     var additionalHour = Number(root.dataset.additionalHour || 115);
     var depositEach = Number(root.dataset.deposit || 50);
-    var hoursInput = root.querySelector("#btfp_calc_hours");
-    var artistInputs = root.querySelectorAll('input[name="btfp_calc_artists"]');
+    var roster = root.querySelector("[data-btfp-calc-roster]");
+    var addButton = root.querySelector("[data-btfp-calc-add]");
     var totalEl = root.querySelector("[data-btfp-calc-total]");
     var depositEl = root.querySelector("[data-btfp-calc-deposit]");
     var balanceEl = root.querySelector("[data-btfp-calc-balance]");
@@ -260,48 +289,121 @@
         return rounded % 1 === 0 ? "$" + rounded.toFixed(0) : "$" + rounded.toFixed(2);
     }
 
-    function selectedArtists() {
-        var selected = root.querySelector('input[name="btfp_calc_artists"]:checked');
-        return Math.max(1, Number(selected ? selected.value : 1));
+    function hoursText(hours) {
+        var rounded = Math.round(hours * 10) / 10;
+        return rounded.toString() + " " + (rounded === 1 ? "hour" : "hours");
     }
 
-    function selectedHours() {
-        var raw = Number(hoursInput.value);
+    function rows() {
+        return Array.prototype.slice.call(root.querySelectorAll("[data-btfp-calc-row]"));
+    }
+
+    function selectedHours(input) {
+        var raw = Number(input.value);
         if (!Number.isFinite(raw)) raw = 1;
         return Math.max(1, Math.round(raw * 2) / 2);
     }
 
+    function artistCost(hours) {
+        return firstHour + Math.max(0, hours - 1) * additionalHour;
+    }
+
+    function buildRow(service) {
+        var row = document.createElement("div");
+        row.className = "lt-btfp__calc-row";
+        row.setAttribute("data-btfp-calc-row", "");
+        row.innerHTML = [
+            '<div class="lt-btfp__calc-row-head">',
+            '    <strong data-btfp-calc-row-label>Artist</strong>',
+            '    <button class="lt-btfp__calc-remove" type="button" data-btfp-calc-remove>Remove</button>',
+            '</div>',
+            '<div class="lt-btfp__calc-row-fields">',
+            '    <label class="lt-btfp__calc-control-label">Service',
+            '        <select class="lt-btfp__calc-input" data-btfp-calc-service>',
+            '            <option value="Balloon Twisting">Balloon Twisting</option>',
+            '            <option value="Face Painting">Face Painting</option>',
+            '        </select>',
+            '    </label>',
+            '    <label class="lt-btfp__calc-control-label">Hours',
+            '        <input class="lt-btfp__calc-input" type="number" min="1" step="0.5" value="1" inputmode="decimal" data-btfp-calc-hours>',
+            '    </label>',
+            '</div>'
+        ].join("");
+        row.querySelector("[data-btfp-calc-service]").value = service || "Balloon Twisting";
+        return row;
+    }
+
+    function reindexRows(currentRows) {
+        currentRows.forEach(function (row, index) {
+            var label = row.querySelector("[data-btfp-calc-row-label]");
+            var remove = row.querySelector("[data-btfp-calc-remove]");
+            if (label) label.textContent = "Artist " + (index + 1);
+            if (remove) remove.hidden = currentRows.length <= 1;
+        });
+    }
+
     function render() {
-        var hours = selectedHours();
-        var artists = selectedArtists();
-        if (String(hoursInput.value) !== String(hours)) {
-            hoursInput.value = String(hours);
+        var currentRows = rows();
+        if (currentRows.length === 0) {
+            roster.appendChild(buildRow("Balloon Twisting"));
+            currentRows = rows();
         }
+        reindexRows(currentRows);
 
-        var additionalHours = Math.max(0, hours - 1);
-        var perArtist = firstHour + additionalHours * additionalHour;
-        var total = artists * perArtist;
-        var deposit = artists * depositEach;
+        var total = 0;
+        var deposit = 0;
+        var formulaParts = [];
+
+        currentRows.forEach(function (row) {
+            var serviceInput = row.querySelector("[data-btfp-calc-service]");
+            var hoursInput = row.querySelector("[data-btfp-calc-hours]");
+            var service = serviceInput ? serviceInput.value : "Artist";
+            var hours = selectedHours(hoursInput);
+            var cost = artistCost(hours);
+            if (hoursInput && String(hoursInput.value) !== String(hours)) {
+                hoursInput.value = String(hours);
+            }
+            total += cost;
+            deposit += depositEach;
+            formulaParts.push(service + " " + hoursText(hours) + " = " + money(cost));
+        });
+
         var balance = Math.max(0, total - deposit);
-        var artistLabel = artists === 1 ? "artist" : "artists";
-        var formula = artists + " " + artistLabel + " x (" + money(firstHour) + " first hour";
-
-        if (additionalHours > 0) {
-            formula += " + " + money(additionalHours * additionalHour) + " additional time";
-        }
-        formula += "). No discounts.";
 
         totalEl.textContent = money(total);
         depositEl.textContent = money(deposit);
         balanceEl.textContent = money(balance);
-        formulaEl.textContent = formula;
+        formulaEl.textContent = formulaParts.join("; ") + ". No discounts.";
     }
 
-    hoursInput.addEventListener("input", render);
-    hoursInput.addEventListener("change", render);
-    artistInputs.forEach(function (input) {
-        input.addEventListener("change", render);
+    root.addEventListener("input", function (event) {
+        if (event.target.matches("[data-btfp-calc-hours]")) {
+            render();
+        }
     });
+    root.addEventListener("change", function (event) {
+        if (event.target.matches("[data-btfp-calc-service], [data-btfp-calc-hours]")) {
+            render();
+        }
+    });
+    root.addEventListener("click", function (event) {
+        var remove = event.target.closest("[data-btfp-calc-remove]");
+        if (!remove) return;
+        var currentRows = rows();
+        if (currentRows.length <= 1) return;
+        remove.closest("[data-btfp-calc-row]").remove();
+        render();
+    });
+    if (addButton) {
+        addButton.addEventListener("click", function () {
+            var currentRows = rows();
+            var nextService = currentRows.length % 2 === 0 ? "Balloon Twisting" : "Face Painting";
+            var row = buildRow(nextService);
+            roster.appendChild(row);
+            render();
+            row.querySelector("[data-btfp-calc-service]").focus();
+        });
+    }
     render();
 })();
 </script>

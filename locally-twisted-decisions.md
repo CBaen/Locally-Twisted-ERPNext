@@ -233,7 +233,9 @@ artist-time calculator as pricing transparency, not as checkout. The calculator
 uses the page's published equation: $130 first hour per artist, $115 each
 additional hour per artist, half-hour increments only at or above one hour, and
 $50 deposit per artist. It shows no discounts and does not create a public
-deposit purchase path.
+deposit purchase path. The calculator must model each artist as a separate row
+with its own service and hours; do not collapse mixed services into one shared
+hour count or one aggregate artist count.
 
 **Reasoning:** GL rejected the returned Process content and then flagged the
 embedded form as visually unacceptable. The problem was not a BTFP-only form;

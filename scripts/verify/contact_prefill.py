@@ -160,38 +160,59 @@ def main() -> int:
                 print("  FAIL - BTFP page should include the customer pricing calculator")
                 failures += 1
             else:
-                page.locator("#btfp_calc_hours").fill("1.5")
-                page.locator("#btfp_calc_service_both").check()
-                calc_state = page.evaluate(
-                    """() => ({
-                        total: document.querySelector('[data-btfp-calc-total]')?.textContent?.trim(),
-                        deposit: document.querySelector('[data-btfp-calc-deposit]')?.textContent?.trim(),
-                        balance: document.querySelector('[data-btfp-calc-balance]')?.textContent?.trim(),
-                        formula: document.querySelector('[data-btfp-calc-formula]')?.textContent?.trim(),
-                    })"""
-                )
-                if calc_state.get("total") != "$375":
-                    print(f"  FAIL - 1.5 hours for both services should total $375, found {calc_state!r}")
+                rows = page.locator("[data-btfp-calc-row]")
+                if rows.count() < 2:
+                    print("  FAIL - BTFP calculator should expose separate artist rows")
                     failures += 1
-                if calc_state.get("deposit") != "$100":
-                    print(f"  FAIL - both services should show $100 deposit, found {calc_state!r}")
-                    failures += 1
-                if calc_state.get("balance") != "$275":
-                    print(f"  FAIL - both services at 1.5 hours should show $275 balance, found {calc_state!r}")
-                    failures += 1
-                if "No discounts" not in (calc_state.get("formula") or ""):
-                    print(f"  FAIL - calculator formula should state no discounts, found {calc_state!r}")
-                    failures += 1
-                page.locator("#btfp_calc_hours").fill("0.5")
-                min_state = page.evaluate(
-                    """() => ({
-                        hours: document.querySelector('#btfp_calc_hours')?.value,
-                        total: document.querySelector('[data-btfp-calc-total]')?.textContent?.trim(),
-                    })"""
-                )
-                if min_state.get("hours") != "1" or min_state.get("total") != "$260":
-                    print(f"  FAIL - BTFP calculator should not allow less than 1 hour, found {min_state!r}")
-                    failures += 1
+                else:
+                    rows.nth(0).locator("[data-btfp-calc-service]").select_option("Balloon Twisting")
+                    rows.nth(0).locator("[data-btfp-calc-hours]").fill("1.5")
+                    rows.nth(1).locator("[data-btfp-calc-service]").select_option("Face Painting")
+                    rows.nth(1).locator("[data-btfp-calc-hours]").fill("2.5")
+                    calc_state = page.evaluate(
+                        """() => ([
+                            document.querySelectorAll('[data-btfp-calc-row]').length,
+                            document.querySelector('[data-btfp-calc-total]')?.textContent?.trim(),
+                            document.querySelector('[data-btfp-calc-deposit]')?.textContent?.trim(),
+                            document.querySelector('[data-btfp-calc-balance]')?.textContent?.trim(),
+                            document.querySelector('[data-btfp-calc-formula]')?.textContent?.trim(),
+                        ])"""
+                    )
+                    row_count, total, deposit, balance, formula = calc_state
+                    if row_count < 2 or total != "$490" or deposit != "$100" or balance != "$390":
+                        print(f"  FAIL - mixed artist durations should total $490/$100/$390, found {calc_state!r}")
+                        failures += 1
+                    if "Balloon Twisting 1.5 hours" not in (formula or "") or "Face Painting 2.5 hours" not in (formula or ""):
+                        print(f"  FAIL - calculator formula should list each artist duration, found {formula!r}")
+                        failures += 1
+                    if "No discounts" not in (formula or ""):
+                        print(f"  FAIL - calculator formula should state no discounts, found {formula!r}")
+                        failures += 1
+                    page.locator("[data-btfp-calc-add]").click()
+                    rows = page.locator("[data-btfp-calc-row]")
+                    rows.nth(2).locator("[data-btfp-calc-service]").select_option("Face Painting")
+                    rows.nth(2).locator("[data-btfp-calc-hours]").fill("1")
+                    add_state = page.evaluate(
+                        """() => ({
+                            rows: document.querySelectorAll('[data-btfp-calc-row]').length,
+                            total: document.querySelector('[data-btfp-calc-total]')?.textContent?.trim(),
+                            deposit: document.querySelector('[data-btfp-calc-deposit]')?.textContent?.trim(),
+                            balance: document.querySelector('[data-btfp-calc-balance]')?.textContent?.trim(),
+                        })"""
+                    )
+                    if add_state.get("rows") != 3 or add_state.get("total") != "$620" or add_state.get("deposit") != "$150" or add_state.get("balance") != "$470":
+                        print(f"  FAIL - adding a third artist should update totals, found {add_state!r}")
+                        failures += 1
+                    rows.nth(0).locator("[data-btfp-calc-hours]").fill("0.5")
+                    calc_state = page.evaluate(
+                        """() => ({
+                            hours: document.querySelector('[data-btfp-calc-row] [data-btfp-calc-hours]')?.value,
+                            total: document.querySelector('[data-btfp-calc-total]')?.textContent?.trim(),
+                        })"""
+                    )
+                    if calc_state.get("hours") != "1" or calc_state.get("total") != "$562.50":
+                        print(f"  FAIL - BTFP calculator should not allow less than 1 hour per artist, found {calc_state!r}")
+                        failures += 1
 
             if page.locator('.lt-book[data-form-contract="inquiry-v1"] #lt-book-form[data-form-contract="inquiry-v1"]').count() != 1:
                 print("  FAIL - shared inquiry form should declare the form design contract")
