@@ -154,8 +154,12 @@ Source workstream: `workstreams/fail-loud-record-level-hardening.md`.
 ```powershell
 python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --shape-only --skip-newsletter
 python scripts/verify/lead_backend_intake_parity.py
+python scripts/verify/customer_email_policy_contract.py
 python scripts/verify/business_automation_index.py --report output/business-automation-index.json
 python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json
+python scripts/setup/sync_maintenance_package.py
+python scripts/verify/maintenance_heartbeat.py --heavy
+python scripts/verify/maintenance_admin_boundary.py
 npm run test:container-contract
 npm run test:public-verify
 ```

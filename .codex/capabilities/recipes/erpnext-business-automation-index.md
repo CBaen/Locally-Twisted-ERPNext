@@ -1,7 +1,7 @@
 ---
 name: ERPNext business automation index
 level: recipe
-last_verified: 2026-05-06
+last_verified: 2026-05-08
 ---
 
 ## What it does
@@ -54,8 +54,10 @@ Current connected launch spine:
 - internal paperwork review digest
 - no-live customer reminder dry-run queue
 - no-live customer reminder review report rows
+- no-live customer/operator email policy boundary contract
+- sanitized maintenance heartbeat and Maintenance Admin access boundary
 - no-live synthetic business pipeline audit
-- scheduled daily business automation checkup
+- scheduled daily business automation checkup plus hourly/daily maintenance heartbeat
 - Accountant Home parity
 
 ## Rules
@@ -72,6 +74,7 @@ surface is allowed only when the report names it as disconnected.
 4. Fake-data verifiers must clean up generated business records or explicitly mark rollback behavior.
 5. Synthetic operating readiness and live cutover readiness must stay separate. Do not require live keys, real operator details, or real customer records to flush out fake-data pipeline bugs.
 6. Amount parity and customer communication paths must fail loudly. A silent skipped email, undercharged checkout, or disconnected document generator is a business relationship risk.
+7. Maintenance/checkup surfaces must stay sanitized by default. A maintenance role can see safe summaries, action-needed text, and counts, but not raw logs, customer records, communications, files, or finance records.
 
 ## Common failure modes
 
@@ -83,3 +86,4 @@ surface is allowed only when the report names it as disconnected.
 - Running status/inventory checks while rollback-based verifiers are still creating temporary records.
 - Letting an aggregate digest, reminder dry run, reminder report, or synthetic pipeline call the full automation index recursively after the aggregate itself is indexed.
 - Leaving missing future surfaces in prose docs instead of a machine-readable verifier report.
+- Giving a maintenance/checkup role broad ERPNext access instead of a narrow sanitized report boundary.

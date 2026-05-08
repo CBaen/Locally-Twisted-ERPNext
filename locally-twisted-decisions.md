@@ -8,6 +8,72 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-08 - Maintenance checkups are sanitized, not broad admin access
+
+**Decision:** Client operations checkups can write and report sanitized
+heartbeat summaries through a narrow Maintenance Admin role. That role may read
+`LT Maintenance Run`, `LT Maintenance Health Event`, `LT Maintenance Action
+Request`, `LT Maintenance Action Log`, the `LT Maintenance Heartbeat` report,
+and the `LT Maintenance Home` workspace. It must not read raw logs, customer
+records, communications, files, or finance records.
+
+**Reasoning:** GL wants automated checkups and loud failures, but broad backend
+access would expose too much customer and financial data for routine
+maintenance. A sanitized heartbeat gives future agents and operators clear
+status, owner-setup signals, and action-needed text without turning maintenance
+into unrestricted ERPNext administration.
+
+**Implementation:** Added `locally_twisted.maintenance.heartbeat`,
+maintenance DocTypes, the `LT Maintenance Heartbeat` Script Report, the
+idempotent `sync_maintenance_package` setup, hourly/daily scheduler hooks, and
+the `maintenance_heartbeat.py` / `maintenance_admin_boundary.py` verifiers.
+The business automation index now treats the heartbeat as launch-required and
+fails if the scheduler, report, role boundary, or sanitized status contract
+breaks.
+
+**Alternatives considered:** Use Error Log and System Manager as the checkup
+surface. Rejected because that hides important status from a maintenance lane
+and exposes raw internal records. Auto-repair backend issues from the
+heartbeat. Rejected until owner approval tiers and exact repair scopes are
+defined.
+
+**Decided by:** GL directive to automate checkups, make failures loud, and
+protect customer-facing/money-making paths; implemented by Codex on 2026-05-08.
+
+---
+
+## 2026-05-08 - Customer email policy boundaries stay no-send until approved
+
+**Decision:** Inquiry acknowledgments, paid-order receipts, operator
+notifications, first-order welcomes, and paid-order email cascade behavior are
+now guarded by a static no-send source contract. The contract verifies queued
+sendmail calls, policy/customer-context copy, reference DocTypes, dynamic
+cascade coverage, and no PDF/attachment kwargs. It must not send email, create
+Email Queue rows, or mutate invoices.
+
+**Reasoning:** Receipts and customer emails are money/trust surfaces. They need
+policy and bookkeeping clarity before any live delivery changes, but live
+emails and real customer data are not needed to prove the current code paths
+are wired correctly.
+
+**Implementation:** Added
+`locally_twisted.verify.customer_email_policy_contract` and
+`scripts/verify/customer_email_policy_contract.py`, wired it into the business
+automation index and synthetic pipeline, and documented it as part of the
+paperwork/backend automation lane.
+
+**Alternatives considered:** Create ERPNext Email Template or Terms records
+now. Deferred because current policy blocks are code-owned and verified against
+the active checkout/inquiry paths. Send test customer emails through ERPNext.
+Rejected for this slice because no-send verification is enough and avoids live
+delivery risk.
+
+**Decided by:** GL directive to focus on paperwork, backend automation,
+invoicing, receipts, and fail-loud behavior without live customer data;
+implemented by Codex on 2026-05-08.
+
+---
+
 ## 2026-05-08 - Portfolio desktop depth stays image-only and below the hero
 
 **Decision:** `/portfolio` desktop photos may use a light black edge fade and

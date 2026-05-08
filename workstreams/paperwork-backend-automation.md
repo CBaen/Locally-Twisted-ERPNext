@@ -1,6 +1,6 @@
 # Paperwork And Backend Automation
 
-Last updated: 2026-05-08 by Codex after adding the customer/operator email policy boundary contract.
+Last updated: 2026-05-08 by Codex after adding the customer/operator email policy boundary contract and sanitized maintenance heartbeat.
 
 ## Outcome
 
@@ -11,6 +11,7 @@ Make Locally Twisted's paperwork path reliable enough for launch and simple enou
 - receipts, operator notifications, and welcome emails are queued once
 - invoices and payment requests are visible for review
 - customer reminders can be prepared as an internal dry-run queue and report rows without going live
+- sanitized maintenance checkups can surface system/business attention without exposing raw logs or customer records
 - Sales Invoice print output is branded and policy-aligned
 - corporate/event invoice language stays aligned with public policy pages
 - backend automation creates reviewable work, not surprise accounting entries
@@ -42,7 +43,10 @@ Fresh local verification on 2026-05-08:
 - `python scripts/verify/inquiry_upload_failure_contract.py --report output/inquiry-upload-failure-contract.json` passed and proved rejected inquiry inspiration photos produce customer-visible and Lead-level evidence.
 - `python scripts/verify/payment_success_reconciliation_contract.py --report output/payment-success-reconciliation-contract.json` passed and proved browser-return reconciliation errors show pending receipt/invoice copy on `/thank-you`.
 - `python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json` passed with 16 no-live synthetic contracts, 0 broken piping, 8 inefficiencies/partial connections, and 3 cutover-deferred items.
-- `python scripts/verify/business_automation_index.py --report output/business-automation-index.json` passed and now maps 24 surfaces indexed, 14 launch-required, 21 connected, 3 exists-but-not-connected, 0 launch-required missing, 0 useful future surfaces missing, and 0 loud-failure gaps.
+- `python scripts/verify/business_automation_index.py --report output/business-automation-index.json` passed and now maps 25 surfaces indexed, 15 launch-required, 22 connected, 3 exists-but-not-connected, 0 launch-required missing, 0 useful future surfaces missing, and 0 loud-failure gaps.
+- `python scripts/setup/sync_maintenance_package.py` passed and ensured the sanitized Maintenance Admin role, report, workspace, and read-only permission boundary.
+- `python scripts/verify/maintenance_heartbeat.py --heavy` passed with public boot, scheduler, notification preference, Maintenance Admin boundary, business automation, and paperwork digest events. Yellow owner-setup events are visible, not hidden failures.
+- `python scripts/verify/maintenance_admin_boundary.py` passed and proved the Maintenance Admin surface can read only sanitized maintenance DocTypes/report/workspace shortcuts, not raw logs, customer records, communication, files, or finance records.
 - `python scripts/verify/unpaid_invoice_review.py --report output/unpaid-invoice-review.json` passed and generated 1 overdue-review candidate for `ACC-SINV-2026-00001`. The candidate includes draft-only `payment_reminder_draft` and `statement_of_account` data, requires human review, and proves no customer send or accounting mutation happens.
 - `python scripts/verify/unpaid_invoice_draft_packet.py --report output/unpaid-invoice-draft-packet.json --markdown output/unpaid-invoice-draft-packet.md` passed and rendered that candidate into draft-only `payment_reminder_draft` and `statement_of_account` packet sections for human review, while proving no customer send or accounting mutation happens.
 - `python scripts/verify/unpaid_invoice_draft_packet_contract.py` passed and now covers fake normal/outlier packet behavior without touching ERPNext records, including PO references, multiple open invoices, missing payment requests, paid-invoice exclusion, and malformed human-approval gates.
@@ -178,10 +182,18 @@ Current live-data facts from the fresh finance inventory:
 - `workstreams/business-automation-index.md` is the cross-system map for intake, CRM, checkout, payment, paperwork, finance, and checkup surfaces.
 - `locally_twisted.verify.business_automation_index.run` classifies each surface as `exists_and_connected`, `exists_but_not_connected`, `missing_needs_connection`, or `missing_should_connect`.
 - The host wrapper is `scripts/verify/business_automation_index.py`.
-- `hooks.py` now includes a daily Frappe scheduler entry for `locally_twisted.verify.business_automation_index.scheduled_checkup`.
-- The scheduled checkup writes a Frappe Error Log if a launch-required connection breaks or a loud-failure gap appears.
+- `hooks.py` now includes a daily Frappe scheduler entry for `locally_twisted.verify.business_automation_index.scheduled_checkup`, an hourly light maintenance heartbeat, and a daily full maintenance heartbeat.
+- The scheduled checkup writes a Frappe Error Log if a launch-required connection breaks or a loud-failure gap appears. The maintenance heartbeat writes sanitized Maintenance Run/Event rows and compact Error Log evidence only.
 - Current exists-but-not-connected surfaces are vendor setup/W-9 packet generation, bank reconciliation cutover, and payroll/HRMS.
 - No currently indexed useful surface is missing; outbound document send-readiness, quote/proposal draft packets, unpaid/overdue invoice review, unpaid invoice packet rendering, paperwork digest, customer reminder dry-run queue, and the customer reminder Desk report are connected as draft-only/no-live paperwork surfaces.
+
+### Sanitized maintenance heartbeat
+
+- `locally_twisted.maintenance.heartbeat.run` returns the client operations heartbeat for system health, business digest topics, notification preferences, approval tiers, and Maintenance Admin access boundaries.
+- `scripts/setup/sync_maintenance_package.py` owns the app-backed Maintenance Admin role, `LT Maintenance Heartbeat` Script Report, `LT Maintenance Home` workspace, and DocPerm boundary.
+- `scripts/verify/maintenance_heartbeat.py` verifies public boot asset-map coverage, scheduler wiring, owner notification preference surface, Maintenance Admin boundary, and optional heavy paperwork/business digest checks.
+- `scripts/verify/maintenance_admin_boundary.py` proves Maintenance Admin cannot read raw logs, customer records, communications, files, or finance records.
+- Scheduled writes are sanitized only: `LT Maintenance Run` and `LT Maintenance Health Event` rows carry safe summaries, action-needed text, and counts, not raw tracebacks or customer data.
 
 ### Accountant and finance workspace
 
@@ -214,7 +226,8 @@ Current live-data facts from the fresh finance inventory:
 10. **Outbound document send-readiness.** Done as a reusable no-send gate. Future senders must pass it before customer delivery.
 11. **Quote/proposal draft packets.** Done as draft-only internal review output. Remaining future work is real PDF rendering, approval UX, and customer delivery only after review gates exist.
 12. **Corporate invoice packet design.** Source template exists. Remaining work is generator/rendering design for larger events without creating an ERPNext Terms record yet.
-13. **Stage threshold design.** Document which stage should create/update Quote, Sales Order, Project/job, Calendar invite, customer follow-up, invoice, or payment request. Do not implement until the threshold is explicit.
+13. **Sanitized maintenance heartbeat.** First pass done as a read-only/scheduled-safe checkup with a narrow Maintenance Admin boundary. Keep it sanitized; do not use it to expose raw logs, customer records, or live repair buttons.
+14. **Stage threshold design.** Document which stage should create/update Quote, Sales Order, Project/job, Calendar invite, customer follow-up, invoice, or payment request. Do not implement until the threshold is explicit.
 
 ## Do Not Do
 
@@ -261,6 +274,9 @@ python scripts/verify/outbound_documents_contract.py
 python scripts/verify/outbound_document_send_readiness_contract.py
 python scripts/verify/quote_proposal_draft_packet.py --report output/quote-proposal-draft-packet.json
 python scripts/verify/quote_proposal_draft_packet_contract.py
+python scripts/setup/sync_maintenance_package.py
+python scripts/verify/maintenance_heartbeat.py --heavy
+python scripts/verify/maintenance_admin_boundary.py
 python scripts/verify/render_outbound_document_previews.py --slug outbound-documents-20260506
 ```
 
