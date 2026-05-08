@@ -70,8 +70,8 @@ CORPORATE_PROCESS = [
     },
     {
         "step": "03",
-        "title": "Installed, documented, struck",
-        "body": "On-time delivery, professional install, clean teardown. Photography documentation available on request for marketing recaps."
+        "title": "On-time, documented, struck clean",
+        "body": "We confirm arrival window before your event and hold to it. Professional install, clean teardown, photography documentation available on request for marketing recaps. If anything changes, you hear from us first — not your venue coordinator."
     },
 ]
 

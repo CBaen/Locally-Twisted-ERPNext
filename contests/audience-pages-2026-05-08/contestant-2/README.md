@@ -19,6 +19,15 @@ Each page uses a different brass accent treatment for its service/info cards:
 
 Same design system. Different posture per audience.
 
+**The posture logic (for build instances — do not apply the wrong border to a new section):**
+
+- **Left-rule** signals "here is information I trust you to receive." The card presents itself as a document or reference — lateral, deferential, civic in register. Used for an audience that processes information through official channels (coordinators, permitting offices, chamber staff).
+- **Top-rule** signals "this leads; you follow." The card presents itself as a header — authoritative, agenda-setting, appropriate for a B2B professional audience that expects vendor communications to be structured and AP-formatted.
+- **Bottom-rule** signals "this supports, it does not headline." The card is a quiet footnote — present but not demanding attention, appropriate for an audience where budget sensitivity means the vendor shouldn't perform more authority than the buyer has.
+- **Full-border** signals "this is for you, personally." The card encloses — envelope-like, all-around — appropriate for an audience making personal, emotionally-weighted decisions where the decor matters because the moment matters.
+
+A build instance adding a new card section to one of these pages MUST use the border direction assigned to that page's audience. Mixing border directions across sections on the same page breaks the posture signal without the buyer consciously noticing — but they will feel it.
+
 ### 2. Honest proof posture
 - Civic and corporate: large named-client tables showing industry breadth
 - Schools: short roster presented as a feature ("deep relationships, not a long shallow list")

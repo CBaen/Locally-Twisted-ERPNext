@@ -77,7 +77,7 @@ PRIVATE_EVENT_MOMENTS = [
     },
     {
         "type": "Milestones & Memorials",
-        "desc": "Retirements, anniversary years, and celebrations of life. Balloon decor can carry weight when it needs to — tasteful, considered, and built around what matters to the people in that room.",
+        "desc": "Retirements, anniversary years, and celebrations of life. When families are doing something impossibly hard, having one thing feel right matters more than it usually does. Balloon decor can carry that weight — tasteful, considered, and built around what mattered to the person in that room.",
         "desc_extended": "If you're planning a celebration of life, you're in the right place. Jeff and the team have done this work. A customer who lost her husband asked for a sports-themed memorial stand — and later wrote: \"Very tasteful and meaningful. He would have loved it.\" That is the standard for every install.",
         "photos": [
             {

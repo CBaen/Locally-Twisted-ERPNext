@@ -36,11 +36,12 @@ CIVIC_CLIENTS = {
 CIVIC_PROOF_STORIES = [
     {
         "client": "SLC Pride",
-        "headline": "Parade-scale arches along the route",
+        "headline": "The arches the press photographs",
         "body": (
-            "Full balloon arches sized for public parade clearance — "
-            "designed to read at distance and photograph well from the street. "
-            "Coordinated with Pride Center and Equality Utah on multi-year installs."
+            "When SLC Pride is on the news that night, these are the arches in the frame. "
+            "Balloon structures sized for public parade clearance, built to read at distance, "
+            "and coordinated with Pride Center and Equality Utah across multiple years. "
+            "The work that has to look right when a city puts it on a banner."
         ),
         "image": "/assets/locally_twisted/images/portfolio/optimized/seasonal-pride-columns.webp",
         "image_alt": "Rainbow balloon columns installed for a civic Pride event",

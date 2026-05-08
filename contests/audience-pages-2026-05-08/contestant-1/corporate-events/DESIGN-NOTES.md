@@ -87,3 +87,29 @@ capability statement — controlled, credentialed, and specific.
 Color alternation: hero (dark image) → crawl (ink) → story (warm white) →
 gallery (slate) → buyer notes (white) → services (near-white) → CTA (ink).
 The two dark bands (crawl and CTA) are separated by four lighter sections.
+
+## Loop 2-2: Known gap — brand color visual proof
+
+The crawl proves volume (30 names in motion = scale). What it does not prove is
+brand color precision. A marketing director at Zions Bank sees her employer's
+name scroll past — that lands. Her unstated follow-up question: "can they match
+our exact corporate blue?"
+
+The gap: no section currently shows the color work. The buyer notes claim color
+matching is available; they don't show it.
+
+The next evolution of this page is a section — after the crawl or inside the
+buyer notes — that shows three or four real brand color swatches paired with
+named clients. Something like: KSL's navy, Zions' corporate blue, Chick-Fil-A's
+red, America First's palette. Not described. Shown as actual color blocks.
+
+**Why not built in Round 2:** the proxy identified this as a future direction,
+not a Round 2 requirement. The page is competitive now on operational voice
+("invoice-ready," "AP-friendly," "brand-safe" — copy that sounds like someone
+who has been in a vendor meeting before). The swatch section would move from
+credible to visually proven.
+
+**Hold the word choices.** The operational register in buyer notes and services
+copy is the page's signature. Do not simplify or genericize "AP-friendly,"
+"invoice-ready," or "brand-safe" in future edits — these are the thing a color
+swatch section alone cannot provide.

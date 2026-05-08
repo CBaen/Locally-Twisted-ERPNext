@@ -78,7 +78,7 @@ On-time setup and strike coordinated with your venue team. No surprises on event
 
 **H2:** Built for the corporate calendar.
 
-**Body P1:** Corporate events live or die by precision: the arch goes up before the doors open, the colors match the brand kit, and the invoice is clean enough for AP. Locally Twisted has run this process for franchise grand openings, broadcaster activations, financial institution community days, and internal company celebrations across Utah.
+**Body P1:** Corporate events have three requirements: the arch is up before the doors open, the colors match the brand kit, and the invoice is clean for AP. Locally Twisted has run this process for franchise grand openings, broadcaster activations, financial institution community days, and internal company celebrations across Utah.
 
 **Body P2:** Latex-free options are available for healthcare and allergy-sensitive environments. Most corporate installs are quoted within two business days.
 

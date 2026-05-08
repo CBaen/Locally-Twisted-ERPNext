@@ -79,27 +79,27 @@ PROOF_ICONS = [
 SCHOOL_OCCASIONS = [
     {
         "title": "Graduation & Commencement",
-        "body": "Stage garlands, entrance arches, and photo backdrops for indoor and outdoor graduation ceremonies. Color-matched to school palette. Setup before guests arrive.",
+        "body": "Setup begins after the venue opens for ceremony prep — usually early morning, before families arrive. Garlands, entrance arches, and stage backdrops are positioned and cleared before the venue resets for the next event that day. The color-matching conversation happens at quote time so there are no surprises when materials arrive.",
     },
     {
         "title": "Back-to-School & Welcome Week",
-        "body": "Stage displays, hallway arches, and spirit columns for back-to-school assemblies, orientation days, and first-week campus energy.",
+        "body": "The install window is typically 7am or earlier — students arrive, the energy needs to already be there. Stage displays, hallway arches, and spirit columns go up and are cleared before the school day starts. The team knows the window isn't negotiable.",
     },
     {
         "title": "Homecoming & Spirit Events",
-        "body": "Homecoming arches, pep rally backdrops, and team-color installs for athletic events and spirit week. Outdoor and gym-appropriate options.",
+        "body": "Between the lunch bell and the pep rally, there isn't much time. Homecoming arches and team-color backdrops are sized and staged ahead of the event window so setup doesn't depend on having a spare hour. Outdoor and gym configurations both available.",
     },
     {
         "title": "Prom & Formal Events",
-        "body": "Elegant entrances, photo backdrops, and ceiling decor for prom, semi-formal, and end-of-year events. School color palettes or custom student-selected colors.",
+        "body": "Prom decor is one of the few events where students have strong opinions about the palette — and those opinions matter. Color selections go through student leadership or event committee sign-off before materials are sourced, so the install reflects what was actually approved, not a best guess.",
     },
     {
         "title": "PTA & Campus Community Events",
-        "body": "Family fun fairs, community fundraisers, teacher appreciation events, and school carnivals. Family-friendly scale and kid-tested durability.",
+        "body": "Family fun fairs and school carnivals have kids in the crowd from the first minute. The installs are built for that: anchored, kid-tested for durability, and family-appropriate scale. The same setup timeline discipline applies — the fair is ready when families arrive.",
     },
     {
         "title": "Athletic & Campus Milestones",
-        "body": "Championship banners, signing-day celebrations, athletic department installs, and campus milestone recognition events.",
+        "body": "Signing-day setups, championship recognitions, and athletic department announcements often come together quickly. The team is used to shorter lead times on milestone moments — share the date and the school colors and the quote turnaround matches the timeline.",
     },
 ]
 

@@ -30,6 +30,9 @@ Three images selected for civic/outdoor range:
 
 All three represent different civic moments without repeating each other.
 
+### Public-Event Ready named-promise section
+The eyebrow "Your event. Our accountability." and H2 "Three things your city needs from a vendor. All three, every time." are named promises addressed directly to the coordinator — not capability labels about LT. The three columns (weather-anchored, one-vendor full service, invoice-ready documentation) are commitments the coordinator can hold LT to. **This section is architecture, not copy. Do not paraphrase or soften these commitments.** Changing the language removes the mechanism.
+
 ### Case study block
 Named the Pride organizations specifically (SLC Pride, Pride Center, Equality Utah, LGBT Chamber)
 because that's a buyer-verifiable claim. "Multiple years running" is conservative (doesn't invent
