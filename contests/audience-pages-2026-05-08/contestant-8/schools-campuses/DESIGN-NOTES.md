@@ -40,6 +40,8 @@ Named Weber State specifically (purple and white) and UofU (implied by the roste
 says "not a generic purple — Weber State purple" which is the specific promise that differentiates
 LT from a generic vendor. Two paragraphs of quiet, confident copy.
 
+**This section is architecture, not copy. Do not paraphrase or soften "Not close enough. Exactly right." or the Weber State specificity.** The activity director reading this page is measuring LT against that commitment on every job. Softening the language breaks the mechanism invisibly.
+
 Stone background — same as civic/corporate case study block for visual rhythm, without competing
 with their stone sections (each page is viewed independently).
 

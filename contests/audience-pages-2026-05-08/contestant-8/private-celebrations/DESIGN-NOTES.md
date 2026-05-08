@@ -56,6 +56,8 @@ The mix shows range (two wedding types, birthday, foil/milestone) without forcin
 White background (the most neutral, quiet surface). Left brass rule on the review callout
 instead of a card border — quieter, more editorial, appropriate for the gravity of the subject.
 
+**This section is architecture, not copy. Do not soften, abbreviate, or reposition it.** The memorial section's placement immediately after the hero (Section 2, before categories) is a deliberate structural claim on the grief buyer before any birthday or wedding content appears. Moving it or softening "Jeff and the team have helped families do this work. They take it seriously." removes the mechanism. The KJSCOTT review is the only verified social proof for this context — do not replace it with a generic placeholder.
+
 The opening paragraph uses the sentence "Jeff and the team have helped families do this work.
 They take it seriously." — one of the few places where Jeff is named. It makes sense here because
 the memorial buyer wants to feel like they're dealing with a person, not a company.

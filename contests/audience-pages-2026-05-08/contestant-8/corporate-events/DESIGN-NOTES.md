@@ -10,6 +10,8 @@ will make their job harder or easier. They are NOT thinking "fun party."
 language a marketing director actually thinks in when evaluating vendors. Putting it in the hero
 makes LT sound like it understands the buyer immediately.
 
+**This tagline is architecture, not copy. Do not paraphrase or soften it.** A marketing director reads "Brand-safe. Repeatable. On your colors." as three specific commitments she can hold LT to. Changing any word changes what LT is promising.
+
 The case study section names industries rather than dwelling on a single client — broadcasters,
 national restaurant groups, financial institutions — so the buyer self-identifies their peer group
 in the proof.

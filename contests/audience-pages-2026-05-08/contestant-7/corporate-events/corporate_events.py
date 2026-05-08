@@ -67,7 +67,7 @@ CORPORATE_SECTORS = [
     {
         "sector": "Healthcare",
         "clients": ["IHC", "Mountain Star Medical"],
-        "note": "Community health events, staff celebrations, and facility grand openings.",
+        "note": "Community health events, staff celebrations, and facility grand openings. Latex-free options available for healthcare and allergy-sensitive environments.",
     },
 ]
 
