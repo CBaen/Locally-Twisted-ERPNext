@@ -92,6 +92,7 @@
 	{% block base_scripts %}
 	<script>
 		frappe.boot = {{ boot | json }}
+		frappe.boot.assets_json = frappe.boot.assets_json || {{ lt_assets_json | default({}, true) | json }};
 		frappe.sys_defaults = frappe.boot.sysdefaults;
 	</script>
 	{{ include_script('frappe-web.bundle.js') }}

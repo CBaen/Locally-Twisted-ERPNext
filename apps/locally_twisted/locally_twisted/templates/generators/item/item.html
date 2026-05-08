@@ -2,8 +2,10 @@
 
 {% block title %} {{ title }} {% endblock %}
 
-{% block breadcrumbs %}
-<div class="product-container item-breadcrumbs small text-muted lt-product-breadcrumbs" aria-label="{{ _('Breadcrumb') }}">
+{% block breadcrumbs %}{% endblock %}
+
+{% block page_content %}
+<nav class="product-container item-breadcrumbs small lt-product-breadcrumbs" aria-label="{{ _('Breadcrumb') }}">
 	<a href="/shop">{{ _("All Balloon Decor") }}</a>
 	{% for parent in parents or [] %}
 		{% if parent.name not in ("Home", "Shop by Category", "All Products", "Shop Items") %}
@@ -16,10 +18,7 @@
 	{% endfor %}
 	<span aria-hidden="true">&rsaquo;</span>
 	<span aria-current="page">{{ title }}</span>
-</div>
-{% endblock %}
-
-{% block page_content %}
+</nav>
 <div class="product-container item-main lt-product-page__main">
 	{% from "webshop/templates/includes/macros.html" import product_image %}
 	<div class="item-content lt-product-page__content">
@@ -36,6 +35,11 @@
 
 {% block base_scripts %}
 <!-- js should be loaded in body! -->
+<script>
+	frappe.boot = {{ boot | json }}
+	frappe.boot.assets_json = frappe.boot.assets_json || {{ lt_assets_json | default({}, true) | json }};
+	frappe.sys_defaults = frappe.boot.sysdefaults;
+</script>
 <script type="text/javascript" src="/assets/frappe/js/lib/jquery/jquery.min.js"></script>
 {{ include_script("frappe-web.bundle.js") }}
 {{ include_script("controls.bundle.js") }}
