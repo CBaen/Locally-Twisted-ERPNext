@@ -1,6 +1,6 @@
 # Business Automation Index
 
-Last updated: 2026-05-08 by Codex after adding the customer/operator email policy boundary contract to the automation index.
+Last updated: 2026-05-08 by Codex after adding the sanitized client operations heartbeat and Maintenance Admin boundary to the automation index.
 
 ## Outcome
 
@@ -38,9 +38,9 @@ python scripts/verify/business_automation_index.py --report output/business-auto
 Current result on 2026-05-08:
 
 - `ok: true`
-- 24 total surfaces indexed
-- 14 launch-required surfaces
-- 21 surfaces exist and are connected
+- 25 total surfaces indexed
+- 15 launch-required surfaces
+- 22 surfaces exist and are connected
 - 3 surfaces exist but are not connected
 - 0 launch-required missing surfaces
 - 0 useful future surfaces missing
@@ -65,6 +65,7 @@ Fresh closeout verification also confirmed:
 - `customer_reminder_review_report.py` turns the dry-run queue into 1 internal review report row grouped under `review_now`, with no customer delivery enabled.
 - `customer_reminder_review_report_contract.py` verifies report rows/groups with fake mixed/empty/malformed-send source scenarios.
 - `customer_email_policy_contract.py` verifies inquiry acknowledgment, paid receipt, operator notification, first-order welcome, and paid-order email cascade policy/no-PDF boundaries without sending email or mutating records.
+- `maintenance_heartbeat.py` verifies the sanitized client operations heartbeat, owner-selected notification topics/cadence surface, approval tiers, and Maintenance Admin raw-log/customer-data boundary.
 - `synthetic_business_pipeline.py` runs 16 no-live synthetic contracts with 0 broken piping and keeps 3 live cutover items deferred.
 
 ## Connected Launch Spine
@@ -89,8 +90,9 @@ These are currently classified as existing and connected:
 - no-live customer reminder dry-run queue
 - no-live customer reminder Desk Script Report
 - no-live customer/operator email policy boundary contract
+- sanitized client operations heartbeat and Maintenance Admin access boundary
 - no-live synthetic business pipeline audit
-- scheduled daily business automation checkup
+- scheduled daily business automation checkup plus hourly light/daily full maintenance heartbeat
 - Accountant Home workspace parity
 - record-level backend failure recorder
 - inquiry upload rejection/failure evidence
@@ -110,13 +112,14 @@ No currently indexed useful surface is missing. Future useful surfaces should be
 
 ## Loud Failure Contract
 
-Launch-required surfaces should fail loudly when required files, hooks, whitelisted methods, setup records, amount parity, or scheduler wiring are missing.
+Launch-required surfaces should fail loudly when required files, hooks, whitelisted methods, setup records, amount parity, maintenance boundaries, or scheduler wiring are missing.
 
 Important current guardrails:
 
 - `business_automation_index.py` exits nonzero when a launch-required surface is missing or disconnected.
-- Frappe scheduler runs `locally_twisted.verify.business_automation_index.scheduled_checkup` daily.
+- Frappe scheduler runs `locally_twisted.verify.business_automation_index.scheduled_checkup` daily, the light maintenance heartbeat hourly, and the full maintenance heartbeat daily.
 - The scheduled checkup writes a Frappe Error Log when launch-required failures, missing required connections, or loud-failure gaps appear.
+- The maintenance heartbeat writes only sanitized Maintenance Run/Event rows and compact Error Log evidence; raw logs and customer records stay outside the Maintenance Admin role.
 - `stripe_line_items_for_sales_order()` now raises `frappe.ValidationError` if Stripe line items would charge less or more than the ERPNext Sales Order grand total.
 - Live payment readiness is cutover-only. Do not use live keys, real operator details, or real customer data as blockers for synthetic pipeline work.
 
@@ -136,6 +139,7 @@ Safe fake-data verifiers are part of the operating model:
 - `customer_reminder_dry_run_contract.py` uses in-memory fake reminder queue payloads and creates no database records.
 - `customer_reminder_review_report_contract.py` uses in-memory fake reminder report payloads and creates no database records.
 - `customer_email_policy_contract.py` is a static source contract and creates no database records.
+- `maintenance_heartbeat.py` can run read-only, and scheduled writes persist sanitized heartbeat summaries only.
 
 Use fake data aggressively in local verification, but do not leave generated business records behind.
 
@@ -163,6 +167,9 @@ python scripts/verify/customer_reminder_dry_run.py --report output/customer-remi
 python scripts/verify/customer_reminder_dry_run_contract.py
 python scripts/verify/customer_reminder_review_report.py --report output/customer-reminder-review-report.json
 python scripts/verify/customer_reminder_review_report_contract.py
+python scripts/setup/sync_maintenance_package.py
+python scripts/verify/maintenance_heartbeat.py --heavy
+python scripts/verify/maintenance_admin_boundary.py
 ```
 
 Launch money path:
@@ -204,6 +211,9 @@ python scripts/verify/customer_reminder_review_report.py --report output/custome
 python scripts/verify/customer_reminder_review_report_contract.py
 python scripts/verify/finance_workspace_parity.py
 python scripts/verify/backend_workspace_parity.py
+python scripts/setup/sync_maintenance_package.py
+python scripts/verify/maintenance_heartbeat.py --heavy
+python scripts/verify/maintenance_admin_boundary.py
 ```
 
 Cutover-only check:
@@ -216,6 +226,6 @@ Run this only during cutover work. It is intentionally not part of the current s
 
 ## Next Safe Slices
 
-- Audit receipt/operator/welcome/inquiry acknowledgment email bodies while keeping the slice verifier-only and no-send.
+- Keep no-send paperwork/reporting and sanitized maintenance checkups green while reviewing any remaining read-only report surfaces.
 - Keep vendor/W-9 generation, bank reconciliation cutover, payroll/HRMS, and stage-to-finance automation explicitly disconnected until their approval/setup gates are real.
 - Quote/proposal packets are connected only as draft-only internal review output; do not treat them as PDF generation, customer delivery, or Quotation approval automation.

@@ -1,0 +1,48 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "autoname": "hash",
+ "creation": "2026-05-08 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": [
+  "enabled",
+  "recipient_label",
+  "topic",
+  "cadence",
+  "channel",
+  "immediate_threshold",
+  "quiet_hours",
+  "provider_billable",
+  "requires_owner_approval_for_changes",
+  "notes"
+ ],
+ "fields": [
+  {"default": "1", "fieldname": "enabled", "fieldtype": "Check", "in_list_view": 1, "label": "Enabled"},
+  {"fieldname": "recipient_label", "fieldtype": "Data", "in_list_view": 1, "label": "Recipient Label", "reqd": 1},
+  {"fieldname": "topic", "fieldtype": "Select", "in_list_view": 1, "label": "Topic", "options": "System Health\nNew Leads\nStale Leads\nAppointments\nPayments Paid\nPayments Late\nDocuments Due\nFailed Automations\nWebsite Errors\nSecurity Events", "reqd": 1},
+  {"fieldname": "cadence", "fieldtype": "Select", "in_list_view": 1, "label": "Cadence", "options": "Immediate\nHourly\nMorning and Evening\nDaily\nWeekly\nMonthly\nScheduled Summary Only", "reqd": 1},
+  {"fieldname": "channel", "fieldtype": "Select", "in_list_view": 1, "label": "Channel", "options": "Email\nSMS\nSlack\nTeams\nClient Portal\nBuilt by Cameron Retainer Queue\nAI Companion Queue", "reqd": 1},
+  {"fieldname": "immediate_threshold", "fieldtype": "Select", "label": "Immediate Threshold", "options": "Critical Only\nWarning and Critical\nAny Issue\nNever"},
+  {"fieldname": "quiet_hours", "fieldtype": "Data", "label": "Quiet Hours"},
+  {"default": "0", "fieldname": "provider_billable", "fieldtype": "Check", "label": "Provider Channel Is Billable"},
+  {"default": "1", "fieldname": "requires_owner_approval_for_changes", "fieldtype": "Check", "label": "Requires Owner Approval For Changes"},
+  {"fieldname": "notes", "fieldtype": "Small Text", "label": "Notes"}
+ ],
+ "links": [],
+ "modified": "2026-05-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Locally Twisted",
+ "name": "LT Client Notification Preference",
+ "naming_rule": "Random",
+ "owner": "Administrator",
+ "permissions": [
+  {"create": 1, "delete": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "role": "System Manager", "share": 1, "write": 1}
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "recipient_label",
+ "track_changes": 1
+}

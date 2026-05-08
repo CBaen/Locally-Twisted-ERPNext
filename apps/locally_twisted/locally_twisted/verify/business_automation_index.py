@@ -400,6 +400,29 @@ def _surfaces(
             "verifiers": ["python scripts/verify/business_automation_index.py --report output/business-automation-index.json"],
         },
         {
+            "id": "client_operations_heartbeat",
+            "lane": "checkups",
+            "summary": "Sanitized client operations heartbeat combines system health, business digest topics, notification preferences, approval tiers, and Maintenance Admin access boundaries.",
+            "required_for_launch": True,
+            "exists": lambda: _files_exist(
+                "locally_twisted/maintenance/heartbeat.py",
+                "locally_twisted/seed/sync_maintenance_package.py",
+                "locally_twisted/locally_twisted/report/lt_maintenance_heartbeat/lt_maintenance_heartbeat.py",
+            ),
+            "connected": _maintenance_heartbeat_connected,
+            "loud_failure": lambda: [],
+            "evidence": [
+                "apps/locally_twisted/locally_twisted/maintenance/heartbeat.py",
+                "apps/locally_twisted/locally_twisted/seed/sync_maintenance_package.py",
+                "apps/locally_twisted/locally_twisted/locally_twisted/report/lt_maintenance_heartbeat/lt_maintenance_heartbeat.py",
+            ],
+            "verifiers": [
+                "python scripts/setup/sync_maintenance_package.py",
+                "python scripts/verify/maintenance_heartbeat.py",
+                "python scripts/verify/maintenance_admin_boundary.py",
+            ],
+        },
+        {
             "id": "accountant_workspace",
             "lane": "finance",
             "summary": "Accountant Home workspace exposes receivables, payment requests, banking, vendors, and setup shortcuts.",
@@ -1366,8 +1389,123 @@ def _scheduled_checkups_connected() -> list[str]:
     if not scheduler_events:
         return ["No scheduler_events are connected for business checkups"]
     text = str(scheduler_events)
-    required = ("business_automation_index",)
+    required = ("business_automation_index", "maintenance.heartbeat")
     return [f"scheduler_events missing {name}" for name in required if name not in text]
+
+
+def _maintenance_heartbeat_connected() -> list[str]:
+    failures = []
+    failures.extend(
+        _callables_exist(
+            "locally_twisted.maintenance.heartbeat.run",
+            "locally_twisted.maintenance.heartbeat.boundary_report",
+            "locally_twisted.maintenance.heartbeat.scheduled_light_checkup",
+            "locally_twisted.maintenance.heartbeat.scheduled_full_checkup",
+        )
+    )
+    if failures:
+        return failures
+
+    heartbeat_run = frappe.get_attr("locally_twisted.maintenance.heartbeat.run")
+    result = heartbeat_run(include_heavy=False, write=False)
+    if result.get("digest_type") != "client_operations_heartbeat":
+        failures.append("maintenance heartbeat returned the wrong digest_type")
+    for key, expected in {
+        "read_only": True,
+        "send_allowed": False,
+        "mutation_allowed": False,
+        "customer_delivery_enabled": False,
+        "automatic_delivery_enabled": False,
+        "sanitized": True,
+        "raw_log_access": False,
+        "customer_data_included": False,
+    }.items():
+        if result.get(key) is not expected:
+            failures.append(f"maintenance heartbeat {key} expected {expected}, found {result.get(key)}")
+    if result.get("ok") is not True:
+        failures.append("maintenance heartbeat returned ok=false")
+
+    required_topics = {
+        "System Health",
+        "New Leads",
+        "Stale Leads",
+        "Appointments",
+        "Payments Paid",
+        "Payments Late",
+        "Documents Due",
+        "Failed Automations",
+        "Website Errors",
+        "Security Events",
+    }
+    missing_topics = sorted(required_topics - set(result.get("notification_topics_available") or []))
+    if missing_topics:
+        failures.append("maintenance heartbeat missing topics: " + ", ".join(missing_topics))
+
+    required_events = {
+        "public_boot_asset_map",
+        "maintenance_scheduler",
+        "client_notification_preferences",
+        "maintenance_role_boundary",
+    }
+    event_ids = {event.get("component") for event in result.get("events") or []}
+    missing_events = sorted(required_events - event_ids)
+    if missing_events:
+        failures.append("maintenance heartbeat missing events: " + ", ".join(missing_events))
+    for event in result.get("events") or []:
+        if event.get("sanitized") is not True:
+            failures.append(f"{event.get('component')} heartbeat event is not sanitized")
+        if event.get("customer_data_included") is not False:
+            failures.append(f"{event.get('component')} heartbeat event includes customer data")
+        if event.get("raw_log_access") is not False:
+            failures.append(f"{event.get('component')} heartbeat event exposes raw log access")
+
+    tier_by_number = {
+        tier.get("tier"): tier for tier in result.get("permission_tiers") or []
+    }
+    for tier in range(5):
+        if tier not in tier_by_number:
+            failures.append(f"maintenance heartbeat missing permission tier {tier}")
+    if tier_by_number.get(4, {}).get("requires_approval") is not True:
+        failures.append("tier 4 maintenance actions must require approval")
+
+    boundary = frappe.get_attr("locally_twisted.maintenance.heartbeat.boundary_report")()
+    if boundary.get("ok") is not True:
+        failures.extend(boundary.get("failures") or ["maintenance boundary returned ok=false"])
+
+    if not frappe.db.exists("Report", "LT Maintenance Heartbeat"):
+        failures.append("Missing Report LT Maintenance Heartbeat")
+    else:
+        report = frappe.get_doc("Report", "LT Maintenance Heartbeat")
+        if report.disabled:
+            failures.append("LT Maintenance Heartbeat report is disabled")
+        roles = {row.role for row in report.roles}
+        if "LT Maintenance Admin Access" not in roles:
+            failures.append("LT Maintenance Heartbeat report missing Maintenance Admin role")
+
+    if frappe.db.exists("Report", "LT Maintenance Heartbeat"):
+        desk_result = frappe.get_attr("frappe.desk.query_report.run")("LT Maintenance Heartbeat", filters={})
+        desk_columns = {
+            column.get("fieldname")
+            for column in desk_result.get("columns") or []
+            if isinstance(column, dict)
+        }
+        for fieldname in ("component", "status", "severity", "safe_summary", "action_needed", "source"):
+            if fieldname not in desk_columns:
+                failures.append(f"LT Maintenance Heartbeat Desk runner missing column {fieldname}")
+        for row in desk_result.get("result") or []:
+            for forbidden_field in ("safe_details", "digest_json", "traceback", "message"):
+                if forbidden_field in row:
+                    failures.append(f"LT Maintenance Heartbeat report exposes {forbidden_field}")
+
+    hooks = _hooks()
+    scheduler_text = str(getattr(hooks, "scheduler_events", None) or "")
+    for marker in (
+        "locally_twisted.maintenance.heartbeat.scheduled_light_checkup",
+        "locally_twisted.maintenance.heartbeat.scheduled_full_checkup",
+    ):
+        if marker not in scheduler_text:
+            failures.append(f"scheduler missing {marker.rsplit('.', 1)[-1]}")
+    return failures
 
 
 def _banking_connected() -> list[str]:
@@ -1499,6 +1637,15 @@ def _checkups() -> list[dict[str, object]]:
                 "python scripts/verify/finance_inventory.py --json",
                 "python scripts/verify/finance_inventory_contract.py",
                 "python scripts/verify/finance_workspace_parity.py",
+            ],
+        },
+        {
+            "id": "maintenance_heartbeat",
+            "commands": [
+                "python scripts/setup/sync_maintenance_package.py",
+                "python scripts/verify/frappe_public_boot_contract.py",
+                "python scripts/verify/maintenance_heartbeat.py",
+                "python scripts/verify/maintenance_admin_boundary.py",
             ],
         },
         {

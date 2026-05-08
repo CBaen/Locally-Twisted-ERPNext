@@ -1,0 +1,50 @@
+{
+ "actions": [],
+ "allow_import": 0,
+ "autoname": "hash",
+ "creation": "2026-05-08 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": [
+  "component",
+  "status",
+  "permission_tier",
+  "approval_required",
+  "explanation",
+  "proposed_action",
+  "verifier_command",
+  "approval_reference",
+  "sanitized",
+  "customer_data_included",
+  "raw_log_access"
+ ],
+ "fields": [
+  {"fieldname": "component", "fieldtype": "Data", "in_list_view": 1, "label": "Component", "reqd": 1},
+  {"default": "Draft", "fieldname": "status", "fieldtype": "Select", "in_list_view": 1, "label": "Status", "options": "Draft\nPending Owner Approval\nApproved\nRejected\nCompleted\nCancelled", "reqd": 1},
+  {"fieldname": "permission_tier", "fieldtype": "Select", "in_list_view": 1, "label": "Permission Tier", "options": "0 - Observe / report only\n1 - Draft / internal review only\n2 - Safe metadata/blocker repair\n3 - Idempotent app-owned setup repair\n4 - Live customer/money/data action", "reqd": 1},
+  {"default": "1", "fieldname": "approval_required", "fieldtype": "Check", "in_list_view": 1, "label": "Approval Required"},
+  {"fieldname": "explanation", "fieldtype": "Small Text", "label": "Explanation", "reqd": 1},
+  {"fieldname": "proposed_action", "fieldtype": "Small Text", "label": "Proposed Action", "reqd": 1},
+  {"fieldname": "verifier_command", "fieldtype": "Data", "label": "Verifier Command", "length": 500},
+  {"fieldname": "approval_reference", "fieldtype": "Data", "label": "Approval Reference"},
+  {"default": "1", "fieldname": "sanitized", "fieldtype": "Check", "label": "Sanitized", "read_only": 1},
+  {"default": "0", "fieldname": "customer_data_included", "fieldtype": "Check", "label": "Customer Data Included", "read_only": 1},
+  {"default": "0", "fieldname": "raw_log_access", "fieldtype": "Check", "label": "Raw Log Access", "read_only": 1}
+ ],
+ "links": [],
+ "modified": "2026-05-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Locally Twisted",
+ "name": "LT Maintenance Action Request",
+ "naming_rule": "Random",
+ "owner": "Administrator",
+ "permissions": [
+  {"create": 1, "delete": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "role": "System Manager", "share": 1, "write": 1}
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "component",
+ "track_changes": 1
+}

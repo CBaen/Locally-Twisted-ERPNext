@@ -306,8 +306,12 @@ jinja = {
 # ---------------
 
 scheduler_events = {
+    "hourly": [
+        "locally_twisted.maintenance.heartbeat.scheduled_light_checkup",
+    ],
     "daily": [
         "locally_twisted.verify.business_automation_index.scheduled_checkup",
+        "locally_twisted.maintenance.heartbeat.scheduled_full_checkup",
     ],
 }
 
