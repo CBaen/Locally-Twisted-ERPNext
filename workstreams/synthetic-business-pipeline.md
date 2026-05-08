@@ -88,4 +88,4 @@ Do not turn this verifier into customer sending or accounting mutation. Rollback
 
 ## Next Safe Slice
 
-Use the synthetic audit as the regression gate while adding the next no-send paperwork slice: reviewed internal UX for customer reminder report rows. Add new fake-data scenarios when a new backend pipe is connected, and keep live cutover checks separate.
+Use the synthetic audit as the regression gate while adding the next no-send paperwork slice: receipt/operator/welcome/inquiry acknowledgment email policy verification. Add new fake-data scenarios when a new backend pipe is connected, and keep live cutover checks separate.

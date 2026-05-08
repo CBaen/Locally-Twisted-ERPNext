@@ -7,6 +7,8 @@ import subprocess
 import sys
 from typing import Any
 
+from _cli import parse_noop_args
+
 
 CONTAINER = "locally-twisted-erpnext-v15-backend-1"
 SITE = "frontend"
@@ -72,6 +74,15 @@ EXPECTED_SHORTCUTS = {
 
 EXPECTED_URL_SHORTCUTS = {
     "Bank Reconciliation": "/app/bank-reconciliation-tool",
+}
+
+EXPECTED_REPORT_SHORTCUTS = {
+    "Reminder Review Report": {
+        "report_name": "LT Customer Reminder Review",
+        "ref_doctype": "Sales Invoice",
+        "report_type": "Script Report",
+        "module": "Locally Twisted",
+    },
 }
 
 EXPECTED_TEXT = {
@@ -177,6 +188,24 @@ def check_workspace() -> list[str]:
                 f"{shortcut.get('type')} {shortcut.get('url')}"
             )
 
+    for label, expected in EXPECTED_REPORT_SHORTCUTS.items():
+        shortcut = shortcuts.get(label)
+        if not shortcut:
+            failures.append(f"{ACCOUNTANT_HOME} missing shortcut {label!r}")
+            continue
+        if label not in shortcut_blocks:
+            failures.append(f"{ACCOUNTANT_HOME} content missing shortcut block {label!r}")
+        if (
+            shortcut.get("type") != "Report"
+            or shortcut.get("link_to") != expected["report_name"]
+            or shortcut.get("report_ref_doctype") != expected["ref_doctype"]
+        ):
+            failures.append(
+                f"{ACCOUNTANT_HOME} {label!r} expected Report {expected['report_name']} "
+                f"for {expected['ref_doctype']}, found {shortcut.get('type')} "
+                f"{shortcut.get('link_to')} / {shortcut.get('report_ref_doctype')}"
+            )
+
     for card_name in EXPECTED_NUMBER_CARDS:
         if card_name not in workspace_cards:
             failures.append(f"{ACCOUNTANT_HOME} missing number card child row {card_name!r}")
@@ -206,11 +235,61 @@ def check_number_cards() -> list[str]:
     return failures
 
 
+def check_reports() -> list[str]:
+    failures = []
+    for label, expected in EXPECTED_REPORT_SHORTCUTS.items():
+        report = try_get_doc("Report", expected["report_name"])
+        if not report:
+            failures.append(f"Missing Report {expected['report_name']!r} for {label!r}")
+            continue
+        for key in ("report_name", "ref_doctype", "report_type", "module"):
+            if report.get(key) != expected[key]:
+                failures.append(
+                    f"Report {expected['report_name']!r} {key} expected {expected[key]!r}, "
+                    f"found {report.get(key)!r}"
+                )
+        if report.get("disabled"):
+            failures.append(f"Report {expected['report_name']!r} is disabled")
+    return failures
+
+
+def check_report_execute() -> list[str]:
+    failures = []
+    try:
+        result = bench_execute(
+            "frappe.desk.query_report.run",
+            kwargs={"report_name": "LT Customer Reminder Review", "filters": {}},
+        )
+    except Exception as exc:
+        return [f"LT Customer Reminder Review execute failed: {exc}"]
+
+    if not isinstance(result, dict):
+        return [f"LT Customer Reminder Review execute returned {type(result).__name__}, expected report payload"]
+
+    columns = result.get("columns") or []
+    rows = result.get("result") or []
+    fieldnames = {column.get("fieldname") for column in columns if isinstance(column, dict)}
+    for fieldname in ("invoice", "customer_name", "recommended_cadence", "send_status", "blocked_customer_send_until"):
+        if fieldname not in fieldnames:
+            failures.append(f"LT Customer Reminder Review execute missing column {fieldname!r}")
+    for row in rows or []:
+        if row.get("delivery_mode") != "internal_review_only":
+            failures.append(f"{row.get('invoice')} report row is not internal-review-only")
+        if row.get("send_status") != "draft_only_not_sent":
+            failures.append(f"{row.get('invoice')} report row is not draft-only")
+        if row.get("customer_delivery_enabled") is not False:
+            failures.append(f"{row.get('invoice')} report row enables customer delivery")
+    return failures
+
+
 def main() -> int:
+    parse_noop_args(__doc__)
     failures = []
     try:
         failures.extend(check_workspace())
         failures.extend(check_number_cards())
+        failures.extend(check_reports())
+        failures.extend(check_report_execute())
     except Exception as exc:
         failures.append(str(exc))
 

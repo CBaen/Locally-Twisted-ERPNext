@@ -12,6 +12,14 @@ import frappe
 
 ACCOUNTANT_HOME = "LT Accountant Home"
 ACCOUNTANT_ROLE = "LT Accountant Access"
+CUSTOMER_REMINDER_REPORT_NAME = "LT Customer Reminder Review"
+CUSTOMER_REMINDER_REPORT_REF_DOCTYPE = "Sales Invoice"
+CUSTOMER_REMINDER_REPORT_ROLES = [
+    "LT Accountant Access",
+    "Accounts Manager",
+    "Accounts User",
+    "System Manager",
+]
 
 ACCOUNTANT_NUMBER_CARDS = {
     "Unpaid Invoices": {
@@ -74,6 +82,13 @@ ACCOUNTANT_SHORTCUTS = [
         "doc_view": "List",
         "color": "Orange",
     },
+    {
+        "label": "Reminder Review Report",
+        "type": "Report",
+        "link_to": CUSTOMER_REMINDER_REPORT_NAME,
+        "report_ref_doctype": CUSTOMER_REMINDER_REPORT_REF_DOCTYPE,
+        "color": "Orange",
+    },
     {"label": "Employees", "type": "DocType", "link_to": "Employee", "doc_view": "List", "color": "Grey"},
 ]
 
@@ -81,11 +96,13 @@ ACCOUNTANT_SHORTCUTS = [
 def execute() -> str:
     summary = {
         "ensured_number_cards": [],
+        "ensured_reports": [],
         "updated_workspace": False,
         "missing_roles": [],
     }
     for name, spec in ACCOUNTANT_NUMBER_CARDS.items():
         _ensure_number_card(name, spec, summary)
+    _ensure_customer_reminder_report(summary)
     _ensure_accountant_workspace(summary)
     frappe.clear_cache()
     frappe.db.commit()
@@ -119,6 +136,50 @@ def _ensure_number_card(name: str, spec: dict, summary: dict) -> None:
     doc = frappe.get_doc({"doctype": "Number Card", "name": name, **fields})
     doc.insert(ignore_permissions=True)
     summary["ensured_number_cards"].append(name)
+
+
+def _ensure_customer_reminder_report(summary: dict) -> None:
+    fields = {
+        "report_name": CUSTOMER_REMINDER_REPORT_NAME,
+        "ref_doctype": CUSTOMER_REMINDER_REPORT_REF_DOCTYPE,
+        "is_standard": "Yes",
+        "module": "Locally Twisted",
+        "report_type": "Script Report",
+        "disabled": 0,
+        "prepared_report": 0,
+        "add_total_row": 0,
+    }
+
+    if frappe.db.exists("Report", CUSTOMER_REMINDER_REPORT_NAME):
+        doc = frappe.get_doc("Report", CUSTOMER_REMINDER_REPORT_NAME)
+        is_new = False
+        changed = False
+    else:
+        doc = frappe.get_doc({"doctype": "Report", "name": CUSTOMER_REMINDER_REPORT_NAME})
+        is_new = True
+        changed = True
+
+    changed = _set_fields(doc, fields) or changed
+
+    roles = []
+    for role in CUSTOMER_REMINDER_REPORT_ROLES:
+        if frappe.db.exists("Role", role):
+            roles.append({"role": role})
+        elif role not in summary["missing_roles"]:
+            summary["missing_roles"].append(role)
+
+    if _child_table_rows(doc.roles, ["role"]) != roles:
+        doc.set("roles", [])
+        for row in roles:
+            doc.append("roles", row)
+        changed = True
+
+    if is_new:
+        doc.insert(ignore_permissions=True)
+        summary["ensured_reports"].append(CUSTOMER_REMINDER_REPORT_NAME)
+    elif changed:
+        doc.save(ignore_permissions=True)
+        summary["ensured_reports"].append(CUSTOMER_REMINDER_REPORT_NAME)
 
 
 def _ensure_accountant_workspace(summary: dict) -> None:
@@ -270,6 +331,7 @@ def _accountant_home_content() -> list[dict]:
             ),
             _shortcut("lt-accountant-chart-of-accounts", "Chart of Accounts", 3),
             _shortcut("lt-accountant-statement-reminders", "Statement Reminders", 3),
+            _shortcut("lt-accountant-reminder-review-report", "Reminder Review Report", 3),
         ]
     )
     return blocks

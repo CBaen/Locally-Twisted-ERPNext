@@ -1,6 +1,6 @@
 # Business Automation Index
 
-Last updated: 2026-05-08 by Codex after adding quote/proposal draft packets to the automation index.
+Last updated: 2026-05-08 by Codex after adding the internal customer reminder Desk report to the automation index.
 
 ## Outcome
 
@@ -86,7 +86,7 @@ These are currently classified as existing and connected:
 - draft-only unpaid invoice reminder/statement packet rendering
 - internal paperwork review digest
 - no-live customer reminder dry-run queue
-- no-live customer reminder review report rows
+- no-live customer reminder Desk Script Report
 - no-live synthetic business pipeline audit
 - scheduled daily business automation checkup
 - Accountant Home workspace parity
@@ -194,6 +194,7 @@ python scripts/verify/unpaid_invoice_draft_packet_contract.py
 python scripts/verify/paperwork_review_digest.py --report output/paperwork-review-digest.json
 python scripts/verify/customer_reminder_dry_run.py --report output/customer-reminder-dry-run.json
 python scripts/verify/customer_reminder_dry_run_contract.py
+python scripts/setup/sync_finance_workspace.py
 python scripts/verify/customer_reminder_review_report.py --report output/customer-reminder-review-report.json
 python scripts/verify/customer_reminder_review_report_contract.py
 python scripts/verify/finance_workspace_parity.py
@@ -210,6 +211,6 @@ Run this only during cutover work. It is intentionally not part of the current s
 
 ## Next Safe Slices
 
-- Build a reviewed internal UX around customer reminder report rows while keeping it draft-only and no-send.
+- Audit receipt/operator/welcome/inquiry acknowledgment email bodies while keeping the slice verifier-only and no-send.
 - Keep vendor/W-9 generation, bank reconciliation cutover, payroll/HRMS, and stage-to-finance automation explicitly disconnected until their approval/setup gates are real.
 - Quote/proposal packets are connected only as draft-only internal review output; do not treat them as PDF generation, customer delivery, or Quotation approval automation.

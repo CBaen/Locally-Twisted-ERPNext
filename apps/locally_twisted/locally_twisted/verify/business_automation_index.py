@@ -472,19 +472,27 @@ def _surfaces(
         {
             "id": "customer_reminder_review_report",
             "lane": "paperwork",
-            "summary": "No-live customer reminder review report exposes table rows and groups for a future Desk page or internal-only schedule.",
+            "summary": "No-live customer reminder review rows are exposed through an internal Desk Script Report without customer delivery.",
             "required_for_launch": False,
-            "exists": lambda: _files_exist("locally_twisted/paperwork/customer_reminder_review_report.py"),
+            "exists": lambda: _files_exist(
+                "locally_twisted/paperwork/customer_reminder_review_report.py",
+                "locally_twisted/locally_twisted/report/lt_customer_reminder_review/lt_customer_reminder_review.py",
+                "locally_twisted/seed/sync_finance_workspace.py",
+            ),
             "connected": _customer_reminder_review_report_connected,
             "loud_failure": lambda: [],
             "evidence": [
                 "apps/locally_twisted/locally_twisted/paperwork/customer_reminder_review_report.py",
+                "apps/locally_twisted/locally_twisted/locally_twisted/report/lt_customer_reminder_review/lt_customer_reminder_review.py",
+                "apps/locally_twisted/locally_twisted/seed/sync_finance_workspace.py",
                 "scripts/verify/customer_reminder_review_report.py",
                 "scripts/verify/customer_reminder_review_report_contract.py",
+                "scripts/verify/finance_workspace_parity.py",
             ],
             "verifiers": [
                 "python scripts/verify/customer_reminder_review_report.py --report output/customer-reminder-review-report.json",
                 "python scripts/verify/customer_reminder_review_report_contract.py",
+                "python scripts/verify/finance_workspace_parity.py",
             ],
         },
         {
@@ -1085,7 +1093,12 @@ def _customer_reminder_dry_run_connected() -> list[str]:
 
 def _customer_reminder_review_report_connected() -> list[str]:
     failures = []
-    failures.extend(_callables_exist("locally_twisted.paperwork.customer_reminder_review_report.run"))
+    failures.extend(
+        _callables_exist(
+            "locally_twisted.paperwork.customer_reminder_review_report.run",
+            "locally_twisted.locally_twisted.report.lt_customer_reminder_review.lt_customer_reminder_review.execute",
+        )
+    )
     result = frappe.get_attr("locally_twisted.paperwork.customer_reminder_review_report.run")()
     if not result.get("ok"):
         failures.extend(result.get("failures") or ["customer_reminder_review_report.run returned not ok"])
@@ -1133,6 +1146,48 @@ def _customer_reminder_review_report_connected() -> list[str]:
             failures.append(f"{row.get('invoice')} reminder report row enables customer delivery")
         if row.get("automatic_delivery_enabled") is not False:
             failures.append(f"{row.get('invoice')} reminder report row enables automatic delivery")
+
+    report_name = "LT Customer Reminder Review"
+    report_exists = bool(frappe.db.exists("Report", report_name))
+    if not report_exists:
+        failures.append(f"Missing Report {report_name}")
+    else:
+        report = frappe.get_doc("Report", report_name)
+        expected_fields = {
+            "report_name": report_name,
+            "ref_doctype": "Sales Invoice",
+            "report_type": "Script Report",
+            "module": "Locally Twisted",
+        }
+        for key, expected in expected_fields.items():
+            if getattr(report, key) != expected:
+                failures.append(f"{report_name} {key} expected {expected}, found {getattr(report, key)}")
+        if report.disabled:
+            failures.append(f"{report_name} is disabled")
+
+    if report_exists:
+        desk_result = frappe.get_attr("frappe.desk.query_report.run")(report_name, filters={})
+        desk_columns = {
+            column.get("fieldname")
+            for column in desk_result.get("columns") or []
+            if isinstance(column, dict)
+        }
+        for fieldname in (
+            "invoice",
+            "customer_name",
+            "recommended_cadence",
+            "send_status",
+            "blocked_customer_send_until",
+        ):
+            if fieldname not in desk_columns:
+                failures.append(f"{report_name} Desk runner missing column {fieldname}")
+        for row in desk_result.get("result") or []:
+            if row.get("delivery_mode") != "internal_review_only":
+                failures.append(f"{row.get('invoice')} Desk report row is not internal-review-only")
+            if row.get("send_status") != "draft_only_not_sent":
+                failures.append(f"{row.get('invoice')} Desk report row is not draft-only")
+            if row.get("customer_delivery_enabled") is not False:
+                failures.append(f"{row.get('invoice')} Desk report row enables customer delivery")
     return failures
 
 
@@ -1220,6 +1275,16 @@ def _finance_workspace_connected() -> list[str]:
             failures.append(f"Missing Number Card {card}")
     for doctype in ("Sales Invoice", "Payment Request", "Payment Entry", "Customer"):
         failures.extend(_doctype_presence([doctype]))
+    if not frappe.db.exists("Report", "LT Customer Reminder Review"):
+        failures.append("Missing Report LT Customer Reminder Review")
+    else:
+        workspace = frappe.get_doc("Workspace", "LT Accountant Home")
+        shortcuts = {row.label: row for row in workspace.shortcuts}
+        shortcut = shortcuts.get("Reminder Review Report")
+        if not shortcut:
+            failures.append("LT Accountant Home missing Reminder Review Report shortcut")
+        elif shortcut.type != "Report" or shortcut.link_to != "LT Customer Reminder Review":
+            failures.append("Reminder Review Report shortcut does not open LT Customer Reminder Review")
     return failures
 
 

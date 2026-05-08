@@ -1,6 +1,6 @@
 # Paperwork And Backend Automation
 
-Last updated: 2026-05-08 by Codex after quote/proposal draft packets were added to the paperwork/automation spine.
+Last updated: 2026-05-08 by Codex after wiring the customer reminder review report into Desk.
 
 ## Outcome
 
@@ -32,7 +32,8 @@ Fresh local verification on 2026-05-06:
 - `python scripts/verify/payment_webhook_contract.py` passed.
 - `python scripts/verify/payment_launch_readiness.py` passed in local/test mode.
 - `python scripts/verify/checkout_lead_conversion_contract.py` passed and rolled back generated records.
-- `python scripts/verify/finance_workspace_parity.py` passed.
+- `python scripts/setup/sync_finance_workspace.py` passed and ensured the Accountant Home number cards, the `LT Customer Reminder Review` Report record, and the Accountant Home report shortcut.
+- `python scripts/verify/finance_workspace_parity.py` passed, including Frappe's Desk report runner for `LT Customer Reminder Review`.
 - `python scripts/verify/finance_inventory_contract.py` passed.
 - Live Stripe keys, webhook secret, production host, and real operator/customer data are cutover-only and were not used as current fake-data/backend readiness gates.
 - `python scripts/verify/paperwork_status.py --report output/paperwork-status.json` passed in `synthetic_without_live_credentials` mode and generated a read-only paperwork status report with `live_cutover_checked: False`.
@@ -159,9 +160,10 @@ Current live-data facts from the fresh finance inventory:
 - `locally_twisted.paperwork.customer_reminder_review_report.run` is the no-live report-row source above the customer reminder dry-run queue.
 - The host verifier is `scripts/verify/customer_reminder_review_report.py`.
 - Fake normal/outlier behavior is covered by `scripts/verify/customer_reminder_review_report_contract.py`.
-- It reads the dry-run queue, then builds table columns, rows, and `review_now` / `hold` / `blocked_send` groups for a future Desk page or internal-only report.
+- It reads the dry-run queue, then builds table columns, rows, and `review_now` / `hold` / `blocked_send` groups for the internal `LT Customer Reminder Review` Desk Script Report.
 - It does not create Email Queue rows, Communications, Payment Entries, Journal Entries, Payment Requests, Error Logs, or Sales Invoice mutations.
 - Current local output: 1 internal-review-only report row for `ACC-SINV-2026-00001`, with recommended cadence `review_now_payment_reminder`, `send_status: draft_only_not_sent`, and `customer_delivery_enabled: false`.
+- Current Desk wiring: `sync_finance_workspace.py` owns the Report record and Accountant Home shortcut; `finance_workspace_parity.py` verifies the report through `frappe.desk.query_report.run`.
 
 ### Business automation index
 
@@ -171,12 +173,12 @@ Current live-data facts from the fresh finance inventory:
 - `hooks.py` now includes a daily Frappe scheduler entry for `locally_twisted.verify.business_automation_index.scheduled_checkup`.
 - The scheduled checkup writes a Frappe Error Log if a launch-required connection breaks or a loud-failure gap appears.
 - Current exists-but-not-connected surfaces are vendor setup/W-9 packet generation, bank reconciliation cutover, and payroll/HRMS.
-- No currently indexed useful surface is missing; outbound document send-readiness, quote/proposal draft packets, unpaid/overdue invoice review, unpaid invoice packet rendering, paperwork digest, customer reminder dry-run queue, and customer reminder review report are connected as draft-only/no-live paperwork surfaces.
+- No currently indexed useful surface is missing; outbound document send-readiness, quote/proposal draft packets, unpaid/overdue invoice review, unpaid invoice packet rendering, paperwork digest, customer reminder dry-run queue, and the customer reminder Desk report are connected as draft-only/no-live paperwork surfaces.
 
 ### Accountant and finance workspace
 
 - Accountant Home parity is verified.
-- It exposes unpaid invoices, overdue invoices, expected payments, recent paid orders, Sales Invoices, Payment Requests, and Payments.
+- It exposes unpaid invoices, overdue invoices, expected payments, recent paid orders, Sales Invoices, Payment Requests, Payments, and the internal customer reminder review report.
 - This is visibility and review, not automatic collections.
 
 ## Active Risks
@@ -197,7 +199,7 @@ Current live-data facts from the fresh finance inventory:
 4. **Unpaid invoice review queue.** First pass done as a draft-only report surface. Draft packet rendering is also done. Next is reviewed Desk UX or scheduled internal review digest, still no reminder sending.
 5. **Paperwork review digest.** First pass done as a read-only internal review payload. Next is a real reviewed Desk queue or scheduled internal-only report UI, still no customer sending.
 6. **Customer reminder dry run.** First pass done as a no-live internal review queue payload.
-7. **Customer reminder review report.** First pass done as no-live report rows/groups above the dry-run queue. Next is a real Desk page using the report rows, still no customer sending.
+7. **Customer reminder review report.** First pass done as no-live report rows/groups and an internal Desk Script Report above the dry-run queue. Future review notes/status should stay no-send until approval gates exist.
 8. **Receipt/operator email audit.** Extend verifier coverage so receipt, operator, welcome, and inquiry acknowledgment email bodies keep the right policy lanes and do not attach PDFs.
 9. **Outbound document template registry.** Done for the first standard set. Extend this folder before creating any new outbound document family elsewhere.
    - Standing rule: every outbound document is answer-first. The recipient should see the practical fields they care about before internal automation notes or policy mechanics.
@@ -232,6 +234,7 @@ python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-b
 python scripts/verify/business_automation_index.py --report output/business-automation-index.json
 python scripts/verify/stripe_amount_parity_contract.py
 python scripts/verify/checkout_lead_conversion_contract.py
+python scripts/setup/sync_finance_workspace.py
 python scripts/verify/finance_workspace_parity.py
 python scripts/verify/finance_inventory_contract.py
 python scripts/verify/paperwork_status.py --report output/paperwork-status.json
@@ -262,4 +265,4 @@ Run this only during cutover work. It is not part of the current synthetic/backe
 
 ## Next Handoff Stage
 
-Next no-approval slice: turn the customer reminder review report rows into a reviewed Desk page for Jeff/accounting. It should show candidate invoices, rendered reminder/statement sections, setup gaps, cutover-deferred items, and review checkboxes for recipient/status/cadence/copy/payment path. It must not send reminders, submit/cancel accounting records, or use live credentials/real customer data.
+Next no-approval slice: audit receipt/operator/welcome/inquiry acknowledgment email bodies so policy lanes, attachment boundaries, and no-PDF assumptions stay verified. It must not send new customer messages, submit/cancel accounting records, or use live credentials/real customer data.

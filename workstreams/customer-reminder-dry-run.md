@@ -1,6 +1,6 @@
 # Customer Reminder Dry Run
 
-Last updated: 2026-05-06 by Codex after adding the no-live customer reminder review report data source.
+Last updated: 2026-05-08 by Codex after wiring the no-live customer reminder review report into Desk.
 
 ## Outcome
 
@@ -13,7 +13,7 @@ Set up as much of customer reminders as possible without going live:
 - verify fake overdue/current/missing-payment-path/malformed-send scenarios
 - keep live delivery, automatic cadence, and accounting mutation disabled
 
-This is not a customer-send surface. It is an internal review queue payload that can feed a Desk page or scheduled internal-only report later.
+This is not a customer-send surface. It is an internal review queue payload that feeds the `LT Customer Reminder Review` Desk Script Report.
 
 ## Current Verified State
 
@@ -22,6 +22,8 @@ Fresh local verification on 2026-05-06:
 ```powershell
 python scripts/verify/customer_reminder_dry_run_contract.py
 python scripts/verify/customer_reminder_dry_run.py --report output/customer-reminder-dry-run.json --markdown output/customer-reminder-dry-run.md
+python scripts/setup/sync_finance_workspace.py
+python scripts/verify/finance_workspace_parity.py
 python scripts/verify/customer_reminder_review_report_contract.py
 python scripts/verify/customer_reminder_review_report.py --report output/customer-reminder-review-report.json --markdown output/customer-reminder-review-report.md --csv output/customer-reminder-review-report.csv
 python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json
@@ -36,6 +38,7 @@ Current result:
 - `send_allowed: false`, `customer_delivery_enabled: false`, `automatic_delivery_enabled: false`, and `mutation_allowed: false`.
 - `customer_reminder_review_report_contract.py` passed 3 fake scenarios: mixed queue grouping, empty queue, and malformed send-enabled source rejection.
 - `customer_reminder_review_report.py` passed against local ERPNext with 1 report row for `ACC-SINV-2026-00001`, grouped under `review_now`.
+- `finance_workspace_parity.py` passed and verifies the internal `LT Customer Reminder Review` Desk report through Frappe's report runner.
 - The synthetic pipeline now runs 15 no-live contracts, all passing, with 0 broken piping.
 - The business automation index now maps 24 surfaces, 21 connected, 3 exists-but-not-connected, and 0 loud-failure gaps.
 
@@ -46,9 +49,11 @@ Current result:
 - Host verifier: `scripts/verify/customer_reminder_dry_run.py`
 - Host fake-data verifier: `scripts/verify/customer_reminder_dry_run_contract.py`
 - Review report surface: `apps/locally_twisted/locally_twisted/paperwork/customer_reminder_review_report.py`
+- Review report Desk adapter: `apps/locally_twisted/locally_twisted/locally_twisted/report/lt_customer_reminder_review/lt_customer_reminder_review.py`
 - Review report contract: `apps/locally_twisted/locally_twisted/verify/customer_reminder_review_report_contract.py`
 - Review report host verifier: `scripts/verify/customer_reminder_review_report.py`
 - Review report host fake-data verifier: `scripts/verify/customer_reminder_review_report_contract.py`
+- Review report Desk verifier: `scripts/verify/finance_workspace_parity.py`
 - Upstream sources: `unpaid_invoice_review.py`, `unpaid_invoice_draft_packet.py`, and `paperwork_review_digest.py`
 
 ## Boundaries
@@ -72,10 +77,10 @@ Not allowed in this lane:
 
 ## Review Report Layer
 
-`customer_reminder_review_report.py` is now the report-ready layer above the dry-run queue. It turns queue items into columns, rows, `review_now` / `hold` / `blocked_send` groups, and optional ignored JSON/Markdown/CSV artifacts for review.
+`customer_reminder_review_report.py` is now the report-ready layer above the dry-run queue. It turns queue items into columns, rows, `review_now` / `hold` / `blocked_send` groups, optional ignored JSON/Markdown/CSV artifacts, and the `LT Customer Reminder Review` Desk Script Report for internal review.
 
-This is still not customer delivery. It is internal display data for a future Desk page or scheduled internal-only report.
+This is still not customer delivery. It is internal display data for accounting review only.
 
 ## Next Safe Slice
 
-Build the reviewed Desk page that consumes the review report rows. The UI should show invoice, customer, days overdue, balance, recommended cadence, draft sections, and approval checkboxes. It still must not send reminders or mutate accounting records.
+Audit receipt/operator/welcome/inquiry acknowledgment email bodies so policy lanes and attachment boundaries stay correct. Keep it verifier-only: no new sends, no PDF attachments, and no customer-delivery actions.
