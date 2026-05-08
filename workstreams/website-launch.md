@@ -1,6 +1,6 @@
 # Website Launch Workstream
 
-Last updated: 2026-05-08 by Codex after BTFP support-band correction and manual keyboard accessibility closeout.
+Last updated: 2026-05-08 by Codex after launch verifier, balloon cursor, and product-card navigation closeout.
 
 ## Outcome
 
@@ -18,6 +18,8 @@ Known collision: another agent is auditing the form. Do not make contact/form sc
 
 2026-05-08 accessibility closeout: the saved local axe scan findings were fixed across `/event-balloons`, `/portfolio`, `/shop`, product detail/category pages, and `/checkout`. `npm run test:a11y` now regenerates desktop/mobile axe reports for the 19 public launch routes and fails on any violation. `npm run test:a11y-manual` adds a manual-style keyboard/focus/zoom-pressure probe for public routes and caught the homepage review crawl plus portfolio hidden-photo tab-order failures. Durable rules: Frappe already provides the page-level main landmark, route templates must not add nested page-level `<main>` landmarks inside `page_content`, and moving proof surfaces must not leave hidden/offscreen items in the tab order.
 
+2026-05-08 launch verifier and public microinteraction closeout: `npm run test:website-verify` now runs `scripts/verify/website_launch_verify.py`, serializing Playwright workers by default so the local ERPNext/Frappe stack is not overloaded by broad launch gates. `npm run test:public-verify` aliases to the same website gate, and `npm run test:launch-verify` adds accessibility plus contact smoke on top. Public microinteractions now have a focused feature handoff at `workstreams/public-site-microinteractions.md` and capability contract at `.codex/capabilities/recipes/public-site-microinteraction-contract.md`. The balloon cursor is desktop/fine-pointer-only production app code, product cards on `/shop` and category pages are clickable from non-interactive areas, and the transient demo file `assets/balloon cursor/Red Balloon Cursor.html` was deleted after the behavior was extracted into app assets.
+
 Live menu/content coordination now lives in `workstreams/menu-content-coordination.md`. Agents touching menu, header, footer, public page content, or nav/content verifiers must update that file before editing so overlapping sessions do not overwrite each other.
 
 2026-05-06 status reset after Event Playground handoff:
@@ -26,7 +28,7 @@ Live menu/content coordination now lives in `workstreams/menu-content-coordinati
 - Use `workstreams/website-launch.md` as the ASAP website launch lane.
 - Website-specific launch gates verified on 2026-05-06: route sweep for `/`, `/contact`, policy pages, `/portfolio`, `/shop`, `/cart`, and `/checkout` returned 200; `/book` returned a 301 to `/contact?intent=quick`; `test:nav-ia` passed; `test:layout-fit` passed 260/260 after a portfolio mobile title fit patch; `test:interactive-layout` passed 42/42; `test:checkout-experience` passed 2/2; `test:shop-smoke` passed; contact prefill, service logic, and smoke form checks passed. Focused portfolio verification after the exact handoff retranslation passed `npm run test:portfolio-reel` 4/4, `npm run test:layout-fit -- --grep portfolio` 13/13, and `npm run test:interactive-layout -- --grep portfolio` 3/3.
 - Payment posture: `payment_launch_readiness.py --mode local` passes in Stripe test mode. `--mode live` fails as expected because live Stripe keys, explicit live site config, payment method configuration, operator email config, and production host name are not in place.
-- `npm run test:website-verify` is the website-only closeout gate. `npm run test:public-verify` now aliases to the same website-only gate. Event Playground remains separately available through `npm run test:event-playground` for the OpenClaw lane.
+- `npm run test:website-verify` is the website-only closeout gate through `scripts/verify/website_launch_verify.py`. `npm run test:public-verify` aliases to the same website-only gate, and `npm run test:launch-verify` adds accessibility plus contact smoke. Event Playground remains separately available through `npm run test:event-playground` for the OpenClaw lane.
 - Do not assume the worktree is clean; check `git status -sb` before editing. Current LT work follows the main-only rule; do not use old feature-branch closeout notes as active git guidance. The active portfolio reference source is `research/a unique portfolio page for a high end corporate balloon events_/design_handoff_locally_twisted_portfolio/`; raw portfolio reference folders, if present, are critique input only. Do not treat raw reference folders as production source or launch evidence.
 - `scripts/verify/smoke_forms.py` now verifies localhost `/contact` submissions through the local Docker/Frappe bench container and cleans up the generated smoke Lead plus linked LT cascade Task. Latest run on 2026-05-06 created marker `SMOKE-TEST-1778073366`, verified it, and reported cleanup OK.
 - `scripts/verify/category_media_candidates.py` now generates a no-mutation approval packet for the 11 empty customer-facing category images. Latest run on 2026-05-06 wrote ignored local reports to `output/category-media-candidates.json` and `output/category-media-candidates.md`; the quick picks are ready for Jeff/GL approval before any live assignment.
@@ -47,7 +49,8 @@ Latest verified controller baseline:
 - `python scripts/verify/nav_ia.py` passed.
 - `npm run test:layout-fit` passed with 247 checks across the current public route list.
 - `npm run test:container-contract` passed with 57 route/viewport checks across the 19 launch public routes.
-- `npm run test:website-verify` passed after the container contract joined the website-only closeout gate.
+- `npm run test:website-verify` passed through `scripts/verify/website_launch_verify.py` with serialized Playwright workers after the container contract joined the website-only closeout gate.
+- Public microinteraction closeout passed targeted browser checks for the balloon cursor and whole-card product navigation, `npm run test:shop-smoke`, `npm run test:layout-fit` 247/247, `npm run test:interactive-layout` 88/88, `npm run test:a11y` with 38 route/viewport axe results and 0 violations, and `npm run test:a11y-manual`.
 - `python scripts/verify/smoke_shop.py` passed after updating stale chrome selectors to the current authority-first header/mobile drawer and retiring the category-card index.
 - `smoke_shop.py` now verifies the desktop/mobile `Event Balloons`, `Portfolio`, `Twisting & Face Painting`, `Ready-to-Order`, `FAQ`, and `/contact` quote paths, plus the `/shop-by-category` redirect and product/variant shop contracts.
 - `python scripts/verify/cart_checkout_contract.py` passed after the cart/checkout item-code contract fix.

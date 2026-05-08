@@ -1,0 +1,92 @@
+/*
+ * Sitewide balloon cursor.
+ * Loaded only on public website pages through web_include_css.
+ */
+
+@media (hover: hover) and (pointer: fine) {
+  html.lt-balloon-cursor-ready,
+  html.lt-balloon-cursor-ready body,
+  html.lt-balloon-cursor-ready a,
+  html.lt-balloon-cursor-ready button,
+  html.lt-balloon-cursor-ready input,
+  html.lt-balloon-cursor-ready textarea,
+  html.lt-balloon-cursor-ready select,
+  html.lt-balloon-cursor-ready label,
+  html.lt-balloon-cursor-ready [role="button"] {
+    cursor: none;
+  }
+}
+
+.lt-balloon-cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  will-change: transform;
+  z-index: 2147483000;
+}
+
+.lt-balloon-cursor svg {
+  position: absolute;
+  left: -14.5px;
+  top: -16.55px;
+  overflow: visible;
+  transform-origin: 50% 34.8%;
+  will-change: transform;
+}
+
+.lt-balloon-cursor__body,
+.lt-balloon-cursor__shade,
+.lt-balloon-cursor__highlight,
+.lt-balloon-cursor__knot {
+  transition: fill 0.35s ease;
+}
+
+.lt-balloon-cursor-ring {
+  position: fixed;
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid var(--lt-brass, #c6a25a);
+  border-radius: 999px;
+  box-shadow:
+    inset 0 0 0 0.5px var(--lt-ink, #191817),
+    0 0 0 0.5px var(--lt-ink, #191817);
+  opacity: 0.85;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0.6);
+  animation: lt-balloon-cursor-ring 0.6s ease-out forwards;
+  z-index: 2147482999;
+}
+
+@keyframes lt-balloon-cursor-ring {
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(3.2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lt-balloon-cursor,
+  .lt-balloon-cursor svg,
+  .lt-balloon-cursor__body,
+  .lt-balloon-cursor__shade,
+  .lt-balloon-cursor__highlight,
+  .lt-balloon-cursor__knot {
+    transition-duration: 0.01ms;
+  }
+
+  .lt-balloon-cursor-ring {
+    display: none;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .lt-balloon-cursor,
+  .lt-balloon-cursor-ring {
+    display: none;
+  }
+}

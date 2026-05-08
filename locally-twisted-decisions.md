@@ -7,6 +7,50 @@ Reasoning matters more than the decision itself. A future instance reading this 
 LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_by_Cameron/built-by-cameron-decisions.md`.
 
 ---
+## 2026-05-08 - Public microinteractions must stay launch-safe
+
+**Decision:** Small public-site microinteractions are allowed when they improve
+customer feel or browsing ease, but they must stay in focused Frappe app assets,
+respect accessibility/device boundaries, and preserve business actions. The
+sitewide red balloon cursor is desktop/fine-pointer-only production CSS/JS, not
+a kept demo page. Product cards may be whole-card clickable through delegated
+JavaScript, but real controls keep their own behavior.
+
+**Reasoning:** GL wanted the website mouse to feel playful and wanted product
+cards selectable from anywhere, not only the photo. Both are launch-friendly
+when they reduce friction or add brand delight. They become launch risks if
+they paste prototype HTML into the app, hide the real cursor on touch devices,
+overflow the viewport, create invalid nested anchors, or hijack `Add to cart`,
+`Choose options`, `Request quote`, selectors, links, modified clicks, or text
+selection.
+
+**Implementation:** Added focused cursor assets in
+`lt-balloon-cursor.css`/`lt-balloon-cursor.js`, delegated card navigation in
+`lt-product-card-click.js`, the card pointer affordance in
+`lt-shop-showroom.css`, and cache-busted hook entries in `hooks.py`. Created
+`workstreams/public-site-microinteractions.md` and
+`.codex/capabilities/recipes/public-site-microinteraction-contract.md`.
+Deleted the transient reference file
+`assets/balloon cursor/Red Balloon Cursor.html` after extracting the useful
+behavior.
+
+**Verification:** Targeted browser checks proved 53 `/shop` cards clickable,
+category product cards clickable after render, add-to-cart still working, touch
+mode skipping the cursor, cursor tilt capped, and no console errors. Closeout
+also passed `npm run test:shop-smoke`, `npm run test:layout-fit` 247/247,
+`npm run test:interactive-layout` 88/88 after cursor overflow clamping,
+`npm run test:a11y` with 38 route/viewport results and 0 violations, and
+`npm run test:a11y-manual`.
+
+**Alternatives considered:** Keep the standalone demo HTML as source material.
+Rejected because it creates a second source of truth outside the Frappe app.
+Wrap entire product cards in anchors. Rejected because the cards contain
+buttons and links that must keep independent behavior.
+
+**Decided by:** GL request on 2026-05-08; implemented and verified by Codex.
+
+---
+
 
 ## 2026-05-08 - BTFP pricing calculator uses per-artist rows
 

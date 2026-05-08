@@ -62,6 +62,7 @@ Workflows. Multi-step. Clear start and finish.
 - [frappe-portfolio-proof-reel](recipes/frappe-portfolio-proof-reel.md) - keep LT's portfolio as a compact native-shell proof collage with large whole photos, center balance, and no wholesale prototype styling.
 - [frappe-public-nav-business-route-contract](recipes/frappe-public-nav-business-route-contract.md) - keep public nav/header/footer route links aligned with approved business lanes and block unapproved route replacements.
 - [frappe-sitewide-visual-overhaul](recipes/frappe-sitewide-visual-overhaul.md) - ship a Frappe/Webshop visual redesign with cache-busts, route checks, screenshots, and launch-safe receipts.
+- [public-site-microinteraction-contract](recipes/public-site-microinteraction-contract.md) - keep small public-site interactions such as custom cursors and card-wide navigation launch-safe, accessible, and free of prototype/demo source drift.
 - [lt-brand-style-guide-consolidation](recipes/lt-brand-style-guide-consolidation.md) - consolidate LT visual authority, delete conflicting style references, and verify old font/pastel/icon drift is gone.
 - [cross-browser-motion-visual-verification](recipes/cross-browser-motion-visual-verification.md) - verify animated, marquee, carousel, reduced-motion, and browser-session visual behavior across Chrome/Brave and media-query branches.
 - [compact-hero-contract](recipes/compact-hero-contract.md) - keep public page heroes compact, same-height per viewport family, and protected by Playwright checks instead of route-local oversized padding.

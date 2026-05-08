@@ -6,6 +6,37 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-08 - Microinteraction demos are not production sources
+
+The balloon cursor started from a standalone HTML demo. It was useful as a
+behavior reference, but keeping it in the repo after production extraction would
+have created a second source of truth and invited future agents to edit the
+demo instead of the Frappe app assets.
+
+**Counter-move:** translate demos into focused app CSS/JS, load them through
+Frappe hooks with cache-busted URLs, verify the served behavior, then delete the
+transient demo unless it has been explicitly approved as `_resources/` reference
+material. Decorative UI still needs real layout gates: this slice's first broad
+run caught cursor/click-ring overflow, and the fix was to clamp decorative
+elements before closeout.
+
+---
+
+## 2026-05-08 - Whole-card clicks must not steal product actions
+
+Making product cards easier to click is good storefront UX, but cards already
+contain buttons, links, selectors, and quote/cart actions. A full-card anchor or
+aggressive click handler can quietly break the purchase path while appearing to
+solve the browsing problem.
+
+**Counter-move:** use delegated card navigation that ignores real interactive
+descendants, modified clicks, and text selection. Restrict inferred targets to
+known product routes, add only a pointer affordance class, and verify both
+sides: card-body clicks navigate, while `Add to cart`, `Choose options`, and
+`Request quote` keep their original behavior.
+
+---
+
 ## 2026-05-08 - Service calculators cannot flatten independent workers
 
 The first BTFP price-check calculator used one hours input and multiplied it by

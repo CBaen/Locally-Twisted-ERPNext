@@ -17,9 +17,11 @@ function findBrowserExecutable() {
 }
 
 const executablePath = findBrowserExecutable();
+const workerCount = Number.parseInt(process.env.LT_PLAYWRIGHT_WORKERS || "1", 10) || 1;
 
 module.exports = defineConfig({
 	timeout: 45_000,
+	workers: workerCount,
 	expect: {
 		timeout: 10_000,
 	},

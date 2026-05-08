@@ -1,6 +1,6 @@
 # Shop Workstream
 
-Last updated: 2026-05-07 by Codex.
+Last updated: 2026-05-08 by Codex after whole-card product navigation closeout.
 
 ## Outcome
 
@@ -11,6 +11,9 @@ This is the active feature-lane handoff for shop work. `HANDOFF.md` remains vali
 ## Current Stage
 
 Active handoff lane. The guest cart/checkout item-code contract, broad browse routing, first variant-media reconciliation pass, per-product variant correctness diff, category-media candidate packet, 2026-05-06 shop showroom container redesign, same-day symmetry repair, and 2026-05-07 product-detail company-first/clear-control cleanup are in place. Product detail pages no longer render Webshop's lower Additional Info/Reviews/Recommendations panel, and product option controls no longer render as nested boxes. `smoke_shop.py` guards against both the auxiliary/recommendation selectors and boxed product controls returning. The 2026-05-06 commerce-rules checkout slice now has its own lane at `workstreams/commerce-rules-checkout.md`; keep shop layout/media work coordinated with that checkout contract. The next shop work should continue with Jeff/GL media approval before assigning category/product media, then product photo/options polish from real product states.
+
+2026-05-08 microinteraction closeout: product listing cards on `/shop` and Webshop-rendered category pages navigate from non-interactive card areas while preserving real buttons and links. The source lane is `workstreams/public-site-microinteractions.md`; the capability contract is `.codex/capabilities/recipes/public-site-microinteraction-contract.md`.
+
 
 Priority order from the current queue:
 
@@ -61,6 +64,7 @@ Primary files:
 - `apps/locally_twisted/locally_twisted/www/checkout.py`
 - `apps/locally_twisted/locally_twisted/www/checkout.html`
 - `apps/locally_twisted/locally_twisted/public/js/lt-guest-cart.js`
+- `apps/locally_twisted/locally_twisted/public/js/lt-product-card-click.js`
 - `apps/locally_twisted/locally_twisted/public/js/lt-webshop-a11y.js`
 - `apps/locally_twisted/locally_twisted/public/css/lt-theme.css`
 - `apps/locally_twisted/locally_twisted/public/css/lt-shop-showroom.css`
@@ -87,6 +91,7 @@ Reference and verification files:
 - `scripts/verify/layout_fit.spec.js`
 - `.codex/capabilities/recipes/frappe-product-page-company-first.md`
 - `.codex/capabilities/recipes/frappe-product-clear-control-contract.md`
+- `.codex/capabilities/recipes/public-site-microinteraction-contract.md`
 
 ## Known Current Facts
 
@@ -106,6 +111,7 @@ Reference and verification files:
 - Current checkout commerce rules: ready-to-order goods can check out and are taxable by fulfillment ZIP/city rate; services, BTFP, service deposits, and delivery charges are non-taxable; standard local delivery is `$15`; Park City delivery is `$50`; out-of-area delivery redirects to a prefilled `/contact` quote path. Product group alone is not a checkout quote gate. See `workstreams/commerce-rules-checkout.md` before changing cart, checkout, delivery, service, or deposit behavior.
 - Cart/checkout now sells actual Item codes and uses the parent Website Item for route/name display when the item is a variant. If the variant has its own `Item.image`, cart/checkout use that selected-variant image; otherwise they fall back to the parent Website Item image. Fixed-price products stay cartable unless fulfillment details, especially out-of-area delivery ZIP, require a quote path.
 - `/shop` cards for variant templates link to "Choose options" instead of adding an unpriced template code. Single-SKU cards add directly when priced.
+- `/shop` and Webshop-rendered category product cards are whole-card clickable from non-interactive card areas. The delegated handler preserves real links/buttons, `Add to cart`, `Choose options`, `Request quote`, selectors, modified clicks, and text selection. Do not wrap entire cards in anchors; use `lt-product-card-click.js` and `.lt-product-card-clickable`.
 - `smoke_shop.py` now verifies fixed-price product pages do not invent product-level quote gates, proves a real retail option-selection add-to-cart flow for `unicorn-bouquet`, and checks the showroom contracts for `/shop`, `/shop-items`, `/shop-items/<group>`, product detail image scale/containment, the desktop rail/mobile select category navigation contract, `/shop` product-grid orphan prevention, and category-product-grid orphan prevention. `cart_checkout_contract.py` verifies the shared API/checkout contract.
 - Variant media first pass completed 2026-05-02: 1,712 variant `Item.image` values are set from `_resources/odoo-live/images/` where Odoo image labels clearly matched product options. Product pages call `locally_twisted.api.variant_media.get_variant_media` after exact option selection and swap the main image when a variant image exists.
 - Detailed media review is now reproducible with `python scripts/setup/sync_variant_media.py --dry-run --include-details --report output/catalog-media-review.json`. Latest refreshed report on 2026-05-06: 49 products checked, 35 with candidate image labels, 45 needing review, 1,712 unchanged mapped variants, and 6,831 skipped variant image assignments.
@@ -164,6 +170,17 @@ After route, template, CSS, or JS edits:
 - `python scripts/verify/nav_ia.py`
 - `npm run test:layout-fit`
 - `npm run test:interactive-layout`
+
+
+Whole-card product navigation verification on 2026-05-08:
+
+- Targeted browser check proved all 53 `/shop` cards were clickable from card body areas.
+- Targeted browser check proved Webshop category cards became clickable after render.
+- Single-SKU add-to-cart still stayed on the page and added the item instead of being hijacked by card navigation.
+- `python scripts/dev/clear_website_cache.py` passed.
+- `npm run test:shop-smoke` passed.
+- `npm run test:layout-fit` passed 247/247.
+- `npm run test:interactive-layout` passed 88/88 after decorative cursor overflow was clamped.
 
 Latest showroom-focused verification on 2026-05-06:
 

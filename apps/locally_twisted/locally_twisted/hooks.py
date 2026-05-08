@@ -45,7 +45,8 @@ web_include_css = [
     "/assets/locally_twisted/css/lt-theme.css?v=20260508-a11y-1",
     "/assets/locally_twisted/css/lt-mega-menu.css?v=20260508-a11y-1",
     "/assets/locally_twisted/css/lt-product-polish.css?v=20260508-a11y-1",
-    "/assets/locally_twisted/css/lt-shop-showroom.css?v=20260508-a11y-1",
+    "/assets/locally_twisted/css/lt-shop-showroom.css?v=20260508-card-click-1",
+    "/assets/locally_twisted/css/lt-balloon-cursor.css?v=20260508-1",
     "/assets/locally_twisted/css/lt-page-containment.css?v=20260507-containment-5",
     "/assets/locally_twisted/css/lt-event-playground.css?v=20260506-event-playground-1",
 ]
@@ -63,6 +64,8 @@ web_include_js = [
     "/assets/locally_twisted/js/lt-webshop-a11y.js?v=20260430-2",
     "/assets/locally_twisted/js/lt-site-preferences.js?v=20260507-reviews-1",
     "/assets/locally_twisted/js/lt-megamenu.js?v=20260505-mega-6",
+    "/assets/locally_twisted/js/lt-product-card-click.js?v=20260508-1",
+    "/assets/locally_twisted/js/lt-balloon-cursor.js?v=20260508-4",
 ]
 
 # Friendly-URL aliases. Frappe's www/ router doesn't auto-translate
