@@ -4,8 +4,24 @@ from __future__ import annotations
 import frappe
 
 
+def _assets_json() -> dict:
+    get_assets_json = getattr(frappe.utils, "get_assets_json", None)
+    if not callable(get_assets_json):
+        return {}
+    return get_assets_json() or {}
+
+
 def update_website_context(context):
     """Add shop category data used by category/sidebar templates."""
+    try:
+        context["lt_assets_json"] = _assets_json()
+    except Exception as e:
+        frappe.log_error(
+            f"website_context._assets_json failed: {e}",
+            title="LT website context",
+        )
+        context["lt_assets_json"] = {}
+
     try:
         children = frappe.db.get_all(
             "Item Group",

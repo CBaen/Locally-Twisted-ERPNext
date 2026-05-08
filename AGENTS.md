@@ -174,15 +174,11 @@ The old `_resources/design-guide/` design-competition synthesis was deleted on 2
 
 The Odoo snapshots are canonical for the rebuilt `/book` and `/contact` form shape where explicitly stated. They are not blanket authority for the rest of the system.
 
-## Current P0 Work
+## Current Work Selection
 
-As of 2026-04-30, the next safest implementation slices are:
+Use `locally-twisted-queue.md` and the active `workstreams/*.md` files for current P0 selection. The old April `/book` P0 is superseded: `/book` now redirects to `/contact?intent=quick`, and `/contact` is the customer inquiry route.
 
-1. `/book` form page: primary inquiry conversion path, currently expected to be missing/404, backed by the existing Lead schema.
-2. `/privacy` and `/terms-of-service`: required for Stripe live-mode readiness.
-3. Fix stale documentation counts so future agents stop repeating catalog errors.
-
-For `/book`, verify the existing Lead schema before building. The intended source is the Hetzner `/book` snapshot and live source if reachable, with native ERPNext Lead field names.
+Current active lanes are launch proof, paperwork/backend automation, fail-loud record-level hardening, brand/shop/portfolio follow-through, and cutover readiness. Before changing any route, form, catalog, checkout, payment, document, or backend automation behavior, verify the current lane file and run the matching verifier.
 
 ## Trust Rules
 

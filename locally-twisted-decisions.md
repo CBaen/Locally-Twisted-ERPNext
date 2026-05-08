@@ -8,6 +8,33 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-08 - Portfolio desktop depth stays image-only and below the hero
+
+**Decision:** `/portfolio` desktop photos may use a light black edge fade and
+image-level shadows for depth. This is not permission to add visible photo
+containers, frames, captions, card backgrounds, forced aspect boxes, or mobile
+depth changes. Clicked desktop photos must stay below the compact hero stacking
+plane.
+
+**Reasoning:** GL liked the larger proof-photo field and suggested a light
+black fade at the edges for a subtle frame feeling, plus shadow logic when
+photos overlap. GL also clarified that the top photos must not cover the hero
+when clicked, and that mobile is a separate problem.
+
+**Implementation:** Added a desktop-only pseudo-element edge fade on `.lt-photo`,
+image-level shadows on `.lt-photo img`, stronger shadow for `.lt-photo.is-front
+img`, and explicit hero/reel z-index planes in `lt-portfolio-reel.css`. Bumped
+the `/portfolio` asset cache key and added portfolio verifier coverage for
+desktop edge fade, image shadow, stronger front-photo shadow, and hero-over-reel
+stacking. While running the red check, public routes were blocked by an
+unrelated dirty `base.html` change that called a missing Jinja helper; that
+line now uses a safe fallback so website pages render instead of returning 500.
+
+**Decided by:** GL approved the desktop-only depth/hero protection direction on
+2026-05-08.
+
+---
+
 ## 2026-05-08 - Portfolio motion settles after click
 
 **Decision:** `/portfolio` no longer uses pointer-follow page/reel parallax or

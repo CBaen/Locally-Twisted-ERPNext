@@ -29,6 +29,11 @@ test.describe("portfolio proof reel", () => {
 			const firstImage = first ? first.querySelector("img") : null;
 			const firstStyle = first ? window.getComputedStyle(first) : null;
 			const imageStyle = firstImage ? window.getComputedStyle(firstImage) : null;
+			const photoEdgeStyle = first ? window.getComputedStyle(first, "::after") : null;
+			const heroStyle = document.querySelector(".lt-portfolio__hero")
+				? window.getComputedStyle(document.querySelector(".lt-portfolio__hero"))
+				: null;
+			const reelStyle = reel ? window.getComputedStyle(reel) : null;
 			const rect = first ? first.getBoundingClientRect() : null;
 			const imageRect = firstImage ? firstImage.getBoundingClientRect() : null;
 			const heroRect = document.querySelector(".lt-portfolio__hero")?.getBoundingClientRect();
@@ -44,7 +49,9 @@ test.describe("portfolio proof reel", () => {
 				heroText: document.querySelector(".lt-portfolio__hero")?.innerText.replace(/\s+/g, " ").trim() || "",
 				heroHeight: heroRect ? Math.round(heroRect.height) : 0,
 				heroBottom: heroRect ? Math.round(heroRect.bottom) : 0,
+				heroZIndex: heroStyle ? heroStyle.zIndex : "",
 				reelTop: reelRect ? Math.round(reelRect.top) : 0,
+				reelZIndex: reelStyle ? reelStyle.zIndex : "",
 				internalNavCount: document.querySelectorAll(".lt-head, .lt-nav").length,
 				fontLinkCount: document.querySelectorAll('link[href*="fonts.googleapis"]').length,
 				cursorDotCount: document.querySelectorAll(".lt-cursor-dot, .lt-cursor-ring").length,
@@ -53,6 +60,8 @@ test.describe("portfolio proof reel", () => {
 				bodyFontFamily,
 				backgroundColor: window.getComputedStyle(root).backgroundColor,
 				imageBackgroundColor: imageStyle ? imageStyle.backgroundColor : "",
+				imageBoxShadow: imageStyle ? imageStyle.boxShadow : "",
+				photoEdgeFade: photoEdgeStyle ? photoEdgeStyle.boxShadow : "",
 				photoBackgroundColor: firstStyle ? firstStyle.backgroundColor : "",
 				photoBoxShadow: firstStyle ? firstStyle.boxShadow : "",
 				frameCount: document.querySelectorAll(".lt-frame").length,
@@ -108,6 +117,8 @@ test.describe("portfolio proof reel", () => {
 		expect(facts.heroText).toContain("Corporate entrances, school stages, civic celebrations, and private moments");
 		expect(facts.heroText).toMatch(/start an event inquiry/i);
 		expect(facts.heroHeight).toBe(280);
+		expect(Number(facts.heroZIndex), "portfolio hero should stay above the desktop photo plane").toBeGreaterThan(50);
+		expect(Number(facts.reelZIndex), "portfolio reel should sit below the hero stacking plane").toBeLessThan(Number(facts.heroZIndex));
 		expect(facts.internalNavCount, "the portfolio should use the shared site chrome, not a copied internal page shell").toBe(0);
 		expect(facts.fontLinkCount, "portfolio should rely on the sitewide LT brand fonts").toBe(0);
 		expect(facts.cursorDotCount, "portfolio should not mount prototype cursor artifacts").toBe(0);
@@ -119,6 +130,8 @@ test.describe("portfolio proof reel", () => {
 		expect(facts.photoBackgroundColor, "portfolio photos should not expose white/cream frame stripes").toBe("rgba(0, 0, 0, 0)");
 		expect(facts.photoBoxShadow, "portfolio photos should read as the image itself, not a framed card").toBe("none");
 		expect(facts.imageBackgroundColor, "image elements should not paint a stripe behind transparent space").toBe("rgba(0, 0, 0, 0)");
+		expect(facts.imageBoxShadow, "desktop portfolio photos need image-level depth without card containers").not.toBe("none");
+		expect(facts.photoEdgeFade, "desktop portfolio photos need a light edge fade instead of a visible frame").not.toBe("none");
 		expect(facts.primaryButtonText).toMatch(/start an event inquiry/i);
 		expect(facts.primaryButtonColor, "primary portfolio CTA text should contrast against its white background").toBe("rgb(14, 34, 64)");
 		expect(facts.primaryButtonTextFill, "primary portfolio CTA should not inherit white text-fill from the dark hero").toBe("rgb(14, 34, 64)");
@@ -168,6 +181,50 @@ test.describe("portfolio proof reel", () => {
 			targetSelectors: [".lt-photo.is-front"],
 		});
 		expectNoLayoutFailures(expect, result, "portfolio proof reel desktop");
+	});
+
+	test("desktop clicked top photos remain behind the portfolio hero", async ({ page }) => {
+		await page.setViewportSize({ width: 1366, height: 768 });
+		const response = await gotoAndSettle(page, "/portfolio");
+		await expectSuccessfulResponse(response, "/portfolio");
+		await page.waitForSelector(".lt-photo");
+		await page.waitForTimeout(250);
+
+		for (const index of [0, 1]) {
+			await page.locator(".lt-photo").nth(index).click({ force: true });
+			await expect(page.locator(".lt-photo.is-front")).toHaveCount(1);
+			await page.waitForTimeout(160);
+
+			const stack = await page.evaluate(() => {
+				function numericZIndex(element) {
+					if (!element) return -1;
+					const value = window.getComputedStyle(element).zIndex;
+					return value === "auto" ? -1 : Number.parseInt(value, 10);
+				}
+
+				const hero = document.querySelector(".lt-portfolio__hero");
+				const reel = document.querySelector(".lt-reel");
+				const front = document.querySelector(".lt-photo.is-front");
+				const frontImage = front ? front.querySelector("img") : null;
+				const heroStyle = hero ? window.getComputedStyle(hero) : null;
+				const reelStyle = reel ? window.getComputedStyle(reel) : null;
+				const frontImageStyle = frontImage ? window.getComputedStyle(frontImage) : null;
+				return {
+					heroPosition: heroStyle ? heroStyle.position : "",
+					heroZIndex: numericZIndex(hero),
+					reelPosition: reelStyle ? reelStyle.position : "",
+					reelZIndex: numericZIndex(reel),
+					frontZIndex: numericZIndex(front),
+					frontImageBoxShadow: frontImageStyle ? frontImageStyle.boxShadow : "",
+				};
+			});
+
+			expect(stack.heroPosition, "hero needs an explicit stacking plane").toBe("relative");
+			expect(stack.reelPosition, "reel needs an explicit stacking plane below the hero").toBe("relative");
+			expect(stack.frontImageBoxShadow, "the front desktop photo should cast stronger depth on overlap").not.toBe("none");
+			expect(stack.heroZIndex, "clicked desktop photos should not cover the hero").toBeGreaterThan(stack.frontZIndex);
+			expect(stack.reelZIndex, "the whole photo reel should stay below the hero").toBeLessThan(stack.heroZIndex);
+		}
 	});
 
 	test("mobile slides full-width natural-ratio photos into view without horizontal overflow", async ({ page }) => {

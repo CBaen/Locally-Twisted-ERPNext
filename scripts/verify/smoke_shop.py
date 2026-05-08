@@ -73,6 +73,7 @@ SHOP_CATEGORY_SHOWCASE_URL = f"{BASE}/shop-items/arches"
 PRODUCT_DETAIL_SHOWCASE_URL = f"{BASE}/shop-items/garlands/baby-shower-garland"
 VARIANT_STARTING_PRICE_URL = f"{BASE}/shop-items/columns/classic-column"
 VARIANT_STARTING_PRICE_ROUTE = "/shop-items/columns/classic-column"
+ASSET_BOOT_ERROR_MARKER = "file_uploader.bundle.js"
 
 DESKTOP_VIEWPORT = {"width": 1366, "height": 900}
 MOBILE_VIEWPORT = {"width": 375, "height": 812}
@@ -89,6 +90,10 @@ class SmokeFail(Exception):
 def assert_(cond, msg):
     if not cond:
         raise SmokeFail(msg)
+
+
+def _asset_boot_errors(errors: list[str]) -> list[str]:
+    return [error for error in errors if ASSET_BOOT_ERROR_MARKER in error]
 
 
 def _box(page, selector: str, index: int = 0):
@@ -641,6 +646,14 @@ def check_product_variant_page(page):
     assert_("Shop by Category" not in body, "Product breadcrumb still shows retired 'Shop by Category' label")
     assert_("/shop-by-category" not in body, "Product breadcrumb still links to retired /shop-by-category route")
     assert_("super shape" not in body.lower(), "Product detail still exposes super shape jargon")
+    assert_(
+        body.count("/assets/frappe/js/lib/jquery/jquery.min.js") == 1,
+        "Product detail should not render duplicate jQuery/base script blocks",
+    )
+    file_uploader_asset = page.evaluate(
+        "() => window.frappe?.boot?.assets_json?.['file_uploader.bundle.js']"
+    )
+    assert_(file_uploader_asset, "Product detail missing Frappe asset map for file uploader bundle")
 
     for attr in PRODUCT_VARIANT_EXPECTED_ATTRS:
         loc = page.locator(f".lt-product__attr[data-attribute-name='{attr}']")
@@ -804,6 +817,8 @@ def main() -> int:
         browser = p.chromium.launch(headless=True)
         ctx = browser.new_context(viewport={"width": 1280, "height": 800})
         page = ctx.new_page()
+        page_errors: list[str] = []
+        page.on("pageerror", lambda error: page_errors.append(str(error)))
         for fn in (
             check_homepage,
             check_shop_page,
@@ -825,11 +840,17 @@ def main() -> int:
             check_variant_add_to_cart_ui,
             check_product_single_page,
         ):
+            before_error_count = len(page_errors)
             try:
                 fn(page)
             except SmokeFail as e:
                 print(f"  FAIL: {e}")
                 failures.append(str(e))
+            new_asset_errors = _asset_boot_errors(page_errors[before_error_count:])
+            if new_asset_errors:
+                msg = f"{fn.__name__} triggered Frappe asset boot error: {new_asset_errors[0]}"
+                print(f"  FAIL: {msg}")
+                failures.append(msg)
         browser.close()
 
         try:

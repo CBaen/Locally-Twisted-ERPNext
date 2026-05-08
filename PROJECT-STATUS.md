@@ -53,7 +53,7 @@
 - **Project-level Codex capabilities installed 2026-05-01:** `.codex/capabilities/` is routed from `AGENTS.md`. Ephemeral Codex validation found `.codex/capabilities/INDEX.md` and read the `screenshot` ingredient on demand.
 
 **What's broken / pending:**
-- **Pre-existing Frappe asset-map bug** on product detail console: `Cannot read properties of undefined (reading 'file_uploader.bundle.js')`. Not from our work; page renders fine. P2.
+- **Frappe asset-map fallback guarded 2026-05-08:** product/shop pages now seed `frappe.boot.assets_json` from `frappe.utils.get_assets_json()` when Frappe's boot payload omits it, and `scripts/verify/smoke_shop.py` fails if the `file_uploader.bundle.js` boot error returns.
 - Routes changed from `/shop/<item>` to `/shop-items/<group>/<item>`. Pre-launch — no public bookmarks broken.
 
 **What's next (in order):**

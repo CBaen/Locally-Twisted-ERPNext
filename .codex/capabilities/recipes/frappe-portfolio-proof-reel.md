@@ -9,7 +9,7 @@ currently_true: true
 verification_level: 2
 last_verified: 2026-05-08
 evidence_quality: direct
-successful_uses: 6
+successful_uses: 7
 failed_uses: 1
 regressions: 3
 depends_on:
@@ -41,11 +41,11 @@ native Frappe shell and current style guide.
 ## Pattern
 
 1. Preserve the approved collage/movement behavior before preserving older local grid/card UI or later Codex reinterpretations.
-2. Keep the scroll-triggered entry, click-to-front pop, large whole-photo sizing, side/scale rhythm, no-captions photo proof, and mobile full-width slide-in stream.
+2. Keep the scroll-triggered entry, click-to-front pop, large whole-photo sizing, side/scale rhythm, no-captions photo proof, desktop image-only depth treatment, and mobile full-width slide-in stream.
 3. Replace what is fake, unsafe, or not LT-owned: placeholder image URLs, fake Brooklyn/contact copy, copied internal navigation, page-local Google font imports, custom cursor artifacts, prototype-only palette choices, route-specific Inquire/Studio/Index footer blocks, and broken asset paths.
 4. Translate into Frappe-owned files: route template, route controller, metadata, CSS, JS, optimized images, and verifiers.
 5. The real public site header/footer wrap the Frappe page. Do not add a second internal page header/nav copied from the prototype, and do not add a second route-local contact/index footer inside the portfolio field.
-6. Display real installed-work photos as the image itself. Do not add visible frame wrappers, card backgrounds, caption overlays, or forced aspect boxes that create letterbox stripes. Use LT's approved warm-white, navy, brass, berry, Cormorant, and Lato system for the branded route shell around the reel.
+6. Display real installed-work photos as the image itself. Do not add visible frame wrappers, card backgrounds, caption overlays, or forced aspect boxes that create letterbox stripes. A light desktop edge fade and shadow are allowed only when they are applied to the photo/pseudo-layer itself and do not create a new visible container. Use LT's approved warm-white, navy, brass, berry, Cormorant, and Lato system for the branded route shell around the reel.
 7. Use optimized derivatives for the public reel, but do not crop proof photos to satisfy layout convenience.
 8. Mobile should become a full-width natural-ratio slide-in stream with no captions and no side gutters, not a static stack and not a tiny desktop reel squeezed into a phone viewport.
 9. Keep the reference folder in `research/` while external critique is active. Delete it only after GL approves cleanup.
@@ -79,6 +79,13 @@ short pop/angle animation that settles into a stable front photo. Do not "improv
 three-column masonry grid, copied prototype shell, custom cursor experience,
 captioned card wall, or generic full-opacity card wall.
 
+Desktop depth is part of the current contract, but it is not a return to framed
+cards. Each photo may carry a subtle black edge fade and image-level shadow;
+the clicked front photo gets the stronger shadow. The portfolio hero must sit
+above the reel's stacking plane so the top photos cannot cover the hero when
+clicked forward. Mobile is intentionally separate and should not inherit new
+desktop depth behavior without a mobile-specific review.
+
 Use the approved side/scale rhythm in photo-array order:
 
 - sides: `left, right, left, center, left, right, left, right, center, right, left, right, left, right, left, center, left, right, left, right`
@@ -104,12 +111,13 @@ npm run test:interactive-layout -- --grep portfolio
 
 Also inspect desktop and mobile screenshots before launch claims, especially after photo-order or image-quality changes. For this reel, include Chrome and Brave captures when the failure report or user feedback mentions cross-browser differences.
 
-The latest verified use passed full `npm run test:portfolio-reel` 5/5,
+The latest verified use passed full `npm run test:portfolio-reel` 6/6,
 `npm run test:interactive-layout -- --grep portfolio` 6/6, and
 `npm run test:layout-fit -- --grep "portfolio fits"` 13/13 after GL rejected
 all photo captions, visible photo frame wrappers, old desktop sizing, the
-route-specific Inquire/Studio/Index footer block, and the mobile view not
-visibly changing in Brave. The route-specific portfolio verifier guards the
+route-specific Inquire/Studio/Index footer block, pointer-follow sway, top
+photos covering the hero, and the mobile view not visibly changing in Brave.
+The route-specific portfolio verifier guards the
 removed footer block directly. A clean Brave mobile pass returned
 200 with the cache-busted `20260508-no-captions-scale-2` assets, 15 photos, 0
 frame wrappers, 0 captions, first photo visible at full viewport width, second
@@ -121,10 +129,13 @@ backgrounds, image rect equals photo rect, locked first/second/fourth photo
 sizes from the `640 * scale * 1.10 * 1.5` math, original-density vertical
 spacing, optimized whole-photo assets, initial fade-in state, scroll-triggered
 desktop entry/opacity, click-to-front pop behavior that settles and ignores
-later pointer movement, no route-specific portfolio contact/index footer, and
-mobile full-width slide-in reveal instead of a static stack. The fifth
-portfolio verifier proves the click-to-front pop still changes the transform,
-then the settled front photo does not change when the pointer moves.
+later pointer movement, image-level desktop shadow, light desktop edge fade, a
+hero stacking plane above clicked front photos, no route-specific portfolio
+contact/index footer, and mobile full-width slide-in reveal instead of a static
+stack. The fifth portfolio verifier proves the click-to-front pop still changes
+the transform, then the settled front photo does not change when the pointer
+moves. The sixth portfolio verifier proves clicked top photos remain behind the
+portfolio hero.
 
 ## LT Receipt
 
@@ -144,6 +155,10 @@ mobile full-width slide-in reveal.
 The latest accessibility correction removed pointer-follow parallax and
 front-photo pointer tilt. Keep the click pop, but the front photo must settle
 after the short animation.
+The latest desktop depth correction added an image-only edge fade, image-level
+shadows, stronger front-photo overlap shadow, and a hero-above-reel stacking
+plane. It is desktop-only and must not be translated into mobile until mobile is
+reviewed separately.
 The kept production source is now the live Frappe translation into
 `apps/locally_twisted/locally_twisted/www/portfolio.html`,
 `apps/locally_twisted/locally_twisted/www/portfolio.py`,
