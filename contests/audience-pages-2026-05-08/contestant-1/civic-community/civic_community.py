@@ -155,4 +155,5 @@ def get_context(context):
     context.proof_stats = PROOF_STATS
     context.case_story = CASE_STORY
     context.audience_services = AUDIENCE_SERVICES
+    context.civic_buyer_notes = CIVIC_BUYER_NOTES
     return context

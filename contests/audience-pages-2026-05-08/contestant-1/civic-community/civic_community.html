@@ -12,6 +12,7 @@
     .lt-civic-gallery              → visual-field (photo proof)
     .lt-civic-clients              → band       (client name grid)
     .lt-civic-services             → band       (service note cards)
+    .lt-civic-buyer-notes          → band       (procurement/operational notes)
     .lt-civic-cta                  → fullbleed  (closing CTA band)
 #}
 
@@ -486,6 +487,45 @@
 @media (prefers-reduced-motion: reduce) {
   .lt-civic-gallery__item { transition: none; }
 }
+
+/* --- Civic buyer notes (band) --- */
+.lt-civic-buyer-notes {
+  background-color: var(--lt-slate-blue, #2C3E5D);
+  padding: 3.5rem 1.25rem;
+}
+.lt-civic-buyer-notes__inner { max-width: 1000px; margin: 0 auto; }
+.lt-civic-buyer-notes__heading {
+  font-family: var(--lt-font-heading, 'Cormorant Garamond', Georgia, serif);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--lt-warm-white, #FAF7F2);
+  text-align: center;
+  margin: 0 0 2rem;
+}
+.lt-civic-buyer-notes__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+@media (min-width: 600px) { .lt-civic-buyer-notes__grid { grid-template-columns: repeat(2, 1fr); } }
+.lt-civic-buyer-notes__item {
+  background-color: rgba(255,255,255,0.07);
+  border-radius: 4px;
+  padding: 1.25rem 1.5rem;
+  border-left: 3px solid var(--lt-brass, #B89A5B);
+}
+.lt-civic-buyer-notes__item-heading {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--lt-warm-white, #FAF7F2);
+  margin: 0 0 0.35rem;
+}
+.lt-civic-buyer-notes__item-body {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: rgba(250,247,242,0.75);
+  margin: 0;
+}
 </style>
 
 <div class="lt-page-civic">
@@ -627,7 +667,24 @@
     </div>
   </section>
 
-  {# 7. Closing CTA — fullbleed #}
+  {# 7. Civic buyer notes — band #}
+  <section class="lt-civic-buyer-notes" aria-labelledby="lt-civic-buyer-notes-heading">
+    <div class="lt-civic-buyer-notes__inner">
+      <h2 id="lt-civic-buyer-notes-heading" class="lt-civic-buyer-notes__heading">
+        What city and organization coordinators need to know
+      </h2>
+      <div class="lt-civic-buyer-notes__grid">
+        {% for note in civic_buyer_notes %}
+        <div class="lt-civic-buyer-notes__item">
+          <p class="lt-civic-buyer-notes__item-heading">{{ note.heading }}</p>
+          <p class="lt-civic-buyer-notes__item-body">{{ note.body }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  {# 8. Closing CTA — fullbleed #}
   <section class="lt-civic-cta lt-fullbleed" aria-labelledby="lt-civic-cta-heading">
     <div class="lt-civic-cta__inner">
       <p class="lt-civic-cta__eyebrow">Plan Your Civic Event</p>
