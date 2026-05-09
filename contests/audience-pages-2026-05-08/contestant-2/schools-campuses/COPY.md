@@ -75,16 +75,16 @@ School budgets are real. Tell us the ceiling and we'll design to it.
 **Heading:** How school installs work
 
 **Card 1 — School Colors. Exactly.**
-Latex and foil matched to your school's actual color system. No close-enough.
+We match against your school's official palette — not the balloon catalog's nearest option. Bring us the hex, the Pantone, or the athletic department's color guide and we source to it across latex and foil.
 
 **Card 2 — On Schedule for School Logistics**
-Installed before the event starts, cleared before the custodians need the space.
+We confirm the install window in writing before the event date. Equipment arrives when the gym or quad opens, and we clear before the custodians need the space — no overlap, no extra coordination on your end.
 
 **Card 3 — Family-Friendly and Safe**
-Appropriate for all ages. Professional install crew — background-checked, on time.
+All builds use non-toxic materials appropriate for students of any age. The install crew is professional and background-checked — no surprises for your administration.
 
 **Card 4 — Budget-Aware Builds**
-School budgets are real. Tell us the ceiling and we'll design to it.
+Tell us the ceiling and we design to it — not down from an inflated proposal. Activity directors and athletic coordinators tell us the number first; we tell them what's possible within it.
 
 ---
 

@@ -78,7 +78,7 @@ TESTIMONIALS = [
         "text": (
             "I needed a sports themed funeral stand. I told them what I needed, "
             "they captured my vision, delivered on time, very reasonable, "
-            "and had many complements. Very tasteful and meaningful."
+            "and had many compliments. Very tasteful and meaningful."
         ),
     },
     {

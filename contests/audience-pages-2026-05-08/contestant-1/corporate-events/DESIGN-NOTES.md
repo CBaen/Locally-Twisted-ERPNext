@@ -29,6 +29,14 @@ capability statement — controlled, credentialed, and specific.
 - The crawl is aria-hidden with a visible label above. Screen reader users
   hear "Clients include" and can tab through if they want; the animation
   pauses on hover/focus.
+- **Implementation constraint:** The crawl uses a CSS `animation` (translateX
+  loop) — NOT a JS marquee library. The brief prohibits "marquee carousels"
+  as a generic ecomm pattern; a CSS scroll animation on a static name list
+  is a different thing. If any future implementation reaches for a JS scroll
+  plugin, stop: render the names as a static two-row wrapping flex layout
+  instead. The names carry the proof; motion is optional. Static is always
+  acceptable. Animated scroll is acceptable only if it is pure CSS, pauses
+  on hover/focus, and requires no JS beyond what Frappe already loads.
 
 ### 3. Case story
 - Text-first layout on mobile (image below on small screens, image right on desktop).
