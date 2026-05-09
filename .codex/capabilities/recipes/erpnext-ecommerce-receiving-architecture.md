@@ -5,11 +5,11 @@ schema_version: 2.0
 level: recipe
 maturity: candidate
 scope: Locally Twisted ERPNext/Frappe ecommerce product import, product detail logic, cart, checkout, and invoice integration
-currently_true: planned
-verification_level: 1
+currently_true: research_synthesis_complete_no_build_approved
+verification_level: 2
 last_verified: 2026-05-09
-evidence_quality: GL decision + current code inspection
-successful_uses: 0
+evidence_quality: GL decision + official docs + live DB metadata + current code inspection + focused source verifiers
+successful_uses: 1
 failed_uses: 0
 regressions: 0
 depends_on:
@@ -77,14 +77,40 @@ Before building any missing ecommerce feature, write the feature's blast-radius 
 
 Expected feature notes: add-on subsystem, server pricing resolver, variant/media visibility, cascading option dependencies, product-template classification, cart metadata, checkout validation, Sales Order / invoice payload preservation, mobile journey behavior, and import readiness gates.
 
+## Current Research Receipt
+
+Codex synthesis exists at
+`research/expedition-erpnext-ecommerce-receiving-architecture/research-synthesis.md`.
+
+Current conclusion: LT needs line-level product configuration preservation before
+rendered product-page rebuild. Live ERPNext has product copy fields on
+`Website Item` and fulfillment fields on `Sales Order`, but no LT fields on
+`Sales Order Item` or `Sales Invoice Item` for selected options, add-ons, or
+customization. The next implementation slice is backend preservation through
+cart, checkout, Sales Order, invoice, and verifier evidence.
+
+Focused evidence:
+
+```powershell
+python scripts/verify/proof_product_contract.py
+python scripts/verify/product_page_contract_source_audit.py
+```
+
+Expected current result: proof product contract passes; source contract audit
+blocks import until resolver prices, media classification, color customization,
+and review-only axes are handled.
+
 ## Research Requirement
 
-Before implementation, draft a five-section research brief and dispatch `/expedition` only after GL approval. Research must cover both:
+Before implementation, use the current synthesis as the starting point. Further
+research is only needed for unresolved design decisions or new product classes.
+Research must cover both:
 
 - ERPNext/Frappe implementation patterns and sharp edges for custom ecommerce logic.
 - Odoo ecommerce concepts/behaviors that should be recreated safely inside ERPNext.
 
-The brief must be stranger-ready and exact to the current stack; do not dispatch a history-heavy handoff.
+Any future brief must be stranger-ready and exact to the current stack; do not
+dispatch a history-heavy handoff.
 
 ## Verification Pattern
 

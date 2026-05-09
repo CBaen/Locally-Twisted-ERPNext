@@ -1,0 +1,137 @@
+#!/usr/bin/env python3
+"""Dry-run the product-page contract against the saved Odoo/source catalog.
+
+This verifier is intentionally read-only. It does not touch ERPNext DB state.
+It shows whether source data is ready to drive a purge/rebuild import.
+"""
+
+from __future__ import annotations
+
+import json
+import sys
+from collections import Counter
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "apps" / "locally_twisted"))
+
+from locally_twisted.catalog_contract import build_product_page_contract
+
+SOURCE_CATALOG = ROOT / "_resources/odoo-live/catalog.json"
+SLUG_TO_GROUP = ROOT / "_resources/odoo-live/slug_to_group.json"
+REPORT_PATH = ROOT / Path(
+    "audits/odoo-erpnext-migration-audit-2026-05-08/"
+    "15-product-page-contract-source-audit.md"
+)
+
+
+def _load_products() -> list[dict]:
+    data = json.loads(SOURCE_CATALOG.read_text(encoding="utf-8"))
+    if isinstance(data, dict):
+        return list(data.get("products") or [])
+    return list(data or [])
+
+
+def _load_slug_to_group() -> dict[str, str]:
+    if not SLUG_TO_GROUP.exists():
+        return {}
+    data = json.loads(SLUG_TO_GROUP.read_text(encoding="utf-8"))
+    return {str(k): str(v) for k, v in data.items()}
+
+
+def main() -> int:
+    products = _load_products()
+    slug_to_group = _load_slug_to_group()
+    contracts = [
+        build_product_page_contract(product, category_hint=slug_to_group.get(str(product.get("slug") or ""), ""))
+        for product in products
+    ]
+
+    warning_counts = Counter()
+    for contract in contracts:
+        for warning in contract.warnings:
+            if "resolver-backed" in warning:
+                warning_counts["missing_resolver_prices"] += 1
+            elif "alternate images" in warning:
+                warning_counts["unclassified_gallery_images"] += 1
+            elif "Axis needs review" in warning:
+                warning_counts["axis_needs_review"] += 1
+            elif "Color axis removed" in warning:
+                warning_counts["color_axis_customization"] += 1
+            else:
+                warning_counts["other"] += 1
+
+    add_on_products = [contract for contract in contracts if contract.add_ons]
+    review_products = [contract for contract in contracts if contract.warnings]
+    gallery_products = [contract for contract in contracts if len(contract.gallery) > 1]
+    resolver_ready = [contract for contract in contracts if contract.source_variant_rows and contract.has_resolver_prices]
+
+    lines = [
+        "# Product Page Contract Source Audit",
+        "",
+        "This is a read-only dry run from Odoo/source catalog data into the new product-page contract shape.",
+        "It is not an ERPNext import and does not mutate the database.",
+        "",
+        "## Counts",
+        "",
+        f"- Source products: {len(products)}",
+        f"- Products with gallery/alternate images: {len(gallery_products)}",
+        f"- Products with confirmed add-on contracts: {len(add_on_products)}",
+        f"- Variant products with resolver-backed prices: {len(resolver_ready)}",
+        f"- Products with warnings/blockers: {len(review_products)}",
+        "",
+        "## Warning buckets",
+        "",
+    ]
+    for key, value in sorted(warning_counts.items()):
+        lines.append(f"- {key}: {value}")
+
+    lines.extend([
+        "",
+        "## Sample contracts needing review",
+        "",
+        "| Slug | Category hint | Variant rows | Required axes | Add-ons | Warnings |",
+        "|---|---|---:|---|---|---|",
+    ])
+    for contract in review_products[:25]:
+        axes = ", ".join(axis.name for axis in contract.required_axes)
+        addons = ", ".join(addon.key for addon in contract.add_ons)
+        warnings = "<br>".join(contract.warnings)
+        lines.append(
+            f"| {contract.slug} | {contract.category_hint} | {contract.source_variant_rows} | "
+            f"{axes} | {addons} | {warnings} |"
+        )
+
+    lines.extend([
+        "",
+        "## Interpretation",
+        "",
+        "The contract builder can separate confirmed foil-number add-ons from required axes, but the source artifact is not import-ready.",
+        "The largest blocker remains resolver-backed pricing: variant rows currently lack `erpnext_variant_price`.",
+        "Gallery images are present but intentionally marked review-needed until classified as parent gallery vs variant image vs other source media.",
+        "",
+        "## Gate result",
+        "",
+    ])
+
+    blocking = bool(warning_counts["missing_resolver_prices"] or warning_counts["axis_needs_review"])
+    if blocking:
+        lines.append("**BLOCKED for destructive purge/import.** Contract dry-run is useful, but source enrichment/classification is still required.")
+    else:
+        lines.append("**PASS for source contract readiness.**")
+
+    REPORT_PATH.write_text("\n".join(lines), encoding="utf-8")
+
+    if blocking:
+        print("[PRODUCT PAGE CONTRACT SOURCE AUDIT] BLOCKED")
+        print(f"report={REPORT_PATH}")
+        print(dict(warning_counts))
+        return 2
+
+    print("[PRODUCT PAGE CONTRACT SOURCE AUDIT] PASS")
+    print(f"report={REPORT_PATH}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

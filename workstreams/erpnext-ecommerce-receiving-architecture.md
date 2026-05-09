@@ -1,7 +1,7 @@
 # ERPNext Ecommerce Receiving Architecture
 
-Status: active planning handoff; no build/import approved.
-Owner context: OpenClaw/Moji, 2026-05-09.
+Status: active Codex takeover handoff; no build/import approved.
+Owner context: Codex, 2026-05-09. GL explicitly redirected this lane away from OpenClaw cockpit/infrastructure work and toward backend-first product-page architecture.
 
 ## Prime directive
 
@@ -101,11 +101,24 @@ Known current starting points from 2026-05-09 inspection:
 
 Treat these as current evidence to re-check, not final truth.
 
+## Codex research synthesis - 2026-05-09
+
+Durable research artifact:
+`research/expedition-erpnext-ecommerce-receiving-architecture/research-synthesis.md`
+
+Current conclusion:
+
+- ERPNext's transactional product unit is the concrete Item/variant, not the product template.
+- LT's current product page/cart/checkout path can resolve a variant and server price, but it drops structured product configuration before Sales Order Item and Sales Invoice Item.
+- Live ERPNext has LT custom fields on Website Item and Sales Order header, but no LT fields on Sales Order Item or Sales Invoice Item for selected options/add-ons/customization.
+- Source contract verification proves the proof-product shape is useful but real import is still blocked: resolver-backed prices, media classification, high-cardinality color customization, and nine review-only axes need architecture before product migration.
+- The first build slice should be backend preservation, not page rendering: line-level configuration storage, server-side resolver, cart payload versioning, checkout write, invoice copy, and verifiers.
+
 ## Immediate next safe work
 
-1. Draft `research/expedition-erpnext-ecommerce-receiving-architecture/research-brief.md` using the five-section research-brief format.
-2. Present only a short summary + path to GL.
-3. Dispatch `/expedition` only after approval.
-4. Produce synthesis with concrete implementation architecture, mapping matrix, blast-radius register, verifier plan, and explicit unknowns.
+1. Design the smallest line-level configuration preservation contract for Sales Order Item and Sales Invoice Item.
+2. Prove `unicorn-bouquet` can carry Bouquet Size plus optional foil-number meaning through cart, checkout, Sales Order, invoice, and Stripe amount parity.
+3. Prove `classic-arch` blocks checkout and creates/validates a structured quote payload until price/media/dependency gaps are resolved.
+4. Produce the implementation blast-radius note before code changes: fields, DocTypes/child tables, templates, APIs, cart payload, checkout, invoice copy, reports, and verifiers.
 
 No imports. No build. No purge. No product-transfer claims.
