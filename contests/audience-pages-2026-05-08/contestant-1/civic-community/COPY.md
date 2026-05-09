@@ -14,7 +14,7 @@ Ogden, Salt Lake, Sandy, and the Wasatch Front.
 
 **Eyebrow:** Civic & Community Events · Wasatch Front
 
-**H1:** Utah's civic and community events, visually led.
+**H1:** Utah civic events, built to photograph.
 
 **Lede:** From Pride celebrations to city government openings — professional
 balloon installations for events that represent Utah's public life.
