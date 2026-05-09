@@ -4,7 +4,7 @@
 
 **Eyebrow:** Utah public events & civic celebrations
 
-**H1:** Balloon decor for Utah public events.
+**H1:** Utah public events, built for the record.
 
 **Lede:** City celebrations, Pride events, chamber gatherings, and community milestones across the Wasatch Front.
 

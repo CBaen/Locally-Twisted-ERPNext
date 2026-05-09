@@ -32,7 +32,7 @@ designed for the moment, delivered to your venue or home.
 
 **Body:** Locally Twisted has helped families do this work. A sports theme. A favorite color. A place they loved, made visible for the people who loved them. Reach out and share the context — the team will handle it with care.
 
-**Blockquote:** "I needed a sports themed funeral stand. I told them what I needed, they captured my vision, delivered on time, very reasonable, and had many complements. Very tasteful and meaningful."
+**Blockquote:** "I needed a sports themed funeral stand. I told them what I needed, they captured my vision, delivered on time, very reasonable, and had many compliments. Very tasteful and meaningful."
 **Attribution:** KJSCOTT — Celebration of Life
 
 ---
@@ -99,7 +99,7 @@ my go-to for that long. They make every event I plan easier and extra special."
 
 **KJSCOTT — celebration of life**
 "I needed a sports themed funeral stand. I told them what I needed, they captured
-my vision, delivered on time, very reasonable, and had many complements. Very
+my vision, delivered on time, very reasonable, and had many compliments. Very
 tasteful and meaningful."
 
 **Sarah J. — birthday**

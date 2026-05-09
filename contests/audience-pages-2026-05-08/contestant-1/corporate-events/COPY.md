@@ -19,9 +19,7 @@ Ancestry, Zions Bank, KSL, Utah Jazz, and 30+ more.
 **Lede:** Grand openings, broadcast activations, corporate parties, and brand
 entrances — on color, on time, and professionally executed.
 
-**CTA 1 (primary):** Request a Corporate Quote →
-
-**CTA 2 (secondary):** View Installed Work
+**CTA (primary):** Request a Corporate Quote →
 
 ---
 

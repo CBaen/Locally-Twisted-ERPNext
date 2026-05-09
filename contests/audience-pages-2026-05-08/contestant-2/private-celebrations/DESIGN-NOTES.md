@@ -31,6 +31,16 @@ The headline names what every private buyer is actually investing in: a beautifu
 - Headline style is more editorial than functional for this page: "The party that felt like you planned it for a year." / "Elegant enough for the photographs. Personal enough for the couple." These are the buyer's interior monologue, not feature claims.
 - **Proof anchor per panel (added after Proxy Loop 1-1):** Each panel ends with a short attributed quote fragment drawn from the verified Google reviews — the moment of "this sounds beautiful" is now also the moment of "here's someone who felt it." The testimonials section below still exists for the longer-form voice, but the skeptical first-time buyer hits evidence at the panel level, not two scrolls later. Quotes kept short (one sentence max, first name + event type) so they read as punctuation, not as a second testimonial block.
 
+### "It is not a department. It is part of the work." — Layout Constraint
+
+This sentence in the Celebrations of Life section **must render as an isolated paragraph with no adjacent content on either side.** It cannot appear mid-paragraph, immediately before a list item, or run-on into the next sentence.
+
+If the CMS or Frappe's Rich Text renderer strips surrounding `<p>` tags and collapses adjacent content into one block, this sentence loses its weight entirely. The build instance must enforce the surrounding paragraph breaks — empty `<p>` spacers, a `<br>` pair, or explicit margin — whatever the rendering surface requires. The whitespace is not decoration. It is the mechanism by which the sentence lands.
+
+Do not let implementation simplify this away.
+
+---
+
 ### Brass divider (warm white, raw-band)
 - Same treatment as civic page — breaks sections visually without adding color.
 

@@ -101,11 +101,7 @@
   text-decoration: none;
   border-radius: 3px;
 }
-.lt-corp-hero__cta--secondary {
-  background-color: transparent;
-  border: 1px solid rgba(250,247,242,0.55);
-  margin-left: 0.5rem;
-}
+/* secondary CTA removed from hero — view-work link placed at gallery */
 .lt-corp-hero__cta:hover,
 .lt-corp-hero__cta:focus-visible {
   background-color: var(--lt-crimson, #B31B34);
@@ -485,9 +481,6 @@
         Request a Corporate Quote
         <span aria-hidden="true">&rarr;</span>
       </a>
-      <a href="/portfolio" class="lt-corp-hero__cta lt-corp-hero__cta--secondary">
-        View Installed Work
-      </a>
     </div>
   </section>
 
@@ -546,6 +539,11 @@
     <h2 id="lt-corp-gallery-heading" class="lt-corp-gallery__heading">
       Installed corporate work
     </h2>
+    <p style="text-align:center;margin:0 0 1.25rem;font-size:0.85rem;">
+      <a href="/portfolio" style="color:var(--lt-brass,#B89A5B);text-decoration:underline;text-underline-offset:3px;">
+        View full portfolio &rarr;
+      </a>
+    </p>
     <div class="lt-corp-gallery__grid" role="list">
       <div class="lt-corp-gallery__item" role="listitem"
            style="background-image: url('/assets/locally_twisted/images/portfolio/optimized/corporate-logo-arch.webp');"

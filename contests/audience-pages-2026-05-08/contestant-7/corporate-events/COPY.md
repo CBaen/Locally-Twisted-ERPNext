@@ -18,7 +18,7 @@
 
 **H2:** The installation reflects the brand. Every time.
 
-**Body:** From Zions Bank community days to KSL broadcast events, corporate clients need decor that matches brand standards — specific Pantone or PMS values, not approximate balloon colors. Locally Twisted custom-mixes for each engagement. AP billing, PO processing, and vendor onboarding are standard. The quote is specific: materials, labor, delivery, and setup in one line-item format.
+**Body:** Brand-safe means the colors are matched to a standards document, not eyeballed against a generic balloon catalog. Locally Twisted custom-mixes for each engagement — the result looks like it was made for your brand because it was. AP billing, PO processing, and vendor onboarding are standard. The quote is specific: materials, labor, delivery, and setup in one line-item format.
 
 ---
 
@@ -42,7 +42,7 @@
 
 ### Healthcare
 **Clients:** IHC · Mountain Star Medical
-**Note:** Community health events, staff celebrations, and facility grand openings.
+**Note:** Community health events, staff celebrations, and facility grand openings. Latex-free installations available — appropriate for clinical settings with infection-control protocols.
 
 ---
 

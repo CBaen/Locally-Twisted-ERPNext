@@ -6,7 +6,7 @@
 
 **H1:** Built for the public stage.
 
-**Lede:** Parade routes, city plazas, Pride celebrations, chamber events, and community gatherings — Locally Twisted has been delivering civic-scale balloon installations across Utah for over two decades.
+**Lede:** Parade routes, city plazas, Pride celebrations, chamber events, and community gatherings. Twenty-plus years of civic-scale balloon work across Utah.
 
 **CTA:** Request a civic quote →
 
@@ -28,7 +28,7 @@
 
 **H2:** Named civic & community relationships
 
-**Sub:** Organizations that have trusted Locally Twisted with public-facing events across the Wasatch Front.
+**Sub:** From city halls to Pride parades, every organization here had their event in public.
 
 **Client list (grouped by organization type — rendered as 4-column grid with brass-rule labels):**
 

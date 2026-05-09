@@ -2,7 +2,7 @@
 
 ## Hero
 **Eyebrow:** Civic & Community Events · Wasatch Front
-**H1:** Built for public events. Designed to photograph.
+**H1:** The decor the city photographs. The install the coordinator stands behind.
 **Lede:** Parade arches, civic plaza moments, Pride installations, and community-fair decor for Utah cities and organizations.
 **CTA:** Plan Your Event →
 
@@ -32,7 +32,7 @@ Safe Kids Fair, Tree House Museum, Western Sports Park, Station Park, Downtown D
 ### Story 1 — SLC Pride
 **Client label:** SLC Pride
 **Headline:** Parade-scale arches along the route
-**Body:** Full balloon arches sized for public parade clearance — designed to read at distance and photograph well from the street. Coordinated with Pride Center and Equality Utah on multi-year installs.
+**Body:** When the parade coverage runs, these arches are in every photograph. Full balloon arches sized for public parade clearance — designed to read at distance and photograph well from the street. Coordinated with Pride Center and Equality Utah on multi-year installs.
 
 ### Story 2 — Gallivan Center
 **Client label:** Gallivan Center

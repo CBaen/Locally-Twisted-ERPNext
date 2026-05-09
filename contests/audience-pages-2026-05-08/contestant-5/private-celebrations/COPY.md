@@ -2,7 +2,7 @@
 
 ## Hero
 
-**Eyebrow:** Birthdays · Weddings · Showers · Milestones · Remembrance
+**Eyebrow:** Birthdays · Weddings · Showers · Milestones · Celebration of Life
 
 **H1:** Balloon decor for life's milestone moments.
 
@@ -27,7 +27,7 @@ If you're here planning a memorial or celebration of life, you're in the right p
 *— Verified customer, memorial service*
 
 **Paragraph 3 (after pull-quote):**
-For every other kind of personal celebration — from children's birthday arches to organic wedding installations to anniversary garlands — the approach is the same: start with what you're imagining, not with a catalog. The category guide below shows the range of work the team has handled across the Wasatch Front.
+Below, the full range of occasions the team handles across the Wasatch Front — from children's birthday arches to organic wedding installations to anniversary garlands. Every conversation starts with what you're imagining, not with a catalog.
 
 *Structural purpose: Claims all buyer types — including grief buyers — BEFORE the category grid. KJSCOTT's review appears at scroll position 2 (immediately after hero), not after birthday and wedding proof.*
 

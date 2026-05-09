@@ -63,6 +63,18 @@ The twin anchors for civic buyers are (1) operational reliability — will they 
 - `seasonal-easter-rabbit-arch.webp` — gallery: community seasonal, family-safe civic range
 - Odoo: `Parades/Standard arch for parade.png` — proof story for Ogden City (to be moved post-winner)
 
+## Civic Procurement Cards — Render Hierarchy
+
+The four Civic Procurement Notes cards each carry two heading levels inside the card. Build instances must render them as follows — do not collapse them to the same visual weight:
+
+- **Italic category title** (e.g., "*City & County Accounts*") — eyebrow treatment: Lato, tracked uppercase, small (0.75rem / 11px), slate color, no bold
+- **Bold card label** (e.g., "Invoicing") — card H3: Cormorant Garamond or Lato semibold, ~1.1rem, near-black
+- **Body text** — Lato regular, base size
+
+If both heading levels render at the same weight, the card collapses into a wall of text and the hierarchy is lost.
+
+---
+
 ## Voice decisions
 - "Built for public events" — not "perfect for" or "great for." Built implies engineering intent.
 - "Designed to photograph" — honest and specific. Civic planners want the Instagram moment for the city.

@@ -87,7 +87,7 @@ If you're here for a celebration of life, you're in the right place. The same ca
 
 ---
 
-## Section 5 — Testimonials
+## Section 6 — Testimonials
 
 **H2:** What people say
 
@@ -107,7 +107,7 @@ If you're here for a celebration of life, you're in the right place. The same ca
 
 ---
 
-## Section 6 — Capability bar
+## Section 7 — Capability bar
 
 **H2:** What you can count on
 
@@ -127,7 +127,7 @@ If you're here for a celebration of life, you're in the right place. The same ca
 
 ---
 
-## Section 7 — Service note
+## Section 8 — Service note
 
 **Label:** For families, couples, and celebration planners
 
@@ -137,7 +137,7 @@ If you're here for a celebration of life, you're in the right place. The same ca
 
 ---
 
-## Section 8 — CTA
+## Section 9 — CTA
 
 **H2:** Tell us what you're imagining.
 

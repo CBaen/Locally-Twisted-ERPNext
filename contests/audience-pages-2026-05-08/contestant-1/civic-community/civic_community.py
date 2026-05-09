@@ -44,7 +44,7 @@ CIVIC_CLIENTS = [
 # Proof stats — do not inflate; these reflect provable scope only.
 PROOF_STATS = [
     {"figure": "20+", "label": "Utah cities served"},
-    {"figure": "10+", "label": "years of civic events"},
+    {"figure": "20+", "label": "years of civic events"},
     {"figure": "Pride", "label": "Salt Lake City, Ogden & beyond"},
     {"figure": "Wasatch", "label": "Front to back range"},
 ]

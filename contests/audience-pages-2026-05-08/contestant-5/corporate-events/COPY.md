@@ -30,7 +30,7 @@
 | Megaplex | Entertainment |
 | Paramount | Entertainment |
 | Museum of Illusion | Entertainment |
-| FanX | Entertainment |
+| FanX | Entertainment *(multi-day convention install)* |
 | Zions Bank | Banking & Finance |
 | America First Credit Union | Banking & Finance |
 | Fidelity | Banking & Finance |
@@ -132,6 +132,6 @@ To begin, share the event brief or submit through the contact form. The team wil
 
 **H2:** Ready to discuss your event?
 
-**Body:** Share the event date, venue, and brand requirements. The team returns a formal quote, usually within one business day.
+**Body:** Share the event date, venue, and brand requirements. The team returns a formal quote within one business day for most requests.
 
 **Button:** Request a corporate quote →

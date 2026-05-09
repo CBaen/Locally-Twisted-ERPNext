@@ -83,7 +83,7 @@
 
 **H2:** How the process works for school clients
 
-**Body:** Quote requests should include the event type, date, venue setup window, and your school's color values. A complete quote covers materials, delivery, installation, and teardown — no separate line items to argue with administrators. For graduation ceremonies, installation is timed to venue walk-throughs before families arrive. For high-traffic student events, installs are placed in positions that hold up for the full event duration. School purchase orders are accepted.
+**Body:** Quote requests should include the event type, date, venue setup window (the time you have access to the space before students arrive), and your school's color values. A complete quote covers materials, delivery, installation, and teardown — no separate line items to argue with administrators. For graduation ceremonies, installation is timed to venue walk-throughs before families arrive. For high-traffic student events, installs are placed in positions that hold up for the full event duration. School purchase orders are accepted.
 
 ---
 

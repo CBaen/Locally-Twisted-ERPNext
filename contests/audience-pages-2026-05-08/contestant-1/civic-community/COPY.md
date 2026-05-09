@@ -28,7 +28,7 @@ balloon installations for events that represent Utah's public life.
 | Figure | Label |
 |--------|-------|
 | 20+ | Utah cities served |
-| 10+ | years of civic events |
+| 20+ | years of civic events |
 | Pride | Salt Lake City, Ogden & beyond |
 | Wasatch | Front to back range |
 
