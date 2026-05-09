@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LT Audience Pages Contest — Render Gallery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#0E2240;--slate:#2F3A4A;--crimson:#B31B34;--brass:#B89A5B;
+  --warm-white:#FAF7F2;--white:#FFFFFF;--near-black:#0A0A0B;
+  --soft-gray:#595A5C;--stone:#E7E5E1;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Lato',sans-serif;background:var(--warm-white);color:var(--near-black);}
+a{color:inherit;text-decoration:none;}
+
+/* --- Header --- */
+.gallery-header{
+  background:var(--navy);
+  padding:48px 24px 40px;
+  text-align:center;
+}
+.gallery-header__eyebrow{
+  font-family:'Lato',sans-serif;font-size:.72rem;font-weight:700;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--brass);
+  margin-bottom:.75rem;
+}
+.gallery-header__title{
+  font-family:'Cormorant Garamond',Georgia,serif;font-size:2.5rem;font-weight:700;
+  color:var(--warm-white);line-height:1.1;margin-bottom:.75rem;
+}
+.gallery-header__sub{
+  font-size:1rem;color:rgba(250,247,242,.75);max-width:56ch;margin:0 auto .5rem;line-height:1.55;
+}
+.gallery-header__notice{
+  display:inline-block;background:rgba(184,154,91,.15);border:1px solid rgba(184,154,91,.35);
+  border-radius:3px;padding:6px 14px;font-size:.72rem;color:var(--brass);
+  letter-spacing:.08em;margin-top:1rem;
+}
+
+/* --- Rankings bar --- */
+.rankings-bar{
+  background:var(--slate);padding:20px 24px;display:flex;flex-wrap:wrap;
+  gap:12px;justify-content:center;border-bottom:3px solid var(--brass);
+}
+.rank-chip{
+  background:rgba(255,255,255,.06);border:1px solid rgba(184,154,91,.25);
+  border-radius:3px;padding:8px 14px;text-align:center;
+}
+.rank-chip__label{font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--brass);}
+.rank-chip__score{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:var(--warm-white);line-height:1;}
+.rank-chip__concept{font-size:.72rem;color:rgba(250,247,242,.6);margin-top:2px;}
+.rank-chip--leader{border-color:var(--brass);background:rgba(184,154,91,.12);}
+
+/* --- Main grid --- */
+.gallery-main{max-width:1400px;margin:0 auto;padding:40px 20px;}
+.gallery-section{margin-bottom:60px;}
+.section-header{
+  display:flex;align-items:baseline;gap:16px;margin-bottom:24px;
+  padding-bottom:12px;border-bottom:2px solid var(--stone);
+}
+.section-header__rank{
+  font-family:'Cinzel',Georgia,serif;font-size:.72rem;font-weight:600;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--crimson);
+  background:rgba(179,27,52,.08);border:1px solid rgba(179,27,52,.2);
+  padding:4px 10px;border-radius:2px;white-space:nowrap;
+}
+.section-header__rank--leader{
+  color:var(--brass);background:rgba(184,154,91,.1);border-color:rgba(184,154,91,.3);
+}
+.section-header__c{
+  font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;
+  color:var(--near-black);
+}
+.section-header__score{
+  font-size:.85rem;color:var(--soft-gray);margin-left:auto;
+}
+
+/* --- Page grid for each contestant --- */
+.pages-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+}
+@media(max-width:900px){.pages-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:500px){.pages-grid{grid-template-columns:1fr;}}
+
+.page-card{border:1px solid var(--stone);border-radius:4px;overflow:hidden;background:#fff;}
+.page-card__label{
+  font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--soft-gray);padding:8px 10px 6px;background:var(--stone);
+  border-bottom:1px solid #d5d3cf;
+}
+.page-card__viewport-pair{display:flex;flex-direction:column;gap:0;}
+.viewport-thumb{
+  position:relative;overflow:hidden;
+  cursor:pointer;
+  border-bottom:1px solid var(--stone);
+}
+.viewport-thumb:last-child{border-bottom:none;}
+.viewport-thumb__label{
+  position:absolute;top:6px;left:6px;
+  background:rgba(10,10,11,.75);color:rgba(250,247,242,.9);
+  font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  padding:2px 6px;border-radius:2px;pointer-events:none;z-index:2;
+}
+.viewport-thumb img{
+  display:block;width:100%;height:auto;
+  transition:opacity .15s;
+}
+.viewport-thumb:hover img{opacity:.88;}
+
+/* --- Modal --- */
+.modal{
+  display:none;position:fixed;inset:0;z-index:1000;
+  background:rgba(10,10,11,.92);
+  align-items:center;justify-content:center;
+  padding:16px;
+}
+.modal.is-open{display:flex;}
+.modal__inner{
+  position:relative;max-width:95vw;max-height:95vh;overflow:auto;
+  background:#fff;border-radius:4px;
+}
+.modal__close{
+  position:fixed;top:16px;right:16px;
+  background:var(--crimson);color:#fff;border:none;cursor:pointer;
+  width:36px;height:36px;border-radius:50%;font-size:1.2rem;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;z-index:1001;
+}
+.modal__img{display:block;max-width:100%;height:auto;}
+.modal__caption{
+  padding:10px 16px;background:var(--navy);color:rgba(250,247,242,.75);
+  font-size:.75rem;letter-spacing:.06em;
+}
+
+/* --- Footer --- */
+.gallery-footer{
+  background:var(--near-black);padding:32px 24px;text-align:center;
+  color:rgba(250,247,242,.4);font-size:.75rem;
+}
+</style>
+</head>
+<body>
+
+<header class="gallery-header">
+  <p class="gallery-header__eyebrow">Locally Twisted &middot; 2026-05-08 Contest</p>
+  <h1 class="gallery-header__title">Audience Pages — Render Gallery</h1>
+  <p class="gallery-header__sub">8 contestants &times; 4 pages &times; 2 viewports = 64 screenshots. Click any thumbnail to view full-size.</p>
+  <span class="gallery-header__notice">Static preview harness &mdash; images replaced with placeholders, nav/footer simplified. See source .html files for full implementation.</span>
+</header>
+
+<div class="rankings-bar">
+  <div class="rank-chip rank-chip--leader">
+    <div class="rank-chip__label">🥇 1st</div>
+    <div class="rank-chip__score">C7 &middot; 26.71</div>
+    <div class="rank-chip__concept">The Proof is in the Place</div>
+  </div>
+  <div class="rank-chip">
+    <div class="rank-chip__label">🥈 2nd (tie)</div>
+    <div class="rank-chip__score">C1 &middot; 26.00</div>
+    <div class="rank-chip__concept">Audience Authority</div>
+  </div>
+  <div class="rank-chip">
+    <div class="rank-chip__label">🥈 2nd (tie)</div>
+    <div class="rank-chip__score">C2 &middot; 26.00</div>
+    <div class="rank-chip__concept">The Right Room</div>
+  </div>
+  <div class="rank-chip">
+    <div class="rank-chip__label">🥈 2nd (tie)</div>
+    <div class="rank-chip__score">C5 &middot; 26.00</div>
+    <div class="rank-chip__concept">Proof-First Buyer Suite</div>
+  </div>
+  <div class="rank-chip">
+    <div class="rank-chip__label">5th</div>
+    <div class="rank-chip__score">C6 &middot; 24.71</div>
+    <div class="rank-chip__concept">Buyer-Scoped Authority</div>
+  </div>
+  <div class="rank-chip">
+    <div class="rank-chip__label">6th</div>
+    <div class="rank-chip__score">C4 &middot; 24.57</div>
+    <div class="rank-chip__concept">One System, Four Buyers</div>
+  </div>
+  <div class="rank-chip">
+    <div class="rank-chip__label">7th (tie)</div>
+    <div class="rank-chip__score">C3 &middot; 24.29</div>
+    <div class="rank-chip__concept">Made For You (anxiety-first)</div>
+  </div>
+  <div class="rank-chip">
+    <div class="rank-chip__label">7th (tie)</div>
+    <div class="rank-chip__score">C8 &middot; 24.29</div>
+    <div class="rank-chip__concept">Made For You (named-promise)</div>
+  </div>
+</div>
+
+<main class="gallery-main">
+
+  <!-- Render order: rank order — C7 first, then C1, C2, C5, C6, C4, C3, C8 -->
+
+  <!-- C7: The Proof is in the Place -->
+  <section class="gallery-section" id="c7">
+    <div class="section-header">
+      <span class="section-header__rank section-header__rank--leader">🥇 Rank 1</span>
+      <h2 class="section-header__c">C7 &mdash; The Proof is in the Place</h2>
+      <span class="section-header__score">26.71 / 30 &middot; AF 9.14 &middot; PD 8.71 &middot; SD 8.86</span>
+    </div>
+    <div class="pages-grid">
+      <div class="page-card">
+        <div class="page-card__label">Civic &amp; Community</div>
+        <div class="page-card__viewport-pair">
+          <div class="viewport-thumb" onclick="openModal('screenshots/contestant-7/civic-community-mobile.png','C7 Civic Community — Mobile (390px)')">
+            <span class="viewport-thumb__label">Mobile 390px</span>
+            <img src="screenshots/contestant-7/civic-community-mobile.png" alt="C7 civic-community mobile" loading="lazy">
+          </div>
+          <div class="viewport-thumb" onclick="openModal('screenshots/contestant-7/civic-community-desktop.png','C7 Civic Community — Desktop (1440px)')">
+            <span class="viewport-thumb__label">Desktop 1440px</span>
+            <img src="screenshots/contestant-7/civic-community-desktop.png" alt="C7 civic-community desktop" loading="lazy">
+          </div>
+        </div>
+      </div>
+      <div class="page-card">
+        <div class="page-card__label">Corporate Events</div>
+        <div class="page-card__viewport-pair">
+          <div class="viewport-thumb" onclick="openModal('screenshots/contestant-7/corporate-events-mobile.png','C7 Corporate Events — Mobile (390px)')">
+            <span class="viewport-thumb__label">Mobile 390px</span>
+            <img src="screenshots/contestant-7/corporate-events-mobile.png" alt="C7 corporate-events mobile" loading="lazy">
+          </div>
+          <div class="viewport-thumb" onclick="openModal('screenshots/contestant-7/corporate-events-desktop.png','C7 Corporate Events — Desktop (1440px)')">
+            <span class="viewport-thumb__label">Desktop 1440px</span>
+            <img src="screenshots/contestant-7/corporate-events-desktop.png" alt="C7 corporate-events desktop" loading="lazy">
+          </div>
+        </div>
+      </div>
+      <div class="page-card">
+        <div class="page-card__label">Private Celebrations</div>
+        <div class="page-card__viewport-pair">
+          <div class="viewport-thumb" onclick="openModal('screenshots/contestant-7/private-celebrations-mobile.png','C7 Private Celebrations — Mobile (390px)')">
+            <span class="viewport-thumb__label">Mobile 390px</span>
+            <img src="screenshots/contestant-7/private-celebrations-mobile.png" alt="C7 private-celebrations mobile" loading="lazy">
+          </div>
+          <div class="viewport-thumb" onclick="openModal('screenshots/contestant-7/private-celebrations-desktop.png','C7 Private Celebrations — Desktop (1440px)')">
+            <span class="viewport-thumb__label">Desktop 1440px</span>
+            <img src="screenshots/contestant-7/private-celebrations-desktop.png" alt="C7 private-celebrations desktop" loading="lazy">
+          </div>
+        </div>
+      </div>
+      <div class="page-card">
+        <div class="page-card__label">Schools &amp; Campuses</div>
+        <div class="page-card__viewport-pair">
+          <div class="viewport-thumb" onclick="openModal('screenshots/contestant-7/schools-campuses-mobile.png','C7 Schools &amp; Campuses — Mobile (390px)')">
+            <span class="viewport-thumb__label">Mobile 390px</span>
+            <img src="screenshots/contestant-7/schools-campuses-mobile.png" alt="C7 schools-campuses mobile" loading="lazy">
+          </div>
+          <div class="viewport-thumb" onclick="openModal('screenshots/contestant-7/schools-campuses-desktop.png','C7 Schools &amp; Campuses — Desktop (1440px)')">
+            <span class="viewport-thumb__label">Desktop 1440px</span>
+            <img src="screenshots/contestant-7/schools-campuses-desktop.png" alt="C7 schools-campuses desktop" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- C1: Audience Authority -->
+  <section class="gallery-section" id="c1">
+    <div class="section-header">
+      <span class="section-header__rank">🥈 Rank 2 (tie)</span>
+      <h2 class="section-header__c">C1 &mdash; Audience Authority</h2>
+      <span class="section-header__score">26.00 / 30 &middot; AF 8.86 &middot; PD 8.86 &middot; SD 8.29</span>
+    </div>
+    <div class="pages-grid">
+      <div class="page-card">
+        <div class="page-card__label">Civic &amp; Community</div>
+        <div class="page-card__viewport-pair">
+          <div class="viewport-thumb" onclick="openModal('screenshots/contestant-1/civic-community-mobile.png','C1 Civic Community — Mobile')"><span class="viewport-thumb__label">Mobile 390px</span><img src="screenshots/contestant-1/civic-community-mobile.png" alt="" loading="lazy"></div>
+          <div class="viewport-thumb" onclick="openModal('screenshots/contestant-1/civic-community-desktop.png','C1 Civic Community — Desktop')"><span class="viewport-thumb__label">Desktop 1440px</span><img src="screenshots/contestant-1/civic-community-desktop.png" alt="" loading="lazy"></div>
+        </div>
+      </div>
+      <div class="page-card">
+        <div class="page-card__label">Corporate Events</div>
+        <div class="page-card__viewport-pair">
+          <div class="viewport-thumb" onclick="openModal('screenshots/contestant-1/corporate-events-mobile.png','C1 Corporate Events — Mobile')"><span class="viewport-thumb__label">Mobile 390px</span><img src="screenshots/contestant-1/corporate-events-mobile.png" alt="" loading="lazy"></div>
+          <div class="viewport-thumb" onclick="openModal('screenshots/contestant-1/corporate-events-desktop.png','C1 Corporate Events — Desktop')"><span class="viewport-thumb__label">Desktop 1440px</span><img src="screenshots/contestant-1/corporate-events-desktop.png" alt="" loading="lazy"></div>
+        </div>
+      </div>
+      <div class="page-card">
+        <div class="page-card__label">Private Celebrations</div>
+        <div class="page-card__viewport-pair">
+          <div class="viewport-thumb" onclick="openModal('screenshots/contestant-1/private-celebrations-mobile.png','C1 Private Celebrations — Mobile')"><span class="viewport-thumb__label">Mobile 390px</span><img src="screenshots/contestant-1/private-celebrations-mobile.png" alt="" loading="lazy"></div>
+          <div class="viewport-thumb" onclick="openModal('screenshots/contestant-1/private-celebrations-desktop.png','C1 Private Celebrations — Desktop')"><span class="viewport-thumb__label">Desktop 1440px</span><img src="screenshots/contestant-1/private-celebrations-desktop.png" alt="" loading="lazy"></div>
+        </div>
+      </div>
+      <div class="page-card">
+        <div class="page-card__label">Schools &amp; Campuses</div>
+        <div class="page-card__viewport-pair">
+          <div class="viewport-thumb" onclick="openModal('screenshots/contestant-1/schools-campuses-mobile.png','C1 Schools — Mobile')"><span class="viewport-thumb__label">Mobile 390px</span><img src="screenshots/contestant-1/schools-campuses-mobile.png" alt="" loading="lazy"></div>
+          <div class="viewport-thumb" onclick="openModal('screenshots/contestant-1/schools-campuses-desktop.png','C1 Schools — Desktop')"><span class="viewport-thumb__label">Desktop 1440px</span><img src="screenshots/contestant-1/schools-campuses-desktop.png" alt="" loading="lazy"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- C2: The Right Room -->
+  <section class="gallery-section" id="c2">
+    <div class="section-header">
+      <span class="section-header__rank">🥈 Rank 2 (tie)</span>
+      <h2 class="section-header__c">C2 &mdash; The Right Room</h2>
+      <span class="section-header__score">26.00 / 30 &middot; AF 9.00 &middot; PD 8.00 &middot; SD 9.00 &middot; Zero variance</span>
+    </div>
+    <div class="pages-grid">
+      <div class="page-card"><div class="page-card__label">Civic &amp; Community</div><div class="page-card__viewport-pair"><div class="viewport-thumb" onclick="openModal('screenshots/contestant-2/civic-community-mobile.png','C2 Civic Community — Mobile')"><span class="viewport-thumb__label">Mobile 390px</span><img src="screenshots/contestant-2/civic-community-mobile.png" alt="" loading="lazy"></div><div class="viewport-thumb" onclick="openModal('screenshots/contestant-2/civic-community-desktop.png','C2 Civic Community — Desktop')"><span class="viewport-thumb__label">Desktop 1440px</span><img src="screenshots/contestant-2/civic-community-desktop.png" alt="" loading="lazy"></div></div></div>
+      <div class="page-card"><div class="page-card__label">Corporate Events</div><div class="page-card__viewport-pair"><div class="viewport-thumb" onclick="openModal('screenshots/contestant-2/corporate-events-mobile.png','C2 Corporate Events — Mobile')"><span class="viewport-thumb__label">Mobile 390px</span><img src="screenshots/contestant-2/corporate-events-mobile.png" alt="" loading="lazy"></div><div class="viewport-thumb" onclick="openModal('screenshots/contestant-2/corporate-events-desktop.png','C2 Corporate Events — Desktop')"><span class="viewport-thumb__label">Desktop 1440px</span><img src="screenshots/contestant-2/corporate-events-desktop.png" alt="" loading="lazy"></div></div></div>
+      <div class="page-card"><div class="page-card__label">Private Celebrations</div><div class="page-card__viewport-pair"><div class="viewport-thumb" onclick="openModal('screenshots/contestant-2/private-celebrations-mobile.png','C2 Private — Mobile')"><span class="viewport-thumb__label">Mobile 390px</span><img src="screenshots/contestant-2/private-celebrations-mobile.png" alt="" loading="lazy"></div><div class="viewport-thumb" onclick="openModal('screenshots/contestant-2/private-celebrations-desktop.png','C2 Private — Desktop')"><span class="viewport-thumb__label">Desktop 1440px</span><img src="screenshots/contestant-2/private-celebrations-desktop.png" alt="" loading="lazy"></div></div></div>
+      <div class="page-card"><div class="page-card__label">Schools &amp; Campuses</div><div class="page-card__viewport-pair"><div class="viewport-thumb" onclick="openModal('screenshots/contestant-2/schools-campuses-mobile.png','C2 Schools — Mobile')"><span class="viewport-thumb__label">Mobile 390px</span><img src="screenshots/contestant-2/schools-campuses-mobile.png" alt="" loading="lazy"></div><div class="viewport-thumb" onclick="openModal('screenshots/contestant-2/schools-campuses-desktop.png','C2 Schools — Desktop')"><span class="viewport-thumb__label">Desktop 1440px</span><img src="screenshots/contestant-2/schools-campuses-desktop.png" alt="" loading="lazy"></div></div></div>
+    </div>
+  </section>
+
+  <!-- C5: Proof-First Buyer Suite -->
+  <section class="gallery-section" id="c5">
+    <div class="section-header">
+      <span class="section-header__rank">🥈 Rank 2 (tie)</span>
+      <h2 class="section-header__c">C5 &mdash; Proof-First Buyer Suite</h2>
+      <span class="section-header__score">26.00 / 30 &middot; AF 9.00 &middot; PD 9.00 &middot; SD 8.00 &middot; Zero variance</span>
+    </div>
+    <div class="pages-grid">
+      <div class="page-card"><div class="page-card__label">Civic &amp; Community</div><div class="page-card__viewport-pair"><div class="viewport-thumb" onclick="openModal('screenshots/contestant-5/civic-community-mobile.png','C5 Civic — Mobile')"><span class="viewport-thumb__label">Mobile 390px</span><img src="screenshots/contestant-5/civic-community-mobile.png" alt="" loading="lazy"></div><div class="viewport-thumb" onclick="openModal('screenshots/contestant-5/civic-community-desktop.png','C5 Civic — Desktop')"><span class="viewport-thumb__label">Desktop 1440px</span><img src="screenshots/contestant-5/civic-community-desktop.png" alt="" loading="lazy"></div></div></div>
+      <div class="page-card"><div class="page-card__label">Corporate Events</div><div class="page-card__viewport-pair"><div class="viewport-thumb" onclick="openModal('screenshots/contestant-5/corporate-events-mobile.png','C5 Corporate — Mobile')"><span class="viewport-thumb__label">Mobile 390px</span><img src="screenshots/contestant-5/corporate-events-mobile.png" alt="" loading="lazy"></div><div class="viewport-thumb" onclick="openModal('screenshots/contestant-5/corporate-events-desktop.png','C5 Corporate — Desktop')"><span class="viewport-thumb__label">Desktop 1440px</span><img src="screenshots/contestant-5/corporate-events-desktop.png" alt="" loading="lazy"></div></div></div>
+      <div class="page-card"><div class="page-card__label">Private Celebrations</div><div class="page-card__viewport-pair"><div class="viewport-thumb" onclick="openModal('screenshots/contestant-5/private-celebrations-mobile.png','C5 Private — Mobile')"><span class="viewport-thumb__label">Mobile 390px</span><img src="screenshots/contestant-5/private-celebrations-mobile.png" alt="" loading="lazy"></div><div class="viewport-thumb" onclick="openModal('screenshots/contestant-5/private-celebrations-desktop.png','C5 Private — Desktop')"><span class="viewport-thumb__label">Desktop 1440px</span><img src="screenshots/contestant-5/private-celebrations-desktop.png" alt="" loading="lazy"></div></div></div>
+      <div class="page-card"><div class="page-card__label">Schools &amp; Campuses</div><div class="page-card__viewport-pair"><div class="viewport-thumb" onclick="openModal('screenshots/contestant-5/schools-campuses-mobile.png','C5 Schools — Mobile')"><span class="viewport-thumb__label">Mobile 390px</span><img src="screenshots/contestant-5/schools-campuses-mobile.png" alt="" loading="lazy"></div><div class="viewport-thumb" onclick="openModal('screenshots/contestant-5/schools-campuses-desktop.png','C5 Schools — Desktop')"><span class="viewport-thumb__label">Desktop 1440px</span><img src="screenshots/contestant-5/schools-campuses-desktop.png" alt="" loading="lazy"></div></div></div>
+    </div>
+  </section>
+
+  <!-- C6: Buyer-Scoped Authority -->
+  <section class="gallery-section" id="c6">
+    <div class="section-header">
+      <span class="section-header__rank">Rank 5</span>
+      <h2 class="section-header__c">C6 &mdash; Buyer-Scoped Authority</h2>
+      <span class="section-header__score">24.71 / 30 &middot; AF 8.14 &middot; PD 8.29 &middot; SD 8.29</span>
+    </div>
+    <div class="pages-grid">
+      <div class="page-card"><div class="page-card__label">Civic &amp; Community</div><div class="page-card__viewport-pair"><div class="viewport-thumb" onclick="openModal('screenshots/contestant-6/civic-community-mobile.png','C6 Civic — Mobile')"><span class="viewport-thumb__label">Mobile 390px</span><img src="screenshots/contestant-6/civic-community-mobile.png" alt="" loading="lazy"></div><div class="viewport-thumb" onclick="openModal('screenshots/contestant-6/civic-community-desktop.png','C6 Civic — Desktop')"><span class="viewport-thumb__label">Desktop 1440px</span><img src="screenshots/contestant-6/civic-community-desktop.png" alt="" loading="lazy"></div></div></div>
+      <div class="page-card"><div class="page-card__label">Corporate Events</div><div class="page-card__viewport-pair"><div class="viewport-thumb" onclick="openModal('screenshots/contestant-6/corporate-events-mobile.png','C6 Corporate — Mobile')"><span class="viewport-thumb__label">Mobile 390px</span><img src="screenshots/contestant-6/corporate-events-mobile.png" alt="" loading="lazy"></div><div class="viewport-thumb" onclick="openModal('screenshots/contestant-6/corporate-events-desktop.png','C6 Corporate — Desktop')"><span class="viewport-thumb__label">Desktop 1440px</span><img src="screenshots/contestant-6/corporate-events-desktop.png" alt="" loading="lazy"></div></div></div>
+      <div class="page-card"><div class="page-card__label">Private Celebrations</div><div class="page-card__viewport-pair"><div class="viewport-thumb" onclick="openModal('screenshots/contestant-6/private-celebrations-mobile.png','C6 Private — Mobile')"><span class="viewport-thumb__label">Mobile 390px</span><img src="screenshots/contestant-6/private-celebrations-mobile.png" alt="" loading="lazy"></div><div class="viewport-thumb" onclick="openModal('screenshots/contestant-6/private-celebrations-desktop.png','C6 Private — Desktop')"><span class="viewport-thumb__label">Desktop 1440px</span><img src="screenshots/contestant-6/private-celebrations-desktop.png" alt="" loading="lazy"></div></div></div>
+      <div class="page-card"><div class="page-card__label">Schools &amp; Campuses</div><div class="page-card__viewport-pair"><div class="viewport-thumb" onclick="openModal('screenshots/contestant-6/schools-campuses-mobile.png','C6 Schools — Mobile')"><span class="viewport-thumb__label">Mobile 390px</span><img src="screenshots/contestant-6/schools-campuses-mobile.png" alt="" loading="lazy"></div><div class="viewport-thumb" onclick="openModal('screenshots/contestant-6/schools-campuses-desktop.png','C6 Schools — Desktop')"><span class="viewport-thumb__label">Desktop 1440px</span><img src="screenshots/contestant-6/schools-campuses-desktop.png" alt="" loading="lazy"></div></div></div>
+    </div>
+  </section>
+
+  <!-- C4: One System, Four Buyers -->
+  <section class="gallery-section" id="c4">
+    <div class="section-header">
+      <span class="section-header__rank">Rank 6</span>
+      <h2 class="section-header__c">C4 &mdash; One System, Four Buyers</h2>
+      <span class="section-header__score">24.57 / 30 &middot; AF 7.86 &middot; PD 8.00 &middot; SD 8.71</span>
+    </div>
+    <div class="pages-grid">
+      <div class="page-card"><div class="page-card__label">Civic &amp; Community</div><div class="page-card__viewport-pair"><div class="viewport-thumb" onclick="openModal('screenshots/contestant-4/civic-community-mobile.png','C4 Civic — Mobile')"><span class="viewport-thumb__label">Mobile 390px</span><img src="screenshots/contestant-4/civic-community-mobile.png" alt="" loading="lazy"></div><div class="viewport-thumb" onclick="openModal('screenshots/contestant-4/civic-community-desktop.png','C4 Civic — Desktop')"><span class="viewport-thumb__label">Desktop 1440px</span><img src="screenshots/contestant-4/civic-community-desktop.png" alt="" loading="lazy"></div></div></div>
+      <div class="page-card"><div class="page-card__label">Corporate Events</div><div class="page-card__viewport-pair"><div class="viewport-thumb" onclick="openModal('screenshots/contestant-4/corporate-events-mobile.png','C4 Corporate — Mobile')"><span class="viewport-thumb__label">Mobile 390px</span><img src="screenshots/contestant-4/corporate-events-mobile.png" alt="" loading="lazy"></div><div class="viewport-thumb" onclick="openModal('screenshots/contestant-4/corporate-events-desktop.png','C4 Corporate — Desktop')"><span class="viewport-thumb__label">Desktop 1440px</span><img src="screenshots/contestant-4/corporate-events-desktop.png" alt="" loading="lazy"></div></div></div>
+      <div class="page-card"><div class="page-card__label">Private Celebrations</div><div class="page-card__viewport-pair"><div class="viewport-thumb" onclick="openModal('screenshots/contestant-4/private-celebrations-mobile.png','C4 Private — Mobile')"><span class="viewport-thumb__label">Mobile 390px</span><img src="screenshots/contestant-4/private-celebrations-mobile.png" alt="" loading="lazy"></div><div class="viewport-thumb" onclick="openModal('screenshots/contestant-4/private-celebrations-desktop.png','C4 Private — Desktop')"><span class="viewport-thumb__label">Desktop 1440px</span><img src="screenshots/contestant-4/private-celebrations-desktop.png" alt="" loading="lazy"></div></div></div>
+      <div class="page-card"><div class="page-card__label">Schools &amp; Campuses</div><div class="page-card__viewport-pair"><div class="viewport-thumb" onclick="openModal('screenshots/contestant-4/schools-campuses-mobile.png','C4 Schools — Mobile')"><span class="viewport-thumb__label">Mobile 390px</span><img src="screenshots/contestant-4/schools-campuses-mobile.png" alt="" loading="lazy"></div><div class="viewport-thumb" onclick="openModal('screenshots/contestant-4/schools-campuses-desktop.png','C4 Schools — Desktop')"><span class="viewport-thumb__label">Desktop 1440px</span><img src="screenshots/contestant-4/schools-campuses-desktop.png" alt="" loading="lazy"></div></div></div>
+    </div>
+  </section>
+
+  <!-- C3: Made For You (anxiety-first) -->
+  <section class="gallery-section" id="c3">
+    <div class="section-header">
+      <span class="section-header__rank">Rank 7 (tie)</span>
+      <h2 class="section-header__c">C3 &mdash; Made For You (anxiety-first)</h2>
+      <span class="section-header__score">24.29 / 30 &middot; AF 8.43 &middot; PD 7.57 &middot; SD 8.29</span>
+    </div>
+    <div class="pages-grid">
+      <div class="page-card"><div class="page-card__label">Civic &amp; Community</div><div class="page-card__viewport-pair"><div class="viewport-thumb" onclick="openModal('screenshots/contestant-3/civic-community-mobile.png','C3 Civic — Mobile')"><span class="viewport-thumb__label">Mobile 390px</span><img src="screenshots/contestant-3/civic-community-mobile.png" alt="" loading="lazy"></div><div class="viewport-thumb" onclick="openModal('screenshots/contestant-3/civic-community-desktop.png','C3 Civic — Desktop')"><span class="viewport-thumb__label">Desktop 1440px</span><img src="screenshots/contestant-3/civic-community-desktop.png" alt="" loading="lazy"></div></div></div>
+      <div class="page-card"><div class="page-card__label">Corporate Events</div><div class="page-card__viewport-pair"><div class="viewport-thumb" onclick="openModal('screenshots/contestant-3/corporate-events-mobile.png','C3 Corporate — Mobile')"><span class="viewport-thumb__label">Mobile 390px</span><img src="screenshots/contestant-3/corporate-events-mobile.png" alt="" loading="lazy"></div><div class="viewport-thumb" onclick="openModal('screenshots/contestant-3/corporate-events-desktop.png','C3 Corporate — Desktop')"><span class="viewport-thumb__label">Desktop 1440px</span><img src="screenshots/contestant-3/corporate-events-desktop.png" alt="" loading="lazy"></div></div></div>
+      <div class="page-card"><div class="page-card__label">Private Celebrations</div><div class="page-card__viewport-pair"><div class="viewport-thumb" onclick="openModal('screenshots/contestant-3/private-celebrations-mobile.png','C3 Private — Mobile')"><span class="viewport-thumb__label">Mobile 390px</span><img src="screenshots/contestant-3/private-celebrations-mobile.png" alt="" loading="lazy"></div><div class="viewport-thumb" onclick="openModal('screenshots/contestant-3/private-celebrations-desktop.png','C3 Private — Desktop')"><span class="viewport-thumb__label">Desktop 1440px</span><img src="screenshots/contestant-3/private-celebrations-desktop.png" alt="" loading="lazy"></div></div></div>
+      <div class="page-card"><div class="page-card__label">Schools &amp; Campuses</div><div class="page-card__viewport-pair"><div class="viewport-thumb" onclick="openModal('screenshots/contestant-3/schools-campuses-mobile.png','C3 Schools — Mobile')"><span class="viewport-thumb__label">Mobile 390px</span><img src="screenshots/contestant-3/schools-campuses-mobile.png" alt="" loading="lazy"></div><div class="viewport-thumb" onclick="openModal('screenshots/contestant-3/schools-campuses-desktop.png','C3 Schools — Desktop')"><span class="viewport-thumb__label">Desktop 1440px</span><img src="screenshots/contestant-3/schools-campuses-desktop.png" alt="" loading="lazy"></div></div></div>
+    </div>
+  </section>
+
+  <!-- C8: Made For You (named-promise) -->
+  <section class="gallery-section" id="c8">
+    <div class="section-header">
+      <span class="section-header__rank">Rank 7 (tie)</span>
+      <h2 class="section-header__c">C8 &mdash; Made For You (named-promise)</h2>
+      <span class="section-header__score">24.29 / 30 &middot; AF 8.14 &middot; PD 7.71 &middot; SD 8.43 &middot; High variance</span>
+    </div>
+    <div class="pages-grid">
+      <div class="page-card"><div class="page-card__label">Civic &amp; Community</div><div class="page-card__viewport-pair"><div class="viewport-thumb" onclick="openModal('screenshots/contestant-8/civic-community-mobile.png','C8 Civic — Mobile')"><span class="viewport-thumb__label">Mobile 390px</span><img src="screenshots/contestant-8/civic-community-mobile.png" alt="" loading="lazy"></div><div class="viewport-thumb" onclick="openModal('screenshots/contestant-8/civic-community-desktop.png','C8 Civic — Desktop')"><span class="viewport-thumb__label">Desktop 1440px</span><img src="screenshots/contestant-8/civic-community-desktop.png" alt="" loading="lazy"></div></div></div>
+      <div class="page-card"><div class="page-card__label">Corporate Events</div><div class="page-card__viewport-pair"><div class="viewport-thumb" onclick="openModal('screenshots/contestant-8/corporate-events-mobile.png','C8 Corporate — Mobile')"><span class="viewport-thumb__label">Mobile 390px</span><img src="screenshots/contestant-8/corporate-events-mobile.png" alt="" loading="lazy"></div><div class="viewport-thumb" onclick="openModal('screenshots/contestant-8/corporate-events-desktop.png','C8 Corporate — Desktop')"><span class="viewport-thumb__label">Desktop 1440px</span><img src="screenshots/contestant-8/corporate-events-desktop.png" alt="" loading="lazy"></div></div></div>
+      <div class="page-card"><div class="page-card__label">Private Celebrations</div><div class="page-card__viewport-pair"><div class="viewport-thumb" onclick="openModal('screenshots/contestant-8/private-celebrations-mobile.png','C8 Private — Mobile')"><span class="viewport-thumb__label">Mobile 390px</span><img src="screenshots/contestant-8/private-celebrations-mobile.png" alt="" loading="lazy"></div><div class="viewport-thumb" onclick="openModal('screenshots/contestant-8/private-celebrations-desktop.png','C8 Private — Desktop')"><span class="viewport-thumb__label">Desktop 1440px</span><img src="screenshots/contestant-8/private-celebrations-desktop.png" alt="" loading="lazy"></div></div></div>
+      <div class="page-card"><div class="page-card__label">Schools &amp; Campuses</div><div class="page-card__viewport-pair"><div class="viewport-thumb" onclick="openModal('screenshots/contestant-8/schools-campuses-mobile.png','C8 Schools — Mobile')"><span class="viewport-thumb__label">Mobile 390px</span><img src="screenshots/contestant-8/schools-campuses-mobile.png" alt="" loading="lazy"></div><div class="viewport-thumb" onclick="openModal('screenshots/contestant-8/schools-campuses-desktop.png','C8 Schools — Desktop')"><span class="viewport-thumb__label">Desktop 1440px</span><img src="screenshots/contestant-8/schools-campuses-desktop.png" alt="" loading="lazy"></div></div></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Modal -->
+<div class="modal" id="modal" onclick="closeModal(event)">
+  <button class="modal__close" onclick="document.getElementById('modal').classList.remove('is-open')" aria-label="Close">&times;</button>
+  <div class="modal__inner">
+    <img class="modal__img" id="modal-img" src="" alt="">
+    <div class="modal__caption" id="modal-caption"></div>
+  </div>
+</div>
+
+<footer class="gallery-footer">
+  LT Audience Pages Contest &middot; 2026-05-08 &middot; 64 screenshots rendered via static preview harness &middot; Images replaced with placeholders
+</footer>
+
+<script>
+function openModal(src, caption) {
+  document.getElementById('modal-img').src = src;
+  document.getElementById('modal-caption').textContent = caption;
+  document.getElementById('modal').classList.add('is-open');
+}
+function closeModal(e) {
+  if (e.target === document.getElementById('modal')) {
+    document.getElementById('modal').classList.remove('is-open');
+  }
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') document.getElementById('modal').classList.remove('is-open');
+});
+</script>
+</body>
+</html>
