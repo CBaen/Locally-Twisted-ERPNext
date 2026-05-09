@@ -2086,7 +2086,7 @@ The CSS-hide is `display: none !important` — the only such chain we kept. It's
 
 **Superseded implementation detail 2026-05-02:** inline selectors remain, but the template no longer performs per-attribute `frappe.get_all` calls from Jinja. It now uses `get_variant_attribute_options`, consumes `valid_options_for_attributes` for progressive disabling, and renders single-select options as radio controls rather than checkbox inputs.
 
-**Decision:** Override webshop's `item_configure.html` to render attribute selectors inline (chips for ≤8 values, dropdown for 9+) via Jinja iteration over `doc.attributes` × `frappe.get_all("Item Attribute Value", parent=<attr>)`. JS validates selection via `webshop.webshop.variant_selector.utils.get_next_attribute_and_values` and updates Add-to-Cart with the matched variant + price.
+**Decision:** Override webshop's `item_configure.html` to render attribute selectors inline (chips for ≤8 values, dropdown for 9+) via Jinja iteration over `doc.attributes` �- `frappe.get_all("Item Attribute Value", parent=<attr>)`. JS validates selection via `webshop.webshop.variant_selector.utils.get_next_attribute_and_values` and updates Add-to-Cart with the matched variant + price.
 
 **Reasoning:** Webshop's stock pattern is a "Select Variant" button that opens a Frappe Dialog modal — customer perception is "options are hidden." GL flagged this as "missing options." Inline selectors solve the perception problem without rebuilding the underlying variant matching logic.
 
@@ -2124,7 +2124,7 @@ GL's directive 2026-04-29: *"they should live in our directory as a design guide
 
 **What was imported:**
 - `_resources/design-guide/synthesis/` — 4 page TSXs (landing, lookbook, shop, balloon-twisting), layout.tsx, globals.css, 5 markdown docs (rationale, mood, voice, menu, SYNTHESIS-BRIEF, SYNTHESIS-COMPLETE)
-- `_resources/design-guide/screenshots/` — 8 approved PNGs (4 pages × 2 viewports) + RENDER-REPORT.md
+- `_resources/design-guide/screenshots/` — 8 approved PNGs (4 pages �- 2 viewports) + RENDER-REPORT.md
 - `_resources/design-guide/README.md` — framing note (guide, not gospel) + per-file purpose
 
 **What was NOT imported:**
@@ -2379,7 +2379,7 @@ This pattern is documented inline in `apps/locally_twisted/locally_twisted/www/c
 
 ## 2026-04-27 (homepage build session) — Reviews carousel chosen over expanded client logo crawl as primary social proof
 
-**Decision:** The reviews block on the homepage uses a horizontal-scrolling carousel of full review cards (currently 19 real Google 5-star reviews × 2 for seamless loop = 38 cards in the DOM). The client logo crawl stays at the bottom of the page but is now visually subordinated to the reviews.
+**Decision:** The reviews block on the homepage uses a horizontal-scrolling carousel of full review cards (currently 19 real Google 5-star reviews �- 2 for seamless loop = 38 cards in the DOM). The client logo crawl stays at the bottom of the page but is now visually subordinated to the reviews.
 
 **Reasoning:** GL's instinct: "He's been in business 28 years; the man can have a carousel of praise that matters more than the carousel of businesses at the bottom." For a high-touch event-decor business, customer *words* persuade prospective clients more than corporate *logos*. Logos prove "we worked with X"; quotes prove "X said this thing about working with us." The latter is harder to fake and harder to ignore.
 
@@ -2730,3 +2730,21 @@ The pattern that worked: read the Odoo source → write a Python script targetin
 **Reasoning:** Standard with Numbers matches Odoo's default convention (carryover for Jeff's familiarity). Calendar year is US small-business default; no indication LT has a different fiscal year. Services is the closest fit for event services (balloon decor, twisting, face painting); Retail is less natural (LT is mostly service work, not goods sale).
 
 **Decided by:** GL confirmed via AskUserQuestion 2026-04-26.
+
+---
+
+## 2026-05-09 - Product migration is blocked until ERPNext ecommerce has a safe receiving ecosystem
+
+**Decision:** Do not treat Odoo-derived product transfer as the current goal. Real product import is blocked until ERPNext/Frappe has a designed, verified ecommerce receiving architecture that can carry product meaning everywhere: backend fields, product type/template classification, variants, add-ons, cascading dependencies, dynamic pricing, product detail rendering, media/variant visibility where source provides it, cart, checkout, Sales Order, invoice, fulfillment/operator meaning, mobile/desktop customer journeys, and fail-loud reports.
+
+**Reasoning:** ERPNext native ecommerce is insufficient visually, logically, and operationally for Locally Twisted. Odoo ecommerce is not the infrastructure to copy, but it is a conceptual witness for mature ecommerce behavior. Copying Odoo field names or data into ERPNext without ERPNext-side logic creates silent failure: fields do not exist, frontend sections do not populate, price/media/option logic drifts, and invoices lose purchase meaning.
+
+**Implementation boundary:** Test products such as Unicorn Bouquet and Classic Arch may be used only as proof cases. They do not prove catalog migration. Any incomplete, awkward, or unmappable product logic must be brought to GL before import or build. If native ERPNext cannot represent a required feature, design the missing ERPNext feature with blast-radius/cascading-effects analysis first.
+
+**Clarification:** Missing variant images are not automatically a defect. Only flag a missing variant/media mapping when the Odoo/source data says that variant has or should expose a specific image. Many variants may legitimately share product media.
+
+**Next required step:** Draft a research brief using the Claude `research-brief` skill shape, then run `/expedition` only after GL approves the brief. Research must cover both ERPNext/Frappe implementation patterns and Odoo ecommerce concepts/behaviors that should be recreated safely inside ERPNext.
+
+**Receipts:** `workstreams/erpnext-ecommerce-receiving-architecture.md`; `.codex/capabilities/recipes/erpnext-ecommerce-receiving-architecture.md`.
+
+**Decided by:** GL directive and clarification, 2026-05-09.

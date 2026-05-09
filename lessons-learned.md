@@ -1111,7 +1111,7 @@ This is the right call here even though `!important` chains are normally a code 
 
 Odoo's product page emits `data-attribute-exclusions="{exclusions: {...}, mapped_attribute_names: {...}}"` JSON in the form HTML. The scraper parses it, builds the cartesian product of all attribute values, then filters out combinations where any selected ptav_id appears in another's exclusion list. For LT's catalog this filtered down to 10,578 ERPNext Item Variants (vs the naive cartesian count of more). Odoo's `archived_combinations` is also captured but currently empty for LT's catalog.
 
-The math sanity-check: `birthday-deliveries` has 4 attributes (Delivery Size 3 × Delivery themes 27 × Add Foil Number 10 × Add Bouquet 3 = 2,430 cartesian; 0 exclusions; 2,430 valid). Confirmed.
+The math sanity-check: `birthday-deliveries` has 4 attributes (Delivery Size 3 �- Delivery themes 27 �- Add Foil Number 10 �- Add Bouquet 3 = 2,430 cartesian; 0 exclusions; 2,430 valid). Confirmed.
 
 ### Bonus — Variant ABBR uniqueness is non-negotiable.
 
@@ -1133,14 +1133,14 @@ Odoo had `Blue Slate` (ptav 1357) AND `Blue slate` (ptav 1399) for `latex colors
 
 **The local clone was stale.** Its XML had:
 - Single-select `x_event_type` (one service per Lead)
-- 3-file × 10 MB photo upload
+- 3-file �- 10 MB photo upload
 - No per-service conditional notes (one generic textarea)
 
 **Hetzner had been independently updated** to:
 - Multi-select `x_services` checkboxes (Balloon Decor / Twisting / Painting / Delivery Only / Event Package / Something Else)
 - Per-service conditional notes — `decor_notes`, `twisting_notes`, `painting_notes`, etc. — show/hide via Odoo's `data-visibility-dependency="x_services"` + `data-visibility-comparator="contains"` pattern
 - Environment fields (Indoor/Outdoor, Shade Required, Colors) appearing when ANY service is selected
-- 5 files × 25 MB photo upload
+- 5 files �- 25 MB photo upload
 
 The ERPNext Lead Custom Fields (45 of them — `custom_event_type` as Table MultiSelect, per-service Long Text notes, etc.) had been built to mirror Hetzner's richer schema. GL was right when they said *"some of it's already implemented in the backend."*
 
@@ -1182,13 +1182,13 @@ My first override of Frappe's `.page-content-wrapper .container` rule used `body
 
 ### Full-page screenshots LIE at extreme aspect ratios
 
-Playwright with `full_page=True` captures the entire scrollable height. On a tall mobile page (6691px tall on home, 3387px on contact), the screenshot dimensions become extreme (e.g., 410×6691). When displayed at any reasonable rendering size, the image gets compressed to ~123×2000 — that's a 33× vertical compression. Sections that should be visible become slivers of pixels indistinguishable from white space. I declared mobile responsiveness "fixed" three times based on these compressed renders; each time the actual visual state was different from what I'd inferred.
+Playwright with `full_page=True` captures the entire scrollable height. On a tall mobile page (6691px tall on home, 3387px on contact), the screenshot dimensions become extreme (e.g., 410�-6691). When displayed at any reasonable rendering size, the image gets compressed to ~123�-2000 — that's a 33�- vertical compression. Sections that should be visible become slivers of pixels indistinguishable from white space. I declared mobile responsiveness "fixed" three times based on these compressed renders; each time the actual visual state was different from what I'd inferred.
 
 **Lesson:** for visual verification, use **viewport-only screenshots at concrete device widths** — 320 (iPhone SE), 375 (iPhone), 414 (iPhone Plus), 1280 (desktop). These don't compress because they're not full-page. Pair with: DOM probes for element widths and overflow (preconditions); programmatic checks of element positions and computed styles; AND ALWAYS GL opening the page in their real browser before declaring done. Full-page is useful for documenting what's there at a glance, but it's not a verdict on visual correctness.
 
 ### Brand logo + hamburger fit at 375 viewport math: 88px reserved, calc() max-width
 
-The mobile brand logo CSS at `lt-theme.css:783-788` had `max-width: 350px; height: 100px` (1.25× of an earlier 80/280 spec). At 375 viewport with row padding 32 + hamburger 44 = 76px reserved, the logo had only 299px of available space. The 350px fixed cap pushed the hamburger 35px past the right edge. Previous instance hid the visual symptom with `body { max-width: 100vw; overflow-x: hidden }` — but the hamburger remained functionally unreachable: only 9px of the 44px tap target was inside the visible viewport on a 375px screen.
+The mobile brand logo CSS at `lt-theme.css:783-788` had `max-width: 350px; height: 100px` (1.25�- of an earlier 80/280 spec). At 375 viewport with row padding 32 + hamburger 44 = 76px reserved, the logo had only 299px of available space. The 350px fixed cap pushed the hamburger 35px past the right edge. Previous instance hid the visual symptom with `body { max-width: 100vw; overflow-x: hidden }` — but the hamburger remained functionally unreachable: only 9px of the 44px tap target was inside the visible viewport on a 375px screen.
 
 **Lesson:** mobile brand logo needs a **responsive cap** that scales with viewport, not a fixed pixel max-width. The shape that works:
 
@@ -1589,7 +1589,7 @@ Calling `webshop.api.get_product_filter_data` returns HTTP 417 EXPECTATION FAILE
 
 The webshop pages set the body to a fixed-height flex container with internal overflow-scroll. **Playwright's `full_page=True` only captures `documentElement.scrollHeight`, which on these pages = viewport height = 800px** — even though the actual content (product grid) extends thousands of pixels below.
 
-The user experience is fine: customers scroll inside the page body and see all the products. **But if you screenshot at the default 1280×800 viewport and trust what you see, you'll declare the shop "broken" when only the first row visible.**
+The user experience is fine: customers scroll inside the page body and see all the products. **But if you screenshot at the default 1280�-800 viewport and trust what you see, you'll declare the shop "broken" when only the first row visible.**
 
 **Fix when verifying with Playwright:** use a tall viewport (`viewport={"width": 1280, "height": 3500}`). The DOM still renders identically; the viewport just captures more in the screenshot.
 
@@ -1692,7 +1692,7 @@ GL wanted the hero headline to cycle through blog post titles while a stable tag
 
 **First-paint gotcha:** at t=0 the keyframe is at 0% which is opacity 0. Title 1 invisible until 1s into the cycle. Solutions: (a) negative `animation-delay: -1s` on title 1 to start mid-cycle, or (b) live with the 1s fade-in delay (current state — Playwright captures show title 1 visible by the time `wait_until="networkidle"` fires).
 
-**Pattern:** Reuse for any cycling content where one stable element + one rotating element is the desired UX (testimonials, blog teasers, mood-to-quote in lookbook). Total cycle = N × per-title duration; staggered delays = full duration / N.
+**Pattern:** Reuse for any cycling content where one stable element + one rotating element is the desired UX (testimonials, blog teasers, mood-to-quote in lookbook). Total cycle = N �- per-title duration; staggered delays = full duration / N.
 
 ### Carousel of cards — same CSS marquee pattern as text crawl, just bigger items
 
@@ -1762,7 +1762,7 @@ External research (Magic Research / `frappe-erpnext-non-gpl-hooks-comparison.md`
 
 ## 2026-04-26 (session end) — TWO consecutive landing-page failures share one pattern: invent + band-aid + claim-done-off-DOM-facts
 
-**What happened:** This session's instance built a landing page using `Web Page` content_type=Page Builder with 4 default Web Templates. The build looked complete from DOM facts (curl showed all sections rendered, Playwright captured a 1366×3818 screenshot, all the section IDs and class names were present). The instance reported it as "tier 1 native" and ready for review. GL opened the page in their actual browser. **It wasn't visible. It wasn't responsive. The copy was made-up.**
+**What happened:** This session's instance built a landing page using `Web Page` content_type=Page Builder with 4 default Web Templates. The build looked complete from DOM facts (curl showed all sections rendered, Playwright captured a 1366�-3818 screenshot, all the section IDs and class names were present). The instance reported it as "tier 1 native" and ready for review. GL opened the page in their actual browser. **It wasn't visible. It wasn't responsive. The copy was made-up.**
 
 **Root cause is now nameable:** Both this session's failure AND the prior Slice 2 failure share the same anti-pattern:
 1. **Invent placeholder copy** instead of pulling from the approved Odoo XML / live site source
@@ -2127,3 +2127,15 @@ The compose-level `restart` (or restarting frontend + websocket together) avoids
 **What to do:** When GL asks for a *thing*, the score is "is the thing built yet?" not "is there a beautiful planning artifact for the thing." Set up the minimum scaffolding required to start building, then start building. The planning machinery is meant to *serve* the build, not to *be* the build. If you find yourself iterating planner-checker loops on a phase that hasn't moved one bit closer to the deliverable, stop and start doing the deliverable.
 
 This is the global anti-pattern #2 (Drift from GL's actual ask). Receipt added to `anti-gl-patterns.md` (project-local).
+
+---
+
+## 2026-05-09 - Product imports fail when they copy fields instead of receiving logic
+
+**Lesson:** For ERP/ecommerce migrations, importing product records is fake progress unless the destination system can receive the product's behavior everywhere. Field names and data values are not enough. The destination needs executable homes for variant logic, add-on logic, price resolution, media visibility, cart/checkout payloads, invoice/order meaning, fulfillment notes, mobile/desktop customer journeys, and fail-loud missing-data reports.
+
+**What happened:** During the Locally Twisted product-page/catalog work, GL clarified that the goal is not to copy Odoo or decorate ERPNext product pages. Odoo is a conceptual witness for mature ecommerce behavior, while ERPNext native ecommerce is insufficient. The build must create an ERPNext-side ecommerce logic ecosystem before any real product migration matters.
+
+**Do this next time:** Before importing customer-facing products from a more mature ecommerce source into a weaker shell, define the receiving architecture first: destination fields/DocTypes, ownership of each behavior, template/process classes, cart/checkout/invoice integration, and verifiers. Treat proof products as test fixtures, not migration completion.
+
+**Avoid:** hardcoding proof products, frontend-only price/add-on logic, unsupported custom fields that silently disappear, missing invoice meaning, and claiming migration progress because records exist.
