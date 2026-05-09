@@ -2748,3 +2748,16 @@ The pattern that worked: read the Odoo source → write a Python script targetin
 **Receipts:** `workstreams/erpnext-ecommerce-receiving-architecture.md`; `.codex/capabilities/recipes/erpnext-ecommerce-receiving-architecture.md`.
 
 **Decided by:** GL directive and clarification, 2026-05-09.
+---
+
+## 2026-05-09 - Browser proof must name the evidence surface used
+
+**Decision:** LT agents must distinguish public web lookup, rendered browser proof, repo route-contract verification, and visible/manual browser checks. Do not use one surface as proof for another.
+
+**Reasoning:** Codex verified current internet access and silent browser access in this repo: `web.run` can search/open public pages, and repo-local Playwright can launch headless Chromium, render a page, inspect visible DOM text, and capture screenshot evidence without opening a physical window. The in-app Browser Use plugin was not proven because the required Node REPL JavaScript execution tool was not exposed in this session.
+
+**Implementation boundary:** For public facts and citations, use `web.run`. For LT route, form, checkout, menu, responsive, visual, or JavaScript behavior, use the narrowest existing LT verifier first, then direct Playwright as investigation evidence when no route contract owns the claim. Use headed/visible browser only when silent verification cannot reproduce the issue or GL explicitly needs to watch.
+
+**Receipts:** `workstreams/browser-verification-runtime.md`; `.codex/capabilities/recipes/codex-browser-verification-surface.md`.
+
+**Decided by:** GL preference for silent browser checks plus Codex verification, 2026-05-09.

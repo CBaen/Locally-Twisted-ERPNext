@@ -2139,3 +2139,14 @@ This is the global anti-pattern #2 (Drift from GL's actual ask). Receipt added t
 **Do this next time:** Before importing customer-facing products from a more mature ecommerce source into a weaker shell, define the receiving architecture first: destination fields/DocTypes, ownership of each behavior, template/process classes, cart/checkout/invoice integration, and verifiers. Treat proof products as test fixtures, not migration completion.
 
 **Avoid:** hardcoding proof products, frontend-only price/add-on logic, unsupported custom fields that silently disappear, missing invoice meaning, and claiming migration progress because records exist.
+---
+
+## 2026-05-09 - Do not let web lookup stand in for browser proof
+
+**Lesson:** Internet access, source/page reading, and rendered browser verification are separate capabilities. A successful web lookup proves outside information access; it does not prove what an LT route renders or how JavaScript, CSS, forms, checkout, menus, or responsive layouts behave.
+
+**What happened:** Codex verified `web.run` against `example.org` and separately verified repo-local Playwright by launching headless Chromium silently, reading rendered DOM text, and capturing a screenshot buffer. The Browser Use in-app path remained unproven because the required Node REPL control tool was not exposed in this session.
+
+**Do this next time:** Name the evidence surface in closeout. Use `web.run` for current public facts and citations. Use LT's route-specific npm gates or direct Playwright for rendered behavior. Re-test Browser Use in the current session before claiming in-app browser control.
+
+**Avoid:** saying "browser verified" when only page text was fetched, opening a visible window when headless Playwright is enough, or treating plugin availability as proof that its control path works.

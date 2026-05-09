@@ -54,6 +54,15 @@ tracked local credentials need rotation/removal from tracked docs, guest
 checkout Lead conversion needs payment-boundary review, and `/event-playground`
 needs a dev/auth gate or production removal.
 
+Codex update on 2026-05-09: browser/internet verification surfaces were checked
+from this repo. `web.run` can search and open/read public pages; repo-local
+Playwright can silently launch headless Chromium and capture rendered-page
+evidence. The in-app Browser Use plugin path was not available in this session
+because its required Node REPL JavaScript execution tool was not exposed. Use
+`workstreams/browser-verification-runtime.md` and
+`.codex/capabilities/recipes/codex-browser-verification-surface.md` before
+claiming which web/browser surface proved a customer-facing route.
+
 ## State Of Reality
 
 The ERPNext build is active at `http://localhost:8081`. The project is **a migration of Locally Twisted's business intent + catalog data into a fresh ERPNext install** (frame revised 2026-04-30 — see `locally-twisted-decisions.md`). "Fresh install" — destination is greenfield ERPNext; no auto-translated Odoo modules or DB dumps. "Migration" — catalog records (53 Website Items / 10,578 original variants / 10,613 original catalog Item Prices, ported 2026-04-30), form intent, policies, voice/brand all carried across from the prior Odoo attempt and the legacy `locallytwisted.com` site, and the new storefront replaces `locallytwisted.com` at cutover. The current live DB now has 10,672 Items and 10,654 Item Prices after delivery service Items and the optional-add-on variant repair.
