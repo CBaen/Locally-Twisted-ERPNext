@@ -1,6 +1,6 @@
 # Paperwork And Backend Automation
 
-Last updated: 2026-05-09 by Codex after making the paperwork digest audience-aware and preventing Desk/report review from executing runtime fake-data contracts.
+Last updated: 2026-05-09 by Codex after adding mandatory copy routing for paperwork/documentation email and send-readiness paths.
 
 ## Outcome
 
@@ -27,6 +27,7 @@ Fresh local verification on 2026-05-09:
 - `python scripts/verify/finance_inventory.py --json` passed.
 - `python scripts/verify/customer_documents_contract.py` passed.
 - `python scripts/verify/customer_email_policy_contract.py` passed and proved inquiry acknowledgment, receipt, operator notification, welcome email, and payment-cascade email boundaries without sending email, creating Email Queue rows, attaching PDFs, or mutating invoices.
+- `python scripts/verify/customer_documents_contract.py` and `python scripts/verify/payment_cascade_contract.py` now also prove queued copy recipients: `hi@locallytwisted.com` for business copies and `cameron@locallytwisted.com` for external-audience customer/client/accountant/contractor-style emails.
 - `python scripts/verify/payment_cascade_contract.py` passed and rolled back generated records.
 - `python scripts/verify/crm_stage_cascade.py` passed.
 - `python scripts/verify/backend_schema_inventory.py` passed.
@@ -60,7 +61,7 @@ Fresh local verification on 2026-05-09:
 - `python scripts/verify/stripe_amount_parity_contract.py` passed. Stripe Checkout line items now include a tax/charges adjustment when needed and must equal the ERPNext Sales Order grand total.
 - `python scripts/verify/invoice_branding_contract.py` passed after syncing the branded Sales Invoice print format and Letter Head. The contract now requires gray vertical callouts for secondary/AP information, the exact black customer-service support bar, and no gold, navy, berry, soft promo colors, dog-logo markers, or old W-9/vendor wording in Sales Invoice print output.
 - `python scripts/verify/outbound_documents_contract.py` passed after creating the standard outbound document source folder and templates. The contract now requires every outbound template to include `## Answer First`, and rendered previews put `Key fields to review` where the internal automation metadata used to appear.
-- `python scripts/verify/outbound_document_send_readiness_contract.py` passed and proves every registered external document family blocks missing required fields, recipient confirmation, company branding, payment path, sensitive attachments, and human approval before any customer delivery; blocked documents can write record-level evidence.
+- `python scripts/verify/outbound_document_send_readiness_contract.py` passed and proves every registered external document family blocks missing required fields, recipient confirmation, internal copy recipients, company branding, payment path, sensitive attachments, and human approval before any customer delivery; blocked documents can write record-level evidence.
 - `python scripts/verify/quote_proposal_draft_packet_contract.py` passed and proves quote/proposal packets stay draft-only, block missing acceptance paths, and fail malformed send-ready source rows.
 - `python scripts/verify/quote_proposal_draft_packet.py --report output/quote-proposal-draft-packet.json` passed with 0 current live Quotation packets, read-only, no-send, and no mutation.
 - `python scripts/verify/render_outbound_document_previews.py --slug outbound-documents-answer-first-20260506 --no-open` rendered 20 fake-data review previews as HTML, PDF, and PNG under ignored `output/playwright/outbound-documents-answer-first-20260506/`.
@@ -185,6 +186,13 @@ Current live-data facts from the fresh finance inventory:
 - Every row is `internal_review_only`, with `customer_delivery_enabled: false` and `accounting_mutation_enabled: false`.
 - Current blockers are explicit: missing Bank Account and Company default bank for company/accountant operations; missing Supplier/vendor records plus approved W-9/secure-send workflow for vendor/contractor readiness; missing HRMS/payroll DocTypes and provider/accountant approval for payroll; draft-only customer reminder packets awaiting human review before any customer send.
 - This section is a report/digest surface only. It does not approve bank sync, supplier onboarding, W-9 sending, payroll, reminder delivery, or accounting mutations.
+
+### Paperwork copy routing
+
+- GL's 2026-05-09 routing rule is now code-owned: every code-owned client/customer/company paperwork or documentation email must copy the business at `hi@locallytwisted.com`.
+- If the email/document would go to a customer, client, contractor, accountant, or other outside recipient, it must also copy `cameron@locallytwisted.com`.
+- Current implementation uses `communication_copy_policy.py` and BCC copy routing on inquiry acknowledgments, paid-order receipts, paid-order operator notifications, and first-order welcome emails. BCC keeps internal copy addresses off outside recipient-visible headers.
+- Outbound document send-readiness now blocks on `business_copy_recipient`, `external_audience_copy_recipient`, and `copy_routing_confirmed` before any future sender can mark a document send-ready.
 
 ### Business automation index
 

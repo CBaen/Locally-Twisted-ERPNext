@@ -1,7 +1,7 @@
 ---
 name: External document audience contract
 level: recipe
-last_verified: 2026-05-06
+last_verified: 2026-05-09
 ---
 
 ## What it does
@@ -41,6 +41,11 @@ policy lane, or source record is missing or contradictory.
 - Reminder, statement, proposal, and contract packets must stay draft/review
   gated until recipient, cadence, copy, payment link, and approval state are
   explicit.
+- Every client/customer/company paperwork or documentation email must copy the
+  business at `hi@locallytwisted.com`. If the document or email would go to a
+  customer, client, contractor, accountant, or other outside audience, it must
+  also copy `cameron@locallytwisted.com`. Prefer BCC for internal copies on
+  outside-recipient email.
 - Missing data should become a blocker in the review packet or verifier output,
   not a blank field in a customer-facing PDF.
 
@@ -114,6 +119,7 @@ python scripts/verify/customer_reminder_dry_run.py --report output/customer-remi
 python scripts/verify/customer_reminder_dry_run_contract.py
 python scripts/verify/customer_reminder_review_report.py --report output/customer-reminder-review-report.json
 python scripts/verify/customer_reminder_review_report_contract.py
+python scripts/verify/outbound_document_send_readiness_contract.py
 ```
 
 Source lives at `apps/locally_twisted/locally_twisted/outbound_documents/`. Extend that registry before adding a new external invoice, receipt, quote, proposal, packet, statement, reminder, work order, contract summary, or follow-up document elsewhere.

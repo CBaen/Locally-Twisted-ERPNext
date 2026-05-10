@@ -8,6 +8,40 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-09 - Paperwork/documentation email copy routing is mandatory
+
+**Decision:** All code-owned client, customer, and company paperwork or
+documentation email must copy the business at `hi@locallytwisted.com`. If the
+email/document would go to a customer, client, contractor, accountant, or other
+outside recipient, it must also copy `cameron@locallytwisted.com`. Internal
+copies should use BCC where possible so outside recipients do not see internal
+copy-routing addresses.
+
+**Reasoning:** GL needs all paperwork/documentation visibility to land in the
+business inbox, and wants a Cameron copy whenever a customer/client/contractor/
+accountant-facing artifact leaves the system. This is an operational trust rule,
+not only email copy polish.
+
+**Implementation:** Added `communication_copy_policy.py` and wired it into
+inquiry acknowledgment, paid-order receipt, paid-order operator notification,
+and first-order welcome send paths. Outbound document send-readiness now blocks
+on `business_copy_recipient`, `external_audience_copy_recipient`, and
+`copy_routing_confirmed`.
+
+**Verification receipt:** Red contracts failed first for missing copy policy and
+missing send-readiness blockers. After implementation,
+`python scripts/verify/customer_documents_contract.py`,
+`python scripts/verify/payment_cascade_contract.py`, and
+`python scripts/verify/outbound_document_send_readiness_contract.py` passed.
+
+**Alternatives considered:** Put copy addresses in per-email calls only.
+Rejected because future paperwork senders would drift. CC the copy recipients.
+Rejected for outside-recipient email because BCC better protects internal
+routing.
+
+**Decided by:** GL request on 2026-05-09; implemented by Codex.
+
+---
 ## 2026-05-08 - Security blocker triage follows business context and payment boundaries
 
 **Decision:** Current fake/test LT data changes the urgency of disclosure

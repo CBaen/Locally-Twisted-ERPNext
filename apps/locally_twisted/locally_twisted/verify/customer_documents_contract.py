@@ -97,6 +97,11 @@ def _check_page_anchors() -> list[str]:
 
 
 def _check_lead_auto_ack_lane_links() -> list[str]:
+    from locally_twisted.communication_copy_policy import (
+        BUSINESS_DOCUMENT_COPY,
+        EXTERNAL_AUDIENCE_COPY,
+    )
+
     token = str(int(time.time()))
     lead = frappe.get_doc(
         {
@@ -128,6 +133,7 @@ def _check_lead_auto_ack_lane_links() -> list[str]:
         return ["missing customer inquiry auto-ack Email Queue row"]
 
     message = _readable_message(rows[0]["message"] or "")
+    recipients = _email_queue_recipients(rows[0]["name"])
     failures = []
     for expected in (
         "/terms-of-service#event-balloon-decor",
@@ -137,7 +143,23 @@ def _check_lead_auto_ack_lane_links() -> list[str]:
     ):
         if expected not in message:
             failures.append(f"auto-ack email missing lane link: {expected}")
+    for expected in (BUSINESS_DOCUMENT_COPY, EXTERNAL_AUDIENCE_COPY):
+        if expected not in recipients:
+            failures.append(f"auto-ack email missing required copy recipient: {expected}")
     return failures
+
+
+def _email_queue_recipients(queue_name: str) -> set[str]:
+    rows = frappe.get_all(
+        "Email Queue Recipient",
+        filters={"parent": queue_name},
+        fields=["recipient"],
+    )
+    return {
+        (row.get("recipient") or "").strip().lower()
+        for row in rows
+        if row.get("recipient")
+    }
 
 
 def _readable_message(message: str) -> str:

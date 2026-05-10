@@ -112,6 +112,14 @@ Verification as `lt-owner-temp@example.com` on 2026-05-02:
 
 Important: these workspace, Number Card, Dashboard Chart, Role Profile, and Calendar View records are recreated by idempotent setup code, not exported fixtures. Before production/cutover, decide whether that remains the preferred ownership model or whether any records should also be exported.
 
+## 2026-05-09 Login / Portal Reality Check
+
+- `/login#login` is the standard Frappe login screen. The URL fragment does not change the server route; `/login` returned HTTP 200 with title `Login`.
+- The local owner/client test account is `lt-owner-temp@example.com` with the `LT Owner` role profile. Fresh `npm run test:desk-owner` passed with the documented local test password and proved `/app/home`, `/app/owner-home`, and `/app/Workspaces` land on the Owner Home command center.
+- `cameron@builtbycameron.com` is an enabled System User with support/admin roles. No local User records existed for `hi@locallytwisted.com` or `cameron@locallytwisted.com` in the 2026-05-09 check.
+- The temporary contractor account `lt-contractor-temp@example.com` remains disabled. Contractors are still not a backend-login tier by default.
+- Public customer flows do not require login: `/cart`, `/checkout`, and `/contact` returned HTTP 200 as guest routes with no redirect to `/login`, and `python scripts/verify/cart_checkout_contract.py` passed.
+
 ## 2026-05-02 CRM Pipeline Translation
 
 Odoo reference check found the approved six-stage CRM concept:

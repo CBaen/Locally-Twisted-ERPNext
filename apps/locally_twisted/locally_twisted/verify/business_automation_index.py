@@ -204,10 +204,11 @@ def _surfaces(
         {
             "id": "lead_contact_ack_cascade",
             "lane": "intake",
-            "summary": "Lead insert cascades into Contact dedup/link, customer acknowledgment email, and first operational Task.",
+            "summary": "Lead insert cascades into Contact dedup/link, customer acknowledgment email with required internal copies, and first operational Task.",
             "required_for_launch": True,
             "exists": lambda: _files_exist(
                 "locally_twisted/lead_cascade.py",
+                "locally_twisted/communication_copy_policy.py",
                 "locally_twisted/stage_cascade.py",
                 "locally_twisted/policy_documents.py",
                 "locally_twisted/verify/customer_email_policy_contract.py",
@@ -217,6 +218,7 @@ def _surfaces(
             "evidence": [
                 "apps/locally_twisted/locally_twisted/hooks.py",
                 "apps/locally_twisted/locally_twisted/lead_cascade.py",
+                "apps/locally_twisted/locally_twisted/communication_copy_policy.py",
                 "apps/locally_twisted/locally_twisted/stage_cascade.py",
                 "apps/locally_twisted/locally_twisted/verify/customer_email_policy_contract.py",
             ],
@@ -275,10 +277,11 @@ def _surfaces(
         {
             "id": "payment_success_paid_order_cascade",
             "lane": "money",
-            "summary": "Paid checkout reconciles Payment Request, Payment Entry, Sales Invoice, receipt email, operator notification, welcome email, and pending-reconciliation thank-you copy.",
+            "summary": "Paid checkout reconciles Payment Request, Payment Entry, Sales Invoice, receipt email, operator notification, welcome email, required internal copies, and pending-reconciliation thank-you copy.",
             "required_for_launch": True,
             "exists": lambda: _files_exist(
                 "locally_twisted/www/payment_success.py",
+                "locally_twisted/communication_copy_policy.py",
                 "locally_twisted/www/thank_you.py",
                 "locally_twisted/www/thank_you.html",
                 "locally_twisted/verify/payment_success_reconciliation_contract.py",
@@ -288,6 +291,7 @@ def _surfaces(
             "loud_failure": _payment_success_loud_failure,
             "evidence": [
                 "apps/locally_twisted/locally_twisted/www/payment_success.py",
+                "apps/locally_twisted/locally_twisted/communication_copy_policy.py",
                 "apps/locally_twisted/locally_twisted/www/thank_you.py",
                 "apps/locally_twisted/locally_twisted/www/thank_you.html",
                 "apps/locally_twisted/locally_twisted/verify/payment_success_reconciliation_contract.py",
@@ -366,10 +370,11 @@ def _surfaces(
         {
             "id": "outbound_document_send_readiness",
             "lane": "paperwork",
-            "summary": "External document families return field, recipient, approval, and record-level blockers before any customer delivery.",
+            "summary": "External document families return field, recipient, internal copy routing, approval, and record-level blockers before any customer delivery.",
             "required_for_launch": True,
             "exists": lambda: _files_exist(
                 "locally_twisted/outbound_documents/send_readiness.py",
+                "locally_twisted/communication_copy_policy.py",
                 "locally_twisted/verify/outbound_document_send_readiness_contract.py",
             ),
             "connected": lambda: _outbound_document_send_readiness_connected(
@@ -378,6 +383,7 @@ def _surfaces(
             "loud_failure": _outbound_document_send_readiness_loud_failure,
             "evidence": [
                 "apps/locally_twisted/locally_twisted/outbound_documents/send_readiness.py",
+                "apps/locally_twisted/locally_twisted/communication_copy_policy.py",
                 "apps/locally_twisted/locally_twisted/verify/outbound_document_send_readiness_contract.py",
             ],
             "verifiers": ["python scripts/verify/outbound_document_send_readiness_contract.py"],

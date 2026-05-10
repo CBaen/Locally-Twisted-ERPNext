@@ -31,6 +31,7 @@ from frappe.utils import escape_html
 
 from locally_twisted import policy_documents
 from locally_twisted import stage_cascade
+from locally_twisted.communication_copy_policy import document_copy_kwargs
 from locally_twisted.failure_recorder import record_backend_failure
 
 
@@ -326,4 +327,5 @@ def _send_auto_ack_email(doc):
         reference_doctype="Lead",
         reference_name=doc.name,
         now=False,  # queue async
+        **document_copy_kwargs(external_audience=True, primary_recipients=[email]),
     )

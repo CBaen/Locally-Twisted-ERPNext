@@ -203,6 +203,10 @@ def _create_payment_request(sales_order_name, customer_name, email):
 
 def _collect_evidence(sales_order_name, customer_name, payment_request_name, contact_name):
     failures = []
+    from locally_twisted.communication_copy_policy import (
+        BUSINESS_DOCUMENT_COPY,
+        EXTERNAL_AUDIENCE_COPY,
+    )
 
     pr_status = frappe.db.get_value("Payment Request", payment_request_name, "status")
     if pr_status != "Paid":
@@ -224,6 +228,13 @@ def _collect_evidence(sales_order_name, customer_name, payment_request_name, con
     if not receipt_queue:
         failures.append("missing customer receipt Email Queue row")
     else:
+        failures.extend(
+            _check_copy_recipients(
+                receipt_queue["name"],
+                [BUSINESS_DOCUMENT_COPY, EXTERNAL_AUDIENCE_COPY],
+                "customer receipt",
+            )
+        )
         receipt_message = _readable_message(receipt_queue.get("message") or "")
         for expected in (
             "/terms-of-service#ready-to-order-pickup-delivery",
@@ -241,10 +252,20 @@ def _collect_evidence(sales_order_name, customer_name, payment_request_name, con
         failures.append("missing operator paid-order Email Queue row")
     elif NOTES not in (operator_queue.get("message") or ""):
         failures.append("operator paid-order email is missing checkout notes")
+    elif BUSINESS_DOCUMENT_COPY not in _email_queue_recipients(operator_queue["name"]):
+        failures.append(f"operator paid-order email missing business copy recipient: {BUSINESS_DOCUMENT_COPY}")
 
     welcome_queue = _email_queue_for("Customer", customer_name, "Welcome to Locally Twisted")
     if not welcome_queue:
         failures.append("missing first-order welcome Email Queue row")
+    else:
+        failures.extend(
+            _check_copy_recipients(
+                welcome_queue["name"],
+                [BUSINESS_DOCUMENT_COPY, EXTERNAL_AUDIENCE_COPY],
+                "first-order welcome",
+            )
+        )
 
     checkout_notes = _checkout_notes_for_sales_order(sales_order_name)
     if not checkout_notes:
@@ -312,6 +333,28 @@ def _email_queue_for(reference_doctype, reference_name, subject_snippet):
         limit=1,
     )
     return rows[0] if rows else None
+
+
+def _email_queue_recipients(queue_name):
+    rows = frappe.get_all(
+        "Email Queue Recipient",
+        filters={"parent": queue_name},
+        fields=["recipient"],
+    )
+    return {
+        (row.get("recipient") or "").strip().lower()
+        for row in rows
+        if row.get("recipient")
+    }
+
+
+def _check_copy_recipients(queue_name, expected_recipients, label):
+    recipients = _email_queue_recipients(queue_name)
+    return [
+        f"{label} email missing required copy recipient: {expected}"
+        for expected in expected_recipients
+        if expected not in recipients
+    ]
 
 
 def _checkout_notes_for_sales_order(sales_order_name):

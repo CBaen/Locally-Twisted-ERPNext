@@ -37,6 +37,7 @@ import frappe
 from frappe.utils import escape_html, flt
 
 from locally_twisted import policy_documents
+from locally_twisted.communication_copy_policy import document_copy_kwargs
 from locally_twisted.crm_pipeline import PIPELINE_FIELD
 from locally_twisted.failure_recorder import record_backend_failure
 from locally_twisted.payments.settings import (
@@ -449,6 +450,7 @@ def _send_receipt_email(so_name):
         # PDF render (wkhtmltopdf-in-Docker trap). The HTML body is the
         # receipt.
         now=False,
+        **document_copy_kwargs(external_audience=True, primary_recipients=[email]),
     )
     frappe.db.commit()
 
@@ -567,6 +569,7 @@ def _send_operator_notification(so_name):
         reference_doctype="Sales Order",
         reference_name=so_name,
         now=False,
+        **document_copy_kwargs(external_audience=False, primary_recipients=[recipient]),
     )
     frappe.db.commit()
 
@@ -657,6 +660,7 @@ def _send_welcome_email_if_first_order(so_name):
         reference_doctype="Customer",
         reference_name=so.customer,
         now=False,
+        **document_copy_kwargs(external_audience=True, primary_recipients=[email]),
     )
     frappe.db.commit()
 

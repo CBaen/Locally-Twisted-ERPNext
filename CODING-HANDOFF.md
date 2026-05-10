@@ -1,6 +1,6 @@
 # Locally Twisted - Coding Handoff
 
-Last updated: 2026-05-09 by Codex after reviewing non-product operations, adding audience-specific operations-readiness rows to the paperwork digest, and preventing internal report rendering from executing runtime fake-data contracts. Current peer handoff: fake data is allowed and useful; fake success is forbidden. Product work is parked per GL's latest instruction; backend forms, cascades, paperwork, vendor/contractor/accountant readiness, and no-send report paths are the active non-product surface.
+Last updated: 2026-05-09 by Codex after verifying login/guest access reality and adding mandatory copy routing for paperwork/documentation email paths. Current peer handoff: fake data is allowed and useful; fake success is forbidden. Product work is parked per GL's latest instruction; backend forms, cascades, paperwork, vendor/contractor/accountant readiness, and no-send report paths are the active non-product surface.
 
 Codex update on 2026-05-08: GL also made no monoliths a system-wide law. The
 LT lane is `workstreams/no-monolith-operating-contract.md`. Do not expand large
@@ -68,6 +68,16 @@ consume `business_automation_index.run(run_runtime_contracts=False)` through
 the digest chain. Full verification still runs runtime fake-data contracts, but
 Desk/report rendering does not create rollback test Leads, upload blockers, or
 document blocker evidence. Run DB-mutating verifiers serially.
+
+Codex update on 2026-05-09: `/login#login` is Frappe's standard login route.
+The local owner/client test account is `lt-owner-temp@example.com`, verified by
+`npm run test:desk-owner`; customers do not need login for `/contact`, `/cart`,
+or `/checkout`. Paperwork/documentation copy routing is code-owned in
+`communication_copy_policy.py`: all code-owned paperwork/document emails copy
+`hi@locallytwisted.com`, and customer/client/contractor/accountant-facing
+messages also copy `cameron@locallytwisted.com` via BCC where possible.
+`customer_documents_contract.py`, `payment_cascade_contract.py`, and
+`outbound_document_send_readiness_contract.py` prove the current behavior.
 
 ## State Of Reality
 

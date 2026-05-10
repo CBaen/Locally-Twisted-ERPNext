@@ -202,7 +202,13 @@ def _expect_all_blocked(result: dict[str, Any]) -> list[str]:
         failures.append("expected every document to be blocked without required fields")
     for document in result.get("documents") or []:
         blockers = document.get("blocked_send_until") or []
-        for expected in ("required_field:recipient", "required_field:company_branding"):
+        for expected in (
+            "required_field:recipient",
+            "required_field:company_branding",
+            "required_field:business_copy_recipient",
+            "required_field:external_audience_copy_recipient",
+            "approval_gate:copy_routing_confirmed",
+        ):
             if expected not in blockers:
                 failures.append(f"{document.get('document_id')} missing blocker {expected}")
     return failures
