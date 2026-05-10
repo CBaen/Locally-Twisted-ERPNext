@@ -125,6 +125,9 @@ doc_events = {
         "after_insert": "locally_twisted.lead_cascade.after_insert",
         "on_update": "locally_twisted.stage_cascade.on_update",
     },
+    "Email Queue": {
+        "before_insert": "locally_twisted.email_delivery_guard.validate_email_queue_delivery",
+    },
 }
 
 override_whitelisted_methods = {

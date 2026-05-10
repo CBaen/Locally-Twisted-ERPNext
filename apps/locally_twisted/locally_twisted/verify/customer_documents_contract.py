@@ -51,6 +51,8 @@ def run():
 def _run_contract():
     failures: list[str] = []
     failures.extend(_check_policy_helper())
+    failures.extend(_check_routed_alias_guard())
+    failures.extend(_check_routed_alias_sendmail_hook())
     failures.extend(_check_page_anchors())
     failures.extend(_check_lead_auto_ack_lane_links())
 
@@ -99,6 +101,60 @@ def _check_page_anchors() -> list[str]:
         for anchor in REQUIRED_ANCHORS:
             if f'id="{anchor}"' not in content:
                 failures.append(f"{route} missing #{anchor} anchor")
+    return failures
+
+
+def _check_routed_alias_guard() -> list[str]:
+    from locally_twisted.email_delivery_guard import validate_email_queue_delivery
+
+    failures = []
+    unsafe_doc = frappe._dict(
+        sender="Locally Twisted <locallytwisted@gmail.com>",
+        recipients=[frappe._dict(recipient="hi@locallytwisted.com")],
+    )
+    try:
+        validate_email_queue_delivery(unsafe_doc)
+    except Exception as exc:
+        if "routed-alias loop" not in str(exc):
+            failures.append(f"routed alias guard raised the wrong error: {exc}")
+    else:
+        failures.append("routed alias guard did not block hi@locallytwisted.com")
+
+    for safe_doc in (
+        frappe._dict(
+            sender="Locally Twisted <locallytwisted@gmail.com>",
+            recipients=[frappe._dict(recipient="locallytwisted@gmail.com")],
+        ),
+        frappe._dict(
+            sender="QA Sender <qa@example.invalid>",
+            recipients=[frappe._dict(recipient="hi@locallytwisted.com")],
+        ),
+    ):
+        try:
+            validate_email_queue_delivery(safe_doc)
+        except Exception as exc:
+            failures.append(f"routed alias guard blocked a safe path: {exc}")
+    return failures
+
+
+def _check_routed_alias_sendmail_hook() -> list[str]:
+    failures = []
+    subject = f"LT routed alias guard probe {int(time.time())}"
+    try:
+        frappe.sendmail(
+            recipients=["hi@locallytwisted.com"],
+            subject=subject,
+            message="This should be blocked before Email Queue insert.",
+            now=False,
+        )
+    except Exception as exc:
+        if "routed-alias loop" not in str(exc):
+            failures.append(f"routed alias sendmail hook raised the wrong error: {exc}")
+    else:
+        failures.append("routed alias sendmail hook did not block hi@locallytwisted.com")
+
+    if frappe.db.exists("Email Queue", {"message": ("like", f"%Subject: {subject}%")}):
+        failures.append("routed alias sendmail hook left an Email Queue row behind")
     return failures
 
 

@@ -50,6 +50,9 @@ policy lane, or source record is missing or contradictory.
   `hi@locallytwisted.com` or `cameron@locallytwisted.com` as internal copy
   targets while the outgoing account is `locallytwisted@gmail.com`; Gmail/Cloudflare
   can dedupe those messages and hide them from the inbox.
+- For LT, keep a global Email Queue insertion guard in place while that SMTP
+  sender/routed-alias shape exists; copy-helper contracts are not enough because
+  live probes and console sends can bypass the helper.
 - Do not make Cameron a standing future copy recipient. Use a non-LT mailbox for
   explicit one-time QA/review sends unless the SMTP sender changes. Prefer BCC
   for internal copies on outside-recipient email.

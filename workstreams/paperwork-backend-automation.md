@@ -191,6 +191,7 @@ Current live-data facts from the fresh finance inventory:
 
 - GL's 2026-05-09 routing rule is code-owned, with a 2026-05-09 delivery correction: public contact remains `hi@locallytwisted.com`, but current internal copy delivery goes to `locallytwisted@gmail.com`.
 - Cloudflare routes `hi@locallytwisted.com` and `cameron@locallytwisted.com` back into the same Gmail account currently used for SMTP, so those aliases create Cloudflare/Gmail dedupe notices instead of reliable inbox-visible copies.
+- `email_delivery_guard.py` is wired to `Email Queue.before_insert` and blocks those routed-alias loop sends globally for the current Gmail sender, including ad hoc live probes that do not use `communication_copy_policy.py`.
 - Cameron is not a standing future copy recipient. Use a non-LT mailbox for explicit one-time QA/review sends unless the SMTP sender changes.
 - Current implementation uses `communication_copy_policy.py` and BCC business copy routing on inquiry acknowledgments, paid-order receipts, paid-order operator notifications, and first-order welcome emails. BCC keeps the internal business copy address off outside recipient-visible headers.
 - Outbound document send-readiness now blocks on `business_copy_recipient` and `copy_routing_confirmed` before any future sender can mark a document send-ready.
