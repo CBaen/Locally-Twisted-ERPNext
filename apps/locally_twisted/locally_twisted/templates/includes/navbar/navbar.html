@@ -6,17 +6,9 @@
    - #lt-mobile-backdrop and #lt-mobile-close close the drawer.
    - [data-lt-drawer-accordion-trigger] toggles same-id drawer panels.
    - [data-lt-search-toggle] opens #lt-site-search-panel without leaving the page.
-   - .lt-cart-count is populated by lt-guest-cart.js.
+   - Ecommerce surfaces are hidden while the online shop is paused.
 #}
 
-{% set product_links = lt_nav_product_links or [
-    {"label": "Arches", "route": "shop-items/arches", "icon": "balloon-arch"},
-    {"label": "Garlands", "route": "shop-items/garlands", "icon": "organic-garland"},
-    {"label": "Columns", "route": "shop-items/columns", "icon": "balloon-column"},
-    {"label": "Balloon Drops", "route": "shop-items/drops", "icon": "event-stage"},
-    {"label": "Bouquets", "route": "shop-items/bouquets", "icon": "balloon-bouquet"},
-    {"label": "Grab & Go", "route": "shop-items/grab-go", "icon": "balloon-cluster"}
-] %}
 {% set event_links = lt_nav_event_links or [
     {"label": "Civic & Community", "route": "civic-community", "icon": "civic-parade", "description": "City, county, chamber, Pride, and public-facing community installs."},
     {"label": "Corporate Events", "route": "corporate-events", "icon": "corporate-entrance", "description": "Brand-safe decor for launches, offices, media events, restaurants, and customer activations."},
@@ -39,7 +31,7 @@
 
                 <ul class="lt-mega-header__top-links">
                     <li><a href="/portfolio">Recent Work</a></li>
-                    <li><a href="/balloon-twisting-and-face-painting">Twisting &amp; Face Painting</a></li>
+                    <li><a href="/contact">Free Event Quote</a></li>
                     {% if frappe.session.user == "Guest" %}
                         <li><a href="/login">Sign In</a></li>
                     {% else %}
@@ -91,38 +83,7 @@
                         </div>
                     </li>
 
-                    <li class="lt-mega-nav__item"><a class="lt-mega-nav__link lt-mega-nav__link--btfp" href="/balloon-twisting-and-face-painting">Twisting &amp; Face Painting</a></li>
-
-                    <li class="lt-mega-nav__item">
-                        <button class="lt-mega-nav__button"
-                                type="button"
-                                data-lt-megamenu-trigger="lt-mega-products"
-                                aria-expanded="false">
-                            Ready-to-Order
-                            <span class="lt-mega-nav__chevron" aria-hidden="true"></span>
-                        </button>
-
-                        <div class="lt-megamenu__panel" id="lt-mega-products" hidden>
-                            <p class="lt-megamenu__eyebrow">Product discovery</p>
-                            <h2 class="lt-megamenu__title">Shop the product families customers ask for most.</h2>
-                            <p class="lt-megamenu__summary">Browse ready-to-order balloon decor by product family, then choose options or request event help.</p>
-
-                            <div class="lt-megamenu__grid">
-                                {% for item in product_links %}
-                                    <a class="lt-megamenu__card" href="/{{ item.route }}">
-                                        <img src="/assets/locally_twisted/icons/brand/{{ item.icon }}.svg" alt="" width="30" height="30">
-                                        <strong>{{ item.label }}</strong>
-                                        <span>View ready-to-order options and product details.</span>
-                                    </a>
-                                {% endfor %}
-                            </div>
-
-                            <div class="lt-megamenu__footer">
-                                <span>Need sizing, venue timing, or an install plan?</span>
-                                <a href="/contact">Request event help</a>
-                            </div>
-                        </div>
-                    </li>
+                    <li class="lt-mega-nav__item"><a class="lt-mega-nav__link lt-mega-nav__link--quote" href="/contact">Free Event Quote</a></li>
 
                     <li class="lt-mega-nav__item"><a class="lt-mega-nav__link" href="/portfolio">Portfolio</a></li>
                     <li class="lt-mega-nav__item"><a class="lt-mega-nav__link" href="/faq">FAQ</a></li>
@@ -141,11 +102,7 @@
                         <path d="m21 21-4.3-4.3"></path>
                     </svg>
                 </button>
-                <a class="lt-mega-header__cart" href="/cart" aria-label="Shopping cart">
-                    <img src="/assets/locally_twisted/icons/cart.svg" alt="" width="20" height="20">
-                    <span class="lt-cart-count" aria-live="polite" aria-atomic="true"></span>
-                </a>
-                <a class="lt-mega-header__cta" href="/contact">Free Event Quote</a>
+                <a class="lt-mega-header__cta" href="/contact">Contact Us</a>
             </div>
         </div>
     </div>
@@ -157,10 +114,6 @@
             </a>
 
             <div class="lt-mega-header__mobile-actions">
-                <a class="lt-mega-header__mobile-action" href="/cart" aria-label="Shopping cart">
-                    <img src="/assets/locally_twisted/icons/cart.svg" alt="" width="22" height="22">
-                    <span class="lt-cart-count" aria-live="polite" aria-atomic="true"></span>
-                </a>
                 <button class="lt-mega-header__mobile-action"
                         type="button"
                         id="lt-mobile-toggle"
@@ -174,24 +127,20 @@
     </div>
 
     <div class="lt-site-search-panel" id="lt-site-search-panel" hidden aria-labelledby="lt-site-search-title">
-        <form class="lt-site-search-panel__form" action="/shop" method="get" role="search">
+        <form class="lt-site-search-panel__form" action="/contact" method="get" role="search">
             <label class="lt-site-search-panel__label" id="lt-site-search-title" for="lt-site-search-input">Search Locally Twisted</label>
             <div class="lt-site-search-panel__field">
                 <input id="lt-site-search-input"
                        name="q"
                        type="search"
                        autocomplete="off"
-                       placeholder="Arches, garlands, bouquets, face painting"
+                       placeholder="Event balloons, portfolio, face painting"
                        data-lt-search-input>
                 <button type="submit">Search</button>
             </div>
         </form>
 
         <div class="lt-site-search-panel__quick" data-lt-search-list>
-            <a href="/shop" data-lt-search-entry data-lt-search-keywords="ready order shop pickup delivery products balloon decor">
-                <strong>Ready-to-Order Decor</strong>
-                <span>Pickup and delivery pieces</span>
-            </a>
             <a href="/event-balloons" data-lt-search-entry data-lt-search-keywords="custom event balloons install civic school corporate private">
                 <strong>Event Balloons</strong>
                 <span>Custom installs and event work</span>
@@ -206,24 +155,18 @@
                 <strong>Portfolio</strong>
                 <span>Recent balloon work</span>
             </a>
-            <a href="/balloon-twisting-and-face-painting" data-lt-search-entry data-lt-search-keywords="balloon twisting face painting entertainment party">
-                <strong>Twisting &amp; Face Painting</strong>
-                <span>Party entertainment services</span>
-            </a>
             <a href="/contact" data-lt-search-entry data-lt-search-keywords="quote contact help event custom request">
                 <strong>Free Event Quote</strong>
                 <span>Ask for sizing or event help</span>
+            </a>
+            <a href="/contact" data-lt-search-entry data-lt-search-keywords="contact help event custom request">
+                <strong>Contact Us</strong>
+                <span>Reach the Locally Twisted team</span>
             </a>
             <a href="/faq" data-lt-search-entry data-lt-search-keywords="faq questions delivery pickup timing policies">
                 <strong>FAQ</strong>
                 <span>Common questions</span>
             </a>
-            {% for item in product_links %}
-                <a href="/{{ item.route }}" data-lt-search-entry data-lt-search-keywords="ready order product {{ item.label | lower }}">
-                    <strong>{{ item.label }}</strong>
-                    <span>Ready-to-order product family</span>
-                </a>
-            {% endfor %}
         </div>
         <p class="lt-site-search-panel__empty" data-lt-search-empty hidden>No quick match yet.</p>
     </div>
@@ -267,24 +210,7 @@
             </div>
         </div>
 
-        <a class="lt-mega-drawer__single" href="/balloon-twisting-and-face-painting">Twisting &amp; Face Painting</a>
-
-        <div class="lt-mega-drawer__section">
-            <button class="lt-mega-drawer__toggle"
-                    type="button"
-                    data-lt-drawer-accordion-trigger="lt-mobile-products"
-                    aria-controls="lt-mobile-products"
-                    aria-expanded="false">
-                Ready-to-Order
-                <span aria-hidden="true">+</span>
-            </button>
-            <div class="lt-mega-drawer__panel" id="lt-mobile-products" hidden>
-                <a href="/shop">Shop All</a>
-                {% for item in product_links %}
-                    <a href="/{{ item.route }}">{{ item.label }}</a>
-                {% endfor %}
-            </div>
-        </div>
+        <a class="lt-mega-drawer__single lt-mega-drawer__single--quote" href="/contact">Free Event Quote</a>
 
         <a class="lt-mega-drawer__single" href="/portfolio">Portfolio</a>
         <a class="lt-mega-drawer__single" href="/faq">FAQ</a>
@@ -294,7 +220,7 @@
             <a class="lt-mega-drawer__single" href="/me">My Account</a>
         {% endif %}
 
-        <a class="lt-mega-drawer__cta" href="/contact">Free Event Quote</a>
+        <a class="lt-mega-drawer__cta" href="/contact">Contact Us</a>
         <button class="lt-mega-drawer__search"
                 type="button"
                 data-lt-search-toggle

@@ -7,7 +7,7 @@ maturity: candidate
 scope: Locally Twisted ERPNext/Frappe public navigation, header/footer IA, and service-route parity
 currently_true: yes
 verification_level: 2
-last_verified: 2026-05-08
+last_verified: 2026-05-10
 evidence_quality: direct
 successful_uses: 2
 failed_uses: 0
@@ -41,10 +41,16 @@ For the current LT site:
   `/balloon-twisting-and-face-painting`.
 - `Process` is not approved as a public top-level nav item or standalone route.
 - `/contact` remains the shared quote/conversion path.
+- Current launch header/menu labels are `Event Balloons`, `Free Event Quote`,
+  `Portfolio`, `FAQ`, and `Contact Us`; both `Free Event Quote` and
+  `Contact Us` point to `/contact`.
+- The BTFP route remains live, but it is not the current primary header label
+  unless GL reopens that wording.
 - Mobile search belongs at the bottom of the drawer, not in the mobile header
-  action row. The mobile header control budget is logo plus cart/menu.
+  action row. While public ecommerce is paused, the mobile header control budget
+  is logo plus menu.
 - Public navigation must not link to `/search`; the search overlay submits to
-  `/shop?q=...`, and `/search` is a no-cache 404 fallback.
+  `/contact`, and `/search` is a no-cache 404 fallback.
 
 ## Pattern
 
@@ -94,3 +100,10 @@ added `.lt-mega-drawer__search` at the bottom of the drawer, kept search as an
 overlay that submits to `/shop`, and added a `/search` no-cache 404 override.
 `nav_ia.py`, focused interactive header/search/drawer checks, and the focused
 mobile drawer smoke helper passed.
+
+On 2026-05-10, after GL paused public ecommerce and corrected header copy,
+Codex removed Ready-to-Order/cart product chrome from public launch navigation,
+changed search to submit to `/contact`, changed the former header CTA label to
+`Contact Us`, changed the adjacent service label to `Free Event Quote`, and
+kept both labels pointed at `/contact`. `nav_ia.py`, live rendered HTML checks,
+cache clear, and focused Playwright header/search/drawer checks passed.

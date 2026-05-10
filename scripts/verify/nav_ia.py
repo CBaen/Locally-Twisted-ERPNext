@@ -33,23 +33,32 @@ def test_desktop_nav_order(navbar: str) -> None:
     expected = [
         "data-lt-megamenu-trigger=\"lt-mega-events\"",
         "Event Balloons",
-        "/balloon-twisting-and-face-painting",
-        "data-lt-megamenu-trigger=\"lt-mega-products\"",
-        "Ready-to-Order",
+        'lt-mega-nav__link--quote" href="/contact">Free Event Quote',
         "/portfolio",
         "/faq",
     ]
     positions = [_line_index(primary_nav, needle) for needle in expected]
     if positions != sorted(positions):
         raise AssertionError(
-            "Primary nav order must be Event Balloons, Twisting & Face Painting, "
-            "Ready-to-Order, Portfolio, FAQ, with deliberate mega-menu triggers"
+            "Primary nav order must be Event Balloons, Free Event Quote, "
+            "Portfolio, FAQ, with deliberate event mega-menu trigger"
         )
+    if "lt-mega-products" in primary_nav or "Ready-to-Order" in primary_nav:
+        raise AssertionError("Primary nav must not expose ecommerce while the shop is paused")
 
 
 def test_quote_cta_is_contact(navbar: str) -> None:
-    if 'href="/contact"' not in navbar or "Free Event Quote" not in navbar:
-        raise AssertionError("Header must keep Free Event Quote pointed at /contact")
+    required = (
+        'lt-mega-nav__link--quote" href="/contact">Free Event Quote',
+        'class="lt-mega-header__cta" href="/contact">Contact Us</a>',
+        'class="lt-mega-drawer__single lt-mega-drawer__single--quote" href="/contact">Free Event Quote</a>',
+        'class="lt-mega-drawer__cta" href="/contact">Contact Us</a>',
+    )
+    for needle in required:
+        if needle not in navbar:
+            raise AssertionError(f"Header/menu must keep Contact Us and Free Event Quote pointed at /contact: {needle}")
+    if 'class="lt-mega-header__cta" href="/contact">Free Event Quote</a>' in navbar:
+        raise AssertionError("Header CTA label must be Contact Us, not Free Event Quote")
 
 
 def test_nav_does_not_link_to_retired_book_route(navbar: str) -> None:
@@ -84,7 +93,7 @@ def test_search_is_overlay_not_public_page(navbar: str, footer: str, search_rout
     required = (
         "data-lt-search-toggle",
         'id="lt-site-search-panel"',
-        'action="/shop"',
+        'action="/contact"',
         'name="q"',
     )
     for needle in required:
@@ -92,6 +101,8 @@ def test_search_is_overlay_not_public_page(navbar: str, footer: str, search_rout
             raise AssertionError(f"Header search overlay contract is missing: {needle}")
     if "lt-mega-header__mobile-search" in navbar:
         raise AssertionError("Mobile search must live in the drawer, not the crowded header action row")
+    if "/shop-items" in navbar or "data-lt-search-product-entry" in navbar:
+        raise AssertionError("Search overlay must not expose product links while ecommerce is paused")
     if "context.http_status_code = 404" not in search_route or "no_cache = 1" not in search_route:
         raise AssertionError("/search must override Frappe's bundled page with a no-cache 404")
 
@@ -102,21 +113,16 @@ def test_mega_menu_contract(navbar: str) -> None:
         'class="lt-mega-brand__logo"',
         'aria-label="Navigation menu"',
         'id="lt-mega-events"',
-        'id="lt-mega-products"',
         'class="lt-megamenu__panel"',
         '"route": "civic-community"',
         '"route": "corporate-events"',
         '"route": "schools-campuses"',
         '"route": "private-celebrations"',
         "Corporate Events",
-        'href="/balloon-twisting-and-face-painting"',
-        '"route": "shop-items/arches"',
-        '"route": "shop-items/garlands"',
-        '"route": "shop-items/columns"',
-        '"route": "shop-items/bouquets"',
+        'lt-mega-nav__link--quote" href="/contact">Free Event Quote',
+        'class="lt-mega-header__cta" href="/contact">Contact Us</a>',
         'id="lt-mobile-toggle"',
         'id="lt-mobile-nav"',
-        'data-lt-drawer-accordion-trigger="lt-mobile-products"',
         'data-lt-search-toggle',
         'aria-expanded="false"',
         "hidden",
@@ -140,19 +146,17 @@ def test_mobile_nav_matches_primary_order(navbar: str) -> None:
     expected = [
         'data-lt-drawer-accordion-trigger="lt-mobile-events"',
         "Event Balloons",
-        'href="/balloon-twisting-and-face-painting"',
-        'data-lt-drawer-accordion-trigger="lt-mobile-products"',
-        "Ready-to-Order",
+        'class="lt-mega-drawer__single lt-mega-drawer__single--quote" href="/contact">Free Event Quote',
         'href="/portfolio"',
         'href="/faq"',
-        'href="/contact">Free Event Quote',
+        'class="lt-mega-drawer__cta" href="/contact">Contact Us',
         'class="lt-mega-drawer__search"',
     ]
     positions = [_line_index(drawer, needle) for needle in expected]
     if positions != sorted(positions):
         raise AssertionError(
             "Mobile drawer must follow desktop primary order: Event Balloons, "
-            "Twisting & Face Painting, Ready-to-Order, Portfolio, FAQ, Free Event Quote, Search"
+            "Free Event Quote, Portfolio, FAQ, Contact Us, Search"
         )
     if 'href="/search"' in drawer:
         raise AssertionError("Mobile drawer must not expose the retired /search page")
@@ -160,6 +164,22 @@ def test_mobile_nav_matches_primary_order(navbar: str) -> None:
         raise AssertionError("Mobile drawer must not hide FAQ behind the retired Help and Details panel")
     if "lt-mobile-nav-heading" in drawer or ">Locally Twisted</span>" in drawer:
         raise AssertionError("Mobile drawer brand must show the logo only, without duplicate Locally Twisted text")
+    if "Ready-to-Order" in drawer or "/shop" in drawer or "/cart" in drawer:
+        raise AssertionError("Mobile drawer must not expose ecommerce while the shop is paused")
+
+
+def test_ecommerce_entry_points_are_paused(navbar: str, footer: str) -> None:
+    combined = f"{navbar}\n{footer}"
+    forbidden = (
+        "Ready-to-Order",
+        'href="/shop"',
+        "/shop-items",
+        'href="/cart"',
+        "Shopping cart",
+    )
+    for needle in forbidden:
+        if needle in combined:
+            raise AssertionError(f"Public header/footer still exposes paused ecommerce: {needle}")
 
 
 def test_no_retired_nav_contract(navbar: str) -> None:
@@ -171,6 +191,8 @@ def test_no_retired_nav_contract(navbar: str) -> None:
         "lt-mobile-drawer",
         "current ERPNext shop",
         "item-group routes",
+        "lt-mega-nav__link--btfp",
+        "Twisting &amp; Face Painting",
     )
     for label in retired:
         if label in navbar:
@@ -225,6 +247,7 @@ def main() -> None:
     test_search_is_overlay_not_public_page(navbar, footer, search_route)
     test_mega_menu_contract(navbar)
     test_mobile_nav_matches_primary_order(navbar)
+    test_ecommerce_entry_points_are_paused(navbar, footer)
     test_no_retired_nav_contract(navbar)
     test_supporting_assets_exist()
     test_homepage_launch_links(home)

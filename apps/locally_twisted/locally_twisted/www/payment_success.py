@@ -39,6 +39,12 @@ from frappe.utils import escape_html, flt
 from locally_twisted import policy_documents
 from locally_twisted.communication_copy_policy import document_copy_kwargs
 from locally_twisted.crm_pipeline import PIPELINE_FIELD
+from locally_twisted.customer_email_theme import (
+    BILLING_INBOX,
+    GENERAL_INBOX,
+    customer_email_inline_images,
+    render_customer_email,
+)
 from locally_twisted.failure_recorder import record_backend_failure
 from locally_twisted.payments.settings import (
     DEFAULT_OPERATOR_EMAIL,
@@ -401,44 +407,40 @@ def _send_receipt_email(so_name):
             f'</tr>'
         )
 
-    body = f"""
-<div style="font-family: Lato, Helvetica, Arial, sans-serif; max-width:560px; margin:0 auto; color:#1a1a1a; line-height:1.55;">
-  <h1 style="font-family: 'Cormorant Garamond', Georgia, serif; font-size:28px; margin:0 0 12px;">
-    Thank you for your order.
-  </h1>
-  <p style="font-size:15px; color:#5a5a5a; margin:0 0 24px;">
-    We&rsquo;ve received your payment and we&rsquo;ll be in touch about delivery.
-    This email is your receipt.
+    body_content = f"""
+<p style="margin:0 0 10px;">
+  We&rsquo;ve received your payment and we&rsquo;ll be in touch about delivery.
+  This email is your receipt.
+</p>
+<div style="background:#FAF7F2;border:1px solid #E7E5E1;border-left:4px solid #B89A5B;padding:12px 14px;margin:0 0 14px;">
+  <p style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#595A5C;margin:0 0 4px;">
+    Order
   </p>
-
-  <div style="background:#fffcfc; border:1px solid rgba(26,26,26,0.08); border-radius:6px; padding:20px; margin:0 0 24px;">
-    <p style="font-family:'Lato',sans-serif; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:#7a7a7a; margin:0 0 6px;">
-      Order
-    </p>
-    <p style="font-family:'Cormorant Garamond', Georgia, serif; font-size:22px; margin:0 0 16px; word-break:break-all;">
-      {escape_html(so.name)}
-    </p>
-    <table style="width:100%; border-collapse:collapse; font-size:14px;">
-      {lines_html}
-      <tr>
-        <td style="padding:12px 0 0; font-weight:600;">Total</td>
-        <td style="padding:12px 0 0; text-align:right; font-weight:600;">
-          ${flt(so.grand_total):,.2f} {escape_html(so.currency or "USD")}
-        </td>
-      </tr>
-    </table>
-  </div>
-
-  {policy_documents.customer_policy_block([policy_documents.LANE_READY_TO_ORDER], include_privacy=True)}
-
-  <p style="font-size:14px; color:#5a5a5a; margin:0 0 8px;">
-    Questions about your order? Reply to this email or call (801) 285-0860.
+  <p style="font-family:Georgia,'Times New Roman',serif;font-size:20px;margin:0 0 10px;color:#0E2240;word-break:break-all;">
+    {escape_html(so.name)}
   </p>
-  <p style="font-size:12px; color:#9a9a9a; margin:24px 0 0;">
-    Locally Twisted &middot; 8969 S 2700 W, West Jordan, UT 84088
-  </p>
+  <table style="width:100%;border-collapse:collapse;font-size:13px;">
+    {lines_html}
+    <tr>
+      <td style="padding:10px 0 0;font-weight:700;color:#0A0A0B;">Total</td>
+      <td style="padding:10px 0 0;text-align:right;font-weight:700;color:#0A0A0B;">
+        ${flt(so.grand_total):,.2f} {escape_html(so.currency or "USD")}
+      </td>
+    </tr>
+  </table>
 </div>
-"""
+{policy_documents.customer_policy_block([policy_documents.LANE_READY_TO_ORDER], include_privacy=True)}
+<p style="font-size:13px;color:#595A5C;margin:0;">
+  Questions about your order or payment? Reply to this email or contact
+  <a href="mailto:{BILLING_INBOX}" style="color:#0E2240;text-decoration:underline;">{BILLING_INBOX}</a>.
+</p>
+""".strip()
+    body = render_customer_email(
+        title="Your Locally Twisted order is confirmed",
+        preheader=f"Payment received for {so.name}. This email is your receipt.",
+        body_html=body_content,
+        support_email=BILLING_INBOX,
+    )
 
     frappe.sendmail(
         recipients=[email],
@@ -446,6 +448,8 @@ def _send_receipt_email(so_name):
         message=body,
         reference_doctype="Sales Order",
         reference_name=so_name,
+        reply_to=BILLING_INBOX,
+        inline_images=customer_email_inline_images(),
         # attach_print intentionally omitted — we never want to attach a
         # PDF render (wkhtmltopdf-in-Docker trap). The HTML body is the
         # receipt.
@@ -453,7 +457,6 @@ def _send_receipt_email(so_name):
         **document_copy_kwargs(external_audience=True, primary_recipients=[email]),
     )
     frappe.db.commit()
-
 
 OPERATOR_EMAIL = DEFAULT_OPERATOR_EMAIL
 # Jeff's operator inbox. Update via site_config.json
@@ -624,34 +627,30 @@ def _send_welcome_email_if_first_order(so_name):
     if _message_already_queued_or_sent("Customer", so.customer, subject):
         return
 
-    body = f"""
-<div style="font-family: Lato, Helvetica, Arial, sans-serif; max-width:560px; margin:0 auto; color:#1a1a1a; line-height:1.6;">
-  <h1 style="font-family:'Cormorant Garamond', Georgia, serif; font-size:30px; margin:0 0 16px;">
-    Welcome to Locally Twisted.
-  </h1>
-  <p style="font-size:16px; color:#3a3a3a; margin:0 0 20px;">
-    Thanks for your first order with us. We&rsquo;ve been making celebrations
-    along the Wasatch Front since 1998, and we&rsquo;re glad you&rsquo;re part of it now.
-  </p>
-
-  <h2 style="font-family:'Cormorant Garamond', Georgia, serif; font-size:20px; margin:24px 0 8px;">
-    What happens next
-  </h2>
-  <ul style="font-size:15px; color:#3a3a3a; padding-left:20px; margin:0 0 20px;">
-    <li style="margin-bottom:6px;">You&rsquo;ll get a separate receipt email with your order details.</li>
-    <li style="margin-bottom:6px;">We&rsquo;ll be in touch about delivery timing for your event.</li>
-    <li style="margin-bottom:6px;">If anything changes on your end, just reply to this email.</li>
-  </ul>
-
-  <p style="font-size:14px; color:#5a5a5a; margin:24px 0 0;">
-    Questions, color preferences, or last-minute additions?
-    Reply here or call (801) 285-0860.
-  </p>
-  <p style="font-size:12px; color:#9a9a9a; margin:24px 0 0;">
-    Locally Twisted &middot; 8969 S 2700 W, West Jordan, UT 84088
-  </p>
-</div>
-"""
+    body_content = """
+<p style="margin:0 0 10px;">
+  Thanks for your first order with us. We&rsquo;ve been making celebrations
+  along the Wasatch Front since 1998, and we&rsquo;re glad you&rsquo;re part of it now.
+</p>
+<p style="font-family:Georgia,'Times New Roman',serif;font-size:18px;color:#0E2240;margin:14px 0 6px;">
+  What happens next
+</p>
+<ul style="font-size:14px;color:#30343A;padding-left:18px;margin:0 0 12px;">
+  <li style="margin-bottom:5px;">You&rsquo;ll get a separate receipt email with your order details.</li>
+  <li style="margin-bottom:5px;">We&rsquo;ll be in touch about delivery timing for your event.</li>
+  <li style="margin-bottom:5px;">If anything changes on your end, just reply to this email.</li>
+</ul>
+<p style="font-size:13px;color:#595A5C;margin:0;">
+  Questions, color preferences, or last-minute additions? Reply here or contact
+  <a href="mailto:hi@locallytwisted.com" style="color:#0E2240;text-decoration:underline;">hi@locallytwisted.com</a>.
+</p>
+""".strip()
+    body = render_customer_email(
+        title="Welcome to Locally Twisted",
+        preheader="Thanks for your first order. Here is what happens next.",
+        body_html=body_content,
+        support_email=GENERAL_INBOX,
+    )
 
     frappe.sendmail(
         recipients=[email],
@@ -659,11 +658,12 @@ def _send_welcome_email_if_first_order(so_name):
         message=body,
         reference_doctype="Customer",
         reference_name=so.customer,
+        reply_to=GENERAL_INBOX,
+        inline_images=customer_email_inline_images(),
         now=False,
         **document_copy_kwargs(external_audience=True, primary_recipients=[email]),
     )
     frappe.db.commit()
-
 
 def _redirect(location):
     frappe.local.flags.redirect_location = location

@@ -8,6 +8,87 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-10 - Public inquiry emails use branded LT shell and delivery-safe company copy
+
+**Decision:** Public inquiry acknowledgments use the branded Locally Twisted
+email shell with the LT logo, mirrored red balloon-dog footer mark, no standard
+ERPNext footer, and the subject/title `U+1F388 Locally Twisted U+1F388 We Got
+Your Message! Be in Touch Soon!`. This applies to the shared public inquiry
+form path, not legal, billing, invoice, receipt, or other finance/legal emails.
+Standing company copy routing remains delivery-safe BCC to
+`locallytwisted@gmail.com` while ERPNext sends through that Gmail account.
+
+**Reasoning:** GL rejected the generic `We Got Your Message`/ERPNext-looking
+email as spammy and off-brand, then requested a playful Locally Twisted subject
+for public forms only. The live review-send also proved that Cloudflare-routed
+`@locallytwisted.com` aliases can report sent at SMTP but still fail inbox
+delivery when they route back into the same Gmail sender. The business still
+needs every customer form/order email copied internally, but the copy target has
+to be a mailbox that actually receives the message.
+
+**Implementation:** Added `customer_email_theme.py`, embedded `lt-logo.png` and
+`lt-balloon-dog-red-email-mirrored.png`, disabled Frappe's standard email
+footer through `configure_email_branding`, wired the theme and copy helper into
+public inquiry acknowledgment plus paid-order email surfaces, and kept the old
+public inquiry subjects in `LEGACY_AUTO_ACK_SUBJECTS` for idempotency so
+retries do not double-send older Leads.
+
+**Verification receipt:** `customer_email_policy_contract.py` guards the branded
+theme, new inquiry subject, no-PDF/no-standard-footer boundary, and company
+copy helper on all production sendmail surfaces. `customer_documents_contract.py`
+creates a rollback Lead, finds the Email Queue row by Lead reference, decodes
+MIME-encoded emoji subjects, checks embedded logo/dog evidence, and proves the
+delivery-safe company copy recipient exists. Latest focused passes:
+`python scripts/verify/customer_email_policy_contract.py`,
+`python scripts/verify/customer_documents_contract.py`,
+`python scripts/verify/payment_cascade_contract.py`, and
+`python scripts/verify/customer_contact_points_contract.py`.
+
+**Alternatives considered:** Use `hi@locallytwisted.com` as the internal copy
+target. Rejected until the sender/routing architecture changes because it is a
+Cloudflare-routed alias into the same Gmail account. Use the playful subject for
+legal/billing/finance emails. Rejected because those surfaces need role-specific
+professional subjects and inboxes.
+
+**Decided by:** GL requests on 2026-05-09 and 2026-05-10; implemented by Codex.
+
+---
+
+## 2026-05-10 - Header conversion labels now use Free Event Quote plus Contact Us
+
+**Decision:** The public header/menu conversion labels are `Free Event Quote`
+and `Contact Us`, and both point to `/contact`. The visible header CTA button
+that previously said `Free Event Quote` now says `Contact Us`. The adjacent
+menu entry that previously said `Twisting & Face Painting` now says
+`Free Event Quote`. The same label/link contract applies in the mobile drawer
+and search quick links.
+
+**Reasoning:** GL wanted the menu hierarchy to make the quote path more direct
+while keeping the CTA plainly customer-service oriented. `/contact` remains the
+shared conversion path for both labels. This is a menu/chrome copy change only;
+the BTFP service route still exists and is not deleted by this decision.
+
+**Implementation:** Updated `templates/includes/navbar/navbar.html` for desktop
+top link, primary nav, header CTA, search quick links, and mobile drawer.
+Updated `scripts/verify/nav_ia.py` so the old header CTA wording fails and the
+new `/contact` label contract is guarded.
+
+**Verification receipt:** A red precheck failed before the patch for all four
+expected labels. After the patch, `python scripts/verify/nav_ia.py` passed,
+`python scripts/dev/clear_website_cache.py` cleared the rendered template cache,
+live `http://localhost:8081/` HTML contained desktop/mobile `Free Event Quote`
+and `Contact Us` links to `/contact`, and focused Playwright header/search/
+drawer checks passed 26/26.
+
+**Alternatives considered:** Keep `Twisting & Face Painting` in the primary
+menu and change only the button. Rejected because GL explicitly requested the
+text above the button change too. Send one label to the BTFP route. Rejected
+because GL specified both labels should lead to the contact page.
+
+**Decided by:** GL request on 2026-05-10; implemented by Codex.
+
+---
+
 ## 2026-05-10 - Form success stays on-page and must prove backend success
 
 **Decision:** The shared `inquiry-v1` form success experience stays on the page with a progress/status panel and success modal. Do not auto-redirect customers away after a successful `/contact` or BTFP inquiry submit.

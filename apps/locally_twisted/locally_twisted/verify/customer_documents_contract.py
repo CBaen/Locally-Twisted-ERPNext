@@ -2,10 +2,14 @@
 from __future__ import annotations
 
 import time
+from email import policy
+from email.parser import Parser
 from html import unescape
 from quopri import decodestring
 
 import frappe
+
+from locally_twisted.customer_email_theme import AUTO_ACK_SUBJECT
 
 
 class ContractFail(Exception):
@@ -178,22 +182,17 @@ def _check_lead_auto_ack_lane_links() -> list[str]:
     )
     lead.insert(ignore_permissions=True)
 
-    rows = frappe.get_all(
-        "Email Queue",
-        filters={
-            "reference_doctype": "Lead",
-            "reference_name": lead.name,
-            "message": ("like", "%Subject: We got your message%"),
-        },
-        fields=["name", "message"],
-        limit=1,
-    )
+    filters = {"reference_doctype": "Lead", "reference_name": lead.name}
+    rows = frappe.get_all("Email Queue", filters=filters, fields=["name", "message"], limit=1)
     if not rows:
         return ["missing customer inquiry auto-ack Email Queue row"]
 
     message = _readable_message(rows[0]["message"] or "")
+    subjects = _message_subjects(rows[0]["message"] or "")
     recipients = _email_queue_recipients(rows[0]["name"])
     failures = []
+    if AUTO_ACK_SUBJECT not in subjects:
+        failures.append(f"auto-ack email subject mismatch: expected {AUTO_ACK_SUBJECT!r}, found {sorted(subjects)!r}")
     for expected in (
         "/terms-of-service#event-balloon-decor",
         "/terms-of-service#face-painting-balloon-twisting",
@@ -206,6 +205,16 @@ def _check_lead_auto_ack_lane_links() -> list[str]:
         failures.append(f"auto-ack email missing required copy recipient: {BUSINESS_DOCUMENT_COPY}")
     for alias in routed_alias_copy_risks(recipients):
         failures.append(f"auto-ack email should not copy routed alias loop: {alias}")
+    for forbidden in (
+        "Locally Twisted Message Sent - 24 Hour or Less Response Time",
+        "Sent via ERPNext",
+        "frappe.io/erpnext",
+    ):
+        if forbidden in message:
+            failures.append(f"auto-ack email contains retired/forbidden copy: {forbidden}")
+    for expected in ("Content-ID:", "lt-logo.png", "lt-balloon-dog-red-email-mirrored.png", "cid:"):
+        if expected not in message:
+            failures.append(f"auto-ack email is missing embedded logo evidence: {expected}")
     return failures
 
 
@@ -232,3 +241,17 @@ def _email_queue_recipients(queue_name: str) -> set[str]:
 def _readable_message(message: str) -> str:
     decoded = decodestring(message.encode("utf-8", errors="ignore")).decode("utf-8", errors="ignore")
     return unescape(f"{message}\n{decoded}")
+
+
+def _message_subjects(message: str) -> set[str]:
+    subjects = set()
+    raw_subject = ""
+    for line in message.splitlines():
+        if line.lower().startswith("subject:"):
+            raw_subject = line.split(":", 1)[1].strip()
+            subjects.add(raw_subject)
+            break
+    parsed_subject = Parser(policy=policy.default).parsestr(message).get("Subject")
+    if parsed_subject:
+        subjects.add(str(parsed_subject))
+    return {subject for subject in subjects if subject}

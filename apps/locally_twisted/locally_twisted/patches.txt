@@ -6,3 +6,4 @@
 # Patches added in this section will be executed after doctypes are migrated
 locally_twisted.patches.sync_contact_intake_backend
 locally_twisted.patches.sync_commerce_rules
+locally_twisted.patches.configure_email_branding

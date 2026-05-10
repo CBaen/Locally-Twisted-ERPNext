@@ -15,7 +15,7 @@ fire on Lead insert from a customer-facing form:
    Contact's `links` child table.
 
 3. after_insert: send an auto-acknowledgment email to the customer with
-   "we got your message, 24 hours" copy. Idempotent via Communication-
+   the LT-branded 24-hour response-time promise. Idempotent via Communication-
    by-subject lookup so a manual rerun never double-sends.
 
 Helpers are isolated so the Lead can still exist for the customer, but partial
@@ -32,10 +32,20 @@ from frappe.utils import escape_html
 from locally_twisted import policy_documents
 from locally_twisted import stage_cascade
 from locally_twisted.communication_copy_policy import document_copy_kwargs
+from locally_twisted.customer_email_theme import (
+    AUTO_ACK_SUBJECT,
+    GENERAL_INBOX,
+    customer_email_inline_images,
+    render_customer_email,
+)
 from locally_twisted.failure_recorder import record_backend_failure
 
 
 WEBSITE_LEAD_SOURCE = "Website"
+LEGACY_AUTO_ACK_SUBJECTS = (
+    "We got your message",
+    "Locally Twisted Message Sent - 24 Hour or Less Response Time",
+)
 
 # Map service-checkbox values (matching Hetzner /book) to the labels we
 # join into the Lead title. Keep aligned with `book.py` SERVICE_OPTIONS.
@@ -257,26 +267,22 @@ def _ensure_contact_link(doc):
 def _send_auto_ack_email(doc):
     """Send the customer auto-acknowledgment email. Idempotent via
     Communication-by-subject lookup -> safe to retry.
-
-    Copy ported from the Odoo `template_form_acknowledgment` mail.template:
-    subject "We got your message", body "Thank you for reaching out...
-    24 hours... browse our shop for inspiration."
     """
     email = (doc.email_id or "").strip()
     if not email:
         return
 
-    subject = "We got your message"
+    subject = AUTO_ACK_SUBJECT
     customer_name = (doc.lead_name or doc.first_name or "Hello").split(" - ")[0]
 
-    # Idempotency: skip if a Communication with this subject already
-    # exists on this Lead.
+    # Idempotency: skip if a Communication with the current subject or the
+    # retired launch subject already exists on this Lead.
     existing = frappe.get_all(
         "Communication",
         filters={
             "reference_doctype": "Lead",
             "reference_name": doc.name,
-            "subject": subject,
+            "subject": ["in", [subject, *LEGACY_AUTO_ACK_SUBJECTS]],
         },
         limit=1,
     )
@@ -290,42 +296,34 @@ def _send_auto_ack_email(doc):
         heading="Before you book",
     )
     body_html = f"""
-<div style="max-width: 600px; margin: 0 auto; font-family: 'Lato', Arial, sans-serif; color: #595A5C;">
-    <div style="background-color: #FBF5F2; padding: 24px 32px; text-align: center;">
-        <h2 style="font-family: Georgia, 'Cormorant Garamond', serif; color: #1A1A1A; margin: 0; font-size: 24px;">
-            Locally Twisted
-        </h2>
-    </div>
-    <div style="padding: 32px; background-color: #FBFBFB;">
-        <p style="font-size: 15px; line-height: 1.6;">{safe_name},</p>
-        <p style="font-size: 15px; line-height: 1.6;">
-            Thank you for reaching out. We've received your message and
-            we'll be in touch within 24 hours.
-        </p>
-        <p style="font-size: 15px; line-height: 1.6;">
-            In the meantime, feel free to browse our
-            <a href="/shop" style="color: #1A1A1A; text-decoration: underline;">shop</a>
-            for inspiration.
-        </p>
-        {policy_block}
-        <p style="font-size: 15px; line-height: 1.6; margin-top: 24px;">
-            Warmly,<br/>
-            The Locally Twisted Family
-        </p>
-    </div>
-    <div style="text-align: center; padding: 16px; font-size: 12px; color: #999;">
-        Locally Twisted &mdash; Utah's Balloon Specialists<br/>
-        8969 S 2700 W, West Jordan, UT 84088
-    </div>
-</div>
+<p style="margin:0 0 10px;">{safe_name},</p>
+<p style="margin:0 0 10px;">
+  Thanks for sending your event details to Locally Twisted.
+</p>
+<p style="margin:0 0 12px;padding:10px 12px;background:#FAF7F2;border-left:4px solid #B31B34;color:#0A0A0B;">
+  <strong>Response time:</strong> We will reply in 24 hours or less.
+</p>
+<p style="margin:0 0 12px;">
+  We will review the request and send the next useful step. For ideas while you wait,
+  browse our <a href="https://locallytwisted.com/portfolio" style="color:#0E2240;text-decoration:underline;">recent work</a>.
+</p>
+{policy_block}
 """.strip()
+    message = render_customer_email(
+        title=subject,
+        preheader="We got your message and will be in touch soon.",
+        body_html=body_html,
+        support_email=GENERAL_INBOX,
+    )
 
     frappe.sendmail(
         recipients=[email],
         subject=subject,
-        message=body_html,
+        message=message,
         reference_doctype="Lead",
         reference_name=doc.name,
+        reply_to=GENERAL_INBOX,
+        inline_images=customer_email_inline_images(),
         now=False,  # queue async
         **document_copy_kwargs(external_audience=True, primary_recipients=[email]),
     )

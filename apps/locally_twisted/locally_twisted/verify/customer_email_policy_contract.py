@@ -21,23 +21,38 @@ FORBIDDEN_SENDMAIL_KWARGS = {
 def run() -> dict[str, object]:
     app_root = Path(frappe.get_app_path("locally_twisted"))
     sources = {
+        "communication_copy_policy": _load_source(app_root / "communication_copy_policy.py"),
+        "customer_email_theme": _load_source(app_root / "customer_email_theme.py"),
         "lead_cascade": _load_source(app_root / "lead_cascade.py"),
         "payment_success": _load_source(app_root / "www" / "payment_success.py"),
         "payment_cascade_contract": _load_source(app_root / "verify" / "payment_cascade_contract.py"),
+        "patches": _load_source(app_root / "patches.txt"),
     }
 
     checks = [
+        _check_copy_policy(sources["communication_copy_policy"]),
+        _check_customer_email_theme(sources["customer_email_theme"]),
+        _check_standard_footer_disabled(),
+        _check_email_branding_patch(sources["patches"]),
         _check_email_function(
             surface_id="lead_auto_ack",
             source=sources["lead_cascade"],
             function_name="_send_auto_ack_email",
             reference_doctype="Lead",
             required_markers=(
+                "AUTO_ACK_SUBJECT",
+                "render_customer_email",
+                "inline_images=customer_email_inline_images()",
+                "reply_to=GENERAL_INBOX",
+                "document_copy_kwargs",
+                "external_audience=True",
+                "primary_recipients=[email]",
                 "policy_documents.customer_policy_block",
                 "policy_documents.lanes_for_lead(doc)",
                 "include_privacy=True",
                 "Before you book",
-                "We got your message",
+                "We got your message and will be in touch soon.",
+                "24 hours or less",
             ),
         ),
         _check_email_function(
@@ -46,6 +61,13 @@ def run() -> dict[str, object]:
             function_name="_send_receipt_email",
             reference_doctype="Sales Order",
             required_markers=(
+                "render_customer_email",
+                "inline_images=customer_email_inline_images()",
+                "support_email=BILLING_INBOX",
+                "reply_to=BILLING_INBOX",
+                "document_copy_kwargs",
+                "external_audience=True",
+                "primary_recipients=[email]",
                 "This email is your receipt.",
                 "policy_documents.customer_policy_block",
                 "policy_documents.LANE_READY_TO_ORDER",
@@ -63,6 +85,9 @@ def run() -> dict[str, object]:
                 "Open order in desk",
                 "Customer notes",
                 "New paid order",
+                "document_copy_kwargs",
+                "external_audience=False",
+                "primary_recipients=[recipient]",
             ),
         ),
         _check_email_function(
@@ -71,6 +96,13 @@ def run() -> dict[str, object]:
             function_name="_send_welcome_email_if_first_order",
             reference_doctype="Customer",
             required_markers=(
+                "render_customer_email",
+                "inline_images=customer_email_inline_images()",
+                "support_email=GENERAL_INBOX",
+                "reply_to=GENERAL_INBOX",
+                "document_copy_kwargs",
+                "external_audience=True",
+                "primary_recipients=[email]",
                 "Welcome to Locally Twisted",
                 "separate receipt email",
                 "If anything changes on your end",
@@ -142,6 +174,63 @@ def _check_email_function(
     if "message" not in kwargs:
         failures.append(f"{function_name} sendmail missing message")
     return _surface(surface_id, failures)
+
+
+def _check_customer_email_theme(source: str) -> dict[str, Any]:
+    failures: list[str] = []
+    for marker in (
+        "LOGO_EMBED_NAME",
+        "DOG_EMBED_NAME",
+        "customer_email_inline_images",
+        "lt-logo.png",
+        "lt-balloon-dog-red-email-mirrored.png",
+        "🎈Locally Twisted🎈 We Got Your Message! Be in Touch Soon!",
+        "#0E2240",
+        "#B31B34",
+        "#B89A5B",
+        "max-width:600px",
+        "hi@locallytwisted.com",
+        "billing@locallytwisted.com",
+    ):
+        if marker not in source:
+            failures.append(f"customer_email_theme.py missing marker {marker!r}")
+    for forbidden in ("Sent via ERPNext", "frappe.io/erpnext"):
+        if forbidden in source:
+            failures.append(f"customer_email_theme.py contains forbidden footer marker {forbidden!r}")
+    return _surface("customer_email_theme", failures)
+
+
+def _check_standard_footer_disabled() -> dict[str, Any]:
+    single_value = frappe.db.get_single_value("System Settings", "disable_standard_email_footer")
+    default_value = frappe.db.get_default("disable_standard_email_footer")
+    failures = []
+    if str(single_value) not in {"1", "True", "true"}:
+        failures.append("System Settings.disable_standard_email_footer must be enabled")
+    if str(default_value) not in {"1", "True", "true"}:
+        failures.append("frappe.db.get_default('disable_standard_email_footer') must resolve enabled")
+    return _surface("standard_email_footer_disabled", failures)
+
+
+def _check_email_branding_patch(source: str) -> dict[str, Any]:
+    failures = []
+    if "locally_twisted.patches.configure_email_branding" not in source:
+        failures.append("patches.txt missing configure_email_branding patch")
+    return _surface("email_branding_patch_registered", failures)
+
+
+def _check_copy_policy(source: str) -> dict[str, Any]:
+    failures = []
+    for marker in (
+        'PUBLIC_BUSINESS_ADDRESS = "hi@locallytwisted.com"',
+        'BUSINESS_DOCUMENT_COPY = "locallytwisted@gmail.com"',
+        '"hi@locallytwisted.com"',
+        '"cameron@locallytwisted.com"',
+        'return {"bcc": copies}',
+        "routed_alias_copy_risks",
+    ):
+        if marker not in source:
+            failures.append(f"communication_copy_policy.py missing marker {marker!r}")
+    return _surface("company_copy_policy", failures)
 
 
 def _check_dynamic_contract(source: str) -> dict[str, Any]:

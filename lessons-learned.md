@@ -6,6 +6,46 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-10 - Email Queue subjects with emoji must be decoded from MIME
+
+The public inquiry acknowledgment now uses a balloon-emoji subject. A raw
+`Email Queue.message LIKE "%Subject: ...%"` check is brittle because queued
+messages can MIME-encode non-ASCII subjects.
+
+**Counter-move:** find the Email Queue row by the business reference
+(`reference_doctype` / `reference_name`) and parse the message headers with
+Python's email parser. Keep the old subject checks as forbidden-copy guards,
+not as the lookup path.
+
+---
+
+## 2026-05-10 - Sent email is not delivery proof when aliases loop back
+
+ERPNext and Gmail can report an email as sent while a Cloudflare-routed
+`@locallytwisted.com` alias loops back into the same Gmail sender and never
+appears where the operator expects it.
+
+**Counter-move:** treat `Email Queue.status = Sent` as SMTP acceptance only.
+For current LT Gmail sending, internal business copies use
+`locallytwisted@gmail.com`, while public reply identities stay role-based
+(`hi@`, `legal@`, `billing@`). Keep the Email Queue insertion guard so live
+console probes cannot bypass the copy helper.
+
+---
+
+## 2026-05-10 - Header CTA copy is a route contract, not copy polish
+
+Changing `Twisting & Face Painting` to `Free Event Quote` and the header CTA
+from `Free Event Quote` to `Contact Us` touched desktop nav, utility links,
+search quick links, mobile drawer labels, cache, rendered HTML, and nav
+verifiers.
+
+**Counter-move:** treat public chrome label changes as one contract across
+`navbar.html`, `nav_ia.py`, live cache, and Playwright header/drawer coverage.
+Run a red precheck or add a failing verifier first when the old label is meant
+to disappear.
+
+
 ## 2026-05-10 - Empty upload slots are not failed uploads
 
 A browser can submit an empty file input part even when the customer never chose

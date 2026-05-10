@@ -1,6 +1,6 @@
 # Menu And Content Coordination
 
-Last updated: 2026-05-08 by Codex.
+Last updated: 2026-05-10 by Codex.
 
 ## Purpose
 
@@ -14,7 +14,7 @@ Before editing any nav, chrome, public page hero/body copy, footer links, or nav
 - Do not edit another active lane's files without adding a note here first.
 - Treat `workstreams/website-launch.md` as the broader launch lane; use this file for menu/content collisions.
 - Keep `/contact` as the shared conversion path unless Guiding Light explicitly changes the architecture.
-- Keep `Twisting & Face Painting` in the primary public nav where the unapproved Process link had been. Do not restore a standalone `/process` page or top-level Process link without explicit GL approval.
+- Current public chrome labels are `Free Event Quote` and `Contact Us`, both pointing to `/contact`. `/balloon-twisting-and-face-painting` remains a live service route, but it is not the primary header label unless GL reopens that wording. Do not restore a standalone `/process` page or top-level Process link without explicit GL approval.
 - Do not claim a route, drawer, form, or verifier is fixed without recording the command and result.
 
 ## Style-Guide Alignment Note For Menu/Content Agents
@@ -36,7 +36,7 @@ For this nav/content lane, stay inside these rules:
 
 | Lane | Owner | Files / Surface | Status |
 |---|---|---|---|
-| Nav/chrome and live menu assets | Codex current session | `templates/includes/navbar/navbar.html`, `navbar_context.py`, header portions of `public/css/lt-theme.css`, `hooks.py`, `public/js/lt-megamenu.js`, `public/css/lt-mega-menu.css`, `scripts/verify/nav_ia.py`, `scripts/verify/smoke_shop.py` | Complete 2026-05-08: Twisting & Face Painting is restored to primary public nav, Process is removed from customer-facing chrome, and mobile search now lives at the bottom of the drawer instead of the crowded mobile header row. |
+| Nav/chrome and live menu assets | Codex current session | `templates/includes/navbar/navbar.html`, `navbar_context.py`, header portions of `public/css/lt-theme.css`, `hooks.py`, `public/js/lt-megamenu.js`, `public/css/lt-mega-menu.css`, `scripts/verify/nav_ia.py`, `scripts/verify/smoke_shop.py` | Complete 2026-05-10: public ecommerce chrome is paused, the primary conversion labels are `Free Event Quote` and `Contact Us` pointing to `/contact`, Process is removed from customer-facing chrome, and mobile search lives at the bottom of the drawer. |
 | Authority page content and route pages | Codex current session | `www/home.*`, `www/event_balloons.*`, `www/balloon_twisting_and_face_painting.*`, `www/portfolio.*`, `www/contact.*`, `www/shop.*`, supporting public content pages | Complete 2026-05-07: standalone Process route files were removed; BTFP remains the approved live-service route. |
 | Owner package and screenshots | Unclaimed | `_resources/brand-direction-architecture-2026-05/`, desktop/mobile renders, route map, builder notes | Pending. Use screenshots from the actual Frappe pages after route/content replacement, not disconnected mockups. |
 
@@ -84,6 +84,14 @@ Status:
 ```
 
 ## Session Notes
+
+### 2026-05-10 - Codex current session nav CTA copy adjustment
+Lane: Public header/menu CTA label alignment.
+Files: `navbar.html`, `nav_ia.py`, `workstreams/menu-content-coordination.md`.
+Intent: Change the visible menu CTA from `Free Event Quote` to `Contact Us`, change the adjacent/above `Twisting & Face Painting` menu entry to `Free Event Quote`, and keep both conversion labels pointed at `/contact`.
+Conflicts: Small copy/link update only; do not reopen broader mega-menu architecture, footer IA, or service-page content.
+Verification: Red check failed before the patch for all four expected labels. After the patch, `python -m py_compile scripts/verify/nav_ia.py` passed, `python scripts/verify/nav_ia.py` passed, `python scripts/dev/clear_website_cache.py` passed, live `http://localhost:8081/` HTML contained desktop/mobile `Free Event Quote` and `Contact Us` links to `/contact`, and focused `npx.cmd playwright test scripts/verify/interactive_layout.spec.js --reporter=line --grep "header breakpoint|header search overlay|desktop mega panels|mobile and tablet drawer" --workers=1` passed 26/26.
+Status: Complete.
 
 ### 2026-05-08 - Codex current session mobile search relocation
 Lane: Mobile public chrome, drawer search, and nav verifier parity.
