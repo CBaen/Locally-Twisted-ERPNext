@@ -46,7 +46,6 @@ def test_desktop_nav_order(navbar: str) -> None:
         "data-lt-megamenu-trigger=\"lt-mega-products\"",
         "Ready-to-Order",
         'lt-mega-nav__link--btfp" href="/balloon-twisting-and-face-painting">Twisting &amp; Face Painting',
-        'lt-mega-nav__link--quote" href="/contact">Free Event Quote',
         "/portfolio",
         "/about",
         "/faq",
@@ -55,22 +54,50 @@ def test_desktop_nav_order(navbar: str) -> None:
     if positions != sorted(positions):
         raise AssertionError(
             "Primary nav order must be Event Balloons, Ready-to-Order, Twisting & Face Painting, "
-            "Free Event Quote, Portfolio, About Us, FAQ, with deliberate mega-menu triggers"
+            "Portfolio, About Us, FAQ, with deliberate mega-menu triggers"
         )
 
 
 def test_quote_cta_is_contact(navbar: str) -> None:
     required = (
-        'lt-mega-nav__link--quote" href="/contact">Free Event Quote',
+        '<li><a href="/contact">Free Event Quote</a></li>',
         'class="lt-mega-header__cta" href="/contact">Contact Us</a>',
-        'class="lt-mega-drawer__single lt-mega-drawer__single--quote" href="/contact">Free Event Quote</a>',
         'class="lt-mega-drawer__cta" href="/contact">Contact Us</a>',
     )
     for needle in required:
         if needle not in navbar:
             raise AssertionError(f"Header/menu must keep Contact Us and Free Event Quote pointed at /contact: {needle}")
+    forbidden = (
+        'lt-mega-nav__link--quote" href="/contact">Free Event Quote',
+        'lt-mega-drawer__single--quote" href="/contact">Free Event Quote',
+        '<strong>Free Event Quote</strong>',
+    )
+    for needle in forbidden:
+        if needle in navbar:
+            raise AssertionError(f"Free Event Quote belongs only in the top header banner, not in menus/search: {needle}")
     if 'class="lt-mega-header__cta" href="/contact">Free Event Quote</a>' in navbar:
         raise AssertionError("Header CTA label must be Contact Us, not Free Event Quote")
+
+
+def test_top_banner_links_are_owner_approved(navbar: str) -> None:
+    top_start = _line_index(navbar, '<ul class="lt-mega-header__top-links">')
+    top_end = _line_index(navbar[top_start:], '</ul>') + top_start
+    top_links = navbar[top_start:top_end]
+    required = (
+        "SHORT NOTICE? LET US KNOW. WE CAN OFTEN HELP WITH 24 HOURS NOTICE!",
+        'href="/contact">Free Event Quote</a>',
+    )
+    forbidden = (
+        'href="/shop">Ready-to-Order</a>',
+        'href="/cart">Cart</a>',
+        'href="/portfolio">Recent Work</a>',
+    )
+    for needle in required:
+        if needle not in top_links:
+            raise AssertionError(f"Header banner must keep the approved quote link: {needle}")
+    for needle in forbidden:
+        if needle in top_links:
+            raise AssertionError(f"Header banner exposes an unapproved utility link: {needle}")
 
 
 def _active_nav_service_removal_approval_lines() -> set[str]:
@@ -164,6 +191,8 @@ def test_search_is_overlay_not_public_page(navbar: str, footer: str, search_rout
         raise AssertionError("Search overlay product links must exist only behind the open-commerce guard")
     if 'href="/about"' not in navbar or "About Us" not in navbar:
         raise AssertionError("Search overlay and public nav must expose the source-owned /about page")
+    if '<strong>Free Event Quote</strong>' in navbar:
+        raise AssertionError("Search quick results must not duplicate the header-banner-only Free Event Quote label")
     if "context.http_status_code = 404" not in search_route or "no_cache = 1" not in search_route:
         raise AssertionError("/search must override Frappe's bundled page with a no-cache 404")
 
@@ -181,7 +210,6 @@ def test_mega_menu_contract(navbar: str) -> None:
         '"route": "private-celebrations"',
         "Corporate Events",
         'class="lt-mega-nav__link" href="/about">About Us</a>',
-        'lt-mega-nav__link--quote" href="/contact">Free Event Quote',
         'class="lt-mega-header__cta" href="/contact">Contact Us</a>',
         'id="lt-mobile-toggle"',
         'id="lt-mobile-nav"',
@@ -211,7 +239,6 @@ def test_mobile_nav_matches_primary_order(navbar: str) -> None:
         'data-lt-drawer-accordion-trigger="lt-mobile-products"',
         "Ready-to-Order",
         'class="lt-mega-drawer__single lt-mega-drawer__single--btfp" href="/balloon-twisting-and-face-painting">Twisting &amp; Face Painting',
-        'class="lt-mega-drawer__single lt-mega-drawer__single--quote" href="/contact">Free Event Quote',
         'href="/portfolio"',
         'href="/about"',
         'href="/faq"',
@@ -222,7 +249,7 @@ def test_mobile_nav_matches_primary_order(navbar: str) -> None:
     if positions != sorted(positions):
         raise AssertionError(
             "Mobile drawer must follow desktop primary order: Event Balloons, "
-            "Ready-to-Order, Twisting & Face Painting, Free Event Quote, Portfolio, About Us, FAQ, Contact Us, Search"
+            "Ready-to-Order, Twisting & Face Painting, Portfolio, About Us, FAQ, Contact Us, Search"
         )
     if 'href="/search"' in drawer:
         raise AssertionError("Mobile drawer must not expose the retired /search page")
@@ -307,6 +334,7 @@ def main() -> None:
     search_route = SEARCH_ROUTE.read_text(encoding="utf-8")
     test_desktop_nav_order(navbar)
     test_quote_cta_is_contact(navbar)
+    test_top_banner_links_are_owner_approved(navbar)
     test_canonical_service_nav_requires_explicit_removal_approval(navbar, footer)
     test_nav_does_not_link_to_retired_book_route(navbar)
     test_nav_does_not_link_to_retired_category_index(navbar, footer)

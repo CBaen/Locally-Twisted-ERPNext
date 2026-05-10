@@ -90,35 +90,50 @@ def main() -> int:
             else:
                 print("  OK - BTFP page shows only live-service choices")
 
-            for service in expected_values:
-                locator = page.locator(f'input[name="x_services"][value="{service}"]')
-                if locator.count() != 1 or not locator.first.is_checked():
-                    print(f"  FAIL - BTFP page should preselect {service!r}")
-                    failures += 1
+            checked_services = page.locator('input[name="x_services"]:checked').evaluate_all(
+                "(nodes) => nodes.map((node) => node.value)"
+            )
+            if checked_services != []:
+                print(f"  FAIL - BTFP page should start with no checked services, found {checked_services!r}")
+                failures += 1
             for hidden_service in ["Balloon Decor", "Delivery", "Pickup", "Events Inquiry", "Something Else"]:
                 if page.locator(f'input[name="x_services"][value="{hidden_service}"]').count() != 0:
                     print(f"  FAIL - BTFP page should not expose {hidden_service!r}")
                     failures += 1
 
             support_banner = page.locator(".lt-btfp__banner")
-            if support_banner.count() != 1:
-                print("  FAIL - BTFP page should include the last-minute support banner")
+            if support_banner.count() != 0:
+                print("  FAIL - BTFP page should not include the old last-minute contact banner")
                 failures += 1
-            else:
-                support_background = support_banner.first.evaluate("node => getComputedStyle(node).backgroundColor")
-                if support_background != "rgb(14, 34, 64)":
-                    print(f"  FAIL - BTFP support banner should use brand blue, found {support_background}")
-                    failures += 1
-                support_color = support_banner.first.evaluate("node => getComputedStyle(node).color")
-                if support_color not in {"rgb(250, 247, 242)", "rgb(255, 255, 255)"}:
-                    print(f"  FAIL - BTFP support banner text should be light on brand blue, found {support_color}")
-                    failures += 1
+            if "Need help on short notice?" in body_text or "Give us a call or send a message" in body_text:
+                print("  FAIL - BTFP page still contains the old short-notice contact copy")
+                failures += 1
 
             crawl = page.locator(".lt-btfp__event-crawl")
             if crawl.count() != 1:
                 print("  FAIL - BTFP page should include the event-type crawl")
                 failures += 1
             else:
+                crawl_slot = crawl.first.evaluate(
+                    """node => {
+                        const previous = node.previousElementSibling;
+                        const next = node.nextElementSibling;
+                        return {
+                            previousClass: previous ? previous.className : "",
+                            nextClass: next ? next.className : "",
+                        };
+                    }"""
+                )
+                if "lt-btfp__intro" not in crawl_slot.get("previousClass", "") or "lt-btfp__services" not in crawl_slot.get("nextClass", ""):
+                    print(f"  FAIL - BTFP event crawl should replace the old banner slot, found {crawl_slot!r}")
+                    failures += 1
+                event_items = page.locator(".lt-btfp__event-crawl-group:first-child .lt-btfp__event-crawl-item").evaluate_all(
+                    "(nodes) => nodes.map((node) => node.textContent.trim())"
+                )
+                required_events = {"Birthday Parties", "School Carnivals", "Company Picnics", "Library Programs", "City Celebrations", "Trunk-or-Treats"}
+                if len(event_items) < 16 or not required_events.issubset(set(event_items)):
+                    print(f"  FAIL - BTFP crawl needs a broader event list, found {event_items!r}")
+                    failures += 1
                 background = crawl.first.evaluate("node => getComputedStyle(node).backgroundColor")
                 if background != "rgb(14, 34, 64)":
                     print(f"  FAIL - BTFP crawl banner should use brand blue, found {background}")
@@ -133,7 +148,12 @@ def main() -> int:
                         if (!track) return null;
                         const style = getComputedStyle(track);
                         const matrix = new DOMMatrixReadOnly(style.transform);
-                        return { x: matrix.m41, animationName: style.animationName };
+                        return {
+                            x: matrix.m41,
+                            animationName: style.animationName,
+                            animationPlayState: style.animationPlayState,
+                            animationIterationCount: style.animationIterationCount
+                        };
                     }"""
                 )
                 page.wait_for_timeout(650)
@@ -147,6 +167,9 @@ def main() -> int:
                 )
                 if not before or not after or before.get("animationName") != "lt-btfp-event-crawl-scroll":
                     print(f"  FAIL - BTFP event crawl should animate, found {before!r}")
+                    failures += 1
+                elif before.get("animationPlayState") != "running" or before.get("animationIterationCount") != "infinite":
+                    print(f"  FAIL - BTFP event crawl should run infinitely, found {before!r}")
                     failures += 1
                 elif after.get("x") <= before.get("x"):
                     print(f"  FAIL - BTFP event crawl should move left-to-right, before={before!r} after={after!r}")

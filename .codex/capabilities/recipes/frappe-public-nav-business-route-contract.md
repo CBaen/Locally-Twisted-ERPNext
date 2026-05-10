@@ -41,13 +41,16 @@ For the current LT site:
   `/balloon-twisting-and-face-painting`.
 - `Process` is not approved as a public top-level nav item or standalone route.
 - `/contact` remains the shared quote/conversion path.
-- Current launch header/menu labels are `Event Balloons`,
-  `Twisting & Face Painting`, `Ready-to-Order`, `Free Event Quote`,
-  `Portfolio`, `About Us`, `FAQ`, and `Contact Us` when ecommerce is open for
-  testing.
+- Current launch desktop primary header labels are `Event Balloons`,
+  `Twisting & Face Painting`, `Ready-to-Order`, `Portfolio`, `About Us`,
+  `FAQ`, and `Contact Us` when ecommerce is open for testing. The top utility
+  banner keeps `Free Event Quote`, the account link, and the short-notice copy:
+  `SHORT NOTICE? LET US KNOW. WE CAN OFTEN HELP WITH 24 HOURS NOTICE!`.
 - `Twisting & Face Painting` points to `/balloon-twisting-and-face-painting`.
 - `Ready-to-Order` points to `/shop` when `lt_ecommerce_paused=0`.
-- `Free Event Quote` and `Contact Us` point to `/contact`.
+- `Free Event Quote` and `Contact Us` point to `/contact`; `Free Event Quote`
+  belongs in the top utility banner and must not replace the BTFP service lane
+  in primary nav, mobile drawer, or search quick links.
 - Removing, hiding, renaming, or replacing a canonical service lane requires an
   explicit GL approval marker; quote/conversion copy requests do not imply
   service removal approval.
@@ -128,3 +131,9 @@ Codex set `lt_ecommerce_paused=0`, cleared website cache, and restored the
 active proof posture to open Ready-to-Order/cart/search behavior. `npm run
 test:ecommerce-full` and `npm run test:public-verify` passed with open
 ecommerce checks included.
+
+Later on 2026-05-10, GL clarified the top menu banner should add the short
+notice line while leaving `Free Event Quote` and the account link in place.
+The nav contract now keeps `Free Event Quote` top-banner-only, `Contact Us` as
+the primary conversion CTA, and `Twisting & Face Painting` as the service lane.
+`nav_ia.py`, `smoke_shop.py`, and full `npm run test:public-verify` passed.

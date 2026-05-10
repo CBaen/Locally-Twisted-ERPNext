@@ -55,8 +55,13 @@ copy that describes Balloon Twisting and Face Painting pricing.
   deposit per artist, no discounts.
 - Calculator inputs are row-based: one row per artist, with independent service
   and hours. Never flatten mixed artists into one shared hours value.
-- Support/event bands stay brand blue. Do not restore the red/tan Process-era
-  divider/banner treatment.
+- The old short-notice contact band is not part of the page contract. Do not
+  restore the "Need help on short notice?" phone/email banner.
+- The event suggestion crawl sits directly after the compact hero, before the
+  service cards, in the former support-band slot.
+- The event crawl stays brand blue, uses the expanded BTFP event list, moves
+  left-to-right, and must keep running infinitely without hover/focus pause or
+  horizontal document scroll.
 
 ## Source Files
 
@@ -105,8 +110,10 @@ also touches chrome, containers, Webshop surfaces, or shared CSS.
 - The service photos only change through hidden/subtle animation with no controls or status.
 - The embedded inquiry form loses the shared status panel, backend-proven
   success modal, or inline cookie notice placement.
-- Brand-blue support/event bands are replaced with red, tan, blush, or a
-  Process-era treatment.
+- The old short-notice phone/email banner returns, the event crawl moves below
+  the service cards again, or the crawl pauses on hover/focus.
+- The brand-blue event crawl is replaced with red, tan, blush, or a Process-era
+  treatment.
 - Decorative crawls/carousels are keyboard focusable while offscreen or hidden.
 
 ## Receipt
@@ -131,3 +138,11 @@ of the service-page contract, not a cosmetic nav preference.
 
 
 On 2026-05-10, GL verified the exact localhost BTFP route and found the beginning form state still selected both artist services, repeat emails were blocked by ERPNext Lead duplicate validation, five-photo upload was not proven in the real flow, and the photo areas still read as static. The repair blanked the initial service selection, enabled duplicate Lead emails through durable CRM Settings patching, added `book_form_repeat_email_photos.py`, and changed the service photos to explicit controlled carousels. The repeat-email/five-photo verifier, focused Playwright BTFP carousel/form tests, and white-label surface verifier passed against `http://localhost:8081`.
+
+Later on 2026-05-10, GL requested removal of the old short-notice phone/email
+band and replacement with the event suggestion crawl in that slot. Codex moved
+the brand-blue crawl directly below the hero, expanded the event list, guarded
+infinite left-to-right motion including hover/focus non-pause, and updated the
+container contract. `contact_prefill.py`, focused BTFP interactive/layout/
+container checks, `smoke_shop.py`, and full `npm run test:public-verify` passed
+against `http://localhost:8081`.

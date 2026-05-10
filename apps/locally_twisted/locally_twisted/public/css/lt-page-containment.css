@@ -35,7 +35,6 @@
   .lt-portfolio-filter,
   .lt-portfolio-grid,
   .lt-btfp__intro,
-  .lt-btfp__banner,
   .lt-btfp__services,
   .lt-btfp__event-crawl,
   .lt-btfp__booking,
@@ -68,7 +67,6 @@
   .lt-portfolio-filter,
   .lt-portfolio-grid,
   .lt-btfp__intro,
-  .lt-btfp__banner,
   .lt-btfp__event-crawl,
   .lt-authority-page .lt-fullbleed,
   .lt-fullbleed
@@ -119,7 +117,6 @@
   .lt-portfolio-filter__inner,
   .lt-portfolio-grid__inner,
   .lt-btfp__intro-inner,
-  .lt-btfp__banner-inner,
   .lt-btfp__services-grid,
   .lt-btfp__booking-grid,
   .lt-faq__inner,
@@ -256,7 +253,6 @@
   .lt-hero__cta,
   .lt-contact__call-btn,
   .lt-book__submit,
-  .lt-btfp__banner-link,
   .lt-btfp__contact-primary,
   .lt-btfp__contact-secondary,
   .lt-portfolio-empty__cta,
@@ -310,7 +306,6 @@
 
 @media (max-width: 575.98px) {
   .lt-authority-actions,
-  .lt-btfp__banner-actions,
   .lt-btfp__contact-actions,
   .lt-cart__empty-actions {
     display: grid;

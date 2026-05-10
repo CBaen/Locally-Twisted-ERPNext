@@ -1111,6 +1111,84 @@ test.describe("Locally Twisted interactive layout states", () => {
 		await expect(carousels.first().locator("[data-btfp-carousel-status]")).toHaveText("2 / 10");
 	});
 
+	test("twisting and face painting event crawl replaces the short-notice band and keeps moving", async ({ page }) => {
+		await page.setViewportSize({ width: 1366, height: 768 });
+		await page.emulateMedia({ reducedMotion: "no-preference" });
+		const response = await gotoAndSettle(page, "/balloon-twisting-and-face-painting");
+		await expectSuccessfulResponse(response, "/balloon-twisting-and-face-painting");
+
+		const contract = await page.evaluate(() => {
+			const crawl = document.querySelector(".lt-btfp__event-crawl");
+			const oldCopy = document.body.innerText.includes("Need help on short notice?") || document.body.innerText.includes("Give us a call or send a message");
+			const events = Array.from(document.querySelectorAll(".lt-btfp__event-crawl-group:first-child .lt-btfp__event-crawl-item")).map((node) => node.textContent.trim());
+			const track = document.querySelector(".lt-btfp__event-crawl-track");
+			const style = track ? window.getComputedStyle(track) : null;
+			return {
+				oldBannerCount: document.querySelectorAll(".lt-btfp__banner").length,
+				oldCopy,
+				previousClass: crawl?.previousElementSibling?.className || "",
+				nextClass: crawl?.nextElementSibling?.className || "",
+				events,
+				viewportOverflowX: crawl ? window.getComputedStyle(crawl.querySelector(".lt-btfp__event-crawl-viewport")).overflowX : null,
+				animationName: style?.animationName || "",
+				animationPlayState: style?.animationPlayState || "",
+				animationIterationCount: style?.animationIterationCount || "",
+			};
+		});
+
+		expect(contract.oldBannerCount, "old short-notice contact band should be removed").toBe(0);
+		expect(contract.oldCopy, "old short-notice contact copy should not remain on the route").toBe(false);
+		expect(contract.previousClass, "event crawl should sit directly after the BTFP hero").toContain("lt-btfp__intro");
+		expect(contract.nextClass, "event crawl should sit before the service cards in the old banner slot").toContain("lt-btfp__services");
+		expect(contract.events.length, "event crawl should include a fuller BTFP event suggestion set").toBeGreaterThanOrEqual(16);
+		for (const eventName of ["Birthday Parties", "School Carnivals", "Company Picnics", "Library Programs", "City Celebrations", "Trunk-or-Treats"]) {
+			expect(contract.events, `event crawl should include ${eventName}`).toContain(eventName);
+		}
+		expect(contract.viewportOverflowX).toBe("hidden");
+		expect(contract.animationName).toBe("lt-btfp-event-crawl-scroll");
+		expect(contract.animationPlayState).toBe("running");
+		expect(contract.animationIterationCount).toBe("infinite");
+
+		const sampleCrawl = async () => page.evaluate(() => {
+			const track = document.querySelector(".lt-btfp__event-crawl-track");
+			if (!track) return null;
+			const style = window.getComputedStyle(track);
+			const matrix = new DOMMatrixReadOnly(style.transform);
+			return {
+				x: matrix.m41,
+				animationPlayState: style.animationPlayState,
+				animationIterationCount: style.animationIterationCount,
+			};
+		});
+
+		const first = await sampleCrawl();
+		await page.waitForTimeout(700);
+		const second = await sampleCrawl();
+		expect(first).not.toBeNull();
+		expect(second).not.toBeNull();
+		expect(second.x - first.x, "crawl should keep moving left-to-right after page load").toBeGreaterThan(0);
+
+		await page.locator(".lt-btfp__event-crawl").hover();
+		const hoverStart = await sampleCrawl();
+		await page.waitForTimeout(700);
+		const hoverEnd = await sampleCrawl();
+		expect(hoverStart.animationPlayState).toBe("running");
+		expect(hoverEnd.animationPlayState).toBe("running");
+		expect(hoverEnd.x - hoverStart.x, "crawl should not pause on hover").toBeGreaterThan(0);
+
+		await page.evaluate(() => {
+			const track = document.querySelector(".lt-btfp__event-crawl-track");
+			track?.setAttribute("tabindex", "-1");
+			track?.focus();
+		});
+		const focusStart = await sampleCrawl();
+		await page.waitForTimeout(700);
+		const focusEnd = await sampleCrawl();
+		expect(focusStart.animationPlayState).toBe("running");
+		expect(focusEnd.animationPlayState).toBe("running");
+		expect(focusEnd.x - focusStart.x, "crawl should not pause on focus").toBeGreaterThan(0);
+	});
+
 	test("homepage hero uses one visible stable headline", async ({ page }) => {
 		await page.setViewportSize({ width: 1366, height: 900 });
 		await page.emulateMedia({ reducedMotion: "no-preference" });

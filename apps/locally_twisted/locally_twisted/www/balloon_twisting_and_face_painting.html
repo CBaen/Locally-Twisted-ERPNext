@@ -12,14 +12,20 @@
     </div>
 </section>
 
-<section class="lt-btfp__banner lt-fullbleed" aria-label="Last-minute bookings welcome">
-    <div class="lt-btfp__banner-inner">
-        <p class="lt-btfp__banner-copy">
-            Need help on short notice? <strong>Give us a call or send a message</strong> and we will check availability.
-        </p>
-        <div class="lt-btfp__banner-actions">
-            <a href="tel:+18012850860" class="lt-btfp__banner-link">(801) 285-0860</a>
-            <a href="mailto:hi@locallytwisted.com" class="lt-btfp__banner-link">hi@locallytwisted.com</a>
+<section class="lt-btfp__event-crawl lt-fullbleed" aria-labelledby="lt-btfp-event-crawl-heading">
+    <h2 id="lt-btfp-event-crawl-heading" class="visually-hidden">Good fits for balloon twisting and face painting</h2>
+    <div class="lt-btfp__event-crawl-viewport" role="presentation">
+        <div class="lt-btfp__event-crawl-track">
+            <div class="lt-btfp__event-crawl-group">
+                {% for event_type in btfp_event_types %}
+                <span class="lt-btfp__event-crawl-item">{{ event_type }}</span>
+                {% endfor %}
+            </div>
+            <div class="lt-btfp__event-crawl-group" aria-hidden="true">
+                {% for event_type in btfp_event_types %}
+                <span class="lt-btfp__event-crawl-item">{{ event_type }}</span>
+                {% endfor %}
+            </div>
         </div>
     </div>
 </section>
@@ -109,24 +115,6 @@
             </dl>
         </article>
 
-    </div>
-</section>
-
-<section class="lt-btfp__event-crawl lt-fullbleed" aria-labelledby="lt-btfp-event-crawl-heading">
-    <h2 id="lt-btfp-event-crawl-heading" class="visually-hidden">Good fits for balloon twisting and face painting</h2>
-    <div class="lt-btfp__event-crawl-viewport" role="presentation">
-        <div class="lt-btfp__event-crawl-track">
-            <div class="lt-btfp__event-crawl-group">
-                {% for event_type in btfp_event_types %}
-                <span class="lt-btfp__event-crawl-item">{{ event_type }}</span>
-                {% endfor %}
-            </div>
-            <div class="lt-btfp__event-crawl-group" aria-hidden="true">
-                {% for event_type in btfp_event_types %}
-                <span class="lt-btfp__event-crawl-item">{{ event_type }}</span>
-                {% endfor %}
-            </div>
-        </div>
     </div>
 </section>
 
@@ -225,7 +213,7 @@
                     </div>
                 </dl>
                 <p class="lt-btfp__calc-formula" data-btfp-calc-formula>
-                    2 artists x $130 first hour.
+                    2 artists x $130 first hour. No discounts.
                 </p>
             </section>
 
@@ -430,7 +418,7 @@
         totalEl.textContent = money(total);
         depositEl.textContent = money(deposit);
         balanceEl.textContent = money(balance);
-        formulaEl.textContent = formulaParts.join("; ") + ".";
+        formulaEl.textContent = formulaParts.join("; ") + ". No discounts.";
     }
 
     root.addEventListener("input", function (event) {

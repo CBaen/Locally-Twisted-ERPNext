@@ -8,6 +8,39 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-10 - Ecommerce research synthesis requires named artifacts, not routed completion text
+
+**Decision:** The Odoo-to-ERPNext ecommerce audit may only cite lanes that produced named artifacts under `workstreams/ecommerce-audit/`, or lanes explicitly marked `[NO EVIDENCE]`. Lane F synthesis must wait until missing lanes A/E are rerun artifact-first or intentionally carried as process failures.
+
+**Reasoning:** The initial five-lane dispatch produced usable Lane B/C/D files but Lane A and Lane E had no required artifacts. Completion summaries, truncated tool output, or agent confidence without a file are not evidence for product import, checkout preservation, or source parity decisions.
+
+**Implementation:** `workstreams/ecommerce-audit/README.md` now lists the evidence inventory, version anchors, blockers, and next safe actions. Dispatch prompts and research brief carry the first-line date/check/confidence contract, parent-accountability clause, and `[NO EVIDENCE]` rule.
+
+**Verification receipt:** Directory inspection showed Lane B/C/D artifacts present and Lane A/E artifacts missing. The artifactless delegation pattern was captured as a Failure Recipe in the capabilities framework.
+
+**Alternatives considered:** Let Lane F synthesize from the assistant-routed completion messages. Rejected because missing artifacts would become invisible false evidence. Throw away the useful B/C/D artifacts. Rejected because they are named, inspectable, and useful within their stated scope.
+
+**Decided by:** GL evidence standard and Moji/OpenClaw cleanup on 2026-05-10.
+
+---
+
+## 2026-05-10 - Odoo is a source witness, not implementation source
+
+**Decision:** Ecommerce migration work may use Odoo-derived surfaces and module behavior as business/source evidence, but receiving functionality must be native ERPNext/Frappe: DocTypes, custom fields, app services, templates, browser contracts, and backend verifiers owned in `locally_twisted`. Do not copy Odoo code or treat Odoo module parity as the launch architecture.
+
+**Reasoning:** The business needs Odoo-derived product meaning preserved, not an Odoo implementation transplanted into ERPNext. Copying code would import incompatible assumptions and make the destination harder to verify. The safe pattern is source meaning in, native contract layer out.
+
+**Implementation:** The ecommerce research brief, plan-deepen, dispatch prompts, Lane B matrix, Lane D architecture report, and `.codex/capabilities/recipes/erpnext-ecommerce-receiving-architecture.md` all route toward a native receiving ecosystem.
+
+**Verification receipt:** Lane B and Lane D artifacts both identify native ERPNext/Frappe receiving layers and explicit version mismatch labels for destination/source evidence.
+
+**Alternatives considered:** Directly port Odoo module logic. Rejected as unsafe and outside the destination architecture. Delete/reimport products before proving the receiver. Rejected because it risks losing customer/operator intent.
+
+**Decided by:** GL/Moji architecture direction on 2026-05-10.
+
+---
+
+
 ## 2026-05-10 - Public ecommerce is reopened for full local testing, not live cutover
 
 **Decision:** Public ecommerce is no longer treated as paused in the local LT testing stack. `lt_ecommerce_paused=0` is the current testing posture, so shop, product, cart, and checkout routes must be verified as open customer journeys. This is not permission to skip staging, live Stripe/payment readiness, bank/accounting setup, DNS cutover discipline, or owner approval before production launch.
@@ -2358,7 +2391,7 @@ The CSS-hide is `display: none !important` — the only such chain we kept. It's
 
 **Superseded implementation detail 2026-05-02:** inline selectors remain, but the template no longer performs per-attribute `frappe.get_all` calls from Jinja. It now uses `get_variant_attribute_options`, consumes `valid_options_for_attributes` for progressive disabling, and renders single-select options as radio controls rather than checkbox inputs.
 
-**Decision:** Override webshop's `item_configure.html` to render attribute selectors inline (chips for ≤8 values, dropdown for 9+) via Jinja iteration over `doc.attributes` �- `frappe.get_all("Item Attribute Value", parent=<attr>)`. JS validates selection via `webshop.webshop.variant_selector.utils.get_next_attribute_and_values` and updates Add-to-Cart with the matched variant + price.
+**Decision:** Override webshop's `item_configure.html` to render attribute selectors inline (chips for ≤8 values, dropdown for 9+) via Jinja iteration over `doc.attributes` �- `frappe.get_all("Item Attribute Value", parent=<attr>)`. JS validates selection via `webshop.webshop.variant_selector.utils.get_next_attribute_and_values` and updates Add-to-Cart with the matched variant + price.
 
 **Reasoning:** Webshop's stock pattern is a "Select Variant" button that opens a Frappe Dialog modal — customer perception is "options are hidden." GL flagged this as "missing options." Inline selectors solve the perception problem without rebuilding the underlying variant matching logic.
 
@@ -2396,7 +2429,7 @@ GL's directive 2026-04-29: *"they should live in our directory as a design guide
 
 **What was imported:**
 - `_resources/design-guide/synthesis/` — 4 page TSXs (landing, lookbook, shop, balloon-twisting), layout.tsx, globals.css, 5 markdown docs (rationale, mood, voice, menu, SYNTHESIS-BRIEF, SYNTHESIS-COMPLETE)
-- `_resources/design-guide/screenshots/` — 8 approved PNGs (4 pages �- 2 viewports) + RENDER-REPORT.md
+- `_resources/design-guide/screenshots/` — 8 approved PNGs (4 pages �- 2 viewports) + RENDER-REPORT.md
 - `_resources/design-guide/README.md` — framing note (guide, not gospel) + per-file purpose
 
 **What was NOT imported:**
@@ -2651,7 +2684,7 @@ This pattern is documented inline in `apps/locally_twisted/locally_twisted/www/c
 
 ## 2026-04-27 (homepage build session) — Reviews carousel chosen over expanded client logo crawl as primary social proof
 
-**Decision:** The reviews block on the homepage uses a horizontal-scrolling carousel of full review cards (currently 19 real Google 5-star reviews �- 2 for seamless loop = 38 cards in the DOM). The client logo crawl stays at the bottom of the page but is now visually subordinated to the reviews.
+**Decision:** The reviews block on the homepage uses a horizontal-scrolling carousel of full review cards (currently 19 real Google 5-star reviews �- 2 for seamless loop = 38 cards in the DOM). The client logo crawl stays at the bottom of the page but is now visually subordinated to the reviews.
 
 **Reasoning:** GL's instinct: "He's been in business 28 years; the man can have a carousel of praise that matters more than the carousel of businesses at the bottom." For a high-touch event-decor business, customer *words* persuade prospective clients more than corporate *logos*. Logos prove "we worked with X"; quotes prove "X said this thing about working with us." The latter is harder to fake and harder to ignore.
 

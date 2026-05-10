@@ -257,21 +257,29 @@ def check_homepage(page):
         return -1
 
     btfp_index = nav_index("Twisting & Face Painting")
-    quote_index = nav_index("Free Event Quote")
     portfolio_index = nav_index("Portfolio")
     faq_index = nav_index("FAQ")
     if PUBLIC_ECOMMERCE_PAUSED:
         assert_("Ready-to-Order" not in nav_text, f"Paused primary nav must hide Ready-to-Order, got {nav_text}")
         assert_(
-            btfp_index < quote_index < portfolio_index < faq_index,
-            f"Paused primary nav should place BTFP, Free Event Quote, Portfolio, FAQ in order; got {nav_text}",
+            btfp_index < portfolio_index < faq_index,
+            f"Paused primary nav should place BTFP, Portfolio, FAQ in order; got {nav_text}",
         )
     else:
         ready_index = nav_index("Ready-to-Order")
         assert_(
-            ready_index < btfp_index < quote_index < portfolio_index < faq_index,
+            ready_index < btfp_index < portfolio_index < faq_index,
             f"Open-commerce primary nav order is wrong, got {nav_text}",
         )
+
+    top_banner = page.locator(".lt-mega-header__top-links").inner_text().replace("\n", " ")
+    top_banner_key = top_banner.casefold()
+    assert_(
+        "short notice? let us know. we can often help with 24 hours notice!" in top_banner_key,
+        f"Desktop top banner missing short-notice message; got {top_banner!r}",
+    )
+    assert_("free event quote" in top_banner_key, f"Desktop top banner missing Free Event Quote; got {top_banner!r}")
+    assert_("sign in" in top_banner_key or "my account" in top_banner_key, f"Desktop top banner missing account link; got {top_banner!r}")
 
     for label, href in (
         ("Portfolio", "/portfolio"),
@@ -944,7 +952,6 @@ def check_mobile_drawer(p):
         "Portfolio": "/portfolio",
         "FAQ": "/faq",
         "Sign In": "/login",
-        "Free Event Quote": "/contact",
         "Contact Us": "/contact",
     }
     if not PUBLIC_ECOMMERCE_PAUSED:

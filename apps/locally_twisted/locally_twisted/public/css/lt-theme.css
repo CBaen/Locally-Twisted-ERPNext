@@ -2697,24 +2697,6 @@ body.lt-filter-open {
     }
 }
 
-/* ─── BTFP page ─────────────────────────────────────────────────────────── */
-
-.lt-btfp__banner-link {
-    color: var(--lt-near-black);
-    text-decoration: underline;
-    text-underline-offset: 0.2em;
-}
-
-.lt-btfp__banner-link:hover,
-.lt-btfp__banner-link:focus-visible {
-    color: var(--lt-teal);
-    outline-offset: 2px;
-}
-
-.lt-btfp__process-number {
-    color: var(--lt-near-black);
-}
-
 /* Webshop breadcrumb contrast fix (a11y audit 2026-04-30) */
 .breadcrumb span[itemprop="name"],
 .breadcrumb a[itemprop="item"] {
@@ -3668,19 +3650,11 @@ h3,
 .lt-book h1,
 .lt-book h2,
 .lt-book h3,
-.lt-btfp h1,
-.lt-btfp h2,
-.lt-btfp h3,
 .lt-btfp__intro-title,
 .lt-btfp__service-card h2,
 .lt-btfp__form-wrap h2,
 .lt-btfp__expect-card h3,
-.lt-btfp__faq-heading,
 .lt-btfp__service-title,
-.lt-btfp__process-title,
-.lt-btfp__process-number,
-.lt-btfp__events-title,
-.lt-btfp__contact-cta h2,
 .lt-portfolio h1,
 .lt-portfolio h2,
 .lt-portfolio h3,

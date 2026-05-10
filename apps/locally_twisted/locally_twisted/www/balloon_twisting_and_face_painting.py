@@ -22,12 +22,24 @@ BTFP_SERVICE_VALUES = {"Balloon Twisting", "Face Painting"}
 BTFP_EVENT_TYPES = [
     "Birthday Parties",
     "School Carnivals",
-    "Corporate Events",
+    "School Field Days",
+    "PTA Nights",
+    "Library Programs",
+    "Summer Camps",
+    "Company Picnics",
+    "Corporate Family Days",
+    "Customer Appreciation Events",
+    "Grand Openings",
+    "Community Fairs",
+    "City Celebrations",
     "Festivals",
     "Church Events",
-    "Grand Openings",
+    "Fundraisers",
     "Family Reunions",
     "Holiday Parties",
+    "Trunk-or-Treats",
+    "Block Parties",
+    "Sports Team Parties",
 ]
 
 
@@ -76,63 +88,6 @@ PAGE_CSS = """.lt-btfp__intro {
     .lt-btfp__intro-lede {
         display: none;
     }
-}
-
-.lt-btfp__banner {
-    background-color: var(--lt-stone-tint);
-    padding: 1.25rem 1rem;
-    border-top: 1px solid rgba(26, 26, 26, 0.06);
-    border-bottom: 1px solid rgba(26, 26, 26, 0.06);
-}
-.lt-btfp__banner-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    text-align: center;
-}
-@media (min-width: 768px) {
-    .lt-btfp__banner-inner {
-        flex-direction: row;
-        gap: 1.5rem;
-    }
-}
-.lt-btfp__banner-copy {
-    font-family: 'Lato', sans-serif;
-    font-size: 1rem;
-    color: var(--lt-near-black);
-    margin: 0;
-    line-height: 1.45;
-}
-.lt-btfp__banner-copy strong {
-    font-weight: 600;
-}
-.lt-btfp__banner-actions {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.5rem 1rem;
-    align-items: center;
-}
-.lt-btfp__banner-link {
-    font-family: 'Lato', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--lt-near-black);
-    text-decoration: underline;
-    text-underline-offset: 0.2em;
-}
-.lt-btfp__banner-link:hover,
-.lt-btfp__banner-link:focus-visible {
-    text-decoration-thickness: 2px;
-}
-.lt-btfp__banner-link:focus-visible {
-    outline: 3px solid var(--lt-teal);
-    outline-offset: 3px;
-    border-radius: 2px;
 }
 
 .lt-btfp__services {
@@ -321,15 +276,6 @@ PAGE_CSS = """.lt-btfp__intro {
     font-weight: 800;
     letter-spacing: 0.16em;
 }
-.lt-btfp__banner {
-    background-color: #0e2240;
-    border-color: rgba(184, 154, 91, 0.28);
-    color: #faf7f2;
-}
-.lt-btfp__banner-copy,
-.lt-btfp__banner-link {
-    color: #faf7f2;
-}
 .lt-btfp__services {
     background-color: #faf7f2;
 }
@@ -347,14 +293,11 @@ PAGE_CSS = """.lt-btfp__intro {
 .lt-btfp__intro .lt-btfp__intro-lede {
     color: #faf7f2;
 }
-.lt-btfp__banner-link:focus-visible {
-    outline-color: #b89a5b;
-}
 .lt-btfp__carousel {
     background-color: #d9c7b3;
 }
-/* Restored approved lower-page contract: event crawl + shared intake form.
-   Keep this section page-local so the general /contact form stays broad. */
+/* Event suggestion crawl + shared intake form. Keep this section page-local so
+   the general /contact form stays broad. */
 .lt-btfp__event-crawl {
     background-color: #0e2240;
     color: #faf7f2;
@@ -376,7 +319,12 @@ PAGE_CSS = """.lt-btfp__intro {
     width: max-content;
     transform: translateX(-50%);
     animation: lt-btfp-event-crawl-scroll 80s linear infinite;
+    animation-play-state: running;
     will-change: transform;
+}
+.lt-btfp__event-crawl-track:hover,
+.lt-btfp__event-crawl-track:focus {
+    animation-play-state: running;
 }
 .lt-btfp__event-crawl-group {
     display: flex;

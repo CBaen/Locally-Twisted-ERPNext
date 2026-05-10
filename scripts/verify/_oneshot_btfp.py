@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
-"""Oneshot: screenshot /balloon-twisting-and-face-painting at mobile + desktop.
-
-Verifies the new Common Questions accordion section (Slice 6b BTFP propagation)
-before handoff to GL.
-"""
+"""Oneshot: screenshot /balloon-twisting-and-face-painting at mobile + desktop."""
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
@@ -35,20 +31,14 @@ def capture(p, viewport, label):
     print(f"saved: {out_path}")
     print(f"title: {page.title()}")
 
-    banner_visible = page.locator(".lt-btfp__banner-copy").count() > 0
+    crawl_visible = page.locator(".lt-btfp__event-crawl").count() > 0
     carousel_imgs = page.locator(".lt-btfp__carousel-img").count()
     fp_carousels = page.locator(".lt-btfp__carousel").count()
-    print(f"banner present: {banner_visible}")
+    print(f"event crawl present: {crawl_visible}")
     print(f"carousels: {fp_carousels}, total images: {carousel_imgs}")
 
-    faq_heading = page.locator("#lt-btfp__faq-heading")
-    faq_visible = faq_heading.count() > 0 and faq_heading.is_visible()
-    summary_count = page.locator(".lt-btfp__faq-item summary").count()
-    print(f"BTFP FAQ section visible: {faq_visible}")
-    print(f"BTFP FAQ summaries: {summary_count}")
-
-    cancel_text = page.locator("text=Cancel 72+ hours").count()
-    print(f"new cancellation copy present: {cancel_text > 0}")
+    form_visible = page.locator("#lt-book-form").count() > 0
+    print(f"shared inquiry form present: {form_visible}")
 
     print(f"console messages: {len(msgs)}")
     for kind, text in msgs:

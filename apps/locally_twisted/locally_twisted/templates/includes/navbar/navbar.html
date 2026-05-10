@@ -43,11 +43,7 @@
                 </div>
 
                 <ul class="lt-mega-header__top-links">
-                    {% if not ecommerce_paused %}
-                        <li><a href="/shop">Ready-to-Order</a></li>
-                        <li><a href="/cart">Cart</a></li>
-                    {% endif %}
-                    <li><a href="/portfolio">Recent Work</a></li>
+                    <li class="lt-mega-header__top-alert">SHORT NOTICE? LET US KNOW. WE CAN OFTEN HELP WITH 24 HOURS NOTICE!</li>
                     <li><a href="/contact">Free Event Quote</a></li>
                     {% if frappe.session.user == "Guest" %}
                         <li><a href="/login">Sign In</a></li>
@@ -139,7 +135,6 @@
                     {% endif %}
 
                     <li class="lt-mega-nav__item"><a class="lt-mega-nav__link lt-mega-nav__link--btfp" href="/balloon-twisting-and-face-painting">Twisting &amp; Face Painting</a></li>
-                    <li class="lt-mega-nav__item"><a class="lt-mega-nav__link lt-mega-nav__link--quote" href="/contact">Free Event Quote</a></li>
 
                     <li class="lt-mega-nav__item"><a class="lt-mega-nav__link" href="/portfolio">Portfolio</a></li>
                     <li class="lt-mega-nav__item"><a class="lt-mega-nav__link" href="/about">About Us</a></li>
@@ -247,10 +242,6 @@
                 <strong>Twisting &amp; Face Painting</strong>
                 <span>Live party artists for kids, families, schools, and events</span>
             </a>
-            <a href="/contact" data-lt-search-entry data-lt-search-keywords="quote contact help event custom request">
-                <strong>Free Event Quote</strong>
-                <span>Ask for sizing or event help</span>
-            </a>
             <a href="/contact" data-lt-search-entry data-lt-search-keywords="contact help event custom request">
                 <strong>Contact Us</strong>
                 <span>Reach the Locally Twisted team</span>
@@ -322,7 +313,6 @@
         {% endif %}
 
         <a class="lt-mega-drawer__single lt-mega-drawer__single--btfp" href="/balloon-twisting-and-face-painting">Twisting &amp; Face Painting</a>
-        <a class="lt-mega-drawer__single lt-mega-drawer__single--quote" href="/contact">Free Event Quote</a>
 
         <a class="lt-mega-drawer__single" href="/portfolio">Portfolio</a>
         <a class="lt-mega-drawer__single" href="/about">About Us</a>

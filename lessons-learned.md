@@ -6,6 +6,19 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-10 - No artifact means no evidence, even when an agent reports completion
+
+The ecommerce audit dispatch proved the failure mode clearly: Lane B, C, and D produced named files that can be inspected. Lane A and Lane E did not. Their routed completion text may be useful debugging context, but it is not evidence for source mapping, docs convergence, import safety, or launch readiness.
+
+**Counter-move:** any delegated research/build lane that affects product migration, checkout, payment, customer records, or launch decisions must name its artifact path up front and write the file before reporting complete. Parent agents must reject artifactless lanes as `[NO EVIDENCE]`, update the handoff with the gap, and rerun narrowly rather than synthesizing from memory or truncated transcript text.
+
+## 2026-05-10 - Version mismatch labels are part of ecommerce evidence
+
+The destination runtime reported ERPNext `15.105.0` and Frappe `15.106.0`, while the dispatch anchor named `frappe/erpnext:v15.105.0` and the container image appeared as `locally-twisted-erpnext:v15`. The Odoo source witness local module reported `19.0.2.15.0`, while prior notes warn production may be `19.0.2.14.0`.
+
+**Counter-move:** carry `[VERSION-MISMATCH]` or equivalent labels directly in research artifacts and handoffs. Do not let a useful proof slice become a false universal claim when source/destination versions are unresolved.
+
+
 ## 2026-05-10 - Optional add-ons are not variant-chip checkboxes
 
 When public ecommerce reopened, `smoke_shop.py` failed because it counted every checkbox inside `.lt-product__configure` as a variant-chip failure. The only checkbox on the tested page was the optional foil-number add-on toggle; the variant choices themselves were already radio/single-select.
@@ -1271,7 +1284,7 @@ This is the right call here even though `!important` chains are normally a code 
 
 Odoo's product page emits `data-attribute-exclusions="{exclusions: {...}, mapped_attribute_names: {...}}"` JSON in the form HTML. The scraper parses it, builds the cartesian product of all attribute values, then filters out combinations where any selected ptav_id appears in another's exclusion list. For LT's catalog this filtered down to 10,578 ERPNext Item Variants (vs the naive cartesian count of more). Odoo's `archived_combinations` is also captured but currently empty for LT's catalog.
 
-The math sanity-check: `birthday-deliveries` has 4 attributes (Delivery Size 3 Ã- Delivery themes 27 Ã- Add Foil Number 10 Ã- Add Bouquet 3 = 2,430 cartesian; 0 exclusions; 2,430 valid). Confirmed.
+The math sanity-check: `birthday-deliveries` has 4 attributes (Delivery Size 3 ï¿½- Delivery themes 27 ï¿½- Add Foil Number 10 ï¿½- Add Bouquet 3 = 2,430 cartesian; 0 exclusions; 2,430 valid). Confirmed.
 
 ### Bonus â€” Variant ABBR uniqueness is non-negotiable.
 
@@ -1293,14 +1306,14 @@ Odoo had `Blue Slate` (ptav 1357) AND `Blue slate` (ptav 1399) for `latex colors
 
 **The local clone was stale.** Its XML had:
 - Single-select `x_event_type` (one service per Lead)
-- 3-file Ã- 10 MB photo upload
+- 3-file ï¿½- 10 MB photo upload
 - No per-service conditional notes (one generic textarea)
 
 **Hetzner had been independently updated** to:
 - Multi-select `x_services` checkboxes (Balloon Decor / Twisting / Painting / Delivery Only / Event Package / Something Else)
 - Per-service conditional notes â€” `decor_notes`, `twisting_notes`, `painting_notes`, etc. â€” show/hide via Odoo's `data-visibility-dependency="x_services"` + `data-visibility-comparator="contains"` pattern
 - Environment fields (Indoor/Outdoor, Shade Required, Colors) appearing when ANY service is selected
-- 5 files Ã- 25 MB photo upload
+- 5 files ï¿½- 25 MB photo upload
 
 The ERPNext Lead Custom Fields (45 of them â€” `custom_event_type` as Table MultiSelect, per-service Long Text notes, etc.) had been built to mirror Hetzner's richer schema. GL was right when they said *"some of it's already implemented in the backend."*
 
@@ -1342,13 +1355,13 @@ My first override of Frappe's `.page-content-wrapper .container` rule used `body
 
 ### Full-page screenshots LIE at extreme aspect ratios
 
-Playwright with `full_page=True` captures the entire scrollable height. On a tall mobile page (6691px tall on home, 3387px on contact), the screenshot dimensions become extreme (e.g., 410Ã-6691). When displayed at any reasonable rendering size, the image gets compressed to ~123Ã-2000 â€” that's a 33Ã- vertical compression. Sections that should be visible become slivers of pixels indistinguishable from white space. I declared mobile responsiveness "fixed" three times based on these compressed renders; each time the actual visual state was different from what I'd inferred.
+Playwright with `full_page=True` captures the entire scrollable height. On a tall mobile page (6691px tall on home, 3387px on contact), the screenshot dimensions become extreme (e.g., 410ï¿½-6691). When displayed at any reasonable rendering size, the image gets compressed to ~123ï¿½-2000 â€” that's a 33ï¿½- vertical compression. Sections that should be visible become slivers of pixels indistinguishable from white space. I declared mobile responsiveness "fixed" three times based on these compressed renders; each time the actual visual state was different from what I'd inferred.
 
 **Lesson:** for visual verification, use **viewport-only screenshots at concrete device widths** â€” 320 (iPhone SE), 375 (iPhone), 414 (iPhone Plus), 1280 (desktop). These don't compress because they're not full-page. Pair with: DOM probes for element widths and overflow (preconditions); programmatic checks of element positions and computed styles; AND ALWAYS GL opening the page in their real browser before declaring done. Full-page is useful for documenting what's there at a glance, but it's not a verdict on visual correctness.
 
 ### Brand logo + hamburger fit at 375 viewport math: 88px reserved, calc() max-width
 
-The mobile brand logo CSS at `lt-theme.css:783-788` had `max-width: 350px; height: 100px` (1.25Ã- of an earlier 80/280 spec). At 375 viewport with row padding 32 + hamburger 44 = 76px reserved, the logo had only 299px of available space. The 350px fixed cap pushed the hamburger 35px past the right edge. Previous instance hid the visual symptom with `body { max-width: 100vw; overflow-x: hidden }` â€” but the hamburger remained functionally unreachable: only 9px of the 44px tap target was inside the visible viewport on a 375px screen.
+The mobile brand logo CSS at `lt-theme.css:783-788` had `max-width: 350px; height: 100px` (1.25ï¿½- of an earlier 80/280 spec). At 375 viewport with row padding 32 + hamburger 44 = 76px reserved, the logo had only 299px of available space. The 350px fixed cap pushed the hamburger 35px past the right edge. Previous instance hid the visual symptom with `body { max-width: 100vw; overflow-x: hidden }` â€” but the hamburger remained functionally unreachable: only 9px of the 44px tap target was inside the visible viewport on a 375px screen.
 
 **Lesson:** mobile brand logo needs a **responsive cap** that scales with viewport, not a fixed pixel max-width. The shape that works:
 
@@ -1749,7 +1762,7 @@ Calling `webshop.api.get_product_filter_data` returns HTTP 417 EXPECTATION FAILE
 
 The webshop pages set the body to a fixed-height flex container with internal overflow-scroll. **Playwright's `full_page=True` only captures `documentElement.scrollHeight`, which on these pages = viewport height = 800px** â€” even though the actual content (product grid) extends thousands of pixels below.
 
-The user experience is fine: customers scroll inside the page body and see all the products. **But if you screenshot at the default 1280Ã-800 viewport and trust what you see, you'll declare the shop "broken" when only the first row visible.**
+The user experience is fine: customers scroll inside the page body and see all the products. **But if you screenshot at the default 1280ï¿½-800 viewport and trust what you see, you'll declare the shop "broken" when only the first row visible.**
 
 **Fix when verifying with Playwright:** use a tall viewport (`viewport={"width": 1280, "height": 3500}`). The DOM still renders identically; the viewport just captures more in the screenshot.
 
@@ -1852,7 +1865,7 @@ GL wanted the hero headline to cycle through blog post titles while a stable tag
 
 **First-paint gotcha:** at t=0 the keyframe is at 0% which is opacity 0. Title 1 invisible until 1s into the cycle. Solutions: (a) negative `animation-delay: -1s` on title 1 to start mid-cycle, or (b) live with the 1s fade-in delay (current state â€” Playwright captures show title 1 visible by the time `wait_until="networkidle"` fires).
 
-**Pattern:** Reuse for any cycling content where one stable element + one rotating element is the desired UX (testimonials, blog teasers, mood-to-quote in lookbook). Total cycle = N Ã- per-title duration; staggered delays = full duration / N.
+**Pattern:** Reuse for any cycling content where one stable element + one rotating element is the desired UX (testimonials, blog teasers, mood-to-quote in lookbook). Total cycle = N ï¿½- per-title duration; staggered delays = full duration / N.
 
 ### Carousel of cards â€” same CSS marquee pattern as text crawl, just bigger items
 
@@ -1922,7 +1935,7 @@ External research (Magic Research / `frappe-erpnext-non-gpl-hooks-comparison.md`
 
 ## 2026-04-26 (session end) â€” TWO consecutive landing-page failures share one pattern: invent + band-aid + claim-done-off-DOM-facts
 
-**What happened:** This session's instance built a landing page using `Web Page` content_type=Page Builder with 4 default Web Templates. The build looked complete from DOM facts (curl showed all sections rendered, Playwright captured a 1366Ã-3818 screenshot, all the section IDs and class names were present). The instance reported it as "tier 1 native" and ready for review. GL opened the page in their actual browser. **It wasn't visible. It wasn't responsive. The copy was made-up.**
+**What happened:** This session's instance built a landing page using `Web Page` content_type=Page Builder with 4 default Web Templates. The build looked complete from DOM facts (curl showed all sections rendered, Playwright captured a 1366ï¿½-3818 screenshot, all the section IDs and class names were present). The instance reported it as "tier 1 native" and ready for review. GL opened the page in their actual browser. **It wasn't visible. It wasn't responsive. The copy was made-up.**
 
 **Root cause is now nameable:** Both this session's failure AND the prior Slice 2 failure share the same anti-pattern:
 1. **Invent placeholder copy** instead of pulling from the approved Odoo XML / live site source

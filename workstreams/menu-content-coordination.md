@@ -14,7 +14,7 @@ Before editing any nav, chrome, public page hero/body copy, footer links, or nav
 - Do not edit another active lane's files without adding a note here first.
 - Treat `workstreams/website-launch.md` as the broader launch lane; use this file for menu/content collisions.
 - Keep `/contact` as the shared conversion path unless Guiding Light explicitly changes the architecture.
-- Current public chrome includes `Twisting & Face Painting` pointing to `/balloon-twisting-and-face-painting`, `Ready-to-Order` pointing to `/shop` while ecommerce is open for testing, plus `Free Event Quote` and `Contact Us` pointing to `/contact`. Do not remove, hide, rename, or replace the BTFP lane unless GL explicitly approves the exact action and `workstreams/nav-service-removal-approvals.md` records the required marker. Do not restore a standalone `/process` page or top-level Process link without explicit GL approval.
+- Current public chrome includes `Twisting & Face Painting` pointing to `/balloon-twisting-and-face-painting`, `Ready-to-Order` pointing to `/shop` while ecommerce is open for testing, `Contact Us` pointing to `/contact`, and top-banner `Free Event Quote` pointing to `/contact`. The top banner also carries `SHORT NOTICE? LET US KNOW. WE CAN OFTEN HELP WITH 24 HOURS NOTICE!` beside the account link. Do not remove, hide, rename, or replace the BTFP lane unless GL explicitly approves the exact action and `workstreams/nav-service-removal-approvals.md` records the required marker. Do not restore a standalone `/process` page or top-level Process link without explicit GL approval.
 - Do not claim a route, drawer, form, or verifier is fixed without recording the command and result.
 
 ## Style-Guide Alignment Note For Menu/Content Agents
@@ -36,7 +36,7 @@ For this nav/content lane, stay inside these rules:
 
 | Lane | Owner | Files / Surface | Status |
 |---|---|---|---|
-| Nav/chrome and live menu assets | Codex current session | `templates/includes/navbar/navbar.html`, `navbar_context.py`, header portions of `public/css/lt-theme.css`, `hooks.py`, `public/js/lt-megamenu.js`, `public/css/lt-mega-menu.css`, `scripts/verify/nav_ia.py`, `scripts/verify/smoke_shop.py` | Complete 2026-05-10: public ecommerce chrome is open for local testing, `Ready-to-Order` points to `/shop`, `Twisting & Face Painting` remains in public chrome, conversion labels are `Free Event Quote` and `Contact Us` pointing to `/contact`, Process is removed from customer-facing chrome, and mobile search lives at the bottom of the drawer. |
+| Nav/chrome and live menu assets | Codex current session | `templates/includes/navbar/navbar.html`, `navbar_context.py`, header portions of `public/css/lt-theme.css`, `hooks.py`, `public/js/lt-megamenu.js`, `public/css/lt-mega-menu.css`, `scripts/verify/nav_ia.py`, `scripts/verify/smoke_shop.py` | Complete 2026-05-10: public ecommerce chrome is open for local testing, `Ready-to-Order` points to `/shop`, `Twisting & Face Painting` remains in public chrome, `Contact Us` points to `/contact`, top-banner `Free Event Quote` points to `/contact`, the top banner includes the 24-hour short-notice message and account link, Process is removed from customer-facing chrome, and mobile search lives at the bottom of the drawer. |
 | Authority page content and route pages | Codex current session | `www/home.*`, `www/event_balloons.*`, `www/balloon_twisting_and_face_painting.*`, `www/portfolio.*`, `www/contact.*`, `www/shop.*`, supporting public content pages | Complete 2026-05-07: standalone Process route files were removed; BTFP remains the approved live-service route. |
 | Owner package and screenshots | Unclaimed | `_resources/brand-direction-architecture-2026-05/`, desktop/mobile renders, route map, builder notes | Pending. Use screenshots from the actual Frappe pages after route/content replacement, not disconnected mockups. |
 
@@ -84,6 +84,14 @@ Status:
 ```
 
 ## Session Notes
+
+### 2026-05-10 - Codex current session top-banner short-notice update
+Lane: Desktop top utility banner and BTFP route crawl placement.
+Files: `navbar.html`, `lt-mega-menu.css`, `balloon_twisting_and_face_painting.*`, `lt-page-containment.css`, `nav_ia.py`, `smoke_shop.py`, `contact_prefill.py`, `interactive_layout.spec.js`, `layout_helpers.js`, and this coordination note.
+Intent: Add the short-notice 24-hour message to the top menu banner while keeping `Free Event Quote` and the account link, remove the static BTFP phone/email short-notice band, move the BTFP event crawl into that former slot, expand the crawl event list, and guard that the crawl does not pause.
+Conflicts: This supersedes stale wording that treated `Free Event Quote` as a primary nav or mobile drawer item; it is now top-banner-only while `Contact Us` remains the primary conversion CTA.
+Verification: `python scripts/dev/clear_website_cache.py --restart` passed; `python scripts/verify/nav_ia.py` passed; `python scripts/verify/contact_prefill.py --base-url http://localhost:8081` passed; focused `npx playwright test scripts/verify/interactive_layout.spec.js --grep "twisting and face painting" --reporter=line --workers=1` passed 9/9; focused BTFP `npm run test:layout-fit` passed 13/13; focused BTFP `npm run test:container-contract` passed 3/3; `python scripts/verify/smoke_shop.py` passed; full `npm run test:public-verify` passed 12/12 website launch steps.
+Status: Complete.
 
 ### 2026-05-10 - Codex current session nav CTA copy adjustment
 Lane: Public header/menu CTA label alignment.

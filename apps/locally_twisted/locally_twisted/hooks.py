@@ -45,12 +45,12 @@ doctype_js = {
 # CSS stayed cached in GL's browser; drawer rendered inline on every page
 # because the cached rules didn't have `position: fixed`.
 web_include_css = [
-    "/assets/locally_twisted/css/lt-theme.css?v=20260508-shell-gap-2",
-    "/assets/locally_twisted/css/lt-mega-menu.css?v=20260510-about-nav-1",
+    "/assets/locally_twisted/css/lt-theme.css?v=20260510-btfp-cleanup-1",
+    "/assets/locally_twisted/css/lt-mega-menu.css?v=20260510-short-notice-1",
     "/assets/locally_twisted/css/lt-product-polish.css?v=20260510-product-runtime-1",
     "/assets/locally_twisted/css/lt-shop-showroom.css?v=20260508-card-click-1",
     "/assets/locally_twisted/css/lt-product-page-visual-first.css?v=20260510-add-on-selector-1",
-    "/assets/locally_twisted/css/lt-page-containment.css?v=20260508-featured-2",
+    "/assets/locally_twisted/css/lt-page-containment.css?v=20260510-btfp-crawl-1",
     "/assets/locally_twisted/css/lt-photo-heroes.css?v=20260510-about-1",
     "/assets/locally_twisted/css/lt-form-experience.css?v=20260510-1",
     "/assets/locally_twisted/css/lt-event-playground.css?v=20260506-event-playground-1",

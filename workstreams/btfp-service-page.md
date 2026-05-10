@@ -1,6 +1,6 @@
 # BTFP Service Page
 
-Last updated: 2026-05-10 by OpenClaw/Moji after GL exact-page corrections for blank form state, repeat-email submissions, five-photo uploads, and explicit service-photo carousels.
+Last updated: 2026-05-10 by Codex after GL moved the event suggestion crawl into the old short-notice band slot and required continuous crawl motion.
 
 ## Outcome
 
@@ -19,8 +19,9 @@ Last updated: 2026-05-10 by OpenClaw/Moji after GL exact-page corrections for bl
 - Calculator math is row-based. Each artist row owns its own service and hours. Do not collapse mixed services into one shared hours value or one aggregate artist count.
 - The two service-card image areas are explicit carousels: 10 images each, previous/next controls, visible `n / 10` status, auto-advance when motion is allowed, and manual controls in reduced-motion mode.
 - The page must not expose a public deposit checkout CTA.
-- Support and event-type bands use brand blue. Do not restore the red/tan Process-era divider or banner treatment.
-- The event crawl is decorative/proof motion and must not expose keyboard focus or horizontal document scroll.
+- The old short-notice contact band is removed. Do not restore the "Need help on short notice?" phone/email band.
+- The event suggestion crawl sits directly after the compact hero, before the service cards, in the former support-band slot.
+- The event crawl uses brand blue, carries a fuller BTFP event list, runs as an infinite left-to-right crawl, and must not pause on hover/focus or expose horizontal document scroll.
 
 ## Files Owned By This Slice
 
@@ -52,12 +53,13 @@ Docs and capability surfaces:
 - `Add another artist` appends a priced row, alternates the default service, and recalculates totals immediately.
 - Remove controls are hidden when only one row remains.
 - The formula text intentionally lists each service and duration so customers can see the math instead of a black-box total.
-- Carousel controls stop auto-advance after manual/focus/hover interaction so the page does not fight the visitor.
+- Carousel controls stop auto-advance after manual/focus/hover interaction so the photo cards do not fight the visitor. This pause rule does not apply to the event suggestion crawl.
 
 ## Verification Receipt
 
 Fresh checks from 2026-05-10:
 
+- Current short-notice/crawl update: `python scripts/dev/clear_website_cache.py --restart` passed; `python scripts/verify/contact_prefill.py --base-url http://localhost:8081` passed; focused `npx playwright test scripts/verify/interactive_layout.spec.js --grep "twisting and face painting" --reporter=line --workers=1` passed 9/9, including old-banner removal, crawl slot, event list, infinite motion, hover/focus non-pause, no initial service selection, service carousels, and compact hero checks. Focused `npm run test:layout-fit -- --grep "btfp" --workers=1` passed 13/13; focused `npm run test:container-contract -- --grep "btfp" --workers=1` passed 3/3; full `npm run test:public-verify` passed 12/12 launch steps. Fresh desktop/mobile screenshots and metrics were captured in `output/playwright/btfp-crawl-header-20260510/`.
 - Exact route HTML at `http://localhost:8081/balloon-twisting-and-face-painting` showed both `x_services` checkboxes unchecked.
 - `python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081` passed: two separate public submissions with the same email, five PNG uploads each, separate fake Leads, 5/5 photos attached on each.
 - `npm run test:interactive-layout -- --grep "twisting and face painting inquiry|service photos expose working carousels|white-label platform leakage"` passed 31/31.
@@ -70,5 +72,6 @@ Earlier 2026-05-08 calculator receipt remains valid: `contact_prefill.py` covers
 
 - If service pricing changes, update the page copy, calculator data attributes, `contact_prefill.py`, policy copy if affected, and this handoff together.
 - If the form contract changes, update `/contact` and this embedded BTFP form together; do not fork a second customer intake form.
+- If the event crawl timing, event list, slot, or pause behavior changes, update `contact_prefill.py`, `interactive_layout.spec.js`, and the container route contract together.
 - If the carousel timing/controls/images change, update the Playwright carousel test and verify reduced-motion behavior.
 - If repeat-email policy changes, update the CRM Settings patch, `book_form_repeat_email_photos.py`, this handoff, and the LT decision log together.
