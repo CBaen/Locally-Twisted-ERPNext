@@ -22,6 +22,8 @@ REQUIRED_ANCHORS = (
 
 def run():
     original_commit = frappe.db.commit
+    original_in_test = frappe.flags.get("in_test")
+    original_testing_email = frappe.flags.get("testing_email")
     intercepted_commits = []
 
     def no_commit(*args, **kwargs):
@@ -29,6 +31,8 @@ def run():
 
     try:
         frappe.db.commit = no_commit
+        frappe.flags.in_test = True
+        frappe.flags.testing_email = False
         result = _run_contract()
         result["commit_calls_intercepted"] = len(intercepted_commits)
         result["rolled_back"] = True
@@ -39,6 +43,8 @@ def run():
         return {"ok": False, "failures": [frappe.get_traceback()]}
     finally:
         frappe.db.commit = original_commit
+        _restore_flag("in_test", original_in_test)
+        _restore_flag("testing_email", original_testing_email)
         frappe.db.rollback()
 
 
@@ -97,7 +103,7 @@ def _check_page_anchors() -> list[str]:
 
 
 def _check_lead_auto_ack_lane_links() -> list[str]:
-    from locally_twisted.communication_copy_policy import BUSINESS_DOCUMENT_COPY
+    from locally_twisted.communication_copy_policy import BUSINESS_DOCUMENT_COPY, routed_alias_copy_risks
 
     token = str(int(time.time()))
     lead = frappe.get_doc(
@@ -142,9 +148,16 @@ def _check_lead_auto_ack_lane_links() -> list[str]:
             failures.append(f"auto-ack email missing lane link: {expected}")
     if BUSINESS_DOCUMENT_COPY not in recipients:
         failures.append(f"auto-ack email missing required copy recipient: {BUSINESS_DOCUMENT_COPY}")
-    if "cameron@locallytwisted.com" in recipients:
-        failures.append("auto-ack email should not permanently copy cameron@locallytwisted.com")
+    for alias in routed_alias_copy_risks(recipients):
+        failures.append(f"auto-ack email should not copy routed alias loop: {alias}")
     return failures
+
+
+def _restore_flag(flag_name: str, original_value) -> None:
+    if original_value is None:
+        frappe.flags.pop(flag_name, None)
+    else:
+        frappe.flags[flag_name] = original_value
 
 
 def _email_queue_recipients(queue_name: str) -> set[str]:

@@ -8,6 +8,19 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-09 - Cloudflare-routed aliases are not delivery-safe internal copies
+
+**Decision:** Keep `hi@locallytwisted.com` as the public business contact, but do not use `hi@locallytwisted.com` or `cameron@locallytwisted.com` as internal copy or QA-review delivery targets while ERPNext sends through `locallytwisted@gmail.com`. Current code-owned internal paperwork copy delivery uses `locallytwisted@gmail.com`; Cameron QA review sends must use a non-LT mailbox unless the SMTP sender changes.
+
+**Reasoning:** The one-time review send generated five real emails, and ERPNext/Gmail accepted them, but Cloudflare Email Routing produced missing-email notices because the `@locallytwisted.com` aliases route back into the same Gmail account used as the sender. Frappe `Email Queue.status = Sent` only proved SMTP acceptance, not inbox-visible delivery.
+
+**Implementation:** Updated `communication_copy_policy.py` so the delivery-safe business copy recipient is `locallytwisted@gmail.com` and the unsafe routed aliases are named. Updated customer-document, payment-cascade, and outbound-send-readiness contracts to fail if those routed aliases appear as internal copies. The live email-producing contracts now force Frappe test email flags so verification cannot send routed aliases before rollback.
+
+**Follow-up:** If LT later moves to Google Workspace, Postmark, Resend, SendGrid, or another sender that is not `locallytwisted@gmail.com`, reassess whether `hi@locallytwisted.com` can become the actual internal delivery target again. Until then, treat `hi@locallytwisted.com` as public contact identity, not the current internal delivery mailbox.
+
+**Decided by:** Cloudflare/Gmail delivery evidence after GL reported the failed review-send emails on 2026-05-09; implemented by Codex.
+
+---
 ## 2026-05-09 - Cameron review copies are one-time QA, not standing routing
 
 **Decision:** `cameron@locallytwisted.com` is not a standing future copy

@@ -217,12 +217,19 @@ def _expect_all_blocked(result: dict[str, Any]) -> list[str]:
 
 
 def _expect_all_ready(result: dict[str, Any]) -> list[str]:
+    from locally_twisted.communication_copy_policy import BUSINESS_DOCUMENT_COPY, routed_alias_copy_risks
+
     failures = _expect_result_ok(result)
     if result.get("send_ready_count") != result.get("document_count"):
         failures.append("expected every complete fake document to be send-ready")
     for document in result.get("documents") or []:
         if document.get("send_allowed") is not True:
             failures.append(f"{document.get('document_id')} did not allow send when complete")
+        recipients = document.get("required_copy_recipients") or []
+        if BUSINESS_DOCUMENT_COPY not in recipients:
+            failures.append(f"{document.get('document_id')} missing delivery-safe business copy recipient")
+        for alias in routed_alias_copy_risks(recipients):
+            failures.append(f"{document.get('document_id')} should not require routed alias copy: {alias}")
     return failures
 
 

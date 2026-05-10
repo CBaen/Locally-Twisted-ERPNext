@@ -73,12 +73,16 @@ Codex update on 2026-05-09: `/login#login` is Frappe's standard login route.
 The local owner/client test account is `lt-owner-temp@example.com`, verified by
 `npm run test:desk-owner`; customers do not need login for `/contact`, `/cart`,
 or `/checkout`. Paperwork/documentation copy routing is code-owned in
-`communication_copy_policy.py`: all code-owned paperwork/document emails copy
-`hi@locallytwisted.com`. Cameron is not a standing future copy recipient; use
-`cameron@locallytwisted.com` only for explicit one-time QA/review sends.
+`communication_copy_policy.py`: public/business contact remains
+`hi@locallytwisted.com`, but the current delivery-safe internal copy mailbox is
+`locallytwisted@gmail.com` because Cloudflare routes the `@locallytwisted.com`
+aliases back into the same Gmail account used for SMTP. Do not use
+`hi@locallytwisted.com` or `cameron@locallytwisted.com` as internal copy targets
+while the sender is `locallytwisted@gmail.com`; use Cameron's non-LT mailbox for
+explicit one-time QA/review sends.
 `customer_documents_contract.py`, `payment_cascade_contract.py`, and
 `outbound_document_send_readiness_contract.py` prove the current standing
-behavior and fail if Cameron is accidentally added as a permanent copy.
+behavior and fail if a routed alias loop is accidentally added as a copy target.
 
 ## State Of Reality
 

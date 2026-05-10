@@ -10,8 +10,9 @@ Keep customer/operator email behavior aligned with receipts, policy lanes, and b
 
 - `locally_twisted.verify.customer_email_policy_contract.run` statically checks source code for inquiry acknowledgment, paid receipt, operator notification, first-order welcome, and paid-order cascade coverage.
 - `scripts/verify/customer_email_policy_contract.py` runs the in-app contract through Docker/Frappe and exits nonzero on missing policy markers, attachment/PDF kwargs, wrong reference DocTypes, or non-queued sendmail calls.
-- `locally_twisted.communication_copy_policy` owns standing internal copy routing: all code-owned document/paperwork emails copy `hi@locallytwisted.com`.
-- `cameron@locallytwisted.com` is not a standing future copy recipient. Use it only for explicit one-time QA/review sends.
+- `locally_twisted.communication_copy_policy` owns standing internal copy routing: public contact remains `hi@locallytwisted.com`, but current internal copy delivery goes to `locallytwisted@gmail.com`.
+- `hi@locallytwisted.com` and `cameron@locallytwisted.com` are Cloudflare-routed aliases back into the same Gmail SMTP account; do not use them as internal copy or QA-send targets while the sender is `locallytwisted@gmail.com`.
+- Cameron is not a standing future copy recipient. Use a non-LT mailbox for explicit one-time QA/review sends unless the SMTP sender changes.
 - `scripts/verify/customer_documents_contract.py` and `scripts/verify/payment_cascade_contract.py` now prove the required copy recipients exist in ERPNext `Email Queue Recipient` rows during rollback-safe fake-data runs.
 - Business automation index now treats this contract as part of Lead acknowledgment and paid-order reconciliation.
 - Synthetic business pipeline now includes `customer_email_policy_boundaries`.
@@ -24,6 +25,7 @@ Keep customer/operator email behavior aligned with receipts, policy lanes, and b
 - No PDF or print attachment kwargs are allowed in the checked sendmail calls.
 - This is source-policy verification, not final copy approval.
 - Internal business copies are queued as BCC where possible so outside recipients do not see the copy-routing address.
+- Verifier runs must set Frappe test email flags before queue assertions; rollback-safe database tests are not delivery-safe if a background mail worker can send routed aliases first.
 
 ## Owner Files
 

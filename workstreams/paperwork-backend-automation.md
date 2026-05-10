@@ -27,7 +27,7 @@ Fresh local verification on 2026-05-09:
 - `python scripts/verify/finance_inventory.py --json` passed.
 - `python scripts/verify/customer_documents_contract.py` passed.
 - `python scripts/verify/customer_email_policy_contract.py` passed and proved inquiry acknowledgment, receipt, operator notification, welcome email, and payment-cascade email boundaries without sending email, creating Email Queue rows, attaching PDFs, or mutating invoices.
-- `python scripts/verify/customer_documents_contract.py` and `python scripts/verify/payment_cascade_contract.py` now also prove the queued business copy recipient: `hi@locallytwisted.com`. They fail if Cameron is accidentally added as a standing future copy recipient.
+- `python scripts/verify/customer_documents_contract.py` and `python scripts/verify/payment_cascade_contract.py` now also prove the queued delivery-safe business copy recipient: `locallytwisted@gmail.com`. They fail if a routed `@locallytwisted.com` alias is accidentally added as an internal copy recipient while the SMTP sender is the same Gmail account.
 - `python scripts/verify/payment_cascade_contract.py` passed and rolled back generated records.
 - `python scripts/verify/crm_stage_cascade.py` passed.
 - `python scripts/verify/backend_schema_inventory.py` passed.
@@ -189,8 +189,9 @@ Current live-data facts from the fresh finance inventory:
 
 ### Paperwork copy routing
 
-- GL's 2026-05-09 routing rule is now code-owned: every code-owned client/customer/company paperwork or documentation email must copy the business at `hi@locallytwisted.com`.
-- `cameron@locallytwisted.com` is not a standing future copy recipient. Use it only for explicit one-time QA/review sends.
+- GL's 2026-05-09 routing rule is code-owned, with a 2026-05-09 delivery correction: public contact remains `hi@locallytwisted.com`, but current internal copy delivery goes to `locallytwisted@gmail.com`.
+- Cloudflare routes `hi@locallytwisted.com` and `cameron@locallytwisted.com` back into the same Gmail account currently used for SMTP, so those aliases create Cloudflare/Gmail dedupe notices instead of reliable inbox-visible copies.
+- Cameron is not a standing future copy recipient. Use a non-LT mailbox for explicit one-time QA/review sends unless the SMTP sender changes.
 - Current implementation uses `communication_copy_policy.py` and BCC business copy routing on inquiry acknowledgments, paid-order receipts, paid-order operator notifications, and first-order welcome emails. BCC keeps the internal business copy address off outside recipient-visible headers.
 - Outbound document send-readiness now blocks on `business_copy_recipient` and `copy_routing_confirmed` before any future sender can mark a document send-ready.
 

@@ -27,6 +27,8 @@ def run():
     """Run the paid-order cascade contract and return JSON-safe evidence."""
     original_commit = frappe.db.commit
     original_operator_email = frappe.conf.get("lt_operator_email")
+    original_in_test = frappe.flags.get("in_test")
+    original_testing_email = frappe.flags.get("testing_email")
     intercepted_commits = []
 
     def no_commit(*args, **kwargs):
@@ -34,6 +36,8 @@ def run():
 
     try:
         frappe.db.commit = no_commit
+        frappe.flags.in_test = True
+        frappe.flags.testing_email = False
         frappe.conf.lt_operator_email = "lt-cascade-operator@example.invalid"
         result = _run_contract()
         result["commit_calls_intercepted"] = len(intercepted_commits)
@@ -49,6 +53,8 @@ def run():
             frappe.conf.pop("lt_operator_email", None)
         else:
             frappe.conf.lt_operator_email = original_operator_email
+        _restore_flag("in_test", original_in_test)
+        _restore_flag("testing_email", original_testing_email)
         frappe.db.rollback()
 
 
@@ -247,10 +253,16 @@ def _collect_evidence(sales_order_name, customer_name, payment_request_name, con
     operator_queue = _email_queue_for("Sales Order", sales_order_name, "New paid order")
     if not operator_queue:
         failures.append("missing operator paid-order Email Queue row")
-    elif NOTES not in (operator_queue.get("message") or ""):
-        failures.append("operator paid-order email is missing checkout notes")
-    elif BUSINESS_DOCUMENT_COPY not in _email_queue_recipients(operator_queue["name"]):
-        failures.append(f"operator paid-order email missing business copy recipient: {BUSINESS_DOCUMENT_COPY}")
+    else:
+        if NOTES not in (operator_queue.get("message") or ""):
+            failures.append("operator paid-order email is missing checkout notes")
+        failures.extend(
+            _check_copy_recipients(
+                operator_queue["name"],
+                [BUSINESS_DOCUMENT_COPY],
+                "operator paid-order",
+            )
+        )
 
     welcome_queue = _email_queue_for("Customer", customer_name, "Welcome to Locally Twisted")
     if not welcome_queue:
@@ -346,15 +358,24 @@ def _email_queue_recipients(queue_name):
 
 
 def _check_copy_recipients(queue_name, expected_recipients, label):
+    from locally_twisted.communication_copy_policy import routed_alias_copy_risks
+
     recipients = _email_queue_recipients(queue_name)
     failures = [
         f"{label} email missing required copy recipient: {expected}"
         for expected in expected_recipients
         if expected not in recipients
     ]
-    if "cameron@locallytwisted.com" in recipients:
-        failures.append(f"{label} email should not permanently copy cameron@locallytwisted.com")
+    for alias in routed_alias_copy_risks(recipients):
+        failures.append(f"{label} email should not copy routed alias loop: {alias}")
     return failures
+
+
+def _restore_flag(flag_name: str, original_value) -> None:
+    if original_value is None:
+        frappe.flags.pop(flag_name, None)
+    else:
+        frappe.flags[flag_name] = original_value
 
 
 def _checkout_notes_for_sales_order(sales_order_name):

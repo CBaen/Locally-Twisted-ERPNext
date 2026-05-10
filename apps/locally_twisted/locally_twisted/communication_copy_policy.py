@@ -4,7 +4,14 @@ from __future__ import annotations
 from collections.abc import Iterable
 
 
-BUSINESS_DOCUMENT_COPY = "hi@locallytwisted.com"
+PUBLIC_BUSINESS_ADDRESS = "hi@locallytwisted.com"
+BUSINESS_DOCUMENT_COPY = "locallytwisted@gmail.com"
+UNSAFE_ROUTED_COPY_ALIASES = frozenset(
+    {
+        "hi@locallytwisted.com",
+        "cameron@locallytwisted.com",
+    }
+)
 
 
 def document_copy_recipients(
@@ -38,6 +45,12 @@ def document_copy_kwargs(
 def document_copy_field_values(*, external_audience: bool = True) -> dict[str, str]:
     """Return send-readiness field values for approved copy routing."""
     return {"business_copy_recipient": BUSINESS_DOCUMENT_COPY}
+
+
+def routed_alias_copy_risks(recipients: Iterable[str] | None) -> list[str]:
+    """Return routed aliases that can loop back into the Gmail SMTP sender."""
+    normalized = {_normalize(value) for value in recipients or []}
+    return sorted(normalized.intersection(UNSAFE_ROUTED_COPY_ALIASES))
 
 
 def _normalize(value: str) -> str:
