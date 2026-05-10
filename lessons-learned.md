@@ -6,6 +6,14 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-10 - Launch cleanup needs an evidence-retention rule
+
+The launch repo had several different kinds of weight mixed together: generated test output, old mirror/audit folders, raw photo drops, stale research throwaways, active feature work, and production source. Treating all of that as either "junk" or "keep" would have been wrong.
+
+**Counter-move:** sort cleanup candidates by role before deleting. Remove regenerable ignored output. Move raw useful drops outside the repo until curated. Delete tracked old experiments only after their production value has been translated and Git history can be the archive. Leave active modified work from other agents alone, and commit cleanup through an explicit file list or isolated index.
+
+---
+
 ## 2026-05-10 - A passing live verifier can still fail cleanup
 
 The repeat-email/five-photo form verifier proved the customer path but left fake Leads, uploaded Files, Communications, Email Queue rows, Contacts, Tasks, and Comments behind. Those records then polluted later email previews, paperwork counts, and operator evidence even though the verifier itself had passed.

@@ -60,6 +60,11 @@ Locally-Twisted-Frontend/
 # Raw client/photo drops are source material, not repo source. Curated/optimized
 # production assets belong in committed app/_resources paths with explicit names.
 assets/New Balloon Pics 3.7.26/
+assets/landing page pics/
+assets/landing page assets/
+assets/hero assets/
+balloon drop/
+balloon drop.zip
 
 # Screenshot accumulation from Playwright recon runs — large (100+ MB across
 # sessions), not source-of-truth. Smoke test (scripts/verify/smoke_shop.py)

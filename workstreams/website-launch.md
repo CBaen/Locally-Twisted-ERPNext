@@ -1,21 +1,22 @@
 # Website Launch Workstream
 
-Last updated: 2026-05-10 by Codex after public ecommerce reopened for full local testing and public/backend ecommerce gates were rerun.
+Last updated: 2026-05-10 by Codex after the full pages/forms-first launch gate passed with ecommerce hidden.
 
-Scope correction 2026-05-10 (GL authoritative): public ecommerce is no longer
-paused in the local testing stack. Ready-to-Order, shop, product, cart, and
-checkout surfaces must be tested as customer paths. This is local/staging
-testing posture, not live cutover approval; production still requires owner
-review, live payment readiness, Frappe Cloud/staging discipline, DNS cutover,
-and the agency staging-to-live gate.
+Scope correction 2026-05-10 (GL authoritative): going live today is
+non-negotiable, and ecommerce may ship later. The current safest launch posture
+is pages/forms first with ecommerce hidden by `lt_ecommerce_paused=1`.
+Ready-to-Order, shop, product, cart, and checkout work is preserved and can be
+reopened after final ecommerce polish, live payment readiness, owner review,
+Frappe Cloud/staging discipline, DNS cutover, and the agency staging-to-live
+gate.
 
 ## Outcome
 
-Launch the Locally Twisted website as a polished public site and ecommerce
-testing candidate: customers can understand the offer, review proof, submit
-inquiries, browse ready-to-order products, and exercise cart/checkout paths
-without broken routes, inaccessible layouts, stale docs, missing policy basics,
-or ecommerce surfaces pretending to be more complete than the backend proves.
+Launch the Locally Twisted website as a polished public site today: customers
+can understand the offer, review proof, submit inquiries, and reach clear
+policy/contact paths without broken routes, inaccessible layouts, stale docs, or
+missing policy basics. If ecommerce is hidden, shop/cart/checkout routes must
+show the branded quote fallback instead of broken or half-live commerce.
 
 This is the launch coordination lane. It does not replace `locally-twisted-queue.md`, `workstreams/shop.md`, or `workstreams/erpnext-backend-simplification.md`; it sequences the launch-critical parts of those lanes.
 
@@ -30,29 +31,49 @@ Active launch lane. Baseline pass started 2026-05-02.
 
 Known collision: another agent is auditing the form. Do not make contact/form schema changes unless that audit is handed off or explicitly merged into this lane.
 
-2026-05-10 public ecommerce full-testing update: GL reopened public ecommerce
-testing. Local site config is `lt_ecommerce_paused=0`, so Ready-to-Order,
-shop, product, cart, checkout, and product search are expected to render as
-open customer paths. Verification passed: `npm run test:ecommerce-full`,
-`npm run test:public-verify`, `python scripts/verify/product_page_architecture_readiness.py`,
-`python scripts/verify/synthetic_business_pipeline.py`, and
-`python scripts/verify/business_automation_index.py`. The launch verifier now
-includes the open ecommerce mode contract, shop smoke, product prices, variant
-media, and checkout experience. The dedicated full ecommerce gate also runs
-rollback-safe checkout fulfillment and checkout-to-Lead conversion. The launch
-verifier still allows one Playwright retry for transient browser-close/502
-flakes while repeatable route/layout failures fail the gate.
+2026-05-10 pages/forms-first launch update: ecommerce is currently hidden in
+the local stack with `lt_ecommerce_paused=1`. The fallback is verified and
+reversible. Full open-commerce testing also passed earlier, but that is now
+treated as this week's ecommerce proof lane, not today's required live posture.
+Verification passed in hidden-commerce mode: `python scripts\verify\website_launch_verify.py --with-a11y --with-contact-smoke`
+completed all 15 launch steps, including page/layout/container/interactive
+checks, portfolio, accessibility, branded ecommerce pause, shop smoke in pause
+mode, and `/contact` backend smoke with cleanup. The ignored `.tmp` preflight
+snapshot from that run was removed during launch cleanup; rerun the verifier or
+snapshot command when fresh local evidence is needed.
+The launch verifier waits for localhost before starting, and it retries once if
+the local site briefly blinks during a browser sweep. Repeatable route/layout
+failures still fail the gate.
+
+2026-05-10 launch repo cleanup: stale generated output, old local evidence,
+raw drops, and historical contest/research debris were removed or moved outside
+the repo so the launch checkout is lighter for client handoff. Source handoff:
+`workstreams/launch-repo-cleanup-2026-05-10.md`; capability:
+`capabilities/recipes/launch-repo-cleanup-and-evidence-retention.md`.
 
 2026-05-10 header conversion-label closeout, refreshed after the short-notice
 top-banner update: the public header/menu now shows
 `Twisting & Face Painting`, top-banner `Free Event Quote`, and `Contact Us`.
 `Twisting & Face Painting` points to `/balloon-twisting-and-face-painting`;
-the conversion labels point to `/contact`. The top banner also carries
-`SHORT NOTICE? LET US KNOW. WE CAN OFTEN HELP WITH 24 HOURS NOTICE!` in the
-old proof-copy slot. The prepared-design proof copy and delivery/truck icon are
-removed. Ready-to-Order source chrome is config-gated and visible while public
-ecommerce is open for testing. Coordination:
+the conversion labels point to `/contact`. The short-notice sentence
+`SHORT NOTICE? LET US KNOW. WE CAN OFTEN HELP WITH 24 HOURS NOTICE!` is a
+centered gold `/contact` link on desktop and a matching visible gold
+`/contact` strip on mobile. The prepared-design proof copy and delivery/truck
+icon are removed. Ready-to-Order source chrome is config-gated: hidden in the
+current pages/forms-first launch posture and available again when ecommerce is
+reopened. Coordination:
 `workstreams/menu-content-coordination.md`; verifier: `scripts/verify/nav_ia.py`.
+
+2026-05-10 short-notice banner and launch-gate correction receipt: cache
+clear/restart, `nav_ia.py`, focused `interactive_layout.spec.js --grep "header uses"`,
+`smoke_shop.py`, and direct `/balloon-twisting-and-face-painting`
+desktop/mobile Playwright metrics passed for the gold linked short-notice
+banner. The stale homepage Custom Event Decor hide-switch was removed so the
+page again matches the launch contract. Focused `container_contract.spec.js`
+passed 75/75, then full `python scripts/verify/website_launch_verify.py` passed
+all 12 website steps in the open ecommerce testing posture. The later
+pages/forms-first hidden-commerce launch gate passed all 15 steps with
+accessibility and contact smoke included.
 
 2026-05-10 ecommerce business-block closeout: GL cleared the remaining source
 add-on, live-snapshot price, and source media/gallery approval blockers for
@@ -62,19 +83,20 @@ commerce-lane testing. With ecommerce temporarily open,
 blocked rows, and 1 finance deferral. The site was then restored to
 `lt_ecommerce_paused=1`, cache was cleared, and
 `python scripts/verify/ecommerce_pause_contract.py` passed. GL later reopened
-public ecommerce testing, so this pause proof is now historical evidence of the
-safety switch, not the current testing mode.
+public ecommerce testing, then clarified the day-of-launch priority as
+pages/forms first with ecommerce optional. The pause proof is now the current
+safe launch fallback.
 
 2026-05-10 SEO/GEO/AEO closeout: `npm run test:seo-contract` now guards
 canonical aliases, sitemap canonical routes plus ecommerce URLs,
 business/service JSON-LD without unverified ratings/hours, current FAQ visible
 questions matched to FAQPage JSON-LD, and BTFP content-image alt text. Source
 handoff: `workstreams/seo-geo-aeo-contract.md`; capability:
-`.codex/capabilities/recipes/lt-seo-geo-aeo-contract.md`.
+`capabilities/recipes/lt-seo-geo-aeo-contract.md`.
 
 2026-05-08 accessibility closeout: the saved local axe scan findings were fixed across `/event-balloons`, `/portfolio`, `/shop`, product detail/category pages, and `/checkout`. `npm run test:a11y` now regenerates desktop/mobile axe reports for the 19 public launch routes and fails on any violation. `npm run test:a11y-manual` adds a manual-style keyboard/focus/zoom-pressure probe for public routes and caught the homepage review crawl plus portfolio hidden-photo tab-order failures. Durable rules: Frappe already provides the page-level main landmark, route templates must not add nested page-level `<main>` landmarks inside `page_content`, and moving proof surfaces must not leave hidden/offscreen items in the tab order.
 
-2026-05-08 launch verifier and public microinteraction closeout, refreshed 2026-05-10 for open ecommerce: `npm run test:website-verify` runs `scripts/verify/website_launch_verify.py`, serializing Playwright workers by default so the local ERPNext/Frappe stack is not overloaded by broad launch gates. `npm run test:public-verify` aliases to the same website gate and now includes open ecommerce checks; `npm run test:ecommerce-full` is the focused ecommerce gate with rollback-safe backend checkout contracts; `npm run test:launch-verify` adds accessibility plus contact smoke on top. Public microinteractions now have a focused feature handoff at `workstreams/public-site-microinteractions.md` and capability contract at `.codex/capabilities/recipes/public-site-microinteraction-contract.md`. The balloon cursor was retired at GL's request; product cards on `/shop` and category pages remain clickable from non-interactive areas, and the transient demo file `assets/balloon cursor/Red Balloon Cursor.html` remains deleted.
+2026-05-08 launch verifier and public microinteraction closeout, refreshed 2026-05-10 for open ecommerce: `npm run test:website-verify` runs `scripts/verify/website_launch_verify.py`, serializing Playwright workers by default so the local ERPNext/Frappe stack is not overloaded by broad launch gates. `npm run test:public-verify` aliases to the same website gate and now includes open ecommerce checks; `npm run test:ecommerce-full` is the focused ecommerce gate with rollback-safe backend checkout contracts; `npm run test:launch-verify` adds accessibility plus contact smoke on top. Public microinteractions now have a focused feature handoff at `workstreams/public-site-microinteractions.md` and capability contract at `capabilities/recipes/public-site-microinteraction-contract.md`. The balloon cursor was retired at GL's request; product cards on `/shop` and category pages remain clickable from non-interactive areas, and the transient demo file `assets/balloon cursor/Red Balloon Cursor.html` remains deleted.
 
 2026-05-08 mobile public chrome/review compactness closeout: mobile search now
 lives at the bottom of the drawer instead of in `.lt-mega-header__mobile-actions`,
@@ -87,7 +109,7 @@ mobile component sizing contract. Feature handoff:
 
 2026-05-08 public security review: active P0 lane is
 `workstreams/public-site-security-hardening.md` with capability contract
-`.codex/capabilities/recipes/frappe-public-storefront-security.md`. First safe
+`capabilities/recipes/frappe-public-storefront-security.md`. First safe
 fixes are in place for `/shop?q=` XSS, product-gallery image rendering, and new
 private inquiry uploads. Follow-up closeout moved checkout Lead conversion to
 the paid-order cascade and gated `/event-playground` behind login plus
@@ -111,12 +133,12 @@ Live menu/content coordination now lives in `workstreams/menu-content-coordinati
 - `scripts/verify/category_media_candidates.py` now generates a no-mutation approval packet for the 11 empty customer-facing category images. Latest run on 2026-05-06 wrote ignored local reports to `output/category-media-candidates.json` and `output/category-media-candidates.md`; the quick picks are ready for Jeff/GL approval before any live assignment.
 - `scripts/setup/sync_category_media.py` now handles the post-approval path: write a selection template, dry-run Frappe Item Group image updates, and apply only rows marked `approved: true`. Safety proof on 2026-05-06: dry-run found 11 would-update rows; `--apply` with the unapproved template returned `not_approved: 11` and made 0 updates; live DB recheck still showed all 11 images as `null`.
 - Paperwork/backend automation focus started 2026-05-06. Coordination lanes: `workstreams/paperwork-backend-automation.md` and `workstreams/business-automation-index.md`. Local/test paperwork spine is verified, Sales Invoice output now has a branded code-owned print format and letterhead, and the answer-first standard outbound document source lives at `apps/locally_twisted/locally_twisted/outbound_documents/`. `business_automation_index.py` now indexes the cascading intake/CRM/checkout/payment/paperwork/finance surfaces and the daily Frappe scheduler runs that checkup. The default invoice is restrained for accounting; larger corporate proof/patriotic growth positioning belongs in proposals, portfolio, and client pages. Live Stripe, bank account, suppliers/vendors, payroll/HRMS, reminder approval, and manual stage-to-finance thresholds remain incomplete.
-- Landing page repair pass completed 2026-05-07 for the ASAP website lane; featured-work width/copy and mobile review compactness updated 2026-05-08; homepage hero changed on 2026-05-10 to GL's seasonal/audience carousel. Feature handoffs: `workstreams/landing-page-repair.md`, `workstreams/homepage-seasonal-hero-carousel-2026-05-10.md`; mobile compactness handoff: `workstreams/mobile-nav-review-compactness.md`; capability contract: `.codex/capabilities/recipes/homepage-launch-proof-contract.md`. Review cards and trusted-business names crawl full-stage left-to-right at matched visible speed: reviews keep the canonical `540s` loop, and trusted-business names use a measured proportional duration. Reduced-motion mode keeps these proof crawls slow, moving, horizontal, and scrollbar-free; the old static/scrollbar fallback is superseded. The hero now has one visible page-level H1 on the first graduation slide, followed by H2 audience slides for Civic & community, Corporate events, Schools & campuses, and Private celebrations; Google reviews sit immediately after the hero and stay compact on mobile; the homepage trust/authority bar is removed for now while the approved icon assets remain available; the cookie notice is inline after reviews; `One of a Kind Designs` follows reviews as the wide custom-install proof band; closing CTA copy is corporate/school/civic/community-first. The 2026-05-10 seasonal-carousel correction passed focused homepage/BTFP/white-label Playwright coverage plus the white-label surface verifier. Earlier compact hero/layout/container/a11y receipts remain relevant but the old static generated-hero expectation is obsolete for `/`.
+- Landing page repair pass completed 2026-05-07 for the ASAP website lane; featured-work width/copy and mobile review compactness updated 2026-05-08; homepage hero changed on 2026-05-10 to GL's seasonal/audience carousel. Feature handoffs: `workstreams/landing-page-repair.md`, `workstreams/homepage-seasonal-hero-carousel-2026-05-10.md`; mobile compactness handoff: `workstreams/mobile-nav-review-compactness.md`; capability contract: `capabilities/recipes/homepage-launch-proof-contract.md`. Review cards and trusted-business names crawl full-stage left-to-right at matched visible speed: reviews keep the canonical `540s` loop, and trusted-business names use a measured proportional duration. Reduced-motion mode keeps these proof crawls slow, moving, horizontal, and scrollbar-free; the old static/scrollbar fallback is superseded. The hero now has one visible page-level H1 on the first graduation slide, followed by H2 audience slides for Civic & community, Corporate events, Schools & campuses, and Private celebrations; Google reviews sit immediately after the hero and stay compact on mobile; the homepage trust/authority bar is removed for now while the approved icon assets remain available; the cookie notice is inline after reviews; `One of a Kind Designs` follows reviews as the wide custom-install proof band; closing CTA copy is corporate/school/civic/community-first. The 2026-05-10 seasonal-carousel correction passed focused homepage/BTFP/white-label Playwright coverage plus the white-label surface verifier. Earlier compact hero/layout/container/a11y receipts remain relevant but the old static generated-hero expectation is obsolete for `/`.
 - Same-day crawl mechanics follow-up now uses GL's corrected left-to-right direction. Verification proved both proof crawls move left-to-right, hide overflow, keep matched visible speed, and continue moving in reduced-motion mode. Full `npm run test:website-verify` passed after the direction correction.
-- Compact hero contract completed 2026-05-07 after GL made same-height, low-padding heroes non-negotiable from agency level down; generated lifestyle hero overlay/crop follow-through completed 2026-05-10. Capability contract: `.codex/capabilities/recipes/compact-hero-contract.md`. `_resources/STYLE-GUIDE.md` v4.6 now keeps the 220px mobile, 250px tablet, and 280px desktop standard hero heights with padding/title caps, plus breakpoint-specific generated WebP lifestyle crops under the black landing-page readability overlay. The implemented route set is `/`, `/event-balloons`, event audience pages, `/portfolio`, `/balloon-twisting-and-face-painting`, `/contact`, `/shop`, and `/shop-items/<group>`. Focused verification passed `npx.cmd playwright test scripts/verify/interactive_layout.spec.js --grep "compact hero height contract" --reporter=line --workers=1` 66/66 after the generated crop/overlay guard enforced generated lifestyle filenames.
-- Executable public container contract completed 2026-05-07 after GL flagged repeated unmanageable container drift. Capability contract: `.codex/capabilities/recipes/frappe-public-container-contract.md`. Every visible direct `.page_content` child on the 19 launch public routes is now declared in `CONTAINER_CONTRACT_ROUTES` with an explicit mode, and `npm run test:container-contract` is part of `npm run test:website-verify` / `npm run test:public-verify`. The first matrix exposed real drift in homepage twisting spotlight containment, portfolio footer markup, contact/location raw Bootstrap containers, document narrow-width selector specificity, BTFP route surfaces, and BTFP event-crawl data; those were repaired, the standalone gate passed 57/57, and the full website gate passed after the contract was added.
-- Nav/BTFP correction completed 2026-05-07 and refreshed 2026-05-10. Handoff: `workstreams/nav-btfp-process-correction.md`. It restored `/balloon-twisting-and-face-painting` as a 200 service route and removed the unapproved `/process` route. The current open-ecommerce header uses primary `Event Balloons`, `Twisting & Face Painting`, `Ready-to-Order`, `Portfolio`, `About Us`, `FAQ`, and `Contact Us`, with Ready-to-Order pointing to `/shop`, Contact Us pointing to `/contact`, top-banner `Free Event Quote` also pointing to `/contact`, the 24-hour short-notice message in the old proof slot, and the old proof copy/truck icon removed.
-- BTFP form/calculator/crawl follow-up completed 2026-05-08 and refreshed 2026-05-10. Feature handoff: `workstreams/btfp-service-page.md`; capability contract: `.codex/capabilities/recipes/btfp-live-service-page-contract.md`. The old red divider is removed; the old static short-notice phone/email band is removed; the brand-blue event suggestion crawl now sits directly after the compact hero in that former slot, uses an expanded event list, and is guarded against hover/focus pause. The page includes a customer-facing artist-time calculator using the published $130 first hour / $115 additional hour / $50 deposit per artist math and no-discount copy, and the shared public inquiry partial declares `data-form-contract="inquiry-v1"`. Calculator follow-up on 2026-05-08 changed the calculator to one row per artist so mixed twisting/painting services can use different hours and extra artists can be added without flattening the math. The durable form visual contract is in `_resources/STYLE-GUIDE.md` and `locally-twisted-decisions.md`. `contact_prefill.py` now guards old-banner removal, event crawl placement/list/motion, calculator, per-artist mixed-duration math, add-artist math, minimum one-hour rule, no public deposit checkout CTA, BTFP-only service choices, and the shared form contract.
+- Compact hero contract completed 2026-05-07 after GL made same-height, low-padding heroes non-negotiable from agency level down; generated lifestyle hero overlay/crop follow-through completed 2026-05-10. Capability contract: `capabilities/recipes/compact-hero-contract.md`. `_resources/STYLE-GUIDE.md` v4.6 now keeps the 220px mobile, 250px tablet, and 280px desktop standard hero heights with padding/title caps, plus breakpoint-specific generated WebP lifestyle crops under the black landing-page readability overlay. The implemented route set is `/`, `/event-balloons`, event audience pages, `/portfolio`, `/balloon-twisting-and-face-painting`, `/contact`, `/shop`, and `/shop-items/<group>`. Focused verification passed `npx.cmd playwright test scripts/verify/interactive_layout.spec.js --grep "compact hero height contract" --reporter=line --workers=1` 66/66 after the generated crop/overlay guard enforced generated lifestyle filenames.
+- Executable public container contract completed 2026-05-07 after GL flagged repeated unmanageable container drift. Capability contract: `capabilities/recipes/frappe-public-container-contract.md`. Every visible direct `.page_content` child on launch public routes is now declared in `CONTAINER_CONTRACT_ROUTES` with an explicit mode, and `npm run test:container-contract` is part of `npm run test:website-verify` / `npm run test:public-verify`. The first matrix exposed real drift in homepage twisting spotlight containment, portfolio footer markup, contact/location raw Bootstrap containers, document narrow-width selector specificity, BTFP route surfaces, and BTFP event-crawl data; those were repaired. Current open-commerce route matrix passes 75/75, including the restored homepage Custom Event Decor section.
+- Nav/BTFP correction completed 2026-05-07 and refreshed 2026-05-10. Handoff: `workstreams/nav-btfp-process-correction.md`. It restored `/balloon-twisting-and-face-painting` as a 200 service route and removed the unapproved `/process` route. The current open-ecommerce header uses primary `Event Balloons`, `Twisting & Face Painting`, `Ready-to-Order`, `Portfolio`, `About Us`, `FAQ`, and `Contact Us`, with Ready-to-Order pointing to `/shop`, Contact Us pointing to `/contact`, top-banner `Free Event Quote` also pointing to `/contact`, the 24-hour short-notice message as a gold linked desktop/mobile banner, and the old proof copy/truck icon removed.
+- BTFP form/calculator/crawl follow-up completed 2026-05-08 and refreshed 2026-05-10. Feature handoff: `workstreams/btfp-service-page.md`; capability contract: `capabilities/recipes/btfp-live-service-page-contract.md`. The old red divider is removed; the old static short-notice phone/email band is removed; the brand-blue event suggestion crawl now sits directly after the compact hero in that former slot, uses an expanded event list, and is guarded against hover/focus pause. The page includes a customer-facing artist-time calculator using the published $130 first hour / $115 additional hour / $50 deposit per artist math and no-discount copy, and the shared public inquiry partial declares `data-form-contract="inquiry-v1"`. Calculator follow-up on 2026-05-08 changed the calculator to one row per artist so mixed twisting/painting services can use different hours and extra artists can be added without flattening the math. The durable form visual contract is in `_resources/STYLE-GUIDE.md` and `locally-twisted-decisions.md`. `contact_prefill.py` now guards old-banner removal, event crawl placement/list/motion, calculator, per-artist mixed-duration math, add-artist math, minimum one-hour rule, no public deposit checkout CTA, BTFP-only service choices, and the shared form contract.
 
 Latest verified controller baseline:
 
@@ -127,10 +149,10 @@ Latest verified controller baseline:
 - `npm run test:layout-fit` passed with 325 checks across the current public route list.
 - `npm run test:container-contract` passed with 75 route/viewport checks across the launch public routes.
 - `npm run test:website-verify` / `npm run test:public-verify` passed 12/12 launch steps through `scripts/verify/website_launch_verify.py` with serialized Playwright workers after the BTFP crawl/header update.
-- Public microinteraction closeout now keeps the balloon cursor retired and verifies whole-card product navigation, `npm run test:shop-smoke`, `npm run test:layout-fit` 325/325, `npm run test:interactive-layout` 163/163, `npm run test:a11y` with 46 route/viewport axe results and 0 violations, and `npm run test:a11y-manual`.
+- Public microinteraction closeout now keeps the balloon cursor retired and verifies whole-card product navigation, `npm run test:shop-smoke`, `npm run test:layout-fit` 325/325, `npm run test:interactive-layout` 163/163, `npm run test:a11y` with 50 route/viewport axe results and 0 violations, and `npm run test:a11y-manual`.
 - Current favicon/cursor retirement pass on 2026-05-08 verified the served red dog favicon, absence of cursor assets/DOM, and product-card text click navigation.
-- `python scripts/verify/smoke_shop.py` passed on 2026-05-10 in open ecommerce mode: it verifies open shop/category/product-detail checks, current BTFP/quote/contact chrome, Ready-to-Order, retired `/search`, optional add-on checkbox distinction, variant add-to-cart, and mobile drawer behavior.
-- `nav_ia.py` now verifies the desktop/mobile `Event Balloons`, `Twisting & Face Painting`, `Ready-to-Order`, `Portfolio`, `About Us`, `FAQ`, `Contact Us`, and top-banner `Free Event Quote`/short-notice/account chrome when ecommerce is open. `Ready-to-Order` remains source-gated if the pause switch is deliberately re-enabled later.
+- `python scripts/verify/smoke_shop.py` passed on 2026-05-10 in open ecommerce mode before the launch posture changed: it verifies open shop/category/product-detail checks, current BTFP/quote/contact chrome, Ready-to-Order, retired `/search`, optional add-on checkbox distinction, variant add-to-cart, and mobile drawer behavior. Current launch proof uses `python scripts/verify/ecommerce_pause_contract.py` plus `python scripts\verify\website_launch_verify.py --with-a11y --with-contact-smoke`, with `/shop`, `/cart`, and `/checkout` covered by the branded pause fallback.
+- `nav_ia.py` now verifies the desktop/mobile `Event Balloons`, `Twisting & Face Painting`, `Ready-to-Order`, `Portfolio`, `About Us`, `FAQ`, `Contact Us`, and top-banner `Free Event Quote`/linked short-notice/account chrome when ecommerce is open. In the current hidden-ecommerce launch posture, `Ready-to-Order` and cart are source-gated out while the gold desktop/mobile short-notice strips, desktop centering, and visible mobile notice remain guarded.
 - `python scripts/verify/cart_checkout_contract.py` passed after the cart/checkout item-code contract fix.
 - `python scripts/verify/variant_media_contract.py` passed after the first variant-media reconciliation pass.
 - `python scripts/verify/catalog_variant_contract.py` passed: 53 products checked, 10,227 expected active required-choice variants, 10,227 live active variants, 4 single-SKU products.
@@ -243,11 +265,11 @@ Primary coordination file: `workstreams/erpnext-backend-simplification.md`.
 
 | Lane | Status | Current evidence | Blocker / next action |
 |---|---|---|---|
-| Controller baseline | Passing after current component gates | Route sweep 200s, `/book` redirect verified, `nav_ia.py` passed, `layout-fit` 325/325, `container-contract` 75/75, full `interactive-layout` 163/163, `a11y` 46 route/viewport results with 0 violations, `checkout-experience` 2/2 passed, `portfolio-reel` 6/6 passed, and `smoke_shop.py` passed | Keep this file current after every lane return |
+| Controller baseline | Passing after current pages/forms-first gate | `website_launch_verify.py --with-a11y --with-contact-smoke` passed 15/15 in hidden-commerce mode: route/layout/container/interactive checks, `a11y` 50 route/viewport results with 0 violations, `a11y-manual`, contact smoke with backend record proof and cleanup, portfolio 6/6, pause contract, and `smoke_shop.py` in pause mode all passed | Keep this file current after every lane return |
 | Form audit | Owned by separate agent | Do not edit `/contact` or Lead schema from this lane yet | Wait for form audit handoff before inquiry-path changes |
 | Policy/trust | Routes load, content not launch-approved | Policy audit found `/privacy`, `/terms-of-service`, `/refund-policy`, `/accessibility` exist; source trace lives in `workstreams/policy-trust.md` | Get GL/legal decisions on unresolved privacy, cookie, shipping/delivery, and refund terms before Stripe URL wiring |
-| Ecommerce/shop | Public ecommerce open for full local testing; production cutover still gated | `npm run test:ecommerce-full` passed; `npm run test:public-verify` passed with open ecommerce checks included; `product_page_architecture_readiness.py` passed with `import_reopen_ok: True`; synthetic pipeline and automation index passed | Continue non-bouquet price audit, media/category approval, and staged/live readiness; do not call this production-ready without staging/client/live-payment cutover approval |
-| Visual/accessibility QA | Civic site-wide visual pass implemented and locally verified; `/portfolio` proof-gallery reel added as a route-specific visual slice; homepage launch repair pass landed; compact generated-photo hero contract landed; BTFP crawl/header update verified | `output/playwright/launch-baseline-20260502/`, `output/playwright/brand-token-20260502/`, `output/playwright/civic-overhaul-20260503-verified/`, `output/playwright/landing-fixes-20260507/`, `output/playwright/compact-heroes-20260507/`, `output/playwright/home-portfolio-corrections-20260507/`, and `output/playwright/generated-heroes-20260510/` are local screenshot evidence; current component gates pass with `layout-fit` 325/325, `container-contract` 75/75, `interactive-layout` 163/163, and `a11y` 46 route/viewport results with 0 violations after the generated hero correction | Do manual keyboard/focus/alt/zoom checks and rerun screenshots after final media/content changes |
+| Ecommerce/shop | Hidden for today’s pages/forms-first launch; preserved for this week’s ecommerce work | `ecommerce_pause_contract.py` passed; `/shop`, `/cart`, and `/checkout` route to the branded quote fallback; earlier open-commerce proof passed `npm run test:ecommerce-full`, `website_launch_verify.py`, `product_page_architecture_readiness.py`, synthetic pipeline, and automation index | Continue non-bouquet price audit, media/category approval, and staged/live readiness; do not call this production-ready without staging/client/live-payment cutover approval |
+| Visual/accessibility QA | Civic site-wide visual pass implemented and locally verified; `/portfolio` proof-gallery reel added as a route-specific visual slice; homepage launch repair pass landed; compact generated-photo hero contract landed; BTFP crawl/header update verified | `output/playwright/launch-baseline-20260502/`, `output/playwright/brand-token-20260502/`, `output/playwright/civic-overhaul-20260503-verified/`, `output/playwright/landing-fixes-20260507/`, `output/playwright/compact-heroes-20260507/`, `output/playwright/home-portfolio-corrections-20260507/`, and `output/playwright/generated-heroes-20260510/` are local screenshot evidence; current component gates pass with `layout-fit` 325/325, `container-contract` 75/75, `interactive-layout` 163/163, `a11y` 50 route/viewport results with 0 violations, and `a11y-manual` passed | Rerun screenshots after final media/content changes |
 | Backend readiness | Paperwork/backend focus active | `paperwork-backend-automation.md` and `business-automation-index.md` now record the 2026-05-06 baseline: finance inventory, customer documents, payment cascade, CRM stage guardrails, payment config/webhook/local readiness, checkout-to-Lead conversion, Accountant Home parity, read-only paperwork status, synthetic no-live pipeline audit, branded Sales Invoice print output, outbound document registry, automation index, scheduled checkup, and Stripe amount-parity contract passed; live Stripe/site setup is cutover-deferred, not a current fake-data blocker | Build reviewed internal digest/queue surfaces; do not send reminders, use live credentials/customer data, or wire CRM stages to finance until thresholds are explicit |
 | Release gate | Not started | No integrated launch report yet | Run final route, form, shop, visual, accessibility, and policy-source gates after implementation lanes land |
 
@@ -272,7 +294,7 @@ Use this lane as the launch controller board when multiple agents or sessions ar
 
 - Machine-wide Guiding Light Codex protocol: communication, attention protection, decision boundary, and verification discipline.
 - Project `AGENTS.md`: LT-specific source routing, ERPNext/Frappe rules, and stale-doc warnings.
-- Project capability: `.codex/capabilities/recipes/take-live-coordinated-workflows.md`.
+- Project capability: `capabilities/recipes/take-live-coordinated-workflows.md`.
 - `locally-twisted-queue.md`: active work selection.
 - `workstreams/*.md`: feature-lane handoffs by user-facing outcome.
 - `workstreams/policy-trust.md`: policy source trace and Stripe/legal readiness lane.
@@ -456,7 +478,7 @@ Visual verification:
 - Shop lane: `workstreams/shop.md`.
 - Policy/trust lane: `workstreams/policy-trust.md`.
 - Backend lane: `workstreams/erpnext-backend-simplification.md`.
-- Take-live coordination recipe: `.codex/capabilities/recipes/take-live-coordinated-workflows.md`.
+- Take-live coordination recipe: `capabilities/recipes/take-live-coordinated-workflows.md`.
 - Legacy whole-project maps: `HANDOFF.md`, `PROJECT-STATUS.md`.
 
 ## Next Handoff Stage

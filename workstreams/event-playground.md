@@ -38,9 +38,9 @@ Current source handoff contract:
 
 ## Construction Capability
 
-Use `.codex/capabilities/recipes/event-playground-construction-truth.md` before changing Event Playground geometry, renderer code, payload facts, or visual verification.
+Use `capabilities/recipes/event-playground-construction-truth.md` before changing Event Playground geometry, renderer code, payload facts, or visual verification.
 
-Use `.codex/capabilities/recipes/event-playground-planning-contract.md` before changing the payload, warnings, contact handoff, Frappe adapter metadata, or quote-readiness behavior.
+Use `capabilities/recipes/event-playground-planning-contract.md` before changing the payload, warnings, contact handoff, Frappe adapter metadata, or quote-readiness behavior.
 
 Current captured regression: arch balloons were rendering with generic downward neck/knot orientation. That is not a manufacturing-faithful classic quad. The current rule is that each classic quad slot points the balloon neck and knot toward the shared tie center, and the PlayCanvas renderer consumes that tested slot data instead of inventing orientation inline.
 

@@ -8,6 +8,20 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-10 - Launch repo cleanup keeps production source, not local debris
+
+**Decision:** The LT launch repo should keep production source, executable verifiers, active source evidence, and feature handoffs. It should not retain raw local drops, generated verifier output, stale mirrors, stale app clones, or old contest/research output after their useful claims have moved into production files or durable docs. Memorial Balloons is a separate side business and is not part of the LT launch repo or launch proof.
+
+**Reasoning:** GL wants clients shielded from weird research data and stale files. Keeping every local artifact in the launch repo makes future agents treat old experiments as current source and makes client handoff harder to trust. Git history is the archive for tracked experiments; local holding folders outside the repo are acceptable for raw assets that might still be useful but are not source.
+
+**Implementation boundary:** Do not bulk-delete active modified work from other agents. Do not read or delete secrets/runtime state as cleanup. Move raw useful photo drops outside the repo, delete regenerable ignored output, and only delete tracked old experiments when production translation and durable docs exist.
+
+**Receipts:** `workstreams/launch-repo-cleanup-2026-05-10.md`; `capabilities/recipes/launch-repo-cleanup-and-evidence-retention.md`; `.gitignore`; `locally-twisted-queue.md`; `workstreams/website-launch.md`.
+
+**Decided by:** GL launch cleanup direction and Codex cleanup pass on 2026-05-10.
+
+---
+
 ## 2026-05-10 - Website launch verifier waits for the site before judging pages
 
 **Decision:** The broad public website verifier must wait until localhost answers before starting browser sweeps, and may retry one browser sweep when the local site briefly blinks during restart. Repeatable page, route, layout, ecommerce, price, media, or checkout failures still fail the launch gate.
