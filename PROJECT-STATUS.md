@@ -4,6 +4,8 @@
 >
 > **Current shop routing correction, 2026-05-02:** `/shop` is the all-decor hub. `/shop-items`, `/all-products`, and `/shop-by-category` now send broad browse traffic to `/shop`; individual category pages stay at `/shop-items/<group>`. The primary nav label is now `Balloon Decor`. Older lines below that say `Shop Balloon Decor` or that broad browse routes alias to `/shop-by-category` are historical receipts, not current routing.
 
+> **Public ecommerce testing correction, 2026-05-10:** Local public ecommerce is reopened for full testing with `lt_ecommerce_paused=0`. Treat `/shop`, product pages, `/cart`, and `/checkout` as active local test paths. This does not approve production/live cutover; use staging, owner review, live payment readiness, and DNS/Frappe Cloud gates before launch.
+
 **Repo:** `git init` 2026-04-26 at `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted`. Pushed to `https://github.com/CBaen/Locally-Twisted-ERPNext`. Separate from BBC agency repo per the agency isolation rule.
 **Tech:** ERPNext v15.105.0 + Frappe v15.106.0 verified locally on 2026-05-08, MariaDB 11.8, Redis 6.2, nginx — running via `frappe_docker` upstream + custom port pinning.
 **Purpose:** Migrate LT's business intent + catalog data into a fresh ERPNext v15 install — website, ecommerce, lead intake, operator workflow, invoicing, payments, accounting, payroll, end-to-end. Frame revised 2026-04-30 (see `locally-twisted-decisions.md`). The destination is greenfield ERPNext; the migration sources are the failed Odoo attempt's discovery work, the catalog data ported 2026-04-30, and the legacy `locallytwisted.com` site that the new ERPNext storefront replaces at cutover.

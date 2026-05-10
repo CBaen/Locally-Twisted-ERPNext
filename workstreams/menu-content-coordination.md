@@ -14,7 +14,7 @@ Before editing any nav, chrome, public page hero/body copy, footer links, or nav
 - Do not edit another active lane's files without adding a note here first.
 - Treat `workstreams/website-launch.md` as the broader launch lane; use this file for menu/content collisions.
 - Keep `/contact` as the shared conversion path unless Guiding Light explicitly changes the architecture.
-- Current public chrome includes `Twisting & Face Painting` pointing to `/balloon-twisting-and-face-painting`, plus `Free Event Quote` and `Contact Us` pointing to `/contact`. Do not remove, hide, rename, or replace the BTFP lane unless GL explicitly approves the exact action and `workstreams/nav-service-removal-approvals.md` records the required marker. Do not restore a standalone `/process` page or top-level Process link without explicit GL approval.
+- Current public chrome includes `Twisting & Face Painting` pointing to `/balloon-twisting-and-face-painting`, `Ready-to-Order` pointing to `/shop` while ecommerce is open for testing, plus `Free Event Quote` and `Contact Us` pointing to `/contact`. Do not remove, hide, rename, or replace the BTFP lane unless GL explicitly approves the exact action and `workstreams/nav-service-removal-approvals.md` records the required marker. Do not restore a standalone `/process` page or top-level Process link without explicit GL approval.
 - Do not claim a route, drawer, form, or verifier is fixed without recording the command and result.
 
 ## Style-Guide Alignment Note For Menu/Content Agents
@@ -36,7 +36,7 @@ For this nav/content lane, stay inside these rules:
 
 | Lane | Owner | Files / Surface | Status |
 |---|---|---|---|
-| Nav/chrome and live menu assets | Codex current session | `templates/includes/navbar/navbar.html`, `navbar_context.py`, header portions of `public/css/lt-theme.css`, `hooks.py`, `public/js/lt-megamenu.js`, `public/css/lt-mega-menu.css`, `scripts/verify/nav_ia.py`, `scripts/verify/smoke_shop.py` | Complete 2026-05-10: public ecommerce chrome is paused, `Twisting & Face Painting` remains in public chrome, conversion labels are `Free Event Quote` and `Contact Us` pointing to `/contact`, Process is removed from customer-facing chrome, and mobile search lives at the bottom of the drawer. |
+| Nav/chrome and live menu assets | Codex current session | `templates/includes/navbar/navbar.html`, `navbar_context.py`, header portions of `public/css/lt-theme.css`, `hooks.py`, `public/js/lt-megamenu.js`, `public/css/lt-mega-menu.css`, `scripts/verify/nav_ia.py`, `scripts/verify/smoke_shop.py` | Complete 2026-05-10: public ecommerce chrome is open for local testing, `Ready-to-Order` points to `/shop`, `Twisting & Face Painting` remains in public chrome, conversion labels are `Free Event Quote` and `Contact Us` pointing to `/contact`, Process is removed from customer-facing chrome, and mobile search lives at the bottom of the drawer. |
 | Authority page content and route pages | Codex current session | `www/home.*`, `www/event_balloons.*`, `www/balloon_twisting_and_face_painting.*`, `www/portfolio.*`, `www/contact.*`, `www/shop.*`, supporting public content pages | Complete 2026-05-07: standalone Process route files were removed; BTFP remains the approved live-service route. |
 | Owner package and screenshots | Unclaimed | `_resources/brand-direction-architecture-2026-05/`, desktop/mobile renders, route map, builder notes | Pending. Use screenshots from the actual Frappe pages after route/content replacement, not disconnected mockups. |
 

@@ -8,6 +8,20 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-10 - Public ecommerce is reopened for full local testing, not live cutover
+
+**Decision:** Public ecommerce is no longer treated as paused in the local LT testing stack. `lt_ecommerce_paused=0` is the current testing posture, so shop, product, cart, and checkout routes must be verified as open customer journeys. This is not permission to skip staging, live Stripe/payment readiness, bank/accounting setup, DNS cutover discipline, or owner approval before production launch.
+
+**Reasoning:** GL corrected the stale pause assumption and asked for continued ecommerce testing. Keeping docs and verifiers in pause-expected mode would let agents avoid the actual product/cart/checkout paths that need proof. The right separation is local full testing versus production/live cutover, not paused forever versus ship live now.
+
+**Implementation:** Local site config was set with `bench --site frontend set-config lt_ecommerce_paused 0` and website cache was cleared. `scripts/verify/website_launch_verify.py` now includes open public ecommerce checks: the mode contract, shop smoke, product price contract, variant media contract, and checkout experience. `package.json` now exposes `npm run test:ecommerce-full` for the rendered and rollback-safe backend ecommerce path.
+
+**Verification receipt:** `npm run test:ecommerce-full` passed: public ecommerce mode, shop smoke, product prices, variant media, checkout experience, checkout fulfillment, and checkout lead conversion. `npm run test:public-verify` passed 12 steps with ecommerce checks inside the public website gate. `python scripts/verify/product_page_architecture_readiness.py` passed with `technical_architecture_ok: True`, `import_reopen_ok: True`, 14 pass rows, 0 blockers, and 1 finance deferral. `python scripts/verify/synthetic_business_pipeline.py` and `python scripts/verify/business_automation_index.py` passed with no broken piping or launch-required missing connections.
+
+**Alternatives considered:** Keep the pause config as the safe default and continue testing only operator/direct paths. Rejected because GL explicitly reopened public ecommerce testing. Treat local testing as live launch approval. Rejected because production cutover still needs staged client review, live payment readiness, DNS/hosting checks, and the agency preflight/staging-to-live process.
+
+**Decided by:** GL instruction on 2026-05-10; implemented by Codex.
+
 ## 2026-05-10 - Business approval clearance is not a public ecommerce launch switch
 
 **Decision:** The product-page architecture business approval blockers for source add-ons beyond `foil_number`, live-snapshot price candidates, and source media/gallery classification are cleared for commerce-lane testing. Public ecommerce remains controlled by the explicit `lt_ecommerce_paused` site config; after the open-commerce proof, the site was restored to paused.

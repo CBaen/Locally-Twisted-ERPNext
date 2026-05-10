@@ -139,7 +139,7 @@ Do this only after the Frappe Cloud staging URL passes verification.
     - `/portfolio`
     - `/balloon-twisting-and-face-painting`
     - `/contact`
-    - `/shop` or the approved paused ready-to-order route
+    - `/shop` plus cart/checkout testing route, unless a fresh GL decision re-enables the pause route
 
 ## Do Not Do
 

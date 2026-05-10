@@ -1,5 +1,10 @@
 # Aion/Axion Dirty Worktree Sweep — 2026-05-09
 
+Superseded status note, 2026-05-10: GL later reopened public ecommerce for
+full local testing. Keep the paused-commerce notes below as historical sweep
+evidence only; current ecommerce proof belongs in `workstreams/shop.md`,
+`workstreams/website-launch.md`, and `npm run test:ecommerce-full`.
+
 ## Purpose
 Classify the large dirty Locally Twisted worktree after Aion/Axion-era edits, protect verified launch-critical work, and separate safe keeps from suspect/parking-lot material.
 

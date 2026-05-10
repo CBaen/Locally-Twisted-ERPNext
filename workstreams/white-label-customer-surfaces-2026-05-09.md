@@ -8,7 +8,7 @@ Launch-blocking cleanup for Locally Twisted customer/client-facing surfaces. Goa
 
 ## Scope
 
-Customer/client/public surfaces include public website pages and menus, login/customer portal chrome, checkout/cart/paused-commerce states, payment result pages, customer order confirmation emails, customer receipts, sales invoices and invoice PDFs/print formats, payment receipts, quote/estimate/proposal packets, statements/payment reminders, vendor setup/W-9 packets, contract acceptance summaries, outbound document previews, visible error messages returned to public APIs, email subjects/body copy/footers, and generated document titles/headers/footers.
+Customer/client/public surfaces include public website pages and menus, login/customer portal chrome, checkout/cart/open-commerce states, pause-mode fallback states if re-enabled, payment result pages, customer order confirmation emails, customer receipts, sales invoices and invoice PDFs/print formats, payment receipts, quote/estimate/proposal packets, statements/payment reminders, vendor setup/W-9 packets, contract acceptance summaries, outbound document previews, visible error messages returned to public APIs, email subjects/body copy/footers, and generated document titles/headers/footers.
 
 ## Preserve stability
 
@@ -59,7 +59,7 @@ Operator-only emails may keep backend record labels/links when needed for operat
 - outbound document preview render/check
 - public rendered route bad-term gate
 - `npm run test:search-contract`
-- targeted Playwright: `npm run test:interactive-layout -- --grep "white-label platform leakage|paused ecommerce states"`
+- targeted Playwright: `npm run test:interactive-layout -- --grep "white-label platform leakage"`
 
 ## Local progress 2026-05-09 23:20 MDT
 
@@ -82,8 +82,8 @@ Operator-only emails may keep backend record labels/links when needed for operat
 - `python scripts/verify/ecommerce_pause_contract.py` — PASS
 - `python scripts/verify/customer_contact_points_contract.py` — PASS
 - `npm run test:search-contract` — PASS, 2 tests
-- `npm run test:interactive-layout -- --grep "white-label platform leakage|paused ecommerce states|homepage hero uses one visible stable headline"` — PASS, 46 tests
+- `npm run test:interactive-layout -- --grep "white-label platform leakage|homepage hero uses one visible stable headline"` - PASS, 46 tests at the time of this lane. Later 2026-05-10 open-commerce testing is covered by `npm run test:public-verify` and `npm run test:ecommerce-full`.
 
 ## Known non-white-label blocker
 
-`python scripts/verify/business_automation_index.py --report output/business-automation-index.json` still fails because the local ERPNext fake-data site has one open record-level backend failure blocker: `public_contact_to_lead:photo_rejected_unsupported_type` on `CRM-LEAD-2026-00040`. The outbound document registry/send-readiness failures from the template edits were resolved; this remaining blocker is not a white-label leak.
+Resolved by later 2026-05-10 backend runs: `python scripts/verify/business_automation_index.py` now passes with no record-level launch blocker. Keep this section as historical context for the white-label lane only.

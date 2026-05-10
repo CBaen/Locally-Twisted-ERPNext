@@ -6,11 +6,11 @@ Last updated: 2026-05-10 by Codex.
 
 This contract keeps Locally Twisted launch work focused.
 
-The long-term goal is a saleable company infrastructure that can help Jeff transition the business over the next 10 years. The immediate goal is narrower: launch a high-quality no-purchase public website that earns trust from the right buyers, supports SEO/local discovery, captures inquiries, and presents ready-to-order offerings as browse/proof only without looking cheap or unfinished.
+The long-term goal is a saleable company infrastructure that can help Jeff transition the business over the next 10 years. The immediate goal is narrower: launch a high-quality public website and ecommerce testing candidate that earns trust from the right buyers, supports SEO/local discovery, captures inquiries, and proves ready-to-order/cart/checkout paths before production cutover.
 
-GL correction, 2026-05-10: V1 launch is a no-purchase public site. Ecommerce is shut down for launch unless GL explicitly reopens it. Do not treat /shop, product import completion, catalog parity, catalog price parity, product/category media parity, cart, checkout, payment-success, thank-you, live Stripe, payment webhooks, or product-page receiving architecture as V1 launch blockers. V1 launch center is public trust/proof/info plus /contact inquiry intake with fail-loud Lead evidence. Ecommerce/catalog/payment lanes remain post-V1 architecture and cutover work.
+GL correction, 2026-05-10: public ecommerce is reopened for full local testing. Do not keep using the no-purchase/pause contract as the current proof posture. Also do not treat local open ecommerce tests as production approval: product import completion, full catalog parity, full catalog price parity, product/category media parity, live Stripe, payment webhooks, DNS cutover, and Frappe Cloud/staging promotion remain separate gates. V1 center is public trust/proof/info, /contact inquiry intake with fail-loud Lead evidence, and a tested ready-to-order/cart/checkout path that can be reviewed before live cutover.
 
-Status note, 2026-05-10: backend-automation-guard reports the direct guest checkout API pause contract fixed and `python scripts/verify/ecommerce_pause_contract.py` passing. Keep this as fixed-pending-review until stack-cartographer's independent review lands.
+Status note, 2026-05-10: Codex opened local ecommerce with `lt_ecommerce_paused=0`; `npm run test:ecommerce-full`, `npm run test:public-verify`, `python scripts/verify/product_page_architecture_readiness.py`, `python scripts/verify/synthetic_business_pipeline.py`, and `python scripts/verify/business_automation_index.py` passed.
 
 Do not use the 10-year ERPNext vision as a reason to delay the website unless the missing backend work directly affects launch trust, inquiry handling, policies, or customer-facing accuracy.
 
@@ -21,9 +21,10 @@ V1 succeeds when a real customer can:
 - understand Locally Twisted as an experienced Utah event balloon decor company;
 - see enough proof to trust the company for corporate, school, city, venue, large private, and family event work;
 - browse ready-to-order products without obvious placeholder or incorrect media;
+- add verified ready-to-order products to cart and reach checkout in the local testing path;
 - submit an inquiry through `/contact`;
 - use `/book` only as a quick-intent redirect to `/contact`;
-- browse ready-to-order offerings without implied live purchase flow;
+- distinguish tested ecommerce readiness from final live payment/cutover approval;
 - see clear privacy, terms, refund/cancellation, accessibility, and service expectation pages;
 - experience the site on desktop and mobile without broken layout, clipped text, inaccessible controls, or obvious ERPNext default seams.
 - get buyer-ready page shells for the Event Balloons audience lanes, with final public copy routed through `brand-copywriter`.
@@ -65,11 +66,11 @@ Primary brand lane. This includes arches, columns, organic installs, backdrops, 
 
 This lane leads the homepage, gallery/proof system, service pages, and authority copy.
 
-### 2. Ready-to-Order Decor (Browse Lane)
+### 2. Ready-to-Order Decor (Ecommerce Testing Lane)
 
-Browse lane for launch. This includes productized bouquets, columns, small decor, seasonal items, delivery-ready items, and other products shown as catalog proof and inquiry context.
+Open testing lane for launch review. This includes productized bouquets, columns, small decor, seasonal items, delivery-ready items, and other products shown as catalog proof, inquiry context, and tested checkout candidates.
 
-This lane should be substantial because Jeff wants ecommerce long-term, but V1 launch keeps it as no-purchase browse/proof, not live checkout.
+This lane should be substantial because Jeff wants ecommerce long-term. Local testing should prove browse, option selection, cart, checkout, fulfillment, and backend cascades. Live checkout still waits for staging/client approval and live payment/cutover readiness.
 
 ### 3. Event Entertainment
 
@@ -124,13 +125,13 @@ Treat these as blockers if customer-facing:
 
 - broken route or redirect in a core path;
 - `/contact` cannot submit correctly;
-- ready-to-order browse surfaces imply live purchase when V1 scope is no-purchase;
+- ready-to-order ecommerce surfaces imply production live payment/cutover approval when only local/staging testing has passed;
 - variant/product media contradicts the selected option where source media exists;
 - policy pages are missing, unreachable, or obviously stale;
 - homepage or navigation presents the wrong business identity;
 - mobile layout overlaps, clips, or hides critical actions;
 - exact trust claims are unverified or stale;
-- no-purchase launch contract is not provable with route pause plus the checkout API pause verifier;
+- ecommerce full-testing contract is not provable through shop, cart, checkout, fulfillment, and backend cascade verifiers;
 - generated or third-party images are used as proof without source/usage clarity.
 
 ## Deferred Until After V1
@@ -138,7 +139,7 @@ Treat these as blockers if customer-facing:
 Do not let these delay launch unless they directly break a launch blocker:
 
 - full 10-year operating model;
-- live ecommerce purchase flow (cart, checkout, payment success, thank-you);
+- live production ecommerce cutover beyond tested local/staging checkout flow;
 - product import completion, catalog parity, catalog price parity, and product/category media parity;
 - payment webhooks and live Stripe cutover setup;
 - product-page receiving architecture completion;
@@ -159,7 +160,8 @@ Do not let these delay launch unless they directly break a launch blocker:
 5. Reconcile Balloon Twisting & Face Painting with the existing V1 agreement: equal pitch, fixed pricing, clear terms, company language.
 6. Build Event Balloon audience-page structure under the active implementation lane; route copy system and fill through `brand-copywriter`.
 7. Run real audits after visual/content changes: route checks, layout fit, Lighthouse, accessibility, mobile screenshots, contact, browse surfaces, and policy-source checks.
-8. Only after V1 launch, expand backend maturity toward the 10-year saleability system.
+8. Before live cutover, run agency preflight, staging audit, owner review, and staging-to-live gates.
+9. After launch, expand backend maturity toward the 10-year saleability system.
 
 ## Operating Rule
 

@@ -42,18 +42,20 @@ For the current LT site:
 - `Process` is not approved as a public top-level nav item or standalone route.
 - `/contact` remains the shared quote/conversion path.
 - Current launch header/menu labels are `Event Balloons`,
-  `Twisting & Face Painting`, `Free Event Quote`, `Portfolio`, `About Us`,
-  `FAQ`, and `Contact Us`.
+  `Twisting & Face Painting`, `Ready-to-Order`, `Free Event Quote`,
+  `Portfolio`, `About Us`, `FAQ`, and `Contact Us` when ecommerce is open for
+  testing.
 - `Twisting & Face Painting` points to `/balloon-twisting-and-face-painting`.
+- `Ready-to-Order` points to `/shop` when `lt_ecommerce_paused=0`.
 - `Free Event Quote` and `Contact Us` point to `/contact`.
 - Removing, hiding, renaming, or replacing a canonical service lane requires an
   explicit GL approval marker; quote/conversion copy requests do not imply
   service removal approval.
 - Mobile search belongs at the bottom of the drawer, not in the mobile header
-  action row. While public ecommerce is paused, the mobile header control budget
-  is logo plus menu.
+  action row. In open ecommerce testing, the mobile header control budget is
+  logo plus cart plus menu.
 - Public navigation must not link to `/search`; the search overlay submits to
-  `/contact`, and `/search` is a no-cache 404 fallback.
+  `/shop` while ecommerce is open and `/search` is a no-cache 404 fallback.
 
 ## Pattern
 
@@ -120,3 +122,9 @@ added `CANONICAL_SERVICE_NAV_LINKS` / `NAV_SERVICE_REMOVAL_APPROVALS` to
 `workstreams/nav-service-removal-approvals.md` contains the exact explicit
 approval marker. `python scripts/verify/nav_ia.py`, live desktop/mobile link
 checks, and focused Playwright header/drawer checks passed.
+
+Later on 2026-05-10, GL reopened public ecommerce for full local testing.
+Codex set `lt_ecommerce_paused=0`, cleared website cache, and restored the
+active proof posture to open Ready-to-Order/cart/search behavior. `npm run
+test:ecommerce-full` and `npm run test:public-verify` passed with open
+ecommerce checks included.

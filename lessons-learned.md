@@ -6,6 +6,12 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-10 - Optional add-ons are not variant-chip checkboxes
+
+When public ecommerce reopened, `smoke_shop.py` failed because it counted every checkbox inside `.lt-product__configure` as a variant-chip failure. The only checkbox on the tested page was the optional foil-number add-on toggle; the variant choices themselves were already radio/single-select.
+
+**Counter-move:** scope selector assertions to the behavior they own. Variant chip contracts should inspect `.lt-product__chips`, while optional add-on contracts should separately prove add-ons are explicit toggles with backend eligibility, value requirements, cart/checkout preservation, and invoice/order line behavior.
+
 ## 2026-05-10 - Commerce smoke tests must follow the configured commerce mode
 
 `smoke_shop.py` was still asserting open-shop navigation, category rails, cards, and product-detail controls after public ecommerce had intentionally been paused. That made the verifier red for the wrong reason and hid the real state: the pause contract was working.

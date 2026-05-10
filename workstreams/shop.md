@@ -1,18 +1,18 @@
 # Shop Workstream
 
-Last updated: 2026-05-10 by Codex after public ecommerce pause closeout.
+Last updated: 2026-05-10 by Codex after public ecommerce reopened for full local testing.
 
 ## Outcome
 
-Make the Locally Twisted shop feel like a polished, trustworthy extension of the public site while preserving ERPNext as the source of truth for catalog, cart, checkout, and order flow. As of 2026-05-10, this is an internal repair lane, not a public launch surface.
+Make the Locally Twisted shop feel like a polished, trustworthy extension of the public site while preserving ERPNext as the source of truth for catalog, cart, checkout, and order flow. As of 2026-05-10, this is a full local ecommerce testing lane; production launch still requires staging/client approval and live payment/cutover gates.
 
 This is the active feature-lane handoff for shop work. `HANDOFF.md` remains valid as a reference guide, but shop work should coordinate here first, then verify against the queue, current files, git state, and the running ERPNext site.
 
 ## Current Stage
 
-Active internal handoff lane. Public Ready-to-Order/shop/product/cart/checkout surfaces are intentionally paused for launch while product-card, product-page, and checkout-process bugs are repaired. Guest traffic to `/shop`, `/shop-items`, `/shop-by-category`, `/all-products`, `/cart`, and `/checkout` now redirects to `/ready-to-order-paused`; logged-in operators can still open direct ecommerce URLs for repair work.
+Active full-testing handoff lane. Local ecommerce is currently open with `lt_ecommerce_paused=0`; guest traffic to `/shop`, `/shop-items`, `/shop-by-category`, `/all-products`, `/cart`, and `/checkout` should render the actual customer surfaces, not the pause page. The pause layer remains available as a safety switch, but it is not the current proof mode.
 
-The guest cart/checkout item-code contract, broad browse routing, first variant-media reconciliation pass, per-product variant correctness diff, category-media candidate packet, 2026-05-06 shop showroom container redesign, same-day symmetry repair, 2026-05-07 product-detail company-first/clear-control cleanup, 2026-05-08 bouquet-size price repair, and 2026-05-08 whole-card product navigation are in place but are not currently public launch promises. Product detail pages no longer render Webshop's lower Additional Info/Reviews/Recommendations panel, product option controls no longer render as nested boxes, and product listing cards navigate from non-interactive card areas while preserving real buttons and links. `smoke_shop.py` is now mode-aware: latest 2026-05-10 paused-mode rerun passed by verifying the branded public pause, current nav/service lanes, event pages, retired `/search`, and mobile drawer while skipping open-shop rail/card/product-detail checks. In open-commerce mode, it still guards auxiliary/recommendation selectors, boxed product controls, quote-first gates, variant add-to-cart, and shop/category behavior. The 2026-05-06 commerce-rules checkout slice has its own lane at `workstreams/commerce-rules-checkout.md`; catalog price recovery now has its own lane at `workstreams/catalog-variant-price-recovery.md`; public microinteractions now have their own lane at `workstreams/public-site-microinteractions.md`. Keep shop layout/media work coordinated with checkout, price-parity, and microinteraction contracts. The next shop work should continue with full non-bouquet price audit, Jeff/GL media approval before assigning category/product media, then product photo/options polish from real product states. Do not restore public Ready-to-Order/shop chrome until GL explicitly reopens ecommerce.
+The guest cart/checkout item-code contract, broad browse routing, first variant-media reconciliation pass, per-product variant correctness diff, category-media candidate packet, 2026-05-06 shop showroom container redesign, same-day symmetry repair, 2026-05-07 product-detail company-first/clear-control cleanup, 2026-05-08 bouquet-size price repair, and 2026-05-08 whole-card product navigation are in place and now have open-mode verification. Product detail pages no longer render Webshop's lower Additional Info/Reviews/Recommendations panel, product option controls no longer render as nested boxes, and product listing cards navigate from non-interactive card areas while preserving real buttons and links. `smoke_shop.py` is mode-aware; the current 2026-05-10 open-mode run passed shop/category rail/card/product-detail checks, quote-first gates, variant add-to-cart, optional add-on toggle distinction, and mobile drawer behavior. The 2026-05-06 commerce-rules checkout slice has its own lane at `workstreams/commerce-rules-checkout.md`; catalog price recovery now has its own lane at `workstreams/catalog-variant-price-recovery.md`; public microinteractions now have their own lane at `workstreams/public-site-microinteractions.md`. Keep shop layout/media work coordinated with checkout, price-parity, and microinteraction contracts. The next shop work should continue with full non-bouquet price audit, Jeff/GL media approval before assigning category/product media, then product photo/options polish from real product states.
 
 Security note from 2026-05-08: `/shop?q=` reflected XSS was reproduced through
 the real local site and patched by escaping `search_query`. Product-gallery
@@ -36,7 +36,7 @@ Work from the main project workspace unless the user explicitly asks for a separ
 
 ## User-Facing Impact
 
-When ecommerce is reopened, customers should be able to browse categories, inspect products, choose only valid options, add configured products to the guest cart, and check out without seeing ERPNext jargon, login traps, broken combinations, missing images, or placeholder category visuals. During the public pause, customers should instead see a clear branded pause page that points them to `/contact` and `/portfolio`.
+Customers should be able to browse categories, inspect products, choose only valid options, add configured products to the guest cart, and check out without seeing ERPNext jargon, login traps, broken combinations, missing images, or placeholder category visuals. If the pause switch is deliberately enabled later, customers should instead see a clear branded pause page that points them to `/contact` and `/portfolio`.
 
 ## Touched Areas
 
@@ -105,7 +105,7 @@ Reference and verification files:
 
 ## Known Current Facts
 
-- Phase 1 shop surfaces are currently hidden from guests: `/shop`, `/shop-by-category`, `/shop-items/<group>`, `/shop-items/<group>/<slug>`, `/cart`, and `/checkout` redirect to `/ready-to-order-paused` for guest traffic. Logged-in operators can still access direct ecommerce URLs for repair work. `/payment-success` and `/thank-you` remain as historical/payment-return surfaces and should be tested before ecommerce is reopened.
+- Phase 1 shop surfaces are currently open for local guest testing: `/shop`, `/shop-by-category`, `/shop-items/<group>`, `/shop-items/<group>/<slug>`, `/cart`, and `/checkout` should render the live customer ecommerce path with `lt_ecommerce_paused=0`. `/payment-success` and `/thank-you` remain payment-return surfaces and still need live/payment-mode care before production cutover.
 - Current live DB state verified 2026-05-08 is 53 Website Items, 10,672 Items, 49 variant templates, 6 non-variant root Items, 10,227 active customer-facing variants, 390 disabled legacy optional-add-on variants, 10,617 all variant records, 10,654 Item Prices, 32,028 Item Variant Attribute rows, and 26 Item Attributes. The 6 non-variant root Items are 4 catalog single-SKU products plus 2 delivery service Items. Re-check live DB counts before changing seed logic or making claims from these numbers.
 - Item Group hierarchy under `Shop Items` has 11 customer-facing children: Arches, Columns, Bouquets, Get-Well Bouquets, Garlands, Drops, Grab & Go, Table Decor, Stands & Easels, Deliveries, and Seasonal & Specialty.
 - Webshop settings are documented with variants and attribute filters enabled.
@@ -122,7 +122,7 @@ Reference and verification files:
 - Cart/checkout now sells actual Item codes and uses the parent Website Item for route/name display when the item is a variant. If the variant has its own `Item.image`, cart/checkout use that selected-variant image; otherwise they fall back to the parent Website Item image. Fixed-price products stay cartable unless fulfillment details, especially out-of-area delivery ZIP, require a quote path.
 - `/shop` cards for variant templates link to "Choose options" instead of adding an unpriced template code. Single-SKU cards add directly when priced.
 - `/shop` and Webshop-rendered category product cards are whole-card clickable from non-interactive card areas. The delegated handler preserves real links/buttons, `Add to cart`, `Choose options`, `Request quote`, selectors, modified clicks, and text selection. Do not wrap entire cards in anchors; use `lt-product-card-click.js` and `.lt-product-card-clickable`.
-- `smoke_shop.py` now verifies fixed-price product pages do not invent product-level quote gates, proves a real retail option-selection add-to-cart flow for `unicorn-bouquet`, and checks the showroom contracts for `/shop`, `/shop-items`, `/shop-items/<group>`, product detail image scale/containment, the desktop rail/mobile select category navigation contract, `/shop` product-grid orphan prevention, and category-product-grid orphan prevention. `cart_checkout_contract.py` verifies the shared API/checkout contract.
+- `smoke_shop.py` now verifies fixed-price product pages do not invent product-level quote gates, proves a real retail option-selection add-to-cart flow for `unicorn-bouquet`, distinguishes optional add-on checkboxes from variant chips, and checks the showroom contracts for `/shop`, `/shop-items`, `/shop-items/<group>`, product detail image scale/containment, the desktop rail/mobile select category navigation contract, `/shop` product-grid orphan prevention, and category-product-grid orphan prevention. `cart_checkout_contract.py` verifies the shared API/checkout contract.
 - Variant media first pass completed 2026-05-02: 1,712 variant `Item.image` values are set from `_resources/odoo-live/images/` where Odoo image labels clearly matched product options. Product pages call `locally_twisted.api.variant_media.get_variant_media` after exact option selection and swap the main image when a variant image exists.
 - Detailed media review is now reproducible with `python scripts/setup/sync_variant_media.py --dry-run --include-details --report output/catalog-media-review.json`. Latest refreshed report on 2026-05-06: 49 products checked, 35 with candidate image labels, 45 needing review, 1,712 unchanged mapped variants, and 6,831 skipped variant image assignments.
 - Category browse media review is now reproducible with `python scripts/verify/category_media_candidates.py`. Latest generated packet on 2026-05-06 found first-pass product-source quick picks for all 11 empty customer-facing Item Groups and wrote ignored local reports to `output/category-media-candidates.json` and `output/category-media-candidates.md`. `python scripts/setup/sync_category_media.py --write-template` creates an approval template, and the dry-run helper stages approved selections through Frappe without writing unless `--apply` is used. No ERPNext image fields were changed.
@@ -168,12 +168,14 @@ Before shop edits:
 
 After route, template, CSS, or JS edits:
 
-- `python scripts/verify/ecommerce_pause_contract.py` while ecommerce remains publicly paused
+- `npm run test:ecommerce-full`
+- `python scripts/verify/ecommerce_pause_contract.py`
 - `python scripts/verify/smoke_shop.py`
 - `python scripts/verify/cart_checkout_contract.py`
 - `npm run test:product-prices`
 - `python scripts/verify/commerce_rules_contract.py`
 - `python scripts/verify/checkout_fulfillment_contract.py`
+- `python scripts/verify/checkout_lead_conversion_contract.py`
 - `python scripts/verify/variant_media_contract.py`
 - `python scripts/verify/catalog_variant_contract.py`
 - `python scripts/setup/sync_variant_media.py --dry-run --include-details --report output/catalog-media-review.json`
@@ -232,6 +234,14 @@ For purchase-flow changes:
 - Verify cart line items use purchasable variant codes where variants are required.
 - Verify checkout can proceed without guest login redirect.
 - Verify payment success still reaches `/thank-you` and does not break the documented invoice/email cascade.
+
+Full ecommerce testing verification on 2026-05-10:
+
+- `bench --site frontend set-config lt_ecommerce_paused 0` opened local public ecommerce and `python scripts/dev/clear_website_cache.py` cleared website caches.
+- `npm run test:ecommerce-full` passed: public ecommerce mode, shop smoke, product prices, variant media, checkout experience, checkout fulfillment, and checkout-to-Lead conversion.
+- `npm run test:public-verify` passed 12 website steps with open ecommerce checks included.
+- `python scripts/verify/synthetic_business_pipeline.py` passed with 22 synthetic readiness contracts, 0 broken piping, 8 inefficiencies, and 3 cutover-deferred items.
+- `python scripts/verify/business_automation_index.py` passed with 27 connected surfaces, 3 future/setup partials, 0 missing required/useful surfaces, and 0 loud-failure gaps.
 
 ## Decisions And References
 

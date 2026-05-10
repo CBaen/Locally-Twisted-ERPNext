@@ -4,7 +4,7 @@ Last updated: 2026-05-10 by OpenClaw/Moji after GL exact-page corrections for bl
 
 ## Outcome
 
-`/balloon-twisting-and-face-painting` is the approved live-service business lane for Balloon Twisting and Face Painting. It is contact-led, quote/inquiry-led, and V1-launch-safe while public ecommerce is paused.
+`/balloon-twisting-and-face-painting` is the approved live-service business lane for Balloon Twisting and Face Painting. It is contact-led and quote/inquiry-led even while public ecommerce is open for ready-to-order testing.
 
 ## Current Contract
 

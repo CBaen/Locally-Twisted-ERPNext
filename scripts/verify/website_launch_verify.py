@@ -88,7 +88,15 @@ def build_steps(args: argparse.Namespace) -> list[Step]:
             local_playwright_command(workers, "scripts/verify/portfolio_reel.spec.js"),
             300,
         ),
-        Step("Ecommerce pause contract", [python, "scripts/verify/ecommerce_pause_contract.py"], 180),
+        Step("Public ecommerce mode contract", [python, "scripts/verify/ecommerce_pause_contract.py"], 180),
+        Step("Shop smoke", [python, "scripts/verify/smoke_shop.py"], 900),
+        Step("Product variant prices", [python, "scripts/verify/product_variant_price_contract.py"], 180),
+        Step("Variant media contract", [python, "scripts/verify/variant_media_contract.py"], 240),
+        Step(
+            "Checkout experience",
+            local_playwright_command(workers, "scripts/verify/checkout_experience.spec.js"),
+            300,
+        ),
     ]
 
     if args.with_a11y:

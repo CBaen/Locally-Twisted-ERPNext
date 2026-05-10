@@ -1,8 +1,8 @@
 # ERPNext Ecommerce Receiving Architecture
 
-Status: active Codex takeover handoff; core technical architecture can pass the
-readiness gate when ecommerce is temporarily open, but public commerce is
-currently paused again and no destructive import is approved.
+Status: active Codex takeover handoff; core technical architecture passes the
+readiness gate with public ecommerce open for local testing. No destructive
+import or production cutover is approved.
 Owner context: Codex, 2026-05-09. GL explicitly redirected this lane away from OpenClaw cockpit/infrastructure work and toward backend-first product-page architecture.
 
 ## Prime directive
@@ -235,8 +235,8 @@ Completed:
 - Updated cart identity to use configured line keys, so the same SKU with
   different selected add-ons/options does not collapse into one cart line.
 - Updated the cart API and cart/checkout summary rendering to expose visible
-  base-plus-add-on display rows and line totals. Public ecommerce remains
-  paused, but the internal data/display contract is no longer base-item-only.
+  base-plus-add-on display rows and line totals. Public ecommerce is open for
+  local testing, and the data/display contract is no longer base-item-only.
 - Hardened configured cart/add-on customer honesty: multi-digit foil add-ons
   now expose selected value, add-on quantity, unit price, and add-on total in
   cart/checkout summaries; cart and checkout no longer fall back from a
@@ -387,18 +387,22 @@ Verified 2026-05-10:
   preserves 30 source rows as 3 Bouquet Size combinations after foil-number
   add-on removal. The same verifier now proves executable dependency
   availability narrowing and loud failure for impossible/unknown selections.
-- `python scripts/verify/product_page_architecture_readiness.py --report output/product-page-architecture-readiness.json`
-  passed while ecommerce was temporarily open: `technical_architecture_ok:
-  True`, `import_reopen_ok: True`, 14 pass rows, 0 blocked rows, and 1 finance
-  deferral. After closeout, commerce was restored to `lt_ecommerce_paused=1`;
-  in the current paused state this same audit is expected to block only on
-  `public_ecommerce_reopen`.
+- `python scripts/verify/product_page_architecture_readiness.py` passed with
+  ecommerce open for local testing: `technical_architecture_ok: True`,
+  `import_reopen_ok: True`, 14 pass rows, 0 blocked rows, and 1 finance
+  deferral.
 - `npm run test:product-quote-first` PASS. This authenticated browser gate
   now covers both reusable product-page controls at desktop and mobile widths:
   Classic Arch renders quote-first controls and carries selected notes into
   the `/contact` hidden product-quote payload, while Unicorn Bouquet keeps
   ready-to-order variant controls and eligible add-ons.
-- `python scripts/verify/ecommerce_pause_contract.py` PASS.
+- `python scripts/verify/ecommerce_pause_contract.py` PASS in open testing
+  mode.
+- `npm run test:ecommerce-full` PASS: public ecommerce mode, shop smoke,
+  product prices, variant media, checkout experience, checkout fulfillment,
+  and checkout-to-Lead conversion.
+- `npm run test:public-verify` PASS with the open ecommerce checks included
+  in the website gate.
 - `python scripts/verify/lead_backend_intake_parity.py` PASS.
 - `python scripts/verify/customer_contact_points_contract.py` PASS.
 - `python scripts/verify/customer_email_policy_contract.py` PASS.
@@ -424,12 +428,10 @@ Verified 2026-05-10:
   remains `review_needed` with safe default `hold_until_classified`. GL cleared
   this packet as an import/reopen business blocker for testing; it is still the
   source evidence trail before any actual media assignment.
-- `python scripts/verify/variant_media_contract.py` PASS. This verifier is now
-  pause-aware: it confirms guest product routes redirect to the ecommerce pause
-  page, then uses authenticated/operator access to verify the temporary variant
-  image swap behavior.
-- `npm run test:checkout-experience` PASS against the current ecommerce-pause
-  launch contract.
+- `python scripts/verify/variant_media_contract.py` PASS against open guest
+  product routes and variant image swap behavior.
+- `npm run test:checkout-experience` PASS against the current open ecommerce
+  cart/checkout route contract.
 - Authenticated product-page render check for temporarily marked
   `unicorn-bouquet` checkout page returned HTTP 200, rendered
   `lt-product__addons`, and had no server exception; the Website Item fields
@@ -460,12 +462,10 @@ Still not complete:
   destructive source purge/import safe by themselves. Deeper family-specific
   dependency UI/import rules and broader journey/acceptance UX gates are still
   open.
-- Public ecommerce remains paused by `lt_ecommerce_paused=1`.
+- Public ecommerce is open for local testing by `lt_ecommerce_paused=0`.
 - The architecture readiness audit now separates core technical architecture
-  from import/reopen gates. Current `technical_architecture_ok` is true. When
-  ecommerce is temporarily opened, `import_reopen_ok` is true. In the current
-  paused state, `import_reopen_ok` is false only because public ecommerce is
-  deliberately paused.
+  from import/reopen gates. Current `technical_architecture_ok` and
+  `import_reopen_ok` are true in the local open testing state.
   Finance/bank remains deferred and is not counted as a current
   template-architecture blocker.
 
@@ -480,7 +480,7 @@ Still not complete:
    import/rebuild rehearsal input without hiding live-snapshot price provenance
    or the held media roles.
 4. Extend desktop/mobile UX gates beyond the two core controls into the full
-   quote review and checkout reopening journeys before public ecommerce returns.
+   quote review and checkout journeys before production cutover.
 
-No destructive imports. No purge. No public ecommerce claim while
-`lt_ecommerce_paused=1`.
+No destructive imports. No purge. No production/live ecommerce claim without
+staging, owner approval, and live payment/cutover readiness.

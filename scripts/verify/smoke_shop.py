@@ -804,10 +804,12 @@ def check_product_variant_page(page):
     btn = page.locator("#lt-add-to-cart-variant")
     assert_(btn.count() == 1, "Add-to-cart button missing")
     assert_(btn.is_disabled(), "Add-to-cart button should be disabled before selection")
-    checkbox_count = page.locator(".lt-product__configure input[type='checkbox']").count()
+    checkbox_count = page.locator(".lt-product__chips input[type='checkbox']").count()
     radio_count = page.locator(".lt-product__configure input[type='radio']").count()
     assert_(checkbox_count == 0, "Variant chips must not use checkbox inputs")
     assert_(radio_count > 0, "Variant chips should use radio inputs for single-choice options")
+    addon_checkbox_count = page.locator(".lt-product__addons input[type='checkbox']").count()
+    assert_(addon_checkbox_count >= 1, "Optional add-ons should remain explicit toggles, not variant axes")
     print("  OK retail inline variants render, jargon stripped, CTA disabled until selection")
 
 

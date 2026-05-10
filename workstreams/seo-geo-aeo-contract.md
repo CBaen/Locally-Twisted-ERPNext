@@ -15,8 +15,8 @@ plan and does not certify search rankings.
   LocalBusiness/Organization JSON-LD without unverified ratings or hours.
 - Legacy route aliases declare canonical public routes instead of creating SEO
   duplicates.
-- `/sitemap.xml` prefers canonical public routes while preserving paused
-  ecommerce URLs that still need discovery continuity.
+- `/sitemap.xml` prefers canonical public routes while preserving ecommerce
+  URLs that still need discovery continuity through testing and launch review.
 - Home and service routes expose stable business/service structured data
   without hardcoded ratings or hours.
 - `/faq` visible questions must match FAQPage JSON-LD. The current AEO question

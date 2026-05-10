@@ -89,11 +89,6 @@ python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --form-pat
 
 ## Known Non-Blocking Failures
 
-Full `npm run test:interactive-layout` was rerun on 2026-05-10 and still has
-unrelated failures in parked product/ecommerce-pause surfaces:
-
-- `/shop-items/garlands` missing expected compact hero contract elements.
-- paused ecommerce pages have a small-target issue on the help link.
-
-Those failures predate or sit outside this shared-form UX slice. The form-owned
-interactive checks listed above pass.
+None currently carried for this slice. A later 2026-05-10 open-ecommerce
+public verification passed through the broad layout/interactive gates and the
+form-owned checks listed above still own this shared-form UX contract.

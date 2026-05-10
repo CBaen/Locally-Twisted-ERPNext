@@ -18,7 +18,9 @@ This implements GL's request for a seasonal first hero followed by the four Even
 - Later slides use H2s, not extra H1s.
 - First slide must stay graduation-seasonal until GL changes the seasonal campaign.
 - Audience slides link to their matching audience routes and include a secondary quote/contact CTA.
-- Copy remains quote-led. Do not make the hero checkout/order-forward while public ecommerce is paused.
+- Copy remains quote-led. Even while public ecommerce is open for testing, do
+  not turn the homepage hero into a checkout/order-forward surface without a
+  fresh GL marketing decision.
 - Reduced-motion users get a stable first slide.
 - Keep compact hero sizing and next-band visibility guarded by `interactive_layout.spec.js`.
 

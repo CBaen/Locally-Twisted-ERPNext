@@ -5,10 +5,10 @@ schema_version: 2.0
 level: recipe
 maturity: candidate
 scope: Locally Twisted ERPNext/Frappe ecommerce product import, product detail logic, cart, checkout, and invoice integration
-currently_true: technical_architecture_ok_backend_preservation_foil_addon_draft_quotation_accepted_quote_to_draft_order_live_checkout_price_price_enrichment_media_visibility_and_business_block_clearance_verified_public_ecommerce_paused
+currently_true: technical_architecture_ok_backend_preservation_foil_addon_draft_quotation_accepted_quote_to_draft_order_live_checkout_price_price_enrichment_media_visibility_and_business_block_clearance_verified_public_ecommerce_open_local_testing
 verification_level: 2
 last_verified: 2026-05-10
-evidence_quality: GL decision + official docs + live DB metadata + current code inspection + focused source verifiers + live price-readiness verifier + source price-enrichment verifier + media visibility verifier + rollback-safe runtime verifier + cart/checkout contract verifier + accepted quote rollback verifier + architecture readiness split + open-commerce proof + restored pause proof
+evidence_quality: GL decision + official docs + live DB metadata + current code inspection + focused source verifiers + live price-readiness verifier + source price-enrichment verifier + media visibility verifier + rollback-safe runtime verifier + cart/checkout contract verifier + accepted quote rollback verifier + architecture readiness split + full open-commerce proof + rollback-safe checkout backend proof
 successful_uses: 1
 failed_uses: 0
 regressions: 0
@@ -193,8 +193,8 @@ As of 2026-05-10, the first backend preservation slice exists:
 - Configured cart lines have stable line keys, so the same SKU with different
   option/add-on payloads does not collapse into one line.
 - The cart API exposes visible display rows and line totals for base products
-  plus priced add-ons. Current public `/cart` and `/checkout` still redirect to
-  the pause page for guests.
+  plus priced add-ons. Current local public `/cart` and `/checkout` render open
+  ecommerce testing paths for guests when `lt_ecommerce_paused=0`.
 - The cart API must reject quote-first variants as `quote_required`; priced
   complex decor cannot be treated as retail checkout just because Item Price
   exists.
@@ -229,6 +229,7 @@ python scripts/verify/product_quote_customer_delivery_contract.py
 python scripts/verify/product_quote_operator_send_control_contract.py
 python scripts/verify/product_quote_customization_contract.py
 python scripts/verify/product_page_dependency_contract.py
+npm run test:ecommerce-full
 npm run test:product-quote-first
 ```
 
@@ -237,7 +238,7 @@ The readiness report separates `technical_architecture_ok` from
 ERPNext/Frappe template contract is built and verified; it does not mean public
 ecommerce is ready.
 
-This does not mean public ecommerce is ready. It proves the first storage,
+This does not mean production ecommerce is ready. It proves the first storage,
 runtime, confirmed foil-number add-on with eligibility and selector UI,
 review-only boundaries for unapproved source add-on families, configured cart-line identity, Lead
 quote handoff, automatic draft Quotation bridge, internal packet visibility,
@@ -246,12 +247,10 @@ BCC-gated customer quote delivery, an operator-owned Quotation send control,
 source dependency-matrix preservation, plus desktop/mobile proof for the two
 reusable product-page control types only.
 
-The readiness audit is mode-sensitive. With ecommerce temporarily open
+The readiness audit is mode-sensitive. With ecommerce open for local testing
 (`lt_ecommerce_paused=0`), the current expected result is
 `technical_architecture_ok: true`, `import_reopen_ok: true`, 14 passing rows, 0
-blocked rows, and 1 finance deferral. After closeout, ecommerce is restored to
-`lt_ecommerce_paused=1`; in that paused state, the expected nonzero result is
-only the `public_ecommerce_reopen` blocker. The source add-on, price-review,
+blocked rows, and 1 finance deferral. The source add-on, price-review,
 and media-classification business blocker rows were cleared by GL for testing
 and must not be reintroduced as blockers unless new source evidence changes.
 Finance/bank/payment integration is explicitly deferred and should not be
@@ -319,16 +318,17 @@ python scripts/verify/product_quote_customer_delivery_contract.py
 python scripts/verify/product_quote_operator_send_control_contract.py
 python scripts/verify/product_quote_customization_contract.py
 python scripts/verify/product_page_dependency_contract.py
+npm run test:ecommerce-full
 ```
 
 Expected current result: proof product contract and runtime contract pass;
 live price-readiness passes for current checkout-classified ERPNext prices;
 source price-enrichment passes for candidate coverage while marking
 live-snapshot candidates review-needed;
-variant media passes through authenticated/internal product-page access while
-guest product routes stay paused; source contract audit and media visibility
-still block destructive import until media classification, color customization,
-review-only axes, and price business-review decisions are handled.
+variant media passes against open guest product routes; source contract audit
+and media visibility still block destructive import until media classification,
+color customization, review-only axes, and price business-review decisions are
+handled.
 
 ## Research Requirement
 

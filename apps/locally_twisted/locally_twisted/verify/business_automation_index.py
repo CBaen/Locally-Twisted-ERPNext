@@ -20,8 +20,8 @@ from locally_twisted.verify.business_automation_product_quote import (
 ROOT = Path(frappe.get_app_path("locally_twisted")).parent.parent
 APP_ROOT = Path(frappe.get_app_path("locally_twisted"))
 NO_PURCHASE_MONEY_DEFERRAL = (
-    "Deferred by the no-purchase V1 launch: public ecommerce is paused, "
-    "and checkout/payment/Stripe is not a launch gate."
+    "Deferred while public ecommerce pause mode is active: checkout/payment/Stripe "
+    "is not the current launch gate in that mode."
 )
 
 
@@ -267,7 +267,7 @@ def _surfaces(
         {
             "id": "ecommerce_no_purchase_api_guard",
             "lane": "checkups",
-            "summary": "Direct checkout APIs fail loudly while ecommerce is paused and cannot create purchase, order, or payment records.",
+            "summary": "Pause-mode direct checkout APIs fail loudly and cannot create purchase, order, or payment records.",
             "required_for_launch": no_purchase_v1,
             "exists": lambda: _files_exist(
                 "locally_twisted/ecommerce_pause.py",
