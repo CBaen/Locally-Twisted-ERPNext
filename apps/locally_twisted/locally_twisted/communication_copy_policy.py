@@ -5,7 +5,6 @@ from collections.abc import Iterable
 
 
 BUSINESS_DOCUMENT_COPY = "hi@locallytwisted.com"
-EXTERNAL_AUDIENCE_COPY = "cameron@locallytwisted.com"
 
 
 def document_copy_recipients(
@@ -16,8 +15,6 @@ def document_copy_recipients(
     """Return internal copy recipients that are not already primary recipients."""
     primary = {_normalize(value) for value in primary_recipients or []}
     copies = [BUSINESS_DOCUMENT_COPY]
-    if external_audience:
-        copies.append(EXTERNAL_AUDIENCE_COPY)
     return [
         recipient
         for recipient in _dedupe(copies)
@@ -40,10 +37,7 @@ def document_copy_kwargs(
 
 def document_copy_field_values(*, external_audience: bool = True) -> dict[str, str]:
     """Return send-readiness field values for approved copy routing."""
-    values = {"business_copy_recipient": BUSINESS_DOCUMENT_COPY}
-    if external_audience:
-        values["external_audience_copy_recipient"] = EXTERNAL_AUDIENCE_COPY
-    return values
+    return {"business_copy_recipient": BUSINESS_DOCUMENT_COPY}
 
 
 def _normalize(value: str) -> str:

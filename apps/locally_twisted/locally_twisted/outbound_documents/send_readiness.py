@@ -10,7 +10,6 @@ from typing import Any
 
 from locally_twisted.communication_copy_policy import (
     BUSINESS_DOCUMENT_COPY,
-    EXTERNAL_AUDIENCE_COPY,
     document_copy_recipients,
 )
 from locally_twisted.outbound_documents.registry import (
@@ -36,7 +35,6 @@ MISSING_VALUE_MARKERS = {
 UNIVERSAL_REQUIRED_FIELDS = (
     "recipient",
     "business_copy_recipient",
-    "external_audience_copy_recipient",
     "company_branding",
 )
 
@@ -233,8 +231,6 @@ def _truthy(value: Any) -> bool:
 def _fake_value(fieldname: str) -> str:
     if fieldname == "business_copy_recipient":
         return BUSINESS_DOCUMENT_COPY
-    if fieldname == "external_audience_copy_recipient":
-        return EXTERNAL_AUDIENCE_COPY
     if "date" in fieldname:
         return "2026-05-08"
     if "amount" in fieldname or "balance" in fieldname or "total" in fieldname or fieldname == "taxes":

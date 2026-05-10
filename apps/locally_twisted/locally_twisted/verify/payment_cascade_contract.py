@@ -203,10 +203,7 @@ def _create_payment_request(sales_order_name, customer_name, email):
 
 def _collect_evidence(sales_order_name, customer_name, payment_request_name, contact_name):
     failures = []
-    from locally_twisted.communication_copy_policy import (
-        BUSINESS_DOCUMENT_COPY,
-        EXTERNAL_AUDIENCE_COPY,
-    )
+    from locally_twisted.communication_copy_policy import BUSINESS_DOCUMENT_COPY
 
     pr_status = frappe.db.get_value("Payment Request", payment_request_name, "status")
     if pr_status != "Paid":
@@ -231,7 +228,7 @@ def _collect_evidence(sales_order_name, customer_name, payment_request_name, con
         failures.extend(
             _check_copy_recipients(
                 receipt_queue["name"],
-                [BUSINESS_DOCUMENT_COPY, EXTERNAL_AUDIENCE_COPY],
+                [BUSINESS_DOCUMENT_COPY],
                 "customer receipt",
             )
         )
@@ -262,7 +259,7 @@ def _collect_evidence(sales_order_name, customer_name, payment_request_name, con
         failures.extend(
             _check_copy_recipients(
                 welcome_queue["name"],
-                [BUSINESS_DOCUMENT_COPY, EXTERNAL_AUDIENCE_COPY],
+                [BUSINESS_DOCUMENT_COPY],
                 "first-order welcome",
             )
         )
@@ -350,11 +347,14 @@ def _email_queue_recipients(queue_name):
 
 def _check_copy_recipients(queue_name, expected_recipients, label):
     recipients = _email_queue_recipients(queue_name)
-    return [
+    failures = [
         f"{label} email missing required copy recipient: {expected}"
         for expected in expected_recipients
         if expected not in recipients
     ]
+    if "cameron@locallytwisted.com" in recipients:
+        failures.append(f"{label} email should not permanently copy cameron@locallytwisted.com")
+    return failures
 
 
 def _checkout_notes_for_sales_order(sales_order_name):

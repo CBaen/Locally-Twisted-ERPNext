@@ -27,7 +27,7 @@ Fresh local verification on 2026-05-09:
 - `python scripts/verify/finance_inventory.py --json` passed.
 - `python scripts/verify/customer_documents_contract.py` passed.
 - `python scripts/verify/customer_email_policy_contract.py` passed and proved inquiry acknowledgment, receipt, operator notification, welcome email, and payment-cascade email boundaries without sending email, creating Email Queue rows, attaching PDFs, or mutating invoices.
-- `python scripts/verify/customer_documents_contract.py` and `python scripts/verify/payment_cascade_contract.py` now also prove queued copy recipients: `hi@locallytwisted.com` for business copies and `cameron@locallytwisted.com` for external-audience customer/client/accountant/contractor-style emails.
+- `python scripts/verify/customer_documents_contract.py` and `python scripts/verify/payment_cascade_contract.py` now also prove the queued business copy recipient: `hi@locallytwisted.com`. They fail if Cameron is accidentally added as a standing future copy recipient.
 - `python scripts/verify/payment_cascade_contract.py` passed and rolled back generated records.
 - `python scripts/verify/crm_stage_cascade.py` passed.
 - `python scripts/verify/backend_schema_inventory.py` passed.
@@ -190,9 +190,9 @@ Current live-data facts from the fresh finance inventory:
 ### Paperwork copy routing
 
 - GL's 2026-05-09 routing rule is now code-owned: every code-owned client/customer/company paperwork or documentation email must copy the business at `hi@locallytwisted.com`.
-- If the email/document would go to a customer, client, contractor, accountant, or other outside recipient, it must also copy `cameron@locallytwisted.com`.
-- Current implementation uses `communication_copy_policy.py` and BCC copy routing on inquiry acknowledgments, paid-order receipts, paid-order operator notifications, and first-order welcome emails. BCC keeps internal copy addresses off outside recipient-visible headers.
-- Outbound document send-readiness now blocks on `business_copy_recipient`, `external_audience_copy_recipient`, and `copy_routing_confirmed` before any future sender can mark a document send-ready.
+- `cameron@locallytwisted.com` is not a standing future copy recipient. Use it only for explicit one-time QA/review sends.
+- Current implementation uses `communication_copy_policy.py` and BCC business copy routing on inquiry acknowledgments, paid-order receipts, paid-order operator notifications, and first-order welcome emails. BCC keeps the internal business copy address off outside recipient-visible headers.
+- Outbound document send-readiness now blocks on `business_copy_recipient` and `copy_routing_confirmed` before any future sender can mark a document send-ready.
 
 ### Business automation index
 

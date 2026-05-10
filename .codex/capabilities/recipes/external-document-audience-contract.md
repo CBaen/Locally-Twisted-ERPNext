@@ -42,10 +42,9 @@ policy lane, or source record is missing or contradictory.
   gated until recipient, cadence, copy, payment link, and approval state are
   explicit.
 - Every client/customer/company paperwork or documentation email must copy the
-  business at `hi@locallytwisted.com`. If the document or email would go to a
-  customer, client, contractor, accountant, or other outside audience, it must
-  also copy `cameron@locallytwisted.com`. Prefer BCC for internal copies on
-  outside-recipient email.
+  business at `hi@locallytwisted.com`. Do not make Cameron a standing future
+  copy recipient. Use `cameron@locallytwisted.com` only for explicit one-time
+  QA/review sends. Prefer BCC for internal copies on outside-recipient email.
 - Missing data should become a blocker in the review packet or verifier output,
   not a blank field in a customer-facing PDF.
 

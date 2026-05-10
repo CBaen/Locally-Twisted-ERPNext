@@ -97,10 +97,7 @@ def _check_page_anchors() -> list[str]:
 
 
 def _check_lead_auto_ack_lane_links() -> list[str]:
-    from locally_twisted.communication_copy_policy import (
-        BUSINESS_DOCUMENT_COPY,
-        EXTERNAL_AUDIENCE_COPY,
-    )
+    from locally_twisted.communication_copy_policy import BUSINESS_DOCUMENT_COPY
 
     token = str(int(time.time()))
     lead = frappe.get_doc(
@@ -143,9 +140,10 @@ def _check_lead_auto_ack_lane_links() -> list[str]:
     ):
         if expected not in message:
             failures.append(f"auto-ack email missing lane link: {expected}")
-    for expected in (BUSINESS_DOCUMENT_COPY, EXTERNAL_AUDIENCE_COPY):
-        if expected not in recipients:
-            failures.append(f"auto-ack email missing required copy recipient: {expected}")
+    if BUSINESS_DOCUMENT_COPY not in recipients:
+        failures.append(f"auto-ack email missing required copy recipient: {BUSINESS_DOCUMENT_COPY}")
+    if "cameron@locallytwisted.com" in recipients:
+        failures.append("auto-ack email should not permanently copy cameron@locallytwisted.com")
     return failures
 
 

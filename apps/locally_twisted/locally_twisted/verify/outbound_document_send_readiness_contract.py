@@ -206,11 +206,13 @@ def _expect_all_blocked(result: dict[str, Any]) -> list[str]:
             "required_field:recipient",
             "required_field:company_branding",
             "required_field:business_copy_recipient",
-            "required_field:external_audience_copy_recipient",
             "approval_gate:copy_routing_confirmed",
         ):
             if expected not in blockers:
                 failures.append(f"{document.get('document_id')} missing blocker {expected}")
+        forbidden = "required_field:external_audience_copy_recipient"
+        if forbidden in blockers:
+            failures.append(f"{document.get('document_id')} should not require standing Cameron copy blocker")
     return failures
 
 

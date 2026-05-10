@@ -74,10 +74,11 @@ The local owner/client test account is `lt-owner-temp@example.com`, verified by
 `npm run test:desk-owner`; customers do not need login for `/contact`, `/cart`,
 or `/checkout`. Paperwork/documentation copy routing is code-owned in
 `communication_copy_policy.py`: all code-owned paperwork/document emails copy
-`hi@locallytwisted.com`, and customer/client/contractor/accountant-facing
-messages also copy `cameron@locallytwisted.com` via BCC where possible.
+`hi@locallytwisted.com`. Cameron is not a standing future copy recipient; use
+`cameron@locallytwisted.com` only for explicit one-time QA/review sends.
 `customer_documents_contract.py`, `payment_cascade_contract.py`, and
-`outbound_document_send_readiness_contract.py` prove the current behavior.
+`outbound_document_send_readiness_contract.py` prove the current standing
+behavior and fail if Cameron is accidentally added as a permanent copy.
 
 ## State Of Reality
 

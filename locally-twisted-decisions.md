@@ -8,6 +8,37 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-09 - Cameron review copies are one-time QA, not standing routing
+
+**Decision:** `cameron@locallytwisted.com` is not a standing future copy
+recipient for production/customer/customer-adjacent paperwork emails. Standing
+code-owned paperwork/documentation copy routing sends the business copy to
+`hi@locallytwisted.com`. Cameron review copies are allowed only when GL
+explicitly asks for a one-time QA/review send.
+
+**Reasoning:** GL corrected the prior request: the intent was to trigger each
+current path and send review copies so Cameron could inspect them now, not to
+add Cameron to every future customer/client/contractor/accountant-facing email.
+
+**Implementation:** Updated `communication_copy_policy.py` so standing copy
+routing only returns `hi@locallytwisted.com`. Updated customer-document,
+payment-cascade, and outbound-send-readiness contracts so they fail if Cameron
+is treated as a permanent copy recipient. Kept explicit copy-routing blockers
+for business copy confirmation.
+
+**Verification receipt:** The corrected contracts failed against the previous
+implementation first. After the fix, `python scripts/verify/customer_documents_contract.py`,
+`python scripts/verify/payment_cascade_contract.py`, and
+`python scripts/verify/outbound_document_send_readiness_contract.py` passed.
+
+**Alternatives considered:** Keep Cameron as a standing BCC for outside-audience
+emails. Rejected because it contradicts GL's correction and would create future
+inbox noise. Remove all copy routing. Rejected because the business copy to
+`hi@locallytwisted.com` is still a standing operational requirement.
+
+**Decided by:** GL correction on 2026-05-09; implemented by Codex.
+
+---
 ## 2026-05-09 - Paperwork/documentation email copy routing is mandatory
 
 **Decision:** All code-owned client, customer, and company paperwork or
