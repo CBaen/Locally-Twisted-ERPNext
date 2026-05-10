@@ -121,11 +121,26 @@ const CHECKOUT_SURFACES = [
 	{ selector: ".lt-checkout", mode: "band", inner: ".lt-checkout__container", maxWidth: PAGE_MAX, optional: true },
 ];
 
+// Event-type / audience-lane page surfaces. The four audience pages
+// (event-balloons, civic-community, corporate-events, schools-campuses,
+// private-celebrations) share one Jinja template that branches by data.
+// Pages migrated to the new audience-lane redesign render .lt-lane-* sections
+// instead of the legacy .lt-authority-proof / .lt-authority-section blocks.
+// Legacy surfaces and new lane surfaces are both optional so either rendering
+// mode passes. .lt-authority-page, hero, and cta are required on all routes.
 const EVENT_TYPE_SURFACES = [
 	{ selector: ".lt-authority-page", mode: "root" },
 	{ selector: ".lt-authority-hero", mode: "fullbleed", inner: ".lt-authority-hero__inner", maxWidth: PAGE_MAX },
-	{ selector: ".lt-authority-proof", mode: "fullbleed", inner: ".lt-authority-proof__inner", maxWidth: PAGE_MAX },
-	{ selector: ".lt-authority-section", mode: "band", inner: ".lt-authority-section__inner", maxWidth: PAGE_MAX, allowMultiple: true },
+	// Legacy surfaces (still used by civic-community, schools-campuses, private-celebrations)
+	{ selector: ".lt-authority-proof", mode: "fullbleed", inner: ".lt-authority-proof__inner", maxWidth: PAGE_MAX, optional: true },
+	{ selector: ".lt-authority-section", mode: "band", inner: ".lt-authority-section__inner", maxWidth: PAGE_MAX, allowMultiple: true, optional: true },
+	// New audience-lane redesign surfaces (used by corporate-events; others to follow)
+	{ selector: ".lt-lane-proof-bar", mode: "fullbleed", inner: ".lt-lane-proof-bar__inner", maxWidth: PAGE_MAX, optional: true },
+	{ selector: ".lt-lane-orgs", mode: "fullbleed", inner: ".lt-lane-orgs__inner", maxWidth: PAGE_MAX, optional: true },
+	{ selector: ".lt-lane-process", mode: "fullbleed", inner: ".lt-lane-process__inner", maxWidth: PAGE_MAX, optional: true },
+	{ selector: ".lt-lane-featured", mode: "fullbleed", inner: ".lt-lane-featured__inner", maxWidth: PAGE_MAX, optional: true },
+	{ selector: ".lt-lane-quote", mode: "fullbleed", inner: ".lt-lane-quote__inner", maxWidth: PAGE_MAX, optional: true },
+	{ selector: ".lt-lane-faq", mode: "fullbleed", inner: ".lt-lane-faq__inner", maxWidth: PAGE_MAX, optional: true },
 	{ selector: ".lt-authority-cta", mode: "fullbleed", inner: ".lt-authority-cta__inner", maxWidth: PAGE_MAX },
 ];
 

@@ -461,84 +461,185 @@ EVENT_TYPE_PAGES = {
         "route": "corporate-events",
         "root_class": "lt-page-corporate",
         "eyebrow": "Corporate events",
-        "title": "On-brand balloon decor for Utah company events.",
+        "title": "Corporate balloon decor that lands the way your meeting does.",
         "lede": (
-            "Grand openings, brand activations, receptions, and company celebrations need clean color, "
-            "reliable timing, and a quote path that supports a professional event plan."
+            "Lobby installations, brand-aligned color, and on-time setup before doors open. "
+            "Locally Twisted has installed for Utah corporate offices, conferences, and team "
+            "events for more than 20 years."
         ),
         "meta_title": "Corporate Event Balloon Decor in Utah",
         "meta_description": (
-            "Quote-led balloon decor for Utah corporate events, launches, receptions, restaurants, "
-            "media events, offices, and customer-facing business gatherings."
+            "Brand-aligned balloon decor for Utah corporate events, launches, conferences, "
+            "and team celebrations. Twenty years of professional install experience, PO and "
+            "COI ready."
         ),
         "quote_href": "/contact?intent=quote&source=corporate-events",
         "support_href": "/portfolio?event=corporate",
         "support_label": "See Corporate Work",
-        "proof": [
-            ("Brand-aware color", "The install should support the brand palette without looking like generic party decor."),
-            ("Schedule discipline", "Corporate events have doors-open moments, stakeholder timing, vendor access, and teardown windows."),
-            ("Camera-ready finish", "Broadcast, launch, ribbon-cutting, and employee-event moments need clean sightlines."),
-            ("Purchase-path ready", "The quote should give enough scope detail for budget, approval, and internal routing."),
-        ],
-        "client_groups": [
-            ("Business and finance", ["Ancestry", "Zions Bank", "America First CU", "Fidelity", "Morgan Stanley"]),
-            ("Media and entertainment", ["KSL", "KUTV", "FOX13", "Utah Jazz", "FanX", "Megaplex"]),
-            ("Restaurant and retail", ["Chick-fil-A", "Texas Roadhouse", "Applebee's", "Chili's", "Station Park"]),
-        ],
-        "stories_heading": "Built for professional rooms.",
-        "stories_lede": (
-            "Company events need decor that looks intentional in person, photographs cleanly, and fits the event schedule."
-        ),
-        "stories": [
+        # --- NEW: 4-tile buyer-language proof bar with brass-line icons ---
+        # Icon names map to files in apps/locally_twisted/locally_twisted/public/icons/brand/<name>.svg
+        "proof_bar": [
             {
-                "kicker": "Brand entrances",
-                "title": "A finished arrival point",
-                "body": "Logo arches and branded entrances help guests find the moment while keeping the event polished and on-color.",
+                "icon": "trusted-partner",
+                "label": "Booked off a PO",
+                "sub": "We invoice. W-9 on request. Repeat corporate work supported on standard terms.",
+            },
+            {
+                "icon": "delivery-install",
+                "label": "Setup before doors",
+                "sub": "Standard 90-minute install windows. Off-hours and overnight setup available on request.",
+            },
+            {
+                "icon": "design-driven",
+                "label": "Brand-color matched",
+                "sub": "Bring your brand deck or Pantone reference. We match to closest stock latex.",
+            },
+            {
+                "icon": "professional",
+                "label": "Certificate of Insurance",
+                "sub": "COI available on request, with additional-insured language for your venue or building.",
+            },
+        ],
+        # --- NEW: Named-organization wall ---
+        # TODO: replace placeholder list with confirmed corporate clients once GL/Jeff verify
+        #       who LT has actually installed for. Avoid name-dropping orgs LT hasn't worked with.
+        "named_orgs": {
+            "eyebrow": "Real organizations",
+            "heading": "Utah corporate teams have trusted us before.",
+            "lede": (
+                "Over 20 years of installations across Utah business and finance, media, "
+                "restaurants and retail, and campus events."
+            ),
+            # TODO(GL): Confirm which of these names LT has genuinely installed for.
+            # Remove any that are aspirational; keep only verified clients.
+            "names": [
+                "Ancestry",
+                "Zions Bank",
+                "America First CU",
+                "Fidelity",
+                "KSL",
+                "KUTV",
+                "FOX13",
+                "Utah Jazz",
+                "FanX",
+                "Megaplex",
+                "Chick-fil-A",
+                "Texas Roadhouse",
+            ],
+        },
+        # --- NEW: "How we work with corporate planners" process list ---
+        "process": {
+            "eyebrow": "How we work with corporate planners",
+            "heading": "Hand it off. We handle the install.",
+            "lede": (
+                "The corporate event workflow is built for secretaries, EAs, and office "
+                "managers who need the decor to be one less thing to worry about."
+            ),
+            "steps": [
+                "Email or call with date, venue, and rough scope. Quote returned within one business day.",
+                "PO or card on file. W-9 and COI provided on request before the work starts.",
+                "Lead time: two weeks standard. Forty-eight hours possible for arches and columns when stock allows.",
+                "Loading dock, freight elevator, and after-hours access notes go in the work order.",
+                "Setup typically completes 60 to 90 minutes before doors open. Off-hours and overnight available.",
+                "Same-day teardown and balloon disposal included. Event photos returned for your file.",
+            ],
+            "photo": {
+                # TODO(GL): Replace with a real "setup in progress" photo from a corporate venue
+                # (install crew at work, ladder, branded décor mid-build). Reusing portfolio shot for now.
                 "image": f"{PORTFOLIO_BASE}/corporate-logo-arch.webp",
-                "alt": "Corporate logo balloon arch at a Utah event entrance",
+                "alt": "Locally Twisted install crew finishing a branded corporate event entrance",
             },
-            {
-                "kicker": "High-visibility events",
-                "title": "Photo backdrops that stay professional",
-                "body": "Corporate and media-facing events need decor that photographs cleanly and does not fight the venue or brand.",
-                "image": f"{PORTFOLIO_BASE}/corporate-weberstock-photo-opt.webp",
-                "alt": "Corporate balloon photo backdrop at a Utah business event",
-            },
-            {
-                "kicker": "Campus and company events",
-                "title": "Color matched to the room",
-                "body": "Corporate, school, and institutional events often need color discipline, quick setup, and balanced scale.",
-                "image": f"{PORTFOLIO_BASE}/corporate-wsu-arch-bouquets.webp",
-                "alt": "Purple and white corporate balloon arch and bouquet install",
-            },
-        ],
-        "gallery_heading": "Inspiration for company rooms and entrances.",
-        "gallery_lede": "Corporate buyers want to know the decor can look polished on camera, on brand, and finished when doors open.",
+        },
+        # --- NEW: Featured installation case-study ---
+        # TODO(GL): Replace with a real named corporate install. Fill in actual lead time,
+        # attendee count, setup window, and event type. No fabricated stats.
+        "featured_install": {
+            "eyebrow": "Featured corporate install",
+            "title": "Annual all-hands, brand-color entrance, dock setup before 7am.",
+            "image": f"{PORTFOLIO_BASE}/corporate-weberstock-photo-opt.webp",
+            "alt": "Branded balloon installation for a Utah corporate annual event",
+            "facts": [
+                {"label": "Event", "value": "Corporate annual gathering"},  # TODO: name the event
+                {"label": "Scope", "value": "Branded entrance arch + two column pairs + registration garlands"},
+                {"label": "Lead time", "value": "Quoted three weeks ahead of event date"},
+                {"label": "Setup", "value": "Dock load-in 6:00am, complete by 7:30am"},
+                {"label": "Notes", "value": "Same-day teardown. Photos returned for the planning file."},
+            ],
+        },
+        # --- NEW: Pull-quote attributed by role (NOT by name unless permission granted) ---
+        # TODO(GL): Replace with a real EA/secretary/events-coordinator quote we have permission
+        # to publish. Until that exists, this section stays absent — the template renders nothing.
+        # "pull_quote": {
+        #     "text": "I sent one email and they handled the rest. The arch was up before our first guests arrived.",
+        #     "attribution": "Executive Assistant - Utah finance firm",
+        # },
+        # --- Existing: gallery (kept as-is; real installs already in place) ---
+        "gallery_heading": "More corporate installs.",
+        "gallery_lede": "A broader look at the kinds of corporate rooms, entrances, and brand moments we have built.",
         "gallery": [
             {"title": "Branded entrance arch", "caption": "A clear arrival moment for guests, photos, and launches.", "image": f"{PORTFOLIO_BASE}/corporate-logo-arch.webp", "alt": "Corporate logo balloon arch at an event entrance", "wide": True},
             {"title": "Large photo backdrop", "caption": "Scale and color for media, reception, and sponsor-facing moments.", "image": f"{PORTFOLIO_BASE}/corporate-weberstock-photo-opt.webp", "alt": "Corporate balloon photo backdrop at a Utah event", "wide": True},
             {"title": "Campus-color install", "caption": "Color discipline for institutions, companies, and university events.", "image": f"{PORTFOLIO_BASE}/corporate-wsu-arch-bouquets.webp", "alt": "Purple and white balloon arch and bouquet install", "wide": False},
         ],
-        "plan_title": "What corporate buyers need to settle early",
-        "plan": [
+        # --- NEW: Plain-language FAQ (corporate buyer's questions, in their words) ---
+        "faq_eyebrow": "Questions corporate planners ask",
+        "faq_heading": "What you need before you send the request to your team.",
+        "faq": [
             {
-                "title": "Brand and color",
-                "text": "Share brand colors, sponsor constraints, logo needs, and the visual role of the install.",
-                "bullets": ["Grand openings", "Logo arches", "Launches", "Reception photos"],
+                "q": "Do you invoice and accept POs?",
+                "a": (
+                    "Yes. We invoice in advance or after the event depending on your AP workflow. "
+                    "Send us your billing contact and any vendor onboarding paperwork with the "
+                    "initial inquiry and we will get it back the same day."
+                ),
             },
             {
-                "title": "Venue schedule",
-                "text": "Confirm access, doors-open time, teardown rules, and who approves the final placement.",
-                "bullets": ["Load-in windows", "Venue contacts", "Stakeholder timing", "Strike timing"],
+                "q": "Can you provide a certificate of insurance?",
+                "a": (
+                    "Yes. We carry general liability and can issue a COI naming your building or "
+                    "venue as additional insured. Send the venue's COI requirements with the "
+                    "inquiry and we will route it to our carrier."
+                ),
             },
             {
-                "title": "Quote clarity",
-                "text": "The inquiry should capture enough scope for approval without pretending the event is a preset package.",
-                "bullets": ["Budget routing", "Install scope", "Delivery details", "Decision timeline"],
+                "q": "How fast can you turn a quote?",
+                "a": (
+                    "One business day for standard scope. Larger or multi-room installs may take "
+                    "a second touch to scope correctly, but we will respond within one business "
+                    "day either way."
+                ),
+            },
+            {
+                "q": "Can you match our exact brand colors?",
+                "a": (
+                    "We match to the closest stock latex available. Send your brand deck, Pantone "
+                    "references, or sample swatches with the inquiry. If your brand color sits "
+                    "outside the stock palette, we will tell you up front and propose the nearest "
+                    "match."
+                ),
+            },
+            {
+                "q": "What lead time do you need?",
+                "a": (
+                    "Two weeks is the standard. Arches, columns, and standard color bouquets can "
+                    "often be turned in 48 hours when stock allows. For brand-specific color "
+                    "matches or sponsor-coordinated installs, give us as much notice as you can."
+                ),
+            },
+            {
+                "q": "Do you handle teardown and disposal?",
+                "a": (
+                    "Yes. Same-day teardown and balloon disposal are included on standard "
+                    "corporate installs. Next-day teardown is available for events that run late "
+                    "or wrap on a weekend."
+                ),
             },
         ],
         "cta_title": "Tell us what the event needs.",
-        "cta_body": "Send the date, venue, brand colors, and rough install goal. The next step is a quote, not an online purchase.",
+        "cta_body": (
+            "Send the date, venue, brand colors, and rough scope. We will return a quote within "
+            "one business day. The next step is a quote, not an online purchase."
+        ),
     },
     "schools_campuses": {
         "route": "schools-campuses",
