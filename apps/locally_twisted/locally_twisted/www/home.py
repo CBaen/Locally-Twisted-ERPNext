@@ -7,6 +7,8 @@ support.
 """
 import frappe
 
+from locally_twisted.seo import business_graph
+
 no_cache = 1
 sitemap = 1
 
@@ -320,6 +322,16 @@ PAGE_CSS = """
 .lt-hero__slide:focus-within {
     pointer-events: auto;
 }
+.lt-hero[data-lt-hero-enhanced="true"] .lt-hero__slide {
+    animation: none;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 500ms ease;
+}
+.lt-hero[data-lt-hero-enhanced="true"] .lt-hero__slide--active {
+    opacity: 1;
+    pointer-events: auto;
+}
 .lt-hero__image {
     position: absolute;
     inset: 0;
@@ -432,13 +444,13 @@ PAGE_CSS = """
 }
 @media (min-width: 768px) {
     .lt-hero {
-        min-height: 280px;
-        height: 280px;
-        max-height: 280px;
+        min-height: 250px;
+        height: 250px;
+        max-height: 250px;
     }
-    .lt-hero__content { padding: 2rem; }
+    .lt-hero__content { padding: 1.65rem 1.5rem; }
     .lt-hero__title {
-        font-size: 2.55rem;
+        font-size: 2.42rem;
         line-height: 1;
         max-width: 32ch;
     }
@@ -450,6 +462,17 @@ PAGE_CSS = """
     .lt-hero__cta {
         font-size: 0.94rem;
         padding-inline: 1.1rem;
+    }
+}
+@media (min-width: 1200px) {
+    .lt-hero {
+        min-height: 280px;
+        height: 280px;
+        max-height: 280px;
+    }
+    .lt-hero__content { padding: 2rem; }
+    .lt-hero__title {
+        font-size: 2.55rem;
     }
 }
 @media (max-width: 575.98px) {
@@ -1107,6 +1130,7 @@ def get_context(context):
     context.custom_categories = CUSTOM_CATEGORIES
     context.featured_work = FEATURED_WORK
     context.home_hero_slides = HOME_HERO_SLIDES
+    context.structured_data = [business_graph("/")]
     # Compute display_name at request time so the source list keeps full
     # names (audit trail) but the rendered cards show "First L." only.
     context.review_quotes = [

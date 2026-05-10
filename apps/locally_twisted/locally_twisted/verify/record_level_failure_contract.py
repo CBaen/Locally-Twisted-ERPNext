@@ -50,12 +50,14 @@ def _run_contract(log_error_calls: list[dict[str, object]]) -> dict[str, object]
     from locally_twisted.failure_recorder import (
         FAILURE_COMMENT_PREFIX,
         record_backend_failure,
+        record_backend_failure_resolution,
         record_health_failures,
     )
 
     token = str(int(time.time()))
     marker = f"LT Failure Recorder {token}"
     lead = _create_lead(marker)
+    grouping_key = f"record_level_failure_contract:lead_contact_dedup:{lead.name}"
 
     before = _counts()
     evidence = record_backend_failure(
@@ -67,7 +69,7 @@ def _run_contract(log_error_calls: list[dict[str, object]]) -> dict[str, object]
         customer_visible_impact="Customer inquiry was received, but Contact linking failed.",
         internal_next_action="Review the Lead and link/create the Contact before follow-up.",
         exception=ValueError("synthetic contact dedup failure"),
-        grouping_key="record_level_failure_contract:lead_contact_dedup",
+        grouping_key=grouping_key,
     )
     after = _counts()
 
@@ -109,12 +111,85 @@ def _run_contract(log_error_calls: list[dict[str, object]]) -> dict[str, object]
     if failures:
         raise ContractFail("; ".join(failures))
 
+    resolution = record_backend_failure_resolution(
+        primary_doctype="Lead",
+        primary_name=lead.name,
+        surface="record_level_failure_contract",
+        step="lead_contact_dedup",
+        grouping_key=grouping_key,
+        resolution_note="Synthetic failure reviewed during rollback contract.",
+    )
+    if not resolution.get("ok"):
+        raise ContractFail(f"failure resolution returned not-ok: {resolution!r}")
+
+    resolved_health = record_health_failures(primary_doctype="Lead", primary_name=lead.name)
+    still_open = [row for row in resolved_health if row.get("grouping_key") == grouping_key]
+    if still_open:
+        raise ContractFail("record_health_failures still reported a resolved synthetic blocker")
+
+    _assert_limited_health_keeps_older_unresolved_failure()
+
     return {
         "ok": True,
         "lead": lead.name,
         "comment": comment.get("name") if comment else None,
+        "resolution_comment": resolution.get("comment"),
         "record_health_failures": len(health),
+        "record_health_failures_after_resolution": len(resolved_health),
     }
+
+
+def _assert_limited_health_keeps_older_unresolved_failure() -> None:
+    from locally_twisted.failure_recorder import (
+        record_backend_failure,
+        record_backend_failure_resolution,
+        record_health_failures,
+    )
+
+    token = str(int(time.time() * 1000))
+    lead = _create_lead(f"LT Failure Limit {token}")
+    older_key = f"record_level_failure_contract:older_unresolved:{lead.name}"
+    newer_key = f"record_level_failure_contract:newer_resolved:{lead.name}"
+
+    record_backend_failure(
+        surface="record_level_failure_contract",
+        step="older_unresolved",
+        severity="error",
+        primary_doctype="Lead",
+        primary_name=lead.name,
+        customer_visible_impact="Customer inquiry is waiting on a backend follow-up.",
+        internal_next_action="This older synthetic blocker should stay visible in limited health reports.",
+        exception=ValueError("synthetic older unresolved failure"),
+        grouping_key=older_key,
+    )
+    time.sleep(0.01)
+    record_backend_failure(
+        surface="record_level_failure_contract",
+        step="newer_resolved",
+        severity="error",
+        primary_doctype="Lead",
+        primary_name=lead.name,
+        customer_visible_impact="Customer inquiry briefly hit a backend follow-up issue.",
+        internal_next_action="This newer synthetic blocker is resolved and should not hide older failures.",
+        exception=ValueError("synthetic newer resolved failure"),
+        grouping_key=newer_key,
+    )
+    record_backend_failure_resolution(
+        primary_doctype="Lead",
+        primary_name=lead.name,
+        surface="record_level_failure_contract",
+        step="newer_resolved",
+        grouping_key=newer_key,
+        resolution_note="Synthetic newer failure resolved during rollback contract.",
+    )
+
+    limited_health = record_health_failures(primary_doctype="Lead", primary_name=lead.name, limit=1)
+    grouping_keys = [row.get("grouping_key") for row in limited_health]
+    if older_key not in grouping_keys:
+        raise ContractFail(
+            "record_health_failures(limit=1) hid an older unresolved blocker after filtering "
+            f"a newer resolved blocker; got {grouping_keys}"
+        )
 
 
 def _create_lead(marker: str):

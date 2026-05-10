@@ -1,0 +1,27 @@
+{
+  "blocked_for_destructive_import": true,
+  "commerce_lane_counts": {
+    "checkout": 15,
+    "quote_first": 38
+  },
+  "confirmed_add_on_product_count": 14,
+  "dependency_matrix_product_count": 36,
+  "dependency_matrix_valid_combination_count": 273,
+  "product_page_type_counts": {
+    "complex_custom_product": 38,
+    "simple_product": 15
+  },
+  "review_only_source_add_on_counts": {
+    "Add Bouquet": 1,
+    "Add ons": 3,
+    "Orbz toppers": 2,
+    "Plush add ons": 3
+  },
+  "source_products": 53,
+  "warning_counts": {
+    "axis_needs_review": 9,
+    "color_axis_customization": 25,
+    "missing_resolver_prices": 49,
+    "unclassified_gallery_images": 49
+  }
+}

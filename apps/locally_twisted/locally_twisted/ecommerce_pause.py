@@ -8,7 +8,8 @@ from werkzeug.exceptions import HTTPException
 from werkzeug.utils import redirect
 
 
-ECOMMERCE_PAUSED = True
+ECOMMERCE_PAUSED_DEFAULT = True
+ECOMMERCE_PAUSED = ECOMMERCE_PAUSED_DEFAULT
 PAUSE_ROUTE = "/ready-to-order-paused"
 
 BLOCKED_PUBLIC_PATHS = (
@@ -21,8 +22,19 @@ BLOCKED_PUBLIC_PATHS = (
 )
 
 
+def _as_bool(value: object) -> bool:
+    if isinstance(value, str):
+        return value.strip().lower() not in {"0", "false", "no", "off", "open"}
+    return bool(value)
+
+
 def is_ecommerce_paused() -> bool:
-    return ECOMMERCE_PAUSED
+    """Return the current public commerce gate.
+
+    The safe default is paused. Local launch testing can open the lanes with
+    `bench --site frontend set-config lt_ecommerce_paused 0`.
+    """
+    return _as_bool(frappe.conf.get("lt_ecommerce_paused", ECOMMERCE_PAUSED_DEFAULT))
 
 
 def normalize_path(path: str | None) -> str:

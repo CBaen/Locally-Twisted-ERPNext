@@ -9,6 +9,13 @@ from typing import Callable
 import frappe
 from frappe.utils import now_datetime
 
+from locally_twisted.verify.business_automation_product_quote import (
+    product_quote_acceptance_surface,
+    product_quote_customer_delivery_surface,
+    product_quote_operator_send_control_surface,
+    product_quote_operator_review_surface,
+)
+
 
 ROOT = Path(frappe.get_app_path("locally_twisted")).parent.parent
 APP_ROOT = Path(frappe.get_app_path("locally_twisted"))
@@ -609,6 +616,10 @@ def _surfaces(
                 "python scripts/verify/quote_proposal_draft_packet_contract.py",
             ],
         },
+        product_quote_operator_review_surface(run_runtime_contracts=run_runtime_contracts),
+        product_quote_acceptance_surface(run_runtime_contracts=run_runtime_contracts),
+        product_quote_customer_delivery_surface(run_runtime_contracts=run_runtime_contracts),
+        product_quote_operator_send_control_surface(run_runtime_contracts=run_runtime_contracts),
         {
             "id": "vendor_setup_packet_generation",
             "lane": "finance",

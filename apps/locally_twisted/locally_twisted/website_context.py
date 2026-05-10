@@ -3,6 +3,9 @@ from __future__ import annotations
 
 import frappe
 
+from locally_twisted.ecommerce_pause import is_ecommerce_paused
+from locally_twisted.seo import apply_seo_context
+
 
 def _assets_json() -> dict:
     get_assets_json = getattr(frappe.utils, "get_assets_json", None)
@@ -13,6 +16,8 @@ def _assets_json() -> dict:
 
 def update_website_context(context):
     """Add shop category data used by category/sidebar templates."""
+    apply_seo_context(context)
+
     try:
         context["lt_assets_json"] = _assets_json()
     except Exception as e:
@@ -21,6 +26,15 @@ def update_website_context(context):
             title="LT website context",
         )
         context["lt_assets_json"] = {}
+
+    try:
+        context["lt_ecommerce_paused"] = is_ecommerce_paused()
+    except Exception as e:
+        frappe.log_error(
+            f"website_context.is_ecommerce_paused failed: {e}",
+            title="LT website context",
+        )
+        context["lt_ecommerce_paused"] = True
 
     try:
         children = frappe.db.get_all(

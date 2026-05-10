@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from locally_twisted.seo import service_schema
+
 
 PAGE_CSS = """
 .lt-event-type-page {
@@ -715,4 +717,12 @@ def get_event_type_context(context, page_key: str):
         "og:description": event_page["meta_description"],
         "og:type": "website",
     }
+    context.structured_data = [
+        service_schema(
+            event_page["meta_title"],
+            event_page["meta_description"],
+            f"/{event_page['route']}",
+            service_type="Balloon decor and event installation",
+        )
+    ]
     return context

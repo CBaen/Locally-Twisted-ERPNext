@@ -484,6 +484,9 @@ def _assert_lead_product_quote_handoff(resolved_item: dict) -> str:
         raise ContractFail(f"product-page quote payload dropped selected options: {payload}")
     if payload.get("customizations") != incoming_payload["customizations"]:
         raise ContractFail(f"product-page quote payload dropped customizations: {payload}")
+    color_recipes = payload.get("color_recipes") or []
+    if not color_recipes or color_recipes[0].get("values") != ["Reflex Gold", "White"]:
+        raise ContractFail(f"product-page quote payload did not create structured color recipes: {payload}")
 
     fields = _lead_product_quote_fields(payload)
     child_rows = _lead_product_quote_child_rows(payload)
@@ -518,6 +521,9 @@ def _assert_lead_product_quote_handoff(resolved_item: dict) -> str:
     quote_payload = stored.get("custom_lt_product_quote_payload") or ""
     if "product-page-quote-form" not in quote_payload:
         raise ContractFail("Lead did not preserve product-page quote payload JSON")
+    stored_payload = json.loads(quote_payload)
+    if not stored_payload.get("color_recipes"):
+        raise ContractFail("Lead did not preserve structured color recipes")
     if len(stored.get("custom_lt_product_quote_items") or []) != 1:
         raise ContractFail("Lead did not preserve product-page quote child row")
     child = stored.get("custom_lt_product_quote_items")[0]

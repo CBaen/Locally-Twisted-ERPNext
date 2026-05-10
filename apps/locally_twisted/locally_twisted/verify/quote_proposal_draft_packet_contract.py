@@ -28,6 +28,7 @@ def run() -> dict[str, object]:
         ("normal_quote_review_packet", _review_normal_quote, _expect_one_clean_packet),
         ("corporate_proposal_review_packet", _review_corporate_proposal, _expect_proposal_copy),
         ("product_quote_placeholder_price_blocks_reviewed_total", _review_product_quote_placeholder_price, _expect_product_quote_pricing_blocker),
+        ("reviewed_product_quote_still_draft_only", _review_product_quote_reviewed_price, _expect_reviewed_product_quote_draft_only),
         ("missing_acceptance_path_blocks_readiness", _review_missing_acceptance_path, _expect_acceptance_blocker),
         ("empty_review_ok", _review_empty, _expect_no_packets),
         ("malformed_send_ready_source_fails", _review_malformed_send_enabled, _expect_malformed_failure),
@@ -111,6 +112,25 @@ def _review_product_quote_placeholder_price() -> dict[str, Any]:
                 "requested_product_page": "classic-arch",
                 "product_quote_status": "Draft Quotation Created",
                 "product_quote_summary": "Requested product page quote: Classic Arch; Arch Size: 20ft",
+                "product_quote_payload": '{"source": "lt_product_page_quote_runtime"}',
+            }
+        )
+    return _review([candidate])
+
+
+def _review_product_quote_reviewed_price() -> dict[str, Any]:
+    candidate = _candidate("QTN-TEST-0006", "Reviewed Product Quote Buyer", scope="Classic Arch product-page quote")
+    for document in candidate["draft_documents"]:
+        fields = document["key_fields_to_review"]
+        fields.update(
+            {
+                "line_items": "Custom arch scope, install, strike",
+                "subtotal": "USD 650.00",
+                "total": "USD 650.00",
+                "investment": "USD 650.00",
+                "requested_product_page": "classic-arch",
+                "product_quote_status": "Ready For Customer Review",
+                "product_quote_summary": "Requested product page quote: Classic Arch; Arch Size: 20ft; pricing reviewed",
                 "product_quote_payload": '{"source": "lt_product_page_quote_runtime"}',
             }
         )
@@ -251,6 +271,20 @@ def _expect_product_quote_pricing_blocker(result: dict[str, Any]) -> list[str]:
         failures.append("quote readiness did not block placeholder product-quote pricing")
     if "pricing review required" not in str(key_fields.get("pricing_status") or "").lower():
         failures.append("key fields did not surface product-quote pricing status")
+    return failures
+
+
+def _expect_reviewed_product_quote_draft_only(result: dict[str, Any]) -> list[str]:
+    failures = _expect_one_clean_packet(result)
+    quote = _section(result, "quote_estimate")
+    key_fields = quote.get("key_fields_to_review") or {}
+    blockers = quote.get("send_readiness", {}).get("blocked_send_until") or []
+    if key_fields.get("pricing_status"):
+        failures.append("reviewed product quote should not carry pricing review required status")
+    if "required_field:reviewed_product_quote_pricing" in blockers:
+        failures.append("reviewed product quote should not block on placeholder pricing")
+    if quote.get("send_readiness", {}).get("send_allowed") is not False:
+        failures.append("reviewed product quote packet must still be draft-only and not send-ready")
     return failures
 
 

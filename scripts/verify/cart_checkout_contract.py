@@ -217,6 +217,33 @@ def _ineligible_foil_number_configuration(value: str) -> dict[str, Any]:
     }
 
 
+def _review_only_add_on_configuration() -> dict[str, Any]:
+    line = bench_execute(
+        "locally_twisted.api.cart.resolve_cart_item_for_sale",
+        kwargs={"item_code": RETAIL_VARIANT_ITEM},
+    )
+    selected_options = {
+        str(row.get("attribute")): str(row.get("attribute_value"))
+        for row in line.get("variant_options") or []
+        if row.get("attribute") and row.get("attribute_value")
+    }
+    return {
+        "schema_version": CONFIG_VERSION,
+        "item_code": RETAIL_VARIANT_ITEM,
+        "website_item_code": RETAIL_VARIANT_TEMPLATE,
+        "selected_options": selected_options,
+        "add_ons": [
+            {
+                "key": "plush_add_ons",
+                "label": "Plush add ons",
+                "value": "Teddy bear",
+                "quantity": 1,
+            }
+        ],
+        "customizations": [],
+    }
+
+
 def check_configured_same_sku_cart_lines_stay_separate_and_visible() -> None:
     cart_entries = [
         {"item_code": RETAIL_VARIANT_ITEM, "qty": 1, "configuration": _foil_number_configuration("5")},
@@ -330,6 +357,23 @@ def check_add_on_eligibility_rejects_unapproved_product() -> None:
     )
 
 
+def check_review_only_source_add_ons_route_to_quote_not_checkout() -> None:
+    expected = "this add-on needs a quote before checkout"
+    bench_execute_expect_error(
+        "locally_twisted.www.checkout._resolve_sale_lines",
+        kwargs={
+            "cart_items": [
+                {
+                    "item_code": RETAIL_VARIANT_ITEM,
+                    "qty": 1,
+                    "configuration": _review_only_add_on_configuration(),
+                }
+            ]
+        },
+        expected=expected,
+    )
+
+
 def check_checkout_rejects_over_limit_quantities() -> None:
     expected = f"Tiny snag: one cart line has more than {MAX_QTY_PER_LINE} items."
     bench_execute_expect_error(
@@ -379,6 +423,7 @@ def main() -> int:
         check_multi_digit_add_on_quantity_and_total_are_visible,
         check_cart_and_checkout_templates_fail_loud_on_line_key_mismatch,
         check_add_on_eligibility_rejects_unapproved_product,
+        check_review_only_source_add_ons_route_to_quote_not_checkout,
         check_checkout_rejects_over_limit_quantities,
         check_shop_cards_keep_priced_products_cartable_and_do_not_add_templates,
     ]

@@ -51,6 +51,7 @@ def main() -> int:
 
     try:
         result = bench_execute()
+        contract_failures = _contract_failures(result)
     except AutomationIndexFail as exc:
         print(f"[BUSINESS AUTOMATION INDEX] FAIL\n  - {exc}")
         return 1
@@ -65,13 +66,36 @@ def main() -> int:
     if args.json:
         print(rendered)
     else:
-        _print_summary(result)
+        _print_summary(result, contract_failures)
 
-    return 0 if result.get("ok") else 1
+    return 0 if result.get("ok") and not contract_failures else 1
 
 
-def _print_summary(result: dict[str, Any]) -> None:
-    print("[BUSINESS AUTOMATION INDEX] " + ("PASS" if result.get("ok") else "FAIL"))
+def _contract_failures(result: dict[str, Any]) -> list[str]:
+    required_surface_ids = {
+        "product_quote_operator_review",
+        "product_quote_acceptance_to_draft_order",
+        "product_quote_customer_delivery",
+        "product_quote_operator_send_control",
+    }
+    surface_ids = {
+        row.get("id")
+        for group in (
+            "exists_and_connected",
+            "exists_but_not_connected",
+            "missing_needs_connection",
+            "missing_should_connect",
+        )
+        for row in (result.get(group) or [])
+    }
+    missing = sorted(required_surface_ids - surface_ids)
+    if missing:
+        return ["missing required automation surfaces: " + ", ".join(missing)]
+    return []
+
+
+def _print_summary(result: dict[str, Any], contract_failures: list[str]) -> None:
+    print("[BUSINESS AUTOMATION INDEX] " + ("PASS" if result.get("ok") and not contract_failures else "FAIL"))
     print(f"  generated_at: {result.get('generated_at')}")
     for key in (
         "exists_and_connected",
@@ -87,7 +111,7 @@ def _print_summary(result: dict[str, Any]) -> None:
         if len(rows) > 8:
             print(f"    - ... {len(rows) - 8} more")
 
-    failures = result.get("failures") or []
+    failures = list(result.get("failures") or []) + contract_failures
     if failures:
         print("  failures:")
         for failure in failures:

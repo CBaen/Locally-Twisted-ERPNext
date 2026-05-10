@@ -8,6 +8,22 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-10 - Business approval clearance is not a public ecommerce launch switch
+
+**Decision:** The product-page architecture business approval blockers for source add-ons beyond `foil_number`, live-snapshot price candidates, and source media/gallery classification are cleared for commerce-lane testing. Public ecommerce remains controlled by the explicit `lt_ecommerce_paused` site config; after the open-commerce proof, the site was restored to paused.
+
+**Reasoning:** GL asked to unblock the business blocks and then pause. The architecture audit needed to stop treating already-escalated source review packets as unresolved business blockers, while still keeping public go-live/open checkout as a separate, explicit switch. Otherwise future agents will either keep blocking on stale review packets or confuse a passing architecture gate with permission to leave customer checkout open.
+
+**Implementation:** `product_page_architecture_readiness.py` now reports the add-on, price, and media business rows as passing with GL's 2026-05-10 clearance. The readiness report still separates `technical_architecture_ok` from `import_reopen_ok` and keeps `public_ecommerce_reopen` tied to the live pause config.
+
+**Verification receipt:** With ecommerce temporarily open, `python scripts/verify/product_page_architecture_readiness.py` passed with `technical_architecture_ok: True`, `import_reopen_ok: True`, 14 pass rows, 0 blocked rows, and 1 finance deferral. Commerce was then paused again with `lt_ecommerce_paused=1`, website cache was cleared, `bench --site frontend execute locally_twisted.ecommerce_pause.is_ecommerce_paused` returned true, and `python scripts/verify/ecommerce_pause_contract.py` passed.
+
+**Alternatives considered:** Leave the review packets as blockers until every future import/media/add-on implementation detail is done. Rejected because GL explicitly cleared the business blocks for testing. Leave ecommerce open after the pass. Rejected because GL explicitly said to pause, and public launch scope is still no-purchase.
+
+**Decided by:** GL instruction on 2026-05-10; implemented by Codex.
+
+---
+
 ## 2026-05-10 - Product quote approval is blocked until operator-ready and audit-addressable
 
 **Decision:** A product-page quote approval link or acceptance may only touch order data when the source Quotation is submitted, priced, not expired, and marked `Ready For Customer Review`. Sales Order acceptance audit/idempotency fields are required setup, not optional enrichment; if any are missing, the approval path fails before a draft Sales Order can be created.
@@ -168,6 +184,7 @@ because GL specified both labels should lead to the contact page.
 **Decided by:** GL request to upgrade form UX/UI and copy; implemented by Codex.
 
 ---
+
 ## 2026-05-09 - Cloudflare-routed aliases are not delivery-safe internal copies
 
 **Decision:** Keep `hi@locallytwisted.com` as the public business contact, but do not use `hi@locallytwisted.com` or `cameron@locallytwisted.com` as internal copy or QA-review delivery targets while ERPNext sends through `locallytwisted@gmail.com`. Current code-owned internal paperwork copy delivery uses `locallytwisted@gmail.com`; Cameron QA review sends must use a non-LT mailbox unless the SMTP sender changes.
@@ -181,6 +198,7 @@ because GL specified both labels should lead to the contact page.
 **Decided by:** Cloudflare/Gmail delivery evidence after GL reported the failed review-send emails on 2026-05-09; implemented by Codex.
 
 ---
+
 ## 2026-05-09 - Cameron review copies are one-time QA, not standing routing
 
 **Decision:** `cameron@locallytwisted.com` is not a standing future copy
@@ -212,6 +230,7 @@ inbox noise. Remove all copy routing. Rejected because the business copy to
 **Decided by:** GL correction on 2026-05-09; implemented by Codex.
 
 ---
+
 ## 2026-05-09 - Paperwork/documentation email copy routing is mandatory
 
 **Decision:** All code-owned client, customer, and company paperwork or
@@ -246,6 +265,7 @@ routing.
 **Decided by:** GL request on 2026-05-09; implemented by Codex.
 
 ---
+
 ## 2026-05-08 - Security blocker triage follows business context and payment boundaries
 
 **Decision:** Current fake/test LT data changes the urgency of disclosure

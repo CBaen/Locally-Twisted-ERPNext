@@ -1,5 +1,7 @@
 """Authority hub for quote-led Utah event balloon work."""
 
+from locally_twisted.seo import service_schema
+
 no_cache = 1
 sitemap = 1
 
@@ -18,4 +20,12 @@ def get_context(context):
         ),
         "og:type": "website",
     }
+    context.structured_data = [
+        service_schema(
+            "Utah event balloon decor",
+            context.metatags["description"],
+            "/event-balloons",
+            service_type="Balloon decor and event installation",
+        )
+    ]
     return context

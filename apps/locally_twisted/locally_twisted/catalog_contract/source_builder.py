@@ -11,6 +11,7 @@ from locally_twisted.catalog_contract.models import (
     ColorGroupContract,
     ColorOptionContract,
     GalleryImageContract,
+    OptionDependencyMatrixContract,
     ProductPageContract,
     RequiredOptionAxisContract,
 )
@@ -86,6 +87,52 @@ def _color_groups(values: tuple[str, ...]) -> tuple[ColorGroupContract, ...]:
             )
         )
     return tuple(groups)
+
+
+def _dependency_matrices(
+    variant_rows: list[dict[str, Any]],
+    required_axes: list[RequiredOptionAxisContract],
+) -> tuple[OptionDependencyMatrixContract, ...]:
+    axes = tuple(axis.name for axis in required_axes)
+    if not axes or not variant_rows:
+        return ()
+
+    seen: dict[tuple[tuple[str, str], ...], dict[str, str]] = {}
+    for row in variant_rows:
+        combo = row.get("combo") or {}
+        if not isinstance(combo, dict):
+            continue
+        values = {
+            axis: str(combo.get(axis) or "").strip()
+            for axis in axes
+            if str(combo.get(axis) or "").strip()
+        }
+        if set(values) != set(axes):
+            continue
+        key = tuple((axis, values[axis]) for axis in axes)
+        seen[key] = values
+
+    combinations = tuple(seen[key] for key in sorted(seen))
+    if not combinations:
+        return (
+            OptionDependencyMatrixContract(
+                axes=axes,
+                valid_combinations=(),
+                source_variant_rows=len(variant_rows),
+                valid_combination_count=0,
+                status="needs_review",
+                note="Source variant rows did not produce a complete required-option dependency matrix.",
+            ),
+        )
+    return (
+        OptionDependencyMatrixContract(
+            axes=axes,
+            valid_combinations=combinations,
+            source_variant_rows=len(variant_rows),
+            valid_combination_count=len(combinations),
+            note="Source valid_variants projected onto required product-page axes after customization/add-on axes are removed.",
+        ),
+    )
 
 
 def build_product_page_contract(product: dict[str, Any], *, category_hint: str = "") -> ProductPageContract:
@@ -171,6 +218,7 @@ def build_product_page_contract(product: dict[str, Any], *, category_hint: str =
         required_axes=tuple(required_axes),
         customization_axes=tuple(customization_axes),
         add_ons=tuple(add_ons),
+        dependency_matrices=_dependency_matrices(variant_rows, required_axes),
         source_variant_rows=len(variant_rows),
         has_resolver_prices=has_prices,
         warnings=tuple(warnings),

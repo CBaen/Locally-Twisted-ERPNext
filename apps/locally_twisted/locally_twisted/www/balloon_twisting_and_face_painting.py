@@ -6,6 +6,7 @@ explains the service and reuses the shared inquiry form with only the
 live-service choices exposed.
 """
 
+from locally_twisted.seo import service_schema
 from locally_twisted.www.book import (
     MAX_PHOTO_BYTES,
     MAX_PHOTOS,
@@ -52,19 +53,19 @@ PAGE_CSS = """.lt-btfp__intro {
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: var(--lt-hero-title-max);
     color: var(--lt-near-black);
-    margin: 0 0 0.55rem;
-    line-height: 1.04;
+    margin: 0 0 0.4rem;
+    line-height: 1;
     text-align: left;
-    max-width: 26rem;
+    max-width: 34rem;
 }
 .lt-btfp__intro-lede {
-    font-size: 0.96rem;
+    font-size: 0.92rem;
     color: var(--lt-soft-gray);
     margin: 0;
     font-weight: 300;
     text-align: left;
     max-width: 46rem;
-    line-height: 1.35;
+    line-height: 1.28;
 }
 @media (min-width: 992px) {
     .lt-btfp__intro {
@@ -703,6 +704,14 @@ def get_context(context):
         "og:description": "Live entertainment that keeps every guest smiling.",
         "og:type": "website",
     }
+    context.structured_data = [
+        service_schema(
+            "Balloon twisting and face painting",
+            context.metatags["description"],
+            "/balloon-twisting-and-face-painting",
+            service_type="Live event entertainment",
+        )
+    ]
     context.colocated_css = PAGE_CSS
     context.occasion_options = OCCASION_OPTIONS
     context.selected_occasion = ""

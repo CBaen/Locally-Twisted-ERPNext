@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-"""Verify variant-aware product media on the LT storefront.
+"""Verify product-template media contracts on the LT storefront.
 
-This checks the customer-facing bug GL named: selecting a product variant should
-move the product photo to the matching variant image when ERPNext has one.
+This checks the customer-facing bug GL named: selecting a ready-to-order
+variant should move the product photo to the matching variant image when
+ERPNext has one. Quote-first product templates are verified as quote-first
+surfaces instead of forcing their old direct-checkout selector contract.
 
 Run:
   python scripts/verify/variant_media_contract.py
@@ -27,9 +29,12 @@ CONTAINER = "locally-twisted-erpnext-v15-backend-1"
 SITE = "frontend"
 BASE = "http://localhost:8081"
 
-TEMPLATE_ITEM = "classic-arch"
-VARIANT_ITEM = "classic-arch-20F-BLA-LAY-NOL"
-PRODUCT_URL = f"{BASE}/shop-items/arches/classic-arch"
+QUOTE_FIRST_TEMPLATE_ITEM = "classic-arch"
+QUOTE_FIRST_VARIANT_ITEM = "classic-arch-20F-BLA-LAY-NOL"
+QUOTE_FIRST_PRODUCT_URL = f"{BASE}/shop-items/arches/classic-arch"
+READY_TEMPLATE_ITEM = "unicorn-bouquet"
+READY_VARIANT_ITEM = "unicorn-bouquet-MED"
+READY_PRODUCT_URL = f"{BASE}/shop-items/bouquets/unicorn-bouquet"
 DESK_USER = os.environ.get("LT_DESK_TEST_USER") or "Administrator"
 DESK_PASSWORD = os.environ.get("LT_DESK_TEST_PASSWORD") or "admin"
 
@@ -72,54 +77,70 @@ def bench_execute(method: str, *, kwargs: dict[str, Any] | None = None) -> Any:
         raise VariantMediaFail(f"{method} returned non-JSON output: {text}") from exc
 
 
-def check_variant_media_api() -> dict[str, Any]:
+def check_quote_first_variant_media_api() -> dict[str, Any]:
     media = bench_execute(
         "locally_twisted.api.variant_media.get_variant_media",
-        kwargs={"item_code": VARIANT_ITEM, "template_item_code": TEMPLATE_ITEM},
+        kwargs={"item_code": QUOTE_FIRST_VARIANT_ITEM, "template_item_code": QUOTE_FIRST_TEMPLATE_ITEM},
     )
 
-    assert_true(media.get("item_code") == VARIANT_ITEM, "variant media API returned the wrong item_code")
+    assert_true(media.get("item_code") == QUOTE_FIRST_VARIANT_ITEM, "variant media API returned the wrong item_code")
     assert_true(
         media.get("fallback_image") == "/files/classic-arch.png",
         f"fallback image should stay on the template, got {media.get('fallback_image')!r}",
     )
     assert_true(
         media.get("image") and media["image"].startswith("/files/classic-arch--extra-"),
-        f"{VARIANT_ITEM} should have a mapped extra image, got {media.get('image')!r}",
+        f"{QUOTE_FIRST_VARIANT_ITEM} should have a mapped extra image, got {media.get('image')!r}",
     )
     assert_true(media.get("has_variant_image") is True, "variant should be marked as having its own image")
     return media
 
 
-def choose_classic_arch_variant(page) -> None:
-    page.locator(".lt-product__attr[data-attribute-name='Arch Size'] .lt-product__chip", has_text="20ft").click()
-    page.locator("select.js-lt-attr-input[data-attribute-name='latex colors']").select_option(label="black")
-    page.locator(".lt-product__attr[data-attribute-name='Design'] .lt-product__chip", has_text="Layered").click()
-    page.locator(".lt-product__attr[data-attribute-name='LED Lights'] .lt-product__chip", has_text="No Lights").click()
+def check_ready_variant_media_api() -> dict[str, Any]:
+    media = bench_execute(
+        "locally_twisted.api.variant_media.get_variant_media",
+        kwargs={"item_code": READY_VARIANT_ITEM, "template_item_code": READY_TEMPLATE_ITEM},
+    )
+
+    assert_true(media.get("item_code") == READY_VARIANT_ITEM, "ready variant media API returned the wrong item_code")
+    assert_true(
+        media.get("fallback_image") == "/files/unicorn-bouquet.png",
+        f"ready fallback image should stay on the template, got {media.get('fallback_image')!r}",
+    )
+    assert_true(
+        media.get("image") == "/files/unicorn-bouquet-medium.webp",
+        f"{READY_VARIANT_ITEM} should have the medium bouquet image, got {media.get('image')!r}",
+    )
+    assert_true(media.get("has_variant_image") is True, "ready variant should be marked as having its own image")
+    return media
 
 
-def check_product_page_swaps_image(media: dict[str, Any]) -> None:
+def choose_ready_variant(page) -> None:
+    page.locator(".lt-product__attr[data-attribute-name='Bouquet Size'] .lt-product__chip", has_text="Medium").click()
+
+
+def check_ready_product_page_swaps_image(media: dict[str, Any]) -> None:
     expected_image = media["image"]
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         ctx = browser.new_context(viewport={"width": 1280, "height": 800})
         page = ctx.new_page()
-        _assert_guest_product_route_is_paused(page)
-        _login_as_operator(page)
-        page.goto(PRODUCT_URL, wait_until="networkidle", timeout=15000)
+        if _guest_product_route_is_paused(page, READY_PRODUCT_URL):
+            _login_as_operator(page)
+            page.goto(READY_PRODUCT_URL, wait_until="networkidle", timeout=15000)
 
         image = page.locator(".product-image img.website-image").first
         assert_true(image.count() == 1, "product page main image was not found")
         initial_src = image.get_attribute("src") or ""
-        assert_true("classic-arch.png" in initial_src, f"initial product image was unexpected: {initial_src!r}")
+        assert_true("unicorn-bouquet.png" in initial_src, f"initial ready product image was unexpected: {initial_src!r}")
 
-        choose_classic_arch_variant(page)
+        choose_ready_variant(page)
         page.wait_for_function(
             """(variantCode) => {
                 const btn = document.querySelector('#lt-add-to-cart-variant');
                 return btn && btn.getAttribute('data-item-code') === variantCode && !btn.disabled;
             }""",
-            arg=VARIANT_ITEM,
+            arg=READY_VARIANT_ITEM,
             timeout=15000,
         )
         page.wait_for_function(
@@ -136,13 +157,48 @@ def check_product_page_swaps_image(media: dict[str, Any]) -> None:
         browser.close()
 
 
-def _assert_guest_product_route_is_paused(page) -> None:
-    response = page.goto(PRODUCT_URL, wait_until="domcontentloaded", timeout=15000)
+def check_quote_first_product_surface() -> None:
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        ctx = browser.new_context(viewport={"width": 1280, "height": 800})
+        page = ctx.new_page()
+        if _guest_product_route_is_paused(page, QUOTE_FIRST_PRODUCT_URL):
+            _login_as_operator(page)
+            page.goto(QUOTE_FIRST_PRODUCT_URL, wait_until="networkidle", timeout=15000)
+
+        assert_true(
+            page.locator(".lt-product__cart--quote-first").count() == 1,
+            "Classic Arch should render the quote-first product-template surface",
+        )
+        assert_true(
+            page.locator(".lt-product__configure").count() == 0,
+            "Classic Arch quote-first page should not expose direct-checkout variant controls",
+        )
+        assert_true(
+            page.locator(".lt-product__quote-attr .js-lt-quote-option").count() > 0,
+            "Classic Arch quote-first page should expose quote option controls",
+        )
+        image = page.locator(".product-image img.website-image").first
+        assert_true(image.count() == 1, "quote-first product page main image was not found")
+        initial_src = image.get_attribute("src") or ""
+        assert_true("classic-arch.png" in initial_src, f"initial quote-first product image was unexpected: {initial_src!r}")
+        browser.close()
+
+
+def _guest_product_route_is_paused(page, product_url: str) -> bool:
+    response = page.goto(product_url, wait_until="domcontentloaded", timeout=15000)
     assert_true(response is not None, "guest product page did not return a response")
+    if "/ready-to-order-paused" in page.url:
+        return True
     assert_true(
-        "/ready-to-order-paused" in page.url,
-        f"guest product page should be paused while ecommerce is hidden, found {page.url!r}",
+        page.url.rstrip("/") == product_url.rstrip("/"),
+        f"guest product page should be open or paused, found {page.url!r}",
     )
+    assert_true(
+        page.locator(".lt-ecommerce-paused").count() == 0,
+        "open guest product page should not render the pause page shell",
+    )
+    return False
 
 
 def _login_as_operator(page) -> None:
@@ -169,20 +225,34 @@ def main() -> int:
     parse_noop_args(__doc__)
     failures = []
     try:
-        media = check_variant_media_api()
-        print(f"[PASS] variant media API returns {media['image']} for {VARIANT_ITEM}")
+        quote_first_media = check_quote_first_variant_media_api()
+        print(f"[PASS] quote-first variant media API returns {quote_first_media['image']} for {QUOTE_FIRST_VARIANT_ITEM}")
     except VariantMediaFail as exc:
         failures.append(str(exc))
-        print(f"[FAIL] variant media API: {exc}")
-        media = None
+        print(f"[FAIL] quote-first variant media API: {exc}")
 
-    if media:
+    try:
+        check_quote_first_product_surface()
+        print("[PASS] Classic Arch renders quote-first controls instead of stale direct-checkout variant controls")
+    except VariantMediaFail as exc:
+        failures.append(str(exc))
+        print(f"[FAIL] quote-first product surface: {exc}")
+
+    try:
+        ready_media = check_ready_variant_media_api()
+        print(f"[PASS] ready-to-order variant media API returns {ready_media['image']} for {READY_VARIANT_ITEM}")
+    except VariantMediaFail as exc:
+        failures.append(str(exc))
+        print(f"[FAIL] ready-to-order variant media API: {exc}")
+        ready_media = None
+
+    if ready_media:
         try:
-            check_product_page_swaps_image(media)
-            print(f"[PASS] product page swaps to {media['image']} after option selection")
+            check_ready_product_page_swaps_image(ready_media)
+            print(f"[PASS] ready-to-order product page swaps to {ready_media['image']} after option selection")
         except VariantMediaFail as exc:
             failures.append(str(exc))
-            print(f"[FAIL] product page image swap: {exc}")
+            print(f"[FAIL] ready-to-order product page image swap: {exc}")
 
     if failures:
         print("\n[VARIANT MEDIA CONTRACT] FAIL")

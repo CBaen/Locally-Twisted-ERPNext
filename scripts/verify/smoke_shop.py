@@ -5,13 +5,13 @@ and retail variant selectors via a real Chromium browser. This should pass on
 every deploy and fail loudly on customer-facing regressions.
 
 Coverage:
-  1. Homepage navbar exposes the current primary links and /shop CTA.
+  1. Homepage navbar exposes the current open-commerce links and /shop CTA.
   2. /shop renders the ready-to-order category rail/dropdown + 53 product cards.
   3. /shop and category pages use the approved product-showroom card contract.
   4. /shop-by-category redirects to /shop instead of rendering the retired
      category-card index.
   5. Each child group's category page returns 200.
-  6. Product detail pages do not invent product-level quote gates.
+  6. Quote-first product detail pages keep the contact handoff instead of checkout controls.
   7. Retail product detail (variant template) renders inline chips/select for
      every attribute, chips are radio/single-select, and partial selections can
      disable invalid later options.
@@ -62,7 +62,7 @@ EXPECTED_CATEGORIES = [
     "Deliveries",
     "Seasonal & Specialty",
 ]
-FIXED_PRICE_PRODUCT_URLS = [
+QUOTE_FIRST_PRODUCT_URLS = [
     (f"{BASE}/shop-items/garlands/baby-shower-garland", "Baby Shower Garland", "baby-shower-garland"),
     (f"{BASE}/shop-items/arches/classic-arch", "Classic Arch", "classic-arch"),
 ]
@@ -189,8 +189,8 @@ def check_variant_template_contract():
         "item_configure.html should use LT's Webshop-backed prepared attribute/value helper",
     )
     assert_(
-        'type="checkbox"' not in text,
-        "variant option chips must not render as checkboxes; variant attributes are single-select",
+        'type="radio"' in text and 'class="lt-product__chip-input js-lt-attr-input"' in text,
+        "variant option chips must render as radio/single-select controls",
     )
     print("  OK no per-attribute Jinja DB lookup; chips stay radio/single-select")
 
@@ -229,7 +229,7 @@ def check_homepage(page):
 
     for label, href in (
         ("Portfolio", "/portfolio"),
-        ("Twisting & Face Painting", "/balloon-twisting-and-face-painting"),
+        ("About Us", "/about"),
         ("FAQ", "/faq"),
     ):
         link = page.locator(".lt-mega-nav__link", has_text=label)
@@ -272,22 +272,22 @@ def check_homepage(page):
         "Product mega menu should link to /shop-items/arches",
     )
 
-    quote_cta = page.locator(".lt-mega-header__cta", has_text="Free Event Quote")
-    assert_(quote_cta.count() == 1, "Desktop header missing Free Event Quote CTA")
-    assert_(quote_cta.first.get_attribute("href") == "/contact", "Free Event Quote CTA must link to /contact")
+    quote_cta = page.locator(".lt-mega-header__cta", has_text="Contact Us")
+    assert_(quote_cta.count() == 1, "Desktop header missing Contact Us CTA")
+    assert_(quote_cta.first.get_attribute("href") == "/contact", "Contact Us CTA must link to /contact")
     footer_all_decor = page.locator("footer .lt-footer__col-link", has_text="All Ready-to-Order")
     assert_(footer_all_decor.count() == 1, "Footer missing All Ready-to-Order link")
     assert_(footer_all_decor.first.get_attribute("href") == "/shop", "Footer All Ready-to-Order link must use /shop")
-    print("  OK mega triggers, key links, /contact quote CTA, and footer /shop link")
+    print("  OK mega triggers, key links, /contact CTA, and footer /shop link")
 
 
 def check_event_type_pages(page):
     print("-> Event type pages")
     expectations = {
-        "/civic-community": ("Civic and community balloon decor", ["Ogden City", "SLC County", "Equality Utah"]),
-        "/corporate-events": ("Corporate event balloons", ["Ancestry", "Zions Bank", "KSL"]),
-        "/schools-campuses": ("School and campus balloon decor", ["University of Utah", "Weber State", "St. Joseph's"]),
-        "/private-celebrations": ("Private celebration balloons", ["Alpine Events", "Ogden Country Club", "Tree House Museum"]),
+        "/civic-community": ("Balloon decor for Utah public events.", ["Ogden City", "SLC County", "Equality Utah"]),
+        "/corporate-events": ("On-brand balloon decor for Utah company events.", ["Ancestry", "Zions Bank", "KSL"]),
+        "/schools-campuses": ("School-color balloon decor for campus moments.", ["University of Utah", "Weber State", "St. Joseph's"]),
+        "/private-celebrations": ("Polished balloons for personal celebrations.", ["Alpine Events", "Ogden Country Club", "Tree House Museum"]),
     }
     for route, (title_text, proof_names) in expectations.items():
         page.goto(f"{BASE}{route}", wait_until="networkidle", timeout=15000)
@@ -526,12 +526,18 @@ def check_variant_template_starting_price_display(page):
     )
 
     page.goto(VARIANT_STARTING_PRICE_URL, wait_until="networkidle", timeout=15000)
-    detail_price = page.locator("#lt-product-price-text").inner_text().strip()
-    assert_(
-        detail_price.lower().startswith("from $"),
-        f"Variant detail page should show a starting price before option selection, got {detail_price!r}",
-    )
-    print("  OK variant templates expose a starting price before options are chosen")
+    if page.locator("#lt-product-price-text").count():
+        detail_price = page.locator("#lt-product-price-text").inner_text().strip()
+        assert_(
+            detail_price.lower().startswith("from $"),
+            f"Variant detail page should show a starting price before option selection, got {detail_price!r}",
+        )
+    else:
+        assert_(
+            page.locator(".lt-product__cart--quote-first").count() == 1,
+            "Variant detail page without direct price should render the quote-first handoff",
+        )
+    print("  OK variant templates expose listing prices and route detail pages to the correct lane")
 
 
 def check_product_detail_no_auxiliary_ecommerce_panels(page):
@@ -677,9 +683,9 @@ def check_category_pages(page):
         print(f"  OK /{cat_name}")
 
 
-def check_fixed_price_product_pages_do_not_show_product_quote_gate(page):
-    print("-> Fixed-price product pages avoid product-level quote gate")
-    for url, expected_title, item_code in FIXED_PRICE_PRODUCT_URLS:
+def check_quote_first_product_pages_keep_quote_gate(page):
+    print("-> Quote-first product pages keep the customer-safe quote gate")
+    for url, expected_title, item_code in QUOTE_FIRST_PRODUCT_URLS:
         page.goto(url, wait_until="networkidle", timeout=15000)
         title = page.locator(".lt-product__title").inner_text()
         assert_(expected_title in title, f"Product title wrong for {url}: {title!r}")
@@ -690,20 +696,22 @@ def check_fixed_price_product_pages_do_not_show_product_quote_gate(page):
         assert_("Shop by Category" not in body, f"{url} breadcrumb still shows retired 'Shop by Category' label")
         assert_("/shop-by-category" not in body, f"{url} breadcrumb still links to retired /shop-by-category route")
         assert_(
-            page.locator(".lt-product__cta--primary", has_text="Request a Quote").count() == 0,
-            f"{url} should not say the product itself requires a quote",
+            page.locator(".lt-product__cart--quote-first").count() == 1,
+            f"{url} should render the quote-first product cart",
         )
-        if page.locator(".lt-product__configure").count():
-            assert_(
-                page.locator("#lt-add-to-cart-variant").count() == 1,
-                f"{url} should expose add-to-cart after option selection",
-            )
-        else:
-            assert_(
-                page.locator(".btn-add-to-cart").count() >= 1,
-                f"{url} should expose add-to-cart when it is a fixed-price single SKU",
-            )
-    print("  OK fixed-price products stay checkoutable; delivery ZIP owns quote fallback")
+        assert_(
+            page.locator(".lt-product__configure").count() == 0,
+            f"{url} should not render direct-checkout variant controls",
+        )
+        assert_(
+            page.locator(".js-lt-product-quote-request").count() == 1,
+            f"{url} should expose the product quote request handoff",
+        )
+        assert_(
+            page.locator(".btn-add-to-cart, #lt-add-to-cart-variant").count() == 0,
+            f"{url} should not expose add-to-cart controls",
+        )
+    print("  OK quote-first products keep product details, options, and contact handoff")
 
 
 def check_product_variant_page(page):
@@ -863,7 +871,6 @@ def check_mobile_drawer(p):
 
     expected_links = {
         "Event Balloons": "/event-balloons",
-        "Twisting & Face Painting": "/balloon-twisting-and-face-painting",
         "Shop All": "/shop",
         "Portfolio": "/portfolio",
         "FAQ": "/faq",
@@ -936,7 +943,7 @@ def main(argv: list[str] | None = None) -> int:
             check_category_nav_rail_contract,
             check_category_product_grid_symmetry_contract,
             check_variant_template_starting_price_display,
-            check_fixed_price_product_pages_do_not_show_product_quote_gate,
+            check_quote_first_product_pages_keep_quote_gate,
             check_product_variant_page,
             check_product_detail_showroom_contract,
             check_product_detail_no_auxiliary_ecommerce_panels,

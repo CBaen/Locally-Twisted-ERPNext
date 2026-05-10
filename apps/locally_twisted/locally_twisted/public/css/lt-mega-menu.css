@@ -665,6 +665,11 @@
         display: none;
     }
 
+    .lt-mega-header .lt-mega-header__cta,
+    .lt-mega-nav__link--quote {
+        display: none;
+    }
+
     .lt-mega-header__cta {
         padding-inline: 14px;
     }
@@ -705,6 +710,12 @@
 
     .lt-mega-nav__link--btfp {
         max-width: 9.75rem;
+    }
+}
+
+@media (min-width: 1280px) and (max-width: 1499.98px) {
+    .lt-mega-header .lt-mega-header__cta {
+        display: none;
     }
 }
 

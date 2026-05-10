@@ -27,6 +27,9 @@ app_license = "mit"
 # include js, css files in header of desk.html
 # app_include_css = "/assets/locally_twisted/css/locally_twisted.css"
 app_include_js = "/assets/locally_twisted/js/lt-desk-workspace-router.js?v=20260506-3"
+doctype_js = {
+    "Quotation": "public/js/lt-product-quote-quotation.js",
+}
 
 # include js, css files in header of web template
 # Brand foundation theme â€” sourced at apps/locally_twisted/locally_twisted/public/css/lt-theme.css
@@ -43,12 +46,12 @@ app_include_js = "/assets/locally_twisted/js/lt-desk-workspace-router.js?v=20260
 # because the cached rules didn't have `position: fixed`.
 web_include_css = [
     "/assets/locally_twisted/css/lt-theme.css?v=20260508-shell-gap-2",
-    "/assets/locally_twisted/css/lt-mega-menu.css?v=20260508-event-menu-1",
+    "/assets/locally_twisted/css/lt-mega-menu.css?v=20260510-about-nav-1",
     "/assets/locally_twisted/css/lt-product-polish.css?v=20260510-product-runtime-1",
     "/assets/locally_twisted/css/lt-shop-showroom.css?v=20260508-card-click-1",
     "/assets/locally_twisted/css/lt-product-page-visual-first.css?v=20260510-add-on-selector-1",
     "/assets/locally_twisted/css/lt-page-containment.css?v=20260508-featured-2",
-    "/assets/locally_twisted/css/lt-photo-heroes.css?v=20260510-event-audience-1",
+    "/assets/locally_twisted/css/lt-photo-heroes.css?v=20260510-about-1",
     "/assets/locally_twisted/css/lt-form-experience.css?v=20260510-1",
     "/assets/locally_twisted/css/lt-event-playground.css?v=20260506-event-playground-1",
 ]
@@ -75,6 +78,8 @@ web_include_js = [
 # explicitly. Python module names (used for the @whitelist API path)
 # stay underscored.
 website_route_rules = [
+    {"from_route": "/about-us",
+     "to_route": "about"},
     {"from_route": "/event-balloons",
      "to_route": "event_balloons"},
     {"from_route": "/civic-community",
@@ -97,6 +102,8 @@ website_route_rules = [
      "to_route": "thank_you"},
     {"from_route": "/ready-to-order-paused",
      "to_route": "ready_to_order_paused"},
+    {"from_route": "/quote-accept",
+     "to_route": "quote_accept"},
     # Override Frappe payments' /payment-success â€” see www/payment_success.py
     # for why (upstream URL malformation + guest 403 on Payment Request read).
     {"from_route": "/payment-success",
@@ -214,6 +221,15 @@ fixtures = [
             "Quotation-custom_lt_product_quote_summary",
             "Quotation-custom_lt_product_quote_payload",
             "Quotation-custom_lt_product_quote_status",
+            "Quotation-custom_lt_quote_acceptance_token_hash",
+            "Quotation-custom_lt_quote_acceptance_token_issued_on",
+            "Quotation-custom_lt_quote_acceptance_token_expires_on",
+            "Sales Order-custom_lt_source_quotation",
+            "Sales Order-custom_lt_quote_acceptance_by",
+            "Sales Order-custom_lt_quote_acceptance_email",
+            "Sales Order-custom_lt_quote_acceptance_on",
+            "Sales Order-custom_lt_quote_acceptance_reference",
+            "Sales Order-custom_lt_quote_acceptance_payload",
             "Quotation Item-custom_lt_product_template_item",
             "Quotation Item-custom_lt_product_page_type",
             "Quotation Item-custom_lt_configuration_version",

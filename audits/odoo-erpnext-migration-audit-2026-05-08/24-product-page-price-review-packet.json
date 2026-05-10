@@ -1,0 +1,4828 @@
+{
+  "approved_for_public_price_count": 0,
+  "candidate_sale_units": 290,
+  "expected_sale_units": 290,
+  "products": [
+    {
+      "commerce_lane": "quote_first",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Classic Organic Balloon Garland",
+      "product_page_type": "complex_custom_product",
+      "required_axes": [
+        "Garland Length"
+      ],
+      "review_unit_count": 3,
+      "review_units": [
+        {
+          "chosen_price": "150.00",
+          "distinct_live_prices": [
+            "150.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Garland Length": "6ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Garland Length=6ft",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "150.00",
+          "distinct_live_prices": [
+            "150.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Garland Length": "9ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Garland Length=9ft",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "150.00",
+          "distinct_live_prices": [
+            "150.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Garland Length": "12ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Garland Length=12ft",
+          "source_row_count": 53
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "classic-organic-balloon-garland"
+    },
+    {
+      "commerce_lane": "quote_first",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Basketball Arch",
+      "product_page_type": "complex_custom_product",
+      "required_axes": [
+        "Arch Size"
+      ],
+      "review_unit_count": 2,
+      "review_units": [
+        {
+          "chosen_price": "340.00",
+          "distinct_live_prices": [
+            "340.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "20ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=20ft",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "340.00",
+          "distinct_live_prices": [
+            "340.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "25ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=25ft",
+          "source_row_count": 1
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "basketball-arch"
+    },
+    {
+      "commerce_lane": "quote_first",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Easter Balloon Arch - Bunny Ear",
+      "product_page_type": "complex_custom_product",
+      "required_axes": [
+        "Arch Size"
+      ],
+      "review_unit_count": 2,
+      "review_units": [
+        {
+          "chosen_price": "375.00",
+          "distinct_live_prices": [
+            "375.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "20ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=20ft",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "375.00",
+          "distinct_live_prices": [
+            "375.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "25ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=25ft",
+          "source_row_count": 1
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "easter-balloon-arch-bunny-ear"
+    },
+    {
+      "commerce_lane": "quote_first",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Halloween arch",
+      "product_page_type": "complex_custom_product",
+      "required_axes": [
+        "Arch Size"
+      ],
+      "review_unit_count": 4,
+      "review_units": [
+        {
+          "chosen_price": "300.00",
+          "distinct_live_prices": [
+            "300.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "20ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=20ft",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "300.00",
+          "distinct_live_prices": [
+            "300.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "25ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=25ft",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "300.00",
+          "distinct_live_prices": [
+            "300.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "30ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=30ft",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "300.00",
+          "distinct_live_prices": [
+            "300.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "35ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=35ft",
+          "source_row_count": 53
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "halloween-arch"
+    },
+    {
+      "commerce_lane": "quote_first",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Large head Missionary",
+      "product_page_type": "complex_custom_product",
+      "required_axes": [
+        "Missionary",
+        "skin color",
+        "Hair color"
+      ],
+      "review_unit_count": 30,
+      "review_units": [
+        {
+          "chosen_price": "175.00",
+          "distinct_live_prices": [
+            "175.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Hair color": "Black",
+            "Missionary": "Elder",
+            "skin color": "Blush"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Hair color=Black|Missionary=Elder|skin color=Blush",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "175.00",
+          "distinct_live_prices": [
+            "175.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Hair color": "Black",
+            "Missionary": "Elder",
+            "skin color": "Latte"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Hair color=Black|Missionary=Elder|skin color=Latte",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "175.00",
+          "distinct_live_prices": [
+            "175.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Hair color": "Black",
+            "Missionary": "Elder",
+            "skin color": "Brown"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Hair color=Black|Missionary=Elder|skin color=Brown",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "175.00",
+          "distinct_live_prices": [
+            "175.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Hair color": "Black",
+            "Missionary": "Sister",
+            "skin color": "Blush"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Hair color=Black|Missionary=Sister|skin color=Blush",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "175.00",
+          "distinct_live_prices": [
+            "175.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Hair color": "Black",
+            "Missionary": "Sister",
+            "skin color": "Latte"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Hair color=Black|Missionary=Sister|skin color=Latte",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "175.00",
+          "distinct_live_prices": [
+            "175.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Hair color": "Black",
+            "Missionary": "Sister",
+            "skin color": "Brown"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Hair color=Black|Missionary=Sister|skin color=Brown",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "175.00",
+          "distinct_live_prices": [
+            "175.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Hair color": "Brown",
+            "Missionary": "Elder",
+            "skin color": "Blush"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Hair color=Brown|Missionary=Elder|skin color=Blush",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "175.00",
+          "distinct_live_prices": [
+            "175.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Hair color": "Brown",
+            "Missionary": "Elder",
+            "skin color": "Latte"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Hair color=Brown|Missionary=Elder|skin color=Latte",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "175.00",
+          "distinct_live_prices": [
+            "175.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Hair color": "Brown",
+            "Missionary": "Elder",
+            "skin color": "Brown"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Hair color=Brown|Missionary=Elder|skin color=Brown",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "175.00",
+          "distinct_live_prices": [
+            "175.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Hair color": "Brown",
+            "Missionary": "Sister",
+            "skin color": "Blush"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Hair color=Brown|Missionary=Sister|skin color=Blush",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "175.00",
+          "distinct_live_prices": [
+            "175.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Hair color": "Brown",
+            "Missionary": "Sister",
+            "skin color": "Latte"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Hair color=Brown|Missionary=Sister|skin color=Latte",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "175.00",
+          "distinct_live_prices": [
+            "175.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Hair color": "Brown",
+            "Missionary": "Sister",
+            "skin color": "Brown"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Hair color=Brown|Missionary=Sister|skin color=Brown",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "175.00",
+          "distinct_live_prices": [
+            "175.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Hair color": "yellow",
+            "Missionary": "Elder",
+            "skin color": "Blush"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Hair color=yellow|Missionary=Elder|skin color=Blush",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "175.00",
+          "distinct_live_prices": [
+            "175.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Hair color": "yellow",
+            "Missionary": "Elder",
+            "skin color": "Latte"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Hair color=yellow|Missionary=Elder|skin color=Latte",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "175.00",
+          "distinct_live_prices": [
+            "175.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Hair color": "yellow",
+            "Missionary": "Elder",
+            "skin color": "Brown"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Hair color=yellow|Missionary=Elder|skin color=Brown",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "175.00",
+          "distinct_live_prices": [
+            "175.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Hair color": "yellow",
+            "Missionary": "Sister",
+            "skin color": "Blush"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Hair color=yellow|Missionary=Sister|skin color=Blush",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "175.00",
+          "distinct_live_prices": [
+            "175.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Hair color": "yellow",
+            "Missionary": "Sister",
+            "skin color": "Latte"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Hair color=yellow|Missionary=Sister|skin color=Latte",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "175.00",
+          "distinct_live_prices": [
+            "175.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Hair color": "yellow",
+            "Missionary": "Sister",
+            "skin color": "Brown"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Hair color=yellow|Missionary=Sister|skin color=Brown",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "175.00",
+          "distinct_live_prices": [
+            "175.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Hair color": "Orange",
+            "Missionary": "Elder",
+            "skin color": "Blush"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Hair color=Orange|Missionary=Elder|skin color=Blush",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "175.00",
+          "distinct_live_prices": [
+            "175.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Hair color": "Orange",
+            "Missionary": "Elder",
+            "skin color": "Latte"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Hair color=Orange|Missionary=Elder|skin color=Latte",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "175.00",
+          "distinct_live_prices": [
+            "175.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Hair color": "Orange",
+            "Missionary": "Elder",
+            "skin color": "Brown"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Hair color=Orange|Missionary=Elder|skin color=Brown",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "175.00",
+          "distinct_live_prices": [
+            "175.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Hair color": "Orange",
+            "Missionary": "Sister",
+            "skin color": "Blush"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Hair color=Orange|Missionary=Sister|skin color=Blush",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "175.00",
+          "distinct_live_prices": [
+            "175.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Hair color": "Orange",
+            "Missionary": "Sister",
+            "skin color": "Latte"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Hair color=Orange|Missionary=Sister|skin color=Latte",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "175.00",
+          "distinct_live_prices": [
+            "175.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Hair color": "Orange",
+            "Missionary": "Sister",
+            "skin color": "Brown"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Hair color=Orange|Missionary=Sister|skin color=Brown",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "175.00",
+          "distinct_live_prices": [
+            "175.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Hair color": "Dark Brown",
+            "Missionary": "Elder",
+            "skin color": "Blush"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Hair color=Dark Brown|Missionary=Elder|skin color=Blush",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "175.00",
+          "distinct_live_prices": [
+            "175.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Hair color": "Dark Brown",
+            "Missionary": "Elder",
+            "skin color": "Latte"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Hair color=Dark Brown|Missionary=Elder|skin color=Latte",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "175.00",
+          "distinct_live_prices": [
+            "175.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Hair color": "Dark Brown",
+            "Missionary": "Elder",
+            "skin color": "Brown"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Hair color=Dark Brown|Missionary=Elder|skin color=Brown",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "175.00",
+          "distinct_live_prices": [
+            "175.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Hair color": "Dark Brown",
+            "Missionary": "Sister",
+            "skin color": "Blush"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Hair color=Dark Brown|Missionary=Sister|skin color=Blush",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "175.00",
+          "distinct_live_prices": [
+            "175.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Hair color": "Dark Brown",
+            "Missionary": "Sister",
+            "skin color": "Latte"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Hair color=Dark Brown|Missionary=Sister|skin color=Latte",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "175.00",
+          "distinct_live_prices": [
+            "175.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Hair color": "Dark Brown",
+            "Missionary": "Sister",
+            "skin color": "Brown"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Hair color=Dark Brown|Missionary=Sister|skin color=Brown",
+          "source_row_count": 1
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "large-head-missionary"
+    },
+    {
+      "commerce_lane": "quote_first",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Premium Organic Garland",
+      "product_page_type": "complex_custom_product",
+      "required_axes": [
+        "Garland Length"
+      ],
+      "review_unit_count": 3,
+      "review_units": [
+        {
+          "chosen_price": "216.00",
+          "distinct_live_prices": [
+            "216.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Garland Length": "6ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Garland Length=6ft",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "216.00",
+          "distinct_live_prices": [
+            "216.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Garland Length": "9ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Garland Length=9ft",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "216.00",
+          "distinct_live_prices": [
+            "216.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Garland Length": "12ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Garland Length=12ft",
+          "source_row_count": 53
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "premium-organic-garland"
+    },
+    {
+      "commerce_lane": "quote_first",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Premium Organic Arch",
+      "product_page_type": "complex_custom_product",
+      "required_axes": [
+        "Arch Size"
+      ],
+      "review_unit_count": 4,
+      "review_units": [
+        {
+          "chosen_price": "720.00",
+          "distinct_live_prices": [
+            "720.00"
+          ],
+          "live_active_match_count": 102,
+          "live_priced_match_count": 102,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "20ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=20ft",
+          "source_row_count": 106
+        },
+        {
+          "chosen_price": "720.00",
+          "distinct_live_prices": [
+            "720.00"
+          ],
+          "live_active_match_count": 102,
+          "live_priced_match_count": 102,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "25ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=25ft",
+          "source_row_count": 106
+        },
+        {
+          "chosen_price": "720.00",
+          "distinct_live_prices": [
+            "720.00"
+          ],
+          "live_active_match_count": 102,
+          "live_priced_match_count": 102,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "30ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=30ft",
+          "source_row_count": 106
+        },
+        {
+          "chosen_price": "720.00",
+          "distinct_live_prices": [
+            "720.00"
+          ],
+          "live_active_match_count": 102,
+          "live_priced_match_count": 102,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "35ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=35ft",
+          "source_row_count": 106
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "premium-organic-arch"
+    },
+    {
+      "commerce_lane": "quote_first",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Pemium Organic Column",
+      "product_page_type": "complex_custom_product",
+      "required_axes": [
+        "Column Height"
+      ],
+      "review_unit_count": 6,
+      "review_units": [
+        {
+          "chosen_price": "180.00",
+          "distinct_live_prices": [
+            "180.00"
+          ],
+          "live_active_match_count": 102,
+          "live_priced_match_count": 102,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "5ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=5ft",
+          "source_row_count": 106
+        },
+        {
+          "chosen_price": "180.00",
+          "distinct_live_prices": [
+            "180.00"
+          ],
+          "live_active_match_count": 102,
+          "live_priced_match_count": 102,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "6ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=6ft",
+          "source_row_count": 106
+        },
+        {
+          "chosen_price": "180.00",
+          "distinct_live_prices": [
+            "180.00"
+          ],
+          "live_active_match_count": 102,
+          "live_priced_match_count": 102,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "7ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=7ft",
+          "source_row_count": 106
+        },
+        {
+          "chosen_price": "180.00",
+          "distinct_live_prices": [
+            "180.00"
+          ],
+          "live_active_match_count": 102,
+          "live_priced_match_count": 102,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "8ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=8ft",
+          "source_row_count": 106
+        },
+        {
+          "chosen_price": "180.00",
+          "distinct_live_prices": [
+            "180.00"
+          ],
+          "live_active_match_count": 102,
+          "live_priced_match_count": 102,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "9ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=9ft",
+          "source_row_count": 106
+        },
+        {
+          "chosen_price": "180.00",
+          "distinct_live_prices": [
+            "180.00"
+          ],
+          "live_active_match_count": 102,
+          "live_priced_match_count": 102,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "10ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=10ft",
+          "source_row_count": 106
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "pemium-organic-column"
+    },
+    {
+      "commerce_lane": "quote_first",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Pride progress Rainbow Balloon Arch",
+      "product_page_type": "complex_custom_product",
+      "required_axes": [
+        "Arch Size"
+      ],
+      "review_unit_count": 4,
+      "review_units": [
+        {
+          "chosen_price": "260.00",
+          "distinct_live_prices": [
+            "260.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "20ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=20ft",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "260.00",
+          "distinct_live_prices": [
+            "260.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "25ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=25ft",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "260.00",
+          "distinct_live_prices": [
+            "260.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "30ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=30ft",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "260.00",
+          "distinct_live_prices": [
+            "260.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "35ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=35ft",
+          "source_row_count": 1
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "pride-progress-rainbow-balloon-arch"
+    },
+    {
+      "commerce_lane": "quote_first",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Classic Arch",
+      "product_page_type": "complex_custom_product",
+      "required_axes": [
+        "Arch Size",
+        "Design",
+        "LED Lights"
+      ],
+      "review_unit_count": 16,
+      "review_units": [
+        {
+          "chosen_price": "260.00",
+          "distinct_live_prices": [
+            "260.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "20ft",
+            "Design": "Swirl (up to 4 colors)",
+            "LED Lights": "No Lights"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=20ft|Design=Swirl (up to 4 colors)|LED Lights=No Lights",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "260.00",
+          "distinct_live_prices": [
+            "260.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "20ft",
+            "Design": "Swirl (up to 4 colors)",
+            "LED Lights": "Add LED Lights"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=20ft|Design=Swirl (up to 4 colors)|LED Lights=Add LED Lights",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "260.00",
+          "distinct_live_prices": [
+            "260.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "20ft",
+            "Design": "Layered (up to 8 colors)",
+            "LED Lights": "No Lights"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=20ft|Design=Layered (up to 8 colors)|LED Lights=No Lights",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "260.00",
+          "distinct_live_prices": [
+            "260.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "20ft",
+            "Design": "Layered (up to 8 colors)",
+            "LED Lights": "Add LED Lights"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=20ft|Design=Layered (up to 8 colors)|LED Lights=Add LED Lights",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "260.00",
+          "distinct_live_prices": [
+            "260.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "25ft",
+            "Design": "Swirl (up to 4 colors)",
+            "LED Lights": "No Lights"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=25ft|Design=Swirl (up to 4 colors)|LED Lights=No Lights",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "260.00",
+          "distinct_live_prices": [
+            "260.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "25ft",
+            "Design": "Swirl (up to 4 colors)",
+            "LED Lights": "Add LED Lights"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=25ft|Design=Swirl (up to 4 colors)|LED Lights=Add LED Lights",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "260.00",
+          "distinct_live_prices": [
+            "260.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "25ft",
+            "Design": "Layered (up to 8 colors)",
+            "LED Lights": "No Lights"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=25ft|Design=Layered (up to 8 colors)|LED Lights=No Lights",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "260.00",
+          "distinct_live_prices": [
+            "260.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "25ft",
+            "Design": "Layered (up to 8 colors)",
+            "LED Lights": "Add LED Lights"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=25ft|Design=Layered (up to 8 colors)|LED Lights=Add LED Lights",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "260.00",
+          "distinct_live_prices": [
+            "260.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "30ft",
+            "Design": "Swirl (up to 4 colors)",
+            "LED Lights": "No Lights"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=30ft|Design=Swirl (up to 4 colors)|LED Lights=No Lights",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "260.00",
+          "distinct_live_prices": [
+            "260.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "30ft",
+            "Design": "Swirl (up to 4 colors)",
+            "LED Lights": "Add LED Lights"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=30ft|Design=Swirl (up to 4 colors)|LED Lights=Add LED Lights",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "260.00",
+          "distinct_live_prices": [
+            "260.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "30ft",
+            "Design": "Layered (up to 8 colors)",
+            "LED Lights": "No Lights"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=30ft|Design=Layered (up to 8 colors)|LED Lights=No Lights",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "260.00",
+          "distinct_live_prices": [
+            "260.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "30ft",
+            "Design": "Layered (up to 8 colors)",
+            "LED Lights": "Add LED Lights"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=30ft|Design=Layered (up to 8 colors)|LED Lights=Add LED Lights",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "260.00",
+          "distinct_live_prices": [
+            "260.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "35ft",
+            "Design": "Swirl (up to 4 colors)",
+            "LED Lights": "No Lights"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=35ft|Design=Swirl (up to 4 colors)|LED Lights=No Lights",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "260.00",
+          "distinct_live_prices": [
+            "260.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "35ft",
+            "Design": "Swirl (up to 4 colors)",
+            "LED Lights": "Add LED Lights"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=35ft|Design=Swirl (up to 4 colors)|LED Lights=Add LED Lights",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "260.00",
+          "distinct_live_prices": [
+            "260.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "35ft",
+            "Design": "Layered (up to 8 colors)",
+            "LED Lights": "No Lights"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=35ft|Design=Layered (up to 8 colors)|LED Lights=No Lights",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "260.00",
+          "distinct_live_prices": [
+            "260.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "35ft",
+            "Design": "Layered (up to 8 colors)",
+            "LED Lights": "Add LED Lights"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=35ft|Design=Layered (up to 8 colors)|LED Lights=Add LED Lights",
+          "source_row_count": 53
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "classic-arch"
+    },
+    {
+      "commerce_lane": "quote_first",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Classic Column",
+      "product_page_type": "complex_custom_product",
+      "required_axes": [
+        "Column Height",
+        "topper"
+      ],
+      "review_unit_count": 36,
+      "review_units": [
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "5ft",
+            "topper": "large topper"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=5ft|topper=large topper",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "5ft",
+            "topper": "Burst"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=5ft|topper=Burst",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "5ft",
+            "topper": "foil star"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=5ft|topper=foil star",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "5ft",
+            "topper": "foil heart"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=5ft|topper=foil heart",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "5ft",
+            "topper": "bubble gum"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=5ft|topper=bubble gum",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "5ft",
+            "topper": "Logo"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=5ft|topper=Logo",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "6ft",
+            "topper": "large topper"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=6ft|topper=large topper",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "6ft",
+            "topper": "Burst"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=6ft|topper=Burst",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "6ft",
+            "topper": "foil star"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=6ft|topper=foil star",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "6ft",
+            "topper": "foil heart"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=6ft|topper=foil heart",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "6ft",
+            "topper": "bubble gum"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=6ft|topper=bubble gum",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "6ft",
+            "topper": "Logo"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=6ft|topper=Logo",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "7ft",
+            "topper": "large topper"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=7ft|topper=large topper",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "7ft",
+            "topper": "Burst"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=7ft|topper=Burst",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "7ft",
+            "topper": "foil star"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=7ft|topper=foil star",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "7ft",
+            "topper": "foil heart"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=7ft|topper=foil heart",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "7ft",
+            "topper": "bubble gum"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=7ft|topper=bubble gum",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "7ft",
+            "topper": "Logo"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=7ft|topper=Logo",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "8ft",
+            "topper": "large topper"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=8ft|topper=large topper",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "8ft",
+            "topper": "Burst"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=8ft|topper=Burst",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "8ft",
+            "topper": "foil star"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=8ft|topper=foil star",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "8ft",
+            "topper": "foil heart"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=8ft|topper=foil heart",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "8ft",
+            "topper": "bubble gum"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=8ft|topper=bubble gum",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "8ft",
+            "topper": "Logo"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=8ft|topper=Logo",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "9ft",
+            "topper": "large topper"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=9ft|topper=large topper",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "9ft",
+            "topper": "Burst"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=9ft|topper=Burst",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "9ft",
+            "topper": "foil star"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=9ft|topper=foil star",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "9ft",
+            "topper": "foil heart"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=9ft|topper=foil heart",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "9ft",
+            "topper": "bubble gum"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=9ft|topper=bubble gum",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "9ft",
+            "topper": "Logo"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=9ft|topper=Logo",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "10ft",
+            "topper": "large topper"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=10ft|topper=large topper",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "10ft",
+            "topper": "Burst"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=10ft|topper=Burst",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "10ft",
+            "topper": "foil star"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=10ft|topper=foil star",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "10ft",
+            "topper": "foil heart"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=10ft|topper=foil heart",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "10ft",
+            "topper": "bubble gum"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=10ft|topper=bubble gum",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "65.00",
+          "distinct_live_prices": [
+            "65.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "10ft",
+            "topper": "Logo"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=10ft|topper=Logo",
+          "source_row_count": 53
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "classic-column"
+    },
+    {
+      "commerce_lane": "quote_first",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Classic Organic columns",
+      "product_page_type": "complex_custom_product",
+      "required_axes": [
+        "Column Height"
+      ],
+      "review_unit_count": 6,
+      "review_units": [
+        {
+          "chosen_price": "125.00",
+          "distinct_live_prices": [
+            "125.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "5ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=5ft",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "125.00",
+          "distinct_live_prices": [
+            "125.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "6ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=6ft",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "125.00",
+          "distinct_live_prices": [
+            "125.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "7ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=7ft",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "125.00",
+          "distinct_live_prices": [
+            "125.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "8ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=8ft",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "125.00",
+          "distinct_live_prices": [
+            "125.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "9ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=9ft",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "125.00",
+          "distinct_live_prices": [
+            "125.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "10ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=10ft",
+          "source_row_count": 53
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "classic-organic-columns"
+    },
+    {
+      "commerce_lane": "quote_first",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Baby Shower Garland",
+      "product_page_type": "complex_custom_product",
+      "required_axes": [
+        "Garland Length"
+      ],
+      "review_unit_count": 3,
+      "review_units": [
+        {
+          "chosen_price": "150.00",
+          "distinct_live_prices": [
+            "150.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Garland Length": "6ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Garland Length=6ft",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "150.00",
+          "distinct_live_prices": [
+            "150.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Garland Length": "9ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Garland Length=9ft",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "150.00",
+          "distinct_live_prices": [
+            "150.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Garland Length": "12ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Garland Length=12ft",
+          "source_row_count": 53
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "baby-shower-garland"
+    },
+    {
+      "commerce_lane": "quote_first",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Balloon Drop",
+      "product_page_type": "complex_custom_product",
+      "required_axes": [
+        "Drop Size"
+      ],
+      "review_unit_count": 3,
+      "review_units": [
+        {
+          "chosen_price": "375.00",
+          "distinct_live_prices": [
+            "375.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Drop Size": "250"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Drop Size=250",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "375.00",
+          "distinct_live_prices": [
+            "375.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Drop Size": "500"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Drop Size=500",
+          "source_row_count": 53
+        },
+        {
+          "chosen_price": "375.00",
+          "distinct_live_prices": [
+            "375.00"
+          ],
+          "live_active_match_count": 51,
+          "live_priced_match_count": 51,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Drop Size": "1000"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Drop Size=1000",
+          "source_row_count": 53
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "balloon-drop"
+    },
+    {
+      "commerce_lane": "quote_first",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Classic Organic Arch",
+      "product_page_type": "complex_custom_product",
+      "required_axes": [
+        "Arch Size"
+      ],
+      "review_unit_count": 4,
+      "review_units": [
+        {
+          "chosen_price": "500.00",
+          "distinct_live_prices": [
+            "500.00"
+          ],
+          "live_active_match_count": 153,
+          "live_priced_match_count": 153,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "20ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=20ft",
+          "source_row_count": 159
+        },
+        {
+          "chosen_price": "500.00",
+          "distinct_live_prices": [
+            "500.00"
+          ],
+          "live_active_match_count": 153,
+          "live_priced_match_count": 153,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "25ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=25ft",
+          "source_row_count": 159
+        },
+        {
+          "chosen_price": "500.00",
+          "distinct_live_prices": [
+            "500.00"
+          ],
+          "live_active_match_count": 153,
+          "live_priced_match_count": 153,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "30ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=30ft",
+          "source_row_count": 159
+        },
+        {
+          "chosen_price": "500.00",
+          "distinct_live_prices": [
+            "500.00"
+          ],
+          "live_active_match_count": 153,
+          "live_priced_match_count": 153,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "35ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=35ft",
+          "source_row_count": 159
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "classic-organic-arch"
+    },
+    {
+      "commerce_lane": "checkout",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Unicorn Bouquet",
+      "product_page_type": "simple_product",
+      "required_axes": [
+        "Bouquet Size"
+      ],
+      "review_unit_count": 3,
+      "review_units": [
+        {
+          "chosen_price": "35.00",
+          "distinct_live_prices": [
+            "35.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons",
+          "source_row_count": 10
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons",
+          "source_row_count": 10
+        },
+        {
+          "chosen_price": "85.00",
+          "distinct_live_prices": [
+            "85.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons",
+          "source_row_count": 10
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "unicorn-bouquet"
+    },
+    {
+      "commerce_lane": "checkout",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Mickey Mouse Bouquet",
+      "product_page_type": "simple_product",
+      "required_axes": [
+        "Bouquet Size"
+      ],
+      "review_unit_count": 3,
+      "review_units": [
+        {
+          "chosen_price": "35.00",
+          "distinct_live_prices": [
+            "35.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons",
+          "source_row_count": 10
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons",
+          "source_row_count": 10
+        },
+        {
+          "chosen_price": "85.00",
+          "distinct_live_prices": [
+            "85.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons",
+          "source_row_count": 10
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "mickey-mouse-bouquet"
+    },
+    {
+      "commerce_lane": "checkout",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Minion Bouquet",
+      "product_page_type": "simple_product",
+      "required_axes": [
+        "Bouquet Size"
+      ],
+      "review_unit_count": 3,
+      "review_units": [
+        {
+          "chosen_price": "35.00",
+          "distinct_live_prices": [
+            "35.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons",
+          "source_row_count": 10
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons",
+          "source_row_count": 10
+        },
+        {
+          "chosen_price": "85.00",
+          "distinct_live_prices": [
+            "85.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons",
+          "source_row_count": 10
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "minion-bouquet"
+    },
+    {
+      "commerce_lane": "checkout",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Encanto Bouquet",
+      "product_page_type": "simple_product",
+      "required_axes": [
+        "Bouquet Size"
+      ],
+      "review_unit_count": 3,
+      "review_units": [
+        {
+          "chosen_price": "35.00",
+          "distinct_live_prices": [
+            "35.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons",
+          "source_row_count": 10
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons",
+          "source_row_count": 10
+        },
+        {
+          "chosen_price": "85.00",
+          "distinct_live_prices": [
+            "85.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons",
+          "source_row_count": 10
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "encanto-bouquet"
+    },
+    {
+      "commerce_lane": "checkout",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Stitch Bouquet",
+      "product_page_type": "simple_product",
+      "required_axes": [
+        "Bouquet Size"
+      ],
+      "review_unit_count": 3,
+      "review_units": [
+        {
+          "chosen_price": "35.00",
+          "distinct_live_prices": [
+            "35.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons",
+          "source_row_count": 10
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons",
+          "source_row_count": 10
+        },
+        {
+          "chosen_price": "85.00",
+          "distinct_live_prices": [
+            "85.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons",
+          "source_row_count": 10
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "stitch-bouquet"
+    },
+    {
+      "commerce_lane": "checkout",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Flamingo Bouquet",
+      "product_page_type": "simple_product",
+      "required_axes": [
+        "Bouquet Size"
+      ],
+      "review_unit_count": 3,
+      "review_units": [
+        {
+          "chosen_price": "35.00",
+          "distinct_live_prices": [
+            "35.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons",
+          "source_row_count": 10
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons",
+          "source_row_count": 10
+        },
+        {
+          "chosen_price": "85.00",
+          "distinct_live_prices": [
+            "85.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons",
+          "source_row_count": 10
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "flamingo-bouquet"
+    },
+    {
+      "commerce_lane": "checkout",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Football Bouquet",
+      "product_page_type": "simple_product",
+      "required_axes": [
+        "Bouquet Size"
+      ],
+      "review_unit_count": 3,
+      "review_units": [
+        {
+          "chosen_price": "35.00",
+          "distinct_live_prices": [
+            "35.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons",
+          "source_row_count": 10
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons",
+          "source_row_count": 10
+        },
+        {
+          "chosen_price": "85.00",
+          "distinct_live_prices": [
+            "85.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons",
+          "source_row_count": 10
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "football-bouquet"
+    },
+    {
+      "commerce_lane": "checkout",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Soccer Bouquet",
+      "product_page_type": "simple_product",
+      "required_axes": [
+        "Bouquet Size"
+      ],
+      "review_unit_count": 3,
+      "review_units": [
+        {
+          "chosen_price": "35.00",
+          "distinct_live_prices": [
+            "35.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons",
+          "source_row_count": 10
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons",
+          "source_row_count": 10
+        },
+        {
+          "chosen_price": "85.00",
+          "distinct_live_prices": [
+            "85.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons",
+          "source_row_count": 10
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "soccer-bouquet"
+    },
+    {
+      "commerce_lane": "checkout",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Space Bouquet",
+      "product_page_type": "simple_product",
+      "required_axes": [
+        "Bouquet Size"
+      ],
+      "review_unit_count": 3,
+      "review_units": [
+        {
+          "chosen_price": "35.00",
+          "distinct_live_prices": [
+            "35.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons",
+          "source_row_count": 10
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons",
+          "source_row_count": 10
+        },
+        {
+          "chosen_price": "85.00",
+          "distinct_live_prices": [
+            "85.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons",
+          "source_row_count": 10
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "space-bouquet"
+    },
+    {
+      "commerce_lane": "checkout",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Over the Hill Bouquet",
+      "product_page_type": "simple_product",
+      "required_axes": [
+        "Bouquet Size"
+      ],
+      "review_unit_count": 3,
+      "review_units": [
+        {
+          "chosen_price": "35.00",
+          "distinct_live_prices": [
+            "35.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons",
+          "source_row_count": 10
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons",
+          "source_row_count": 10
+        },
+        {
+          "chosen_price": "85.00",
+          "distinct_live_prices": [
+            "85.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons",
+          "source_row_count": 10
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "over-the-hill-bouquet"
+    },
+    {
+      "commerce_lane": "quote_first",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Organic Grab n' Go",
+      "product_page_type": "complex_custom_product",
+      "required_axes": [
+        "Garland Length"
+      ],
+      "review_unit_count": 3,
+      "review_units": [
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 50,
+          "live_priced_match_count": 50,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Garland Length": "6ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Garland Length=6ft",
+          "source_row_count": 52
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 50,
+          "live_priced_match_count": 50,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Garland Length": "9ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Garland Length=9ft",
+          "source_row_count": 52
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 50,
+          "live_priced_match_count": 50,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Garland Length": "12ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Garland Length=12ft",
+          "source_row_count": 52
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "organic-grab-n-go"
+    },
+    {
+      "commerce_lane": "quote_first",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Birthday Deliveries",
+      "product_page_type": "complex_custom_product",
+      "required_axes": [
+        "Delivery Size",
+        "Delivery themes"
+      ],
+      "review_unit_count": 81,
+      "review_units": [
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Small",
+            "Delivery themes": "Mickey"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Small|Delivery themes=Mickey",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Small",
+            "Delivery themes": "Minnie"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Small|Delivery themes=Minnie",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Small",
+            "Delivery themes": "Mermaid"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Small|Delivery themes=Mermaid",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Small",
+            "Delivery themes": "Basketball"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Small|Delivery themes=Basketball",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Small",
+            "Delivery themes": "Soccer"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Small|Delivery themes=Soccer",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Small",
+            "Delivery themes": "Unicorn"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Small|Delivery themes=Unicorn",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Small",
+            "Delivery themes": "Chase"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Small|Delivery themes=Chase",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Small",
+            "Delivery themes": "spiderman"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Small|Delivery themes=spiderman",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Small",
+            "Delivery themes": "batman"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Small|Delivery themes=batman",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Small",
+            "Delivery themes": "Gamer"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Small|Delivery themes=Gamer",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Small",
+            "Delivery themes": "Dino Birthday"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Small|Delivery themes=Dino Birthday",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Small",
+            "Delivery themes": "Sonic"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Small|Delivery themes=Sonic",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Small",
+            "Delivery themes": "Elmo"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Small|Delivery themes=Elmo",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Small",
+            "Delivery themes": "Encanto"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Small|Delivery themes=Encanto",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Small",
+            "Delivery themes": "Camping Birthday"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Small|Delivery themes=Camping Birthday",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Small",
+            "Delivery themes": "Rainbow Birthday"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Small|Delivery themes=Rainbow Birthday",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Small",
+            "Delivery themes": "Space"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Small|Delivery themes=Space",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Small",
+            "Delivery themes": "Boho Rainbow"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Small|Delivery themes=Boho Rainbow",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Small",
+            "Delivery themes": "Frozen"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Small|Delivery themes=Frozen",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Small",
+            "Delivery themes": "Birthday Celebration"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Small|Delivery themes=Birthday Celebration",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Small",
+            "Delivery themes": "Jurassic World"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Small|Delivery themes=Jurassic World",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Small",
+            "Delivery themes": "Blush and Mint Cake"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Small|Delivery themes=Blush and Mint Cake",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Small",
+            "Delivery themes": "Rosegold and pink Happy Birthday"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Small|Delivery themes=Rosegold and pink Happy Birthday",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Small",
+            "Delivery themes": "Pink Butterfly"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Small|Delivery themes=Pink Butterfly",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Small",
+            "Delivery themes": "TikTok Birthday"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Small|Delivery themes=TikTok Birthday",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Small",
+            "Delivery themes": "Football"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Small|Delivery themes=Football",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Small",
+            "Delivery themes": "Toy Story"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Small|Delivery themes=Toy Story",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Medium",
+            "Delivery themes": "Mickey"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Medium|Delivery themes=Mickey",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Medium",
+            "Delivery themes": "Minnie"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Medium|Delivery themes=Minnie",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Medium",
+            "Delivery themes": "Mermaid"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Medium|Delivery themes=Mermaid",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Medium",
+            "Delivery themes": "Basketball"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Medium|Delivery themes=Basketball",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Medium",
+            "Delivery themes": "Soccer"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Medium|Delivery themes=Soccer",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Medium",
+            "Delivery themes": "Unicorn"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Medium|Delivery themes=Unicorn",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Medium",
+            "Delivery themes": "Chase"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Medium|Delivery themes=Chase",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Medium",
+            "Delivery themes": "spiderman"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Medium|Delivery themes=spiderman",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Medium",
+            "Delivery themes": "batman"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Medium|Delivery themes=batman",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Medium",
+            "Delivery themes": "Gamer"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Medium|Delivery themes=Gamer",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Medium",
+            "Delivery themes": "Dino Birthday"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Medium|Delivery themes=Dino Birthday",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Medium",
+            "Delivery themes": "Sonic"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Medium|Delivery themes=Sonic",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Medium",
+            "Delivery themes": "Elmo"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Medium|Delivery themes=Elmo",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Medium",
+            "Delivery themes": "Encanto"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Medium|Delivery themes=Encanto",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Medium",
+            "Delivery themes": "Camping Birthday"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Medium|Delivery themes=Camping Birthday",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Medium",
+            "Delivery themes": "Rainbow Birthday"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Medium|Delivery themes=Rainbow Birthday",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Medium",
+            "Delivery themes": "Space"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Medium|Delivery themes=Space",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Medium",
+            "Delivery themes": "Boho Rainbow"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Medium|Delivery themes=Boho Rainbow",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Medium",
+            "Delivery themes": "Frozen"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Medium|Delivery themes=Frozen",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Medium",
+            "Delivery themes": "Birthday Celebration"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Medium|Delivery themes=Birthday Celebration",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Medium",
+            "Delivery themes": "Jurassic World"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Medium|Delivery themes=Jurassic World",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Medium",
+            "Delivery themes": "Blush and Mint Cake"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Medium|Delivery themes=Blush and Mint Cake",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Medium",
+            "Delivery themes": "Rosegold and pink Happy Birthday"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Medium|Delivery themes=Rosegold and pink Happy Birthday",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Medium",
+            "Delivery themes": "Pink Butterfly"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Medium|Delivery themes=Pink Butterfly",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Medium",
+            "Delivery themes": "TikTok Birthday"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Medium|Delivery themes=TikTok Birthday",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Medium",
+            "Delivery themes": "Football"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Medium|Delivery themes=Football",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Medium",
+            "Delivery themes": "Toy Story"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Medium|Delivery themes=Toy Story",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Large",
+            "Delivery themes": "Mickey"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Large|Delivery themes=Mickey",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Large",
+            "Delivery themes": "Minnie"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Large|Delivery themes=Minnie",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Large",
+            "Delivery themes": "Mermaid"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Large|Delivery themes=Mermaid",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Large",
+            "Delivery themes": "Basketball"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Large|Delivery themes=Basketball",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Large",
+            "Delivery themes": "Soccer"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Large|Delivery themes=Soccer",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Large",
+            "Delivery themes": "Unicorn"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Large|Delivery themes=Unicorn",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Large",
+            "Delivery themes": "Chase"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Large|Delivery themes=Chase",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Large",
+            "Delivery themes": "spiderman"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Large|Delivery themes=spiderman",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Large",
+            "Delivery themes": "batman"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Large|Delivery themes=batman",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Large",
+            "Delivery themes": "Gamer"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Large|Delivery themes=Gamer",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Large",
+            "Delivery themes": "Dino Birthday"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Large|Delivery themes=Dino Birthday",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Large",
+            "Delivery themes": "Sonic"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Large|Delivery themes=Sonic",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Large",
+            "Delivery themes": "Elmo"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Large|Delivery themes=Elmo",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Large",
+            "Delivery themes": "Encanto"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Large|Delivery themes=Encanto",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Large",
+            "Delivery themes": "Camping Birthday"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Large|Delivery themes=Camping Birthday",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Large",
+            "Delivery themes": "Rainbow Birthday"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Large|Delivery themes=Rainbow Birthday",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Large",
+            "Delivery themes": "Space"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Large|Delivery themes=Space",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Large",
+            "Delivery themes": "Boho Rainbow"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Large|Delivery themes=Boho Rainbow",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Large",
+            "Delivery themes": "Frozen"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Large|Delivery themes=Frozen",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Large",
+            "Delivery themes": "Birthday Celebration"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Large|Delivery themes=Birthday Celebration",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Large",
+            "Delivery themes": "Jurassic World"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Large|Delivery themes=Jurassic World",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Large",
+            "Delivery themes": "Blush and Mint Cake"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Large|Delivery themes=Blush and Mint Cake",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Large",
+            "Delivery themes": "Rosegold and pink Happy Birthday"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Large|Delivery themes=Rosegold and pink Happy Birthday",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Large",
+            "Delivery themes": "Pink Butterfly"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Large|Delivery themes=Pink Butterfly",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Large",
+            "Delivery themes": "TikTok Birthday"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Large|Delivery themes=TikTok Birthday",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Large",
+            "Delivery themes": "Football"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Large|Delivery themes=Football",
+          "source_row_count": 30
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 30,
+          "live_priced_match_count": 30,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Delivery Size": "Large",
+            "Delivery themes": "Toy Story"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Delivery Size=Large|Delivery themes=Toy Story",
+          "source_row_count": 30
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "birthday-deliveries"
+    },
+    {
+      "commerce_lane": "checkout",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Easter Balloon Cups",
+      "product_page_type": "simple_product",
+      "required_axes": [
+        "Easter Designs"
+      ],
+      "review_unit_count": 7,
+      "review_units": [
+        {
+          "chosen_price": "13.00",
+          "distinct_live_prices": [
+            "13.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Easter Designs": "Bunny"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Easter Designs=Bunny",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "13.00",
+          "distinct_live_prices": [
+            "13.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Easter Designs": "Flower"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Easter Designs=Flower",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "13.00",
+          "distinct_live_prices": [
+            "13.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Easter Designs": "Bunny in basket"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Easter Designs=Bunny in basket",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "13.00",
+          "distinct_live_prices": [
+            "13.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Easter Designs": "Easter egg"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Easter Designs=Easter egg",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "13.00",
+          "distinct_live_prices": [
+            "13.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Easter Designs": "Unicorn egg"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Easter Designs=Unicorn egg",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "13.00",
+          "distinct_live_prices": [
+            "13.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Easter Designs": "Butterfly"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Easter Designs=Butterfly",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "13.00",
+          "distinct_live_prices": [
+            "13.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Easter Designs": "Turtle"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Easter Designs=Turtle",
+          "source_row_count": 1
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "easter-balloon-cups"
+    },
+    {
+      "commerce_lane": "quote_first",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Star Column",
+      "product_page_type": "complex_custom_product",
+      "required_axes": [
+        "Column Height"
+      ],
+      "review_unit_count": 4,
+      "review_units": [
+        {
+          "chosen_price": "90.00",
+          "distinct_live_prices": [
+            "90.00"
+          ],
+          "live_active_match_count": 290,
+          "live_priced_match_count": 290,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "6ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=6ft",
+          "source_row_count": 290
+        },
+        {
+          "chosen_price": "90.00",
+          "distinct_live_prices": [
+            "90.00"
+          ],
+          "live_active_match_count": 290,
+          "live_priced_match_count": 290,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "7ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=7ft",
+          "source_row_count": 290
+        },
+        {
+          "chosen_price": "90.00",
+          "distinct_live_prices": [
+            "90.00"
+          ],
+          "live_active_match_count": 290,
+          "live_priced_match_count": 290,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "8ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=8ft",
+          "source_row_count": 290
+        },
+        {
+          "chosen_price": "90.00",
+          "distinct_live_prices": [
+            "90.00"
+          ],
+          "live_active_match_count": 290,
+          "live_priced_match_count": 290,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "9ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=9ft",
+          "source_row_count": 290
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "star-column"
+    },
+    {
+      "commerce_lane": "quote_first",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "6 color rainbow arch",
+      "product_page_type": "complex_custom_product",
+      "required_axes": [
+        "Arch Size"
+      ],
+      "review_unit_count": 2,
+      "review_units": [
+        {
+          "chosen_price": "340.00",
+          "distinct_live_prices": [
+            "340.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "20ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=20ft",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "340.00",
+          "distinct_live_prices": [
+            "340.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Arch Size": "25ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Arch Size=25ft",
+          "source_row_count": 1
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "6-color-rainbow-arch"
+    },
+    {
+      "commerce_lane": "checkout",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Paw Patrol Bouquet",
+      "product_page_type": "simple_product",
+      "required_axes": [
+        "Bouquet Size"
+      ],
+      "review_unit_count": 3,
+      "review_units": [
+        {
+          "chosen_price": "35.00",
+          "distinct_live_prices": [
+            "35.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons",
+          "source_row_count": 10
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons",
+          "source_row_count": 10
+        },
+        {
+          "chosen_price": "85.00",
+          "distinct_live_prices": [
+            "85.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons",
+          "source_row_count": 10
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "paw-patrol-bouquet"
+    },
+    {
+      "commerce_lane": "checkout",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Elsa Bouquet",
+      "product_page_type": "simple_product",
+      "required_axes": [
+        "Bouquet Size"
+      ],
+      "review_unit_count": 3,
+      "review_units": [
+        {
+          "chosen_price": "35.00",
+          "distinct_live_prices": [
+            "35.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons",
+          "source_row_count": 10
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons",
+          "source_row_count": 10
+        },
+        {
+          "chosen_price": "85.00",
+          "distinct_live_prices": [
+            "85.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons",
+          "source_row_count": 10
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "elsa-bouquet"
+    },
+    {
+      "commerce_lane": "checkout",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Holy COW!! Bouquet",
+      "product_page_type": "simple_product",
+      "required_axes": [
+        "Bouquet Size"
+      ],
+      "review_unit_count": 3,
+      "review_units": [
+        {
+          "chosen_price": "35.00",
+          "distinct_live_prices": [
+            "35.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons",
+          "source_row_count": 10
+        },
+        {
+          "chosen_price": "70.00",
+          "distinct_live_prices": [
+            "70.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons",
+          "source_row_count": 10
+        },
+        {
+          "chosen_price": "85.00",
+          "distinct_live_prices": [
+            "85.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Bouquet Size": "Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Bouquet Size=Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons",
+          "source_row_count": 10
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "holy-cow-bouquet"
+    },
+    {
+      "commerce_lane": "quote_first",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "6' Graduation stands",
+      "product_page_type": "complex_custom_product",
+      "required_axes": [
+        "Graduation stands"
+      ],
+      "review_unit_count": 2,
+      "review_units": [
+        {
+          "chosen_price": "45.00",
+          "distinct_live_prices": [
+            "45.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Graduation stands": "Congrats"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Graduation stands=Congrats",
+          "source_row_count": 1
+        },
+        {
+          "chosen_price": "45.00",
+          "distinct_live_prices": [
+            "45.00"
+          ],
+          "live_active_match_count": 1,
+          "live_priced_match_count": 1,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Graduation stands": "Yay"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Graduation stands=Yay",
+          "source_row_count": 1
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "6-graduation-stands"
+    },
+    {
+      "commerce_lane": "quote_first",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Large Garland",
+      "product_page_type": "complex_custom_product",
+      "required_axes": [
+        "Garland Length"
+      ],
+      "review_unit_count": 3,
+      "review_units": [
+        {
+          "chosen_price": "216.00",
+          "distinct_live_prices": [
+            "216.00"
+          ],
+          "live_active_match_count": 29,
+          "live_priced_match_count": 29,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Garland Length": "6ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Garland Length=6ft",
+          "source_row_count": 29
+        },
+        {
+          "chosen_price": "216.00",
+          "distinct_live_prices": [
+            "216.00"
+          ],
+          "live_active_match_count": 29,
+          "live_priced_match_count": 29,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Garland Length": "9ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Garland Length=9ft",
+          "source_row_count": 29
+        },
+        {
+          "chosen_price": "216.00",
+          "distinct_live_prices": [
+            "216.00"
+          ],
+          "live_active_match_count": 29,
+          "live_priced_match_count": 29,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Garland Length": "12ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Garland Length=12ft",
+          "source_row_count": 29
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "large-garland"
+    },
+    {
+      "commerce_lane": "quote_first",
+      "decision_needed": "Approve this live-snapshot price for public use, replace it with a business-approved price, or keep the unit quote-only.",
+      "name": "Large Organic Column",
+      "product_page_type": "complex_custom_product",
+      "required_axes": [
+        "Column Height"
+      ],
+      "review_unit_count": 6,
+      "review_units": [
+        {
+          "chosen_price": "180.00",
+          "distinct_live_prices": [
+            "180.00"
+          ],
+          "live_active_match_count": 29,
+          "live_priced_match_count": 29,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "5ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=5ft",
+          "source_row_count": 29
+        },
+        {
+          "chosen_price": "180.00",
+          "distinct_live_prices": [
+            "180.00"
+          ],
+          "live_active_match_count": 29,
+          "live_priced_match_count": 29,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "6ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=6ft",
+          "source_row_count": 29
+        },
+        {
+          "chosen_price": "180.00",
+          "distinct_live_prices": [
+            "180.00"
+          ],
+          "live_active_match_count": 29,
+          "live_priced_match_count": 29,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "7ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=7ft",
+          "source_row_count": 29
+        },
+        {
+          "chosen_price": "180.00",
+          "distinct_live_prices": [
+            "180.00"
+          ],
+          "live_active_match_count": 29,
+          "live_priced_match_count": 29,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "8ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=8ft",
+          "source_row_count": 29
+        },
+        {
+          "chosen_price": "180.00",
+          "distinct_live_prices": [
+            "180.00"
+          ],
+          "live_active_match_count": 29,
+          "live_priced_match_count": 29,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "9ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=9ft",
+          "source_row_count": 29
+        },
+        {
+          "chosen_price": "180.00",
+          "distinct_live_prices": [
+            "180.00"
+          ],
+          "live_active_match_count": 29,
+          "live_priced_match_count": 29,
+          "price_source_kind": "live_erpnext_snapshot",
+          "projected_required_combo": {
+            "Column Height": "10ft"
+          },
+          "safe_default": "business_review_required",
+          "sale_unit_key": "Column Height=10ft",
+          "source_row_count": 29
+        }
+      ],
+      "safe_default": "business_review_required",
+      "slug": "large-organic-column"
+    }
+  ],
+  "products_needing_review": 36,
+  "purpose": "Business review packet for product-page prices sourced from current live ERPNext snapshot data.",
+  "review_unit_count": 273,
+  "safe_default": "business_review_required",
+  "schema_version": "lt-product-page-price-review-packet-v1",
+  "source_product_count": 53,
+  "warning": "This packet does not approve customer-facing prices. Live snapshot candidates preserve current ERPNext state only and must be accepted or replaced before import/reopen."
+}

@@ -63,6 +63,36 @@ ADD_ON_ITEM_CONTRACTS = {
     },
 }
 
+ADD_ON_KEY_ALIASES = {
+    "add_foil_number": "foil_number",
+}
+
+# Source/Odoo add-on-looking axes that are known, but not approved for paid
+# checkout. They must fail as quote-required instead of looking like broken
+# setup or silently becoming free options.
+REVIEW_ONLY_SOURCE_ADD_ONS = {
+    "add_ons": {
+        "label": "Add ons",
+        "source_attribute": "Add ons",
+        "review_reason": "Potential optional add-ons need product-family mapping before checkout.",
+    },
+    "plush_add_ons": {
+        "label": "Plush add ons",
+        "source_attribute": "Plush add ons",
+        "review_reason": "Plush upgrades need product-family mapping before checkout.",
+    },
+    "orbz_toppers": {
+        "label": "Orbz toppers",
+        "source_attribute": "Orbz toppers",
+        "review_reason": "Topper upgrades need product-family mapping before checkout.",
+    },
+    "add_bouquet": {
+        "label": "Add Bouquet",
+        "source_attribute": "Add Bouquet",
+        "review_reason": "Companion bouquets need GL/product-family confirmation before checkout.",
+    },
+}
+
 CUSTOMER_SAFE_SETUP_FALLBACK = (
     "Tiny snag: this checkout setup needs a quick team review. "
     "Please request a quote while we fix it."
@@ -504,8 +534,16 @@ def _validated_checkout_add_ons(
                 _("Tiny snag: this item's add-on details are not readable. Please choose the options again."),
                 frappe.ValidationError,
             )
-        key = str(raw.get("key") or "").strip()
+        key = _add_on_key(raw)
         spec = ADD_ON_ITEM_CONTRACTS.get(key)
+        if not spec and key in REVIEW_ONLY_SOURCE_ADD_ONS:
+            frappe.throw(
+                _(
+                    "Tiny snag: this add-on needs a quote before checkout. "
+                    "Please send it through the inquiry form so we price the upgrade correctly."
+                ),
+                frappe.ValidationError,
+            )
         if not spec:
             frappe.log_error(
                 f"Unknown add-on: {key or '(blank)'}",
@@ -531,6 +569,23 @@ def _validated_checkout_add_ons(
             }
         )
     return normalized
+
+
+def _add_on_key(raw: dict[str, Any]) -> str:
+    for fieldname in ("key", "source_attribute", "label"):
+        candidate = raw.get(fieldname)
+        if candidate:
+            break
+    else:
+        candidate = ""
+    key = _canonical_add_on_key(candidate)
+    return ADD_ON_KEY_ALIASES.get(key, key)
+
+
+def _canonical_add_on_key(value: Any) -> str:
+    text = str(value or "").strip().lower().replace("-", " ").replace("/", " ")
+    parts = [part for part in text.split() if part]
+    return "_".join(parts)
 
 
 def _assert_add_on_is_eligible(key: str, spec: dict[str, Any], website_item_code: str | None) -> None:

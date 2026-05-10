@@ -11,6 +11,7 @@ from typing import Any
 import frappe
 from frappe import _
 
+from locally_twisted.catalog_contract.color_rules import grouped_colors, is_balloon_color_axis
 from locally_twisted.product_page_runtime import CONFIG_VERSION
 
 
@@ -40,6 +41,7 @@ def normalize_public_product_quote_payload(
         incoming.get("customizations"),
         label="product quote custom notes",
     )
+    color_recipes = _color_recipes(selected_options=selected_options, customizations=customizations)
     summary = _summary(
         item=item,
         selected_options=selected_options,
@@ -61,6 +63,7 @@ def normalize_public_product_quote_payload(
         "selected_options": selected_options,
         "add_ons": add_ons,
         "customizations": customizations,
+        "color_recipes": color_recipes,
         "needs_operator_review": True,
     }
 
@@ -215,6 +218,58 @@ def _display_value(value: Any) -> str:
     if value in (None, ""):
         return ""
     return _clean_optional_text(value)
+
+
+def _color_recipes(
+    *,
+    selected_options: dict[str, str],
+    customizations: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    recipes: dict[str, list[str]] = {}
+
+    for axis, text in selected_options.items():
+        if is_balloon_color_axis(axis):
+            recipes[axis] = _split_color_values(text)
+
+    for row in customizations:
+        axis = _clean_optional_text(row.get("axis")) or _clean_optional_text(row.get("key"))
+        if not is_balloon_color_axis(axis):
+            continue
+        values = row.get("values")
+        if values in (None, ""):
+            values = row.get("value")
+        recipes[axis] = _split_color_values(values)
+
+    result = []
+    for axis, values in recipes.items():
+        clean_values = [value for value in values if value]
+        if not clean_values:
+            continue
+        result.append(
+            {
+                "axis": axis,
+                "label": "Balloon color recipe",
+                "values": clean_values,
+                "color_groups": grouped_colors(clean_values),
+                "status": "needs_operator_review",
+                "source": "product_quote_request",
+            }
+        )
+    return result
+
+
+def _split_color_values(value: Any) -> list[str]:
+    if isinstance(value, list):
+        return [_clean_optional_text(entry) for entry in value if _clean_optional_text(entry)]
+    if value in (None, ""):
+        return []
+    if isinstance(value, dict):
+        _throw_bad_payload("product quote color recipe")
+    parts = [
+        _clean_optional_text(part)
+        for part in str(value).replace("|", ",").replace(";", ",").split(",")
+    ]
+    return [part for part in parts if part]
 
 
 def _throw_bad_payload(label: str) -> None:

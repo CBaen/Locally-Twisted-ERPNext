@@ -14,22 +14,39 @@ test.describe("Locally Twisted search contract", () => {
 		const panel = page.locator("#lt-site-search-panel");
 		await expect(panel).toBeVisible();
 		await expect(panel.locator("a[href='/portfolio']")).toBeVisible();
-		await expect(panel.locator("a[href^='/shop']")).toHaveCount(0);
 		await expect(panel.locator("[data-lt-search-empty]")).toBeHidden();
 	});
 
-	test("submitted search query lands on contact fallback while ecommerce is paused", async ({ page }) => {
+	test("header search overlay exposes the About Us company page", async ({ page }) => {
 		await page.setViewportSize({ width: 1366, height: 768 });
 		const response = await gotoAndSettle(page, "/");
 		expect(response, "home should return a response").not.toBeNull();
 		expect(response.status(), "home should load").toBeLessThan(400);
 
 		await page.locator(".lt-mega-header__search").click();
+		await page.locator("#lt-site-search-input").fill("about");
+
+		const panel = page.locator("#lt-site-search-panel");
+		await expect(panel).toBeVisible();
+		await expect(panel.locator("a[href='/about']")).toBeVisible();
+		await expect(panel.locator("a[href='/about'] strong")).toHaveText("About Us");
+		await expect(panel.locator("[data-lt-search-empty]")).toBeHidden();
+	});
+
+	test("submitted search query lands on the active commerce/search lane", async ({ page }) => {
+		await page.setViewportSize({ width: 1366, height: 768 });
+		const response = await gotoAndSettle(page, "/");
+		expect(response, "home should return a response").not.toBeNull();
+		expect(response.status(), "home should load").toBeLessThan(400);
+
+		await page.locator(".lt-mega-header__search").click();
+		const formAction = await page.locator("#lt-site-search-panel form").getAttribute("action");
 		await page.locator("#lt-site-search-input").fill("balloons");
-		await Promise.all([
-			page.waitForURL(/\/contact\?q=balloons$/),
-			page.keyboard.press("Enter"),
-		]);
-		await expect(page.locator(".lt-contact__intro h1")).toBeVisible();
+		await Promise.all([page.waitForURL(new RegExp(`${formAction}\\?q=balloons$`)), page.keyboard.press("Enter")]);
+		if (formAction === "/shop") {
+			await expect(page.locator(".lt-shop--landing")).toBeVisible();
+		} else {
+			await expect(page.locator(".lt-contact__intro h1")).toBeVisible();
+		}
 	});
 });

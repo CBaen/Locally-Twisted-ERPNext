@@ -1,6 +1,8 @@
 # ERPNext Ecommerce Receiving Architecture
 
-Status: active Codex takeover handoff; no build/import approved.
+Status: active Codex takeover handoff; core technical architecture can pass the
+readiness gate when ecommerce is temporarily open, but public commerce is
+currently paused again and no destructive import is approved.
 Owner context: Codex, 2026-05-09. GL explicitly redirected this lane away from OpenClaw cockpit/infrastructure work and toward backend-first product-page architecture.
 
 ## Prime directive
@@ -96,7 +98,7 @@ Known current starting points from 2026-05-09 inspection:
 
 - `catalog_contract/models.py` models a starter `ProductPageContract` with required axes, customization axes, add-ons, gallery, warnings, resolver-price presence, but it is too shallow for complete receiving architecture.
 - `catalog_contract/addon_rules.py` confirms only `Add Foil Number` as a real add-on; other possible add-on axes are review-only.
-- `catalog_contract/source_builder.py` separates required axes, color customization axes, confirmed add-ons, and warnings, but does not yet own full template type, dependency rules, invoice payloads, or complete fail-loud import gates.
+- `catalog_contract/source_builder.py` originally separated required axes, color customization axes, confirmed add-ons, and warnings, but did not yet own full template type, dependency rules, invoice payloads, or complete fail-loud import gates. The completed slices below now cover template classification and required-axis source dependency matrices; deeper family-specific dependency rules and import gates remain open.
 - `templates/generators/item/item_configure.html` currently renders inline ERPNext variant selectors, color drawers, variant price lookup, and variant image updates; it still contains temporary bridge logic and is not a complete product receiving ecosystem.
 
 Treat these as current evidence to re-check, not final truth.
@@ -105,6 +107,9 @@ Treat these as current evidence to re-check, not final truth.
 
 Durable research artifact:
 `research/expedition-erpnext-ecommerce-receiving-architecture/research-synthesis.md`
+
+OpenClaw cockpit witness:
+`C:/Users/baenb/.openclaw/workspace/projects/lightdeck-command-center/workstreams/locally-twisted-paid-work-cockpit.md`
 
 Current conclusion:
 
@@ -195,6 +200,12 @@ Completed:
   projected required combos, sale-unit keys, live match status, and purge
   status. Price enrichment passes, while purge/reimport remains blocked for 49
   products because non-price review gates still exist.
+- Added a focused business price review packet extracted from the price
+  enrichment artifact. `python scripts/verify/product_page_price_review_packet.py`
+  writes `audits/odoo-erpnext-migration-audit-2026-05-08/24-product-page-price-review-packet.md`
+  and `.json` with only the live-snapshot-priced sale units that still need
+  approval or replacement. Current packet covers 36 products and 273 review
+  units, with 0 approved public prices.
 - Added a separate read-only media visibility gate so live primary/variant
   image behavior is not confused with approved source media classification.
   Current live ERPNext has primary `Website Item` images for all 53 source
@@ -202,6 +213,13 @@ Completed:
   blocked for import because 95 extra images across 49 products are
   unclassified and no ERPNext `Website Slideshow` records exist for approved
   parent-gallery media.
+- Added a source-backed media classification packet for those unclassified
+  source extras. `python scripts/verify/product_page_media_classification_packet.py`
+  writes `audits/odoo-erpnext-migration-audit-2026-05-08/23-product-page-media-classification-packet.md`
+  and `.json` with one row per source extra image, allowed roles, and the
+  enforced safe default `hold_until_classified`. Current packet covers 49
+  products and 95 source extra images, with 0 approved parent-gallery images
+  and 0 assigned variant images.
 - Added the first confirmed add-on runtime slice for `foil_number`:
   `ADDON-FOIL-NUMBER` is a code-owned ERPNext Item with a Standard Selling
   price, checkout expands it into an explicit Sales Order Item line, invoices
@@ -226,11 +244,37 @@ Completed:
   checkout setup errors strip internal item codes/custom-field names; and
   Stripe, thank-you, receipt, and operator summary labels preserve selected
   add-on values without exposing parent/internal setup text.
+- Added the first add-on dependency boundary. Known but unapproved source
+  add-on families (`Add ons`, `Plush add ons`, `Orbz toppers`, `Add Bouquet`)
+  are explicit review-only contracts and route to quote instead of paid
+  checkout. The source audit now writes
+  `15-product-page-contract-source-audit.json` with review-only family counts:
+  `Add ons` 3, `Plush add ons` 3, `Orbz toppers` 2, and `Add Bouquet` 1.
+- Added a source-backed add-on approval packet for those review-only families.
+  `python scripts/verify/product_add_on_approval_packet.py` writes
+  `audits/odoo-erpnext-migration-audit-2026-05-08/22-product-add-on-approval-packet.md`
+  and `.json` with affected products, source values, decision needed, and the
+  enforced safe default `quote_only_until_approved`. Current packet covers 4
+  review axes, 9 affected products, and 0 checkout-approved add-ons.
 - Hardened quote-first product pages past a simple contact link. The
   quote-first partial now renders reusable option/custom-note controls,
   writes selected options and design/color notes into the versioned product
   quote handoff, and `/contact` normalizes that payload instead of silently
   dropping bad shapes to empty arrays.
+- Added the first structured color recipe preservation slice. Quote-first
+  balloon color choices now become `color_recipes` with selected values,
+  grouped color metadata, and operator-review status; the Lead-to-draft
+  Quotation bridge preserves that structure on Quotation and Quotation Item
+  JSON instead of flattening colors into loose notes only.
+- Added the first source-backed option dependency matrix slice. Source
+  `valid_variants` are projected onto required product-page axes after color
+  customization and add-on axes are removed, so the reusable contract can
+  preserve available combinations without turning colors or add-ons back into
+  required SKU selectors.
+- Added the first executable dependency helper for those matrices.
+  `available_options_for_selection` narrows available axis values from a
+  partial selection and fails loudly for impossible combinations or unknown
+  axes instead of letting invalid frontend choices look valid.
 - Added runtime fallback inference for live Website Items whose `Page
   Template` / `Buying Path` fields are unset or still `needs_review`. Complex
   live variant axes, especially balloon color axes and multi-axis arch-style
@@ -243,10 +287,43 @@ Completed:
   `LT-PRODUCT-QUOTE-REVIEW` line now surface `Pricing review required`, block
   send-readiness on `reviewed_product_quote_pricing`, and no longer phrase a
   placeholder `$0.00` as a reviewed customer total.
-- Added a quote-to-order preservation helper for the future human-approved
-  acceptance path. It copies LT product-page line configuration from Quotation
-  Item to Sales Order Item without creating, submitting, emailing, invoicing,
-  or requesting payment.
+- Added a quote-to-order preservation helper for the human-approved acceptance
+  path. It copies LT product-page line configuration from Quotation Item to
+  Sales Order Item without submitting, emailing, invoicing, or requesting
+  payment.
+- Added the first internal operator-review evaluator for product-page quote
+  Quotations. It reports placeholder review lines, zero-dollar pricing,
+  malformed payloads, missing recipient/date/terms/event context, and a
+  read-only `Ready For Customer Review` state. It does not send, create Sales
+  Orders, create invoices, request payment, or enable acceptance.
+- Added the first accepted-product-quote bridge. A submitted, priced,
+  human-accepted product-page Quotation can create a draft Sales Order only,
+  store the source quote plus written-approval details on Sales Order fields,
+  and preserve the product-page payload on Sales Order Item rows. Placeholder
+  review lines, draft/unsubmitted quotes, missing acceptance details, missing
+  Sales Order acceptance audit fields, non-ready review status, malformed
+  payloads, zero pricing, and expired quotes fail loudly. The bridge does not
+  create invoices, payment requests, Email Queue rows, or Communications.
+- Added the first customer-visible quote approval entry point at
+  `/quote-accept`. Approval links are tokenized and hashed on the Quotation;
+  missing, invalid, or expired links show a branded loud failure instead of a
+  blank/dead route.
+- Added the first `/quote-accept` customer-experience gate. Missing approval
+  codes fail loudly with a safe `/contact` fallback, successful approval
+  replaces the editable form with a distinct no-payment success panel, and the
+  browser gate now creates a temporary real token, previews the quote, submits
+  guest approval, confirms one draft Sales Order, confirms no invoice/payment
+  request, and cleans up the fake records.
+- Added the first customer quote sender. It sends reviewed product-page quote
+  approval links to the customer, requires a delivery-safe business BCC,
+  rejects routed-alias BCCs such as `hi@locallytwisted.com`, and does not
+  create Sales Orders, invoices, payment requests, Email Queue rows, or
+  Communications in the rollback-safe contract.
+- Added the first operator-owned send control for reviewed product-page quotes.
+  Submitted Quotations marked `Ready For Customer Review` get a Quotation Desk
+  button that calls a non-guest whitelisted method, sends the approval link
+  through the BCC-gated sender, and still creates no orders, invoices, payment
+  requests, Email Queue rows, or Communications in the rollback-safe contract.
 
 Verified 2026-05-10:
 
@@ -254,8 +331,68 @@ Verified 2026-05-10:
   Current runtime coverage includes Quotation Item to Sales Order Item payload
   copy for a future accepted quote path.
 - `python scripts/verify/cart_checkout_contract.py` PASS.
+  Current cart coverage includes review-only source add-ons routing to quote
+  instead of paid checkout.
+- `python scripts/verify/product_add_on_dependency_contract.py` PASS.
+  Current add-on dependency coverage proves confirmed `foil_number` remains a
+  priced checkout add-on while the four source add-on families still needing
+  product-family mapping cannot enter paid checkout.
+- `python scripts/verify/product_add_on_approval_packet.py` PASS. Current
+  packet covers `Add Bouquet`, `Add ons`, `Orbz toppers`, and
+  `Plush add ons`; all default to `quote_only_until_approved` and none are
+  approved for checkout.
 - `python scripts/verify/quote_proposal_draft_packet_contract.py` PASS.
-  Current contract includes the quote-first placeholder-pricing outlier.
+  Current contract includes the quote-first placeholder-pricing outlier and
+  the reviewed-product-quote-still-draft-only scenario.
+- `python scripts/verify/product_quote_operator_review_contract.py` PASS.
+  Current contract covers placeholder zero-price blockers, malformed payload
+  blockers, and a reviewed internal-ready quote that still forbids send/order/payment.
+- `python scripts/verify/product_quote_operator_review.py --report output/product-quote-operator-review.json`
+  PASS. Current fake-data site has 0 persisted product quote Quotations after
+  rollback-safe tests, so the live report is empty and non-mutating.
+- `python scripts/verify/product_quote_acceptance_contract.py` PASS. Current
+  coverage creates a rollback-safe submitted product quote, records acceptance
+  fields on a draft Sales Order, preserves LT product-page line payloads, and
+  confirms Sales Invoice, Payment Request, Email Queue, and Communication
+  counts do not change. It also proves token link creation and expired-token
+  failure behavior. The 2026-05-10 review closeout added direct coverage for
+  missing Sales Order acceptance audit/idempotency fields and for
+  `Needs Operator Review` quotations blocking token issuance and acceptance.
+- `Invoke-WebRequest http://localhost:8081/quote-accept` returned HTTP 200 with
+  `Review your quote`, branded `Tiny snag` failure copy, and `/contact`
+  fallback for a missing token.
+- `npm run test:quote-accept-experience` PASS. Current browser coverage proves
+  missing approval-code failure copy, safe contact fallback, no editable form
+  in the failure state, a distinct post-approval no-payment success panel in
+  the route template, and a real temporary token journey through public preview
+  plus guest approval submission.
+- `python scripts/verify/product_quote_customer_delivery_contract.py` PASS.
+  Current coverage stubs `frappe.sendmail`, verifies the customer recipient,
+  required delivery-safe business BCC, routed-alias BCC rejection,
+  `/quote-accept` approval link, no internal marker leaks in the email body,
+  and no order/finance/email record count changes.
+- `python scripts/verify/product_quote_operator_send_control_contract.py` PASS.
+  Current coverage proves the Quotation Desk button hook exists, the operator
+  method is whitelisted but not guest-callable, only quotes marked
+  `Ready For Customer Review` can send, required BCC is present, and
+  order/finance/email record counts do not change.
+- `python scripts/verify/product_quote_customization_contract.py` PASS.
+  Current coverage proves quote-first balloon color choices become structured
+  `color_recipes`, carry grouped color metadata, survive draft Quotation
+  creation, and malformed color payloads fail loudly.
+- `python scripts/verify/product_page_dependency_contract.py` PASS. Current
+  source coverage proves Classic Arch preserves 848 source rows as 16
+  required-axis combinations across Arch Size, Design, and LED Lights, while
+  excluding `latex colors` from required dependency axes. Unicorn Bouquet
+  preserves 30 source rows as 3 Bouquet Size combinations after foil-number
+  add-on removal. The same verifier now proves executable dependency
+  availability narrowing and loud failure for impossible/unknown selections.
+- `python scripts/verify/product_page_architecture_readiness.py --report output/product-page-architecture-readiness.json`
+  passed while ecommerce was temporarily open: `technical_architecture_ok:
+  True`, `import_reopen_ok: True`, 14 pass rows, 0 blocked rows, and 1 finance
+  deferral. After closeout, commerce was restored to `lt_ecommerce_paused=1`;
+  in the current paused state this same audit is expected to block only on
+  `public_ecommerce_reopen`.
 - `npm run test:product-quote-first` PASS. This authenticated browser gate
   now covers both reusable product-page controls at desktop and mobile widths:
   Classic Arch renders quote-first controls and carries selected notes into
@@ -267,15 +404,26 @@ Verified 2026-05-10:
 - `python scripts/verify/customer_email_policy_contract.py` PASS.
 - `python scripts/verify/proof_product_contract.py` PASS.
 - `python scripts/verify/product_page_contract_source_audit.py` produced the
-  expected BLOCKED report with template classification and import blockers.
+  expected BLOCKED report plus JSON artifact with template classification,
+  import blockers, and review-only source add-on counts.
 - `python scripts/verify/product_page_price_readiness_contract.py` PASS and
   wrote `audits/odoo-erpnext-migration-audit-2026-05-08/19-product-page-price-readiness-report.md`.
 - `python scripts/verify/product_page_price_enrichment_contract.py` PASS and
   wrote `audits/odoo-erpnext-migration-audit-2026-05-08/21-product-page-price-enrichment-report.md`
   plus `21-product-page-price-enrichment-candidates.json`.
+- `python scripts/verify/product_page_price_review_packet.py` PASS. Current
+  packet covers 36 products and 273 live-snapshot-priced sale units, all kept
+  at `business_review_required` with 0 approved public prices. GL cleared this
+  packet as an import/reopen business blocker for testing; keep the provenance
+  visible in any import rehearsal.
 - `python scripts/verify/product_page_media_visibility_contract.py` produced
   the expected BLOCKED report at
   `audits/odoo-erpnext-migration-audit-2026-05-08/20-product-page-media-visibility-report.md`.
+- `python scripts/verify/product_page_media_classification_packet.py` PASS.
+  Current packet covers 49 products and 95 source extra images; every image
+  remains `review_needed` with safe default `hold_until_classified`. GL cleared
+  this packet as an import/reopen business blocker for testing; it is still the
+  source evidence trail before any actual media assignment.
 - `python scripts/verify/variant_media_contract.py` PASS. This verifier is now
   pause-aware: it confirms guest product routes redirect to the ecommerce pause
   page, then uses authenticated/operator access to verify the temporary variant
@@ -291,33 +439,48 @@ Verified 2026-05-10:
 
 Still not complete:
 
-- Add-on subsystem is only built for the confirmed `foil_number` proof slice.
-  Explicit eligibility and first selector UI are enforced for that slice, but
-  dependency logic and additional add-on classes are still open.
+- Add-on subsystem is only executable for the confirmed `foil_number` proof
+  slice. Explicit eligibility, first selector UI, review-only boundaries, and
+  the source-backed approval packet for four unapproved source families are
+  now in place. GL cleared the current quote-only default as an import/reopen
+  business blocker for testing, but additional paid-checkout add-on classes are
+  still not built.
 - Quote-first product-page payloads now preserve selected details, automatically
-  create an internal draft Quotation, and block zero-dollar review-line packets
-  from sounding customer-ready. The operator quote-edit/review/send/acceptance
-  workflow is still not built. This bridge does not email, submit, request
-  payment, or imply customer success.
-- Source row-level price-candidate coverage now has a verifier and artifact,
-  but live-snapshot candidates still need business price review. Media
-  classification, color recipe persistence, dependencies, and broader
-  journey/acceptance UX gates are still open. Current live primary/variant
-  image evidence has a verifier, but it does not make a destructive source
-  purge/import safe.
-- Public ecommerce remains paused.
+  create an internal draft Quotation, block zero-dollar review-line packets
+  from sounding customer-ready, expose a no-send operator-review readiness
+  evaluator, and can turn a submitted accepted quote into a draft Sales Order
+  without payment/email/invoice side effects through a tokenized public
+  acceptance route. The first customer quote sender is now built and BCC-gated,
+  the first operator-owned Quotation send control is built, and the first
+  real-token `/quote-accept` browser journey is covered. Broader customer
+  review polish still needs review before live use.
+- Source row-level price-candidate coverage and media classification now have
+  verifiers, artifacts, and row-level packets. GL cleared those packets as
+  import/reopen business blockers for testing, but they still do not make a
+  destructive source purge/import safe by themselves. Deeper family-specific
+  dependency UI/import rules and broader journey/acceptance UX gates are still
+  open.
+- Public ecommerce remains paused by `lt_ecommerce_paused=1`.
+- The architecture readiness audit now separates core technical architecture
+  from import/reopen gates. Current `technical_architecture_ok` is true. When
+  ecommerce is temporarily opened, `import_reopen_ok` is true. In the current
+  paused state, `import_reopen_ok` is false only because public ecommerce is
+  deliberately paused.
+  Finance/bank remains deferred and is not counted as a current
+  template-architecture blocker.
 
 ## Immediate next safe work
 
-1. Extend the quote-first draft Quotation bridge from draft packet/readiness
-   gates into an operator-owned edit/review/send/acceptance workflow when GL
-   reopens that slice.
+1. Extend the quote-first path from the current real-token `/quote-accept`
+   browser journey into broader customer-review polish before live use.
 2. Extend the add-on subsystem from the confirmed `foil_number` proof slice
-   into dependency logic and any additional approved add-on classes.
-3. Turn the source price-enrichment candidate artifact into the import/rebuild
-   rehearsal input only after business price review accepts or replaces the
-   live-snapshot candidates.
+   into real paid-checkout product-family add-on logic only when GL names the
+   next add-on class to build.
+3. Turn the source price-enrichment and media classification artifacts into an
+   import/rebuild rehearsal input without hiding live-snapshot price provenance
+   or the held media roles.
 4. Extend desktop/mobile UX gates beyond the two core controls into the full
    quote review and checkout reopening journeys before public ecommerce returns.
 
-No imports. No build. No purge. No product-transfer claims.
+No destructive imports. No purge. No public ecommerce claim while
+`lt_ecommerce_paused=1`.

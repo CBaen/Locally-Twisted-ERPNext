@@ -29,6 +29,7 @@ from locally_twisted.product_quote_runtime import (
     QUOTE_STATUS_DRAFT_CREATED,
     QUOTE_STATUS_NEEDS_REVIEW,
 )
+from locally_twisted.product_quote_acceptance import ACCEPTANCE_FIELDNAMES, TOKEN_FIELDNAMES
 
 
 SO_FIELDS = [
@@ -83,6 +84,58 @@ SO_FIELDS = [
         "label": "Fulfillment Status",
         "fieldtype": "Data",
         "insert_after": "custom_lt_requested_window_end",
+    },
+]
+
+SO_PRODUCT_QUOTE_ACCEPTANCE_FIELDS = [
+    {
+        "fieldname": ACCEPTANCE_FIELDNAMES["source_quotation"],
+        "label": "Accepted Quote",
+        "fieldtype": "Link",
+        "options": "Quotation",
+        "insert_after": "custom_lt_fulfillment_status",
+        "read_only": 1,
+        "description": "Reviewed product-page quote that became this draft order.",
+    },
+    {
+        "fieldname": ACCEPTANCE_FIELDNAMES["accepted_by"],
+        "label": "Accepted By",
+        "fieldtype": "Data",
+        "insert_after": ACCEPTANCE_FIELDNAMES["source_quotation"],
+        "read_only": 1,
+        "description": "Name recorded from the customer's written approval.",
+    },
+    {
+        "fieldname": ACCEPTANCE_FIELDNAMES["accepted_email"],
+        "label": "Accepted Email",
+        "fieldtype": "Data",
+        "insert_after": ACCEPTANCE_FIELDNAMES["accepted_by"],
+        "read_only": 1,
+        "description": "Email address recorded from the customer's written approval.",
+    },
+    {
+        "fieldname": ACCEPTANCE_FIELDNAMES["accepted_on"],
+        "label": "Accepted On",
+        "fieldtype": "Date",
+        "insert_after": ACCEPTANCE_FIELDNAMES["accepted_email"],
+        "read_only": 1,
+        "description": "Date recorded from the customer's written approval.",
+    },
+    {
+        "fieldname": ACCEPTANCE_FIELDNAMES["acceptance_reference"],
+        "label": "Acceptance Reference",
+        "fieldtype": "Small Text",
+        "insert_after": ACCEPTANCE_FIELDNAMES["accepted_on"],
+        "read_only": 1,
+        "description": "Written approval reference, such as an email thread, signed packet, or approval note.",
+    },
+    {
+        "fieldname": ACCEPTANCE_FIELDNAMES["acceptance_payload"],
+        "label": "Acceptance Record",
+        "fieldtype": "JSON",
+        "insert_after": ACCEPTANCE_FIELDNAMES["acceptance_reference"],
+        "read_only": 1,
+        "description": "Machine-readable acceptance details captured when the draft order was created.",
     },
 ]
 
@@ -218,6 +271,31 @@ QUOTATION_FIELDS = [
         "default": QUOTE_STATUS_NEEDS_REVIEW,
         "description": "Operator-visible status for the product-page quote bridge.",
     },
+    {
+        "fieldname": TOKEN_FIELDNAMES["token_hash"],
+        "label": "Quote Approval Token",
+        "fieldtype": "Data",
+        "insert_after": QUOTATION_FIELDNAMES["status"],
+        "read_only": 1,
+        "hidden": 1,
+        "description": "Hashed one-quote customer approval token. The raw token is not stored.",
+    },
+    {
+        "fieldname": TOKEN_FIELDNAMES["token_issued_on"],
+        "label": "Quote Approval Link Issued On",
+        "fieldtype": "Datetime",
+        "insert_after": TOKEN_FIELDNAMES["token_hash"],
+        "read_only": 1,
+        "description": "When the customer quote approval link was prepared.",
+    },
+    {
+        "fieldname": TOKEN_FIELDNAMES["token_expires_on"],
+        "label": "Quote Approval Link Expires On",
+        "fieldtype": "Date",
+        "insert_after": TOKEN_FIELDNAMES["token_issued_on"],
+        "read_only": 1,
+        "description": "After this date, the customer approval link must fail loudly.",
+    },
 ]
 
 DELIVERY_ITEMS = {
@@ -279,7 +357,7 @@ def execute(commit: bool = True) -> str:
 
 
 def _ensure_sales_order_fields(summary: dict) -> None:
-    for spec in SO_FIELDS:
+    for spec in [*SO_FIELDS, *SO_PRODUCT_QUOTE_ACCEPTANCE_FIELDS]:
         status = _ensure_custom_field("Sales Order", spec)
         if status:
             summary["custom_fields"].append(status)

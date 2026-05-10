@@ -6,6 +6,22 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-10 - Rollback-safe Frappe verifiers are not parallel-safe
+
+A batch run launched several rollback-style ERPNext/Frappe verifiers against the same local site in parallel. One product quote customization contract briefly failed because another verifier's rollback/test mutation made its fake Lead disappear mid-contract. The same contract passed immediately when rerun alone.
+
+**Counter-move:** run rollback-safe Frappe database verifiers sequentially unless they are explicitly designed for parallel isolation. Browser-only Playwright checks can run in their normal worker model, but tests that monkeypatch `frappe.db.commit`, create fake Leads/Quotations/Sales Orders, or call `frappe.db.rollback()` share the same site state and can invalidate each other.
+
+---
+
+## 2026-05-10 - Cleared business blockers and live commerce state are separate gates
+
+The product-page architecture audit had real source/business blocker rows for add-ons, live-snapshot prices, and media classification. After GL cleared those blocks for commerce-lane testing, the site still needed to be paused again for V1 launch. A green open-commerce architecture pass is not the same thing as permission to leave checkout open to customers.
+
+**Counter-move:** model business approval rows, technical architecture health, and public live/open state separately. A readiness gate should say exactly which layer is blocking. When GL clears a business review blocker and then says pause, verify both modes: pass while temporarily open, then restore the pause config and prove the public pause contract.
+
+---
+
 ## 2026-05-10 - Approval links need their own backend gate, not just Desk controls
 
 The product-page quote Desk send button already checked `Ready For Customer Review`, but the token issuance and customer-acceptance helpers could still be called directly. That left a backend path where a submitted/priced quote in `Needs Operator Review` could create a draft Sales Order.

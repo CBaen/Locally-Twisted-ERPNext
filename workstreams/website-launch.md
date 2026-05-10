@@ -1,6 +1,6 @@
 # Website Launch Workstream
 
-Last updated: 2026-05-10 by Codex after public ecommerce pause and header conversion-label closeout.
+Last updated: 2026-05-10 by Codex after ecommerce business-block clearance, public ecommerce pause restoration, and header conversion-label closeout.
 
 Scope correction 2026-05-10 (GL authoritative): V1 launch is no-purchase public
 site scope. Ready-to-Order, shop, product, cart, and checkout surfaces are
@@ -44,12 +44,29 @@ retry for transient browser-close/502 flakes while repeatable route/layout
 failures still fail the gate.
 
 2026-05-10 header conversion-label closeout: the public header/menu now shows
-`Free Event Quote` and `Contact Us`, both pointing to `/contact`. The former
-visible CTA label `Free Event Quote` became `Contact Us`; the adjacent service
-label that previously read `Twisting & Face Painting` became `Free Event Quote`.
-`/balloon-twisting-and-face-painting` remains a live service route, but the
-primary header label is now the quote path. Coordination:
+`Twisting & Face Painting`, `Free Event Quote`, and `Contact Us`.
+`Twisting & Face Painting` points to `/balloon-twisting-and-face-painting`;
+the two conversion labels point to `/contact`. Ready-to-Order source chrome is
+config-gated and hidden while public ecommerce is paused. Coordination:
 `workstreams/menu-content-coordination.md`; verifier: `scripts/verify/nav_ia.py`.
+
+2026-05-10 ecommerce business-block closeout: GL cleared the remaining source
+add-on, live-snapshot price, and source media/gallery approval blockers for
+commerce-lane testing. With ecommerce temporarily open,
+`python scripts/verify/product_page_architecture_readiness.py` passed with
+`technical_architecture_ok: True`, `import_reopen_ok: True`, 14 pass rows, 0
+blocked rows, and 1 finance deferral. The site was then restored to
+`lt_ecommerce_paused=1`, cache was cleared, and
+`python scripts/verify/ecommerce_pause_contract.py` passed. This does not
+change V1 launch scope: public ecommerce stays paused unless GL explicitly
+reopens purchase scope.
+
+2026-05-10 SEO/GEO/AEO closeout: `npm run test:seo-contract` now guards
+canonical aliases, sitemap canonical routes plus paused ecommerce URLs,
+business/service JSON-LD without unverified ratings/hours, current FAQ visible
+questions matched to FAQPage JSON-LD, and BTFP content-image alt text. Source
+handoff: `workstreams/seo-geo-aeo-contract.md`; capability:
+`.codex/capabilities/recipes/lt-seo-geo-aeo-contract.md`.
 
 2026-05-08 accessibility closeout: the saved local axe scan findings were fixed across `/event-balloons`, `/portfolio`, `/shop`, product detail/category pages, and `/checkout`. `npm run test:a11y` now regenerates desktop/mobile axe reports for the 19 public launch routes and fails on any violation. `npm run test:a11y-manual` adds a manual-style keyboard/focus/zoom-pressure probe for public routes and caught the homepage review crawl plus portfolio hidden-photo tab-order failures. Durable rules: Frappe already provides the page-level main landmark, route templates must not add nested page-level `<main>` landmarks inside `page_content`, and moving proof surfaces must not leave hidden/offscreen items in the tab order.
 
@@ -109,7 +126,7 @@ Latest verified controller baseline:
 - Public microinteraction closeout now keeps the balloon cursor retired and verifies whole-card product navigation, `npm run test:shop-smoke`, `npm run test:layout-fit` 299/299, `npm run test:interactive-layout` 154/154, `npm run test:a11y` with 46 route/viewport axe results and 0 violations, and `npm run test:a11y-manual`.
 - Current favicon/cursor retirement pass on 2026-05-08 verified the served red dog favicon, absence of cursor assets/DOM, and product-card text click navigation. It also exposed that `python scripts/verify/smoke_shop.py` is not currently green in this shared worktree: it fails on the variant-chip checkbox contract and a homepage nav `Portfolio` assertion. Treat the full shop-smoke status as blocked until the active shop/menu lane repairs it.
 - `python scripts/verify/smoke_shop.py` passed after updating stale chrome selectors to the current authority-first header/mobile drawer and retiring the category-card index.
-- `nav_ia.py` now verifies the desktop/mobile `Event Balloons`, `Free Event Quote`, `Portfolio`, `FAQ`, and `Contact Us` launch chrome while ecommerce is paused. Older `smoke_shop.py` references to `Twisting & Face Painting` and `Ready-to-Order` are historical unless the internal shop lane explicitly updates them.
+- `nav_ia.py` now verifies the desktop/mobile `Event Balloons`, `Twisting & Face Painting`, `Free Event Quote`, `Portfolio`, `About Us`, `FAQ`, and `Contact Us` launch chrome while ecommerce is paused. `Ready-to-Order` remains source-gated and hidden in rendered public chrome unless the internal shop lane explicitly opens ecommerce.
 - `python scripts/verify/cart_checkout_contract.py` passed after the cart/checkout item-code contract fix.
 - `python scripts/verify/variant_media_contract.py` passed after the first variant-media reconciliation pass.
 - `python scripts/verify/catalog_variant_contract.py` passed: 53 products checked, 10,227 expected active required-choice variants, 10,227 live active variants, 4 single-SKU products.

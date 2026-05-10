@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Verify that public ecommerce is paused for launch.
+"""Verify that public ecommerce matches the configured launch/testing mode.
 
-This is a temporary launch contract: customer-facing shop, product, cart, and
-checkout routes must land on the branded pause page, while public navigation
-must not advertise Ready-to-Order or cart entry points.
+The source default is paused. Local commerce testing can open the routes with
+the site config key `lt_ecommerce_paused = 0`; this verifier then expects
+shop/product/cart/checkout lanes and public navigation to be visible.
 """
 from __future__ import annotations
 
@@ -67,35 +67,6 @@ def read(path: Path) -> str:
     return path.read_text(encoding="utf-8")
 
 
-def assert_source_hidden() -> None:
-    navbar = read(NAVBAR)
-    footer = read(FOOTER)
-    event_balloons = read(EVENT_BALLOONS)
-
-    nav_forbidden = (
-        "Ready-to-Order",
-        'href="/shop"',
-        "/shop-items",
-        'href="/cart"',
-        "Shopping cart",
-        "data-lt-search-product-entry",
-    )
-    for needle in nav_forbidden:
-        if needle in navbar:
-            fail(f"navbar still exposes ecommerce surface: {needle}")
-
-    footer_forbidden = ("Ready-to-Order", 'href="/shop"', "/shop-items")
-    for needle in footer_forbidden:
-        if needle in footer:
-            fail(f"footer still exposes ecommerce surface: {needle}")
-
-    if 'href="/shop"' in event_balloons:
-        fail("event balloons CTA still points customers to /shop")
-
-    if 'action="/shop"' in navbar:
-        fail("search form still submits to /shop")
-
-
 def get_final(route: str) -> tuple[int, str, str]:
     url = urljoin(BASE_URL + "/", route.lstrip("/"))
     request = Request(url, headers={"User-Agent": "LT ecommerce pause verifier"})
@@ -138,6 +109,10 @@ def doctype_exists(doctype: str) -> bool:
     return bool(bench_execute("frappe.db.exists", args=["DocType", doctype]))
 
 
+def is_configured_paused() -> bool:
+    return bool(bench_execute("locally_twisted.ecommerce_pause.is_ecommerce_paused"))
+
+
 def mutation_counts() -> dict[str, int]:
     doctypes = list(MUTATION_DOCTYPES)
     doctypes.extend(doctype for doctype in OPTIONAL_MUTATION_DOCTYPES if doctype_exists(doctype))
@@ -176,18 +151,60 @@ def assert_checkout_api_guard_order() -> None:
         fail("submit_guest_order must check ecommerce pause before purchase, order, payment, or Stripe work")
 
 
-def assert_routes_paused() -> None:
+def assert_source_has_safe_default() -> None:
+    source = read(ROOT / "apps/locally_twisted/locally_twisted/ecommerce_pause.py")
+    if "ECOMMERCE_PAUSED_DEFAULT = True" not in source:
+        fail("ecommerce pause source default must stay paused")
+    if 'lt_ecommerce_paused' not in source:
+        fail("ecommerce pause must be controlled by lt_ecommerce_paused site config")
+
+
+def assert_navigation_matches_mode(paused: bool) -> None:
+    status, final_url, body = get_final("/")
+    if status >= 400:
+        fail(f"homepage returned HTTP {status} while checking ecommerce navigation")
+    if urlparse(final_url).path.rstrip("/") not in ("", "/"):
+        fail(f"homepage navigation check unexpectedly landed on {final_url}")
+
+    open_markers = (
+        'data-lt-megamenu-trigger="lt-mega-products"',
+        'href="/shop"',
+        'href="/cart"',
+        'action="/shop"',
+        "data-lt-search-product-entry",
+    )
+    if paused:
+        for needle in open_markers:
+            if needle in body:
+                fail(f"paused homepage still exposes ecommerce surface: {needle}")
+        if "Ready-to-Order" in body:
+            fail("paused homepage still advertises Ready-to-Order")
+    else:
+        for needle in open_markers:
+            if needle not in body:
+                fail(f"open homepage is missing ecommerce surface: {needle}")
+        if "Ready-to-Order" not in body:
+            fail("open homepage must advertise Ready-to-Order")
+
+
+def assert_routes_match_mode(paused: bool) -> None:
     for route in BLOCKED_ROUTES:
         status, final_url, body = get_final(route)
         final_path = urlparse(final_url).path.rstrip("/")
         if status >= 400:
             fail(f"{route} returned HTTP {status}")
-        if final_path != PAUSE_PATH:
-            fail(f"{route} should land on {PAUSE_PATH}, landed on {final_url}")
-        if "Ready-to-order is paused" not in body:
-            fail(f"{route} did not render the branded pause message")
-        if "Start a custom event quote" not in body:
-            fail(f"{route} did not render the contact fallback")
+        if paused:
+            if final_path != PAUSE_PATH:
+                fail(f"{route} should land on {PAUSE_PATH}, landed on {final_url}")
+            if "Ready-to-order is paused" not in body:
+                fail(f"{route} did not render the branded pause message")
+            if "Start a custom event quote" not in body:
+                fail(f"{route} did not render the contact fallback")
+        else:
+            if final_path == PAUSE_PATH:
+                fail(f"{route} is still paused in open-commerce mode")
+            if "lt-ecommerce-paused" in body:
+                fail(f"{route} rendered the pause page shell in open-commerce mode")
 
 
 def post_checkout_api(method: str) -> dict[str, object]:
@@ -256,11 +273,14 @@ def assert_direct_checkout_apis_blocked() -> None:
 
 def main() -> int:
     parse_noop_args(__doc__)
-    assert_source_hidden()
+    paused = is_configured_paused()
+    assert_source_has_safe_default()
+    assert_navigation_matches_mode(paused)
     assert_checkout_api_guard_order()
-    assert_routes_paused()
-    assert_direct_checkout_apis_blocked()
-    print("Ecommerce pause contract passed")
+    assert_routes_match_mode(paused)
+    if paused:
+        assert_direct_checkout_apis_blocked()
+    print(f"Ecommerce {'pause' if paused else 'open testing'} contract passed")
     return 0
 
 

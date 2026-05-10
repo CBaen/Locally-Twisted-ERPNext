@@ -1,6 +1,6 @@
 # Business Automation Index
 
-Last updated: 2026-05-09 by Codex after adding a no-runtime automation-index mode for internal reports.
+Last updated: 2026-05-10 by Codex after adding the product quote operator send control.
 
 ## Outcome
 
@@ -35,12 +35,12 @@ Latest report:
 python scripts/verify/business_automation_index.py --report output/business-automation-index.json
 ```
 
-Current result on 2026-05-09:
+Current result on 2026-05-10:
 
 - `ok: true`
-- 25 total surfaces indexed
-- 15 launch-required surfaces
-- 22 surfaces exist and are connected
+- 30 total surfaces indexed
+- 12 launch-required surfaces
+- 27 surfaces exist and are connected
 - 3 surfaces exist but are not connected
 - 0 launch-required missing surfaces
 - 0 useful future surfaces missing
@@ -69,7 +69,8 @@ Fresh closeout verification also confirmed:
 - `customer_reminder_review_report_contract.py` verifies report rows/groups with fake mixed/empty/malformed-send source scenarios.
 - `customer_email_policy_contract.py` verifies inquiry acknowledgment, paid receipt, operator notification, first-order welcome, and paid-order email cascade policy/no-PDF boundaries without sending email or mutating records.
 - `maintenance_heartbeat.py` verifies the sanitized client operations heartbeat, owner-selected notification topics/cadence surface, approval tiers, and Maintenance Admin raw-log/customer-data boundary.
-- `synthetic_business_pipeline.py` runs 16 no-live synthetic contracts with 0 broken piping and keeps 3 live cutover items deferred.
+- `synthetic_business_pipeline.py` runs 16 active no-live synthetic readiness contracts with 0 broken piping and keeps 9 cutover items deferred.
+- Product-page quote operator review, accepted-quote-to-draft-order, customer quote delivery, and operator send-control checks are indexed through `business_automation_product_quote.py`, so the main automation index stays a registry instead of absorbing feature-specific checkers.
 
 ## Connected Launch Spine
 
@@ -86,6 +87,11 @@ These are currently classified as existing and connected:
 - outbound document registry and source templates
 - outbound document send-readiness blockers
 - draft-only quote/proposal review packets
+- product-page quote operator-review readiness with no send/order/payment
+- accepted product-page quotes to draft Sales Orders with no invoice/payment/email side effects
+- `/quote-accept` real-token customer failure/success UX gate
+- customer quote approval-link delivery with required business BCC
+- operator-owned Quotation send control for reviewed product-page quotes
 - read-only paperwork status checkup
 - draft-only unpaid/overdue invoice review candidates
 - draft-only unpaid invoice reminder/statement packet rendering
@@ -132,7 +138,7 @@ Important current guardrails:
 Safe fake-data verifiers are part of the operating model:
 
 - `synthetic_business_pipeline.py` runs the current no-live operating-readiness suite and fails if broken piping appears.
-- `record_level_failure_contract.py` creates rollback-safe record-level backend failure evidence.
+- `record_level_failure_contract.py` creates rollback-safe record-level backend failure evidence and proves exact resolution comments close a grouping key without deleting the original evidence.
 - `inquiry_upload_failure_contract.py` proves rejected inspiration photos produce customer-visible and Lead-level evidence.
 - `smoke_forms.py` creates and deletes a test Lead and linked cascade Task.
 - `checkout_lead_conversion_contract.py` creates rollback-only checkout records, proves the Lead stays pending before payment, then proves paid-order conversion.
@@ -142,6 +148,10 @@ Safe fake-data verifiers are part of the operating model:
 - outbound document send-readiness uses fake payloads and rollback-safe record-level blocker evidence.
 - `customer_reminder_dry_run_contract.py` uses in-memory fake reminder queue payloads and creates no database records.
 - `customer_reminder_review_report_contract.py` uses in-memory fake reminder report payloads and creates no database records.
+- `product_quote_operator_review_contract.py` uses in-memory fake product quote review payloads and creates no database records.
+- `product_quote_acceptance_contract.py` creates rollback-safe Lead, Quotation, Customer, and draft Sales Order records, then proves invoices, payment requests, Email Queue rows, and Communications do not change.
+- `product_quote_customer_delivery_contract.py` creates rollback-safe Lead and Quotation records, stubs `frappe.sendmail`, requires a delivery-safe business BCC, rejects routed-alias BCCs such as `hi@locallytwisted.com`, and proves order/finance/email counts do not change.
+- `product_quote_operator_send_control_contract.py` creates rollback-safe Lead and Quotation records, verifies the Quotation Desk button hook plus whitelisted operator method, stubs `frappe.sendmail`, requires a delivery-safe business BCC, and proves order/finance/email counts do not change.
 - `customer_email_policy_contract.py` is a static source contract and creates no database records.
 - `maintenance_heartbeat.py` can run read-only, and scheduled writes persist sanitized heartbeat summaries only.
 
@@ -161,6 +171,12 @@ python scripts/verify/customer_email_policy_contract.py
 python scripts/verify/outbound_document_send_readiness_contract.py
 python scripts/verify/quote_proposal_draft_packet.py --report output/quote-proposal-draft-packet.json
 python scripts/verify/quote_proposal_draft_packet_contract.py
+python scripts/verify/product_quote_operator_review.py --report output/product-quote-operator-review.json
+python scripts/verify/product_quote_operator_review_contract.py
+python scripts/verify/product_quote_acceptance_contract.py
+npm run test:quote-accept-experience
+python scripts/verify/product_quote_customer_delivery_contract.py
+python scripts/verify/product_quote_operator_send_control_contract.py
 python scripts/verify/stripe_amount_parity_contract.py
 python scripts/verify/paperwork_status.py --report output/paperwork-status.json
 python scripts/verify/unpaid_invoice_review.py --report output/unpaid-invoice-review.json
@@ -204,6 +220,12 @@ python scripts/verify/outbound_documents_contract.py
 python scripts/verify/outbound_document_send_readiness_contract.py
 python scripts/verify/quote_proposal_draft_packet.py --report output/quote-proposal-draft-packet.json
 python scripts/verify/quote_proposal_draft_packet_contract.py
+python scripts/verify/product_quote_operator_review.py --report output/product-quote-operator-review.json
+python scripts/verify/product_quote_operator_review_contract.py
+python scripts/verify/product_quote_acceptance_contract.py
+npm run test:quote-accept-experience
+python scripts/verify/product_quote_customer_delivery_contract.py
+python scripts/verify/product_quote_operator_send_control_contract.py
 python scripts/verify/unpaid_invoice_review.py --report output/unpaid-invoice-review.json
 python scripts/verify/unpaid_invoice_draft_packet.py --report output/unpaid-invoice-draft-packet.json
 python scripts/verify/unpaid_invoice_draft_packet_contract.py
@@ -232,4 +254,4 @@ Run this only during cutover work. It is intentionally not part of the current s
 
 - Keep no-send paperwork/reporting and sanitized maintenance checkups green while reviewing any remaining read-only report surfaces.
 - Keep vendor/W-9 generation, bank reconciliation cutover, payroll/HRMS, and stage-to-finance automation explicitly disconnected until their approval/setup gates are real.
-- Quote/proposal packets are connected only as draft-only internal review output; do not treat them as PDF generation, customer delivery, or Quotation approval automation.
+- Quote/proposal packets and product quote operator review are connected only as draft-only/internal review output. The operator send control can send a reviewed submitted quote approval link, but it still does not create a Sales Order, invoice, payment request, PDF, or payment path.

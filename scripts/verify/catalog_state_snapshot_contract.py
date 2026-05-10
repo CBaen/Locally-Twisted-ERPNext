@@ -9,6 +9,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from _cli import parse_noop_args
+
 SNAPSHOT = Path(
     "audits/odoo-erpnext-migration-audit-2026-05-08/"
     "current-state-snapshot-2026-05-08-1102"
@@ -58,6 +60,8 @@ def _load_json(path: Path):
 
 
 def main() -> int:
+    parse_noop_args(__doc__)
+
     failures: list[str] = []
 
     if not SNAPSHOT.exists():

@@ -1,0 +1,98 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+<style>{{ page_css }}</style>
+
+<section class="lt-quote-accept" aria-labelledby="lt-quote-accept-title">
+  <div class="lt-quote-accept__inner">
+    <p class="lt-quote-accept__eyebrow">Quote approval</p>
+    <h1 class="lt-quote-accept__title" id="lt-quote-accept-title">Review your quote.</h1>
+
+    {% if acceptance_error %}
+    <p class="lt-quote-accept__copy lt-quote-accept__error" role="alert">{{ acceptance_error }}</p>
+    <p class="lt-quote-accept__copy">Nothing was approved or ordered. Send us a note and we will help.</p>
+    <a class="lt-quote-accept__button" href="/contact">Contact Locally Twisted</a>
+    {% elif preview %}
+    <p class="lt-quote-accept__copy">
+      This approval creates a draft order for the team to review. It does not charge a card or create an invoice.
+    </p>
+    <div class="lt-quote-accept__summary" aria-label="Quote summary">
+      <div class="lt-quote-accept__row"><strong>Quote</strong><span>{{ preview.quotation }}</span></div>
+      <div class="lt-quote-accept__row"><strong>For</strong><span>{{ preview.customer_name }}</span></div>
+      <div class="lt-quote-accept__row"><strong>Scope</strong><span>{{ preview.summary }}</span></div>
+      <div class="lt-quote-accept__row"><strong>Total</strong><span>{{ "$%.2f"|format(preview.total) }} {{ preview.currency }}</span></div>
+      {% if preview.expires_on %}
+      <div class="lt-quote-accept__row"><strong>Link expires</strong><span>{{ preview.expires_on }}</span></div>
+      {% endif %}
+    </div>
+
+    <form class="lt-quote-accept__form" id="lt-quote-accept-form">
+      <input type="hidden" name="token" value="{{ token }}">
+      <label class="lt-quote-accept__field">
+        Your name
+        <input name="accepted_by" autocomplete="name" required>
+      </label>
+      <label class="lt-quote-accept__field">
+        Your email
+        <input name="accepted_email" type="email" autocomplete="email" required>
+      </label>
+      <label class="lt-quote-accept__field">
+        Approval note
+        <textarea name="acceptance_reference" rows="3" required></textarea>
+      </label>
+      <button class="lt-quote-accept__button" type="submit">Approve quote</button>
+      <p class="lt-quote-accept__status" id="lt-quote-accept-status" role="status"></p>
+    </form>
+    <div class="lt-quote-accept__success" data-lt-quote-accepted hidden role="status" aria-live="polite">
+      <h2>We have your approval.</h2>
+      <p data-lt-quote-accepted-message>
+        Thanks, we have your quote approval. The team will review the order draft before any invoice or payment step.
+      </p>
+      <p>No card was charged. Nothing was invoiced. We will review the draft order before any payment step.</p>
+      <a class="lt-quote-accept__button" href="/contact">Contact Locally Twisted</a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<script>
+(function () {
+  var form = document.getElementById('lt-quote-accept-form');
+  if (!form) return;
+  var status = document.getElementById('lt-quote-accept-status');
+  var successPanel = document.querySelector('[data-lt-quote-accepted]');
+  var successMessage = document.querySelector('[data-lt-quote-accepted-message]');
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+    var button = form.querySelector('button[type="submit"]');
+    var data = new URLSearchParams(new FormData(form));
+    if (button) button.disabled = true;
+    if (status) status.textContent = 'Saving your approval...';
+    fetch('/api/method/locally_twisted.product_quote_acceptance.accept_product_quote_from_token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+      body: data.toString()
+    })
+      .then(function (response) { return response.json(); })
+      .then(function (payload) {
+        var message = payload.message || payload;
+        if (!message || message.ok !== true) {
+          throw new Error((payload._server_messages || payload.exc || 'Tiny snag: the approval did not save yet. Please contact us.'));
+        }
+        if (status) status.textContent = message.customer_message || 'Thanks, we have your quote approval.';
+        if (successMessage) {
+          successMessage.textContent = message.customer_message || 'Thanks, we have your quote approval. The team will review the order draft before any invoice or payment step.';
+        }
+        if (successPanel) successPanel.hidden = false;
+        form.hidden = true;
+        form.setAttribute('aria-hidden', 'true');
+        form.reset();
+      })
+      .catch(function () {
+        if (status) status.textContent = 'Tiny snag: the approval did not save yet. Please contact us and we will help.';
+        if (button) button.disabled = false;
+      });
+  });
+})();
+</script>
+{% endblock %}

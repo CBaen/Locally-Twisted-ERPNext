@@ -87,6 +87,12 @@ def main() -> int:
         failures.append(
             f"Classic Arch must classify as complex_custom_product/quote_first, found {classic.product_page_type}/{classic.commerce_lane}."
         )
+    if not classic.dependency_matrices:
+        failures.append("Classic Arch must preserve source valid-option dependency matrix.")
+    else:
+        matrix = classic.dependency_matrices[0]
+        if matrix.axes != ("Arch Size", "Design", "LED Lights") or matrix.valid_combination_count != 16:
+            failures.append(f"Classic Arch dependency matrix wrong: axes={matrix.axes}, combinations={matrix.valid_combination_count}.")
 
     lines = [
         "# Proof Product Contract Report",
@@ -109,6 +115,7 @@ def main() -> int:
         f"- Required axes: {', '.join(axis.name for axis in classic.required_axes) or '(none)'}",
         f"- Customization axes: {', '.join(axis.name for axis in classic.customization_axes) or '(none)'}",
         f"- Gallery images in source contract: {len(classic.gallery)}",
+        f"- Dependency matrices: {len(classic.dependency_matrices)}",
         f"- Warnings: {len(classic.warnings)}",
         "",
     ]

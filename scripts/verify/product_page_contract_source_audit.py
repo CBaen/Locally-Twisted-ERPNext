@@ -16,12 +16,17 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "apps" / "locally_twisted"))
 
 from locally_twisted.catalog_contract import build_product_page_contract
+from locally_twisted.catalog_contract.addon_rules import REVIEW_ADD_ONS
 
 SOURCE_CATALOG = ROOT / "_resources/odoo-live/catalog.json"
 SLUG_TO_GROUP = ROOT / "_resources/odoo-live/slug_to_group.json"
 REPORT_PATH = ROOT / Path(
     "audits/odoo-erpnext-migration-audit-2026-05-08/"
     "15-product-page-contract-source-audit.md"
+)
+JSON_PATH = ROOT / Path(
+    "audits/odoo-erpnext-migration-audit-2026-05-08/"
+    "15-product-page-contract-source-audit.json"
 )
 
 
@@ -53,6 +58,7 @@ def main() -> int:
     warning_counts = Counter()
     product_page_type_counts = Counter(contract.product_page_type for contract in contracts)
     commerce_lane_counts = Counter(contract.commerce_lane for contract in contracts)
+    review_add_on_axis_counts = Counter()
     for contract in contracts:
         for warning in contract.warnings:
             if "resolver-backed" in warning:
@@ -61,12 +67,21 @@ def main() -> int:
                 warning_counts["unclassified_gallery_images"] += 1
             elif "Axis needs review" in warning:
                 warning_counts["axis_needs_review"] += 1
+                for axis_name in REVIEW_ADD_ONS:
+                    if f": {axis_name} -" in warning:
+                        review_add_on_axis_counts[axis_name] += 1
             elif "Color axis removed" in warning:
                 warning_counts["color_axis_customization"] += 1
             else:
                 warning_counts["other"] += 1
 
     add_on_products = [contract for contract in contracts if contract.add_ons]
+    dependency_products = [contract for contract in contracts if contract.dependency_matrices]
+    dependency_combo_count = sum(
+        matrix.valid_combination_count
+        for contract in dependency_products
+        for matrix in contract.dependency_matrices
+    )
     review_products = [contract for contract in contracts if contract.warnings]
     gallery_products = [contract for contract in contracts if len(contract.gallery) > 1]
     resolver_ready = [contract for contract in contracts if contract.source_variant_rows and contract.has_resolver_prices]
@@ -82,6 +97,8 @@ def main() -> int:
         f"- Source products: {len(products)}",
         f"- Products with gallery/alternate images: {len(gallery_products)}",
         f"- Products with confirmed add-on contracts: {len(add_on_products)}",
+        f"- Products with source-backed dependency matrices: {len(dependency_products)}",
+        f"- Required-axis valid combinations preserved: {dependency_combo_count}",
         f"- Variant products with resolver-backed prices: {len(resolver_ready)}",
         f"- Products with warnings/blockers: {len(review_products)}",
         "",
@@ -108,6 +125,16 @@ def main() -> int:
     ])
     for key, value in sorted(warning_counts.items()):
         lines.append(f"- {key}: {value}")
+
+    lines.extend([
+        "",
+        "## Review-only source add-on families",
+        "",
+    ])
+    for axis_name in sorted(REVIEW_ADD_ONS):
+        lines.append(
+            f"- {axis_name}: {review_add_on_axis_counts.get(axis_name, 0)} product(s) need mapping before checkout"
+        )
 
     lines.extend([
         "",
@@ -148,16 +175,34 @@ def main() -> int:
     else:
         lines.append("**PASS for source contract readiness.**")
 
+    artifact = {
+        "source_products": len(products),
+        "product_page_type_counts": dict(product_page_type_counts),
+        "commerce_lane_counts": dict(commerce_lane_counts),
+        "warning_counts": dict(warning_counts),
+        "review_only_source_add_on_counts": dict(review_add_on_axis_counts),
+        "confirmed_add_on_product_count": len(add_on_products),
+        "dependency_matrix_product_count": len(dependency_products),
+        "dependency_matrix_valid_combination_count": dependency_combo_count,
+        "blocked_for_destructive_import": bool(
+            warning_counts["missing_resolver_prices"] or warning_counts["axis_needs_review"]
+        ),
+    }
+
+    REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
     REPORT_PATH.write_text("\n".join(lines), encoding="utf-8")
+    JSON_PATH.write_text(json.dumps(artifact, indent=2, sort_keys=True), encoding="utf-8")
 
     if blocking:
         print("[PRODUCT PAGE CONTRACT SOURCE AUDIT] BLOCKED")
         print(f"report={REPORT_PATH}")
+        print(f"json={JSON_PATH}")
         print(dict(warning_counts))
         return 2
 
     print("[PRODUCT PAGE CONTRACT SOURCE AUDIT] PASS")
     print(f"report={REPORT_PATH}")
+    print(f"json={JSON_PATH}")
     return 0
 
 

@@ -40,6 +40,12 @@
    NO inline <style> blocks. NO Bootstrap 5 utilities.
 #}
 
+{% if lt_ecommerce_paused is defined %}
+    {% set ecommerce_paused = lt_ecommerce_paused %}
+{% else %}
+    {% set ecommerce_paused = true %}
+{% endif %}
+
 <footer class="lt-footer">
 
     {# ================================================================
@@ -155,6 +161,9 @@
                     <p class="lt-footer__col-title">Event Work</p>
                     <ul class="list-unstyled lt-footer__col-list">
                         <li><a class="lt-footer__col-link" href="/event-balloons">Event Balloons</a></li>
+                        {% if not ecommerce_paused %}
+                            <li><a class="lt-footer__col-link" href="/shop">All Ready-to-Order</a></li>
+                        {% endif %}
                         <li><a class="lt-footer__col-link" href="/portfolio">Portfolio</a></li>
                         <li><a class="lt-footer__col-link" href="/balloon-twisting-and-face-painting">Twisting &amp; Face Painting</a></li>
                         <li><a class="lt-footer__col-link" href="/contact">Free Event Quote</a></li>

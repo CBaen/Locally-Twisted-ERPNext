@@ -62,6 +62,16 @@ class AddOnContract:
 
 
 @dataclass(frozen=True)
+class OptionDependencyMatrixContract:
+    axes: tuple[str, ...]
+    valid_combinations: tuple[dict[str, str], ...]
+    source_variant_rows: int = 0
+    valid_combination_count: int = 0
+    status: Literal["source_backed", "needs_review"] = "source_backed"
+    note: str = ""
+
+
+@dataclass(frozen=True)
 class ProductPageContract:
     slug: str
     source_name: str
@@ -78,6 +88,7 @@ class ProductPageContract:
     required_axes: tuple[RequiredOptionAxisContract, ...] = field(default_factory=tuple)
     customization_axes: tuple[RequiredOptionAxisContract, ...] = field(default_factory=tuple)
     add_ons: tuple[AddOnContract, ...] = field(default_factory=tuple)
+    dependency_matrices: tuple[OptionDependencyMatrixContract, ...] = field(default_factory=tuple)
     source_variant_rows: int = 0
     has_resolver_prices: bool = False
     warnings: tuple[str, ...] = field(default_factory=tuple)

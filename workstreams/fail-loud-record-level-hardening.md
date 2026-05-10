@@ -72,6 +72,15 @@ Still open after this slice:
 - The next no-approval paperwork step is internal reviewed UX for customer reminder report rows. It must stay no-send and review-only.
 - Quote/proposal generation, vendor/W-9 generation, bank reconciliation cutover, payroll/HRMS, and stage-to-finance thresholds remain not connected or approval-gated.
 
+## 2026-05-10 Record Failure Resolution Update
+
+Implemented:
+
+- `failure_recorder.py` now supports exact resolution comments for a backend failure grouping key.
+- `record_health_failures()` keeps the original failure Comment intact but stops reporting it as open when a later `LT_BACKEND_RESOLVED` comment matches the same grouping key.
+- `record_level_failure_contract.py` proves the open-failure and resolved-failure behavior in rollback.
+- The stale fake-data upload warning on `CRM-LEAD-2026-00040` was resolved by adding resolution Comment `ursmtf6m30`; the original failure Comment `ods9l3euu4` remains as evidence.
+
 ## Operating Truth
 
 All current Locally Twisted ERPNext/Frappe data is fake/test data for automation testing until GL explicitly says otherwise.

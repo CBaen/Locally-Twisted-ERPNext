@@ -244,6 +244,7 @@ def _runtime_payload(payload: dict[str, Any], lead_name: str, item_code: str) ->
         "selected_options": payload.get("selected_options") or {},
         "add_ons": payload.get("add_ons") or [],
         "customizations": payload.get("customizations") or [],
+        "color_recipes": payload.get("color_recipes") or [],
         "needs_operator_review": True,
     }
     return normalized

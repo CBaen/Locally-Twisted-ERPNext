@@ -1,6 +1,6 @@
 # Synthetic Business Pipeline
 
-Last updated: 2026-05-08 by Codex after adding checkout-to-paid-order Lead conversion gating.
+Last updated: 2026-05-10 by Codex after adding the product quote operator send-control gate.
 
 ## Outcome
 
@@ -16,17 +16,16 @@ Latest command:
 python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json
 ```
 
-Current result on 2026-05-08:
+Current result on 2026-05-10:
 
 - `ok: true`
 - `synthetic_only: true`
 - `live_inputs_required: false`
 - `uses_real_customer_data: false`
-- 16 synthetic contracts run
-- 16 synthetic contracts passing
+- 16 active synthetic readiness contracts passing
 - 0 broken piping items
 - 8 inefficiencies / partial connections surfaced
-- 3 cutover-deferred items surfaced
+- 9 cutover-deferred items surfaced
 
 The report writes ignored JSON to `output/synthetic-business-pipeline.json`.
 
@@ -34,6 +33,7 @@ The report writes ignored JSON to `output/synthetic-business-pipeline.json`.
 
 - Record-level backend failure evidence with rollback-safe Lead blockers and Error Log evidence.
 - Inquiry upload rejection/failure handling with customer-visible summary and Lead-level evidence.
+- Product add-on dependency boundaries: confirmed `foil_number` remains priced checkout, while review-only source add-on families route to quote.
 - Payment-success browser-return reconciliation errors with pending thank-you copy.
 - Stripe Checkout amount parity with in-memory fake Sales Orders.
 - Checkout-to-paid-order Lead conversion with a stubbed Stripe URL and rollback-only records: the Lead remains pending after checkout and converts only during the paid-order cascade.
@@ -45,6 +45,11 @@ The report writes ignored JSON to `output/synthetic-business-pipeline.json`.
 - Outbound document registry/template contract.
 - Outbound document send-readiness blockers for missing required fields, recipient confirmation, payment path, branding, human approval, sensitive attachments, and record-level blocker evidence.
 - Quote/proposal draft packets with fake Quotation/Lead-style scenarios, including missing acceptance path and malformed send-ready source rows.
+- Product quote operator-review scenarios, including placeholder zero-price blockers, malformed payload blockers, and reviewed internal-ready no-send/no-order state.
+- Accepted product quote to draft Sales Order behavior with rollback-only Lead, Quotation, Customer, and Sales Order records, source quote/acceptance detail preservation, and no invoice/payment/email side effects.
+- Product quote customer delivery behavior with stubbed email, required delivery-safe business BCC, routed-alias BCC rejection, `/quote-accept` approval link, and no order/finance/email record count changes.
+- Product quote operator send-control behavior with Quotation Desk hook proof, whitelisted non-guest server method, required delivery-safe business BCC, `/quote-accept` approval link, and no order/finance/email record count changes.
+- Product quote customization behavior with structured `color_recipes`, grouped color metadata, Lead-to-draft-Quotation preservation, and loud malformed color payload failures.
 - Unpaid invoice packet normal/outlier fake-data scenarios.
 - Customer reminder dry-run normal/outlier fake-data scenarios, including missing payment path and malformed send-enabled packets.
 - Customer reminder review-report normal/outlier fake-data scenarios, including grouped rows, empty queues, and malformed send-enabled source rows.
@@ -73,8 +78,10 @@ Do not turn this verifier into customer sending or accounting mutation. Rollback
 - `apps/locally_twisted/locally_twisted/verify/synthetic_business_pipeline.py`
 - `scripts/verify/synthetic_business_pipeline.py`
 - `apps/locally_twisted/locally_twisted/verify/record_level_failure_contract.py`
+- `apps/locally_twisted/locally_twisted/failure_recorder.py` now supports exact failure-resolution comments, so stale fake-data blockers can be closed without deleting the original failure evidence.
 - `apps/locally_twisted/locally_twisted/verify/inquiry_upload_failure_contract.py`
 - `apps/locally_twisted/locally_twisted/verify/payment_success_reconciliation_contract.py`
+- `apps/locally_twisted/locally_twisted/verify/product_add_on_dependency_contract.py`
 - `apps/locally_twisted/locally_twisted/verify/customer_email_policy_contract.py`
 - `apps/locally_twisted/locally_twisted/failure_recorder.py`
 - `apps/locally_twisted/locally_twisted/verify/paperwork_status.py`
@@ -86,6 +93,17 @@ Do not turn this verifier into customer sending or accounting mutation. Rollback
 - `apps/locally_twisted/locally_twisted/verify/outbound_document_send_readiness_contract.py`
 - `apps/locally_twisted/locally_twisted/paperwork/quote_proposal_draft_packet.py`
 - `apps/locally_twisted/locally_twisted/verify/quote_proposal_draft_packet_contract.py`
+- `apps/locally_twisted/locally_twisted/product_quote_operator_review.py`
+- `apps/locally_twisted/locally_twisted/verify/product_quote_operator_review_contract.py`
+- `apps/locally_twisted/locally_twisted/product_quote_acceptance.py`
+- `apps/locally_twisted/locally_twisted/verify/product_quote_acceptance_contract.py`
+- `apps/locally_twisted/locally_twisted/product_quote_customer_delivery.py`
+- `apps/locally_twisted/locally_twisted/verify/product_quote_customer_delivery_contract.py`
+- `apps/locally_twisted/locally_twisted/product_quote_operator_send.py`
+- `apps/locally_twisted/locally_twisted/public/js/lt-product-quote-quotation.js`
+- `apps/locally_twisted/locally_twisted/verify/product_quote_operator_send_control_contract.py`
+- `apps/locally_twisted/locally_twisted/product_quote_request.py`
+- `apps/locally_twisted/locally_twisted/verify/product_quote_customization_contract.py`
 - `apps/locally_twisted/locally_twisted/verify/business_automation_index.py`
 
 ## Next Safe Slice

@@ -68,7 +68,14 @@ def main() -> int:
         print("[RECORD-LEVEL FAILURE CONTRACT] " + ("PASS" if result.get("ok") else "FAIL"))
         print(f"  lead: {result.get('lead')}")
         print(f"  comment: {result.get('comment')}")
+        if result.get("resolution_comment"):
+            print(f"  resolution_comment: {result.get('resolution_comment')}")
         print(f"  record_health_failures: {result.get('record_health_failures')}")
+        if result.get("record_health_failures_after_resolution") is not None:
+            print(
+                "  record_health_failures_after_resolution: "
+                f"{result.get('record_health_failures_after_resolution')}"
+            )
         failures = result.get("failures") or []
         if failures:
             print("  failures:")
