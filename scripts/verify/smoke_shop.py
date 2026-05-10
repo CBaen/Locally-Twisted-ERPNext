@@ -2,11 +2,14 @@
 
 Validates the catalog port, shop hub, public nav, fixed-price product lane,
 and retail variant selectors via a real Chromium browser. This should pass on
-every deploy and fail loudly on customer-facing regressions.
+every deploy and fail loudly on customer-facing regressions. When public
+ecommerce is intentionally paused, open-shop checks are skipped and the pause
+contract is verified instead.
 
 Coverage:
-  1. Homepage navbar exposes the current open-commerce links and /shop CTA.
-  2. /shop renders the ready-to-order category rail/dropdown + 53 product cards.
+  1. Homepage navbar exposes the current mode-aware nav and /contact CTA.
+  2. /shop renders the ready-to-order category rail/dropdown + 53 product cards
+     when ecommerce is open, or redirects to the pause page when paused.
   3. /shop and category pages use the approved product-showroom card contract.
   4. /shop-by-category redirects to /shop instead of rendering the retired
      category-card index.
@@ -76,6 +79,17 @@ PRODUCT_DETAIL_SHOWCASE_URL = f"{BASE}/shop-items/garlands/baby-shower-garland"
 VARIANT_STARTING_PRICE_URL = f"{BASE}/shop-items/columns/classic-column"
 VARIANT_STARTING_PRICE_ROUTE = "/shop-items/columns/classic-column"
 ASSET_BOOT_ERROR_MARKER = "file_uploader.bundle.js"
+PUBLIC_ECOMMERCE_PAUSED = False
+PAUSED_ECOMMERCE_ROUTES = (
+    "/shop",
+    "/shop-items",
+    "/shop-items/arches",
+    "/shop-items/bouquets/unicorn-bouquet",
+    "/shop-by-category",
+    "/all-products",
+    "/cart",
+    "/checkout",
+)
 
 DESKTOP_VIEWPORT = {"width": 1366, "height": 900}
 MOBILE_VIEWPORT = {"width": 375, "height": 812}
@@ -96,6 +110,26 @@ def assert_(cond, msg):
 
 def _asset_boot_errors(errors: list[str]) -> list[str]:
     return [error for error in errors if ASSET_BOOT_ERROR_MARKER in error]
+
+
+def _is_pause_page(page) -> bool:
+    return "/ready-to-order-paused" in page.url or page.locator(".lt-ecommerce-paused").count() > 0
+
+
+def detect_public_ecommerce_paused(page) -> bool:
+    page.goto(f"{BASE}/shop", wait_until="networkidle", timeout=15000)
+    return _is_pause_page(page)
+
+
+def check_ecommerce_pause_routes(page):
+    print("-> Public ecommerce pause routes")
+    for route in PAUSED_ECOMMERCE_ROUTES:
+        page.goto(f"{BASE}{route}", wait_until="networkidle", timeout=15000)
+        assert_(_is_pause_page(page), f"{route} should land on the branded ecommerce pause page")
+        body = page.content()
+        assert_("Ready-to-order is paused" in body, f"{route} did not render the pause headline")
+        assert_("Start a custom event quote" in body, f"{route} did not render the quote fallback")
+    print("  OK paused shop/product/cart/checkout routes render the branded quote fallback")
 
 
 def _box(page, selector: str, index: int = 0):
@@ -203,7 +237,10 @@ def check_homepage(page):
     event_trigger = page.locator("[data-lt-megamenu-trigger='lt-mega-events']")
     product_trigger = page.locator("[data-lt-megamenu-trigger='lt-mega-products']")
     assert_(event_trigger.count() == 1, "Desktop header missing Event Balloons mega trigger")
-    assert_(product_trigger.count() == 1, "Desktop header missing Ready-to-Order mega trigger")
+    if PUBLIC_ECOMMERCE_PAUSED:
+        assert_(product_trigger.count() == 0, "Paused desktop header must not expose Ready-to-Order mega trigger")
+    else:
+        assert_(product_trigger.count() == 1, "Desktop header missing Ready-to-Order mega trigger")
 
     nav_links = page.locator(".lt-mega-nav__link, .lt-mega-nav__button")
     nav_text = [
@@ -219,13 +256,22 @@ def check_homepage(page):
         assert_(False, f"Primary nav missing {label}; got {nav_text}")
         return -1
 
+    btfp_index = nav_index("Twisting & Face Painting")
+    quote_index = nav_index("Free Event Quote")
     portfolio_index = nav_index("Portfolio")
-    ready_index = nav_index("Ready-to-Order")
     faq_index = nav_index("FAQ")
-    assert_(
-        ready_index < portfolio_index < faq_index,
-        f"Primary nav should place Portfolio between Ready-to-Order and FAQ, got {nav_text}",
-    )
+    if PUBLIC_ECOMMERCE_PAUSED:
+        assert_("Ready-to-Order" not in nav_text, f"Paused primary nav must hide Ready-to-Order, got {nav_text}")
+        assert_(
+            btfp_index < quote_index < portfolio_index < faq_index,
+            f"Paused primary nav should place BTFP, Free Event Quote, Portfolio, FAQ in order; got {nav_text}",
+        )
+    else:
+        ready_index = nav_index("Ready-to-Order")
+        assert_(
+            ready_index < btfp_index < quote_index < portfolio_index < faq_index,
+            f"Open-commerce primary nav order is wrong, got {nav_text}",
+        )
 
     for label, href in (
         ("Portfolio", "/portfolio"),
@@ -244,10 +290,18 @@ def check_homepage(page):
     assert_(page.locator("#lt-site-search-panel").is_visible(), "Search overlay did not open")
     assert_(page.url.rstrip("/") == BASE, "Opening search overlay must not navigate away from the current page")
     page.locator("#lt-site-search-input").fill("arches")
-    assert_(
-        page.locator("#lt-site-search-panel a[href='/shop-items/arches']").is_visible(),
-        "Search overlay should filter quick product-family links",
-    )
+    if PUBLIC_ECOMMERCE_PAUSED:
+        form_action = page.locator("#lt-site-search-panel form").first.get_attribute("action")
+        assert_(form_action == "/contact", f"Paused search form should submit to /contact, got {form_action!r}")
+        assert_(
+            page.locator("#lt-site-search-panel [data-lt-search-product-entry]").count() == 0,
+            "Paused search overlay must not expose product quick links",
+        )
+    else:
+        assert_(
+            page.locator("#lt-site-search-panel a[href='/shop-items/arches']").is_visible(),
+            "Search overlay should filter quick product-family links",
+        )
     page.keyboard.press("Escape")
     assert_(not page.locator("#lt-site-search-panel").is_visible(), "Search overlay did not close on Escape")
 
@@ -265,20 +319,24 @@ def check_homepage(page):
     assert_(page.locator("#lt-mega-events", has_text="Corporate Entrances").count() == 0, "Event mega menu must say Corporate Events, not Corporate Entrances")
     assert_(page.locator("#lt-mega-events .lt-megamenu__card[href='/event-balloons']").count() == 0, "Event mega cards must not all link to /event-balloons")
     assert_(page.locator("#lt-mega-events .lt-megamenu__card[href='/portfolio']").count() == 0, "Corporate event mega card must not link to /portfolio")
-    product_trigger.click()
-    assert_(page.locator("#lt-mega-products").is_visible(), "Ready-to-Order mega menu did not open")
-    assert_(
-        page.locator("#lt-mega-products a[href='/shop-items/arches']").count() >= 1,
-        "Product mega menu should link to /shop-items/arches",
-    )
+    if not PUBLIC_ECOMMERCE_PAUSED:
+        product_trigger.click()
+        assert_(page.locator("#lt-mega-products").is_visible(), "Ready-to-Order mega menu did not open")
+        assert_(
+            page.locator("#lt-mega-products a[href='/shop-items/arches']").count() >= 1,
+            "Product mega menu should link to /shop-items/arches",
+        )
 
     quote_cta = page.locator(".lt-mega-header__cta", has_text="Contact Us")
     assert_(quote_cta.count() == 1, "Desktop header missing Contact Us CTA")
     assert_(quote_cta.first.get_attribute("href") == "/contact", "Contact Us CTA must link to /contact")
     footer_all_decor = page.locator("footer .lt-footer__col-link", has_text="All Ready-to-Order")
-    assert_(footer_all_decor.count() == 1, "Footer missing All Ready-to-Order link")
-    assert_(footer_all_decor.first.get_attribute("href") == "/shop", "Footer All Ready-to-Order link must use /shop")
-    print("  OK mega triggers, key links, /contact CTA, and footer /shop link")
+    if PUBLIC_ECOMMERCE_PAUSED:
+        assert_(footer_all_decor.count() == 0, "Paused footer must hide All Ready-to-Order link")
+    else:
+        assert_(footer_all_decor.count() == 1, "Footer missing All Ready-to-Order link")
+        assert_(footer_all_decor.first.get_attribute("href") == "/shop", "Footer All Ready-to-Order link must use /shop")
+    print("  OK mode-aware mega navigation, service lane, /contact CTA, and footer commerce state")
 
 
 def check_event_type_pages(page):
@@ -293,9 +351,9 @@ def check_event_type_pages(page):
         page.goto(f"{BASE}{route}", wait_until="networkidle", timeout=15000)
         assert_(page.locator(".lt-event-type-page").count() == 1, f"{route} missing event-type page wrapper")
         assert_(page.locator("h1", has_text=title_text).count() == 1, f"{route} missing focused page title")
-        body = page.locator("body").inner_text()
+        body = page.locator("body").inner_text().casefold()
         for proof_name in proof_names:
-            assert_(proof_name in body, f"{route} must mention proof client {proof_name}")
+            assert_(proof_name.casefold() in body, f"{route} must mention proof client {proof_name}")
     print("  OK event menu routes render focused proof pages with relevant client names")
 
 
@@ -865,18 +923,30 @@ def check_mobile_drawer(p):
         timeout=10000,
     )
 
-    for panel_id in ("lt-mobile-events", "lt-mobile-products"):
+    panel_ids = ["lt-mobile-events"]
+    if not PUBLIC_ECOMMERCE_PAUSED:
+        panel_ids.append("lt-mobile-products")
+    else:
+        assert_(
+            page.locator("[data-lt-drawer-accordion-trigger='lt-mobile-products']").count() == 0,
+            "Paused mobile drawer must not expose Ready-to-Order accordion",
+        )
+
+    for panel_id in panel_ids:
         page.locator(f"[data-lt-drawer-accordion-trigger='{panel_id}']").click()
         assert_(page.locator(f"#{panel_id}").is_visible(), f"Mobile drawer panel {panel_id} did not open")
 
     expected_links = {
         "Event Balloons": "/event-balloons",
-        "Shop All": "/shop",
+        "Twisting & Face Painting": "/balloon-twisting-and-face-painting",
         "Portfolio": "/portfolio",
         "FAQ": "/faq",
         "Sign In": "/login",
         "Free Event Quote": "/contact",
+        "Contact Us": "/contact",
     }
+    if not PUBLIC_ECOMMERCE_PAUSED:
+        expected_links["Shop All"] = "/shop"
     for label, href in expected_links.items():
         link = page.locator("#lt-mobile-nav a", has_text=label).first
         assert_(link.count() == 1, f"Mobile drawer missing {label}")
@@ -929,6 +999,37 @@ def main(argv: list[str] | None = None) -> int:
         page = ctx.new_page()
         page_errors: list[str] = []
         page.on("pageerror", lambda error: page_errors.append(str(error)))
+        global PUBLIC_ECOMMERCE_PAUSED
+        PUBLIC_ECOMMERCE_PAUSED = detect_public_ecommerce_paused(page)
+        if PUBLIC_ECOMMERCE_PAUSED:
+            print("-> Public ecommerce mode")
+            print("  OK detected paused public ecommerce; open-shop smoke checks will be skipped")
+            try:
+                check_ecommerce_pause_routes(page)
+            except SmokeFail as e:
+                print(f"  FAIL: {e}")
+                failures.append(str(e))
+
+        open_commerce_checks = {
+            check_shop_page,
+            check_shop_showroom_contract,
+            check_shop_product_grid_symmetry_contract,
+            check_shop_items_broad_route,
+            check_shop_by_category_redirect,
+            check_category_pages,
+            check_category_showroom_contract,
+            check_category_nav_rail_contract,
+            check_category_product_grid_symmetry_contract,
+            check_variant_template_starting_price_display,
+            check_quote_first_product_pages_keep_quote_gate,
+            check_product_variant_page,
+            check_product_detail_showroom_contract,
+            check_product_detail_no_auxiliary_ecommerce_panels,
+            check_product_detail_clear_option_box_contract,
+            check_progressive_variant_option_disabling,
+            check_variant_add_to_cart_ui,
+            check_product_single_page,
+        }
         for fn in (
             check_homepage,
             check_event_type_pages,
@@ -952,6 +1053,10 @@ def main(argv: list[str] | None = None) -> int:
             check_variant_add_to_cart_ui,
             check_product_single_page,
         ):
+            if PUBLIC_ECOMMERCE_PAUSED and fn in open_commerce_checks:
+                print(f"-> {fn.__name__}")
+                print("  SKIP public ecommerce is paused; covered by ecommerce pause route contract")
+                continue
             before_error_count = len(page_errors)
             try:
                 fn(page)

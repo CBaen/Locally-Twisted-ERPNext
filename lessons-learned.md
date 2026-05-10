@@ -6,6 +6,14 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-10 - Commerce smoke tests must follow the configured commerce mode
+
+`smoke_shop.py` was still asserting open-shop navigation, category rails, cards, and product-detail controls after public ecommerce had intentionally been paused. That made the verifier red for the wrong reason and hid the real state: the pause contract was working.
+
+**Counter-move:** launch/shop smoke tests must detect the configured commerce mode first. In paused mode, prove the branded pause routes, current public chrome, service lanes, and safe quote fallback; skip open-shop card/rail/product-detail checks. In open-commerce mode, run the full shop/product/cart assertions.
+
+---
+
 ## 2026-05-10 - Rollback-safe Frappe verifiers are not parallel-safe
 
 A batch run launched several rollback-style ERPNext/Frappe verifiers against the same local site in parallel. One product quote customization contract briefly failed because another verifier's rollback/test mutation made its fake Lead disappear mid-contract. The same contract passed immediately when rerun alone.
