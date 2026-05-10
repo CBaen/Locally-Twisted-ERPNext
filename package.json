@@ -9,6 +9,7 @@
     "test:layout-fit": "playwright test scripts/verify/layout_fit.spec.js --reporter=line",
     "test:container-contract": "playwright test scripts/verify/container_contract.spec.js --reporter=line",
     "test:interactive-layout": "playwright test scripts/verify/interactive_layout.spec.js --reporter=line",
+    "test:form-experience": "playwright test scripts/verify/form_experience.spec.js --reporter=line",
     "test:portfolio-reel": "playwright test scripts/verify/portfolio_reel.spec.js --reporter=line",
     "test:event-playground": "playwright test scripts/verify/event_playground.spec.js --reporter=line",
     "test:checkout-experience": "playwright test scripts/verify/checkout_experience.spec.js --reporter=line",

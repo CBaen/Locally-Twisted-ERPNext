@@ -716,9 +716,36 @@ every deploy.
                     We'll use this info to contact you about your event.
                 </p>
 
-                <button type="submit" id="book_submit" class="lt-book__submit">
-                    Send Request
-                </button>
+                <div id="book_status"
+                     class="lt-book__status"
+                     data-lt-form-status
+                     role="status"
+                     aria-live="polite"
+                     aria-atomic="true"
+                     hidden>
+                    <div class="lt-book__status-marker" aria-hidden="true"></div>
+                    <div class="lt-book__status-body">
+                        <p class="lt-book__status-title" data-lt-form-status-title>Checking your details</p>
+                        <p class="lt-book__status-message" data-lt-form-status-message>
+                            We are making sure the basics are ready before your request goes to the team.
+                        </p>
+                        <ol class="lt-book__status-steps" aria-label="Submission progress">
+                            <li data-lt-form-status-step="details">Details checked</li>
+                            <li data-lt-form-status-step="send">Request sent</li>
+                            <li data-lt-form-status-step="save">Saved for follow-up</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="lt-book__submit-row">
+                    <button type="submit" id="book_submit" class="lt-book__submit" data-lt-form-submit>
+                        <span data-lt-submit-label>Send Request</span>
+                        <span class="lt-book__submit-spinner" aria-hidden="true"></span>
+                    </button>
+                    <p class="lt-book__submit-note">
+                        No account needed. We only show success after the request is saved.
+                    </p>
+                </div>
 
                 <div id="book_feedback" class="lt-book__feedback" role="alert" aria-live="assertive"></div>
             </fieldset>
@@ -727,15 +754,31 @@ every deploy.
 </section>
 
 {# Confirmation modal — id="received" matches #received hash on either page #}
-<div id="received" class="lt-book__modal" role="dialog" aria-label="Request received" aria-modal="true" aria-hidden="true">
+<div id="received"
+     class="lt-book__modal"
+     role="dialog"
+     aria-labelledby="received_title"
+     aria-describedby="received_message received_next_steps"
+     aria-modal="true"
+     aria-hidden="true">
     <div class="lt-book__modal-backdrop"></div>
     <div class="lt-book__modal-card" tabindex="-1">
         <div class="lt-book__modal-check" aria-hidden="true">&#x2713;</div>
-        <h2>Request received</h2>
-        <p id="received_message">We'll get back to you as soon as possible.</p>
-        <button type="button" class="lt-book__modal-close" aria-label="Close and return to homepage">
-            Back to home
-        </button>
+        <h2 id="received_title">Request received</h2>
+        <p id="received_message">We will review it and follow up soon.</p>
+        <ul id="received_next_steps" class="lt-book__modal-next">
+            <li>We will review the event details and service notes.</li>
+            <li>If timing, venue access, or photos need a closer look, we will ask before quoting.</li>
+            <li>If this is urgent, call <a href="tel:+18012850860"><span class="o_force_ltr">(801) 285-0860</span></a>.</li>
+        </ul>
+        <div class="lt-book__modal-actions">
+            <button type="button" class="lt-book__modal-close" data-lt-modal-action="stay">
+                Stay here
+            </button>
+            <a class="lt-book__modal-home" href="/" data-lt-modal-action="home">
+                Keep browsing
+            </a>
+        </div>
     </div>
 </div>
 
@@ -1007,139 +1050,8 @@ every deploy.
         });
     }
 
-    /* --- 3. Form AJAX submit ----------------------------------------- */
-    var form = document.getElementById('lt-book-form');
-    var submitBtn = document.getElementById('book_submit');
-    var feedback = document.getElementById('book_feedback');
-    var receivedMessage = document.getElementById('received_message');
-    var defaultReceivedMessage = receivedMessage ? receivedMessage.textContent : '';
-    var BOOK_FALLBACK_ERROR = 'Tiny snag: we could not send your request just now. Please call (801) 285-0860 or email hi@locallytwisted.com and we will help.';
-    if (!form || !submitBtn || !feedback) return;
-
-    function showError(message) {
-        feedback.textContent = message;
-        feedback.classList.add('is-error');
-        feedback.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-
-    function clearError() {
-        feedback.textContent = '';
-        feedback.classList.remove('is-error');
-    }
-
-    form.addEventListener('submit', function (ev) {
-        ev.preventDefault();
-        clearError();
-
-        var name = (form.elements['contact_name'].value || '').trim();
-        var email = (form.elements['email_from'].value || '').trim();
-        if (!name) {
-            showError('Please tell us your name.');
-            form.elements['contact_name'].focus();
-            return;
-        }
-        if (!email) {
-            showError('Please give us an email so we can reply.');
-            form.elements['email_from'].focus();
-            return;
-        }
-
-        var data = new FormData(form);
-
-        submitBtn.disabled = true;
-        var originalLabel = submitBtn.textContent;
-        submitBtn.textContent = 'Sending...';
-
-        fetch('/api/method/locally_twisted.www.book.submit_book_inquiry', {
-            method: 'POST',
-            headers: {
-                'X-Frappe-CSRF-Token': (window.frappe && window.frappe.csrf_token) || 'token',
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: data,
-            credentials: 'same-origin'
-        }).then(function (resp) {
-            return resp.json().then(function (body) { return { status: resp.status, body: body }; });
-        }).then(function (result) {
-            submitBtn.disabled = false;
-            submitBtn.textContent = originalLabel;
-            if (result.status >= 200 && result.status < 300 && result.body && result.body.message && result.body.message.ok) {
-                var uploadSummary = result.body.message.photo_uploads || {};
-                if (receivedMessage) {
-                    receivedMessage.textContent = uploadSummary.customer_message || defaultReceivedMessage;
-                }
-                form.reset();
-                updateConditionals();
-                window.location.hash = '#received';
-                showModal();
-            } else {
-                var msg = parseServerError(result.body) || BOOK_FALLBACK_ERROR;
-                showError(msg);
-            }
-        }).catch(function (err) {
-            submitBtn.disabled = false;
-            submitBtn.textContent = originalLabel;
-            showError(BOOK_FALLBACK_ERROR);
-            if (window.console && console.error) console.error('Book form submit failed', err);
-        });
-    });
-
-    function isCustomerSafeMessage(message) {
-        if (typeof message !== 'string') return false;
-        var value = message.trim();
-        if (!value) return false;
-        return !/(Traceback|Exception|Error:|frappe\.|pymysql|DocType|doctype|SQL|stack)/i.test(value);
-    }
-
-    function parseServerError(body) {
-        if (!body) return null;
-        if (body._server_messages) {
-            try {
-                var msgs = JSON.parse(body._server_messages);
-                if (Array.isArray(msgs) && msgs.length) {
-                    var first = JSON.parse(msgs[0]);
-                    if (isCustomerSafeMessage(first.message)) return first.message;
-                }
-            } catch (e) {}
-        }
-        if (isCustomerSafeMessage(body.message)) return body.message;
-        return null;
-    }
-
-    /* --- 4. Confirmation modal -------------------------------------- */
-    var modalTimer = null;
-    function showModal() {
-        var modal = document.getElementById('received');
-        if (!modal) return;
-        if (modal.classList.contains('lt-book__modal--open')) return;
-        modal.classList.add('lt-book__modal--open');
-        modal.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
-        var card = modal.querySelector('.lt-book__modal-card');
-        if (card) card.focus();
-
-        modalTimer = setTimeout(function () {
-            window.location.href = '/';
-        }, 4000);
-
-        var closeBtn = modal.querySelector('.lt-book__modal-close');
-        if (closeBtn) closeBtn.addEventListener('click', dismissModal);
-        var backdrop = modal.querySelector('.lt-book__modal-backdrop');
-        if (backdrop) backdrop.addEventListener('click', dismissModal);
-    }
-    function dismissModal() {
-        if (modalTimer) clearTimeout(modalTimer);
-        window.location.href = '/';
-    }
-    document.addEventListener('keydown', function (e) {
-        if (e.key !== 'Escape') return;
-        var modal = document.getElementById('received');
-        if (!modal || !modal.classList.contains('lt-book__modal--open')) return;
-        dismissModal();
-    });
-    if (window.location.hash === '#received') showModal();
-    window.addEventListener('hashchange', function () {
-        if (window.location.hash === '#received') showModal();
-    });
+    /* --- 3. Shared form submit engine hook --------------------------- */
+    window.LT_INQUIRY_FORM = window.LT_INQUIRY_FORM || {};
+    window.LT_INQUIRY_FORM.updateConditionals = updateConditionals;
 })();
 </script>

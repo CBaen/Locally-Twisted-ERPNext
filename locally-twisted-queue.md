@@ -79,7 +79,7 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 ### First-ship omissions to revisit (deliberate deferrals)
 
 - ~~**BTFP event-type animated crawl + pricing math**~~ DONE 2026-05-08: current BTFP route uses the brand-blue support banner and event-type crawl, removes the old red divider/banner treatment, includes real service-card photo carousels, uses the shared `inquiry-v1` form contract, and has a customer-facing row-based artist-time calculator that supports different services/hours per artist plus added artists. It is covered by `contact_prefill.py`, `workstreams/btfp-service-page.md`, and the public container contract as `.lt-btfp__event-crawl` / `.lt-btfp__event-crawl-viewport`.
-- [P2] **BTFP and contact confirmation modals with auto-redirect** — replaced with inline success banners on first ship; add modal+redirect on a polish pass.
+- ~~**BTFP and contact confirmation experience**~~ DONE 2026-05-10: the shared `inquiry-v1` form now has an accessible submit status panel, branded success/failure states, an upgraded on-page success modal, no forced redirect, and inline cookie notice placement on form pages. Feature handoff: `workstreams/form-submission-experience.md`; verifier: `npm run test:form-experience`.
 - [P2] **Symmetry fix for Custom Creations on mobile** — currently 2-2-1 layout (Balloon Drops orphan on row 3). GL flagged the orphan-on-row-3 violates symmetry preference. Options: (a) center the orphan via `grid-column: 1 / -1` on `:nth-child(5)` (cleanest minimal change), (b) 1-per-row stack on mobile. Easy CSS fix; defer until next homepage iteration.
 
 ### Open iterations on already-built Lead schema (carried into Phase 2)
@@ -94,6 +94,7 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 - [P0] Verify Contact dedup logic now in `apps/locally_twisted/locally_twisted/lead_cascade.py` (Lead → existing Contact match by email/phone, else create new). Queue previously listed this as unbuilt; confirm with a smoke record before deleting.
 - [P0] Verify customer acknowledgment email automation now in `apps/locally_twisted/locally_twisted/lead_cascade.py` (`after_insert`, queued `frappe.sendmail`). Queue previously listed this as unbuilt; confirm mail queue behavior before deleting.
 - [P0] Loud-failure compliance audit across every form on Phase 1 surfaces
+- [P0] Keep the shared form submission UX honest: no success state unless the backend returns `message.ok`, no forced success redirect, and update `scripts/verify/form_experience.spec.js` with any future form-state changes.
 - [P1] Monitor alerts (Better Stack or equivalent) — fire if `/contact` form-creation rate drops to zero for >24 hours
 
 ### New asset drops at `assets/` (GL added 2026-04-27)

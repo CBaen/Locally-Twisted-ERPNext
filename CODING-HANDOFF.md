@@ -125,7 +125,8 @@ Verified or updated during the 2026-05-01 storefront correction and contact clea
 - Fail loudly is now the operating law across LT: forms, automations, payments, documents, customer communication, route/container contracts, verifiers, and agent claims must block false success and leave actionable evidence. Project entrypoint: `.codex/capabilities/recipes/fail-loud-operating-law.md`.
 - `/balloon-twisting-and-face-painting` is now a contact-led editorial service page using real BTFP information, brand-blue support/event bands, an event-type crawl, and the shared inquiry form scoped to live artist service choices. It has no public deposit-checkout CTA. Its customer calculator uses the public `$130` first hour / `$115` additional hour / `$50` deposit-per-artist rules with one row per artist so mixed services can use different hours.
 - `/contact` supports guided prefill for `?service=btfp`, `?service=twisting`, and `?service=face-painting`.
-- `scripts/verify/smoke_forms.py` now verifies localhost `/contact` submissions through the local Docker/Frappe bench container and cleans up the generated smoke Lead plus linked LT cascade Task. Latest run on 2026-05-06 created marker `SMOKE-TEST-1778091063`, verified it, and reported cleanup OK.
+- `scripts/verify/smoke_forms.py` verifies localhost `/contact` submissions through the local Docker/Frappe bench container and cleans up the generated smoke Lead plus linked LT cascade Task. Latest run on 2026-05-10 created marker `SMOKE-TEST-1778380640428736700`, verified it, and reported cleanup OK.
+- The shared `inquiry-v1` form submission experience was upgraded on 2026-05-10 for both `/contact` and the BTFP embedded form: it has an accessible progress/status panel, customer-safe failure state, success modal with next steps, no forced redirect, and inline cookie notice placement on form pages. The submit UX still fails loudly: it only shows success when the backend response includes `message.ok`.
 - The contact form service taxonomy is current: `Balloon Decor`, `Balloon Twisting`, `Face Painting`, `Delivery`, `Pickup`, `Events Inquiry`, `Something Else`. Do not reintroduce `Delivery Only`, `Pickup Only`, or `Event Package`.
 - `Events Inquiry` is the high-value package planning path. It shows "Let's build a memory", package-piece checkboxes from the homepage custom categories, color prompt, and one planning text area. The server aggregates those values into `custom_package_notes`; no new ERPNext fields were added in this slice.
 - `Event Environment` and "Shade is required for outdoor events" only appear for live artist services: Balloon Twisting and Face Painting.
@@ -383,6 +384,7 @@ Contact form logic regression checks:
 python scripts/verify/contact_service_logic.py --base-url http://localhost:8081
 python scripts/verify/contact_prefill.py --base-url http://localhost:8081
 python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --form-path /contact --skip-newsletter
+npm run test:form-experience
 ```
 
 Backend Lead/CRM intake parity:

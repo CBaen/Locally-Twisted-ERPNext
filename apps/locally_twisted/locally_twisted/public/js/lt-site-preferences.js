@@ -91,9 +91,15 @@
         }
         var banner = buildBanner();
         var homeReviews = document.querySelector('.lt-reviews-block');
+        var formSurface = document.querySelector('.lt-contact__grid, .lt-btfp__booking-grid');
         if (homeReviews) {
             banner.classList.add('lt-cookie-consent--inline');
             homeReviews.insertAdjacentElement('afterend', banner);
+            return;
+        }
+        if (formSurface) {
+            banner.classList.add('lt-cookie-consent--inline');
+            formSurface.insertAdjacentElement('afterend', banner);
             return;
         }
         document.body.appendChild(banner);

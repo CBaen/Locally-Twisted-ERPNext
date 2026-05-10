@@ -271,7 +271,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 				.locator('script[src*="lt-site-preferences.js"]')
 				.evaluateAll((scripts) => scripts.map((script) => script.getAttribute("src") || ""));
 			expect(
-				scriptSrcs.some((src) => src.includes("lt-site-preferences.js?v=20260507-reviews-1")),
+				scriptSrcs.some((src) => src.includes("lt-site-preferences.js?v=20260510-form-inline-1")),
 				"site-preferences script should be cache-busted when inline notice behavior changes"
 			).toBe(true);
 		});

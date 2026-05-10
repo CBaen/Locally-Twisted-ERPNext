@@ -8,6 +8,19 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-10 - Form success stays on-page and must prove backend success
+
+**Decision:** The shared `inquiry-v1` form success experience stays on the page with a progress/status panel and success modal. Do not auto-redirect customers away after a successful `/contact` or BTFP inquiry submit.
+
+**Reasoning:** The form is a trust surface, not just a visual component. A forced redirect makes the customer lose context and can hide whether the backend actually saved the inquiry. The upgraded experience can show progress, customer-safe failure copy, and next steps while still obeying the fail-loud rule: no success unless the backend returns `message.ok`.
+
+**Implementation:** Added focused `lt-inquiry-form-experience.js` and `lt-form-experience.css`, updated the shared form partial with an accessible status region and modal actions, moved cookie notice placement inline on form pages, and added `scripts/verify/form_experience.spec.js`.
+
+**Verification receipt:** The focused form verifier failed first because the status panel did not exist. After implementation, `npm run test:form-experience`, full `/contact` smoke submit with cleanup, `contact_prefill.py`, `contact_service_logic.py`, `test:container-contract`, manual accessibility, and focused contact interactive layout checks passed.
+
+**Decided by:** GL request to upgrade form UX/UI and copy; implemented by Codex.
+
+---
 ## 2026-05-09 - Cloudflare-routed aliases are not delivery-safe internal copies
 
 **Decision:** Keep `hi@locallytwisted.com` as the public business contact, but do not use `hi@locallytwisted.com` or `cameron@locallytwisted.com` as internal copy or QA-review delivery targets while ERPNext sends through `locallytwisted@gmail.com`. Current code-owned internal paperwork copy delivery uses `locallytwisted@gmail.com`; Cameron QA review sends must use a non-LT mailbox unless the SMTP sender changes.
