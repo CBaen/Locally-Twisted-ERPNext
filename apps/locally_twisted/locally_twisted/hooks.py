@@ -46,7 +46,7 @@ doctype_js = {
 # because the cached rules didn't have `position: fixed`.
 web_include_css = [
     "/assets/locally_twisted/css/lt-theme.css?v=20260510-btfp-cleanup-1",
-    "/assets/locally_twisted/css/lt-mega-menu.css?v=20260510-short-notice-1",
+    "/assets/locally_twisted/css/lt-mega-menu.css?v=20260510-short-notice-2",
     "/assets/locally_twisted/css/lt-product-polish.css?v=20260510-product-runtime-1",
     "/assets/locally_twisted/css/lt-shop-showroom.css?v=20260508-card-click-1",
     "/assets/locally_twisted/css/lt-product-page-visual-first.css?v=20260510-add-on-selector-1",

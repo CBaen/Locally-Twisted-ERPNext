@@ -44,8 +44,9 @@ For the current LT site:
 - Current launch desktop primary header labels are `Event Balloons`,
   `Twisting & Face Painting`, `Ready-to-Order`, `Portfolio`, `About Us`,
   `FAQ`, and `Contact Us` when ecommerce is open for testing. The top utility
-  banner keeps `Free Event Quote`, the account link, and the short-notice copy:
-  `SHORT NOTICE? LET US KNOW. WE CAN OFTEN HELP WITH 24 HOURS NOTICE!`.
+  banner replaces the old proof copy/icon with the short-notice copy:
+  `SHORT NOTICE? LET US KNOW. WE CAN OFTEN HELP WITH 24 HOURS NOTICE!`, while
+  keeping `Free Event Quote` and the account link on the right.
 - `Twisting & Face Painting` points to `/balloon-twisting-and-face-painting`.
 - `Ready-to-Order` points to `/shop` when `lt_ecommerce_paused=0`.
 - `Free Event Quote` and `Contact Us` point to `/contact`; `Free Event Quote`
@@ -137,3 +138,9 @@ notice line while leaving `Free Event Quote` and the account link in place.
 The nav contract now keeps `Free Event Quote` top-banner-only, `Contact Us` as
 the primary conversion CTA, and `Twisting & Face Painting` as the service lane.
 `nav_ia.py`, `smoke_shop.py`, and full `npm run test:public-verify` passed.
+
+Follow-up correction: the short-notice line belongs in the former proof slot.
+The old `Prepared design, clean installs, and invoiced event support across
+Utah.` copy and `delivery-install.svg` icon are removed from the header.
+`nav_ia.py`, `smoke_shop.py`, and direct Playwright header metrics passed after
+cache clear/restart.

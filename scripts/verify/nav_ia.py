@@ -80,24 +80,36 @@ def test_quote_cta_is_contact(navbar: str) -> None:
 
 
 def test_top_banner_links_are_owner_approved(navbar: str) -> None:
+    top_row_start = _line_index(navbar, '<div class="container lt-mega-header__top-row">')
+    top_row_end = _line_index(navbar[top_row_start:], '</div>') + top_row_start
+    top_row = navbar[top_row_start:top_row_end]
     top_start = _line_index(navbar, '<ul class="lt-mega-header__top-links">')
     top_end = _line_index(navbar[top_start:], '</ul>') + top_start
     top_links = navbar[top_start:top_end]
-    required = (
+    row_required = (
         "SHORT NOTICE? LET US KNOW. WE CAN OFTEN HELP WITH 24 HOURS NOTICE!",
+    )
+    link_required = (
         'href="/contact">Free Event Quote</a>',
     )
     forbidden = (
         'href="/shop">Ready-to-Order</a>',
         'href="/cart">Cart</a>',
         'href="/portfolio">Recent Work</a>',
+        "Prepared design, clean installs, and invoiced event support across Utah.",
+        "delivery-install.svg",
     )
-    for needle in required:
+    for needle in row_required:
+        if needle not in top_row:
+            raise AssertionError(f"Header top banner must keep the short-notice message: {needle}")
+    if "lt-mega-header__top-alert" in top_links:
+        raise AssertionError("Short-notice message belongs in the old proof slot, not inside the utility links")
+    for needle in link_required:
         if needle not in top_links:
-            raise AssertionError(f"Header banner must keep the approved quote link: {needle}")
+            raise AssertionError(f"Header top links must keep the approved quote link: {needle}")
     for needle in forbidden:
-        if needle in top_links:
-            raise AssertionError(f"Header banner exposes an unapproved utility link: {needle}")
+        if needle in top_row:
+            raise AssertionError(f"Header banner exposes removed proof/utility content: {needle}")
 
 
 def _active_nav_service_removal_approval_lines() -> set[str]:

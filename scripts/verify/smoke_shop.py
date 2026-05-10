@@ -272,7 +272,7 @@ def check_homepage(page):
             f"Open-commerce primary nav order is wrong, got {nav_text}",
         )
 
-    top_banner = page.locator(".lt-mega-header__top-links").inner_text().replace("\n", " ")
+    top_banner = page.locator(".lt-mega-header__top-row").inner_text().replace("\n", " ")
     top_banner_key = top_banner.casefold()
     assert_(
         "short notice? let us know. we can often help with 24 hours notice!" in top_banner_key,
@@ -280,6 +280,14 @@ def check_homepage(page):
     )
     assert_("free event quote" in top_banner_key, f"Desktop top banner missing Free Event Quote; got {top_banner!r}")
     assert_("sign in" in top_banner_key or "my account" in top_banner_key, f"Desktop top banner missing account link; got {top_banner!r}")
+    assert_(
+        "prepared design, clean installs" not in top_banner_key,
+        f"Desktop top banner still contains removed proof copy; got {top_banner!r}",
+    )
+    assert_(
+        page.locator(".lt-mega-header__top img[src*='delivery-install']").count() == 0,
+        "Desktop top banner must not show the delivery/truck icon",
+    )
 
     for label, href in (
         ("Portfolio", "/portfolio"),

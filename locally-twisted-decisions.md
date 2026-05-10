@@ -8,6 +8,22 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-10 - Short-notice banner owns the top proof slot
+
+**Decision:** The desktop top utility banner uses the left proof slot for `SHORT NOTICE? LET US KNOW. WE CAN OFTEN HELP WITH 24 HOURS NOTICE!`. `Free Event Quote` remains a right-side utility link to `/contact`, and the account link remains. The old `Prepared design, clean installs, and invoiced event support across Utah.` proof copy and delivery/truck icon are removed from the header.
+
+**Reasoning:** GL clarified the desired customer message was not an extra utility-link item. Keeping both the old proof copy and the short-notice line made the header carry two competing micro-promises and preserved stale chrome. The safe contract for peer agents is one explicit top-message slot plus the existing utility links.
+
+**Implementation:** `navbar.html` now renders `.lt-mega-header__top-message` in the old proof slot. `lt-mega-menu.css` styles that slot directly. `scripts/verify/nav_ia.py` and `scripts/verify/smoke_shop.py` fail if the old proof copy/icon returns or if the short-notice message is moved inside the utility-link list.
+
+**Verification receipt:** After cache clear/restart, `python scripts/verify/nav_ia.py` and `python scripts/verify/smoke_shop.py` passed. Direct Playwright header metrics showed `proofCount: 0`, `topAlertCount: 0`, `deliveryIconCount: 0`, `oldCopyPresent: false`, and loaded `lt-mega-menu.css?v=20260510-short-notice-2`.
+
+**Alternatives considered:** Keep the old proof copy and add short-notice as another right-side list item. Rejected because it preserved stale messaging and made the utility row noisier. Remove `Free Event Quote`. Rejected because it remains an approved conversion link to `/contact`.
+
+**Decided by:** GL clarification and Moji/OpenClaw follow-through on 2026-05-10.
+
+---
+
 ## 2026-05-10 - Ecommerce research synthesis requires named artifacts, not routed completion text
 
 **Decision:** The Odoo-to-ERPNext ecommerce audit may only cite lanes that produced named artifacts under `workstreams/ecommerce-audit/`, or lanes explicitly marked `[NO EVIDENCE]`. Lane F synthesis must wait until missing lanes A/E are rerun artifact-first or intentionally carried as process failures.

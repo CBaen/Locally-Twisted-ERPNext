@@ -25,6 +25,8 @@ Forensic report: `C:/Users/baenb/.openclaw/workspace/reports/lt-btfp-menu-remova
 - `Free Event Quote` and `Contact Us` remain conversion labels to `/contact`.
 - `/contact` does not replace the BTFP service lane.
 - `/process` is not an approved replacement.
+- The desktop top banner uses the left proof slot for `SHORT NOTICE? LET US KNOW. WE CAN OFTEN HELP WITH 24 HOURS NOTICE!`.
+- The old `Prepared design, clean installs, and invoiced event support across Utah.` copy and `delivery-install.svg` icon are retired header chrome, not dormant defaults.
 
 ## Approval Marker
 
@@ -39,7 +41,9 @@ Do not add this marker from inference. It requires direct GL approval naming the
 ## Code/Verifier Surface
 
 - Nav template: `apps/locally_twisted/locally_twisted/templates/includes/navbar/navbar.html`
+- Header styling: `apps/locally_twisted/locally_twisted/public/css/lt-mega-menu.css`
 - Source guard: `scripts/verify/nav_ia.py`
+- Rendered smoke guard: `scripts/verify/smoke_shop.py`
 - Coordination board: `workstreams/menu-content-coordination.md`
 - Project decision: `locally-twisted-decisions.md`
 - Capability: `.codex/capabilities/recipes/frappe-public-nav-business-route-contract.md`
@@ -58,6 +62,8 @@ Then prove rendered presence when the change affects customer chrome:
 - desktop header has one `Twisting & Face Painting` link to `/balloon-twisting-and-face-painting`
 - mobile drawer has one `Twisting & Face Painting` link to `/balloon-twisting-and-face-painting`
 - search quick links include `Twisting & Face Painting`
+- top banner contains the 24-hour short-notice line
+- top banner does not contain the retired prepared-design proof copy, `lt-mega-header__proof`, `lt-mega-header__top-alert`, or `delivery-install.svg`
 
 ## Generalization
 

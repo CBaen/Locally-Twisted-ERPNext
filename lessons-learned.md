@@ -6,6 +6,12 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-10 - Header microcopy slots need explicit ownership
+
+The short-notice message was initially placed as a utility-list item beside `Free Event Quote` and account links while the old prepared-design proof copy/truck icon stayed in the left proof slot. GL's correction showed the actual contract: replace the proof slot with the short-notice promise, keep the conversion/account links, and delete stale proof chrome.
+
+**Counter-move:** treat header/banner slots as named surfaces, not generic places to stuff copy. If a message supersedes an existing proof line, remove the old copy/icon and add verifier checks for both presence of the new slot and absence of the retired slot. Positive checks for new copy are not enough.
+
 ## 2026-05-10 - No artifact means no evidence, even when an agent reports completion
 
 The ecommerce audit dispatch proved the failure mode clearly: Lane B, C, and D produced named files that can be inspected. Lane A and Lane E did not. Their routed completion text may be useful debugging context, but it is not evidence for source mapping, docs convergence, import safety, or launch readiness.
