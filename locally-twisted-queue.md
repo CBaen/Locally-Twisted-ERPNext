@@ -38,6 +38,8 @@ agency staging-to-live gate remain separate release requirements.
 
 **Email preview review rule (2026-05-10 GL caught):** queued emails can correctly carry inline logo assets as `cid:` MIME parts, but standalone browser/PDF preview files cannot resolve those URLs. Before showing email review artifacts from `output/email-previews/` or `output/email-print-fit/`, rewrite inline image parts to embedded data URLs and run a browser image-dimension check so broken first-page logos fail loudly.
 
+**Verifier cleanup rule (2026-05-10 Codex):** public-form proof scripts that create real ERPNext records must own cleanup. `scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081` now deletes old and current verifier-owned `lt-repeat-email-photo-*@example.invalid` Leads, uploaded Files, Communications, Email Queue rows, Contacts, Tasks, and Comments by default, and fails if cleanup is unavailable or incomplete unless `--keep-records` is explicit.
+
 ### Phase 1 — Customer site (lookbook-forward, with small shop)
 
 See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slice list. Highlights:

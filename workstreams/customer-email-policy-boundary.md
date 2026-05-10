@@ -1,6 +1,6 @@
 # Customer Email Policy Boundary
 
-Last updated: 2026-05-10 by Codex after splitting playful intake email from formal customer/operator shells and fixing standalone preview image rendering.
+Last updated: 2026-05-10 by Codex after splitting playful intake email from formal customer/operator shells, fixing standalone preview image rendering, and adding fail-loud cleanup to the repeat-email/photo verifier.
 
 ## Outcome
 
@@ -25,7 +25,7 @@ Keep customer/operator email behavior aligned with receipts, policy lanes, and b
 - `locally_twisted.email_delivery_guard` is wired to `Email Queue.before_insert` and blocks routed-alias loop sends even when a live probe bypasses `communication_copy_policy`.
 - Cameron is not a standing future copy recipient. Use a non-LT mailbox for explicit one-time QA/review sends unless the SMTP sender changes.
 - `scripts/verify/customer_documents_contract.py` and `scripts/verify/payment_cascade_contract.py` now prove the required copy recipients exist in ERPNext `Email Queue Recipient` rows during rollback-safe fake-data runs.
-- `scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081` proves the real form path can queue one customer confirmation after uploads and include the correct file count.
+- `scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081` proves the real form path can queue one customer confirmation after uploads and include the correct file count. It now cleans verifier-owned fake Leads, uploaded Files, Communications, Email Queue rows, Contacts, Tasks, and Comments before/after the run; cleanup failure is a test failure unless `--keep-records` is explicitly used for debugging.
 - One-page print proof for the current customer-form confirmation was generated from a real queued five-photo test Email Queue row at ignored path `output/email-print-fit/customer-form-confirmation.pdf`; large-document intake reported 1 PDF page. This proves the customer-form confirmation sample, not every outbound email family.
 - Current visual review previews live under ignored `output/email-previews/`: `customer-form-confirmation.html`, `.png`, `.pdf`, and `email-preview-gallery.html` / `.png` for intake, formal customer, and operator examples.
 - Email clients resolve queued inline images through `cid:` MIME parts, but standalone browser/PDF review renders do not. Preview exports must rewrite those `cid:` image sources to embedded data URLs before screenshot/PDF capture, then fail if any image has `naturalWidth` or `naturalHeight` of 0.
@@ -50,6 +50,7 @@ Keep customer/operator email behavior aligned with receipts, policy lanes, and b
 - `apps/locally_twisted/locally_twisted/public/icons/lt-balloon-dog-red-email-mirrored.png`
 - `apps/locally_twisted/locally_twisted/patches/configure_email_branding.py`
 - `apps/locally_twisted/locally_twisted/verify/customer_documents_contract.py`
+- `apps/locally_twisted/locally_twisted/verify/book_form_repeat_email_photos_cleanup.py`
 - `apps/locally_twisted/locally_twisted/lead_cascade.py`
 - `apps/locally_twisted/locally_twisted/www/payment_success.py`
 - `apps/locally_twisted/locally_twisted/communication_copy_policy.py`
@@ -57,6 +58,7 @@ Keep customer/operator email behavior aligned with receipts, policy lanes, and b
 - `apps/locally_twisted/locally_twisted/verify/business_automation_index.py`
 - `apps/locally_twisted/locally_twisted/verify/synthetic_business_pipeline.py`
 - `scripts/verify/synthetic_business_pipeline.py`
+- `scripts/verify/book_form_repeat_email_photos.py`
 
 ## Verification
 

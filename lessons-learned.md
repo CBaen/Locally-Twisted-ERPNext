@@ -6,6 +6,14 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-10 - A passing live verifier can still fail cleanup
+
+The repeat-email/five-photo form verifier proved the customer path but left fake Leads, uploaded Files, Communications, Email Queue rows, Contacts, Tasks, and Comments behind. Those records then polluted later email previews, paperwork counts, and operator evidence even though the verifier itself had passed.
+
+**Counter-move:** any verifier that creates real ERPNext records needs a cleanup contract as part of the test, not as a manual afterthought. Use a guarded fake namespace, delete old residue before the run, delete current records after the run, and fail if cleanup is unavailable or incomplete unless an explicit debugging flag keeps records.
+
+---
+
 ## 2026-05-10 - Header microcopy slots need explicit ownership
 
 The short-notice message was initially placed as a utility-list item beside `Free Event Quote` and account links while the old prepared-design proof copy/truck icon stayed in the left proof slot. GL's correction showed the actual contract: replace the proof slot with the short-notice promise, keep the conversion/account links, and delete stale proof chrome.

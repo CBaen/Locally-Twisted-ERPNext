@@ -38,6 +38,11 @@ Email Queue assertions, or public/company email addresses.
 - Public form confirmations must echo only non-empty customer-submitted fields, including free-text notes.
 - Public form confirmations must mention reference files only when files were actually attached. The `/contact` and BTFP form path defers the customer confirmation until after upload handling so the count is accurate.
 - Public form confirmations use compact policy links, not the full long policy block, to keep print output short.
+- The repeat-email/five-photo verifier owns its fake record namespace and must
+  clean it. `scripts/verify/book_form_repeat_email_photos.py` deletes old and
+  current verifier-owned Leads, uploaded Files, Communications, Email Queue
+  rows, Contacts, Tasks, and Comments on localhost; cleanup failure is a
+  verifier failure unless `--keep-records` is explicit.
 - Review/export previews rendered outside an email client must not leave `cid:`
   image sources in standalone HTML. Rewrite queued inline images to embedded
   data URLs before browser screenshots or PDFs, then verify image dimensions.
@@ -69,6 +74,7 @@ Email Queue assertions, or public/company email addresses.
 - `apps/locally_twisted/locally_twisted/patches/configure_email_branding.py`
 - `apps/locally_twisted/locally_twisted/verify/customer_email_policy_contract.py`
 - `apps/locally_twisted/locally_twisted/verify/customer_documents_contract.py`
+- `apps/locally_twisted/locally_twisted/verify/book_form_repeat_email_photos_cleanup.py`
 
 ## Verification
 
@@ -125,6 +131,9 @@ python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-b
   messages.
 - Sending the public form confirmation before uploads finish, which makes the
   customer receipt lie about attached files.
+- Letting public-form proof scripts leave fake Leads, private Files,
+  Communications, Email Queue rows, Contacts, Tasks, or Comments behind. Test
+  proof is not clean unless its generated business records are gone.
 - Treating a standalone browser/PDF email preview as valid while it still
   contains `src="cid:..."`; that renders as a broken logo even when the queued
   email MIME parts are present for real email clients.

@@ -8,6 +8,22 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-10 - Public form verifiers must clean real fake records
+
+**Decision:** Live public-form verifiers that create ERPNext records must own their generated namespace and fail if cleanup cannot complete. The repeat-email/five-photo verifier now deletes old and current `lt-repeat-email-photo-*@example.invalid` Leads, uploaded Files, Communications, Email Queue rows, Contacts, Tasks, and Comments by default; keeping records requires explicit `--keep-records`.
+
+**Reasoning:** The verifier correctly proved the customer path, but prior runs left fake Leads, uploaded Files, Communications, Email Queue rows, Contacts, Tasks, and Comments in the local DB. That pollutes operator views, email/paperwork counts, and future evidence. Fake data is allowed for testing; unowned fake residue is not.
+
+**Implementation:** Added `locally_twisted.verify.book_form_repeat_email_photos_cleanup` and wired `scripts/verify/book_form_repeat_email_photos.py` to run pre-run namespace cleanup plus current-run cleanup on localhost. Added the verifier to the business automation fake-data contract inventory.
+
+**Verification receipt:** A pre-fix preview found 14 verifier-owned Leads, 70 Files, 14 Email Queue rows, 14 Communications, 14 Contacts, 14 Tasks, and 70 Comments. The cleanup helper removed that residue. The corrected verifier passed against `http://localhost:8081`, deleted 30 records from its current run, and a post-run preview reported 0 remaining verifier-owned records.
+
+**Alternatives considered:** Leave fake records because the data is non-production. Rejected because it undermines clean operator evidence and cutover confidence. Make cleanup best-effort only. Rejected because cleanup failure is a real verification failure unless debugging is explicit.
+
+**Decided by:** Codex closeout cleanup under GL's "GitHub is archive, store nothing unnecessary" standard on 2026-05-10.
+
+---
+
 ## 2026-05-10 - Email review previews must embed inline assets for browser/PDF rendering
 
 **Decision:** Email Queue is allowed to use standard inline `cid:` MIME images for actual outbound email, but any standalone review artifact shown in a browser, screenshot, or PDF must rewrite those images to embedded data URLs and fail if an image does not load.

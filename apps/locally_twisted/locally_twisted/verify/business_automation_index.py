@@ -1816,6 +1816,11 @@ def _fake_data_contracts() -> list[dict[str, object]]:
             "cleanup": "deletes generated smoke Lead and linked cascade Task",
         },
         {
+            "command": "python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081",
+            "creates": ["Lead", "Contact", "Task", "File", "Communication", "Email Queue", "Comment"],
+            "cleanup": "deletes old and current verifier-owned repeat-email/photo records",
+        },
+        {
             "command": "python scripts/verify/crm_stage_cascade.py",
             "creates": ["Lead", "Task"],
             "cleanup": "deletes generated test records",
