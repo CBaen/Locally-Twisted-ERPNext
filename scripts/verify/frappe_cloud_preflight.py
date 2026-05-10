@@ -34,6 +34,9 @@ APP_PACKAGE = APP_ROOT / "locally_twisted"
 PUBLIC_DOMAIN = "locallytwisted.com"
 WWW_DOMAIN = "www.locallytwisted.com"
 EXPECTED_CLOUDFLARE_NS = {"edward.ns.cloudflare.com", "laura.ns.cloudflare.com"}
+APP_SOURCE_REPO = "CBaen/Locally-Twisted-Frappe-App"
+APP_SOURCE_URL = f"https://github.com/{APP_SOURCE_REPO}.git"
+FRAPPE_CLOUD_PUBLIC_KEY = "id_ed25519.pub"
 
 
 @dataclass
@@ -125,12 +128,16 @@ def check_app_packaging() -> list[Check]:
         checks.append(Check("app_pyproject", "block", "Custom app pyproject.toml is missing."))
         return checks
 
-    if root_pyproject.exists():
+    app_source_check = check_app_source_mirror()
+    if app_source_check.status == "pass":
+        checks.append(app_source_check)
+    elif root_pyproject.exists():
         checks.append(
             Check(
                 "app_source_shape",
                 "warn",
-                "Repository root also has a pyproject.toml; confirm Frappe Cloud validates the intended app.",
+                "Repository root also has a pyproject.toml; confirm Frappe Cloud validates the intended app or use the app-root mirror.",
+                {"app_source_repo": APP_SOURCE_URL},
             )
         )
     else:
@@ -170,6 +177,44 @@ def check_app_packaging() -> list[Check]:
     return checks
 
 
+def check_app_source_mirror() -> Check:
+    code, out, err = run(
+        [
+            "gh",
+            "repo",
+            "view",
+            APP_SOURCE_REPO,
+            "--json",
+            "defaultBranchRef,visibility,url",
+            "--jq",
+            ".url + \" \" + .visibility + \" \" + .defaultBranchRef.name",
+        ]
+    )
+    if code != 0 or not out:
+        return Check(
+            "app_source_shape",
+            "warn",
+            "App-root GitHub mirror is not confirmed.",
+            {"app_source_repo": APP_SOURCE_URL, "error": err},
+        )
+
+    code, _, err = run(["gh", "api", f"repos/{APP_SOURCE_REPO}/contents/pyproject.toml", "--jq", ".path"])
+    if code != 0:
+        return Check(
+            "app_source_shape",
+            "warn",
+            "App-root GitHub mirror exists but pyproject.toml was not confirmed at its root.",
+            {"app_source_repo": APP_SOURCE_URL, "error": err},
+        )
+
+    return Check(
+        "app_source_shape",
+        "pass",
+        "App-root GitHub mirror is ready for Frappe Cloud custom app validation.",
+        {"app_source_repo": APP_SOURCE_URL, "repo": out},
+    )
+
+
 def check_github() -> Check:
     code, login, err = run(["gh", "api", "user", "--jq", ".login"])
     if code == 0 and login:
@@ -199,11 +244,27 @@ def check_ssh_public_keys() -> list[Check]:
     if unreadable:
         checks.append(Check("ssh_public_keys_unreadable", "warn", "Some SSH public keys exist but are not readable.", {"keys": unreadable}))
 
-    code, _, err = run(["ssh-add", "-l"])
-    if code == 0:
-        checks.append(Check("ssh_agent", "pass", "ssh-agent has at least one loaded identity."))
+    expected_key = ssh_dir / FRAPPE_CLOUD_PUBLIC_KEY
+    expected_private_key = expected_key.with_suffix("")
+    code, fingerprint, err = run(["ssh-keygen", "-lf", str(expected_key)])
+    if code == 0 and expected_private_key.exists():
+        checks.append(
+            Check(
+                "frappe_cloud_ssh_key",
+                "pass",
+                "Frappe Cloud SSH public key is readable and the matching private key exists locally.",
+                {"public_key": str(expected_key), "fingerprint": fingerprint},
+            )
+        )
     else:
-        checks.append(Check("ssh_agent", "warn", "ssh-agent is not currently reporting loaded identities.", {"error": err}))
+        checks.append(
+            Check(
+                "frappe_cloud_ssh_key",
+                "warn",
+                "Frappe Cloud SSH key is not fully ready.",
+                {"public_key": str(expected_key), "private_key_exists": expected_private_key.exists(), "error": err},
+            )
+        )
 
     return checks
 

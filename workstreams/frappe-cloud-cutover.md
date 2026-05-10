@@ -20,10 +20,13 @@ No current-site DNS record should be changed until Jeff is present and the Frapp
 - Repo branch rule: `main` only.
 - Current remote: `https://github.com/CBaen/Locally-Twisted-ERPNext.git`.
 - Current custom app root: `apps/locally_twisted`.
+- Frappe Cloud app-root mirror: `https://github.com/CBaen/Locally-Twisted-Frappe-App.git`.
 - App package name: `locally_twisted`.
 - App metadata exists at `apps/locally_twisted/pyproject.toml`.
 - App advertises Frappe v15 support with `frappe = ">=15.0.0,<16.0.0"`.
 - App has no declared APT packages today: `[deploy.dependencies.apt] packages = []`.
+- Frappe Cloud SSH key to add in the dashboard: `C:\Users\baenb\.ssh\id_ed25519.pub`.
+- Frappe Cloud SSH key fingerprint: `SHA256:7xYKNfuUifwOSCXCVeZcb7YNk4/djsiwg49abG9j9uU`.
 - Public domain is already delegated to Cloudflare:
   - `edward.ns.cloudflare.com`
   - `laura.ns.cloudflare.com`
@@ -40,17 +43,15 @@ Reason: Locally Twisted is a custom ERPNext app with website route overrides, pa
 
 ## App Source Decision
 
-Do not assume Frappe Cloud can consume this whole repository as the app source.
+Do not use the full project repository as the Frappe Cloud custom app source.
 
-This repo is a project repo. The Frappe app starts at `apps/locally_twisted`, and Frappe Cloud custom app validation expects app metadata such as `pyproject.toml` at the app root. The safe prep is to publish an app-root GitHub source/mirror whose repository root is exactly the contents of `apps/locally_twisted`.
-
-Recommended future app-source repo:
+This repo is a project repo. The Frappe app starts at `apps/locally_twisted`, and Frappe Cloud custom app validation expects app metadata such as `pyproject.toml` at the app root. The prepared app-root GitHub mirror has exactly the contents of `apps/locally_twisted` at repository root:
 
 ```text
-CBaen/Locally-Twisted-Frappe-App
+https://github.com/CBaen/Locally-Twisted-Frappe-App.git
 ```
 
-That mirror should be private unless Jeff explicitly approves a public app source. Sync it from a reviewed commit of this repo, not from a dirty worktree.
+That mirror is private. Sync it from a reviewed commit of this repo, not from a dirty worktree.
 
 ## Data Migration Decision
 
@@ -82,23 +83,26 @@ The verifier is read-only. It checks branch, remote, dirty worktree state, app m
 Current known preflight warnings:
 
 - The worktree is dirty because several other LT feature lanes are active. Cutover should use a clean, reviewed, pushed commit.
-- The app source is nested under `apps/locally_twisted`; prepare an app-root mirror before asking Frappe Cloud to validate the custom app.
-- `ssh-agent` is not running in the current PowerShell session.
-- One readable public key exists: `codex_tailscale_wardenclyffe.pub`. Another public key path, `id_ed25519.pub`, exists but was not readable from this session.
 - DNS still points to the current old site. That is correct until cutover.
+
+Resolved prep warnings:
+
+- `id_ed25519.pub` is now readable and is the key to paste into Frappe Cloud Settings > SSH Key.
+- `ssh-agent` is not required for the current prep path; use the Frappe Cloud dashboard SSH certificate flow with the matching local private key.
+- The app-root mirror exists at `CBaen/Locally-Twisted-Frappe-App` with `pyproject.toml` at repository root.
 
 ## Frappe Cloud Setup Path
 
 Use the dashboard until there is a reason to automate.
 
 1. Log into Frappe Cloud.
-2. Add the SSH public key under Frappe Cloud account settings.
+2. Add `C:\Users\baenb\.ssh\id_ed25519.pub` under Frappe Cloud account settings.
 3. Create a private bench on Frappe/ERPNext v15 in the chosen region.
 4. Add required apps to the private bench:
    - ERPNext
    - Payments
    - Webshop
-   - Locally Twisted custom app from the app-root GitHub source
+   - Locally Twisted custom app from `https://github.com/CBaen/Locally-Twisted-Frappe-App.git`
 5. Deploy the bench.
 6. Create a staging site on that private bench.
 7. Install apps on the site in this order:
