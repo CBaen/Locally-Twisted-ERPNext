@@ -10,6 +10,11 @@ from locally_twisted.communication_copy_policy import (
     BUSINESS_DOCUMENT_COPY,
     routed_alias_copy_risks,
 )
+from locally_twisted.customer_email_theme import (
+    GENERAL_INBOX,
+    formal_email_inline_images,
+    render_formal_customer_email,
+)
 from locally_twisted.product_quote_acceptance import issue_product_quote_acceptance_token
 from locally_twisted.product_quote_runtime import QUOTATION_FIELDNAMES
 
@@ -48,6 +53,8 @@ def send_product_quote_customer_review(
         message=message,
         reference_doctype="Quotation",
         reference_name=quotation.name,
+        reply_to=GENERAL_INBOX,
+        inline_images=formal_email_inline_images(),
         now=False,
         delayed=True,
     )
@@ -132,13 +139,22 @@ def _customer_message(quotation, acceptance_url: str) -> str:
     summary = quotation.get(QUOTATION_FIELDNAMES["summary"]) or "your reviewed quote"
     total = float(quotation.get("grand_total") or 0)
     currency = quotation.get("currency") or "USD"
-    return f"""
-<p>Hi there,</p>
-<p>Your Locally Twisted quote is ready for review.</p>
-<p><strong>Quote:</strong> {frappe.utils.escape_html(quotation.name)}<br>
-<strong>Scope:</strong> {frappe.utils.escape_html(summary)}<br>
-<strong>Total:</strong> {total:.2f} {frappe.utils.escape_html(currency)}</p>
-<p><a href="{frappe.utils.escape_html(acceptance_url)}">Review and approve your quote</a></p>
-<p>Approving the quote creates a draft order for our team to review. It does not charge a card or create an invoice.</p>
-<p>If anything looks off, reply to this email and we will help.</p>
-"""
+    body_html = f"""
+<p style="margin:0 0 10px;">Your Locally Twisted quote is ready for review.</p>
+<div style="background:#F7F7F5;border:1px solid #E1DED8;padding:10px 12px;margin:0 0 12px;">
+  <p style="margin:0 0 5px;"><strong>Quote:</strong> {frappe.utils.escape_html(quotation.name)}</p>
+  <p style="margin:0 0 5px;"><strong>Scope:</strong> {frappe.utils.escape_html(summary)}</p>
+  <p style="margin:0;"><strong>Total:</strong> {total:.2f} {frappe.utils.escape_html(currency)}</p>
+</div>
+<p style="margin:0 0 12px;">
+  <a href="{frappe.utils.escape_html(acceptance_url)}" style="display:inline-block;padding:8px 14px;background:#1F2933;color:#FFFFFF;text-decoration:none;border-radius:4px;font-weight:700;">Review and approve your quote</a>
+</p>
+<p style="margin:0 0 10px;">Approving the quote creates a draft order for our team to review. It does not charge a card or create an invoice.</p>
+<p style="margin:0;">Reply to this email if anything looks off and we will help.</p>
+""".strip()
+    return render_formal_customer_email(
+        title="Your Locally Twisted quote is ready for review",
+        preheader=f"Review quote {quotation.name}. No card will be charged by approving.",
+        body_html=body_html,
+        support_email=GENERAL_INBOX,
+    )

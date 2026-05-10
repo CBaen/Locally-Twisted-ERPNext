@@ -25,6 +25,7 @@ def run() -> dict[str, object]:
         "customer_email_theme": _load_source(app_root / "customer_email_theme.py"),
         "lead_cascade": _load_source(app_root / "lead_cascade.py"),
         "payment_success": _load_source(app_root / "www" / "payment_success.py"),
+        "product_quote_customer_delivery": _load_source(app_root / "product_quote_customer_delivery.py"),
         "payment_cascade_contract": _load_source(app_root / "verify" / "payment_cascade_contract.py"),
         "patches": _load_source(app_root / "patches.txt"),
     }
@@ -61,8 +62,8 @@ def run() -> dict[str, object]:
             function_name="_send_receipt_email",
             reference_doctype="Sales Order",
             required_markers=(
-                "render_customer_email",
-                "inline_images=customer_email_inline_images()",
+                "render_formal_customer_email",
+                "inline_images=formal_email_inline_images()",
                 "support_email=BILLING_INBOX",
                 "reply_to=BILLING_INBOX",
                 "document_copy_kwargs",
@@ -81,6 +82,7 @@ def run() -> dict[str, object]:
             function_name="_send_operator_notification",
             reference_doctype="Sales Order",
             required_markers=(
+                "render_operator_email",
                 "get_operator_email()",
                 "Open order in desk",
                 "Customer notes",
@@ -96,8 +98,8 @@ def run() -> dict[str, object]:
             function_name="_send_welcome_email_if_first_order",
             reference_doctype="Customer",
             required_markers=(
-                "render_customer_email",
-                "inline_images=customer_email_inline_images()",
+                "render_formal_customer_email",
+                "inline_images=formal_email_inline_images()",
                 "support_email=GENERAL_INBOX",
                 "reply_to=GENERAL_INBOX",
                 "document_copy_kwargs",
@@ -106,6 +108,31 @@ def run() -> dict[str, object]:
                 "Welcome to Locally Twisted",
                 "separate receipt email",
                 "If anything changes on your end",
+            ),
+        ),
+        _check_email_function(
+            surface_id="product_quote_customer_delivery",
+            source=sources["product_quote_customer_delivery"],
+            function_name="send_product_quote_customer_review",
+            reference_doctype="Quotation",
+            required_markers=(
+                "message = _customer_message",
+                "bcc=[bcc]",
+                "reply_to=GENERAL_INBOX",
+                "inline_images=formal_email_inline_images()",
+                "delayed=True",
+            ),
+        ),
+        _check_function_markers(
+            surface_id="product_quote_customer_message",
+            source=sources["product_quote_customer_delivery"],
+            function_name="_customer_message",
+            required_markers=(
+                "render_formal_customer_email",
+                "support_email=GENERAL_INBOX",
+                "Your Locally Twisted quote is ready for review.",
+                "It does not charge a card or create an invoice.",
+                "Reply to this email",
             ),
         ),
         _check_dynamic_contract(sources["payment_cascade_contract"]),
@@ -176,6 +203,24 @@ def _check_email_function(
     return _surface(surface_id, failures)
 
 
+def _check_function_markers(
+    *,
+    surface_id: str,
+    source: str,
+    function_name: str,
+    required_markers: tuple[str, ...],
+) -> dict[str, Any]:
+    failures: list[str] = []
+    function_source, function_node = _function_source(source, function_name)
+    if not function_source or function_node is None:
+        failures.append(f"missing function {function_name}")
+        return _surface(surface_id, failures)
+    for marker in required_markers:
+        if marker not in function_source:
+            failures.append(f"{function_name} missing marker {marker!r}")
+    return _surface(surface_id, failures)
+
+
 def _check_customer_email_theme(source: str) -> dict[str, Any]:
     failures: list[str] = []
     for marker in (
@@ -184,8 +229,11 @@ def _check_customer_email_theme(source: str) -> dict[str, Any]:
         "customer_email_inline_images",
         "lt-logo.png",
         "lt-balloon-dog-red-email-mirrored.png",
-        "🎈Locally Twisted🎈 Got your Message",
+        "Locally Twisted 🎈 Thanks",
         "form_confirmation_subject",
+        "render_formal_customer_email",
+        "render_operator_email",
+        "formal_email_inline_images",
         "#0E2240",
         "#B31B34",
         "#B89A5B",

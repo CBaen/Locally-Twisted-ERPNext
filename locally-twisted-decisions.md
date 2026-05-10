@@ -8,6 +8,22 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-10 - Email review previews must embed inline assets for browser/PDF rendering
+
+**Decision:** Email Queue is allowed to use standard inline `cid:` MIME images for actual outbound email, but any standalone review artifact shown in a browser, screenshot, or PDF must rewrite those images to embedded data URLs and fail if an image does not load.
+
+**Reasoning:** GL caught broken first-page logo placeholders in both rendered review outputs. The queued email MIME had the logo and balloon-dog image parts, so the email-client delivery shape was not the same problem as the standalone preview. The preview artifact itself is what GL reviews, so it must be self-contained and visibly correct.
+
+**Implementation boundary:** `output/email-previews/` and `output/email-print-fit/` are ignored local review artifacts, not source of truth. They may remain locally when GL is actively reviewing email designs, but they must not be committed as durable project state. Future preview tooling should assert no `cid:` sources remain and check loaded image dimensions with Playwright before presenting render evidence.
+
+**Verification receipt:** The current customer form confirmation and gallery preview HTML were rewritten to data-URL images, `rg -n "cid:" output/email-previews output/email-print-fit` returned no matches, Playwright reported all preview images loaded, and both customer confirmation PDFs still contained one page marker.
+
+**Alternatives considered:** Leave the previews as raw queued HTML and explain that real email clients resolve `cid:`. Rejected because GL reviews the rendered artifacts and broken visual proof is not acceptable. Commit generated preview exports. Rejected because ignored outputs are review artifacts, not repo source.
+
+**Decided by:** GL bug report and Codex fix on 2026-05-10.
+
+---
+
 ## 2026-05-10 - Short-notice banner owns the top proof slot
 
 **Decision:** The desktop top utility banner uses the left proof slot for `SHORT NOTICE? LET US KNOW. WE CAN OFTEN HELP WITH 24 HOURS NOTICE!`. `Free Event Quote` remains a right-side utility link to `/contact`, and the account link remains. The old `Prepared design, clean installs, and invoiced event support across Utah.` proof copy and delivery/truck icon are removed from the header.
@@ -3101,7 +3117,7 @@ The pattern that worked: read the Odoo source → write a Python script targetin
 
 ## 2026-05-10 - Customer form confirmations are upload-aware receipts of what was submitted
 
-**Decision:** Public customer form confirmations must function as a plain-language receipt of the customer's submitted information. They use the dynamic subject `U+1F388 Locally Twisted U+1F388 Got your Message {first_name} - 1 day Follow-Up!`, the message title `Here is what we received`, and a compact one-page-oriented shell. They echo only non-empty submitted fields, include free-text notes, and mention reference files only when files attached. The form path must queue the customer confirmation after upload handling so the file count is true.
+**Decision:** Public customer form confirmations must function as a plain-language receipt of the customer's submitted information. They use the dynamic subject `Locally Twisted U+1F388 Thanks {first_name}! We'll be in touch within a day`, the message title `Here is what we received`, and a compact one-page-oriented shell. They echo only non-empty submitted fields, include free-text notes, and mention reference files only when files attached. The form path must queue the customer confirmation after upload handling so the file count is true.
 
 **Reasoning:** GL needs the confirmation email to help customers catch mistakes quickly and to give the business a reliable record of what the customer says they submitted. A generic "we got your message" email is too weak for discrepancy handling, and a false photo warning or wrong file count is worse than no detail. Printed customer email also needs to fit one page where possible, so long policy blocks were replaced with compact policy links for this form-confirmation path.
 
@@ -3110,3 +3126,31 @@ The pattern that worked: read the Odoo source → write a Python script targetin
 **Receipts:** `apps/locally_twisted/locally_twisted/lead_cascade.py`; `apps/locally_twisted/locally_twisted/www/book.py`; `apps/locally_twisted/locally_twisted/customer_email_theme.py`; `apps/locally_twisted/locally_twisted/verify/customer_documents_contract.py`; `workstreams/customer-email-policy-boundary.md`; `.codex/capabilities/recipes/customer-email-delivery-branding-contract.md`.
 
 **Decided by:** GL email-design approval and caveats, 2026-05-10.
+
+---
+
+## 2026-05-10 - Customer form confirmation subject uses thanks copy
+
+**Decision:** The public customer form confirmation subject is now `Locally Twisted U+1F388 Thanks {first_name}! We'll be in touch within a day`.
+
+**Reasoning:** GL requested this exact subject shape after reviewing the prior `Got your Message` / `1 day Follow-Up` copy. Keep the balloon in the subject, but the message should now read as a thanks note with the one-day response expectation.
+
+**Implementation boundary:** This is still public-form-only. Do not reuse this subject for receipts, invoices, billing, legal, payroll, vendor, or accountant paperwork.
+
+**Receipts:** `apps/locally_twisted/locally_twisted/customer_email_theme.py`; `apps/locally_twisted/locally_twisted/verify/customer_documents_contract.py`; `apps/locally_twisted/locally_twisted/verify/customer_email_policy_contract.py`.
+
+**Decided by:** GL direct copy request, 2026-05-10.
+
+---
+
+## 2026-05-10 - Formal email shells are separate from public intake charm
+
+**Decision:** The public intake confirmation is the only fun/unique form response. Paid receipts, first-order welcome emails, reviewed quote approval emails, and operator paid-order notifications use restrained formal shells specific to the recipient.
+
+**Reasoning:** GL asked to keep formal responses formal and avoid overdoing type, sizing, or decoration. The customer needs proof and next steps; the operator needs clear action details. The balloon-dog/footer treatment belongs on the intake confirmation, not on receipts, quote approvals, operator notices, or future finance/legal paperwork.
+
+**Implementation boundary:** `render_customer_email` remains the public intake shell. `render_formal_customer_email` is for customer proof/formal responses and uses logo-only inline images. `render_operator_email` is for internal action emails. New finance, legal, vendor, accountant, or reminder emails should use restrained recipient-specific copy and must not inherit the playful intake shell by default.
+
+**Receipts:** `apps/locally_twisted/locally_twisted/customer_email_theme.py`; `apps/locally_twisted/locally_twisted/www/payment_success.py`; `apps/locally_twisted/locally_twisted/product_quote_customer_delivery.py`; `apps/locally_twisted/locally_twisted/verify/customer_email_policy_contract.py`; `output/email-previews/email-preview-gallery.html`.
+
+**Decided by:** GL direction to keep formal responses formal, 2026-05-10.

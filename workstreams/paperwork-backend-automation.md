@@ -1,6 +1,6 @@
 # Paperwork And Backend Automation
 
-Last updated: 2026-05-10 by Codex after tightening customer form confirmation email details, upload-aware file-count copy, and one-page print proof.
+Last updated: 2026-05-10 by Codex after tightening customer form confirmation email details, splitting formal email shells, and fixing standalone preview image rendering.
 
 ## Outcome
 
@@ -28,6 +28,8 @@ Fresh local verification on 2026-05-10 for the customer form confirmation slice:
 - `python scripts/verify/customer_email_policy_contract.py` passed after updating the source contract to the compact upload-aware form confirmation.
 - `python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081` passed against the local site after the backend worker restart, proving the real browser/form path queues one confirmation after uploads and includes `We received 5 files for reference.` for a five-photo inquiry.
 - A print proof generated from the real queued five-photo confirmation at ignored path `output/email-print-fit/customer-form-confirmation.pdf` was ingested through the large-document intake tool and reported 1 PDF page. This verifies the customer form confirmation sample only; other email families still need their own print-fit pass.
+- Preview exports under ignored `output/email-previews/` were regenerated after GL caught broken first-page logo placeholders in browser/PDF renders. Root cause was standalone preview HTML retaining `cid:` image URLs from Email Queue MIME parts; the corrected preview embeds image data URLs and was checked with Playwright image-dimension assertions.
+- `python scripts/verify/product_quote_customer_delivery_contract.py` passed after moving quote approval emails onto the formal customer shell.
 - `python scripts/verify/payment_cascade_contract.py` passed after shared email-shell compaction.
 - `python scripts/verify/client_event_automation_matrix.py --report output/client-event-automation-matrix.json` passed with the existing four warnings that no event-created follow-up Task automation exists today.
 
@@ -96,7 +98,8 @@ Current live-data facts from the fresh finance inventory:
 - The public form submit path defers the customer confirmation until after inspiration-photo handling so the email can include the correct file count.
 - Inquiry acknowledgment emails use compact code-owned policy links from `locally_twisted.policy_documents`, not the full long policy block.
 - Customer form confirmations echo only non-empty customer-submitted fields, including free-text notes, and only include the reference-file line when files were attached.
-- Customer form confirmations use the dynamic subject `U+1F388 Locally Twisted U+1F388 Got your Message {first_name} - 1 day Follow-Up!` with message title `Here is what we received`.
+- Customer form confirmations use the dynamic subject `Locally Twisted U+1F388 Thanks {first_name}! We'll be in touch within a day` with message title `Here is what we received`.
+- The public intake confirmation is the only playful/fun form response. Paid receipts, first-order welcome emails, reviewed quote approval emails, and operator paid-order notices now use restrained formal shells.
 - Lead payment guidance fields exist for service/deposit timing, but they do not create money records.
 
 ### Ready-to-order checkout paperwork
@@ -126,6 +129,7 @@ Current live-data facts from the fresh finance inventory:
 - `customer_email_policy_contract.py` statically checks inquiry acknowledgment, paid receipt, operator notification, and first-order welcome email functions.
 - The contract verifies queued `frappe.sendmail(..., now=False)` calls, required policy/customer-context copy, reference DocTypes, and the absence of PDF/attachment sendmail kwargs.
 - The customer inquiry branch must include submitted details, customer correction copy, upload-aware file-count copy, compact policy links, and the delivery-safe business copy recipient.
+- The formal customer branch must use logo-only inline images and recipient-specific copy for receipts, welcome, and quote approval. The operator branch must use an internal action shell and keep Desk/order/customer details scannable.
 - The contract also checks the dynamic paid-order cascade test still covers receipt policy text/link, operator checkout notes, first-order welcome queueing, and duplicate receipt prevention.
 - This is a no-send source contract: it does not create Email Queue rows, send customer messages, attach PDFs, or mutate invoices.
 
@@ -283,6 +287,7 @@ python scripts/verify/customer_documents_contract.py
 python scripts/verify/customer_email_policy_contract.py
 python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081
 python scripts/verify/payment_cascade_contract.py
+python scripts/verify/product_quote_customer_delivery_contract.py
 python scripts/verify/crm_stage_cascade.py
 python scripts/verify/backend_schema_inventory.py
 python scripts/verify/payment_backend_config_contract.py

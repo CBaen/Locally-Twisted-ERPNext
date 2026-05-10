@@ -33,11 +33,17 @@ Email Queue assertions, or public/company email addresses.
 ## Current Contract
 
 - Public inquiry acknowledgments use `customer_email_theme.py`.
-- Public form confirmation subjects use `U+1F388 Locally Twisted U+1F388 Got your Message {first_name} - 1 day Follow-Up!`.
+- Public form confirmation subjects use `Locally Twisted U+1F388 Thanks {first_name}! We'll be in touch within a day`.
 - Public form confirmation titles use `Here is what we received`; do not repeat the subject as the message header.
 - Public form confirmations must echo only non-empty customer-submitted fields, including free-text notes.
 - Public form confirmations must mention reference files only when files were actually attached. The `/contact` and BTFP form path defers the customer confirmation until after upload handling so the count is accurate.
 - Public form confirmations use compact policy links, not the full long policy block, to keep print output short.
+- Review/export previews rendered outside an email client must not leave `cid:`
+  image sources in standalone HTML. Rewrite queued inline images to embedded
+  data URLs before browser screenshots or PDFs, then verify image dimensions.
+- Only public intake confirmations use the playful branded shell with the balloon-dog footer mark.
+- Paid receipts, first-order welcome emails, reviewed quote emails, and other customer proof responses use `render_formal_customer_email` with logo-only inline images.
+- Internal paid-order notifications use `render_operator_email`: plain, formal, action oriented, and specific to the operator recipient.
 - The playful public inquiry subject is only for public forms. Do not use it
   for legal, billing, invoices, receipts, payroll, vendor packets, contracts, or
   other finance/legal emails.
@@ -74,6 +80,7 @@ python scripts/verify/customer_email_policy_contract.py
 python scripts/verify/customer_documents_contract.py
 python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081
 python scripts/verify/payment_cascade_contract.py
+python scripts/verify/product_quote_customer_delivery_contract.py
 python scripts/verify/customer_contact_points_contract.py
 ```
 
@@ -82,6 +89,16 @@ and inspect it through large-document intake. Current proof for the customer
 form confirmation is ignored at `output/email-print-fit/customer-form-confirmation.pdf`
 and intake reported 1 PDF page. This is not yet global proof for every email
 family.
+
+When generating review previews under `output/email-previews/`, run a browser
+image check that fails on unresolved images:
+
+```powershell
+# This should print no matches; any cid: match means the standalone preview is
+# not self-contained. Then use Playwright to fail any image whose
+# naturalWidth/naturalHeight is 0.
+rg -n "cid:" output/email-previews output/email-print-fit
+```
 
 When payment/operator paths are touched, also run:
 
@@ -103,8 +120,14 @@ python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-b
   customer mail.
 - Applying the playful public-form subject to finance/legal surfaces that need
   professional role-specific subjects.
+- Letting the playful intake shell leak into receipts, quote approvals,
+  operator notifications, invoices, reminders, vendor packets, or legal/billing
+  messages.
 - Sending the public form confirmation before uploads finish, which makes the
   customer receipt lie about attached files.
+- Treating a standalone browser/PDF email preview as valid while it still
+  contains `src="cid:..."`; that renders as a broken logo even when the queued
+  email MIME parts are present for real email clients.
 - Re-expanding inquiry emails with long policy blocks until the printed email
   spills onto a second page.
 - Adding a new sendmail surface without `document_copy_kwargs(...)`, explicit

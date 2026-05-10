@@ -42,8 +42,9 @@ from locally_twisted.crm_pipeline import PIPELINE_FIELD
 from locally_twisted.customer_email_theme import (
     BILLING_INBOX,
     GENERAL_INBOX,
-    customer_email_inline_images,
-    render_customer_email,
+    formal_email_inline_images,
+    render_formal_customer_email,
+    render_operator_email,
 )
 from locally_twisted.failure_recorder import record_backend_failure
 from locally_twisted.payments.settings import (
@@ -438,7 +439,7 @@ def _send_receipt_email(so_name):
   <a href="mailto:{BILLING_INBOX}" style="color:#0E2240;text-decoration:underline;">{BILLING_INBOX}</a>.
 </p>
 """.strip()
-    body = render_customer_email(
+    body = render_formal_customer_email(
         title="Your Locally Twisted order is confirmed",
         preheader=f"Payment received for {so.name}. This email is your receipt.",
         body_html=body_content,
@@ -452,7 +453,7 @@ def _send_receipt_email(so_name):
         reference_doctype="Sales Order",
         reference_name=so_name,
         reply_to=BILLING_INBOX,
-        inline_images=customer_email_inline_images(),
+        inline_images=formal_email_inline_images(),
         # attach_print intentionally omitted — we never want to attach a
         # PDF render (wkhtmltopdf-in-Docker trap). The HTML body is the
         # receipt.
@@ -537,13 +538,9 @@ def _send_operator_notification(so_name):
     desk_link = f"{site_url}/app/sales-order/{so.name}"
     order_notes = _get_customer_order_notes_html(so.name)
 
-    body = f"""
-<div style="font-family: Lato, Helvetica, Arial, sans-serif; max-width:600px; color:#1a1a1a; line-height:1.55;">
-  <h1 style="font-family:'Cormorant Garamond', Georgia, serif; font-size:22px; margin:0 0 4px;">
-    A new paid order just landed.
-  </h1>
-  <p style="margin:0 0 16px; color:#5a5a5a;">{escape_html(so.name)} &middot; ${flt(so.grand_total):,.2f} {escape_html(so.currency or "USD")}</p>
-
+    body_content = f"""
+  <p style="margin:0 0 10px;"><strong>Order:</strong> {escape_html(so.name)}<br>
+  <strong>Total:</strong> ${flt(so.grand_total):,.2f} {escape_html(so.currency or "USD")}</p>
   <table style="width:100%; border-collapse:collapse; font-size:14px; margin:0 0 16px;">
     <thead>
       <tr style="border-bottom:1px solid #ddd;">
@@ -555,19 +552,25 @@ def _send_operator_notification(so_name):
     <tbody>{lines_html}</tbody>
   </table>
 
+  <div style="background:#F7F7F5;border:1px solid #E1DED8;padding:10px 12px;margin:0 0 14px;">
   <p style="margin:0 0 6px;"><strong>Customer:</strong> {escape_html(so.customer_name or so.customer or "")}</p>
   {f'<p style="margin:0 0 6px;"><strong>Email:</strong> {escape_html(customer_email)}</p>' if customer_email else ''}
   {f'<p style="margin:0 0 6px;"><strong>Phone:</strong> {escape_html(customer_phone)}</p>' if customer_phone else ''}
-  {f'<p style="margin:0 0 16px; white-space:pre-line;"><strong>Shipping:</strong><br>{shipping_addr}</p>' if shipping_addr else ''}
-  {f'<p style="margin:0 0 16px; white-space:pre-line;"><strong>Customer notes:</strong><br>{order_notes}</p>' if order_notes else ''}
+  {f'<p style="margin:0 0 6px; white-space:pre-line;"><strong>Shipping:</strong><br>{escape_html(shipping_addr)}</p>' if shipping_addr else ''}
+  {f'<p style="margin:0; white-space:pre-line;"><strong>Customer notes:</strong><br>{order_notes}</p>' if order_notes else ''}
+  </div>
 
-  <p style="margin:24px 0 0;">
+  <p style="margin:14px 0 0;">
     <a href="{desk_link}" style="display:inline-block; padding:8px 16px; background:#107373; color:#fff; text-decoration:none; border-radius:4px; font-weight:600;">
       Open order in desk
     </a>
   </p>
-</div>
 """
+    body = render_operator_email(
+        title="New paid order",
+        preheader=f"{so.name} - ${flt(so.grand_total):,.2f} {so.currency or 'USD'}",
+        body_html=body_content,
+    )
 
     frappe.sendmail(
         recipients=[recipient],
@@ -649,7 +652,7 @@ def _send_welcome_email_if_first_order(so_name):
   <a href="mailto:hi@locallytwisted.com" style="color:#0E2240;text-decoration:underline;">hi@locallytwisted.com</a>.
 </p>
 """.strip()
-    body = render_customer_email(
+    body = render_formal_customer_email(
         title="Welcome to Locally Twisted",
         preheader="Thanks for your first order. Here is what happens next.",
         body_html=body_content,
@@ -663,7 +666,7 @@ def _send_welcome_email_if_first_order(so_name):
         reference_doctype="Customer",
         reference_name=so.customer,
         reply_to=GENERAL_INBOX,
-        inline_images=customer_email_inline_images(),
+        inline_images=formal_email_inline_images(),
         now=False,
         **document_copy_kwargs(external_audience=True, primary_recipients=[email]),
     )

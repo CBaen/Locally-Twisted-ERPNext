@@ -42,18 +42,24 @@ OpenClaw/Moji update on 2026-05-10: the homepage hero now implements GL's season
 
 Codex update on 2026-05-10: public inquiry acknowledgments now use the branded
 LT email shell with the LT logo, mirrored red balloon-dog footer mark, no
-standard ERPNext footer, and the public-form-only dynamic subject `U+1F388
-Locally Twisted U+1F388 Got your Message {first_name} - 1 day Follow-Up!`.
+standard ERPNext footer, and the public-form-only dynamic subject `Locally
+Twisted U+1F388 Thanks {first_name}! We'll be in touch within a day`.
 The form path defers the customer confirmation until after photo upload
 handling so it can echo the non-empty submitted fields, free-text notes, and a
 reference-file count only when files attach. The message title is `Here is what
-we received`, not a repeated subject line. Company copies still go to
+we received`, not a repeated subject line. This playful intake shell is not the
+default for all email. Paid receipts, first-order welcome, reviewed quote
+approval emails, and operator paid-order notices use restrained formal shells
+specific to the recipient. Company copies still go to
 `locallytwisted@gmail.com` as delivery-safe BCC while the sender is the same
 Gmail account behind the routed `@locallytwisted.com` aliases. Keep the playful
 subject out of legal, billing, invoice, receipt, and finance/legal emails.
 One-page print proof exists for one real queued five-photo form confirmation
-only; do not claim all email families print to one page until each family has
-its own actual-HTML PDF proof. Source handoff:
+only; preview renderings are ignored under `output/email-previews/`. Standalone
+browser/PDF review renders cannot resolve queued `cid:` image sources, so any
+preview export must rewrite inline Email Queue images to embedded data URLs and
+verify every `<img>` loads before review. Do not claim all email families print
+to one page until each family has its own actual-HTML PDF proof. Source handoff:
 `workstreams/customer-email-policy-boundary.md`; capability:
 `.codex/capabilities/recipes/customer-email-delivery-branding-contract.md`.
 

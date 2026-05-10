@@ -8,6 +8,11 @@ import sys
 
 from _cli import parse_noop_args
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8")
+
 
 CONTAINER = "locally-twisted-erpnext-v15-backend-1"
 SITE = "frontend"

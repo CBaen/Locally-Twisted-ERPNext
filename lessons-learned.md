@@ -95,6 +95,21 @@ The FAQ mixed service rules under generic buckets. The most dangerous example wa
 
 ---
 
+## 2026-05-10 - Email preview HTML cannot rely on cid images
+
+Email Queue messages can be correct for real email clients while still rendering
+broken in browser/PDF review files. The queued MIME contains inline image parts
+with `Content-ID`, but standalone HTML opened through Playwright, Chrome, or a
+PDF renderer cannot resolve `src="cid:..."` without an email client.
+
+**Counter-move:** email preview/export tooling must parse the queued MIME image
+parts or use the same local assets, rewrite preview HTML to embedded data URLs,
+and then run a browser check that every `<img>` has nonzero natural dimensions.
+Do not treat the queued email MIME as visual-preview proof until the standalone
+artifact itself loads the logo/images.
+
+---
+
 ## 2026-05-10 - ERPNext Lead duplicate-email setting can silently break inquiry reality
 
 ERPNext's Lead controller blocks repeat `email_id` values unless `CRM Settings.allow_lead_duplication_based_on_emails` is enabled. That default is wrong for LT's public inquiry form: one person can ask about multiple events from the same email address.

@@ -7,7 +7,7 @@ import frappe
 from frappe.utils import escape_html
 
 
-AUTO_ACK_SUBJECT = "🎈Locally Twisted🎈 Got your Message"
+AUTO_ACK_SUBJECT = "Locally Twisted 🎈 Thanks"
 LOGO_EMBED_NAME = "lt-logo.png"
 DOG_EMBED_NAME = "lt-balloon-dog-red-email-mirrored.png"
 GENERAL_INBOX = "hi@locallytwisted.com"
@@ -18,7 +18,7 @@ SITE_URL = "https://locallytwisted.com"
 
 def form_confirmation_subject(first_name: str | None) -> str:
     customer_name = str(first_name or "there").strip().split(" - ")[0].strip() or "there"
-    return f"{AUTO_ACK_SUBJECT} {customer_name} - 1 day Follow-Up!"
+    return f"{AUTO_ACK_SUBJECT} {customer_name}! We'll be in touch within a day"
 
 
 def render_customer_email(
@@ -86,6 +86,112 @@ def render_customer_email(
   </table>
 </div>
 """.strip()
+
+
+def render_formal_customer_email(
+    *,
+    title: str,
+    preheader: str,
+    body_html: str,
+    support_email: str = GENERAL_INBOX,
+) -> str:
+    """Return a restrained customer email shell for receipts, quotes, and formal replies."""
+    safe_title = escape_html(title)
+    safe_preheader = escape_html(preheader)
+    safe_support_email = escape_html(support_email)
+    return f"""
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;line-height:1px;font-size:1px;">
+  {safe_preheader}
+</div>
+<div style="width:100%;margin:0;padding:0;background:#F4F2EE;font-family:Helvetica,Arial,sans-serif;color:#1F2933;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;background:#F4F2EE;">
+    <tr>
+      <td align="center" style="padding:12px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;border-collapse:collapse;background:#FFFFFF;border:1px solid #DAD6CE;border-top:3px solid #1F2933;">
+          <tr>
+            <td style="padding:12px 16px 8px;border-bottom:1px solid #E7E5E1;">
+              <img embed="{LOGO_EMBED_NAME}" width="150" alt="Locally Twisted" style="display:block;width:150px;max-width:64%;height:auto;border:0;outline:none;text-decoration:none;margin:0 0 10px;">
+              <h1 style="font-family:Helvetica,Arial,sans-serif;font-size:18px;line-height:1.25;color:#1F2933;margin:0 0 4px;font-weight:700;">
+                {safe_title}
+              </h1>
+              <p style="font-size:12px;line-height:1.35;color:#5B616A;margin:0;">
+                {safe_preheader}
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:12px 16px 10px;font-size:13px;line-height:1.45;color:#30343A;word-break:break-word;">
+              {body_html}
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:8px 16px;border-top:1px solid #E7E5E1;color:#5B616A;font-size:11px;line-height:1.35;">
+              Locally Twisted &middot;
+              <a href="mailto:{safe_support_email}" style="color:#1F2933;text-decoration:underline;">{safe_support_email}</a>
+              &middot; {PHONE_DISPLAY}
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</div>
+""".strip()
+
+
+def render_operator_email(
+    *,
+    title: str,
+    preheader: str,
+    body_html: str,
+) -> str:
+    """Return a plain internal action email shell for operators."""
+    safe_title = escape_html(title)
+    safe_preheader = escape_html(preheader)
+    return f"""
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;line-height:1px;font-size:1px;">
+  {safe_preheader}
+</div>
+<div style="width:100%;margin:0;padding:0;background:#F4F2EE;font-family:Helvetica,Arial,sans-serif;color:#1F2933;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;background:#F4F2EE;">
+    <tr>
+      <td align="center" style="padding:12px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;border-collapse:collapse;background:#FFFFFF;border:1px solid #DAD6CE;border-top:3px solid #111111;">
+          <tr>
+            <td style="padding:12px 16px 8px;border-bottom:1px solid #E7E5E1;">
+              <p style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#5B616A;margin:0 0 5px;">Internal action</p>
+              <h1 style="font-family:Helvetica,Arial,sans-serif;font-size:18px;line-height:1.25;color:#111111;margin:0 0 4px;font-weight:700;">
+                {safe_title}
+              </h1>
+              <p style="font-size:12px;line-height:1.35;color:#5B616A;margin:0;">
+                {safe_preheader}
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:12px 16px 10px;font-size:13px;line-height:1.45;color:#30343A;word-break:break-word;">
+              {body_html}
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:8px 16px;border-top:1px solid #E7E5E1;color:#5B616A;font-size:11px;line-height:1.35;">
+              Locally Twisted operations &middot; Internal notification
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</div>
+""".strip()
+
+
+def formal_email_inline_images() -> list[dict[str, object]]:
+    """Return the logo only for restrained customer emails."""
+    icons_path = Path(frappe.get_app_path("locally_twisted")) / "public" / "icons"
+    return [
+        {"filename": LOGO_EMBED_NAME, "filecontent": (icons_path / LOGO_EMBED_NAME).read_bytes()},
+    ]
 
 
 def customer_email_inline_images() -> list[dict[str, object]]:

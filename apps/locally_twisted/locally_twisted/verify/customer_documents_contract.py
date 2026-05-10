@@ -22,7 +22,7 @@ REQUIRED_ANCHORS = (
 
 
 def _expected_form_subject(first_name: str) -> str:
-    return f"🎈Locally Twisted🎈 Got your Message {first_name} - 1 day Follow-Up!"
+    return f"Locally Twisted 🎈 Thanks {first_name}! We'll be in touch within a day"
 
 
 def run():
