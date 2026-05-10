@@ -1,6 +1,6 @@
 # Paperwork And Backend Automation
 
-Last updated: 2026-05-09 by Codex after adding mandatory copy routing for paperwork/documentation email and send-readiness paths.
+Last updated: 2026-05-10 by Codex after tightening customer form confirmation email details, upload-aware file-count copy, and one-page print proof.
 
 ## Outcome
 
@@ -21,6 +21,15 @@ Make Locally Twisted's paperwork path reliable enough for launch and simple enou
 This lane coordinates paperwork, receipts, invoices, payment records, customer emails, reminder dry runs, reminder review reports, and backend automation boundaries. It does not replace `workstreams/finance-payroll-quickbooks-migration.md`, `workstreams/synthetic-business-pipeline.md`, `workstreams/customer-reminder-dry-run.md`, `workstreams/customer-reminder-review-report.md`, `workstreams/payment-backend-launch-readiness.md`, `workstreams/customer-document-policy-lanes.md`, or `workstreams/erpnext-backend-simplification.md`; it sequences the launch-critical parts of those lanes.
 
 ## Current Verified Baseline
+
+Fresh local verification on 2026-05-10 for the customer form confirmation slice:
+
+- `python scripts/verify/customer_documents_contract.py` passed after proving the customer form confirmation has the dynamic public-form subject, submitted-detail confirmation block, no file-count line when no files were submitted, file-count copy when uploads attach, policy links, logo evidence, and delivery-safe business copy routing.
+- `python scripts/verify/customer_email_policy_contract.py` passed after updating the source contract to the compact upload-aware form confirmation.
+- `python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081` passed against the local site after the backend worker restart, proving the real browser/form path queues one confirmation after uploads and includes `We received 5 files for reference.` for a five-photo inquiry.
+- A print proof generated from the real queued five-photo confirmation at ignored path `output/email-print-fit/customer-form-confirmation.pdf` was ingested through the large-document intake tool and reported 1 PDF page. This verifies the customer form confirmation sample only; other email families still need their own print-fit pass.
+- `python scripts/verify/payment_cascade_contract.py` passed after shared email-shell compaction.
+- `python scripts/verify/client_event_automation_matrix.py --report output/client-event-automation-matrix.json` passed with the existing four warnings that no event-created follow-up Task automation exists today.
 
 Fresh local verification on 2026-05-09:
 
@@ -84,7 +93,10 @@ Current live-data facts from the fresh finance inventory:
 
 - Public `/contact` creates Leads.
 - `lead_cascade.py` creates or links Contact records and queues customer acknowledgment emails.
-- Inquiry acknowledgment emails include code-owned policy blocks from `locally_twisted.policy_documents`.
+- The public form submit path defers the customer confirmation until after inspiration-photo handling so the email can include the correct file count.
+- Inquiry acknowledgment emails use compact code-owned policy links from `locally_twisted.policy_documents`, not the full long policy block.
+- Customer form confirmations echo only non-empty customer-submitted fields, including free-text notes, and only include the reference-file line when files were attached.
+- Customer form confirmations use the dynamic subject `U+1F388 Locally Twisted U+1F388 Got your Message {first_name} - 1 day Follow-Up!` with message title `Here is what we received`.
 - Lead payment guidance fields exist for service/deposit timing, but they do not create money records.
 
 ### Ready-to-order checkout paperwork
@@ -113,6 +125,7 @@ Current live-data facts from the fresh finance inventory:
 
 - `customer_email_policy_contract.py` statically checks inquiry acknowledgment, paid receipt, operator notification, and first-order welcome email functions.
 - The contract verifies queued `frappe.sendmail(..., now=False)` calls, required policy/customer-context copy, reference DocTypes, and the absence of PDF/attachment sendmail kwargs.
+- The customer inquiry branch must include submitted details, customer correction copy, upload-aware file-count copy, compact policy links, and the delivery-safe business copy recipient.
 - The contract also checks the dynamic paid-order cascade test still covers receipt policy text/link, operator checkout notes, first-order welcome queueing, and duplicate receipt prevention.
 - This is a no-send source contract: it does not create Email Queue rows, send customer messages, attach PDFs, or mutate invoices.
 
@@ -194,6 +207,7 @@ Current live-data facts from the fresh finance inventory:
 - `email_delivery_guard.py` is wired to `Email Queue.before_insert` and blocks those routed-alias loop sends globally for the current Gmail sender, including ad hoc live probes that do not use `communication_copy_policy.py`.
 - Cameron is not a standing future copy recipient. Use a non-LT mailbox for explicit one-time QA/review sends unless the SMTP sender changes.
 - Current implementation uses `communication_copy_policy.py` and BCC business copy routing on inquiry acknowledgments, paid-order receipts, paid-order operator notifications, and first-order welcome emails. BCC keeps the internal business copy address off outside recipient-visible headers.
+- Customer form confirmations reply to `hi@locallytwisted.com`; external customer replies should route to the business inbox, but same-Gmail routed-alias QA sends remain blocked/unsafe under the current sender.
 - Outbound document send-readiness now blocks on `business_copy_recipient` and `copy_routing_confirmed` before any future sender can mark a document send-ready.
 
 ### Business automation index
@@ -229,6 +243,7 @@ Current live-data facts from the fresh finance inventory:
 - Payroll is feasibility-only until HRMS/payroll DocTypes exist and accountant/provider approval is in place.
 - One unpaid and overdue Sales Invoice exists in local data. Treat it as a review target, not as approval to send reminders.
 - Automated customer reminders are not approved. Copy, cadence, audience, edge cases, and opt-out handling need approval before sending.
+- One-page print fit is currently proved for the customer form confirmation sample only. Receipts, operator notifications, welcome emails, reminders, and finance/legal packets still need their own actual-HTML print-fit proofs before claiming all outbound emails print on one page.
 - Manual stage-to-finance automation still needs explicit threshold design. Do not duplicate the checkout money path from CRM stage movement.
 
 ## First Safe Slices
@@ -266,6 +281,7 @@ Core paperwork/backend baseline:
 python scripts/verify/finance_inventory.py --json
 python scripts/verify/customer_documents_contract.py
 python scripts/verify/customer_email_policy_contract.py
+python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081
 python scripts/verify/payment_cascade_contract.py
 python scripts/verify/crm_stage_cascade.py
 python scripts/verify/backend_schema_inventory.py

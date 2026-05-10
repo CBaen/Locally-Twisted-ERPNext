@@ -37,9 +37,9 @@ from locally_twisted import policy_documents
 from locally_twisted import stage_cascade
 from locally_twisted.communication_copy_policy import document_copy_kwargs
 from locally_twisted.customer_email_theme import (
-    AUTO_ACK_SUBJECT,
     GENERAL_INBOX,
     customer_email_inline_images,
+    form_confirmation_subject,
     render_customer_email,
 )
 from locally_twisted.failure_recorder import record_backend_failure
@@ -49,6 +49,7 @@ WEBSITE_LEAD_SOURCE = "Website"
 LEGACY_AUTO_ACK_SUBJECTS = (
     "We got your message",
     "Locally Twisted Message Sent - 24 Hour or Less Response Time",
+    "\U0001F388Locally Twisted\U0001F388 We Got Your Message! Be in Touch Soon!",
 )
 
 # Map service-checkbox values (matching Hetzner /book) to the labels we
@@ -150,7 +151,8 @@ def after_insert(doc, method=None):
 
     try:
         if (doc.source or "").strip() == WEBSITE_LEAD_SOURCE:
-            _send_auto_ack_email(doc)
+            if not getattr(getattr(doc, "flags", None), "lt_defer_customer_ack", False):
+                _send_auto_ack_email(doc)
     except Exception as e:
         record_backend_failure(
             surface="lead_contact_ack_cascade",
@@ -344,16 +346,21 @@ def _ensure_contact_link(doc):
         contact.save(ignore_permissions=True)
 
 
-def _send_auto_ack_email(doc):
+def send_customer_inquiry_confirmation(doc, *, photo_uploads=None):
+    """Queue the customer-facing confirmation email for a Website inquiry."""
+    return _send_auto_ack_email(doc, photo_uploads=photo_uploads)
+
+
+def _send_auto_ack_email(doc, *, photo_uploads=None):
     """Send the customer auto-acknowledgment email. Idempotent via
-    Communication-by-subject lookup -> safe to retry.
+    Lead-scoped Communication/Email Queue lookup -> safe to retry.
     """
     email = (doc.email_id or "").strip()
     if not email:
         return
 
-    subject = AUTO_ACK_SUBJECT
     customer_name = (doc.lead_name or doc.first_name or "Hello").split(" - ")[0]
+    subject = form_confirmation_subject(customer_name)
 
     # Idempotency: skip if a Communication with the current subject or the
     # retired launch subject already exists on this Lead.
@@ -366,32 +373,35 @@ def _send_auto_ack_email(doc):
         },
         limit=1,
     )
-    if existing:
+    queued = frappe.get_all(
+        "Email Queue",
+        filters={
+            "reference_doctype": "Lead",
+            "reference_name": doc.name,
+        },
+        limit=1,
+    )
+    if existing or queued:
         return
 
     safe_name = escape_html(customer_name)
-    policy_block = policy_documents.customer_policy_block(
-        policy_documents.lanes_for_lead(doc),
-        include_privacy=True,
-        heading="Before you book",
-    )
+    details_block = _customer_submitted_details_block(doc, photo_uploads=photo_uploads)
+    policy_block = _compact_policy_link_block(policy_documents.lanes_for_lead(doc))
     body_html = f"""
-<p style="margin:0 0 10px;">{safe_name},</p>
-<p style="margin:0 0 10px;">
-  Thanks for sending your event details to Locally Twisted.
+<p style="margin:0 0 7px;">{safe_name},</p>
+<p style="margin:0 0 8px;">Thanks for choosing Locally Twisted!</p>
+<p style="margin:0 0 8px;">
+  If anything you submitted appears incorrect, please reply to this email so we can make it right!
 </p>
-<p style="margin:0 0 12px;padding:10px 12px;background:#FAF7F2;border-left:4px solid #B31B34;color:#0A0A0B;">
-  <strong>Response time:</strong> We will reply in 24 hours or less.
-</p>
-<p style="margin:0 0 12px;">
-  We will review the request and send the next useful step. For ideas while you wait,
-  browse our <a href="https://locallytwisted.com/portfolio" style="color:#0E2240;text-decoration:underline;">recent work</a>.
+{details_block}
+<p style="margin:8px 0;">
+  We will get back to you as soon as possible. Generally within less than 24 hours, no matter the day.
 </p>
 {policy_block}
 """.strip()
     message = render_customer_email(
-        title=subject,
-        preheader="We got your message and will be in touch soon.",
+        title="Here is what we received",
+        preheader="Please review your event details and reply if anything needs a fix.",
         body_html=body_html,
         support_email=GENERAL_INBOX,
     )
@@ -407,3 +417,108 @@ def _send_auto_ack_email(doc):
         now=False,  # queue async
         **document_copy_kwargs(external_audience=True, primary_recipients=[email]),
     )
+
+
+def _customer_submitted_details_block(doc, *, photo_uploads=None) -> str:
+    rows: list[tuple[str, str]] = []
+
+    def line(label, value):
+        if value is None or value == "" or value == 0:
+            return
+        rows.append((label, str(value)))
+
+    line("Name", (doc.get("first_name") or doc.get("lead_name") or "").split(" - ")[0])
+    line("Email", doc.get("email_id"))
+    line("Phone", doc.get("mobile_no") or doc.get("phone"))
+    line("Company", doc.get("company_name"))
+    line("Occasion", doc.get("custom_occasion_type"))
+    line("Event date", doc.get("custom_event_date"))
+    line("Event start time", doc.get("custom_event_time"))
+    line("Event end time", doc.get("custom_event_end_time"))
+    line("Location", doc.get("custom_event_location"))
+    line("Estimated guests", doc.get("custom_guest_count"))
+    services = _services_for_confirmation(doc)
+    if services:
+        line("Services requested", ", ".join(services))
+    line("Indoor / Outdoor", doc.get("custom_indoor_outdoor"))
+    if doc.get("custom_shade_required"):
+        line("Shade", "Required")
+    line("Colors", doc.get("custom_colors"))
+    line("Decor types", doc.get("custom_decor_types"))
+    line("Setup arrival", doc.get("custom_setup_time_arrival"))
+    line("Decor notes", doc.get("custom_decor_notes"))
+    line("Twisters", doc.get("custom_num_twisters"))
+    line("Twister start", doc.get("custom_artist_start"))
+    line("Twister end", doc.get("custom_artist_end"))
+    line("Twisting notes", doc.get("custom_twisting_notes"))
+    line("Face painters", doc.get("custom_num_painters"))
+    line("Painter start", doc.get("custom_painter_start"))
+    line("Painter end", doc.get("custom_painter_end"))
+    line("Painting notes", doc.get("custom_painting_notes"))
+    line("Delivery notes", doc.get("custom_delivery_notes"))
+    line("Events inquiry notes", doc.get("custom_package_notes"))
+    line("Other notes", doc.get("custom_other_notes"))
+    line("Anything else", doc.get("custom_anything_else"))
+
+    attached = int((photo_uploads or {}).get("attached") or 0)
+    if attached:
+        line("Reference files", f"We received {attached} files for reference.")
+    upload_issues = _photo_upload_issue_summary(photo_uploads)
+    if upload_issues:
+        line("Reference file notes", upload_issues)
+
+    rows_html = "".join(
+        "<tr>"
+        f"<td style=\"padding:3px 8px 3px 0;color:#595A5C;white-space:nowrap;vertical-align:top;\">{escape_html(label)}</td>"
+        f"<td style=\"padding:3px 0;color:#0A0A0B;vertical-align:top;\">{escape_html(value).replace(chr(10), '<br>')}</td>"
+        "</tr>"
+        for label, value in rows
+    )
+    return f"""
+<div style="border:1px solid #E7E5E1;border-left:3px solid #B31B34;background:#FAF7F2;padding:8px 10px;margin:8px 0;">
+  <p style="font-size:13px;font-weight:700;color:#0A0A0B;margin:0 0 5px;">Here is what we received</p>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;font-size:12px;line-height:1.28;">
+    {rows_html}
+  </table>
+</div>
+""".strip()
+
+
+def _services_for_confirmation(doc) -> list[str]:
+    labels = []
+    for row in doc.get("custom_event_type") or []:
+        label = row.get("service_type") or row.get("service_type_name") or row.get("name1")
+        if label:
+            labels.append(str(label).strip())
+    if not labels and doc.get("custom_services"):
+        labels = [part.strip() for part in str(doc.get("custom_services")).split(",") if part.strip()]
+    return labels
+
+
+def _photo_upload_issue_summary(photo_uploads) -> str:
+    if not photo_uploads:
+        return ""
+    issues = []
+    for item in (photo_uploads.get("rejected") or []) + (photo_uploads.get("failed") or []):
+        filename = item.get("filename") or "unnamed upload"
+        message = item.get("message") or item.get("reason") or "needs review"
+        issues.append(f"{filename}: {message}")
+    return "; ".join(issues)
+
+
+def _compact_policy_link_block(lanes) -> str:
+    items = []
+    for lane in policy_documents.normalize_lanes(lanes):
+        spec = policy_documents.POLICY_LANES[lane]
+        items.append(
+            f"{escape_html(spec['label'])}: "
+            f"<a href=\"{spec['terms']}\" style=\"color:#0E2240;text-decoration:underline;\">Terms</a> "
+            f"&middot; <a href=\"{spec['refund']}\" style=\"color:#0E2240;text-decoration:underline;\">Refund policy</a>"
+        )
+    return f"""
+<div style="border-top:1px solid #E7E5E1;margin:8px 0 0;padding-top:7px;font-size:11px;line-height:1.28;color:#595A5C;">
+  <p style="margin:0 0 4px;font-weight:700;color:#0A0A0B;">Before you book</p>
+  <p style="margin:0;">{"<br>".join(items)}</p>
+  <p style="margin:4px 0 0;"><a href="/privacy" style="color:#0E2240;text-decoration:underline;">Privacy policy</a></p>
+</div>
+""".strip()

@@ -9,9 +9,6 @@ from quopri import decodestring
 
 import frappe
 
-from locally_twisted.customer_email_theme import AUTO_ACK_SUBJECT
-
-
 class ContractFail(Exception):
     pass
 
@@ -22,6 +19,10 @@ REQUIRED_ANCHORS = (
     "face-painting-balloon-twisting",
     "corporate-invoicing",
 )
+
+
+def _expected_form_subject(first_name: str) -> str:
+    return f"🎈Locally Twisted🎈 Got your Message {first_name} - 1 day Follow-Up!"
 
 
 def run():
@@ -59,6 +60,7 @@ def _run_contract():
     failures.extend(_check_routed_alias_sendmail_hook())
     failures.extend(_check_page_anchors())
     failures.extend(_check_lead_auto_ack_lane_links())
+    failures.extend(_check_form_confirmation_file_count_after_uploads())
 
     if failures:
         raise ContractFail("; ".join(failures))
@@ -171,9 +173,19 @@ def _check_lead_auto_ack_lane_links() -> list[str]:
             "doctype": "Lead",
             "first_name": f"LT Doc Test {token}",
             "email_id": f"lt-doc-{token}@example.invalid",
+            "company_name": "LT Doc Company",
             "source": "Website",
             "status": "Open",
             "custom_pipeline_stage": "New Inquiry",
+            "custom_occasion_type": "Corporate Event",
+            "custom_event_date": "2026-06-15",
+            "custom_event_time": "3:00 PM",
+            "custom_event_end_time": "5:00 PM",
+            "custom_event_location": "West Jordan Test Venue",
+            "custom_guest_count": 75,
+            "custom_colors": "red, white, and blue",
+            "custom_decor_notes": "Entry arch and photo backdrop",
+            "custom_anything_else": "Extra note from customer",
             "custom_event_type": [
                 {"service_type": "Balloon Decor"},
                 {"service_type": "Face Painting"},
@@ -191,8 +203,9 @@ def _check_lead_auto_ack_lane_links() -> list[str]:
     subjects = _message_subjects(rows[0]["message"] or "")
     recipients = _email_queue_recipients(rows[0]["name"])
     failures = []
-    if AUTO_ACK_SUBJECT not in subjects:
-        failures.append(f"auto-ack email subject mismatch: expected {AUTO_ACK_SUBJECT!r}, found {sorted(subjects)!r}")
+    expected_subject = _expected_form_subject(lead.first_name)
+    if expected_subject not in subjects:
+        failures.append(f"auto-ack email subject mismatch: expected {expected_subject!r}, found {sorted(subjects)!r}")
     for expected in (
         "/terms-of-service#event-balloon-decor",
         "/terms-of-service#face-painting-balloon-twisting",
@@ -207,14 +220,82 @@ def _check_lead_auto_ack_lane_links() -> list[str]:
         failures.append(f"auto-ack email should not copy routed alias loop: {alias}")
     for forbidden in (
         "Locally Twisted Message Sent - 24 Hour or Less Response Time",
+        "We Got Your Message! Be in Touch Soon!",
         "Sent via ERPNext",
         "frappe.io/erpnext",
     ):
         if forbidden in message:
             failures.append(f"auto-ack email contains retired/forbidden copy: {forbidden}")
+    for expected in (
+        "Here is what we received",
+        "If anything you submitted appears incorrect, please reply to this email so we can make it right!",
+        "Generally within less than 24 hours, no matter the day.",
+        "Thanks for choosing Locally Twisted!",
+        "Company",
+        "LT Doc Company",
+        "Occasion",
+        "Corporate Event",
+        "Event date",
+        "2026-06-15",
+        "Services requested",
+        "Balloon Decor, Face Painting",
+        "Colors",
+        "red, white, and blue",
+        "Decor notes",
+        "Entry arch and photo backdrop",
+        "Anything else",
+        "Extra note from customer",
+    ):
+        if expected not in message:
+            failures.append(f"auto-ack email missing submitted-detail confirmation: {expected}")
+    if "files for reference" in message:
+        failures.append("auto-ack email should not mention reference files when no files were submitted")
     for expected in ("Content-ID:", "lt-logo.png", "lt-balloon-dog-red-email-mirrored.png", "cid:"):
         if expected not in message:
             failures.append(f"auto-ack email is missing embedded logo evidence: {expected}")
+    return failures
+
+
+def _check_form_confirmation_file_count_after_uploads() -> list[str]:
+    from locally_twisted import lead_cascade
+    from locally_twisted.communication_copy_policy import BUSINESS_DOCUMENT_COPY
+
+    token = str(int(time.time()))
+    first_name = f"LT File Test {token}"
+    lead = frappe.get_doc(
+        {
+            "doctype": "Lead",
+            "first_name": first_name,
+            "email_id": f"lt-file-{token}@example.invalid",
+            "source": "Website",
+            "status": "Open",
+            "custom_pipeline_stage": "New Inquiry",
+            "custom_event_type": [{"service_type": "Balloon Twisting"}],
+        }
+    )
+    lead.flags.lt_defer_customer_ack = True
+    lead.insert(ignore_permissions=True)
+    lead_cascade.send_customer_inquiry_confirmation(
+        lead,
+        photo_uploads={"submitted": 3, "attached": 3, "rejected": [], "failed": []},
+    )
+
+    filters = {"reference_doctype": "Lead", "reference_name": lead.name}
+    rows = frappe.get_all("Email Queue", filters=filters, fields=["name", "message"], limit=2)
+    if len(rows) != 1:
+        return [f"deferred form confirmation should queue exactly one Email Queue row, found {len(rows)}"]
+
+    message = _readable_message(rows[0]["message"] or "")
+    subjects = _message_subjects(rows[0]["message"] or "")
+    recipients = _email_queue_recipients(rows[0]["name"])
+    failures = []
+    expected_subject = _expected_form_subject(first_name)
+    if expected_subject not in subjects:
+        failures.append(f"file-count confirmation subject mismatch: expected {expected_subject!r}, found {sorted(subjects)!r}")
+    if "We received 3 files for reference." not in message:
+        failures.append("form confirmation is missing attached file count")
+    if BUSINESS_DOCUMENT_COPY not in recipients:
+        failures.append(f"form confirmation missing required copy recipient: {BUSINESS_DOCUMENT_COPY}")
     return failures
 
 

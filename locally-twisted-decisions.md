@@ -3047,3 +3047,17 @@ The pattern that worked: read the Odoo source → write a Python script targetin
 **Receipts:** `apps/locally_twisted/locally_twisted/verify/business_automation_index.py`; `apps/locally_twisted/locally_twisted/paperwork/paperwork_review_digest.py`; `scripts/verify/paperwork_review_digest.py`; `workstreams/paperwork-backend-automation.md`.
 
 **Decided by:** Codex implementation following GL's non-product operations request, 2026-05-09.
+
+---
+
+## 2026-05-10 - Customer form confirmations are upload-aware receipts of what was submitted
+
+**Decision:** Public customer form confirmations must function as a plain-language receipt of the customer's submitted information. They use the dynamic subject `U+1F388 Locally Twisted U+1F388 Got your Message {first_name} - 1 day Follow-Up!`, the message title `Here is what we received`, and a compact one-page-oriented shell. They echo only non-empty submitted fields, include free-text notes, and mention reference files only when files attached. The form path must queue the customer confirmation after upload handling so the file count is true.
+
+**Reasoning:** GL needs the confirmation email to help customers catch mistakes quickly and to give the business a reliable record of what the customer says they submitted. A generic "we got your message" email is too weak for discrepancy handling, and a false photo warning or wrong file count is worse than no detail. Printed customer email also needs to fit one page where possible, so long policy blocks were replaced with compact policy links for this form-confirmation path.
+
+**Implementation boundary:** The playful subject is public-form-only. Do not reuse it for receipts, invoices, billing, legal, payroll, vendor, or accountant paperwork. Current one-page print proof covers one real queued five-photo customer form confirmation only; each other outbound email family needs its own actual-HTML PDF proof before anyone claims global one-page print fit.
+
+**Receipts:** `apps/locally_twisted/locally_twisted/lead_cascade.py`; `apps/locally_twisted/locally_twisted/www/book.py`; `apps/locally_twisted/locally_twisted/customer_email_theme.py`; `apps/locally_twisted/locally_twisted/verify/customer_documents_contract.py`; `workstreams/customer-email-policy-boundary.md`; `.codex/capabilities/recipes/customer-email-delivery-branding-contract.md`.
+
+**Decided by:** GL email-design approval and caveats, 2026-05-10.

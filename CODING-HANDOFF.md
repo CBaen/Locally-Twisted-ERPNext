@@ -38,12 +38,18 @@ OpenClaw/Moji update on 2026-05-10: the homepage hero now implements GL's season
 
 Codex update on 2026-05-10: public inquiry acknowledgments now use the branded
 LT email shell with the LT logo, mirrored red balloon-dog footer mark, no
-standard ERPNext footer, and the public-form-only subject/title `U+1F388
-Locally Twisted U+1F388 We Got Your Message! Be in Touch Soon!`. Company
-copies still go to `locallytwisted@gmail.com` as delivery-safe BCC while the
-sender is the same Gmail account behind the routed `@locallytwisted.com`
-aliases. Keep the playful subject out of legal, billing, invoice, receipt, and
-finance/legal emails. Source handoff:
+standard ERPNext footer, and the public-form-only dynamic subject `U+1F388
+Locally Twisted U+1F388 Got your Message {first_name} - 1 day Follow-Up!`.
+The form path defers the customer confirmation until after photo upload
+handling so it can echo the non-empty submitted fields, free-text notes, and a
+reference-file count only when files attach. The message title is `Here is what
+we received`, not a repeated subject line. Company copies still go to
+`locallytwisted@gmail.com` as delivery-safe BCC while the sender is the same
+Gmail account behind the routed `@locallytwisted.com` aliases. Keep the playful
+subject out of legal, billing, invoice, receipt, and finance/legal emails.
+One-page print proof exists for one real queued five-photo form confirmation
+only; do not claim all email families print to one page until each family has
+its own actual-HTML PDF proof. Source handoff:
 `workstreams/customer-email-policy-boundary.md`; capability:
 `.codex/capabilities/recipes/customer-email-delivery-branding-contract.md`.
 

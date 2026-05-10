@@ -38,7 +38,7 @@ from frappe import _
 from frappe.rate_limiter import rate_limit
 from frappe.utils import escape_html, validate_email_address
 
-from locally_twisted import commerce_rules
+from locally_twisted import commerce_rules, lead_cascade
 from locally_twisted.failure_recorder import record_backend_failure
 
 
@@ -241,7 +241,7 @@ def submit_book_inquiry():
     if product_quote_child_rows:
         lead_doc["custom_lt_product_quote_items"] = product_quote_child_rows
     try:
-        lead = _insert_lead_with_retry(lead_doc)
+        lead = _insert_lead_with_retry(lead_doc, defer_customer_ack=True)
     except Exception as e:
         # Loud-failure: log dev-channel detail before re-raising so the
         # framework error handler surfaces the user-facing error banner.
@@ -332,6 +332,7 @@ def submit_book_inquiry():
         delivery_notes, package_notes, other_notes, description, attached, payment_rule,
         photo_uploads,
     )
+    _send_deferred_customer_confirmation(lead, photo_uploads)
 
     frappe.db.commit()
     return {"ok": True, "lead": lead.name, "photos": attached, "photo_uploads": photo_uploads}
@@ -340,11 +341,13 @@ def submit_book_inquiry():
 # -------------------------- helpers ---------------------------------- #
 
 
-def _insert_lead_with_retry(lead_doc):
+def _insert_lead_with_retry(lead_doc, *, defer_customer_ack=False):
     """Retry only transient database contention during public Lead creation."""
     max_attempts = 3
     for attempt in range(1, max_attempts + 1):
         lead = frappe.get_doc(copy.deepcopy(lead_doc))
+        if defer_customer_ack:
+            lead.flags.lt_defer_customer_ack = True
         try:
             lead.insert(ignore_permissions=True)
             return lead
@@ -354,6 +357,23 @@ def _insert_lead_with_retry(lead_doc):
             frappe.db.rollback()
             time.sleep(0.15 * attempt)
     raise RuntimeError("unreachable lead insert retry state")
+
+
+def _send_deferred_customer_confirmation(lead, photo_uploads):
+    try:
+        lead_cascade.send_customer_inquiry_confirmation(lead, photo_uploads=photo_uploads)
+    except Exception as e:
+        record_backend_failure(
+            surface="lead_contact_ack_cascade",
+            step="customer_ack_email",
+            severity="error",
+            primary_doctype="Lead",
+            primary_name=lead.name,
+            customer_visible_impact="The inquiry was received, but the acknowledgment email did not queue.",
+            internal_next_action="Confirm the customer email and send or requeue the acknowledgment.",
+            exception=e,
+            grouping_key=f"lead_contact_ack_cascade:customer_ack_email:{lead.name}",
+        )
 
 
 def _is_transient_lead_insert_error(exc):

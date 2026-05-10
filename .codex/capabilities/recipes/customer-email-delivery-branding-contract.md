@@ -5,7 +5,7 @@ schema_version: 2.0
 level: recipe
 maturity: candidate
 scope: Locally Twisted ERPNext/Frappe customer/operator email branding, company-copy routing, and Email Queue proof
-currently_true: unknown
+currently_true: true
 verification_level: 2
 last_verified: 2026-05-10
 evidence_quality: direct
@@ -33,7 +33,11 @@ Email Queue assertions, or public/company email addresses.
 ## Current Contract
 
 - Public inquiry acknowledgments use `customer_email_theme.py`.
-- Public inquiry subject/title is `U+1F388 Locally Twisted U+1F388 We Got Your Message! Be in Touch Soon!`.
+- Public form confirmation subjects use `U+1F388 Locally Twisted U+1F388 Got your Message {first_name} - 1 day Follow-Up!`.
+- Public form confirmation titles use `Here is what we received`; do not repeat the subject as the message header.
+- Public form confirmations must echo only non-empty customer-submitted fields, including free-text notes.
+- Public form confirmations must mention reference files only when files were actually attached. The `/contact` and BTFP form path defers the customer confirmation until after upload handling so the count is accurate.
+- Public form confirmations use compact policy links, not the full long policy block, to keep print output short.
 - The playful public inquiry subject is only for public forms. Do not use it
   for legal, billing, invoices, receipts, payroll, vendor packets, contracts, or
   other finance/legal emails.
@@ -68,9 +72,16 @@ email theme, copy routing, subject, or sendmail change:
 ```powershell
 python scripts/verify/customer_email_policy_contract.py
 python scripts/verify/customer_documents_contract.py
+python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081
 python scripts/verify/payment_cascade_contract.py
 python scripts/verify/customer_contact_points_contract.py
 ```
+
+When print fit changes, create a PDF from the actual queued Email Queue HTML
+and inspect it through large-document intake. Current proof for the customer
+form confirmation is ignored at `output/email-print-fit/customer-form-confirmation.pdf`
+and intake reported 1 PDF page. This is not yet global proof for every email
+family.
 
 When payment/operator paths are touched, also run:
 
@@ -92,5 +103,9 @@ python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-b
   customer mail.
 - Applying the playful public-form subject to finance/legal surfaces that need
   professional role-specific subjects.
+- Sending the public form confirmation before uploads finish, which makes the
+  customer receipt lie about attached files.
+- Re-expanding inquiry emails with long policy blocks until the printed email
+  spills onto a second page.
 - Adding a new sendmail surface without `document_copy_kwargs(...)`, explicit
   primary recipients, and a verifier marker.
