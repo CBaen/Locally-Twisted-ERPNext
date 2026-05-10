@@ -12,9 +12,9 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 **Decision:** The shared `inquiry-v1` form success experience stays on the page with a progress/status panel and success modal. Do not auto-redirect customers away after a successful `/contact` or BTFP inquiry submit.
 
-**Reasoning:** The form is a trust surface, not just a visual component. A forced redirect makes the customer lose context and can hide whether the backend actually saved the inquiry. The upgraded experience can show progress, customer-safe failure copy, and next steps while still obeying the fail-loud rule: no success unless the backend returns `message.ok`.
+**Reasoning:** The form is a trust surface, not just a visual component. A forced redirect makes the customer lose context and can hide whether the backend actually saved the inquiry. The upgraded experience can show quiet progress and customer-safe failure copy while still obeying the fail-loud rule: no success unless the backend returns `message.ok`. The customer-facing modal should stay short; do not re-add a next-step lecture or browse-away CTA.
 
-**Implementation:** Added focused `lt-inquiry-form-experience.js` and `lt-form-experience.css`, updated the shared form partial with an accessible status region and modal actions, moved cookie notice placement inline on form pages, and added `scripts/verify/form_experience.spec.js`.
+**Implementation:** Added focused `lt-inquiry-form-experience.js` and `lt-form-experience.css`, updated the shared form partial with an accessible status region and quiet modal action, moved cookie notice placement inline on form pages, filtered empty upload slots before photo validation, and added `scripts/verify/form_experience.spec.js` plus empty-upload coverage in `inquiry_upload_failure_contract.py`.
 
 **Durable docs:** `workstreams/form-submission-experience.md` and `.codex/capabilities/recipes/shared-inquiry-form-experience.md`.
 

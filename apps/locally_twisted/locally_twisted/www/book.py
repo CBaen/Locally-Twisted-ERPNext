@@ -496,10 +496,18 @@ def _files_from_request(field_name):
     if files_obj is None:
         return []
     try:
-        return files_obj.getlist(field_name) or []
+        files = files_obj.getlist(field_name) or []
     except Exception:
         single = files_obj.get(field_name)
-        return [single] if single else []
+        files = [single] if single else []
+    return [file_obj for file_obj in files if _is_submitted_upload(file_obj)]
+
+
+def _is_submitted_upload(file_obj):
+    filename = (getattr(file_obj, "filename", "") or "").strip()
+    if filename:
+        return True
+    return _file_size(file_obj) > 0
 
 
 def _is_allowed_photo(f):

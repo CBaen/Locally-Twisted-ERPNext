@@ -62,6 +62,60 @@ def run() -> dict[str, object]:
 
 
 def _run_contract(log_error_calls: list[dict[str, object]]) -> dict[str, object]:
+    no_photo_result = _assert_empty_upload_slot_is_ignored()
+    log_count_before_invalid = len(log_error_calls)
+    invalid_result = _assert_invalid_upload_records_failure(log_error_calls)
+    invalid_result["empty_upload_slot"] = no_photo_result
+    invalid_result["log_error_calls_for_invalid_upload"] = (
+        len(log_error_calls) - log_count_before_invalid
+    )
+    return invalid_result
+
+
+def _assert_empty_upload_slot_is_ignored() -> dict[str, object]:
+    from locally_twisted.www.book import submit_book_inquiry
+
+    token = str(int(time.time()))
+    marker = f"LT Empty Upload {token}"
+    empty = _FakeFile("", "", b"")
+
+    frappe.local.form_dict = frappe._dict(
+        {
+            "contact_name": marker,
+            "email_from": f"lt-empty-upload-{token}@example.invalid",
+            "phone": "801-555-0188",
+            "x_services": '["Balloon Twisting"]',
+            "description": "Synthetic empty upload slot contract.",
+        }
+    )
+    frappe.request = _FakeRequest([empty])
+
+    response = inspect.unwrap(submit_book_inquiry)()
+    upload_summary = response.get("photo_uploads") or {}
+    failures = []
+
+    if not response.get("ok"):
+        failures.append(f"empty-upload inquiry returned not-ok: {response!r}")
+    if response.get("photos") != 0:
+        failures.append(f"empty upload should not attach, photos={response.get('photos')!r}")
+    if upload_summary.get("submitted") != 0:
+        failures.append(f"empty upload should not count as submitted, found {upload_summary.get('submitted')!r}")
+    if upload_summary.get("rejected") or upload_summary.get("failed"):
+        failures.append(f"empty upload should not create upload issues: {upload_summary!r}")
+    if upload_summary.get("customer_message"):
+        failures.append("empty upload should not create a customer photo warning")
+
+    if failures:
+        raise ContractFail("; ".join(failures))
+
+    return {
+        "ok": True,
+        "lead": response.get("lead"),
+        "photo_uploads": upload_summary,
+    }
+
+
+def _assert_invalid_upload_records_failure(log_error_calls: list[dict[str, object]]) -> dict[str, object]:
     from locally_twisted.failure_recorder import record_health_failures
     from locally_twisted.www.book import submit_book_inquiry
 

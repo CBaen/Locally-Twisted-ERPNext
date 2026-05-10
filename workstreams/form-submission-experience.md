@@ -24,10 +24,12 @@ Capability router:
 - Success stays on the page. Do not restore the old forced 4-second redirect.
 - A direct `#received` URL must not show fake success; the modal opens only
   from the verified submit path.
-- The success modal explains next steps, gives the urgent call path, and lets
-  the customer choose whether to stay or keep browsing.
+- The success modal is intentionally quiet: short confirmation, no next-step
+  lecture, one close button.
 - Failure copy stays customer-safe and plain. Internal exceptions stay out of
   public copy.
+- Empty file inputs must not become photo warnings. Only a real selected file
+  can produce an upload issue message.
 - The first-visit cookie notice renders inline after form surfaces instead of
   covering fields or submit controls.
 
@@ -71,6 +73,19 @@ The real smoke test created marker `SMOKE-TEST-1778380640428736700`, verified
 the backend record, and cleaned up the fake Lead plus linked smoke Tasks.
 
 Commit receipt: `399932d Improve shared inquiry form experience`.
+
+Follow-up pass on 2026-05-10 removed the over-explaining submit chrome and
+quieted the modal. It also fixed the false photo-warning path where an empty
+browser upload slot counted as a failed photo. Verification:
+
+```powershell
+node --check apps/locally_twisted/locally_twisted/public/js/lt-inquiry-form-experience.js
+python -m py_compile apps/locally_twisted/locally_twisted/www/book.py apps/locally_twisted/locally_twisted/verify/inquiry_upload_failure_contract.py
+python scripts/dev/clear_website_cache.py --restart
+npm run test:form-experience
+python scripts/verify/inquiry_upload_failure_contract.py
+python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --form-path /balloon-twisting-and-face-painting --skip-newsletter
+```
 
 ## Known Non-Blocking Failures
 

@@ -10,8 +10,8 @@ currently_true: unknown
 verification_level: 2
 last_verified: 2026-05-10
 evidence_quality: direct
-successful_uses: 1
-failed_uses: 1
+successful_uses: 2
+failed_uses: 2
 regressions: 0
 depends_on:
   - erpnext-intake-form-parity
@@ -50,11 +50,15 @@ This recipe does not own Lead schema parity or field taxonomy. Use
   success until the backend response includes `message.ok`.
 - Customer-facing failure copy stays calm, plain, and non-technical. Internal
   exception text stays out of public UI.
-- Success stays on-page with clear next steps. Do not restore the forced
-  4-second redirect away from the form.
+- Success stays on-page with quiet confirmation. Do not restore the forced
+  4-second redirect away from the form, a next-step lecture, or a browse-away
+  link.
 - The modal must be accessible enough for normal keyboard and screen-reader
-  use: labelled dialog, described next steps, close action, and no hidden fake
-  success route.
+  use: labelled dialog, short described message, close action, and no hidden
+  fake success route.
+- Empty upload slots from the browser are not submitted photos. Do not surface
+  an inspiration-photo warning unless a real selected file failed validation or
+  attachment.
 - Cookie or preference notices on form pages must not overlay required fields,
   submit buttons, or validation copy. On current LT form routes, the notice
   renders inline after the form grid.
@@ -87,6 +91,7 @@ Useful adjacent checks after form markup, cache-buster, or page-shell changes:
 ```powershell
 python scripts/verify/contact_prefill.py --base-url http://localhost:8081
 python scripts/verify/contact_service_logic.py --base-url http://localhost:8081
+python scripts/verify/inquiry_upload_failure_contract.py
 npm run test:container-contract
 npm run test:a11y-manual
 ```
@@ -97,6 +102,9 @@ npm run test:a11y-manual
   path other than a verified backend submit response.
 - A customer sees "sent" or "received" copy while the AJAX request failed,
   returned a non-OK response, or returned a response without `message.ok`.
+- A customer sees an inspiration-photo warning when no file was selected.
+- The form reintroduces the removed progress-step text (`Details checked`,
+  `Saved for follow-up`) or the `No account needed` helper line.
 - A cookie notice, banner, drawer, or modal covers form controls on mobile.
 - The form partial grows a second inline submit system instead of using the
   dedicated `lt-inquiry-form-experience.js` owner.
@@ -113,3 +121,12 @@ guard proving direct `#received` URLs do not show fake success. The focused
 form verifier, backend smoke submit with cleanup, contact prefill/service logic,
 container contract, manual accessibility, and focused interactive contact
 checks passed.
+
+On 2026-05-10 GL flagged two regressions from the first UX pass: an empty file
+input on the BTFP form could produce an inspiration-photo warning, and the form
+chrome/modal copy was too instructional. The repair filters empty upload slots,
+suppresses photo warnings unless a real selected file had an issue, removes the
+visible progress-step/note copy, and reduces the modal to a short confirmation
+with one close action. `npm run test:form-experience`,
+`python scripts/verify/inquiry_upload_failure_contract.py`, and a real BTFP
+smoke submit passed.

@@ -729,22 +729,14 @@ every deploy.
                         <p class="lt-book__status-message" data-lt-form-status-message>
                             We are making sure the basics are ready before your request goes to the team.
                         </p>
-                        <ol class="lt-book__status-steps" aria-label="Submission progress">
-                            <li data-lt-form-status-step="details">Details checked</li>
-                            <li data-lt-form-status-step="send">Request sent</li>
-                            <li data-lt-form-status-step="save">Saved for follow-up</li>
-                        </ol>
                     </div>
                 </div>
 
                 <div class="lt-book__submit-row">
                     <button type="submit" id="book_submit" class="lt-book__submit" data-lt-form-submit>
-                        <span data-lt-submit-label>Send Request</span>
+                        <span data-lt-submit-label>Send</span>
                         <span class="lt-book__submit-spinner" aria-hidden="true"></span>
                     </button>
-                    <p class="lt-book__submit-note">
-                        No account needed. We only show success after the request is saved.
-                    </p>
                 </div>
 
                 <div id="book_feedback" class="lt-book__feedback" role="alert" aria-live="assertive"></div>
@@ -758,26 +750,18 @@ every deploy.
      class="lt-book__modal"
      role="dialog"
      aria-labelledby="received_title"
-     aria-describedby="received_message received_next_steps"
+     aria-describedby="received_message"
      aria-modal="true"
      aria-hidden="true">
     <div class="lt-book__modal-backdrop"></div>
     <div class="lt-book__modal-card" tabindex="-1">
         <div class="lt-book__modal-check" aria-hidden="true">&#x2713;</div>
         <h2 id="received_title">Request received</h2>
-        <p id="received_message">We will review it and follow up soon.</p>
-        <ul id="received_next_steps" class="lt-book__modal-next">
-            <li>We will review the event details and service notes.</li>
-            <li>If timing, venue access, or photos need a closer look, we will ask before quoting.</li>
-            <li>If this is urgent, call <a href="tel:+18012850860"><span class="o_force_ltr">(801) 285-0860</span></a>.</li>
-        </ul>
+        <p id="received_message">Thanks, we got it and will follow up soon.</p>
         <div class="lt-book__modal-actions">
             <button type="button" class="lt-book__modal-close" data-lt-modal-action="stay">
-                Stay here
+                Close
             </button>
-            <a class="lt-book__modal-home" href="/" data-lt-modal-action="home">
-                Keep browsing
-            </a>
         </div>
     </div>
 </div>

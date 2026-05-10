@@ -4,7 +4,7 @@
     var FORM_SELECTOR = "form[data-form-contract='inquiry-v1']";
     var ENDPOINT = '/api/method/locally_twisted.www.book.submit_book_inquiry';
     var FALLBACK_ERROR = 'Tiny snag: your request did not send. Please try again, or call (801) 285-0860 or email hi@locallytwisted.com and we will help.';
-    var DEFAULT_SUCCESS = 'We will review it and follow up soon.';
+    var DEFAULT_SUCCESS = 'Thanks, we got it and will follow up soon.';
     var FIELD_ERROR = {
         contact_name: 'Please tell us your name.',
         email_from: 'Please give us an email so we can reply.'
@@ -144,7 +144,7 @@
             submit.disabled = busy;
             submit.classList.toggle('is-loading', busy);
         }
-        if (label) label.textContent = busy ? 'Sending request' : 'Send Request';
+        if (label) label.textContent = busy ? 'Sending' : 'Send';
     }
 
     function isSubmitting(form) {
@@ -185,7 +185,11 @@
 
     function successMessage(result) {
         var uploadSummary = result && result.photo_uploads ? result.photo_uploads : {};
-        return uploadSummary.customer_message || DEFAULT_SUCCESS;
+        var issueCount = (uploadSummary.rejected || []).length + (uploadSummary.failed || []).length;
+        if (uploadSummary.submitted > 0 && issueCount > 0 && uploadSummary.customer_message) {
+            return uploadSummary.customer_message;
+        }
+        return DEFAULT_SUCCESS;
     }
 
     function openModal(message) {

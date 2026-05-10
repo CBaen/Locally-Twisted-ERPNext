@@ -6,6 +6,16 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-10 - Empty upload slots are not failed uploads
+
+A browser can submit an empty file input part even when the customer never chose
+a file. Treating that empty slot as a real upload made the BTFP success modal
+claim inspiration photos had trouble attaching, which was false and alarming.
+
+**Counter-move:** filter upload parts with no filename and no bytes before
+validation. Only a real selected file can create a customer-visible photo
+warning. Keep the submit modal short; fail-loud evidence belongs on the backend
+record and verifier output, not as a lecture in the customer's success state.
 ## 2026-05-10 - Form success must be a backend-proven state, not a browser state
 
 The shared inquiry form looked like a simple UX polish task, but the old

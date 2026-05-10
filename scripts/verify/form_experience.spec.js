@@ -35,9 +35,11 @@ test.describe("Locally Twisted inquiry form experience", () => {
 		await expect(status).toHaveCount(1);
 		await expect(status).toHaveAttribute("aria-live", "polite");
 		await expect(status).toBeHidden();
-		await expect(form.locator("[data-lt-form-status-step='details']")).toHaveCount(1);
-		await expect(form.locator("[data-lt-form-status-step='send']")).toHaveCount(1);
-		await expect(form.locator("[data-lt-form-status-step='save']")).toHaveCount(1);
+		await expect(form.locator("[data-lt-form-status-step]")).toHaveCount(0);
+		await expect(page.getByText("Details checked")).toHaveCount(0);
+		await expect(page.getByText("Saved for follow-up")).toHaveCount(0);
+		await expect(page.getByText("No account needed")).toHaveCount(0);
+		await expect(page.getByRole("button", { name: "Send Request" })).toHaveCount(0);
 	});
 
 	test("direct #received visits do not show fake success", async ({ page }) => {
@@ -48,7 +50,7 @@ test.describe("Locally Twisted inquiry form experience", () => {
 		await expect(page.locator("[data-lt-form-status]")).toBeHidden();
 	});
 
-	test("successful submit shows next steps without forcing the customer away", async ({ page }) => {
+	test("successful submit shows a quiet confirmation without forcing the customer away", async ({ page }) => {
 		await page.route("**/api/method/locally_twisted.www.book.submit_book_inquiry", async (route) => {
 			await route.fulfill({
 				status: 200,
@@ -78,11 +80,47 @@ test.describe("Locally Twisted inquiry form experience", () => {
 		const modal = page.locator("#received");
 		await expect(modal).toBeVisible();
 		await expect(modal).toContainText("Request received");
-		await expect(modal).toContainText("We will review it and follow up");
+		await expect(modal).toContainText("Thanks, we got it");
 		await expect(modal.locator("[data-lt-modal-action='stay']")).toBeVisible();
-		await expect(modal.locator("[data-lt-modal-action='home']")).toBeVisible();
+		await expect(modal.locator("[data-lt-modal-action='home']")).toHaveCount(0);
+		await expect(modal).not.toContainText("photos need a closer look");
+		await expect(modal).not.toContainText("Keep browsing");
 
 		await page.waitForTimeout(4300);
 		await expect(page).toHaveURL(`${BASE_URL}/contact#received`);
+	});
+
+	test("empty photo state never shows an attachment warning", async ({ page }) => {
+		await page.route("**/api/method/locally_twisted.www.book.submit_book_inquiry", async (route) => {
+			await route.fulfill({
+				status: 200,
+				contentType: "application/json",
+				body: JSON.stringify({
+					message: {
+						ok: true,
+						lead: "LEAD-FORM-UX-NO-PHOTO",
+						photo_uploads: {
+							submitted: 0,
+							attached: 0,
+							rejected: [],
+							failed: [],
+							customer_message: "We received your request. The inspiration photo file(s) had a little trouble attaching, so we made a note for the team to follow up.",
+						},
+					},
+				}),
+			});
+		});
+
+		await page.goto(`${BASE_URL}/balloon-twisting-and-face-painting`);
+		await dismissCookieNotice(page);
+		await fillRequiredFields(page);
+
+		await page.locator("#book_submit").click();
+
+		const modal = page.locator("#received");
+		await expect(modal).toBeVisible();
+		await expect(modal).toContainText("Request received");
+		await expect(modal).not.toContainText("inspiration photo file");
+		await expect(modal).not.toContainText("trouble attaching");
 	});
 });
