@@ -73,6 +73,29 @@ def test_quote_cta_is_contact(navbar: str) -> None:
         raise AssertionError("Header CTA label must be Contact Us, not Free Event Quote")
 
 
+def _active_nav_service_removal_approval_lines() -> set[str]:
+    """Return approval marker lines that are active records, not examples.
+
+    The approvals file documents the required marker inside a fenced example.
+    Example text must never count as GL approval, or the guard can silently
+    bypass itself.
+    """
+    if not NAV_SERVICE_REMOVAL_APPROVALS.exists():
+        return set()
+
+    active_lines: set[str] = set()
+    in_fenced_block = False
+    for raw_line in NAV_SERVICE_REMOVAL_APPROVALS.read_text(encoding="utf-8").splitlines():
+        stripped = raw_line.strip()
+        if stripped.startswith("```"):
+            in_fenced_block = not in_fenced_block
+            continue
+        if in_fenced_block or not stripped:
+            continue
+        active_lines.add(stripped)
+    return active_lines
+
+
 def test_canonical_service_nav_requires_explicit_removal_approval(navbar: str, footer: str) -> None:
     """Fail loudly if an approved live service disappears from public navigation.
 
@@ -81,19 +104,19 @@ def test_canonical_service_nav_requires_explicit_removal_approval(navbar: str, f
     workstreams/nav-service-removal-approvals.md before changing the nav.
     """
     combined = f"{navbar}\n{footer}"
-    approval_text = NAV_SERVICE_REMOVAL_APPROVALS.read_text(encoding="utf-8") if NAV_SERVICE_REMOVAL_APPROVALS.exists() else ""
+    approval_lines = _active_nav_service_removal_approval_lines()
     for service in CANONICAL_SERVICE_NAV_LINKS:
         expected_href = f'href="{service["href"]}"'
         expected_html_label = service["html_label"]
         is_present = expected_href in combined and expected_html_label in combined
         if is_present:
             continue
-        if service["approval_marker"] in approval_text:
+        if service["approval_marker"] in approval_lines:
             continue
         raise AssertionError(
             "Canonical service nav item disappeared without explicit GL approval: "
             f"{service['label']} ({service['href']}). Add the service back, or record "
-            f"the exact approval marker in {NAV_SERVICE_REMOVAL_APPROVALS.relative_to(ROOT)}."
+            f"the exact approval marker in {NAV_SERVICE_REMOVAL_APPROVALS.relative_to(ROOT)} as an active approval, not an example."
         )
 
 
