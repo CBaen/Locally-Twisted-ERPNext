@@ -19,6 +19,7 @@ def run(
     include_synthetic: bool = True,
     include_customer_reminders: bool = True,
     include_customer_reminder_report: bool = True,
+    run_runtime_contracts: bool = True,
 ) -> dict[str, object]:
     """Return a JSON-safe automation map that fails loudly on broken required links."""
     surfaces = _surfaces(
@@ -26,6 +27,7 @@ def run(
         include_synthetic=include_synthetic,
         include_customer_reminders=include_customer_reminders,
         include_customer_reminder_report=include_customer_reminder_report,
+        run_runtime_contracts=run_runtime_contracts,
     )
     rows = [_evaluate(surface) for surface in surfaces]
     record_level_failures = _record_level_health_rows()
@@ -37,6 +39,7 @@ def run(
         "ok": not failures,
         "generated_at": now_datetime().isoformat(),
         "read_only": True,
+        "runtime_contracts_executed": run_runtime_contracts,
         "summary": {
             "surface_count": len(rows),
             "required_count": sum(1 for row in rows if row["required_for_launch"]),
@@ -149,6 +152,7 @@ def _surfaces(
     include_synthetic: bool = True,
     include_customer_reminders: bool = True,
     include_customer_reminder_report: bool = True,
+    run_runtime_contracts: bool = True,
 ) -> list[dict[str, object]]:
     surfaces = [
         {
@@ -160,7 +164,7 @@ def _surfaces(
                 "locally_twisted/failure_recorder.py",
                 "locally_twisted/verify/record_level_failure_contract.py",
             ),
-            "connected": _record_level_failure_connected,
+            "connected": lambda: _record_level_failure_connected(run_runtime_contracts=run_runtime_contracts),
             "loud_failure": _record_level_failure_loud_failure,
             "evidence": [
                 "apps/locally_twisted/locally_twisted/failure_recorder.py",
@@ -180,7 +184,7 @@ def _surfaces(
                 "locally_twisted/www/book.py",
                 "locally_twisted/templates/includes/book_form.html",
             ),
-            "connected": _contact_connected,
+            "connected": lambda: _contact_connected(run_runtime_contracts=run_runtime_contracts),
             "loud_failure": _contact_loud_failure,
             "evidence": [
                 "apps/locally_twisted/locally_twisted/www/contact.py",
@@ -280,7 +284,7 @@ def _surfaces(
                 "locally_twisted/verify/payment_success_reconciliation_contract.py",
                 "locally_twisted/verify/customer_email_policy_contract.py",
             ),
-            "connected": _payment_success_connected,
+            "connected": lambda: _payment_success_connected(run_runtime_contracts=run_runtime_contracts),
             "loud_failure": _payment_success_loud_failure,
             "evidence": [
                 "apps/locally_twisted/locally_twisted/www/payment_success.py",
@@ -368,7 +372,9 @@ def _surfaces(
                 "locally_twisted/outbound_documents/send_readiness.py",
                 "locally_twisted/verify/outbound_document_send_readiness_contract.py",
             ),
-            "connected": _outbound_document_send_readiness_connected,
+            "connected": lambda: _outbound_document_send_readiness_connected(
+                run_runtime_contracts=run_runtime_contracts
+            ),
             "loud_failure": _outbound_document_send_readiness_loud_failure,
             "evidence": [
                 "apps/locally_twisted/locally_twisted/outbound_documents/send_readiness.py",
@@ -611,7 +617,7 @@ def _surfaces(
     return surfaces
 
 
-def _record_level_failure_connected() -> list[str]:
+def _record_level_failure_connected(*, run_runtime_contracts: bool = True) -> list[str]:
     failures = []
     failures.extend(_callables_exist(
         "locally_twisted.failure_recorder.record_backend_failure",
@@ -627,7 +633,7 @@ def _record_level_failure_connected() -> list[str]:
     ):
         if marker not in source:
             failures.append(f"failure_recorder.py missing marker {marker}")
-    if not failures:
+    if not failures and run_runtime_contracts:
         result = frappe.get_attr("locally_twisted.verify.record_level_failure_contract.run")()
         if not result.get("ok"):
             failures.extend(result.get("failures") or ["record-level failure contract failed"])
@@ -661,7 +667,7 @@ def _record_level_failure_loud_failure() -> list[str]:
     return failures
 
 
-def _contact_connected() -> list[str]:
+def _contact_connected(*, run_runtime_contracts: bool = True) -> list[str]:
     failures = []
     failures.extend(_callables_exist("locally_twisted.verify.inquiry_upload_failure_contract.run"))
     failures.extend(_doctype_presence(["Lead", "LT Service Type", "LT Lead Service Type", "LT Lead Photo"]))
@@ -700,7 +706,7 @@ def _contact_connected() -> list[str]:
     for marker in ("custom_event_type", "custom_package_notes", "custom_lt_payment_timing"):
         if marker not in contact_source:
             failures.append(f"contact.py does not write/read {marker}")
-    if not failures:
+    if not failures and run_runtime_contracts:
         result = frappe.get_attr("locally_twisted.verify.inquiry_upload_failure_contract.run")()
         if not result.get("ok"):
             failures.extend(result.get("failures") or ["inquiry upload failure contract failed"])
@@ -798,7 +804,7 @@ def _checkout_loud_failure() -> list[str]:
     return failures
 
 
-def _payment_success_connected() -> list[str]:
+def _payment_success_connected(*, run_runtime_contracts: bool = True) -> list[str]:
     failures = []
     failures.extend(_callables_exist(
         "locally_twisted.www.payment_success.reconcile_paid_sales_order",
@@ -809,7 +815,7 @@ def _payment_success_connected() -> list[str]:
     for marker in ("Payment Entry", "Sales Invoice", "sendmail", "operator"):
         if marker not in source:
             failures.append(f"payment_success.py missing connection marker {marker}")
-    if not failures:
+    if not failures and run_runtime_contracts:
         result = frappe.get_attr("locally_twisted.verify.payment_success_reconciliation_contract.run")()
         if not result.get("ok"):
             failures.extend(result.get("failures") or ["payment success reconciliation contract failed"])
@@ -938,7 +944,7 @@ def _outbound_documents_connected() -> list[str]:
     return failures
 
 
-def _outbound_document_send_readiness_connected() -> list[str]:
+def _outbound_document_send_readiness_connected(*, run_runtime_contracts: bool = True) -> list[str]:
     failures = []
     failures.extend(
         _callables_exist(
@@ -946,6 +952,9 @@ def _outbound_document_send_readiness_connected() -> list[str]:
             "locally_twisted.verify.outbound_document_send_readiness_contract.run",
         )
     )
+    if not run_runtime_contracts:
+        return failures
+
     result = frappe.get_attr("locally_twisted.verify.outbound_document_send_readiness_contract.run")()
     if not result.get("ok"):
         failures.extend(result.get("failures") or ["outbound document send-readiness contract returned not ok"])
@@ -1105,10 +1114,14 @@ def _paperwork_review_digest_connected() -> list[str]:
         "cutover_deferred_not_blocking",
         "setup_gaps",
         "partial_connections",
+        "operations_readiness",
         "next_safe_actions",
     ):
         if key not in sections:
             failures.append(f"paperwork_review_digest missing section {key}")
+    automation_summary = (result.get("source_summaries") or {}).get("business_automation_index") or {}
+    if automation_summary.get("runtime_contracts_executed") is not False:
+        failures.append("paperwork_review_digest executes runtime contracts through the automation index")
     if "live_payment_blockers" in sections:
         failures.append("paperwork_review_digest still labels live payment readiness as a current blocker")
     for packet in sections.get("unpaid_invoice_packets", {}).get("items", []):

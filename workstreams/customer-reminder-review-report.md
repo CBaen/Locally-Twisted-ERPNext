@@ -1,6 +1,6 @@
 # Customer Reminder Review Report
 
-Last updated: 2026-05-08 by Codex after adding the internal Desk Script Report.
+Last updated: 2026-05-09 by Codex after proving the Desk report consumes a non-runtime paperwork digest.
 
 ## Outcome
 
@@ -18,7 +18,7 @@ It does not send reminders, queue email, create Communications, mutate invoices,
 
 ## Current Verified State
 
-Fresh local verification on 2026-05-08:
+Fresh local verification on 2026-05-09:
 
 ```powershell
 python scripts/setup/sync_finance_workspace.py
@@ -37,8 +37,9 @@ Current result:
 - The row is grouped under `review_now` with cadence `review_now_payment_reminder`.
 - `sync_finance_workspace.py` ensured the `LT Customer Reminder Review` Report record and Accountant Home shortcut.
 - `finance_workspace_parity.py` passed and exercises Frappe's `frappe.desk.query_report.run` path for the report.
-- The synthetic pipeline now runs 15 no-live contracts, all passing, with 0 broken piping.
-- The business automation index now maps 24 surfaces, 21 connected, 3 exists-but-not-connected, and 0 loud-failure gaps.
+- The report source consumes `paperwork_review_digest.run`, which now calls the automation index with `run_runtime_contracts=False`; rendering the Desk report does not execute rollback-heavy fake-data contracts.
+- The synthetic pipeline now runs 16 no-live contracts, all passing, with 0 broken piping.
+- The business automation index now maps 25 surfaces, 22 connected, 3 exists-but-not-connected, and 0 loud-failure gaps.
 
 ## Source Files
 
@@ -73,6 +74,8 @@ Not allowed in this lane:
 ## Recursion Guard
 
 The report consumes `customer_reminder_dry_run.run()`, and the dry run consumes `paperwork_review_digest.run()`. The digest and synthetic pipeline call `business_automation_index.run(...)` with both `include_customer_reminders=False` and `include_customer_reminder_report=False` so the index can classify these surfaces without recursively invoking itself through the digest chain.
+
+The digest also passes `run_runtime_contracts=False` when it consumes the automation index. Keep that boundary: Desk/report rendering must stay read-only and must not run fake Lead/upload/payment/document contracts just to show report rows.
 
 ## Next Safe Slice
 

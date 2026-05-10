@@ -38,6 +38,7 @@ def run() -> dict[str, object]:
         include_synthetic=False,
         include_customer_reminders=False,
         include_customer_reminder_report=False,
+        run_runtime_contracts=False,
     )
     invoice_review = unpaid_invoice_review.run()
     draft_packets = unpaid_invoice_draft_packet.run()
@@ -72,6 +73,11 @@ def run() -> dict[str, object]:
             "Exists but not connected",
             _partial_connection_items(automation),
         ),
+        "operations_readiness": _section(
+            "operations_readiness",
+            "Operations readiness by audience",
+            _operations_readiness_items(status, automation, draft_packets),
+        ),
         "next_safe_actions": _section(
             "next_safe_actions",
             "Next safe actions",
@@ -98,6 +104,7 @@ def run() -> dict[str, object]:
             "business_automation_index": {
                 "ok": automation.get("ok"),
                 "summary": automation.get("summary"),
+                "runtime_contracts_executed": automation.get("runtime_contracts_executed"),
             },
             "unpaid_invoice_review": {
                 "ok": invoice_review.get("ok"),
@@ -200,6 +207,135 @@ def _partial_connection_items(automation: dict[str, Any]) -> list[dict[str, Any]
             }
         )
     return items
+
+
+def _operations_readiness_items(
+    status: dict[str, Any],
+    automation: dict[str, Any],
+    draft_packets: dict[str, Any],
+) -> list[dict[str, Any]]:
+    gaps = list(status.get("attention_items") or [])
+    partials = {
+        row.get("id"): row
+        for row in automation.get("exists_but_not_connected") or []
+    }
+    packet_count = int(draft_packets.get("packet_count") or 0)
+
+    bank_blockers = [
+        gap for gap in gaps
+        if "Bank Account" in gap or "default bank" in gap or "banking" in gap
+    ]
+    supplier_blockers = [
+        gap for gap in gaps
+        if "Supplier" in gap or "vendor" in gap or "contractor" in gap
+    ]
+    payroll_blockers = [
+        gap for gap in gaps
+        if "Employee" in gap or "Payroll" in gap or "payroll" in gap
+    ]
+
+    customer_blockers = []
+    if packet_count:
+        customer_blockers.append(
+            f"{packet_count} customer reminder packet(s) are draft-only and require human review."
+        )
+
+    return [
+        _operations_item(
+            item_id="company_operations",
+            audience="Company / operator",
+            status="setup_required" if bank_blockers else "review_ready",
+            summary="Operational finance can be reviewed, but banking is not connected for reconciliation.",
+            blockers=bank_blockers,
+            next_safe_action=(
+                "Create the accountant-approved Bank Account and Company default bank before treating reconciliation as ready."
+            ),
+            source_evidence=[
+                "paperwork_status.attention_items",
+                _partial_summary(partials.get("bank_reconciliation_cutover")),
+            ],
+        ),
+        _operations_item(
+            item_id="vendor_contractor",
+            audience="Vendor / contractor",
+            status="setup_required" if supplier_blockers else "review_ready",
+            summary="Vendor packet templates exist, but contractor/vendor records and W-9 delivery are not operational.",
+            blockers=supplier_blockers + [_partial_summary(partials.get("vendor_setup_packet_generation"))],
+            next_safe_action=(
+                "Create Supplier/vendor records and connect an approved W-9 plus secure reviewed delivery path before using vendor packets."
+            ),
+            source_evidence=[
+                "paperwork_status.attention_items",
+                "business_automation_index.exists_but_not_connected.vendor_setup_packet_generation",
+                "outbound_document_send_readiness_contract.vendor_w9_missing_secure_attachment_blocks_send",
+            ],
+        ),
+        _operations_item(
+            item_id="accountant_finance",
+            audience="Accountant / finance reviewer",
+            status="setup_required" if bank_blockers or payroll_blockers else "review_ready",
+            summary="Invoices, payment requests, and reminder packets are visible for review; bank and payroll setup remain gated.",
+            blockers=bank_blockers + payroll_blockers + [_partial_summary(partials.get("payroll_hrms"))],
+            next_safe_action=(
+                "Use Accountant Home and the reminder report for review-only work; keep payroll, bank sync, and accounting mutations gated."
+            ),
+            source_evidence=[
+                "finance_inventory.record_counts",
+                "finance_workspace_parity",
+                "customer_reminder_review_report",
+            ],
+        ),
+        _operations_item(
+            item_id="customer_user",
+            audience="Customer / public user",
+            status="connected_review_only",
+            summary="Inquiry, paid checkout, receipts, and reminders have guardrails; customer reminders remain no-send.",
+            blockers=customer_blockers,
+            next_safe_action=(
+                "Keep customer-facing reminders and statements draft-only until recipient, cadence, copy, and payment path are approved."
+            ),
+            source_evidence=[
+                "customer_email_policy_contract",
+                "payment_cascade_contract",
+                "customer_reminder_dry_run",
+                "customer_reminder_review_report",
+            ],
+        ),
+    ]
+
+
+def _operations_item(
+    *,
+    item_id: str,
+    audience: str,
+    status: str,
+    summary: str,
+    blockers: list[str | None],
+    next_safe_action: str,
+    source_evidence: list[str | None],
+) -> dict[str, Any]:
+    return {
+        "id": item_id,
+        "audience": audience,
+        "status": status,
+        "summary": summary,
+        "blockers": [blocker for blocker in blockers if blocker],
+        "next_safe_action": next_safe_action,
+        "source_evidence": [evidence for evidence in source_evidence if evidence],
+        "customer_delivery_enabled": False,
+        "accounting_mutation_enabled": False,
+        "internal_review_only": True,
+    }
+
+
+def _partial_summary(row: dict[str, Any] | None) -> str | None:
+    if not row:
+        return None
+    summary = row.get("summary")
+    future = row.get("future_connection")
+    if summary and future:
+        return f"{summary} Future connection: {future}"
+    return summary or future
 
 
 def _next_safe_actions(

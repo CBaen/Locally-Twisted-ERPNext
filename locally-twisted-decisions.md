@@ -2761,3 +2761,17 @@ The pattern that worked: read the Odoo source → write a Python script targetin
 **Receipts:** `workstreams/browser-verification-runtime.md`; `.codex/capabilities/recipes/codex-browser-verification-surface.md`.
 
 **Decided by:** GL preference for silent browser checks plus Codex verification, 2026-05-09.
+
+---
+
+## 2026-05-09 - Internal review reports must not execute runtime fake-data contracts
+
+**Decision:** Paperwork/accountant/operator review surfaces may consume the business automation index, but they must use the index's non-runtime mode. `paperwork_review_digest.run`, customer reminder dry-run/report paths, and Desk report rendering should not execute rollback-heavy fake-data contracts while rendering a report.
+
+**Reasoning:** A report intended for review can become a hidden mutation path if it runs fake Lead/upload/record-level contracts behind the scenes. That breaks the no-fake-success standard and can leave confusing test artifacts under concurrent verifier/report runs. Runtime fake-data contracts still belong in explicit verification commands and synthetic readiness gates, not in ordinary digest/report rendering.
+
+**Implementation boundary:** `locally_twisted.verify.business_automation_index.run` now exposes `runtime_contracts_executed` and accepts `run_runtime_contracts=False`. Full verification and scheduled/synthetic gates may use the default runtime-contract mode. Internal paperwork digests and report chains use non-runtime mode while still checking files, hooks, DocTypes, setup records, and open record-level blockers.
+
+**Receipts:** `apps/locally_twisted/locally_twisted/verify/business_automation_index.py`; `apps/locally_twisted/locally_twisted/paperwork/paperwork_review_digest.py`; `scripts/verify/paperwork_review_digest.py`; `workstreams/paperwork-backend-automation.md`.
+
+**Decided by:** Codex implementation following GL's non-product operations request, 2026-05-09.

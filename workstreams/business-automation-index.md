@@ -1,6 +1,6 @@
 # Business Automation Index
 
-Last updated: 2026-05-08 by Codex after moving checkout Lead conversion behind the paid-order cascade.
+Last updated: 2026-05-09 by Codex after adding a no-runtime automation-index mode for internal reports.
 
 ## Outcome
 
@@ -35,7 +35,7 @@ Latest report:
 python scripts/verify/business_automation_index.py --report output/business-automation-index.json
 ```
 
-Current result on 2026-05-08:
+Current result on 2026-05-09:
 
 - `ok: true`
 - 25 total surfaces indexed
@@ -45,6 +45,9 @@ Current result on 2026-05-08:
 - 0 launch-required missing surfaces
 - 0 useful future surfaces missing
 - 0 loud-failure gaps
+- `runtime_contracts_executed: true` for the full verifier command.
+
+Internal report/digest callers now use `run_runtime_contracts=False`. That mode still checks files, hooks, DocTypes, setup records, and open record-level blockers, but it does not execute rollback-heavy fake-data contracts while rendering accountant/operator review surfaces.
 
 The report is read-only and writes the current JSON snapshot to `output/business-automation-index.json`.
 
@@ -52,14 +55,14 @@ Fresh closeout verification also confirmed:
 
 - record-level backend failure evidence writes rollback-safe Error Log and record blocker evidence.
 - rejected inquiry inspiration uploads now return a customer-visible upload summary and write Lead-level evidence.
-- `/contact` smoke submission verified backend Lead creation and cleanup with marker `SMOKE-TEST-1778091063`.
+- `/contact` smoke submission verified backend Lead creation and cleanup with marker `SMOKE-TEST-1778371709633066300`.
 - Frappe's hook registry includes `locally_twisted.verify.business_automation_index.scheduled_checkup` under `daily`.
 - Live Stripe keys, webhook secrets, production host checks, and real operator/customer data are cutover-only and are not part of the current synthetic readiness gate.
-- `paperwork_status.py` reports 30 sent Email Queue rows, 1 unpaid/overdue Sales Invoice, 8 expected Payment Requests, no pending email queue rows, and `live_cutover_checked: False`.
+- `paperwork_status.py` reports 46 sent Email Queue rows, 1 unpaid/overdue Sales Invoice, 8 expected Payment Requests, no pending email queue rows, and `live_cutover_checked: False`.
 - `unpaid_invoice_review.py` reports 1 overdue-review candidate and creates draft-only reminder/statement candidate data without sending or mutating records.
 - `unpaid_invoice_draft_packet.py` renders the overdue-review candidate into draft-only reminder and statement packet sections without sending or mutating records.
 - `unpaid_invoice_draft_packet_contract.py` verifies normal/outlier packet behavior with fake data, including missing payment links and malformed approval gates.
-- `paperwork_review_digest.py` combines the paperwork status, automation index, unpaid review, and draft packets into one internal read-only review payload.
+- `paperwork_review_digest.py` combines the paperwork status, automation index, unpaid review, and draft packets into one internal read-only review payload. It includes `operations_readiness` rows for company/operator, vendor/contractor, accountant/finance reviewer, and customer/public-user readiness, and consumes the automation index with `run_runtime_contracts=False`.
 - `customer_reminder_dry_run.py` builds 1 internal-review-only reminder queue item locally, with no customer delivery enabled.
 - `customer_reminder_dry_run_contract.py` verifies no-live reminder queue behavior with fake overdue/current/missing-payment-path/malformed-send scenarios.
 - `customer_reminder_review_report.py` turns the dry-run queue into 1 internal review report row grouped under `review_now`, with no customer delivery enabled.
@@ -117,6 +120,7 @@ Launch-required surfaces should fail loudly when required files, hooks, whitelis
 Important current guardrails:
 
 - `business_automation_index.py` exits nonzero when a launch-required surface is missing or disconnected.
+- `business_automation_index.run(run_runtime_contracts=False)` is the correct mode for internal report/digest callers. Use the full default runtime-contract mode only from explicit verification, scheduled checkups, or synthetic readiness gates.
 - Frappe scheduler runs `locally_twisted.verify.business_automation_index.scheduled_checkup` daily, the light maintenance heartbeat hourly, and the full maintenance heartbeat daily.
 - The scheduled checkup writes a Frappe Error Log when launch-required failures, missing required connections, or loud-failure gaps appear.
 - The maintenance heartbeat writes only sanitized Maintenance Run/Event rows and compact Error Log evidence; raw logs and customer records stay outside the Maintenance Admin role.

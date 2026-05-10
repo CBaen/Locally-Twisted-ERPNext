@@ -1,7 +1,7 @@
 ---
 name: ERPNext business automation index
 level: recipe
-last_verified: 2026-05-08
+last_verified: 2026-05-09
 ---
 
 ## What it does
@@ -59,6 +59,7 @@ Current connected launch spine:
 - no-live synthetic business pipeline audit
 - scheduled daily business automation checkup plus hourly/daily maintenance heartbeat
 - Accountant Home parity
+- paperwork review digest operations-readiness rows for company/operator, vendor/contractor, accountant/finance reviewer, and customer/public-user review
 
 ## Rules
 
@@ -75,6 +76,7 @@ surface is allowed only when the report names it as disconnected.
 5. Synthetic operating readiness and live cutover readiness must stay separate. Do not require live keys, real operator details, or real customer records to flush out fake-data pipeline bugs.
 6. Amount parity and customer communication paths must fail loudly. A silent skipped email, undercharged checkout, or disconnected document generator is a business relationship risk.
 7. Maintenance/checkup surfaces must stay sanitized by default. A maintenance role can see safe summaries, action-needed text, and counts, but not raw logs, customer records, communications, files, or finance records.
+8. Internal report and digest callers must not execute rollback-heavy fake-data contracts while rendering. For LT, call `business_automation_index.run(run_runtime_contracts=False)` from paperwork digests, customer reminder reports, and Desk report paths; use the default runtime-contract mode only for explicit verification, scheduled checkups, and synthetic readiness gates.
 
 ## Common failure modes
 
@@ -85,5 +87,6 @@ surface is allowed only when the report names it as disconnected.
 - Letting live cutover checks appear as current blockers in a fake-data/synthetic audit.
 - Running status/inventory checks while rollback-based verifiers are still creating temporary records.
 - Letting an aggregate digest, reminder dry run, reminder report, or synthetic pipeline call the full automation index recursively after the aggregate itself is indexed.
+- Letting an accountant/operator report execute fake-data contracts as part of rendering, which can leave test artifacts or make a read-only report mutate state under load.
 - Leaving missing future surfaces in prose docs instead of a machine-readable verifier report.
 - Giving a maintenance/checkup role broad ERPNext access instead of a narrow sanitized report boundary.

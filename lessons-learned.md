@@ -2150,3 +2150,15 @@ This is the global anti-pattern #2 (Drift from GL's actual ask). Receipt added t
 **Do this next time:** Name the evidence surface in closeout. Use `web.run` for current public facts and citations. Use LT's route-specific npm gates or direct Playwright for rendered behavior. Re-test Browser Use in the current session before claiming in-app browser control.
 
 **Avoid:** saying "browser verified" when only page text was fetched, opening a visible window when headless Playwright is enough, or treating plugin availability as proof that its control path works.
+
+---
+
+## 2026-05-09 - Read-only reports must not run fake-data contracts
+
+**Lesson:** A report can stop being read-only if it calls a verifier that creates rollback fake data behind the scenes. Accountant/operator review paths should consume summarized readiness state, not run Lead/upload/payment/document contracts while rendering.
+
+**What happened:** While reviewing non-product operations, the customer reminder Desk/report chain consumed the paperwork digest, which consumed the business automation index. The full index mode can run rollback-heavy contracts. Under concurrent verifier/report execution, synthetic Lead/upload blocker evidence briefly surfaced as open record-level failures.
+
+**Do this next time:** Give shared automation indexes a non-runtime mode for internal reports. Keep runtime fake-data contracts in explicit verifier/synthetic readiness commands, run DB-mutating verifiers serially, and make report payloads expose whether runtime contracts were executed.
+
+**Avoid:** nesting full verifier suites inside Desk reports, parallelizing rollback-heavy Frappe DB verifiers, or treating `read_only: true` as sufficient when called dependencies can mutate state.

@@ -1,6 +1,6 @@
 # Paperwork And Backend Automation
 
-Last updated: 2026-05-08 by Codex after adding the customer/operator email policy boundary contract and sanitized maintenance heartbeat.
+Last updated: 2026-05-09 by Codex after making the paperwork digest audience-aware and preventing Desk/report review from executing runtime fake-data contracts.
 
 ## Outcome
 
@@ -22,7 +22,7 @@ This lane coordinates paperwork, receipts, invoices, payment records, customer e
 
 ## Current Verified Baseline
 
-Fresh local verification on 2026-05-08:
+Fresh local verification on 2026-05-09:
 
 - `python scripts/verify/finance_inventory.py --json` passed.
 - `python scripts/verify/customer_documents_contract.py` passed.
@@ -44,6 +44,8 @@ Fresh local verification on 2026-05-08:
 - `python scripts/verify/payment_success_reconciliation_contract.py --report output/payment-success-reconciliation-contract.json` passed and proved browser-return reconciliation errors show pending receipt/invoice copy on `/thank-you`.
 - `python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json` passed with 16 no-live synthetic contracts, 0 broken piping, 8 inefficiencies/partial connections, and 3 cutover-deferred items.
 - `python scripts/verify/business_automation_index.py --report output/business-automation-index.json` passed and now maps 25 surfaces indexed, 15 launch-required, 22 connected, 3 exists-but-not-connected, 0 launch-required missing, 0 useful future surfaces missing, and 0 loud-failure gaps.
+- `python scripts/verify/paperwork_review_digest.py --report output/paperwork-review-digest.json --markdown output/paperwork-review-digest.md` passed and now includes `operations_readiness` rows for company/operator, vendor/contractor, accountant/finance reviewer, and customer/public-user readiness. The digest calls the automation index with `run_runtime_contracts=False`, so accountant-facing Desk/report review cannot create rollback fake-data records while rendering.
+- `python scripts/verify/customer_reminder_dry_run.py --report output/customer-reminder-dry-run.json`, `python scripts/verify/customer_reminder_review_report.py --report output/customer-reminder-review-report.json --markdown output/customer-reminder-review-report.md --csv output/customer-reminder-review-report.csv`, and `python scripts/verify/finance_workspace_parity.py` passed after the no-runtime digest change.
 - `python scripts/setup/sync_maintenance_package.py` passed and ensured the sanitized Maintenance Admin role, report, workspace, and read-only permission boundary.
 - `python scripts/verify/maintenance_heartbeat.py --heavy` passed with public boot, scheduler, notification preference, Maintenance Admin boundary, business automation, and paperwork digest events. Yellow owner-setup events are visible, not hidden failures.
 - `python scripts/verify/maintenance_admin_boundary.py` passed and proved the Maintenance Admin surface can read only sanitized maintenance DocTypes/report/workspace shortcuts, not raw logs, customer records, communication, files, or finance records.
@@ -177,11 +179,19 @@ Current live-data facts from the fresh finance inventory:
 - Current local output: 1 internal-review-only report row for `ACC-SINV-2026-00001`, with recommended cadence `review_now_payment_reminder`, `send_status: draft_only_not_sent`, and `customer_delivery_enabled: false`.
 - Current Desk wiring: `sync_finance_workspace.py` owns the Report record and Accountant Home shortcut; `finance_workspace_parity.py` verifies the report through `frappe.desk.query_report.run`.
 
+### Operations readiness digest rows
+
+- `paperwork_review_digest.run` now adds an `operations_readiness` section for the four non-product audiences GL called out: company/operator, vendor/contractor, accountant/finance reviewer, and customer/public user.
+- Every row is `internal_review_only`, with `customer_delivery_enabled: false` and `accounting_mutation_enabled: false`.
+- Current blockers are explicit: missing Bank Account and Company default bank for company/accountant operations; missing Supplier/vendor records plus approved W-9/secure-send workflow for vendor/contractor readiness; missing HRMS/payroll DocTypes and provider/accountant approval for payroll; draft-only customer reminder packets awaiting human review before any customer send.
+- This section is a report/digest surface only. It does not approve bank sync, supplier onboarding, W-9 sending, payroll, reminder delivery, or accounting mutations.
+
 ### Business automation index
 
 - `workstreams/business-automation-index.md` is the cross-system map for intake, CRM, checkout, payment, paperwork, finance, and checkup surfaces.
 - `locally_twisted.verify.business_automation_index.run` classifies each surface as `exists_and_connected`, `exists_but_not_connected`, `missing_needs_connection`, or `missing_should_connect`.
 - The host wrapper is `scripts/verify/business_automation_index.py`.
+- `business_automation_index.run` exposes `runtime_contracts_executed`. Full verification defaults to `True`; digest/report callers pass `False` so internal review surfaces do not execute rollback-heavy fake-data contracts.
 - `hooks.py` now includes a daily Frappe scheduler entry for `locally_twisted.verify.business_automation_index.scheduled_checkup`, an hourly light maintenance heartbeat, and a daily full maintenance heartbeat.
 - The scheduled checkup writes a Frappe Error Log if a launch-required connection breaks or a loud-failure gap appears. The maintenance heartbeat writes sanitized Maintenance Run/Event rows and compact Error Log evidence only.
 - Current exists-but-not-connected surfaces are vendor setup/W-9 packet generation, bank reconciliation cutover, and payroll/HRMS.

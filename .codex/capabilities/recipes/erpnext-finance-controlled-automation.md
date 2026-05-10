@@ -1,7 +1,7 @@
 ---
 name: ERPNext finance controlled automation
 level: recipe
-last_verified: 2026-05-06
+last_verified: 2026-05-09
 ---
 
 ## What it does
@@ -45,6 +45,10 @@ Use this when a client repo starts handling QuickBooks migration, invoicing, pay
 8. Keep the automation map current.
 
    Cross-system finance work should have one index that says what exists, what is connected, what exists but is not connected, what is missing and required, and what is missing but useful. For LT, `business_automation_index.py` is that index and should fail nonzero when launch-required links break.
+
+9. Keep accountant/operator reports non-runtime.
+
+   Internal review surfaces can consume the automation map, but they should not execute rollback-heavy fake-data contracts while rendering. For LT paperwork digests and reminder reports, use the automation index's non-runtime mode and expose audience-specific readiness rows instead of creating test records in Desk/report paths.
 
 ## LT verification commands
 
@@ -92,6 +96,7 @@ Run live inventory after mutating verifiers finish and rollback, not in parallel
 - Draft reminder or statement helpers can become collections automation if they do not prove `send_allowed: false`, `mutation_allowed: false`, and unchanged guarded record counts.
 - Draft packet renderers can accidentally become delivery automation if they create Email Queue, Communication, Payment Request, Payment Entry, Journal Entry, or invoice mutations while preparing review output.
 - Review digests can look harmless while hiding setup blockers or recursively triggering indexed checks; keep them read-only, mutation-guarded, and explicit about partially connected finance surfaces.
+- Review digests can also become unsafe if they execute fake-data runtime contracts while rendering. Keep finance/accountant report paths in non-runtime index mode and reserve fake-data contracts for explicit verification commands.
 - Customer reminder dry runs can accidentally become customer delivery if queue items are not explicitly `internal_review_only`, `draft_only_not_sent`, and blocked on human approval, recipient, invoice status, cadence, copy, and payment path.
 - Customer reminder reports can accidentally become approval surfaces if rows do not carry no-live delivery flags and blockers.
 - Synthetic finance audits can lose focus if live credentials become current blockers. Keep live Stripe/bank/provider credentials out of fake-data readiness work until cutover.

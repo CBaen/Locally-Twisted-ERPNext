@@ -109,6 +109,9 @@ def _contract_failures(result: dict[str, Any]) -> list[str]:
     missing_sources = sorted(expected_sources - set(result.get("source_surfaces") or []))
     if missing_sources:
         failures.append("missing source surfaces: " + ", ".join(missing_sources))
+    automation_summary = (result.get("source_summaries") or {}).get("business_automation_index") or {}
+    if automation_summary.get("runtime_contracts_executed") is not False:
+        failures.append("paperwork digest must not execute fake-data runtime contracts through the automation index")
 
     sections = result.get("sections")
     if not isinstance(sections, dict):
@@ -119,6 +122,7 @@ def _contract_failures(result: dict[str, Any]) -> list[str]:
         "cutover_deferred_not_blocking",
         "setup_gaps",
         "partial_connections",
+        "operations_readiness",
         "next_safe_actions",
     ):
         if key not in sections:
@@ -131,6 +135,24 @@ def _contract_failures(result: dict[str, Any]) -> list[str]:
             failures.append(f"{packet.get('invoice')} packet is not draft-only")
         if packet.get("human_approval_required") is not True:
             failures.append(f"{packet.get('invoice')} packet does not require human approval")
+
+    operations_items = sections.get("operations_readiness", {}).get("items") or []
+    operations_ids = {item.get("id") for item in operations_items if isinstance(item, dict)}
+    for required_id in ("company_operations", "vendor_contractor", "accountant_finance", "customer_user"):
+        if required_id not in operations_ids:
+            failures.append(f"operations_readiness missing {required_id}")
+    for item in operations_items:
+        if not isinstance(item, dict):
+            failures.append("operations_readiness item is not an object")
+            continue
+        if not item.get("audience"):
+            failures.append(f"{item.get('id')} missing audience")
+        if not item.get("next_safe_action"):
+            failures.append(f"{item.get('id')} missing next_safe_action")
+        if item.get("customer_delivery_enabled") is not False:
+            failures.append(f"{item.get('id')} does not block customer delivery")
+        if item.get("accounting_mutation_enabled") is not False:
+            failures.append(f"{item.get('id')} does not block accounting mutation")
     return failures
 
 
@@ -141,7 +163,13 @@ def _print_summary(result: dict[str, Any], contract_failures: list[str]) -> None
     print(f"  send_allowed: {result.get('send_allowed')}")
     print(f"  mutation_allowed: {result.get('mutation_allowed')}")
     sections = result.get("sections") or {}
-    for key in ("unpaid_invoice_packets", "cutover_deferred_not_blocking", "setup_gaps", "partial_connections"):
+    for key in (
+        "unpaid_invoice_packets",
+        "cutover_deferred_not_blocking",
+        "setup_gaps",
+        "partial_connections",
+        "operations_readiness",
+    ):
         section = sections.get(key) or {}
         print(f"  {key}: {section.get('count')}")
     failures = list(result.get("failures") or []) + contract_failures
@@ -167,6 +195,7 @@ def _markdown(result: dict[str, Any]) -> str:
         ("cutover_deferred_not_blocking", "Cutover Deferred, Not Blocking"),
         ("setup_gaps", "Setup Gaps"),
         ("partial_connections", "Partial Connections"),
+        ("operations_readiness", "Operations Readiness"),
         ("next_safe_actions", "Next Safe Actions"),
     ):
         section = sections.get(key) or {}
