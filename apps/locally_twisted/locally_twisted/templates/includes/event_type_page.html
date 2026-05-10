@@ -21,6 +21,26 @@
         </div>
     </section>
 
+    {# ====== NEW: Buyer-language proof bar (4 tiles, brass-line icons) ====== #}
+    {% if page.proof_bar %}
+    <section class="lt-lane-proof-bar lt-fullbleed" aria-label="{{ page.title }} commitments at a glance">
+        <div class="lt-lane-proof-bar__inner">
+            {% for tile in page.proof_bar %}
+            <div class="lt-lane-proof-tile">
+                {% if tile.icon %}
+                <div class="lt-lane-proof-tile__icon" aria-hidden="true"
+                     style="background-image: url('/assets/locally_twisted/icons/brand/{{ tile.icon }}.svg')"></div>
+                {% endif %}
+                <p class="lt-lane-proof-tile__label">{{ tile.label }}</p>
+                <p class="lt-lane-proof-tile__sub">{{ tile.sub }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    {# ====== Legacy: pre-redesign generic proof row (kept for pages not yet migrated) ====== #}
+    {% if page.proof and not page.proof_bar %}
     <section class="lt-authority-proof lt-fullbleed" aria-label="{{ page.title }} experience highlights">
         <div class="lt-authority-proof__inner">
             {% for label, text in page.proof %}
@@ -31,7 +51,30 @@
             {% endfor %}
         </div>
     </section>
+    {% endif %}
 
+    {# ====== NEW: Named-organization wall (text tiles by default; logos if rights confirmed) ====== #}
+    {% if page.named_orgs %}
+    <section class="lt-lane-orgs lt-fullbleed" aria-labelledby="{{ page.route }}-orgs-title">
+        <div class="lt-lane-orgs__inner">
+            <div class="lt-lane-orgs__heading">
+                <p class="lt-authority-eyebrow">{{ page.named_orgs.eyebrow or "Real organizations" }}</p>
+                <h2 id="{{ page.route }}-orgs-title">{{ page.named_orgs.heading }}</h2>
+                {% if page.named_orgs.lede %}
+                <p>{{ page.named_orgs.lede }}</p>
+                {% endif %}
+            </div>
+            <div class="lt-lane-orgs__grid">
+                {% for name in page.named_orgs.names %}
+                <div class="lt-lane-orgs__tile">{{ name }}</div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    {# ====== Legacy: pre-redesign client_groups (kept for pages not yet migrated) ====== #}
+    {% if page.client_groups and not page.named_orgs %}
     <section class="lt-authority-section lt-audience-section" aria-labelledby="{{ page.route }}-client-title">
         <div class="lt-authority-section__inner lt-audience-section__inner">
             <div class="lt-audience-section__heading">
@@ -55,7 +98,71 @@
             </div>
         </div>
     </section>
+    {% endif %}
 
+    {# ====== NEW: "How we work with you" - numbered process list + anchor photo ====== #}
+    {% if page.process %}
+    <section class="lt-lane-process lt-fullbleed" aria-labelledby="{{ page.route }}-process-title">
+        <div class="lt-lane-process__inner">
+            <div>
+                <div class="lt-lane-process__heading">
+                    <p class="lt-authority-eyebrow">{{ page.process.eyebrow or "How we work with you" }}</p>
+                    <h2 id="{{ page.route }}-process-title">{{ page.process.heading }}</h2>
+                    {% if page.process.lede %}
+                    <p>{{ page.process.lede }}</p>
+                    {% endif %}
+                </div>
+                <ol class="lt-lane-process__list">
+                    {% for step in page.process.steps %}
+                    <li>{{ step }}</li>
+                    {% endfor %}
+                </ol>
+            </div>
+            {% if page.process.photo %}
+            <figure class="lt-lane-process__photo">
+                <img src="{{ page.process.photo.image }}" alt="{{ page.process.photo.alt }}" loading="lazy">
+            </figure>
+            {% endif %}
+        </div>
+    </section>
+    {% endif %}
+
+    {# ====== NEW: Featured installation case-study ====== #}
+    {% if page.featured_install %}
+    <section class="lt-lane-featured lt-fullbleed" aria-labelledby="{{ page.route }}-featured-title">
+        <div class="lt-lane-featured__inner">
+            <figure class="lt-lane-featured__photo">
+                <img src="{{ page.featured_install.image }}" alt="{{ page.featured_install.alt }}" loading="lazy">
+            </figure>
+            <div class="lt-lane-featured__body">
+                <p class="lt-lane-featured__eyebrow">{{ page.featured_install.eyebrow or "Featured install" }}</p>
+                <h2 id="{{ page.route }}-featured-title" class="lt-lane-featured__title">{{ page.featured_install.title }}</h2>
+                <dl class="lt-lane-featured__facts">
+                    {% for fact in page.featured_install.facts %}
+                    <div>
+                        <dt>{{ fact.label }}</dt>
+                        <dd>{{ fact.value }}</dd>
+                    </div>
+                    {% endfor %}
+                </dl>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    {# ====== NEW: Pull-quote attributed by role ====== #}
+    {% if page.pull_quote %}
+    <section class="lt-lane-quote lt-fullbleed" aria-label="Customer feedback">
+        <div class="lt-lane-quote__inner">
+            <span class="lt-lane-quote__mark" aria-hidden="true">&ldquo;</span>
+            <blockquote class="lt-lane-quote__text">{{ page.pull_quote.text }}</blockquote>
+            <p class="lt-lane-quote__attribution">{{ page.pull_quote.attribution }}</p>
+        </div>
+    </section>
+    {% endif %}
+
+    {# ====== Legacy: pre-redesign "stories" block (kept for pages not yet migrated) ====== #}
+    {% if page.stories and not page.featured_install %}
     <section class="lt-authority-section lt-audience-section lt-audience-section--stone" aria-labelledby="{{ page.route }}-stories-title">
         <div class="lt-authority-section__inner lt-audience-section__inner">
             <div class="lt-audience-section__heading">
@@ -77,7 +184,9 @@
             </div>
         </div>
     </section>
+    {% endif %}
 
+    {# ====== Existing: gallery (kept for all pages) ====== #}
     {% if page.gallery %}
     <section class="lt-audience-gallery lt-fullbleed" aria-labelledby="{{ page.route }}-gallery-title">
         <div class="lt-audience-gallery__inner">
@@ -101,6 +210,39 @@
     </section>
     {% endif %}
 
+    {# ====== NEW: Plain-language FAQ ====== #}
+    {% if page.faq %}
+    <section class="lt-lane-faq lt-fullbleed" aria-labelledby="{{ page.route }}-faq-title">
+        <div class="lt-lane-faq__inner">
+            <div class="lt-lane-faq__heading">
+                <p class="lt-authority-eyebrow">{{ page.faq_eyebrow or "Questions buyers ask" }}</p>
+                <h2 id="{{ page.route }}-faq-title">{{ page.faq_heading or "What you need to know before you ask for a quote." }}</h2>
+                {% if page.faq_lede %}
+                <p>{{ page.faq_lede }}</p>
+                {% endif %}
+            </div>
+            <div class="lt-lane-faq__list">
+                {% for item in page.faq %}
+                <details class="lt-lane-faq__item">
+                    <summary>{{ item.q }}</summary>
+                    <div class="lt-lane-faq__answer">
+                        {% if item.a is string %}
+                        <p>{{ item.a }}</p>
+                        {% else %}
+                        {% for para in item.a %}
+                        <p>{{ para }}</p>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                </details>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    {# ====== Legacy: pre-redesign "plan" block (kept for pages not yet migrated) ====== #}
+    {% if page.plan and not page.faq %}
     <section class="lt-authority-section lt-authority-section--dark lt-fullbleed" aria-labelledby="{{ page.route }}-plan-title">
         <div class="lt-authority-section__inner">
             <p class="lt-authority-eyebrow">Planning fit</p>
@@ -120,7 +262,9 @@
             </div>
         </div>
     </section>
+    {% endif %}
 
+    {# ====== Existing: closing CTA (kept for all pages) ====== #}
     <section class="lt-authority-cta lt-audience-cta lt-fullbleed" aria-labelledby="{{ page.route }}-cta-title">
         <div class="lt-authority-cta__inner lt-audience-cta__inner">
             <h2 id="{{ page.route }}-cta-title">{{ page.cta_title }}</h2>
