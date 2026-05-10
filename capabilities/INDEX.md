@@ -1,27 +1,47 @@
-# Capabilities - What This Agent Instance Can Do
+# Locally Twisted Capabilities
 
-This file is the project capability index for Locally Twisted. Read it on
-arrival, then open only the capability files needed for the current task.
+This is the shared project capability index for Locally Twisted. It is not
+owned by Codex, OpenClaw, Claude, or any one agent. Read it on arrival when the
+task depends on reusable LT operating knowledge, then open only the capability
+files needed for the current task.
+
+## Root Label
+
+- Purpose: reusable Locally Twisted project operating knowledge, route/layout
+  contracts, ERPNext/Frappe implementation patterns, project-specific Failure
+  Recipes, and verification guidance.
+- Belongs here: LT-specific public-site, ecommerce, ERPNext, paperwork,
+  automation, catalog, design, and verification knowledge.
+- Does not belong here: systemwide user/process rules, agency-wide standards
+  that apply to all clients, secrets, private customer records, raw runtime
+  logs, or agent auth/session material.
+- Related roots: system/user root
+  `C:\Users\baenb\capabilities\INDEX.md`, agency root
+  `C:\Users\baenb\projects\Built_by_Cameron\capabilities\INDEX.md`, and source
+  package `C:\Users\baenb\projects\capabilities-framework\capabilities\INDEX.md`.
 
 ## How To Use This
 
 - Skim the layers below. Know the territory.
 - When you reach for help, scan the layer that fits. Do not read every file.
+- For known-risk surfaces or familiar failure patterns, check `failures/`
+  before recipes.
 - When you discover or verify a new capability, add the file in the matching
   layer folder and add the one-liner here.
 - Half-formed ideas go in `kitchen/`.
-- Things you tried that did not work go in `failures/`.
-- Evidence-backed use, upvotes, downvotes, and promotions go in `evidence/`.
+- Dead ends and recurring Failure Recipes go in `failures/`.
+- Evidence-backed use, upvotes, downvotes, failures, fixes, and promotions go
+  in `evidence/`.
 
 ## Capability Lifecycle
 
-This root follows the machine-wide capability schema v2.0. Older files remain
+This root follows the shared capability schema v2.2. Older files remain
 usable as legacy cards, but `currently_true`, `verified`, and `staple` require
 new evidence in the stated scope. Do not promote old LT cards from memory alone.
 
 ## Principles
 
-- Global rule: `C:\Users\baenb\.codex\capabilities\principles\no-monolith-files.md` - do not create or expand hand-authored production monoliths; split by clear responsibility unless the file is research/reference material.
+- System rule: `C:\Users\baenb\capabilities\principles\no-monolith-files.md` - do not create or expand hand-authored production monoliths; split by clear responsibility unless the file is research/reference material.
 
 ## Ingredients
 
@@ -36,7 +56,7 @@ Workflows. Multi-step. Clear start and finish.
 
 - [erpnext-ecommerce-receiving-architecture](recipes/erpnext-ecommerce-receiving-architecture.md) - design the ERPNext-side ecommerce receiving ecosystem before importing Odoo-derived products: fields, logic, variants, add-ons, pricing, media, cart, checkout, invoice, mobile/desktop journeys, and fail-loud gates.
 
-- Agency reference: `C:\Users\baenb\projects\Built_by_Cameron\.codex\capabilities\recipes\frappe-default-surface-map.md` maps Frappe/Webshop native spacing, wrappers, headings, chrome, and CMS defaults to the usual BBC override moves.
+- Agency reference: `C:\Users\baenb\projects\Built_by_Cameron\capabilities\recipes\frappe-default-surface-map.md` maps Frappe/Webshop native spacing, wrappers, headings, chrome, and CMS defaults to the usual BBC override moves.
 - [claude-reference-library](recipes/claude-reference-library.md) - safely consult older Claude skills/rules as reference material without treating them as truth or copying them wholesale.
 - [balloon-material-visual-physics](recipes/balloon-material-visual-physics.md) - model balloons as sized latex objects with inflation, finish, tension, contact, knots, and construction-unit deformation instead of generic spheres.
 - [codex-browser-verification-surface](recipes/codex-browser-verification-surface.md) - choose between public web lookup, silent Playwright render proof, LT route-contract verifiers, and headed browser checks without mixing evidence types.
@@ -94,12 +114,16 @@ End-to-end compositions of recipes. The shape of a complete piece of work.
 [kitchen/](kitchen/) - capabilities being figured out. Promote to a layer when
 ready, or move to `failures/` if it did not pan out.
 
-## Failures
+## Failures / Failure Recipes
 
-Things that were tried and did not work. Read this layer when an idea feels
-familiar but you cannot remember why.
+Dead ends, recurring failure patterns, regressions, and process failures. Read
+this layer before recipes when a task touches LT public chrome, route contracts,
+approval gates, verifier expectations, payments, customer communication, or any
+pattern that feels familiar.
 
-- [failures/](failures/) - see the README inside for the convention.
+- [failures/](failures/) - Failure Recipes overview, dead-end convention, and template.
+- [public-nav-seo-verifier-drift](failures/public-nav-seo-verifier-drift.md) - prevents SEO/GEO/AEO or verifier work from changing header/footer/menu/search public chrome without explicit approval.
+- [public-header-contrast-safe-area-regression](failures/public-header-contrast-safe-area-regression.md) - prevents gold header banner hover/focus contrast and mobile safe-area side-order regressions.
 
 ## Evidence And Registry
 
@@ -111,5 +135,6 @@ familiar but you cannot remember why.
 1. Skim this index.
 2. Open the layer folder that matches today's task.
 3. When in doubt, check `kitchen/` for in-progress notes that might help.
-4. Before pursuing an approach that feels familiar, check `failures/`.
+4. Before pursuing an approach that feels familiar, changing a guard/verifier,
+   or touching a known-risk surface, check `failures/`.
 5. Before trusting a capability as proven, check maturity and evidence.

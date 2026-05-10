@@ -126,9 +126,9 @@ The 2026-05-10 verification passed full `npm run test:portfolio-reel` 6/6,
 `npm run test:a11y-manual`. A live route/asset probe returned 200 for
 `/portfolio` plus representative new WebP assets, and a focused rendered DOM
 check found all 59 new portfolio records loaded from `/optimized/` with no
-desktop or mobile document overflow. Full `npm run test:a11y` still fails on
-unrelated homepage-only `aria-hidden-focus` carousel slides and did not report a
-portfolio finding.
+desktop or mobile document overflow. Later 2026-05-10 launch verification
+repaired the unrelated homepage accessibility blocker; `npm run test:a11y`
+now passes 50 route/viewport axe checks with 0 violations.
 
 The prior verified use passed full `npm run test:portfolio-reel` 6/6,
 `npm run test:interactive-layout -- --grep portfolio` 6/6, and

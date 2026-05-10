@@ -35,7 +35,7 @@ Use this recipe before changing public layout, full-bleed sections, crawls, caro
 Before diagnosing a Frappe-native gap, heading, breadcrumb, Webshop panel,
 cart/card padding, navbar/footer default, or CMS-style issue, read the agency
 conversion chart at
-`C:\Users\baenb\projects\Built_by_Cameron\.codex\capabilities\recipes\frappe-default-surface-map.md`.
+`C:\Users\baenb\projects\Built_by_Cameron\capabilities\recipes\frappe-default-surface-map.md`.
 That card maps native Frappe/Webshop defaults to the usual BBC override moves.
 This LT recipe then decides the local route/container contract.
 
@@ -179,5 +179,11 @@ homepage twisting spotlight missing shared containment, portfolio footer lacking
 an inner wrapper, contact using raw Bootstrap containers, document pages losing
 their narrow-width override through selector specificity, BTFP contract drift
 after the event-crawl/inquiry page change, and the BTFP event crawl data not
-rendering. The repaired gate now passes 57/57 checks across 19 public routes at
+rendering. The repaired gate passed 57/57 checks across 19 public routes at
 320px, 820px, and 1366px.
+
+On 2026-05-10, the launch route list expanded with open ecommerce testing
+surfaces. A stale homepage hide-switch briefly removed the Custom Event Decor
+section while the route contract still required it; restoring the section made
+the page and contract agree again. The current container gate passes 75/75
+checks across the launch route list at 320px, 820px, and 1366px.

@@ -44,7 +44,8 @@ For the current LT site:
 - Current launch desktop primary header labels are `Event Balloons`,
   `Twisting & Face Painting`, `Ready-to-Order`, `Portfolio`, `About Us`,
   `FAQ`, and `Contact Us` when ecommerce is open for testing. The top utility
-  banner replaces the old proof copy/icon with the short-notice copy:
+  banner replaces the old proof copy/icon with a centered gold `/contact`
+  short-notice link:
   `SHORT NOTICE? LET US KNOW. WE CAN OFTEN HELP WITH 24 HOURS NOTICE!`, while
   keeping `Free Event Quote` and the account link on the right.
 - `Twisting & Face Painting` points to `/balloon-twisting-and-face-painting`.
@@ -57,7 +58,8 @@ For the current LT site:
   service removal approval.
 - Mobile search belongs at the bottom of the drawer, not in the mobile header
   action row. In open ecommerce testing, the mobile header control budget is
-  logo plus cart plus menu.
+  logo plus cart plus menu, with a separate gold short-notice `/contact` strip
+  above the mobile header row.
 - Public navigation must not link to `/search`; the search overlay submits to
   `/shop` while ecommerce is open and `/search` is a no-cache 404 fallback.
 
@@ -144,3 +146,16 @@ The old `Prepared design, clean installs, and invoiced event support across
 Utah.` copy and `delivery-install.svg` icon are removed from the header.
 `nav_ia.py`, `smoke_shop.py`, and direct Playwright header metrics passed after
 cache clear/restart.
+
+Final GL correction on 2026-05-10: the short-notice sentence is a `/contact`
+link, centered to the screen on desktop, gold on desktop and mobile, visible on
+mobile, and slightly letter-spaced on desktop. `nav_ia.py`, focused
+`interactive_layout.spec.js --grep "header uses"`, `smoke_shop.py`, and direct
+`/balloon-twisting-and-face-painting` desktop/mobile Playwright metrics passed.
+
+Review closeout on 2026-05-10: the gold banner hover/focus state must keep
+`var(--lt-mega-ink)` text on brass and the mobile banner safe-area shorthand
+must map right inset to right padding and left inset to left padding.
+`nav_ia.py` now fails on the low-contrast white hover/focus regression and the
+left/right safe-area swap. Focused `npm run test:interactive-layout -- --grep
+"header|drawer|mega|mobile"` passed 55/55 after the fix.

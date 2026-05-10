@@ -156,9 +156,17 @@ passed 247/247, and `interactive_layout.spec.js` passed 88/88.
 
 On 2026-05-07, the route-level container contract became executable via
 `scripts/verify/container_contract.spec.js` and `npm run
-test:container-contract`. The gate currently passes 57/57 checks across the
+test:container-contract`. The gate currently passes 75/75 checks across the
 launch public route list at 320px, 820px, and 1366px, and is now part of
 `npm run test:website-verify` / `npm run test:public-verify`.
+
+On 2026-05-10, the broad public website gate passed in the open ecommerce
+testing posture: `layout-fit` 325/325, `container-contract` 75/75,
+`interactive-layout` 163/163, search 3/3, portfolio 6/6, checkout 2/2, shop
+smoke, product prices, variant media, and open ecommerce mode. Extra launch
+checks also passed: `npm run test:a11y` with 50 route/viewport axe checks and
+0 violations, `npm run test:a11y-manual`, and contact smoke with backend record
+proof plus cleanup.
 
 On 2026-05-08, the mobile header/search and Google review compactness pass
 added a sharper component-size lesson: layout-fit did not catch the review

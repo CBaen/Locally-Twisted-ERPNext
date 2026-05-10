@@ -7,6 +7,7 @@ at a route that is no longer part of the launch surface.
 """
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 from _cli import parse_noop_args
@@ -17,6 +18,7 @@ NAVBAR = ROOT / "apps/locally_twisted/locally_twisted/templates/includes/navbar/
 FOOTER = ROOT / "apps/locally_twisted/locally_twisted/templates/includes/footer/footer.html"
 HOME = ROOT / "apps/locally_twisted/locally_twisted/www/home.html"
 SEARCH_ROUTE = ROOT / "apps/locally_twisted/locally_twisted/www/search.py"
+MEGA_MENU_CSS = ROOT / "apps/locally_twisted/locally_twisted/public/css/lt-mega-menu.css"
 NAV_SERVICE_REMOVAL_APPROVALS = ROOT / "workstreams/nav-service-removal-approvals.md"
 
 CANONICAL_SERVICE_NAV_LINKS = (
@@ -86,8 +88,12 @@ def test_top_banner_links_are_owner_approved(navbar: str) -> None:
     top_start = _line_index(navbar, '<ul class="lt-mega-header__top-links">')
     top_end = _line_index(navbar[top_start:], '</ul>') + top_start
     top_links = navbar[top_start:top_end]
+    short_notice = "SHORT NOTICE? LET US KNOW. WE CAN OFTEN HELP WITH 24 HOURS NOTICE!"
     row_required = (
-        "SHORT NOTICE? LET US KNOW. WE CAN OFTEN HELP WITH 24 HOURS NOTICE!",
+        f'<a class="lt-mega-header__top-message" href="/contact">{short_notice}</a>',
+    )
+    mobile_required = (
+        f'<a class="lt-mega-header__mobile-message" href="/contact">{short_notice}</a>',
     )
     link_required = (
         'href="/contact">Free Event Quote</a>',
@@ -101,7 +107,10 @@ def test_top_banner_links_are_owner_approved(navbar: str) -> None:
     )
     for needle in row_required:
         if needle not in top_row:
-            raise AssertionError(f"Header top banner must keep the short-notice message: {needle}")
+            raise AssertionError(f"Header top banner must keep the linked short-notice message: {needle}")
+    for needle in mobile_required:
+        if needle not in navbar:
+            raise AssertionError(f"Mobile header must keep the linked short-notice message: {needle}")
     if "lt-mega-header__top-alert" in top_links:
         raise AssertionError("Short-notice message belongs in the old proof slot, not inside the utility links")
     for needle in link_required:
@@ -110,6 +119,31 @@ def test_top_banner_links_are_owner_approved(navbar: str) -> None:
     for needle in forbidden:
         if needle in top_row:
             raise AssertionError(f"Header banner exposes removed proof/utility content: {needle}")
+
+
+def _css_rule(css: str, selector: str) -> str:
+    match = re.search(rf"{re.escape(selector)}\s*\{{(?P<body>[^}}]+)\}}", css)
+    if not match:
+        raise AssertionError(f"Missing expected CSS rule: {selector}")
+    return match.group("body")
+
+
+def test_top_banner_accessibility_css(css: str) -> None:
+    hover_required = (
+        ".lt-mega-header__top-message:hover,\n.lt-mega-header__top-message:focus-visible,\n.lt-mega-header__top-links a:hover,\n.lt-mega-header__top-links a:focus-visible",
+        ".lt-mega-header__mobile-message:hover,\n.lt-mega-header__mobile-message:focus-visible",
+    )
+    for selector in hover_required:
+        body = _css_rule(css, selector)
+        if "color: var(--lt-mega-ink);" not in body:
+            raise AssertionError(f"Header banner hover/focus text must stay dark on brass: {selector}")
+        if "#fffdf9" in body:
+            raise AssertionError(f"Header banner hover/focus must not use low-contrast white text: {selector}")
+
+    mobile_top = _css_rule(css, ".lt-mega-header__mobile-top")
+    expected_padding = "padding: 0 max(0.85rem, env(safe-area-inset-right)) 0 max(0.85rem, env(safe-area-inset-left));"
+    if expected_padding not in mobile_top:
+        raise AssertionError("Mobile top banner padding must map right inset to right padding and left inset to left padding")
 
 
 def _active_nav_service_removal_approval_lines() -> set[str]:
@@ -344,9 +378,11 @@ def main() -> None:
     footer = FOOTER.read_text(encoding="utf-8")
     home = HOME.read_text(encoding="utf-8")
     search_route = SEARCH_ROUTE.read_text(encoding="utf-8")
+    mega_menu_css = MEGA_MENU_CSS.read_text(encoding="utf-8")
     test_desktop_nav_order(navbar)
     test_quote_cta_is_contact(navbar)
     test_top_banner_links_are_owner_approved(navbar)
+    test_top_banner_accessibility_css(mega_menu_css)
     test_canonical_service_nav_requires_explicit_removal_approval(navbar, footer)
     test_nav_does_not_link_to_retired_book_route(navbar)
     test_nav_does_not_link_to_retired_category_index(navbar, footer)

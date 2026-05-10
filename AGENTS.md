@@ -2,7 +2,7 @@
 
 This is the agent-neutral entrypoint for Codex / ChatGPT / other coding agents working in this repo.
 
-This project inherits the machine-wide Guiding Light Codex communication protocol from `C:\Users\baenb\AGENTS.md` and the global Codex framework. Use that protocol for communication, tangent handling, plain-language explanations, verification discipline, and deciding what to ask Guiding Light versus what the agent should own.
+This project inherits the machine-wide Guiding Light communication protocol from `C:\Users\baenb\AGENTS.md` and the shared capability framework. Use that protocol for communication, tangent handling, plain-language explanations, verification discipline, and deciding what to ask Guiding Light versus what the agent should own.
 
 Do not treat old handoff files as truth. Treat them as claims, then verify important facts against git, files, and the running ERPNext database before relying on them.
 
@@ -18,7 +18,7 @@ Branches are forbidden in this repo. Work on `main` only.
 ## No Monoliths
 
 Source of truth:
-`C:\Users\baenb\.codex\capabilities\principles\no-monolith-files.md`.
+`C:\Users\baenb\capabilities\principles\no-monolith-files.md`.
 
 Apply it here as: one hand-authored production file, one clear job. Split
 cross-concern LT changes into named modules, partials, helpers, recipes,
@@ -132,13 +132,13 @@ This project supports multi-agent / multi-handoff work. Active handoffs should b
 
 ## Capabilities
 
-Project-level Codex capability docs live at `.codex/capabilities/INDEX.md`.
+Project-level shared capability docs live at `capabilities/INDEX.md`.
 
 Read the index when a task depends on local tools, reusable workflows, project-specific operating knowledge, or prior lessons. Then open only the specific capability files needed for the current task.
 
 Treat `last_verified` dates older than about 90 days as stale until rechecked.
 
-For public layout, Frappe container, `.lt-fullbleed`, Webshop surface, crawl/marquee, breakpoint, nav, drawer, modal, form, product selector, cart, checkout, or broad visual work, read `.codex/capabilities/recipes/frappe-public-container-contract.md` and `.codex/capabilities/recipes/responsive-container-audit.md` before editing. If the work touches a hero, intro, masthead, or page-header treatment, also read `.codex/capabilities/recipes/compact-hero-contract.md`. Container fit and compact same-height heroes are launch requirements, not polish.
+For public layout, Frappe container, `.lt-fullbleed`, Webshop surface, crawl/marquee, breakpoint, nav, drawer, modal, form, product selector, cart, checkout, or broad visual work, read `capabilities/recipes/frappe-public-container-contract.md` and `capabilities/recipes/responsive-container-audit.md` before editing. If the work touches a hero, intro, masthead, or page-header treatment, also read `capabilities/recipes/compact-hero-contract.md`. Container fit and compact same-height heroes are launch requirements, not polish.
 
 Older Claude skills and rules under `C:\Users\baenb\.claude\` are a read-only reference library, not project truth. The useful entrypoints are `C:\Users\baenb\.claude\skills\README.md`, specific `SKILL.md` files, and `C:\Users\baenb\.claude\rules\reach-paths.md`. For Frappe/ERPNext launch work, especially consider the older `frappe-payment-safety`, `frappe-form-integrity`, `frappe-fixture-discipline`, `frappe-migration-guard`, and `frappe-deploy-safety` skills as checklists for what to verify. Do not read secrets, runtime state, logs, caches, sessions, or token files there, and do not copy Claude-era files wholesale into this repo.
 

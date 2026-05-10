@@ -5,11 +5,11 @@ schema_version: 2.0
 level: recipe
 maturity: candidate
 scope: Locally Twisted public page heroes in ERPNext/Frappe and Webshop routes
-currently_true: unknown
+currently_true: yes
 verification_level: 2
 last_verified: 2026-05-10
 evidence_quality: direct
-successful_uses: 3
+successful_uses: 4
 failed_uses: 1
 regressions: 0
 depends_on:
@@ -118,8 +118,7 @@ phone regression for `/civic-community`, `/corporate-events`,
 Verification for the event lane passed: focused audience hero regression 12/12,
 event compact-hero checks for `/event-balloons` and the four audience pages,
 targeted `layout-fit` 65/65, targeted `container-contract` 15/15, and
-`test:a11y-manual`. The current shared worktree still has unrelated broad
-compact-hero failures on homepage tablet and BTFP tablet/desktop (`51/54`), and
-the full axe audit currently fails on homepage-only `aria-hidden-focus` carousel
-slide issues. Do not claim the global compact-hero or full accessibility gates
-are green until those are repaired.
+`test:a11y-manual`. Later 2026-05-10 launch verification repaired the unrelated
+homepage/BTFP compact-hero and homepage carousel accessibility blockers:
+full `interactive_layout.spec.js` passed 163/163 inside the website gate, and
+`npm run test:a11y` passed 50 route/viewport axe checks with 0 violations.

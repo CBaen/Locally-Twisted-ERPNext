@@ -72,7 +72,7 @@ Minimum standard:
 
 ## Customer-Facing Failure Voice
 
-Global source: `C:\Users\baenb\.codex\capabilities\recipes\customer-facing-failure-voice.md`.
+Global source: `C:\Users\baenb\capabilities\recipes\customer-facing-failure-voice.md`.
 
 Public/customer-facing failures must be warm, plain, and gently playful without
 turning into fake success. Use the "calm kindergarten teacher" test:

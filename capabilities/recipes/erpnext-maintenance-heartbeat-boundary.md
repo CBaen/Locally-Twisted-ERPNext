@@ -8,7 +8,7 @@ last_verified: 2026-05-08
 
 Documents the Locally Twisted implementation of the agency maintenance
 heartbeat standard at
-`C:\Users\baenb\projects\Built_by_Cameron\.codex\capabilities\recipes\erpnext-maintenance-heartbeat-boundary.md`.
+`C:\Users\baenb\projects\Built_by_Cameron\capabilities\recipes\erpnext-maintenance-heartbeat-boundary.md`.
 This file is the client receipt layer: exact LT role names, DocTypes, scripts,
 verification commands, and expected current states live here.
 

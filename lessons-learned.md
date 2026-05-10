@@ -14,6 +14,45 @@ The repeat-email/five-photo form verifier proved the customer path but left fake
 
 ---
 
+## 2026-05-10 - Header/footer chrome is not a side effect of SEO work
+
+Owner-removed header/banner items came back while the work was framed around
+public-site/SEO/service-nav improvement. `Free Event Quote` also appeared in
+multiple chrome zones because an older verifier encoded that duplicate state.
+
+**Counter-move:** treat header, footer, menu, mobile drawer, search quick
+links, and top-banner slots as customer-facing business signage. SEO/GEO/AEO
+agents can change metadata, sitemap, canonical, structured data, FAQ/AEO
+content, and page copy inside their scope; they need explicit approval before
+changing chrome. Update the verifier first so it fails against the current bad
+state, then repair the smallest template surface.
+
+## 2026-05-10 - Header accessibility can fail outside the static screenshot
+
+The gold banner looked repaired at rest, but hover/focus text became white on
+brass at 2.65:1 contrast and mobile landscape safe-area padding protected the
+wrong side.
+
+**Counter-move:** when a public header strip changes color or padding, verify
+the interaction-state color and safe-area side order, not just text presence.
+For LT, `nav_ia.py` now checks the exact CSS failure alongside the template IA
+contract.
+
+## 2026-05-10 - Capability path ownership is architecture, not cleanup
+
+Moving LT capabilities from `.codex/capabilities/` to `capabilities/` was not a
+cosmetic path cleanup. The path itself was teaching future agents that Codex
+owned the project operating knowledge, which breaks parity with OpenClaw,
+Claude, and future agents.
+
+**Counter-move:** put capability roots where their scope is true:
+`C:\Users\baenb\capabilities` for system/user knowledge,
+`Built_by_Cameron/capabilities` for agency knowledge, and
+`<project>/capabilities` for project knowledge. Runtime folders are adapters or
+compatibility pointers only.
+
+---
+
 ## 2026-05-10 - Header microcopy slots need explicit ownership
 
 The short-notice message was initially placed as a utility-list item beside `Free Event Quote` and account links while the old prepared-design proof copy/truck icon stayed in the left proof slot. GL's correction showed the actual contract: replace the proof slot with the short-notice promise, keep the conversion/account links, and delete stale proof chrome.
@@ -600,7 +639,7 @@ selection panels. Size, latex color, add-on numbers, and other variant controls
 should be clear text-level controls with selected-state emphasis, not nested
 containers. Keep the pickup/delivery panel as the framed exception. Guard this
 with `scripts/verify/smoke_shop.py` and
-`.codex/capabilities/recipes/frappe-product-clear-control-contract.md`.
+`capabilities/recipes/frappe-product-clear-control-contract.md`.
 
 ---
 
@@ -617,7 +656,7 @@ fulfillment notes, product copy, and a clear cart/contact path. Do not restore
 recommendation panels, generic upsells, empty reviews tabs, or visible boxes
 that exist only because the Webshop template offered a section. Guard this with
 `scripts/verify/smoke_shop.py` and the
-`.codex/capabilities/recipes/frappe-product-page-company-first.md` contract.
+`capabilities/recipes/frappe-product-page-company-first.md` contract.
 
 ---
 
@@ -952,7 +991,7 @@ The PlayCanvas game, Frappe wrapper, contact-form prefill, and browser tests all
 
 GL caught the arch balloons pointing down. That was a real manufacturing mistake, not a styling preference: a classic quad cluster is tied/twisted at a shared center, so each balloon neck/knot points into that tie point. The renderer defaulted all balloon necks downward and still passed canvas tests because those tests only proved "nonblank and interactive."
 
-**Counter-move:** use `.codex/capabilities/recipes/event-playground-construction-truth.md` before any Event Playground geometry work. Put construction slots in pure modules first, test neck/knot vectors against the shared tie center, and make PlayCanvas consume those slots. A nonblank canvas is never enough proof for balloon construction.
+**Counter-move:** use `capabilities/recipes/event-playground-construction-truth.md` before any Event Playground geometry work. Put construction slots in pure modules first, test neck/knot vectors against the shared tie center, and make PlayCanvas consume those slots. A nonblank canvas is never enough proof for balloon construction.
 
 ---
 
@@ -962,7 +1001,7 @@ Older notes correctly found that Frappe wraps normal web pages in `.page-content
 
 Research against the installed local stack confirmed the current contract: Frappe/Webshop still owns the website lifecycle, route templates, header/footer hooks, product/listing/cart selectors, and asset loading. LT owns the visual containment inside that lifecycle through `lt-theme.css` and `lt-page-containment.css`. That means every public section must choose a mode before CSS work starts: contained workflow/reading surface, or deliberate full-bleed band with its own inner wrapper and browser-verified clipping.
 
-**Counter-move:** before changing public layout, `.lt-fullbleed`, crawls, review tracks, Webshop pages, or shared CSS, read `.codex/capabilities/recipes/frappe-public-container-contract.md`. Classify the section, preserve Frappe/Webshop hooks and selectors, use LT inner containment instead of relying on the neutralized parent container, and verify no document overflow, visible unintended scrollbar, or browser-specific fallback.
+**Counter-move:** before changing public layout, `.lt-fullbleed`, crawls, review tracks, Webshop pages, or shared CSS, read `capabilities/recipes/frappe-public-container-contract.md`. Classify the section, preserve Frappe/Webshop hooks and selectors, use LT inner containment instead of relying on the neutralized parent container, and verify no document overflow, visible unintended scrollbar, or browser-specific fallback.
 
 ---
 
