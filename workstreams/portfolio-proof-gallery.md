@@ -1,7 +1,8 @@
 # Portfolio Proof Gallery
 
-Last updated: 2026-05-08 by Codex after GL approved desktop-only photo edge
-fade, depth shadows, and hero stacking protection.
+Last updated: 2026-05-10 by Codex after adding the ignored raw
+`assets/New Balloon Pics 3.7.26/` photo drop as 59 curated optimized portfolio
+photos.
 
 ## Outcome
 
@@ -25,13 +26,14 @@ of a static image stack.
   Frappe page shell, branded compact portfolio hero, reel mount, no-script
   fallback, empty state, and JSON-LD. The route-specific Inquire/Studio/Index
   footer block was removed on 2026-05-08 after GL rejected it.
-- `apps/locally_twisted/locally_twisted/www/portfolio.py` owns gallery records, display order, optimized image URLs, approved export side/scale/aspect rhythm, metadata, and server-side query filtering for category/event links.
+- `apps/locally_twisted/locally_twisted/www/portfolio.py` owns the base gallery records, display order, optimized image URLs, approved export side/scale/aspect rhythm, metadata, and server-side query filtering for category/event links.
+- `apps/locally_twisted/locally_twisted/www/portfolio_new_balloon_pics.py` owns the 2026-03-07 photo-drop records so new proof-photo additions do not bloat the route controller. The raw drop remains ignored by `.gitignore`; only curated WebP derivatives ship from the app public path.
 - `apps/locally_twisted/locally_twisted/public/css/lt-portfolio-reel.css` and `apps/locally_twisted/locally_twisted/public/js/lt-portfolio-reel.js` own the shipped reel styling and interaction. Current locked constants: `density = 1.10`, `photoScale = 1.5`, `BASE_UNIT = 640`, `VERTICAL_SPACING = 80`, `OVERLAP = 0.55`, `CENTER_BREATH = 140`, drift smoothing `0.02`, opacity speed `4.0`; photo aspect ratios come from the optimized image dimensions in `PORTFOLIO_REEL_META`. Photo size and reel density are separate controls. Pointer-follow parallax and front-photo pointer tilt are not allowed; click-to-front motion must settle.
 - Desktop photos have a light edge fade and image-level shadow for depth. The
   clicked front photo gets the stronger shadow, but the hero owns the higher
   stacking plane so the top photos cannot cover it. Do not port this to mobile
   without a mobile-specific review.
-- `apps/locally_twisted/locally_twisted/public/images/portfolio/optimized/` contains web-ready full-aspect WebP derivatives for the reel.
+- `apps/locally_twisted/locally_twisted/public/images/portfolio/optimized/` contains web-ready full-aspect WebP derivatives for the reel. As of 2026-05-10, `/portfolio` renders 74 photos total: 15 original curated proof photos plus 59 optimized photos from `assets/New Balloon Pics 3.7.26/`.
 - `scripts/verify/portfolio_reel.spec.js` verifies the current contract: no
   portfolio Google font links, no custom cursor artifacts, no copied internal
   nav, branded compact hero copy, export photo sizing math, optimized image
@@ -55,25 +57,27 @@ npm run test:layout-fit -- --grep portfolio
 npm run test:interactive-layout -- --grep portfolio
 ```
 
-Latest local verification on 2026-05-08: `python
-scripts/dev/clear_website_cache.py --restart` completed, `npm run
-test:portfolio-reel` passed 6/6, `npm run test:layout-fit -- --grep
-"portfolio fits"` passed 13/13, and `npm run test:interactive-layout -- --grep
-portfolio` passed 6/6. After the route-specific footer block was removed, the
-portfolio verifier passed with the footer guard. The fifth portfolio test
-proved the front-photo pop animation still changes transform and then settles so
-later pointer movement does not change the front photo. The sixth portfolio test
-proves clicked top photos remain behind the hero and verifies desktop depth
-shadows. A clean Brave mobile check returned 200 with the
-cache-busted `20260508-no-captions-scale-2` assets, 15 photos, 0 frame wrappers,
-0 captions, first photo visible at 390px wide, second photo waiting offscreen,
-and no page errors. Footer-removal DOM evidence found `.lt-foot` count 0, no
-`Portfolio contact` landmark, and none of the rejected footer labels. Fresh
-visual evidence is in
-`output/playwright/portfolio-brave-mobile-no-captions.png`,
-`output/playwright/portfolio-desktop-no-captions-scale.png`, and
-`output/playwright/portfolio-desktop-no-captions-scroll.png`; footer-removal
-evidence is in `output/playwright/portfolio-footer-removed-desktop.png`.
+Latest local verification on 2026-05-10 after the new photo batch:
+`python scripts/dev/clear_website_cache.py --restart` completed,
+`npm run test:portfolio-reel` passed 6/6,
+`npm run test:layout-fit -- --grep portfolio` passed 13/13,
+`npm run test:container-contract -- --grep portfolio` passed 3/3, and
+`npm run test:a11y-manual` passed. A live HTTP probe returned 200 for
+`/portfolio` and representative new WebP assets. A focused rendered DOM check
+found all 59 new `.lt-photo[data-id^="portfolio-2026-03-07"]` records, all
+loaded through `/optimized/`, no unloaded images, and no desktop or mobile
+document overflow. The full `npm run test:a11y` gate still fails on unrelated
+homepage-only `aria-hidden-focus` carousel slide issues; it did not report a
+portfolio finding.
+
+Previous 2026-05-08 verification: `npm run test:portfolio-reel` passed 6/6,
+`npm run test:layout-fit -- --grep "portfolio fits"` passed 13/13, and
+`npm run test:interactive-layout -- --grep portfolio` passed 6/6. After the
+route-specific footer block was removed, the portfolio verifier passed with the
+footer guard. The fifth portfolio test proved the front-photo pop animation
+still changes transform and then settles so later pointer movement does not
+change the front photo. The sixth portfolio test proves clicked top photos
+remain behind the hero and verifies desktop depth shadows.
 
 The current receipt specifically checked:
 

@@ -7,9 +7,9 @@ maturity: candidate
 scope: Locally Twisted ERPNext/Frappe portfolio and proof-gallery visual work
 currently_true: true
 verification_level: 2
-last_verified: 2026-05-08
+last_verified: 2026-05-10
 evidence_quality: direct
-successful_uses: 7
+successful_uses: 8
 failed_uses: 1
 regressions: 3
 depends_on:
@@ -106,12 +106,31 @@ Run these after editing portfolio layout, image metadata, source/reference trans
 python scripts/dev/clear_website_cache.py --restart
 npm run test:portfolio-reel
 npm run test:layout-fit -- --grep portfolio
+npm run test:container-contract -- --grep portfolio
 npm run test:interactive-layout -- --grep portfolio
+npm run test:a11y-manual
 ```
 
 Also inspect desktop and mobile screenshots before launch claims, especially after photo-order or image-quality changes. For this reel, include Chrome and Brave captures when the failure report or user feedback mentions cross-browser differences.
 
-The latest verified use passed full `npm run test:portfolio-reel` 6/6,
+The latest verified use on 2026-05-10 added 59 optimized proof photos from the
+ignored raw `assets/New Balloon Pics 3.7.26/` drop without changing the locked
+reel rhythm. `/portfolio` now renders 74 total photos. The new batch lives in
+`portfolio_new_balloon_pics.py` instead of expanding the route controller, and
+the public assets are curated WebP derivatives under
+`public/images/portfolio/optimized/`.
+
+The 2026-05-10 verification passed full `npm run test:portfolio-reel` 6/6,
+`npm run test:layout-fit -- --grep portfolio` 13/13,
+`npm run test:container-contract -- --grep portfolio` 3/3, and
+`npm run test:a11y-manual`. A live route/asset probe returned 200 for
+`/portfolio` plus representative new WebP assets, and a focused rendered DOM
+check found all 59 new portfolio records loaded from `/optimized/` with no
+desktop or mobile document overflow. Full `npm run test:a11y` still fails on
+unrelated homepage-only `aria-hidden-focus` carousel slides and did not report a
+portfolio finding.
+
+The prior verified use passed full `npm run test:portfolio-reel` 6/6,
 `npm run test:interactive-layout -- --grep portfolio` 6/6, and
 `npm run test:layout-fit -- --grep "portfolio fits"` 13/13 after GL rejected
 all photo captions, visible photo frame wrappers, old desktop sizing, the
@@ -167,3 +186,7 @@ The kept production source is now the live Frappe translation into
 optimized images under
 `apps/locally_twisted/locally_twisted/public/images/portfolio/optimized/`, and
 `scripts/verify/portfolio_reel.spec.js`.
+On 2026-05-10, the raw `assets/New Balloon Pics 3.7.26/` drop remained ignored
+as source material and 59 curated optimized WebPs were added to the public
+portfolio reel. The batch-specific records live in
+`apps/locally_twisted/locally_twisted/www/portfolio_new_balloon_pics.py`.

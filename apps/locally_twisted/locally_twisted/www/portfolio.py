@@ -8,6 +8,11 @@ installed-work photos.
 import json
 
 import frappe
+from locally_twisted.www.portfolio_new_balloon_pics import (
+    NEW_BALLOON_PICS_DISPLAY_ORDER,
+    NEW_BALLOON_PICS_ITEMS,
+    NEW_BALLOON_PICS_REEL_META,
+)
 
 no_cache = 1
 sitemap = 1
@@ -185,6 +190,7 @@ GALLERY_ITEMS = [
         "alt": "Pair of rainbow balloon columns for a Pride event entrance",
     },
 ]
+GALLERY_ITEMS.extend(NEW_BALLOON_PICS_ITEMS)
 
 
 # Keep this side/scale rhythm aligned with the approved Frappe design handoff in
@@ -231,6 +237,7 @@ PORTFOLIO_DISPLAY_ORDER = [
     "birthday-balloon-bouquets",
     "birthday-pirate-column",
 ]
+PORTFOLIO_DISPLAY_ORDER.extend(NEW_BALLOON_PICS_DISPLAY_ORDER)
 
 PORTFOLIO_REEL_META = {
     "wedding-organic-half-arch": {"w": 1500, "h": 2000},
@@ -249,6 +256,7 @@ PORTFOLIO_REEL_META = {
     "birthday-balloon-bouquets": {"w": 2000, "h": 1500},
     "school-back-to-school-stage": {"w": 746, "h": 573},
 }
+PORTFOLIO_REEL_META.update(NEW_BALLOON_PICS_REEL_META)
 
 _portfolio_order = {slug: index for index, slug in enumerate(PORTFOLIO_DISPLAY_ORDER)}
 GALLERY_ITEMS.sort(key=lambda item: _portfolio_order.get(item["slug"], len(_portfolio_order)))
@@ -288,6 +296,8 @@ def _optimized_url(filename):
 
 
 def _source_url(filename):
+    if filename.lower().endswith(".webp"):
+        return _optimized_url(filename)
     return f"/assets/locally_twisted/images/portfolio/{filename}"
 
 
