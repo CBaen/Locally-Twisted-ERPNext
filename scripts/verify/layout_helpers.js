@@ -7,6 +7,7 @@ const PUBLIC_ROUTES = [
 	{ name: "home", path: "/" },
 	{ name: "book-alias", path: "/book" },
 	{ name: "contact", path: "/contact" },
+	{ name: "about", path: "/about" },
 	{ name: "event-balloons", path: "/event-balloons" },
 	{ name: "civic-community", path: "/civic-community" },
 	{ name: "corporate-events", path: "/corporate-events" },
@@ -98,6 +99,27 @@ const SHOP_LANDING_SURFACES = [
 const ECOMMERCE_PAUSED_SURFACES = [
 	{ selector: ".lt-ecommerce-paused", mode: "band", inner: ".lt-ecommerce-paused__inner", maxWidth: PAGE_MAX },
 ];
+const OPTIONAL_ECOMMERCE_PAUSED_SURFACES = ECOMMERCE_PAUSED_SURFACES.map((surface) => ({ ...surface, optional: true }));
+const OPTIONAL_SHOP_LANDING_SURFACES = SHOP_LANDING_SURFACES.map((surface) => ({ ...surface, optional: true }));
+
+const CATEGORY_SHOP_SURFACES = [
+	{ selector: ".lt-shop--category", mode: "root", optional: true },
+	{ selector: ".lt-shop__hero", mode: "band", inner: ".lt-shop__hero-inner", maxWidth: SHOP_MAX, optional: true },
+	{ selector: ".lt-shop__layout", mode: "contained", maxWidth: SHOP_MAX, optional: true },
+];
+
+const PRODUCT_DETAIL_SURFACES = [
+	{ selector: ".lt-product-breadcrumbs", mode: "contained", maxWidth: SHOP_MAX, optional: true },
+	{ selector: ".lt-product-page__main", mode: "contained", maxWidth: SHOP_MAX, optional: true },
+];
+
+const CART_SURFACES = [
+	{ selector: ".lt-cart", mode: "band", inner: ".lt-cart__container", maxWidth: SHOP_MAX, optional: true },
+];
+
+const CHECKOUT_SURFACES = [
+	{ selector: ".lt-checkout", mode: "band", inner: ".lt-checkout__container", maxWidth: PAGE_MAX, optional: true },
+];
 
 const EVENT_TYPE_SURFACES = [
 	{ selector: ".lt-authority-page", mode: "root" },
@@ -105,6 +127,12 @@ const EVENT_TYPE_SURFACES = [
 	{ selector: ".lt-authority-proof", mode: "fullbleed", inner: ".lt-authority-proof__inner", maxWidth: PAGE_MAX },
 	{ selector: ".lt-authority-section", mode: "band", inner: ".lt-authority-section__inner", maxWidth: PAGE_MAX, allowMultiple: true },
 	{ selector: ".lt-authority-cta", mode: "fullbleed", inner: ".lt-authority-cta__inner", maxWidth: PAGE_MAX },
+];
+
+const ABOUT_SURFACES = [
+	{ selector: ".lt-about__hero", mode: "fullbleed", inner: ".lt-about__hero-inner", maxWidth: PAGE_MAX },
+	{ selector: ".lt-about", mode: "band", inner: ".lt-about__inner", maxWidth: PAGE_MAX },
+	{ selector: ".lt-about__cta", mode: "fullbleed", inner: ".lt-about__cta-inner", maxWidth: PAGE_MAX },
 ];
 
 const CONTAINER_CONTRACT_ROUTES = [
@@ -152,6 +180,12 @@ const CONTAINER_CONTRACT_ROUTES = [
 		path: "/contact",
 		topLevel: [".lt-contact__intro", ".lt-contact", ".lt-locations"],
 		surfaces: CONTACT_SURFACES,
+	},
+	{
+		name: "about",
+		path: "/about",
+		topLevel: [".lt-about__hero.lt-fullbleed", ".lt-about", ".lt-about__cta.lt-fullbleed"],
+		surfaces: ABOUT_SURFACES,
 	},
 	{
 		name: "event-balloons",
@@ -215,8 +249,11 @@ const CONTAINER_CONTRACT_ROUTES = [
 	{
 		name: "faq",
 		path: "/faq",
-		topLevel: [".lt-faq"],
-		surfaces: [{ selector: ".lt-faq", mode: "band", inner: ".lt-faq__inner", maxWidth: NARROW_MAX }],
+		topLevel: [".lt-faq__hero.lt-fullbleed", ".lt-faq"],
+		surfaces: [
+			{ selector: ".lt-faq__hero", mode: "fullbleed", inner: ".lt-faq__hero-inner", maxWidth: PAGE_MAX },
+			{ selector: ".lt-faq", mode: "band", inner: ".lt-faq__inner", maxWidth: NARROW_MAX },
+		],
 	},
 	{
 		name: "privacy",
@@ -251,44 +288,74 @@ const CONTAINER_CONTRACT_ROUTES = [
 	{
 		name: "shop",
 		path: "/shop",
-		topLevel: [".lt-ecommerce-paused"],
-		surfaces: ECOMMERCE_PAUSED_SURFACES,
+		topLevel: [
+			{ selector: ".lt-ecommerce-paused", optional: true },
+			{ selector: ".lt-shop--landing", optional: true },
+		],
+		requireOneTopLevel: [".lt-ecommerce-paused", ".lt-shop--landing"],
+		surfaces: [...OPTIONAL_ECOMMERCE_PAUSED_SURFACES, ...OPTIONAL_SHOP_LANDING_SURFACES],
 	},
 	{
 		name: "shop-by-category",
 		path: "/shop-by-category",
-		topLevel: [".lt-ecommerce-paused"],
-		surfaces: ECOMMERCE_PAUSED_SURFACES,
+		topLevel: [
+			{ selector: ".lt-ecommerce-paused", optional: true },
+			{ selector: ".lt-shop--landing", optional: true },
+		],
+		requireOneTopLevel: [".lt-ecommerce-paused", ".lt-shop--landing"],
+		surfaces: [...OPTIONAL_ECOMMERCE_PAUSED_SURFACES, ...OPTIONAL_SHOP_LANDING_SURFACES],
 	},
 	{
 		name: "variant-product",
 		path: "/shop-items/garlands/baby-shower-garland",
-		topLevel: [".lt-ecommerce-paused"],
-		surfaces: ECOMMERCE_PAUSED_SURFACES,
+		topLevel: [
+			{ selector: ".lt-ecommerce-paused", optional: true },
+			{ selector: ".lt-product-breadcrumbs", optional: true },
+			{ selector: ".lt-product-page__main", optional: true },
+		],
+		requireOneTopLevel: [".lt-ecommerce-paused", ".lt-product-page__main"],
+		surfaces: [...OPTIONAL_ECOMMERCE_PAUSED_SURFACES, ...PRODUCT_DETAIL_SURFACES],
 	},
 	{
 		name: "single-product",
 		path: "/shop-items/seasonal-specialty/easter-balloon-cups",
-		topLevel: [".lt-ecommerce-paused"],
-		surfaces: ECOMMERCE_PAUSED_SURFACES,
+		topLevel: [
+			{ selector: ".lt-ecommerce-paused", optional: true },
+			{ selector: ".lt-product-breadcrumbs", optional: true },
+			{ selector: ".lt-product-page__main", optional: true },
+		],
+		requireOneTopLevel: [".lt-ecommerce-paused", ".lt-product-page__main"],
+		surfaces: [...OPTIONAL_ECOMMERCE_PAUSED_SURFACES, ...PRODUCT_DETAIL_SURFACES],
 	},
 	{
 		name: "seasonal-category",
 		path: "/shop-items/seasonal-specialty",
-		topLevel: [".lt-ecommerce-paused"],
-		surfaces: ECOMMERCE_PAUSED_SURFACES,
+		topLevel: [
+			{ selector: ".lt-ecommerce-paused", optional: true },
+			{ selector: ".lt-shop--category", optional: true },
+		],
+		requireOneTopLevel: [".lt-ecommerce-paused", ".lt-shop--category"],
+		surfaces: [...OPTIONAL_ECOMMERCE_PAUSED_SURFACES, ...CATEGORY_SHOP_SURFACES],
 	},
 	{
 		name: "cart",
 		path: "/cart",
-		topLevel: [".lt-ecommerce-paused"],
-		surfaces: ECOMMERCE_PAUSED_SURFACES,
+		topLevel: [
+			{ selector: ".lt-ecommerce-paused", optional: true },
+			{ selector: ".lt-cart", optional: true },
+		],
+		requireOneTopLevel: [".lt-ecommerce-paused", ".lt-cart"],
+		surfaces: [...OPTIONAL_ECOMMERCE_PAUSED_SURFACES, ...CART_SURFACES],
 	},
 	{
 		name: "checkout",
 		path: "/checkout",
-		topLevel: [".lt-ecommerce-paused"],
-		surfaces: ECOMMERCE_PAUSED_SURFACES,
+		topLevel: [
+			{ selector: ".lt-ecommerce-paused", optional: true },
+			{ selector: ".lt-checkout", optional: true },
+		],
+		requireOneTopLevel: [".lt-ecommerce-paused", ".lt-checkout"],
+		surfaces: [...OPTIONAL_ECOMMERCE_PAUSED_SURFACES, ...CHECKOUT_SURFACES],
 	},
 	{
 		name: "thank-you",
@@ -640,7 +707,9 @@ async function auditContainerContract(page, routeContract) {
 			}
 
 			if (pageContent) {
-				const declaredTopLevel = routeContract.topLevel || [];
+				const declaredTopLevel = (routeContract.topLevel || []).map((entry) =>
+					typeof entry === "string" ? { selector: entry, optional: false } : entry,
+				);
 				const visibleTopLevel = Array.from(pageContent.children).filter((element) => {
 					if (["SCRIPT", "STYLE", "NOSCRIPT"].includes(element.tagName)) return false;
 					return isVisible(element);
@@ -648,7 +717,7 @@ async function auditContainerContract(page, routeContract) {
 
 				for (const element of visibleTopLevel) {
 					if (element.matches("[data-container-contract-ignore]")) continue;
-					const declared = declaredTopLevel.some((selector) => element.matches(selector));
+					const declared = declaredTopLevel.some((entry) => element.matches(entry.selector));
 					if (!declared) {
 						fail(
 							"unclassified-top-level-surface",
@@ -658,13 +727,27 @@ async function auditContainerContract(page, routeContract) {
 					}
 				}
 
-				for (const selector of declaredTopLevel) {
-					const found = visibleTopLevel.some((element) => element.matches(selector));
+				for (const entry of declaredTopLevel) {
+					const found = visibleTopLevel.some((element) => element.matches(entry.selector));
 					if (!found) {
+						if (entry.optional) continue;
 						fail(
 							"missing-top-level-surface",
-							selector,
-							`${routeContract.path} declares ${selector} as a top-level surface, but it was not visible`,
+							entry.selector,
+							`${routeContract.path} declares ${entry.selector} as a top-level surface, but it was not visible`,
+						);
+					}
+				}
+
+				if (routeContract.requireOneTopLevel) {
+					const foundAny = routeContract.requireOneTopLevel.some((selector) =>
+						visibleTopLevel.some((element) => element.matches(selector)),
+					);
+					if (!foundAny) {
+						fail(
+							"missing-top-level-surface",
+							routeContract.requireOneTopLevel.join(", "),
+							`${routeContract.path} must render one configured commerce top-level surface`,
 						);
 					}
 				}

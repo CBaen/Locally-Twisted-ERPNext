@@ -42,6 +42,20 @@ html body .lt-contact__intro {
   --lt-photo-hero-position: center center;
 }
 
+html body .lt-faq__hero {
+  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/contact-generated-lifestyle-mobile.webp");
+  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/contact-generated-lifestyle-tablet.webp");
+  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/contact-generated-lifestyle-desktop.webp");
+  --lt-photo-hero-position: center center;
+}
+
+html body .lt-about__hero {
+  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/about-generated-lifestyle-mobile.webp");
+  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/about-generated-lifestyle-tablet.webp");
+  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/about-generated-lifestyle-desktop.webp");
+  --lt-photo-hero-position: center center;
+}
+
 html body .lt-shop__hero {
   --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/shop-generated-lifestyle-mobile.webp");
   --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/shop-generated-lifestyle-tablet.webp");
@@ -61,6 +75,8 @@ html body :is(
   .lt-portfolio__hero,
   .lt-btfp__intro,
   .lt-contact__intro,
+  .lt-faq__hero,
+  .lt-about__hero,
   .lt-shop__hero
 ) {
   background: var(--lt-navy);
@@ -76,6 +92,8 @@ html body :is(
   .lt-portfolio__hero,
   .lt-btfp__intro,
   .lt-contact__intro,
+  .lt-faq__hero,
+  .lt-about__hero,
   .lt-shop__hero
 )::before,
 html body :is(
@@ -84,6 +102,8 @@ html body :is(
   .lt-portfolio__hero,
   .lt-btfp__intro,
   .lt-contact__intro,
+  .lt-faq__hero,
+  .lt-about__hero,
   .lt-shop__hero
 )::after {
   content: "";
@@ -98,6 +118,8 @@ html body :is(
   .lt-portfolio__hero,
   .lt-btfp__intro,
   .lt-contact__intro,
+  .lt-faq__hero,
+  .lt-about__hero,
   .lt-shop__hero
 )::before {
   background-color: var(--lt-navy);
@@ -114,6 +136,8 @@ html body :is(
   .lt-portfolio__hero,
   .lt-btfp__intro,
   .lt-contact__intro,
+  .lt-faq__hero,
+  .lt-about__hero,
   .lt-shop__hero
 )::after {
   background: var(--lt-photo-hero-overlay);
@@ -138,6 +162,8 @@ html body :is(
   .lt-portfolio__hero-inner,
   .lt-btfp__intro-inner,
   .lt-contact__intro > .container,
+  .lt-faq__hero-inner,
+  .lt-about__hero-inner,
   .lt-shop__hero-inner
 ) {
   position: relative;
@@ -149,6 +175,8 @@ html body :is(
   .lt-portfolio__title,
   .lt-btfp__intro-title,
   .lt-contact__intro h1,
+  .lt-faq__hero h1,
+  .lt-about__hero h1,
   .lt-shop__hero-title,
   .lt-shop__title
 ) {
@@ -160,6 +188,8 @@ html body :is(
   .lt-portfolio__lede,
   .lt-btfp__intro-lede,
   .lt-contact__intro-lede,
+  .lt-faq__hero-lede,
+  .lt-about__hero-lede,
   .lt-shop__hero-lede
 ) {
   color: rgba(255, 255, 255, 0.92);
@@ -169,6 +199,8 @@ html body :is(
   .lt-authority-hero .lt-authority-eyebrow,
   .lt-portfolio__hero .lt-portfolio__eyebrow,
   .lt-btfp__intro .lt-btfp__kicker,
+  .lt-faq__hero .lt-faq__eyebrow,
+  .lt-about__hero .lt-about__eyebrow,
   .lt-shop__hero .lt-shop__hero-eyebrow,
   .lt-shop__hero .lt-shop__eyebrow
 ) {
@@ -186,6 +218,8 @@ html body .lt-shop__hero-lede a {
     .lt-portfolio__hero,
     .lt-btfp__intro,
     .lt-contact__intro,
+    .lt-faq__hero,
+    .lt-about__hero,
     .lt-shop__hero
   )::before,
   html body .lt-hero__image {
@@ -200,6 +234,8 @@ html body .lt-shop__hero-lede a {
     .lt-portfolio__hero,
     .lt-btfp__intro,
     .lt-contact__intro,
+    .lt-faq__hero,
+    .lt-about__hero,
     .lt-shop__hero
   )::before,
   html body .lt-hero__image {

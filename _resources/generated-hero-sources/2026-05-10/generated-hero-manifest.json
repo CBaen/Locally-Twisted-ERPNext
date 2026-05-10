@@ -81,6 +81,37 @@
       "prompt": "High-end lifestyle photograph of a corporate and civic event lobby in Utah with a custom balloon arch framing a registration area, slate blue, berry, brass, ivory, and soft mint balloon palette, polished stone floor, modern architectural details, adults in dressy casual event attire blurred in the distance, no readable signage, no logos, no watermarks, natural light, premium event photography, wide hero composition with balanced negative space for text overlay."
     },
     {
+      "slug": "about-generated-lifestyle",
+      "source": "about-generated-lifestyle-source.webp",
+      "model": "black-forest-labs/FLUX.2-pro",
+      "source_width": 2048,
+      "source_height": 896,
+      "derivatives": [
+        {
+          "key": "mobile",
+          "path": "about-generated-lifestyle-mobile.webp",
+          "width": 828,
+          "height": 440,
+          "bytes": 43568
+        },
+        {
+          "key": "tablet",
+          "path": "about-generated-lifestyle-tablet.webp",
+          "width": 1640,
+          "height": 500,
+          "bytes": 65268
+        },
+        {
+          "key": "desktop",
+          "path": "about-generated-lifestyle-desktop.webp",
+          "width": 2732,
+          "height": 560,
+          "bytes": 83384
+        }
+      ],
+      "prompt": "Derived About page hero crop from the event-generated-lifestyle source for consistent current-platform visual authority: high-end Utah event lobby with custom balloon arch, slate blue, berry, brass, ivory, and soft mint palette, no readable signage, no logos, no watermarks, wide hero composition."
+    },
+    {
       "slug": "portfolio-generated-lifestyle",
       "source": "portfolio-generated-lifestyle-source.webp",
       "model": "black-forest-labs/FLUX.2-pro",

@@ -1,6 +1,37 @@
 # Locally Twisted - Coding Handoff
 
-Last updated: 2026-05-10 by Codex after the public inquiry email branding/company-copy and header conversion-label closeout. Current peer handoff: fake data is allowed and useful; fake success is forbidden. V1 public launch is no-purchase brand/proof/inquiry/policy scope while ecommerce repair continues internally.
+Last updated: 2026-05-10 by Codex after ecommerce business-block clearance, commerce-pause restoration, product quote acceptance hardening, and SEO/AEO verifier drift repair. Current peer handoff: fake data is allowed and useful; fake success is forbidden. V1 public launch is no-purchase brand/proof/inquiry/policy scope while ecommerce repair continues internally.
+
+Codex update on 2026-05-10: GL cleared the remaining product-page architecture
+business approval blockers for commerce-lane testing, not for public go-live.
+The add-on approval packet, source media classification packet, and
+live-snapshot price review packet are still source evidence, but their business
+approval rows no longer block the architecture readiness gate. While ecommerce
+was temporarily open, `python scripts/verify/product_page_architecture_readiness.py`
+passed with `technical_architecture_ok: True`, `import_reopen_ok: True`, 14
+passing rows, 0 blocked rows, and 1 finance deferral. Commerce was then paused
+again through `lt_ecommerce_paused=1`, website cache was cleared, and
+`python scripts/verify/ecommerce_pause_contract.py` passed. In the current
+paused state, the readiness audit may exit nonzero only because
+`public_ecommerce_reopen` is blocked by the deliberate site config pause. Do
+not read that as a returned source/business blocker.
+
+Codex update on 2026-05-10: accepted product-page quote approvals now fail
+loudly unless Sales Order acceptance audit/idempotency fields exist and the
+Quotation is marked `Ready For Customer Review`. This closes the direct-token
+gap where a submitted/priced but not operator-ready quote could create a draft
+Sales Order, and the missing-field gap where source quote and written-approval
+fields could be silently skipped. Verifier:
+`python scripts/verify/product_quote_acceptance_contract.py`. Feature handoff:
+`workstreams/erpnext-ecommerce-receiving-architecture.md`; capability:
+`.codex/capabilities/recipes/erpnext-ecommerce-receiving-architecture.md`.
+
+Codex update on 2026-05-10: the SEO/GEO/AEO gate is a launch verifier, not a
+stale content snapshot. `npm run test:seo-contract` now checks the current FAQ
+visible questions against FAQPage JSON-LD, plus canonical routes, sitemap,
+business/service structured data, and BTFP image alt text. Feature handoff:
+`workstreams/seo-geo-aeo-contract.md`; capability:
+`.codex/capabilities/recipes/lt-seo-geo-aeo-contract.md`.
 
 OpenClaw/Moji update on 2026-05-10: `/balloon-twisting-and-face-painting` was corrected against GL's exact localhost feedback. The embedded inquiry form now starts with no artist-service checkbox selected; repeat inquiries from the same email are allowed through durable `CRM Settings.allow_lead_duplication_based_on_emails` configuration; and the form's advertised five-photo upload path is guarded by `scripts/verify/book_form_repeat_email_photos.py`. The two service-card photos are now explicit 10-image carousels with prev/next controls and visible status. Source handoff: `workstreams/btfp-service-page.md`; capability: `.codex/capabilities/recipes/btfp-live-service-page-contract.md`.
 
@@ -17,13 +48,7 @@ finance/legal emails. Source handoff:
 `workstreams/customer-email-policy-boundary.md`; capability:
 `.codex/capabilities/recipes/customer-email-delivery-branding-contract.md`.
 
-Codex update on 2026-05-10: public header/menu conversion labels are now
-`Free Event Quote` and `Contact Us`, both pointed at `/contact`. The former
-visible header CTA label `Free Event Quote` is now `Contact Us`, and the
-adjacent/top service label that previously read `Twisting & Face Painting` now
-reads `Free Event Quote`. `/balloon-twisting-and-face-painting` remains a live
-service route; this is chrome labeling, not route deletion. Coordination:
-`workstreams/menu-content-coordination.md`; verifier: `scripts/verify/nav_ia.py`.
+OpenClaw/Moji update on 2026-05-10: GL caught a second significant BTFP nav-removal violation. `Twisting & Face Painting` is restored as a canonical public service lane in desktop nav, mobile drawer, and search quick links, pointing to `/balloon-twisting-and-face-painting`. `Free Event Quote` and `Contact Us` remain `/contact` conversion labels; they do not replace BTFP discovery. `scripts/verify/nav_ia.py` now fails if the canonical lane disappears unless `workstreams/nav-service-removal-approvals.md` contains the exact explicit approval marker. Coordination: `workstreams/menu-content-coordination.md`; feature handoff: `workstreams/nav-service-removal-guard.md`; capability: `.codex/capabilities/recipes/frappe-public-nav-business-route-contract.md`.
 Codex update on 2026-05-10: GL corrected launch scope. V1 launch is a
 no-purchase public site (brand/proof/inquiry/policy), not a live ecommerce
 release. Treat `/shop` as browse-only for launch narrative. `/cart`,
@@ -168,12 +193,12 @@ Verified or updated during the 2026-05-01 storefront correction and contact clea
 - Checkout commerce rules are now coordinated with fulfillment, tax, and inquiry lanes. Ready-to-order goods can check out; custom/quote-required products and out-of-area delivery stay in the quote/Lead path. Standard local delivery is `$15`, Park City delivery is `$50`, and past fulfillment dates are rejected server-side.
 - Checkout tax now separates jurisdiction from taxable base. ZIP/city selects the Utah rate, but only goods are taxable. Services, face painting, balloon twisting, deposits for those services, and delivery charges are non-taxable. The local stack has a 0 percent `LT Non-Taxable Sales` Item Tax Template; delivery fee lines and `Services` item-group lines use that non-taxable override in Sales Orders.
 - Contact/Lead intake now records service payment guidance fields: payment timing, deposit due, balance timing, and payment notes. Artist services use `$50 per artist` deposit guidance; mixed artist + decor/event inquiries preserve that deposit note and include the full-before-prep guidance for quoted work. This is guidance only, not an automatic service/deposit finance record.
-- Header/menu now uses the deliberate premium two-level mega-menu with public ecommerce chrome paused for V1 launch: full-height Locally Twisted logo image, desktop `Event Balloons`, `Free Event Quote`, `Portfolio`, `FAQ`, top proof row, search overlay, and `Contact Us` CTA. `Free Event Quote` and `Contact Us` both point at `/contact`. `/balloon-twisting-and-face-painting` remains a live service route and the BTFP page/form/calculator contract still lives at `workstreams/btfp-service-page.md`, but the primary header label is now the quote path unless GL changes it again. Menu coordination lives at `workstreams/menu-content-coordination.md`; the older BTFP/Process correction handoff remains historical context at `workstreams/nav-btfp-process-correction.md`.
+- Header/menu now uses the deliberate premium two-level mega-menu with public ecommerce chrome paused for V1 launch: full-height Locally Twisted logo image, desktop `Event Balloons`, `Twisting & Face Painting`, `Free Event Quote`, `Portfolio`, `About Us`, `FAQ`, top proof row, search overlay, and `Contact Us` CTA. `Twisting & Face Painting` points to `/balloon-twisting-and-face-painting`; `Free Event Quote` and `Contact Us` both point at `/contact`. Ready-to-Order source chrome stays config-gated and is hidden while `lt_ecommerce_paused=1`. Menu coordination lives at `workstreams/menu-content-coordination.md`; the active service-removal guard handoff is `workstreams/nav-service-removal-guard.md`; the older BTFP/Process correction handoff remains historical context at `workstreams/nav-btfp-process-correction.md`.
 - Mobile header compactness is now part of the nav contract: while public ecommerce is paused, the header row carries only the logo and menu. Search lives as a bottom drawer button, opens the overlay, closes the drawer first, and submits to `/contact`; `/search` is kept as a no-cache 404 fallback, not a public page.
 - Header color repair completed 2026-05-06 after GL flagged the all-black chrome as off-style. The mega-menu contract stayed intact, but `lt-mega-menu.css` now uses a style-guide split: slim deep-navy desktop proof row, warm-white desktop main nav, warm-white mobile header/drawer surfaces, berry CTA, brass borders, and ink text. `hooks.py` cache-bust is `lt-mega-menu.css?v=20260506-mega-5`, and `interactive_layout.spec.js` guards against regressing the header shell back to the black ink band.
 - `/event-balloons`, `/portfolio`, and `/balloon-twisting-and-face-painting` are real public routes and return 200 locally. `/process` was unapproved and has been removed from the customer-facing site contract. `/portfolio` now keeps only the approved collage-of-imagery and movement behavior from the external prototype: native LT shell/global typography, branded compact portfolio hero, 1.5x larger desktop installed-work images, frequent center-column photos, optimized WebP derivatives, no cropped cards, no captions, no visible frame wrappers, no route-specific Inquire/Studio/Index footer block, actual image dimensions, mobile full-width slide-in reveal, and click-to-front interaction. Do not reintroduce the copied prototype hero, portfolio-specific font imports, custom cursor, fake internal nav/shell, static mobile stacking, photo captions, frame/card wrappers, forced design-slot aspect ratios that create letterbox stripes, route-local portfolio contact/index/footer sections, or full Claude/designer page styling. Category/event query links still filter the photo payload server-side. The research folder remains critique input only; the Frappe implementation, optimized assets, and verifier are the kept production source.
 - The mega-menu source contract is active: `navbar_context.py`, `templates/includes/navbar/navbar.html`, `public/css/lt-mega-menu.css`, and `public/js/lt-megamenu.js` must stay in parity with `hooks.py`, `nav_ia.py`, and `smoke_shop.py`.
-- Footer no longer exposes `What We Make`, `About Us`, or `Book an Event`; `All Ready-to-Order` routes to `/shop`.
+- Footer no longer exposes `What We Make` or `Book an Event`; `All Ready-to-Order` is config-gated and hidden while ecommerce is paused, and `Twisting & Face Painting` remains visible as a service lane.
 - Product detail/configure templates no longer include the "Start a conversation" or "Tell us what you're imagining" sales-pitch blocks.
 - `/shop-items/arches` now scopes to Arches. Root cause was missing Webshop `.item-group-content` class in the custom Item Group wrapper, not catalog data.
 - `/shop` is the customer-facing all-decor hub. `/shop-items`, `/all-products`, and `/shop-by-category` route or redirect to `/shop`; individual category pages remain at `/shop-items/<group>`.

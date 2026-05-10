@@ -14,7 +14,7 @@ Before editing any nav, chrome, public page hero/body copy, footer links, or nav
 - Do not edit another active lane's files without adding a note here first.
 - Treat `workstreams/website-launch.md` as the broader launch lane; use this file for menu/content collisions.
 - Keep `/contact` as the shared conversion path unless Guiding Light explicitly changes the architecture.
-- Current public chrome labels are `Free Event Quote` and `Contact Us`, both pointing to `/contact`. `/balloon-twisting-and-face-painting` remains a live service route, but it is not the primary header label unless GL reopens that wording. Do not restore a standalone `/process` page or top-level Process link without explicit GL approval.
+- Current public chrome includes `Twisting & Face Painting` pointing to `/balloon-twisting-and-face-painting`, plus `Free Event Quote` and `Contact Us` pointing to `/contact`. Do not remove, hide, rename, or replace the BTFP lane unless GL explicitly approves the exact action and `workstreams/nav-service-removal-approvals.md` records the required marker. Do not restore a standalone `/process` page or top-level Process link without explicit GL approval.
 - Do not claim a route, drawer, form, or verifier is fixed without recording the command and result.
 
 ## Style-Guide Alignment Note For Menu/Content Agents
@@ -91,6 +91,14 @@ Files: `navbar.html`, `nav_ia.py`, `workstreams/menu-content-coordination.md`.
 Intent: Change the visible menu CTA from `Free Event Quote` to `Contact Us`, change the adjacent/above `Twisting & Face Painting` menu entry to `Free Event Quote`, and keep both conversion labels pointed at `/contact`.
 Conflicts: Small copy/link update only; do not reopen broader mega-menu architecture, footer IA, or service-page content.
 Verification: Red check failed before the patch for all four expected labels. After the patch, `python -m py_compile scripts/verify/nav_ia.py` passed, `python scripts/verify/nav_ia.py` passed, `python scripts/dev/clear_website_cache.py` passed, live `http://localhost:8081/` HTML contained desktop/mobile `Free Event Quote` and `Contact Us` links to `/contact`, and focused `npx.cmd playwright test scripts/verify/interactive_layout.spec.js --reporter=line --grep "header breakpoint|header search overlay|desktop mega panels|mobile and tablet drawer" --workers=1` passed 26/26.
+Status: Complete.
+
+### 2026-05-10 - OpenClaw/Moji canonical service lane restoration
+Lane: Public nav canonical service guardrail after GL caught BTFP removal.
+Files: `navbar.html`, `nav_ia.py`, `locally-twisted-decisions.md`, `workstreams/nav-service-removal-guard.md`, `workstreams/nav-service-removal-approvals.md`, FAQ/nav docs.
+Intent: Restore `Twisting & Face Painting` to desktop nav, mobile drawer, and search quick links; keep `Free Event Quote` and `Contact Us` as `/contact` conversion labels; make service-lane removal fail loudly without an explicit approval marker.
+Conflicts: This supersedes the earlier same-day note that treated BTFP as non-primary header wording. A quote-label request is not removal approval.
+Verification: `python scripts/verify/nav_ia.py` passed; live `http://localhost:8081/` rendered checks found one desktop and one mobile `Twisting & Face Painting` link to `/balloon-twisting-and-face-painting`; focused Playwright header/drawer/menu checks passed.
 Status: Complete.
 
 ### 2026-05-08 - Codex current session mobile search relocation

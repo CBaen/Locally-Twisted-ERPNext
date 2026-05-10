@@ -1,12 +1,100 @@
 import frappe
 
+from locally_twisted.seo import faq_schema
+
 no_cache = 1
 sitemap = 1
 
 
+FAQ_AEO_QUESTIONS = [
+    {
+        "question": "How are face painting and balloon twisting priced?",
+        "answer": (
+            "Each artist is priced independently: $130 for the first hour and "
+            "$115 for each additional hour. One twister and one painter for "
+            "two hours is two separate artist totals, not one bundled service."
+        ),
+    },
+    {
+        "question": "How is event balloon decor priced?",
+        "answer": (
+            "Event decor is quoted from the actual scope: piece type, size, "
+            "colors, venue, access, setup window, delivery, installation needs, "
+            "and takedown or return details when they apply."
+        ),
+    },
+    {
+        "question": "What payment is required for personal balloon decor?",
+        "answer": (
+            "Personal balloon decor such as arches, columns, and larger installs "
+            "is typically paid in full before prep starts. The quote should show "
+            "scope, timing, payment terms, and event-specific fees before approval."
+        ),
+    },
+    {
+        "question": "How do pickup and delivery usually work for ready-to-order items?",
+        "answer": (
+            "Pickup is free when confirmed by Locally Twisted. Standard local delivery "
+            "is $15 for Davis, Weber, Salt Lake, and Utah counties. Park City delivery "
+            "is $50 for ZIP codes 84060, 84068, and 84098. Out-of-area delivery is quoted before payment."
+        ),
+    },
+    {
+        "question": "Do corporate clients pay deposits?",
+        "answer": (
+            "Corporate clients usually do not pay a deposit. Locally Twisted invoices "
+            "corporate work on Net 30 after the event unless a quote or written agreement says otherwise."
+        ),
+    },
+]
+
+
+
 PAGE_CSS = """
+.lt-faq__hero {
+    min-height: var(--lt-hero-standard-height);
+    height: var(--lt-hero-standard-height);
+    max-height: var(--lt-hero-standard-height);
+    padding: 0 1rem;
+    border-bottom: 4px solid #b31b34;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+.lt-faq__hero-inner {
+    width: min(1160px, calc(100% - 2rem));
+    margin: 0 auto;
+    padding-block: var(--lt-hero-padding-y);
+}
+.lt-faq__eyebrow {
+    margin: 0 0 0.45rem;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 0.78rem;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    line-height: 1.35;
+    text-transform: uppercase;
+    color: var(--lt-brass, #d9c7b3);
+}
+.lt-faq__hero h1 {
+    max-width: 24ch;
+    margin: 0 0 0.55rem;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: var(--lt-hero-title-max);
+    font-weight: 700;
+    line-height: 1.02;
+    letter-spacing: 0;
+    color: #fff;
+}
+.lt-faq__hero-lede {
+    max-width: 760px;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.92);
+    font-size: clamp(0.9rem, 1.6vw, 1rem);
+    line-height: 1.35;
+}
 .lt-faq {
-    padding: 4rem 1.5rem;
+    padding: 3rem 1.5rem 4rem;
 }
 .lt-faq__inner {
     max-width: 44rem;
@@ -213,5 +301,6 @@ def get_context(context):
         ),
         "og:type": "website",
     }
+    context.structured_data = [faq_schema(FAQ_AEO_QUESTIONS)]
     context.colocated_css = PAGE_CSS
     return context

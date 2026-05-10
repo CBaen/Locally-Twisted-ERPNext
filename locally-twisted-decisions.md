@@ -8,6 +8,38 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-10 - Product quote approval is blocked until operator-ready and audit-addressable
+
+**Decision:** A product-page quote approval link or acceptance may only touch order data when the source Quotation is submitted, priced, not expired, and marked `Ready For Customer Review`. Sales Order acceptance audit/idempotency fields are required setup, not optional enrichment; if any are missing, the approval path fails before a draft Sales Order can be created.
+
+**Reasoning:** Review found two silent-failure risks. First, missing Sales Order custom fields let the acceptance bridge skip source quote and written-approval fields while still inserting an order, which also broke retry/idempotency. Second, direct token issuance could bypass the Desk send wrapper and accept a quote still in `Needs Operator Review` or `Draft Quotation Created`.
+
+**Implementation:** `product_quote_acceptance_blockers()` now returns `product_quote_not_ready_for_customer_review` unless the Quotation status is `Ready For Customer Review`. `create_draft_sales_order_from_accepted_product_quote`, `_existing_sales_order_for_quote`, and `_copy_acceptance_context` now require all Sales Order acceptance fields. The rollback contract simulates missing Sales Order acceptance storage and non-ready quote status before proving the happy path still creates only a draft Sales Order.
+
+**Verification receipt:** Red check first failed on missing acceptance storage. After the fix, `python scripts/verify/product_quote_acceptance_contract.py` passed, and `npm run test:seo-contract` passed after the FAQ verifier drift was repaired.
+
+**Alternatives considered:** Let missing fields behave as a partial-degraded state and rely on operator cleanup. Rejected because it creates duplicate, untraceable draft orders. Rely only on the Desk send wrapper to enforce status. Rejected because token/acceptance helpers are separate trust boundaries.
+
+**Decided by:** Codex review closeout on 2026-05-10.
+
+---
+
+## 2026-05-10 - Removing canonical service nav items now fails loud
+
+**Decision:** `Twisting & Face Painting` is a canonical public service lane and must remain exposed in desktop navigation, mobile navigation, search quick links, and footer unless Guiding Light gives a fresh explicit approval to remove, rename, or hide that service surface. The restored header label points to `/balloon-twisting-and-face-painting`. `Free Event Quote` and `Contact Us` remain `/contact` conversion labels; they do not replace the BTFP service lane.
+
+**Reasoning:** GL corrected a repeated failure: an entire line of business disappeared from the menu twice. The May 10 quote-label change was inferred too broadly and treated BTFP as retired from chrome, even though no explicit service-removal decision existed. Removing a service lane is a business decision, not a copy tweak.
+
+**Implementation:** Restored the BTFP desktop nav link, mobile drawer link, and search quick link. Added a canonical service-removal guard to `scripts/verify/nav_ia.py`; if `Twisting & Face Painting` and `/balloon-twisting-and-face-painting` disappear from public navigation without an exact approval marker in `workstreams/nav-service-removal-approvals.md`, verification fails loudly.
+
+**Verification receipt:** `python scripts/verify/nav_ia.py` passed after restoration/gate update. `python scripts/dev/clear_website_cache.py` cleared Frappe caches. A live Playwright check against `http://localhost:8081/` found exactly one desktop and one mobile `Twisting & Face Painting` link, both pointing to `/balloon-twisting-and-face-painting`. Focused interactive menu leakage check passed 1/1.
+
+**Alternatives considered:** Leave BTFP out of the primary menu because `/contact` still exists. Rejected because it hides a real service lane and repeats the prior Process-page mistake. Allow nav changes to be inferred from quote-flow language. Rejected; service removal now requires explicit named approval.
+
+**Decided by:** GL correction on 2026-05-10; implemented by Moji/OpenClaw with forensic audit support.
+
+---
+
 ## 2026-05-10 - BTFP inquiry starts blank, allows repeat emails, and shows explicit service-photo carousels
 
 **Decision:** `/balloon-twisting-and-face-painting` remains a contact-led live-service route, but its embedded inquiry form starts with neither `Balloon Twisting` nor `Face Painting` checked. Customers choose the service(s) they want from a blank state. The same customer email may submit multiple separate inquiries, and the form must accept up to five inspiration photos per inquiry. The two service-card photo areas must behave as explicit carousels with controls/status, not as static-looking hero photos.

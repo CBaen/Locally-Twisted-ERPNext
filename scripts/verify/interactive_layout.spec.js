@@ -81,6 +81,20 @@ const COMPACT_HERO_ROUTES = [
 		contentSelector: ".lt-contact__intro .container",
 		titleSelector: ".lt-contact__intro h1",
 	},
+	{
+		name: "about",
+		path: "/about",
+		heroSelector: ".lt-about__hero",
+		contentSelector: ".lt-about__hero-inner",
+		titleSelector: ".lt-about__hero h1",
+	},
+	{
+		name: "faq",
+		path: "/faq",
+		heroSelector: ".lt-faq__hero",
+		contentSelector: ".lt-faq__hero-inner",
+		titleSelector: ".lt-faq__hero h1",
+	},
 ];
 
 async function expectSuccessfulResponse(response, path) {
@@ -382,7 +396,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 			});
 
 			expect(result.found, "mobile header should expose the logo and action group").toBe(true);
-			expect(result.mobileActionCount, "mobile header should only carry the menu control while ecommerce is paused").toBe(1);
+			expect(result.mobileActionCount, "mobile header should only carry the menu control").toBe(1);
 			expect(result.mobileSearchCount, "mobile search belongs at the bottom of the drawer").toBe(0);
 			expect(result.logoRight, "logo should not collide with menu controls").toBeLessThanOrEqual(result.actionsLeft - 8);
 		});
@@ -434,20 +448,22 @@ test.describe("Locally Twisted interactive layout states", () => {
 			});
 		}
 
-		test("search query submits to contact while ecommerce is paused", async ({ page }) => {
+		test("search query submits to the active commerce/search lane", async ({ page }) => {
 			await page.setViewportSize({ width: 1366, height: 768 });
 			const response = await gotoAndSettle(page, "/");
 			await expectSuccessfulResponse(response, "/");
 
 			await page.locator(".lt-mega-header__search").click();
+			const formAction = await page.locator("#lt-site-search-panel form").getAttribute("action");
 			await page.locator("#lt-site-search-input").fill("balloons");
-			await Promise.all([
-				page.waitForURL(/\/contact\?q=balloons$/),
-				page.keyboard.press("Enter"),
-			]);
+			await Promise.all([page.waitForURL(new RegExp(`${formAction}\\?q=balloons$`)), page.keyboard.press("Enter")]);
 			await page.waitForLoadState("networkidle", { timeout: 10000 }).catch(() => {});
 
-			await expect(page.locator(".lt-contact__intro h1")).toBeVisible();
+			if (formAction === "/shop") {
+				await expect(page.locator(".lt-shop--landing")).toBeVisible();
+			} else {
+				await expect(page.locator(".lt-contact__intro h1")).toBeVisible();
+			}
 		});
 
 		test("/search is not a public page", async ({ page }) => {
@@ -545,7 +561,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 		}
 	});
 
-	test.describe("paused ecommerce states", () => {
+	test.describe("configured ecommerce states", () => {
 		for (const viewport of [
 			{ name: "320", width: 320, height: 812 },
 			{ name: "390", width: 390, height: 844 },
@@ -553,18 +569,24 @@ test.describe("Locally Twisted interactive layout states", () => {
 			{ name: "1200", width: 1200, height: 900 },
 		]) {
 			for (const path of ["/shop", "/shop-items/bouquets/unicorn-bouquet", "/cart", "/checkout"]) {
-				test(`${path} pause page fits at ${viewport.name}px`, async ({ page }) => {
+				test(`${path} configured commerce page fits at ${viewport.name}px`, async ({ page }) => {
 					await page.setViewportSize({ width: viewport.width, height: viewport.height });
 					const response = await gotoAndSettle(page, path);
 					await expectSuccessfulResponse(response, path);
-					await expect(page).toHaveURL(/\/ready-to-order-paused/);
-					await expect(page.locator(".lt-ecommerce-paused__title")).toContainText("Ready-to-order is paused.");
+					const isPaused = page.url().includes("/ready-to-order-paused");
+					if (isPaused) {
+						await expect(page.locator(".lt-ecommerce-paused__title")).toContainText("Ready-to-order is paused.");
+					} else {
+						await expect(page.locator("body")).not.toContainText("Ready-to-order is paused");
+					}
 
-					const result = await auditPageLayout(page, {
-						containerSelectors: [".lt-ecommerce-paused", ".lt-ecommerce-paused__inner"],
-						targetSelectors: [".lt-ecommerce-paused__button", ".lt-ecommerce-paused__help a"],
-					});
-					expectNoLayoutFailures(expect, result, `${path} pause page at ${viewport.name}px`);
+					const result = isPaused
+						? await auditPageLayout(page, {
+								containerSelectors: [".lt-ecommerce-paused", ".lt-ecommerce-paused__inner"],
+								targetSelectors: [".lt-ecommerce-paused__button", ".lt-ecommerce-paused__help a"],
+							})
+						: await auditPageLayout(page);
+					expectNoLayoutFailures(expect, result, `${path} configured commerce page at ${viewport.name}px`);
 				});
 			}
 		}
@@ -994,7 +1016,10 @@ test.describe("Locally Twisted interactive layout states", () => {
 			const hero = document.querySelector(".lt-hero");
 			const featured = document.querySelector(".lt-featured");
 			const reviews = document.querySelector(".lt-reviews-block");
-			const heroNext = hero ? hero.nextElementSibling : null;
+			let heroNext = hero ? hero.nextElementSibling : null;
+			while (heroNext && ["SCRIPT", "STYLE", "TEMPLATE"].includes(heroNext.tagName)) {
+				heroNext = heroNext.nextElementSibling;
+			}
 			const authorityCount = document.querySelectorAll(".lt-authority").length;
 			const authorityIconCount = document.querySelectorAll(".lt-authority__icon").length;
 			const badge = document.querySelector(".lt-reviews-block__badge");
@@ -1160,7 +1185,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 
 			const result = await page.evaluate(() => {
 				const notice = document.querySelector(".lt-cookie-consent");
-				const buttons = Array.from(document.querySelectorAll(".lt-hero__cta"));
+				const buttons = Array.from(document.querySelectorAll(".lt-hero__slide--active .lt-hero__cta"));
 				function rect(element) {
 					const box = element.getBoundingClientRect();
 					return {

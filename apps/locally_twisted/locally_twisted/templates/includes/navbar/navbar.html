@@ -19,6 +19,19 @@
     {"label": "Frequently Asked Questions", "route": "faq"},
     {"label": "Start a Quote", "route": "contact"}
 ] %}
+{% set product_links = lt_nav_product_links or [
+    {"label": "Arches", "route": "shop-items/arches", "icon": "balloon-arch"},
+    {"label": "Garlands", "route": "shop-items/garlands", "icon": "organic-garland"},
+    {"label": "Columns", "route": "shop-items/columns", "icon": "balloon-column"},
+    {"label": "Balloon Drops", "route": "shop-items/drops", "icon": "event-stage"},
+    {"label": "Bouquets", "route": "shop-items/bouquets", "icon": "balloon-bouquet"},
+    {"label": "Grab & Go", "route": "shop-items/grab-go", "icon": "balloon-cluster"}
+] %}
+{% if lt_ecommerce_paused is defined %}
+    {% set ecommerce_paused = lt_ecommerce_paused %}
+{% else %}
+    {% set ecommerce_paused = true %}
+{% endif %}
 
 <header class="lt-header lt-mega-header">
     <div class="lt-mega-header__desktop d-none d-lg-block">
@@ -30,6 +43,10 @@
                 </div>
 
                 <ul class="lt-mega-header__top-links">
+                    {% if not ecommerce_paused %}
+                        <li><a href="/shop">Ready-to-Order</a></li>
+                        <li><a href="/cart">Cart</a></li>
+                    {% endif %}
                     <li><a href="/portfolio">Recent Work</a></li>
                     <li><a href="/contact">Free Event Quote</a></li>
                     {% if frappe.session.user == "Guest" %}
@@ -83,14 +100,63 @@
                         </div>
                     </li>
 
+                    {% if not ecommerce_paused %}
+                        <li class="lt-mega-nav__item">
+                            <button class="lt-mega-nav__button"
+                                    type="button"
+                                    data-lt-megamenu-trigger="lt-mega-products"
+                                    aria-expanded="false">
+                                Ready-to-Order
+                                <span class="lt-mega-nav__chevron" aria-hidden="true"></span>
+                            </button>
+
+                            <div class="lt-megamenu__panel" id="lt-mega-products" hidden>
+                                <p class="lt-megamenu__eyebrow">Pickup-friendly pieces</p>
+                                <h2 class="lt-megamenu__title">Simple balloon decor ready for direct checkout.</h2>
+                                <p class="lt-megamenu__summary">Use the shop for standard pieces with clear options. Custom sizing, installs, and venue coordination still belong in the quote path.</p>
+
+                                <div class="lt-megamenu__grid">
+                                    <a class="lt-megamenu__card" href="/shop">
+                                        <img src="/assets/locally_twisted/icons/brand/balloon-pair.svg" alt="" width="30" height="30">
+                                        <strong>All Ready-to-Order</strong>
+                                        <span>Browse all standard pickup and simple delivery pieces.</span>
+                                    </a>
+                                    {% for item in product_links %}
+                                        <a class="lt-megamenu__card" href="/{{ item.route }}">
+                                            <img src="/assets/locally_twisted/icons/brand/{{ item.icon }}.svg" alt="" width="30" height="30">
+                                            <strong>{{ item.label }}</strong>
+                                            <span>Shop the {{ item.label | lower }} lane.</span>
+                                        </a>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="lt-megamenu__footer">
+                                    <span>Need delivery, install, or a custom build?</span>
+                                    <a href="/contact">Start a quote</a>
+                                </div>
+                            </div>
+                        </li>
+                    {% endif %}
+
+                    <li class="lt-mega-nav__item"><a class="lt-mega-nav__link lt-mega-nav__link--btfp" href="/balloon-twisting-and-face-painting">Twisting &amp; Face Painting</a></li>
                     <li class="lt-mega-nav__item"><a class="lt-mega-nav__link lt-mega-nav__link--quote" href="/contact">Free Event Quote</a></li>
 
                     <li class="lt-mega-nav__item"><a class="lt-mega-nav__link" href="/portfolio">Portfolio</a></li>
+                    <li class="lt-mega-nav__item"><a class="lt-mega-nav__link" href="/about">About Us</a></li>
                     <li class="lt-mega-nav__item"><a class="lt-mega-nav__link" href="/faq">FAQ</a></li>
                 </ul>
             </nav>
 
             <div class="lt-mega-header__actions">
+                {% if not ecommerce_paused %}
+                    <a class="lt-mega-header__cart" href="/cart" aria-label="Shopping cart">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                            <circle cx="8" cy="21" r="1"></circle>
+                            <circle cx="19" cy="21" r="1"></circle>
+                            <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+                        </svg>
+                    </a>
+                {% endif %}
                 <button class="lt-mega-header__search"
                         type="button"
                         data-lt-search-toggle
@@ -127,7 +193,7 @@
     </div>
 
     <div class="lt-site-search-panel" id="lt-site-search-panel" hidden aria-labelledby="lt-site-search-title">
-        <form class="lt-site-search-panel__form" action="/contact" method="get" role="search">
+        <form class="lt-site-search-panel__form" action="{% if ecommerce_paused %}/contact{% else %}/shop{% endif %}" method="get" role="search">
             <label class="lt-site-search-panel__label" id="lt-site-search-title" for="lt-site-search-input">Search Locally Twisted</label>
             <div class="lt-site-search-panel__field">
                 <input id="lt-site-search-input"
@@ -145,6 +211,24 @@
                 <strong>Event Balloons</strong>
                 <span>Custom installs and event work</span>
             </a>
+            {% if not ecommerce_paused %}
+                <a href="/shop" data-lt-search-entry data-lt-search-product-entry data-lt-search-keywords="ready order shop all products pickup checkout">
+                    <strong>All Ready-to-Order</strong>
+                    <span>Standard pieces for direct checkout</span>
+                </a>
+                {% for item in product_links %}
+                    <a href="/{{ item.route }}" data-lt-search-entry data-lt-search-product-entry data-lt-search-keywords="ready order product shop {{ item.label | lower }}">
+                        <strong>{{ item.label }}</strong>
+                        <span>Ready-to-order {{ item.label | lower }}</span>
+                    </a>
+                {% endfor %}
+                {% for item in lt_nav_search_product_links or [] %}
+                    <a href="/{{ item.route }}" data-lt-search-entry data-lt-search-product-entry data-lt-search-keywords="{{ item.keywords | e }}">
+                        <strong>{{ item.label }}</strong>
+                        <span>{{ item.summary }}</span>
+                    </a>
+                {% endfor %}
+            {% endif %}
             {% for item in event_links %}
                 <a href="/{{ item.route }}" data-lt-search-entry data-lt-search-keywords="event balloons {{ item.label | lower }}">
                     <strong>{{ item.label }}</strong>
@@ -154,6 +238,14 @@
             <a href="/portfolio" data-lt-search-entry data-lt-search-keywords="recent work photos examples gallery inspiration">
                 <strong>Portfolio</strong>
                 <span>Recent balloon work</span>
+            </a>
+            <a href="/about" data-lt-search-entry data-lt-search-keywords="about company team locally twisted since 1998 utah balloon decor">
+                <strong>About Us</strong>
+                <span>Utah balloon company since 1998</span>
+            </a>
+            <a href="/balloon-twisting-and-face-painting" data-lt-search-entry data-lt-search-keywords="balloon twisting face painting artist entertainment party birthday school corporate">
+                <strong>Twisting &amp; Face Painting</strong>
+                <span>Live party artists for kids, families, schools, and events</span>
             </a>
             <a href="/contact" data-lt-search-entry data-lt-search-keywords="quote contact help event custom request">
                 <strong>Free Event Quote</strong>
@@ -210,9 +302,30 @@
             </div>
         </div>
 
+        {% if not ecommerce_paused %}
+            <div class="lt-mega-drawer__section">
+                <button class="lt-mega-drawer__toggle"
+                        type="button"
+                        data-lt-drawer-accordion-trigger="lt-mobile-products"
+                        aria-controls="lt-mobile-products"
+                        aria-expanded="false">
+                    Ready-to-Order
+                    <span aria-hidden="true">+</span>
+                </button>
+                <div class="lt-mega-drawer__panel" id="lt-mobile-products" hidden>
+                    <a href="/shop">Shop All</a>
+                    {% for item in product_links %}
+                        <a href="/{{ item.route }}">{{ item.label }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        <a class="lt-mega-drawer__single lt-mega-drawer__single--btfp" href="/balloon-twisting-and-face-painting">Twisting &amp; Face Painting</a>
         <a class="lt-mega-drawer__single lt-mega-drawer__single--quote" href="/contact">Free Event Quote</a>
 
         <a class="lt-mega-drawer__single" href="/portfolio">Portfolio</a>
+        <a class="lt-mega-drawer__single" href="/about">About Us</a>
         <a class="lt-mega-drawer__single" href="/faq">FAQ</a>
         {% if frappe.session.user == "Guest" %}
             <a class="lt-mega-drawer__single" href="/login">Sign In</a>

@@ -6,6 +6,46 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-10 - Approval links need their own backend gate, not just Desk controls
+
+The product-page quote Desk send button already checked `Ready For Customer Review`, but the token issuance and customer-acceptance helpers could still be called directly. That left a backend path where a submitted/priced quote in `Needs Operator Review` could create a draft Sales Order.
+
+**Counter-move:** treat token creation, public acceptance, and downstream order creation as separate trust boundaries. Each one must enforce the same readiness gate and have verifier coverage that calls the helper directly, not only through the UI wrapper.
+
+---
+
+## 2026-05-10 - Missing audit fields are blockers, not optional enrichment
+
+The quote acceptance bridge copied source quote and written-approval details to Sales Order fields only when the fields existed. If fixtures/custom fields were missing, it could still create a draft Sales Order without idempotency or audit trace fields.
+
+**Counter-move:** any downstream record that depends on custom fields for idempotency, audit, accounting traceability, or customer approval must fail before mutation if those fields are absent. The verifier should temporarily remove field metadata and prove the path fails loudly.
+
+---
+
+## 2026-05-10 - SEO structured-data tests must follow visible page truth
+
+The SEO contract failed because it still expected an older FAQ set while `/faq` had moved to service-specific questions. The structured-data gate became stale even though the page itself was current.
+
+**Counter-move:** when FAQ content changes, update the visible question source and the FAQPage JSON-LD verifier in the same slice. Tests should assert parity between current visible questions and structured data, not preserve old content as a hidden requirement.
+
+---
+
+## 2026-05-10 - Service lanes are business inventory, not nav copy
+
+`Twisting & Face Painting` disappeared from public chrome twice: first when broad nav/style work replaced it with an unapproved `/process` route, then again when a quote-label request was over-inferred into removing the BTFP service lane from header/search/mobile. In both cases, the route still existed, but customer discovery was damaged.
+
+**Counter-move:** treat any customer-facing business lane, service field, form field, price field, payment term, document field, route, or menu item as canonical business inventory. Renaming, hiding, replacing, merging, or deleting it requires either an explicit GL approval marker or a fail-loud verifier failure. Positive tests for the new label are not enough; add invariant tests for the old/canonical business thing that must not silently disappear.
+
+---
+
+## 2026-05-10 - FAQ answers must be lane-specific when policies differ
+
+The FAQ mixed service rules under generic buckets. The most dangerous example was `Booking and pricing`: the answer gave the hourly face-painting/twisting formula in a way that could mislead event decor/install customers.
+
+**Counter-move:** when service policies differ, structure customer-facing FAQ by service lane first, then shared policy second. Schema/AEO questions must mirror the visible lane-specific FAQ, not preserve a stale generic question set.
+
+---
+
 ## 2026-05-10 - ERPNext Lead duplicate-email setting can silently break inquiry reality
 
 ERPNext's Lead controller blocks repeat `email_id` values unless `CRM Settings.allow_lead_duplication_based_on_emails` is enabled. That default is wrong for LT's public inquiry form: one person can ask about multiple events from the same email address.

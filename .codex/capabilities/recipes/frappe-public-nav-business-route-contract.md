@@ -41,11 +41,14 @@ For the current LT site:
   `/balloon-twisting-and-face-painting`.
 - `Process` is not approved as a public top-level nav item or standalone route.
 - `/contact` remains the shared quote/conversion path.
-- Current launch header/menu labels are `Event Balloons`, `Free Event Quote`,
-  `Portfolio`, `FAQ`, and `Contact Us`; both `Free Event Quote` and
-  `Contact Us` point to `/contact`.
-- The BTFP route remains live, but it is not the current primary header label
-  unless GL reopens that wording.
+- Current launch header/menu labels are `Event Balloons`,
+  `Twisting & Face Painting`, `Free Event Quote`, `Portfolio`, `About Us`,
+  `FAQ`, and `Contact Us`.
+- `Twisting & Face Painting` points to `/balloon-twisting-and-face-painting`.
+- `Free Event Quote` and `Contact Us` point to `/contact`.
+- Removing, hiding, renaming, or replacing a canonical service lane requires an
+  explicit GL approval marker; quote/conversion copy requests do not imply
+  service removal approval.
 - Mobile search belongs at the bottom of the drawer, not in the mobile header
   action row. While public ecommerce is paused, the mobile header control budget
   is logo plus menu.
@@ -61,6 +64,7 @@ For the current LT site:
    - desktop header,
    - top utility/proof links,
    - mobile drawer,
+   - search quick links,
    - footer,
    - navbar context data,
    - passive route list,
@@ -107,3 +111,12 @@ changed search to submit to `/contact`, changed the former header CTA label to
 `Contact Us`, changed the adjacent service label to `Free Event Quote`, and
 kept both labels pointed at `/contact`. `nav_ia.py`, live rendered HTML checks,
 cache clear, and focused Playwright header/search/drawer checks passed.
+
+Later on 2026-05-10, GL caught that the quote-label change had silently removed
+BTFP from desktop nav, mobile drawer, and search quick links. OpenClaw/Moji
+restored `Twisting & Face Painting` as a canonical public service lane and
+added `CANONICAL_SERVICE_NAV_LINKS` / `NAV_SERVICE_REMOVAL_APPROVALS` to
+`scripts/verify/nav_ia.py`. The BTFP lane may now disappear only when
+`workstreams/nav-service-removal-approvals.md` contains the exact explicit
+approval marker. `python scripts/verify/nav_ia.py`, live desktop/mobile link
+checks, and focused Playwright header/drawer checks passed.

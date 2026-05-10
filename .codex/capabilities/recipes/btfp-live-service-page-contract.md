@@ -37,7 +37,9 @@ copy that describes Balloon Twisting and Face Painting pricing.
 ## Contract
 
 - This route is an approved, vital Locally Twisted business lane.
-- The public nav label is `Twisting & Face Painting`.
+- The public nav/search label is `Twisting & Face Painting`.
+- The lane must stay discoverable in desktop nav, mobile drawer, and search quick links unless GL explicitly approves removal/hiding/renaming/replacement in `workstreams/nav-service-removal-approvals.md`.
+- `/contact`, `Free Event Quote`, and `Contact Us` are conversion paths/labels; they do not replace this service lane.
 - `/process` is not an approved route or replacement for this service lane.
 - The route uses the shared `inquiry-v1` form contract instead of a forked BTFP
   intake form.
@@ -91,7 +93,7 @@ also touches chrome, containers, Webshop surfaces, or shared CSS.
 ## Red Flags
 
 - A service page rebuild mentions Process, links to `/process`, or removes the
-  BTFP nav lane.
+  BTFP nav/search lane without the exact approval marker.
 - Calculator UI has one global `hours` input plus an artist count.
 - The formula cannot show one twisting artist at one duration and one face
   painter at another duration.
@@ -120,6 +122,12 @@ On 2026-05-10, the shared embedded form was revalidated through the new
 `shared-inquiry-form-experience` contract. `npm run test:form-experience`
 proved the BTFP page uses inline cookie placement and does not rely on a forked
 or fake-success form path.
+
+On 2026-05-10, after GL caught BTFP missing from public navigation again,
+OpenClaw/Moji restored `Twisting & Face Painting` to desktop nav, mobile drawer,
+and search quick links, then added a fail-loud approval-marker guard in
+`scripts/verify/nav_ia.py`. This recipe now treats BTFP discoverability as part
+of the service-page contract, not a cosmetic nav preference.
 
 
 On 2026-05-10, GL verified the exact localhost BTFP route and found the beginning form state still selected both artist services, repeat emails were blocked by ERPNext Lead duplicate validation, five-photo upload was not proven in the real flow, and the photo areas still read as static. The repair blanked the initial service selection, enabled duplicate Lead emails through durable CRM Settings patching, added `book_form_repeat_email_photos.py`, and changed the service photos to explicit controlled carousels. The repeat-email/five-photo verifier, focused Playwright BTFP carousel/form tests, and white-label surface verifier passed against `http://localhost:8081`.
