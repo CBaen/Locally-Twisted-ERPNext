@@ -1,0 +1,208 @@
+{
+  "generated_at": "2026-05-10T01:17:56.039668+00:00",
+  "api": "Together AI images/generations",
+  "source": "project VITE_TOGETHER_API_KEY from Built_by_Cameron .env",
+  "note": "Fresh generated lifestyle hero sources. Existing LT real/proof photos remain reserved for non-hero placements.",
+  "targets": {
+    "mobile": [
+      828,
+      440
+    ],
+    "tablet": [
+      1640,
+      500
+    ],
+    "desktop": [
+      2732,
+      560
+    ]
+  },
+  "items": [
+    {
+      "slug": "home-generated-lifestyle",
+      "source": "home-generated-lifestyle-source.webp",
+      "model": "black-forest-labs/FLUX.2-pro",
+      "source_width": 2048,
+      "source_height": 896,
+      "derivatives": [
+        {
+          "key": "mobile",
+          "path": "home-generated-lifestyle-mobile.webp",
+          "width": 828,
+          "height": 440,
+          "bytes": 53862
+        },
+        {
+          "key": "tablet",
+          "path": "home-generated-lifestyle-tablet.webp",
+          "width": 1640,
+          "height": 500,
+          "bytes": 107810
+        },
+        {
+          "key": "desktop",
+          "path": "home-generated-lifestyle-desktop.webp",
+          "width": 2732,
+          "height": 560,
+          "bytes": 148196
+        }
+      ],
+      "prompt": "Premium lifestyle event photograph in Utah: a sophisticated community celebration entrance with a sculptural balloon installation in slate blue, berry, brass, ivory, and soft mint, real venue architecture, warm daylight, Wasatch Front atmosphere through windows, tasteful adults mingling softly out of focus, no readable text, no logos, no watermarks, no cartoon style, editorial event photography, refined commercial quality, wide hero composition with important details centered."
+    },
+    {
+      "slug": "event-generated-lifestyle",
+      "source": "event-generated-lifestyle-source.webp",
+      "model": "black-forest-labs/FLUX.2-pro",
+      "source_width": 2048,
+      "source_height": 896,
+      "derivatives": [
+        {
+          "key": "mobile",
+          "path": "event-generated-lifestyle-mobile.webp",
+          "width": 828,
+          "height": 440,
+          "bytes": 57116
+        },
+        {
+          "key": "tablet",
+          "path": "event-generated-lifestyle-tablet.webp",
+          "width": 1640,
+          "height": 500,
+          "bytes": 91520
+        },
+        {
+          "key": "desktop",
+          "path": "event-generated-lifestyle-desktop.webp",
+          "width": 2732,
+          "height": 560,
+          "bytes": 114622
+        }
+      ],
+      "prompt": "High-end lifestyle photograph of a corporate and civic event lobby in Utah with a custom balloon arch framing a registration area, slate blue, berry, brass, ivory, and soft mint balloon palette, polished stone floor, modern architectural details, adults in dressy casual event attire blurred in the distance, no readable signage, no logos, no watermarks, natural light, premium event photography, wide hero composition with balanced negative space for text overlay."
+    },
+    {
+      "slug": "portfolio-generated-lifestyle",
+      "source": "portfolio-generated-lifestyle-source.webp",
+      "model": "black-forest-labs/FLUX.2-pro",
+      "source_width": 2048,
+      "source_height": 896,
+      "derivatives": [
+        {
+          "key": "mobile",
+          "path": "portfolio-generated-lifestyle-mobile.webp",
+          "width": 828,
+          "height": 440,
+          "bytes": 65316
+        },
+        {
+          "key": "tablet",
+          "path": "portfolio-generated-lifestyle-tablet.webp",
+          "width": 1640,
+          "height": 500,
+          "bytes": 118782
+        },
+        {
+          "key": "desktop",
+          "path": "portfolio-generated-lifestyle-desktop.webp",
+          "width": 2732,
+          "height": 560,
+          "bytes": 164186
+        }
+      ],
+      "prompt": "Upscale lifestyle photograph of a university or civic reception with a beautiful organic balloon photo moment, brass and berry accents with slate blue and ivory balloons, elegant architecture, guests admiring the installation in soft background blur, no readable text, no logos, no watermarks, realistic professional event photography, refined color grading, wide hero composition, central installation remains clear after responsive cropping."
+    },
+    {
+      "slug": "btfp-generated-lifestyle",
+      "source": "btfp-generated-lifestyle-source.webp",
+      "model": "black-forest-labs/FLUX.2-pro",
+      "source_width": 1536,
+      "source_height": 768,
+      "derivatives": [
+        {
+          "key": "mobile",
+          "path": "btfp-generated-lifestyle-mobile.webp",
+          "width": 828,
+          "height": 440,
+          "bytes": 61750
+        },
+        {
+          "key": "tablet",
+          "path": "btfp-generated-lifestyle-tablet.webp",
+          "width": 1640,
+          "height": 500,
+          "bytes": 106778
+        },
+        {
+          "key": "desktop",
+          "path": "btfp-generated-lifestyle-desktop.webp",
+          "width": 2732,
+          "height": 560,
+          "bytes": 133962
+        }
+      ],
+      "prompt": "Premium outdoor family event lifestyle photograph in Utah with a balloon twisting and face painting station under a clean canopy, bright table of safe face-paint colors and balloon creations, joyful family gathering in soft background blur, tasteful not childish, slate blue, berry, brass, ivory, and soft mint accents, no readable text, no logos, no watermarks, natural daylight, professional documentary event photography, wide hero composition."
+    },
+    {
+      "slug": "contact-generated-lifestyle",
+      "source": "contact-generated-lifestyle-source.webp",
+      "model": "black-forest-labs/FLUX.2-pro",
+      "source_width": 2048,
+      "source_height": 896,
+      "derivatives": [
+        {
+          "key": "mobile",
+          "path": "contact-generated-lifestyle-mobile.webp",
+          "width": 828,
+          "height": 440,
+          "bytes": 42808
+        },
+        {
+          "key": "tablet",
+          "path": "contact-generated-lifestyle-tablet.webp",
+          "width": 1640,
+          "height": 500,
+          "bytes": 79442
+        },
+        {
+          "key": "desktop",
+          "path": "contact-generated-lifestyle-desktop.webp",
+          "width": 2732,
+          "height": 560,
+          "bytes": 131412
+        }
+      ],
+      "prompt": "Lifestyle photograph of a refined event-planning table in a balloon design studio: color swatches, brass hardware samples, balloon material samples in slate blue, berry, ivory, and soft mint, tablet with blank dark screen, hands arranging a palette, no readable text, no logos, no watermarks, warm window light, professional commercial photography, wide hero composition with clear center crop."
+    },
+    {
+      "slug": "shop-generated-lifestyle",
+      "source": "shop-generated-lifestyle-source.webp",
+      "model": "black-forest-labs/FLUX.2-pro",
+      "source_width": 2048,
+      "source_height": 896,
+      "derivatives": [
+        {
+          "key": "mobile",
+          "path": "shop-generated-lifestyle-mobile.webp",
+          "width": 828,
+          "height": 440,
+          "bytes": 47176
+        },
+        {
+          "key": "tablet",
+          "path": "shop-generated-lifestyle-tablet.webp",
+          "width": 1640,
+          "height": 500,
+          "bytes": 79772
+        },
+        {
+          "key": "desktop",
+          "path": "shop-generated-lifestyle-desktop.webp",
+          "width": 2732,
+          "height": 560,
+          "bytes": 111124
+        }
+      ],
+      "prompt": "Premium lifestyle photograph of a ready-to-order balloon bouquet preparation area: finished balloon bouquets staged for pickup and delivery in a clean studio, slate blue, berry, brass, ivory, and soft mint palette, gift ribbons and weights, warm daylight, no readable text, no logos, no watermarks, realistic commercial event product photography, wide hero composition with central bouquets for responsive crop."
+    }
+  ]
+}

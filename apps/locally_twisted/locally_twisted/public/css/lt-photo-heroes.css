@@ -1,0 +1,214 @@
+/* Shared compact generated-photo hero contract.
+   Loaded after page containment so hero routes share one crop/overlay system. */
+
+:root {
+  --lt-photo-hero-overlay:
+    linear-gradient(90deg, rgba(10, 10, 11, 0.88) 0%, rgba(14, 34, 64, 0.72) 42%, rgba(14, 34, 64, 0.12) 100%),
+    linear-gradient(180deg, rgba(14, 34, 64, 0.05) 0%, rgba(10, 10, 11, 0.34) 100%);
+}
+
+html body .lt-hero {
+  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/home-generated-lifestyle-mobile.webp");
+  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/home-generated-lifestyle-tablet.webp");
+  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/home-generated-lifestyle-desktop.webp");
+  --lt-photo-hero-position: center center;
+}
+
+html body .lt-authority-hero {
+  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/event-generated-lifestyle-mobile.webp");
+  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/event-generated-lifestyle-tablet.webp");
+  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/event-generated-lifestyle-desktop.webp");
+  --lt-photo-hero-position: center center;
+}
+
+html body .lt-portfolio__hero {
+  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/portfolio-generated-lifestyle-mobile.webp");
+  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/portfolio-generated-lifestyle-tablet.webp");
+  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/portfolio-generated-lifestyle-desktop.webp");
+  --lt-photo-hero-position: center center;
+}
+
+html body .lt-btfp__intro {
+  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/btfp-generated-lifestyle-mobile.webp");
+  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/btfp-generated-lifestyle-tablet.webp");
+  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/btfp-generated-lifestyle-desktop.webp");
+  --lt-photo-hero-position: center center;
+}
+
+html body .lt-contact__intro {
+  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/contact-generated-lifestyle-mobile.webp");
+  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/contact-generated-lifestyle-tablet.webp");
+  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/contact-generated-lifestyle-desktop.webp");
+  --lt-photo-hero-position: center center;
+}
+
+html body .lt-shop__hero {
+  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/shop-generated-lifestyle-mobile.webp");
+  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/shop-generated-lifestyle-tablet.webp");
+  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/shop-generated-lifestyle-desktop.webp");
+  --lt-photo-hero-position: center center;
+}
+
+html body[data-path="shop-items/garlands"] .lt-shop__hero {
+  --lt-photo-hero-mobile: url("/assets/locally_twisted/images/heroes/shop-garlands-generated-lifestyle-mobile.webp");
+  --lt-photo-hero-tablet: url("/assets/locally_twisted/images/heroes/shop-garlands-generated-lifestyle-tablet.webp");
+  --lt-photo-hero-desktop: url("/assets/locally_twisted/images/heroes/shop-garlands-generated-lifestyle-desktop.webp");
+}
+
+html body :is(
+  .lt-hero,
+  .lt-authority-hero,
+  .lt-portfolio__hero,
+  .lt-btfp__intro,
+  .lt-contact__intro,
+  .lt-shop__hero
+) {
+  background: var(--lt-navy);
+  color: var(--lt-white);
+  isolation: isolate;
+  overflow: hidden;
+  position: relative;
+}
+
+html body :is(
+  .lt-hero,
+  .lt-authority-hero,
+  .lt-portfolio__hero,
+  .lt-btfp__intro,
+  .lt-contact__intro,
+  .lt-shop__hero
+)::before,
+html body :is(
+  .lt-hero,
+  .lt-authority-hero,
+  .lt-portfolio__hero,
+  .lt-btfp__intro,
+  .lt-contact__intro,
+  .lt-shop__hero
+)::after {
+  content: "";
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+html body :is(
+  .lt-hero,
+  .lt-authority-hero,
+  .lt-portfolio__hero,
+  .lt-btfp__intro,
+  .lt-contact__intro,
+  .lt-shop__hero
+)::before {
+  background-color: var(--lt-navy);
+  background-image: var(--lt-photo-hero-mobile);
+  background-position: var(--lt-photo-hero-position);
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: 0;
+}
+
+html body :is(
+  .lt-hero,
+  .lt-authority-hero,
+  .lt-portfolio__hero,
+  .lt-btfp__intro,
+  .lt-contact__intro,
+  .lt-shop__hero
+)::after {
+  background: var(--lt-photo-hero-overlay);
+  z-index: 1;
+}
+
+html body .lt-hero__image {
+  background-image: var(--lt-photo-hero-mobile);
+  background-position: var(--lt-photo-hero-position);
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: 0;
+}
+
+html body .lt-hero__image::after {
+  background: none;
+}
+
+html body :is(
+  .lt-hero__content,
+  .lt-authority-hero__inner,
+  .lt-portfolio__hero-inner,
+  .lt-btfp__intro-inner,
+  .lt-contact__intro > .container,
+  .lt-shop__hero-inner
+) {
+  position: relative;
+  z-index: 2;
+}
+
+html body :is(
+  .lt-authority-hero h1,
+  .lt-portfolio__title,
+  .lt-btfp__intro-title,
+  .lt-contact__intro h1,
+  .lt-shop__hero-title,
+  .lt-shop__title
+) {
+  color: var(--lt-white);
+}
+
+html body :is(
+  .lt-authority-hero__lede,
+  .lt-portfolio__lede,
+  .lt-btfp__intro-lede,
+  .lt-contact__intro-lede,
+  .lt-shop__hero-lede
+) {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+html body :is(
+  .lt-authority-hero .lt-authority-eyebrow,
+  .lt-portfolio__hero .lt-portfolio__eyebrow,
+  .lt-btfp__intro .lt-btfp__kicker,
+  .lt-shop__hero .lt-shop__hero-eyebrow,
+  .lt-shop__hero .lt-shop__eyebrow
+) {
+  color: var(--lt-brass);
+}
+
+html body .lt-shop__hero-lede a {
+  color: var(--lt-white);
+}
+
+@media (min-width: 768px) {
+  html body :is(
+    .lt-hero,
+    .lt-authority-hero,
+    .lt-portfolio__hero,
+    .lt-btfp__intro,
+    .lt-contact__intro,
+    .lt-shop__hero
+  )::before,
+  html body .lt-hero__image {
+    background-image: var(--lt-photo-hero-tablet);
+  }
+}
+
+@media (min-width: 1200px) {
+  html body :is(
+    .lt-hero,
+    .lt-authority-hero,
+    .lt-portfolio__hero,
+    .lt-btfp__intro,
+    .lt-contact__intro,
+    .lt-shop__hero
+  )::before,
+  html body .lt-hero__image {
+    background-image: var(--lt-photo-hero-desktop);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  html body .lt-authority-hero .lt-authority-actions {
+    display: none;
+  }
+}

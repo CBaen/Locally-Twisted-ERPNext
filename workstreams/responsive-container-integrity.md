@@ -1,6 +1,6 @@
 # Responsive Container Integrity Workstream
 
-Last updated: 2026-05-07 by Codex after adding the executable route-level public container contract to the website gate.
+Last updated: 2026-05-10 by Codex after repairing Event Balloons audience-page mobile heroes that were clipping text/CTA under obsolete real-photo hero panels.
 
 ## Status
 
@@ -25,7 +25,7 @@ GL identified a systemic failure: the site could pass narrow checks while still 
 - `scripts/verify/layout_fit.spec.js` runs passive layout checks across the current launch public route list and 13 viewport families.
 - `scripts/verify/container_contract.spec.js` runs the route-level public container contract across the launch public route list at 320px, 820px, and 1366px. It requires every visible top-level `.page_content` child to be classified, every full-bleed surface to declare itself, contained inners to stay within their declared max width, crawl/marquee viewports to clip instead of scroll, and Frappe's `main.container` to stay neutralized.
 - `scripts/verify/interactive_layout.spec.js` checks stateful UI across platform-name leakage, header breakpoints, desktop mega panels, mobile drawer accordions, shop filters/product selectors, contact expanded conditionals, portfolio front-photo state, homepage proof crawls, cookie placement, and reduced-motion homepage behavior.
-- `scripts/verify/interactive_layout.spec.js` also enforces the compact hero contract across the current named hero routes: 220px mobile, 250px tablet, and 280px desktop standard heights with padding/title caps.
+- `scripts/verify/interactive_layout.spec.js` also enforces the compact generated-photo hero contract across the current named hero routes: 220px mobile, 250px tablet, and 280px desktop standard heights with padding/title caps, breakpoint-specific WebP crops, and the black landing-page readability overlay.
 - `package.json` exposes:
   - `npm run test:layout-fit`
   - `npm run test:container-contract`
@@ -60,7 +60,8 @@ The standing viewport families are:
 - Kept desktop mega panels inside the header/container instead of anchoring narrow product panels to individual nav item widths.
 - Fixed reduced-motion homepage proof-crawl behavior so the two business-proof tracks keep the accepted slow crawl, stay horizontal/full-stage, and do not force overflow when reduced motion is requested.
 - Added the portfolio state check; 2026-05-06 follow-up now checks the current proof-reel front-photo behavior instead of the superseded modal behavior.
-- Added the compact hero contract after GL rejected oversized/inconsistent page heroes. The first red run failed 14/14; the implemented pass is green at 14/14 for home, event balloons, portfolio, BTFP, contact, shop, and category heroes.
+- Added the compact hero contract after GL rejected oversized/inconsistent page heroes. The first red run failed 14/14; the later generated-photo/overlay expansion first failed against missing crops, then passed 66/66 for home, event balloons, event audience pages, portfolio, BTFP, contact, shop, and category heroes.
+- Repaired the Event Balloons hub plus the four audience-page heroes after GL flagged the mobile view. The old real-photo panel path stacked inside the fixed compact hero and clipped title/CTA on phones; those panels are removed from the hero, real/proof photos remain in story/gallery sections, and the shared generated-photo hero layer owns the hero image.
 - Reconciled `smoke_shop.py` with the commerce lane. 2026-05-06 correction: fixed-price products must not invent product-level quote gates; out-of-area delivery ZIP owns the quote fallback, while retail products such as `unicorn-bouquet` still verify inline variant controls and cart writes.
 - Added the executable public container contract. The first red check failed because `CONTAINER_CONTRACT_VIEWPORTS` was missing; the full matrix then caught real drift in the homepage twisting spotlight, portfolio footer, contact Bootstrap container, document narrow-width specificity, BTFP route contract, and BTFP event-crawl data. Repairs landed in `layout_helpers.js`, `container_contract.spec.js`, `lt-page-containment.css`, `hooks.py`, `portfolio.html`, `lt-portfolio-reel.css`, `balloon_twisting_and_face_painting.py`, and `package.json`.
 
@@ -72,17 +73,20 @@ The standing viewport families are:
 - `python -B -m py_compile scripts\verify\smoke_shop.py` passed.
 - `python scripts/verify/commerce_rules_contract.py` passed.
 - `python scripts/verify/smoke_shop.py` passed.
-- `npm run test:interactive-layout` passed 88/88 after the compact hero repair.
-- `npm run test:layout-fit` passed 247/247 after `/process` was removed from the public route list.
+- `npm run test:interactive-layout` passed 154/154 after the generated-photo hero repair.
+- `npm run test:layout-fit` passed 299/299 after the public route and breakpoint matrix expansion.
 - `npm run test:checkout-experience` passed 2/2.
-- `npm run test:container-contract` passed 57/57 after the executable route contract repair.
+- `npm run test:container-contract` passed 69/69 after the executable route contract repair and route matrix expansion.
+- `npm run test:a11y` passed with 46 route/viewport axe results and 0 violations after the generated-photo hero selector leak was fixed.
 - `npm run test:website-verify` passed; `npm run test:public-verify` aliases to the same website-only gate.
-- `npm run test:interactive-layout -- --grep "compact hero height contract"` passed 14/14 after the compact hero repair.
+- `npx.cmd playwright test scripts/verify/interactive_layout.spec.js --grep "compact hero height contract" --reporter=line --workers=1` passed 66/66 after the generated-photo hero repair.
+- 2026-05-10 Event Balloons hero follow-up: `npx playwright test scripts/verify/event_hero_mobile.spec.js --reporter=line` passed 12/12, targeted Event Balloons `layout-fit` passed 65/65, targeted `container-contract` passed 15/15, and `npm run test:a11y-manual` passed. The full compact-hero grep currently passes for Event Balloons routes but remains 51/54 overall because homepage tablet and BTFP tablet/desktop are failing in this shared worktree. The full `npm run test:a11y` gate currently fails on unrelated homepage-only `aria-hidden-focus` carousel slide issues.
 
 ## Rules For Future Work
 
 - Do not solve layout by hiding body overflow unless the real container math is already fixed.
 - Do not let heroes grow by page-local padding, `min-height`, or large title clamps. A hero is a compact page label, not the page.
+- Do not put public hero text over a bare image. Use breakpoint-specific generated lifestyle photo crops under the shared black readability overlay and verify the actual rendered crop.
 - Any new public route or component must be added to `PUBLIC_ROUTES` or a route-specific interactive check when it becomes launch-critical.
 - Any new public route or visible top-level `.page_content` section must be added to `CONTAINER_CONTRACT_ROUTES` with an explicit mode before the route is considered done.
 - Any new drawer, modal, accordion, filter, product selector, or breakpoint-specific behavior needs an open-state check.

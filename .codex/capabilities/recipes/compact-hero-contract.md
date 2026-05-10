@@ -5,12 +5,12 @@ schema_version: 2.0
 level: recipe
 maturity: candidate
 scope: Locally Twisted public page heroes in ERPNext/Frappe and Webshop routes
-currently_true: yes
+currently_true: unknown
 verification_level: 2
-last_verified: 2026-05-07
+last_verified: 2026-05-10
 evidence_quality: direct
-successful_uses: 1
-failed_uses: 0
+successful_uses: 3
+failed_uses: 1
 regressions: 0
 depends_on:
   - responsive-container-audit
@@ -43,6 +43,15 @@ proof take over.
 
 - If a route has a hero, it uses the same standard height as other heroes in
   that viewport family.
+- Public page heroes use generated lifestyle photo layers with
+  breakpoint-specific WebP crops: `*-mobile.webp`, `*-tablet.webp`, and
+  `*-desktop.webp`. Do not source hero crops from the reserved real
+  work/proof photo library.
+- Keep source generations, prompts, and review sheets in `_resources/`; the
+  public hero asset folder should contain only the breakpoint-ready crops.
+- Hero text sits above a black landing-page-style readability overlay. Do not
+  place hero text directly on a bare image, and do not use a single crop for
+  all breakpoints.
 - A hero may carry eyebrow, H1, and one short lede. Extra proof, terms, CTAs,
   and sales explanation move below the hero if they create crowding.
 - Do not add page-local `min-height`, large `clamp()` title scales, or vertical
@@ -56,7 +65,9 @@ proof take over.
 
 - `/` via `.lt-hero`
 - `/event-balloons` via `.lt-authority-hero`
-- `/portfolio` via `.lt-portfolio .lt-hero`
+- `/civic-community`, `/corporate-events`, `/schools-campuses`, and
+  `/private-celebrations` via `.lt-authority-hero`
+- `/portfolio` via `.lt-portfolio__hero`
 - `/balloon-twisting-and-face-painting` via `.lt-btfp__intro`
 - `/contact` via `.lt-contact__intro`
 - `/shop` via `.lt-shop__hero`
@@ -82,7 +93,33 @@ For broad closeout, also run:
 python scripts/dev/clear_website_cache.py
 npm run test:layout-fit
 npm run test:interactive-layout
+npm run test:container-contract
+npm run test:a11y
 ```
 
 Restart the backend container before cache clear when a route-controller
 `PAGE_CSS` constant changes.
+
+For visual hero closeout, inspect screenshots at mobile, tablet, and desktop
+breakpoints. The executable guard checks crop filenames and overlay presence,
+but human inspection is still needed for subject framing.
+
+## LT Receipt
+
+On 2026-05-10, GL reported that the four Event Balloons audience-page mobile
+heroes looked wrong. Root cause: the audience pages and the `/event-balloons`
+hub still rendered old real-photo hero panels inside the fixed compact hero
+shell, so mobile clipped the H1/CTA and started the proof band under a cropped
+photo. The repair removed those hero panels, let the shared generated-photo
+hero layer own the image, loaded `lt-photo-heroes.css`, and added a focused
+phone regression for `/civic-community`, `/corporate-events`,
+`/schools-campuses`, and `/private-celebrations`.
+
+Verification for the event lane passed: focused audience hero regression 12/12,
+event compact-hero checks for `/event-balloons` and the four audience pages,
+targeted `layout-fit` 65/65, targeted `container-contract` 15/15, and
+`test:a11y-manual`. The current shared worktree still has unrelated broad
+compact-hero failures on homepage tablet and BTFP tablet/desktop (`51/54`), and
+the full axe audit currently fails on homepage-only `aria-hidden-focus` carousel
+slide issues. Do not claim the global compact-hero or full accessibility gates
+are green until those are repaired.
