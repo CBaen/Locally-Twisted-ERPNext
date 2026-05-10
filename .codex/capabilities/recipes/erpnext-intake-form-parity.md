@@ -8,6 +8,10 @@ last_verified: 2026-05-08
 
 Keeps a public inquiry form, ERPNext Lead metadata, submit mapping, and the operator-facing Desk form in agreement.
 
+This recipe owns data and schema parity. If the change is about the customer
+submit/status/modal experience, pair it with
+`shared-inquiry-form-experience`.
+
 ## When to reach for it
 
 Use this when changing a public `/contact` or `/book` style form, Lead Custom Fields, service taxonomy, conditional Desk sections, uploaded photo fields, or any field label that differs between customer copy and employee copy.
@@ -64,6 +68,7 @@ python scripts/verify/lead_backend_intake_parity.py
 python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --shape-only --skip-newsletter
 python scripts/verify/contact_service_logic.py --base-url http://localhost:8081
 python scripts/verify/contact_prefill.py --base-url http://localhost:8081
+npm run test:form-experience
 ```
 
 If running the full writing smoke test, delete the generated test Lead/newsletter records afterward.
@@ -72,6 +77,8 @@ If running the full writing smoke test, delete the generated test Lead/newslette
 
 - A public form can look right while Desk conditionals still depend on a different Lead field.
 - A browser success modal can hide a backend mapping drift.
+- A polished form experience can hide a broken submit path unless success is
+  gated on the backend's `message.ok` response.
 - Employee-facing labels can accidentally inherit customer helper copy and make Desk feel noisy.
 - `Time` fields can create slider/time-picker friction for simple estimates.
 - Existing `Time` values can turn into machine-style strings with seconds or microseconds after conversion; clean those up so staff do not treat junk timestamps as real event times.

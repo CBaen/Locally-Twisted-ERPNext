@@ -16,6 +16,8 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 **Implementation:** Added focused `lt-inquiry-form-experience.js` and `lt-form-experience.css`, updated the shared form partial with an accessible status region and modal actions, moved cookie notice placement inline on form pages, and added `scripts/verify/form_experience.spec.js`.
 
+**Durable docs:** `workstreams/form-submission-experience.md` and `.codex/capabilities/recipes/shared-inquiry-form-experience.md`.
+
 **Verification receipt:** The focused form verifier failed first because the status panel did not exist. After implementation, `npm run test:form-experience`, full `/contact` smoke submit with cleanup, `contact_prefill.py`, `contact_service_logic.py`, `test:container-contract`, manual accessibility, and focused contact interactive layout checks passed.
 
 **Decided by:** GL request to upgrade form UX/UI and copy; implemented by Codex.

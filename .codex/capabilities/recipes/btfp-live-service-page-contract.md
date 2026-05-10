@@ -7,7 +7,7 @@ maturity: candidate
 scope: Locally Twisted Balloon Twisting and Face Painting public route, shared inquiry form, and customer pricing calculator
 currently_true: yes
 verification_level: 2
-last_verified: 2026-05-08
+last_verified: 2026-05-10
 evidence_quality: direct
 successful_uses: 1
 failed_uses: 1
@@ -93,6 +93,8 @@ also touches chrome, containers, Webshop surfaces, or shared CSS.
 - A public deposit checkout CTA returns on the BTFP route.
 - The page forks a second customer intake form instead of using the shared
   inquiry partial.
+- The embedded inquiry form loses the shared status panel, backend-proven
+  success modal, or inline cookie notice placement.
 - Brand-blue support/event bands are replaced with red, tan, blush, or a
   Process-era treatment.
 - Decorative crawls/carousels are keyboard focusable while offscreen or hidden.
@@ -105,3 +107,8 @@ failed because the page only exposed one shared hours input and one aggregate
 artist count. The repair changed the calculator to per-artist rows, then
 `contact_prefill.py`, `test:a11y`, `test:a11y-manual`, `test:layout-fit`, and
 `interactive_layout.spec.js` passed against the live local route.
+
+On 2026-05-10, the shared embedded form was revalidated through the new
+`shared-inquiry-form-experience` contract. `npm run test:form-experience`
+proved the BTFP page uses inline cookie placement and does not rely on a forked
+or fake-success form path.

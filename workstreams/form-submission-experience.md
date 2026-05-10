@@ -11,6 +11,9 @@ This handoff owns the customer-facing submit experience for the shared
 It does not own product-page architecture, checkout pricing, Lead schema
 changes, or customer email policy.
 
+Capability router:
+`.codex/capabilities/recipes/shared-inquiry-form-experience.md`.
+
 ## Current Contract
 
 - The form stays guest-friendly; no login is required.
@@ -42,6 +45,8 @@ changes, or customer email policy.
   owns cookie notice placement.
 - `scripts/verify/form_experience.spec.js` is the focused verifier for this
   contract.
+- `.codex/capabilities/recipes/shared-inquiry-form-experience.md` is the
+  reusable recipe for future agents changing submit/status/modal behavior.
 
 ## Verification Receipt
 
@@ -64,6 +69,8 @@ npx playwright test scripts/verify/interactive_layout.spec.js -g "homepage serve
 
 The real smoke test created marker `SMOKE-TEST-1778380640428736700`, verified
 the backend record, and cleaned up the fake Lead plus linked smoke Tasks.
+
+Commit receipt: `399932d Improve shared inquiry form experience`.
 
 ## Known Non-Blocking Failures
 

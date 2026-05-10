@@ -6,6 +6,22 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-10 - Form success must be a backend-proven state, not a browser state
+
+The shared inquiry form looked like a simple UX polish task, but the old
+experience made success feel route/browser-driven: a forced redirect and modal
+state can make a customer believe the inquiry landed even when the backend path
+is broken. The cookie banner also created a practical UX failure by being able
+to cover form controls.
+
+**Counter-move:** treat form success UI as part of the backend contract. Show
+progress while sending, but only show final success after the submit handler
+returns `message.ok`. Do not let `#received`, cookies, localStorage, or a stale
+route state open a fake success modal. On form-heavy pages, place consent or
+preference notices inline so they cannot block fields or buttons.
+
+---
+
 ## 2026-05-08 - Fake data lowers disclosure urgency, not state-integrity standards
 
 The security review correctly found public-order and public-file exposure, but
