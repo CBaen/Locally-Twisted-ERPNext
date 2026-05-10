@@ -65,7 +65,7 @@ def get_context(context):
     context.contact_intro_lede = (
         "A few details are enough to get started."
         if intent_param == "quick"
-        else "One form handles business, school, civic, community, venue, private-event, and ready-to-order questions. We will route the inquiry from here."
+        else "One form handles business, school, civic, community, venue, private-event, pickup, and delivery questions. We will make sure your request reaches the right person."
     )
     context.max_photos = MAX_PHOTOS
     context.max_photo_mb = MAX_PHOTO_BYTES // (1024 * 1024)

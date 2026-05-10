@@ -245,7 +245,7 @@
     var checkoutQuoteHandoffKey = 'lt_checkout_quote_handoff_v1';
     var currentCheckoutItems = {{ (checkout_items_payload_json or "[]") | safe }};
     var totalsRequestSerial = 0;
-    var CHECKOUT_FALLBACK_ERROR = 'Tiny snag: we could not start checkout just now. Please call (801) 285-0860 or email hi@locallytwisted.com and we will help.';
+    var CHECKOUT_FALLBACK_ERROR = 'Tiny snag: we could not start checkout just now. Please call (801) 285-0860 or email billing@locallytwisted.com and we will help.';
 
     function setFeedback(state, msg) {
         feedback.classList.remove('is-success', 'is-error');
@@ -316,6 +316,18 @@
         }).join(' - ');
     }
 
+    function formatDisplayLine(displayLine) {
+        var label = displayLine.display_label || displayLine.web_item_name || displayLine.item_code || 'Add-on';
+        var qty = parseInt(displayLine.qty || 1, 10);
+        if (!isFinite(qty) || qty < 1) qty = 1;
+        var unit = typeof displayLine.price_list_rate === 'number' ? displayLine.price_list_rate : 0;
+        var total = typeof displayLine.line_total === 'number' ? displayLine.line_total : unit * qty;
+        var parts = [label, fmtMoney(unit) + ' each'];
+        if (qty > 1) parts.splice(1, 0, 'qty ' + qty);
+        if (qty > 1 || Math.abs(total - unit) > 0.001) parts.push(fmtMoney(total) + ' total');
+        return parts.join(' - ');
+    }
+
     /* Safe DOM-construction helper — same pattern as /cart page. Avoids
      * innerHTML so user-controlled strings can't escape the markup. */
     function el(tag, opts, children) {
@@ -346,7 +358,7 @@
         if (typeof message !== 'string') return false;
         var value = message.trim();
         if (!value) return false;
-        return !/(Traceback|Exception|Error:|frappe\.|pymysql|DocType|doctype|SQL|stack)/i.test(value);
+        return !/(Traceback|Exception|Error:|frappe\.|pymysql|DocType|doctype|SQL|stack|Missing Item|Missing .* fields|custom_lt_|ADDON-|Unknown add-on|Add-on:)/i.test(value);
     }
 
     function extractCustomerError(body) {
@@ -405,9 +417,8 @@
         showSummaryState('loading');
         disableSubmit('Loading cart');
 
-        var codes = cart.items.map(function (it) { return it.item_code; });
         var fd = new FormData();
-        fd.append('item_codes', JSON.stringify(codes));
+        fd.append('item_codes', JSON.stringify(cart.items));
 
         fetch('/api/method/locally_twisted.api.cart.get_cart_items', {
             method: 'POST',
@@ -431,16 +442,20 @@
     }
 
     function renderSummary(cart, serverItems, missing) {
-        var byCode = {};
+        var byLineKey = {};
         for (var i = 0; i < serverItems.length; i++) {
-            byCode[serverItems[i].item_code] = serverItems[i];
+            if (serverItems[i].cart_line_key) byLineKey[serverItems[i].cart_line_key] = serverItems[i];
         }
 
         // Drop missing items from localStorage so the customer doesn't
         // submit a stale cart that the server will reject.
         if (missing && missing.length) {
             for (var m = 0; m < missing.length; m++) {
-                window.LT_CART.remove(missing[m].item_code);
+                if (missing[m].cart_line_key && window.LT_CART.removeLine) {
+                    window.LT_CART.removeLine(missing[m].cart_line_key);
+                } else {
+                    window.LT_CART.remove(missing[m].item_code);
+                }
             }
             cart = window.LT_CART.getCart();
             if (!cart.items.length) {
@@ -456,21 +471,32 @@
         var subtotal = 0;
         var itemsForSubmit = [];
         currentCheckoutItems = [];
+        var mismatchedLines = 0;
 
         for (var k = 0; k < cart.items.length; k++) {
             var line = cart.items[k];
-            var server = byCode[line.item_code];
-            if (!server) continue;
-            var lineTotal = server.price_list_rate * line.qty;
+            var lineKey = line.line_key || (window.LT_CART.lineKey && window.LT_CART.lineKey(line.item_code, line.configuration || null));
+            var server = byLineKey[lineKey];
+            if (!server) {
+                mismatchedLines++;
+                continue;
+            }
+            var lineTotal = typeof server.line_total === 'number' ? server.line_total : server.price_list_rate * line.qty;
             subtotal += lineTotal;
-            itemsForSubmit.push({ item_code: server.item_code, qty: line.qty });
+            var submitLine = { item_code: server.item_code, qty: line.qty };
+            if (line.configuration && typeof line.configuration === 'object') {
+                submitLine.configuration = line.configuration;
+            }
+            itemsForSubmit.push(submitLine);
             currentCheckoutItems.push({
                 item_code: server.item_code,
                 website_item_code: server.website_item_code || '',
                 name: server.web_item_name || server.item_code,
                 qty: line.qty,
                 options: optionSummary(server),
-                unit_price: server.price_list_rate
+                unit_price: server.price_list_rate,
+                line_total: lineTotal,
+                display_lines: server.display_lines || []
             });
 
             var img = el('div', { 'class': 'lt-checkout__line-img', 'aria-hidden': 'true' });
@@ -487,10 +513,19 @@
             var optionsText = optionSummary(server);
             if (optionsText) metaParts.push(optionsText);
             metaParts.push(fmtMoney(server.price_list_rate) + ' each');
+            var displayLines = Array.isArray(server.display_lines) ? server.display_lines : [];
+            for (var d = 0; d < displayLines.length; d++) {
+                if (!displayLines[d].is_add_on) continue;
+                metaParts.push(formatDisplayLine(displayLines[d]));
+            }
             meta.textContent = metaParts.join(' - ');
             var body = el('div', { 'class': 'lt-checkout__line-body' }, [name, meta]);
             var amount = el('p', { 'class': 'lt-checkout__line-amount', text: fmtMoney(lineTotal) });
             sumLines.appendChild(el('div', { 'class': 'lt-checkout__line' }, [img, body, amount]));
+        }
+        if (mismatchedLines) {
+            showSummaryLineMismatchError();
+            return;
         }
 
         currentSubtotal = subtotal;
@@ -501,6 +536,14 @@
         if (itemsJsonInput) itemsJsonInput.value = JSON.stringify(itemsForSubmit);
         enableSubmit();
         updateTotals();
+    }
+
+    function showSummaryLineMismatchError() {
+        if (sumError) {
+            sumError.textContent = 'Tiny snag: one configured cart line did not match the server. Please return to cart and refresh before checkout.';
+        }
+        showSummaryState('error');
+        disableSubmit('Configured cart line did not match the server');
     }
 
     function buildQuoteHandoffPayload(fd, reasonMessage) {
@@ -583,6 +626,15 @@
                 setFeedback('error', msg.message || 'Delivery quote needed for this location.');
                 return;
             }
+            if (msg.status === 'ecommerce_paused') {
+                currentQuoteRequired = true;
+                if (sumDelivery) sumDelivery.textContent = 'Quote instead';
+                if (sumTax) sumTax.textContent = 'Reviewed with quote';
+                if (sumGrand) sumGrand.textContent = fmtMoney(currentSubtotal || 0);
+                submit.textContent = 'Contact Us';
+                setFeedback('error', msg.message || 'Ready-to-order is paused. Please contact us for a quote.');
+                return;
+            }
             if (!msg.ok) return;
             currentQuoteRequired = false;
             if (sumDelivery) sumDelivery.textContent = fmtMoney(msg.delivery_fee || 0);
@@ -658,8 +710,12 @@
             submit.disabled = false;
             submit.textContent = originalLabel;
             var msg = result.body && result.body.message;
-            if (result.status >= 200 && result.status < 300 && msg && msg.status === 'quote_required') {
+            if (msg && msg.status === 'quote_required') {
                 redirectToDeliveryQuote(new FormData(form), msg.message || 'Delivery quote needed for this location.');
+                return;
+            }
+            if (msg && msg.status === 'ecommerce_paused') {
+                redirectToDeliveryQuote(new FormData(form), msg.message || 'Ready-to-order is paused. Please contact us for a quote.');
                 return;
             }
             if (result.status >= 200 && result.status < 300 && msg && msg.ok) {

@@ -6,6 +6,7 @@ Read-only. Does not touch ERPNext.
 
 from __future__ import annotations
 
+import argparse
 import json
 import sys
 from pathlib import Path
@@ -42,6 +43,9 @@ def _find(products: list[dict], slug: str) -> dict:
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.parse_args()
+
     products = _products()
     groups = _groups()
     contracts = {
@@ -55,6 +59,10 @@ def main() -> int:
 
     if not any(axis.name == "Bouquet Size" for axis in unicorn.required_axes):
         failures.append("Unicorn Bouquet must keep Bouquet Size as a required visible selector.")
+    if unicorn.product_page_type != "simple_product" or unicorn.commerce_lane != "checkout":
+        failures.append(
+            f"Unicorn Bouquet must classify as simple_product/checkout, found {unicorn.product_page_type}/{unicorn.commerce_lane}."
+        )
     if not any(addon.key == "foil_number" for addon in unicorn.add_ons):
         failures.append("Unicorn Bouquet must expose foil number as optional add-on contract.")
     if len(unicorn.gallery) < 2:
@@ -75,6 +83,10 @@ def main() -> int:
             failures.append("Classic Arch latex colors should preserve the full high-cardinality color list.")
     if any(axis.name == "latex colors" for axis in classic.required_axes):
         failures.append("Classic Arch latex colors must not remain a normal required ERPNext variant selector/dropdown.")
+    if classic.product_page_type != "complex_custom_product" or classic.commerce_lane != "quote_first":
+        failures.append(
+            f"Classic Arch must classify as complex_custom_product/quote_first, found {classic.product_page_type}/{classic.commerce_lane}."
+        )
 
     lines = [
         "# Proof Product Contract Report",
@@ -83,6 +95,8 @@ def main() -> int:
         "",
         "## Unicorn Bouquet",
         "",
+        f"- Template: {unicorn.product_page_type_label} (`{unicorn.product_page_type}`)",
+        f"- Commerce lane: {unicorn.commerce_lane_label} (`{unicorn.commerce_lane}`)",
         f"- Required axes: {', '.join(axis.name for axis in unicorn.required_axes) or '(none)'}",
         f"- Add-ons: {', '.join(addon.key for addon in unicorn.add_ons) or '(none)'}",
         f"- Gallery images in source contract: {len(unicorn.gallery)}",
@@ -90,6 +104,8 @@ def main() -> int:
         "",
         "## Classic Arch",
         "",
+        f"- Template: {classic.product_page_type_label} (`{classic.product_page_type}`)",
+        f"- Commerce lane: {classic.commerce_lane_label} (`{classic.commerce_lane}`)",
         f"- Required axes: {', '.join(axis.name for axis in classic.required_axes) or '(none)'}",
         f"- Customization axes: {', '.join(axis.name for axis in classic.customization_axes) or '(none)'}",
         f"- Gallery images in source contract: {len(classic.gallery)}",

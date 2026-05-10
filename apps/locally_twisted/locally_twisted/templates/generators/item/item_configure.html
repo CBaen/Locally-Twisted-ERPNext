@@ -17,6 +17,7 @@
 {%- set lt_checkout_lane = checkout_lane_for_item_group(doc.item_group) -%}
 {%- set lt_variant_attributes = get_variant_attribute_options(doc.item_code) or [] -%}
 {%- set lt_starting_price_display = get_variant_starting_price_display(doc.item_code) -%}
+{%- set lt_add_on_options = get_checkout_add_on_options(doc.item_code) or [] -%}
 
 {% if lt_checkout_lane == "quote_required" %}
 <div class="lt-product__cart" data-variant-item-code="">
@@ -125,6 +126,41 @@
         </div>
     {%- endfor -%}
 
+    {%- if lt_add_on_options -%}
+        <div class="lt-product__addons" aria-label="{{ _('Optional upgrades') }}">
+            {%- for add_on in lt_add_on_options -%}
+                <div class="lt-product__addon"
+                     data-addon-key="{{ add_on.key }}"
+                     data-addon-label="{{ add_on.label }}"
+                     data-addon-unit-price="{{ add_on.unit_price }}">
+                    <label class="lt-product__addon-toggle">
+                        <input type="checkbox"
+                               class="js-lt-addon-toggle"
+                               data-addon-key="{{ add_on.key }}"
+                               data-addon-label="{{ add_on.label }}">
+                        <span>
+                            <span class="lt-product__addon-title">{{ _(add_on.label) }}</span>
+                            <span class="lt-product__addon-price">
+                                {{ add_on.formatted_unit_price }} {{ _("each") }}
+                            </span>
+                        </span>
+                    </label>
+                    <label class="lt-product__addon-value-label">
+                        <span>{{ _("Number") }}</span>
+                        <input type="text"
+                               class="lt-product__addon-value js-lt-addon-value"
+                               data-addon-key="{{ add_on.key }}"
+                               inputmode="numeric"
+                               autocomplete="off"
+                               maxlength="10"
+                               disabled>
+                    </label>
+                    <p class="lt-product__addon-help">{{ _(add_on.help) }}</p>
+                </div>
+            {%- endfor -%}
+        </div>
+    {%- endif -%}
+
     <div class="lt-product__configure-status" id="lt-configure-status" aria-live="polite"></div>
 
     {# Price + Add-to-Cart, populated by JS once a complete combination is selected #}
@@ -163,6 +199,7 @@
     var addBtn = document.getElementById('lt-add-to-cart-variant');
     var viewInCart = form.querySelector('.lt-view-in-cart');
     var attrEls = form.querySelectorAll('.lt-product__attr');
+    var addOnRows = form.querySelectorAll('.lt-product__addon');
     var mediaRequestSerial = 0;
     var variantRequestSerial = 0;
 
@@ -176,6 +213,7 @@
     var msgPriceWaiting = msgStartingPrice || "{{ _('Price shows when you choose your options') | replace("'", "\\'") }}";
     var msgLedPriceMissing = "{{ _('LED Lights are an upgrade, but the imported catalog has no LED surcharge yet. Choose No Lights or request a quote so we do not sell it as free.') | replace("'", "\\'") }}";
     var msgLedPriceReview = "{{ _('LED price needs review') | replace("'", "\\'") }}";
+    var msgAddOnNeedsValue = "{{ _('Tiny snag: please enter the foil number before adding this upgrade.') | replace("'", "\\'") }}";
 
     function moveColorDrawersUnderMedia() {
         var mediaTarget = document.querySelector('.lt-product__under-media-options');
@@ -402,6 +440,52 @@
         priceTextEl.textContent = formattedPrice || msgPriceWaiting;
     }
 
+    function selectedConfiguration(variantCode) {
+        return {
+            schema_version: 'lt-product-config-v1',
+            item_code: variantCode,
+            website_item_code: templateCode,
+            selected_options: selectedAttrs(),
+            add_ons: selectedAddOns(),
+            customizations: []
+        };
+    }
+
+    function selectedAddOns() {
+        var addOns = [];
+        addOnRows.forEach(function (row) {
+            var toggle = row.querySelector('.js-lt-addon-toggle');
+            if (!toggle || !toggle.checked) return;
+            var valueInput = row.querySelector('.js-lt-addon-value');
+            var value = valueInput ? (valueInput.value || '').trim() : '';
+            var quantity = selectedNumberCount(value);
+            addOns.push({
+                key: row.getAttribute('data-addon-key'),
+                label: row.getAttribute('data-addon-label'),
+                value: value,
+                quantity: quantity
+            });
+        });
+        return addOns;
+    }
+
+    function selectedNumberCount(value) {
+        var digits = String(value || '').replace(/\D/g, '');
+        return digits.length || (String(value || '').trim() ? 1 : 0);
+    }
+
+    function addOnsNeedValue() {
+        var needsValue = false;
+        addOnRows.forEach(function (row) {
+            var toggle = row.querySelector('.js-lt-addon-toggle');
+            var valueInput = row.querySelector('.js-lt-addon-value');
+            if (toggle && toggle.checked && valueInput && !(valueInput.value || '').trim()) {
+                needsValue = true;
+            }
+        });
+        return needsValue;
+    }
+
     function refresh() {
         showSelectedTags();
         var picks = selectedAttrs();
@@ -445,6 +529,12 @@
 
                 if (matches.length === 1) {
                     var variantCode = matches[0];
+                    if (addOnsNeedValue()) {
+                        setStatus(msgAddOnNeedsValue, true);
+                        disableAdd(msgIncomplete);
+                        updateVariantImage(variantCode);
+                        return;
+                    }
                     if (selectedLedNeedsPriceReview(picks)) {
                         priceTextEl.textContent = msgLedPriceReview;
                         disableAdd(msgLedPriceReview);
@@ -491,6 +581,24 @@
         refresh();
     });
 
+    addOnRows.forEach(function (row) {
+        var toggle = row.querySelector('.js-lt-addon-toggle');
+        var valueInput = row.querySelector('.js-lt-addon-value');
+        if (toggle) {
+            toggle.addEventListener('change', function () {
+                if (valueInput) {
+                    valueInput.disabled = !toggle.checked;
+                    if (!toggle.checked) valueInput.value = '';
+                    if (toggle.checked) valueInput.focus();
+                }
+                refresh();
+            });
+        }
+        if (valueInput) {
+            valueInput.addEventListener('input', refresh);
+        }
+    });
+
     addBtn.addEventListener('click', function () {
         var code = addBtn.getAttribute('data-item-code');
         if (!code) return;
@@ -498,6 +606,7 @@
         webshop.webshop.shopping_cart.update_cart({
             item_code: code,
             qty: 1,
+            configuration: selectedConfiguration(code),
             callback: function (r) {
                 addBtn.disabled = false;
                 if (r.message && viewInCart) {

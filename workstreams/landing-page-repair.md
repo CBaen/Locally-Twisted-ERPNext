@@ -14,7 +14,7 @@ company, and avoid platform-specific crawl or cookie-overlay failures.
 
 Completed on 2026-05-07:
 
-- The hero has one visible stable H1 over a real optimized installed-work photo.
+- The hero has one visible stable H1 over a generated lifestyle hero photo from the project image-generation API. Existing installed-work photos are reserved for the proof bands and portfolio.
 - The hero now obeys the sitewide compact hero contract: 220px mobile and 280px
   desktop in the current verifier, with the tablet standard documented at
   250px.
@@ -127,6 +127,16 @@ unless a fresh failing run proves it again.
 The compact hero contract was added after this repair because GL escalated the
 same-height hero rule to agency level. First red run failed 14/14; after CSS
 and copy-density changes the focused compact-hero gate passed 14/14.
+
+2026-05-10 correction: the earlier photo-hero pass used reserved real/proof
+photos as hero crops, which was wrong. Public heroes now use generated
+lifestyle photos from the project image-generation API, with source files and
+prompts stored in `_resources/generated-hero-sources/2026-05-10/`. Current
+verification passed focused compact heroes 66/66, full
+`npm run test:interactive-layout` 154/154, `npm run test:layout-fit` 299/299,
+`npm run test:container-contract` 69/69, and `npm run test:a11y` with 46
+route/viewport axe results and 0 violations. Rendered hero screenshots are in
+`output/playwright/generated-heroes-20260510/`.
 
 Same-day crawl regression follow-up: the old verifier protected a static
 reduced-motion fallback, and a later correction briefly inverted the crawl

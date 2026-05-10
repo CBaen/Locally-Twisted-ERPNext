@@ -36,7 +36,7 @@
 }
 
 .lt-mega-header__top {
-    background: #071a33;
+    background: var(--lt-mega-navy);
     border-bottom: 1px solid rgba(184, 154, 91, 0.48);
     color: #fffdf9;
 }

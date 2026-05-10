@@ -6,11 +6,11 @@ profile: governed
 level: recipe
 maturity: candidate
 scope: Locally Twisted shared inquiry-v1 public form experience on /contact and service-page embeds
-currently_true: unknown
+currently_true: yes
 verification_level: 2
 last_verified: 2026-05-10
 evidence_quality: direct
-successful_uses: 2
+successful_uses: 3
 failed_uses: 2
 regressions: 0
 depends_on:
@@ -43,6 +43,7 @@ This recipe does not own Lead schema parity or field taxonomy. Use
 ## Contract
 
 - The form remains guest-friendly; login is not required.
+- Repeat inquiries from the same email are allowed when the business treats each Lead as a separate event/opportunity.
 - The visible success state is caused only by the verified submit path.
 - A route hash such as `/contact#received` must not open a success modal by
   itself.
@@ -56,6 +57,7 @@ This recipe does not own Lead schema parity or field taxonomy. Use
 - The modal must be accessible enough for normal keyboard and screen-reader
   use: labelled dialog, short described message, close action, and no hidden
   fake success route.
+- Up to five real inspiration-photo uploads must attach successfully on the backend when selected.
 - Empty upload slots from the browser are not submitted photos. Do not surface
   an inspiration-photo warning unless a real selected file failed validation or
   attachment.
@@ -84,6 +86,7 @@ Backend submit and cleanup:
 
 ```powershell
 python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --skip-newsletter
+python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081
 ```
 
 Useful adjacent checks after form markup, cache-buster, or page-shell changes:
@@ -103,6 +106,8 @@ npm run test:a11y-manual
 - A customer sees "sent" or "received" copy while the AJAX request failed,
   returned a non-OK response, or returned a response without `message.ok`.
 - A customer sees an inspiration-photo warning when no file was selected.
+- A repeat customer email is rejected as a duplicate Lead.
+- The UI claims "Up to 5 images" but the endpoint only proves one/no uploaded file path.
 - The form reintroduces the removed progress-step text (`Details checked`,
   `Saved for follow-up`) or the `No account needed` helper line.
 - A cookie notice, banner, drawer, or modal covers form controls on mobile.
@@ -130,3 +135,6 @@ visible progress-step/note copy, and reduces the modal to a short confirmation
 with one close action. `npm run test:form-experience`,
 `python scripts/verify/inquiry_upload_failure_contract.py`, and a real BTFP
 smoke submit passed.
+
+
+On 2026-05-10 the BTFP route exposed a repeat-email failure from ERPNext's default Lead duplicate-email validation while GL was testing five inspiration photos. The repair enabled duplicate Lead emails through CRM Settings, added a durable patch, and added `scripts/verify/book_form_repeat_email_photos.py` to submit two separate inquiries with the same email and five PNG files each. The verifier passed locally and should remain part of public form closeout when upload or CRM settings change.

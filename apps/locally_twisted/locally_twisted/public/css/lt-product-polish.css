@@ -151,6 +151,14 @@
   box-shadow: none;
 }
 
+.lt-product__quote-note {
+  max-width: 42rem;
+  margin: 0 0 0.9rem;
+  color: var(--lt-polish-ink);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
 .lt-product__price-current {
   color: var(--lt-polish-navy);
   font-family: var(--lt-polish-heading);

@@ -83,6 +83,7 @@ def _contract_failures(result: dict[str, Any]) -> list[str]:
     expected = {
         "normal_quote_review_packet",
         "corporate_proposal_review_packet",
+        "product_quote_placeholder_price_blocks_reviewed_total",
         "missing_acceptance_path_blocks_readiness",
         "empty_review_ok",
         "malformed_send_ready_source_fails",

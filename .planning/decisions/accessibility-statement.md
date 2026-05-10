@@ -86,7 +86,7 @@ The style guide already targets WCAG 2.1 AA throughout (color contrast tables, f
 >
 > If you run into a barrier on this site — anything that gets in the way of finding what you need or getting in touch — please let us know. We want to hear from you.
 >
-> Reach us at **accessibility@locallytwisted.com** or **(801) 285-0860**, and we'll work with you to provide what you need and to fix the barrier for the next person.
+> Reach us at **legal@locallytwisted.com** or **(801) 285-0860**, and we'll work with you to provide what you need and to fix the barrier for the next person.
 
 (Email needs to be set up and monitored. Phone is the existing business line.)
 

@@ -6,6 +6,30 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-10 - ERPNext Lead duplicate-email setting can silently break inquiry reality
+
+ERPNext's Lead controller blocks repeat `email_id` values unless `CRM Settings.allow_lead_duplication_based_on_emails` is enabled. That default is wrong for LT's public inquiry form: one person can ask about multiple events from the same email address.
+
+**Counter-move:** for inquiry-led client sites, treat repeat email as an explicit CRM decision, not a database nuisance. Enable the setting through a durable patch when the business expects multiple inquiries per contact, and verify with two public submissions using the same email. Contact dedupe/linking can still preserve the relationship; Lead uniqueness must not block new customer intent.
+
+---
+
+## 2026-05-10 - A carousel that looks static is still broken to the customer
+
+The BTFP cards technically had CSS fade animation across multiple images, but GL still saw them as static. That was a valid product failure because there were no controls, count, or obvious affordance that more photos existed.
+
+**Counter-move:** for customer-visible proof photos, especially on service pages, add explicit carousel affordances: next/previous controls, visible count/status, and a reduced-motion path. Guard the behavior in Playwright by clicking next and checking the status changes, not just by counting image tags in HTML.
+
+---
+
+## 2026-05-10 - Multi-file upload claims need a repeatable five-file proof
+
+The form said "Up to 5 images," but GL could not upload five photos in the real flow while a duplicate email error masked the result. A one-file or no-file smoke test would not have caught the advertised contract.
+
+**Counter-move:** when a public form advertises a file count, create a verifier that posts exactly that many files through the same endpoint and asserts the backend attached that many records. Pair upload proof with the real customer identity constraints, such as repeat-email submissions, because the first failing validation can hide upload bugs.
+
+---
+
 ## 2026-05-10 - Email Queue subjects with emoji must be decoded from MIME
 
 The public inquiry acknowledgment now uses a balloon-emoji subject. A raw

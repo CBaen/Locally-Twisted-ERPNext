@@ -109,6 +109,18 @@
         }).join(" - ");
     }
 
+    function formatDisplayLine(displayLine) {
+        var label = displayLine.display_label || displayLine.web_item_name || displayLine.item_code || "Add-on";
+        var qty = parseInt(displayLine.qty || 1, 10);
+        if (!isFinite(qty) || qty < 1) qty = 1;
+        var unit = typeof displayLine.price_list_rate === "number" ? displayLine.price_list_rate : 0;
+        var total = typeof displayLine.line_total === "number" ? displayLine.line_total : unit * qty;
+        var parts = [label, fmtMoney(unit) + " each"];
+        if (qty > 1) parts.splice(1, 0, "qty " + qty);
+        if (qty > 1 || Math.abs(total - unit) > 0.001) parts.push(fmtMoney(total) + " total");
+        return parts.join(" - ");
+    }
+
     /* DOM-construction helper: creates a node with attrs + text content.
      * Avoids innerHTML entirely so user-controlled strings can't escape
      * into the markup, even if a future change removes the escapeHtml
@@ -138,8 +150,8 @@
         return node;
     }
 
-    function buildLine(server, qty) {
-        var lineTotal = server.price_list_rate * qty;
+    function buildLine(server, qty, lineKey) {
+        var lineTotal = typeof server.line_total === "number" ? server.line_total : server.price_list_rate * qty;
         var routeHref = "/" + server.route;
         var safeName = server.web_item_name || server.item_code;
 
@@ -164,11 +176,16 @@
         var metaParts = [];
         if (optionsText) metaParts.push(optionsText);
         metaParts.push(fmtMoney(server.price_list_rate) + " each");
+        var displayLines = Array.isArray(server.display_lines) ? server.display_lines : [];
+        for (var d = 0; d < displayLines.length; d++) {
+            if (!displayLines[d].is_add_on) continue;
+            metaParts.push(formatDisplayLine(displayLines[d]));
+        }
         var bodyMeta = el("p", { "class": "lt-cart__line-meta", text: metaParts.join(" - ") });
         var removeBtn = el("button", {
             type: "button",
             "class": "lt-cart__line-remove",
-            data: { action: "remove", itemCode: server.item_code },
+            data: { action: "remove", itemCode: server.item_code, lineKey: lineKey },
             text: "Remove",
         });
         var body = el("div", { "class": "lt-cart__line-body" }, [bodyName, bodyMeta, removeBtn]);
@@ -176,7 +193,7 @@
         var decBtn = el("button", {
             type: "button",
             "class": "lt-cart__qty-btn",
-            data: { action: "dec", itemCode: server.item_code },
+            data: { action: "dec", itemCode: server.item_code, lineKey: lineKey },
             "aria-label": "Decrease quantity",
         });
         decBtn.textContent = "−";  // unicode minus
@@ -189,13 +206,13 @@
             max: "99",
             value: String(qty),
             "aria-label": "Quantity",
-            data: { itemCode: server.item_code },
+            data: { itemCode: server.item_code, lineKey: lineKey },
         });
 
         var incBtn = el("button", {
             type: "button",
             "class": "lt-cart__qty-btn",
-            data: { action: "inc", itemCode: server.item_code },
+            data: { action: "inc", itemCode: server.item_code, lineKey: lineKey },
             "aria-label": "Increase quantity",
             text: "+",
         });
@@ -206,7 +223,7 @@
         return el("div", {
             "class": "lt-cart__line",
             role: "listitem",
-            data: { itemCode: server.item_code },
+            data: { itemCode: server.item_code, lineKey: lineKey },
         }, [img, body, qtyGroup, amount]);
     }
 
@@ -224,9 +241,8 @@
 
         showState("loading");
 
-        var codes = cart.items.map(function (it) { return it.item_code; });
         var fd = new FormData();
-        fd.append("item_codes", JSON.stringify(codes));
+        fd.append("item_codes", JSON.stringify(cart.items));
 
         fetch("/api/method/locally_twisted.api.cart.get_cart_items", {
             method: "POST",
@@ -249,15 +265,19 @@
     }
 
     function renderCart(cart, serverItems, missing) {
-        var byCode = {};
+        var byLineKey = {};
         for (var i = 0; i < serverItems.length; i++) {
-            byCode[serverItems[i].item_code] = serverItems[i];
+            if (serverItems[i].cart_line_key) byLineKey[serverItems[i].cart_line_key] = serverItems[i];
         }
 
         if (missing && missing.length) {
             var droppedCount = 0;
             for (var m = 0; m < missing.length; m++) {
-                window.LT_CART.remove(missing[m].item_code);
+                if (missing[m].cart_line_key && window.LT_CART.removeLine) {
+                    window.LT_CART.removeLine(missing[m].cart_line_key);
+                } else {
+                    window.LT_CART.remove(missing[m].item_code);
+                }
                 droppedCount++;
             }
             noticeEl.hidden = false;
@@ -279,17 +299,35 @@
         while (linesEl.firstChild) linesEl.removeChild(linesEl.firstChild);
 
         var subtotal = 0;
+        var mismatchedLines = 0;
         for (var k = 0; k < cart.items.length; k++) {
             var line = cart.items[k];
-            var server = byCode[line.item_code];
-            if (!server) continue;
-            subtotal += server.price_list_rate * line.qty;
-            linesEl.appendChild(buildLine(server, line.qty));
+            var lineKey = line.line_key || (window.LT_CART.lineKey && window.LT_CART.lineKey(line.item_code, line.configuration || null));
+            var server = byLineKey[lineKey];
+            if (!server) {
+                mismatchedLines++;
+                continue;
+            }
+            subtotal += typeof server.line_total === "number" ? server.line_total : server.price_list_rate * line.qty;
+            linesEl.appendChild(buildLine(server, line.qty, lineKey));
+        }
+        if (mismatchedLines) {
+            showLineMismatchError();
+            return;
         }
 
         subtotalEl.textContent = fmtMoney(subtotal);
         grandEl.textContent = fmtMoney(subtotal);
         showState("populated");
+    }
+
+    function showLineMismatchError() {
+        errorEl.innerHTML = "";
+        errorEl.appendChild(el("strong", {
+            text: "Tiny snag: one configured cart line did not match the server."
+        }));
+        errorEl.appendChild(document.createTextNode(" Please refresh the cart, or call (801) 285-0860 and we will help keep the details together."));
+        showState("error");
     }
 
     // Delegated event handler for qty buttons + remove links.
@@ -298,12 +336,14 @@
         if (!btn) return;
         var code = btn.dataset.itemCode;
         if (!code) return;
+        var lineKey = btn.dataset.lineKey;
         var action = btn.dataset.action;
         if (action === "inc") {
             var c = window.LT_CART.getCart();
             for (var i = 0; i < c.items.length; i++) {
-                if (c.items[i].item_code === code) {
-                    window.LT_CART.update(code, c.items[i].qty + 1);
+                if ((lineKey && c.items[i].line_key === lineKey) || (!lineKey && c.items[i].item_code === code)) {
+                    if (lineKey && window.LT_CART.updateLine) window.LT_CART.updateLine(lineKey, c.items[i].qty + 1);
+                    else window.LT_CART.update(code, c.items[i].qty + 1);
                     break;
                 }
             }
@@ -311,14 +351,18 @@
         } else if (action === "dec") {
             var c2 = window.LT_CART.getCart();
             for (var j = 0; j < c2.items.length; j++) {
-                if (c2.items[j].item_code === code) {
-                    if (c2.items[j].qty > 1) window.LT_CART.update(code, c2.items[j].qty - 1);
+                if ((lineKey && c2.items[j].line_key === lineKey) || (!lineKey && c2.items[j].item_code === code)) {
+                    if (c2.items[j].qty > 1) {
+                        if (lineKey && window.LT_CART.updateLine) window.LT_CART.updateLine(lineKey, c2.items[j].qty - 1);
+                        else window.LT_CART.update(code, c2.items[j].qty - 1);
+                    }
                     break;
                 }
             }
             loadAndRender();
         } else if (action === "remove") {
-            window.LT_CART.remove(code);
+            if (lineKey && window.LT_CART.removeLine) window.LT_CART.removeLine(lineKey);
+            else window.LT_CART.remove(code);
             loadAndRender();
         }
     });
@@ -328,10 +372,12 @@
         if (!ev.target.classList.contains("lt-cart__qty-input")) return;
         var code = ev.target.dataset.itemCode;
         if (!code) return;
+        var lineKey = ev.target.dataset.lineKey;
         var v = parseInt(ev.target.value, 10);
         if (!isFinite(v) || v < 1) v = 1;
         if (v > 99) v = 99;
-        window.LT_CART.update(code, v);
+        if (lineKey && window.LT_CART.updateLine) window.LT_CART.updateLine(lineKey, v);
+        else window.LT_CART.update(code, v);
         loadAndRender();
     });
 

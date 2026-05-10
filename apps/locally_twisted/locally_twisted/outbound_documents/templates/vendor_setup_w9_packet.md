@@ -35,7 +35,7 @@ Put legal business name, remittance contact, W-9 delivery status, PO/reference h
 
 ## Recipient Outcome
 
-The customer can complete vendor onboarding and issue a PO or payment request with fewer follow-up emails.
+The customer can complete vendor onboarding and issue a PO or arrange payment with fewer follow-up emails.
 
 ## Automation Notes
 

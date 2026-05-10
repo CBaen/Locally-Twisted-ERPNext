@@ -1,16 +1,18 @@
 # Shop Workstream
 
-Last updated: 2026-05-08 by Codex after whole-card product navigation closeout.
+Last updated: 2026-05-10 by Codex after public ecommerce pause closeout.
 
 ## Outcome
 
-Make the Locally Twisted shop feel like a polished, trustworthy extension of the public site while preserving ERPNext as the source of truth for catalog, cart, checkout, and order flow.
+Make the Locally Twisted shop feel like a polished, trustworthy extension of the public site while preserving ERPNext as the source of truth for catalog, cart, checkout, and order flow. As of 2026-05-10, this is an internal repair lane, not a public launch surface.
 
 This is the active feature-lane handoff for shop work. `HANDOFF.md` remains valid as a reference guide, but shop work should coordinate here first, then verify against the queue, current files, git state, and the running ERPNext site.
 
 ## Current Stage
 
-Active handoff lane. The guest cart/checkout item-code contract, broad browse routing, first variant-media reconciliation pass, per-product variant correctness diff, category-media candidate packet, 2026-05-06 shop showroom container redesign, same-day symmetry repair, 2026-05-07 product-detail company-first/clear-control cleanup, 2026-05-08 bouquet-size price repair, and 2026-05-08 whole-card product navigation are in place. Product detail pages no longer render Webshop's lower Additional Info/Reviews/Recommendations panel, product option controls no longer render as nested boxes, and product listing cards navigate from non-interactive card areas while preserving real buttons and links. `smoke_shop.py` guards against auxiliary/recommendation selectors, boxed product controls, and current shop/category behavior; latest 2026-05-08 rerun passed after the product-card click slice. The 2026-05-06 commerce-rules checkout slice has its own lane at `workstreams/commerce-rules-checkout.md`; catalog price recovery now has its own lane at `workstreams/catalog-variant-price-recovery.md`; public microinteractions now have their own lane at `workstreams/public-site-microinteractions.md`. Keep shop layout/media work coordinated with checkout, price-parity, and microinteraction contracts. The next shop work should continue with full non-bouquet price audit, Jeff/GL media approval before assigning category/product media, then product photo/options polish from real product states.
+Active internal handoff lane. Public Ready-to-Order/shop/product/cart/checkout surfaces are intentionally paused for launch while product-card, product-page, and checkout-process bugs are repaired. Guest traffic to `/shop`, `/shop-items`, `/shop-by-category`, `/all-products`, `/cart`, and `/checkout` now redirects to `/ready-to-order-paused`; logged-in operators can still open direct ecommerce URLs for repair work.
+
+The guest cart/checkout item-code contract, broad browse routing, first variant-media reconciliation pass, per-product variant correctness diff, category-media candidate packet, 2026-05-06 shop showroom container redesign, same-day symmetry repair, 2026-05-07 product-detail company-first/clear-control cleanup, 2026-05-08 bouquet-size price repair, and 2026-05-08 whole-card product navigation are in place but are not currently public launch promises. Product detail pages no longer render Webshop's lower Additional Info/Reviews/Recommendations panel, product option controls no longer render as nested boxes, and product listing cards navigate from non-interactive card areas while preserving real buttons and links. `smoke_shop.py` guards against auxiliary/recommendation selectors, boxed product controls, and current shop/category behavior; latest 2026-05-08 rerun passed after the product-card click slice. The 2026-05-06 commerce-rules checkout slice has its own lane at `workstreams/commerce-rules-checkout.md`; catalog price recovery now has its own lane at `workstreams/catalog-variant-price-recovery.md`; public microinteractions now have their own lane at `workstreams/public-site-microinteractions.md`. Keep shop layout/media work coordinated with checkout, price-parity, and microinteraction contracts. The next shop work should continue with full non-bouquet price audit, Jeff/GL media approval before assigning category/product media, then product photo/options polish from real product states. Do not restore public Ready-to-Order/shop chrome until GL explicitly reopens ecommerce.
 
 Security note from 2026-05-08: `/shop?q=` reflected XSS was reproduced through
 the real local site and patched by escaping `search_query`. Product-gallery
@@ -34,7 +36,7 @@ Work from the main project workspace unless the user explicitly asks for a separ
 
 ## User-Facing Impact
 
-Customers should be able to browse categories, inspect products, choose only valid options, add configured products to the guest cart, and check out without seeing ERPNext jargon, login traps, broken combinations, missing images, or placeholder category visuals.
+When ecommerce is reopened, customers should be able to browse categories, inspect products, choose only valid options, add configured products to the guest cart, and check out without seeing ERPNext jargon, login traps, broken combinations, missing images, or placeholder category visuals. During the public pause, customers should instead see a clear branded pause page that points them to `/contact` and `/portfolio`.
 
 ## Touched Areas
 
@@ -47,6 +49,7 @@ Customers should be able to browse categories, inspect products, choose only val
 - `/payment-success`
 - `/thank-you`
 - Product listing cards, category detail pages, product detail pages, configure controls, and guest cart behavior.
+- Public pause layer: `apps/locally_twisted/locally_twisted/ecommerce_pause.py`, `www/ready_to_order_paused.py`, `www/ready_to_order_paused.html`, and `scripts/verify/ecommerce_pause_contract.py`.
 
 Primary files:
 
@@ -102,7 +105,7 @@ Reference and verification files:
 
 ## Known Current Facts
 
-- Phase 1 shop surfaces are live or compatibility-safe: `/shop`, `/shop-by-category` redirecting to `/shop`, `/shop-items/<group>`, `/shop-items/<group>/<slug>`, `/cart`, `/checkout`, `/payment-success`, and `/thank-you`.
+- Phase 1 shop surfaces are currently hidden from guests: `/shop`, `/shop-by-category`, `/shop-items/<group>`, `/shop-items/<group>/<slug>`, `/cart`, and `/checkout` redirect to `/ready-to-order-paused` for guest traffic. Logged-in operators can still access direct ecommerce URLs for repair work. `/payment-success` and `/thank-you` remain as historical/payment-return surfaces and should be tested before ecommerce is reopened.
 - Current live DB state verified 2026-05-08 is 53 Website Items, 10,672 Items, 49 variant templates, 6 non-variant root Items, 10,227 active customer-facing variants, 390 disabled legacy optional-add-on variants, 10,617 all variant records, 10,654 Item Prices, 32,028 Item Variant Attribute rows, and 26 Item Attributes. The 6 non-variant root Items are 4 catalog single-SKU products plus 2 delivery service Items. Re-check live DB counts before changing seed logic or making claims from these numbers.
 - Item Group hierarchy under `Shop Items` has 11 customer-facing children: Arches, Columns, Bouquets, Get-Well Bouquets, Garlands, Drops, Grab & Go, Table Decor, Stands & Easels, Deliveries, and Seasonal & Specialty.
 - Webshop settings are documented with variants and attribute filters enabled.
@@ -165,6 +168,7 @@ Before shop edits:
 
 After route, template, CSS, or JS edits:
 
+- `python scripts/verify/ecommerce_pause_contract.py` while ecommerce remains publicly paused
 - `python scripts/verify/smoke_shop.py`
 - `python scripts/verify/cart_checkout_contract.py`
 - `npm run test:product-prices`

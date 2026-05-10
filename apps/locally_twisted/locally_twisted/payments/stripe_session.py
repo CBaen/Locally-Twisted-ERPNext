@@ -31,6 +31,7 @@ from locally_twisted.payments.settings import (
     get_stripe_payment_method_configuration,
     get_stripe_settings,
 )
+from locally_twisted.product_page_runtime import customer_facing_line_label
 
 
 def stripe_line_items_for_sales_order(so) -> list[dict]:
@@ -39,7 +40,7 @@ def stripe_line_items_for_sales_order(so) -> list[dict]:
     line_items = []
 
     for item in so.items:
-        item_name = (item.item_name or item.item_code).strip()
+        item_name = customer_facing_line_label(item)
         qty = int(item.qty)
         unit_amount_cents = _money_to_cents(item.rate)
         line_items.append({

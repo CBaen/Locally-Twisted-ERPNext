@@ -78,6 +78,65 @@ FEATURED_WORK = [
 ]
 
 
+HOME_HERO_SLIDES = [
+    {
+        "kicker": "Graduation season",
+        "title": "Graduation balloon decor for Utah schools and families.",
+        "proofline": "Now featuring grad garlands, stages, and photo moments.",
+        "body": "Celebrate the class of 2026 with polished balloon installs for ceremonies, senior nights, grad parties, and campus events.",
+        "image": "/assets/locally_twisted/images/portfolio/optimized/school-grad-garland.webp",
+        "primary_label": "Plan graduation decor",
+        "primary_url": "/contact?intent=quote&source=home-hero-graduation",
+        "secondary_label": "See event balloons",
+        "secondary_url": "/event-balloons",
+    },
+    {
+        "kicker": "Civic & community",
+        "title": "Balloon moments for public events and community gatherings.",
+        "proofline": "Parades, city events, Pride, fairs, and public celebrations.",
+        "body": "Create a welcoming entrance, stage, booth, or photo moment that helps the whole event feel organized and alive.",
+        "image": "/assets/locally_twisted/images/portfolio/optimized/seasonal-pride-columns.webp",
+        "primary_label": "Explore civic events",
+        "primary_url": "/civic-community",
+        "secondary_label": "Start a quote",
+        "secondary_url": "/contact?intent=quote&source=home-hero-civic",
+    },
+    {
+        "kicker": "Corporate events",
+        "title": "Brand-ready balloon decor for business events.",
+        "proofline": "Entrances, launches, client events, open houses, and staff celebrations.",
+        "body": "Match colors, logos, and room flow so the event looks intentional without making your team babysit the decor.",
+        "image": "/assets/locally_twisted/images/portfolio/optimized/corporate-logo-arch.webp",
+        "primary_label": "Explore corporate events",
+        "primary_url": "/corporate-events",
+        "secondary_label": "Start a quote",
+        "secondary_url": "/contact?intent=quote&source=home-hero-corporate",
+    },
+    {
+        "kicker": "Schools & campuses",
+        "title": "School balloon decor for big days on campus.",
+        "proofline": "Graduations, back-to-school, senior nights, dances, and fundraisers.",
+        "body": "Give students, staff, and families a photo-ready moment that feels festive, clear, and easy to navigate.",
+        "image": "/assets/locally_twisted/images/portfolio/optimized/school-back-to-school-stage.webp",
+        "primary_label": "Explore school events",
+        "primary_url": "/schools-campuses",
+        "secondary_label": "Start a quote",
+        "secondary_url": "/contact?intent=quote&source=home-hero-schools",
+    },
+    {
+        "kicker": "Private celebrations",
+        "title": "Personal celebration decor that still feels polished.",
+        "proofline": "Birthdays, weddings, showers, anniversaries, and family milestones.",
+        "body": "Bring color, shape, and a finished focal point to the party without turning setup into another full-time job.",
+        "image": "/assets/locally_twisted/images/portfolio/optimized/wedding-floral-half-arch.webp",
+        "primary_label": "Explore private celebrations",
+        "primary_url": "/private-celebrations",
+        "secondary_label": "Start a quote",
+        "secondary_url": "/contact?intent=quote&source=home-hero-private",
+    },
+]
+
+
 # Reviews carousel - horizontal-scrolling proof from customer praise. Keep
 # rating/count claims out of the visible badge unless they are reverified.
 REVIEW_QUOTES = [
@@ -242,13 +301,28 @@ PAGE_CSS = """
     background-color: var(--lt-navy);
     padding: 0;
     overflow: hidden;
+}
+.lt-hero__slide {
+    position: absolute;
+    inset: 0;
     display: flex;
     align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    animation: lt-home-hero-carousel 40s infinite;
+}
+.lt-hero__slide:nth-child(1) { animation-delay: 0s; }
+.lt-hero__slide:nth-child(2) { animation-delay: 8s; }
+.lt-hero__slide:nth-child(3) { animation-delay: 16s; }
+.lt-hero__slide:nth-child(4) { animation-delay: 24s; }
+.lt-hero__slide:nth-child(5) { animation-delay: 32s; }
+.lt-hero__slide--active,
+.lt-hero__slide:focus-within {
+    pointer-events: auto;
 }
 .lt-hero__image {
     position: absolute;
     inset: 0;
-    background-image: url('/assets/locally_twisted/images/portfolio/optimized/corporate-weberstock-photo-opt.webp');
     background-size: cover;
     background-position: center;
     background-color: var(--lt-navy);
@@ -270,6 +344,17 @@ PAGE_CSS = """
     padding: 1.5rem 1rem;
     text-align: left;
     color: var(--lt-white);
+}
+@keyframes lt-home-hero-carousel {
+    0% { opacity: 0; }
+    2.5% { opacity: 1; pointer-events: auto; }
+    17.5% { opacity: 1; pointer-events: auto; }
+    20% { opacity: 0; }
+    100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lt-hero__slide { animation: none; opacity: 0; }
+    .lt-hero__slide:first-child { opacity: 1; pointer-events: auto; }
 }
 .lt-hero__eyebrow {
     font-family: var(--lt-font-body);
@@ -407,7 +492,7 @@ PAGE_CSS = """
  * once and the mask fades into empty space, not readable text. */
 .lt-reviews-block {
     background-color: var(--lt-near-white);
-    padding: 3rem 1rem 3.5rem;
+    padding: 2.2rem 1rem 2.4rem;
 }
 .lt-reviews-block__inner {
     /* Narrow column for the badge above the carousel. */
@@ -420,7 +505,7 @@ PAGE_CSS = """
     flex-direction: column;
     align-items: center;
     gap: 0.4rem;
-    margin: 0 0 2rem;
+    margin: 0 0 1.1rem;
     text-decoration: none;
     color: var(--lt-navy);
 }
@@ -447,6 +532,7 @@ PAGE_CSS = """
 .lt-reviews-block__quotes {
     /* Break out of the narrow badge column so the crawl spans the full stage. */
     overflow: hidden;
+    padding: 0;
     width: 100vw;
     position: relative;
     left: 50%;
@@ -470,8 +556,8 @@ PAGE_CSS = """
     display: flex;
     align-items: stretch;
     flex: 0 0 auto;
-    gap: 1rem;
-    padding-right: 1rem;
+    gap: 0.75rem;
+    padding-right: 0.75rem;
 }
 .lt-reviews-block__quotes:hover .lt-reviews-block__track,
 .lt-reviews-block__track:focus-within {
@@ -483,18 +569,18 @@ PAGE_CSS = """
 }
 @media (max-width: 575.98px) {
     .lt-reviews-block__group {
-        gap: 0.75rem;
-        padding-right: 0.75rem;
+        gap: 0.55rem;
+        padding-right: 0.55rem;
     }
     .lt-reviews-block__quote {
-        padding: 1.2rem;
+        padding: 0.85rem;
     }
 }
 .lt-reviews-block__quote {
-    flex: 0 0 320px;
+    flex: 0 0 300px;
     background-color: var(--lt-white);
     border-radius: 0.5rem;
-    padding: 1.5rem 1.5rem 1.25rem;
+    padding: 1.05rem 1.1rem 1rem;
     text-align: left;
     border: 1px solid rgba(184, 154, 91, 0.22);
     box-shadow: 0 10px 28px rgba(10, 10, 11, 0.06);
@@ -503,25 +589,29 @@ PAGE_CSS = """
 }
 .lt-reviews-block__quote-mark {
     font-family: var(--lt-font-heading);
-    font-size: 2.5rem;
+    font-size: 1.85rem;
     color: var(--lt-brass);
     line-height: 1;
-    margin: 0 0 0.5rem;
+    margin: 0 0 0.35rem;
     opacity: 0.6;
 }
 .lt-reviews-block__quote-text {
+    display: -webkit-box;
     font-family: var(--lt-font-body);
     font-size: 0.95rem;
     color: var(--lt-near-black);
-    line-height: 1.55;
-    margin: 0 0 0.75rem;
-    min-height: 3.5rem;
+    line-height: 1.45;
+    margin: 0 0 0.55rem;
+    min-height: 0;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
 }
 .lt-reviews-block__quote-attr {
     font-family: var(--lt-font-body);
     font-size: 0.8125rem;
     color: var(--lt-soft-gray);
-    margin: 0 0 0.75rem;
+    margin: 0 0 0.45rem;
 }
 .lt-reviews-block__quote-stars {
     color: var(--lt-brass);
@@ -529,21 +619,12 @@ PAGE_CSS = """
     letter-spacing: 0.12em;
     line-height: 1;
     margin-top: auto;        /* push to bottom of flex-column card */
-    padding-top: 0.75rem;
+    padding-top: 0.35rem;
     text-align: center;
 }
-.lt-reviews-block__quote--placeholder {
-    background-color: rgba(255, 255, 255, 0.5);
-    border: 1px dashed var(--lt-soft-gray);
-}
-.lt-reviews-block__quote--placeholder .lt-reviews-block__quote-text {
-    color: var(--lt-soft-gray);
-    font-style: italic;
-}
-
 @media (max-width: 575.98px) {
     .lt-reviews-block {
-        padding: 1.55rem 0.75rem 1.75rem;
+        padding: 1.25rem 0.75rem 1.35rem;
     }
     .lt-reviews-block__badge {
         gap: 0.25rem;
@@ -570,22 +651,18 @@ PAGE_CSS = """
         padding: 0;
     }
     .lt-reviews-block__quote {
-        flex-basis: min(260px, calc(100vw - 3rem));
-        padding: 0.95rem 1rem 0.9rem;
+        flex-basis: min(248px, calc(100vw - 2.5rem));
+        padding: 0.78rem 0.85rem 0.75rem;
     }
     .lt-reviews-block__quote-mark {
         font-size: 1.55rem;
         margin-bottom: 0.35rem;
     }
     .lt-reviews-block__quote-text {
-        display: -webkit-box;
         font-size: 0.86rem;
         line-height: 1.45;
-        margin-bottom: 0.55rem;
-        min-height: 0;
-        overflow: hidden;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 5;
+        margin-bottom: 0.45rem;
+        -webkit-line-clamp: 4;
     }
     .lt-reviews-block__quote-attr {
         font-size: 0.76rem;
@@ -1029,6 +1106,7 @@ def get_context(context):
     context.client_crawl = CLIENT_CRAWL
     context.custom_categories = CUSTOM_CATEGORIES
     context.featured_work = FEATURED_WORK
+    context.home_hero_slides = HOME_HERO_SLIDES
     # Compute display_name at request time so the source list keeps full
     # names (audit trail) but the rendered cards show "First L." only.
     context.review_quotes = [

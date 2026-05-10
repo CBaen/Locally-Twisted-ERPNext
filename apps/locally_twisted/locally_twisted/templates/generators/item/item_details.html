@@ -16,6 +16,7 @@
 {% set price_info = product_info.get('price') or {} %}
 {% set _brand = frappe.utils.strip_html(doc.lt_brand_description or '') %}
 {% set _details = frappe.utils.strip_html(doc.lt_product_details or '') %}
+{% set lt_product_runtime = get_product_page_runtime_context(doc.item_code) %}
 
 <div class="col-md-7 lt-product__details {{ width_class }}">
 
@@ -53,11 +54,15 @@
         </div>
     {% endif %}
 
-    {# Variant selector OR add-to-cart, per webshop #}
-    {% if has_variants %}
+    {# Runtime product page type controls the primary customer action. #}
+    {% if lt_product_runtime.is_quote_first or lt_product_runtime.needs_review %}
+        {% include "templates/generators/item/item_quote_first.html" %}
+    {% elif lt_product_runtime.is_ready_to_order and has_variants %}
         {% include "templates/generators/item/item_configure.html" %}
-    {% else %}
+    {% elif lt_product_runtime.is_ready_to_order %}
         {% include "templates/generators/item/item_add_to_cart.html" %}
+    {% else %}
+        {% include "templates/generators/item/item_quote_first.html" %}
     {% endif %}
 
     <div class="lt-product__copy-panel">

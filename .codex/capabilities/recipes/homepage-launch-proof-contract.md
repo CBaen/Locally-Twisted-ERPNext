@@ -7,7 +7,7 @@ maturity: candidate
 scope: Locally Twisted ERPNext/Frappe homepage hero, proof crawls, cookie placement, and launch CTAs
 currently_true: yes
 verification_level: 2
-last_verified: 2026-05-08
+last_verified: 2026-05-10
 evidence_quality: direct
 successful_uses: 4
 failed_uses: 1
@@ -37,18 +37,29 @@ review crawl, trusted-client crawl, cookie notice placement, or launch CTAs.
 
 - The hero uses one visible stable H1, not hidden page-title plus rotating
   headings.
-- The hero image is a real optimized Locally Twisted install photo:
-  `/assets/locally_twisted/images/portfolio/optimized/corporate-weberstock-photo-opt.webp`.
+- The hero image is a generated lifestyle hero photo made through the project
+  image-generation API and cropped per breakpoint:
+  `/assets/locally_twisted/images/heroes/home-generated-lifestyle-*.webp`.
+  Existing real/proof photos stay reserved for the proof bands and portfolio
+  surfaces below the hero. Generation source files and prompts live in
+  `_resources/generated-hero-sources/2026-05-10/`.
 - The first viewport must leave a hint of the next band visible on desktop and
   small mobile widths.
 - The hero must obey the compact hero contract: 220px mobile, 250px tablet, and
   280px desktop standard heights, with no route-local oversized padding or title
   scale.
 - Google reviews are the first homepage band immediately after `.lt-hero`.
+- The review crawl uses curated five-star Google quote records from
+  `home.py`. The template renders one readable copy and one duplicate copy for
+  the marquee; both copies must use the same card markup, include a visible
+  five-star row, and avoid placeholder/pending cards.
 - On mobile, the Google review band is intentionally compact. The current
   interactive contract caps the total review block at 380px, the marquee at
   240px, review cards at 270px wide and 240px high, and prevents global
   `section` padding from leaking into `.lt-reviews-block__quotes`.
+- On desktop, `.lt-reviews-block__quotes` must also neutralize global
+  `section` padding. A leaked 4rem top/bottom section rule makes the review
+  band look broken even when the cards are correct.
 - The homepage currently does not render a trust/authority bar. Keep the
   approved brand SVG icon assets for future proof sections, but do not put the
   trust bar back into the homepage unless GL explicitly reopens that choice.
@@ -123,8 +134,8 @@ before marking the homepage ready for GL review.
   Google reviews.
 - Event Playground, blog-title cycling, or design-studio language returns to the
   launch hero without a fresh GL decision.
-- The homepage relies on generic/generated scenery when a real optimized install
-  photo is available.
+- The homepage uses reserved real/proof photos as hero crops instead of the
+  generated lifestyle hero asset.
 
 ## LT Receipt
 
@@ -164,3 +175,21 @@ and added a compact mobile review sizing contract to
 `interactive_layout.spec.js`. After cache clear/restart, live measurements at
 320px, 375px, 390px, and 414px showed the review block at about 364px tall.
 Targeted interactive review checks and targeted home layout-fit passed.
+
+On 2026-05-10, GL flagged excessive landing-page Google review spacing and
+inconsistent card content. Live desktop measurement found the nested review
+carousel was inheriting the global desktop `section` padding, adding 64px above
+and below the cards, and the visible-at-load duplicate marquee copy lacked the
+per-card star row. The repair made review cards render through one template
+macro for both marquee copies, removed placeholder-card rendering, zeroed the
+carousel padding at every breakpoint, tightened desktop/mobile card spacing,
+and added an interactive verifier for the curated review count, non-empty
+review text, five-star rows in both marquee copies, and compact desktop
+spacing. After cache clear/restart, live desktop measurement showed the review
+band at about 444px tall with 19 unique curated reviews and 38 rendered marquee
+cards; focused review tests passed 5/5 and homepage layout-fit passed 13/13.
+
+
+## 2026-05-10 seasonal-carousel override
+
+GL changed the launch homepage hero from a single static hero to a rotating seasonal/audience carousel. Current first slide is graduation season, followed by the four Event Balloons submenu audience lanes. The old "one stable generated lifestyle hero image" verifier expectation is obsolete for this slice; the active guard is one visible page-level H1 on the first slide, compact hero sizing, reduced-motion fallback, quote-led CTAs, and no platform leakage. Feature handoff: `workstreams/homepage-seasonal-hero-carousel-2026-05-10.md`.

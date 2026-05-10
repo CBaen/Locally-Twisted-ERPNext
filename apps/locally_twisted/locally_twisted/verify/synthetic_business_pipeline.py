@@ -40,6 +40,7 @@ SYNTHETIC_CONTRACTS = (
         "data_mode": "in_memory_fake_order",
         "creates": [],
         "cleanup": "no database records created",
+        "deferred_when_ecommerce_paused": True,
     },
     {
         "id": "checkout_lead_conversion",
@@ -49,6 +50,7 @@ SYNTHETIC_CONTRACTS = (
         "data_mode": "rollback_fake_guest_checkout",
         "creates": ["Lead", "Contact", "Customer", "Sales Order", "Payment Request", "Task"],
         "cleanup": "intercepts commits and rolls back generated records",
+        "deferred_when_ecommerce_paused": True,
     },
     {
         "id": "checkout_fulfillment",
@@ -58,6 +60,7 @@ SYNTHETIC_CONTRACTS = (
         "data_mode": "rollback_fake_fulfillment_checkout",
         "creates": ["Customer", "Contact", "Address", "Sales Order", "Payment Request"],
         "cleanup": "stubs Stripe session creation, intercepts commits, and rolls back generated records",
+        "deferred_when_ecommerce_paused": True,
     },
     {
         "id": "payment_success_paid_order_cascade",
@@ -76,6 +79,7 @@ SYNTHETIC_CONTRACTS = (
             "Email Queue",
         ],
         "cleanup": "intercepts commits and rolls back generated records",
+        "deferred_when_ecommerce_paused": True,
     },
     {
         "id": "payment_success_reconciliation_pending",
@@ -85,6 +89,7 @@ SYNTHETIC_CONTRACTS = (
         "data_mode": "monkeypatched_browser_return",
         "creates": [],
         "cleanup": "uses fake Stripe/reconciliation responses only",
+        "deferred_when_ecommerce_paused": True,
     },
     {
         "id": "stripe_webhook_reconciliation",
@@ -94,6 +99,7 @@ SYNTHETIC_CONTRACTS = (
         "data_mode": "mocked_stripe_event",
         "creates": [],
         "cleanup": "no Stripe call; request/signature parsing is mocked",
+        "deferred_when_ecommerce_paused": True,
     },
     {
         "id": "customer_document_policy",
@@ -184,6 +190,10 @@ GUARD_DOCTYPES = (
     "Error Log",
     "Comment",
 )
+DEFERRED_MONEY_REASON = (
+    "Ecommerce is paused for no-purchase V1; checkout, payment, Stripe, "
+    "and paid-order contracts are deferred until GL reopens ecommerce."
+)
 
 
 def run() -> dict[str, object]:
@@ -194,7 +204,10 @@ def run() -> dict[str, object]:
     before = _guard_counts()
     failures: list[str] = []
 
-    contract_items = [_run_contract(spec) for spec in SYNTHETIC_CONTRACTS]
+    active_contracts = _active_contracts()
+    deferred_contracts = _deferred_contracts()
+    contract_items = [_run_contract(spec) for spec in active_contracts]
+    deferred_items = [_deferred_contract_item(spec) for spec in deferred_contracts]
     broken_piping = [item for item in contract_items if not item["ok"]]
 
     status = paperwork_status.run()
@@ -203,6 +216,7 @@ def run() -> dict[str, object]:
         include_synthetic=False,
         include_customer_reminders=False,
         include_customer_reminder_report=False,
+        run_runtime_contracts=False,
     )
     digest = paperwork_review_digest.run()
 
@@ -241,7 +255,12 @@ def run() -> dict[str, object]:
         "cutover_deferred_not_blocking": _section(
             "cutover_deferred_not_blocking",
             "Cutover deferred, not blocking synthetic readiness",
-            _cutover_items(status),
+            [*_cutover_items(status), *deferred_items],
+        ),
+        "deferred_money_surfaces": _section(
+            "deferred_money_surfaces",
+            "Deferred money surfaces",
+            deferred_items,
         ),
     }
 
@@ -264,6 +283,7 @@ def run() -> dict[str, object]:
         "summary": {
             "synthetic_contract_count": len(contract_items),
             "synthetic_contract_pass_count": sum(1 for item in contract_items if item["ok"]),
+            "deferred_contract_count": len(deferred_items),
             "broken_piping_count": len(broken_piping),
             "inefficiency_count": sections["inefficiencies"]["count"],
             "cutover_deferred_count": sections["cutover_deferred_not_blocking"]["count"],
@@ -283,6 +303,8 @@ def run() -> dict[str, object]:
             "no_customer_send": True,
             "no_persisted_fake_records": True,
             "live_cutover_is_separate": True,
+            "no_purchase_v1": _ecommerce_paused(),
+            "deferred_money_reason": DEFERRED_MONEY_REASON if _ecommerce_paused() else None,
         },
         "failures": failures,
     }
@@ -307,6 +329,44 @@ def _run_contract(spec: dict[str, Any]) -> dict[str, Any]:
         "cleanup": spec["cleanup"],
         "failures": failures,
         "evidence": _evidence_summary(result),
+    }
+
+
+def _active_contracts() -> list[dict[str, Any]]:
+    return [spec for spec in SYNTHETIC_CONTRACTS if not _contract_deferred(spec)]
+
+
+def _deferred_contracts() -> list[dict[str, Any]]:
+    return [spec for spec in SYNTHETIC_CONTRACTS if _contract_deferred(spec)]
+
+
+def _contract_deferred(spec: dict[str, Any]) -> bool:
+    return bool(spec.get("deferred_when_ecommerce_paused") and _ecommerce_paused())
+
+
+def _ecommerce_paused() -> bool:
+    try:
+        from locally_twisted.ecommerce_pause import is_ecommerce_paused
+
+        return bool(is_ecommerce_paused())
+    except Exception:
+        return False
+
+
+def _deferred_contract_item(spec: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "id": spec["id"],
+        "lane": spec["lane"],
+        "ok": True,
+        "deferred": True,
+        "command": spec["command"],
+        "data_mode": spec["data_mode"],
+        "live_inputs_required": False,
+        "uses_real_customer_data": False,
+        "creates": spec["creates"],
+        "cleanup": "not run during no-purchase V1 launch proof",
+        "reason": DEFERRED_MONEY_REASON,
+        "failures": [],
     }
 
 

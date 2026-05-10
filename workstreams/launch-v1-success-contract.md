@@ -1,14 +1,18 @@
 # Launch V1 Success Contract
 
-Last updated: 2026-05-02 by Codex.
+Last updated: 2026-05-10 by Codex.
 
 ## Purpose
 
 This contract keeps Locally Twisted launch work focused.
 
-The long-term goal is a saleable company infrastructure that can help Jeff transition the business over the next 10 years. The immediate goal is narrower: launch a high-quality public website that earns trust from the right buyers, supports SEO/local discovery, captures inquiries, and supports ready-to-order ecommerce without looking cheap or unfinished.
+The long-term goal is a saleable company infrastructure that can help Jeff transition the business over the next 10 years. The immediate goal is narrower: launch a high-quality no-purchase public website that earns trust from the right buyers, supports SEO/local discovery, captures inquiries, and presents ready-to-order offerings as browse/proof only without looking cheap or unfinished.
 
-Do not use the 10-year ERPNext vision as a reason to delay the website unless the missing backend work directly affects launch trust, inquiry handling, checkout, payments, policies, or customer-facing accuracy.
+GL correction, 2026-05-10: V1 launch is a no-purchase public site. Ecommerce is shut down for launch unless GL explicitly reopens it. Do not treat /shop, product import completion, catalog parity, catalog price parity, product/category media parity, cart, checkout, payment-success, thank-you, live Stripe, payment webhooks, or product-page receiving architecture as V1 launch blockers. V1 launch center is public trust/proof/info plus /contact inquiry intake with fail-loud Lead evidence. Ecommerce/catalog/payment lanes remain post-V1 architecture and cutover work.
+
+Status note, 2026-05-10: backend-automation-guard reports the direct guest checkout API pause contract fixed and `python scripts/verify/ecommerce_pause_contract.py` passing. Keep this as fixed-pending-review until stack-cartographer's independent review lands.
+
+Do not use the 10-year ERPNext vision as a reason to delay the website unless the missing backend work directly affects launch trust, inquiry handling, policies, or customer-facing accuracy.
 
 ## V1 Launch Promise
 
@@ -19,9 +23,10 @@ V1 succeeds when a real customer can:
 - browse ready-to-order products without obvious placeholder or incorrect media;
 - submit an inquiry through `/contact`;
 - use `/book` only as a quick-intent redirect to `/contact`;
-- use cart/checkout for appropriate small-shop products;
+- browse ready-to-order offerings without implied live purchase flow;
 - see clear privacy, terms, refund/cancellation, accessibility, and service expectation pages;
 - experience the site on desktop and mobile without broken layout, clipped text, inaccessible controls, or obvious ERPNext default seams.
+- get buyer-ready page shells for the Event Balloons audience lanes, with final public copy routed through `brand-copywriter`.
 
 ## Long-Term Business Direction
 
@@ -60,11 +65,11 @@ Primary brand lane. This includes arches, columns, organic installs, backdrops, 
 
 This lane leads the homepage, gallery/proof system, service pages, and authority copy.
 
-### 2. Ready-to-Order Decor
+### 2. Ready-to-Order Decor (Browse Lane)
 
-Ecommerce lane. This includes productized bouquets, columns, small decor, seasonal items, delivery-ready items, and other products that can reasonably belong in cart/checkout.
+Browse lane for launch. This includes productized bouquets, columns, small decor, seasonal items, delivery-ready items, and other products shown as catalog proof and inquiry context.
 
-This lane should be substantial because Jeff wants ecommerce, but it should be framed as convenient ready-to-order decor, not the whole brand.
+This lane should be substantial because Jeff wants ecommerce long-term, but V1 launch keeps it as no-purchase browse/proof, not live checkout.
 
 ### 3. Event Entertainment
 
@@ -97,7 +102,7 @@ Launch-quality also includes things automated scores do not fully judge:
 
 - real mobile screenshots look professional;
 - images are not smashed, cropped badly, blurry, or misleading;
-- contact and checkout paths work as actual business flows;
+- contact and browse paths work as actual business flows;
 - policy and refund language is visible where customers need it;
 - local proof supports Utah event authority;
 - content is structured to answer customer and search-engine questions clearly.
@@ -119,12 +124,13 @@ Treat these as blockers if customer-facing:
 
 - broken route or redirect in a core path;
 - `/contact` cannot submit correctly;
-- cart/checkout uses wrong item codes or sends customers into login traps;
+- ready-to-order browse surfaces imply live purchase when V1 scope is no-purchase;
 - variant/product media contradicts the selected option where source media exists;
 - policy pages are missing, unreachable, or obviously stale;
 - homepage or navigation presents the wrong business identity;
 - mobile layout overlaps, clips, or hides critical actions;
 - exact trust claims are unverified or stale;
+- no-purchase launch contract is not provable with route pause plus the checkout API pause verifier;
 - generated or third-party images are used as proof without source/usage clarity.
 
 ## Deferred Until After V1
@@ -132,6 +138,10 @@ Treat these as blockers if customer-facing:
 Do not let these delay launch unless they directly break a launch blocker:
 
 - full 10-year operating model;
+- live ecommerce purchase flow (cart, checkout, payment success, thank-you);
+- product import completion, catalog parity, catalog price parity, and product/category media parity;
+- payment webhooks and live Stripe cutover setup;
+- product-page receiving architecture completion;
 - deep CRM maturity beyond launch-safe inquiry handling;
 - full employee/contractor workflow automation;
 - advanced reporting;
@@ -145,10 +155,11 @@ Do not let these delay launch unless they directly break a launch blocker:
 1. Reset color and brand direction before rendering new page concepts.
 2. Produce visual companions as generated image boards/concept stills, not browser popups by default.
 3. Redesign the proof surface: homepage, gallery/inspiration, and high-value service framing.
-4. Clean shop/category/product presentation so ecommerce supports trust instead of cheapening the brand.
+4. Clean shop/category/product presentation so ready-to-order browse supports trust instead of cheapening the brand.
 5. Reconcile Balloon Twisting & Face Painting with the existing V1 agreement: equal pitch, fixed pricing, clear terms, company language.
-6. Run real audits after visual/content changes: route checks, layout fit, Lighthouse, accessibility, mobile screenshots, contact, cart, checkout, and policy-source checks.
-7. Only after V1 launch, expand backend maturity toward the 10-year saleability system.
+6. Build Event Balloon audience-page structure under the active implementation lane; route copy system and fill through `brand-copywriter`.
+7. Run real audits after visual/content changes: route checks, layout fit, Lighthouse, accessibility, mobile screenshots, contact, browse surfaces, and policy-source checks.
+8. Only after V1 launch, expand backend maturity toward the 10-year saleability system.
 
 ## Operating Rule
 

@@ -20,8 +20,12 @@ styling.
 
 Use this guide when writing customer-facing copy, building Frappe/Jinja pages,
 styling Webshop surfaces, reviewing visual work, making image selections, drawing
-icons, or briefing GPT/Codex-style coding agents. Version 4.5 keeps the
-non-negotiable compact hero contract and updates the portfolio correction:
+icons, or briefing GPT/Codex-style coding agents. Version 4.6 keeps the
+non-negotiable compact hero contract and adds the shared generated-photo hero
+rule: public heroes use breakpoint-specific lifestyle crops made through the
+project image-generation API under the black landing-page readability overlay.
+Existing real/proof photos are reserved for portfolio, product, and proof
+surfaces. It also keeps the portfolio correction:
 portfolio photos carry the proof alone, without captions or visible frame
 wrappers, while mobile keeps slide-in motion instead of becoming a static stack.
 
@@ -42,7 +46,7 @@ wrappers, while mobile keeps slide-in motion instead of becoming a static stack.
 11. **Fail loudly. Always.** Forms, automations, documents, customer messages, route contracts, containers, and agent claims must block false success and leave actionable evidence.
 12. **Containers are launch-critical.** Text, images, controls, menus, cards, forms, chips, drawers, and modals must stay inside their containers at breakpoint edges and in open/expanded states.
 13. **Verify visible work.** Do not claim a route, layout, or visual state works without checking it.
-14. **Heroes are compact and standardized.** A hero labels the page; it is not the page. Use the hero height contract below and do not add page-local hero padding or giant title clamps without a documented exception.
+14. **Heroes are compact, photographic, and standardized.** A hero labels the page; it is not the page. Use the hero height contract below, use a generated lifestyle photo under the black landing-page readability overlay, and do not add page-local hero padding or giant title clamps without a documented exception.
 
 ---
 
@@ -107,6 +111,15 @@ Expectations:
 
 - If a page has a hero, it uses the same standard height as other heroes in
   that viewport family.
+- Public page heroes use generated lifestyle photo layers with
+  breakpoint-specific WebP crops: `*-mobile.webp`, `*-tablet.webp`, and
+  `*-desktop.webp`. Do not source public hero crops from the reserved real
+  work/proof photo library.
+- The current generated hero sources, prompts, and contact sheet live in
+  `_resources/generated-hero-sources/2026-05-10/`; only breakpoint-ready crops
+  belong under the public `images/heroes/` asset path.
+- Hero text must sit above the same black readability overlay pattern used by
+  the landing page. Do not put hero text directly on a bare image.
 - A hero may include an eyebrow, one H1, and one short lede at most.
 - CTAs are allowed only if they fit inside the contract without crowding; move
   extra proof, delivery terms, route explanations, and secondary content below
@@ -195,7 +208,7 @@ Current primary navigation is `Event Balloons`, `Portfolio`,
 | Element | Exists as | Required treatment |
 |---|---|---|
 | Premium proof bar | Future trust/value bars | Dark ink/navy/slate band, brass line icons, short uppercase Lato titles, compact proof text. Use the Image #3 icon standard, but do not render a homepage trust bar in the current launch layout. |
-| Hero sections | `lt-hero`, `lt-shop__hero`, `lt-portfolio-hero`, page intros | Cormorant headings, Lato labels, real proof imagery where possible, dark authority bands for civic/company pages, warmer light headers for product/legal pages. |
+| Hero sections | `lt-hero`, `lt-shop__hero`, `lt-portfolio__hero`, page intros | Cormorant headings, Lato labels, generated lifestyle photo crops per breakpoint, and the black landing-page readability overlay. Do not use reserved real/proof photos for hero crops. Dark authority feel stays consistent across public heroes; product/legal page warmth belongs below the hero unless a documented exception is approved. |
 | Photo cards / proof reels | Featured work, portfolio reel, product cards, BTFP service cards | Preserve real work. Product cards can crop tighter; proof/portfolio surfaces need context, scale, natural image ratios, and movement where the route contract calls for it. Portfolio photos are not caption cards; use the image itself with no visible frame wrapper. Hidden/offscreen moving items must not be keyboard focusable. |
 | Filters/chips | Shop chips, portfolio pills, category filters, product option chips | Rectangular or lightly rounded, Lato 700, visible selected state, and restrained selected/hover states. |
 | Forms | Contact/book form, checkout, newsletter | Lato labels, white form surface, warm/stone inputs, visible Deep Navy/Brass focus, clear required text, loud Berry error state, no placeholder-only labels, no duplicate page-specific form systems. |
@@ -540,7 +553,7 @@ Do not reintroduce `Delivery Only`, `Pickup Only`, or `Event Package`.
 
 - Prefer real photography.
 - The photo carries the argument; copy annotates.
-- Text may sit in a partial dark panel or a carefully legible overlay, but avoid fighting the image.
+- Text sits over the shared black hero readability overlay; avoid fighting the image.
 - The best homepage/hero direction is Americana authority: Wasatch mountains, Salt Lake or Utah city/civic context, formal entrances, parade arches, school/university installs, and public-event scale.
 - Use Cormorant Garamond for large hero copy and keep the CTA rectangular. The hero should not feel like a party flyer.
 - If using carousel behavior, include visible controls, touch support, and at least 5 seconds per slide.
@@ -567,12 +580,12 @@ selected to support Civic Celebration authority with Brand Direction quality.
 - Keep blacks rich, whites warm, and brass/berry details controlled. Avoid gray, muddy, or washed-out images.
 - Remove or avoid photos that feel blurry, stretched, poorly cropped, over-saturated, or too phone-snapshot casual for the first impression.
 - Do not apply heavy filters, fake blur, dark stock-style overlays, or color treatments that hide the balloon work.
-- Use dark overlays only where text must sit over a hero image, and verify readability at mobile and desktop sizes.
+- Use the shared black overlay where text sits over a hero image, and verify readability at mobile, tablet, and desktop sizes.
 - Product photos are the color; the UI should not compete with them.
 
 ### Crop And Layout Rules
 
-- Hero images: wide civic/authority compositions with a clear left or lower-left text zone.
+- Hero images: wide civic/authority compositions with a clear left or lower-left text zone. Ship explicit `mobile`, `tablet`, and `desktop` WebP crops for the actual 220px / 250px / 280px containers instead of stretching one source.
 - Proof cards: show enough setting to understand buyer context, not only the balloon surface.
 - Portfolio/detail images: preserve the full piece even if image heights vary. Full-piece visibility and natural aspect ratio matter more than perfect grid uniformity.
 - Ready-to-order products can use cleaner catalog crops, but company-level pages need proof-rich installation imagery.

@@ -10,6 +10,7 @@ Run:
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 from typing import Any
@@ -27,8 +28,10 @@ SITE = "frontend"
 BASE = "http://localhost:8081"
 
 TEMPLATE_ITEM = "classic-arch"
-VARIANT_ITEM = "classic-arch-20F-BLA-LAY-ADD"
+VARIANT_ITEM = "classic-arch-20F-BLA-LAY-NOL"
 PRODUCT_URL = f"{BASE}/shop-items/arches/classic-arch"
+DESK_USER = os.environ.get("LT_DESK_TEST_USER") or "Administrator"
+DESK_PASSWORD = os.environ.get("LT_DESK_TEST_PASSWORD") or "admin"
 
 
 class VariantMediaFail(Exception):
@@ -92,7 +95,7 @@ def choose_classic_arch_variant(page) -> None:
     page.locator(".lt-product__attr[data-attribute-name='Arch Size'] .lt-product__chip", has_text="20ft").click()
     page.locator("select.js-lt-attr-input[data-attribute-name='latex colors']").select_option(label="black")
     page.locator(".lt-product__attr[data-attribute-name='Design'] .lt-product__chip", has_text="Layered").click()
-    page.locator(".lt-product__attr[data-attribute-name='LED Lights'] .lt-product__chip", has_text="Add LED Lights").click()
+    page.locator(".lt-product__attr[data-attribute-name='LED Lights'] .lt-product__chip", has_text="No Lights").click()
 
 
 def check_product_page_swaps_image(media: dict[str, Any]) -> None:
@@ -101,6 +104,8 @@ def check_product_page_swaps_image(media: dict[str, Any]) -> None:
         browser = p.chromium.launch(headless=True)
         ctx = browser.new_context(viewport={"width": 1280, "height": 800})
         page = ctx.new_page()
+        _assert_guest_product_route_is_paused(page)
+        _login_as_operator(page)
         page.goto(PRODUCT_URL, wait_until="networkidle", timeout=15000)
 
         image = page.locator(".product-image img.website-image").first
@@ -129,6 +134,35 @@ def check_product_page_swaps_image(media: dict[str, Any]) -> None:
         final_src = image.get_attribute("src") or ""
         assert_true(final_src != initial_src, "variant selection did not change the main product image")
         browser.close()
+
+
+def _assert_guest_product_route_is_paused(page) -> None:
+    response = page.goto(PRODUCT_URL, wait_until="domcontentloaded", timeout=15000)
+    assert_true(response is not None, "guest product page did not return a response")
+    assert_true(
+        "/ready-to-order-paused" in page.url,
+        f"guest product page should be paused while ecommerce is hidden, found {page.url!r}",
+    )
+
+
+def _login_as_operator(page) -> None:
+    response = page.goto(f"{BASE}/login", wait_until="domcontentloaded", timeout=15000)
+    assert_true(response is not None, "/login did not return a response")
+    login = page.evaluate(
+        """async ({ user, password }) => {
+            const response = await fetch('/api/method/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({ usr: user, pwd: password })
+            });
+            return { status: response.status, body: await response.text() };
+        }""",
+        {"user": DESK_USER, "password": DESK_PASSWORD},
+    )
+    assert_true(login["status"] == 200, f"operator login failed: {login}")
 
 
 def main() -> int:

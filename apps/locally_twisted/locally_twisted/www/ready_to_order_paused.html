@@ -1,0 +1,27 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+<style>{{ page_css }}</style>
+
+<section class="lt-ecommerce-paused" aria-labelledby="lt-ecommerce-paused-title">
+  <div class="lt-ecommerce-paused__inner">
+    <p class="lt-ecommerce-paused__eyebrow">Ready-to-order pause</p>
+    <h1 class="lt-ecommerce-paused__title" id="lt-ecommerce-paused-title">Ready-to-order is paused.</h1>
+    <p class="lt-ecommerce-paused__copy">
+      Online ordering is temporarily paused while Locally Twisted finishes polishing the ready-to-order experience.
+      We do not want to take an order until the details are clear and the path is reliable.
+    </p>
+    <p class="lt-ecommerce-paused__copy">
+      For now, send a quote request and the Locally Twisted team will help with pickup pieces,
+      delivery questions, or a custom event setup.
+    </p>
+    <div class="lt-ecommerce-paused__actions">
+      <a class="lt-ecommerce-paused__button lt-ecommerce-paused__button--primary" href="/contact">Start a custom event quote</a>
+      <a class="lt-ecommerce-paused__button lt-ecommerce-paused__button--secondary" href="/portfolio">See recent work</a>
+    </div>
+    <p class="lt-ecommerce-paused__help">
+      Need help soon? Call <a href="tel:+18012850860">(801) 285-0860</a>.
+    </p>
+  </div>
+</section>
+{% endblock %}

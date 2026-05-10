@@ -281,7 +281,7 @@ SCENARIOS: tuple[Scenario, ...] = (
         data={"company": {"name": "Locally Twisted"}},
         key_facts=(
             ("Request", "Vendor setup and W-9 routing"),
-            ("Remittance contact", "hi@locallytwisted.com"),
+            ("Remittance contact", "billing@locallytwisted.com"),
             ("Payment terms", "Per approved quote or invoice"),
             ("PO handling", "PO shown on invoice when provided"),
         ),
@@ -695,7 +695,7 @@ def brand_header(logo_data_uri: str) -> str:
       <div class="brand-logo">{logo}</div>
       <div class="brand-contact">
         <strong>Locally Twisted</strong>
-        <span>hi@locallytwisted.com</span>
+        <span>billing@locallytwisted.com</span>
         <span>(801) 285-0860</span>
         <span>locallytwisted.com</span>
       </div>

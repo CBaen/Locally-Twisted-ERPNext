@@ -18,7 +18,7 @@ template_type: outbound_markdown_v1
 
 ## Audience
 
-The event buyer needs a professional thank-you for `{{ sales_order.name }}` plus an easy path to repeat, recommend, or plan next year's event.
+The event buyer needs a professional thank-you for `{{ event.name }}` plus an easy path to repeat, recommend, or plan next year's event.
 
 ## Answer First
 

@@ -8,6 +8,38 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-10 - BTFP inquiry starts blank, allows repeat emails, and shows explicit service-photo carousels
+
+**Decision:** `/balloon-twisting-and-face-painting` remains a contact-led live-service route, but its embedded inquiry form starts with neither `Balloon Twisting` nor `Face Painting` checked. Customers choose the service(s) they want from a blank state. The same customer email may submit multiple separate inquiries, and the form must accept up to five inspiration photos per inquiry. The two service-card photo areas must behave as explicit carousels with controls/status, not as static-looking hero photos.
+
+**Reasoning:** GL verified the exact local page and found three launch-breaking mismatches: the form preselected both artist services before the customer chose anything, repeat use of `cameronbpaul@gmail.com` failed with ERPNext's default `Lead.email_id` duplicate check, and the newly-added photo fades still looked static. For this business, one household/contact can request multiple events from the same email address; blocking that path loses real customer intent. The page also advertises up to five files, so the backend must prove 5-file attachment with repeat emails, not only one-file upload.
+
+**Implementation:** `balloon_twisting_and_face_painting.py` now sets `context.preselected_services = []`. `CRM Settings.allow_lead_duplication_based_on_emails` was enabled locally and a durable patch, `locally_twisted.patches.configure_crm_duplicate_lead_emails`, was registered in `patches.txt` so migrations keep repeat Lead emails allowed. The BTFP service photos are now JS-enhanced carousels with previous/next controls, visible `1 / 10` status, 10 images per service, auto-advance when motion is allowed, and manual controls under reduced motion.
+
+**Verification receipt:** Exact route HTML was checked at `http://localhost:8081/balloon-twisting-and-face-painting`; both service checkboxes rendered unchecked. `scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081` submitted two separate inquiries with the same email and five PNG uploads each, creating separate fake Leads with 5/5 photos attached. Targeted Playwright `npm run test:interactive-layout -- --grep "twisting and face painting inquiry|service photos expose working carousels|white-label platform leakage"` passed 31/31. `python scripts/verify/white_label_customer_surfaces.py --base-url http://localhost:8081` passed.
+
+**Alternatives considered:** Keep both artist services preselected because the route is combined. Rejected because GL explicitly wanted the beginning state blank. Work around duplicate email by merging into one Lead or asking customers to use another email. Rejected because separate event inquiries should create separate Lead records while Contact dedupe still links by email/phone. Keep CSS-only fade motion. Rejected because the user-visible page still read as static.
+
+**Decided by:** GL exact-page correction on 2026-05-09/10; implemented by OpenClaw/Moji.
+
+---
+
+## 2026-05-10 - Homepage hero rotates seasonal graduation first, then event-audience ads
+
+**Decision:** The homepage hero is a rotating carousel for the current launch moment: first slide is seasonal graduation, followed by the four Event Balloons submenu audience lanes (`Civic & community`, `Corporate events`, `Schools & campuses`, `Private celebrations`). The carousel is quote-led and links each audience slide to its matching route plus `/contact` quote intent.
+
+**Reasoning:** GL asked for the landing hero to lead with current seasonal relevance instead of a single generic hero image, then promote the four event-audience lanes as ad-like entry points. This changes the earlier stable-single-hero contract for this launch slice only; proof/brand integrity still requires one visible page-level H1, no platform leakage, compact hero sizing, and quote-led copy while public ecommerce is paused.
+
+**Implementation:** `home.py` owns `HOME_HERO_SLIDES`, `home.html` renders one H1 on the first slide and H2s on subsequent slides, and route-local CSS rotates five full-bleed slides with reduced-motion fallback to the first graduation slide.
+
+**Verification receipt:** Custom rendered contract confirmed 5 homepage slides, graduation first using `school-grad-garland.webp`, and all four event-audience labels/links. Targeted Playwright `homepage hero|white-label platform leakage|balloon twisting` passed after updating the verifier to expect the seasonal first image and visible first-slide CTAs.
+
+**Alternatives considered:** Keep the generated lifestyle static hero. Rejected by GL's seasonal carousel request. Put product/shop CTAs in the hero. Rejected because V1 launch is quote/inquiry-led while public ecommerce is paused.
+
+**Decided by:** GL request on 2026-05-09/10; implemented by OpenClaw/Moji.
+
+---
+
 ## 2026-05-10 - Public inquiry emails use branded LT shell and delivery-safe company copy
 
 **Decision:** Public inquiry acknowledgments use the branded Locally Twisted

@@ -44,12 +44,12 @@ app_include_js = "/assets/locally_twisted/js/lt-desk-workspace-router.js?v=20260
 web_include_css = [
     "/assets/locally_twisted/css/lt-theme.css?v=20260508-shell-gap-2",
     "/assets/locally_twisted/css/lt-mega-menu.css?v=20260508-event-menu-1",
-    "/assets/locally_twisted/css/lt-product-polish.css?v=20260508-a11y-1",
+    "/assets/locally_twisted/css/lt-product-polish.css?v=20260510-product-runtime-1",
     "/assets/locally_twisted/css/lt-shop-showroom.css?v=20260508-card-click-1",
-    "/assets/locally_twisted/css/lt-product-page-visual-first.css?v=20260508-classic-arch-9",
+    "/assets/locally_twisted/css/lt-product-page-visual-first.css?v=20260510-add-on-selector-1",
     "/assets/locally_twisted/css/lt-page-containment.css?v=20260508-featured-2",
-    "/assets/locally_twisted/css/lt-form-experience.css?v=20260510-1",
     "/assets/locally_twisted/css/lt-photo-heroes.css?v=20260510-event-audience-1",
+    "/assets/locally_twisted/css/lt-form-experience.css?v=20260510-1",
     "/assets/locally_twisted/css/lt-event-playground.css?v=20260506-event-playground-1",
 ]
 
@@ -61,12 +61,12 @@ web_include_css = [
 #   Exposes window.LT.newsletter.submit(email) â†’ Promise.
 #   Auto-binds to form[data-lt-newsletter] on DOMContentLoaded.
 web_include_js = [
-    "/assets/locally_twisted/js/lt-guest-cart.js?v=20260429-1",
+    "/assets/locally_twisted/js/lt-guest-cart.js?v=20260510-cart-line-key-1",
     "/assets/locally_twisted/js/lt-newsletter.js?v=20260430-2",
     "/assets/locally_twisted/js/lt-webshop-a11y.js?v=20260430-2",
     "/assets/locally_twisted/js/lt-site-preferences.js?v=20260510-form-inline-1",
     "/assets/locally_twisted/js/lt-inquiry-form-experience.js?v=20260510-quiet-1",
-    "/assets/locally_twisted/js/lt-megamenu.js?v=20260508-search-2",
+    "/assets/locally_twisted/js/lt-megamenu.js?v=20260509-search-products-1",
     "/assets/locally_twisted/js/lt-product-card-click.js?v=20260508-1",
 ]
 
@@ -95,6 +95,8 @@ website_route_rules = [
      "to_route": "terms_of_service"},
     {"from_route": "/thank-you",
      "to_route": "thank_you"},
+    {"from_route": "/ready-to-order-paused",
+     "to_route": "ready_to_order_paused"},
     # Override Frappe payments' /payment-success â€” see www/payment_success.py
     # for why (upstream URL malformation + guest 403 on Payment Request read).
     {"from_route": "/payment-success",
@@ -202,6 +204,31 @@ fixtures = [
         "filters": [["name", "in", [
             "Website Item-lt_brand_description",
             "Website Item-lt_product_details",
+            "Website Item-lt_product_page_type",
+            "Website Item-lt_commerce_lane",
+            "Quotation-custom_lt_source_lead",
+            "Quotation-custom_lt_product_template_item",
+            "Quotation-custom_lt_product_page_type",
+            "Quotation-custom_lt_commerce_lane",
+            "Quotation-custom_lt_configuration_version",
+            "Quotation-custom_lt_product_quote_summary",
+            "Quotation-custom_lt_product_quote_payload",
+            "Quotation-custom_lt_product_quote_status",
+            "Quotation Item-custom_lt_product_template_item",
+            "Quotation Item-custom_lt_product_page_type",
+            "Quotation Item-custom_lt_configuration_version",
+            "Quotation Item-custom_lt_configuration_summary",
+            "Quotation Item-custom_lt_configuration_json",
+            "Sales Order Item-custom_lt_product_template_item",
+            "Sales Order Item-custom_lt_product_page_type",
+            "Sales Order Item-custom_lt_configuration_version",
+            "Sales Order Item-custom_lt_configuration_summary",
+            "Sales Order Item-custom_lt_configuration_json",
+            "Sales Invoice Item-custom_lt_product_template_item",
+            "Sales Invoice Item-custom_lt_product_page_type",
+            "Sales Invoice Item-custom_lt_configuration_version",
+            "Sales Invoice Item-custom_lt_configuration_summary",
+            "Sales Invoice Item-custom_lt_configuration_json",
         ]]],
     },
 ]
@@ -379,7 +406,7 @@ scheduler_events = {
 
 # Request Events
 # ----------------
-# before_request = ["locally_twisted.utils.before_request"]
+before_request = ["locally_twisted.ecommerce_pause.before_request"]
 # after_request = ["locally_twisted.utils.after_request"]
 
 # Job Events

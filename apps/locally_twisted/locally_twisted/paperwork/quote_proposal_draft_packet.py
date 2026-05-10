@@ -15,6 +15,7 @@ from frappe.utils import now_datetime
 
 from locally_twisted.outbound_documents.registry import OUTBOUND_DOCUMENTS
 from locally_twisted.outbound_documents.send_readiness import evaluate_send_readiness
+from locally_twisted.product_quote_runtime import QUOTATION_FIELDNAMES
 
 
 PACKET_TYPE = "quote_proposal_draft_packet"
@@ -108,20 +109,25 @@ def render_from_review(
 def _quotation_review(limit: int) -> dict[str, Any]:
     candidates = []
     if frappe.db.exists("DocType", "Quotation"):
+        fields = [
+            "name",
+            "quotation_to",
+            "party_name",
+            "customer_name",
+            "transaction_date",
+            "valid_till",
+            "grand_total",
+            "currency",
+            "status",
+            "docstatus",
+        ]
+        meta = frappe.get_meta("Quotation")
+        for fieldname in QUOTATION_FIELDNAMES.values():
+            if meta.has_field(fieldname):
+                fields.append(fieldname)
         rows = frappe.get_all(
             "Quotation",
-            fields=[
-                "name",
-                "quotation_to",
-                "party_name",
-                "customer_name",
-                "transaction_date",
-                "valid_till",
-                "grand_total",
-                "currency",
-                "status",
-                "docstatus",
-            ],
+            fields=fields,
             order_by="modified desc",
             limit=limit,
         )
@@ -147,6 +153,7 @@ def _candidate_from_quotation(row: dict[str, Any]) -> dict[str, Any]:
     proof_photos = _custom_or_default("Quotation", row.get("name"), ("custom_proof_photos",), "")
     approval_steps = "Human scope, pricing, terms, recipient, and photo-use review"
     total = _money(row.get("grand_total"), row.get("currency"))
+    product_quote_fields = _product_quote_fields(row)
     key_fields = {
         "quote_number": row.get("name"),
         "customer_name": customer_name,
@@ -171,6 +178,7 @@ def _candidate_from_quotation(row: dict[str, Any]) -> dict[str, Any]:
         "company_branding": "Locally Twisted approved quote/proposal branding",
         "payment_terms": "Review payment terms before delivery",
     }
+    key_fields.update(product_quote_fields)
     return _candidate(
         source_doctype="Quotation",
         source_name=row.get("name"),
@@ -208,7 +216,9 @@ def _candidate(
 
 def _document(document_id: str, key_fields: dict[str, Any]) -> dict[str, Any]:
     spec = OUTBOUND_DOCUMENTS[document_id]
+    key_fields = _with_pricing_review_status(key_fields)
     readiness = evaluate_send_readiness(document_id, key_fields, [])
+    readiness = _with_pricing_review_blocker(readiness, key_fields)
     return {
         "document_id": document_id,
         "title": spec.title,
@@ -246,7 +256,8 @@ def _packet(candidate: dict[str, Any]) -> dict[str, Any]:
 
 def _section(candidate: dict[str, Any], document: dict[str, Any]) -> dict[str, Any]:
     document_id = document.get("document_id")
-    key_fields = dict(document.get("key_fields_to_review") or {})
+    key_fields = _with_pricing_review_status(dict(document.get("key_fields_to_review") or {}))
+    send_readiness = _with_pricing_review_blocker(document.get("send_readiness") or {}, key_fields)
     if document_id == "quote_estimate":
         subject = f"Draft quote {key_fields.get('quote_number') or candidate.get('source_name')} - {key_fields.get('customer_name')}"
         answer_first = _quote_answer_first(key_fields)
@@ -269,7 +280,7 @@ def _section(candidate: dict[str, Any], document: dict[str, Any]) -> dict[str, A
         "do_not_send_without": document.get("do_not_send_without"),
         "automation_ready": document.get("automation_ready"),
         "send_status": "draft_only_not_sent",
-        "send_readiness": document.get("send_readiness") or {},
+        "send_readiness": send_readiness,
         "subject": subject,
         "answer_first": answer_first,
         "body_preview": body_preview,
@@ -280,19 +291,27 @@ def _section(candidate: dict[str, Any], document: dict[str, Any]) -> dict[str, A
 
 
 def _quote_answer_first(key_fields: dict[str, Any]) -> str:
+    if _has_pricing_review_status(key_fields):
+        total_piece = "pricing review required before customer delivery"
+    else:
+        total_piece = f"reviewed total: {key_fields.get('total')}"
     return (
         f"Quote {key_fields.get('quote_number')} for {key_fields.get('customer_name')} covers "
         f"{key_fields.get('scope')} on {key_fields.get('event_date')} at {key_fields.get('event_location')}; "
-        f"reviewed total: {key_fields.get('total')}."
+        f"{total_piece}."
     )
 
 
 def _quote_body(key_fields: dict[str, Any]) -> str:
+    pricing_status = key_fields.get("pricing_status")
+    pricing_line = f"Pricing: {pricing_status}\n" if pricing_status else ""
     return (
         f"Event date: {key_fields.get('event_date')}\n"
         f"Location: {key_fields.get('event_location')}\n"
         f"Scope: {key_fields.get('scope')}\n"
+        f"Product quote: {key_fields.get('product_quote_summary') or 'None'}\n"
         f"Assumptions: {key_fields.get('assumptions')}\n"
+        f"{pricing_line}"
         f"Total: {key_fields.get('total')}\n"
         f"Acceptance path: {key_fields.get('acceptance_path')}\n\n"
         "This is a draft review packet. Confirm pricing, terms, and recipient before delivery."
@@ -300,19 +319,28 @@ def _quote_body(key_fields: dict[str, Any]) -> str:
 
 
 def _proposal_answer_first(key_fields: dict[str, Any]) -> str:
+    investment = (
+        "pricing review required"
+        if _has_pricing_review_status(key_fields)
+        else key_fields.get("investment")
+    )
     return (
         f"Proposal packet for {key_fields.get('customer_name')}: goal is {key_fields.get('event_goal')}; "
-        f"investment is {key_fields.get('investment')}; approval steps: {key_fields.get('approval_steps')}."
+        f"investment is {investment}; approval steps: {key_fields.get('approval_steps')}."
     )
 
 
 def _proposal_body(key_fields: dict[str, Any]) -> str:
+    pricing_status = key_fields.get("pricing_status")
+    pricing_line = f"Pricing: {pricing_status}\n" if pricing_status else ""
     return (
         f"Client context: {key_fields.get('client_context')}\n"
         f"Event goal: {key_fields.get('event_goal')}\n"
         f"Proposed scope: {key_fields.get('proposed_scope')}\n"
+        f"Product quote: {key_fields.get('product_quote_summary') or 'None'}\n"
         f"Venue assumptions: {key_fields.get('venue_assumptions')}\n"
         f"Proof photos: {key_fields.get('proof_photos')}\n"
+        f"{pricing_line}"
         f"Investment: {key_fields.get('investment')}\n\n"
         "This proposal is internal-only until proof photos, commercial terms, and recipient are approved."
     )
@@ -329,6 +357,89 @@ def _source_failures(review: dict[str, Any]) -> list[str]:
     if review.get("mutation_allowed") is not False:
         failures.append("source quotation review allows mutations")
     return failures
+
+
+def _with_pricing_review_status(key_fields: dict[str, Any]) -> dict[str, Any]:
+    fields = dict(key_fields)
+    if not _needs_product_quote_pricing_review(fields):
+        return fields
+    fields["pricing_status"] = (
+        "Pricing review required: this product-page quote is still using the "
+        "zero-dollar review line. Replace it with reviewed itemized pricing "
+        "before any customer delivery."
+    )
+    for amount_field in ("subtotal", "total", "investment"):
+        if _money_is_zero(fields.get(amount_field)):
+            fields[amount_field] = "Pricing review required"
+    return fields
+
+
+def _with_pricing_review_blocker(readiness: dict[str, Any], key_fields: dict[str, Any]) -> dict[str, Any]:
+    result = dict(readiness or {})
+    if not _has_pricing_review_status(key_fields):
+        return result
+    blockers = list(result.get("blocked_send_until") or [])
+    if "required_field:reviewed_product_quote_pricing" not in blockers:
+        blockers.append("required_field:reviewed_product_quote_pricing")
+    missing = list(result.get("missing_required_fields") or [])
+    if "reviewed_product_quote_pricing" not in missing:
+        missing.append("reviewed_product_quote_pricing")
+    result["send_ready"] = False
+    result["send_allowed"] = False
+    result["blocked_send_until"] = blockers
+    result["missing_required_fields"] = missing
+    return result
+
+
+def _needs_product_quote_pricing_review(key_fields: dict[str, Any]) -> bool:
+    has_product_quote = any(
+        key_fields.get(fieldname)
+        for fieldname in (
+            "requested_product_page",
+            "product_quote_status",
+            "product_quote_summary",
+            "product_quote_payload",
+        )
+    )
+    if not has_product_quote:
+        return False
+    line_items = str(key_fields.get("line_items") or "")
+    if "LT-PRODUCT-QUOTE-REVIEW" in line_items:
+        return True
+    return any(_money_is_zero(key_fields.get(fieldname)) for fieldname in ("total", "investment"))
+
+
+def _has_pricing_review_status(key_fields: dict[str, Any]) -> bool:
+    return "pricing review required" in str(key_fields.get("pricing_status") or "").lower()
+
+
+def _money_is_zero(value: Any) -> bool:
+    text = str(value or "").strip()
+    if not text:
+        return False
+    digits = "".join(char for char in text if char.isdigit() or char in ".-")
+    if not digits:
+        return False
+    try:
+        return Decimal(digits) == Decimal("0")
+    except (InvalidOperation, ValueError):
+        return False
+
+
+def _product_quote_fields(row: dict[str, Any]) -> dict[str, Any]:
+    summary = row.get(QUOTATION_FIELDNAMES["summary"])
+    payload = row.get(QUOTATION_FIELDNAMES["json"])
+    if not summary and not payload:
+        return {}
+    return {
+        "source_inquiry": row.get(QUOTATION_FIELDNAMES["source_lead"]) or "Review source Lead",
+        "requested_product_page": row.get(QUOTATION_FIELDNAMES["template_item"]) or "Review requested product page",
+        "product_page_type": row.get(QUOTATION_FIELDNAMES["page_type"]) or "Review page type",
+        "commerce_lane": row.get(QUOTATION_FIELDNAMES["commerce_lane"]) or "Review commerce lane",
+        "product_quote_status": row.get(QUOTATION_FIELDNAMES["status"]) or "Review product quote status",
+        "product_quote_summary": summary or "Review product quote summary",
+        "product_quote_payload": payload or "Review product quote payload",
+    }
 
 
 def _packet_shape_failures(packets: list[dict[str, Any]]) -> list[str]:

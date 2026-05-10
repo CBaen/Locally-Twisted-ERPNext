@@ -356,10 +356,11 @@ every deploy.
     <div class="lt-book__form-wrap">
         <form id="lt-book-form" data-form-contract="inquiry-v1" novalidate enctype="multipart/form-data">
             <fieldset>
-                <legend class="visually-hidden">Event Booking Request</legend>
+                <legend class="visually-hidden">Event Quote Request</legend>
                 {% if requested_item_code %}
                 <input type="hidden" name="lt_requested_item_code" value="{{ requested_item_code }}">
                 <input type="hidden" name="lt_requested_item_name" value="{{ requested_item_name }}">
+                <input type="hidden" id="lt_product_quote_payload" name="lt_product_quote_payload" value="">
                 <div class="lt-book__prefill">
                     <strong>Quote request:</strong> {{ requested_item_name }}
                 </div>
@@ -627,9 +628,9 @@ every deploy.
                      data-visibility-comparator="contains"
                      data-visibility-condition="Events Inquiry"
                      hidden>
-                    <h3 class="lt-book__conditional-title">Let's build a memory</h3>
+                    <h3 class="lt-book__conditional-title">Let&rsquo;s shape the event decor</h3>
                     <p class="lt-book__conditional-help">
-                        Pick the pieces you are imagining. We will help shape the right mix.
+                        Choose the pieces you are considering. We&rsquo;ll help shape the right mix.
                     </p>
                     <fieldset class="lt-book__services" style="margin: 0 0 0.75rem;">
                         <legend class="lt-book__services-legend">What should be part of it?</legend>
@@ -647,7 +648,7 @@ every deploy.
                         </div>
                     </fieldset>
                     <div class="lt-book__field" style="margin-top: 0.75rem;">
-                        <label for="book_package_colors">What colors should lead the party?</label>
+                        <label for="book_package_colors">What colors should lead the design?</label>
                         <input type="text" id="book_package_colors" name="x_package_colors"
                                class="lt-book__input"
                                placeholder="Brand colors, school colors, soft pastels, bold and bright..."
@@ -841,6 +842,40 @@ every deploy.
         }).join(separator || ', ');
     }
 
+    var PRODUCT_QUOTE_HANDOFF_KEY = 'lt_product_quote_handoff_v1';
+
+    function applyProductPageQuoteHandoff() {
+        var raw = null;
+        try {
+            raw = window.sessionStorage.getItem(PRODUCT_QUOTE_HANDOFF_KEY);
+        } catch (err) {
+            return;
+        }
+        if (!raw) return;
+
+        var payload = null;
+        try {
+            payload = JSON.parse(raw);
+        } catch (err) {
+            return;
+        }
+        if (!payload || payload.source !== 'product-page-quote') return;
+
+        var requestedItem = document.querySelector('[name="lt_requested_item_code"]');
+        var quotePayload = document.getElementById('lt_product_quote_payload');
+        if (!quotePayload || !requestedItem) return;
+        if (payload.website_item_code && payload.website_item_code !== requestedItem.value) return;
+
+        quotePayload.value = JSON.stringify(payload);
+        checkService('Balloon Decor');
+        updateConditionals();
+        setNamedValue('description', payload.summary || 'Product page quote request');
+
+        try {
+            window.sessionStorage.removeItem(PRODUCT_QUOTE_HANDOFF_KEY);
+        } catch (err) {}
+    }
+
     function deliveryAddressLine(fulfillment) {
         if (!fulfillment) return '';
         return joinParts([
@@ -1001,6 +1036,7 @@ every deploy.
         } catch (err) {}
     }
 
+    applyProductPageQuoteHandoff();
     applyCheckoutQuoteHandoff();
     applyEventPlaygroundHandoff();
 

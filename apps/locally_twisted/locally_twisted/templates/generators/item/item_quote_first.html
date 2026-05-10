@@ -1,0 +1,198 @@
+{# Quote-first product-page controls.
+
+   Used by LT's reusable complex/custom page type when paid checkout would
+   flatten required product meaning.
+#}
+{%- set lt_variant_attributes = get_variant_attribute_options(doc.item_code) or [] -%}
+<div class="lt-product__cart lt-product__cart--quote-first"
+     data-template-item-code="{{ doc.item_code }}"
+     data-item-name="{{ doc.web_item_name }}"
+     data-product-page-type="{{ lt_product_runtime.product_page_type }}"
+     data-commerce-lane="{{ lt_product_runtime.commerce_lane }}">
+    <div class="lt-product__quote-note" aria-live="polite">
+        {{ _("This design needs a quick quote before checkout so colors, setup, timing, and details stay together.") }}
+    </div>
+
+    <form class="lt-product__quote-form"
+          aria-label="{{ _('Product quote details') }}"
+          onsubmit="return false;">
+        {%- for row in lt_variant_attributes -%}
+            {%- set attr_name = row.attribute -%}
+            {%- set field_id = "lt-quote-attr-" ~ loop.index -%}
+            {%- set values = row.get("values") or [] -%}
+            {%- set is_color_drawer = is_balloon_color_attribute(attr_name) -%}
+            {%- set is_chips = (values | length <= 8) and not is_color_drawer -%}
+
+            <div class="lt-product__attr lt-product__quote-attr"
+                 data-attribute-name="{{ attr_name }}"
+                 data-display-type="{{ 'color-drawer' if is_color_drawer else ('chips' if is_chips else 'select') }}">
+                <label for="{{ field_id }}" class="lt-product__attr-label">
+                    {{ _(attr_name) }}
+                    <span class="lt-product__attr-selected" id="{{ field_id }}-selected"></span>
+                </label>
+
+                {%- if is_color_drawer -%}
+                    {%- set color_groups = get_balloon_color_groups(values) -%}
+                    <div class="lt-product__color-drawers"
+                         id="{{ field_id }}"
+                         aria-label="{{ _(attr_name) }}">
+                        {%- for group in color_groups -%}
+                            <details class="lt-product__color-drawer" {% if loop.first %}open{% endif %}>
+                                <summary class="lt-product__color-drawer-summary">
+                                    <span class="lt-product__color-group-name">{{ _(group.group) }}</span>
+                                    <span class="lt-product__drawer-toggle" aria-hidden="true">
+                                        <span class="lt-product__drawer-toggle-open">{{ _("Close") }}</span>
+                                        <span class="lt-product__drawer-toggle-closed">{{ _("Open") }}</span>
+                                    </span>
+                                    <span class="lt-product__color-count">{{ group.options | length }}</span>
+                                </summary>
+                                <div class="lt-product__color-grid">
+                                    {%- for color in group.options -%}
+                                        <label class="lt-product__color-card">
+                                            <input type="checkbox"
+                                                   class="lt-product__color-input js-lt-quote-option"
+                                                   name="lt-quote-color-{{ attr_name | replace(' ', '-') }}"
+                                                   value="{{ color.name }}"
+                                                   data-attribute-name="{{ attr_name }}">
+                                            <span class="lt-product__color-swatch" style="--lt-color-swatch: {{ color.hex_value or '#d8c7b8' }}" aria-hidden="true"></span>
+                                            <span class="lt-product__color-name">
+                                                <span>{{ color.name }}</span>
+                                                {% if color.hex_value %}<span class="lt-product__color-hex">({{ color.hex_value }})</span>{% endif %}
+                                            </span>
+                                        </label>
+                                    {%- endfor -%}
+                                </div>
+                            </details>
+                        {%- endfor -%}
+                    </div>
+                {%- elif is_chips -%}
+                    <div class="lt-product__chips" id="{{ field_id }}" role="radiogroup" aria-label="{{ _(attr_name) }}">
+                        {%- for v in values -%}
+                            <label class="lt-product__chip">
+                                <input type="radio"
+                                       class="lt-product__chip-input js-lt-quote-option"
+                                       name="lt-quote-attr-{{ attr_name | replace(' ', '-') }}"
+                                       value="{{ v }}"
+                                       data-attribute-name="{{ attr_name }}">
+                                <span class="lt-product__chip-label">{{ v }}</span>
+                            </label>
+                        {%- endfor -%}
+                    </div>
+                {%- else -%}
+                    <select class="lt-product__select js-lt-quote-option"
+                            id="{{ field_id }}"
+                            name="lt-quote-attr-{{ attr_name | replace(' ', '-') }}"
+                            data-attribute-name="{{ attr_name }}">
+                        <option value="">{{ _("Choose a") }} {{ _(attr_name) | lower }}.</option>
+                        {%- for v in values -%}
+                            <option value="{{ v }}">{{ v }}</option>
+                        {%- endfor -%}
+                    </select>
+                {%- endif -%}
+            </div>
+        {%- endfor -%}
+
+        <label class="lt-product__addon-value-label lt-product__quote-note-field">
+            <span>{{ _("Color notes") }}</span>
+            <textarea class="lt-product__select js-lt-quote-customization"
+                      data-customization-key="color_notes"
+                      data-customization-label="{{ _('Color notes') }}"
+                      rows="2"></textarea>
+        </label>
+        <label class="lt-product__addon-value-label lt-product__quote-note-field">
+            <span>{{ _("Design notes") }}</span>
+            <textarea class="lt-product__select js-lt-quote-customization"
+                      data-customization-key="design_notes"
+                      data-customization-label="{{ _('Design notes') }}"
+                      rows="3"></textarea>
+        </label>
+    </form>
+
+    <div class="lt-product__actions">
+        <a href="/contact?intent=quote&source=product-page&item={{ doc.item_code }}"
+           class="lt-product__cta lt-product__cta--primary js-lt-product-quote-request"
+           data-item-code="{{ doc.item_code }}"
+           data-item-name="{{ doc.web_item_name }}"
+           data-product-page-type="{{ lt_product_runtime.product_page_type }}"
+           data-commerce-lane="{{ lt_product_runtime.commerce_lane }}">
+            {{ _("Request a Quote") }}
+        </a>
+    </div>
+</div>
+
+<script>
+(function () {
+    'use strict';
+    var root = document.querySelector('.lt-product__cart--quote-first');
+    if (!root) return;
+    var link = root.querySelector('.js-lt-product-quote-request');
+    if (!link) return;
+
+    function selectedQuoteOptions() {
+        var picks = {};
+        root.querySelectorAll('.lt-product__quote-attr').forEach(function (row) {
+            var attrName = row.getAttribute('data-attribute-name');
+            if (!attrName) return;
+            var values = [];
+            var select = row.querySelector('select.js-lt-quote-option');
+            if (select && select.value) {
+                values.push(select.value);
+            } else {
+                row.querySelectorAll('.js-lt-quote-option:checked').forEach(function (input) {
+                    if (input.value) values.push(input.value);
+                });
+            }
+            if (values.length) picks[attrName] = values.join(', ');
+        });
+        return picks;
+    }
+
+    function selectedQuoteCustomizations() {
+        var rows = [];
+        root.querySelectorAll('.js-lt-quote-customization').forEach(function (input) {
+            var value = (input.value || '').trim();
+            if (!value) return;
+            rows.push({
+                key: input.getAttribute('data-customization-key') || '',
+                label: input.getAttribute('data-customization-label') || '',
+                value: value
+            });
+        });
+        return rows;
+    }
+
+    function quoteSummary(itemName, itemCode, options, customizations) {
+        var pieces = ['Requested product page quote: ' + itemName + ' (' + itemCode + ')'];
+        Object.keys(options).sort().forEach(function (key) {
+            pieces.push(key + ': ' + options[key]);
+        });
+        customizations.forEach(function (row) {
+            if (row.label && row.value) pieces.push(row.label + ': ' + row.value);
+        });
+        return pieces.join('; ');
+    }
+
+    link.addEventListener('click', function () {
+        var itemCode = link.getAttribute('data-item-code') || '';
+        var itemName = link.getAttribute('data-item-name') || itemCode;
+        var options = selectedQuoteOptions();
+        var customizations = selectedQuoteCustomizations();
+        var payload = {
+            schema_version: 'lt-product-config-v1',
+            source: 'product-page-quote',
+            website_item_code: itemCode,
+            web_item_name: itemName,
+            product_page_type: link.getAttribute('data-product-page-type') || 'needs_review',
+            commerce_lane: link.getAttribute('data-commerce-lane') || 'quote_first',
+            summary: quoteSummary(itemName, itemCode, options, customizations),
+            selected_options: options,
+            add_ons: [],
+            customizations: customizations,
+            needs_operator_review: true
+        };
+        try {
+            window.sessionStorage.setItem('lt_product_quote_handoff_v1', JSON.stringify(payload));
+        } catch (err) {}
+    });
+})();
+</script>

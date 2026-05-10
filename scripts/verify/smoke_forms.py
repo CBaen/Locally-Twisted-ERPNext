@@ -115,6 +115,24 @@ def cleanup_record_in_backend_frappe(test_marker: str, base_url: str) -> bool | 
         lead_name = lead.get("name")
         if not lead_name:
             continue
+        comments = _get_list_via_local_bench(
+            "Comment",
+            [["reference_doctype", "=", "Lead"], ["reference_name", "=", lead_name]],
+            ["name"],
+            base_url,
+        )
+        if comments is None:
+            ok = False
+            comments = []
+        communications = _get_list_via_local_bench(
+            "Communication",
+            [["reference_doctype", "=", "Lead"], ["reference_name", "=", lead_name]],
+            ["name"],
+            base_url,
+        )
+        if communications is None:
+            ok = False
+            communications = []
         tasks = _get_list_via_local_bench(
             "Task",
             [["custom_lt_lead", "=", lead_name]],
@@ -124,6 +142,14 @@ def cleanup_record_in_backend_frappe(test_marker: str, base_url: str) -> bool | 
         if tasks is None:
             ok = False
             continue
+        for comment in comments:
+            comment_name = comment.get("name")
+            if comment_name:
+                ok = _delete_doc_via_local_bench("Comment", comment_name, base_url) and ok
+        for communication in communications:
+            communication_name = communication.get("name")
+            if communication_name:
+                ok = _delete_doc_via_local_bench("Communication", communication_name, base_url) and ok
         for task in tasks:
             task_name = task.get("name")
             if task_name:
@@ -154,7 +180,41 @@ def _get_list_via_local_bench(doctype: str, filters: list, fields: list[str], ba
 def _delete_doc_via_local_bench(doctype: str, name: str, base_url: str) -> bool:
     if not _is_local_base_url(base_url):
         return False
-    return _bench_execute("frappe.client.delete", {"doctype": doctype, "name": name}) is not None
+    return _bench_delete_doc(doctype, name) is not None
+
+
+def _bench_delete_doc(doctype: str, name: str) -> str | None:
+    container = os.environ.get("LT_FRAPPE_BACKEND_CONTAINER", "locally-twisted-erpnext-v15-backend-1")
+    site = os.environ.get("LT_FRAPPE_SITE", "frontend")
+    command = [
+        "docker",
+        "exec",
+        container,
+        "bench",
+        "--site",
+        site,
+        "execute",
+        "frappe.delete_doc",
+        "--args",
+        repr([doctype, name]),
+        "--kwargs",
+        repr({"force": True, "ignore_permissions": True}),
+    ]
+    try:
+        result = subprocess.run(
+            command,
+            check=False,
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+    except (OSError, subprocess.SubprocessError) as exc:
+        print(f"       local bench unavailable: {exc}")
+        return None
+    if result.returncode != 0:
+        print(f"       local bench delete failed for {doctype} {name}: {result.stderr.strip()[:300]}")
+        return None
+    return result.stdout.strip()
 
 
 def _bench_execute(method: str, kwargs: dict) -> str | None:
@@ -198,7 +258,7 @@ def _is_local_base_url(base_url: str) -> bool:
 # Smoke test
 # =============================================================================
 def smoke_test(base_url: str, form_path: str, shape_only: bool = False) -> int:
-    test_marker = f"SMOKE-TEST-{int(time.time())}"
+    test_marker = f"SMOKE-TEST-{time.time_ns()}"
     form_url = f"{base_url.rstrip('/')}/{form_path.lstrip('/')}"
     print(f"\n[SMOKE] Form: {form_url}")
     print(f"        Test marker: {test_marker}")
@@ -265,7 +325,13 @@ def smoke_test(base_url: str, form_path: str, shape_only: bool = False) -> int:
 
         # Step 5: verify the page response — must NOT be a blank white page
         # (this is the LT 2026-04-22 failure mode)
-        time.sleep(2)
+        try:
+            page.wait_for_selector(
+                ".lt-book__modal--open, .lt-book__feedback.is-error",
+                timeout=12000,
+            )
+        except PlaywrightTimeout:
+            pass
         body_text = page.locator("body").inner_text()
         if not body_text.strip():
             print(f"        FAIL — page body is empty after submit (silent-failure pattern)")
@@ -331,7 +397,7 @@ def smoke_newsletter(base_url: str) -> int:
 
     Returns 0 on full pass, 1 on any failure.
     """
-    test_email = f"smoke-newsletter-{int(time.time())}@bbc-test.invalid"
+    test_email = f"smoke-newsletter-{time.time_ns()}@bbc-test.invalid"
     endpoint = f"{base_url.rstrip('/')}/api/method/locally_twisted.api.newsletter.signup"
 
     print(f"\n[SMOKE] Newsletter endpoint: {endpoint}")

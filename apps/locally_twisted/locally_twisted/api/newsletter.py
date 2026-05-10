@@ -46,6 +46,10 @@ _MAX_EMAIL_LEN = 200
 _MAX_SOURCE_URL_LEN = 500
 
 
+def _already_on_list_response():
+    return {"ok": True, "message": "You're already on the list — thanks!"}
+
+
 @frappe.whitelist(allow_guest=True)
 @rate_limit(limit=10, seconds=60 * 60, key="email", ip_based=False)
 def signup(email=None):
@@ -77,7 +81,7 @@ def signup(email=None):
     # ── Idempotent insert ──────────────────────────────────────────────
     try:
         if frappe.db.exists("LT Newsletter Signup", {"email": email}):
-            return {"ok": True, "message": "You're already on the list — thanks!"}
+            return _already_on_list_response()
 
         # Pull source_url from the HTTP request for analytics (which page
         # the visitor signed up from).  None if not available.
@@ -91,7 +95,17 @@ def signup(email=None):
             "email": email,
             "source_url": source_url,
         })
-        doc.insert(ignore_permissions=True)
+        try:
+            doc.insert(ignore_permissions=True)
+        except frappe.UniqueValidationError:
+            # Another request can create the same email after the exists()
+            # check. Keep the public result idempotent instead of leaking a
+            # raw database uniqueness error to the customer.
+            frappe.db.rollback()
+            if frappe.db.exists("LT Newsletter Signup", {"email": email}):
+                frappe.clear_messages()
+                return _already_on_list_response()
+            raise
         frappe.db.commit()
         return {"ok": True, "message": "Thanks — we'll be in touch."}
 

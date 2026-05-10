@@ -18,7 +18,7 @@ template_type: outbound_markdown_v1
 
 ## Audience
 
-The event buyer needs to know what `{{ quotation.name }}` includes, what it costs, and exactly how to approve it.
+The event buyer needs to know what the estimate includes, what it costs, and exactly how to approve it.
 
 ## Answer First
 
@@ -39,7 +39,7 @@ The buyer can approve, request a revision, or route the estimate to procurement 
 
 ## Automation Notes
 
-Use Lead and Quotation data once the scope is reviewed by a human.
+Use reviewed inquiry and estimate data once the scope is approved by a human.
 
 Do not auto-send from this registry. A future quote sender should create a draft/review candidate until stage thresholds and approval rules are explicit.
 

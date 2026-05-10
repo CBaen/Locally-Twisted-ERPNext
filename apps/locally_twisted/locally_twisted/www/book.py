@@ -29,7 +29,9 @@ Loud-failure compliance (per project CLAUDE.md + global loud-failure rule):
   - Developer: frappe.log_error on every uncaught exception with payload
   - Monitor: scripts/verify/smoke_forms.py covers /contact on every deploy
 """
+import copy
 import json
+import time
 
 import frappe
 from frappe import _
@@ -181,12 +183,15 @@ def submit_book_inquiry():
 
     # Free-form catch-all
     description = (fd.get("description") or "").strip()
-    requested_item = _requested_item_note(
-        (fd.get("lt_requested_item_code") or "").strip(),
-        (fd.get("lt_requested_item_name") or "").strip(),
-    )
+    requested_item_code = (fd.get("lt_requested_item_code") or "").strip()
+    requested_item_name = (fd.get("lt_requested_item_name") or "").strip()
+    requested_product_quote_raw = (fd.get("lt_product_quote_payload") or "").strip()
+    requested_item = _requested_item_note(requested_item_code, requested_item_name)
+    product_quote_payload = _requested_product_quote_payload(requested_item_code, requested_product_quote_raw)
     if requested_item:
         description = _combine_text_values(requested_item, description)
+    if product_quote_payload and product_quote_payload.get("summary"):
+        description = _combine_text_values(product_quote_payload["summary"], description)
     payment_rule = _payment_rule_for_inquiry(services, num_twisters, num_painters)
 
     # Lead Source: ensure "Website" exists (idempotent)
@@ -231,9 +236,12 @@ def submit_book_inquiry():
         "custom_source_channel": "Website Form",
     }
     lead_doc.update(_lead_payment_fields(payment_rule))
-    lead = frappe.get_doc(lead_doc)
+    lead_doc.update(_lead_product_quote_fields(product_quote_payload))
+    product_quote_child_rows = _lead_product_quote_child_rows(product_quote_payload)
+    if product_quote_child_rows:
+        lead_doc["custom_lt_product_quote_items"] = product_quote_child_rows
     try:
-        lead.insert(ignore_permissions=True)
+        lead = _insert_lead_with_retry(lead_doc)
     except Exception as e:
         # Loud-failure: log dev-channel detail before re-raising so the
         # framework error handler surfaces the user-facing error banner.
@@ -330,6 +338,36 @@ def submit_book_inquiry():
 
 
 # -------------------------- helpers ---------------------------------- #
+
+
+def _insert_lead_with_retry(lead_doc):
+    """Retry only transient database contention during public Lead creation."""
+    max_attempts = 3
+    for attempt in range(1, max_attempts + 1):
+        lead = frappe.get_doc(copy.deepcopy(lead_doc))
+        try:
+            lead.insert(ignore_permissions=True)
+            return lead
+        except Exception as exc:
+            if attempt >= max_attempts or not _is_transient_lead_insert_error(exc):
+                raise
+            frappe.db.rollback()
+            time.sleep(0.15 * attempt)
+    raise RuntimeError("unreachable lead insert retry state")
+
+
+def _is_transient_lead_insert_error(exc):
+    query_deadlock_error = getattr(frappe, "QueryDeadlockError", None)
+    if query_deadlock_error and isinstance(exc, query_deadlock_error):
+        return True
+
+    message = str(exc).lower()
+    transient_markers = (
+        "deadlock",
+        "record has changed since last read",
+        "try restarting transaction",
+    )
+    return any(marker in message for marker in transient_markers)
 
 
 def _parse_int(value):
@@ -429,6 +467,115 @@ def _lead_payment_fields(payment_rule):
         "custom_lt_payment_notes": payment_rule.get("payment_notes"),
     }
     return {fieldname: value for fieldname, value in fields.items() if meta.has_field(fieldname)}
+
+
+def _lead_product_quote_fields(product_quote_payload):
+    if not product_quote_payload:
+        return {}
+    meta = frappe.get_meta("Lead")
+    fields = {
+        "custom_lt_product_template_item": product_quote_payload.get("website_item_code"),
+        "custom_lt_product_page_type": product_quote_payload.get("product_page_type"),
+        "custom_lt_product_quote_summary": product_quote_payload.get("summary"),
+        "custom_lt_product_quote_payload": json.dumps(product_quote_payload, sort_keys=True, default=str),
+    }
+    return {fieldname: value for fieldname, value in fields.items() if meta.has_field(fieldname)}
+
+
+def _lead_product_quote_child_rows(product_quote_payload):
+    if not product_quote_payload:
+        return []
+    meta = frappe.get_meta("Lead")
+    if not meta.has_field("custom_lt_product_quote_items"):
+        return []
+    return [
+        {
+            "product_page": product_quote_payload.get("website_item_code"),
+            "product_page_type": product_quote_payload.get("product_page_type"),
+            "commerce_lane": product_quote_payload.get("commerce_lane"),
+            "summary": product_quote_payload.get("summary"),
+            "payload_json": json.dumps(product_quote_payload, sort_keys=True, default=str),
+            "status": "Needs Operator Review",
+        }
+    ]
+
+
+def _requested_product_quote_payload(item_code, raw_payload=None):
+    incoming = _decode_requested_product_quote_payload(raw_payload)
+    if incoming and not item_code:
+        item_code = incoming.get("website_item_code")
+    if not item_code:
+        return None
+    item = frappe.db.get_value(
+        "Website Item",
+        {"item_code": item_code, "published": 1},
+        ["item_code", "web_item_name", "item_group", "route"],
+        as_dict=True,
+    )
+    if not item:
+        return None
+
+    from locally_twisted.product_page_runtime import product_page_contract_for_website_item
+    from locally_twisted.product_quote_request import normalize_public_product_quote_payload
+
+    contract = product_page_contract_for_website_item(item["item_code"])
+    if incoming and incoming.get("website_item_code") and incoming.get("website_item_code") != item.get("item_code"):
+        frappe.throw(
+            _(
+                "Tiny snag: this product quote was attached to a different product page. "
+                "Please open the product again and send the quote request one more time."
+            ),
+            frappe.ValidationError,
+        )
+
+    return normalize_public_product_quote_payload(
+        item=item,
+        contract=contract,
+        incoming=incoming,
+    )
+
+
+def _decode_requested_product_quote_payload(raw_payload):
+    if not raw_payload:
+        return {}
+    try:
+        payload = json.loads(raw_payload)
+    except (TypeError, ValueError):
+        frappe.throw(
+            _(
+                "Tiny snag: this product quote did not come through cleanly. "
+                "Please open the product again and send the quote request one more time."
+            ),
+            frappe.ValidationError,
+        )
+    if not isinstance(payload, dict):
+        frappe.throw(
+            _(
+                "Tiny snag: this product quote did not come through cleanly. "
+                "Please open the product again and send the quote request one more time."
+            ),
+            frappe.ValidationError,
+        )
+
+    from locally_twisted.product_page_runtime import CONFIG_VERSION
+
+    if payload.get("schema_version") != CONFIG_VERSION:
+        frappe.throw(
+            _(
+                "Tiny snag: this product quote used an older option format. "
+                "Please open the product again and send the quote request one more time."
+            ),
+            frappe.ValidationError,
+        )
+    return payload
+
+
+def _dict_or_empty(value):
+    return value if isinstance(value, dict) else {}
+
+
+def _list_or_empty(value):
+    return value if isinstance(value, list) else []
 
 
 def _requested_item_note(item_code, fallback_name):

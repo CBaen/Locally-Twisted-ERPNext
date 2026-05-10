@@ -149,6 +149,12 @@ CUSTOM_FIELD_UPDATES = {
         "fieldtype": "Small Text",
         "insert_after": "custom_lt_balance_timing",
     },
+    "custom_lt_product_quote_items": {
+        "label": "Product Quote Items",
+        "fieldtype": "Table",
+        "options": "LT Product Quote Item",
+        "insert_after": "custom_lt_product_quote_payload",
+    },
 }
 
 LEAD_PHOTO_DOCTYPE = {
@@ -170,6 +176,52 @@ LEAD_PHOTO_DOCTYPE = {
             "label": "Caption",
             "fieldtype": "Data",
             "in_list_view": 1,
+        },
+    ],
+}
+
+PRODUCT_QUOTE_ITEM_DOCTYPE = {
+    "doctype": "DocType",
+    "name": "LT Product Quote Item",
+    "module": "Custom",
+    "custom": 1,
+    "istable": 1,
+    "editable_grid": 1,
+    "fields": [
+        {
+            "fieldname": "product_page",
+            "label": "Product Page",
+            "fieldtype": "Link",
+            "options": "Item",
+            "in_list_view": 1,
+        },
+        {
+            "fieldname": "product_page_type",
+            "label": "Page Type",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+        },
+        {
+            "fieldname": "commerce_lane",
+            "label": "Commerce Lane",
+            "fieldtype": "Data",
+        },
+        {
+            "fieldname": "summary",
+            "label": "Summary",
+            "fieldtype": "Small Text",
+            "in_list_view": 1,
+        },
+        {
+            "fieldname": "payload_json",
+            "label": "Payload JSON",
+            "fieldtype": "JSON",
+        },
+        {
+            "fieldname": "status",
+            "label": "Status",
+            "fieldtype": "Data",
+            "default": "Needs Operator Review",
         },
     ],
 }
@@ -217,6 +269,48 @@ ENSURED_LEAD_CUSTOM_FIELDS = {
         "fieldtype": "Small Text",
         "insert_after": "custom_lt_balance_timing",
     },
+    "custom_lt_product_template_item": {
+        "doctype": "Custom Field",
+        "dt": "Lead",
+        "fieldname": "custom_lt_product_template_item",
+        "label": "Requested Product Page",
+        "fieldtype": "Link",
+        "options": "Item",
+        "insert_after": "custom_anything_else",
+    },
+    "custom_lt_product_page_type": {
+        "doctype": "Custom Field",
+        "dt": "Lead",
+        "fieldname": "custom_lt_product_page_type",
+        "label": "LT Product Page Type",
+        "fieldtype": "Data",
+        "insert_after": "custom_lt_product_template_item",
+    },
+    "custom_lt_product_quote_summary": {
+        "doctype": "Custom Field",
+        "dt": "Lead",
+        "fieldname": "custom_lt_product_quote_summary",
+        "label": "Product Quote Summary",
+        "fieldtype": "Small Text",
+        "insert_after": "custom_lt_product_page_type",
+    },
+    "custom_lt_product_quote_payload": {
+        "doctype": "Custom Field",
+        "dt": "Lead",
+        "fieldname": "custom_lt_product_quote_payload",
+        "label": "Product Quote Payload",
+        "fieldtype": "JSON",
+        "insert_after": "custom_lt_product_quote_summary",
+    },
+    "custom_lt_product_quote_items": {
+        "doctype": "Custom Field",
+        "dt": "Lead",
+        "fieldname": "custom_lt_product_quote_items",
+        "label": "Product Quote Items",
+        "fieldtype": "Table",
+        "options": "LT Product Quote Item",
+        "insert_after": "custom_lt_product_quote_payload",
+    },
 }
 
 
@@ -231,7 +325,7 @@ def execute(commit: bool = True) -> str:
         "updated_leads": 0,
     }
     _sync_service_types(summary)
-    _ensure_lead_photo_doctype(summary)
+    _ensure_contact_child_doctypes(summary)
     _ensure_lead_custom_fields(summary)
     _sync_lead_custom_fields(summary)
     summary["normalized_time_values"] = _normalize_existing_lead_time_text()
@@ -282,11 +376,12 @@ def _sync_service_types(summary: dict) -> None:
         summary["ensured_services"].append(service)
 
 
-def _ensure_lead_photo_doctype(summary: dict) -> None:
-    if frappe.db.exists("DocType", "LT Lead Photo"):
-        return
-    frappe.get_doc(LEAD_PHOTO_DOCTYPE).insert(ignore_permissions=True)
-    summary["ensured_doctypes"].append("LT Lead Photo")
+def _ensure_contact_child_doctypes(summary: dict) -> None:
+    for spec in (LEAD_PHOTO_DOCTYPE, PRODUCT_QUOTE_ITEM_DOCTYPE):
+        if frappe.db.exists("DocType", spec["name"]):
+            continue
+        frappe.get_doc(spec).insert(ignore_permissions=True)
+        summary["ensured_doctypes"].append(spec["name"])
 
 
 def _ensure_lead_custom_fields(summary: dict) -> None:

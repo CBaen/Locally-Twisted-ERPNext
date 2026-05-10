@@ -50,6 +50,7 @@ from locally_twisted.payments.settings import (
     DEFAULT_OPERATOR_EMAIL,
     get_operator_email,
 )
+from locally_twisted.product_page_runtime import customer_facing_line_label
 
 
 no_cache = 1
@@ -320,11 +321,13 @@ def _ensure_sales_invoice(so_name):
         return existing[0]["parent"]
 
     from erpnext.selling.doctype.sales_order.sales_order import make_sales_invoice
+    from locally_twisted.product_page_runtime import copy_sales_order_line_configuration_to_invoice
 
     si = make_sales_invoice(so_name, ignore_permissions=True)
     si.flags.ignore_permissions = True
     si.flags.mute_email = True
     si.set_missing_values()
+    copy_sales_order_line_configuration_to_invoice(si, so_name)
     si.insert(ignore_permissions=True)
     si.submit()
     frappe.db.commit()
@@ -395,7 +398,7 @@ def _send_receipt_email(so_name):
     # customer input). escape_html applied as belt-and-suspenders.
     lines_html = ""
     for item in so.items:
-        name = item.item_name or item.item_code
+        name = customer_facing_line_label(item)
         lines_html += (
             f'<tr>'
             f'<td style="padding:8px 0;border-bottom:1px solid #eee;">'
@@ -457,6 +460,7 @@ def _send_receipt_email(so_name):
         **document_copy_kwargs(external_audience=True, primary_recipients=[email]),
     )
     frappe.db.commit()
+
 
 OPERATOR_EMAIL = DEFAULT_OPERATOR_EMAIL
 # Jeff's operator inbox. Update via site_config.json
@@ -520,7 +524,7 @@ def _send_operator_notification(so_name):
 
     lines_html = ""
     for item in so.items:
-        name = item.item_name or item.item_code
+        name = customer_facing_line_label(item)
         lines_html += (
             f'<tr>'
             f'<td style="padding:6px 12px 6px 0;">{escape_html(name)}</td>'
@@ -664,6 +668,7 @@ def _send_welcome_email_if_first_order(so_name):
         **document_copy_kwargs(external_audience=True, primary_recipients=[email]),
     )
     frappe.db.commit()
+
 
 def _redirect(location):
     frappe.local.flags.redirect_location = location

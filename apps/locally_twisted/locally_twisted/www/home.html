@@ -8,28 +8,49 @@
 #}
 
 {# --- 1. Hero --- #}
-<section class="lt-hero lt-fullbleed" aria-labelledby="lt-page-heading">
-    <div class="lt-hero__image" aria-hidden="true"></div>
-    <div class="lt-hero__content">
-        <p class="lt-hero__eyebrow">Utah's Wasatch Front · Since 1998</p>
+<section class="lt-hero lt-fullbleed" aria-labelledby="lt-page-heading" aria-describedby="lt-hero-tagline">
+    {% for slide in home_hero_slides %}
+    <article class="lt-hero__slide{% if loop.first %} lt-hero__slide--active{% endif %}" aria-hidden="{{ 'false' if loop.first else 'true' }}">
+        <div class="lt-hero__image" style="background-image: url('{{ slide.image }}');" aria-hidden="true"></div>
+        <div class="lt-hero__content">
+            <p class="lt-hero__eyebrow">{{ slide.kicker }}</p>
 
-        <h1 id="lt-page-heading" class="lt-hero__title">Professional balloon decor for Utah events that matter.</h1>
-        <p class="lt-hero__proofline">Corporate, school, civic, and community ready.</p>
+            {% if loop.first %}
+            <h1 id="lt-page-heading" class="lt-hero__title">{{ slide.title }}</h1>
+            {% else %}
+            <h2 class="lt-hero__title">{{ slide.title }}</h2>
+            {% endif %}
+            <p class="lt-hero__proofline">{{ slide.proofline }}</p>
 
-        <p id="lt-hero-tagline" class="lt-hero__tagline">
-            Prepared design, clean install, and quote-led support for Utah business, school, civic, community, venue, and private events.
-        </p>
-        <a href="/contact" class="lt-hero__cta">
-            Free Event Quote
-            <span aria-hidden="true">&rarr;</span>
-        </a>
-        <a href="/event-balloons" class="lt-hero__cta lt-hero__cta--secondary">
-            Event Balloons
-        </a>
-    </div>
+            <p{% if loop.first %} id="lt-hero-tagline"{% endif %} class="lt-hero__tagline">
+                {{ slide.body }}
+            </p>
+            <a href="{{ slide.primary_url }}" class="lt-hero__cta">
+                {{ slide.primary_label }}
+                <span aria-hidden="true">&rarr;</span>
+            </a>
+            <a href="{{ slide.secondary_url }}" class="lt-hero__cta lt-hero__cta--secondary">
+                {{ slide.secondary_label }}
+            </a>
+        </div>
+    </article>
+    {% endfor %}
 </section>
 
 {# --- 2. Google review proof crawl --- #}
+{% macro lt_review_card(quote) -%}
+<article class="lt-reviews-block__quote" data-lt-review-card data-lt-review-rating="{{ quote.rating or 5 }}">
+    <p class="lt-reviews-block__quote-mark" aria-hidden="true">&ldquo;</p>
+    <p class="lt-reviews-block__quote-text">{{ quote.text | replace("Totally Twisted", "Locally Twisted") }}</p>
+    <p class="lt-reviews-block__quote-attr">
+        &mdash; {{ quote.display_name or quote.name }}{% if quote.event %}, {{ quote.event }}{% endif %}
+    </p>
+    <span class="lt-reviews-block__quote-stars" role="img"
+          aria-label="{{ quote.rating or 5 }} out of 5 stars">
+        {% for _ in range(quote.rating or 5) %}&#9733;{% endfor %}
+    </span>
+</article>
+{%- endmacro %}
 <section class="lt-reviews-block lt-fullbleed" aria-labelledby="lt-reviews-heading">
     <div class="lt-reviews-block__inner">
         <h2 id="lt-reviews-heading" class="visually-hidden">What people say</h2>
@@ -53,45 +74,13 @@
             <div class="lt-reviews-block__track">
                 <div class="lt-reviews-block__group">
                     {% for quote in review_quotes %}
-                        {% if quote %}
-                        <article class="lt-reviews-block__quote">
-                            <p class="lt-reviews-block__quote-mark" aria-hidden="true">&ldquo;</p>
-                            <p class="lt-reviews-block__quote-text">{{ quote.text | replace("Totally Twisted", "Locally Twisted") }}</p>
-                            <p class="lt-reviews-block__quote-attr">
-                                &mdash; {{ quote.display_name or quote.name }}{% if quote.event %}, {{ quote.event }}{% endif %}
-                            </p>
-                            <span class="lt-reviews-block__quote-stars" role="img"
-                                 aria-label="{{ quote.rating or 5 }} out of 5 stars">
-                                {% for _ in range(quote.rating or 5) %}&#9733;{% endfor %}
-                            </span>
-                        </article>
-                        {% else %}
-                        <article class="lt-reviews-block__quote lt-reviews-block__quote--placeholder">
-                            <p class="lt-reviews-block__quote-mark" aria-hidden="true">&ldquo;</p>
-                            <p class="lt-reviews-block__quote-text">Real Google review pending&hellip;</p>
-                            <p class="lt-reviews-block__quote-attr">&mdash; coming soon</p>
-                        </article>
-                        {% endif %}
+                        {% if quote and quote.text %}{{ lt_review_card(quote) }}{% endif %}
                     {% endfor %}
                 </div>
                 {# Duplicate set for seamless loop, aria-hidden so screen readers don't double-read. #}
                 <div class="lt-reviews-block__group" aria-hidden="true">
                     {% for quote in review_quotes %}
-                        {% if quote %}
-                        <article class="lt-reviews-block__quote">
-                            <p class="lt-reviews-block__quote-mark" aria-hidden="true">&ldquo;</p>
-                            <p class="lt-reviews-block__quote-text">{{ quote.text | replace("Totally Twisted", "Locally Twisted") }}</p>
-                            <p class="lt-reviews-block__quote-attr">
-                                &mdash; {{ quote.display_name or quote.name }}{% if quote.event %}, {{ quote.event }}{% endif %}
-                            </p>
-                        </article>
-                        {% else %}
-                        <article class="lt-reviews-block__quote lt-reviews-block__quote--placeholder">
-                            <p class="lt-reviews-block__quote-mark" aria-hidden="true">&ldquo;</p>
-                            <p class="lt-reviews-block__quote-text">Real Google review pending&hellip;</p>
-                            <p class="lt-reviews-block__quote-attr">&mdash; coming soon</p>
-                        </article>
-                        {% endif %}
+                        {% if quote and quote.text %}{{ lt_review_card(quote) }}{% endif %}
                     {% endfor %}
                 </div>
             </div>
@@ -260,10 +249,10 @@
 {# --- 9. Closing CTA --- #}
 <section class="lt-cta lt-fullbleed" aria-labelledby="lt-cta-heading">
     <div class="lt-cta__inner">
-        <h2 id="lt-cta-heading" class="lt-cta__heading">Make Your Celebration Unforgettable</h2>
+        <h2 id="lt-cta-heading" class="lt-cta__heading">Help your event feel finished.</h2>
         <p class="lt-cta__body">
             From corporate, school, civic, and community events to polished private celebrations,
-            we've helped Utah gatherings feel finished since 1998. Yours is next.
+            Locally Twisted helps Utah gatherings look planned, welcoming, and ready.
         </p>
         <a href="/contact" class="lt-cta__button">
             Tell us about your event
@@ -284,16 +273,15 @@
                 Balloon Twisting &amp; Face Painting
             </h2>
             <p>
-                Add unforgettable entertainment to any event. Our skilled artists create
-                balloon animals, swords, crowns, and custom designs on the spot &mdash;
-                plus professional face painting that transforms kids (and adults!) into
-                their favorite characters.
+                Add friendly live entertainment to school events, company family days,
+                festivals, birthdays, and community gatherings. Balloon twisting and face
+                painting give guests something fun to watch, request, and remember.
             </p>
             <p>
                 A strong fit for school events, company family days, festivals, birthdays, and community gatherings.
             </p>
             <a class="lt-twisting-spotlight__cta" href="/balloon-twisting-and-face-painting">
-                Book Entertainment
+                Ask about live services
             </a>
         </div>
     </div>

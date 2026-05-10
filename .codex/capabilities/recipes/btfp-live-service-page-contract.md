@@ -9,7 +9,7 @@ currently_true: yes
 verification_level: 2
 last_verified: 2026-05-10
 evidence_quality: direct
-successful_uses: 1
+successful_uses: 2
 failed_uses: 1
 regressions: 0
 depends_on:
@@ -42,7 +42,10 @@ copy that describes Balloon Twisting and Face Painting pricing.
 - The route uses the shared `inquiry-v1` form contract instead of a forked BTFP
   intake form.
 - Visible service choices on the page are only `Balloon Twisting` and
-  `Face Painting`; both are preselected for the combined route.
+  `Face Painting`; neither is preselected on initial page load.
+- The form accepts repeat inquiries from the same email address; Contact linking/dedupe handles person identity while separate Leads represent separate event inquiries.
+- The form supports up to five inspiration-photo uploads per inquiry.
+- The two service-card photo areas are explicit 10-image carousels with previous/next controls and visible status.
 - The customer calculator is transparency only. It does not create checkout,
   deposit, Quote, Sales Order, Payment Request, or Stripe state.
 - Published math is `$130` first hour per artist, `$115` each additional hour
@@ -59,6 +62,7 @@ copy that describes Balloon Twisting and Face Painting pricing.
 - `apps/locally_twisted/locally_twisted/www/balloon_twisting_and_face_painting.py`
 - `apps/locally_twisted/locally_twisted/templates/includes/book_form.html`
 - `scripts/verify/contact_prefill.py`
+- `scripts/verify/book_form_repeat_email_photos.py`
 - `scripts/verify/manual_a11y_probe.js`
 - `scripts/verify/layout_helpers.js`
 
@@ -69,6 +73,7 @@ Focused route contract:
 ```powershell
 python scripts/dev/clear_website_cache.py --restart
 python scripts/verify/contact_prefill.py --base-url http://localhost:8081
+python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081
 ```
 
 Public layout and accessibility:
@@ -93,6 +98,9 @@ also touches chrome, containers, Webshop surfaces, or shared CSS.
 - A public deposit checkout CTA returns on the BTFP route.
 - The page forks a second customer intake form instead of using the shared
   inquiry partial.
+- The service checkboxes are preselected again on first load.
+- Repeat-email public submissions fail with ERPNext duplicate Lead email copy.
+- The service photos only change through hidden/subtle animation with no controls or status.
 - The embedded inquiry form loses the shared status panel, backend-proven
   success modal, or inline cookie notice placement.
 - Brand-blue support/event bands are replaced with red, tan, blush, or a
@@ -112,3 +120,6 @@ On 2026-05-10, the shared embedded form was revalidated through the new
 `shared-inquiry-form-experience` contract. `npm run test:form-experience`
 proved the BTFP page uses inline cookie placement and does not rely on a forked
 or fake-success form path.
+
+
+On 2026-05-10, GL verified the exact localhost BTFP route and found the beginning form state still selected both artist services, repeat emails were blocked by ERPNext Lead duplicate validation, five-photo upload was not proven in the real flow, and the photo areas still read as static. The repair blanked the initial service selection, enabled duplicate Lead emails through durable CRM Settings patching, added `book_form_repeat_email_photos.py`, and changed the service photos to explicit controlled carousels. The repeat-email/five-photo verifier, focused Playwright BTFP carousel/form tests, and white-label surface verifier passed against `http://localhost:8081`.

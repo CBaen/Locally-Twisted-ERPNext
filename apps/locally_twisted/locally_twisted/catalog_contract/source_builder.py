@@ -14,6 +14,7 @@ from locally_twisted.catalog_contract.models import (
     ProductPageContract,
     RequiredOptionAxisContract,
 )
+from locally_twisted.product_page_labels import commerce_lane_label, product_page_type_label
 
 
 CHECKOUT_CATEGORY_HINTS = {
@@ -24,6 +25,8 @@ CHECKOUT_CATEGORY_HINTS = {
     "grab",
     "seasonal",
 }
+
+REVIEW_WARNING_PREFIX = "Axis needs review before import:"
 
 
 def _axis_values(axis: Any) -> tuple[str, ...]:
@@ -39,10 +42,37 @@ def _has_resolver_prices(rows: list[dict[str, Any]]) -> bool:
     return all(row.get("erpnext_variant_price") is not None for row in rows)
 
 
-def _commerce_lane(slug: str, category_hint: str = "") -> str:
+def _checkout_category(slug: str, category_hint: str = "") -> bool:
     text = f"{slug} {category_hint}".lower()
-    if any(hint in text for hint in CHECKOUT_CATEGORY_HINTS):
+    return any(hint in text for hint in CHECKOUT_CATEGORY_HINTS)
+
+
+def _product_page_type(
+    *,
+    slug: str,
+    category_hint: str,
+    required_axes: list[RequiredOptionAxisContract],
+    customization_axes: list[RequiredOptionAxisContract],
+    warnings: list[str],
+) -> str:
+    if not slug:
+        return "needs_review"
+    if customization_axes:
+        return "complex_custom_product"
+    if len(required_axes) > 1:
+        return "complex_custom_product"
+    if any(warning.startswith(REVIEW_WARNING_PREFIX) for warning in warnings):
+        return "complex_custom_product"
+    if _checkout_category(slug, category_hint):
+        return "simple_product"
+    return "complex_custom_product"
+
+
+def _commerce_lane(product_page_type: str) -> str:
+    if product_page_type == "simple_product":
         return "checkout"
+    if product_page_type == "complex_custom_product":
+        return "quote_first"
     return "needs_review"
 
 
@@ -103,7 +133,7 @@ def build_product_page_contract(product: dict[str, Any], *, category_hint: str =
             for row in known_add_on_contracts_for_axis(str(axis_name)):
                 add_ons.append(AddOnContract(**row))
         else:
-            warnings.append(f"Axis needs review before import: {axis_name} - {classification.note}")
+            warnings.append(f"{REVIEW_WARNING_PREFIX} {axis_name} - {classification.note}")
 
     primary_image = str(product.get("image_url") or "")
     gallery = [GalleryImageContract(url=primary_image, role="primary")] if primary_image else []
@@ -116,6 +146,15 @@ def build_product_page_contract(product: dict[str, Any], *, category_hint: str =
     if gallery and any(image.role == "review_needed" for image in gallery):
         warnings.append("One or more alternate images need gallery/variant classification.")
 
+    product_page_type = _product_page_type(
+        slug=slug,
+        category_hint=category_hint,
+        required_axes=required_axes,
+        customization_axes=customization_axes,
+        warnings=warnings,
+    )
+    commerce_lane = _commerce_lane(product_page_type)
+
     return ProductPageContract(
         slug=slug,
         source_name=title,
@@ -123,7 +162,10 @@ def build_product_page_contract(product: dict[str, Any], *, category_hint: str =
         title=title,
         description_html=str(product.get("description") or ""),
         category_hint=category_hint,
-        commerce_lane=_commerce_lane(slug, category_hint),
+        product_page_type=product_page_type,
+        product_page_type_label=product_page_type_label(product_page_type),
+        commerce_lane=commerce_lane,
+        commerce_lane_label=commerce_lane_label(commerce_lane),
         primary_image=primary_image,
         gallery=tuple(gallery),
         required_axes=tuple(required_axes),

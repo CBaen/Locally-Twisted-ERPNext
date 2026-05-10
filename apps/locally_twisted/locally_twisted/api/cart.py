@@ -24,9 +24,17 @@ from frappe import _
 from frappe.utils import flt
 
 from locally_twisted.commerce_rules import checkout_lane_for_item_group
+from locally_twisted.product_page_runtime import (
+    LINE_FIELDNAMES,
+    cart_line_key,
+    normalize_client_configuration,
+    product_page_contract_for_website_item,
+    sales_order_add_on_lines,
+)
 
 
 MAX_CART_LINES = 50
+MAX_QTY_PER_LINE = 99
 PRICE_LIST = "Standard Selling"
 
 
@@ -57,7 +65,7 @@ def _missing_message(reason):
     return _("Tiny snag: this item is no longer available. Please remove it from your cart.")
 
 
-def _resolve_cart_item_for_sale(item_code):
+def _resolve_cart_item_for_sale(item_code, configuration=None):
     """Resolve one client-provided item code into a purchasable cart line.
 
     Variants are the sellable Item rows, but only the template usually has a
@@ -97,7 +105,11 @@ def _resolve_cart_item_for_sale(item_code):
     if not website_item:
         return None, "unavailable"
 
+    product_page_contract = product_page_contract_for_website_item(website_item["item_code"])
     checkout_lane = checkout_lane_for_item_group(website_item.get("item_group"))
+    if product_page_contract.get("commerce_lane") == "quote_first":
+        return None, "quote_required"
+    normalized_configuration = normalize_client_configuration(configuration)
 
     rate = frappe.db.get_value(
         "Item Price",
@@ -116,6 +128,9 @@ def _resolve_cart_item_for_sale(item_code):
         "short_description": website_item.get("short_description") or None,
         "item_group": website_item.get("item_group"),
         "checkout_lane": checkout_lane,
+        "product_commerce_lane": product_page_contract.get("commerce_lane"),
+        "product_page_type": product_page_contract.get("product_page_type"),
+        "configuration": normalized_configuration,
         "price_list_rate": flt(rate),
         "available": True,
         "is_variant": bool(item.get("variant_of")),
@@ -123,13 +138,18 @@ def _resolve_cart_item_for_sale(item_code):
     }, None
 
 
-def resolve_cart_item_for_sale(item_code, raise_on_missing=True):
+def resolve_cart_item_for_sale(item_code, raise_on_missing=True, configuration=None):
     """Return the server-trusted cart line for one purchasable Item code."""
-    resolved, reason = _resolve_cart_item_for_sale(item_code)
+    resolved, reason = _resolve_cart_item_for_sale(item_code, configuration=configuration)
     if resolved or not raise_on_missing:
         return resolved
 
     frappe.throw(_missing_message(reason), frappe.ValidationError)
+
+
+def resolve_cart_item_for_sale_with_reason(item_code, configuration=None):
+    """Return the server-trusted cart line plus the fail-loud reason."""
+    return _resolve_cart_item_for_sale(item_code, configuration=configuration)
 
 
 @frappe.whitelist(allow_guest=True)
@@ -192,29 +212,108 @@ def get_cart_items(item_codes=None):
             frappe.ValidationError,
         )
 
-    # De-duplicate while preserving insertion order — matters for cart
-    # display order.
-    seen = set()
-    clean_codes = []
-    for code in item_codes:
-        if not isinstance(code, str):
+    # Preserve configured cart lines in order. Same SKU can appear more than
+    # once when its option/add-on payload is different.
+    clean_entries = []
+    for entry in item_codes:
+        configuration = None
+        qty = 1
+        if isinstance(entry, dict):
+            code = (entry.get("item_code") or "").strip()
+            configuration = entry.get("configuration")
+            qty = _clean_qty(entry.get("qty") or 1)
+        elif isinstance(entry, str):
+            code = entry.strip()
+        else:
             continue
-        code = code.strip()
-        if not code or code in seen:
+        if not code:
             continue
-        seen.add(code)
-        clean_codes.append(code)
+        clean_entries.append(
+            {
+                "item_code": code,
+                "qty": qty,
+                "configuration": configuration,
+                "cart_line_key": cart_line_key(code, configuration),
+            }
+        )
 
-    if not clean_codes:
+    if not clean_entries:
         return {"items": [], "missing": []}
 
     items = []
     missing = []
-    for code in clean_codes:
-        row, reason = _resolve_cart_item_for_sale(code)
+    for entry in clean_entries:
+        row, reason = _resolve_cart_item_for_sale(entry["item_code"], configuration=entry.get("configuration"))
         if not row:
-            missing.append({"item_code": code, "reason": reason or "unavailable"})
+            missing.append(
+                {
+                    "item_code": entry["item_code"],
+                    "cart_line_key": entry["cart_line_key"],
+                    "reason": reason or "unavailable",
+                }
+            )
             continue
+        row["cart_line_key"] = entry["cart_line_key"]
+        row["qty"] = entry["qty"]
+        row["display_lines"] = _cart_display_lines(row, entry["qty"])
+        row["line_total"] = sum(flt(line.get("line_total") or 0) for line in row["display_lines"])
+        row["add_on_total"] = sum(
+            flt(line.get("line_total") or 0)
+            for line in row["display_lines"]
+            if line.get("is_add_on")
+        )
         items.append(row)
 
     return {"items": items, "missing": missing}
+
+
+def _clean_qty(value) -> int:
+    try:
+        qty = int(value)
+    except (TypeError, ValueError):
+        qty = 1
+    return max(1, min(qty, MAX_QTY_PER_LINE))
+
+
+def _cart_display_lines(row: dict, qty: int) -> list[dict]:
+    display_lines = [
+        {
+            "item_code": row["item_code"],
+            "web_item_name": row.get("web_item_name") or row["item_code"],
+            "display_label": row.get("web_item_name") or row["item_code"],
+            "qty": qty,
+            "price_list_rate": flt(row.get("price_list_rate") or 0),
+            "line_total": flt(row.get("price_list_rate") or 0) * qty,
+            "is_add_on": False,
+        }
+    ]
+    for add_on_line in sales_order_add_on_lines(
+        resolved_item=row,
+        client_configuration=row.get("configuration"),
+        parent_qty=qty,
+    ):
+        payload = _line_payload(add_on_line)
+        value = payload.get("selected_value")
+        display_label = payload.get("add_on_label") or add_on_line.get("item_name") or add_on_line["item_code"]
+        if value not in (None, ""):
+            display_label = f"{display_label}: {value}"
+        display_lines.append(
+            {
+                "item_code": add_on_line["item_code"],
+                "web_item_name": add_on_line.get("item_name") or add_on_line["item_code"],
+                "display_label": display_label,
+                "qty": int(add_on_line["qty"]),
+                "price_list_rate": flt(add_on_line["rate"]),
+                "line_total": flt(add_on_line["rate"]) * int(add_on_line["qty"]),
+                "configuration_summary": add_on_line.get(LINE_FIELDNAMES["summary"]),
+                "is_add_on": True,
+            }
+        )
+    return display_lines
+
+
+def _line_payload(line: dict) -> dict:
+    try:
+        return json.loads(line.get(LINE_FIELDNAMES["json"]) or "{}")
+    except (TypeError, ValueError):
+        return {}

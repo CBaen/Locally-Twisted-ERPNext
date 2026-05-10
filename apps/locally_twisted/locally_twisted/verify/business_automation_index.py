@@ -12,6 +12,10 @@ from frappe.utils import now_datetime
 
 ROOT = Path(frappe.get_app_path("locally_twisted")).parent.parent
 APP_ROOT = Path(frappe.get_app_path("locally_twisted"))
+NO_PURCHASE_MONEY_DEFERRAL = (
+    "Deferred by the no-purchase V1 launch: public ecommerce is paused, "
+    "and checkout/payment/Stripe is not a launch gate."
+)
 
 
 def run(
@@ -154,6 +158,7 @@ def _surfaces(
     include_customer_reminder_report: bool = True,
     run_runtime_contracts: bool = True,
 ) -> list[dict[str, object]]:
+    no_purchase_v1 = _no_purchase_v1_active()
     surfaces = [
         {
             "id": "record_level_failure_recorder",
@@ -253,15 +258,33 @@ def _surfaces(
             "creates_fake_data": True,
         },
         {
+            "id": "ecommerce_no_purchase_api_guard",
+            "lane": "checkups",
+            "summary": "Direct checkout APIs fail loudly while ecommerce is paused and cannot create purchase, order, or payment records.",
+            "required_for_launch": no_purchase_v1,
+            "exists": lambda: _files_exist(
+                "locally_twisted/ecommerce_pause.py",
+                "locally_twisted/www/checkout.py",
+            ),
+            "connected": _no_purchase_checkout_guard_connected,
+            "loud_failure": _no_purchase_checkout_guard_loud_failure,
+            "evidence": [
+                "apps/locally_twisted/locally_twisted/ecommerce_pause.py",
+                "apps/locally_twisted/locally_twisted/www/checkout.py",
+                "scripts/verify/ecommerce_pause_contract.py",
+            ],
+            "verifiers": ["python scripts/verify/ecommerce_pause_contract.py"],
+        },
+        {
             "id": "guest_checkout_to_payment_request",
             "lane": "money",
             "summary": "Guest checkout creates or links Customer, Contact, Address, Sales Order, Payment Request, and Stripe redirect.",
-            "required_for_launch": True,
+            "required_for_launch": not no_purchase_v1,
             "exists": lambda: _files_exist(
                 "locally_twisted/www/checkout.py",
                 "locally_twisted/payments/stripe_session.py",
             ),
-            "connected": _checkout_connected,
+            "connected": lambda: _deferred_money_connected() if no_purchase_v1 else _checkout_connected(),
             "loud_failure": _checkout_loud_failure,
             "evidence": [
                 "apps/locally_twisted/locally_twisted/www/checkout.py",
@@ -273,12 +296,13 @@ def _surfaces(
                 "python scripts/verify/payment_launch_readiness.py",
             ],
             "creates_fake_data": True,
+            "future_connection": NO_PURCHASE_MONEY_DEFERRAL if no_purchase_v1 else None,
         },
         {
             "id": "payment_success_paid_order_cascade",
             "lane": "money",
             "summary": "Paid checkout reconciles Payment Request, Payment Entry, Sales Invoice, receipt email, operator notification, welcome email, required internal copies, and pending-reconciliation thank-you copy.",
-            "required_for_launch": True,
+            "required_for_launch": not no_purchase_v1,
             "exists": lambda: _files_exist(
                 "locally_twisted/www/payment_success.py",
                 "locally_twisted/communication_copy_policy.py",
@@ -287,7 +311,11 @@ def _surfaces(
                 "locally_twisted/verify/payment_success_reconciliation_contract.py",
                 "locally_twisted/verify/customer_email_policy_contract.py",
             ),
-            "connected": lambda: _payment_success_connected(run_runtime_contracts=run_runtime_contracts),
+            "connected": lambda: (
+                _deferred_money_connected()
+                if no_purchase_v1
+                else _payment_success_connected(run_runtime_contracts=run_runtime_contracts)
+            ),
             "loud_failure": _payment_success_loud_failure,
             "evidence": [
                 "apps/locally_twisted/locally_twisted/www/payment_success.py",
@@ -304,31 +332,34 @@ def _surfaces(
                 "python scripts/verify/customer_email_policy_contract.py",
             ],
             "creates_fake_data": True,
+            "future_connection": NO_PURCHASE_MONEY_DEFERRAL if no_purchase_v1 else None,
         },
         {
             "id": "stripe_amount_parity",
             "lane": "money",
             "summary": "Stripe Checkout Session line items must equal the ERPNext Sales Order and Payment Request amount.",
-            "required_for_launch": True,
+            "required_for_launch": not no_purchase_v1,
             "exists": lambda: _files_exist("locally_twisted/payments/stripe_session.py"),
-            "connected": _stripe_amount_parity_connected,
+            "connected": lambda: _deferred_money_connected() if no_purchase_v1 else _stripe_amount_parity_connected(),
             "loud_failure": _stripe_amount_parity_loud_failure,
             "evidence": ["apps/locally_twisted/locally_twisted/payments/stripe_session.py"],
             "verifiers": ["python scripts/verify/stripe_amount_parity_contract.py"],
+            "future_connection": NO_PURCHASE_MONEY_DEFERRAL if no_purchase_v1 else None,
         },
         {
             "id": "stripe_webhook_reconciliation",
             "lane": "money",
             "summary": "Stripe webhook can reconcile paid Sales Orders through the same paid-order helper.",
-            "required_for_launch": True,
+            "required_for_launch": not no_purchase_v1,
             "exists": lambda: _files_exist("locally_twisted/payments/stripe_webhook.py"),
-            "connected": _stripe_webhook_connected,
+            "connected": lambda: _deferred_money_connected() if no_purchase_v1 else _stripe_webhook_connected(),
             "loud_failure": _stripe_webhook_loud_failure,
             "evidence": ["apps/locally_twisted/locally_twisted/payments/stripe_webhook.py"],
             "verifiers": [
                 "python scripts/verify/payment_webhook_contract.py",
                 "python scripts/verify/payment_launch_readiness.py",
             ],
+            "future_connection": NO_PURCHASE_MONEY_DEFERRAL if no_purchase_v1 else None,
         },
         {
             "id": "branded_sales_invoice",
@@ -783,6 +814,59 @@ def _stage_loud_failure() -> list[str]:
     if "frappe.log_error" not in source:
         return ["stage_cascade does not log failures"]
     return []
+
+
+def _no_purchase_v1_active() -> bool:
+    try:
+        from locally_twisted.ecommerce_pause import is_ecommerce_paused
+
+        return bool(is_ecommerce_paused())
+    except Exception:
+        return False
+
+
+def _deferred_money_connected() -> list[str]:
+    return []
+
+
+def _no_purchase_checkout_guard_connected() -> list[str]:
+    if not _no_purchase_v1_active():
+        return []
+
+    failures = []
+    failures.extend(_callables_exist(
+        "locally_twisted.ecommerce_pause.is_ecommerce_paused",
+        "locally_twisted.www.checkout.preview_checkout_totals",
+        "locally_twisted.www.checkout.submit_guest_order",
+    ))
+    source = _read("locally_twisted/www/checkout.py")
+    for marker in (
+        "_assert_checkout_api_open(\"preview_checkout_totals\")",
+        "_assert_checkout_api_open(\"submit_guest_order\")",
+        "NO_PURCHASE_CHECKOUT_STATUS",
+        "ecommerce_paused",
+    ):
+        if marker not in source:
+            failures.append(f"checkout.py missing no-purchase guard marker {marker}")
+    return failures
+
+
+def _no_purchase_checkout_guard_loud_failure() -> list[str]:
+    if not _no_purchase_v1_active():
+        return []
+
+    source = _read("locally_twisted/www/checkout.py")
+    failures = []
+    for marker in (
+        "frappe.log_error",
+        "LT paused checkout API blocked",
+        "NO_PURCHASE_CHECKOUT_MESSAGE",
+        "NO_PURCHASE_CHECKOUT_STATUS",
+        "contact_url",
+    ):
+        if marker not in source:
+            failures.append(f"checkout.py missing loud/customer-safe no-purchase guard marker {marker}")
+    return failures
 
 
 def _checkout_connected() -> list[str]:
@@ -1586,6 +1670,27 @@ def _app_path(relative_path: str) -> Path:
 
 
 def _checkups() -> list[dict[str, object]]:
+    money_checkup = (
+        {
+            "id": "no_purchase_ecommerce_guard",
+            "commands": [
+                "python scripts/verify/ecommerce_pause_contract.py",
+            ],
+        }
+        if _no_purchase_v1_active()
+        else {
+            "id": "money_path",
+            "commands": [
+                "python scripts/verify/payment_backend_config_contract.py",
+                "python scripts/verify/stripe_amount_parity_contract.py",
+                "python scripts/verify/payment_webhook_contract.py",
+                "python scripts/verify/checkout_lead_conversion_contract.py",
+                "python scripts/verify/checkout_fulfillment_contract.py",
+                "python scripts/verify/payment_cascade_contract.py",
+                "python scripts/verify/payment_success_reconciliation_contract.py",
+            ],
+        }
+    )
     return [
         {
             "id": "contact_intake",
@@ -1605,18 +1710,7 @@ def _checkups() -> list[dict[str, object]]:
                 "python scripts/verify/backend_schema_inventory.py",
             ],
         },
-        {
-            "id": "money_path",
-            "commands": [
-                "python scripts/verify/payment_backend_config_contract.py",
-                "python scripts/verify/stripe_amount_parity_contract.py",
-                "python scripts/verify/payment_webhook_contract.py",
-                "python scripts/verify/checkout_lead_conversion_contract.py",
-                "python scripts/verify/checkout_fulfillment_contract.py",
-                "python scripts/verify/payment_cascade_contract.py",
-                "python scripts/verify/payment_success_reconciliation_contract.py",
-            ],
-        },
+        money_checkup,
         {
             "id": "synthetic_pipeline",
             "commands": [

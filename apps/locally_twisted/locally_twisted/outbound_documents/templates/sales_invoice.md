@@ -40,9 +40,9 @@ The bookkeeper can enter the invoice, route it for approval, pay it, and reply t
 
 ## Automation Notes
 
-The current production source is the `Locally Twisted Sales Invoice` print format owned by `locally_twisted.seed.sync_invoice_branding`.
+The current production source is the Locally Twisted branded invoice print format maintained by the local app.
 
-Do not auto-send from this registry. A future sender must confirm the Sales Invoice is real, terms are approved, the recipient is correct, and the generated PDF passes the invoice branding contract.
+Do not auto-send from this registry. A future sender must confirm the invoice is real, terms are approved, the recipient is correct, and the generated PDF passes the invoice branding contract.
 
 ## Boundaries
 

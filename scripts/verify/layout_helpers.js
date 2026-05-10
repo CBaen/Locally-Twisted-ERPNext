@@ -19,6 +19,7 @@ const PUBLIC_ROUTES = [
 	{ name: "terms", path: "/terms-of-service" },
 	{ name: "refund-policy", path: "/refund-policy" },
 	{ name: "accessibility", path: "/accessibility" },
+	{ name: "ready-to-order-paused", path: "/ready-to-order-paused" },
 	{ name: "shop", path: "/shop" },
 	{ name: "shop-by-category", path: "/shop-by-category" },
 	{ name: "variant-product", path: "/shop-items/garlands/baby-shower-garland" },
@@ -92,6 +93,10 @@ const SHOP_LANDING_SURFACES = [
 	{ selector: ".lt-shop__band", mode: "raw-band" },
 	{ selector: ".lt-shop__listing", mode: "band", inner: ".lt-shop__listing-inner", maxWidth: SHOP_MAX },
 	{ selector: ".lt-shop__cta", mode: "band", inner: ".lt-shop__cta-inner", maxWidth: SHOP_MAX },
+];
+
+const ECOMMERCE_PAUSED_SURFACES = [
+	{ selector: ".lt-ecommerce-paused", mode: "band", inner: ".lt-ecommerce-paused__inner", maxWidth: PAGE_MAX },
 ];
 
 const EVENT_TYPE_SURFACES = [
@@ -238,57 +243,52 @@ const CONTAINER_CONTRACT_ROUTES = [
 		surfaces: [{ selector: ".lt-accessibility", mode: "band", inner: ".lt-accessibility__inner", maxWidth: NARROW_MAX }],
 	},
 	{
+		name: "ready-to-order-paused",
+		path: "/ready-to-order-paused",
+		topLevel: [".lt-ecommerce-paused"],
+		surfaces: ECOMMERCE_PAUSED_SURFACES,
+	},
+	{
 		name: "shop",
 		path: "/shop",
-		topLevel: [".lt-shop--landing"],
-		surfaces: SHOP_LANDING_SURFACES,
+		topLevel: [".lt-ecommerce-paused"],
+		surfaces: ECOMMERCE_PAUSED_SURFACES,
 	},
 	{
 		name: "shop-by-category",
 		path: "/shop-by-category",
-		topLevel: [".lt-shop--landing"],
-		surfaces: SHOP_LANDING_SURFACES,
+		topLevel: [".lt-ecommerce-paused"],
+		surfaces: ECOMMERCE_PAUSED_SURFACES,
 	},
 	{
 		name: "variant-product",
 		path: "/shop-items/garlands/baby-shower-garland",
-		topLevel: [".lt-product-breadcrumbs", ".product-container.item-main.lt-product-page__main"],
-		surfaces: [
-			{ selector: ".lt-product-breadcrumbs", mode: "contained", maxWidth: SHOP_MAX },
-			{ selector: ".product-container.item-main", mode: "band", inner: ".lt-product-page__content", maxWidth: SHOP_MAX },
-			{ selector: ".lt-product__configure", mode: "contained", maxWidth: SHOP_MAX },
-		],
+		topLevel: [".lt-ecommerce-paused"],
+		surfaces: ECOMMERCE_PAUSED_SURFACES,
 	},
 	{
 		name: "single-product",
 		path: "/shop-items/seasonal-specialty/easter-balloon-cups",
-		topLevel: [".lt-product-breadcrumbs", ".product-container.item-main.lt-product-page__main"],
-		surfaces: [
-			{ selector: ".lt-product-breadcrumbs", mode: "contained", maxWidth: SHOP_MAX },
-			{ selector: ".product-container.item-main", mode: "band", inner: ".lt-product-page__content", maxWidth: SHOP_MAX },
-		],
+		topLevel: [".lt-ecommerce-paused"],
+		surfaces: ECOMMERCE_PAUSED_SURFACES,
 	},
 	{
 		name: "seasonal-category",
 		path: "/shop-items/seasonal-specialty",
-		topLevel: [".lt-shop--category.item-group-content"],
-		surfaces: [
-			{ selector: ".lt-shop--category", mode: "root" },
-			{ selector: ".lt-shop__hero", mode: "band", inner: ".lt-shop__hero-inner", maxWidth: SHOP_MAX },
-			{ selector: ".lt-shop__browse-layout", mode: "band", inner: ".lt-shop__main", maxWidth: SHOP_MAX, allowFlush: true },
-		],
+		topLevel: [".lt-ecommerce-paused"],
+		surfaces: ECOMMERCE_PAUSED_SURFACES,
 	},
 	{
 		name: "cart",
 		path: "/cart",
-		topLevel: [".lt-cart"],
-		surfaces: [{ selector: ".lt-cart", mode: "band", inner: ".lt-cart__container", maxWidth: PAGE_MAX }],
+		topLevel: [".lt-ecommerce-paused"],
+		surfaces: ECOMMERCE_PAUSED_SURFACES,
 	},
 	{
 		name: "checkout",
 		path: "/checkout",
-		topLevel: [".lt-checkout"],
-		surfaces: [{ selector: ".lt-checkout", mode: "band", inner: ".lt-checkout__container", maxWidth: PAGE_MAX }],
+		topLevel: [".lt-ecommerce-paused"],
+		surfaces: ECOMMERCE_PAUSED_SURFACES,
 	},
 	{
 		name: "thank-you",

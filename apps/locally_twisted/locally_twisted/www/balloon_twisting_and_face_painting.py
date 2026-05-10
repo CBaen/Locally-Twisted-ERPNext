@@ -191,24 +191,57 @@ PAGE_CSS = """.lt-btfp__intro {
     height: 100%;
     object-fit: cover;
     opacity: 0;
-    animation: lt-btfp-carousel-fade 36s infinite;
+    transition: opacity 420ms ease;
 }
-.lt-btfp__carousel-img:nth-child(1) { animation-delay: 0s; }
-.lt-btfp__carousel-img:nth-child(2) { animation-delay: 6s; }
-.lt-btfp__carousel-img:nth-child(3) { animation-delay: 12s; }
-.lt-btfp__carousel-img:nth-child(4) { animation-delay: 18s; }
-.lt-btfp__carousel-img:nth-child(5) { animation-delay: 24s; }
-.lt-btfp__carousel-img:nth-child(6) { animation-delay: 30s; }
-@keyframes lt-btfp-carousel-fade {
-    0%   { opacity: 0; }
-    3%   { opacity: 1; }
-    16%  { opacity: 1; }
-    19%  { opacity: 0; }
-    100% { opacity: 0; }
+.lt-btfp__carousel-img:first-child,
+.lt-btfp__carousel-img.is-active {
+    opacity: 1;
+}
+.lt-btfp__carousel[data-enhanced="true"] .lt-btfp__carousel-img:first-child:not(.is-active) {
+    opacity: 0;
+}
+.lt-btfp__carousel-control {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    width: 2.35rem;
+    height: 2.35rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.78);
+    background: rgba(10, 10, 11, 0.48);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+}
+.lt-btfp__carousel-control:hover,
+.lt-btfp__carousel-control:focus-visible {
+    background: rgba(10, 10, 11, 0.72);
+    outline: 3px solid rgba(184, 154, 91, 0.45);
+    outline-offset: 2px;
+}
+.lt-btfp__carousel-control--prev { left: 0.65rem; }
+.lt-btfp__carousel-control--next { right: 0.65rem; }
+.lt-btfp__carousel-status {
+    position: absolute;
+    left: 50%;
+    bottom: 0.7rem;
+    transform: translateX(-50%);
+    z-index: 2;
+    padding: 0.22rem 0.62rem;
+    border-radius: 999px;
+    background: rgba(10, 10, 11, 0.58);
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
 }
 @media (prefers-reduced-motion: reduce) {
-    .lt-btfp__carousel-img { animation: none; opacity: 0; }
-    .lt-btfp__carousel-img:first-child { opacity: 1; }
+    .lt-btfp__carousel-img { transition: none; }
 }
 
 .lt-btfp__kicker {
@@ -678,7 +711,7 @@ def get_context(context):
         if option[1] in BTFP_SERVICE_VALUES
     ]
     context.package_item_options = PACKAGE_ITEM_OPTIONS
-    context.preselected_services = ["Balloon Twisting", "Face Painting"]
+    context.preselected_services = []
     context.requested_item_code = ""
     context.requested_item_name = ""
     context.max_photos = MAX_PHOTOS

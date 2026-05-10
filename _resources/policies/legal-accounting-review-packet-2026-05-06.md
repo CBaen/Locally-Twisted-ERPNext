@@ -121,7 +121,7 @@ Legal questions:
 
 Current business-approved positions:
 
-- Privacy contact remains `hi@locallytwisted.com`.
+- Privacy/legal contact is now `legal@locallytwisted.com`; general inquiry remains `hi@locallytwisted.com`, and billing/refund/payment questions route to `billing@locallytwisted.com`.
 - The site collects contact details, event details, inspiration photos, cart/order/payment status, newsletter details, and website activity.
 - The site may use cookies, pixels, local browser storage, analytics, advertising, tracking, marketing measurement, retargeting, cart/session storage, and preference storage.
 - The site is intended for adults arranging orders/events.

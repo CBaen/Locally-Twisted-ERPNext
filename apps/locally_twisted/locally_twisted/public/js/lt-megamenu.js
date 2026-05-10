@@ -168,9 +168,10 @@
                 var text = (
                     (entry.textContent || "") + " " + (entry.getAttribute("data-lt-search-keywords") || "")
                 ).toLowerCase();
-                var matched = !terms.length || terms.every(function (term) {
+                var isProductEntry = entry.hasAttribute("data-lt-search-product-entry");
+                var matched = terms.length ? terms.every(function (term) {
                     return text.indexOf(term) !== -1;
-                });
+                }) : !isProductEntry;
                 entry.toggleAttribute("hidden", !matched);
                 if (matched) visible += 1;
             });

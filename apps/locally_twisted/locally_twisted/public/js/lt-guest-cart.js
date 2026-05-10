@@ -10,11 +10,13 @@
  * the cart lives entirely in the browser.
  *
  * Public surface:
- *   LT_CART.getCart()        -> {items: [{item_code, qty}], updated_at}
+ *   LT_CART.getCart()        -> {items: [{item_code, qty, line_key, configuration?}], updated_at}
  *   LT_CART.getCount()       -> total number of items (sum of qtys)
- *   LT_CART.add(code, qty)   -> add or increment a line
- *   LT_CART.update(code, q)  -> set qty to q (q<=0 removes the line)
- *   LT_CART.remove(code)     -> drop a line
+ *   LT_CART.add(code, qty, configuration) -> add or increment a line
+ *   LT_CART.update(code, q)  -> set qty to q on the first matching item (legacy)
+ *   LT_CART.updateLine(key, q) -> set qty to q on one configured line
+ *   LT_CART.remove(code)     -> drop the first matching item (legacy)
+ *   LT_CART.removeLine(key)  -> drop one configured line
  *   LT_CART.clear()          -> empty the cart (call after order submit)
  *   LT_CART.subscribe(fn)    -> register a listener; fn(cart) on every change
  *
@@ -27,7 +29,7 @@
     "use strict";
 
     var STORAGE_KEY = "lt_cart";
-    var SCHEMA_VERSION = 1;
+    var SCHEMA_VERSION = 3;
     var MAX_QTY_PER_LINE = 99;
     var CHANGE_EVENT = "lt-cart-change";
     var ADD_TO_CART_FAILURE = "Tiny snag: we could not add that to your cart just now. Please try once more or call (801) 285-0860.";
@@ -74,7 +76,14 @@
                 var q = parseInt(it.qty, 10);
                 if (!isFinite(q) || q < 1) continue;
                 if (q > MAX_QTY_PER_LINE) q = MAX_QTY_PER_LINE;
-                clean.push({ item_code: it.item_code, qty: q });
+                var cleanLine = { item_code: it.item_code, qty: q };
+                if (it.configuration && typeof it.configuration === "object") {
+                    cleanLine.configuration = it.configuration;
+                }
+                cleanLine.line_key = typeof it.line_key === "string" && it.line_key
+                    ? it.line_key
+                    : lineKeyFor(cleanLine.item_code, cleanLine.configuration || null);
+                clean.push(cleanLine);
             }
             return { v: SCHEMA_VERSION, items: clean, updated_at: parsed.updated_at || nowIso() };
         } catch (err) {
@@ -114,9 +123,40 @@
         } catch (err) { /* IE fallback unneeded — Frappe v15 ships modern only */ }
     }
 
-    function findLine(cart, itemCode) {
+    function stableStringify(value) {
+        if (value === null || typeof value !== "object") {
+            return JSON.stringify(value);
+        }
+        if (Array.isArray(value)) {
+            return "[" + value.map(stableStringify).join(",") + "]";
+        }
+        var keys = Object.keys(value).sort();
+        return "{" + keys.map(function (key) {
+            return JSON.stringify(key) + ":" + stableStringify(value[key]);
+        }).join(",") + "}";
+    }
+
+    function lineKeyFor(itemCode, configuration) {
+        var configKey = configuration && typeof configuration === "object"
+            ? stableStringify(configuration)
+            : "";
+        return itemCode + "::" + configKey;
+    }
+
+    function findLineByKey(cart, lineKey) {
         for (var i = 0; i < cart.items.length; i++) {
-            if (cart.items[i].item_code === itemCode) return i;
+            if (cart.items[i].line_key === lineKey) return i;
+        }
+        return -1;
+    }
+
+    function findLine(cart, itemCode, configuration) {
+        var lineKey = lineKeyFor(itemCode, configuration || null);
+        var byKey = findLineByKey(cart, lineKey);
+        if (byKey >= 0) return byKey;
+        if (configuration && typeof configuration === "object") return -1;
+        for (var i = 0; i < cart.items.length; i++) {
+            if (cart.items[i].item_code === itemCode && !cart.items[i].configuration) return i;
         }
         return -1;
     }
@@ -131,7 +171,7 @@
             return total;
         },
 
-        add: function (itemCode, qty) {
+        add: function (itemCode, qty, configuration) {
             if (!itemCode || typeof itemCode !== "string") {
                 throw new Error("LT_CART.add: item_code is required");
             }
@@ -139,11 +179,20 @@
             if (!isFinite(qty) || qty < 1) qty = 1;
 
             var cart = readRaw();
-            var idx = findLine(cart, itemCode);
+            var lineKey = lineKeyFor(itemCode, configuration || null);
+            var idx = findLine(cart, itemCode, configuration || null);
             if (idx >= 0) {
                 cart.items[idx].qty = Math.min(cart.items[idx].qty + qty, MAX_QTY_PER_LINE);
+                if (configuration && typeof configuration === "object") {
+                    cart.items[idx].configuration = configuration;
+                }
+                cart.items[idx].line_key = lineKey;
             } else {
-                cart.items.push({ item_code: itemCode, qty: Math.min(qty, MAX_QTY_PER_LINE) });
+                var line = { item_code: itemCode, qty: Math.min(qty, MAX_QTY_PER_LINE), line_key: lineKey };
+                if (configuration && typeof configuration === "object") {
+                    line.configuration = configuration;
+                }
+                cart.items.push(line);
             }
             writeRaw(cart);
             return cart;
@@ -152,7 +201,21 @@
         update: function (itemCode, qty) {
             qty = parseInt(qty, 10);
             var cart = readRaw();
-            var idx = findLine(cart, itemCode);
+            var idx = findLine(cart, itemCode, null);
+            if (idx < 0) return cart;
+            if (!isFinite(qty) || qty < 1) {
+                cart.items.splice(idx, 1);
+            } else {
+                cart.items[idx].qty = Math.min(qty, MAX_QTY_PER_LINE);
+            }
+            writeRaw(cart);
+            return cart;
+        },
+
+        updateLine: function (lineKey, qty) {
+            qty = parseInt(qty, 10);
+            var cart = readRaw();
+            var idx = findLineByKey(cart, lineKey);
             if (idx < 0) return cart;
             if (!isFinite(qty) || qty < 1) {
                 cart.items.splice(idx, 1);
@@ -165,7 +228,16 @@
 
         remove: function (itemCode) {
             var cart = readRaw();
-            var idx = findLine(cart, itemCode);
+            var idx = findLine(cart, itemCode, null);
+            if (idx < 0) return cart;
+            cart.items.splice(idx, 1);
+            writeRaw(cart);
+            return cart;
+        },
+
+        removeLine: function (lineKey) {
+            var cart = readRaw();
+            var idx = findLineByKey(cart, lineKey);
             if (idx < 0) return cart;
             cart.items.splice(idx, 1);
             writeRaw(cart);
@@ -187,6 +259,7 @@
             };
         },
 
+        lineKey: lineKeyFor,
         _storageAvailable: storageAvailable,
     };
 
@@ -224,7 +297,7 @@
             opts = opts || {};
             if (!opts.item_code) return;
             try {
-                LT_CART.add(opts.item_code, opts.qty || 1);
+                LT_CART.add(opts.item_code, opts.qty || 1, opts.configuration || null);
                 if (typeof opts.callback === "function") {
                     opts.callback({ message: { item_code: opts.item_code } });
                 }

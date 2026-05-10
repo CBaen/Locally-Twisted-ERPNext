@@ -10,6 +10,7 @@ from dataclasses import asdict, dataclass, field
 from typing import Literal
 
 CommerceLane = Literal["checkout", "quote_first", "hybrid", "needs_review"]
+ProductPageType = Literal["simple_product", "complex_custom_product", "needs_review"]
 ImageRole = Literal["primary", "gallery", "variant", "review_needed"]
 AxisStatus = Literal["required", "optional_addon", "customization", "needs_review"]
 SelectorType = Literal["radio", "single_select", "multi_select_drawer", "cards", "needs_design"]
@@ -68,7 +69,10 @@ class ProductPageContract:
     title: str
     description_html: str
     category_hint: str = ""
+    product_page_type: ProductPageType = "needs_review"
+    product_page_type_label: str = "Needs page review"
     commerce_lane: CommerceLane = "needs_review"
+    commerce_lane_label: str = "Needs review before customers use it"
     primary_image: str = ""
     gallery: tuple[GalleryImageContract, ...] = field(default_factory=tuple)
     required_axes: tuple[RequiredOptionAxisContract, ...] = field(default_factory=tuple)

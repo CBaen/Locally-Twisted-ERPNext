@@ -2,6 +2,10 @@
 
 Last updated: 2026-05-10 by Codex after the public inquiry email branding/company-copy and header conversion-label closeout. Current peer handoff: fake data is allowed and useful; fake success is forbidden. V1 public launch is no-purchase brand/proof/inquiry/policy scope while ecommerce repair continues internally.
 
+OpenClaw/Moji update on 2026-05-10: `/balloon-twisting-and-face-painting` was corrected against GL's exact localhost feedback. The embedded inquiry form now starts with no artist-service checkbox selected; repeat inquiries from the same email are allowed through durable `CRM Settings.allow_lead_duplication_based_on_emails` configuration; and the form's advertised five-photo upload path is guarded by `scripts/verify/book_form_repeat_email_photos.py`. The two service-card photos are now explicit 10-image carousels with prev/next controls and visible status. Source handoff: `workstreams/btfp-service-page.md`; capability: `.codex/capabilities/recipes/btfp-live-service-page-contract.md`.
+
+OpenClaw/Moji update on 2026-05-10: the homepage hero now implements GL's seasonal carousel request. First slide is graduation season, followed by Civic & community, Corporate events, Schools & campuses, and Private celebrations audience slides. Source handoff: `workstreams/homepage-seasonal-hero-carousel-2026-05-10.md`; capability: `.codex/capabilities/recipes/homepage-launch-proof-contract.md`.
+
 Codex update on 2026-05-10: public inquiry acknowledgments now use the branded
 LT email shell with the LT logo, mirrored red balloon-dog footer mark, no
 standard ERPNext footer, and the public-form-only subject/title `U+1F388

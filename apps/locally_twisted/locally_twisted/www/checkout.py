@@ -35,6 +35,11 @@ sitemap = 0  # don't index the checkout page
 MAX_CART_LINES = 50  # mirrors locally_twisted.api.cart.MAX_CART_LINES
 MAX_QTY_PER_LINE = 99  # mirrors lt-guest-cart.js MAX_QTY_PER_LINE
 PRICE_LIST = "Standard Selling"
+NO_PURCHASE_CHECKOUT_STATUS = "ecommerce_paused"
+NO_PURCHASE_CHECKOUT_MESSAGE = (
+    "Ready-to-order is paused while we launch the new site. "
+    "Please start a custom event quote from the contact page instead."
+)
 
 
 PAGE_CSS = """
@@ -429,12 +434,15 @@ def _normalize_line_qty(qty):
 def _resolve_cart_items(item_code, qty, items_json):
     """Resolve buy-now params OR items_json payload into one canonical list.
 
-    Returns list of {"item_code": str, "qty": int}. Order is preserved.
+    Returns list of {"item_code": str, "qty": int, "configuration": dict | None}.
+    Order is preserved.
     Duplicates are coalesced (later qty wins on collision — matches the
     client cart's add-or-increment semantics).
 
     Raises ValidationError on malformed input.
     """
+    from locally_twisted.product_page_runtime import cart_line_key
+
     if items_json:
         try:
             parsed = json.loads(items_json)
@@ -462,13 +470,23 @@ def _resolve_cart_items(item_code, qty, items_json):
             q = _normalize_line_qty(entry.get("qty") or 1)
             if not ic:
                 continue
-            if ic not in seen:
-                order.append(ic)
-            seen[ic] = q
-        return [{"item_code": ic, "qty": seen[ic]} for ic in order]
+            configuration = entry.get("configuration")
+            key = cart_line_key(ic, configuration)
+            if key not in seen:
+                order.append(key)
+            seen[key] = {"item_code": ic, "qty": q, "configuration": configuration, "cart_line_key": key}
+        return [seen[key] for key in order]
 
     if item_code:
-        return [{"item_code": item_code.strip(), "qty": _normalize_line_qty(qty)}]
+        clean_item_code = item_code.strip()
+        return [
+            {
+                "item_code": clean_item_code,
+                "qty": _normalize_line_qty(qty),
+                "configuration": None,
+                "cart_line_key": cart_line_key(clean_item_code, None),
+            }
+        ]
 
     return []
 
@@ -479,13 +497,29 @@ def _resolve_sale_lines(cart_items):
     Delivery-zone quote handling is resolved later through fulfillment rules;
     product group alone does not make a priced cart line quote-only.
     """
-    from locally_twisted.api.cart import resolve_cart_item_for_sale
+    from locally_twisted.api.cart import resolve_cart_item_for_sale_with_reason
+    from locally_twisted.product_page_runtime import (
+        LINE_FIELDNAMES,
+        sales_order_add_on_lines,
+        sales_order_line_configuration_fields,
+    )
 
     so_line_items = []
     resolved_items = []
     for line in cart_items:
-        resolved = resolve_cart_item_for_sale(line["item_code"], raise_on_missing=False)
+        resolved, missing_reason = resolve_cart_item_for_sale_with_reason(
+            line["item_code"],
+            configuration=line.get("configuration"),
+        )
         if not resolved:
+            if missing_reason == "quote_required":
+                frappe.throw(
+                    _(
+                        "Tiny snag: this design needs a quote before checkout. "
+                        "Please send it through the inquiry form so we keep the details together."
+                    ),
+                    frappe.ValidationError,
+                )
             frappe.throw(
                 _("Tiny snag: one cart item is no longer available. Please return to your cart and choose again."),
                 frappe.ValidationError,
@@ -498,9 +532,33 @@ def _resolve_sale_lines(cart_items):
             "qty": qty_value,
             "rate": rate,
         }
+        so_line.update(
+            sales_order_line_configuration_fields(
+                resolved_item=resolved,
+                client_configuration=line.get("configuration"),
+            )
+        )
         so_line.update(_item_tax_override(so_line))
         so_line_items.append(so_line)
         resolved_items.append({**resolved, "qty": qty_value, "line_total": rate * qty_value})
+        for add_on_line in sales_order_add_on_lines(
+            resolved_item=resolved,
+            client_configuration=line.get("configuration"),
+            parent_qty=qty_value,
+        ):
+            add_on_line.update(_item_tax_override(add_on_line))
+            so_line_items.append(add_on_line)
+            resolved_items.append(
+                {
+                    "item_code": add_on_line["item_code"],
+                    "web_item_name": add_on_line.get("item_name") or add_on_line["item_code"],
+                    "qty": add_on_line["qty"],
+                    "price_list_rate": add_on_line["rate"],
+                    "line_total": flt(add_on_line["rate"]) * int(add_on_line["qty"]),
+                    "configuration_summary": add_on_line.get(LINE_FIELDNAMES["summary"]),
+                    "is_add_on": True,
+                }
+            )
     return so_line_items, resolved_items
 
 
@@ -602,12 +660,64 @@ def _build_totals(so_line_items, fulfillment, tax):
     }
 
 
+def _assert_checkout_api_open(surface: str) -> dict | None:
+    """Block direct checkout APIs while launch is inquiry-only.
+
+    Return a normal JSON payload instead of raising frappe.throw so the public
+    checkout UI does not show Frappe's generic/internal-error language. The
+    guard still fails loudly through Error Log via _log_paused_checkout_api_block.
+    """
+    from locally_twisted.ecommerce_pause import is_ecommerce_paused
+
+    if not is_ecommerce_paused():
+        return None
+
+    _log_paused_checkout_api_block(surface)
+    frappe.local.response["http_status_code"] = 403
+    return {
+        "ok": False,
+        "status": NO_PURCHASE_CHECKOUT_STATUS,
+        "message": _(NO_PURCHASE_CHECKOUT_MESSAGE),
+        "contact_url": "/contact?intent=quote&source=checkout-paused",
+    }
+
+
+def _log_paused_checkout_api_block(surface: str) -> None:
+    request = getattr(frappe.local, "request", None)
+    form_dict = getattr(frappe, "form_dict", {}) or {}
+    safe_form_keys = sorted(
+        key
+        for key in form_dict
+        if key not in {"cmd", "name", "email", "phone", "address_line1", "address_line2"}
+    )
+    payload = {
+        "surface": surface,
+        "status": NO_PURCHASE_CHECKOUT_STATUS,
+        "user": getattr(frappe.session, "user", None),
+        "method": getattr(request, "method", None) if request else None,
+        "path": getattr(request, "path", None) if request else None,
+        "form_keys": safe_form_keys,
+        "customer_visible_message": NO_PURCHASE_CHECKOUT_MESSAGE,
+    }
+    try:
+        frappe.log_error(
+            title="LT paused checkout API blocked",
+            message=json.dumps(payload, indent=2, default=str),
+        )
+    except Exception:
+        # The customer/order guard must still fire even if Error Log writing fails.
+        pass
+
+
 @frappe.whitelist(allow_guest=True)
-@rate_limit(limit=60, seconds=60 * 60)
+@rate_limit(limit=600, seconds=60 * 60)
 def preview_checkout_totals(item_code="", qty=1, items_json="",
                             fulfillment_method="delivery", pickup_location="",
                             city="", postal_code=""):
     """Return server-trusted checkout totals for the visible order summary."""
+    blocked = _assert_checkout_api_open("preview_checkout_totals")
+    if blocked:
+        return blocked
     cart_items = _resolve_cart_items(item_code, qty, items_json)
     if not cart_items:
         return {"ok": False, "status": "empty_cart", "message": _("Please pick at least one item.")}
@@ -636,7 +746,7 @@ def preview_checkout_totals(item_code="", qty=1, items_json="",
 
 
 @frappe.whitelist(allow_guest=True)
-@rate_limit(limit=10, seconds=60 * 60)
+@rate_limit(limit=600, seconds=60 * 60)
 def submit_guest_order(item_code="", qty=1, items_json="",
                        name="", email="", phone="",
                        address_line1="", address_line2="", city="", state="",
@@ -659,6 +769,10 @@ def submit_guest_order(item_code="", qty=1, items_json="",
     from server-side Item Price ONLY — client-supplied prices are never
     trusted at any layer.
     """
+    blocked = _assert_checkout_api_open("submit_guest_order")
+    if blocked:
+        return blocked
+
     name = (name or "").strip()
     email = (email or "").strip()
     phone = (phone or "").strip()

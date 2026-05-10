@@ -109,12 +109,15 @@ def _contract_failures(result: dict[str, Any]) -> list[str]:
         failures.append("broken_piping section is not empty")
     if "live_payment_blockers" in sections:
         failures.append("live payment readiness is still labeled as a current blocker")
-    required_contract_ids = {
+    money_contract_ids = {
         "stripe_amount_parity",
         "checkout_lead_conversion",
         "checkout_fulfillment",
         "payment_success_paid_order_cascade",
+        "payment_success_reconciliation_pending",
         "stripe_webhook_reconciliation",
+    }
+    required_contract_ids = {
         "customer_document_policy",
         "customer_email_policy_boundaries",
         "outbound_document_templates",
@@ -129,6 +132,20 @@ def _contract_failures(result: dict[str, Any]) -> list[str]:
         for item in sections.get("synthetic_operating_readiness", {}).get("items", [])
         if isinstance(item, dict)
     }
+    deferred_ids = {
+        item.get("id")
+        for item in sections.get("deferred_money_surfaces", {}).get("items", [])
+        if isinstance(item, dict)
+    }
+    if result.get("boundaries", {}).get("no_purchase_v1") is True:
+        missing_deferred_ids = sorted(money_contract_ids - deferred_ids)
+        if missing_deferred_ids:
+            failures.append(
+                "no-purchase synthetic pipeline missing deferred money contracts: "
+                + ", ".join(missing_deferred_ids)
+            )
+    else:
+        required_contract_ids |= money_contract_ids
     missing_contract_ids = sorted(required_contract_ids - contract_ids)
     if missing_contract_ids:
         failures.append("synthetic pipeline missing contracts: " + ", ".join(missing_contract_ids))

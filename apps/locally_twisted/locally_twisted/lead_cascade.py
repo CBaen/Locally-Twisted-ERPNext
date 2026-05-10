@@ -18,6 +18,10 @@ fire on Lead insert from a customer-facing form:
    the LT-branded 24-hour response-time promise. Idempotent via Communication-
    by-subject lookup so a manual rerun never double-sends.
 
+4. after_insert: if the Lead came from a product-page quote handoff, create
+   an internal draft Quotation so operator review starts in the right ERPNext
+   record instead of stopping at a raw Lead note.
+
 Helpers are isolated so the Lead can still exist for the customer, but partial
 failures must leave record-level evidence on the Lead. Error Log-only evidence
 is not enough for customer-intent handoffs.
@@ -72,30 +76,63 @@ def before_insert(doc, method=None):
     a placeholder (e.g. the form's hidden "Booking Request" sentinel).
     """
     placeholder_titles = {"Booking Request", "Quick Booking Request", ""}
-    customer_name = (doc.lead_name or "").strip()
-    if customer_name and customer_name not in placeholder_titles:
-        return  # already meaningful, don't overwrite
+    current_title = (doc.lead_name or "").strip()
+    services_label = _format_services_label(doc)
+    formatted_title = _format_useful_lead_title(doc, current_title, services_label, placeholder_titles)
+    if formatted_title:
+        doc.lead_name = formatted_title
 
-    # The form posts contact_name in `lead_name`; if `lead_name` was
-    # the literal placeholder, pull the real name from `first_name` /
-    # `company_name` etc. Frappe's Lead doesn't have contact_name as a
-    # standard field; the customer name comes in via lead_name.
+
+def _format_useful_lead_title(doc, current_title, services_label, placeholder_titles):
+    if current_title and current_title not in placeholder_titles:
+        if services_label and current_title in _real_name_candidates(doc):
+            return f"{current_title} - {services_label}"
+        return None
+
     parts = []
     real_name = doc.get("first_name") or doc.get("company_name") or ""
     real_name = real_name.strip() if real_name else ""
     if real_name:
         parts.append(real_name)
 
-    services_label = _format_services_label(doc)
     if services_label:
         parts.append(services_label)
 
     if parts:
-        doc.lead_name = " - ".join(parts)
+        return " - ".join(parts)
+    return None
+
+
+def _real_name_candidates(doc):
+    candidates = []
+    for fieldname in ("first_name", "company_name"):
+        value = (doc.get(fieldname) or "").strip()
+        if value:
+            candidates.append(value)
+    first_name = (doc.get("first_name") or "").strip()
+    last_name = (doc.get("last_name") or "").strip()
+    if first_name and last_name:
+        candidates.append(f"{first_name} {last_name}")
+    return set(candidates)
 
 
 def after_insert(doc, method=None):
     """Run the cascade. Each helper isolated in try/except."""
+    try:
+        _ensure_useful_title_after_insert(doc)
+    except Exception as e:
+        record_backend_failure(
+            surface="lead_contact_ack_cascade",
+            step="lead_title_format",
+            severity="error",
+            primary_doctype="Lead",
+            primary_name=doc.name,
+            customer_visible_impact="The inquiry was received, but the internal Lead title did not include all useful details.",
+            internal_next_action="Review the Lead title and service selections before follow-up.",
+            exception=e,
+            grouping_key=f"lead_contact_ack_cascade:lead_title_format:{doc.name}",
+        )
+
     try:
         _ensure_contact_link(doc)
     except Exception as e:
@@ -128,6 +165,21 @@ def after_insert(doc, method=None):
         )
 
     try:
+        _ensure_product_quote_draft(doc)
+    except Exception as e:
+        record_backend_failure(
+            surface="lead_product_quote_cascade",
+            step="draft_quotation",
+            severity="error",
+            primary_doctype="Lead",
+            primary_name=doc.name,
+            customer_visible_impact="The inquiry was received, but the internal product quote draft did not finish.",
+            internal_next_action="Open the Lead, review the Product Quote Items table, and create or repair the draft Quotation before quoting.",
+            exception=e,
+            grouping_key=f"lead_product_quote_cascade:draft_quotation:{doc.name}",
+        )
+
+    try:
         stage_cascade.after_insert(doc)
     except Exception as e:
         record_backend_failure(
@@ -141,6 +193,34 @@ def after_insert(doc, method=None):
             exception=e,
             grouping_key=f"lead_contact_ack_cascade:initial_task_cascade:{doc.name}",
         )
+
+
+def _ensure_product_quote_draft(doc):
+    if not _has_product_quote_payload(doc):
+        return None
+    from locally_twisted.product_quote_runtime import create_product_page_draft_quotation_from_lead
+
+    return create_product_page_draft_quotation_from_lead(doc.name)
+
+
+def _has_product_quote_payload(doc) -> bool:
+    if doc.get("custom_lt_product_quote_payload"):
+        return True
+    return bool(doc.get("custom_lt_product_quote_items"))
+
+
+def _ensure_useful_title_after_insert(doc):
+    saved_doc = frappe.get_doc("Lead", doc.name)
+    placeholder_titles = {"Booking Request", "Quick Booking Request", ""}
+    current_title = (saved_doc.lead_name or "").strip()
+    services_label = _format_services_label(saved_doc)
+    formatted_title = _format_useful_lead_title(saved_doc, current_title, services_label, placeholder_titles)
+    if not formatted_title or formatted_title == current_title:
+        return
+
+    frappe.db.set_value("Lead", saved_doc.name, "lead_name", formatted_title, update_modified=False)
+    doc.lead_name = formatted_title
+    saved_doc.lead_name = formatted_title
 
 
 def _format_services_label(doc):

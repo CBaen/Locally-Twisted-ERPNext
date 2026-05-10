@@ -18,7 +18,7 @@ template_type: outbound_markdown_v1
 
 ## Audience
 
-The venue, client day-of contact, and crew need a shared practical plan for `{{ sales_order.name }}`.
+The venue, client day-of contact, and crew need a shared practical plan for `{{ booking.reference }}`.
 
 ## Answer First
 

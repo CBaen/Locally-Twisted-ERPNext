@@ -13,6 +13,8 @@ land in browser history.
 import frappe
 from frappe import _
 
+from locally_twisted.product_page_runtime import customer_facing_line_label
+
 no_cache = 1
 sitemap = 0
 
@@ -216,7 +218,7 @@ def get_context(context):
         )
         context.reconciliation_notice = (
             "If you saw a card charge, please call (801) 285-0860 or email "
-            "hi@locallytwisted.com so we can match it up for you."
+            "billing@locallytwisted.com so we can match it up for you."
         )
     elif reconciliation_pending:
         context.thank_you_lede = (
@@ -250,7 +252,7 @@ def get_context(context):
             }
             context.line_items = [
                 {
-                    "item_name": item.item_name or item.item_code,
+                    "item_name": customer_facing_line_label(item),
                     "qty": item.qty,
                     "amount": item.amount,
                 }

@@ -16,12 +16,12 @@ REQUIRED_PRINT_FORMAT_MARKERS = [
     "Locally Twisted",
     "Sales Invoice",
     "Balloon decor for Utah events",
-    "hi@locallytwisted.com",
+    "billing@locallytwisted.com",
     "(801) 285-0860",
     "For accounts payable",
     "PO / reference",
     "Customer Service, Continued Event Support, and Repeat Orders:",
-    "Reply to this invoice and we will route the request to the right person.",
+    "For new event support or repeat orders, email hi@locallytwisted.com.",
     "lt-support-banner",
     "lt-ap-strip",
     "lt-callout",
@@ -50,14 +50,19 @@ REQUIRED_RENDER_MARKERS = [
     "Locally Twisted",
     "Sales Invoice",
     "Balloon decor for Utah events",
-    "hi@locallytwisted.com",
+    "billing@locallytwisted.com",
     "(801) 285-0860",
     "For accounts payable",
     "PO / reference",
     "Customer Service, Continued Event Support, and Repeat Orders:",
-    "Reply to this invoice and we will route the request to the right person.",
-    "Invoice terms",
+    "For new event support or repeat orders, email hi@locallytwisted.com.",
     "lt-callout",
+]
+
+REQUIRED_RENDER_SECTION_MARKERS = [
+    "Payment receipt",
+    "Invoice terms",
+    "Corporate invoicing",
 ]
 
 FORBIDDEN_RENDER_MARKERS = [
@@ -247,7 +252,7 @@ def _check_letter_head(doc, failures: list[str]) -> None:
             failures.append(f"Letter Head {fieldname} is {actual!r}, expected {expected!r}")
 
     content = doc.content or ""
-    for marker in ["Locally Twisted", "hi@locallytwisted.com", "(801) 285-0860", "lt-logo.png"]:
+    for marker in ["Locally Twisted", "billing@locallytwisted.com", "(801) 285-0860", "lt-logo.png"]:
         if marker not in content:
             failures.append(f"Letter Head missing brand marker: {marker}")
     for marker in FORBIDDEN_PRINT_STYLE_MARKERS:
@@ -336,6 +341,7 @@ def _check_rendered_invoice(invoice_name: str, failures: list[str], evidence: di
     for marker in REQUIRED_RENDER_MARKERS:
         if marker not in text and marker not in html:
             failures.append(f"Rendered invoice missing brand marker: {marker}")
+    _check_rendered_invoice_section(text, html, "Rendered invoice", failures)
     _check_forbidden_render_markers(html, text, "Rendered invoice", failures)
 
 
@@ -354,6 +360,7 @@ def _check_default_rendered_invoice(invoice_name: str, failures: list[str], evid
     for marker in REQUIRED_RENDER_MARKERS:
         if marker not in text and marker not in html:
             failures.append(f"Default rendered invoice missing brand marker: {marker}")
+    _check_rendered_invoice_section(text, html, "Default rendered invoice", failures)
     _check_forbidden_render_markers(html, text, "Default rendered invoice", failures)
 
 
@@ -374,6 +381,19 @@ def _check_forbidden_render_markers(
     for marker in FORBIDDEN_RENDER_MARKERS:
         if _contains_marker(html, marker) or _contains_marker(text, marker):
             failures.append(f"{label} still contains retired copy: {marker}")
+
+
+def _check_rendered_invoice_section(
+    text: str,
+    html: str,
+    label: str,
+    failures: list[str],
+) -> None:
+    if not any(marker in text or marker in html for marker in REQUIRED_RENDER_SECTION_MARKERS):
+        failures.append(
+            f"{label} missing invoice status section marker: "
+            + ", ".join(REQUIRED_RENDER_SECTION_MARKERS)
+        )
 
 
 def _compact_print_format(doc) -> dict[str, object]:

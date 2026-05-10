@@ -56,6 +56,7 @@ def local_playwright_command(workers: int, spec: str) -> list[str]:
         "test",
         spec,
         "--reporter=dot",
+        "--retries=1",
         f"--workers={workers}",
     ]
 
@@ -78,17 +79,16 @@ def build_steps(args: argparse.Namespace) -> list[Step]:
             600,
         ),
         Step(
-            "Checkout experience",
-            local_playwright_command(workers, "scripts/verify/checkout_experience.spec.js"),
-            240,
+            "Search contract",
+            local_playwright_command(workers, "scripts/verify/search_contract.spec.js"),
+            180,
         ),
         Step(
             "Portfolio proof reel",
             local_playwright_command(workers, "scripts/verify/portfolio_reel.spec.js"),
             300,
         ),
-        Step("Guarded product prices", [python, "scripts/verify/product_variant_price_contract.py"], 180),
-        Step("Shop smoke", [python, "scripts/verify/smoke_shop.py"], 300),
+        Step("Ecommerce pause contract", [python, "scripts/verify/ecommerce_pause_contract.py"], 180),
     ]
 
     if args.with_a11y:

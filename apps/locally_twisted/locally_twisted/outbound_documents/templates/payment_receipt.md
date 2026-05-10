@@ -39,7 +39,7 @@ The recipient can close the payment loop, attach the receipt to their expense re
 
 ## Automation Notes
 
-Receipt automation may use the paid-order cascade after it confirms the Payment Entry or paid Sales Invoice exists.
+Receipt automation may use the paid-order cascade after it confirms the payment and related invoice status.
 
 Do not auto-send from this registry. The live sender must be idempotent, avoid duplicate receipt emails, and use the code-owned policy blocks.
 

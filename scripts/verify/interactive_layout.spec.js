@@ -9,11 +9,12 @@ const {
 	expectNoLayoutFailures,
 } = require("./layout_helpers");
 
-const PLATFORM_WORDS = /\b(?:ERPNext|Frappe)\b/i;
+const PLATFORM_WORDS = /\b(?:ERPNext|Frappe|Odoo)\b/i;
 
 const COMPACT_HERO_VIEWPORTS = [
-	{ name: "mobile", width: 390, height: 844, expectedHeight: 220, maxPadding: 24, maxTitle: 32 },
-	{ name: "desktop", width: 1366, height: 768, expectedHeight: 280, maxPadding: 32, maxTitle: 44 },
+	{ name: "mobile", width: 390, height: 844, expectedHeight: 220, maxPadding: 24, maxTitle: 32, imageKey: "mobile" },
+	{ name: "tablet", width: 820, height: 1180, expectedHeight: 250, maxPadding: 28, maxTitle: 40, imageKey: "tablet" },
+	{ name: "desktop", width: 1366, height: 768, expectedHeight: 280, maxPadding: 32, maxTitle: 44, imageKey: "desktop" },
 ];
 
 const COMPACT_HERO_ROUTES = [
@@ -79,20 +80,6 @@ const COMPACT_HERO_ROUTES = [
 		heroSelector: ".lt-contact__intro",
 		contentSelector: ".lt-contact__intro .container",
 		titleSelector: ".lt-contact__intro h1",
-	},
-	{
-		name: "shop",
-		path: "/shop",
-		heroSelector: ".lt-shop__hero",
-		contentSelector: ".lt-shop__hero-inner",
-		titleSelector: ".lt-shop__hero-title",
-	},
-	{
-		name: "shop category",
-		path: "/shop-items/seasonal-specialty",
-		heroSelector: ".lt-shop__hero",
-		contentSelector: ".lt-shop__hero-inner",
-		titleSelector: ".lt-shop__title",
 	},
 ];
 
@@ -177,6 +164,43 @@ test.describe("Locally Twisted interactive layout states", () => {
 				});
 			}
 		}
+
+		for (const viewport of COMPACT_HERO_VIEWPORTS) {
+			for (const route of COMPACT_HERO_ROUTES) {
+				test(`${route.name} hero uses a generated lifestyle crop and black readability overlay at ${viewport.name}`, async ({ page }) => {
+					await page.setViewportSize({ width: viewport.width, height: viewport.height });
+					const response = await gotoAndSettle(page, route.path);
+					await expectSuccessfulResponse(response, route.path);
+
+					const result = await page.evaluate(({ route }) => {
+						const hero = document.querySelector(route.heroSelector);
+						if (!hero) return { found: false };
+						const before = window.getComputedStyle(hero, "::before");
+						const after = window.getComputedStyle(hero, "::after");
+						const nestedImage = hero.querySelector(".lt-hero__image");
+						const nestedImageStyle = nestedImage ? window.getComputedStyle(nestedImage) : null;
+						const heroStyle = window.getComputedStyle(hero);
+						const photoBackground = [
+							before.backgroundImage,
+							nestedImageStyle ? nestedImageStyle.backgroundImage : "",
+							heroStyle.backgroundImage,
+						].find((value) => value && value !== "none") || "";
+						return {
+							found: true,
+							photoBackground,
+							beforeZ: before.zIndex,
+							afterBackground: after.backgroundImage,
+							afterZ: after.zIndex,
+						};
+					}, { route });
+
+					expect(result.found, `${route.path} should expose the named hero contract element`).toBe(true);
+					expect(result.photoBackground, `${route.path} hero should use a generated responsive lifestyle photo layer`).toContain(`generated-lifestyle-${viewport.imageKey}.webp`);
+					expect(result.afterBackground, `${route.path} hero should include the landing-page-style black readability overlay`).toContain("rgba(10, 10, 11");
+					expect(Number.parseInt(result.afterZ, 10), `${route.path} overlay should sit above the image layer`).toBeGreaterThan(Number.parseInt(result.beforeZ || "0", 10));
+				});
+			}
+		}
 	});
 
 	test.describe("white-label platform leakage", () => {
@@ -195,7 +219,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 			const desktopResponse = await gotoAndSettle(page, "/");
 			await expectSuccessfulResponse(desktopResponse, "/");
 
-			for (const trigger of ["lt-mega-events", "lt-mega-products"]) {
+			for (const trigger of ["lt-mega-events"]) {
 				await page.locator(`[data-lt-megamenu-trigger="${trigger}"]`).click();
 				await expect(page.locator(`#${trigger}`)).toBeVisible();
 				const visibleText = await page.locator("body").innerText();
@@ -210,7 +234,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 
 			await page.locator("#lt-mobile-toggle").click();
 			await expect(page.locator("#lt-mobile-nav")).toBeVisible();
-			for (const panel of ["lt-mobile-events", "lt-mobile-products"]) {
+			for (const panel of ["lt-mobile-events"]) {
 				await page.locator(`[data-lt-drawer-accordion-trigger="${panel}"]`).click();
 				await expect(page.locator(`#${panel}`)).toBeVisible();
 			}
@@ -332,13 +356,13 @@ test.describe("Locally Twisted interactive layout states", () => {
 
 				const result = await auditPageLayout(page, {
 					containerSelectors: [".lt-mega-header", ".lt-mega-header__main-row", ".lt-mega-header__mobile-row"],
-					targetSelectors: [".lt-mega-header__mobile-action", ".lt-mega-header__cart", ".lt-mega-header__search", ".lt-mega-header__cta"],
+					targetSelectors: [".lt-mega-header__mobile-action", ".lt-mega-header__search", ".lt-mega-header__cta"],
 				});
 				expectNoLayoutFailures(expect, result, `header at ${viewport.name}px`);
 			});
 		}
 
-		test("small mobile header keeps logo clear of cart and menu controls", async ({ page }) => {
+		test("small mobile header keeps logo clear of menu controls", async ({ page }) => {
 			await page.setViewportSize({ width: 320, height: 812 });
 			const response = await gotoAndSettle(page, "/");
 			await expectSuccessfulResponse(response, "/");
@@ -358,9 +382,9 @@ test.describe("Locally Twisted interactive layout states", () => {
 			});
 
 			expect(result.found, "mobile header should expose the logo and action group").toBe(true);
-			expect(result.mobileActionCount, "mobile header should only carry cart and menu controls").toBe(2);
+			expect(result.mobileActionCount, "mobile header should only carry the menu control while ecommerce is paused").toBe(1);
 			expect(result.mobileSearchCount, "mobile search belongs at the bottom of the drawer").toBe(0);
-			expect(result.logoRight, "logo should not collide with cart/menu controls").toBeLessThanOrEqual(result.actionsLeft - 8);
+			expect(result.logoRight, "logo should not collide with menu controls").toBeLessThanOrEqual(result.actionsLeft - 8);
 		});
 	});
 
@@ -393,9 +417,9 @@ test.describe("Locally Twisted interactive layout states", () => {
 				await expect(page.locator("#lt-site-search-input")).toBeFocused();
 				expect(page.url(), "search overlay should not navigate").toBe(beforeUrl);
 
-				await page.locator("#lt-site-search-input").fill("arches");
-				await expect(page.locator("#lt-site-search-panel a[href='/shop-items/arches']")).toBeVisible();
-				await expect(page.locator("#lt-site-search-panel a[href='/portfolio']")).toBeHidden();
+				await page.locator("#lt-site-search-input").fill("portfolio");
+				await expect(page.locator("#lt-site-search-panel a[href='/portfolio']")).toBeVisible();
+				await expect(page.locator("#lt-site-search-panel a[href='/event-balloons']")).toBeHidden();
 
 				const result = await auditPageLayout(page, {
 					containerSelectors: [".lt-mega-header", "#lt-site-search-panel", ".lt-site-search-panel__field"],
@@ -410,34 +434,20 @@ test.describe("Locally Twisted interactive layout states", () => {
 			});
 		}
 
-		test("search query submits to shop results", async ({ page }) => {
+		test("search query submits to contact while ecommerce is paused", async ({ page }) => {
 			await page.setViewportSize({ width: 1366, height: 768 });
 			const response = await gotoAndSettle(page, "/");
 			await expectSuccessfulResponse(response, "/");
 
 			await page.locator(".lt-mega-header__search").click();
-			await page.locator("#lt-site-search-input").fill("arches");
+			await page.locator("#lt-site-search-input").fill("balloons");
 			await Promise.all([
-				page.waitForURL(/\/shop\?q=arches$/),
+				page.waitForURL(/\/contact\?q=balloons$/),
 				page.keyboard.press("Enter"),
 			]);
 			await page.waitForLoadState("networkidle", { timeout: 10000 }).catch(() => {});
 
-			await expect(page.locator(".lt-shop__search-summary")).toContainText('Showing matches for "arches".');
-			await expect(page.locator(".lt-shop__card", { hasText: "Classic Arch" })).toBeVisible();
-		});
-
-		test("shop query results are not served from the broad shop cache", async ({ page }) => {
-			await page.setViewportSize({ width: 1366, height: 768 });
-			const shopResponse = await gotoAndSettle(page, "/shop");
-			await expectSuccessfulResponse(shopResponse, "/shop");
-			await expect(page.locator("#lt-shop-count")).toContainText("53 items");
-
-			const queryResponse = await gotoAndSettle(page, "/shop?q=zzznothing");
-			await expectSuccessfulResponse(queryResponse, "/shop?q=zzznothing");
-			await expect(page.locator(".lt-shop__search-summary")).toContainText('Showing matches for "zzznothing".');
-			await expect(page.locator(".lt-shop__empty")).toBeVisible();
-			await expect(page.locator("#lt-shop-grid")).toHaveCount(0);
+			await expect(page.locator(".lt-contact__intro h1")).toBeVisible();
 		});
 
 		test("/search is not a public page", async ({ page }) => {
@@ -475,7 +485,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 		});
 
 		for (const viewport of HEADER_VIEWPORTS.filter((item) => item.expectedMode === "desktop")) {
-			for (const trigger of ["lt-mega-events", "lt-mega-products"]) {
+			for (const trigger of ["lt-mega-events"]) {
 				test(`${trigger} panel fits at ${viewport.name}px`, async ({ page }) => {
 					await page.setViewportSize({ width: viewport.width, height: viewport.height });
 					const response = await gotoAndSettle(page, "/");
@@ -494,7 +504,6 @@ test.describe("Locally Twisted interactive layout states", () => {
 						targetSelectors: [
 							".lt-mega-nav__button",
 							".lt-mega-nav__link",
-							".lt-mega-header__cart",
 							".lt-mega-header__search",
 							".lt-mega-header__cta",
 						],
@@ -516,7 +525,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 				await page.locator("#lt-mobile-toggle").click();
 				await expect(page.locator("#lt-mobile-nav")).toBeVisible();
 
-				for (const panel of ["lt-mobile-events", "lt-mobile-products"]) {
+				for (const panel of ["lt-mobile-events"]) {
 					await page.locator(`[data-lt-drawer-accordion-trigger="${panel}"]`).click();
 					await expect(page.locator(`#${panel}`)).toBeVisible();
 				}
@@ -536,141 +545,29 @@ test.describe("Locally Twisted interactive layout states", () => {
 		}
 	});
 
-	test.describe("shop and product states", () => {
+	test.describe("paused ecommerce states", () => {
 		for (const viewport of [
 			{ name: "320", width: 320, height: 812 },
 			{ name: "390", width: 390, height: 844 },
 			{ name: "820", width: 820, height: 1180 },
 			{ name: "1200", width: 1200, height: 900 },
 		]) {
-			test(`/shop category navigation and grid fit at ${viewport.name}px`, async ({ page }) => {
-				await page.setViewportSize({ width: viewport.width, height: viewport.height });
-				const response = await gotoAndSettle(page, "/shop");
-				await expectSuccessfulResponse(response, "/shop");
+			for (const path of ["/shop", "/shop-items/bouquets/unicorn-bouquet", "/cart", "/checkout"]) {
+				test(`${path} pause page fits at ${viewport.name}px`, async ({ page }) => {
+					await page.setViewportSize({ width: viewport.width, height: viewport.height });
+					const response = await gotoAndSettle(page, path);
+					await expectSuccessfulResponse(response, path);
+					await expect(page).toHaveURL(/\/ready-to-order-paused/);
+					await expect(page.locator(".lt-ecommerce-paused__title")).toContainText("Ready-to-order is paused.");
 
-				await expect(page.locator(".lt-shop__chip")).toHaveCount(0);
-				await expect(page.locator(".lt-shop__category-select")).toHaveCount(1);
-				if (viewport.width >= 992) {
-					await expect(page.locator(".lt-shop__category-rail nav")).toBeVisible();
-				} else {
-					await expect(page.locator(".lt-shop__category-select")).toBeVisible();
-				}
-
-				const result = await auditPageLayout(page, {
-					containerSelectors: [".lt-shop__category-rail", ".lt-shop__grid", ".lt-shop__card"],
-					targetSelectors: [".lt-shop__category-link", ".lt-shop__category-select", ".lt-shop__card-add", ".lt-shop__cta-btn"],
+					const result = await auditPageLayout(page, {
+						containerSelectors: [".lt-ecommerce-paused", ".lt-ecommerce-paused__inner"],
+						targetSelectors: [".lt-ecommerce-paused__button", ".lt-ecommerce-paused__help a"],
+					});
+					expectNoLayoutFailures(expect, result, `${path} pause page at ${viewport.name}px`);
 				});
-				expectNoLayoutFailures(expect, result, `/shop category navigation at ${viewport.name}px`);
-			});
-
-			test(`variant product selectors fit at ${viewport.name}px`, async ({ page }) => {
-				await page.setViewportSize({ width: viewport.width, height: viewport.height });
-				const response = await gotoAndSettle(page, "/shop-items/bouquets/unicorn-bouquet");
-				await expectSuccessfulResponse(response, "/shop-items/bouquets/unicorn-bouquet");
-				await expect(page.locator(".lt-product__configure")).toHaveCount(1);
-				await expect(page.locator(".lt-product__attr")).toHaveCount(1);
-				await expect(page.locator(".lt-product__attr[data-attribute-name='Bouquet Size']")).toHaveCount(1);
-				await expect(page.locator("text=Add Foil Number")).toHaveCount(0);
-
-				const result = await auditPageLayout(page, {
-					containerSelectors: [".lt-product__configure", ".lt-product__attr", ".lt-product__actions", ".lt-product__details"],
-					targetSelectors: [".lt-product__chip", "#lt-add-to-cart-variant", ".lt-product__configure select"],
-				});
-				expectNoLayoutFailures(expect, result, `variant product at ${viewport.name}px`);
-			});
+			}
 		}
-
-		test("desktop mega panel closes before product option interaction after scroll", async ({ page }) => {
-			await page.setViewportSize({ width: 1200, height: 900 });
-			const response = await gotoAndSettle(page, "/shop-items/bouquets/unicorn-bouquet");
-			await expectSuccessfulResponse(response, "/shop-items/bouquets/unicorn-bouquet");
-
-			await page.locator('[data-lt-megamenu-trigger="lt-mega-products"]').click();
-			await expect(page.locator("#lt-mega-products")).toBeVisible();
-			await page.evaluate(() => window.scrollBy(0, 320));
-			await expect(page.locator("#lt-mega-products")).toBeHidden();
-
-			await page.locator(".lt-product__attr[data-attribute-name='Bouquet Size'] .lt-product__chip").first().click();
-			await expect(page.locator("#lt-add-to-cart-variant")).toBeEnabled();
-			await expect(page.locator("#lt-add-to-cart-variant")).toHaveAttribute("data-item-code", /unicorn-bouquet-SMA/);
-		});
-
-		test("multi-photo product gallery avoids horizontal scrollbars and supports mobile swipe", async ({ page }) => {
-			await page.setViewportSize({ width: 390, height: 844 });
-			const response = await gotoAndSettle(page, "/shop-items/arches/classic-arch");
-			await expectSuccessfulResponse(response, "/shop-items/arches/classic-arch");
-			await expect(page.locator(".lt-product__thumbnail-button")).toHaveCount(5);
-
-			const before = await page.locator(".product-image img.website-image").first().getAttribute("src");
-			await page.locator(".product-image").dispatchEvent("pointerdown", {
-				pointerId: 1,
-				pointerType: "touch",
-				clientX: 340,
-				clientY: 300,
-				isPrimary: true,
-			});
-			await page.locator(".product-image").dispatchEvent("pointerup", {
-				pointerId: 1,
-				pointerType: "touch",
-				clientX: 80,
-				clientY: 304,
-				isPrimary: true,
-			});
-			await expect.poll(async () => page.locator(".product-image img.website-image").first().getAttribute("src")).not.toBe(before);
-
-			const mobile = await page.evaluate(() => {
-				const rail = document.querySelector(".lt-product__thumbnail-rail");
-				const doc = document.documentElement;
-				const offenders = Array.from(document.querySelectorAll("body *"))
-					.map((element) => {
-						const style = window.getComputedStyle(element);
-						return {
-							className: String(element.className || ""),
-							overflowX: style.overflowX,
-							scrollbarWidth: style.scrollbarWidth,
-							scrollWidth: element.scrollWidth,
-							clientWidth: element.clientWidth,
-						};
-					})
-					.filter((item) => ["auto", "scroll"].includes(item.overflowX) && item.scrollWidth > item.clientWidth + 1 && item.scrollbarWidth !== "none");
-				return {
-					documentOverflow: doc.scrollWidth - doc.clientWidth,
-					railOverflowX: rail ? window.getComputedStyle(rail).overflowX : null,
-					railScrollbarWidth: rail ? window.getComputedStyle(rail).scrollbarWidth : null,
-					railScrollSnapType: rail ? window.getComputedStyle(rail).scrollSnapType : null,
-					offenders,
-				};
-			});
-			expect(Math.abs(mobile.documentOverflow), "product page must not create document-level horizontal overflow").toBeLessThanOrEqual(1);
-			expect(mobile.railOverflowX, "mobile gallery may be swipeable, but not with a visible native scrollbar").toBe("auto");
-			expect(mobile.railScrollbarWidth, "mobile gallery must hide native scrollbar chrome").toBe("none");
-			expect(mobile.railScrollSnapType, "mobile gallery should use a swipe/snap photo strip").toContain("x");
-			expect(mobile.offenders, "no visible internal horizontal scrollbars are allowed").toEqual([]);
-
-			await page.setViewportSize({ width: 1366, height: 900 });
-			await gotoAndSettle(page, "/shop-items/arches/classic-arch");
-			const desktop = await page.evaluate(() => {
-				const doc = document.documentElement;
-				const offenders = Array.from(document.querySelectorAll("body *"))
-					.map((element) => {
-						const style = window.getComputedStyle(element);
-						return {
-							className: String(element.className || ""),
-							overflowX: style.overflowX,
-							scrollbarWidth: style.scrollbarWidth,
-							scrollWidth: element.scrollWidth,
-							clientWidth: element.clientWidth,
-						};
-					})
-					.filter((item) => ["auto", "scroll"].includes(item.overflowX) && item.scrollWidth > item.clientWidth + 1 && item.scrollbarWidth !== "none");
-				return {
-					documentOverflow: doc.scrollWidth - doc.clientWidth,
-					offenders,
-				};
-			});
-			expect(Math.abs(desktop.documentOverflow), "desktop product page must not create horizontal overflow").toBeLessThanOrEqual(1);
-			expect(desktop.offenders, "desktop product gallery must not expose internal horizontal scrollbars").toEqual([]);
-		});
 	});
 
 	test.describe("content-heavy interactive states", () => {
@@ -781,6 +678,61 @@ test.describe("Locally Twisted interactive layout states", () => {
 			});
 		}
 
+		test("review cards keep all curated Google quotes and five-star rows in both marquee copies", async ({ page }) => {
+			await page.setViewportSize({ width: 1366, height: 900 });
+			const response = await gotoAndSettle(page, "/");
+			await expectSuccessfulResponse(response, "/");
+
+			const result = await page.evaluate(() => {
+				const groups = Array.from(document.querySelectorAll(".lt-reviews-block__group"));
+				const cards = Array.from(document.querySelectorAll("[data-lt-review-card]"));
+				const text = (card, selector) => (card.querySelector(selector)?.textContent || "").replace(/\s+/g, " ").trim();
+				const compactStars = (card) => text(card, ".lt-reviews-block__quote-stars").replace(/\s+/g, "");
+				const starCount = (card) => Array.from(compactStars(card)).filter((character) => character.charCodeAt(0) === 9733).length;
+				const cardInfo = (card, index) => {
+					const rect = card.getBoundingClientRect();
+					return {
+						index,
+						text: text(card, ".lt-reviews-block__quote-text"),
+						stars: compactStars(card),
+						starCount: starCount(card),
+						starLabel: card.querySelector(".lt-reviews-block__quote-stars")?.getAttribute("aria-label") || "",
+						rating: card.getAttribute("data-lt-review-rating") || "",
+						visible: rect.left < window.innerWidth && rect.right > 0,
+					};
+				};
+				const infos = cards.map(cardInfo);
+				const groupTexts = groups.map((group) =>
+					Array.from(group.querySelectorAll("[data-lt-review-card]")).map((card) => text(card, ".lt-reviews-block__quote-text"))
+				);
+
+				return {
+					groupCount: groups.length,
+					groupSizes: groups.map((group) => group.querySelectorAll("[data-lt-review-card]").length),
+					uniqueReviewCount: new Set(infos.map((card) => card.text)).size,
+					emptyCards: infos.filter((card) => !card.text).map((card) => card.index),
+					pendingCards: infos.filter((card) => /pending/i.test(card.text)).map((card) => card.index),
+					missingStarCards: infos.filter((card) => card.starCount !== 5 || card.stars.length !== 5 || card.starLabel !== "5 out of 5 stars").map((card) => card.index),
+					nonFiveRatingCards: infos.filter((card) => card.rating !== "5").map((card) => card.index),
+					visibleCount: infos.filter((card) => card.visible).length,
+					visibleMissingStarCards: infos.filter((card) => card.visible && card.starCount !== 5).map((card) => card.index),
+					duplicateMatchesSource: JSON.stringify(groupTexts[0] || []) === JSON.stringify(groupTexts[1] || []),
+				};
+			});
+
+			expect(result.groupCount, "review marquee should have one readable copy and one duplicate copy").toBe(2);
+			expect(result.groupSizes[0], "homepage should preserve the curated Google review set").toBeGreaterThanOrEqual(19);
+			expect(result.groupSizes[1], "duplicate marquee copy should include every source review").toBe(result.groupSizes[0]);
+			expect(result.uniqueReviewCount, "review copy should not silently disappear").toBeGreaterThanOrEqual(19);
+			expect(result.duplicateMatchesSource, "marquee duplicate should match the readable review copy").toBe(true);
+			expect(result.emptyCards, "review cards must not render empty text").toEqual([]);
+			expect(result.pendingCards, "homepage must not show placeholder review cards").toEqual([]);
+			expect(result.nonFiveRatingCards, "homepage review cards should only use five-star reviews").toEqual([]);
+			expect(result.missingStarCards, "every rendered review card should show the five-star row").toEqual([]);
+			expect(result.visibleCount, "the review crawl should show several cards at load").toBeGreaterThanOrEqual(3);
+			expect(result.visibleMissingStarCards, "visible review cards should not be the starless duplicate copy").toEqual([]);
+		});
+
 		test("mobile review proof keeps the compact sizing contract", async ({ page }) => {
 			await page.setViewportSize({ width: 390, height: 844 });
 			const response = await gotoAndSettle(page, "/");
@@ -799,6 +751,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 						paddingBottom: parseFloat(style.paddingBottom),
 						paddingLeft: parseFloat(style.paddingLeft),
 						paddingRight: parseFloat(style.paddingRight),
+						gap: parseFloat(style.gap) || 0,
 					};
 				}
 
@@ -811,6 +764,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 					block: box(".lt-reviews-block"),
 					badge: box(".lt-reviews-block__badge"),
 					quotes: box(".lt-reviews-block__quotes"),
+					group: box(".lt-reviews-block__group"),
 					card: box(".lt-reviews-block__quote"),
 					cardCount: cards.length,
 					maxCardHeight: Math.max(...cards.map((card) => card.height)),
@@ -827,10 +781,59 @@ test.describe("Locally Twisted interactive layout states", () => {
 			expect(result.quotes.height, "mobile review marquee should not be a tall card stack").toBeLessThanOrEqual(240);
 			expect(result.quotes.paddingTop, "global section padding must not leak into mobile review marquee").toBe(0);
 			expect(result.quotes.paddingBottom, "global section padding must not leak into mobile review marquee").toBe(0);
-			expect(result.maxCardWidth, "mobile review cards should stay narrower than the viewport").toBeLessThanOrEqual(270);
+			expect(result.group.gap, "mobile review card gap should stay tight").toBeLessThanOrEqual(9);
+			expect(result.maxCardWidth, "mobile review cards should stay narrower than the viewport").toBeLessThanOrEqual(255);
 			expect(result.maxCardHeight, "mobile review cards should stay compact").toBeLessThanOrEqual(240);
 			expect(result.card.paddingLeft, "mobile review card horizontal padding should stay tight").toBeLessThanOrEqual(17);
 			expect(result.card.paddingRight, "mobile review card horizontal padding should stay tight").toBeLessThanOrEqual(17);
+		});
+
+		test("desktop review proof spacing stays compact", async ({ page }) => {
+			await page.setViewportSize({ width: 1366, height: 900 });
+			const response = await gotoAndSettle(page, "/");
+			await expectSuccessfulResponse(response, "/");
+
+			const result = await page.evaluate(() => {
+				function box(selector) {
+					const element = document.querySelector(selector);
+					if (!element) return null;
+					const rect = element.getBoundingClientRect();
+					const style = window.getComputedStyle(element);
+					return {
+						height: rect.height,
+						width: rect.width,
+						paddingTop: parseFloat(style.paddingTop),
+						paddingBottom: parseFloat(style.paddingBottom),
+						gap: parseFloat(style.gap) || 0,
+						marginBottom: parseFloat(style.marginBottom) || 0,
+					};
+				}
+
+				const cards = Array.from(document.querySelectorAll(".lt-reviews-block__quote")).map((card) => {
+					const rect = card.getBoundingClientRect();
+					return { height: rect.height, width: rect.width };
+				});
+
+				return {
+					block: box(".lt-reviews-block"),
+					badge: box(".lt-reviews-block__badge"),
+					quotes: box(".lt-reviews-block__quotes"),
+					group: box(".lt-reviews-block__group"),
+					maxCardHeight: Math.max(...cards.map((card) => card.height)),
+					maxCardWidth: Math.max(...cards.map((card) => card.width)),
+				};
+			});
+
+			expect(result.block, "reviews block should render").not.toBeNull();
+			expect(result.block.height, "desktop Google review section should stay compact").toBeLessThanOrEqual(475);
+			expect(result.block.paddingTop, "desktop review section top padding should stay tight").toBeLessThanOrEqual(36);
+			expect(result.block.paddingBottom, "desktop review section bottom padding should stay tight").toBeLessThanOrEqual(40);
+			expect(result.badge.marginBottom, "desktop badge-to-cards spacing should stay tight").toBeLessThanOrEqual(18);
+			expect(result.quotes.paddingTop, "global section padding must not leak into desktop review marquee").toBe(0);
+			expect(result.quotes.paddingBottom, "global section padding must not leak into desktop review marquee").toBe(0);
+			expect(result.group.gap, "desktop review card gap should stay tight").toBeLessThanOrEqual(12);
+			expect(result.maxCardWidth, "desktop review cards should stay compact").toBeLessThanOrEqual(300);
+			expect(result.maxCardHeight, "desktop review cards should not stretch short reviews into blank cards").toBeLessThanOrEqual(245);
 		});
 	});
 
@@ -1058,6 +1061,31 @@ test.describe("Locally Twisted interactive layout states", () => {
 		expect(Math.abs(result.documentOverflow), "wide featured gallery should not create document overflow").toBeLessThanOrEqual(1);
 	});
 
+	test("twisting and face painting inquiry starts with no service checkbox selected", async ({ page }) => {
+		await page.setViewportSize({ width: 390, height: 844 });
+		const response = await gotoAndSettle(page, "/balloon-twisting-and-face-painting");
+		await expectSuccessfulResponse(response, "/balloon-twisting-and-face-painting");
+
+		const checkedServices = await page.locator('input[name="x_services"]:checked').evaluateAll((inputs) => inputs.map((input) => input.value));
+		expect(checkedServices, "BTFP booking form should let the visitor choose services from a blank state").toEqual([]);
+	});
+
+	test("twisting and face painting service photos expose working carousels", async ({ page }) => {
+		await page.setViewportSize({ width: 390, height: 844 });
+		await page.emulateMedia({ reducedMotion: "reduce" });
+		const response = await gotoAndSettle(page, "/balloon-twisting-and-face-painting");
+		await expectSuccessfulResponse(response, "/balloon-twisting-and-face-painting");
+
+		const carousels = page.locator("[data-btfp-carousel]");
+		await expect(carousels).toHaveCount(2);
+		await expect(carousels.first().locator(".lt-btfp__carousel-img")).toHaveCount(10);
+		await expect(carousels.nth(1).locator(".lt-btfp__carousel-img")).toHaveCount(10);
+
+		await expect(carousels.first().locator("[data-btfp-carousel-status]")).toHaveText("1 / 10");
+		await carousels.first().locator("[data-btfp-carousel-next]").click();
+		await expect(carousels.first().locator("[data-btfp-carousel-status]")).toHaveText("2 / 10");
+	});
+
 	test("homepage hero uses one visible stable headline", async ({ page }) => {
 		await page.setViewportSize({ width: 1366, height: 900 });
 		await page.emulateMedia({ reducedMotion: "no-preference" });
@@ -1090,7 +1118,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 		expect(result.h1Text[0], "homepage H1 should be the visible hero headline").toBe(result.heroTitleText);
 		expect(result.titleVisible, "homepage H1 should be visible, not screen-reader-only").toBe(true);
 		expect(result.animationName, "homepage H1 should not rotate or fade").toBe("none");
-		expect(result.heroImage, "homepage hero should prove a real balloon install, not only a scenic Utah background").toContain("corporate-weberstock-photo-opt.webp");
+		expect(result.heroImage, "homepage hero carousel should open with the graduation-season image").toContain("school-grad-garland.webp");
 		expect(result.cyclingCount, "homepage should not render hidden rotating H2/H1 headline copies").toBe(0);
 		expect(result.nextBandTop, "desktop first viewport should show the next band below the hero").toBeLessThan(result.viewportHeight - 16);
 	});
@@ -1103,7 +1131,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 		const result = await page.evaluate(() => {
 			const reviews = document.querySelector(".lt-reviews-block");
 			const cookie = document.querySelector(".lt-cookie-consent");
-			const buttons = Array.from(document.querySelectorAll(".lt-hero__cta"));
+			const buttons = Array.from(document.querySelectorAll(".lt-hero__slide:first-child .lt-hero__cta"));
 			const reviewsRect = reviews ? reviews.getBoundingClientRect() : null;
 			const cookieRect = cookie ? cookie.getBoundingClientRect() : null;
 			return {

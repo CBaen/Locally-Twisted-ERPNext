@@ -1,7 +1,7 @@
 ---
 name: External document audience contract
 level: recipe
-last_verified: 2026-05-09
+last_verified: 2026-05-10
 ---
 
 ## What it does
@@ -42,10 +42,13 @@ policy lane, or source record is missing or contradictory.
   gated until recipient, cadence, copy, payment link, and approval state are
   explicit.
 - Every client/customer/company paperwork or documentation email must preserve
-  `hi@locallytwisted.com` as the public business contact, but the internal copy
-  delivery address must be a real mailbox that does not route back into the
-  same SMTP sender. For the current LT Gmail setup, that delivery-safe business
-  copy is `locallytwisted@gmail.com`.
+  the role-appropriate public inbox: `hi@locallytwisted.com` for general
+  inquiry/event support, `legal@locallytwisted.com` for legal/policy/accessibility
+  copy and legal paperwork, and `billing@locallytwisted.com` for invoices,
+  billing, refunds, payment reconciliation, accounts payable, and payroll.
+  Internal copy delivery must still use a real mailbox that does not route back
+  into the same SMTP sender. For the current LT Gmail setup, that delivery-safe
+  business copy is `locallytwisted@gmail.com`.
 - Do not use Cloudflare-routed `@locallytwisted.com` aliases such as
   `hi@locallytwisted.com` or `cameron@locallytwisted.com` as internal copy
   targets while the outgoing account is `locallytwisted@gmail.com`; Gmail/Cloudflare

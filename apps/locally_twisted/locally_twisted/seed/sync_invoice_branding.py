@@ -26,7 +26,7 @@ LETTER_HEAD_CONTENT = """
     </div>
     <div style="text-align:right; color:#111111; font-size:12px; line-height:1.55;">
       <strong style="font-size:13px;">Locally Twisted</strong><br>
-      <a href="mailto:hi@locallytwisted.com" style="color:#111111; text-decoration:none;">hi@locallytwisted.com</a><br>
+      <a href="mailto:billing@locallytwisted.com" style="color:#111111; text-decoration:none;">billing@locallytwisted.com</a><br>
       <span style="color:#111111; text-decoration:none;">(801) 285-0860</span><br>
       <a href="https://locallytwisted.com" style="color:#111111; text-decoration:none;">locallytwisted.com</a>
     </div>
@@ -44,7 +44,7 @@ PRINT_FORMAT_HTML = """
     </div>
     <div class="lt-brand-contact">
       <strong>Locally Twisted</strong>
-      <span>hi@locallytwisted.com</span>
+      <span>billing@locallytwisted.com</span>
       <span>(801) 285-0860</span>
       <span>locallytwisted.com</span>
     </div>
@@ -216,10 +216,10 @@ PRINT_FORMAT_HTML = """
   </section>
 
   <section class="lt-payment-note lt-callout">
-    <p><strong>For accounts payable:</strong> hi@locallytwisted.com &middot; (801) 285-0860</p>
+    <p><strong>For accounts payable:</strong> billing@locallytwisted.com &middot; (801) 285-0860</p>
     <div class="lt-support-banner">
       <p><strong>Customer Service, Continued Event Support, and Repeat Orders:</strong></p>
-      <p>Reply to this invoice and we will route the request to the right person.</p>
+      <p>For new event support or repeat orders, email hi@locallytwisted.com.</p>
     </div>
   </section>
 </div>

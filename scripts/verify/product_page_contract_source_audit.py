@@ -4,9 +4,9 @@
 This verifier is intentionally read-only. It does not touch ERPNext DB state.
 It shows whether source data is ready to drive a purge/rebuild import.
 """
-
 from __future__ import annotations
 
+import argparse
 import json
 import sys
 from collections import Counter
@@ -40,6 +40,9 @@ def _load_slug_to_group() -> dict[str, str]:
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.parse_args()
+
     products = _load_products()
     slug_to_group = _load_slug_to_group()
     contracts = [
@@ -48,6 +51,8 @@ def main() -> int:
     ]
 
     warning_counts = Counter()
+    product_page_type_counts = Counter(contract.product_page_type for contract in contracts)
+    commerce_lane_counts = Counter(contract.commerce_lane for contract in contracts)
     for contract in contracts:
         for warning in contract.warnings:
             if "resolver-backed" in warning:
@@ -80,9 +85,27 @@ def main() -> int:
         f"- Variant products with resolver-backed prices: {len(resolver_ready)}",
         f"- Products with warnings/blockers: {len(review_products)}",
         "",
-        "## Warning buckets",
+        "## Product-page template classification",
         "",
     ]
+    for key, value in sorted(product_page_type_counts.items()):
+        label = next((contract.product_page_type_label for contract in contracts if contract.product_page_type == key), key)
+        lines.append(f"- {label} (`{key}`): {value}")
+
+    lines.extend([
+        "",
+        "## Commerce lane classification",
+        "",
+    ])
+    for key, value in sorted(commerce_lane_counts.items()):
+        label = next((contract.commerce_lane_label for contract in contracts if contract.commerce_lane == key), key)
+        lines.append(f"- {label} (`{key}`): {value}")
+
+    lines.extend([
+        "",
+        "## Warning buckets",
+        "",
+    ])
     for key, value in sorted(warning_counts.items()):
         lines.append(f"- {key}: {value}")
 
@@ -90,15 +113,16 @@ def main() -> int:
         "",
         "## Sample contracts needing review",
         "",
-        "| Slug | Category hint | Variant rows | Required axes | Add-ons | Warnings |",
-        "|---|---|---:|---|---|---|",
+        "| Slug | Template | Lane | Category hint | Variant rows | Required axes | Add-ons | Warnings |",
+        "|---|---|---|---|---:|---|---|---|",
     ])
     for contract in review_products[:25]:
         axes = ", ".join(axis.name for axis in contract.required_axes)
         addons = ", ".join(addon.key for addon in contract.add_ons)
         warnings = "<br>".join(contract.warnings)
         lines.append(
-            f"| {contract.slug} | {contract.category_hint} | {contract.source_variant_rows} | "
+            f"| {contract.slug} | {contract.product_page_type_label} | {contract.commerce_lane_label} | "
+            f"{contract.category_hint} | {contract.source_variant_rows} | "
             f"{axes} | {addons} | {warnings} |"
         )
 
@@ -107,8 +131,12 @@ def main() -> int:
         "## Interpretation",
         "",
         "The contract builder can separate confirmed foil-number add-ons from required axes, but the source artifact is not import-ready.",
-        "The largest blocker remains resolver-backed pricing: variant rows currently lack `erpnext_variant_price`.",
+        "Every source product is now classified into one of the two reusable product-page template types so import review is about architecture, not fake product content.",
+        "The largest source-artifact blocker remains resolver-backed pricing: variant rows currently lack `erpnext_variant_price` for a destructive purge/import.",
+        "`product_page_price_readiness_contract.py` checks the separate live-ERPNext Item Price gate for the current database.",
+        "`product_page_price_enrichment_contract.py` builds the separate candidate price map for purge/reimport rehearsal without mutating the source scrape.",
         "Gallery images are present but intentionally marked review-needed until classified as parent gallery vs variant image vs other source media.",
+        "`product_page_media_visibility_contract.py` checks the separate live-ERPNext media evidence and source-media classification gate.",
         "",
         "## Gate result",
         "",
