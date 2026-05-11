@@ -20,6 +20,7 @@ commerce still requires Frappe Cloud/staging, owner review, live
 Stripe/payment readiness, DNS, and the agency staging-to-live gate.
 
 **Frappe Cloud/Cloudflare/Stripe launch gate (2026-05-11):** Source handoff is
+`LT-LAUNCH-RUNBOOK.md`, with the deeper technical gate at
 `workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11.md`. Do not cut
 DNS from a dirty/ahead worktree. Required gates are
 `frappe_cloud_preflight.py`, staging

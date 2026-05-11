@@ -6,6 +6,23 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-11 - Technical preflight is not account access
+
+The launch prep initially grouped Frappe Cloud, Cloudflare, and Stripe as if
+they were the same kind of readiness check. They are not. Frappe Cloud preflight
+can prove GitHub/app/SSH shape while dashboard ownership is still unconfirmed.
+Cloudflare nameservers can be delegated while Codex still cannot edit DNS.
+Stripe CLI can be logged into a live-capable account while the business still
+needs to decide whether that is the right merchant account for LT.
+
+**Counter-move:** split launch docs into machine-verifiable gates and human
+account-control gates. For LT, use `LT-LAUNCH-RUNBOOK.md` for the operator
+checklist and `workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11.md`
+for the technical cutover gate. Do not claim DNS/payment readiness until both
+the technical gate and human account-control boundary are satisfied.
+
+---
+
 ## 2026-05-10 - Checkout eligibility is an allow-list, not an inference
 
 Phase 4 proved that blank or partial Website Item ecommerce fields are dangerous. A price, a sellable variant, or an inferred page template can make a product look checkout-ready while the business meaning still belongs in quote/review.

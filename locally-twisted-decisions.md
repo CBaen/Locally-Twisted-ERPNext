@@ -8,6 +8,42 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-11 - Launch operator and ecommerce fallback are explicit
+
+**Decision:** Cameron is the human launch operator for Frappe Cloud,
+Cloudflare, and Stripe cutover. Jeff does not need to do technical cutover
+work. Public launch may include a narrow ecommerce shelf, including twisting or
+face-painting deposits, only if hardening, security, product-scope, live
+payment config, and one real low-risk payment test pass. If those gates do not
+pass, the public website and inquiry path still launch with ecommerce paused.
+
+**Reasoning:** GL clarified that he cannot give a clean yes/no answer to
+"website only or ecommerce" because the right answer depends on proof. The
+launch should not be delayed by full ecommerce, but it also must not expose
+half-live checkout. Account access is also a human boundary: Codex can verify
+local CLI/preflight state, but Cameron must be available for Frappe Cloud and
+Cloudflare dashboard actions and must decide the correct Stripe merchant
+account.
+
+**Implementation boundary:** `LT-LAUNCH-RUNBOOK.md` is the project-root human
+operator checklist. The technical gate remains
+`workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11.md`. Do not cut
+DNS from a dirty/ahead worktree. Do not expose live checkout until
+`payment_launch_readiness.py --mode live --base-url https://locallytwisted.com`
+passes and one intentional low-risk payment/refund test proves the ERPNext paid
+chain and email queue behavior.
+
+**Alternatives considered:** Make launch website-only regardless of proof.
+Rejected because GL wants some ecommerce if it can be proven safe. Open all
+local ecommerce because local fake-data gates pass. Rejected because live host,
+Stripe, webhook, policy, product approval, and real payment proof are separate
+cutover gates.
+
+**Decided by:** GL clarification and Codex launch-gate implementation on
+2026-05-11.
+
+---
+
 ## 2026-05-11 - Repo hygiene stays main-only and raw asset copies stay outside launch source
 
 **Decision:** LT cleanup work must not keep branch or linked-worktree holding areas. If a non-main branch is discovered, future agents must prove whether it contains unique work before removal, then return the repo to main-only state. Raw local photo drops that are preserved outside the repo should not also remain as duplicate tracked launch assets unless a current feature deliberately promotes them to production source.
