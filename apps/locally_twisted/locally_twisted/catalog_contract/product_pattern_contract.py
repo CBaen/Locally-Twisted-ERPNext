@@ -47,6 +47,7 @@ FailLoudState = Literal[
     "review_only_add_on",
     "unpriced_add_on",
     "unsupported_customization_payload",
+    "missing_multi_color_configuration",
     "conditional_pricing_unverified",
     "source_pattern_unpreserved",
     "media_uncertainty",
@@ -277,7 +278,7 @@ def resolve_product_pattern_selection(
     _enforce_resolver_mode(contract, mode)
 
     selected_options = _selected_options(contract, selected_config)
-    customization_payload = _customization_payload(contract, selected_config)
+    customization_payload = _customization_payload(contract, selected_config, mode=mode)
     add_on_lines = _add_on_lines(contract, selected_config)
     item_code = ""
     if item_resolver:
@@ -409,9 +410,13 @@ def _axis_contract_from_source(
     role: AxisRole = "sale_unit"
     allows_multiple = False
     if is_balloon_color_axis(axis_name):
-        notes.append("Single selected color can be a priced sale-unit axis when variants/prices exist.")
-        notes.append("Multi-color recipes need customization payload support instead of variant explosion.")
-        allows_multiple = str(axis.get("display_type") or "").strip().lower() == "multi"
+        role = "customization"
+        selector_type = "multi_color_recipe_builder"
+        notes.append("Source color axes require multi-color/recipe-capable configuration before checkout.")
+        notes.append(
+            "One-color variant lookup is compatibility-only when the source contract explicitly says single-color sale unit."
+        )
+        allows_multiple = True
 
     if _looks_like_customization_axis(axis_name):
         role = "customization"
@@ -646,6 +651,14 @@ def _checkout_eligibility(
     if customization_axes:
         fail_loud.append("unsupported_customization_payload")
         required_work.append("Add validated customization payload schema and SO/SI/receipt summaries.")
+    color_configuration_axes = [
+        axis.name for axis in axes if axis.role == "customization" and is_balloon_color_axis(axis.name)
+    ]
+    if color_configuration_axes:
+        fail_loud.append("missing_multi_color_configuration")
+        required_work.append(
+            "Add multi-color/recipe-capable cart, checkout, SO/SI, and receipt preservation before paid checkout."
+        )
 
     if media.status == "primary_missing":
         fail_loud.append("media_uncertainty")
@@ -661,7 +674,11 @@ def _checkout_eligibility(
         status: CheckoutStatus = "needs_pricing"
     elif "review_only_add_on" in fail_loud or "unpriced_add_on" in fail_loud:
         status = "needs_add_on_pricing"
-    elif "unsupported_customization_payload" in fail_loud or "source_pattern_unpreserved" in fail_loud:
+    elif (
+        "unsupported_customization_payload" in fail_loud
+        or "missing_multi_color_configuration" in fail_loud
+        or "source_pattern_unpreserved" in fail_loud
+    ):
         status = "needs_customization_payload"
     elif "conditional_pricing_unverified" in fail_loud:
         status = "needs_pricing"
@@ -700,6 +717,14 @@ def _apply_mapper_enforcement(
     import_requirements = tuple(str(value) for value in source_pattern.get("erpnext_contract_requirements") or ())
     customization_axes = [axis.name for axis in axes if axis.role == "customization"]
 
+    if (
+        ("large_single_choice_color" in patterns or "multi_color_recipes" in patterns)
+        and _source_requires_customization_payload(source_pattern, axes)
+    ):
+        fail_loud.append("missing_multi_color_configuration")
+        required_work.append(
+            "Preserve source color choices with a multi-color/recipe-capable configuration contract before checkout."
+        )
     if "multi_color_recipes" in patterns and _source_requires_customization_payload(source_pattern, axes):
         fail_loud.append("unsupported_customization_payload")
         required_work.append("Preserve multi-color recipe selections in a validated customization payload before checkout.")
@@ -720,26 +745,26 @@ def _source_requires_customization_payload(
     source_pattern: dict[str, Any],
     axes: tuple[AxisContract, ...],
 ) -> bool:
-    """Return true only for source recipe semantics not represented as sale-unit axes.
-
-    The source mapper deliberately marks color axes conservatively. A single
-    color choice is checkout-safe when ERPNext has a ready sale-unit axis for
-    that source axis. Actual recipe-builder axes still require a validated
-    customization payload before paid checkout.
-    """
-    ready_sale_unit_axes = {axis.name for axis in axes if axis.role == "sale_unit" and axis.status == "ready"}
+    """Return true for source color/recipe semantics unless explicitly single-color sale-unit."""
     for axis in source_pattern.get("axis_contracts") or []:
         if not isinstance(axis, dict):
             continue
         patterns = {str(pattern) for pattern in axis.get("patterns") or ()}
-        if "multi_color_recipe_customization" not in patterns:
+        if not patterns & {"large_single_choice_color", "multi_color_recipe_customization"}:
             continue
-        axis_name = _clean(axis.get("name"))
-        primitive_key = _clean(axis.get("primitive_key"))
-        if primitive_key == "color_choice_contract" and axis_name in ready_sale_unit_axes:
+        if _explicit_single_color_sale_unit(axis):
             continue
         return True
     return False
+
+
+def _explicit_single_color_sale_unit(axis: dict[str, Any]) -> bool:
+    patterns = {str(pattern) for pattern in axis.get("patterns") or ()}
+    return bool(
+        patterns & {"single_color_sale_unit", "explicit_single_color_sale_unit"}
+        or _clean(axis.get("sale_unit_mode")) == "single_color"
+        or _clean(axis.get("pricing_strategy")) == "single_color_sale_unit"
+    )
 
 
 def _selected_options(contract: ProductPatternContract, selected_config: dict[str, Any]) -> dict[str, str]:
@@ -765,7 +790,12 @@ def _selected_options(contract: ProductPatternContract, selected_config: dict[st
     return result
 
 
-def _customization_payload(contract: ProductPatternContract, selected_config: dict[str, Any]) -> dict[str, Any]:
+def _customization_payload(
+    contract: ProductPatternContract,
+    selected_config: dict[str, Any],
+    *,
+    mode: ResolverMode,
+) -> dict[str, Any]:
     customizations = selected_config.get("customizations") or {}
     if isinstance(customizations, list):
         customizations = {"items": customizations}
@@ -773,7 +803,11 @@ def _customization_payload(contract: ProductPatternContract, selected_config: di
         raise ProductPatternContractError("customizations must be a dict or list")
     if customizations and not any(axis.role == "customization" for axis in contract.axis_contracts):
         raise ProductPatternContractError("customization payload provided for a product without customization axes")
-    if customizations and "unsupported_customization_payload" in contract.checkout_eligibility.fail_loud_states:
+    if (
+        mode == "checkout"
+        and customizations
+        and "unsupported_customization_payload" in contract.checkout_eligibility.fail_loud_states
+    ):
         raise ProductPatternContractError("customization payload is not connected to paid checkout yet")
     return customizations
 

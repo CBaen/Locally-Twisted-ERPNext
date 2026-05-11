@@ -513,9 +513,10 @@ def _checkout_eligibility(
             and live_coverage.get("coverage_status") not in {"covered", "representative_item_required"}
         ):
             blocking.append("conditional_pricing_matrix_needed")
-        if patterns & {"large_single_choice_color", "multi_color_recipes", "freeform_customer_text"}:
-            if not _representative_only_checkout(source_axes, representative):
-                blocking.append("checkout_customization_contract_needed")
+        if patterns & {"large_single_choice_color", "multi_color_recipes"}:
+            blocking.append("multi_color_recipe_configuration_contract_needed")
+        if "freeform_customer_text" in patterns:
+            blocking.append("checkout_customization_contract_needed")
     if source_axes["review_only_axes"] and _website_lane(website_item) == "checkout":
         blocking.append("review_only_add_on_checkout_contract_needed")
     if representative is None and _website_lane(website_item) == "checkout":
@@ -561,18 +562,6 @@ def _capability(website_item: dict[str, Any], checkout: dict[str, Any]) -> tuple
     return "needs_review_or_missing", blockers or ["missing or needs-review ERPNext lane"]
 
 
-def _representative_only_checkout(
-    source_axes: dict[str, list[str]],
-    representative: RepresentativePricedItem | None,
-) -> bool:
-    return bool(
-        representative
-        and not source_axes.get("required_sale_unit_axes")
-        and not source_axes.get("add_on_axes")
-        and not source_axes.get("review_only_axes")
-    )
-
-
 def _server_boundary(
     *,
     product: dict[str, Any],
@@ -584,7 +573,6 @@ def _server_boundary(
     selected_options = representative.selected_options if representative else {}
     add_on_axes = source_axes.get("add_on_axes") or []
     customization_axes = source_axes.get("customization_axes") or []
-    representative_only = _representative_only_checkout(source_axes, representative)
     return ServerBoundaryContract(
         selected_config_schema={
             "schema_version": CONFIG_VERSION,
@@ -602,14 +590,16 @@ def _server_boundary(
         },
         customization_validation={
             "status": (
-                "checkout_validation_contract_needed"
+                "multi_color_recipe_configuration_contract_needed"
                 if customization_axes and _website_lane(website_item) == "checkout"
-                and not representative_only
-                else "not_exposed_in_representative_checkout"
-                if customization_axes and representative_only and _website_lane(website_item) == "checkout"
                 else "quote_first_or_not_required"
             ),
             "source_axes": customization_axes,
+            "required_preservation": (
+                "cart selected_config, checkout validation, Sales Order/Sales Invoice line JSON, and receipt summary"
+                if customization_axes
+                else ""
+            ),
         },
         totals_provenance={
             "item_price_source": representative.provenance if representative else "",

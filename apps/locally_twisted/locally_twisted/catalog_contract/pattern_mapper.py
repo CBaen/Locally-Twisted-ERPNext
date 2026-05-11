@@ -317,12 +317,12 @@ def _axis_mapping(
         )
     if "large_single_choice_color" in patterns:
         return (
-            "color_choice_contract",
-            "color customization contract or required color variant axis",
-            "single_select_color_drawer",
-            "Checkout imports must preserve selected color as either an Item Variant Attribute or validated line configuration.",
-            "grouped color drawer with single-selection preservation",
-            "preserve_selected_color_with_sale_unit",
+            "multi_color_configuration_contract",
+            "multi-color/recipe-capable configuration contract",
+            "multi_color_recipe_builder",
+            "Checkout imports must preserve color selection or recipe details in validated line configuration.",
+            "multi-color/recipe builder with cart, checkout, SO/SI, and receipt preservation",
+            "quote_or_validated_configuration_price",
         )
     if "multi_color_recipe_customization" in patterns:
         return (
@@ -456,6 +456,20 @@ def _sale_unit_contract(
             "selector_key": "quantity_only",
             "pricing_strategy": "base_item_price",
         }
+    if "large_single_choice_color" in patterns or "multi_color_recipes" in patterns:
+        return {
+            "path": "multi_color_configuration_contract",
+            "checkout_eligible": False,
+            "requirements": (
+                "multi-color/recipe-capable cart selected_config",
+                "checkout validation contract",
+                "Sales Order/Sales Invoice line JSON preservation",
+                "receipt summary preservation",
+                "quote gate until configuration price path exists",
+            ),
+            "selector_key": "multi_color_recipe_builder",
+            "pricing_strategy": "quote_or_validated_configuration_price",
+        }
     required_axes = tuple(axis.name for axis in axes if "required_sale_unit_axis" in axis.patterns)
     if required_axes:
         return {
@@ -492,7 +506,7 @@ def _erpnext_requirements(patterns: tuple[str, ...]) -> tuple[str, ...]:
     if "finite_variants" in patterns:
         requirements.append("Item template, Item variants, Item Variant Attribute rows, and Item Price rows")
     if "large_single_choice_color" in patterns:
-        requirements.append("Color choice preservation as required variant axis or validated line configuration")
+        requirements.append("Multi-color/recipe-capable line configuration contract")
     if "multi_color_recipes" in patterns:
         requirements.append("Multi-color recipe/customization payload and quote-first fallback")
     if "multi_axis_priced_variants" in patterns:
@@ -515,7 +529,7 @@ def _import_implications(patterns: tuple[str, ...]) -> tuple[str, ...]:
     if "finite_variants" in patterns:
         implications.append("Project source axes into required sale units before creating variants.")
     if "large_single_choice_color" in patterns:
-        implications.append("Do not discard high-cardinality color selections during checkout import.")
+        implications.append("Do not clear checkout until color selections preserve cart, checkout, SO/SI, and receipt data.")
     if "multi_color_recipes" in patterns:
         implications.append("Avoid color-combination variant explosion; preserve recipe details as customization/quote data.")
     if "multi_axis_priced_variants" in patterns:
