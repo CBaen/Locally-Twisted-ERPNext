@@ -1,0 +1,812 @@
+{
+  "cart_api_blocked_count": 38,
+  "commit_calls_intercepted": 0,
+  "contract_precedence": [
+    {
+      "case": "explicit_page_needs_review_blank_lane_does_not_infer_checkout",
+      "resolved": {
+        "commerce_lane": "needs_review",
+        "product_page_type": "needs_review"
+      }
+    },
+    {
+      "case": "blank_page_explicit_lane_needs_review_does_not_infer_checkout",
+      "resolved": {
+        "commerce_lane": "needs_review",
+        "product_page_type": "needs_review"
+      }
+    },
+    {
+      "case": "blank_fields_never_infer_paid_checkout",
+      "resolved": {
+        "commerce_lane": "needs_review",
+        "product_page_type": "needs_review"
+      }
+    },
+    {
+      "case": "partial_explicit_checkout_without_simple_page_type_fails_closed",
+      "resolved": {
+        "commerce_lane": "needs_review",
+        "product_page_type": "needs_review"
+      }
+    },
+    {
+      "case": "explicit_simple_checkout_still_allowed",
+      "resolved": {
+        "commerce_lane": "checkout",
+        "product_page_type": "simple_product"
+      }
+    },
+    {
+      "case": "explicit_complex_quote_first_still_allowed",
+      "resolved": {
+        "commerce_lane": "quote_first",
+        "product_page_type": "complex_custom_product"
+      }
+    }
+  ],
+  "direct_checkout_url_blocked_count": 38,
+  "malformed_and_stale_config": {
+    "malformed_items_json": "blocked_validation_error",
+    "needs_review_old_schema_configuration": "blocked_old_schema",
+    "non_list_items_json": "blocked_validation_error",
+    "quote_first_old_schema_configuration": "blocked_old_schema"
+  },
+  "needs_review_count": 5,
+  "needs_review_rows": [
+    {
+      "candidate_item_code": "birthday-deliveries-LAR-BAS-02-5BA",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "needs_review",
+        "is_quote_first": false,
+        "is_ready_to_order": false,
+        "needs_review": true,
+        "product_page_type": "needs_review"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "needs_review|needs_review",
+      "website_item_code": "birthday-deliveries"
+    },
+    {
+      "candidate_item_code": "marble-table-decor-BLA",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "needs_review",
+        "is_quote_first": false,
+        "is_ready_to_order": false,
+        "needs_review": true,
+        "product_page_type": "needs_review"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "needs_review|needs_review",
+      "website_item_code": "marble-table-decor"
+    },
+    {
+      "candidate_item_code": "butterfly-get-well-bouquet-latex-free-NON",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "needs_review",
+        "is_quote_first": false,
+        "is_ready_to_order": false,
+        "needs_review": true,
+        "product_page_type": "needs_review"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "needs_review|needs_review",
+      "website_item_code": "butterfly-get-well-bouquet-latex-free"
+    },
+    {
+      "candidate_item_code": "bandage-get-well-bouquet-latex-free-NON",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "needs_review",
+        "is_quote_first": false,
+        "is_ready_to_order": false,
+        "needs_review": true,
+        "product_page_type": "needs_review"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "needs_review|needs_review",
+      "website_item_code": "bandage-get-well-bouquet-latex-free"
+    },
+    {
+      "candidate_item_code": "shooting-star-get-well-bouquet-latex-free-NON",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "needs_review",
+        "is_quote_first": false,
+        "is_ready_to_order": false,
+        "needs_review": true,
+        "product_page_type": "needs_review"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "needs_review|needs_review",
+      "website_item_code": "shooting-star-get-well-bouquet-latex-free"
+    }
+  ],
+  "needs_review_samples": [
+    {
+      "candidate_item_code": "birthday-deliveries-LAR-BAS-02-5BA",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "needs_review",
+        "is_quote_first": false,
+        "is_ready_to_order": false,
+        "needs_review": true,
+        "product_page_type": "needs_review"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "needs_review|needs_review",
+      "website_item_code": "birthday-deliveries"
+    },
+    {
+      "candidate_item_code": "marble-table-decor-BLA",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "needs_review",
+        "is_quote_first": false,
+        "is_ready_to_order": false,
+        "needs_review": true,
+        "product_page_type": "needs_review"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "needs_review|needs_review",
+      "website_item_code": "marble-table-decor"
+    },
+    {
+      "candidate_item_code": "butterfly-get-well-bouquet-latex-free-NON",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "needs_review",
+        "is_quote_first": false,
+        "is_ready_to_order": false,
+        "needs_review": true,
+        "product_page_type": "needs_review"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "needs_review|needs_review",
+      "website_item_code": "butterfly-get-well-bouquet-latex-free"
+    },
+    {
+      "candidate_item_code": "bandage-get-well-bouquet-latex-free-NON",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "needs_review",
+        "is_quote_first": false,
+        "is_ready_to_order": false,
+        "needs_review": true,
+        "product_page_type": "needs_review"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "needs_review|needs_review",
+      "website_item_code": "bandage-get-well-bouquet-latex-free"
+    },
+    {
+      "candidate_item_code": "shooting-star-get-well-bouquet-latex-free-NON",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "needs_review",
+        "is_quote_first": false,
+        "is_ready_to_order": false,
+        "needs_review": true,
+        "product_page_type": "needs_review"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "needs_review|needs_review",
+      "website_item_code": "shooting-star-get-well-bouquet-latex-free"
+    }
+  ],
+  "no_sellable_candidate_count": 0,
+  "no_sellable_candidate_synthetic": {
+    "cart_api": "blocked_unavailable",
+    "direct_checkout_url": "blocked_not_found",
+    "item_code": "__lt_phase4_no_sellable_candidate__",
+    "sellable_candidate": null,
+    "stale_localstorage": "blocked_unavailable"
+  },
+  "ok": true,
+  "quote_first_count": 33,
+  "quote_first_rows": [
+    {
+      "candidate_item_code": "baby-shower-combination-photo-opt-BLA",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "baby-shower-combination-photo-opt"
+    },
+    {
+      "candidate_item_code": "classic-organic-balloon-garland-12F-BLA",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "classic-organic-balloon-garland"
+    },
+    {
+      "candidate_item_code": "basketball-arch-20F",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "basketball-arch"
+    },
+    {
+      "candidate_item_code": "number-balloon-columns-BLA-BLA",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "number-balloon-columns"
+    },
+    {
+      "candidate_item_code": "easter-balloon-arch-bunny-ear-20F",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "easter-balloon-arch-bunny-ear"
+    },
+    {
+      "candidate_item_code": "graduation-grab-n-go-BLA",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "graduation-grab-n-go"
+    },
+    {
+      "candidate_item_code": "halloween-arch-20F-BLA",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "halloween-arch"
+    },
+    {
+      "candidate_item_code": "large-head-missionary-ELD-BLU-BLA",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "large-head-missionary"
+    },
+    {
+      "candidate_item_code": "premium-organic-garland-12F-BLA",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "premium-organic-garland"
+    },
+    {
+      "candidate_item_code": "premium-organic-arch-20F-BLA-FOI",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "premium-organic-arch"
+    },
+    {
+      "candidate_item_code": "pemium-organic-column-10F-BLA-FOI",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "pemium-organic-column"
+    },
+    {
+      "candidate_item_code": "pride-progress-rainbow-balloon-arch-20F",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "pride-progress-rainbow-balloon-arch"
+    },
+    {
+      "candidate_item_code": "classic-arch-20F-BLA-LAY-ADD",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "classic-arch"
+    },
+    {
+      "candidate_item_code": "classic-column-10F-BLA-BUB",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "classic-column"
+    },
+    {
+      "candidate_item_code": "classic-organic-columns-10F-BLA",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "classic-organic-columns"
+    },
+    {
+      "candidate_item_code": "baby-shower-garland-12F-BLA",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "baby-shower-garland"
+    },
+    {
+      "candidate_item_code": "balloon-drop-100-BLA",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "balloon-drop"
+    },
+    {
+      "candidate_item_code": "classic-organic-arch-20F-BLA-FOI",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "classic-organic-arch"
+    },
+    {
+      "candidate_item_code": "7-butterfly-column-BLA",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "7-butterfly-column"
+    },
+    {
+      "candidate_item_code": "7-epic-column-BLA",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "7-epic-column"
+    },
+    {
+      "candidate_item_code": "organic-grab-n-go-12F-BLA",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "organic-grab-n-go"
+    },
+    {
+      "candidate_item_code": "star-column-BLA-6FT-BLA",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "star-column"
+    },
+    {
+      "candidate_item_code": "sleepy-baby-column-BLA",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "sleepy-baby-column"
+    },
+    {
+      "candidate_item_code": "baby-table-decor-BLU",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "baby-table-decor"
+    },
+    {
+      "candidate_item_code": "logo-3-layered-bouquet-BLA",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "logo-3-layered-bouquet"
+    },
+    {
+      "candidate_item_code": "6-color-rainbow-arch-20F",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "6-color-rainbow-arch"
+    },
+    {
+      "candidate_item_code": "mothers-day-front-yard-7-column",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "mothers-day-front-yard-7-column"
+    },
+    {
+      "candidate_item_code": "6-graduation-stands-CON",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "6-graduation-stands"
+    },
+    {
+      "candidate_item_code": "classic-organic-for-easel-BLA",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "classic-organic-for-easel"
+    },
+    {
+      "candidate_item_code": "easter-arch",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "easter-arch"
+    },
+    {
+      "candidate_item_code": "large-garland-12F-BLA",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "large-garland"
+    },
+    {
+      "candidate_item_code": "large-organic-column-10F-BLA",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "large-organic-column"
+    },
+    {
+      "candidate_item_code": "pride-arch",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "pride-arch"
+    }
+  ],
+  "quote_first_samples": [
+    {
+      "candidate_item_code": "baby-shower-combination-photo-opt-BLA",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "baby-shower-combination-photo-opt"
+    },
+    {
+      "candidate_item_code": "classic-organic-balloon-garland-12F-BLA",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "classic-organic-balloon-garland"
+    },
+    {
+      "candidate_item_code": "basketball-arch-20F",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "basketball-arch"
+    },
+    {
+      "candidate_item_code": "large-garland-12F-BLA",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "large-garland"
+    },
+    {
+      "candidate_item_code": "large-organic-column-10F-BLA",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "large-organic-column"
+    },
+    {
+      "candidate_item_code": "pride-arch",
+      "cart_api": "blocked_quote_required",
+      "direct_checkout_url": "blocked_not_found",
+      "runtime_context": {
+        "commerce_lane": "quote_first",
+        "is_quote_first": true,
+        "is_ready_to_order": false,
+        "needs_review": false,
+        "product_page_type": "complex_custom_product"
+      },
+      "stale_localstorage": "blocked_quote_required",
+      "stored_contract": "complex_custom_product|quote_first",
+      "website_item_code": "pride-arch"
+    }
+  ],
+  "record_count_deltas": {},
+  "rolled_back": true,
+  "stale_localstorage_blocked_count": 38
+}

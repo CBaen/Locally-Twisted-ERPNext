@@ -114,7 +114,7 @@ def _criteria(contract_results: dict[str, dict[str, object]], public_ecommerce_p
                 "C:/Users/baenb/.openclaw/workspace/projects/lightdeck-command-center/workstreams/locally-twisted-paid-work-cockpit.md",
                 "research/expedition-erpnext-ecommerce-receiving-architecture/research-synthesis.md",
                 "workstreams/erpnext-ecommerce-receiving-architecture.md",
-                ".codex/capabilities/recipes/erpnext-ecommerce-receiving-architecture.md",
+                "capabilities/recipes/erpnext-ecommerce-receiving-architecture.md",
             ],
         ),
         _row(

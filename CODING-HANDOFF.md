@@ -1,5 +1,7 @@
 # Locally Twisted - Coding Handoff
 
+OpenClaw/Moji update on 2026-05-10: ready-to-order ecommerce Phases 1-4 are closed with parent-verified artifacts before Phase 5. Phase 1 repaired checkout/customer-note verifier foundations. Phase 2 applied explicit Website Item contracts: 15 `simple_product|checkout`, 33 `complex_custom_product|quote_first`, 5 `needs_review|needs_review`. Phase 3 proved the scoped first checkout family: 13 approved foil-number bouquet pages plus Mother's Day simple checkout preserve Sales Order/Sales Invoice lines and roll back cleanly. Phase 4 hardened quote/event boundaries: the 33 quote-first and 5 needs-review products cannot enter paid checkout through product-page controls, cart API, direct checkout URL, stale localStorage, malformed JSON, old cart schema, or unavailable/no-sellable candidates. Direct paid checkout now requires explicit `simple_product|checkout`; blank/partial/inferred fields fail closed. Public ecommerce remains paused by default with `lt_ecommerce_paused=1`; Phase 5 is delivery/payment/operator proof, not launch. Feature handoffs: `workstreams/ecommerce-audit/README.md`, `workstreams/ecommerce-audit/ready-to-order-ecommerce-goal-progress-2026-05-10.md`, `workstreams/ecommerce-audit/phase-4-quote-event-path-hardening-result-2026-05-10.md`, and `workstreams/erpnext-ecommerce-receiving-architecture.md`.
+
 Codex update on 2026-05-10: launch repo cleanup is now a documented feature
 slice. Raw local photo drops were moved out of the repo to
 `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted-local-drops\`,
@@ -55,8 +57,8 @@ Late 2026-05-10 launch-gate repair: `scripts/verify/website_launch_verify.py`
 now waits for localhost before browser sweeps and retries once when the local
 site briefly blinks during restart. The stale homepage Custom Event Decor
 hide-switch was removed so the homepage again matches the launch contract.
-Full `python scripts\verify\website_launch_verify.py` passed all 12 website
-steps with open ecommerce testing enabled. The extra launch checks also passed:
+Earlier open-commerce `python scripts\verify\website_launch_verify.py` passed all 12 website
+steps while ecommerce was temporarily enabled. The site was later restored to the current pages/forms-first paused posture (`lt_ecommerce_paused=1`). The extra launch checks also passed:
 `npm run test:a11y` reported 50 route/viewport axe checks with 0 violations,
 `npm run test:a11y-manual` passed, and contact smoke submitted, verified the
 backend Lead, then cleaned up its test records.

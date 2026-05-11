@@ -5,10 +5,10 @@ schema_version: 2.0
 level: recipe
 maturity: candidate
 scope: Locally Twisted ERPNext/Frappe ecommerce product import, product detail logic, cart, checkout, and invoice integration
-currently_true: technical_architecture_ok_backend_preservation_foil_addon_draft_quotation_accepted_quote_to_draft_order_live_checkout_price_price_enrichment_media_visibility_and_business_block_clearance_verified_public_ecommerce_open_local_testing
+currently_true: phase_1_4_backend_preservation_explicit_checkout_allowlist_quote_event_fail_closed_public_ecommerce_paused_by_default
 verification_level: 2
 last_verified: 2026-05-10
-evidence_quality: GL decision + official docs + live DB metadata + current code inspection + focused source verifiers + live price-readiness verifier + source price-enrichment verifier + media visibility verifier + rollback-safe runtime verifier + cart/checkout contract verifier + accepted quote rollback verifier + architecture readiness split + full open-commerce proof + rollback-safe checkout backend proof
+evidence_quality: GL decision + official docs + live DB metadata + current code inspection + focused source verifiers + rollback-safe runtime verifier + cart/checkout/quote boundary verifiers + architecture readiness split + durable Phase 1-4 artifacts + paused-mode launch proof
 successful_uses: 1
 failed_uses: 0
 regressions: 0
@@ -193,8 +193,10 @@ As of 2026-05-10, the first backend preservation slice exists:
 - Configured cart lines have stable line keys, so the same SKU with different
   option/add-on payloads does not collapse into one line.
 - The cart API exposes visible display rows and line totals for base products
-  plus priced add-ons. Current local public `/cart` and `/checkout` render open
-  ecommerce testing paths for guests when `lt_ecommerce_paused=0`.
+  plus priced add-ons when ecommerce is intentionally opened for testing.
+  Current local/public launch posture is paused (`lt_ecommerce_paused=1`), so
+  `/shop`, `/cart`, and `/checkout` should show the branded quote fallback
+  unless a verifier deliberately opens ecommerce inside a controlled test step.
 - The cart API must reject quote-first variants as `quote_required`; priced
   complex decor cannot be treated as retail checkout just because Item Price
   exists.
@@ -247,12 +249,14 @@ BCC-gated customer quote delivery, an operator-owned Quotation send control,
 source dependency-matrix preservation, plus desktop/mobile proof for the two
 reusable product-page control types only.
 
-The readiness audit is mode-sensitive. With ecommerce open for local testing
-(`lt_ecommerce_paused=0`), the current expected result is
-`technical_architecture_ok: true`, `import_reopen_ok: true`, 14 passing rows, 0
-blocked rows, and 1 finance deferral. The source add-on, price-review,
-and media-classification business blocker rows were cleared by GL for testing
-and must not be reintroduced as blockers unless new source evidence changes.
+The readiness audit is mode-sensitive. The current local/public posture is
+paused (`lt_ecommerce_paused=1`), so the top-level architecture gate may report
+`technical_architecture_ok: true` with `import_reopen_ok: false` only because
+`public_ecommerce_reopen` is intentionally blocked by site config. A temporary
+open-mode proof can show `import_reopen_ok: true`; after that proof, restore
+paused mode and rerun the pause contract. The source add-on, price-review, and
+media-classification business blocker rows were cleared by GL for testing and
+must not be reintroduced as blockers unless new source evidence changes.
 Finance/bank/payment integration is explicitly deferred and should not be
 counted as a current template-architecture blocker.
 

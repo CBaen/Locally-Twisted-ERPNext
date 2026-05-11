@@ -16,6 +16,9 @@ class ContractFail(Exception):
 
 def run():
     original_commit = frappe.db.commit
+    from locally_twisted import ecommerce_pause
+
+    original_is_ecommerce_paused = ecommerce_pause.is_ecommerce_paused
     intercepted_commits = []
 
     def no_commit(*args, **kwargs):
@@ -23,6 +26,7 @@ def run():
 
     try:
         frappe.db.commit = no_commit
+        ecommerce_pause.is_ecommerce_paused = lambda: False
         result = _run_contract()
         result["commit_calls_intercepted"] = len(intercepted_commits)
         result["rolled_back"] = True
@@ -33,6 +37,7 @@ def run():
         return {"ok": False, "failures": [frappe.get_traceback()]}
     finally:
         frappe.db.commit = original_commit
+        ecommerce_pause.is_ecommerce_paused = original_is_ecommerce_paused
         frappe.db.rollback()
 
 
@@ -164,6 +169,7 @@ def _submit_paid_pickup():
 def _submit_out_of_area_quote():
     email = f"lt-outarea-{int(time.time())}@example.invalid"
     result = _submit_checkout(
+        allow_quote_required=True,
         email=email,
         fulfillment_method="delivery",
         address_line1="123 Red Rock Road",
@@ -208,7 +214,7 @@ def _submit_past_date_rejected():
     raise ContractFail("past requested fulfillment date should be rejected before checkout records are created")
 
 
-def _submit_checkout(**kwargs):
+def _submit_checkout(allow_quote_required: bool = False, **kwargs):
     import locally_twisted.payments.stripe_session as stripe_session
     from locally_twisted.www.checkout import submit_guest_order
 
@@ -235,7 +241,20 @@ def _submit_checkout(**kwargs):
 
     try:
         stripe_session.create_session_for_sales_order = fake_create_session_for_sales_order
-        return submit_guest_order(**defaults)
+        result = submit_guest_order(**defaults)
+        if not result.get("ok"):
+            status = result.get("status")
+            if status == "ecommerce_paused":
+                raise ContractFail(
+                    "checkout API returned ecommerce_paused inside the verifier; "
+                    "the verifier pause bypass is not active"
+                )
+            if allow_quote_required and status == "quote_required":
+                return result
+            raise ContractFail(f"checkout submit failed before Sales Order creation: {result!r}")
+        if not result.get("sales_order"):
+            raise ContractFail(f"checkout submit did not return a Sales Order: {result!r}")
+        return result
     finally:
         stripe_session.create_session_for_sales_order = original_create_session
 

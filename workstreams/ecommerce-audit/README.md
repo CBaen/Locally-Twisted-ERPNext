@@ -9,11 +9,30 @@ This directory is the evidence packet for the May 10 ecommerce architecture audi
 
 | Lane | Required artifact | Current state | Use it for |
 |---|---|---|---|
-| A — Odoo source commerce map | `odoo-source-commerce-map-2026-05-10.md` | **Missing** / `[NO EVIDENCE]` | Do not cite source-product findings from this lane until rerun artifact-first. |
+| A — Odoo source commerce map | `odoo-source-commerce-map-2026-05-10.md` | Present, read back | Cite for Odoo source/product/page/option/pricing/media/cart meaning, with version mismatch labels. |
 | B — ERPNext receiving parity matrix | `erpnext-receiving-parity-matrix-2026-05-10.md` | Present | Destination parity, custom-field/service/verifier matrix, blockers. |
 | C — Cart/checkout intent preservation | `cart-checkout-intent-preservation-audit-2026-05-10.md` | Present | Browser/backend proof slice for configured checkout and quote-first paths. |
 | D — Native Frappe template architecture | `native-frappe-product-template-architecture-2026-05-10.md` | Present | Smallest safe native architecture and required custom layer. |
-| E — Odoo/docs/agent-action convergence | `odoo-docs-agent-action-convergence-2026-05-10.md` | **Missing** / `[NO EVIDENCE]` | Do not cite docs/source convergence from this lane until rerun artifact-first. |
+| E — Odoo/docs/agent-action convergence | `odoo-docs-agent-action-convergence-2026-05-10.md` | Present, parent-created / recovered artifact-first | Cite for converged Odoo witness → ERPNext receiving architecture, including no-variant options, cart intent, quote-first, checkout/payment boundary, automations, and verifier state. |
+| Infrastructure doc map + synthesis | `ecommerce-infrastructure-doc-map-and-synthesis-2026-05-10.md` | Present, parent-created | Front-door map of every infrastructure artifact, the recovered plan, current evidence, sequencing, and what remains blocked. Start here. |
+| Infrastructure plan v2 | `ecommerce-infrastructure-plan-v2-2026-05-10.md` | Present, parent-created | New infrastructure-first action plan: source authority, receiving contract register, runtime payloads, cart/checkout/quote proof, human approval packets, import/reopen gates, and launch decision packet. |
+| Live Odoo backend architecture witness | `odoo-backend-architecture-and-checkout-logic-2026-05-10.md` | Present, parent-created / live read-only backend + source proof | Direct Odoo backend/public read-only observations: product/variant/no-variant architecture, 53-color behavior, cart/order-line preservation, checkout/payment boundary, delivery, CRM fields, automations, and ERPNext receiving requirements. |
+| Infrastructure readiness packet | `ecommerce-infrastructure-readiness-packet-2026-05-10.md` | Present, parent-created | Current launch-readiness packet: what is proven, what remains blocked, Odoo logic to preserve, verifier state, and next engineering gates. |
+| ERPNext receiving build spec from Odoo | `erpnext-receiving-build-spec-from-odoo-2026-05-10.md` | Present, parent-created | Converts live Odoo backend logic into concrete ERPNext/Frappe object model, gaps, gates, and coding order. |
+| Ready-to-order checkout scope decision | `ready-to-order-checkout-scope-decision-2026-05-10.md` | Present, GL-directed / parent-recorded | Narrows launch scope: direct checkout only for ready-to-order/simple products; complex/high-variant/high-dollar decor routes quote-first/invoice-first. |
+| Ready-to-order product candidate list | `ready-to-order-product-candidate-list-2026-05-10.md` | Present, subagent-created / parent-read | Classifies all 53 source products: 0 checkout-ready-now, 15 checkout-after-small-fix, 33 quote-first, 5 hide/needs-review. |
+| Event pages vs ready-to-order shop contract | `event-pages-vs-ready-to-order-shop-contract-2026-05-10.md` | Present, GL-directed / parent-recorded | Public IA/merchandising rule: high-ticket decor lives as examples on event pages with quote CTAs; shop stays simple/low-variation and preserves customer notes. |
+| Customer note checkout preservation audit | `customer-note-checkout-preservation-audit-2026-05-10.md` | Present, subagent-created / parent-read | Finds optional `order_notes` is code-wired to Sales Order timeline Communication and operator/payment-success lookup, but lacks a single passing end-to-end checkout-note verifier. |
+| Ecommerce infrastructure agent playbook | `ecommerce-infrastructure-agent-playbook-2026-05-10.md` | Present, subagent-created / parent-read | Reusable future-agent playbook: scope rules, Odoo witness rules, ready-to-order vs event quote split, customer-note rule, artifact-first behavior, verifier gates, and failure modes. |
+| Ready-to-order ecommerce plan-deepen | `ready-to-order-ecommerce-plan-deepen-2026-05-10.md` | Present, parent-created after `/plan_deepen` | Deepens the narrowed plan: direct checkout only for simple products, event decor quote-first, Phase 1 verifier repair before product edits, explicit Website Item classification sequence, delivery/payment/operator gates, and current `checkout_fulfillment_contract.py` pause-harness diagnosis. |
+| Phase 1 verifier foundation result | `phase-1-verifier-foundation-result-2026-05-10.md` | Present, subagent-created / verifier-backed | Repairs checkout fulfillment pause harness/KeyError failure and adds rollback-safe customer-note checkout preservation proof with exact verifier output. |
+| Phase 2 Website Item classification result | `phase-2-website-item-classification-result-2026-05-10.md` | Present, verifier-backed / applied | Adds targeted dry-run/apply classifier, applies the exact 53 Website Item lane/type decisions, and proves stored counts: 15 checkout, 33 quote-first, 5 needs-review. |
+| Phase 3 checkout product-family proof result | `phase-3-checkout-product-family-proof-result-2026-05-10.md` + `phase-3-checkout-product-family-contract-20260510.json` | Present, verifier-backed / parent-verified | Proves the scoped first direct-checkout family: 13 approved foil-number bouquet pages, Mother's Day simple no-add-on path, Sales Order/Sales Invoice line preservation, rollback, and Easter seasonal deferral; public launch remains blocked. |
+| Phase 4 quote/event path hardening result | `phase-4-quote-event-path-hardening-result-2026-05-10.md` + `phase-4-quote-event-checkout-boundary-contract-20260510.json` | Present, verifier-backed / parent-verified | Proves 33 quote-first + 5 needs-review products cannot enter paid checkout through product page controls, cart API, direct checkout URL, or stale localStorage; fail-closed precedence prevents inferred/partial checkout drift. |
+| Verifier failure diagnosis | `product-page-architecture-readiness-failure-diagnosis-2026-05-10.md` | Present, parent/subagent-created then parent-verified | Explains why the prior `bench execute failed` no longer reproduces; latest exact verifier command passes. |
+| Infrastructure synthesis | `ecommerce-infrastructure-research-synthesis-2026-05-10.md` | Present, parent-created | Corrected synthesis for the real question: ERPNext receiving infrastructure, contract/runtime layers, line-level preservation, quote/checkout bridges, fail-loud evidence, and verifier gates. |
+| Knowledge base index | `ecommerce-knowledge-base-index-2026-05-10.md` | Present, parent-created | Supporting index of recalled memory, local artifacts, source repos, verified docs, blockers, and next actions. |
+| Product proof matrix | `ecommerce-product-proof-matrix-2026-05-10.md` | Present, parent-created / downstream only | 53-row source/product matrix. Use only after infrastructure gates; not the architecture decision artifact. |
 | User-provided Odoo surfaces | `user-provided-odoo-surfaces-2026-05-10.md` | Present | Read-only surface references supplied by GL; do not click admin/auth surfaces without preflight. |
 
 ## Version anchors and mismatch labels
@@ -24,11 +43,34 @@ This directory is the evidence packet for the May 10 ecommerce architecture audi
 
 ## Current conclusion
 
-Native ERPNext/Frappe can receive the proof-slice ecommerce meaning safely when the `locally_twisted` contract layer is kept in charge: two product-page lanes, versioned line payload fields, source-backed dependency/add-on/pricing/media services, quote-first bridges, and fail-loud verifiers. Full catalog import/reimport and public launch remain blocked until missing lanes are rerun or explicitly marked `[NO EVIDENCE]` in synthesis, version mismatches are handled, and final import/public-state gates pass.
+Native ERPNext/Frappe can receive the proof-slice ecommerce meaning safely when the `locally_twisted` contract layer is kept in charge: two product-page lanes, versioned line payload fields, source-backed dependency/add-on/pricing/media services, quote-first bridges, and fail-loud verifiers. The live Odoo backend witness now sharpens the receiving target: true variants only for SKU/price identity, no-variant structured options for large/customer-specific choices, backend-preserved cart/order-line intent, quote-first escape hatches, delivery/payment boundaries, and guarded automations. GL has narrowed launch scope further: direct checkout should launch only for ready-to-order/simple products; complex/high-variant/high-dollar decor should route quote-first/invoice-first. Lane E is now recovered artifact-first. After Phase 4, the scoped first direct-checkout family is backend-proven for 13 foil-number bouquet pages and Mother's Day simple checkout, while 33 quote-first + 5 needs-review products are backend-proven unable to enter paid checkout through product-page controls, cart API, direct checkout URL, or stale localStorage. Easter remains seasonally deferred. The exact product-page architecture readiness verifier still reports `technical_architecture_ok: True` and `import_reopen_ok: False` because public ecommerce is intentionally paused. Full catalog import/reimport and public launch remain blocked until version mismatches are handled and final import/public-state gates pass.
+
+
+## Pre-Phase-5 hygiene verification (2026-05-10 18:xx MDT)
+
+Parent reran the Phase 1-4 owned gates after documentation cleanup and stale ignored-output cleanup. All passed:
+
+- `python -m py_compile ...` for ecommerce runtime/verifier/runner files.
+- `python scripts/verify/product_page_runtime_contract.py` PASS.
+- `python scripts/verify/website_item_classification_contract.py --report output/phase-4-website-item-classification-contract-20260510.json` PASS; generated JSON matched durable workstream copy, then the ignored output duplicate was removed.
+- `python scripts/verify/checkout_fulfillment_contract.py` PASS; rollback confirmed.
+- `python scripts/verify/payment_cascade_contract.py` PASS; rollback confirmed.
+- `python scripts/verify/customer_note_checkout_preservation_contract.py` PASS; survivor counts stayed zero.
+- `python scripts/verify/checkout_product_family_contract.py --report output/phase-3-checkout-product-family-contract-20260510.json` PASS; generated JSON matched durable workstream copy, then the ignored output duplicate was removed.
+- `python scripts/verify/quote_event_checkout_boundary_contract.py --report output/phase-4-quote-event-checkout-boundary-contract-20260510.json` PASS; generated JSON matched durable workstream copy, then the ignored output duplicate was removed.
+
+Current durable JSON evidence remains only under this workstream directory. Ignored `output/phase-*20260510.json` duplicates are regenerated proof artifacts, not source, and were deleted after equality checks.
 
 ## Next safe actions
 
-1. Rerun Lane A and Lane E artifact-first with the required `D:YYYY-MM-DD | Check:<source/date> | Confidence:<label>` first line and explicit `[NO EVIDENCE]` rule.
-2. Rerun or accept Lane B's aggregate readiness `[LIVE-MISMATCH]` only after a clean top-level `product_page_architecture_readiness.py` run in the same intended ecommerce mode.
-3. Run Lane F synthesis only after all lanes have named artifacts or are deliberately carried as `[NO EVIDENCE]` process failures.
-4. Do not delete/reimport products, click admin-like Odoo URLs, or mutate authenticated systems for this audit without a fresh rollback/preflight.
+1. Treat Lane A as present only through the parent-verified artifact `odoo-source-commerce-map-2026-05-10.md`; do not trust the earlier artifactless child completion event.
+2. Use recovered Lane E (`odoo-docs-agent-action-convergence-2026-05-10.md`) as the convergence artifact; no longer carry Lane E as `[NO EVIDENCE]`.
+3. Use `ecommerce-infrastructure-doc-map-and-synthesis-2026-05-10.md` as the front-door architecture map, `ecommerce-infrastructure-plan-v2-2026-05-10.md` as the active action plan, `ecommerce-infrastructure-readiness-packet-2026-05-10.md` for the current proof/gate packet, and `erpnext-receiving-build-spec-from-odoo-2026-05-10.md` for the concrete coding order; use product matrices only downstream of infrastructure gates.
+4. Treat the earlier `product_page_architecture_readiness.py` `bench execute failed` as transient unless it recurs; current exact command passes and the diagnosis artifact explains the failure mode.
+5. Rerun the readiness verifier immediately before any import/public launch decision in the same intended ecommerce mode.
+6. Run Lane F/final synthesis only after version mismatches and final launch gates are either resolved or explicitly labeled.
+7. Do not delete/reimport products, click admin-like Odoo mutation paths, or mutate authenticated systems for this audit without a fresh rollback/preflight.
+8. Use `ready-to-order-product-candidate-list-2026-05-10.md` as the product-scope artifact; do not build a full complex-product checkout parity list.
+9. The first checkout tranche is 15 products after small fixes, not 53 products: character/sports/theme bouquets plus Easter Balloon Cups and Mother's Day Bouquet; all complex decor stays quote-first or review/hidden.
+10. Treat the focused customer-note verifier as Phase 1 complete: `customer_note_checkout_preservation_contract.py` now passes in rollback-safe mode.
+11. Use `ready-to-order-ecommerce-plan-deepen-2026-05-10.md` and `ready-to-order-ecommerce-goal-progress-2026-05-10.md` as active sequencing gates: Phase 1, Phase 2, scoped Phase 3, and scoped Phase 4 are verifier-backed; next build the delivery/payment/operator packet.

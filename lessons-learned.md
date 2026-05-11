@@ -6,6 +6,23 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-10 - Checkout eligibility is an allow-list, not an inference
+
+Phase 4 proved that blank or partial Website Item ecommerce fields are dangerous. A price, a sellable variant, or an inferred page template can make a product look checkout-ready while the business meaning still belongs in quote/review.
+
+**Counter-move:** direct paid checkout must require an explicit `simple_product|checkout` contract. Treat blank fields, mixed fields, inferred checkout, `needs_review`, stale localStorage, old cart schemas, and direct checkout URLs as fail-closed paths. Verifiers should attack every bypass, not just the normal add-to-cart button.
+
+---
+
+## 2026-05-10 - Review CONCERNs are build inputs, not commentary
+
+Phase 4 architecture and edge-case reviews both found real gaps after the first implementation: partial Website Item drift, no-sellable-candidate coverage, malformed/stale cart shapes, and sample-only artifact rows. Treating those as reviewer notes would have left the false-checkout boundary porous.
+
+**Counter-move:** when an independent review returns CONCERN, add code and verifier cases until the reviewer can reread a durable artifact and pass it. The parent agent must read the artifact, not just accept the rerun summary.
+
+---
+
+
 ## 2026-05-10 - Launch cleanup needs an evidence-retention rule
 
 The launch repo had several different kinds of weight mixed together: generated test output, old mirror/audit folders, raw photo drops, stale research throwaways, active feature work, and production source. Treating all of that as either "junk" or "keep" would have been wrong.

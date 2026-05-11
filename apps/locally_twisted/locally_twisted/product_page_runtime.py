@@ -45,7 +45,6 @@ FOIL_NUMBER_ELIGIBLE_WEBSITE_ITEMS = (
     "soccer-bouquet",
     "space-bouquet",
     "over-the-hill-bouquet",
-    "birthday-deliveries",
     "paw-patrol-bouquet",
     "elsa-bouquet",
     "holy-cow-bouquet",
@@ -221,18 +220,60 @@ def product_page_contract_for_website_item(website_item_code: str | None) -> dic
     inferred = _inferred_product_page_contract(website_item_code, row)
     explicit_page_type = _known_or_empty(row.get(WEBSITE_ITEM_PAGE_TYPE_FIELD), PRODUCT_PAGE_TYPE_OPTIONS)
     explicit_commerce_lane = _known_or_empty(row.get(WEBSITE_ITEM_COMMERCE_LANE_FIELD), COMMERCE_LANE_OPTIONS)
-    page_type = explicit_page_type if explicit_page_type and explicit_page_type != "needs_review" else inferred["product_page_type"]
-    commerce_lane = (
-        explicit_commerce_lane
-        if explicit_commerce_lane and explicit_commerce_lane != "needs_review"
-        else inferred["commerce_lane"]
+    resolved = resolved_product_page_contract_values(
+        explicit_page_type=explicit_page_type,
+        explicit_commerce_lane=explicit_commerce_lane,
+        inferred=inferred,
     )
     return {
-        "product_page_type": page_type,
-        "commerce_lane": commerce_lane,
+        "product_page_type": resolved["product_page_type"],
+        "commerce_lane": resolved["commerce_lane"],
         "web_item_name": row.get("web_item_name") or website_item_code,
         "item_group": row.get("item_group") or "",
     }
+
+
+def resolved_product_page_contract_values(
+    *,
+    explicit_page_type: str,
+    explicit_commerce_lane: str,
+    inferred: dict[str, str],
+) -> dict[str, str]:
+    """Resolve stored Website Item fields with fail-closed checkout precedence.
+
+    Paid checkout is allowed only when the Website Item explicitly says both
+    `simple_product` and `checkout`. Inference can preserve quote-first review
+    behavior for unclassified complex products, but it must never infer paid
+    checkout from item-group hints or partially-filled fields.
+    """
+    inferred_page_type = inferred.get("product_page_type") or "needs_review"
+    inferred_commerce_lane = inferred.get("commerce_lane") or "needs_review"
+
+    if explicit_page_type == "simple_product" and explicit_commerce_lane == "checkout":
+        return {"product_page_type": "simple_product", "commerce_lane": "checkout"}
+
+    if explicit_page_type == "complex_custom_product" and explicit_commerce_lane == "quote_first":
+        return {"product_page_type": "complex_custom_product", "commerce_lane": "quote_first"}
+
+    if explicit_page_type == "needs_review" or explicit_commerce_lane == "needs_review":
+        return {"product_page_type": "needs_review", "commerce_lane": "needs_review"}
+
+    if explicit_commerce_lane == "checkout":
+        return {"product_page_type": "needs_review", "commerce_lane": "needs_review"}
+
+    if explicit_commerce_lane == "quote_first":
+        page_type = explicit_page_type or inferred_page_type
+        if page_type == "needs_review":
+            page_type = "complex_custom_product"
+        return {"product_page_type": page_type, "commerce_lane": "quote_first"}
+
+    if inferred_commerce_lane == "checkout":
+        return {"product_page_type": "needs_review", "commerce_lane": "needs_review"}
+
+    if inferred_page_type == "needs_review" or inferred_commerce_lane == "needs_review":
+        return {"product_page_type": "needs_review", "commerce_lane": "needs_review"}
+
+    return {"product_page_type": inferred_page_type, "commerce_lane": inferred_commerce_lane}
 
 
 def _inferred_product_page_contract(website_item_code: str, website_item: dict[str, Any]) -> dict[str, str]:
@@ -287,7 +328,7 @@ def sales_order_line_configuration_fields(
 
     website_item_code = resolved_item.get("website_item_code") or resolved_item.get("item_code")
     contract = product_page_contract_for_website_item(website_item_code)
-    if contract["commerce_lane"] == "quote_first":
+    if contract["commerce_lane"] != "checkout":
         frappe.throw(
             _(
                 "Tiny snag: this design needs a quote before checkout. "
@@ -344,7 +385,7 @@ def sales_order_add_on_lines(
         return []
 
     contract = product_page_contract_for_website_item(website_item_code)
-    if contract["commerce_lane"] == "quote_first":
+    if contract["commerce_lane"] != "checkout":
         frappe.throw(
             _(
                 "Tiny snag: this design needs a quote before checkout. "
@@ -504,7 +545,15 @@ def _assert_client_options_match_variant(
             frappe.ValidationError,
         )
     for attribute, value in selected.items():
-        if attribute in variant_options and str(value) != str(variant_options[attribute]):
+        if attribute not in variant_options:
+            frappe.throw(
+                _(
+                    "Tiny snag: this cart item's saved options no longer match this item. "
+                    "Please choose the options again."
+                ),
+                frappe.ValidationError,
+            )
+        if str(value) != str(variant_options[attribute]):
             frappe.throw(
                 _("Tiny snag: this cart item's saved options do not match the selected item. Please choose the options again."),
                 frappe.ValidationError,

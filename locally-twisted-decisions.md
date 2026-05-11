@@ -8,6 +8,23 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-10 - Paid checkout is explicit allow-list only
+
+**Decision:** LT paid/direct checkout requires the stored Website Item contract to resolve to explicit `simple_product|checkout`. Blank fields, partial checkout fields, inferred checkout, `quote_first`, `needs_review`, and malformed/stale cart payloads must fail closed into quote/review behavior instead of entering paid checkout.
+
+**Reasoning:** Phase 4 review found that relying on runtime inference or one populated field could let complex/event/decor products drift into retail checkout after stale localStorage, direct checkout URLs, or partial Website Item edits. The safe launch shape is not "anything priced can checkout"; it is a narrow allow-list for simple ready-to-order products with backend record proof.
+
+**Implementation:** `product_page_runtime.resolved_product_page_contract_values()` centralizes precedence, `product_page_contract_for_website_item()` fails closed for blank/partial/needs-review drift, Sales Order line/add-on builders reject non-checkout lanes, and `api/cart.py` blocks any runtime contract whose `commerce_lane != "checkout"`. Phase 3 keeps the approved simple checkout proof; Phase 4 blocks the 33 quote-first and 5 needs-review products across product page controls, cart API, direct checkout URL, stale localStorage, malformed JSON, old-schema config, and unavailable/no-sellable candidates.
+
+**Verification receipt:** `python scripts/verify/quote_event_checkout_boundary_contract.py --report output/phase-4-quote-event-checkout-boundary-contract-20260510.json` passed with 33 quote-first, 5 needs-review, 38 cart API blocks, 38 direct checkout URL blocks, 38 stale localStorage blocks, `record_count_deltas: {}`, and rollback true. Regression gates also passed for product-page runtime, checkout product family, Website Item classification, checkout fulfillment, and customer-note checkout preservation. Durable proof lives at `workstreams/ecommerce-audit/phase-4-quote-event-checkout-boundary-contract-20260510.json`.
+
+**Alternatives considered:** Let explicit prices or inferred runtime fallback decide checkout. Rejected because price existence is not customer/order readiness. Treat missing Website Item fields as temporary defaults. Rejected because blank setup fields are exactly how false checkout leaks happen.
+
+**Decided by:** Phase 4 architecture/edge-case review closeout by OpenClaw/Moji on 2026-05-10.
+
+---
+
+
 ## 2026-05-10 - Launch repo cleanup keeps production source, not local debris
 
 **Decision:** The LT launch repo should keep production source, executable verifiers, active source evidence, and feature handoffs. It should not retain raw local drops, generated verifier output, stale mirrors, stale app clones, or old contest/research output after their useful claims have moved into production files or durable docs. Memorial Balloons is a separate side business and is not part of the LT launch repo or launch proof.
@@ -169,7 +186,9 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ## 2026-05-10 - Public ecommerce is reopened for full local testing, not live cutover
 
-**Decision:** Public ecommerce is no longer treated as paused in the local LT testing stack. `lt_ecommerce_paused=0` is the current testing posture, so shop, product, cart, and checkout routes must be verified as open customer journeys. This is not permission to skip staging, live Stripe/payment readiness, bank/accounting setup, DNS cutover discipline, or owner approval before production launch.
+**Current status:** Superseded later on 2026-05-10 for current launch posture. The open-mode proof remains valid regression evidence, but the active site posture is pages/forms-first with `lt_ecommerce_paused=1`; direct checkout remains blocked until Phase 5+ gates pass. See `2026-05-10 - Paid checkout is explicit allow-list only` and `2026-05-10 - Business approval clearance is not a public ecommerce launch switch`.
+
+**Decision at the time:** Public ecommerce was temporarily opened in the local LT testing stack with `lt_ecommerce_paused=0` so shop, product, cart, and checkout routes could be verified as open customer journeys. This was not permission to skip staging, live Stripe/payment readiness, bank/accounting setup, DNS cutover discipline, or owner approval before production launch. Current posture is restored to `lt_ecommerce_paused=1`.
 
 **Reasoning:** GL corrected the stale pause assumption and asked for continued ecommerce testing. Keeping docs and verifiers in pause-expected mode would let agents avoid the actual product/cart/checkout paths that need proof. The right separation is local full testing versus production/live cutover, not paused forever versus ship live now.
 

@@ -57,7 +57,7 @@ def _variant_options(item_code):
 
 def _missing_message(reason):
     if reason == "quote_required":
-        return _("Tiny snag: this request needs a delivery quote before checkout.")
+        return _("Tiny snag: this design needs a quote before checkout so details, timing, and pricing stay together.")
     if reason == "choose_options":
         return _("Please choose this item's options before adding it to cart.")
     if reason == "unpriced":
@@ -107,7 +107,7 @@ def _resolve_cart_item_for_sale(item_code, configuration=None):
 
     product_page_contract = product_page_contract_for_website_item(website_item["item_code"])
     checkout_lane = checkout_lane_for_item_group(website_item.get("item_group"))
-    if product_page_contract.get("commerce_lane") == "quote_first":
+    if product_page_contract.get("commerce_lane") != "checkout":
         return None, "quote_required"
     normalized_configuration = normalize_client_configuration(configuration)
 
