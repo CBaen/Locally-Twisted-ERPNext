@@ -26,6 +26,22 @@ protected by quote-first fallback, the five Classic exclusions remain
 quote-first, the local import evidence is upsert/write rather than a
 delete/recreate transcript, and the shared worktree is dirty.
 
+## 2026-05-11 Storefront Proof And Complex UI Handoff
+
+Use `storefront-proof-and-complex-ui-handoff-2026-05-11.md` for the
+storefront-owned proof and next UI slice. It captures the corrected
+Ready-to-Order/search rendered proof, final post-import checkout proof, the
+all-priced-page frontend audit, Classic Arch's current quote-gated state, the
+quote-first lane correction, and the complex-product UI checklist.
+
+Current storefront evidence: 53 published priced product routes rendered; 18
+direct-checkout pages passed option selection, `data-item-code`, add-to-cart,
+cart-line configuration, and checkout summary preservation; 35 priced pages are
+currently quote-gated at the first rendered layer. `quote_first` is a
+setting/lane flag, not a hard blocker. A lane flip still needs backend-truth UI
+for multi-color recipes, add-ons, conditional pricing, image updates, and
+cart/checkout/receipt summary parity.
+
 ## Evidence inventory
 
 | Lane | Required artifact | Current state | Use it for |
@@ -53,6 +69,7 @@ delete/recreate transcript, and the shared worktree is dirty.
 | Verifier failure diagnosis | `product-page-architecture-readiness-failure-diagnosis-2026-05-10.md` | Present, parent/subagent-created then parent-verified | Explains why the prior `bench execute failed` no longer reproduces; latest exact verifier command passes. |
 | Phase 5 delivery/payment/operator packet | `phase-5-delivery-payment-operator-packet-2026-05-10.md` | Present, parent-verified / local proof | Proves delivery fee mapping, pickup, tax boundaries, payment backend config, mocked webhook, paid cascade, payment-success reconciliation, operator quote review/send control, customer quote delivery BCC safety, local launch readiness, and pause-state safety. |
 | Post-import checkout launch closeout | `post-import-checkout-launch-closeout-2026-05-11.md` | Present, local proof / backend-owned closeout | Current 48 kept / 5 Classic-excluded import and checkout proof packet; records final browser proof PASS, backend contract gates, priority products, upsert/write caveat, and remaining caveats. |
+| Storefront proof and complex UI handoff | `storefront-proof-and-complex-ui-handoff-2026-05-11.md` | Present, rendered storefront proof / frontend-owned handoff | Captures Ready-to-Order/search proof, final post-import checkout proof, all-priced-page audit, Classic Arch proof, quote-first lane correction, complex UI requirements, and regression proof ladder. |
 | Phase 6 launch decision packet | `phase-6-launch-decision-packet-2026-05-10.md` | Present, parent decision | Keeps public ecommerce paused; live checkout remains blocked until production HTTPS host, explicit live Stripe/site config, policy approval, webhook setup, and one intentional real payment test pass. |
 | Infrastructure synthesis | `ecommerce-infrastructure-research-synthesis-2026-05-10.md` | Present, parent-created | Corrected synthesis for the real question: ERPNext receiving infrastructure, contract/runtime layers, line-level preservation, quote/checkout bridges, fail-loud evidence, and verifier gates. |
 | Knowledge base index | `ecommerce-knowledge-base-index-2026-05-10.md` | Present, parent-created | Supporting index of recalled memory, local artifacts, source repos, verified docs, blockers, and next actions. |

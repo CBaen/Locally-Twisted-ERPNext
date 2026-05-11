@@ -8,6 +8,47 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-11 - Quote-first is a storefront lane flag, not a permanent product blocker
+
+**Decision:** `quote_first` means the current product page does not expose
+direct checkout controls. It must not be described as proof that a priced
+product can never be purchasable. A product with a product page and pricing may
+move to checkout when the backend product contract, option UI, price/media
+resolution, add-on handling, cart, checkout, and downstream document summaries
+preserve the product meaning.
+
+**Reasoning:** GL corrected the working model after rendered proof showed 35
+priced pages quote-gated at the first UI layer. The lane flag blocked the
+current storefront proof, but it is a configurable safety posture. Some
+quote-first products appear likely to pass with the existing chips/select
+pipeline after a lane flip, while complex products such as Classic Arch still
+need multi-color recipes, add-on pricing, conditional pricing, and summary
+parity before checkout would be truthful.
+
+**Implementation boundary:** Do not flip broad product lanes as a substitute
+for product-page UI work. Keep direct checkout limited to products whose
+backend contract can resolve a purchasable item code, price, media behavior,
+configuration summary, cart line, checkout summary, and ERPNext document fields.
+For complex Odoo-equivalent products, build backend-authored UI contracts:
+multi-slot color recipe builder, palette picker, explicit add-on contracts,
+conditional pricing panel, backend-driven image updates, and
+cart/checkout/receipt summary parity. Classic Arch remains priced and visible
+but currently quote-gated; its downstream checkout path is untested until that
+lane and configuration contract change.
+
+**Verification receipt:** Storefront handoff
+`workstreams/ecommerce-audit/storefront-proof-and-complex-ui-handoff-2026-05-11.md`
+records the rendered evidence: Ready-to-Order/search proof passed, final
+post-import checkout proof passed for priority products, the all-priced-page
+audit rendered 53 priced routes with 18 full checkout passes and 35
+quote-gated first-layer stops, and Classic Arch currently renders
+`complex_custom_product` / `quote_first`.
+
+**Decided by:** GL owner correction and Codex review/proof documentation on
+2026-05-11.
+
+---
+
 ## 2026-05-11 - `/event-balloons` is removed with no redirect
 
 **Decision:** `/event-balloons` is not a public launch route and must not be kept as a hidden compatibility page. `/event-balloons` and `/event_balloons` should return 404 with no redirect. Public chrome may still expose the four event audience pages, but no link, button, search quick result, footer link, hero CTA, portfolio CTA, canonical rule, route alias, or sitemap entry may point to `/event-balloons`.
