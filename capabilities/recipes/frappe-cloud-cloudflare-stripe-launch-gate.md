@@ -90,4 +90,3 @@ On 2026-05-11:
 - `payment_launch_readiness.py` passed local test-mode checks.
 - `payment_launch_readiness.py --mode live` correctly failed on test Stripe
   config and local/non-HTTPS host configuration.
-
