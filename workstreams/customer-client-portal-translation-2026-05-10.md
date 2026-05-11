@@ -21,9 +21,13 @@ Portal-owned closeout files:
 - `apps/locally_twisted/locally_twisted/customer_portal_pages.py`
 - `apps/locally_twisted/locally_twisted/templates/includes/customer_portal_page.html`
 - `apps/locally_twisted/locally_twisted/public/css/lt-customer-portal.css`
+- `apps/locally_twisted/locally_twisted/www/login.html`
+- `apps/locally_twisted/locally_twisted/www/login.py`
+- `apps/locally_twisted/locally_twisted/public/css/lt-login.css`
 - `apps/locally_twisted/locally_twisted/verify/customer_portal_home_contract.py`
 - `apps/locally_twisted/locally_twisted/verify/customer_portal_v1_contract.py`
 - `apps/locally_twisted/locally_twisted/verify/customer_portal_review_fixture.py`
+- `scripts/verify/customer_login_visual.spec.js`
 - `scripts/verify/customer_portal_visual.spec.js`
 - `capabilities/recipes/customer-client-portal-contract.md`
 - this workstream
@@ -44,13 +48,17 @@ python scripts/verify/customer_portal_v1_contract.py
 python scripts/verify/customer_portal_inventory.py --base-url http://localhost:8081 --strict-menu --report output/customer-portal-inventory.json
 python scripts/verify/customer_portal_home_contract.py
 python scripts/verify/customer_account_provisioning_contract.py
+npm run test:customer-login-visual
 ```
 
 Result on 2026-05-11: all listed contracts passed locally.
 
 Hard boundaries currently holding:
 
-- `/login` returns HTTP 200.
+- `/login#login` returns the branded LT customer login shell and preserves
+  working Frappe authentication for Website Users.
+- `/login#signup` returns a branded invite-only account message; public signup
+  remains closed.
 - `/me` as a guest returns HTTP 403.
 - Public signup is disabled: `Website Settings.disable_signup = 1`.
 - Login remains visible: `Website Settings.hide_login = 0`.
@@ -192,6 +200,7 @@ python scripts/verify/customer_portal_inventory.py --base-url http://localhost:8
 python scripts/verify/customer_portal_home_contract.py
 python scripts/verify/customer_account_provisioning_contract.py
 npm run test:customer-portal-visual
+npm run test:customer-login-visual
 ```
 
 Future portal work must update or extend these contracts before claiming a
@@ -201,6 +210,14 @@ Visual shell proof added on 2026-05-11:
 
 - `lt-customer-portal.css` is registered through `web_include_css`, not kept as
   a Python inline style block.
+- `/login` is overridden with `www/login.html`, `www/login.py`, and
+  `lt-login.css`. The page uses the premium-concierge account visual direction,
+  hides public marketing chrome, keeps Frappe's `#login_email`,
+  `#login_password`, `.form-login`, and `.btn-login` hooks, and keeps signup as
+  invite-only account help instead of public self-service signup.
+- `scripts/verify/customer_login_visual.spec.js` checks `/login#login` on
+  mobile and desktop, checks `/login#signup`, proves a fixture Website User can
+  sign in through the visible form, then reaches `/me`.
 - `scripts/verify/customer_portal_visual.spec.js` creates a temporary
   customer account, logs in through the real `/api/method/login` path, verifies
   desktop/mobile containment, verifies the LT logo loads, blocks native/internal

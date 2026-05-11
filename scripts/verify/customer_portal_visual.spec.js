@@ -11,13 +11,36 @@ const OUTPUT_DIR = path.join("output", "playwright", "customer-portal");
 
 let fixture;
 
-function benchExecute(method, kwargs = {}) {
+function sleep(ms) {
+	Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
+}
+
+function isTransientDatabaseLock(error) {
+	const stderr = error.stderr ? error.stderr.toString() : "";
+	const stdout = error.stdout ? error.stdout.toString() : "";
+	const message = `${error.message || ""}\n${stdout}\n${stderr}`;
+	return /Deadlock found|QueryDeadlockError|Lock wait timeout/i.test(message);
+}
+
+function benchExecute(method, kwargs = {}, options = {}) {
 	const args = ["exec", CONTAINER, "bench", "--site", SITE, "execute", method];
 	if (Object.keys(kwargs).length) {
 		args.push("--kwargs", JSON.stringify(kwargs));
 	}
-	const output = execFileSync("docker", args, { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
-	return JSON.parse(output.trim() || "{}");
+	const retries = options.retries || 0;
+	for (let attempt = 0; attempt <= retries; attempt += 1) {
+		try {
+			const output = execFileSync("docker", args, { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+			return JSON.parse(output.trim() || "{}");
+		} catch (error) {
+			if (attempt < retries && isTransientDatabaseLock(error)) {
+				sleep(650 * (attempt + 1));
+				continue;
+			}
+			throw error;
+		}
+	}
+	throw new Error(`bench execute retry loop exhausted for ${method}`);
 }
 
 async function login(page) {
@@ -51,7 +74,7 @@ test.describe("Customer portal branded visual contract", () => {
 		fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 		fixture = benchExecute("locally_twisted.verify.customer_portal_review_fixture.create", {
 			password: PASSWORD,
-		});
+		}, { retries: 3 });
 		if (!fixture.ok) {
 			throw new Error(`fixture creation failed: ${JSON.stringify(fixture)}`);
 		}
@@ -79,11 +102,15 @@ test.describe("Customer portal branded visual contract", () => {
 
 			await expect(page.locator("[data-lt-customer-portal][data-lt-account-dashboard]")).toBeVisible();
 			await expect(page.locator('link[href*="lt-customer-portal.css"]')).toHaveCount(1);
-			const logoLoaded = await page.locator(".lt-portal__brand img").evaluate((img) => img.complete && img.naturalWidth > 0);
+			const logoLoaded = await page.locator(".lt-portal__brand > img").first().evaluate((img) => img.complete && img.naturalWidth > 0);
 			expect(logoLoaded).toBe(true);
+			const logoSrc = await page.locator(".lt-portal__brand > img").first().getAttribute("src");
+			expect(logoSrc).toContain("portal-balloon-dog-red.png");
 			await expect(page.locator(".lt-portal__identity")).toContainText("Private account view");
 			await expect(page.locator(".lt-portal__metric")).toHaveCount(4);
 			await expect(page.locator(".lt-portal__nav a")).toHaveCount(8);
+			await expect(page.locator("body")).not.toContainText("SHORT NOTICE");
+			await expect(page.locator("body")).not.toContainText("Stay in the loop");
 			await expect(page.locator("body")).not.toContainText("Opportunity");
 			await expect(page.locator("body")).not.toContainText("Material Request");
 			await expect(page.locator("body")).not.toContainText("Supplier Quotation");

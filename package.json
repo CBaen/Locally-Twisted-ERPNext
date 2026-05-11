@@ -22,6 +22,7 @@
     "test:ecommerce-full": "npm run test:public-ecommerce && npm run test:shop-smoke && npm run test:product-prices && npm run test:variant-media && npm run test:checkout-experience && npm run test:checkout-fulfillment && npm run test:checkout-lead-conversion",
     "test:quote-accept-experience": "playwright test scripts/verify/quote_accept_experience.spec.js --reporter=line",
     "test:customer-portal-visual": "playwright test scripts/verify/customer_portal_visual.spec.js --reporter=line",
+    "test:customer-login-visual": "playwright test scripts/verify/customer_login_visual.spec.js --reporter=line",
     "test:product-quote-first": "playwright test scripts/verify/product_quote_first_experience.spec.js --reporter=line",
     "test:product-prices": "python scripts/verify/product_variant_price_contract.py",
     "test:variant-media": "python scripts/verify/variant_media_contract.py",

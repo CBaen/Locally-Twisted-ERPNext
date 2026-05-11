@@ -1,5 +1,16 @@
 # Locally Twisted - Coding Handoff
 
+Codex update on 2026-05-11: customer login is now part of the branded
+customer/client account product. `/login#login` renders the LT premium-concierge
+account doorway, hides public marketing chrome, preserves Frappe's native login
+form hooks, and was verified with a temporary Website User signing in through
+the visible form and reaching `/me`. `/login#signup` renders branded
+invite-only account help; public signup remains disabled and guest public
+inquiry/shop/cart/checkout paths stay open. Feature handoff:
+`workstreams/customer-client-portal-translation-2026-05-10.md`; capability:
+`capabilities/recipes/customer-client-portal-contract.md`. Guards:
+`npm run test:customer-login-visual` and `npm run test:customer-portal-visual`.
+
 Codex update on 2026-05-11: repo hygiene follow-up closed the forbidden branch
 and asset-location regression thread. The linked worktree branch
 `ecommerce-phase-1-4-hygiene-20260510` was verified as already contained in
@@ -207,8 +218,10 @@ the digest chain. Full verification still runs runtime fake-data contracts, but
 Desk/report rendering does not create rollback test Leads, upload blockers, or
 document blocker evidence. Run DB-mutating verifiers serially.
 
-Codex update on 2026-05-09: `/login#login` is Frappe's standard login route.
-The local owner/client test account is `lt-owner-temp@example.com`, verified by
+Codex update on 2026-05-09, superseded on 2026-05-11 for the customer-facing
+screen: `/login#login` is still the Frappe auth route, but LT now owns its
+branded customer login shell while preserving native auth hooks. The local
+owner/client test account is `lt-owner-temp@example.com`, verified by
 `npm run test:desk-owner`; customers do not need login for `/contact`, `/cart`,
 or `/checkout`. Paperwork/documentation copy routing is code-owned in
 `communication_copy_policy.py`: public/business contact remains

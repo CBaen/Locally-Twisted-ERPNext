@@ -35,6 +35,12 @@ customer account visual shell.
 - Customer accounts are optional and invite-first. Public signup stays disabled.
 - Guest public inquiry, shop, cart, and checkout paths must remain usable; do
   not require login for public browsing or checkout.
+- `/login#login` is an LT-branded customer account doorway, not the stock
+  ERPNext-looking page. It must preserve Frappe's native login IDs/classes so a
+  real Website User can authenticate through the visible form.
+- `/login#signup` must stay branded and invite-first; it must not expose public
+  self-signup or imply that anonymous customers need an account to request,
+  browse, cart, or checkout.
 - `/me` is the customer account home. Guest `/me` must not be readable.
 - The account experience is LT-owned, not ERPNext native list pages.
 - The individual account routes are `/me`, `/account/events`,
@@ -66,9 +72,13 @@ customer account visual shell.
 - `apps/locally_twisted/locally_twisted/customer_portal_pages.py`
 - `apps/locally_twisted/locally_twisted/templates/includes/customer_portal_page.html`
 - `apps/locally_twisted/locally_twisted/public/css/lt-customer-portal.css`
+- `apps/locally_twisted/locally_twisted/www/login.html`
+- `apps/locally_twisted/locally_twisted/www/login.py`
+- `apps/locally_twisted/locally_twisted/public/css/lt-login.css`
 - `apps/locally_twisted/locally_twisted/customer_account_provisioning.py`
 - `apps/locally_twisted/locally_twisted/seed/sync_customer_portal.py`
 - `apps/locally_twisted/locally_twisted/verify/customer_portal_review_fixture.py`
+- `scripts/verify/customer_login_visual.spec.js`
 
 ## Verification
 
@@ -80,6 +90,7 @@ python scripts/verify/customer_portal_v1_contract.py
 python scripts/verify/customer_portal_home_contract.py
 python scripts/verify/customer_account_provisioning_contract.py
 python scripts/verify/customer_portal_inventory.py --base-url http://localhost:8081 --strict-menu --report output/customer-portal-inventory.json
+npm run test:customer-login-visual
 npm run test:customer-portal-visual
 ```
 
@@ -91,6 +102,8 @@ the local Frappe backend/frontend containers and rerun the visual verifier.
 
 - Treating Portal Settings rows as the customer experience. They are route
   affordances; LT pages own the customer-visible account product.
+- Letting `/login` fall back to a stock ERPNext-looking screen, losing the
+  native Frappe auth hooks, or showing public signup as a normal customer path.
 - Letting the default Frappe sidebar reappear next to the branded portal nav.
 - Creating customer Users from guest checkout or failed payment state.
 - Marking a staff-owned or unrelated File as a customer-uploaded portal file.

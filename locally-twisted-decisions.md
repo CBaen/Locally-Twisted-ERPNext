@@ -8,6 +8,22 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-11 - Customer login is part of the LT account product
+
+**Decision:** `/login#login` is an LT-branded customer account doorway, not a stock ERPNext-looking page. It must preserve Frappe's native login form hooks so Website Users can authenticate through the visible form. `/login#signup` stays branded and invite-first instead of exposing public self-signup.
+
+**Reasoning:** GL rejected the account surface when it looked generic and untrustworthy. The login page is the first trust moment for customers who do have accounts, so it must match the premium-concierge portal direction while keeping authentication owned by Frappe. Customers still do not need accounts to browse, request a quote, cart, or checkout.
+
+**Implementation boundary:** Keep public signup disabled. Do not create Users during guest checkout. Do not replace Frappe auth JS with custom credential handling. If the login template changes, keep `#login_email`, `#login_password`, `.form-login`, and `.btn-login` unless the verifier is updated to prove equivalent native auth behavior.
+
+**Verification receipt:** `npm run test:customer-login-visual` passed 4/4 on 2026-05-11, covering mobile and desktop `/login#login`, branded `/login#signup`, and a temporary Website User signing in through the visible form and reaching `/me`. `npm run test:customer-portal-visual`, `python scripts/verify/customer_portal_home_contract.py`, `python scripts/verify/customer_portal_v1_contract.py`, and `python scripts/verify/customer_portal_inventory.py --base-url http://localhost:8081 --strict-menu --report output/customer-portal-inventory.json` also passed.
+
+**Alternatives considered:** Leave `/login` as the stock ERPNext page. Rejected because it makes the account product feel detached and untrustworthy. Build a custom auth endpoint. Rejected because Frappe already owns session security and the safer move is a branded shell around native auth hooks.
+
+**Decided by:** GL correction and Codex implementation on 2026-05-11.
+
+---
+
 ## 2026-05-11 - Launch operator and ecommerce fallback are explicit
 
 **Decision:** Cameron is the human launch operator for Frappe Cloud,

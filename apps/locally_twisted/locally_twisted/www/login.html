@@ -1,0 +1,212 @@
+{% extends "templates/web.html" %}
+
+{% set icon_base = "/assets/locally_twisted/icons/customer-portal" %}
+{% set portal_logo = icon_base ~ "/portal-balloon-dog-red.png" %}
+
+{% macro email_login_body() -%}
+{% if not disable_user_pass_login or (ldap_settings and ldap_settings.enabled) %}
+<div class="page-card-body">
+    <div class="lt-login__field">
+        <label for="login_email">{{ login_label or _("Email") }}</label>
+        <input type="text" id="login_email" class="form-control"
+            placeholder="{% if login_name_placeholder %}{{ login_name_placeholder }}{% else %}{{ _('email@example.com') }}{% endif %}"
+            required autofocus autocomplete="username">
+    </div>
+
+    <div class="lt-login__field">
+        <label for="login_password">{{ _("Password") }}</label>
+        <div class="lt-login__password">
+            <input type="password" id="login_password" class="form-control" placeholder="Password"
+                autocomplete="current-password" required>
+            <button type="button" toggle="#login_password" class="toggle-password">{{ _("Show") }}</button>
+        </div>
+    </div>
+
+    {% if not disable_user_pass_login %}
+    <p class="forgot-password-message">
+        <a href="#forgot">{{ _("Forgot password?") }}</a>
+    </p>
+    {% endif %}
+</div>
+{% endif %}
+<div class="page-card-actions">
+    {% if not disable_user_pass_login %}
+    <button class="btn btn-sm btn-primary btn-block btn-login" type="submit">{{ _("Sign in") }}</button>
+    {% endif %}
+    {% if ldap_settings and ldap_settings.enabled %}
+    <button class="btn btn-sm {{ "btn-primary" if disable_user_pass_login else "btn-default" }} btn-block btn-login btn-ldap-login">
+        {{ _("Login with LDAP") }}
+    </button>
+    {% endif %}
+</div>
+{% endmacro %}
+
+{% macro login_shell(title, subtitle, form_class, button_hint=None) %}
+<section class="{{ form_class }}">
+    <div class="lt-login__card">
+        <div class="lt-login__chrome">
+            <a class="lt-login__brand" href="/" aria-label="Locally Twisted homepage">
+                <img src="{{ portal_logo }}" alt="" width="42" height="42" loading="eager">
+                <span>locally_twisted</span>
+            </a>
+            <a class="lt-login__home-link" href="/">Home</a>
+        </div>
+
+        <div class="lt-login__intro">
+            <img src="{{ portal_logo }}" alt="" width="82" height="82" loading="eager">
+            <div>
+                <p>Private customer account</p>
+                <h1>{{ title }}</h1>
+                <span>{{ subtitle }}</span>
+            </div>
+        </div>
+
+        <div class="lt-login__trust-card">
+            <img src="{{ icon_base }}/portal-lock.svg" alt="" width="28" height="28" loading="eager">
+            <div>
+                <strong>Invite-only access</strong>
+                <p>Use the email Locally Twisted connected to your quote, event, or organization account.</p>
+            </div>
+        </div>
+
+        <div class="login-content page-card">
+            {{ caller() }}
+        </div>
+
+        {% if button_hint %}
+        <p class="lt-login__hint">{{ button_hint }}</p>
+        {% endif %}
+
+        <a class="lt-login__request-link" href="/contact">
+            <span>Need an event quote?</span>
+            <strong>Start a new request</strong>
+        </a>
+    </div>
+</section>
+{% endmacro %}
+
+{% block head_include %}
+{{ include_style('login.bundle.css') }}
+<link type="text/css" rel="stylesheet" href="/assets/locally_twisted/css/lt-login.css?v=20260511-premium-concierge-1">
+{% endblock %}
+
+{% block page_content %}
+<!-- {{ for_test }} -->
+<div class="lt-login" data-lt-customer-login>
+    <noscript>
+        <div class="lt-login__noscript">
+            <h1>{{ _("Javascript is disabled on your browser") }}</h1>
+            <p>{{ _("You need to enable JavaScript to sign in.") }}</p>
+        </div>
+    </noscript>
+
+    {% call login_shell("Welcome back", "Sign in to see quotes, event details, files, billing, and follow-up.", "for-login") %}
+    <form class="form-signin form-login" role="form">
+        {%- if social_login or login_with_email_link -%}
+        {{ email_login_body() }}
+        <div class="social-logins text-center">
+            {% if not disable_user_pass_login or (ldap_settings and ldap_settings.enabled) %}
+            <p class="text-muted login-divider">{{ _("or") }}</p>
+            {% endif %}
+            <div class="social-login-buttons">
+                {% for provider in provider_logins %}
+                <div class="login-button-wrapper">
+                    <a href="{{ provider.auth_url }}" class="btn btn-block btn-default btn-sm btn-login-option btn-{{ provider.name }}">
+                        {% if provider.icon %}{{ provider.icon }}{% endif %}
+                        {{ _("Login with {0}").format(provider.provider_name) }}
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            {% if login_with_email_link %}
+            <div class="login-with-email-link social-login-buttons">
+                <div class="login-button-wrapper">
+                    <a href="#login-with-email-link" class="btn btn-block btn-default btn-sm btn-login-option btn-login-with-email-link">
+                        {{ _("Login with email link") }}
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        {%- else -%}
+        {{ email_login_body() }}
+        {%- endif -%}
+    </form>
+    {% endcall %}
+
+    {%- if social_login -%}
+    {% call login_shell("Sign in with email", "Use your customer account email and password.", "for-email-login") %}
+    <form class="form-signin form-login" role="form">
+        {{ email_login_body() }}
+    </form>
+    {% endcall %}
+    {%- endif -%}
+
+    {% call login_shell("Create an account", "Customer accounts are created by invitation after a quote, booking, or organization setup.", "for-signup signup-disabled") %}
+    <div class="page-card-body">
+        <div class="lt-login__disabled">
+            <strong>Accounts are invite-only</strong>
+            <p>Locally Twisted opens customer accounts after a quote, booking, or organization setup so the portal stays connected to real event records.</p>
+            <a href="/contact" class="btn btn-primary btn-md">{{ _("Request help") }}</a>
+        </div>
+    </div>
+    {% endcall %}
+
+    {% call login_shell("Reset your password", "Enter your account email and we will send reset instructions.", "for-forgot") %}
+    <form class="form-signin form-forgot hide" role="form">
+        <div class="page-card-body">
+            <div class="lt-login__field">
+                <label for="forgot_email">{{ _("Email Address") }}</label>
+                <input type="email" id="forgot_email" class="form-control"
+                    placeholder="{{ _('email@example.com') }}" required autofocus autocomplete="username">
+            </div>
+        </div>
+        <div class="page-card-actions">
+            <button class="btn btn-sm btn-primary btn-block btn-forgot" type="submit">{{ _("Reset password") }}</button>
+            <p class="text-center sign-up-message"><a href="#login">{{ _("Back to sign in") }}</a></p>
+        </div>
+    </form>
+    {% endcall %}
+
+    <section class="for-login-with-email-link">
+        <div class="lt-login__card">
+            <div class="lt-login__chrome">
+                <a class="lt-login__brand" href="/" aria-label="Locally Twisted homepage">
+                    <img src="{{ portal_logo }}" alt="" width="42" height="42" loading="eager">
+                    <span>locally_twisted</span>
+                </a>
+                <a class="lt-login__home-link" href="/">Home</a>
+            </div>
+            <div class="lt-login__intro">
+                <img src="{{ portal_logo }}" alt="" width="82" height="82" loading="eager">
+                <div>
+                    <p>Secure sign in</p>
+                    <h1>Email login link</h1>
+                    <span>We will email a temporary sign-in link if this method is enabled.</span>
+                </div>
+            </div>
+            <div class="login-content page-card">
+                <form class="form-signin form-login-with-email-link hide" role="form">
+                    <div class="page-card-body">
+                        <div class="lt-login__field">
+                            <label for="login_with_email_link_email">{{ _("Email Address") }}</label>
+                            <input type="email" id="login_with_email_link_email" class="form-control"
+                                placeholder="{{ _('email@example.com') }}" required autofocus autocomplete="username">
+                        </div>
+                    </div>
+                    <div class="page-card-actions">
+                        <button class="btn btn-sm btn-primary btn-block btn-login-with-email-link" type="submit">{{ _("Send login link") }}</button>
+                        <p class="text-center sign-up-message"><a href="#login">{{ _("Back to sign in") }}</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>{% include "templates/includes/login/login.js" %}</script>
+{% endblock %}
+
+{% block sidebar %}{% endblock %}

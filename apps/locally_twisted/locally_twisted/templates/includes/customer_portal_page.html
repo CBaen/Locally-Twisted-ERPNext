@@ -1,74 +1,189 @@
-<section class="lt-portal lt-portal--{{ portal_mode }}" data-lt-customer-portal {{ portal_page.marker }}>
-    <div class="lt-portal__inner">
-        <header class="lt-portal__hero">
-            <div class="lt-portal__brand">
-                <img src="/assets/locally_twisted/icons/lt-logo.png" alt="" width="86" height="70" loading="eager">
-                <span>{% if portal_mode == "organization" %}Organization account{% else %}Customer account{% endif %}</span>
-            </div>
-            <div class="lt-portal__hero-copy">
-                <p class="lt-portal__eyebrow">
-                    {% if portal_mode == "organization" %}Locally Twisted shared account{% else %}Locally Twisted private account{% endif %}
-                </p>
-                <h1>{{ portal_page.heading }}</h1>
-                <p class="lt-portal__lede">{{ portal_page.lede }}</p>
-            </div>
-            <aside class="lt-portal__identity" aria-label="Signed in account">
-                <span>Signed in as</span>
-                <strong>{{ portal_display_name }}</strong>
-                <p>Private account view</p>
-            </aside>
-        </header>
+{% set icon_base = portal_icon_base or "/assets/locally_twisted/icons/customer-portal" %}
+{% set portal_logo = portal_logo or icon_base ~ "/portal-balloon-dog-red.png" %}
+{% if portal_access_blocked %}
+<section class="lt-portal lt-portal--blocked" data-lt-customer-portal data-lt-portal-access-blocked>
+    <div class="lt-portal__app">
+        <main class="lt-portal__shell lt-portal__shell--blocked">
+            <section class="lt-portal__hero lt-portal__concierge-card" aria-label="Account access">
+                <div class="lt-portal__chrome">
+                    <a class="lt-portal__brand" href="/home" aria-label="Locally Twisted homepage">
+                        <img src="{{ portal_logo }}" alt="" width="40" height="40" loading="eager">
+                        <span>locally_twisted</span>
+                    </a>
+                    <a class="lt-portal__text-link lt-portal__text-link--light" href="/?cmd=web_logout">Log Out</a>
+                </div>
 
-        {% if portal_summary.next_action %}
-        <div class="lt-portal__action" data-tone="{{ portal_summary.next_action.tone }}">
-            <div>
-                <span class="lt-portal__action-label">Next step</span>
-                <strong>{{ portal_summary.next_action.label }}</strong>
-            </div>
-            <a class="lt-portal__button" href="{{ portal_summary.next_action.href }}">Review</a>
-        </div>
-        {% endif %}
+                <div class="lt-portal__profile">
+                    <img class="lt-portal__avatar" src="{{ portal_logo }}" alt="" width="86" height="86" loading="eager">
+                    <div class="lt-portal__profile-copy">
+                        <p class="lt-portal__eyebrow">Account access</p>
+                        <h1>This sign-in needs account setup.</h1>
+                        <aside class="lt-portal__identity" aria-label="Signed in account">
+                            <span>Signed in as</span>
+                            <strong>{{ portal_display_name }}</strong>
+                            <p>Use Log Out to leave this account and sign in with a different one.</p>
+                        </aside>
+                    </div>
+                </div>
 
-        <dl class="lt-portal__metrics" aria-label="Account summary">
-            {% for item in portal_metrics %}
-            <div class="lt-portal__metric">
-                <dt>{{ item.label }}</dt>
-                <dd>{{ item.value }}</dd>
-            </div>
-            {% endfor %}
-        </dl>
-
-        <nav class="lt-portal__nav" aria-label="Account sections">
-            {% for item in portal_nav %}
-            <a href="{{ item.href }}" {% if item.active %}aria-current="page"{% endif %}>{{ item.label }}</a>
-            {% endfor %}
-        </nav>
-
-        <div class="lt-portal__grid">
-            {% for row in portal_page.records %}
-            <article class="lt-portal__card">
-                {% if row.status_label %}
-                <span class="lt-portal__status">{{ row.status_label }}</span>
-                {% endif %}
-                <h2 class="lt-portal__card-title">{{ row.title }}</h2>
-                {% if row.description %}
-                <p class="lt-portal__meta">{{ row.description }}</p>
-                {% endif %}
-                {% if row.meta %}
-                <dl class="lt-portal__facts">
-                    {% for item in row.meta %}
+                <article class="lt-portal__quote-card">
+                    <img src="{{ icon_base }}/portal-lock.svg" alt="" width="28" height="28" loading="eager">
                     <div>
-                        <dt>{{ item.label }}</dt>
+                        <strong>Account link needed</strong>
+                        <p>You are signed in, but this account is not connected to a Locally Twisted customer account yet.</p>
+                    </div>
+                </article>
+
+                <a class="lt-portal__primary-action" href="/?cmd=web_logout">
+                    <span>Log Out</span>
+                    <img src="{{ icon_base }}/portal-chevron-right.svg" alt="" width="18" height="18" loading="eager">
+                </a>
+            </section>
+        </main>
+    </div>
+</section>
+{% else %}
+{% set portal_handle = "locally_twisted_team" if portal_mode == "organization" else "locally_twisted" %}
+{% set portal_view_label = "Organization view" if portal_mode == "organization" else "Private account view" %}
+{% set portal_type_label = "Shared account" if portal_mode == "organization" else "Private account" %}
+<section class="lt-portal lt-portal--{{ portal_mode }}" data-lt-customer-portal {{ portal_page.marker }}>
+    <div class="lt-portal__app">
+        <main class="lt-portal__shell">
+            <section class="lt-portal__hero lt-portal__concierge-card" aria-label="Account snapshot">
+                <div class="lt-portal__chrome">
+                    <a class="lt-portal__brand" href="/me" aria-label="Locally Twisted account home">
+                        <img src="{{ portal_logo }}" alt="" width="40" height="40" loading="eager">
+                        <span>{{ portal_handle }}</span>
+                        <img class="lt-portal__brand-chevron" src="{{ icon_base }}/portal-chevron-down.svg" alt="" width="14" height="14" loading="eager">
+                    </a>
+                    <div class="lt-portal__top-actions" aria-label="Account actions">
+                        <a class="lt-portal__icon-button" href="/contact" aria-label="Start a new request">
+                            <img src="{{ icon_base }}/portal-plus.svg" alt="" width="18" height="18" loading="eager">
+                        </a>
+                        <span class="lt-portal__icon-button" aria-label="Account menu">
+                            <img src="{{ icon_base }}/portal-menu.svg" alt="" width="18" height="18" loading="eager">
+                        </span>
+                    </div>
+                </div>
+
+                <div class="lt-portal__profile">
+                    <img class="lt-portal__avatar" src="{{ portal_logo }}" alt="" width="86" height="86" loading="eager">
+                    <div class="lt-portal__profile-copy">
+                        <p class="lt-portal__eyebrow">{{ "Locally Twisted shared account" if portal_mode == "organization" else "Locally Twisted private account" }}</p>
+                        <h1>{{ portal_display_name }}</h1>
+                        <p class="lt-portal__handle">@{{ portal_handle }}</p>
+                        <aside class="lt-portal__identity" aria-label="Signed in account">
+                            <span>Signed in as</span>
+                            <strong>{{ portal_display_name }}</strong>
+                            <p>{{ portal_view_label }}</p>
+                        </aside>
+                        <span class="lt-portal__private-pill">
+                            <img src="{{ icon_base }}/portal-lock.svg" alt="" width="12" height="12" loading="eager">
+                            {{ portal_type_label }}
+                        </span>
+                    </div>
+                </div>
+
+                <dl class="lt-portal__metrics" aria-label="Account summary">
+                    {% for item in portal_metrics %}
+                    <div class="lt-portal__metric">
                         <dd>{{ item.value }}</dd>
+                        <dt>{{ item.label }}</dt>
                     </div>
                     {% endfor %}
                 </dl>
-                {% endif %}
-                {% if row.href %}
-                <a class="lt-portal__text-link" href="{{ row.href }}">{{ row.cta_label }}</a>
-                {% endif %}
-            </article>
-            {% endfor %}
-        </div>
+
+                <article class="lt-portal__quote-card" data-tone="{{ portal_summary.next_action.tone if portal_summary.next_action else 'calm' }}">
+                    <img src="{{ icon_base }}/portal-quote-ready.svg" alt="" width="48" height="48" loading="eager">
+                    <div>
+                        <strong>{{ portal_summary.next_action.label if portal_summary.next_action else portal_page.heading }}</strong>
+                        <p>{{ "We prepared the next step for your event." if portal_summary.next_action else portal_page.lede }}</p>
+                        {% if portal_summary.next_action %}
+                        <a href="{{ portal_summary.next_action.href }}">Review your quote</a>
+                        {% endif %}
+                    </div>
+                </article>
+
+                <a class="lt-portal__primary-action" href="/contact">
+                    <span>Start a new request</span>
+                    <img src="{{ icon_base }}/portal-plus.svg" alt="" width="18" height="18" loading="eager">
+                </a>
+            </section>
+
+            <div class="lt-portal__workspace">
+                <aside class="lt-portal__menu-panel" aria-label="Account menu">
+                    <div class="lt-portal__sheet-handle" aria-hidden="true"></div>
+                    <div class="lt-portal__menu-head">
+                        <strong>{{ portal_handle }}</strong>
+                        <span>{{ portal_type_label }}</span>
+                    </div>
+                    <nav class="lt-portal__nav" aria-label="Account sections">
+                        {% for item in portal_nav %}
+                        <a href="{{ item.href }}" {% if item.active %}aria-current="page"{% endif %}>
+                            <img src="{{ icon_base }}/{{ item.icon }}" alt="" width="22" height="22" loading="lazy">
+                            <span>{{ item.label }}</span>
+                            <img class="lt-portal__row-chevron" src="{{ icon_base }}/portal-chevron-right.svg" alt="" width="16" height="16" loading="lazy">
+                        </a>
+                        {% endfor %}
+                    </nav>
+                    <div class="lt-portal__menu-foot">
+                        <a href="/?cmd=web_logout">
+                            <img src="{{ icon_base }}/portal-settings.svg" alt="" width="20" height="20" loading="lazy">
+                            <span>Log Out</span>
+                        </a>
+                    </div>
+                </aside>
+
+                <section class="lt-portal__content" aria-label="Account details">
+                    <header class="lt-portal__content-head">
+                        <span class="lt-portal__content-icon">
+                            <img src="{{ icon_base }}/{{ portal_page.icon }}" alt="" width="24" height="24" loading="lazy">
+                        </span>
+                        <div>
+                            <p>{{ "Account section" if portal_mode == "account" else "Organization section" }}</p>
+                            <h2>{{ portal_page.heading }}</h2>
+                            <span>{{ portal_page.lede }}</span>
+                        </div>
+                    </header>
+
+                    <div class="lt-portal__grid">
+                        {% for row in portal_page.records %}
+                        <article class="lt-portal__card">
+                            <span class="lt-portal__card-icon">
+                                <img src="{{ icon_base }}/{{ row.icon or portal_page.icon }}" alt="" width="24" height="24" loading="lazy">
+                            </span>
+                            <div class="lt-portal__card-body">
+                                <div class="lt-portal__card-head">
+                                    <div>
+                                        {% if row.status_label %}
+                                        <span class="lt-portal__status">{{ row.status_label }}</span>
+                                        {% endif %}
+                                        <h3 class="lt-portal__card-title">{{ row.title }}</h3>
+                                    </div>
+                                    {% if row.href %}
+                                    <a class="lt-portal__text-link" href="{{ row.href }}">{{ row.cta_label }}</a>
+                                    {% endif %}
+                                </div>
+                                {% if row.description %}
+                                <p class="lt-portal__meta">{{ row.description }}</p>
+                                {% endif %}
+                                {% if row.meta %}
+                                <dl class="lt-portal__facts">
+                                    {% for item in row.meta %}
+                                    <div>
+                                        <dt>{{ item.label }}</dt>
+                                        <dd>{{ item.value }}</dd>
+                                    </div>
+                                    {% endfor %}
+                                </dl>
+                                {% endif %}
+                            </div>
+                        </article>
+                        {% endfor %}
+                    </div>
+                </section>
+            </div>
+        </main>
     </div>
 </section>
+{% endif %}

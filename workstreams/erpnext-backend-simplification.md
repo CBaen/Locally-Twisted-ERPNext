@@ -114,7 +114,7 @@ Important: these workspace, Number Card, Dashboard Chart, Role Profile, and Cale
 
 ## 2026-05-09 Login / Portal Reality Check
 
-- `/login#login` is the standard Frappe login screen. The URL fragment does not change the server route; `/login` returned HTTP 200 with title `Login`.
+- `/login#login` is still the Frappe auth route, but the customer-facing page is now LT-branded through the customer/client portal slice. The URL fragment does not change the server route. Current customer login visual/auth proof lives in `workstreams/customer-client-portal-translation-2026-05-10.md`.
 - The local owner/client test account is `lt-owner-temp@example.com` with the `LT Owner` role profile. Fresh `npm run test:desk-owner` passed with the documented local test password and proved `/app/home`, `/app/owner-home`, and `/app/Workspaces` land on the Owner Home command center.
 - `cameron@builtbycameron.com` is an enabled System User with support/admin roles. No local User records existed for `hi@locallytwisted.com` or `cameron@locallytwisted.com` in the 2026-05-09 check.
 - The temporary contractor account `lt-contractor-temp@example.com` remains disabled. Contractors are still not a backend-login tier by default.
