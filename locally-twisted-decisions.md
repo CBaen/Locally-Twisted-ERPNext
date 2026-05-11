@@ -8,6 +8,21 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-11 - Repo hygiene stays main-only and raw asset copies stay outside launch source
+
+**Decision:** LT cleanup work must not keep branch or linked-worktree holding areas. If a non-main branch is discovered, future agents must prove whether it contains unique work before removal, then return the repo to main-only state. Raw local photo drops that are preserved outside the repo should not also remain as duplicate tracked launch assets unless a current feature deliberately promotes them to production source.
+
+**Reasoning:** GL restated that branches are forbidden. The May 11 cleanup found a linked worktree branch named `ecommerce-phase-1-4-hygiene-20260510`; it was already contained in `main`, so keeping it only created false state. The same cleanup found three deleted tracked `assets/what we do photos/` images with exact copies in the local raw-drop holding folder. Keeping duplicate raw photo copies inside the launch repo conflicts with the clean-repo rule and makes future agents treat parked asset pools as current source.
+
+**Implementation boundary:** Before deleting a branch/worktree, verify the current checkout is `main`, inspect the linked worktree state, prove ancestry with `git merge-base --is-ancestor <branch> main`, and confirm whether untracked/unstaged files exist. Before committing tracked asset deletions, prove the file either has Git history, an exact preserved local holding copy, or an intentional production replacement. Do not delete other-agent active work or unreviewed raw drops as a broad sweep.
+
+**Verification receipt:** `git merge-base --is-ancestor ecommerce-phase-1-4-hygiene-20260510 main` passed; the linked worktree had staged-only changes and no unstaged/untracked files; the worktree and branch ref were removed; local/remote branch listings returned main-only. `git hash-object` proved exact matches for `Giant Pumpkin Balloon.png`, `Happy Easter Carrot balloons.jpg`, and `balloon Ferris wheel Salt lake city utah.jpg` under `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted-local-drops\landing-page-pics-20260510\`.
+
+**Alternatives considered:** Keep the branch as a safety bookmark. Rejected because Git history and `main` are the archive, and branch parking is forbidden. Restore the duplicate tracked raw photos to the repo. Rejected because exact local holding copies and Git history already preserve them; re-adding them would keep a second source of truth.
+
+**Decided by:** GL branch rule correction and Codex cleanup follow-through on 2026-05-11.
+
+---
 ## 2026-05-11 - Customer portal V1 is LT-owned, invite-first, and review-request based
 
 **Decision:** Customer accounts remain optional and invite-first. The logged-in customer experience is now owned by Locally Twisted routes and summaries, not ERPNext native list pages. The V1 portal exposes all eight customer modules: Event Details, Quotes, Invoices & Receipts, Files & Inspiration, Customer Checklist, Repeat Client, After-Event Follow-Up, and Organization Portal. Organization buyers use a separate `/organization` route family.

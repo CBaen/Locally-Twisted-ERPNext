@@ -4,12 +4,12 @@ name: Launch Repo Cleanup And Evidence Retention
 schema_version: 2.0
 level: recipe
 maturity: candidate
-scope: Locally Twisted launch repo cleanup, raw asset intake, generated evidence retention, and stale artifact deletion
+scope: Locally Twisted launch repo cleanup, raw asset intake, generated evidence retention, stale artifact deletion, and forbidden branch/worktree cleanup
 currently_true: true
 verification_level: 2
-last_verified: 2026-05-10
+last_verified: 2026-05-11
 evidence_quality: direct
-successful_uses: 1
+successful_uses: 2
 failed_uses: 0
 regressions: 0
 depends_on:
@@ -22,6 +22,7 @@ tags:
   - stale artifacts
   - raw assets
   - evidence retention
+  - main-only git hygiene
 ---
 
 # Launch Repo Cleanup And Evidence Retention
@@ -41,6 +42,7 @@ GitHub is the archive for tracked historical experiments. Local holding folders 
 - Generated reports, Playwright screenshots, mirror folders, build outputs, or verifier debris accumulate.
 - A research/contest/prototype output has already been translated into production app files or durable docs.
 - A launch handoff references ignored `.tmp/` or `output/` evidence that has been deleted.
+- A forbidden branch or linked worktree appears during launch cleanup.
 
 ## Procedure
 
@@ -49,10 +51,12 @@ GitHub is the archive for tracked historical experiments. Local holding folders 
 3. Delete only regenerable ignored output directly: caches, build output, screenshots, stale local verifier reports, and generated preview folders.
 4. Move large raw photo drops outside the repo when they may still be useful but are not production source.
 5. Delete tracked experiment output only when the implemented production source and durable handoffs already exist. Git history remains the archive.
-6. Add `.gitignore` guards for raw/drop paths that should not re-enter the launch repo.
-7. Update the feature handoff, queue, decisions, lessons, and capability index when the cleanup changes future-agent behavior.
-8. Run the narrow verifiers that prove cleanup did not break launch posture.
-9. In a dirty shared worktree, commit with explicit files or an isolated index. Do not stage unrelated agent work.
+6. For a forbidden branch or linked worktree, do not keep it as a bookmark. Prove whether it has unique work first: inspect the linked worktree, check staged/unstaged/untracked files, and run `git merge-base --is-ancestor <branch> main` before removal.
+7. Before committing tracked asset deletions, prove the asset is preserved by Git history, an exact local holding copy, or an intentional production replacement.
+8. Add `.gitignore` guards for raw/drop paths that should not re-enter the launch repo.
+9. Update the feature handoff, queue, decisions, lessons, and capability index when the cleanup changes future-agent behavior.
+10. Run the narrow verifiers that prove cleanup did not break launch posture.
+11. In a shared worktree with unrelated active changes, commit with explicit files or an isolated index. Do not stage unrelated agent work.
 
 ## Keep
 
@@ -70,3 +74,7 @@ GitHub is the archive for tracked historical experiments. Local holding folders 
 ## 2026-05-10 Receipt
 
 The launch cleanup removed regenerable outputs, stale mirrors/audits, old app clones, research throwaways, and tracked audience-page contest output. Raw photo drops were moved to `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted-local-drops\`. `.gitignore` now blocks the known raw/drop paths from returning. `ecommerce_pause_contract.py`, `nav_ia.py`, and cleanup-owned `git diff --check` passed.
+
+## 2026-05-11 Receipt
+
+Follow-up cleanup removed the forbidden linked worktree/branch `ecommerce-phase-1-4-hygiene-20260510` after ancestry and worktree-state checks proved it did not hold unique unstaged/untracked work. The three deleted tracked `assets/what we do photos/` raw images were removed from repo source after `git hash-object` proved exact copies in `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted-local-drops\landing-page-pics-20260510\`. Ignored forensic screenshot folders from regression research were deleted after the findings moved into tracked docs.

@@ -61,6 +61,10 @@ raw drops, and historical contest/research debris were removed or moved outside
 the repo so the launch checkout is lighter for client handoff. Source handoff:
 `workstreams/launch-repo-cleanup-2026-05-10.md`; capability:
 `capabilities/recipes/launch-repo-cleanup-and-evidence-retention.md`.
+2026-05-11 follow-up removed the stray linked worktree/branch after proving it
+was already contained in `main`, and removed duplicate tracked raw
+`assets/what we do photos/` launch images after exact copies were verified in
+the local raw-drop holding folder.
 
 2026-05-10 header conversion-label closeout, refreshed after the short-notice
 top-banner update: the public header/menu now shows

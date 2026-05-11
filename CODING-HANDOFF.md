@@ -1,5 +1,17 @@
 # Locally Twisted - Coding Handoff
 
+Codex update on 2026-05-11: repo hygiene follow-up closed the forbidden branch
+and asset-location regression thread. The linked worktree branch
+`ecommerce-phase-1-4-hygiene-20260510` was verified as already contained in
+`main`, its linked worktree had no unstaged or untracked files, then the
+worktree and branch ref were removed. Local branch state is main-only again.
+The three deleted `assets/what we do photos/` images were traced by blob hash to
+exact copies in
+`C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted-local-drops\landing-page-pics-20260510\`;
+the repo keeps Git history plus the local holding copy instead of duplicate raw
+launch assets. Feature handoff:
+`workstreams/launch-repo-cleanup-2026-05-10.md`; capability:
+`capabilities/recipes/launch-repo-cleanup-and-evidence-retention.md`.
 
 OpenClaw/Moji update on 2026-05-10 late: ready-to-order ecommerce Phases 1-6 now have local proof/decision artifacts. Phase 5 proves delivery/payment/operator readiness locally: checkout fulfillment delivery fees + pickup + tax boundaries, local Stripe/test payment backend config, mocked webhook handling, paid-order cascade, payment-success reconciliation, operator quote review/send control, customer quote delivery BCC safety, and pause-mode safety all pass. Phase 6 decision: do not open live checkout yet; public ecommerce stays paused with `lt_ecommerce_paused=1` until HTTPS production host, explicit live Stripe/site config, policy approval, webhook setup, and one intentional low-risk real payment test pass. Current evidence: `workstreams/ecommerce-audit/phase-5-delivery-payment-operator-packet-2026-05-10.md` and `workstreams/ecommerce-audit/phase-6-launch-decision-packet-2026-05-10.md`. Safe wording: local ecommerce implementation is complete to the non-live boundary; live launch is an owner/access cutover.
 
