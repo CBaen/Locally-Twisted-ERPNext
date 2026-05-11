@@ -37,6 +37,7 @@ def run() -> dict[str, Any]:
         "book": _read(app_root / "www" / "book.py"),
         "checkout_html": _read(app_root / "www" / "checkout.html"),
         "checkout": _read(app_root / "www" / "checkout.py"),
+        "privacy_html": _read(app_root / "www" / "privacy.html"),
         "newsletter_js": _read(app_root / "public" / "js" / "lt-newsletter.js"),
         "newsletter": _read(app_root / "api" / "newsletter.py"),
         "footer": _read(app_root / "templates" / "includes" / "footer" / "footer.html"),
@@ -54,6 +55,7 @@ def run() -> dict[str, Any]:
         _checkout_surface(sources),
         _paid_order_message_surface(sources),
         _newsletter_surface(sources),
+        _email_use_notice_surface(sources),
         _shop_search_surface(sources),
         _direct_link_surface(app_root),
         _product_cart_surface(app_root),
@@ -242,12 +244,48 @@ def _newsletter_surface(sources: dict[str, str]) -> dict[str, Any]:
     )
 
 
+def _email_use_notice_surface(sources: dict[str, str]) -> dict[str, Any]:
+    failures = []
+    failures.extend(_missing(
+        sources["checkout_html"],
+        (
+            "Email (for receipt, invoice, and order updates)",
+            "separate from order emails",
+            "We do not add checkout emails to marketing",
+            "If you check the offers box above or join the newsletter",
+        ),
+    ))
+    failures.extend(_missing(
+        sources["footer"],
+        (
+            "Joining signs you up for marketing emails; order and invoice emails are separate.",
+        ),
+    ))
+    failures.extend(_missing(
+        sources["privacy_html"],
+        (
+            "Order emails and marketing emails",
+            "We do not add that email to marketing lists",
+            "Marketing emails include an unsubscribe option.",
+        ),
+    ))
+    return _surface(
+        "email_use_notice",
+        "checkout email and newsletter opt-in copy",
+        ["/checkout", "footer newsletter form", "/privacy"],
+        False,
+        False,
+        failures,
+        "Checkout email use is described as transactional/order-related, while newsletter and marketing emails require separate opt-in copy.",
+    )
+
+
 def _shop_search_surface(sources: dict[str, str]) -> dict[str, Any]:
     failures = _missing(
         sources["navbar"],
         (
             "lt-site-search-panel__form",
-            "action=\"/contact\"",
+            "action=\"{% if ecommerce_paused %}/contact{% else %}/shop{% endif %}\"",
             "method=\"get\"",
         ),
     )

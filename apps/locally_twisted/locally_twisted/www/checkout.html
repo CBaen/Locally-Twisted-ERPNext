@@ -13,7 +13,7 @@
         <div class="lt-checkout__main">
             <h1 class="lt-checkout__title">Checkout</h1>
             <p class="lt-checkout__subtitle">
-                No account required. We&rsquo;ll send a receipt to the email you give us.
+                No account required. We&rsquo;ll use your email for your receipt, invoice, pickup or delivery updates, and order questions.
             </p>
 
         <form id="lt-checkout-form" class="lt-checkout__form" novalidate data-mode="{{ mode }}">
@@ -38,7 +38,7 @@
             </div>
 
             <div class="lt-checkout__field">
-                <label for="co-email">Email (we&rsquo;ll send your receipt here) <span class="lt-checkout__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></label>
+                <label for="co-email">Email (for receipt, invoice, and order updates) <span class="lt-checkout__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></label>
                 <input type="email" id="co-email" name="email" class="lt-checkout__input" required autocomplete="email">
             </div>
 
@@ -119,12 +119,14 @@
                 <input type="checkbox" id="co-marketing" name="marketing_opt_in" value="1"
                        style="margin-top: 0.25rem; flex-shrink: 0; width: auto; min-height: 0;">
                 <label for="co-marketing" style="margin: 0; font-weight: 400; font-size: 0.9rem; color: var(--lt-soft-gray); line-height: 1.4;">
-                    Send me occasional offers and updates from Locally Twisted (optional &mdash; not required to purchase).
+                    Yes, send me occasional offers and updates from Locally Twisted. This is optional and separate from order emails.
                 </label>
             </div>
 
             <p class="lt-checkout__notice">
-                We use this info to fulfill your order and send your receipt. By continuing,
+                Checkout emails are for your receipt, invoice, payment, pickup or delivery, and order-support details.
+                We do not add checkout emails to marketing. If you check the offers box above or join the newsletter,
+                you may receive marketing emails and can unsubscribe from those. By continuing,
                 you agree to our
                 <a href="/terms-of-service#ready-to-order-pickup-delivery">pickup and delivery terms</a>
                 and
