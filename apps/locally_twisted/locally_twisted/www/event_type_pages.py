@@ -772,6 +772,23 @@ EVENT_TYPE_PAGES = {
         "quote_href": "/contact?intent=quote&source=schools-campuses",
         "support_href": "/portfolio?event=school",
         "support_label": "See School Work",
+        "named_orgs": {
+            # TODO(GL): Confirm which of these names LT has genuinely installed for.
+            "names": [
+                "University of Utah",
+                "Weber State",
+                "St. Joseph's",
+                "Tree House Museum",
+                "Sea Quest",
+                "Safe Kids Fair",
+                "Western Sports Park",
+                "Graduations",
+                "Back-to-School Events",
+                "Assemblies",
+                "Athletics",
+                "Family Nights",
+            ],
+        },
         "proof": [
             ("School-color clarity", "Decor should read instantly in gyms, commons areas, stages, entrances, and outdoor arrival points."),
             ("Schedule-aware setup", "School events have bell schedules, family arrival times, custodial access, and tight teardown windows."),
