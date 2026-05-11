@@ -1,0 +1,304 @@
+#!/usr/bin/env python3
+"""Build ERPNext/Frappe ProductPatternContract architecture report.
+
+This verifier is read-only. It joins the reusable Odoo option-pattern mapper
+with current ERPNext Website Item, Item, Item Price, and variant-attribute rows.
+It classifies all source product pages by generic architecture capability, not
+by product-name exceptions.
+
+Run:
+  python scripts/verify/product_pattern_contract.py
+  python scripts/verify/product_pattern_contract.py --json
+  python scripts/verify/product_pattern_contract.py --report output/product-pattern-contract.json
+"""
+from __future__ import annotations
+
+import argparse
+import csv
+import json
+import subprocess
+import sys
+from datetime import UTC, datetime
+from io import StringIO
+from pathlib import Path
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[2]
+APP_PATH = ROOT / "apps" / "locally_twisted"
+if str(APP_PATH) not in sys.path:
+    sys.path.insert(0, str(APP_PATH))
+
+from locally_twisted.catalog_contract.erpnext_pattern_contract import build_erpnext_product_pattern_report
+from locally_twisted.catalog_contract.pattern_mapper import build_product_pattern_report
+
+
+CONTAINER = "locally-twisted-erpnext-v15-backend-1"
+SITE = "frontend"
+SOURCE_CATALOG = ROOT / "_resources" / "odoo-live" / "catalog.json"
+DEFAULT_REPORT = ROOT / "output" / "product-pattern-contract.json"
+DEFAULT_MARKDOWN = ROOT / "output" / "product-pattern-contract.md"
+
+
+class ProductPatternContractFail(Exception):
+    pass
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--json", action="store_true", help="Print full ProductPatternContract JSON")
+    parser.add_argument("--report", help="Write ProductPatternContract JSON to this path")
+    parser.add_argument("--markdown", help="Write Markdown report to this path")
+    args = parser.parse_args()
+
+    try:
+        source = _source_catalog()
+        products = list(source.get("products") or [])
+        source_artifact = _source_pattern_artifact(source, products)
+        erpnext_rows = _erpnext_rows([str(row.get("slug") or "") for row in products if row.get("slug")])
+        report = build_erpnext_product_pattern_report(
+            source_artifact,
+            erpnext_rows,
+            metadata={
+                "generated_at": datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
+                "source_catalog": str(SOURCE_CATALOG.relative_to(ROOT)),
+                "source_scraped_at": source.get("scraped_at"),
+                "erpnext_site": SITE,
+                "erpnext_container": CONTAINER,
+                "logic_note": "Product names are examples only; capability is classified from source patterns and ERPNext records.",
+            },
+        )
+    except ProductPatternContractFail as exc:
+        print(f"[PRODUCT PATTERN CONTRACT] FAIL\n  - {exc}")
+        return 1
+
+    artifact = report.to_artifact()
+    failures = _contract_failures(artifact)
+
+    report_path = _rooted(args.report) if args.report else DEFAULT_REPORT
+    markdown_path = _rooted(args.markdown) if args.markdown else DEFAULT_MARKDOWN
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    markdown_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text(json.dumps(artifact, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    markdown_path.write_text(report.to_markdown(), encoding="utf-8")
+
+    print(f"[PRODUCT PATTERN CONTRACT] wrote {report_path.relative_to(ROOT)}")
+    print(f"[PRODUCT PATTERN CONTRACT] wrote {markdown_path.relative_to(ROOT)}")
+    if args.json:
+        print(json.dumps(artifact, indent=2, sort_keys=True))
+    else:
+        _print_summary(artifact, failures)
+
+    return 0 if not failures else 2
+
+
+def _source_catalog() -> dict[str, Any]:
+    if not SOURCE_CATALOG.exists():
+        raise ProductPatternContractFail(f"missing source catalog: {SOURCE_CATALOG.relative_to(ROOT)}")
+    data = json.loads(SOURCE_CATALOG.read_text(encoding="utf-8"))
+    if not isinstance(data, dict) or not isinstance(data.get("products"), list):
+        raise ProductPatternContractFail("source catalog must be an object with products list")
+    return data
+
+
+def _source_pattern_artifact(source: dict[str, Any], products: list[dict[str, Any]]) -> dict[str, Any]:
+    report = build_product_pattern_report(
+        products,
+        metadata={
+            "source_catalog": str(SOURCE_CATALOG.relative_to(ROOT)),
+            "source_scraped_at": source.get("scraped_at"),
+        },
+    )
+    artifact = report.to_artifact()
+    raw_by_slug = {str(row.get("slug") or ""): row for row in products}
+    for row in artifact.get("products") or []:
+        raw = raw_by_slug.get(str(row.get("slug") or "")) or {}
+        row["source_rows"] = [
+            {
+                "combo": dict(source_row.get("combo") or {}),
+                "price": source_row.get("erpnext_variant_price", source_row.get("price")),
+            }
+            for source_row in raw.get("valid_variants") or []
+            if isinstance(source_row, dict)
+        ]
+    return artifact
+
+
+def _erpnext_rows(slugs: list[str]) -> dict[str, list[dict[str, Any]]]:
+    if not slugs:
+        raise ProductPatternContractFail("no source slugs available")
+    quoted = ", ".join(_sql_literal(slug) for slug in sorted(set(slugs)))
+    queries = {
+        "website_items": f"""
+select
+  name,
+  item_code,
+  web_item_name,
+  route,
+  published,
+  item_group,
+  lt_product_page_type,
+  lt_commerce_lane
+from `tabWebsite Item`
+where item_code in ({quoted})
+order by item_code;
+""",
+        "items": f"""
+select
+  name,
+  item_code,
+  item_name,
+  item_group,
+  has_variants,
+  variant_of,
+  disabled,
+  image
+from tabItem
+where item_code in ({quoted}) or variant_of in ({quoted})
+order by coalesce(nullif(variant_of, ''), item_code), item_code;
+""",
+        "item_prices": f"""
+select
+  ip.item_code,
+  ip.price_list,
+  ip.selling,
+  ip.price_list_rate,
+  ip.currency
+from `tabItem Price` ip
+join tabItem i on i.item_code = ip.item_code
+where ip.price_list = 'Standard Selling'
+  and ip.selling = 1
+  and (i.item_code in ({quoted}) or i.variant_of in ({quoted}))
+order by ip.item_code;
+""",
+        "variant_attributes": f"""
+select
+  iva.parent,
+  iva.attribute,
+  iva.attribute_value
+from `tabItem Variant Attribute` iva
+join tabItem i on i.name = iva.parent
+where i.item_code in ({quoted}) or i.variant_of in ({quoted})
+order by iva.parent, iva.idx;
+""",
+        "line_fields": f"""
+select dt, fieldname
+from `tabCustom Field`
+where dt in ('Sales Order Item', 'Sales Invoice Item')
+  and fieldname in (
+    'custom_lt_product_template_item',
+    'custom_lt_product_page_type',
+    'custom_lt_configuration_version',
+    'custom_lt_configuration_summary',
+    'custom_lt_configuration_json'
+  )
+union
+select parent as dt, fieldname
+from tabDocField
+where parent in ('Sales Order Item', 'Sales Invoice Item')
+  and fieldname in (
+    'custom_lt_product_template_item',
+    'custom_lt_product_page_type',
+    'custom_lt_configuration_version',
+    'custom_lt_configuration_summary',
+    'custom_lt_configuration_json'
+  )
+order by dt, fieldname;
+""",
+    }
+    return {name: _mariadb_dicts(query) for name, query in queries.items()}
+
+
+def _mariadb_dicts(query: str) -> list[dict[str, Any]]:
+    cmd = [
+        "docker",
+        "exec",
+        CONTAINER,
+        "bench",
+        "--site",
+        SITE,
+        "mariadb",
+        "--batch",
+        "--raw",
+        "--execute",
+        "set SQL_SELECT_LIMIT=DEFAULT;\n" + query.strip(),
+    ]
+    proc = subprocess.run(cmd, text=True, encoding="utf-8", capture_output=True, timeout=120)
+    if proc.returncode != 0:
+        raise ProductPatternContractFail(
+            f"mariadb query failed\nQUERY:\n{query}\nSTDOUT:\n{proc.stdout}\nSTDERR:\n{proc.stderr}"
+        )
+    output = proc.stdout.strip()
+    if not output:
+        return []
+    reader = csv.DictReader(StringIO(output), delimiter="\t")
+    return [dict(row) for row in reader]
+
+
+def _contract_failures(artifact: dict[str, Any]) -> list[str]:
+    failures: list[str] = []
+    if artifact.get("schema_version") != "lt-erpnext-product-pattern-contract-v1":
+        failures.append("unexpected schema_version")
+    if artifact.get("read_only") is not True:
+        failures.append("artifact must be read_only")
+    if artifact.get("destructive_allowed") is not False:
+        failures.append("artifact must not allow destructive action")
+    summary = artifact.get("summary") or {}
+    if int(summary.get("source_products") or 0) != 53:
+        failures.append(f"expected 53 source products, found {summary.get('source_products')}")
+    if int(summary.get("explicit_checkout_products") or 0) != 18:
+        failures.append(
+            "current explicit checkout product count changed; expected 18, "
+            f"found {summary.get('explicit_checkout_products')}"
+        )
+    products = artifact.get("products")
+    if not isinstance(products, list):
+        return failures + ["products must be a list"]
+    for row in products:
+        if not row.get("slug"):
+            failures.append("product row missing slug")
+        if not row.get("capability"):
+            failures.append(f"{row.get('slug')} missing capability")
+        if not isinstance(row.get("server_boundary"), dict):
+            failures.append(f"{row.get('slug')} missing server_boundary")
+        if not isinstance(row.get("checkout_eligibility"), dict):
+            failures.append(f"{row.get('slug')} missing checkout_eligibility")
+    return failures
+
+
+def _print_summary(artifact: dict[str, Any], failures: list[str]) -> None:
+    summary = artifact.get("summary") or {}
+    print("[PRODUCT PATTERN CONTRACT] " + ("PASS" if not failures else "FAIL"))
+    print(f"  source_products: {summary.get('source_products')}")
+    print(f"  explicit_checkout_products: {summary.get('explicit_checkout_products')}")
+    print(f"  direct_checkout_ready_products: {summary.get('direct_checkout_ready_products')}")
+    print(f"  quote_first_supported_products: {summary.get('quote_first_supported_products')}")
+    print(f"  missing_or_needs_review_products: {summary.get('missing_or_needs_review_products')}")
+    print(f"  capability_counts: {_format_counts(summary.get('capability_counts') or {})}")
+    print(f"  website_lane_counts: {_format_counts(summary.get('website_lane_counts') or {})}")
+    print(f"  checkout_blocker_counts: {_format_counts(summary.get('checkout_blocker_counts') or {})}")
+    if failures:
+        print("  failures:")
+        for failure in failures:
+            print(f"    - {failure}")
+
+
+def _format_counts(counts: dict[str, int]) -> str:
+    if not counts:
+        return "none"
+    return ", ".join(f"{key}={value}" for key, value in sorted(counts.items()))
+
+
+def _sql_literal(value: str) -> str:
+    return "'" + value.replace("\\", "\\\\").replace("'", "''") + "'"
+
+
+def _rooted(path: str) -> Path:
+    candidate = Path(path)
+    if not candidate.is_absolute():
+        candidate = ROOT / candidate
+    return candidate.resolve()
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -97,11 +97,19 @@ def main() -> int:
     summary = result.get("summary") or {}
     print("[PRODUCT PATTERN CONTRACT REPORT] " + ("PASS" if result.get("ok") else "FAIL"))
     print(f"  - report: {output}")
+    print(f"  - inventory_ok: {result.get('inventory_ok')}")
+    print(f"  - checkout_gate_ok: {result.get('checkout_gate_ok')}")
+    print(f"  - published Website Items: {result.get('published_website_item_count')}")
     print(f"  - priced Website Items: {result.get('priced_website_item_count')}")
     print(f"  - checkout statuses: {summary.get('checkout_status_counts')}")
     print(f"  - fail-loud states: {summary.get('fail_loud_state_counts')}")
+    for failure in result.get("inventory_failures") or []:
+        print(f"  - inventory: {failure}")
+    for failure in result.get("checkout_gate_failures") or []:
+        print(f"  - checkout: {failure}")
     for failure in result.get("failures") or []:
-        print(f"  - {failure}")
+        if failure not in (result.get("inventory_failures") or []) and failure not in (result.get("checkout_gate_failures") or []):
+            print(f"  - {failure}")
     return 0 if result.get("ok") else 1
 
 

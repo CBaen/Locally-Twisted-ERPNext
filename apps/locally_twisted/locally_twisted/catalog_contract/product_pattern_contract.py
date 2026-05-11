@@ -18,6 +18,9 @@ from locally_twisted.catalog_contract.addon_rules import (
     known_add_on_contracts_for_axis,
 )
 from locally_twisted.catalog_contract.color_rules import is_balloon_color_axis
+from locally_twisted.catalog_contract.pattern_mapper import (
+    build_product_pattern_contract as build_source_pattern_contract,
+)
 
 
 SCHEMA_VERSION = "lt-product-pattern-contract-v1"
@@ -42,10 +45,12 @@ CheckoutStatus = Literal[
 FailLoudState = Literal[
     "missing_price",
     "review_only_add_on",
+    "unpriced_add_on",
     "unsupported_customization_payload",
     "media_uncertainty",
     "dependency_mismatch",
 ]
+ResolverMode = Literal["checkout", "quote", "report"]
 
 
 LINE_CONFIGURATION_FIELDS = {
@@ -88,6 +93,7 @@ class AxisContract:
     pricing_required: bool = True
     allows_multiple_values: bool = False
     add_on_key: str = ""
+    add_on_contract: dict[str, Any] = field(default_factory=dict)
     review_reason: str = ""
     notes: tuple[str, ...] = field(default_factory=tuple)
 
@@ -171,6 +177,10 @@ class ProductPatternContract:
     checkout_eligibility: CheckoutEligibility
     cart_contract: dict[str, Any]
     order_preservation_contract: dict[str, Any]
+    source_patterns: tuple[str, ...] = field(default_factory=tuple)
+    source_integrity: dict[str, Any] = field(default_factory=dict)
+    source_import_requirements: tuple[str, ...] = field(default_factory=tuple)
+    source_pattern_contract: dict[str, Any] = field(default_factory=dict)
     import_implications: tuple[str, ...] = field(default_factory=tuple)
     warnings: tuple[str, ...] = field(default_factory=tuple)
 
@@ -208,6 +218,7 @@ def build_product_pattern_contract(
 
     source_product = source_product or {}
     slug = _clean(erpnext_product.get("item_code") or source_product.get("slug"))
+    source_pattern = _source_pattern_contract(source_product)
     axis_contracts = _axis_contracts(source_product, erpnext_product)
     pricing = _pricing_provenance(source_product, erpnext_product)
     media = _media_contract(source_product, erpnext_product)
@@ -233,8 +244,14 @@ def build_product_pattern_contract(
         checkout_eligibility=checkout,
         cart_contract=_cart_contract(axis_contracts),
         order_preservation_contract=_order_preservation_contract(),
-        import_implications=_import_implications(axis_contracts, pricing, dependency_matrix),
-        warnings=_warnings(source_product, erpnext_product, pricing, media),
+        source_patterns=tuple(str(pattern) for pattern in source_pattern.get("patterns") or ()),
+        source_integrity=dict(source_pattern.get("source_integrity") or {}),
+        source_import_requirements=tuple(
+            str(requirement) for requirement in source_pattern.get("erpnext_contract_requirements") or ()
+        ),
+        source_pattern_contract=source_pattern,
+        import_implications=_import_implications(axis_contracts, pricing, dependency_matrix, source_pattern),
+        warnings=_warnings(source_product, erpnext_product, pricing, media, source_pattern),
     )
 
 
@@ -244,6 +261,7 @@ def resolve_product_pattern_selection(
     *,
     item_resolver: Callable[[dict[str, str]], str | None] | None = None,
     price_resolver: Callable[[str], Decimal | str | float | int | None] | None = None,
+    mode: ResolverMode = "checkout",
 ) -> ProductPatternResolution:
     """Validate a selected configuration against a contract.
 
@@ -253,6 +271,7 @@ def resolve_product_pattern_selection(
 
     if not isinstance(selected_config, dict):
         raise ProductPatternContractError("selected_config must be a dict")
+    _enforce_resolver_mode(contract, mode)
 
     selected_options = _selected_options(contract, selected_config)
     customization_payload = _customization_payload(contract, selected_config)
@@ -278,6 +297,8 @@ def resolve_product_pattern_selection(
         "customizations": customization_payload,
         "source": SCHEMA_VERSION,
     }
+    add_on_total = sum(_decimal(line.get("amount")) or Decimal("0") for line in add_on_lines)
+    base_price = _decimal(price) or Decimal("0")
     summary = _summary(contract, selected_options, customization_payload, add_on_lines)
     return ProductPatternResolution(
         item_code=item_code,
@@ -288,6 +309,8 @@ def resolve_product_pattern_selection(
         cart_line_key=_cart_line_key(item_code, payload),
         total_provenance={
             "base_item_price": _money(price),
+            "add_on_total": _money(add_on_total),
+            "grand_total": _money(base_price + add_on_total),
             "price_list": contract.pricing.price_list,
             "pricing_status": contract.pricing.status,
             "add_on_line_count": len(add_on_lines),
@@ -303,7 +326,7 @@ def _axis_contracts(source_product: dict[str, Any], erpnext_product: dict[str, A
 
     for axis_name, axis in source_axes.items():
         values = _source_axis_values(axis)
-        contracts[str(axis_name)] = _axis_contract_from_source(str(axis_name), values, axis)
+        contracts[str(axis_name)] = _axis_contract_from_source(str(axis_name), values, axis, erpnext_product)
 
     for axis_name, values in erpnext_axes.items():
         clean_name = str(axis_name)
@@ -321,6 +344,7 @@ def _axis_contracts(source_product: dict[str, Any], erpnext_product: dict[str, A
                 pricing_required=existing.pricing_required,
                 allows_multiple_values=existing.allows_multiple_values,
                 add_on_key=existing.add_on_key,
+                add_on_contract=existing.add_on_contract,
                 review_reason=existing.review_reason,
                 notes=existing.notes,
             )
@@ -339,23 +363,32 @@ def _axis_contracts(source_product: dict[str, Any], erpnext_product: dict[str, A
     return tuple(contracts[name] for name in sorted(contracts))
 
 
-def _axis_contract_from_source(axis_name: str, values: tuple[str, ...], axis: dict[str, Any]) -> AxisContract:
+def _axis_contract_from_source(
+    axis_name: str,
+    values: tuple[str, ...],
+    axis: dict[str, Any],
+    erpnext_product: dict[str, Any],
+) -> AxisContract:
     classification = classify_axis(axis_name)
     selector_type = _selector_type(axis_name, values, axis)
     add_on_contracts = known_add_on_contracts_for_axis(axis_name)
     notes: list[str] = []
 
     if classification.status == "optional_addon":
-        add_on_key = _clean((add_on_contracts[0] or {}).get("key") if add_on_contracts else "")
+        add_on_contract = _add_on_contract(axis_name, add_on_contracts, erpnext_product)
+        add_on_key = _clean(add_on_contract.get("key"))
+        if not _add_on_contract_ready(add_on_contract):
+            notes.append("Confirmed add-on is missing live ERPNext item/price validation.")
         return AxisContract(
             name=axis_name,
             role="add_on",
             values=values,
             selector_type="add_on_control",
-            status="ready" if add_on_key else "needs_mapping",
+            status="ready" if _add_on_contract_ready(add_on_contract) else "needs_mapping",
             pricing_required=True,
             add_on_key=add_on_key,
-            notes=(classification.note,),
+            add_on_contract=add_on_contract,
+            notes=tuple([classification.note, *notes]),
         )
 
     if classification.status == "needs_review":
@@ -428,6 +461,58 @@ def _pricing_provenance(source_product: dict[str, Any], erpnext_product: dict[st
         representative_item_code=_clean(erpnext_product.get("representative_item_code")),
         representative_price=representative_price,
         notes=tuple(notes),
+    )
+
+
+def _add_on_contract(
+    axis_name: str,
+    add_on_contracts: list[dict],
+    erpnext_product: dict[str, Any],
+) -> dict[str, Any]:
+    contract = dict(add_on_contracts[0] if add_on_contracts else {})
+    if not contract:
+        return {}
+    item_code = _clean(contract.get("item_code"))
+    live_prices = erpnext_product.get("add_on_prices_by_item")
+    live_price = None
+    if isinstance(live_prices, dict):
+        live_price = _money_or_none(live_prices.get(item_code))
+    unit_price = _money_or_none(contract.get("unit_price"))
+    price_status = "ready"
+    notes: list[str] = []
+    if not item_code:
+        price_status = "missing_item_code"
+        notes.append("Add-on contract is missing an ERPNext item_code.")
+    elif isinstance(live_prices, dict) and live_price is None:
+        price_status = "missing_live_item_price"
+        notes.append(f"No live {STANDARD_PRICE_LIST} Item Price found for add-on item {item_code}.")
+    elif live_price is not None and unit_price is not None and _decimal(live_price) != _decimal(unit_price):
+        price_status = "price_conflict"
+        notes.append(f"Live add-on price {live_price} differs from contract unit price {unit_price}.")
+    return {
+        **contract,
+        "source_attribute": axis_name,
+        "item_code": item_code,
+        "unit_price": unit_price,
+        "live_unit_price": live_price,
+        "price_list": STANDARD_PRICE_LIST,
+        "price_status": price_status,
+        "ready_for_checkout": price_status == "ready",
+        "quantity_min": int(contract.get("quantity_min") or 1),
+        "quantity_max": int(contract.get("quantity_max") or 1),
+        "requires_value": bool(contract.get("requires_value")),
+        "receipt_label": _clean(contract.get("receipt_label") or contract.get("label")),
+        "notes": tuple(notes),
+    }
+
+
+def _add_on_contract_ready(contract: dict[str, Any]) -> bool:
+    return bool(
+        contract
+        and contract.get("key")
+        and contract.get("item_code")
+        and contract.get("unit_price") not in (None, "")
+        and contract.get("ready_for_checkout") is not False
     )
 
 
@@ -538,9 +623,12 @@ def _checkout_eligibility(
 
     review_axes = [axis.name for axis in axes if axis.role == "review_only"]
     unmapped_addons = [axis.name for axis in axes if axis.role == "add_on" and axis.status != "ready"]
-    if review_axes or unmapped_addons:
+    if review_axes:
         fail_loud.append("review_only_add_on")
-        required_work.append("Map add-on axes to priced add-on Items or keep them in quote/review payloads.")
+        required_work.append("Keep review-only add-on axes in quote/review payloads until mapping is approved.")
+    if unmapped_addons:
+        fail_loud.append("unpriced_add_on")
+        required_work.append("Map confirmed add-ons to priced ERPNext add-on Items with quantity/value validation.")
 
     customization_axes = [axis.name for axis in axes if axis.role == "customization"]
     if customization_axes:
@@ -557,7 +645,7 @@ def _checkout_eligibility(
 
     if "missing_price" in fail_loud:
         status: CheckoutStatus = "needs_pricing"
-    elif "review_only_add_on" in fail_loud:
+    elif "review_only_add_on" in fail_loud or "unpriced_add_on" in fail_loud:
         status = "needs_add_on_pricing"
     elif "unsupported_customization_payload" in fail_loud:
         status = "needs_customization_payload"
@@ -616,11 +704,29 @@ def _customization_payload(contract: ProductPatternContract, selected_config: di
     return customizations
 
 
+def _enforce_resolver_mode(contract: ProductPatternContract, mode: ResolverMode) -> None:
+    if mode not in {"checkout", "quote", "report"}:
+        raise ProductPatternContractError(f"unknown resolver mode: {mode}")
+    if mode != "checkout":
+        return
+    if contract.checkout_eligibility.status != "checkout_ready":
+        raise ProductPatternContractError(
+            f"contract is not checkout-ready: {contract.checkout_eligibility.status}"
+        )
+    if contract.checkout_eligibility.fail_loud_states:
+        states = ", ".join(contract.checkout_eligibility.fail_loud_states)
+        raise ProductPatternContractError(f"contract has fail-loud states: {states}")
+
+
 def _add_on_lines(contract: ProductPatternContract, selected_config: dict[str, Any]) -> list[dict[str, Any]]:
     add_ons = selected_config.get("add_ons") or []
     if not isinstance(add_ons, list):
         raise ProductPatternContractError("add_ons must be a list")
-    allowed = {axis.add_on_key for axis in contract.axis_contracts if axis.role == "add_on" and axis.add_on_key}
+    allowed = {
+        axis.add_on_key: axis
+        for axis in contract.axis_contracts
+        if axis.role == "add_on" and axis.add_on_key
+    }
     review_only = {axis.name for axis in contract.axis_contracts if axis.role == "review_only"}
     result = []
     for row in add_ons:
@@ -631,8 +737,66 @@ def _add_on_lines(contract: ProductPatternContract, selected_config: dict[str, A
             if review_only:
                 raise ProductPatternContractError(f"review-only add-on axis cannot checkout yet: {sorted(review_only)}")
             raise ProductPatternContractError(f"unknown add-on key for product contract: {key}")
-        result.append(dict(row))
+        axis = allowed[key]
+        contract_row = axis.add_on_contract
+        if not _add_on_contract_ready(contract_row):
+            raise ProductPatternContractError(f"add-on is not priced for checkout: {axis.name}")
+        quantity = _add_on_quantity(row, contract_row)
+        selected_value = _clean(row.get("value") or row.get("selected_value"))
+        if contract_row.get("requires_value") and not selected_value:
+            raise ProductPatternContractError(f"add-on {axis.name} requires a selected value")
+        if selected_value and axis.values and selected_value not in axis.values:
+            raise ProductPatternContractError(f"invalid add-on value for {axis.name}: {selected_value}")
+        unit_price = _decimal(contract_row.get("live_unit_price") or contract_row.get("unit_price"))
+        if unit_price is None:
+            raise ProductPatternContractError(f"add-on {axis.name} missing unit price")
+        amount = unit_price * Decimal(quantity)
+        result.append(
+            {
+                "key": key,
+                "source_axis": axis.name,
+                "item_code": contract_row["item_code"],
+                "label": _clean(contract_row.get("label")),
+                "receipt_label": _clean(contract_row.get("receipt_label") or contract_row.get("label")),
+                "selected_value": selected_value,
+                "quantity": quantity,
+                "unit_price": _money(unit_price),
+                "amount": _money(amount),
+                "price_list": contract_row.get("price_list") or STANDARD_PRICE_LIST,
+                "summary": _add_on_summary(contract_row, selected_value, quantity, amount),
+            }
+        )
     return result
+
+
+def _add_on_quantity(row: dict[str, Any], contract_row: dict[str, Any]) -> int:
+    raw = row.get("quantity", row.get("qty", 1))
+    try:
+        quantity = int(raw)
+    except (TypeError, ValueError):
+        raise ProductPatternContractError(f"invalid add-on quantity: {raw}") from None
+    minimum = int(contract_row.get("quantity_min") or 1)
+    maximum = int(contract_row.get("quantity_max") or minimum)
+    if quantity < minimum or quantity > maximum:
+        raise ProductPatternContractError(
+            f"add-on quantity {quantity} outside allowed range {minimum}-{maximum}"
+        )
+    return quantity
+
+
+def _add_on_summary(
+    contract_row: dict[str, Any],
+    selected_value: str,
+    quantity: int,
+    amount: Decimal,
+) -> str:
+    label = _clean(contract_row.get("receipt_label") or contract_row.get("label") or contract_row.get("key"))
+    pieces = [label]
+    if selected_value:
+        pieces.append(selected_value)
+    pieces.append(f"qty {quantity}")
+    pieces.append(f"${_money(amount)}")
+    return " - ".join(pieces)
 
 
 def _cart_contract(axes: tuple[AxisContract, ...]) -> dict[str, Any]:
@@ -642,6 +806,9 @@ def _cart_contract(axes: tuple[AxisContract, ...]) -> dict[str, Any]:
         "sale_unit_axes": [axis.name for axis in axes if axis.role == "sale_unit"],
         "customization_axes": [axis.name for axis in axes if axis.role == "customization"],
         "add_on_axes": [axis.name for axis in axes if axis.role == "add_on"],
+        "add_on_contracts": [
+            axis.add_on_contract for axis in axes if axis.role == "add_on" and axis.add_on_contract
+        ],
         "review_only_axes": [axis.name for axis in axes if axis.role == "review_only"],
     }
 
@@ -652,6 +819,8 @@ def _order_preservation_contract() -> dict[str, Any]:
         "summary_required": True,
         "json_required": True,
         "receipt_label_source": "custom_lt_configuration_summary/custom_lt_configuration_json",
+        "add_on_line_detail_required": True,
+        "add_on_line_fields": ("item_code", "qty", "rate", "amount", "description"),
     }
 
 
@@ -659,8 +828,10 @@ def _import_implications(
     axes: tuple[AxisContract, ...],
     pricing: PricingProvenance,
     dependency_matrix: DependencyMatrixContract,
+    source_pattern: dict[str, Any],
 ) -> tuple[str, ...]:
     implications: list[str] = []
+    implications.extend(str(value) for value in source_pattern.get("import_implications") or ())
     if any(axis.role == "sale_unit" for axis in axes):
         implications.append("Create/import only enabled sale-unit Items that resolve from required axes.")
     if any(axis.role == "customization" for axis in axes):
@@ -681,6 +852,7 @@ def _warnings(
     erpnext_product: dict[str, Any],
     pricing: PricingProvenance,
     media: MediaRoleContract,
+    source_pattern: dict[str, Any],
 ) -> tuple[str, ...]:
     warnings: list[str] = []
     if source_product and _clean(source_product.get("slug")) != _clean(erpnext_product.get("item_code")):
@@ -689,7 +861,15 @@ def _warnings(
         warnings.extend(pricing.notes)
     if media.status != "ready":
         warnings.extend(media.notes)
+    if source_product and not source_pattern:
+        warnings.append("Source product could not be classified by Odoo option-pattern mapper.")
     return tuple(dict.fromkeys(warnings))
+
+
+def _source_pattern_contract(source_product: dict[str, Any]) -> dict[str, Any]:
+    if not source_product:
+        return {}
+    return build_source_pattern_contract(source_product).to_dict()
 
 
 def _source_axis_values(axis: Any) -> tuple[str, ...]:
@@ -755,7 +935,9 @@ def _summary(
     if customizations:
         pieces.append("Customizations preserved in structured payload")
     if add_ons:
-        pieces.append("Add-ons preserved in structured payload")
+        pieces.append(
+            "Add-ons - " + ", ".join(_clean(row.get("summary")) for row in add_ons if row.get("summary"))
+        )
     return "; ".join(pieces)
 
 

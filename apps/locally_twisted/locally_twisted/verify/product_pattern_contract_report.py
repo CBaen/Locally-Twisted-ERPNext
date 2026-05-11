@@ -15,6 +15,7 @@ from locally_twisted.catalog_contract.product_pattern_contract import (
     STANDARD_PRICE_LIST,
     build_product_pattern_contract,
 )
+from locally_twisted.catalog_contract.addon_rules import known_add_on_contracts_for_axis
 
 
 EXPECTED_PRICED_WEBSITE_ITEMS = 53
@@ -27,7 +28,8 @@ def run(source_catalog: dict[str, Any] | None = None, source_catalog_path: str |
         for product in source.get("products") or []
         if product.get("slug")
     }
-    erpnext_products = _erpnext_priced_website_items()
+    add_on_prices = _add_on_prices_for_source(source_products.values())
+    erpnext_products = _erpnext_published_website_items(add_on_prices)
     contracts = [
         build_product_pattern_contract(
             source_product=source_products.get(row["item_code"]),
@@ -47,21 +49,29 @@ def run(source_catalog: dict[str, Any] | None = None, source_catalog_path: str |
         for row in rows
         for axis in row.get("axis_contracts") or []
     )
-    failures = _failures(rows, source_products)
+    line_field_status = _line_field_status()
+    inventory_failures = _inventory_failures(rows, source_products)
+    checkout_failures = _checkout_gate_failures(rows, line_field_status)
+    failures = inventory_failures + checkout_failures
     return {
         "ok": not failures,
+        "inventory_ok": not inventory_failures,
+        "checkout_gate_ok": not checkout_failures,
         "schema_version": SCHEMA_VERSION,
         "generated_at": now_datetime().isoformat(),
         "read_only": True,
         "destructive_allowed": False,
-        "scope": "all published Website Items with Standard Selling prices",
+        "scope": "all published Website Items, including rows with missing Standard Selling prices",
         "expected_priced_website_items": EXPECTED_PRICED_WEBSITE_ITEMS,
-        "priced_website_item_count": len(rows),
+        "published_website_item_count": len(rows),
+        "priced_website_item_count": sum(1 for row in rows if row["pricing"]["priced_sale_units"] > 0),
         "summary": {
             "checkout_status_counts": dict(sorted(status_counts.items())),
             "fail_loud_state_counts": dict(sorted(fail_loud_counts.items())),
             "axis_role_counts": dict(sorted(axis_role_counts.items())),
             "source_product_count": len(source_products),
+            "published_website_item_count": len(rows),
+            "priced_website_item_count": sum(1 for row in rows if row["pricing"]["priced_sale_units"] > 0),
         },
         "resolver_boundary": (
             "ProductPatternContract + selected_config -> exact item_code or priced representative item, "
@@ -83,16 +93,19 @@ def run(source_catalog: dict[str, Any] | None = None, source_catalog_path: str |
                 "custom_lt_configuration_json",
             ],
         },
+        "line_field_status": line_field_status,
+        "inventory_failures": inventory_failures,
+        "checkout_gate_failures": checkout_failures,
         "failures": failures,
         "products": rows,
     }
 
 
-def _failures(rows: list[dict[str, Any]], source_products: dict[str, dict[str, Any]]) -> list[str]:
+def _inventory_failures(rows: list[dict[str, Any]], source_products: dict[str, dict[str, Any]]) -> list[str]:
     failures = []
     if len(rows) != EXPECTED_PRICED_WEBSITE_ITEMS:
         failures.append(
-            f"expected {EXPECTED_PRICED_WEBSITE_ITEMS} priced Website Items, found {len(rows)}"
+            f"expected {EXPECTED_PRICED_WEBSITE_ITEMS} published Website Items, found {len(rows)}"
         )
     missing_source = sorted(row["slug"] for row in rows if row["slug"] not in source_products)
     if missing_source:
@@ -100,6 +113,50 @@ def _failures(rows: list[dict[str, Any]], source_products: dict[str, dict[str, A
     missing_routes = sorted(row["slug"] for row in rows if not row.get("route"))
     if missing_routes:
         failures.append(f"priced Website Items missing Website Item route: {missing_routes}")
+    return failures
+
+
+def _checkout_gate_failures(rows: list[dict[str, Any]], line_field_status: dict[str, Any]) -> list[str]:
+    failures = []
+    missing_price = sorted(row["slug"] for row in rows if row["pricing"]["status"] == "missing")
+    if missing_price:
+        failures.append(f"published Website Items missing Standard Selling prices: {missing_price}")
+    unresolved_checkout = sorted(
+        row["slug"]
+        for row in rows
+        if row.get("current_commerce_lane") == "checkout"
+        and row["checkout_eligibility"]["status"] != "checkout_ready"
+    )
+    if unresolved_checkout:
+        failures.append(f"checkout-lane products not checkout_ready: {unresolved_checkout}")
+    fail_loud_checkout = sorted(
+        row["slug"]
+        for row in rows
+        if row["checkout_eligibility"]["status"] == "checkout_ready"
+        and row["checkout_eligibility"].get("fail_loud_states")
+    )
+    if fail_loud_checkout:
+        failures.append(f"checkout_ready products still have fail-loud states: {fail_loud_checkout}")
+    unpriced_addons = sorted(
+        row["slug"]
+        for row in rows
+        for axis in row.get("axis_contracts") or []
+        if axis.get("role") == "add_on" and not (axis.get("add_on_contract") or {}).get("ready_for_checkout")
+    )
+    if unpriced_addons:
+        failures.append(f"products with unpriced add-on contracts: {sorted(set(unpriced_addons))}")
+    lost_mapper = sorted(
+        row["slug"]
+        for row in rows
+        if not row.get("source_patterns")
+        or not row.get("source_integrity")
+        or not row.get("source_pattern_contract")
+    )
+    if lost_mapper:
+        failures.append(f"products missing carried Odoo mapper contract semantics: {lost_mapper}")
+    missing_line_fields = line_field_status.get("missing") or {}
+    if any(missing_line_fields.values()):
+        failures.append(f"missing preservation line fields: {missing_line_fields}")
     return failures
 
 
@@ -114,7 +171,7 @@ def _load_source_catalog(source_catalog_path: str | None = None) -> dict[str, An
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def _erpnext_priced_website_items() -> list[dict[str, Any]]:
+def _erpnext_published_website_items(add_on_prices: dict[str, Any]) -> list[dict[str, Any]]:
     website_items = frappe.get_all(
         "Website Item",
         filters={"published": 1},
@@ -148,10 +205,9 @@ def _erpnext_priced_website_items() -> list[dict[str, Any]]:
             order_by="name asc",
         )
         price_rows = _price_rows(item_code, [variant.name for variant in variants])
-        if not price_rows:
-            continue
         variant_axes = _variant_axes([variant.name for variant in variants])
         representative = _representative_price(price_rows, variants, item_code)
+        prices = [row.get("price_list_rate") for row in price_rows]
         rows.append(
             {
                 **dict(website_item),
@@ -161,15 +217,87 @@ def _erpnext_priced_website_items() -> list[dict[str, Any]]:
                 "variant_count": len(variants),
                 "template_price_count": sum(1 for row in price_rows if row.get("item_code") == item_code),
                 "priced_variant_count": sum(1 for row in price_rows if row.get("item_code") != item_code),
-                "price_min": min(row.get("price_list_rate") for row in price_rows),
-                "price_max": max(row.get("price_list_rate") for row in price_rows),
+                "price_min": min(prices) if prices else None,
+                "price_max": max(prices) if prices else None,
                 "representative_item_code": representative.get("item_code"),
                 "representative_price": representative.get("price_list_rate"),
                 "variant_image_count": sum(1 for variant in variants if variant.get("image")),
                 "variant_axes": variant_axes,
+                "add_on_prices_by_item": add_on_prices,
             }
         )
     return rows
+
+
+def _add_on_prices_for_source(source_products: Any) -> dict[str, Any]:
+    item_codes = sorted(
+        {
+            str(contract.get("item_code") or "")
+            for product in source_products
+            for axis_name in (product.get("attributes") or {})
+            for contract in known_add_on_contracts_for_axis(str(axis_name))
+            if contract.get("item_code")
+        }
+    )
+    if not item_codes:
+        return {}
+    return {
+        row.get("item_code"): row.get("price_list_rate")
+        for row in frappe.get_all(
+            "Item Price",
+            filters={
+                "item_code": ["in", item_codes],
+                "price_list": STANDARD_PRICE_LIST,
+                "selling": 1,
+            },
+            fields=["item_code", "price_list_rate"],
+            limit_page_length=1000,
+        )
+    }
+
+
+def _line_field_status() -> dict[str, Any]:
+    required = {
+        "Sales Order Item": {
+            "custom_lt_product_template_item",
+            "custom_lt_product_page_type",
+            "custom_lt_configuration_version",
+            "custom_lt_configuration_summary",
+            "custom_lt_configuration_json",
+        },
+        "Sales Invoice Item": {
+            "custom_lt_product_template_item",
+            "custom_lt_product_page_type",
+            "custom_lt_configuration_version",
+            "custom_lt_configuration_summary",
+            "custom_lt_configuration_json",
+        },
+    }
+    present: dict[str, set[str]] = {doctype: set() for doctype in required}
+    for doctype, fieldnames in required.items():
+        custom_rows = frappe.get_all(
+            "Custom Field",
+            filters={"dt": doctype, "fieldname": ["in", sorted(fieldnames)]},
+            fields=["fieldname"],
+            limit_page_length=1000,
+        )
+        doc_rows = frappe.get_all(
+            "DocField",
+            filters={"parent": doctype, "fieldname": ["in", sorted(fieldnames)]},
+            fields=["fieldname"],
+            limit_page_length=1000,
+        )
+        present[doctype].update(str(row.fieldname) for row in [*custom_rows, *doc_rows])
+    missing = {
+        doctype: sorted(fieldnames - present[doctype])
+        for doctype, fieldnames in required.items()
+    }
+    return {
+        "ready": not any(missing.values()),
+        "required": {doctype: sorted(fieldnames) for doctype, fieldnames in required.items()},
+        "present": {doctype: sorted(fieldnames) for doctype, fieldnames in present.items()},
+        "missing": missing,
+    }
 
 
 def _price_rows(template_item_code: str, variant_codes: list[str]) -> list[dict[str, Any]]:
