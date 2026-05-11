@@ -54,7 +54,7 @@ web_include_css = [
     "/assets/locally_twisted/css/lt-photo-heroes.css?v=20260510-about-1",
     "/assets/locally_twisted/css/lt-form-experience.css?v=20260510-1",
     "/assets/locally_twisted/css/lt-event-playground.css?v=20260506-event-playground-1",
-    "/assets/locally_twisted/css/lt-audience-lane.css?v=20260510-audience-lane-3-editorial",
+    "/assets/locally_twisted/css/lt-audience-lane.css?v=20260510-audience-lane-4-lean",
 ]
 
 # Guest cart engine â€” overrides webshop's broken-for-guest cart functions
@@ -105,6 +105,18 @@ website_route_rules = [
      "to_route": "ready_to_order_paused"},
     {"from_route": "/quote-accept",
      "to_route": "quote_accept"},
+    # Customer accounts use LT-owned routes, not ERPNext's native
+    # quotation/order/invoice/address list pages.
+    {"from_route": "/quotations",
+     "to_route": "account/quotes"},
+    {"from_route": "/orders",
+     "to_route": "account/events"},
+    {"from_route": "/invoices",
+     "to_route": "account/billing"},
+    {"from_route": "/addresses",
+     "to_route": "account/events"},
+    {"from_route": "/account/follow-up",
+     "to_route": "account/follow_up"},
     # Override Frappe payments' /payment-success â€” see www/payment_success.py
     # for why (upstream URL malformation + guest 403 on Payment Request read).
     {"from_route": "/payment-success",

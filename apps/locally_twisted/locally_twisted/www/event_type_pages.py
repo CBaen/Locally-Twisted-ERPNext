@@ -689,12 +689,11 @@ EVENT_TYPE_PAGES = {
         #     "attribution": "Executive Assistant - Utah finance firm",
         # },
         # --- Existing: gallery (kept as-is; real installs already in place) ---
-        "gallery_heading": "More corporate installs.",
-        "gallery_lede": "A broader look at the kinds of corporate rooms, entrances, and brand moments we have built.",
+        "gallery_heading": "Real corporate installs.",
         "gallery": [
-            {"title": "Branded entrance arch", "caption": "A clear arrival moment for guests, photos, and launches.", "image": f"{PORTFOLIO_BASE}/corporate-logo-arch.webp", "alt": "Corporate logo balloon arch at an event entrance", "wide": True},
-            {"title": "Large photo backdrop", "caption": "Scale and color for media, reception, and sponsor-facing moments.", "image": f"{PORTFOLIO_BASE}/corporate-weberstock-photo-opt.webp", "alt": "Corporate balloon photo backdrop at a Utah event", "wide": True},
-            {"title": "Campus-color install", "caption": "Color discipline for institutions, companies, and university events.", "image": f"{PORTFOLIO_BASE}/corporate-wsu-arch-bouquets.webp", "alt": "Purple and white balloon arch and bouquet install", "wide": False},
+            {"image": f"{PORTFOLIO_BASE}/corporate-logo-arch.webp", "alt": "Corporate logo balloon arch at a Utah event entrance", "wide": True},
+            {"image": f"{PORTFOLIO_BASE}/corporate-weberstock-photo-opt.webp", "alt": "Large corporate balloon backdrop for a Utah business event", "wide": True},
+            {"image": f"{PORTFOLIO_BASE}/corporate-wsu-arch-bouquets.webp", "alt": "Corporate-color balloon arch and bouquet install", "wide": False},
         ],
         # --- NEW: Plain-language FAQ (corporate buyer's questions, in their words) ---
         "faq_eyebrow": "Questions corporate planners ask",
