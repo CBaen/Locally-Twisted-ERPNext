@@ -10,7 +10,9 @@ const EVENT_PLAYGROUND_URL = `${EVENT_PLAYGROUND_BASE}/event-playground.html`;
 const BASE_URL = process.env.LT_BASE_URL || "http://localhost:8081";
 const DESK_USER = process.env.LT_DESK_TEST_USER;
 const DESK_PASSWORD = process.env.LT_DESK_TEST_PASSWORD;
-const SPIKE_DIR = path.resolve(__dirname, "../..", "research/design-studio-v2/event-builder-spike");
+const DEFAULT_SPIKE_DIR =
+	"C:/Users/baenb/projects/design-studio/workstreams/locally-twisted-plan-custom-decor-v2/design-studio-v2/event-builder-spike";
+const SPIKE_DIR = path.resolve(process.env.EVENT_PLAYGROUND_SPIKE_DIR || DEFAULT_SPIKE_DIR);
 let viteServer = null;
 
 async function isPreviewReady() {
@@ -39,7 +41,9 @@ test.beforeAll(async () => {
 	if (await isPreviewReady()) return;
 	const viteEntry = path.join(SPIKE_DIR, "node_modules", "vite", "bin", "vite.js");
 	if (!fs.existsSync(viteEntry)) {
-		throw new Error("Vite is not installed in the Event Playground spike folder.");
+		throw new Error(
+			`Vite is not installed in the Event Playground spike folder: ${SPIKE_DIR}. Set EVENT_PLAYGROUND_SPIKE_DIR if the design-studio repo moved.`,
+		);
 	}
 	viteServer = spawn(
 		process.execPath,

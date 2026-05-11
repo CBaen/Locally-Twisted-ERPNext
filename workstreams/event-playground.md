@@ -1,14 +1,14 @@
 # Event Playground Internal Preview Workstream
 
-Last updated: 2026-05-08 by Codex after gating the internal Frappe preview route.
+Last updated: 2026-05-11 by Codex after moving design-studio source/docs to the standalone design-studio repo.
 
 ## Status
 
 `/event-playground` is a hidden internal-preview route for the PlayCanvas event-decor planner. It is not in public navigation and is not a customer launch surface yet. The Frappe wrapper now redirects guests to `/login` and requires `Administrator` or `System Manager` before it exposes the local Vite iframe.
 
-OpenClaw now owns the next PlayCanvas/Event Playground pass. For the Locally Twisted website launch lane, treat this workstream as parked unless GL explicitly brings it back into scope.
+The standalone design-studio repo now owns the PlayCanvas/Event Playground source packet, research notes, prototype package, and reusable balloon-physics capabilities. For the Locally Twisted website launch lane, this LT workstream owns only the hidden Frappe wrapper and contact-form handoff.
 
-The isolated PlayCanvas prototype lives in `research/design-studio-v2/event-builder-spike/`. The Frappe route wraps the local Vite preview in an iframe so GL/Jeff/OpenClaw can review the experience without deciding production bundle storage, save/share persistence, pricing, checkout, or Lead automation.
+The isolated PlayCanvas prototype now lives at `C:\Users\baenb\projects\design-studio\workstreams\locally-twisted-plan-custom-decor-v2\design-studio-v2\event-builder-spike\`. The Frappe route wraps the local Vite preview in an iframe so GL/Jeff/peer agents can review the experience without deciding production bundle storage, save/share persistence, pricing, checkout, or Lead automation.
 
 Current naming boundary:
 
@@ -20,7 +20,7 @@ Current naming boundary:
 
 - PlayCanvas/Vite owns the interactive game runtime.
 - Frappe owns only the hidden route shell, iframe boundary, and contact-form handoff.
-- Balloon construction truth lives in pure source modules before PlayCanvas renders it. For classic quad slots, use `research/design-studio-v2/event-builder-spike/src/event-playground-construction.js`.
+- Balloon construction truth lives in pure source modules before PlayCanvas renders it. For classic quad slots, use `C:\Users\baenb\projects\design-studio\workstreams\locally-twisted-plan-custom-decor-v2\design-studio-v2\event-builder-spike\src\event-playground-construction.js`.
 - The iframe sends a `LT_EVENT_PLAYGROUND_CONTACT_HANDOFF` message to the Frappe wrapper.
 - The wrapper stores `lt_event_playground_handoff_v1` in Frappe-site `sessionStorage` and redirects to `/contact?intent=quote&source=event-playground`.
 - `/contact` pre-fills the existing inquiry form with customer contact details, ISO event date when present, event location/city, Balloon Decor / Events Inquiry services, colors, decor type, package notes, and the free-text design summary.
@@ -38,9 +38,9 @@ Current source handoff contract:
 
 ## Construction Capability
 
-Use `capabilities/recipes/event-playground-construction-truth.md` before changing Event Playground geometry, renderer code, payload facts, or visual verification.
+Use `C:\Users\baenb\projects\design-studio\capabilities\recipes\event-playground-construction-truth.md` before changing Event Playground geometry, renderer code, payload facts, or visual verification.
 
-Use `capabilities/recipes/event-playground-planning-contract.md` before changing the payload, warnings, contact handoff, Frappe adapter metadata, or quote-readiness behavior.
+Use `C:\Users\baenb\projects\design-studio\capabilities\recipes\event-playground-planning-contract.md` before changing the payload, warnings, contact handoff, Frappe adapter metadata, or quote-readiness behavior.
 
 Current captured regression: arch balloons were rendering with generic downward neck/knot orientation. That is not a manufacturing-faithful classic quad. The current rule is that each classic quad slot points the balloon neck and knot toward the shared tie center, and the PlayCanvas renderer consumes that tested slot data instead of inventing orientation inline.
 
@@ -57,12 +57,12 @@ Current quote-honesty regression risk: the PlayCanvas render density is fuller t
 
 ## Audit Packet
 
-Committed audit notes for OpenClaw and future Codex agents:
+Committed audit notes for future Codex/OpenClaw agents now live in the standalone design-studio repo:
 
-- `research/design-studio-v2/audits/visual-gameplay-mobile-desktop-audit.md`
-- `research/design-studio-v2/audits/frappe-cloud-integration-audit.md`
-- `research/design-studio-v2/audits/manufacturer-physics-audit.md`
-- `research/design-studio-v2/audits/next-version-build-notes-2026-05-07.md`
+- `C:\Users\baenb\projects\design-studio\workstreams\locally-twisted-plan-custom-decor-v2\design-studio-v2\audits\visual-gameplay-mobile-desktop-audit.md`
+- `C:\Users\baenb\projects\design-studio\workstreams\locally-twisted-plan-custom-decor-v2\design-studio-v2\audits\frappe-cloud-integration-audit.md`
+- `C:\Users\baenb\projects\design-studio\workstreams\locally-twisted-plan-custom-decor-v2\design-studio-v2\audits\manufacturer-physics-audit.md`
+- `C:\Users\baenb\projects\design-studio\workstreams\locally-twisted-plan-custom-decor-v2\design-studio-v2\audits\next-version-build-notes-2026-05-07.md`
 
 These are research/handoff notes, not production proof. The Frappe Cloud audit did not inspect the live database. Re-run DB/schema checks before implementing save/share/Lead behavior.
 
@@ -71,7 +71,7 @@ These are research/handoff notes, not production proof. The Frappe Cloud audit d
 Nested prototype checks:
 
 ```powershell
-cd research/design-studio-v2/event-builder-spike
+cd C:\Users\baenb\projects\design-studio\workstreams\locally-twisted-plan-custom-decor-v2\design-studio-v2\event-builder-spike
 npm run test:classic
 npm run build
 npm run verify:event-playground
@@ -90,7 +90,7 @@ npm run test:event-playground
 
 ## Next Decisions
 
-Owned by OpenClaw unless GL reassigns this lane:
+Owned by the standalone design-studio repo unless GL reassigns this lane back into the LT launch repo:
 
 - Whether `Event Playground` is the final customer-facing name.
 - Whether the route should become public, sales-shared only, or remain internal.

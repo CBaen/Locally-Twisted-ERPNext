@@ -58,12 +58,9 @@ Workflows. Multi-step. Clear start and finish.
 
 - Agency reference: `C:\Users\baenb\projects\Built_by_Cameron\capabilities\recipes\frappe-default-surface-map.md` maps Frappe/Webshop native spacing, wrappers, headings, chrome, and CMS defaults to the usual BBC override moves.
 - [claude-reference-library](recipes/claude-reference-library.md) - safely consult older Claude skills/rules as reference material without treating them as truth or copying them wholesale.
-- [balloon-material-visual-physics](recipes/balloon-material-visual-physics.md) - model balloons as sized latex objects with inflation, finish, tension, contact, knots, and construction-unit deformation instead of generic spheres.
 - [codex-browser-verification-surface](recipes/codex-browser-verification-surface.md) - choose between public web lookup, silent Playwright render proof, LT route-contract verifiers, and headed browser checks without mixing evidence types.
 - [btfp-live-service-page-contract](recipes/btfp-live-service-page-contract.md) - keep the Twisting & Face Painting route, shared inquiry form, and per-artist pricing calculator aligned with the approved business lane.
 - [customer-email-delivery-branding-contract](recipes/customer-email-delivery-branding-contract.md) - keep public inquiry email branding, company-copy routing, role inboxes, and Email Queue proof aligned without confusing sent status for delivery.
-- [event-playground-construction-truth](recipes/event-playground-construction-truth.md) - keep Event Playground balloon geometry tied to tested construction facts, including classic quad tie-center neck/knot orientation.
-- [event-playground-planning-contract](recipes/event-playground-planning-contract.md) - keep Event Playground / Plan Custom Decor payloads, warnings, quote-readiness gates, and Frappe handoff boundaries from turning a planning preview into an unapproved quote engine.
 - [erpnext-business-automation-index](recipes/erpnext-business-automation-index.md) - index ERPNext/Frappe business automations by connected, partially connected, required-missing, useful-missing, fake-data, and loud-failure status.
 - [erpnext-catalog-variant-price-parity](recipes/erpnext-catalog-variant-price-parity.md) - audit and repair ERPNext Item variant prices from Odoo's dynamic resolver instead of page base price.
 - [erpnext-finance-controlled-automation](recipes/erpnext-finance-controlled-automation.md) - build ERPNext finance/payroll migration surfaces with review queues and accountant approval gates before automation.
@@ -97,12 +94,20 @@ Workflows. Multi-step. Clear start and finish.
 - [lt-brand-style-guide-consolidation](recipes/lt-brand-style-guide-consolidation.md) - consolidate LT visual authority, delete conflicting style references, and verify old font/pastel/icon drift is gone.
 - [cross-browser-motion-visual-verification](recipes/cross-browser-motion-visual-verification.md) - verify animated, marquee, carousel, reduced-motion, and browser-session visual behavior across Chrome/Brave and media-query branches.
 - [compact-hero-contract](recipes/compact-hero-contract.md) - keep public page heroes compact, same-height per viewport family, and protected by Playwright checks instead of route-local oversized padding.
-- [playcanvas-event-builder-stage-physics](recipes/playcanvas-event-builder-stage-physics.md) - keep the PlayCanvas event-builder game anchored through stage-root and piece-root hierarchy, transform math, pointer input, and browser verification.
-- [prototype-engine-spike-verification](recipes/prototype-engine-spike-verification.md) - compare browser rendering engines in isolated research packages with shared payload facts and real browser verification.
 - [responsive-container-audit](recipes/responsive-container-audit.md) - audit public routes and stateful UI across breakpoint edges so text, controls, menus, forms, cards, and product selectors stay inside their containers.
 - [take-live-coordinated-workflows](recipes/take-live-coordinated-workflows.md) - coordinate multi-agent launch lanes with controller ownership, review gates, and release verification.
 - [visual-debugging](recipes/visual-debugging.md) - see what the user sees without asking them to describe it.
 - [deploy-static-site-to-cloudflare](recipes/deploy-static-site-to-cloudflare.md) - get a Hugo/Astro/Next-static site live on a custom domain.
+
+## External Design-Studio Capabilities
+
+Moved on 2026-05-11: reusable Event Playground / Plan Custom Decor design capabilities now live in `C:\Users\baenb\projects\design-studio\capabilities\recipes\`. Do not recreate local LT copies unless GL explicitly wants a Frappe implementation contract fork.
+
+- `balloon-material-visual-physics.md`
+- `event-playground-construction-truth.md`
+- `event-playground-planning-contract.md`
+- `playcanvas-event-builder-stage-physics.md`
+- `prototype-engine-spike-verification.md`
 
 ## Meals
 

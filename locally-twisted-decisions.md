@@ -3324,3 +3324,17 @@ The pattern that worked: read the Odoo source → write a Python script targetin
 **Receipts:** `scripts/verify/cloudflare_launch_readiness.py`; `scripts/verify/cloudflare_launch_readiness_contract.py`; `workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11.md`.
 
 **Decided by:** Codex review-fix implementation after external review, 2026-05-11.
+
+---
+
+## 2026-05-11 - Design Studio source belongs in the standalone design-studio repo
+
+**Decision:** Event Playground / Plan Custom Decor research, prototype source, PlayCanvas/Babylon spikes, and reusable balloon-physics design capabilities live in `C:\Users\baenb\projects\design-studio`. The LT repo keeps only final Frappe implementation outputs, the hidden `/event-playground` wrapper, the contact handoff verifier, and LT-specific launch documentation.
+
+**Reasoning:** Design Studio is a shared design-tool workspace, not Locally Twisted production source. Keeping research packages and reusable design capabilities inside LT created a second source of truth and made future agents treat prototype code as launch-app code.
+
+**Implementation boundary:** Do not recreate `research/design-studio-v2/` or the moved capability recipes in this repo. Future design/prototype work starts in `C:\Users\baenb\projects\design-studio\workstreams\locally-twisted-plan-custom-decor-v2\`; only approved Frappe integration files, verifiers, fixtures, and LT handoff notes return here. `scripts/verify/event_playground.spec.js` can still run the hidden wrapper proof by reading the external spike path, with `EVENT_PLAYGROUND_SPIKE_DIR` as an override.
+
+**Receipts:** `workstreams/event-playground.md`; `scripts/verify/event_playground.spec.js`; `capabilities/INDEX.md`; `CODING-HANDOFF.md`; `locally-twisted-queue.md`.
+
+**Decided by:** GL direct instruction to move the design studio docs to the standalone design-studio repo, 2026-05-11.
