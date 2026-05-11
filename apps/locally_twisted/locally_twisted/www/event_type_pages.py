@@ -378,84 +378,181 @@ EVENT_TYPE_PAGES = {
         "route": "civic-community",
         "root_class": "lt-page-civic",
         "eyebrow": "Civic and community events",
-        "title": "Balloon decor for Utah public events.",
+        "title": "Community events deserve a photo people frame.",
         "lede": (
-            "Parade arches, civic plaza moments, Pride installations, and community decor "
-            "need to read clearly in public, photograph well, and respect the event plan."
+            "Parades, ribbon cuttings, festivals, and fundraisers. Locally Twisted has installed "
+            "alongside Utah civic teams and volunteers for more than 20 years. We bring the decor "
+            "and the install crew so your volunteers can run the event."
         ),
         "meta_title": "Civic and Community Balloon Decor in Utah",
         "meta_description": (
-            "Quote-led balloon decor for Utah city, county, chamber, Pride, community, "
-            "and public-facing events."
+            "Photo-ready balloon decor for Utah parades, chambers, school fundraisers, city "
+            "festivals, and public events. Sponsor-color recognition and volunteer-friendly install."
         ),
         "quote_href": "/contact?intent=quote&source=civic-community",
         "support_href": "/portfolio?event=civic",
         "support_label": "See Civic Work",
-        "proof": [
-            ("Public-facing scale", "Entrances, columns, arches, and stage moments should guide guests and hold up in photographs."),
-            ("Local event context", "City, county, chamber, Pride, venue, and public-space work needs practical access and timing details up front."),
-            ("Friendly, not casual", "The room can feel welcoming while still fitting official programs, public venues, and sponsor-facing events."),
-            ("Quote-led planning", "The right next step is the inquiry form, where date, venue, access, audience, and scale can be shaped together."),
-        ],
-        "client_groups": [
-            ("Cities and counties", ["Ogden City", "Sandy City", "Herriman City", "Syracuse City", "SLC County", "UDOT"]),
-            ("Community organizations", ["Equality Utah", "SLC Pride", "Pride Center", "LGBT Chamber", "Ogden Weber Chamber"]),
-            ("Public venues and events", ["Gallivan Center", "Ogden Airport", "Station Park", "Tree House Museum", "Safe Kids Fair"]),
-        ],
-        "stories_heading": "Public work needs a public-ready plan.",
-        "stories_lede": (
-            "Public event decor works best when guest flow, photo points, scale, and setup conditions are planned together."
-        ),
-        "stories": [
+        "proof_bar": [
             {
-                "kicker": "Civic photo moments",
-                "title": "Color that reads in a crowd",
-                "body": "Columns, arches, and backdrops give public events a clear point of arrival without turning the space into clutter.",
+                "icon": "trusted-partner",
+                "label": "Install crew included",
+                "sub": "Your volunteers run the program. We deliver, install, and remove the decor.",
+            },
+            {
+                "icon": "civic-parade",
+                "label": "Photo-ready moments",
+                "sub": "Ribbon-cutting arches, stage backdrops, sponsor-color photo walls.",
+            },
+            {
+                "icon": "delivery-install",
+                "label": "Weather plans built in",
+                "sub": "Indoor backup, weighted bases, wind-aware sizing. We call early when it matters.",
+            },
+            {
+                "icon": "design-driven",
+                "label": "Sponsor color recognition",
+                "sub": "Brand colors woven through garlands, arches, and photo backdrops.",
+            },
+        ],
+        "named_orgs": {
+            "eyebrow": "Real organizations",
+            "heading": "Utah cities, chambers, and community teams already trust us.",
+            "lede": (
+                "Two decades of installations across municipal events, school fundraisers, "
+                "chamber galas, festivals, and public celebrations."
+            ),
+            "photos": [
+                {
+                    "image": f"{PORTFOLIO_BASE}/seasonal-pride-columns.webp",
+                    "alt": "Rainbow balloon columns at a Utah community event",
+                },
+                {
+                    "image": f"{PORTFOLIO_BASE}/corporate-weberstock-photo-opt.webp",
+                    "alt": "Large festival-scale balloon photo backdrop",
+                },
+                {
+                    "image": f"{PORTFOLIO_BASE}/seasonal-easter-rabbit-arch.webp",
+                    "alt": "Seasonal balloon arch at a public family event",
+                },
+            ],
+            "ribbon_label": "Installed for",
+            # TODO(GL): Confirm which of these names LT has genuinely installed for.
+            "names": [
+                "Ogden City",
+                "Sandy City",
+                "Herriman City",
+                "Syracuse City",
+                "SLC County",
+                "UDOT",
+                "SLC Pride",
+                "Equality Utah",
+                "Ogden Weber Chamber",
+                "Gallivan Center",
+                "Ogden Airport",
+                "Safe Kids Fair",
+            ],
+        },
+        "process": {
+            "eyebrow": "How we work with civic organizers",
+            "heading": "Your volunteers run the event. We handle the decor.",
+            "lede": (
+                "The civic event workflow is built for chamber organizers, school PTAs, city "
+                "coordinators, and nonprofit volunteer leads who already have enough to manage."
+            ),
+            "steps": [
+                "Send the event, the location, and your sponsor list. Quote returned within one or two business days.",
+                "We work with municipal permitting and venue contacts directly when needed.",
+                "Lead time: two to three weeks for parades, festivals, and fairs. Faster for ribbon cuttings.",
+                "Outdoor events get a weather call window communicated 48 hours before doors.",
+                "Sponsor colors woven into garlands, arches, or backdrops so recognition reads in every photo.",
+                "Volunteer-friendly install. We arrive, set up, and remove so your team focuses on the program.",
+            ],
+            "photo": {
                 "image": f"{PORTFOLIO_BASE}/seasonal-pride-columns.webp",
-                "alt": "Rainbow balloon columns at a public community event",
+                "alt": "Locally Twisted civic install at a public Utah event",
             },
-            {
-                "kicker": "Community scale",
-                "title": "Large enough for outdoor attention",
-                "body": "Public-facing work needs scale, sightlines, and install choices that make sense for shared spaces and visitor traffic.",
-                "image": f"{PORTFOLIO_BASE}/corporate-weberstock-photo-opt.webp",
-                "alt": "Large balloon photo backdrop at a Utah community event",
-            },
-            {
-                "kicker": "Seasonal gatherings",
-                "title": "Family-friendly without looking temporary",
-                "body": "Community and seasonal installs can feel warm and accessible while still looking planned, balanced, and finished.",
-                "image": f"{PORTFOLIO_BASE}/seasonal-easter-rabbit-arch.webp",
-                "alt": "Seasonal balloon arch with public-event styling",
-            },
-        ],
-        "gallery_heading": "Inspiration from real public work.",
-        "gallery_lede": "Customers need to see the kind of scale and color Locally Twisted can bring to a civic or community space.",
+        },
+        "featured_install": {
+            "eyebrow": "Featured civic install",
+            "title": "Festival-scale photo backdrop, sponsor-color garlands, weather contingency on file.",
+            "image": f"{PORTFOLIO_BASE}/corporate-weberstock-photo-opt.webp",
+            "alt": "Large balloon installation at a Utah community festival",
+            "facts": [
+                {"label": "Event", "value": "Public community festival"},  # TODO: name the event
+                {"label": "Scope", "value": "Large photo backdrop, sponsor-color garlands, entrance arch"},
+                {"label": "Lead time", "value": "Quoted three weeks ahead"},
+                {"label": "Setup", "value": "Pre-doors install, weather call window confirmed 48 hours prior"},
+                {"label": "Outcome", "value": "Event-night photos used in chamber communications"},
+            ],
+        },
+        # TODO(GL): Add real PTA / chamber / civic-organizer quote when permission granted.
+        # "pull_quote": {
+        #     "text": "We had a parade to run. They handled the rest.",
+        #     "attribution": "Chamber event organizer - Northern Utah",
+        # },
+        "gallery_heading": "More civic and community work.",
+        "gallery_lede": "A broader look at the kinds of public-facing rooms and outdoor moments we have built.",
         "gallery": [
             {"title": "Rainbow civic columns", "caption": "Color that can anchor an entrance or community photo point.", "image": f"{PORTFOLIO_BASE}/seasonal-pride-columns.webp", "alt": "Rainbow balloon columns at a public community event", "wide": True},
             {"title": "Festival-scale backdrop", "caption": "A larger installation built to read in photos and crowds.", "image": f"{PORTFOLIO_BASE}/corporate-weberstock-photo-opt.webp", "alt": "Large balloon backdrop at a Utah festival event", "wide": True},
             {"title": "Seasonal public arch", "caption": "Friendly seasonal decor that still feels planned and finished.", "image": f"{PORTFOLIO_BASE}/seasonal-easter-rabbit-arch.webp", "alt": "Seasonal Easter balloon arch for a public event", "wide": False},
         ],
-        "plan_title": "What civic coordinators need to settle early",
-        "plan": [
+        "faq_eyebrow": "Questions civic organizers ask",
+        "faq_heading": "What you need before you bring it to your board.",
+        "faq": [
             {
-                "title": "Access and timing",
-                "text": "Share the venue, load-in window, public access constraints, and strike expectations before design decisions harden.",
-                "bullets": ["Public spaces", "Street or plaza events", "Venue contacts", "Teardown windows"],
+                "q": "Can you work with our municipal permit process?",
+                "a": (
+                    "Yes. Send the venue, the date, and the permitting contact and we will "
+                    "coordinate directly. We have worked with city event coordinators, public "
+                    "venues, and street/plaza permits across the Wasatch Front."
+                ),
             },
             {
-                "title": "Visibility and guest flow",
-                "text": "The piece should help orient guests, frame photos, and keep paths clear.",
-                "bullets": ["Entrances", "Stage edges", "Photo points", "Sponsor-safe placement"],
+                "q": "Outdoor event - what is your wind and weather plan?",
+                "a": (
+                    "Every outdoor install uses weighted bases and wind-aware sizing. We call "
+                    "the weather window 48 hours before doors so you can decide whether to "
+                    "trigger the indoor backup, which we plan with you up front."
+                ),
             },
             {
-                "title": "Weather and placement",
-                "text": "Outdoor installs need practical decisions about sun, wind, shade, anchoring, and backup placement.",
-                "bullets": ["Outdoor exposure", "Shade needs", "Surface type", "Indoor fallback"],
+                "q": "Can you coordinate sponsor colors or logos in the decor?",
+                "a": (
+                    "Yes. Send your sponsor list with brand colors and we will weave recognition "
+                    "into the garland, arch, or photo backdrop so sponsors read in every event "
+                    "photo without becoming the whole visual."
+                ),
+            },
+            {
+                "q": "We are a 501(c)(3) - do you offer nonprofit pricing?",
+                "a": (
+                    "We work with nonprofits regularly. Mention your status in the inquiry and "
+                    "we will share the options available for your scope."
+                ),
+            },
+            {
+                "q": "Will our volunteers need to help with setup?",
+                "a": (
+                    "No. We deliver, install, and remove the decor. Your volunteers focus on "
+                    "the program, the photo line, the sponsor table, and everything that needs "
+                    "a person who knows your event."
+                ),
+            },
+            {
+                "q": "Can you do a school fundraiser within a typical PTA budget?",
+                "a": (
+                    "Often yes. Send your budget range, the event, and a photo of the space and "
+                    "we will scope to what is doable. We will be honest if the scale you want "
+                    "needs more, and we will tell you what is possible at the budget you have."
+                ),
             },
         ],
         "cta_title": "Planning a public event?",
-        "cta_body": "Send the date, location, audience, and rough install goal. Locally Twisted will help shape a quote path from there.",
+        "cta_body": (
+            "Send the date, location, audience, and rough install goal. Locally Twisted will "
+            "shape a quote within one or two business days."
+        ),
     },
     "corporate_events": {
         "route": "corporate-events",
@@ -744,82 +841,191 @@ EVENT_TYPE_PAGES = {
         "route": "private-celebrations",
         "root_class": "lt-page-private",
         "eyebrow": "Private celebrations",
-        "title": "Polished balloons for personal celebrations.",
+        "title": "The reveal that makes the room gasp.",
         "lede": (
-            "Birthdays, weddings, showers, memorials, and hosted family events often need one finished focal point "
-            "that feels personal without looking improvised."
+            "Birthdays, baby showers, gender reveals, milestone anniversaries, hosted family events. "
+            "Locally Twisted has been making the photo-ready moment for Utah families since 2003."
         ),
         "meta_title": "Private Celebration Balloon Decor in Utah",
         "meta_description": (
-            "Quote-led balloon decor for Utah birthdays, weddings, showers, memorials, hosted home events, "
-            "venues, and family celebrations."
+            "Photo-ready balloon decor for Utah birthdays, baby showers, gender reveals, milestone "
+            "anniversaries, and hosted family events. Delivered before guests arrive."
         ),
         "quote_href": "/contact?intent=quote&source=private-celebrations",
         "support_href": "/portfolio?event=private",
         "support_label": "See Celebration Work",
-        "proof": [
-            ("Personal scale", "Private events usually need a strong photo moment or room anchor, not scattered decoration everywhere."),
-            ("Tasteful details", "Names, themes, and color palettes can be personal while the finished piece stays clean and elevated."),
-            ("Venue or home fit", "Delivery, pickup, indoor/outdoor placement, and teardown choices change the right recommendation."),
-            ("Inquiry first", "The contact form lets the team shape the right piece before promising a product or price."),
-        ],
-        "client_groups": [
-            ("Venue and event context", ["Alpine Events", "Lux Events", "Ogden Country Club", "The Boiler Room"]),
-            ("Family-facing settings", ["Station Park", "Newgate Mall", "Shops at Southtown", "Tree House Museum"]),
-            ("Celebration types", ["Birthdays", "Weddings", "Showers", "Memorials", "Hosted family events"]),
-        ],
-        "stories_heading": "Personal events still need structure.",
-        "stories_lede": "Personal celebrations work best when the room has one clear focal point and the setup fits the place.",
-        "stories": [
+        "proof_bar": [
             {
-                "kicker": "Milestone birthdays",
-                "title": "A clear focal point for the room",
-                "body": "Birthday installs work best when the balloon piece gives guests one finished place to gather, photograph, and celebrate.",
+                "icon": "premium-private-event",
+                "label": "The WOW moment",
+                "sub": "Designed for the photo before the first guest arrives.",
+            },
+            {
+                "icon": "trusted-partner",
+                "label": "Kid-safe materials",
+                "sub": "Latex from industry-trusted suppliers. We brief you on choking-hazard awareness.",
+            },
+            {
+                "icon": "balloon-arch",
+                "label": "Indoor or outdoor",
+                "sub": "Weighted bases, ceiling-safe install, anchoring for backyard or venue.",
+            },
+            {
+                "icon": "delivery-install",
+                "label": "Delivered before guests",
+                "sub": "Time-of-arrival coordinated. Surprise reveals timed to your moment.",
+            },
+        ],
+        "named_orgs": {
+            "eyebrow": "Real venues, real homes",
+            "heading": "Utah families and venues have hosted us for over 20 years.",
+            "lede": (
+                "Two decades of birthdays, baby showers, gender reveals, weddings, milestone "
+                "anniversaries, memorials, and hosted family events."
+            ),
+            "photos": [
+                {
+                    "image": f"{PORTFOLIO_BASE}/birthday-dolphin-backdrop.webp",
+                    "alt": "Themed birthday balloon backdrop for a private celebration",
+                },
+                {
+                    "image": f"{PORTFOLIO_BASE}/wedding-floral-half-arch.webp",
+                    "alt": "Floral wedding balloon half arch for a private celebration",
+                },
+                {
+                    "image": f"{PORTFOLIO_BASE}/birthday-balloon-bouquets.webp",
+                    "alt": "Birthday balloon bouquets arranged for a private celebration",
+                },
+            ],
+            "ribbon_label": "Installed at",
+            # TODO(GL): Confirm which venues / event types LT has genuinely installed for.
+            "names": [
+                "Alpine Events",
+                "Lux Events",
+                "Ogden Country Club",
+                "The Boiler Room",
+                "Station Park",
+                "Tree House Museum",
+                "Birthdays",
+                "Baby Showers",
+                "Gender Reveals",
+                "Weddings",
+                "Milestone Anniversaries",
+                "Memorials",
+            ],
+        },
+        "process": {
+            "eyebrow": "How we work on private events",
+            "heading": "Tell us the photo you want. We bring the rest.",
+            "lede": (
+                "The private-event workflow is built for parents, hosts, and family planners "
+                "who know the feeling they want before they know the product name."
+            ),
+            "steps": [
+                "Send the event, the date, and the photo you want. Quote returned within one or two business days.",
+                "Card on file holds the date. Deposit applied to the final balance.",
+                "Lead time: two weeks standard. Rush available when stock and schedule allow.",
+                "Indoor or outdoor. We ask about ceilings, sun, wind, pets, and kids' ages so the install is safe.",
+                "Delivery window timed so the host gets the reveal before guests arrive.",
+                "Same-day or next-day teardown available. We will tell you which fits your venue.",
+            ],
+            "photo": {
                 "image": f"{PORTFOLIO_BASE}/birthday-dolphin-backdrop.webp",
-                "alt": "Birthday balloon backdrop with a finished photo moment",
+                "alt": "Locally Twisted private-event install in a Utah celebration space",
             },
-            {
-                "kicker": "Weddings and showers",
-                "title": "Soft color, clean structure",
-                "body": "Private celebrations can carry personal colors and themes while still feeling composed, warm, and venue-ready.",
-                "image": f"{PORTFOLIO_BASE}/wedding-floral-half-arch.webp",
-                "alt": "Wedding floral balloon half arch for a private celebration",
-            },
-            {
-                "kicker": "Family gatherings",
-                "title": "Easy to understand at a glance",
-                "body": "A polished arch, column, or backdrop helps a personal gathering feel intentional without overcomplicating the room.",
-                "image": f"{PORTFOLIO_BASE}/birthday-balloon-bouquets.webp",
-                "alt": "Birthday balloon bouquets arranged for a private celebration",
-            },
-        ],
-        "gallery_heading": "Inspiration for personal celebrations.",
-        "gallery_lede": "Private-event customers often know the feeling before they know the product name. These examples help turn that feeling into a clear quote request.",
+        },
+        "featured_install": {
+            "eyebrow": "Featured private install",
+            "title": "Surprise birthday reveal, themed photo wall, delivered while the guest of honor was at brunch.",
+            "image": f"{PORTFOLIO_BASE}/birthday-dolphin-backdrop.webp",
+            "alt": "Themed birthday balloon backdrop installed for a Utah private celebration",
+            "facts": [
+                {"label": "Event", "value": "Milestone birthday surprise"},  # TODO: name the event
+                {"label": "Scope", "value": "Themed photo backdrop, balloon column pair, table bouquets"},
+                {"label": "Lead time", "value": "Quoted two weeks ahead"},
+                {"label": "Delivery", "value": "Two-hour window aligned with guest-of-honor away time"},
+                {"label": "Outcome", "value": "Reveal photo used in the family's holiday card"},
+            ],
+        },
+        # TODO(GL): Add real parent/host quote when permission granted.
+        # "pull_quote": {
+        #     "text": "She walked in and the whole room went quiet. We still talk about that photo.",
+        #     "attribution": "Birthday host - Salt Lake City",
+        # },
+        "gallery_heading": "More private celebrations.",
+        "gallery_lede": "A broader look at the kinds of personal moments we have built.",
         "gallery": [
             {"title": "Floral half arch", "caption": "Soft, polished, and personal for weddings, showers, and hosted celebrations.", "image": f"{PORTFOLIO_BASE}/wedding-floral-half-arch.webp", "alt": "Wedding floral balloon half arch for a private celebration", "wide": True},
             {"title": "Under-the-sea backdrop", "caption": "A themed photo moment that still feels finished and intentional.", "image": f"{PORTFOLIO_BASE}/birthday-dolphin-backdrop.webp", "alt": "Ocean-themed birthday balloon backdrop", "wide": True},
             {"title": "Birthday bouquets", "caption": "Pickup-friendly pieces can still make the room feel ready.", "image": f"{PORTFOLIO_BASE}/birthday-balloon-bouquets.webp", "alt": "Birthday balloon bouquets arranged for a party table", "wide": False},
         ],
-        "plan_title": "What private-event planners need to settle early",
-        "plan": [
+        "faq_eyebrow": "Questions hosts ask",
+        "faq_heading": "What you need to know before the party.",
+        "faq": [
             {
-                "title": "The main photo moment",
-                "text": "Name the part of the room that should feel finished first: entrance, table, backdrop, stage, or gift area.",
-                "bullets": ["Birthday backdrops", "Wedding accents", "Shower entrances", "Memorial stands"],
+                "q": "How far in advance do I book?",
+                "a": (
+                    "Two weeks is the standard. Rush windows are available when stock and "
+                    "schedule allow. Send the date as early as you can - the calendar fills "
+                    "fastest around graduation, spring/summer wedding, and holiday seasons."
+                ),
             },
             {
-                "title": "Room and delivery fit",
-                "text": "The same idea changes if it is a home, venue, church hall, backyard, or pickup piece.",
-                "bullets": ["Ceiling height", "Indoor/outdoor", "Delivery access", "Pickup timing"],
+                "q": "Can I see colors in person?",
+                "a": (
+                    "Yes. Send a Pinterest board, photo, or color swatch and we will match to "
+                    "the closest stock latex. For complicated palettes, we can show samples "
+                    "before the install is built."
+                ),
             },
             {
-                "title": "Personal details",
-                "text": "Colors, names, theme notes, and tone help shape the design without promising a preset package.",
-                "bullets": ["Names", "Palette", "Mood", "Family priorities"],
+                "q": "Is it kid-safe and pet-safe?",
+                "a": (
+                    "We use latex from industry-trusted suppliers and brief you on "
+                    "choking-hazard awareness when kids under three will be at the party. We "
+                    "anchor and weight installs so pets, toddlers, and the wind cannot pull "
+                    "them down."
+                ),
+            },
+            {
+                "q": "What if it rains, or it is hot, or my event is in the backyard?",
+                "a": (
+                    "Outdoor installs use weighted bases, wind-aware sizing, and a weather "
+                    "plan we agree on before delivery. We will call the weather window 24 to "
+                    "48 hours before doors and you decide whether to trigger the indoor plan."
+                ),
+            },
+            {
+                "q": "Can you set up while I keep the birthday person out of the room?",
+                "a": (
+                    "Yes. Tell us the surprise window in the inquiry and we will time delivery "
+                    "and install so the reveal happens the way you imagined."
+                ),
+            },
+            {
+                "q": "What is the smallest size you do, and what is a typical price range?",
+                "a": (
+                    "Bouquets, single columns, and table arrangements work for smaller "
+                    "gatherings. Larger backdrops, arches, and full room installs scale up "
+                    "from there. Send the event and your rough budget in the inquiry and we "
+                    "will be honest about what fits and what does not."
+                ),
+            },
+            {
+                "q": "Will it last through the whole party?",
+                "a": (
+                    "Yes. We use installation techniques and materials selected for the "
+                    "event length and environment. Heat, sun, ceiling height, and indoor "
+                    "versus outdoor each change the choice; we plan for the conditions of "
+                    "your specific event."
+                ),
             },
         ],
         "cta_title": "Tell us what you are imagining.",
-        "cta_body": "Send the date, place, colors, and the moment you want the room to hold. Locally Twisted will help shape the right quote.",
+        "cta_body": (
+            "Send the date, place, colors, and the moment you want the room to hold. "
+            "Locally Twisted will shape the right quote within one or two business days."
+        ),
     },
 }
 
