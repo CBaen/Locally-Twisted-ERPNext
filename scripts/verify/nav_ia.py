@@ -131,18 +131,36 @@ def _css_rule(css: str, selector: str) -> str:
 
 
 def test_top_banner_accessibility_css(css: str) -> None:
+    desktop_top = _css_rule(css, ".lt-mega-header__top")
+    if "background: var(--lt-mega-navy);" not in desktop_top:
+        raise AssertionError("Desktop top banner must use the deep-navy authority band, not brass/yellow")
+    if "color: var(--lt-mega-warm);" not in desktop_top:
+        raise AssertionError("Desktop top banner text must stay warm-white on navy")
+
+    top_message = _css_rule(css, ".lt-mega-header__top-message")
+    if "color: var(--lt-mega-warm);" not in top_message:
+        raise AssertionError("Desktop top banner message must stay warm-white on navy")
+
+    top_links = _css_rule(css, ".lt-mega-header__top-links a")
+    if "color: var(--lt-mega-warm);" not in top_links:
+        raise AssertionError("Desktop top banner links must stay warm-white on navy")
+
     hover_required = (
         ".lt-mega-header__top-message:hover,\n.lt-mega-header__top-message:focus-visible,\n.lt-mega-header__top-links a:hover,\n.lt-mega-header__top-links a:focus-visible",
         ".lt-mega-header__mobile-message:hover,\n.lt-mega-header__mobile-message:focus-visible",
     )
     for selector in hover_required:
         body = _css_rule(css, selector)
-        if "color: var(--lt-mega-ink);" not in body:
-            raise AssertionError(f"Header banner hover/focus text must stay dark on brass: {selector}")
-        if "#fffdf9" in body:
-            raise AssertionError(f"Header banner hover/focus must not use low-contrast white text: {selector}")
+        if "color: var(--lt-mega-warm);" not in body:
+            raise AssertionError(f"Header banner hover/focus text must stay warm-white on navy: {selector}")
+        if "text-decoration-color: var(--lt-mega-brass);" not in body:
+            raise AssertionError(f"Header banner hover/focus underline should use brass as accent only: {selector}")
 
     mobile_top = _css_rule(css, ".lt-mega-header__mobile-top")
+    if "background: var(--lt-mega-navy);" not in mobile_top:
+        raise AssertionError("Mobile top banner must use the deep-navy authority band, not brass/yellow")
+    if "color: var(--lt-mega-warm);" not in mobile_top:
+        raise AssertionError("Mobile top banner container must set warm-white text so inherited links stay readable")
     expected_padding = "padding: 0 max(0.85rem, env(safe-area-inset-right)) 0 max(0.85rem, env(safe-area-inset-left));"
     if expected_padding not in mobile_top:
         raise AssertionError("Mobile top banner padding must map right inset to right padding and left inset to left padding")

@@ -8,6 +8,35 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-11 - Public short-notice banner is deep navy, not brass/gold
+
+**Decision:** The public header short-notice strip is a deep-navy authority
+band on desktop and mobile. The linked text points to `/contact`, stays
+warm-white, and uses brass only as underline/focus accent. Brass/gold is not
+an approved banner background for this strip.
+
+**Reasoning:** GL caught the banner returning to yellow/brass more than once.
+Forensic review pinned the source regression to commit `f091c72`, which changed
+`.lt-mega-header__top` and `.lt-mega-header__mobile-top` to brass and updated
+nearby docs/guards so the wrong color looked intentional. The May 6 header
+repair had already moved public chrome to the deep-navy authority treatment.
+
+**Implementation boundary:** Do not describe, implement, or guard the
+short-notice strip as gold/brass. If this color contract is reopened, update
+CSS, `nav_ia.py`, rendered Playwright/smoke checks, feature handoffs, queue,
+handoff, and capability docs in the same slice. A CSS-only correction is not
+enough because stale written contracts caused the repeat regression.
+
+**Verification receipt:** `python scripts\verify\nav_ia.py`,
+`npx.cmd playwright test scripts/verify/interactive_layout.spec.js --grep "header breakpoint contract" --reporter=line`,
+and direct browser probes passed on 2026-05-11. Direct probes showed desktop
+and mobile banner backgrounds at `rgb(14, 34, 64)`. Feature handoff:
+`workstreams/public-header-banner-contract-2026-05-10.md`.
+
+**Decided by:** GL correction and Codex forensic closeout on 2026-05-11.
+
+---
+
 ## 2026-05-11 - Quote-first is a storefront lane flag, not a permanent product blocker
 
 **Decision:** `quote_first` means the current product page does not expose
@@ -358,13 +387,18 @@ cutover gates.
 
 ## 2026-05-10 - Short-notice banner owns the top proof slot
 
-**Decision:** The header short-notice sentence `SHORT NOTICE? LET US KNOW. WE CAN OFTEN HELP WITH 24 HOURS NOTICE!` is a linked `/contact` banner, centered on desktop, gold on desktop and mobile, and slightly letter-spaced on desktop. `Free Event Quote` remains a right-side desktop utility link to `/contact`, and the account link remains. The old `Prepared design, clean installs, and invoiced event support across Utah.` proof copy and delivery/truck icon are removed from the header.
+**Superseded color note:** This entry still owns the slot/content decision, but
+the color sentence was superseded on 2026-05-11. The banner is deep navy on
+desktop and mobile, not gold/brass. See
+`2026-05-11 - Public short-notice banner is deep navy, not brass/gold`.
+
+**Decision:** The header short-notice sentence `SHORT NOTICE? LET US KNOW. WE CAN OFTEN HELP WITH 24 HOURS NOTICE!` is a linked `/contact` banner, centered on desktop and mobile, and slightly letter-spaced on desktop. `Free Event Quote` remains a right-side desktop utility link to `/contact`, and the account link remains. The old `Prepared design, clean installs, and invoiced event support across Utah.` proof copy and delivery/truck icon are removed from the header.
 
 **Reasoning:** GL clarified the desired customer message was not an extra utility-link item. Keeping both the old proof copy and the short-notice line made the header carry two competing micro-promises and preserved stale chrome. The safe contract for peer agents is one explicit top-message slot plus the existing utility links.
 
-**Implementation:** `navbar.html` now renders `.lt-mega-header__top-message` and `.lt-mega-header__mobile-message` as `/contact` links. `lt-mega-menu.css` styles the desktop top row as a centered gold grid banner and gives mobile its own matching gold notice strip. `scripts/verify/nav_ia.py`, `scripts/verify/smoke_shop.py`, and the header breakpoint Playwright contract fail if the old proof copy/icon returns, if the short-notice message is unlinked, if mobile loses the notice, or if the banner color regresses.
+**Implementation:** `navbar.html` now renders `.lt-mega-header__top-message` and `.lt-mega-header__mobile-message` as `/contact` links. `lt-mega-menu.css` styles the desktop top row as a centered deep-navy grid banner and gives mobile its own matching deep-navy notice strip. `scripts/verify/nav_ia.py`, `scripts/verify/smoke_shop.py`, and the header breakpoint Playwright contract fail if the old proof copy/icon returns, if the short-notice message is unlinked, if mobile loses the notice, or if the banner color regresses.
 
-**Verification receipt:** After cache clear/restart, `python scripts/verify/nav_ia.py`, focused `npx playwright test scripts/verify/interactive_layout.spec.js --grep "header uses" --reporter=line --workers=1`, and `python scripts/verify/smoke_shop.py` passed. Direct `/balloon-twisting-and-face-painting` Playwright metrics showed desktop and mobile notice links visible, `href: "/contact"`, gold `rgb(184, 154, 91)` strips, `centerDelta: 0`, 40px click targets, and desktop `letterSpacing: 1.05px`. Current cache key is `lt-mega-menu.css?v=20260510-short-notice-4`.
+**Verification receipt:** After the 2026-05-11 color correction, `python scripts/verify/nav_ia.py`, focused `npx.cmd playwright test scripts/verify/interactive_layout.spec.js --grep "header breakpoint contract" --reporter=line`, and direct browser probes passed. Direct browser probes showed desktop and mobile notice links visible, `href: "/contact"`, deep-navy `rgb(14, 34, 64)` strips, warm-white text, and desktop/mobile visibility. Current cache key is `lt-mega-menu.css?v=20260511-blue-banner-2`.
 
 **Alternatives considered:** Keep the old proof copy and add short-notice as another right-side list item. Rejected because it preserved stale messaging and made the utility row noisier. Remove `Free Event Quote`. Rejected because it remains an approved conversion link to `/contact`.
 

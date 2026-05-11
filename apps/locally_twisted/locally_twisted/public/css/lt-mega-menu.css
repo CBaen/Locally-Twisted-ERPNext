@@ -36,9 +36,9 @@
 }
 
 .lt-mega-header__top {
-    background: var(--lt-mega-brass);
-    border-bottom: 1px solid rgba(10, 10, 11, 0.18);
-    color: var(--lt-mega-ink);
+    background: var(--lt-mega-navy);
+    border-bottom: 1px solid rgba(250, 247, 242, 0.16);
+    color: var(--lt-mega-warm);
 }
 
 .lt-mega-header__main-row,
@@ -59,7 +59,7 @@
 
 .lt-mega-header__top-message {
     align-items: center;
-    color: var(--lt-mega-ink);
+    color: var(--lt-mega-warm);
     display: inline-flex;
     font: 900 14px/1.25 Lato, system-ui, sans-serif;
     grid-column: 2;
@@ -95,7 +95,7 @@
 }
 
 .lt-mega-header__top-links a {
-    color: var(--lt-mega-ink);
+    color: var(--lt-mega-warm);
     font: 900 13px/1.15 Lato, system-ui, sans-serif;
     text-decoration: none;
     text-transform: uppercase;
@@ -105,15 +105,16 @@
 .lt-mega-header__top-message:focus-visible,
 .lt-mega-header__top-links a:hover,
 .lt-mega-header__top-links a:focus-visible {
-    color: var(--lt-mega-ink);
+    color: var(--lt-mega-warm);
     text-decoration: underline;
+    text-decoration-color: var(--lt-mega-brass);
     text-decoration-thickness: 2px;
     text-underline-offset: 0.18em;
 }
 
 .lt-mega-header__top-message:focus-visible,
 .lt-mega-header__top-links a:focus-visible {
-    outline: 2px solid currentColor;
+    outline: 2px solid var(--lt-mega-brass);
     outline-offset: 3px;
 }
 
@@ -351,15 +352,16 @@
 }
 
 .lt-mega-header__mobile-top {
-    background: var(--lt-mega-brass);
-    border-bottom: 1px solid rgba(10, 10, 11, 0.16);
+    background: var(--lt-mega-navy);
+    border-bottom: 1px solid rgba(250, 247, 242, 0.16);
+    color: var(--lt-mega-warm);
     padding: 0 max(0.85rem, env(safe-area-inset-right)) 0 max(0.85rem, env(safe-area-inset-left));
     text-align: center;
 }
 
 .lt-mega-header__mobile-message {
     align-items: center;
-    color: var(--lt-mega-ink);
+    color: var(--lt-mega-warm);
     display: inline-flex;
     font: 900 11px/1.25 Lato, system-ui, sans-serif;
     justify-content: center;
@@ -372,14 +374,15 @@
 
 .lt-mega-header__mobile-message:hover,
 .lt-mega-header__mobile-message:focus-visible {
-    color: var(--lt-mega-ink);
+    color: var(--lt-mega-warm);
     text-decoration: underline;
+    text-decoration-color: var(--lt-mega-brass);
     text-decoration-thickness: 2px;
     text-underline-offset: 0.18em;
 }
 
 .lt-mega-header__mobile-message:focus-visible {
-    outline: 2px solid currentColor;
+    outline: 2px solid var(--lt-mega-brass);
     outline-offset: 3px;
 }
 

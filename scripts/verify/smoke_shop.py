@@ -288,6 +288,11 @@ def check_homepage(page):
         page.locator(".lt-mega-header__top img[src*='delivery-install']").count() == 0,
         "Desktop top banner must not show the delivery/truck icon",
     )
+    top_banner_background = page.locator(".lt-mega-header__top").evaluate("el => getComputedStyle(el).backgroundColor")
+    assert_(
+        top_banner_background == "rgb(14, 34, 64)",
+        f"Desktop top banner must render deep navy, not brass/yellow; got {top_banner_background}",
+    )
 
     for label, href in (
         ("Portfolio", "/portfolio"),
@@ -358,10 +363,10 @@ def check_homepage(page):
 def check_event_type_pages(page):
     print("-> Event type pages")
     expectations = {
-        "/civic-community": ("Balloon decor for Utah public events.", ["Ogden City", "SLC County", "Equality Utah"]),
-        "/corporate-events": ("On-brand balloon decor for Utah company events.", ["Ancestry", "Zions Bank", "KSL"]),
+        "/civic-community": ("Community events deserve a photo people frame.", ["Ogden City", "SLC County", "Equality Utah"]),
+        "/corporate-events": ("Corporate balloon decor that lands the way your meeting does.", ["Ancestry", "Zions Bank", "KSL"]),
         "/schools-campuses": ("School-color balloon decor for campus moments.", ["University of Utah", "Weber State", "St. Joseph's"]),
-        "/private-celebrations": ("Polished balloons for personal celebrations.", ["Alpine Events", "Ogden Country Club", "Tree House Museum"]),
+        "/private-celebrations": ("The reveal that makes the room gasp.", ["Alpine Events", "Ogden Country Club", "Tree House Museum"]),
     }
     for route, (title_text, proof_names) in expectations.items():
         page.goto(f"{BASE}{route}", wait_until="networkidle", timeout=15000)

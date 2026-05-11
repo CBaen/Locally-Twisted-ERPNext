@@ -131,7 +131,7 @@ pattern that feels familiar.
 
 - [failures/](failures/) - Failure Recipes overview, dead-end convention, and template.
 - [public-nav-seo-verifier-drift](failures/public-nav-seo-verifier-drift.md) - prevents SEO/GEO/AEO or verifier work from changing header/footer/menu/search public chrome without explicit approval.
-- [public-header-contrast-safe-area-regression](failures/public-header-contrast-safe-area-regression.md) - prevents gold header banner hover/focus contrast and mobile safe-area side-order regressions.
+- [public-header-contrast-safe-area-regression](failures/public-header-contrast-safe-area-regression.md) - prevents deep-navy header banner color, hover/focus contrast, and mobile safe-area side-order regressions.
 
 ## Evidence And Registry
 

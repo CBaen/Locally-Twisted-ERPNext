@@ -48,7 +48,7 @@ For the current LT site:
   `/civic-community`, `/corporate-events`, `/schools-campuses`, and
   `/private-celebrations`; `/event-balloons` is removed and must not be
   linked or redirected. The top utility banner replaces the old proof
-  copy/icon with a centered gold `/contact` short-notice link:
+  copy/icon with a centered deep-navy `/contact` short-notice link:
   `SHORT NOTICE? LET US KNOW. WE CAN OFTEN HELP WITH 24 HOURS NOTICE!`, while
   keeping `Free Event Quote` and the account link on the right.
 - `Twisting & Face Painting` points to `/balloon-twisting-and-face-painting`.
@@ -61,8 +61,8 @@ For the current LT site:
   service removal approval.
 - Mobile search belongs at the bottom of the drawer, not in the mobile header
   action row. In open ecommerce testing, the mobile header control budget is
-  logo plus cart plus menu, with a separate gold short-notice `/contact` strip
-  above the mobile header row.
+  logo plus cart plus menu, with a separate deep-navy short-notice `/contact`
+  strip above the mobile header row.
 - Public navigation must not link to `/search`; the search overlay submits to
   `/shop` while ecommerce is open and `/search` is a no-cache 404 fallback.
 - Public navigation, footer, search, hero CTAs, and portfolio actions must not
@@ -152,17 +152,18 @@ Utah.` copy and `delivery-install.svg` icon are removed from the header.
 `nav_ia.py`, `smoke_shop.py`, and direct Playwright header metrics passed after
 cache clear/restart.
 
-Final GL correction on 2026-05-10: the short-notice sentence is a `/contact`
-link, centered to the screen on desktop, gold on desktop and mobile, visible on
-mobile, and slightly letter-spaced on desktop. `nav_ia.py`, focused
-`interactive_layout.spec.js --grep "header uses"`, `smoke_shop.py`, and direct
-`/balloon-twisting-and-face-painting` desktop/mobile Playwright metrics passed.
+Final GL correction on 2026-05-11: the short-notice sentence is a `/contact`
+link, centered to the screen on desktop, deep navy on desktop and mobile,
+visible on mobile, and slightly letter-spaced on desktop. Warm-white text is
+required; brass is only an accent/focus treatment, not the banner background.
+`nav_ia.py`, focused `interactive_layout.spec.js --grep "header breakpoint contract"`,
+`smoke_shop.py`, and direct desktop/mobile browser probes passed.
 
-Review closeout on 2026-05-10: the gold banner hover/focus state must keep
-`var(--lt-mega-ink)` text on brass and the mobile banner safe-area shorthand
-must map right inset to right padding and left inset to left padding.
-`nav_ia.py` now fails on the low-contrast white hover/focus regression and the
-left/right safe-area swap. Focused `npm run test:interactive-layout -- --grep
-"header|drawer|mega|mobile"` passed 55/55 after the fix.
+Review closeout on 2026-05-11: the 2026-05-10 gold/brass banner language was a
+regression source. The top strip must remain `var(--lt-mega-navy)` on desktop
+and mobile, and the mobile banner safe-area shorthand must map right inset to
+right padding and left inset to left padding. `nav_ia.py` now fails if the
+source contract moves the strip away from navy, and rendered guards verify
+`rgb(14, 34, 64)` for desktop/mobile banner backgrounds.
 
 On 2026-05-11, GL rejected the standalone `/event-balloons` hub before launch. Codex deleted `www/event_balloons.html` and `.py`, removed the route alias and canonical mapping, removed footer/search/home/portfolio links, and added negative guards in `nav_ia.py`, `seo_contract.spec.js`, `interactive_layout`, and route lists. Direct local checks return 404 with no redirect for both `/event-balloons` and `/event_balloons`; sitemap search is clean. The four event audience routes remain live.

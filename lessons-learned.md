@@ -22,6 +22,21 @@ GL rejected the homepage review-platform treatment because "no cards" also meant
 
 ---
 
+## 2026-05-11 - Stale written contracts can be the regression
+
+The public short-notice banner regressed from deep navy to brass/gold because a
+May 10 change updated CSS and docs/guards together in the wrong direction. The
+next agent could read the stale handoff/capability text and reasonably believe
+gold was approved, even after the live site had been corrected back to blue.
+
+**Counter-move:** when a visual regression repeats, trace both code history and
+contract history. Fix the source CSS, rendered verifier, static verifier,
+feature handoff, queue/handoff notes, and capability/failure recipe together.
+Do not close banner/header work while active docs still describe the wrong
+color as approved.
+
+---
+
 ## 2026-05-11 - Page fixes need the actual requested fix first
 
 The landing-page pass started from a broad "fix the landing page" frame before

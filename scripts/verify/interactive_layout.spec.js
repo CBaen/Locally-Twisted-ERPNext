@@ -406,6 +406,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 						header: background(".lt-mega-header"),
 						top: background(".lt-mega-header__top"),
 						mobile: background(".lt-mega-header__mobile"),
+						mobileTop: background(".lt-mega-header__mobile-top"),
 					};
 				});
 				expect(colorContract.header, "header shell should use the warm-white style-guide surface").toBe("rgb(250, 247, 242)");
@@ -414,6 +415,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 					expect(colorContract.top, "desktop proof row should keep the deep-navy authority band").toBe("rgb(14, 34, 64)");
 				} else {
 					expect(colorContract.mobile, "mobile header should use the warm-white style-guide surface").toBe("rgb(250, 247, 242)");
+					expect(colorContract.mobileTop, "mobile proof row should keep the deep-navy authority band").toBe("rgb(14, 34, 64)");
 				}
 
 				const result = await auditPageLayout(page, {

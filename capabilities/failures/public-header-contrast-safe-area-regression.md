@@ -4,7 +4,7 @@ type: failure
 failure_kind: regression_pattern
 schema_version: 0.1
 date_discovered: 2026-05-10
-last_updated: 2026-05-10
+last_updated: 2026-05-11
 status: guarded
 scope: project
 owner_context: Locally Twisted public header/banner CSS
@@ -23,18 +23,20 @@ tags:
   - mobile
 ---
 
-# Failure Recipe: Public Header Contrast And Safe-Area Regression
+# Failure Recipe: Public Header Color, Contrast, And Safe-Area Regression
 
 ## Symptom
 
-The gold public header/banner looks acceptable at rest, but hover/focus text
-drops below contrast requirements or mobile landscape notch padding protects
-the wrong side.
+The public short-notice header/banner regresses from the approved deep-navy
+authority band to brass/gold, or its hover/focus/mobile safe-area behavior
+drifts while the text/link content still looks correct.
 
 ## Trigger conditions
 
 - Header top banner background changes to brass/gold.
-- Hover/focus styles are copied from a dark-banner treatment.
+- Static source guards check text/link presence but not the color token.
+- Hover/focus styles are copied between dark and brass treatments without
+  revalidating the approved banner color.
 - Mobile top strip uses CSS shorthand with safe-area vars.
 - Verification checks text/link presence but not the interaction state or
   asymmetric safe-area mapping.
@@ -43,25 +45,26 @@ the wrong side.
 
 | Date | Project | Surface | Action being taken | Bad outcome | Evidence | Guard state | Status |
 |---|---|---|---|---|---|---|---|
-| 2026-05-10 | Locally Twisted | `lt-mega-menu.css` header banner | Header banner cleanup after owner CTA correction | Hover/focus changed banner text to `#fffdf9` on brass `#b89a5b` at 2.65:1 contrast; mobile safe-area left/right vars were reversed | Reviewer output, direct contrast calculation, source diff | `nav_ia.py` CSS guard added | guarded |
+| 2026-05-10 | Locally Twisted | `lt-mega-menu.css` header banner | Header banner cleanup after owner CTA correction | Deep-navy banner was changed to brass/gold and docs/verifiers then described brass as the protected state | `git blame` pins `.lt-mega-header__top` brass rule to `f091c72`; `workstreams/public-header-banner-contract-2026-05-10.md` and `menu-content-coordination.md` said gold/brass | `nav_ia.py`, `smoke_shop.py`, and `interactive_layout.spec.js` now guard navy desktop/mobile color | guarded |
 
 ## Root pattern
 
-The template contract was repaired, but the interaction-state CSS and mobile
-safe-area contract were treated as visual polish instead of launch-facing
-accessibility and device-fit behavior.
+The content/IA contract and the visual color contract split. A later commit
+correctly guarded banner copy and link placement, but normalized brass/gold as
+the intended banner color even though the May 6 header repair had moved the
+public chrome to a deep-navy authority band.
 
 ## Why it seemed reasonable at the time
 
-The previous top strip used a dark background, where white hover text was
-reasonable. When the banner became brass, the old hover convention no longer
-held. Safe-area shorthand also looks symmetrical until a device has asymmetric
-notch insets.
+The banner task was framed around copy placement and utility-link cleanup, so
+the visual color was treated as incidental. The stale docs then made the wrong
+color look approved to the next agent.
 
 ## Detection signals
 
-- `#fffdf9` inside `.lt-mega-header__top-message` or
-  `.lt-mega-header__mobile-message` hover/focus rules.
+- `background: var(--lt-mega-brass)` on `.lt-mega-header__top` or
+  `.lt-mega-header__mobile-top`.
+- Docs that describe the short-notice strip as gold/brass.
 - CSS shorthand on `.lt-mega-header__mobile-top` with
   `safe-area-inset-left` in the right-padding slot or
   `safe-area-inset-right` in the left-padding slot.
@@ -70,15 +73,16 @@ notch insets.
 
 ## Required guard
 
-`scripts/verify/nav_ia.py` must fail if the banner hover/focus text is not
-`var(--lt-mega-ink)` or if mobile safe-area padding swaps the left/right vars.
-Rendered header/drawer checks still cover fit; source CSS catches the exact
-regression before visual review.
+`scripts/verify/nav_ia.py` must fail if desktop or mobile top banner CSS is not
+`background: var(--lt-mega-navy)` with warm text. Rendered checks must also
+assert `rgb(14, 34, 64)` for `.lt-mega-header__top` and
+`.lt-mega-header__mobile-top`. Source CSS catches contract drift before visual
+review; rendered checks catch stale-cache or load-order failures.
 
 ## Recovery recipe
 
-1. Keep banner hover/focus text dark on brass.
-2. Use underline for hover/focus and outline only for keyboard focus.
+1. Keep desktop and mobile short-notice strips deep navy.
+2. Keep banner text warm white; use brass only as focus/underline accent.
 3. Map CSS shorthand as top, right, bottom, left.
 4. Clear Frappe website cache after CSS/template changes.
 5. Run `python scripts\verify\nav_ia.py`.
@@ -87,10 +91,10 @@ regression before visual review.
 
 ## What not to do
 
-- Do not use white text on the brass banner for hover/focus.
+- Do not describe or implement the public short-notice strip as brass/gold.
 - Do not rely on default link focus styling after removing contrast.
 - Do not treat safe-area shorthand as obvious without checking the side order.
-- Do not call a static banner screenshot proof of hover/focus accessibility.
+- Do not call a static source check proof of the live rendered banner color.
 
 ## Cross-links
 
