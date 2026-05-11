@@ -1,0 +1,46 @@
+{
+  "captured_on": "2026-05-11",
+  "source": "apps/locally_twisted/locally_twisted/www/home.html",
+  "icons": [
+    {
+      "icon": "arch",
+      "label": "Balloon Arches",
+      "file": "icons/arch.svg"
+    },
+    {
+      "icon": "column",
+      "label": "Columns",
+      "file": "icons/column.svg"
+    },
+    {
+      "icon": "garland",
+      "label": "Garlands",
+      "file": "icons/garland.svg"
+    },
+    {
+      "icon": "backdrop",
+      "label": "Picture Perfect Backdrops",
+      "file": "icons/backdrop.svg"
+    },
+    {
+      "icon": "drop",
+      "label": "Balloon Drops",
+      "file": "icons/drop.svg"
+    },
+    {
+      "icon": "bouquet",
+      "label": "Balloon Bouquets",
+      "file": "icons/bouquet.svg"
+    },
+    {
+      "icon": "centerpiece",
+      "label": "Centerpieces",
+      "file": "icons/centerpiece.svg"
+    },
+    {
+      "icon": "sculpture",
+      "label": "Custom Sculptures",
+      "file": "icons/sculpture.svg"
+    }
+  ]
+}

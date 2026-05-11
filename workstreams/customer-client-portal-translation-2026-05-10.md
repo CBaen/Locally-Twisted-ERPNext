@@ -49,9 +49,12 @@ python scripts/verify/customer_portal_inventory.py --base-url http://localhost:8
 python scripts/verify/customer_portal_home_contract.py
 python scripts/verify/customer_account_provisioning_contract.py
 npm run test:customer-login-visual
+npx.cmd playwright test scripts/verify/interactive_layout.spec.js --grep "logged-in public header exposes logout" --reporter=line --workers=1
 ```
 
-Result on 2026-05-11: all listed contracts passed locally.
+Result on 2026-05-11: all listed contracts passed locally. The focused logout
+regression passed with `LT_DESK_TEST_USER` and `LT_DESK_TEST_PASSWORD` set to
+the local dev account.
 
 Hard boundaries currently holding:
 
@@ -70,6 +73,12 @@ Hard boundaries currently holding:
 - Checkout still must not create a `User`.
 - Supplier portal routes still exist and remain Supplier-only; they are not the
   customer account experience.
+- Signed-in public users can log out from both desktop header and mobile drawer.
+- Signed-in customer portal users can log out from the top action area and the
+  menu footer.
+- Signed-in accounts without a connected LT customer record land on the
+  account-access-blocked screen with a visible logout action instead of a dead
+  end.
 
 ## Implemented V1 Shape
 
@@ -223,6 +232,9 @@ Visual shell proof added on 2026-05-11:
   desktop/mobile containment, verifies the LT logo loads, blocks native/internal
   portal words, snapshots account home, and cleans up the temporary customer
   records.
+- `scripts/verify/interactive_layout.spec.js` includes a focused session test
+  proving API login, blocked-account logout visibility, public header logout,
+  mobile drawer logout, and return to logged-out `Sign In` state.
 - Python module edits can leave local web workers serving mixed old/new portal
   state. If the visual contract reports stale nav counts after route-context
   edits, restart the local backend/frontend containers, clear website cache, and

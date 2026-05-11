@@ -116,6 +116,10 @@
   gap: 0.45rem;
 }
 
+.lt-portal__top-actions .lt-portal__text-link {
+  white-space: nowrap;
+}
+
 .lt-portal__icon-button {
   align-items: center;
   background: rgba(255, 253, 249, 0.08);

@@ -45,6 +45,7 @@
                         <li><a href="/login">Sign In</a></li>
                     {% else %}
                         <li><a href="/me">My Account</a></li>
+                        <li><a href="/?cmd=web_logout">Log Out</a></li>
                     {% endif %}
                 </ul>
             </div>
@@ -320,6 +321,7 @@
             <a class="lt-mega-drawer__single" href="/login">Sign In</a>
         {% else %}
             <a class="lt-mega-drawer__single" href="/me">My Account</a>
+            <a class="lt-mega-drawer__single" href="/?cmd=web_logout">Log Out</a>
         {% endif %}
 
         <a class="lt-mega-drawer__cta" href="/contact">Contact Us</a>

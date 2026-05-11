@@ -1,5 +1,24 @@
 # Locally Twisted - Coding Handoff
 
+Codex update on 2026-05-11: homepage Custom Event Decor is hidden for the
+launch page, but its recovery assets are preserved intentionally. The homepage
+now sets `show_custom_event_decor = False` and wraps the `lt-categories` block
+plus its following divider in that flag. Recovery archive:
+`_resources/homepage-custom-event-decor-2026-05-11/`, containing the before-hide
+screenshot, extracted SVG icons, and manifest. The next `One of a Kind Designs`
+photo swap is a photo-only proof-band task: use whole photos with shadows; do
+not add text overlays, cards, background-image crops, fixed-height containers,
+or any clipping wrapper.
+
+Codex update on 2026-05-11: signed-in users now have visible logout exits on
+public and account surfaces. The public desktop header and mobile drawer show
+`Log Out` beside `My Account`; LT account pages show `Log Out` in the top action
+area and menu footer; the account-access-blocked state keeps its visible logout
+path. Verification used `python -m py_compile`, `node --check`, cache clear,
+focused logout Playwright coverage with `LT_DESK_TEST_USER` /
+`LT_DESK_TEST_PASSWORD`, header/drawer checks, `nav_ia.py`,
+`customer_portal_inventory.py`, and `customer_portal_visual.spec.js`.
+
 Codex update on 2026-05-11: customer login is now part of the branded
 customer/client account product. `/login#login` renders the LT premium-concierge
 account doorway, hides public marketing chrome, preserves Frappe's native login

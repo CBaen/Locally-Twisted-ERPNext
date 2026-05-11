@@ -1,0 +1,7 @@
+<svg viewBox="0 0 64 64" fill="none"
+  stroke="currentColor" stroke-width="3" role="img" aria-label="Columns icon">
+  <rect x="24" y="10" width="16" height="44" rx="3" stroke-linejoin="round"/>
+  <circle cx="32" cy="22" r="2.5" fill="currentColor" stroke="none"/>
+  <circle cx="32" cy="34" r="2.5" fill="currentColor" stroke="none"/>
+  <circle cx="32" cy="46" r="2.5" fill="currentColor" stroke="none"/>
+  </svg>

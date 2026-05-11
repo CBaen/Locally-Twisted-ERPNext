@@ -8,6 +8,61 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-11 - Signed-in public users need a visible logout escape hatch
+
+**Decision:** Any signed-in user who reaches a public or LT-owned account
+surface must have a visible `Log Out` path. The public desktop header and mobile
+drawer show `Log Out` beside `My Account`; LT account pages expose `Log Out` in
+the top action area and menu footer; the account-access-blocked screen includes
+a clear logout action.
+
+**Reasoning:** GL could not log out from the local site. The direct Frappe
+logout endpoint worked, but the custom public chrome hid the exit path and the
+account-blocked state could feel like a dead end. That is a trust failure even
+when the backend session endpoint is healthy.
+
+**Implementation boundary:** Use Frappe's website logout URL
+`/?cmd=web_logout`. Do not replace Frappe session handling with a custom auth
+endpoint. Future header, drawer, login, portal, or account-blocked changes must
+keep a visible logout affordance for signed-in users.
+
+**Verification receipt:** Focused Playwright session regression passed with
+`LT_DESK_TEST_USER` / `LT_DESK_TEST_PASSWORD`: API login, blocked-account logout
+visibility, `/home` desktop header logout, mobile drawer logout, and return to
+logged-out `Sign In` state.
+
+**Decided by:** GL bug report and Codex implementation on 2026-05-11.
+
+---
+
+## 2026-05-11 - Homepage Custom Event Decor is hidden, not deleted
+
+**Decision:** The homepage `Custom Event Decor` block is hidden for launch by
+`show_custom_event_decor = False`. The source Jinja block remains guarded for
+intentional restoration, and recovery assets live at
+`_resources/homepage-custom-event-decor-2026-05-11/`.
+
+**Reasoning:** GL explicitly asked to hide the block while preserving the icons
+and a screenshot in case the block comes back. Deleting the block would lose
+layout and icon recovery context; leaving it visible would violate the current
+landing-page direction.
+
+**Implementation boundary:** Do not restore the block by accident during
+homepage/layout work. If it returns, flip the flag intentionally, check the
+archive, clear website cache, and rerun desktop/mobile homepage layout gates.
+The next `One of a Kind Designs` photo replacement must be whole-photo proof
+with shadows only, not cards, text overlays, fixed crop boxes, or containers
+that clip balloon art.
+
+**Verification receipt:** Before hiding, a live screenshot and all eight inline
+SVG icons were archived under `_resources/homepage-custom-event-decor-2026-05-11/`.
+After hiding, live DOM checks found zero `.lt-categories` blocks and no visible
+`Custom Event Decor` heading; targeted homepage layout-fit passed.
+
+**Decided by:** GL direction and Codex implementation on 2026-05-11.
+
+---
+
 ## 2026-05-11 - Customer login is part of the LT account product
 
 **Decision:** `/login#login` is an LT-branded customer account doorway, not a stock ERPNext-looking page. It must preserve Frappe's native login form hooks so Website Users can authenticate through the visible form. `/login#signup` stays branded and invite-first instead of exposing public self-signup.

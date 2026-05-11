@@ -9,12 +9,13 @@ currently_true: unknown
 verification_level: 2
 last_verified: 2026-05-11
 evidence_quality: direct
-successful_uses: 1
+successful_uses: 2
 failed_uses: 0
 regressions: 0
 depends_on:
   - fail-loud-operating-law
-used_by: []
+used_by:
+  - customer-client-portal-translation
 tags:
   - Locally Twisted
   - ERPNext
@@ -41,6 +42,11 @@ customer account visual shell.
 - `/login#signup` must stay branded and invite-first; it must not expose public
   self-signup or imply that anonymous customers need an account to request,
   browse, cart, or checkout.
+- Signed-in public users must have a visible `Log Out` path in the desktop
+  header and mobile drawer.
+- Signed-in account users must have a visible `Log Out` path in the LT-owned
+  account shell. Account-access-blocked users must not be stranded without a
+  logout action.
 - `/me` is the customer account home. Guest `/me` must not be readable.
 - The account experience is LT-owned, not ERPNext native list pages.
 - The individual account routes are `/me`, `/account/events`,
@@ -75,10 +81,12 @@ customer account visual shell.
 - `apps/locally_twisted/locally_twisted/www/login.html`
 - `apps/locally_twisted/locally_twisted/www/login.py`
 - `apps/locally_twisted/locally_twisted/public/css/lt-login.css`
+- `apps/locally_twisted/locally_twisted/templates/includes/navbar/navbar.html`
 - `apps/locally_twisted/locally_twisted/customer_account_provisioning.py`
 - `apps/locally_twisted/locally_twisted/seed/sync_customer_portal.py`
 - `apps/locally_twisted/locally_twisted/verify/customer_portal_review_fixture.py`
 - `scripts/verify/customer_login_visual.spec.js`
+- `scripts/verify/interactive_layout.spec.js`
 
 ## Verification
 
@@ -92,6 +100,7 @@ python scripts/verify/customer_account_provisioning_contract.py
 python scripts/verify/customer_portal_inventory.py --base-url http://localhost:8081 --strict-menu --report output/customer-portal-inventory.json
 npm run test:customer-login-visual
 npm run test:customer-portal-visual
+npx.cmd playwright test scripts/verify/interactive_layout.spec.js --grep "logged-in public header exposes logout" --reporter=line --workers=1
 ```
 
 After Jinja, Python route context, or CSS edits, clear website cache. If browser
@@ -105,6 +114,7 @@ the local Frappe backend/frontend containers and rerun the visual verifier.
 - Letting `/login` fall back to a stock ERPNext-looking screen, losing the
   native Frappe auth hooks, or showing public signup as a normal customer path.
 - Letting the default Frappe sidebar reappear next to the branded portal nav.
+- Hiding or omitting logout on any signed-in custom public/account surface.
 - Creating customer Users from guest checkout or failed payment state.
 - Marking a staff-owned or unrelated File as a customer-uploaded portal file.
 - Exposing ERPNext workflow labels, supplier routes, Desk routes, or raw records

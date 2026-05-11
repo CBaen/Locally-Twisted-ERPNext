@@ -1,0 +1,6 @@
+<svg viewBox="0 0 64 64" fill="none"
+  stroke="currentColor" stroke-width="3" role="img" aria-label="Picture Perfect Backdrops icon">
+  <rect x="8" y="12" width="48" height="32" rx="2" stroke-linejoin="round"/>
+  <path d="M14 36 L24 26 L32 32 L42 22 L50 30" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="42" cy="22" r="3" fill="currentColor" stroke="none"/>
+  </svg>

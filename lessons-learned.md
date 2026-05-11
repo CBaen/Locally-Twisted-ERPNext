@@ -6,6 +6,46 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-11 - Page fixes need the actual requested fix first
+
+The landing-page pass started from a broad "fix the landing page" frame before
+the exact requested fix was named. GL corrected the failure: without direction,
+the agent was guessing at the surface and creating distrust before the real task
+arrived.
+
+**Counter-move:** when a visual/page request is broad and GL has not named the
+specific defect, stop at orientation and ask for the exact target. Once GL names
+the target, keep the slice narrow, preserve requested recovery assets, and do
+not fold unrelated polish into the same closeout.
+
+---
+
+## 2026-05-11 - A working logout endpoint is not a working logout experience
+
+Frappe's `/?cmd=web_logout` path worked, but the LT custom header/account shell
+did not expose it clearly enough. A signed-in user could reach public/account
+surfaces with no obvious way out, which is a customer-trust failure even when
+the backend endpoint is healthy.
+
+**Counter-move:** auth/session UX needs a visible signed-in escape hatch in
+every custom public chrome and account shell. Verify the full loop: login,
+visible logout affordance, click logout, and return to logged-out state.
+
+---
+
+## 2026-05-11 - Hiding a visual block needs a recovery artifact
+
+GL asked to hide Custom Event Decor but keep the icons and a screenshot in case
+the block comes back. A code flag alone is not enough: future agents need the
+visual state and icon source without relying on memory or guessing from Git.
+
+**Counter-move:** when a user asks to hide, park, or remove a visual section but
+explicitly wants it recoverable, create a small durable archive with a screenshot,
+source assets, and a manifest. Document the restoration flag and verification
+commands in the feature handoff.
+
+---
+
 ## 2026-05-11 - Technical preflight is not account access
 
 The launch prep initially grouped Frappe Cloud, Cloudflare, and Stripe as if

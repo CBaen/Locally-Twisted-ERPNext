@@ -1,7 +1,7 @@
 # Landing Page Repair Workstream
 
-Last updated: 2026-05-08 by Codex after compacting the mobile Google review
-proof band and adding its sizing contract.
+Last updated: 2026-05-11 by Codex after hiding Custom Event Decor and archiving
+its recovery assets.
 
 ## Outcome
 
@@ -41,6 +41,15 @@ Completed on 2026-05-07:
   launch hero.
 - The hero no longer inherits global `section` vertical padding or local
   oversized min-height behavior.
+- Custom Event Decor is currently hidden from the homepage behind
+  `show_custom_event_decor = False`. The block is not deleted; the source Jinja
+  remains guarded, and recovery assets live in
+  `_resources/homepage-custom-event-decor-2026-05-11/`.
+- `One of a Kind Designs` remains the next photo-replacement surface. Future
+  replacement photos should be rendered as full photos with shadow only. Do not
+  add text overlays, captions inside the image surface, `background-image`
+  cropping, fixed-height crop boxes, or card containers that cut off balloon
+  art.
 
 ## Source Files
 
@@ -50,9 +59,25 @@ Completed on 2026-05-07:
 - `apps/locally_twisted/locally_twisted/public/css/lt-page-containment.css`
 - `apps/locally_twisted/locally_twisted/public/js/lt-site-preferences.js`
 - `scripts/verify/interactive_layout.spec.js`
-- Capability contract: `.codex/capabilities/recipes/homepage-launch-proof-contract.md`
+- Capability contract: `capabilities/recipes/homepage-launch-proof-contract.md`
+- Recovery archive:
+  `_resources/homepage-custom-event-decor-2026-05-11/`
 
 ## Verification Receipt
+
+Custom Event Decor hide on 2026-05-11:
+
+```powershell
+python -m py_compile apps\locally_twisted\locally_twisted\www\home.py
+python scripts/dev/clear_website_cache.py --restart
+npx.cmd playwright test scripts/verify/layout_fit.spec.js --grep "home fits" --reporter=line --workers=1
+```
+
+Result: before hiding, the block screenshot and all eight inline SVG icons were
+archived under `_resources/homepage-custom-event-decor-2026-05-11/`. After the
+flagged hide, live DOM checks found zero `.lt-categories` blocks and no visible
+`Custom Event Decor` heading on the homepage. Targeted homepage layout checks
+passed 13/13.
 
 Mobile review compactness correction on 2026-05-08:
 
@@ -194,3 +219,8 @@ overflow for both banners, and effectively identical speed deltas in
 - Do not restore the homepage trust bar or put the installed-work proof band
   above Google reviews unless GL explicitly changes the launch proof order
   again.
+- Do not restore Custom Event Decor to the homepage without flipping
+  `show_custom_event_decor` intentionally, checking the archive, and rerunning
+  desktop/mobile layout verification.
+- For the next `One of a Kind Designs` photo replacement, preserve whole balloon
+  art photos. No crop containers, card shells, or text-on-photo treatment.

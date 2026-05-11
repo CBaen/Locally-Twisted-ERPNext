@@ -1128,6 +1128,7 @@ def get_context(context):
     }
     context.client_crawl = CLIENT_CRAWL
     context.custom_categories = CUSTOM_CATEGORIES
+    context.show_custom_event_decor = False
     context.featured_work = FEATURED_WORK
     context.home_hero_slides = HOME_HERO_SLIDES
     context.structured_data = [business_graph("/")]

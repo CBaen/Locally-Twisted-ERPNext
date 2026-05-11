@@ -53,7 +53,7 @@ web_include_css = [
     "/assets/locally_twisted/css/lt-page-containment.css?v=20260510-btfp-crawl-1",
     "/assets/locally_twisted/css/lt-photo-heroes.css?v=20260510-about-1",
     "/assets/locally_twisted/css/lt-form-experience.css?v=20260510-1",
-    "/assets/locally_twisted/css/lt-customer-portal.css?v=20260511-premium-concierge-1",
+    "/assets/locally_twisted/css/lt-customer-portal.css?v=20260511-logout-1",
     "/assets/locally_twisted/css/lt-event-playground.css?v=20260506-event-playground-1",
     "/assets/locally_twisted/css/lt-audience-lane.css?v=20260510-audience-lane-6-slider",
 ]

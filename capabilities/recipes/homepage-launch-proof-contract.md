@@ -5,11 +5,11 @@ schema_version: 2.0
 level: recipe
 maturity: candidate
 scope: Locally Twisted ERPNext/Frappe homepage hero, proof crawls, cookie placement, and launch CTAs
-currently_true: yes
+currently_true: unknown
 verification_level: 2
-last_verified: 2026-05-10
+last_verified: 2026-05-11
 evidence_quality: direct
-successful_uses: 4
+successful_uses: 5
 failed_uses: 1
 regressions: 1
 depends_on:
@@ -70,6 +70,14 @@ review crawl, trusted-client crawl, cookie notice placement, or launch CTAs.
 - `One of a Kind Designs` appears after Google reviews as a wide installed-work
   proof band. Real custom installation proof is still important, but the launch
   homepage now leads with social proof under the hero.
+- Custom Event Decor is hidden from the current homepage behind
+  `show_custom_event_decor = False`. The block's recovery archive is
+  `_resources/homepage-custom-event-decor-2026-05-11/`, including the before-hide
+  screenshot and extracted SVG icons.
+- Future `One of a Kind Designs` photo replacements must render whole photos
+  with shadows only. Do not use `background-image` crop surfaces, fixed-height
+  image boxes, text overlays, captions inside the photo surface, or card
+  containers that clip balloon art.
 - Review cards and trusted-business names are full-stage crawls. Both move
   left-to-right. Review cards use the canonical `540s` loop, and the
   trusted-business crawl is measured in the browser so its pixel speed matches
@@ -90,6 +98,7 @@ review crawl, trusted-client crawl, cookie notice placement, or launch CTAs.
 - `apps/locally_twisted/locally_twisted/public/css/lt-page-containment.css`
 - `apps/locally_twisted/locally_twisted/public/js/lt-site-preferences.js`
 - `scripts/verify/interactive_layout.spec.js`
+- `_resources/homepage-custom-event-decor-2026-05-11/`
 
 ## Verification
 
@@ -102,6 +111,13 @@ npm run test:interactive-layout -- --grep "mobile review proof"
 npx playwright test scripts/verify/layout_fit.spec.js --reporter=dot --grep "home fits"
 npm run test:interactive-layout -- --grep "homepage|cookie notice"
 npm run test:interactive-layout -- --grep "compact hero height contract"
+```
+
+After hiding or restoring Custom Event Decor, also verify that the intended
+visibility state is true in the live DOM and rerun the homepage layout gate:
+
+```powershell
+npx.cmd playwright test scripts/verify/layout_fit.spec.js --grep "home fits" --reporter=line --workers=1
 ```
 
 If `home.py` route-controller constants such as `PAGE_CSS` changed, restart the
@@ -130,6 +146,10 @@ before marking the homepage ready for GL review.
   oversized padding, or giant title clamps.
 - A trust/authority bar appears between the hero and reviews.
 - The installed-work proof band appears before reviews.
+- Custom Event Decor returns to the homepage without an explicit flag change,
+  archive review, and fresh desktop/mobile layout proof.
+- `One of a Kind Designs` photos are placed in crop containers, card shells, or
+  text-overlay treatments that cut off balloon art.
 - The cookie notice blocks primary CTAs on mobile or sits between the hero and
   Google reviews.
 - Event Playground, blog-title cycling, or design-studio language returns to the
@@ -193,3 +213,13 @@ cards; focused review tests passed 5/5 and homepage layout-fit passed 13/13.
 ## 2026-05-10 seasonal-carousel override
 
 GL changed the launch homepage hero from a single static hero to a rotating seasonal/audience carousel. Current first slide is graduation season, followed by the four Event Balloons submenu audience lanes. The old "one stable generated lifestyle hero image" verifier expectation is obsolete for this slice; the active guard is one visible page-level H1 on the first slide, compact hero sizing, reduced-motion fallback, quote-led CTAs, and no platform leakage. Feature handoff: `workstreams/homepage-seasonal-hero-carousel-2026-05-10.md`.
+
+## 2026-05-11 Custom Event Decor hide
+
+GL directed that the homepage Custom Event Decor block be hidden while keeping a
+screenshot and all eight icons recoverable. The current controller flag is
+`show_custom_event_decor = False`; the guarded Jinja block remains in
+`home.html`; recovery assets are in
+`_resources/homepage-custom-event-decor-2026-05-11/`. The next photo work on
+`One of a Kind Designs` must preserve whole photos and avoid crop/card/text
+treatments.

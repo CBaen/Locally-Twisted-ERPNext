@@ -10,6 +10,8 @@ const {
 } = require("./layout_helpers");
 
 const PLATFORM_WORDS = /\b(?:ERPNext|Frappe|Odoo)\b/i;
+const DESK_USER = process.env.LT_DESK_TEST_USER;
+const DESK_PASSWORD = process.env.LT_DESK_TEST_PASSWORD;
 
 const COMPACT_HERO_VIEWPORTS = [
 	{ name: "mobile", width: 390, height: 844, expectedHeight: 220, maxPadding: 24, maxTitle: 32, imageKey: "mobile" },
@@ -108,6 +110,25 @@ async function dismissCookieNotice(page) {
 	if (!(await banner.isVisible().catch(() => false))) return;
 	await page.locator(".lt-cookie-consent__button--secondary").click();
 	await expect(banner).toHaveCount(0);
+}
+
+async function loginThroughApi(page) {
+	await page.goto(new URL("/login", BASE_URL).toString(), { waitUntil: "domcontentloaded" });
+	const result = await page.evaluate(
+		async ({ user, password }) => {
+			const response = await fetch("/api/method/login", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					"X-Requested-With": "XMLHttpRequest",
+				},
+				body: JSON.stringify({ usr: user, pwd: password }),
+			});
+			return { status: response.status, body: await response.text() };
+		},
+		{ user: DESK_USER, password: DESK_PASSWORD },
+	);
+	expect(result.status, result.body).toBe(200);
 }
 
 test.describe("Locally Twisted interactive layout states", () => {
@@ -312,6 +333,40 @@ test.describe("Locally Twisted interactive layout states", () => {
 				scriptSrcs.some((src) => src.includes("lt-site-preferences.js?v=20260510-form-inline-1")),
 				"site-preferences script should be cache-busted when inline notice behavior changes"
 			).toBe(true);
+		});
+
+		test("logged-in public header exposes logout and clears the session", async ({ page }) => {
+			test.skip(!DESK_USER || !DESK_PASSWORD, "Set LT_DESK_TEST_USER and LT_DESK_TEST_PASSWORD.");
+			await loginThroughApi(page);
+
+			await page.setViewportSize({ width: 1366, height: 900 });
+			const blockedResponse = await gotoAndSettle(page, "/");
+			await expectSuccessfulResponse(blockedResponse, "/");
+			await expect(page.locator("[data-lt-portal-access-blocked]")).toBeVisible();
+			await expect(page.locator("[data-lt-portal-access-blocked]").getByRole("link", { name: /Log Out/i }).first()).toBeVisible();
+
+			const desktopResponse = await gotoAndSettle(page, "/home");
+			await expectSuccessfulResponse(desktopResponse, "/home");
+			await expect(page.locator("body")).toHaveAttribute("frappe-session-status", "logged-in");
+			await expect(page.locator(".lt-mega-header__top-links").getByRole("link", { name: /My Account/i })).toBeVisible();
+			await expect(page.locator(".lt-mega-header__top-links").getByRole("link", { name: /Log Out/i })).toHaveAttribute("href", "/?cmd=web_logout");
+
+			await page.setViewportSize({ width: 390, height: 844 });
+			const mobileResponse = await gotoAndSettle(page, "/home");
+			await expectSuccessfulResponse(mobileResponse, "/home");
+			await dismissCookieNotice(page);
+			await page.locator("#lt-mobile-toggle").click();
+			await expect(page.locator("#lt-mobile-nav")).toBeVisible();
+			const mobileLogout = page.locator("#lt-mobile-nav").getByRole("link", { name: /Log Out/i });
+			await expect(mobileLogout).toBeVisible();
+			await mobileLogout.click();
+			await page.waitForLoadState("networkidle");
+
+			const loggedOutResponse = await gotoAndSettle(page, "/home");
+			await expectSuccessfulResponse(loggedOutResponse, "/home");
+			await expect(page.locator("body")).toHaveAttribute("frappe-session-status", "logged-out");
+			await page.locator("#lt-mobile-toggle").click();
+			await expect(page.locator("#lt-mobile-nav").getByRole("link", { name: /Sign In/i })).toBeVisible();
 		});
 	});
 
