@@ -21,15 +21,15 @@
 
     {# ============ Thin name ribbon - editorial credit strip ============ #}
     {% if page.named_orgs and page.named_orgs.names %}
-    <section class="lt-lane-orgs lt-fullbleed" aria-label="Organizations we have installed for">
+    <section class="lt-lane-orgs lt-fullbleed" aria-label="In collaboration with">
         <div class="lt-lane-orgs__inner">
             <div class="lt-lane-orgs__ribbon">
                 <span class="lt-lane-orgs__ribbon-label">In Collaboration With</span>
-                <span class="lt-lane-orgs__ribbon-names">
+                <div class="lt-lane-orgs__ribbon-names" data-lt-collab-ribbon>
                     {%- for name in page.named_orgs.names -%}
-                    <span class="lt-lane-orgs__ribbon-name">{{ name }}</span>{% if not loop.last %}<span class="lt-lane-orgs__ribbon-dot" aria-hidden="true">&middot;</span>{% endif %}
+                    <span class="lt-lane-orgs__ribbon-name">{{ name }}</span><span class="lt-lane-orgs__ribbon-dot" aria-hidden="true">&middot;</span>
                     {%- endfor -%}
-                </span>
+                </div>
             </div>
         </div>
     </section>

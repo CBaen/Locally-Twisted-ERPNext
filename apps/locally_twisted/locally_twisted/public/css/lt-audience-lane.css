@@ -25,8 +25,19 @@
 
 .lt-lane-orgs {
   background: #fff;
-  padding: clamp(1.5rem, 3.5vw, 2.25rem) clamp(1rem, 3vw, 2rem);
+  padding: clamp(1rem, 2.5vw, 1.5rem) clamp(1rem, 3vw, 2rem);
   border-bottom: 1px solid rgba(184, 154, 91, 0.4);
+  /* Fixed container height so every audience-lane ribbon renders in the same
+     vertical space, regardless of how many names the page lists. */
+  min-height: 96px;
+  display: flex;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .lt-lane-orgs {
+    min-height: 80px;
+  }
 }
 
 .lt-lane-orgs__inner {
@@ -35,13 +46,13 @@
   margin: 0 auto;
 }
 
-/* Ribbon is the only thing in this section. Heading text removed. */
+/* Ribbon is the only thing in this section. */
 .lt-lane-orgs__ribbon {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem 0.9rem;
+  gap: 0.4rem 0.9rem;
 }
 
 .lt-lane-orgs__ribbon-label {
@@ -54,6 +65,7 @@
   flex-shrink: 0;
 }
 
+/* Desktop / tablet: wrapping flex row, centered. */
 .lt-lane-orgs__ribbon-names {
   display: inline-flex;
   flex-wrap: wrap;
@@ -78,6 +90,53 @@
   color: var(--lt-brass);
   font-weight: 700;
   user-select: none;
+}
+
+/* Mobile: touch-swipe horizontal scroller. JS clones the names list 2x and
+   teleports scrollLeft when the user nears either edge so the loop never ends. */
+@media (max-width: 767.98px) {
+  .lt-lane-orgs__ribbon {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .lt-lane-orgs__ribbon-names {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;       /* Firefox */
+    -ms-overflow-style: none;     /* IE / Edge legacy */
+    /* Brass-tinted fade masks at left/right edges so the strip implies "more". */
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 24px,
+      #000 calc(100% - 24px),
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 24px,
+      #000 calc(100% - 24px),
+      transparent 100%
+    );
+  }
+
+  .lt-lane-orgs__ribbon-names::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Active-drag affordance on touch devices. */
+.lt-lane-orgs__ribbon-names.is-dragging {
+  cursor: grabbing;
 }
 
 /* ============================================================
