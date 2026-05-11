@@ -1,19 +1,42 @@
-<section class="lt-portal" data-lt-customer-portal {{ portal_page.marker }}>
+<section class="lt-portal lt-portal--{{ portal_mode }}" data-lt-customer-portal {{ portal_page.marker }}>
     <div class="lt-portal__inner">
         <header class="lt-portal__hero">
-            <p class="lt-portal__eyebrow">
-                {% if portal_mode == "organization" %}Locally Twisted organization account{% else %}Locally Twisted account{% endif %}
-            </p>
-            <h1>{{ portal_page.heading }}</h1>
-            <p class="lt-portal__lede">{{ portal_page.lede }}</p>
+            <div class="lt-portal__brand">
+                <img src="/assets/locally_twisted/icons/lt-logo.png" alt="" width="86" height="70" loading="eager">
+                <span>{% if portal_mode == "organization" %}Organization account{% else %}Customer account{% endif %}</span>
+            </div>
+            <div class="lt-portal__hero-copy">
+                <p class="lt-portal__eyebrow">
+                    {% if portal_mode == "organization" %}Locally Twisted shared account{% else %}Locally Twisted private account{% endif %}
+                </p>
+                <h1>{{ portal_page.heading }}</h1>
+                <p class="lt-portal__lede">{{ portal_page.lede }}</p>
+            </div>
+            <aside class="lt-portal__identity" aria-label="Signed in account">
+                <span>Signed in as</span>
+                <strong>{{ portal_display_name }}</strong>
+                <p>Private account view</p>
+            </aside>
         </header>
 
         {% if portal_summary.next_action %}
-        <div class="lt-portal__action">
-            <strong>{{ portal_summary.next_action.label }}</strong>
-            <a class="lt-portal__button" href="{{ portal_summary.next_action.href }}">Open</a>
+        <div class="lt-portal__action" data-tone="{{ portal_summary.next_action.tone }}">
+            <div>
+                <span class="lt-portal__action-label">Next step</span>
+                <strong>{{ portal_summary.next_action.label }}</strong>
+            </div>
+            <a class="lt-portal__button" href="{{ portal_summary.next_action.href }}">Review</a>
         </div>
         {% endif %}
+
+        <dl class="lt-portal__metrics" aria-label="Account summary">
+            {% for item in portal_metrics %}
+            <div class="lt-portal__metric">
+                <dt>{{ item.label }}</dt>
+                <dd>{{ item.value }}</dd>
+            </div>
+            {% endfor %}
+        </dl>
 
         <nav class="lt-portal__nav" aria-label="Account sections">
             {% for item in portal_nav %}
@@ -24,15 +47,25 @@
         <div class="lt-portal__grid">
             {% for row in portal_page.records %}
             <article class="lt-portal__card">
-                <span class="lt-portal__card-title">{{ row.title }}</span>
                 {% if row.status_label %}
-                <p class="lt-portal__meta"><strong>{{ row.status_label }}</strong></p>
+                <span class="lt-portal__status">{{ row.status_label }}</span>
                 {% endif %}
+                <h2 class="lt-portal__card-title">{{ row.title }}</h2>
                 {% if row.description %}
                 <p class="lt-portal__meta">{{ row.description }}</p>
                 {% endif %}
+                {% if row.meta %}
+                <dl class="lt-portal__facts">
+                    {% for item in row.meta %}
+                    <div>
+                        <dt>{{ item.label }}</dt>
+                        <dd>{{ item.value }}</dd>
+                    </div>
+                    {% endfor %}
+                </dl>
+                {% endif %}
                 {% if row.href %}
-                <p class="lt-portal__meta"><a href="{{ row.href }}">Open</a></p>
+                <a class="lt-portal__text-link" href="{{ row.href }}">{{ row.cta_label }}</a>
                 {% endif %}
             </article>
             {% endfor %}

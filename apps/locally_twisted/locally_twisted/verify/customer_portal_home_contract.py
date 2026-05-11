@@ -12,6 +12,9 @@ class ContractFail(Exception):
 
 REQUIRED_MARKERS = {
     "data-lt-account-dashboard",
+    "lt-customer-portal.css",
+    "Private account view",
+    "lt-portal__metric",
     "Event Details",
     "Invoices & Receipts",
     "Files & Inspiration",

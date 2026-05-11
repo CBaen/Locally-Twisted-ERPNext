@@ -52,6 +52,12 @@ FORBIDDEN_MARKERS = {
     "Buying",
 }
 
+REQUIRED_SHELL_MARKERS = {
+    "lt-customer-portal.css",
+    "Private account view",
+    "lt-portal__metric",
+}
+
 
 def run() -> dict[str, Any]:
     original_user = frappe.session.user
@@ -145,6 +151,9 @@ def _render_required_routes() -> set[str]:
         html = get_response_content(route)
         if marker not in html:
             raise ContractFail(f"{route} did not render required marker {marker}")
+        missing_shell = sorted(term for term in REQUIRED_SHELL_MARKERS if term not in html)
+        if missing_shell:
+            raise ContractFail(f"{route} did not render branded account shell markers: {', '.join(missing_shell)}")
         forbidden = sorted(term for term in FORBIDDEN_MARKERS if term in html)
         if forbidden:
             raise ContractFail(f"{route} exposed forbidden portal markers: {', '.join(forbidden)}")

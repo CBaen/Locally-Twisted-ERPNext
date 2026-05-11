@@ -9,6 +9,32 @@ experience without breaking guest-first public flows. This lane is for customers
 and clients only; owner, employee, accountant, contractor, vendor, and backend
 Desk access stay in their own lanes.
 
+## Ownership And Gate Decision
+
+Codex owns customer/client portal closeout for now. OpenClaw/Moji can continue
+shop, product, cart, and checkout closeout without bundling this portal slice.
+The two lanes may share a dirty worktree, but they must not share one closeout
+claim, one commit, or one proof packet unless GL explicitly merges them later.
+
+Portal-owned closeout files:
+
+- `apps/locally_twisted/locally_twisted/customer_portal_pages.py`
+- `apps/locally_twisted/locally_twisted/templates/includes/customer_portal_page.html`
+- `apps/locally_twisted/locally_twisted/public/css/lt-customer-portal.css`
+- `apps/locally_twisted/locally_twisted/verify/customer_portal_home_contract.py`
+- `apps/locally_twisted/locally_twisted/verify/customer_portal_v1_contract.py`
+- `apps/locally_twisted/locally_twisted/verify/customer_portal_review_fixture.py`
+- `scripts/verify/customer_portal_visual.spec.js`
+- `capabilities/recipes/customer-client-portal-contract.md`
+- this workstream
+
+Shared files requiring hunk-level review before staging:
+
+- `apps/locally_twisted/locally_twisted/hooks.py`
+- `package.json`
+- `capabilities/INDEX.md`
+- `capabilities/registry/capability-registry.jsonl`
+
 ## Current Verified State
 
 Commands:
@@ -82,6 +108,7 @@ Source modules:
 - `apps/locally_twisted/locally_twisted/customer_portal.py`
 - `apps/locally_twisted/locally_twisted/customer_portal_pages.py`
 - `apps/locally_twisted/locally_twisted/templates/includes/customer_portal_page.html`
+- `apps/locally_twisted/locally_twisted/public/css/lt-customer-portal.css`
 
 The portal reads through `get_customer_portal_summary(user)` and
 `get_organization_portal_summary(user)`. Those functions resolve
@@ -119,6 +146,9 @@ Important behavior:
   attached to another source fail before portal metadata is created.
 - Organization portal access requires `LT Organization Portal Membership`, not
   a shared email domain guess.
+- LT-owned account pages hide Frappe's default portal sidebar and use the
+  branded account shell plus in-page nav. Organization Portal appears in the
+  account nav because it is one of the eight customer-facing value surfaces.
 
 ## Odoo Reference Signals
 
@@ -161,10 +191,25 @@ Supporting gates:
 python scripts/verify/customer_portal_inventory.py --base-url http://localhost:8081 --strict-menu --report output/customer-portal-inventory.json
 python scripts/verify/customer_portal_home_contract.py
 python scripts/verify/customer_account_provisioning_contract.py
+npm run test:customer-portal-visual
 ```
 
 Future portal work must update or extend these contracts before claiming a
 customer/account behavior is ready.
+
+Visual shell proof added on 2026-05-11:
+
+- `lt-customer-portal.css` is registered through `web_include_css`, not kept as
+  a Python inline style block.
+- `scripts/verify/customer_portal_visual.spec.js` creates a temporary
+  customer account, logs in through the real `/api/method/login` path, verifies
+  desktop/mobile containment, verifies the LT logo loads, blocks native/internal
+  portal words, snapshots account home, and cleans up the temporary customer
+  records.
+- Python module edits can leave local web workers serving mixed old/new portal
+  state. If the visual contract reports stale nav counts after route-context
+  edits, restart the local backend/frontend containers, clear website cache, and
+  rerun the browser contract.
 
 ## Remaining Work
 
@@ -173,7 +218,6 @@ customer/account behavior is ready.
   through routed-alias loops.
 - Add richer per-record detail pages when real customer review requires more
   than the current summary cards.
-- Add browser screenshots for the new routes after the next visual pass.
 - Add customer-visible file upload UI after file-size/type/cap policy is
   finalized.
 - Add organization AP/people management actions only after Jeff/GL approve the
