@@ -510,6 +510,24 @@ EVENT_TYPE_PAGES = {
                 "Over 20 years of installations across Utah business and finance, media, "
                 "restaurants and retail, and campus events."
             ),
+            # TODO(GL): Drop in real photos of installs at named corporate clients.
+            # Three is the sweet spot; the photos do the heavy lifting and the ribbon
+            # below picks up the name-dropping in a single editorial credit line.
+            "photos": [
+                {
+                    "image": f"{PORTFOLIO_BASE}/corporate-logo-arch.webp",
+                    "alt": "Branded corporate balloon arch at a Utah event entrance",
+                },
+                {
+                    "image": f"{PORTFOLIO_BASE}/corporate-weberstock-photo-opt.webp",
+                    "alt": "Large corporate balloon backdrop for a Utah business event",
+                },
+                {
+                    "image": f"{PORTFOLIO_BASE}/corporate-wsu-arch-bouquets.webp",
+                    "alt": "Corporate-color balloon arch and bouquet install",
+                },
+            ],
+            "ribbon_label": "Installed for",
             # TODO(GL): Confirm which of these names LT has genuinely installed for.
             # Remove any that are aspirational; keep only verified clients.
             "names": [

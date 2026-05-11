@@ -52,7 +52,7 @@
     </section>
     {% endif %}
 
-    {# ====== NEW: Named-organization wall (text tiles by default; logos if rights confirmed) ====== #}
+    {# ====== Named-organization band: photos do the heavy lifting; names as a thin credit ribbon below ====== #}
     {% if page.named_orgs %}
     <section class="lt-lane-orgs lt-fullbleed" aria-labelledby="{{ page.route }}-orgs-title">
         <div class="lt-lane-orgs__inner">
@@ -63,11 +63,25 @@
                 <p>{{ page.named_orgs.lede }}</p>
                 {% endif %}
             </div>
-            <div class="lt-lane-orgs__grid">
-                {% for name in page.named_orgs.names %}
-                <div class="lt-lane-orgs__tile">{{ name }}</div>
+            {% if page.named_orgs.photos %}
+            <div class="lt-lane-orgs__photos">
+                {% for photo in page.named_orgs.photos %}
+                <figure class="lt-lane-orgs__photo">
+                    <img src="{{ photo.image }}" alt="{{ photo.alt }}" loading="lazy">
+                </figure>
                 {% endfor %}
             </div>
+            {% endif %}
+            {% if page.named_orgs.names %}
+            <div class="lt-lane-orgs__ribbon" aria-label="Organizations we have installed for">
+                <span class="lt-lane-orgs__ribbon-label">{{ page.named_orgs.ribbon_label or "Installed for" }}</span>
+                <span class="lt-lane-orgs__ribbon-names">
+                    {%- for name in page.named_orgs.names -%}
+                    <span class="lt-lane-orgs__ribbon-name">{{ name }}</span>{% if not loop.last %}<span class="lt-lane-orgs__ribbon-dot" aria-hidden="true">&middot;</span>{% endif %}
+                    {%- endfor -%}
+                </span>
+            </div>
+            {% endif %}
         </div>
     </section>
     {% endif %}
