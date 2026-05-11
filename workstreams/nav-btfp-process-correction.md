@@ -1,6 +1,6 @@
 # Nav BTFP / Process Correction
 
-Last updated: 2026-05-08 by Codex after linking the BTFP service-page handoff.
+Last updated: 2026-05-11 by Codex after linking the removed `/event-balloons` hub handoff.
 
 ## Outcome
 
@@ -24,9 +24,13 @@ See `locally-twisted-decisions.md` entry:
 
 Current rule:
 
-- Primary nav: `Event Balloons`, `Portfolio`, `Twisting & Face Painting`,
-  `Ready-to-Order`, `FAQ`.
+- Primary nav: non-link `Event Balloons` audience dropdown, `Ready-to-Order`,
+  `Twisting & Face Painting`, `Portfolio`, `About Us`, `FAQ`, and `Contact Us`
+  when ecommerce is open.
 - `Free Event Quote` points to `/contact`.
+- `/event-balloons` is removed with no redirect; event audience links point to
+  `/civic-community`, `/corporate-events`, `/schools-campuses`, and
+  `/private-celebrations`.
 - `/balloon-twisting-and-face-painting` is the approved live-service route.
 - `/process` is not an approved public route and should stay gone unless GL
   explicitly reopens it.
@@ -45,6 +49,8 @@ Current rule:
 - `apps/locally_twisted/locally_twisted/www/process.html` deleted
 - `apps/locally_twisted/locally_twisted/www/process.py` deleted
 - BTFP page follow-up owned by `workstreams/btfp-service-page.md`
+- Event Balloons hub removal owned by
+  `workstreams/event-balloons-route-removal-2026-05-11.md`
 
 Docs updated:
 
@@ -56,9 +62,9 @@ Docs updated:
 - `workstreams/menu-content-coordination.md`
 - `workstreams/website-launch.md`
 - `workstreams/brand-style-guide-consolidation.md`
-- `.codex/capabilities/INDEX.md`
-- `.codex/capabilities/recipes/frappe-public-nav-business-route-contract.md`
-- `.codex/capabilities/evidence/capability-evidence.jsonl`
+- `capabilities/INDEX.md`
+- `capabilities/recipes/frappe-public-nav-business-route-contract.md`
+- `capabilities/evidence/capability-evidence.jsonl`
 
 ## Implementation Notes
 
@@ -91,6 +97,11 @@ Fresh checks from 2026-05-07:
 - Manual Playwright audit checked desktop nav, mobile drawer, BTFP desktop,
   BTFP mobile, 32 BTFP images, 19 chrome/footer internal links, and no Process
   anchors in inspected chrome or BTFP page.
+
+2026-05-11 supersession: the historical `/event-balloons` 200 receipt above is
+no longer current. `/event-balloons` and `/event_balloons` should now return
+404 with no redirect. See
+`workstreams/event-balloons-route-removal-2026-05-11.md`.
 
 ## Cleanup
 

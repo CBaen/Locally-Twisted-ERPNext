@@ -1,12 +1,11 @@
 # LT Brand Copy Audience Pages
 
 Status: draft contract
-Last verified: 2026-05-10
-Scope: Locally Twisted public audience pages under the Event Balloons lane.
+Last verified: 2026-05-11
+Scope: Locally Twisted public event audience pages that sit between portfolio proof and `/contact`.
 
 Use this when writing or reviewing audience-page copy such as:
 
-- `/event-balloons`
 - `/corporate-events`
 - `/schools-campuses`
 - `/civic-community`
@@ -83,22 +82,17 @@ Current data-model copy atoms:
 - `plan_title`: what this audience needs, not what Locally Twisted wants to
   sell.
 - `plan`: practical planning concerns and likely use cases.
-- `CTA`: route to `/contact` as the quote path, with `/portfolio` or
-  `/event-balloons` as supporting proof.
+- `CTA`: route to `/contact` as the quote path, with `/portfolio` as supporting
+  proof when needed. Do not route CTAs to `/event-balloons`; that hub was
+  removed before launch.
 
 ## Audience Angles
 
-### Event Balloons Hub
+### Route boundary
 
-Position as the umbrella for quote-led Utah event decor. The hub should explain
-that event work differs from ready-to-order products because it involves venue
-access, timing, install method, audience, scale, and cleanup.
-
-Good phrases:
-
-- "Built for events that need to run clean."
-- "Quote-led planning before event day."
-- "Delivery, setup, and clean install support."
+`/event-balloons` is not a current public route. Use the four audience pages
+below plus `/portfolio` and `/contact` instead of recreating a hub by copy
+drift.
 
 ### Corporate Events
 

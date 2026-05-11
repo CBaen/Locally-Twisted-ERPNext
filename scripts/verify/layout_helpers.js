@@ -8,7 +8,6 @@ const PUBLIC_ROUTES = [
 	{ name: "book-alias", path: "/book" },
 	{ name: "contact", path: "/contact" },
 	{ name: "about", path: "/about" },
-	{ name: "event-balloons", path: "/event-balloons" },
 	{ name: "civic-community", path: "/civic-community" },
 	{ name: "corporate-events", path: "/corporate-events" },
 	{ name: "schools-campuses", path: "/schools-campuses" },
@@ -122,8 +121,8 @@ const CHECKOUT_SURFACES = [
 ];
 
 // Event-type / audience-lane page surfaces. The four audience pages
-// (event-balloons, civic-community, corporate-events, schools-campuses,
-// private-celebrations) share one Jinja template that branches by data.
+// (civic-community, corporate-events, schools-campuses, private-celebrations)
+// share one Jinja template that branches by data.
 // Pages migrated to the new audience-lane redesign render .lt-lane-* sections
 // instead of the legacy .lt-authority-proof / .lt-authority-section blocks.
 // Legacy surfaces and new lane surfaces are both optional so either rendering
@@ -201,12 +200,6 @@ const CONTAINER_CONTRACT_ROUTES = [
 		path: "/about",
 		topLevel: [".lt-about__hero.lt-fullbleed", ".lt-about", ".lt-about__cta.lt-fullbleed"],
 		surfaces: ABOUT_SURFACES,
-	},
-	{
-		name: "event-balloons",
-		path: "/event-balloons",
-		topLevel: [".lt-authority-page"],
-		surfaces: EVENT_TYPE_SURFACES,
 	},
 	{
 		name: "civic-community",

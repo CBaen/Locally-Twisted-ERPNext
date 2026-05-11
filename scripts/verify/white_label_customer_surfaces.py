@@ -38,7 +38,6 @@ CUSTOMER_BACKEND_RE = re.compile(
 
 PUBLIC_ROUTES = (
     "/",
-    "/event-balloons",
     "/corporate-events",
     "/schools-campuses",
     "/civic-community",

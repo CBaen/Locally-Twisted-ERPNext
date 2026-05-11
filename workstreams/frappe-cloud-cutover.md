@@ -135,7 +135,7 @@ Do this only after the Frappe Cloud staging URL passes verification.
 11. Verify:
     - `https://locallytwisted.com/`
     - `https://www.locallytwisted.com/`
-    - `/event-balloons`
+    - `/event-balloons` returns 404 with no redirect
     - `/portfolio`
     - `/balloon-twisting-and-face-painting`
     - `/contact`

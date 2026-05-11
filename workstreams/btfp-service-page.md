@@ -1,6 +1,6 @@
 # BTFP Service Page
 
-Last updated: 2026-05-10 by Codex after GL moved the event suggestion crawl into the old short-notice band slot and required continuous crawl motion.
+Last updated: 2026-05-11 by Codex after fixing the rotated Mirabel twisting photo pixels.
 
 ## Outcome
 
@@ -18,6 +18,8 @@ Last updated: 2026-05-10 by Codex after GL moved the event suggestion crawl into
 - Public pricing is transparency only: `$130` first hour per artist, `$115` each additional hour per artist, half-hours only after each artist's first hour, `$50` deposit per artist, no discounts.
 - Calculator math is row-based. Each artist row owns its own service and hours. Do not collapse mixed services into one shared hours value or one aggregate artist count.
 - The two service-card image areas are explicit carousels: 10 images each, previous/next controls, visible `n / 10` status, auto-advance when motion is allowed, and manual controls in reduced-motion mode.
+- `twisting-mirabel.png` has corrected pixel orientation and should not rely on
+  EXIF orientation for the browser to display it upright.
 - The page must not expose a public deposit checkout CTA.
 - The old short-notice contact band is removed. Do not restore the "Need help on short notice?" phone/email band.
 - The event suggestion crawl sits directly after the compact hero, before the service cards, in the former support-band slot.
@@ -41,9 +43,9 @@ Docs and capability surfaces:
 - `locally-twisted-queue.md`
 - `lessons-learned.md`
 - `workstreams/website-launch.md`
-- `.codex/capabilities/recipes/btfp-live-service-page-contract.md`
-- `.codex/capabilities/recipes/shared-inquiry-form-experience.md`
-- `.codex/capabilities/recipes/erpnext-intake-form-parity.md`
+- `capabilities/recipes/btfp-live-service-page-contract.md`
+- `capabilities/recipes/shared-inquiry-form-experience.md`
+- `capabilities/recipes/erpnext-intake-form-parity.md`
 
 ## Implementation Notes
 
@@ -67,6 +69,10 @@ Fresh checks from 2026-05-10:
 - `python -m py_compile` passed for touched route/patch Python files.
 
 Earlier 2026-05-08 calculator receipt remains valid: `contact_prefill.py` covers mixed durations (one twisting artist at `1.5` hours plus one face painter at `2.5` hours totals `$490`, deposit `$100`, balance `$390`; adding a third one-hour artist totals `$620`, deposit `$150`, balance `$470`).
+
+2026-05-11 image-orientation receipt: `apps/locally_twisted/locally_twisted/public/images/btfp/twisting/twisting-mirabel.png`
+was pixel-rotated upright and stripped of EXIF orientation dependency. Browser
+verification confirmed the BTFP page and carousel render the image upright.
 
 ## Next Safe Changes
 

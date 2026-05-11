@@ -47,7 +47,6 @@ test.describe("Locally Twisted SEO, GEO, and AEO contract", () => {
 	for (const [path, canonicalPath] of [
 		["/home", "/"],
 		["/about-us", "/about"],
-		["/event_balloons", "/event-balloons"],
 		["/balloon_twisting_and_face_painting", "/balloon-twisting-and-face-painting"],
 		["/refund_policy", "/refund-policy"],
 		["/terms_of_service", "/terms-of-service"],
@@ -65,10 +64,10 @@ test.describe("Locally Twisted SEO, GEO, and AEO contract", () => {
 		expect(response.status()).toBe(200);
 		const xml = await response.text();
 
-		for (const path of ["/", "/about", "/event-balloons", "/balloon-twisting-and-face-painting", "/faq"]) {
+		for (const path of ["/", "/about", "/balloon-twisting-and-face-painting", "/faq"]) {
 			expect(xml, `sitemap should include ${path}`).toContain(absolutePath(path));
 		}
-		for (const path of ["/home", "/about-us", "/event_balloons", "/balloon_twisting_and_face_painting", "/refund_policy", "/terms_of_service"]) {
+		for (const path of ["/home", "/about-us", "/event-balloons", "/event_balloons", "/balloon_twisting_and_face_painting", "/refund_policy", "/terms_of_service"]) {
 			expect(xml, `sitemap should exclude duplicate ${path}`).not.toContain(absolutePath(path));
 		}
 		for (const path of ["/shop", "/shop-items/seasonal-specialty"]) {
@@ -76,8 +75,19 @@ test.describe("Locally Twisted SEO, GEO, and AEO contract", () => {
 		}
 	});
 
+	test("removed Event Balloons hub routes return 404 without redirect", async ({ request }) => {
+		for (const path of ["/event-balloons", "/event_balloons"]) {
+			const response = await request.get(new URL(path, BASE_URL).toString(), {
+				failOnStatusCode: false,
+				maxRedirects: 0,
+			});
+			expect(response.status(), `${path} should be gone`).toBe(404);
+			expect(response.headers().location, `${path} should not redirect`).toBeUndefined();
+		}
+	});
+
 	test("home and service pages expose stable structured data without ratings or hours", async ({ page }) => {
-		for (const path of ["/", "/event-balloons", "/corporate-events", "/balloon-twisting-and-face-painting"]) {
+		for (const path of ["/", "/corporate-events", "/balloon-twisting-and-face-painting"]) {
 			const response = await gotoAndSettle(page, path);
 			expect(response, `${path} should return a response`).not.toBeNull();
 			expect(response.status(), `${path} should load`).toBeLessThan(400);

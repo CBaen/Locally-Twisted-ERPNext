@@ -4,7 +4,7 @@ type: failure
 failure_kind: process_failure
 schema_version: 0.1
 date_discovered: 2026-05-10
-last_updated: 2026-05-10
+last_updated: 2026-05-11
 status: guarded
 scope: project
 owner_context: Locally Twisted ERPNext public site
@@ -45,12 +45,17 @@ conversion label appears in multiple public chrome zones.
 | Date | Project | Surface | Action being taken | Bad outcome | Evidence | Guard state | Status |
 |---|---|---|---|---|---|---|---|
 | 2026-05-10 | Locally Twisted | `navbar.html`, search quick links, `nav_ia.py` | About/service-nav and SEO-adjacent public-site work | Top banner included `Ready-to-Order`, `Cart`, `Recent Work`; `Free Event Quote` appeared in both top banner and menus/search | User correction; `git blame`; red/green `scripts/verify/nav_ia.py` behavior | project guard added | guarded |
+| 2026-05-11 | Locally Twisted | `/event-balloons`, home/portfolio/footer/search/sitemap/canonical | Route/page cleanup before launch | Unapproved hub route would have remained discoverable if treated as SEO compatibility | User correction; 404 no-redirect check; sitemap clean; `nav_ia.py`; `seo_contract.spec.js` | negative route/link/sitemap guards added | guarded |
 
 ## Root pattern
 
 The public header and menu were treated as an optimization surface instead of
 owner-approved business signage. The old verifier preserved duplicate quote
 labels rather than protecting the approved IA.
+
+A second instance treated a not-yet-launched hub route as something to preserve
+or link for convenience. Before launch, owner-rejected routes should be deleted
+and left as clean 404s unless GL explicitly asks for a redirect.
 
 ## Why it seemed reasonable at the time
 
@@ -66,6 +71,8 @@ the bad state looked intentional to future agents.
 - `Ready-to-Order`, `Cart`, or `Recent Work` in the top banner.
 - `Free Event Quote` outside the top banner.
 - Search quick links duplicating top-banner-only CTA language.
+- `/event-balloons` in links, route aliases, canonical maps, sitemap
+  expectations, hero CTAs, portfolio CTAs, or footer/search quick links.
 
 ## Required guard
 
@@ -74,9 +81,14 @@ the bad state looked intentional to future agents.
 not change header, footer, menu, search quick links, or public chrome without
 explicit owner approval.
 
+`/event-balloons` must not be restored or redirected without a fresh explicit
+GL route decision. The four event audience routes remain the approved public
+event-discovery routes.
+
 ## Recovery recipe
 
-1. Update `scripts/verify/nav_ia.py` so it fails against the bad header.
+1. Update `scripts/verify/nav_ia.py` so it fails against the bad header or
+   removed-route link.
 2. Repair the smallest navbar/search/drawer template surface.
 3. Clear Frappe website cache after Jinja/CSS changes.
 4. Run `python scripts\verify\nav_ia.py`.
@@ -89,6 +101,7 @@ explicit owner approval.
 - Do not keep duplicate `Free Event Quote` labels because both point to
   `/contact`.
 - Do not rewrite the verifier to protect unapproved header state.
+- Do not add redirects for prelaunch owner-rejected routes as an SEO reflex.
 - Do not remove the known instance because the current template was repaired.
 
 ## Cross-links

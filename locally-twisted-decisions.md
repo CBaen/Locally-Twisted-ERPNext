@@ -8,6 +8,48 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-11 - `/event-balloons` is removed with no redirect
+
+**Decision:** `/event-balloons` is not a public launch route and must not be kept as a hidden compatibility page. `/event-balloons` and `/event_balloons` should return 404 with no redirect. Public chrome may still expose the four event audience pages, but no link, button, search quick result, footer link, hero CTA, portfolio CTA, canonical rule, route alias, or sitemap entry may point to `/event-balloons`.
+
+**Reasoning:** GL explicitly rejected the page and its buttons. The site has not launched or been indexed yet, so there is no SEO need to preserve or redirect this URL. A redirect would keep an unapproved route alive and would contradict the "no redirect, no nothing" instruction.
+
+**Implementation boundary:** Keep `www/event_balloons.html` and `www/event_balloons.py` deleted. Keep the route rule and canonical mapping out of `hooks.py` and `seo.py`. If a future hub page is desired, it needs a fresh explicit GL route decision instead of restoring this file pair from history.
+
+**Verification receipt:** Direct local no-redirect checks returned 404 and an empty `Location` header for both `/event-balloons` and `/event_balloons`; `/sitemap.xml` contained neither route; `rg` found no live app-source matches outside negative verifier assertions; `python scripts/verify/nav_ia.py` passed; focused SEO contract checks for removed routes and sitemap passed.
+
+**Decided by:** GL correction and Codex implementation on 2026-05-11.
+
+---
+
+## 2026-05-11 - Homepage review proof is logo-only platform proof
+
+**Decision:** The homepage review proof strip shows GigSalad, Google, and Facebook as logos with platform-appropriate proof marks. It must not show exact review counts, must not show the visible word `reviews` under the logos, and must not present those platforms as cards or contained boxes.
+
+**Reasoning:** GL wanted the additional review locations for trust, then corrected the implementation because counts, visible helper labels, small logos, and card/container treatments made the section look wrong and added unasked-for copy. The proof should be the platform logo plus rating or recommendation proof, not a text-heavy review widget.
+
+**Implementation boundary:** Keep exact counts out unless reverified in the same run and explicitly approved for display. Do not add helper copy below the logos. If Facebook's model is recommendation-based, represent that honestly instead of forcing it into Google-style five-star copy.
+
+**Verification receipt:** Homepage source renders the three platform links with logo assets and no visible count text. Feature handoff: `workstreams/homepage-review-platform-proof-2026-05-11.md`.
+
+**Decided by:** GL correction and Codex implementation on 2026-05-11.
+
+---
+
+## 2026-05-11 - Checkout email use is transactional unless the customer opts into marketing
+
+**Decision:** Checkout/customer contact copy must distinguish order email from marketing email. Checkout email may be used for invoices, receipts, order updates, support, and order-related information. Marketing email requires the customer to sign up for the newsletter or otherwise opt into marketing.
+
+**Reasoning:** GL asked where the site should tell customers how email is used. The safe launch copy is plain and narrow: order/invoice email for the order path, marketing only for marketing opt-in. This avoids implying the checkout email is silently added to promotional lists.
+
+**Implementation boundary:** Keep checkout and policy copy aligned. Do not add marketing language to invoice, receipt, legal, billing, or support paths unless the customer has opted into marketing. Future newsletter naming can change, but the transactional/marketing split should remain.
+
+**Verification receipt:** Commit `0e9d4f8` updated `checkout.html`, footer newsletter copy, `/privacy`, and the customer-contact-point verifier; focused checkout, privacy, layout, and container checks passed before push.
+
+**Decided by:** GL request and Codex implementation on 2026-05-11.
+
+---
+
 ## 2026-05-11 - Signed-in public users need a visible logout escape hatch
 
 **Decision:** Any signed-in user who reaches a public or LT-owned account
@@ -404,7 +446,7 @@ cutover gates.
 
 ## 2026-05-10 - Homepage hero rotates seasonal graduation first, then event-audience ads
 
-**Decision:** The homepage hero is a rotating carousel for the current launch moment: first slide is seasonal graduation, followed by the four Event Balloons submenu audience lanes (`Civic & community`, `Corporate events`, `Schools & campuses`, `Private celebrations`). The carousel is quote-led and links each audience slide to its matching route plus `/contact` quote intent.
+**Decision:** The homepage hero is a rotating carousel for the current launch moment: first slide is seasonal graduation, followed by the four event audience lanes (`Civic & community`, `Corporate events`, `Schools & campuses`, `Private celebrations`). The carousel is quote-led and links each audience slide to its matching route plus `/contact` quote intent. The first slide must not use `/event-balloons` as a secondary CTA because that hub route is removed.
 
 **Reasoning:** GL asked for the landing hero to lead with current seasonal relevance instead of a single generic hero image, then promote the four event-audience lanes as ad-like entry points. This changes the earlier stable-single-hero contract for this launch slice only; proof/brand integrity still requires one visible page-level H1, no platform leakage, compact hero sizing, and quote-led copy while public ecommerce is paused.
 
@@ -1513,7 +1555,7 @@ scope; Codex implemented and verified the site slice.
 
 ## 2026-05-07 - Public page heroes use one compact height contract
 
-**Decision:** Every LT public page hero must use the shared compact hero contract instead of route-local oversized hero guesses. The implemented standard is 220px mobile, 250px tablet, and 280px desktop, with hard caps of 280px mobile, 300px tablet, and 320px desktop. Vertical padding is capped at 24px mobile, 28px tablet, and 32px desktop; hero H1 size is capped at 32px mobile, 40px tablet, and 44px desktop. The current Playwright verifier covers `/`, `/event-balloons`, `/portfolio`, `/balloon-twisting-and-face-painting`, `/contact`, `/shop`, and `/shop-items/seasonal-specialty`.
+**Decision:** Every LT public page hero must use the shared compact hero contract instead of route-local oversized hero guesses. The implemented standard is 220px mobile, 250px tablet, and 280px desktop, with hard caps of 280px mobile, 300px tablet, and 320px desktop. Vertical padding is capped at 24px mobile, 28px tablet, and 32px desktop; hero H1 size is capped at 32px mobile, 40px tablet, and 44px desktop. The current Playwright verifier covers `/`, the four event audience pages, `/portfolio`, `/balloon-twisting-and-face-painting`, `/contact`, `/shop`, and `/shop-items/seasonal-specialty`; `/event-balloons` is removed.
 
 **Reasoning:** GL rejected the inconsistent and oversized hero pattern as a recurring agency-level failure. The live LT routes proved the problem: home, event-balloons, portfolio, BTFP, contact, shop, and category pages all had different min-heights, section padding, title clamps, and inner padding. Several heroes consumed most or all of the first viewport, hiding products, proof, forms, and useful content.
 

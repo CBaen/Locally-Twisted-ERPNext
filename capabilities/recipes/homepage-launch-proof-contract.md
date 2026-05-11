@@ -48,12 +48,15 @@ review crawl, trusted-client crawl, cookie notice placement, or launch CTAs.
 - The hero must obey the compact hero contract: 220px mobile, 250px tablet, and
   280px desktop standard heights, with no route-local oversized padding or title
   scale.
-- Google reviews are the first homepage band immediately after `.lt-hero`.
-- The review crawl uses curated five-star Google quote records from
+- Review proof is the first homepage band immediately after `.lt-hero`.
+- The platform strip above the crawl shows GigSalad, Google, and Facebook as
+  logos with platform-appropriate proof marks. It must not show exact counts,
+  visible `reviews` labels, or card/container treatments around the logos.
+- The review crawl uses curated five-star customer quote records from
   `home.py`. The template renders one readable copy and one duplicate copy for
   the marquee; both copies must use the same card markup, include a visible
   five-star row, and avoid placeholder/pending cards.
-- On mobile, the Google review band is intentionally compact. The current
+- On mobile, the review band is intentionally compact. The current
   interactive contract caps the total review block at 380px, the marquee at
   240px, review cards at 270px wide and 240px high, and prevents global
   `section` padding from leaking into `.lt-reviews-block__quotes`.
@@ -148,6 +151,8 @@ before marking the homepage ready for GL review.
 - The installed-work proof band appears before reviews.
 - Custom Event Decor returns to the homepage without an explicit flag change,
   archive review, and fresh desktop/mobile layout proof.
+- The platform proof strip adds visible review counts, visible `reviews`
+  labels, card shells, borders, shadows, or padded boxes around the logos.
 - `One of a Kind Designs` photos are placed in crop containers, card shells, or
   text-overlay treatments that cut off balloon art.
 - The cookie notice blocks primary CTAs on mobile or sits between the hero and
@@ -212,7 +217,7 @@ cards; focused review tests passed 5/5 and homepage layout-fit passed 13/13.
 
 ## 2026-05-10 seasonal-carousel override
 
-GL changed the launch homepage hero from a single static hero to a rotating seasonal/audience carousel. Current first slide is graduation season, followed by the four Event Balloons submenu audience lanes. The old "one stable generated lifestyle hero image" verifier expectation is obsolete for this slice; the active guard is one visible page-level H1 on the first slide, compact hero sizing, reduced-motion fallback, quote-led CTAs, and no platform leakage. Feature handoff: `workstreams/homepage-seasonal-hero-carousel-2026-05-10.md`.
+GL changed the launch homepage hero from a single static hero to a rotating seasonal/audience carousel. Current first slide is graduation season, followed by the four event audience lanes. The old "one stable generated lifestyle hero image" verifier expectation is obsolete for this slice; the active guard is one visible page-level H1 on the first slide, compact hero sizing, reduced-motion fallback, quote-led CTAs, and no platform leakage. Feature handoff: `workstreams/homepage-seasonal-hero-carousel-2026-05-10.md`.
 
 ## 2026-05-11 Custom Event Decor hide
 
@@ -223,3 +228,14 @@ screenshot and all eight icons recoverable. The current controller flag is
 `_resources/homepage-custom-event-decor-2026-05-11/`. The next photo work on
 `One of a Kind Designs` must preserve whole photos and avoid crop/card/text
 treatments.
+
+## 2026-05-11 review platform proof and hub route cleanup
+
+GL corrected the homepage review proof to be logo-only platform proof. The
+current strip shows GigSalad, Google, and Facebook logos with proof marks, no
+visible counts, no visible `reviews` label, and no platform cards/containers.
+Feature handoff: `workstreams/homepage-review-platform-proof-2026-05-11.md`.
+
+The graduation hero secondary CTA no longer points to `/event-balloons`, and
+the hidden Custom Event Decor heading no longer links there. The removed route
+is documented at `workstreams/event-balloons-route-removal-2026-05-11.md`.

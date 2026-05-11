@@ -21,7 +21,6 @@ CANONICAL_PATH_MAP = {
     "/home": "/",
     "/about-us": "/about",
     "/book": "/contact",
-    "/event_balloons": "/event-balloons",
     "/civic_community": "/civic-community",
     "/corporate_events": "/corporate-events",
     "/schools_campuses": "/schools-campuses",

@@ -28,13 +28,6 @@ const COMPACT_HERO_ROUTES = [
 		titleSelector: ".lt-hero__title",
 	},
 	{
-		name: "event balloons",
-		path: "/event-balloons",
-		heroSelector: ".lt-authority-hero",
-		contentSelector: ".lt-authority-hero__content",
-		titleSelector: ".lt-authority-hero h1",
-	},
-	{
 		name: "civic community",
 		path: "/civic-community",
 		heroSelector: ".lt-authority-hero",
@@ -488,7 +481,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 
 				await page.locator("#lt-site-search-input").fill("portfolio");
 				await expect(page.locator("#lt-site-search-panel a[href='/portfolio']")).toBeVisible();
-				await expect(page.locator("#lt-site-search-panel a[href='/event-balloons']")).toBeHidden();
+				await expect(page.locator("#lt-site-search-panel a[href='/event-balloons']")).toHaveCount(0);
 
 				const result = await auditPageLayout(page, {
 					containerSelectors: [".lt-mega-header", "#lt-site-search-panel", ".lt-site-search-panel__field"],
@@ -810,6 +803,47 @@ test.describe("Locally Twisted interactive layout states", () => {
 			expect(result.visibleMissingStarCards, "visible review cards should not be the starless duplicate copy").toEqual([]);
 		});
 
+		test("review platform logos show external locations without visible counts", async ({ page }) => {
+			await page.setViewportSize({ width: 1366, height: 900 });
+			const response = await gotoAndSettle(page, "/");
+			await expectSuccessfulResponse(response, "/");
+
+			const result = await page.evaluate(() => {
+				const platforms = Array.from(document.querySelectorAll("[data-lt-review-platform]"));
+				return platforms.map((platform) => {
+					const logo = platform.querySelector("img");
+					const style = window.getComputedStyle(platform);
+					return {
+						platform: platform.getAttribute("data-lt-review-platform") || "",
+						text: platform.innerText.replace(/\s+/g, " ").trim(),
+						href: platform.href,
+						logoAlt: logo ? logo.alt : "",
+						logoSrc: logo ? logo.getAttribute("src") || "" : "",
+						logoLoaded: logo ? logo.complete && logo.naturalWidth > 0 : false,
+						label: platform.getAttribute("aria-label") || "",
+						backgroundColor: style.backgroundColor,
+						boxShadow: style.boxShadow,
+						borderTopWidth: style.borderTopWidth,
+					};
+				});
+			});
+
+			expect(result.map((platform) => platform.platform), "review platform logos should flank Google with GigSalad and Facebook").toEqual(["gigsalad", "google", "facebook"]);
+			expect(result[0].href, "GigSalad logo should link to the public Locally Twisted profile").toBe("https://www.gigsalad.com/locally_twisted_llc_ogden");
+			expect(result[0].text, "GigSalad logo should not add any visible copy below the star row").toBe("\u2605\u2605\u2605\u2605\u2605");
+			expect(result[0].logoAlt).toBe("GigSalad");
+			expect(result[1].href, "Google logo should still link to Google reviews search").toMatch(/^https:\/\/www\.google\.com\/search\?q=Locally\+Twisted\+Reviews/);
+			expect(result[1].text, "Google logo should not add any visible copy below the star row").toBe("\u2605\u2605\u2605\u2605\u2605");
+			expect(result[1].logoAlt).toBe("Google");
+			expect(result[2].href, "Facebook logo should link to the review tab on the West Jordan page").toBe("https://www.facebook.com/locallytwisted/reviews");
+			expect(result[2].text, "Facebook logo should use its recommendation-style proof without extra visible copy").toBe("Recommended");
+			expect(result[2].logoAlt).toBe("Facebook");
+			expect(result.filter((platform) => /reviews/i.test(platform.text)), "review platform links should not add the word Reviews under the logos").toEqual([]);
+			expect(result.filter((platform) => /(\d|%)/.test(platform.text) || /(\d|percent)/i.test(platform.label)), "visible and accessible platform copy should not expose counts or rating totals").toEqual([]);
+			expect(result.filter((platform) => platform.backgroundColor !== "rgba(0, 0, 0, 0)" || platform.boxShadow !== "none" || platform.borderTopWidth !== "0px"), "review platform links should be a logo strip, not cards").toEqual([]);
+			expect(result.filter((platform) => !platform.logoLoaded), "all review platform logos should load").toEqual([]);
+		});
+
 		test("mobile review proof keeps the compact sizing contract", async ({ page }) => {
 			await page.setViewportSize({ width: 390, height: 844 });
 			const response = await gotoAndSettle(page, "/");
@@ -839,7 +873,11 @@ test.describe("Locally Twisted interactive layout states", () => {
 
 				return {
 					block: box(".lt-reviews-block"),
-					badge: box(".lt-reviews-block__badge"),
+					platforms: box(".lt-reviews-block__platforms"),
+					platformLinks: Array.from(document.querySelectorAll(".lt-reviews-block__platform")).map((platform) => {
+						const rect = platform.getBoundingClientRect();
+						return { height: rect.height, width: rect.width };
+					}),
 					quotes: box(".lt-reviews-block__quotes"),
 					group: box(".lt-reviews-block__group"),
 					card: box(".lt-reviews-block__quote"),
@@ -851,10 +889,11 @@ test.describe("Locally Twisted interactive layout states", () => {
 
 			expect(result.block, "reviews block should render").not.toBeNull();
 			expect(result.cardCount, "reviews crawl should include customer cards").toBeGreaterThanOrEqual(4);
-			expect(result.block.height, "mobile Google review section should not dominate the first scroll").toBeLessThanOrEqual(380);
+			expect(result.block.height, "mobile review section should not dominate the first scroll").toBeLessThanOrEqual(380);
 			expect(result.block.paddingTop, "mobile review section top padding should stay compact").toBeLessThanOrEqual(26);
 			expect(result.block.paddingBottom, "mobile review section bottom padding should stay compact").toBeLessThanOrEqual(30);
-			expect(result.badge.height, "mobile Google rating badge should stay compact").toBeLessThanOrEqual(76);
+			expect(result.platforms.height, "mobile multi-platform logo row should stay compact").toBeLessThanOrEqual(64);
+			expect(Math.max(...result.platformLinks.map((platform) => platform.height)), "mobile review platform links should stay compact").toBeLessThanOrEqual(58);
 			expect(result.quotes.height, "mobile review marquee should not be a tall card stack").toBeLessThanOrEqual(240);
 			expect(result.quotes.paddingTop, "global section padding must not leak into mobile review marquee").toBe(0);
 			expect(result.quotes.paddingBottom, "global section padding must not leak into mobile review marquee").toBe(0);
@@ -893,7 +932,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 
 				return {
 					block: box(".lt-reviews-block"),
-					badge: box(".lt-reviews-block__badge"),
+					platforms: box(".lt-reviews-block__platforms"),
 					quotes: box(".lt-reviews-block__quotes"),
 					group: box(".lt-reviews-block__group"),
 					maxCardHeight: Math.max(...cards.map((card) => card.height)),
@@ -902,10 +941,12 @@ test.describe("Locally Twisted interactive layout states", () => {
 			});
 
 			expect(result.block, "reviews block should render").not.toBeNull();
-			expect(result.block.height, "desktop Google review section should stay compact").toBeLessThanOrEqual(475);
+			expect(result.block.height, "desktop review section should stay compact").toBeLessThanOrEqual(475);
 			expect(result.block.paddingTop, "desktop review section top padding should stay tight").toBeLessThanOrEqual(36);
 			expect(result.block.paddingBottom, "desktop review section bottom padding should stay tight").toBeLessThanOrEqual(40);
-			expect(result.badge.marginBottom, "desktop badge-to-cards spacing should stay tight").toBeLessThanOrEqual(18);
+			expect(result.platforms.height, "desktop multi-platform logo row should restore the larger review-proof scale").toBeGreaterThanOrEqual(88);
+			expect(result.platforms.height, "desktop multi-platform logo row should stay controlled").toBeLessThanOrEqual(102);
+			expect(result.platforms.marginBottom, "desktop platform-to-cards spacing should stay tight").toBeLessThanOrEqual(18);
 			expect(result.quotes.paddingTop, "global section padding must not leak into desktop review marquee").toBe(0);
 			expect(result.quotes.paddingBottom, "global section padding must not leak into desktop review marquee").toBe(0);
 			expect(result.group.gap, "desktop review card gap should stay tight").toBeLessThanOrEqual(12);
@@ -1062,7 +1103,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 		expect(Math.abs(Math.abs(crawlDelta) - Math.abs(reviewDelta)), "client crawl should match review-card speed in reduced-motion mode").toBeLessThanOrEqual(2.5);
 	});
 
-	test("homepage leads with Google review proof immediately after the hero", async ({ page }) => {
+	test("homepage leads with multi-platform review proof immediately after the hero", async ({ page }) => {
 		await page.setViewportSize({ width: 1366, height: 900 });
 		const response = await gotoAndSettle(page, "/");
 		await expectSuccessfulResponse(response, "/");
@@ -1077,7 +1118,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 			}
 			const authorityCount = document.querySelectorAll(".lt-authority").length;
 			const authorityIconCount = document.querySelectorAll(".lt-authority__icon").length;
-			const badge = document.querySelector(".lt-reviews-block__badge");
+			const platforms = Array.from(document.querySelectorAll("[data-lt-review-platform]"));
 			const ctaBody = document.querySelector(".lt-cta__body");
 			return {
 				heroBottom: hero.getBoundingClientRect().bottom + window.scrollY,
@@ -1086,17 +1127,23 @@ test.describe("Locally Twisted interactive layout states", () => {
 				heroNextIsReviews: heroNext ? heroNext.classList.contains("lt-reviews-block") : false,
 				authorityCount,
 				authorityIconCount,
-				badgeText: badge ? badge.innerText.replace(/\s+/g, " ").trim() : "",
+				platformText: platforms.map((platform) => platform.innerText.replace(/\s+/g, " ").trim()).join(" | "),
+				platforms: platforms.map((platform) => platform.getAttribute("data-lt-review-platform") || ""),
+				platformLabels: platforms.map((platform) => platform.getAttribute("aria-label") || ""),
 				ctaText: ctaBody ? ctaBody.innerText.replace(/\s+/g, " ").trim() : "",
 			};
 		});
 
-		expect(result.heroNextIsReviews, "Google reviews should be the first homepage band after the hero").toBe(true);
-		expect(result.reviewsTop, "Google reviews should start after the hero").toBeGreaterThanOrEqual(result.heroBottom - 1);
-		expect(result.reviewsTop, "Google review proof should appear before the installed-work proof band").toBeLessThan(result.featuredTop);
+		expect(result.heroNextIsReviews, "review proof should be the first homepage band after the hero").toBe(true);
+		expect(result.reviewsTop, "review proof should start after the hero").toBeGreaterThanOrEqual(result.heroBottom - 1);
+		expect(result.reviewsTop, "review proof should appear before the installed-work proof band").toBeLessThan(result.featuredTop);
 		expect(result.authorityCount, "homepage should not render a trust/authority bar right now").toBe(0);
 		expect(result.authorityIconCount, "trust bar icons should stay as assets, not render as a homepage bar").toBe(0);
-		expect(result.badgeText, "the first post-hero proof band should be clearly Google reviews").toMatch(/Google reviews/i);
+		expect(result.platforms, "the first post-hero proof band should include GigSalad, Google, and Facebook").toEqual(["gigsalad", "google", "facebook"]);
+		expect(result.platformText, "the first post-hero proof band should not add the word Reviews under the logos").not.toMatch(/reviews/i);
+		expect(result.platformText, "the first post-hero proof band should show proof without counts or rating totals").not.toMatch(/(\d|%)/);
+		expect(result.platformLabels.join(" "), "the first post-hero proof band should name the external review platforms").toMatch(/GigSalad.*Google.*Facebook/s);
+		expect(result.platformLabels.join(" "), "accessibility labels should not expose counts or rating totals").not.toMatch(/(\d|percent)/i);
 		expect(result.ctaText, "closing CTA should lead with corporate, school, civic, and community work").toMatch(/corporate, school, civic, and community/i);
 		expect(result.ctaText, "closing CTA should keep private celebrations secondary").toMatch(/private celebrations/i);
 	});

@@ -1,5 +1,28 @@
 # Locally Twisted - Coding Handoff
 
+Codex public-site update on 2026-05-11: `/event-balloons` is removed as a
+route, with no redirect and no compatibility page. The app no longer has
+`www/event_balloons.*`, the `/event-balloons` route rule, the `/event_balloons`
+canonical mapping, footer/search/hero/portfolio links, or sitemap inclusion.
+Direct local checks return 404 with no `Location` header for `/event-balloons`
+and `/event_balloons`. The four event audience routes remain live. Feature
+handoff: `workstreams/event-balloons-route-removal-2026-05-11.md`; guards:
+`scripts/verify/nav_ia.py` and `scripts/verify/seo_contract.spec.js`.
+
+Codex homepage update on 2026-05-11: the review proof strip is now
+multi-platform: GigSalad, Google, and Facebook appear as unboxed logos with
+platform-appropriate proof marks. It intentionally shows no exact review
+counts and no visible `reviews` label under the logos. Feature handoff:
+`workstreams/homepage-review-platform-proof-2026-05-11.md`; capability:
+`capabilities/recipes/homepage-launch-proof-contract.md`.
+
+Codex policy/content update on 2026-05-11: checkout and policy surfaces now
+plainly state that checkout email is used for invoices, receipts, support, and
+order-related messages. Marketing email is separate and requires newsletter or
+marketing opt-in. The BTFP Mirabel twisting photo was also pixel-rotated into
+the correct orientation rather than relying on EXIF orientation. Commit
+`0e9d4f8` already pushed this code/image slice; the docs below now record it.
+
 Codex backend closeout on 2026-05-11: the local ecommerce checkout slice is
 green after the approved local import. Current front-door handoff:
 `workstreams/ecommerce-audit/post-import-checkout-launch-closeout-2026-05-11.md`.

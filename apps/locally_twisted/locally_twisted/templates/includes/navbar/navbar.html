@@ -202,10 +202,6 @@
         </form>
 
         <div class="lt-site-search-panel__quick" data-lt-search-list>
-            <a href="/event-balloons" data-lt-search-entry data-lt-search-keywords="custom event balloons install civic school corporate private">
-                <strong>Event Balloons</strong>
-                <span>Custom installs and event work</span>
-            </a>
             {% if not ecommerce_paused %}
                 <a href="/shop" data-lt-search-entry data-lt-search-product-entry data-lt-search-keywords="ready order shop all products pickup checkout">
                     <strong>All Ready-to-Order</strong>
@@ -286,7 +282,6 @@
                 <span aria-hidden="true">+</span>
             </button>
             <div class="lt-mega-drawer__panel" id="lt-mobile-events" hidden>
-                <a href="/event-balloons">Event Balloons</a>
                 {% for item in event_links %}
                     <a href="/{{ item.route }}">{{ item.label }}</a>
                 {% endfor %}

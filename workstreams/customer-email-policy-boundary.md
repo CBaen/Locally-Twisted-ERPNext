@@ -1,6 +1,6 @@
 # Customer Email Policy Boundary
 
-Last updated: 2026-05-10 by Codex after splitting playful intake email from formal customer/operator shells, fixing standalone preview image rendering, and adding fail-loud cleanup to the repeat-email/photo verifier.
+Last updated: 2026-05-11 by Codex after adding the checkout/order-email disclosure boundary.
 
 ## Outcome
 
@@ -31,6 +31,9 @@ Keep customer/operator email behavior aligned with receipts, policy lanes, and b
 - Email clients resolve queued inline images through `cid:` MIME parts, but standalone browser/PDF review renders do not. Preview exports must rewrite those `cid:` image sources to embedded data URLs before screenshot/PDF capture, then fail if any image has `naturalWidth` or `naturalHeight` of 0.
 - Business automation index now treats this contract as part of Lead acknowledgment and paid-order reconciliation.
 - Synthetic business pipeline now includes `customer_email_policy_boundaries`.
+- Checkout and policy copy now state the order-email boundary plainly: checkout
+  email is used for invoices, receipts, support, and order-related information.
+  Marketing email is separate and requires newsletter/marketing opt-in.
 
 ## Boundaries
 
@@ -55,10 +58,12 @@ Keep customer/operator email behavior aligned with receipts, policy lanes, and b
 - `apps/locally_twisted/locally_twisted/www/payment_success.py`
 - `apps/locally_twisted/locally_twisted/communication_copy_policy.py`
 - `apps/locally_twisted/locally_twisted/verify/payment_cascade_contract.py`
+- `apps/locally_twisted/locally_twisted/verify/customer_contact_points_contract.py`
 - `apps/locally_twisted/locally_twisted/verify/business_automation_index.py`
 - `apps/locally_twisted/locally_twisted/verify/synthetic_business_pipeline.py`
 - `scripts/verify/synthetic_business_pipeline.py`
 - `scripts/verify/book_form_repeat_email_photos.py`
+- `scripts/verify/customer_contact_points_contract.py`
 
 ## Verification
 
@@ -68,6 +73,7 @@ python scripts/verify/customer_documents_contract.py
 python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081
 python scripts/verify/payment_cascade_contract.py
 python scripts/verify/product_quote_customer_delivery_contract.py
+python scripts/verify/customer_contact_points_contract.py
 python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json
 python scripts/verify/business_automation_index.py --report output/business-automation-index.json
 ```

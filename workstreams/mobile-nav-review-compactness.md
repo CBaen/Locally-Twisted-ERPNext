@@ -1,13 +1,13 @@
 # Mobile Nav And Review Compactness
 
-Last updated: 2026-05-08 by Codex.
+Last updated: 2026-05-11 by Codex after homepage review platform proof changed from Google-only to multi-platform logos.
 
 ## Purpose
 
 This handoff owns the mobile public chrome correction GL requested on
 2026-05-08: keep the Locally Twisted logo clear, keep cart/menu usable, move
-search to the bottom of the mobile drawer, and make the homepage Google review
-proof section compact on mobile.
+search to the bottom of the mobile drawer, and make the homepage review proof
+section compact on mobile.
 
 This is a launch-surface feature handoff, not a new broad visual direction.
 
@@ -25,9 +25,11 @@ Complete as of 2026-05-08:
 - `/search` is intentionally overridden by `www/search.py` / `www/search.html`
   as a no-cache 404 fallback so public navigation cannot accidentally expose
   the bundled Frappe search page.
-- Mobile Google review proof is compact: live browser measurements after cache
+- Mobile review proof is compact: live browser measurements after cache
   clear showed the review block at about `364px` high across 320px, 375px,
   390px, and 414px viewports. Before this pass, 320px measured about `693px`.
+- The current 2026-05-11 platform strip shows GigSalad, Google, and Facebook
+  as unboxed logos with no visible counts and no visible `reviews` label.
 - The review marquee explicitly neutralizes global `section` padding on mobile
   so the cards cannot inherit the old 2rem top/bottom padding.
 - `interactive_layout.spec.js` now guards the mobile review sizing contract:
@@ -49,9 +51,9 @@ Complete as of 2026-05-08:
 
 Related capability contracts:
 
-- `.codex/capabilities/recipes/frappe-public-nav-business-route-contract.md`
-- `.codex/capabilities/recipes/homepage-launch-proof-contract.md`
-- `.codex/capabilities/recipes/responsive-container-audit.md`
+- `capabilities/recipes/frappe-public-nav-business-route-contract.md`
+- `capabilities/recipes/homepage-launch-proof-contract.md`
+- `capabilities/recipes/responsive-container-audit.md`
 
 ## Verification Receipt
 
@@ -88,6 +90,8 @@ Results:
   mobile.
 - If the review copy/cards change, rerun the compact sizing test and live
   mobile measurements before claiming the section still fits.
+- Do not fix mobile fit by turning platform logos into cards, bordered boxes,
+  count blocks, or explanatory labels.
 - Full `smoke_shop.py` may be affected by unrelated active shop/product lanes in
   this shared worktree. Use the focused drawer smoke path for this feature, and
   do not claim the full shop smoke is green unless it is rerun and passes.

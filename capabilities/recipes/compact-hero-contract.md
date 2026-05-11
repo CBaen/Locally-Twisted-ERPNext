@@ -7,7 +7,7 @@ maturity: candidate
 scope: Locally Twisted public page heroes in ERPNext/Frappe and Webshop routes
 currently_true: yes
 verification_level: 2
-last_verified: 2026-05-10
+last_verified: 2026-05-11
 evidence_quality: direct
 successful_uses: 4
 failed_uses: 1
@@ -64,7 +64,6 @@ proof take over.
 ## Current Covered Routes
 
 - `/` via `.lt-hero`
-- `/event-balloons` via `.lt-authority-hero`
 - `/civic-community`, `/corporate-events`, `/schools-campuses`, and
   `/private-celebrations` via `.lt-authority-hero`
 - `/portfolio` via `.lt-portfolio__hero`
@@ -122,3 +121,8 @@ targeted `layout-fit` 65/65, targeted `container-contract` 15/15, and
 homepage/BTFP compact-hero and homepage carousel accessibility blockers:
 full `interactive_layout.spec.js` passed 163/163 inside the website gate, and
 `npm run test:a11y` passed 50 route/viewport axe checks with 0 violations.
+
+On 2026-05-11, GL rejected the standalone `/event-balloons` hub before launch.
+The compact hero route matrix now keeps only the four event audience pages for
+that lane; `/event-balloons` should remain a 404 with no redirect unless GL
+makes a new hub-route decision.

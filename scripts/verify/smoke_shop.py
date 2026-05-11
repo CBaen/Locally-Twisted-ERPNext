@@ -955,7 +955,6 @@ def check_mobile_drawer(p):
         assert_(page.locator(f"#{panel_id}").is_visible(), f"Mobile drawer panel {panel_id} did not open")
 
     expected_links = {
-        "Event Balloons": "/event-balloons",
         "Twisting & Face Painting": "/balloon-twisting-and-face-painting",
         "Portfolio": "/portfolio",
         "FAQ": "/faq",

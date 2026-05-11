@@ -28,7 +28,6 @@ PAUSE_PATH = "/ready-to-order-paused"
 
 NAVBAR = ROOT / "apps/locally_twisted/locally_twisted/templates/includes/navbar/navbar.html"
 FOOTER = ROOT / "apps/locally_twisted/locally_twisted/templates/includes/footer/footer.html"
-EVENT_BALLOONS = ROOT / "apps/locally_twisted/locally_twisted/www/event_balloons.html"
 CHECKOUT_SOURCE = ROOT / "apps/locally_twisted/locally_twisted/www/checkout.py"
 
 BLOCKED_ROUTES = (

@@ -1,6 +1,6 @@
 """Homepage controller for the public `/` route.
 
-Current launch shape: civic/Utah hero, Google review proof crawl,
+Current launch shape: civic/Utah hero, multi-platform review proof crawl,
 wide installed-work proof photos, full-stage client proof crawl,
 custom decor discovery, a contact CTA, and secondary twisting/face-painting
 support.
@@ -36,8 +36,8 @@ CLIENT_CRAWL = [
 
 
 # The 8 customizable categories - items Jeff actually customizes for events.
-# These point at the Portfolio and current Event Balloons route while the
-# interactive Event Playground work remains outside the ASAP launch lane.
+# These point at the portfolio while the interactive Event Playground work
+# remains outside the ASAP launch lane.
 # Updated 2026-04-28 per GL:
 # Columns is the canonical name; Garlands replaces "Organic Garlands"
 # (organic remains an option, not a separate product); Centerpieces and
@@ -89,8 +89,8 @@ HOME_HERO_SLIDES = [
         "image": "/assets/locally_twisted/images/portfolio/optimized/school-grad-garland.webp",
         "primary_label": "Plan graduation decor",
         "primary_url": "/contact?intent=quote&source=home-hero-graduation",
-        "secondary_label": "See event balloons",
-        "secondary_url": "/event-balloons",
+        "secondary_label": "",
+        "secondary_url": "",
     },
     {
         "kicker": "Civic & community",
@@ -510,43 +510,77 @@ PAGE_CSS = """
 
 /* --- Reviews block -------------------------------------------------- */
 /* The review carousel uses a full-stage viewport so the fade-mask does
- * not clip readable card text on wide monitors. The badge stays centered;
- * the carousel viewport spans the full band so more cards are visible at
- * once and the mask fades into empty space, not readable text. */
+ * not clip readable card text on wide monitors. The platform badges stay
+ * centered; the carousel viewport spans the full band so more cards are
+ * visible at once and the mask fades into empty space, not readable text. */
 .lt-reviews-block {
     background-color: var(--lt-near-white);
     padding: 2.2rem 1rem 2.4rem;
 }
 .lt-reviews-block__inner {
-    /* Narrow column for the badge above the carousel. */
+    /* Narrow column for the platform badges above the carousel. */
     max-width: 1200px;
     margin: 0 auto;
     text-align: center;
 }
-.lt-reviews-block__badge {
+.lt-reviews-block__platforms {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.9rem clamp(2.2rem, 5vw, 4.6rem);
+    margin: 0 auto 1.1rem;
+}
+.lt-reviews-block__platform {
     display: inline-flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.4rem;
-    margin: 0 0 1.1rem;
+    justify-content: center;
+    min-width: 0;
+    gap: 0.35rem;
+    padding: 0;
     text-decoration: none;
     color: var(--lt-navy);
 }
+.lt-reviews-block__platform:hover,
+.lt-reviews-block__platform:focus-visible {
+    color: var(--lt-near-black);
+    text-decoration: underline;
+    text-decoration-color: var(--lt-brass);
+    text-underline-offset: 0.22rem;
+}
+.lt-reviews-block__platform:focus-visible {
+    outline: 2px solid var(--lt-brass);
+    outline-offset: 0.25rem;
+}
+.lt-reviews-block__logo {
+    width: auto;
+    max-width: none;
+    height: 56px;
+    object-fit: contain;
+    display: block;
+}
+.lt-reviews-block__platform--gigsalad .lt-reviews-block__logo {
+    width: auto;
+    height: 58px;
+}
+.lt-reviews-block__platform--facebook .lt-reviews-block__logo {
+    width: 60px;
+    height: 60px;
+}
 .lt-reviews-block__stars {
     color: var(--lt-brass);
-    font-size: 1.625rem;
-    letter-spacing: 0.1em;
+    font-size: 1.65rem;
+    letter-spacing: 0.08em;
     line-height: 1;
 }
-.lt-reviews-block__score {
-    font-family: var(--lt-font-heading);
-    font-size: 2rem;
-    color: var(--lt-near-black);
-}
-.lt-reviews-block__count {
+.lt-reviews-block__recommendation {
+    color: #0866ff;
     font-family: var(--lt-font-body);
-    font-size: 0.95rem;
-    color: var(--lt-soft-gray);
+    font-size: 1.35rem;
+    font-weight: 800;
+    line-height: 1;
+    white-space: nowrap;
 }
 /* Reviews carousel - horizontal-scrolling marquee of customer praise.
  * Pattern mirrors .lt-crawl but with full review cards instead of
@@ -649,20 +683,33 @@ PAGE_CSS = """
     .lt-reviews-block {
         padding: 1.25rem 0.75rem 1.35rem;
     }
-    .lt-reviews-block__badge {
-        gap: 0.25rem;
+    .lt-reviews-block__platforms {
+        flex-wrap: nowrap;
+        gap: 0.6rem;
         margin-bottom: 0.85rem;
     }
+    .lt-reviews-block__platform {
+        min-width: 0;
+        gap: 0.1rem;
+    }
+    .lt-reviews-block__logo {
+        max-width: min(100%, 78px);
+        height: 26px;
+    }
+    .lt-reviews-block__platform--gigsalad .lt-reviews-block__logo {
+        max-width: min(100%, 96px);
+        height: 24px;
+    }
+    .lt-reviews-block__platform--facebook .lt-reviews-block__logo {
+        width: 28px;
+        height: 28px;
+    }
     .lt-reviews-block__stars {
-        font-size: 1.2rem;
-    }
-    .lt-reviews-block__score {
-        font-size: 1.45rem;
-        line-height: 1.05;
-    }
-    .lt-reviews-block__count {
         font-size: 0.82rem;
-        line-height: 1.25;
+        letter-spacing: 0.03em;
+    }
+    .lt-reviews-block__recommendation {
+        font-size: 0.76rem;
     }
     .lt-reviews-block__quotes {
         mask-image: linear-gradient(
@@ -713,15 +760,7 @@ PAGE_CSS = """
 .lt-categories__heading-link {
     color: inherit;
     text-decoration: none;
-    border-bottom: 2px solid transparent;
     padding-bottom: 0.15rem;
-    transition: border-color 0.2s ease, color 0.2s ease;
-}
-.lt-categories__heading-link:hover,
-.lt-categories__heading-link:focus-visible {
-    color: var(--lt-berry);
-    border-bottom-color: var(--lt-brass);
-    text-decoration: none;
 }
 .lt-categories__lede {
     text-align: center;

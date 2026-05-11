@@ -37,7 +37,7 @@ For this nav/content lane, stay inside these rules:
 | Lane | Owner | Files / Surface | Status |
 |---|---|---|---|
 | Nav/chrome and live menu assets | Codex current session | `templates/includes/navbar/navbar.html`, `navbar_context.py`, header portions of `public/css/lt-theme.css`, `hooks.py`, `public/js/lt-megamenu.js`, `public/css/lt-mega-menu.css`, `scripts/verify/nav_ia.py`, `scripts/verify/smoke_shop.py` | Complete 2026-05-10: public ecommerce chrome is open for local testing, `Ready-to-Order` points to `/shop`, `Twisting & Face Painting` remains in public chrome, `Contact Us` points to `/contact`, top-banner `Free Event Quote` points to `/contact`, the 24-hour short-notice message is a centered gold `/contact` link on desktop and a visible gold `/contact` strip on mobile, account link remains, the prepared-design proof copy/truck icon are removed, Process is removed from customer-facing chrome, and mobile search lives at the bottom of the drawer. |
-| Authority page content and route pages | Codex current session | `www/home.*`, `www/event_balloons.*`, `www/balloon_twisting_and_face_painting.*`, `www/portfolio.*`, `www/contact.*`, `www/shop.*`, supporting public content pages | Complete 2026-05-07: standalone Process route files were removed; BTFP remains the approved live-service route. |
+| Authority page content and route pages | Codex current session | `www/home.*`, deleted `www/event_balloons.*`, `www/balloon_twisting_and_face_painting.*`, `www/portfolio.*`, `www/contact.*`, `www/shop.*`, supporting public content pages | Complete 2026-05-11: standalone Process route files remain removed; `/event-balloons` route files are deleted with no redirect; BTFP remains the approved live-service route and the four event audience pages remain live. |
 | Owner package and screenshots | Unclaimed | `_resources/brand-direction-architecture-2026-05/`, desktop/mobile renders, route map, builder notes | Pending. Use screenshots from the actual Frappe pages after route/content replacement, not disconnected mockups. |
 
 Feature handoff for the BTFP/Process correction: `workstreams/nav-btfp-process-correction.md`.
@@ -45,6 +45,10 @@ Feature handoff for mobile search/review compactness:
 `workstreams/mobile-nav-review-compactness.md`.
 Feature handoff for the top banner and quote-label contract:
 `workstreams/public-header-banner-contract-2026-05-10.md`.
+Feature handoff for the removed Event Balloons hub route:
+`workstreams/event-balloons-route-removal-2026-05-11.md`.
+Feature handoff for the homepage review platform proof strip:
+`workstreams/homepage-review-platform-proof-2026-05-11.md`.
 
 ## Current Conflict Notes
 
@@ -55,6 +59,7 @@ Feature handoff for the top banner and quote-label contract:
 ## Evidence Recorded This Session
 
 - 2026-05-07 BTFP/Process correction: direct route check returned 200 for `/`, `/event-balloons`, `/portfolio`, `/balloon-twisting-and-face-painting`, `/contact`, `/shop`, and `/faq`; `/process` returned 404.
+- 2026-05-11 Event Balloons hub removal supersedes the old `/event-balloons` 200 route receipt: `/event-balloons` and `/event_balloons` now return 404 with no redirect, and there are no live app-source links, route rules, canonical mappings, sitemap entries, footer links, search quick links, hero CTAs, or portfolio buttons pointing to the removed hub.
 - 2026-05-07 compact hero follow-up: `python scripts/verify/nav_ia.py` passed; `python scripts/verify/smoke_shop.py` passed; `npm run test:portfolio-reel` passed 4/4; `npm run test:checkout-experience` passed 2/2; `npm run test:interactive-layout` passed 88/88; `npm run test:layout-fit` passed 247/247.
 - 2026-05-07 BTFP/Process correction: manual Playwright audit saved screenshots to `output/playwright/nav-btfp-restored-20260507/`, checked desktop/mobile BTFP nav links, 32 BTFP page images, 19 chrome/footer internal links, and no Process anchors in inspected chrome or BTFP page.
 - Route sweep returned 200 for `/`, `/event-balloons`, `/portfolio`, `/contact`, `/shop`, `/faq`, `/balloon-twisting-and-face-painting`, `/privacy`, `/terms-of-service`, `/refund-policy`, `/accessibility`, `/cart`, `/checkout`, `/payment-success`, `/thank-you`, `/shop-items/arches`, and `/shop-items/garlands/baby-shower-garland`.
@@ -86,6 +91,14 @@ Status:
 ```
 
 ## Session Notes
+
+### 2026-05-11 - Codex current session event hub and review proof cleanup
+Lane: Removed `/event-balloons` hub route, homepage review platform strip, and route/documentation parity.
+Files: `home.*`, deleted `event_balloons.*`, `portfolio.html`, navbar/footer partials, `hooks.py`, `seo.py`, route/verifier files, and related launch docs.
+Intent: Delete the unapproved `/event-balloons` page and every public discovery path to it with no redirect; keep the four event audience pages live; show GigSalad, Google, and Facebook review proof as unboxed logos with no counts and no visible `reviews` label.
+Conflicts: The shared worktree also contains unrelated ecommerce/header/catalog edits. Do not broad-stage this file set without reviewing scope.
+Verification: Direct no-redirect HTTP checks returned 404 for `/event-balloons` and `/event_balloons`; sitemap search was clean; `python scripts/verify/nav_ia.py` passed; focused SEO sitemap/removed-route contract passed; focused search/event-mega Playwright checks passed; focused home/portfolio/event-audience layout-fit passed.
+Status: Complete.
 
 ### 2026-05-10 - Codex current session top-banner short-notice update
 Lane: Desktop top utility banner and BTFP route crawl placement.

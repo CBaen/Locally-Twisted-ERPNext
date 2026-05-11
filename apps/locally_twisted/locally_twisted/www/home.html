@@ -29,9 +29,11 @@
                 {{ slide.primary_label }}
                 <span aria-hidden="true">&rarr;</span>
             </a>
+            {% if slide.secondary_url and slide.secondary_label %}
             <a href="{{ slide.secondary_url }}" class="lt-hero__cta lt-hero__cta--secondary"{% if not loop.first %} tabindex="-1"{% endif %}>
                 {{ slide.secondary_label }}
             </a>
+            {% endif %}
         </div>
     </article>
     {% endfor %}
@@ -79,7 +81,7 @@
 })();
 </script>
 
-{# --- 2. Google review proof crawl --- #}
+{# --- 2. Multi-platform review proof crawl --- #}
 {% macro lt_review_card(quote) -%}
 <article class="lt-reviews-block__quote" data-lt-review-card data-lt-review-rating="{{ quote.rating or 5 }}">
     <p class="lt-reviews-block__quote-mark" aria-hidden="true">&ldquo;</p>
@@ -97,14 +99,32 @@
     <div class="lt-reviews-block__inner">
         <h2 id="lt-reviews-heading" class="visually-hidden">What people say</h2>
 
-        <a href="https://www.google.com/search?q=Locally+Twisted+Reviews"
-           target="_blank" rel="noopener noreferrer"
-           class="lt-reviews-block__badge"
-           aria-label="Locally Twisted Google reviews (opens in new tab)">
-            <span class="lt-reviews-block__stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-            <span class="lt-reviews-block__score">Google reviews</span>
-            <span class="lt-reviews-block__count">Read what customers say</span>
-        </a>
+        <div class="lt-reviews-block__platforms" aria-label="Review platforms">
+            <a href="https://www.gigsalad.com/locally_twisted_llc_ogden"
+               target="_blank" rel="noopener noreferrer"
+               class="lt-reviews-block__platform lt-reviews-block__platform--gigsalad"
+               data-lt-review-platform="gigsalad"
+               aria-label="Locally Twisted on GigSalad (opens in new tab)">
+                <img class="lt-reviews-block__logo" src="/assets/locally_twisted/icons/gigsalad-logo-2025.png" alt="GigSalad" width="559" height="117">
+                <span class="lt-reviews-block__stars" role="img" aria-label="Five out of five stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+            </a>
+            <a href="https://www.google.com/search?q=Locally+Twisted+Reviews"
+               target="_blank" rel="noopener noreferrer"
+               class="lt-reviews-block__platform lt-reviews-block__platform--google"
+               data-lt-review-platform="google"
+               aria-label="Locally Twisted on Google (opens in new tab)">
+                <img class="lt-reviews-block__logo" src="/assets/locally_twisted/icons/google-logo.png" alt="Google" width="544" height="184">
+                <span class="lt-reviews-block__stars" role="img" aria-label="Five out of five stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+            </a>
+            <a href="https://www.facebook.com/locallytwisted/reviews"
+               target="_blank" rel="noopener noreferrer"
+               class="lt-reviews-block__platform lt-reviews-block__platform--facebook"
+               data-lt-review-platform="facebook"
+               aria-label="Locally Twisted on Facebook (opens in new tab)">
+                <img class="lt-reviews-block__logo" src="/assets/locally_twisted/icons/facebook.svg" alt="Facebook" width="48" height="48">
+                <span class="lt-reviews-block__recommendation">Recommended</span>
+            </a>
+        </div>
 
         {#
             Reviews carousel — horizontal scrolling marquee of cards.
@@ -131,7 +151,6 @@
 </section>
 
 {# --- 6. Custom Event Decor — 8 customizable categories (full-bleed band).
-     Heading links to the current Event Balloons authority route;
      consultative work, NOT in the shop. #}
 {# --- 3. One of a Kind Designs: installed-work proof after reviews --- #}
 <section class="lt-featured lt-fullbleed" aria-labelledby="lt-featured-heading">
@@ -162,7 +181,7 @@
 {% if show_custom_event_decor %}
 <section class="lt-categories lt-fullbleed" aria-labelledby="lt-categories-heading">
     <h2 id="lt-categories-heading" class="lt-categories__heading">
-        <a class="lt-categories__heading-link" href="/event-balloons">Custom Event Decor</a>
+        <span class="lt-categories__heading-link">Custom Event Decor</span>
     </h2>
     <p class="lt-categories__lede">
         Eight custom pieces in your colors. Choose the pieces that fit your event, then send us the details.

@@ -7,7 +7,7 @@ maturity: candidate
 scope: Locally Twisted ERPNext/Frappe public navigation, header/footer IA, and service-route parity
 currently_true: yes
 verification_level: 2
-last_verified: 2026-05-10
+last_verified: 2026-05-11
 evidence_quality: direct
 successful_uses: 2
 failed_uses: 0
@@ -41,11 +41,14 @@ For the current LT site:
   `/balloon-twisting-and-face-painting`.
 - `Process` is not approved as a public top-level nav item or standalone route.
 - `/contact` remains the shared quote/conversion path.
-- Current launch desktop primary header labels are `Event Balloons`,
-  `Twisting & Face Painting`, `Ready-to-Order`, `Portfolio`, `About Us`,
-  `FAQ`, and `Contact Us` when ecommerce is open for testing. The top utility
-  banner replaces the old proof copy/icon with a centered gold `/contact`
-  short-notice link:
+- Current launch desktop primary header labels include a non-link
+  `Event Balloons` audience dropdown, `Twisting & Face Painting`,
+  `Ready-to-Order`, `Portfolio`, `About Us`, `FAQ`, and `Contact Us` when
+  ecommerce is open for testing. The event dropdown links only to
+  `/civic-community`, `/corporate-events`, `/schools-campuses`, and
+  `/private-celebrations`; `/event-balloons` is removed and must not be
+  linked or redirected. The top utility banner replaces the old proof
+  copy/icon with a centered gold `/contact` short-notice link:
   `SHORT NOTICE? LET US KNOW. WE CAN OFTEN HELP WITH 24 HOURS NOTICE!`, while
   keeping `Free Event Quote` and the account link on the right.
 - `Twisting & Face Painting` points to `/balloon-twisting-and-face-painting`.
@@ -62,6 +65,8 @@ For the current LT site:
   above the mobile header row.
 - Public navigation must not link to `/search`; the search overlay submits to
   `/shop` while ecommerce is open and `/search` is a no-cache 404 fallback.
+- Public navigation, footer, search, hero CTAs, and portfolio actions must not
+  link to `/event-balloons`.
 
 ## Pattern
 
@@ -159,3 +164,5 @@ must map right inset to right padding and left inset to left padding.
 `nav_ia.py` now fails on the low-contrast white hover/focus regression and the
 left/right safe-area swap. Focused `npm run test:interactive-layout -- --grep
 "header|drawer|mega|mobile"` passed 55/55 after the fix.
+
+On 2026-05-11, GL rejected the standalone `/event-balloons` hub before launch. Codex deleted `www/event_balloons.html` and `.py`, removed the route alias and canonical mapping, removed footer/search/home/portfolio links, and added negative guards in `nav_ia.py`, `seo_contract.spec.js`, `interactive_layout`, and route lists. Direct local checks return 404 with no redirect for both `/event-balloons` and `/event_balloons`; sitemap search is clean. The four event audience routes remain live.

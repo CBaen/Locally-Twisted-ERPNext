@@ -6,6 +6,22 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-11 - No cards means no containers, labels, or helpful filler
+
+GL rejected the homepage review-platform treatment because "no cards" also meant no visual containers, no smaller proof marks, no poor logo assets, no visible count copy, and no invented `reviews` label under each platform. The request was for logo proof, not a review widget.
+
+**Counter-move:** when GL removes a visual pattern, strip the whole pattern family. If the instruction is "just the logo," do not add helper text, counts, cards, borders, shadows, padded boxes, or explanatory labels unless asked.
+
+---
+
+## 2026-05-11 - An unapproved route should die loudly before launch
+
+`/event-balloons` had not launched or been indexed, so a redirect would have preserved an unapproved page instead of cleaning the route. The correct repair was deletion plus negative route/link/sitemap/canonical guards: 404 with no redirect, no source links, no sitemap entry, no compatibility page.
+
+**Counter-move:** before launch, do not invent redirects for pages GL rejects. Delete the route source, remove every discovery path, then add negative verifiers so future agents cannot recreate the page by "fixing" the 404.
+
+---
+
 ## 2026-05-11 - Page fixes need the actual requested fix first
 
 The landing-page pass started from a broad "fix the landing page" frame before

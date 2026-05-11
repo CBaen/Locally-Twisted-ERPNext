@@ -83,8 +83,6 @@ web_include_js = [
 website_route_rules = [
     {"from_route": "/about-us",
      "to_route": "about"},
-    {"from_route": "/event-balloons",
-     "to_route": "event_balloons"},
     {"from_route": "/civic-community",
      "to_route": "civic_community"},
     {"from_route": "/corporate-events",

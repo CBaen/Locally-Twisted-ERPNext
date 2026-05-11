@@ -178,7 +178,7 @@ component is added, append it here before a broad implementation swarm begins.
 | Global header/nav | `templates/includes/navbar/navbar.html` | First brand contact and browse path | Two-level desktop nav may be used, but the logo must stay visually dominant, nav labels must meet accessible sizing, and the whole header should feel like the Image #3 banner translated to ecommerce. |
 | Mobile header/drawer | `navbar.html` | Fast browse and cart access | Large logo, 44px controls, plain nav labels, dark/warm surfaces, no cramped menu text, no mystery icons. |
 | Footer/newsletter | `templates/includes/footer/footer.html` | Closing brand trust and legal wayfinding | Deep navy/ink ground, warm text, brass labels, clean newsletter states, legal links visible. Use the logo/approved wordmark, not a random font fallback. |
-| Home | `/`, `www/home.html`, `www/home.py` | Highest brand authority page | Civic/Utah hero image, Cormorant hero type, Google reviews immediately after the hero, no homepage trust bar unless GL reopens it, large recent-work photos after reviews, custom decor discovery, client proof, closing CTA. |
+| Home | `/`, `www/home.html`, `www/home.py` | Highest brand authority page | Civic/Utah hero image, Cormorant hero type, GigSalad/Google/Facebook review proof immediately after the hero, no homepage trust bar unless GL reopens it, large recent-work photos after reviews, custom decor discovery hidden for current launch, client proof, closing CTA. |
 | Shop landing | `/shop`, `www/shop.html` | Ready-to-order retail lane | Still premium but more practical. Keep filters, product cards, and add-to-cart clear; use restrained surfaces so product color carries the page. |
 | Category / item group listing | `/shop-items/<group>`, Item Group generator | Product discovery | Use editorial shop header, left/sidebar filters on desktop, drawer filters on mobile, stable grid cards, visible count/sort state, and product color as the visual accent. |
 | Product detail/configure | Webshop item overrides under `templates/generators/item/` | Conversion and product clarity | Product image first, Cormorant product name, Lato specs/options, clear price and stock. Fixed-price products stay cartable; product group alone must not create a quote-only failure. Out-of-area delivery redirects to a prefilled `/contact` quote path. Do not render generic Additional Info, Reviews, or Recommended Items panels unless GL explicitly reopens that ecommerce decision. Product option controls must be clear, not boxed; pickup/delivery is the approved framed product-detail exception. |
@@ -198,10 +198,12 @@ component is added, append it here before a broad implementation swarm begins.
 `/contact` is the canonical inquiry page. `/book` is legacy compatibility only
 and should redirect to `/contact?intent=quick` unless a later route decision
 changes that. Customer CTAs should normally point to `/contact`, not `/book`.
-Current primary navigation is `Event Balloons`, `Portfolio`,
-`Twisting & Face Painting`, `Ready-to-Order`, and `FAQ`, with
-`Free Event Quote` pointing to `/contact`. Do not add a standalone
-`Process` page or top-level nav link unless GL explicitly approves it.
+Current primary navigation includes a non-link `Event Balloons` audience
+dropdown, `Twisting & Face Painting`, `Ready-to-Order`, `Portfolio`, `About Us`,
+`FAQ`, and `Contact Us`, with top-banner `Free Event Quote` pointing to
+`/contact`. The event dropdown links only to the four audience pages. Do not add
+standalone `/process` or `/event-balloons` pages or links unless GL explicitly
+approves them.
 
 ### Reusable Element Map
 
@@ -215,7 +217,7 @@ Current primary navigation is `Event Balloons`, `Portfolio`,
 | CTAs | Hero/contact/shop/cart/checkout buttons | Primary is berry/crimson or deep navy. Secondary is transparent outline. Keep labels plain and short. |
 | Accordions/details | FAQ and mobile nav accordions | Large hit areas, clear expanded state, keyboard support, no tiny chevrons as the only signal. |
 | Drawers/modals | Mobile nav, portfolio modal, cart/filter drawers | Dark/warm brand surfaces, focusable close buttons, trapped/managed focus where modal, no visual jump or hidden overflow. |
-| Reviews | Home review block, future testimonials | Support proof, do not lead the brand. Verify current rating/count before publishing numbers. |
+| Reviews | Home review block, future testimonials | Support proof, do not lead the brand. The homepage platform strip is logo/proof only: no exact counts, no visible `reviews` labels, and no card/container treatments around GigSalad, Google, or Facebook. Verify current rating/count before publishing numbers. |
 | Logo/client crawl | Home client proof | Use text/category proof unless logo permission is confirmed. Homepage proof crawls move left-to-right at matched visible speed; keep movement slow, linear, pauseable, scrollbar-free, and out of the tab order when items are not interactive unless the business-proof contract changes. |
 | Empty/loading/error states | Cart, checkout, shop, forms, filters | Plain language, calm hierarchy, phone/contact fallback for customer blockers. |
 
@@ -521,15 +523,18 @@ Do not reintroduce `Delivery Only`, `Pickup Only`, or `Event Package`.
 - The logo should feel like a brand mark, not a tiny text label. Do not shrink it to solve layout problems; fix the layout.
 - Desktop navigation can be one or two rows, but spacing must feel intentional. Avoid boxed/floating row fragments, cramped 12px nav labels, and disconnected rules.
 - Primary nav order is currently:
-  - Event Balloons
-  - Portfolio
+  - Event Balloons audience dropdown
+  - Ready-to-Order when ecommerce is open
   - Twisting & Face Painting
-  - Ready-to-Order
+  - Portfolio
+  - About Us
   - FAQ
-  - Search
-- The utility area keeps the main `Free Event Quote` CTA pointed at `/contact`.
-- Do not add Gallery, About, Book an Event, or What We Make links unless scope is reopened.
-- Do not revive the old mega-menu or Plan-by-Occasion model unless GL explicitly reopens navigation IA.
+  - Contact Us
+- The utility area keeps `Free Event Quote` pointed at `/contact`.
+- Do not add Gallery, Book an Event, or What We Make links unless scope is reopened.
+- Do not revive the old mega-menu, Plan-by-Occasion model, standalone
+  `/event-balloons` hub, or `/process` route unless GL explicitly reopens
+  navigation IA.
 
 ### Footer
 

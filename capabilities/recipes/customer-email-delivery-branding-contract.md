@@ -7,7 +7,7 @@ maturity: candidate
 scope: Locally Twisted ERPNext/Frappe customer/operator email branding, company-copy routing, and Email Queue proof
 currently_true: true
 verification_level: 2
-last_verified: 2026-05-10
+last_verified: 2026-05-11
 evidence_quality: direct
 successful_uses: 1
 failed_uses: 0
@@ -28,7 +28,8 @@ tags:
 
 Use this recipe when changing customer acknowledgments, receipts, operator
 notifications, welcome emails, internal copy routing, email subjects, Frappe
-Email Queue assertions, or public/company email addresses.
+Email Queue assertions, public/company email addresses, or checkout/order-email
+privacy copy.
 
 ## Current Contract
 
@@ -63,6 +64,9 @@ Email Queue assertions, or public/company email addresses.
   `locallytwisted@gmail.com` while ERPNext sends through that same Gmail account.
 - Do not use Cloudflare-routed `@locallytwisted.com` aliases as internal copy or
   QA-send targets while they route back into the same Gmail sender.
+- Checkout email copy must stay transactional: invoices, receipts, support, and
+  order-related information. Marketing email requires newsletter or marketing
+  opt-in and must not be implied by ordinary checkout email collection.
 
 ## Implementation Surfaces
 
@@ -75,6 +79,8 @@ Email Queue assertions, or public/company email addresses.
 - `apps/locally_twisted/locally_twisted/verify/customer_email_policy_contract.py`
 - `apps/locally_twisted/locally_twisted/verify/customer_documents_contract.py`
 - `apps/locally_twisted/locally_twisted/verify/book_form_repeat_email_photos_cleanup.py`
+- `apps/locally_twisted/locally_twisted/verify/customer_contact_points_contract.py`
+- `scripts/verify/customer_contact_points_contract.py`
 
 ## Verification
 
@@ -141,3 +147,4 @@ python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-b
   spills onto a second page.
 - Adding a new sendmail surface without `document_copy_kwargs(...)`, explicit
   primary recipients, and a verifier marker.
+- Treating checkout email collection as silent marketing-list consent.

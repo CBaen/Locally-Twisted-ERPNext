@@ -17,6 +17,8 @@ ROOT = Path(__file__).resolve().parents[2]
 NAVBAR = ROOT / "apps/locally_twisted/locally_twisted/templates/includes/navbar/navbar.html"
 FOOTER = ROOT / "apps/locally_twisted/locally_twisted/templates/includes/footer/footer.html"
 HOME = ROOT / "apps/locally_twisted/locally_twisted/www/home.html"
+PORTFOLIO = ROOT / "apps/locally_twisted/locally_twisted/www/portfolio.html"
+HOOKS = ROOT / "apps/locally_twisted/locally_twisted/hooks.py"
 SEARCH_ROUTE = ROOT / "apps/locally_twisted/locally_twisted/www/search.py"
 MEGA_MENU_CSS = ROOT / "apps/locally_twisted/locally_twisted/public/css/lt-mega-menu.css"
 NAV_SERVICE_REMOVAL_APPROVALS = ROOT / "workstreams/nav-service-removal-approvals.md"
@@ -359,8 +361,6 @@ def test_supporting_assets_exist() -> None:
 def test_homepage_launch_links(home: str) -> None:
     if "/customizable-event-decor" in home:
         raise AssertionError("Homepage must not link to retired /customizable-event-decor route")
-    if 'href="/event-balloons"' not in home:
-        raise AssertionError("Homepage Custom Event Decor heading must point at /event-balloons")
     retired_exact_counts = (
         "4.9 Google rating",
         "100+ Google reviews",
@@ -372,11 +372,32 @@ def test_homepage_launch_links(home: str) -> None:
             raise AssertionError(f"Homepage still contains stale launch copy: {text}")
 
 
+def test_event_balloons_hub_is_removed(navbar: str, footer: str, home: str, portfolio: str, hooks: str) -> None:
+    combined = f"{navbar}\n{footer}\n{home}\n{portfolio}\n{hooks}"
+    forbidden = (
+        'href="/event-balloons"',
+        "'/event-balloons'",
+        '"/event-balloons"',
+        '"to_route": "event_balloons"',
+    )
+    for needle in forbidden:
+        if needle in combined:
+            raise AssertionError(f"Removed /event-balloons page must not be linked or routed: {needle}")
+    for path in (
+        ROOT / "apps/locally_twisted/locally_twisted/www/event_balloons.html",
+        ROOT / "apps/locally_twisted/locally_twisted/www/event_balloons.py",
+    ):
+        if path.exists():
+            raise AssertionError(f"Removed /event-balloons route file still exists: {path.relative_to(ROOT)}")
+
+
 def main() -> None:
     parse_noop_args(__doc__)
     navbar = NAVBAR.read_text(encoding="utf-8")
     footer = FOOTER.read_text(encoding="utf-8")
     home = HOME.read_text(encoding="utf-8")
+    portfolio = PORTFOLIO.read_text(encoding="utf-8")
+    hooks = HOOKS.read_text(encoding="utf-8")
     search_route = SEARCH_ROUTE.read_text(encoding="utf-8")
     mega_menu_css = MEGA_MENU_CSS.read_text(encoding="utf-8")
     test_desktop_nav_order(navbar)
@@ -394,6 +415,7 @@ def main() -> None:
     test_no_retired_nav_contract(navbar)
     test_supporting_assets_exist()
     test_homepage_launch_links(home)
+    test_event_balloons_hub_is_removed(navbar, footer, home, portfolio, hooks)
     print("Nav IA checks passed")
 
 
