@@ -47,6 +47,8 @@ FailLoudState = Literal[
     "review_only_add_on",
     "unpriced_add_on",
     "unsupported_customization_payload",
+    "conditional_pricing_unverified",
+    "source_pattern_unpreserved",
     "media_uncertainty",
     "dependency_mismatch",
 ]
@@ -229,6 +231,7 @@ def build_product_pattern_contract(
         pricing=pricing,
         media=media,
         dependency_matrix=dependency_matrix,
+        source_pattern=source_pattern,
     )
     return ProductPatternContract(
         slug=slug,
@@ -483,6 +486,9 @@ def _add_on_contract(
     if not item_code:
         price_status = "missing_item_code"
         notes.append("Add-on contract is missing an ERPNext item_code.")
+    elif not isinstance(live_prices, dict):
+        price_status = "missing_live_item_price"
+        notes.append("No live ERPNext add-on Item Price evidence was provided to the contract builder.")
     elif isinstance(live_prices, dict) and live_price is None:
         price_status = "missing_live_item_price"
         notes.append(f"No live {STANDARD_PRICE_LIST} Item Price found for add-on item {item_code}.")
@@ -512,6 +518,11 @@ def _add_on_contract_ready(contract: dict[str, Any]) -> bool:
         and contract.get("key")
         and contract.get("item_code")
         and contract.get("unit_price") not in (None, "")
+        and contract.get("live_unit_price") not in (None, "")
+        and contract.get("price_status") == "ready"
+        and contract.get("quantity_min")
+        and contract.get("quantity_max")
+        and contract.get("receipt_label")
         and contract.get("ready_for_checkout") is not False
     )
 
@@ -613,6 +624,7 @@ def _checkout_eligibility(
     pricing: PricingProvenance,
     media: MediaRoleContract,
     dependency_matrix: DependencyMatrixContract,
+    source_pattern: dict[str, Any],
 ) -> CheckoutEligibility:
     fail_loud: list[FailLoudState] = []
     required_work: list[str] = []
@@ -643,12 +655,16 @@ def _checkout_eligibility(
         fail_loud.append("dependency_mismatch")
         required_work.append("Import or generate a source-backed dependency matrix for sale-unit options.")
 
+    _apply_mapper_enforcement(source_pattern, axes, pricing, dependency_matrix, fail_loud, required_work)
+
     if "missing_price" in fail_loud:
         status: CheckoutStatus = "needs_pricing"
     elif "review_only_add_on" in fail_loud or "unpriced_add_on" in fail_loud:
         status = "needs_add_on_pricing"
-    elif "unsupported_customization_payload" in fail_loud:
+    elif "unsupported_customization_payload" in fail_loud or "source_pattern_unpreserved" in fail_loud:
         status = "needs_customization_payload"
+    elif "conditional_pricing_unverified" in fail_loud:
+        status = "needs_pricing"
     elif "dependency_mismatch" in fail_loud:
         status = "dependency_mismatch"
     elif "media_uncertainty" in fail_loud:
@@ -666,6 +682,64 @@ def _checkout_eligibility(
         fail_loud_states=tuple(dict.fromkeys(fail_loud)),
         required_work=tuple(dict.fromkeys(required_work)),
     )
+
+
+def _apply_mapper_enforcement(
+    source_pattern: dict[str, Any],
+    axes: tuple[AxisContract, ...],
+    pricing: PricingProvenance,
+    dependency_matrix: DependencyMatrixContract,
+    fail_loud: list[FailLoudState],
+    required_work: list[str],
+) -> None:
+    if not source_pattern:
+        return
+
+    patterns = set(str(pattern) for pattern in source_pattern.get("patterns") or ())
+    source_integrity = source_pattern.get("source_integrity") or {}
+    import_requirements = tuple(str(value) for value in source_pattern.get("erpnext_contract_requirements") or ())
+    customization_axes = [axis.name for axis in axes if axis.role == "customization"]
+
+    if "multi_color_recipes" in patterns and _source_requires_customization_payload(source_pattern, axes):
+        fail_loud.append("unsupported_customization_payload")
+        required_work.append("Preserve multi-color recipe selections in a validated customization payload before checkout.")
+    if "freeform_customer_text" in patterns and customization_axes:
+        fail_loud.append("unsupported_customization_payload")
+        required_work.append("Preserve freeform customer text with validation limits and SO/SI summaries before checkout.")
+    if "conditional_pricing" in patterns and (
+        pricing.status != "ready" or dependency_matrix.status in {"missing_source_matrix", "mismatch"}
+    ):
+        fail_loud.append("conditional_pricing_unverified")
+        required_work.append("Attach approved conditional price matrix provenance before checkout.")
+    if not source_integrity or not import_requirements:
+        fail_loud.append("source_pattern_unpreserved")
+        required_work.append("Carry Odoo mapper source integrity and import requirements into the ProductPatternContract.")
+
+
+def _source_requires_customization_payload(
+    source_pattern: dict[str, Any],
+    axes: tuple[AxisContract, ...],
+) -> bool:
+    """Return true only for source recipe semantics not represented as sale-unit axes.
+
+    The source mapper deliberately marks color axes conservatively. A single
+    color choice is checkout-safe when ERPNext has a ready sale-unit axis for
+    that source axis. Actual recipe-builder axes still require a validated
+    customization payload before paid checkout.
+    """
+    ready_sale_unit_axes = {axis.name for axis in axes if axis.role == "sale_unit" and axis.status == "ready"}
+    for axis in source_pattern.get("axis_contracts") or []:
+        if not isinstance(axis, dict):
+            continue
+        patterns = {str(pattern) for pattern in axis.get("patterns") or ()}
+        if "multi_color_recipe_customization" not in patterns:
+            continue
+        axis_name = _clean(axis.get("name"))
+        primitive_key = _clean(axis.get("primitive_key"))
+        if primitive_key == "color_choice_contract" and axis_name in ready_sale_unit_axes:
+            continue
+        return True
+    return False
 
 
 def _selected_options(contract: ProductPatternContract, selected_config: dict[str, Any]) -> dict[str, str]:
@@ -764,6 +838,13 @@ def _add_on_lines(contract: ProductPatternContract, selected_config: dict[str, A
                 "amount": _money(amount),
                 "price_list": contract_row.get("price_list") or STANDARD_PRICE_LIST,
                 "summary": _add_on_summary(contract_row, selected_value, quantity, amount),
+                "sales_document_line": {
+                    "item_code": contract_row["item_code"],
+                    "qty": quantity,
+                    "rate": _money(unit_price),
+                    "amount": _money(amount),
+                    "description": _add_on_summary(contract_row, selected_value, quantity, amount),
+                },
             }
         )
     return result

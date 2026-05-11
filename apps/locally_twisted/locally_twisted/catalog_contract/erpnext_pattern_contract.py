@@ -14,6 +14,7 @@ from dataclasses import asdict, dataclass, field
 from decimal import Decimal, InvalidOperation
 from typing import Any, Literal
 
+from locally_twisted.catalog_contract.addon_rules import known_add_on_contracts_for_axis
 from locally_twisted.catalog_variant_rules import normalize_variant_value
 
 
@@ -38,7 +39,9 @@ Capability = Literal[
 CHECKOUT_BLOCKING_PATTERNS = {
     "large_single_choice_color",
     "multi_color_recipes",
+    "conditional_pricing",
     "freeform_customer_text",
+    "add_ons",
 }
 
 
@@ -88,6 +91,9 @@ class ERPNextProductPatternRow:
     media_roles: dict[str, Any]
     dependency_matrix: dict[str, Any]
     checkout_eligibility: dict[str, Any]
+    source_integrity: dict[str, Any]
+    source_import_requirements: tuple[str, ...]
+    source_import_implications: tuple[str, ...]
     server_boundary: ServerBoundaryContract
 
     def to_dict(self) -> dict[str, Any]:
@@ -109,9 +115,13 @@ class ERPNextProductPatternReport:
         for row in self.rows:
             pattern_counts.update(row.patterns)
             blocker_counts.update(row.checkout_eligibility.get("blocking_reasons") or [])
+        inventory_failures = self.inventory_failures()
+        checkout_gate_failures = self.checkout_gate_failures()
         return {
             "schema_version": SCHEMA_VERSION,
             "source_products": len(self.rows),
+            "inventory_ok": not inventory_failures,
+            "checkout_gate_ok": not checkout_gate_failures,
             "capability_counts": dict(sorted(capability_counts.items())),
             "website_lane_counts": dict(sorted(lane_counts.items())),
             "pattern_counts": dict(sorted(pattern_counts.items())),
@@ -122,6 +132,48 @@ class ERPNextProductPatternReport:
             "missing_or_needs_review_products": capability_counts.get("needs_review_or_missing", 0),
         }
 
+    def inventory_failures(self) -> list[str]:
+        failures = []
+        missing_website = sorted(row.slug for row in self.rows if not row.website_item)
+        if missing_website:
+            failures.append(f"source products missing published Website Item rows: {missing_website}")
+        missing_source = sorted(
+            row.slug for row in self.rows if row.website_item and not row.source_integrity
+        )
+        if missing_source:
+            failures.append(f"published Website Items missing Odoo source integrity: {missing_source}")
+        return failures
+
+    def checkout_gate_failures(self) -> list[str]:
+        failures = []
+        missing_price = sorted(
+            row.slug
+            for row in self.rows
+            if row.website_item and row.pricing_provenance.get("representative") is None
+        )
+        if missing_price:
+            failures.append(f"published Website Items missing item-specific Standard Selling price: {missing_price}")
+        unresolved = sorted(
+            row.slug
+            for row in self.rows
+            if row.website_item and row.checkout_eligibility.get("blocking_reasons")
+        )
+        if unresolved:
+            failures.append(f"published Website Items with unresolved checkout gate blockers: {unresolved}")
+        lost_mapper = sorted(
+            row.slug
+            for row in self.rows
+            if row.website_item
+            and (
+                not row.patterns
+                or not row.source_integrity
+                or not row.source_import_requirements
+            )
+        )
+        if lost_mapper:
+            failures.append(f"published Website Items missing mapper pattern preservation: {lost_mapper}")
+        return failures
+
     def to_artifact(self) -> dict[str, Any]:
         return {
             "schema_version": SCHEMA_VERSION,
@@ -130,6 +182,11 @@ class ERPNextProductPatternReport:
             "destructive_allowed": False,
             "purpose": "ERPNext/Frappe ProductPatternContract architecture capability report.",
             "summary": self.summary(),
+            "ok": not self.inventory_failures() and not self.checkout_gate_failures(),
+            "inventory_ok": not self.inventory_failures(),
+            "checkout_gate_ok": not self.checkout_gate_failures(),
+            "inventory_failures": self.inventory_failures(),
+            "checkout_gate_failures": self.checkout_gate_failures(),
             "server_side_contract_boundary": _server_boundary_overview(),
             "products": [row.to_dict() for row in self.rows],
         }
@@ -200,7 +257,17 @@ def build_erpnext_product_pattern_report(
     metadata: dict[str, Any] | None = None,
 ) -> ERPNextProductPatternReport:
     products = source_artifact.get("products") or []
-    rows = tuple(_build_row(product, erpnext_rows) for product in products)
+    source_slugs = {str(product.get("slug") or "") for product in products if product.get("slug")}
+    published_slugs = {
+        str(row.get("item_code") or "")
+        for row in erpnext_rows.get("website_items") or []
+        if row.get("item_code")
+    }
+    missing_source_products = [
+        {"slug": slug, "source_name": slug, "patterns": (), "axis_contracts": ()}
+        for slug in sorted(published_slugs - source_slugs)
+    ]
+    rows = tuple(_build_row(product, erpnext_rows) for product in [*products, *missing_source_products])
     return ERPNextProductPatternReport(rows=rows, metadata=dict(metadata or {}))
 
 
@@ -213,6 +280,7 @@ def _build_row(product: dict[str, Any], erpnext_rows: dict[str, list[dict[str, A
         if str(row.get("variant_of") or "") == slug and _is_enabled(row)
     ]
     price_by_item = _price_by_item(erpnext_rows.get("item_prices") or [])
+    add_on_price_by_item = _price_by_item(erpnext_rows.get("add_on_prices") or [])
     attrs_by_item = _attrs_by_item(erpnext_rows.get("variant_attributes") or [])
     source_axes = _source_axes(product)
     expected = _expected_dependency_matrix(product, source_axes["required_sale_unit_axes"])
@@ -232,6 +300,7 @@ def _build_row(product: dict[str, Any], erpnext_rows: dict[str, list[dict[str, A
         representative=representative,
         line_fields=erpnext_rows.get("line_fields") or [],
         live_coverage=live_coverage,
+        add_on_price_by_item=add_on_price_by_item,
     )
     capability, reasons = _capability(website_item, checkout)
     return ERPNextProductPatternRow(
@@ -251,6 +320,9 @@ def _build_row(product: dict[str, Any], erpnext_rows: dict[str, list[dict[str, A
         live_required_axis_coverage=live_coverage,
         pricing_provenance=_pricing_provenance(representative, live_coverage),
         media_roles=dict(product.get("media_roles") or {}),
+        source_integrity=dict(product.get("source_integrity") or {}),
+        source_import_requirements=tuple(str(value) for value in product.get("erpnext_contract_requirements") or ()),
+        source_import_implications=tuple(str(value) for value in product.get("import_implications") or ()),
         dependency_matrix={
             "axes": source_axes["required_sale_unit_axes"],
             "expected_combination_count": len(expected),
@@ -414,9 +486,17 @@ def _checkout_eligibility(
     representative: RepresentativePricedItem | None,
     line_fields: list[dict[str, Any]],
     live_coverage: dict[str, Any],
+    add_on_price_by_item: dict[str, Decimal],
 ) -> dict[str, Any]:
     patterns = set(product.get("patterns") or [])
     blocking = []
+    missing_mapper_contract = (
+        not patterns
+        or not product.get("source_integrity")
+        or not product.get("erpnext_contract_requirements")
+    )
+    if missing_mapper_contract and website_item:
+        blocking.append("missing_odoo_pattern_mapper_contract")
     if not website_item:
         blocking.append("missing_website_item")
     if not template:
@@ -424,12 +504,18 @@ def _checkout_eligibility(
     if _website_lane(website_item) == "needs_review":
         blocking.append("website_item_needs_review")
     source_axes = _source_axes(product)
-    if (
-        _website_lane(website_item) == "checkout"
-        and patterns & CHECKOUT_BLOCKING_PATTERNS
-        and not _representative_only_checkout(source_axes, representative)
-    ):
-        blocking.append("checkout_customization_contract_needed")
+    if _website_lane(website_item) == "checkout" and patterns & CHECKOUT_BLOCKING_PATTERNS:
+        unpriced_add_on_axes = _unpriced_add_on_axes(source_axes.get("add_on_axes") or [], add_on_price_by_item)
+        if unpriced_add_on_axes:
+            blocking.append("priced_add_on_line_contract_needed")
+        if (
+            "conditional_pricing" in patterns
+            and live_coverage.get("coverage_status") not in {"covered", "representative_item_required"}
+        ):
+            blocking.append("conditional_pricing_matrix_needed")
+        if patterns & {"large_single_choice_color", "multi_color_recipes", "freeform_customer_text"}:
+            if not _representative_only_checkout(source_axes, representative):
+                blocking.append("checkout_customization_contract_needed")
     if source_axes["review_only_axes"] and _website_lane(website_item) == "checkout":
         blocking.append("review_only_add_on_checkout_contract_needed")
     if representative is None and _website_lane(website_item) == "checkout":
@@ -448,6 +534,19 @@ def _checkout_eligibility(
         "blocking_reasons": sorted(set(blocking)),
         "eligible_for_direct_checkout_by_generic_contract": not blocking and _website_lane(website_item) == "checkout",
     }
+
+
+def _unpriced_add_on_axes(add_on_axes: list[str], add_on_price_by_item: dict[str, Decimal]) -> list[str]:
+    unpriced = []
+    for axis in add_on_axes:
+        contracts = known_add_on_contracts_for_axis(axis)
+        if not contracts:
+            unpriced.append(axis)
+            continue
+        item_codes = [str(contract.get("item_code") or "") for contract in contracts if contract.get("item_code")]
+        if not item_codes or any(item_code not in add_on_price_by_item for item_code in item_codes):
+            unpriced.append(axis)
+    return unpriced
 
 
 def _capability(website_item: dict[str, Any], checkout: dict[str, Any]) -> tuple[Capability, list[str]]:
@@ -496,9 +595,10 @@ def _server_boundary(
         },
         representative_priced_item=representative,
         add_on_line_contract={
-            "status": "ready_if_registered_and_priced" if add_on_axes else "not_required",
+            "status": "requires_priced_item_registry" if add_on_axes else "not_required",
             "source_axes": add_on_axes,
             "line_source": "lt_product_page_add_on",
+            "required_fields": ("item_code", "qty", "rate", "amount", "description", "receipt_label"),
         },
         customization_validation={
             "status": (
@@ -527,6 +627,8 @@ def _server_boundary(
             "sales_invoice_item": LINE_FIELDNAMES,
             "summary_source": "custom_lt_configuration_summary",
             "json_source": "custom_lt_configuration_json",
+            "source_integrity_required": bool(product.get("source_integrity")),
+            "import_requirements": tuple(str(value) for value in product.get("erpnext_contract_requirements") or ()),
         },
     )
 

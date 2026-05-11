@@ -30,6 +30,7 @@ if str(APP_PATH) not in sys.path:
     sys.path.insert(0, str(APP_PATH))
 
 from locally_twisted.catalog_contract.erpnext_pattern_contract import build_erpnext_product_pattern_report
+from locally_twisted.catalog_contract.addon_rules import known_add_on_contracts_for_axis
 from locally_twisted.catalog_contract.pattern_mapper import build_product_pattern_report
 
 
@@ -55,7 +56,7 @@ def main() -> int:
         source = _source_catalog()
         products = list(source.get("products") or [])
         source_artifact = _source_pattern_artifact(source, products)
-        erpnext_rows = _erpnext_rows([str(row.get("slug") or "") for row in products if row.get("slug")])
+        erpnext_rows = _erpnext_rows(products)
         report = build_erpnext_product_pattern_report(
             source_artifact,
             erpnext_rows,
@@ -73,7 +74,8 @@ def main() -> int:
         return 1
 
     artifact = report.to_artifact()
-    failures = _contract_failures(artifact)
+    inventory_failures, checkout_gate_failures = _contract_failures(artifact)
+    failures = inventory_failures + checkout_gate_failures
 
     report_path = _rooted(args.report) if args.report else DEFAULT_REPORT
     markdown_path = _rooted(args.markdown) if args.markdown else DEFAULT_MARKDOWN
@@ -124,10 +126,27 @@ def _source_pattern_artifact(source: dict[str, Any], products: list[dict[str, An
     return artifact
 
 
-def _erpnext_rows(slugs: list[str]) -> dict[str, list[dict[str, Any]]]:
+def _erpnext_rows(products: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
+    slugs = [str(row.get("slug") or "") for row in products if row.get("slug")]
     if not slugs:
         raise ProductPatternContractFail("no source slugs available")
     quoted = ", ".join(_sql_literal(slug) for slug in sorted(set(slugs)))
+    source_or_published = (
+        f"item_code in ({quoted}) "
+        "or item_code in (select item_code from `tabWebsite Item` where published = 1)"
+    )
+    variant_of_source_or_published = (
+        f"variant_of in ({quoted}) "
+        "or variant_of in (select item_code from `tabWebsite Item` where published = 1)"
+    )
+    aliased_source_or_published = (
+        f"i.item_code in ({quoted}) "
+        "or i.item_code in (select item_code from `tabWebsite Item` where published = 1)"
+    )
+    aliased_variant_of_source_or_published = (
+        f"i.variant_of in ({quoted}) "
+        "or i.variant_of in (select item_code from `tabWebsite Item` where published = 1)"
+    )
     queries = {
         "website_items": f"""
 select
@@ -140,7 +159,7 @@ select
   lt_product_page_type,
   lt_commerce_lane
 from `tabWebsite Item`
-where item_code in ({quoted})
+where published = 1
 order by item_code;
 """,
         "items": f"""
@@ -154,7 +173,7 @@ select
   disabled,
   image
 from tabItem
-where item_code in ({quoted}) or variant_of in ({quoted})
+where {source_or_published} or {variant_of_source_or_published}
 order by coalesce(nullif(variant_of, ''), item_code), item_code;
 """,
         "item_prices": f"""
@@ -168,7 +187,7 @@ from `tabItem Price` ip
 join tabItem i on i.item_code = ip.item_code
 where ip.price_list = 'Standard Selling'
   and ip.selling = 1
-  and (i.item_code in ({quoted}) or i.variant_of in ({quoted}))
+  and ({aliased_source_or_published} or {aliased_variant_of_source_or_published})
 order by ip.item_code;
 """,
         "variant_attributes": f"""
@@ -178,7 +197,7 @@ select
   iva.attribute_value
 from `tabItem Variant Attribute` iva
 join tabItem i on i.name = iva.parent
-where i.item_code in ({quoted}) or i.variant_of in ({quoted})
+where {aliased_source_or_published} or {aliased_variant_of_source_or_published}
 order by iva.parent, iva.idx;
 """,
         "line_fields": f"""
@@ -206,7 +225,34 @@ where parent in ('Sales Order Item', 'Sales Invoice Item')
 order by dt, fieldname;
 """,
     }
+    add_on_item_codes = _add_on_item_codes(products)
+    if add_on_item_codes:
+        quoted_add_ons = ", ".join(_sql_literal(item_code) for item_code in add_on_item_codes)
+        queries["add_on_prices"] = f"""
+select
+  item_code,
+  price_list,
+  selling,
+  price_list_rate,
+  currency
+from `tabItem Price`
+where price_list = 'Standard Selling'
+  and selling = 1
+  and item_code in ({quoted_add_ons})
+order by item_code;
+"""
     return {name: _mariadb_dicts(query) for name, query in queries.items()}
+
+
+def _add_on_item_codes(products: list[dict[str, Any]]) -> list[str]:
+    item_codes = {
+        str(contract.get("item_code") or "")
+        for product in products
+        for axis_name in (product.get("attributes") or {})
+        for contract in known_add_on_contracts_for_axis(str(axis_name))
+        if contract.get("item_code")
+    }
+    return sorted(item_codes)
 
 
 def _mariadb_dicts(query: str) -> list[dict[str, Any]]:
@@ -235,35 +281,38 @@ def _mariadb_dicts(query: str) -> list[dict[str, Any]]:
     return [dict(row) for row in reader]
 
 
-def _contract_failures(artifact: dict[str, Any]) -> list[str]:
-    failures: list[str] = []
+def _contract_failures(artifact: dict[str, Any]) -> tuple[list[str], list[str]]:
+    inventory_failures: list[str] = []
+    checkout_gate_failures: list[str] = []
     if artifact.get("schema_version") != "lt-erpnext-product-pattern-contract-v1":
-        failures.append("unexpected schema_version")
+        inventory_failures.append("unexpected schema_version")
     if artifact.get("read_only") is not True:
-        failures.append("artifact must be read_only")
+        inventory_failures.append("artifact must be read_only")
     if artifact.get("destructive_allowed") is not False:
-        failures.append("artifact must not allow destructive action")
+        inventory_failures.append("artifact must not allow destructive action")
     summary = artifact.get("summary") or {}
-    if int(summary.get("source_products") or 0) != 53:
-        failures.append(f"expected 53 source products, found {summary.get('source_products')}")
+    if int(summary.get("source_products") or 0) < 53:
+        inventory_failures.append(f"expected at least 53 source products, found {summary.get('source_products')}")
     if int(summary.get("explicit_checkout_products") or 0) != 18:
-        failures.append(
+        inventory_failures.append(
             "current explicit checkout product count changed; expected 18, "
             f"found {summary.get('explicit_checkout_products')}"
         )
     products = artifact.get("products")
     if not isinstance(products, list):
-        return failures + ["products must be a list"]
+        return inventory_failures + ["products must be a list"], checkout_gate_failures
     for row in products:
         if not row.get("slug"):
-            failures.append("product row missing slug")
+            inventory_failures.append("product row missing slug")
         if not row.get("capability"):
-            failures.append(f"{row.get('slug')} missing capability")
+            inventory_failures.append(f"{row.get('slug')} missing capability")
         if not isinstance(row.get("server_boundary"), dict):
-            failures.append(f"{row.get('slug')} missing server_boundary")
+            checkout_gate_failures.append(f"{row.get('slug')} missing server_boundary")
         if not isinstance(row.get("checkout_eligibility"), dict):
-            failures.append(f"{row.get('slug')} missing checkout_eligibility")
-    return failures
+            checkout_gate_failures.append(f"{row.get('slug')} missing checkout_eligibility")
+    inventory_failures.extend(artifact.get("inventory_failures") or [])
+    checkout_gate_failures.extend(artifact.get("checkout_gate_failures") or [])
+    return inventory_failures, checkout_gate_failures
 
 
 def _print_summary(artifact: dict[str, Any], failures: list[str]) -> None:
@@ -272,6 +321,8 @@ def _print_summary(artifact: dict[str, Any], failures: list[str]) -> None:
     print(f"  source_products: {summary.get('source_products')}")
     print(f"  explicit_checkout_products: {summary.get('explicit_checkout_products')}")
     print(f"  direct_checkout_ready_products: {summary.get('direct_checkout_ready_products')}")
+    print(f"  inventory_ok: {artifact.get('inventory_ok')}")
+    print(f"  checkout_gate_ok: {artifact.get('checkout_gate_ok')}")
     print(f"  quote_first_supported_products: {summary.get('quote_first_supported_products')}")
     print(f"  missing_or_needs_review_products: {summary.get('missing_or_needs_review_products')}")
     print(f"  capability_counts: {_format_counts(summary.get('capability_counts') or {})}")

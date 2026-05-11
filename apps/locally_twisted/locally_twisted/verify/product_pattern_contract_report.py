@@ -18,7 +18,7 @@ from locally_twisted.catalog_contract.product_pattern_contract import (
 from locally_twisted.catalog_contract.addon_rules import known_add_on_contracts_for_axis
 
 
-EXPECTED_PRICED_WEBSITE_ITEMS = 53
+EXPECTED_PUBLISHED_WEBSITE_ITEMS = 53
 
 
 def run(source_catalog: dict[str, Any] | None = None, source_catalog_path: str | None = None) -> dict[str, Any]:
@@ -62,7 +62,7 @@ def run(source_catalog: dict[str, Any] | None = None, source_catalog_path: str |
         "read_only": True,
         "destructive_allowed": False,
         "scope": "all published Website Items, including rows with missing Standard Selling prices",
-        "expected_priced_website_items": EXPECTED_PRICED_WEBSITE_ITEMS,
+        "expected_published_website_items": EXPECTED_PUBLISHED_WEBSITE_ITEMS,
         "published_website_item_count": len(rows),
         "priced_website_item_count": sum(1 for row in rows if row["pricing"]["priced_sale_units"] > 0),
         "summary": {
@@ -103,9 +103,9 @@ def run(source_catalog: dict[str, Any] | None = None, source_catalog_path: str |
 
 def _inventory_failures(rows: list[dict[str, Any]], source_products: dict[str, dict[str, Any]]) -> list[str]:
     failures = []
-    if len(rows) != EXPECTED_PRICED_WEBSITE_ITEMS:
+    if len(rows) != EXPECTED_PUBLISHED_WEBSITE_ITEMS:
         failures.append(
-            f"expected {EXPECTED_PRICED_WEBSITE_ITEMS} published Website Items, found {len(rows)}"
+            f"expected {EXPECTED_PUBLISHED_WEBSITE_ITEMS} published Website Items, found {len(rows)}"
         )
     missing_source = sorted(row["slug"] for row in rows if row["slug"] not in source_products)
     if missing_source:
@@ -141,7 +141,7 @@ def _checkout_gate_failures(rows: list[dict[str, Any]], line_field_status: dict[
         row["slug"]
         for row in rows
         for axis in row.get("axis_contracts") or []
-        if axis.get("role") == "add_on" and not (axis.get("add_on_contract") or {}).get("ready_for_checkout")
+        if axis.get("role") == "add_on" and not _add_on_contract_ready(axis.get("add_on_contract") or {})
     )
     if unpriced_addons:
         failures.append(f"products with unpriced add-on contracts: {sorted(set(unpriced_addons))}")
@@ -150,6 +150,7 @@ def _checkout_gate_failures(rows: list[dict[str, Any]], line_field_status: dict[
         for row in rows
         if not row.get("source_patterns")
         or not row.get("source_integrity")
+        or not row.get("source_import_requirements")
         or not row.get("source_pattern_contract")
     )
     if lost_mapper:
@@ -158,6 +159,18 @@ def _checkout_gate_failures(rows: list[dict[str, Any]], line_field_status: dict[
     if any(missing_line_fields.values()):
         failures.append(f"missing preservation line fields: {missing_line_fields}")
     return failures
+
+
+def _add_on_contract_ready(contract: dict[str, Any]) -> bool:
+    return bool(
+        contract.get("ready_for_checkout")
+        and contract.get("item_code")
+        and contract.get("live_unit_price") not in (None, "")
+        and contract.get("price_status") == "ready"
+        and contract.get("quantity_min")
+        and contract.get("quantity_max")
+        and contract.get("receipt_label")
+    )
 
 
 def _load_source_catalog(source_catalog_path: str | None = None) -> dict[str, Any]:
