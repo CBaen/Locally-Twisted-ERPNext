@@ -5,6 +5,27 @@ D:2026-05-10 | Check:local artifacts 2026-05-10 | Confidence:[LOCAL-PROOF]
 
 This directory is the evidence packet for the May 10 ecommerce architecture audit. It is not a product import, not a destructive migration rehearsal, and not permission to copy Odoo code. Odoo is the source witness for business meaning; ERPNext/Frappe v15 receives that meaning through native DocTypes, custom fields, app services, templates, and verifiers.
 
+## 2026-05-11 Post-Import Checkout Closeout
+
+Use `post-import-checkout-launch-closeout-2026-05-11.md` as the current
+front-door handoff for the local ecommerce checkout slice. It supersedes stale
+pause-centric, bouquet-only, cups-exclusion, and blanket high-variant exclusion
+notes for this slice.
+
+Current closeout evidence: corrected product set is 48 kept / 5
+owner-explicit Classic exclusions; the approved local import ran against the
+local ERPNext `frontend` site only and completed the guarded upsert/write path
+with exit 0; the final browser proof passes for Easter Balloon Cups, 7'
+Butterfly Column, Graduation Grab n Go, 6' Graduation stands, and Unicorn
+Bouquet. Final proof command:
+`& "C:\Program Files\nodejs\node.exe" scripts/verify/post_import_checkout_proof.js`.
+Backend contracts are green for `product_import_readiness_gate`,
+`post_import_catalog_state`, `direct_checkout_target_contract`, and
+`cart_checkout_contract`. Remaining caveats: 8 review-only add-on axes are
+protected by quote-first fallback, the five Classic exclusions remain
+quote-first, the local import evidence is upsert/write rather than a
+delete/recreate transcript, and the shared worktree is dirty.
+
 ## Evidence inventory
 
 | Lane | Required artifact | Current state | Use it for |
@@ -31,6 +52,7 @@ This directory is the evidence packet for the May 10 ecommerce architecture audi
 | Phase 4 quote/event path hardening result | `phase-4-quote-event-path-hardening-result-2026-05-10.md` + `phase-4-quote-event-checkout-boundary-contract-20260510.json` | Present, verifier-backed / parent-verified | Proves 33 quote-first + 5 needs-review products cannot enter paid checkout through product page controls, cart API, direct checkout URL, or stale localStorage; fail-closed precedence prevents inferred/partial checkout drift. |
 | Verifier failure diagnosis | `product-page-architecture-readiness-failure-diagnosis-2026-05-10.md` | Present, parent/subagent-created then parent-verified | Explains why the prior `bench execute failed` no longer reproduces; latest exact verifier command passes. |
 | Phase 5 delivery/payment/operator packet | `phase-5-delivery-payment-operator-packet-2026-05-10.md` | Present, parent-verified / local proof | Proves delivery fee mapping, pickup, tax boundaries, payment backend config, mocked webhook, paid cascade, payment-success reconciliation, operator quote review/send control, customer quote delivery BCC safety, local launch readiness, and pause-state safety. |
+| Post-import checkout launch closeout | `post-import-checkout-launch-closeout-2026-05-11.md` | Present, local proof / backend-owned closeout | Current 48 kept / 5 Classic-excluded import and checkout proof packet; records final browser proof PASS, backend contract gates, priority products, upsert/write caveat, and remaining caveats. |
 | Phase 6 launch decision packet | `phase-6-launch-decision-packet-2026-05-10.md` | Present, parent decision | Keeps public ecommerce paused; live checkout remains blocked until production HTTPS host, explicit live Stripe/site config, policy approval, webhook setup, and one intentional real payment test pass. |
 | Infrastructure synthesis | `ecommerce-infrastructure-research-synthesis-2026-05-10.md` | Present, parent-created | Corrected synthesis for the real question: ERPNext receiving infrastructure, contract/runtime layers, line-level preservation, quote/checkout bridges, fail-loud evidence, and verifier gates. |
 | Knowledge base index | `ecommerce-knowledge-base-index-2026-05-10.md` | Present, parent-created | Supporting index of recalled memory, local artifacts, source repos, verified docs, blockers, and next actions. |

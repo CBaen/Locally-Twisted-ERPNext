@@ -1,0 +1,110 @@
+{
+  "generated_at": "2026-05-11T18:55:30Z",
+  "scope": "local_erpnext_container_site_frontend",
+  "frappe_cloud_or_live_touched": false,
+  "destructive_command_exit": 0,
+  "backup_path": "/home/frappe/frappe-bench/sites/frontend/private/backups/20260511_122754-frontend-database.sql.gz",
+  "command": "docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.seed_catalog.execute --kwargs \"{'dry_run': False, 'destructive': True, 'v1_subset_only': True, 'backup_path': '/home/frappe/frappe-bench/sites/frontend/private/backups/20260511_122754-frontend-database.sql.gz', 'snapshot_path': '/home/frappe/frappe-bench/apps/locally_twisted/locally_twisted/seed/_guard/current-state-snapshot-2026-05-11-1050', 'purge_scope_report': '/home/frappe/frappe-bench/apps/locally_twisted/locally_twisted/seed/_guard/16-catalog-purge-scope-dry-run.json'}\"",
+  "import_summary": {
+    "products_seeded": 48,
+    "variants_created": 0,
+    "items_already_present": 48,
+    "missing_images": 0,
+    "missing_groups": 0,
+    "errors": 0,
+    "note": "Runner completed the approved local write/import path by upserting existing records. It did not report fresh variant creation."
+  },
+  "post_import_counts": {
+    "included_products": 48,
+    "excluded_products": 5,
+    "website_items_included": 48,
+    "item_templates_included": 48,
+    "item_variants_included": 6894,
+    "item_prices_included": 6928
+  },
+  "excluded_existing_products": {
+    "classic-organic-balloon-garland": {
+      "published": 1,
+      "lt_commerce_lane": "quote_first"
+    },
+    "classic-arch": {
+      "published": 1,
+      "lt_commerce_lane": "quote_first"
+    },
+    "classic-column": {
+      "published": 1,
+      "lt_commerce_lane": "quote_first"
+    },
+    "classic-organic-columns": {
+      "published": 1,
+      "lt_commerce_lane": "quote_first"
+    },
+    "classic-organic-arch": {
+      "published": 1,
+      "lt_commerce_lane": "quote_first"
+    },
+    "note": "The dry-run purge scope explicitly held these existing excluded templates out of the 48-product import scope; they remain quote-first, not direct checkout."
+  },
+  "priority_product_status": {
+    "easter-balloon-cups": {
+      "route": "shop-items/seasonal-specialty/easter-balloon-cups",
+      "published": 1,
+      "lt_product_page_type": "simple_product",
+      "lt_commerce_lane": "checkout",
+      "variant_count": 7,
+      "price_count": 8,
+      "ready": true
+    },
+    "7-butterfly-column": {
+      "route": "shop-items/columns/7-butterfly-column",
+      "published": 1,
+      "lt_product_page_type": "simple_product",
+      "lt_commerce_lane": "checkout",
+      "variant_count": 51,
+      "price_count": 52,
+      "ready": true
+    },
+    "graduation-grab-n-go": {
+      "route": "shop-items/grab-go/graduation-grab-n-go",
+      "published": 1,
+      "lt_product_page_type": "simple_product",
+      "lt_commerce_lane": "checkout",
+      "variant_count": 51,
+      "price_count": 52,
+      "ready": true
+    },
+    "6-graduation-stands": {
+      "route": "shop-items/stands-easels/6-graduation-stands",
+      "published": 1,
+      "lt_product_page_type": "simple_product",
+      "lt_commerce_lane": "checkout",
+      "variant_count": 2,
+      "price_count": 3,
+      "ready": true
+    },
+    "unicorn-bouquet": {
+      "route": "shop-items/bouquets/unicorn-bouquet",
+      "published": 1,
+      "lt_product_page_type": "simple_product",
+      "lt_commerce_lane": "checkout",
+      "variant_count": 33,
+      "price_count": 34,
+      "ready": true
+    }
+  },
+  "verification_results": {
+    "v1_manifest": "PASS: included=48 excluded=5 sale_units=225 price_review_units=0 extra_images_held=66",
+    "product_import_readiness_gate": "PASS: 10 pass, 1 warning, 0 blocker",
+    "post_import_catalog_state": "PASS: kept-set counts match purge-scope expectations",
+    "checkout_product_family_contract": "PASS: rollback verifier produced Sales Invoice ACC-SINV-2026-00003 and rolled generated records back",
+    "cart_checkout_contract": "PASS: 9 checks passed",
+    "focused_http_routes": "PASS: 5 priority product routes plus /cart and /checkout returned HTTP 200",
+    "direct_checkout_target_contract": "PASS: 7' Butterfly Column, Graduation Grab n Go, and 6' Graduation stands resolve to checkout, candidate variants, prices, and cart resolver acceptance; Classic exclusions remain quote_first.",
+    "focused_product_routes_after_fix": "PASS: 7' Butterfly Column, Graduation Grab n Go, and 6' Graduation stands returned HTTP 200 with quoteGate=false, directCheckoutControl=true, and priceText=true.",
+    "post_import_checkout_proof_browser": "BLOCKED: Playwright could not launch Chrome or Edge remote-debugging pipe before hitting localhost"
+  },
+  "cleanup": {
+    "seed_data_cleanup": "not_removed_tool_policy_rejected_remove_item",
+    "guard_packet_kept": true
+  }
+}

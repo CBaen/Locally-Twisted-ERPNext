@@ -1,0 +1,50 @@
+{
+  "generated_at": "2026-05-11T19:10:00Z",
+  "scope": "local_erpnext_container_site_frontend",
+  "frappe_cloud_or_live_touched": false,
+  "command": "& \"C:\\Program Files\\nodejs\\node.exe\" scripts/verify/post_import_checkout_proof.js",
+  "exit_code": 0,
+  "result": "PASS",
+  "report_path": "output/playwright/post-import-checkout-proof.json",
+  "priority_products": [
+    {
+      "label": "Easter Balloon Cups",
+      "slug": "easter-balloon-cups",
+      "item_code": "easter-balloon-cups-BUN",
+      "price": "$13.00",
+      "status": "cart_and_checkout_summary_preserved"
+    },
+    {
+      "label": "7' Butterfly Column",
+      "slug": "7-butterfly-column",
+      "item_code": "7-butterfly-column-REF",
+      "price": "$120.00",
+      "status": "cart_and_checkout_summary_preserved"
+    },
+    {
+      "label": "Graduation Grab n Go",
+      "slug": "graduation-grab-n-go",
+      "item_code": "graduation-grab-n-go-REF",
+      "price": "$85.00",
+      "status": "cart_and_checkout_summary_preserved"
+    },
+    {
+      "label": "6' Graduation stands",
+      "slug": "6-graduation-stands",
+      "item_code": "6-graduation-stands-CON",
+      "price": "$45.00",
+      "status": "cart_and_checkout_summary_preserved"
+    },
+    {
+      "label": "Unicorn Bouquet",
+      "slug": "unicorn-bouquet",
+      "item_code": "unicorn-bouquet-SMA",
+      "price": "$35.00",
+      "status": "cart_and_checkout_summary_preserved"
+    }
+  ],
+  "notes": [
+    "Proof report under output/ is ignored runtime evidence; rerun the command for fresh browser evidence.",
+    "This result supersedes the earlier browser-launch blocked note in 29-local-destructive-import-result.json."
+  ]
+}

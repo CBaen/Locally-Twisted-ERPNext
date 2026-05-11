@@ -1,0 +1,19 @@
+{
+  "approved": true,
+  "approved_at": "2026-05-11T18:27:25Z",
+  "approval_text": "approved",
+  "approved_by": "user via Leader",
+  "scope": "local_erpnext_container_site_frontend",
+  "site": "frontend",
+  "container": "locally-twisted-erpnext-v15-backend-1",
+  "frappe_cloud_or_live_in_scope": false,
+  "included_products": 48,
+  "excluded_products": 5,
+  "explicit_excluded_slugs": [
+    "classic-organic-balloon-garland",
+    "classic-arch",
+    "classic-column",
+    "classic-organic-columns",
+    "classic-organic-arch"
+  ]
+}

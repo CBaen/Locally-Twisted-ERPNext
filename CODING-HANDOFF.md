@@ -1,5 +1,23 @@
 # Locally Twisted - Coding Handoff
 
+Codex backend closeout on 2026-05-11: the local ecommerce checkout slice is
+green after the approved local import. Current front-door handoff:
+`workstreams/ecommerce-audit/post-import-checkout-launch-closeout-2026-05-11.md`.
+Use the corrected product scope of 48 kept products and 5 owner-explicit
+Classic exclusions (`classic-organic-balloon-garland`, `classic-arch`,
+`classic-column`, `classic-organic-columns`, `classic-organic-arch`). The local
+approved import completed with exit 0 against the local ERPNext `frontend` site
+only and proved the guarded upsert/write path, not a full delete/recreate
+transcript. Final browser proof passed with
+`& "C:\Program Files\nodejs\node.exe" scripts/verify/post_import_checkout_proof.js`
+for Easter Balloon Cups, 7' Butterfly Column, Graduation Grab n Go, 6'
+Graduation stands, and Unicorn Bouquet. Backend contracts are green for
+`product_import_readiness_gate`, `post_import_catalog_state`,
+`direct_checkout_target_contract`, and `cart_checkout_contract`. Remaining
+caveats: 8 review-only add-on axes are quote-first protected until mapped, the
+five Classic exclusions remain quote-first, Frappe Cloud/live Stripe/DNS/real
+payment tests are separate gates, and the shared worktree is dirty.
+
 Codex update on 2026-05-11: homepage Custom Event Decor is hidden for the
 launch page, but its recovery assets are preserved intentionally. The homepage
 now sets `show_custom_event_decor = False` and wraps the `lt-categories` block
