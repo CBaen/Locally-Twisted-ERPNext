@@ -21,6 +21,12 @@ from typing import Any
 CONTAINER = "locally-twisted-erpnext-v15-backend-1"
 SITE = "frontend"
 BASE_URL = "http://localhost:8081"
+POLICY_ROUTES = (
+    "/privacy",
+    "/terms-of-service",
+    "/refund-policy",
+    "/accessibility",
+)
 
 
 class ContractFail(Exception):
@@ -57,9 +63,9 @@ def bench_execute(method: str, *, kwargs: dict[str, Any] | None = None) -> Any:
         raise ContractFail(f"{method} returned non-JSON output: {text}") from exc
 
 
-def route_status(path: str) -> int:
+def route_status(base_url: str, path: str) -> int:
     req = urllib.request.Request(
-        f"{BASE_URL}{path}",
+        f"{base_url.rstrip('/')}{path}",
         headers={"User-Agent": "LT payment launch readiness verifier"},
     )
     try:
@@ -77,6 +83,11 @@ def main() -> int:
         default="local",
         help="local checks current dev readiness; live additionally requires explicit live-mode config keys",
     )
+    parser.add_argument(
+        "--base-url",
+        default=BASE_URL,
+        help="Base URL for public policy route checks. Defaults to local dev.",
+    )
     args = parser.parse_args()
 
     try:
@@ -84,10 +95,7 @@ def main() -> int:
             "locally_twisted.verify.payment_launch_readiness.run",
             kwargs={"mode": args.mode},
         )
-        route_results = {
-            "/privacy": route_status("/privacy"),
-            "/terms-of-service": route_status("/terms-of-service"),
-        }
+        route_results = {path: route_status(args.base_url, path) for path in POLICY_ROUTES}
     except ContractFail as exc:
         print(f"[PAYMENT LAUNCH READINESS] FAIL\n  - {exc}")
         return 1
@@ -116,6 +124,8 @@ def main() -> int:
         "webshop_checkout_enabled",
         "operator_email",
         "webhook_secret_configured",
+        "host_name",
+        "stripe_webhook_endpoint",
         "outgoing_email_account",
     ]:
         print(f"  {key}: {result.get(key)}")

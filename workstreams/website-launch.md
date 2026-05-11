@@ -45,6 +45,17 @@ The launch verifier waits for localhost before starting, and it retries once if
 the local site briefly blinks during a browser sweep. Repeatable route/layout
 failures still fail the gate.
 
+2026-05-11 Frappe Cloud/Cloudflare/Stripe launch gate: the cutover-control
+packet now lives at
+`workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11.md`. Public
+launch remains pages/forms first with `lt_ecommerce_paused=1`; live checkout is
+blocked until Frappe Cloud staging, Cloudflare dynamic-route checks, live
+Stripe config, backend payment contracts, and one real low-risk payment test
+pass. New verifier:
+`python scripts/verify/cloudflare_launch_readiness.py --base-url https://locallytwisted.com`.
+`payment_launch_readiness.py --mode live` now treats explicit HTTPS
+`host_name` as a hard live-mode requirement.
+
 2026-05-10 launch repo cleanup: stale generated output, old local evidence,
 raw drops, and historical contest/research debris were removed or moved outside
 the repo so the launch checkout is lighter for client handoff. Source handoff:
@@ -271,6 +282,7 @@ Primary coordination file: `workstreams/erpnext-backend-simplification.md`.
 | Ecommerce/shop | Hidden for today’s pages/forms-first launch; preserved for this week’s ecommerce work | `ecommerce_pause_contract.py` passed; `/shop`, `/cart`, and `/checkout` route to the branded quote fallback; earlier open-commerce proof passed `npm run test:ecommerce-full`, `website_launch_verify.py`, `product_page_architecture_readiness.py`, synthetic pipeline, and automation index | Continue non-bouquet price audit, media/category approval, and staged/live readiness; do not call this production-ready without staging/client/live-payment cutover approval |
 | Visual/accessibility QA | Civic site-wide visual pass implemented and locally verified; `/portfolio` proof-gallery reel added as a route-specific visual slice; homepage launch repair pass landed; compact generated-photo hero contract landed; BTFP crawl/header update verified | `output/playwright/launch-baseline-20260502/`, `output/playwright/brand-token-20260502/`, `output/playwright/civic-overhaul-20260503-verified/`, `output/playwright/landing-fixes-20260507/`, `output/playwright/compact-heroes-20260507/`, `output/playwright/home-portfolio-corrections-20260507/`, and `output/playwright/generated-heroes-20260510/` are local screenshot evidence; current component gates pass with `layout-fit` 325/325, `container-contract` 75/75, `interactive-layout` 163/163, `a11y` 50 route/viewport results with 0 violations, and `a11y-manual` passed | Rerun screenshots after final media/content changes |
 | Backend readiness | Paperwork/backend focus active | `paperwork-backend-automation.md` and `business-automation-index.md` now record the 2026-05-06 baseline: finance inventory, customer documents, payment cascade, CRM stage guardrails, payment config/webhook/local readiness, checkout-to-Lead conversion, Accountant Home parity, read-only paperwork status, synthetic no-live pipeline audit, branded Sales Invoice print output, outbound document registry, automation index, scheduled checkup, and Stripe amount-parity contract passed; live Stripe/site setup is cutover-deferred, not a current fake-data blocker | Build reviewed internal digest/queue surfaces; do not send reminders, use live credentials/customer data, or wire CRM stages to finance until thresholds are explicit |
+| Frappe Cloud / Cloudflare / Stripe | Gate defined; not cut over | `workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11.md`, `scripts/verify/frappe_cloud_preflight.py`, `scripts/verify/cloudflare_launch_readiness.py`, and stricter `payment_launch_readiness.py --mode live` | Freeze/push source, pass Frappe Cloud staging, then run Cloudflare and live Stripe gates before DNS/payment exposure |
 | Release gate | Not started | No integrated launch report yet | Run final route, form, shop, visual, accessibility, and policy-source gates after implementation lanes land |
 
 ## Higher-Quality Launch Additions

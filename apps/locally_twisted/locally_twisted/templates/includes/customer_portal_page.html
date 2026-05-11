@@ -1,0 +1,41 @@
+<section class="lt-portal" data-lt-customer-portal {{ portal_page.marker }}>
+    <div class="lt-portal__inner">
+        <header class="lt-portal__hero">
+            <p class="lt-portal__eyebrow">
+                {% if portal_mode == "organization" %}Locally Twisted organization account{% else %}Locally Twisted account{% endif %}
+            </p>
+            <h1>{{ portal_page.heading }}</h1>
+            <p class="lt-portal__lede">{{ portal_page.lede }}</p>
+        </header>
+
+        {% if portal_summary.next_action %}
+        <div class="lt-portal__action">
+            <strong>{{ portal_summary.next_action.label }}</strong>
+            <a class="lt-portal__button" href="{{ portal_summary.next_action.href }}">Open</a>
+        </div>
+        {% endif %}
+
+        <nav class="lt-portal__nav" aria-label="Account sections">
+            {% for item in portal_nav %}
+            <a href="{{ item.href }}" {% if item.active %}aria-current="page"{% endif %}>{{ item.label }}</a>
+            {% endfor %}
+        </nav>
+
+        <div class="lt-portal__grid">
+            {% for row in portal_page.records %}
+            <article class="lt-portal__card">
+                <span class="lt-portal__card-title">{{ row.title }}</span>
+                {% if row.status_label %}
+                <p class="lt-portal__meta"><strong>{{ row.status_label }}</strong></p>
+                {% endif %}
+                {% if row.description %}
+                <p class="lt-portal__meta">{{ row.description }}</p>
+                {% endif %}
+                {% if row.href %}
+                <p class="lt-portal__meta"><a href="{{ row.href }}">Open</a></p>
+                {% endif %}
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>

@@ -1,6 +1,18 @@
 # Locally Twisted - Coding Handoff
 
+
 OpenClaw/Moji update on 2026-05-10: ready-to-order ecommerce Phases 1-4 are closed with parent-verified artifacts before Phase 5. Phase 1 repaired checkout/customer-note verifier foundations. Phase 2 applied explicit Website Item contracts: 15 `simple_product|checkout`, 33 `complex_custom_product|quote_first`, 5 `needs_review|needs_review`. Phase 3 proved the scoped first checkout family: 13 approved foil-number bouquet pages plus Mother's Day simple checkout preserve Sales Order/Sales Invoice lines and roll back cleanly. Phase 4 hardened quote/event boundaries: the 33 quote-first and 5 needs-review products cannot enter paid checkout through product-page controls, cart API, direct checkout URL, stale localStorage, malformed JSON, old cart schema, or unavailable/no-sellable candidates. Direct paid checkout now requires explicit `simple_product|checkout`; blank/partial/inferred fields fail closed. Public ecommerce remains paused by default with `lt_ecommerce_paused=1`; Phase 5 is delivery/payment/operator proof, not launch. Feature handoffs: `workstreams/ecommerce-audit/README.md`, `workstreams/ecommerce-audit/ready-to-order-ecommerce-goal-progress-2026-05-10.md`, `workstreams/ecommerce-audit/phase-4-quote-event-path-hardening-result-2026-05-10.md`, and `workstreams/erpnext-ecommerce-receiving-architecture.md`.
+
+Codex update on 2026-05-11: the Frappe Cloud / Cloudflare / Stripe launch plan
+is now a repo-owned cutover gate at
+`workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11.md`. It preserves
+pages/forms-first launch with `lt_ecommerce_paused=1`, blocks live checkout
+until staging/live payment/product proof passes, adds
+`scripts/verify/cloudflare_launch_readiness.py` for dynamic-route cache/challenge
+checks, treats `cf-cache-status: MISS` and every non-bypass cache status as a
+dynamic-route blocker, and tightens `payment_launch_readiness.py --mode live`
+so HTTPS `host_name` is a hard requirement. Fast guard:
+`python scripts/verify/cloudflare_launch_readiness_contract.py`.
 
 Codex update on 2026-05-10: launch repo cleanup is now a documented feature
 slice. Raw local photo drops were moved out of the repo to
@@ -197,6 +209,48 @@ live probe bypasses the copy helper.
 `customer_documents_contract.py`, `payment_cascade_contract.py`, and
 `outbound_document_send_readiness_contract.py` prove the current standing
 behavior and fail if a routed alias loop is accidentally added as a copy target.
+
+Codex update on 2026-05-11: customer/client portal V1 is now an LT-owned
+account product, not styled ERPNext native list pages. `scripts/setup/sync_customer_portal.py`
+runs `locally_twisted.seed.sync_customer_portal.execute` to keep public signup
+disabled, keep guest shop/cart/checkout boundaries open, set the portal home to
+`me`, keep `default_role` empty, expose Customer menu rows for `/account/quotes`,
+`/account/events`, `/account/billing`, `/account/files`, `/account/checklist`,
+`/account/repeat`, `/account/follow-up`, and `/organization`, hide stock
+customer/public routes, and keep supplier routes Supplier-only. Compatibility
+route rules send `/quotations`, `/orders`, `/invoices`, and `/addresses` to the
+owned LT account routes so customers do not land on raw ERPNext list pages.
+Primary guard: `python scripts/verify/customer_portal_v1_contract.py`. Menu
+guard: `python scripts/verify/customer_portal_inventory.py --base-url http://localhost:8081 --strict-menu --report output/customer-portal-inventory.json`.
+Feature handoff: `workstreams/customer-client-portal-translation-2026-05-10.md`.
+
+Codex update on 2026-05-11: `/me` now renders the account dashboard from
+`customer_portal.py` and `customer_portal_pages.py`. The dashboard and owned
+routes show all eight modules: Event Details, Quotes, Invoices & Receipts,
+Files & Inspiration, Customer Checklist, Repeat Client, After-Event Follow-Up,
+and Organization Portal. Customer actions write review/metadata records through
+`LT Customer Change Request`, `LT Customer Portal File`,
+`LT Customer Checklist Response`, and `LT Organization Portal Membership`.
+Customer change/repeat requests do not directly mutate Sales Orders, Addresses,
+Quotations, invoices, or payment records. Customer-uploaded portal files now
+require a `File` owned by the logged-in customer and already attached to the
+same source record before `LT Customer Portal File` can be created; arbitrary
+File names and staff-owned files fail loudly. Guard:
+`python scripts/verify/customer_portal_home_contract.py`; the broader V1 guard
+renders all individual and organization routes as a temporary Customer Website
+User, proves the file registration boundary, and rolls back the fake records.
+
+Codex update on 2026-05-10: invite-only customer account provisioning now has a
+no-send backend helper at
+`apps/locally_twisted/locally_twisted/customer_account_provisioning.py`.
+`provision_customer_account(contact_name)` creates or reuses a `Website User`
+with the `Customer` role only when the Contact has a primary email and a linked
+Customer, links `Contact.user`, blocks missing Customer/email, blocks existing
+backend/System User collisions, blocks supplier/customer portal crossover, and
+does not send welcome/password emails. Guard:
+`python scripts/verify/customer_account_provisioning_contract.py`; it creates
+fake Customer/Contact/User cases in a rollback transaction and verifies no Email
+Queue or Communication side effects.
 
 ## State Of Reality
 

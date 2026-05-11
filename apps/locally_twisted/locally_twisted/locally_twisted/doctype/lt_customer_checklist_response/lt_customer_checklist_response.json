@@ -1,0 +1,40 @@
+{
+ "actions": [],
+ "allow_import": 0,
+ "autoname": "hash",
+ "creation": "2026-05-11 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": [
+  "source_doctype",
+  "source_name",
+  "item_key",
+  "completed",
+  "customer",
+  "user"
+ ],
+ "fields": [
+  {"fieldname": "source_doctype", "fieldtype": "Data", "in_list_view": 1, "label": "Source DocType", "reqd": 1},
+  {"fieldname": "source_name", "fieldtype": "Data", "in_list_view": 1, "label": "Source Name", "reqd": 1},
+  {"fieldname": "item_key", "fieldtype": "Data", "in_list_view": 1, "label": "Item Key", "reqd": 1},
+  {"default": "0", "fieldname": "completed", "fieldtype": "Check", "in_list_view": 1, "label": "Completed"},
+  {"fieldname": "customer", "fieldtype": "Link", "label": "Customer", "options": "Customer"},
+  {"fieldname": "user", "fieldtype": "Link", "label": "User", "options": "User", "reqd": 1}
+ ],
+ "links": [],
+ "modified": "2026-05-11 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Locally Twisted",
+ "name": "LT Customer Checklist Response",
+ "naming_rule": "Random",
+ "owner": "Administrator",
+ "permissions": [
+  {"create": 1, "delete": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "role": "System Manager", "share": 1, "write": 1}
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "item_key",
+ "track_changes": 1
+}

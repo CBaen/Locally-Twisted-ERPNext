@@ -1,8 +1,15 @@
 # Payment Backend Launch Readiness
 
-Last updated: 2026-05-02
+Last updated: 2026-05-11
 
 This workstream is the payment-specific handoff lane for launch readiness. It is intentionally separate from `PROJECT-STATUS.md`, because that file mixes current receipts with stale historical state.
+
+2026-05-11 cutover update: live mode now requires an explicit HTTPS
+`host_name` in site config, in addition to explicit live Stripe settings,
+payment gateway account, Stripe payment method configuration, operator email,
+and webhook signing secret. The production webhook endpoint remains
+`/api/method/locally_twisted.payments.stripe_webhook.stripe_webhook`; use the
+full `https://locallytwisted.com/...` URL only after the production host exists.
 
 ## Scope
 
@@ -70,7 +77,7 @@ The live-mode verifier is the right tool later, after GL/Jeff/accounting are rea
 - `lt_payment_gateway_account` is not explicitly set in site config.
 - `lt_stripe_payment_method_configuration` is not explicitly set in site config.
 - `lt_operator_email` is not explicitly set in site config.
-- `host_name` is local-only: `http://localhost:8081`.
+- `host_name` is missing, local-only, or not HTTPS.
 
 The verifier intentionally does not print secrets.
 

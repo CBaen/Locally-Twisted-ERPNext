@@ -160,6 +160,7 @@ python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-b
 python scripts/setup/sync_maintenance_package.py
 python scripts/verify/maintenance_heartbeat.py --heavy
 python scripts/verify/maintenance_admin_boundary.py
+python scripts/verify/cloudflare_launch_readiness_contract.py
 npm run test:container-contract
 npm run test:public-verify
 ```

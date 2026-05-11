@@ -1,6 +1,6 @@
 # Public Site Security Hardening
 
-Last updated: 2026-05-08 by Codex after GL blocker triage, paid-conversion repair, and Event Playground gating.
+Last updated: 2026-05-11 by Codex after customer portal file-registration review hardening.
 
 ## Outcome
 
@@ -20,6 +20,14 @@ Fixed in this closeout:
 - New `/contact` inspiration-photo uploads are stored as private Frappe `File` records.
 - Guest checkout no longer marks an existing inquiry Lead as `Converted` / `Approved` before payment succeeds. The paid-order cascade now performs the final Lead conversion after the payment boundary.
 - `/event-playground?port=<port>` now redirects guests to login and requires `Administrator` or `System Manager` before exposing the internal local preview iframe.
+
+Customer portal follow-up on 2026-05-11:
+
+- `register_customer_portal_file` now requires the referenced `File` to be owned
+  by the logged-in customer and already attached to the same source record before
+  creating `LT Customer Portal File`.
+- `customer_portal_v1_contract.py` proves a valid customer-owned file registers
+  and staff-owned or wrong-source files fail without creating portal metadata.
 
 GL triage on 2026-05-08:
 
@@ -56,7 +64,7 @@ Remaining follow-ups:
 - `scripts/verify/event_playground_gate.py`
 - `scripts/verify/event_playground.spec.js`
 - `workstreams/public-site-security-hardening.md`
-- `.codex/capabilities/recipes/frappe-public-storefront-security.md`
+- `capabilities/recipes/frappe-public-storefront-security.md`
 
 ## Required Verification
 
@@ -82,3 +90,6 @@ Also run targeted checks for the exact security symptom:
 - A new inquiry upload must create `tabFile.is_private = 1`.
 - A payment-not-complete checkout path must not mark an existing Lead as converted/approved.
 - A guest `/event-playground?port=<port>` request must redirect or deny access without exposing `127.0.0.1:<port>`.
+- A customer portal file registration attempt with an arbitrary, staff-owned, or
+  wrong-source `File.name` must fail before `LT Customer Portal File` is
+  created.

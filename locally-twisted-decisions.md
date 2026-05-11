@@ -8,6 +8,22 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-11 - Customer portal V1 is LT-owned, invite-first, and review-request based
+
+**Decision:** Customer accounts remain optional and invite-first. The logged-in customer experience is now owned by Locally Twisted routes and summaries, not ERPNext native list pages. The V1 portal exposes all eight customer modules: Event Details, Quotes, Invoices & Receipts, Files & Inspiration, Customer Checklist, Repeat Client, After-Event Follow-Up, and Organization Portal. Organization buyers use a separate `/organization` route family.
+
+**Reasoning:** GL approved the full value-add portal shape and chose review requests for customer changes, all modules visible in V1, and separate organization portal mode. Native ERPNext portal routes expose generic doctype/list language and are not a designed customer experience. Customer convenience must not quietly mutate fulfillment, accounting, quote, address, or payment records.
+
+**Implementation boundary:** `customer_portal.py` is the backend source for customer-safe summaries and actions. It resolves `Website User -> Contact -> Customer`, returns allowlisted DTO fields, and blocks raw ERP exposure. Customer edits and repeat-event requests create `LT Customer Change Request`; customer-visible files require `LT Customer Portal File`; checklist state uses `LT Customer Checklist Response`; organization access requires `LT Organization Portal Membership`. `/quotations`, `/orders`, `/invoices`, and `/addresses` are compatibility-routed to LT-owned account pages. Do not enable public signup, require login for inquiry/cart/checkout, expose raw Files/Communications/internal notes, or let customer portal actions directly mutate order/accounting records.
+
+**Verification receipt:** Red check first failed because `locally_twisted.customer_portal` did not exist. After implementation and `bench --site frontend migrate`, `python scripts/verify/customer_portal_v1_contract.py`, `python scripts/verify/customer_portal_home_contract.py`, `python scripts/verify/customer_account_provisioning_contract.py`, `python scripts/verify/customer_portal_inventory.py --base-url http://localhost:8081 --strict-menu`, and `python scripts/verify/verifier_cli_contract.py` passed.
+
+**Alternatives considered:** Keep native ERPNext customer list routes and only rename them. Rejected because it leaves the customer in raw ERP surfaces. Let customers directly edit event/order/address fields. Rejected because review requests protect fulfillment, quoting, accounting, and operations. Merge organization buyers into the same dashboard only. Rejected by GL preference for separate organization mode.
+
+**Decided by:** GL product direction and Codex implementation on 2026-05-11.
+
+---
+
 ## 2026-05-10 - Paid checkout is explicit allow-list only
 
 **Decision:** LT paid/direct checkout requires the stored Website Item contract to resolve to explicit `simple_product|checkout`. Blank fields, partial checkout fields, inferred checkout, `quote_first`, `needs_review`, and malformed/stale cart payloads must fail closed into quote/review behavior instead of entering paid checkout.
@@ -16,7 +32,7 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 **Implementation:** `product_page_runtime.resolved_product_page_contract_values()` centralizes precedence, `product_page_contract_for_website_item()` fails closed for blank/partial/needs-review drift, Sales Order line/add-on builders reject non-checkout lanes, and `api/cart.py` blocks any runtime contract whose `commerce_lane != "checkout"`. Phase 3 keeps the approved simple checkout proof; Phase 4 blocks the 33 quote-first and 5 needs-review products across product page controls, cart API, direct checkout URL, stale localStorage, malformed JSON, old-schema config, and unavailable/no-sellable candidates.
 
-**Verification receipt:** `python scripts/verify/quote_event_checkout_boundary_contract.py --report output/phase-4-quote-event-checkout-boundary-contract-20260510.json` passed with 33 quote-first, 5 needs-review, 38 cart API blocks, 38 direct checkout URL blocks, 38 stale localStorage blocks, `record_count_deltas: {}`, and rollback true. Regression gates also passed for product-page runtime, checkout product family, Website Item classification, checkout fulfillment, and customer-note checkout preservation. Durable proof lives at `workstreams/ecommerce-audit/phase-4-quote-event-checkout-boundary-contract-20260510.json`.
+**Verification receipt:** `python scripts\verify\quote_event_checkout_boundary_contract.py --report output\phase-4-quote-event-checkout-boundary-contract-20260510.json` passed with 33 quote-first, 5 needs-review, 38 cart API blocks, 38 direct checkout URL blocks, 38 stale localStorage blocks, `record_count_deltas: {}`, and rollback true. Regression gates also passed for product-page runtime, checkout product family, Website Item classification, checkout fulfillment, and customer-note checkout preservation. Durable proof lives at `workstreams/ecommerce-audit/phase-4-quote-event-checkout-boundary-contract-20260510.json`.
 
 **Alternatives considered:** Let explicit prices or inferred runtime fallback decide checkout. Rejected because price existence is not customer/order readiness. Treat missing Website Item fields as temporary defaults. Rejected because blank setup fields are exactly how false checkout leaks happen.
 
@@ -3266,3 +3282,45 @@ The pattern that worked: read the Odoo source → write a Python script targetin
 **Receipts:** `apps/locally_twisted/locally_twisted/customer_email_theme.py`; `apps/locally_twisted/locally_twisted/www/payment_success.py`; `apps/locally_twisted/locally_twisted/product_quote_customer_delivery.py`; `apps/locally_twisted/locally_twisted/verify/customer_email_policy_contract.py`; `output/email-previews/email-preview-gallery.html`.
 
 **Decided by:** GL direction to keep formal responses formal, 2026-05-10.
+
+---
+
+## 2026-05-10 - Customer accounts are invite-only and `/me` is LT-owned
+
+**Decision:** Guest inquiry, cart, and checkout remain account-free. Checkout must not create a `User`. Customer account access is allowed only as an explicit invite/provisioning path after a real Contact and Customer relationship exists. The logged-in `/me` route is now a Locally Twisted account home, not Frappe's native account utility page.
+
+**Reasoning:** GL asked what happens when people want to sign up and log in, and the verified state showed public signup disabled, guest `/me` blocked, and no real Customer Website User path in use. The business needs account access to be useful for quotes, bookings, invoices, and event addresses, but automatic public signup would widen the blast radius and create support/security confusion. The safe first move is an LT-owned account home plus rollback-safe verification, while public flows remain guest-friendly.
+
+**Implementation boundary:** Do not enable public signup without a new explicit decision. Do not create customer Users from incomplete checkout or failed payment state. `provision_customer_account(contact_name)` may create/reuse a no-send Customer Website User only after a Contact has a primary email and linked Customer, and it must block backend/System User collisions and supplier/customer portal crossover. Do not expose Desk/backend access, supplier routes, project/time/material routes, internal notes, cost/margin, Communications, Files, payroll, or procurement data through customer accounts. Route pages behind Quotes, Orders & Bookings, Invoices & Receipts, and Event Addresses still need their own customer-safe translation before the portal is considered complete.
+
+**Receipts:** `apps/locally_twisted/locally_twisted/www/me.py`; `apps/locally_twisted/locally_twisted/www/me.html`; `apps/locally_twisted/locally_twisted/customer_account_provisioning.py`; `apps/locally_twisted/locally_twisted/seed/sync_customer_portal.py`; `apps/locally_twisted/locally_twisted/verify/customer_portal_home_contract.py`; `apps/locally_twisted/locally_twisted/verify/customer_account_provisioning_contract.py`; `scripts/verify/customer_portal_inventory.py`; `scripts/verify/customer_portal_home_contract.py`; `scripts/verify/customer_account_provisioning_contract.py`; `workstreams/customer-client-portal-translation-2026-05-10.md`.
+
+**Decided by:** Codex implementation following GL's customer/login portal question and invite-only account boundary, 2026-05-10.
+
+---
+
+## 2026-05-11 - Customer portal file registration is same-user and same-source only
+
+**Decision:** The customer-facing portal file registration endpoint may create `LT Customer Portal File` only when the referenced `File` is owned by the logged-in customer account and is already attached to the same source record the customer can access.
+
+**Reasoning:** File names are not proof of ownership. Allowing a customer to pass any existing `File` name would let them misattribute staff-owned, unrelated, or discovered files as customer uploads for their event/account.
+
+**Implementation boundary:** Staff publishing/customer-visible file workflows need their own operator path and must not mark files as `uploaded_by_customer` through the customer endpoint. Future customer upload UI must attach the `File` to the intended source record before calling `register_customer_portal_file`.
+
+**Receipts:** `apps/locally_twisted/locally_twisted/customer_portal.py`; `apps/locally_twisted/locally_twisted/verify/customer_portal_v1_contract.py`; `scripts/verify/customer_portal_v1_contract.py`; `workstreams/customer-client-portal-translation-2026-05-10.md`.
+
+**Decided by:** Codex review-fix implementation after external review, 2026-05-11.
+
+---
+
+## 2026-05-11 - Cloudflare dynamic routes use a cache-status allowlist
+
+**Decision:** Dynamic launch routes pass Cloudflare readiness only when the `cf-cache-status` header is absent, `BYPASS`, or `DYNAMIC`. `MISS` is a blocker, along with `HIT`, `STALE`, `UPDATING`, `EXPIRED`, `REVALIDATED`, and any other non-allowlisted cache status.
+
+**Reasoning:** A first-request `MISS` can become a later `HIT`, so it proves Cloudflare considered the dynamic route cacheable. Login, contact, cart, checkout, payment return, thank-you, API ping, and Stripe webhook paths must bypass cache instead of merely avoiding a cached response during the first probe.
+
+**Implementation boundary:** Do not switch this verifier back to a small denylist. If Cloudflare introduces a new safe bypass status, add it only with source-backed justification and a contract update.
+
+**Receipts:** `scripts/verify/cloudflare_launch_readiness.py`; `scripts/verify/cloudflare_launch_readiness_contract.py`; `workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11.md`.
+
+**Decided by:** Codex review-fix implementation after external review, 2026-05-11.

@@ -1,0 +1,46 @@
+{
+ "actions": [],
+ "allow_import": 0,
+ "autoname": "hash",
+ "creation": "2026-05-11 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": [
+  "source_doctype",
+  "source_name",
+  "file",
+  "label",
+  "purpose",
+  "customer",
+  "owner_user",
+  "visible_to_customer",
+  "uploaded_by_customer"
+ ],
+ "fields": [
+  {"fieldname": "source_doctype", "fieldtype": "Data", "in_list_view": 1, "label": "Source DocType", "reqd": 1},
+  {"fieldname": "source_name", "fieldtype": "Data", "in_list_view": 1, "label": "Source Name", "reqd": 1},
+  {"fieldname": "file", "fieldtype": "Link", "in_list_view": 1, "label": "File", "options": "File", "reqd": 1},
+  {"fieldname": "label", "fieldtype": "Data", "in_list_view": 1, "label": "Label"},
+  {"default": "Reference", "fieldname": "purpose", "fieldtype": "Select", "in_list_view": 1, "label": "Purpose", "options": "Reference\nInspiration\nPost Event\nReceipt\nOther", "reqd": 1},
+  {"fieldname": "customer", "fieldtype": "Link", "in_list_view": 1, "label": "Customer", "options": "Customer"},
+  {"fieldname": "owner_user", "fieldtype": "Link", "label": "Owner User", "options": "User"},
+  {"default": "1", "fieldname": "visible_to_customer", "fieldtype": "Check", "in_list_view": 1, "label": "Visible To Customer"},
+  {"default": "0", "fieldname": "uploaded_by_customer", "fieldtype": "Check", "label": "Uploaded By Customer"}
+ ],
+ "links": [],
+ "modified": "2026-05-11 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Locally Twisted",
+ "name": "LT Customer Portal File",
+ "naming_rule": "Random",
+ "owner": "Administrator",
+ "permissions": [
+  {"create": 1, "delete": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "role": "System Manager", "share": 1, "write": 1}
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "label",
+ "track_changes": 1
+}

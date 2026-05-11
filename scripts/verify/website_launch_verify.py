@@ -9,16 +9,29 @@ from __future__ import annotations
 
 import argparse
 import os
+import shutil
 import subprocess
 import sys
 import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Sequence
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
 
 
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_BASE_URL = "http://localhost:8081"
+PLAYWRIGHT_RESULTS = ROOT / "test-results"
+SITE_READY_PATHS = ("/", "/privacy")
+TRANSIENT_SITE_MARKERS = (
+    "502 Bad Gateway",
+    "Received:   502",
+    "Target page, context or browser has been closed",
+    "Target page has been closed",
+    "browser has been closed",
+    "Target closed",
+)
 
 
 def parse_worker_count(value: str | None) -> int:
@@ -42,6 +55,58 @@ def command_text(command: Sequence[str]) -> str:
     if os.name == "nt":
         return subprocess.list2cmdline(list(command))
     return " ".join(command)
+
+
+def is_playwright_step(step: Step) -> bool:
+    return any("playwright" in part.lower() for part in step.command)
+
+
+def clear_playwright_results() -> None:
+    if PLAYWRIGHT_RESULTS.exists():
+        shutil.rmtree(PLAYWRIGHT_RESULTS)
+
+
+def error_context_text() -> str:
+    if not PLAYWRIGHT_RESULTS.exists():
+        return ""
+    snippets = []
+    for path in PLAYWRIGHT_RESULTS.rglob("error-context.md"):
+        try:
+            snippets.append(path.read_text(encoding="utf-8", errors="replace"))
+        except OSError:
+            continue
+    return "\n".join(snippets)
+
+
+def is_transient_site_failure() -> bool:
+    text = error_context_text()
+    return any(marker in text for marker in TRANSIENT_SITE_MARKERS)
+
+
+def request_is_served(base_url: str, path: str) -> bool:
+    url = base_url.rstrip("/") + path
+    request = Request(url, headers={"User-Agent": "LT launch verifier readiness probe"})
+    try:
+        with urlopen(request, timeout=8) as response:
+            return response.status < 500
+    except HTTPError as error:
+        return error.code < 500
+    except (OSError, URLError):
+        return False
+
+
+def wait_for_site_ready(base_url: str, timeout_seconds: int = 90) -> bool:
+    deadline = time.monotonic() + timeout_seconds
+    stable_hits = 0
+    while time.monotonic() < deadline:
+        if all(request_is_served(base_url, path) for path in SITE_READY_PATHS):
+            stable_hits += 1
+            if stable_hits >= 2:
+                return True
+        else:
+            stable_hits = 0
+        time.sleep(2)
+    return False
 
 
 def local_playwright_command(workers: int, spec: str) -> list[str]:
@@ -127,36 +192,56 @@ def build_steps(args: argparse.Namespace) -> list[Step]:
     return steps
 
 
-def run_step(step: Step, env: dict[str, str]) -> int:
+def run_step(step: Step, env: dict[str, str], base_url: str) -> int:
     print(f"\n=== {step.name} ===", flush=True)
     print(f"$ {command_text(step.command)}", flush=True)
-    started = time.monotonic()
-    try:
-        proc = subprocess.run(
-            step.command,
-            cwd=ROOT,
-            env=env,
-            timeout=step.timeout_seconds,
-        )
-    except subprocess.TimeoutExpired:
-        elapsed = time.monotonic() - started
-        print(
-            f"[WEBSITE LAUNCH VERIFY] FAIL: {step.name} timed out after {elapsed:.1f}s "
-            f"(limit {step.timeout_seconds}s)",
-            flush=True,
-        )
-        return 124
+    max_attempts = 2 if is_playwright_step(step) else 1
+    for attempt in range(1, max_attempts + 1):
+        if is_playwright_step(step):
+            clear_playwright_results()
+        started = time.monotonic()
+        try:
+            proc = subprocess.run(
+                step.command,
+                cwd=ROOT,
+                env=env,
+                timeout=step.timeout_seconds,
+            )
+        except subprocess.TimeoutExpired:
+            elapsed = time.monotonic() - started
+            print(
+                f"[WEBSITE LAUNCH VERIFY] FAIL: {step.name} timed out after {elapsed:.1f}s "
+                f"(limit {step.timeout_seconds}s)",
+                flush=True,
+            )
+            return 124
 
-    elapsed = time.monotonic() - started
-    if proc.returncode != 0:
+        elapsed = time.monotonic() - started
+        if proc.returncode == 0:
+            print(f"[WEBSITE LAUNCH VERIFY] PASS: {step.name} ({elapsed:.1f}s)", flush=True)
+            return 0
+
+        if attempt < max_attempts and is_transient_site_failure():
+            print(
+                f"[WEBSITE LAUNCH VERIFY] RETRY: {step.name} saw a temporary site/browser failure "
+                f"after {elapsed:.1f}s; waiting for localhost to settle.",
+                flush=True,
+            )
+            if not wait_for_site_ready(base_url):
+                print(
+                    f"[WEBSITE LAUNCH VERIFY] FAIL: localhost did not become stable before retrying {step.name}",
+                    flush=True,
+                )
+                return proc.returncode
+            continue
+
         print(
             f"[WEBSITE LAUNCH VERIFY] FAIL: {step.name} exited {proc.returncode} after {elapsed:.1f}s",
             flush=True,
         )
         return proc.returncode
 
-    print(f"[WEBSITE LAUNCH VERIFY] PASS: {step.name} ({elapsed:.1f}s)", flush=True)
-    return 0
+    return 1
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
@@ -201,9 +286,12 @@ def main(argv: Sequence[str] | None = None) -> int:
         f"(base_url={args.base_url}, playwright_workers={env['LT_PLAYWRIGHT_WORKERS']})",
         flush=True,
     )
+    if not wait_for_site_ready(args.base_url):
+        print("[WEBSITE LAUNCH VERIFY] FAIL: localhost did not become stable before verification", flush=True)
+        return 1
 
     for step in steps:
-        result = run_step(step, env)
+        result = run_step(step, env, args.base_url)
         if result != 0:
             return result
 

@@ -107,6 +107,8 @@ def _run_contract(mode):
             f"Stripe payment method configuration {payment_method_configuration!r} does not start with 'pmc_'"
         )
 
+    host_name = (frappe.conf.get("host_name") or "").strip()
+
     if mode == "live":
         _check_live_mode_requirements(
             failures,
@@ -116,6 +118,7 @@ def _run_contract(mode):
             payment_gateway_account=payment_gateway_account,
             payment_method_configuration=payment_method_configuration,
             operator_email=operator_email,
+            host_name=host_name,
         )
     else:
         if stripe_mode == "test":
@@ -133,6 +136,8 @@ def _run_contract(mode):
         "webshop_checkout_enabled": str(webshop.get("enable_checkout")) == "1",
         "operator_email": operator_email,
         "webhook_secret_configured": webhook_secret_configured,
+        "host_name": host_name,
+        "stripe_webhook_endpoint": _webhook_endpoint(host_name),
         "outgoing_email_account": outgoing_email.get("name") if outgoing_email else None,
     }
 
@@ -214,6 +219,7 @@ def _check_live_mode_requirements(
     payment_gateway_account,
     payment_method_configuration,
     operator_email,
+    host_name,
 ):
     if stripe_mode != "live":
         failures.append(
@@ -226,13 +232,22 @@ def _check_live_mode_requirements(
         "lt_stripe_payment_method_configuration": payment_method_configuration,
         "lt_operator_email": operator_email,
         "stripe_webhook_signing_secret": "configured",
+        "host_name": host_name,
     }
     for key in required_site_config:
         if not frappe.conf.get(key):
             failures.append(f"live mode requires explicit site_config key {key!r}")
 
-    host_name = (frappe.conf.get("host_name") or "").strip()
     if not host_name:
-        warnings.append("host_name is not set in site_config; confirm production URL generation before live checkout")
+        return
     elif "localhost" in host_name or "127.0.0.1" in host_name:
         failures.append(f"host_name is local-only in live mode: {host_name!r}")
+    elif not host_name.startswith("https://"):
+        failures.append(f"host_name must be HTTPS in live mode: {host_name!r}")
+
+
+def _webhook_endpoint(host_name):
+    host_name = (host_name or "").strip().rstrip("/")
+    if not host_name:
+        return "/api/method/locally_twisted.payments.stripe_webhook.stripe_webhook"
+    return f"{host_name}/api/method/locally_twisted.payments.stripe_webhook.stripe_webhook"

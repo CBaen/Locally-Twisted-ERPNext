@@ -2428,3 +2428,27 @@ This is the global anti-pattern #2 (Drift from GL's actual ask). Receipt added t
 **Do this next time:** Give shared automation indexes a non-runtime mode for internal reports. Keep runtime fake-data contracts in explicit verifier/synthetic readiness commands, run DB-mutating verifiers serially, and make report payloads expose whether runtime contracts were executed.
 
 **Avoid:** nesting full verifier suites inside Desk reports, parallelizing rollback-heavy Frappe DB verifiers, or treating `read_only: true` as sufficient when called dependencies can mutate state.
+
+---
+
+## 2026-05-11 - A Cloudflare `MISS` is not safe proof for dynamic Frappe routes
+
+**Lesson:** For dynamic login, form, cart, checkout, payment, account, and webhook routes, `cf-cache-status: MISS` means the route was cache-eligible. That is a launch failure, not a pass.
+
+**What happened:** The first Cloudflare launch verifier only blocked `HIT`, `STALE`, and `UPDATING`. Review caught that a route can return `MISS` immediately after a purge or Cache-Everything-style rule and later become `HIT`.
+
+**Do this next time:** Use an allowlist for dynamic-route cache statuses. Absent header, `BYPASS`, and `DYNAMIC` are acceptable for this LT gate; `MISS` and unknown non-empty statuses fail loudly with a contract.
+
+**Avoid:** small denylist checks for cache behavior on launch-critical dynamic routes.
+
+---
+
+## 2026-05-11 - File names are not customer portal authorization
+
+**Lesson:** A Frappe `File.name` proves only that a row exists. Customer portal actions must prove who uploaded the file and which source record it belongs to before creating visibility metadata.
+
+**What happened:** The first customer portal file-registration endpoint allowed any existing `File` name after source access passed, which could attach unrelated or staff-owned files to a customer's portal history.
+
+**Do this next time:** Customer-uploaded portal files need both same-user ownership and same-source attachment before registration. Staff-published files need a separate operator path and must not be marked `uploaded_by_customer`.
+
+**Avoid:** customer-facing whitelisted methods that accept arbitrary document names without checking source ownership and intended attachment context.
