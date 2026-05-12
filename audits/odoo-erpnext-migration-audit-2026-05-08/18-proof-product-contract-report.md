@@ -34,6 +34,13 @@ Selector type: `multi_select_drawer`
 - Neutrals: 9 colors
 - Brights: 4 colors
 
+### Unicorn Bouquet foil-number add-on
+
+- Item code: `ADDON-FOIL-NUMBER`
+- Quantity bounds: `1` to `4`
+- Requires value: `True`
+- Receipt label: `Foil number add-on`
+
 ## Gate result
 
 **PASS for proof-product contract shape.** Source import is still blocked by price/media review gates elsewhere.

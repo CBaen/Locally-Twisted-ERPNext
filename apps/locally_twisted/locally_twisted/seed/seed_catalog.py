@@ -48,11 +48,19 @@ import time
 from pathlib import Path
 
 import frappe
+from locally_twisted.catalog_import_subset import (
+    assert_must_work_products_included,
+    import_exclusion_reasons,
+    primary_exclusion_reason,
+    reason_counts,
+)
+from locally_twisted.catalog_contract import build_product_page_contract
 from locally_twisted.catalog_variant_rules import (
     dedupe_required_variant_rows,
     normalize_variant_value,
     required_variant_attribute_names,
 )
+from locally_twisted.product_page_runtime import CONFIG_VERSION, LINE_FIELDNAMES
 
 # Catalog and mapping paths — relative to bench-bench dir or /workspace mount
 WORKSPACE_PATHS = [
@@ -97,17 +105,19 @@ def _normalize_value(attr_name: str, raw_value: str, normalize_map: dict) -> str
     return normalize_variant_value(attr_name, value)
 
 
+def _find_source_image(slug: str, images_dir: Path) -> Path | None:
+    for ext in (".png", ".jpg", ".jpeg", ".webp"):
+        candidate = images_dir / f"{slug}{ext}"
+        if candidate.exists():
+            return candidate
+    return None
+
+
 def _ensure_file_attached(item_code: str, slug: str, images_dir: Path) -> str | None:
     """Copy image into site files dir, create File doc, return the file_url.
 
     Returns None if no source image exists (loud-flagged by caller)."""
-    # Find a source file with any common extension
-    src = None
-    for ext in (".png", ".jpg", ".jpeg", ".webp"):
-        candidate = images_dir / f"{slug}{ext}"
-        if candidate.exists():
-            src = candidate
-            break
+    src = _find_source_image(slug, images_dir)
     if not src:
         return None
 
@@ -238,7 +248,15 @@ def _clean_route(item_group: str, slug: str) -> str:
     return f"{group_route}/{slug}".lstrip("/")
 
 
-def _upsert_website_item(template_code: str, prod: dict, item_group: str, file_url: str | None) -> str:
+def _set_website_item_contract(wi, contract) -> None:
+    meta = frappe.get_meta("Website Item")
+    if meta.has_field("lt_product_page_type"):
+        wi.lt_product_page_type = contract.product_page_type
+    if meta.has_field("lt_commerce_lane"):
+        wi.lt_commerce_lane = contract.commerce_lane
+
+
+def _upsert_website_item(template_code: str, prod: dict, item_group: str, file_url: str | None, contract) -> str:
     """Find-or-create the Website Item for the template. Returns the Website Item name."""
     existing = frappe.db.exists("Website Item", {"item_code": template_code})
     slug = prod["slug"]
@@ -257,6 +275,7 @@ def _upsert_website_item(template_code: str, prod: dict, item_group: str, file_u
         wi.web_long_description = long_desc
         if file_url:
             wi.website_image = file_url
+        _set_website_item_contract(wi, contract)
         wi.save(ignore_permissions=True)
         return wi.name
 
@@ -274,8 +293,122 @@ def _upsert_website_item(template_code: str, prod: dict, item_group: str, file_u
     wi.web_long_description = long_desc
     if file_url:
         wi.website_image = file_url
+    _set_website_item_contract(wi, contract)
     wi.save(ignore_permissions=True)
     return wi.name
+
+
+def _build_import_plan(
+    *,
+    catalog: dict,
+    slug_to_group: dict,
+    images_dir: Path,
+    max_products: int | None,
+    slug_filter: str | None,
+    v1_subset_only: bool,
+) -> dict:
+    products = catalog["products"]
+    if slug_filter:
+        products = [p for p in products if p["slug"] == slug_filter]
+    if max_products:
+        products = products[:max_products]
+
+    rows = []
+    selected = []
+    excluded = []
+    missing_groups = []
+    missing_images = []
+    for prod in products:
+        slug = prod["slug"]
+        group = slug_to_group.get(slug)
+        if not group:
+            missing_groups.append(slug)
+            rows.append({"slug": slug, "status": "blocked", "blocker": "missing slug_to_group mapping"})
+            continue
+
+        contract = build_product_page_contract(prod, category_hint=group)
+        exclusion_details = import_exclusion_reasons(prod, contract) if v1_subset_only else []
+        exclusion_codes = [reason["code"] for reason in exclusion_details]
+        primary_exclusion = primary_exclusion_reason(exclusion_details)
+        source_image = _find_source_image(slug, images_dir)
+        if not source_image:
+            missing_images.append(slug)
+
+        row = {
+            "slug": slug,
+            "name": prod.get("name"),
+            "item_group": group,
+            "product_page_type": contract.product_page_type,
+            "commerce_lane": contract.commerce_lane,
+            "source_variant_rows": contract.source_variant_rows,
+            "has_customization_axes": bool(contract.customization_axes),
+            "image_status": "present" if source_image else "missing",
+            "selected_for_v1_import": not exclusion_details,
+            "primary_exclusion_reason": primary_exclusion,
+            "excluded_reason_codes": exclusion_codes,
+            "excluded_reason_details": exclusion_details,
+            "excluded_reasons": [reason["detail"] for reason in exclusion_details],
+        }
+        rows.append(row)
+        if exclusion_details:
+            excluded.append(row)
+        else:
+            selected.append(row)
+
+    return {
+        "schema_version": "lt-catalog-import-plan-v1",
+        "dry_run_default": True,
+        "destructive_import_requires_explicit_flag": True,
+        "line_configuration_architecture": {
+            "config_version": CONFIG_VERSION,
+            "fieldnames": LINE_FIELDNAMES,
+            "writer": "locally_twisted.product_page_runtime",
+        },
+        "summary": {
+            "source_products_seen": len(products),
+            "selected_for_v1_import": len(selected),
+            "excluded_from_v1_import": len(excluded),
+            "excluded_counts_by_primary_reason": reason_counts(rows, primary=True),
+            "excluded_counts_by_reason": reason_counts(rows, primary=False),
+            "must_work_validation_errors": assert_must_work_products_included(rows) if v1_subset_only else [],
+            "missing_groups": len(missing_groups),
+            "missing_images": len(missing_images),
+        },
+        "missing_groups": missing_groups,
+        "missing_images": missing_images,
+        "rows": rows,
+    }
+
+
+def _guard_path_exists(label: str, value: str | None) -> str:
+    if not str(value or "").strip():
+        raise SystemExit(f"FATAL: destructive import requires {label}.")
+    path = Path(str(value))
+    if not path.exists():
+        raise SystemExit(f"FATAL: destructive import {label} does not exist: {path}")
+    return str(path)
+
+
+def _validate_destructive_guards(
+    *,
+    destructive: bool,
+    backup_path: str | None,
+    snapshot_path: str | None,
+    purge_scope_report: str | None,
+) -> dict:
+    if not destructive:
+        return {"destructive": False, "write_allowed": False}
+    if not str(backup_path or "").strip():
+        raise SystemExit("FATAL: destructive import requires a named backup_path from `bench --site frontend backup --with-files`.")
+    snapshot = _guard_path_exists("snapshot_path", snapshot_path)
+    purge_report = _guard_path_exists("purge_scope_report", purge_scope_report)
+    return {
+        "destructive": True,
+        "write_allowed": True,
+        "backup_path": str(backup_path),
+        "snapshot_path": snapshot,
+        "purge_scope_report": purge_report,
+    }
 
 
 def _seed_variants(template_code: str, prod: dict, normalize_map: dict, log) -> int:
@@ -342,26 +475,70 @@ def _rebuild_variant_cache(template_code: str):
 
 # ── Public entrypoint ────────────────────────────────────────────────
 
-def execute(max_products: int | None = None, slug_filter: str | None = None) -> str:
-    """Seed the full Odoo catalog into ERPNext webshop.
+def execute(
+    max_products: int | None = None,
+    slug_filter: str | None = None,
+    dry_run: bool = True,
+    destructive: bool = False,
+    backup_path: str | None = None,
+    snapshot_path: str | None = None,
+    purge_scope_report: str | None = None,
+    v1_subset_only: bool = True,
+) -> str:
+    """Plan or seed the Odoo catalog into ERPNext webshop.
 
     Args:
         max_products: optional cap for smoke testing. None = process all.
         slug_filter: optional single-slug filter for surgical re-run on one product.
+        dry_run: defaults to True and performs no ERPNext writes.
+        destructive: required before any ERPNext write/import path can run.
+        backup_path: required in destructive mode; name/path from bench backup.
+        snapshot_path: required existing snapshot folder in destructive mode.
+        purge_scope_report: required existing purge dry-run report in destructive mode.
+        v1_subset_only: excludes owner-named unsupported structures and proven backend/schema blockers.
 
     Returns: a summary string.
     """
     catalog, slug_to_group, normalize_map, images_dir = _load_inputs()
+    guard = _validate_destructive_guards(
+        destructive=destructive,
+        backup_path=backup_path,
+        snapshot_path=snapshot_path,
+        purge_scope_report=purge_scope_report,
+    )
+    plan = _build_import_plan(
+        catalog=catalog,
+        slug_to_group=slug_to_group,
+        images_dir=images_dir,
+        max_products=max_products,
+        slug_filter=slug_filter,
+        v1_subset_only=v1_subset_only,
+    )
+
+    if dry_run or not destructive:
+        plan["mode"] = "dry_run"
+        plan["guard"] = guard
+        plan["next_command_sequence"] = [
+            "python scripts/setup/stage_seed_data.py",
+            "bench --site frontend backup --with-files",
+            "python scripts/verify/catalog_state_snapshot_contract.py",
+            "python scripts/verify/catalog_purge_scope_dry_run.py",
+            "bench --site frontend execute locally_twisted.seed.seed_catalog.execute --kwargs \"{'dry_run': True}\"",
+            "bench --site frontend execute locally_twisted.seed.seed_catalog.execute --kwargs \"{'dry_run': False, 'destructive': True, 'backup_path': '<backup>', 'snapshot_path': '<snapshot>', 'purge_scope_report': '<purge-report>'}\"",
+        ]
+        rendered = json.dumps(plan, indent=2, sort_keys=True)
+        print(rendered)
+        return rendered
+
+    if plan["missing_groups"]:
+        raise SystemExit(f"FATAL: missing group mappings: {plan['missing_groups']}")
 
     # in_import skips email triggers and some validate paths — speeds bulk insert.
     frappe.flags.in_import = True
     frappe.flags.ignore_permissions = True
 
-    products = catalog["products"]
-    if slug_filter:
-        products = [p for p in products if p["slug"] == slug_filter]
-    if max_products:
-        products = products[:max_products]
+    selected_slugs = {row["slug"] for row in plan["rows"] if row.get("selected_for_v1_import")}
+    products = [p for p in catalog["products"] if p["slug"] in selected_slugs]
 
     print(f"=== Seeding {len(products)} products ===")
     print(f"  catalog: {len(catalog['products'])} total, {len(products)} processing")
@@ -387,6 +564,7 @@ def execute(max_products: int | None = None, slug_filter: str | None = None) -> 
             raise SystemExit(f"slug_to_group.json missing entry for {slug!r}")
 
         try:
+            contract = build_product_page_contract(prod, category_hint=group)
             file_url = _ensure_file_attached(slug, slug, images_dir)
             if not file_url:
                 summary["missing_images"].append(slug)
@@ -400,7 +578,7 @@ def execute(max_products: int | None = None, slug_filter: str | None = None) -> 
             if not has_attrs:
                 _upsert_item_price(template, prod.get("base_price"))
 
-            web_item = _upsert_website_item(template, prod, group, file_url)
+            web_item = _upsert_website_item(template, prod, group, file_url, contract)
 
             variants_created = 0
             if has_attrs:

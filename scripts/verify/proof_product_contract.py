@@ -63,8 +63,21 @@ def main() -> int:
         failures.append(
             f"Unicorn Bouquet must classify as simple_product/checkout, found {unicorn.product_page_type}/{unicorn.commerce_lane}."
         )
-    if not any(addon.key == "foil_number" for addon in unicorn.add_ons):
+    foil_number = next((addon for addon in unicorn.add_ons if addon.key == "foil_number"), None)
+    if not foil_number:
         failures.append("Unicorn Bouquet must expose foil number as optional add-on contract.")
+    else:
+        if foil_number.item_code != "ADDON-FOIL-NUMBER":
+            failures.append(f"Foil number add-on must preserve ERPNext item_code, found {foil_number.item_code!r}.")
+        if foil_number.quantity_min != 1 or foil_number.quantity_max != 4:
+            failures.append(
+                "Foil number add-on must preserve quantity bounds 1..4, "
+                f"found {foil_number.quantity_min}..{foil_number.quantity_max}."
+            )
+        if foil_number.requires_value is not True:
+            failures.append("Foil number add-on must require the selected number value.")
+        if foil_number.receipt_label != "Foil number add-on":
+            failures.append(f"Foil number add-on must preserve receipt label, found {foil_number.receipt_label!r}.")
     if len(unicorn.gallery) < 2:
         failures.append("Unicorn Bouquet should have primary + alternate gallery image evidence.")
 
@@ -131,6 +144,17 @@ def main() -> int:
         ])
         for group in latex.color_groups:
             lines.append(f"- {group.group}: {len(group.options)} colors")
+
+    if foil_number:
+        lines.extend([
+            "",
+            "### Unicorn Bouquet foil-number add-on",
+            "",
+            f"- Item code: `{foil_number.item_code}`",
+            f"- Quantity bounds: `{foil_number.quantity_min}` to `{foil_number.quantity_max}`",
+            f"- Requires value: `{foil_number.requires_value}`",
+            f"- Receipt label: `{foil_number.receipt_label}`",
+        ])
 
     lines.extend(["", "## Gate result", ""])
     if failures:

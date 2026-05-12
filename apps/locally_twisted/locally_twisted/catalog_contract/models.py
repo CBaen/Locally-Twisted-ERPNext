@@ -11,7 +11,7 @@ from typing import Literal
 
 CommerceLane = Literal["checkout", "quote_first", "hybrid", "needs_review"]
 ProductPageType = Literal["simple_product", "complex_custom_product", "needs_review"]
-ImageRole = Literal["primary", "gallery", "variant", "review_needed"]
+ImageRole = Literal["primary", "gallery", "variant_image", "reference", "ignored_artifact"]
 AxisStatus = Literal["required", "optional_addon", "customization", "needs_review"]
 SelectorType = Literal["radio", "single_select", "multi_select_drawer", "cards", "needs_design"]
 
@@ -55,7 +55,12 @@ class AddOnContract:
     key: str
     label: str
     pricing_rule: str
+    item_code: str = ""
     unit_price: float | None = None
+    quantity_min: int = 1
+    quantity_max: int = 1
+    requires_value: bool = False
+    receipt_label: str = ""
     source_attribute: str = ""
     status: Literal["confirmed", "needs_review"] = "needs_review"
     note: str = ""
