@@ -69,6 +69,14 @@ def verify_record_in_backend_frappe(test_marker: str, base_url: str) -> bool:
         )
         if records is not None:
             return len(records) > 0
+        records = _get_list_via_cdp_backend(
+            "Lead",
+            [["first_name", "=", test_marker]],
+            ["name", "first_name"],
+            base_url,
+        )
+        if records is not None:
+            return len(records) > 0
         print("       backend verification unavailable - set LT_ADMIN_PASSWORD or run against local Docker stack")
         return False
 
@@ -100,12 +108,23 @@ VERIFY_BACKEND = verify_record_in_backend_frappe   # swap for other stacks
 
 def cleanup_record_in_backend_frappe(test_marker: str, base_url: str) -> bool | None:
     """Delete smoke Leads and linked LT cascade Tasks for this exact marker."""
+    get_list = _get_list_via_local_bench
+    delete_doc = _delete_doc_via_local_bench
     leads = _get_list_via_local_bench(
         "Lead",
         [["first_name", "=", test_marker]],
         ["name", "first_name"],
         base_url,
     )
+    if leads is None:
+        get_list = _get_list_via_cdp_backend
+        delete_doc = _delete_doc_via_cdp_backend
+        leads = get_list(
+            "Lead",
+            [["first_name", "=", test_marker]],
+            ["name", "first_name"],
+            base_url,
+        )
     if leads is None:
         return None
 
@@ -114,7 +133,7 @@ def cleanup_record_in_backend_frappe(test_marker: str, base_url: str) -> bool | 
         lead_name = lead.get("name")
         if not lead_name:
             continue
-        comments = _get_list_via_local_bench(
+        comments = get_list(
             "Comment",
             [["reference_doctype", "=", "Lead"], ["reference_name", "=", lead_name]],
             ["name"],
@@ -123,7 +142,7 @@ def cleanup_record_in_backend_frappe(test_marker: str, base_url: str) -> bool | 
         if comments is None:
             ok = False
             comments = []
-        communications = _get_list_via_local_bench(
+        communications = get_list(
             "Communication",
             [["reference_doctype", "=", "Lead"], ["reference_name", "=", lead_name]],
             ["name"],
@@ -132,28 +151,40 @@ def cleanup_record_in_backend_frappe(test_marker: str, base_url: str) -> bool | 
         if communications is None:
             ok = False
             communications = []
-        tasks = _get_list_via_local_bench(
+        email_queues = get_list(
+            "Email Queue",
+            [["reference_doctype", "=", "Lead"], ["reference_name", "=", lead_name]],
+            ["name"],
+            base_url,
+        )
+        if email_queues is None:
+            ok = False
+            email_queues = []
+        tasks = get_list(
             "Task",
             [["custom_lt_lead", "=", lead_name]],
             ["name"],
             base_url,
         )
         if tasks is None:
-            ok = False
-            continue
+            tasks = []
         for comment in comments:
             comment_name = comment.get("name")
             if comment_name:
-                ok = _delete_doc_via_local_bench("Comment", comment_name, base_url) and ok
+                ok = delete_doc("Comment", comment_name, base_url) and ok
         for communication in communications:
             communication_name = communication.get("name")
             if communication_name:
-                ok = _delete_doc_via_local_bench("Communication", communication_name, base_url) and ok
+                ok = delete_doc("Communication", communication_name, base_url) and ok
+        for email_queue in email_queues:
+            email_queue_name = email_queue.get("name")
+            if email_queue_name:
+                ok = delete_doc("Email Queue", email_queue_name, base_url) and ok
         for task in tasks:
             task_name = task.get("name")
             if task_name:
-                ok = _delete_doc_via_local_bench("Task", task_name, base_url) and ok
-        ok = _delete_doc_via_local_bench("Lead", lead_name, base_url) and ok
+                ok = delete_doc("Task", task_name, base_url) and ok
+        ok = delete_doc("Lead", lead_name, base_url) and ok
     return ok
 
 
@@ -180,6 +211,87 @@ def _delete_doc_via_local_bench(doctype: str, name: str, base_url: str) -> bool:
     if not _is_local_base_url(base_url):
         return False
     return _bench_delete_doc(doctype, name) is not None
+
+
+def _backend_base_url(base_url: str) -> str:
+    return os.environ.get("LT_BACKEND_BASE_URL", base_url).rstrip("/")
+
+
+def _with_cdp_admin_page(base_url: str, callback):
+    cdp_url = os.environ.get("LT_BACKEND_CDP_URL") or os.environ.get("LT_CDP_URL")
+    if not cdp_url:
+        return None
+
+    backend_base = _backend_base_url(base_url)
+    playwright = sync_playwright().start()
+    try:
+        browser = playwright.chromium.connect_over_cdp(cdp_url)
+        for context in browser.contexts:
+            for page in context.pages:
+                if not page.url.startswith(backend_base + "/"):
+                    continue
+                state = page.evaluate(
+                    """async () => {
+                        const response = await fetch('/api/method/frappe.auth.get_logged_user', {
+                            headers: { Accept: 'application/json' },
+                        });
+                        const data = await response.json();
+                        return { status: response.status, user: data.message || null };
+                    }"""
+                )
+                if state.get("status") == 200 and state.get("user") and state.get("user") != "Guest":
+                    return callback(page)
+        return None
+    except Exception as exc:
+        print(f"       CDP backend access failed: {exc}")
+        return None
+    finally:
+        playwright.stop()
+
+
+def _get_list_via_cdp_backend(doctype: str, filters: list, fields: list[str], base_url: str) -> list[dict] | None:
+    def query(page):
+        result = page.evaluate(
+            """async ({ doctype, filters, fields }) => {
+                const params = new URLSearchParams({
+                    filters: JSON.stringify(filters),
+                    fields: JSON.stringify(fields),
+                    limit_page_length: '100',
+                });
+                const response = await fetch(`/api/resource/${encodeURIComponent(doctype)}?${params}`, {
+                    headers: { Accept: 'application/json' },
+                });
+                const data = await response.json();
+                return { status: response.status, data: data.data || [] };
+            }""",
+            {"doctype": doctype, "filters": filters, "fields": fields},
+        )
+        if result.get("status", 500) >= 400:
+            return None
+        return result.get("data", [])
+
+    return _with_cdp_admin_page(base_url, query)
+
+
+def _delete_doc_via_cdp_backend(doctype: str, name: str, base_url: str) -> bool:
+    def delete(page):
+        result = page.evaluate(
+            """async ({ doctype, name }) => {
+                const csrf = window.csrf_token || window.frappe?.csrf_token || document.querySelector('meta[name="csrf-token"]')?.content;
+                const headers = { Accept: 'application/json', 'Content-Type': 'application/json' };
+                if (csrf) headers['X-Frappe-CSRF-Token'] = csrf;
+                const response = await fetch('/api/method/frappe.client.delete', {
+                    method: 'POST',
+                    headers,
+                    body: JSON.stringify({ doctype, name }),
+                });
+                return { status: response.status, ok: response.ok };
+            }""",
+            {"doctype": doctype, "name": name},
+        )
+        return bool(result.get("ok"))
+
+    return bool(_with_cdp_admin_page(base_url, delete))
 
 
 def _bench_delete_doc(doctype: str, name: str) -> str | None:
