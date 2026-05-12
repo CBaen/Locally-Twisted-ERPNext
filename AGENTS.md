@@ -155,6 +155,25 @@ Work within Frappe and ERPNext.
 - Before declaring visual work done, verify with browser screenshots at desktop and mobile widths, plus the layout gates below.
 - Browser verification is repo-local. `playwright.config.js` prefers installed Chrome/Edge on Windows when Playwright's bundled Chromium is missing. Use `npm run test:layout-fit` for passive public route layout checks, `npm run test:interactive-layout` for stateful menus/drawers/modals/forms/product controls, `npm run test:public-verify` for broad public-site closeout, and `npm run test:desk-owner` with `LT_DESK_TEST_USER` / `LT_DESK_TEST_PASSWORD` for the owner Desk route check.
 
+## Launch Provider Ownership
+
+For Frappe Cloud, Cloudflare, Stripe, DNS, hosting, and production-provider
+work, agents own the execution once GL says the account/session is logged in or
+available. Do not hand GL provider dashboard checklists as the next action. Use
+the project capabilities, browser automation, provider CLI/API, SSH, and repo
+verifiers first. Ask GL only for MFA, unavailable credentials, payment/legal or
+business approval, or a final destructive go/no-go.
+
+For the LT Frappe Cloud launch specifically:
+
+- Install/update the Frappe Cloud custom app from the app-root mirror:
+  `https://github.com/CBaen/Locally-Twisted-Frappe-App.git`.
+- Keep `locally_twisted` installed last.
+- Set `lt_ecommerce_paused=1` on staging/live before public verification.
+- Prove the temporary Frappe Cloud URL before any Cloudflare DNS cutover.
+- Do not expose checkout/Stripe unless that separate payment gate is explicitly
+  reopened and passes.
+
 ## Voice And UI Language
 
 Jeff is not a technical operator. Customer and backend UI copy should be plain.

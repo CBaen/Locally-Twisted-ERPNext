@@ -6,6 +6,22 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-12 - Logged-in launch access means agents own dashboard work
+
+During the Frappe Cloud launch, the agent gave GL manual dashboard steps after
+GL had already logged into Frappe Cloud and Cloudflare and had prepared the
+research/process path. That converted agent-owned deployment work into human
+busywork at the exact cutover point.
+
+**Counter-move:** once GL says the account is logged in or access is available,
+the agent owns the provider workflow through browser automation, CLI/API, SSH,
+or the documented project process. Ask GL only for MFA, missing credentials,
+payment/business approval, or a destructive go/no-go. Do not hand GL a checklist
+for Frappe Cloud app install, site config, cache clear, or DNS mutation when the
+agent has an available execution path.
+
+---
+
 ## 2026-05-12 - Lead reference names are not email idempotency boundaries
 
 The Contact form reused `CRM-LEAD-2026-00073`, and an older sent Email Queue row

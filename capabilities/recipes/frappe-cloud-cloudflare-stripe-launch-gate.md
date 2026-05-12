@@ -47,6 +47,12 @@ Do not confuse technical preflight with account control.
   must confirm whether LT live payments should use that account or a
   Locally Twisted/Jeff-owned Stripe account.
 
+Once GL says the needed provider account is logged in or otherwise available,
+dashboard execution becomes agent-owned work. Use the documented Frappe Cloud
+flow, provider API/CLI/SSH, or Playwright/browser automation before escalating.
+Escalate only MFA, unavailable credentials, payment/business approval, or a
+destructive final go/no-go.
+
 ## Required Gates
 
 Run from repo root unless a staging/production URL is explicitly required.
@@ -71,6 +77,8 @@ python scripts/verify/stripe_amount_parity_contract.py
   ownership.
 - Treating Cloudflare nameserver delegation as proof that Codex can edit DNS.
 - Treating any logged-in Stripe account as the correct LT merchant account.
+- Handing GL Frappe Cloud/Cloudflare dashboard steps after GL has already made
+  the account session available.
 - Treating `locallytwisted.com` as the Frappe host before the dynamic Frappe
   routes and webhook path pass.
 - Opening checkout because local fake-data contracts pass, without live
