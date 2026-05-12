@@ -1,6 +1,6 @@
 # BTFP Service Page
 
-Last updated: 2026-05-11 by Codex after fixing the rotated Mirabel twisting photo pixels.
+Last updated: 2026-05-12 by Codex after cache-busting the upright Mirabel twisting photo.
 
 ## Outcome
 
@@ -71,8 +71,11 @@ Fresh checks from 2026-05-10:
 Earlier 2026-05-08 calculator receipt remains valid: `contact_prefill.py` covers mixed durations (one twisting artist at `1.5` hours plus one face painter at `2.5` hours totals `$490`, deposit `$100`, balance `$390`; adding a third one-hour artist totals `$620`, deposit `$150`, balance `$470`).
 
 2026-05-11 image-orientation receipt: `apps/locally_twisted/locally_twisted/public/images/btfp/twisting/twisting-mirabel.png`
-was pixel-rotated upright and stripped of EXIF orientation dependency. Browser
-verification confirmed the BTFP page and carousel render the image upright.
+was pixel-rotated upright and stripped of EXIF orientation dependency. 2026-05-12
+follow-up cache-busted the first carousel image URL with `?v=20260512-upright`
+because the browser could keep serving the older sideways bitmap for the same
+asset path. Browser verification confirmed the BTFP page and carousel render
+the image upright.
 
 ## Next Safe Changes
 
