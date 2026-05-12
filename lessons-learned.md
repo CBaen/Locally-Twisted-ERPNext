@@ -6,6 +6,23 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-12 - Complex checkout needs a scaffold, not a product-name hunch
+
+The storefront proof showed which products were currently quote-gated, but the
+first heuristic lane-flip list mixed simple sale-unit products with
+multi-color recipes, add-ons, conditional pricing, freeform text, and
+needs-review products. That could let a product look ready because it renders,
+while checkout would still lose the customer's selected meaning or price it
+wrong downstream.
+
+**Counter-move:** before flipping any quote-first product, run the
+source-backed complex checkout scaffold. It must classify the product lane,
+name the missing UI/server contracts, preserve direct-checkout regression
+guards, and keep live checkout enablement false until the focused local proof
+passes.
+
+---
+
 ## 2026-05-12 - A Frappe Cloud deploy hash is not live release proof
 
 The live app hash changed while the site was still serving old behavior because

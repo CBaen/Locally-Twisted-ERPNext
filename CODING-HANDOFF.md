@@ -49,6 +49,18 @@ not absent. Feature handoff:
 `workstreams/ecommerce-audit/ready-to-order-nav-search-backend-gate-2026-05-12.md`;
 guards: `python scripts\verify\nav_ia.py` and `npm run test:search-contract`.
 
+Codex ecommerce scaffold update on 2026-05-12: complex product checkout
+planning is now source-backed and local-only through
+`scripts/verify/complex_checkout_scaffold.py`. The scaffold passes with 53
+products: 18 direct-checkout regression guards, 4 simple-axis lane-flip
+candidates, 6 multi-color UI cases, 20 add-on/conditional blocked products, 5
+needs-review/missing products, and 0 explicit checkout architecture gaps. It
+supersedes older heuristic quote-first flip lists and does not authorize live
+site, Frappe Cloud, DNS, Stripe, or Website Item lane updates. Feature handoff:
+`workstreams/ecommerce-audit/complex-checkout-scaffold-2026-05-12.md`; guards:
+`python scripts/verify/complex_checkout_scaffold_contract.py` and
+`python scripts/verify/complex_checkout_scaffold.py`.
+
 Codex public-site update on 2026-05-11: `/event-balloons` is removed as a
 route, with no redirect and no compatibility page. The app no longer has
 `www/event_balloons.*`, the `/event-balloons` route rule, the `/event_balloons`
@@ -88,7 +100,8 @@ Graduation stands, and Unicorn Bouquet. Backend contracts are green for
 `direct_checkout_target_contract`, and `cart_checkout_contract`. Remaining
 caveats: 8 review-only add-on axes are quote-first protected until mapped, the
 five Classic exclusions remain quote-first, Frappe Cloud/live Stripe/DNS/real
-payment tests are separate gates, and the shared worktree is dirty.
+payment tests are separate gates, and the shared worktree may have active
+uncommitted changes from other agents.
 
 Codex update on 2026-05-11: homepage Custom Event Decor is hidden for the
 launch page, but its recovery assets are preserved intentionally. The homepage

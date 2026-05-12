@@ -8,6 +8,38 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-12 - Quote-first lane flips require the complex checkout scaffold
+
+**Decision:** Future quote-first product lane flips must start from the
+source-backed complex checkout scaffold, not older rendered-front-end heuristic
+lists. The scaffold may identify local rehearsal candidates, but it does not
+authorize live checkout enablement, Frappe Cloud updates, DNS changes, or
+Stripe/live payment work.
+
+**Reasoning:** The storefront audit proved that 35 products are quote-gated at
+the rendered layer, but that alone did not distinguish simple sale-unit
+products from multi-color recipe, add-on, conditional-pricing, freeform, or
+needs-review products. A heuristic "likely to pass" list would let products
+enter checkout before the ERPNext receiving contract, cart payload, summary,
+and downstream Sales Order/Sales Invoice preservation are proven.
+
+**Implementation boundary:** Use
+`locally_twisted.catalog_contract.complex_checkout_scaffold` and
+`scripts/verify/complex_checkout_scaffold.py` before lane flips. Current local
+scaffold result: 53 products, 18 direct-checkout regression guards, 4
+simple-axis lane-flip candidates, 6 multi-color UI cases, 20
+add-on/conditional blocked products, 5 needs-review/missing products, and 0
+explicit checkout architecture gaps.
+
+**Verification receipt:** `python -m py_compile` for the new scaffold module and
+scripts passed, `python scripts/verify/complex_checkout_scaffold_contract.py`
+passed, and `python scripts/verify/complex_checkout_scaffold.py` passed locally
+without live site updates.
+
+**Decided by:** Codex local ecommerce scaffolding continuation on 2026-05-12.
+
+---
+
 ## 2026-05-12 - Live inquiry proof must verify customer and owner email content
 
 **Decision:** Public inquiry success requires both customer confirmation and

@@ -62,6 +62,20 @@ allowlist entries only; they cannot bypass Website Item
 `simple_product|checkout` fields. Search filtering hides backend-approved
 nonmatching quick-link nodes instead of removing them from the DOM.
 
+## 2026-05-12 Complex Checkout Scaffold
+
+Use `complex-checkout-scaffold-2026-05-12.md` for the current local-only
+complex product-page checkout scaffold. `python
+scripts/verify/complex_checkout_scaffold.py` refreshes ProductPatternContract
+data and writes ignored `output/complex-checkout-scaffold.*` artifacts without
+touching Frappe Cloud or the live domain.
+
+Current scaffold proof: 53 products checked, 18 direct-checkout regression
+guards, 4 simple-axis lane-flip candidates, 6 multi-color UI cases, 20
+add-on/conditional blocked products, 5 needs-review/missing products, and 0
+explicit checkout architecture gaps. The scaffold supersedes older
+rendered-front-end heuristic lane-flip lists.
+
 ## 2026-05-12 Ecommerce Shop Setup Closeout
 
 Use the root `ECOMMERCE-SHOP-HANDOFF.md` for the current local ecommerce shop
@@ -124,6 +138,7 @@ Prices, 26 Item Attributes, and 32,028 Item Variant Attribute rows.
 | Post-import checkout launch closeout | `post-import-checkout-launch-closeout-2026-05-11.md` | Present, local proof / backend-owned closeout | Current 48 kept / 5 Classic-excluded import and checkout proof packet; records final browser proof PASS, backend contract gates, priority products, upsert/write caveat, and remaining caveats. |
 | Storefront proof and complex UI handoff | `storefront-proof-and-complex-ui-handoff-2026-05-11.md` | Present, rendered storefront proof / frontend-owned handoff | Captures Ready-to-Order/search proof, final post-import checkout proof, all-priced-page audit, Classic Arch proof, quote-first lane correction, complex UI requirements, and regression proof ladder. |
 | Ready-to-Order nav/search backend gate | `ready-to-order-nav-search-backend-gate-2026-05-12.md` | Present, review-closeout / local DB + rendered proof | Captures owner-include-as-allowlist rule, backend `simple_product|checkout` requirement, hidden-vs-removed search quick-link assertion, mobile drawer label correction, and nav/search verifier receipts. |
+| Complex checkout scaffold | `complex-checkout-scaffold-2026-05-12.md` + `../../scripts/verify/complex_checkout_scaffold.py` | Present, local ProductPatternContract scaffold / source-owned gate | Maps all 53 products into direct-checkout guard, simple lane-flip, multi-color UI, add-on/conditional blocked, or needs-review stages before any future quote-first lane flip. |
 | Ecommerce shop setup closeout | `../../ECOMMERCE-SHOP-HANDOFF.md` | Present, current root closeout | Current completed-lane summary for backend wiring, catalog/import/pricing, media readiness, storefront UX/homepage verifier alignment, runner wrapper, remaining live gates, and scoped worktree caveats. |
 | Phase 6 launch decision packet | `phase-6-launch-decision-packet-2026-05-10.md` | Present, parent decision | Keeps public ecommerce paused; live checkout remains blocked until production HTTPS host, explicit live Stripe/site config, policy approval, webhook setup, and one intentional real payment test pass. |
 | Infrastructure synthesis | `ecommerce-infrastructure-research-synthesis-2026-05-10.md` | Present, parent-created | Corrected synthesis for the real question: ERPNext receiving infrastructure, contract/runtime layers, line-level preservation, quote/checkout bridges, fail-loud evidence, and verifier gates. |
@@ -148,12 +163,14 @@ backend wiring, catalog/import/pricing, media readiness, storefront product
 UX/nav/search, homepage verifier alignment, and runner wrapper lanes are green.
 The local system has 53 published priced Website Items, 18 direct-checkout
 products, and 35 currently quote-first/needs-review products that fail closed
-unless deliberately mapped. This is local ecommerce architecture/import proof,
-not final live cutover approval. Remaining launch gates are Frappe Cloud
-staging/source freeze, Cloudflare/DNS, live Stripe/site config/webhook, legal
-or policy approvals where needed, one intentional low-risk live payment test,
-and final real catalog approval if the local product set is to become public
-catalog truth.
+unless deliberately mapped. The complex-checkout scaffold now splits those 35
+into 4 simple-axis lane-flip candidates, 6 multi-color UI cases, 20
+add-on/conditional blocked products, and 5 needs-review/missing products. This
+is local ecommerce architecture/import proof, not final live cutover approval.
+Remaining launch gates are Frappe Cloud staging/source freeze, Cloudflare/DNS,
+live Stripe/site config/webhook, legal or policy approvals where needed, one
+intentional low-risk live payment test, and final real catalog approval if the
+local product set is to become public catalog truth.
 
 
 ## Pre-Phase-5 hygiene verification (2026-05-10 18:xx MDT)

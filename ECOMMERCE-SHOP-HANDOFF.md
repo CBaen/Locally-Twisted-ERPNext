@@ -5,7 +5,7 @@ Status as of 2026-05-12 for peer GPT-5.5 Codex/OpenClaw agents.
 ## Current Repository State
 
 - Branch: `main`
-- Published closeout baseline: `1811cd6 Fix ecommerce closeout doc state`; verify current `HEAD` / `origin/main` with `git status -sb` before editing.
+- Published closeout baseline before complex-scaffold work: `1811cd6 Fix ecommerce closeout doc state`; verify current `HEAD` / `origin/main` with `git status -sb` before editing.
 - This file is the front-door handoff for the finished local ecommerce shop setup slice.
 - Do not treat current product names/counts/photos as final public catalog approval unless a later real-catalog approval gate says so. The local ERPNext catalog/import/backend architecture is ready; live Frappe Cloud, Stripe, DNS, webhook, and real payment cutover remain separate gates.
 
@@ -109,6 +109,32 @@ Evidence: `run_playwright.cmd` uses Program Files Node and package scripts call 
 
 Older mapper task `991323ce` was already published in `d0d5c41`. No docs work was done by `source-contract-sprinter` for `60a5e721`; this handoff replaces that missing closeout.
 
+### Complex checkout scaffold - 2026-05-12
+
+Owner: `Codex`
+
+Result: complete as local/source scaffolding only. No live site update, Frappe
+Cloud update, DNS change, Stripe change, or Website Item lane flip was made.
+
+Files added:
+
+- `apps/locally_twisted/locally_twisted/catalog_contract/complex_checkout_scaffold.py`
+- `scripts/verify/complex_checkout_scaffold.py`
+- `scripts/verify/complex_checkout_scaffold_contract.py`
+- `workstreams/ecommerce-audit/complex-checkout-scaffold-2026-05-12.md`
+
+Green gates:
+
+- `python -m py_compile apps\locally_twisted\locally_twisted\catalog_contract\complex_checkout_scaffold.py scripts\verify\complex_checkout_scaffold.py scripts\verify\complex_checkout_scaffold_contract.py`
+- `python scripts\verify\complex_checkout_scaffold_contract.py`
+- `python scripts\verify\complex_checkout_scaffold.py`
+
+Evidence summary: 53 products checked; 18 direct-checkout regression guards; 4
+simple-axis lane-flip candidates; 6 multi-color UI cases; 20 add-on or
+conditional-pricing blocked products; 5 needs-review/missing products; 0
+explicit checkout architecture gaps. Generated evidence lives under ignored
+`output/complex-checkout-scaffold.*` and can be regenerated.
+
 ## Current Working Position
 
 - Backend ecommerce architecture is green.
@@ -116,6 +142,8 @@ Older mapper task `991323ce` was already published in `d0d5c41`. No docs work wa
 - Media readiness is green.
 - Storefront product UX/nav/search/homepage verifier alignment is green.
 - Runner wrapper is green.
+- Complex checkout scaffold is green for local planning and blocks stale
+  heuristic lane-flip lists from being used as checkout approval.
 - The shared worktree may still show regenerated audit artifacts under `audits/odoo-erpnext-migration-audit-2026-05-08/`; do not broad-stage them without reviewing the producing lane.
 
 ## Remaining Launch Gates
@@ -135,5 +163,8 @@ These are not current local ecommerce architecture blockers:
 - Direct checkout must still be backend-truth driven by Website Item fields, ProductPatternContract, resolver behavior, selected config, item code, price, media, add-ons, cart line key, checkout summary, and SO/SI preserved fields.
 - `needs_review` and partial/blank Website Item classification must fail closed.
 - Add-ons require explicit mapping, price, quantity/value limits, and SO/SI line preservation before checkout.
+- Use the complex-checkout scaffold before flipping any quote-first product.
+  Current source-backed simple-axis candidates are only `large-head-missionary`,
+  `mothers-day-front-yard-7-column`, `easter-arch`, and `pride-arch`.
 - Held media must not render as gallery/variant media until classified.
-- Use scoped staging only; do not commit regenerated audit artifacts or unrelated dirty files.
+- Use scoped staging only; do not commit regenerated audit artifacts or unrelated changed files.

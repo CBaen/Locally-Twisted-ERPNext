@@ -1,7 +1,9 @@
 """Call authenticated Frappe whitelisted methods from an existing CDP browser."""
 from __future__ import annotations
 
+import argparse
 import json
+import sys
 from typing import Any
 
 
@@ -76,3 +78,13 @@ def call_with_cdp(*, base_url: str, method: str, kwargs: dict[str, Any], cdp_url
         )
     message = payload.get("message")
     return message if isinstance(message, dict) else payload
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.parse_args()
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

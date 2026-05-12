@@ -14,6 +14,11 @@ from locally_twisted.catalog_contract.models import (
     RequiredOptionAxisContract,
 )
 from locally_twisted.catalog_contract.addon_review import build_add_on_approval_packet
+from locally_twisted.catalog_contract.complex_checkout_scaffold import (
+    ComplexCheckoutScaffoldReport,
+    ComplexCheckoutScaffoldRow,
+    build_complex_checkout_scaffold_report,
+)
 from locally_twisted.catalog_contract.dependency_rules import available_options_for_selection
 from locally_twisted.catalog_contract.erpnext_pattern_contract import (
     ERPNextProductPatternReport,
@@ -37,6 +42,8 @@ from locally_twisted.catalog_contract.source_builder import build_product_page_c
 __all__ = [
     "AddOnContract",
     "AxisPatternContract",
+    "ComplexCheckoutScaffoldReport",
+    "ComplexCheckoutScaffoldRow",
     "ColorGroupContract",
     "ColorOptionContract",
     "ERPNextProductPatternReport",
@@ -50,6 +57,7 @@ __all__ = [
     "RequiredOptionAxisContract",
     "ServerBoundaryContract",
     "build_add_on_approval_packet",
+    "build_complex_checkout_scaffold_report",
     "available_options_for_selection",
     "build_erpnext_product_pattern_report",
     "build_media_classification_packet",

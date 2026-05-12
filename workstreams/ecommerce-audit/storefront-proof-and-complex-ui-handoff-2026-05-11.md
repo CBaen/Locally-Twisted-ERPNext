@@ -23,6 +23,12 @@ live Stripe gates remain separate.
   18 passed option selection, `data-item-code`, add-to-cart, cart line
   configuration, and checkout summary preservation; 35 stopped at the first
   rendered layer because they are currently `quote_first`.
+- 2026-05-12 source-backed scaffold now supersedes the older heuristic
+  quote-first flip lists. `python scripts/verify/complex_checkout_scaffold.py`
+  passes locally and writes `output/complex-checkout-scaffold.*` with 18
+  direct-checkout regression guards, 4 simple-axis candidates, 6 multi-color UI
+  cases, 20 add-on/conditional blocked products, and 5 needs-review/missing
+  products.
 - `quote_first` is a lane/setting flag. It is not proof that a product cannot
   ever be purchasable. It means the current storefront does not expose direct
   checkout controls for that product.
@@ -48,6 +54,8 @@ as stale while this lane is active.
 - `output/playwright/c849adb7-classic-arch-page.png`
 - `output/playwright/0784b926-all-priced-product-checkout-proof.json`
 - `output/playwright/0784b926-products/`
+- `output/complex-checkout-scaffold.json`
+- `output/complex-checkout-scaffold.md`
 
 ## Current Product-Level Boundary
 
@@ -79,53 +87,58 @@ layer. No `no price`, `no add control`, resolver, cart-preservation, or
 checkout-preservation failures were observed among products that expose direct
 checkout controls.
 
-## If Quote-First Is Flipped To Checkout
+## Current Source-Backed Checkout Scaffold
 
-Likely to pass with the existing UI, assuming backend variant records/prices
-exist and the visible axes are truly required sale-unit axes:
+Use `workstreams/ecommerce-audit/complex-checkout-scaffold-2026-05-12.md` and
+`scripts/verify/complex_checkout_scaffold.py` as the current checkout-planning
+gate. It supersedes the older rendered-front-end heuristic lists for lane flips.
 
-- `6-color-rainbow-arch`
-- `baby-table-decor`
-- `basketball-arch`
+Simple-axis lane-flip candidates:
+
 - `easter-arch`
-- `easter-balloon-arch-bunny-ear`
 - `large-head-missionary`
 - `mothers-day-front-yard-7-column`
 - `pride-arch`
-- `pride-progress-rainbow-balloon-arch`
 
-Likely to technically resolve but be incomplete or wrong without new UI because
-the current color drawer preserves only one color:
+Multi-color recipe UI required before checkout:
 
 - `7-epic-column`
 - `baby-shower-combination-photo-opt`
+- `classic-organic-for-easel`
+- `number-balloon-columns`
+- `sleepy-baby-column`
+- `baby-table-decor`
+
+Add-on or conditional-pricing blocked before checkout:
+
+- `6-color-rainbow-arch`
 - `baby-shower-garland`
 - `balloon-drop`
+- `basketball-arch`
 - `classic-arch`
 - `classic-column`
+- `classic-organic-arch`
 - `classic-organic-balloon-garland`
 - `classic-organic-columns`
-- `classic-organic-for-easel`
+- `easter-balloon-arch-bunny-ear`
 - `halloween-arch`
 - `large-garland`
 - `large-organic-column`
 - `logo-3-layered-bouquet`
-- `number-balloon-columns`
 - `organic-grab-n-go`
-- `premium-organic-garland`
-- `sleepy-baby-column`
-
-Unsafe to flip until add-on or conditional pricing contracts are mapped:
-
-- `bandage-get-well-bouquet-latex-free`
-- `butterfly-get-well-bouquet-latex-free`
-- `shooting-star-get-well-bouquet-latex-free`
-- `birthday-deliveries`
-- `classic-organic-arch`
 - `pemium-organic-column`
+- `premium-organic-garland`
 - `premium-organic-arch`
-- `marble-table-decor`
+- `pride-progress-rainbow-balloon-arch`
 - `star-column`
+
+Needs review or missing before checkout planning:
+
+- `birthday-deliveries`
+- `marble-table-decor`
+- `butterfly-get-well-bouquet-latex-free`
+- `bandage-get-well-bouquet-latex-free`
+- `shooting-star-get-well-bouquet-latex-free`
 
 ## Reusable Existing Controls
 

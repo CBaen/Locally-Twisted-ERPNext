@@ -56,6 +56,12 @@ OpenClaw cockpit witness:
   config/webhook, legal/policy approval where needed, one intentional live
   payment test, and final real catalog approval if the local products become
   public catalog truth.
+- 2026-05-12 complex-checkout scaffold: local/source-only planning is now
+  executable through `scripts/verify/complex_checkout_scaffold.py`. It maps the
+  53 products into 18 direct-checkout regression guards, 4 simple-axis
+  lane-flip candidates, 6 multi-color UI cases, 20 add-on/conditional blocked
+  products, and 5 needs-review/missing products. This report supersedes older
+  heuristic quote-first flip lists and still authorizes no live update.
 - Test products are proof cases only: Unicorn Bouquet and Classic Arch.
 - Product template types are logic/process classes:
   - `simple_product`: few options, little customization, but still backend-driven.
@@ -235,6 +241,8 @@ As of 2026-05-10, the first backend preservation slice exists:
 Primary verifier:
 
 ```powershell
+python scripts/verify/complex_checkout_scaffold_contract.py
+python scripts/verify/complex_checkout_scaffold.py
 python scripts/verify/product_page_architecture_readiness.py --report output/product-page-architecture-readiness.json
 python scripts/verify/product_page_runtime_contract.py
 python scripts/verify/product_add_on_dependency_contract.py

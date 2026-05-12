@@ -135,15 +135,20 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 
 - [P0] **Complex product-page checkout UI and browse rules.** Active storefront
   handoff: `workstreams/ecommerce-audit/storefront-proof-and-complex-ui-handoff-2026-05-11.md`.
-  Decide category/browse/search exposure for accepted quote-first products,
-  then build the backend-authored complex checkout UI before flipping broad
-  product lanes: multi-slot color recipe builder, palette picker, explicit
-  add-on contracts, conditional pricing panel, backend-driven media updates,
-  and cart/checkout/receipt summary parity. Proof ladder starts with
-  simple-axis quote-first products, then a garland/drop multi-color case,
-  Classic Column, Birthday Deliveries, and Classic Arch as the full stress
-  case. Keep the 18 currently passing direct-checkout pages green as regression
-  coverage.
+  Current local scaffold:
+  `workstreams/ecommerce-audit/complex-checkout-scaffold-2026-05-12.md`.
+  `python scripts/verify/complex_checkout_scaffold.py` passes with 53 products:
+  18 direct-checkout regression guards, 4 simple-axis lane-flip candidates, 6
+  multi-color UI cases, 20 add-on/conditional blocked products, and 5
+  needs-review/missing products. Decide category/browse/search exposure for
+  accepted quote-first products, then build the backend-authored complex
+  checkout UI before flipping broad product lanes: multi-slot color recipe
+  builder, palette picker, explicit add-on contracts, conditional pricing
+  panel, backend-driven media updates, and cart/checkout/receipt summary
+  parity. Proof ladder starts with the 4 simple-axis candidates, then one of
+  the 6 multi-color-only cases, then Classic Column, add-on/conditional mapping,
+  and Classic Arch as the full stress case. Keep the 18 currently passing
+  direct-checkout pages green as regression coverage.
 
 - [P0] **Website launch workstream.** Active launch coordination lane at `workstreams/website-launch.md`. Goal: get the public site and inquiry path live today, with ecommerce hidden if needed and preserved for follow-up. Navigation correction handoff: `workstreams/nav-btfp-process-correction.md`; removed hub route handoff: `workstreams/event-balloons-route-removal-2026-05-11.md`; active canonical-service guard handoff: `workstreams/nav-service-removal-guard.md`; mobile search/review compactness handoff: `workstreams/mobile-nav-review-compactness.md`; BTFP service page/form/calculator handoff: `workstreams/btfp-service-page.md`; FAQ service-lane handoff: `workstreams/faq-service-lane-rewrite.md`; public microinteraction handoff: `workstreams/public-site-microinteractions.md`; current menu label source: `workstreams/menu-content-coordination.md`. Current header/menu has `Twisting & Face Painting` pointing to `/balloon-twisting-and-face-painting`, the event dropdown pointing only to the four audience routes, `Contact Us` pointing to `/contact`, and top-banner `Free Event Quote` pointing to `/contact` beside the account link. Ready-to-Order is config-gated: hidden in the current pages/forms-first launch posture and restored when ecommerce is reopened. The 24-hour short-notice message is a centered deep-navy `/contact` link on desktop and a matching visible deep-navy `/contact` strip on mobile; the old prepared-design proof copy and delivery/truck icon are removed. Removing, hiding, renaming, or replacing the BTFP lane requires the exact approval marker in `workstreams/nav-service-removal-approvals.md`; `scripts/verify/nav_ia.py` fails without it. Keep `/event-balloons` and `/process` out unless GL explicitly reopens them. Keep mobile search at the bottom of the drawer, not in the mobile header action row. Current hidden-commerce launch proof: `python scripts\verify\website_launch_verify.py --with-a11y --with-contact-smoke` passed 15/15 steps and `python scripts/verify/ecommerce_pause_contract.py` passed. Ignored `.tmp` preflight snapshots are not retained after launch cleanup; rerun the snapshot command when fresh local evidence is needed. Open ecommerce proof remains available through `npm run test:ecommerce-full` when the switch is reopened.
 - [P0] **Public storefront security hardening.** Active handoff: `workstreams/public-site-security-hardening.md`; capability: `capabilities/recipes/frappe-public-storefront-security.md`. The 2026-05-08 security review reproduced `/shop?q=` reflected XSS, unauthenticated `/thank-you?order=<Sales Order>` order-summary exposure, a public Lead attachment URL, tracked local credentials in docs, pre-payment guest checkout Lead conversion, and an unauthenticated `/event-playground?port=` internal preview bridge. Fixed now: `/shop?q=` escaping, product-gallery image rendering, new private inquiry uploads, checkout Lead conversion delayed until the paid-order cascade, and Event Playground guest/auth gating. GL clarified current data/files are fake, the order-summary and existing public fake-file findings are not immediate launch blockers for this balloon business/fake-data state, and GL owns credential rotation/doc cleanup. Remaining: credential rotation before broader sharing/cutover, optional token-bound receipt hardening before real customer cutover, and fake public Lead file cleanup if the test files should not remain.
