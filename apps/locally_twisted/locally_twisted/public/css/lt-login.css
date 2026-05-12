@@ -262,6 +262,11 @@ body[data-path="login"] .page_content {
   font-weight: 900;
 }
 
+.lt-login .page-card .page-card-body .forgot-password-message > a,
+.lt-login .page-card .login-divider.text-muted {
+  color: #525252;
+}
+
 .lt-login .btn-primary {
   background: var(--lt-login-berry);
   border: 0;
