@@ -95,6 +95,9 @@ def check_quote_first_variant_media_api() -> dict[str, Any]:
     )
     assert_true(media.get("has_variant_image") is False, "unclassified variant image should not be marked renderable")
     assert_true(media.get("held_back_variant_image") is True, "source variant image should be reported as held back")
+    assert_true(media.get("held_back_media_role") == "ignored_artifact", f"held variant image needs safe role, got {media}")
+    assert_true(media.get("held_back_render_policy") == "hold_back", f"held variant image needs render policy, got {media}")
+    assert_true(media.get("hold_reason"), "held variant image needs a hold reason")
     assert_true(media.get("media_role") == "primary", f"fallback image should report primary role, got {media}")
     return media
 
@@ -116,6 +119,9 @@ def check_ready_variant_media_api() -> dict[str, Any]:
     )
     assert_true(media.get("has_variant_image") is False, "unclassified ready variant should not be marked renderable")
     assert_true(media.get("held_back_variant_image") is True, "source variant image should be reported as held back")
+    assert_true(media.get("held_back_media_role") == "ignored_artifact", f"held ready image needs safe role, got {media}")
+    assert_true(media.get("held_back_render_policy") == "hold_back", f"held ready image needs render policy, got {media}")
+    assert_true(media.get("hold_reason"), "held ready image needs a hold reason")
     assert_true(media.get("media_role") == "primary", f"fallback image should report primary role, got {media}")
     return media
 

@@ -61,6 +61,12 @@ def get_variant_media(item_code: str, template_item_code: str | None = None) -> 
     variant_image = item.get("image") or None
     approved_variant_image = None
     image = approved_variant_image or fallback_image
+    held_back_variant_image = bool(variant_image and variant_image != fallback_image)
+    hold_reason = (
+        "Variant image is held until source media classification approves the variant_image role."
+        if held_back_variant_image
+        else ""
+    )
 
     return {
         "item_code": item["item_code"],
@@ -68,12 +74,11 @@ def get_variant_media(item_code: str, template_item_code: str | None = None) -> 
         "image": image,
         "fallback_image": fallback_image,
         "has_variant_image": bool(approved_variant_image and approved_variant_image != fallback_image),
-        "held_back_variant_image": bool(variant_image and variant_image != fallback_image),
-        "hold_reason": (
-            "Variant image is held until source media classification approves the variant_image role."
-            if variant_image and variant_image != fallback_image
-            else ""
-        ),
+        "held_back_variant_image": held_back_variant_image,
+        "held_back_media_role": "ignored_artifact" if held_back_variant_image else "",
+        "held_back_render_policy": "hold_back" if held_back_variant_image else "",
+        "hold_reason": hold_reason,
+        "role_reason": hold_reason,
         "media_role": "primary" if image == fallback_image else "variant_image",
         "alt": item.get("item_name") or website_item.get("web_item_name") or item["item_code"],
         "route": website_item.get("route"),

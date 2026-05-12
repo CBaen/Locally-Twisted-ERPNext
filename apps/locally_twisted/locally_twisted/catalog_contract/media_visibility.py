@@ -137,12 +137,14 @@ def build_media_visibility_report(
     live = _LiveMediaCatalog(live_rows)
     rows: list[MediaVisibilityRow] = []
     blockers: list[str] = []
+    contracts_by_slug: dict[str, Any] = {}
 
     for product in products:
         contract = build_product_page_contract(
             product,
             category_hint=slug_to_group.get(str(product.get("slug") or ""), ""),
         )
+        contracts_by_slug[contract.slug] = contract
         slug = str(product.get("slug") or "")
         source_extra_images = len(product.get("additional_image_urls") or [])
         live_row = live.coverage_for(slug)
@@ -175,6 +177,17 @@ def build_media_visibility_report(
     if unclassified_products:
         blockers.append(
             f"{len(unclassified_products)} products have {unclassified_images} unsafe unclassified source extra images."
+        )
+    unsafe_held_rows = [
+        row.slug
+        for row in rows
+        if row.held_back_ignored_artifacts
+        and _held_media_has_unsafe_rendering(contracts_by_slug.get(row.slug))
+    ]
+    if unsafe_held_rows:
+        blockers.append(
+            "Held ignored_artifact media is missing hold_back render policy for: "
+            + ", ".join(unsafe_held_rows[:10])
         )
     role_count_mismatches = [
         row.slug
@@ -264,3 +277,17 @@ def _clean(value: Any) -> str:
     if value in (None, "NULL"):
         return ""
     return str(value).strip()
+
+
+def _held_media_has_unsafe_rendering(contract: Any) -> bool:
+    if not contract:
+        return True
+    return any(
+        image.role == SAFE_HELD_EXTRA_ROLE
+        and (
+            getattr(image, "classification_status", "") != "hold_until_classified"
+            or getattr(image, "render_policy", "") != "hold_back"
+            or not getattr(image, "role_reason", "")
+        )
+        for image in contract.gallery
+    )

@@ -48,9 +48,12 @@ def build_media_classification_packet(
         "source_product_count": len(products),
         "products_with_extra_images": len(rows),
         "source_extra_image_count": image_count,
-        "unclassified_image_count": image_count,
+        "held_back_ignored_artifact_count": image_count,
+        "unsafe_unclassified_image_count": 0,
+        "unclassified_image_count": 0,
         "approved_gallery_count": 0,
         "assigned_variant_image_count": 0,
+        "approved_reference_count": 0,
         "products": rows,
     }
 
@@ -64,7 +67,12 @@ def _product_row(product: dict[str, Any], *, slug_to_group: dict[str, str]) -> d
             "url": str(url),
             "current_role": SAFE_DEFAULT,
             "classification_status": HOLD_STATUS,
-            "hold_reason": "Source extra image has no approved media role yet.",
+            "render_policy": "hold_back",
+            "role_reason": (
+                "No source-backed classification approves this extra image as gallery, "
+                "variant_image, or reference media."
+            ),
+            "hold_reason": "Held as ignored_artifact so product pages do not publish unclassified media.",
             "safe_default": SAFE_DEFAULT,
             "allowed_roles": list(ALLOWED_ROLES),
         }

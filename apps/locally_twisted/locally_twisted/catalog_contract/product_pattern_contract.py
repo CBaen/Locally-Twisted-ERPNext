@@ -31,7 +31,7 @@ AxisRole = Literal["sale_unit", "customization", "add_on", "review_only"]
 AxisSource = Literal["odoo_source", "erpnext_variant", "combined"]
 AxisStatus = Literal["ready", "needs_mapping", "needs_review"]
 PricingStatus = Literal["ready", "missing", "incomplete", "conflict_needs_fix"]
-MediaStatus = Literal["ready", "primary_missing", "uncertain_roles"]
+MediaStatus = Literal["ready", "primary_missing"]
 DependencyStatus = Literal["ready", "not_required", "missing_source_matrix", "mismatch"]
 CheckoutStatus = Literal[
     "checkout_ready",
@@ -128,6 +128,10 @@ class MediaRoleContract:
     primary_image: str = ""
     variant_image_count: int = 0
     gallery_count: int = 0
+    reference_count: int = 0
+    source_extra_count: int = 0
+    held_ignored_artifact_count: int = 0
+    held_variant_image_count: int = 0
     uncertain_count: int = 0
     roles: tuple[str, ...] = field(default_factory=tuple)
     notes: tuple[str, ...] = field(default_factory=tuple)
@@ -535,31 +539,38 @@ def _add_on_contract_ready(contract: dict[str, Any]) -> bool:
 
 def _media_contract(source_product: dict[str, Any], erpnext_product: dict[str, Any]) -> MediaRoleContract:
     primary = _clean(erpnext_product.get("website_image") or erpnext_product.get("item_image") or source_product.get("image_url"))
-    variant_count = int(erpnext_product.get("variant_image_count") or 0)
-    gallery_count = len(source_product.get("additional_image_urls") or [])
+    held_variant_count = int(erpnext_product.get("variant_image_count") or 0)
+    source_extra_count = len(source_product.get("additional_image_urls") or [])
+    held_ignored_artifact_count = source_extra_count
+    variant_count = 0
+    gallery_count = 0
+    reference_count = 0
     roles: list[str] = []
     notes: list[str] = []
     if primary:
         roles.append("primary")
-    if variant_count:
-        roles.append("variant_image")
-    if gallery_count:
-        roles.append("gallery")
-        notes.append("Extra source media must stay classified by role before automated import.")
+    if held_variant_count or held_ignored_artifact_count:
+        roles.append("ignored_artifact")
+    if held_variant_count:
+        notes.append("Live variant Item images are held until source media classification approves variant_image rendering.")
+    if held_ignored_artifact_count:
+        notes.append("Source extra images are held as ignored_artifact until approved as gallery, variant_image, or reference media.")
 
     status: MediaStatus = "ready"
-    uncertain_count = gallery_count
+    uncertain_count = 0
     if not primary:
         status = "primary_missing"
         notes.append("No primary image found in ERPNext or source artifact.")
-    elif uncertain_count:
-        status = "uncertain_roles"
 
     return MediaRoleContract(
         status=status,
         primary_image=primary,
         variant_image_count=variant_count,
         gallery_count=gallery_count,
+        reference_count=reference_count,
+        source_extra_count=source_extra_count,
+        held_ignored_artifact_count=held_ignored_artifact_count,
+        held_variant_image_count=held_variant_count,
         uncertain_count=uncertain_count,
         roles=tuple(roles or ["none"]),
         notes=tuple(notes),

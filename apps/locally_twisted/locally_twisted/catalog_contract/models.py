@@ -12,6 +12,8 @@ from typing import Literal
 CommerceLane = Literal["checkout", "quote_first", "hybrid", "needs_review"]
 ProductPageType = Literal["simple_product", "complex_custom_product", "needs_review"]
 ImageRole = Literal["primary", "gallery", "variant_image", "reference", "ignored_artifact"]
+ImageClassificationStatus = Literal["approved", "hold_until_classified"]
+ImageRenderPolicy = Literal["render", "hold_back"]
 AxisStatus = Literal["required", "optional_addon", "customization", "needs_review"]
 SelectorType = Literal["radio", "single_select", "multi_select_drawer", "cards", "needs_design"]
 
@@ -22,6 +24,9 @@ class GalleryImageContract:
     role: ImageRole
     source: str = "odoo"
     label: str = ""
+    classification_status: ImageClassificationStatus = "approved"
+    render_policy: ImageRenderPolicy = "render"
+    role_reason: str = ""
 
 
 @dataclass(frozen=True)

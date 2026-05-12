@@ -183,9 +183,28 @@ def build_product_page_contract(product: dict[str, Any], *, category_hint: str =
             warnings.append(f"{REVIEW_WARNING_PREFIX} {axis_name} - {classification.note}")
 
     primary_image = str(product.get("image_url") or "")
-    gallery = [GalleryImageContract(url=primary_image, role="primary")] if primary_image else []
+    gallery = [
+        GalleryImageContract(
+            url=primary_image,
+            role="primary",
+            label="Primary product image",
+            role_reason="Source primary image maps to the Website Item primary media slot.",
+        )
+    ] if primary_image else []
     for url in product.get("additional_image_urls") or []:
-        gallery.append(GalleryImageContract(url=str(url), role="ignored_artifact"))
+        gallery.append(
+            GalleryImageContract(
+                url=str(url),
+                role="ignored_artifact",
+                label="Held source extra image",
+                classification_status="hold_until_classified",
+                render_policy="hold_back",
+                role_reason=(
+                    "No source-backed classification approves this extra image as gallery, "
+                    "variant_image, or reference media."
+                ),
+            )
+        )
 
     has_prices = _has_resolver_prices(variant_rows)
     if variant_rows and not has_prices:
