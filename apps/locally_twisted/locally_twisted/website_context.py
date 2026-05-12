@@ -22,8 +22,8 @@ def update_website_context(context):
         context["lt_assets_json"] = _assets_json()
     except Exception as e:
         frappe.log_error(
-            f"website_context._assets_json failed: {e}",
             title="LT website context",
+            message=f"website_context._assets_json failed: {e}",
         )
         context["lt_assets_json"] = {}
 
@@ -31,8 +31,8 @@ def update_website_context(context):
         context["lt_ecommerce_paused"] = is_ecommerce_paused()
     except Exception as e:
         frappe.log_error(
-            f"website_context.is_ecommerce_paused failed: {e}",
             title="LT website context",
+            message=f"website_context.is_ecommerce_paused failed: {e}",
         )
         context["lt_ecommerce_paused"] = True
 
@@ -48,8 +48,8 @@ def update_website_context(context):
         )
     except Exception as e:
         frappe.log_error(
-            f"website_context.update_website_context failed: {e}",
             title="LT website context",
+            message=f"website_context.update_website_context failed: {e}",
         )
         children = []
 

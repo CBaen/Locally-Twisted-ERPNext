@@ -4,6 +4,8 @@ from __future__ import annotations
 import frappe
 from frappe.utils import strip_html
 
+from locally_twisted.ecommerce_pause import is_ecommerce_paused
+
 PRODUCT_GROUP_ICONS = {
     "Arches": "balloon-arch",
     "Garlands": "organic-garland",
@@ -98,6 +100,13 @@ def _ready_to_order_exclusion_reason(item: dict) -> str:
 
 
 def _ready_to_order_product_links() -> list[dict[str, str]]:
+    if is_ecommerce_paused():
+        return []
+
+    meta = frappe.get_meta("Website Item")
+    if not meta.has_field("lt_product_page_type") or not meta.has_field("lt_commerce_lane"):
+        return []
+
     items = frappe.db.sql(
         """
         SELECT
@@ -162,8 +171,8 @@ def update_website_context(context):
         product_links = _ready_to_order_product_links()
     except Exception as exc:
         frappe.log_error(
-            f"navbar_context ready-to-order links failed: {exc}",
             title="LT navbar context",
+            message=f"navbar_context ready-to-order links failed: {exc}",
         )
         product_links = []
 
