@@ -40,6 +40,20 @@ setting/lane flag, not a hard blocker; flipping it still requires
 backend-truth UI for multi-slot color recipes, add-ons, conditional pricing,
 image updates, and cart/checkout/receipt summary parity.
 
+**Ecommerce shop setup closeout (2026-05-12):** Current root handoff is
+`ECOMMERCE-SHOP-HANDOFF.md`. Local ecommerce setup lanes are complete on
+`main`: backend wiring `f82b8ef1` green with no edits, catalog/import/pricing
+`4da4b135` published in `9a27b49`, media readiness `d2653ce8`/`d9543e5f`
+published in `8e4a95b`, storefront UX/homepage verifier alignment
+`3132de36`/`4fd5ae4f` published in `3179463`, and runner wrapper work
+`786f962e` included in `e4186c1`. Current local counts are 53 published Website
+Items, 10,674 Items, 49 templates, 10,617 variants, 10,227 active variants, 390
+disabled variants, 10,656 Item Prices, 26 Item Attributes, and 32,028 Item
+Variant Attribute rows. No local ERPNext catalog/pricing/import/media/backend
+ecommerce blocker remains; remaining gates are staging/live release, Stripe,
+DNS, legal/policy, explicit real payment approval, and final real catalog
+approval if the local product set is to become public catalog truth.
+
 **Frappe Cloud/Cloudflare/Stripe launch gate (2026-05-11):** Source handoff is
 `LT-LAUNCH-RUNBOOK.md`, with the deeper technical gate at
 `workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11.md`. Do not cut
