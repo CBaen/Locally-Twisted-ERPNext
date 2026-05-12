@@ -1,8 +1,8 @@
 # Frappe Cloud Cutover Workstream
 
-Status: prep-only, no deployment or DNS change made.
+Status: LIVE VERIFIED on Frappe Cloud at `https://locallytwisted.com`.
 Owner lane: production hosting and final `locallytwisted.com` cutover.
-Last verified: 2026-05-10.
+Last verified: 2026-05-12.
 
 ## Purpose
 
@@ -11,9 +11,31 @@ Make the eventual owner-present Frappe Cloud launch look boring:
 1. The app source is already acceptable to Frappe Cloud.
 2. The production site is staged and verified under a temporary Frappe Cloud URL.
 3. The domain is already known to be Cloudflare-controlled.
-4. The final meeting only adds the custom domain, verifies SSL, makes it primary, and changes Cloudflare DNS.
+4. The custom domains have been added, SSL verified, and Cloudflare DNS cut over.
 
-No current-site DNS record should be changed until Jeff is present and the Frappe Cloud site has passed the launch checks.
+Do not re-enable checkout/payment or change Cloudflare proxy mode without a fresh launch gate.
+
+## Live Cutover Result - 2026-05-12
+
+Decision: `LIVE VERIFIED`.
+
+- Public live URL: `https://locallytwisted.com`.
+- Frappe Cloud staging/source URL: `https://locallytwisted.v.frappe.cloud`.
+- Cloudflare DNS web records now point to Frappe Cloud:
+  - `locallytwisted.com A 34.226.39.121`, DNS-only.
+  - `www.locallytwisted.com CNAME locallytwisted.v.frappe.cloud`, DNS-only.
+- Both `https://locallytwisted.com/` and `https://www.locallytwisted.com/` return HTTP 200 from `Server: Frappe Cloud` with `X-Page-Name: home`.
+- Ecommerce/checkout remains paused on live. `/shop`, `/cart`, and `/checkout` route to the branded `ready-to-order-paused` fallback.
+- Canonical apex/www redirect is a follow-up, not a blocker: the available Frappe Cloud API accepted domain add/SSL but did not expose primary-domain or redirect actions in this dashboard build. Both domains are customer-visible and valid over HTTPS.
+
+Verification artifacts:
+
+- Staging final snapshot: `.tmp/release-snapshots/staging-final-before-live-cutover.json`.
+- Live after snapshot: `.tmp/release-snapshots/live-after-domain-bind-full-watch.json`.
+- Staging/live comparison: `.tmp/release-snapshots/staging-vs-live-after-domain-bind-full-watch.json` (`ok: true`; only expected URL changes).
+- Full live launch verifier log: `output/live-website-launch-verify-cdp.log`.
+- Cloudflare readiness: `python scripts/verify/cloudflare_launch_readiness.py --base-url https://locallytwisted.com` passed with 0 blockers and 0 warnings.
+- Full live verifier: `python scripts/verify/website_launch_verify.py --base-url https://locallytwisted.com --with-a11y --with-contact-smoke` reported `PASS: 16 steps completed`; the PowerShell wrapper returned nonzero because post-pass Node deprecation warnings were emitted to stderr.
 
 ## Current Verified Facts
 
