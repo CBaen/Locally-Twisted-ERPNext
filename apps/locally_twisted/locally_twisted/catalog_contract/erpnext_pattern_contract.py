@@ -336,6 +336,7 @@ def _build_row(product: dict[str, Any], erpnext_rows: dict[str, list[dict[str, A
             representative=representative,
             checkout=checkout,
             source_axes=source_axes,
+            line_fields=erpnext_rows.get("line_fields") or [],
         ),
     )
 
@@ -513,9 +514,12 @@ def _checkout_eligibility(
             and live_coverage.get("coverage_status") not in {"covered", "representative_item_required"}
         ):
             blocking.append("conditional_pricing_matrix_needed")
-        if patterns & {"large_single_choice_color", "multi_color_recipes"}:
+        if patterns & {"large_single_choice_color", "multi_color_recipes"} and not _multi_color_configuration_ready(
+            source_axes,
+            line_fields,
+        ):
             blocking.append("multi_color_recipe_configuration_contract_needed")
-        if "freeform_customer_text" in patterns:
+        if "freeform_customer_text" in patterns and source_axes.get("freeform_customer_text_axes"):
             blocking.append("checkout_customization_contract_needed")
     if source_axes["review_only_axes"] and _website_lane(website_item) == "checkout":
         blocking.append("review_only_add_on_checkout_contract_needed")
@@ -550,6 +554,14 @@ def _unpriced_add_on_axes(add_on_axes: list[str], add_on_price_by_item: dict[str
     return unpriced
 
 
+def _multi_color_configuration_ready(source_axes: dict[str, list[str]], line_fields: list[dict[str, Any]]) -> bool:
+    customization_axes = source_axes.get("customization_axes") or []
+    if not customization_axes:
+        return False
+    missing_line_fields = sorted(set(LINE_FIELDNAMES.values()) - {str(row.get("fieldname")) for row in line_fields})
+    return not missing_line_fields
+
+
 def _capability(website_item: dict[str, Any], checkout: dict[str, Any]) -> tuple[Capability, list[str]]:
     lane = _website_lane(website_item)
     blockers = checkout.get("blocking_reasons") or []
@@ -569,17 +581,27 @@ def _server_boundary(
     representative: RepresentativePricedItem | None,
     checkout: dict[str, Any],
     source_axes: dict[str, list[str]],
+    line_fields: list[dict[str, Any]],
 ) -> ServerBoundaryContract:
     selected_options = representative.selected_options if representative else {}
     add_on_axes = source_axes.get("add_on_axes") or []
     customization_axes = source_axes.get("customization_axes") or []
+    multi_color_ready = _multi_color_configuration_ready(source_axes, line_fields)
     return ServerBoundaryContract(
         selected_config_schema={
             "schema_version": CONFIG_VERSION,
             "website_item_code": product.get("slug"),
             "selected_options": selected_options,
+            "color_recipes": [
+                {
+                    "axis": axis,
+                    "values": ["selected color names"],
+                    "status": "validated_for_checkout",
+                }
+                for axis in customization_axes
+            ],
             "add_ons": [{"source_axis": axis, "status": "requires_add_on_registry"} for axis in add_on_axes],
-            "customizations": [{"source_axis": axis, "status": "requires_validation_contract"} for axis in customization_axes],
+            "customizations": [],
         },
         representative_priced_item=representative,
         add_on_line_contract={
@@ -590,7 +612,10 @@ def _server_boundary(
         },
         customization_validation={
             "status": (
-                "multi_color_recipe_configuration_contract_needed"
+                "ready_multi_color_recipe_contract"
+                if customization_axes and _website_lane(website_item) == "checkout"
+                and multi_color_ready
+                else "multi_color_recipe_configuration_contract_needed"
                 if customization_axes and _website_lane(website_item) == "checkout"
                 else "quote_first_or_not_required"
             ),
@@ -600,6 +625,7 @@ def _server_boundary(
                 if customization_axes
                 else ""
             ),
+            "single_select_color_allowed": False if customization_axes else None,
         },
         totals_provenance={
             "item_price_source": representative.provenance if representative else "",
@@ -610,6 +636,7 @@ def _server_boundary(
         cart_line_key_contract={
             "formula": "item_code::json.dumps(configuration, sort_keys=True, separators=(',', ':'))",
             "requires_selected_options_match_resolved_item": True,
+            "requires_color_recipes_in_canonical_json": bool(customization_axes),
             "checkout_blocked": bool(checkout.get("blocking_reasons")),
         },
         sales_document_fields={
@@ -625,12 +652,12 @@ def _server_boundary(
 
 def _server_boundary_overview() -> dict[str, str]:
     return {
-        "selected_config": "versioned payload containing selected_options, add_ons, and customizations",
+        "selected_config": "versioned payload containing selected_options, color_recipes, add_ons, and customizations",
         "item_resolution": "selected config resolves to one ERPNext item_code or representative priced item",
         "add_on_lines": "registered add-ons become separate priced Sales Order/Sales Invoice lines",
-        "customization_validation": "unsupported checkout customizations fail loudly; quote-first can preserve them",
+        "customization_validation": "multi-color recipes validate for checkout; unsupported customizations fail loudly",
         "totals_provenance": "totals derive from ERPNext Item Price rows plus registered add-on Item Price rows",
-        "cart_line_key": "item_code plus canonical configuration JSON prevents option collisions",
+        "cart_line_key": "item_code plus canonical configuration JSON, including color_recipes, prevents option collisions",
         "document_summary": "SO/SI line fields preserve template, page type, schema version, summary, and JSON",
     }
 

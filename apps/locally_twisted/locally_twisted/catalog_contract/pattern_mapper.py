@@ -322,7 +322,7 @@ def _axis_mapping(
             "multi_color_recipe_builder",
             "Checkout imports must preserve color selection or recipe details in validated line configuration.",
             "multi-color/recipe builder with cart, checkout, SO/SI, and receipt preservation",
-            "quote_or_validated_configuration_price",
+            "representative_item_price_with_validated_color_recipe",
         )
     if "multi_color_recipe_customization" in patterns:
         return (
@@ -459,16 +459,16 @@ def _sale_unit_contract(
     if "large_single_choice_color" in patterns or "multi_color_recipes" in patterns:
         return {
             "path": "multi_color_configuration_contract",
-            "checkout_eligible": False,
+            "checkout_eligible": True,
             "requirements": (
                 "multi-color/recipe-capable cart selected_config",
                 "checkout validation contract",
                 "Sales Order/Sales Invoice line JSON preservation",
                 "receipt summary preservation",
-                "quote gate until configuration price path exists",
+                "representative priced Item or explicit configuration price path",
             ),
             "selector_key": "multi_color_recipe_builder",
-            "pricing_strategy": "quote_or_validated_configuration_price",
+            "pricing_strategy": "representative_item_price_with_validated_color_recipe",
         }
     required_axes = tuple(axis.name for axis in axes if "required_sale_unit_axis" in axis.patterns)
     if required_axes:

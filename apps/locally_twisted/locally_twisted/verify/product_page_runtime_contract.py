@@ -62,6 +62,7 @@ def _run_contract():
     _assert_live_runtime_contracts_match_proof_source()
     _assert_product_page_add_on_options_are_eligible()
     resolved_item, line = _assert_line_resolution_preserves_configuration()
+    _assert_multi_color_checkout_configuration_preserved()
     add_on_lines = _assert_foil_number_add_on_becomes_priced_line(resolved_item)
     sales_order = _assert_sales_order_accepts_line(line)
     add_on_sales_order = _assert_sales_order_accepts_lines(add_on_lines)
@@ -234,6 +235,71 @@ def _assert_line_resolution_preserves_configuration():
     if payload.get("schema_version") != CONFIG_VERSION:
         raise ContractFail("line payload has wrong schema version")
     return resolved, line
+
+
+def _assert_multi_color_checkout_configuration_preserved() -> None:
+    from locally_twisted.product_page_runtime import cart_line_key, sales_order_line_configuration_fields
+
+    resolved_item = {
+        "item_code": PROOF_ITEM,
+        "website_item_code": "unicorn-bouquet",
+        "variant_options": [
+            {"attribute": "Bouquet Size", "attribute_value": "Small"},
+            {"attribute": "latex colors", "attribute_value": "White"},
+        ],
+    }
+    configuration = {
+        "schema_version": CONFIG_VERSION,
+        "item_code": PROOF_ITEM,
+        "website_item_code": "unicorn-bouquet",
+        "selected_options": {"Bouquet Size": "Small"},
+        "color_recipes": [{"axis": "latex colors", "values": ["White", "Reflex Gold"]}],
+        "add_ons": [],
+        "customizations": [],
+    }
+    line = sales_order_line_configuration_fields(
+        resolved_item=resolved_item,
+        client_configuration=configuration,
+    )
+    payload = json.loads(line[LINE_FIELDNAMES["json"]])
+    if payload.get("selected_options", {}).get("latex colors"):
+        raise ContractFail(f"multi-color checkout preserved color as selected_options: {payload}")
+    recipes = payload.get("color_recipes") or []
+    if not recipes or recipes[0].get("values") != ["White", "Reflex Gold"]:
+        raise ContractFail(f"multi-color checkout did not preserve color recipe: {payload}")
+    if "Color recipe preserved" not in line.get(LINE_FIELDNAMES["summary"], ""):
+        raise ContractFail("Sales Order summary did not surface color recipe preservation")
+
+    changed_configuration = dict(configuration)
+    changed_configuration["color_recipes"] = [{"axis": "latex colors", "values": ["White", "Reflex Gold", "Black"]}]
+    if cart_line_key(PROOF_ITEM, configuration) == cart_line_key(PROOF_ITEM, changed_configuration):
+        raise ContractFail("cart line key did not include color_recipes")
+
+    missing_recipe = dict(configuration)
+    missing_recipe["color_recipes"] = []
+    try:
+        sales_order_line_configuration_fields(
+            resolved_item=resolved_item,
+            client_configuration=missing_recipe,
+        )
+    except frappe.ValidationError as exc:
+        if "color choices saved as a color recipe" not in str(exc):
+            raise ContractFail(f"missing color recipe failed with wrong message: {exc}") from exc
+    else:
+        raise ContractFail("checkout accepted color variant without a color recipe")
+
+    single_select = dict(configuration)
+    single_select["selected_options"] = {"Bouquet Size": "Small", "latex colors": "White"}
+    try:
+        sales_order_line_configuration_fields(
+            resolved_item=resolved_item,
+            client_configuration=single_select,
+        )
+    except frappe.ValidationError as exc:
+        if "color choices must be saved as a color recipe" not in str(exc):
+            raise ContractFail(f"single-select color failed with wrong message: {exc}") from exc
+    else:
+        raise ContractFail("checkout accepted single-select color as selected_options")
 
 
 def _assert_foil_number_add_on_becomes_priced_line(resolved_item: dict):

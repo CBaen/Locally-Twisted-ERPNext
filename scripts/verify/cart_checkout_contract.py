@@ -317,6 +317,19 @@ def check_multi_digit_add_on_quantity_and_total_are_visible() -> None:
     assert_true(float(items[0].get("line_total") or 0) == 59.0, f"line total should include $35 + $24, found {items[0]}")
 
 
+def check_cart_line_key_matches_browser_unicode_serialization() -> None:
+    configuration = _foil_number_configuration("5")
+    configuration["selected_options"]["Bouquet Size"] = "Small \u2014 launch proof label"
+    line_key = bench_execute(
+        "locally_twisted.product_page_runtime.cart_line_key",
+        kwargs={"item_code": RETAIL_VARIANT_ITEM, "client_configuration": configuration},
+    )
+    assert_true(
+        "\\u2014" not in line_key,
+        f"server cart_line_key should match browser JSON.stringify Unicode output, found {line_key!r}",
+    )
+
+
 def check_cart_and_checkout_templates_fail_loud_on_line_key_mismatch() -> None:
     cart_template = (ROOT / "apps/locally_twisted/locally_twisted/www/lt_cart.html").read_text(encoding="utf-8")
     checkout_template = (ROOT / "apps/locally_twisted/locally_twisted/www/checkout.html").read_text(encoding="utf-8")
@@ -338,6 +351,29 @@ def check_cart_and_checkout_templates_fail_loud_on_line_key_mismatch() -> None:
             ".line_total" in source and ".qty" in source,
             f"{label} add-on formatter must expose add-on qty and line total, not only unit price",
         )
+
+
+def check_product_page_color_selector_uses_recipe_schema() -> None:
+    item_configure = (
+        ROOT / "apps/locally_twisted/locally_twisted/templates/generators/item/item_configure.html"
+    ).read_text(encoding="utf-8")
+
+    assert_true(
+        'type="checkbox"' in item_configure and "selectedColorRecipeRows" in item_configure,
+        "color selector must allow multi-color recipe selection, not only a single radio choice",
+    )
+    assert_true(
+        "color_recipes: selectedColorRecipeRows()" in item_configure,
+        "configured cart payload must include color_recipes",
+    )
+    assert_true(
+        "selected_options: selectedSaleUnitAttrs()" in item_configure,
+        "configured cart payload must exclude color axes from selected_options",
+    )
+    assert_true(
+        "selected_options: selectedAttrs()" not in item_configure,
+        "single-select color selected_options payload must not pass checkout readiness",
+    )
 
 
 def check_add_on_eligibility_rejects_unapproved_product() -> None:
@@ -421,7 +457,9 @@ def main() -> int:
         check_checkout_resolver_accepts_retail_variant,
         check_configured_same_sku_cart_lines_stay_separate_and_visible,
         check_multi_digit_add_on_quantity_and_total_are_visible,
+        check_cart_line_key_matches_browser_unicode_serialization,
         check_cart_and_checkout_templates_fail_loud_on_line_key_mismatch,
+        check_product_page_color_selector_uses_recipe_schema,
         check_add_on_eligibility_rejects_unapproved_product,
         check_review_only_source_add_ons_route_to_quote_not_checkout,
         check_checkout_rejects_over_limit_quantities,

@@ -12,7 +12,7 @@ from typing import Any
 import frappe
 from frappe import _
 
-from locally_twisted.catalog_contract.color_rules import is_balloon_color_axis
+from locally_twisted.catalog_contract.color_rules import grouped_colors, is_balloon_color_axis
 from locally_twisted.catalog_variant_rules import required_variant_attribute_names
 from locally_twisted.product_page_labels import COMMERCE_LANE_OPTIONS, PRODUCT_PAGE_TYPE_OPTIONS
 
@@ -33,6 +33,7 @@ LINE_FIELDNAMES = {
 
 MAX_CONFIGURATION_BYTES = 12000
 MAX_ADD_ON_QUANTITY = 10
+MAX_COLOR_RECIPE_VALUES = 24
 
 FOIL_NUMBER_ELIGIBLE_WEBSITE_ITEMS = (
     "unicorn-bouquet",
@@ -184,7 +185,16 @@ def normalize_client_configuration(raw: Any) -> dict[str, Any] | None:
             frappe.ValidationError,
         )
 
-    return json.loads(encoded)
+    normalized = json.loads(encoded)
+    normalized["color_recipes"] = _normalized_color_recipes(normalized)
+    encoded = json.dumps(normalized, sort_keys=True, default=str)
+    if len(encoded.encode("utf-8")) > MAX_CONFIGURATION_BYTES:
+        frappe.throw(
+            _("Tiny snag: this item has too many option details for checkout. Please request a quote and we will help."),
+            frappe.ValidationError,
+        )
+
+    return normalized
 
 
 def cart_line_key(item_code: str, client_configuration: dict[str, Any] | None = None) -> str:
@@ -193,7 +203,13 @@ def cart_line_key(item_code: str, client_configuration: dict[str, Any] | None = 
     configuration = normalize_client_configuration(client_configuration)
     configuration_key = ""
     if configuration:
-        configuration_key = json.dumps(configuration, sort_keys=True, separators=(",", ":"), default=str)
+        configuration_key = json.dumps(
+            configuration,
+            sort_keys=True,
+            separators=(",", ":"),
+            default=str,
+            ensure_ascii=False,
+        )
     return f"{item_code}::{configuration_key}"
 
 
@@ -337,13 +353,20 @@ def sales_order_line_configuration_fields(
             frappe.ValidationError,
         )
 
-    client_configuration = normalize_client_configuration(client_configuration)
-    _assert_checkout_configuration_is_priced(client_configuration, website_item_code=website_item_code)
-
     variant_options = _variant_options_dict(resolved_item.get("variant_options") or [])
+    client_configuration = normalize_client_configuration(client_configuration)
+    color_recipes = _validated_checkout_color_recipes(client_configuration, variant_options=variant_options)
+    _assert_checkout_configuration_is_priced(
+        client_configuration,
+        website_item_code=website_item_code,
+        variant_options=variant_options,
+    )
+    sale_unit_options = {
+        attribute: value for attribute, value in variant_options.items() if not is_balloon_color_axis(attribute)
+    }
     _assert_client_options_match_variant(
         client_configuration=client_configuration,
-        variant_options=variant_options,
+        variant_options=sale_unit_options,
         resolved_item=resolved_item,
     )
 
@@ -353,9 +376,10 @@ def sales_order_line_configuration_fields(
         "website_item_code": website_item_code,
         "product_page_type": contract["product_page_type"],
         "commerce_lane": contract["commerce_lane"],
-        "selected_options": variant_options,
+        "selected_options": sale_unit_options,
+        "color_recipes": color_recipes,
         "add_ons": _validated_checkout_add_ons(client_configuration, website_item_code=website_item_code),
-        "customizations": [],
+        "customizations": _non_color_customizations(client_configuration),
         "source": "lt_product_page_runtime",
     }
     summary = _configuration_summary(payload)
@@ -510,11 +534,21 @@ def _assert_checkout_configuration_is_priced(
     client_configuration: dict[str, Any] | None,
     *,
     website_item_code: str | None,
+    variant_options: dict[str, str] | None = None,
 ) -> None:
     if not client_configuration:
+        if any(is_balloon_color_axis(axis) for axis in (variant_options or {})):
+            frappe.throw(
+                _(
+                    "Tiny snag: this product needs color choices saved as a color recipe before checkout. "
+                    "Please choose the colors again so we keep the details together."
+                ),
+                frappe.ValidationError,
+            )
         return
     _validated_checkout_add_ons(client_configuration, website_item_code=website_item_code)
-    if client_configuration.get("customizations"):
+    _validated_checkout_color_recipes(client_configuration, variant_options=variant_options or {})
+    if _non_color_customizations(client_configuration):
         frappe.throw(
             _(
                 "Tiny snag: custom option details are not connected to paid checkout yet. "
@@ -542,6 +576,15 @@ def _assert_client_options_match_variant(
     if not isinstance(selected, dict):
         frappe.throw(
             _("Tiny snag: this cart item's selected options are not readable. Please choose the options again."),
+            frappe.ValidationError,
+        )
+    color_axes = sorted(attribute for attribute in selected if is_balloon_color_axis(attribute))
+    if color_axes:
+        frappe.throw(
+            _(
+                "Tiny snag: color choices must be saved as a color recipe before checkout. "
+                "Please choose the colors again so we keep the details together."
+            ),
             frappe.ValidationError,
         )
     for attribute, value in selected.items():
@@ -618,6 +661,150 @@ def _validated_checkout_add_ons(
             }
         )
     return normalized
+
+
+def _validated_checkout_color_recipes(
+    client_configuration: dict[str, Any] | None,
+    *,
+    variant_options: dict[str, str],
+) -> list[dict[str, Any]]:
+    recipes = _normalized_color_recipes(client_configuration or {})
+    by_axis = {recipe["axis"]: recipe for recipe in recipes}
+    required_axes = sorted(axis for axis in variant_options if is_balloon_color_axis(axis))
+    missing = [axis for axis in required_axes if axis not in by_axis]
+    if missing:
+        frappe.throw(
+            _(
+                "Tiny snag: this product needs color choices saved as a color recipe before checkout. "
+                "Please choose the colors again so we keep the details together."
+            ),
+            frappe.ValidationError,
+        )
+    return recipes
+
+
+def _normalized_color_recipes(configuration: dict[str, Any]) -> list[dict[str, Any]]:
+    selected = configuration.get("selected_options") or {}
+    if isinstance(selected, dict):
+        selected_color_axes = sorted(axis for axis in selected if is_balloon_color_axis(axis))
+        if selected_color_axes:
+            frappe.throw(
+                _(
+                    "Tiny snag: color choices must be saved as a color recipe before checkout. "
+                    "Please choose the colors again so we keep the details together."
+                ),
+                frappe.ValidationError,
+            )
+    elif selected not in (None, ""):
+        frappe.throw(
+            _("Tiny snag: this cart item's selected options are not readable. Please choose the options again."),
+            frappe.ValidationError,
+        )
+
+    raw_recipes = configuration.get("color_recipes") or []
+    if raw_recipes and not isinstance(raw_recipes, list):
+        frappe.throw(
+            _("Tiny snag: this item's color recipe is not readable. Please choose the colors again."),
+            frappe.ValidationError,
+        )
+
+    recipe_rows = list(raw_recipes)
+    customizations = configuration.get("customizations") or []
+    if isinstance(customizations, dict):
+        recipe_rows.extend(customizations.get("color_recipes") or [])
+        customizations = customizations.get("items") or []
+    if not isinstance(customizations, list):
+        frappe.throw(
+            _("Tiny snag: this item's custom option details are not readable. Please choose the options again."),
+            frappe.ValidationError,
+        )
+    for row in customizations:
+        if not isinstance(row, dict):
+            continue
+        axis = _clean_text(row.get("axis") or row.get("key") or row.get("source_axis"))
+        if is_balloon_color_axis(axis):
+            recipe_rows.append(row)
+
+    normalized: dict[str, dict[str, Any]] = {}
+    for row in recipe_rows:
+        if not isinstance(row, dict):
+            frappe.throw(
+                _("Tiny snag: this item's color recipe is not readable. Please choose the colors again."),
+                frappe.ValidationError,
+            )
+        axis = _clean_text(row.get("axis") or row.get("key") or row.get("source_axis"))
+        if not is_balloon_color_axis(axis):
+            frappe.throw(
+                _("Tiny snag: this item's color recipe used an unknown color option. Please choose the colors again."),
+                frappe.ValidationError,
+            )
+        values = _color_recipe_values(row)
+        if not values:
+            frappe.throw(
+                _("Tiny snag: this item's color recipe needs at least one color. Please choose the colors again."),
+                frappe.ValidationError,
+            )
+        if len(values) > MAX_COLOR_RECIPE_VALUES:
+            frappe.throw(
+                _("Tiny snag: this item's color recipe has too many colors for checkout. Please request a quote and we will help."),
+                frappe.ValidationError,
+            )
+        normalized[axis] = {
+            "axis": axis,
+            "label": _clean_text(row.get("label")) or "Balloon color recipe",
+            "values": values,
+            "color_groups": grouped_colors(values),
+            "status": "validated_for_checkout",
+            "source": "lt_product_page_runtime",
+        }
+    return [normalized[axis] for axis in sorted(normalized)]
+
+
+def _color_recipe_values(row: dict[str, Any]) -> list[str]:
+    if "values" not in row:
+        value = row.get("value")
+        if isinstance(value, list):
+            raw_values = value
+        elif value in (None, ""):
+            raw_values = []
+        else:
+            frappe.throw(
+                _("Tiny snag: this item's color recipe must allow multiple colors. Please choose the colors again."),
+                frappe.ValidationError,
+            )
+    else:
+        raw_values = row.get("values")
+    if not isinstance(raw_values, list):
+        frappe.throw(
+            _("Tiny snag: this item's color recipe must allow multiple colors. Please choose the colors again."),
+            frappe.ValidationError,
+        )
+    values = [_clean_text(value) for value in raw_values]
+    return [value for value in values if value]
+
+
+def _non_color_customizations(client_configuration: dict[str, Any] | None) -> list[dict[str, Any]]:
+    if not client_configuration:
+        return []
+    customizations = client_configuration.get("customizations") or []
+    if isinstance(customizations, dict):
+        customizations = customizations.get("items") or []
+    if not isinstance(customizations, list):
+        return [{"status": "invalid_customization_payload"}]
+    result = []
+    for row in customizations:
+        if not isinstance(row, dict):
+            result.append({"status": "invalid_customization_row"})
+            continue
+        axis = _clean_text(row.get("axis") or row.get("key") or row.get("source_axis"))
+        if is_balloon_color_axis(axis):
+            continue
+        result.append(row)
+    return result
+
+
+def _clean_text(value: Any) -> str:
+    return " ".join(str(value or "").strip().split())
 
 
 def _add_on_key(raw: dict[str, Any]) -> str:
@@ -712,6 +899,8 @@ def _configuration_summary(payload: dict[str, Any]) -> str:
         pieces.append(f"Options - {options}")
     if payload.get("add_ons"):
         pieces.append("Add-ons preserved in structured payload")
+    if payload.get("color_recipes"):
+        pieces.append("Color recipe preserved in structured payload")
     if payload.get("customizations"):
         pieces.append("Customizations preserved in structured payload")
     if not pieces:

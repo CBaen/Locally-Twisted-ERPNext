@@ -67,7 +67,7 @@
                      data-hidden-select-id="{{ field_id }}"
                      aria-label="{{ _(attr_name) }}">
                     <p class="lt-product__color-help">
-                        {{ _("Choose one balloon color for current pricing. Multi-color recipes will be handled in the rebuilt catalog contract.") }}
+                        {{ _("Choose one or more balloon colors.") }}
                     </p>
                     {%- for group in color_groups -%}
                         <details class="lt-product__color-drawer" {% if loop.first %}open{% endif %}>
@@ -82,7 +82,7 @@
                             <div class="lt-product__color-grid">
                                 {%- for color in group.options -%}
                                     <label class="lt-product__color-card">
-                                        <input type="radio"
+                                        <input type="checkbox"
                                                class="lt-product__color-input js-lt-color-radio"
                                                name="lt-color-{{ attr_name | replace(' ', '-') }}"
                                                value="{{ color.name }}"
@@ -215,13 +215,6 @@
     var msgLedPriceReview = "{{ _('LED price needs review') | replace("'", "\\'") }}";
     var msgAddOnNeedsValue = "{{ _('Tiny snag: please enter the foil number before adding this upgrade.') | replace("'", "\\'") }}";
 
-    function moveColorDrawersUnderMedia() {
-        var mediaTarget = document.querySelector('.lt-product__under-media-options');
-        var colorAttr = form.querySelector('.lt-product__attr[data-display-type="color-drawer"]');
-        if (!mediaTarget || !colorAttr || colorAttr.parentNode === mediaTarget) return;
-        mediaTarget.appendChild(colorAttr);
-    }
-
     function productImageEl() {
         return document.querySelector('.product-image img.website-image') || document.querySelector('img.website-image');
     }
@@ -236,7 +229,6 @@
     }
 
     var defaultProductImage = currentProductImage();
-    moveColorDrawersUnderMedia();
 
     function setProductImage(src, alt) {
         var img = productImageEl();
@@ -250,12 +242,19 @@
         if (link) link.setAttribute('href', src);
 
         var matchedThumb = null;
+        document.querySelectorAll('.lt-product__thumbnail-button').forEach(function (button) {
+            button.setAttribute('aria-pressed', 'false');
+        });
         document.querySelectorAll('.item-slideshow-image').forEach(function (thumb) {
             var thumbSrc = thumb.getAttribute('src') || '';
             var isMatch = src && (thumbSrc === src || thumbSrc.indexOf(src) !== -1 || src.indexOf(thumbSrc) !== -1);
             thumb.classList.toggle('active', isMatch);
             if (isMatch) matchedThumb = thumb;
         });
+        if (matchedThumb) {
+            var matchedButton = matchedThumb.closest('.lt-product__thumbnail-button');
+            if (matchedButton) matchedButton.setAttribute('aria-pressed', 'true');
+        }
         if (!matchedThumb && src !== defaultProductImage.src) {
             document.querySelectorAll('.item-slideshow-image.active').forEach(function (thumb) {
                 thumb.classList.remove('active');
@@ -319,16 +318,42 @@
         var hidden = attr.querySelector('.js-lt-color-hidden');
         var checked = colorRadiosFor(attr).filter(function (input) { return input.checked; });
         if (hidden) {
-            // Temporary bridge for the current ERPNext variant model: one color maps
-            // to the SKU used for price/cart lookup. The purge/rebuild will move
-            // multi-color recipes out of SKU axes.
+            // Compatibility bridge for the current ERPNext variant model: the
+            // first selected color resolves the representative priced SKU while
+            // the full recipe is preserved in selectedConfiguration().
             hidden.value = checked.length ? checked[0].value : '';
         }
     }
 
-    function selectedColorName(a) {
+    function selectedColorNames(a) {
         var checked = colorRadiosFor(a).filter(function (input) { return input.checked; });
-        return checked.length ? checked[0].value : "";
+        return checked.map(function (input) { return input.value; });
+    }
+
+    function selectedColorRecipeRows() {
+        var recipes = [];
+        attrEls.forEach(function (a) {
+            if (a.getAttribute('data-display-type') !== 'color-drawer') return;
+            var attrName = a.getAttribute('data-attribute-name');
+            var values = selectedColorNames(a);
+            if (!values.length) return;
+            recipes.push({
+                axis: attrName,
+                label: attrName,
+                values: values
+            });
+        });
+        return recipes;
+    }
+
+    function selectedSaleUnitAttrs() {
+        var picks = selectedAttrs();
+        attrEls.forEach(function (a) {
+            if (a.getAttribute('data-display-type') === 'color-drawer') {
+                delete picks[a.getAttribute('data-attribute-name')];
+            }
+        });
+        return picks;
     }
 
     function showSelectedTags() {
@@ -336,9 +361,9 @@
         attrEls.forEach(function (a) {
             var sel = a.querySelector('.lt-product__attr-selected');
             var name = a.getAttribute('data-attribute-name');
-            var colorName = selectedColorName(a);
-            if (colorName) {
-                sel.textContent = ' - ' + colorName;
+            var colorNames = selectedColorNames(a);
+            if (colorNames.length) {
+                sel.textContent = ' - ' + colorNames.join(', ');
                 return;
             }
             sel.textContent = picks[name] ? ' - ' + picks[name] : '';
@@ -445,7 +470,8 @@
             schema_version: 'lt-product-config-v1',
             item_code: variantCode,
             website_item_code: templateCode,
-            selected_options: selectedAttrs(),
+            selected_options: selectedSaleUnitAttrs(),
+            color_recipes: selectedColorRecipeRows(),
             add_ons: selectedAddOns(),
             customizations: []
         };
@@ -571,15 +597,19 @@
         refresh();
     });
 
-    form.addEventListener('change', function (event) {
-        var colorInput = event.target && event.target.closest ? event.target.closest('.js-lt-color-radio') : null;
+    function handleAttributeInput(event) {
+        var target = event.target;
+        var colorInput = target && target.closest ? target.closest('.js-lt-color-radio') : null;
         if (colorInput) return;
-        var input = event.target && event.target.closest ? event.target.closest('.js-lt-attr-input') : null;
+        var input = target && target.closest ? target.closest('.js-lt-attr-input') : null;
         if (input) {
             clearSelectionsAfter(input.getAttribute('data-attribute-name'));
+            refresh();
         }
-        refresh();
-    });
+    }
+
+    form.addEventListener('change', handleAttributeInput);
+    form.addEventListener('input', handleAttributeInput);
 
     addOnRows.forEach(function (row) {
         var toggle = row.querySelector('.js-lt-addon-toggle');

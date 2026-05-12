@@ -137,6 +137,27 @@ def _checkout_gate_failures(rows: list[dict[str, Any]], line_field_status: dict[
     )
     if fail_loud_checkout:
         failures.append(f"checkout_ready products still have fail-loud states: {fail_loud_checkout}")
+    missing_color_contract = sorted(
+        row["slug"]
+        for row in rows
+        if row.get("current_commerce_lane") == "checkout"
+        and _requires_multi_color_contract(row)
+        and not _has_multi_color_checkout_contract(row)
+    )
+    if missing_color_contract:
+        failures.append(f"checkout products missing multi-color configuration contract: {missing_color_contract}")
+    single_select_color_checkout = sorted(
+        row["slug"]
+        for row in rows
+        if row.get("current_commerce_lane") == "checkout"
+        and any(
+            axis.get("role") == "sale_unit" and axis.get("selector_type") in {"color_drawer", "single_select"}
+            for axis in row.get("axis_contracts") or []
+            if _is_color_axis(axis.get("name"))
+        )
+    )
+    if single_select_color_checkout:
+        failures.append(f"checkout products still treating color as single-select sale unit: {single_select_color_checkout}")
     unpriced_addons = sorted(
         row["slug"]
         for row in rows
@@ -159,6 +180,29 @@ def _checkout_gate_failures(rows: list[dict[str, Any]], line_field_status: dict[
     if any(missing_line_fields.values()):
         failures.append(f"missing preservation line fields: {missing_line_fields}")
     return failures
+
+
+def _requires_multi_color_contract(row: dict[str, Any]) -> bool:
+    patterns = set(row.get("source_patterns") or [])
+    return bool(patterns & {"large_single_choice_color", "multi_color_recipes"})
+
+
+def _has_multi_color_checkout_contract(row: dict[str, Any]) -> bool:
+    cart_contract = row.get("cart_contract") or {}
+    color_contract = cart_contract.get("color_recipe_contract") or {}
+    preservation = row.get("order_preservation_contract") or {}
+    return bool(
+        color_contract.get("status") == "ready"
+        and cart_contract.get("color_recipe_axes")
+        and "color_recipes" in (cart_contract.get("required_keys") or [])
+        and preservation.get("json_required")
+        and preservation.get("summary_required")
+        and preservation.get("color_recipe_detail_required")
+    )
+
+
+def _is_color_axis(axis_name: Any) -> bool:
+    return str(axis_name or "").strip().lower() in {"latex colors", "color palette", "number colors", "baby color"}
 
 
 def _add_on_contract_ready(contract: dict[str, Any]) -> bool:

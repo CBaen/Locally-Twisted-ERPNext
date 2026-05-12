@@ -310,9 +310,34 @@ def _contract_failures(artifact: dict[str, Any]) -> tuple[list[str], list[str]]:
             checkout_gate_failures.append(f"{row.get('slug')} missing server_boundary")
         if not isinstance(row.get("checkout_eligibility"), dict):
             checkout_gate_failures.append(f"{row.get('slug')} missing checkout_eligibility")
+        if _requires_multi_color_contract(row) and _website_lane(row) == "checkout":
+            if not _has_multi_color_server_boundary(row):
+                checkout_gate_failures.append(f"{row.get('slug')} missing multi-color checkout server boundary")
     inventory_failures.extend(artifact.get("inventory_failures") or [])
     checkout_gate_failures.extend(artifact.get("checkout_gate_failures") or [])
     return inventory_failures, checkout_gate_failures
+
+
+def _requires_multi_color_contract(row: dict[str, Any]) -> bool:
+    patterns = set(row.get("patterns") or [])
+    return bool(patterns & {"large_single_choice_color", "multi_color_recipes"})
+
+
+def _has_multi_color_server_boundary(row: dict[str, Any]) -> bool:
+    boundary = row.get("server_boundary") or {}
+    schema = boundary.get("selected_config_schema") or {}
+    customization = boundary.get("customization_validation") or {}
+    cart_key = boundary.get("cart_line_key_contract") or {}
+    return bool(
+        schema.get("color_recipes")
+        and customization.get("status") == "ready_multi_color_recipe_contract"
+        and customization.get("single_select_color_allowed") is False
+        and cart_key.get("requires_color_recipes_in_canonical_json") is True
+    )
+
+
+def _website_lane(row: dict[str, Any]) -> str:
+    return str((row.get("checkout_eligibility") or {}).get("website_lane") or "")
 
 
 def _print_summary(artifact: dict[str, Any], failures: list[str]) -> None:

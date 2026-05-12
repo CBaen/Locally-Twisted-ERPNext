@@ -297,6 +297,7 @@ def resolve_product_pattern_selection(
         "item_code": item_code,
         "website_item_code": contract.item_code,
         "selected_options": selected_options,
+        "color_recipes": customization_payload.get("color_recipes") or [],
         "add_ons": list(add_on_lines),
         "customizations": customization_payload,
         "source": SCHEMA_VERSION,
@@ -648,13 +649,16 @@ def _checkout_eligibility(
         required_work.append("Map confirmed add-ons to priced ERPNext add-on Items with quantity/value validation.")
 
     customization_axes = [axis.name for axis in axes if axis.role == "customization"]
-    if customization_axes:
+    unsupported_customization_axes = [
+        axis.name for axis in axes if axis.role == "customization" and not is_balloon_color_axis(axis.name)
+    ]
+    if unsupported_customization_axes:
         fail_loud.append("unsupported_customization_payload")
         required_work.append("Add validated customization payload schema and SO/SI/receipt summaries.")
     color_configuration_axes = [
         axis.name for axis in axes if axis.role == "customization" and is_balloon_color_axis(axis.name)
     ]
-    if color_configuration_axes:
+    if color_configuration_axes and not _multi_color_configuration_contract_ready(axes):
         fail_loud.append("missing_multi_color_configuration")
         required_work.append(
             "Add multi-color/recipe-capable cart, checkout, SO/SI, and receipt preservation before paid checkout."
@@ -720,15 +724,17 @@ def _apply_mapper_enforcement(
     if (
         ("large_single_choice_color" in patterns or "multi_color_recipes" in patterns)
         and _source_requires_customization_payload(source_pattern, axes)
+        and not _multi_color_configuration_contract_ready(axes)
     ):
         fail_loud.append("missing_multi_color_configuration")
         required_work.append(
             "Preserve source color choices with a multi-color/recipe-capable configuration contract before checkout."
         )
     if "multi_color_recipes" in patterns and _source_requires_customization_payload(source_pattern, axes):
-        fail_loud.append("unsupported_customization_payload")
-        required_work.append("Preserve multi-color recipe selections in a validated customization payload before checkout.")
-    if "freeform_customer_text" in patterns and customization_axes:
+        if not _multi_color_configuration_contract_ready(axes):
+            fail_loud.append("unsupported_customization_payload")
+            required_work.append("Preserve multi-color recipe selections in a validated customization payload before checkout.")
+    if "freeform_customer_text" in patterns and _source_freeform_axes(source_pattern):
         fail_loud.append("unsupported_customization_payload")
         required_work.append("Preserve freeform customer text with validation limits and SO/SI summaries before checkout.")
     if "conditional_pricing" in patterns and (
@@ -756,6 +762,17 @@ def _source_requires_customization_payload(
             continue
         return True
     return False
+
+
+def _source_freeform_axes(source_pattern: dict[str, Any]) -> tuple[str, ...]:
+    axes = []
+    for axis in source_pattern.get("axis_contracts") or []:
+        if not isinstance(axis, dict):
+            continue
+        patterns = {str(pattern) for pattern in axis.get("patterns") or ()}
+        if "freeform_customer_text_candidate" in patterns:
+            axes.append(_clean(axis.get("name")))
+    return tuple(axis for axis in axes if axis)
 
 
 def _explicit_single_color_sale_unit(axis: dict[str, Any]) -> bool:
@@ -803,6 +820,9 @@ def _customization_payload(
         raise ProductPatternContractError("customizations must be a dict or list")
     if customizations and not any(axis.role == "customization" for axis in contract.axis_contracts):
         raise ProductPatternContractError("customization payload provided for a product without customization axes")
+    color_recipes = _color_recipe_payload(contract, selected_config, customizations, mode=mode)
+    if color_recipes:
+        customizations = {**customizations, "color_recipes": color_recipes}
     if (
         mode == "checkout"
         and customizations
@@ -810,6 +830,71 @@ def _customization_payload(
     ):
         raise ProductPatternContractError("customization payload is not connected to paid checkout yet")
     return customizations
+
+
+def _color_recipe_payload(
+    contract: ProductPatternContract,
+    selected_config: dict[str, Any],
+    customizations: dict[str, Any],
+    *,
+    mode: ResolverMode,
+) -> list[dict[str, Any]]:
+    color_axes = {
+        axis.name: axis
+        for axis in contract.axis_contracts
+        if axis.role == "customization" and is_balloon_color_axis(axis.name)
+    }
+    selected_options = selected_config.get("selected_options") or {}
+    if isinstance(selected_options, dict):
+        selected_color_axes = sorted(axis for axis in selected_options if axis in color_axes)
+        if selected_color_axes and mode == "checkout":
+            raise ProductPatternContractError(
+                f"color axes must use color_recipes, not selected_options: {selected_color_axes}"
+            )
+    if not color_axes:
+        return []
+
+    raw_recipes = selected_config.get("color_recipes") or customizations.get("color_recipes") or []
+    if not raw_recipes:
+        raw_recipes = [
+            row
+            for row in customizations.get("items") or []
+            if isinstance(row, dict)
+            and _clean(row.get("axis") or row.get("key") or row.get("source_axis")) in color_axes
+        ]
+    if mode == "checkout" and not raw_recipes:
+        raise ProductPatternContractError(f"missing color_recipes for color axes: {sorted(color_axes)}")
+    if not isinstance(raw_recipes, list):
+        raise ProductPatternContractError("color_recipes must be a list")
+
+    normalized: dict[str, dict[str, Any]] = {}
+    for row in raw_recipes:
+        if not isinstance(row, dict):
+            raise ProductPatternContractError("color_recipes rows must be dicts")
+        axis_name = _clean(row.get("axis") or row.get("key") or row.get("source_axis"))
+        axis = color_axes.get(axis_name)
+        if not axis:
+            raise ProductPatternContractError(f"unknown color recipe axis: {axis_name}")
+        values = row.get("values")
+        if not isinstance(values, list):
+            raise ProductPatternContractError(f"color recipe {axis_name} must provide a values list")
+        clean_values = tuple(_clean(value) for value in values if _clean(value))
+        if not clean_values:
+            raise ProductPatternContractError(f"color recipe {axis_name} must include at least one color")
+        invalid = sorted(value for value in clean_values if axis.values and value not in axis.values)
+        if invalid:
+            raise ProductPatternContractError(f"invalid color recipe value for {axis_name}: {invalid}")
+        normalized[axis_name] = {
+            "axis": axis_name,
+            "label": _clean(row.get("label")) or "Balloon color recipe",
+            "values": clean_values,
+            "status": "validated_for_checkout" if mode == "checkout" else "preserved_for_quote",
+        }
+    if mode == "checkout":
+        missing = sorted(axis for axis in color_axes if axis not in normalized)
+        if missing:
+            raise ProductPatternContractError(f"missing color_recipes for color axes: {missing}")
+    return [normalized[axis] for axis in sorted(normalized)]
 
 
 def _enforce_resolver_mode(contract: ProductPatternContract, mode: ResolverMode) -> None:
@@ -915,11 +1000,14 @@ def _add_on_summary(
 
 
 def _cart_contract(axes: tuple[AxisContract, ...]) -> dict[str, Any]:
+    color_axes = [axis.name for axis in axes if axis.role == "customization" and is_balloon_color_axis(axis.name)]
     return {
         "schema_version": CART_CONFIGURATION_VERSION,
-        "required_keys": ("item_code", "website_item_code", "selected_options", "add_ons", "customizations"),
+        "required_keys": ("item_code", "website_item_code", "selected_options", "color_recipes", "add_ons", "customizations"),
         "sale_unit_axes": [axis.name for axis in axes if axis.role == "sale_unit"],
         "customization_axes": [axis.name for axis in axes if axis.role == "customization"],
+        "color_recipe_axes": color_axes,
+        "color_recipe_contract": _multi_color_configuration_contract(axes),
         "add_on_axes": [axis.name for axis in axes if axis.role == "add_on"],
         "add_on_contracts": [
             axis.add_on_contract for axis in axes if axis.role == "add_on" and axis.add_on_contract
@@ -934,9 +1022,47 @@ def _order_preservation_contract() -> dict[str, Any]:
         "summary_required": True,
         "json_required": True,
         "receipt_label_source": "custom_lt_configuration_summary/custom_lt_configuration_json",
+        "color_recipe_detail_required": True,
         "add_on_line_detail_required": True,
         "add_on_line_fields": ("item_code", "qty", "rate", "amount", "description"),
     }
+
+
+def _multi_color_configuration_contract(axes: tuple[AxisContract, ...]) -> dict[str, Any]:
+    color_axes = [axis for axis in axes if axis.role == "customization" and is_balloon_color_axis(axis.name)]
+    if not color_axes:
+        return {"status": "not_required", "source_axes": []}
+    return {
+        "status": "ready" if _multi_color_configuration_contract_ready(axes) else "missing",
+        "schema_version": CART_CONFIGURATION_VERSION,
+        "source_axes": [axis.name for axis in color_axes],
+        "selector_type": "multi_color_recipe_builder",
+        "required_payload": {
+            "color_recipes": [
+                {
+                    "axis": "source color axis name",
+                    "values": "non-empty list of selected colors",
+                    "status": "validated_for_checkout",
+                }
+            ]
+        },
+        "checkout_validation": "reject selected_options color axes; require color_recipes list for each source color axis",
+        "cart_line_key": "canonical JSON includes color_recipes so same item with different recipes stays separate",
+        "sales_document_preservation": LINE_CONFIGURATION_FIELDS,
+        "receipt_preservation": "custom_lt_configuration_summary plus custom_lt_configuration_json",
+    }
+
+
+def _multi_color_configuration_contract_ready(axes: tuple[AxisContract, ...]) -> bool:
+    color_axes = [axis for axis in axes if axis.role == "customization" and is_balloon_color_axis(axis.name)]
+    if not color_axes:
+        return True
+    return all(
+        axis.selector_type == "multi_color_recipe_builder"
+        and axis.allows_multiple_values
+        and axis.status in {"ready", "needs_mapping"}
+        for axis in color_axes
+    )
 
 
 def _import_implications(
