@@ -11,3 +11,4 @@ locally_twisted.patches.sync_product_page_quote_lead_fields
 locally_twisted.patches.sync_product_page_quote_quotation_fields
 locally_twisted.patches.configure_email_branding
 locally_twisted.patches.configure_crm_duplicate_lead_emails
+locally_twisted.patches.sync_site_branding

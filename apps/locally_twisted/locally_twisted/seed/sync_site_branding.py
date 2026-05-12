@@ -19,6 +19,7 @@ WEBSITE_FIELDS = {
     "app_logo": LOGO_PATH,
     "splash_image": LOGO_PATH,
     "favicon": FAVICON_PATH,
+    "home_page": "home",
     "head_html": "",
 }
 

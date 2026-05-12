@@ -27,6 +27,8 @@ SITE_READY_PATHS = ("/", "/privacy")
 TRANSIENT_SITE_MARKERS = (
     "502 Bad Gateway",
     "Received:   502",
+    "503 Service Unavailable",
+    "Received:   503",
     "Target page, context or browser has been closed",
     "Target page has been closed",
     "browser has been closed",
@@ -132,6 +134,7 @@ def build_steps(args: argparse.Namespace) -> list[Step]:
     steps = [
         Step("Verifier CLI safety contract", [python, "scripts/verify/verifier_cli_contract.py"], 120),
         Step("Navigation IA", [python, "scripts/verify/nav_ia.py"], 120),
+        Step("Public homepage identity", [python, "scripts/verify/public_home_identity.py"], 120),
         Step("Passive layout matrix", local_playwright_command(workers, "scripts/verify/layout_fit.spec.js"), 900),
         Step(
             "Public container contract",
