@@ -127,7 +127,7 @@
         </div>
 
         {#
-            Reviews carousel — horizontal scrolling marquee of cards.
+            Reviews carousel - horizontal scrolling marquee of cards.
             Track holds two copies of the review list for a seamless
             infinite loop; the duplicate set is aria-hidden so screen
             readers only read each review once. Pauses on hover/focus.
@@ -150,8 +150,6 @@
     </div>
 </section>
 
-{# --- 6. Custom Event Decor — 8 customizable categories (full-bleed band).
-     consultative work, NOT in the shop. #}
 {# --- 3. One of a Kind Designs: installed-work proof after reviews --- #}
 <section class="lt-featured lt-fullbleed" aria-labelledby="lt-featured-heading">
     <div class="lt-featured__inner">
@@ -165,120 +163,6 @@
         </div>
     </div>
 </section>
-
-{% if show_custom_event_decor %}
-<section class="lt-categories lt-fullbleed" aria-labelledby="lt-categories-heading">
-    <h2 id="lt-categories-heading" class="lt-categories__heading">
-        <span class="lt-categories__heading-link">Custom Event Decor</span>
-    </h2>
-    <p class="lt-categories__lede">
-        Eight custom pieces in your colors. Choose the pieces that fit your event, then send us the details.
-    </p>
-    <div class="lt-categories__grid">
-        {% for cat in custom_categories %}
-        <div class="lt-categories__item">
-            <a href="/portfolio?category={{ cat.slug }}" class="lt-categories__link">
-                <span class="lt-categories__circle">
-                    {% if cat.icon == 'arch' %}
-                    <svg class="lt-categories__icon-svg" viewBox="0 0 64 64" fill="none"
-                         stroke="currentColor" stroke-width="3" aria-hidden="true">
-                        <path d="M10 54 V32 a22 22 0 0 1 44 0 V54" stroke-linecap="round"/>
-                        <circle cx="14" cy="22" r="3" fill="currentColor" stroke="none"/>
-                        <circle cx="32" cy="12" r="3" fill="currentColor" stroke="none"/>
-                        <circle cx="50" cy="22" r="3" fill="currentColor" stroke="none"/>
-                    </svg>
-                    {% elif cat.icon == 'column' %}
-                    <svg class="lt-categories__icon-svg" viewBox="0 0 64 64" fill="none"
-                         stroke="currentColor" stroke-width="3" aria-hidden="true">
-                        <rect x="24" y="10" width="16" height="44" rx="3" stroke-linejoin="round"/>
-                        <circle cx="32" cy="22" r="2.5" fill="currentColor" stroke="none"/>
-                        <circle cx="32" cy="34" r="2.5" fill="currentColor" stroke="none"/>
-                        <circle cx="32" cy="46" r="2.5" fill="currentColor" stroke="none"/>
-                    </svg>
-                    {% elif cat.icon == 'garland' %}
-                    <svg class="lt-categories__icon-svg" viewBox="0 0 64 64" fill="none"
-                         stroke="currentColor" stroke-width="3" aria-hidden="true">
-                        <path d="M6 22 Q32 50 58 22" stroke-linecap="round"/>
-                        <circle cx="14" cy="28" r="3" fill="currentColor" stroke="none"/>
-                        <circle cx="24" cy="36" r="3" fill="currentColor" stroke="none"/>
-                        <circle cx="32" cy="38" r="3" fill="currentColor" stroke="none"/>
-                        <circle cx="40" cy="36" r="3" fill="currentColor" stroke="none"/>
-                        <circle cx="50" cy="28" r="3" fill="currentColor" stroke="none"/>
-                    </svg>
-                    {% elif cat.icon == 'backdrop' %}
-                    <svg class="lt-categories__icon-svg" viewBox="0 0 64 64" fill="none"
-                         stroke="currentColor" stroke-width="3" aria-hidden="true">
-                        <rect x="8" y="12" width="48" height="32" rx="2" stroke-linejoin="round"/>
-                        <path d="M14 36 L24 26 L32 32 L42 22 L50 30" stroke-linecap="round" stroke-linejoin="round"/>
-                        <circle cx="42" cy="22" r="3" fill="currentColor" stroke="none"/>
-                    </svg>
-                    {% elif cat.icon == 'drop' %}
-                    <svg class="lt-categories__icon-svg" viewBox="0 0 64 64" fill="none"
-                         stroke="currentColor" stroke-width="3" aria-hidden="true">
-                        <line x1="6" y1="10" x2="58" y2="10" stroke-linecap="round"/>
-                        <circle cx="16" cy="22" r="4" fill="currentColor" stroke="none"/>
-                        <circle cx="28" cy="32" r="4" fill="currentColor" stroke="none"/>
-                        <circle cx="40" cy="42" r="4" fill="currentColor" stroke="none"/>
-                        <circle cx="52" cy="26" r="4" fill="currentColor" stroke="none"/>
-                        <circle cx="22" cy="48" r="4" fill="currentColor" stroke="none"/>
-                        <circle cx="46" cy="54" r="4" fill="currentColor" stroke="none"/>
-                    </svg>
-                    {% elif cat.icon == 'bouquet' %}
-                    {# Bouquet: 5 balloons fanning from a tied center-bottom point.
-                       Same line+circle aesthetic as the other 5 icons —
-                       circles for balloons, lines for strings, with a small
-                       knot circle at the tie point. #}
-                    <svg class="lt-categories__icon-svg" viewBox="0 0 64 64" fill="none"
-                         stroke="currentColor" stroke-width="3" aria-hidden="true">
-                        <line x1="32" y1="48" x2="14" y2="22" stroke-linecap="round"/>
-                        <line x1="32" y1="48" x2="22" y2="14" stroke-linecap="round"/>
-                        <line x1="32" y1="48" x2="32" y2="10" stroke-linecap="round"/>
-                        <line x1="32" y1="48" x2="42" y2="14" stroke-linecap="round"/>
-                        <line x1="32" y1="48" x2="50" y2="22" stroke-linecap="round"/>
-                        <circle cx="14" cy="22" r="4" fill="currentColor" stroke="none"/>
-                        <circle cx="22" cy="14" r="4" fill="currentColor" stroke="none"/>
-                        <circle cx="32" cy="10" r="4" fill="currentColor" stroke="none"/>
-                        <circle cx="42" cy="14" r="4" fill="currentColor" stroke="none"/>
-                        <circle cx="50" cy="22" r="4" fill="currentColor" stroke="none"/>
-                        <circle cx="32" cy="48" r="3" fill="currentColor" stroke="none"/>
-                        <path d="M32 48 L28 56 M32 48 L36 56" stroke-linecap="round"/>
-                    </svg>
-                    {% elif cat.icon == 'centerpiece' %}
-                    {# Centerpiece: 3-balloon cluster on a stem rising from a
-                       tabletop. Same line+circle aesthetic. #}
-                    <svg class="lt-categories__icon-svg" viewBox="0 0 64 64" fill="none"
-                         stroke="currentColor" stroke-width="3" aria-hidden="true">
-                        <circle cx="20" cy="24" r="6" fill="currentColor" stroke="none"/>
-                        <circle cx="32" cy="14" r="6" fill="currentColor" stroke="none"/>
-                        <circle cx="44" cy="24" r="6" fill="currentColor" stroke="none"/>
-                        <line x1="32" y1="30" x2="32" y2="54" stroke-linecap="round"/>
-                        <line x1="12" y1="54" x2="52" y2="54" stroke-linecap="round"/>
-                    </svg>
-                    {% elif cat.icon == 'sculpture' %}
-                    {# Custom Sculptures: sparkle/star plus two small accent
-                       circles, signaling bespoke work in the same stroke
-                       aesthetic as the sibling icons. #}
-                    <svg class="lt-categories__icon-svg" viewBox="0 0 64 64" fill="none"
-                         stroke="currentColor" stroke-width="3" aria-hidden="true">
-                        <path d="M32 8 L36 28 L56 32 L36 36 L32 56 L28 36 L8 32 L28 28 Z"
-                              stroke-linejoin="round"/>
-                        <circle cx="52" cy="14" r="2.5" fill="currentColor" stroke="none"/>
-                        <circle cx="14" cy="50" r="2.5" fill="currentColor" stroke="none"/>
-                    </svg>
-                    {% endif %}
-                </span>
-                <span class="lt-categories__name">{{ cat.name }}</span>
-            </a>
-        </div>
-        {% endfor %}
-    </div>
-</section>
-
-{# --- 7. 3-dot divider --- #}
-<div class="lt-divider" role="presentation" aria-hidden="true">
-    <span></span><span></span><span></span>
-</div>
-{% endif %}
 
 {# --- 8. Client Logo Crawl --- #}
 <section class="lt-crawl lt-fullbleed" aria-labelledby="lt-crawl-heading">
@@ -312,7 +196,7 @@
     </div>
 </section>
 
-{# --- 10. Twisting & Face Painting spotlight — secondary support path --- #}
+{# --- 10. Twisting & Face Painting spotlight - secondary support path --- #}
 <section class="lt-twisting-spotlight lt-fullbleed" aria-labelledby="lt-twisting-heading">
     <div class="lt-twisting-spotlight__inner">
         <div class="lt-twisting-spotlight__image"

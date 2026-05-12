@@ -2,8 +2,7 @@
 
 Current launch shape: civic/Utah hero, multi-platform review proof crawl,
 wide installed-work proof photos, full-stage client proof crawl,
-custom decor discovery, a contact CTA, and secondary twisting/face-painting
-support.
+a contact CTA, and secondary twisting/face-painting support.
 """
 import frappe
 
@@ -32,27 +31,6 @@ CLIENT_CRAWL = [
     "The Boiler Room", "Western Sports Park", "St. Joseph's",
     "Syracuse City", "West Point City", "Clinton City", "Hooper City",
     "Kearns", "Ogden Weber Chamber", "LGBT Chamber",
-]
-
-
-# The 8 customizable categories - items Jeff actually customizes for events.
-# These point at the portfolio while the interactive Event Playground work
-# remains outside the ASAP launch lane.
-# Updated 2026-04-28 per GL:
-# Columns is the canonical name; Garlands replaces "Organic Garlands"
-# (organic remains an option, not a separate product); Centerpieces and
-# Custom Sculptures added (Sculptures = the "anything you imagine" bucket
-# - characters, themed shapes, one-off builds; distinct from balloon
-# twisting entertainment which lives at /balloon-twisting-and-face-painting).
-CUSTOM_CATEGORIES = [
-    {"slug": "balloon-arches", "name": "Balloon Arches", "icon": "arch"},
-    {"slug": "columns", "name": "Columns", "icon": "column"},
-    {"slug": "garlands", "name": "Garlands", "icon": "garland"},
-    {"slug": "picture-perfect-backdrops", "name": "Picture Perfect Backdrops", "icon": "backdrop"},
-    {"slug": "balloon-drops", "name": "Balloon Drops", "icon": "drop"},
-    {"slug": "balloon-bouquets", "name": "Balloon Bouquets", "icon": "bouquet"},
-    {"slug": "centerpieces", "name": "Centerpieces", "icon": "centerpiece"},
-    {"slug": "custom-sculptures", "name": "Custom Sculptures", "icon": "sculpture"},
 ]
 
 
@@ -264,8 +242,7 @@ PAGE_CSS = """
 /* ======================================================================
  * Launch homepage - proof-first event decor shape
  * BEM blocks: lt-hero, lt-authority, lt-featured, lt-reviews-block,
- *             lt-divider, lt-categories, lt-crawl, lt-cta,
- *             lt-twisting-spotlight
+ *             lt-crawl, lt-cta, lt-twisting-spotlight
  * Uses CSS variables from lt-theme.css (--lt-teal, --lt-near-black, etc.)
  * ====================================================================== */
 
@@ -296,24 +273,6 @@ PAGE_CSS = """
     margin-left: -50vw;
     margin-right: -50vw;
 }
-/* --- 3-dot divider --------------------------------------------------- */
-.lt-divider {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    padding: 1.75rem 0;
-    background-color: var(--lt-white);
-}
-.lt-divider span {
-    display: block;
-    width: 0.45rem;
-    height: 0.45rem;
-    border-radius: 50%;
-    background-color: var(--lt-brass);
-    opacity: 0.75;
-}
-
 /* --- Hero ------------------------------------------------------------ */
 .lt-hero {
     position: relative;
@@ -765,96 +724,6 @@ PAGE_CSS = """
     }
 }
 
-/* --- Custom Event Decor categories ---------------------------------- */
-.lt-categories {
-    background-color: var(--lt-white);
-    padding: 4rem 1.5rem;
-}
-.lt-categories__heading {
-    font-family: var(--lt-font-heading);
-    font-size: 2.25rem;
-    text-align: center;
-    color: var(--lt-near-black);
-    margin: 0 0 0.5rem;
-}
-.lt-categories__heading-link {
-    color: inherit;
-    text-decoration: none;
-    padding-bottom: 0.15rem;
-}
-.lt-categories__lede {
-    text-align: center;
-    color: var(--lt-soft-gray);
-    max-width: 540px;
-    margin: 0 auto 2.75rem;
-    font-size: 1rem;
-}
-/* 8-category grid (per GL 2026-04-28 — Centerpieces + Custom Sculptures
- * added; Garlands replaces "Organic Garlands"; Pillars retired):
- *   <768px : 2 columns × 4 rows  (clean 2-2-2-2 mobile)
- *   768-1399px : 4 columns × 2 rows (4-4 tablet, even rows, no orphans)
- *   ≥1400px : 4 columns × 2 rows (kept at 4-wide for legibility — 8 in a
- *                                  single ribbon would compress circles
- *                                  and labels at typical desktop widths) */
-.lt-categories__grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem 1.5rem;
-    max-width: 1500px;
-    margin: 0 auto;
-}
-@media (min-width: 768px) {
-    .lt-categories__grid {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 2.5rem 2rem;
-    }
-}
-@media (min-width: 1200px) {
-    .lt-categories__grid {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 3rem 2.5rem;
-    }
-}
-.lt-categories__item {
-    text-align: center;
-}
-.lt-categories__link {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.85rem;
-    text-decoration: none;
-    color: var(--lt-near-black);
-}
-.lt-categories__circle {
-    width: 130px;
-    height: 130px;
-    border-radius: 50%;
-    background-color: var(--lt-near-white);
-    border: 1px solid rgba(184, 154, 91, 0.35);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.2s ease, background-color 0.2s ease;
-}
-.lt-categories__link:hover .lt-categories__circle,
-.lt-categories__link:focus-visible .lt-categories__circle {
-    background-color: var(--lt-stone);
-    transform: translateY(-3px);
-}
-.lt-categories__icon-svg {
-    width: 56px;
-    height: 56px;
-    color: var(--lt-brass);
-}
-.lt-categories__name {
-    font-family: var(--lt-font-body);
-    font-size: 1rem;
-    font-weight: 600;
-    line-height: 1.3;
-    max-width: 9rem;
-}
-
 /* --- Featured Work (One of a Kind Designs) - full-width proof band --- */
 .lt-featured {
     background-color: var(--lt-near-white);
@@ -1135,8 +1004,6 @@ def get_context(context):
         "og:type": "website",
     }
     context.client_crawl = CLIENT_CRAWL
-    context.custom_categories = CUSTOM_CATEGORIES
-    context.show_custom_event_decor = False
     context.featured_work = FEATURED_WORK
     context.home_hero_slides = HOME_HERO_SLIDES
     context.structured_data = [business_graph("/")]
