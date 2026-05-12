@@ -29,6 +29,7 @@ PAUSE_PATH = "/ready-to-order-paused"
 NAVBAR = ROOT / "apps/locally_twisted/locally_twisted/templates/includes/navbar/navbar.html"
 FOOTER = ROOT / "apps/locally_twisted/locally_twisted/templates/includes/footer/footer.html"
 CHECKOUT_SOURCE = ROOT / "apps/locally_twisted/locally_twisted/www/checkout.py"
+PAUSE_PAGE_SOURCE = ROOT / "apps/locally_twisted/locally_twisted/www/ready_to_order_paused.py"
 
 BLOCKED_ROUTES = (
     "/shop",
@@ -156,6 +157,10 @@ def assert_source_has_safe_default() -> None:
         fail("ecommerce pause source default must stay paused")
     if 'lt_ecommerce_paused' not in source:
         fail("ecommerce pause must be controlled by lt_ecommerce_paused site config")
+
+    pause_source = read(PAUSE_PAGE_SOURCE)
+    if "noindex" in pause_source or "nofollow" in pause_source:
+        fail("paused ecommerce page must not noindex or nofollow crawler-visible paused behavior")
 
 
 def assert_navigation_matches_mode(paused: bool) -> None:
