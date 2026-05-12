@@ -44,13 +44,14 @@ def verify_record_in_backend_frappe(test_marker: str, base_url: str) -> bool:
 
     Lead is NOT Guest-readable, so unauthenticated REST returns 403. The
     smoke test fills test_marker into the form's `contact_name` field
-    (which maps to Lead.first_name), so we filter on first_name. Two
-    auth paths in priority order:
+    (which maps to Lead.first_name), so we filter on first_name.
+    Backend verification paths:
 
       1. LT_ADMIN_PASSWORD env var → Basic auth as Administrator
          (set this for the loud-failure deploy gate)
-      2. No creds → return None to trigger the "modal-visible counts
-         as pass" fallback in the caller, with a WARN.
+      2. Local Docker bench access for local development.
+      3. No backend access means the smoke fails, even if the success UI
+         appeared. This catches silent-submission failures on staging/live.
     """
     import os
     import base64
@@ -68,10 +69,8 @@ def verify_record_in_backend_frappe(test_marker: str, base_url: str) -> bool:
         )
         if records is not None:
             return len(records) > 0
-        print("       backend verification SKIPPED - set LT_ADMIN_PASSWORD or run against local Docker stack")
-        # Return True so the smoke doesn't fail when the success modal rendered
-        # but an authenticated/local backend check is not available.
-        return True
+        print("       backend verification unavailable - set LT_ADMIN_PASSWORD or run against local Docker stack")
+        return False
 
     filters = json.dumps([["first_name", "=", test_marker]])
     fields = json.dumps(["name", "first_name"])
