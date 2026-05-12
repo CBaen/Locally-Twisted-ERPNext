@@ -5,13 +5,19 @@ from typing import Any
 
 import frappe
 
+from locally_twisted.verify.book_form_repeat_email_photos_email_contract import (
+    verify_email_delivery as _verify_email_delivery,
+)
+
 
 EMAIL_PREFIX = "lt-repeat-email-photo-"
 EMAIL_SUFFIX = "@example.invalid"
 
 
+@frappe.whitelist()
 def preview(email: str | None = None, include_existing: bool = False) -> dict[str, Any]:
     """Return remaining verifier-owned records without mutating the database."""
+    _require_authenticated_user()
     lead_names = _lead_names(email=email, include_existing=include_existing)
     targets = _cleanup_targets(lead_names, email=email, include_existing=include_existing)
     return {
@@ -30,12 +36,14 @@ def preview(email: str | None = None, include_existing: bool = False) -> dict[st
     }
 
 
+@frappe.whitelist()
 def cleanup(email: str | None = None, include_existing: bool = False) -> dict[str, Any]:
     """Delete records created by scripts/verify/book_form_repeat_email_photos.py.
 
     The guard only permits the verifier-owned invalid email namespace so this
     helper cannot become a general Lead cleanup tool by accident.
     """
+    _require_authenticated_user()
     _validate_scope(email=email, include_existing=include_existing)
     lead_names = _lead_names(email=email, include_existing=include_existing)
     targets = _cleanup_targets(lead_names, email=email, include_existing=include_existing)
@@ -67,6 +75,17 @@ def cleanup(email: str | None = None, include_existing: bool = False) -> dict[st
         "failures": failures,
         "remaining": remaining,
     }
+
+
+@frappe.whitelist()
+def verify_email_delivery(email: str, expected_labels: str | list[str] | None = None) -> dict[str, Any]:
+    _require_authenticated_user()
+    return _verify_email_delivery(email=email, expected_labels=expected_labels)
+
+
+def _require_authenticated_user() -> None:
+    if getattr(getattr(frappe, "session", None), "user", None) == "Guest":
+        frappe.throw("Authentication required for verifier-owned record inspection")
 
 
 def _validate_scope(email: str | None, include_existing: bool) -> None:

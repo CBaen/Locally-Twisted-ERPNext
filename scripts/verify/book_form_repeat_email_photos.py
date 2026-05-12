@@ -65,24 +65,77 @@ def cleanup_records(
     *,
     email: str | None = None,
     include_existing: bool = False,
+    admin_base_url: str | None = None,
+    cdp_url: str | None = None,
 ) -> dict | None:
-    if not _is_local_base_url(base_url):
-        return None
-    return _bench_execute_json(
+    return _call_verifier_method(
+        base_url,
         "locally_twisted.verify.book_form_repeat_email_photos_cleanup.cleanup",
         {"email": email, "include_existing": include_existing},
+        admin_base_url=admin_base_url,
+        cdp_url=cdp_url,
     )
+
+
+def verify_email_delivery(
+    base_url: str,
+    *,
+    email: str,
+    expected_labels: list[str],
+    admin_base_url: str | None = None,
+    cdp_url: str | None = None,
+) -> dict:
+    result = _call_verifier_method(
+        base_url,
+        "locally_twisted.verify.book_form_repeat_email_photos_cleanup.verify_email_delivery",
+        {"email": email, "expected_labels": expected_labels},
+        admin_base_url=admin_base_url,
+        cdp_url=cdp_url,
+    )
+    if result is None:
+        raise AssertionError(
+            "Email-content verification unavailable. Use localhost, or pass --admin-base-url and --cdp-url "
+            "for an authenticated live Frappe session."
+        )
+    if result.get("failures"):
+        raise AssertionError(f"Email-content verification failed: {json.dumps(result, indent=2, default=str)}")
+    if not result.get("ok"):
+        raise AssertionError(f"Email-content verification did not pass: {json.dumps(result, indent=2, default=str)}")
+    return result
 
 
 def fail_if_cleanup_incomplete(label: str, cleanup: dict | None) -> None:
     if cleanup is None:
         raise AssertionError(
-            f"{label} cleanup unavailable. Use a localhost Frappe target or pass --keep-records explicitly."
+            f"{label} cleanup unavailable. Use localhost, pass authenticated --admin-base-url/--cdp-url, "
+            "or pass --keep-records explicitly."
         )
     if cleanup.get("failures"):
         raise AssertionError(f"{label} cleanup failed: {cleanup['failures']}")
     if not cleanup.get("ok"):
         raise AssertionError(f"{label} cleanup left verifier-owned records: {cleanup.get('remaining')}")
+
+
+def _call_verifier_method(
+    base_url: str,
+    method: str,
+    kwargs: dict,
+    *,
+    admin_base_url: str | None = None,
+    cdp_url: str | None = None,
+) -> dict | None:
+    if _is_local_base_url(base_url):
+        return _bench_execute_json(method, kwargs)
+    if cdp_url:
+        from frappe_whitelisted_client import call_with_cdp
+
+        return call_with_cdp(
+            base_url=(admin_base_url or base_url),
+            method=method,
+            kwargs=kwargs,
+            cdp_url=cdp_url,
+        )
+    return None
 
 
 def _bench_execute_json(method: str, kwargs: dict) -> dict | None:
@@ -109,15 +162,15 @@ def _bench_execute_json(method: str, kwargs: dict) -> dict | None:
             timeout=60,
         )
     except (OSError, subprocess.SubprocessError) as exc:
-        print(f"local bench unavailable for cleanup: {exc}")
+        print(f"local bench unavailable for verifier method: {exc}")
         return None
     if result.returncode != 0:
-        print(f"local bench cleanup command failed: {result.stderr.strip()[:500]}")
+        print(f"local bench verifier command failed: {result.stderr.strip()[:500]}")
         return None
     try:
         return json.loads(result.stdout.strip() or "{}")
     except json.JSONDecodeError as exc:
-        print(f"local bench cleanup returned non-JSON: {exc}: {result.stdout.strip()[:500]}")
+        print(f"local bench verifier returned non-JSON: {exc}: {result.stdout.strip()[:500]}")
         return None
 
 
@@ -129,6 +182,15 @@ def _is_local_base_url(base_url: str) -> bool:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--base-url", default="http://localhost:8081")
+    parser.add_argument(
+        "--admin-base-url",
+        help="Authenticated Frappe base URL to inspect live Email Queue rows, e.g. https://site.v.frappe.cloud.",
+    )
+    parser.add_argument(
+        "--cdp-url",
+        default=os.environ.get("LT_VERIFY_CDP_URL"),
+        help="Existing authenticated browser CDP endpoint for live Email Queue inspection.",
+    )
     parser.add_argument(
         "--keep-records",
         action="store_true",
@@ -143,22 +205,42 @@ def main() -> None:
 
     existing_cleanup = None
     if not args.keep_records and not args.skip_existing_cleanup:
-        existing_cleanup = cleanup_records(args.base_url, include_existing=True)
+        existing_cleanup = cleanup_records(
+            args.base_url,
+            include_existing=True,
+            admin_base_url=args.admin_base_url,
+            cdp_url=args.cdp_url,
+        )
         fail_if_cleanup_incomplete("pre-run existing verifier-record", existing_cleanup)
 
     token = int(time.time())
     email = f"lt-repeat-email-photo-{token}@example.invalid"
+    first_label = f"repeat-email-photo contract first {token}"
+    second_label = f"repeat-email-photo contract second {token}"
     first = None
     second = None
+    delivery = None
     cleanup = None
     try:
-        first = submit(args.base_url, email, f"repeat-email-photo contract first {token}")
-        second = submit(args.base_url, email, f"repeat-email-photo contract second {token}")
+        first = submit(args.base_url, email, first_label)
+        second = submit(args.base_url, email, second_label)
         if first["lead"] == second["lead"]:
             raise AssertionError(f"Expected two separate Lead records, got {first['lead']}")
+        delivery = verify_email_delivery(
+            args.base_url,
+            email=email,
+            expected_labels=[first_label, second_label],
+            admin_base_url=args.admin_base_url,
+            cdp_url=args.cdp_url,
+        )
     finally:
         if not args.keep_records:
-            cleanup = cleanup_records(args.base_url, email=email)
+            cleanup = cleanup_records(
+                args.base_url,
+                email=email,
+                admin_base_url=args.admin_base_url,
+                cdp_url=args.cdp_url,
+            )
 
     if not args.keep_records:
         fail_if_cleanup_incomplete("current verifier-record", cleanup)
@@ -168,6 +250,15 @@ def main() -> None:
         {
             "email": email,
             "leads": [first["lead"], second["lead"]] if first and second else [],
+            "email_delivery_verified": bool(delivery and delivery.get("ok")),
+            "delivery_queues": [
+                {
+                    "lead": item.get("lead"),
+                    "customer_queue": (item.get("customer_queue") or {}).get("name"),
+                    "business_queue": (item.get("business_queue") or {}).get("name"),
+                }
+                for item in (delivery or {}).get("leads", [])
+            ],
             "pre_run_cleanup_deleted": len((existing_cleanup or {}).get("deleted", [])),
             "current_cleanup_deleted": len((cleanup or {}).get("deleted", [])),
             "records_kept": bool(args.keep_records),

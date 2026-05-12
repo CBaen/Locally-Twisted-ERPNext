@@ -598,7 +598,7 @@ def _operator_inquiry_details_block(doc, *, customer_email, photo_uploads=None, 
     line("Delivery notes", doc.get("custom_delivery_notes"))
     line("Events inquiry notes", doc.get("custom_package_notes"))
     line("Other notes", doc.get("custom_other_notes"))
-    line("Anything else", doc.get("custom_anything_else"))
+    line("Anything else", _customer_note_for_display(doc.get("custom_anything_else")))
 
     if photo_uploads:
         submitted = int(photo_uploads.get("submitted") or 0)
@@ -628,7 +628,8 @@ def _operator_inquiry_details_block(doc, *, customer_email, photo_uploads=None, 
 """.strip()
 
     return f"""
-<p style="margin:0 0 10px;">A new website inquiry needs follow-up.</p>
+<p style="margin:0 0 8px;">A customer submitted this website inquiry. Review the details below, then follow up from the Lead.</p>
+<p style="font-size:13px;font-weight:700;color:#111111;margin:0 0 6px;">Customer-submitted details</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;font-size:13px;line-height:1.35;">
   {rows_html}
 </table>
@@ -675,7 +676,7 @@ def _customer_submitted_details_block(doc, *, photo_uploads=None) -> str:
     line("Delivery notes", doc.get("custom_delivery_notes"))
     line("Events inquiry notes", doc.get("custom_package_notes"))
     line("Other notes", doc.get("custom_other_notes"))
-    line("Anything else", doc.get("custom_anything_else"))
+    line("Anything else", _customer_note_for_display(doc.get("custom_anything_else")))
 
     attached = int((photo_uploads or {}).get("attached") or 0)
     if attached:
@@ -721,6 +722,26 @@ def _photo_upload_issue_summary(photo_uploads) -> str:
         message = item.get("message") or item.get("reason") or "needs review"
         issues.append(f"{filename}: {message}")
     return "; ".join(issues)
+
+
+def _customer_note_for_display(note) -> str:
+    text = str(note or "").strip()
+    if not text:
+        return ""
+
+    marker_index = text.lower().find(CUSTOMER_EMAIL_NOTE_PREFIX.lower())
+    if marker_index < 0:
+        return text
+
+    before = text[:marker_index].strip(" ;\r\n")
+    after = text[marker_index + len(CUSTOMER_EMAIL_NOTE_PREFIX):].strip()
+    for separator in (";", "\n", "\r"):
+        if separator in after:
+            after = after.split(separator, 1)[1].strip(" ;\r\n")
+            break
+    else:
+        after = ""
+    return "; ".join(part for part in (before, after) if part)
 
 
 def _compact_policy_link_block(lanes) -> str:
