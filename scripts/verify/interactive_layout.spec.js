@@ -1120,6 +1120,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 			}
 			const authorityCount = document.querySelectorAll(".lt-authority").length;
 			const authorityIconCount = document.querySelectorAll(".lt-authority__icon").length;
+			const customEventDecor = document.querySelector(".lt-categories");
 			const platforms = Array.from(document.querySelectorAll("[data-lt-review-platform]"));
 			const ctaBody = document.querySelector(".lt-cta__body");
 			return {
@@ -1129,6 +1130,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 				heroNextIsReviews: heroNext ? heroNext.classList.contains("lt-reviews-block") : false,
 				authorityCount,
 				authorityIconCount,
+				hasCustomEventDecor: Boolean(customEventDecor),
 				platformText: platforms.map((platform) => platform.innerText.replace(/\s+/g, " ").trim()).join(" | "),
 				platforms: platforms.map((platform) => platform.getAttribute("data-lt-review-platform") || ""),
 				platformLabels: platforms.map((platform) => platform.getAttribute("aria-label") || ""),
@@ -1141,6 +1143,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 		expect(result.reviewsTop, "review proof should appear before the installed-work proof band").toBeLessThan(result.featuredTop);
 		expect(result.authorityCount, "homepage should not render a trust/authority bar right now").toBe(0);
 		expect(result.authorityIconCount, "trust bar icons should stay as assets, not render as a homepage bar").toBe(0);
+		expect(result.hasCustomEventDecor, "homepage should not render the Custom Event Decor category block").toBe(false);
 		expect(result.platforms, "the first post-hero proof band should include GigSalad, Google, and Facebook").toEqual(["gigsalad", "google", "facebook"]);
 		expect(result.platformText, "the first post-hero proof band should not add the word Reviews under the logos").not.toMatch(/reviews/i);
 		expect(result.platformText, "the first post-hero proof band should show proof without counts or rating totals").not.toMatch(/(\d|%)/);

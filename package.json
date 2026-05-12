@@ -11,6 +11,7 @@
     "test:interactive-layout": "scripts\\verify\\run_playwright.cmd test scripts/verify/interactive_layout.spec.js --reporter=line",
     "test:form-experience": "scripts\\verify\\run_playwright.cmd test scripts/verify/form_experience.spec.js --reporter=line",
     "test:search-contract": "scripts\\verify\\run_playwright.cmd test scripts/verify/search_contract.spec.js --reporter=line",
+    "test:ecommerce-browser-proof": "scripts\\verify\\run_playwright.cmd test scripts/verify/search_contract.spec.js scripts/verify/checkout_experience.spec.js --reporter=line --workers=4 && scripts\\verify\\run_playwright.cmd test scripts/verify/interactive_layout.spec.js --grep=\"configured ecommerce states\" --reporter=line --workers=4",
     "test:seo-contract": "scripts\\verify\\run_playwright.cmd test scripts/verify/seo_contract.spec.js --reporter=line",
     "test:ecommerce-pause": "python scripts/verify/ecommerce_pause_contract.py",
     "test:public-ecommerce": "python scripts/verify/ecommerce_pause_contract.py",

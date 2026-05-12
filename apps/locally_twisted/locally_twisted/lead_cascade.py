@@ -371,6 +371,7 @@ def _send_auto_ack_email(doc, *, photo_uploads=None):
             "reference_doctype": "Lead",
             "reference_name": doc.name,
             "subject": ["in", [subject, *LEGACY_AUTO_ACK_SUBJECTS]],
+            **_current_lead_creation_filter(doc),
         },
         limit=1,
     )
@@ -427,14 +428,19 @@ def _has_current_confirmation_email_queue(doc) -> bool:
     Email Queue rows with the same reference_name must not suppress the new
     customer's confirmation email.
     """
-    created_at = get_datetime(doc.get("creation")) if doc.get("creation") else None
     filters = {
         "reference_doctype": "Lead",
         "reference_name": doc.name,
+        **_current_lead_creation_filter(doc),
     }
-    if created_at:
-        filters["creation"] = [">=", created_at]
     return bool(frappe.get_all("Email Queue", filters=filters, limit=1))
+
+
+def _current_lead_creation_filter(doc) -> dict:
+    created_at = get_datetime(doc.get("creation")) if doc.get("creation") else None
+    if not created_at:
+        return {}
+    return {"creation": [">=", created_at]}
 
 
 def _customer_submitted_details_block(doc, *, photo_uploads=None) -> str:

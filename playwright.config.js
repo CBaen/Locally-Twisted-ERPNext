@@ -17,8 +17,8 @@ function findBrowserExecutable() {
 }
 
 const executablePath = findBrowserExecutable();
-const workerCount = Number.parseInt(process.env.LT_PLAYWRIGHT_WORKERS || "4", 10) || 4;
-const fullyParallel = process.env.LT_PLAYWRIGHT_FULLY_PARALLEL !== "0";
+const workerCount = Number.parseInt(process.env.LT_PLAYWRIGHT_WORKERS || "1", 10) || 1;
+const fullyParallel = process.env.LT_PLAYWRIGHT_FULLY_PARALLEL === "1";
 
 module.exports = defineConfig({
 	timeout: 45_000,
