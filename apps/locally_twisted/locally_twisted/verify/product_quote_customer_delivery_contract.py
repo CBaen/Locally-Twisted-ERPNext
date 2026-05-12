@@ -170,6 +170,7 @@ def _submitted_reviewed_product_quote() -> str:
             "status": "Open",
         }
     )
+    lead.flags.lt_defer_customer_ack = True
     lead.insert(ignore_permissions=True)
     payload = _product_quote_payload()
     quotation = frappe.get_doc(
@@ -228,6 +229,7 @@ def _submitted_reviewed_customer_product_quote_with_linked_contact() -> str:
             "status": "Open",
         }
     )
+    lead.flags.lt_defer_customer_ack = True
     lead.insert(ignore_permissions=True)
     customer = frappe.get_doc(
         {

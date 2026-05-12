@@ -261,19 +261,33 @@ def run() -> dict[str, object]:
 
     active_contracts = _active_contracts()
     deferred_contracts = _deferred_contracts()
-    contract_items = [_run_contract(spec) for spec in active_contracts]
+    stage_mutations: list[dict[str, Any]] = []
+    contract_items = []
+    for spec in active_contracts:
+        contract_before = _guard_counts()
+        item = _run_contract(spec)
+        contract_after = _guard_counts()
+        contract_delta = _count_delta(contract_before, contract_after)
+        if contract_delta:
+            item["mutation_delta"] = contract_delta
+            stage_mutations.append({"stage": f"contract:{spec['id']}", "delta": contract_delta})
+        contract_items.append(item)
     deferred_items = [_deferred_contract_item(spec) for spec in deferred_contracts]
     broken_piping = [item for item in contract_items if not item["ok"]]
 
-    status = paperwork_status.run()
-    automation = business_automation_index.run(
-        include_digest=False,
-        include_synthetic=False,
-        include_customer_reminders=False,
-        include_customer_reminder_report=False,
-        run_runtime_contracts=False,
+    status = _run_guarded_stage("paperwork_status", paperwork_status.run, stage_mutations)
+    automation = _run_guarded_stage(
+        "business_automation_index",
+        lambda: business_automation_index.run(
+            include_digest=False,
+            include_synthetic=False,
+            include_customer_reminders=False,
+            include_customer_reminder_report=False,
+            run_runtime_contracts=False,
+        ),
+        stage_mutations,
     )
-    digest = paperwork_review_digest.run()
+    digest = _run_guarded_stage("paperwork_review_digest", paperwork_review_digest.run, stage_mutations)
 
     after = _guard_counts()
     if before != after:
@@ -349,6 +363,7 @@ def run() -> dict[str, object]:
             "before": before,
             "after": after,
             "changed": before != after,
+            "stage_mutations": stage_mutations,
         },
         "boundaries": {
             "live_stripe_keys_required": False,
@@ -495,3 +510,23 @@ def _guard_counts() -> dict[str, int]:
         for doctype in GUARD_DOCTYPES
         if frappe.db.exists("DocType", doctype)
     }
+
+
+def _run_guarded_stage(stage: str, runner, stage_mutations: list[dict[str, Any]]) -> dict[str, Any]:
+    before = _guard_counts()
+    result = runner()
+    after = _guard_counts()
+    delta = _count_delta(before, after)
+    if delta:
+        stage_mutations.append({"stage": stage, "delta": delta})
+    return result
+
+
+def _count_delta(before: dict[str, int], after: dict[str, int]) -> dict[str, dict[str, int]]:
+    delta = {}
+    for doctype in sorted(set(before) | set(after)):
+        old = before.get(doctype, 0)
+        new = after.get(doctype, 0)
+        if old != new:
+            delta[doctype] = {"before": old, "after": new, "delta": new - old}
+    return delta

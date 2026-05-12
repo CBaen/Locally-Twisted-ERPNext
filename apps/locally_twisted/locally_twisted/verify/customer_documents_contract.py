@@ -27,19 +27,27 @@ def _expected_form_subject(first_name: str) -> str:
 
 def run():
     original_commit = frappe.db.commit
+    original_log_error = frappe.log_error
     original_in_test = frappe.flags.get("in_test")
     original_testing_email = frappe.flags.get("testing_email")
     intercepted_commits = []
+    log_error_calls = []
 
     def no_commit(*args, **kwargs):
         intercepted_commits.append(True)
 
+    def fake_log_error(*args, **kwargs):
+        log_error_calls.append({"args": args, "kwargs": kwargs})
+        return f"ROLLBACK-ERROR-LOG-{len(log_error_calls)}"
+
     try:
         frappe.db.commit = no_commit
+        frappe.log_error = fake_log_error
         frappe.flags.in_test = True
         frappe.flags.testing_email = False
         result = _run_contract()
         result["commit_calls_intercepted"] = len(intercepted_commits)
+        result["log_error_calls_intercepted"] = len(log_error_calls)
         result["rolled_back"] = True
         return result
     except ContractFail as exc:
@@ -48,6 +56,7 @@ def run():
         return {"ok": False, "failures": [frappe.get_traceback()]}
     finally:
         frappe.db.commit = original_commit
+        frappe.log_error = original_log_error
         _restore_flag("in_test", original_in_test)
         _restore_flag("testing_email", original_testing_email)
         frappe.db.rollback()
@@ -194,7 +203,7 @@ def _check_lead_auto_ack_lane_links() -> list[str]:
     )
     lead.insert(ignore_permissions=True)
 
-    filters = {"reference_doctype": "Lead", "reference_name": lead.name}
+    filters = _current_lead_email_queue_filters(lead)
     rows = frappe.get_all("Email Queue", filters=filters, fields=["name", "message"], limit=1)
     if not rows:
         return ["missing customer inquiry auto-ack Email Queue row"]
@@ -280,7 +289,7 @@ def _check_form_confirmation_file_count_after_uploads() -> list[str]:
         photo_uploads={"submitted": 3, "attached": 3, "rejected": [], "failed": []},
     )
 
-    filters = {"reference_doctype": "Lead", "reference_name": lead.name}
+    filters = _current_lead_email_queue_filters(lead)
     rows = frappe.get_all("Email Queue", filters=filters, fields=["name", "message"], limit=2)
     if len(rows) != 1:
         return [f"deferred form confirmation should queue exactly one Email Queue row, found {len(rows)}"]
@@ -304,6 +313,13 @@ def _restore_flag(flag_name: str, original_value) -> None:
         frappe.flags.pop(flag_name, None)
     else:
         frappe.flags[flag_name] = original_value
+
+
+def _current_lead_email_queue_filters(lead) -> dict:
+    filters = {"reference_doctype": "Lead", "reference_name": lead.name}
+    if lead.get("creation"):
+        filters["creation"] = [">=", lead.get("creation")]
+    return filters
 
 
 def _email_queue_recipients(queue_name: str) -> set[str]:

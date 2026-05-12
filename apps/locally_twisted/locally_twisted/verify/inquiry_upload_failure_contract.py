@@ -22,6 +22,9 @@ def run() -> dict[str, object]:
     original_log_error = frappe.log_error
     original_form_dict = getattr(frappe.local, "form_dict", None)
     original_request = getattr(frappe, "request", None)
+    from locally_twisted.www import book as book_module
+
+    original_deferred_confirmation = book_module._send_deferred_customer_confirmation
     intercepted_commits = []
     log_error_calls = []
 
@@ -32,9 +35,13 @@ def run() -> dict[str, object]:
         log_error_calls.append({"args": args, "kwargs": kwargs})
         return f"ROLLBACK-ERROR-LOG-{len(log_error_calls)}"
 
+    def fake_deferred_confirmation(*args, **kwargs):
+        return {"ok": True, "queued": False, "synthetic_upload_contract": True}
+
     try:
         frappe.db.commit = no_commit
         frappe.log_error = fake_log_error
+        book_module._send_deferred_customer_confirmation = fake_deferred_confirmation
         result = _run_contract(log_error_calls)
         result["commit_calls_intercepted"] = len(intercepted_commits)
         result["log_error_calls_intercepted"] = len(log_error_calls)
@@ -47,6 +54,7 @@ def run() -> dict[str, object]:
     finally:
         frappe.db.commit = original_commit
         frappe.log_error = original_log_error
+        book_module._send_deferred_customer_confirmation = original_deferred_confirmation
         if original_form_dict is None:
             frappe.local.form_dict = frappe._dict()
         else:
