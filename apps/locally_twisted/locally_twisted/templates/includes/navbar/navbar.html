@@ -19,14 +19,7 @@
     {"label": "Frequently Asked Questions", "route": "faq"},
     {"label": "Start a Quote", "route": "contact"}
 ] %}
-{% set product_links = lt_nav_product_links or [
-    {"label": "Arches", "route": "shop-items/arches", "icon": "balloon-arch"},
-    {"label": "Garlands", "route": "shop-items/garlands", "icon": "organic-garland"},
-    {"label": "Columns", "route": "shop-items/columns", "icon": "balloon-column"},
-    {"label": "Balloon Drops", "route": "shop-items/drops", "icon": "event-stage"},
-    {"label": "Bouquets", "route": "shop-items/bouquets", "icon": "balloon-bouquet"},
-    {"label": "Grab & Go", "route": "shop-items/grab-go", "icon": "balloon-cluster"}
-] %}
+{% set product_links = lt_nav_product_links or [] %}
 {% if lt_ecommerce_paused is defined %}
     {% set ecommerce_paused = lt_ecommerce_paused %}
 {% else %}
@@ -104,21 +97,16 @@
                             </button>
 
                             <div class="lt-megamenu__panel" id="lt-mega-products" hidden>
-                                <p class="lt-megamenu__eyebrow">Pickup-friendly pieces</p>
-                                <h2 class="lt-megamenu__title">Simple balloon decor ready for direct checkout.</h2>
-                                <p class="lt-megamenu__summary">Use the shop for standard pieces with clear options. Custom sizing, installs, and venue coordination still belong in the quote path.</p>
+                                <p class="lt-megamenu__eyebrow">Backend-approved checkout</p>
+                                <h2 class="lt-megamenu__title">Ready-to-order pieces with a clear checkout path.</h2>
+                                <p class="lt-megamenu__summary">These links come from ERPNext Website Item records whose product page, options, cart, and checkout path are ready for purchase.</p>
 
                                 <div class="lt-megamenu__grid">
-                                    <a class="lt-megamenu__card" href="/shop">
-                                        <img src="/assets/locally_twisted/icons/brand/balloon-pair.svg" alt="" width="30" height="30">
-                                        <strong>All Ready-to-Order</strong>
-                                        <span>Browse all standard pickup and simple delivery pieces.</span>
-                                    </a>
                                     {% for item in product_links %}
                                         <a class="lt-megamenu__card" href="/{{ item.route }}">
                                             <img src="/assets/locally_twisted/icons/brand/{{ item.icon }}.svg" alt="" width="30" height="30">
                                             <strong>{{ item.label }}</strong>
-                                            <span>Shop the {{ item.label | lower }} lane.</span>
+                                            <span>{{ item.summary }}</span>
                                         </a>
                                     {% endfor %}
                                 </div>
@@ -204,15 +192,9 @@
         <div class="lt-site-search-panel__quick" data-lt-search-list>
             {% if not ecommerce_paused %}
                 <a href="/shop" data-lt-search-entry data-lt-search-product-entry data-lt-search-keywords="ready order shop all products pickup checkout">
-                    <strong>All Ready-to-Order</strong>
-                    <span>Standard pieces for direct checkout</span>
+                    <strong>Shop</strong>
+                    <span>Browse product pages; checkout appears only where ERPNext allows it</span>
                 </a>
-                {% for item in product_links %}
-                    <a href="/{{ item.route }}" data-lt-search-entry data-lt-search-product-entry data-lt-search-keywords="ready order product shop {{ item.label | lower }}">
-                        <strong>{{ item.label }}</strong>
-                        <span>Ready-to-order {{ item.label | lower }}</span>
-                    </a>
-                {% endfor %}
                 {% for item in lt_nav_search_product_links or [] %}
                     <a href="/{{ item.route }}" data-lt-search-entry data-lt-search-product-entry data-lt-search-keywords="{{ item.keywords | e }}">
                         <strong>{{ item.label }}</strong>
@@ -299,7 +281,7 @@
                     <span aria-hidden="true">+</span>
                 </button>
                 <div class="lt-mega-drawer__panel" id="lt-mobile-products" hidden>
-                    <a href="/shop">Shop All</a>
+                    <a href="/shop">All Ready-to-Order</a>
                     {% for item in product_links %}
                         <a href="/{{ item.route }}">{{ item.label }}</a>
                     {% endfor %}

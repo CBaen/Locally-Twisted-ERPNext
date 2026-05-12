@@ -7,7 +7,7 @@ maturity: candidate
 scope: Locally Twisted ERPNext/Frappe public navigation, header/footer IA, and service-route parity
 currently_true: yes
 verification_level: 2
-last_verified: 2026-05-11
+last_verified: 2026-05-12
 evidence_quality: direct
 successful_uses: 2
 failed_uses: 0
@@ -53,6 +53,12 @@ For the current LT site:
   keeping `Free Event Quote` and the account link on the right.
 - `Twisting & Face Painting` points to `/balloon-twisting-and-face-painting`.
 - `Ready-to-Order` points to `/shop` when `lt_ecommerce_paused=0`.
+- Ready-to-Order product quick links in header, mobile drawer, and search must
+  be backend-derived. Owner include codes are merchandising allowlist entries
+  only; they cannot bypass Website Item `simple_product|checkout` fields,
+  enabled root Item status, published state, or Standard Selling price checks.
+  Header search filtering may leave backend-approved but nonmatching product
+  nodes in the DOM with `hidden`; owner-excluded products should stay absent.
 - `Free Event Quote` and `Contact Us` point to `/contact`; `Free Event Quote`
   belongs in the top utility banner and must not replace the BTFP service lane
   in primary nav, mobile drawer, or search quick links.
@@ -95,6 +101,7 @@ For the current LT site:
 python scripts/dev/clear_website_cache.py
 python scripts/verify/nav_ia.py
 python scripts/verify/smoke_shop.py
+npm run test:search-contract
 npm run test:interactive-layout
 npm run test:layout-fit
 ```
@@ -167,3 +174,12 @@ source contract moves the strip away from navy, and rendered guards verify
 `rgb(14, 34, 64)` for desktop/mobile banner backgrounds.
 
 On 2026-05-11, GL rejected the standalone `/event-balloons` hub before launch. Codex deleted `www/event_balloons.html` and `.py`, removed the route alias and canonical mapping, removed footer/search/home/portfolio links, and added negative guards in `nav_ia.py`, `seo_contract.spec.js`, `interactive_layout`, and route lists. Direct local checks return 404 with no redirect for both `/event-balloons` and `/event_balloons`; sitemap search is clean. The four event audience routes remain live.
+
+On 2026-05-12, review closeout hardened Ready-to-Order product quick links:
+`READY_TO_ORDER_OWNER_INCLUDE_CODES` is now only an allowlist, and
+`navbar_context.py` still requires backend Website Item `simple_product|checkout`
+before nav/search exposure. `search_contract.spec.js` now asserts filtered
+backend-approved quick links are hidden rather than removed, while Classic
+owner-excluded products remain absent. `python scripts\verify\nav_ia.py`,
+`npm run test:search-contract`, and live ERPNext reads of the four included item
+codes passed.

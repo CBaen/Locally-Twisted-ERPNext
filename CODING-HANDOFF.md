@@ -1,5 +1,14 @@
 # Locally Twisted - Coding Handoff
 
+Codex ecommerce review closeout on 2026-05-12: Ready-to-Order nav/search links
+now require both owner include and backend Website Item checkout eligibility.
+`READY_TO_ORDER_OWNER_INCLUDE_CODES` is an allowlist only; it cannot bypass
+`lt_product_page_type = simple_product` and `lt_commerce_lane = checkout`.
+The search contract now treats filtered backend-approved quick links as hidden,
+not absent. Feature handoff:
+`workstreams/ecommerce-audit/ready-to-order-nav-search-backend-gate-2026-05-12.md`;
+guards: `python scripts\verify\nav_ia.py` and `npm run test:search-contract`.
+
 Codex public-site update on 2026-05-11: `/event-balloons` is removed as a
 route, with no redirect and no compatibility page. The app no longer has
 `www/event_balloons.*`, the `/event-balloons` route rule, the `/event_balloons`

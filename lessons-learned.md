@@ -6,6 +6,21 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-12 - Owner include is not checkout eligibility
+
+The Ready-to-Order nav/search patch almost let an owner-included item code
+advertise as checkout-ready even if ERPNext Website Item fields later reverted
+to `quote_first` or `needs_review`. The same review also caught a false test
+assumption: the search overlay hides filtered quick-link nodes with `hidden`
+instead of removing them from the DOM.
+
+**Counter-move:** keep merchandising allowlists separate from backend commerce
+eligibility. Assert both: owner-included products still need explicit
+`simple_product|checkout`, and search tests must distinguish hidden entries
+from absent owner-excluded entries.
+
+---
+
 ## 2026-05-11 - No cards means no containers, labels, or helpful filler
 
 GL rejected the homepage review-platform treatment because "no cards" also meant no visual containers, no smaller proof marks, no poor logo assets, no visible count copy, and no invented `reviews` label under each platform. The request was for logo proof, not a review widget.

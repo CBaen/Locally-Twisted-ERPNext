@@ -10,7 +10,9 @@ live Stripe gates remain separate.
 
 - Ready-to-Order menu/search logic was corrected to follow backend executable
   product eligibility instead of blanket bouquet-only, cups, or high-variant
-  exclusions.
+  exclusions. 2026-05-12 review closeout tightened this further: owner include
+  codes are not a checkout bypass, and filtered backend-approved search links
+  are asserted hidden instead of absent.
 - Rendered Ready-to-Order/search proof passed for the priority products:
   Easter Balloon Cups, 7' Butterfly Column, 6' Graduation stands, and
   Graduation Grab n Go. Classic exclusions stayed out of quick links.
@@ -184,7 +186,9 @@ Keep and extend these current product-page controls:
 - Decide category/browse/search rules for accepted quote-first products. The
   2026-05-11 storefront audit found accepted quote-first products have live
   routes and `/shop?q=` search hits but do not populate Ready-to-Order quick
-  links; if category browsing should show all accepted product pages, that
+  links. Keep `ready-to-order-nav-search-backend-gate-2026-05-12.md` as the
+  nav/search guard while making that decision. If category browsing should show
+  all accepted product pages, that
   requires a deliberate browse contract.
 - Build complex-product UI components above instead of treating a lane flip as
   enough.

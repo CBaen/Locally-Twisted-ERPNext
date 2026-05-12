@@ -4,15 +4,36 @@ from __future__ import annotations
 import frappe
 from frappe.utils import strip_html
 
+PRODUCT_GROUP_ICONS = {
+    "Arches": "balloon-arch",
+    "Garlands": "organic-garland",
+    "Columns": "balloon-column",
+    "Drops": "event-stage",
+    "Balloon Drops": "event-stage",
+    "Bouquets": "balloon-bouquet",
+    "Get-Well Bouquets": "balloon-bouquet",
+    "Grab & Go": "balloon-cluster",
+    "Table Decor": "balloon-cluster",
+    "Stands & Easels": "event-stage",
+    "Deliveries": "delivery-install",
+    "Seasonal & Specialty": "balloon-pair",
+}
 
-FALLBACK_PRODUCT_LINKS = [
-    {"label": "Arches", "route": "shop-items/arches", "icon": "balloon-arch"},
-    {"label": "Garlands", "route": "shop-items/garlands", "icon": "organic-garland"},
-    {"label": "Columns", "route": "shop-items/columns", "icon": "balloon-column"},
-    {"label": "Balloon Drops", "route": "shop-items/drops", "icon": "event-stage"},
-    {"label": "Bouquets", "route": "shop-items/bouquets", "icon": "balloon-bouquet"},
-    {"label": "Grab & Go", "route": "shop-items/grab-go", "icon": "balloon-cluster"},
-]
+READY_TO_ORDER_OWNER_INCLUDE_CODES = {
+    "6-graduation-stands",
+    "7-butterfly-column",
+    "easter-balloon-cups",
+    "graduation-grab-n-go",
+}
+
+READY_TO_ORDER_EXCLUDED_ITEM_CODES = {
+    "classic-arch",
+    "classic-column",
+    "classic-garland",
+    "classic-organic-arch",
+    "classic-organic-balloon-garland",
+    "classic-organic-columns",
+}
 
 EVENT_LINKS = [
     {
@@ -56,7 +77,47 @@ def _plain_text(value: str | None) -> str:
     return " ".join(strip_html(str(value or "")).split())
 
 
-def _product_search_links() -> list[dict[str, str]]:
+def _group_icon(item_group: str | None) -> str:
+    return PRODUCT_GROUP_ICONS.get(_plain_text(item_group), "balloon-pair")
+
+
+def _has_checkout_price(website_item_code: str) -> bool:
+    return bool(
+        frappe.db.sql(
+            """
+            SELECT ip.name
+            FROM `tabItem` it
+            JOIN `tabItem Price` ip
+              ON ip.item_code = it.item_code
+             AND ip.price_list = 'Standard Selling'
+             AND ip.selling = 1
+            WHERE it.disabled = 0
+              AND (it.item_code = %(item_code)s OR it.variant_of = %(item_code)s)
+            LIMIT 1
+            """,
+            {"item_code": website_item_code},
+        )
+    )
+
+
+def _is_backend_checkout_enabled(item: dict) -> bool:
+    return item.get("lt_product_page_type") == "simple_product" and item.get("lt_commerce_lane") == "checkout"
+
+
+def _ready_to_order_exclusion_reason(item: dict) -> str:
+    item_code = item.get("item_code") or ""
+    if item_code in READY_TO_ORDER_EXCLUDED_ITEM_CODES:
+        return "owner_excluded_product"
+    if item_code not in READY_TO_ORDER_OWNER_INCLUDE_CODES:
+        return "not_owner_included_product"
+    if not _is_backend_checkout_enabled(item):
+        return "not_checkout_enabled"
+    if not _has_checkout_price(item_code):
+        return "missing_checkout_price"
+    return ""
+
+
+def _ready_to_order_product_links() -> list[dict[str, str]]:
     items = frappe.db.sql(
         """
         SELECT
@@ -64,10 +125,13 @@ def _product_search_links() -> list[dict[str, str]]:
             wi.web_item_name,
             wi.route,
             wi.short_description,
-            wi.item_group
+            wi.item_group,
+            wi.lt_product_page_type,
+            wi.lt_commerce_lane
         FROM `tabWebsite Item` wi
         LEFT JOIN `tabItem` it ON it.item_code = wi.item_code
         WHERE wi.published = 1
+          AND it.disabled = 0
           AND (it.variant_of IS NULL OR it.variant_of = '')
         ORDER BY wi.item_group, wi.web_item_name
         """,
@@ -76,6 +140,9 @@ def _product_search_links() -> list[dict[str, str]]:
 
     links = []
     for item in items:
+        if _ready_to_order_exclusion_reason(item):
+            continue
+
         label = _plain_text(item.get("web_item_name") or item.get("item_code"))
         route = _route(item.get("route"), "")
         if not label or not route:
@@ -101,52 +168,28 @@ def _product_search_links() -> list[dict[str, str]]:
                 "route": route,
                 "summary": item_group or "Ready-to-order product",
                 "keywords": keywords,
+                "icon": _group_icon(item_group),
+                "item_code": item.get("item_code") or "",
+                "item_group": item_group,
             }
         )
     return links
 
 
 def update_website_context(context):
-    """Add mega-menu data backed by ERPNext Item Group routes when available."""
-    product_links = [dict(item) for item in FALLBACK_PRODUCT_LINKS]
-
+    """Add mega-menu data backed by explicit ERPNext Website Item checkout lanes."""
     try:
-        children = frappe.db.get_all(
-            "Item Group",
-            filters={"parent_item_group": "Shop Items", "show_in_website": 1},
-            fields=["item_group_name", "route", "weightage"],
-            order_by="weightage asc, item_group_name asc",
-        )
+        product_links = _ready_to_order_product_links()
     except Exception as exc:
         frappe.log_error(
-            f"navbar_context.update_website_context failed: {exc}",
+            f"navbar_context ready-to-order links failed: {exc}",
             title="LT navbar context",
         )
-        children = []
-
-    if children:
-        route_by_label = {
-            child["item_group_name"]: _route(child.get("route"), "")
-            for child in children
-            if child.get("item_group_name")
-        }
-        for item in product_links:
-            matched_route = route_by_label.get(item["label"])
-            if matched_route:
-                item["route"] = matched_route
-
-    try:
-        search_product_links = _product_search_links()
-    except Exception as exc:
-        frappe.log_error(
-            f"navbar_context product search links failed: {exc}",
-            title="LT navbar search context",
-        )
-        search_product_links = []
+        product_links = []
 
     context["lt_nav_product_links"] = product_links
     context["lt_nav_event_links"] = EVENT_LINKS
     context["lt_nav_service_links"] = SERVICE_LINKS
-    context["lt_nav_search_product_links"] = search_product_links
+    context["lt_nav_search_product_links"] = product_links
     context["lt_nav_quote_route"] = "contact"
     return context

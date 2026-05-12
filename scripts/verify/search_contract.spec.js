@@ -33,6 +33,31 @@ test.describe("Locally Twisted search contract", () => {
 		await expect(panel.locator("[data-lt-search-empty]")).toBeHidden();
 	});
 
+	test("header search overlay follows backend-approved product quick-link rules", async ({ page }) => {
+		await page.setViewportSize({ width: 1366, height: 768 });
+		const response = await gotoAndSettle(page, "/");
+		expect(response, "home should return a response").not.toBeNull();
+		expect(response.status(), "home should load").toBeLessThan(400);
+
+		await page.locator(".lt-mega-header__search").click();
+		const formAction = await page.locator("#lt-site-search-panel form").getAttribute("action");
+		await page.locator("#lt-site-search-input").fill("balloon cups");
+
+		const panel = page.locator("#lt-site-search-panel");
+		await expect(panel).toBeVisible();
+		if (formAction === "/shop") {
+			await expect(panel.locator("a[href='/shop-items/seasonal-specialty/easter-balloon-cups']")).toBeVisible();
+			await expect(panel.locator("a[href='/shop-items/columns/7-butterfly-column']")).toBeHidden();
+			await expect(panel.locator("a[href='/shop-items/arches/classic-arch']")).toHaveCount(0);
+			await expect(panel.locator("a[href='/shop-items/columns/classic-column']")).toHaveCount(0);
+			await expect(panel.locator("[data-lt-search-empty]")).toBeHidden();
+		} else {
+			await expect(panel.locator("[data-lt-search-product-entry]")).toHaveCount(0);
+			await expect(panel.locator("a[href*='easter-balloon-cups']")).toHaveCount(0);
+			await expect(panel.locator("[data-lt-search-empty]")).toBeVisible();
+		}
+	});
+
 	test("submitted search query lands on the active commerce/search lane", async ({ page }) => {
 		await page.setViewportSize({ width: 1366, height: 768 });
 		const response = await gotoAndSettle(page, "/");

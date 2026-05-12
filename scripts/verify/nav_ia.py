@@ -15,6 +15,7 @@ from _cli import parse_noop_args
 
 ROOT = Path(__file__).resolve().parents[2]
 NAVBAR = ROOT / "apps/locally_twisted/locally_twisted/templates/includes/navbar/navbar.html"
+NAVBAR_CONTEXT = ROOT / "apps/locally_twisted/locally_twisted/navbar_context.py"
 FOOTER = ROOT / "apps/locally_twisted/locally_twisted/templates/includes/footer/footer.html"
 HOME = ROOT / "apps/locally_twisted/locally_twisted/www/home.html"
 PORTFOLIO = ROOT / "apps/locally_twisted/locally_twisted/www/portfolio.html"
@@ -327,7 +328,7 @@ def test_mobile_nav_matches_primary_order(navbar: str) -> None:
         raise AssertionError("Mobile drawer must expose the open-commerce product panel when commerce is unpaused")
 
 
-def test_ecommerce_entry_points_are_config_guarded(navbar: str, footer: str) -> None:
+def test_ecommerce_entry_points_are_config_guarded(navbar: str, footer: str, navbar_context: str) -> None:
     combined = f"{navbar}\n{footer}"
     required = (
         "{% if not ecommerce_paused %}",
@@ -340,6 +341,46 @@ def test_ecommerce_entry_points_are_config_guarded(navbar: str, footer: str) -> 
     for needle in required:
         if needle not in combined:
             raise AssertionError(f"Open-commerce source guard is missing expected ecommerce marker: {needle}")
+    context_required = (
+        "READY_TO_ORDER_OWNER_INCLUDE_CODES",
+        '"easter-balloon-cups"',
+        '"7-butterfly-column"',
+        '"6-graduation-stands"',
+        '"graduation-grab-n-go"',
+        "READY_TO_ORDER_EXCLUDED_ITEM_CODES",
+        '"classic-arch"',
+        '"classic-column"',
+        '"classic-organic-arch"',
+        '"classic-organic-columns"',
+        '"classic-organic-balloon-garland"',
+        "_is_backend_checkout_enabled",
+    )
+    for needle in context_required:
+        if needle not in navbar_context:
+            raise AssertionError(f"Ready-to-Order menu must follow corrected backend eligibility: {needle}")
+    retired_context = (
+        "HIGH_VARIANT_MENU_LIMIT",
+        "READY_TO_ORDER_EXCLUDED_TERMS",
+        "is_balloon_color_axis",
+        "color_axis_excluded_from_v1_checkout_menu",
+        "high_variant_count_excluded_from_v1_checkout_menu",
+        "excluded_v1_product_family",
+        "if not (_is_backend_checkout_enabled(item) or item_code in READY_TO_ORDER_OWNER_INCLUDE_CODES):",
+    )
+    for needle in retired_context:
+        if needle in navbar_context:
+            raise AssertionError(f"Ready-to-Order menu still uses retired blanket exclusion logic: {needle}")
+    forbidden = (
+        '"Arches", "route": "shop-items/arches"',
+        '"Columns", "route": "shop-items/columns"',
+        '"Garlands", "route": "shop-items/garlands"',
+        "Shop the {{ item.label | lower }} lane.",
+        "<a href=\"/shop\">Shop All</a>",
+        "Custom sizing, high-variant choices, cups, installs, and venue coordination stay in the quote path.",
+    )
+    for needle in forbidden:
+        if needle in navbar:
+            raise AssertionError(f"Ready-to-Order menu still carries frontend-only category framing: {needle}")
 
 
 def test_no_retired_nav_contract(navbar: str) -> None:
@@ -412,6 +453,7 @@ def test_event_balloons_hub_is_removed(navbar: str, footer: str, home: str, port
 def main() -> None:
     parse_noop_args(__doc__)
     navbar = NAVBAR.read_text(encoding="utf-8")
+    navbar_context = NAVBAR_CONTEXT.read_text(encoding="utf-8")
     footer = FOOTER.read_text(encoding="utf-8")
     home = HOME.read_text(encoding="utf-8")
     portfolio = PORTFOLIO.read_text(encoding="utf-8")
@@ -429,7 +471,7 @@ def main() -> None:
     test_search_is_overlay_not_public_page(navbar, footer, search_route)
     test_mega_menu_contract(navbar)
     test_mobile_nav_matches_primary_order(navbar)
-    test_ecommerce_entry_points_are_config_guarded(navbar, footer)
+    test_ecommerce_entry_points_are_config_guarded(navbar, footer, navbar_context)
     test_no_retired_nav_contract(navbar)
     test_supporting_assets_exist()
     test_homepage_launch_links(home)

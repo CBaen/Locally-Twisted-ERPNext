@@ -8,6 +8,39 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-12 - Ready-to-Order owner include cannot bypass backend checkout fields
+
+**Decision:** Ready-to-Order menu and search product quick links must require
+both owner inclusion and backend Website Item checkout eligibility. The owner
+include list is a merchandising allowlist, not a checkout override. Products
+must still be explicitly `lt_product_page_type = simple_product` and
+`lt_commerce_lane = checkout` before the header, mobile drawer, or search
+overlay advertises them as Ready-to-Order.
+
+**Reasoning:** The review found that owner-included item codes could stay linked
+as checkout-ready even if a seed/import reverted their Website Item fields to
+`quote_first` or `needs_review`. That violated the existing backend-source rule:
+frontend navigation may reflect checkout state, but it cannot create checkout
+state.
+
+**Implementation boundary:** Change Website Item fields intentionally when a
+product is allowed into checkout. Do not fix visibility by adding template links
+or by extending owner include constants alone. Header search filtering may hide
+backend-approved nonmatching quick-link nodes with `hidden`; tests should not
+require those filtered nodes to be removed from the DOM.
+
+**Verification receipt:** `python -m py_compile
+apps/locally_twisted/locally_twisted/navbar_context.py scripts/verify/nav_ia.py`,
+`python scripts\verify\nav_ia.py`, and `npm run test:search-contract` passed.
+Live local ERPNext reads confirmed the four current owner-included products are
+published `simple_product|checkout` records, and a synthetic owner-included
+`quote_first` item returned `not_checkout_enabled`.
+
+**Decided by:** Codex review closeout on 2026-05-12, preserving the already
+approved backend-source-of-truth architecture.
+
+---
+
 ## 2026-05-11 - Public short-notice banner is deep navy, not brass/gold
 
 **Decision:** The public header short-notice strip is a deep-navy authority
