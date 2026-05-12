@@ -1,6 +1,6 @@
 # V1 Odoo-to-ERPNext Import Manifest
 
-- Generated: `2026-05-12T01:18:45Z`
+- Generated: `2026-05-12T02:53:07Z`
 - Mode: read-only manifest; no purge, import, delete, or ERPNext mutation.
 - V1 scope: products that fit the current ERPNext backend/schema contract.
 - Variants, cups, and high-variant products are not blanket exclusions.
