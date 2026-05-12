@@ -55,7 +55,7 @@ web_include_css = [
     "/assets/locally_twisted/css/lt-form-experience.css?v=20260510-1",
     "/assets/locally_twisted/css/lt-customer-portal.css?v=20260511-logout-1",
     "/assets/locally_twisted/css/lt-event-playground.css?v=20260506-event-playground-1",
-    "/assets/locally_twisted/css/lt-audience-lane.css?v=20260510-audience-lane-6-slider",
+    "/assets/locally_twisted/css/lt-audience-lane.css?v=20260512-photo-gallery-a11y-1",
 ]
 
 # Guest cart engine â€” overrides webshop's broken-for-guest cart functions

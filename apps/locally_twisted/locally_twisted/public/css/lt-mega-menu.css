@@ -197,10 +197,17 @@
 }
 
 .lt-mega-nav__link--btfp {
+    display: inline-grid;
+    grid-template-rows: repeat(2, auto);
     line-height: 1.05;
-    max-width: 12rem;
+    max-width: none;
+    min-width: 9.8rem;
     text-align: center;
-    white-space: normal;
+    white-space: nowrap;
+}
+
+.lt-mega-nav__link--btfp span {
+    display: block;
 }
 
 .lt-mega-nav__chevron {
@@ -725,7 +732,7 @@
     }
 
     .lt-mega-nav__link--btfp {
-        max-width: 9.25rem;
+        min-width: 9.25rem;
     }
 
     #lt-mega-events .lt-megamenu__grid {
@@ -759,7 +766,7 @@
     }
 
     .lt-mega-nav__link--btfp {
-        max-width: 9.75rem;
+        min-width: 9.25rem;
     }
 }
 

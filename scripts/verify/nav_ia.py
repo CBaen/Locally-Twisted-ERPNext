@@ -50,7 +50,9 @@ def test_desktop_nav_order(navbar: str) -> None:
         "Event Balloons",
         "data-lt-megamenu-trigger=\"lt-mega-products\"",
         "Ready-to-Order",
-        'lt-mega-nav__link--btfp" href="/balloon-twisting-and-face-painting">Twisting &amp; Face Painting',
+        'lt-mega-nav__link--btfp" href="/balloon-twisting-and-face-painting"',
+        "<span>Twisting &amp;</span>",
+        "<span>Face Painting</span>",
         "/portfolio",
         "/about",
         "/faq",
@@ -342,18 +344,12 @@ def test_ecommerce_entry_points_are_config_guarded(navbar: str, footer: str, nav
         if needle not in combined:
             raise AssertionError(f"Open-commerce source guard is missing expected ecommerce marker: {needle}")
     context_required = (
-        "READY_TO_ORDER_OWNER_INCLUDE_CODES",
-        '"easter-balloon-cups"',
-        '"7-butterfly-column"',
-        '"6-graduation-stands"',
-        '"graduation-grab-n-go"',
-        "READY_TO_ORDER_EXCLUDED_ITEM_CODES",
-        '"classic-arch"',
-        '"classic-column"',
-        '"classic-organic-arch"',
-        '"classic-organic-columns"',
-        '"classic-organic-balloon-garland"',
         "_is_backend_checkout_enabled",
+        "lt_product_page_type",
+        "lt_commerce_lane",
+        "simple_product",
+        "checkout",
+        "_has_checkout_price",
     )
     for needle in context_required:
         if needle not in navbar_context:
@@ -365,6 +361,9 @@ def test_ecommerce_entry_points_are_config_guarded(navbar: str, footer: str, nav
         "color_axis_excluded_from_v1_checkout_menu",
         "high_variant_count_excluded_from_v1_checkout_menu",
         "excluded_v1_product_family",
+        "READY_TO_ORDER_OWNER_INCLUDE_CODES",
+        "READY_TO_ORDER_EXCLUDED_ITEM_CODES",
+        "owner_excluded_product",
         "if not (_is_backend_checkout_enabled(item) or item_code in READY_TO_ORDER_OWNER_INCLUDE_CODES):",
     )
     for needle in retired_context:
@@ -375,7 +374,6 @@ def test_ecommerce_entry_points_are_config_guarded(navbar: str, footer: str, nav
         '"Columns", "route": "shop-items/columns"',
         '"Garlands", "route": "shop-items/garlands"',
         "Shop the {{ item.label | lower }} lane.",
-        "<a href=\"/shop\">Shop All</a>",
         "Custom sizing, high-variant choices, cups, installs, and venue coordination stay in the quote path.",
     )
     for needle in forbidden:

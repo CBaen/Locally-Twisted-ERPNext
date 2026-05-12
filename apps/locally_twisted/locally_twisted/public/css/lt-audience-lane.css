@@ -56,13 +56,18 @@
 }
 
 .lt-lane-orgs__ribbon-label {
-  color: var(--lt-brass);
+  color: var(--lt-navy);
   font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 0.72rem;
   font-weight: 900;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   flex-shrink: 0;
+}
+
+.lt-lane-orgs__ribbon-names:focus-visible {
+  outline: 2px solid var(--lt-berry);
+  outline-offset: 4px;
 }
 
 /* Desktop / tablet: wrapping flex row, centered. */

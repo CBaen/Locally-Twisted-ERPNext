@@ -56,26 +56,46 @@ CUSTOM_CATEGORIES = [
 ]
 
 
-# Featured work - 3 curated custom-install proof cards. Review and replace
-# when the next approved one-of-a-kind photo packet is selected.
+LANDING_PHOTO_BASE = "/assets/locally_twisted/images/landing-page-pics/landing-page"
+
+
+# One of a Kind Designs uses the landing-page photo packet directly.
 FEATURED_WORK = [
     {
-        "category": "Balloon Arches",
-        "title": "Corporate Brand Entrance",
-        "image": "/assets/locally_twisted/images/portfolio/corporate-logo-arch.png",
-        "alt": "Corporate brand balloon arch installed at an event entrance",
+        "image": f"{LANDING_PHOTO_BASE}/train.webp",
+        "alt": "Two train balloon sculptures for a custom event display",
     },
     {
-        "category": "Schools",
-        "title": "Back-to-School Stage",
-        "image": "/assets/locally_twisted/images/portfolio/school-back-to-school-stage.png",
-        "alt": "Large balloon stage display for a school event",
+        "image": f"{LANDING_PHOTO_BASE}/20. Dinosour arch.webp",
+        "alt": "Dinosaur-themed balloon arch installation",
     },
     {
-        "category": "Corporate Decor",
-        "title": "Festival Photo Moment",
-        "image": "/assets/locally_twisted/images/portfolio/corporate-weberstock-photo-opt.png",
-        "alt": "Large event balloon photo backdrop for a branded festival",
+        "image": f"{LANDING_PHOTO_BASE}/balloon Ferris wheel Salt lake city utah.webp",
+        "alt": "Balloon Ferris wheel installation in Salt Lake City",
+    },
+    {
+        "image": f"{LANDING_PHOTO_BASE}/cochella photo opt - Copy.webp",
+        "alt": "Large festival-style balloon photo installation",
+    },
+    {
+        "image": f"{LANDING_PHOTO_BASE}/IMG_8457.webp",
+        "alt": "Large custom balloon decor installation",
+    },
+    {
+        "image": f"{LANDING_PHOTO_BASE}/25_ arch up to 24_ balloons organic.webp",
+        "alt": "Organic balloon arch installation",
+    },
+    {
+        "image": f"{LANDING_PHOTO_BASE}/50 latex free backdrop.webp",
+        "alt": "Latex-free balloon backdrop installation",
+    },
+    {
+        "image": f"{LANDING_PHOTO_BASE}/Celebrate orgnaic wall.webp",
+        "alt": "Celebrate organic balloon wall installation",
+    },
+    {
+        "image": f"{LANDING_PHOTO_BASE}/Organic on swing - Copy.webp",
+        "alt": "Organic balloon garland on a swing frame",
     },
 ]
 
@@ -89,8 +109,8 @@ HOME_HERO_SLIDES = [
         "image": "/assets/locally_twisted/images/portfolio/optimized/school-grad-garland.webp",
         "primary_label": "Plan graduation decor",
         "primary_url": "/contact?intent=quote&source=home-hero-graduation",
-        "secondary_label": "",
-        "secondary_url": "",
+        "secondary_label": "Start a quote",
+        "secondary_url": "/contact?intent=quote&source=home-hero-graduation-secondary",
     },
     {
         "kicker": "Civic & community",
@@ -838,7 +858,7 @@ PAGE_CSS = """
 /* --- Featured Work (One of a Kind Designs) - full-width proof band --- */
 .lt-featured {
     background-color: var(--lt-near-white);
-    padding: 3.25rem 1.25rem 3.75rem;
+    padding: 3.25rem 1rem 3.75rem;
 }
 .lt-featured__inner {
     max-width: 1700px;
@@ -854,80 +874,29 @@ PAGE_CSS = """
 @media (min-width: 1200px) {
     .lt-featured__heading { font-size: 2.75rem; }
 }
-.lt-featured__lede {
-    text-align: center;
-    color: var(--lt-soft-gray);
-    max-width: 680px;
-    margin: 0 auto 2.25rem;
-    font-size: 1rem;
-}
 .lt-featured__grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    margin-top: 1.75rem;
 }
 @media (min-width: 768px) {
-    .lt-featured__grid { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .lt-featured__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .lt-featured__photo--lead { grid-column: 1 / -1; }
 }
 @media (min-width: 1200px) {
-    .lt-featured__grid { gap: 1.25rem; }
+    .lt-featured__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
-.lt-featured__card {
-    background-color: var(--lt-white);
-    border-radius: 0.5rem;
-    overflow: hidden;
-    text-decoration: none;
-    color: inherit;
-    border: 1px solid rgba(184, 154, 91, 0.22);
-    box-shadow: 0 10px 30px rgba(10, 10, 11, 0.07);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+.lt-featured__photo {
     display: block;
-}
-.lt-featured__card:hover,
-.lt-featured__card:focus-visible {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+    margin: 0;
+    min-width: 0;
 }
 .lt-featured__image {
+    display: block;
     width: 100%;
-    aspect-ratio: 4 / 3;
-    background-color: var(--lt-warm-tint);
-    background-size: cover;
-    background-position: center;
-}
-.lt-featured__body {
-    padding: 1.25rem 1.5rem 1.5rem;
-}
-.lt-featured__category {
-    font-family: var(--lt-font-body);
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--lt-berry);
-    margin: 0 0 0.5rem;
-}
-.lt-featured__title {
-    font-family: var(--lt-font-heading);
-    font-size: 1.375rem;
-    color: var(--lt-near-black);
-    margin: 0;
-    line-height: 1.25;
-}
-.lt-featured__viewall {
-    text-align: center;
-    margin: 2.5rem 0 0;
-}
-.lt-featured__viewall a {
-    display: inline-block;
-    padding: 0.75rem 1.75rem;
-    color: var(--lt-near-black);
-    text-decoration: none;
-    border: 1px solid var(--lt-near-black);
-    border-radius: 0.375rem;
-    font-family: var(--lt-font-body);
-    font-weight: 600;
-    font-size: 0.9375rem;
+    height: auto;
+    object-fit: contain;
 }
 .lt-featured__viewall a:hover,
 .lt-featured__viewall a:focus-visible {
@@ -1167,7 +1136,7 @@ def get_context(context):
     }
     context.client_crawl = CLIENT_CRAWL
     context.custom_categories = CUSTOM_CATEGORIES
-    context.show_custom_event_decor = False
+    context.show_custom_event_decor = True
     context.featured_work = FEATURED_WORK
     context.home_hero_slides = HOME_HERO_SLIDES
     context.structured_data = [business_graph("/")]

@@ -25,7 +25,7 @@
         <div class="lt-lane-orgs__inner">
             <div class="lt-lane-orgs__ribbon">
                 <span class="lt-lane-orgs__ribbon-label">In Collaboration With</span>
-                <div class="lt-lane-orgs__ribbon-names" data-lt-collab-ribbon>
+                <div class="lt-lane-orgs__ribbon-names" data-lt-collab-ribbon tabindex="0" aria-label="Collaborating organizations">
                     {%- for name in page.named_orgs.names -%}
                     <span class="lt-lane-orgs__ribbon-name">{{ name }}</span><span class="lt-lane-orgs__ribbon-dot" aria-hidden="true">&middot;</span>
                     {%- endfor -%}
@@ -40,7 +40,6 @@
     <section class="lt-audience-gallery lt-fullbleed" aria-labelledby="{{ page.route }}-gallery-title">
         <div class="lt-audience-gallery__inner">
             <div class="lt-audience-gallery__heading">
-                <p class="lt-authority-eyebrow">Real installs</p>
                 <h2 id="{{ page.route }}-gallery-title">{{ page.gallery_heading }}</h2>
             </div>
             <div class="lt-audience-gallery__grid">

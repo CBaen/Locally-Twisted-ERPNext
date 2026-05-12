@@ -18,8 +18,28 @@ PAGE_CSS = """
   max-width: 28ch;
 }
 
+.lt-event-type-page .lt-authority-hero__lede {
+  max-width: 43rem;
+}
+
 .lt-event-type-page .lt-authority-actions {
   flex-wrap: wrap;
+}
+
+@media (min-width: 1200px) {
+  .lt-event-type-page .lt-authority-hero__content {
+    padding-block: 20px;
+  }
+
+  .lt-event-type-page .lt-authority-hero h1 {
+    font-size: 2.55rem;
+    line-height: 1.02;
+  }
+
+  .lt-event-type-page .lt-authority-hero__lede {
+    line-height: 1.28;
+    margin-bottom: 0.65rem;
+  }
 }
 
 .lt-event-type-page .lt-authority-proof__inner {
@@ -237,7 +257,7 @@ PAGE_CSS = """
 
 .lt-audience-gallery {
   background: #fff;
-  padding: clamp(2.75rem, 7vw, 5rem) 1rem;
+  padding: clamp(2.5rem, 6vw, 4.5rem) 1rem;
 }
 
 .lt-audience-gallery__inner {
@@ -267,71 +287,34 @@ PAGE_CSS = """
 }
 
 .lt-audience-gallery__grid {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: clamp(0.75rem, 2vw, 1.2rem);
+  column-count: 3;
+  column-gap: clamp(0.75rem, 1.5vw, 1rem);
 }
 
 .lt-audience-gallery__item {
-  grid-column: span 4;
-  overflow: hidden;
+  break-inside: avoid;
+  display: block;
   margin: 0;
-  border: 1px solid rgba(14, 34, 64, 0.14);
-  border-radius: 4px;
-  background: var(--lt-warm-white);
-  box-shadow: 0 16px 36px rgba(10, 10, 11, 0.07);
-}
-
-.lt-audience-gallery__item--wide {
-  grid-column: span 6;
+  padding: 0 0 clamp(0.75rem, 1.5vw, 1rem);
 }
 
 .lt-audience-gallery__item img {
   display: block;
   width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
+  height: auto;
+  object-fit: contain;
   background: var(--lt-stone);
 }
 
-.lt-audience-gallery__item--wide img {
-  aspect-ratio: 16 / 10;
-}
-
-.lt-audience-gallery__caption {
-  padding: 0.9rem 1rem 1rem;
-}
-
-.lt-audience-gallery__caption strong {
-  display: block;
-  color: var(--lt-ink);
-  font-family: var(--lt-font-heading);
-  font-size: 1.25rem;
-  line-height: 1.05;
-}
-
-.lt-audience-gallery__caption span {
-  display: block;
-  margin-top: 0.35rem;
-  color: var(--lt-soft-gray);
-  font: 0.92rem/1.45 var(--lt-font-body);
-}
-
 @media (max-width: 899.98px) {
-  .lt-audience-gallery__item,
-  .lt-audience-gallery__item--wide {
-    grid-column: span 6;
+  .lt-audience-gallery__grid {
+    column-count: 2;
   }
 }
 
 @media (max-width: 575.98px) {
   .lt-audience-gallery__grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .lt-audience-gallery__item,
-  .lt-audience-gallery__item--wide {
-    grid-column: auto;
+    column-count: 1;
   }
 }
 
@@ -371,6 +354,11 @@ PAGE_CSS = """
 
 
 PORTFOLIO_BASE = "/assets/locally_twisted/images/portfolio/optimized"
+LANDING_PHOTO_BASE = "/assets/locally_twisted/images/landing-page-pics"
+
+
+def _photo(folder: str, filename: str, alt: str) -> dict[str, str]:
+    return {"image": f"{LANDING_PHOTO_BASE}/{folder}/{filename}", "alt": alt}
 
 
 EVENT_TYPE_PAGES = {
@@ -493,9 +481,18 @@ EVENT_TYPE_PAGES = {
         "gallery_heading": "More civic and community work.",
         "gallery_lede": "A broader look at the kinds of public-facing rooms and outdoor moments we have built.",
         "gallery": [
-            {"title": "Rainbow civic columns", "caption": "Color that can anchor an entrance or community photo point.", "image": f"{PORTFOLIO_BASE}/seasonal-pride-columns.webp", "alt": "Rainbow balloon columns at a public community event", "wide": True},
-            {"title": "Festival-scale backdrop", "caption": "A larger installation built to read in photos and crowds.", "image": f"{PORTFOLIO_BASE}/corporate-weberstock-photo-opt.webp", "alt": "Large balloon backdrop at a Utah festival event", "wide": True},
-            {"title": "Seasonal public arch", "caption": "Friendly seasonal decor that still feels planned and finished.", "image": f"{PORTFOLIO_BASE}/seasonal-easter-rabbit-arch.webp", "alt": "Seasonal Easter balloon arch for a public event", "wide": False},
+            _photo("community", "balloon Ferris wheel Salt lake city utah - Copy.webp", "Balloon Ferris wheel installation at a Utah public event"),
+            _photo("community", "Barbie Box photo opt - Copy.webp", "Life-size themed balloon photo box at a community event"),
+            _photo("community", "bird costums for parades.webp", "Costumed parade characters at a public community event"),
+            _photo("community", "Giant Pumpkin Balloon.webp", "Large pumpkin balloon sculpture for a public seasonal event"),
+            _photo("community", "IMG_0215.webp", "Balloon decor installation for a community celebration"),
+            _photo("community", "IMG_1807 - Copy.webp", "Large balloon decor for a Utah community event"),
+            _photo("community", "IMG_2628 - Copy.webp", "Balloon installation at a civic or community gathering"),
+            _photo("community", "IMG_2635 - Copy.webp", "Community event balloon decor with large-scale color"),
+            _photo("community", "IMG_8457 - Copy.webp", "Photo-ready balloon installation for a Utah public event"),
+            _photo("community", "IMG_8625 - Copy.webp", "Balloon decor built for a community event space"),
+            _photo("community", "leukemia .webp", "Balloon decor for a community fundraising event"),
+            _photo("community", "tree house dinner.webp", "Balloon decor for a Treehouse Museum community event"),
         ],
         "faq_eyebrow": "Questions civic organizers ask",
         "faq_heading": "What you need before you bring it to your board.",
@@ -691,9 +688,18 @@ EVENT_TYPE_PAGES = {
         # --- Existing: gallery (kept as-is; real installs already in place) ---
         "gallery_heading": "Real corporate installs.",
         "gallery": [
-            {"image": f"{PORTFOLIO_BASE}/corporate-logo-arch.webp", "alt": "Corporate logo balloon arch at a Utah event entrance", "wide": True},
-            {"image": f"{PORTFOLIO_BASE}/corporate-weberstock-photo-opt.webp", "alt": "Large corporate balloon backdrop for a Utah business event", "wide": True},
-            {"image": f"{PORTFOLIO_BASE}/corporate-wsu-arch-bouquets.webp", "alt": "Corporate-color balloon arch and bouquet install", "wide": False},
+            _photo("corporate", "25_ 24_ balloon plus stars organic.webp", "Large organic balloon arch with star accents for a corporate event"),
+            _photo("corporate", "Custom halloween backdrop - Copy.webp", "Custom Halloween balloon backdrop for a branded event"),
+            _photo("corporate", "ihc heart columns latex free.webp", "Latex-free heart balloon columns for a corporate or healthcare event"),
+            _photo("corporate", "IMG_1263 - Copy.webp", "Corporate balloon decor installation in a Utah event space"),
+            _photo("corporate", "IMG_1799 - Copy.webp", "Professional balloon installation for a corporate event"),
+            _photo("corporate", "IMG_1802 - Copy.webp", "Balloon decor arranged for a business event entrance"),
+            _photo("corporate", "IMG_3809 - Copy.webp", "Corporate event balloon decor with branded color"),
+            _photo("corporate", "IMG_4341 - Copy.webp", "Corporate balloon installation for a public-facing event"),
+            _photo("corporate", "Smurfs backdrop - Copy.webp", "Custom movie-release balloon backdrop for a corporate event"),
+            _photo("corporate", "Smurfs movie release - Copy.webp", "Balloon decor for a branded movie release event"),
+            _photo("corporate", "UTA Photo opt.webp", "Large balloon photo opportunity for a Utah organization event"),
+            _photo("corporate", "walmart.webp", "Corporate balloon decor for a Walmart event"),
         ],
         # --- NEW: Plain-language FAQ (corporate buyer's questions, in their words) ---
         "faq_eyebrow": "Questions corporate planners ask",
@@ -828,9 +834,14 @@ EVENT_TYPE_PAGES = {
         "gallery_heading": "Inspiration for school-color moments.",
         "gallery_lede": "School and campus buyers need to see ceremony scale, family photo energy, and school-spirit color before they ask for a quote.",
         "gallery": [
-            {"title": "Graduation garland", "caption": "School colors framing a milestone without crowding the ceremony.", "image": f"{PORTFOLIO_BASE}/school-grad-garland.webp", "alt": "School graduation balloon garland in school colors", "wide": True},
-            {"title": "Back-to-school stage", "caption": "A cheerful focal point for assemblies, photos, and family arrival.", "image": f"{PORTFOLIO_BASE}/school-back-to-school-stage.webp", "alt": "School stage balloon display for a back-to-school event", "wide": True},
-            {"title": "University color palette", "caption": "Polished campus color that can work for athletics, welcome events, or recognition days.", "image": f"{PORTFOLIO_BASE}/corporate-wsu-arch-bouquets.webp", "alt": "Purple and white university balloon install", "wide": False},
+            _photo("school", "Back to school stage display - Copy.webp", "Back-to-school balloon stage display"),
+            _photo("school", "Back to school stage display 4 - Copy.webp", "Large back-to-school balloon stage installation"),
+            _photo("school", "Cactus columns - Copy.webp", "Cactus-themed balloon columns for a school event"),
+            _photo("school", "north davis.webp", "North Davis school balloon decor"),
+            _photo("school", "Sports themed balloon arch.webp", "Sports-themed balloon arch for a campus event"),
+            _photo("school", "UofU football.webp", "University of Utah football balloon decor"),
+            _photo("school", "Weber balloons.webp", "Weber school-color balloon decor"),
+            _photo("school", "WSU arch and bouquets - Copy.webp", "Weber State balloon arch and bouquets"),
         ],
         "plan_title": "What schools need to settle early",
         "plan": [
@@ -971,9 +982,14 @@ EVENT_TYPE_PAGES = {
         "gallery_heading": "More private celebrations.",
         "gallery_lede": "A broader look at the kinds of personal moments we have built.",
         "gallery": [
-            {"title": "Floral half arch", "caption": "Soft, polished, and personal for weddings, showers, and hosted celebrations.", "image": f"{PORTFOLIO_BASE}/wedding-floral-half-arch.webp", "alt": "Wedding floral balloon half arch for a private celebration", "wide": True},
-            {"title": "Under-the-sea backdrop", "caption": "A themed photo moment that still feels finished and intentional.", "image": f"{PORTFOLIO_BASE}/birthday-dolphin-backdrop.webp", "alt": "Ocean-themed birthday balloon backdrop", "wide": True},
-            {"title": "Birthday bouquets", "caption": "Pickup-friendly pieces can still make the room feel ready.", "image": f"{PORTFOLIO_BASE}/birthday-balloon-bouquets.webp", "alt": "Birthday balloon bouquets arranged for a party table", "wide": False},
+            _photo("private", "birthday.webp", "Birthday balloon decor for a private celebration"),
+            _photo("private", "birthday1.webp", "Birthday balloon display for a private event"),
+            _photo("private", "carrousel.webp", "Carousel-themed decor for a private celebration"),
+            _photo("private", "Floral backdrop.webp", "Floral balloon backdrop for a private celebration"),
+            _photo("private", "home tree.webp", "Home celebration balloon decor"),
+            _photo("private", "IMG_9061 - Copy.webp", "Private party balloon installation"),
+            _photo("private", "private.webp", "Balloon decor for a private hosted celebration"),
+            _photo("private", "retirement remove watermark.webp", "Retirement balloon decor for a private celebration"),
         ],
         "faq_eyebrow": "Questions hosts ask",
         "faq_heading": "What you need to know before the party.",

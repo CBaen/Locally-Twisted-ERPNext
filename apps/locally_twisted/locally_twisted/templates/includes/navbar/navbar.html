@@ -119,7 +119,12 @@
                         </li>
                     {% endif %}
 
-                    <li class="lt-mega-nav__item"><a class="lt-mega-nav__link lt-mega-nav__link--btfp" href="/balloon-twisting-and-face-painting">Twisting &amp; Face Painting</a></li>
+                    <li class="lt-mega-nav__item">
+                        <a class="lt-mega-nav__link lt-mega-nav__link--btfp" href="/balloon-twisting-and-face-painting">
+                            <span>Twisting &amp;</span>
+                            <span>Face Painting</span>
+                        </a>
+                    </li>
 
                     <li class="lt-mega-nav__item"><a class="lt-mega-nav__link" href="/portfolio">Portfolio</a></li>
                     <li class="lt-mega-nav__item"><a class="lt-mega-nav__link" href="/about">About Us</a></li>
@@ -281,7 +286,7 @@
                     <span aria-hidden="true">+</span>
                 </button>
                 <div class="lt-mega-drawer__panel" id="lt-mobile-products" hidden>
-                    <a href="/shop">All Ready-to-Order</a>
+                    <a href="/shop">Shop All</a>
                     {% for item in product_links %}
                         <a href="/{{ item.route }}">{{ item.label }}</a>
                     {% endfor %}

@@ -832,10 +832,10 @@ test.describe("Locally Twisted interactive layout states", () => {
 
 			expect(result.map((platform) => platform.platform), "review platform logos should flank Google with GigSalad and Facebook").toEqual(["gigsalad", "google", "facebook"]);
 			expect(result[0].href, "GigSalad logo should link to the public Locally Twisted profile").toBe("https://www.gigsalad.com/locally_twisted_llc_ogden");
-			expect(result[0].text, "GigSalad logo should not add any visible copy below the star row").toBe("\u2605\u2605\u2605\u2605\u2605");
+			expect(result[0].text, "GigSalad logo should not add any visible copy below the star row").toBe("★★★★★");
 			expect(result[0].logoAlt).toBe("GigSalad");
 			expect(result[1].href, "Google logo should still link to Google reviews search").toMatch(/^https:\/\/www\.google\.com\/search\?q=Locally\+Twisted\+Reviews/);
-			expect(result[1].text, "Google logo should not add any visible copy below the star row").toBe("\u2605\u2605\u2605\u2605\u2605");
+			expect(result[1].text, "Google logo should not add any visible copy below the star row").toBe("★★★★★");
 			expect(result[1].logoAlt).toBe("Google");
 			expect(result[2].href, "Facebook logo should link to the review tab on the West Jordan page").toBe("https://www.facebook.com/locallytwisted/reviews");
 			expect(result[2].text, "Facebook logo should use its recommendation-style proof without extra visible copy").toBe("Recommended");
@@ -1160,7 +1160,7 @@ test.describe("Locally Twisted interactive layout states", () => {
 			const inner = document.querySelector(".lt-featured__inner");
 			const heading = document.querySelector(".lt-featured__heading");
 			const grid = document.querySelector(".lt-featured__grid");
-			const cards = Array.from(document.querySelectorAll(".lt-featured__card"));
+			const photos = Array.from(document.querySelectorAll(".lt-featured__photo"));
 			const images = Array.from(document.querySelectorAll(".lt-featured__image"));
 			const rect = (el) => {
 				if (!el) return null;
@@ -1168,25 +1168,36 @@ test.describe("Locally Twisted interactive layout states", () => {
 				return { left: Math.round(r.left), right: Math.round(r.right), width: Math.round(r.width), height: Math.round(r.height) };
 			};
 			const gridStyle = grid ? window.getComputedStyle(grid) : null;
+			const imageSources = images.map((image) => image.getAttribute("src") || "");
 			return {
 				headingText: heading ? heading.textContent.trim() : "",
 				featured: rect(featured),
 				inner: rect(inner),
 				grid: rect(grid),
-				cardRects: cards.map(rect),
+				photoRects: photos.map(rect),
 				imageRects: images.map(rect),
-				gridColumnCount: gridStyle ? gridStyle.gridTemplateColumns.split(" ").filter(Boolean).length : 0,
-				gridGap: gridStyle ? Number.parseFloat(gridStyle.columnGap) : null,
+				columnGap: gridStyle ? Number.parseFloat(gridStyle.columnGap) : null,
 				documentOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+				hasCardText: Boolean(document.querySelector(".lt-featured__body, .lt-featured__title, .lt-featured__category, .lt-featured__lede, .lt-featured__viewall")),
+				distinctImageColumns: Array.from(new Set(images.map((image) => Math.round(image.getBoundingClientRect().left)))).length,
+				firstImageSource: imageSources[0] || "",
+				imageSources,
+				leadIsFullRow: Boolean(photos[0]?.classList.contains("lt-featured__photo--lead")),
 			};
 		});
 
 		expect(result.headingText).toBe("One of a Kind Designs");
 		expect(result.inner.width, "featured work should use the visual proof width instead of the narrow reading max").toBeGreaterThanOrEqual(1300);
-		expect(result.gridColumnCount, "featured work should remain a three-photo desktop row").toBe(3);
-		expect(Math.max(...result.cardRects.map((card) => card.width)), "featured cards should stretch wider than the old cramped cards").toBeGreaterThanOrEqual(420);
-		expect(result.gridGap, "featured gallery gap should be restrained").toBeLessThanOrEqual(24);
-		expect(result.imageRects.every((image) => image.height < image.width), "featured images should use landscape installation crops").toBe(true);
+		expect(result.distinctImageColumns, "featured work should use a three-column photo field after the lead image").toBeGreaterThanOrEqual(3);
+		expect(result.imageRects.length, "featured work should render the expanded landing-page photo packet").toBe(9);
+		expect(result.firstImageSource, "train image should lead the installed-work grid").toContain("train.webp");
+		expect(result.leadIsFullRow, "lead train image should get the full-row treatment").toBe(true);
+		expect(result.imageRects[0].width, "lead train image should be visibly larger than normal grid images").toBeGreaterThan(result.imageRects[1].width * 2);
+		expect(result.imageSources.join(" "), "popcorn image should be removed from the homepage gallery").not.toContain("popcorn%202.webp");
+		expect(result.imageSources.join(" "), "popcorn image should be removed from the homepage gallery").not.toContain("popcorn 2.webp");
+		expect(result.hasCardText, "featured photos should not carry category/title/commentary containers").toBe(false);
+		expect(result.columnGap, "featured gallery gap should be restrained").toBeLessThanOrEqual(24);
+		expect(result.imageRects.every((image) => image.width > 0 && image.height > 0), "featured images should render as real visible images").toBe(true);
 		expect(Math.abs(result.documentOverflow), "wide featured gallery should not create document overflow").toBeLessThanOrEqual(1);
 	});
 
