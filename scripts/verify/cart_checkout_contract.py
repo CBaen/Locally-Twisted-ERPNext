@@ -376,6 +376,23 @@ def check_product_page_color_selector_uses_recipe_schema() -> None:
     )
 
 
+def check_source_mapper_has_no_product_slug_checkout_override() -> None:
+    source_builder = (
+        ROOT / "apps/locally_twisted/locally_twisted/catalog_contract/source_builder.py"
+    ).read_text(encoding="utf-8")
+
+    forbidden_markers = (
+        "OWNER_DIRECT_CHECKOUT_SLUGS",
+        "slug in OWNER_DIRECT_CHECKOUT_SLUGS",
+    )
+    for marker in forbidden_markers:
+        assert_true(
+            marker not in source_builder,
+            "source mapper must not use product-slug branches for checkout eligibility; "
+            "ProductPatternContract/backend schema must own the decision",
+        )
+
+
 def check_add_on_eligibility_rejects_unapproved_product() -> None:
     expected = "this add-on is not available for this product"
     bench_execute_expect_error(
@@ -460,6 +477,7 @@ def main() -> int:
         check_cart_line_key_matches_browser_unicode_serialization,
         check_cart_and_checkout_templates_fail_loud_on_line_key_mismatch,
         check_product_page_color_selector_uses_recipe_schema,
+        check_source_mapper_has_no_product_slug_checkout_override,
         check_add_on_eligibility_rejects_unapproved_product,
         check_review_only_source_add_ons_route_to_quote_not_checkout,
         check_checkout_rejects_over_limit_quantities,
