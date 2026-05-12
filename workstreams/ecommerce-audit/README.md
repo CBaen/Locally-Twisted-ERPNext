@@ -61,6 +61,35 @@ allowlist entries only; they cannot bypass Website Item
 `simple_product|checkout` fields. Search filtering hides backend-approved
 nonmatching quick-link nodes instead of removing them from the DOM.
 
+## 2026-05-12 Ecommerce Shop Setup Closeout
+
+Use the root `ECOMMERCE-SHOP-HANDOFF.md` for the current local ecommerce shop
+setup closeout. Completed lanes:
+
+- Backend wiring `f82b8ef1`: no backend edits; ProductPatternContract,
+  selected config, cart line key, add-on SO/SI preservation, checkout lead
+  conversion, quote fallback, fail-loud checkout blocks, all product quote
+  contracts, and customer note preservation passed.
+- Catalog/import/pricing `4da4b135`: commit `9a27b49`; guarded
+  `website_item_classification_contract --apply` changed exactly 5 Website Item
+  fields to `needs_review|needs_review`; no ERPNext catalog/pricing/import
+  blocker remains.
+- Media `d2653ce8` / `d9543e5f`: commit `8e4a95b`; 49 products / 95 source
+  extra images are explicitly held as `ignored_artifact` / `hold_back`,
+  `unsafe_unclassified_images=0`, and media visibility / variant media
+  contracts pass.
+- Storefront/product UX `3132de36` plus homepage blocker `4fd5ae4f`: commit
+  `3179463`; homepage container verifier was rebaselined to committed
+  `show_custom_event_decor=False`; focused nav/search/shop/container checks
+  pass.
+- Runner `786f962e`: included in `e4186c1`; Playwright wrapper uses Program
+  Files Node and focused runner proofs pass. Long broad sweeps may still see
+  transient ERPNext HTTP 417/502, but exact reruns pass.
+
+Current local counts: 53 published Website Items, 10,674 Items, 49 templates,
+10,617 variants, 10,227 active variants, 390 disabled variants, 10,656 Item
+Prices, 26 Item Attributes, and 32,028 Item Variant Attribute rows.
+
 ## Evidence inventory
 
 | Lane | Required artifact | Current state | Use it for |
@@ -94,6 +123,7 @@ nonmatching quick-link nodes instead of removing them from the DOM.
 | Post-import checkout launch closeout | `post-import-checkout-launch-closeout-2026-05-11.md` | Present, local proof / backend-owned closeout | Current 48 kept / 5 Classic-excluded import and checkout proof packet; records final browser proof PASS, backend contract gates, priority products, upsert/write caveat, and remaining caveats. |
 | Storefront proof and complex UI handoff | `storefront-proof-and-complex-ui-handoff-2026-05-11.md` | Present, rendered storefront proof / frontend-owned handoff | Captures Ready-to-Order/search proof, final post-import checkout proof, all-priced-page audit, Classic Arch proof, quote-first lane correction, complex UI requirements, and regression proof ladder. |
 | Ready-to-Order nav/search backend gate | `ready-to-order-nav-search-backend-gate-2026-05-12.md` | Present, review-closeout / local DB + rendered proof | Captures owner-include-as-allowlist rule, backend `simple_product|checkout` requirement, hidden-vs-removed search quick-link assertion, mobile drawer label correction, and nav/search verifier receipts. |
+| Ecommerce shop setup closeout | `../../ECOMMERCE-SHOP-HANDOFF.md` | Present, current root closeout | Current completed-lane summary for backend wiring, catalog/import/pricing, media readiness, storefront UX/homepage verifier alignment, runner wrapper, remaining live gates, and scoped worktree caveats. |
 | Phase 6 launch decision packet | `phase-6-launch-decision-packet-2026-05-10.md` | Present, parent decision | Keeps public ecommerce paused; live checkout remains blocked until production HTTPS host, explicit live Stripe/site config, policy approval, webhook setup, and one intentional real payment test pass. |
 | Infrastructure synthesis | `ecommerce-infrastructure-research-synthesis-2026-05-10.md` | Present, parent-created | Corrected synthesis for the real question: ERPNext receiving infrastructure, contract/runtime layers, line-level preservation, quote/checkout bridges, fail-loud evidence, and verifier gates. |
 | Knowledge base index | `ecommerce-knowledge-base-index-2026-05-10.md` | Present, parent-created | Supporting index of recalled memory, local artifacts, source repos, verified docs, blockers, and next actions. |
@@ -108,7 +138,21 @@ nonmatching quick-link nodes instead of removing them from the DOM.
 
 ## Current conclusion
 
-Native ERPNext/Frappe can receive the proof-slice ecommerce meaning safely when the `locally_twisted` contract layer is kept in charge: two product-page lanes, versioned line payload fields, source-backed dependency/add-on/pricing/media services, quote-first bridges, and fail-loud verifiers. The live Odoo backend witness now sharpens the receiving target: true variants only for SKU/price identity, no-variant structured options for large/customer-specific choices, backend-preserved cart/order-line intent, quote-first escape hatches, delivery/payment boundaries, and guarded automations. GL has narrowed launch scope further: direct checkout should launch only for ready-to-order/simple products; complex/high-variant/high-dollar decor should route quote-first/invoice-first. Current ERPNext products are fixture products for proving the receiving ecosystem, not the final import set; future product work must prove a controlled purge/reupload fills the LT schema fields, preserves cascading option/dependency logic, and triggers the expected automations before any catalog-completeness claim. Lane E is now recovered artifact-first. After the 2026-05-11 parity correction, the checkout proof is backend-proven for 15 checkout Website Item families/pages covering 47 enabled sale SKUs and 86 Sales Order/Sales Invoice rows: 39 bouquet variants, 39 bouquet foil add-on rows, 7 Easter variants, and 1 Mother's Day SKU. The 33 quote-first + 5 needs-review products are backend-proven unable to enter paid checkout through product-page controls, cart API, direct checkout URL, or stale localStorage. Easter and Mother's Day are architecture-verified fixtures, not seasonal/public launch approvals. Phase 5 now proves the delivery/payment/operator packet locally: delivery fees, pickup, tax boundaries, payment backend config, mocked webhook, paid cascade, payment-success reconciliation, operator/customer quote controls, local launch readiness, and pause-state safety. The current launch goal is to harden and open ecommerce when its staging/live gates pass, not to preserve a pause posture. Full catalog import/reimport is blocked by `product_import_readiness_gate.py` until source approvals, runner guards, fresh snapshot/backup evidence, and fail-loud field writes are ready. Live checkout remains blocked until production HTTPS host, explicit live Stripe/site config, policy approval, webhook setup, and one intentional real payment test pass. Final closeout reruns after public regression cleanup reconfirmed Phase 4: 33 quote-first and 5 needs-review products are blocked from product controls, cart API, direct checkout URL, and stale localStorage. Standard product-page local polish does not change the launch boundary; media/import reopen remains blocked by unclassified extra source images, absent approved Website Slideshow records, and missing real-catalog approval.
+Native ERPNext/Frappe can receive the ecommerce shop meaning safely when the
+`locally_twisted` contract layer stays in charge: ProductPatternContract,
+Website Item page/lane fields, versioned line payload fields, source-backed
+dependency/add-on/pricing/media services, quote-first bridges, fail-loud
+verifiers, and scoped import guards. As of the 2026-05-12 closeout, local
+backend wiring, catalog/import/pricing, media readiness, storefront product
+UX/nav/search, homepage verifier alignment, and runner wrapper lanes are green.
+The local system has 53 published priced Website Items, 18 direct-checkout
+products, and 35 currently quote-first/needs-review products that fail closed
+unless deliberately mapped. This is local ecommerce architecture/import proof,
+not final live cutover approval. Remaining launch gates are Frappe Cloud
+staging/source freeze, Cloudflare/DNS, live Stripe/site config/webhook, legal
+or policy approvals where needed, one intentional low-risk live payment test,
+and final real catalog approval if the local product set is to become public
+catalog truth.
 
 
 ## Pre-Phase-5 hygiene verification (2026-05-10 18:xx MDT)

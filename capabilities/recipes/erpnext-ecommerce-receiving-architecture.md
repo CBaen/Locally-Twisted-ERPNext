@@ -5,10 +5,10 @@ schema_version: 2.0
 level: recipe
 maturity: candidate
 scope: Locally Twisted ERPNext/Frappe ecommerce product import, product detail logic, cart, checkout, and invoice integration
-currently_true: open_ecommerce_local_proof_explicit_checkout_allowlist_quote_event_fail_closed_all_enabled_checkout_sku_proof_real_catalog_import_blocked
+currently_true: local_ecommerce_shop_setup_green_backend_catalog_media_storefront_runner_live_cutover_still_gated
 verification_level: 2
-last_verified: 2026-05-11
-evidence_quality: GL decision + official docs + live DB metadata + current code inspection + focused source verifiers + rollback-safe runtime verifier + cart/checkout/quote boundary verifiers + all-enabled-checkout-SKU proof + architecture readiness split + durable Phase 1-5 artifacts + open-mode local proof + product import readiness gate
+last_verified: 2026-05-12
+evidence_quality: GL decision + official docs + live DB metadata + current code inspection + focused source verifiers + rollback-safe runtime verifier + cart/checkout/quote boundary verifiers + ProductPatternContract reports + all-enabled-checkout-SKU proof + architecture readiness split + durable Phase 1-5 artifacts + local catalog/import/media/storefront closeout gates
 successful_uses: 1
 failed_uses: 0
 regressions: 0
@@ -46,6 +46,16 @@ OpenClaw cockpit witness:
 
 - No real product import until incomplete/awkward/missing logic is surfaced to GL and resolved.
 - Current ERPNext products are test fixtures only. Future import/reopen work must prove a controlled purge/reupload/import path where products that fit the LT schema populate the correct Website Item/custom fields, preserve cascading/dependency information, and trigger expected automations. Do not treat current product records as final catalog truth.
+- 2026-05-12 closeout: local ecommerce shop setup is green for backend wiring,
+  catalog/import/pricing, media readiness, storefront product UX/nav/search,
+  homepage verifier alignment, and the Playwright runner wrapper. Current local
+  counts are 53 published Website Items, 10,674 Items, 49 templates, 10,617
+  variants, 10,227 active variants, 390 disabled variants, 10,656 Item Prices,
+  26 Item Attributes, and 32,028 Item Variant Attribute rows. Live launch still
+  requires Frappe Cloud staging/source freeze, Cloudflare/DNS, live Stripe/site
+  config/webhook, legal/policy approval where needed, one intentional live
+  payment test, and final real catalog approval if the local products become
+  public catalog truth.
 - Test products are proof cases only: Unicorn Bouquet and Classic Arch.
 - Product template types are logic/process classes:
   - `simple_product`: few options, little customization, but still backend-driven.
