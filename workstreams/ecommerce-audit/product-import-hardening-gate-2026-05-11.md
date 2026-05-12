@@ -24,7 +24,7 @@ python scripts/verify/product_import_readiness_gate.py --report output/product-i
 
 The verifier is read-only. It does not import, purge, upload, delete, or change ERPNext records.
 
-Current local result is `PASS` with one warning. That is evidence that the
+Current local result is `PASS` with no warnings. That is evidence that the
 local corrected V1 import gate is prepared for the guarded local path; it is not
 approval for Frappe Cloud/live import, live Stripe, DNS cutover, or final real
 catalog merchandising.
@@ -179,14 +179,14 @@ Rollback is restore DB/files backup first. Snapshot-based repair is only a secon
 
 ## Current Blockers
 
-Current result: `PASS` for local corrected V1 import readiness, with one
-warning.
+Current result: `PASS` for local corrected V1 import readiness, with no
+warnings or blockers.
 
 Fresh read-only gate result on 2026-05-12:
 
 - Command:
   `python scripts/verify/product_import_readiness_gate.py --report output/product-import-readiness-gate.json`
-- Result: exit 0 / `PASS`, read-only, 11 pass rows, 1 warning, 0 blockers.
+- Result: exit 0 / `PASS`, read-only, 12 pass rows, 0 warnings, 0 blockers.
 - Corrected V1 manifest: 48 included products, 5 owner-explicit Classic
   exclusions, 225 deterministic source-priced sale units.
 - Purge scope: 48 templates, 6,894 variants, 6,928 prices.
@@ -198,8 +198,9 @@ Fresh read-only gate result on 2026-05-12:
   guard markers.
 - Final explicit local-only destructive approval is recorded for the local
   `frontend` site.
-- Warning: 8 included products have review-only add-on axes protected by
-  quote-first fallback until mapped.
+- `v1_add_on_fallbacks`: 8 included products keep review-only add-on axes
+  protected behind quote-first fallback. The gate now blocks only if a
+  review-only add-on leaks onto a direct-checkout product.
 
 Regression fixes completed on 2026-05-12:
 

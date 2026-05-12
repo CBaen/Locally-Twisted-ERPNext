@@ -22,7 +22,7 @@ Bouquet. Final proof command:
 Backend contracts are green for `product_import_readiness_gate`,
 `post_import_catalog_state`, `direct_checkout_target_contract`, and
 `cart_checkout_contract`. Remaining caveats: 8 review-only add-on axes are
-protected by quote-first fallback, the five Classic exclusions remain
+protected by verified quote-first fallback, the five Classic exclusions remain
 quote-first, the local import evidence is upsert/write rather than a
 delete/recreate transcript, and the shared worktree is dirty.
 

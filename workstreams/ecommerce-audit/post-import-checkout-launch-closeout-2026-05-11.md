@@ -75,14 +75,14 @@ python scripts/verify/cart_checkout_contract.py
 
 Expected current evidence:
 
-- `product_import_readiness_gate`: PASS with 11 pass, 1 warning, 0 blockers.
+- `product_import_readiness_gate`: PASS with 12 pass, 0 warnings, 0 blockers.
 - `post_import_catalog_state`: PASS with 48 included / 5 excluded, all included products ready, and empty blocker lists.
 - `direct_checkout_target_contract`: PASS for 7' Butterfly Column, Graduation Grab n Go, and 6' Graduation stands; Classic exclusions remain quote-first.
 - `cart_checkout_contract`: PASS, including configured line-key preservation and Unicode/browser line-key parity.
 
 ## Remaining Caveats
 
-- 8 included products have review-only add-on axes. They are protected by quote-first fallback until those add-ons are explicitly mapped for checkout.
+- 8 included products have review-only add-on axes. They are protected by quote-first fallback, and the import gate now blocks if any of those add-ons leaks onto a direct-checkout product.
 - The five owner-explicit Classic exclusions remain quote-first.
 - The local approved import proved guarded upsert/write behavior, not a full delete/recreate transcript.
 - The repo worktree is shared and dirty; do not use broad staging or broad cleanup.

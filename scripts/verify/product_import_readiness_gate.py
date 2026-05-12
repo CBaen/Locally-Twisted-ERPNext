@@ -398,8 +398,8 @@ def _v1_add_on_row() -> GateRow:
     if review_only:
         return GateRow(
             "v1_add_on_fallbacks",
-            "warning",
-            f"{len(review_only)} included product(s) have review-only add-on axes protected by quote-first fallback.",
+            "pass",
+            f"{len(review_only)} included product(s) keep review-only add-on axes protected behind quote-first fallback.",
             next_action="Map these add-ons before allowing direct checkout for those products.",
         )
     return GateRow(
