@@ -5,6 +5,7 @@
 [post_model_sync]
 # Patches added in this section will be executed after doctypes are migrated
 locally_twisted.patches.sync_contact_intake_backend
+locally_twisted.patches.resync_contact_intake_backend_20260512
 locally_twisted.patches.sync_commerce_rules
 locally_twisted.patches.sync_product_page_runtime
 locally_twisted.patches.sync_product_page_quote_lead_fields
