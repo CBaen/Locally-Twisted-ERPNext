@@ -502,8 +502,6 @@ def _checkout_eligibility(
         blocking.append("missing_website_item")
     if not template:
         blocking.append("missing_template_item")
-    if _website_lane(website_item) == "needs_review":
-        blocking.append("website_item_needs_review")
     source_axes = _source_axes(product)
     if _website_lane(website_item) == "checkout" and patterns & CHECKOUT_BLOCKING_PATTERNS:
         unpriced_add_on_axes = _unpriced_add_on_axes(source_axes.get("add_on_axes") or [], add_on_price_by_item)
