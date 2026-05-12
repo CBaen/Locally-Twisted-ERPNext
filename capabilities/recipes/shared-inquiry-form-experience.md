@@ -8,11 +8,11 @@ maturity: candidate
 scope: Locally Twisted shared inquiry-v1 public form experience on /contact and service-page embeds
 currently_true: yes
 verification_level: 2
-last_verified: 2026-05-10
+last_verified: 2026-05-12
 evidence_quality: direct
-successful_uses: 3
-failed_uses: 2
-regressions: 0
+successful_uses: 4
+failed_uses: 3
+regressions: 1
 depends_on:
   - erpnext-intake-form-parity
   - fail-loud-operating-law
@@ -49,6 +49,12 @@ This recipe does not own Lead schema parity or field taxonomy. Use
   itself.
 - The submit flow may show progress while sending, but it must not imply final
   success until the backend response includes `message.ok`.
+- The backend may return `message.ok` only after the current customer
+  confirmation email queues or a current same-Lead queue row exists. A stale
+  `Email Queue` or `Communication` row from an older Lead with the same name is
+  not proof.
+- The success message is `A confirmation of your request will be sent to your
+  email address shortly. We will be in contact within 24 hours!`
 - Customer-facing failure copy stays calm, plain, and non-technical. Internal
   exception text stays out of public UI.
 - Success stays on-page with quiet confirmation. Do not restore the forced
@@ -73,6 +79,7 @@ This recipe does not own Lead schema parity or field taxonomy. Use
 - `apps/locally_twisted/locally_twisted/public/js/lt-site-preferences.js`
 - `scripts/verify/form_experience.spec.js`
 - `workstreams/form-submission-experience.md`
+- `workstreams/form-email-confirmation-regression-2026-05-12.md`
 
 ## Verification
 
@@ -87,6 +94,7 @@ Backend submit and cleanup:
 ```powershell
 python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --skip-newsletter
 python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081
+python scripts/verify/customer_email_policy_contract.py
 ```
 
 Useful adjacent checks after form markup, cache-buster, or page-shell changes:
@@ -105,6 +113,10 @@ npm run test:a11y-manual
   path other than a verified backend submit response.
 - A customer sees "sent" or "received" copy while the AJAX request failed,
   returned a non-OK response, or returned a response without `message.ok`.
+- A customer sees "Request received" while the confirmation email did not
+  queue for the current Lead.
+- Idempotency checks use Lead reference name alone instead of the current
+  Lead's creation boundary.
 - A customer sees an inspiration-photo warning when no file was selected.
 - A repeat customer email is rejected as a duplicate Lead.
 - The UI claims "Up to 5 images" but the endpoint only proves one/no uploaded file path.
@@ -138,3 +150,13 @@ smoke submit passed.
 
 
 On 2026-05-10 the BTFP route exposed a repeat-email failure from ERPNext's default Lead duplicate-email validation while GL was testing five inspiration photos. The repair enabled duplicate Lead emails through CRM Settings, added a durable patch, and added `scripts/verify/book_form_repeat_email_photos.py` to submit two separate inquiries with the same email and five PNG files each. The verifier passed locally and should remain part of public form closeout when upload or CRM settings change.
+
+On 2026-05-12 GL caught that both public form success modals still used weak
+copy and that the Contact form had not initially queued the current customer
+confirmation. Root cause was stale Lead-reference idempotency: an older
+`Email Queue` row shared the recreated Lead name. The repair scoped both
+`Email Queue` and `Communication` idempotency to the current Lead creation time,
+added a loud backend failure if queue proof is missing, updated success copy,
+requeued the missing Contact confirmation, and passed the focused form/email
+guards. Feature handoff:
+`../../workstreams/form-email-confirmation-regression-2026-05-12.md`.

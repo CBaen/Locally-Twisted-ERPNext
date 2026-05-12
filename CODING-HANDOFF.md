@@ -1,5 +1,32 @@
 # Locally Twisted - Coding Handoff
 
+Codex form/email closeout on 2026-05-12: `/contact` and
+`/balloon-twisting-and-face-painting` now use the success copy "A confirmation
+of your request will be sent to your email address shortly. We will be in
+contact within 24 hours!" and the backend must not return public success unless
+the customer confirmation email queues or a current same-Lead queue row exists.
+Root cause was stale Lead-reference idempotency: an old Email Queue row for a
+reused Lead name suppressed the new Contact confirmation. `Email Queue` and
+`Communication` idempotency checks must be scoped to the current Lead
+incarnation by creation time. Feature handoff:
+`workstreams/form-email-confirmation-regression-2026-05-12.md`; Failure Recipe:
+`capabilities/failures/public-form-stale-email-queue-idempotency.md`; guards:
+`npm run test:form-experience`,
+`python scripts/verify/customer_email_policy_contract.py`,
+`python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --skip-newsletter`,
+and `python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081`.
+
+Codex verifier-runtime closeout on 2026-05-12: Playwright in-file parallelism
+is opt-in only. Keep `playwright.config.js` defaults at one worker and
+`fullyParallel = false`; use `LT_PLAYWRIGHT_FULLY_PARALLEL=1` only for specs
+that prove fixture isolation. Shared ERPNext fixture specs such as
+`quote_accept_experience.spec.js` can race if global in-file parallelism is
+enabled. Handoff: `workstreams/playwright-verifier-runtime-2026-05-12.md`;
+Failure Recipe:
+`capabilities/failures/playwright-in-file-parallel-fixture-race.md`; guards:
+`node --check playwright.config.js`, `npm run test:quote-accept-experience`,
+and `npm run test:form-experience`.
+
 Codex ecommerce review closeout on 2026-05-12: Ready-to-Order nav/search links
 now require both owner include and backend Website Item checkout eligibility.
 `READY_TO_ORDER_OWNER_INCLUDE_CODES` is an allowlist only; it cannot bypass

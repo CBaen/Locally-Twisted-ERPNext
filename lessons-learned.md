@@ -6,6 +6,35 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-12 - Lead reference names are not email idempotency boundaries
+
+The Contact form reused `CRM-LEAD-2026-00073`, and an older sent Email Queue row
+from the prior Lead with that name suppressed the new customer confirmation.
+The customer saw success while the current Lead initially had no current
+confirmation queue row.
+
+**Counter-move:** public-form confirmation idempotency must include the current
+Lead's creation boundary for both `Email Queue` and `Communication` lookups.
+After `frappe.sendmail`, assert a current queue row exists before returning
+`message.ok`. Preserve historical queue rows; narrow the query instead of
+deleting evidence.
+
+---
+
+## 2026-05-12 - Playwright speed settings can become fixture corruption
+
+Changing Playwright to run tests inside each spec file concurrently looked like
+a harmless speed improvement, but LT specs often share backend fixtures,
+markers, or cleanup inside a file. `quote_accept_experience.spec.js` is the
+known reviewed example.
+
+**Counter-move:** default Playwright to one worker and no in-file parallelism.
+Use `LT_PLAYWRIGHT_FULLY_PARALLEL=1` only for specs that prove per-test fixture
+isolation. If proof is slow, split independent specs or create unique per-test
+namespaces; do not weaken cleanup.
+
+---
+
 ## 2026-05-12 - Owner include is not checkout eligibility
 
 The Ready-to-Order nav/search patch almost let an owner-included item code

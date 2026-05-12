@@ -7,11 +7,11 @@ maturity: candidate
 scope: Locally Twisted ERPNext/Frappe customer/operator email branding, company-copy routing, and Email Queue proof
 currently_true: true
 verification_level: 2
-last_verified: 2026-05-11
+last_verified: 2026-05-12
 evidence_quality: direct
-successful_uses: 1
-failed_uses: 0
-regressions: 0
+successful_uses: 2
+failed_uses: 1
+regressions: 1
 depends_on:
   - external-document-audience-contract
   - fail-loud-operating-law
@@ -38,6 +38,11 @@ privacy copy.
 - Public form confirmation titles use `Here is what we received`; do not repeat the subject as the message header.
 - Public form confirmations must echo only non-empty customer-submitted fields, including free-text notes.
 - Public form confirmations must mention reference files only when files were actually attached. The `/contact` and BTFP form path defers the customer confirmation until after upload handling so the count is accurate.
+- Public form confirmation idempotency must be scoped to the current Lead
+  incarnation. A historical `Email Queue` or `Communication` row with the same
+  `reference_name` is not proof that the current Lead was acknowledged.
+- Public form endpoints must fail loudly if the customer confirmation email
+  does not queue; they must not return `message.ok` and show public success.
 - Public form confirmations use compact policy links, not the full long policy block, to keep print output short.
 - The repeat-email/five-photo verifier owns its fake record namespace and must
   clean it. `scripts/verify/book_form_repeat_email_photos.py` deletes old and
@@ -81,6 +86,7 @@ privacy copy.
 - `apps/locally_twisted/locally_twisted/verify/book_form_repeat_email_photos_cleanup.py`
 - `apps/locally_twisted/locally_twisted/verify/customer_contact_points_contract.py`
 - `scripts/verify/customer_contact_points_contract.py`
+- `workstreams/form-email-confirmation-regression-2026-05-12.md`
 
 ## Verification
 
@@ -91,6 +97,7 @@ email theme, copy routing, subject, or sendmail change:
 python scripts/verify/customer_email_policy_contract.py
 python scripts/verify/customer_documents_contract.py
 python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081
+python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --skip-newsletter
 python scripts/verify/payment_cascade_contract.py
 python scripts/verify/product_quote_customer_delivery_contract.py
 python scripts/verify/customer_contact_points_contract.py
@@ -123,6 +130,9 @@ python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-b
 
 - Treating `Email Queue.status = Sent` as inbox delivery proof. It only proves
   SMTP acceptance.
+- Treating any same-reference `Email Queue` or `Communication` row as
+  idempotency proof. Public-form confirmations need a current Lead creation
+  boundary so old rows cannot suppress newly recreated Leads.
 - Looking up emoji subjects with raw `LIKE "%Subject: ...%"`. Find rows by
   reference record and decode the MIME subject instead.
 - Sending company copies to `hi@locallytwisted.com` while the sender is
@@ -137,6 +147,8 @@ python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-b
   messages.
 - Sending the public form confirmation before uploads finish, which makes the
   customer receipt lie about attached files.
+- Returning public success when the confirmation email did not queue for the
+  current Lead.
 - Letting public-form proof scripts leave fake Leads, private Files,
   Communications, Email Queue rows, Contacts, Tasks, or Comments behind. Test
   proof is not clean unless its generated business records are gone.

@@ -57,9 +57,26 @@ real low-risk payment test pass.
 
 **Operating law (2026-05-08):** if it can fail, it must fail loudly. Apply this to forms, automations, payments, documents, customer communication, containers, route contracts, verification, and agent handoffs. The project recipe is `capabilities/recipes/fail-loud-operating-law.md`; future queue items should name the verifier, Error Log, blocker field, mutation guard, route contract, or report row that makes failure visible.
 
+**Public form email success rule (2026-05-12):** `/contact` and BTFP form
+success now requires current confirmation email queue proof. Do not show
+`Request received` unless the backend returns `message.ok`, and do not return
+`message.ok` unless the customer confirmation email queued or a current
+same-Lead queue row exists. Stale `Email Queue` / `Communication` rows from an
+older reused Lead name are not idempotency proof. Handoff:
+`workstreams/form-email-confirmation-regression-2026-05-12.md`; Failure Recipe:
+`capabilities/failures/public-form-stale-email-queue-idempotency.md`.
+
 **Operating law (2026-05-08):** no hand-authored production monoliths. Files should have one clear job unless they are explicitly research/reference artifacts. Use `workstreams/no-monolith-operating-contract.md` and the global capability `C:\Users\baenb\capabilities\principles\no-monolith-files.md` before expanding large source, template, CSS, verifier, script, or project-doc files.
 
 **Verification surface note (2026-05-09):** public internet lookup, rendered browser proof, and LT route-contract verifiers are different evidence classes. Current handoff: `workstreams/browser-verification-runtime.md`; capability: `capabilities/recipes/codex-browser-verification-surface.md`. Use `web.run` for outside facts, repo-local Playwright/LT npm gates for rendered-route proof, and re-test Browser Use before claiming in-app browser control works.
+
+**Playwright runtime rule (2026-05-12):** keep in-file Playwright parallelism
+opt-in. Default `playwright.config.js` workers stay at `1` and
+`fullyParallel` stays false because several LT specs share backend fixtures and
+cleanup markers. Use `LT_PLAYWRIGHT_FULLY_PARALLEL=1` only for specs with
+proven fixture isolation. Handoff:
+`workstreams/playwright-verifier-runtime-2026-05-12.md`; Failure Recipe:
+`capabilities/failures/playwright-in-file-parallel-fixture-race.md`.
 
 **Cockpit priority correction (2026-05-09 GL):** the command-center/cockpit work exists to serve paid Locally Twisted infrastructure and website progress first, especially the ERPNext ecommerce receiving/product-page/backend ecosystem rebuild. LOOMTEM implementation is parked. Active cockpit source: `C:/Users/baenb/.openclaw/workspace/projects/lightdeck-command-center/workstreams/locally-twisted-paid-work-cockpit.md`.
 
@@ -156,7 +173,7 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 
 - [P0] Verify Contact dedup logic now in `apps/locally_twisted/locally_twisted/lead_cascade.py` (Lead → existing Contact match by email/phone, else create new). Queue previously listed this as unbuilt; confirm with a smoke record before deleting.
 - [P0] Loud-failure compliance audit across every form on Phase 1 surfaces
-- [P0] Keep the shared form submission UX honest: no success state unless the backend returns `message.ok`, no forced success redirect, no `#received` fake success, and update `scripts/verify/form_experience.spec.js` plus `capabilities/recipes/shared-inquiry-form-experience.md` with any future form-state changes.
+- [P0] Keep the shared form submission UX honest: no success state unless the backend returns `message.ok`, no forced success redirect, no `#received` fake success, no `message.ok` unless current confirmation-email queue proof exists, and update `scripts/verify/form_experience.spec.js` plus `capabilities/recipes/shared-inquiry-form-experience.md` with any future form-state changes.
 - [P1] Monitor alerts (Better Stack or equivalent) — fire if `/contact` form-creation rate drops to zero for >24 hours
 
 ### New asset drops at `assets/` (GL added 2026-04-27)

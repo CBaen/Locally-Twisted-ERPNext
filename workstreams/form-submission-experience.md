@@ -1,6 +1,6 @@
 # Form Submission Experience
 
-Last updated: 2026-05-10
+Last updated: 2026-05-12 by Codex after the confirmation-email regression fix.
 
 ## Scope
 
@@ -24,8 +24,11 @@ Capability router:
 - Success stays on the page. Do not restore the old forced 4-second redirect.
 - A direct `#received` URL must not show fake success; the modal opens only
   from the verified submit path.
-- The success modal is intentionally quiet: short confirmation, no next-step
-  lecture, one close button.
+- The success modal is intentionally quiet: `Request received`, the
+  confirmation-email/24-hour response promise, and one close button.
+- Backend success requires email-queue proof. If customer confirmation email
+  does not queue, the endpoint must fail loudly with customer-safe copy instead
+  of returning `message.ok`.
 - Failure copy stays customer-safe and plain. Internal exceptions stay out of
   public copy.
 - Empty file inputs must not become photo warnings. Only a real selected file
@@ -86,6 +89,28 @@ npm run test:form-experience
 python scripts/verify/inquiry_upload_failure_contract.py
 python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --form-path /balloon-twisting-and-face-painting --skip-newsletter
 ```
+
+Follow-up regression closeout on 2026-05-12 fixed the success-copy and
+confirmation-email trust boundary. The Contact form had reused a Lead name, and
+an old Email Queue row suppressed the current confirmation. Idempotency now
+scopes existing `Email Queue` and `Communication` rows to the current Lead
+creation time, and the UI copy promises a confirmation email plus 24-hour
+contact window. Verification:
+
+```powershell
+node --check apps/locally_twisted/locally_twisted/public/js/lt-inquiry-form-experience.js
+node --check scripts/verify/form_experience.spec.js
+python -m py_compile apps/locally_twisted/locally_twisted/lead_cascade.py apps/locally_twisted/locally_twisted/www/book.py
+python scripts/dev/clear_website_cache.py
+npm run test:form-experience
+python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --skip-newsletter
+python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081
+```
+
+Feature handoff:
+`workstreams/form-email-confirmation-regression-2026-05-12.md`.
+Failure Recipe:
+`capabilities/failures/public-form-stale-email-queue-idempotency.md`.
 
 ## Known Non-Blocking Failures
 

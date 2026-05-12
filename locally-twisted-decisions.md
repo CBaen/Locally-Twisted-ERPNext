@@ -8,6 +8,67 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-12 - Public form success requires current confirmation email queue proof
+
+**Decision:** `/contact` and `/balloon-twisting-and-face-painting` may show
+`Request received` only after the backend returns `message.ok`, and the backend
+must not return that success unless the customer confirmation email queued or a
+current same-Lead confirmation queue row exists. Public success copy must tell
+customers: `A confirmation of your request will be sent to your email address
+shortly. We will be in contact within 24 hours!`
+
+**Reasoning:** GL caught a trust-breaking regression: the customer saw success
+while the Contact form confirmation email did not initially queue. Root cause
+was stale idempotency. An older `Email Queue` row referenced the same reused
+Lead name as the new Contact Lead, so the system incorrectly skipped the
+current confirmation.
+
+**Implementation boundary:** Do not use Lead reference name alone as public
+form acknowledgment idempotency. `Email Queue` and `Communication` checks must
+be scoped to the current Lead incarnation by creation time. Do not delete
+historical queue rows as a normal fix; preserve history and narrow the query.
+If email queue proof fails, throw a customer-safe loud failure instead of
+returning `message.ok`.
+
+**Verification receipt:** The missing Contact confirmation for
+`CRM-LEAD-2026-00073` was requeued as `gbf0g958qj`; BTFP
+`CRM-LEAD-2026-00074` already had `95fi9c31jm`. Both final queue rows were
+`Sent` to `locallytwisted@gmail.com` and `cameronbpaul@gmail.com`.
+`npm run test:form-experience`,
+`python scripts/verify/customer_email_policy_contract.py`,
+`python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --skip-newsletter`,
+and `python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081`
+passed on 2026-05-12.
+
+**Decided by:** GL correction and Codex regression repair on 2026-05-12.
+
+---
+
+## 2026-05-12 - Playwright in-file parallelism is opt-in for LT verifiers
+
+**Decision:** LT Playwright defaults stay serial inside each spec file:
+`workers` defaults to `1` and `fullyParallel` defaults to false. In-file
+parallelism is allowed only when explicitly enabled with
+`LT_PLAYWRIGHT_FULLY_PARALLEL=1` for specs that have proven fixture isolation.
+
+**Reasoning:** Existing LT specs share mutable module state and backend
+fixtures. The reviewed example, `quote_accept_experience.spec.js`, uses a
+shared fixture marker and cleanup. Running tests inside the file concurrently
+can delete another test's fake records while it is still running.
+
+**Implementation boundary:** Do not speed up broad launch proof by making
+in-file Playwright parallelism default-on. Split independent specs or add
+per-test fixture namespaces before raising parallelism. This is a verifier
+integrity decision, not a rejection of Playwright.
+
+**Verification receipt:** `node --check playwright.config.js`,
+`npm run test:quote-accept-experience`, and `npm run test:form-experience`
+passed on 2026-05-12; both Playwright test runs reported one worker.
+
+**Decided by:** External review comment and Codex fix on 2026-05-12.
+
+---
+
 ## 2026-05-12 - Ready-to-Order owner include cannot bypass backend checkout fields
 
 **Decision:** Ready-to-Order menu and search product quick links must require

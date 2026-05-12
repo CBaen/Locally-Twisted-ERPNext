@@ -1,6 +1,6 @@
 # Customer Email Policy Boundary
 
-Last updated: 2026-05-11 by Codex after adding the checkout/order-email disclosure boundary.
+Last updated: 2026-05-12 by Codex after the stale Lead-reference idempotency fix.
 
 ## Outcome
 
@@ -13,6 +13,13 @@ Keep customer/operator email behavior aligned with receipts, policy lanes, and b
 - Public customer-facing inboxes are role-based: `hi@locallytwisted.com` for general inquiry/web copy, `legal@locallytwisted.com` for legal/policy/accessibility copy and legal paperwork, and `billing@locallytwisted.com` for invoices, billing, refunds, payment reconciliation, accounts payable, and payroll.
 - Public inquiry acknowledgments use `customer_email_theme.py`: LT logo, mirrored red balloon-dog footer mark, no ERPNext standard footer, and dynamic subject `Locally Twisted U+1F388 Thanks {first_name}! We'll be in touch within a day`.
 - The public form endpoint defers the customer confirmation until after inspiration-photo handling, so the confirmation can accurately say how many reference files were received. Direct Website Lead inserts still use the same renderer without a file-count line.
+- Public form success requires current email-queue proof. Stale `Email Queue`
+  or `Communication` rows from an older Lead with the same name must not
+  suppress a newly recreated Lead's confirmation. Idempotency checks are scoped
+  by the current Lead creation time.
+- If `frappe.sendmail` returns without a current confirmation `Email Queue`
+  row, the public form endpoint must fail loudly with customer-safe copy and
+  must not return `message.ok`.
 - Customer form confirmations use the email title `Here is what we received` instead of repeating the subject line. The body echoes only non-empty fields the customer submitted, includes free-text notes, and only includes `We received X files for reference.` when files were attached.
 - Customer form confirmations tell customers to reply if anything looks wrong. Current reply-to stays `hi@locallytwisted.com`; external customer replies should route through Cloudflare, but same-Gmail routed-alias QA sends are blocked/unsafe while ERPNext sends from `locallytwisted@gmail.com`.
 - Inquiry confirmation policy copy is compact links, not the full long policy block, so the email is better suited for one-page printing.
@@ -64,6 +71,7 @@ Keep customer/operator email behavior aligned with receipts, policy lanes, and b
 - `scripts/verify/synthetic_business_pipeline.py`
 - `scripts/verify/book_form_repeat_email_photos.py`
 - `scripts/verify/customer_contact_points_contract.py`
+- `workstreams/form-email-confirmation-regression-2026-05-12.md`
 
 ## Verification
 
@@ -71,6 +79,7 @@ Keep customer/operator email behavior aligned with receipts, policy lanes, and b
 python scripts/verify/customer_email_policy_contract.py
 python scripts/verify/customer_documents_contract.py
 python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081
+python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --skip-newsletter
 python scripts/verify/payment_cascade_contract.py
 python scripts/verify/product_quote_customer_delivery_contract.py
 python scripts/verify/customer_contact_points_contract.py
@@ -80,4 +89,12 @@ python scripts/verify/business_automation_index.py --report output/business-auto
 
 ## Next Safe Slice
 
-Next email work should be either provider/sender architecture review or a formal print-fit verifier that covers every outbound email family. Do not treat the customer-form one-page proof as global proof for receipts, operator notices, welcome emails, reminders, or finance/legal packets. If LT moves away from Gmail-as-sender or changes Cloudflare routing, revalidate whether `hi@locallytwisted.com` can become an internal delivery mailbox. Keep delivery no-live until recipients, opt-out/response handling, and approval gates are explicit.
+Next email work should be either provider/sender architecture review, a formal
+print-fit verifier that covers every outbound email family, or a negative
+contract for stale Lead-reference confirmation rows. Do not treat the
+customer-form one-page proof as global proof for receipts, operator notices,
+welcome emails, reminders, or finance/legal packets. If LT moves away from
+Gmail-as-sender or changes Cloudflare routing, revalidate whether
+`hi@locallytwisted.com` can become an internal delivery mailbox. Keep delivery
+no-live until recipients, opt-out/response handling, and approval gates are
+explicit.
