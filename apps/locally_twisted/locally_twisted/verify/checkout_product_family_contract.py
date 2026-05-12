@@ -88,18 +88,36 @@ def _run_contract(token: str) -> dict[str, Any]:
     _assert_unknown_client_selected_options_fail_loudly()
 
     sales_order_lines: list[dict[str, Any]] = []
+    expected_base_line_count = 0
+    expected_add_on_line_count = 0
     bouquet_results: list[dict[str, Any]] = []
     for website_item_code in EXPECTED_FOIL_BOUQUET_WEBSITE_ITEMS:
         bouquet_result, lines = _assert_bouquet_family_line(website_item_code)
         bouquet_results.append(bouquet_result)
         sales_order_lines.extend(lines)
+        expected_base_line_count += int(bouquet_result["enabled_variant_count"])
+        expected_add_on_line_count += int(bouquet_result["add_on_line_count"])
 
     mothers_day_result, mothers_day_lines = _assert_mothers_day_simple_line()
     sales_order_lines.extend(mothers_day_lines)
+    expected_base_line_count += int(mothers_day_result["sale_sku_count"])
 
-    sales_order = _assert_sales_order_accepts_family_lines(token, sales_order_lines)
-    sales_invoice_name = _assert_invoice_preserves_family_lines(sales_order.name, expected_line_count=len(sales_order_lines))
-    easter_result = _easter_balloon_cups_seasonal_status()
+    easter_result, easter_lines = _assert_easter_balloon_cups_simple_line()
+    sales_order_lines.extend(easter_lines)
+    expected_base_line_count += int(easter_result["enabled_variant_count"])
+
+    sales_order = _assert_sales_order_accepts_family_lines(
+        token,
+        sales_order_lines,
+        expected_base_line_count=expected_base_line_count,
+        expected_add_on_line_count=expected_add_on_line_count,
+    )
+    sales_invoice_name = _assert_invoice_preserves_family_lines(
+        sales_order.name,
+        expected_line_count=len(sales_order_lines),
+        expected_base_line_count=expected_base_line_count,
+        expected_add_on_line_count=expected_add_on_line_count,
+    )
 
     return {
         "bouquet_family_count": len(bouquet_results),
@@ -110,6 +128,8 @@ def _run_contract(token: str) -> dict[str, Any]:
         "sales_invoice": sales_invoice_name,
         "sales_order_line_count": len(sales_order.items),
         "expected_sales_order_line_count": len(sales_order_lines),
+        "enabled_sale_sku_count": expected_base_line_count,
+        "add_on_line_count": expected_add_on_line_count,
         "line_fields": sorted(LINE_FIELDNAMES.values()),
         "schema_version": CONFIG_VERSION,
     }
@@ -144,62 +164,77 @@ def _assert_bouquet_family_line(website_item_code: str) -> tuple[dict[str, Any],
     from locally_twisted.www.checkout import _resolve_sale_lines
 
     website_item = _assert_website_item_contract(website_item_code, page_type="simple_product", commerce_lane="checkout")
-    variant_item_code = _small_bouquet_variant(website_item_code)
+    variant_item_codes = _enabled_variants_for_template(website_item_code, required_attribute="Bouquet Size")
 
     add_on_options = get_checkout_add_on_options(website_item_code)
     foil_option = _only_foil_option(website_item_code, add_on_options)
 
-    resolved = _resolve_cart_item(variant_item_code, website_item_code)
-    configuration = _configuration_payload(
-        item_code=variant_item_code,
-        website_item_code=website_item_code,
-        variant_options=resolved.get("variant_options") or [],
-        add_ons=[
+    sale_lines: list[dict[str, Any]] = []
+    verified_variants: list[dict[str, Any]] = []
+    for variant_item_code in variant_item_codes:
+        resolved = _resolve_cart_item(variant_item_code, website_item_code)
+        selected_options = _variant_options_dict(resolved.get("variant_options") or [])
+        if not selected_options.get("Bouquet Size"):
+            raise ContractFail(f"{variant_item_code} did not preserve Bouquet Size selected option")
+        configuration = _configuration_payload(
+            item_code=variant_item_code,
+            website_item_code=website_item_code,
+            variant_options=resolved.get("variant_options") or [],
+            add_ons=[
+                {
+                    "key": FOIL_NUMBER_ADD_ON_KEY,
+                    "label": "Foil number",
+                    "value": "7",
+                    "quantity": 1,
+                }
+            ],
+        )
+
+        lines, resolved_items = _resolve_sale_lines(
+            [{"item_code": variant_item_code, "qty": 1, "configuration": configuration}]
+        )
+        if len(lines) != 2:
+            raise ContractFail(f"{variant_item_code} should create base + foil add-on lines, found {len(lines)}")
+        if len(resolved_items) != 2:
+            raise ContractFail(f"{variant_item_code} resolved display lines should include add-on, found {len(resolved_items)}")
+
+        base_line, add_on_line = lines
+        _assert_base_line_payload(
+            label=variant_item_code,
+            line=base_line,
+            expected_item_code=variant_item_code,
+            expected_website_item_code=website_item_code,
+            expect_add_on=True,
+            expected_selected_options=selected_options,
+        )
+        _assert_foil_add_on_line_payload(
+            label=variant_item_code,
+            line=add_on_line,
+            expected_parent_item_code=variant_item_code,
+            expected_website_item_code=website_item_code,
+        )
+        sale_lines.extend(lines)
+        verified_variants.append(
             {
-                "key": FOIL_NUMBER_ADD_ON_KEY,
-                "label": "Foil number",
-                "value": "7",
-                "quantity": 1,
+                "variant_item_code": variant_item_code,
+                "selected_options": selected_options,
+                "resolved_line_count": len(lines),
             }
-        ],
-    )
-
-    lines, resolved_items = _resolve_sale_lines(
-        [{"item_code": variant_item_code, "qty": 1, "configuration": configuration}]
-    )
-    if len(lines) != 2:
-        raise ContractFail(f"{website_item_code} should create base + foil add-on lines, found {len(lines)}")
-    if len(resolved_items) != 2:
-        raise ContractFail(f"{website_item_code} resolved display lines should include add-on, found {len(resolved_items)}")
-
-    base_line, add_on_line = lines
-    _assert_base_line_payload(
-        label=website_item_code,
-        line=base_line,
-        expected_item_code=variant_item_code,
-        expected_website_item_code=website_item_code,
-        expect_add_on=True,
-        expected_selected_options=_variant_options_dict(resolved.get("variant_options") or []),
-    )
-    _assert_foil_add_on_line_payload(
-        label=website_item_code,
-        line=add_on_line,
-        expected_parent_item_code=variant_item_code,
-        expected_website_item_code=website_item_code,
-    )
+        )
 
     return (
         {
             "website_item_code": website_item_code,
             "web_item_name": website_item.get("web_item_name"),
-            "variant_item_code": variant_item_code,
             "stored_contract": "simple_product|checkout",
             "foil_option_rate": flt(foil_option.get("unit_price")),
-            "resolved_line_count": len(lines),
+            "enabled_variant_count": len(variant_item_codes),
+            "add_on_line_count": len(variant_item_codes),
+            "resolved_line_count": len(sale_lines),
+            "verified_variants": verified_variants,
         },
-        lines,
+        sale_lines,
     )
-
 
 def _assert_unknown_client_selected_options_fail_loudly() -> None:
     stale_configuration = _configuration_payload(
@@ -235,40 +270,162 @@ def _assert_unknown_client_selected_options_fail_loudly() -> None:
 
 
 def _assert_mothers_day_simple_line() -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    return _assert_single_sku_simple_line(
+        website_item_code=MOTHERS_DAY_WEBSITE_ITEM,
+        label="Mother's Day Bouquet",
+        no_add_on_failure="Mother's Day Bouquet should not expose checkout add-ons",
+    )
+
+
+def _assert_easter_balloon_cups_simple_line() -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    variant_item_codes = _enabled_variants_for_template(
+        EASTER_BALLOON_CUPS_WEBSITE_ITEM,
+        required_attribute="Easter Designs",
+    )
+    sale_lines: list[dict[str, Any]] = []
+    verified_variants: list[dict[str, Any]] = []
+    web_item_name = "Easter Balloon Cups"
+    for variant_item_code in variant_item_codes:
+        result, lines = _assert_variant_simple_line(
+            website_item_code=EASTER_BALLOON_CUPS_WEBSITE_ITEM,
+            variant_item_code=variant_item_code,
+            label="Easter Balloon Cups",
+            no_add_on_failure="Easter Balloon Cups should not expose checkout add-ons",
+        )
+        web_item_name = result.get("web_item_name") or web_item_name
+        sale_lines.extend(lines)
+        verified_variants.append(
+            {
+                "variant_item_code": variant_item_code,
+                "selected_options": result.get("selected_options"),
+                "resolved_line_count": result.get("resolved_line_count"),
+            }
+        )
+
+    return (
+        {
+            "website_item_code": EASTER_BALLOON_CUPS_WEBSITE_ITEM,
+            "web_item_name": web_item_name,
+            "stored_contract": "simple_product|checkout",
+            "enabled_variant_count": len(variant_item_codes),
+            "add_on_options": 0,
+            "resolved_line_count": len(sale_lines),
+            "verified_variants": verified_variants,
+            "seasonal_status": "architecture_verified_not_launch_approval",
+            "note": (
+                "Seasonal orderability/visibility is still a separate GL/business approval; "
+                "this verifies the ERPNext receiving architecture only."
+            ),
+        },
+        sale_lines,
+    )
+
+def _assert_variant_simple_line(
+    *,
+    website_item_code: str,
+    variant_item_code: str,
+    label: str,
+    no_add_on_failure: str,
+) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     from locally_twisted.product_options import get_checkout_add_on_options
     from locally_twisted.www.checkout import _resolve_sale_lines
 
     website_item = _assert_website_item_contract(
-        MOTHERS_DAY_WEBSITE_ITEM,
+        website_item_code,
         page_type="simple_product",
         commerce_lane="checkout",
     )
-    if get_checkout_add_on_options(MOTHERS_DAY_WEBSITE_ITEM):
-        raise ContractFail("Mother's Day Bouquet should not expose checkout add-ons")
+    if get_checkout_add_on_options(website_item_code):
+        raise ContractFail(no_add_on_failure)
 
-    item_code = _sellable_item_for_template(MOTHERS_DAY_WEBSITE_ITEM)
-    resolved = _resolve_cart_item(item_code, MOTHERS_DAY_WEBSITE_ITEM)
+    item = frappe.db.get_value(
+        "Item",
+        {"item_code": variant_item_code, "variant_of": website_item_code},
+        ["item_code", "disabled"],
+        as_dict=True,
+    )
+    if not item or int(item.get("disabled") or 0):
+        raise ContractFail(f"{label} variant {variant_item_code} is missing or disabled")
+
+    resolved = _resolve_cart_item(variant_item_code, website_item_code)
+    selected_options = _variant_options_dict(resolved.get("variant_options") or [])
+    if not selected_options:
+        raise ContractFail(f"{label} variant path did not resolve selected options: {resolved}")
+    configuration = _configuration_payload(
+        item_code=variant_item_code,
+        website_item_code=website_item_code,
+        variant_options=resolved.get("variant_options") or [],
+    )
+
+    lines, resolved_items = _resolve_sale_lines(
+        [{"item_code": variant_item_code, "qty": 1, "configuration": configuration}]
+    )
+    if len(lines) != 1 or len(resolved_items) != 1:
+        raise ContractFail(f"{label} variant path should create one line, found {len(lines)}")
+    _assert_base_line_payload(
+        label=website_item_code,
+        line=lines[0],
+        expected_item_code=variant_item_code,
+        expected_website_item_code=website_item_code,
+        expect_add_on=False,
+        expected_selected_options=selected_options,
+    )
+
+    return (
+        {
+            "website_item_code": website_item_code,
+            "web_item_name": website_item.get("web_item_name"),
+            "variant_item_code": variant_item_code,
+            "stored_contract": "simple_product|checkout",
+            "selected_options": selected_options,
+            "add_on_options": 0,
+            "resolved_line_count": len(lines),
+        },
+        lines,
+    )
+
+
+def _assert_single_sku_simple_line(
+    *,
+    website_item_code: str,
+    label: str,
+    no_add_on_failure: str,
+) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    from locally_twisted.product_options import get_checkout_add_on_options
+    from locally_twisted.www.checkout import _resolve_sale_lines
+
+    website_item = _assert_website_item_contract(
+        website_item_code,
+        page_type="simple_product",
+        commerce_lane="checkout",
+    )
+    if get_checkout_add_on_options(website_item_code):
+        raise ContractFail(no_add_on_failure)
+
+    item_code = _sellable_item_for_template(website_item_code)
+    resolved = _resolve_cart_item(item_code, website_item_code)
     if resolved.get("variant_options"):
-        raise ContractFail(f"Mother's Day simple path unexpectedly resolved variant options: {resolved}")
+        raise ContractFail(f"{label} simple path unexpectedly resolved variant options: {resolved}")
 
     lines, resolved_items = _resolve_sale_lines([{"item_code": item_code, "qty": 1, "configuration": None}])
     if len(lines) != 1 or len(resolved_items) != 1:
-        raise ContractFail(f"Mother's Day simple path should create one line, found {len(lines)}")
+        raise ContractFail(f"{label} simple path should create one line, found {len(lines)}")
     _assert_base_line_payload(
-        label=MOTHERS_DAY_WEBSITE_ITEM,
+        label=website_item_code,
         line=lines[0],
         expected_item_code=item_code,
-        expected_website_item_code=MOTHERS_DAY_WEBSITE_ITEM,
+        expected_website_item_code=website_item_code,
         expect_add_on=False,
         expected_selected_options={},
     )
 
     return (
         {
-            "website_item_code": MOTHERS_DAY_WEBSITE_ITEM,
+            "website_item_code": website_item_code,
             "web_item_name": website_item.get("web_item_name"),
             "item_code": item_code,
             "stored_contract": "simple_product|checkout",
+            "sale_sku_count": 1,
             "add_on_options": 0,
             "resolved_line_count": len(lines),
         },
@@ -293,7 +450,7 @@ def _assert_website_item_contract(website_item_code: str, *, page_type: str, com
     return row
 
 
-def _small_bouquet_variant(website_item_code: str) -> str:
+def _enabled_variants_for_template(website_item_code: str, *, required_attribute: str) -> list[str]:
     rows = frappe.db.sql(
         """
         SELECT item.item_code
@@ -302,17 +459,18 @@ def _small_bouquet_variant(website_item_code: str) -> str:
             ON attr.parent = item.name
         WHERE item.variant_of = %s
             AND item.disabled = 0
-            AND attr.attribute = 'Bouquet Size'
-            AND attr.attribute_value LIKE %s
+            AND attr.attribute = %s
+            AND attr.attribute_value IS NOT NULL
+            AND attr.attribute_value != ''
         ORDER BY item.item_code
-        LIMIT 1
         """,
-        (website_item_code, "Small%"),
+        (website_item_code, required_attribute),
         as_dict=True,
     )
-    if not rows:
-        raise ContractFail(f"{website_item_code} has no enabled Small bouquet variant")
-    return rows[0]["item_code"]
+    item_codes = [row["item_code"] for row in rows]
+    if not item_codes:
+        raise ContractFail(f"{website_item_code} has no enabled variants for {required_attribute}")
+    return item_codes
 
 
 def _sellable_item_for_template(website_item_code: str) -> str:
@@ -483,7 +641,13 @@ def _payload(label: str, line: Any) -> dict[str, Any]:
         raise ContractFail(f"{label} line payload is not valid JSON: {raw!r}") from exc
 
 
-def _assert_sales_order_accepts_family_lines(token: str, lines: list[dict[str, Any]]):
+def _assert_sales_order_accepts_family_lines(
+    token: str,
+    lines: list[dict[str, Any]],
+    *,
+    expected_base_line_count: int,
+    expected_add_on_line_count: int,
+):
     customer = _create_customer(token)
     sales_order = frappe.get_doc(
         {
@@ -503,11 +667,22 @@ def _assert_sales_order_accepts_family_lines(token: str, lines: list[dict[str, A
     sales_order.submit()
     if len(sales_order.items) != len(lines):
         raise ContractFail(f"Sales Order stored {len(sales_order.items)} lines, expected {len(lines)}")
-    _assert_stored_rows_preserve_line_fields("Sales Order", sales_order.items)
+    _assert_stored_rows_preserve_line_fields(
+        "Sales Order",
+        sales_order.items,
+        expected_base_line_count=expected_base_line_count,
+        expected_add_on_line_count=expected_add_on_line_count,
+    )
     return sales_order
 
 
-def _assert_invoice_preserves_family_lines(sales_order_name: str, *, expected_line_count: int) -> str:
+def _assert_invoice_preserves_family_lines(
+    sales_order_name: str,
+    *,
+    expected_line_count: int,
+    expected_base_line_count: int,
+    expected_add_on_line_count: int,
+) -> str:
     from erpnext.selling.doctype.sales_order.sales_order import make_sales_invoice
     from locally_twisted.product_page_runtime import copy_sales_order_line_configuration_to_invoice
 
@@ -520,11 +695,22 @@ def _assert_invoice_preserves_family_lines(sales_order_name: str, *, expected_li
     invoice.submit()
     if len(invoice.items) != expected_line_count:
         raise ContractFail(f"Sales Invoice stored {len(invoice.items)} lines, expected {expected_line_count}")
-    _assert_stored_rows_preserve_line_fields("Sales Invoice", invoice.items)
+    _assert_stored_rows_preserve_line_fields(
+        "Sales Invoice",
+        invoice.items,
+        expected_base_line_count=expected_base_line_count,
+        expected_add_on_line_count=expected_add_on_line_count,
+    )
     return invoice.name
 
 
-def _assert_stored_rows_preserve_line_fields(label: str, rows: list[Any]) -> None:
+def _assert_stored_rows_preserve_line_fields(
+    label: str,
+    rows: list[Any],
+    *,
+    expected_base_line_count: int,
+    expected_add_on_line_count: int,
+) -> None:
     base_count = 0
     add_on_count = 0
     for row in rows:
@@ -542,10 +728,10 @@ def _assert_stored_rows_preserve_line_fields(label: str, rows: list[Any]) -> Non
                 raise ContractFail(f"{label} base row did not preserve checkout lane: {payload}")
         else:
             raise ContractFail(f"{label} row has unknown LT product-page payload source: {payload}")
-    if base_count != len(EXPECTED_FOIL_BOUQUET_WEBSITE_ITEMS) + 1:
-        raise ContractFail(f"{label} should store bouquet base lines plus Mother's Day, found {base_count}")
-    if add_on_count != len(EXPECTED_FOIL_BOUQUET_WEBSITE_ITEMS):
-        raise ContractFail(f"{label} should store one foil add-on line per bouquet, found {add_on_count}")
+    if base_count != expected_base_line_count:
+        raise ContractFail(f"{label} should store {expected_base_line_count} checkout base SKU lines, found {base_count}")
+    if add_on_count != expected_add_on_line_count:
+        raise ContractFail(f"{label} should store {expected_add_on_line_count} foil add-on lines, found {add_on_count}")
 
 
 def _create_customer(token: str):

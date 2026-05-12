@@ -67,9 +67,12 @@ def main() -> int:
     else:
         print("[CHECKOUT PRODUCT-FAMILY CONTRACT] " + ("PASS" if result.get("ok") else "FAIL"))
         print(f"  bouquet_family_count: {result.get('bouquet_family_count')}")
+        print(f"  enabled_sale_sku_count: {result.get('enabled_sale_sku_count')}")
+        print(f"  add_on_line_count: {result.get('add_on_line_count')}")
         print(f"  sales_order_line_count: {result.get('sales_order_line_count')}")
         print(f"  sales_invoice: {result.get('sales_invoice')}")
-        print(f"  easter_balloon_cups: {(result.get('easter_balloon_cups') or {}).get('status')}")
+        easter = result.get('easter_balloon_cups') or {}
+        print(f"  easter_balloon_cups: {easter.get('seasonal_status') or easter.get('status')}")
         print(f"  survivor_counts: {result.get('survivor_counts')}")
         if result.get("rolled_back"):
             print("  rollback: verifier rolled back all generated records")
