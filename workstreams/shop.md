@@ -99,9 +99,9 @@ Reference and verification files:
 - `scripts/setup/sync_variant_media.py`
 - `scripts/verify/nav_ia.py`
 - `scripts/verify/layout_fit.spec.js`
-- `.codex/capabilities/recipes/frappe-product-page-company-first.md`
-- `.codex/capabilities/recipes/frappe-product-clear-control-contract.md`
-- `.codex/capabilities/recipes/public-site-microinteraction-contract.md`
+- `capabilities/recipes/frappe-product-page-company-first.md`
+- `capabilities/recipes/frappe-product-clear-control-contract.md`
+- `capabilities/recipes/public-site-microinteraction-contract.md`
 
 ## Known Current Facts
 
@@ -114,9 +114,10 @@ Reference and verification files:
 - `/shop` is the all-decor hub. `/shop-items`, `/all-products`, and `/shop-by-category` route or redirect to `/shop`; category detail pages stay at `/shop-items/<group>`.
 - `/shop-items/arches` previously required restoring `.item-group-content`; do not remove that structure without retesting group pages.
 - Shop showroom container redesign completed 2026-05-06: `/shop` uses large photo-first ready-to-order cards; `/shop-items` aliases to the `/shop` showroom contract; `/shop-items/<group>` keeps Webshop/Frappe product listing behavior while using the LT showroom shell; product detail pages use a wider contained image/detail layout. The shared override is `lt-shop-showroom.css`, loaded after `lt-product-polish.css`.
-- Product detail company-first cleanup completed 2026-05-07: the Webshop lower Additional Info/Reviews/Recommended Items panel is removed from product detail pages, the old auxiliary/recommendation CSS selectors are gone, and the primary product shell is less visibly boxed. The same-day clear-control correction removed boxed styling from product options, variant chips, select/dropdowns, and price/add-to-cart groups; pickup/delivery is the approved framed product-detail exception. Do not restore recommendation panels, empty reviews/spec tabs, generic upsell sections, or boxed product controls unless GL explicitly reopens the decision. Capabilities: `.codex/capabilities/recipes/frappe-product-page-company-first.md` and `.codex/capabilities/recipes/frappe-product-clear-control-contract.md`.
+- Product detail company-first cleanup completed 2026-05-07: the Webshop lower Additional Info/Reviews/Recommended Items panel is removed from product detail pages, the old auxiliary/recommendation CSS selectors are gone, and the primary product shell is less visibly boxed. The same-day clear-control correction removed boxed styling from product options, variant chips, select/dropdowns, and price/add-to-cart groups; pickup/delivery is the approved framed product-detail exception. Do not restore recommendation panels, empty reviews/spec tabs, generic upsell sections, or boxed product controls unless GL explicitly reopens the decision. Capabilities: `capabilities/recipes/frappe-product-page-company-first.md` and `capabilities/recipes/frappe-product-clear-control-contract.md`.
 - Shop category navigation UX repair completed 2026-05-06: the old `/shop` chip filter wall and `/shop-items/<group>` 12-button tile wall are retired. Both `/shop` and category pages use the shared `shop_category_nav.html` component: a slim desktop left rail and a native mobile category select. `/shop` category choices now navigate to category pages instead of filtering in place; product grids still avoid a single desktop orphan card where the rendered count makes that possible.
 - Verified showroom measurements on 2026-05-06: `/shop` desktop cards remain above the `340px` card and `300px` image minimums with the category rail present, `/shop` mobile cards remain non-thumbnail, `/shop-items/arches` desktop cards remain showroom-sized in paired rows, and the representative product detail image remains above the desktop image-size contract.
+- Current ERPNext product records are test fixtures for ecommerce receiving proof, not final catalog truth. Do not make catalog-completeness claims from them. Future product work must prove a controlled purge/reupload/import path populates LT Website Item/custom fields, preserves cascading option/dependency information, and triggers expected automations before any public product shelf is trusted.
 - The guest cart is localStorage-based at `/cart`, supports multi-item checkout, and connects to Stripe Checkout Sessions in test mode.
 - Current checkout commerce rules: ready-to-order goods can check out and are taxable by fulfillment ZIP/city rate; services, BTFP, service deposits, and delivery charges are non-taxable; standard local delivery is `$15`; Park City delivery is `$50`; out-of-area delivery redirects to a prefilled `/contact` quote path. Product group alone is not a checkout quote gate. See `workstreams/commerce-rules-checkout.md` before changing cart, checkout, delivery, service, or deposit behavior.
 - Cart/checkout now sells actual Item codes and uses the parent Website Item for route/name display when the item is a variant. If the variant has its own `Item.image`, cart/checkout use that selected-variant image; otherwise they fall back to the parent Website Item image. Fixed-price products stay cartable unless fulfillment details, especially out-of-area delivery ZIP, require a quote path.
@@ -242,6 +243,31 @@ Full ecommerce testing verification on 2026-05-10:
 - `npm run test:public-verify` passed 12 website steps with open ecommerce checks included.
 - `python scripts/verify/synthetic_business_pipeline.py` passed with 22 synthetic readiness contracts, 0 broken piping, 8 inefficiencies, and 3 cutover-deferred items.
 - `python scripts/verify/business_automation_index.py` passed with 27 connected surfaces, 3 future/setup partials, 0 missing required/useful surfaces, and 0 loud-failure gaps.
+
+Shop smoke closeout on 2026-05-11:
+
+- `scripts/verify/smoke_shop.py` was rebaselined for current audience-page H1
+  copy from `apps/locally_twisted/locally_twisted/www/event_type_pages.py`.
+- The `/civic-community missing focused page title` blocker is cleared. The
+  same title map now matches the current `/corporate-events`,
+  `/schools-campuses`, and `/private-celebrations` H1 source so peer GPT 5.5
+  agents do not rediscover the same stale verifier mismatch route by route.
+- Closeout command: `npm run test:shop-smoke` passed with
+  `=== All shop smoke checks PASSED ===`.
+- This is a real client project. The currently visible/imported product records
+  are test products/fixtures for architecture and behavior proof only, not
+  launch catalog truth.
+
+Open ecommerce webshop role for future peer agents:
+
+- Do not treat the ecommerce lane as frontend-only. Product-page UX and
+  SEO/AEO/GEO decisions must preserve ERPNext v15.105.0 / Frappe v15 Webshop
+  backend meaning through Item, Item Variant, Website Item, Item Price, Item
+  Attribute, media/gallery, Webshop Settings, cart/checkout APIs, payments, and
+  Frappe Cloud persistence.
+- If product-page copy, media, price, variants, structured data, or discovery
+  claims cannot be verified against backend fields or runtime evidence, mark
+  the claim blocked instead of guessing.
 
 ## Decisions And References
 

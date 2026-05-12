@@ -1,0 +1,96 @@
+﻿ M CODING-HANDOFF.md
+ M apps/locally_twisted/locally_twisted/hooks.py
+ M apps/locally_twisted/locally_twisted/public/css/lt-mega-menu.css
+ M apps/locally_twisted/locally_twisted/public/css/lt-product-page-visual-first.css
+ M apps/locally_twisted/locally_twisted/templates/generators/item/item.html
+ M apps/locally_twisted/locally_twisted/templates/generators/item/item_configure.html
+ M apps/locally_twisted/locally_twisted/templates/generators/item/item_details.html
+ M apps/locally_twisted/locally_twisted/templates/generators/item/item_image.html
+ M apps/locally_twisted/locally_twisted/verify/checkout_product_family_contract.py
+ M apps/locally_twisted/locally_twisted/www/home.html
+ M apps/locally_twisted/locally_twisted/www/home.py
+ M capabilities/INDEX.md
+ M capabilities/failures/public-header-contrast-safe-area-regression.md
+ M capabilities/recipes/erpnext-ecommerce-receiving-architecture.md
+ M capabilities/recipes/frappe-public-nav-business-route-contract.md
+ M capabilities/registry/capability-registry.jsonl
+ M lessons-learned.md
+ M locally-twisted-decisions.md
+ M locally-twisted-queue.md
+ M scripts/verify/checkout_product_family_contract.py
+ M scripts/verify/interactive_layout.spec.js
+ M scripts/verify/nav_ia.py
+ M scripts/verify/search_contract.spec.js
+ M scripts/verify/smoke_shop.py
+ M workstreams/brand-style-guide-consolidation.md
+ M workstreams/browser-verification-runtime.md
+ M workstreams/btfp-service-page.md
+ M workstreams/catalog-variant-price-recovery.md
+ M workstreams/ecommerce-audit/README.md
+ M workstreams/ecommerce-audit/ready-to-order-ecommerce-goal-progress-2026-05-10.md
+ M workstreams/erpnext-backend-simplification.md
+ M workstreams/form-submission-experience.md
+ M workstreams/homepage-seasonal-hero-carousel-2026-05-10.md
+ M workstreams/landing-page-repair.md
+ M workstreams/menu-content-coordination.md
+ M workstreams/mobile-nav-review-compactness.md
+ M workstreams/nav-btfp-process-correction.md
+ M workstreams/nav-service-removal-guard.md
+ M workstreams/paperwork-backend-automation.md
+ M workstreams/portfolio-proof-gallery.md
+ M workstreams/public-header-banner-contract-2026-05-10.md
+ M workstreams/responsive-container-integrity.md
+ M workstreams/shop.md
+ M workstreams/website-launch.md
+?? apps/locally_twisted/locally_twisted/public/icons/gigsalad.svg
+?? apps/locally_twisted/locally_twisted/public/icons/google.svg
+?? "assets/landing-page-pics/Giant Pumpkin Balloon.png"
+?? "assets/landing-page-pics/Happy Easter Carrot balloons.jpg"
+?? assets/landing-page-pics/IMG_1263.jpeg
+?? assets/landing-page-pics/IMG_1802.jpeg
+?? "assets/landing-page-pics/IMG_1919 - Copy.jpeg"
+?? assets/landing-page-pics/IMG_3792.JPG
+?? assets/landing-page-pics/IMG_8457.jpeg
+?? "assets/landing-page-pics/IMG_9269 - Copy.JPG"
+?? "assets/landing-page-pics/balloon Ferris wheel Salt lake city utah.jpg"
+?? assets/landing-page-pics/community/IMG_0215.JPG
+?? "assets/landing-page-pics/community/IMG_1807 - Copy.jpeg"
+?? "assets/landing-page-pics/community/IMG_2628 - Copy.jpeg"
+?? "assets/landing-page-pics/community/IMG_2635 - Copy.JPG"
+?? "assets/landing-page-pics/community/IMG_8457 - Copy.jpeg"
+?? "assets/landing-page-pics/community/IMG_8625 - Copy.jpeg"
+?? "assets/landing-page-pics/community/balloon Ferris wheel Salt lake city utah - Copy.jpg"
+?? assets/landing-page-pics/community/train.jpg
+?? "assets/landing-page-pics/community/tree house dinner.png"
+?? "assets/landing-page-pics/corporate/IMG_1263 - Copy.jpeg"
+?? "assets/landing-page-pics/corporate/IMG_1799 - Copy.jpeg"
+?? "assets/landing-page-pics/corporate/IMG_1802 - Copy.jpeg"
+?? "assets/landing-page-pics/corporate/IMG_3809 - Copy.JPG"
+?? "assets/landing-page-pics/corporate/IMG_4341 - Copy.jpeg"
+?? assets/landing-page-pics/corporate/walmart.jpg
+?? assets/landing-page-pics/parade.png
+?? "assets/landing-page-pics/popcorn 2.png"
+?? assets/landing-page-pics/popcorn.png
+?? "assets/landing-page-pics/private/Happy Easter Carrot balloons - Copy.jpg"
+?? "assets/landing-page-pics/private/IMG_7782 - Copy.jpeg"
+?? "assets/landing-page-pics/private/IMG_7783 - Copy.jpeg"
+?? "assets/landing-page-pics/private/IMG_9061 - Copy.jpeg"
+?? "assets/landing-page-pics/private/home tree.jpg"
+?? "assets/landing-page-pics/school/Weber balloons.png"
+?? "assets/landing-page-pics/sponge bob.png"
+?? workstreams/ecommerce-audit/2026-05-10-2330-phase-1-4-shop-audit/browser-gate-results.tsv
+?? workstreams/ecommerce-audit/2026-05-10-2330-phase-1-4-shop-audit/checkout-product-family-after-easter.json
+?? workstreams/ecommerce-audit/2026-05-10-2330-phase-1-4-shop-audit/checkout-product-family-final.json
+?? workstreams/ecommerce-audit/2026-05-10-2330-phase-1-4-shop-audit/checkout-product-family.json
+?? workstreams/ecommerce-audit/2026-05-10-2330-phase-1-4-shop-audit/fix-rerun-2-results.tsv
+?? workstreams/ecommerce-audit/2026-05-10-2330-phase-1-4-shop-audit/fix-rerun-results.tsv
+?? workstreams/ecommerce-audit/2026-05-10-2330-phase-1-4-shop-audit/gate-results.tsv
+?? workstreams/ecommerce-audit/2026-05-10-2330-phase-1-4-shop-audit/git-status-final.txt
+?? workstreams/ecommerce-audit/2026-05-10-2330-phase-1-4-shop-audit/product-add-on-dependency.json
+?? workstreams/ecommerce-audit/2026-05-10-2330-phase-1-4-shop-audit/quote-event-boundary.json
+?? workstreams/ecommerce-audit/2026-05-10-2330-phase-1-4-shop-audit/website-item-classification.json
+?? workstreams/ecommerce-audit/phase-1-4-deep-audit-brief-2026-05-10.md
+?? workstreams/ecommerce-audit/phase-1-4-deep-audit-import-schema-lens-2026-05-10.md
+?? workstreams/ecommerce-audit/phase-1-4-deep-audit-safety-lens-2026-05-10.md
+?? workstreams/ecommerce-audit/phase-1-4-deep-audit-verifier-lens-2026-05-10.md
+?? workstreams/ecommerce-audit/ready-to-order-product-cut-plan-2026-05-10.md

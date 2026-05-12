@@ -131,7 +131,7 @@
       "source_variant_rows": 636
     }
   ],
-  "generated_at": "2026-05-12T00:45:24Z",
+  "generated_at": "2026-05-12T01:18:45Z",
   "next_command_sequence": [
     "python scripts/verify/v1_odoo_erpnext_import_manifest.py",
     "python scripts/verify/catalog_purge_scope_dry_run.py",

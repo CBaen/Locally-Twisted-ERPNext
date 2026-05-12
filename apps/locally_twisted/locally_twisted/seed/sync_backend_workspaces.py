@@ -13,11 +13,18 @@ from locally_twisted.seed import sync_crm_pipeline
 
 
 OWNER_HOME = "LT Owner Home"
+MANAGER_HOME = "LT Manager Home"
+EMPLOYEE_HOME = "LT Employee Home"
 OWNER_WORKSPACE_ROLE = "LT Owner Access"
 OWNER_DEFAULT_WORKSPACE_USERS = [
     "cameron@builtbycameron.com",
     "locallytwisted@gmail.com",
 ]
+PERSONA_DEFAULT_WORKSPACE_USERS = {
+    "lt-owner-temp@example.com": OWNER_HOME,
+    "lt-manager-temp@example.com": MANAGER_HOME,
+    "lt-employee-temp@example.com": EMPLOYEE_HOME,
+}
 PLATFORM_NAMED_WORKSPACES_TO_HIDE = [
     "ERPNext Settings",
     "ERPNext Integrations",
@@ -61,9 +68,9 @@ STALE_SHORTCUT_LABELS = {
 }
 
 WORKSPACES_TO_NORMALIZE = [
-    "LT Owner Home",
-    "LT Manager Home",
-    "LT Employee Home",
+    OWNER_HOME,
+    MANAGER_HOME,
+    EMPLOYEE_HOME,
 ]
 
 OWNER_REQUIRED_ROLES = ["Item Manager"]
@@ -227,6 +234,119 @@ OWNER_HOME_SHORTCUTS = [
     },
 ]
 
+MANAGER_HOME_SHORTCUTS = [
+    {
+        "label": "Events Inquiry Inbox",
+        "type": "DocType",
+        "link_to": "Lead",
+        "doc_view": "List",
+        "stats_filter": {"custom_pipeline_stage": "New Inquiry"},
+        "color": "Blue",
+        "format": "{} New",
+    },
+    {
+        "label": "Inquiry Board",
+        "type": "DocType",
+        "link_to": "Lead",
+        "doc_view": "Kanban",
+        "kanban_board": "LT Inquiry Board",
+        "color": "Blue",
+    },
+    {
+        "label": "Booking Calendar",
+        "type": "DocType",
+        "link_to": "Sales Order",
+        "doc_view": "Calendar",
+        "color": "Green",
+    },
+    {
+        "label": "Bookings",
+        "type": "DocType",
+        "link_to": "Sales Order",
+        "doc_view": "List",
+        "color": "Yellow",
+    },
+    {
+        "label": "Customers",
+        "type": "DocType",
+        "link_to": "Customer",
+        "doc_view": "List",
+        "color": "Blue",
+    },
+    {
+        "label": "People to Contact",
+        "type": "DocType",
+        "link_to": "Contact",
+        "doc_view": "List",
+        "color": "Grey",
+    },
+    {
+        "label": "Event Jobs",
+        "type": "DocType",
+        "link_to": "Project",
+        "doc_view": "List",
+        "stats_filter": {"status": "Open"},
+        "color": "Green",
+        "format": "{} Open",
+    },
+    {
+        "label": "Task Board",
+        "type": "DocType",
+        "link_to": "Task",
+        "doc_view": "Kanban",
+        "kanban_board": "LT Task Board",
+        "color": "Orange",
+    },
+    {
+        "label": "Add New Inquiry",
+        "type": "DocType",
+        "link_to": "Lead",
+        "doc_view": "New",
+        "color": "Green",
+    },
+    {
+        "label": "Add Customer",
+        "type": "DocType",
+        "link_to": "Customer",
+        "doc_view": "New",
+        "color": "Green",
+    },
+]
+
+EMPLOYEE_HOME_SHORTCUTS = [
+    {
+        "label": "My Tasks",
+        "type": "DocType",
+        "link_to": "Task",
+        "doc_view": "List",
+        "color": "Orange",
+    },
+    {
+        "label": "Booking Calendar",
+        "type": "DocType",
+        "link_to": "Sales Order",
+        "doc_view": "Calendar",
+        "color": "Green",
+    },
+    {
+        "label": "Event Jobs",
+        "type": "DocType",
+        "link_to": "Project",
+        "doc_view": "List",
+        "stats_filter": {"status": "Open"},
+        "color": "Green",
+        "format": "{} Open",
+    },
+    {
+        "label": "Task Board",
+        "type": "DocType",
+        "link_to": "Task",
+        "doc_view": "Kanban",
+        "kanban_board": "LT Task Board",
+        "color": "Orange",
+    },
+]
+
 
 def execute() -> str:
     summary = {
@@ -247,6 +367,19 @@ def execute() -> str:
     for workspace in WORKSPACES_TO_NORMALIZE:
         _normalize_workspace(workspace, summary)
     _set_owner_home_command_center(summary)
+    _set_persona_workspace(
+        MANAGER_HOME,
+        MANAGER_HOME_SHORTCUTS,
+        _manager_home_content(),
+        summary,
+    )
+    _set_persona_workspace(
+        EMPLOYEE_HOME,
+        EMPLOYEE_HOME_SHORTCUTS,
+        _employee_home_content(),
+        summary,
+    )
+    _ensure_persona_default_workspaces(summary)
     _ensure_default_owner_workspace(summary)
     _hide_platform_named_workspaces(summary)
     frappe.clear_cache()
@@ -435,6 +568,30 @@ def _set_owner_home_command_center(summary: dict) -> None:
         )
 
 
+def _set_persona_workspace(
+    workspace_name: str,
+    desired_shortcuts: list[dict],
+    desired_content: list[dict],
+    summary: dict,
+) -> None:
+    if not frappe.db.exists("Workspace", workspace_name):
+        return
+
+    doc = frappe.get_doc("Workspace", workspace_name)
+    changed = False
+    changed = _ensure_shortcuts(doc, desired_shortcuts) or changed
+
+    if _load_content(doc.content) != desired_content:
+        doc.content = json.dumps(desired_content)
+        changed = True
+
+    if changed:
+        doc.save(ignore_permissions=True)
+        summary["updated_workspaces"].append(
+            {"workspace": workspace_name, "layout": "persona-focused"}
+        )
+
+
 def _ensure_default_owner_workspace(summary: dict) -> None:
     if not frappe.db.exists("Workspace", OWNER_HOME):
         return
@@ -475,6 +632,24 @@ def _ensure_default_owner_workspace(summary: dict) -> None:
             summary["updated_users"].append(
                 {"user": user_name, "default_workspace": OWNER_HOME}
             )
+
+
+def _ensure_persona_default_workspaces(summary: dict) -> None:
+    for user_name, workspace_name in PERSONA_DEFAULT_WORKSPACE_USERS.items():
+        if not frappe.db.exists("User", user_name):
+            continue
+        if not frappe.db.exists("Workspace", workspace_name):
+            continue
+
+        doc = frappe.get_doc("User", user_name)
+        if doc.default_workspace == workspace_name:
+            continue
+
+        doc.default_workspace = workspace_name
+        doc.save(ignore_permissions=True)
+        summary["updated_users"].append(
+            {"user": user_name, "default_workspace": workspace_name}
+        )
 
 
 def _get_owner_operator_roles() -> list[str]:
@@ -580,37 +755,98 @@ def _owner_home_content() -> list[dict]:
     return blocks
 
 
+def _manager_home_content() -> list[dict]:
+    return [
+        _header(
+            "lt-manager-title",
+            '<span class="h4"><b>Manager Home</b></span>',
+            12,
+        ),
+        _header(
+            "lt-manager-subtitle",
+            '<span class="text-muted">Keep inquiries, bookings, customers, and job follow-up moving without catalog tools.</span>',
+            12,
+        ),
+        _header(
+            "lt-manager-work-title",
+            '<span class="h4"><b>Today&apos;s work</b></span>',
+            12,
+        ),
+        _shortcut("lt-manager-inquiries", "Events Inquiry Inbox", 3),
+        _shortcut("lt-manager-board", "Inquiry Board", 3),
+        _shortcut("lt-manager-calendar", "Booking Calendar", 3),
+        _shortcut("lt-manager-tasks", "Task Board", 3),
+        _header(
+            "lt-manager-records-title",
+            '<span class="h4"><b>Customer and event records</b></span>',
+            12,
+        ),
+        _shortcut("lt-manager-bookings", "Bookings", 3),
+        _shortcut("lt-manager-customers", "Customers", 3),
+        _shortcut("lt-manager-contacts", "People to Contact", 3),
+        _shortcut("lt-manager-jobs", "Event Jobs", 3),
+        _header(
+            "lt-manager-add-title",
+            '<span class="h4"><b>Add only what the team needs</b></span>',
+            12,
+        ),
+        _shortcut("lt-manager-add-inquiry", "Add New Inquiry", 3),
+        _shortcut("lt-manager-add-customer", "Add Customer", 3),
+    ]
+
+
+def _employee_home_content() -> list[dict]:
+    return [
+        _header(
+            "lt-employee-title",
+            '<span class="h4"><b>My Jobs</b></span>',
+            12,
+        ),
+        _header(
+            "lt-employee-subtitle",
+            '<span class="text-muted">See assigned work and the event schedule without customer, finance, or catalog administration.</span>',
+            12,
+        ),
+        _header(
+            "lt-employee-work-title",
+            '<span class="h4"><b>Work to do</b></span>',
+            12,
+        ),
+        _shortcut("lt-employee-my-tasks", "My Tasks", 3),
+        _shortcut("lt-employee-task-board", "Task Board", 3),
+        _shortcut("lt-employee-calendar", "Booking Calendar", 3),
+        _shortcut("lt-employee-jobs", "Event Jobs", 3),
+    ]
+
+
 def _ensure_shortcuts(doc, desired_shortcuts: list[dict]) -> bool:
-    changed = False
-    existing_by_label = {row.label: row for row in doc.shortcuts}
-
+    fields = [
+        "label",
+        "type",
+        "link_to",
+        "url",
+        "doc_view",
+        "kanban_board",
+        "color",
+        "format",
+        "report_ref_doctype",
+        "stats_filter",
+    ]
+    desired_rows = []
     for spec in desired_shortcuts:
-        row = existing_by_label.get(spec["label"])
-        if row is None:
-            row = doc.append("shortcuts", {})
-            changed = True
-        for key in (
-            "label",
-            "type",
-            "link_to",
-            "url",
-            "doc_view",
-            "kanban_board",
-            "color",
-            "format",
-            "report_ref_doctype",
-        ):
-            value = spec.get(key)
-            if getattr(row, key, None) != value:
-                setattr(row, key, value)
-                changed = True
-        stats_filter = spec.get("stats_filter")
-        value = json.dumps(stats_filter) if stats_filter is not None else None
-        if getattr(row, "stats_filter", None) != value:
-            row.stats_filter = value
-            changed = True
+        row = {field: spec.get(field) for field in fields}
+        if spec.get("stats_filter") is not None:
+            row["stats_filter"] = json.dumps(spec["stats_filter"])
+        desired_rows.append(row)
 
-    return changed
+    if _child_table_rows(doc.shortcuts, fields) == desired_rows:
+        return False
+
+    doc.set("shortcuts", [])
+    for row in desired_rows:
+        doc.append("shortcuts", row)
+    return True
+
 
 
 def _set_fields(doc, fields: dict) -> bool:

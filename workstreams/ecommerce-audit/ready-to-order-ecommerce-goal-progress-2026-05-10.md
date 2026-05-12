@@ -216,6 +216,49 @@ Ecommerce pause contract passed
 [PAYMENT LAUNCH READINESS] FAIL (live; expected cutover blockers: test keys, missing explicit live site-config keys, localhost host_name)
 ```
 
+## Final Phase 4/closeout reconfirmation (2026-05-10 22:07 MDT)
+
+After unrelated public-audience/navigation cleanup and standard-product-page local work, parent reran the safety gates serially. Current proof remains:
+
+```text
+[QUOTE/EVENT CHECKOUT BOUNDARY CONTRACT] PASS
+  quote_first_count: 33
+  needs_review_count: 5
+  cart_api_blocked_count: 38
+  direct_checkout_url_blocked_count: 38
+  stale_localstorage_blocked_count: 38
+  no_sellable_candidate_count: 0
+  rollback: verifier rolled back and created no business records
+[CHECKOUT PRODUCT-FAMILY CONTRACT] PASS
+[CHECKOUT FULFILLMENT CONTRACT] PASS
+[CUSTOMER NOTE CHECKOUT PRESERVATION CONTRACT] PASS
+[PRODUCT QUOTE CUSTOMER DELIVERY CONTRACT] PASS
+[PRODUCT PAGE ARCHITECTURE READINESS] BLOCKED only on public_ecommerce_reopen because public ecommerce is intentionally paused
+```
+
+A parallel verifier attempt hit an InnoDB deadlock in `product_quote_customer_delivery_contract.py`; rerunning the same DB-mutating verifier alone passed. Future agents should run rollback/Frappe DB verifiers serially unless a verifier explicitly proves parallel isolation. Browser-only Playwright worker parallelism is a separate concern.
+
+Product-page visual/template polish is not a public ecommerce launch signal. The current standard-product-page local slice only adds runtime CSS classes, a ready-to-order note, and thumbnail `aria-pressed` synchronization. The media/architecture import-reopen gate is still not open: source extra images remain unclassified, approved Website Slideshow records are absent, and public ecommerce is paused.
+
+GL correction at 22:18 MDT: current ERPNext products are test products only. The next true import proof is not more polish on the current product records; it is a future controlled purge/reupload that demonstrates products fitting the schema populate the right fields, use logic/cascading information, and trigger expected automations. Do not run the purge/reupload during this closeout/audit.
+
 ## Current final action
 
-Local ecommerce implementation is complete to the safe non-live boundary. Keep public ecommerce paused. Next work requires owner/access cutover: production HTTPS host, explicit live Stripe/site config, policy approval, webhook setup, live readiness verifier, and one intentional low-risk real payment test.
+Local ecommerce implementation is complete to the safe non-live architecture boundary and is open locally for proof with `lt_ecommerce_paused=0`. Do not reframe pause as the desired posture. Next work is launch execution: keep the open-mode local/staging proof green, finish the real-catalog import gate, and complete owner/access cutover for production HTTPS host, explicit live Stripe/site config, policy approval, webhook setup, live readiness verifier, and one intentional low-risk real payment test before live checkout is claimed.
+
+## 2026-05-11 all-enabled-SKU correction
+
+GL caught that prior wording collapsed checkout Website Item family/page count into product/SKU count. Current corrected proof:
+
+```text
+[CHECKOUT PRODUCT-FAMILY CONTRACT] PASS
+  bouquet_family_count: 13
+  enabled_sale_sku_count: 47
+  add_on_line_count: 39
+  sales_order_line_count: 86
+  easter_balloon_cups: architecture_verified_not_launch_approval
+  survivor_counts: {'customer': 0, 'sales_order': 0, 'sales_invoice': 0}
+  rollback: verifier rolled back all generated records
+```
+
+Use `workstreams/ecommerce-audit/checkout-enabled-sku-parity-proof-2026-05-11.md` and `workstreams/ecommerce-audit/2026-05-10-2330-phase-1-4-shop-audit/checkout-product-family-all-skus-final.json` for current checkout-family evidence. Do not reuse the old 27/28-row representative outputs as final proof.

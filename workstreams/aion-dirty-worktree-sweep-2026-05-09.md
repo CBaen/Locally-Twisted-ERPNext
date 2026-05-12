@@ -5,6 +5,10 @@ full local testing. Keep the paused-commerce notes below as historical sweep
 evidence only; current ecommerce proof belongs in `workstreams/shop.md`,
 `workstreams/website-launch.md`, and `npm run test:ecommerce-full`.
 
+Superseded route note, 2026-05-11: `/event-balloons` is no longer a verified
+200 route. GL rejected the hub before launch; it should return 404 with no
+redirect. See `workstreams/event-balloons-route-removal-2026-05-11.md`.
+
 ## Purpose
 Classify the large dirty Locally Twisted worktree after Aion/Axion-era edits, protect verified launch-critical work, and separate safe keeps from suspect/parking-lot material.
 

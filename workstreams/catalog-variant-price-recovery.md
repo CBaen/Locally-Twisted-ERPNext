@@ -79,21 +79,16 @@ npm run test:product-prices
 python scripts/verify/cart_checkout_contract.py
 ```
 
-Useful but currently not green for unrelated shop layout reasons:
+Current broader shop smoke is green again:
 
 ```powershell
 python scripts/verify/smoke_shop.py
 ```
 
-Known current `smoke_shop.py` failures from 2026-05-08 were category
-rail/card-rendering checks:
-
-- Category page did not render visible product cards.
-- `/shop` missing desktop category rail.
-- Category product grid did not render visible cards.
-
-Do not interpret that as a pricing verifier failure. Do not ignore it either;
-it belongs to the active shop/website launch lane.
+The earlier 2026-05-08 category rail/card-rendering failures are closed in the
+current open ecommerce website gate. Do not interpret the green shop smoke as
+full catalog price parity; it proves the guarded bouquet prices and current
+rendered shop flow, while the non-bouquet price recovery remains open.
 
 ## How To Continue
 

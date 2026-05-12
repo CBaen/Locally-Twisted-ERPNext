@@ -80,7 +80,6 @@ Run these from the repo root unless a staging/production URL is required.
 python scripts/verify/frappe_cloud_preflight.py
 python scripts/verify/website_launch_verify.py --base-url <staging-url> --with-a11y --with-contact-smoke
 python scripts/verify/ecommerce_pause_contract.py
-python scripts/verify/cloudflare_launch_readiness_contract.py
 python scripts/verify/cloudflare_launch_readiness.py --base-url https://locallytwisted.com
 python scripts/verify/payment_launch_readiness.py --mode live --base-url https://locallytwisted.com
 python scripts/verify/business_automation_index.py
@@ -96,7 +95,7 @@ python scripts/verify/stripe_amount_parity_contract.py
 2. Cloudflare account control is not confirmed.
 3. Stripe is confirmed on this machine, but it may be the wrong merchant account for LT.
 4. `locallytwisted.com` is still the old/non-Frappe site today.
-5. The worktree must be clean and synced before DNS cutover.
+5. The worktree is dirty and `main` is ahead of `origin/main`; do not cut DNS from this state.
 
 ## Do Not Do Yet
 

@@ -140,7 +140,7 @@ Current live-data facts from the fresh finance inventory:
 - `locally_twisted.seed.sync_invoice_branding` owns the `Locally Twisted Sales Invoice` Print Format, `Locally Twisted` Letter Head, and Sales Invoice `default_print_format` Property Setter.
 - `scripts/setup/sync_invoice_branding.py` is idempotent and safe to re-run after invoice copy or style changes.
 - `scripts/verify/invoice_branding_contract.py` verifies the setup records, default print-format resolution, visible logo/contact header, AP-friendly fields, gray callout treatment, black support-banner copy/treatment, forbidden gold/dog/promo markers, item-header padding, served logo asset, title-associated invoice summary placement, and rendered invoice HTML against the current sample Sales Invoice.
-- External document standards now live in `.codex/capabilities/recipes/external-document-audience-contract.md`: every invoice, receipt, proposal, packet, and accounting document should be designed around the recipient's workflow before brand flourish.
+- External document standards now live in `capabilities/recipes/external-document-audience-contract.md`: every invoice, receipt, proposal, packet, and accounting document should be designed around the recipient's workflow before brand flourish.
 
 ### Outbound document source folder
 

@@ -27,7 +27,7 @@ V1 succeeds when a real customer can:
 - distinguish tested ecommerce readiness from final live payment/cutover approval;
 - see clear privacy, terms, refund/cancellation, accessibility, and service expectation pages;
 - experience the site on desktop and mobile without broken layout, clipped text, inaccessible controls, or obvious ERPNext default seams.
-- get buyer-ready page shells for the Event Balloons audience lanes, with final public copy routed through `brand-copywriter`.
+- get buyer-ready page shells for the four event audience lanes, with final public copy routed through `brand-copywriter`; do not recreate the removed `/event-balloons` hub without a fresh GL route decision.
 
 ## Long-Term Business Direction
 

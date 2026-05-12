@@ -12,6 +12,7 @@ import frappe
 
 ACCOUNTANT_HOME = "LT Accountant Home"
 ACCOUNTANT_ROLE = "LT Accountant Access"
+ACCOUNTANT_DEFAULT_WORKSPACE_USERS = ["lt-accountant-temp@example.com"]
 CUSTOMER_REMINDER_REPORT_NAME = "LT Customer Reminder Review"
 CUSTOMER_REMINDER_REPORT_REF_DOCTYPE = "Sales Invoice"
 CUSTOMER_REMINDER_REPORT_ROLES = [
@@ -67,21 +68,8 @@ ACCOUNTANT_SHORTCUTS = [
     {"label": "Payment Requests", "type": "DocType", "link_to": "Payment Request", "doc_view": "List", "color": "Green"},
     {"label": "Payments", "type": "DocType", "link_to": "Payment Entry", "doc_view": "List", "color": "Green"},
     {"label": "Customers", "type": "DocType", "link_to": "Customer", "doc_view": "List", "color": "Blue"},
-    {"label": "Suppliers", "type": "DocType", "link_to": "Supplier", "doc_view": "List", "color": "Grey"},
-    {"label": "Purchase Invoices", "type": "DocType", "link_to": "Purchase Invoice", "doc_view": "List", "color": "Yellow"},
-    {"label": "Bank Transactions", "type": "DocType", "link_to": "Bank Transaction", "doc_view": "List", "color": "Green"},
-    {"label": "Bank Accounts", "type": "DocType", "link_to": "Bank Account", "doc_view": "List", "color": "Green"},
-    {"label": "Bank Reconciliation", "type": "URL", "url": "/app/bank-reconciliation-tool", "color": "Green"},
     {"label": "Journal Entries", "type": "DocType", "link_to": "Journal Entry", "doc_view": "List", "color": "Grey"},
     {"label": "Chart of Accounts", "type": "DocType", "link_to": "Account", "doc_view": "Tree", "color": "Grey"},
-    {"label": "Payment Terms", "type": "DocType", "link_to": "Payment Terms Template", "doc_view": "List", "color": "Grey"},
-    {
-        "label": "Statement Reminders",
-        "type": "DocType",
-        "link_to": "Process Statement Of Accounts",
-        "doc_view": "List",
-        "color": "Orange",
-    },
     {
         "label": "Reminder Review Report",
         "type": "Report",
@@ -89,7 +77,6 @@ ACCOUNTANT_SHORTCUTS = [
         "report_ref_doctype": CUSTOMER_REMINDER_REPORT_REF_DOCTYPE,
         "color": "Orange",
     },
-    {"label": "Employees", "type": "DocType", "link_to": "Employee", "doc_view": "List", "color": "Grey"},
 ]
 
 
@@ -98,12 +85,14 @@ def execute() -> str:
         "ensured_number_cards": [],
         "ensured_reports": [],
         "updated_workspace": False,
+        "updated_users": [],
         "missing_roles": [],
     }
     for name, spec in ACCOUNTANT_NUMBER_CARDS.items():
         _ensure_number_card(name, spec, summary)
     _ensure_customer_reminder_report(summary)
     _ensure_accountant_workspace(summary)
+    _ensure_accountant_default_workspaces(summary)
     frappe.clear_cache()
     frappe.db.commit()
     print(json.dumps(summary, indent=2, sort_keys=True))
@@ -238,6 +227,25 @@ def _ensure_accountant_workspace(summary: dict) -> None:
         summary["updated_workspace"] = True
 
 
+def _ensure_accountant_default_workspaces(summary: dict) -> None:
+    if not frappe.db.exists("Workspace", ACCOUNTANT_HOME):
+        return
+
+    for user_name in ACCOUNTANT_DEFAULT_WORKSPACE_USERS:
+        if not frappe.db.exists("User", user_name):
+            continue
+
+        doc = frappe.get_doc("User", user_name)
+        if doc.default_workspace == ACCOUNTANT_HOME:
+            continue
+
+        doc.default_workspace = ACCOUNTANT_HOME
+        doc.save(ignore_permissions=True)
+        summary["updated_users"].append(
+            {"user": user_name, "default_workspace": ACCOUNTANT_HOME}
+        )
+
+
 def _ensure_role(doc, summary: dict) -> bool:
     if not frappe.db.exists("Role", ACCOUNTANT_ROLE):
         summary["missing_roles"].append(ACCOUNTANT_ROLE)
@@ -251,30 +259,32 @@ def _ensure_role(doc, summary: dict) -> bool:
 
 
 def _ensure_shortcuts(doc, desired_shortcuts: list[dict]) -> bool:
-    changed = False
-    existing_by_label = {row.label: row for row in doc.shortcuts}
+    fields = [
+        "label",
+        "type",
+        "link_to",
+        "url",
+        "doc_view",
+        "kanban_board",
+        "color",
+        "format",
+        "report_ref_doctype",
+    ]
+    desired_rows = [
+        {field: _empty_to_none(spec.get(field)) for field in fields}
+        for spec in desired_shortcuts
+    ]
+    current_rows = [
+        {field: _empty_to_none(getattr(row, field, None)) for field in fields}
+        for row in doc.shortcuts
+    ]
+    if current_rows == desired_rows:
+        return False
 
-    for spec in desired_shortcuts:
-        row = existing_by_label.get(spec["label"])
-        if row is None:
-            row = doc.append("shortcuts", {})
-            changed = True
-        for key in (
-            "label",
-            "type",
-            "link_to",
-            "url",
-            "doc_view",
-            "kanban_board",
-            "color",
-            "format",
-            "report_ref_doctype",
-        ):
-            value = spec.get(key)
-            if not _same_value(getattr(row, key, None), value):
-                setattr(row, key, value)
-                changed = True
-    return changed
+    doc.set("shortcuts", [])
+    for row in desired_rows:
+        doc.append("shortcuts", row)
+    return True
 
 
 def _accountant_home_content() -> list[dict]:
@@ -286,7 +296,7 @@ def _accountant_home_content() -> list[dict]:
         ),
         _header(
             "lt-accountant-subtitle",
-            '<span class="text-muted">Invoices, payments, bank reconciliation, payroll/vendor records, and accountant review exports.</span>',
+            '<span class="text-muted">Invoices, payments, reminder review, and accounting reference without payroll, vendor, or bank setup clutter.</span>',
             12,
         ),
     ]
@@ -307,31 +317,18 @@ def _accountant_home_content() -> list[dict]:
             _shortcut("lt-accountant-payments", "Payments", 3),
             _shortcut("lt-accountant-customers", "Customers", 3),
             _header(
-                "lt-accountant-bank-title",
-                '<span class="h4"><b>Banking and review</b></span>',
+                "lt-accountant-review-title",
+                '<span class="h4"><b>Review before sending</b></span>',
                 12,
             ),
-            _shortcut("lt-accountant-bank-transactions", "Bank Transactions", 3),
-            _shortcut("lt-accountant-bank-accounts", "Bank Accounts", 3),
-            _shortcut("lt-accountant-bank-reconciliation", "Bank Reconciliation", 3),
-            _shortcut("lt-accountant-journal-entries", "Journal Entries", 3),
-            _header(
-                "lt-accountant-vendor-title",
-                '<span class="h4"><b>Vendors and payroll records</b></span>',
-                12,
-            ),
-            _shortcut("lt-accountant-suppliers", "Suppliers", 3),
-            _shortcut("lt-accountant-purchase-invoices", "Purchase Invoices", 3),
-            _shortcut("lt-accountant-employees", "Employees", 3),
-            _shortcut("lt-accountant-payment-terms", "Payment Terms", 3),
-            _header(
-                "lt-accountant-reports-title",
-                '<span class="h4"><b>Accounting setup and statements</b></span>',
-                12,
-            ),
-            _shortcut("lt-accountant-chart-of-accounts", "Chart of Accounts", 3),
-            _shortcut("lt-accountant-statement-reminders", "Statement Reminders", 3),
             _shortcut("lt-accountant-reminder-review-report", "Reminder Review Report", 3),
+            _header(
+                "lt-accountant-reference-title",
+                '<span class="h4"><b>Accounting reference</b></span>',
+                12,
+            ),
+            _shortcut("lt-accountant-journal-entries", "Journal Entries", 3),
+            _shortcut("lt-accountant-chart-of-accounts", "Chart of Accounts", 3),
         ]
     )
     return blocks
@@ -350,6 +347,10 @@ def _same_value(current, desired) -> bool:
     if current in (None, "") and desired in (None, ""):
         return True
     return current == desired
+
+
+def _empty_to_none(value):
+    return None if value == "" else value
 
 
 def _child_table_rows(rows, fields: list[str]) -> list[dict]:

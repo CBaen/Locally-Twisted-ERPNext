@@ -1,0 +1,24 @@
+﻿command	status
+python -m py_compile apps/locally_twisted/locally_twisted/product_page_runtime.py apps/locally_twisted/locally_twisted/product_options.py apps/locally_twisted/locally_twisted/commerce_rules.py apps/locally_twisted/locally_twisted/api/cart.py apps/locally_twisted/locally_twisted/www/checkout.py apps/locally_twisted/locally_twisted/verify/quote_event_checkout_boundary_contract.py scripts/verify/quote_event_checkout_boundary_contract.py	0
+python scripts/verify/commerce_rules_contract.py	0
+python scripts/verify/website_item_classification_contract.py --report workstreams/ecommerce-audit/2026-05-10-2330-phase-1-4-shop-audit/website-item-classification.json	0
+python scripts/verify/product_page_dependency_contract.py	0
+python scripts/verify/product_add_on_dependency_contract.py --report workstreams/ecommerce-audit/2026-05-10-2330-phase-1-4-shop-audit/product-add-on-dependency.json	0
+python scripts/verify/product_page_runtime_contract.py	0
+python scripts/verify/proof_product_contract.py	0
+python scripts/verify/product_quote_customization_contract.py	0
+python scripts/verify/cart_checkout_contract.py	0
+python scripts/verify/checkout_product_family_contract.py --report workstreams/ecommerce-audit/2026-05-10-2330-phase-1-4-shop-audit/checkout-product-family.json	0
+python scripts/verify/checkout_fulfillment_contract.py	0
+python scripts/verify/customer_note_checkout_preservation_contract.py	0
+python scripts/verify/payment_backend_config_contract.py	0
+python scripts/verify/payment_cascade_contract.py	0
+python scripts/verify/payment_webhook_contract.py	0
+python scripts/verify/payment_success_reconciliation_contract.py	0
+python scripts/verify/product_quote_operator_review_contract.py	0
+python scripts/verify/product_quote_operator_send_control_contract.py	0
+python scripts/verify/product_quote_customer_delivery_contract.py	0
+python scripts/verify/quote_event_checkout_boundary_contract.py --report workstreams/ecommerce-audit/2026-05-10-2330-phase-1-4-shop-audit/quote-event-boundary.json	0
+python scripts/verify/ecommerce_pause_contract.py	0
+python scripts/verify/smoke_shop.py	0
+python scripts/verify/nav_ia.py	0

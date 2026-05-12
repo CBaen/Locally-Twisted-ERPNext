@@ -31,6 +31,7 @@ named: "everything should cascade" (2026-04-29 cart session) -> here
 applied to Leads on customer-form submission.
 """
 import frappe
+from frappe.utils import get_datetime
 from frappe.utils import escape_html
 
 from locally_twisted import policy_documents
@@ -373,16 +374,9 @@ def _send_auto_ack_email(doc, *, photo_uploads=None):
         },
         limit=1,
     )
-    queued = frappe.get_all(
-        "Email Queue",
-        filters={
-            "reference_doctype": "Lead",
-            "reference_name": doc.name,
-        },
-        limit=1,
-    )
+    queued = _has_current_confirmation_email_queue(doc)
     if existing or queued:
-        return
+        return {"ok": True, "queued": False, "skipped_existing": True}
 
     safe_name = escape_html(customer_name)
     details_block = _customer_submitted_details_block(doc, photo_uploads=photo_uploads)
@@ -417,6 +411,30 @@ def _send_auto_ack_email(doc, *, photo_uploads=None):
         now=False,  # queue async
         **document_copy_kwargs(external_audience=True, primary_recipients=[email]),
     )
+    if not _has_current_confirmation_email_queue(doc):
+        frappe.throw(
+            "We saved your request, but the confirmation email did not queue. "
+            "Please call (801) 285-0860 or email hi@locallytwisted.com and we will help.",
+            frappe.ValidationError,
+        )
+    return {"ok": True, "queued": True, "skipped_existing": False}
+
+
+def _has_current_confirmation_email_queue(doc) -> bool:
+    """Return true only for queue rows that belong to this Lead incarnation.
+
+    Test cleanup can remove and recreate Leads with the same autoname. Old
+    Email Queue rows with the same reference_name must not suppress the new
+    customer's confirmation email.
+    """
+    created_at = get_datetime(doc.get("creation")) if doc.get("creation") else None
+    filters = {
+        "reference_doctype": "Lead",
+        "reference_name": doc.name,
+    }
+    if created_at:
+        filters["creation"] = [">=", created_at]
+    return bool(frappe.get_all("Email Queue", filters=filters, limit=1))
 
 
 def _customer_submitted_details_block(doc, *, photo_uploads=None) -> str:

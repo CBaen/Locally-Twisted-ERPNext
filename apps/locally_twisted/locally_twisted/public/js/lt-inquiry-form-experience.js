@@ -4,7 +4,7 @@
     var FORM_SELECTOR = "form[data-form-contract='inquiry-v1']";
     var ENDPOINT = '/api/method/locally_twisted.www.book.submit_book_inquiry';
     var FALLBACK_ERROR = 'Tiny snag: your request did not send. Please try again, or call (801) 285-0860 or email hi@locallytwisted.com and we will help.';
-    var DEFAULT_SUCCESS = 'Thanks, we got it and will follow up soon.';
+    var DEFAULT_SUCCESS = 'A confirmation of your request will be sent to your email address shortly. We will be in contact within 24 hours!';
     var FIELD_ERROR = {
         contact_name: 'Please tell us your name.',
         email_from: 'Please give us an email so we can reply.'
@@ -28,7 +28,7 @@
         },
         success: {
             title: 'Request received',
-            message: 'We will review it and follow up soon.',
+            message: DEFAULT_SUCCESS,
             activeStep: 'save'
         },
         error: {

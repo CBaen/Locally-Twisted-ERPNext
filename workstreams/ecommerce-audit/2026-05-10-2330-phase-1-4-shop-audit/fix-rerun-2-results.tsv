@@ -1,0 +1,7 @@
+﻿command	status
+python -m py_compile apps/locally_twisted/locally_twisted/verify/checkout_product_family_contract.py	0
+python scripts/verify/checkout_product_family_contract.py --report workstreams/ecommerce-audit/2026-05-10-2330-phase-1-4-shop-audit/checkout-product-family-after-easter.json	0
+npx playwright test scripts/verify/interactive_layout.spec.js --grep civic --reporter=line	1
+python -m py_compile scripts/verify/checkout_product_family_contract.py	0
+python scripts/verify/checkout_product_family_contract.py --report workstreams/ecommerce-audit/2026-05-10-2330-phase-1-4-shop-audit/checkout-product-family-final.json	0
+npx playwright test scripts/verify/search_contract.spec.js --reporter=line	0

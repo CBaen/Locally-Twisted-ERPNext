@@ -1,0 +1,513 @@
+{
+  "add_on_line_count": 39,
+  "bouquet_family": [
+    {
+      "add_on_line_count": 3,
+      "enabled_variant_count": 3,
+      "foil_option_rate": 12.0,
+      "resolved_line_count": 6,
+      "stored_contract": "simple_product|checkout",
+      "verified_variants": [
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons"
+          },
+          "variant_item_code": "unicorn-bouquet-LAR"
+        },
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons"
+          },
+          "variant_item_code": "unicorn-bouquet-MED"
+        },
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons"
+          },
+          "variant_item_code": "unicorn-bouquet-SMA"
+        }
+      ],
+      "web_item_name": "Unicorn Bouquet",
+      "website_item_code": "unicorn-bouquet"
+    },
+    {
+      "add_on_line_count": 3,
+      "enabled_variant_count": 3,
+      "foil_option_rate": 12.0,
+      "resolved_line_count": 6,
+      "stored_contract": "simple_product|checkout",
+      "verified_variants": [
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons"
+          },
+          "variant_item_code": "mickey-mouse-bouquet-LAR"
+        },
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons"
+          },
+          "variant_item_code": "mickey-mouse-bouquet-MED"
+        },
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons"
+          },
+          "variant_item_code": "mickey-mouse-bouquet-SMA"
+        }
+      ],
+      "web_item_name": "Mickey Mouse Bouquet",
+      "website_item_code": "mickey-mouse-bouquet"
+    },
+    {
+      "add_on_line_count": 3,
+      "enabled_variant_count": 3,
+      "foil_option_rate": 12.0,
+      "resolved_line_count": 6,
+      "stored_contract": "simple_product|checkout",
+      "verified_variants": [
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons"
+          },
+          "variant_item_code": "minion-bouquet-LAR"
+        },
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons"
+          },
+          "variant_item_code": "minion-bouquet-MED"
+        },
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons"
+          },
+          "variant_item_code": "minion-bouquet-SMA"
+        }
+      ],
+      "web_item_name": "Minion Bouquet",
+      "website_item_code": "minion-bouquet"
+    },
+    {
+      "add_on_line_count": 3,
+      "enabled_variant_count": 3,
+      "foil_option_rate": 12.0,
+      "resolved_line_count": 6,
+      "stored_contract": "simple_product|checkout",
+      "verified_variants": [
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons"
+          },
+          "variant_item_code": "encanto-bouquet-LAR"
+        },
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons"
+          },
+          "variant_item_code": "encanto-bouquet-MED"
+        },
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons"
+          },
+          "variant_item_code": "encanto-bouquet-SMA"
+        }
+      ],
+      "web_item_name": "Encanto Bouquet",
+      "website_item_code": "encanto-bouquet"
+    },
+    {
+      "add_on_line_count": 3,
+      "enabled_variant_count": 3,
+      "foil_option_rate": 12.0,
+      "resolved_line_count": 6,
+      "stored_contract": "simple_product|checkout",
+      "verified_variants": [
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons"
+          },
+          "variant_item_code": "stitch-bouquet-LAR"
+        },
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons"
+          },
+          "variant_item_code": "stitch-bouquet-MED"
+        },
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons"
+          },
+          "variant_item_code": "stitch-bouquet-SMA"
+        }
+      ],
+      "web_item_name": "Stitch Bouquet",
+      "website_item_code": "stitch-bouquet"
+    },
+    {
+      "add_on_line_count": 3,
+      "enabled_variant_count": 3,
+      "foil_option_rate": 12.0,
+      "resolved_line_count": 6,
+      "stored_contract": "simple_product|checkout",
+      "verified_variants": [
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons"
+          },
+          "variant_item_code": "flamingo-bouquet-LAR"
+        },
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons"
+          },
+          "variant_item_code": "flamingo-bouquet-MED"
+        },
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons"
+          },
+          "variant_item_code": "flamingo-bouquet-SMA"
+        }
+      ],
+      "web_item_name": "Flamingo Bouquet",
+      "website_item_code": "flamingo-bouquet"
+    },
+    {
+      "add_on_line_count": 3,
+      "enabled_variant_count": 3,
+      "foil_option_rate": 12.0,
+      "resolved_line_count": 6,
+      "stored_contract": "simple_product|checkout",
+      "verified_variants": [
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons"
+          },
+          "variant_item_code": "football-bouquet-LAR"
+        },
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons"
+          },
+          "variant_item_code": "football-bouquet-MED"
+        },
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons"
+          },
+          "variant_item_code": "football-bouquet-SMA"
+        }
+      ],
+      "web_item_name": "Football Bouquet",
+      "website_item_code": "football-bouquet"
+    },
+    {
+      "add_on_line_count": 3,
+      "enabled_variant_count": 3,
+      "foil_option_rate": 12.0,
+      "resolved_line_count": 6,
+      "stored_contract": "simple_product|checkout",
+      "verified_variants": [
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons"
+          },
+          "variant_item_code": "soccer-bouquet-LAR"
+        },
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons"
+          },
+          "variant_item_code": "soccer-bouquet-MED"
+        },
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons"
+          },
+          "variant_item_code": "soccer-bouquet-SMA"
+        }
+      ],
+      "web_item_name": "Soccer Bouquet",
+      "website_item_code": "soccer-bouquet"
+    },
+    {
+      "add_on_line_count": 3,
+      "enabled_variant_count": 3,
+      "foil_option_rate": 12.0,
+      "resolved_line_count": 6,
+      "stored_contract": "simple_product|checkout",
+      "verified_variants": [
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons"
+          },
+          "variant_item_code": "space-bouquet-LAR"
+        },
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons"
+          },
+          "variant_item_code": "space-bouquet-MED"
+        },
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons"
+          },
+          "variant_item_code": "space-bouquet-SMA"
+        }
+      ],
+      "web_item_name": "Space Bouquet",
+      "website_item_code": "space-bouquet"
+    },
+    {
+      "add_on_line_count": 3,
+      "enabled_variant_count": 3,
+      "foil_option_rate": 12.0,
+      "resolved_line_count": 6,
+      "stored_contract": "simple_product|checkout",
+      "verified_variants": [
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons"
+          },
+          "variant_item_code": "over-the-hill-bouquet-LAR"
+        },
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons"
+          },
+          "variant_item_code": "over-the-hill-bouquet-MED"
+        },
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons"
+          },
+          "variant_item_code": "over-the-hill-bouquet-SMA"
+        }
+      ],
+      "web_item_name": "Over the Hill Bouquet",
+      "website_item_code": "over-the-hill-bouquet"
+    },
+    {
+      "add_on_line_count": 3,
+      "enabled_variant_count": 3,
+      "foil_option_rate": 12.0,
+      "resolved_line_count": 6,
+      "stored_contract": "simple_product|checkout",
+      "verified_variants": [
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons"
+          },
+          "variant_item_code": "paw-patrol-bouquet-LAR"
+        },
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons"
+          },
+          "variant_item_code": "paw-patrol-bouquet-MED"
+        },
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons"
+          },
+          "variant_item_code": "paw-patrol-bouquet-SMA"
+        }
+      ],
+      "web_item_name": "Paw Patrol Bouquet",
+      "website_item_code": "paw-patrol-bouquet"
+    },
+    {
+      "add_on_line_count": 3,
+      "enabled_variant_count": 3,
+      "foil_option_rate": 12.0,
+      "resolved_line_count": 6,
+      "stored_contract": "simple_product|checkout",
+      "verified_variants": [
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons"
+          },
+          "variant_item_code": "elsa-bouquet-LAR"
+        },
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons"
+          },
+          "variant_item_code": "elsa-bouquet-MED"
+        },
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons"
+          },
+          "variant_item_code": "elsa-bouquet-SMA"
+        }
+      ],
+      "web_item_name": "Elsa Bouquet",
+      "website_item_code": "elsa-bouquet"
+    },
+    {
+      "add_on_line_count": 3,
+      "enabled_variant_count": 3,
+      "foil_option_rate": 12.0,
+      "resolved_line_count": 6,
+      "stored_contract": "simple_product|checkout",
+      "verified_variants": [
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons"
+          },
+          "variant_item_code": "holy-cow-bouquet-LAR"
+        },
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons"
+          },
+          "variant_item_code": "holy-cow-bouquet-MED"
+        },
+        {
+          "resolved_line_count": 2,
+          "selected_options": {
+            "Bouquet Size": "Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons"
+          },
+          "variant_item_code": "holy-cow-bouquet-SMA"
+        }
+      ],
+      "web_item_name": "Holy COW!! Bouquet",
+      "website_item_code": "holy-cow-bouquet"
+    }
+  ],
+  "bouquet_family_count": 13,
+  "commit_calls_intercepted": 0,
+  "easter_balloon_cups": {
+    "add_on_options": 0,
+    "enabled_variant_count": 7,
+    "note": "Seasonal orderability/visibility is still a separate GL/business approval; this verifies the ERPNext receiving architecture only.",
+    "resolved_line_count": 7,
+    "seasonal_status": "architecture_verified_not_launch_approval",
+    "stored_contract": "simple_product|checkout",
+    "verified_variants": [
+      {
+        "resolved_line_count": 1,
+        "selected_options": {
+          "Easter Designs": "Bunny"
+        },
+        "variant_item_code": "easter-balloon-cups-BUN"
+      },
+      {
+        "resolved_line_count": 1,
+        "selected_options": {
+          "Easter Designs": "Bunny in basket"
+        },
+        "variant_item_code": "easter-balloon-cups-BUNN"
+      },
+      {
+        "resolved_line_count": 1,
+        "selected_options": {
+          "Easter Designs": "Butterfly"
+        },
+        "variant_item_code": "easter-balloon-cups-BUT"
+      },
+      {
+        "resolved_line_count": 1,
+        "selected_options": {
+          "Easter Designs": "Easter egg"
+        },
+        "variant_item_code": "easter-balloon-cups-EAS"
+      },
+      {
+        "resolved_line_count": 1,
+        "selected_options": {
+          "Easter Designs": "Flower"
+        },
+        "variant_item_code": "easter-balloon-cups-FLO"
+      },
+      {
+        "resolved_line_count": 1,
+        "selected_options": {
+          "Easter Designs": "Turtle"
+        },
+        "variant_item_code": "easter-balloon-cups-TUR"
+      },
+      {
+        "resolved_line_count": 1,
+        "selected_options": {
+          "Easter Designs": "Unicorn egg"
+        },
+        "variant_item_code": "easter-balloon-cups-UNI"
+      }
+    ],
+    "web_item_name": "Easter Balloon Cups",
+    "website_item_code": "easter-balloon-cups"
+  },
+  "enabled_sale_sku_count": 47,
+  "expected_sales_order_line_count": 86,
+  "line_fields": [
+    "custom_lt_configuration_json",
+    "custom_lt_configuration_summary",
+    "custom_lt_configuration_version",
+    "custom_lt_product_page_type",
+    "custom_lt_product_template_item"
+  ],
+  "mothers_day": {
+    "add_on_options": 0,
+    "item_code": "mothers-day-bouquet",
+    "resolved_line_count": 1,
+    "sale_sku_count": 1,
+    "stored_contract": "simple_product|checkout",
+    "web_item_name": "Mother's Day Bouquet",
+    "website_item_code": "mothers-day-bouquet"
+  },
+  "ok": true,
+  "rolled_back": true,
+  "sales_invoice": "ACC-SINV-2026-00003",
+  "sales_order": "SAL-ORD-2026-00022",
+  "sales_order_line_count": 86,
+  "schema_version": "lt-product-config-v1",
+  "survivor_counts": {
+    "customer": 0,
+    "sales_invoice": 0,
+    "sales_order": 0
+  }
+}

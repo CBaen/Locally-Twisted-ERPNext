@@ -9,12 +9,14 @@
     <div class="lt-product__media-shell {% if has_gallery %}has-thumbnails{% endif %}">
         {% if has_gallery %}
             <div class="item-slideshow lt-product__thumbnail-rail d-flex flex-column mr-3"
+                 data-lt-gallery-role="standard-product-thumbnails"
                  aria-label="{{ _('Other product photos') }}">
                 <div class="lt-product__thumbnail-heading">{{ _('Other product photos') }}</div>
                 {% for item in lt_gallery_slides %}
                 <button type="button"
                         class="lt-product__thumbnail-button"
-                        aria-label="{{ _('View product photo') }} {{ loop.index }}">
+                        aria-label="{{ _('View product photo') }} {{ loop.index }}"
+                        aria-pressed="{{ 'true' if loop.first else 'false' }}">
                     <img class="item-slideshow-image mb-2 {% if loop.first %}active{% endif %}"
                          src="{{ item.image | e }}" alt="{{ item.heading | e }}">
                 </button>
@@ -25,6 +27,7 @@
             <script>
                 frappe.ready(() => {
                     const $galleryImages = $('.lt-product__thumbnail-button .item-slideshow-image');
+                    const $galleryButtons = $('.lt-product__thumbnail-button');
 
                     function showGalleryImage(index) {
                         if (!$galleryImages.length) return;
@@ -38,7 +41,8 @@
 
                         $galleryImages.removeClass('active');
                         $img.addClass('active');
-                        const button = $img.closest('.lt-product__thumbnail-button').get(0);
+                        $galleryButtons.attr('aria-pressed', 'false');
+                        const button = $img.closest('.lt-product__thumbnail-button').attr('aria-pressed', 'true').get(0);
                         if (button && button.scrollIntoView) {
                             button.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
                         }

@@ -45,6 +45,8 @@ ORGANIZATION_ROUTES = {
 FORBIDDEN_MARKERS = {
     "Manage third party apps",
     "Opportunity",
+    "SHORT NOTICE",
+    "Stay in the loop",
     "Timesheets",
     "Material Request",
     "Supplier Quotation",
@@ -54,7 +56,6 @@ FORBIDDEN_MARKERS = {
 
 REQUIRED_SHELL_MARKERS = {
     "lt-customer-portal.css",
-    "Private account view",
     "lt-portal__metric",
 }
 
@@ -151,7 +152,8 @@ def _render_required_routes() -> set[str]:
         html = get_response_content(route)
         if marker not in html:
             raise ContractFail(f"{route} did not render required marker {marker}")
-        missing_shell = sorted(term for term in REQUIRED_SHELL_MARKERS if term not in html)
+        expected_view_marker = "Organization view" if route in ORGANIZATION_ROUTES else "Private account view"
+        missing_shell = sorted(term for term in REQUIRED_SHELL_MARKERS | {expected_view_marker} if term not in html)
         if missing_shell:
             raise ContractFail(f"{route} did not render branded account shell markers: {', '.join(missing_shell)}")
         forbidden = sorted(term for term in FORBIDDEN_MARKERS if term in html)

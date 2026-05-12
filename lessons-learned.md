@@ -21,22 +21,6 @@ from absent owner-excluded entries.
 
 ---
 
-## 2026-05-11 - No cards means no containers, labels, or helpful filler
-
-GL rejected the homepage review-platform treatment because "no cards" also meant no visual containers, no smaller proof marks, no poor logo assets, no visible count copy, and no invented `reviews` label under each platform. The request was for logo proof, not a review widget.
-
-**Counter-move:** when GL removes a visual pattern, strip the whole pattern family. If the instruction is "just the logo," do not add helper text, counts, cards, borders, shadows, padded boxes, or explanatory labels unless asked.
-
----
-
-## 2026-05-11 - An unapproved route should die loudly before launch
-
-`/event-balloons` had not launched or been indexed, so a redirect would have preserved an unapproved page instead of cleaning the route. The correct repair was deletion plus negative route/link/sitemap/canonical guards: 404 with no redirect, no source links, no sitemap entry, no compatibility page.
-
-**Counter-move:** before launch, do not invent redirects for pages GL rejects. Delete the route source, remove every discovery path, then add negative verifiers so future agents cannot recreate the page by "fixing" the 404.
-
----
-
 ## 2026-05-11 - Stale written contracts can be the regression
 
 The public short-notice banner regressed from deep navy to brass/gold because a
@@ -106,6 +90,50 @@ account-control gates. For LT, use `LT-LAUNCH-RUNBOOK.md` for the operator
 checklist and `workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11.md`
 for the technical cutover gate. Do not claim DNS/payment readiness until both
 the technical gate and human account-control boundary are satisfied.
+
+---
+
+## 2026-05-11 - No cards means no containers, labels, or helpful filler
+
+GL rejected the homepage review-platform treatment because "no cards" also
+meant no visual containers, no smaller proof marks, no poor logo assets, no
+visible count copy, and no invented `reviews` label under each platform. The
+request was for logo proof, not a review widget.
+
+**Counter-move:** when GL removes a visual pattern, strip the whole pattern
+family. If the instruction is "just the logo," do not add helper text,
+counts, cards, borders, shadows, padded boxes, or explanatory labels unless
+asked.
+
+---
+
+## 2026-05-11 - An unapproved route should die loudly before launch
+
+`/event-balloons` had not launched or been indexed, so a redirect would have
+preserved an unapproved page instead of cleaning the route. The correct repair
+was deletion plus negative route/link/sitemap/canonical guards: 404 with no
+redirect, no source links, no sitemap entry, no compatibility page.
+
+**Counter-move:** before launch, do not invent redirects for pages GL rejects.
+Delete the route source, remove every discovery path, then add negative
+verifiers so future agents cannot recreate the page by "fixing" the 404.
+
+---
+
+## 2026-05-11 - Family/page counts are not SKU proof
+
+The checkout audit initially reported 15 checkout products because the classifier counted Website Item families/pages. GL correctly challenged that wording: current enabled checkout coverage is 15 families/pages but 47 sellable SKUs, and the backend proof must account for 86 order/invoice rows once bouquet add-ons are included.
+
+**Counter-move:** in ecommerce migrations, always name the counting unit: Website Item/page, product family, enabled sale SKU, add-on line, Sales Order row, Sales Invoice row. A representative variant is useful for a first cut, but closeout proof for checkout architecture must walk every enabled sellable SKU or explicitly state it is sample-only.
+
+---
+
+
+## 2026-05-10 - Test products are not import proof
+
+The ecommerce phases proved important receiving behavior against current ERPNext product records, but GL corrected the frame: those products are test fixtures. The real catalog proof is whether a clean purge/reupload/import path fills the right LT schema fields, preserves cascading/dependency information, and triggers the intended automations.
+
+**Counter-move:** when auditing ecommerce/shop, separate runtime behavior proof from import/rebuild proof. Use current products to exercise verifiers, but do not make final catalog claims until a controlled import audit proves the receiving system from clean input. Destructive purge/reupload requires fresh preflight and explicit approval.
 
 ---
 

@@ -6,6 +6,7 @@
 # Editor
 .vscode/
 .idea/
+.codex/
 *.swp
 *.swo
 *~
@@ -56,10 +57,12 @@ Locally-Twisted-Frontend/
 # The IMAGES go in _resources/images/ which IS committed.
 .scratch/
 .tmp/
+tmp/
 
 # Raw client/photo drops are source material, not repo source. Curated/optimized
 # production assets belong in committed app/_resources paths with explicit names.
 assets/New Balloon Pics 3.7.26/
+assets/landing-page-pics/
 assets/landing page pics/
 assets/landing page assets/
 assets/hero assets/
@@ -97,6 +100,12 @@ _resources/webshop-state-vs-spec-2026-04-30/screenshots/
 # kept here so it's accessible inside the locally_twisted container at the same
 # path. Re-staged from _resources/odoo-live/ when the seed needs to run.
 apps/locally_twisted/locally_twisted/seed/_data/
+apps/locally_twisted/locally_twisted/seed/_guard/
+
+# Image optimization manifests and rejected generated candidates are local QA
+# byproducts. Committed public images should be the named files used by pages.
+apps/locally_twisted/locally_twisted/public/images/landing-page-pics/**/image-finish-manifest.*
+apps/locally_twisted/locally_twisted/public/images/landing-page-pics/landing-page/popcorn 2.webp
 
 # Throwaway HTML fetched during scraper development. Re-fetchable; not source-of-truth.
 _resources/_tmp_odoo_sample.html

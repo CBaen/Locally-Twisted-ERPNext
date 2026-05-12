@@ -21,17 +21,41 @@ EXPECTED_WORKSPACE_SHORTCUTS = {
         "Add Product": ("Item", "New"),
     },
     "LT Manager Home": {
+        "Events Inquiry Inbox": ("Lead", "List"),
+        "Inquiry Board": ("Lead", "Kanban"),
         "Booking Calendar": ("Sales Order", "Calendar"),
+        "Bookings": ("Sales Order", "List"),
         "Customers": ("Customer", "List"),
         "People to Contact": ("Contact", "List"),
+        "Event Jobs": ("Project", "List"),
+        "Task Board": ("Task", "Kanban"),
+        "Add New Inquiry": ("Lead", "New"),
+        "Add Customer": ("Customer", "New"),
     },
     "LT Employee Home": {
+        "My Tasks": ("Task", "List"),
         "Booking Calendar": ("Sales Order", "Calendar"),
-        "People to Contact": ("Contact", "List"),
+        "Event Jobs": ("Project", "List"),
+        "Task Board": ("Task", "Kanban"),
     },
 }
 
 STALE_LABELS = {"Event Calendar", "Clients & Customers", "Contacts"}
+
+FORBIDDEN_WORKSPACE_SHORTCUTS = {
+    "LT Manager Home": {"Products", "Product Prices", "Add Product"},
+    "LT Employee Home": {
+        "Events Inquiry Inbox",
+        "Inquiry Board",
+        "Customers",
+        "People to Contact",
+        "Products",
+        "Product Prices",
+        "Add New Inquiry",
+        "Add Customer",
+        "Add Product",
+    },
+}
 
 OWNER_HOME_NUMBER_CARDS = {
     "New Inquiries": {
@@ -90,6 +114,11 @@ OWNER_DEFAULT_WORKSPACE_USERS = {
     "locallytwisted@gmail.com": set(),
 }
 OWNER_OPERATOR_ROLES = {"Item Manager", OWNER_WORKSPACE_ROLE}
+PERSONA_DEFAULT_WORKSPACES = {
+    "lt-owner-temp@example.com": "LT Owner Home",
+    "lt-manager-temp@example.com": "LT Manager Home",
+    "lt-employee-temp@example.com": "LT Employee Home",
+}
 
 
 def bench_execute(method: str, *, kwargs: dict[str, Any] | None = None) -> Any:
@@ -163,6 +192,13 @@ def check_workspace(name: str, expected: dict[str, tuple[str, str]]) -> list[str
     stale_found = sorted((set(shortcuts) | content_labels) & STALE_LABELS)
     if stale_found:
         failures.append(f"{name} still shows stale labels: {', '.join(stale_found)}")
+
+    forbidden_found = sorted(
+        (set(shortcuts) | {label for label in content_labels if label})
+        & FORBIDDEN_WORKSPACE_SHORTCUTS.get(name, set())
+    )
+    if forbidden_found:
+        failures.append(f"{name} still shows non-persona shortcuts: {', '.join(forbidden_found)}")
 
     for label, (doctype, view) in expected.items():
         shortcut = shortcuts.get(label)
@@ -293,6 +329,20 @@ def check_owner_default_users_preserve_roles() -> list[str]:
     return failures
 
 
+def check_persona_default_workspaces() -> list[str]:
+    failures = []
+    for user_name, expected_workspace in PERSONA_DEFAULT_WORKSPACES.items():
+        user = try_get_doc("User", user_name)
+        if not user:
+            continue
+        if user.get("default_workspace") != expected_workspace:
+            failures.append(
+                f"{user_name} default workspace expected {expected_workspace!r}, "
+                f"found {user.get('default_workspace')!r}"
+            )
+    return failures
+
+
 def main() -> int:
     parse_noop_args(__doc__)
     failures = []
@@ -302,6 +352,7 @@ def main() -> int:
     failures.extend(check_owner_command_center())
     failures.extend(check_contractor_has_no_backend_login())
     failures.extend(check_owner_default_users_preserve_roles())
+    failures.extend(check_persona_default_workspaces())
 
     if failures:
         print("[BACKEND WORKSPACE PARITY] FAIL")

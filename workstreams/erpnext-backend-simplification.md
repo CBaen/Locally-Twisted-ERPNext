@@ -1,6 +1,6 @@
 # ERPNext Backend Simplification Workstream
 
-Last updated: 2026-05-03 by Codex after checkout/Lead conversion parity.
+Last updated: 2026-05-11 by Codex after backend persona workspace simplification.
 
 ## Outcome
 
@@ -119,6 +119,66 @@ Important: these workspace, Number Card, Dashboard Chart, Role Profile, and Cale
 - `cameron@builtbycameron.com` is an enabled System User with support/admin roles. No local User records existed for `hi@locallytwisted.com` or `cameron@locallytwisted.com` in the 2026-05-09 check.
 - The temporary contractor account `lt-contractor-temp@example.com` remains disabled. Contractors are still not a backend-login tier by default.
 - Public customer flows do not require login: `/cart`, `/checkout`, and `/contact` returned HTTP 200 as guest routes with no redirect to `/login`, and `python scripts/verify/cart_checkout_contract.py` passed.
+
+## 2026-05-11 Backend Persona Workspace Simplification
+
+Current local ERPNext Desk state is now persona-focused rather than only
+owner-focused:
+
+- `LT Owner Home` keeps the command center, Jeff next-action flow, and secondary
+  catalog tools including `Add Product`.
+- `LT Manager Home` keeps inquiry, booking, customer/contact, event job, task,
+  and add-inquiry/customer actions, but no longer exposes `Products`,
+  `Product Prices`, or `Add Product`.
+- `LT Employee Home` is narrowed to `My Tasks`, `Task Board`, `Booking
+  Calendar`, and `Event Jobs`; it no longer exposes customer/contact, inquiry,
+  or catalog administration shortcuts.
+- `LT Accountant Home` is narrowed to invoices, payment requests, payment
+  entries, customers, reminder review, journal entries, and chart of accounts.
+  It no longer exposes bank, vendor, payment-terms, statement-reminder, or
+  employee/payroll shortcuts while those lanes remain incomplete.
+- `LT Maintenance Home` remains the sanitized maintenance surface. The
+  `LT Maintenance Heartbeat` report was re-synced so it includes
+  `LT Maintenance Admin Access`; maintenance, heartbeat, and finance parity
+  gates now pass.
+- Temp persona users now have explicit default workspaces: Owner, Manager,
+  Employee, and Accountant route to their matching LT workspaces instead of
+  depending on workspace ordering.
+
+Code ownership and guards:
+
+- `apps/locally_twisted/locally_twisted/seed/sync_backend_workspaces.py`
+  now owns deterministic Manager and Employee workspace shortcut/content sets.
+- `apps/locally_twisted/locally_twisted/seed/sync_finance_workspace.py`
+  now owns the reduced Accountant Home shortcut/content set and prunes removed
+  finance/payroll setup links.
+- `scripts/verify/backend_workspace_parity.py` now fails if Manager/Employee
+  workspaces regain non-persona shortcuts.
+- `scripts/verify/finance_workspace_parity.py` now fails if Accountant Home
+  regains unfinished bank/vendor/payroll setup shortcuts.
+- `scripts/verify/persona_desk_routes.spec.js` and `npm run test:desk-personas`
+  prove Manager, Employee, and Accountant temp accounts land on the expected
+  personalized Desk views.
+- The backend and finance syncs both touch `User.default_workspace`; run them
+  serially when applying both in the same session.
+
+Verification receipt on 2026-05-11:
+
+- `python scripts/setup/sync_maintenance_package.py`
+- `python scripts/setup/sync_backend_workspaces.py`
+- `python scripts/setup/sync_finance_workspace.py`
+- `python scripts/verify/backend_workspace_parity.py`
+- `python scripts/verify/finance_workspace_parity.py`
+- `python scripts/verify/maintenance_admin_boundary.py`
+- `python scripts/verify/maintenance_heartbeat.py`
+- `$env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-personas`
+- `$env:LT_DESK_TEST_USER='lt-owner-temp@example.com'; $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner`
+
+Next permission work should not start from custom Frappe `User Type` records.
+Frappe still uses standard `System User` and `Website User`; LT's backend
+personas are role/profile/workspace packages. The next safe slice is to tighten
+DocType permissions and user permissions behind these views with failing
+verifiers first.
 
 ## 2026-05-02 CRM Pipeline Translation
 
@@ -245,7 +305,7 @@ Specific lessons:
 - Stage cascades should start with reversible operational records when the finance threshold is not fully agreed yet.
 - Inventory existing finance paths before wiring a stage to finance. This repo already has checkout/payment-success cascades, so stage automation must coordinate with them instead of creating parallel records.
 
-These patterns are now promoted to `.codex/capabilities/recipes/erpnext-simplified-role-verification.md` and `.codex/capabilities/recipes/erpnext-crm-pipeline-safety.md`, and both are indexed in `.codex/capabilities/INDEX.md`.
+These patterns are now promoted to `capabilities/recipes/erpnext-simplified-role-verification.md` and `capabilities/recipes/erpnext-crm-pipeline-safety.md`, and both are indexed in `capabilities/INDEX.md`.
 
 ## Dependencies And Collision Points
 
@@ -343,7 +403,7 @@ python scripts/dev/clear_website_cache.py
 - `PROJECT-STATUS.md` - project map and historical receipts.
 - `locally-twisted-decisions.md` - durable reasoning, especially 2026-05-01 service taxonomy and 2026-04-30 fixture decisions.
 - `lessons-learned.md` - project-specific traps.
-- `.codex/capabilities/INDEX.md` - capability routing.
+- `capabilities/INDEX.md` - capability routing.
 
 Relevant code:
 

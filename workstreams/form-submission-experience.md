@@ -12,7 +12,7 @@ It does not own product-page architecture, checkout pricing, Lead schema
 changes, or customer email policy.
 
 Capability router:
-`.codex/capabilities/recipes/shared-inquiry-form-experience.md`.
+`capabilities/recipes/shared-inquiry-form-experience.md`.
 
 ## Current Contract
 
@@ -47,7 +47,7 @@ Capability router:
   owns cookie notice placement.
 - `scripts/verify/form_experience.spec.js` is the focused verifier for this
   contract.
-- `.codex/capabilities/recipes/shared-inquiry-form-experience.md` is the
+- `capabilities/recipes/shared-inquiry-form-experience.md` is the
   reusable recipe for future agents changing submit/status/modal behavior.
 
 ## Verification Receipt

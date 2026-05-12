@@ -5,6 +5,7 @@
 {% block breadcrumbs %}{% endblock %}
 
 {% block page_content %}
+{% set lt_product_runtime = get_product_page_runtime_context(doc.item_code) %}
 <nav class="product-container item-breadcrumbs small lt-product-breadcrumbs" aria-label="{{ _('Breadcrumb') }}">
 	<a href="/shop">{{ _("All Balloon Decor") }}</a>
 	{% for parent in parents or [] %}
@@ -19,7 +20,9 @@
 	<span aria-hidden="true">&rsaquo;</span>
 	<span aria-current="page">{{ title }}</span>
 </nav>
-<div class="product-container item-main lt-product-page__main">
+<div class="product-container item-main lt-product-page__main lt-product-page--{{ lt_product_runtime.product_page_type | replace('_', '-') }} lt-product-page--{{ lt_product_runtime.commerce_lane | replace('_', '-') }}"
+     data-lt-product-page-type="{{ lt_product_runtime.product_page_type }}"
+     data-lt-commerce-lane="{{ lt_product_runtime.commerce_lane }}">
 	{% from "webshop/templates/includes/macros.html" import product_image %}
 	<div class="item-content lt-product-page__content">
 		<div class="product-page-content" itemscope itemtype="http://schema.org/Product">

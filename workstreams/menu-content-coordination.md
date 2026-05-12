@@ -14,7 +14,7 @@ Before editing any nav, chrome, public page hero/body copy, footer links, or nav
 - Do not edit another active lane's files without adding a note here first.
 - Treat `workstreams/website-launch.md` as the broader launch lane; use this file for menu/content collisions.
 - Keep `/contact` as the shared conversion path unless Guiding Light explicitly changes the architecture.
-- Current public chrome includes `Twisting & Face Painting` pointing to `/balloon-twisting-and-face-painting`, `Ready-to-Order` pointing to `/shop` while ecommerce is open for testing, `Contact Us` pointing to `/contact`, and top-banner-only `Free Event Quote` pointing to `/contact`. The short-notice sentence `SHORT NOTICE? LET US KNOW. WE CAN OFTEN HELP WITH 24 HOURS NOTICE!` is a centered deep-navy `/contact` link on desktop and a matching visible deep-navy `/contact` strip on mobile; the account link remains on the desktop right. The old prepared-design proof copy and delivery/truck icon are removed. `Ready-to-Order`, `Cart`, and `Recent Work` do not belong in the top banner, and `Free Event Quote` must not appear in primary nav, mobile drawer, or search quick results. Banner text stays warm-white on navy; brass is accent only. Mobile safe-area left/right padding must match the physical sides. Do not remove, hide, rename, or replace the BTFP lane unless GL explicitly approves the exact action and `workstreams/nav-service-removal-approvals.md` records the required marker. Do not restore a standalone `/process` page or top-level Process link without explicit GL approval.
+- Current public chrome includes `Twisting & Face Painting` pointing to `/balloon-twisting-and-face-painting`, an event-audience dropdown linking only to `/civic-community`, `/corporate-events`, `/schools-campuses`, and `/private-celebrations`, `Ready-to-Order` pointing to `/shop` while ecommerce is open for testing, `Contact Us` pointing to `/contact`, and top-banner-only `Free Event Quote` pointing to `/contact`. The short-notice sentence `SHORT NOTICE? LET US KNOW. WE CAN OFTEN HELP WITH 24 HOURS NOTICE!` is a centered deep-navy `/contact` link on desktop and a matching visible deep-navy `/contact` strip on mobile; the account link remains on the desktop right. The old prepared-design proof copy and delivery/truck icon are removed. `Ready-to-Order`, `Cart`, and `Recent Work` do not belong in the top banner, and `Free Event Quote` must not appear in primary nav, mobile drawer, or search quick results. Banner text stays warm-white on navy; brass is accent only. Mobile safe-area left/right padding must match the physical sides. Do not remove, hide, rename, or replace the BTFP lane unless GL explicitly approves the exact action and `workstreams/nav-service-removal-approvals.md` records the required marker. Do not restore standalone `/process` or `/event-balloons` pages or links without explicit GL approval.
 - Do not claim a route, drawer, form, or verifier is fixed without recording the command and result.
 
 ## Style-Guide Alignment Note For Menu/Content Agents
@@ -93,11 +93,21 @@ Status:
 ## Session Notes
 
 ### 2026-05-11 - Codex current session event hub and review proof cleanup
-Lane: Removed `/event-balloons` hub route, homepage review platform strip, and route/documentation parity.
-Files: `home.*`, deleted `event_balloons.*`, `portfolio.html`, navbar/footer partials, `hooks.py`, `seo.py`, route/verifier files, and related launch docs.
-Intent: Delete the unapproved `/event-balloons` page and every public discovery path to it with no redirect; keep the four event audience pages live; show GigSalad, Google, and Facebook review proof as unboxed logos with no counts and no visible `reviews` label.
-Conflicts: The shared worktree also contains unrelated ecommerce/header/catalog edits. Do not broad-stage this file set without reviewing scope.
-Verification: Direct no-redirect HTTP checks returned 404 for `/event-balloons` and `/event_balloons`; sitemap search was clean; `python scripts/verify/nav_ia.py` passed; focused SEO sitemap/removed-route contract passed; focused search/event-mega Playwright checks passed; focused home/portfolio/event-audience layout-fit passed.
+Lane: Removed `/event-balloons` hub route, homepage review platform strip, and
+route/documentation parity.
+Files: `home.*`, deleted `event_balloons.*`, `portfolio.html`, navbar/footer
+partials, `hooks.py`, `seo.py`, route/verifier files, and related launch docs.
+Intent: Delete the unapproved `/event-balloons` page and every public
+discovery path to it with no redirect; keep the four event audience pages
+live; show GigSalad, Google, and Facebook review proof as unboxed logos with no
+counts and no visible `reviews` label.
+Conflicts: The shared worktree also contains unrelated ecommerce/header/catalog
+edits. Do not broad-stage this file set without reviewing scope.
+Verification: Direct no-redirect HTTP checks returned 404 for
+`/event-balloons` and `/event_balloons`; sitemap search was clean;
+`python scripts/verify/nav_ia.py` passed; focused SEO sitemap/removed-route
+contract passed; focused search/event-mega Playwright checks passed; focused
+home/portfolio/event-audience layout-fit passed.
 Status: Complete.
 
 ### 2026-05-10 - Codex current session top-banner short-notice update
@@ -105,7 +115,7 @@ Lane: Desktop top utility banner and BTFP route crawl placement.
 Files: `navbar.html`, `lt-mega-menu.css`, `balloon_twisting_and_face_painting.*`, `lt-page-containment.css`, `nav_ia.py`, `smoke_shop.py`, `contact_prefill.py`, `interactive_layout.spec.js`, `layout_helpers.js`, and this coordination note.
 Intent: Add the short-notice 24-hour message to the top menu banner in the old proof slot while keeping `Free Event Quote` and the account link, remove the old prepared-design proof copy/truck icon, remove the static BTFP phone/email short-notice band, move the BTFP event crawl into that former slot, expand the crawl event list, and guard that the crawl does not pause.
 Conflicts: This supersedes stale wording that treated `Free Event Quote` as a primary nav or mobile drawer item; it is now top-banner-only while `Contact Us` remains the primary conversion CTA. The short-notice message must not be inserted inside the utility-link list.
-Verification: `python scripts/dev/clear_website_cache.py --restart` passed; `python scripts/verify/nav_ia.py` passed; `python scripts/verify/contact_prefill.py --base-url http://localhost:8081` passed; focused `npx playwright test scripts/verify/interactive_layout.spec.js --grep "twisting and face painting" --reporter=line --workers=1` passed 9/9; focused BTFP `npm run test:layout-fit` passed 13/13; focused BTFP `npm run test:container-contract` passed 3/3; `python scripts/verify/smoke_shop.py` passed; full `npm run test:public-verify` passed 12/12 website launch steps. Follow-up correction after GL clarified the old proof slot: `python scripts/dev/clear_website_cache.py --restart`, `python scripts/verify/nav_ia.py`, and `python scripts/verify/smoke_shop.py` passed; direct Playwright metrics showed `proofCount: 0`, `topAlertCount: 0`, `deliveryIconCount: 0`, and `oldCopyPresent: false`. 2026-05-11 correction after GL caught the brass/yellow regression: `python scripts/verify/nav_ia.py`, `npx.cmd playwright test scripts/verify/interactive_layout.spec.js --grep "header breakpoint contract" --reporter=line`, and live browser probes passed with desktop/mobile short-notice strips at `rgb(14, 34, 64)` and warm-white text.
+Verification: `python scripts/dev/clear_website_cache.py --restart` passed; `python scripts/verify/nav_ia.py` passed; `python scripts/verify/contact_prefill.py --base-url http://localhost:8081` passed; focused `npx playwright test scripts/verify/interactive_layout.spec.js --grep "twisting and face painting" --reporter=line --workers=1` passed 9/9; focused BTFP `npm run test:layout-fit` passed 13/13; focused BTFP `npm run test:container-contract` passed 3/3; `python scripts/verify/smoke_shop.py` passed; full `npm run test:public-verify` passed 12/12 website launch steps. Follow-up correction after GL clarified the old proof slot: `python scripts/dev/clear_website_cache.py --restart`, `python scripts/verify/nav_ia.py`, and `python scripts/verify/smoke_shop.py` passed; direct Playwright metrics showed `proofCount: 0`, `topAlertCount: 0`, `deliveryIconCount: 0`, and `oldCopyPresent: false`. 2026-05-11 correction after GL caught the brass/yellow regression: `python scripts/verify/nav_ia.py`, `npx.cmd playwright test scripts/verify/interactive_layout.spec.js --grep "header breakpoint contract" --reporter=line`, `python scripts/verify/smoke_shop.py`, and live browser probes passed with desktop/mobile short-notice strips at `rgb(14, 34, 64)` and warm-white text.
 Launch-gate follow-up: the stale homepage Custom Event Decor hide-switch was removed, focused `container_contract.spec.js` passed 75/75, and full `python scripts\verify\website_launch_verify.py` passed all 12 website steps with open ecommerce testing enabled.
 Status: Complete.
 
@@ -114,7 +124,7 @@ Lane: Top banner ownership, quote-label dedupe, hover/focus contrast, and mobile
 Files: `navbar.html`, `lt-mega-menu.css`, `nav_ia.py`, `public-header-banner-contract-2026-05-10.md`, and capability failure cards.
 Intent: Keep `Free Event Quote` top-banner-only, keep `Contact Us` as the menu/drawer CTA, block `Ready-to-Order`, `Cart`, and `Recent Work` from the top banner, and guard the navy banner interaction/mobile padding contract after the gold/brass regression was identified as wrong.
 Conflicts: SEO/GEO/AEO work must not mutate header/footer/menu/search quick links unless the task explicitly names those surfaces and approval evidence.
-Verification: Superseded by the 2026-05-11 navy correction. `python scripts/verify/nav_ia.py`, focused header breakpoint Playwright, and live browser probes now guard desktop/mobile navy strips.
+Verification: Superseded by the 2026-05-11 navy correction. `python scripts/verify/nav_ia.py`, focused header breakpoint Playwright, `python scripts/verify/smoke_shop.py`, and live browser probes now guard desktop/mobile navy strips.
 Status: Complete.
 
 ### 2026-05-10 - Codex current session nav CTA copy adjustment

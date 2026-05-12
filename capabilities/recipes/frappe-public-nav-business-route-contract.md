@@ -46,9 +46,9 @@ For the current LT site:
   `Ready-to-Order`, `Portfolio`, `About Us`, `FAQ`, and `Contact Us` when
   ecommerce is open for testing. The event dropdown links only to
   `/civic-community`, `/corporate-events`, `/schools-campuses`, and
-  `/private-celebrations`; `/event-balloons` is removed and must not be
-  linked or redirected. The top utility banner replaces the old proof
-  copy/icon with a centered deep-navy `/contact` short-notice link:
+  `/private-celebrations`; `/event-balloons` is removed and must not be linked
+  or redirected. The top utility banner replaces the old proof copy/icon with a
+  centered deep-navy `/contact` short-notice link:
   `SHORT NOTICE? LET US KNOW. WE CAN OFTEN HELP WITH 24 HOURS NOTICE!`, while
   keeping `Free Event Quote` and the account link on the right.
 - `Twisting & Face Painting` points to `/balloon-twisting-and-face-painting`.
@@ -173,7 +173,13 @@ right padding and left inset to left padding. `nav_ia.py` now fails if the
 source contract moves the strip away from navy, and rendered guards verify
 `rgb(14, 34, 64)` for desktop/mobile banner backgrounds.
 
-On 2026-05-11, GL rejected the standalone `/event-balloons` hub before launch. Codex deleted `www/event_balloons.html` and `.py`, removed the route alias and canonical mapping, removed footer/search/home/portfolio links, and added negative guards in `nav_ia.py`, `seo_contract.spec.js`, `interactive_layout`, and route lists. Direct local checks return 404 with no redirect for both `/event-balloons` and `/event_balloons`; sitemap search is clean. The four event audience routes remain live.
+On 2026-05-11, GL rejected the standalone `/event-balloons` hub before launch.
+Codex deleted `www/event_balloons.html` and `.py`, removed the route alias and
+canonical mapping, removed footer/search/home/portfolio links, and added
+negative guards in `nav_ia.py`, `seo_contract.spec.js`, `interactive_layout`,
+and route lists. Direct local checks return 404 with no redirect for both
+`/event-balloons` and `/event_balloons`; sitemap search is clean. The four
+event audience routes remain live.
 
 On 2026-05-12, review closeout hardened Ready-to-Order product quick links:
 `READY_TO_ORDER_OWNER_INCLUDE_CODES` is now only an allowlist, and

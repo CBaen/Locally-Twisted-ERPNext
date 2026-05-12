@@ -36,7 +36,7 @@ Confirmed output facts:
 
 ## Use this for LT closeout
 
-For website, shop, cart, checkout, contact, portfolio, BTFP, public-nav, security, or visual work, prefer the project gates documented in `.codex/capabilities/recipes/codex-browser-verification-surface.md` and the route-specific capability recipe. Do not use a generic page fetch as proof that a browser-rendered route works.
+For website, shop, cart, checkout, contact, portfolio, BTFP, public-nav, security, or visual work, prefer the project gates documented in `capabilities/recipes/codex-browser-verification-surface.md` and the route-specific capability recipe. Do not use a generic page fetch as proof that a browser-rendered route works.
 
 ## Not done
 

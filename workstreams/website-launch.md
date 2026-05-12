@@ -70,7 +70,7 @@ the local raw-drop holding folder.
 top-banner update: the public header/menu now shows
 `Twisting & Face Painting`, top-banner `Free Event Quote`, and `Contact Us`.
 `Twisting & Face Painting` points to `/balloon-twisting-and-face-painting`;
-the conversion labels point to `/contact`. The short-notice sentence
+the event dropdown points only to the four audience routes; the conversion labels point to `/contact`. The short-notice sentence
 `SHORT NOTICE? LET US KNOW. WE CAN OFTEN HELP WITH 24 HOURS NOTICE!` is a
 centered deep-navy `/contact` link on desktop and a matching visible deep-navy
 `/contact` strip on mobile, with warm-white text and brass only as an accent.
@@ -82,10 +82,10 @@ reopened. Coordination:
 
 2026-05-11 short-notice banner and launch-gate correction receipt: cache
 clear/restart, `nav_ia.py`, focused `interactive_layout.spec.js --grep "header breakpoint contract"`,
-and direct desktop/mobile browser probes passed for the deep-navy linked
-short-notice banner. The 2026-05-10 brass/gold written contract was identified
-as a regression source and superseded. The stale homepage Custom Event Decor
-hide-switch was removed so the
+`smoke_shop.py`, and direct desktop/mobile browser probes passed for the
+deep-navy linked short-notice banner. The 2026-05-10 brass/gold written
+contract was identified as a regression source and superseded. The stale
+homepage Custom Event Decor hide-switch was removed so the
 page again matches the launch contract. Focused `container_contract.spec.js`
 passed 75/75, then full `python scripts/verify/website_launch_verify.py` passed
 all 12 website steps in the open ecommerce testing posture. The later
@@ -115,16 +115,16 @@ handoff: `workstreams/seo-geo-aeo-contract.md`; capability:
 
 2026-05-08 launch verifier and public microinteraction closeout, refreshed 2026-05-10 for open ecommerce: `npm run test:website-verify` runs `scripts/verify/website_launch_verify.py`, serializing Playwright workers by default so the local ERPNext/Frappe stack is not overloaded by broad launch gates. `npm run test:public-verify` aliases to the same website gate and now includes open ecommerce checks; `npm run test:ecommerce-full` is the focused ecommerce gate with rollback-safe backend checkout contracts; `npm run test:launch-verify` adds accessibility plus contact smoke on top. Public microinteractions now have a focused feature handoff at `workstreams/public-site-microinteractions.md` and capability contract at `capabilities/recipes/public-site-microinteraction-contract.md`. The balloon cursor was retired at GL's request; product cards on `/shop` and category pages remain clickable from non-interactive areas, and the transient demo file `assets/balloon cursor/Red Balloon Cursor.html` remains deleted.
 
-2026-05-08 mobile public chrome/review compactness closeout: mobile search now
+2026-05-08 mobile public chrome/review compactness closeout, refreshed 2026-05-11 for multi-platform review proof: mobile search now
 lives at the bottom of the drawer instead of in `.lt-mega-header__mobile-actions`,
 which keeps the mobile header compact at 320px. In open ecommerce testing the
 mobile header carries logo, cart, and menu. Search opens the overlay and now submits to `/shop`; `/search` is
-a no-cache 404 fallback, not a public nav destination. The homepage Google
-review proof band now has a
-mobile component sizing contract. Feature handoff:
-`workstreams/mobile-nav-review-compactness.md`.
-
-2026-05-11 review platform refresh: the homepage review proof now uses GigSalad, Google, and Facebook logos with no visible counts, no visible `reviews` label, and no platform cards/containers. Feature handoff: `workstreams/homepage-review-platform-proof-2026-05-11.md`.
+a no-cache 404 fallback, not a public nav destination. The homepage review
+proof band now uses GigSalad, Google, and Facebook logos with no visible
+counts, no visible `reviews` label, and no platform cards/containers. It still
+has a mobile component sizing contract. Feature handoffs:
+`workstreams/mobile-nav-review-compactness.md` and
+`workstreams/homepage-review-platform-proof-2026-05-11.md`.
 
 2026-05-08 public security review: active P0 lane is
 `workstreams/public-site-security-hardening.md` with capability contract

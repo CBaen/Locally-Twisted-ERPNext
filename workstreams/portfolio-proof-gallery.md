@@ -66,9 +66,9 @@ Latest local verification on 2026-05-10 after the new photo batch:
 `/portfolio` and representative new WebP assets. A focused rendered DOM check
 found all 59 new `.lt-photo[data-id^="portfolio-2026-03-07"]` records, all
 loaded through `/optimized/`, no unloaded images, and no desktop or mobile
-document overflow. The full `npm run test:a11y` gate still fails on unrelated
-homepage-only `aria-hidden-focus` carousel slide issues; it did not report a
-portfolio finding.
+document overflow. Later 2026-05-10 launch verification repaired the unrelated
+homepage accessibility blocker; `npm run test:a11y` now passes 50
+route/viewport axe checks with 0 violations.
 
 Previous 2026-05-08 verification: `npm run test:portfolio-reel` passed 6/6,
 `npm run test:layout-fit -- --grep "portfolio fits"` passed 13/13, and

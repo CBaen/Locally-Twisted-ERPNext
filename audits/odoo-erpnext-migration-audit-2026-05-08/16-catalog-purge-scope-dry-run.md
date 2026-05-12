@@ -2,7 +2,7 @@
 
 Read-only dry run from saved snapshot. No ERPNext connection and no deletes.
 
-- Generated: `2026-05-12T00:39:28Z`
+- Generated: `2026-05-12T01:18:45Z`
 - Snapshot: `audits\odoo-erpnext-migration-audit-2026-05-08\current-state-snapshot-2026-05-11-1050`
 - Import subset rule: include products that fit the current ERPNext backend schema; variants are allowed; exclude owner-named unsupported structures and proven schema/backend blockers.
 - Variants, cups, and high-variant products are not blanket exclusions.

@@ -8,6 +8,11 @@ from typing import Any
 from locally_twisted.catalog_contract.source_builder import build_product_page_contract
 
 
+RENDERABLE_EXTRA_ROLES = {"gallery", "variant_image", "reference"}
+SAFE_HELD_EXTRA_ROLE = "ignored_artifact"
+KNOWN_MEDIA_ROLES = {"primary", *RENDERABLE_EXTRA_ROLES, SAFE_HELD_EXTRA_ROLE}
+
+
 @dataclass(frozen=True)
 class MediaVisibilityRow:
     slug: str
@@ -15,6 +20,10 @@ class MediaVisibilityRow:
     commerce_lane_label: str
     source_primary_images: int
     source_extra_images: int
+    approved_gallery_images: int
+    approved_variant_images: int
+    reference_images: int
+    held_back_ignored_artifacts: int
     live_website_image: bool
     live_slideshow: bool
     active_variants: int
@@ -24,7 +33,7 @@ class MediaVisibilityRow:
 
     @property
     def needs_media_review(self) -> bool:
-        return self.unclassified_source_images > 0
+        return self.held_back_ignored_artifacts > 0 or self.unclassified_source_images > 0
 
 
 @dataclass(frozen=True)
@@ -40,6 +49,10 @@ class MediaVisibilityReport:
             "products_with_source_primary_image": sum(1 for row in self.rows if row.source_primary_images),
             "products_with_source_extra_images": sum(1 for row in self.rows if row.source_extra_images),
             "source_extra_images": sum(row.source_extra_images for row in self.rows),
+            "approved_gallery_images": sum(row.approved_gallery_images for row in self.rows),
+            "approved_variant_images": sum(row.approved_variant_images for row in self.rows),
+            "reference_images": sum(row.reference_images for row in self.rows),
+            "held_back_ignored_artifacts": sum(row.held_back_ignored_artifacts for row in self.rows),
             "unclassified_source_images": sum(row.unclassified_source_images for row in self.rows),
             "website_items_with_live_image": sum(1 for row in self.rows if row.live_website_image),
             "website_items_with_slideshow": sum(1 for row in self.rows if row.live_slideshow),
@@ -64,7 +77,11 @@ class MediaVisibilityReport:
             f"- Products with source primary image: {summary['products_with_source_primary_image']}",
             f"- Products with source extra images: {summary['products_with_source_extra_images']}",
             f"- Source extra images: {summary['source_extra_images']}",
-            f"- Unclassified source extra images: {summary['unclassified_source_images']}",
+            f"- Approved gallery images: {summary['approved_gallery_images']}",
+            f"- Approved variant images: {summary['approved_variant_images']}",
+            f"- Reference images: {summary['reference_images']}",
+            f"- Held-back ignored artifacts: {summary['held_back_ignored_artifacts']}",
+            f"- Unsafe unclassified source extra images: {summary['unclassified_source_images']}",
             f"- Website Items with live primary image: {summary['website_items_with_live_image']}",
             f"- Website Items with slideshow field set: {summary['website_items_with_slideshow']}",
             f"- Website Slideshow records: {summary['website_slideshows']}",
@@ -88,18 +105,21 @@ class MediaVisibilityReport:
             "## Interpretation",
             "",
             "Live ERPNext primary images and some variant images are evidence of current stored media, not proof that source media is fully classified.",
-            "Unclassified source extras must stay out of customer-facing import claims until approved as gallery, variant_image, reference, or intentionally ignored_artifact media.",
+            "Source extras marked ignored_artifact are intentionally held back and are non-blocking because product pages must not render them.",
+            "Gallery, variant_image, and reference media may render only when the backend/source contract approves that role.",
             "The current public ecommerce pause means rendered product-page media proof must use authenticated/internal access or explicitly report the pause as the blocker.",
             "",
             "## Product Coverage",
             "",
-            "| Slug | Template | Lane | Source primary | Source extras | Unclassified extras | Live primary | Live slideshow | Active variants | Variant images | Distinct variant images |",
-            "|---|---|---|---:|---:|---:|---|---|---:|---:|---:|",
+            "| Slug | Template | Lane | Source primary | Source extras | Gallery | Variant | Reference | Held ignored | Unsafe unclassified | Live primary | Live slideshow | Active variants | Variant images | Distinct variant images |",
+            "|---|---|---|---:|---:|---:|---:|---:|---:|---:|---|---|---:|---:|---:|",
         ])
         for row in self.rows:
             lines.append(
                 f"| {row.slug} | {row.product_page_type_label} | {row.commerce_lane_label} | "
-                f"{row.source_primary_images} | {row.source_extra_images} | {row.unclassified_source_images} | "
+                f"{row.source_primary_images} | {row.source_extra_images} | "
+                f"{row.approved_gallery_images} | {row.approved_variant_images} | {row.reference_images} | "
+                f"{row.held_back_ignored_artifacts} | {row.unclassified_source_images} | "
                 f"{'yes' if row.live_website_image else 'no'} | {'yes' if row.live_slideshow else 'no'} | "
                 f"{row.active_variants} | {row.active_variant_images} | {row.distinct_variant_images} |"
             )
@@ -126,22 +146,27 @@ def build_media_visibility_report(
         slug = str(product.get("slug") or "")
         source_extra_images = len(product.get("additional_image_urls") or [])
         live_row = live.coverage_for(slug)
+        source_extra_roles = [
+            image.role
+            for image in contract.gallery
+            if image.role != "primary"
+        ]
         row = MediaVisibilityRow(
             slug=contract.slug,
             product_page_type_label=contract.product_page_type_label,
             commerce_lane_label=contract.commerce_lane_label,
             source_primary_images=1 if product.get("image_url") else 0,
             source_extra_images=source_extra_images,
+            approved_gallery_images=sum(1 for role in source_extra_roles if role == "gallery"),
+            approved_variant_images=sum(1 for role in source_extra_roles if role == "variant_image"),
+            reference_images=sum(1 for role in source_extra_roles if role == "reference"),
+            held_back_ignored_artifacts=sum(1 for role in source_extra_roles if role == SAFE_HELD_EXTRA_ROLE),
             live_website_image=live_row["live_website_image"],
             live_slideshow=live_row["live_slideshow"],
             active_variants=live_row["active_variants"],
             active_variant_images=live_row["active_variant_images"],
             distinct_variant_images=live_row["distinct_variant_images"],
-            unclassified_source_images=sum(
-                1
-                for image in contract.gallery
-                if image.role not in {"primary", "gallery", "variant_image", "reference"}
-            ),
+            unclassified_source_images=sum(1 for role in source_extra_roles if role not in KNOWN_MEDIA_ROLES),
         )
         rows.append(row)
 
@@ -149,10 +174,30 @@ def build_media_visibility_report(
     unclassified_images = sum(row.unclassified_source_images for row in rows)
     if unclassified_products:
         blockers.append(
-            f"{len(unclassified_products)} products have {unclassified_images} unclassified source extra images."
+            f"{len(unclassified_products)} products have {unclassified_images} unsafe unclassified source extra images."
         )
-    if website_slideshow_count == 0 or website_slideshow_item_count == 0:
-        blockers.append("No ERPNext Website Slideshow records are present for approved gallery media.")
+    role_count_mismatches = [
+        row.slug
+        for row in rows
+        if row.source_extra_images
+        != (
+            row.approved_gallery_images
+            + row.approved_variant_images
+            + row.reference_images
+            + row.held_back_ignored_artifacts
+            + row.unclassified_source_images
+        )
+    ]
+    if role_count_mismatches:
+        blockers.append(
+            "Source extra image counts do not match backend media-role classifications for: "
+            + ", ".join(role_count_mismatches[:10])
+        )
+    approved_gallery_images = sum(row.approved_gallery_images for row in rows)
+    if approved_gallery_images and (website_slideshow_count == 0 or website_slideshow_item_count == 0):
+        blockers.append("Approved gallery media exists but no ERPNext Website Slideshow records are present.")
+    if not approved_gallery_images and (website_slideshow_count or website_slideshow_item_count):
+        blockers.append("ERPNext Website Slideshow records exist without source-approved gallery media.")
     missing_primary = [row.slug for row in rows if row.source_primary_images and not row.live_website_image]
     if missing_primary:
         blockers.append("Live ERPNext is missing primary Website Item images for: " + ", ".join(missing_primary[:10]))

@@ -14,6 +14,7 @@ CONTAINER = "locally-twisted-erpnext-v15-backend-1"
 SITE = "frontend"
 ACCOUNTANT_HOME = "LT Accountant Home"
 ACCOUNTANT_ROLE = "LT Accountant Access"
+ACCOUNTANT_TEMP_USER = "lt-accountant-temp@example.com"
 
 EXPECTED_NUMBER_CARDS = {
     "Unpaid Invoices": {
@@ -61,20 +62,22 @@ EXPECTED_SHORTCUTS = {
     "Payment Requests": ("Payment Request", "List"),
     "Payments": ("Payment Entry", "List"),
     "Customers": ("Customer", "List"),
-    "Suppliers": ("Supplier", "List"),
-    "Purchase Invoices": ("Purchase Invoice", "List"),
-    "Bank Transactions": ("Bank Transaction", "List"),
-    "Bank Accounts": ("Bank Account", "List"),
     "Journal Entries": ("Journal Entry", "List"),
     "Chart of Accounts": ("Account", "Tree"),
-    "Payment Terms": ("Payment Terms Template", "List"),
-    "Statement Reminders": ("Process Statement Of Accounts", "List"),
-    "Employees": ("Employee", "List"),
 }
 
-EXPECTED_URL_SHORTCUTS = {
-    "Bank Reconciliation": "/app/bank-reconciliation-tool",
+FORBIDDEN_SHORTCUTS = {
+    "Suppliers",
+    "Purchase Invoices",
+    "Bank Transactions",
+    "Bank Accounts",
+    "Bank Reconciliation",
+    "Payment Terms",
+    "Statement Reminders",
+    "Employees",
 }
+
+EXPECTED_URL_SHORTCUTS = {}
 
 EXPECTED_REPORT_SHORTCUTS = {
     "Reminder Review Report": {
@@ -88,9 +91,8 @@ EXPECTED_REPORT_SHORTCUTS = {
 EXPECTED_TEXT = {
     "Accountant Home",
     "Money to collect",
-    "Banking and review",
-    "Vendors and payroll records",
-    "Accounting setup and statements",
+    "Review before sending",
+    "Accounting reference",
 }
 
 
@@ -157,6 +159,15 @@ def check_workspace() -> list[str]:
 
     if ACCOUNTANT_ROLE not in roles:
         failures.append(f"{ACCOUNTANT_HOME} missing role {ACCOUNTANT_ROLE!r}")
+
+    forbidden_found = sorted(
+        (set(shortcuts) | {label for label in shortcut_blocks if label}) & FORBIDDEN_SHORTCUTS
+    )
+    if forbidden_found:
+        failures.append(
+            f"{ACCOUNTANT_HOME} still shows unfinished finance/payroll shortcuts: "
+            f"{', '.join(forbidden_found)}"
+        )
 
     for text in EXPECTED_TEXT:
         if text not in content_text:
@@ -253,6 +264,18 @@ def check_reports() -> list[str]:
     return failures
 
 
+def check_accountant_default_workspace() -> list[str]:
+    user = try_get_doc("User", ACCOUNTANT_TEMP_USER)
+    if not user:
+        return []
+    if user.get("default_workspace") != ACCOUNTANT_HOME:
+        return [
+            f"{ACCOUNTANT_TEMP_USER} default workspace expected {ACCOUNTANT_HOME!r}, "
+            f"found {user.get('default_workspace')!r}"
+        ]
+    return []
+
+
 def check_report_execute() -> list[str]:
     failures = []
     try:
@@ -289,6 +312,7 @@ def main() -> int:
         failures.extend(check_workspace())
         failures.extend(check_number_cards())
         failures.extend(check_reports())
+        failures.extend(check_accountant_default_workspace())
         failures.extend(check_report_execute())
     except Exception as exc:
         failures.append(str(exc))

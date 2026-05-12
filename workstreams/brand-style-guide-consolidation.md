@@ -34,7 +34,7 @@ The approved target is:
 - Restored the deliberate premium two-level mega menu after GL chose that direction over the simple header.
 - Added/served `lt-mega-menu.css`, `lt-page-containment.css`, `lt-product-polish.css`, and `lt-megamenu.js` through `hooks.py`.
 - Bumped the theme CSS cache key in `hooks.py` to `20260505-authority-4`.
-- Added `/event-balloons` during the authority-page pass. Later correction removed the unapproved standalone `/process` page from the customer-facing nav contract and restored `/balloon-twisting-and-face-painting` as the primary live-service route.
+- Added `/event-balloons` during the authority-page pass. Later corrections removed the unapproved standalone `/process` page, restored `/balloon-twisting-and-face-painting` as the primary live-service route, and removed `/event-balloons` again before launch with no redirect. The four event audience pages remain live.
 - Reinstated `navbar_context.py` for menu data and kept `website_context.py` for shop/sidebar defaults.
 - Fixed mobile hero spacing, reviews carousel clipping, dark-section heading contrast, portfolio chip wrapping, footer newsletter mobile stacking, product/shop panel spacing, and shop-card mobile density.
 - Added the standing responsive container audit gate so future visual work checks breakpoint edges and open UI states, not only one mobile and one desktop screenshot.
@@ -68,7 +68,7 @@ The first four-icon pass was not enough. Balloon pages should use balloon-form i
 - Review the generated post-fix screenshots with GL/Jeff for taste, photos, and proof hierarchy; layout/container regressions are currently green.
 - Replace or edit photos toward the Image #3 quality bar: crisp, premium, high-contrast, real scale, civic/Utah/corporate/school/private-event authority.
 - Verify exact review/trust claims before launch copy is treated as final.
-- Keep `workstreams/responsive-container-integrity.md` and `.codex/capabilities/recipes/responsive-container-audit.md` current when new public containers or stateful UI are added.
+- Keep `workstreams/responsive-container-integrity.md` and `capabilities/recipes/responsive-container-audit.md` current when new public containers or stateful UI are added.
 - Keep catalog color names such as product `Blush` intact. The retired `blush` rule applies to UI styling and design references, not supplier/product data.
 - Do not use deleted `_resources/design-guide/` screenshots, TSX files, or the old shop/spec comparison docs as current taste calibration.
 - Do not remove or simplify the restored mega-menu unless GL explicitly changes the navigation decision again.

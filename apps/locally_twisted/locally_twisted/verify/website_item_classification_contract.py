@@ -32,6 +32,9 @@ CHECKOUT_READY_AFTER_SMALL_FIX = (
     "holy-cow-bouquet",
     "easter-balloon-cups",
     "mothers-day-bouquet",
+    "graduation-grab-n-go",
+    "7-butterfly-column",
+    "6-graduation-stands",
 )
 
 QUOTE_FIRST = (
@@ -40,7 +43,6 @@ QUOTE_FIRST = (
     "basketball-arch",
     "number-balloon-columns",
     "easter-balloon-arch-bunny-ear",
-    "graduation-grab-n-go",
     "halloween-arch",
     "large-head-missionary",
     "premium-organic-garland",
@@ -53,7 +55,6 @@ QUOTE_FIRST = (
     "baby-shower-garland",
     "balloon-drop",
     "classic-organic-arch",
-    "7-butterfly-column",
     "7-epic-column",
     "organic-grab-n-go",
     "star-column",
@@ -62,7 +63,6 @@ QUOTE_FIRST = (
     "logo-3-layered-bouquet",
     "6-color-rainbow-arch",
     "mothers-day-front-yard-7-column",
-    "6-graduation-stands",
     "classic-organic-for-easel",
     "easter-arch",
     "large-garland",
@@ -95,8 +95,8 @@ DESIRED_BY_LANE: dict[str, dict[str, str]] = {
 
 EXPECTED_TOTAL = 53
 EXPECTED_COUNTS = {
-    "checkout_ready_after_small_fix": 15,
-    "quote_first": 33,
+    "checkout_ready_after_small_fix": 18,
+    "quote_first": 30,
     "hide_or_needs_review": 5,
 }
 ONLY_MUTATED_FIELDS = (WEBSITE_ITEM_PAGE_TYPE_FIELD, WEBSITE_ITEM_COMMERCE_LANE_FIELD)

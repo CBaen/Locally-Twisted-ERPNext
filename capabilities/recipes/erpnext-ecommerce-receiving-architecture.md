@@ -5,10 +5,10 @@ schema_version: 2.0
 level: recipe
 maturity: candidate
 scope: Locally Twisted ERPNext/Frappe ecommerce product import, product detail logic, cart, checkout, and invoice integration
-currently_true: phase_1_4_backend_preservation_explicit_checkout_allowlist_quote_event_fail_closed_public_ecommerce_paused_by_default
+currently_true: open_ecommerce_local_proof_explicit_checkout_allowlist_quote_event_fail_closed_all_enabled_checkout_sku_proof_real_catalog_import_blocked
 verification_level: 2
-last_verified: 2026-05-10
-evidence_quality: GL decision + official docs + live DB metadata + current code inspection + focused source verifiers + rollback-safe runtime verifier + cart/checkout/quote boundary verifiers + architecture readiness split + durable Phase 1-4 artifacts + paused-mode launch proof
+last_verified: 2026-05-11
+evidence_quality: GL decision + official docs + live DB metadata + current code inspection + focused source verifiers + rollback-safe runtime verifier + cart/checkout/quote boundary verifiers + all-enabled-checkout-SKU proof + architecture readiness split + durable Phase 1-5 artifacts + open-mode local proof + product import readiness gate
 successful_uses: 1
 failed_uses: 0
 regressions: 0
@@ -45,6 +45,7 @@ OpenClaw cockpit witness:
 ## Current LT Contract
 
 - No real product import until incomplete/awkward/missing logic is surfaced to GL and resolved.
+- Current ERPNext products are test fixtures only. Future import/reopen work must prove a controlled purge/reupload/import path where products that fit the LT schema populate the correct Website Item/custom fields, preserve cascading/dependency information, and trigger expected automations. Do not treat current product records as final catalog truth.
 - Test products are proof cases only: Unicorn Bouquet and Classic Arch.
 - Product template types are logic/process classes:
   - `simple_product`: few options, little customization, but still backend-driven.
@@ -158,7 +159,8 @@ As of 2026-05-10, the first backend preservation slice exists:
   quote page candidates while still blocking import.
 - Live price-readiness now has a separate gate. Current ERPNext Item Price
   coverage passes for checkout-classified page contracts: 15 Ready-to-order
-  page candidates and 47 expected sale units.
+  Website Item families/pages and 47 enabled sale SKUs. Keep those counts
+  separate in handoffs; 15 is not the SKU count.
 - Source price-enrichment now has a separate candidate gate. Current coverage
   preserves 10,828 source variant rows and collapses them into 290 / 290
   expected import sale units: 17 source base-price units and 273
@@ -181,6 +183,10 @@ As of 2026-05-10, the first backend preservation slice exists:
 - `LT-PRODUCT-QUOTE-REVIEW` is a code-owned zero-dollar review Item used when
   ERPNext refuses template Items on Quotation rows; the requested product page
   still lives in LT custom fields and JSON.
+- The checkout product-family contract is all-enabled-SKU proof, not a
+  representative sample. Current fixture coverage is 15 checkout Website Item
+  families/pages, 47 enabled sale SKUs, 39 bouquet foil-number add-on rows,
+  and 86 Sales Order/Sales Invoice rows with rollback clean.
 - The confirmed `foil_number` add-on proof slice exists: `ADDON-FOIL-NUMBER`
   is code-owned, priced through ERPNext Item Price, expanded into its own Sales
   Order Item line, copied to Sales Invoice Item, and preserved in the base
@@ -193,10 +199,10 @@ As of 2026-05-10, the first backend preservation slice exists:
 - Configured cart lines have stable line keys, so the same SKU with different
   option/add-on payloads does not collapse into one line.
 - The cart API exposes visible display rows and line totals for base products
-  plus priced add-ons when ecommerce is intentionally opened for testing.
-  Current local/public launch posture is paused (`lt_ecommerce_paused=1`), so
-  `/shop`, `/cart`, and `/checkout` should show the branded quote fallback
-  unless a verifier deliberately opens ecommerce inside a controlled test step.
+  plus priced add-ons when ecommerce is open. The current local proof posture is
+  open (`lt_ecommerce_paused=0`): `/shop`, `/cart`, and `/checkout` should
+  render customer ecommerce surfaces. Treat a pause fallback on those routes as
+  a blocker to investigate unless the active task explicitly sets pause mode.
 - The cart API must reject quote-first variants as `quote_required`; priced
   complex decor cannot be treated as retail checkout just because Item Price
   exists.
@@ -224,6 +230,7 @@ python scripts/verify/product_page_runtime_contract.py
 python scripts/verify/product_add_on_dependency_contract.py
 python scripts/verify/product_add_on_approval_packet.py
 python scripts/verify/cart_checkout_contract.py
+python scripts/verify/checkout_product_family_contract.py --report workstreams/ecommerce-audit/2026-05-10-2330-phase-1-4-shop-audit/checkout-product-family-all-skus-final.json
 python scripts/verify/product_quote_operator_review_contract.py
 python scripts/verify/product_quote_acceptance_contract.py
 npm run test:quote-accept-experience
@@ -249,14 +256,13 @@ BCC-gated customer quote delivery, an operator-owned Quotation send control,
 source dependency-matrix preservation, plus desktop/mobile proof for the two
 reusable product-page control types only.
 
-The readiness audit is mode-sensitive. The current local/public posture is
-paused (`lt_ecommerce_paused=1`), so the top-level architecture gate may report
-`technical_architecture_ok: true` with `import_reopen_ok: false` only because
-`public_ecommerce_reopen` is intentionally blocked by site config. A temporary
-open-mode proof can show `import_reopen_ok: true`; after that proof, restore
-paused mode and rerun the pause contract. The source add-on, price-review, and
-media-classification business blocker rows were cleared by GL for testing and
-must not be reintroduced as blockers unless new source evidence changes.
+The readiness audit is mode-sensitive. The current local proof posture is open
+(`lt_ecommerce_paused=0`), so `product_page_architecture_readiness.py` should
+report `technical_architecture_ok: true` and `import_reopen_ok: true` unless a
+real architecture/import blocker appears. The pause switch remains a safety
+control, not the desired launch posture. The source add-on, price-review, and
+media-classification rows are still real-catalog import blockers until approved;
+do not use fixture-product proof as catalog approval.
 Finance/bank/payment integration is explicitly deferred and should not be
 counted as a current template-architecture blocker.
 
@@ -269,7 +275,7 @@ Before importing a product family, prove:
 3. Every destination exists and is executable, not just a label.
 4. Required variant axes, optional add-ons, customization axes, backend-only fields, and needs-review axes are separated.
 5. Server-side pricing resolves base variant, add-ons, and modifiers.
-6. Product page, cart, checkout, Sales Order, invoice, and fulfillment/operator views preserve selected meaning.
+6. Product page, cart, checkout, Sales Order, invoice, and fulfillment/operator views preserve selected meaning for every enabled sellable checkout SKU, not just one sample variant.
 7. Desktop and mobile journeys expose the needed choices for the template type.
 8. Missing/incomplete/awkward data fails loudly through import blocker, verifier failure, admin report, customer-safe block, or GL review queue.
 

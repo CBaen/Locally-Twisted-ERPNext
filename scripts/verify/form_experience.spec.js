@@ -1,6 +1,7 @@
 const { test, expect } = require("@playwright/test");
 
 const BASE_URL = process.env.LT_BASE_URL || "http://localhost:8081";
+const CONFIRMATION_COPY = "A confirmation of your request will be sent to your email address shortly. We will be in contact within 24 hours!";
 
 async function dismissCookieNotice(page) {
 	const banner = page.locator(".lt-cookie-consent");
@@ -80,7 +81,7 @@ test.describe("Locally Twisted inquiry form experience", () => {
 		const modal = page.locator("#received");
 		await expect(modal).toBeVisible();
 		await expect(modal).toContainText("Request received");
-		await expect(modal).toContainText("Thanks, we got it");
+		await expect(modal).toContainText(CONFIRMATION_COPY);
 		await expect(modal.locator("[data-lt-modal-action='stay']")).toBeVisible();
 		await expect(modal.locator("[data-lt-modal-action='home']")).toHaveCount(0);
 		await expect(modal).not.toContainText("photos need a closer look");

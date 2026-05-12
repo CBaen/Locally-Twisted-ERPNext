@@ -19,22 +19,6 @@ PRODUCT_GROUP_ICONS = {
     "Seasonal & Specialty": "balloon-pair",
 }
 
-READY_TO_ORDER_OWNER_INCLUDE_CODES = {
-    "6-graduation-stands",
-    "7-butterfly-column",
-    "easter-balloon-cups",
-    "graduation-grab-n-go",
-}
-
-READY_TO_ORDER_EXCLUDED_ITEM_CODES = {
-    "classic-arch",
-    "classic-column",
-    "classic-garland",
-    "classic-organic-arch",
-    "classic-organic-balloon-garland",
-    "classic-organic-columns",
-}
-
 EVENT_LINKS = [
     {
         "label": "Civic & Community",
@@ -106,10 +90,6 @@ def _is_backend_checkout_enabled(item: dict) -> bool:
 
 def _ready_to_order_exclusion_reason(item: dict) -> str:
     item_code = item.get("item_code") or ""
-    if item_code in READY_TO_ORDER_EXCLUDED_ITEM_CODES:
-        return "owner_excluded_product"
-    if item_code not in READY_TO_ORDER_OWNER_INCLUDE_CODES:
-        return "not_owner_included_product"
     if not _is_backend_checkout_enabled(item):
         return "not_checkout_enabled"
     if not _has_checkout_price(item_code):

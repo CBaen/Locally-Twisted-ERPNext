@@ -1,0 +1,18 @@
+{
+  "ok": true,
+  "confirmed_add_ons": [
+    "Add Foil Number"
+  ],
+  "review_only_source_add_ons": [
+    "Add Bouquet",
+    "Add ons",
+    "Orbz toppers",
+    "Plush add ons"
+  ],
+  "runtime_review_only_keys": [
+    "add_bouquet",
+    "add_ons",
+    "orbz_toppers",
+    "plush_add_ons"
+  ]
+}

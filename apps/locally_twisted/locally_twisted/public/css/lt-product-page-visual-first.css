@@ -53,6 +53,10 @@
   outline-offset: 2px;
 }
 
+.lt-product__thumbnail-button[aria-pressed="true"] {
+  border-color: rgba(184, 154, 91, 0.72);
+}
+
 .lt-product__thumbnail-button .item-slideshow-image {
   display: block;
   width: 100%;
@@ -80,6 +84,17 @@
 
 .lt-product__brand-description--lead p:last-child {
   margin-bottom: 0;
+}
+
+.lt-product__standard-note {
+  margin: clamp(0.9rem, 2vw, 1.15rem) 0 0;
+  color: var(--lt-polish-slate, #2f3a4a);
+  font-size: 0.96rem;
+  line-height: 1.5;
+}
+
+.lt-product-page--simple-product .lt-product__standard-note {
+  max-width: 48rem;
 }
 
 .lt-product__copy-panel {

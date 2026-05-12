@@ -54,6 +54,12 @@
         </div>
     {% endif %}
 
+    {% if lt_product_runtime.is_ready_to_order %}
+        <p class="lt-product__standard-note">
+            {{ _("Ready to order: choose the available options here, add any approved upgrades, and we’ll keep those details with your order.") }}
+        </p>
+    {% endif %}
+
     {# Runtime product page type controls the primary customer action. #}
     {% if lt_product_runtime.is_quote_first or lt_product_runtime.needs_review %}
         {% include "templates/generators/item/item_quote_first.html" %}

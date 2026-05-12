@@ -41,6 +41,47 @@ approved backend-source-of-truth architecture.
 
 ---
 
+## 2026-05-11 - Backend Desk personas use role/profile/workspace packages, not custom User Types
+
+**Decision:** LT backend personalization should stay on Frappe's standard
+`System User` / `Website User` foundation and use LT role profiles, roles,
+workspaces, and targeted permission rules for the business personas. Do not
+start by creating custom Frappe `User Type` records for Owner, Manager,
+Employee, Accountant, or Maintenance.
+
+**Reasoning:** Live local ERPNext only has the standard Frappe user types, while
+LT already has role profiles and workspaces for the needed personas. Official
+Frappe docs split the problem the same way: workspaces are controlled by module
+and role access, while real record access is controlled by DocType permissions
+and User Permissions. Custom user types would add platform complexity before
+the existing role/profile/workspace lane is exhausted.
+
+**Implementation boundary:** Keep Owner, Manager, Employee, Accountant, and
+Maintenance views code-owned through idempotent sync scripts and verifiers.
+Manager should not expose catalog tools; Employee should not expose customer,
+inquiry, or catalog administration; Accountant should not expose bank, vendor,
+payment-term, statement-reminder, or employee/payroll setup links until those
+lanes are approved and populated. The next access-hardening slice should add
+failing DocType/User Permission verifiers before changing broad ERPNext role
+permissions.
+
+**Verification receipt:** `python scripts/setup/sync_maintenance_package.py`,
+`python scripts/setup/sync_backend_workspaces.py`,
+`python scripts/setup/sync_finance_workspace.py`,
+`python scripts/verify/backend_workspace_parity.py`,
+`python scripts/verify/finance_workspace_parity.py`,
+`python scripts/verify/maintenance_admin_boundary.py`,
+`python scripts/verify/maintenance_heartbeat.py`,
+`npm run test:desk-personas`, and `npm run test:desk-owner` passed locally on
+2026-05-11 with the documented temp-user password environment variables.
+Backend and finance workspace syncs both touch User records, so apply them
+serially when running both in one session.
+
+**Decided by:** GL acceptance of Codex's plan-deepened recommendation and Codex
+implementation on 2026-05-11.
+
+---
+
 ## 2026-05-11 - Public short-notice banner is deep navy, not brass/gold
 
 **Decision:** The public header short-notice strip is a deep-navy authority
@@ -62,9 +103,9 @@ enough because stale written contracts caused the repeat regression.
 
 **Verification receipt:** `python scripts\verify\nav_ia.py`,
 `npx.cmd playwright test scripts/verify/interactive_layout.spec.js --grep "header breakpoint contract" --reporter=line`,
-and direct browser probes passed on 2026-05-11. Direct probes showed desktop
-and mobile banner backgrounds at `rgb(14, 34, 64)`. Feature handoff:
-`workstreams/public-header-banner-contract-2026-05-10.md`.
+and `python scripts\verify\smoke_shop.py` passed on 2026-05-11. Direct browser
+probes showed desktop and mobile banner backgrounds at `rgb(14, 34, 64)`.
+Feature handoff: `workstreams/public-header-banner-contract-2026-05-10.md`.
 
 **Decided by:** GL correction and Codex forensic closeout on 2026-05-11.
 
@@ -113,13 +154,28 @@ quote-gated first-layer stops, and Classic Arch currently renders
 
 ## 2026-05-11 - `/event-balloons` is removed with no redirect
 
-**Decision:** `/event-balloons` is not a public launch route and must not be kept as a hidden compatibility page. `/event-balloons` and `/event_balloons` should return 404 with no redirect. Public chrome may still expose the four event audience pages, but no link, button, search quick result, footer link, hero CTA, portfolio CTA, canonical rule, route alias, or sitemap entry may point to `/event-balloons`.
+**Decision:** `/event-balloons` is not a public launch route and must not be
+kept as a hidden compatibility page. `/event-balloons` and `/event_balloons`
+should return 404 with no redirect. Public chrome may still expose the four
+event audience pages, but no link, button, search quick result, footer link,
+hero CTA, portfolio CTA, canonical rule, route alias, or sitemap entry may
+point to `/event-balloons`.
 
-**Reasoning:** GL explicitly rejected the page and its buttons. The site has not launched or been indexed yet, so there is no SEO need to preserve or redirect this URL. A redirect would keep an unapproved route alive and would contradict the "no redirect, no nothing" instruction.
+**Reasoning:** GL explicitly rejected the page and its buttons. The site has
+not launched or been indexed yet, so there is no SEO need to preserve or
+redirect this URL. A redirect would keep an unapproved route alive and would
+contradict the "no redirect, no nothing" instruction.
 
-**Implementation boundary:** Keep `www/event_balloons.html` and `www/event_balloons.py` deleted. Keep the route rule and canonical mapping out of `hooks.py` and `seo.py`. If a future hub page is desired, it needs a fresh explicit GL route decision instead of restoring this file pair from history.
+**Implementation boundary:** Keep `www/event_balloons.html` and
+`www/event_balloons.py` deleted. Keep the route rule and canonical mapping out
+of `hooks.py` and `seo.py`. If a future hub page is desired, it needs a fresh
+explicit GL route decision instead of restoring this file pair from history.
 
-**Verification receipt:** Direct local no-redirect checks returned 404 and an empty `Location` header for both `/event-balloons` and `/event_balloons`; `/sitemap.xml` contained neither route; `rg` found no live app-source matches outside negative verifier assertions; `python scripts/verify/nav_ia.py` passed; focused SEO contract checks for removed routes and sitemap passed.
+**Verification receipt:** Direct local no-redirect checks returned 404 and an
+empty `Location` header for both `/event-balloons` and `/event_balloons`;
+`/sitemap.xml` contained neither route; `rg` found no live app-source matches
+outside negative verifier assertions; `python scripts/verify/nav_ia.py` passed;
+focused SEO contract checks for removed routes and sitemap passed.
 
 **Decided by:** GL correction and Codex implementation on 2026-05-11.
 
@@ -127,13 +183,25 @@ quote-gated first-layer stops, and Classic Arch currently renders
 
 ## 2026-05-11 - Homepage review proof is logo-only platform proof
 
-**Decision:** The homepage review proof strip shows GigSalad, Google, and Facebook as logos with platform-appropriate proof marks. It must not show exact review counts, must not show the visible word `reviews` under the logos, and must not present those platforms as cards or contained boxes.
+**Decision:** The homepage review proof strip shows GigSalad, Google, and
+Facebook as logos with platform-appropriate proof marks. It must not show exact
+review counts, must not show the visible word `reviews` under the logos, and
+must not present those platforms as cards or contained boxes.
 
-**Reasoning:** GL wanted the additional review locations for trust, then corrected the implementation because counts, visible helper labels, small logos, and card/container treatments made the section look wrong and added unasked-for copy. The proof should be the platform logo plus rating or recommendation proof, not a text-heavy review widget.
+**Reasoning:** GL wanted the additional review locations for trust, then
+corrected the implementation because counts, visible helper labels, small
+logos, and card/container treatments made the section look wrong and added
+unasked-for copy. The proof should be the platform logo plus rating or
+recommendation proof, not a text-heavy review widget.
 
-**Implementation boundary:** Keep exact counts out unless reverified in the same run and explicitly approved for display. Do not add helper copy below the logos. If Facebook's model is recommendation-based, represent that honestly instead of forcing it into Google-style five-star copy.
+**Implementation boundary:** Keep exact counts out unless reverified in the
+same run and explicitly approved for display. Do not add helper copy below the
+logos. If Facebook's model is recommendation-based, represent that honestly
+instead of forcing it into Google-style five-star copy.
 
-**Verification receipt:** Homepage source renders the three platform links with logo assets and no visible count text. Feature handoff: `workstreams/homepage-review-platform-proof-2026-05-11.md`.
+**Verification receipt:** Homepage source renders the three platform links with
+logo assets and no visible count text. Feature handoff:
+`workstreams/homepage-review-platform-proof-2026-05-11.md`.
 
 **Decided by:** GL correction and Codex implementation on 2026-05-11.
 
@@ -141,13 +209,24 @@ quote-gated first-layer stops, and Classic Arch currently renders
 
 ## 2026-05-11 - Checkout email use is transactional unless the customer opts into marketing
 
-**Decision:** Checkout/customer contact copy must distinguish order email from marketing email. Checkout email may be used for invoices, receipts, order updates, support, and order-related information. Marketing email requires the customer to sign up for the newsletter or otherwise opt into marketing.
+**Decision:** Checkout/customer contact copy must distinguish order email from
+marketing email. Checkout email may be used for invoices, receipts, order
+updates, support, and order-related information. Marketing email requires the
+customer to sign up for the newsletter or otherwise opt into marketing.
 
-**Reasoning:** GL asked where the site should tell customers how email is used. The safe launch copy is plain and narrow: order/invoice email for the order path, marketing only for marketing opt-in. This avoids implying the checkout email is silently added to promotional lists.
+**Reasoning:** GL asked where the site should tell customers how email is used.
+The safe launch copy is plain and narrow: order/invoice email for the order
+path, marketing only for marketing opt-in. This avoids implying the checkout
+email is silently added to promotional lists.
 
-**Implementation boundary:** Keep checkout and policy copy aligned. Do not add marketing language to invoice, receipt, legal, billing, or support paths unless the customer has opted into marketing. Future newsletter naming can change, but the transactional/marketing split should remain.
+**Implementation boundary:** Keep checkout and policy copy aligned. Do not add
+marketing language to invoice, receipt, legal, billing, or support paths unless
+the customer has opted into marketing. Future newsletter naming can change, but
+the transactional/marketing split should remain.
 
-**Verification receipt:** Commit `0e9d4f8` updated `checkout.html`, footer newsletter copy, `/privacy`, and the customer-contact-point verifier; focused checkout, privacy, layout, and container checks passed before push.
+**Verification receipt:** Commit `0e9d4f8` updated `checkout.html`, footer
+newsletter copy, `/privacy`, and the customer-contact-point verifier; focused
+checkout, privacy, layout, and container checks passed before push.
 
 **Decided by:** GL request and Codex implementation on 2026-05-11.
 
@@ -208,19 +287,77 @@ After hiding, live DOM checks found zero `.lt-categories` blocks and no visible
 
 ---
 
-## 2026-05-11 - Customer login is part of the LT account product
+## 2026-05-11 - Backend launch work is stack-anchored and approval-routed
 
-**Decision:** `/login#login` is an LT-branded customer account doorway, not a stock ERPNext-looking page. It must preserve Frappe's native login form hooks so Website Users can authenticate through the visible form. `/login#signup` stays branded and invite-first instead of exposing public self-signup.
+**Decision:** Backend ecommerce launch work must be anchored to the actual LT
+stack: Frappe v15.106.0, ERPNext v15.105.0, Webshop, payments, and the custom
+`locally_twisted` app installed last. Frappe Cloud release assumptions must use
+Git-backed private bench behavior, explicit site config, and persistent app
+artifacts such as hooks, fixtures, patches, and verifiers. Locally Twisted is a
+real client project; only the currently visible/imported product records are
+fixture/test product records until a controlled real catalog import gate passes.
 
-**Reasoning:** GL rejected the account surface when it looked generic and untrustworthy. The login page is the first trust moment for customers who do have accounts, so it must match the premium-concierge portal direction while keeping authentication owned by Frappe. Customers still do not need accounts to browse, request a quote, cart, or checkout.
+**Reasoning:** GL corrected two launch risks: agents were treating a paused
+ecommerce posture as a desired end state, and some language made the whole
+project sound like a test project. The right launch boundary is narrower:
+current products are fixtures for architecture proof, while the client project,
+deployment, payment cutover, and catalog import are real. Backend guidance also
+needs to match the exact Frappe/ERPNext/Webshop/payments stack and Frappe Cloud
+constraints instead of generic ERPNext advice.
 
-**Implementation boundary:** Keep public signup disabled. Do not create Users during guest checkout. Do not replace Frappe auth JS with custom credential handling. If the login template changes, keep `#login_email`, `#login_password`, `.form-login`, and `.btn-login` unless the verifier is updated to prove equivalent native auth behavior.
+**Implementation boundary:** Technical code-scope, verifier, and
+non-production repo-edit decisions route to Leader. Ask the user only for true
+business-owner approvals: destructive catalog purge/import, real catalog
+approval, live Stripe/real charge/refund, DNS cutover, legal/policy approval,
+secrets/account access, production customer-record mutation, or a scope tradeoff
+that changes launch/business behavior. If a question crosses into Odoo CE 19
+source mapping beyond approved read-only packets, route it to the
+Odoo-to-Frappe specialist instead of guessing.
 
-**Verification receipt:** `npm run test:customer-login-visual` passed 4/4 on 2026-05-11, covering mobile and desktop `/login#login`, branded `/login#signup`, and a temporary Website User signing in through the visible form and reaching `/me`. `npm run test:customer-portal-visual`, `python scripts/verify/customer_portal_home_contract.py`, `python scripts/verify/customer_portal_v1_contract.py`, and `python scripts/verify/customer_portal_inventory.py --base-url http://localhost:8081 --strict-menu --report output/customer-portal-inventory.json` also passed.
+**Receipts:** `workstreams/ecommerce-audit/product-import-hardening-gate-2026-05-11.md`;
+`workstreams/payment-portal-live-cutover-checklist-2026-05-11.md`;
+`scripts/verify/product_import_readiness_gate.py`.
 
-**Alternatives considered:** Leave `/login` as the stock ERPNext page. Rejected because it makes the account product feel detached and untrustworthy. Build a custom auth endpoint. Rejected because Frappe already owns session security and the safer move is a branded shell around native auth hooks.
+**Decided by:** GL/Leader owner correction on 2026-05-11.
 
-**Decided by:** GL correction and Codex implementation on 2026-05-11.
+---
+
+## 2026-05-11 - Webshop work is open-ecommerce, backend-truth launch execution
+
+**Decision:** The ecommerce/webshop lane is no longer framed as preserving a
+paused checkout posture. Future webshop work must harden and prove open
+ecommerce against ERPNext v15.105.0 / Frappe v15 Webshop backend truth. Product
+page UX, ecommerce design, and SEO/AEO/GEO claims must be traceable to Item,
+Item Variant, Website Item, Item Price, Item Attribute, media/gallery, Webshop
+Settings, cart/checkout APIs, payment integration, and Frappe Cloud persistence
+constraints.
+
+**Reasoning:** GL corrected the working goal: the real client launch needs the
+ecommerce build ready, not an argument for keeping it paused. The currently
+visible/imported product records are test products/fixtures only, so they can
+prove architecture and behavior but cannot become real launch catalog truth
+without a separate approved import/catalog proof gate.
+
+**Implementation boundary:** Do not call the project or launch a test project.
+Only the current product records are test products. When product-page, variant,
+price, media, structured data, discovery, cart, checkout, payment, or order
+claims cannot be verified against backend fields or runtime evidence, mark the
+claim blocked. Do not perform destructive product purge/reupload/import, live
+Stripe charges/refunds, DNS cutover, production customer-record mutation, or
+real catalog approval without the separate owner gate.
+
+**Verification receipt:** `npm run test:shop-smoke` passed on 2026-05-11 after
+the audience-page H1 smoke verifier was rebaselined in
+`scripts/verify/smoke_shop.py`; the prior `/civic-community missing focused
+page title` blocker is cleared.
+
+**Alternatives considered:** Continue treating ecommerce as intentionally
+paused. Rejected because the owner correction changed the launch-execution goal.
+Treat current visible products as launch catalog truth. Rejected because GL
+explicitly limited them to test products/fixtures until a separate catalog gate.
+
+**Decided by:** GL owner correction and Codex documentation update on
+2026-05-11.
 
 ---
 
@@ -260,6 +397,38 @@ cutover gates.
 
 ---
 
+## 2026-05-11 - Customer login is part of the LT account product
+
+**Decision:** `/login#login` is an LT-branded customer account doorway, not a stock ERPNext-looking page. It must preserve Frappe's native login form hooks so Website Users can authenticate through the visible form. `/login#signup` stays branded and invite-first instead of exposing public self-signup.
+
+**Reasoning:** GL rejected the account surface when it looked generic and untrustworthy. The login page is the first trust moment for customers who do have accounts, so it must match the premium-concierge portal direction while keeping authentication owned by Frappe. Customers still do not need accounts to browse, request a quote, cart, or checkout.
+
+**Implementation boundary:** Keep public signup disabled. Do not create Users during guest checkout. Do not replace Frappe auth JS with custom credential handling. If the login template changes, keep `#login_email`, `#login_password`, `.form-login`, and `.btn-login` unless the verifier is updated to prove equivalent native auth behavior.
+
+**Verification receipt:** `npm run test:customer-login-visual` passed 4/4 on 2026-05-11, covering mobile and desktop `/login#login`, branded `/login#signup`, and a temporary Website User signing in through the visible form and reaching `/me`. `npm run test:customer-portal-visual`, `python scripts/verify/customer_portal_home_contract.py`, `python scripts/verify/customer_portal_v1_contract.py`, and `python scripts/verify/customer_portal_inventory.py --base-url http://localhost:8081 --strict-menu --report output/customer-portal-inventory.json` also passed.
+
+**Alternatives considered:** Leave `/login` as the stock ERPNext page. Rejected because it makes the account product feel detached and untrustworthy. Build a custom auth endpoint. Rejected because Frappe already owns session security and the safer move is a branded shell around native auth hooks.
+
+**Decided by:** GL correction and Codex implementation on 2026-05-11.
+
+---
+
+## 2026-05-11 - Checkout page/family count and sellable SKU count are separate evidence claims
+
+**Decision:** LT ecommerce docs and verifiers must distinguish checkout Website Item families/pages from enabled sellable checkout SKUs. The current explicit checkout classification is 15 Website Item families/pages, but the backend receiving proof must cover all 47 enabled sale SKUs and their generated order/invoice rows.
+
+**Reasoning:** The first Phase 1-4 closeout wording collapsed family/page count into product/SKU count, which made it sound like only 15 products survived. GL caught the mismatch. The real architecture question is whether every enabled sellable checkout SKU can resolve from product page/cart configuration into Sales Order and Sales Invoice meaning without leaking quote-first products into paid checkout.
+
+**Implementation boundary:** `checkout_product_family_contract.py` must prove all enabled variants for checkout-classified families, not one representative variant. Report both counts in handoffs: 15 checkout Website Item families/pages; 47 enabled sale SKUs; 86 Sales Order/Sales Invoice rows in the current fixture proof. Easter Balloon Cups and Mother's Day may be architecture-verified as fixtures without becoming seasonal/public launch approvals. Current ERPNext products remain test fixtures, not final catalog truth.
+
+**Verification receipt:** `python scripts/verify/checkout_product_family_contract.py --report workstreams/ecommerce-audit/2026-05-10-2330-phase-1-4-shop-audit/checkout-product-family-all-skus-final.json` passed with `bouquet_family_count: 13`, `enabled_sale_sku_count: 47`, `add_on_line_count: 39`, `sales_order_line_count: 86`, Easter status `architecture_verified_not_launch_approval`, survivor counts all zero, and rollback clean.
+
+**Alternatives considered:** Keep one sample SKU per checkout family as sufficient proof. Rejected because family-level proof does not prove every enabled sellable SKU. Rename the 15 families as 15 products. Rejected because it misleads future agents and humans about variants/SKUs. Treat Easter/Mother's Day architecture proof as public launch approval. Rejected because seasonality/business/media approval and public ecommerce opening are separate gates.
+
+**Decided by:** GL correction and OpenClaw/Moji verifier follow-through on 2026-05-11.
+
+---
+
 ## 2026-05-11 - Repo hygiene stays main-only and raw asset copies stay outside launch source
 
 **Decision:** LT cleanup work must not keep branch or linked-worktree holding areas. If a non-main branch is discovered, future agents must prove whether it contains unique work before removal, then return the repo to main-only state. Raw local photo drops that are preserved outside the repo should not also remain as duplicate tracked launch assets unless a current feature deliberately promotes them to production source.
@@ -275,6 +444,7 @@ cutover gates.
 **Decided by:** GL branch rule correction and Codex cleanup follow-through on 2026-05-11.
 
 ---
+
 ## 2026-05-11 - Customer portal V1 is LT-owned, invite-first, and review-request based
 
 **Decision:** Customer accounts remain optional and invite-first. The logged-in customer experience is now owned by Locally Twisted routes and summaries, not ERPNext native list pages. The V1 portal exposes all eight customer modules: Event Details, Quotes, Invoices & Receipts, Files & Inspiration, Customer Checklist, Repeat Client, After-Event Follow-Up, and Organization Portal. Organization buyers use a separate `/organization` route family.
@@ -288,6 +458,35 @@ cutover gates.
 **Alternatives considered:** Keep native ERPNext customer list routes and only rename them. Rejected because it leaves the customer in raw ERP surfaces. Let customers directly edit event/order/address fields. Rejected because review requests protect fulfillment, quoting, accounting, and operations. Merge organization buyers into the same dashboard only. Rejected by GL preference for separate organization mode.
 
 **Decided by:** GL product direction and Codex implementation on 2026-05-11.
+
+---
+
+
+## 2026-05-10 - Current ERPNext products are ecommerce test fixtures, not final catalog truth
+
+**Decision:** Current ERPNext product records may be used only as test products for ecommerce/shop contract coverage. Final catalog confidence requires a future controlled purge/reupload/import proof showing that products fitting the LT schema populate the correct Website Item/custom fields, preserve cascading option/dependency information, and trigger the intended automations.
+
+**Reasoning:** The current products helped prove Phases 1-4, but they were shaped during migration/testing and should not become accidental launch truth. GL specifically corrected that we will need to purge and reupload products and then verify the import path itself. The important question is not whether the current records can be polished; it is whether the receiving system correctly rebuilds the right fields and behavior from a clean upload.
+
+**Implementation boundary:** Do not run destructive purge/reupload during closeout or audit. Audits may inspect what would need to be proven, but mutation requires a fresh preflight, rollback plan, and explicit approval. Product-page polish does not equal import proof.
+
+**Decided by:** GL correction on 2026-05-10 22:18 MDT.
+
+---
+
+## 2026-05-10 - First public checkout shelf is curated bouquet-only, not a catalog port
+
+**Decision:** The first public checkout shelf should be the 13 character/sports/theme bouquet-family products after final image/price/seasonality review. Easter Balloon Cups and Mother's Day Bouquet stay held unless timely. Complex decor, event installations, color-heavy/custom/logo/personalized work, ambiguous add-on products, and the three Get Well plush bouquet variants stay quote-first, hidden, or review-only instead of being forced into paid checkout.
+
+**Reasoning:** Phase 2 classification found 15 checkout-after-small-fix candidates, 33 quote-first products, and 5 hide/needs-review products. Phase 3 proved a narrow ready-to-order checkout family, and Phase 4 proved quote/event products are blocked from checkout. GL's product correction was that endless variants and $400+ decor are not the right self-checkout path at the current company/system maturity. A small, boring checkout shelf is safer than pretending the old configurable catalog should be ported wholesale.
+
+**Implementation boundary:** Use `workstreams/ecommerce-audit/ready-to-order-product-cut-plan-2026-05-10.md` before reopening products. Direct checkout still requires explicit `simple_product|checkout`; quote-first and needs-review products must remain blocked by product controls, cart API, direct checkout URL, and stale localStorage. Product-page polish, source media review, or a local payment verifier does not authorize public ecommerce.
+
+**Verification receipt:** Phase 4 closeout rerun passed with 33 quote-first and 5 needs-review products blocked across product controls, cart API, direct checkout URL, and stale localStorage. Phase 3 checkout-family proof passed for 13 bouquet-family pages plus Mother's Day simple path; Phase 5 local delivery/payment/operator packet passed; Phase 6 decision keeps `lt_ecommerce_paused=1` until live cutover gates and one low-risk real payment test pass.
+
+**Alternatives considered:** Port all 53 products into direct checkout. Rejected because most are custom/event/design/labor-dependent products. Put all 15 candidates live immediately. Rejected because Easter and Mother's Day are seasonal, and all products still need owner/media/price review before public exposure. Delete complex products. Rejected because they are valuable as event-page inspiration and quote-first lead paths.
+
+**Decided by:** GL scope correction and OpenClaw/Moji ecommerce closeout on 2026-05-10.
 
 ---
 
@@ -431,7 +630,7 @@ desktop and mobile, not gold/brass. See
 
 **Implementation:** `navbar.html` now renders `.lt-mega-header__top-message` and `.lt-mega-header__mobile-message` as `/contact` links. `lt-mega-menu.css` styles the desktop top row as a centered deep-navy grid banner and gives mobile its own matching deep-navy notice strip. `scripts/verify/nav_ia.py`, `scripts/verify/smoke_shop.py`, and the header breakpoint Playwright contract fail if the old proof copy/icon returns, if the short-notice message is unlinked, if mobile loses the notice, or if the banner color regresses.
 
-**Verification receipt:** After the 2026-05-11 color correction, `python scripts/verify/nav_ia.py`, focused `npx.cmd playwright test scripts/verify/interactive_layout.spec.js --grep "header breakpoint contract" --reporter=line`, and direct browser probes passed. Direct browser probes showed desktop and mobile notice links visible, `href: "/contact"`, deep-navy `rgb(14, 34, 64)` strips, warm-white text, and desktop/mobile visibility. Current cache key is `lt-mega-menu.css?v=20260511-blue-banner-2`.
+**Verification receipt:** After the 2026-05-11 color correction, `python scripts/verify/nav_ia.py`, focused `npx.cmd playwright test scripts/verify/interactive_layout.spec.js --grep "header breakpoint contract" --reporter=line`, and `python scripts/verify/smoke_shop.py` passed. Direct browser probes showed desktop and mobile notice links visible, `href: "/contact"`, deep-navy `rgb(14, 34, 64)` strips, warm-white text, and desktop/mobile visibility. Current cache key is `lt-mega-menu.css?v=20260511-blue-banner-2`.
 
 **Alternatives considered:** Keep the old proof copy and add short-notice as another right-side list item. Rejected because it preserved stale messaging and made the utility row noisier. Remove `Free Event Quote`. Rejected because it remains an approved conversion link to `/contact`.
 

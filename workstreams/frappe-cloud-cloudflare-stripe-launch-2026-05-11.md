@@ -2,13 +2,12 @@
 
 Last updated: 2026-05-11 by Codex.
 
-Project-root operator runbook: `LT-LAUNCH-RUNBOOK.md`.
-
-Project capability: `capabilities/recipes/frappe-cloud-cloudflare-stripe-launch-gate.md`.
-
 ## Scope
 
 This workstream turns the public launch plan into an executable gate.
+
+Project-root operator runbook: `LT-LAUNCH-RUNBOOK.md`.
+Project capability: `capabilities/recipes/frappe-cloud-cloudflare-stripe-launch-gate.md`.
 
 Default launch posture:
 

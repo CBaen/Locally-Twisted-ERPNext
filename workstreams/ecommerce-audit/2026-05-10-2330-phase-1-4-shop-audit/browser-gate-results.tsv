@@ -1,0 +1,5 @@
+﻿command	status
+npx playwright test scripts/verify/checkout_experience.spec.js --reporter=line	0
+npx playwright test scripts/verify/product_quote_first_experience.spec.js --reporter=line	0
+npx playwright test scripts/verify/search_contract.spec.js --reporter=line	1
+npx playwright test scripts/verify/interactive_layout.spec.js --reporter=line	1

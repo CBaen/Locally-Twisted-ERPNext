@@ -310,7 +310,7 @@ def check_homepage(page):
     search_button.click()
     assert_(page.locator("#lt-site-search-panel").is_visible(), "Search overlay did not open")
     assert_(page.url.rstrip("/") == BASE, "Opening search overlay must not navigate away from the current page")
-    page.locator("#lt-site-search-input").fill("arches")
+    page.locator("#lt-site-search-input").fill("balloon cups")
     if PUBLIC_ECOMMERCE_PAUSED:
         form_action = page.locator("#lt-site-search-panel form").first.get_attribute("action")
         assert_(form_action == "/contact", f"Paused search form should submit to /contact, got {form_action!r}")
@@ -320,8 +320,16 @@ def check_homepage(page):
         )
     else:
         assert_(
-            page.locator("#lt-site-search-panel a[href='/shop-items/arches']").is_visible(),
-            "Search overlay should filter quick product-family links",
+            page.locator("#lt-site-search-panel a[href='/shop-items/seasonal-specialty/easter-balloon-cups']").is_visible(),
+            "Search overlay should include backend-approved Balloon Cups product links",
+        )
+        assert_(
+            page.locator("#lt-site-search-panel a[href='/shop-items/arches/classic-arch']").count() == 0,
+            "Search overlay must not expose owner-excluded Classic Arch",
+        )
+        assert_(
+            page.locator("#lt-site-search-panel a[href='/shop-items/columns/classic-column']").count() == 0,
+            "Search overlay must not expose owner-excluded Classic Column",
         )
     page.keyboard.press("Escape")
     assert_(not page.locator("#lt-site-search-panel").is_visible(), "Search overlay did not close on Escape")
@@ -344,8 +352,39 @@ def check_homepage(page):
         product_trigger.click()
         assert_(page.locator("#lt-mega-products").is_visible(), "Ready-to-Order mega menu did not open")
         assert_(
-            page.locator("#lt-mega-products a[href='/shop-items/arches']").count() >= 1,
-            "Product mega menu should link to /shop-items/arches",
+            page.locator("#lt-mega-products a[href='/shop-items/bouquets/unicorn-bouquet']").count() >= 1,
+            "Product mega menu should link to backend-approved checkout products",
+        )
+        assert_(
+            page.locator("#lt-mega-products a[href='/shop-items/seasonal-specialty/easter-balloon-cups']").count() >= 1,
+            "Product mega menu must expose backend-approved Balloon Cups",
+        )
+        assert_(
+            page.locator("#lt-mega-products a[href='/shop-items/columns/7-butterfly-column']").count() >= 1,
+            "Product mega menu must expose 7' Butterfly Column unless backend proves a blocker",
+        )
+        assert_(
+            page.locator("#lt-mega-products a[href='/shop-items/stands-easels/6-graduation-stands']").count() >= 1,
+            "Product mega menu must expose 6' Graduation stands unless backend proves a blocker",
+        )
+        assert_(
+            page.locator("#lt-mega-products a[href='/shop-items/grab-go/graduation-grab-n-go']").count() >= 1,
+            "Product mega menu must expose Graduation Grab n Go unless backend proves a blocker",
+        )
+        for excluded_href in (
+            "/shop-items/arches/classic-arch",
+            "/shop-items/columns/classic-column",
+            "/shop-items/arches/classic-organic-arch",
+            "/shop-items/columns/classic-organic-columns",
+            "/shop-items/garlands/classic-organic-balloon-garland",
+        ):
+            assert_(
+                page.locator(f"#lt-mega-products a[href='{excluded_href}']").count() == 0,
+                f"Product mega menu must not expose owner-excluded {excluded_href}",
+            )
+        assert_(
+            page.locator("#lt-mega-products a[href='/shop-items/arches']").count() == 0,
+            "Product mega menu must not frame category lanes as ready-to-order checkout",
         )
 
     quote_cta = page.locator(".lt-mega-header__cta", has_text="Contact Us")
@@ -848,7 +887,7 @@ def check_product_detail_showroom_contract(page):
 
 
 def check_progressive_variant_option_disabling(page):
-    print(f"-> {PRODUCT_PROGRESSIVE_URL} size variants update media and remain changeable")
+    print(f"-> {PRODUCT_PROGRESSIVE_URL} size variants resolve price/item and remain changeable")
     page.goto(PRODUCT_PROGRESSIVE_URL, wait_until="networkidle", timeout=15000)
     assert_(
         page.locator(".lt-product__attr[data-attribute-name='Add Foil Number']").count() == 0,
@@ -860,9 +899,14 @@ def check_progressive_variant_option_disabling(page):
         """() => {
             const btn = document.querySelector('#lt-add-to-cart-variant');
             const img = document.querySelector('.product-image img.website-image');
+            const price = document.querySelector('#lt-product-price-text');
+            const code = btn ? (btn.getAttribute('data-item-code') || '') : '';
+            const src = img ? (img.getAttribute('src') || '') : '';
+            const priceText = price ? (price.textContent || '').replace(/\\s+/g, ' ') : '';
             return btn && !btn.disabled
-                && btn.getAttribute('data-item-code')
-                && img && /medium/i.test(img.getAttribute('src') || '');
+                && /-MED$/i.test(code)
+                && /\\$\\s*70(?:\\.00)?/.test(priceText)
+                && src.length > 0;
         }""",
         timeout=10000,
     )
@@ -873,16 +917,21 @@ def check_progressive_variant_option_disabling(page):
         """(previousCode) => {
             const btn = document.querySelector('#lt-add-to-cart-variant');
             const img = document.querySelector('.product-image img.website-image');
+            const price = document.querySelector('#lt-product-price-text');
+            const code = btn ? (btn.getAttribute('data-item-code') || '') : '';
+            const src = img ? (img.getAttribute('src') || '') : '';
+            const priceText = price ? (price.textContent || '').replace(/\\s+/g, ' ') : '';
             return btn && !btn.disabled
-                && btn.getAttribute('data-item-code')
-                && btn.getAttribute('data-item-code') !== previousCode
-                && img && /large/i.test(img.getAttribute('src') || '');
+                && /-LAR$/i.test(code)
+                && code !== previousCode
+                && /\\$\\s*85(?:\\.00)?/.test(priceText)
+                && src.length > 0;
         }""",
         arg=medium_code,
         timeout=10000,
     )
 
-    print("  OK bouquet size alone resolves a variant, swaps image, and stays changeable")
+    print("  OK bouquet size alone resolves live priced variants and stays changeable")
 
 
 def check_variant_add_to_cart_ui(page):

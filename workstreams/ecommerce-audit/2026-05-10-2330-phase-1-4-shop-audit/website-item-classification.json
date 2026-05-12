@@ -1,0 +1,1150 @@
+{
+  "ok": true,
+  "action": "dry_run",
+  "apply_requested": false,
+  "expected_total": 53,
+  "expected_counts": {
+    "checkout_ready_after_small_fix": 15,
+    "quote_first": 33,
+    "hide_or_needs_review": 5
+  },
+  "matched_count": 53,
+  "missing": [],
+  "ambiguous": [],
+  "only_mutated_doctype": "Website Item",
+  "only_mutated_fields": [
+    "lt_product_page_type",
+    "lt_commerce_lane"
+  ],
+  "planned_change_count": 0,
+  "applied_change_count": 0,
+  "desired_counts": {
+    "checkout_ready_after_small_fix": 15,
+    "quote_first": 33,
+    "hide_or_needs_review": 5
+  },
+  "stored_counts_for_targets": {
+    "simple_product|checkout": 15,
+    "complex_custom_product|quote_first": 33,
+    "needs_review|needs_review": 5
+  },
+  "records": [
+    {
+      "lane": "checkout_ready_after_small_fix",
+      "name": "WEB-ITM-0006",
+      "item_code": "unicorn-bouquet",
+      "web_item_name": "Unicorn Bouquet",
+      "published": 1,
+      "before": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "desired": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "modified_before": "2026-05-10 15:51:57.571607"
+    },
+    {
+      "lane": "checkout_ready_after_small_fix",
+      "name": "WEB-ITM-0007",
+      "item_code": "mickey-mouse-bouquet",
+      "web_item_name": "Mickey Mouse Bouquet",
+      "published": 1,
+      "before": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "desired": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "modified_before": "2026-05-10 15:51:57.583222"
+    },
+    {
+      "lane": "checkout_ready_after_small_fix",
+      "name": "WEB-ITM-0008",
+      "item_code": "minion-bouquet",
+      "web_item_name": "Minion Bouquet",
+      "published": 1,
+      "before": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "desired": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "modified_before": "2026-05-10 15:51:57.586757"
+    },
+    {
+      "lane": "checkout_ready_after_small_fix",
+      "name": "WEB-ITM-0009",
+      "item_code": "encanto-bouquet",
+      "web_item_name": "Encanto Bouquet",
+      "published": 1,
+      "before": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "desired": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "modified_before": "2026-05-10 15:51:57.587666"
+    },
+    {
+      "lane": "checkout_ready_after_small_fix",
+      "name": "WEB-ITM-0010",
+      "item_code": "stitch-bouquet",
+      "web_item_name": "Stitch Bouquet",
+      "published": 1,
+      "before": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "desired": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "modified_before": "2026-05-10 15:51:57.588446"
+    },
+    {
+      "lane": "checkout_ready_after_small_fix",
+      "name": "WEB-ITM-0011",
+      "item_code": "flamingo-bouquet",
+      "web_item_name": "Flamingo Bouquet",
+      "published": 1,
+      "before": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "desired": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "modified_before": "2026-05-10 15:51:57.589226"
+    },
+    {
+      "lane": "checkout_ready_after_small_fix",
+      "name": "WEB-ITM-0012",
+      "item_code": "football-bouquet",
+      "web_item_name": "Football Bouquet",
+      "published": 1,
+      "before": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "desired": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "modified_before": "2026-05-10 15:51:57.590000"
+    },
+    {
+      "lane": "checkout_ready_after_small_fix",
+      "name": "WEB-ITM-0013",
+      "item_code": "soccer-bouquet",
+      "web_item_name": "Soccer Bouquet",
+      "published": 1,
+      "before": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "desired": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "modified_before": "2026-05-10 15:51:57.590838"
+    },
+    {
+      "lane": "checkout_ready_after_small_fix",
+      "name": "WEB-ITM-0015",
+      "item_code": "space-bouquet",
+      "web_item_name": "Space Bouquet",
+      "published": 1,
+      "before": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "desired": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "modified_before": "2026-05-10 15:51:57.591626"
+    },
+    {
+      "lane": "checkout_ready_after_small_fix",
+      "name": "WEB-ITM-0014",
+      "item_code": "over-the-hill-bouquet",
+      "web_item_name": "Over the Hill Bouquet",
+      "published": 1,
+      "before": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "desired": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "modified_before": "2026-05-10 15:51:57.592434"
+    },
+    {
+      "lane": "checkout_ready_after_small_fix",
+      "name": "WEB-ITM-0024",
+      "item_code": "paw-patrol-bouquet",
+      "web_item_name": "Paw Patrol Bouquet",
+      "published": 1,
+      "before": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "desired": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "modified_before": "2026-05-10 15:51:57.593019"
+    },
+    {
+      "lane": "checkout_ready_after_small_fix",
+      "name": "WEB-ITM-0025",
+      "item_code": "elsa-bouquet",
+      "web_item_name": "Elsa Bouquet",
+      "published": 1,
+      "before": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "desired": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "modified_before": "2026-05-10 15:51:57.593720"
+    },
+    {
+      "lane": "checkout_ready_after_small_fix",
+      "name": "WEB-ITM-0026",
+      "item_code": "holy-cow-bouquet",
+      "web_item_name": "Holy COW!! Bouquet",
+      "published": 1,
+      "before": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "desired": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "modified_before": "2026-05-10 15:51:57.594316"
+    },
+    {
+      "lane": "checkout_ready_after_small_fix",
+      "name": "WEB-ITM-0019",
+      "item_code": "easter-balloon-cups",
+      "web_item_name": "Easter Balloon Cups",
+      "published": 1,
+      "before": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "desired": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "modified_before": "2026-05-10 15:51:57.594924"
+    },
+    {
+      "lane": "checkout_ready_after_small_fix",
+      "name": "WEB-ITM-0032",
+      "item_code": "mothers-day-bouquet",
+      "web_item_name": "Mother's Day Bouquet",
+      "published": 1,
+      "before": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "desired": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout"
+      },
+      "modified_before": "2026-05-10 15:51:57.595472"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0035",
+      "item_code": "baby-shower-combination-photo-opt",
+      "web_item_name": "Baby Shower Combination Photo opt",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.596017"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0036",
+      "item_code": "classic-organic-balloon-garland",
+      "web_item_name": "Classic Organic Balloon Garland",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.596602"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0034",
+      "item_code": "basketball-arch",
+      "web_item_name": "Basketball Arch",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.597207"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0001",
+      "item_code": "number-balloon-columns",
+      "web_item_name": "Number Balloon Columns",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.597831"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0037",
+      "item_code": "easter-balloon-arch-bunny-ear",
+      "web_item_name": "Easter Balloon Arch - Bunny Ear",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.598394"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0002",
+      "item_code": "graduation-grab-n-go",
+      "web_item_name": "Graduation Grab n Go",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.598938"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0038",
+      "item_code": "halloween-arch",
+      "web_item_name": "Halloween arch",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.599501"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0039",
+      "item_code": "large-head-missionary",
+      "web_item_name": "Large head Missionary",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.600105"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0040",
+      "item_code": "premium-organic-garland",
+      "web_item_name": "Premium Organic Garland",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.600634"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0041",
+      "item_code": "premium-organic-arch",
+      "web_item_name": "Premium Organic Arch",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.601258"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0003",
+      "item_code": "pemium-organic-column",
+      "web_item_name": "Pemium Organic Column",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.601846"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0042",
+      "item_code": "pride-progress-rainbow-balloon-arch",
+      "web_item_name": "Pride progress Rainbow Balloon Arch",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.602377"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0043",
+      "item_code": "classic-arch",
+      "web_item_name": "Classic Arch",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.602920"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0044",
+      "item_code": "classic-column",
+      "web_item_name": "Classic Column",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.603455"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0004",
+      "item_code": "classic-organic-columns",
+      "web_item_name": "Classic Organic columns",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.603983"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0005",
+      "item_code": "baby-shower-garland",
+      "web_item_name": "Baby Shower Garland",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.604481"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0045",
+      "item_code": "balloon-drop",
+      "web_item_name": "Balloon Drop",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.605069"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0046",
+      "item_code": "classic-organic-arch",
+      "web_item_name": "Classic Organic Arch",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.605719"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0016",
+      "item_code": "7-butterfly-column",
+      "web_item_name": "7' Butterfly Column",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.606284"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0017",
+      "item_code": "7-epic-column",
+      "web_item_name": "7' Epic Column",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.606799"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0018",
+      "item_code": "organic-grab-n-go",
+      "web_item_name": "Organic Grab n' Go",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.607305"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0048",
+      "item_code": "star-column",
+      "web_item_name": "Star Column",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.607817"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0049",
+      "item_code": "sleepy-baby-column",
+      "web_item_name": "Sleepy Baby Column",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.612022"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0020",
+      "item_code": "baby-table-decor",
+      "web_item_name": "Baby Table decor",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.612762"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0021",
+      "item_code": "logo-3-layered-bouquet",
+      "web_item_name": "Logo 3 layered bouquet",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.613383"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0050",
+      "item_code": "6-color-rainbow-arch",
+      "web_item_name": "6 color rainbow arch",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.613966"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0022",
+      "item_code": "mothers-day-front-yard-7-column",
+      "web_item_name": "Mother's day front yard 7' Column",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.614459"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0030",
+      "item_code": "6-graduation-stands",
+      "web_item_name": "6' Graduation stands",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.614932"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0031",
+      "item_code": "classic-organic-for-easel",
+      "web_item_name": "classic organic for easel",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.615444"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0051",
+      "item_code": "easter-arch",
+      "web_item_name": "Easter Arch",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.616154"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0052",
+      "item_code": "large-garland",
+      "web_item_name": "Large Garland",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.616777"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0033",
+      "item_code": "large-organic-column",
+      "web_item_name": "Large Organic Column",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.617371"
+    },
+    {
+      "lane": "quote_first",
+      "name": "WEB-ITM-0053",
+      "item_code": "pride-arch",
+      "web_item_name": "Pride Arch",
+      "published": 1,
+      "before": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "desired": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "complex_custom_product",
+        "commerce_lane": "quote_first"
+      },
+      "modified_before": "2026-05-10 15:51:57.617877"
+    },
+    {
+      "lane": "hide_or_needs_review",
+      "name": "WEB-ITM-0047",
+      "item_code": "birthday-deliveries",
+      "web_item_name": "Birthday Deliveries",
+      "published": 1,
+      "before": {
+        "product_page_type": "needs_review",
+        "commerce_lane": "needs_review"
+      },
+      "desired": {
+        "product_page_type": "needs_review",
+        "commerce_lane": "needs_review"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "needs_review",
+        "commerce_lane": "needs_review"
+      },
+      "modified_before": "2026-04-30 01:15:08.153686"
+    },
+    {
+      "lane": "hide_or_needs_review",
+      "name": "WEB-ITM-0023",
+      "item_code": "marble-table-decor",
+      "web_item_name": "Marble table decor",
+      "published": 1,
+      "before": {
+        "product_page_type": "needs_review",
+        "commerce_lane": "needs_review"
+      },
+      "desired": {
+        "product_page_type": "needs_review",
+        "commerce_lane": "needs_review"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "needs_review",
+        "commerce_lane": "needs_review"
+      },
+      "modified_before": "2026-04-30 01:19:45.874213"
+    },
+    {
+      "lane": "hide_or_needs_review",
+      "name": "WEB-ITM-0027",
+      "item_code": "butterfly-get-well-bouquet-latex-free",
+      "web_item_name": "Butterfly \"GET WELL\" Bouquet (Latex free)",
+      "published": 1,
+      "before": {
+        "product_page_type": "needs_review",
+        "commerce_lane": "needs_review"
+      },
+      "desired": {
+        "product_page_type": "needs_review",
+        "commerce_lane": "needs_review"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "needs_review",
+        "commerce_lane": "needs_review"
+      },
+      "modified_before": "2026-04-30 01:19:55.994752"
+    },
+    {
+      "lane": "hide_or_needs_review",
+      "name": "WEB-ITM-0028",
+      "item_code": "bandage-get-well-bouquet-latex-free",
+      "web_item_name": "Bandage \"GET WELL\" Bouquet (Latex free)",
+      "published": 1,
+      "before": {
+        "product_page_type": "needs_review",
+        "commerce_lane": "needs_review"
+      },
+      "desired": {
+        "product_page_type": "needs_review",
+        "commerce_lane": "needs_review"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "needs_review",
+        "commerce_lane": "needs_review"
+      },
+      "modified_before": "2026-04-30 01:19:56.312771"
+    },
+    {
+      "lane": "hide_or_needs_review",
+      "name": "WEB-ITM-0029",
+      "item_code": "shooting-star-get-well-bouquet-latex-free",
+      "web_item_name": "Shooting star \"GET WELL\" Bouquet (Latex free)",
+      "published": 1,
+      "before": {
+        "product_page_type": "needs_review",
+        "commerce_lane": "needs_review"
+      },
+      "desired": {
+        "product_page_type": "needs_review",
+        "commerce_lane": "needs_review"
+      },
+      "needs_change": false,
+      "reverse_set": {
+        "product_page_type": "needs_review",
+        "commerce_lane": "needs_review"
+      },
+      "modified_before": "2026-04-30 01:19:56.607682"
+    }
+  ],
+  "after_records": [],
+  "mismatches": [],
+  "failures": [],
+  "reversal_note": "Use each record's name with reverse_set.product_page_type and reverse_set.commerce_lane to restore prior Website Item field values. No publish/delete/reimport/media/price fields are touched by this verifier."
+}

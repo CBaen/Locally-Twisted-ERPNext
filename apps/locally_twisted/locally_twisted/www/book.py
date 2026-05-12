@@ -374,6 +374,11 @@ def _send_deferred_customer_confirmation(lead, photo_uploads):
             exception=e,
             grouping_key=f"lead_contact_ack_cascade:customer_ack_email:{lead.name}",
         )
+        frappe.throw(
+            "We saved your request, but the confirmation email did not queue. "
+            "Please call (801) 285-0860 or email hi@locallytwisted.com and we will help.",
+            frappe.ValidationError,
+        )
 
 
 def _is_transient_lead_insert_error(exc):
