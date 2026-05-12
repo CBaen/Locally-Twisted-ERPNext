@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Verify product-template media contracts on the LT storefront.
 
-This checks the customer-facing bug GL named: selecting a ready-to-order
-variant should move the product photo to the matching variant image when
-ERPNext has one. Quote-first product templates are verified as quote-first
-surfaces instead of forcing their old direct-checkout selector contract.
+This checks the layer-6 media contract: unclassified variant images must stay
+held back, and selecting a ready-to-order variant must not imply a photo changed
+unless the backend returns an approved `variant_image` role. Quote-first product
+templates are verified as quote-first surfaces instead of forcing their old
+direct-checkout selector contract.
 
 Run:
   python scripts/verify/variant_media_contract.py
@@ -89,10 +90,12 @@ def check_quote_first_variant_media_api() -> dict[str, Any]:
         f"fallback image should stay on the template, got {media.get('fallback_image')!r}",
     )
     assert_true(
-        media.get("image") and media["image"].startswith("/files/classic-arch--extra-"),
-        f"{QUOTE_FIRST_VARIANT_ITEM} should have a mapped extra image, got {media.get('image')!r}",
+        media.get("image") == media.get("fallback_image"),
+        f"unclassified quote-first variant image should stay on fallback, got {media.get('image')!r}",
     )
-    assert_true(media.get("has_variant_image") is True, "variant should be marked as having its own image")
+    assert_true(media.get("has_variant_image") is False, "unclassified variant image should not be marked renderable")
+    assert_true(media.get("held_back_variant_image") is True, "source variant image should be reported as held back")
+    assert_true(media.get("media_role") == "primary", f"fallback image should report primary role, got {media}")
     return media
 
 
@@ -108,10 +111,12 @@ def check_ready_variant_media_api() -> dict[str, Any]:
         f"ready fallback image should stay on the template, got {media.get('fallback_image')!r}",
     )
     assert_true(
-        media.get("image") == "/files/unicorn-bouquet-medium.webp",
-        f"{READY_VARIANT_ITEM} should have the medium bouquet image, got {media.get('image')!r}",
+        media.get("image") == media.get("fallback_image"),
+        f"unclassified ready variant image should stay on fallback, got {media.get('image')!r}",
     )
-    assert_true(media.get("has_variant_image") is True, "ready variant should be marked as having its own image")
+    assert_true(media.get("has_variant_image") is False, "unclassified ready variant should not be marked renderable")
+    assert_true(media.get("held_back_variant_image") is True, "source variant image should be reported as held back")
+    assert_true(media.get("media_role") == "primary", f"fallback image should report primary role, got {media}")
     return media
 
 
@@ -119,7 +124,7 @@ def choose_ready_variant(page) -> None:
     page.locator(".lt-product__attr[data-attribute-name='Bouquet Size'] .lt-product__chip", has_text="Medium").click()
 
 
-def check_ready_product_page_swaps_image(media: dict[str, Any]) -> None:
+def check_ready_product_page_holds_unclassified_variant_image(media: dict[str, Any]) -> None:
     expected_image = media["image"]
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
@@ -136,13 +141,15 @@ def check_ready_product_page_swaps_image(media: dict[str, Any]) -> None:
 
         choose_ready_variant(page)
         page.wait_for_function(
-            """(variantCode) => {
-                const btn = document.querySelector('#lt-add-to-cart-variant');
-                return btn && btn.getAttribute('data-item-code') === variantCode && !btn.disabled;
+            """() => {
+                const checked = document.querySelector(
+                    ".lt-product__attr[data-attribute-name='Bouquet Size'] .js-lt-attr-input:checked"
+                );
+                return checked && /Medium/.test(checked.value || '');
             }""",
-            arg=READY_VARIANT_ITEM,
-            timeout=15000,
+            timeout=5000,
         )
+        page.wait_for_timeout(1500)
         page.wait_for_function(
             """(expectedPath) => {
                 const img = document.querySelector('.product-image img.website-image');
@@ -153,7 +160,7 @@ def check_ready_product_page_swaps_image(media: dict[str, Any]) -> None:
         )
 
         final_src = image.get_attribute("src") or ""
-        assert_true(final_src != initial_src, "variant selection did not change the main product image")
+        assert_true(final_src == initial_src, "unclassified variant selection should not change the main product image")
         browser.close()
 
 
@@ -226,7 +233,7 @@ def main() -> int:
     failures = []
     try:
         quote_first_media = check_quote_first_variant_media_api()
-        print(f"[PASS] quote-first variant media API returns {quote_first_media['image']} for {QUOTE_FIRST_VARIANT_ITEM}")
+        print(f"[PASS] quote-first variant media API holds unclassified media at {quote_first_media['image']}")
     except VariantMediaFail as exc:
         failures.append(str(exc))
         print(f"[FAIL] quote-first variant media API: {exc}")
@@ -240,7 +247,7 @@ def main() -> int:
 
     try:
         ready_media = check_ready_variant_media_api()
-        print(f"[PASS] ready-to-order variant media API returns {ready_media['image']} for {READY_VARIANT_ITEM}")
+        print(f"[PASS] ready-to-order variant media API holds unclassified media at {ready_media['image']}")
     except VariantMediaFail as exc:
         failures.append(str(exc))
         print(f"[FAIL] ready-to-order variant media API: {exc}")
@@ -248,8 +255,8 @@ def main() -> int:
 
     if ready_media:
         try:
-            check_ready_product_page_swaps_image(ready_media)
-            print(f"[PASS] ready-to-order product page swaps to {ready_media['image']} after option selection")
+            check_ready_product_page_holds_unclassified_variant_image(ready_media)
+            print("[PASS] ready-to-order product page keeps primary image until variant media is classified")
         except VariantMediaFail as exc:
             failures.append(str(exc))
             print(f"[FAIL] ready-to-order product page image swap: {exc}")

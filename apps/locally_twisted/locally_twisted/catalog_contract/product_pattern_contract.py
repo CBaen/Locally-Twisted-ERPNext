@@ -542,7 +542,7 @@ def _media_contract(source_product: dict[str, Any], erpnext_product: dict[str, A
     if primary:
         roles.append("primary")
     if variant_count:
-        roles.append("variant")
+        roles.append("variant_image")
     if gallery_count:
         roles.append("gallery")
         notes.append("Extra source media must stay classified by role before automated import.")

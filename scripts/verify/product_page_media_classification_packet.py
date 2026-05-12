@@ -25,6 +25,7 @@ SOURCE_CATALOG = ROOT / "_resources/odoo-live/catalog.json"
 SLUG_TO_GROUP = ROOT / "_resources/odoo-live/slug_to_group.json"
 DEFAULT_REPORT = ROOT / "audits/odoo-erpnext-migration-audit-2026-05-08/23-product-page-media-classification-packet.json"
 DEFAULT_MARKDOWN = ROOT / "audits/odoo-erpnext-migration-audit-2026-05-08/23-product-page-media-classification-packet.md"
+EXPECTED_ALLOWED_ROLES = ["primary", "gallery", "variant_image", "reference", "ignored_artifact"]
 
 
 def main() -> int:
@@ -56,8 +57,14 @@ def main() -> int:
 
 def _contract_failures(packet: dict[str, Any]) -> list[str]:
     failures: list[str] = []
-    if packet.get("approved_parent_gallery_count") != 0:
-        failures.append("packet approved parent-gallery media")
+    if packet.get("allowed_roles") != EXPECTED_ALLOWED_ROLES:
+        failures.append(f"packet allowed roles drifted: {packet.get('allowed_roles')}")
+    if packet.get("safe_default") != "ignored_artifact":
+        failures.append("packet safe default must hold unclassified images as ignored_artifact")
+    if packet.get("hold_status") != "hold_until_classified":
+        failures.append("packet hold_status must be hold_until_classified")
+    if packet.get("approved_gallery_count") != 0:
+        failures.append("packet approved gallery media")
     if packet.get("assigned_variant_image_count") != 0:
         failures.append("packet assigned variant images")
     if packet.get("source_extra_image_count") != packet.get("unclassified_image_count"):
@@ -77,11 +84,13 @@ def _contract_failures(packet: dict[str, Any]) -> list[str]:
         if int(row.get("extra_image_count") or 0) != len(row.get("images") or []):
             failures.append(f"{row.get('slug')} extra_image_count does not match images list")
         for image in row.get("images") or []:
-            if image.get("current_role") != "review_needed":
-                failures.append(f"{row.get('slug')} image is not review_needed")
-            if image.get("safe_default") != "hold_until_classified":
-                failures.append(f"{row.get('slug')} image safe_default is not hold_until_classified")
-            if not image.get("allowed_roles"):
+            if image.get("current_role") != "ignored_artifact":
+                failures.append(f"{row.get('slug')} image is not held as ignored_artifact")
+            if image.get("classification_status") != "hold_until_classified":
+                failures.append(f"{row.get('slug')} image classification_status is not hold_until_classified")
+            if image.get("safe_default") != "ignored_artifact":
+                failures.append(f"{row.get('slug')} image safe_default is not ignored_artifact")
+            if image.get("allowed_roles") != EXPECTED_ALLOWED_ROLES:
                 failures.append(f"{row.get('slug')} image missing allowed_roles")
     return failures
 
@@ -92,7 +101,9 @@ def _print_summary(packet: dict[str, Any], failures: list[str]) -> None:
     print(f"  products_with_extra_images: {packet.get('products_with_extra_images')}")
     print(f"  source_extra_images: {packet.get('source_extra_image_count')}")
     print(f"  unclassified_images: {packet.get('unclassified_image_count')}")
-    print(f"  approved_parent_gallery_count: {packet.get('approved_parent_gallery_count')}")
+    print(f"  allowed_roles: {packet.get('allowed_roles')}")
+    print(f"  safe_default: {packet.get('safe_default')}")
+    print(f"  approved_gallery_count: {packet.get('approved_gallery_count')}")
     for row in (packet.get("products") or [])[:8]:
         print(f"  - {row.get('slug')}: {row.get('extra_image_count')} image(s), lane={row.get('commerce_lane_label')}")
     extra = len(packet.get("products") or []) - 8
@@ -117,7 +128,9 @@ def _to_markdown(packet: dict[str, Any]) -> str:
         f"- Products with extra images: {packet.get('products_with_extra_images')}",
         f"- Source extra images: {packet.get('source_extra_image_count')}",
         f"- Unclassified images: {packet.get('unclassified_image_count')}",
-        f"- Approved parent-gallery images: {packet.get('approved_parent_gallery_count')}",
+        f"- Allowed roles: {', '.join(packet.get('allowed_roles') or [])}",
+        f"- Safe default role: {packet.get('safe_default')}",
+        f"- Approved gallery images: {packet.get('approved_gallery_count')}",
         f"- Assigned variant images: {packet.get('assigned_variant_image_count')}",
         "",
         "## Product Rows",
@@ -128,13 +141,16 @@ def _to_markdown(packet: dict[str, Any]) -> str:
     for row in packet.get("products") or []:
         lines.append(
             f"| `{row.get('slug')}` {row.get('title')} | {row.get('product_page_type_label')} | "
-            f"{row.get('commerce_lane_label')} | {row.get('extra_image_count')} | hold_until_classified |"
+            f"{row.get('commerce_lane_label')} | {row.get('extra_image_count')} | ignored_artifact / hold_until_classified |"
         )
     lines.extend(["", "## Image Rows", ""])
     for row in packet.get("products") or []:
         lines.extend([f"### {row.get('slug')}", ""])
         for image in row.get("images") or []:
-            lines.append(f"- `{image.get('source_index')}` {image.get('url')} -> review_needed")
+            lines.append(
+                f"- `{image.get('source_index')}` {image.get('url')} -> "
+                "ignored_artifact / hold_until_classified"
+            )
         lines.append("")
     return "\n".join(lines).rstrip() + "\n"
 

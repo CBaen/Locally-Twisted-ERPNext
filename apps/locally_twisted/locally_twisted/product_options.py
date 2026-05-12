@@ -140,29 +140,15 @@ def get_balloon_color_groups(values) -> list[dict[str, Any]]:
 
 
 def get_product_gallery_slides(item_code: str | None, primary_image: str | None = None, limit: int = 12) -> list[dict[str, str]]:
-    """Return distinct product/variant image slides for a product template.
+    """Return source-approved product gallery slides for a product template.
 
-    Current ERPNext has no Website Item slideshows, but many imported variants
-    already carry source alternate images. This helper exposes those as a
-    temporary product-page gallery while the rebuild pipeline learns to create
-    proper Website Slideshow records.
+    Website Slideshow rows are the backend-approved gallery path. When no
+    slideshow is supplied by Webshop, this fallback returns only the primary
+    image. Live variant Item.image rows are intentionally held back here until
+    the source media packet classifies them as `gallery` or `variant_image`.
     """
     if not item_code:
         return []
-
-    rows = frappe.db.sql(
-        """
-        SELECT item_code, item_name, image
-        FROM `tabItem`
-        WHERE disabled = 0
-          AND image IS NOT NULL
-          AND image != ''
-          AND (item_code = %(item_code)s OR variant_of = %(item_code)s)
-        ORDER BY CASE WHEN item_code = %(item_code)s THEN 0 ELSE 1 END, item_code ASC
-        """,
-        {"item_code": item_code},
-        as_dict=True,
-    )
 
     seen: set[str] = set()
     slides: list[dict[str, str]] = []
@@ -175,9 +161,6 @@ def get_product_gallery_slides(item_code: str | None, primary_image: str | None 
         slides.append({"image": image, "heading": heading})
 
     add_slide(primary_image, "Main product photo")
-    for row in rows:
-        add_slide(row.get("image"), row.get("item_name") or row.get("item_code") or "Product photo")
-
     return slides
 
 

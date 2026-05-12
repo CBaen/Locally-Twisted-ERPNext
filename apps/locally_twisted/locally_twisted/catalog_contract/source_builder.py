@@ -185,13 +185,13 @@ def build_product_page_contract(product: dict[str, Any], *, category_hint: str =
     primary_image = str(product.get("image_url") or "")
     gallery = [GalleryImageContract(url=primary_image, role="primary")] if primary_image else []
     for url in product.get("additional_image_urls") or []:
-        gallery.append(GalleryImageContract(url=str(url), role="review_needed"))
+        gallery.append(GalleryImageContract(url=str(url), role="ignored_artifact"))
 
     has_prices = _has_resolver_prices(variant_rows)
     if variant_rows and not has_prices:
         warnings.append("Variant product lacks resolver-backed erpnext_variant_price rows.")
-    if gallery and any(image.role == "review_needed" for image in gallery):
-        warnings.append("One or more alternate images need gallery/variant classification.")
+    if gallery and any(image.role == "ignored_artifact" for image in gallery):
+        warnings.append("One or more alternate images are held back until gallery/variant/reference classification.")
 
     product_page_type = _product_page_type(
         slug=slug,

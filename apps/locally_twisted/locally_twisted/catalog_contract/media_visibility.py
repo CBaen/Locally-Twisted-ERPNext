@@ -87,8 +87,8 @@ class MediaVisibilityReport:
             "",
             "## Interpretation",
             "",
-            "Live ERPNext primary images and some variant images are evidence of current display behavior, not proof that source media is fully classified.",
-            "Unclassified source extras must stay out of customer-facing import claims until approved as parent gallery, variant image, category/reference media, or review-only source material.",
+            "Live ERPNext primary images and some variant images are evidence of current stored media, not proof that source media is fully classified.",
+            "Unclassified source extras must stay out of customer-facing import claims until approved as gallery, variant_image, reference, or intentionally ignored_artifact media.",
             "The current public ecommerce pause means rendered product-page media proof must use authenticated/internal access or explicitly report the pause as the blocker.",
             "",
             "## Product Coverage",
@@ -137,7 +137,11 @@ def build_media_visibility_report(
             active_variants=live_row["active_variants"],
             active_variant_images=live_row["active_variant_images"],
             distinct_variant_images=live_row["distinct_variant_images"],
-            unclassified_source_images=sum(1 for image in contract.gallery if image.role == "review_needed"),
+            unclassified_source_images=sum(
+                1
+                for image in contract.gallery
+                if image.role not in {"primary", "gallery", "variant_image", "reference"}
+            ),
         )
         rows.append(row)
 
@@ -148,7 +152,7 @@ def build_media_visibility_report(
             f"{len(unclassified_products)} products have {unclassified_images} unclassified source extra images."
         )
     if website_slideshow_count == 0 or website_slideshow_item_count == 0:
-        blockers.append("No ERPNext Website Slideshow records are present for approved parent-gallery media.")
+        blockers.append("No ERPNext Website Slideshow records are present for approved gallery media.")
     missing_primary = [row.slug for row in rows if row.source_primary_images and not row.live_website_image]
     if missing_primary:
         blockers.append("Live ERPNext is missing primary Website Item images for: " + ", ".join(missing_primary[:10]))

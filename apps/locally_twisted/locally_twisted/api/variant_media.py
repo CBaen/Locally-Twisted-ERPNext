@@ -27,8 +27,8 @@ def get_variant_media(item_code: str, template_item_code: str | None = None) -> 
     """Return the storefront image for an Item or variant Item.
 
     Variant Items are sellable rows, while the Website Item usually lives on
-    the template. This method keeps the template image as fallback and only
-    switches to the variant image when ERPNext has one on Item.image.
+    the template. This method keeps the template image as fallback until a
+    source-backed media role marks a variant image as approved for rendering.
     """
     item_code = (item_code or "").strip()
     template_item_code = (template_item_code or "").strip() or None
@@ -59,14 +59,22 @@ def get_variant_media(item_code: str, template_item_code: str | None = None) -> 
 
     fallback_image = website_item.get("website_image") or None
     variant_image = item.get("image") or None
-    image = variant_image or fallback_image
+    approved_variant_image = None
+    image = approved_variant_image or fallback_image
 
     return {
         "item_code": item["item_code"],
         "template_item_code": website_item["item_code"],
         "image": image,
         "fallback_image": fallback_image,
-        "has_variant_image": bool(variant_image and variant_image != fallback_image),
+        "has_variant_image": bool(approved_variant_image and approved_variant_image != fallback_image),
+        "held_back_variant_image": bool(variant_image and variant_image != fallback_image),
+        "hold_reason": (
+            "Variant image is held until source media classification approves the variant_image role."
+            if variant_image and variant_image != fallback_image
+            else ""
+        ),
+        "media_role": "primary" if image == fallback_image else "variant_image",
         "alt": item.get("item_name") or website_item.get("web_item_name") or item["item_code"],
         "route": website_item.get("route"),
         "variant_options": _variant_options(item["item_code"]) if item.get("variant_of") else [],

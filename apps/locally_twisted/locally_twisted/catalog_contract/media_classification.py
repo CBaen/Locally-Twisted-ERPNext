@@ -11,12 +11,14 @@ from locally_twisted.catalog_contract.source_builder import build_product_page_c
 
 
 SCHEMA_VERSION = "lt-product-page-media-classification-packet-v1"
-SAFE_DEFAULT = "hold_until_classified"
+SAFE_DEFAULT = "ignored_artifact"
+HOLD_STATUS = "hold_until_classified"
 ALLOWED_ROLES = (
-    "parent_gallery",
+    "primary",
+    "gallery",
     "variant_image",
-    "category_or_reference",
-    "ignore_source_artifact",
+    "reference",
+    "ignored_artifact",
 )
 
 
@@ -38,15 +40,16 @@ def build_media_classification_packet(
         "purpose": "Source media classification packet before ERPNext product-page import or public ecommerce reopen.",
         "warning": (
             "This packet does not assign media. Source extra images must remain "
-            "out of Website Slideshow, variant image, category image, and gallery claims until approved."
+            "out of Website Slideshow, variant image, reference image, and gallery claims until approved."
         ),
         "safe_default": SAFE_DEFAULT,
+        "hold_status": HOLD_STATUS,
         "allowed_roles": list(ALLOWED_ROLES),
         "source_product_count": len(products),
         "products_with_extra_images": len(rows),
         "source_extra_image_count": image_count,
         "unclassified_image_count": image_count,
-        "approved_parent_gallery_count": 0,
+        "approved_gallery_count": 0,
         "assigned_variant_image_count": 0,
         "products": rows,
     }
@@ -59,7 +62,9 @@ def _product_row(product: dict[str, Any], *, slug_to_group: dict[str, str]) -> d
         {
             "source_index": index,
             "url": str(url),
-            "current_role": "review_needed",
+            "current_role": SAFE_DEFAULT,
+            "classification_status": HOLD_STATUS,
+            "hold_reason": "Source extra image has no approved media role yet.",
             "safe_default": SAFE_DEFAULT,
             "allowed_roles": list(ALLOWED_ROLES),
         }
