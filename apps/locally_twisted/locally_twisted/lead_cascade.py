@@ -31,22 +31,26 @@ named: "everything should cascade" (2026-04-29 cart session) -> here
 applied to Leads on customer-form submission.
 """
 import frappe
-from frappe.utils import get_datetime
+from frappe.utils import get_datetime, get_url
 from frappe.utils import escape_html
 
 from locally_twisted import policy_documents
 from locally_twisted import stage_cascade
-from locally_twisted.communication_copy_policy import document_copy_kwargs
+from locally_twisted.communication_copy_policy import BUSINESS_DOCUMENT_COPY, document_copy_kwargs
 from locally_twisted.customer_email_theme import (
     GENERAL_INBOX,
     customer_email_inline_images,
     form_confirmation_subject,
     render_customer_email,
+    render_operator_email,
 )
 from locally_twisted.failure_recorder import record_backend_failure
 
 
 WEBSITE_LEAD_SOURCE = "Website"
+CUSTOMER_EMAIL_FLAG = "lt_customer_email"
+CUSTOMER_EMAIL_NOTE_PREFIX = "Customer email:"
+BUSINESS_INQUIRY_SUBJECT_PREFIX = "New website inquiry"
 LEGACY_AUTO_ACK_SUBJECTS = (
     "We got your message",
     "Locally Twisted Message Sent - 24 Hour or Less Response Time",
@@ -64,6 +68,21 @@ SERVICE_LABEL_MAP = {
     "Events Inquiry": "Event Inquiry",
     "Something Else": "Other",
 }
+
+
+def customer_email_for(doc) -> str:
+    """Return the real customer email even when Lead.email_id had to stay blank."""
+    flagged_email = (getattr(getattr(doc, "flags", None), CUSTOMER_EMAIL_FLAG, "") or "").strip()
+    if flagged_email:
+        return flagged_email
+    lead_email = (doc.get("email_id") or "").strip()
+    if lead_email:
+        return lead_email
+    return _customer_email_from_note(doc.get("custom_anything_else"))
+
+
+def customer_email_note(email: str) -> str:
+    return f"{CUSTOMER_EMAIL_NOTE_PREFIX} {email.strip()}"
 
 
 def before_insert(doc, method=None):
@@ -275,7 +294,7 @@ def _ensure_contact_link(doc):
     `links` child table on Contact. The Lead-side has no FK; the join
     direction is Contact -> Lead.
     """
-    email = (doc.email_id or "").strip().lower()
+    email = customer_email_for(doc).lower()
     phone = (doc.mobile_no or doc.phone or "").strip()
     digits = "".join(c for c in phone if c.isdigit())
 
@@ -352,11 +371,54 @@ def send_customer_inquiry_confirmation(doc, *, photo_uploads=None):
     return _send_auto_ack_email(doc, photo_uploads=photo_uploads)
 
 
+def send_business_inquiry_notification(doc, *, photo_uploads=None):
+    """Queue the internal business notification for a Website inquiry."""
+    if _has_current_business_notification_queue(doc):
+        return {"ok": True, "queued": False, "skipped_existing": True}
+
+    customer_email = customer_email_for(doc)
+    customer_name = (doc.lead_name or doc.first_name or "Website inquiry").split(" - ")[0]
+    subject = f"{BUSINESS_INQUIRY_SUBJECT_PREFIX} from {customer_name}"
+    desk_link = f"{get_url()}/app/lead/{doc.name}"
+    body_html = _operator_inquiry_details_block(
+        doc,
+        customer_email=customer_email,
+        photo_uploads=photo_uploads,
+        desk_link=desk_link,
+    )
+    message = render_operator_email(
+        title="New website inquiry",
+        preheader=f"{customer_name} submitted a Locally Twisted form.",
+        body_html=body_html,
+    )
+
+    frappe.sendmail(
+        recipients=[BUSINESS_DOCUMENT_COPY],
+        subject=subject,
+        message=message,
+        reference_doctype="Lead",
+        reference_name=doc.name,
+        reply_to=customer_email or GENERAL_INBOX,
+        now=False,
+        **document_copy_kwargs(
+            external_audience=False,
+            primary_recipients=[BUSINESS_DOCUMENT_COPY],
+        ),
+    )
+    if not _has_current_business_notification_queue(doc):
+        frappe.throw(
+            "We saved your request, but the business notification email did not queue. "
+            "Please call (801) 285-0860 or email hi@locallytwisted.com and we will help.",
+            frappe.ValidationError,
+        )
+    return {"ok": True, "queued": True, "skipped_existing": False}
+
+
 def _send_auto_ack_email(doc, *, photo_uploads=None):
     """Send the customer auto-acknowledgment email. Idempotent via
     Lead-scoped Communication/Email Queue lookup -> safe to retry.
     """
-    email = (doc.email_id or "").strip()
+    email = customer_email_for(doc)
     if not email:
         return
 
@@ -375,7 +437,7 @@ def _send_auto_ack_email(doc, *, photo_uploads=None):
         },
         limit=1,
     )
-    queued = _has_current_confirmation_email_queue(doc)
+    queued = _has_current_confirmation_email_queue(doc, recipient=email)
     if existing or queued:
         return {"ok": True, "queued": False, "skipped_existing": True}
 
@@ -412,7 +474,7 @@ def _send_auto_ack_email(doc, *, photo_uploads=None):
         now=False,  # queue async
         **document_copy_kwargs(external_audience=True, primary_recipients=[email]),
     )
-    if not _has_current_confirmation_email_queue(doc):
+    if not _has_current_confirmation_email_queue(doc, recipient=email):
         frappe.throw(
             "We saved your request, but the confirmation email did not queue. "
             "Please call (801) 285-0860 or email hi@locallytwisted.com and we will help.",
@@ -421,19 +483,72 @@ def _send_auto_ack_email(doc, *, photo_uploads=None):
     return {"ok": True, "queued": True, "skipped_existing": False}
 
 
-def _has_current_confirmation_email_queue(doc) -> bool:
+def _has_current_confirmation_email_queue(doc, *, recipient=None) -> bool:
     """Return true only for queue rows that belong to this Lead incarnation.
 
     Test cleanup can remove and recreate Leads with the same autoname. Old
     Email Queue rows with the same reference_name must not suppress the new
     customer's confirmation email.
     """
+    return _has_current_email_queue(doc, recipient=recipient or customer_email_for(doc))
+
+
+def _has_current_business_notification_queue(doc) -> bool:
+    return _has_current_email_queue(
+        doc,
+        recipient=BUSINESS_DOCUMENT_COPY,
+        required_message_text=BUSINESS_INQUIRY_SUBJECT_PREFIX,
+    )
+
+
+def _has_current_email_queue(doc, *, recipient=None, required_message_text=None) -> bool:
     filters = {
         "reference_doctype": "Lead",
         "reference_name": doc.name,
         **_current_lead_creation_filter(doc),
     }
-    return bool(frappe.get_all("Email Queue", filters=filters, limit=1))
+    rows = frappe.get_all(
+        "Email Queue",
+        filters=filters,
+        fields=["name", "message"],
+        limit_page_length=20,
+    )
+    normalized_recipient = _normalize_email(recipient)
+    for row in rows:
+        if normalized_recipient and normalized_recipient not in _email_queue_recipients(row["name"]):
+            continue
+        if required_message_text and required_message_text not in (row.get("message") or ""):
+            continue
+        return True
+    return False
+
+
+def _email_queue_recipients(queue_name: str) -> set[str]:
+    rows = frappe.get_all(
+        "Email Queue Recipient",
+        filters={"parent": queue_name},
+        fields=["recipient"],
+    )
+    return {
+        _normalize_email(row.get("recipient"))
+        for row in rows
+        if row.get("recipient")
+    }
+
+
+def _normalize_email(value) -> str:
+    return str(value or "").strip().lower()
+
+
+def _customer_email_from_note(note) -> str:
+    text = str(note or "")
+    marker_index = text.lower().find(CUSTOMER_EMAIL_NOTE_PREFIX.lower())
+    if marker_index < 0:
+        return ""
+    value = text[marker_index + len(CUSTOMER_EMAIL_NOTE_PREFIX):].strip()
+    for separator in (";", "\n", "\r", "<", " "):
+        value = value.split(separator, 1)[0].strip()
+    return value
 
 
 def _current_lead_creation_filter(doc) -> dict:
@@ -441,6 +556,84 @@ def _current_lead_creation_filter(doc) -> dict:
     if not created_at:
         return {}
     return {"creation": [">=", created_at]}
+
+
+def _operator_inquiry_details_block(doc, *, customer_email, photo_uploads=None, desk_link=None) -> str:
+    rows: list[tuple[str, str]] = []
+
+    def line(label, value):
+        if value is None or value == "" or value == 0:
+            return
+        rows.append((label, str(value)))
+
+    line("Lead", doc.name)
+    line("Name", (doc.get("first_name") or doc.get("lead_name") or "").split(" - ")[0])
+    line("Email", customer_email)
+    line("Phone", doc.get("mobile_no") or doc.get("phone"))
+    line("Company", doc.get("company_name"))
+    line("Occasion", doc.get("custom_occasion_type"))
+    line("Event date", doc.get("custom_event_date"))
+    line("Event start time", doc.get("custom_event_time"))
+    line("Event end time", doc.get("custom_event_end_time"))
+    line("Location", doc.get("custom_event_location"))
+    line("Estimated guests", doc.get("custom_guest_count"))
+    services = _services_for_confirmation(doc)
+    if services:
+        line("Services requested", ", ".join(services))
+    line("Indoor / Outdoor", doc.get("custom_indoor_outdoor"))
+    if doc.get("custom_shade_required"):
+        line("Shade", "Required")
+    line("Colors", doc.get("custom_colors"))
+    line("Decor types", doc.get("custom_decor_types"))
+    line("Setup arrival", doc.get("custom_setup_time_arrival"))
+    line("Decor notes", doc.get("custom_decor_notes"))
+    line("Twisters", doc.get("custom_num_twisters"))
+    line("Twister start", doc.get("custom_artist_start"))
+    line("Twister end", doc.get("custom_artist_end"))
+    line("Twisting notes", doc.get("custom_twisting_notes"))
+    line("Face painters", doc.get("custom_num_painters"))
+    line("Painter start", doc.get("custom_painter_start"))
+    line("Painter end", doc.get("custom_painter_end"))
+    line("Painting notes", doc.get("custom_painting_notes"))
+    line("Delivery notes", doc.get("custom_delivery_notes"))
+    line("Events inquiry notes", doc.get("custom_package_notes"))
+    line("Other notes", doc.get("custom_other_notes"))
+    line("Anything else", doc.get("custom_anything_else"))
+
+    if photo_uploads:
+        submitted = int(photo_uploads.get("submitted") or 0)
+        attached = int(photo_uploads.get("attached") or 0)
+        if submitted:
+            line("Reference files", f"{attached} of {submitted} attached")
+        upload_issues = _photo_upload_issue_summary(photo_uploads)
+        if upload_issues:
+            line("Reference file notes", upload_issues)
+
+    rows_html = "".join(
+        "<tr>"
+        f"<td style=\"padding:4px 10px 4px 0;color:#5B616A;white-space:nowrap;vertical-align:top;\">{escape_html(label)}</td>"
+        f"<td style=\"padding:4px 0;color:#1F2933;vertical-align:top;\">{escape_html(value).replace(chr(10), '<br>')}</td>"
+        "</tr>"
+        for label, value in rows
+    )
+    open_link = ""
+    if desk_link:
+        safe_link = escape_html(desk_link)
+        open_link = f"""
+<p style="margin:14px 0 0;">
+  <a href="{safe_link}" style="display:inline-block;padding:8px 14px;background:#111111;color:#ffffff;text-decoration:none;border-radius:4px;font-weight:600;">
+    Open Lead in desk
+  </a>
+</p>
+""".strip()
+
+    return f"""
+<p style="margin:0 0 10px;">A new website inquiry needs follow-up.</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;font-size:13px;line-height:1.35;">
+  {rows_html}
+</table>
+{open_link}
+""".strip()
 
 
 def _customer_submitted_details_block(doc, *, photo_uploads=None) -> str:
@@ -452,7 +645,7 @@ def _customer_submitted_details_block(doc, *, photo_uploads=None) -> str:
         rows.append((label, str(value)))
 
     line("Name", (doc.get("first_name") or doc.get("lead_name") or "").split(" - ")[0])
-    line("Email", doc.get("email_id"))
+    line("Email", customer_email_for(doc))
     line("Phone", doc.get("mobile_no") or doc.get("phone"))
     line("Company", doc.get("company_name"))
     line("Occasion", doc.get("custom_occasion_type"))

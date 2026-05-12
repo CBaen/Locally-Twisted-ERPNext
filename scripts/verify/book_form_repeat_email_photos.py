@@ -55,6 +55,8 @@ def submit(base_url: str, email: str, label: str) -> dict:
     assert payload["photo_uploads"]["attached"] == 5, payload
     assert not payload["photo_uploads"].get("rejected"), payload
     assert not payload["photo_uploads"].get("failed"), payload
+    assert payload.get("business_notification", {}).get("queued") is True, payload
+    assert payload.get("customer_confirmation", {}).get("queued") is True, payload
     return payload
 
 

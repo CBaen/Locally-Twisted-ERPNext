@@ -241,7 +241,7 @@ def submit_book_inquiry():
     if product_quote_child_rows:
         lead_doc["custom_lt_product_quote_items"] = product_quote_child_rows
     try:
-        lead = _insert_lead_with_retry(lead_doc, defer_customer_ack=True)
+        lead = _insert_lead_with_retry(lead_doc, defer_customer_ack=True, customer_email=email)
     except Exception as e:
         # Loud-failure: log dev-channel detail before re-raising so the
         # framework error handler surfaces the user-facing error banner.
@@ -332,26 +332,48 @@ def submit_book_inquiry():
         delivery_notes, package_notes, other_notes, description, attached, payment_rule,
         photo_uploads,
     )
-    _send_deferred_customer_confirmation(lead, photo_uploads)
+    business_notification = _send_deferred_business_notification(lead, photo_uploads)
+    customer_confirmation = _send_deferred_customer_confirmation(lead, photo_uploads)
 
     frappe.db.commit()
-    return {"ok": True, "lead": lead.name, "photos": attached, "photo_uploads": photo_uploads}
+    return {
+        "ok": True,
+        "lead": lead.name,
+        "photos": attached,
+        "photo_uploads": photo_uploads,
+        "business_notification": business_notification,
+        "customer_confirmation": customer_confirmation,
+    }
 
 
 # -------------------------- helpers ---------------------------------- #
 
 
-def _insert_lead_with_retry(lead_doc, *, defer_customer_ack=False):
+def _insert_lead_with_retry(lead_doc, *, defer_customer_ack=False, customer_email=None):
     """Retry only transient database contention during public Lead creation."""
     max_attempts = 3
+    working_doc = copy.deepcopy(lead_doc)
+    stripped_unique_email = False
     for attempt in range(1, max_attempts + 1):
-        lead = frappe.get_doc(copy.deepcopy(lead_doc))
+        lead = frappe.get_doc(copy.deepcopy(working_doc))
         if defer_customer_ack:
             lead.flags.lt_defer_customer_ack = True
+        if customer_email:
+            lead.flags.lt_customer_email = customer_email
         try:
             lead.insert(ignore_permissions=True)
             return lead
         except Exception as exc:
+            if (
+                not stripped_unique_email
+                and working_doc.get("email_id")
+                and _is_duplicate_lead_email_error(exc)
+            ):
+                frappe.db.rollback()
+                _clear_frappe_messages()
+                working_doc = _lead_doc_without_unique_email(working_doc, customer_email or working_doc.get("email_id"))
+                stripped_unique_email = True
+                continue
             if attempt >= max_attempts or not _is_transient_lead_insert_error(exc):
                 raise
             frappe.db.rollback()
@@ -359,9 +381,31 @@ def _insert_lead_with_retry(lead_doc, *, defer_customer_ack=False):
     raise RuntimeError("unreachable lead insert retry state")
 
 
+def _send_deferred_business_notification(lead, photo_uploads):
+    try:
+        return lead_cascade.send_business_inquiry_notification(lead, photo_uploads=photo_uploads)
+    except Exception as e:
+        record_backend_failure(
+            surface="lead_contact_ack_cascade",
+            step="business_notification_email",
+            severity="error",
+            primary_doctype="Lead",
+            primary_name=lead.name,
+            customer_visible_impact="The inquiry was received, but the business notification email did not queue.",
+            internal_next_action="Open the Lead immediately and confirm the business notification email settings.",
+            exception=e,
+            grouping_key=f"lead_contact_ack_cascade:business_notification_email:{lead.name}",
+        )
+        frappe.throw(
+            "We saved your request, but the business notification email did not queue. "
+            "Please call (801) 285-0860 or email hi@locallytwisted.com and we will help.",
+            frappe.ValidationError,
+        )
+
+
 def _send_deferred_customer_confirmation(lead, photo_uploads):
     try:
-        lead_cascade.send_customer_inquiry_confirmation(lead, photo_uploads=photo_uploads)
+        return lead_cascade.send_customer_inquiry_confirmation(lead, photo_uploads=photo_uploads)
     except Exception as e:
         record_backend_failure(
             surface="lead_contact_ack_cascade",
@@ -393,6 +437,31 @@ def _is_transient_lead_insert_error(exc):
         "try restarting transaction",
     )
     return any(marker in message for marker in transient_markers)
+
+
+def _is_duplicate_lead_email_error(exc):
+    duplicate_error = getattr(frappe, "DuplicateEntryError", None)
+    if duplicate_error and not isinstance(exc, duplicate_error):
+        return False
+    message = str(exc).lower()
+    return "email address" in message and "unique" in message
+
+
+def _lead_doc_without_unique_email(lead_doc, customer_email):
+    retry_doc = copy.deepcopy(lead_doc)
+    retry_doc["email_id"] = None
+    note = lead_cascade.customer_email_note(customer_email)
+    current_note = retry_doc.get("custom_anything_else") or ""
+    if note not in current_note:
+        retry_doc["custom_anything_else"] = _combine_text_values(note, current_note)
+    return retry_doc
+
+
+def _clear_frappe_messages():
+    try:
+        frappe.clear_messages()
+    except Exception:
+        pass
 
 
 def _parse_int(value):
@@ -791,6 +860,7 @@ def _record_inquiry_communication(
             return
         parts.append(f"<strong>{escape_html(label)}:</strong> {escape_html(str(value))}")
 
+    line("Email", email)
     line("Phone", phone)
     line("Company", company)
     line("Occasion", _occasion_label(occasion))

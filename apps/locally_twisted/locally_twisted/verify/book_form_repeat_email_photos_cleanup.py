@@ -85,13 +85,37 @@ def _is_verifier_email(email: str) -> bool:
 
 def _lead_names(email: str | None, include_existing: bool) -> list[str]:
     filters: dict[str, Any] = {}
+    names: set[str] = set()
     if email:
         filters["email_id"] = email
+        names.update(frappe.get_all("Lead", filters=filters, pluck="name", limit_page_length=1000))
+        names.update(
+            frappe.get_all(
+                "Lead",
+                filters={"custom_anything_else": ["like", f"%Customer email: {email}%"]},
+                pluck="name",
+                limit_page_length=1000,
+            )
+        )
     elif include_existing:
         filters["email_id"] = ["like", f"{EMAIL_PREFIX}%{EMAIL_SUFFIX}"]
+        names.update(frappe.get_all("Lead", filters=filters, pluck="name", limit_page_length=1000))
+        names.update(
+            frappe.get_all(
+                "Lead",
+                filters={
+                    "custom_anything_else": [
+                        "like",
+                        f"%Customer email: {EMAIL_PREFIX}%{EMAIL_SUFFIX}%",
+                    ]
+                },
+                pluck="name",
+                limit_page_length=1000,
+            )
+        )
     else:
         return []
-    return frappe.get_all("Lead", filters=filters, pluck="name", limit_page_length=1000)
+    return sorted(names)
 
 
 def _cleanup_targets(
