@@ -6,6 +6,53 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-12 - A Frappe Cloud deploy hash is not live release proof
+
+The live app hash changed while the site was still serving old behavior because
+the site update/migration had not completed successfully. The failed migrations
+were real release blockers: blank mandatory System Settings fields, local-only
+Lead/custom DocType schema drift, and an unguarded optional legacy
+`custom_services` query.
+
+**Counter-move:** for Frappe Cloud, require both bench deploy success and site
+update/migrate success before claiming the release. Then run live route/API/form
+verifiers against the public domain. Source must own every custom field/DocType
+needed by live code, and optional legacy fields must be metadata-guarded before
+querying.
+
+---
+
+## 2026-05-12 - Email smoke tests must read the message, not just the flag
+
+The form smoke test was not sufficient because it did not prove the content GL
+needed: what the client said, the details they provided, and the owner-facing
+version of the same information. A queued flag can still hide wrong recipients,
+customer-directed owner copy, missing submitted fields, or internal fallback
+markers leaking into the message.
+
+**Counter-move:** public form launch proof must inspect the actual Email Queue
+body and recipients for both customer and owner paths. Owner copy should be
+directed at the business while carrying the same customer-submitted details.
+Customer and owner email bodies must strip internal markers such as
+`Customer email:` before display.
+
+---
+
+## 2026-05-12 - Repeat customers are not duplicate inquiries
+
+After DNS cutover, repeat same-email public form submissions returned `409`
+because ERPNext's linked Email Address record is unique. That platform rule is
+not the business rule: one customer can ask for multiple events, and every one
+must create a separate opportunity.
+
+**Counter-move:** public inquiry code must accept repeat same-email Leads. If
+the unique Email Address link blocks the insert, retry without `email_id`,
+preserve the customer email in a controlled internal fallback, and ensure
+customer/owner rendering still shows the real submitted email without leaking
+the fallback marker.
+
+---
+
 ## 2026-05-12 - Logged-in launch access means agents own dashboard work
 
 During the Frappe Cloud launch, the agent gave GL manual dashboard steps after

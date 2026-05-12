@@ -1,7 +1,7 @@
 ---
 name: ERPNext intake form parity
 level: recipe
-last_verified: 2026-05-08
+last_verified: 2026-05-12
 ---
 
 ## What it does
@@ -20,6 +20,11 @@ Current LT public form contract is `inquiry-v1`. Service routes can scope and
 preselect service choices through controller context, but they must not fork a
 second customer intake form unless GL explicitly approves a separate form
 contract.
+
+On Frappe Cloud, the source app must own the intake schema. Local database
+customizations are not enough: a fresh cloud site needs the Lead Custom Fields,
+`LT Service Type`, `LT Lead Service Type`, and `LT Lead Photo` created by
+source-controlled sync/patch code before public forms can write safely.
 
 ## How to use it
 
@@ -60,6 +65,13 @@ customer-facing success message over broken intake.
    approved. For BTFP, the calculator is row-based pricing transparency while
    the shared inquiry form still owns the customer request.
 
+8. Guard optional legacy fields.
+
+   Migration helpers may need to rewrite older data such as `Lead.custom_services`,
+   but Frappe Cloud sites that never had that legacy field must skip the query
+   entirely. Check `frappe.get_meta("Lead").has_field(...)` before selecting or
+   rewriting optional columns.
+
 ## LT verification commands
 
 ```powershell
@@ -69,6 +81,16 @@ python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --shape-on
 python scripts/verify/contact_service_logic.py --base-url http://localhost:8081
 python scripts/verify/contact_prefill.py --base-url http://localhost:8081
 npm run test:form-experience
+```
+
+For Frappe Cloud/live schema proof, include the site update/migrate job and a
+live writing smoke:
+
+```powershell
+$env:LT_BACKEND_BASE_URL='https://locallytwisted.v.frappe.cloud'
+$env:LT_BACKEND_CDP_URL='http://127.0.0.1:9222'
+python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --form-path /contact --skip-newsletter
+python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --form-path /balloon-twisting-and-face-painting --skip-newsletter
 ```
 
 If running the full writing smoke test, delete the generated test Lead/newsletter records afterward.
@@ -84,3 +106,7 @@ If running the full writing smoke test, delete the generated test Lead/newslette
 - Existing `Time` values can turn into machine-style strings with seconds or microseconds after conversion; clean those up so staff do not treat junk timestamps as real event times.
 - A service page forks a new customer form because it needs scoped choices,
   when controller context on the shared form would preserve one intake path.
+- A Frappe Cloud release succeeds at bench deploy but fails site update because
+  schema only existed in the local database.
+- A migration queries an optional legacy field before verifying that the field
+  exists on the current site's Lead DocType.

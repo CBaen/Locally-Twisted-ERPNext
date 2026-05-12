@@ -132,8 +132,10 @@ pattern that feels familiar.
 - [failures/](failures/) - Failure Recipes overview, dead-end convention, and template.
 - [public-nav-seo-verifier-drift](failures/public-nav-seo-verifier-drift.md) - prevents SEO/GEO/AEO or verifier work from changing header/footer/menu/search public chrome without explicit approval.
 - [provider-dashboard-work-bounced-to-gl](failures/provider-dashboard-work-bounced-to-gl.md) - prevents Frappe Cloud, Cloudflare, Stripe, DNS, and hosting dashboard work from being handed back to GL after account access/session is available.
+- [frappe-cloud-release-site-migration-drift](failures/frappe-cloud-release-site-migration-drift.md) - prevents Frappe Cloud app deploy hashes from being treated as live release proof before site update/migration, source-owned schema, and live route/form verifiers pass.
 - [public-header-contrast-safe-area-regression](failures/public-header-contrast-safe-area-regression.md) - prevents deep-navy header banner color, hover/focus contrast, and mobile safe-area side-order regressions.
 - [public-form-stale-email-queue-idempotency](failures/public-form-stale-email-queue-idempotency.md) - prevents old Lead-reference Email Queue or Communication rows from suppressing current public-form confirmations.
+- [public-form-repeat-email-lead-conflict](failures/public-form-repeat-email-lead-conflict.md) - prevents ERPNext Email Address uniqueness from turning legitimate repeat same-email public inquiries into 409 failures.
 - [playwright-in-file-parallel-fixture-race](failures/playwright-in-file-parallel-fixture-race.md) - keeps LT Playwright specs serial by default unless backend fixture isolation is proven.
 
 ## Evidence And Registry

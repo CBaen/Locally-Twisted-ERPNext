@@ -8,6 +8,70 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-12 - Live inquiry proof must verify customer and owner email content
+
+**Decision:** Public inquiry success requires both customer confirmation and
+business/owner notification proof. The business owner receives the same
+customer-submitted details, but in owner-directed copy. Smoke tests are not
+launch proof unless they inspect the Email Queue body/recipients for the
+customer and owner paths, not just a queue flag.
+
+**Reasoning:** GL caught the business-critical gap: the customer-facing form
+could say the request was received while the owner did not reliably get the
+details. The previous smoke test was too shallow because it did not prove that
+the submitted details appeared in the actual customer and owner messages.
+
+**Implementation boundary:** `submit_book_inquiry` must not return
+`message.ok` unless customer confirmation and owner/business notification are
+queued or current same-Lead queue rows exist. The owner email uses
+`render_operator_email`, goes to `locallytwisted@gmail.com`, and uses owner
+copy such as "A customer submitted this website inquiry" while preserving the
+customer-submitted field table. Internal fallback markers such as
+`Customer email:` must not leak into customer/owner email bodies.
+
+**Verification receipt:** The strict live verifier passed against
+`https://locallytwisted.com` with authenticated backend checks through
+`https://locallytwisted.v.frappe.cloud`; it submitted two repeat same-email
+inquiries with five photos each, verified customer queues and business queues
+for both Leads, verified email body content, and cleaned its verifier-owned
+records. Live `/contact` and live BTFP `smoke_forms.py` also passed with
+backend proof and cleanup.
+
+**Decided by:** GL correction and Codex live form/email repair on 2026-05-12.
+
+---
+
+## 2026-05-12 - Frappe Cloud release proof requires site migration and source-owned schema
+
+**Decision:** A Frappe Cloud bench deploy hash is not a completed release for
+LT. Release proof requires the bench deploy to succeed, the site update/migrate
+job to succeed, source-owned schema to be present on the live site, and live
+route/API/form verifiers to pass.
+
+**Reasoning:** During the live cutover, the app hash changed before the live
+site had actually migrated to the working source. Site update first failed on
+blank mandatory `System Settings.language` / `time_zone`, then exposed that
+local-only Lead fields/custom DocTypes were missing from the source migration,
+then failed when an optional legacy `Lead.custom_services` query ran on a site
+without that column.
+
+**Implementation boundary:** The app must own the intake schema it needs on a
+fresh Frappe Cloud site. `sync_site_branding` must fill blank mandatory System
+Settings defaults before save. `sync_contact_intake_backend` must create the LT
+Lead fields and custom DocTypes used by public forms. Optional legacy fields
+must be checked with metadata before querying or rewriting them.
+
+**Verification receipt:** Final live state on 2026-05-12: custom app release
+`72a4se4v64`, app hash `04de8212aa7dbf4895716717865fc6e1029c757b`, bench
+deploy `62q1r0otg1` `Success`, site update/migrate job `15s16992i2` `Success`,
+`deploy_in_progress=false`, `has_running_release_pipeline=false`. Live form
+smoke and strict repeat-email/five-photo proof passed after that final site
+update.
+
+**Decided by:** Codex Frappe Cloud live cutover repair on 2026-05-12.
+
+---
+
 ## 2026-05-12 - Public form success requires current confirmation email queue proof
 
 **Decision:** `/contact` and `/balloon-twisting-and-face-painting` may show

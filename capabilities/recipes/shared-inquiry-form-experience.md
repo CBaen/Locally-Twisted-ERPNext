@@ -10,9 +10,9 @@ currently_true: yes
 verification_level: 2
 last_verified: 2026-05-12
 evidence_quality: direct
-successful_uses: 4
-failed_uses: 3
-regressions: 1
+successful_uses: 5
+failed_uses: 4
+regressions: 0
 depends_on:
   - erpnext-intake-form-parity
   - fail-loud-operating-law
@@ -44,6 +44,8 @@ This recipe does not own Lead schema parity or field taxonomy. Use
 
 - The form remains guest-friendly; login is not required.
 - Repeat inquiries from the same email are allowed when the business treats each Lead as a separate event/opportunity.
+- Repeat same-email inquiries must not return `409` only because ERPNext's
+  linked Email Address row is unique.
 - The visible success state is caused only by the verified submit path.
 - A route hash such as `/contact#received` must not open a success modal by
   itself.
@@ -53,6 +55,8 @@ This recipe does not own Lead schema parity or field taxonomy. Use
   confirmation email queues or a current same-Lead queue row exists. A stale
   `Email Queue` or `Communication` row from an older Lead with the same name is
   not proof.
+- The backend may return `message.ok` only after the current owner/business
+  notification queues or a current same-Lead owner queue row exists.
 - The success message is `A confirmation of your request will be sent to your
   email address shortly. We will be in contact within 24 hours!`
 - Customer-facing failure copy stays calm, plain, and non-technical. Internal
@@ -97,6 +101,16 @@ python scripts/verify/book_form_repeat_email_photos.py --base-url http://localho
 python scripts/verify/customer_email_policy_contract.py
 ```
 
+Live public form release proof:
+
+```powershell
+$env:LT_BACKEND_BASE_URL='https://locallytwisted.v.frappe.cloud'
+$env:LT_BACKEND_CDP_URL='http://127.0.0.1:9222'
+python scripts/verify/book_form_repeat_email_photos.py --base-url https://locallytwisted.com --admin-base-url https://locallytwisted.v.frappe.cloud --cdp-url http://127.0.0.1:9222
+python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --form-path /contact --skip-newsletter
+python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --form-path /balloon-twisting-and-face-painting --skip-newsletter
+```
+
 Useful adjacent checks after form markup, cache-buster, or page-shell changes:
 
 ```powershell
@@ -115,10 +129,16 @@ npm run test:a11y-manual
   returned a non-OK response, or returned a response without `message.ok`.
 - A customer sees "Request received" while the confirmation email did not
   queue for the current Lead.
+- A customer sees "Request received" while the owner/business notification did
+  not queue for the current Lead.
+- The owner notification does not include the same submitted details the
+  customer provided, or speaks to the owner as if they were the customer.
 - Idempotency checks use Lead reference name alone instead of the current
   Lead's creation boundary.
 - A customer sees an inspiration-photo warning when no file was selected.
 - A repeat customer email is rejected as a duplicate Lead.
+- A live verifier checks only that an email queued, not that the customer and
+  owner Email Queue bodies contain the submitted details.
 - The UI claims "Up to 5 images" but the endpoint only proves one/no uploaded file path.
 - The form reintroduces the removed progress-step text (`Details checked`,
   `Saved for follow-up`) or the `No account needed` helper line.
@@ -160,3 +180,12 @@ added a loud backend failure if queue proof is missing, updated success copy,
 requeued the missing Contact confirmation, and passed the focused form/email
 guards. Feature handoff:
 `../../workstreams/form-email-confirmation-regression-2026-05-12.md`.
+
+Later on 2026-05-12 after DNS cutover, the live forms returned `409` for repeat
+same-email inquiries and the owner email path was not proven deeply enough. The
+repair made repeat same-email inquiries safe despite ERPNext Email Address
+uniqueness, added owner/business notification proof, verified the actual
+customer and owner Email Queue bodies/recipients, deployed through Frappe Cloud
+release `72a4se4v64` / app hash
+`04de8212aa7dbf4895716717865fc6e1029c757b`, and passed live `/contact`, live
+BTFP, and strict repeat-email/five-photo form proof with cleanup.

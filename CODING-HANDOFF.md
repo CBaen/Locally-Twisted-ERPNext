@@ -1,20 +1,33 @@
 # Locally Twisted - Coding Handoff
 
-Codex form/email closeout on 2026-05-12: `/contact` and
-`/balloon-twisting-and-face-painting` now use the success copy "A confirmation
-of your request will be sent to your email address shortly. We will be in
-contact within 24 hours!" and the backend must not return public success unless
-the customer confirmation email queues or a current same-Lead queue row exists.
-Root cause was stale Lead-reference idempotency: an old Email Queue row for a
-reused Lead name suppressed the new Contact confirmation. `Email Queue` and
-`Communication` idempotency checks must be scoped to the current Lead
-incarnation by creation time. Feature handoff:
-`workstreams/form-email-confirmation-regression-2026-05-12.md`; Failure Recipe:
-`capabilities/failures/public-form-stale-email-queue-idempotency.md`; guards:
-`npm run test:form-experience`,
-`python scripts/verify/customer_email_policy_contract.py`,
-`python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --skip-newsletter`,
-and `python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081`.
+Codex live form/email/Frappe Cloud closeout on 2026-05-12:
+`locallytwisted.com` is now serving the Frappe Cloud app release
+`72a4se4v64` / app hash `04de8212aa7dbf4895716717865fc6e1029c757b`;
+bench deploy `62q1r0otg1` and site update job `15s16992i2` both ended
+`Success`. `/contact` and `/balloon-twisting-and-face-painting` pass live
+smoke after DNS cutover, and the strict live repeat-email/five-photo verifier
+passed against `https://locallytwisted.com` with customer and business
+notification Email Queue body/recipient proof. Public success now requires both
+current customer confirmation and owner/business notification evidence. The
+business owner email goes to `locallytwisted@gmail.com`, uses owner-directed
+copy, and includes the same customer-submitted details without internal fallback
+markers. Root causes fixed: repeat same-email Lead insert returned 409 because
+ERPNext's Email Address link is unique; stale same-Lead Email Queue/Communication
+rows were treated as idempotency proof; prior smoke only trusted queue flags;
+Frappe Cloud bench deploy hash changed before the site update/migration and
+source-owned schema were actually live. Feature handoffs:
+`workstreams/form-email-confirmation-regression-2026-05-12.md` and
+`workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11.md`. Failure
+Recipes:
+`capabilities/failures/public-form-stale-email-queue-idempotency.md`,
+`capabilities/failures/public-form-repeat-email-lead-conflict.md`, and
+`capabilities/failures/frappe-cloud-release-site-migration-drift.md`. Guards:
+`python scripts/verify/book_form_repeat_email_photos.py --base-url https://locallytwisted.com --admin-base-url https://locallytwisted.v.frappe.cloud --cdp-url http://127.0.0.1:9222`,
+`python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --form-path /contact --skip-newsletter`,
+and
+`python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --form-path /balloon-twisting-and-face-painting --skip-newsletter`
+with `LT_BACKEND_BASE_URL=https://locallytwisted.v.frappe.cloud` and
+`LT_BACKEND_CDP_URL=http://127.0.0.1:9222`.
 
 Codex verifier-runtime closeout on 2026-05-12: Playwright in-file parallelism
 is opt-in only. Keep `playwright.config.js` defaults at one worker and

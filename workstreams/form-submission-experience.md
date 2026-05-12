@@ -1,6 +1,6 @@
 # Form Submission Experience
 
-Last updated: 2026-05-12 by Codex after the confirmation-email regression fix.
+Last updated: 2026-05-12 by Codex after the live repeat-email/owner-notification fix.
 
 ## Scope
 
@@ -26,9 +26,11 @@ Capability router:
   from the verified submit path.
 - The success modal is intentionally quiet: `Request received`, the
   confirmation-email/24-hour response promise, and one close button.
-- Backend success requires email-queue proof. If customer confirmation email
-  does not queue, the endpoint must fail loudly with customer-safe copy instead
-  of returning `message.ok`.
+- Backend success requires customer confirmation and owner/business
+  notification email-queue proof. If either queue path fails, the endpoint must
+  fail loudly with customer-safe copy instead of returning `message.ok`.
+- Repeat same-email inquiries are allowed. A returning customer's second event
+  inquiry must not become a duplicate-email `409`.
 - Failure copy stays customer-safe and plain. Internal exceptions stay out of
   public copy.
 - Empty file inputs must not become photo warnings. Only a real selected file
@@ -107,10 +109,23 @@ python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --skip-new
 python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081
 ```
 
+Live cutover closeout later on 2026-05-12 fixed the repeat same-email `409`,
+added owner/business notification proof, and required actual customer/owner
+Email Queue body/recipient verification. Live proof:
+
+```powershell
+$env:LT_BACKEND_BASE_URL='https://locallytwisted.v.frappe.cloud'
+$env:LT_BACKEND_CDP_URL='http://127.0.0.1:9222'
+python scripts/verify/book_form_repeat_email_photos.py --base-url https://locallytwisted.com --admin-base-url https://locallytwisted.v.frappe.cloud --cdp-url http://127.0.0.1:9222
+python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --form-path /contact --skip-newsletter
+python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --form-path /balloon-twisting-and-face-painting --skip-newsletter
+```
+
 Feature handoff:
 `workstreams/form-email-confirmation-regression-2026-05-12.md`.
 Failure Recipe:
-`capabilities/failures/public-form-stale-email-queue-idempotency.md`.
+`capabilities/failures/public-form-stale-email-queue-idempotency.md` and
+`capabilities/failures/public-form-repeat-email-lead-conflict.md`.
 
 ## Known Non-Blocking Failures
 

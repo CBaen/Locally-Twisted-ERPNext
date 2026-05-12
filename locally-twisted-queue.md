@@ -54,31 +54,38 @@ ecommerce blocker remains; remaining gates are staging/live release, Stripe,
 DNS, legal/policy, explicit real payment approval, and final real catalog
 approval if the local product set is to become public catalog truth.
 
-**Frappe Cloud/Cloudflare/Stripe launch gate (2026-05-11):** Source handoff is
+**Frappe Cloud/Cloudflare/Stripe launch state (2026-05-12):** Source handoff is
 `LT-LAUNCH-RUNBOOK.md`, with the deeper technical gate at
-`workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11.md`. Do not cut
-DNS from a dirty/ahead worktree. Required gates are
-`frappe_cloud_preflight.py`, staging
-`website_launch_verify.py --with-a11y --with-contact-smoke`,
-`ecommerce_pause_contract.py`, `cloudflare_launch_readiness_contract.py`,
-`cloudflare_launch_readiness.py --base-url https://locallytwisted.com`, and
-`payment_launch_readiness.py --mode live --base-url https://locallytwisted.com`.
-The Cloudflare gate treats `MISS` as a dynamic-route cache blocker. Live
-checkout stays blocked until the live Stripe config, product scope, and one
-real low-risk payment test pass.
+`workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11.md`.
+`locallytwisted.com` is now serving the Frappe Cloud site for pages/forms.
+Final custom app release `72a4se4v64`, app hash
+`04de8212aa7dbf4895716717865fc6e1029c757b`, bench deploy `62q1r0otg1`, and
+site update/migrate job `15s16992i2` are successful. Live `/contact`, live BTFP
+smoke, and strict repeat-email/five-photo customer+owner Email Queue content
+proof passed and cleaned verifier records. Remaining active launch blocker is
+not pages/forms; it is live checkout. Keep Stripe/ecommerce blocked until live
+Stripe config, product scope, policy URLs/webhook, and one real low-risk payment
+test pass. Rerun Cloudflare dynamic-route and live form gates after any future
+DNS/cache/security/Frappe Cloud release change.
 
 **Reconciliation note (2026-05-07; refreshed 2026-05-11):** `scripts/verify/layout_fit.spec.js` is restored and currently verifies through `npm run test:layout-fit` (325 checks inside `npm run test:public-verify` after route/breakpoint matrix expansion and generated hero work). `npm run test:container-contract` is the executable route-level public container contract and is part of `npm run test:website-verify` / `npm run test:public-verify`. `npm run test:interactive-layout` adds stateful public UI checks, including the compact generated-photo hero contract. `npm run test:checkout-experience` now covers open `/cart` and `/checkout` rendering in the current ecommerce testing mode; `npm run test:ecommerce-full` adds shop smoke, prices, variant media, and rollback-safe checkout backend contracts. Event Playground / PlayCanvas source work moved to `C:\Users\baenb\projects\design-studio\workstreams\locally-twisted-plan-custom-decor-v2\` and is no longer part of the ASAP website launch lane; the LT repo owns only the hidden Frappe wrapper and contact handoff. Its latest source handoff is `event-playground-v2` plus `design-studio-v1`, with quote math gated behind LT review. Treat `.planning/phases/01-customer-site-and-storefront/PLAN.md` as historical; `/contact` is still the primary quote/inquiry route and `/book` redirects to `/contact?intent=quick`.
 
 **Operating law (2026-05-08):** if it can fail, it must fail loudly. Apply this to forms, automations, payments, documents, customer communication, containers, route contracts, verification, and agent handoffs. The project recipe is `capabilities/recipes/fail-loud-operating-law.md`; future queue items should name the verifier, Error Log, blocker field, mutation guard, route contract, or report row that makes failure visible.
 
 **Public form email success rule (2026-05-12):** `/contact` and BTFP form
-success now requires current confirmation email queue proof. Do not show
-`Request received` unless the backend returns `message.ok`, and do not return
-`message.ok` unless the customer confirmation email queued or a current
-same-Lead queue row exists. Stale `Email Queue` / `Communication` rows from an
-older reused Lead name are not idempotency proof. Handoff:
-`workstreams/form-email-confirmation-regression-2026-05-12.md`; Failure Recipe:
-`capabilities/failures/public-form-stale-email-queue-idempotency.md`.
+success requires current customer confirmation and owner/business notification
+proof. Do not show `Request received` unless the backend returns `message.ok`,
+and do not return `message.ok` unless the customer and owner Email Queue rows
+exist for the current Lead or a current same-Lead queue row exists. Stale
+`Email Queue` / `Communication` rows from an older reused Lead name are not
+idempotency proof. Repeat same-email inquiries must be accepted; ERPNext's
+unique Email Address link cannot turn a legitimate second inquiry into a 409.
+Smoke proof must inspect customer-submitted details in both customer and owner
+email bodies, not only queue flags. Handoff:
+`workstreams/form-email-confirmation-regression-2026-05-12.md`; Failure
+Recipes:
+`capabilities/failures/public-form-stale-email-queue-idempotency.md` and
+`capabilities/failures/public-form-repeat-email-lead-conflict.md`.
 
 **Operating law (2026-05-08):** no hand-authored production monoliths. Files should have one clear job unless they are explicitly research/reference artifacts. Use `workstreams/no-monolith-operating-contract.md` and the global capability `C:\Users\baenb\capabilities\principles\no-monolith-files.md` before expanding large source, template, CSS, verifier, script, or project-doc files.
 

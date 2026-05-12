@@ -1,7 +1,7 @@
 ---
 name: Frappe Cloud Cloudflare Stripe launch gate
 level: recipe
-last_verified: 2026-05-11
+last_verified: 2026-05-12
 currently_true: true
 ---
 
@@ -24,7 +24,8 @@ The detailed technical handoff is
 
 Default public launch posture:
 
-- Public site and `/contact` can launch first.
+- Public site and `/contact` can launch first. As of 2026-05-12,
+  `locallytwisted.com` is serving the Frappe Cloud site for pages/forms.
 - Ecommerce remains paused with `lt_ecommerce_paused=1` unless a deliberate
   product/payment gate opens a narrow shelf.
 - Some ecommerce may launch only after hardening, security, payment, product
@@ -33,6 +34,9 @@ Default public launch posture:
   surfaces; they need the same proof as product checkout.
 - If ecommerce fails a real gate, the site launches with the branded ecommerce
   pause fallback instead of waiting for full checkout.
+- A Frappe Cloud bench deploy hash is not enough. The site update/migration job
+  must succeed, the source app must own the live schema, and public live
+  route/API/form verifiers must pass.
 
 ## Human Access Boundary
 
@@ -71,6 +75,17 @@ python scripts/verify/payment_webhook_contract.py
 python scripts/verify/stripe_amount_parity_contract.py
 ```
 
+For live inquiry form release proof, include authenticated backend verification
+against the Frappe Cloud admin host:
+
+```powershell
+$env:LT_BACKEND_BASE_URL='https://locallytwisted.v.frappe.cloud'
+$env:LT_BACKEND_CDP_URL='http://127.0.0.1:9222'
+python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --form-path /contact --skip-newsletter
+python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --form-path /balloon-twisting-and-face-painting --skip-newsletter
+python scripts/verify/book_form_repeat_email_photos.py --base-url https://locallytwisted.com --admin-base-url https://locallytwisted.v.frappe.cloud --cdp-url http://127.0.0.1:9222
+```
+
 ## Failure Modes
 
 - Treating `frappe_cloud_preflight.py` as proof of Frappe Cloud dashboard
@@ -81,6 +96,12 @@ python scripts/verify/stripe_amount_parity_contract.py
   the account session available.
 - Treating `locallytwisted.com` as the Frappe host before the dynamic Frappe
   routes and webhook path pass.
+- Treating a successful Frappe Cloud bench deploy as proof the site is running
+  the new code before site update/migration succeeds.
+- Letting custom fields or custom DocTypes exist only in the local database
+  instead of source-controlled install/migration code.
+- Querying optional legacy fields during migration without checking current
+  DocType metadata.
 - Opening checkout because local fake-data contracts pass, without live
   HTTPS host, explicit live Stripe config, webhook secret, policy URLs, and one
   low-risk real payment test.
@@ -98,3 +119,14 @@ On 2026-05-11:
 - `payment_launch_readiness.py` passed local test-mode checks.
 - `payment_launch_readiness.py --mode live` correctly failed on test Stripe
   config and local/non-HTTPS host configuration.
+
+On 2026-05-12:
+
+- Final Frappe Cloud custom app release was `72a4se4v64`.
+- Final app hash was `04de8212aa7dbf4895716717865fc6e1029c757b`.
+- Final bench deploy `62q1r0otg1` succeeded.
+- Final site update/migrate job `15s16992i2` succeeded.
+- `deploy_in_progress=false` and `has_running_release_pipeline=false`.
+- Live `/contact` and live BTFP smoke passed with backend proof and cleanup.
+- Strict live repeat-email/five-photo proof passed with customer and owner
+  Email Queue body/recipient verification and cleanup.

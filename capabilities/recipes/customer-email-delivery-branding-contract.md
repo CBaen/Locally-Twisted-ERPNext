@@ -9,9 +9,9 @@ currently_true: true
 verification_level: 2
 last_verified: 2026-05-12
 evidence_quality: direct
-successful_uses: 2
-failed_uses: 1
-regressions: 1
+successful_uses: 3
+failed_uses: 2
+regressions: 0
 depends_on:
   - external-document-audience-contract
   - fail-loud-operating-law
@@ -43,6 +43,17 @@ privacy copy.
   `reference_name` is not proof that the current Lead was acknowledged.
 - Public form endpoints must fail loudly if the customer confirmation email
   does not queue; they must not return `message.ok` and show public success.
+- Public form endpoints must also fail loudly if the owner/business notification
+  does not queue; the business has to receive the inquiry details.
+- Public form owner/business notifications use `render_operator_email`, go to
+  `locallytwisted@gmail.com`, and speak to the business owner, not to the
+  customer.
+- Owner/business notification detail tables must contain the same
+  customer-submitted fields as the customer confirmation, while stripping
+  internal fallback markers such as `Customer email:`.
+- Repeat same-email inquiries are legitimate. If ERPNext's linked Email Address
+  uniqueness blocks a fresh Lead insert, preserve the customer email in a
+  controlled internal fallback and keep email rendering correct.
 - Public form confirmations use compact policy links, not the full long policy block, to keep print output short.
 - The repeat-email/five-photo verifier owns its fake record namespace and must
   clean it. `scripts/verify/book_form_repeat_email_photos.py` deletes old and
@@ -84,7 +95,10 @@ privacy copy.
 - `apps/locally_twisted/locally_twisted/verify/customer_email_policy_contract.py`
 - `apps/locally_twisted/locally_twisted/verify/customer_documents_contract.py`
 - `apps/locally_twisted/locally_twisted/verify/book_form_repeat_email_photos_cleanup.py`
+- `apps/locally_twisted/locally_twisted/verify/book_form_repeat_email_photos_email_contract.py`
 - `apps/locally_twisted/locally_twisted/verify/customer_contact_points_contract.py`
+- `scripts/verify/book_form_repeat_email_photos.py`
+- `scripts/verify/frappe_whitelisted_client.py`
 - `scripts/verify/customer_contact_points_contract.py`
 - `workstreams/form-email-confirmation-regression-2026-05-12.md`
 
@@ -126,6 +140,17 @@ python scripts/verify/client_event_automation_matrix.py
 python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-business-pipeline.json
 ```
 
+For live public form release proof, use authenticated backend checks and verify
+actual Email Queue content:
+
+```powershell
+$env:LT_BACKEND_BASE_URL='https://locallytwisted.v.frappe.cloud'
+$env:LT_BACKEND_CDP_URL='http://127.0.0.1:9222'
+python scripts/verify/book_form_repeat_email_photos.py --base-url https://locallytwisted.com --admin-base-url https://locallytwisted.v.frappe.cloud --cdp-url http://127.0.0.1:9222
+python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --form-path /contact --skip-newsletter
+python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --form-path /balloon-twisting-and-face-painting --skip-newsletter
+```
+
 ## Failure Modes
 
 - Treating `Email Queue.status = Sent` as inbox delivery proof. It only proves
@@ -149,6 +174,14 @@ python scripts/verify/synthetic_business_pipeline.py --report output/synthetic-b
   customer receipt lie about attached files.
 - Returning public success when the confirmation email did not queue for the
   current Lead.
+- Returning public success when the owner/business notification did not queue
+  for the current Lead.
+- Treating a smoke test as sufficient when it does not inspect the submitted
+  details in the actual customer and owner Email Queue messages.
+- Rendering owner notifications with customer-directed copy.
+- Leaking the internal `Customer email:` fallback marker into either customer
+  or owner email.
+- Rejecting a repeat same-email public inquiry as a duplicate event.
 - Letting public-form proof scripts leave fake Leads, private Files,
   Communications, Email Queue rows, Contacts, Tasks, or Comments behind. Test
   proof is not clean unless its generated business records are gone.

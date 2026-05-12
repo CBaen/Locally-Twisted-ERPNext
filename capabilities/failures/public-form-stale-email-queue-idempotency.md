@@ -11,6 +11,8 @@ owner_context: Locally Twisted ERPNext public inquiry forms
 related_capabilities:
   - ../recipes/customer-email-delivery-branding-contract.md
   - ../recipes/shared-inquiry-form-experience.md
+related_failures:
+  - public-form-repeat-email-lead-conflict.md
 tags:
   - locally-twisted
   - public-form
@@ -41,6 +43,7 @@ Communication row with the same Lead reference name exists.
 | Date | Project | Surface | Bad outcome | Evidence | Guard state | Status |
 |---|---|---|---|---|---|---|
 | 2026-05-12 | Locally Twisted | `/contact` public inquiry | `CRM-LEAD-2026-00073` saw success while an old 2026-05-10 Email Queue row suppressed the 2026-05-11 confirmation | Live DB showed stale `2eghkl7krg` and new requeued `gbf0g958qj`; both final customer/company recipients sent | idempotency scoped to current Lead creation | guarded |
+| 2026-05-12 | Locally Twisted | Live `/contact` and BTFP after DNS cutover | Same failure class would have allowed false success if queue proof stayed shallow | Strict live repeat-email/five-photo verifier now checks current customer and business Email Queue bodies/recipients, not only queue flags | live content verifier added | guarded |
 
 ## Root pattern
 
@@ -65,6 +68,7 @@ name boundary.
 Public-form confirmation idempotency must scope existing `Email Queue` and
 `Communication` rows to the current Lead incarnation. The backend must fail
 loudly if `frappe.sendmail` returns without creating a current queue row.
+Public success must also require current owner/business notification proof.
 
 ## Recovery recipe
 
@@ -78,12 +82,17 @@ loudly if `frappe.sendmail` returns without creating a current queue row.
    `python scripts/verify/customer_email_policy_contract.py`,
    `python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --skip-newsletter`,
    and `python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081`.
+6. For live release, run `book_form_repeat_email_photos.py` against
+   `https://locallytwisted.com` with authenticated Frappe Cloud backend CDP so
+   the verifier can inspect customer and owner Email Queue bodies.
 
 ## What not to do
 
 - Do not delete old Email Queue rows as the primary fix.
 - Do not claim success because an older same-reference row is `Sent`.
 - Do not catch email-queue failures and still return `message.ok`.
+- Do not accept queue-flag smoke proof without body/recipient checks for the
+  customer and owner messages.
 - Do not remove direct `#received` fake-success protection while repairing copy.
 
 ## Cross-links
@@ -91,10 +100,11 @@ loudly if `frappe.sendmail` returns without creating a current queue row.
 - `../../workstreams/form-email-confirmation-regression-2026-05-12.md`
 - `../../workstreams/form-submission-experience.md`
 - `../../workstreams/customer-email-policy-boundary.md`
+- `public-form-repeat-email-lead-conflict.md`
 - `../recipes/customer-email-delivery-branding-contract.md`
 - `../recipes/shared-inquiry-form-experience.md`
 
 ## Evidence quality
 
-Verified against live local ERPNext DB rows on 2026-05-12 and guarded by focused
-form/email verifiers.
+Verified against live local ERPNext DB rows and the Frappe Cloud production
+site on 2026-05-12, guarded by focused form/email verifiers.
