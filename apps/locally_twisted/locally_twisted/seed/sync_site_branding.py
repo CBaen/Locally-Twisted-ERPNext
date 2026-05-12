@@ -27,6 +27,11 @@ SYSTEM_FIELDS = {
     "app_name": APP_NAME,
 }
 
+SYSTEM_DEFAULT_FIELDS = {
+    "language": "en",
+    "time_zone": "America/Denver",
+}
+
 
 def execute() -> dict[str, object]:
     """Apply the white-label website and system branding fields."""
@@ -43,10 +48,15 @@ def execute() -> dict[str, object]:
 
     system = frappe.get_single("System Settings")
     system_changed = _apply_fields(system, SYSTEM_FIELDS, summary["system_settings"])
-    if system_changed:
+    system_defaults_changed = _apply_default_fields(
+        system,
+        SYSTEM_DEFAULT_FIELDS,
+        summary["system_settings"],
+    )
+    if system_changed or system_defaults_changed:
         system.save(ignore_permissions=True)
 
-    if website_changed or system_changed:
+    if website_changed or system_changed or system_defaults_changed:
         frappe.clear_cache()
         frappe.db.commit()
         summary["committed"] = True
@@ -66,6 +76,22 @@ def _apply_fields(doc, desired: dict[str, str], evidence: dict[str, object]) -> 
             "changed": before != value,
         }
         if before != value:
+            doc.set(field, value)
+            changed = True
+    return changed
+
+
+def _apply_default_fields(doc, desired: dict[str, str], evidence: dict[str, object]) -> bool:
+    changed = False
+    for field, value in desired.items():
+        before = doc.get(field)
+        evidence[field] = {
+            "before": before,
+            "after": value if not before else before,
+            "changed": not bool(before),
+            "default_only": True,
+        }
+        if not before:
             doc.set(field, value)
             changed = True
     return changed

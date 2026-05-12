@@ -20,7 +20,18 @@ def call_with_cdp(*, base_url: str, method: str, kwargs: dict[str, Any], cdp_url
         context = browser.contexts[0]
         page = context.pages[0] if context.pages else context.new_page()
         if not page.url.startswith(target):
-            page.goto(f"{target}/app", wait_until="domcontentloaded", timeout=60000)
+            page.goto(f"{target}/app", wait_until="networkidle", timeout=60000)
+        try:
+            page.wait_for_function(
+                "() => !!(window.csrf_token || (window.frappe && window.frappe.csrf_token))",
+                timeout=10000,
+            )
+        except Exception:
+            page.reload(wait_until="networkidle", timeout=60000)
+            page.wait_for_function(
+                "() => !!(window.csrf_token || (window.frappe && window.frappe.csrf_token))",
+                timeout=10000,
+            )
         result = page.evaluate(
             """async ({target, method, kwargs}) => {
                 const csrf =
