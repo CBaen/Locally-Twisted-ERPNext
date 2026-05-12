@@ -949,6 +949,9 @@ def _friendly_time_text(value: object) -> str | None:
 
 
 def _rewrite_existing_lead_service_csv() -> int:
+    if not frappe.get_meta("Lead").has_field("custom_services"):
+        return 0
+
     updated = 0
     for lead in frappe.get_all(
         "Lead",
