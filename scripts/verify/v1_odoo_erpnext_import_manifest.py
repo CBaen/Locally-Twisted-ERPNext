@@ -18,6 +18,8 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from _cli import parse_noop_args
+
 
 ROOT = Path(__file__).resolve().parents[2]
 APP_PATH = ROOT / "apps" / "locally_twisted"
@@ -45,6 +47,7 @@ RUNTIME_CONSTANTS = {}
 
 
 def main() -> int:
+    parse_noop_args(__doc__)
     generated_at = datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
     manifest = build_manifest(generated_at)
     OUTPUT_JSON.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")

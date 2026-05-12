@@ -226,6 +226,12 @@
   color: var(--lt-berry);
 }
 
+.lt-lane-faq__item summary:focus-visible {
+  outline: 3px solid var(--lt-berry);
+  outline-offset: 3px;
+  background: rgba(179, 27, 52, 0.06);
+}
+
 .lt-lane-faq__answer {
   padding: 0 0.5rem 1rem;
   color: var(--lt-ink);

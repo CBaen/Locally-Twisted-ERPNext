@@ -95,7 +95,9 @@ python scripts/verify/stripe_amount_parity_contract.py
 2. Cloudflare account control is not confirmed.
 3. Stripe is confirmed on this machine, but it may be the wrong merchant account for LT.
 4. `locallytwisted.com` is still the old/non-Frappe site today.
-5. The worktree is dirty and `main` is ahead of `origin/main`; do not cut DNS from this state.
+
+Before cutover, re-check `git status -sb` and the Frappe Cloud preflight. Do
+not cut DNS from a dirty, ahead, behind, or unreviewed source state.
 
 ## Do Not Do Yet
 
