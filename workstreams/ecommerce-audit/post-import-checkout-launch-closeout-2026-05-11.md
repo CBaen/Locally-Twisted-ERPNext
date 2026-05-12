@@ -36,8 +36,8 @@ The final checkout browser proof covered these products end to end:
 | Product | Slug | Proof status |
 |---|---|---|
 | Easter Balloon Cups | `easter-balloon-cups` | PASS: options, image swap, price, cart line preservation, cart, checkout summary |
-| 7' Butterfly Column | `7-butterfly-column` | PASS: variant option resolves to `7-butterfly-column-REF`, price $120, cart, checkout summary |
-| Graduation Grab n Go | `graduation-grab-n-go` | PASS: variant option resolves to `graduation-grab-n-go-REF`, price $85, cart, checkout summary |
+| 7' Butterfly Column | `7-butterfly-column` | PASS: visible color drawer resolves to `7-butterfly-column-REF`, records `latex colors = Reflex Champage` in `color_recipes`, price $120, cart, checkout summary |
+| Graduation Grab n Go | `graduation-grab-n-go` | PASS: visible color drawer resolves to `graduation-grab-n-go-REF`, records `latex colors = Reflex Champage` in `color_recipes`, price $85, cart, checkout summary |
 | 6' Graduation stands | `6-graduation-stands` | PASS: variant option resolves to `6-graduation-stands-CON`, price $45, image swap, cart, checkout summary |
 | Unicorn Bouquet | `unicorn-bouquet` | PASS: bouquet-size option resolves to `unicorn-bouquet-SMA`, price $35, image swap, cart, checkout summary |
 
@@ -55,6 +55,13 @@ Result:
 
 The proof report is ignored runtime evidence under `output/`; rerun the command when fresh evidence is needed.
 
+2026-05-12 regression update: the proof now selects visible color drawer
+checkboxes instead of the hidden compatibility select, asserts cart
+`configuration.color_recipes`, and calls the non-mutating
+`preview_checkout_totals` API with pickup at `West Jordan` before accepting the
+checkout summary. Fresh proof artifact showed server preview `ok: true`,
+subtotal `$298.00`, tax `$22.20`, and total `$320.20`.
+
 ## Backend Contracts
 
 Current green backend contracts for this slice:
@@ -68,8 +75,8 @@ python scripts/verify/cart_checkout_contract.py
 
 Expected current evidence:
 
-- `product_import_readiness_gate`: PASS with 10 pass, 1 warning, 0 blockers.
-- `post_import_catalog_state`: PASS with 48 included / 5 excluded and priority products ready.
+- `product_import_readiness_gate`: PASS with 11 pass, 1 warning, 0 blockers.
+- `post_import_catalog_state`: PASS with 48 included / 5 excluded, all included products ready, and empty blocker lists.
 - `direct_checkout_target_contract`: PASS for 7' Butterfly Column, Graduation Grab n Go, and 6' Graduation stands; Classic exclusions remain quote-first.
 - `cart_checkout_contract`: PASS, including configured line-key preservation and Unicode/browser line-key parity.
 

@@ -38,6 +38,8 @@ QUOTE_VARIANT_ITEM = "6-color-rainbow-arch-20F"
 QUOTE_SINGLE_SKU_ITEM = "easter-arch"
 RETAIL_VARIANT_TEMPLATE = "unicorn-bouquet"
 RETAIL_VARIANT_ITEM = "unicorn-bouquet-SMA"
+COLOR_RECIPE_TEMPLATE = "7-butterfly-column"
+COLOR_RECIPE_ITEM = "7-butterfly-column-REF"
 SINGLE_SKU_ITEM = "mothers-day-bouquet"
 PRICE_LIST = "Standard Selling"
 MAX_QTY_PER_LINE = 99
@@ -244,6 +246,24 @@ def _review_only_add_on_configuration() -> dict[str, Any]:
     }
 
 
+def _color_recipe_configuration() -> dict[str, Any]:
+    return {
+        "schema_version": CONFIG_VERSION,
+        "item_code": COLOR_RECIPE_ITEM,
+        "website_item_code": COLOR_RECIPE_TEMPLATE,
+        "selected_options": {},
+        "color_recipes": [
+            {
+                "axis": "latex colors",
+                "label": "latex colors",
+                "values": ["Reflex Champage"],
+            }
+        ],
+        "add_ons": [],
+        "customizations": [],
+    }
+
+
 def check_configured_same_sku_cart_lines_stay_separate_and_visible() -> None:
     cart_entries = [
         {"item_code": RETAIL_VARIANT_ITEM, "qty": 1, "configuration": _foil_number_configuration("5")},
@@ -327,6 +347,39 @@ def check_cart_line_key_matches_browser_unicode_serialization() -> None:
     assert_true(
         "\\u2014" not in line_key,
         f"server cart_line_key should match browser JSON.stringify Unicode output, found {line_key!r}",
+    )
+
+
+def check_cart_api_echoes_browser_line_key_for_color_recipes() -> None:
+    configuration = _color_recipe_configuration()
+    browser_line_key = (
+        f"{COLOR_RECIPE_ITEM}::"
+        + json.dumps(configuration, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
+    )
+    data = bench_execute(
+        "locally_twisted.api.cart.get_cart_items",
+        kwargs={
+            "item_codes": [
+                {
+                    "item_code": COLOR_RECIPE_ITEM,
+                    "qty": 1,
+                    "configuration": configuration,
+                    "line_key": browser_line_key,
+                }
+            ]
+        },
+    )
+    items = data.get("items") or []
+    assert_true(len(items) == 1, f"color recipe cart row should return 1 row, found {items}")
+    assert_true(
+        items[0].get("cart_line_key") == browser_line_key,
+        "cart API must echo the browser line key so enriched color recipes still render on /cart",
+    )
+    color_recipes = (items[0].get("configuration") or {}).get("color_recipes") or []
+    assert_true(color_recipes, f"server should retain color recipe evidence, found {items[0]}")
+    assert_true(
+        color_recipes[0].get("status") == "validated_for_checkout",
+        f"server should still validate/enrich color recipes, found {color_recipes[0]}",
     )
 
 
@@ -475,6 +528,7 @@ def main() -> int:
         check_configured_same_sku_cart_lines_stay_separate_and_visible,
         check_multi_digit_add_on_quantity_and_total_are_visible,
         check_cart_line_key_matches_browser_unicode_serialization,
+        check_cart_api_echoes_browser_line_key_for_color_recipes,
         check_cart_and_checkout_templates_fail_loud_on_line_key_mismatch,
         check_product_page_color_selector_uses_recipe_schema,
         check_source_mapper_has_no_product_slug_checkout_override,

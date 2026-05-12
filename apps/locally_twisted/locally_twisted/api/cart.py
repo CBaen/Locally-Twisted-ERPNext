@@ -138,6 +138,29 @@ def _resolve_cart_item_for_sale(item_code, configuration=None):
     }, None
 
 
+def client_cart_line_key_for_display(item_code, configuration=None, submitted_line_key=None):
+    """Return the browser cart-line key to use for display matching.
+
+    The server may enrich a valid configuration, especially color recipes, while
+    resolving display rows. Cart and checkout pages still need to match the
+    exact localStorage line the browser submitted.
+    """
+    computed_line_key = cart_line_key(item_code, configuration)
+    if not isinstance(submitted_line_key, str):
+        return computed_line_key
+
+    clean_line_key = submitted_line_key.strip()
+    if not clean_line_key:
+        return computed_line_key
+
+    has_configuration = isinstance(configuration, dict)
+    if has_configuration and clean_line_key.startswith(f"{item_code}::"):
+        return clean_line_key
+    if not has_configuration and clean_line_key in {item_code, f"{item_code}::"}:
+        return clean_line_key
+    return computed_line_key
+
+
 def resolve_cart_item_for_sale(item_code, raise_on_missing=True, configuration=None):
     """Return the server-trusted cart line for one purchasable Item code."""
     resolved, reason = _resolve_cart_item_for_sale(item_code, configuration=configuration)
@@ -217,10 +240,12 @@ def get_cart_items(item_codes=None):
     clean_entries = []
     for entry in item_codes:
         configuration = None
+        submitted_line_key = None
         qty = 1
         if isinstance(entry, dict):
             code = (entry.get("item_code") or "").strip()
             configuration = entry.get("configuration")
+            submitted_line_key = entry.get("line_key")
             qty = _clean_qty(entry.get("qty") or 1)
         elif isinstance(entry, str):
             code = entry.strip()
@@ -233,7 +258,7 @@ def get_cart_items(item_codes=None):
                 "item_code": code,
                 "qty": qty,
                 "configuration": configuration,
-                "cart_line_key": cart_line_key(code, configuration),
+                "cart_line_key": client_cart_line_key_for_display(code, configuration, submitted_line_key),
             }
         )
 
