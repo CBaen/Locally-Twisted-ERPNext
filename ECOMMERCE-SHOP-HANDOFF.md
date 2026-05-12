@@ -5,7 +5,7 @@ Status as of 2026-05-12 for peer GPT-5.5 Codex/OpenClaw agents.
 ## Current Repository State
 
 - Branch: `main`
-- HEAD / `origin/main`: `3179463 Align homepage container contract with hidden decor`
+- HEAD / `origin/main`: `ab46734 Update ecommerce closeout references`
 - This file is the front-door handoff for the finished local ecommerce shop setup slice.
 - Do not treat current product names/counts/photos as final public catalog approval unless a later real-catalog approval gate says so. The local ERPNext catalog/import/backend architecture is ready; live Frappe Cloud, Stripe, DNS, webhook, and real payment cutover remain separate gates.
 

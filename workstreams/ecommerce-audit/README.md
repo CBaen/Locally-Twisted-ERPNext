@@ -35,7 +35,8 @@ Backend contracts are green for `product_import_readiness_gate`,
 `cart_checkout_contract`. Remaining caveats: 8 review-only add-on axes are
 protected by verified quote-first fallback, the five Classic exclusions remain
 quote-first, the local import evidence is upsert/write rather than a
-delete/recreate transcript, and the shared worktree is dirty.
+delete/recreate transcript. At the 2026-05-12 docs closeout publish state,
+the shared worktree was clean at `ab46734`.
 
 ## 2026-05-11 Storefront Proof And Complex UI Handoff
 
