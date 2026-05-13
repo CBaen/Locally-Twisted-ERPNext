@@ -3,11 +3,16 @@
 from __future__ import annotations
 
 import json
+from functools import lru_cache
+import os
+from pathlib import Path
 from typing import Any
 
 import frappe
 from frappe.utils import flt, fmt_money
 
+from locally_twisted.catalog_contract.axis_projection import live_variant_axis_projection
+from locally_twisted.catalog_contract.pattern_mapper import build_product_pattern_contract as build_source_pattern_contract
 from locally_twisted.catalog_contract.product_page_architecture_contract import (
     build_product_page_architecture_contract,
 )
@@ -25,7 +30,30 @@ def get_variant_attribute_options(item_code: str | None) -> list[dict[str, Any]]
         return []
     rows = get_attributes_and_values(item_code) or []
     required_names = set(required_variant_attribute_names(row.get("attribute") for row in rows))
-    return [row for row in rows if row.get("attribute") in required_names]
+    source_axes = _source_axis_contracts_by_name(item_code)
+    filtered = []
+    for row in rows:
+        attribute = str(row.get("attribute") or "").strip()
+        if attribute not in required_names:
+            continue
+        projection = live_variant_axis_projection(
+            attribute=attribute,
+            values=[_option_value(value) for value in row.get("values") or []],
+            source_axis_contract=source_axes.get(attribute),
+        )
+        filtered.append(
+            {
+                **row,
+                "lt_axis_role": projection["role"],
+                "lt_selector_type": projection["selector_type"],
+                "lt_payload_target": "color_recipes"
+                if projection["role"] == "customization" and is_balloon_color_axis(attribute)
+                else "selected_options",
+                "lt_allows_multiple_values": projection["allows_multiple_values"],
+                "lt_axis_notes": projection["notes"],
+            }
+        )
+    return filtered
 
 
 def get_variant_starting_price(item_code: str | None, price_list: str = PRICE_LIST) -> dict[str, Any] | None:
@@ -260,25 +288,12 @@ def _live_architecture_axes(item_code: str) -> list[dict[str, Any]]:
             continue
         values = [_option_value(value) for value in row.get("values") or []]
         values = [value for value in values if value]
-        color_axis = is_balloon_color_axis(attribute)
-        axes.append(
-            {
-                "name": attribute,
-                "role": "customization" if color_axis else "sale_unit",
-                "values": values,
-                "selector_type": "multi_color_recipe_builder"
-                if color_axis
-                else "chip_group"
-                if len(values) <= 8
-                else "single_select",
-                "source": "erpnext_variant",
-                "status": "ready",
-                "allows_multiple_values": color_axis,
-                "notes": (
-                    "Live Webshop projection; source ProductPatternContract remains audit authority.",
-                ),
-            }
+        projection = live_variant_axis_projection(
+            attribute=attribute,
+            values=values,
+            source_axis_contract=_source_axis_contracts_by_name(item_code).get(attribute),
         )
+        axes.append(projection)
     for option in get_checkout_add_on_options(item_code):
         axes.append(
             {
@@ -309,3 +324,62 @@ def _option_value(value: Any) -> str:
     if isinstance(value, dict):
         return str(value.get("name") or value.get("attribute_value") or value.get("value") or "").strip()
     return str(value or "").strip()
+
+
+@lru_cache(maxsize=256)
+def _source_axis_contracts_by_name(item_code: str | None) -> dict[str, dict[str, Any]]:
+    source_product = _source_product_for_item(item_code)
+    if not source_product:
+        return {}
+    try:
+        contract = build_source_pattern_contract(source_product).to_dict()
+    except Exception:
+        return {}
+    return {
+        str(axis.get("name") or "").strip(): axis
+        for axis in contract.get("axis_contracts") or []
+        if axis.get("name")
+    }
+
+
+@lru_cache(maxsize=1)
+def _source_products_by_slug() -> dict[str, dict[str, Any]]:
+    source = None
+    for catalog_path in _source_catalog_paths():
+        try:
+            if catalog_path.exists():
+                source = json.loads(catalog_path.read_text(encoding="utf-8"))
+                break
+        except Exception:
+            continue
+    if not source:
+        return {}
+    return {
+        str(product.get("slug") or "").strip(): product
+        for product in source.get("products") or []
+        if product.get("slug")
+    }
+
+
+def _source_catalog_paths() -> tuple[Path, ...]:
+    configured = []
+    try:
+        configured.append(frappe.conf.get("lt_source_catalog_path"))
+    except Exception:
+        pass
+    configured.append(os.environ.get("LT_SOURCE_CATALOG_PATH"))
+    paths = [Path(value) for value in configured if value]
+    paths.append(Path("/tmp/lt-odoo-live-catalog.json"))
+    try:
+        app_root = Path(frappe.get_app_path("locally_twisted")).parent
+        paths.append(app_root / "_resources" / "odoo-live" / "catalog.json")
+    except Exception:
+        pass
+    return tuple(dict.fromkeys(paths))
+
+
+def _source_product_for_item(item_code: str | None) -> dict[str, Any] | None:
+    item_code = str(item_code or "").strip()
+    if not item_code:
+        return None
+    return _source_products_by_slug().get(item_code)

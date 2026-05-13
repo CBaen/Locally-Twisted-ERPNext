@@ -3990,7 +3990,16 @@ and block checkout. Frontend JS may render and submit this contract but must not
 own checkout eligibility, pricing truth, or document preservation.
 Product-specific architecture branches are disallowed.
 
+Post-review constraint: live ERPNext variant axes must not become
+`customization` only because the attribute name looks like a balloon-color
+axis. The live projection must use source/backend recipe authority. If that
+authority is absent, even a color-looking ERPNext variant axis remains a
+sale-unit control targeting `selected_options`. If the source explicitly marks
+single-color sale-unit behavior, that explicit marker wins over recipe-looking
+patterns.
+
 **Receipts:** `apps/locally_twisted/locally_twisted/catalog_contract/product_page_architecture_contract.py`;
+`apps/locally_twisted/locally_twisted/catalog_contract/axis_projection.py`;
 `apps/locally_twisted/locally_twisted/product_options.py`;
 `scripts/verify/product_page_architecture_contract.py`;
 `scripts/verify/product_page_architecture_contract_contract.py`;

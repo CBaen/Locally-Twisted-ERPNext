@@ -459,6 +459,14 @@ Verified 2026-05-10:
 - `npm run test:product-quote-first` now also proves the emitted
   `.js-lt-product-page-architecture` JSON on quote-first and ready-to-order
   product pages.
+- Post-review regression, 2026-05-12: live color-axis projection now uses the
+  carried source/backend contract instead of classifying by attribute name.
+  Source recipe axes such as `7-butterfly-column` stay `customization` ->
+  `color_recipes`; ERPNext-only color variant axes without that source signal
+  stay `sale_unit` -> `selected_options`. Browser proof now opens
+  `7-butterfly-column`, selects a visible color, adds it to the local cart, and
+  asserts the payload keeps the color in `color_recipes` with no color in
+  `selected_options`.
 
 ## Backend product-page architecture contract - 2026-05-12
 

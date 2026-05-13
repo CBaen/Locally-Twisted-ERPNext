@@ -17,6 +17,7 @@ from locally_twisted.catalog_contract.addon_rules import (
     classify_axis,
     known_add_on_contracts_for_axis,
 )
+from locally_twisted.catalog_contract.axis_projection import source_axis_is_explicit_single_color_sale_unit
 from locally_twisted.catalog_contract.color_rules import is_balloon_color_axis
 from locally_twisted.catalog_contract.pattern_mapper import (
     build_product_pattern_contract as build_source_pattern_contract,
@@ -415,13 +416,18 @@ def _axis_contract_from_source(
     role: AxisRole = "sale_unit"
     allows_multiple = False
     if is_balloon_color_axis(axis_name):
-        role = "customization"
-        selector_type = "multi_color_recipe_builder"
-        notes.append("Source color axes require multi-color/recipe-capable configuration before checkout.")
-        notes.append(
-            "One-color variant lookup is compatibility-only when the source contract explicitly says single-color sale unit."
-        )
-        allows_multiple = True
+        if source_axis_is_explicit_single_color_sale_unit(axis):
+            role = "sale_unit"
+            selector_type = "single_select"
+            notes.append("Source explicitly marks this color axis as a single-color sale unit.")
+        else:
+            role = "customization"
+            selector_type = "multi_color_recipe_builder"
+            notes.append("Source color axes require multi-color/recipe-capable configuration before checkout.")
+            notes.append(
+                "One-color variant lookup is compatibility-only when the source contract explicitly says single-color sale unit."
+            )
+            allows_multiple = True
 
     if _looks_like_customization_axis(axis_name):
         role = "customization"
@@ -787,12 +793,7 @@ def _source_freeform_axes(source_pattern: dict[str, Any]) -> tuple[str, ...]:
 
 
 def _explicit_single_color_sale_unit(axis: dict[str, Any]) -> bool:
-    patterns = {str(pattern) for pattern in axis.get("patterns") or ()}
-    return bool(
-        patterns & {"single_color_sale_unit", "explicit_single_color_sale_unit"}
-        or _clean(axis.get("sale_unit_mode")) == "single_color"
-        or _clean(axis.get("pricing_strategy")) == "single_color_sale_unit"
-    )
+    return source_axis_is_explicit_single_color_sale_unit(axis)
 
 
 def _selected_options(contract: ProductPatternContract, selected_config: dict[str, Any]) -> dict[str, str]:

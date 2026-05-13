@@ -62,7 +62,9 @@ page controls -> versioned payload -> resolver fields -> SO/SI/Quotation line
 parity. Product rows and the complex scaffold are downstream evidence only, not
 the architecture. Guards: `python scripts/verify/product_page_architecture_contract_contract.py`,
 `python scripts/verify/product_page_architecture_contract.py`, and
-`npm run test:product-quote-first`.
+`npm run test:product-quote-first`. Post-review hardening now requires live
+color variant axes to use source/backend recipe authority before targeting
+`color_recipes`; otherwise they remain sale-unit `selected_options`.
 
 **Frappe Cloud/Cloudflare/Stripe launch state (2026-05-12):** Source handoff is
 `LT-LAUNCH-RUNBOOK.md`, with the deeper technical gate at

@@ -23,6 +23,7 @@ from locally_twisted.catalog_contract.product_page_architecture_contract import 
     build_product_page_architecture_report,
     validate_product_page_architecture_contract,
 )
+from locally_twisted.catalog_contract.axis_projection import live_variant_axis_projection  # noqa: E402
 
 
 class ProductPageArchitectureContractTest(unittest.TestCase):
@@ -79,6 +80,66 @@ class ProductPageArchitectureContractTest(unittest.TestCase):
         broken["controls"][0]["payload_target"] = "selected_options"
         failures = validate_product_page_architecture_contract(broken)
         self.assertTrue(any("color customization must target color_recipes" in failure for failure in failures))
+
+    def test_color_sale_unit_variant_axis_targets_selected_options(self) -> None:
+        axis = live_variant_axis_projection(
+            attribute="latex colors",
+            values=["White", "Gold"],
+            source_axis_contract=None,
+        )
+        contract = build_product_page_architecture_contract(
+            _row(axes=[axis], status="checkout_ready", lane="checkout")
+        ).to_dict()
+
+        controls = {control["axis_name"]: control for control in contract["controls"]}
+        self.assertEqual(controls["latex colors"]["role"], "sale_unit")
+        self.assertEqual(controls["latex colors"]["payload_target"], "selected_options")
+        self.assertEqual(controls["latex colors"]["selector_type"], "chip_group")
+        self.assertFalse(controls["latex colors"]["allows_multiple_values"])
+        self.assertEqual(validate_product_page_architecture_contract(contract), [])
+
+    def test_source_color_recipe_axis_targets_color_recipes(self) -> None:
+        axis = live_variant_axis_projection(
+            attribute="latex colors",
+            values=["White", "Gold"],
+            source_axis_contract={
+                "name": "latex colors",
+                "patterns": ["large_single_choice_color", "multi_color_recipe_customization"],
+                "selector_key": "multi_color_recipe_builder",
+            },
+        )
+        contract = build_product_page_architecture_contract(
+            _row(axes=[axis], status="checkout_ready", lane="checkout")
+        ).to_dict()
+
+        controls = {control["axis_name"]: control for control in contract["controls"]}
+        self.assertEqual(controls["latex colors"]["role"], "customization")
+        self.assertEqual(controls["latex colors"]["payload_target"], "color_recipes")
+        self.assertEqual(controls["latex colors"]["selector_type"], "multi_color_recipe_builder")
+        self.assertTrue(controls["latex colors"]["allows_multiple_values"])
+        self.assertEqual(validate_product_page_architecture_contract(contract), [])
+
+    def test_explicit_single_color_source_axis_stays_sale_unit(self) -> None:
+        axis = live_variant_axis_projection(
+            attribute="latex colors",
+            values=["White", "Gold"],
+            source_axis_contract={
+                "name": "latex colors",
+                "patterns": [
+                    "large_single_choice_color",
+                    "multi_color_recipe_customization",
+                    "explicit_single_color_sale_unit",
+                ],
+            },
+        )
+        contract = build_product_page_architecture_contract(
+            _row(axes=[axis], status="checkout_ready", lane="checkout")
+        ).to_dict()
+
+        controls = {control["axis_name"]: control for control in contract["controls"]}
+        self.assertEqual(controls["latex colors"]["role"], "sale_unit")
+        self.assertEqual(controls["latex colors"]["payload_target"], "selected_options")
+        self.assertEqual(validate_product_page_architecture_contract(contract), [])
 
     def test_report_fails_structural_contract_errors_only(self) -> None:
         report = build_product_page_architecture_report(

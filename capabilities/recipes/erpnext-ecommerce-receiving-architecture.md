@@ -71,6 +71,12 @@ OpenClaw cockpit witness:
   Quotation/Sales Order/Sales Invoice line parity to the ERPNext document
   layer. Product pages emit the architecture JSON for browser proof, and
   product-specific rules are explicitly not allowed.
+- 2026-05-12 post-review hardening: live page projection must not infer
+  customization from a color-like attribute name alone. Use
+  `axis_projection.live_variant_axis_projection`: source/backend recipe
+  semantics keep color axes in `color_recipes`; absent recipe authority keeps
+  the ERPNext variant axis in `selected_options`; explicit single-color
+  sale-unit markers override recipe-looking patterns.
 - Test products are proof cases only: Unicorn Bouquet and Classic Arch.
 - Product template types are logic/process classes:
   - `simple_product`: few options, little customization, but still backend-driven.

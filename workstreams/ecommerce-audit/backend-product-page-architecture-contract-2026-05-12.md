@@ -17,14 +17,25 @@ allowed by this contract.
 
 ## Code
 
+- `apps/locally_twisted/locally_twisted/catalog_contract/axis_projection.py`
+  owns the shared live/source axis projection rule. A balloon-color-looking
+  ERPNext variant axis stays `sale_unit` unless a source/backend contract marks
+  it as a color recipe/customization axis; explicit single-color sale-unit
+  source markers win over recipe patterns.
 - `apps/locally_twisted/locally_twisted/catalog_contract/product_page_architecture_contract.py`
   builds and validates `lt-product-page-architecture-contract-v1`.
 - `apps/locally_twisted/locally_twisted/verify/product_page_architecture_contract.py`
-  joins the current ProductPatternContract report to the architecture contract.
+  joins the current ProductPatternContract report to the architecture contract
+  and checks live color-axis projection against the source/backend role.
 - `apps/locally_twisted/locally_twisted/product_options.py` exposes the live
-  Webshop projection for product templates.
+  Webshop projection for product templates. It reads the source catalog from
+  `lt_source_catalog_path`, `LT_SOURCE_CATALOG_PATH`,
+  `/tmp/lt-odoo-live-catalog.json`, or the app-local `_resources` path.
 - `apps/locally_twisted/locally_twisted/templates/generators/item/item_details.html`
   emits `.js-lt-product-page-architecture` JSON on product pages.
+- `apps/locally_twisted/locally_twisted/templates/generators/item/item_configure.html`
+  and `item_quote_first.html` use the backend-emitted selector/payload target
+  instead of treating every balloon-color-looking axis as a multi-color drawer.
 - `scripts/verify/product_page_architecture_contract.py` generates
   `output/product-page-architecture-contract.*`.
 - `scripts/verify/product_page_architecture_contract_contract.py` is the fast
@@ -40,6 +51,9 @@ allowed by this contract.
 - Sale-unit axes target `selected_options`.
 - Color customization axes target `color_recipes`; checkout must not treat them
   as single-select `selected_options`.
+- Live ERPNext variant axes are not classified by attribute name alone. Source
+  recipe patterns emit `color_recipes`; missing recipe/source authority leaves
+  the axis as sale-unit `selected_options`.
 - Approved priced add-ons target `add_ons`.
 - Review-only/unmapped add-ons target `quote_context` and block checkout.
 - Browser payload is `lt-product-config-v1`.
@@ -55,9 +69,10 @@ Green:
 - `python scripts/verify/product_page_architecture_contract_contract.py`
 - `python scripts/verify/product_page_architecture_contract.py`
 - `python scripts/verify/product_page_runtime_contract.py`
-- `node --check scripts/verify/product_quote_first_experience.spec.js`
+- `docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.direct_checkout_target_contract.run`
 - `npm run test:product-quote-first`
-- `python scripts/verify/verifier_cli_contract.py`
+- `npm run test:form-experience`
+- `python scripts/verify/ecommerce_pause_contract.py`
 
 Expected blocked-shape gate:
 
@@ -66,6 +81,12 @@ Expected blocked-shape gate:
 Result: `technical_architecture_ok: True`; `import_reopen_ok: False` only
 because `public_ecommerce_reopen` is blocked by the current paused ecommerce
 site config.
+
+Not counted as a pass in the post-review run: `python
+scripts/verify/website_launch_verify.py --with-contact-smoke` hit the command
+timeout/reporting pipe before clean closeout. The targeted form-experience
+suite passed, so this broader launch verifier needs a separate rerun if launch
+verification is the active question.
 
 ## Handoff
 

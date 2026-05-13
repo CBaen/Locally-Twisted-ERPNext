@@ -20,11 +20,14 @@
             {%- set attr_name = row.attribute -%}
             {%- set field_id = "lt-quote-attr-" ~ loop.index -%}
             {%- set values = row.get("values") or [] -%}
-            {%- set is_color_drawer = is_balloon_color_attribute(attr_name) -%}
-            {%- set is_chips = (values | length <= 8) and not is_color_drawer -%}
+            {%- set selector_type = row.get("lt_selector_type") or "" -%}
+            {%- set is_color_drawer = selector_type == "multi_color_recipe_builder" -%}
+            {%- set is_chips = selector_type == "chip_group" or ((values | length <= 8) and not is_color_drawer) -%}
 
             <div class="lt-product__attr lt-product__quote-attr"
                  data-attribute-name="{{ attr_name }}"
+                 data-axis-role="{{ row.get('lt_axis_role') or 'sale_unit' }}"
+                 data-payload-target="{{ row.get('lt_payload_target') or 'selected_options' }}"
                  data-display-type="{{ 'color-drawer' if is_color_drawer else ('chips' if is_chips else 'select') }}">
                 <label for="{{ field_id }}" class="lt-product__attr-label">
                     {{ _(attr_name) }}

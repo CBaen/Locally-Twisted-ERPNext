@@ -64,9 +64,16 @@ async function chooseReadyToOrderOption(page) {
 	await firstChoice.check({ force: true });
 }
 
+async function chooseFirstColorRecipeOption(page) {
+	const firstColor = page.locator('.lt-product__attr[data-payload-target="color_recipes"] input.js-lt-color-radio').first();
+	await expect(firstColor).toBeVisible();
+	await firstColor.check({ force: true });
+}
+
 async function primeBrowser(page) {
 	await page.addInitScript(() => {
 		window.localStorage.setItem("lt_cookie_consent", "declined");
+		window.localStorage.removeItem("lt_cart");
 		document.cookie = "lt_cookie_consent=declined; path=/; SameSite=Lax";
 	});
 	await loginAsOperator(page);
@@ -151,5 +158,41 @@ for (const viewport of VIEWPORTS) {
 		await expectNoHorizontalOverflow(page);
 		await chooseReadyToOrderOption(page);
 		await expect(page.locator("#lt-add-to-cart-variant")).toBeEnabled();
+	});
+
+	test(`source-backed checkout color axes stay color recipes on ${viewport.name}`, async ({ page }) => {
+		await page.setViewportSize({ width: viewport.width, height: viewport.height });
+		await primeBrowser(page);
+		await page.goto(new URL("/shop-items/columns/7-butterfly-column", BASE_URL).toString(), {
+			waitUntil: "domcontentloaded",
+		});
+
+		await expect(page.locator(".lt-product__configure")).toBeVisible();
+		const architecture = await expectArchitectureContract(page, "checkout");
+		const colorControl = architecture.controls.find((control) => control.axis_name === "latex colors");
+		expect(colorControl).toEqual(
+			expect.objectContaining({
+				role: "customization",
+				payload_target: "color_recipes",
+				selector_type: "multi_color_recipe_builder",
+				source: "combined",
+			}),
+		);
+		await expect(page.locator('.lt-product__attr[data-payload-target="color_recipes"]')).toBeVisible();
+		await expectNoHorizontalOverflow(page);
+		await chooseFirstColorRecipeOption(page);
+		await expect(page.locator("#lt-add-to-cart-variant")).toBeEnabled();
+		await page.locator("#lt-add-to-cart-variant").click();
+
+		const cart = await page.evaluate(() => JSON.parse(window.localStorage.getItem("lt_cart") || "{}"));
+		expect(cart.items).toHaveLength(1);
+		const configuration = cart.items[0].configuration;
+		expect(configuration.selected_options).toEqual({});
+		expect(configuration.color_recipes).toEqual([
+			expect.objectContaining({
+				axis: "latex colors",
+				values: expect.arrayContaining(["Reflex Champage"]),
+			}),
+		]);
 	});
 }
