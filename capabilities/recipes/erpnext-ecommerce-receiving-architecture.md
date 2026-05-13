@@ -62,6 +62,15 @@ OpenClaw cockpit witness:
   lane-flip candidates, 6 multi-color UI cases, 20 add-on/conditional blocked
   products, and 5 needs-review/missing products. This report supersedes older
   heuristic quote-first flip lists and still authorizes no live update.
+- 2026-05-12 backend product-page architecture contract:
+  `lt-product-page-architecture-contract-v1` is now the generic receiving
+  architecture between ProductPatternContract/source semantics and product-page
+  controls. It maps sale-unit axes to `selected_options`, color customization
+  axes to `color_recipes`, approved add-ons to `add_ons`, review-only axes to
+  `quote_context`, server-derived resolver fields to the backend, and
+  Quotation/Sales Order/Sales Invoice line parity to the ERPNext document
+  layer. Product pages emit the architecture JSON for browser proof, and
+  product-specific rules are explicitly not allowed.
 - Test products are proof cases only: Unicorn Bouquet and Classic Arch.
 - Product template types are logic/process classes:
   - `simple_product`: few options, little customization, but still backend-driven.
@@ -243,6 +252,8 @@ Primary verifier:
 ```powershell
 python scripts/verify/complex_checkout_scaffold_contract.py
 python scripts/verify/complex_checkout_scaffold.py
+python scripts/verify/product_page_architecture_contract_contract.py
+python scripts/verify/product_page_architecture_contract.py
 python scripts/verify/product_page_architecture_readiness.py --report output/product-page-architecture-readiness.json
 python scripts/verify/product_page_runtime_contract.py
 python scripts/verify/product_add_on_dependency_contract.py

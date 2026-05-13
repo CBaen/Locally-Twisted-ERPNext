@@ -82,6 +82,22 @@ async function expectNoHorizontalOverflow(page) {
 	);
 }
 
+async function expectArchitectureContract(page, expectedLane) {
+	const node = page.locator(".js-lt-product-page-architecture").first();
+	await expect(node).toBeAttached();
+	const contract = JSON.parse(await node.textContent());
+	expect(contract.schema_version).toBe("lt-product-page-architecture-contract-v1");
+	expect(contract.commerce_lane).toBe(expectedLane);
+	expect(contract.product_specific_rules_allowed).toBe(false);
+	expect(contract.payload_contract.client_payload_keys).toEqual(
+		expect.arrayContaining(["selected_options", "color_recipes", "add_ons", "customizations"]),
+	);
+	expect(contract.payload_contract.server_derived_keys).toEqual(
+		expect.arrayContaining(["resolved_item_code", "price_provenance", "readable_summary", "canonical_cart_line_key"]),
+	);
+	return contract;
+}
+
 for (const viewport of VIEWPORTS) {
 	test(`quote-first product page carries selected details into the contact form on ${viewport.name}`, async ({ page }) => {
 		await page.setViewportSize({ width: viewport.width, height: viewport.height });
@@ -92,6 +108,8 @@ for (const viewport of VIEWPORTS) {
 
 		await expect(page.locator(".lt-product__cart--quote-first")).toBeVisible();
 		await expect(page.locator(".lt-product__configure")).toHaveCount(0);
+		const architecture = await expectArchitectureContract(page, "quote_first");
+		expect(architecture.controls.some((control) => control.payload_target === "color_recipes")).toBe(true);
 		await expectNoHorizontalOverflow(page);
 		await chooseFirstVisibleOption(page);
 		await page.locator('[data-customization-key="color_notes"]').fill("Reflex Gold and Navy");
@@ -127,6 +145,9 @@ for (const viewport of VIEWPORTS) {
 		await expect(page.locator(".lt-product__configure")).toBeVisible();
 		await expect(page.locator(".lt-product__cart--quote-first")).toHaveCount(0);
 		await expect(page.locator(".lt-product__addons")).toBeVisible();
+		const architecture = await expectArchitectureContract(page, "checkout");
+		expect(architecture.controls.some((control) => control.payload_target === "selected_options")).toBe(true);
+		expect(architecture.controls.some((control) => control.payload_target === "add_ons")).toBe(true);
 		await expectNoHorizontalOverflow(page);
 		await chooseReadyToOrderOption(page);
 		await expect(page.locator("#lt-add-to-cart-variant")).toBeEnabled();

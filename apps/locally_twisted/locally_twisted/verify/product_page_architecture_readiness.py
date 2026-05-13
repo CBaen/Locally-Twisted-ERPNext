@@ -24,9 +24,13 @@ PUBLIC_REOPEN = "public_reopen"
 OUT_OF_SCOPE_DEFERRED = "out_of_scope_deferred"
 
 
-def run() -> dict[str, object]:
+def run(source_catalog_path: str | None = None) -> dict[str, object]:
     """Return a JSON-safe architecture readiness report."""
     contract_results = {
+        "page_architecture": _run_contract(
+            "locally_twisted.verify.product_page_architecture_contract.run",
+            kwargs={"source_catalog_path": source_catalog_path} if source_catalog_path else None,
+        ),
         "runtime": _run_contract("locally_twisted.verify.product_page_runtime_contract.run"),
         "add_on_dependency": _run_contract("locally_twisted.verify.product_add_on_dependency_contract.run"),
         "quote_customization": _run_contract("locally_twisted.verify.product_quote_customization_contract.run"),
@@ -95,6 +99,7 @@ def run() -> dict[str, object]:
 
 
 def _criteria(contract_results: dict[str, dict[str, object]], public_ecommerce_paused: bool) -> list[dict[str, object]]:
+    page_architecture = _contract_ok(contract_results, "page_architecture")
     runtime = _contract_ok(contract_results, "runtime")
     add_on_dependency = _contract_ok(contract_results, "add_on_dependency")
     quote_customization = _contract_ok(contract_results, "quote_customization")
@@ -128,6 +133,22 @@ def _criteria(contract_results: dict[str, dict[str, object]], public_ecommerce_p
                 "locally_twisted/verify/product_page_runtime_contract.py",
             ],
             verifiers=["python scripts/verify/product_page_runtime_contract.py"],
+        ),
+        _row(
+            "backend_driven_product_page_contract",
+            PASS if page_architecture else BLOCKED,
+            "Product pages have one generic receiving contract from source/ERPNext axis semantics to controls, versioned payload, resolver boundary, and document parity.",
+            blocker=None if page_architecture else _contract_blocker(contract_results, "page_architecture"),
+            evidence=[
+                "locally_twisted/catalog_contract/product_page_architecture_contract.py",
+                "locally_twisted/product_options.py",
+                "locally_twisted/templates/generators/item/item_details.html",
+                "locally_twisted/verify/product_page_architecture_contract.py",
+            ],
+            verifiers=[
+                "python scripts/verify/product_page_architecture_contract_contract.py",
+                "python scripts/verify/product_page_architecture_contract.py",
+            ],
         ),
         _row(
             "line_level_order_invoice_preservation",
@@ -350,9 +371,9 @@ def _row(
     }
 
 
-def _run_contract(method: str) -> dict[str, object]:
+def _run_contract(method: str, *, kwargs: dict[str, object] | None = None) -> dict[str, object]:
     try:
-        result = frappe.get_attr(method)()
+        result = frappe.get_attr(method)(**(kwargs or {}))
     except Exception:
         return {"status": BLOCKED, "method": method, "failures": [frappe.get_traceback()]}
     if result.get("ok") is True:

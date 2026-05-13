@@ -3966,3 +3966,34 @@ The pattern that worked: read the Odoo source → write a Python script targetin
 **Receipts:** `workstreams/event-playground.md`; `scripts/verify/event_playground.spec.js`; `capabilities/INDEX.md`; `CODING-HANDOFF.md`; `locally-twisted-queue.md`.
 
 **Decided by:** GL direct instruction to move the design studio docs to the standalone design-studio repo, 2026-05-11.
+
+---
+
+## 2026-05-12 - Product-page architecture is a generic receiving contract, not a product scaffold
+
+**Decision:** Product-page ecommerce architecture is owned by
+`lt-product-page-architecture-contract-v1`. Product names, proof products,
+checkout candidate lists, and complex scaffold stages are evidence against that
+contract, not the architecture itself.
+
+**Reasoning:** GL corrected a layer error: discussing products and scaffold
+stages does not satisfy the software architecture requirement. The reusable
+architecture must define how source/ERPNext axes become controls, how customer
+choices enter `lt-product-config-v1`, how the server derives item/price/summary
+and cart-line identity, and how Quotation/Sales Order/Sales Invoice lines
+preserve meaning.
+
+**Implementation boundary:** Sale-unit axes target `selected_options`; color
+customization axes target `color_recipes`; approved priced add-ons target
+`add_ons`; review-only add-ons and unmapped source axes target `quote_context`
+and block checkout. Frontend JS may render and submit this contract but must not
+own checkout eligibility, pricing truth, or document preservation.
+Product-specific architecture branches are disallowed.
+
+**Receipts:** `apps/locally_twisted/locally_twisted/catalog_contract/product_page_architecture_contract.py`;
+`apps/locally_twisted/locally_twisted/product_options.py`;
+`scripts/verify/product_page_architecture_contract.py`;
+`scripts/verify/product_page_architecture_contract_contract.py`;
+`workstreams/ecommerce-audit/backend-product-page-architecture-contract-2026-05-12.md`.
+
+**Decided by:** GL correction and Codex implementation, 2026-05-12.

@@ -28,6 +28,15 @@ from locally_twisted.catalog_contract.erpnext_pattern_contract import (
     canonical_cart_line_key,
 )
 from locally_twisted.catalog_contract.media_classification import build_media_classification_packet
+from locally_twisted.catalog_contract.product_page_architecture_contract import (
+    ProductPageArchitectureContract,
+    ProductPageControlContract,
+    ProductPageDocumentParityContract,
+    ProductPagePayloadContract,
+    build_product_page_architecture_contract,
+    build_product_page_architecture_report,
+    validate_product_page_architecture_contract,
+)
 from locally_twisted.catalog_contract.pattern_mapper import (
     AxisPatternContract,
     MediaRoleRequirement,
@@ -53,6 +62,10 @@ __all__ = [
     "OptionDependencyMatrixContract",
     "ProductPatternContract",
     "ProductPatternReport",
+    "ProductPageArchitectureContract",
+    "ProductPageControlContract",
+    "ProductPageDocumentParityContract",
+    "ProductPagePayloadContract",
     "ProductPageContract",
     "RequiredOptionAxisContract",
     "ServerBoundaryContract",
@@ -61,9 +74,12 @@ __all__ = [
     "available_options_for_selection",
     "build_erpnext_product_pattern_report",
     "build_media_classification_packet",
+    "build_product_page_architecture_contract",
+    "build_product_page_architecture_report",
     "build_product_pattern_contract",
     "build_product_pattern_report",
     "build_price_review_packet",
     "build_product_page_contract",
     "canonical_cart_line_key",
+    "validate_product_page_architecture_contract",
 ]

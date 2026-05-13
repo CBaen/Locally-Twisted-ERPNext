@@ -411,6 +411,16 @@ Verified 2026-05-10:
   posture through `website_launch_verify.py --with-a11y --with-contact-smoke`;
   open-commerce checks remain a separate regression gate when the switch is
   intentionally reopened.
+- `python scripts/verify/product_page_architecture_contract_contract.py` PASS.
+  Current coverage proves the generic product-page architecture maps sale-unit
+  axes to `selected_options`, color customization axes to `color_recipes`,
+  approved add-ons to `add_ons`, review-only add-ons to `quote_context`, and
+  forbids product-specific architecture rules.
+- `python scripts/verify/product_page_architecture_contract.py` PASS. Current
+  source/live coverage checks 53 products, 18 checkout-allowed and 35
+  quote-first-allowed, with backend-owned payload targets and SO/SI/Quotation
+  parity. Generated evidence lives under ignored
+  `output/product-page-architecture-contract.*`.
 - `python scripts/verify/lead_backend_intake_parity.py` PASS.
 - `python scripts/verify/customer_contact_points_contract.py` PASS.
 - `python scripts/verify/customer_email_policy_contract.py` PASS.
@@ -446,6 +456,28 @@ Verified 2026-05-10:
   were restored to `needs_review` afterward.
 - `python scripts/verify/verifier_cli_contract.py` PASS.
 - `python scripts/dev/clear_website_cache.py` completed after Jinja/CSS edits.
+- `npm run test:product-quote-first` now also proves the emitted
+  `.js-lt-product-page-architecture` JSON on quote-first and ready-to-order
+  product pages.
+
+## Backend product-page architecture contract - 2026-05-12
+
+Implemented `lt-product-page-architecture-contract-v1` as the corrected
+architecture layer between ProductPatternContract/source semantics and rendered
+product-page controls. This is not a product accommodation list.
+
+The contract now owns:
+
+- axis role to payload target mapping;
+- `lt-product-config-v1` client payload shape;
+- server-derived resolver fields: resolved item, price provenance, readable
+  summary, and canonical cart-line key;
+- Quotation Item, Sales Order Item, and Sales Invoice Item line-field parity;
+- no-product-specific-rule enforcement;
+- live Webshop projection emitted from `item_details.html` for page JS/tests.
+
+Feature handoff:
+`workstreams/ecommerce-audit/backend-product-page-architecture-contract-2026-05-12.md`.
 
 Still not complete:
 

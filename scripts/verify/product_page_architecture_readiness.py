@@ -20,19 +20,19 @@ CONTAINER = "locally-twisted-erpnext-v15-backend-1"
 SITE = "frontend"
 METHOD = "locally_twisted.verify.product_page_architecture_readiness.run"
 ROOT = Path(__file__).resolve().parents[2]
+SOURCE_CATALOG = ROOT / "_resources" / "odoo-live" / "catalog.json"
+CONTAINER_SOURCE_CATALOG = "/tmp/lt-odoo-live-catalog.json"
 
 
 class ArchitectureReadinessFail(Exception):
     pass
 
 
-def bench_execute() -> dict[str, Any]:
-    proc = subprocess.run(
-        ["docker", "exec", CONTAINER, "bench", "--site", SITE, "execute", METHOD],
-        text=True,
-        capture_output=True,
-        timeout=90,
-    )
+def bench_execute(*, kwargs: dict[str, Any] | None = None) -> dict[str, Any]:
+    cmd = ["docker", "exec", CONTAINER, "bench", "--site", SITE, "execute", METHOD]
+    if kwargs is not None:
+        cmd.extend(["--kwargs", json.dumps(kwargs)])
+    proc = subprocess.run(cmd, text=True, capture_output=True, timeout=180)
     if proc.returncode != 0:
         raise ArchitectureReadinessFail(
             f"bench execute failed\nSTDOUT:\n{proc.stdout}\nSTDERR:\n{proc.stderr}"
@@ -58,7 +58,8 @@ def main() -> int:
     args = parser.parse_args()
 
     try:
-        result = bench_execute()
+        copy_source_catalog_to_container()
+        result = bench_execute(kwargs={"source_catalog_path": CONTAINER_SOURCE_CATALOG})
     except ArchitectureReadinessFail as exc:
         print(f"[PRODUCT PAGE ARCHITECTURE READINESS] FAIL\n  - {exc}")
         return 1
@@ -113,6 +114,21 @@ def _rooted(path: str) -> Path:
     if not candidate.is_absolute():
         candidate = ROOT / candidate
     return candidate.resolve()
+
+
+def copy_source_catalog_to_container() -> None:
+    if not SOURCE_CATALOG.exists():
+        raise ArchitectureReadinessFail(f"missing host source catalog: {SOURCE_CATALOG.relative_to(ROOT)}")
+    proc = subprocess.run(
+        ["docker", "cp", str(SOURCE_CATALOG), f"{CONTAINER}:{CONTAINER_SOURCE_CATALOG}"],
+        text=True,
+        capture_output=True,
+        timeout=60,
+    )
+    if proc.returncode != 0:
+        raise ArchitectureReadinessFail(
+            f"docker cp failed for source catalog\nSTDOUT:\n{proc.stdout}\nSTDERR:\n{proc.stderr}"
+        )
 
 
 if __name__ == "__main__":

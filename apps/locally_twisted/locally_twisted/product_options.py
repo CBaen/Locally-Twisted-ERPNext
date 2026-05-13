@@ -2,13 +2,18 @@
 
 from __future__ import annotations
 
+import json
 from typing import Any
 
 import frappe
 from frappe.utils import flt, fmt_money
 
+from locally_twisted.catalog_contract.product_page_architecture_contract import (
+    build_product_page_architecture_contract,
+)
 from locally_twisted.catalog_variant_rules import required_variant_attribute_names
 from locally_twisted.catalog_contract.color_rules import grouped_colors, is_balloon_color_axis
+from locally_twisted.catalog_contract.product_pattern_contract import LINE_CONFIGURATION_FIELDS
 from locally_twisted.commerce_rules import PRICE_LIST
 from locally_twisted.product_page_runtime import ADD_ON_ITEM_CONTRACTS, product_page_contract_for_website_item
 from webshop.webshop.variant_selector.utils import get_attributes_and_values
@@ -178,3 +183,129 @@ def get_product_page_runtime_context(item_code: str | None) -> dict[str, Any]:
         "is_simple_product": product_page_type == "simple_product",
         "needs_review": product_page_type == "needs_review" or commerce_lane == "needs_review",
     }
+
+
+def get_product_page_architecture_context(item_code: str | None) -> dict[str, Any]:
+    """Return backend-emitted product-page receiving architecture for templates.
+
+    This is the live Webshop projection of the deeper source/ProductPattern
+    contract. It gives the browser a generic contract shape without making the
+    browser the authority for checkout eligibility, pricing, or document
+    preservation.
+    """
+
+    item_code = str(item_code or "").strip()
+    runtime = product_page_contract_for_website_item(item_code)
+    commerce_lane = runtime.get("commerce_lane") or "needs_review"
+    page_type = runtime.get("product_page_type") or "needs_review"
+    axes = _live_architecture_axes(item_code)
+    checkout_status = "checkout_ready" if commerce_lane == "checkout" else "lane_mapping_only"
+    architecture = build_product_page_architecture_contract(
+        {
+            "schema_version": "lt-live-product-page-architecture-projection-v1",
+            "slug": item_code,
+            "item_code": item_code,
+            "source_name": runtime.get("web_item_name") or item_code,
+            "route": "",
+            "current_page_type": page_type,
+            "current_commerce_lane": commerce_lane,
+            "axis_contracts": axes,
+            "checkout_eligibility": {
+                "status": checkout_status,
+                "current_page_type": page_type,
+                "current_commerce_lane": commerce_lane,
+                "fail_loud_states": [],
+                "required_work": [],
+            },
+            "order_preservation_contract": {
+                "line_fields": LINE_CONFIGURATION_FIELDS,
+                "summary_required": True,
+                "json_required": True,
+                "receipt_label_source": "custom_lt_configuration_summary/custom_lt_configuration_json",
+                "add_on_line_detail_required": True,
+                "color_recipe_detail_required": True,
+            },
+        }
+    ).to_dict()
+    architecture["live_projection_note"] = (
+        "Template render hint only. Source/ProductPatternContract and server runtime "
+        "remain authority for import, checkout eligibility, pricing, and persistence."
+    )
+    return architecture
+
+
+def get_product_page_architecture_json(item_code: str | None) -> str:
+    """Return HTML-safe JSON for the product-page architecture script tag."""
+
+    text = json.dumps(
+        get_product_page_architecture_context(item_code),
+        sort_keys=True,
+        default=str,
+        ensure_ascii=False,
+    )
+    return (
+        text.replace("<", "\\u003c")
+        .replace(">", "\\u003e")
+        .replace("&", "\\u0026")
+        .replace("\u2028", "\\u2028")
+        .replace("\u2029", "\\u2029")
+    )
+
+
+def _live_architecture_axes(item_code: str) -> list[dict[str, Any]]:
+    axes: list[dict[str, Any]] = []
+    for row in get_variant_attribute_options(item_code):
+        attribute = str(row.get("attribute") or "").strip()
+        if not attribute:
+            continue
+        values = [_option_value(value) for value in row.get("values") or []]
+        values = [value for value in values if value]
+        color_axis = is_balloon_color_axis(attribute)
+        axes.append(
+            {
+                "name": attribute,
+                "role": "customization" if color_axis else "sale_unit",
+                "values": values,
+                "selector_type": "multi_color_recipe_builder"
+                if color_axis
+                else "chip_group"
+                if len(values) <= 8
+                else "single_select",
+                "source": "erpnext_variant",
+                "status": "ready",
+                "allows_multiple_values": color_axis,
+                "notes": (
+                    "Live Webshop projection; source ProductPatternContract remains audit authority.",
+                ),
+            }
+        )
+    for option in get_checkout_add_on_options(item_code):
+        axes.append(
+            {
+                "name": option.get("label") or option.get("key"),
+                "role": "add_on",
+                "values": [],
+                "selector_type": option.get("input_type") or "add_on_selector",
+                "source": "erpnext_runtime",
+                "status": "ready",
+                "allows_multiple_values": False,
+                "add_on_key": option.get("key"),
+                "add_on_contract": {
+                    "ready_for_checkout": True,
+                    "item_code": option.get("item_code"),
+                    "price_status": "ready",
+                    "live_unit_price": option.get("unit_price"),
+                    "quantity_min": 1,
+                    "quantity_max": 10,
+                    "receipt_label": option.get("label"),
+                    "input_type": option.get("input_type"),
+                },
+            }
+        )
+    return axes
+
+
+def _option_value(value: Any) -> str:
+    if isinstance(value, dict):
+        return str(value.get("name") or value.get("attribute_value") or value.get("value") or "").strip()
+    return str(value or "").strip()

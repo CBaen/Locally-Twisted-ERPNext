@@ -17,6 +17,7 @@
 {% set _brand = frappe.utils.strip_html(doc.lt_brand_description or '') %}
 {% set _details = frappe.utils.strip_html(doc.lt_product_details or '') %}
 {% set lt_product_runtime = get_product_page_runtime_context(doc.item_code) %}
+{% set lt_product_architecture_json = get_product_page_architecture_json(doc.item_code) %}
 
 <div class="col-md-7 lt-product__details {{ width_class }}">
 
@@ -59,6 +60,12 @@
             {{ _("Ready to order: choose the available options here, add any approved upgrades, and we’ll keep those details with your order.") }}
         </p>
     {% endif %}
+
+    <script type="application/json"
+            class="js-lt-product-page-architecture"
+            data-template-item-code="{{ doc.item_code }}">
+{{ lt_product_architecture_json | safe }}
+    </script>
 
     {# Runtime product page type controls the primary customer action. #}
     {% if lt_product_runtime.is_quote_first or lt_product_runtime.needs_review %}

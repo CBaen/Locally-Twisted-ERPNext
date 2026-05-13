@@ -2692,3 +2692,28 @@ This is the global anti-pattern #2 (Drift from GL's actual ask). Receipt added t
 **Do this next time:** Customer-uploaded portal files need both same-user ownership and same-source attachment before registration. Staff-published files need a separate operator path and must not be marked `uploaded_by_customer`.
 
 **Avoid:** customer-facing whitelisted methods that accept arbitrary document names without checking source ownership and intended attachment context.
+
+---
+
+## 2026-05-12 - A product scaffold is not ecommerce architecture
+
+**Lesson:** When GL asks for software architecture, product buckets and candidate
+lists are not enough. Architecture must name the reusable contracts, ownership
+boundaries, payloads, server-derived fields, downstream document destinations,
+and verifiers that make product examples safe.
+
+**What happened:** A complex checkout scaffold grouped products into planning
+stages, but that answered a downstream product-readiness question instead of
+the requested ERPNext ecommerce receiving architecture. The corrected slice
+added `lt-product-page-architecture-contract-v1`, mapping source/ERPNext axes to
+backend-driven controls, `lt-product-config-v1` payload targets, resolver
+fields, and Quotation/Sales Order/Sales Invoice line parity.
+
+**Do this next time:** Before discussing product accommodation, build or point
+to the generic contract first. Product rows should prove sale-unit,
+customization, add-on, review-only, quote-first, cart, checkout, and document
+parity behavior. They should never be the architecture.
+
+**Avoid:** product-name branches, frontend-only eligibility, treating a verifier
+report as a system design, or saying "architecture" when the artifact only
+classifies products.

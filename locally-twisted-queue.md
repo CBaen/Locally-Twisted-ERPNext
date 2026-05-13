@@ -54,6 +54,16 @@ ecommerce blocker remains; remaining gates are staging/live release, Stripe,
 DNS, legal/policy, explicit real payment approval, and final real catalog
 approval if the local product set is to become public catalog truth.
 
+**Backend product-page architecture contract (2026-05-12):** The architecture
+layer corrected after the complex-scaffold drift is
+`workstreams/ecommerce-audit/backend-product-page-architecture-contract-2026-05-12.md`.
+Use `lt-product-page-architecture-contract-v1` as the source/local gate for
+page controls -> versioned payload -> resolver fields -> SO/SI/Quotation line
+parity. Product rows and the complex scaffold are downstream evidence only, not
+the architecture. Guards: `python scripts/verify/product_page_architecture_contract_contract.py`,
+`python scripts/verify/product_page_architecture_contract.py`, and
+`npm run test:product-quote-first`.
+
 **Frappe Cloud/Cloudflare/Stripe launch state (2026-05-12):** Source handoff is
 `LT-LAUNCH-RUNBOOK.md`, with the deeper technical gate at
 `workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11.md`.

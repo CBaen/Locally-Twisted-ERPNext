@@ -135,6 +135,45 @@ conditional-pricing blocked products; 5 needs-review/missing products; 0
 explicit checkout architecture gaps. Generated evidence lives under ignored
 `output/complex-checkout-scaffold.*` and can be regenerated.
 
+### Backend product-page architecture contract - 2026-05-12
+
+Owner: `Codex`
+
+Result: complete as source/local architecture. This is the corrected
+architecture layer; the complex scaffold is only downstream planning evidence.
+
+Files added/changed:
+
+- `apps/locally_twisted/locally_twisted/catalog_contract/product_page_architecture_contract.py`
+- `apps/locally_twisted/locally_twisted/verify/product_page_architecture_contract.py`
+- `apps/locally_twisted/locally_twisted/product_options.py`
+- `apps/locally_twisted/locally_twisted/templates/generators/item/item_details.html`
+- `scripts/verify/product_page_architecture_contract.py`
+- `scripts/verify/product_page_architecture_contract_contract.py`
+- `scripts/verify/product_page_architecture_readiness.py`
+- `scripts/verify/product_quote_first_experience.spec.js`
+- `workstreams/ecommerce-audit/backend-product-page-architecture-contract-2026-05-12.md`
+
+Green gates:
+
+- `python scripts/verify/product_page_architecture_contract_contract.py`
+- `python scripts/verify/product_page_architecture_contract.py`
+- `python scripts/verify/product_page_runtime_contract.py`
+- `node --check scripts/verify/product_quote_first_experience.spec.js`
+- `npm run test:product-quote-first`
+- `python scripts/verify/verifier_cli_contract.py`
+
+Expected gated result:
+
+- `python scripts/verify/product_page_architecture_readiness.py --report output/product-page-architecture-readiness.json`
+  reports `technical_architecture_ok: True` and `import_reopen_ok: False`
+  because current ecommerce pause config still blocks public reopen.
+
+Evidence summary: 53 product rows are mapped through the generic receiving
+architecture; 18 checkout-allowed, 35 quote-first-allowed; payload targets are
+`selected_options`, `color_recipes`, `add_ons`, and `quote_context`;
+product-specific rules are explicitly not allowed.
+
 ## Current Working Position
 
 - Backend ecommerce architecture is green.
@@ -144,6 +183,8 @@ explicit checkout architecture gaps. Generated evidence lives under ignored
 - Runner wrapper is green.
 - Complex checkout scaffold is green for local planning and blocks stale
   heuristic lane-flip lists from being used as checkout approval.
+- Backend product-page architecture contract is green and emitted to product
+  pages as a backend-owned JSON contract.
 - The shared worktree may still show regenerated audit artifacts under `audits/odoo-erpnext-migration-audit-2026-05-08/`; do not broad-stage them without reviewing the producing lane.
 
 ## Remaining Launch Gates
@@ -166,5 +207,7 @@ These are not current local ecommerce architecture blockers:
 - Use the complex-checkout scaffold before flipping any quote-first product.
   Current source-backed simple-axis candidates are only `large-head-missionary`,
   `mothers-day-front-yard-7-column`, `easter-arch`, and `pride-arch`.
+- Product-page controls must be driven by the generic architecture contract,
+  not by product-name branches or frontend-only checkout eligibility.
 - Held media must not render as gallery/variant media until classified.
 - Use scoped staging only; do not commit regenerated audit artifacts or unrelated changed files.

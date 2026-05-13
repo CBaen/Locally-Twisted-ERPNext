@@ -1,5 +1,23 @@
 # Locally Twisted - Coding Handoff
 
+Codex ecommerce architecture correction on 2026-05-12: product-page receiving
+architecture is now explicit and generic through
+`lt-product-page-architecture-contract-v1`. The new contract maps
+ProductPatternContract/source axes to backend-driven controls, versioned cart
+payload targets, server-derived resolver fields, and Quotation/Sales
+Order/Sales Invoice line parity. Product pages now emit
+`.js-lt-product-page-architecture` JSON; the browser verifier proves it on both
+quote-first and ready-to-order product pages. No live site, Frappe Cloud, DNS,
+Stripe, destructive import, or Website Item lane update was made. Feature
+handoff:
+`workstreams/ecommerce-audit/backend-product-page-architecture-contract-2026-05-12.md`;
+guards: `python scripts/verify/product_page_architecture_contract_contract.py`,
+`python scripts/verify/product_page_architecture_contract.py`,
+`python scripts/verify/product_page_runtime_contract.py`, and
+`npm run test:product-quote-first`. The readiness gate is expected to report
+`technical_architecture_ok: True` and `import_reopen_ok: False` while public
+ecommerce remains paused.
+
 Codex live form/email/Frappe Cloud closeout on 2026-05-12:
 `locallytwisted.com` is now serving the Frappe Cloud app release
 `72a4se4v64` / app hash `04de8212aa7dbf4895716717865fc6e1029c757b`;
