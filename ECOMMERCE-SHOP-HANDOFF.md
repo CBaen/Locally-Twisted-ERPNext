@@ -141,12 +141,18 @@ Owner: `Codex`
 
 Result: complete as source/local architecture. This is the corrected
 architecture layer; the complex scaffold is only downstream planning evidence.
+Post-review hardening is pushed in `88a708c Harden product page axis
+projection`.
 
 Files added/changed:
 
+- `apps/locally_twisted/locally_twisted/catalog_contract/axis_projection.py`
 - `apps/locally_twisted/locally_twisted/catalog_contract/product_page_architecture_contract.py`
+- `apps/locally_twisted/locally_twisted/catalog_contract/product_pattern_contract.py`
 - `apps/locally_twisted/locally_twisted/verify/product_page_architecture_contract.py`
 - `apps/locally_twisted/locally_twisted/product_options.py`
+- `apps/locally_twisted/locally_twisted/templates/generators/item/item_configure.html`
+- `apps/locally_twisted/locally_twisted/templates/generators/item/item_quote_first.html`
 - `apps/locally_twisted/locally_twisted/templates/generators/item/item_details.html`
 - `scripts/verify/product_page_architecture_contract.py`
 - `scripts/verify/product_page_architecture_contract_contract.py`
@@ -159,9 +165,10 @@ Green gates:
 - `python scripts/verify/product_page_architecture_contract_contract.py`
 - `python scripts/verify/product_page_architecture_contract.py`
 - `python scripts/verify/product_page_runtime_contract.py`
-- `node --check scripts/verify/product_quote_first_experience.spec.js`
+- `docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.direct_checkout_target_contract.run`
 - `npm run test:product-quote-first`
-- `python scripts/verify/verifier_cli_contract.py`
+- `npm run test:form-experience`
+- `python scripts/verify/ecommerce_pause_contract.py`
 
 Expected gated result:
 
@@ -173,6 +180,14 @@ Evidence summary: 53 product rows are mapped through the generic receiving
 architecture; 18 checkout-allowed, 35 quote-first-allowed; payload targets are
 `selected_options`, `color_recipes`, `add_ons`, and `quote_context`;
 product-specific rules are explicitly not allowed.
+
+Post-review axis rule: live ERPNext variant axes are not classified by
+attribute name alone. Source/backend recipe patterns keep color axes in
+`color_recipes`; missing recipe authority keeps the axis as sale-unit
+`selected_options`; explicit single-color sale-unit source markers override
+recipe-looking patterns. The browser regression proves `7-butterfly-column`
+emits `latex colors -> color_recipes` and preserves the selected color in the
+cart payload without leaking it into `selected_options`.
 
 ## Current Working Position
 
@@ -209,5 +224,7 @@ These are not current local ecommerce architecture blockers:
   `mothers-day-front-yard-7-column`, `easter-arch`, and `pride-arch`.
 - Product-page controls must be driven by the generic architecture contract,
   not by product-name branches or frontend-only checkout eligibility.
+- Color-axis payload targets must come from source/backend semantics, not from
+  attribute-name heuristics.
 - Held media must not render as gallery/variant media until classified.
 - Use scoped staging only; do not commit regenerated audit artifacts or unrelated changed files.

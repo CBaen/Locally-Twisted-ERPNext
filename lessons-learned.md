@@ -2717,3 +2717,27 @@ parity behavior. They should never be the architecture.
 **Avoid:** product-name branches, frontend-only eligibility, treating a verifier
 report as a system design, or saying "architecture" when the artifact only
 classifies products.
+
+---
+
+## 2026-05-12 - Do not classify payload targets from attribute names alone
+
+**Lesson:** A label like `latex colors` is not enough to decide whether a live
+ERPNext product-page control targets `selected_options` or `color_recipes`.
+The payload target has to come from the source/backend contract.
+
+**What happened:** The live architecture projection treated any balloon-color
+axis as `customization -> color_recipes`. Review caught the inverse risk for
+ready-to-order products whose color-looking axis is really a required ERPNext
+variant sale-unit. The fix moved this rule into
+`catalog_contract/axis_projection.py`: source/backend recipe semantics target
+`color_recipes`; absent recipe authority leaves the variant axis as
+`selected_options`; explicit single-color sale-unit markers override
+recipe-looking patterns.
+
+**Do this next time:** Put semantic projection rules in a shared backend helper,
+then verify both the generated contract and the rendered/cart payload. A pass
+that only proves the Add to Cart button enables is not enough.
+
+**Avoid:** name-based axis routing, frontend-only selector assumptions, and
+verifiers that check emitted JSON without also proving the browser payload.

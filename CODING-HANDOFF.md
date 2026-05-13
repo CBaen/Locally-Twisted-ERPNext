@@ -18,6 +18,18 @@ guards: `python scripts/verify/product_page_architecture_contract_contract.py`,
 `technical_architecture_ok: True` and `import_reopen_ok: False` while public
 ecommerce remains paused.
 
+Post-review follow-up published as `88a708c Harden product page axis
+projection`: live product-page projection now uses
+`catalog_contract/axis_projection.py`. Do not infer `customization` from a
+balloon-color-like attribute name alone. Source/backend recipe authority keeps
+color axes in `color_recipes`; absent recipe authority keeps ERPNext variant
+axes in `selected_options`; explicit single-color sale-unit source markers win
+over recipe-looking patterns. The live architecture verifier now checks
+source-backed color-axis projection, and `npm run test:product-quote-first`
+opens `7-butterfly-column`, selects a visible color, adds it to local cart, and
+asserts the cart payload has `color_recipes` with no color in
+`selected_options`.
+
 Codex live form/email/Frappe Cloud closeout on 2026-05-12:
 `locallytwisted.com` is now serving the Frappe Cloud app release
 `72a4se4v64` / app hash `04de8212aa7dbf4895716717865fc6e1029c757b`;
