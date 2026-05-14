@@ -10,6 +10,7 @@ Required Jinja context (each page's controller must set):
   - occasion_options: list of (value, label) tuples
   - service_options:  list of (cb_id, value, label) tuples
   - package_item_options: list of strings for large Events Inquiry pieces
+  - preferred_contact_options: list of (value, label) tuples
   - max_photos:       int  (file count cap)
   - max_photo_mb:     int  (per-file size cap in MB)
 
@@ -122,6 +123,20 @@ every deploy.
     min-height: 96px;
     resize: vertical;
     font-family: 'Lato', sans-serif;
+}
+.lt-book__field-helper,
+.lt-book__field-hint {
+    margin: 0.35rem 0 0;
+    color: rgba(10, 10, 11, 0.72);
+    font-family: 'Lato', sans-serif;
+    font-size: 0.86rem;
+    line-height: 1.35;
+}
+.lt-book__field-hint {
+    min-height: 1.1rem;
+}
+.lt-book__field-hint:empty {
+    display: none;
 }
 
 .lt-book__services {
@@ -378,15 +393,20 @@ every deploy.
                                autocomplete="name"/>
                     </div>
                     <div class="lt-book__field">
-                        <label for="book_phone">Phone</label>
+                        <label for="book_phone">
+                            Phone number <span class="lt-book__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span>
+                        </label>
                         <input type="tel" id="book_phone" name="phone"
                                class="lt-book__input"
+                               required aria-required="true"
                                autocomplete="tel"
+                               aria-describedby="book_phone_helper"
                                placeholder="(801) 555-0000"/>
+                        <p id="book_phone_helper" class="lt-book__field-helper">We ask for a phone number so we have a second way to contact you about your inquiry.</p>
                     </div>
                 </div>
 
-                {# Row 2: Email + Company #}
+                {# Row 2: Email + preferred contact method #}
                 <div class="lt-book__row lt-book__row--two">
                     <div class="lt-book__field">
                         <label for="book_email">
@@ -396,8 +416,29 @@ every deploy.
                                class="lt-book__input"
                                required aria-required="true"
                                autocomplete="email"
+                               aria-describedby="book_email_helper book_email_hint"
                                placeholder="your@email.com"/>
+                        <p id="book_email_helper" class="lt-book__field-helper">Please double-check your email so we can respond to your inquiry.</p>
+                        <p id="book_email_hint" class="lt-book__field-hint" aria-live="polite"></p>
                     </div>
+                    <div class="lt-book__field">
+                        <label for="book_preferred_contact_method">
+                            Preferred method of contact <span class="lt-book__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span>
+                        </label>
+                        <select id="book_preferred_contact_method"
+                                name="preferred_contact_method"
+                                class="lt-book__select"
+                                required aria-required="true">
+                            <option value="">Select one...</option>
+                            {% for value, label in preferred_contact_options %}
+                            <option value="{{ value }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                {# Row 3: Company + Occasion #}
+                <div class="lt-book__row lt-book__row--two">
                     <div class="lt-book__field">
                         <label for="book_company">
                             Company <span class="lt-book__optional">(optional)</span>
@@ -406,28 +447,29 @@ every deploy.
                                class="lt-book__input"
                                autocomplete="organization"/>
                     </div>
-                </div>
-
-                {# Row 3: Occasion + Event Date #}
-                <div class="lt-book__row lt-book__row--two">
                     <div class="lt-book__field">
-                        <label for="book_occasion">What are you celebrating?</label>
-                        <select id="book_occasion" name="x_occasion_type" class="lt-book__select">
-                            <option value="">Select one...</option>
+                        <label for="book_occasion">
+                            Event type <span class="lt-book__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span>
+                        </label>
+                        <select id="book_occasion" name="x_occasion_type" class="lt-book__select" required aria-required="true">
+                            <option value="">Select an event type</option>
                             {% for value, label in occasion_options %}
                             <option value="{{ value }}"{% if selected_occasion == value %} selected{% endif %}>{{ label }}</option>
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="lt-book__field">
-                        <label for="book_date">Event Date</label>
-                        <input type="date" id="book_date" name="x_event_date"
-                               class="lt-book__input"/>
-                    </div>
                 </div>
 
-                {# Row 4: Event Start + End #}
+                {# Row 4: Event Date + Event Start #}
                 <div class="lt-book__row lt-book__row--two">
+                    <div class="lt-book__field">
+                        <label for="book_date">
+                            Event date <span class="lt-book__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span>
+                        </label>
+                        <input type="date" id="book_date" name="x_event_date"
+                               class="lt-book__input"
+                               required aria-required="true"/>
+                    </div>
                     <div class="lt-book__field">
                         <label for="book_time">
                             Event Start Time <span class="lt-book__optional">(even an estimate is helpful!)</span>
@@ -436,6 +478,10 @@ every deploy.
                                class="lt-book__input"
                                placeholder="e.g. 3 PM, afternoon, TBD"/>
                     </div>
+                </div>
+
+                {# Row 5: Event End + City/Location #}
+                <div class="lt-book__row lt-book__row--two">
                     <div class="lt-book__field">
                         <label for="book_end_time">
                             Event End Time <span class="lt-book__optional">(even an estimate is helpful!)</span>
@@ -444,16 +490,19 @@ every deploy.
                                class="lt-book__input"
                                placeholder="e.g. 5 PM, evening, not sure yet"/>
                     </div>
-                </div>
-
-                {# Row 5: City/Location + Guest count #}
-                <div class="lt-book__row lt-book__row--two">
                     <div class="lt-book__field">
-                        <label for="book_location">City / Location</label>
+                        <label for="book_location">
+                            Event city/location <span class="lt-book__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span>
+                        </label>
                         <input type="text" id="book_location" name="x_event_location"
                                class="lt-book__input"
+                               required aria-required="true"
                                placeholder="Address, venue name, or city"/>
                     </div>
+                </div>
+
+                {# Row 6: Guest count #}
+                <div class="lt-book__row">
                     <div class="lt-book__field">
                         <label for="book_guests">Estimated Guests</label>
                         <input type="number" id="book_guests" name="x_guest_count"

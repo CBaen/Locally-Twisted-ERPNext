@@ -11,6 +11,7 @@ from locally_twisted.www.book import (
     SERVICE_OPTIONS,
     MAX_PHOTOS,
     MAX_PHOTO_BYTES,
+    PREFERRED_CONTACT_OPTIONS,
 )
 
 
@@ -53,6 +54,7 @@ def get_context(context):
     context.selected_occasion = frappe.form_dict.get("occasion") or ""
     context.service_options = SERVICE_OPTIONS
     context.package_item_options = PACKAGE_ITEM_OPTIONS
+    context.preferred_contact_options = PREFERRED_CONTACT_OPTIONS
     context.preselected_services = preselected_services
     context.requested_item_code = requested_item.get("item_code") if requested_item else ""
     context.requested_item_name = requested_item.get("web_item_name") if requested_item else ""

@@ -8,6 +8,38 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-14 - Client change requests use local, staging, then live gates
+
+**Decision:** Client-requested changes for Locally Twisted must be built and
+tested locally first, then pushed to staging and tested on staging, and only
+after successful staging proof and the required approval may they be pushed
+live and tested live. This applies to frontend, backend, form logic, data
+mapping, email, payment, policy, and operator-flow changes.
+
+**Reasoning:** GL clarified this process directly on [LOC-6](/LOC/issues/LOC-6)
+after the contact-form change request was identified as not yet actionable.
+The process requirement is independent of the missing form-change details:
+agents must understand and preserve the release gate now, while keeping the
+actual implementation blocked until exact requested copy, visible logic,
+backend mapping, and policy/legal/payment/customer-promise impacts are known.
+
+**Implementation boundary:** No live change is complete from local proof alone.
+If staging fails, fix the source and re-prove it before live. If the requested
+change affects policy, legal, privacy, payment, or a customer promise, UMA or
+the correct peer owner must resolve that business decision before CTO treats it
+as executable. Production-only fixes are allowed only to roll back or stop
+active damage.
+
+**Verification receipt:** Stored in
+`capabilities/recipes/take-live-coordinated-workflows.md`, the CTO memory files,
+and this decision log on 2026-05-14. No production route or form code changed
+for this process-only heartbeat. [LOC-6](/LOC/issues/LOC-6) remains blocked for
+implementation details.
+
+**Decided by:** GL comment on [LOC-6](/LOC/issues/LOC-6), acknowledged by CTO.
+
+---
+
 ## 2026-05-14 - Frappe Cloud route health is not management-session proof
 
 **Decision:** Treat the current LT Frappe Cloud connection as verified for

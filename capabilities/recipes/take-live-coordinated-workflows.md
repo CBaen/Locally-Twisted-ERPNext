@@ -1,7 +1,7 @@
 ---
 name: Take-live coordinated workflows
 level: recipe
-last_verified: 2026-05-02
+last_verified: 2026-05-14
 ---
 
 ## What it does
@@ -11,6 +11,22 @@ Organizes a launch push with multiple agents or coordinated sessions while prese
 ## When to reach for it
 
 Use this when Locally Twisted is moving toward launch and multiple agents could work in parallel on independent lanes such as forms, shop, policy pages, media, accessibility, backend readiness, or release verification.
+
+## Mandatory change-request release chain
+
+Every Locally Twisted client change request follows this order:
+
+1. Build and test the change locally first.
+2. Push the same reviewed source/artifact to staging.
+3. Test the affected frontend, backend, data, email, payment, and operator paths
+   on staging as applicable.
+4. Push live only after staging succeeds and the required owner/client approval
+   is recorded.
+5. Test the affected live paths after release before calling the change done.
+
+If any stage fails, stop the release, fix source, and restart at the earliest
+stage that can prove the fix. Do not make production-only fixes except to roll
+back or stop active damage.
 
 ## How to use it
 
@@ -64,6 +80,7 @@ Use this when Locally Twisted is moving toward launch and multiple agents could 
 
 - [claude-reference-library](claude-reference-library.md) - optional read-only reference for older Frappe launch, payment, form, fixture, migration, and deploy safety checklists.
 - [visual-debugging](visual-debugging.md) - supports visual inspection when browser screenshots are needed.
+- `C:\Users\baenb\capabilities\recipes\client-release-safety-gates.md` - agency-wide local/preflight, staging, approval, live, and post-live release gate.
 
 ## Failure modes
 
@@ -73,6 +90,8 @@ Use this when Locally Twisted is moving toward launch and multiple agents could 
 - Audit results are not launch evidence until the exact affected route, form, or flow is verified after integration.
 - Beautiful pages can mask broken inquiry, cart, checkout, or product-option behavior. Launch quality must include function and trust, not only visuals.
 - ERPNext app-build copy is not business truth by itself. Customer-facing business details should trace to the Odoo business-detail source or explicit approval.
+- Treating local success as live readiness skips the required staging proof and
+  approval gate.
 
 ## Examples
 

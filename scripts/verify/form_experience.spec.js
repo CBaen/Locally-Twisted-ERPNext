@@ -13,7 +13,12 @@ async function dismissCookieNotice(page) {
 
 async function fillRequiredFields(page) {
 	await page.locator("#book_name").fill("Form UX Test");
+	await page.locator("#book_phone").fill("801-555-0101");
 	await page.locator("#book_email").fill("form-ux-test@example.com");
+	await page.locator("#book_preferred_contact_method").selectOption("Email");
+	await page.locator("#book_occasion").selectOption("corporate");
+	await page.locator("#book_date").fill("2026-06-20");
+	await page.locator("#book_location").fill("Ogden, UT");
 }
 
 test.describe("Locally Twisted inquiry form experience", () => {
@@ -41,6 +46,23 @@ test.describe("Locally Twisted inquiry form experience", () => {
 		await expect(page.getByText("Saved for follow-up")).toHaveCount(0);
 		await expect(page.getByText("No account needed")).toHaveCount(0);
 		await expect(page.getByRole("button", { name: "Send Request" })).toHaveCount(0);
+		await expect(form.locator("#book_name")).toHaveAttribute("autocomplete", "name");
+		await expect(form.locator("#book_email")).toHaveAttribute("autocomplete", "email");
+		await expect(form.locator("#book_phone")).toHaveAttribute("autocomplete", "tel");
+		await expect(form.locator("#book_email_helper")).toContainText("Please double-check your email so we can respond to your inquiry.");
+		await expect(form.locator("#book_phone_helper")).toContainText("We ask for a phone number so we have a second way to contact you about your inquiry.");
+		await expect(form.locator("#book_phone")).toHaveAttribute("required", "");
+		await expect(form.locator("#book_preferred_contact_method")).toHaveAttribute("required", "");
+		await expect(form.locator("#book_occasion")).toHaveAttribute("required", "");
+		await expect(form.locator("#book_date")).toHaveAttribute("required", "");
+		await expect(form.locator("#book_location")).toHaveAttribute("required", "");
+		await expect(form.locator("#book_preferred_contact_method option")).toHaveText([
+			"Select one...",
+			"Email",
+			"Text",
+			"Phone",
+		]);
+		await expect(form.locator("#book_occasion option").first()).toHaveText("Select an event type");
 	});
 
 	test("direct #received visits do not show fake success", async ({ page }) => {
@@ -49,6 +71,64 @@ test.describe("Locally Twisted inquiry form experience", () => {
 
 		await expect(page.locator("#received")).toBeHidden();
 		await expect(page.locator("[data-lt-form-status]")).toBeHidden();
+	});
+
+	test("required contact basics fail before the request is sent", async ({ page }) => {
+		let requests = 0;
+		await page.route("**/api/method/locally_twisted.www.book.submit_book_inquiry", async (route) => {
+			requests += 1;
+			await route.fulfill({ status: 500, body: "" });
+		});
+
+		await page.goto(`${BASE_URL}/contact`);
+		await dismissCookieNotice(page);
+		await page.locator("#book_name").fill("Form UX Test");
+		await page.locator("#book_email").fill("form-ux-test@gamil.com");
+		await page.locator("#book_email").blur();
+		await expect(page.locator("#book_email_hint")).toContainText("form-ux-test@gmail.com");
+
+		await page.locator("#book_submit").click();
+		await expect(page.locator("#book_feedback")).toContainText("Please enter a phone number so we have a second way to contact you about your inquiry.");
+		expect(requests).toBe(0);
+
+		await page.locator("#book_phone").fill("801-555-0101");
+		await page.locator("#book_submit").click();
+		await expect(page.locator("#book_feedback")).toContainText("Please choose how you prefer to be contacted.");
+		expect(requests).toBe(0);
+
+		await page.locator("#book_preferred_contact_method").selectOption("Email");
+		await page.locator("#book_submit").click();
+		await expect(page.locator("#book_feedback")).toContainText("Please choose an event type.");
+		expect(requests).toBe(0);
+
+		await page.locator("#book_occasion").selectOption("corporate");
+		await page.locator("#book_submit").click();
+		await expect(page.locator("#book_feedback")).toContainText("Please choose the event date.");
+		expect(requests).toBe(0);
+
+		await page.locator("#book_date").fill("2026-06-20");
+		await page.locator("#book_submit").click();
+		await expect(page.locator("#book_feedback")).toContainText("Please tell us the city or location for the event.");
+		expect(requests).toBe(0);
+	});
+
+	test("invalid email fails loudly before the request is sent", async ({ page }) => {
+		let requests = 0;
+		await page.route("**/api/method/locally_twisted.www.book.submit_book_inquiry", async (route) => {
+			requests += 1;
+			await route.fulfill({ status: 500, body: "" });
+		});
+
+		await page.goto(`${BASE_URL}/contact`);
+		await dismissCookieNotice(page);
+		await page.locator("#book_name").fill("Form UX Test");
+		await page.locator("#book_phone").fill("801-555-0101");
+		await page.locator("#book_email").fill("not-an-email");
+		await page.locator("#book_preferred_contact_method").selectOption("Email");
+
+		await page.locator("#book_submit").click();
+		await expect(page.locator("#book_feedback")).toContainText("Please enter a valid email address.");
+		expect(requests).toBe(0);
 	});
 
 	test("successful submit shows a quiet confirmation without forcing the customer away", async ({ page }) => {

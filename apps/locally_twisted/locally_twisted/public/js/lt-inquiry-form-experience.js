@@ -7,7 +7,40 @@
     var DEFAULT_SUCCESS = 'A confirmation of your request will be sent to your email address shortly. We will be in contact within 24 hours!';
     var FIELD_ERROR = {
         contact_name: 'Please tell us your name.',
-        email_from: 'Please give us an email so we can reply.'
+        email_from: 'Please enter a valid email address.',
+        email_invalid: 'Please enter a valid email address.',
+        phone: 'Please enter a phone number so we have a second way to contact you about your inquiry.',
+        preferred_contact_method: 'Please choose how you prefer to be contacted.',
+        x_occasion_type: 'Please choose an event type.',
+        x_event_date: 'Please choose the event date.',
+        x_event_location: 'Please tell us the city or location for the event.'
+    };
+    var COMMON_EMAIL_DOMAINS = [
+        'gmail.com',
+        'yahoo.com',
+        'icloud.com',
+        'hotmail.com',
+        'outlook.com',
+        'aol.com',
+        'msn.com',
+        'live.com',
+        'comcast.net',
+        'me.com'
+    ];
+    var EMAIL_DOMAIN_FIXES = {
+        'gamil.com': 'gmail.com',
+        'gmail.con': 'gmail.com',
+        'gmal.com': 'gmail.com',
+        'gmial.com': 'gmail.com',
+        'gnail.com': 'gmail.com',
+        'yaho.com': 'yahoo.com',
+        'yahoo.con': 'yahoo.com',
+        'hotmial.com': 'hotmail.com',
+        'hotmail.con': 'hotmail.com',
+        'outlok.com': 'outlook.com',
+        'outlook.con': 'outlook.com',
+        'iclod.com': 'icloud.com',
+        'icloud.con': 'icloud.com'
     };
 
     var STATUS_COPY = {
@@ -105,6 +138,60 @@
         });
     }
 
+    function editDistance(a, b) {
+        var matrix = [];
+        var i;
+        var j;
+        for (i = 0; i <= b.length; i += 1) matrix[i] = [i];
+        for (j = 0; j <= a.length; j += 1) matrix[0][j] = j;
+        for (i = 1; i <= b.length; i += 1) {
+            for (j = 1; j <= a.length; j += 1) {
+                matrix[i][j] = b.charAt(i - 1) === a.charAt(j - 1)
+                    ? matrix[i - 1][j - 1]
+                    : Math.min(
+                        matrix[i - 1][j - 1] + 1,
+                        matrix[i][j - 1] + 1,
+                        matrix[i - 1][j] + 1
+                    );
+            }
+        }
+        return matrix[b.length][a.length];
+    }
+
+    function suggestedEmail(email) {
+        var value = (email || '').trim();
+        var at = value.lastIndexOf('@');
+        if (at <= 0 || at === value.length - 1) return '';
+        var local = value.slice(0, at);
+        var domain = value.slice(at + 1).toLowerCase();
+        var suggestion = EMAIL_DOMAIN_FIXES[domain] || '';
+        if (!suggestion) {
+            COMMON_EMAIL_DOMAINS.some(function (known) {
+                if (domain === known) return true;
+                if (Math.abs(domain.length - known.length) > 2) return false;
+                if (editDistance(domain, known) <= 2) {
+                    suggestion = known;
+                    return true;
+                }
+                return false;
+            });
+        }
+        return suggestion ? local + '@' + suggestion : '';
+    }
+
+    function emailMessageWithSuggestion(message, email) {
+        var suggestion = suggestedEmail(email);
+        return suggestion ? message + ' Did you mean ' + suggestion + '?' : message;
+    }
+
+    function setEmailSuggestion(form) {
+        var field = form.elements.email_from;
+        var hint = form.querySelector('#book_email_hint');
+        if (!field || !hint) return;
+        var suggestion = suggestedEmail(textOf(field));
+        hint.textContent = suggestion ? 'Did you mean ' + suggestion + '?' : '';
+    }
+
     function showError(form, message, fieldName) {
         var finalMessage = message || FALLBACK_ERROR;
         var feedback = form.querySelector('#book_feedback');
@@ -129,9 +216,38 @@
         if (!textOf(form.elements.contact_name)) {
             return { ok: false, field: 'contact_name', message: FIELD_ERROR.contact_name };
         }
-        if (!textOf(form.elements.email_from)) {
+        var emailField = form.elements.email_from;
+        var email = textOf(emailField);
+        if (!email) {
             return { ok: false, field: 'email_from', message: FIELD_ERROR.email_from };
         }
+        if (emailField && !emailField.checkValidity()) {
+            return {
+                ok: false,
+                field: 'email_from',
+                message: emailMessageWithSuggestion(FIELD_ERROR.email_invalid, email)
+            };
+        }
+        if (!textOf(form.elements.phone)) {
+            return { ok: false, field: 'phone', message: FIELD_ERROR.phone };
+        }
+        if (!textOf(form.elements.preferred_contact_method)) {
+            return {
+                ok: false,
+                field: 'preferred_contact_method',
+                message: FIELD_ERROR.preferred_contact_method
+            };
+        }
+        if (!textOf(form.elements.x_occasion_type)) {
+            return { ok: false, field: 'x_occasion_type', message: FIELD_ERROR.x_occasion_type };
+        }
+        if (!textOf(form.elements.x_event_date)) {
+            return { ok: false, field: 'x_event_date', message: FIELD_ERROR.x_event_date };
+        }
+        if (!textOf(form.elements.x_event_location)) {
+            return { ok: false, field: 'x_event_location', message: FIELD_ERROR.x_event_location };
+        }
+        setEmailSuggestion(form);
         return { ok: true };
     }
 
@@ -236,6 +352,7 @@
 
     function resetAfterSuccess(form) {
         form.reset();
+        setEmailSuggestion(form);
         if (window.LT_INQUIRY_FORM && typeof window.LT_INQUIRY_FORM.updateConditionals === 'function') {
             window.LT_INQUIRY_FORM.updateConditionals();
         }
@@ -299,6 +416,14 @@
         form.dataset.ltExperienceBound = 'true';
         form.setAttribute('aria-busy', 'false');
         form.addEventListener('submit', submitForm);
+        if (form.elements.email_from) {
+            form.elements.email_from.addEventListener('input', function () {
+                setEmailSuggestion(form);
+            });
+            form.elements.email_from.addEventListener('blur', function () {
+                setEmailSuggestion(form);
+            });
+        }
     }
 
     ready(function () {

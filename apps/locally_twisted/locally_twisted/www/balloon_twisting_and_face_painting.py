@@ -12,6 +12,7 @@ from locally_twisted.www.book import (
     MAX_PHOTOS,
     OCCASION_OPTIONS,
     PACKAGE_ITEM_OPTIONS,
+    PREFERRED_CONTACT_OPTIONS,
     SERVICE_OPTIONS,
 )
 
@@ -668,6 +669,7 @@ def get_context(context):
         if option[1] in BTFP_SERVICE_VALUES
     ]
     context.package_item_options = PACKAGE_ITEM_OPTIONS
+    context.preferred_contact_options = PREFERRED_CONTACT_OPTIONS
     context.preselected_services = []
     context.requested_item_code = ""
     context.requested_item_name = ""

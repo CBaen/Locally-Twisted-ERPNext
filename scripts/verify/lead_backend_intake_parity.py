@@ -93,6 +93,17 @@ EXPECTED_CUSTOM_FIELDS = {
         "depends_on": None,
     },
     "custom_guest_count": {"depends_on": None},
+    "custom_preferred_contact_method": {
+        "label": "Preferred Contact Method",
+        "fieldtype": "Select",
+        "options": "\nEmail\nText\nPhone",
+        "depends_on": None,
+    },
+    "lt_section_decor": {
+        "label": "Balloon Decor Details",
+        "depends_on": selected(["Balloon Decor"]),
+        "insert_after": "custom_preferred_contact_method",
+    },
     "custom_setup_time_arrival": {
         "fieldtype": "Data",
         "description": TIME_TEXT_DESCRIPTION,
@@ -210,7 +221,7 @@ def check_lead_custom_fields() -> list[str]:
     rows = get_list(
         "Custom Field",
         filters={"dt": "Lead"},
-        fields=["fieldname", "label", "fieldtype", "description", "depends_on", "options"],
+        fields=["fieldname", "label", "fieldtype", "description", "depends_on", "options", "insert_after"],
         limit_page_length=250,
         order_by="idx asc",
     )
@@ -301,6 +312,8 @@ def check_submit_mapping_helper() -> list[str]:
     source = Path("apps/locally_twisted/locally_twisted/www/book.py").read_text(encoding="utf-8")
     if '"custom_event_type": _service_child_rows(services)' not in source:
         failures.append("submit_book_inquiry does not populate Lead.custom_event_type from services")
+    if '"custom_preferred_contact_method": preferred_contact_method' not in source:
+        failures.append("submit_book_inquiry does not populate Lead.custom_preferred_contact_method")
 
     try:
         artist_rule = bench_execute(

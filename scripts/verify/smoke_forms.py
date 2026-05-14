@@ -407,10 +407,25 @@ def smoke_test(base_url: str, form_path: str, shape_only: bool = False) -> int:
         try:
             name_field = page.locator("input[name='contact_name'], input[name='lead_name'], input[name='name']").first
             email_field = page.locator("input[type='email'], input[name='email_id']").first
+            phone_field = page.locator("input[name='phone'], input[type='tel']").first
+            preferred_field = page.locator("select[name='preferred_contact_method']").first
+            event_type_field = page.locator("select[name='x_occasion_type']").first
+            event_date_field = page.locator("input[name='x_event_date']").first
+            event_location_field = page.locator("input[name='x_event_location']").first
             if name_field.count() > 0:
                 name_field.fill(test_marker)
             if email_field.count() > 0:
                 email_field.fill(f"{test_marker.lower()}@bbc-test.invalid")
+            if phone_field.count() > 0:
+                phone_field.fill("801-555-0198")
+            if preferred_field.count() > 0:
+                preferred_field.select_option("Email")
+            if event_type_field.count() > 0:
+                event_type_field.select_option("corporate")
+            if event_date_field.count() > 0:
+                event_date_field.fill("2026-06-20")
+            if event_location_field.count() > 0:
+                event_location_field.fill("Ogden, UT")
         except Exception as e:
             print(f"        FAIL — could not fill form fields: {e}")
             browser.close()

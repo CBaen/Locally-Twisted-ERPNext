@@ -94,6 +94,17 @@ CUSTOM_FIELD_UPDATES = {
         "depends_on": None,
     },
     "custom_guest_count": {"depends_on": None},
+    "custom_preferred_contact_method": {
+        "label": "Preferred Contact Method",
+        "fieldtype": "Select",
+        "options": "\nEmail\nText\nPhone",
+        "depends_on": None,
+    },
+    "lt_section_decor": {
+        "label": "Balloon Decor Details",
+        "depends_on": _selected(["Balloon Decor"]),
+        "insert_after": "custom_preferred_contact_method",
+    },
     "custom_setup_time_arrival": {
         "fieldtype": "Data",
         "description": TIME_TEXT_DESCRIPTION,
@@ -236,13 +247,23 @@ LEAD_INTAKE_CUSTOM_FIELDS = {
         "fieldtype": "Int",
         "insert_after": "custom_event_location",
     },
+    "custom_preferred_contact_method": {
+        "doctype": "Custom Field",
+        "dt": "Lead",
+        "fieldname": "custom_preferred_contact_method",
+        "label": "Preferred Contact Method",
+        "fieldtype": "Select",
+        "options": "\nEmail\nText\nPhone",
+        "insert_after": "custom_guest_count",
+        "description": "Customer's requested follow-up channel for this inquiry.",
+    },
     "lt_section_decor": {
         "doctype": "Custom Field",
         "dt": "Lead",
         "fieldname": "lt_section_decor",
         "label": "Balloon Decor Details",
         "fieldtype": "Section Break",
-        "insert_after": "custom_guest_count",
+        "insert_after": "custom_preferred_contact_method",
         "depends_on": _selected(["Balloon Decor"]),
     },
     "custom_decor_types": {

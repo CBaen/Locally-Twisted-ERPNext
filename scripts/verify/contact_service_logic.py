@@ -98,6 +98,63 @@ def main() -> int:
         failures.extend(expect_checkbox(page, "Event Package", present=False))
         failures.extend(expect_absent_panel(page, "Something Else"))
 
+        phone = page.locator("#book_phone")
+        if phone.count() != 1:
+            failures.append("phone field should exist once")
+        else:
+            if phone.get_attribute("required") is None:
+                failures.append("phone field should be required")
+            if phone.get_attribute("autocomplete") != "tel":
+                failures.append("phone field should preserve autocomplete=tel")
+            if "book_phone_helper" not in (phone.get_attribute("aria-describedby") or ""):
+                failures.append("phone field should point to approved helper copy")
+            phone_helper = page.locator("#book_phone_helper")
+            if phone_helper.count() != 1 or "second way to contact you" not in (phone_helper.text_content() or ""):
+                failures.append("phone helper should use approved copy")
+
+        email = page.locator("#book_email")
+        if email.count() != 1:
+            failures.append("email field should exist once")
+        else:
+            if email.get_attribute("required") is None:
+                failures.append("email field should be required")
+            if email.get_attribute("autocomplete") != "email":
+                failures.append("email field should preserve autocomplete=email")
+            described_by = email.get_attribute("aria-describedby") or ""
+            for expected_id in ("book_email_helper", "book_email_hint"):
+                if expected_id not in described_by:
+                    failures.append(f"email field should point to {expected_id}")
+            helper = page.locator("#book_email_helper")
+            if helper.count() != 1 or "Please double-check your email" not in (helper.text_content() or ""):
+                failures.append("email helper should use approved copy")
+            email.fill("casey@gamil.com")
+            email.blur()
+            hint = page.locator("#book_email_hint")
+            if hint.count() != 1 or "casey@gmail.com" not in (hint.text_content() or ""):
+                failures.append("email typo hint should suggest casey@gmail.com for gamil.com")
+
+        preferred = page.locator("#book_preferred_contact_method")
+        if preferred.count() != 1:
+            failures.append("preferred contact method field should exist once")
+        else:
+            if preferred.get_attribute("required") is None:
+                failures.append("preferred contact method should be required")
+            options = preferred.locator("option").evaluate_all("(nodes) => nodes.map((node) => node.value)")
+            if options != ["", "Email", "Text", "Phone"]:
+                failures.append(f"preferred contact options should be Email/Text/Phone, found {options!r}")
+
+        required_fields = [
+            ("#book_occasion", "event type"),
+            ("#book_date", "event date"),
+            ("#book_location", "event city/location"),
+        ]
+        for selector, label in required_fields:
+            field = page.locator(selector)
+            if field.count() != 1:
+                failures.append(f"{label} field should exist once")
+            elif field.get_attribute("required") is None:
+                failures.append(f"{label} field should be required")
+
         failures.extend(check_service(
             page,
             "Balloon Decor",

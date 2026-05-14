@@ -92,6 +92,10 @@ def _assert_empty_upload_slot_is_ignored() -> dict[str, object]:
             "contact_name": marker,
             "email_from": f"lt-empty-upload-{token}@example.invalid",
             "phone": "801-555-0188",
+            "preferred_contact_method": "Email",
+            "x_occasion_type": "birthday",
+            "x_event_date": "2026-06-20",
+            "x_event_location": "Test City",
             "x_services": '["Balloon Twisting"]',
             "description": "Synthetic empty upload slot contract.",
         }
@@ -136,6 +140,10 @@ def _assert_invalid_upload_records_failure(log_error_calls: list[dict[str, objec
             "contact_name": marker,
             "email_from": f"lt-upload-failure-{token}@example.invalid",
             "phone": "801-555-0188",
+            "preferred_contact_method": "Email",
+            "x_occasion_type": "corporate",
+            "x_event_date": "2026-06-20",
+            "x_event_location": "Test City",
             "x_services": '["Balloon Decor"]',
             "description": "Synthetic invalid upload contract.",
         }

@@ -6,10 +6,9 @@ Spec: Hetzner http://5.78.136.133/book — saved 2026-04-29 to
 _resources/odoo-live-snapshot/hetzner-book.html. The local Odoo clone is
 stale; do not use it as canonical.
 
-The form mirrors Hetzner's structure with one consolidation rule from
-GL (2026-04-29): Name + Email required, Phone optional. Hetzner /book has
-all three required; we inherit /contact's "email-required, phone-optional"
-shape because /contact is consolidated into /book.
+The form mirrors Hetzner's structure with the current /contact consolidation:
+name, email, phone, preferred contact method, event type, event date, and
+city/location are required on the shared inquiry path.
 
 Submit flow:
   1. Client posts multipart/form-data to submit_book_inquiry
@@ -83,6 +82,12 @@ SERVICE_OPTIONS = [
 ]
 SERVICE_VALUES = {value for _cb_id, value, _label in SERVICE_OPTIONS}
 
+PREFERRED_CONTACT_OPTIONS = [
+    ("Email", "Email"),
+    ("Text", "Text"),
+    ("Phone", "Phone"),
+]
+
 
 PACKAGE_ITEM_OPTIONS = [
     "Balloon Arches",
@@ -124,9 +129,9 @@ def submit_book_inquiry():
     """Receive a /book form submission and create a Lead + linked records.
 
     Reads `frappe.form_dict` for fields and `frappe.request.files` for
-    photos. All fields are optional except first_name + email (per GL's
-    consolidation rule (b) 2026-04-29). Returns JSON; raises on
-    persistence failure so the client-side script can render an error.
+    photos. Name, email, phone, preferred contact method, event type, event
+    date, and city/location are required. Returns JSON; raises on persistence
+    failure so the client-side script can render an error.
     """
     fd = frappe.form_dict
 
@@ -136,19 +141,37 @@ def submit_book_inquiry():
     if not first_name:
         frappe.throw(_("Please tell us your name."), frappe.ValidationError)
     if not email:
-        frappe.throw(_("Please give us an email so we can reply."), frappe.ValidationError)
-    email = validate_email_address(email, throw=True)
+        frappe.throw(_("Please enter a valid email address."), frappe.ValidationError)
+    email = _validate_required_email(email)
+
+    phone = (fd.get("phone") or "").strip()
+    if not phone:
+        frappe.throw(
+            _("Please enter a phone number so we have a second way to contact you about your inquiry."),
+            frappe.ValidationError,
+        )
+    preferred_contact_method = _normalize_preferred_contact_method(fd.get("preferred_contact_method"))
+    if not preferred_contact_method:
+        frappe.throw(
+            _("Please choose how you prefer to be contacted."),
+            frappe.ValidationError,
+        )
 
     # Optional contact fields
-    phone = (fd.get("phone") or "").strip()
     company = (fd.get("partner_name") or "").strip()
 
     # Event basics
     occasion = (fd.get("x_occasion_type") or "").strip()
-    event_date = (fd.get("x_event_date") or "").strip() or None
+    if not occasion:
+        frappe.throw(_("Please choose an event type."), frappe.ValidationError)
+    event_date = (fd.get("x_event_date") or "").strip()
+    if not event_date:
+        frappe.throw(_("Please choose the event date."), frappe.ValidationError)
     event_time = (fd.get("x_event_time") or "").strip()
     event_end_time = (fd.get("x_event_end_time") or "").strip()
     event_location = (fd.get("x_event_location") or "").strip()
+    if not event_location:
+        frappe.throw(_("Please tell us the city or location for the event."), frappe.ValidationError)
     guest_count = _parse_int(fd.get("x_guest_count"))
 
     # Multi-select services (incoming as repeated form field or CSV).
@@ -203,7 +226,7 @@ def submit_book_inquiry():
         "first_name": first_name,
         "last_name": "",
         "email_id": email,
-        "mobile_no": phone or None,
+        "mobile_no": phone,
         "company_name": company or None,
         "source": "Website",
         "status": "Open",
@@ -214,6 +237,7 @@ def submit_book_inquiry():
         "custom_event_end_time": event_end_time or None,
         "custom_event_location": event_location or None,
         "custom_guest_count": guest_count,
+        "custom_preferred_contact_method": preferred_contact_method,
         "custom_event_type": _service_child_rows(services),
         "custom_decor_types": decor_types or None,
         "custom_setup_time_arrival": setup_arrival or None,
@@ -324,7 +348,7 @@ def submit_book_inquiry():
     # message body + the structured summary so Jeff has one place to read
     # the customer's submission verbatim.
     _record_inquiry_communication(
-        lead, first_name, email, phone, company, occasion, event_date,
+        lead, first_name, email, phone, preferred_contact_method, company, occasion, event_date,
         event_time, event_end_time, event_location, guest_count, services, indoor_outdoor,
         shade_required, colors, decor_types, setup_arrival, decor_notes,
         num_twisters, artist_start, artist_end, twisting_notes,
@@ -347,6 +371,24 @@ def submit_book_inquiry():
 
 
 # -------------------------- helpers ---------------------------------- #
+
+
+def _validate_required_email(email):
+    validated = validate_email_address(email, throw=False)
+    if not validated:
+        frappe.throw(
+            _("Please enter a valid email address."),
+            frappe.ValidationError,
+        )
+    return validated
+
+
+def _normalize_preferred_contact_method(value):
+    value = (value or "").strip()
+    for option, _label in PREFERRED_CONTACT_OPTIONS:
+        if value.lower() == option.lower():
+            return option
+    return ""
 
 
 def _insert_lead_with_retry(lead_doc, *, defer_customer_ack=False, customer_email=None):
@@ -843,7 +885,7 @@ def _photo_upload_customer_message(summary):
 
 
 def _record_inquiry_communication(
-    lead, first_name, email, phone, company, occasion, event_date,
+    lead, first_name, email, phone, preferred_contact_method, company, occasion, event_date,
     event_time, event_end_time, event_location, guest_count, services, indoor_outdoor,
     shade_required, colors, decor_types, setup_arrival, decor_notes,
     num_twisters, artist_start, artist_end, twisting_notes,
@@ -862,6 +904,7 @@ def _record_inquiry_communication(
 
     line("Email", email)
     line("Phone", phone)
+    line("Preferred contact method", preferred_contact_method)
     line("Company", company)
     line("Occasion", _occasion_label(occasion))
     line("Event date", event_date)
