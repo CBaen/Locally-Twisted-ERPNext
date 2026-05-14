@@ -125,8 +125,9 @@ def main() -> int:
         events_panel = panel(page, "Events Inquiry")
         if events_panel.count() == 1 and events_panel.first.is_visible():
             heading = events_panel.locator(".lt-book__conditional-title").first.text_content() or ""
-            if heading.strip() != "Let's build a memory":
-                failures.append("Events Inquiry heading should be \"Let's build a memory\"")
+            normalized_heading = heading.strip().replace("\u2019", "'")
+            if normalized_heading != "Let's shape the event decor":
+                failures.append("Events Inquiry heading should be \"Let's shape the event decor\"")
             for item in PACKAGE_ITEMS:
                 item_checkbox = events_panel.locator(f'input[name="x_package_items"][value="{item}"]')
                 if item_checkbox.count() != 1:
