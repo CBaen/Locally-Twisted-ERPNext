@@ -3,8 +3,9 @@
 Validates the catalog port, shop hub, public nav, fixed-price product lane,
 and retail variant selectors via a real Chromium browser. This should pass on
 every deploy and fail loudly on customer-facing regressions. When public
-ecommerce is intentionally paused, open-shop checks are skipped and the pause
-contract is verified instead.
+ecommerce live exposure is locked, open-shop checks are skipped and the public
+safety-lock contract is verified instead. That public lock must not be treated
+as a reason to stop local ecommerce implementation work.
 
 Coverage:
   1. Homepage navbar exposes the current mode-aware nav and /contact CTA.

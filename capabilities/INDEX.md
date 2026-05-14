@@ -54,7 +54,8 @@ combination.
 
 Workflows. Multi-step. Clear start and finish.
 
-- [erpnext-ecommerce-receiving-architecture](recipes/erpnext-ecommerce-receiving-architecture.md) - design the ERPNext-side ecommerce receiving ecosystem before importing Odoo-derived products: fields, logic, variants, add-ons, pricing, media, cart, checkout, invoice, mobile/desktop journeys, fail-loud gates, current open-commerce local proof (`lt_ecommerce_paused=0`), real-catalog import blockers, and the 15-family / 47-enabled-SKU checkout proof distinction.
+- [erpnext-ecommerce-receiving-architecture](recipes/erpnext-ecommerce-receiving-architecture.md) - design the ERPNext-side ecommerce receiving ecosystem before importing Odoo-derived products: fields, logic, variants, add-ons, pricing, media, cart, checkout, invoice, mobile/desktop journeys, fail-loud gates, live-exposure safety lock separation, real-catalog import blockers, and the 15-family / 47-enabled-SKU checkout proof distinction.
+- [erpnext-product-blueprint-authoring](recipes/erpnext-product-blueprint-authoring.md) - add staff-authored, local-only ERPNext product blueprints for highly customizable products, with validation, dry-run preview, guarded unpublished local apply, and fixed-price add-on runtime cascade proof.
 
 - Agency reference: `C:\Users\baenb\projects\Built_by_Cameron\capabilities\recipes\frappe-default-surface-map.md` maps Frappe/Webshop native spacing, wrappers, headings, chrome, and CMS defaults to the usual BBC override moves.
 - [claude-reference-library](recipes/claude-reference-library.md) - safely consult older Claude skills/rules as reference material without treating them as truth or copying them wholesale.

@@ -8,6 +8,53 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-14 - Staff-authored product blueprints are the local product creation bridge
+
+**Decision:** Highly customizable ecommerce products must be authorable through
+ERPNext's software interface, not only through developer-coded imports or source
+packets. The local bridge is `LT Product Blueprint`: staff enter product
+basics, options, color recipes, add-ons, and conditional pricing; the system
+validates those choices against the backend product-page architecture; the
+operator can preview a no-write apply plan; and local Desk apply can create
+unpublished ERPNext product records behind role, site-config, and server-held
+confirmation gates.
+
+**Reasoning:** GL clarified that the architecture is not just making room for
+existing Odoo products. Odoo is a useful behavior witness, but the actual
+problem is bridging ERPNext infrastructure gaps for highly customizable
+products so employee-authored product meaning cascades into product pages,
+cart, checkout, quotes, order lines, invoices, media, add-ons, pricing, and
+future imports. A product flow that only Codex can code does not satisfy that.
+
+**Implementation boundary:** `lt_ecommerce_paused=1` remains a public/live
+exposure safety lock and must not be used as a reason to stop local ecommerce
+build work. Local `frontend` has `lt_allow_local_blueprint_apply=1` for the
+test harness. Generated Website Items stay unpublished. `Approved For Live`
+remains blocked. No Frappe Cloud, DNS, Stripe, live publish, Sales Order, Sales
+Invoice, or Payment Request mutation is part of this slice. Blueprint-authored
+checkout add-ons currently cascade only for checkout-approved fixed-item-price
+rows backed by an enabled Item and Standard Selling Item Price.
+
+**Remaining work:** browser proof of an applied blueprint product, richer
+self-service UI for complex color/add-on/conditional cases, conditional pricing
+runtime, media assignment, broader add-on family mapping, refreshed import
+safety evidence, and staging/live release proof before customer exposure.
+
+**Verification receipt:** `python scripts/verify/product_blueprint_contract.py`,
+`python scripts/verify/product_blueprint_live_contract.py`,
+`python scripts/verify/product_page_runtime_contract.py`,
+`python scripts/verify/product_add_on_dependency_contract.py`,
+`python scripts/verify/product_page_architecture_contract_contract.py`,
+`python scripts/verify/ecommerce_pause_contract.py`, and
+`python scripts/verify/verifier_cli_contract.py` passed locally. The readiness
+gate still reports `technical_architecture_ok=true` and
+`import_reopen_ok=false` while the public exposure lock is on.
+
+**Decided by:** GL correction and Codex local product-blueprint implementation
+on 2026-05-14.
+
+---
+
 ## 2026-05-12 - Quote-first lane flips require the complex checkout scaffold
 
 **Decision:** Future quote-first product lane flips must start from the

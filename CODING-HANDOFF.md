@@ -1,5 +1,25 @@
 # Locally Twisted - Coding Handoff
 
+Codex ecommerce product-blueprint update on 2026-05-14: staff product creation
+now has a local ERPNext surface instead of requiring developer-coded product
+packets. `LT Product Blueprint` validates product basics, options, color
+recipes, add-ons, conditional pricing, page type, buying path, and base price;
+previews a no-write apply plan; and can apply locally from Desk only for
+`System Manager` / `Item Manager` users when `lt_allow_local_blueprint_apply=1`
+is set. Generated Website Items stay unpublished; live approval is blocked; no
+Frappe Cloud, DNS, Stripe, order, invoice, Payment Request, or public publish
+mutation is part of this slice. Blueprint-authored fixed-price checkout add-ons
+now cascade into product options and checkout validation when backed by an
+enabled Item and Standard Selling Item Price. Feature handoff:
+`workstreams/ecommerce-audit/product-blueprint-authoring-2026-05-14.md`;
+capability: `capabilities/recipes/erpnext-product-blueprint-authoring.md`;
+guards: `python scripts/verify/product_blueprint_contract.py`,
+`python scripts/verify/product_blueprint_live_contract.py`,
+`python scripts/verify/product_page_runtime_contract.py`, and
+`python scripts/verify/product_add_on_dependency_contract.py`.
+`lt_ecommerce_paused=1` remains a live/customer exposure safety lock, not an
+implementation blocker for local ecommerce build work.
+
 Codex ecommerce architecture correction on 2026-05-12: product-page receiving
 architecture is now explicit and generic through
 `lt-product-page-architecture-contract-v1`. The new contract maps
@@ -16,7 +36,7 @@ guards: `python scripts/verify/product_page_architecture_contract_contract.py`,
 `python scripts/verify/product_page_runtime_contract.py`, and
 `npm run test:product-quote-first`. The readiness gate is expected to report
 `technical_architecture_ok: True` and `import_reopen_ok: False` while public
-ecommerce remains paused.
+ecommerce live exposure remains locked.
 
 Post-review follow-up published as `88a708c Harden product page axis
 projection`: live product-page projection now uses
@@ -210,7 +230,7 @@ launch assets. Feature handoff:
 
 OpenClaw/Moji update on 2026-05-10 22:18: GL clarified that current ERPNext products are test products only. Future ecommerce/shop proof must include a controlled purge/reupload/import path that shows products fitting the LT schema populate the correct fields, preserve cascading option logic, and trigger intended automations. Do not perform that purge/reupload as part of this closeout/audit; use current products only as fixtures for verifier coverage.
 
-OpenClaw/Moji update on 2026-05-10 closeout: Phase 4 ecommerce safety was rerun after public-regression cleanup and remains protected. The quote/event boundary verifier still blocks 33 quote-first + 5 needs-review products through product controls, cart API, direct checkout URL, and stale localStorage. A standard-product-page local slice adds runtime page/lane classes, a ready-to-order note, and thumbnail `aria-pressed` sync; `product_page_runtime_contract.py` passes, but this is not import-reopen or live-checkout readiness. Media/architecture remains blocked by the intentional public ecommerce pause plus unresolved source extra-image/Website Slideshow approval work. Product-scope handoff: `workstreams/ecommerce-audit/ready-to-order-product-cut-plan-2026-05-10.md`; recommended first checkout shelf is 13 bouquet-family products only, holding Easter/Mother's Day unless seasonal.
+OpenClaw/Moji update on 2026-05-10 closeout: Phase 4 ecommerce safety was rerun after public-regression cleanup and remains protected. The quote/event boundary verifier still blocks 33 quote-first + 5 needs-review products through product controls, cart API, direct checkout URL, and stale localStorage. A standard-product-page local slice adds runtime page/lane classes, a ready-to-order note, and thumbnail `aria-pressed` sync; `product_page_runtime_contract.py` passes, but this is not import-reopen or live-checkout readiness. The remaining local implementation issues were unresolved source extra-image/Website Slideshow approval work and missing product-authoring/runtime proof; the public ecommerce safety lock protected live exposure but was not the implementation blocker. Product-scope handoff: `workstreams/ecommerce-audit/ready-to-order-product-cut-plan-2026-05-10.md`; recommended first checkout shelf is 13 bouquet-family products only, holding Easter/Mother's Day unless seasonal.
 
 OpenClaw/Moji update on 2026-05-10 late: ready-to-order ecommerce Phases 1-6 now have local proof/decision artifacts. Phase 5 proves delivery/payment/operator readiness locally: checkout fulfillment delivery fees + pickup + tax boundaries, local Stripe/test payment backend config, mocked webhook handling, paid-order cascade, payment-success reconciliation, operator quote review/send control, customer quote delivery BCC safety, and pause-mode safety all pass. Phase 6 decision: do not open live checkout yet; public ecommerce stays paused with `lt_ecommerce_paused=1` until HTTPS production host, explicit live Stripe/site config, policy approval, webhook setup, and one intentional low-risk real payment test pass. Current evidence: `workstreams/ecommerce-audit/phase-5-delivery-payment-operator-packet-2026-05-10.md` and `workstreams/ecommerce-audit/phase-6-launch-decision-packet-2026-05-10.md`. Safe wording: local ecommerce implementation is complete to the non-live boundary; live launch is an owner/access cutover.
 

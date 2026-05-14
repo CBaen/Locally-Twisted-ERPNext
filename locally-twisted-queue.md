@@ -12,13 +12,16 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 
 **Ecommerce launch execution posture (2026-05-11 GL/Leader correction):** The
-goal is to open and prove the ecommerce path, not preserve pause posture. Treat
-any active pause flag as a technical blocker/config state in the unpause path;
-use the matching Frappe Cloud/staging, product import, live payment, DNS, and
+goal is to open and prove the ecommerce path, not preserve pause posture.
+2026-05-14 GL correction: `lt_ecommerce_paused=1` is a live/customer exposure
+safety lock, not an implementation blocker. Continue local and staging/test
+harness ecommerce work under the lock and name actual blockers: incomplete UI,
+missing apply flow, unsafe checkout, unmapped add-ons, unresolved pricing,
+unverified media, failed verifier, missing staging proof, or owner approval.
+Use the matching Frappe Cloud/staging, product import, live payment, DNS, and
 staging-to-live gates to decide what can safely go live. Current
-visible/imported product records are
-fixture/test products for architecture proof only; Locally Twisted itself is a
-real client project.
+visible/imported product records are fixture/test products for architecture
+proof only; Locally Twisted itself is a real client project.
 
 **Shop smoke gate (2026-05-11):** `d52c6888` cleared the
 `/civic-community missing focused page title` blocker by rebaselining the
@@ -144,6 +147,7 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 **Remaining (in priority order):**
 - [P0] **Ready-to-order ecommerce launch hardening and real catalog import gate.** Active front-door handoff: `workstreams/ecommerce-audit/README.md`; current post-import checkout closeout: `workstreams/ecommerce-audit/post-import-checkout-launch-closeout-2026-05-11.md`; import gate handoff: `workstreams/ecommerce-audit/product-import-hardening-gate-2026-05-11.md`; payment cutover checklist: `workstreams/payment-portal-live-cutover-checklist-2026-05-11.md`; receiving architecture handoff/capability: `workstreams/erpnext-ecommerce-receiving-architecture.md` and `capabilities/recipes/erpnext-ecommerce-receiving-architecture.md`. Current local proof uses the corrected manifest: 48 kept products and 5 owner-explicit Classic exclusions (`classic-organic-balloon-garland`, `classic-arch`, `classic-column`, `classic-organic-columns`, `classic-organic-arch`). The approved local import completed with exit 0 against the local ERPNext `frontend` site only and proved the guarded upsert/write path; it is not a delete/recreate transcript. Final browser proof passed with `& "C:\Program Files\nodejs\node.exe" scripts/verify/post_import_checkout_proof.js` for Easter Balloon Cups, 7' Butterfly Column, Graduation Grab n Go, 6' Graduation stands, and Unicorn Bouquet. 2026-05-12 verifier hardening now proves visible color-drawer selections produce `color_recipes` for 7' Butterfly Column and Graduation Grab n Go, then passes the non-mutating checkout totals preview before accepting checkout summary proof. Backend contracts are green for `product_import_readiness_gate`, `post_import_catalog_state`, `direct_checkout_target_contract`, and `cart_checkout_contract`; `post_import_catalog_state` now fails loudly if any included product is missing, unpublished, disabled, or unpriced. Direct paid checkout still requires explicit `simple_product|checkout`; blank, partial, inferred, quote-first, and needs-review Website Item states fail closed. Remaining caveats: 8 review-only add-on axes are protected by quote-first fallback until mapped, the five Classic exclusions remain quote-first, current product records are still local import/proof evidence rather than final real catalog approval, and live Frappe Cloud/Stripe/DNS/webhook/real payment gates remain separate.
   2026-05-12 nav/search review closeout is `workstreams/ecommerce-audit/ready-to-order-nav-search-backend-gate-2026-05-12.md`: Ready-to-Order quick links now require owner include plus backend `simple_product|checkout`, owner include cannot bypass checkout eligibility, and the search contract treats filtered backend-approved links as hidden rather than removed from the DOM.
+  2026-05-14 product blueprint authoring handoff is `workstreams/ecommerce-audit/product-blueprint-authoring-2026-05-14.md`; capability is `capabilities/recipes/erpnext-product-blueprint-authoring.md`. Employees can now define product basics, options, color recipes, add-ons, and conditional pricing in `LT Product Blueprint`, preview a no-write apply plan, and use guarded local Desk apply to create unpublished ERPNext product records. Local `frontend` has `lt_allow_local_blueprint_apply=1` for this test harness. Do not enable that gate on staging/live or publish generated Website Items without product-page browser proof, cart/checkout proof, media/conditional-pricing/add-on family mapping, refreshed import safety evidence, and explicit release approval.
 
 - [P0] **Complex product-page checkout UI and browse rules.** Active storefront
   handoff: `workstreams/ecommerce-audit/storefront-proof-and-complex-ui-handoff-2026-05-11.md`.
@@ -157,10 +161,13 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
   checkout UI before flipping broad product lanes: multi-slot color recipe
   builder, palette picker, explicit add-on contracts, conditional pricing
   panel, backend-driven media updates, and cart/checkout/receipt summary
-  parity. Proof ladder starts with the 4 simple-axis candidates, then one of
-  the 6 multi-color-only cases, then Classic Column, add-on/conditional mapping,
-  and Classic Arch as the full stress case. Keep the 18 currently passing
-  direct-checkout pages green as regression coverage.
+  parity. The blueprint authoring slice now gives employees the local Desk
+  input surface; the remaining work is making those authored complex choices
+  render and cascade safely everywhere. Proof ladder starts with one applied
+  blueprint product browser/cart/checkout proof, then the 4 simple-axis
+  candidates, one of the 6 multi-color-only cases, Classic Column,
+  add-on/conditional mapping, and Classic Arch as the full stress case. Keep the
+  18 currently passing direct-checkout pages green as regression coverage.
 
 - [P0] **Website launch workstream.** Active launch coordination lane at `workstreams/website-launch.md`. Goal: get the public site and inquiry path live today, with ecommerce hidden if needed and preserved for follow-up. Navigation correction handoff: `workstreams/nav-btfp-process-correction.md`; removed hub route handoff: `workstreams/event-balloons-route-removal-2026-05-11.md`; active canonical-service guard handoff: `workstreams/nav-service-removal-guard.md`; mobile search/review compactness handoff: `workstreams/mobile-nav-review-compactness.md`; BTFP service page/form/calculator handoff: `workstreams/btfp-service-page.md`; FAQ service-lane handoff: `workstreams/faq-service-lane-rewrite.md`; public microinteraction handoff: `workstreams/public-site-microinteractions.md`; current menu label source: `workstreams/menu-content-coordination.md`. Current header/menu has `Twisting & Face Painting` pointing to `/balloon-twisting-and-face-painting`, the event dropdown pointing only to the four audience routes, `Contact Us` pointing to `/contact`, and top-banner `Free Event Quote` pointing to `/contact` beside the account link. Ready-to-Order is config-gated: hidden in the current pages/forms-first launch posture and restored when ecommerce is reopened. The 24-hour short-notice message is a centered deep-navy `/contact` link on desktop and a matching visible deep-navy `/contact` strip on mobile; the old prepared-design proof copy and delivery/truck icon are removed. Removing, hiding, renaming, or replacing the BTFP lane requires the exact approval marker in `workstreams/nav-service-removal-approvals.md`; `scripts/verify/nav_ia.py` fails without it. Keep `/event-balloons` and `/process` out unless GL explicitly reopens them. Keep mobile search at the bottom of the drawer, not in the mobile header action row. Current hidden-commerce launch proof: `python scripts\verify\website_launch_verify.py --with-a11y --with-contact-smoke` passed 15/15 steps and `python scripts/verify/ecommerce_pause_contract.py` passed. Ignored `.tmp` preflight snapshots are not retained after launch cleanup; rerun the snapshot command when fresh local evidence is needed. Open ecommerce proof remains available through `npm run test:ecommerce-full` when the switch is reopened.
 - [P0] **Public storefront security hardening.** Active handoff: `workstreams/public-site-security-hardening.md`; capability: `capabilities/recipes/frappe-public-storefront-security.md`. The 2026-05-08 security review reproduced `/shop?q=` reflected XSS, unauthenticated `/thank-you?order=<Sales Order>` order-summary exposure, a public Lead attachment URL, tracked local credentials in docs, pre-payment guest checkout Lead conversion, and an unauthenticated `/event-playground?port=` internal preview bridge. Fixed now: `/shop?q=` escaping, product-gallery image rendering, new private inquiry uploads, checkout Lead conversion delayed until the paid-order cascade, and Event Playground guest/auth gating. GL clarified current data/files are fake, the order-summary and existing public fake-file findings are not immediate launch blockers for this balloon business/fake-data state, and GL owns credential rotation/doc cleanup. Remaining: credential rotation before broader sharing/cutover, optional token-bound receipt hardening before real customer cutover, and fake public Lead file cleanup if the test files should not remain.

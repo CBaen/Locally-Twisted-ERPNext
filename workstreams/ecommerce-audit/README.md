@@ -5,16 +5,18 @@ D:2026-05-10 | Check:local artifacts 2026-05-10 | Confidence:[LOCAL-PROOF]
 
 This directory is the evidence packet for the May 10 ecommerce architecture audit. It is not a product import, not a destructive migration rehearsal, and not permission to copy Odoo code. Odoo is the source witness for business meaning; ERPNext/Frappe v15 receives that meaning through native DocTypes, custom fields, app services, templates, and verifiers.
 
-2026-05-11 owner correction for peer GPT 5.5 agents: the current ecommerce
-workstream is launch execution for open ecommerce, not preservation of a pause
-posture. Treat any existing pause flag or checkout fallback as a gate/blocker
-to clear or document, not the desired final state. Keep the architecture lens
-backend-first: ERPNext v15.105.0 / Frappe v15 Webshop integration must preserve
-Item, Item Variant, Website Item, Item Price, Item Attribute, media/gallery,
-Webshop Settings, cart/checkout, payment, and Frappe Cloud persistence meaning
-into product-page UX and search/discovery. Current visible/imported products
-are test products only; real catalog truth requires a separate approved
-catalog/import proof gate.
+2026-05-14 GL correction for peer GPT 5.5 agents: `lt_ecommerce_paused=1`
+is a live/customer exposure safety lock, not an implementation blocker. The
+reason ecommerce is not public is that the product, cart, checkout, pricing,
+media, staff-authoring, and verification paths are not trustworthy enough yet.
+Local and staging/test-harness ecommerce work must continue under the lock and
+must name actual blockers. Keep the architecture lens backend-first: ERPNext
+v15.105.0 / Frappe v15 Webshop integration must preserve Item, Item Variant,
+Website Item, Item Price, Item Attribute, media/gallery, Webshop Settings,
+cart/checkout, payment, and Frappe Cloud persistence meaning into product-page
+UX and search/discovery. Current visible/imported products are test products
+only; real catalog truth requires a separate approved catalog/import proof
+gate.
 
 ## 2026-05-11 Post-Import Checkout Closeout
 
@@ -105,6 +107,24 @@ Current local counts: 53 published Website Items, 10,674 Items, 49 templates,
 10,617 variants, 10,227 active variants, 390 disabled variants, 10,656 Item
 Prices, 26 Item Attributes, and 32,028 Item Variant Attribute rows.
 
+## 2026-05-14 Product Blueprint Authoring
+
+Use `product-blueprint-authoring-2026-05-14.md` for the current local-only
+staff product-authoring slice. It adds `LT Product Blueprint` plus child tables
+for options, color recipes, add-ons, and conditional pricing; validates page
+type/buying path/payload targets against the backend product-page architecture;
+previews a no-write apply plan; exposes a guarded Desk `Apply Locally` action;
+and lets checkout-approved fixed-item-price blueprint add-ons cascade into
+product options and checkout validation.
+
+Boundaries: the local `frontend` site has `lt_allow_local_blueprint_apply=1`
+for this test harness; generated Website Items stay unpublished; `Approved For
+Live` remains blocked; no live publish, order, invoice, Payment Request, Stripe,
+Frappe Cloud, DNS, or live checkout work was performed. Remaining product
+authoring work is browser proof of an applied blueprint product, richer
+self-service UI for complex cases, conditional pricing runtime, media
+assignment, broader add-on family mapping, and refreshed import safety evidence.
+
 ## Evidence inventory
 
 | Lane | Required artifact | Current state | Use it for |
@@ -141,6 +161,7 @@ Prices, 26 Item Attributes, and 32,028 Item Variant Attribute rows.
 | Complex checkout scaffold | `complex-checkout-scaffold-2026-05-12.md` + `../../scripts/verify/complex_checkout_scaffold.py` | Present, local ProductPatternContract scaffold / source-owned gate | Maps all 53 products into direct-checkout guard, simple lane-flip, multi-color UI, add-on/conditional blocked, or needs-review stages before any future quote-first lane flip. |
 | Backend product-page architecture contract | `backend-product-page-architecture-contract-2026-05-12.md` + `../../scripts/verify/product_page_architecture_contract.py` | Present, post-review / source+live projection gate | Owns `lt-product-page-architecture-contract-v1`, source/backend axis role projection, payload target mapping, line-field parity, and the post-review color-axis regression proof. |
 | Ecommerce shop setup closeout | `../../ECOMMERCE-SHOP-HANDOFF.md` | Present, current root closeout | Current completed-lane summary for backend wiring, catalog/import/pricing, media readiness, storefront UX/homepage verifier alignment, runner wrapper, remaining live gates, and scoped worktree caveats. |
+| Product blueprint authoring | `product-blueprint-authoring-2026-05-14.md` + `../../scripts/verify/product_blueprint_contract.py` + `../../scripts/verify/product_blueprint_live_contract.py` | Present, local-only staff authoring / rollback-safe apply proof | Adds employee Desk product setup, validation evidence, dry-run apply plan, guarded unpublished local apply, and fixed-price blueprint add-on runtime cascade. |
 | Phase 6 launch decision packet | `phase-6-launch-decision-packet-2026-05-10.md` | Present, parent decision | Keeps public ecommerce paused; live checkout remains blocked until production HTTPS host, explicit live Stripe/site config, policy approval, webhook setup, and one intentional real payment test pass. |
 | Infrastructure synthesis | `ecommerce-infrastructure-research-synthesis-2026-05-10.md` | Present, parent-created | Corrected synthesis for the real question: ERPNext receiving infrastructure, contract/runtime layers, line-level preservation, quote/checkout bridges, fail-loud evidence, and verifier gates. |
 | Knowledge base index | `ecommerce-knowledge-base-index-2026-05-10.md` | Present, parent-created | Supporting index of recalled memory, local artifacts, source repos, verified docs, blockers, and next actions. |
@@ -166,12 +187,15 @@ The local system has 53 published priced Website Items, 18 direct-checkout
 products, and 35 currently quote-first/needs-review products that fail closed
 unless deliberately mapped. The complex-checkout scaffold now splits those 35
 into 4 simple-axis lane-flip candidates, 6 multi-color UI cases, 20
-add-on/conditional blocked products, and 5 needs-review/missing products. This
-is local ecommerce architecture/import proof, not final live cutover approval.
-Remaining launch gates are Frappe Cloud staging/source freeze, Cloudflare/DNS,
-live Stripe/site config/webhook, legal or policy approvals where needed, one
-intentional low-risk live payment test, and final real catalog approval if the
-local product set is to become public catalog truth.
+add-on/conditional blocked products, and 5 needs-review/missing products. The
+staff blueprint slice now lets employees define new customizable products in
+ERPNext locally, preview/apply them unpublished, and prove one fixed-price
+blueprint add-on cascade. This is local ecommerce architecture/import/authoring
+proof, not final live cutover approval. Remaining launch gates are Frappe Cloud
+staging/source freeze, Cloudflare/DNS, live Stripe/site config/webhook, legal or
+policy approvals where needed, one intentional low-risk live payment test, and
+final real catalog approval if the local product set is to become public
+catalog truth.
 
 
 ## Pre-Phase-5 hygiene verification (2026-05-10 18:xx MDT)
@@ -204,3 +228,7 @@ Current durable JSON evidence remains only under this workstream directory. Igno
 11. Use `ready-to-order-ecommerce-plan-deepen-2026-05-10.md`, `ready-to-order-ecommerce-goal-progress-2026-05-10.md`, `phase-5-delivery-payment-operator-packet-2026-05-10.md`, `product-import-hardening-gate-2026-05-11.md`, and `../payment-portal-live-cutover-checklist-2026-05-11.md` as active sequencing gates: Phases 1-5 are locally verifier-backed; import and live payment are the remaining backend cutover gates.
 12. Use `ready-to-order-product-cut-plan-2026-05-10.md` for no-port product-scope decisions: recommended public shelf is the 13 bouquet-family pages only, with Easter/Mother's Day held unless seasonal; complex/event/custom products stay quote-first or hidden/review-only.
 13. Do not treat the current 53 products as final catalog truth. Use them only as fixture products until a future controlled purge/reupload/import audit proves the schema, logic, cascading information, and automations repopulate correctly.
+14. Continue product-authoring work under the live-exposure lock. Use
+    `product-blueprint-authoring-2026-05-14.md` and
+    `capabilities/recipes/erpnext-product-blueprint-authoring.md`; do not cite
+    `lt_ecommerce_paused=1` as a reason to stop local build/test work.

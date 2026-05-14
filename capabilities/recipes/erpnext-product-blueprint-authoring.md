@@ -1,0 +1,119 @@
+---
+id: erpnext-product-blueprint-authoring
+name: ERPNext Product Blueprint Authoring
+schema_version: 2.0
+level: recipe
+maturity: candidate
+scope: Locally Twisted ERPNext staff-authored product setup for highly customizable ecommerce products
+currently_true: unknown
+verification_level: 2
+last_verified: 2026-05-14
+evidence_quality: direct
+successful_uses: 1
+failed_uses: 0
+regressions: 0
+used_by:
+  - Codex
+  - OpenClaw
+depends_on:
+  - erpnext-ecommerce-receiving-architecture
+  - fail-loud-operating-law
+tags:
+  - Locally Twisted
+  - ERPNext
+  - Frappe
+  - ecommerce
+  - product authoring
+  - custom products
+  - local only
+---
+
+# ERPNext Product Blueprint Authoring
+
+Use this when adding or changing Locally Twisted products that need employee
+authoring in ERPNext instead of developer-coded product packets.
+
+## Rule
+
+Staff-facing product setup belongs in `LT Product Blueprint`. Odoo product
+records are useful witnesses for behavior, but the architecture must support
+highly customizable products beyond the exact Odoo catalog that happened to
+exist. The blueprint is the local bridge from employee-entered product meaning
+to ERPNext Items, Website Items, prices, options, add-ons, and future
+conditional pricing/media flows.
+
+`lt_ecommerce_paused=1` is a live/customer exposure safety lock. It is not a
+reason to stop local product-authoring, cart, checkout, pricing, media, or
+verifier work. For local build work, name the actual blocker.
+
+## Current Contract
+
+- Employees create a Desk `LT Product Blueprint` record with product basics,
+  options, color recipes, add-ons, and conditional pricing rows.
+- Validation maps employee labels to the architecture contract:
+  `simple_product`, `complex_custom_product`, `checkout`, `quote_first`,
+  `needs_review`, `selected_options`, `color_recipes`, `add_ons`, and
+  `quote_context`.
+- Drafts may save while blocked so staff can work incrementally. Moving blocked
+  records to preview/staging fails loudly.
+- `Approved For Live` is blocked in this local slice.
+- Dry-run preview writes no product records and names the intended Item,
+  Website Item, attribute, variant, price, add-on, and held-media work.
+- Local apply is guarded by role, site config, and server-only confirmation:
+  `System Manager` or `Item Manager`, `lt_allow_local_blueprint_apply=1`, and
+  the server-held `LOCAL_ONLY_BLUEPRINT_APPLY` token.
+- Local apply keeps Website Items unpublished and creates no Sales Orders,
+  Sales Invoices, Payment Requests, Stripe records, Frappe Cloud updates, DNS
+  changes, or live publish actions.
+- Blueprint-authored checkout add-ons currently cascade only when they are
+  checkout-approved fixed-item-price rows pointing at an enabled Item with a
+  Standard Selling Item Price. Quantity min/max is enforced by checkout
+  validation.
+
+## Workflow
+
+1. Create or edit the `LT Product Blueprint` in Desk.
+2. Resolve validation blockers until the record is `Ready For Local Preview`.
+3. Use `Preview Local Apply` and read the planned record counts/blockers.
+4. Use `Apply Locally` only on the local `frontend` site when the temporary
+   product needs ERPNext runtime proof.
+5. Run the pure and rollback-safe verifiers below before trusting the generated
+   product records.
+6. Keep generated Website Items unpublished until browser, cart, checkout,
+   pricing, media, and staging gates prove the product family.
+
+## Verification
+
+```powershell
+python scripts/verify/product_blueprint_contract.py
+python scripts/verify/product_blueprint_live_contract.py
+python scripts/verify/product_page_runtime_contract.py
+python scripts/verify/product_add_on_dependency_contract.py
+python scripts/verify/product_page_architecture_contract_contract.py
+python scripts/verify/ecommerce_pause_contract.py
+python scripts/verify/product_page_architecture_readiness.py --json
+python scripts/verify/verifier_cli_contract.py
+```
+
+Expected current result: product blueprint pure/live contracts pass;
+`product_page_architecture_readiness.py --json` reports
+`technical_architecture_ok=true` and `import_reopen_ok=false` while the public
+exposure lock is on. That false `import_reopen_ok` is expected local safety
+posture, not a local product-authoring blocker.
+
+## Remaining Work
+
+- Browser proof of an applied blueprint product page, cart line, checkout
+  summary, and rollback-safe order/invoice preservation.
+- Richer self-service UI for multi-slot color recipes, complex add-on families,
+  and conditional pricing.
+- Conditional pricing runtime and fail-loud checkout/quote behavior.
+- Media assignment fields, dry-run/apply behavior, and approval evidence.
+- Fresh import safety evidence before any staging/live product release.
+
+Backlinks:
+
+- `workstreams/ecommerce-audit/product-blueprint-authoring-2026-05-14.md`
+- `workstreams/ecommerce-audit/README.md`
+- `ECOMMERCE-SHOP-HANDOFF.md`
+- `locally-twisted-decisions.md`

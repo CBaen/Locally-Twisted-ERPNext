@@ -1,0 +1,38 @@
+{
+ "actions": [],
+ "creation": "2026-05-14 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "add_on_name",
+  "add_on_item",
+  "price_source",
+  "requires_value",
+  "quantity_min",
+  "quantity_max",
+  "checkout_approved",
+  "payload_target"
+ ],
+ "fields": [
+  {"fieldname": "add_on_name", "fieldtype": "Data", "in_list_view": 1, "label": "Add-on Name", "reqd": 1},
+  {"fieldname": "add_on_item", "fieldtype": "Link", "in_list_view": 1, "label": "Add-on Item", "options": "Item"},
+  {"default": "Needs review", "fieldname": "price_source", "fieldtype": "Select", "in_list_view": 1, "label": "Price Source", "options": "Fixed Item Price\nConditional\nQuote only\nNeeds review", "reqd": 1},
+  {"default": "0", "fieldname": "requires_value", "fieldtype": "Check", "label": "Requires Customer Value"},
+  {"default": "0", "fieldname": "quantity_min", "fieldtype": "Int", "label": "Minimum Quantity"},
+  {"default": "0", "fieldname": "quantity_max", "fieldtype": "Int", "label": "Maximum Quantity"},
+  {"default": "0", "fieldname": "checkout_approved", "fieldtype": "Check", "in_list_view": 1, "label": "Checkout Approved"},
+  {"fieldname": "payload_target", "fieldtype": "Data", "in_list_view": 1, "label": "Payload Target", "read_only": 1}
+ ],
+ "istable": 1,
+ "links": [],
+ "modified": "2026-05-14 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Locally Twisted",
+ "name": "LT Product Blueprint Add On",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

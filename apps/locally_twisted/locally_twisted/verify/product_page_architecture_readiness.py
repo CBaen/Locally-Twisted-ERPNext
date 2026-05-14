@@ -77,7 +77,10 @@ def run(source_catalog_path: str | None = None) -> dict[str, object]:
         "generated_at": now_datetime().isoformat(),
         "read_only": True,
         "scope": "erpnext_frappe_product_page_template_architecture",
-        "ok_meaning": "true only when the core architecture and all business/import/public-reopen gates are clear",
+        "ok_meaning": (
+            "true only when the core architecture and all business/import/public-reopen gates are clear; "
+            "the public-reopen gate is separate from local ecommerce implementation readiness"
+        ),
         "fake_products_are_evidence_only": True,
         "public_ecommerce_paused": paused,
         "finance_deferred": True,
@@ -331,8 +334,13 @@ def _criteria(contract_results: dict[str, dict[str, object]], public_ecommerce_p
         _row(
             "public_ecommerce_reopen",
             BLOCKED if public_ecommerce_paused else PASS,
-            "Public shop, product, cart, checkout, and ready-to-order surfaces match the configured ecommerce mode.",
-            blocker="Public ecommerce is still paused by site config." if public_ecommerce_paused else None,
+            "Public shop, product, cart, checkout, and ready-to-order surfaces match the configured public exposure mode.",
+            blocker=(
+                "Public ecommerce live exposure is locked by site config; "
+                "continue local build/test work under this safety lock."
+                if public_ecommerce_paused
+                else None
+            ),
             category=PUBLIC_REOPEN,
             evidence=["locally_twisted/ecommerce_pause.py"],
             verifiers=[

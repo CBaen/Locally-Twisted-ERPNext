@@ -67,6 +67,68 @@ ADD_ON_KEY_ALIASES = {
     "add_foil_number": "foil_number",
 }
 
+
+def checkout_add_on_contracts_for_item(website_item_code: str | None) -> dict[str, dict[str, Any]]:
+    """Return static and blueprint-authored checkout add-ons for a product page."""
+    contracts = {key: dict(value) for key, value in ADD_ON_ITEM_CONTRACTS.items()}
+    contracts.update(_blueprint_add_on_contracts_for_item(website_item_code))
+    return contracts
+
+
+def _blueprint_add_on_contracts_for_item(website_item_code: str | None) -> dict[str, dict[str, Any]]:
+    website_item_code = str(website_item_code or "").strip()
+    if not website_item_code:
+        return {}
+    if not frappe.db.exists("DocType", "LT Product Blueprint"):
+        return {}
+    blueprint_names = frappe.get_all(
+        "LT Product Blueprint",
+        filters={"target_item_code": website_item_code},
+        pluck="name",
+    )
+    if not blueprint_names:
+        return {}
+    rows = frappe.get_all(
+        "LT Product Blueprint Add On",
+        filters={
+            "parent": ["in", blueprint_names],
+            "parenttype": "LT Product Blueprint",
+            "checkout_approved": 1,
+            "price_source": "Fixed Item Price",
+        },
+        fields=["add_on_name", "add_on_item", "requires_value", "quantity_min", "quantity_max"],
+        order_by="idx asc",
+    )
+    contracts: dict[str, dict[str, Any]] = {}
+    for row in rows:
+        item_code = str(row.get("add_on_item") or "").strip()
+        if not item_code:
+            continue
+        item = frappe.db.get_value(
+            "Item",
+            {"item_code": item_code, "disabled": 0},
+            ["item_code", "item_name", "item_group", "description"],
+            as_dict=True,
+        )
+        if not item:
+            continue
+        label = str(row.get("add_on_name") or item.get("item_name") or item_code).strip()
+        key = f"blueprint_{_canonical_add_on_key(label or item_code)}"
+        contracts[key] = {
+            "item_code": item_code,
+            "item_name": item.get("item_name") or label,
+            "label": label,
+            "item_group": item.get("item_group") or "",
+            "description": item.get("description") or f"Blueprint add-on for {website_item_code}.",
+            "eligible_website_item_codes": (website_item_code,),
+            "input_type": "number_text" if row.get("requires_value") else "quantity",
+            "quantity_min": int(row.get("quantity_min") or 0),
+            "quantity_max": int(row.get("quantity_max") or MAX_ADD_ON_QUANTITY),
+            "source": "lt_product_blueprint",
+        }
+    return contracts
+
+
 # Source/Odoo add-on-looking axes that are known, but not approved for paid
 # checkout. They must fail as quote-required instead of looking like broken
 # setup or silently becoming free options.
@@ -419,8 +481,9 @@ def sales_order_add_on_lines(
         )
 
     lines = []
+    add_on_contracts = checkout_add_on_contracts_for_item(website_item_code)
     for add_on in add_ons:
-        spec = ADD_ON_ITEM_CONTRACTS[add_on["key"]]
+        spec = add_on_contracts[add_on["key"]]
         item = frappe.db.get_value(
             "Item",
             {"item_code": spec["item_code"], "disabled": 0},
@@ -620,6 +683,7 @@ def _validated_checkout_add_ons(
         )
 
     normalized = []
+    add_on_contracts = checkout_add_on_contracts_for_item(website_item_code)
     for raw in add_ons:
         if not isinstance(raw, dict):
             frappe.throw(
@@ -627,7 +691,7 @@ def _validated_checkout_add_ons(
                 frappe.ValidationError,
             )
         key = _add_on_key(raw)
-        spec = ADD_ON_ITEM_CONTRACTS.get(key)
+        spec = add_on_contracts.get(key)
         if not spec and key in REVIEW_ONLY_SOURCE_ADD_ONS:
             frappe.throw(
                 _(
@@ -651,6 +715,24 @@ def _validated_checkout_add_ons(
         _assert_add_on_is_eligible(key, spec, website_item_code)
         value = raw.get("value")
         quantity = _add_on_quantity(raw.get("quantity"), value=value)
+        quantity_min = int(spec.get("quantity_min") or 0)
+        quantity_max = int(spec.get("quantity_max") or MAX_ADD_ON_QUANTITY)
+        if quantity_min and quantity < quantity_min:
+            frappe.throw(
+                _(
+                    "Tiny snag: this add-on needs a higher quantity before checkout. "
+                    "Please choose the product options again."
+                ),
+                frappe.ValidationError,
+            )
+        if quantity > quantity_max:
+            frappe.throw(
+                _(
+                    "Tiny snag: this add-on quantity is higher than this product allows. "
+                    "Please choose the product options again."
+                ),
+                frappe.ValidationError,
+            )
         normalized.append(
             {
                 "key": key,

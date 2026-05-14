@@ -20,7 +20,10 @@ from locally_twisted.catalog_variant_rules import required_variant_attribute_nam
 from locally_twisted.catalog_contract.color_rules import grouped_colors, is_balloon_color_axis
 from locally_twisted.catalog_contract.product_pattern_contract import LINE_CONFIGURATION_FIELDS
 from locally_twisted.commerce_rules import PRICE_LIST
-from locally_twisted.product_page_runtime import ADD_ON_ITEM_CONTRACTS, product_page_contract_for_website_item
+from locally_twisted.product_page_runtime import (
+    checkout_add_on_contracts_for_item,
+    product_page_contract_for_website_item,
+)
 from webshop.webshop.variant_selector.utils import get_attributes_and_values
 
 
@@ -130,7 +133,7 @@ def get_checkout_add_on_options(item_code: str | None, price_list: str = PRICE_L
         return []
 
     options = []
-    for key, spec in ADD_ON_ITEM_CONTRACTS.items():
+    for key, spec in checkout_add_on_contracts_for_item(item_code).items():
         eligible = tuple(spec.get("eligible_website_item_codes") or ())
         if eligible and item_code not in eligible:
             continue
@@ -149,7 +152,9 @@ def get_checkout_add_on_options(item_code: str | None, price_list: str = PRICE_L
                 "item_code": spec["item_code"],
                 "unit_price": rate,
                 "formatted_unit_price": fmt_money(rate, currency=frappe.db.get_default("currency") or "USD"),
-                "input_type": "number_text",
+                "input_type": spec.get("input_type") or "number_text",
+                "quantity_min": int(spec.get("quantity_min") or 0),
+                "quantity_max": int(spec.get("quantity_max") or 10),
                 "help": "Optional upgrade. Each selected number is priced separately.",
             }
         )
@@ -310,8 +315,8 @@ def _live_architecture_axes(item_code: str) -> list[dict[str, Any]]:
                     "item_code": option.get("item_code"),
                     "price_status": "ready",
                     "live_unit_price": option.get("unit_price"),
-                    "quantity_min": 1,
-                    "quantity_max": 10,
+                    "quantity_min": option.get("quantity_min", 0),
+                    "quantity_max": option.get("quantity_max", 10),
                     "receipt_label": option.get("label"),
                     "input_type": option.get("input_type"),
                 },

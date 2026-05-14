@@ -1,13 +1,17 @@
 # Ecommerce Shop Handoff
 
-Status as of 2026-05-12 for peer GPT-5.5 Codex/OpenClaw agents.
+Status as of 2026-05-14 for peer GPT-5.5 Codex/OpenClaw agents.
 
 ## Current Repository State
 
 - Branch: `main`
 - Published closeout baseline before complex-scaffold work: `1811cd6 Fix ecommerce closeout doc state`; verify current `HEAD` / `origin/main` with `git status -sb` before editing.
-- This file is the front-door handoff for the finished local ecommerce shop setup slice.
+- This file is the front-door handoff for the local ecommerce shop setup and
+  staff product-authoring slices.
 - Do not treat current product names/counts/photos as final public catalog approval unless a later real-catalog approval gate says so. The local ERPNext catalog/import/backend architecture is ready; live Frappe Cloud, Stripe, DNS, webhook, and real payment cutover remain separate gates.
+- `lt_ecommerce_paused=1` is a public/live exposure safety lock, not a reason
+  to stop local build/test work. Name the actual blocker when ecommerce work is
+  incomplete.
 
 ## Completed Lanes
 
@@ -174,7 +178,8 @@ Expected gated result:
 
 - `python scripts/verify/product_page_architecture_readiness.py --report output/product-page-architecture-readiness.json`
   reports `technical_architecture_ok: True` and `import_reopen_ok: False`
-  because current ecommerce pause config still blocks public reopen.
+  because the public/live exposure safety lock is on. That lock does not block
+  local ecommerce implementation work.
 
 Evidence summary: 53 product rows are mapped through the generic receiving
 architecture; 18 checkout-allowed, 35 quote-first-allowed; payload targets are
@@ -189,6 +194,53 @@ recipe-looking patterns. The browser regression proves `7-butterfly-column`
 emits `latex colors -> color_recipes` and preserves the selected color in the
 cart payload without leaking it into `selected_options`.
 
+### Product blueprint authoring - 2026-05-14
+
+Owner: `Codex`
+
+Result: complete as a local-only staff product-authoring and unpublished apply
+slice. No live site update, Frappe Cloud update, DNS change, Stripe change,
+public publish, order, invoice, or Payment Request was made.
+
+Files added/changed:
+
+- `apps/locally_twisted/locally_twisted/locally_twisted/doctype/lt_product_blueprint/`
+- `apps/locally_twisted/locally_twisted/locally_twisted/doctype/lt_product_blueprint_option/`
+- `apps/locally_twisted/locally_twisted/locally_twisted/doctype/lt_product_blueprint_color_recipe/`
+- `apps/locally_twisted/locally_twisted/locally_twisted/doctype/lt_product_blueprint_add_on/`
+- `apps/locally_twisted/locally_twisted/locally_twisted/doctype/lt_product_blueprint_conditional_price/`
+- `apps/locally_twisted/locally_twisted/product_blueprint_validation.py`
+- `apps/locally_twisted/locally_twisted/product_blueprint_apply_plan.py`
+- `apps/locally_twisted/locally_twisted/product_blueprint_local_apply.py`
+- `apps/locally_twisted/locally_twisted/product_page_runtime.py`
+- `apps/locally_twisted/locally_twisted/product_options.py`
+- `apps/locally_twisted/locally_twisted/verify/product_blueprint_contract.py`
+- `scripts/verify/product_blueprint_contract.py`
+- `scripts/verify/product_blueprint_live_contract.py`
+- `workstreams/ecommerce-audit/product-blueprint-authoring-2026-05-14.md`
+
+Green gates:
+
+- `python scripts/verify/product_blueprint_contract.py`
+- `python scripts/verify/product_blueprint_live_contract.py`
+- `python scripts/verify/product_page_runtime_contract.py`
+- `python scripts/verify/product_add_on_dependency_contract.py`
+- `python scripts/verify/product_page_architecture_contract_contract.py`
+- `python scripts/verify/ecommerce_pause_contract.py`
+- `python scripts/verify/verifier_cli_contract.py`
+
+Evidence summary: `LT Product Blueprint` is installed with child tables for
+options, color recipes, add-ons, and conditional pricing. Validation maps
+employee labels to `simple_product`, `complex_custom_product`, `checkout`,
+`quote_first`, `needs_review`, `selected_options`, `color_recipes`, `add_ons`,
+and `quote_context`. The dry-run apply plan writes no product records. Desk
+apply is role-gated, local-site-config-gated, server-token-gated, and keeps the
+generated Website Item unpublished. The rollback-safe verifier proves a
+temporary direct-checkout blueprint creates one template Item, two variants,
+one Item Attribute, two Item Prices, one unpublished Website Item, zero
+orders/invoices/payments, and one checkout-approved fixed-price blueprint add-on
+that appears in product options and fails loudly above its quantity max.
+
 ## Current Working Position
 
 - Backend ecommerce architecture is green.
@@ -200,6 +252,8 @@ cart payload without leaking it into `selected_options`.
   heuristic lane-flip lists from being used as checkout approval.
 - Backend product-page architecture contract is green and emitted to product
   pages as a backend-owned JSON contract.
+- Staff product blueprint authoring is green for validation, dry-run preview,
+  guarded unpublished local apply, and fixed-price add-on runtime cascade.
 - The shared worktree may still show regenerated audit artifacts under `audits/odoo-erpnext-migration-audit-2026-05-08/`; do not broad-stage them without reviewing the producing lane.
 
 ## Remaining Launch Gates
@@ -212,6 +266,9 @@ These are not current local ecommerce architecture blockers:
 - Legal/policy copy approval where needed.
 - One intentional low-risk live payment test after explicit owner approval.
 - Final real catalog approval if the visible local product set is being treated as public launch catalog truth rather than architecture/import proof.
+- Browser proof of applied blueprint products, richer self-service complex
+  authoring UI, conditional pricing runtime, media assignment, broader add-on
+  mapping, and refreshed import safety evidence before any product release.
 
 ## Do Not Regress
 
@@ -226,5 +283,8 @@ These are not current local ecommerce architecture blockers:
   not by product-name branches or frontend-only checkout eligibility.
 - Color-axis payload targets must come from source/backend semantics, not from
   attribute-name heuristics.
+- Staff product creation must stay in `LT Product Blueprint` and its verifiers,
+  not developer-only source packets, when the requirement is employee
+  self-service authoring.
 - Held media must not render as gallery/variant media until classified.
 - Use scoped staging only; do not commit regenerated audit artifacts or unrelated changed files.

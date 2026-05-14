@@ -5,13 +5,16 @@ schema_version: 2.0
 level: recipe
 maturity: candidate
 scope: Locally Twisted ERPNext/Frappe ecommerce product import, product detail logic, cart, checkout, and invoice integration
-currently_true: local_ecommerce_shop_setup_green_backend_catalog_media_storefront_runner_live_cutover_still_gated
+currently_true: unknown
 verification_level: 2
-last_verified: 2026-05-12
-evidence_quality: GL decision + official docs + live DB metadata + current code inspection + focused source verifiers + rollback-safe runtime verifier + cart/checkout/quote boundary verifiers + ProductPatternContract reports + all-enabled-checkout-SKU proof + architecture readiness split + durable Phase 1-5 artifacts + local catalog/import/media/storefront closeout gates
+last_verified: 2026-05-14
+evidence_quality: direct
 successful_uses: 1
 failed_uses: 0
 regressions: 0
+used_by:
+  - Codex
+  - OpenClaw
 depends_on:
   - erpnext-catalog-variant-price-parity
   - erpnext-checkout-commerce-rules
@@ -25,6 +28,7 @@ tags:
   - product import
   - variants
   - add-ons
+  - product authoring
   - checkout
   - invoice
 ---
@@ -77,6 +81,15 @@ OpenClaw cockpit witness:
   semantics keep color axes in `color_recipes`; absent recipe authority keeps
   the ERPNext variant axis in `selected_options`; explicit single-color
   sale-unit markers override recipe-looking patterns.
+- 2026-05-14 staff product-authoring slice:
+  `LT Product Blueprint` is the employee-facing bridge for highly customizable
+  products that should not require developer-coded product packets. It validates
+  options, color recipes, add-ons, conditional pricing, page type, buying path,
+  and base price; previews the no-write apply plan; applies locally only behind
+  role, site-config, and server-confirmation gates; keeps generated Website
+  Items unpublished; and allows checkout-approved fixed-item-price blueprint
+  add-ons to cascade into product options and checkout validation. Feature
+  handoff: `workstreams/ecommerce-audit/product-blueprint-authoring-2026-05-14.md`.
 - Test products are proof cases only: Unicorn Bouquet and Classic Arch.
 - Product template types are logic/process classes:
   - `simple_product`: few options, little customization, but still backend-driven.
@@ -230,10 +243,12 @@ As of 2026-05-10, the first backend preservation slice exists:
 - Configured cart lines have stable line keys, so the same SKU with different
   option/add-on payloads does not collapse into one line.
 - The cart API exposes visible display rows and line totals for base products
-  plus priced add-ons when ecommerce is open. The current local proof posture is
-  open (`lt_ecommerce_paused=0`): `/shop`, `/cart`, and `/checkout` should
-  render customer ecommerce surfaces. Treat a pause fallback on those routes as
-  a blocker to investigate unless the active task explicitly sets pause mode.
+  plus priced add-ons when ecommerce is opened for controlled local testing.
+  `lt_ecommerce_paused=1` is a public/live exposure safety lock, not a reason
+  to stop local build work. If a route falls back to pause copy during an
+  open-mode verifier, name the actual mismatch: site config, route contract,
+  checkout eligibility, payment config, product mapping, or missing staging
+  approval.
 - The cart API must reject quote-first variants as `quote_required`; priced
   complex decor cannot be treated as retail checkout just because Item Price
   exists.
@@ -263,6 +278,8 @@ python scripts/verify/product_page_architecture_contract.py
 python scripts/verify/product_page_architecture_readiness.py --report output/product-page-architecture-readiness.json
 python scripts/verify/product_page_runtime_contract.py
 python scripts/verify/product_add_on_dependency_contract.py
+python scripts/verify/product_blueprint_contract.py
+python scripts/verify/product_blueprint_live_contract.py
 python scripts/verify/product_add_on_approval_packet.py
 python scripts/verify/cart_checkout_contract.py
 python scripts/verify/checkout_product_family_contract.py --report workstreams/ecommerce-audit/2026-05-10-2330-phase-1-4-shop-audit/checkout-product-family-all-skus-final.json
@@ -291,13 +308,14 @@ BCC-gated customer quote delivery, an operator-owned Quotation send control,
 source dependency-matrix preservation, plus desktop/mobile proof for the two
 reusable product-page control types only.
 
-The readiness audit is mode-sensitive. The current local proof posture is open
-(`lt_ecommerce_paused=0`), so `product_page_architecture_readiness.py` should
-report `technical_architecture_ok: true` and `import_reopen_ok: true` unless a
-real architecture/import blocker appears. The pause switch remains a safety
-control, not the desired launch posture. The source add-on, price-review, and
-media-classification rows are still real-catalog import blockers until approved;
-do not use fixture-product proof as catalog approval.
+The readiness audit is mode-sensitive. In the current local safety posture,
+`product_page_architecture_readiness.py --json` is expected to report
+`technical_architecture_ok: true` and `import_reopen_ok: false` while
+`lt_ecommerce_paused=1` protects public/live exposure. That public exposure
+lock is not a blocker for local product-authoring, generated-product, cart,
+checkout, pricing, media, or verifier work. The source add-on, price-review,
+and media-classification rows are still real-catalog import blockers until
+approved; do not use fixture-product proof as catalog approval.
 Finance/bank/payment integration is explicitly deferred and should not be
 counted as a current template-architecture blocker.
 
@@ -326,7 +344,11 @@ Before building any missing ecommerce feature, write the feature's blast-radius 
 - What verifier proves the feature across backend/frontend/cart/checkout/invoice?
 - What is the smallest safe proof slice?
 
-Expected feature notes: add-on subsystem, server pricing resolver, variant/media visibility, cascading option dependencies, product-template classification, cart metadata, checkout validation, Sales Order / invoice payload preservation, mobile journey behavior, and import readiness gates.
+Expected feature notes: staff product-authoring surface, add-on subsystem,
+server pricing resolver, variant/media visibility, cascading option
+dependencies, product-template classification, cart metadata, checkout
+validation, Sales Order / invoice payload preservation, mobile journey
+behavior, and import readiness gates.
 
 ## Current Research Receipt
 

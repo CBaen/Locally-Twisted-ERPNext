@@ -6,6 +6,38 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-14 - A live safety lock is not an implementation excuse
+
+The ecommerce lane started looping on the phrase "intentionally paused" as if
+the pause itself explained why local product/cart/checkout work could stop.
+GL corrected the frame: live ecommerce is locked because it is broken,
+incomplete, and not trustworthy for customers yet. The lock protects customers
+while the local work fixes the actual problems.
+
+**Counter-move:** when `lt_ecommerce_paused=1` is present, first decide whether
+the task is about public/live exposure or local/staging/test-harness build work.
+For live exposure, keep the lock until release gates pass. For build work,
+continue under the lock and name the real blocker: incomplete UI, missing
+employee authoring, unmapped add-ons, unresolved pricing, unsafe checkout,
+unverified media, failed verifier, missing staging proof, or owner approval.
+
+---
+
+## 2026-05-14 - Employee product authoring cannot depend on an agent editing code
+
+The ecommerce architecture could preserve existing fixture/Odoo-derived product
+meaning, but GL clarified that employees must be able to add future highly
+custom products through the software interface. A flow where Codex writes each
+product as code does not bridge the operational gap.
+
+**Counter-move:** custom product work needs a staff-facing record, validation
+evidence, preview/apply plan, and runtime cascade proof. For LT that surface is
+`LT Product Blueprint`, backed by `product_blueprint_contract.py` and
+`product_blueprint_live_contract.py`. Treat Odoo as a behavior witness, not the
+boundary of what the product architecture can express.
+
+---
+
 ## 2026-05-12 - Complex checkout needs a scaffold, not a product-name hunch
 
 The storefront proof showed which products were currently quote-gated, but the
