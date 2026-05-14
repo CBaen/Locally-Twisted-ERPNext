@@ -402,6 +402,7 @@ every deploy.
                                autocomplete="tel"
                                aria-describedby="book_phone_helper"
                                placeholder="(801) 555-0000"/>
+                        <p id="book_phone_error" class="lt-book__field-error" data-lt-field-error-for="phone" hidden></p>
                         <p id="book_phone_helper" class="lt-book__field-helper">We ask for a phone number so we have a second way to contact you about your inquiry.</p>
                     </div>
                 </div>
@@ -434,6 +435,7 @@ every deploy.
                             <option value="{{ value }}">{{ label }}</option>
                             {% endfor %}
                         </select>
+                        <p id="book_preferred_contact_method_error" class="lt-book__field-error" data-lt-field-error-for="preferred_contact_method" hidden></p>
                     </div>
                 </div>
 

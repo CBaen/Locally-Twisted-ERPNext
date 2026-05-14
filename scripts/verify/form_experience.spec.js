@@ -21,6 +21,36 @@ async function fillRequiredFields(page) {
 	await page.locator("#book_location").fill("Ogden, UT");
 }
 
+async function expectInCurrentViewport(page, locator) {
+	await expect(locator).toBeVisible();
+	await expect.poll(async () => {
+		const box = await locator.boundingBox();
+		const viewport = page.viewportSize();
+		if (!box || !viewport) return "missing";
+		const top = Math.round(box.y);
+		const bottom = Math.round(box.y + box.height);
+		return top >= 0 && bottom <= viewport.height ? "visible" : `${top}:${bottom}:${viewport.height}`;
+	}).toBe("visible");
+}
+
+async function expectLoudInvalidState(locator) {
+	const styles = await locator.evaluate((field) => {
+		const style = window.getComputedStyle(field);
+		return {
+			borderLeftWidth: Number.parseFloat(style.borderLeftWidth),
+			borderTopWidth: Number.parseFloat(style.borderTopWidth),
+			boxShadow: style.boxShadow,
+			outlineStyle: style.outlineStyle,
+			outlineWidth: Number.parseFloat(style.outlineWidth),
+		};
+	});
+
+	expect(styles.borderLeftWidth).toBeGreaterThan(styles.borderTopWidth);
+	expect(styles.boxShadow).not.toBe("none");
+	expect(styles.outlineStyle).not.toBe("none");
+	expect(styles.outlineWidth).toBeGreaterThanOrEqual(3);
+}
+
 test.describe("Locally Twisted inquiry form experience", () => {
 	test("cookie notice sits inline on form pages instead of covering fields", async ({ page }) => {
 		await page.goto(`${BASE_URL}/contact`);
@@ -89,11 +119,15 @@ test.describe("Locally Twisted inquiry form experience", () => {
 
 		await page.locator("#book_submit").click();
 		await expect(page.locator("#book_feedback")).toContainText("Please enter a phone number so we have a second way to contact you about your inquiry.");
+		await expect(page.locator("#book_phone_error")).toContainText("Please enter a phone number so we have a second way to contact you about your inquiry.");
+		await expect(page.locator("#book_phone")).toHaveAttribute("aria-describedby", /book_phone_helper.*book_phone_error/);
 		expect(requests).toBe(0);
 
 		await page.locator("#book_phone").fill("801-555-0101");
 		await page.locator("#book_submit").click();
 		await expect(page.locator("#book_feedback")).toContainText("Please choose how you prefer to be contacted.");
+		await expect(page.locator("#book_preferred_contact_method_error")).toContainText("Please choose how you prefer to be contacted.");
+		await expect(page.locator("#book_preferred_contact_method")).toHaveAttribute("aria-describedby", /book_preferred_contact_method_error/);
 		expect(requests).toBe(0);
 
 		await page.locator("#book_preferred_contact_method").selectOption("Email");
@@ -111,6 +145,63 @@ test.describe("Locally Twisted inquiry form experience", () => {
 		await expect(page.locator("#book_feedback")).toContainText("Please tell us the city or location for the event.");
 		expect(requests).toBe(0);
 	});
+
+	for (const viewport of [
+		{ name: "desktop", width: 1366, height: 900 },
+		{ name: "mobile", width: 390, height: 844 },
+	]) {
+		test(`required phone and preferred-contact errors stay visible in the current viewport on ${viewport.name}`, async ({ page }) => {
+			let requests = 0;
+			await page.setViewportSize({ width: viewport.width, height: viewport.height });
+			await page.route("**/api/method/locally_twisted.www.book.submit_book_inquiry", async (route) => {
+				requests += 1;
+				await route.fulfill({ status: 500, body: "" });
+			});
+
+			await page.goto(`${BASE_URL}/contact`);
+			await dismissCookieNotice(page);
+			await page.locator("#book_name").fill("Form UX Test");
+			await page.locator("#book_email").fill("form-ux-test@example.com");
+
+			await page.locator("#book_submit").click();
+
+			const phone = page.locator("#book_phone");
+			const phoneError = page.locator("#book_phone_error");
+			await expect(phone).toHaveAttribute("required", "");
+			await expect(phone).toHaveAttribute("aria-required", "true");
+			await expect(phone).toHaveAttribute("autocomplete", "tel");
+			await expect(phone).toHaveAttribute("aria-invalid", "true");
+			await expect(phone).toHaveAttribute("aria-describedby", /book_phone_helper.*book_phone_error/);
+			await expect(phoneError).toContainText("Please enter a phone number so we have a second way to contact you about your inquiry.");
+			await expectInCurrentViewport(page, phoneError);
+			await expectLoudInvalidState(phone);
+			await expect(page.locator("#received")).toBeHidden();
+			expect(page.url()).not.toContain("#received");
+			expect(requests).toBe(0);
+
+			await phone.fill("801-555-0101");
+			await page.locator("#book_submit").click();
+
+			const preferred = page.locator("#book_preferred_contact_method");
+			const preferredError = page.locator("#book_preferred_contact_method_error");
+			await expect(preferred).toHaveAttribute("required", "");
+			await expect(preferred).toHaveAttribute("aria-required", "true");
+			await expect(preferred.locator("option")).toHaveText([
+				"Select one...",
+				"Email",
+				"Text",
+				"Phone",
+			]);
+			await expect(preferred).toHaveAttribute("aria-invalid", "true");
+			await expect(preferred).toHaveAttribute("aria-describedby", /book_preferred_contact_method_error/);
+			await expect(preferredError).toContainText("Please choose how you prefer to be contacted.");
+			await expectInCurrentViewport(page, preferredError);
+			await expectLoudInvalidState(preferred);
+			await expect(page.locator("#received")).toBeHidden();
+			expect(page.url()).not.toContain("#received");
+			expect(requests).toBe(0);
+		});
+	}
 
 	test("invalid email fails loudly before the request is sent", async ({ page }) => {
 		let requests = 0;

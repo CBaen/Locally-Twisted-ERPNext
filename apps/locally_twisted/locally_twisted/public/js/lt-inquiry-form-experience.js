@@ -127,15 +127,60 @@
         });
     }
 
+    function describedByTokens(field) {
+        return (field.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean);
+    }
+
+    function clearFieldError(field) {
+        var errorId;
+        var tokens;
+        if (!field) return;
+
+        errorId = field.dataset.ltErrorDescribedBy || '';
+        if (errorId) {
+            tokens = describedByTokens(field).filter(function (token) {
+                return token !== errorId;
+            });
+            if (tokens.length) {
+                field.setAttribute('aria-describedby', tokens.join(' '));
+            } else {
+                field.removeAttribute('aria-describedby');
+            }
+            delete field.dataset.ltErrorDescribedBy;
+        }
+        field.removeAttribute('aria-invalid');
+    }
+
     function clearFeedback(form) {
         var feedback = form.querySelector('#book_feedback');
         if (feedback) {
             feedback.textContent = '';
             feedback.classList.remove('is-error');
         }
-        Array.prototype.forEach.call(form.querySelectorAll('[aria-invalid="true"]'), function (field) {
-            field.removeAttribute('aria-invalid');
+        Array.prototype.forEach.call(form.querySelectorAll('[data-lt-field-error-for]'), function (error) {
+            error.textContent = '';
+            error.hidden = true;
         });
+        Array.prototype.forEach.call(form.querySelectorAll('[aria-invalid="true"]'), function (field) {
+            clearFieldError(field);
+        });
+    }
+
+    function showFieldError(form, field, message) {
+        var error = field && field.name ? form.querySelector('[data-lt-field-error-for="' + field.name + '"]') : null;
+        var tokens;
+        if (!error) return;
+
+        error.textContent = message;
+        error.hidden = false;
+
+        if (!error.id) return;
+        tokens = describedByTokens(field);
+        if (tokens.indexOf(error.id) === -1) {
+            tokens.push(error.id);
+            field.setAttribute('aria-describedby', tokens.join(' '));
+        }
+        field.dataset.ltErrorDescribedBy = error.id;
     }
 
     function editDistance(a, b) {
@@ -204,6 +249,7 @@
         }
         if (field) {
             field.setAttribute('aria-invalid', 'true');
+            showFieldError(form, field, finalMessage);
             safeFocus(field);
             return;
         }
