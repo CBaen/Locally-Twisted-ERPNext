@@ -381,7 +381,7 @@ every deploy.
                 </div>
                 {% endif %}
 
-                {# Row 1: Name + Phone #}
+                {# Row 1: Name + preferred contact method #}
                 <div class="lt-book__row lt-book__row--two">
                     <div class="lt-book__field">
                         <label for="book_name">
@@ -391,36 +391,6 @@ every deploy.
                                class="lt-book__input"
                                required aria-required="true"
                                autocomplete="name"/>
-                    </div>
-                    <div class="lt-book__field">
-                        <label for="book_phone">
-                            Phone number <span class="lt-book__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span>
-                        </label>
-                        <input type="tel" id="book_phone" name="phone"
-                               class="lt-book__input"
-                               required aria-required="true"
-                               autocomplete="tel"
-                               aria-describedby="book_phone_helper"
-                               placeholder="(801) 555-0000"/>
-                        <p id="book_phone_error" class="lt-book__field-error" data-lt-field-error-for="phone" hidden></p>
-                        <p id="book_phone_helper" class="lt-book__field-helper">We ask for a phone number so we have a second way to contact you about your inquiry.</p>
-                    </div>
-                </div>
-
-                {# Row 2: Email + preferred contact method #}
-                <div class="lt-book__row lt-book__row--two">
-                    <div class="lt-book__field">
-                        <label for="book_email">
-                            Email <span class="lt-book__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span>
-                        </label>
-                        <input type="email" id="book_email" name="email_from"
-                               class="lt-book__input"
-                               required aria-required="true"
-                               autocomplete="email"
-                               aria-describedby="book_email_helper book_email_hint"
-                               placeholder="your@email.com"/>
-                        <p id="book_email_helper" class="lt-book__field-helper">Please double-check your email so we can respond to your inquiry.</p>
-                        <p id="book_email_hint" class="lt-book__field-hint" aria-live="polite"></p>
                     </div>
                     <div class="lt-book__field">
                         <label for="book_preferred_contact_method">
@@ -436,6 +406,36 @@ every deploy.
                             {% endfor %}
                         </select>
                         <p id="book_preferred_contact_method_error" class="lt-book__field-error" data-lt-field-error-for="preferred_contact_method" hidden></p>
+                    </div>
+                </div>
+
+                {# Row 2: Email + phone #}
+                <div class="lt-book__row lt-book__row--two">
+                    <div class="lt-book__field">
+                        <label for="book_email">
+                            Email <span class="lt-book__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span>
+                        </label>
+                        <input type="email" id="book_email" name="email_from"
+                               class="lt-book__input"
+                               required aria-required="true"
+                               autocomplete="email"
+                               aria-describedby="book_email_helper book_email_hint"
+                               placeholder="your@email.com"/>
+                        <p id="book_email_helper" class="lt-book__field-helper">Please double-check your email so we can respond to your inquiry.</p>
+                        <p id="book_email_hint" class="lt-book__field-hint" aria-live="polite"></p>
+                    </div>
+                    <div class="lt-book__field">
+                        <label for="book_phone">
+                            Phone number <span class="lt-book__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span>
+                        </label>
+                        <input type="tel" id="book_phone" name="phone"
+                               class="lt-book__input"
+                               required aria-required="true"
+                               autocomplete="tel"
+                               aria-describedby="book_phone_helper"
+                               placeholder="(801) 555-0000"/>
+                        <p id="book_phone_error" class="lt-book__field-error" data-lt-field-error-for="phone" hidden></p>
+                        <p id="book_phone_helper" class="lt-book__field-helper">We ask for a phone number so we have a second way to contact you about your inquiry.</p>
                     </div>
                 </div>
 

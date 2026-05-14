@@ -51,6 +51,19 @@ async function expectLoudInvalidState(locator) {
 	expect(styles.outlineWidth).toBeGreaterThanOrEqual(3);
 }
 
+async function fieldBox(page, selector) {
+	return page.locator(selector).evaluate((field) => {
+		const container = field.closest(".lt-book__field");
+		const box = (container || field).getBoundingClientRect();
+		return {
+			x: Math.round(box.x),
+			y: Math.round(box.y),
+			width: Math.round(box.width),
+			height: Math.round(box.height),
+		};
+	});
+}
+
 test.describe("Locally Twisted inquiry form experience", () => {
 	test("cookie notice sits inline on form pages instead of covering fields", async ({ page }) => {
 		await page.goto(`${BASE_URL}/contact`);
@@ -93,6 +106,31 @@ test.describe("Locally Twisted inquiry form experience", () => {
 			"Phone",
 		]);
 		await expect(form.locator("#book_occasion option").first()).toHaveText("Select an event type");
+	});
+
+	test("preferred contact method sits below name on mobile and beside name on desktop", async ({ page }) => {
+		await page.setViewportSize({ width: 390, height: 844 });
+		await page.goto(`${BASE_URL}/contact`);
+		await dismissCookieNotice(page);
+
+		const mobileName = await fieldBox(page, "#book_name");
+		const mobilePreferred = await fieldBox(page, "#book_preferred_contact_method");
+		const mobileEmail = await fieldBox(page, "#book_email");
+		expect(mobilePreferred.x).toBe(mobileName.x);
+		expect(mobilePreferred.width).toBe(mobileName.width);
+		expect(mobilePreferred.y).toBeGreaterThanOrEqual(mobileName.y + mobileName.height);
+		expect(mobilePreferred.y).toBeLessThan(mobileEmail.y);
+
+		await page.setViewportSize({ width: 1366, height: 900 });
+		await page.reload();
+		await dismissCookieNotice(page);
+
+		const desktopName = await fieldBox(page, "#book_name");
+		const desktopPreferred = await fieldBox(page, "#book_preferred_contact_method");
+		const desktopEmail = await fieldBox(page, "#book_email");
+		expect(Math.abs(desktopPreferred.y - desktopName.y)).toBeLessThanOrEqual(2);
+		expect(desktopPreferred.x).toBeGreaterThan(desktopName.x + desktopName.width);
+		expect(desktopEmail.y).toBeGreaterThan(desktopName.y + desktopName.height);
 	});
 
 	test("direct #received visits do not show fake success", async ({ page }) => {
