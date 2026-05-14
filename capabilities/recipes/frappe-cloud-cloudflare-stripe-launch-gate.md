@@ -1,7 +1,7 @@
 ---
 name: Frappe Cloud Cloudflare Stripe launch gate
 level: recipe
-last_verified: 2026-05-12
+last_verified: 2026-05-14
 currently_true: true
 ---
 
@@ -37,6 +37,9 @@ Default public launch posture:
 - A Frappe Cloud bench deploy hash is not enough. The site update/migration job
   must succeed, the source app must own the live schema, and public live
   route/API/form verifiers must pass.
+- As of 2026-05-14, public Frappe Cloud route health and Cloudflare
+  dynamic-route health are verified, but direct Frappe Cloud dashboard/API/CLI
+  management from Codex is not proven by those checks.
 
 ## Human Access Boundary
 
@@ -130,3 +133,16 @@ On 2026-05-12:
 - Live `/contact` and live BTFP smoke passed with backend proof and cleanup.
 - Strict live repeat-email/five-photo proof passed with customer and owner
   Email Queue body/recipient verification and cleanup.
+
+On 2026-05-14:
+
+- `https://locallytwisted.com` returned HTTP 200 with `Server: Frappe Cloud`.
+- `/api/method/frappe.ping` returned HTTP 200 with `{"message":"pong"}`.
+- `cloudflare_launch_readiness.py --base-url https://locallytwisted.com`
+  passed 10 checks with 0 blockers and 0 warnings.
+- `frappe_cloud_preflight.py` passed after its `dns_current_target` wording was
+  corrected to recognize `www.locallytwisted.com` targeting
+  `locallytwisted.v.frappe.cloud`.
+- Host inspection found no direct Frappe Cloud CLI, host `bench`, or Frappe
+  Cloud environment variables. Treat dashboard/API control as a separate
+  authenticated management surface.

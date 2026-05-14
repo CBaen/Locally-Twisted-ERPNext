@@ -1,6 +1,6 @@
 # Locally Twisted Launch Runbook
 
-Last updated: 2026-05-12 by Codex.
+Last updated: 2026-05-14 by Codex.
 
 This is the plain launch doc at the project root.
 
@@ -18,6 +18,9 @@ The public website and inquiry forms are now live on Frappe Cloud at
 Ecommerce/live checkout is still a separate gate. The site can stay live while
 checkout remains paused or quote-first.
 
+The 2026-05-14 connection audit proves public route health, not direct Frappe
+Cloud dashboard/API control from Codex.
+
 ## Current Confirmed State
 
 1. Frappe Cloud
@@ -27,10 +30,22 @@ checkout remains paused or quote-first.
    - Final site update/migrate job: `15s16992i2`, status `Success`.
    - `deploy_in_progress=false`.
    - `has_running_release_pipeline=false`.
+   - 2026-05-14 public route probe: `https://locallytwisted.com` returned HTTP
+     200 with `Server: Frappe Cloud`.
+   - 2026-05-14 API probe: `/api/method/frappe.ping` returned HTTP 200 with
+     `{"message":"pong"}`.
+   - Direct Frappe Cloud management from this host is not proven by that route
+     probe. No direct `fcloud`/Frappe Cloud CLI, host `bench`, or Frappe Cloud
+     env vars were found during the connection audit.
 
 2. Cloudflare / domain
    - `locallytwisted.com` now reaches the Frappe Cloud site for the public
      website and inquiry forms.
+   - 2026-05-14 Cloudflare dynamic-route gate passed 10 checks with 0 blockers
+     and 0 warnings.
+   - 2026-05-14 Frappe Cloud preflight recognized the `www` Frappe Cloud
+     vanity host target and passed with 0 blockers and 0 warnings after stale
+     DNS-target wording was corrected.
    - Future DNS/security/cache changes still need the Cloudflare dynamic-route
      gate before claiming route health.
 
@@ -41,6 +56,8 @@ checkout remains paused or quote-first.
      Email Queue body/recipient verification and cleanup.
 
 4. Stripe / ecommerce
+   - Stripe CLI access on `wardenclyffe` works for the Built by Cameron account,
+     but that does not approve LT live checkout or merchant-account ownership.
    - Live checkout remains blocked until the live Stripe config, product scope,
      policy URLs, webhook, and one real low-risk payment test pass.
    - Do not treat the public website being live as checkout approval.

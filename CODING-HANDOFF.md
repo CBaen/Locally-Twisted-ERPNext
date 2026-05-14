@@ -1,5 +1,22 @@
 # Locally Twisted - Coding Handoff
 
+Codex provider connection audit on 2026-05-14: the public Frappe Cloud route
+layer is healthy, but direct Frappe Cloud management automation is not proven
+as a Codex connector. `https://locallytwisted.com` returned HTTP 200 with
+`Server: Frappe Cloud`, and `/api/method/frappe.ping` returned
+`{"message":"pong"}`. `python scripts/verify/cloudflare_launch_readiness.py
+--base-url https://locallytwisted.com` passed 10 checks with 0 blockers and 0
+warnings. `python scripts/verify/frappe_cloud_preflight.py` passed after the
+DNS target wording was corrected to recognize `www.locallytwisted.com` pointing
+at `locallytwisted.v.frappe.cloud`; the verifier remains read-only and is not
+dashboard login proof. On the host, no direct `fcloud`/Frappe Cloud CLI, host
+`bench`, or Frappe Cloud env vars were found. Use the documented dashboard,
+SSH, browser, or provider API path only after an authenticated management
+session exists. Local LT stack was also up with the DB container healthy.
+Feature handoff:
+`workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11.md`; capability:
+`capabilities/recipes/frappe-cloud-cloudflare-stripe-launch-gate.md`.
+
 Codex ecommerce product-blueprint update on 2026-05-14: staff product creation
 now has a local ERPNext surface instead of requiring developer-coded product
 packets. `LT Product Blueprint` validates product basics, options, color

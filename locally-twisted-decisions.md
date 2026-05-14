@@ -8,6 +8,37 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-14 - Frappe Cloud route health is not management-session proof
+
+**Decision:** Treat the current LT Frappe Cloud connection as verified for
+public serving, route behavior, Cloudflare dynamic-route behavior, GitHub/app
+packaging, DNS shape, and SSH key readiness. Do not treat it as proof that
+Codex has a direct Frappe Cloud dashboard/API/CLI management session.
+
+**Reasoning:** The 2026-05-14 audit proved the live public surface:
+`https://locallytwisted.com` returned HTTP 200 with `Server: Frappe Cloud`, and
+`/api/method/frappe.ping` returned `{"message":"pong"}`. The Cloudflare dynamic
+route gate passed 10 checks with 0 blockers/warnings. The Frappe Cloud
+preflight also passed after its stale DNS-target wording was corrected. But
+host inspection found no direct Frappe Cloud CLI, host `bench`, or Frappe Cloud
+environment variables, and route health does not equal dashboard ownership or
+API control.
+
+**Implementation boundary:** Future agents must name the verified surface:
+public route, Cloudflare route, local Docker stack, SSH key readiness,
+dashboard session, API token, or CLI. Provider-management mutations still need
+the documented authenticated dashboard/SSH/browser/API path. Live checkout
+remains blocked by the existing Stripe/product/webhook/payment-test gate.
+
+**Verification receipt:** `python scripts/verify/cloudflare_launch_readiness.py
+--base-url https://locallytwisted.com`, `python
+scripts/verify/frappe_cloud_preflight.py`, direct public home/ping probes, and
+`docker ps --filter "name=locally-twisted-erpnext-v15"`.
+
+**Decided by:** Codex provider connection audit on 2026-05-14.
+
+---
+
 ## 2026-05-14 - Staff-authored product blueprints are the local product creation bridge
 
 **Decision:** Highly customizable ecommerce products must be authorable through

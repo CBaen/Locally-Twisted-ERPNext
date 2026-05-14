@@ -69,7 +69,7 @@ the architecture. Guards: `python scripts/verify/product_page_architecture_contr
 color variant axes to use source/backend recipe authority before targeting
 `color_recipes`; otherwise they remain sale-unit `selected_options`.
 
-**Frappe Cloud/Cloudflare/Stripe launch state (2026-05-12):** Source handoff is
+**Frappe Cloud/Cloudflare/Stripe launch state (2026-05-14):** Source handoff is
 `LT-LAUNCH-RUNBOOK.md`, with the deeper technical gate at
 `workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11.md`.
 `locallytwisted.com` is now serving the Frappe Cloud site for pages/forms.
@@ -77,11 +77,16 @@ Final custom app release `72a4se4v64`, app hash
 `04de8212aa7dbf4895716717865fc6e1029c757b`, bench deploy `62q1r0otg1`, and
 site update/migrate job `15s16992i2` are successful. Live `/contact`, live BTFP
 smoke, and strict repeat-email/five-photo customer+owner Email Queue content
-proof passed and cleaned verifier records. Remaining active launch blocker is
-not pages/forms; it is live checkout. Keep Stripe/ecommerce blocked until live
-Stripe config, product scope, policy URLs/webhook, and one real low-risk payment
-test pass. Rerun Cloudflare dynamic-route and live form gates after any future
-DNS/cache/security/Frappe Cloud release change.
+proof passed and cleaned verifier records. 2026-05-14 connection audit: public
+home returned HTTP 200 with `Server: Frappe Cloud`, `frappe.ping` returned
+`pong`, Cloudflare dynamic-route readiness passed 10 checks with 0
+blockers/warnings, and Frappe Cloud preflight passed after stale DNS-target
+wording was corrected. These are route/preflight claims, not proof of direct
+Frappe Cloud dashboard/API control from Codex. Remaining active launch blocker
+is not pages/forms; it is live checkout. Keep Stripe/ecommerce blocked until
+live Stripe config, product scope, policy URLs/webhook, and one real low-risk
+payment test pass. Rerun Cloudflare dynamic-route and live form gates after any
+future DNS/cache/security/Frappe Cloud release change.
 
 **Reconciliation note (2026-05-07; refreshed 2026-05-11):** `scripts/verify/layout_fit.spec.js` is restored and currently verifies through `npm run test:layout-fit` (325 checks inside `npm run test:public-verify` after route/breakpoint matrix expansion and generated hero work). `npm run test:container-contract` is the executable route-level public container contract and is part of `npm run test:website-verify` / `npm run test:public-verify`. `npm run test:interactive-layout` adds stateful public UI checks, including the compact generated-photo hero contract. `npm run test:checkout-experience` now covers open `/cart` and `/checkout` rendering in the current ecommerce testing mode; `npm run test:ecommerce-full` adds shop smoke, prices, variant media, and rollback-safe checkout backend contracts. Event Playground / PlayCanvas source work moved to `C:\Users\baenb\projects\design-studio\workstreams\locally-twisted-plan-custom-decor-v2\` and is no longer part of the ASAP website launch lane; the LT repo owns only the hidden Frappe wrapper and contact handoff. Its latest source handoff is `event-playground-v2` plus `design-studio-v1`, with quote math gated behind LT review. Treat `.planning/phases/01-customer-site-and-storefront/PLAN.md` as historical; `/contact` is still the primary quote/inquiry route and `/book` redirects to `/contact?intent=quick`.
 
@@ -216,6 +221,11 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 
 `/contact` is the primary inquiry route. `/book` is retired and redirects to `/contact?intent=quick`. Phase 2 now covers depth around all forms:
 
+- [P0] Contact form UX readiness planning is captured at
+  `workstreams/contact-form-ux-readiness-2026-05-14.md`. It is not live-release
+  approval for new form changes. Legal-impact changes still need legal counsel;
+  exact requested changes, UX/CMO/CTO review, and local/staging/live gates are
+  listed in that handoff.
 - [P0] Verify Contact dedup logic now in `apps/locally_twisted/locally_twisted/lead_cascade.py` (Lead → existing Contact match by email/phone, else create new). Queue previously listed this as unbuilt; confirm with a smoke record before deleting.
 - [P0] Loud-failure compliance audit across every form on Phase 1 surfaces
 - [P0] Keep the shared form submission UX honest: no success state unless the backend returns `message.ok`, no forced success redirect, no `#received` fake success, no `message.ok` unless current confirmation-email queue proof exists, and update `scripts/verify/form_experience.spec.js` plus `capabilities/recipes/shared-inquiry-form-experience.md` with any future form-state changes.

@@ -6,6 +6,22 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-14 - Route health and provider control are separate claims
+
+The 2026-05-14 Frappe Cloud check could honestly say the live site is served by
+Frappe Cloud and that Cloudflare dynamic routes are healthy. It could not
+honestly say Codex has direct Frappe Cloud dashboard/API/CLI control. No direct
+Frappe Cloud CLI, host `bench`, or Frappe Cloud env vars were present on the
+host during the audit.
+
+**Counter-move:** every launch/provider handoff must name the verified surface:
+public route, dynamic Cloudflare route, local Docker stack, SSH key readiness,
+dashboard session, API token, or CLI. Use `frappe_cloud_preflight.py` for
+GitHub/app/SSH/DNS shape and `cloudflare_launch_readiness.py` for route health,
+but do not use either as dashboard-login proof.
+
+---
+
 ## 2026-05-14 - A live safety lock is not an implementation excuse
 
 The ecommerce lane started looping on the phrase "intentionally paused" as if

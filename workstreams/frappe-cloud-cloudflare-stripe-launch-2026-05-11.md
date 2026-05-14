@@ -1,6 +1,6 @@
 # Frappe Cloud, Cloudflare, And Stripe Launch Gate
 
-Last updated: 2026-05-12 by Codex.
+Last updated: 2026-05-14 by Codex.
 
 ## Scope
 
@@ -18,6 +18,9 @@ Current launch posture:
   smokes after cutover.
 - The strict live repeat-email/five-photo verifier passed with customer and
   business Email Queue body/recipient proof and cleanup.
+- The 2026-05-14 connection audit proved public Frappe Cloud route health and
+  Cloudflare dynamic-route health. It did not prove direct Frappe Cloud
+  dashboard/API control from Codex.
 - Live Stripe checkout remains closed until the separate product/payment gates
   pass.
 
@@ -40,12 +43,41 @@ the final go/no-go evidence for payments and ecommerce exposure.
 
 | Track | Current state | Gate |
 |---|---|---|
-| Source/Frappe Cloud | Source and mirror were pushed; final live app hash is `04de8212aa7dbf4895716717865fc6e1029c757b`; `locally_twisted` is installed last on the site | `python scripts/verify/frappe_cloud_preflight.py`; Frappe Cloud bench deploy and site update/migrate must both be successful |
+| Source/Frappe Cloud | Source and mirror were pushed; final live app hash is `04de8212aa7dbf4895716717865fc6e1029c757b`; `locally_twisted` is installed last on the site; public route probes return Frappe Cloud | `python scripts/verify/frappe_cloud_preflight.py`; Frappe Cloud bench deploy and site update/migrate must both be successful |
 | Public site/forms | Live `/contact` and BTFP smokes passed, and strict content email proof passed | `smoke_forms.py` for each route plus `book_form_repeat_email_photos.py` against live with authenticated backend CDP |
 | Hidden commerce | Website launch does not approve checkout | `python scripts/verify/ecommerce_pause_contract.py` before relying on a paused/no-purchase posture |
 | Cloudflare | Domain now routes to Frappe Cloud for pages/forms; rerun dynamic-route gate after any DNS/cache/security change | `python scripts/verify/cloudflare_launch_readiness.py --base-url https://locallytwisted.com` |
 | Stripe | Live checkout remains blocked | `python scripts/verify/payment_launch_readiness.py --mode live --base-url https://locallytwisted.com` plus one intentional low-risk real payment test |
 | Backend proof before opening checkout | Still required before any checkout scope opens | `business_automation_index.py`, `synthetic_business_pipeline.py`, `payment_backend_config_contract.py`, `payment_webhook_contract.py`, `stripe_amount_parity_contract.py` |
+
+## 2026-05-14 Connection Audit
+
+This audit was read-only for Frappe Cloud and Cloudflare. It proves public
+serving and route behavior, not dashboard/API session control.
+
+Results:
+
+- `https://locallytwisted.com` returned HTTP 200 with `Server: Frappe Cloud`.
+- `https://locallytwisted.com/api/method/frappe.ping` returned HTTP 200 with
+  `{"message":"pong"}`.
+- `python scripts/verify/cloudflare_launch_readiness.py --base-url
+  https://locallytwisted.com` passed 10 checks with 0 blockers and 0 warnings.
+  `/cart` and `/checkout` route to the paused ready-to-order page, and the
+  Stripe webhook path reaches Frappe without a Cloudflare challenge or cache
+  hit.
+- `python scripts/verify/frappe_cloud_preflight.py` passed after
+  `dns_current_target` was corrected to recognize `www.locallytwisted.com`
+  targeting `locallytwisted.v.frappe.cloud`.
+- The local `locally-twisted-erpnext-v15` Docker stack was running; the DB
+  container was healthy and frontend was bound to `localhost:8081`.
+- Host-level management tooling remains limited: no direct Frappe Cloud CLI,
+  host `bench`, or Frappe Cloud environment variables were found. The preflight
+  proves GitHub mirror, SSH key, app package, branch, and DNS shape; it is not
+  dashboard login proof.
+
+Operational rule for future agents: say which surface you verified. Public
+route health, Cloudflare route health, local Docker health, SSH key readiness,
+and Frappe Cloud dashboard/API control are different claims.
 
 ## Production Config Contract
 

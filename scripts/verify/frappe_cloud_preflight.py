@@ -33,6 +33,7 @@ APP_ROOT = PROJECT_ROOT / "apps" / "locally_twisted"
 APP_PACKAGE = APP_ROOT / "locally_twisted"
 PUBLIC_DOMAIN = "locallytwisted.com"
 WWW_DOMAIN = "www.locallytwisted.com"
+FRAPPE_CLOUD_VANITY_HOST = "locallytwisted.v.frappe.cloud"
 EXPECTED_CLOUDFLARE_NS = {"edward.ns.cloudflare.com", "laura.ns.cloudflare.com"}
 APP_SOURCE_REPO = "CBaen/Locally-Twisted-Frappe-App"
 APP_SOURCE_URL = f"https://github.com/{APP_SOURCE_REPO}.git"
@@ -313,14 +314,25 @@ def check_dns() -> list[Check]:
     else:
         checks.append(Check("dns_nameservers", "warn", "Could not resolve nameservers for the domain."))
 
-    checks.append(
-        Check(
-            "dns_current_target",
-            "warn",
-            "Current public records still point at the existing website; do not change them until final cutover.",
-            {"apex_a": a_records, "www_cname": www_cname, "www_a": www_a},
+    target_details = {"apex_a": a_records, "www_cname": www_cname, "www_a": www_a}
+    if FRAPPE_CLOUD_VANITY_HOST in www_cname:
+        checks.append(
+            Check(
+                "dns_current_target",
+                "pass",
+                "Public DNS includes the Frappe Cloud vanity host; use the Cloudflare dynamic-route gate for HTTP health.",
+                target_details,
+            )
         )
-    )
+    else:
+        checks.append(
+            Check(
+                "dns_current_target",
+                "warn",
+                "Public DNS target is not confirmed as the Frappe Cloud vanity host; do not change final routing without the launch gate.",
+                target_details,
+            )
+        )
     return checks
 
 
