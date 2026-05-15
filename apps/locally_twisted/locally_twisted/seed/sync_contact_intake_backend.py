@@ -97,7 +97,7 @@ CUSTOM_FIELD_UPDATES = {
     "custom_preferred_contact_method": {
         "label": "Preferred Contact Method",
         "fieldtype": "Select",
-        "options": "\nEmail\nText\nPhone",
+        "options": "\nEmail\nPhone\nText",
         "depends_on": None,
     },
     "lt_section_decor": {
@@ -253,7 +253,7 @@ LEAD_INTAKE_CUSTOM_FIELDS = {
         "fieldname": "custom_preferred_contact_method",
         "label": "Preferred Contact Method",
         "fieldtype": "Select",
-        "options": "\nEmail\nText\nPhone",
+        "options": "\nEmail\nPhone\nText",
         "insert_after": "custom_guest_count",
         "description": "Customer's requested follow-up channel for this inquiry.",
     },

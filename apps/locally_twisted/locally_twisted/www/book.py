@@ -84,8 +84,8 @@ SERVICE_VALUES = {value for _cb_id, value, _label in SERVICE_OPTIONS}
 
 PREFERRED_CONTACT_OPTIONS = [
     ("Email", "Email"),
-    ("Text", "Text"),
     ("Phone", "Phone"),
+    ("Text", "Text"),
 ]
 
 
@@ -167,8 +167,8 @@ def submit_book_inquiry():
     event_date = (fd.get("x_event_date") or "").strip()
     if not event_date:
         frappe.throw(_("Please choose the event date."), frappe.ValidationError)
-    event_time = (fd.get("x_event_time") or "").strip()
-    event_end_time = (fd.get("x_event_end_time") or "").strip()
+    event_time = _compose_time_widget_value(fd, "x_event_time", "event start time")
+    event_end_time = _compose_time_widget_value(fd, "x_event_end_time", "event end time")
     event_location = (fd.get("x_event_location") or "").strip()
     if not event_location:
         frappe.throw(_("Please tell us the city or location for the event."), frappe.ValidationError)
@@ -389,6 +389,26 @@ def _normalize_preferred_contact_method(value):
         if value.lower() == option.lower():
             return option
     return ""
+
+
+def _compose_time_widget_value(fd, prefix, label):
+    value = (fd.get(prefix) or "").strip()
+    if value:
+        return value
+
+    hour = (fd.get(f"{prefix}_hour") or "").strip()
+    minute = (fd.get(f"{prefix}_minute") or "").strip()
+    period = (fd.get(f"{prefix}_period") or "").strip().upper()
+    parts = [hour, minute, period]
+    present_count = len([part for part in parts if part])
+    if present_count == 0:
+        return ""
+    if present_count != 3 or hour not in {str(n) for n in range(1, 13)} or minute not in {"00", "15", "30", "45"} or period not in {"AM", "PM"}:
+        frappe.throw(
+            _(f"Please choose a complete {label} or leave it blank."),
+            frappe.ValidationError,
+        )
+    return f"{hour}:{minute} {period}"
 
 
 def _insert_lead_with_retry(lead_doc, *, defer_customer_ack=False, customer_email=None):

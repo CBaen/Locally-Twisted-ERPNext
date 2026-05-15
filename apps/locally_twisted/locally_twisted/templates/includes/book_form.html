@@ -138,6 +138,28 @@ every deploy.
 .lt-book__field-hint:empty {
     display: none;
 }
+.lt-book__time-picker {
+    display: grid;
+    grid-template-columns: minmax(4.5rem, 1fr) auto minmax(4.5rem, 1fr) minmax(5.5rem, 1fr);
+    align-items: center;
+    gap: 0.45rem;
+}
+.lt-book__time-select {
+    min-width: 0;
+}
+.lt-book__time-separator {
+    color: rgba(10, 10, 11, 0.62);
+    font-family: 'Lato', sans-serif;
+    font-weight: 800;
+}
+@media (max-width: 420px) {
+    .lt-book__time-picker {
+        grid-template-columns: 1fr auto 1fr;
+    }
+    .lt-book__time-picker .lt-book__time-select:last-child {
+        grid-column: 1 / -1;
+    }
+}
 
 .lt-book__services {
     background-color: rgba(14, 34, 64, 0.035);
@@ -435,7 +457,7 @@ every deploy.
                                aria-describedby="book_phone_helper"
                                placeholder="(801) 555-0000"/>
                         <p id="book_phone_error" class="lt-book__field-error" data-lt-field-error-for="phone" hidden></p>
-                        <p id="book_phone_helper" class="lt-book__field-helper">We ask for a phone number so we have a second way to contact you about your inquiry.</p>
+                        <p id="book_phone_helper" class="lt-book__field-helper">Used solely in regards to your inquiry.</p>
                     </div>
                 </div>
 
@@ -462,7 +484,7 @@ every deploy.
                     </div>
                 </div>
 
-                {# Row 4: Event Date + Event Start #}
+                {# Row 4: Event Date + City/Location #}
                 <div class="lt-book__row lt-book__row--two">
                     <div class="lt-book__field">
                         <label for="book_date">
@@ -473,26 +495,6 @@ every deploy.
                                required aria-required="true"/>
                     </div>
                     <div class="lt-book__field">
-                        <label for="book_time">
-                            Event Start Time <span class="lt-book__optional">(even an estimate is helpful!)</span>
-                        </label>
-                        <input type="text" id="book_time" name="x_event_time"
-                               class="lt-book__input"
-                               placeholder="e.g. 3 PM, afternoon, TBD"/>
-                    </div>
-                </div>
-
-                {# Row 5: Event End + City/Location #}
-                <div class="lt-book__row lt-book__row--two">
-                    <div class="lt-book__field">
-                        <label for="book_end_time">
-                            Event End Time <span class="lt-book__optional">(even an estimate is helpful!)</span>
-                        </label>
-                        <input type="text" id="book_end_time" name="x_event_end_time"
-                               class="lt-book__input"
-                               placeholder="e.g. 5 PM, evening, not sure yet"/>
-                    </div>
-                    <div class="lt-book__field">
                         <label for="book_location">
                             Event city/location <span class="lt-book__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span>
                         </label>
@@ -500,6 +502,62 @@ every deploy.
                                class="lt-book__input"
                                required aria-required="true"
                                placeholder="Address, venue name, or city"/>
+                    </div>
+                </div>
+
+                {# Row 5: Event Start + Event End #}
+                <div class="lt-book__row lt-book__row--two">
+                    <div class="lt-book__field">
+                        <span class="lt-book__label" id="book_time_label">Event Start Time <span class="lt-book__optional">(optional)</span></span>
+                        <input type="hidden" id="book_time" name="x_event_time" data-lt-time-value="x_event_time"/>
+                        <div class="lt-book__time-picker" role="group" aria-labelledby="book_time_label" aria-describedby="book_time_helper">
+                            <select id="book_time_hour" name="x_event_time_hour" class="lt-book__select lt-book__time-select" data-lt-time-part="x_event_time" data-lt-time-unit="hour" aria-label="Event start hour">
+                                <option value="">Hour</option>
+                                {% for hour in range(1, 13) %}
+                                <option value="{{ hour }}">{{ hour }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="lt-book__time-separator" aria-hidden="true">:</span>
+                            <select id="book_time_minute" name="x_event_time_minute" class="lt-book__select lt-book__time-select" data-lt-time-part="x_event_time" data-lt-time-unit="minute" aria-label="Event start minutes">
+                                <option value="">Min</option>
+                                <option value="00">00</option>
+                                <option value="15">15</option>
+                                <option value="30">30</option>
+                                <option value="45">45</option>
+                            </select>
+                            <select id="book_time_period" name="x_event_time_period" class="lt-book__select lt-book__time-select" data-lt-time-part="x_event_time" data-lt-time-unit="period" aria-label="Event start AM or PM">
+                                <option value="">AM/PM</option>
+                                <option value="AM">AM</option>
+                                <option value="PM">PM</option>
+                            </select>
+                        </div>
+                        <p id="book_time_helper" class="lt-book__field-helper">Even an estimate is helpful.</p>
+                    </div>
+                    <div class="lt-book__field">
+                        <span class="lt-book__label" id="book_end_time_label">Event End Time <span class="lt-book__optional">(optional)</span></span>
+                        <input type="hidden" id="book_end_time" name="x_event_end_time" data-lt-time-value="x_event_end_time"/>
+                        <div class="lt-book__time-picker" role="group" aria-labelledby="book_end_time_label" aria-describedby="book_end_time_helper">
+                            <select id="book_end_time_hour" name="x_event_end_time_hour" class="lt-book__select lt-book__time-select" data-lt-time-part="x_event_end_time" data-lt-time-unit="hour" aria-label="Event end hour">
+                                <option value="">Hour</option>
+                                {% for hour in range(1, 13) %}
+                                <option value="{{ hour }}">{{ hour }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="lt-book__time-separator" aria-hidden="true">:</span>
+                            <select id="book_end_time_minute" name="x_event_end_time_minute" class="lt-book__select lt-book__time-select" data-lt-time-part="x_event_end_time" data-lt-time-unit="minute" aria-label="Event end minutes">
+                                <option value="">Min</option>
+                                <option value="00">00</option>
+                                <option value="15">15</option>
+                                <option value="30">30</option>
+                                <option value="45">45</option>
+                            </select>
+                            <select id="book_end_time_period" name="x_event_end_time_period" class="lt-book__select lt-book__time-select" data-lt-time-part="x_event_end_time" data-lt-time-unit="period" aria-label="Event end AM or PM">
+                                <option value="">AM/PM</option>
+                                <option value="AM">AM</option>
+                                <option value="PM">PM</option>
+                            </select>
+                        </div>
+                        <p id="book_end_time_helper" class="lt-book__field-helper">Even an estimate is helpful.</p>
                     </div>
                 </div>
 
@@ -873,11 +931,57 @@ every deploy.
     /* --- 1b. Checkout delivery-quote handoff prefill ---------------- */
     var QUOTE_HANDOFF_KEY = 'lt_checkout_quote_handoff_v1';
 
+    function timePart(prefix, unit) {
+        return document.querySelector('[data-lt-time-part="' + prefix + '"][data-lt-time-unit="' + unit + '"]');
+    }
+
+    function updateTimeValue(prefix) {
+        var hidden = document.querySelector('[data-lt-time-value="' + prefix + '"]');
+        var hour = timePart(prefix, 'hour');
+        var minute = timePart(prefix, 'minute');
+        var period = timePart(prefix, 'period');
+        if (!hidden || !hour || !minute || !period) return;
+        hidden.value = hour.value && minute.value && period.value
+            ? hour.value + ':' + minute.value + ' ' + period.value
+            : '';
+    }
+
+    function setTimePickerValue(prefix, value) {
+        var match = String(value || '').trim().match(/^(\d{1,2})(?::(\d{2}))?\s*(AM|PM)$/i);
+        var hour;
+        var minute;
+        var period;
+        if (!match) return;
+        hour = String(Number(match[1]));
+        minute = match[2] || '00';
+        period = match[3].toUpperCase();
+        if (!timePart(prefix, 'hour') || !timePart(prefix, 'minute') || !timePart(prefix, 'period')) return;
+        timePart(prefix, 'hour').value = hour;
+        timePart(prefix, 'minute').value = minute;
+        timePart(prefix, 'period').value = period;
+        updateTimeValue(prefix);
+    }
+
+    function bindTimePickers() {
+        var prefixes = [];
+        document.querySelectorAll('[data-lt-time-part]').forEach(function (field) {
+            var prefix = field.getAttribute('data-lt-time-part');
+            if (prefix && prefixes.indexOf(prefix) === -1) prefixes.push(prefix);
+            field.addEventListener('change', function () {
+                updateTimeValue(prefix);
+            });
+        });
+        prefixes.forEach(updateTimeValue);
+    }
+
     function setNamedValue(name, value) {
         if (value == null || value === '') return;
         var root = document.getElementById('lt-book-form') || document;
         var field = root.querySelector('[name="' + name + '"]');
         if (field) field.value = String(value);
+        if (field && field.hasAttribute('data-lt-time-value')) {
+            setTimePickerValue(name, value);
+        }
     }
 
     function checkService(value) {
@@ -892,6 +996,8 @@ every deploy.
             return String(part).trim();
         }).join(separator || ', ');
     }
+
+    bindTimePickers();
 
     var PRODUCT_QUOTE_HANDOFF_KEY = 'lt_product_quote_handoff_v1';
 

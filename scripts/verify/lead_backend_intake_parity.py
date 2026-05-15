@@ -96,7 +96,7 @@ EXPECTED_CUSTOM_FIELDS = {
     "custom_preferred_contact_method": {
         "label": "Preferred Contact Method",
         "fieldtype": "Select",
-        "options": "\nEmail\nText\nPhone",
+        "options": "\nEmail\nPhone\nText",
         "depends_on": None,
     },
     "lt_section_decor": {
@@ -364,9 +364,11 @@ def check_public_form_time_copy() -> list[str]:
     required_snippets = [
         "Event Start Time",
         "Event End Time",
-        "(even an estimate is helpful!)",
-        'type="text" id="book_time" name="x_event_time"',
-        'type="text" id="book_end_time" name="x_event_end_time"',
+        "Even an estimate is helpful.",
+        'type="hidden" id="book_time" name="x_event_time"',
+        'type="hidden" id="book_end_time" name="x_event_end_time"',
+        'data-lt-time-part="x_event_time"',
+        'data-lt-time-part="x_event_end_time"',
     ]
     for snippet in required_snippets:
         if snippet not in source:

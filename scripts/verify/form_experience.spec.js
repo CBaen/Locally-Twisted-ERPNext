@@ -93,7 +93,7 @@ test.describe("Locally Twisted inquiry form experience", () => {
 		await expect(form.locator("#book_email")).toHaveAttribute("autocomplete", "email");
 		await expect(form.locator("#book_phone")).toHaveAttribute("autocomplete", "tel");
 		await expect(form.locator("#book_email_helper")).toContainText("Please double-check your email so we can respond to your inquiry.");
-		await expect(form.locator("#book_phone_helper")).toContainText("We ask for a phone number so we have a second way to contact you about your inquiry.");
+		await expect(form.locator("#book_phone_helper")).toContainText("Used solely in regards to your inquiry.");
 		await expect(form.locator("#book_phone")).toHaveAttribute("required", "");
 		await expect(form.locator("#book_preferred_contact_method")).toHaveAttribute("required", "");
 		await expect(form.locator("#book_occasion")).toHaveAttribute("required", "");
@@ -102,10 +102,14 @@ test.describe("Locally Twisted inquiry form experience", () => {
 		await expect(form.locator("#book_preferred_contact_method option")).toHaveText([
 			"Select one...",
 			"Email",
-			"Text",
 			"Phone",
+			"Text",
 		]);
 		await expect(form.locator("#book_occasion option").first()).toHaveText("Select an event type");
+		await expect(form.locator("#book_time")).toHaveAttribute("type", "hidden");
+		await expect(form.locator("#book_end_time")).toHaveAttribute("type", "hidden");
+		await expect(form.locator("#book_time_helper")).toContainText("Even an estimate is helpful.");
+		await expect(form.locator("#book_end_time_helper")).toContainText("Even an estimate is helpful.");
 	});
 
 	test("preferred contact method sits below name on mobile and beside name on desktop", async ({ page }) => {
@@ -131,6 +135,37 @@ test.describe("Locally Twisted inquiry form experience", () => {
 		expect(Math.abs(desktopPreferred.y - desktopName.y)).toBeLessThanOrEqual(2);
 		expect(desktopPreferred.x).toBeGreaterThan(desktopName.x + desktopName.width);
 		expect(desktopEmail.y).toBeGreaterThan(desktopName.y + desktopName.height);
+	});
+
+	test("event location comes before structured start and end time controls", async ({ page }) => {
+		await page.setViewportSize({ width: 390, height: 844 });
+		await page.goto(`${BASE_URL}/contact`);
+		await dismissCookieNotice(page);
+
+		const mobileLocation = await fieldBox(page, "#book_location");
+		const mobileStart = await fieldBox(page, "#book_time_hour");
+		const mobileEnd = await fieldBox(page, "#book_end_time_hour");
+		expect(mobileLocation.y).toBeLessThan(mobileStart.y);
+		expect(mobileEnd.y).toBeGreaterThan(mobileStart.y);
+
+		await page.setViewportSize({ width: 1366, height: 900 });
+		await page.reload();
+		await dismissCookieNotice(page);
+
+		const desktopLocation = await fieldBox(page, "#book_location");
+		const desktopStart = await fieldBox(page, "#book_time_hour");
+		const desktopEnd = await fieldBox(page, "#book_end_time_hour");
+		expect(desktopLocation.y).toBeLessThan(desktopStart.y);
+		expect(Math.abs(desktopStart.y - desktopEnd.y)).toBeLessThanOrEqual(2);
+
+		await page.locator("#book_time_hour").selectOption("3");
+		await page.locator("#book_time_minute").selectOption("15");
+		await page.locator("#book_time_period").selectOption("PM");
+		await page.locator("#book_end_time_hour").selectOption("5");
+		await page.locator("#book_end_time_minute").selectOption("45");
+		await page.locator("#book_end_time_period").selectOption("PM");
+		await expect(page.locator("#book_time")).toHaveValue("3:15 PM");
+		await expect(page.locator("#book_end_time")).toHaveValue("5:45 PM");
 	});
 
 	test("direct #received visits do not show fake success", async ({ page }) => {
@@ -227,8 +262,8 @@ test.describe("Locally Twisted inquiry form experience", () => {
 			await expect(preferred.locator("option")).toHaveText([
 				"Select one...",
 				"Email",
-				"Text",
 				"Phone",
+				"Text",
 			]);
 			await expect(preferred).toHaveAttribute("aria-invalid", "true");
 			await expect(preferred).toHaveAttribute("aria-describedby", /book_preferred_contact_method_error/);

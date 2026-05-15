@@ -109,7 +109,7 @@ def main() -> int:
             if "book_phone_helper" not in (phone.get_attribute("aria-describedby") or ""):
                 failures.append("phone field should point to approved helper copy")
             phone_helper = page.locator("#book_phone_helper")
-            if phone_helper.count() != 1 or "second way to contact you" not in (phone_helper.text_content() or ""):
+            if phone_helper.count() != 1 or "Used solely in regards to your inquiry." not in (phone_helper.text_content() or ""):
                 failures.append("phone helper should use approved copy")
 
         email = page.locator("#book_email")
@@ -140,8 +140,24 @@ def main() -> int:
             if preferred.get_attribute("required") is None:
                 failures.append("preferred contact method should be required")
             options = preferred.locator("option").evaluate_all("(nodes) => nodes.map((node) => node.value)")
-            if options != ["", "Email", "Text", "Phone"]:
-                failures.append(f"preferred contact options should be Email/Text/Phone, found {options!r}")
+            if options != ["", "Email", "Phone", "Text"]:
+                failures.append(f"preferred contact options should be Email/Phone/Text, found {options!r}")
+
+        time_fields = [
+            ("#book_time", "x_event_time", "#book_time_hour", "#book_time_minute", "#book_time_period"),
+            ("#book_end_time", "x_event_end_time", "#book_end_time_hour", "#book_end_time_minute", "#book_end_time_period"),
+        ]
+        for hidden_selector, field_name, hour_selector, minute_selector, period_selector in time_fields:
+            hidden = page.locator(hidden_selector)
+            if hidden.count() != 1 or hidden.get_attribute("name") != field_name:
+                failures.append(f"{field_name} hidden time target should preserve backend mapping")
+                continue
+            for selector in (hour_selector, minute_selector, period_selector):
+                if page.locator(selector).count() != 1:
+                    failures.append(f"{field_name} should expose structured 12-hour control {selector}")
+            helper = page.locator(f"{hidden_selector}_helper")
+            if helper.count() != 1 or "Even an estimate is helpful." not in (helper.text_content() or ""):
+                failures.append(f"{field_name} estimate copy should be on its own helper line")
 
         required_fields = [
             ("#book_occasion", "event type"),
