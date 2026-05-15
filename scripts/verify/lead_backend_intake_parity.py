@@ -365,6 +365,8 @@ def check_public_form_time_copy() -> list[str]:
         "Event Start Time",
         "Event End Time",
         "Even an estimate is helpful.",
+        "Which services are you interested in?",
+        "Preferred contact method",
         'type="hidden" id="book_time" name="x_event_time"',
         'type="hidden" id="book_end_time" name="x_event_end_time"',
         'data-lt-time-part="x_event_time"',

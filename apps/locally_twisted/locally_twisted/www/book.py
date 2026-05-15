@@ -7,8 +7,8 @@ _resources/odoo-live-snapshot/hetzner-book.html. The local Odoo clone is
 stale; do not use it as canonical.
 
 The form mirrors Hetzner's structure with the current /contact consolidation:
-name, email, phone, preferred contact method, event type, event date, and
-city/location are required on the shared inquiry path.
+event type, event date, city/location, name, email,
+phone, and preferred contact method are required on the shared inquiry path.
 
 Submit flow:
   1. Client posts multipart/form-data to submit_book_inquiry
@@ -77,7 +77,7 @@ SERVICE_OPTIONS = [
     ("svc_painting", "Face Painting", "Face Painting"),
     ("svc_delivery", "Delivery", "Delivery (helium bouquets, balloon pieces)"),
     ("svc_pickup", "Pickup", "Pickup"),
-    ("svc_package", "Events Inquiry", "Events Inquiry"),
+    ("svc_package", "Events Inquiry", "Multiple services or larger event"),
     ("svc_other", "Something Else", "Something Else"),
 ]
 SERVICE_VALUES = {value for _cb_id, value, _label in SERVICE_OPTIONS}
@@ -135,7 +135,21 @@ def submit_book_inquiry():
     """
     fd = frappe.form_dict
 
-    # Required fields
+    # Event basics
+    occasion = (fd.get("x_occasion_type") or "").strip()
+    if not occasion:
+        frappe.throw(_("Please choose an event type."), frappe.ValidationError)
+    event_date = (fd.get("x_event_date") or "").strip()
+    if not event_date:
+        frappe.throw(_("Please choose the event date."), frappe.ValidationError)
+    event_time = _compose_time_widget_value(fd, "x_event_time", "event start time")
+    event_end_time = _compose_time_widget_value(fd, "x_event_end_time", "event end time")
+    event_location = (fd.get("x_event_location") or "").strip()
+    if not event_location:
+        frappe.throw(_("Please tell us the city or location for the event."), frappe.ValidationError)
+    guest_count = _parse_int(fd.get("x_guest_count"))
+
+    # Required contact fields
     first_name = (fd.get("contact_name") or "").strip()
     email = (fd.get("email_from") or "").strip()
     if not first_name:
@@ -159,20 +173,6 @@ def submit_book_inquiry():
 
     # Optional contact fields
     company = (fd.get("partner_name") or "").strip()
-
-    # Event basics
-    occasion = (fd.get("x_occasion_type") or "").strip()
-    if not occasion:
-        frappe.throw(_("Please choose an event type."), frappe.ValidationError)
-    event_date = (fd.get("x_event_date") or "").strip()
-    if not event_date:
-        frappe.throw(_("Please choose the event date."), frappe.ValidationError)
-    event_time = _compose_time_widget_value(fd, "x_event_time", "event start time")
-    event_end_time = _compose_time_widget_value(fd, "x_event_end_time", "event end time")
-    event_location = (fd.get("x_event_location") or "").strip()
-    if not event_location:
-        frappe.throw(_("Please tell us the city or location for the event."), frappe.ValidationError)
-    guest_count = _parse_int(fd.get("x_guest_count"))
 
     # Multi-select services (incoming as repeated form field or CSV).
     services = _parse_multivalue(fd.get("x_services"))
@@ -232,7 +232,7 @@ def submit_book_inquiry():
         "status": "Open",
         "custom_pipeline_stage": "New Inquiry",
         "custom_occasion_type": _occasion_label(occasion),
-        "custom_event_date": event_date,
+        "custom_event_date": event_date or None,
         "custom_event_time": event_time or None,
         "custom_event_end_time": event_end_time or None,
         "custom_event_location": event_location or None,

@@ -259,6 +259,15 @@
     }
 
     function validate(form) {
+        if (!textOf(form.elements.x_event_date)) {
+            return { ok: false, field: 'x_event_date', message: FIELD_ERROR.x_event_date };
+        }
+        if (!textOf(form.elements.x_event_location)) {
+            return { ok: false, field: 'x_event_location', message: FIELD_ERROR.x_event_location };
+        }
+        if (!textOf(form.elements.x_occasion_type)) {
+            return { ok: false, field: 'x_occasion_type', message: FIELD_ERROR.x_occasion_type };
+        }
         if (!textOf(form.elements.contact_name)) {
             return { ok: false, field: 'contact_name', message: FIELD_ERROR.contact_name };
         }
@@ -284,15 +293,6 @@
                 message: FIELD_ERROR.preferred_contact_method
             };
         }
-        if (!textOf(form.elements.x_occasion_type)) {
-            return { ok: false, field: 'x_occasion_type', message: FIELD_ERROR.x_occasion_type };
-        }
-        if (!textOf(form.elements.x_event_date)) {
-            return { ok: false, field: 'x_event_date', message: FIELD_ERROR.x_event_date };
-        }
-        if (!textOf(form.elements.x_event_location)) {
-            return { ok: false, field: 'x_event_location', message: FIELD_ERROR.x_event_location };
-        }
         setEmailSuggestion(form);
         return { ok: true };
     }
@@ -306,7 +306,7 @@
             submit.disabled = busy;
             submit.classList.toggle('is-loading', busy);
         }
-        if (label) label.textContent = busy ? 'Sending' : 'Send';
+        if (label) label.textContent = busy ? 'Sending' : 'Send request';
     }
 
     function isSubmitting(form) {

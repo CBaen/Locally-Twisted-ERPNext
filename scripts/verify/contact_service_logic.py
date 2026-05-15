@@ -125,7 +125,7 @@ def main() -> int:
                 if expected_id not in described_by:
                     failures.append(f"email field should point to {expected_id}")
             helper = page.locator("#book_email_helper")
-            if helper.count() != 1 or "Please double-check your email" not in (helper.text_content() or ""):
+            if helper.count() != 1 or "Used solely in regards to your inquiry." not in (helper.text_content() or ""):
                 failures.append("email helper should use approved copy")
             email.fill("casey@gamil.com")
             email.blur()
@@ -170,7 +170,6 @@ def main() -> int:
                 failures.append(f"{label} field should exist once")
             elif field.get_attribute("required") is None:
                 failures.append(f"{label} field should be required")
-
         failures.extend(check_service(
             page,
             "Balloon Decor",
@@ -199,8 +198,8 @@ def main() -> int:
         if events_panel.count() == 1 and events_panel.first.is_visible():
             heading = events_panel.locator(".lt-book__conditional-title").first.text_content() or ""
             normalized_heading = heading.strip().replace("\u2019", "'")
-            if normalized_heading != "Let's shape the event decor":
-                failures.append("Events Inquiry heading should be \"Let's shape the event decor\"")
+            if normalized_heading != "Multiple services or larger event":
+                failures.append("Events Inquiry heading should be \"Multiple services or larger event\"")
             for item in PACKAGE_ITEMS:
                 item_checkbox = events_panel.locator(f'input[name="x_package_items"][value="{item}"]')
                 if item_checkbox.count() != 1:
