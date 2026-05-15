@@ -315,7 +315,8 @@ jinja = {
 # ------------
 
 # before_install = "locally_twisted.install.before_install"
-# after_install = "locally_twisted.install.after_install"
+after_install = "locally_twisted.install.after_install"
+after_migrate = "locally_twisted.install.after_migrate"
 
 # Uninstallation
 # ------------
