@@ -21,7 +21,7 @@
 | ERPNext image pin | `frappe/erpnext:v15.105.0` (latest stable v15 patch) |
 | Frappe site | `frontend` |
 | URL | http://localhost:8081 |
-| Logins | `Administrator` / `admin` (superuser) · `cameron@builtbycameron.com` / `LocalDev2026!` (Cameron — System Manager dev account) · `locallytwisted@gmail.com` (Jeff Kimber — pre-created for transfer, no password yet) |
+| Logins | `Administrator` / `admin` (superuser) · `cameron@builtbycameron.com` / `LocalDev2026!` (Cameron — System Manager dev account) · `locallytwisted@gmail.com` / `LocalTemp2026!` (Jeff Kimber temporary owner login; change later) |
 
 ## This folder is structured per the agency isolation rule
 

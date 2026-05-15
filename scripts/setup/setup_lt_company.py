@@ -63,7 +63,7 @@ JEFF_USER = {
     "doctype": "User",
     "email": "locallytwisted@gmail.com",
     "first_name": "Jeff",
-    "last_name": "Baen",
+    "last_name": "Kimber",
     "send_welcome_email": 0,
     "enabled": 1,
     "user_type": "System User",

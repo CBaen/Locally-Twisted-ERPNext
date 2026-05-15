@@ -1,5 +1,15 @@
 # Locally Twisted - Coding Handoff
 
+Codex owner-access hotfix on 2026-05-15: `locallytwisted@gmail.com` now has
+immediate local backend access with the temporary owner password
+`LocalTemp2026!` until GL changes it later. The account is an enabled
+`System User`, defaults to `LT Owner Home`, has owner/operator roles without
+`System Manager`, and is the business-owner account for leads/inquiries.
+Verification passed with `python scripts/verify/backend_workspace_parity.py`
+and `$env:LT_DESK_TEST_USER='locallytwisted@gmail.com';
+$env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner`.
+Access-track handoff: `workstreams/user-access-audit-2026-05-15.md`.
+
 Codex inquiry-form hardening closeout on 2026-05-15: the shared `inquiry-v1`
 form now puts Contact Details first, keeps `What are you celebrating?`
 optional, removes redundant optional/helper copy, alternates Event Basics to
@@ -22,6 +32,7 @@ capabilities: `capabilities/recipes/shared-inquiry-form-experience.md`,
 `python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081`,
 and `python scripts/verify/customer_email_policy_contract.py`. This is
 local/source proof only until deployed through Frappe Cloud and reverified live.
+
 Codex access closeout on 2026-05-15: local human-user access was audited
 against the running ERPNext/Frappe site and DB. Current enabled operator
 personas are Owner, Manager, Employee, Accountant, Admin/support, Customer

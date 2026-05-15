@@ -55,7 +55,8 @@ Enabled users:
   `LT Owner Access`, plus `System Manager` and `Website Manager`.
 - `locallytwisted@gmail.com`: `System User`, `LT Owner Home`,
   owner/operator sales, customer, project, and catalog access; no
-  `System Manager`.
+  `System Manager`. Temporary local password set on 2026-05-15:
+  `LocalTemp2026!` until GL changes it later.
 - `lt-owner-temp@example.com`: `System User`, `LT Owner` role profile,
   `LT Owner Calm Desk`, `LT Owner Home`.
 - `lt-manager-temp@example.com`: `System User`, `LT Manager` role profile,
@@ -94,6 +95,9 @@ Owner:
 - Next access work should verify the exact Jeff/business-owner cutover account,
   what Jeff must see first after login, and which owner actions must be one
   click from `LT Owner Home`.
+- Immediate-access receipt on 2026-05-15: `locallytwisted@gmail.com` was
+  verified through `npm run test:desk-owner` with the temporary owner password
+  and landed on the Owner Home command center.
 
 Manager:
 
@@ -171,6 +175,7 @@ python scripts/verify/marketing_review_access_boundary.py
 npm run test:marketing-review-access
 $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-personas
 $env:LT_DESK_TEST_USER='lt-owner-temp@example.com'; $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner
+$env:LT_DESK_TEST_USER='locallytwisted@gmail.com'; $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner
 ```
 
 Manual/local proof also created a temporary marketing Website User, logged in
