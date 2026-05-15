@@ -26,6 +26,16 @@ real DocType/User Permission matrix checks, explicit external-review role
 boundaries, test-user cleanup, and small role changes only after failing
 verifiers prove the exact exposure.
 
+2026-05-15 GL correction: access work is now owner-first. The active access
+design target is Jeff/business-owner use, with Cameron/Built by Cameron support
+access preserved for build and maintenance. Manager, Employee, Accountant,
+Customer, Supplier, Maintenance Admin, and Marketing Reviewer profiles are
+boundary/audit context unless they directly protect or unblock owner/support
+use. Keep profile work inside this lane and
+`workstreams/user-access-audit-2026-05-15.md`; do not propagate it into other
+handoffs unless a specific owner workflow, verifier, or permission boundary
+requires the cross-link.
+
 This file is the job sheet for future handoffs. Keep `locally-twisted-queue.md` as the active task source, and update this file when the backend simplification lane changes stage.
 
 ## Owner
@@ -44,6 +54,8 @@ The real user-facing outcome is operational:
 - Leads are easier to process.
 - Sample records can support a backend tour.
 - Future agents stop treating old `/book`, Odoo, and experimental Lead-schema notes as current product direction.
+- Cameron/Built by Cameron can still maintain the system without turning
+  support access into the normal client/operator experience.
 
 ## Touched Areas
 

@@ -17,6 +17,33 @@ It covers:
 Cross-link: the external marketing reviewer feature lives at
 `workstreams/marketing-review-access-2026-05-15.md`.
 
+## Current Direction
+
+GL correction on 2026-05-15: this access track should focus on the business
+owner's access and use, plus Cameron/Built by Cameron support access. Those are
+the only profiles that require active access design right now.
+
+Primary required profiles:
+
+- Jeff/business owner: the real daily operator who needs the simplest possible
+  LT owner Desk path.
+- Cameron/Built by Cameron support: the build/support account that needs
+  enough admin reach to maintain and repair the system.
+
+Secondary boundary profiles:
+
+- Manager, Employee, Accountant, Customer, Supplier, Maintenance Admin, and
+  Marketing Reviewer profiles stay documented for audit and regression
+  boundaries only.
+- Do not turn these secondary profiles into separate feature lanes unless they
+  directly protect or unblock business-owner/support use, or GL explicitly
+  reopens that profile.
+- Keep this track local to this handoff and
+  `workstreams/erpnext-backend-simplification.md`. Cross-link into commerce,
+  paperwork, customer portal, marketing review, or public-site handoffs only
+  when an owner workflow, verifier, or permission boundary actually requires
+  it.
+
 ## Current Live Inventory
 
 Verified from the running local ERPNext database on 2026-05-15.
@@ -64,6 +91,9 @@ Owner:
 - Owner personas can work inquiries, bookings, customers, contacts, tasks,
   projects, and catalog tools.
 - `cameron@builtbycameron.com` also retains support/admin roles.
+- Next access work should verify the exact Jeff/business-owner cutover account,
+  what Jeff must see first after login, and which owner actions must be one
+  click from `LT Owner Home`.
 
 Manager:
 
@@ -157,12 +187,17 @@ Known yellow/non-blocking result:
 
 ## Follow-Up Queue Inputs
 
-- Add focused failing verifiers before changing broad ERPNext role permissions.
+- Verify the exact Jeff/business-owner cutover account and owner daily path
+  before improving any secondary profile.
+- Keep Cameron/Built by Cameron support access intact while narrowing the
+  client-facing owner path.
+- Add focused failing permission-matrix verifiers only for exposure that
+  affects the required owner/support profiles.
 - Decide whether Manager should retain any `Item Price` create/write/delete
-  permission; the current workspace hides catalog tools but the role matrix
-  still allows the permission.
+  permission only if that exposure affects owner/support delegation or
+  handoff safety.
 - Decide whether to remove or disable the leftover enabled customer visual
-  test user.
+  test user if it affects owner/support account clarity or launch safety.
 - If a real Exploring Not Boring account is created, create it as a `Website
   User` with only `LT Marketing Review Access`, no customer/supplier/Desk/admin
   roles, and rerun the marketing boundary verifier plus live HTTP proof.
