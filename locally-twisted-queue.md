@@ -133,6 +133,25 @@ can make Administrator look like every role. Feature handoff:
 `capabilities/recipes/erpnext-external-review-access.md`; guard:
 `npm run test:marketing-review-access`.
 
+**Public inquiry form spam/solicitation rule (2026-05-15):** `/contact` and
+BTFP keep one shared `inquiry-v1` form. The form must render a signed
+`lt_form_token` and invisible `website` honeypot; backend submit must reject
+missing/too-fast/stale/honeypot posts before Lead creation, emails, or file
+handling. High-confidence sales solicitations are soft-filtered: keep the Lead
+and customer-safe confirmation path for audit/review, suppress only the owner
+notification, and never block plausible event customers because they mention
+corporate, marketing, school, nonprofit, decor, balloons, dates, guests, or
+services. Source handoff:
+`workstreams/inquiry-form-spam-sales-filter-2026-05-15.md`; capabilities:
+`capabilities/recipes/shared-inquiry-form-experience.md`,
+`capabilities/recipes/erpnext-intake-form-parity.md`, and
+`capabilities/recipes/frappe-public-storefront-security.md`; guards:
+`python scripts/verify/inquiry_spam_gate.py --base-url http://localhost:8081`
+and
+`python scripts/verify/inquiry_sales_solicitation_filter.py --base-url http://localhost:8081`.
+Production is not protected until the Frappe Cloud app release/site update is
+done and these same gates pass against `https://locallytwisted.com`.
+
 **Operating law (2026-05-08):** no hand-authored production monoliths. Files should have one clear job unless they are explicitly research/reference artifacts. Use `workstreams/no-monolith-operating-contract.md` and the global capability `C:\Users\baenb\capabilities\principles\no-monolith-files.md` before expanding large source, template, CSS, verifier, script, or project-doc files.
 
 **Verification surface note (2026-05-09):** public internet lookup, rendered browser proof, and LT route-contract verifiers are different evidence classes. Current handoff: `workstreams/browser-verification-runtime.md`; capability: `capabilities/recipes/codex-browser-verification-surface.md`. Use `web.run` for outside facts, repo-local Playwright/LT npm gates for rendered-route proof, and re-test Browser Use before claiming in-app browser control works.

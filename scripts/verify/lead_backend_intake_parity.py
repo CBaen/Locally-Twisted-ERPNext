@@ -362,11 +362,16 @@ def check_public_form_time_copy() -> list[str]:
         encoding="utf-8"
     )
     required_snippets = [
-        "Event Start Time",
-        "Event End Time",
-        "Even an estimate is helpful.",
-        "Which services are you interested in?",
+        "Event start time",
+        "Event end time",
+        "Even Estimates Help",
+        "Contact Details",
+        "Timing and Scale",
+        "What services are you interested in?",
         "Preferred contact method",
+        'name="lt_form_token"',
+        'name="website"',
+        'data-lt-form-section="event-basics"',
         'type="hidden" id="book_time" name="x_event_time"',
         'type="hidden" id="book_end_time" name="x_event_end_time"',
         'data-lt-time-part="x_event_time"',
@@ -375,6 +380,14 @@ def check_public_form_time_copy() -> list[str]:
     for snippet in required_snippets:
         if snippet not in source:
             failures.append(f"public inquiry form missing time-field snippet: {snippet}")
+    stale_snippets = [
+        "Even an estimate is helpful.",
+        '<span class="lt-book__optional">(optional)</span>',
+        "book_preferred_contact_method_helper",
+    ]
+    for snippet in stale_snippets:
+        if snippet in source:
+            failures.append(f"public inquiry form still has stale helper/optional copy: {snippet}")
     return failures
 
 

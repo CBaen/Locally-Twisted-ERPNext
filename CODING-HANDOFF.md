@@ -1,5 +1,27 @@
 # Locally Twisted - Coding Handoff
 
+Codex inquiry-form hardening closeout on 2026-05-15: the shared `inquiry-v1`
+form now puts Contact Details first, keeps `What are you celebrating?`
+optional, removes redundant optional/helper copy, alternates Event Basics to
+`#F6F7F8`, widens AM/PM controls, and adds `Even Estimates Help` under event
+start/end time. Public submit now requires a signed hidden `lt_form_token` and
+empty invisible `website` honeypot; missing/too-fast/stale/honeypot posts fail
+before Lead creation, emails, or files. High-confidence sales solicitations are
+soft-filtered: save the Lead and customer-safe confirmation path, add audit
+evidence, and suppress only the owner "New website inquiry" email. Feature
+handoff: `workstreams/inquiry-form-spam-sales-filter-2026-05-15.md`;
+capabilities: `capabilities/recipes/shared-inquiry-form-experience.md`,
+`capabilities/recipes/erpnext-intake-form-parity.md`, and
+`capabilities/recipes/frappe-public-storefront-security.md`; guards:
+`python scripts/verify/inquiry_spam_gate.py --base-url http://localhost:8081`,
+`python scripts/verify/inquiry_sales_solicitation_filter.py --base-url http://localhost:8081`,
+`npm run test:form-experience`,
+`python scripts/verify/lead_backend_intake_parity.py`,
+`python scripts/verify/contact_service_logic.py --base-url http://localhost:8081`,
+`python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --form-path /contact --skip-newsletter`,
+`python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081`,
+and `python scripts/verify/customer_email_policy_contract.py`. This is
+local/source proof only until deployed through Frappe Cloud and reverified live.
 Codex access closeout on 2026-05-15: local human-user access was audited
 against the running ERPNext/Frappe site and DB. Current enabled operator
 personas are Owner, Manager, Employee, Accountant, Admin/support, Customer

@@ -14,14 +14,20 @@ import argparse
 import base64
 import json
 import os
+import re
 import subprocess
 import time
+from html import unescape
 import urllib.parse
 
 import requests
 
 PNG_1X1 = base64.b64decode(
     "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII="
+)
+TOKEN_RE = re.compile(
+    r'<input[^>]+name=["\']lt_form_token["\'][^>]+value=["\']([^"\']+)["\']',
+    re.IGNORECASE,
 )
 
 
@@ -44,7 +50,9 @@ def submit(base_url: str, email: str, label: str) -> dict:
         "x_guest_count": "33",
         "x_services": "Balloon Twisting,Face Painting",
         "description": label,
+        "lt_form_token": fetch_form_token(base_url),
     }
+    time.sleep(2.1)
     response = requests.post(
         f"{base_url.rstrip('/')}/api/method/locally_twisted.www.book.submit_book_inquiry",
         data=data,
@@ -61,6 +69,15 @@ def submit(base_url: str, email: str, label: str) -> dict:
     assert payload.get("business_notification", {}).get("queued") is True, payload
     assert payload.get("customer_confirmation", {}).get("queued") is True, payload
     return payload
+
+
+def fetch_form_token(base_url: str) -> str:
+    response = requests.get(f"{base_url.rstrip('/')}/contact", timeout=30)
+    response.raise_for_status()
+    match = TOKEN_RE.search(response.text)
+    if not match:
+        raise AssertionError("public inquiry form did not render lt_form_token")
+    return unescape(match.group(1)).strip()
 
 
 def cleanup_records(

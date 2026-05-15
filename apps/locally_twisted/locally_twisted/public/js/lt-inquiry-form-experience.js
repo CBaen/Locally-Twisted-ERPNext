@@ -11,7 +11,6 @@
         email_invalid: 'Please enter a valid email address.',
         phone: 'Please enter a phone number so we have a second way to contact you about your inquiry.',
         preferred_contact_method: 'Please choose how you prefer to be contacted.',
-        x_occasion_type: 'Please choose an event type.',
         x_event_date: 'Please choose the event date.',
         x_event_location: 'Please tell us the city or location for the event.'
     };
@@ -264,9 +263,6 @@
         }
         if (!textOf(form.elements.x_event_location)) {
             return { ok: false, field: 'x_event_location', message: FIELD_ERROR.x_event_location };
-        }
-        if (!textOf(form.elements.x_occasion_type)) {
-            return { ok: false, field: 'x_occasion_type', message: FIELD_ERROR.x_occasion_type };
         }
         if (!textOf(form.elements.contact_name)) {
             return { ok: false, field: 'contact_name', message: FIELD_ERROR.contact_name };

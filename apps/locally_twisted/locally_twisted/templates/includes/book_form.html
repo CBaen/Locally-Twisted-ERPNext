@@ -42,6 +42,7 @@ every deploy.
     --lt-form-brass: #B89A5B;
     --lt-form-berry: #B31B34;
     --lt-form-paper: #FFFFFF;
+    --lt-form-section-soft: #F6F7F8;
     --lt-form-warm: #FAF7F2;
     --lt-form-stone: #E7E5E1;
     padding: 0;
@@ -71,6 +72,33 @@ every deploy.
 }
 .lt-book__section-title:first-of-type {
     margin-top: 0;
+}
+.lt-book__section {
+    background-color: #FFFFFF;
+    border-radius: 0.45rem;
+    margin: 0 0 1rem;
+    padding: clamp(0.95rem, 2vw, 1.2rem);
+}
+.lt-book__section .lt-book__section-title {
+    margin-top: 0;
+}
+.lt-book__section--event-basics {
+    background-color: var(--lt-form-section-soft);
+}
+.lt-book__section--timing-and-scale {
+    margin-bottom: 0;
+}
+.lt-book__section--event-basics .lt-book__services {
+    background-color: #FFFFFF;
+}
+.lt-book__bot-check {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-200vw);
 }
 
 .lt-book__row {
@@ -153,12 +181,14 @@ every deploy.
 }
 .lt-book__time-picker {
     display: grid;
-    grid-template-columns: minmax(4.5rem, 1fr) auto minmax(4.5rem, 1fr) minmax(5.5rem, 1fr);
+    grid-template-columns: minmax(4.8rem, 1fr) auto minmax(4.8rem, 1fr) minmax(6rem, 1.1fr);
     align-items: center;
     gap: 0.45rem;
 }
 .lt-book__time-select {
     min-width: 0;
+    padding-left: 0.55rem;
+    padding-right: 0.55rem;
 }
 .lt-book__time-separator {
     color: rgba(10, 10, 11, 0.62);
@@ -167,7 +197,7 @@ every deploy.
 }
 @media (max-width: 420px) {
     .lt-book__time-picker {
-        grid-template-columns: 1fr auto 1fr;
+        grid-template-columns: minmax(4.8rem, 1fr) auto minmax(4.8rem, 1fr);
     }
     .lt-book__time-picker .lt-book__time-select:last-child {
         grid-column: 1 / -1;
@@ -421,6 +451,18 @@ every deploy.
         <form id="lt-book-form" data-form-contract="inquiry-v1" novalidate enctype="multipart/form-data">
             <fieldset>
                 <legend class="visually-hidden">Event request</legend>
+                <input type="hidden"
+                       id="book_spam_token"
+                       name="lt_form_token"
+                       value="{{ inquiry_spam_token or '' }}">
+                <div class="lt-book__bot-check" aria-hidden="true">
+                    <label for="book_website">Leave this field blank</label>
+                    <input type="text"
+                           id="book_website"
+                           name="website"
+                           autocomplete="off"
+                           tabindex="-1">
+                </div>
                 {% if requested_item_code %}
                 <input type="hidden" name="lt_requested_item_code" value="{{ requested_item_code }}">
                 <input type="hidden" name="lt_requested_item_name" value="{{ requested_item_name }}">
@@ -430,9 +472,77 @@ every deploy.
                 </div>
                 {% endif %}
 
-                <h3 class="lt-book__section-title">Event basics</h3>
+                <section class="lt-book__section lt-book__section--contact"
+                         data-lt-form-section="contact-details"
+                         aria-labelledby="book_contact_details_title">
+                <h3 class="lt-book__section-title" id="book_contact_details_title">Contact Details</h3>
 
-                {# Row 1: Event Date + City/Location #}
+                {# Row 1: Name + Preferred Contact Method #}
+                <div class="lt-book__row lt-book__row--two">
+                    <div class="lt-book__field">
+                        <label for="book_name">
+                            Your name <span class="lt-book__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span>
+                        </label>
+                        <input type="text" id="book_name" name="contact_name"
+                               class="lt-book__input"
+                               required aria-required="true"
+                               autocomplete="name"/>
+                    </div>
+                    <div class="lt-book__field">
+                        <label for="book_preferred_contact_method">
+                            Preferred contact method <span class="lt-book__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span>
+                        </label>
+                        <select id="book_preferred_contact_method"
+                                name="preferred_contact_method"
+                                class="lt-book__select"
+                                required aria-required="true">
+                            <option value="">Select one...</option>
+                            {% for value, label in preferred_contact_options %}
+                            <option value="{{ value }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                        <p id="book_preferred_contact_method_error" class="lt-book__field-error" data-lt-field-error-for="preferred_contact_method" hidden></p>
+                    </div>
+                </div>
+
+                {# Row 2: Email + Phone #}
+                <div class="lt-book__row lt-book__row--two">
+                    <div class="lt-book__field">
+                        <label for="book_email">
+                            Email <span class="lt-book__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span>
+                        </label>
+                        <input type="email" id="book_email" name="email_from"
+                               class="lt-book__input"
+                               required aria-required="true"
+                               autocomplete="email"
+                               aria-describedby="book_email_helper book_email_hint"
+                               placeholder="your@email.com"/>
+                        <p id="book_email_helper" class="lt-book__field-helper">Used solely in regards to your inquiry.</p>
+                        <p id="book_email_hint" class="lt-book__field-hint" aria-live="polite"></p>
+                    </div>
+                    <div class="lt-book__field">
+                        <label for="book_phone">
+                            Phone number <span class="lt-book__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span>
+                        </label>
+                        <input type="tel" id="book_phone" name="phone"
+                               class="lt-book__input"
+                               required aria-required="true"
+                               autocomplete="tel"
+                               aria-describedby="book_phone_helper"
+                               placeholder="(801) 555-0000"/>
+                        <p id="book_phone_error" class="lt-book__field-error" data-lt-field-error-for="phone" hidden></p>
+                        <p id="book_phone_helper" class="lt-book__field-helper">Used solely in regards to your inquiry.</p>
+                    </div>
+                </div>
+
+                </section>
+
+                <section class="lt-book__section lt-book__section--event-basics"
+                         data-lt-form-section="event-basics"
+                         aria-labelledby="book_event_basics_title">
+                <h3 class="lt-book__section-title" id="book_event_basics_title">Event Basics</h3>
+
+                {# Row 3: Event Date + City/Location #}
                 <div class="lt-book__row lt-book__row--two">
                     <div class="lt-book__field">
                         <label for="book_date">
@@ -457,13 +567,11 @@ every deploy.
                     </div>
                 </div>
 
-                {# Row 2: Occasion #}
+                {# Row 4: Occasion #}
                 <div class="lt-book__row">
                     <div class="lt-book__field">
-                        <label for="book_occasion">
-                            What are you celebrating? <span class="lt-book__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span>
-                        </label>
-                        <select id="book_occasion" name="x_occasion_type" class="lt-book__select" required aria-required="true">
+                        <label for="book_occasion">What are you celebrating?</label>
+                        <select id="book_occasion" name="x_occasion_type" class="lt-book__select">
                             <option value="">Select one...</option>
                             {% for value, label in occasion_options %}
                             <option value="{{ value }}"{% if selected_occasion == value %} selected{% endif %}>{{ label }}</option>
@@ -475,7 +583,7 @@ every deploy.
                 {# Multi-select services #}
                 <fieldset class="lt-book__services">
                     <legend class="lt-book__services-legend">
-                        Which services are you interested in?
+                        What services are you interested in?
                         <span class="lt-book__services-hint">(select all that apply)</span>
                     </legend>
                     {% for cb_id, value, label in service_options %}
@@ -490,76 +598,19 @@ every deploy.
                     {% endfor %}
                 </fieldset>
 
-                <h3 class="lt-book__section-title">Contact details</h3>
+                </section>
 
-                {# Row 3: Name + Email #}
-                <div class="lt-book__row lt-book__row--two">
-                    <div class="lt-book__field">
-                        <label for="book_name">
-                            Your name <span class="lt-book__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span>
-                        </label>
-                        <input type="text" id="book_name" name="contact_name"
-                               class="lt-book__input"
-                               required aria-required="true"
-                               autocomplete="name"/>
-                    </div>
-                    <div class="lt-book__field">
-                        <label for="book_email">
-                            Email <span class="lt-book__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span>
-                        </label>
-                        <input type="email" id="book_email" name="email_from"
-                               class="lt-book__input"
-                               required aria-required="true"
-                               autocomplete="email"
-                               aria-describedby="book_email_helper book_email_hint"
-                               placeholder="your@email.com"/>
-                        <p id="book_email_helper" class="lt-book__field-helper">Used solely in regards to your inquiry.</p>
-                        <p id="book_email_hint" class="lt-book__field-hint" aria-live="polite"></p>
-                    </div>
-                </div>
-
-                {# Row 4: Phone + preferred contact method #}
-                <div class="lt-book__row lt-book__row--two">
-                    <div class="lt-book__field">
-                        <label for="book_phone">
-                            Phone number <span class="lt-book__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span>
-                        </label>
-                        <input type="tel" id="book_phone" name="phone"
-                               class="lt-book__input"
-                               required aria-required="true"
-                               autocomplete="tel"
-                               aria-describedby="book_phone_helper"
-                               placeholder="(801) 555-0000"/>
-                        <p id="book_phone_error" class="lt-book__field-error" data-lt-field-error-for="phone" hidden></p>
-                        <p id="book_phone_helper" class="lt-book__field-helper">Used solely in regards to your inquiry.</p>
-                    </div>
-                    <div class="lt-book__field">
-                        <label for="book_preferred_contact_method">
-                            Preferred contact method <span class="lt-book__required" aria-hidden="true">*</span><span class="visually-hidden"> (required)</span>
-                        </label>
-                        <select id="book_preferred_contact_method"
-                                name="preferred_contact_method"
-                                class="lt-book__select"
-                                required aria-required="true"
-                                aria-describedby="book_preferred_contact_method_helper">
-                            <option value="">Select one...</option>
-                            {% for value, label in preferred_contact_options %}
-                            <option value="{{ value }}">{{ label }}</option>
-                            {% endfor %}
-                        </select>
-                        <p id="book_preferred_contact_method_error" class="lt-book__field-error" data-lt-field-error-for="preferred_contact_method" hidden></p>
-                        <p id="book_preferred_contact_method_helper" class="lt-book__field-helper">Choose the best way for us to follow up about this request.</p>
-                    </div>
-                </div>
-
-                <h3 class="lt-book__section-title">Timing and scale</h3>
+                <section class="lt-book__section lt-book__section--timing-and-scale"
+                         data-lt-form-section="timing-and-scale"
+                         aria-labelledby="book_timing_scale_title">
+                <h3 class="lt-book__section-title" id="book_timing_scale_title">Timing and Scale</h3>
 
                 {# Row 5: Event Start + Event End #}
                 <div class="lt-book__row lt-book__row--two">
                     <div class="lt-book__field">
-                        <span class="lt-book__label" id="book_time_label">Event Start Time <span class="lt-book__optional">(optional)</span></span>
+                        <span class="lt-book__label" id="book_time_label">Event start time</span>
                         <input type="hidden" id="book_time" name="x_event_time" data-lt-time-value="x_event_time"/>
-                        <div class="lt-book__time-picker" role="group" aria-labelledby="book_time_label" aria-describedby="book_time_helper">
+                        <div class="lt-book__time-picker" role="group" aria-labelledby="book_time_label">
                             <select id="book_time_hour" name="x_event_time_hour" class="lt-book__select lt-book__time-select" data-lt-time-part="x_event_time" data-lt-time-unit="hour" aria-label="Event start hour">
                                 <option value="">Hour</option>
                                 {% for hour in range(1, 13) %}
@@ -580,12 +631,12 @@ every deploy.
                                 <option value="PM">PM</option>
                             </select>
                         </div>
-                        <p id="book_time_helper" class="lt-book__field-helper">Even an estimate is helpful.</p>
+                        <p id="book_time_helper" class="lt-book__field-helper">Even Estimates Help</p>
                     </div>
                     <div class="lt-book__field">
-                        <span class="lt-book__label" id="book_end_time_label">Event End Time <span class="lt-book__optional">(optional)</span></span>
+                        <span class="lt-book__label" id="book_end_time_label">Event end time</span>
                         <input type="hidden" id="book_end_time" name="x_event_end_time" data-lt-time-value="x_event_end_time"/>
-                        <div class="lt-book__time-picker" role="group" aria-labelledby="book_end_time_label" aria-describedby="book_end_time_helper">
+                        <div class="lt-book__time-picker" role="group" aria-labelledby="book_end_time_label">
                             <select id="book_end_time_hour" name="x_event_end_time_hour" class="lt-book__select lt-book__time-select" data-lt-time-part="x_event_end_time" data-lt-time-unit="hour" aria-label="Event end hour">
                                 <option value="">Hour</option>
                                 {% for hour in range(1, 13) %}
@@ -606,7 +657,7 @@ every deploy.
                                 <option value="PM">PM</option>
                             </select>
                         </div>
-                        <p id="book_end_time_helper" class="lt-book__field-helper">Even an estimate is helpful.</p>
+                        <p id="book_end_time_helper" class="lt-book__field-helper">Even Estimates Help</p>
                     </div>
                 </div>
 
@@ -619,9 +670,7 @@ every deploy.
                                min="1" placeholder="e.g. 50"/>
                     </div>
                     <div class="lt-book__field">
-                        <label for="book_company">
-                            Company or organization <span class="lt-book__optional">(optional)</span>
-                        </label>
+                        <label for="book_company">Company or organization</label>
                         <input type="text" id="book_company" name="partner_name"
                                class="lt-book__input"
                                autocomplete="organization"/>
@@ -840,9 +889,7 @@ every deploy.
 
                 {# Photos #}
                 <div class="lt-book__field" style="margin-top: 1.5rem;">
-                    <label for="book_photos">
-                        Inspiration photos <span class="lt-book__optional">(optional)</span>
-                    </label>
+                    <label for="book_photos">Inspiration photos</label>
                     <input type="file" id="book_photos" name="ufile"
                            class="lt-book__input"
                            accept="image/jpeg,image/png,image/gif,image/webp,image/heic,.heic,.heif"
@@ -889,6 +936,7 @@ every deploy.
                 </div>
 
                 <div id="book_feedback" class="lt-book__feedback" role="alert" aria-live="assertive"></div>
+                </section>
             </fieldset>
         </form>
     </div>

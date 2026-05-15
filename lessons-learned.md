@@ -2825,3 +2825,48 @@ that only proves the Add to Cart button enables is not enough.
 
 **Avoid:** name-based axis routing, frontend-only selector assumptions, and
 verifiers that check emitted JSON without also proving the browser payload.
+
+---
+
+## 2026-05-15 - A pasted owner email is not proof of the local ERPNext environment
+
+**Lesson:** When debugging a form notification, match the exact environment
+that generated the email before drawing conclusions. A Lead number in an email
+can exist locally with different data if the email came from staging, live, or
+an older instance.
+
+**What happened:** The Nicole/vettedvas owner-notification text matched LT's
+ERPNext owner email template, but the local database had no Nicole/vettedvas
+Lead, Communication, or Email Queue row. Local `CRM-LEAD-2026-00011` was an
+older smoke-test Lead, not Nicole.
+
+**Do this next time:** Verify Lead, Communication, Email Queue, File, and route
+state in the exact local/staging/live environment under investigation. Do not
+inspect personal email or unrelated mailboxes for LT ERPNext form evidence
+unless GL explicitly asks and the mailbox is in scope.
+
+**Avoid:** treating a pasted email as local database proof, using a proxy Lead
+with the same name/number shape, or leaving the ERPNext/Frappe record path to
+search unrelated personal mail.
+
+---
+
+## 2026-05-15 - Public form sales spam needs soft suppression, not broad keyword blocking
+
+**Lesson:** A public business inquiry form can receive vendor sales pitches as
+soon as it is live. Protect the owner notification path, but keep ambiguous
+submissions reviewable so real customers are not lost.
+
+**What happened:** The Nicole/vettedvas-style message was a virtual-assistant
+sales pitch. The repair added a signed form token, honeypot, and conservative
+sales-solicitation classifier. High-confidence sales pitches still save a Lead
+for audit/review and follow the customer-safe confirmation path, but the owner
+email is suppressed.
+
+**Do this next time:** Require multiple vendor/sales signals before suppressing
+owner notification, and let event/customer signals override the classifier.
+Guard both the spam gate and the false-positive boundary with verifiers.
+
+**Avoid:** blocking customers because they mention corporate, marketing,
+school, nonprofit, or business context, or silently dropping all evidence of a
+submission that might still need review.

@@ -12,6 +12,7 @@ from locally_twisted.www.book import (
     MAX_PHOTOS,
     MAX_PHOTO_BYTES,
     PREFERRED_CONTACT_OPTIONS,
+    build_inquiry_spam_token,
 )
 
 
@@ -71,6 +72,7 @@ def get_context(context):
     )
     context.max_photos = MAX_PHOTOS
     context.max_photo_mb = MAX_PHOTO_BYTES // (1024 * 1024)
+    context.inquiry_spam_token = build_inquiry_spam_token()
     return context
 
 

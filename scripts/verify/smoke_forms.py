@@ -409,7 +409,6 @@ def smoke_test(base_url: str, form_path: str, shape_only: bool = False) -> int:
             email_field = page.locator("input[type='email'], input[name='email_id']").first
             phone_field = page.locator("input[name='phone'], input[type='tel']").first
             preferred_field = page.locator("select[name='preferred_contact_method']").first
-            event_type_field = page.locator("select[name='x_occasion_type']").first
             event_date_field = page.locator("input[name='x_event_date']").first
             event_location_field = page.locator("input[name='x_event_location']").first
             if name_field.count() > 0:
@@ -420,8 +419,6 @@ def smoke_test(base_url: str, form_path: str, shape_only: bool = False) -> int:
                 phone_field.fill("801-555-0198")
             if preferred_field.count() > 0:
                 preferred_field.select_option("Email")
-            if event_type_field.count() > 0:
-                event_type_field.select_option("corporate")
             if event_date_field.count() > 0:
                 event_date_field.fill("2026-06-20")
             if event_location_field.count() > 0:
@@ -439,6 +436,7 @@ def smoke_test(base_url: str, form_path: str, shape_only: bool = False) -> int:
         # partial. Fall back to the form-scoped submit if id isn't present
         # (kept for any non-LT smoke runs that point at a different form).
         try:
+            page.wait_for_timeout(2200)
             inquiry_submit = page.locator("#book_submit")
             if inquiry_submit.count() > 0:
                 inquiry_submit.click(timeout=10000)

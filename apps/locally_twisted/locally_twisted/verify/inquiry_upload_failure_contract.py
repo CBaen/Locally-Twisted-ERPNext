@@ -81,9 +81,10 @@ def _run_contract(log_error_calls: list[dict[str, object]]) -> dict[str, object]
 
 
 def _assert_empty_upload_slot_is_ignored() -> dict[str, object]:
-    from locally_twisted.www.book import submit_book_inquiry
+    from locally_twisted.www.book import build_inquiry_spam_token, submit_book_inquiry
 
     token = str(int(time.time()))
+    spam_token = build_inquiry_spam_token(int(time.time()) - 3)
     marker = f"LT Empty Upload {token}"
     empty = _FakeFile("", "", b"")
 
@@ -98,6 +99,7 @@ def _assert_empty_upload_slot_is_ignored() -> dict[str, object]:
             "x_event_location": "Test City",
             "x_services": '["Balloon Twisting"]',
             "description": "Synthetic empty upload slot contract.",
+            "lt_form_token": spam_token,
         }
     )
     frappe.request = _FakeRequest([empty])
@@ -129,9 +131,10 @@ def _assert_empty_upload_slot_is_ignored() -> dict[str, object]:
 
 def _assert_invalid_upload_records_failure(log_error_calls: list[dict[str, object]]) -> dict[str, object]:
     from locally_twisted.failure_recorder import record_health_failures
-    from locally_twisted.www.book import submit_book_inquiry
+    from locally_twisted.www.book import build_inquiry_spam_token, submit_book_inquiry
 
     token = str(int(time.time()))
+    spam_token = build_inquiry_spam_token(int(time.time()) - 3)
     marker = f"LT Upload Failure {token}"
     invalid = _FakeFile("not-an-image.txt", "text/plain", b"hello")
 
@@ -146,6 +149,7 @@ def _assert_invalid_upload_records_failure(log_error_calls: list[dict[str, objec
             "x_event_location": "Test City",
             "x_services": '["Balloon Decor"]',
             "description": "Synthetic invalid upload contract.",
+            "lt_form_token": spam_token,
         }
     )
     frappe.request = _FakeRequest([invalid])

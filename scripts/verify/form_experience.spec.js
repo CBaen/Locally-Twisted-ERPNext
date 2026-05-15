@@ -16,7 +16,6 @@ async function fillRequiredFields(page) {
 	await page.locator("#book_phone").fill("801-555-0101");
 	await page.locator("#book_email").fill("form-ux-test@example.com");
 	await page.locator("#book_preferred_contact_method").selectOption("Email");
-	await page.locator("#book_occasion").selectOption("corporate");
 	await page.locator("#book_date").fill("2026-06-20");
 	await page.locator("#book_location").fill("Ogden, UT");
 }
@@ -64,6 +63,12 @@ async function fieldBox(page, selector) {
 	});
 }
 
+async function sectionBackground(form, section) {
+	return form.locator(`[data-lt-form-section='${section}']`).evaluate((element) => (
+		window.getComputedStyle(element).backgroundColor
+	));
+}
+
 test.describe("Locally Twisted inquiry form experience", () => {
 	test("cookie notice sits inline on form pages instead of covering fields", async ({ page }) => {
 		await page.goto(`${BASE_URL}/contact`);
@@ -98,10 +103,34 @@ test.describe("Locally Twisted inquiry form experience", () => {
 		await expect(form.locator("#book_phone_helper")).toContainText("Used solely in regards to your inquiry.");
 		await expect(form.locator("#book_date_helper")).toContainText("Exact date or best estimate.");
 		await expect(form.locator("#book_location_helper")).toContainText("Venue, address, city, or general area.");
-		await expect(form.locator("#book_preferred_contact_method_helper")).toContainText("Choose the best way for us to follow up about this request.");
+		await expect(form.locator("#book_preferred_contact_method_helper")).toHaveCount(0);
+		await expect(form.locator(".lt-book__optional")).toHaveCount(0);
+		await expect(form).not.toContainText("(optional)");
+		await expect(form).not.toContainText("Even an estimate is helpful.");
+		await expect(form.locator("#book_time_helper")).toHaveText("Even Estimates Help");
+		await expect(form.locator("#book_end_time_helper")).toHaveText("Even Estimates Help");
+		await expect(form.getByRole("heading", { name: "Contact Details" })).toHaveCount(1);
+		await expect(form.getByRole("heading", { name: "Event Basics" })).toHaveCount(1);
+		await expect(form.getByRole("heading", { name: "Timing and Scale" })).toHaveCount(1);
+		await expect(form).not.toContainText("Contact details");
+		await expect(form).not.toContainText("Timing and scale");
+		await expect(form.locator("[data-lt-form-section='contact-details']")).toHaveCount(1);
+		await expect(form.locator("[data-lt-form-section='event-basics']")).toHaveCount(1);
+		await expect(form.locator("[data-lt-form-section='timing-and-scale']")).toHaveCount(1);
+		await expect(await sectionBackground(form, "contact-details")).toBe("rgb(255, 255, 255)");
+		await expect(await sectionBackground(form, "event-basics")).toBe("rgb(246, 247, 248)");
+		await expect(await sectionBackground(form, "timing-and-scale")).toBe("rgb(255, 255, 255)");
 		await expect(form.locator("#book_phone")).toHaveAttribute("required", "");
 		await expect(form.locator("#book_preferred_contact_method")).toHaveAttribute("required", "");
-		await expect(form.locator("#book_occasion")).toHaveAttribute("required", "");
+		await expect(form.locator("#book_spam_token")).toHaveAttribute("type", "hidden");
+		await expect(form.locator("#book_spam_token")).toHaveAttribute("name", "lt_form_token");
+		await expect(form.locator("#book_spam_token")).toHaveValue(/\./);
+		await expect(form.locator("#book_website")).toHaveAttribute("name", "website");
+		await expect(form.locator("#book_website")).toHaveAttribute("autocomplete", "off");
+		await expect(form.locator("#book_website")).toHaveAttribute("tabindex", "-1");
+		await expect(form.locator(".lt-book__bot-check")).toHaveAttribute("aria-hidden", "true");
+		await expect(form.locator(".lt-book__bot-check")).toHaveCSS("opacity", "0");
+		await expect(form.locator("#book_occasion")).not.toHaveAttribute("required", "");
 		await expect(form.locator("#book_date")).toHaveAttribute("required", "");
 		await expect(form.locator("#book_location")).toHaveAttribute("required", "");
 		await expect(form.locator("#book_preferred_contact_method option")).toHaveText([
@@ -113,49 +142,50 @@ test.describe("Locally Twisted inquiry form experience", () => {
 		await expect(form.locator("#book_occasion option").first()).toHaveText("Select one...");
 		await expect(form.locator("#book_time")).toHaveAttribute("type", "hidden");
 		await expect(form.locator("#book_end_time")).toHaveAttribute("type", "hidden");
-		await expect(form.locator("#book_time_helper")).toContainText("Even an estimate is helpful.");
-		await expect(form.locator("#book_end_time_helper")).toContainText("Even an estimate is helpful.");
 	});
 
-	test("approved hierarchy puts event basics before contact details and timing", async ({ page }) => {
+	test("approved hierarchy puts contact details first on mobile and desktop", async ({ page }) => {
 		await page.setViewportSize({ width: 390, height: 844 });
 		await page.goto(`${BASE_URL}/contact`);
 		await dismissCookieNotice(page);
 
-		const mobileDate = await fieldBox(page, "#book_date");
-		const mobileLocation = await fieldBox(page, "#book_location");
-		const mobileOccasion = await fieldBox(page, "#book_occasion");
-		const mobileServices = await fieldBox(page, "#svc_decor");
 		const mobileName = await fieldBox(page, "#book_name");
 		const mobilePreferred = await fieldBox(page, "#book_preferred_contact_method");
 		const mobileEmail = await fieldBox(page, "#book_email");
 		const mobilePhone = await fieldBox(page, "#book_phone");
+		const mobileDate = await fieldBox(page, "#book_date");
+		const mobileLocation = await fieldBox(page, "#book_location");
+		const mobileOccasion = await fieldBox(page, "#book_occasion");
+		const mobileServices = await fieldBox(page, "#svc_decor");
 		const mobileStart = await fieldBox(page, "#book_time_hour");
-		expect(mobileDate.y).toBeLessThan(mobileLocation.y);
-		expect(mobileLocation.y).toBeLessThan(mobileOccasion.y);
-		expect(mobileServices.y).toBeLessThan(mobileName.y);
-		expect(mobileName.y).toBeLessThan(mobileEmail.y);
+		expect(mobileName.y).toBeLessThan(mobilePreferred.y);
+		expect(mobilePreferred.y).toBeLessThan(mobileEmail.y);
 		expect(mobileEmail.y).toBeLessThan(mobilePhone.y);
-		expect(mobilePhone.y).toBeLessThan(mobilePreferred.y);
-		expect(mobilePreferred.y).toBeLessThan(mobileStart.y);
+		expect(mobilePhone.y).toBeLessThan(mobileDate.y);
+		expect(mobileDate.y).toBeLessThanOrEqual(mobileLocation.y);
+		expect(mobileLocation.y).toBeLessThan(mobileOccasion.y);
+		expect(mobileOccasion.y).toBeLessThan(mobileServices.y);
+		expect(mobileServices.y).toBeLessThan(mobileStart.y);
 
 		await page.setViewportSize({ width: 1366, height: 900 });
 		await page.reload();
 		await dismissCookieNotice(page);
 
-		const desktopDate = await fieldBox(page, "#book_date");
-		const desktopLocation = await fieldBox(page, "#book_location");
-		const desktopServices = await fieldBox(page, "#svc_decor");
 		const desktopName = await fieldBox(page, "#book_name");
 		const desktopPreferred = await fieldBox(page, "#book_preferred_contact_method");
 		const desktopEmail = await fieldBox(page, "#book_email");
 		const desktopPhone = await fieldBox(page, "#book_phone");
+		const desktopDate = await fieldBox(page, "#book_date");
+		const desktopLocation = await fieldBox(page, "#book_location");
+		const desktopServices = await fieldBox(page, "#svc_decor");
 		const desktopStart = await fieldBox(page, "#book_time_hour");
+		expect(Math.abs(desktopPreferred.y - desktopName.y)).toBeLessThanOrEqual(2);
+		expect(Math.abs(desktopPhone.y - desktopEmail.y)).toBeLessThanOrEqual(2);
+		expect(desktopEmail.y).toBeGreaterThan(desktopName.y + desktopName.height);
+		expect(desktopDate.y).toBeGreaterThan(desktopEmail.y + desktopEmail.height);
 		expect(Math.abs(desktopLocation.y - desktopDate.y)).toBeLessThanOrEqual(2);
-		expect(desktopServices.y).toBeLessThan(desktopName.y);
-		expect(Math.abs(desktopEmail.y - desktopName.y)).toBeLessThanOrEqual(2);
-		expect(Math.abs(desktopPreferred.y - desktopPhone.y)).toBeLessThanOrEqual(2);
-		expect(desktopStart.y).toBeGreaterThan(desktopPreferred.y + desktopPreferred.height);
+		expect(desktopServices.y).toBeGreaterThan(desktopDate.y + desktopDate.height);
+		expect(desktopStart.y).toBeGreaterThan(desktopServices.y + desktopServices.height);
 	});
 
 	for (const viewport of [
@@ -193,6 +223,14 @@ test.describe("Locally Twisted inquiry form experience", () => {
 		const desktopEnd = await fieldBox(page, "#book_end_time_hour");
 		expect(desktopLocation.y).toBeLessThan(desktopStart.y);
 		expect(Math.abs(desktopStart.y - desktopEnd.y)).toBeLessThanOrEqual(2);
+		const desktopPeriod = await fieldBox(page, "#book_time_period");
+		expect(desktopPeriod.width).toBeGreaterThanOrEqual(96);
+
+		await page.setViewportSize({ width: 390, height: 844 });
+		await page.reload();
+		await dismissCookieNotice(page);
+		const mobilePeriod = await fieldBox(page, "#book_time_period");
+		expect(mobilePeriod.width).toBeGreaterThanOrEqual(220);
 
 		await page.locator("#book_time_hour").selectOption("3");
 		await page.locator("#book_time_minute").selectOption("15");
@@ -212,15 +250,23 @@ test.describe("Locally Twisted inquiry form experience", () => {
 		await expect(page.locator("[data-lt-form-status]")).toBeHidden();
 	});
 
-	test("required event basics fail before the request is sent", async ({ page }) => {
+	test("required event basics fail before the request is sent but occasion stays optional", async ({ page }) => {
 		let requests = 0;
 		await page.route("**/api/method/locally_twisted.www.book.submit_book_inquiry", async (route) => {
 			requests += 1;
-			await route.fulfill({ status: 500, body: "" });
+			await route.fulfill({
+				status: 200,
+				contentType: "application/json",
+				body: JSON.stringify({ message: { ok: true, lead: "LEAD-FORM-UX-OPTIONAL-OCCASION" } }),
+			});
 		});
 
 		await page.goto(`${BASE_URL}/contact`);
 		await dismissCookieNotice(page);
+		await page.locator("#book_name").fill("Form UX Test");
+		await page.locator("#book_email").fill("form-ux-test@example.com");
+		await page.locator("#book_phone").fill("801-555-0101");
+		await page.locator("#book_preferred_contact_method").selectOption("Email");
 
 		await page.locator("#book_submit").click();
 		await expect(page.locator("#book_feedback")).toContainText("Please choose the event date.");
@@ -233,8 +279,9 @@ test.describe("Locally Twisted inquiry form experience", () => {
 
 		await page.locator("#book_location").fill("Ogden, UT");
 		await page.locator("#book_submit").click();
-		await expect(page.locator("#book_feedback")).toContainText("Please choose an event type.");
-		expect(requests).toBe(0);
+		await expect(page.locator("#book_feedback")).toBeHidden();
+		await expect(page.locator("#book_occasion")).not.toHaveAttribute("aria-invalid", "true");
+		expect(requests).toBe(1);
 	});
 
 	test("required contact basics fail before the request is sent", async ({ page }) => {
@@ -248,7 +295,6 @@ test.describe("Locally Twisted inquiry form experience", () => {
 		await dismissCookieNotice(page);
 		await page.locator("#book_date").fill("2026-06-20");
 		await page.locator("#book_location").fill("Ogden, UT");
-		await page.locator("#book_occasion").selectOption("corporate");
 		await page.locator("#book_name").fill("Form UX Test");
 		await page.locator("#book_email").fill("form-ux-test@gamil.com");
 		await page.locator("#book_email").blur();
@@ -287,7 +333,6 @@ test.describe("Locally Twisted inquiry form experience", () => {
 			await dismissCookieNotice(page);
 			await page.locator("#book_date").fill("2026-06-20");
 			await page.locator("#book_location").fill("Ogden, UT");
-			await page.locator("#book_occasion").selectOption("corporate");
 			await page.locator("#book_name").fill("Form UX Test");
 			await page.locator("#book_email").fill("form-ux-test@example.com");
 
@@ -342,7 +387,6 @@ test.describe("Locally Twisted inquiry form experience", () => {
 		await dismissCookieNotice(page);
 		await page.locator("#book_date").fill("2026-06-20");
 		await page.locator("#book_location").fill("Ogden, UT");
-		await page.locator("#book_occasion").selectOption("corporate");
 		await page.locator("#book_name").fill("Form UX Test");
 		await page.locator("#book_phone").fill("801-555-0101");
 		await page.locator("#book_email").fill("not-an-email");

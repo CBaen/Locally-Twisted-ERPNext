@@ -7,7 +7,7 @@ _resources/odoo-live-snapshot/hetzner-book.html. The local Odoo clone is
 stale; do not use it as canonical.
 
 The form mirrors Hetzner's structure with the current /contact consolidation:
-event type, event date, city/location, name, email,
+event date, city/location, name, email,
 phone, and preferred contact method are required on the shared inquiry path.
 
 Submit flow:
@@ -29,6 +29,8 @@ Loud-failure compliance (per project CLAUDE.md + global loud-failure rule):
   - Monitor: scripts/verify/smoke_forms.py covers /contact on every deploy
 """
 import copy
+import hashlib
+import hmac
 import json
 import time
 
@@ -39,6 +41,7 @@ from frappe.utils import escape_html, validate_email_address
 
 from locally_twisted import commerce_rules, lead_cascade
 from locally_twisted.failure_recorder import record_backend_failure
+from locally_twisted.inquiry_sales_filter import classify_inquiry_sales_solicitation
 
 
 no_cache = 1
@@ -116,11 +119,74 @@ PHOTO_UPLOAD_FAILURE_STEPS = {
     "too_many_files": "photo_rejected_too_many_files",
     "upload_failed": "photo_upload_failed",
 }
+INQUIRY_SPAM_TOKEN_FIELD = "lt_form_token"
+INQUIRY_HONEYPOT_FIELD = "website"
+INQUIRY_SPAM_TOKEN_MAX_AGE_SECONDS = 4 * 60 * 60
+INQUIRY_SPAM_MIN_FILL_SECONDS = 2
+INQUIRY_SPAM_RETRY_MESSAGE = _(
+    "Tiny pause: please refresh the page and try again before sending this request."
+)
+
+
+def build_inquiry_spam_token(now: int | None = None) -> str:
+    """Build a signed, timestamped token for the public inquiry form."""
+    timestamp = int(now or time.time())
+    signature = _inquiry_spam_signature(timestamp)
+    return f"{timestamp}.{signature}"
 
 
 def get_context(context):
     frappe.local.flags.redirect_location = "/contact?intent=quick"
     raise frappe.Redirect
+
+
+def _validate_inquiry_spam_gate(fd):
+    """Reject common bot submissions before creating Leads or email queues."""
+    if (fd.get(INQUIRY_HONEYPOT_FIELD) or "").strip():
+        _throw_inquiry_spam_gate()
+
+    timestamp = _inquiry_spam_token_timestamp((fd.get(INQUIRY_SPAM_TOKEN_FIELD) or "").strip())
+    if not timestamp:
+        _throw_inquiry_spam_gate()
+
+    elapsed = int(time.time()) - timestamp
+    if elapsed < INQUIRY_SPAM_MIN_FILL_SECONDS:
+        _throw_inquiry_spam_gate()
+    if elapsed > INQUIRY_SPAM_TOKEN_MAX_AGE_SECONDS:
+        _throw_inquiry_spam_gate()
+
+
+def _inquiry_spam_token_timestamp(token: str) -> int | None:
+    try:
+        raw_timestamp, signature = token.split(".", 1)
+        timestamp = int(raw_timestamp)
+    except (AttributeError, TypeError, ValueError):
+        return None
+
+    expected = _inquiry_spam_signature(timestamp)
+    if not hmac.compare_digest(signature, expected):
+        return None
+    return timestamp
+
+
+def _inquiry_spam_signature(timestamp: int) -> str:
+    secret = _inquiry_spam_secret().encode("utf-8")
+    payload = str(int(timestamp)).encode("utf-8")
+    return hmac.new(secret, payload, hashlib.sha256).hexdigest()
+
+
+def _inquiry_spam_secret() -> str:
+    site = getattr(getattr(frappe, "local", None), "site", "") or ""
+    return str(
+        frappe.conf.get("encryption_key")
+        or frappe.conf.get("db_password")
+        or site
+        or "locally_twisted_inquiry_form"
+    )
+
+
+def _throw_inquiry_spam_gate():
+    frappe.throw(INQUIRY_SPAM_RETRY_MESSAGE, frappe.ValidationError)
 
 
 @frappe.whitelist(allow_guest=True)
@@ -129,16 +195,15 @@ def submit_book_inquiry():
     """Receive a /book form submission and create a Lead + linked records.
 
     Reads `frappe.form_dict` for fields and `frappe.request.files` for
-    photos. Name, email, phone, preferred contact method, event type, event
-    date, and city/location are required. Returns JSON; raises on persistence
+    photos. Name, email, phone, preferred contact method, event date, and
+    city/location are required. Returns JSON; raises on persistence
     failure so the client-side script can render an error.
     """
     fd = frappe.form_dict
+    _validate_inquiry_spam_gate(fd)
 
     # Event basics
     occasion = (fd.get("x_occasion_type") or "").strip()
-    if not occasion:
-        frappe.throw(_("Please choose an event type."), frappe.ValidationError)
     event_date = (fd.get("x_event_date") or "").strip()
     if not event_date:
         frappe.throw(_("Please choose the event date."), frappe.ValidationError)
@@ -216,6 +281,22 @@ def submit_book_inquiry():
     if product_quote_payload and product_quote_payload.get("summary"):
         description = _combine_text_values(product_quote_payload["summary"], description)
     payment_rule = _payment_rule_for_inquiry(services, num_twisters, num_painters)
+    solicitation_filter = classify_inquiry_sales_solicitation({
+        "name": first_name,
+        "email": email,
+        "phone": phone,
+        "company": company,
+        "occasion": _occasion_label(occasion),
+        "event_location": event_location,
+        "services": services,
+        "decor_notes": decor_notes,
+        "twisting_notes": twisting_notes,
+        "painting_notes": painting_notes,
+        "delivery_notes": delivery_notes,
+        "package_notes": package_notes,
+        "other_notes": other_notes,
+        "description": description,
+    })
 
     # Lead Source: ensure "Website" exists (idempotent)
     _ensure_lead_source("Website")
@@ -366,7 +447,11 @@ def submit_book_inquiry():
         delivery_notes, package_notes, other_notes, description, attached, payment_rule,
         photo_uploads,
     )
-    business_notification = _send_deferred_business_notification(lead, photo_uploads)
+    business_notification = _send_deferred_business_notification(
+        lead,
+        photo_uploads,
+        solicitation_filter=solicitation_filter,
+    )
     customer_confirmation = _send_deferred_customer_confirmation(lead, photo_uploads)
 
     frappe.db.commit()
@@ -453,7 +538,18 @@ def _insert_lead_with_retry(lead_doc, *, defer_customer_ack=False, customer_emai
     raise RuntimeError("unreachable lead insert retry state")
 
 
-def _send_deferred_business_notification(lead, photo_uploads):
+def _send_deferred_business_notification(lead, photo_uploads, *, solicitation_filter=None):
+    if (solicitation_filter or {}).get("is_solicitation"):
+        _record_sales_solicitation_note(lead, solicitation_filter)
+        return {
+            "ok": True,
+            "queued": False,
+            "skipped_existing": False,
+            "suppressed": True,
+            "reason": "sales_solicitation",
+            "sales_score": solicitation_filter.get("sales_score"),
+            "customer_score": solicitation_filter.get("customer_score"),
+        }
     try:
         return lead_cascade.send_business_inquiry_notification(lead, photo_uploads=photo_uploads)
     except Exception as e:
@@ -473,6 +569,24 @@ def _send_deferred_business_notification(lead, photo_uploads):
             "Please call (801) 285-0860 or email hi@locallytwisted.com and we will help.",
             frappe.ValidationError,
         )
+
+
+def _record_sales_solicitation_note(lead, solicitation_filter):
+    reasons = ", ".join(solicitation_filter.get("sales_reasons") or [])
+    customer_reasons = ", ".join(solicitation_filter.get("customer_reasons") or [])
+    frappe.get_doc({
+        "doctype": "Comment",
+        "comment_type": "Info",
+        "reference_doctype": "Lead",
+        "reference_name": lead.name,
+        "content": (
+            "Owner email suppressed: high-confidence sales solicitation. "
+            f"Sales score: {solicitation_filter.get('sales_score')}; "
+            f"customer/event score: {solicitation_filter.get('customer_score')}; "
+            f"sales signals: {frappe.utils.escape_html(reasons) or 'none'}; "
+            f"customer signals: {frappe.utils.escape_html(customer_reasons) or 'none'}."
+        ),
+    }).insert(ignore_permissions=True)
 
 
 def _send_deferred_customer_confirmation(lead, photo_uploads):

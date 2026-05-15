@@ -4201,3 +4201,64 @@ patterns.
 `workstreams/ecommerce-audit/backend-product-page-architecture-contract-2026-05-12.md`.
 
 **Decided by:** GL correction and Codex implementation, 2026-05-12.
+
+---
+
+## 2026-05-15 - Public inquiry form starts with Contact Details and keeps occasion optional
+
+**Decision:** The active public inquiry form puts Contact Details first. On
+desktop, preferred contact method sits beside name and email starts the next
+row; on mobile, preferred contact method sits directly under name. Event Basics
+comes next, `What are you celebrating?` is optional, visible "optional" labels
+are removed, and Timing and Scale uses title case with `Even Estimates Help`
+under event start and end time.
+
+**Reasoning:** Contact identity is the first business need for any inquiry.
+Making event basics lead the form created unnecessary friction and made a
+simple intake feel backwards. Occasion helps context but is not required to
+start a real follow-up, so it must not block submit.
+
+**Implementation boundary:** Do not fork a second form to solve layout or copy.
+Keep `/contact` and service-page embeds on the shared `inquiry-v1` partial and
+prove field meaning with backend Lead parity. If future UX changes add/remove
+fields, update public markup, backend submit handling, Lead mapping, email body
+detail rendering, and verifiers together.
+
+**Receipts:** `workstreams/inquiry-form-spam-sales-filter-2026-05-15.md`;
+`workstreams/contact-form-ux-readiness-2026-05-14.md`;
+`capabilities/recipes/shared-inquiry-form-experience.md`;
+`capabilities/recipes/erpnext-intake-form-parity.md`.
+
+**Decided by:** GL direct form-design correction and Codex implementation,
+2026-05-15.
+
+---
+
+## 2026-05-15 - Sales solicitations are soft-filtered, not hard-blocked
+
+**Decision:** Public inquiry spam protection uses a signed form token, an
+invisible honeypot, and a conservative sales-solicitation classifier. Bot posts
+are rejected before Lead creation. High-confidence vendor/sales solicitations
+still save a Lead and customer-safe confirmation path, but suppress the owner
+"New website inquiry" notification and add an audit comment to the Lead.
+
+**Reasoning:** The Nicole/vettedvas-style message was a sales pitch, not an
+event inquiry, and owner inbox spam started immediately after launch. A hard
+keyword block would risk rejecting real customers, especially corporate or
+marketing-event buyers. Soft suppression protects the owner email while keeping
+review evidence for anything ambiguous.
+
+**Implementation boundary:** The classifier must require multiple sales/vendor
+signals and must be overridden by real event/customer signals such as dates,
+guest counts, locations, balloons, decor, twisting, face painting, or event
+service language. It must never classify only because a customer mentions
+corporate, marketing, school, nonprofit, or business context.
+
+**Receipts:** `apps/locally_twisted/locally_twisted/inquiry_sales_filter.py`;
+`scripts/verify/inquiry_spam_gate.py`;
+`scripts/verify/inquiry_sales_solicitation_filter.py`;
+`workstreams/inquiry-form-spam-sales-filter-2026-05-15.md`;
+`capabilities/recipes/frappe-public-storefront-security.md`.
+
+**Decided by:** GL request to combat form spam and add a sales-solicitation
+filter without blocking potential customers, 2026-05-15.

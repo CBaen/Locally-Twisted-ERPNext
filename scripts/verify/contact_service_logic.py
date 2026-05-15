@@ -139,9 +139,24 @@ def main() -> int:
         else:
             if preferred.get_attribute("required") is None:
                 failures.append("preferred contact method should be required")
+            if preferred.get_attribute("aria-describedby") and "book_preferred_contact_method_helper" in preferred.get_attribute("aria-describedby"):
+                failures.append("preferred contact method should not point to removed helper copy")
+            if page.locator("#book_preferred_contact_method_helper").count() != 0:
+                failures.append("preferred contact method helper copy should not exist")
             options = preferred.locator("option").evaluate_all("(nodes) => nodes.map((node) => node.value)")
             if options != ["", "Email", "Phone", "Text"]:
                 failures.append(f"preferred contact options should be Email/Phone/Text, found {options!r}")
+
+        spam_token = page.locator("#book_spam_token")
+        if spam_token.count() != 1:
+            failures.append("inquiry form should render one signed spam token")
+        elif spam_token.get_attribute("name") != "lt_form_token" or "." not in (spam_token.input_value() or ""):
+            failures.append("inquiry spam token should be signed and posted as lt_form_token")
+        honeypot = page.locator("#book_website")
+        if honeypot.count() != 1:
+            failures.append("inquiry form should render one invisible website honeypot")
+        elif honeypot.get_attribute("name") != "website" or honeypot.get_attribute("tabindex") != "-1":
+            failures.append("inquiry honeypot should be named website and removed from tab order")
 
         time_fields = [
             ("#book_time", "x_event_time", "#book_time_hour", "#book_time_minute", "#book_time_period"),
@@ -156,11 +171,22 @@ def main() -> int:
                 if page.locator(selector).count() != 1:
                     failures.append(f"{field_name} should expose structured 12-hour control {selector}")
             helper = page.locator(f"{hidden_selector}_helper")
-            if helper.count() != 1 or "Even an estimate is helpful." not in (helper.text_content() or ""):
-                failures.append(f"{field_name} estimate copy should be on its own helper line")
+            if helper.count() != 1:
+                failures.append(f"{field_name} estimate helper copy should exist once")
+            elif helper.inner_text().strip() != "Even Estimates Help":
+                failures.append(f"{field_name} estimate helper copy should be 'Even Estimates Help'")
+
+        optional_fields = [
+            ("#book_occasion", "event type"),
+        ]
+        for selector, label in optional_fields:
+            field = page.locator(selector)
+            if field.count() != 1:
+                failures.append(f"{label} field should exist once")
+            elif field.get_attribute("required") is not None:
+                failures.append(f"{label} field should not be required")
 
         required_fields = [
-            ("#book_occasion", "event type"),
             ("#book_date", "event date"),
             ("#book_location", "event city/location"),
         ]

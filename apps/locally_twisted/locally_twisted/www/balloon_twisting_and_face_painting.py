@@ -14,6 +14,7 @@ from locally_twisted.www.book import (
     PACKAGE_ITEM_OPTIONS,
     PREFERRED_CONTACT_OPTIONS,
     SERVICE_OPTIONS,
+    build_inquiry_spam_token,
 )
 
 no_cache = 1
@@ -675,5 +676,6 @@ def get_context(context):
     context.requested_item_name = ""
     context.max_photos = MAX_PHOTOS
     context.max_photo_mb = MAX_PHOTO_BYTES // (1024 * 1024)
+    context.inquiry_spam_token = build_inquiry_spam_token()
     context.update({"btfp_event_types": BTFP_EVENT_TYPES})
     return context

@@ -6,7 +6,7 @@ profile: governed
 level: recipe
 maturity: candidate
 scope: Locally Twisted shared inquiry-v1 public form experience on /contact and service-page embeds
-currently_true: yes
+currently_true: true
 verification_level: 2
 last_verified: 2026-05-15
 evidence_quality: direct
@@ -25,6 +25,8 @@ tags:
   - inquiry form
   - contact
   - BTFP
+  - spam gate
+  - sales filter
   - modal
   - fail loud
   - UX
@@ -43,6 +45,11 @@ This recipe does not own Lead schema parity or field taxonomy. Use
 ## Contract
 
 - The form remains guest-friendly; login is not required.
+- The form must render a signed `lt_form_token` and an invisible `website`
+  honeypot.
+- Backend submit must reject missing, malformed, too-fast, stale, or
+  honeypot-filled posts before Lead creation, customer confirmation, owner
+  notification, or file handling.
 - Repeat inquiries from the same email are allowed when the business treats each Lead as a separate event/opportunity.
 - Repeat same-email inquiries must not return `409` only because ERPNext's
   linked Email Address row is unique.
@@ -57,6 +64,9 @@ This recipe does not own Lead schema parity or field taxonomy. Use
   not proof.
 - The backend may return `message.ok` only after the current owner/business
   notification queues or a current same-Lead owner queue row exists.
+- Exception: a high-confidence sales solicitation may return the normal
+  customer-safe response while suppressing only the owner notification, but only
+  when the Lead is still saved and an audit comment records the suppression.
 - The success message is `A confirmation of your request will be sent to your
   email address shortly. We will be in contact within 24 hours!`
 - Customer-facing failure copy stays calm, plain, and non-technical. Internal
@@ -83,12 +93,16 @@ This recipe does not own Lead schema parity or field taxonomy. Use
 
 - `apps/locally_twisted/locally_twisted/templates/includes/book_form.html`
 - `apps/locally_twisted/locally_twisted/public/js/lt-inquiry-form-experience.js`
+- `apps/locally_twisted/locally_twisted/inquiry_sales_filter.py`
 - `apps/locally_twisted/locally_twisted/public/css/lt-form-experience.css`
 - `apps/locally_twisted/locally_twisted/public/js/lt-site-preferences.js`
 - `scripts/verify/form_experience.spec.js`
+- `scripts/verify/inquiry_spam_gate.py`
+- `scripts/verify/inquiry_sales_solicitation_filter.py`
 - `workstreams/form-submission-experience.md`
 - `workstreams/form-email-confirmation-regression-2026-05-12.md`
 - `workstreams/inquiry-photo-storage-owner-attachments-2026-05-15.md`
+- `workstreams/inquiry-form-spam-sales-filter-2026-05-15.md`
 - `capabilities/recipes/erpnext-inquiry-photo-delivery-contract.md`
 
 ## Verification
@@ -97,6 +111,8 @@ Focused form experience:
 
 ```powershell
 npm run test:form-experience
+python scripts/verify/inquiry_spam_gate.py --base-url http://localhost:8081
+python scripts/verify/inquiry_sales_solicitation_filter.py --base-url http://localhost:8081
 ```
 
 Backend submit and cleanup:
@@ -131,6 +147,9 @@ npm run test:a11y-manual
 
 - A success modal appears from a URL hash, cookie, localStorage flag, or any
   path other than a verified backend submit response.
+- The form posts successfully without a current signed token.
+- A honeypot-filled post creates a Lead, Email Queue row, Communication, or
+  File.
 - A customer sees "sent" or "received" copy while the AJAX request failed,
   returned a non-OK response, or returned a response without `message.ok`.
 - A customer sees "Request received" while the confirmation email did not
@@ -139,6 +158,11 @@ npm run test:a11y-manual
   not queue for the current Lead.
 - The owner notification does not include the same submitted details the
   customer provided, or speaks to the owner as if they were the customer.
+- A sales pitch suppresses owner notification without leaving a Lead comment or
+  explicit suppression metadata.
+- A real event/customer inquiry is classified as a sales solicitation only
+  because it mentions corporate, marketing, school, nonprofit, or business
+  context.
 - Idempotency checks use Lead reference name alone instead of the current
   Lead's creation boundary.
 - A customer sees an inspiration-photo warning when no file was selected.
@@ -205,3 +229,14 @@ keeps customer success gated on the same form/email path while extending photo
 proof to private Files, CRM photo rows, customer no-attachment queues, owner
 `fid` attachment refs, and cleanup. Feature handoff:
 `../../workstreams/inquiry-photo-storage-owner-attachments-2026-05-15.md`.
+
+Later on 2026-05-15, GL reported immediate form spam from a
+Nicole/vettedvas-style sales pitch and requested a blocker that would not lose
+real customers. The repair added the signed hidden token, invisible honeypot,
+and conservative sales-solicitation suppression path. Local gates
+`python scripts/verify/inquiry_spam_gate.py --base-url http://localhost:8081`
+and
+`python scripts/verify/inquiry_sales_solicitation_filter.py --base-url http://localhost:8081`
+passed along with the existing form, Lead parity, smoke, repeat-email/photo,
+and email policy gates. Feature handoff:
+`../../workstreams/inquiry-form-spam-sales-filter-2026-05-15.md`.

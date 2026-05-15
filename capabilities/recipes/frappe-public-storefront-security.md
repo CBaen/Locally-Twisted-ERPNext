@@ -5,11 +5,11 @@ schema_version: 2.0
 level: recipe
 maturity: candidate
 scope: Locally Twisted ERPNext/Frappe public storefront security review and hardening
-currently_true: false
+currently_true: unknown
 verification_level: 2
-last_verified: 2026-05-11
+last_verified: 2026-05-15
 evidence_quality: direct
-successful_uses: 2
+successful_uses: 3
 failed_uses: 1
 regressions: 1
 depends_on:
@@ -43,6 +43,12 @@ Public routes must not treat Frappe/ERPNext document names, template strings, lo
 - Escape every customer-controlled string rendered into Jinja output. Do not assume Frappe page templates autoescape.
 - Do not build DOM/HTML strings from database or URL values. Use text nodes, `textContent`, jQuery attribute objects, or equivalent safe APIs.
 - Store customer-submitted files as private unless GL explicitly approves public publication.
+- Public inquiry forms must carry a signed, time-bound form token and an
+  invisible honeypot. Bad tokens and filled honeypots fail before Lead creation,
+  emails, Communications, or file handling.
+- Sales-solicitation filtering must be soft and conservative: suppress owner
+  notification only for high-confidence vendor/sales pitches while preserving
+  Lead/audit evidence and the customer-safe response path.
 - Customer portal file-registration methods must prove the `File` belongs to
   the current customer and the same source record before creating visibility or
   uploaded-by-customer metadata.
@@ -75,3 +81,16 @@ to be owned by the logged-in customer and already attached to the same source
 record before `LT Customer Portal File` is created. The portal V1 contract now
 proves one valid customer-owned source file registers and that staff-owned or
 wrong-source files fail without creating portal metadata.
+
+## 2026-05-15 Receipt
+
+GL reported immediate public-form spam from a Nicole/vettedvas-style vendor
+pitch. The local repair added a signed hidden `lt_form_token`, invisible
+`website` honeypot, backend rejection before mutation for bot-shaped posts, and
+a conservative sales-solicitation classifier that suppresses only the owner
+notification while preserving Lead/audit evidence. Guards:
+`python scripts/verify/inquiry_spam_gate.py --base-url http://localhost:8081`
+and
+`python scripts/verify/inquiry_sales_solicitation_filter.py --base-url http://localhost:8081`.
+Handoff:
+`../../workstreams/inquiry-form-spam-sales-filter-2026-05-15.md`.

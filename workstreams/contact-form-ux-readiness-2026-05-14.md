@@ -3,6 +3,96 @@
 Source issue: [LOC-8](/LOC/issues/LOC-8)
 Parent issue: [LOC-6](/LOC/issues/LOC-6)
 
+## 2026-05-15 Implemented Form / Spam Closeout
+
+Active implementation handoff:
+[inquiry-form-spam-sales-filter-2026-05-15.md](inquiry-form-spam-sales-filter-2026-05-15.md).
+
+Current state:
+
+- Contact Details now sits first on the public inquiry form.
+- Preferred contact method sits beside name on desktop and directly under name
+  on mobile.
+- Email replaces the prior preferred-contact position in the next row.
+- Preferred-contact helper copy was removed.
+- Event Basics follows Contact Details and uses `#F6F7F8`; Contact Details and
+  Timing and Scale remain white.
+- `What are you celebrating?` is optional in the browser and backend submit
+  path.
+- Timing and Scale uses title case, removes visible "optional" labels, and adds
+  `Even Estimates Help` under event start/end time.
+- AM/PM controls were widened so the text fits.
+- The public form now renders a signed `lt_form_token` plus an invisible
+  `website` honeypot.
+- Backend submit rejects missing/too-fast/stale/honeypot posts before Lead
+  creation, emails, or file handling.
+- High-confidence sales solicitations are soft-filtered: a Lead still exists
+  for audit/review, customer-safe confirmation still follows the normal path,
+  but the owner "New website inquiry" email is suppressed.
+
+Local proof passed on 2026-05-15:
+
+```powershell
+python scripts\verify\inquiry_sales_solicitation_filter.py --base-url http://localhost:8081
+python scripts\verify\inquiry_spam_gate.py --base-url http://localhost:8081
+npm run test:form-experience
+python scripts\verify\lead_backend_intake_parity.py
+python scripts\verify\contact_service_logic.py --base-url http://localhost:8081
+python scripts\verify\smoke_forms.py --base-url http://localhost:8081 --form-path /contact --skip-newsletter
+python scripts\verify\book_form_repeat_email_photos.py --base-url http://localhost:8081
+python scripts\verify\customer_email_policy_contract.py
+docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.inquiry_upload_failure_contract.run
+```
+
+The live site still needs a Frappe Cloud app release/site update plus live spam,
+sales-filter, smoke, and repeat-email/photo proof before this is claimed as
+production protection.
+
+## 2026-05-15 Form-First Audit Update
+
+Current directive: review and repair the contact form as its own individual
+slice before taking up other Paperclip-created changes.
+
+Current form files in the dirty worktree:
+
+- `apps/locally_twisted/locally_twisted/www/contact.html`
+- `apps/locally_twisted/locally_twisted/www/contact.py`
+
+The dirty form changes are copy-only:
+
+- form heading changed from `Free Event Quote` to
+  `Tell us what you're planning`;
+- page title/meta/intro changed from free-quote language to
+  tell-us-about-your-event language.
+
+Superseded context from the earlier form audit: the larger form behavior changes
+had already added phone, preferred contact method, structured time controls,
+email typo warning, louder frontend validation, and backend Lead mapping. The
+latest closeout above corrects the occasion field back to optional and adds the
+spam/sales-filter gates.
+
+Local verification passed on 2026-05-15 against `http://localhost:8081/contact`:
+
+```powershell
+python -m py_compile apps\locally_twisted\locally_twisted\www\book.py apps\locally_twisted\locally_twisted\www\contact.py scripts\verify\contact_service_logic.py scripts\verify\lead_backend_intake_parity.py
+python scripts\verify\contact_service_logic.py --base-url http://localhost:8081
+python scripts\verify\lead_backend_intake_parity.py
+npm run test:form-experience
+python scripts\verify\smoke_forms.py --base-url http://localhost:8081 --form-path /contact --skip-newsletter
+python scripts\verify\customer_email_policy_contract.py
+python scripts\verify\book_form_repeat_email_photos.py --base-url http://localhost:8081
+```
+
+Observed local/live gap on 2026-05-15:
+
+- local has preferred contact method, email typo hint, structured visible time
+  controls, and newer JS/CSS asset versions;
+- live `https://locallytwisted.com/contact` is still the older release and does
+  not show those newer form features.
+
+Do not mix non-form Paperclip changes into this slice. The separate review
+packet is `workstreams/paperclip-change-audit-2026-05-15.md`.
+
 ## Recommendation
 
 Conditional go for scoped engineering planning. No-go for live release until:

@@ -14,7 +14,10 @@ submit/status/modal experience, pair it with
 
 ## When to reach for it
 
-Use this when changing a public `/contact` or `/book` style form, Lead Custom Fields, service taxonomy, conditional Desk sections, uploaded photo fields, or any field label that differs between customer copy and employee copy.
+Use this when changing a public `/contact` or `/book` style form, Lead Custom
+Fields, required/optional field state, service taxonomy, conditional Desk
+sections, uploaded photo fields, or any field label that differs between
+customer copy and employee copy.
 
 Current LT public form contract is `inquiry-v1`. Service routes can scope and
 preselect service choices through controller context, but they must not fork a
@@ -46,38 +49,51 @@ customer-facing success message over broken intake.
 
    Confirm the form handler writes to the same field that Desk conditionals read. For LT, selected services must populate `custom_event_type` child rows, not only a text echo.
 
-4. Avoid Frappe `Time` fields for estimated event times.
+4. Keep required fields intentionally small.
+
+   Contact identity and enough follow-up detail matter more than forcing every
+   event attribute up front. On the current public form, `What are you
+   celebrating?` is optional and must not be re-required in the browser,
+   backend submit path, or smoke verifier without a new explicit decision.
+
+5. Avoid Frappe `Time` fields for estimated event times.
 
    Desk renders `Time` fields as low-level time controls that are awkward for quick human entry. For estimates such as event start/end, setup arrival, artist start/end, and delivery windows, prefer `Data` fields with examples like `3 PM`, `3:30 PM`, `afternoon`, or `TBD`.
 
-5. Treat fieldtype changes as migrations.
+6. Treat fieldtype changes as migrations.
 
    Frappe blocks many Custom Field fieldtype changes through normal validation. If changing an existing `Time` field to `Data`, use a guarded idempotent sync that only allows the known safe widening, lets Frappe rebuild the DocType schema, and normalizes old machine-style values.
 
-6. Verify with both backend and browser evidence.
+7. Verify with both backend and browser evidence.
 
    Backend metadata passing is not enough when the complaint is visual. Open the actual Desk route and confirm the field renders as the intended input type with the intended label.
 
-7. Treat photo uploads as three connected backend contracts.
+8. Treat photo uploads as three connected backend contracts.
 
    A private `File` attached to the Lead is not the same as CRM photo storage.
    For LT inquiry photos, successful uploads must create private Lead Files and
    matching `custom_inspiration_photos` rows. Owner notification attachment
    refs are covered by `erpnext-inquiry-photo-delivery-contract`.
 
-8. Keep service-page pricing helpers separate from form submission.
+9. Keep service-page pricing helpers separate from form submission.
 
    A calculator on a service page can help the customer estimate scope, but it
    is not a Lead schema field or checkout shortcut unless that is deliberately
    approved. For BTFP, the calculator is row-based pricing transparency while
    the shared inquiry form still owns the customer request.
 
-9. Guard optional legacy fields.
+10. Guard optional legacy fields.
 
    Migration helpers may need to rewrite older data such as `Lead.custom_services`,
    but Frappe Cloud sites that never had that legacy field must skip the query
    entirely. Check `frappe.get_meta("Lead").has_field(...)` before selecting or
    rewriting optional columns.
+
+11. Keep anti-bot fields out of Desk schema.
+
+    `lt_form_token` and `website` are public submit guards, not Lead metadata.
+    They must block bad requests before Lead creation and must not become
+    operator-facing fields or customer-submitted details in email bodies.
 
 ## LT verification commands
 
@@ -87,6 +103,8 @@ python scripts/verify/lead_backend_intake_parity.py
 python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --shape-only --skip-newsletter
 python scripts/verify/contact_service_logic.py --base-url http://localhost:8081
 python scripts/verify/contact_prefill.py --base-url http://localhost:8081
+python scripts/verify/inquiry_spam_gate.py --base-url http://localhost:8081
+python scripts/verify/inquiry_sales_solicitation_filter.py --base-url http://localhost:8081
 python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081
 npm run test:form-experience
 ```
@@ -111,6 +129,10 @@ If running the full writing smoke test, delete the generated test Lead/newslette
 - A polished form experience can hide a broken submit path unless success is
   gated on the backend's `message.ok` response.
 - Employee-facing labels can accidentally inherit customer helper copy and make Desk feel noisy.
+- A field marked optional in the UI can still be required by backend submit or
+  smoke fixtures.
+- Bot-token/honeypot fields can accidentally leak into Lead fields, customer
+  confirmation bodies, or owner customer-submitted detail sections.
 - `Time` fields can create slider/time-picker friction for simple estimates.
 - Existing `Time` values can turn into machine-style strings with seconds or microseconds after conversion; clean those up so staff do not treat junk timestamps as real event times.
 - A service page forks a new customer form because it needs scoped choices,
