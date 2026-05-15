@@ -11,6 +11,12 @@ queueing, stale idempotency rows, and the verifiers that keep the submit path
 honest. It does not own product-page quote emails, paid receipts, invoice
 emails, or finance/legal outbound documents.
 
+2026-05-15 follow-up: the May 12 proof was sufficient for repeat same-email
+submit, customer/owner queue existence, body content, recipients, and cleanup.
+It was not sufficient for inquiry-photo delivery because it did not inspect CRM
+photo rows or owner Email Queue attachment refs. The dedicated follow-up is
+`workstreams/inquiry-photo-storage-owner-attachments-2026-05-15.md`.
+
 ## Regression
 
 GL submitted both public forms and saw the modal copy:
@@ -81,6 +87,11 @@ owns the schema and the site update job succeeds.
 - The owner/customer email detail blocks strip the internal `Customer email:`
   fallback marker before display.
 - The missing Contact confirmation was requeued after the fix.
+- 2026-05-15 source now adds a stricter photo-delivery contract: uploaded
+  photos must appear as private Lead Files, `custom_inspiration_photos` rows,
+  and owner-only Email Queue attachment refs; customer confirmations remain
+  attachment-free and count-only. This source fix is pushed but not yet
+  live-verified on Frappe Cloud.
 
 Live DB evidence from the screenshot submissions:
 
@@ -177,16 +188,22 @@ Live route smokes both reported `FORM SHAPE OK`, `SUCCESS UI VISIBLE`,
   the idempotency query instead.
 - Do not treat a Frappe Cloud bench deploy hash as live release proof. The site
   update/migration job and live route/API verifiers must pass.
+- Do not treat uploaded-file count, customer/owner queue existence, or message
+  body text as photo delivery proof. Photo delivery requires CRM photo rows and
+  owner `Email Queue.attachments` `fid` refs.
 
 ## Cross-links
 
 - `workstreams/form-submission-experience.md`
 - `workstreams/customer-email-policy-boundary.md`
+- `workstreams/inquiry-photo-storage-owner-attachments-2026-05-15.md`
 - `workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11.md`
 - `capabilities/recipes/shared-inquiry-form-experience.md`
 - `capabilities/recipes/customer-email-delivery-branding-contract.md`
+- `capabilities/recipes/erpnext-inquiry-photo-delivery-contract.md`
 - `capabilities/recipes/erpnext-intake-form-parity.md`
 - `capabilities/recipes/frappe-cloud-cloudflare-stripe-launch-gate.md`
+- `capabilities/failures/public-form-photo-storage-owner-attachment-gap.md`
 - `capabilities/failures/public-form-stale-email-queue-idempotency.md`
 - `capabilities/failures/public-form-repeat-email-lead-conflict.md`
 - `capabilities/failures/frappe-cloud-release-site-migration-drift.md`

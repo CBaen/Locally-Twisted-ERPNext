@@ -107,6 +107,20 @@ Recipes:
 `capabilities/failures/public-form-stale-email-queue-idempotency.md` and
 `capabilities/failures/public-form-repeat-email-lead-conflict.md`.
 
+**Public form photo storage/owner attachment rule (2026-05-15):** inquiry
+photos are not proven by a body count or a generic Lead `File` attachment.
+They must exist as private Lead `File` rows, CRM-visible
+`custom_inspiration_photos` rows, and owner-only Email Queue attachment refs.
+Customer confirmations remain attachment-free and only report the received
+count. Source fix is pushed in the full repo (`4422793`) and Frappe Cloud app
+mirror (`6a06062`), but production is not protected until Frappe Cloud deploy,
+site update/migrate, and the live repeat-email/five-photo verifier pass.
+Handoff: `workstreams/inquiry-photo-storage-owner-attachments-2026-05-15.md`;
+capability:
+`capabilities/recipes/erpnext-inquiry-photo-delivery-contract.md`; Failure
+Recipe:
+`capabilities/failures/public-form-photo-storage-owner-attachment-gap.md`.
+
 **Operating law (2026-05-08):** no hand-authored production monoliths. Files should have one clear job unless they are explicitly research/reference artifacts. Use `workstreams/no-monolith-operating-contract.md` and the global capability `C:\Users\baenb\capabilities\principles\no-monolith-files.md` before expanding large source, template, CSS, verifier, script, or project-doc files.
 
 **Verification surface note (2026-05-09):** public internet lookup, rendered browser proof, and LT route-contract verifiers are different evidence classes. Current handoff: `workstreams/browser-verification-runtime.md`; capability: `capabilities/recipes/codex-browser-verification-surface.md`. Use `web.run` for outside facts, repo-local Playwright/LT npm gates for rendered-route proof, and re-test Browser Use before claiming in-app browser control works.
@@ -150,6 +164,14 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 - Hetzner-shaped header + footer + 3 mega menus + mobile drawer + newsletter strip + `LT Newsletter Signup` DocType + endpoint + smoke test. 6 pre-task fixes (including unblocking /book). Triadic-construction-v2 + GL Proxy + fix round + audit pass. See `HANDOFF.md`, `MIRROR-REBUILD-COMPLETE.md`, `research/triadic-build-chrome-rebuild/` for receipts.
 
 **Remaining (in priority order):**
+- [P0] **Deploy and live-verify the inquiry photo storage hotfix.** The source
+  and app mirror commits are pushed, but live Frappe Cloud is not verified on
+  this fix. Deploy app mirror commit `6a06062`, confirm the bench deploy and
+  site update/migrate job both succeed, then run
+  `python scripts/verify/book_form_repeat_email_photos.py --base-url https://locallytwisted.com --admin-base-url https://locallytwisted.v.frappe.cloud --cdp-url http://127.0.0.1:9222`
+  with authenticated backend access. Do not claim production fixed until the
+  live verifier proves CRM photo rows and owner Email Queue attachment refs and
+  cleans verifier-owned records.
 - [P0] **Ready-to-order ecommerce launch hardening and real catalog import gate.** Active front-door handoff: `workstreams/ecommerce-audit/README.md`; current post-import checkout closeout: `workstreams/ecommerce-audit/post-import-checkout-launch-closeout-2026-05-11.md`; import gate handoff: `workstreams/ecommerce-audit/product-import-hardening-gate-2026-05-11.md`; payment cutover checklist: `workstreams/payment-portal-live-cutover-checklist-2026-05-11.md`; receiving architecture handoff/capability: `workstreams/erpnext-ecommerce-receiving-architecture.md` and `capabilities/recipes/erpnext-ecommerce-receiving-architecture.md`. Current local proof uses the corrected manifest: 48 kept products and 5 owner-explicit Classic exclusions (`classic-organic-balloon-garland`, `classic-arch`, `classic-column`, `classic-organic-columns`, `classic-organic-arch`). The approved local import completed with exit 0 against the local ERPNext `frontend` site only and proved the guarded upsert/write path; it is not a delete/recreate transcript. Final browser proof passed with `& "C:\Program Files\nodejs\node.exe" scripts/verify/post_import_checkout_proof.js` for Easter Balloon Cups, 7' Butterfly Column, Graduation Grab n Go, 6' Graduation stands, and Unicorn Bouquet. 2026-05-12 verifier hardening now proves visible color-drawer selections produce `color_recipes` for 7' Butterfly Column and Graduation Grab n Go, then passes the non-mutating checkout totals preview before accepting checkout summary proof. Backend contracts are green for `product_import_readiness_gate`, `post_import_catalog_state`, `direct_checkout_target_contract`, and `cart_checkout_contract`; `post_import_catalog_state` now fails loudly if any included product is missing, unpublished, disabled, or unpriced. Direct paid checkout still requires explicit `simple_product|checkout`; blank, partial, inferred, quote-first, and needs-review Website Item states fail closed. Remaining caveats: 8 review-only add-on axes are protected by quote-first fallback until mapped, the five Classic exclusions remain quote-first, current product records are still local import/proof evidence rather than final real catalog approval, and live Frappe Cloud/Stripe/DNS/webhook/real payment gates remain separate.
   2026-05-12 nav/search review closeout is `workstreams/ecommerce-audit/ready-to-order-nav-search-backend-gate-2026-05-12.md`: Ready-to-Order quick links now require owner include plus backend `simple_product|checkout`, owner include cannot bypass checkout eligibility, and the search contract treats filtered backend-approved links as hidden rather than removed from the DOM.
   2026-05-14 product blueprint authoring handoff is `workstreams/ecommerce-audit/product-blueprint-authoring-2026-05-14.md`; capability is `capabilities/recipes/erpnext-product-blueprint-authoring.md`. Employees can now define product basics, options, color recipes, add-ons, and conditional pricing in `LT Product Blueprint`, preview a no-write apply plan, and use guarded local Desk apply to create unpublished ERPNext product records. Local `frontend` has `lt_allow_local_blueprint_apply=1` for this test harness. Do not enable that gate on staging/live or publish generated Website Items without product-page browser proof, cart/checkout proof, media/conditional-pricing/add-on family mapping, refreshed import safety evidence, and explicit release approval.

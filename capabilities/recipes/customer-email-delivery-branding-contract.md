@@ -7,10 +7,10 @@ maturity: candidate
 scope: Locally Twisted ERPNext/Frappe customer/operator email branding, company-copy routing, and Email Queue proof
 currently_true: true
 verification_level: 2
-last_verified: 2026-05-12
+last_verified: 2026-05-15
 evidence_quality: direct
-successful_uses: 3
-failed_uses: 2
+successful_uses: 4
+failed_uses: 3
 regressions: 0
 depends_on:
   - external-document-audience-contract
@@ -38,6 +38,8 @@ privacy copy.
 - Public form confirmation titles use `Here is what we received`; do not repeat the subject as the message header.
 - Public form confirmations must echo only non-empty customer-submitted fields, including free-text notes.
 - Public form confirmations must mention reference files only when files were actually attached. The `/contact` and BTFP form path defers the customer confirmation until after upload handling so the count is accurate.
+- Public form confirmations must not attach customer-submitted inspiration
+  photos back to the customer. They are count-only for files.
 - Public form confirmation idempotency must be scoped to the current Lead
   incarnation. A historical `Email Queue` or `Communication` row with the same
   `reference_name` is not proof that the current Lead was acknowledged.
@@ -48,6 +50,10 @@ privacy copy.
 - Public form owner/business notifications use `render_operator_email`, go to
   `locallytwisted@gmail.com`, and speak to the business owner, not to the
   customer.
+- Public form owner/business notifications may attach submitted photos, but
+  only as queued private Lead File refs in `Email Queue.attachments`, such as
+  `{"fid": file_doc.name}`. The refs must resolve to Files attached to the
+  current Lead.
 - Owner/business notification detail tables must contain the same
   customer-submitted fields as the customer confirmation, while stripping
   internal fallback markers such as `Customer email:`.
@@ -101,6 +107,8 @@ privacy copy.
 - `scripts/verify/frappe_whitelisted_client.py`
 - `scripts/verify/customer_contact_points_contract.py`
 - `workstreams/form-email-confirmation-regression-2026-05-12.md`
+- `workstreams/inquiry-photo-storage-owner-attachments-2026-05-15.md`
+- `capabilities/recipes/erpnext-inquiry-photo-delivery-contract.md`
 
 ## Verification
 
@@ -151,6 +159,11 @@ python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --for
 python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --form-path /balloon-twisting-and-face-painting --skip-newsletter
 ```
 
+For inquiry-photo changes, the repeat-email/five-photo verifier must prove
+customer queues have no attachments and owner/business queues contain private
+Lead File `fid` refs in `Email Queue.attachments`. Body text and counts are not
+enough.
+
 ## Failure Modes
 
 - Treating `Email Queue.status = Sent` as inbox delivery proof. It only proves
@@ -172,6 +185,10 @@ python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --for
   messages.
 - Sending the public form confirmation before uploads finish, which makes the
   customer receipt lie about attached files.
+- Attaching submitted inspiration photos to the customer confirmation.
+- Treating uploaded-file count, `Email Queue.message` body text, or generic
+  Lead File rows as proof the owner received photos. Owner delivery requires
+  queued `Email Queue.attachments` refs.
 - Returning public success when the confirmation email did not queue for the
   current Lead.
 - Returning public success when the owner/business notification did not queue

@@ -1,7 +1,7 @@
 # Customer Email Policy Boundary
 
-Last updated: 2026-05-12 by Codex after the live owner-notification and
-repeat-email cutover fix.
+Last updated: 2026-05-15 by Codex after the inquiry-photo storage and owner
+attachment hotfix.
 
 ## Outcome
 
@@ -14,6 +14,9 @@ Keep customer/operator email behavior aligned with receipts, policy lanes, and b
 - Public customer-facing inboxes are role-based: `hi@locallytwisted.com` for general inquiry/web copy, `legal@locallytwisted.com` for legal/policy/accessibility copy and legal paperwork, and `billing@locallytwisted.com` for invoices, billing, refunds, payment reconciliation, accounts payable, and payroll.
 - Public inquiry acknowledgments use `customer_email_theme.py`: LT logo, mirrored red balloon-dog footer mark, no ERPNext standard footer, and dynamic subject `Locally Twisted U+1F388 Thanks {first_name}! We'll be in touch within a day`.
 - The public form endpoint defers the customer confirmation until after inspiration-photo handling, so the confirmation can accurately say how many reference files were received. Direct Website Lead inserts still use the same renderer without a file-count line.
+- Customer confirmations remain attachment-free. They may report the count of
+  received reference files, but they must not attach customer-submitted photos
+  back to the customer.
 - Public form success requires current customer confirmation and owner/business
   notification Email Queue proof. Stale `Email Queue` or `Communication` rows
   from an older Lead with the same name must not suppress a newly recreated
@@ -25,6 +28,10 @@ Keep customer/operator email behavior aligned with receipts, policy lanes, and b
 - Owner/business public-inquiry notifications use `render_operator_email`,
   go to `locallytwisted@gmail.com`, speak to the business owner, and include
   the same customer-submitted details as the customer receipt.
+- Owner/business public-inquiry notifications may attach submitted photos, but
+  only by resolving private `File` docs attached to the same Lead and queuing
+  `Email Queue.attachments` refs such as `{"fid": file_doc.name}`. A body count
+  is not proof of owner photo delivery.
 - Internal fallback markers such as `Customer email:` must be stripped from
   customer and owner email bodies.
 - Repeat same-email public inquiries are allowed. ERPNext Email Address
@@ -44,6 +51,10 @@ Keep customer/operator email behavior aligned with receipts, policy lanes, and b
 - Cameron is not a standing future copy recipient. Use a non-LT mailbox for explicit one-time QA/review sends unless the SMTP sender changes.
 - `scripts/verify/customer_documents_contract.py` and `scripts/verify/payment_cascade_contract.py` now prove the required copy recipients exist in ERPNext `Email Queue Recipient` rows during rollback-safe fake-data runs.
 - `scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081` proves the real form path can queue customer and business notifications after uploads, include the correct file count, and preserve submitted details. It now cleans verifier-owned fake Leads, uploaded Files, Communications, Email Queue rows, Contacts, Tasks, and Comments before/after the run; cleanup failure is a test failure unless `--keep-records` is explicitly used for debugging.
+- 2026-05-15 local source proof extends the repeat-email/five-photo verifier to
+  prove CRM photo rows and owner-only Email Queue attachment refs while keeping
+  customer queues attachment-free. Production still needs Frappe Cloud deploy,
+  site update/migrate, and live verifier proof for this new contract.
 - Live release proof on 2026-05-12 ran the same verifier against
   `https://locallytwisted.com` with authenticated Frappe Cloud backend CDP and
   verified customer and owner Email Queue bodies/recipients for two repeat
@@ -72,6 +83,9 @@ The static/rollback policy contract has these boundaries:
 The live public-form verifier is different: it intentionally creates and cleans
 real verifier-owned Leads, Files, Communications, Email Queue rows, Contacts,
 Tasks, and Comments so the production form and email path are actually proven.
+For inquiry photos, it must also prove Lead photo child rows and owner
+`Email Queue.attachments` `fid` refs; customer queue attachments must remain
+absent.
 
 ## Owner Files
 
@@ -96,6 +110,8 @@ Tasks, and Comments so the production form and email path are actually proven.
 - `scripts/verify/frappe_whitelisted_client.py`
 - `scripts/verify/customer_contact_points_contract.py`
 - `workstreams/form-email-confirmation-regression-2026-05-12.md`
+- `workstreams/inquiry-photo-storage-owner-attachments-2026-05-15.md`
+- `capabilities/recipes/erpnext-inquiry-photo-delivery-contract.md`
 
 ## Verification
 

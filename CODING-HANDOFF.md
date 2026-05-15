@@ -1,5 +1,23 @@
 # Locally Twisted - Coding Handoff
 
+Codex inquiry-photo hotfix on 2026-05-15: production Lead
+`CRM-LEAD-2026-00007` had private File `44b4de500d`
+(`/private/files/image.jpg`) but no `custom_inspiration_photos` rows and no
+owner Email Queue attachment refs. Source is fixed and pushed in the full repo
+as `4422793 Fix inquiry photo storage and owner attachments`; the Frappe Cloud
+app mirror is fixed and pushed as `6a06062 Fix inquiry photo storage and owner
+attachments`. Local proof passed with customer confirmations attachment-free,
+owner notifications carrying queued private File `fid` refs, and CRM photo
+rows matching uploaded Files. The live Frappe Cloud site is not yet proven to
+run this hotfix; deploy the app mirror, run the site update/migrate job, then
+run the live repeat-email/five-photo verifier with authenticated backend CDP
+before claiming production protection. Feature handoff:
+`workstreams/inquiry-photo-storage-owner-attachments-2026-05-15.md`;
+capability:
+`capabilities/recipes/erpnext-inquiry-photo-delivery-contract.md`; failure
+recipe:
+`capabilities/failures/public-form-photo-storage-owner-attachment-gap.md`.
+
 Codex provider connection audit on 2026-05-14: the public Frappe Cloud route
 layer is healthy, but direct Frappe Cloud management automation is not proven
 as a Codex connector. `https://locallytwisted.com` returned HTTP 200 with

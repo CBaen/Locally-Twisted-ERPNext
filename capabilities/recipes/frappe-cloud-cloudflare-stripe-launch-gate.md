@@ -1,7 +1,7 @@
 ---
 name: Frappe Cloud Cloudflare Stripe launch gate
 level: recipe
-last_verified: 2026-05-14
+last_verified: 2026-05-15
 currently_true: true
 ---
 
@@ -40,6 +40,10 @@ Default public launch posture:
 - As of 2026-05-14, public Frappe Cloud route health and Cloudflare
   dynamic-route health are verified, but direct Frappe Cloud dashboard/API/CLI
   management from Codex is not proven by those checks.
+- As of 2026-05-15, the inquiry-photo storage/owner attachment hotfix is
+  pushed to source and the Frappe Cloud app mirror, but it is not a live release
+  until bench deploy, site update/migrate, and live photo-delivery verifier
+  proof pass.
 
 ## Human Access Boundary
 
@@ -108,6 +112,9 @@ python scripts/verify/book_form_repeat_email_photos.py --base-url https://locall
 - Opening checkout because local fake-data contracts pass, without live
   HTTPS host, explicit live Stripe config, webhook secret, policy URLs, and one
   low-risk real payment test.
+- Treating a source/app mirror push for form-photo delivery as live proof
+  before bench deploy, site update/migration, and live verifier proof of CRM
+  photo rows plus owner Email Queue attachment refs.
 
 ## Verification Notes
 
@@ -146,3 +153,15 @@ On 2026-05-14:
 - Host inspection found no direct Frappe Cloud CLI, host `bench`, or Frappe
   Cloud environment variables. Treat dashboard/API control as a separate
   authenticated management surface.
+
+On 2026-05-15:
+
+- Full repo commit `4422793 Fix inquiry photo storage and owner attachments`
+  and app mirror commit `6a06062 Fix inquiry photo storage and owner
+  attachments` were pushed.
+- `frappe_cloud_preflight.py` and `cloudflare_launch_readiness.py --base-url
+  https://locallytwisted.com` passed after the source push, proving preflight
+  and route health only.
+- Direct Frappe Cloud management was still unavailable from Codex in this
+  session, so live deploy/site update and live repeat-email/five-photo verifier
+  proof remain pending.

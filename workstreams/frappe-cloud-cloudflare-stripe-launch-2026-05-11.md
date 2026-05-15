@@ -1,6 +1,6 @@
 # Frappe Cloud, Cloudflare, And Stripe Launch Gate
 
-Last updated: 2026-05-14 by Codex.
+Last updated: 2026-05-15 by Codex.
 
 ## Scope
 
@@ -21,6 +21,9 @@ Current launch posture:
 - The 2026-05-14 connection audit proved public Frappe Cloud route health and
   Cloudflare dynamic-route health. It did not prove direct Frappe Cloud
   dashboard/API control from Codex.
+- The 2026-05-15 inquiry-photo hotfix is pushed to the full repo and Frappe
+  Cloud app mirror, but production is not protected until Frappe Cloud deploy,
+  site update/migrate, and live photo-delivery verifier proof pass.
 - Live Stripe checkout remains closed until the separate product/payment gates
   pass.
 
@@ -43,8 +46,8 @@ the final go/no-go evidence for payments and ecommerce exposure.
 
 | Track | Current state | Gate |
 |---|---|---|
-| Source/Frappe Cloud | Source and mirror were pushed; final live app hash is `04de8212aa7dbf4895716717865fc6e1029c757b`; `locally_twisted` is installed last on the site; public route probes return Frappe Cloud | `python scripts/verify/frappe_cloud_preflight.py`; Frappe Cloud bench deploy and site update/migrate must both be successful |
-| Public site/forms | Live `/contact` and BTFP smokes passed, and strict content email proof passed | `smoke_forms.py` for each route plus `book_form_repeat_email_photos.py` against live with authenticated backend CDP |
+| Source/Frappe Cloud | Source and mirror were pushed; final verified live app hash remains `04de8212aa7dbf4895716717865fc6e1029c757b`; new inquiry-photo source is pushed as full repo `4422793` and app mirror `6a06062` but not live-verified | `python scripts/verify/frappe_cloud_preflight.py`; Frappe Cloud bench deploy and site update/migrate must both be successful |
+| Public site/forms | Live `/contact` and BTFP smokes passed on the prior release, but the 2026-05-15 photo-storage/owner-attachment hotfix still needs live proof | `smoke_forms.py` for each route plus `book_form_repeat_email_photos.py` against live with authenticated backend CDP, proving CRM photo rows and owner Email Queue attachment refs |
 | Hidden commerce | Website launch does not approve checkout | `python scripts/verify/ecommerce_pause_contract.py` before relying on a paused/no-purchase posture |
 | Cloudflare | Domain now routes to Frappe Cloud for pages/forms; rerun dynamic-route gate after any DNS/cache/security change | `python scripts/verify/cloudflare_launch_readiness.py --base-url https://locallytwisted.com` |
 | Stripe | Live checkout remains blocked | `python scripts/verify/payment_launch_readiness.py --mode live --base-url https://locallytwisted.com` plus one intentional low-risk real payment test |
@@ -78,6 +81,25 @@ Results:
 Operational rule for future agents: say which surface you verified. Public
 route health, Cloudflare route health, local Docker health, SSH key readiness,
 and Frappe Cloud dashboard/API control are different claims.
+
+## 2026-05-15 Inquiry Photo Hotfix Deploy Boundary
+
+Source and mirror pushes are complete:
+
+- full ERPNext repo: `4422793 Fix inquiry photo storage and owner attachments`
+- Frappe Cloud app mirror: `6a06062 Fix inquiry photo storage and owner
+  attachments`
+
+This is not live proof. The next launch pass must deploy the app mirror commit,
+confirm bench deploy and site update/migrate success, then run:
+
+```powershell
+python scripts\verify\book_form_repeat_email_photos.py --base-url https://locallytwisted.com --admin-base-url https://locallytwisted.v.frappe.cloud --cdp-url http://127.0.0.1:9222
+```
+
+The verifier must prove private Lead Files, `custom_inspiration_photos` rows,
+customer queues with no attachments, owner queues with `fid` attachment refs,
+and cleanup. Route health and `frappe_cloud_preflight.py` are not enough.
 
 ## Production Config Contract
 
@@ -181,3 +203,5 @@ Communication, Contact, Task, ToDo, Event, and Comment.
   launch and needs its own product/payment/customer-email proof.
 - Any future DNS, Cloudflare cache/security, or Frappe Cloud release change
   needs the relevant live route/API/form gates rerun.
+- Inquiry-photo owner delivery remains pending until app mirror commit
+  `6a06062` is deployed, migrated, and live-verified.

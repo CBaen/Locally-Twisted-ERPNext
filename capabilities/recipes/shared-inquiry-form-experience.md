@@ -8,10 +8,10 @@ maturity: candidate
 scope: Locally Twisted shared inquiry-v1 public form experience on /contact and service-page embeds
 currently_true: yes
 verification_level: 2
-last_verified: 2026-05-12
+last_verified: 2026-05-15
 evidence_quality: direct
-successful_uses: 5
-failed_uses: 4
+successful_uses: 6
+failed_uses: 5
 regressions: 0
 depends_on:
   - erpnext-intake-form-parity
@@ -68,6 +68,10 @@ This recipe does not own Lead schema parity or field taxonomy. Use
   use: labelled dialog, short described message, close action, and no hidden
   fake success route.
 - Up to five real inspiration-photo uploads must attach successfully on the backend when selected.
+- Backend proof for selected inspiration photos includes private Lead Files,
+  matching `custom_inspiration_photos` rows, customer Email Queue rows with no
+  attachments, and owner Email Queue rows with private Lead File `fid`
+  attachment refs.
 - Empty upload slots from the browser are not submitted photos. Do not surface
   an inspiration-photo warning unless a real selected file failed validation or
   attachment.
@@ -84,6 +88,8 @@ This recipe does not own Lead schema parity or field taxonomy. Use
 - `scripts/verify/form_experience.spec.js`
 - `workstreams/form-submission-experience.md`
 - `workstreams/form-email-confirmation-regression-2026-05-12.md`
+- `workstreams/inquiry-photo-storage-owner-attachments-2026-05-15.md`
+- `capabilities/recipes/erpnext-inquiry-photo-delivery-contract.md`
 
 ## Verification
 
@@ -140,6 +146,8 @@ npm run test:a11y-manual
 - A live verifier checks only that an email queued, not that the customer and
   owner Email Queue bodies contain the submitted details.
 - The UI claims "Up to 5 images" but the endpoint only proves one/no uploaded file path.
+- Uploaded Lead Files exist, but the CRM photo table or owner Email Queue
+  attachment refs are empty.
 - The form reintroduces the removed progress-step text (`Details checked`,
   `Saved for follow-up`) or the `No account needed` helper line.
 - A cookie notice, banner, drawer, or modal covers form controls on mobile.
@@ -189,3 +197,11 @@ customer and owner Email Queue bodies/recipients, deployed through Frappe Cloud
 release `72a4se4v64` / app hash
 `04de8212aa7dbf4895716717865fc6e1029c757b`, and passed live `/contact`, live
 BTFP, and strict repeat-email/five-photo form proof with cleanup.
+
+On 2026-05-15 GL reported that a production inquiry photo was not visible to
+the business owner. The photo existed as a private Lead File, but the Lead
+photo table and owner Email Queue attachment refs were empty. The local repair
+keeps customer success gated on the same form/email path while extending photo
+proof to private Files, CRM photo rows, customer no-attachment queues, owner
+`fid` attachment refs, and cleanup. Feature handoff:
+`../../workstreams/inquiry-photo-storage-owner-attachments-2026-05-15.md`.

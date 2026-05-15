@@ -1,7 +1,7 @@
 ---
 name: ERPNext intake form parity
 level: recipe
-last_verified: 2026-05-12
+last_verified: 2026-05-15
 ---
 
 ## What it does
@@ -58,14 +58,21 @@ customer-facing success message over broken intake.
 
    Backend metadata passing is not enough when the complaint is visual. Open the actual Desk route and confirm the field renders as the intended input type with the intended label.
 
-7. Keep service-page pricing helpers separate from form submission.
+7. Treat photo uploads as three connected backend contracts.
+
+   A private `File` attached to the Lead is not the same as CRM photo storage.
+   For LT inquiry photos, successful uploads must create private Lead Files and
+   matching `custom_inspiration_photos` rows. Owner notification attachment
+   refs are covered by `erpnext-inquiry-photo-delivery-contract`.
+
+8. Keep service-page pricing helpers separate from form submission.
 
    A calculator on a service page can help the customer estimate scope, but it
    is not a Lead schema field or checkout shortcut unless that is deliberately
    approved. For BTFP, the calculator is row-based pricing transparency while
    the shared inquiry form still owns the customer request.
 
-8. Guard optional legacy fields.
+9. Guard optional legacy fields.
 
    Migration helpers may need to rewrite older data such as `Lead.custom_services`,
    but Frappe Cloud sites that never had that legacy field must skip the query
@@ -80,6 +87,7 @@ python scripts/verify/lead_backend_intake_parity.py
 python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --shape-only --skip-newsletter
 python scripts/verify/contact_service_logic.py --base-url http://localhost:8081
 python scripts/verify/contact_prefill.py --base-url http://localhost:8081
+python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081
 npm run test:form-experience
 ```
 
@@ -91,6 +99,7 @@ $env:LT_BACKEND_BASE_URL='https://locallytwisted.v.frappe.cloud'
 $env:LT_BACKEND_CDP_URL='http://127.0.0.1:9222'
 python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --form-path /contact --skip-newsletter
 python scripts/verify/smoke_forms.py --base-url https://locallytwisted.com --form-path /balloon-twisting-and-face-painting --skip-newsletter
+python scripts/verify/book_form_repeat_email_photos.py --base-url https://locallytwisted.com --admin-base-url https://locallytwisted.v.frappe.cloud --cdp-url http://127.0.0.1:9222
 ```
 
 If running the full writing smoke test, delete the generated test Lead/newsletter records afterward.
@@ -110,3 +119,6 @@ If running the full writing smoke test, delete the generated test Lead/newslette
   schema only existed in the local database.
 - A migration queries an optional legacy field before verifying that the field
   exists on the current site's Lead DocType.
+- Uploaded private Files exist, but the Lead's `custom_inspiration_photos`
+  child table is empty, so the CRM backend does not show the photos where staff
+  expect them.

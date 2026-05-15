@@ -8,6 +8,45 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-15 - Public inquiry photos must store in CRM and attach only to owner notifications
+
+**Decision:** Public inquiry photo uploads must be treated as backend intake
+records, not just email decoration. A successful upload must create a private
+Lead `File`, append a matching `Lead.custom_inspiration_photos` child row, and
+queue owner/business notification attachment refs with `{"fid":
+file_doc.name}`. Customer confirmations stay attachment-free and may only
+report the received file count.
+
+**Reasoning:** Production Lead `CRM-LEAD-2026-00007` proved the old contract was
+too weak: the customer's `image.jpg` existed as private File `44b4de500d`, but
+the CRM photo table was empty and owner Email Queue rows had `attachments: []`.
+The owner needs the submitted images in the backend and in the business
+notification; a count in the email body is not proof of either.
+
+**Alternatives considered:** Gmail or personal-inbox search was rejected as a
+source of truth for form-upload storage. Attaching the images back to the
+customer confirmation was rejected because that widens customer-uploaded image
+distribution and is not needed for acknowledgment. Generic Lead `File`
+attachments alone were rejected because Desk photo rows and Email Queue
+attachment refs are separate Frappe contracts.
+
+**Implementation boundary:** Source is fixed and pushed locally in the full
+repo commit `4422793` and the Frappe Cloud app mirror commit `6a06062`. Live
+production is not proven protected until Frappe Cloud deploy, site
+update/migrate, and the live repeat-email/five-photo verifier prove private
+Files, CRM photo rows, customer no-attachment confirmations, owner attachment
+refs, and cleanup.
+
+**Verification receipt:** Local proof used compile checks, the static customer
+email policy contract, the upload-failure contract, cache clear/restart, and
+`python scripts/verify/book_form_repeat_email_photos.py --base-url
+http://localhost:8081`. Handoff:
+`workstreams/inquiry-photo-storage-owner-attachments-2026-05-15.md`.
+
+**Decided by:** Production incident and GL direction on 2026-05-15.
+
+---
+
 ## 2026-05-14 - Client change requests use local, staging, then live gates
 
 **Decision:** Client-requested changes for Locally Twisted must be built and

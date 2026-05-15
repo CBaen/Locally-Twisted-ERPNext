@@ -6,6 +6,23 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-15 - Lead File attachments are not CRM photo storage
+
+The missing production inquiry photo was not missing from ERPNext entirely:
+Lead `CRM-LEAD-2026-00007` had private File `44b4de500d`, but
+`custom_inspiration_photos_count` was `0` and owner Email Queue rows had
+`attachments: []`. The old verifier proved a count and queue existence, but it
+did not prove the backend storage surface the business owner sees or the
+queued attachment refs Frappe uses for owner mail.
+
+**Counter-move:** public inquiry photo proof must check all three backend
+surfaces: private Lead `File` rows, matching `custom_inspiration_photos` child
+rows, and owner-only `Email Queue.attachments` JSON `fid` refs. Customer
+confirmations stay attachment-free and count-only. Do not use Gmail or
+personal inboxes as the source of truth for form-upload storage.
+
+---
+
 ## 2026-05-14 - Route health and provider control are separate claims
 
 The 2026-05-14 Frappe Cloud check could honestly say the live site is served by

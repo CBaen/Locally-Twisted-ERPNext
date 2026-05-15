@@ -79,6 +79,7 @@ Built before the frame reset; some still active, some legacy reference.
 | `workstreams/launch-repo-cleanup-2026-05-10.md` | Launch cleanup handoff for raw drops, stale generated evidence, removed contest output, and repo-light client handoff rules. |
 | `workstreams/ecommerce-audit/README.md` | Front-door ecommerce infrastructure/evidence map, including the 2026-05-12 complex checkout scaffold and local-only launch gates. |
 | `workstreams/ecommerce-audit/complex-checkout-scaffold-2026-05-12.md` | Source-backed checkout-planning scaffold for quote-first products: direct-checkout guards, simple lane-flip candidates, multi-color UI, add-on/conditional blockers, and needs-review products. |
+| `workstreams/inquiry-photo-storage-owner-attachments-2026-05-15.md` | Public inquiry photo storage and owner-attachment hotfix boundary: production incident facts, local proof, source commits, live deploy gate, and cross-links. |
 | `workstreams/brand-audience-style-reset.md` | Brand/audience reset, proof inventory, and reference-site lessons. |
 | `workstreams/brand-style-guide-consolidation.md` | Current feature handoff for the 2026-05-05 style-guide cleanup, deleted conflicting references, and new icon-suite direction. |
 | `workstreams/shop.md` | Shop, catalog, product, variant, media, and ecommerce confidence lane. |

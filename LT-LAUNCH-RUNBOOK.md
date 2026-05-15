@@ -1,6 +1,6 @@
 # Locally Twisted Launch Runbook
 
-Last updated: 2026-05-14 by Codex.
+Last updated: 2026-05-15 by Codex.
 
 This is the plain launch doc at the project root.
 
@@ -20,6 +20,11 @@ checkout remains paused or quote-first.
 
 The 2026-05-14 connection audit proves public route health, not direct Frappe
 Cloud dashboard/API control from Codex.
+
+The 2026-05-15 inquiry-photo hotfix is pushed in source and the Frappe Cloud
+app mirror, but live production is not proven on that fix until Frappe Cloud
+deploy, site update/migrate, and the live repeat-email/five-photo verifier
+pass.
 
 ## Current Confirmed State
 
@@ -54,6 +59,9 @@ Cloud dashboard/API control from Codex.
    - `/balloon-twisting-and-face-painting` live smoke passed.
    - Strict live repeat-email/five-photo proof passed with customer and business
      Email Queue body/recipient verification and cleanup.
+   - 2026-05-15 source now requires private Lead Files, CRM photo rows, and
+     owner Email Queue attachment refs for inquiry photos. That source fix is
+     not yet live-verified on Frappe Cloud.
 
 4. Stripe / ecommerce
    - Stripe CLI access on `wardenclyffe` works for the Built by Cameron account,
@@ -114,6 +122,9 @@ python scripts/verify/stripe_amount_parity_contract.py
    business approval before live payments.
 3. Public ecommerce/product checkout remains separate from the pages/forms
    launch and must pass its own product/payment/customer-email proof.
+4. The inquiry photo storage/owner attachment hotfix must be deployed to
+   Frappe Cloud and live-verified before claiming production photo delivery is
+   protected.
 
 ## Do Not Do
 
