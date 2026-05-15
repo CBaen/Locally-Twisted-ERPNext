@@ -126,11 +126,6 @@ def create_doctype(opener):
                     "read": 1, "write": 1, "create": 1, "delete": 1,
                     "report": 1, "export": 1, "share": 1,
                 },
-                {
-                    "role": "All",
-                    "read": 1, "write": 1, "create": 1,
-                    # No delete: an audit-trail record class shouldn't be user-deletable.
-                },
             ],
         }
     }

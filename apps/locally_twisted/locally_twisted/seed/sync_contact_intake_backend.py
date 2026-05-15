@@ -41,6 +41,49 @@ TIME_TEXT_FIELDS = (
 )
 TIME_TEXT_RE = re.compile(r"^(\d{1,2}):(\d{2})(?::(\d{2})(?:\.(\d+))?)?$")
 
+PERMISSION_FIELDS = (
+    "read",
+    "write",
+    "create",
+    "delete",
+    "submit",
+    "cancel",
+    "amend",
+    "report",
+    "export",
+    "import",
+    "share",
+    "print",
+    "email",
+)
+
+
+def _permission_row(role: str, **enabled: int) -> dict[str, int | str]:
+    row: dict[str, int | str] = {"role": role}
+    for fieldname in PERMISSION_FIELDS:
+        row[fieldname] = 1 if enabled.get(fieldname) else 0
+    return row
+
+
+SERVICE_TYPE_PERMISSIONS = [
+    _permission_row(
+        "System Manager",
+        read=1,
+        write=1,
+        create=1,
+        delete=1,
+        report=1,
+        export=1,
+        share=1,
+        print=1,
+        email=1,
+    ),
+    _permission_row("LT Owner Access", read=1),
+    _permission_row("LT Manager Access", read=1),
+    _permission_row("Sales Manager", read=1),
+    _permission_row("Sales User", read=1),
+]
+
 
 def _selected(values: list[str]) -> str:
     quoted = ",".join(f"'{value}'" for value in values)
@@ -610,28 +653,7 @@ SERVICE_TYPE_DOCTYPE = {
         },
     ],
     "permissions": [
-        {
-            "role": "System Manager",
-            "read": 1,
-            "write": 1,
-            "create": 1,
-            "delete": 1,
-            "report": 1,
-            "export": 1,
-            "share": 1,
-            "print": 1,
-        },
-        {
-            "role": "All",
-            "read": 1,
-            "write": 1,
-            "create": 1,
-            "delete": 1,
-            "report": 1,
-            "export": 1,
-            "share": 1,
-            "print": 1,
-        },
+        dict(row) for row in SERVICE_TYPE_PERMISSIONS
     ],
 }
 
@@ -816,6 +838,7 @@ ENSURED_LEAD_CUSTOM_FIELDS = {
 def execute(commit: bool = True) -> str:
     summary = {
         "ensured_doctypes": [],
+        "hardened_doctype_permissions": [],
         "renamed_services": [],
         "ensured_services": [],
         "ensured_custom_fields": [],
@@ -878,9 +901,39 @@ def _sync_service_types(summary: dict) -> None:
 def _ensure_contact_child_doctypes(summary: dict) -> None:
     for spec in (SERVICE_TYPE_DOCTYPE, LEAD_SERVICE_TYPE_DOCTYPE, LEAD_PHOTO_DOCTYPE, PRODUCT_QUOTE_ITEM_DOCTYPE):
         if frappe.db.exists("DocType", spec["name"]):
+            if spec["name"] == "LT Service Type":
+                _sync_doctype_permissions(spec["name"], SERVICE_TYPE_PERMISSIONS, summary)
             continue
         frappe.get_doc(spec).insert(ignore_permissions=True)
         summary["ensured_doctypes"].append(spec["name"])
+        if spec["name"] == "LT Service Type":
+            summary["hardened_doctype_permissions"].append(spec["name"])
+
+
+def _sync_doctype_permissions(
+    doctype_name: str,
+    permission_rows: list[dict[str, int | str]],
+    summary: dict,
+) -> None:
+    doc = frappe.get_doc("DocType", doctype_name)
+    current = [_normalized_permission_row(row.as_dict()) for row in doc.permissions]
+    desired = [_normalized_permission_row(row) for row in permission_rows]
+    if current == desired:
+        return
+
+    doc.set("permissions", [])
+    for row in permission_rows:
+        doc.append("permissions", dict(row))
+    doc.save(ignore_permissions=True)
+    frappe.clear_cache(doctype=doctype_name)
+    summary["hardened_doctype_permissions"].append(doctype_name)
+
+
+def _normalized_permission_row(row: dict) -> dict[str, int | str]:
+    normalized: dict[str, int | str] = {"role": row.get("role") or ""}
+    for fieldname in PERMISSION_FIELDS:
+        normalized[fieldname] = 1 if row.get(fieldname) else 0
+    return normalized
 
 
 def _ensure_lead_custom_fields(summary: dict) -> None:
