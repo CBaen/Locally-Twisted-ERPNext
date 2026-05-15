@@ -10,7 +10,7 @@ Verifies that a simplified ERPNext/Frappe backend role works as a real operator 
 
 ## When to reach for it
 
-Use this when creating or changing a non-admin backend profile for an owner, manager, employee, accountant, contractor, or client user. Use it again when a user reports that a shortcut, calendar, workspace, or login link looks confusing or fails after login.
+Use this when creating or changing a non-admin backend profile for an owner, manager, employee, accountant, contractor, or client user. Use it again when a user reports that a shortcut, calendar, workspace, or login link looks confusing or fails after login. If the person only needs public website review with no ERPNext operation, use [erpnext-external-review-access](erpnext-external-review-access.md) instead.
 
 ## How to use it
 
@@ -20,7 +20,7 @@ Check the whole chain in this order:
 
    Write down what the person should do in the system, using business words. Example: Jeff should see new inquiries, customers, bookings, products, job boards, and the booking calendar without ERPNext module clutter.
 
-   If the person only needs job details occasionally, consider whether they need a backend login at all. Contractors may be better served by text, email, and calendar invites unless they have a real operator workflow inside ERPNext.
+   If the person only needs job details occasionally, consider whether they need a backend login at all. Contractors may be better served by text, email, and calendar invites unless they have a real operator workflow inside ERPNext. External website reviewers should be Website Users behind a narrow public review route, not Desk users.
 
 2. Verify with the actual non-admin login.
 
@@ -125,6 +125,7 @@ for doctype in ["Lead", "Sales Order", "Event", "Customer", "Contact", "Item"]:
 - Number Card names follow Frappe naming rules. If the sync uses an internal name that differs from the label, link validation can fail when saving the Workspace.
 - A Desk route returning HTTP 200 can still fail client-side after Frappe calls `desk_page.getpage`.
 - Browser cache can make a fixed file behave like the old file until the served asset is verified or the browser is hard-refreshed.
+- Effective role helpers can overstate admin membership. For least-privilege external review boundaries, verify explicit `Has Role` membership on the User record instead of broad role lookup.
 
 ## Examples
 

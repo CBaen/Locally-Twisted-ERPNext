@@ -1,6 +1,6 @@
 # ERPNext Backend Simplification Workstream
 
-Last updated: 2026-05-11 by Codex after backend persona workspace simplification.
+Last updated: 2026-05-15 by Codex after human-access audit and marketing review access closeout.
 
 ## Outcome
 
@@ -19,6 +19,12 @@ The target backend is not "all possible ERPNext modules." It is a small operatin
 ## Current Stage
 
 Active handoff lane. First Jeff-facing Desk simplification edits have been made in the live local ERPNext database and are now recreated by idempotent setup scripts.
+
+2026-05-15 access-audit addendum: the current working frontier is not another
+workspace label pass. It is permission hardening behind the simplified views:
+real DocType/User Permission matrix checks, explicit external-review role
+boundaries, test-user cleanup, and small role changes only after failing
+verifiers prove the exact exposure.
 
 This file is the job sheet for future handoffs. Keep `locally-twisted-queue.md` as the active task source, and update this file when the backend simplification lane changes stage.
 
@@ -56,6 +62,11 @@ Primary backend surfaces:
 - `scripts/setup/sync_contact_intake_backend.py`.
 - `scripts/verify/lead_backend_intake_parity.py`.
 - `hooks.py` fixtures and `doc_events`.
+- human-access guard surfaces:
+  `apps/locally_twisted/locally_twisted/marketing_review_access.py`,
+  `apps/locally_twisted/locally_twisted/www/me.py`,
+  `apps/locally_twisted/locally_twisted/verify/marketing_review_access_boundary.py`,
+  and `workstreams/user-access-audit-2026-05-15.md`.
 
 ## Known Current Facts
 
@@ -179,6 +190,52 @@ Frappe still uses standard `System User` and `Website User`; LT's backend
 personas are role/profile/workspace packages. The next safe slice is to tighten
 DocType permissions and user permissions behind these views with failing
 verifiers first.
+
+## 2026-05-15 Human Access Audit
+
+The latest access review is
+`workstreams/user-access-audit-2026-05-15.md`.
+
+Current verified access state:
+
+- Owner, Manager, Employee, and Accountant temp Desk personas all pass browser
+  route proof after backend restart.
+- Customer Website User portal contracts pass and keep customer accounts out of
+  Desk/backend records.
+- The marketing reviewer lane is separate from customer accounts:
+  `Website User` plus explicit `LT Marketing Review Access`,
+  `desk_access = 0`, no DocPerm rows, `/marketing-review` only.
+- `User Permission` rows are currently empty. Restrictions are role/profile,
+  workspace, portal-code, and hook based.
+- No enabled Supplier user, permanent marketing reviewer user, or enabled
+  Maintenance Admin user was found in the local DB.
+- One enabled customer visual test account remains:
+  `lt-portal-visual-1778476910635718999@example.invalid`.
+
+Important finding:
+
+- Manager workspace does not surface catalog tools, but the current role matrix
+  still grants Manager `Item Price` create/write/delete. Treat this as the next
+  access-hardening target. Add a failing permission-matrix verifier before
+  removing or rewriting broad ERPNext roles.
+
+Verification receipt on 2026-05-15:
+
+- `python scripts/verify/customer_portal_inventory.py --base-url http://localhost:8081 --strict-menu`
+- `python scripts/verify/custom_doctype_permission_boundary.py`
+- `python scripts/verify/backend_workspace_parity.py`
+- `python scripts/verify/finance_workspace_parity.py`
+- `python scripts/verify/maintenance_admin_boundary.py`
+- `python scripts/verify/maintenance_heartbeat.py`
+- `python scripts/verify/customer_portal_v1_contract.py`
+- `python scripts/verify/customer_portal_home_contract.py`
+- `python scripts/verify/customer_account_provisioning_contract.py`
+- `python scripts/verify/customer_documents_contract.py`
+- `python scripts/verify/customer_contact_points_contract.py`
+- `python scripts/verify/marketing_review_access_boundary.py`
+- `npm run test:marketing-review-access`
+- `$env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-personas`
+- `$env:LT_DESK_TEST_USER='lt-owner-temp@example.com'; $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner`
 
 ## 2026-05-02 CRM Pipeline Translation
 

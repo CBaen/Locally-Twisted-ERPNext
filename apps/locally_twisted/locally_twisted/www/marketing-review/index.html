@@ -1,0 +1,32 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+<style>{{ page_css }}</style>
+
+<section class="lt-marketing-review" data-lt-marketing-review>
+  <div class="lt-marketing-review__inner">
+    <p class="lt-marketing-review__eyebrow">{{ marketing_review_company }}</p>
+    <h1 class="lt-marketing-review__title">Website review access</h1>
+    <p class="lt-marketing-review__lede">
+      This doorway is for external review of the public Locally Twisted website.
+      It opens review links only; customer records, files, payments, emails, orders,
+      and ERPNext Desk are outside this account.
+    </p>
+    <div class="lt-marketing-review__notice" role="note">
+      <strong>Public-site review only</strong>
+      <span>Use these links to inspect copy, layout, proof, navigation, and public customer paths.</span>
+    </div>
+    <div class="lt-marketing-review__grid">
+      {% for item in marketing_review_links %}
+      <a class="lt-marketing-review__link" href="{{ item.href }}">
+        <strong>{{ item.label }}</strong>
+        <span>{{ item.description }}</span>
+      </a>
+      {% endfor %}
+    </div>
+    <p class="lt-marketing-review__footer">
+      Done reviewing? <a href="/?cmd=web_logout">Log out</a>.
+    </p>
+  </div>
+</section>
+{% endblock %}

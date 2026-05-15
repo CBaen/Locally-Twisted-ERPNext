@@ -24,6 +24,7 @@
     "test:quote-accept-experience": "scripts\\verify\\run_playwright.cmd test scripts/verify/quote_accept_experience.spec.js --reporter=line",
     "test:customer-portal-visual": "scripts\\verify\\run_playwright.cmd test scripts/verify/customer_portal_visual.spec.js --reporter=line",
     "test:customer-login-visual": "scripts\\verify\\run_playwright.cmd test scripts/verify/customer_login_visual.spec.js --reporter=line",
+    "test:marketing-review-access": "python scripts/verify/marketing_review_access_boundary.py",
     "test:product-quote-first": "scripts\\verify\\run_playwright.cmd test scripts/verify/product_quote_first_experience.spec.js --reporter=line",
     "test:product-prices": "python scripts/verify/product_variant_price_contract.py",
     "test:variant-media": "python scripts/verify/variant_media_contract.py",

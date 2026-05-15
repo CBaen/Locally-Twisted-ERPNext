@@ -1,5 +1,32 @@
 # Locally Twisted - Coding Handoff
 
+Codex access closeout on 2026-05-15: local human-user access was audited
+against the running ERPNext/Frappe site and DB. Current enabled operator
+personas are Owner, Manager, Employee, Accountant, Admin/support, Customer
+Website User, and Guest; no enabled Supplier user, Maintenance Admin user, or
+permanent marketing reviewer user was found. `User Permission` rows are empty,
+so the current boundary is role/profile/workspace/portal/hook based. The new
+external marketing lane is `Website User` + explicit
+`LT Marketing Review Access`, `desk_access = 0`, no DocPerm rows, `/me`
+redirect to `/marketing-review`, and backend-sensitive DocTypes denied through
+marketing-only hooks. The first guard version used broad/effective role lookup
+and misclassified Administrator/bench contexts; it was repaired to require the
+explicit `Has Role` child row. Feature handoffs:
+`workstreams/marketing-review-access-2026-05-15.md` and
+`workstreams/user-access-audit-2026-05-15.md`; capability:
+`capabilities/recipes/erpnext-external-review-access.md`; guards:
+`python scripts/verify/marketing_review_access_boundary.py`,
+`npm run test:marketing-review-access`,
+`python scripts/verify/customer_portal_inventory.py --base-url http://localhost:8081 --strict-menu`,
+`python scripts/verify/backend_workspace_parity.py`,
+`python scripts/verify/finance_workspace_parity.py`,
+`python scripts/verify/maintenance_admin_boundary.py`,
+`python scripts/verify/custom_doctype_permission_boundary.py`,
+`npm run test:desk-personas`, and `npm run test:desk-owner`. Follow-up:
+Manager workspace hides catalog tools, but the role matrix still allows
+`Item Price` create/write/delete; add failing permission-matrix verifiers
+before broad ERPNext role changes.
+
 Codex inquiry-photo hotfix on 2026-05-15: production Lead
 `CRM-LEAD-2026-00007` had private File `44b4de500d`
 (`/private/files/image.jpg`) but no `custom_inspiration_photos` rows and no

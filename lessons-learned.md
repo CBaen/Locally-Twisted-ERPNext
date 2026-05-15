@@ -6,6 +6,25 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-15 - Narrow reviewer roles need explicit membership checks
+
+The first marketing review access guard used Frappe's effective role lookup.
+That looked fine for a temporary Website User, but it misclassified
+Administrator/bench contexts because Administrator can appear to have framework
+roles broadly. The result was not a marketing data leak; it was the opposite
+failure mode: customer portal verifiers could not create rollback fixtures
+because the marketing mutation guard treated admin execution as a marketing
+reviewer.
+
+**Counter-move:** for narrow external-access lanes, check the explicit
+`Has Role` child row on the User record before applying the boundary. Keep
+effective role helpers for normal role-aware UI logic, not for least-privilege
+access guards that must distinguish admin/test contexts from the external
+account. After touching auth hooks, rerun both the new boundary verifier and
+the adjacent customer/Desk contracts.
+
+---
+
 ## 2026-05-15 - Lead File attachments are not CRM photo storage
 
 The missing production inquiry photo was not missing from ERPNext entirely:

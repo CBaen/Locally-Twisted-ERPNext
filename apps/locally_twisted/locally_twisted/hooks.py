@@ -293,6 +293,9 @@ fixtures = [
 # role_home_page = {
 # 	"Role": "home_page"
 # }
+role_home_page = {
+    "LT Marketing Review Access": "marketing-review",
+}
 
 # Generators
 # ----------
@@ -353,6 +356,57 @@ jinja = {
 # has_permission = {
 # 	"Event": "frappe.desk.doctype.event.event.has_permission",
 # }
+_marketing_sensitive_doctypes = [
+    "Lead",
+    "Customer",
+    "Contact",
+    "Address",
+    "Quotation",
+    "Sales Order",
+    "Sales Invoice",
+    "Payment Request",
+    "Payment Entry",
+    "Communication",
+    "Email Queue",
+    "File",
+    "Item",
+    "Item Price",
+    "Website Item",
+    "Project",
+    "Task",
+    "Error Log",
+    "Access Log",
+    "Activity Log",
+    "Version",
+    "LT Maintenance Run",
+    "LT Maintenance Health Event",
+    "LT Maintenance Action Request",
+    "LT Maintenance Action Log",
+]
+
+permission_query_conditions = {
+    doctype: "locally_twisted.marketing_review_access.marketing_no_records_condition"
+    for doctype in _marketing_sensitive_doctypes
+}
+
+has_permission = {
+    doctype: "locally_twisted.marketing_review_access.has_marketing_sensitive_doc_permission"
+    for doctype in _marketing_sensitive_doctypes
+}
+
+_marketing_mutation_block_doctypes = [
+    doctype
+    for doctype in _marketing_sensitive_doctypes
+    if doctype not in {"Error Log", "Access Log", "Activity Log", "Version"}
+]
+
+for _marketing_sensitive_doctype in _marketing_mutation_block_doctypes:
+    doc_events.setdefault(_marketing_sensitive_doctype, {})
+    for _marketing_sensitive_event in ("before_insert", "before_save", "on_trash"):
+        doc_events[_marketing_sensitive_doctype].setdefault(
+            _marketing_sensitive_event,
+            "locally_twisted.marketing_review_access.block_marketing_sensitive_doc_mutation",
+        )
 
 # DocType Class
 # ---------------

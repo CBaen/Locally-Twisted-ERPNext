@@ -8,6 +8,52 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-15 - External marketing review access is website-only and role-explicit
+
+**Decision:** External marketing reviewers for Locally Twisted use standard
+Frappe `Website User` accounts with the narrow explicit
+`LT Marketing Review Access` role. They do not receive a custom Frappe
+`User Type`, Desk access, Customer, Supplier, Website Manager, System Manager,
+sales, finance, item, owner, accountant, or maintenance roles.
+
+**Reasoning:** Exploring Not Boring needs to review public website copy,
+layout, navigation, proof, portfolio, inquiry paths, and policy surfaces. That
+does not require ERPNext Desk or backend records. Frappe's standard user model
+already separates `Website User` from `System User`, and LT already uses roles,
+role profiles, workspaces, portal code, and permission hooks for access shape.
+Creating custom User Types would add platform complexity and risk.
+
+**Alternatives considered:** Giving the marketing company a Desk/System User
+account was rejected because it exposes backend routes and role pressure they
+do not need. Using the customer portal was rejected because reviewers are not
+customers and should not see customer-safe account records. Using broad role
+helpers for the boundary was rejected after verification showed Administrator
+and bench contexts can be misclassified; this boundary must check explicit
+`Has Role` membership on the User record.
+
+**Implementation boundary:** The owned review surface is `/marketing-review`.
+`LT Marketing Review Access` has `desk_access = 0` and no DocPerm rows.
+Marketing reviewers landing on `/me` are redirected to `/marketing-review`.
+Permission query conditions, `has_permission`, and mutation hooks deny
+sensitive backend DocTypes only for explicit marketing-role users. No permanent
+marketing reviewer user was created locally in this slice, and no production
+deploy was performed.
+
+**Verification receipt:** Local verification passed with
+`python scripts/setup/sync_marketing_review_access.py`,
+`python scripts/verify/marketing_review_access_boundary.py`,
+`npm run test:marketing-review-access`, customer portal contract reruns, Desk
+persona browser proof, and a live local HTTP proof using a temporary marketing
+Website User. The temporary User was deleted. Feature handoffs:
+`workstreams/marketing-review-access-2026-05-15.md` and
+`workstreams/user-access-audit-2026-05-15.md`; capability:
+`capabilities/recipes/erpnext-external-review-access.md`.
+
+**Decided by:** GL request for Exploring Not Boring marketing access and Codex
+implementation/audit on 2026-05-15.
+
+---
+
 ## 2026-05-15 - Public inquiry photos must store in CRM and attach only to owner notifications
 
 **Decision:** Public inquiry photo uploads must be treated as backend intake
