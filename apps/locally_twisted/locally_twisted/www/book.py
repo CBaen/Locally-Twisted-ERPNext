@@ -293,6 +293,7 @@ def submit_book_inquiry():
     photo_files = _files_from_request("ufile")
     photo_uploads = _photo_upload_summary(len(photo_files))
     attached = 0
+    stored_photo_files = []
     for f in photo_files[MAX_PHOTOS:]:
         _record_photo_upload_issue(
             lead,
@@ -322,7 +323,7 @@ def submit_book_inquiry():
             )
             continue
         try:
-            frappe.get_doc({
+            file_doc = frappe.get_doc({
                 "doctype": "File",
                 "file_name": f.filename,
                 "is_private": 1,
@@ -331,6 +332,7 @@ def submit_book_inquiry():
                 "attached_to_name": lead.name,
             }).insert(ignore_permissions=True)
             attached += 1
+            stored_photo_files.append(file_doc)
         except Exception as e:
             _record_photo_upload_issue(
                 lead,
@@ -343,6 +345,14 @@ def submit_book_inquiry():
             )
     photo_uploads["attached"] = attached
     photo_uploads["customer_message"] = _photo_upload_customer_message(photo_uploads)
+    if stored_photo_files:
+        lead.reload()
+        for file_doc in stored_photo_files:
+            lead.append("custom_inspiration_photos", {
+                "photo": file_doc.file_url,
+                "caption": file_doc.file_name,
+            })
+        lead.save(ignore_permissions=True)
 
     # Inbound Communication on the Lead's timeline. Captures the
     # message body + the structured summary so Jeff has one place to read

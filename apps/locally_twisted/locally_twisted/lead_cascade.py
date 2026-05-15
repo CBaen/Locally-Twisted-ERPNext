@@ -371,6 +371,29 @@ def send_customer_inquiry_confirmation(doc, *, photo_uploads=None):
     return _send_auto_ack_email(doc, photo_uploads=photo_uploads)
 
 
+def _business_inquiry_photo_attachments(doc) -> list[dict[str, str]]:
+    photo_urls = {
+        row.get("photo")
+        for row in (doc.get("custom_inspiration_photos") or [])
+        if row.get("photo")
+    }
+    if not photo_urls:
+        return []
+
+    rows = frappe.get_all(
+        "File",
+        filters={
+            "attached_to_doctype": "Lead",
+            "attached_to_name": doc.name,
+            "file_url": ["in", sorted(photo_urls)],
+        },
+        fields=["name"],
+        order_by="creation asc",
+        limit_page_length=20,
+    )
+    return [{"fid": row["name"]} for row in rows if row.get("name")]
+
+
 def send_business_inquiry_notification(doc, *, photo_uploads=None):
     """Queue the internal business notification for a Website inquiry."""
     if _has_current_business_notification_queue(doc):
@@ -386,6 +409,7 @@ def send_business_inquiry_notification(doc, *, photo_uploads=None):
         photo_uploads=photo_uploads,
         desk_link=desk_link,
     )
+    attachments = _business_inquiry_photo_attachments(doc)
     message = render_operator_email(
         title="New website inquiry",
         preheader=f"{customer_name} submitted a Locally Twisted form.",
@@ -399,6 +423,7 @@ def send_business_inquiry_notification(doc, *, photo_uploads=None):
         reference_doctype="Lead",
         reference_name=doc.name,
         reply_to=customer_email or GENERAL_INBOX,
+        attachments=attachments,
         now=False,
         **document_copy_kwargs(
             external_audience=False,

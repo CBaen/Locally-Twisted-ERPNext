@@ -82,6 +82,7 @@ def _contract_failures(result: dict[str, Any]) -> list[str]:
         failures.append("contract enables customer delivery")
     expected = {
         "lead_auto_ack",
+        "lead_business_notification",
         "paid_order_receipt",
         "paid_order_operator_notification",
         "first_order_welcome",

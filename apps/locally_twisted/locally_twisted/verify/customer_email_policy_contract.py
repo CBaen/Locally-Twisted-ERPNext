@@ -56,6 +56,7 @@ def run() -> dict[str, object]:
                 "Generally within less than 24 hours",
             ),
         ),
+        _check_business_notification_function(sources["lead_cascade"]),
         _check_email_function(
             surface_id="paid_order_receipt",
             source=sources["payment_success"],
@@ -203,6 +204,68 @@ def _check_email_function(
     return _surface(surface_id, failures)
 
 
+def _check_business_notification_function(source: str) -> dict[str, Any]:
+    surface_id = "lead_business_notification"
+    failures: list[str] = []
+    helper_source, helper_node = _function_source(source, "_business_inquiry_photo_attachments")
+    function_source, function_node = _function_source(source, "send_business_inquiry_notification")
+    if not helper_source or helper_node is None:
+        failures.append("missing function _business_inquiry_photo_attachments")
+    if not function_source or function_node is None:
+        failures.append("missing function send_business_inquiry_notification")
+        return _surface(surface_id, failures)
+
+    for marker in (
+        "custom_inspiration_photos",
+        '"File"',
+        '"attached_to_doctype": "Lead"',
+        '"attached_to_name": doc.name',
+        '"file_url": ["in", sorted(photo_urls)]',
+        'return [{"fid": row["name"]}',
+    ):
+        if marker not in helper_source:
+            failures.append(f"_business_inquiry_photo_attachments missing marker {marker!r}")
+
+    for marker in (
+        "render_operator_email",
+        "recipients=[BUSINESS_DOCUMENT_COPY]",
+        "reply_to=customer_email or GENERAL_INBOX",
+        "attachments = _business_inquiry_photo_attachments(doc)",
+        "attachments=attachments",
+        "document_copy_kwargs",
+        "external_audience=False",
+        "primary_recipients=[BUSINESS_DOCUMENT_COPY]",
+        "BUSINESS_INQUIRY_SUBJECT_PREFIX",
+    ):
+        if marker not in function_source:
+            failures.append(f"send_business_inquiry_notification missing marker {marker!r}")
+
+    sendmail_calls = _sendmail_calls(function_node)
+    if len(sendmail_calls) != 1:
+        failures.append(f"send_business_inquiry_notification expected exactly one frappe.sendmail call, found {len(sendmail_calls)}")
+        return _surface(surface_id, failures)
+
+    call = sendmail_calls[0]
+    kwargs = {keyword.arg: keyword.value for keyword in call.keywords if keyword.arg}
+    forbidden = sorted((FORBIDDEN_SENDMAIL_KWARGS - {"attachments"}) & set(kwargs))
+    if forbidden:
+        failures.append(
+            "send_business_inquiry_notification sendmail includes forbidden PDF/print kwargs: "
+            + ", ".join(forbidden)
+        )
+    if not _keyword_equals_name(kwargs, "attachments", "attachments"):
+        failures.append("send_business_inquiry_notification sendmail must attach only the owner photo refs")
+    if not _keyword_equals_string(kwargs, "reference_doctype", "Lead"):
+        failures.append("send_business_inquiry_notification sendmail does not reference Lead")
+    if not _keyword_equals_false(kwargs, "now"):
+        failures.append("send_business_inquiry_notification sendmail is not queued with now=False")
+    if "recipients" not in kwargs:
+        failures.append("send_business_inquiry_notification sendmail missing recipients")
+    if "message" not in kwargs:
+        failures.append("send_business_inquiry_notification sendmail missing message")
+    return _surface(surface_id, failures)
+
+
 def _check_function_markers(
     *,
     surface_id: str,
@@ -332,3 +395,8 @@ def _keyword_equals_string(kwargs: dict[str, ast.AST], name: str, expected: str)
 def _keyword_equals_false(kwargs: dict[str, ast.AST], name: str) -> bool:
     node = kwargs.get(name)
     return isinstance(node, ast.Constant) and node.value is False
+
+
+def _keyword_equals_name(kwargs: dict[str, ast.AST], name: str, expected: str) -> bool:
+    node = kwargs.get(name)
+    return isinstance(node, ast.Name) and node.id == expected

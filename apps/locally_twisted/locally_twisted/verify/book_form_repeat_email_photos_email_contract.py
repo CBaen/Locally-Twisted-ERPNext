@@ -87,6 +87,8 @@ def _lead_names(email: str) -> list[str]:
 
 def _verify_lead_email_delivery(lead, *, email: str, expected_label: str) -> dict[str, Any]:
     failures: list[str] = []
+    file_rows = _lead_file_rows(lead)
+    photo_rows = _lead_photo_rows(lead)
     queue_rows = _current_email_queue_rows(lead)
     inspected = [_inspect_queue_row(row) for row in queue_rows]
 
@@ -109,16 +111,48 @@ def _verify_lead_email_delivery(lead, *, email: str, expected_label: str) -> dic
     if not business_queue:
         failures.append(f"{lead.name} missing current business owner notification queue for {BUSINESS_DOCUMENT_COPY}")
     else:
-        failures.extend(_business_email_failures(lead, business_queue, email=email, expected_label=expected_label))
+        failures.extend(
+            _business_email_failures(
+                lead,
+                business_queue,
+                email=email,
+                expected_label=expected_label,
+                expected_files=file_rows,
+            )
+        )
+
+    failures.extend(_lead_photo_storage_failures(lead, file_rows=file_rows, photo_rows=photo_rows))
 
     return {
         "lead": lead.name,
         "creation": str(lead.get("creation")),
+        "lead_file_count": len(file_rows),
+        "lead_photo_table_count": len(photo_rows),
         "customer_queue": _queue_summary(customer_queue),
         "business_queue": _queue_summary(business_queue),
         "current_queue_count": len(inspected),
         "failures": failures,
     }
+
+
+def _lead_file_rows(lead) -> list[dict[str, Any]]:
+    return frappe.get_all(
+        "File",
+        filters={"attached_to_doctype": "Lead", "attached_to_name": lead.name},
+        fields=["name", "file_name", "file_url", "is_private"],
+        order_by="creation asc",
+        limit_page_length=100,
+    )
+
+
+def _lead_photo_rows(lead) -> list[dict[str, Any]]:
+    return [
+        {
+            "photo": row.get("photo"),
+            "caption": row.get("caption"),
+        }
+        for row in (lead.get("custom_inspiration_photos") or [])
+    ]
 
 
 def _current_email_queue_rows(lead) -> list[dict[str, Any]]:
@@ -128,7 +162,7 @@ def _current_email_queue_rows(lead) -> list[dict[str, Any]]:
     return frappe.get_all(
         "Email Queue",
         filters=filters,
-        fields=["name", "creation", "message", "status"],
+        fields=["name", "creation", "message", "status", "attachments"],
         order_by="creation asc",
         limit_page_length=100,
     )
@@ -143,6 +177,8 @@ def _inspect_queue_row(row: dict[str, Any]) -> dict[str, Any]:
         "status": row.get("status"),
         "recipients": _email_queue_recipients(row.get("name")),
         "subjects": _message_subjects(row.get("message") or ""),
+        "attachment_refs": _attachment_refs(row.get("attachments")),
+        "attachment_filenames": _attachment_filenames(row.get("message") or ""),
         "searchable": searchable,
     }
 
@@ -189,10 +225,22 @@ def _customer_email_failures(lead, row: dict[str, Any], *, email: str, expected_
             ],
         )
     )
+    if row.get("attachment_refs") or row.get("attachment_filenames"):
+        failures.append(
+            f"{lead.name} customer email {row['name']} should not include customer photo attachments: "
+            f"refs={row.get('attachment_refs') or []}, mime={sorted(row.get('attachment_filenames') or [])}"
+        )
     return failures
 
 
-def _business_email_failures(lead, row: dict[str, Any], *, email: str, expected_label: str) -> list[str]:
+def _business_email_failures(
+    lead,
+    row: dict[str, Any],
+    *,
+    email: str,
+    expected_label: str,
+    expected_files: list[dict[str, Any]],
+) -> list[str]:
     failures = _missing_marker_failures(
         lead,
         row,
@@ -220,6 +268,72 @@ def _business_email_failures(lead, row: dict[str, Any], *, email: str, expected_
             ],
         )
     )
+    expected_file_ids = [file_row.get("name") for file_row in expected_files if file_row.get("name")]
+    expected_file_urls = {
+        file_row.get("file_url")
+        for file_row in expected_files
+        if file_row.get("file_url")
+    }
+    attachment_refs = row.get("attachment_refs") or []
+    attachment_fids = [ref.get("fid") for ref in attachment_refs if ref.get("fid")]
+    attachment_file_urls = [ref.get("file_url") for ref in attachment_refs if ref.get("file_url")]
+    if len(attachment_refs) != len(expected_file_ids):
+        failures.append(
+            f"{lead.name} business owner email {row['name']} expected {len(expected_file_ids)} "
+            f"queued photo attachment ref(s), found {len(attachment_refs)}: {attachment_refs}"
+        )
+    for file_row in expected_files:
+        if file_row.get("name") in attachment_fids:
+            continue
+        if file_row.get("file_url") in attachment_file_urls:
+            continue
+        failures.append(
+            f"{lead.name} business owner email {row['name']} missing queued photo attachment "
+            f"for File {file_row.get('name')!r}"
+        )
+    for ref in attachment_refs:
+        if ref.get("fid"):
+            continue
+        if ref.get("file_url") in expected_file_urls:
+            continue
+        if ref.get("print_format_attachment") == 1:
+            failures.append(
+                f"{lead.name} business owner email {row['name']} includes forbidden print/PDF attachment ref"
+            )
+            continue
+        failures.append(f"{lead.name} business owner email {row['name']} has unexpected attachment ref {ref}")
+    return failures
+
+
+def _lead_photo_storage_failures(
+    lead,
+    *,
+    file_rows: list[dict[str, Any]],
+    photo_rows: list[dict[str, Any]],
+) -> list[str]:
+    failures = []
+    if len(file_rows) != 5:
+        failures.append(f"{lead.name} expected 5 private Lead File records, found {len(file_rows)}")
+    for file_row in file_rows:
+        if int(file_row.get("is_private") or 0) != 1:
+            failures.append(f"{lead.name} photo File {file_row.get('name')} is not private")
+    if len(photo_rows) != len(file_rows):
+        failures.append(
+            f"{lead.name} expected {len(file_rows)} CRM Inspiration Photos row(s), found {len(photo_rows)}"
+        )
+    file_urls = {file_row.get("file_url") for file_row in file_rows if file_row.get("file_url")}
+    captions = {file_row.get("file_name") for file_row in file_rows if file_row.get("file_name")}
+    for row in photo_rows:
+        if not row.get("photo"):
+            failures.append(f"{lead.name} CRM Inspiration Photos row missing photo value")
+        elif row.get("photo") not in file_urls:
+            failures.append(
+                f"{lead.name} CRM Inspiration Photos row points at unknown file URL {row.get('photo')!r}"
+            )
+        if row.get("caption") and row.get("caption") not in captions:
+            failures.append(
+                f"{lead.name} CRM Inspiration Photos row caption {row.get('caption')!r} does not match an uploaded file"
+            )
     return failures
 
 
@@ -282,6 +396,8 @@ def _queue_summary(row: dict[str, Any] | None) -> dict[str, Any] | None:
         "status": row.get("status"),
         "recipients": sorted(row["recipients"]),
         "subjects": sorted(row["subjects"]),
+        "attachment_refs": row.get("attachment_refs") or [],
+        "attachment_filenames": sorted(row.get("attachment_filenames") or []),
     }
 
 
@@ -333,6 +449,40 @@ def _message_subjects(message: str) -> set[str]:
     except Exception:
         pass
     return {subject for subject in subjects if subject}
+
+
+def _attachment_filenames(message: str) -> set[str]:
+    filenames: set[str] = set()
+    try:
+        parsed = Parser(policy=policy.default).parsestr(message or "")
+        for part in parsed.walk():
+            disposition = (part.get_content_disposition() or "").lower()
+            if disposition != "attachment":
+                continue
+            filename = part.get_filename()
+            if filename:
+                filenames.add(str(filename))
+    except Exception:
+        pass
+    return filenames
+
+
+def _attachment_refs(value) -> list[dict[str, Any]]:
+    if not value:
+        return []
+    try:
+        parsed = json.loads(value)
+    except Exception as exc:
+        return [{"parse_error": str(exc), "raw": str(value)}]
+    if not isinstance(parsed, list):
+        return [{"unexpected_attachments_shape": type(parsed).__name__, "raw": str(value)}]
+    refs: list[dict[str, Any]] = []
+    for item in parsed:
+        if isinstance(item, dict):
+            refs.append(dict(item))
+        else:
+            refs.append({"unexpected_attachment_ref": str(item)})
+    return refs
 
 
 def _searchable_text(message: str) -> str:
