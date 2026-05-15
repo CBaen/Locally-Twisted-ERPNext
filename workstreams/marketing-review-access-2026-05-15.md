@@ -109,5 +109,5 @@ Follow-up audit receipt from 2026-05-15:
 
 - No permanent Exploring Not Boring user has been created in the local DB.
 - No production/Frappe Cloud deploy was performed in this slice.
-- No GitHub push was performed from this documentation closeout because GL
-  clarified "do not push the code live; just commit."
+- GitHub push to `origin/main` is source archive only; it is not a
+  production/Frappe Cloud deploy and does not push code live.

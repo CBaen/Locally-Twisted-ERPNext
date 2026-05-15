@@ -14,6 +14,7 @@ Branches are forbidden in this repo. Work on `main` only.
 - Before editing, run `git rev-parse --abbrev-ref HEAD`; it must print `main`. If it does not, stop and switch to `main` without discarding work.
 - Push completed commits directly to `origin/main`. GitHub is the archive; branches are not holding areas, queues, or coordination lanes.
 - Machine-wide hooks live at `C:\Users\baenb\.codex\git-hooks\no-branches` and block non-main commits and pushes. Git has no pre-hook that can fully prevent branch creation before it happens, so agents must obey this file as the primary rule.
+- Do not report unrelated repository file state as routine status, progress chatter, or closeout filler. Surface other changed files only when they block the LT task, overlap files you must touch, affect commit/push safety, or GL asks for git state. Treat repeated unsolicited changed-file commentary as a mental-load/accessibility issue.
 
 ## No Monoliths
 
