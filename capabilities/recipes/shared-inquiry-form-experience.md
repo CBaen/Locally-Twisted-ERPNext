@@ -240,3 +240,10 @@ and
 passed along with the existing form, Lead parity, smoke, repeat-email/photo,
 and email policy gates. Feature handoff:
 `../../workstreams/inquiry-form-spam-sales-filter-2026-05-15.md`.
+
+On 2026-05-16 the source was deployed to live as full repo `631f9a8` and app
+mirror `b4b3bf8`. The live smoke proved the happy path, Lead creation, photo
+storage, and owner/customer email queues after Frappe Cloud site update
+`b48j584nua`, but it did not specifically rerun the dedicated live bot/sales
+fixture branches. Release handoff:
+`../../workstreams/inquiry-form-live-release-2026-05-16.md`.

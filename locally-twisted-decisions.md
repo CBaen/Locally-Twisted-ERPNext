@@ -8,6 +8,89 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-16 - Inquiry form release proof requires site update plus live form evidence
+
+**Decision:** Public inquiry form fixes are not considered live from a GitHub
+push, app mirror push, app hash, or route health alone. For Frappe Cloud, the
+site update/migrate job must succeed and live form evidence must prove the
+business path being claimed.
+
+**Reasoning:** The photo incident was a business trust failure: the owner email
+said a customer submitted photos, but the CRM photo table and owner Email Queue
+attachments were empty. The production release became trustworthy only after
+Frappe Cloud site update `b48j584nua` / update job `b48oge6unq` succeeded and
+the live `smoke test from cameron` submission proved Lead
+`CRM-LEAD-2026-00013`, five private Files, five CRM photo rows, owner Email
+Queue `683s86r04b` with five attachment refs, and customer Email Queue
+`683suhfaa9` with zero photo attachments.
+
+**Implementation boundary:** Future public form releases must name the proof
+surface: local verifier, staging verifier, live cleanup verifier, or
+intentional real business-email smoke. Do not collapse those into "deployed."
+Checkout, Stripe, and ecommerce exposure remain separate gates.
+
+**Receipts:** `workstreams/inquiry-form-live-release-2026-05-16.md`;
+`workstreams/inquiry-photo-storage-owner-attachments-2026-05-15.md`;
+`workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11.md`;
+`LT-LAUNCH-RUNBOOK.md`;
+`capabilities/recipes/erpnext-inquiry-photo-delivery-contract.md`.
+
+**Decided by:** GL approval of the live smoke and Codex Frappe Cloud release
+execution, 2026-05-16.
+
+---
+
+## 2026-05-16 - Release scope is previous-live app hash to target mirror commit
+
+**Decision:** Frappe Cloud custom app release review must compare the previous
+live app hash to the target app mirror commit. Reviewing only the final source
+commit or current dirty working-tree status is insufficient.
+
+**Reasoning:** The deployed 2026-05-16 release did not include current
+uncommitted dirty files, but the app mirror target included already-committed
+changes beyond the final two-file source commit. That is a release-scope
+control issue, not dirty-file contamination. Future agents need the full
+old-live-to-target diff to know what is actually being promoted.
+
+**Implementation boundary:** Before a live Frappe Cloud promotion, capture the
+current live app hash/source point, target app mirror commit, file diff
+categories, site update/migrate result, and live verifier receipt. Do not use
+`git show HEAD` as the release diff.
+
+**Receipts:** `capabilities/failures/frappe-cloud-app-mirror-release-scope-drift.md`;
+`workstreams/inquiry-form-live-release-2026-05-16.md`;
+`workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11.md`.
+
+**Decided by:** Codex release-scope audit during the 2026-05-16 live inquiry
+release.
+
+---
+
+## 2026-05-16 - Staging Website Settings parity is release-critical config
+
+**Decision:** Staging remains separate from live, and staging root/login
+behavior is a release-critical configuration surface. A staging root that shows
+Sign In while `/home` works must be investigated as Website Settings drift
+before calling live broken.
+
+**Reasoning:** `https://locallytwisted-staging.frappe.cloud/#login` rendered
+Sign In because staging `Website Settings.home_page` and branding fields had
+drifted. Live was not broken. Repairing staging required setting `home_page =
+home`, LT app branding/logo/favicon, Standard theme, and clearing staging cache.
+
+**Implementation boundary:** Future staging checks must include `/`, `/#login`,
+`/home`, `/contact`, and Website Settings parity. Staging fixes must not be
+presented as live production changes unless the live host is separately
+verified.
+
+**Receipts:** `capabilities/failures/frappe-cloud-staging-website-settings-drift.md`;
+`workstreams/inquiry-form-live-release-2026-05-16.md`;
+`workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11.md`.
+
+**Decided by:** Codex staging repair during GL's 2026-05-16 staging incident.
+
+---
+
 ## 2026-05-15 - External marketing review access is website-only and role-explicit
 
 **Decision:** External marketing reviewers for Locally Twisted use standard
@@ -76,12 +159,13 @@ distribution and is not needed for acknowledgment. Generic Lead `File`
 attachments alone were rejected because Desk photo rows and Email Queue
 attachment refs are separate Frappe contracts.
 
-**Implementation boundary:** Source is fixed and pushed locally in the full
-repo commit `4422793` and the Frappe Cloud app mirror commit `6a06062`. Live
-production is not proven protected until Frappe Cloud deploy, site
-update/migrate, and the live repeat-email/five-photo verifier prove private
-Files, CRM photo rows, customer no-attachment confirmations, owner attachment
-refs, and cleanup.
+**Implementation boundary:** Source was first fixed and pushed locally in the
+full repo commit `4422793` and the Frappe Cloud app mirror commit `6a06062`.
+2026-05-16 supersession: production photo delivery is now live-proven by source
+`631f9a8`, app mirror `b4b3bf8`, site update `b48j584nua`, Lead
+`CRM-LEAD-2026-00013`, five CRM photo rows, owner Email Queue `683s86r04b` with
+five attachment refs, and customer Email Queue `683suhfaa9` with zero
+attachments. Future releases still need their own site update and live proof.
 
 **Verification receipt:** Local proof used compile checks, the static customer
 email policy contract, the upload-failure contract, cache clear/restart, and

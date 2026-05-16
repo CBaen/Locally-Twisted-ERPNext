@@ -7,7 +7,7 @@ maturity: candidate
 scope: Locally Twisted ERPNext/Frappe customer/operator email branding, company-copy routing, and Email Queue proof
 currently_true: true
 verification_level: 2
-last_verified: 2026-05-15
+last_verified: 2026-05-16
 evidence_quality: direct
 successful_uses: 4
 failed_uses: 3
@@ -108,6 +108,7 @@ privacy copy.
 - `scripts/verify/customer_contact_points_contract.py`
 - `workstreams/form-email-confirmation-regression-2026-05-12.md`
 - `workstreams/inquiry-photo-storage-owner-attachments-2026-05-15.md`
+- `workstreams/inquiry-form-live-release-2026-05-16.md`
 - `capabilities/recipes/erpnext-inquiry-photo-delivery-contract.md`
 
 ## Verification
@@ -163,6 +164,11 @@ For inquiry-photo changes, the repeat-email/five-photo verifier must prove
 customer queues have no attachments and owner/business queues contain private
 Lead File `fid` refs in `Email Queue.attachments`. Body text and counts are not
 enough.
+
+2026-05-16 live business-email smoke receipt: Lead `CRM-LEAD-2026-00013`,
+owner Email Queue `683s86r04b` sent to `locallytwisted@gmail.com` with five
+attachment refs, and customer Email Queue `683suhfaa9` sent with zero photo
+attachments.
 
 ## Failure Modes
 

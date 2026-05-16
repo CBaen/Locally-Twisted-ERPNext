@@ -106,22 +106,42 @@ that the live site is already running this hotfix.
 
 ## Live Status
 
-The deploy source is ready: both GitHub repositories are pushed on `main`.
+Production is now verified on the owner-photo delivery path.
 
-The live Frappe Cloud site is not yet verified as running this fix. The next
-agent must not claim production protection until all three are true:
+Live release and smoke receipt from 2026-05-16:
 
-1. Frappe Cloud bench deploy/release succeeds from app mirror commit `6a06062`.
-2. The site update/migrate job succeeds.
-3. The live repeat-email/five-photo verifier passes with authenticated backend
-   inspection and cleanup.
+| Field | Value |
+|---|---|
+| Full repo source commit | `631f9a8 Run contact intake schema sync on install` |
+| Frappe app mirror commit | `b4b3bf8 Run contact intake schema sync on install` |
+| Frappe Cloud site update | `b48j584nua`, `Success` |
+| Frappe Cloud update job | `b48oge6unq`, `Success` |
+| Source bench | `bench-39776-000013-f94-virginia` |
+| Destination bench | `bench-39776-000015-f94v` |
+| Deploy type | `Migrate` |
+| Live cache clear | `26es8svcaq`, `Success` |
+| Live smoke Lead | `CRM-LEAD-2026-00013` |
+| Live smoke contact name | `smoke test from cameron` |
+| Owner Email Queue | `683s86r04b`, `Sent`, to `locallytwisted@gmail.com`, subject `New website inquiry from smoke test from cameron`, attachment refs `5` |
+| Customer Email Queue | `683suhfaa9`, `Sent`, attachment refs `0` |
 
-At closeout, Codex did not have a usable Frappe Cloud management surface:
+The live smoke stored five private Lead `File` rows and five
+`custom_inspiration_photos` child rows:
 
-- no local Frappe Cloud CLI/env auth;
-- no `id_ed25519-cert.pub` SSH certificate;
-- direct SSH to the known host on port `2222` timed out;
-- no active CDP browser session was available for dashboard automation.
+- `img-9111.jpeg`
+- `baby-shower-garland.png`
+- `birthday-deliveries--extra-02.webp`
+- `basketball-arch.png`
+- `contact-hero.png`
+
+This proves the specific business-owner problem GL reported: customer-uploaded
+photos are stored in the CRM photo table and are queued as owner-only email
+attachments. Customer confirmations remain attachment-free.
+
+The 2026-05-16 smoke was an intentional real business-email smoke, not the
+rollback cleanup verifier. The repeat same-email/five-photo cleanup verifier
+remains the right guard after future source changes because it proves the same
+contract without leaving live test records behind.
 
 ## Owner Files
 
@@ -146,8 +166,9 @@ At closeout, Codex did not have a usable Frappe Cloud management surface:
 - Do not verify Frappe queued attachment refs by reading only MIME attachment
   parts in `Email Queue.message`. For queued private files, inspect
   `Email Queue.attachments` JSON for `fid` refs.
-- Do not claim live production fixed from GitHub push, Frappe Cloud app hash,
-  or route health alone. Site update/migrate plus live form verifier must pass.
+- Do not claim a future live production release fixed from GitHub push, Frappe
+  Cloud app hash, or route health alone. Site update/migrate plus live form
+  verifier or intentional live smoke evidence must pass again.
 
 ## Cross-links
 

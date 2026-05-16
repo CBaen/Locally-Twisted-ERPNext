@@ -1,5 +1,32 @@
 # Locally Twisted - Coding Handoff
 
+Codex live inquiry release closeout on 2026-05-16: full repo commit
+`631f9a8 Run contact intake schema sync on install` and Frappe app mirror commit
+`b4b3bf8 Run contact intake schema sync on install` are live on
+`locallytwisted.v.frappe.cloud`. Frappe Cloud site update `b48j584nua`
+completed successfully with update job `b48oge6unq`, deploy type `Migrate`,
+source bench `bench-39776-000013-f94-virginia`, destination bench
+`bench-39776-000015-f94v`, and the site now reports Active with no update
+available. Live cache clear job `26es8svcaq` succeeded. Route proof after the
+update: `/`, `/#login`, `/contact`, and `/login` all returned HTTP 200 on the
+expected public surfaces. The accepted live smoke used contact name
+`smoke test from cameron`, created Lead `CRM-LEAD-2026-00013`, stored five
+private Lead `File` rows and five `custom_inspiration_photos` rows, sent owner
+Email Queue `683s86r04b` to `locallytwisted@gmail.com` with five attachment
+refs, and sent customer Email Queue `683suhfaa9` with zero photo attachments.
+The staging panic URL was staging, not live: staging root and `/#login`
+rendered Sign In because `Website Settings.home_page` and branding fields had
+drifted; staging was repaired by setting `home_page=home`, LT app branding,
+Standard theme, and clearing cache via Frappe Cloud job `fb85o6ncdh`.
+
+Release-scope warning for the next agent: no uncommitted dirty workspace files
+were mixed into the deployed release commits, but the app mirror release scope
+was broader than the final two-file commit. Compare the previous live app hash
+to the target app mirror commit before promotion, not only `git show HEAD`.
+Failure Recipes:
+`capabilities/failures/frappe-cloud-app-mirror-release-scope-drift.md` and
+`capabilities/failures/frappe-cloud-staging-website-settings-drift.md`.
+
 Codex owner-access hotfix on 2026-05-15: `locallytwisted@gmail.com` now has
 immediate local backend access with the temporary owner password
 `LocalTemp2026!` until GL changes it later. The account is an enabled
@@ -30,8 +57,11 @@ capabilities: `capabilities/recipes/shared-inquiry-form-experience.md`,
 `python scripts/verify/contact_service_logic.py --base-url http://localhost:8081`,
 `python scripts/verify/smoke_forms.py --base-url http://localhost:8081 --form-path /contact --skip-newsletter`,
 `python scripts/verify/book_form_repeat_email_photos.py --base-url http://localhost:8081`,
-and `python scripts/verify/customer_email_policy_contract.py`. This is
-local/source proof only until deployed through Frappe Cloud and reverified live.
+and `python scripts/verify/customer_email_policy_contract.py`. This source is
+now live as part of `631f9a8` / app mirror `b4b3bf8`. The 2026-05-16 live
+happy-path smoke proved the shared form can still save a Lead, store photos,
+and send the owner/customer queues; rerun the dedicated spam/sales fixture gates
+after any future form-security change.
 
 Codex access closeout on 2026-05-15: local human-user access was audited
 against the running ERPNext/Frappe site and DB. Current enabled operator
@@ -68,10 +98,11 @@ as `4422793 Fix inquiry photo storage and owner attachments`; the Frappe Cloud
 app mirror is fixed and pushed as `6a06062 Fix inquiry photo storage and owner
 attachments`. Local proof passed with customer confirmations attachment-free,
 owner notifications carrying queued private File `fid` refs, and CRM photo
-rows matching uploaded Files. The live Frappe Cloud site is not yet proven to
-run this hotfix; deploy the app mirror, run the site update/migrate job, then
-run the live repeat-email/five-photo verifier with authenticated backend CDP
-before claiming production protection. Feature handoff:
+rows matching uploaded Files. Live release proof on 2026-05-16 updated the site
+to app mirror commit `b4b3bf8` and the accepted real smoke proved Lead
+`CRM-LEAD-2026-00013` had five private Lead Files, five CRM photo rows, owner
+Email Queue `683s86r04b` with five queued attachment refs, and customer Email
+Queue `683suhfaa9` with no photo attachments. Feature handoff:
 `workstreams/inquiry-photo-storage-owner-attachments-2026-05-15.md`;
 capability:
 `capabilities/recipes/erpnext-inquiry-photo-delivery-contract.md`; failure

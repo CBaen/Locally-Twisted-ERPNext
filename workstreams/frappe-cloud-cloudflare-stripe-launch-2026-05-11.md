@@ -1,6 +1,6 @@
 # Frappe Cloud, Cloudflare, And Stripe Launch Gate
 
-Last updated: 2026-05-15 by Codex.
+Last updated: 2026-05-16 by Codex.
 
 ## Scope
 
@@ -21,33 +21,38 @@ Current launch posture:
 - The 2026-05-14 connection audit proved public Frappe Cloud route health and
   Cloudflare dynamic-route health. It did not prove direct Frappe Cloud
   dashboard/API control from Codex.
-- The 2026-05-15 inquiry-photo hotfix is pushed to the full repo and Frappe
-  Cloud app mirror, but production is not protected until Frappe Cloud deploy,
-  site update/migrate, and live photo-delivery verifier proof pass.
+- The 2026-05-15 inquiry-photo hotfix and inquiry spam/filter source are live
+  as of the 2026-05-16 Frappe Cloud site update. The accepted real smoke proved
+  CRM photo rows and owner-only Email Queue attachment refs.
+- Staging is separate from live. The 2026-05-16 staging `/#login` failure was
+  Website Settings drift on staging, not a live production outage.
 - Live Stripe checkout remains closed until the separate product/payment gates
   pass.
 
 This file does not authorize live checkout by itself. The controller still owns
 the final go/no-go evidence for payments and ecommerce exposure.
 
-## Final Public Site Release State
+## Current Public Site Release State
 
 | Item | Value |
 |---|---|
-| Frappe Cloud custom app release | `72a4se4v64` |
-| App hash | `04de8212aa7dbf4895716717865fc6e1029c757b` |
-| Bench deploy | `62q1r0otg1`, `Success` |
-| Site update/migrate job | `15s16992i2`, `Success` |
-| Running deploy pipeline | `false` |
+| Full repo source commit | `631f9a8 Run contact intake schema sync on install` |
+| Frappe app mirror commit | `b4b3bf8 Run contact intake schema sync on install` |
+| Previous live app hash | `04de8212aa7dbf4895716717865fc6e1029c757b` |
+| Current site update/migrate job | `b48j584nua`, `Success`; update job `b48oge6unq`, `Success` |
+| Source bench | `bench-39776-000013-f94-virginia` |
+| Destination bench | `bench-39776-000015-f94v` |
+| Live cache clear | `26es8svcaq`, `Success` |
+| Site state after update | Active on `bench-39776-000015-f94v`, no update available |
 | Production domain | `https://locallytwisted.com` |
-| Admin/staging host used for authenticated checks | `https://locallytwisted.v.frappe.cloud` |
+| Frappe Cloud host used for authenticated checks | `https://locallytwisted.v.frappe.cloud` |
 
 ## Tracks
 
 | Track | Current state | Gate |
 |---|---|---|
-| Source/Frappe Cloud | Source and mirror were pushed; final verified live app hash remains `04de8212aa7dbf4895716717865fc6e1029c757b`; new inquiry-photo source is pushed as full repo `4422793` and app mirror `6a06062` but not live-verified | `python scripts/verify/frappe_cloud_preflight.py`; Frappe Cloud bench deploy and site update/migrate must both be successful |
-| Public site/forms | Live `/contact` and BTFP smokes passed on the prior release, but the 2026-05-15 photo-storage/owner-attachment hotfix still needs live proof | `smoke_forms.py` for each route plus `book_form_repeat_email_photos.py` against live with authenticated backend CDP, proving CRM photo rows and owner Email Queue attachment refs |
+| Source/Frappe Cloud | Source and app mirror are live at `631f9a8` / `b4b3bf8`; site update `b48j584nua` and update job `b48oge6unq` succeeded | For future releases: `python scripts/verify/frappe_cloud_preflight.py`; compare previous live app hash to target mirror commit; Frappe Cloud bench deploy and site update/migrate must both be successful |
+| Public site/forms | Live smoke on 2026-05-16 proved Lead `CRM-LEAD-2026-00013`, five private Files, five CRM photo rows, owner Email Queue `683s86r04b` with five attachment refs, and customer Email Queue `683suhfaa9` with zero photo attachments | `smoke_forms.py` for each route plus `book_form_repeat_email_photos.py` against live with authenticated backend CDP after future form changes |
 | Hidden commerce | Website launch does not approve checkout | `python scripts/verify/ecommerce_pause_contract.py` before relying on a paused/no-purchase posture |
 | Cloudflare | Domain now routes to Frappe Cloud for pages/forms; rerun dynamic-route gate after any DNS/cache/security change | `python scripts/verify/cloudflare_launch_readiness.py --base-url https://locallytwisted.com` |
 | Stripe | Live checkout remains blocked | `python scripts/verify/payment_launch_readiness.py --mode live --base-url https://locallytwisted.com` plus one intentional low-risk real payment test |
@@ -82,24 +87,32 @@ Operational rule for future agents: say which surface you verified. Public
 route health, Cloudflare route health, local Docker health, SSH key readiness,
 and Frappe Cloud dashboard/API control are different claims.
 
-## 2026-05-15 Inquiry Photo Hotfix Deploy Boundary
+## 2026-05-16 Inquiry Form Live Release
 
-Source and mirror pushes are complete:
+The inquiry-photo hotfix, inquiry spam/filter hardening, and source-owned
+contact intake schema sync are live. Release handoff:
+`workstreams/inquiry-form-live-release-2026-05-16.md`.
 
-- full ERPNext repo: `4422793 Fix inquiry photo storage and owner attachments`
-- Frappe Cloud app mirror: `6a06062 Fix inquiry photo storage and owner
-  attachments`
+Live smoke receipt:
 
-This is not live proof. The next launch pass must deploy the app mirror commit,
-confirm bench deploy and site update/migrate success, then run:
+- Lead `CRM-LEAD-2026-00013`.
+- Contact name `smoke test from cameron`.
+- Owner subject `New website inquiry from smoke test from cameron`.
+- Owner Email Queue `683s86r04b`, status `Sent`, recipient
+  `locallytwisted@gmail.com`, attachment refs `5`.
+- Customer Email Queue `683suhfaa9`, status `Sent`, attachment refs `0`.
+- Five private Lead Files and five `custom_inspiration_photos` rows.
 
-```powershell
-python scripts\verify\book_form_repeat_email_photos.py --base-url https://locallytwisted.com --admin-base-url https://locallytwisted.v.frappe.cloud --cdp-url http://127.0.0.1:9222
-```
+Scope warning: this release did not mix current dirty working-tree files, but
+the app mirror release contained already-committed changes beyond the final
+two-file source commit. Future Frappe Cloud release review must compare the
+previous live app hash to the target app mirror commit. Do not judge release
+scope only from `git show HEAD`.
 
-The verifier must prove private Lead Files, `custom_inspiration_photos` rows,
-customer queues with no attachments, owner queues with `fid` attachment refs,
-and cleanup. Route health and `frappe_cloud_preflight.py` are not enough.
+Staging warning: `https://locallytwisted-staging.frappe.cloud/#login` showing
+Sign In was staging Website Settings drift, not live production breakage.
+Staging was repaired by setting `home_page=home`, LT branding fields, Standard
+theme, and clearing cache with job `fb85o6ncdh`.
 
 ## Production Config Contract
 
@@ -168,6 +181,12 @@ python scripts/verify/cloudflare_launch_readiness_contract.py
 - Default blank `System Settings.language` and `time_zone` on a fresh Frappe
   Cloud site must be filled before saving `System Settings`.
 - After deploy/migrate, run live route/API proofs, not only dashboard checks.
+- Compare the previous live app hash to the target app mirror commit before
+  promotion. A clean final commit does not prove the full deployed diff is
+  narrow.
+- Staging `Website Settings.home_page`, app branding, favicon, and theme are
+  release-critical config. A staging root that shows login while `/home` works
+  is config drift, not proof that live is down.
 
 ## Live Verification Receipt
 
@@ -195,6 +214,17 @@ email body content, and cleaned verifier-owned ERPNext records. A final cleanup
 preview returned zero verifier-owned records across Lead, File, Email Queue,
 Communication, Contact, Task, ToDo, Event, and Comment.
 
+Passed on 2026-05-16 after site update `b48j584nua` / update job
+`b48oge6unq`:
+
+- `/`, `/#login`, `/contact`, and `/login` returned expected public surfaces.
+- Live real smoke `smoke test from cameron` created Lead
+  `CRM-LEAD-2026-00013`.
+- The Lead had five private Files and five `custom_inspiration_photos` rows.
+- Owner Email Queue `683s86r04b` was `Sent` to `locallytwisted@gmail.com`
+  with five attachment refs.
+- Customer Email Queue `683suhfaa9` was `Sent` with zero photo attachments.
+
 ## Current Blockers / Deferrals
 
 - Live Stripe checkout is blocked until live config, policy URLs, webhook, and
@@ -203,5 +233,3 @@ Communication, Contact, Task, ToDo, Event, and Comment.
   launch and needs its own product/payment/customer-email proof.
 - Any future DNS, Cloudflare cache/security, or Frappe Cloud release change
   needs the relevant live route/API/form gates rerun.
-- Inquiry-photo owner delivery remains pending until app mirror commit
-  `6a06062` is deployed, migrated, and live-verified.

@@ -81,12 +81,26 @@ docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute 
 All listed gates passed. The Docker/Frappe command emitted existing cssutils
 warnings for unrelated CSS values but returned `ok: true`.
 
-## Live Release Gate
+## Live Status
 
-This slice is source-ready locally, not live-proven until the Frappe Cloud app
-release/site update is complete and the live form gates are rerun.
+The source for this slice is now live as part of the 2026-05-16 Frappe Cloud
+site update:
 
-Minimum live proof after deploy:
+| Field | Value |
+|---|---|
+| Full repo source commit | `631f9a8 Run contact intake schema sync on install` |
+| Frappe app mirror commit | `b4b3bf8 Run contact intake schema sync on install` |
+| Frappe Cloud site update | `b48j584nua`, `Success` |
+| Frappe Cloud update job | `b48oge6unq`, `Success` |
+| Live route proof | `/`, `/#login`, `/contact`, `/login` returned HTTP 200 on expected public surfaces |
+| Live smoke proof | `smoke test from cameron` created Lead `CRM-LEAD-2026-00013` and sent customer/owner queues |
+
+The 2026-05-16 live smoke proved the customer happy path, Lead creation, photo
+storage, and owner/customer email paths after deploy. It did not specifically
+exercise the sales-suppression branch or bot rejection fixtures on live.
+
+Use these gates after any future form-security, spam-filter, token, honeypot,
+submit, email, or file-handling change:
 
 ```powershell
 python scripts\verify\inquiry_spam_gate.py --base-url https://locallytwisted.com
@@ -96,7 +110,9 @@ python scripts\verify\book_form_repeat_email_photos.py --base-url https://locall
 ```
 
 Use `LT_BACKEND_BASE_URL` / `LT_BACKEND_CDP_URL` as needed for authenticated
-backend proof. Do not claim production spam protection from local-only results.
+backend proof. The spam/sales classifier should be considered live code, but
+future changes still require the dedicated live fixture gates before claiming a
+new production-hardening release.
 
 ## Investigation Notes
 

@@ -11,11 +11,12 @@ queueing, stale idempotency rows, and the verifiers that keep the submit path
 honest. It does not own product-page quote emails, paid receipts, invoice
 emails, or finance/legal outbound documents.
 
-2026-05-15 follow-up: the May 12 proof was sufficient for repeat same-email
+2026-05-15/16 follow-up: the May 12 proof was sufficient for repeat same-email
 submit, customer/owner queue existence, body content, recipients, and cleanup.
 It was not sufficient for inquiry-photo delivery because it did not inspect CRM
-photo rows or owner Email Queue attachment refs. The dedicated follow-up is
-`workstreams/inquiry-photo-storage-owner-attachments-2026-05-15.md`.
+photo rows or owner Email Queue attachment refs. The dedicated follow-ups are
+`workstreams/inquiry-photo-storage-owner-attachments-2026-05-15.md` and
+`workstreams/inquiry-form-live-release-2026-05-16.md`.
 
 ## Regression
 
@@ -90,8 +91,10 @@ owns the schema and the site update job succeeds.
 - 2026-05-15 source now adds a stricter photo-delivery contract: uploaded
   photos must appear as private Lead Files, `custom_inspiration_photos` rows,
   and owner-only Email Queue attachment refs; customer confirmations remain
-  attachment-free and count-only. This source fix is pushed but not yet
-  live-verified on Frappe Cloud.
+  attachment-free and count-only. This source fix was live-verified on
+  2026-05-16 by Lead `CRM-LEAD-2026-00013`, owner Email Queue `683s86r04b`
+  with five attachment refs, and customer Email Queue `683suhfaa9` with zero
+  attachments.
 
 Live DB evidence from the screenshot submissions:
 
@@ -197,6 +200,7 @@ Live route smokes both reported `FORM SHAPE OK`, `SUCCESS UI VISIBLE`,
 - `workstreams/form-submission-experience.md`
 - `workstreams/customer-email-policy-boundary.md`
 - `workstreams/inquiry-photo-storage-owner-attachments-2026-05-15.md`
+- `workstreams/inquiry-form-live-release-2026-05-16.md`
 - `workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11.md`
 - `capabilities/recipes/shared-inquiry-form-experience.md`
 - `capabilities/recipes/customer-email-delivery-branding-contract.md`

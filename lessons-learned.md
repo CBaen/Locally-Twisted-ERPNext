@@ -2870,3 +2870,46 @@ Guard both the spam gate and the false-positive boundary with verifiers.
 **Avoid:** blocking customers because they mention corporate, marketing,
 school, nonprofit, or business context, or silently dropping all evidence of a
 submission that might still need review.
+
+---
+
+## 2026-05-16 - A clean last commit is not a release-scope audit
+
+**Lesson:** For Frappe Cloud custom app releases, release scope is the diff from
+the previous live app hash to the target app mirror commit. A clean final
+commit and a dirty-worktree audit answer narrower questions.
+
+**What happened:** The 2026-05-16 inquiry release did not mix current
+uncommitted dirty files into the deployed commits. However, the app mirror
+target contained already-committed changes beyond the final source commit
+`631f9a8`. That meant "dirty files were not deployed" was true, but not enough
+to describe everything the live app update promoted.
+
+**Do this next time:** Capture the current live app hash/source point, target
+mirror commit, old-live-to-target file diff categories, site update/migrate
+result, and live verifier receipt before promotion. Use the dirty-worktree
+check only to prove uncommitted local edits were not staged.
+
+**Avoid:** saying "only this commit went live" from `git show HEAD`, or treating
+app mirror scope as equivalent to the final full-repo commit.
+
+---
+
+## 2026-05-16 - Name staging versus live before diagnosing a panic URL
+
+**Lesson:** A Frappe Cloud staging URL can be broken while live is healthy.
+Environment naming is not a formality during incident response; it determines
+which records, settings, and blast radius are real.
+
+**What happened:** GL reported `https://locallytwisted-staging.frappe.cloud/#login`
+as live broken. That URL was staging. Staging root and `/#login` rendered Sign
+In because `Website Settings.home_page` and branding fields were unset, while
+live routes were separately healthy.
+
+**Do this next time:** Say the environment out loud, check `/`, `/#login`,
+`/home`, `/contact`, and Website Settings parity, then repair staging config
+without implying production was changed. Verify live separately before making a
+live outage claim.
+
+**Avoid:** escalating a staging-only root/login drift into a live breakage
+claim, or debugging source code before checking Frappe Website Settings.

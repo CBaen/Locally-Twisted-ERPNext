@@ -1,7 +1,7 @@
 ---
 name: ERPNext inquiry photo delivery contract
 level: recipe
-last_verified: 2026-05-15
+last_verified: 2026-05-16
 currently_true: true
 ---
 
@@ -72,6 +72,16 @@ $env:LT_BACKEND_CDP_URL='http://127.0.0.1:9222'
 python scripts\verify\book_form_repeat_email_photos.py --base-url https://locallytwisted.com --admin-base-url https://locallytwisted.v.frappe.cloud --cdp-url http://127.0.0.1:9222
 ```
 
+2026-05-16 live proof used an intentional real business-email smoke instead of
+the cleanup verifier. Receipt:
+
+- source `631f9a8`, app mirror `b4b3bf8`;
+- Frappe Cloud site update `b48j584nua` and update job `b48oge6unq` succeeded;
+- Lead `CRM-LEAD-2026-00013` stored five private Files and five CRM photo rows;
+- owner Email Queue `683s86r04b` was `Sent` to `locallytwisted@gmail.com` with
+  five attachment refs;
+- customer Email Queue `683suhfaa9` was `Sent` with zero photo attachments.
+
 ## Failure Modes
 
 - Private `File` rows exist, but the CRM photo table is empty.
@@ -85,10 +95,13 @@ python scripts\verify\book_form_repeat_email_photos.py --base-url https://locall
   backend storage/attachment contract.
 - A GitHub app mirror push is treated as live proof before Frappe Cloud site
   update and live verifier proof.
+- The final source commit is treated as the complete release scope instead of
+  comparing the previous live app hash to the target app mirror commit.
 
 ## Related
 
 - `../failures/public-form-photo-storage-owner-attachment-gap.md`
+- `../failures/frappe-cloud-app-mirror-release-scope-drift.md`
 - `customer-email-delivery-branding-contract.md`
 - `erpnext-intake-form-parity.md`
 - `shared-inquiry-form-experience.md`

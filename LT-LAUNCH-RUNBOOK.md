@@ -1,6 +1,6 @@
 # Locally Twisted Launch Runbook
 
-Last updated: 2026-05-15 by Codex.
+Last updated: 2026-05-16 by Codex.
 
 This is the plain launch doc at the project root.
 
@@ -21,20 +21,25 @@ checkout remains paused or quote-first.
 The 2026-05-14 connection audit proves public route health, not direct Frappe
 Cloud dashboard/API control from Codex.
 
-The 2026-05-15 inquiry-photo hotfix is pushed in source and the Frappe Cloud
-app mirror, but live production is not proven on that fix until Frappe Cloud
-deploy, site update/migrate, and the live repeat-email/five-photo verifier
-pass.
+The 2026-05-15 inquiry-photo hotfix is now live and proved on 2026-05-16 by a
+real company-email smoke with five photos. That smoke proved CRM photo rows and
+owner-only queued attachment refs. Ecommerce/live checkout is still blocked.
 
 ## Current Confirmed State
 
 1. Frappe Cloud
-   - Live custom app release: `72a4se4v64`.
-   - Live app hash: `04de8212aa7dbf4895716717865fc6e1029c757b`.
-   - Final bench deploy: `62q1r0otg1`, status `Success`.
-   - Final site update/migrate job: `15s16992i2`, status `Success`.
-   - `deploy_in_progress=false`.
-   - `has_running_release_pipeline=false`.
+   - Current full repo source commit:
+     `631f9a8 Run contact intake schema sync on install`.
+   - Current Frappe app mirror commit:
+     `b4b3bf8 Run contact intake schema sync on install`.
+   - Previous live app hash:
+     `04de8212aa7dbf4895716717865fc6e1029c757b`.
+   - Current site update/migrate job: `b48j584nua`, status `Success`.
+   - Current update job: `b48oge6unq`, status `Success`.
+   - Source bench: `bench-39776-000013-f94-virginia`.
+   - Destination bench: `bench-39776-000015-f94v`.
+   - Cache clear job: `26es8svcaq`, status `Success`.
+   - Site state after update: Active, no update available.
    - 2026-05-14 public route probe: `https://locallytwisted.com` returned HTTP
      200 with `Server: Frappe Cloud`.
    - 2026-05-14 API probe: `/api/method/frappe.ping` returned HTTP 200 with
@@ -59,9 +64,11 @@ pass.
    - `/balloon-twisting-and-face-painting` live smoke passed.
    - Strict live repeat-email/five-photo proof passed with customer and business
      Email Queue body/recipient verification and cleanup.
-   - 2026-05-15 source now requires private Lead Files, CRM photo rows, and
-     owner Email Queue attachment refs for inquiry photos. That source fix is
-     not yet live-verified on Frappe Cloud.
+   - 2026-05-16 real company-email smoke passed with contact name
+     `smoke test from cameron`, Lead `CRM-LEAD-2026-00013`, five private Lead
+     Files, five CRM photo rows, owner Email Queue `683s86r04b` with five
+     attachment refs, and customer Email Queue `683suhfaa9` with no photo
+     attachments.
 
 4. Stripe / ecommerce
    - Stripe CLI access on `wardenclyffe` works for the Built by Cameron account,
@@ -122,9 +129,6 @@ python scripts/verify/stripe_amount_parity_contract.py
    business approval before live payments.
 3. Public ecommerce/product checkout remains separate from the pages/forms
    launch and must pass its own product/payment/customer-email proof.
-4. The inquiry photo storage/owner attachment hotfix must be deployed to
-   Frappe Cloud and live-verified before claiming production photo delivery is
-   protected.
 
 ## Do Not Do
 
@@ -133,3 +137,7 @@ python scripts/verify/stripe_amount_parity_contract.py
 3. Do not paste Stripe, Cloudflare, or Frappe Cloud secrets into chat or docs.
 4. Do not call a Frappe Cloud deploy complete until both bench deploy and site
    update/migration have succeeded and live route/API verifiers pass.
+5. Do not call a future release narrow from the final commit alone. Compare the
+   previous live app hash to the target app mirror commit before promotion.
+6. Do not treat a staging root login screen as live breakage without naming the
+   environment and checking Website Settings parity.

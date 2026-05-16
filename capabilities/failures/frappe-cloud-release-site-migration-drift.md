@@ -4,13 +4,16 @@ type: failure
 failure_kind: release_gate_gap
 schema_version: 0.1
 date_discovered: 2026-05-12
-last_updated: 2026-05-12
+last_updated: 2026-05-16
 status: guarded
 scope: project
 owner_context: Locally Twisted Frappe Cloud release and live cutover
 related_capabilities:
   - ../recipes/frappe-cloud-cloudflare-stripe-launch-gate.md
   - ../recipes/erpnext-intake-form-parity.md
+related_failures:
+  - frappe-cloud-app-mirror-release-scope-drift.md
+  - frappe-cloud-staging-website-settings-drift.md
 tags:
   - locally-twisted
   - frappe-cloud
@@ -77,13 +80,19 @@ route/API/form verifiers pass. Source code must create the schema it writes.
 - Do not ignore a failed site update because the public homepage looks newer.
 - Do not run optional legacy migrations against fields that are absent on the
   current site.
+- Do not use this guard as a substitute for release-scope review. Site
+  migration success proves the target migrated; it does not prove the target
+  app diff was narrow.
 
 ## Cross-links
 
 - `../../workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11.md`
+- `../../workstreams/inquiry-form-live-release-2026-05-16.md`
 - `../../LT-LAUNCH-RUNBOOK.md`
 - `../recipes/frappe-cloud-cloudflare-stripe-launch-gate.md`
 - `../recipes/erpnext-intake-form-parity.md`
+- `frappe-cloud-app-mirror-release-scope-drift.md`
+- `frappe-cloud-staging-website-settings-drift.md`
 
 ## Evidence Quality
 

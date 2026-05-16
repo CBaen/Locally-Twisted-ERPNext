@@ -1,7 +1,7 @@
 ---
 name: ERPNext intake form parity
 level: recipe
-last_verified: 2026-05-15
+last_verified: 2026-05-16
 ---
 
 ## What it does
@@ -121,6 +121,13 @@ python scripts/verify/book_form_repeat_email_photos.py --base-url https://locall
 ```
 
 If running the full writing smoke test, delete the generated test Lead/newsletter records afterward.
+
+2026-05-16 live release receipt: site update `b48j584nua` / update job
+`b48oge6unq` succeeded for full repo `631f9a8` and app mirror `b4b3bf8`; real
+smoke Lead `CRM-LEAD-2026-00013` proved five private Files, five
+`custom_inspiration_photos` rows, owner Email Queue `683s86r04b` with five
+attachment refs, and customer Email Queue `683suhfaa9` with zero photo
+attachments.
 
 ## Failure modes
 

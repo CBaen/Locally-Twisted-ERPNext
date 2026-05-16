@@ -1,7 +1,7 @@
 ---
 name: Frappe Cloud Cloudflare Stripe launch gate
 level: recipe
-last_verified: 2026-05-15
+last_verified: 2026-05-16
 currently_true: true
 ---
 
@@ -40,10 +40,16 @@ Default public launch posture:
 - As of 2026-05-14, public Frappe Cloud route health and Cloudflare
   dynamic-route health are verified, but direct Frappe Cloud dashboard/API/CLI
   management from Codex is not proven by those checks.
-- As of 2026-05-15, the inquiry-photo storage/owner attachment hotfix is
-  pushed to source and the Frappe Cloud app mirror, but it is not a live release
-  until bench deploy, site update/migrate, and live photo-delivery verifier
-  proof pass.
+- As of 2026-05-16, the inquiry-photo storage/owner attachment hotfix and
+  inquiry form hardening are live at full repo `631f9a8` and app mirror
+  `b4b3bf8`; site update `b48j584nua` / update job `b48oge6unq` succeeded, and
+  the accepted live smoke proved CRM photo rows plus owner-only Email Queue
+  attachment refs.
+- Future release scope must be compared from previous live app hash to target
+  app mirror commit. Dirty-worktree checks do not prove full deployed scope.
+- Staging root/login behavior depends on Website Settings parity. Check
+  staging `/`, `/#login`, `/home`, `/contact`, `home_page`, branding, favicon,
+  and theme before calling source broken or live broken.
 
 ## Human Access Boundary
 
@@ -105,6 +111,10 @@ python scripts/verify/book_form_repeat_email_photos.py --base-url https://locall
   routes and webhook path pass.
 - Treating a successful Frappe Cloud bench deploy as proof the site is running
   the new code before site update/migration succeeds.
+- Treating the final source commit as the full Frappe Cloud release scope
+  instead of comparing previous live app hash to target app mirror commit.
+- Treating staging `/#login` rendering Sign In as live breakage before checking
+  environment and Website Settings parity.
 - Letting custom fields or custom DocTypes exist only in the local database
   instead of source-controlled install/migration code.
 - Querying optional legacy fields during migration without checking current
@@ -162,6 +172,23 @@ On 2026-05-15:
 - `frappe_cloud_preflight.py` and `cloudflare_launch_readiness.py --base-url
   https://locallytwisted.com` passed after the source push, proving preflight
   and route health only.
-- Direct Frappe Cloud management was still unavailable from Codex in this
+- Direct Frappe Cloud management was still unavailable from Codex in that
   session, so live deploy/site update and live repeat-email/five-photo verifier
-  proof remain pending.
+  proof remained pending until the 2026-05-16 release below.
+
+On 2026-05-16:
+
+- Full repo commit `631f9a8 Run contact intake schema sync on install` and app
+  mirror commit `b4b3bf8 Run contact intake schema sync on install` were live.
+- Frappe Cloud site update `b48j584nua` and update job `b48oge6unq` succeeded;
+  cache clear job `26es8svcaq` succeeded.
+- Live routes `/`, `/#login`, `/contact`, and `/login` returned expected
+  surfaces.
+- Real company-email smoke `smoke test from cameron` created Lead
+  `CRM-LEAD-2026-00013` with five private Files and five CRM photo rows. Owner
+  Email Queue `683s86r04b` sent to `locallytwisted@gmail.com` with five
+  attachment refs; customer Email Queue `683suhfaa9` sent with zero photo
+  attachments.
+- Staging `/#login` rendered Sign In because staging Website Settings drifted,
+  not because live was broken. Staging was repaired and cache clear job
+  `fb85o6ncdh` succeeded.

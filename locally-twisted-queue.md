@@ -69,24 +69,27 @@ the architecture. Guards: `python scripts/verify/product_page_architecture_contr
 color variant axes to use source/backend recipe authority before targeting
 `color_recipes`; otherwise they remain sale-unit `selected_options`.
 
-**Frappe Cloud/Cloudflare/Stripe launch state (2026-05-14):** Source handoff is
+**Frappe Cloud/Cloudflare/Stripe launch state (2026-05-16):** Source handoff is
 `LT-LAUNCH-RUNBOOK.md`, with the deeper technical gate at
 `workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11.md`.
 `locallytwisted.com` is now serving the Frappe Cloud site for pages/forms.
-Final custom app release `72a4se4v64`, app hash
-`04de8212aa7dbf4895716717865fc6e1029c757b`, bench deploy `62q1r0otg1`, and
-site update/migrate job `15s16992i2` are successful. Live `/contact`, live BTFP
-smoke, and strict repeat-email/five-photo customer+owner Email Queue content
-proof passed and cleaned verifier records. 2026-05-14 connection audit: public
-home returned HTTP 200 with `Server: Frappe Cloud`, `frappe.ping` returned
-`pong`, Cloudflare dynamic-route readiness passed 10 checks with 0
-blockers/warnings, and Frappe Cloud preflight passed after stale DNS-target
-wording was corrected. These are route/preflight claims, not proof of direct
-Frappe Cloud dashboard/API control from Codex. Remaining active launch blocker
-is not pages/forms; it is live checkout. Keep Stripe/ecommerce blocked until
-live Stripe config, product scope, policy URLs/webhook, and one real low-risk
-payment test pass. Rerun Cloudflare dynamic-route and live form gates after any
-future DNS/cache/security/Frappe Cloud release change.
+Current source is full repo `631f9a8 Run contact intake schema sync on install`
+and Frappe app mirror `b4b3bf8 Run contact intake schema sync on install`.
+Frappe Cloud site update `b48j584nua` and update job `b48oge6unq` succeeded;
+the site is Active on `bench-39776-000015-f94v`, and cache clear job
+`26es8svcaq` succeeded. Live route proof after update: `/`, `/#login`,
+`/contact`, and `/login` returned expected surfaces. Live real company-email
+smoke `smoke test from cameron` created Lead `CRM-LEAD-2026-00013`, stored five
+private Lead Files and five CRM photo rows, sent owner Email Queue `683s86r04b`
+with five attachment refs, and sent customer Email Queue `683suhfaa9` with no
+photo attachments. 2026-05-14 connection audit still stands for Cloudflare
+dynamic-route readiness. Remaining active launch blocker is not pages/forms; it
+is live checkout. Keep Stripe/ecommerce blocked until live Stripe config,
+product scope, policy URLs/webhook, and one real low-risk payment test pass.
+Rerun Cloudflare dynamic-route and live form gates after any future
+DNS/cache/security/Frappe Cloud release change. Future release review must
+compare the previous live app hash to the target app mirror commit; do not use
+the final commit alone as release scope proof.
 
 **Reconciliation note (2026-05-07; refreshed 2026-05-11):** `scripts/verify/layout_fit.spec.js` is restored and currently verifies through `npm run test:layout-fit` (325 checks inside `npm run test:public-verify` after route/breakpoint matrix expansion and generated hero work). `npm run test:container-contract` is the executable route-level public container contract and is part of `npm run test:website-verify` / `npm run test:public-verify`. `npm run test:interactive-layout` adds stateful public UI checks, including the compact generated-photo hero contract. `npm run test:checkout-experience` now covers open `/cart` and `/checkout` rendering in the current ecommerce testing mode; `npm run test:ecommerce-full` adds shop smoke, prices, variant media, and rollback-safe checkout backend contracts. Event Playground / PlayCanvas source work moved to `C:\Users\baenb\projects\design-studio\workstreams\locally-twisted-plan-custom-decor-v2\` and is no longer part of the ASAP website launch lane; the LT repo owns only the hidden Frappe wrapper and contact handoff. Its latest source handoff is `event-playground-v2` plus `design-studio-v1`, with quote math gated behind LT review. Treat `.planning/phases/01-customer-site-and-storefront/PLAN.md` as historical; `/contact` is still the primary quote/inquiry route and `/book` redirects to `/contact?intent=quick`.
 
@@ -107,15 +110,17 @@ Recipes:
 `capabilities/failures/public-form-stale-email-queue-idempotency.md` and
 `capabilities/failures/public-form-repeat-email-lead-conflict.md`.
 
-**Public form photo storage/owner attachment rule (2026-05-15):** inquiry
+**Public form photo storage/owner attachment rule (2026-05-16):** inquiry
 photos are not proven by a body count or a generic Lead `File` attachment.
 They must exist as private Lead `File` rows, CRM-visible
 `custom_inspiration_photos` rows, and owner-only Email Queue attachment refs.
 Customer confirmations remain attachment-free and only report the received
-count. Source fix is pushed in the full repo (`4422793`) and Frappe Cloud app
-mirror (`6a06062`), but production is not protected until Frappe Cloud deploy,
-site update/migrate, and the live repeat-email/five-photo verifier pass.
+count. Source fix was deployed to live in full repo `631f9a8` and app mirror
+`b4b3bf8`; the accepted 2026-05-16 live smoke proved five private Files, five
+CRM photo rows, owner Email Queue `683s86r04b` with five attachment refs, and
+customer Email Queue `683suhfaa9` with zero attachment refs.
 Handoff: `workstreams/inquiry-photo-storage-owner-attachments-2026-05-15.md`;
+release handoff: `workstreams/inquiry-form-live-release-2026-05-16.md`;
 capability:
 `capabilities/recipes/erpnext-inquiry-photo-delivery-contract.md`; Failure
 Recipe:
@@ -161,8 +166,9 @@ services. Source handoff:
 `python scripts/verify/inquiry_spam_gate.py --base-url http://localhost:8081`
 and
 `python scripts/verify/inquiry_sales_solicitation_filter.py --base-url http://localhost:8081`.
-Production is not protected until the Frappe Cloud app release/site update is
-done and these same gates pass against `https://locallytwisted.com`.
+This code is live as of `631f9a8` / `b4b3bf8`; the 2026-05-16 live smoke proved
+the happy path, but not the dedicated live bot/sales fixture branches. Rerun the
+spam and sales gates against live after any future form-security change.
 
 **Operating law (2026-05-08):** no hand-authored production monoliths. Files should have one clear job unless they are explicitly research/reference artifacts. Use `workstreams/no-monolith-operating-contract.md` and the global capability `C:\Users\baenb\capabilities\principles\no-monolith-files.md` before expanding large source, template, CSS, verifier, script, or project-doc files.
 
@@ -207,14 +213,6 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 - Hetzner-shaped header + footer + 3 mega menus + mobile drawer + newsletter strip + `LT Newsletter Signup` DocType + endpoint + smoke test. 6 pre-task fixes (including unblocking /book). Triadic-construction-v2 + GL Proxy + fix round + audit pass. See `HANDOFF.md`, `MIRROR-REBUILD-COMPLETE.md`, `research/triadic-build-chrome-rebuild/` for receipts.
 
 **Remaining (in priority order):**
-- [P0] **Deploy and live-verify the inquiry photo storage hotfix.** The source
-  and app mirror commits are pushed, but live Frappe Cloud is not verified on
-  this fix. Deploy app mirror commit `6a06062`, confirm the bench deploy and
-  site update/migrate job both succeed, then run
-  `python scripts/verify/book_form_repeat_email_photos.py --base-url https://locallytwisted.com --admin-base-url https://locallytwisted.v.frappe.cloud --cdp-url http://127.0.0.1:9222`
-  with authenticated backend access. Do not claim production fixed until the
-  live verifier proves CRM photo rows and owner Email Queue attachment refs and
-  cleans verifier-owned records.
 - [P0] **Ready-to-order ecommerce launch hardening and real catalog import gate.** Active front-door handoff: `workstreams/ecommerce-audit/README.md`; current post-import checkout closeout: `workstreams/ecommerce-audit/post-import-checkout-launch-closeout-2026-05-11.md`; import gate handoff: `workstreams/ecommerce-audit/product-import-hardening-gate-2026-05-11.md`; payment cutover checklist: `workstreams/payment-portal-live-cutover-checklist-2026-05-11.md`; receiving architecture handoff/capability: `workstreams/erpnext-ecommerce-receiving-architecture.md` and `capabilities/recipes/erpnext-ecommerce-receiving-architecture.md`. Current local proof uses the corrected manifest: 48 kept products and 5 owner-explicit Classic exclusions (`classic-organic-balloon-garland`, `classic-arch`, `classic-column`, `classic-organic-columns`, `classic-organic-arch`). The approved local import completed with exit 0 against the local ERPNext `frontend` site only and proved the guarded upsert/write path; it is not a delete/recreate transcript. Final browser proof passed with `& "C:\Program Files\nodejs\node.exe" scripts/verify/post_import_checkout_proof.js` for Easter Balloon Cups, 7' Butterfly Column, Graduation Grab n Go, 6' Graduation stands, and Unicorn Bouquet. 2026-05-12 verifier hardening now proves visible color-drawer selections produce `color_recipes` for 7' Butterfly Column and Graduation Grab n Go, then passes the non-mutating checkout totals preview before accepting checkout summary proof. Backend contracts are green for `product_import_readiness_gate`, `post_import_catalog_state`, `direct_checkout_target_contract`, and `cart_checkout_contract`; `post_import_catalog_state` now fails loudly if any included product is missing, unpublished, disabled, or unpriced. Direct paid checkout still requires explicit `simple_product|checkout`; blank, partial, inferred, quote-first, and needs-review Website Item states fail closed. Remaining caveats: 8 review-only add-on axes are protected by quote-first fallback until mapped, the five Classic exclusions remain quote-first, current product records are still local import/proof evidence rather than final real catalog approval, and live Frappe Cloud/Stripe/DNS/webhook/real payment gates remain separate.
   2026-05-12 nav/search review closeout is `workstreams/ecommerce-audit/ready-to-order-nav-search-backend-gate-2026-05-12.md`: Ready-to-Order quick links now require owner include plus backend `simple_product|checkout`, owner include cannot bypass checkout eligibility, and the search contract treats filtered backend-approved links as hidden rather than removed from the DOM.
   2026-05-14 product blueprint authoring handoff is `workstreams/ecommerce-audit/product-blueprint-authoring-2026-05-14.md`; capability is `capabilities/recipes/erpnext-product-blueprint-authoring.md`. Employees can now define product basics, options, color recipes, add-ons, and conditional pricing in `LT Product Blueprint`, preview a no-write apply plan, and use guarded local Desk apply to create unpublished ERPNext product records. Local `frontend` has `lt_allow_local_blueprint_apply=1` for this test harness. Do not enable that gate on staging/live or publish generated Website Items without product-page browser proof, cart/checkout proof, media/conditional-pricing/add-on family mapping, refreshed import safety evidence, and explicit release approval.
