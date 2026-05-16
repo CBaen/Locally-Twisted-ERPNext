@@ -17,6 +17,9 @@ It covers:
 Cross-link: the external marketing reviewer feature lives at
 `workstreams/marketing-review-access-2026-05-15.md`.
 
+Owner phone/action feature handoff:
+`workstreams/owner-phone-action-center-2026-05-15.md`.
+
 ## Current Direction
 
 GL correction on 2026-05-15: this access track should focus on the business
@@ -89,6 +92,9 @@ Other current facts:
 Owner:
 
 - `LT Owner Home` is the owner Desk entry.
+- `Call or Text` is now the first owner fast path and opens `/owner-actions`,
+  a phone-first local page backed by owner-safe DTOs instead of raw ERPNext
+  records.
 - Owner personas can work inquiries, bookings, customers, contacts, tasks,
   projects, and catalog tools.
 - `cameron@builtbycameron.com` also retains support/admin roles.
@@ -98,6 +104,14 @@ Owner:
 - Immediate-access receipt on 2026-05-15: `locallytwisted@gmail.com` was
   verified through `npm run test:desk-owner` with the temporary owner password
   and landed on the Owner Home command center.
+- Assistant integration boundary: ChatGPT is only one future adapter. The
+  current local implementation is provider-neutral and OAuth/API-compatible at
+  the DTO boundary, but external assistant auth is not enabled. Future OAuth,
+  API-key, MCP, OpenAPI, or other provider adapters must consume the owner DTOs
+  and pass their own auth verifier before exposure.
+- Initial owner write surface is `log_contact_attempt` only. It creates one
+  Comment on the source record and must not queue customer email, send texts,
+  place calls, mutate stages, create finance records, or submit orders.
 
 Manager:
 
@@ -172,7 +186,10 @@ python scripts/verify/customer_account_provisioning_contract.py
 python scripts/verify/customer_documents_contract.py
 python scripts/verify/customer_contact_points_contract.py
 python scripts/verify/marketing_review_access_boundary.py
+python scripts/setup/sync_owner_demo_data.py
+python scripts/verify/owner_business_access_contract.py
 npm run test:marketing-review-access
+$env:LT_DESK_TEST_USER='locallytwisted@gmail.com'; $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:owner-actions
 $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-personas
 $env:LT_DESK_TEST_USER='lt-owner-temp@example.com'; $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner
 $env:LT_DESK_TEST_USER='locallytwisted@gmail.com'; $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner
@@ -194,6 +211,13 @@ Known yellow/non-blocking result:
 
 - Verify the exact Jeff/business-owner cutover account and owner daily path
   before improving any secondary profile.
+- Before any real assistant integration, add the external-provider auth gate
+  and token verifier. Local Frappe session proof is not enough for ChatGPT,
+  MCP, OpenAPI, or other API clients.
+- Keep `/owner-actions` fake records local and clearly marked with
+  `LT-DEMO-OWNER-ACTIONS`; remove them with
+  `python scripts/setup/sync_owner_demo_data.py --cleanup` when no longer
+  useful for demo/training.
 - Keep Cameron/Built by Cameron support access intact while narrowing the
   client-facing owner path.
 - Add focused failing permission-matrix verifiers only for exposure that

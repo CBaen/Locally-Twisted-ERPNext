@@ -1,0 +1,104 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+<style>{{ page_css }}</style>
+
+{% set data = owner_action_center %}
+<section class="lt-owner-actions" data-lt-owner-actions>
+  <div class="lt-owner-actions__shell">
+    <header class="lt-owner-actions__top">
+      <div>
+        <p class="lt-owner-actions__eyebrow">Locally Twisted owner</p>
+        <h1 class="lt-owner-actions__title">Call or text</h1>
+        <p class="lt-owner-actions__lede">Urgent people, upcoming bookings, and owner-safe business details.</p>
+      </div>
+      <a class="lt-owner-actions__desk-link" href="/app/Workspaces">Desk</a>
+    </header>
+
+    <div class="lt-owner-actions__metrics" aria-label="Owner summary">
+      <div class="lt-owner-actions__metric">
+        <strong>{{ data.summary.urgent_contact_count }}</strong>
+        <span>Urgent contacts</span>
+      </div>
+      <div class="lt-owner-actions__metric">
+        <strong>{{ data.summary.new_inquiry_count }}</strong>
+        <span>New inquiries</span>
+      </div>
+      <div class="lt-owner-actions__metric">
+        <strong>{{ data.summary.upcoming_booking_count }}</strong>
+        <span>Upcoming bookings</span>
+      </div>
+      <div class="lt-owner-actions__metric">
+        <strong>{{ data.summary.open_followup_count }}</strong>
+        <span>Open follow-ups</span>
+      </div>
+    </div>
+
+    <div class="lt-owner-actions__layout">
+      <section class="lt-owner-actions__panel" aria-label="Urgent contacts">
+        <header class="lt-owner-actions__panel-head">
+          <h2>Urgent</h2>
+          <span>{{ data.urgent_contacts|length }} ready</span>
+        </header>
+        <div class="lt-owner-actions__list">
+          {% for row in data.urgent_contacts %}
+          <article class="lt-owner-actions__card" data-owner-action-card data-source="{{ row.source_doctype }}" data-source-name="{{ row.source_name }}">
+            <div class="lt-owner-actions__card-main">
+              {% if row.stage %}<span class="lt-owner-actions__status">{{ row.stage }}</span>{% endif %}
+              <h3>{{ row.title }}</h3>
+              <p class="lt-owner-actions__meta">
+                {{ row.reason }}{% if row.when %} - {{ row.when }}{% endif %}{% if row.location %} - {{ row.location }}{% endif %}
+              </p>
+              {% if row.message_draft %}
+              <p class="lt-owner-actions__draft">{{ row.message_draft }}</p>
+              {% endif %}
+            </div>
+            <div class="lt-owner-actions__actions">
+              {% if row.phone_href %}
+              <a class="lt-owner-actions__button lt-owner-actions__button--primary" href="{{ row.phone_href }}">Call</a>
+              <a class="lt-owner-actions__button lt-owner-actions__button--secondary" href="{{ row.sms_href }}">Text</a>
+              {% endif %}
+              <a class="lt-owner-actions__button" href="{{ row.record_url }}">Record</a>
+            </div>
+          </article>
+          {% else %}
+          <p class="lt-owner-actions__empty">No urgent contacts are ready.</p>
+          {% endfor %}
+        </div>
+      </section>
+
+      <section class="lt-owner-actions__panel" aria-label="Upcoming bookings">
+        <header class="lt-owner-actions__panel-head">
+          <h2>Calendar</h2>
+          <span>{{ data.upcoming_bookings|length }} soon</span>
+        </header>
+        <div class="lt-owner-actions__list">
+          {% for row in data.upcoming_bookings %}
+          <article class="lt-owner-actions__card" data-owner-booking-card>
+            <div class="lt-owner-actions__card-main">
+              {% if row.stage %}<span class="lt-owner-actions__status">{{ row.stage }}</span>{% endif %}
+              <h3>{{ row.title }}</h3>
+              <p class="lt-owner-actions__meta">
+                {{ row.reason }}{% if row.when %} - {{ row.when }}{% endif %}
+              </p>
+              {% if row.message_draft %}
+              <p class="lt-owner-actions__draft">{{ row.message_draft }}</p>
+              {% endif %}
+            </div>
+            <div class="lt-owner-actions__actions">
+              {% if row.phone_href %}
+              <a class="lt-owner-actions__button lt-owner-actions__button--primary" href="{{ row.phone_href }}">Call</a>
+              <a class="lt-owner-actions__button lt-owner-actions__button--secondary" href="{{ row.sms_href }}">Text</a>
+              {% endif %}
+              <a class="lt-owner-actions__button" href="{{ row.record_url }}">Record</a>
+            </div>
+          </article>
+          {% else %}
+          <p class="lt-owner-actions__empty">No upcoming bookings are ready.</p>
+          {% endfor %}
+        </div>
+      </section>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -136,6 +136,12 @@ OWNER_DASHBOARD_CHART = {
 
 OWNER_HOME_SHORTCUTS = [
     {
+        "label": "Call or Text",
+        "type": "URL",
+        "url": "/owner-actions",
+        "color": "Green",
+    },
+    {
         "label": "Events Inquiry Inbox",
         "type": "DocType",
         "link_to": "Lead",
@@ -702,10 +708,10 @@ def _owner_home_content() -> list[dict]:
             ),
             _header(
                 "lt-owner-step-1",
-                '<span class="h5"><b>1. Answer new inquiries</b></span><br><span class="text-muted">Open Events Inquiry Inbox and call or text the newest people first.</span>',
+                '<span class="h5"><b>1. Call or text the next person</b></span><br><span class="text-muted">Open Call or Text and reach the newest people first.</span>',
                 9,
             ),
-            _shortcut("lt-owner-step-1-open", "Events Inquiry Inbox", 3),
+            _shortcut("lt-owner-step-1-open", "Call or Text", 3),
             _header(
                 "lt-owner-step-2",
                 '<span class="h5"><b>2. Check upcoming bookings</b></span><br><span class="text-muted">Look at this week, confirm delivery or pickup notes, and catch surprises early.</span>',
@@ -737,6 +743,7 @@ def _owner_home_content() -> list[dict]:
                 '<span class="h4"><b>Fast paths</b></span>',
                 12,
             ),
+            _shortcut("lt-owner-fast-call-text", "Call or Text", 3),
             _shortcut("lt-owner-fast-inquiries", "Events Inquiry Inbox", 3),
             _shortcut("lt-owner-fast-calendar", "Booking Calendar", 3),
             _shortcut("lt-owner-fast-customers", "Customers", 3),

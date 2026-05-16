@@ -88,6 +88,51 @@ verified.
 `workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11.md`.
 
 **Decided by:** Codex staging repair during GL's 2026-05-16 staging incident.
+---
+
+## 2026-05-15 - Owner assistant access is provider-neutral DTO first
+
+**Decision:** Jeff/business-owner assistant and phone access starts with an
+LT-owned provider-neutral DTO/API boundary, not with ChatGPT-specific logic.
+ChatGPT, MCP, OpenAPI, OAuth, API-key, or any other future client must be an
+adapter over the same owner-safe business DTOs.
+
+**Reasoning:** The owner needs fast business action on a phone: call, text, see
+urgent Leads, see upcoming bookings, and record that follow-up happened. That
+workflow should translate to ChatGPT later, but it must not make ChatGPT the
+source of truth or give any assistant raw ERPNext access. The local owner page
+can use Frappe session auth now; external assistant providers need their own
+auth/token verifier before exposure.
+
+**Alternatives considered:** Building a ChatGPT-only integration first was
+rejected because it would couple the business contract to one provider and
+blur auth boundaries. Direct raw ERPNext record access was rejected because it
+would leak platform fields and create unsafe write pressure. Automated call,
+text, email, quote, payment, and stage mutation were rejected for this slice;
+human tap and a Comment-only contact log are the safe first write boundary.
+
+**Implementation boundary:** `/owner-actions` is the local phone-first owner
+surface. `locally_twisted.owner_business_access` owns the DTOs.
+`locally_twisted.api.owner_business` is the whitelisted adapter. The only
+initial write method is `log_contact_attempt`, which creates one Comment and
+does not send customer messages or mutate business/accounting state. Fake
+local records are marker-owned with `LT-DEMO-OWNER-ACTIONS` and removable with
+`python scripts/setup/sync_owner_demo_data.py --cleanup`.
+
+**Verification receipt:** Local proof passed with
+`python scripts/setup/sync_backend_workspaces.py`,
+`python scripts/setup/sync_owner_demo_data.py`,
+`python scripts/verify/backend_workspace_parity.py`,
+`python scripts/verify/owner_business_access_contract.py`,
+`npm run test:owner-actions`, `npm run test:desk-owner`,
+`npm run test:desk-personas`, and
+`python scripts/verify/synthetic_business_pipeline.py`. Feature handoff:
+`workstreams/owner-phone-action-center-2026-05-15.md`; capability:
+`capabilities/recipes/erpnext-owner-business-access-api.md`.
+
+**Decided by:** GL direction that Jeff needs few-tap phone action and that
+assistant integration must be ChatGPT-compatible but not ChatGPT-only; Codex
+implementation on 2026-05-15.
 
 ---
 

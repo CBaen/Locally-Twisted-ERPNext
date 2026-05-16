@@ -6,6 +6,23 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-15 - Assistant access needs a business DTO before provider adapters
+
+The owner access request started with ChatGPT language, then expanded to
+OAuth-agnostic/API-compatible access. Building directly for one assistant would
+have made the provider look like the architecture and would have encouraged
+raw ERPNext record access before the business boundary was clear.
+
+**Counter-move:** define the owner-safe business DTO first, then let ChatGPT,
+MCP, OpenAPI, OAuth, API-key, or other clients become adapters. Keep the first
+write narrow and verifiable. For LT owner access, the first write is only
+`log_contact_attempt`, which creates one Comment and does not send customer
+messages or mutate business/accounting state. Prove the real owner login,
+phone page, DTO contract, and fake local data cleanup before discussing any
+external provider integration.
+
+---
+
 ## 2026-05-15 - Narrow reviewer roles need explicit membership checks
 
 The first marketing review access guard used Frappe's effective role lookup.

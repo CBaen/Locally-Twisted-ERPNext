@@ -149,6 +149,14 @@ owner/support use. Keep this track contained to
 `workstreams/erpnext-backend-simplification.md`; do not spread it into
 commerce, paperwork, customer-portal, or public-site handoffs unless a specific
 verifier, permission boundary, or owner workflow requires that cross-link.
+2026-05-15 owner phone-action slice:
+`workstreams/owner-phone-action-center-2026-05-15.md`. `LT Owner Home` now has
+`Call or Text` leading to `/owner-actions`; local fake owner demo records are
+managed by `python scripts/setup/sync_owner_demo_data.py`; provider-neutral
+owner DTO/API boundaries are guarded by `npm run test:owner-actions` and
+`python scripts/verify/owner_business_access_contract.py`. Future ChatGPT,
+OAuth, API, MCP, or OpenAPI work must stay as adapters over this DTO boundary,
+not direct raw ERPNext access.
 
 **Public inquiry form spam/solicitation rule (2026-05-15):** `/contact` and
 BTFP keep one shared `inquiry-v1` form. The form must render a signed
@@ -256,7 +264,12 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 - [P1] **Category browse imagery.** PARKED at the 2026-05-06 stopping point. Verified against live DB: all 11 customer-facing Item Group children under `Shop Items` have empty `image` fields. A no-mutation approval packet can be regenerated with `python scripts/verify/category_media_candidates.py`; the latest quick picks cover all 11 categories in ignored local `output/category-media-candidates.md`. `python scripts/setup/sync_category_media.py --write-template` creates the approval template and `python scripts/setup/sync_category_media.py --selection output/category-media-selection.template.json` dry-runs the Frappe update path. Do not run `--apply` or assign live Item Group images until GL/Jeff explicitly approve selections. Do not revive the retired `/shop-by-category` card index for launch; use representative category media for `/shop-items/<group>` pages or a future image-rich mega-menu only after photos are selected.
 - [P1] **Slice 8 — Service category pages.** `/services/<event-type>` × 5 (Corporate, Weddings, Birthdays, Schools, Seasonal). Each ends with inquiry CTA to `/contact`.
 - [P1] **Slice 9 — Color Chart page.** `/color-chart` — static reference, all balloon colors with names. Answers Jeff's "customers want to see colors" instinct without a configurator. Visual swatch grid + print-friendly stylesheet.
-- [P1] **Sample data for backend tour.** Before Jeff demo: a few realistic Lead records, one or two completed orders, one upcoming event. Lets Jeff click around the desk and see the system in motion.
+- [P1] **Sample data for backend tour.** First owner phone-action seed exists
+  for localhost: `python scripts/setup/sync_owner_demo_data.py` creates marked
+  fake Leads, one Customer/Contact, and one draft upcoming Sales Order for
+  `/owner-actions`. Follow-up only if Jeff needs broader Desk-tour data such
+  as completed orders or post-event history. Cleanup:
+  `python scripts/setup/sync_owner_demo_data.py --cleanup`.
 - [P2] **Slice 13 — Blog framework + 2-3 first posts.** "Kindergarten Teacher" voice. Deferrable. The homepage hero is a seasonal/audience carousel; do not reintroduce cycling blog titles into the launch hero.
 - [P2] **Variant cache rebuild on Webshop Settings change.** If the next instance enables/disables variants or attribute filters, run `for template in templates: ItemVariantsCacheManager(template).rebuild_cache()` to flush stale Redis state.
 - [P2] **Visual asset generation/source cleanup.** Non-urgent tangent pinned 2026-05-02. Revisit Facebook/Instagram/X icon assets as one small slice of the larger visual asset system after the higher-priority Localo/resource-mining work. Use the global capability recipe at `C:\Users\baenb\capabilities\recipes\safe-visual-asset-sourcing-and-generation.md` for icons, SVGs, generated lifestyle images, representative balloon decor renders, blog visuals, proof-photo handling, rights checks, post-production, and site verification.

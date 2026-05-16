@@ -15,6 +15,7 @@ SITE = "frontend"
 
 EXPECTED_WORKSPACE_SHORTCUTS = {
     "LT Owner Home": {
+        "Call or Text": {"type": "URL", "url": "/owner-actions"},
         "Booking Calendar": ("Sales Order", "Calendar"),
         "Customers": ("Customer", "List"),
         "People to Contact": ("Contact", "List"),
@@ -99,7 +100,7 @@ OWNER_HOME_CHART = {
 OWNER_HOME_TEXT = {
     "Today at Locally Twisted",
     "What Jeff does next",
-    "Answer new inquiries",
+    "Call or text the next person",
     "Check upcoming bookings",
     "Finish follow-ups",
     "Update products only when needed",
@@ -178,7 +179,7 @@ def check_calendar_view() -> list[str]:
     return failures
 
 
-def check_workspace(name: str, expected: dict[str, tuple[str, str]]) -> list[str]:
+def check_workspace(name: str, expected: dict[str, Any]) -> list[str]:
     failures = []
     workspace = get_doc("Workspace", name)
     shortcuts = {row["label"]: row for row in workspace.get("shortcuts", [])}
@@ -200,13 +201,22 @@ def check_workspace(name: str, expected: dict[str, tuple[str, str]]) -> list[str
     if forbidden_found:
         failures.append(f"{name} still shows non-persona shortcuts: {', '.join(forbidden_found)}")
 
-    for label, (doctype, view) in expected.items():
+    for label, spec in expected.items():
         shortcut = shortcuts.get(label)
         if not shortcut:
             failures.append(f"{name} missing shortcut {label!r}")
             continue
         if label not in content_labels:
             failures.append(f"{name} content missing shortcut block {label!r}")
+        if isinstance(spec, dict):
+            for key, value in spec.items():
+                if shortcut.get(key) != value:
+                    failures.append(
+                        f"{name} {label!r} expected {key}={value!r}, found {shortcut.get(key)!r}"
+                    )
+            continue
+
+        doctype, view = spec
         if shortcut.get("link_to") != doctype or shortcut.get("doc_view") != view:
             failures.append(
                 f"{name} {label!r} expected {doctype}/{view}, found "

@@ -1,6 +1,6 @@
 # ERPNext Backend Simplification Workstream
 
-Last updated: 2026-05-15 by Codex after human-access audit and marketing review access closeout.
+Last updated: 2026-05-15 by Codex after owner phone-action access closeout.
 
 ## Outcome
 
@@ -37,6 +37,12 @@ handoffs unless a specific owner workflow, verifier, or permission boundary
 requires the cross-link.
 
 This file is the job sheet for future handoffs. Keep `locally-twisted-queue.md` as the active task source, and update this file when the backend simplification lane changes stage.
+
+2026-05-15 owner phone-action update: the current owner-first slice now has a
+local `/owner-actions` page, owner-safe business DTOs, a narrow whitelisted API
+adapter, and fake local records for a quality localhost owner tour. Feature
+handoff: `workstreams/owner-phone-action-center-2026-05-15.md`. Capability:
+`capabilities/recipes/erpnext-owner-business-access-api.md`.
 
 ## Owner
 
@@ -75,6 +81,11 @@ Primary backend surfaces:
 - `scripts/verify/lead_backend_intake_parity.py`.
 - `hooks.py` fixtures and `doc_events`.
 - human-access guard surfaces:
+  `apps/locally_twisted/locally_twisted/owner_business_access.py`,
+  `apps/locally_twisted/locally_twisted/api/owner_business.py`,
+  `apps/locally_twisted/locally_twisted/www/owner-actions/`,
+  `apps/locally_twisted/locally_twisted/seed/owner_demo_data.py`,
+  `apps/locally_twisted/locally_twisted/verify/owner_business_access_contract.py`,
   `apps/locally_twisted/locally_twisted/marketing_review_access.py`,
   `apps/locally_twisted/locally_twisted/www/me.py`,
   `apps/locally_twisted/locally_twisted/verify/marketing_review_access_boundary.py`,
@@ -96,6 +107,15 @@ Verify these before editing DB/schema, but they are the latest documented workin
 - `lead_cascade.py` hooks on Lead insert to create/link Contact and queue the customer acknowledgment email.
 - `/payment-success` marks Payment Requests paid, creates Sales Invoices, sends receipt/operator/welcome emails, and redirects customers even if backend follow-up fails.
 - Checkout/Lead conversion parity is verified across the payment boundary: when checkout reuses a Contact linked to a Lead, the Lead stays `Open` / `New Inquiry` until the paid-order cascade runs. After payment reconciliation, native `Lead.status` becomes `Converted`, `Lead.customer` is set, `Lead.custom_pipeline_stage` moves to `Approved`, the old New Inquiry task closes, and the Approved follow-up task becomes active. The verifier rolls back its generated Customer, Sales Order, and Payment Request.
+- Owner phone actions are provider-neutral DTOs first. `/owner-actions` uses
+  the same DTO layer intended for future ChatGPT/OAuth/API-compatible adapters.
+  ChatGPT is not the architecture; future providers must authenticate through
+  their own adapter/token verifier before reading this surface. Initial write
+  scope is only `log_contact_attempt`, which records a Comment and does not
+  send customer messages or mutate business state.
+- Local owner demo data is intentionally fake and marker-owned. Run
+  `python scripts/setup/sync_owner_demo_data.py` to refresh it and
+  `python scripts/setup/sync_owner_demo_data.py --cleanup` to remove it.
 - `LT Lead Photo`, the Lead photos section, and the connecting `custom_inspiration_photos` Table field now exist. The current sync recreates the missing field if needed.
 - `hooks.py` currently fixtures Item Groups and Item Attributes. Phase 6 must prune operator-state-sensitive fixture coverage before Jeff edits backend catalog values.
 - There are old `scripts/translate/` and `scripts/fix/` Lead-schema scripts with stale labels like `Event Package` and `Delivery Only`. Do not rerun them blindly.

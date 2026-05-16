@@ -33,7 +33,8 @@
     "test:public-verify": "npm run test:website-verify",
     "test:launch-verify": "python scripts/verify/website_launch_verify.py --with-a11y --with-contact-smoke",
     "test:desk-owner": "scripts\\verify\\run_playwright.cmd test scripts/verify/owner_desk_routes.spec.js --reporter=line",
-    "test:desk-personas": "scripts\\verify\\run_playwright.cmd test scripts/verify/persona_desk_routes.spec.js --reporter=line"
+    "test:desk-personas": "scripts\\verify\\run_playwright.cmd test scripts/verify/persona_desk_routes.spec.js --reporter=line",
+    "test:owner-actions": "python scripts/setup/sync_owner_demo_data.py && scripts\\verify\\run_playwright.cmd test scripts/verify/owner_action_center.spec.js --reporter=line && python scripts/verify/owner_business_access_contract.py"
   },
   "devDependencies": {
     "@playwright/test": "^1.59.1",

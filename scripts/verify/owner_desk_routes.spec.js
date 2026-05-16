@@ -51,6 +51,7 @@ test.describe("Owner Desk route recovery", () => {
 			await expect(body).toContainText("Owner Home");
 			await expect(body).toContainText("Today at Locally Twisted");
 			await expect(body).toContainText("What Jeff does next");
+			await expect(body).toContainText("Call or Text");
 			await expect(body).toContainText("New Inquiries");
 			await expect(body).toContainText("Overdue Follow-ups");
 			await expect(body).toContainText("Add Product");
