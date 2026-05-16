@@ -184,9 +184,9 @@ Verification:
 - `python -m compileall apps\locally_twisted\locally_twisted\verify\checkout_lead_conversion_contract.py`
 - `docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.checkout_lead_conversion_contract.run`
 
-## Bucket 6 - Maintenance Heartbeat Role Change: Review Separately
+## Bucket 6 - Maintenance Heartbeat Role Change: Resolved Locally
 
-Priority: post-form review.
+Priority: resolved as maintenance boundary parity.
 
 File touched:
 
@@ -198,8 +198,15 @@ Finding:
 
 Risk:
 
-- could be correct access hardening, but role changes should be reviewed with
-  the backend/admin permission lane.
+- resolved: `LT Maintenance Admin Access` is the existing narrow maintenance
+  role, and the report role now matches the sanitized Maintenance Admin
+  boundary.
+
+Verification:
+
+- `docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute frappe.db.exists --args "['Role', 'LT Maintenance Admin Access']"`
+- `python scripts\verify\maintenance_heartbeat.py`
+- `python scripts\verify\maintenance_admin_boundary.py`
 
 ## Bucket 7 - External Odoo Project Concern
 

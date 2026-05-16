@@ -234,8 +234,8 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
   `workstreams/paperclip-change-audit-2026-05-15.md`: the Reflex Champagne
   catalog/color patch is resolved locally and no longer has a missing tracked
   patch risk; the checkout verifier pause override is verifier-only and
-  resolved locally; continue with backend workspace/persona permission changes,
-  maintenance heartbeat role change, and
+  resolved locally; the maintenance heartbeat role change is resolved locally;
+  continue with backend workspace/persona permission changes and
   remaining Odoo-derived `_resources/odoo-live/*` review. Do not stage,
   commit, deploy, or live-verify these as part of the form slice unless GL
   explicitly folds one bucket into the form release.
