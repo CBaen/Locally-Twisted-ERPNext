@@ -157,9 +157,9 @@ Risk:
 - this may be valid backend simplification, but it is not part of the contact
   form slice and affects staff Desk behavior.
 
-## Bucket 5 - Checkout Verifier Pause Override: Review Separately
+## Bucket 5 - Checkout Verifier Pause Override: Resolved Locally
 
-Priority: post-form, launch-sensitive.
+Priority: resolved as a verifier-only cleanup.
 
 File touched:
 
@@ -172,8 +172,17 @@ Finding:
 
 Risk:
 
-- this may be an appropriate test harness move, but it must be reviewed through
-  the ecommerce/checkout lane before live release claims.
+- resolved: the pause bypass is scoped to
+  `locally_twisted.verify.checkout_lead_conversion_contract.run`, restores the
+  original pause function in `finally`, and now fails loudly if the bypass is
+  not active inside the verifier;
+- this is verifier-only proof and does not reopen checkout, Stripe, or live
+  ecommerce.
+
+Verification:
+
+- `python -m compileall apps\locally_twisted\locally_twisted\verify\checkout_lead_conversion_contract.py`
+- `docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.checkout_lead_conversion_contract.run`
 
 ## Bucket 6 - Maintenance Heartbeat Role Change: Review Separately
 

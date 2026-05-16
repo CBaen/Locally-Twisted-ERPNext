@@ -22,6 +22,9 @@ class ContractFail(Exception):
 
 def run():
     original_commit = frappe.db.commit
+    from locally_twisted import ecommerce_pause
+
+    original_is_ecommerce_paused = ecommerce_pause.is_ecommerce_paused
     intercepted_commits = []
 
     def no_commit(*args, **kwargs):
@@ -29,6 +32,7 @@ def run():
 
     try:
         frappe.db.commit = no_commit
+        ecommerce_pause.is_ecommerce_paused = lambda: False
         result = _run_contract()
         result["commit_calls_intercepted"] = len(intercepted_commits)
         result["rolled_back"] = True
@@ -39,6 +43,7 @@ def run():
         return {"ok": False, "failures": [frappe.get_traceback()]}
     finally:
         frappe.db.commit = original_commit
+        ecommerce_pause.is_ecommerce_paused = original_is_ecommerce_paused
         frappe.db.rollback()
 
 
@@ -62,6 +67,11 @@ def _run_contract():
         raise ContractFail("Lead insert did not create an open New Inquiry task")
 
     result = _submit_checkout(email=email, name=marker)
+    if result.get("status") == "ecommerce_paused":
+        raise ContractFail(
+            "checkout API returned ecommerce_paused inside the verifier; "
+            "the verifier pause bypass is not active"
+        )
 
     lead_after_checkout = frappe.get_doc("Lead", lead.name)
     contact_after = frappe.get_doc("Contact", contact_name)
