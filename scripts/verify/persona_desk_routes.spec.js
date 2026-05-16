@@ -30,6 +30,7 @@ const PERSONAS = [
 		forbidden: [
 			"Events Inquiry Inbox",
 			"Inquiry Board",
+			"Booking Calendar",
 			"Customers",
 			"People to Contact",
 			"Add New Inquiry",

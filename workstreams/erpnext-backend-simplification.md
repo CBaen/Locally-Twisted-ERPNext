@@ -173,13 +173,15 @@ Current local ERPNext Desk state is now persona-focused rather than only
 owner-focused:
 
 - `LT Owner Home` keeps the command center, Jeff next-action flow, and secondary
-  catalog tools including `Add Product`.
+  catalog tools. `Products` and `Add Product` now route through
+  `LT Product Blueprint` so owner product work starts in the guided local setup
+  surface instead of raw `Item`.
 - `LT Manager Home` keeps inquiry, booking, customer/contact, event job, task,
   and add-inquiry/customer actions, but no longer exposes `Products`,
   `Product Prices`, or `Add Product`.
-- `LT Employee Home` is narrowed to `My Tasks`, `Task Board`, `Booking
-  Calendar`, and `Event Jobs`; it no longer exposes customer/contact, inquiry,
-  or catalog administration shortcuts.
+- `LT Employee Home` is narrowed to `My Tasks`, `Task Board`, and `Event Jobs`;
+  it no longer exposes Booking Calendar, customer/contact, inquiry, or catalog
+  administration shortcuts.
 - `LT Accountant Home` is narrowed to invoices, payment requests, payment
   entries, customers, reminder review, journal entries, and chart of accounts.
   It no longer exposes bank, vendor, payment-terms, statement-reminder, or
@@ -199,8 +201,12 @@ Code ownership and guards:
 - `apps/locally_twisted/locally_twisted/seed/sync_finance_workspace.py`
   now owns the reduced Accountant Home shortcut/content set and prunes removed
   finance/payroll setup links.
-- `scripts/verify/backend_workspace_parity.py` now fails if Manager/Employee
-  workspaces regain non-persona shortcuts.
+- `scripts/verify/backend_workspace_parity.py` now fails if Owner product
+  shortcuts bypass `LT Product Blueprint` or if Manager/Employee workspaces
+  regain non-persona shortcuts.
+- `apps/locally_twisted/locally_twisted/verify/persona_workspace_permissions.py`
+  proves visible workspace shortcuts match each persona's actual read/create
+  permission before the workspace parity gate can pass.
 - `scripts/verify/finance_workspace_parity.py` now fails if Accountant Home
   regains unfinished bank/vendor/payroll setup shortcuts.
 - `scripts/verify/persona_desk_routes.spec.js` and `npm run test:desk-personas`

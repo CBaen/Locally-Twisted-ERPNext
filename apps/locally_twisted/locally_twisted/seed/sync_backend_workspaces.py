@@ -206,14 +206,14 @@ OWNER_HOME_SHORTCUTS = [
     {
         "label": "Products",
         "type": "DocType",
-        "link_to": "Item",
+        "link_to": "LT Product Blueprint",
         "doc_view": "List",
         "color": "Purple",
     },
     {
         "label": "Add Product",
         "type": "DocType",
-        "link_to": "Item",
+        "link_to": "LT Product Blueprint",
         "doc_view": "New",
         "color": "Green",
     },
@@ -326,13 +326,6 @@ EMPLOYEE_HOME_SHORTCUTS = [
         "link_to": "Task",
         "doc_view": "List",
         "color": "Orange",
-    },
-    {
-        "label": "Booking Calendar",
-        "type": "DocType",
-        "link_to": "Sales Order",
-        "doc_view": "Calendar",
-        "color": "Green",
     },
     {
         "label": "Event Jobs",
@@ -811,7 +804,7 @@ def _employee_home_content() -> list[dict]:
         ),
         _header(
             "lt-employee-subtitle",
-            '<span class="text-muted">See assigned work and the event schedule without customer, finance, or catalog administration.</span>',
+            '<span class="text-muted">See assigned work and event jobs without customer, finance, or catalog administration.</span>',
             12,
         ),
         _header(
@@ -821,7 +814,6 @@ def _employee_home_content() -> list[dict]:
         ),
         _shortcut("lt-employee-my-tasks", "My Tasks", 3),
         _shortcut("lt-employee-task-board", "Task Board", 3),
-        _shortcut("lt-employee-calendar", "Booking Calendar", 3),
         _shortcut("lt-employee-jobs", "Event Jobs", 3),
     ]
 

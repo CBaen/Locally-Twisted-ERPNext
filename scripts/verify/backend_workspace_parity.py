@@ -19,7 +19,8 @@ EXPECTED_WORKSPACE_SHORTCUTS = {
         "Booking Calendar": ("Sales Order", "Calendar"),
         "Customers": ("Customer", "List"),
         "People to Contact": ("Contact", "List"),
-        "Add Product": ("Item", "New"),
+        "Products": ("LT Product Blueprint", "List"),
+        "Add Product": ("LT Product Blueprint", "New"),
     },
     "LT Manager Home": {
         "Events Inquiry Inbox": ("Lead", "List"),
@@ -35,7 +36,6 @@ EXPECTED_WORKSPACE_SHORTCUTS = {
     },
     "LT Employee Home": {
         "My Tasks": ("Task", "List"),
-        "Booking Calendar": ("Sales Order", "Calendar"),
         "Event Jobs": ("Project", "List"),
         "Task Board": ("Task", "Kanban"),
     },
@@ -48,6 +48,7 @@ FORBIDDEN_WORKSPACE_SHORTCUTS = {
     "LT Employee Home": {
         "Events Inquiry Inbox",
         "Inquiry Board",
+        "Booking Calendar",
         "Customers",
         "People to Contact",
         "Products",
@@ -353,6 +354,14 @@ def check_persona_default_workspaces() -> list[str]:
     return failures
 
 
+def check_persona_shortcut_permissions() -> list[str]:
+    result = bench_execute("locally_twisted.verify.persona_workspace_permissions.run")
+    failures = result.get("failures") if isinstance(result, dict) else None
+    if failures is None:
+        return ["persona shortcut permission verifier returned an invalid result"]
+    return list(failures)
+
+
 def main() -> int:
     parse_noop_args(__doc__)
     failures = []
@@ -363,6 +372,7 @@ def main() -> int:
     failures.extend(check_contractor_has_no_backend_login())
     failures.extend(check_owner_default_users_preserve_roles())
     failures.extend(check_persona_default_workspaces())
+    failures.extend(check_persona_shortcut_permissions())
 
     if failures:
         print("[BACKEND WORKSPACE PARITY] FAIL")

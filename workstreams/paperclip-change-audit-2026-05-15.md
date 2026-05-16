@@ -134,9 +134,9 @@ Verification:
 - `docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.product_page_runtime_contract.run`
 - `cmd /c scripts\verify\run_playwright.cmd test scripts/verify/product_quote_first_experience.spec.js --reporter=line`
 
-## Bucket 4 - Backend Workspace/Persona Permissions: Review Separately
+## Bucket 4 - Backend Workspace/Persona Permissions: Resolved Locally
 
-Priority: post-form review.
+Priority: resolved as backend/access-lane cleanup.
 
 Files touched:
 
@@ -154,8 +154,20 @@ Finding:
 
 Risk:
 
-- this may be valid backend simplification, but it is not part of the contact
-  form slice and affects staff Desk behavior.
+- resolved: Employee Home is intentionally narrowed to assigned tasks and event
+  jobs; Manager retains booking visibility; Owner Product/Add Product shortcuts
+  now route through `LT Product Blueprint` instead of raw `Item`;
+- the new `persona_workspace_permissions` verifier is tracked and included in
+  `backend_workspace_parity.py`, so visible workspace shortcuts must match each
+  persona's actual permissions.
+
+Verification:
+
+- `python -m compileall apps\locally_twisted\locally_twisted\seed\sync_backend_workspaces.py apps\locally_twisted\locally_twisted\verify\persona_workspace_permissions.py scripts\verify\backend_workspace_parity.py`
+- `python scripts\verify\backend_workspace_parity.py`
+- `docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.persona_workspace_permissions.run`
+- `$env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-personas`
+- `python scripts\verify\product_blueprint_contract.py`
 
 ## Bucket 5 - Checkout Verifier Pause Override: Resolved Locally
 

@@ -127,6 +127,8 @@ Employee:
 - `LT Employee Home` is the employee Desk entry.
 - Employee workspace is narrowed to assigned work, tasks, task board, and event
   jobs.
+- Employee no longer gets a visible Booking Calendar shortcut; Manager retains
+  booking visibility.
 - Employee does not get visible customer, finance, or catalog administration.
 
 Accountant:
@@ -177,6 +179,7 @@ Commands passed locally on 2026-05-15:
 python scripts/verify/customer_portal_inventory.py --base-url http://localhost:8081 --strict-menu
 python scripts/verify/custom_doctype_permission_boundary.py
 python scripts/verify/backend_workspace_parity.py
+docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.verify.persona_workspace_permissions.run
 python scripts/verify/finance_workspace_parity.py
 python scripts/verify/maintenance_admin_boundary.py
 python scripts/verify/maintenance_heartbeat.py
