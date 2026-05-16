@@ -31,6 +31,16 @@ def _color_key(name: str) -> str:
     return " ".join(str(name or "").replace("-", " ").strip().lower().split())
 
 
+COLOR_NAME_ALIASES = {
+    "reflex champage": "Reflex Champagne",
+}
+
+
+def canonical_color_name(name: str) -> str:
+    clean = " ".join(str(name or "").strip().split())
+    return COLOR_NAME_ALIASES.get(_color_key(clean), clean)
+
+
 # Approximate values sampled visually from the provided Qualatex guide image.
 # These are customer-facing aids, not official vendor color science values.
 QUALATEX_GUIDE_APPROX_HEX = {
@@ -105,12 +115,12 @@ QUALATEX_GUIDE_APPROX_HEX = {
 
 def approximate_hex_for_color(name: str) -> str:
     """Approximate Qualatex-like swatch hex for customer-facing color metadata."""
-    key = _color_key(name)
+    key = _color_key(canonical_color_name(name))
     if key in QUALATEX_GUIDE_APPROX_HEX:
         return QUALATEX_GUIDE_APPROX_HEX[key]
 
     rules = [
-        ("champage", "#b8a08f"), ("champagne", "#b8a08f"), ("truffle", "#5b3f3c"),
+        ("champagne", "#b8a08f"), ("truffle", "#5b3f3c"),
         ("cream", "#eee8dc"), ("green tea", "#9bcbb3"),
         ("reflex blue", "#1f6f8d"), ("periwinkle", "#8ea4dc"),
         ("robin", "#86c5d8"), ("deep teal", "#006f73"),
@@ -124,7 +134,7 @@ def approximate_hex_for_color(name: str) -> str:
 
 
 def classify_color_name(name: str) -> ClassifiedColor:
-    clean = " ".join(str(name or "").strip().split())
+    clean = canonical_color_name(name)
     lower = clean.lower()
 
     if lower.startswith("reflex"):

@@ -253,7 +253,7 @@ def _assert_multi_color_checkout_configuration_preserved() -> None:
         "item_code": PROOF_ITEM,
         "website_item_code": "unicorn-bouquet",
         "selected_options": {"Bouquet Size": "Small"},
-        "color_recipes": [{"axis": "latex colors", "values": ["White", "Reflex Gold"]}],
+        "color_recipes": [{"axis": "latex colors", "values": ["White", "Reflex Champage"]}],
         "add_ons": [],
         "customizations": [],
     }
@@ -265,13 +265,13 @@ def _assert_multi_color_checkout_configuration_preserved() -> None:
     if payload.get("selected_options", {}).get("latex colors"):
         raise ContractFail(f"multi-color checkout preserved color as selected_options: {payload}")
     recipes = payload.get("color_recipes") or []
-    if not recipes or recipes[0].get("values") != ["White", "Reflex Gold"]:
+    if not recipes or recipes[0].get("values") != ["White", "Reflex Champagne"]:
         raise ContractFail(f"multi-color checkout did not preserve color recipe: {payload}")
     if "Color recipe preserved" not in line.get(LINE_FIELDNAMES["summary"], ""):
         raise ContractFail("Sales Order summary did not surface color recipe preservation")
 
     changed_configuration = dict(configuration)
-    changed_configuration["color_recipes"] = [{"axis": "latex colors", "values": ["White", "Reflex Gold", "Black"]}]
+    changed_configuration["color_recipes"] = [{"axis": "latex colors", "values": ["White", "Reflex Champagne", "Black"]}]
     if cart_line_key(PROOF_ITEM, configuration) == cart_line_key(PROOF_ITEM, changed_configuration):
         raise ContractFail("cart line key did not include color_recipes")
 

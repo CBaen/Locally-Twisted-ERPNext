@@ -256,7 +256,7 @@ def _color_recipe_configuration() -> dict[str, Any]:
             {
                 "axis": "latex colors",
                 "label": "latex colors",
-                "values": ["Reflex Champage"],
+                "values": ["Reflex Champagne"],
             }
         ],
         "add_ons": [],

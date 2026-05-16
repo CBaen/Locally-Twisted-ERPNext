@@ -67,12 +67,12 @@ def _normalized_payload() -> dict[str, object]:
             "commerce_lane": "quote_first",
             "selected_options": {
                 "Arch Size": "20ft",
-                "latex colors": "Reflex Gold, White, Navy",
+                "latex colors": "Reflex Champage, White, Navy",
             },
             "customizations": [
                 {
                     "axis": "latex colors",
-                    "values": ["Reflex Gold", "White", "Navy"],
+                    "values": ["Reflex Champage", "White", "Navy"],
                     "label": "Balloon color recipe",
                 }
             ],
@@ -88,13 +88,13 @@ def _assert_color_recipe(payload: dict[str, object]) -> None:
     recipe = recipes[0]
     if recipe.get("axis") != "latex colors":
         raise ContractFail(f"color recipe lost source axis: {recipe}")
-    if recipe.get("values") != ["Reflex Gold", "White", "Navy"]:
+    if recipe.get("values") != ["Reflex Champagne", "White", "Navy"]:
         raise ContractFail(f"color recipe lost selected values: {recipe}")
     groups = {group.get("group") for group in recipe.get("color_groups") or []}
     if "Reflex" not in groups or "Neutrals" not in groups:
         raise ContractFail(f"color recipe did not preserve grouped color metadata: {recipe}")
     summary = str(payload.get("summary") or "")
-    if "Balloon color recipe: Reflex Gold, White, Navy" not in summary:
+    if "Balloon color recipe: Reflex Champagne, White, Navy" not in summary:
         raise ContractFail(f"summary did not surface color recipe: {summary}")
 
 

@@ -11,7 +11,11 @@ from typing import Any
 import frappe
 from frappe import _
 
-from locally_twisted.catalog_contract.color_rules import grouped_colors, is_balloon_color_axis
+from locally_twisted.catalog_contract.color_rules import (
+    canonical_color_name,
+    grouped_colors,
+    is_balloon_color_axis,
+)
 from locally_twisted.product_page_runtime import CONFIG_VERSION
 
 
@@ -33,6 +37,10 @@ def normalize_public_product_quote_payload(
         incoming.get("selected_options"),
         label="product quote options",
     )
+    selected_options = {
+        key: _canonicalized_color_display(value) if is_balloon_color_axis(key) else value
+        for key, value in selected_options.items()
+    }
     add_ons = _row_list(
         incoming.get("add_ons"),
         label="product quote add-ons",
@@ -41,6 +49,7 @@ def normalize_public_product_quote_payload(
         incoming.get("customizations"),
         label="product quote custom notes",
     )
+    customizations = _canonicalized_color_customizations(customizations)
     color_recipes = _color_recipes(selected_options=selected_options, customizations=customizations)
     summary = _summary(
         item=item,
@@ -193,6 +202,27 @@ def _summary(
     return "; ".join(pieces)[:MAX_QUOTE_SUMMARY_LENGTH]
 
 
+def _canonicalized_color_display(value: Any) -> str:
+    return ", ".join(_split_color_values(value))
+
+
+def _canonicalized_color_customizations(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    result = []
+    for row in rows:
+        axis = _clean_optional_text(row.get("axis")) or _clean_optional_text(row.get("key"))
+        if not is_balloon_color_axis(axis):
+            result.append(row)
+            continue
+        normalized = dict(row)
+        if "values" in normalized:
+            normalized["values"] = _split_color_values(normalized.get("values"))
+        elif "value" in normalized:
+            values = _split_color_values(normalized.get("value"))
+            normalized["value"] = values if isinstance(normalized.get("value"), list) else ", ".join(values)
+        result.append(normalized)
+    return result
+
+
 def _row_summary(row: dict[str, Any]) -> str:
     label = (
         _clean_optional_text(row.get("label"))
@@ -260,7 +290,11 @@ def _color_recipes(
 
 def _split_color_values(value: Any) -> list[str]:
     if isinstance(value, list):
-        return [_clean_optional_text(entry) for entry in value if _clean_optional_text(entry)]
+        return [
+            canonical_color_name(_clean_optional_text(entry))
+            for entry in value
+            if _clean_optional_text(entry)
+        ]
     if value in (None, ""):
         return []
     if isinstance(value, dict):
@@ -269,7 +303,7 @@ def _split_color_values(value: Any) -> list[str]:
         _clean_optional_text(part)
         for part in str(value).replace("|", ",").replace(";", ",").split(",")
     ]
-    return [part for part in parts if part]
+    return [canonical_color_name(part) for part in parts if part]
 
 
 def _throw_bad_payload(label: str) -> None:

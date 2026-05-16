@@ -12,7 +12,11 @@ from typing import Any
 import frappe
 from frappe import _
 
-from locally_twisted.catalog_contract.color_rules import grouped_colors, is_balloon_color_axis
+from locally_twisted.catalog_contract.color_rules import (
+    canonical_color_name,
+    grouped_colors,
+    is_balloon_color_axis,
+)
 from locally_twisted.catalog_variant_rules import required_variant_attribute_names
 from locally_twisted.product_page_labels import COMMERCE_LANE_OPTIONS, PRODUCT_PAGE_TYPE_OPTIONS
 
@@ -861,7 +865,7 @@ def _color_recipe_values(row: dict[str, Any]) -> list[str]:
             _("Tiny snag: this item's color recipe must allow multiple colors. Please choose the colors again."),
             frappe.ValidationError,
         )
-    values = [_clean_text(value) for value in raw_values]
+    values = [canonical_color_name(_clean_text(value)) for value in raw_values]
     return [value for value in values if value]
 
 

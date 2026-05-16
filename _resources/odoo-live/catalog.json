@@ -28,7 +28,7 @@
           "values": [
             {
               "ptav_id": 1349,
-              "name": "Reflex Champage"
+              "name": "Reflex Champagne"
             },
             {
               "ptav_id": 1350,
@@ -297,7 +297,7 @@
         "1401": []
       },
       "mapped_attribute_names": {
-        "1349": "latex colors: Reflex Champage",
+        "1349": "latex colors: Reflex Champagne",
         "1350": "latex colors: Reflex Truffle",
         "1351": "latex colors: Dusk Cream",
         "1352": "latex colors: Dusk Green Tea",
@@ -357,7 +357,7 @@
             1349
           ],
           "combo": {
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 650.0
         },
@@ -867,7 +867,7 @@
           "values": [
             {
               "ptav_id": 1934,
-              "name": "Reflex Champage"
+              "name": "Reflex Champagne"
             },
             {
               "ptav_id": 1935,
@@ -1142,7 +1142,7 @@
         "1": "Garland Length: 6ft",
         "2": "Garland Length: 9ft",
         "3": "Garland Length: 12ft",
-        "1934": "latex colors: Reflex Champage",
+        "1934": "latex colors: Reflex Champagne",
         "1935": "latex colors: Reflex Truffle",
         "1936": "latex colors: Dusk Cream",
         "1937": "latex colors: Dusk Green Tea",
@@ -1204,7 +1204,7 @@
           ],
           "combo": {
             "Garland Length": "6ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 150.0
         },
@@ -1787,7 +1787,7 @@
           ],
           "combo": {
             "Garland Length": "9ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 150.0
         },
@@ -2370,7 +2370,7 @@
           ],
           "combo": {
             "Garland Length": "12ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 150.0
         },
@@ -3060,7 +3060,7 @@
           "values": [
             {
               "ptav_id": 1775,
-              "name": "Reflex Champage"
+              "name": "Reflex Champagne"
             },
             {
               "ptav_id": 1776,
@@ -3363,7 +3363,7 @@
         "306": "Number selection: 8",
         "307": "Number selection: 9",
         "308": "Number selection: 0",
-        "1775": "latex colors: Reflex Champage",
+        "1775": "latex colors: Reflex Champagne",
         "1776": "latex colors: Reflex Truffle",
         "1777": "latex colors: Dusk Cream",
         "1778": "latex colors: Dusk Green Tea",
@@ -3425,7 +3425,7 @@
           ],
           "combo": {
             "Number colors": "Gold",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 55.0
         },
@@ -4008,7 +4008,7 @@
           ],
           "combo": {
             "Number colors": "Silver",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 55.0
         },
@@ -4591,7 +4591,7 @@
           ],
           "combo": {
             "Number colors": "Rose gold",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 55.0
         },
@@ -5174,7 +5174,7 @@
           ],
           "combo": {
             "Number colors": "pink",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 55.0
         },
@@ -5757,7 +5757,7 @@
           ],
           "combo": {
             "Number colors": "blue",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 55.0
         },
@@ -6340,7 +6340,7 @@
           ],
           "combo": {
             "Number colors": "white gold",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 55.0
         },
@@ -6923,7 +6923,7 @@
           ],
           "combo": {
             "Number colors": "Black",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 55.0
         },
@@ -7579,7 +7579,7 @@
           "values": [
             {
               "ptav_id": 2297,
-              "name": "Reflex Champage"
+              "name": "Reflex Champagne"
             },
             {
               "ptav_id": 2298,
@@ -7848,7 +7848,7 @@
         "2349": []
       },
       "mapped_attribute_names": {
-        "2297": "latex colors: Reflex Champage",
+        "2297": "latex colors: Reflex Champagne",
         "2298": "latex colors: Reflex Truffle",
         "2299": "latex colors: Dusk Cream",
         "2300": "latex colors: Dusk Green Tea",
@@ -7908,7 +7908,7 @@
             2297
           ],
           "combo": {
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 85.0
         },
@@ -8424,7 +8424,7 @@
           "values": [
             {
               "ptav_id": 1616,
-              "name": "Reflex Champage"
+              "name": "Reflex Champagne"
             },
             {
               "ptav_id": 1617,
@@ -8701,7 +8701,7 @@
         "372": "Arch Size: 25ft",
         "373": "Arch Size: 30ft",
         "374": "Arch Size: 35ft",
-        "1616": "latex colors: Reflex Champage",
+        "1616": "latex colors: Reflex Champagne",
         "1617": "latex colors: Reflex Truffle",
         "1618": "latex colors: Dusk Cream",
         "1619": "latex colors: Dusk Green Tea",
@@ -8763,7 +8763,7 @@
           ],
           "combo": {
             "Arch Size": "20ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 300.0
         },
@@ -9346,7 +9346,7 @@
           ],
           "combo": {
             "Arch Size": "25ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 300.0
         },
@@ -9929,7 +9929,7 @@
           ],
           "combo": {
             "Arch Size": "30ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 300.0
         },
@@ -10512,7 +10512,7 @@
           ],
           "combo": {
             "Arch Size": "35ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 300.0
         },
@@ -11618,7 +11618,7 @@
           "values": [
             {
               "ptav_id": 1987,
-              "name": "Reflex Champage"
+              "name": "Reflex Champagne"
             },
             {
               "ptav_id": 1988,
@@ -11893,7 +11893,7 @@
         "101": "Garland Length: 6ft",
         "102": "Garland Length: 9ft",
         "103": "Garland Length: 12ft",
-        "1987": "latex colors: Reflex Champage",
+        "1987": "latex colors: Reflex Champagne",
         "1988": "latex colors: Reflex Truffle",
         "1989": "latex colors: Dusk Cream",
         "1990": "latex colors: Dusk Green Tea",
@@ -11955,7 +11955,7 @@
           ],
           "combo": {
             "Garland Length": "6ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 216.0
         },
@@ -12538,7 +12538,7 @@
           ],
           "combo": {
             "Garland Length": "9ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 216.0
         },
@@ -13121,7 +13121,7 @@
           ],
           "combo": {
             "Garland Length": "12ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 216.0
         },
@@ -13741,7 +13741,7 @@
           "values": [
             {
               "ptav_id": 1669,
-              "name": "Reflex Champage"
+              "name": "Reflex Champagne"
             },
             {
               "ptav_id": 1670,
@@ -14034,7 +14034,7 @@
         "134": "Arch Size: 25ft",
         "135": "Arch Size: 30ft",
         "136": "Arch Size: 35ft",
-        "1669": "latex colors: Reflex Champage",
+        "1669": "latex colors: Reflex Champagne",
         "1670": "latex colors: Reflex Truffle",
         "1671": "latex colors: Dusk Cream",
         "1672": "latex colors: Dusk Green Tea",
@@ -14100,7 +14100,7 @@
           "combo": {
             "Add ons": "Foil stars",
             "Arch Size": "20ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 720.0
         },
@@ -14789,7 +14789,7 @@
           "combo": {
             "Add ons": "Foil stars",
             "Arch Size": "25ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 720.0
         },
@@ -15478,7 +15478,7 @@
           "combo": {
             "Add ons": "Foil stars",
             "Arch Size": "30ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 720.0
         },
@@ -16167,7 +16167,7 @@
           "combo": {
             "Add ons": "Foil stars",
             "Arch Size": "35ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 720.0
         },
@@ -16856,7 +16856,7 @@
           "combo": {
             "Add ons": "themed foils",
             "Arch Size": "20ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 720.0
         },
@@ -17545,7 +17545,7 @@
           "combo": {
             "Add ons": "themed foils",
             "Arch Size": "25ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 720.0
         },
@@ -18234,7 +18234,7 @@
           "combo": {
             "Add ons": "themed foils",
             "Arch Size": "30ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 720.0
         },
@@ -18923,7 +18923,7 @@
           "combo": {
             "Add ons": "themed foils",
             "Arch Size": "35ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 720.0
         },
@@ -19655,7 +19655,7 @@
           "values": [
             {
               "ptav_id": 1561,
-              "name": "Reflex Champage"
+              "name": "Reflex Champagne"
             },
             {
               "ptav_id": 1562,
@@ -19952,7 +19952,7 @@
         "169": "Column Height: 8ft",
         "170": "Column Height: 9ft",
         "171": "Column Height: 10ft",
-        "1561": "latex colors: Reflex Champage",
+        "1561": "latex colors: Reflex Champagne",
         "1562": "latex colors: Reflex Truffle",
         "1563": "latex colors: Dusk Cream",
         "1564": "latex colors: Dusk Green Tea",
@@ -20018,7 +20018,7 @@
           "combo": {
             "Add ons": "Foil stars",
             "Column Height": "5ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 180.0
         },
@@ -20707,7 +20707,7 @@
           "combo": {
             "Add ons": "Foil stars",
             "Column Height": "6ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 180.0
         },
@@ -21396,7 +21396,7 @@
           "combo": {
             "Add ons": "Foil stars",
             "Column Height": "7ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 180.0
         },
@@ -22085,7 +22085,7 @@
           "combo": {
             "Add ons": "Foil stars",
             "Column Height": "8ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 180.0
         },
@@ -22774,7 +22774,7 @@
           "combo": {
             "Add ons": "Foil stars",
             "Column Height": "9ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 180.0
         },
@@ -23463,7 +23463,7 @@
           "combo": {
             "Add ons": "Foil stars",
             "Column Height": "10ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 180.0
         },
@@ -24152,7 +24152,7 @@
           "combo": {
             "Add ons": "themed foils",
             "Column Height": "5ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 180.0
         },
@@ -24841,7 +24841,7 @@
           "combo": {
             "Add ons": "themed foils",
             "Column Height": "6ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 180.0
         },
@@ -25530,7 +25530,7 @@
           "combo": {
             "Add ons": "themed foils",
             "Column Height": "7ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 180.0
         },
@@ -26219,7 +26219,7 @@
           "combo": {
             "Add ons": "themed foils",
             "Column Height": "8ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 180.0
         },
@@ -26908,7 +26908,7 @@
           "combo": {
             "Add ons": "themed foils",
             "Column Height": "9ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 180.0
         },
@@ -27597,7 +27597,7 @@
           "combo": {
             "Add ons": "themed foils",
             "Column Height": "10ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 180.0
         },
@@ -28430,7 +28430,7 @@
           "values": [
             {
               "ptav_id": 1508,
-              "name": "Reflex Champage"
+              "name": "Reflex Champagne"
             },
             {
               "ptav_id": 1509,
@@ -28739,7 +28739,7 @@
         "202": "Arch Size: 25ft",
         "203": "Arch Size: 30ft",
         "204": "Arch Size: 35ft",
-        "1508": "latex colors: Reflex Champage",
+        "1508": "latex colors: Reflex Champagne",
         "1509": "latex colors: Reflex Truffle",
         "1510": "latex colors: Dusk Cream",
         "1511": "latex colors: Dusk Green Tea",
@@ -28809,7 +28809,7 @@
             "Arch Size": "20ft",
             "Design": "Swirl (up to 4 colors)",
             "LED Lights": "No Lights",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 260.0
         },
@@ -29604,7 +29604,7 @@
             "Arch Size": "20ft",
             "Design": "Swirl (up to 4 colors)",
             "LED Lights": "Add LED Lights",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 260.0
         },
@@ -30399,7 +30399,7 @@
             "Arch Size": "20ft",
             "Design": "Layered (up to 8 colors)",
             "LED Lights": "No Lights",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 260.0
         },
@@ -31194,7 +31194,7 @@
             "Arch Size": "20ft",
             "Design": "Layered (up to 8 colors)",
             "LED Lights": "Add LED Lights",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 260.0
         },
@@ -31989,7 +31989,7 @@
             "Arch Size": "25ft",
             "Design": "Swirl (up to 4 colors)",
             "LED Lights": "No Lights",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 260.0
         },
@@ -32784,7 +32784,7 @@
             "Arch Size": "25ft",
             "Design": "Swirl (up to 4 colors)",
             "LED Lights": "Add LED Lights",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 260.0
         },
@@ -33579,7 +33579,7 @@
             "Arch Size": "25ft",
             "Design": "Layered (up to 8 colors)",
             "LED Lights": "No Lights",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 260.0
         },
@@ -34374,7 +34374,7 @@
             "Arch Size": "25ft",
             "Design": "Layered (up to 8 colors)",
             "LED Lights": "Add LED Lights",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 260.0
         },
@@ -35169,7 +35169,7 @@
             "Arch Size": "30ft",
             "Design": "Swirl (up to 4 colors)",
             "LED Lights": "No Lights",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 260.0
         },
@@ -35964,7 +35964,7 @@
             "Arch Size": "30ft",
             "Design": "Swirl (up to 4 colors)",
             "LED Lights": "Add LED Lights",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 260.0
         },
@@ -36759,7 +36759,7 @@
             "Arch Size": "30ft",
             "Design": "Layered (up to 8 colors)",
             "LED Lights": "No Lights",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 260.0
         },
@@ -37554,7 +37554,7 @@
             "Arch Size": "30ft",
             "Design": "Layered (up to 8 colors)",
             "LED Lights": "Add LED Lights",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 260.0
         },
@@ -38349,7 +38349,7 @@
             "Arch Size": "35ft",
             "Design": "Swirl (up to 4 colors)",
             "LED Lights": "No Lights",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 260.0
         },
@@ -39144,7 +39144,7 @@
             "Arch Size": "35ft",
             "Design": "Swirl (up to 4 colors)",
             "LED Lights": "Add LED Lights",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 260.0
         },
@@ -39939,7 +39939,7 @@
             "Arch Size": "35ft",
             "Design": "Layered (up to 8 colors)",
             "LED Lights": "No Lights",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 260.0
         },
@@ -40734,7 +40734,7 @@
             "Arch Size": "35ft",
             "Design": "Layered (up to 8 colors)",
             "LED Lights": "Add LED Lights",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 260.0
         },
@@ -41574,7 +41574,7 @@
           "values": [
             {
               "ptav_id": 1828,
-              "name": "Reflex Champage"
+              "name": "Reflex Champagne"
             },
             {
               "ptav_id": 1829,
@@ -41891,7 +41891,7 @@
         "241": "Column Height: 8ft",
         "242": "Column Height: 9ft",
         "243": "Column Height: 10ft",
-        "1828": "latex colors: Reflex Champage",
+        "1828": "latex colors: Reflex Champagne",
         "1829": "latex colors: Reflex Truffle",
         "1830": "latex colors: Dusk Cream",
         "1831": "latex colors: Dusk Green Tea",
@@ -41960,7 +41960,7 @@
           ],
           "combo": {
             "Column Height": "5ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "large topper"
           },
           "price": 65.0
@@ -41973,7 +41973,7 @@
           ],
           "combo": {
             "Column Height": "5ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "Burst"
           },
           "price": 65.0
@@ -41986,7 +41986,7 @@
           ],
           "combo": {
             "Column Height": "5ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "foil star"
           },
           "price": 65.0
@@ -41999,7 +41999,7 @@
           ],
           "combo": {
             "Column Height": "5ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "foil heart"
           },
           "price": 65.0
@@ -42012,7 +42012,7 @@
           ],
           "combo": {
             "Column Height": "5ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "bubble gum"
           },
           "price": 65.0
@@ -42025,7 +42025,7 @@
           ],
           "combo": {
             "Column Height": "5ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "Logo"
           },
           "price": 65.0
@@ -46094,7 +46094,7 @@
           ],
           "combo": {
             "Column Height": "6ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "large topper"
           },
           "price": 65.0
@@ -46107,7 +46107,7 @@
           ],
           "combo": {
             "Column Height": "6ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "Burst"
           },
           "price": 65.0
@@ -46120,7 +46120,7 @@
           ],
           "combo": {
             "Column Height": "6ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "foil star"
           },
           "price": 65.0
@@ -46133,7 +46133,7 @@
           ],
           "combo": {
             "Column Height": "6ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "foil heart"
           },
           "price": 65.0
@@ -46146,7 +46146,7 @@
           ],
           "combo": {
             "Column Height": "6ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "bubble gum"
           },
           "price": 65.0
@@ -46159,7 +46159,7 @@
           ],
           "combo": {
             "Column Height": "6ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "Logo"
           },
           "price": 65.0
@@ -50228,7 +50228,7 @@
           ],
           "combo": {
             "Column Height": "7ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "large topper"
           },
           "price": 65.0
@@ -50241,7 +50241,7 @@
           ],
           "combo": {
             "Column Height": "7ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "Burst"
           },
           "price": 65.0
@@ -50254,7 +50254,7 @@
           ],
           "combo": {
             "Column Height": "7ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "foil star"
           },
           "price": 65.0
@@ -50267,7 +50267,7 @@
           ],
           "combo": {
             "Column Height": "7ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "foil heart"
           },
           "price": 65.0
@@ -50280,7 +50280,7 @@
           ],
           "combo": {
             "Column Height": "7ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "bubble gum"
           },
           "price": 65.0
@@ -50293,7 +50293,7 @@
           ],
           "combo": {
             "Column Height": "7ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "Logo"
           },
           "price": 65.0
@@ -54362,7 +54362,7 @@
           ],
           "combo": {
             "Column Height": "8ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "large topper"
           },
           "price": 65.0
@@ -54375,7 +54375,7 @@
           ],
           "combo": {
             "Column Height": "8ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "Burst"
           },
           "price": 65.0
@@ -54388,7 +54388,7 @@
           ],
           "combo": {
             "Column Height": "8ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "foil star"
           },
           "price": 65.0
@@ -54401,7 +54401,7 @@
           ],
           "combo": {
             "Column Height": "8ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "foil heart"
           },
           "price": 65.0
@@ -54414,7 +54414,7 @@
           ],
           "combo": {
             "Column Height": "8ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "bubble gum"
           },
           "price": 65.0
@@ -54427,7 +54427,7 @@
           ],
           "combo": {
             "Column Height": "8ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "Logo"
           },
           "price": 65.0
@@ -58496,7 +58496,7 @@
           ],
           "combo": {
             "Column Height": "9ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "large topper"
           },
           "price": 65.0
@@ -58509,7 +58509,7 @@
           ],
           "combo": {
             "Column Height": "9ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "Burst"
           },
           "price": 65.0
@@ -58522,7 +58522,7 @@
           ],
           "combo": {
             "Column Height": "9ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "foil star"
           },
           "price": 65.0
@@ -58535,7 +58535,7 @@
           ],
           "combo": {
             "Column Height": "9ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "foil heart"
           },
           "price": 65.0
@@ -58548,7 +58548,7 @@
           ],
           "combo": {
             "Column Height": "9ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "bubble gum"
           },
           "price": 65.0
@@ -58561,7 +58561,7 @@
           ],
           "combo": {
             "Column Height": "9ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "Logo"
           },
           "price": 65.0
@@ -62630,7 +62630,7 @@
           ],
           "combo": {
             "Column Height": "10ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "large topper"
           },
           "price": 65.0
@@ -62643,7 +62643,7 @@
           ],
           "combo": {
             "Column Height": "10ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "Burst"
           },
           "price": 65.0
@@ -62656,7 +62656,7 @@
           ],
           "combo": {
             "Column Height": "10ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "foil star"
           },
           "price": 65.0
@@ -62669,7 +62669,7 @@
           ],
           "combo": {
             "Column Height": "10ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "foil heart"
           },
           "price": 65.0
@@ -62682,7 +62682,7 @@
           ],
           "combo": {
             "Column Height": "10ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "bubble gum"
           },
           "price": 65.0
@@ -62695,7 +62695,7 @@
           ],
           "combo": {
             "Column Height": "10ft",
-            "latex colors": "Reflex Champage",
+            "latex colors": "Reflex Champagne",
             "topper": "Logo"
           },
           "price": 65.0
@@ -66808,7 +66808,7 @@
           "values": [
             {
               "ptav_id": 1881,
-              "name": "Reflex Champage"
+              "name": "Reflex Champagne"
             },
             {
               "ptav_id": 1882,
@@ -67089,7 +67089,7 @@
         "378": "Column Height: 8ft",
         "379": "Column Height: 9ft",
         "380": "Column Height: 10ft",
-        "1881": "latex colors: Reflex Champage",
+        "1881": "latex colors: Reflex Champagne",
         "1882": "latex colors: Reflex Truffle",
         "1883": "latex colors: Dusk Cream",
         "1884": "latex colors: Dusk Green Tea",
@@ -67151,7 +67151,7 @@
           ],
           "combo": {
             "Column Height": "5ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 125.0
         },
@@ -67734,7 +67734,7 @@
           ],
           "combo": {
             "Column Height": "6ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 125.0
         },
@@ -68317,7 +68317,7 @@
           ],
           "combo": {
             "Column Height": "7ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 125.0
         },
@@ -68900,7 +68900,7 @@
           ],
           "combo": {
             "Column Height": "8ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 125.0
         },
@@ -69483,7 +69483,7 @@
           ],
           "combo": {
             "Column Height": "9ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 125.0
         },
@@ -70066,7 +70066,7 @@
           ],
           "combo": {
             "Column Height": "10ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 125.0
         },
@@ -70682,7 +70682,7 @@
           "values": [
             {
               "ptav_id": 1296,
-              "name": "Reflex Champage"
+              "name": "Reflex Champagne"
             },
             {
               "ptav_id": 1297,
@@ -70957,7 +70957,7 @@
         "1293": "Garland Length: 6ft",
         "1294": "Garland Length: 9ft",
         "1295": "Garland Length: 12ft",
-        "1296": "latex colors: Reflex Champage",
+        "1296": "latex colors: Reflex Champagne",
         "1297": "latex colors: Reflex Truffle",
         "1298": "latex colors: Dusk Cream",
         "1299": "latex colors: Dusk Green Tea",
@@ -71019,7 +71019,7 @@
           ],
           "combo": {
             "Garland Length": "6ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 150.0
         },
@@ -71602,7 +71602,7 @@
           ],
           "combo": {
             "Garland Length": "9ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 150.0
         },
@@ -72185,7 +72185,7 @@
           ],
           "combo": {
             "Garland Length": "12ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 150.0
         },
@@ -72801,7 +72801,7 @@
           "values": [
             {
               "ptav_id": 2040,
-              "name": "Reflex Champage"
+              "name": "Reflex Champagne"
             },
             {
               "ptav_id": 2041,
@@ -73076,7 +73076,7 @@
         "802": "Drop Size: 250",
         "803": "Drop Size: 500",
         "804": "Drop Size: 1000",
-        "2040": "latex colors: Reflex Champage",
+        "2040": "latex colors: Reflex Champagne",
         "2041": "latex colors: Reflex Truffle",
         "2042": "latex colors: Dusk Cream",
         "2043": "latex colors: Dusk Green Tea",
@@ -73138,7 +73138,7 @@
           ],
           "combo": {
             "Drop Size": "250",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 375.0
         },
@@ -73721,7 +73721,7 @@
           ],
           "combo": {
             "Drop Size": "500",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 375.0
         },
@@ -74304,7 +74304,7 @@
           ],
           "combo": {
             "Drop Size": "1000",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 375.0
         },
@@ -74924,7 +74924,7 @@
           "values": [
             {
               "ptav_id": 1722,
-              "name": "Reflex Champage"
+              "name": "Reflex Champagne"
             },
             {
               "ptav_id": 1723,
@@ -75222,7 +75222,7 @@
         "550": "Arch Size: 25ft",
         "551": "Arch Size: 30ft",
         "552": "Arch Size: 35ft",
-        "1722": "latex colors: Reflex Champage",
+        "1722": "latex colors: Reflex Champagne",
         "1723": "latex colors: Reflex Truffle",
         "1724": "latex colors: Dusk Cream",
         "1725": "latex colors: Dusk Green Tea",
@@ -75289,7 +75289,7 @@
           "combo": {
             "Add ons": "None",
             "Arch Size": "20ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 500.0
         },
@@ -75978,7 +75978,7 @@
           "combo": {
             "Add ons": "None",
             "Arch Size": "25ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 500.0
         },
@@ -76667,7 +76667,7 @@
           "combo": {
             "Add ons": "None",
             "Arch Size": "30ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 500.0
         },
@@ -77356,7 +77356,7 @@
           "combo": {
             "Add ons": "None",
             "Arch Size": "35ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 500.0
         },
@@ -78045,7 +78045,7 @@
           "combo": {
             "Add ons": "Foil stars",
             "Arch Size": "20ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 500.0
         },
@@ -78734,7 +78734,7 @@
           "combo": {
             "Add ons": "Foil stars",
             "Arch Size": "25ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 500.0
         },
@@ -79423,7 +79423,7 @@
           "combo": {
             "Add ons": "Foil stars",
             "Arch Size": "30ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 500.0
         },
@@ -80112,7 +80112,7 @@
           "combo": {
             "Add ons": "Foil stars",
             "Arch Size": "35ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 500.0
         },
@@ -80801,7 +80801,7 @@
           "combo": {
             "Add ons": "themed foils",
             "Arch Size": "20ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 500.0
         },
@@ -81490,7 +81490,7 @@
           "combo": {
             "Add ons": "themed foils",
             "Arch Size": "25ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 500.0
         },
@@ -82179,7 +82179,7 @@
           "combo": {
             "Add ons": "themed foils",
             "Arch Size": "30ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 500.0
         },
@@ -82868,7 +82868,7 @@
           "combo": {
             "Add ons": "themed foils",
             "Arch Size": "35ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 500.0
         },
@@ -88093,7 +88093,7 @@
           "values": [
             {
               "ptav_id": 1402,
-              "name": "Reflex Champage"
+              "name": "Reflex Champagne"
             },
             {
               "ptav_id": 1403,
@@ -88362,7 +88362,7 @@
         "1454": []
       },
       "mapped_attribute_names": {
-        "1402": "latex colors: Reflex Champage",
+        "1402": "latex colors: Reflex Champagne",
         "1403": "latex colors: Reflex Truffle",
         "1404": "latex colors: Dusk Cream",
         "1405": "latex colors: Dusk Green Tea",
@@ -88422,7 +88422,7 @@
             1402
           ],
           "combo": {
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 120.0
         },
@@ -88914,7 +88914,7 @@
           "values": [
             {
               "ptav_id": 1455,
-              "name": "Reflex Champage"
+              "name": "Reflex Champagne"
             },
             {
               "ptav_id": 1456,
@@ -89183,7 +89183,7 @@
         "1507": []
       },
       "mapped_attribute_names": {
-        "1455": "latex colors: Reflex Champage",
+        "1455": "latex colors: Reflex Champagne",
         "1456": "latex colors: Reflex Truffle",
         "1457": "latex colors: Dusk Cream",
         "1458": "latex colors: Dusk Green Tea",
@@ -89243,7 +89243,7 @@
             1455
           ],
           "combo": {
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 100.0
         },
@@ -89755,7 +89755,7 @@
           "values": [
             {
               "ptav_id": 1117,
-              "name": "Reflex Champage"
+              "name": "Reflex Champagne"
             },
             {
               "ptav_id": 1118,
@@ -90025,7 +90025,7 @@
         "1005": "Garland Length: 6ft",
         "1006": "Garland Length: 9ft",
         "1007": "Garland Length: 12ft",
-        "1117": "latex colors: Reflex Champage",
+        "1117": "latex colors: Reflex Champagne",
         "1118": "latex colors: Reflex Truffle",
         "1119": "latex colors: Dusk Cream",
         "1120": "latex colors: Dusk Green Tea",
@@ -90086,7 +90086,7 @@
           ],
           "combo": {
             "Garland Length": "6ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 70.0
         },
@@ -90658,7 +90658,7 @@
           ],
           "combo": {
             "Garland Length": "9ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 70.0
         },
@@ -91230,7 +91230,7 @@
           ],
           "combo": {
             "Garland Length": "12ft",
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 70.0
         },
@@ -144116,7 +144116,7 @@
           "values": [
             {
               "ptav_id": 2093,
-              "name": "Reflex Champage"
+              "name": "Reflex Champagne"
             },
             {
               "ptav_id": 2094,
@@ -144385,7 +144385,7 @@
         "2145": []
       },
       "mapped_attribute_names": {
-        "2093": "latex colors: Reflex Champage",
+        "2093": "latex colors: Reflex Champagne",
         "2094": "latex colors: Reflex Truffle",
         "2095": "latex colors: Dusk Cream",
         "2096": "latex colors: Dusk Green Tea",
@@ -144445,7 +144445,7 @@
             2093
           ],
           "combo": {
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 220.0
         },
@@ -144997,7 +144997,7 @@
           "values": [
             {
               "ptav_id": 2148,
-              "name": "Reflex Champage"
+              "name": "Reflex Champagne"
             },
             {
               "ptav_id": 2149,
@@ -145266,7 +145266,7 @@
         "2200": []
       },
       "mapped_attribute_names": {
-        "2148": "latex colors: Reflex Champage",
+        "2148": "latex colors: Reflex Champagne",
         "2149": "latex colors: Reflex Truffle",
         "2150": "latex colors: Dusk Cream",
         "2151": "latex colors: Dusk Green Tea",
@@ -145326,7 +145326,7 @@
             2148
           ],
           "combo": {
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 90.0
         },
@@ -147692,7 +147692,7 @@
           "values": [
             {
               "ptav_id": 2707,
-              "name": "Reflex Champage"
+              "name": "Reflex Champagne"
             },
             {
               "ptav_id": 2708,
@@ -147961,7 +147961,7 @@
         "2759": []
       },
       "mapped_attribute_names": {
-        "2707": "latex colors: Reflex Champage",
+        "2707": "latex colors: Reflex Champagne",
         "2708": "latex colors: Reflex Truffle",
         "2709": "latex colors: Dusk Cream",
         "2710": "latex colors: Dusk Green Tea",
@@ -148021,7 +148021,7 @@
             2707
           ],
           "combo": {
-            "latex colors": "Reflex Champage"
+            "latex colors": "Reflex Champagne"
           },
           "price": 100.0
         },

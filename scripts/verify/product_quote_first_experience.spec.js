@@ -191,7 +191,7 @@ for (const viewport of VIEWPORTS) {
 		expect(configuration.color_recipes).toEqual([
 			expect.objectContaining({
 				axis: "latex colors",
-				values: expect.arrayContaining(["Reflex Champage"]),
+				values: expect.arrayContaining(["Reflex Champagne"]),
 			}),
 		]);
 	});
