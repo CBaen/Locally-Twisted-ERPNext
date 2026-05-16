@@ -126,6 +126,26 @@ capability:
 Recipe:
 `capabilities/failures/public-form-photo-storage-owner-attachment-gap.md`.
 
+**Public inquiry form spam/solicitation rule (2026-05-15):** `/contact` and
+BTFP keep one shared `inquiry-v1` form. The form must render a signed
+`lt_form_token` and invisible `website` honeypot; backend submit must reject
+missing/too-fast/stale/honeypot posts before Lead creation, emails, or file
+handling. High-confidence sales solicitations are soft-filtered: keep the Lead
+and customer-safe confirmation path for audit/review, suppress only the owner
+notification, and never block plausible event customers because they mention
+corporate, marketing, school, nonprofit, decor, balloons, dates, guests, or
+services. Source handoff:
+`workstreams/inquiry-form-spam-sales-filter-2026-05-15.md`; capabilities:
+`capabilities/recipes/shared-inquiry-form-experience.md`,
+`capabilities/recipes/erpnext-intake-form-parity.md`, and
+`capabilities/recipes/frappe-public-storefront-security.md`; guards:
+`python scripts/verify/inquiry_spam_gate.py --base-url http://localhost:8081`
+and
+`python scripts/verify/inquiry_sales_solicitation_filter.py --base-url http://localhost:8081`.
+This code is live as of `631f9a8` / `b4b3bf8`; the 2026-05-16 live smoke proved
+the happy path, but not the dedicated live bot/sales fixture branches. Rerun the
+spam and sales gates against live after any future form-security change.
+
 **External review access rule (2026-05-15):** outside review accounts for
 Locally Twisted use standard Frappe `Website User` accounts plus a narrow
 explicit role, not custom User Types or Desk access. Current marketing lane:
@@ -157,26 +177,6 @@ owner DTO/API boundaries are guarded by `npm run test:owner-actions` and
 `python scripts/verify/owner_business_access_contract.py`. Future ChatGPT,
 OAuth, API, MCP, or OpenAPI work must stay as adapters over this DTO boundary,
 not direct raw ERPNext access.
-
-**Public inquiry form spam/solicitation rule (2026-05-15):** `/contact` and
-BTFP keep one shared `inquiry-v1` form. The form must render a signed
-`lt_form_token` and invisible `website` honeypot; backend submit must reject
-missing/too-fast/stale/honeypot posts before Lead creation, emails, or file
-handling. High-confidence sales solicitations are soft-filtered: keep the Lead
-and customer-safe confirmation path for audit/review, suppress only the owner
-notification, and never block plausible event customers because they mention
-corporate, marketing, school, nonprofit, decor, balloons, dates, guests, or
-services. Source handoff:
-`workstreams/inquiry-form-spam-sales-filter-2026-05-15.md`; capabilities:
-`capabilities/recipes/shared-inquiry-form-experience.md`,
-`capabilities/recipes/erpnext-intake-form-parity.md`, and
-`capabilities/recipes/frappe-public-storefront-security.md`; guards:
-`python scripts/verify/inquiry_spam_gate.py --base-url http://localhost:8081`
-and
-`python scripts/verify/inquiry_sales_solicitation_filter.py --base-url http://localhost:8081`.
-This code is live as of `631f9a8` / `b4b3bf8`; the 2026-05-16 live smoke proved
-the happy path, but not the dedicated live bot/sales fixture branches. Rerun the
-spam and sales gates against live after any future form-security change.
 
 **Operating law (2026-05-08):** no hand-authored production monoliths. Files should have one clear job unless they are explicitly research/reference artifacts. Use `workstreams/no-monolith-operating-contract.md` and the global capability `C:\Users\baenb\capabilities\principles\no-monolith-files.md` before expanding large source, template, CSS, verifier, script, or project-doc files.
 
@@ -241,7 +241,7 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 - [P0] **Ready-to-order ecommerce launch hardening and real catalog import gate.** Active front-door handoff: `workstreams/ecommerce-audit/README.md`; current post-import checkout closeout: `workstreams/ecommerce-audit/post-import-checkout-launch-closeout-2026-05-11.md`; import gate handoff: `workstreams/ecommerce-audit/product-import-hardening-gate-2026-05-11.md`; payment cutover checklist: `workstreams/payment-portal-live-cutover-checklist-2026-05-11.md`; receiving architecture handoff/capability: `workstreams/erpnext-ecommerce-receiving-architecture.md` and `capabilities/recipes/erpnext-ecommerce-receiving-architecture.md`. Current local proof uses the corrected manifest: 48 kept products and 5 owner-explicit Classic exclusions (`classic-organic-balloon-garland`, `classic-arch`, `classic-column`, `classic-organic-columns`, `classic-organic-arch`). The approved local import completed with exit 0 against the local ERPNext `frontend` site only and proved the guarded upsert/write path; it is not a delete/recreate transcript. Final browser proof passed with `& "C:\Program Files\nodejs\node.exe" scripts/verify/post_import_checkout_proof.js` for Easter Balloon Cups, 7' Butterfly Column, Graduation Grab n Go, 6' Graduation stands, and Unicorn Bouquet. 2026-05-12 verifier hardening now proves visible color-drawer selections produce `color_recipes` for 7' Butterfly Column and Graduation Grab n Go, then passes the non-mutating checkout totals preview before accepting checkout summary proof. Backend contracts are green for `product_import_readiness_gate`, `post_import_catalog_state`, `direct_checkout_target_contract`, and `cart_checkout_contract`; `post_import_catalog_state` now fails loudly if any included product is missing, unpublished, disabled, or unpriced. Direct paid checkout still requires explicit `simple_product|checkout`; blank, partial, inferred, quote-first, and needs-review Website Item states fail closed. Remaining caveats: 8 review-only add-on axes are protected by quote-first fallback until mapped, the five Classic exclusions remain quote-first, current product records are still local import/proof evidence rather than final real catalog approval, and live Frappe Cloud/Stripe/DNS/webhook/real payment gates remain separate.
   2026-05-12 nav/search review closeout is `workstreams/ecommerce-audit/ready-to-order-nav-search-backend-gate-2026-05-12.md`: Ready-to-Order quick links now require owner include plus backend `simple_product|checkout`, owner include cannot bypass checkout eligibility, and the search contract treats filtered backend-approved links as hidden rather than removed from the DOM.
   2026-05-14 product blueprint authoring handoff is `workstreams/ecommerce-audit/product-blueprint-authoring-2026-05-14.md`; capability is `capabilities/recipes/erpnext-product-blueprint-authoring.md`. Employees can now define product basics, options, color recipes, add-ons, and conditional pricing in `LT Product Blueprint`, preview a no-write apply plan, and use guarded local Desk apply to create unpublished ERPNext product records. Local `frontend` has `lt_allow_local_blueprint_apply=1` for this test harness. Do not enable that gate on staging/live or publish generated Website Items without product-page browser proof, cart/checkout proof, media/conditional-pricing/add-on family mapping, refreshed import safety evidence, and explicit release approval.
-  2026-05-15 generic Product Setup runtime handoff is `workstreams/ecommerce-audit/generic-product-setup-runtime-2026-05-15.md`: selection groups are generic, SKU-defining axes resolve to ERPNext variants, configuration-only groups stay out of variant generation, setup schemas/API feed the product page, cart/checkout validates server-side, Sales Order/Sales Invoice/Quotation records preserve structured details, approved media rules can drive customer images, and `LT Owner Home` Add Product opens Product Setup. Cleanup proof reran migrate, backend workspace sync, Product Blueprint, product-page runtime, cart/checkout, live/staff setup, variant media, Stripe amount parity, ecommerce pause, and verifier CLI gates. Remaining gates are fresh import snapshot/readiness, staging/live Stripe/webhook/payment approval, and final product scope approval.
+  2026-05-15 generic Product Setup runtime handoff is `workstreams/ecommerce-audit/generic-product-setup-runtime-2026-05-15.md`: selection groups are generic, SKU-defining axes resolve to ERPNext variants, configuration-only groups stay out of variant generation, setup schemas/API feed the product page, cart/checkout validates server-side, Sales Order/Sales Invoice/Quotation records preserve structured details, approved media rules can drive customer images, and `LT Owner Home` Add Product opens Product Setup. Follow-up proof now verifies an `Item Manager` staff user can create a high-cardinality setup, and controlled local open/restore proof passes ecommerce open-testing plus rendered product-page media checks before restoring `lt_ecommerce_paused=1`. Remaining gates are fresh import snapshot/readiness, staging/live Stripe/webhook/payment approval, and final product scope approval.
 
 - [P0] **Complex product-page checkout UI and browse rules.** Active storefront
   handoff: `workstreams/ecommerce-audit/storefront-proof-and-complex-ui-handoff-2026-05-11.md`.
