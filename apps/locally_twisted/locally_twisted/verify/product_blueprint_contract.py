@@ -38,6 +38,7 @@ BLUEPRINT_DOCTYPES = (
     "LT Product Blueprint Color Recipe",
     "LT Product Blueprint Add On",
     "LT Product Blueprint Conditional Price",
+    "LT Product Blueprint Media Rule",
 )
 
 
@@ -77,6 +78,7 @@ def _run_contract() -> dict[str, object]:
     before = _counts()
     doc = _insert_valid_quote_first_blueprint()
     _assert_validation_evidence(doc)
+    staff_result = _assert_item_manager_staff_setup_flow()
     _assert_live_approval_blocks()
     _assert_preview_with_blockers_blocks()
     after = _counts()
@@ -86,6 +88,7 @@ def _run_contract() -> dict[str, object]:
         "ok": True,
         "blueprint": doc.name,
         "validation_status": doc.validation_status,
+        "staff_setup": staff_result,
         "save_only_guard_counts_unchanged": True,
         "local_apply": apply_result,
     }
@@ -265,6 +268,104 @@ def _assert_guarded_local_apply() -> dict[str, object]:
         "published": result.get("website_item_published"),
         "dynamic_add_on_checked": True,
     }
+
+
+def _assert_item_manager_staff_setup_flow() -> dict[str, object]:
+    suffix = frappe.generate_hash(length=8).lower()
+    user = _insert_item_manager_user(suffix)
+    current_user = frappe.session.user
+    try:
+        frappe.set_user(user)
+        product_slug = f"staff-setup-proof-{suffix}"
+        doc = frappe.get_doc(
+            {
+                "doctype": "LT Product Blueprint",
+                "product_name": "Staff Setup Proof",
+                "product_slug": product_slug,
+                "item_group": _first_leaf_item_group(),
+                "page_template": "Ready-to-order page",
+                "buying_path": "Direct checkout",
+                "publish_status": "Draft",
+                "base_price": 35,
+                "option_rows": [
+                    {
+                        "axis_name": "Proof Size",
+                        "selection_behavior": "SKU-defining variant",
+                        "control_type": "Single select",
+                        "required": 1,
+                        "values": "Small\nLarge",
+                    },
+                    {
+                        "axis_name": "Design Choices",
+                        "selection_behavior": "Configuration only",
+                        "control_type": "Multi select",
+                        "required": 0,
+                        "min_selections": 0,
+                        "max_selections": 9,
+                        "values": "\n".join(f"Choice {idx:02d}" for idx in range(1, 61)),
+                    },
+                ],
+                "media_rule_rows": [
+                    {
+                        "rule_name": "Choice media proof",
+                        "rule_type": "Selection group",
+                        "selection_group": "Design Choices",
+                        "selection_value": "Choice 01",
+                        "image": "/files/staff-setup-media-proof.png",
+                        "approved_for_customer": 1,
+                    }
+                ],
+            }
+        ).insert()
+
+        if doc.owner != user:
+            raise ContractFail(f"Staff-created Product Setup owner should be the staff user, found {doc.owner}.")
+        if doc.validation_status != "Ready For Local Preview":
+            raise ContractFail(f"Staff setup should validate for local preview: {doc.validation_summary}")
+        apply_plan = json.loads(doc.apply_plan_json or "{}")
+        setup_schema = (apply_plan.get("planned_records") or {}).get("product_setup_schema") or {}
+        generation = setup_schema.get("generation") or {}
+        if generation.get("variant_combination_count") != 2:
+            raise ContractFail(f"Staff setup should create only SKU-defining variants: {generation}")
+        if generation.get("configuration_only_group_count") != 1:
+            raise ContractFail(f"Staff setup should preserve one configuration-only group: {generation}")
+        groups = {group.get("key"): group for group in setup_schema.get("selection_groups") or []}
+        design_group = groups.get("design-choices") or {}
+        if design_group.get("max_selections") != 9 or len(design_group.get("values") or []) != 60:
+            raise ContractFail(f"Staff high-cardinality group was not preserved: {design_group}")
+        if not setup_schema.get("media_rules"):
+            raise ContractFail("Staff setup media rule was not present in the Product Setup schema.")
+
+        preview = get_local_apply_preview(doc.name)
+        if not preview.get("ok") or preview.get("writes_enabled"):
+            raise ContractFail(f"Staff Desk preview should be readable and no-write: {preview}")
+        return {
+            "user": user,
+            "blueprint": doc.name,
+            "variant_combination_count": generation.get("variant_combination_count"),
+            "configuration_choice_count": len(design_group.get("values") or []),
+            "configuration_max": design_group.get("max_selections"),
+            "media_rules": len(setup_schema.get("media_rules") or []),
+        }
+    finally:
+        frappe.set_user(current_user)
+
+
+def _insert_item_manager_user(suffix: str) -> str:
+    email = f"lt-product-setup-{suffix}@example.invalid"
+    user = frappe.get_doc(
+        {
+            "doctype": "User",
+            "email": email,
+            "first_name": "Product",
+            "last_name": "Setup Proof",
+            "enabled": 1,
+            "send_welcome_email": 0,
+            "roles": [{"role": "Item Manager"}],
+        }
+    )
+    user.insert(ignore_permissions=True)
+    return email
 
 
 def _insert_support_add_on_item(suffix: str) -> str:

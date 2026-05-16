@@ -10,6 +10,8 @@ from __future__ import annotations
 import re
 from typing import Any
 
+from locally_twisted.product_setup_runtime import BEHAVIOR_TO_PAYLOAD_TARGET, ROLE_TO_BEHAVIOR
+
 
 SCHEMA_VERSION = "lt-product-blueprint-v1"
 
@@ -70,6 +72,7 @@ def blueprint_doc_to_dict(doc: Any) -> dict[str, Any]:
         "conditional_price_rows": [
             _row_to_dict(row) for row in getattr(doc, "conditional_price_rows", [])
         ],
+        "media_rule_rows": [_row_to_dict(row) for row in getattr(doc, "media_rule_rows", [])],
     }
 
 
@@ -168,8 +171,19 @@ def _validate_options(rows: list[dict[str, Any]], blockers: list[str], warnings:
         seen.add(row.get("axis_name"))
         if row.get("role") not in OPTION_ROLE_TO_PAYLOAD_TARGET:
             blockers.append(f"{label}: option role is not recognized.")
+        if row.get("min_selections") < 0:
+            blockers.append(f"{label}: minimum selections cannot be negative.")
+        if row.get("max_selections") < 0:
+            blockers.append(f"{label}: maximum selections cannot be negative.")
+        if row.get("max_selections") and row.get("min_selections") > row.get("max_selections"):
+            blockers.append(f"{label}: minimum selections cannot exceed maximum selections.")
+        for default in row.get("default_values") or []:
+            if default not in (row.get("values") or []):
+                blockers.append(f"{label}: default value {default} is not in the allowed values.")
         if not row.get("values"):
             blockers.append(f"{label}: at least one value is required.")
+        if row.get("pricing_behavior") == "Needs review":
+            warnings.append(f"{label}: pricing needs review before this selection can be checkout-ready.")
         if row.get("role") == "Review only":
             warnings.append(f"{label}: review-only options will route through quote context, not checkout.")
 
@@ -235,13 +249,23 @@ def _validate_conditional_prices(
 
 def _normalize_option(row: dict[str, Any]) -> dict[str, Any]:
     role = _text(row.get("role")) or "Sale unit option"
+    selection_behavior = _text(row.get("selection_behavior")) or ROLE_TO_BEHAVIOR.get(role, "SKU-defining variant")
+    payload_target = BEHAVIOR_TO_PAYLOAD_TARGET.get(selection_behavior) or OPTION_ROLE_TO_PAYLOAD_TARGET.get(role)
     values = _split_values(row.get("values"))
     return {
         "axis_name": _text(row.get("axis_name")),
         "role": role,
+        "selection_behavior": selection_behavior,
+        "control_type": _text(row.get("control_type")) or ("Multi select" if _int(row.get("max_selections")) > 1 else "Single select"),
         "required": _as_bool(row.get("required")),
+        "min_selections": _int(row.get("min_selections")),
+        "max_selections": _int(row.get("max_selections")),
         "values": values,
-        "payload_target": OPTION_ROLE_TO_PAYLOAD_TARGET.get(role),
+        "default_values": _split_values(row.get("default_values")),
+        "payload_target": payload_target,
+        "pricing_behavior": _text(row.get("pricing_behavior")) or "Included in base price",
+        "media_behavior": _text(row.get("media_behavior")) or "No image change",
+        "document_output": _text(row.get("document_output")) or "Customer and operator",
         "operator_note": _text(row.get("operator_note")),
     }
 
@@ -285,9 +309,17 @@ def _row_to_dict(row: Any) -> dict[str, Any]:
     keys = (
         "axis_name",
         "role",
+        "selection_behavior",
+        "control_type",
         "required",
+        "min_selections",
+        "max_selections",
         "values",
+        "default_values",
         "payload_target",
+        "pricing_behavior",
+        "media_behavior",
+        "document_output",
         "operator_note",
         "recipe_name",
         "min_colors",
@@ -305,6 +337,13 @@ def _row_to_dict(row: Any) -> dict[str, Any]:
         "price_behavior",
         "amount",
         "approved_for_checkout",
+        "rule_name",
+        "rule_type",
+        "selection_group",
+        "selection_value",
+        "variant_item",
+        "image",
+        "approved_for_customer",
     )
     return {key: getattr(row, key, None) for key in keys if hasattr(row, key)}
 

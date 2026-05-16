@@ -129,6 +129,8 @@
         </div>
     {%- endfor -%}
 
+    <div class="lt-product__setup-groups js-lt-product-setup-groups"></div>
+
     {%- if lt_add_on_options -%}
         <div class="lt-product__addons" aria-label="{{ _('Optional upgrades') }}">
             {%- for add_on in lt_add_on_options -%}
@@ -277,12 +279,16 @@
             method: 'locally_twisted.api.variant_media.get_variant_media',
             args: {
                 item_code: variantCode,
-                template_item_code: templateCode
+                template_item_code: templateCode,
+                configuration: selectedConfiguration(variantCode)
             },
             callback: function (mr) {
                 if (requestId !== mediaRequestSerial) return;
                 var media = (mr && mr.message) || {};
-                if (media.image) {
+                var setupMedia = approvedSetupMedia(variantCode);
+                if (setupMedia && setupMedia.image) {
+                    setProductImage(setupMedia.image, setupMedia.label || media.alt || '');
+                } else if (media.image) {
                     setProductImage(media.image, media.alt || '');
                 } else {
                     resetProductImage();
@@ -475,9 +481,24 @@
             website_item_code: templateCode,
             selected_options: selectedSaleUnitAttrs(),
             color_recipes: selectedColorRecipeRows(),
+            configuration_groups: selectedProductSetupGroups(),
             add_ons: selectedAddOns(),
             customizations: []
         };
+    }
+
+    function selectedProductSetupGroups() {
+        if (window.LT_PRODUCT_SETUP && typeof window.LT_PRODUCT_SETUP.collectConfigurationGroups === 'function') {
+            return window.LT_PRODUCT_SETUP.collectConfigurationGroups(form);
+        }
+        return [];
+    }
+
+    function approvedSetupMedia(variantCode) {
+        if (window.LT_PRODUCT_SETUP && typeof window.LT_PRODUCT_SETUP.selectedMediaRule === 'function') {
+            return window.LT_PRODUCT_SETUP.selectedMediaRule(form, variantCode);
+        }
+        return null;
     }
 
     function selectedAddOns() {
@@ -613,6 +634,14 @@
 
     form.addEventListener('change', handleAttributeInput);
     form.addEventListener('input', handleAttributeInput);
+
+    function handleProductSetupInput(event) {
+        var input = event.target && event.target.closest ? event.target.closest('.js-lt-product-setup-input') : null;
+        if (input) refresh();
+    }
+
+    form.addEventListener('change', handleProductSetupInput);
+    form.addEventListener('input', handleProductSetupInput);
 
     addOnRows.forEach(function (row) {
         var toggle = row.querySelector('.js-lt-addon-toggle');

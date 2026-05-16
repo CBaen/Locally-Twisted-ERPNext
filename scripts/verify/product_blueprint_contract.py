@@ -25,6 +25,10 @@ from locally_twisted.product_blueprint_local_apply import (  # noqa: E402
     build_local_apply_preview,
     validate_local_apply_request,
 )
+from locally_twisted.product_setup_runtime import (  # noqa: E402
+    build_product_setup_schema,
+    resolve_product_setup_configuration,
+)
 
 
 DOCTYPE_ROOT = ROOT / "apps" / "locally_twisted" / "locally_twisted" / "locally_twisted" / "doctype"
@@ -264,6 +268,185 @@ class ProductBlueprintContractTest(unittest.TestCase):
             data = _doctype(folder, filename)
             self.assertEqual(data.get("istable"), 1, filename)
             self.assertEqual(data.get("permissions"), [], filename)
+
+    def test_generic_selection_groups_do_not_infer_product_specific_defaults(self) -> None:
+        values = "\n".join(f"Choice {idx:02d}" for idx in range(1, 61))
+        schema = build_product_setup_schema(
+            _blueprint(
+                page_template="Ready-to-order page",
+                buying_path="Direct checkout",
+                base_price=35,
+                option_rows=[
+                    {
+                        "axis_name": "Size",
+                        "selection_behavior": "SKU-defining variant",
+                        "control_type": "Single select",
+                        "required": 1,
+                        "values": "Small\nLarge",
+                    },
+                    {
+                        "axis_name": "Design Choices",
+                        "selection_behavior": "Configuration only",
+                        "control_type": "Multi select",
+                        "required": 0,
+                        "min_selections": 0,
+                        "max_selections": 9,
+                        "values": values,
+                    },
+                ],
+            )
+        )
+
+        groups = {row["key"]: row for row in schema["selection_groups"]}
+        self.assertTrue(groups["size"]["sku_defining"])
+        self.assertEqual(groups["size"]["payload_target"], "selected_options")
+        self.assertFalse(groups["design-choices"]["sku_defining"])
+        self.assertEqual(groups["design-choices"]["payload_target"], "configuration_groups")
+        self.assertEqual(groups["design-choices"]["max_selections"], 9)
+        self.assertEqual(len(groups["design-choices"]["values"]), 60)
+        self.assertEqual(groups["design-choices"]["default_values"], [])
+        self.assertEqual(schema["generation"]["variant_combination_count"], 2)
+
+    def test_generic_resolver_enforces_min_max_and_allowed_values(self) -> None:
+        schema = build_product_setup_schema(
+            _blueprint(
+                page_template="Ready-to-order page",
+                buying_path="Direct checkout",
+                base_price=35,
+                option_rows=[
+                    {
+                        "axis_name": "Size",
+                        "selection_behavior": "SKU-defining variant",
+                        "required": 1,
+                        "values": "Small\nLarge",
+                    },
+                    {
+                        "axis_name": "Design Choices",
+                        "selection_behavior": "Configuration only",
+                        "control_type": "Multi select",
+                        "required": 1,
+                        "min_selections": 1,
+                        "max_selections": 2,
+                        "values": "One\nTwo\nThree",
+                    },
+                ],
+            )
+        )
+
+        too_many = resolve_product_setup_configuration(
+            schema,
+            {"selections": {"size": "Small", "design-choices": ["One", "Two", "Three"]}},
+        )
+        self.assertFalse(too_many["ok"])
+        self.assertTrue(any("at most 2" in row for row in too_many["blockers"]))
+
+        unknown = resolve_product_setup_configuration(
+            schema,
+            {"selections": {"size": "Small", "design-choices": ["Four"]}},
+        )
+        self.assertFalse(unknown["ok"])
+        self.assertTrue(any("is not an allowed choice" in row for row in unknown["blockers"]))
+
+    def test_generic_resolver_preserves_checkout_payload_without_variant_explosion(self) -> None:
+        schema = build_product_setup_schema(
+            _blueprint(
+                page_template="Ready-to-order page",
+                buying_path="Direct checkout",
+                base_price=35,
+                option_rows=[
+                    {
+                        "axis_name": "Size",
+                        "selection_behavior": "SKU-defining variant",
+                        "required": 1,
+                        "values": "Small\nLarge",
+                    },
+                    {
+                        "axis_name": "Design Choices",
+                        "selection_behavior": "Configuration only",
+                        "control_type": "Multi select",
+                        "required": 1,
+                        "min_selections": 1,
+                        "max_selections": 9,
+                        "values": "\n".join(f"Choice {idx:02d}" for idx in range(1, 61)),
+                    },
+                ],
+            )
+        )
+
+        resolved = resolve_product_setup_configuration(
+            schema,
+            {"selections": {"size": "Large", "design-choices": ["Choice 01", "Choice 42"]}},
+        )
+
+        self.assertTrue(resolved["ok"], resolved)
+        self.assertEqual(resolved["commerce_outcome"], "checkout")
+        self.assertEqual(resolved["resolved_variant_attributes"], {"Size": "Large"})
+        self.assertEqual(
+            resolved["configuration_payload"]["configuration_groups"],
+            [
+                {
+                    "key": "design-choices",
+                    "label": "Design Choices",
+                    "values": ["Choice 01", "Choice 42"],
+                    "document_output": "Customer and operator",
+                }
+            ],
+        )
+
+    def test_apply_plan_uses_only_sku_defining_groups_for_variants(self) -> None:
+        result = build_apply_plan(
+            _blueprint(
+                page_template="Ready-to-order page",
+                buying_path="Direct checkout",
+                base_price=35,
+                option_rows=[
+                    {
+                        "axis_name": "Size",
+                        "selection_behavior": "SKU-defining variant",
+                        "required": 1,
+                        "values": "Small\nLarge",
+                    },
+                    {
+                        "axis_name": "Design Choices",
+                        "selection_behavior": "Configuration only",
+                        "control_type": "Multi select",
+                        "max_selections": 9,
+                        "values": "\n".join(f"Choice {idx:02d}" for idx in range(1, 61)),
+                    },
+                ],
+            )
+        )
+
+        self.assertTrue(result["ok"], result)
+        self.assertEqual(len(result["planned_records"]["item_variants"]), 2)
+        self.assertEqual(result["planned_records"]["product_setup_schema"]["generation"]["variant_combination_count"], 2)
+
+    def test_product_setup_doctypes_have_generic_system_fields(self) -> None:
+        option = _doctype("lt_product_blueprint_option", "lt_product_blueprint_option.json")
+        fields = {field["fieldname"]: field for field in option["fields"]}
+        for fieldname in (
+            "selection_behavior",
+            "control_type",
+            "min_selections",
+            "max_selections",
+            "default_values",
+            "pricing_behavior",
+            "media_behavior",
+            "document_output",
+        ):
+            self.assertIn(fieldname, fields)
+
+        product = _doctype("lt_product_blueprint", "lt_product_blueprint.json")
+        product_fields = {field["fieldname"]: field for field in product["fields"]}
+        self.assertEqual(product_fields["media_rule_rows"]["options"], "LT Product Blueprint Media Rule")
+
+    def test_owner_add_product_opens_guided_product_setup(self) -> None:
+        workspace_seed = (ROOT / "apps" / "locally_twisted" / "locally_twisted" / "seed" / "sync_backend_workspaces.py").read_text(
+            encoding="utf-8"
+        )
+        workspace_contract = (ROOT / "scripts" / "verify" / "backend_workspace_parity.py").read_text(encoding="utf-8")
+        self.assertIn('"link_to": "LT Product Blueprint"', workspace_seed)
+        self.assertIn('"Add Product": ("LT Product Blueprint", "New")', workspace_contract)
 
 
 def _blueprint(**overrides):

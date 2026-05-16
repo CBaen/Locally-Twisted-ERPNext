@@ -63,6 +63,7 @@ def _run_contract():
     _assert_product_page_add_on_options_are_eligible()
     resolved_item, line = _assert_line_resolution_preserves_configuration()
     _assert_multi_color_checkout_configuration_preserved()
+    _assert_generic_product_setup_configuration_preserved()
     add_on_lines = _assert_foil_number_add_on_becomes_priced_line(resolved_item)
     sales_order = _assert_sales_order_accepts_line(line)
     add_on_sales_order = _assert_sales_order_accepts_lines(add_on_lines)
@@ -300,6 +301,119 @@ def _assert_multi_color_checkout_configuration_preserved() -> None:
             raise ContractFail(f"single-select color failed with wrong message: {exc}") from exc
     else:
         raise ContractFail("checkout accepted single-select color as selected_options")
+
+
+def _assert_generic_product_setup_configuration_preserved() -> None:
+    from locally_twisted.api.product_setup import get_product_setup_schema, resolve_product_setup
+    from locally_twisted.api.variant_media import get_variant_media
+    from locally_twisted.product_page_runtime import sales_order_line_configuration_fields
+
+    blueprint_name = f"lt-runtime-generic-proof-{int(time.time())}"
+    blueprint = frappe.get_doc(
+        {
+            "doctype": "LT Product Blueprint",
+            "product_name": "LT Runtime Generic Proof",
+            "product_slug": blueprint_name,
+            "item_group": "Bouquets",
+            "page_template": "Ready-to-order page",
+            "buying_path": "Direct checkout",
+            "publish_status": "Local Preview Ready",
+            "base_price": 35,
+            "target_item_code": "unicorn-bouquet",
+            "option_rows": [
+                {
+                    "axis_name": "Bouquet Size",
+                    "selection_behavior": "SKU-defining variant",
+                    "control_type": "Single select",
+                    "required": 1,
+                    "values": "Small\nMedium",
+                },
+                {
+                    "axis_name": "Design Choices",
+                    "selection_behavior": "Configuration only",
+                    "control_type": "Multi select",
+                    "required": 1,
+                    "min_selections": 1,
+                    "max_selections": 3,
+                    "values": "Ribbon\nCard\nCharm",
+                },
+            ],
+            "media_rule_rows": [
+                {
+                    "rule_name": "Ribbon image",
+                    "rule_type": "Selection group",
+                    "selection_group": "Design Choices",
+                    "selection_value": "Ribbon",
+                    "image": "/files/lt-product-setup-media-proof.png",
+                    "approved_for_customer": 1,
+                }
+            ],
+        }
+    )
+    blueprint.insert(ignore_permissions=True)
+    try:
+        resolved_item = {
+            "item_code": PROOF_ITEM,
+            "website_item_code": "unicorn-bouquet",
+            "variant_options": [{"attribute": "Bouquet Size", "attribute_value": "Small"}],
+        }
+        configuration = {
+            "schema_version": CONFIG_VERSION,
+            "item_code": PROOF_ITEM,
+            "website_item_code": "unicorn-bouquet",
+            "selected_options": {"bouquet-size": "Small"},
+            "configuration_groups": [
+                {
+                    "key": "design-choices",
+                    "label": "Design Choices",
+                    "values": ["Ribbon", "Card"],
+                    "document_output": "Customer and operator",
+                }
+            ],
+            "add_ons": [],
+            "customizations": [],
+        }
+        api_schema = get_product_setup_schema("unicorn-bouquet")
+        if api_schema.get("source") != "lt_product_setup":
+            raise ContractFail(f"generic Product Setup API returned wrong schema source: {api_schema}")
+        api_resolution = resolve_product_setup("unicorn-bouquet", json.dumps(configuration))
+        if not api_resolution.get("ok"):
+            raise ContractFail(f"generic Product Setup API rejected valid configuration: {api_resolution}")
+        media = get_variant_media(PROOF_ITEM, "unicorn-bouquet", json.dumps(configuration))
+        if media.get("media_role") != "product_setup_media_rule":
+            raise ContractFail(f"approved Product Setup media rule did not drive variant media: {media}")
+        line = sales_order_line_configuration_fields(
+            resolved_item=resolved_item,
+            client_configuration=configuration,
+        )
+        payload = json.loads(line[LINE_FIELDNAMES["json"]])
+        groups = payload.get("configuration_groups") or []
+        if groups != configuration["configuration_groups"]:
+            raise ContractFail(f"generic Product Setup configuration was not preserved: {payload}")
+        if "Design Choices" not in line.get(LINE_FIELDNAMES["summary"], ""):
+            raise ContractFail("Sales Order summary did not surface generic Product Setup configuration")
+
+        too_many = dict(configuration)
+        too_many["configuration_groups"] = [
+            {
+                "key": "design-choices",
+                "label": "Design Choices",
+                "values": ["Ribbon", "Card", "Charm", "Extra"],
+                "document_output": "Customer and operator",
+            }
+        ]
+        try:
+            sales_order_line_configuration_fields(
+                resolved_item=resolved_item,
+                client_configuration=too_many,
+            )
+        except frappe.ValidationError as exc:
+            if "needs review before checkout" not in str(exc):
+                raise ContractFail(f"too-many generic selections failed with wrong message: {exc}") from exc
+        else:
+            raise ContractFail("checkout accepted too many Product Setup configuration selections")
+    finally:
+        frappe.delete_doc("LT Product Blueprint", blueprint.name, force=True, ignore_permissions=True)
 
 
 def _assert_foil_number_add_on_becomes_priced_line(resolved_item: dict):

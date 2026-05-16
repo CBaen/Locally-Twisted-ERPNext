@@ -424,6 +424,15 @@ def check_product_page_color_selector_uses_recipe_schema() -> None:
         "configured cart payload must exclude color axes from selected_options",
     )
     assert_true(
+        "configuration_groups: selectedProductSetupGroups()" in item_configure,
+        "configured cart payload must include backend-authored Product Setup configuration groups",
+    )
+    hooks = (ROOT / "apps/locally_twisted/locally_twisted/hooks.py").read_text(encoding="utf-8")
+    assert_true(
+        "lt-product-setup-runtime.js" in hooks,
+        "product pages must load the generic Product Setup frontend runtime",
+    )
+    assert_true(
         "selected_options: selectedAttrs()" not in item_configure,
         "single-select color selected_options payload must not pass checkout readiness",
     )

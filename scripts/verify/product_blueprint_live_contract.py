@@ -50,6 +50,15 @@ def main() -> int:
     print(f"  - rolled_back: {result.get('rolled_back')}")
     print(f"  - save_only_guard_counts_unchanged: {result.get('save_only_guard_counts_unchanged')}")
     print(f"  - rollback_guard_counts_unchanged: {result.get('rollback_guard_counts_unchanged')}")
+    staff_setup = result.get("staff_setup") or {}
+    if staff_setup:
+        print(
+            "  - staff_setup: "
+            f"{staff_setup.get('configuration_choice_count')} configuration choices, "
+            f"max={staff_setup.get('configuration_max')}, "
+            f"variants={staff_setup.get('variant_combination_count')}, "
+            f"media_rules={staff_setup.get('media_rules')}"
+        )
     local_apply = result.get("local_apply") or {}
     print(
         "  - local_apply: "

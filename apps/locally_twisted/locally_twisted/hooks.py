@@ -72,6 +72,7 @@ web_include_js = [
     "/assets/locally_twisted/js/lt-site-preferences.js?v=20260510-form-inline-1",
     "/assets/locally_twisted/js/lt-inquiry-form-experience.js?v=20260515-form-layout-1",
     "/assets/locally_twisted/js/lt-megamenu.js?v=20260509-search-products-1",
+    "/assets/locally_twisted/js/lt-product-setup-runtime.js?v=20260515-generic-1",
     "/assets/locally_twisted/js/lt-product-card-click.js?v=20260508-1",
     "/assets/locally_twisted/js/lt-audience-ribbon.js?v=20260510-collab-slider-1",
 ]

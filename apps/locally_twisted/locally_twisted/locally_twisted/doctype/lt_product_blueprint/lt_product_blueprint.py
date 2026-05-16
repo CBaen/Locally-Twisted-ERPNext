@@ -102,6 +102,7 @@ def _doc_to_validation_payload(doc) -> dict:
         "color_recipe_rows": [row.as_dict() for row in doc.color_recipe_rows or []],
         "add_on_rows": [row.as_dict() for row in doc.add_on_rows or []],
         "conditional_price_rows": [row.as_dict() for row in doc.conditional_price_rows or []],
+        "media_rule_rows": [row.as_dict() for row in doc.media_rule_rows or []],
     }
 
 

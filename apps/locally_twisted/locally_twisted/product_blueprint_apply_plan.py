@@ -14,6 +14,7 @@ from locally_twisted.product_blueprint_validation import (
     blueprint_doc_to_dict,
     validate_blueprint,
 )
+from locally_twisted.product_setup_runtime import build_product_setup_schema
 
 
 SCHEMA_VERSION = "lt-product-blueprint-apply-plan-v1"
@@ -28,6 +29,7 @@ def build_apply_plan_doc(doc: Any) -> dict[str, Any]:
 def build_apply_plan(data: dict[str, Any]) -> dict[str, Any]:
     """Return a dry-run product-generation plan without mutating ERPNext."""
     validation = validate_blueprint(data)
+    setup_schema = build_product_setup_schema(data)
     contract = validation.get("contract") or {}
     product_page_type = contract.get("product_page_type")
     commerce_lane = contract.get("commerce_lane")
@@ -35,7 +37,14 @@ def build_apply_plan(data: dict[str, Any]) -> dict[str, Any]:
     product_name = _text(data.get("product_name"))
     item_group = _text(data.get("item_group"))
     base_price = float(contract.get("base_price") or 0)
-    sale_axes = [row for row in contract.get("option_rows") or [] if row.get("payload_target") == "selected_options"]
+    sale_axes = [
+        {
+            "axis_name": row.get("label"),
+            "values": row.get("values") or [],
+        }
+        for row in setup_schema.get("selection_groups") or []
+        if row.get("sku_defining")
+    ]
     variant_combos = _variant_combinations(sale_axes)
 
     blockers = list(validation.get("blockers") or [])
@@ -56,6 +65,7 @@ def build_apply_plan(data: dict[str, Any]) -> dict[str, Any]:
         sale_axes=sale_axes,
         variant_combos=variant_combos if not blockers else [],
         contract=contract,
+        setup_schema=setup_schema,
     )
 
     return {
@@ -86,6 +96,7 @@ def _planned_records(
     sale_axes: list[dict[str, Any]],
     variant_combos: list[dict[str, str]],
     contract: dict[str, Any],
+    setup_schema: dict[str, Any],
 ) -> dict[str, Any]:
     has_variants = bool(variant_combos)
     base_item = {
@@ -158,9 +169,11 @@ def _planned_records(
         "add_ons": add_ons,
         "color_recipes": contract.get("color_recipe_rows") or [],
         "conditional_prices": contract.get("conditional_price_rows") or [],
+        "product_setup_schema": setup_schema,
         "media": {
-            "action": "held_for_later_slice",
-            "reason": "Product Blueprint does not yet include media assignment fields.",
+            "action": "would_apply_approved_rules" if setup_schema.get("media_rules") else "held_until_media_rules_exist",
+            "rules": setup_schema.get("media_rules") or [],
+            "reason": "Only approved Product Setup media rules can change customer-facing images.",
         },
     }
 

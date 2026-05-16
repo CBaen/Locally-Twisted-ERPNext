@@ -19,6 +19,10 @@ from locally_twisted.catalog_contract.color_rules import (
 )
 from locally_twisted.catalog_variant_rules import required_variant_attribute_names
 from locally_twisted.product_page_labels import COMMERCE_LANE_OPTIONS, PRODUCT_PAGE_TYPE_OPTIONS
+from locally_twisted.product_setup_runtime import (
+    product_setup_schema_for_website_item,
+    resolve_product_setup_configuration,
+)
 
 
 CONFIG_VERSION = "lt-product-config-v1"
@@ -421,11 +425,16 @@ def sales_order_line_configuration_fields(
 
     variant_options = _variant_options_dict(resolved_item.get("variant_options") or [])
     client_configuration = normalize_client_configuration(client_configuration)
+    setup_resolution = _product_setup_resolution_for_checkout(
+        website_item_code=website_item_code,
+        client_configuration=client_configuration,
+    )
     color_recipes = _validated_checkout_color_recipes(client_configuration, variant_options=variant_options)
     _assert_checkout_configuration_is_priced(
         client_configuration,
         website_item_code=website_item_code,
         variant_options=variant_options,
+        allow_configuration_groups=bool(setup_resolution),
     )
     sale_unit_options = {
         attribute: value for attribute, value in variant_options.items() if not is_balloon_color_axis(attribute)
@@ -434,6 +443,7 @@ def sales_order_line_configuration_fields(
         client_configuration=client_configuration,
         variant_options=sale_unit_options,
         resolved_item=resolved_item,
+        setup_resolution=setup_resolution,
     )
 
     payload = {
@@ -445,7 +455,9 @@ def sales_order_line_configuration_fields(
         "selected_options": sale_unit_options,
         "color_recipes": color_recipes,
         "add_ons": _validated_checkout_add_ons(client_configuration, website_item_code=website_item_code),
+        "configuration_groups": _configuration_groups_from_resolution(setup_resolution, client_configuration),
         "customizations": _non_color_customizations(client_configuration),
+        "validation_hash": (setup_resolution or {}).get("validation_hash"),
         "source": "lt_product_page_runtime",
     }
     summary = _configuration_summary(payload)
@@ -602,6 +614,7 @@ def _assert_checkout_configuration_is_priced(
     *,
     website_item_code: str | None,
     variant_options: dict[str, str] | None = None,
+    allow_configuration_groups: bool = False,
 ) -> None:
     if not client_configuration:
         if any(is_balloon_color_axis(axis) for axis in (variant_options or {})):
@@ -615,6 +628,14 @@ def _assert_checkout_configuration_is_priced(
         return
     _validated_checkout_add_ons(client_configuration, website_item_code=website_item_code)
     _validated_checkout_color_recipes(client_configuration, variant_options=variant_options or {})
+    if _configuration_groups(client_configuration) and not allow_configuration_groups:
+        frappe.throw(
+            _(
+                "Tiny snag: these product choices are not connected to checkout yet. "
+                "Please request a quote so the details stay with the request."
+            ),
+            frappe.ValidationError,
+        )
     if _non_color_customizations(client_configuration):
         frappe.throw(
             _(
@@ -625,11 +646,32 @@ def _assert_checkout_configuration_is_priced(
         )
 
 
+def _product_setup_resolution_for_checkout(
+    *,
+    website_item_code: str | None,
+    client_configuration: dict[str, Any] | None,
+) -> dict[str, Any] | None:
+    schema = product_setup_schema_for_website_item(website_item_code)
+    if not schema:
+        return None
+    resolution = resolve_product_setup_configuration(schema, client_configuration or {})
+    if not resolution.get("ok") or resolution.get("commerce_outcome") != "checkout":
+        frappe.throw(
+            _(
+                "Tiny snag: this product setup needs review before checkout. "
+                "Please adjust the selections or ask the team for help."
+            ),
+            frappe.ValidationError,
+        )
+    return resolution
+
+
 def _assert_client_options_match_variant(
     *,
     client_configuration: dict[str, Any] | None,
     variant_options: dict[str, str],
     resolved_item: dict[str, Any],
+    setup_resolution: dict[str, Any] | None = None,
 ) -> None:
     if not client_configuration:
         return
@@ -639,6 +681,18 @@ def _assert_client_options_match_variant(
             _("Tiny snag: this cart item's saved options point to a different item. Please choose the options again."),
             frappe.ValidationError,
         )
+    if setup_resolution:
+        resolved_attributes = setup_resolution.get("resolved_variant_attributes") or {}
+        for attribute, value in resolved_attributes.items():
+            if attribute not in variant_options or str(value) != str(variant_options.get(attribute)):
+                frappe.throw(
+                    _(
+                        "Tiny snag: this cart item's saved setup no longer matches the selected item. "
+                        "Please choose the options again."
+                    ),
+                    frappe.ValidationError,
+                )
+        return
     selected = client_configuration.get("selected_options") or {}
     if not isinstance(selected, dict):
         frappe.throw(
@@ -889,6 +943,50 @@ def _non_color_customizations(client_configuration: dict[str, Any] | None) -> li
     return result
 
 
+def _configuration_groups_from_resolution(
+    setup_resolution: dict[str, Any] | None,
+    client_configuration: dict[str, Any] | None,
+) -> list[dict[str, Any]]:
+    if setup_resolution:
+        groups = setup_resolution.get("configuration_groups") or []
+        return [row for row in groups if isinstance(row, dict)]
+    return _configuration_groups(client_configuration)
+
+
+def _configuration_groups(client_configuration: dict[str, Any] | None) -> list[dict[str, Any]]:
+    if not client_configuration:
+        return []
+    raw = client_configuration.get("configuration_groups") or []
+    if isinstance(raw, dict):
+        raw = raw.get("items") or []
+    if not isinstance(raw, list):
+        return [{"status": "invalid_configuration_group_payload"}]
+
+    result = []
+    for row in raw:
+        if not isinstance(row, dict):
+            result.append({"status": "invalid_configuration_group_row"})
+            continue
+        key = _clean_text(row.get("key") or row.get("axis") or row.get("label"))
+        label = _clean_text(row.get("label") or row.get("axis") or key)
+        values = row.get("values")
+        if values is None and row.get("value") not in (None, ""):
+            values = [row.get("value")]
+        if not isinstance(values, list):
+            values = [values] if values not in (None, "") else []
+        clean_values = [_clean_text(value) for value in values if _clean_text(value)]
+        if key or label or clean_values:
+            result.append(
+                {
+                    "key": key,
+                    "label": label,
+                    "values": clean_values,
+                    "document_output": _clean_text(row.get("document_output")) or "Customer and operator",
+                }
+            )
+    return result
+
+
 def _clean_text(value: Any) -> str:
     return " ".join(str(value or "").strip().split())
 
@@ -987,6 +1085,19 @@ def _configuration_summary(payload: dict[str, Any]) -> str:
         pieces.append("Add-ons preserved in structured payload")
     if payload.get("color_recipes"):
         pieces.append("Color recipe preserved in structured payload")
+    if payload.get("configuration_groups"):
+        group_bits = []
+        for row in payload.get("configuration_groups") or []:
+            if not isinstance(row, dict):
+                continue
+            label = row.get("label") or row.get("key")
+            values = ", ".join(str(value) for value in row.get("values") or [] if str(value or "").strip())
+            if label and values:
+                group_bits.append(f"{label}: {values}")
+        if group_bits:
+            pieces.append("Configured choices - " + "; ".join(group_bits))
+        else:
+            pieces.append("Configured choices preserved in structured payload")
     if payload.get("customizations"):
         pieces.append("Customizations preserved in structured payload")
     if not pieces:

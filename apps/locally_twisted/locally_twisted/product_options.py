@@ -24,6 +24,7 @@ from locally_twisted.product_page_runtime import (
     checkout_add_on_contracts_for_item,
     product_page_contract_for_website_item,
 )
+from locally_twisted.product_setup_runtime import get_product_setup_schema_json
 from webshop.webshop.variant_selector.utils import get_attributes_and_values
 
 

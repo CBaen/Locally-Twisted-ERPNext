@@ -18,6 +18,7 @@
 {% set _details = frappe.utils.strip_html(doc.lt_product_details or '') %}
 {% set lt_product_runtime = get_product_page_runtime_context(doc.item_code) %}
 {% set lt_product_architecture_json = get_product_page_architecture_json(doc.item_code) %}
+{% set lt_product_setup_schema_json = get_product_setup_schema_json(doc.item_code) %}
 
 <div class="col-md-7 lt-product__details {{ width_class }}">
 
@@ -65,6 +66,11 @@
             class="js-lt-product-page-architecture"
             data-template-item-code="{{ doc.item_code }}">
 {{ lt_product_architecture_json | safe }}
+    </script>
+    <script type="application/json"
+            class="js-lt-product-setup-schema"
+            data-template-item-code="{{ doc.item_code }}">
+{{ lt_product_setup_schema_json | safe }}
     </script>
 
     {# Runtime product page type controls the primary customer action. #}
