@@ -37,16 +37,16 @@ def get_context(context):
     if requested_item and "Balloon Decor" not in preselected_services:
         preselected_services.append("Balloon Decor")
 
-    context.title = "Free Event Quote - Locally Twisted"
+    context.title = "Tell us about your event - Locally Twisted"
     context.metatags = {
         "title": context.title,
         "description": (
-            "Request a quote for Utah event balloon decor, delivery, install support, "
-            "balloon twisting, and face painting from Locally Twisted."
+            "Send the date, location, services, and setup details for a Utah event "
+            "with Locally Twisted."
         ),
         "og:title": context.title,
         "og:description": (
-            "Request a quote for Utah event balloon decor and event support from Locally Twisted."
+            "Tell Locally Twisted about the Utah event you are planning."
         ),
         "og:type": "website",
         "twitter:card": "summary_large_image",
@@ -60,15 +60,10 @@ def get_context(context):
     context.requested_item_code = requested_item.get("item_code") if requested_item else ""
     context.requested_item_name = requested_item.get("web_item_name") if requested_item else ""
     context.contact_intent = intent_param
-    context.contact_intro_title = (
-        "Tell us about the event"
-        if intent_param == "quick"
-        else "Request a free event quote"
-    )
+    context.contact_intro_title = "Tell us about your event"
     context.contact_intro_lede = (
-        "A few details are enough to get started."
-        if intent_param == "quick"
-        else "One form handles business, school, civic, community, venue, private-event, pickup, and delivery questions. We will make sure your request reaches the right person."
+        "Share the date, location, services, and a few setup details. "
+        "We'll follow up using your preferred contact method."
     )
     context.max_photos = MAX_PHOTOS
     context.max_photo_mb = MAX_PHOTO_BYTES // (1024 * 1024)

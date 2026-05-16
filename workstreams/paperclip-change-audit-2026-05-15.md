@@ -17,16 +17,16 @@ was a deploy/migrate stop condition.
 3. Treat any `patches.txt` entry pointing at an untracked or missing patch file
    as the next cleanup target because it can break migrate/deploy.
 
-## Bucket 1 - Contact Form: Now
+## Bucket 1 - Contact Form: Resolved Locally
 
-Priority: P0, active now.
+Priority: local copy closeout done; live release remains separate.
 
-Files currently dirty:
+Files resolved:
 
 - `apps/locally_twisted/locally_twisted/www/contact.html`
 - `apps/locally_twisted/locally_twisted/www/contact.py`
 
-Dirty changes found:
+Copy changes:
 
 - form heading changed from `Free Event Quote` to
   `Tell us what you're planning`;
@@ -43,9 +43,10 @@ Recent committed form behavior found:
 - frontend validation fails louder before submit;
 - backend Lead intake maps the new required fields.
 
-Local verification passed against `http://localhost:8081/contact`:
+Latest local verification passed against `http://localhost:8081/contact`:
 
-- `python -m py_compile ...`
+- `python -m py_compile apps\locally_twisted\locally_twisted\www\contact.py scripts\verify\contact_service_logic.py scripts\verify\lead_backend_intake_parity.py`
+- `python scripts\dev\clear_website_cache.py`
 - `python scripts/verify/contact_service_logic.py --base-url http://localhost:8081`
 - `python scripts/verify/lead_backend_intake_parity.py`
 - `npm run test:form-experience`
@@ -59,10 +60,11 @@ Local/live difference found:
   controls, and newer form assets;
 - live `https://locallytwisted.com/contact` is still the older release.
 
-Next decision for GL:
+Live boundary:
 
-- approve, revise, or reject the current form copy and required-field behavior
-  before any deploy or mixed cleanup.
+- this is not a live release; live `https://locallytwisted.com/contact` still
+  needs Frappe Cloud deploy/site update and live proof before claiming the copy
+  or newer form features are production-active.
 
 ## Bucket 2 - Inquiry Photo Hotfix: Deploy/Live Verify
 

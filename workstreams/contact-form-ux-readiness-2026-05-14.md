@@ -48,17 +48,17 @@ The live site still needs a Frappe Cloud app release/site update plus live spam,
 sales-filter, smoke, and repeat-email/photo proof before this is claimed as
 production protection.
 
-## 2026-05-15 Form-First Audit Update
+## 2026-05-15 Form-First Copy Closeout
 
-Current directive: review and repair the contact form as its own individual
-slice before taking up other Paperclip-created changes.
+Current directive: keep the contact form as its own individual slice and do not
+mix it with non-form dirty-file cleanup.
 
-Current form files in the dirty worktree:
+Local copy update resolved:
 
 - `apps/locally_twisted/locally_twisted/www/contact.html`
 - `apps/locally_twisted/locally_twisted/www/contact.py`
 
-The dirty form changes are copy-only:
+The form changes are copy-only:
 
 - form heading changed from `Free Event Quote` to
   `Tell us what you're planning`;
@@ -71,10 +71,12 @@ email typo warning, louder frontend validation, and backend Lead mapping. The
 latest closeout above corrects the occasion field back to optional and adds the
 spam/sales-filter gates.
 
-Local verification passed on 2026-05-15 against `http://localhost:8081/contact`:
+Latest local verification passed on 2026-05-15 against
+`http://localhost:8081/contact`:
 
 ```powershell
-python -m py_compile apps\locally_twisted\locally_twisted\www\book.py apps\locally_twisted\locally_twisted\www\contact.py scripts\verify\contact_service_logic.py scripts\verify\lead_backend_intake_parity.py
+python -m py_compile apps\locally_twisted\locally_twisted\www\contact.py scripts\verify\contact_service_logic.py scripts\verify\lead_backend_intake_parity.py
+python scripts\dev\clear_website_cache.py
 python scripts\verify\contact_service_logic.py --base-url http://localhost:8081
 python scripts\verify\lead_backend_intake_parity.py
 npm run test:form-experience

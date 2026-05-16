@@ -221,14 +221,13 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 - Hetzner-shaped header + footer + 3 mega menus + mobile drawer + newsletter strip + `LT Newsletter Signup` DocType + endpoint + smoke test. 6 pre-task fixes (including unblocking /book). Triadic-construction-v2 + GL Proxy + fix round + audit pass. See `HANDOFF.md`, `MIRROR-REBUILD-COMPLETE.md`, `research/triadic-build-chrome-rebuild/` for receipts.
 
 **Remaining (in priority order):**
-- [P0] **Contact form review and requested changes.** This is the immediate
-  working slice before the other Paperclip audit buckets. Source handoff:
+- [P0] **Contact form local copy closeout.** Local copy-only contact changes are
+  resolved and verified; live deploy/proof remains separate. Source handoff:
   `workstreams/contact-form-ux-readiness-2026-05-14.md`; audit packet:
-  `workstreams/paperclip-change-audit-2026-05-15.md`. Current local form gates
-  passed on 2026-05-15, but live is still on the older form release. Review the
-  current copy, required fields, preferred contact method, structured time
-  controls, photo behavior, and success/failure state as one form-owned slice
-  before mixing in catalog, backend, checkout, or deploy work.
+  `workstreams/paperclip-change-audit-2026-05-15.md`. Latest local form gates
+  passed on 2026-05-15, but live is still on the older form release and still
+  needs Frappe Cloud deploy/site update plus live proof before production
+  claims.
 - [P0] **Immediate post-form Paperclip change review.** After the form slice,
   review the non-form dirty buckets in
   `workstreams/paperclip-change-audit-2026-05-15.md`: the Reflex Champagne
