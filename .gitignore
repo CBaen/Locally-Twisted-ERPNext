@@ -85,6 +85,12 @@ test invoices/
 # Local Superpowers visual companion sessions.
 .superpowers/
 
+# Local Nimbalyst workspace plans/session state. Shared plans should be moved
+# into tracked project docs deliberately instead of left here by the app.
+nimbalyst-local/
+Nimbalyst-Local/
+.nimbalyst/local/
+
 # Generated local audit/mirror payloads. Keep committed reports/inventories and
 # capture scripts, but do not track bulky re-creatable HTML/assets/screenshots.
 _resources/a11y-audit-2026-04-30/*.json
