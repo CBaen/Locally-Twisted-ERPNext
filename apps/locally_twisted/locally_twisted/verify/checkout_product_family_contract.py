@@ -16,6 +16,7 @@ from typing import Any
 import frappe
 from frappe.utils import add_days, flt, nowdate
 
+from locally_twisted.catalog_contract.color_rules import canonical_color_name, is_balloon_color_axis
 from locally_twisted.product_page_runtime import (
     ADD_ON_ITEM_CONTRACTS,
     CONFIG_VERSION,
@@ -46,6 +47,9 @@ EXPECTED_FOIL_BOUQUET_WEBSITE_ITEMS = (
 )
 MOTHERS_DAY_WEBSITE_ITEM = "mothers-day-bouquet"
 EASTER_BALLOON_CUPS_WEBSITE_ITEM = "easter-balloon-cups"
+GRADUATION_STANDS_WEBSITE_ITEM = "6-graduation-stands"
+BUTTERFLY_COLUMN_WEBSITE_ITEM = "7-butterfly-column"
+GRADUATION_GRAB_N_GO_WEBSITE_ITEM = "graduation-grab-n-go"
 
 
 class ContractFail(Exception):
@@ -90,6 +94,7 @@ def _run_contract(token: str) -> dict[str, Any]:
     sales_order_lines: list[dict[str, Any]] = []
     expected_base_line_count = 0
     expected_add_on_line_count = 0
+    expected_color_recipe_line_count = 0
     bouquet_results: list[dict[str, Any]] = []
     for website_item_code in EXPECTED_FOIL_BOUQUET_WEBSITE_ITEMS:
         bouquet_result, lines = _assert_bouquet_family_line(website_item_code)
@@ -106,30 +111,57 @@ def _run_contract(token: str) -> dict[str, Any]:
     sales_order_lines.extend(easter_lines)
     expected_base_line_count += int(easter_result["enabled_variant_count"])
 
+    graduation_stands_result, graduation_stands_lines = _assert_graduation_stands_simple_line()
+    sales_order_lines.extend(graduation_stands_lines)
+    expected_base_line_count += int(graduation_stands_result["enabled_variant_count"])
+
+    butterfly_result, butterfly_lines = _assert_color_recipe_family_line(
+        website_item_code=BUTTERFLY_COLUMN_WEBSITE_ITEM,
+        label="7' Butterfly Column",
+    )
+    sales_order_lines.extend(butterfly_lines)
+    expected_base_line_count += int(butterfly_result["enabled_variant_count"])
+    expected_color_recipe_line_count += int(butterfly_result["color_recipe_line_count"])
+
+    graduation_grab_result, graduation_grab_lines = _assert_color_recipe_family_line(
+        website_item_code=GRADUATION_GRAB_N_GO_WEBSITE_ITEM,
+        label="Graduation Grab n Go",
+    )
+    sales_order_lines.extend(graduation_grab_lines)
+    expected_base_line_count += int(graduation_grab_result["enabled_variant_count"])
+    expected_color_recipe_line_count += int(graduation_grab_result["color_recipe_line_count"])
+
     sales_order = _assert_sales_order_accepts_family_lines(
         token,
         sales_order_lines,
         expected_base_line_count=expected_base_line_count,
         expected_add_on_line_count=expected_add_on_line_count,
+        expected_color_recipe_line_count=expected_color_recipe_line_count,
     )
     sales_invoice_name = _assert_invoice_preserves_family_lines(
         sales_order.name,
         expected_line_count=len(sales_order_lines),
         expected_base_line_count=expected_base_line_count,
         expected_add_on_line_count=expected_add_on_line_count,
+        expected_color_recipe_line_count=expected_color_recipe_line_count,
     )
 
     return {
+        "direct_checkout_family_count": len(bouquet_results) + 5,
         "bouquet_family_count": len(bouquet_results),
         "bouquet_family": bouquet_results,
         "mothers_day": mothers_day_result,
         "easter_balloon_cups": easter_result,
+        "graduation_stands": graduation_stands_result,
+        "butterfly_column": butterfly_result,
+        "graduation_grab_n_go": graduation_grab_result,
         "sales_order": sales_order.name,
         "sales_invoice": sales_invoice_name,
         "sales_order_line_count": len(sales_order.items),
         "expected_sales_order_line_count": len(sales_order_lines),
         "enabled_sale_sku_count": expected_base_line_count,
         "add_on_line_count": expected_add_on_line_count,
+        "color_recipe_line_count": expected_color_recipe_line_count,
         "line_fields": sorted(LINE_FIELDNAMES.values()),
         "schema_version": CONFIG_VERSION,
     }
@@ -319,6 +351,133 @@ def _assert_easter_balloon_cups_simple_line() -> tuple[dict[str, Any], list[dict
         },
         sale_lines,
     )
+
+
+def _assert_graduation_stands_simple_line() -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    variant_item_codes = _enabled_variants_for_template(
+        GRADUATION_STANDS_WEBSITE_ITEM,
+        required_attribute="Graduation stands",
+    )
+    sale_lines: list[dict[str, Any]] = []
+    verified_variants: list[dict[str, Any]] = []
+    web_item_name = "6' Graduation stands"
+    for variant_item_code in variant_item_codes:
+        result, lines = _assert_variant_simple_line(
+            website_item_code=GRADUATION_STANDS_WEBSITE_ITEM,
+            variant_item_code=variant_item_code,
+            label="6' Graduation stands",
+            no_add_on_failure="6' Graduation stands should not expose checkout add-ons",
+        )
+        web_item_name = result.get("web_item_name") or web_item_name
+        sale_lines.extend(lines)
+        verified_variants.append(
+            {
+                "variant_item_code": variant_item_code,
+                "selected_options": result.get("selected_options"),
+                "resolved_line_count": result.get("resolved_line_count"),
+            }
+        )
+
+    return (
+        {
+            "website_item_code": GRADUATION_STANDS_WEBSITE_ITEM,
+            "web_item_name": web_item_name,
+            "stored_contract": "simple_product|checkout",
+            "enabled_variant_count": len(variant_item_codes),
+            "add_on_options": 0,
+            "resolved_line_count": len(sale_lines),
+            "verified_variants": verified_variants,
+        },
+        sale_lines,
+    )
+
+
+def _assert_color_recipe_family_line(
+    *,
+    website_item_code: str,
+    label: str,
+) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    from locally_twisted.product_options import get_checkout_add_on_options
+    from locally_twisted.www.checkout import _resolve_sale_lines
+
+    website_item = _assert_website_item_contract(
+        website_item_code,
+        page_type="simple_product",
+        commerce_lane="checkout",
+    )
+    if get_checkout_add_on_options(website_item_code):
+        raise ContractFail(f"{label} should not expose checkout add-ons")
+
+    variant_item_codes = _enabled_variants_for_template(website_item_code, required_attribute="latex colors")
+    sale_lines: list[dict[str, Any]] = []
+    verified_variants: list[dict[str, Any]] = []
+    for variant_item_code in variant_item_codes:
+        resolved = _resolve_cart_item(variant_item_code, website_item_code)
+        selected_options = _variant_options_dict(resolved.get("variant_options") or [])
+        color_options = {
+            attribute: value
+            for attribute, value in selected_options.items()
+            if is_balloon_color_axis(attribute)
+        }
+        if not color_options:
+            raise ContractFail(f"{label} variant {variant_item_code} did not resolve a color axis")
+        configuration = _configuration_payload(
+            item_code=variant_item_code,
+            website_item_code=website_item_code,
+            variant_options=resolved.get("variant_options") or [],
+            color_recipes=[
+                {
+                    "axis": attribute,
+                    "label": attribute,
+                    "values": [value],
+                }
+                for attribute, value in sorted(color_options.items())
+            ],
+        )
+
+        lines, resolved_items = _resolve_sale_lines(
+            [{"item_code": variant_item_code, "qty": 1, "configuration": configuration}]
+        )
+        if len(lines) != 1:
+            raise ContractFail(f"{label} variant path should create one checkout line, found {len(lines)}")
+        if len(resolved_items) != 1:
+            raise ContractFail(f"{label} resolved display lines should include one base line, found {len(resolved_items)}")
+        _assert_base_line_payload(
+            label=variant_item_code,
+            line=lines[0],
+            expected_item_code=variant_item_code,
+            expected_website_item_code=website_item_code,
+            expect_add_on=False,
+            expected_selected_options={},
+        )
+        _assert_color_recipe_payload(
+            label=variant_item_code,
+            line=lines[0],
+            expected_color_options=color_options,
+        )
+        sale_lines.extend(lines)
+        verified_variants.append(
+            {
+                "variant_item_code": variant_item_code,
+                "color_recipes": color_options,
+                "resolved_line_count": len(lines),
+            }
+        )
+
+    return (
+        {
+            "website_item_code": website_item_code,
+            "web_item_name": website_item.get("web_item_name"),
+            "stored_contract": "simple_product|checkout",
+            "enabled_variant_count": len(variant_item_codes),
+            "color_recipe_line_count": len(variant_item_codes),
+            "add_on_options": 0,
+            "resolved_line_count": len(sale_lines),
+            "verified_variants": verified_variants,
+        },
+        sale_lines,
+    )
+
 
 def _assert_variant_simple_line(
     *,
@@ -534,12 +693,21 @@ def _configuration_payload(
     website_item_code: str,
     variant_options: list[dict[str, Any]],
     add_ons: list[dict[str, Any]] | None = None,
+    color_recipes: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
+    selected_options = _variant_options_dict(variant_options)
+    if color_recipes:
+        selected_options = {
+            attribute: value
+            for attribute, value in selected_options.items()
+            if not is_balloon_color_axis(attribute)
+        }
     return {
         "schema_version": CONFIG_VERSION,
         "item_code": item_code,
         "website_item_code": website_item_code,
-        "selected_options": _variant_options_dict(variant_options),
+        "selected_options": selected_options,
+        "color_recipes": color_recipes or [],
         "add_ons": add_ons or [],
         "customizations": [],
     }
@@ -626,6 +794,32 @@ def _assert_foil_add_on_line_payload(
             raise ContractFail(f"{label} add-on payload {key} should be {expected!r}, found {payload.get(key)!r}")
 
 
+def _assert_color_recipe_payload(
+    *,
+    label: str,
+    line: dict[str, Any],
+    expected_color_options: dict[str, str],
+) -> None:
+    payload = _payload(label, line)
+    recipes = {
+        str(row.get("axis")): row
+        for row in payload.get("color_recipes") or []
+        if row.get("axis")
+    }
+    for attribute, value in expected_color_options.items():
+        recipe = recipes.get(attribute)
+        expected_value = canonical_color_name(value)
+        if not recipe:
+            raise ContractFail(f"{label} line dropped color recipe axis {attribute}: {payload}")
+        if expected_value not in set(recipe.get("values") or []):
+            raise ContractFail(
+                f"{label} line color recipe for {attribute} should include {expected_value!r}, "
+                f"found {recipe.get('values')}"
+            )
+        if recipe.get("status") != "validated_for_checkout":
+            raise ContractFail(f"{label} line color recipe should be validated for checkout: {recipe}")
+
+
 def _assert_line_fields(label: str, line: Any) -> None:
     for fieldname in LINE_FIELDNAMES.values():
         value = line.get(fieldname) if hasattr(line, "get") else getattr(line, fieldname, None)
@@ -647,6 +841,7 @@ def _assert_sales_order_accepts_family_lines(
     *,
     expected_base_line_count: int,
     expected_add_on_line_count: int,
+    expected_color_recipe_line_count: int,
 ):
     customer = _create_customer(token)
     sales_order = frappe.get_doc(
@@ -672,6 +867,7 @@ def _assert_sales_order_accepts_family_lines(
         sales_order.items,
         expected_base_line_count=expected_base_line_count,
         expected_add_on_line_count=expected_add_on_line_count,
+        expected_color_recipe_line_count=expected_color_recipe_line_count,
     )
     return sales_order
 
@@ -682,6 +878,7 @@ def _assert_invoice_preserves_family_lines(
     expected_line_count: int,
     expected_base_line_count: int,
     expected_add_on_line_count: int,
+    expected_color_recipe_line_count: int,
 ) -> str:
     from erpnext.selling.doctype.sales_order.sales_order import make_sales_invoice
     from locally_twisted.product_page_runtime import copy_sales_order_line_configuration_to_invoice
@@ -700,6 +897,7 @@ def _assert_invoice_preserves_family_lines(
         invoice.items,
         expected_base_line_count=expected_base_line_count,
         expected_add_on_line_count=expected_add_on_line_count,
+        expected_color_recipe_line_count=expected_color_recipe_line_count,
     )
     return invoice.name
 
@@ -710,9 +908,11 @@ def _assert_stored_rows_preserve_line_fields(
     *,
     expected_base_line_count: int,
     expected_add_on_line_count: int,
+    expected_color_recipe_line_count: int,
 ) -> None:
     base_count = 0
     add_on_count = 0
+    color_recipe_count = 0
     for row in rows:
         _assert_line_fields(label, row)
         payload = _payload(label, row)
@@ -726,12 +926,19 @@ def _assert_stored_rows_preserve_line_fields(
             base_count += 1
             if payload.get("commerce_lane") != "checkout":
                 raise ContractFail(f"{label} base row did not preserve checkout lane: {payload}")
+            if payload.get("color_recipes"):
+                color_recipe_count += 1
         else:
             raise ContractFail(f"{label} row has unknown LT product-page payload source: {payload}")
     if base_count != expected_base_line_count:
         raise ContractFail(f"{label} should store {expected_base_line_count} checkout base SKU lines, found {base_count}")
     if add_on_count != expected_add_on_line_count:
         raise ContractFail(f"{label} should store {expected_add_on_line_count} foil add-on lines, found {add_on_count}")
+    if color_recipe_count != expected_color_recipe_line_count:
+        raise ContractFail(
+            f"{label} should store {expected_color_recipe_line_count} color-recipe lines, "
+            f"found {color_recipe_count}"
+        )
 
 
 def _create_customer(token: str):

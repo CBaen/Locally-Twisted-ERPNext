@@ -11,6 +11,22 @@ ecommerce release claim.
 This is not a live-release approval. `lt_ecommerce_paused=1` remains the
 customer exposure lock.
 
+## Business-Lane Correction
+
+GL corrected the product model on 2026-05-17: there are no business
+"quote-first" products. That label came from agent-side safety modeling, not
+from Locally Twisted's intended catalog. If it is a product, the target state is
+purchasable. Pricing and product details should come from the Odoo product
+export list; if a product cannot be mapped cleanly, repull or repair the import
+source instead of treating "quote-first" as a final business lane.
+
+The ERPNext field value `quote_first` still exists in current verifiers and
+records as an internal legacy/safety state. In this handoff, read it as
+"not safely purchasable yet because import data, pricing, media, or checkout
+proof is incomplete." Products in that state should be blocked, hidden, or
+kept out of customer checkout until they are proven from source export data and
+runtime tests.
+
 ## Scope Cleanup Before This Report
 
 The previous local Product Setup release proof left generated Website Item
@@ -26,14 +42,15 @@ Website Item was unpublished.
 
 | Gate | Result | Evidence |
 |---|---|---|
-| Product pattern contract | PASS | `python scripts/verify/product_pattern_contract.py` via `complex_checkout_scaffold.py`; 53 products, 18 checkout, 30 quote-first, 5 needs-review, no checkout blockers |
-| Complex checkout scaffold | PASS | `python scripts/verify/complex_checkout_scaffold.py`; 18 direct checkout guards, 4 simple lane-flip candidates, 6 multi-color UI products, 20 add-on/conditional blocked, 5 needs-review |
+| Product pattern contract | PASS with terminology caveat | `python scripts/verify/product_pattern_contract.py` via `complex_checkout_scaffold.py`; 53 products, 18 backend checkout, 30 legacy internal `quote_first` holds, 5 needs-review, no checkout blockers |
+| Complex checkout scaffold | PASS with terminology caveat | `python scripts/verify/complex_checkout_scaffold.py`; 18 direct checkout guards, 4 simple purchasable proof candidates, 6 multi-color UI products, 20 add-on/conditional blocked, 5 needs-review |
 | Price readiness | PASS | `python scripts/verify/product_page_price_readiness_contract.py`; backend-first gate now reports 18 backend checkout products and 51/51 checkout sale units priced; source-template classification still shows 15 checkout products and 8 source/backend lane differences for audit context |
 | Media visibility | PASS with caveat | `python scripts/verify/product_page_media_visibility_contract.py`; 53 live primary images, 1,751 active variant images, 95 source extras held back, 0 unsafe unclassified images |
-| Checkout family cascade | PASS | `python scripts/verify/checkout_product_family_contract.py`; 47 sale SKUs and 86 SO/SI rows rolled back |
+| Checkout family cascade | PASS | `python scripts/verify/checkout_product_family_contract.py`; 18 direct checkout families, 151 sale SKUs, 39 add-on rows, 102 color-recipe rows, and 190 SO/SI rows rolled back |
 | Variant media safety | PASS | `python scripts/verify/variant_media_contract.py`; unclassified media held and product pages keep approved primary image |
 | Product-page runtime | PASS | `python scripts/verify/product_page_runtime_contract.py`; selected config preserved through SO/SI/Quotation paths in rollback |
-| Cart/checkout runtime | PASS | `python scripts/verify/cart_checkout_contract.py`; quote-first blocks, cart line keys, add-ons, over-limit quantities, and stale payload failures guarded |
+| Cart/checkout runtime | PASS | `python scripts/verify/cart_checkout_contract.py`; blocked-product guards, cart line keys, add-ons, over-limit quantities, stale payload failures, and color-recipe/variant mismatch failures guarded |
+| Open-mode product UX | PASS / local only | Temporarily set local `lt_ecommerce_paused=0`, ran `node scripts/verify/post_import_checkout_proof.js`, restored `lt_ecommerce_paused=1`, and cleared website cache; product page, cart, and checkout preview passed for Easter Balloon Cups, 7' Butterfly Column, Graduation Grab n Go, 6' Graduation stands, and Unicorn Bouquet |
 | Stripe amount parity | PASS | `python scripts/verify/stripe_amount_parity_contract.py`; hosted checkout cents match ERPNext totals |
 | Payment cascade | PASS | `python scripts/verify/payment_cascade_contract.py`; SO -> PR -> Payment Entry -> SI -> receipt/operator/welcome email rolled back |
 
@@ -41,11 +58,13 @@ Website Item was unpublished.
 
 The price-readiness verifier now reports both source-template classification and
 current backend Website Item lane. Backend lane remains authoritative for
-checkout readiness.
+current checkout admission, but `quote_first` is a legacy/internal hold label,
+not the desired catalog model.
 
-- Source-template classification: 15 checkout products, 38 quote-first products.
-- Current backend classification: 18 checkout products, 30 quote-first products,
-  5 needs-review products.
+- Source-template classification: 15 checkout products, 38 legacy internal
+  hold products.
+- Current backend classification: 18 checkout products, 30 legacy internal
+  hold products, 5 needs-review products.
 - Backend checkout price gate: 18/18 backend checkout products and 51/51 sale
   units have live ERPNext price coverage.
 
@@ -56,10 +75,12 @@ classification are:
 - `7-butterfly-column`
 - `graduation-grab-n-go`
 
-They still need product-family UX/cascade proof like every other Tranche 1
-product, but the live ERPNext price gate now covers them.
+The updated checkout-family cascade now covers these three, and the open-mode
+browser proof covers a representative selection for each. The remaining Tranche
+1 UX work is to expand browser coverage across all 18 current checkout families
+at desktop and mobile widths.
 
-The five backend needs-review products relative to source-template quote-first
+The five backend needs-review products relative to source-template legacy hold
 classification are:
 
 - `bandage-get-well-bouquet-latex-free`
@@ -73,10 +94,10 @@ classification are:
 | Status | Count | Meaning |
 |---|---:|---|
 | Direct checkout regression guard | 18 | Current backend says checkout-ready; keep these green while proving UX/cascade family by family |
-| Simple lane-flip candidate | 4 | Quote-first now; can be considered for checkout only after focused local rehearsal |
+| Simple purchasable proof candidate | 4 | Currently held by legacy internal field; can enter checkout only after focused source/export and local rehearsal proof |
 | Multi-color recipe UI required | 6 | Needs customer-facing multi-color UI plus backend validation before checkout |
 | Add-on or conditional pricing blocked | 20 | Needs explicit add-on and/or conditional pricing contracts before checkout |
-| Needs review or missing | 5 | Keep blocked/quote-first/hidden until product-page type, lane, and source meaning are reviewed |
+| Needs review or missing | 5 | Keep blocked or hidden until product-page type, buying path, source export meaning, pricing, and media are reviewed |
 
 ## Tranche 1 - Preserve Current Direct Checkout Products
 
@@ -86,14 +107,14 @@ family.
 
 | Product | Slug | Current next step |
 |---|---|---|
-| 6' Graduation stands | `6-graduation-stands` | Price gate covers 2/2 sale units; run product-family UX/cascade proof |
-| 7' Butterfly Column | `7-butterfly-column` | Price gate covers 1/1 sale unit; run product-family UX/cascade proof |
-| Easter Balloon Cups | `easter-balloon-cups` | Preserve direct checkout and prove selected option receipt parity |
+| 6' Graduation stands | `6-graduation-stands` | Backend cascade proved 2 variants through SO/SI; open-mode product UX proof passed representative selection |
+| 7' Butterfly Column | `7-butterfly-column` | Backend cascade proved 51 color variants through SO/SI; open-mode product UX proof passed color recipe selection |
+| Easter Balloon Cups | `easter-balloon-cups` | Backend cascade proved 7 variants through SO/SI; open-mode product UX proof passed representative selection |
 | Elsa Bouquet | `elsa-bouquet` | Bouquet-size checkout regression guard |
 | Encanto Bouquet | `encanto-bouquet` | Bouquet-size checkout regression guard |
 | Flamingo Bouquet | `flamingo-bouquet` | Bouquet-size checkout regression guard |
 | Football Bouquet | `football-bouquet` | Bouquet-size checkout regression guard |
-| Graduation Grab n Go | `graduation-grab-n-go` | Price gate covers 1/1 sale unit; run product-family UX/cascade proof |
+| Graduation Grab n Go | `graduation-grab-n-go` | Backend cascade proved 51 color variants through SO/SI; open-mode product UX proof passed color recipe selection |
 | Holy COW!! Bouquet | `holy-cow-bouquet` | Bouquet-size checkout regression guard |
 | Mickey Mouse Bouquet | `mickey-mouse-bouquet` | Bouquet-size checkout regression guard |
 | Minion Bouquet | `minion-bouquet` | Bouquet-size checkout regression guard |
@@ -105,11 +126,11 @@ family.
 | Stitch Bouquet | `stitch-bouquet` | Bouquet-size checkout regression guard |
 | Unicorn Bouquet | `unicorn-bouquet` | Bouquet-size checkout regression guard |
 
-## Tranche 2 - Simple Lane-Flip Candidates
+## Tranche 2 - Simple Purchasable Proof Candidates
 
-These stay quote-first until a focused local lane-flip rehearsal proves product
-page, cart, checkout, payment, invoice, receipt, and owner/operator payload
-parity.
+These stay out of customer checkout until a focused local proof uses Odoo export
+data to prove product page, cart, checkout, payment, invoice, receipt, and
+owner/operator payload parity.
 
 | Product | Slug | Required before checkout |
 |---|---|---|
@@ -134,9 +155,9 @@ update behavior where approved, and receipt summary parity before checkout.
 
 ## Tranche 4 - Add-On Or Conditional Pricing Blocked
 
-These remain quote-first until explicit add-on mapping, conditional price
-matrices, quantity/value limits, total provenance, and SO/SI/receipt
-preservation are implemented and proved.
+These remain blocked from customer checkout until explicit add-on mapping,
+conditional price matrices, quantity/value limits, total provenance, and
+SO/SI/receipt preservation are implemented and proved from product source data.
 
 | Product | Slug | Primary blocker |
 |---|---|---|
@@ -176,9 +197,13 @@ source meaning, add-ons, and media/pricing presentation are reviewed.
 
 ## Next Concrete Work
 
-1. Build a focused Tranche 1 certification runner/report that proves the 18
-   current direct-checkout products by family, not only as a grouped contract.
-2. Add browser screenshots or Playwright checks for the Tranche 1 product-page
-   UX at desktop and mobile widths before any design claim.
-3. Keep all other product families quote-first, needs-review, or hidden until
-   their tranche gate passes.
+1. Expand the open-mode browser proof from the representative five products to
+   all 18 currently purchasable product families at desktop and mobile widths
+   before any full design/UX certification claim.
+2. Use the Odoo product export list to repair the remaining product-family
+   holds into purchasable products; repull the export if current source data is
+   incomplete or unclear.
+3. Keep all other product families blocked, needs-review, or hidden until their
+   tranche gate passes; do not present `quote_first` as the business model.
+4. Replace remaining verifier/report wording that says quote-first with
+   blocked/import-repair language where the field name itself is not required.

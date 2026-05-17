@@ -846,6 +846,19 @@ def _validated_checkout_color_recipes(
             ),
             frappe.ValidationError,
         )
+    mismatched = []
+    for axis in required_axes:
+        required_value = canonical_color_name(variant_options.get(axis))
+        if required_value and required_value not in set(by_axis[axis].get("values") or []):
+            mismatched.append(axis)
+    if mismatched:
+        frappe.throw(
+            _(
+                "Tiny snag: this cart item's saved color recipe no longer matches this item. "
+                "Please choose the colors again so we keep the details together."
+            ),
+            frappe.ValidationError,
+        )
     return recipes
 
 

@@ -383,6 +383,31 @@ def check_cart_api_echoes_browser_line_key_for_color_recipes() -> None:
     )
 
 
+def check_color_recipe_must_include_resolved_variant_color() -> None:
+    mismatched_configuration = _color_recipe_configuration()
+    mismatched_configuration["color_recipes"] = [
+        {
+            "axis": "latex colors",
+            "label": "latex colors",
+            "values": ["White"],
+        }
+    ]
+    expected = "saved color recipe no longer matches this item"
+    bench_execute_expect_error(
+        "locally_twisted.www.checkout._resolve_sale_lines",
+        kwargs={
+            "cart_items": [
+                {
+                    "item_code": COLOR_RECIPE_ITEM,
+                    "qty": 1,
+                    "configuration": mismatched_configuration,
+                }
+            ]
+        },
+        expected=expected,
+    )
+
+
 def check_cart_and_checkout_templates_fail_loud_on_line_key_mismatch() -> None:
     cart_template = (ROOT / "apps/locally_twisted/locally_twisted/www/lt_cart.html").read_text(encoding="utf-8")
     checkout_template = (ROOT / "apps/locally_twisted/locally_twisted/www/checkout.html").read_text(encoding="utf-8")
@@ -538,6 +563,7 @@ def main() -> int:
         check_multi_digit_add_on_quantity_and_total_are_visible,
         check_cart_line_key_matches_browser_unicode_serialization,
         check_cart_api_echoes_browser_line_key_for_color_recipes,
+        check_color_recipe_must_include_resolved_variant_color,
         check_cart_and_checkout_templates_fail_loud_on_line_key_mismatch,
         check_product_page_color_selector_uses_recipe_schema,
         check_source_mapper_has_no_product_slug_checkout_override,

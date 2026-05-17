@@ -14,6 +14,26 @@ CONTAINER = "locally-twisted-erpnext-v15-backend-1"
 SITE = "frontend"
 METHOD = "locally_twisted.verify.checkout_product_family_contract.run"
 ROOT = Path(__file__).resolve().parents[2]
+EXPECTED_DIRECT_CHECKOUT_WEBSITE_ITEMS = {
+    "6-graduation-stands",
+    "7-butterfly-column",
+    "easter-balloon-cups",
+    "elsa-bouquet",
+    "encanto-bouquet",
+    "flamingo-bouquet",
+    "football-bouquet",
+    "graduation-grab-n-go",
+    "holy-cow-bouquet",
+    "mickey-mouse-bouquet",
+    "minion-bouquet",
+    "mothers-day-bouquet",
+    "over-the-hill-bouquet",
+    "paw-patrol-bouquet",
+    "soccer-bouquet",
+    "space-bouquet",
+    "stitch-bouquet",
+    "unicorn-bouquet",
+}
 
 
 class ContractFail(Exception):
@@ -54,6 +74,7 @@ def main() -> int:
     except ContractFail as exc:
         print(f"[CHECKOUT PRODUCT-FAMILY CONTRACT] FAIL\n  - {exc}")
         return 1
+    contract_failures = _contract_failures(result)
 
     rendered = json.dumps(result, indent=2, sort_keys=True, default=str)
     if args.report:
@@ -65,8 +86,9 @@ def main() -> int:
     if args.json:
         print(rendered)
     else:
-        print("[CHECKOUT PRODUCT-FAMILY CONTRACT] " + ("PASS" if result.get("ok") else "FAIL"))
+        print("[CHECKOUT PRODUCT-FAMILY CONTRACT] " + ("PASS" if result.get("ok") and not contract_failures else "FAIL"))
         print(f"  bouquet_family_count: {result.get('bouquet_family_count')}")
+        print(f"  direct_checkout_family_count: {result.get('direct_checkout_family_count')}")
         print(f"  enabled_sale_sku_count: {result.get('enabled_sale_sku_count')}")
         print(f"  add_on_line_count: {result.get('add_on_line_count')}")
         print(f"  sales_order_line_count: {result.get('sales_order_line_count')}")
@@ -77,12 +99,13 @@ def main() -> int:
         if result.get("rolled_back"):
             print("  rollback: verifier rolled back all generated records")
         failures = result.get("failures") or []
+        failures.extend(contract_failures)
         if failures:
             print("  failures:")
             for failure in failures:
                 print(f"    - {failure}")
 
-    return 0 if result.get("ok") else 1
+    return 0 if result.get("ok") and not contract_failures else 1
 
 
 def _rooted(path: str) -> Path:
@@ -90,6 +113,42 @@ def _rooted(path: str) -> Path:
     if not candidate.is_absolute():
         candidate = ROOT / candidate
     return candidate.resolve()
+
+
+def _contract_failures(result: dict[str, Any]) -> list[str]:
+    covered = _covered_website_items(result)
+    missing = sorted(EXPECTED_DIRECT_CHECKOUT_WEBSITE_ITEMS - covered)
+    extra = sorted(covered - EXPECTED_DIRECT_CHECKOUT_WEBSITE_ITEMS)
+    failures: list[str] = []
+    if missing:
+        failures.append(f"direct checkout family contract is missing product families: {missing}")
+    if extra:
+        failures.append(f"direct checkout family contract covered unexpected product families: {extra}")
+    if result.get("direct_checkout_family_count") != len(EXPECTED_DIRECT_CHECKOUT_WEBSITE_ITEMS):
+        failures.append(
+            "direct_checkout_family_count should be "
+            f"{len(EXPECTED_DIRECT_CHECKOUT_WEBSITE_ITEMS)}, found {result.get('direct_checkout_family_count')}"
+        )
+    return failures
+
+
+def _covered_website_items(result: dict[str, Any]) -> set[str]:
+    covered = {
+        str(row.get("website_item_code"))
+        for row in result.get("bouquet_family") or []
+        if row.get("website_item_code")
+    }
+    for key in (
+        "mothers_day",
+        "easter_balloon_cups",
+        "graduation_stands",
+        "butterfly_column",
+        "graduation_grab_n_go",
+    ):
+        row = result.get(key) or {}
+        if row.get("website_item_code"):
+            covered.add(str(row.get("website_item_code")))
+    return covered
 
 
 if __name__ == "__main__":
