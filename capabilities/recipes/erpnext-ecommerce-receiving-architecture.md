@@ -77,8 +77,10 @@ OpenClaw cockpit witness:
   Current proof is tranche-based: 18 current backend checkout families remain
   under regression guard; four simple products passed backend, browser, and
   payment/customer-message cascade proof; six multi-color products passed
-  backend checkout/SO/SI rehearsal for 563 enabled color SKUs but still need
-  browser, payment/customer-message, media behavior, and owner approval.
+  backend checkout/SO/SI rehearsal for 563 enabled color SKUs plus
+  desktop/mobile browser product/cart/checkout preview with 14 color drawer
+  proofs, but still need payment/customer-message, media behavior, and owner
+  approval.
 - 2026-05-12 backend product-page architecture contract:
   `lt-product-page-architecture-contract-v1` is now the generic receiving
   architecture between ProductPatternContract/source semantics and product-page

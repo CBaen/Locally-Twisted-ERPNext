@@ -35,9 +35,14 @@ and verifier
 `classic-organic-for-easel`, `number-balloon-columns`, and
 `sleepy-baby-column` can resolve 563 enabled color SKUs through checkout with
 `color_recipes`, preserve source-backed prices and SO/SI line fields, and roll
-back cleanly. Browser UX, Payment Request, Payment Entry, receipt email,
-operator email, welcome email, media update behavior, owner approval, and
-staging/live exposure remain pending for that tranche.
+back cleanly. Browser proof also exists at
+`workstreams/ecommerce-audit/multi-color-purchasable-browser-proof-2026-05-17.md`
+with verifier `python scripts/verify/multi_color_purchasable_browser_proof.py`;
+desktop and mobile product/cart/checkout preview passed with 12 product-route
+checks and 14 visible color drawer proofs, and restoration was verified.
+Payment Request, Payment Entry, receipt email, operator email, welcome email,
+media update behavior, owner approval, and staging/live exposure remain pending
+for that tranche.
 
 Codex repo hygiene closeout on 2026-05-17: local `main` is reconciled with
 `origin/main` at `d541a0c6fdb12ac280ec7eb044b7a4397be7fd8c`, the working tree

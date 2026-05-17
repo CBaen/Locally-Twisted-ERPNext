@@ -102,11 +102,13 @@ backend, browser, and payment/customer-message cascade, pending final
 owner/product approval. Multi-color repair lane backend rehearsal is green for
 `7-epic-column`, `baby-shower-combination-photo-opt`, `baby-table-decor`,
 `classic-organic-for-easel`, `number-balloon-columns`, and
-`sleepy-baby-column` through 563 color SKU checkout/SO/SI lines, pending
-browser proof, payment/customer-message cascade, media behavior proof, and
+`sleepy-baby-column` through 563 color SKU checkout/SO/SI lines and through
+desktop/mobile browser product/cart/checkout preview with 14 color drawer
+proofs, pending payment/customer-message cascade, media behavior proof, and
 final owner/product approval. Handoffs:
 `workstreams/ecommerce-audit/simple-purchasable-payment-cascade-2026-05-17.md`
-and `workstreams/ecommerce-audit/multi-color-purchasable-rehearsal-2026-05-17.md`.
+`workstreams/ecommerce-audit/multi-color-purchasable-rehearsal-2026-05-17.md`,
+and `workstreams/ecommerce-audit/multi-color-purchasable-browser-proof-2026-05-17.md`.
 
 **Repo hygiene cleanup track (2026-05-17):** the cleanup track reconciled local
 `main` with `origin/main` at `d541a0c` and deleted stale detached Codex

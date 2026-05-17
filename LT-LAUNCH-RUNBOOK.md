@@ -81,7 +81,8 @@ owner-only queued attachment refs. Ecommerce/live checkout is still blocked.
      browser, payment, or owner-approval proof is incomplete.
    - Current local repair proof: four simple products passed backend, browser,
      and payment/customer-message cascade; six multi-color products passed
-     backend checkout/SO/SI rehearsal only. Neither tranche is live-approved.
+     backend checkout/SO/SI rehearsal plus desktop/mobile browser product,
+     cart, and checkout preview. Neither tranche is live-approved.
 
 ## Codex Owns
 

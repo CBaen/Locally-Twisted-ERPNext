@@ -6,6 +6,21 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-17 - Browser proofs should click visible product controls
+
+The multi-color browser proof failed on the first attempt because the verifier
+used Playwright `check()` directly on the color checkbox input. The actual
+customer control is the visible color card label, and clicking the label is
+what reliably triggers the UI's hidden-select sync and variant refresh path.
+
+**Counter-move:** for product-page browser proofs, interact through the visible
+control the customer sees: chip label, color card label, select, or button.
+Then wait for the real downstream state, such as checked input plus hidden
+color select plus cart `color_recipes`, instead of trusting the low-level input
+action alone.
+
+---
+
 ## 2026-05-17 - Source color casing drift can break product proof
 
 The multi-color rehearsal initially failed before checkout because Odoo had

@@ -306,7 +306,7 @@ def _required_next_gates(stage: str, source_found: bool) -> tuple[str, ...]:
     if stage == "multi_color_recipe_ui_required":
         return (
             "keep multi_color_purchasable_rehearsal_contract green",
-            "browser product/cart/checkout proof",
+            "keep multi_color_purchasable_browser_proof green",
             "payment/receipt/customer-message cascade proof",
             "final owner/product-scope approval before customer exposure",
         )

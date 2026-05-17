@@ -244,7 +244,14 @@ async function chooseFirstOptionForEachAttribute(page) {
 			if (!value) fail(`Color option for ${name} has empty value`);
 			const hidden = attr.locator(".js-lt-color-hidden").first();
 			if ((await hidden.count()) === 0) fail(`Color drawer for ${name} is missing hidden sync select`);
-			await input.check({ force: true });
+			if (!(await input.isChecked().catch(() => false))) {
+				const label = input.locator("xpath=ancestor::label[1]");
+				if ((await label.count()) > 0) {
+					await label.click();
+				} else {
+					await input.check({ force: true });
+				}
+			}
 			await page.waitForFunction(
 				({ attrName, expectedValue }) => {
 					const attrEl = Array.from(document.querySelectorAll(".lt-product__attr")).find(

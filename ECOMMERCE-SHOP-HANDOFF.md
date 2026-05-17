@@ -271,9 +271,10 @@ that appears in product options and fails loudly above its quantity max.
   `classic-organic-for-easel`, `number-balloon-columns`, and
   `sleepy-baby-column` preserve source-backed prices and 563 enabled color SKU
   lines through checkout, `color_recipes`, Sales Order, and Sales Invoice in
-  rollback. Browser UX, payment/customer-message cascade, media update
-  behavior, final owner/product approval, and live exposure are still pending
-  for that tranche.
+  rollback. Local open-mode browser proof is also green at desktop and mobile
+  widths for product pages, visible color drawers, cart, and checkout preview.
+  Payment/customer-message cascade, media update behavior, final owner/product
+  approval, and live exposure are still pending for that tranche.
 - The shared worktree may still show regenerated audit artifacts under `audits/odoo-erpnext-migration-audit-2026-05-08/`; do not broad-stage them without reviewing the producing lane.
 
 ## Remaining Launch Gates
@@ -308,8 +309,8 @@ These are not current local ecommerce architecture blockers:
   `baby-shower-combination-photo-opt`, `baby-table-decor`,
   `classic-organic-for-easel`, `number-balloon-columns`, and
   `sleepy-baby-column`; their backend checkout/SO/SI rehearsal is proven. Do
-  not expose them to customers until browser, payment/customer-message, media
-  behavior, and final owner/product approval gates pass.
+  not expose them to customers until payment/customer-message, media behavior,
+  and final owner/product approval gates pass.
 - Product-page controls must be driven by the generic architecture contract,
   not by product-name branches or frontend-only checkout eligibility.
 - Color-axis payload targets must come from source/backend semantics, not from

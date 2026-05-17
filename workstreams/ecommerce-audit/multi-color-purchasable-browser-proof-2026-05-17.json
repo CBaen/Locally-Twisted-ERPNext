@@ -1,0 +1,1118 @@
+{
+  "baseUrl": "http://localhost:8081",
+  "chromePath": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+  "expectedProductCount": 6,
+  "products": [
+    {
+      "label": "7' Epic Column",
+      "route": "/shop-items/columns/7-epic-column",
+      "title": "7' Epic Column",
+      "itemCode": "7-epic-column-REF",
+      "selections": {},
+      "colorDrawers": [
+        {
+          "axis": "latex colors",
+          "value": "Reflex Champagne",
+          "hiddenValue": "Reflex Champagne"
+        }
+      ],
+      "priceBefore": "from $ 100.00",
+      "priceAfter": "$ 100.00",
+      "imageBefore": "/files/7-epic-column.png",
+      "imageAfter": "/files/7-epic-column.png",
+      "cartLine": {
+        "item_code": "7-epic-column-REF",
+        "qty": 1,
+        "configuration": {
+          "schema_version": "lt-product-config-v1",
+          "item_code": "7-epic-column-REF",
+          "website_item_code": "7-epic-column",
+          "selected_options": {},
+          "color_recipes": [
+            {
+              "axis": "latex colors",
+              "label": "latex colors",
+              "values": [
+                "Reflex Champagne"
+              ]
+            }
+          ],
+          "configuration_groups": [],
+          "add_ons": [],
+          "customizations": []
+        },
+        "line_key": "7-epic-column-REF::{\"add_ons\":[],\"color_recipes\":[{\"axis\":\"latex colors\",\"label\":\"latex colors\",\"values\":[\"Reflex Champagne\"]}],\"configuration_groups\":[],\"customizations\":[],\"item_code\":\"7-epic-column-REF\",\"schema_version\":\"lt-product-config-v1\",\"selected_options\":{},\"website_item_code\":\"7-epic-column\"}"
+      },
+      "viewport": "desktop"
+    },
+    {
+      "label": "Baby Shower Combination Photo opt",
+      "route": "/shop-items/table-decor/baby-shower-combination-photo-opt",
+      "title": "Baby Shower Combination Photo opt",
+      "itemCode": "baby-shower-combination-photo-opt-REF",
+      "selections": {},
+      "colorDrawers": [
+        {
+          "axis": "latex colors",
+          "value": "Reflex Champagne",
+          "hiddenValue": "Reflex Champagne"
+        }
+      ],
+      "priceBefore": "from $ 650.00",
+      "priceAfter": "$ 650.00",
+      "imageBefore": "/files/baby-shower-combination-photo-opt.png",
+      "imageAfter": "/files/baby-shower-combination-photo-opt.png",
+      "cartLine": {
+        "item_code": "baby-shower-combination-photo-opt-REF",
+        "qty": 1,
+        "configuration": {
+          "schema_version": "lt-product-config-v1",
+          "item_code": "baby-shower-combination-photo-opt-REF",
+          "website_item_code": "baby-shower-combination-photo-opt",
+          "selected_options": {},
+          "color_recipes": [
+            {
+              "axis": "latex colors",
+              "label": "latex colors",
+              "values": [
+                "Reflex Champagne"
+              ]
+            }
+          ],
+          "configuration_groups": [],
+          "add_ons": [],
+          "customizations": []
+        },
+        "line_key": "baby-shower-combination-photo-opt-REF::{\"add_ons\":[],\"color_recipes\":[{\"axis\":\"latex colors\",\"label\":\"latex colors\",\"values\":[\"Reflex Champagne\"]}],\"configuration_groups\":[],\"customizations\":[],\"item_code\":\"baby-shower-combination-photo-opt-REF\",\"schema_version\":\"lt-product-config-v1\",\"selected_options\":{},\"website_item_code\":\"baby-shower-combination-photo-opt\"}"
+      },
+      "viewport": "desktop"
+    },
+    {
+      "label": "Baby Table decor",
+      "route": "/shop-items/table-decor/baby-table-decor",
+      "title": "Baby Table decor",
+      "itemCode": "baby-table-decor-BLU",
+      "selections": {},
+      "colorDrawers": [
+        {
+          "axis": "Baby color",
+          "value": "blue",
+          "hiddenValue": "blue"
+        }
+      ],
+      "priceBefore": "from $ 30.00",
+      "priceAfter": "$ 30.00",
+      "imageBefore": "/files/baby-table-decor.png",
+      "imageAfter": "/files/baby-table-decor.png",
+      "cartLine": {
+        "item_code": "baby-table-decor-BLU",
+        "qty": 1,
+        "configuration": {
+          "schema_version": "lt-product-config-v1",
+          "item_code": "baby-table-decor-BLU",
+          "website_item_code": "baby-table-decor",
+          "selected_options": {},
+          "color_recipes": [
+            {
+              "axis": "Baby color",
+              "label": "Baby color",
+              "values": [
+                "blue"
+              ]
+            }
+          ],
+          "configuration_groups": [],
+          "add_ons": [],
+          "customizations": []
+        },
+        "line_key": "baby-table-decor-BLU::{\"add_ons\":[],\"color_recipes\":[{\"axis\":\"Baby color\",\"label\":\"Baby color\",\"values\":[\"blue\"]}],\"configuration_groups\":[],\"customizations\":[],\"item_code\":\"baby-table-decor-BLU\",\"schema_version\":\"lt-product-config-v1\",\"selected_options\":{},\"website_item_code\":\"baby-table-decor\"}"
+      },
+      "viewport": "desktop"
+    },
+    {
+      "label": "classic organic for easel",
+      "route": "/shop-items/stands-easels/classic-organic-for-easel",
+      "title": "classic organic for easel",
+      "itemCode": "classic-organic-for-easel-REF",
+      "selections": {},
+      "colorDrawers": [
+        {
+          "axis": "latex colors",
+          "value": "Reflex Champagne",
+          "hiddenValue": "Reflex Champagne"
+        }
+      ],
+      "priceBefore": "from $ 100.00",
+      "priceAfter": "$ 100.00",
+      "imageBefore": "/files/classic-organic-for-easel.png",
+      "imageAfter": "/files/classic-organic-for-easel.png",
+      "cartLine": {
+        "item_code": "classic-organic-for-easel-REF",
+        "qty": 1,
+        "configuration": {
+          "schema_version": "lt-product-config-v1",
+          "item_code": "classic-organic-for-easel-REF",
+          "website_item_code": "classic-organic-for-easel",
+          "selected_options": {},
+          "color_recipes": [
+            {
+              "axis": "latex colors",
+              "label": "latex colors",
+              "values": [
+                "Reflex Champagne"
+              ]
+            }
+          ],
+          "configuration_groups": [],
+          "add_ons": [],
+          "customizations": []
+        },
+        "line_key": "classic-organic-for-easel-REF::{\"add_ons\":[],\"color_recipes\":[{\"axis\":\"latex colors\",\"label\":\"latex colors\",\"values\":[\"Reflex Champagne\"]}],\"configuration_groups\":[],\"customizations\":[],\"item_code\":\"classic-organic-for-easel-REF\",\"schema_version\":\"lt-product-config-v1\",\"selected_options\":{},\"website_item_code\":\"classic-organic-for-easel\"}"
+      },
+      "viewport": "desktop"
+    },
+    {
+      "label": "Number Balloon Columns",
+      "route": "/shop-items/columns/number-balloon-columns",
+      "title": "Number Balloon Columns",
+      "itemCode": "number-balloon-columns-BLU-REF",
+      "selections": {},
+      "colorDrawers": [
+        {
+          "axis": "Number colors",
+          "value": "blue",
+          "hiddenValue": "blue"
+        },
+        {
+          "axis": "latex colors",
+          "value": "Reflex Champagne",
+          "hiddenValue": "Reflex Champagne"
+        }
+      ],
+      "priceBefore": "from $ 55.00",
+      "priceAfter": "$ 55.00",
+      "imageBefore": "/files/number-balloon-columns.png",
+      "imageAfter": "/files/number-balloon-columns.png",
+      "cartLine": {
+        "item_code": "number-balloon-columns-BLU-REF",
+        "qty": 1,
+        "configuration": {
+          "schema_version": "lt-product-config-v1",
+          "item_code": "number-balloon-columns-BLU-REF",
+          "website_item_code": "number-balloon-columns",
+          "selected_options": {},
+          "color_recipes": [
+            {
+              "axis": "Number colors",
+              "label": "Number colors",
+              "values": [
+                "blue"
+              ]
+            },
+            {
+              "axis": "latex colors",
+              "label": "latex colors",
+              "values": [
+                "Reflex Champagne"
+              ]
+            }
+          ],
+          "configuration_groups": [],
+          "add_ons": [],
+          "customizations": []
+        },
+        "line_key": "number-balloon-columns-BLU-REF::{\"add_ons\":[],\"color_recipes\":[{\"axis\":\"Number colors\",\"label\":\"Number colors\",\"values\":[\"blue\"]},{\"axis\":\"latex colors\",\"label\":\"latex colors\",\"values\":[\"Reflex Champagne\"]}],\"configuration_groups\":[],\"customizations\":[],\"item_code\":\"number-balloon-columns-BLU-REF\",\"schema_version\":\"lt-product-config-v1\",\"selected_options\":{},\"website_item_code\":\"number-balloon-columns\"}"
+      },
+      "viewport": "desktop"
+    },
+    {
+      "label": "Sleepy Baby Column",
+      "route": "/shop-items/columns/sleepy-baby-column",
+      "title": "Sleepy Baby Column",
+      "itemCode": "sleepy-baby-column-REF",
+      "selections": {},
+      "colorDrawers": [
+        {
+          "axis": "latex colors",
+          "value": "Reflex Champagne",
+          "hiddenValue": "Reflex Champagne"
+        }
+      ],
+      "priceBefore": "from $ 220.00",
+      "priceAfter": "$ 220.00",
+      "imageBefore": "/files/sleepy-baby-column.png",
+      "imageAfter": "/files/sleepy-baby-column.png",
+      "cartLine": {
+        "item_code": "sleepy-baby-column-REF",
+        "qty": 1,
+        "configuration": {
+          "schema_version": "lt-product-config-v1",
+          "item_code": "sleepy-baby-column-REF",
+          "website_item_code": "sleepy-baby-column",
+          "selected_options": {},
+          "color_recipes": [
+            {
+              "axis": "latex colors",
+              "label": "latex colors",
+              "values": [
+                "Reflex Champagne"
+              ]
+            }
+          ],
+          "configuration_groups": [],
+          "add_ons": [],
+          "customizations": []
+        },
+        "line_key": "sleepy-baby-column-REF::{\"add_ons\":[],\"color_recipes\":[{\"axis\":\"latex colors\",\"label\":\"latex colors\",\"values\":[\"Reflex Champagne\"]}],\"configuration_groups\":[],\"customizations\":[],\"item_code\":\"sleepy-baby-column-REF\",\"schema_version\":\"lt-product-config-v1\",\"selected_options\":{},\"website_item_code\":\"sleepy-baby-column\"}"
+      },
+      "viewport": "desktop"
+    },
+    {
+      "label": "7' Epic Column",
+      "route": "/shop-items/columns/7-epic-column",
+      "title": "7' Epic Column",
+      "itemCode": "7-epic-column-REF",
+      "selections": {},
+      "colorDrawers": [
+        {
+          "axis": "latex colors",
+          "value": "Reflex Champagne",
+          "hiddenValue": "Reflex Champagne"
+        }
+      ],
+      "priceBefore": "from $ 100.00",
+      "priceAfter": "$ 100.00",
+      "imageBefore": "/files/7-epic-column.png",
+      "imageAfter": "/files/7-epic-column.png",
+      "cartLine": {
+        "item_code": "7-epic-column-REF",
+        "qty": 1,
+        "configuration": {
+          "schema_version": "lt-product-config-v1",
+          "item_code": "7-epic-column-REF",
+          "website_item_code": "7-epic-column",
+          "selected_options": {},
+          "color_recipes": [
+            {
+              "axis": "latex colors",
+              "label": "latex colors",
+              "values": [
+                "Reflex Champagne"
+              ]
+            }
+          ],
+          "configuration_groups": [],
+          "add_ons": [],
+          "customizations": []
+        },
+        "line_key": "7-epic-column-REF::{\"add_ons\":[],\"color_recipes\":[{\"axis\":\"latex colors\",\"label\":\"latex colors\",\"values\":[\"Reflex Champagne\"]}],\"configuration_groups\":[],\"customizations\":[],\"item_code\":\"7-epic-column-REF\",\"schema_version\":\"lt-product-config-v1\",\"selected_options\":{},\"website_item_code\":\"7-epic-column\"}"
+      },
+      "viewport": "mobile"
+    },
+    {
+      "label": "Baby Shower Combination Photo opt",
+      "route": "/shop-items/table-decor/baby-shower-combination-photo-opt",
+      "title": "Baby Shower Combination Photo opt",
+      "itemCode": "baby-shower-combination-photo-opt-REF",
+      "selections": {},
+      "colorDrawers": [
+        {
+          "axis": "latex colors",
+          "value": "Reflex Champagne",
+          "hiddenValue": "Reflex Champagne"
+        }
+      ],
+      "priceBefore": "from $ 650.00",
+      "priceAfter": "$ 650.00",
+      "imageBefore": "/files/baby-shower-combination-photo-opt.png",
+      "imageAfter": "/files/baby-shower-combination-photo-opt.png",
+      "cartLine": {
+        "item_code": "baby-shower-combination-photo-opt-REF",
+        "qty": 1,
+        "configuration": {
+          "schema_version": "lt-product-config-v1",
+          "item_code": "baby-shower-combination-photo-opt-REF",
+          "website_item_code": "baby-shower-combination-photo-opt",
+          "selected_options": {},
+          "color_recipes": [
+            {
+              "axis": "latex colors",
+              "label": "latex colors",
+              "values": [
+                "Reflex Champagne"
+              ]
+            }
+          ],
+          "configuration_groups": [],
+          "add_ons": [],
+          "customizations": []
+        },
+        "line_key": "baby-shower-combination-photo-opt-REF::{\"add_ons\":[],\"color_recipes\":[{\"axis\":\"latex colors\",\"label\":\"latex colors\",\"values\":[\"Reflex Champagne\"]}],\"configuration_groups\":[],\"customizations\":[],\"item_code\":\"baby-shower-combination-photo-opt-REF\",\"schema_version\":\"lt-product-config-v1\",\"selected_options\":{},\"website_item_code\":\"baby-shower-combination-photo-opt\"}"
+      },
+      "viewport": "mobile"
+    },
+    {
+      "label": "Baby Table decor",
+      "route": "/shop-items/table-decor/baby-table-decor",
+      "title": "Baby Table decor",
+      "itemCode": "baby-table-decor-BLU",
+      "selections": {},
+      "colorDrawers": [
+        {
+          "axis": "Baby color",
+          "value": "blue",
+          "hiddenValue": "blue"
+        }
+      ],
+      "priceBefore": "from $ 30.00",
+      "priceAfter": "$ 30.00",
+      "imageBefore": "/files/baby-table-decor.png",
+      "imageAfter": "/files/baby-table-decor.png",
+      "cartLine": {
+        "item_code": "baby-table-decor-BLU",
+        "qty": 1,
+        "configuration": {
+          "schema_version": "lt-product-config-v1",
+          "item_code": "baby-table-decor-BLU",
+          "website_item_code": "baby-table-decor",
+          "selected_options": {},
+          "color_recipes": [
+            {
+              "axis": "Baby color",
+              "label": "Baby color",
+              "values": [
+                "blue"
+              ]
+            }
+          ],
+          "configuration_groups": [],
+          "add_ons": [],
+          "customizations": []
+        },
+        "line_key": "baby-table-decor-BLU::{\"add_ons\":[],\"color_recipes\":[{\"axis\":\"Baby color\",\"label\":\"Baby color\",\"values\":[\"blue\"]}],\"configuration_groups\":[],\"customizations\":[],\"item_code\":\"baby-table-decor-BLU\",\"schema_version\":\"lt-product-config-v1\",\"selected_options\":{},\"website_item_code\":\"baby-table-decor\"}"
+      },
+      "viewport": "mobile"
+    },
+    {
+      "label": "classic organic for easel",
+      "route": "/shop-items/stands-easels/classic-organic-for-easel",
+      "title": "classic organic for easel",
+      "itemCode": "classic-organic-for-easel-REF",
+      "selections": {},
+      "colorDrawers": [
+        {
+          "axis": "latex colors",
+          "value": "Reflex Champagne",
+          "hiddenValue": "Reflex Champagne"
+        }
+      ],
+      "priceBefore": "from $ 100.00",
+      "priceAfter": "$ 100.00",
+      "imageBefore": "/files/classic-organic-for-easel.png",
+      "imageAfter": "/files/classic-organic-for-easel.png",
+      "cartLine": {
+        "item_code": "classic-organic-for-easel-REF",
+        "qty": 1,
+        "configuration": {
+          "schema_version": "lt-product-config-v1",
+          "item_code": "classic-organic-for-easel-REF",
+          "website_item_code": "classic-organic-for-easel",
+          "selected_options": {},
+          "color_recipes": [
+            {
+              "axis": "latex colors",
+              "label": "latex colors",
+              "values": [
+                "Reflex Champagne"
+              ]
+            }
+          ],
+          "configuration_groups": [],
+          "add_ons": [],
+          "customizations": []
+        },
+        "line_key": "classic-organic-for-easel-REF::{\"add_ons\":[],\"color_recipes\":[{\"axis\":\"latex colors\",\"label\":\"latex colors\",\"values\":[\"Reflex Champagne\"]}],\"configuration_groups\":[],\"customizations\":[],\"item_code\":\"classic-organic-for-easel-REF\",\"schema_version\":\"lt-product-config-v1\",\"selected_options\":{},\"website_item_code\":\"classic-organic-for-easel\"}"
+      },
+      "viewport": "mobile"
+    },
+    {
+      "label": "Number Balloon Columns",
+      "route": "/shop-items/columns/number-balloon-columns",
+      "title": "Number Balloon Columns",
+      "itemCode": "number-balloon-columns-BLU-REF",
+      "selections": {},
+      "colorDrawers": [
+        {
+          "axis": "Number colors",
+          "value": "blue",
+          "hiddenValue": "blue"
+        },
+        {
+          "axis": "latex colors",
+          "value": "Reflex Champagne",
+          "hiddenValue": "Reflex Champagne"
+        }
+      ],
+      "priceBefore": "from $ 55.00",
+      "priceAfter": "$ 55.00",
+      "imageBefore": "/files/number-balloon-columns.png",
+      "imageAfter": "/files/number-balloon-columns.png",
+      "cartLine": {
+        "item_code": "number-balloon-columns-BLU-REF",
+        "qty": 1,
+        "configuration": {
+          "schema_version": "lt-product-config-v1",
+          "item_code": "number-balloon-columns-BLU-REF",
+          "website_item_code": "number-balloon-columns",
+          "selected_options": {},
+          "color_recipes": [
+            {
+              "axis": "Number colors",
+              "label": "Number colors",
+              "values": [
+                "blue"
+              ]
+            },
+            {
+              "axis": "latex colors",
+              "label": "latex colors",
+              "values": [
+                "Reflex Champagne"
+              ]
+            }
+          ],
+          "configuration_groups": [],
+          "add_ons": [],
+          "customizations": []
+        },
+        "line_key": "number-balloon-columns-BLU-REF::{\"add_ons\":[],\"color_recipes\":[{\"axis\":\"Number colors\",\"label\":\"Number colors\",\"values\":[\"blue\"]},{\"axis\":\"latex colors\",\"label\":\"latex colors\",\"values\":[\"Reflex Champagne\"]}],\"configuration_groups\":[],\"customizations\":[],\"item_code\":\"number-balloon-columns-BLU-REF\",\"schema_version\":\"lt-product-config-v1\",\"selected_options\":{},\"website_item_code\":\"number-balloon-columns\"}"
+      },
+      "viewport": "mobile"
+    },
+    {
+      "label": "Sleepy Baby Column",
+      "route": "/shop-items/columns/sleepy-baby-column",
+      "title": "Sleepy Baby Column",
+      "itemCode": "sleepy-baby-column-REF",
+      "selections": {},
+      "colorDrawers": [
+        {
+          "axis": "latex colors",
+          "value": "Reflex Champagne",
+          "hiddenValue": "Reflex Champagne"
+        }
+      ],
+      "priceBefore": "from $ 220.00",
+      "priceAfter": "$ 220.00",
+      "imageBefore": "/files/sleepy-baby-column.png",
+      "imageAfter": "/files/sleepy-baby-column.png",
+      "cartLine": {
+        "item_code": "sleepy-baby-column-REF",
+        "qty": 1,
+        "configuration": {
+          "schema_version": "lt-product-config-v1",
+          "item_code": "sleepy-baby-column-REF",
+          "website_item_code": "sleepy-baby-column",
+          "selected_options": {},
+          "color_recipes": [
+            {
+              "axis": "latex colors",
+              "label": "latex colors",
+              "values": [
+                "Reflex Champagne"
+              ]
+            }
+          ],
+          "configuration_groups": [],
+          "add_ons": [],
+          "customizations": []
+        },
+        "line_key": "sleepy-baby-column-REF::{\"add_ons\":[],\"color_recipes\":[{\"axis\":\"latex colors\",\"label\":\"latex colors\",\"values\":[\"Reflex Champagne\"]}],\"configuration_groups\":[],\"customizations\":[],\"item_code\":\"sleepy-baby-column-REF\",\"schema_version\":\"lt-product-config-v1\",\"selected_options\":{},\"website_item_code\":\"sleepy-baby-column\"}"
+      },
+      "viewport": "mobile"
+    }
+  ],
+  "viewports": [
+    {
+      "viewport": {
+        "name": "desktop",
+        "width": 1366,
+        "height": 900
+      },
+      "products": [
+        {
+          "label": "7' Epic Column",
+          "route": "/shop-items/columns/7-epic-column",
+          "title": "7' Epic Column",
+          "itemCode": "7-epic-column-REF",
+          "selections": {},
+          "colorDrawers": [
+            {
+              "axis": "latex colors",
+              "value": "Reflex Champagne",
+              "hiddenValue": "Reflex Champagne"
+            }
+          ],
+          "priceBefore": "from $ 100.00",
+          "priceAfter": "$ 100.00",
+          "imageBefore": "/files/7-epic-column.png",
+          "imageAfter": "/files/7-epic-column.png",
+          "cartLine": {
+            "item_code": "7-epic-column-REF",
+            "qty": 1,
+            "configuration": {
+              "schema_version": "lt-product-config-v1",
+              "item_code": "7-epic-column-REF",
+              "website_item_code": "7-epic-column",
+              "selected_options": {},
+              "color_recipes": [
+                {
+                  "axis": "latex colors",
+                  "label": "latex colors",
+                  "values": [
+                    "Reflex Champagne"
+                  ]
+                }
+              ],
+              "configuration_groups": [],
+              "add_ons": [],
+              "customizations": []
+            },
+            "line_key": "7-epic-column-REF::{\"add_ons\":[],\"color_recipes\":[{\"axis\":\"latex colors\",\"label\":\"latex colors\",\"values\":[\"Reflex Champagne\"]}],\"configuration_groups\":[],\"customizations\":[],\"item_code\":\"7-epic-column-REF\",\"schema_version\":\"lt-product-config-v1\",\"selected_options\":{},\"website_item_code\":\"7-epic-column\"}"
+          },
+          "viewport": "desktop"
+        },
+        {
+          "label": "Baby Shower Combination Photo opt",
+          "route": "/shop-items/table-decor/baby-shower-combination-photo-opt",
+          "title": "Baby Shower Combination Photo opt",
+          "itemCode": "baby-shower-combination-photo-opt-REF",
+          "selections": {},
+          "colorDrawers": [
+            {
+              "axis": "latex colors",
+              "value": "Reflex Champagne",
+              "hiddenValue": "Reflex Champagne"
+            }
+          ],
+          "priceBefore": "from $ 650.00",
+          "priceAfter": "$ 650.00",
+          "imageBefore": "/files/baby-shower-combination-photo-opt.png",
+          "imageAfter": "/files/baby-shower-combination-photo-opt.png",
+          "cartLine": {
+            "item_code": "baby-shower-combination-photo-opt-REF",
+            "qty": 1,
+            "configuration": {
+              "schema_version": "lt-product-config-v1",
+              "item_code": "baby-shower-combination-photo-opt-REF",
+              "website_item_code": "baby-shower-combination-photo-opt",
+              "selected_options": {},
+              "color_recipes": [
+                {
+                  "axis": "latex colors",
+                  "label": "latex colors",
+                  "values": [
+                    "Reflex Champagne"
+                  ]
+                }
+              ],
+              "configuration_groups": [],
+              "add_ons": [],
+              "customizations": []
+            },
+            "line_key": "baby-shower-combination-photo-opt-REF::{\"add_ons\":[],\"color_recipes\":[{\"axis\":\"latex colors\",\"label\":\"latex colors\",\"values\":[\"Reflex Champagne\"]}],\"configuration_groups\":[],\"customizations\":[],\"item_code\":\"baby-shower-combination-photo-opt-REF\",\"schema_version\":\"lt-product-config-v1\",\"selected_options\":{},\"website_item_code\":\"baby-shower-combination-photo-opt\"}"
+          },
+          "viewport": "desktop"
+        },
+        {
+          "label": "Baby Table decor",
+          "route": "/shop-items/table-decor/baby-table-decor",
+          "title": "Baby Table decor",
+          "itemCode": "baby-table-decor-BLU",
+          "selections": {},
+          "colorDrawers": [
+            {
+              "axis": "Baby color",
+              "value": "blue",
+              "hiddenValue": "blue"
+            }
+          ],
+          "priceBefore": "from $ 30.00",
+          "priceAfter": "$ 30.00",
+          "imageBefore": "/files/baby-table-decor.png",
+          "imageAfter": "/files/baby-table-decor.png",
+          "cartLine": {
+            "item_code": "baby-table-decor-BLU",
+            "qty": 1,
+            "configuration": {
+              "schema_version": "lt-product-config-v1",
+              "item_code": "baby-table-decor-BLU",
+              "website_item_code": "baby-table-decor",
+              "selected_options": {},
+              "color_recipes": [
+                {
+                  "axis": "Baby color",
+                  "label": "Baby color",
+                  "values": [
+                    "blue"
+                  ]
+                }
+              ],
+              "configuration_groups": [],
+              "add_ons": [],
+              "customizations": []
+            },
+            "line_key": "baby-table-decor-BLU::{\"add_ons\":[],\"color_recipes\":[{\"axis\":\"Baby color\",\"label\":\"Baby color\",\"values\":[\"blue\"]}],\"configuration_groups\":[],\"customizations\":[],\"item_code\":\"baby-table-decor-BLU\",\"schema_version\":\"lt-product-config-v1\",\"selected_options\":{},\"website_item_code\":\"baby-table-decor\"}"
+          },
+          "viewport": "desktop"
+        },
+        {
+          "label": "classic organic for easel",
+          "route": "/shop-items/stands-easels/classic-organic-for-easel",
+          "title": "classic organic for easel",
+          "itemCode": "classic-organic-for-easel-REF",
+          "selections": {},
+          "colorDrawers": [
+            {
+              "axis": "latex colors",
+              "value": "Reflex Champagne",
+              "hiddenValue": "Reflex Champagne"
+            }
+          ],
+          "priceBefore": "from $ 100.00",
+          "priceAfter": "$ 100.00",
+          "imageBefore": "/files/classic-organic-for-easel.png",
+          "imageAfter": "/files/classic-organic-for-easel.png",
+          "cartLine": {
+            "item_code": "classic-organic-for-easel-REF",
+            "qty": 1,
+            "configuration": {
+              "schema_version": "lt-product-config-v1",
+              "item_code": "classic-organic-for-easel-REF",
+              "website_item_code": "classic-organic-for-easel",
+              "selected_options": {},
+              "color_recipes": [
+                {
+                  "axis": "latex colors",
+                  "label": "latex colors",
+                  "values": [
+                    "Reflex Champagne"
+                  ]
+                }
+              ],
+              "configuration_groups": [],
+              "add_ons": [],
+              "customizations": []
+            },
+            "line_key": "classic-organic-for-easel-REF::{\"add_ons\":[],\"color_recipes\":[{\"axis\":\"latex colors\",\"label\":\"latex colors\",\"values\":[\"Reflex Champagne\"]}],\"configuration_groups\":[],\"customizations\":[],\"item_code\":\"classic-organic-for-easel-REF\",\"schema_version\":\"lt-product-config-v1\",\"selected_options\":{},\"website_item_code\":\"classic-organic-for-easel\"}"
+          },
+          "viewport": "desktop"
+        },
+        {
+          "label": "Number Balloon Columns",
+          "route": "/shop-items/columns/number-balloon-columns",
+          "title": "Number Balloon Columns",
+          "itemCode": "number-balloon-columns-BLU-REF",
+          "selections": {},
+          "colorDrawers": [
+            {
+              "axis": "Number colors",
+              "value": "blue",
+              "hiddenValue": "blue"
+            },
+            {
+              "axis": "latex colors",
+              "value": "Reflex Champagne",
+              "hiddenValue": "Reflex Champagne"
+            }
+          ],
+          "priceBefore": "from $ 55.00",
+          "priceAfter": "$ 55.00",
+          "imageBefore": "/files/number-balloon-columns.png",
+          "imageAfter": "/files/number-balloon-columns.png",
+          "cartLine": {
+            "item_code": "number-balloon-columns-BLU-REF",
+            "qty": 1,
+            "configuration": {
+              "schema_version": "lt-product-config-v1",
+              "item_code": "number-balloon-columns-BLU-REF",
+              "website_item_code": "number-balloon-columns",
+              "selected_options": {},
+              "color_recipes": [
+                {
+                  "axis": "Number colors",
+                  "label": "Number colors",
+                  "values": [
+                    "blue"
+                  ]
+                },
+                {
+                  "axis": "latex colors",
+                  "label": "latex colors",
+                  "values": [
+                    "Reflex Champagne"
+                  ]
+                }
+              ],
+              "configuration_groups": [],
+              "add_ons": [],
+              "customizations": []
+            },
+            "line_key": "number-balloon-columns-BLU-REF::{\"add_ons\":[],\"color_recipes\":[{\"axis\":\"Number colors\",\"label\":\"Number colors\",\"values\":[\"blue\"]},{\"axis\":\"latex colors\",\"label\":\"latex colors\",\"values\":[\"Reflex Champagne\"]}],\"configuration_groups\":[],\"customizations\":[],\"item_code\":\"number-balloon-columns-BLU-REF\",\"schema_version\":\"lt-product-config-v1\",\"selected_options\":{},\"website_item_code\":\"number-balloon-columns\"}"
+          },
+          "viewport": "desktop"
+        },
+        {
+          "label": "Sleepy Baby Column",
+          "route": "/shop-items/columns/sleepy-baby-column",
+          "title": "Sleepy Baby Column",
+          "itemCode": "sleepy-baby-column-REF",
+          "selections": {},
+          "colorDrawers": [
+            {
+              "axis": "latex colors",
+              "value": "Reflex Champagne",
+              "hiddenValue": "Reflex Champagne"
+            }
+          ],
+          "priceBefore": "from $ 220.00",
+          "priceAfter": "$ 220.00",
+          "imageBefore": "/files/sleepy-baby-column.png",
+          "imageAfter": "/files/sleepy-baby-column.png",
+          "cartLine": {
+            "item_code": "sleepy-baby-column-REF",
+            "qty": 1,
+            "configuration": {
+              "schema_version": "lt-product-config-v1",
+              "item_code": "sleepy-baby-column-REF",
+              "website_item_code": "sleepy-baby-column",
+              "selected_options": {},
+              "color_recipes": [
+                {
+                  "axis": "latex colors",
+                  "label": "latex colors",
+                  "values": [
+                    "Reflex Champagne"
+                  ]
+                }
+              ],
+              "configuration_groups": [],
+              "add_ons": [],
+              "customizations": []
+            },
+            "line_key": "sleepy-baby-column-REF::{\"add_ons\":[],\"color_recipes\":[{\"axis\":\"latex colors\",\"label\":\"latex colors\",\"values\":[\"Reflex Champagne\"]}],\"configuration_groups\":[],\"customizations\":[],\"item_code\":\"sleepy-baby-column-REF\",\"schema_version\":\"lt-product-config-v1\",\"selected_options\":{},\"website_item_code\":\"sleepy-baby-column\"}"
+          },
+          "viewport": "desktop"
+        }
+      ],
+      "checkoutPreview": {
+        "ok": true,
+        "fulfillment": {
+          "method": "pickup",
+          "zone": "pickup",
+          "label": "West Jordan",
+          "delivery_fee": 0,
+          "delivery_item_code": null,
+          "can_checkout": true,
+          "message": "Pickup date and window are requested until confirmed by Locally Twisted."
+        },
+        "subtotal": 1155,
+        "delivery_fee": 0,
+        "tax_rate": 7.45,
+        "tax_amount": 86.05,
+        "total": 1241.05
+      }
+    },
+    {
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "products": [
+        {
+          "label": "7' Epic Column",
+          "route": "/shop-items/columns/7-epic-column",
+          "title": "7' Epic Column",
+          "itemCode": "7-epic-column-REF",
+          "selections": {},
+          "colorDrawers": [
+            {
+              "axis": "latex colors",
+              "value": "Reflex Champagne",
+              "hiddenValue": "Reflex Champagne"
+            }
+          ],
+          "priceBefore": "from $ 100.00",
+          "priceAfter": "$ 100.00",
+          "imageBefore": "/files/7-epic-column.png",
+          "imageAfter": "/files/7-epic-column.png",
+          "cartLine": {
+            "item_code": "7-epic-column-REF",
+            "qty": 1,
+            "configuration": {
+              "schema_version": "lt-product-config-v1",
+              "item_code": "7-epic-column-REF",
+              "website_item_code": "7-epic-column",
+              "selected_options": {},
+              "color_recipes": [
+                {
+                  "axis": "latex colors",
+                  "label": "latex colors",
+                  "values": [
+                    "Reflex Champagne"
+                  ]
+                }
+              ],
+              "configuration_groups": [],
+              "add_ons": [],
+              "customizations": []
+            },
+            "line_key": "7-epic-column-REF::{\"add_ons\":[],\"color_recipes\":[{\"axis\":\"latex colors\",\"label\":\"latex colors\",\"values\":[\"Reflex Champagne\"]}],\"configuration_groups\":[],\"customizations\":[],\"item_code\":\"7-epic-column-REF\",\"schema_version\":\"lt-product-config-v1\",\"selected_options\":{},\"website_item_code\":\"7-epic-column\"}"
+          },
+          "viewport": "mobile"
+        },
+        {
+          "label": "Baby Shower Combination Photo opt",
+          "route": "/shop-items/table-decor/baby-shower-combination-photo-opt",
+          "title": "Baby Shower Combination Photo opt",
+          "itemCode": "baby-shower-combination-photo-opt-REF",
+          "selections": {},
+          "colorDrawers": [
+            {
+              "axis": "latex colors",
+              "value": "Reflex Champagne",
+              "hiddenValue": "Reflex Champagne"
+            }
+          ],
+          "priceBefore": "from $ 650.00",
+          "priceAfter": "$ 650.00",
+          "imageBefore": "/files/baby-shower-combination-photo-opt.png",
+          "imageAfter": "/files/baby-shower-combination-photo-opt.png",
+          "cartLine": {
+            "item_code": "baby-shower-combination-photo-opt-REF",
+            "qty": 1,
+            "configuration": {
+              "schema_version": "lt-product-config-v1",
+              "item_code": "baby-shower-combination-photo-opt-REF",
+              "website_item_code": "baby-shower-combination-photo-opt",
+              "selected_options": {},
+              "color_recipes": [
+                {
+                  "axis": "latex colors",
+                  "label": "latex colors",
+                  "values": [
+                    "Reflex Champagne"
+                  ]
+                }
+              ],
+              "configuration_groups": [],
+              "add_ons": [],
+              "customizations": []
+            },
+            "line_key": "baby-shower-combination-photo-opt-REF::{\"add_ons\":[],\"color_recipes\":[{\"axis\":\"latex colors\",\"label\":\"latex colors\",\"values\":[\"Reflex Champagne\"]}],\"configuration_groups\":[],\"customizations\":[],\"item_code\":\"baby-shower-combination-photo-opt-REF\",\"schema_version\":\"lt-product-config-v1\",\"selected_options\":{},\"website_item_code\":\"baby-shower-combination-photo-opt\"}"
+          },
+          "viewport": "mobile"
+        },
+        {
+          "label": "Baby Table decor",
+          "route": "/shop-items/table-decor/baby-table-decor",
+          "title": "Baby Table decor",
+          "itemCode": "baby-table-decor-BLU",
+          "selections": {},
+          "colorDrawers": [
+            {
+              "axis": "Baby color",
+              "value": "blue",
+              "hiddenValue": "blue"
+            }
+          ],
+          "priceBefore": "from $ 30.00",
+          "priceAfter": "$ 30.00",
+          "imageBefore": "/files/baby-table-decor.png",
+          "imageAfter": "/files/baby-table-decor.png",
+          "cartLine": {
+            "item_code": "baby-table-decor-BLU",
+            "qty": 1,
+            "configuration": {
+              "schema_version": "lt-product-config-v1",
+              "item_code": "baby-table-decor-BLU",
+              "website_item_code": "baby-table-decor",
+              "selected_options": {},
+              "color_recipes": [
+                {
+                  "axis": "Baby color",
+                  "label": "Baby color",
+                  "values": [
+                    "blue"
+                  ]
+                }
+              ],
+              "configuration_groups": [],
+              "add_ons": [],
+              "customizations": []
+            },
+            "line_key": "baby-table-decor-BLU::{\"add_ons\":[],\"color_recipes\":[{\"axis\":\"Baby color\",\"label\":\"Baby color\",\"values\":[\"blue\"]}],\"configuration_groups\":[],\"customizations\":[],\"item_code\":\"baby-table-decor-BLU\",\"schema_version\":\"lt-product-config-v1\",\"selected_options\":{},\"website_item_code\":\"baby-table-decor\"}"
+          },
+          "viewport": "mobile"
+        },
+        {
+          "label": "classic organic for easel",
+          "route": "/shop-items/stands-easels/classic-organic-for-easel",
+          "title": "classic organic for easel",
+          "itemCode": "classic-organic-for-easel-REF",
+          "selections": {},
+          "colorDrawers": [
+            {
+              "axis": "latex colors",
+              "value": "Reflex Champagne",
+              "hiddenValue": "Reflex Champagne"
+            }
+          ],
+          "priceBefore": "from $ 100.00",
+          "priceAfter": "$ 100.00",
+          "imageBefore": "/files/classic-organic-for-easel.png",
+          "imageAfter": "/files/classic-organic-for-easel.png",
+          "cartLine": {
+            "item_code": "classic-organic-for-easel-REF",
+            "qty": 1,
+            "configuration": {
+              "schema_version": "lt-product-config-v1",
+              "item_code": "classic-organic-for-easel-REF",
+              "website_item_code": "classic-organic-for-easel",
+              "selected_options": {},
+              "color_recipes": [
+                {
+                  "axis": "latex colors",
+                  "label": "latex colors",
+                  "values": [
+                    "Reflex Champagne"
+                  ]
+                }
+              ],
+              "configuration_groups": [],
+              "add_ons": [],
+              "customizations": []
+            },
+            "line_key": "classic-organic-for-easel-REF::{\"add_ons\":[],\"color_recipes\":[{\"axis\":\"latex colors\",\"label\":\"latex colors\",\"values\":[\"Reflex Champagne\"]}],\"configuration_groups\":[],\"customizations\":[],\"item_code\":\"classic-organic-for-easel-REF\",\"schema_version\":\"lt-product-config-v1\",\"selected_options\":{},\"website_item_code\":\"classic-organic-for-easel\"}"
+          },
+          "viewport": "mobile"
+        },
+        {
+          "label": "Number Balloon Columns",
+          "route": "/shop-items/columns/number-balloon-columns",
+          "title": "Number Balloon Columns",
+          "itemCode": "number-balloon-columns-BLU-REF",
+          "selections": {},
+          "colorDrawers": [
+            {
+              "axis": "Number colors",
+              "value": "blue",
+              "hiddenValue": "blue"
+            },
+            {
+              "axis": "latex colors",
+              "value": "Reflex Champagne",
+              "hiddenValue": "Reflex Champagne"
+            }
+          ],
+          "priceBefore": "from $ 55.00",
+          "priceAfter": "$ 55.00",
+          "imageBefore": "/files/number-balloon-columns.png",
+          "imageAfter": "/files/number-balloon-columns.png",
+          "cartLine": {
+            "item_code": "number-balloon-columns-BLU-REF",
+            "qty": 1,
+            "configuration": {
+              "schema_version": "lt-product-config-v1",
+              "item_code": "number-balloon-columns-BLU-REF",
+              "website_item_code": "number-balloon-columns",
+              "selected_options": {},
+              "color_recipes": [
+                {
+                  "axis": "Number colors",
+                  "label": "Number colors",
+                  "values": [
+                    "blue"
+                  ]
+                },
+                {
+                  "axis": "latex colors",
+                  "label": "latex colors",
+                  "values": [
+                    "Reflex Champagne"
+                  ]
+                }
+              ],
+              "configuration_groups": [],
+              "add_ons": [],
+              "customizations": []
+            },
+            "line_key": "number-balloon-columns-BLU-REF::{\"add_ons\":[],\"color_recipes\":[{\"axis\":\"Number colors\",\"label\":\"Number colors\",\"values\":[\"blue\"]},{\"axis\":\"latex colors\",\"label\":\"latex colors\",\"values\":[\"Reflex Champagne\"]}],\"configuration_groups\":[],\"customizations\":[],\"item_code\":\"number-balloon-columns-BLU-REF\",\"schema_version\":\"lt-product-config-v1\",\"selected_options\":{},\"website_item_code\":\"number-balloon-columns\"}"
+          },
+          "viewport": "mobile"
+        },
+        {
+          "label": "Sleepy Baby Column",
+          "route": "/shop-items/columns/sleepy-baby-column",
+          "title": "Sleepy Baby Column",
+          "itemCode": "sleepy-baby-column-REF",
+          "selections": {},
+          "colorDrawers": [
+            {
+              "axis": "latex colors",
+              "value": "Reflex Champagne",
+              "hiddenValue": "Reflex Champagne"
+            }
+          ],
+          "priceBefore": "from $ 220.00",
+          "priceAfter": "$ 220.00",
+          "imageBefore": "/files/sleepy-baby-column.png",
+          "imageAfter": "/files/sleepy-baby-column.png",
+          "cartLine": {
+            "item_code": "sleepy-baby-column-REF",
+            "qty": 1,
+            "configuration": {
+              "schema_version": "lt-product-config-v1",
+              "item_code": "sleepy-baby-column-REF",
+              "website_item_code": "sleepy-baby-column",
+              "selected_options": {},
+              "color_recipes": [
+                {
+                  "axis": "latex colors",
+                  "label": "latex colors",
+                  "values": [
+                    "Reflex Champagne"
+                  ]
+                }
+              ],
+              "configuration_groups": [],
+              "add_ons": [],
+              "customizations": []
+            },
+            "line_key": "sleepy-baby-column-REF::{\"add_ons\":[],\"color_recipes\":[{\"axis\":\"latex colors\",\"label\":\"latex colors\",\"values\":[\"Reflex Champagne\"]}],\"configuration_groups\":[],\"customizations\":[],\"item_code\":\"sleepy-baby-column-REF\",\"schema_version\":\"lt-product-config-v1\",\"selected_options\":{},\"website_item_code\":\"sleepy-baby-column\"}"
+          },
+          "viewport": "mobile"
+        }
+      ],
+      "checkoutPreview": {
+        "ok": true,
+        "fulfillment": {
+          "method": "pickup",
+          "zone": "pickup",
+          "label": "West Jordan",
+          "delivery_fee": 0,
+          "delivery_item_code": null,
+          "can_checkout": true,
+          "message": "Pickup date and window are requested until confirmed by Locally Twisted."
+        },
+        "subtotal": 1155,
+        "delivery_fee": 0,
+        "tax_rate": 7.45,
+        "tax_amount": 86.05,
+        "total": 1241.05
+      }
+    }
+  ],
+  "ok": true
+}

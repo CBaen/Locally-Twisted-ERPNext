@@ -198,6 +198,18 @@ surviving records. It does not prove browser UX, Payment Request, Payment
 Entry, receipt/operator/welcome emails, media update behavior, owner approval,
 or staging/live exposure.
 
+## 2026-05-17 Multi-Color Purchasable Browser Proof
+
+Use `multi-color-purchasable-browser-proof-2026-05-17.md` and
+`multi-color-purchasable-browser-proof-2026-05-17.json` for the local open-mode
+browser proof of that same multi-color repair lane. The wrapper temporarily
+opens local ecommerce, applies the checkout contract to the six Website Items,
+runs desktop and mobile product/cart/checkout preview proof, verifies 14
+visible color drawer selections preserve `color_recipes`, then restores the
+original Website Item contracts and `lt_ecommerce_paused=1`. It does not prove
+Payment Request, Payment Entry, receipt/operator/welcome emails, media update
+behavior, owner approval, or staging/live exposure.
+
 ## Evidence inventory
 
 | Lane | Required artifact | Current state | Use it for |
