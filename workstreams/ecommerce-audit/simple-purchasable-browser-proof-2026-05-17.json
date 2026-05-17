@@ -1,0 +1,422 @@
+{
+  "baseUrl": "http://localhost:8081",
+  "chromePath": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+  "expectedProductCount": 4,
+  "products": [
+    {
+      "label": "Easter Arch",
+      "route": "/shop-items/arches/easter-arch",
+      "title": "Easter Arch",
+      "itemCode": "easter-arch",
+      "selections": {},
+      "colorDrawers": [],
+      "priceBefore": "$ 250.00",
+      "priceAfter": "$ 250.00",
+      "imageBefore": "/files/easter-arch.png",
+      "imageAfter": "/files/easter-arch.png",
+      "cartLine": {
+        "item_code": "easter-arch",
+        "qty": 1,
+        "line_key": "easter-arch::"
+      },
+      "viewport": "desktop"
+    },
+    {
+      "label": "Large head Missionary",
+      "route": "/shop-items/bouquets/large-head-missionary",
+      "title": "Large head Missionary",
+      "itemCode": "large-head-missionary-ELD-BLU-BLA",
+      "selections": {
+        "Missionary": "Elder",
+        "skin color": "Blush",
+        "Hair color": "Black"
+      },
+      "colorDrawers": [],
+      "priceBefore": "from $ 175.00",
+      "priceAfter": "$ 175.00",
+      "imageBefore": "/files/large-head-missionary.png",
+      "imageAfter": "/files/large-head-missionary.png",
+      "cartLine": {
+        "item_code": "large-head-missionary-ELD-BLU-BLA",
+        "qty": 1,
+        "configuration": {
+          "schema_version": "lt-product-config-v1",
+          "item_code": "large-head-missionary-ELD-BLU-BLA",
+          "website_item_code": "large-head-missionary",
+          "selected_options": {
+            "Missionary": "Elder",
+            "skin color": "Blush",
+            "Hair color": "Black"
+          },
+          "color_recipes": [],
+          "configuration_groups": [],
+          "add_ons": [],
+          "customizations": []
+        },
+        "line_key": "large-head-missionary-ELD-BLU-BLA::{\"add_ons\":[],\"color_recipes\":[],\"configuration_groups\":[],\"customizations\":[],\"item_code\":\"large-head-missionary-ELD-BLU-BLA\",\"schema_version\":\"lt-product-config-v1\",\"selected_options\":{\"Hair color\":\"Black\",\"Missionary\":\"Elder\",\"skin color\":\"Blush\"},\"website_item_code\":\"large-head-missionary\"}"
+      },
+      "viewport": "desktop"
+    },
+    {
+      "label": "Mother's day front yard 7' Column",
+      "route": "/shop-items/columns/mothers-day-front-yard-7-column",
+      "title": "Mother's day front yard 7' Column",
+      "itemCode": "mothers-day-front-yard-7-column",
+      "selections": {},
+      "colorDrawers": [],
+      "priceBefore": "$ 140.00",
+      "priceAfter": "$ 140.00",
+      "imageBefore": "/files/mothers-day-front-yard-7-column.png",
+      "imageAfter": "/files/mothers-day-front-yard-7-column.png",
+      "cartLine": {
+        "item_code": "mothers-day-front-yard-7-column",
+        "qty": 1,
+        "line_key": "mothers-day-front-yard-7-column::"
+      },
+      "viewport": "desktop"
+    },
+    {
+      "label": "Pride Arch",
+      "route": "/shop-items/arches/pride-arch",
+      "title": "Pride Arch",
+      "itemCode": "pride-arch",
+      "selections": {},
+      "colorDrawers": [],
+      "priceBefore": "$ 325.00",
+      "priceAfter": "$ 325.00",
+      "imageBefore": "/files/pride-arch.png",
+      "imageAfter": "/files/pride-arch.png",
+      "cartLine": {
+        "item_code": "pride-arch",
+        "qty": 1,
+        "line_key": "pride-arch::"
+      },
+      "viewport": "desktop"
+    },
+    {
+      "label": "Easter Arch",
+      "route": "/shop-items/arches/easter-arch",
+      "title": "Easter Arch",
+      "itemCode": "easter-arch",
+      "selections": {},
+      "colorDrawers": [],
+      "priceBefore": "$ 250.00",
+      "priceAfter": "$ 250.00",
+      "imageBefore": "/files/easter-arch.png",
+      "imageAfter": "/files/easter-arch.png",
+      "cartLine": {
+        "item_code": "easter-arch",
+        "qty": 1,
+        "line_key": "easter-arch::"
+      },
+      "viewport": "mobile"
+    },
+    {
+      "label": "Large head Missionary",
+      "route": "/shop-items/bouquets/large-head-missionary",
+      "title": "Large head Missionary",
+      "itemCode": "large-head-missionary-ELD-BLU-BLA",
+      "selections": {
+        "Missionary": "Elder",
+        "skin color": "Blush",
+        "Hair color": "Black"
+      },
+      "colorDrawers": [],
+      "priceBefore": "from $ 175.00",
+      "priceAfter": "$ 175.00",
+      "imageBefore": "/files/large-head-missionary.png",
+      "imageAfter": "/files/large-head-missionary.png",
+      "cartLine": {
+        "item_code": "large-head-missionary-ELD-BLU-BLA",
+        "qty": 1,
+        "configuration": {
+          "schema_version": "lt-product-config-v1",
+          "item_code": "large-head-missionary-ELD-BLU-BLA",
+          "website_item_code": "large-head-missionary",
+          "selected_options": {
+            "Missionary": "Elder",
+            "skin color": "Blush",
+            "Hair color": "Black"
+          },
+          "color_recipes": [],
+          "configuration_groups": [],
+          "add_ons": [],
+          "customizations": []
+        },
+        "line_key": "large-head-missionary-ELD-BLU-BLA::{\"add_ons\":[],\"color_recipes\":[],\"configuration_groups\":[],\"customizations\":[],\"item_code\":\"large-head-missionary-ELD-BLU-BLA\",\"schema_version\":\"lt-product-config-v1\",\"selected_options\":{\"Hair color\":\"Black\",\"Missionary\":\"Elder\",\"skin color\":\"Blush\"},\"website_item_code\":\"large-head-missionary\"}"
+      },
+      "viewport": "mobile"
+    },
+    {
+      "label": "Mother's day front yard 7' Column",
+      "route": "/shop-items/columns/mothers-day-front-yard-7-column",
+      "title": "Mother's day front yard 7' Column",
+      "itemCode": "mothers-day-front-yard-7-column",
+      "selections": {},
+      "colorDrawers": [],
+      "priceBefore": "$ 140.00",
+      "priceAfter": "$ 140.00",
+      "imageBefore": "/files/mothers-day-front-yard-7-column.png",
+      "imageAfter": "/files/mothers-day-front-yard-7-column.png",
+      "cartLine": {
+        "item_code": "mothers-day-front-yard-7-column",
+        "qty": 1,
+        "line_key": "mothers-day-front-yard-7-column::"
+      },
+      "viewport": "mobile"
+    },
+    {
+      "label": "Pride Arch",
+      "route": "/shop-items/arches/pride-arch",
+      "title": "Pride Arch",
+      "itemCode": "pride-arch",
+      "selections": {},
+      "colorDrawers": [],
+      "priceBefore": "$ 325.00",
+      "priceAfter": "$ 325.00",
+      "imageBefore": "/files/pride-arch.png",
+      "imageAfter": "/files/pride-arch.png",
+      "cartLine": {
+        "item_code": "pride-arch",
+        "qty": 1,
+        "line_key": "pride-arch::"
+      },
+      "viewport": "mobile"
+    }
+  ],
+  "viewports": [
+    {
+      "viewport": {
+        "name": "desktop",
+        "width": 1366,
+        "height": 900
+      },
+      "products": [
+        {
+          "label": "Easter Arch",
+          "route": "/shop-items/arches/easter-arch",
+          "title": "Easter Arch",
+          "itemCode": "easter-arch",
+          "selections": {},
+          "colorDrawers": [],
+          "priceBefore": "$ 250.00",
+          "priceAfter": "$ 250.00",
+          "imageBefore": "/files/easter-arch.png",
+          "imageAfter": "/files/easter-arch.png",
+          "cartLine": {
+            "item_code": "easter-arch",
+            "qty": 1,
+            "line_key": "easter-arch::"
+          },
+          "viewport": "desktop"
+        },
+        {
+          "label": "Large head Missionary",
+          "route": "/shop-items/bouquets/large-head-missionary",
+          "title": "Large head Missionary",
+          "itemCode": "large-head-missionary-ELD-BLU-BLA",
+          "selections": {
+            "Missionary": "Elder",
+            "skin color": "Blush",
+            "Hair color": "Black"
+          },
+          "colorDrawers": [],
+          "priceBefore": "from $ 175.00",
+          "priceAfter": "$ 175.00",
+          "imageBefore": "/files/large-head-missionary.png",
+          "imageAfter": "/files/large-head-missionary.png",
+          "cartLine": {
+            "item_code": "large-head-missionary-ELD-BLU-BLA",
+            "qty": 1,
+            "configuration": {
+              "schema_version": "lt-product-config-v1",
+              "item_code": "large-head-missionary-ELD-BLU-BLA",
+              "website_item_code": "large-head-missionary",
+              "selected_options": {
+                "Missionary": "Elder",
+                "skin color": "Blush",
+                "Hair color": "Black"
+              },
+              "color_recipes": [],
+              "configuration_groups": [],
+              "add_ons": [],
+              "customizations": []
+            },
+            "line_key": "large-head-missionary-ELD-BLU-BLA::{\"add_ons\":[],\"color_recipes\":[],\"configuration_groups\":[],\"customizations\":[],\"item_code\":\"large-head-missionary-ELD-BLU-BLA\",\"schema_version\":\"lt-product-config-v1\",\"selected_options\":{\"Hair color\":\"Black\",\"Missionary\":\"Elder\",\"skin color\":\"Blush\"},\"website_item_code\":\"large-head-missionary\"}"
+          },
+          "viewport": "desktop"
+        },
+        {
+          "label": "Mother's day front yard 7' Column",
+          "route": "/shop-items/columns/mothers-day-front-yard-7-column",
+          "title": "Mother's day front yard 7' Column",
+          "itemCode": "mothers-day-front-yard-7-column",
+          "selections": {},
+          "colorDrawers": [],
+          "priceBefore": "$ 140.00",
+          "priceAfter": "$ 140.00",
+          "imageBefore": "/files/mothers-day-front-yard-7-column.png",
+          "imageAfter": "/files/mothers-day-front-yard-7-column.png",
+          "cartLine": {
+            "item_code": "mothers-day-front-yard-7-column",
+            "qty": 1,
+            "line_key": "mothers-day-front-yard-7-column::"
+          },
+          "viewport": "desktop"
+        },
+        {
+          "label": "Pride Arch",
+          "route": "/shop-items/arches/pride-arch",
+          "title": "Pride Arch",
+          "itemCode": "pride-arch",
+          "selections": {},
+          "colorDrawers": [],
+          "priceBefore": "$ 325.00",
+          "priceAfter": "$ 325.00",
+          "imageBefore": "/files/pride-arch.png",
+          "imageAfter": "/files/pride-arch.png",
+          "cartLine": {
+            "item_code": "pride-arch",
+            "qty": 1,
+            "line_key": "pride-arch::"
+          },
+          "viewport": "desktop"
+        }
+      ],
+      "checkoutPreview": {
+        "ok": true,
+        "fulfillment": {
+          "method": "pickup",
+          "zone": "pickup",
+          "label": "West Jordan",
+          "delivery_fee": 0,
+          "delivery_item_code": null,
+          "can_checkout": true,
+          "message": "Pickup date and window are requested until confirmed by Locally Twisted."
+        },
+        "subtotal": 890,
+        "delivery_fee": 0,
+        "tax_rate": 7.45,
+        "tax_amount": 66.31,
+        "total": 956.31
+      }
+    },
+    {
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "products": [
+        {
+          "label": "Easter Arch",
+          "route": "/shop-items/arches/easter-arch",
+          "title": "Easter Arch",
+          "itemCode": "easter-arch",
+          "selections": {},
+          "colorDrawers": [],
+          "priceBefore": "$ 250.00",
+          "priceAfter": "$ 250.00",
+          "imageBefore": "/files/easter-arch.png",
+          "imageAfter": "/files/easter-arch.png",
+          "cartLine": {
+            "item_code": "easter-arch",
+            "qty": 1,
+            "line_key": "easter-arch::"
+          },
+          "viewport": "mobile"
+        },
+        {
+          "label": "Large head Missionary",
+          "route": "/shop-items/bouquets/large-head-missionary",
+          "title": "Large head Missionary",
+          "itemCode": "large-head-missionary-ELD-BLU-BLA",
+          "selections": {
+            "Missionary": "Elder",
+            "skin color": "Blush",
+            "Hair color": "Black"
+          },
+          "colorDrawers": [],
+          "priceBefore": "from $ 175.00",
+          "priceAfter": "$ 175.00",
+          "imageBefore": "/files/large-head-missionary.png",
+          "imageAfter": "/files/large-head-missionary.png",
+          "cartLine": {
+            "item_code": "large-head-missionary-ELD-BLU-BLA",
+            "qty": 1,
+            "configuration": {
+              "schema_version": "lt-product-config-v1",
+              "item_code": "large-head-missionary-ELD-BLU-BLA",
+              "website_item_code": "large-head-missionary",
+              "selected_options": {
+                "Missionary": "Elder",
+                "skin color": "Blush",
+                "Hair color": "Black"
+              },
+              "color_recipes": [],
+              "configuration_groups": [],
+              "add_ons": [],
+              "customizations": []
+            },
+            "line_key": "large-head-missionary-ELD-BLU-BLA::{\"add_ons\":[],\"color_recipes\":[],\"configuration_groups\":[],\"customizations\":[],\"item_code\":\"large-head-missionary-ELD-BLU-BLA\",\"schema_version\":\"lt-product-config-v1\",\"selected_options\":{\"Hair color\":\"Black\",\"Missionary\":\"Elder\",\"skin color\":\"Blush\"},\"website_item_code\":\"large-head-missionary\"}"
+          },
+          "viewport": "mobile"
+        },
+        {
+          "label": "Mother's day front yard 7' Column",
+          "route": "/shop-items/columns/mothers-day-front-yard-7-column",
+          "title": "Mother's day front yard 7' Column",
+          "itemCode": "mothers-day-front-yard-7-column",
+          "selections": {},
+          "colorDrawers": [],
+          "priceBefore": "$ 140.00",
+          "priceAfter": "$ 140.00",
+          "imageBefore": "/files/mothers-day-front-yard-7-column.png",
+          "imageAfter": "/files/mothers-day-front-yard-7-column.png",
+          "cartLine": {
+            "item_code": "mothers-day-front-yard-7-column",
+            "qty": 1,
+            "line_key": "mothers-day-front-yard-7-column::"
+          },
+          "viewport": "mobile"
+        },
+        {
+          "label": "Pride Arch",
+          "route": "/shop-items/arches/pride-arch",
+          "title": "Pride Arch",
+          "itemCode": "pride-arch",
+          "selections": {},
+          "colorDrawers": [],
+          "priceBefore": "$ 325.00",
+          "priceAfter": "$ 325.00",
+          "imageBefore": "/files/pride-arch.png",
+          "imageAfter": "/files/pride-arch.png",
+          "cartLine": {
+            "item_code": "pride-arch",
+            "qty": 1,
+            "line_key": "pride-arch::"
+          },
+          "viewport": "mobile"
+        }
+      ],
+      "checkoutPreview": {
+        "ok": true,
+        "fulfillment": {
+          "method": "pickup",
+          "zone": "pickup",
+          "label": "West Jordan",
+          "delivery_fee": 0,
+          "delivery_item_code": null,
+          "can_checkout": true,
+          "message": "Pickup date and window are requested until confirmed by Locally Twisted."
+        },
+        "subtotal": 890,
+        "delivery_fee": 0,
+        "tax_rate": 7.45,
+        "tax_amount": 66.31,
+        "total": 956.31
+      }
+    }
+  ],
+  "ok": true
+}

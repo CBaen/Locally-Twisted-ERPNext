@@ -17,14 +17,17 @@ const CHROME_PATH =
 	process.env.PLAYWRIGHT_CHROME_PATH ||
 	"C:/Program Files/Google/Chrome/Application/chrome.exe";
 const OUT_DIR = path.join(process.cwd(), "output", "playwright");
-const REPORT_PATH = path.join(OUT_DIR, "post-import-checkout-proof.json");
-const EXPECTED_DIRECT_CHECKOUT_PRODUCT_COUNT = 18;
+const REPORT_PATH = process.env.LT_CHECKOUT_PROOF_REPORT
+	? path.resolve(process.cwd(), process.env.LT_CHECKOUT_PROOF_REPORT)
+	: path.join(OUT_DIR, "post-import-checkout-proof.json");
+const CUSTOM_PRODUCTS_JSON = process.env.LT_CHECKOUT_PROOF_PRODUCTS_JSON || "";
+const DEFAULT_EXPECTED_DIRECT_CHECKOUT_PRODUCT_COUNT = 18;
 const VIEWPORTS = [
 	{ name: "desktop", width: 1366, height: 900 },
 	{ name: "mobile", width: 390, height: 844 },
 ];
 
-const PRODUCTS = [
+const DEFAULT_PRODUCTS = [
 	{
 		label: "Easter Balloon Cups",
 		route: "/shop-items/seasonal-specialty/easter-balloon-cups",
@@ -117,10 +120,41 @@ const PRODUCTS = [
 	},
 ];
 
+const PRODUCTS = loadProducts();
+const EXPECTED_DIRECT_CHECKOUT_PRODUCT_COUNT = Number.parseInt(
+	process.env.LT_EXPECTED_DIRECT_CHECKOUT_PRODUCT_COUNT ||
+		(CUSTOM_PRODUCTS_JSON ? String(PRODUCTS.length) : String(DEFAULT_EXPECTED_DIRECT_CHECKOUT_PRODUCT_COUNT)),
+	10,
+);
+
 function fail(message) {
 	const error = new Error(message);
 	error.proofFailure = true;
 	throw error;
+}
+
+function loadProducts() {
+	if (!CUSTOM_PRODUCTS_JSON) return DEFAULT_PRODUCTS;
+	let parsed;
+	try {
+		parsed = JSON.parse(CUSTOM_PRODUCTS_JSON);
+	} catch (error) {
+		fail(`LT_CHECKOUT_PROOF_PRODUCTS_JSON is not valid JSON: ${error.message}`);
+	}
+	if (!Array.isArray(parsed) || parsed.length === 0) {
+		fail("LT_CHECKOUT_PROOF_PRODUCTS_JSON must be a non-empty product array");
+	}
+	for (const [index, product] of parsed.entries()) {
+		for (const key of ["label", "route", "expectedTemplate"]) {
+			if (!product[key] || typeof product[key] !== "string") {
+				fail(`custom product ${index} is missing string field ${key}`);
+			}
+		}
+		if (!product.route.startsWith("/")) {
+			fail(`custom product ${product.label} route must start with /`);
+		}
+	}
+	return parsed;
 }
 
 function hasMoney(text) {
@@ -249,7 +283,24 @@ async function chooseFirstOptionForEachAttribute(page) {
 		);
 		if (!input) fail(`No visible enabled option input for ${name}`);
 		const value = await input.getAttribute("value");
-		await input.check({ force: true });
+		const label = input.locator("xpath=ancestor::label[1]");
+		if ((await label.count()) > 0) {
+			await label.click();
+		} else {
+			await input.check({ force: true });
+		}
+		await page.waitForFunction(
+			({ attrName, expectedValue }) => {
+				return Array.from(document.querySelectorAll(".lt-product__attr")).some((attrEl) => {
+					if (attrEl.getAttribute("data-attribute-name") !== attrName) return false;
+					return Array.from(attrEl.querySelectorAll(".js-lt-attr-input:checked")).some(
+						(inputEl) => inputEl.value === expectedValue,
+					);
+				});
+			},
+			{ attrName: name, expectedValue: value || "" },
+			{ timeout: 10000 },
+		);
 		selectionProof.selectedOptions[name] = value || "";
 	}
 	return selectionProof;
@@ -442,7 +493,7 @@ async function main() {
 			`post-import checkout proof must cover ${EXPECTED_DIRECT_CHECKOUT_PRODUCT_COUNT} direct checkout product families, found ${PRODUCTS.length}`,
 		);
 	}
-	fs.mkdirSync(OUT_DIR, { recursive: true });
+	fs.mkdirSync(path.dirname(REPORT_PATH), { recursive: true });
 	const browser = await chromium.launch({
 		headless: true,
 		executablePath: CHROME_PATH,
@@ -452,6 +503,7 @@ async function main() {
 	const proof = {
 		baseUrl: BASE_URL,
 		chromePath: CHROME_PATH,
+		expectedProductCount: EXPECTED_DIRECT_CHECKOUT_PRODUCT_COUNT,
 		products: [],
 		viewports: [],
 		ok: false,

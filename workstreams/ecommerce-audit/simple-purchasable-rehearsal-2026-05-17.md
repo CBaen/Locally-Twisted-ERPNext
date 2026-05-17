@@ -47,11 +47,10 @@ Result:
 
 ## Still Not Proven
 
-This is not live checkout approval. The remaining gates for this tranche are:
+This is not live checkout approval. Browser proof is now covered by
+`simple-purchasable-browser-proof-2026-05-17.md`. The remaining gates for this
+tranche are:
 
-- Open-mode desktop and mobile product-page UX proof.
-- Cart and checkout browser proof after an intentional local lane flip.
 - Payment Request, Payment Entry, customer receipt email, operator email, and
   first-order welcome proof using these tranche products.
 - Final owner/product-scope approval before any customer exposure.
-

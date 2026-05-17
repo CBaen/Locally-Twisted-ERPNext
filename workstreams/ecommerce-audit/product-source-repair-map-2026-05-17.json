@@ -4,7 +4,7 @@
   "live_site_update_allowed": false,
   "metadata": {
     "business_rule": "Products target purchasable checkout; legacy quote_first values are internal holds.",
-    "generated_at": "2026-05-17T20:23:44Z",
+    "generated_at": "2026-05-17T20:42:49Z",
     "price_enrichment": "audits\\odoo-erpnext-migration-audit-2026-05-08\\21-product-page-price-enrichment-candidates.json",
     "scaffold": "output\\complex-checkout-scaffold.json",
     "source_catalog": "_resources\\odoo-live\\catalog.json"
@@ -285,9 +285,9 @@
       },
       "repair_lane": "simple_purchasable_rehearsal",
       "required_next_gates": [
-        "focused source/export purchasable rehearsal",
-        "open-mode product UX proof",
-        "checkout/payment/invoice/receipt cascade proof"
+        "Payment Request/Payment Entry cascade proof",
+        "receipt/operator/welcome email proof",
+        "final owner/product-scope approval before customer exposure"
       ],
       "scaffold_stage": "simple_axis_lane_flip_candidate",
       "slug": "large-head-missionary",
@@ -1433,9 +1433,9 @@
       },
       "repair_lane": "simple_purchasable_rehearsal",
       "required_next_gates": [
-        "focused source/export purchasable rehearsal",
-        "open-mode product UX proof",
-        "checkout/payment/invoice/receipt cascade proof"
+        "Payment Request/Payment Entry cascade proof",
+        "receipt/operator/welcome email proof",
+        "final owner/product-scope approval before customer exposure"
       ],
       "scaffold_stage": "simple_axis_lane_flip_candidate",
       "slug": "mothers-day-front-yard-7-column",
@@ -1782,9 +1782,9 @@
       },
       "repair_lane": "simple_purchasable_rehearsal",
       "required_next_gates": [
-        "focused source/export purchasable rehearsal",
-        "open-mode product UX proof",
-        "checkout/payment/invoice/receipt cascade proof"
+        "Payment Request/Payment Entry cascade proof",
+        "receipt/operator/welcome email proof",
+        "final owner/product-scope approval before customer exposure"
       ],
       "scaffold_stage": "simple_axis_lane_flip_candidate",
       "slug": "easter-arch",
@@ -1923,9 +1923,9 @@
       },
       "repair_lane": "simple_purchasable_rehearsal",
       "required_next_gates": [
-        "focused source/export purchasable rehearsal",
-        "open-mode product UX proof",
-        "checkout/payment/invoice/receipt cascade proof"
+        "Payment Request/Payment Entry cascade proof",
+        "receipt/operator/welcome email proof",
+        "final owner/product-scope approval before customer exposure"
       ],
       "scaffold_stage": "simple_axis_lane_flip_candidate",
       "slug": "pride-arch",

@@ -15,6 +15,12 @@ prove `large-head-missionary`, `mothers-day-front-yard-7-column`,
 `easter-arch`, and `pride-arch` can preserve source-backed prices and 33 sale
 SKU lines through Sales Order and Sales Invoice inside rollback. This is
 backend-only proof, not browser, payment, receipt, live, or owner approval.
+Browser proof also exists at
+`workstreams/ecommerce-audit/simple-purchasable-browser-proof-2026-05-17.md`
+with verifier `python scripts/verify/simple_purchasable_browser_proof.py`;
+desktop and mobile product/cart/checkout preview passed for the same four
+products after temporary local-only opening, and restoration was verified.
+Payment, receipt, operator email, live, and owner approval remain pending.
 
 Codex repo hygiene closeout on 2026-05-17: local `main` is reconciled with
 `origin/main` at `d541a0c6fdb12ac280ec7eb044b7a4397be7fd8c`, the working tree
