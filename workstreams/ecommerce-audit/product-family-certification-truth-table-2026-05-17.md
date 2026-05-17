@@ -52,6 +52,7 @@ Website Item was unpublished.
 | Cart/checkout runtime | PASS | `python scripts/verify/cart_checkout_contract.py`; blocked-product guards, cart line keys, add-ons, over-limit quantities, stale payload failures, and color-recipe/variant mismatch failures guarded |
 | Open-mode product UX | PASS / local only | Temporarily set local `lt_ecommerce_paused=0`, ran `node scripts/verify/post_import_checkout_proof.js`, restored `lt_ecommerce_paused=1`, and cleared website cache; product page, cart, and checkout preview passed for all 18 current checkout families at desktop and mobile widths |
 | Product source repair map | PASS | `python scripts/verify/product_source_repair_map.py`; 53/53 Odoo export rows found, 18 certified checkout products, 35 blocked-until-certified products, 0 contract failures |
+| Simple purchasable rehearsal | PASS / backend only | `python scripts/verify/simple_purchasable_rehearsal_contract.py`; 4 simple repair-lane products, 33 sale SKUs, source-backed prices, SO/SI line preservation, and rollback cleanup passed |
 | Stripe amount parity | PASS | `python scripts/verify/stripe_amount_parity_contract.py`; hosted checkout cents match ERPNext totals |
 | Payment cascade | PASS | `python scripts/verify/payment_cascade_contract.py`; SO -> PR -> Payment Entry -> SI -> receipt/operator/welcome email rolled back |
 
@@ -94,7 +95,7 @@ classification are:
 | Status | Count | Meaning |
 |---|---:|---|
 | Direct checkout regression guard | 18 | Current backend says checkout-ready; keep these green while proving UX/cascade family by family |
-| Simple purchasable proof candidate | 4 | Currently held by legacy internal field; can enter checkout only after focused source/export and local rehearsal proof |
+| Simple purchasable backend rehearsal passed | 4 | Source/export price and SO/SI line preservation are proven; browser UX, cart/checkout, payment, receipt, operator, and approval gates remain before customer checkout |
 | Multi-color recipe UI required | 6 | Needs customer-facing multi-color UI plus backend validation before checkout |
 | Add-on or conditional pricing blocked | 20 | Needs explicit add-on and/or conditional pricing contracts before checkout |
 | Needs review or missing | 5 | Keep blocked or hidden until product-page type, buying path, source export meaning, pricing, and media are reviewed |
@@ -128,16 +129,17 @@ family.
 
 ## Tranche 2 - Simple Purchasable Proof Candidates
 
-These stay out of customer checkout until a focused local proof uses Odoo export
-data to prove product page, cart, checkout, payment, invoice, receipt, and
-owner/operator payload parity.
+These stay out of customer checkout until the remaining customer-facing proof
+uses Odoo export data to prove product page, cart, checkout, payment, invoice,
+receipt, and owner/operator payload parity. Backend SO/SI rehearsal passed on
+2026-05-17 with 33 sale SKU lines and zero surviving generated records.
 
 | Product | Slug | Required before checkout |
 |---|---|---|
-| Easter Arch | `easter-arch` | Focused local lane-flip rehearsal proof |
-| Large head Missionary | `large-head-missionary` | Focused local lane-flip rehearsal proof |
-| Mother's day front yard 7' Column | `mothers-day-front-yard-7-column` | Focused local lane-flip rehearsal proof |
-| Pride Arch | `pride-arch` | Focused local lane-flip rehearsal proof |
+| Easter Arch | `easter-arch` | Backend SO/SI rehearsal passed; still needs open-mode UX, payment/receipt/operator proof, and approval |
+| Large head Missionary | `large-head-missionary` | Backend SO/SI rehearsal passed for 30 variants; still needs open-mode UX, payment/receipt/operator proof, and approval |
+| Mother's day front yard 7' Column | `mothers-day-front-yard-7-column` | Backend SO/SI rehearsal passed; still needs open-mode UX, payment/receipt/operator proof, and approval |
+| Pride Arch | `pride-arch` | Backend SO/SI rehearsal passed; still needs open-mode UX, payment/receipt/operator proof, and approval |
 
 ## Tranche 3 - Multi-Color Recipe UI Required
 
@@ -197,10 +199,14 @@ source meaning, add-ons, and media/pricing presentation are reviewed.
 
 ## Next Concrete Work
 
-1. Use `product-source-repair-map-2026-05-17.md` to repair the remaining
+1. Extend the simple repair-lane proof from backend SO/SI rehearsal into
+   open-mode product-page/cart/checkout browser proof and payment/receipt/
+   operator cascade proof for `large-head-missionary`,
+   `mothers-day-front-yard-7-column`, `easter-arch`, and `pride-arch`.
+2. Use `product-source-repair-map-2026-05-17.md` to repair the remaining
    product-family holds into purchasable products; repull the Odoo export if
    current source data is incomplete or unclear.
-2. Keep all other product families blocked, needs-review, or hidden until their
+3. Keep all other product families blocked, needs-review, or hidden until their
    tranche gate passes; do not present `quote_first` as the business model.
-3. Replace remaining verifier/report wording that says quote-first with
+4. Replace remaining verifier/report wording that says quote-first with
    blocked/import-repair language where the field name itself is not required.

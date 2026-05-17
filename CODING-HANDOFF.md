@@ -8,6 +8,13 @@ data, pricing, media, UI, cart, checkout, payment, invoice, receipt, and
 operator/customer payload preservation are proven. Current source-backed repair
 queue: `workstreams/ecommerce-audit/product-source-repair-map-2026-05-17.md`
 and verifier `python scripts/verify/product_source_repair_map.py`.
+First repair-lane proof now exists for the simple tranche:
+`workstreams/ecommerce-audit/simple-purchasable-rehearsal-2026-05-17.md`
+and verifier `python scripts/verify/simple_purchasable_rehearsal_contract.py`
+prove `large-head-missionary`, `mothers-day-front-yard-7-column`,
+`easter-arch`, and `pride-arch` can preserve source-backed prices and 33 sale
+SKU lines through Sales Order and Sales Invoice inside rollback. This is
+backend-only proof, not browser, payment, receipt, live, or owner approval.
 
 Codex repo hygiene closeout on 2026-05-17: local `main` is reconciled with
 `origin/main` at `d541a0c6fdb12ac280ec7eb044b7a4397be7fd8c`, the working tree

@@ -153,6 +153,17 @@ correction that every product targets purchasable behavior; non-certified rows
 are `blocked_until_certified` until source data, pricing, media, and checkout
 cascade proof pass.
 
+## 2026-05-17 Simple Purchasable Rehearsal
+
+Use `simple-purchasable-rehearsal-2026-05-17.md` and
+`simple-purchasable-rehearsal-2026-05-17.json` for the first backend-only
+rehearsal of the simple repair lane. The rollback contract temporarily applies
+`simple_product|checkout` in one ERPNext transaction for `large-head-missionary`,
+`mothers-day-front-yard-7-column`, `easter-arch`, and `pride-arch`, proves 33
+sale SKUs through Sales Order and Sales Invoice line preservation, and rolls
+back with zero surviving records. It does not prove browser UX, Payment Request,
+Payment Entry, receipt email, operator email, or live/customer approval.
+
 ## Evidence inventory
 
 | Lane | Required artifact | Current state | Use it for |
@@ -193,6 +204,7 @@ cascade proof pass.
 | Generic Product Setup runtime | `generic-product-setup-runtime-2026-05-15.md` + `../../scripts/verify/product_blueprint_live_contract.py` + `../../scripts/verify/cart_checkout_contract.py` + `../../scripts/verify/payment_cascade_contract.py` | Present, local-only complex Product Setup media/payment proof | Proves generic selection groups, SKU-defining variants, configuration-only choices, combination media rules, server-selected image parity through cart/checkout/Stripe/receipt, role-gated local apply, and fake-card local payment cascade. |
 | Product family certification truth table | `product-family-certification-truth-table-2026-05-17.md` + `../../scripts/verify/checkout_product_family_contract.py` + `../../scripts/verify/post_import_checkout_proof.js` | Present, backend-first current product certification | Splits the 53 real product families into 18 certified checkout regression guards and 35 blocked repair rows while preserving GL's no-business-quote-first correction. |
 | Product source repair map | `product-source-repair-map-2026-05-17.md` + `product-source-repair-map-2026-05-17.json` + `../../scripts/verify/product_source_repair_map.py` | Present, source-backed repair queue | Maps every Odoo-export product to `purchasable_product`, reports 53/53 source rows found, and assigns the remaining 35 products to focused repair lanes instead of treating legacy holds as a product model. |
+| Simple purchasable rehearsal | `simple-purchasable-rehearsal-2026-05-17.md` + `simple-purchasable-rehearsal-2026-05-17.json` + `../../scripts/verify/simple_purchasable_rehearsal_contract.py` | Present, rollback-safe backend proof | Proves the four simple repair-lane products can preserve source-backed prices and 33 sale SKU lines through Sales Order and Sales Invoice when temporarily treated as checkout inside one transaction. |
 | Phase 6 launch decision packet | `phase-6-launch-decision-packet-2026-05-10.md` | Present, parent decision | Keeps public ecommerce paused; live checkout remains blocked until production HTTPS host, explicit live Stripe/site config, policy approval, webhook setup, and one intentional real payment test pass. |
 | Infrastructure synthesis | `ecommerce-infrastructure-research-synthesis-2026-05-10.md` | Present, parent-created | Corrected synthesis for the real question: ERPNext receiving infrastructure, contract/runtime layers, line-level preservation, quote/checkout bridges, fail-loud evidence, and verifier gates. |
 | Knowledge base index | `ecommerce-knowledge-base-index-2026-05-10.md` | Present, parent-created | Supporting index of recalled memory, local artifacts, source repos, verified docs, blockers, and next actions. |

@@ -1,0 +1,409 @@
+{
+  "add_on_line_count": 0,
+  "color_recipe_line_count": 0,
+  "commit_calls_intercepted": 0,
+  "enabled_sale_sku_count": 33,
+  "expected_sales_order_line_count": 33,
+  "line_fields": [
+    "custom_lt_configuration_json",
+    "custom_lt_configuration_summary",
+    "custom_lt_configuration_version",
+    "custom_lt_product_page_type",
+    "custom_lt_product_template_item"
+  ],
+  "ok": true,
+  "original_contracts": {
+    "easter-arch": {
+      "commerce_lane": "quote_first",
+      "product_page_type": "complex_custom_product",
+      "published": true,
+      "web_item_name": "Easter Arch",
+      "website_item_name": "WEB-ITM-0051"
+    },
+    "large-head-missionary": {
+      "commerce_lane": "quote_first",
+      "product_page_type": "complex_custom_product",
+      "published": true,
+      "web_item_name": "Large head Missionary",
+      "website_item_name": "WEB-ITM-0039"
+    },
+    "mothers-day-front-yard-7-column": {
+      "commerce_lane": "quote_first",
+      "product_page_type": "complex_custom_product",
+      "published": true,
+      "web_item_name": "Mother's day front yard 7' Column",
+      "website_item_name": "WEB-ITM-0022"
+    },
+    "pride-arch": {
+      "commerce_lane": "quote_first",
+      "product_page_type": "complex_custom_product",
+      "published": true,
+      "web_item_name": "Pride Arch",
+      "website_item_name": "WEB-ITM-0053"
+    }
+  },
+  "rolled_back": true,
+  "sales_invoice": "ACC-SINV-2026-00004",
+  "sales_order": "SAL-ORD-2026-00024",
+  "sales_order_line_count": 33,
+  "schema_version": "lt-product-config-v1",
+  "simple_rehearsal_product_count": 4,
+  "simple_rehearsal_products": [
+    {
+      "add_on_options": 0,
+      "required_attributes": [
+        "Missionary",
+        "skin color",
+        "Hair color"
+      ],
+      "resolved_line_count": 30,
+      "sale_sku_count": 30,
+      "source_name": "Large head Missionary",
+      "source_price": 175.0,
+      "source_price_basis": "Odoo base price; live ERPNext snapshot prices match every variant",
+      "verified_variant_count": 30,
+      "verified_variants": [
+        {
+          "price": 175.0,
+          "resolved_line_count": 1,
+          "selected_options": {
+            "Hair color": "Black",
+            "Missionary": "Elder",
+            "skin color": "Blush"
+          },
+          "variant_item_code": "large-head-missionary-ELD-BLU-BLA"
+        },
+        {
+          "price": 175.0,
+          "resolved_line_count": 1,
+          "selected_options": {
+            "Hair color": "Brown",
+            "Missionary": "Elder",
+            "skin color": "Blush"
+          },
+          "variant_item_code": "large-head-missionary-ELD-BLU-BRO"
+        },
+        {
+          "price": 175.0,
+          "resolved_line_count": 1,
+          "selected_options": {
+            "Hair color": "Dark Brown",
+            "Missionary": "Elder",
+            "skin color": "Blush"
+          },
+          "variant_item_code": "large-head-missionary-ELD-BLU-DAR"
+        },
+        {
+          "price": 175.0,
+          "resolved_line_count": 1,
+          "selected_options": {
+            "Hair color": "Orange",
+            "Missionary": "Elder",
+            "skin color": "Blush"
+          },
+          "variant_item_code": "large-head-missionary-ELD-BLU-ORA"
+        },
+        {
+          "price": 175.0,
+          "resolved_line_count": 1,
+          "selected_options": {
+            "Hair color": "yellow",
+            "Missionary": "Elder",
+            "skin color": "Blush"
+          },
+          "variant_item_code": "large-head-missionary-ELD-BLU-YEL"
+        },
+        {
+          "price": 175.0,
+          "resolved_line_count": 1,
+          "selected_options": {
+            "Hair color": "Black",
+            "Missionary": "Elder",
+            "skin color": "Brown"
+          },
+          "variant_item_code": "large-head-missionary-ELD-BRO-BLA"
+        },
+        {
+          "price": 175.0,
+          "resolved_line_count": 1,
+          "selected_options": {
+            "Hair color": "Brown",
+            "Missionary": "Elder",
+            "skin color": "Brown"
+          },
+          "variant_item_code": "large-head-missionary-ELD-BRO-BRO"
+        },
+        {
+          "price": 175.0,
+          "resolved_line_count": 1,
+          "selected_options": {
+            "Hair color": "Dark Brown",
+            "Missionary": "Elder",
+            "skin color": "Brown"
+          },
+          "variant_item_code": "large-head-missionary-ELD-BRO-DAR"
+        },
+        {
+          "price": 175.0,
+          "resolved_line_count": 1,
+          "selected_options": {
+            "Hair color": "Orange",
+            "Missionary": "Elder",
+            "skin color": "Brown"
+          },
+          "variant_item_code": "large-head-missionary-ELD-BRO-ORA"
+        },
+        {
+          "price": 175.0,
+          "resolved_line_count": 1,
+          "selected_options": {
+            "Hair color": "yellow",
+            "Missionary": "Elder",
+            "skin color": "Brown"
+          },
+          "variant_item_code": "large-head-missionary-ELD-BRO-YEL"
+        },
+        {
+          "price": 175.0,
+          "resolved_line_count": 1,
+          "selected_options": {
+            "Hair color": "Black",
+            "Missionary": "Elder",
+            "skin color": "Latte"
+          },
+          "variant_item_code": "large-head-missionary-ELD-LAT-BLA"
+        },
+        {
+          "price": 175.0,
+          "resolved_line_count": 1,
+          "selected_options": {
+            "Hair color": "Brown",
+            "Missionary": "Elder",
+            "skin color": "Latte"
+          },
+          "variant_item_code": "large-head-missionary-ELD-LAT-BRO"
+        },
+        {
+          "price": 175.0,
+          "resolved_line_count": 1,
+          "selected_options": {
+            "Hair color": "Dark Brown",
+            "Missionary": "Elder",
+            "skin color": "Latte"
+          },
+          "variant_item_code": "large-head-missionary-ELD-LAT-DAR"
+        },
+        {
+          "price": 175.0,
+          "resolved_line_count": 1,
+          "selected_options": {
+            "Hair color": "Orange",
+            "Missionary": "Elder",
+            "skin color": "Latte"
+          },
+          "variant_item_code": "large-head-missionary-ELD-LAT-ORA"
+        },
+        {
+          "price": 175.0,
+          "resolved_line_count": 1,
+          "selected_options": {
+            "Hair color": "yellow",
+            "Missionary": "Elder",
+            "skin color": "Latte"
+          },
+          "variant_item_code": "large-head-missionary-ELD-LAT-YEL"
+        },
+        {
+          "price": 175.0,
+          "resolved_line_count": 1,
+          "selected_options": {
+            "Hair color": "Black",
+            "Missionary": "Sister",
+            "skin color": "Blush"
+          },
+          "variant_item_code": "large-head-missionary-SIS-BLU-BLA"
+        },
+        {
+          "price": 175.0,
+          "resolved_line_count": 1,
+          "selected_options": {
+            "Hair color": "Brown",
+            "Missionary": "Sister",
+            "skin color": "Blush"
+          },
+          "variant_item_code": "large-head-missionary-SIS-BLU-BRO"
+        },
+        {
+          "price": 175.0,
+          "resolved_line_count": 1,
+          "selected_options": {
+            "Hair color": "Dark Brown",
+            "Missionary": "Sister",
+            "skin color": "Blush"
+          },
+          "variant_item_code": "large-head-missionary-SIS-BLU-DAR"
+        },
+        {
+          "price": 175.0,
+          "resolved_line_count": 1,
+          "selected_options": {
+            "Hair color": "Orange",
+            "Missionary": "Sister",
+            "skin color": "Blush"
+          },
+          "variant_item_code": "large-head-missionary-SIS-BLU-ORA"
+        },
+        {
+          "price": 175.0,
+          "resolved_line_count": 1,
+          "selected_options": {
+            "Hair color": "yellow",
+            "Missionary": "Sister",
+            "skin color": "Blush"
+          },
+          "variant_item_code": "large-head-missionary-SIS-BLU-YEL"
+        },
+        {
+          "price": 175.0,
+          "resolved_line_count": 1,
+          "selected_options": {
+            "Hair color": "Black",
+            "Missionary": "Sister",
+            "skin color": "Brown"
+          },
+          "variant_item_code": "large-head-missionary-SIS-BRO-BLA"
+        },
+        {
+          "price": 175.0,
+          "resolved_line_count": 1,
+          "selected_options": {
+            "Hair color": "Brown",
+            "Missionary": "Sister",
+            "skin color": "Brown"
+          },
+          "variant_item_code": "large-head-missionary-SIS-BRO-BRO"
+        },
+        {
+          "price": 175.0,
+          "resolved_line_count": 1,
+          "selected_options": {
+            "Hair color": "Dark Brown",
+            "Missionary": "Sister",
+            "skin color": "Brown"
+          },
+          "variant_item_code": "large-head-missionary-SIS-BRO-DAR"
+        },
+        {
+          "price": 175.0,
+          "resolved_line_count": 1,
+          "selected_options": {
+            "Hair color": "Orange",
+            "Missionary": "Sister",
+            "skin color": "Brown"
+          },
+          "variant_item_code": "large-head-missionary-SIS-BRO-ORA"
+        },
+        {
+          "price": 175.0,
+          "resolved_line_count": 1,
+          "selected_options": {
+            "Hair color": "yellow",
+            "Missionary": "Sister",
+            "skin color": "Brown"
+          },
+          "variant_item_code": "large-head-missionary-SIS-BRO-YEL"
+        },
+        {
+          "price": 175.0,
+          "resolved_line_count": 1,
+          "selected_options": {
+            "Hair color": "Black",
+            "Missionary": "Sister",
+            "skin color": "Latte"
+          },
+          "variant_item_code": "large-head-missionary-SIS-LAT-BLA"
+        },
+        {
+          "price": 175.0,
+          "resolved_line_count": 1,
+          "selected_options": {
+            "Hair color": "Brown",
+            "Missionary": "Sister",
+            "skin color": "Latte"
+          },
+          "variant_item_code": "large-head-missionary-SIS-LAT-BRO"
+        },
+        {
+          "price": 175.0,
+          "resolved_line_count": 1,
+          "selected_options": {
+            "Hair color": "Dark Brown",
+            "Missionary": "Sister",
+            "skin color": "Latte"
+          },
+          "variant_item_code": "large-head-missionary-SIS-LAT-DAR"
+        },
+        {
+          "price": 175.0,
+          "resolved_line_count": 1,
+          "selected_options": {
+            "Hair color": "Orange",
+            "Missionary": "Sister",
+            "skin color": "Latte"
+          },
+          "variant_item_code": "large-head-missionary-SIS-LAT-ORA"
+        },
+        {
+          "price": 175.0,
+          "resolved_line_count": 1,
+          "selected_options": {
+            "Hair color": "yellow",
+            "Missionary": "Sister",
+            "skin color": "Latte"
+          },
+          "variant_item_code": "large-head-missionary-SIS-LAT-YEL"
+        }
+      ],
+      "website_item_code": "large-head-missionary"
+    },
+    {
+      "add_on_options": 0,
+      "item_code": "mothers-day-front-yard-7-column",
+      "required_attributes": [],
+      "resolved_line_count": 1,
+      "sale_sku_count": 1,
+      "source_name": "Mother's day front yard 7' Column",
+      "source_price": 140.0,
+      "source_price_basis": "Odoo base price",
+      "website_item_code": "mothers-day-front-yard-7-column"
+    },
+    {
+      "add_on_options": 0,
+      "item_code": "easter-arch",
+      "required_attributes": [],
+      "resolved_line_count": 1,
+      "sale_sku_count": 1,
+      "source_name": "Easter Arch",
+      "source_price": 250.0,
+      "source_price_basis": "Odoo base price",
+      "website_item_code": "easter-arch"
+    },
+    {
+      "add_on_options": 0,
+      "item_code": "pride-arch",
+      "required_attributes": [],
+      "resolved_line_count": 1,
+      "sale_sku_count": 1,
+      "source_name": "Pride Arch",
+      "source_price": 325.0,
+      "source_price_basis": "Odoo base price",
+      "website_item_code": "pride-arch"
+    }
+  ],
+  "survivor_counts": {
+    "customer": 0,
+    "sales_invoice": 0,
+    "sales_order": 0
+  },
+  "transactional_contract": "simple_product|checkout"
+}

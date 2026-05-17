@@ -257,6 +257,12 @@ that appears in product options and fails loudly above its quantity max.
   pages as a backend-owned JSON contract.
 - Staff product blueprint authoring is green for validation, dry-run preview,
   guarded unpublished local apply, and fixed-price add-on runtime cascade.
+- First simple repair-lane backend proof is green: `large-head-missionary`,
+  `mothers-day-front-yard-7-column`, `easter-arch`, and `pride-arch` preserve
+  source-backed prices and 33 sale SKU lines through Sales Order and Sales
+  Invoice in rollback. Browser UX, cart/checkout open-mode proof, payment,
+  receipts, operator emails, and live approval are still pending for that
+  tranche.
 - The shared worktree may still show regenerated audit artifacts under `audits/odoo-erpnext-migration-audit-2026-05-08/`; do not broad-stage them without reviewing the producing lane.
 
 ## Remaining Launch Gates
@@ -283,7 +289,9 @@ These are not current local ecommerce architecture blockers:
 - Use the source repair map and complex-checkout scaffold before moving any
   held product into checkout.
   Current source-backed simple-axis candidates are only `large-head-missionary`,
-  `mothers-day-front-yard-7-column`, `easter-arch`, and `pride-arch`.
+  `mothers-day-front-yard-7-column`, `easter-arch`, and `pride-arch`; their
+  backend SO/SI rehearsal is proven, but customer-facing and payment proof is
+  not complete.
 - Product-page controls must be driven by the generic architecture contract,
   not by product-name branches or frontend-only checkout eligibility.
 - Color-axis payload targets must come from source/backend semantics, not from
