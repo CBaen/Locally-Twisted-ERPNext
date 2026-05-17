@@ -301,8 +301,6 @@ def _required_next_gates(stage: str, source_found: bool) -> tuple[str, ...]:
         )
     if stage == "simple_axis_lane_flip_candidate":
         return (
-            "Payment Request/Payment Entry cascade proof",
-            "receipt/operator/welcome email proof",
             "final owner/product-scope approval before customer exposure",
         )
     if stage == "multi_color_recipe_ui_required":

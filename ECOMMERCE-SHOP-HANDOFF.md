@@ -261,9 +261,11 @@ that appears in product options and fails loudly above its quantity max.
   `mothers-day-front-yard-7-column`, `easter-arch`, and `pride-arch` preserve
   source-backed prices and 33 sale SKU lines through Sales Order and Sales
   Invoice in rollback. Local open-mode browser proof is also green at desktop
-  and mobile widths for product pages, cart, and checkout preview. Payment,
-  receipts, operator emails, and live approval are still pending for that
-  tranche.
+  and mobile widths for product pages, cart, and checkout preview. Payment
+  cascade proof is green for all 33 sale lines through Payment Request, Payment
+  Entry, Sales Invoice, receipt email, operator email, welcome email, and
+  rollback cleanup. Final owner/product approval and live exposure are still
+  pending for that tranche.
 - The shared worktree may still show regenerated audit artifacts under `audits/odoo-erpnext-migration-audit-2026-05-08/`; do not broad-stage them without reviewing the producing lane.
 
 ## Remaining Launch Gates
@@ -292,7 +294,8 @@ These are not current local ecommerce architecture blockers:
   Current source-backed simple-axis candidates are only `large-head-missionary`,
   `mothers-day-front-yard-7-column`, `easter-arch`, and `pride-arch`; their
   backend SO/SI rehearsal and local browser cart/checkout preview are proven,
-  but payment/customer-message proof is not complete.
+  and payment/customer-message proof is complete. Do not expose them to
+  customers until final owner/product approval is explicit.
 - Product-page controls must be driven by the generic architecture contract,
   not by product-name branches or frontend-only checkout eligibility.
 - Color-axis payload targets must come from source/backend semantics, not from

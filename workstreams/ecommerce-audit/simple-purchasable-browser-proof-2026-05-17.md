@@ -54,7 +54,7 @@ Result:
 
 ## Still Not Proven
 
-- Payment Request, Payment Entry, Sales Invoice, customer receipt email,
-  operator email, and first-order welcome proof using this tranche.
+- Payment cascade is now covered by
+  `simple-purchasable-payment-cascade-2026-05-17.md`.
 - Final owner/product-scope approval.
 - Staging/live checkout exposure.

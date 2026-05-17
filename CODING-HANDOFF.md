@@ -20,7 +20,13 @@ Browser proof also exists at
 with verifier `python scripts/verify/simple_purchasable_browser_proof.py`;
 desktop and mobile product/cart/checkout preview passed for the same four
 products after temporary local-only opening, and restoration was verified.
-Payment, receipt, operator email, live, and owner approval remain pending.
+Payment cascade proof also exists at
+`workstreams/ecommerce-audit/simple-purchasable-payment-cascade-2026-05-17.md`
+with verifier
+`python scripts/verify/simple_purchasable_payment_cascade_contract.py`; all 33
+sale lines passed Payment Request, Payment Entry, Sales Invoice, customer
+receipt, operator email, welcome email, idempotency, and rollback cleanup. Final
+owner/product approval and staging/live exposure remain pending.
 
 Codex repo hygiene closeout on 2026-05-17: local `main` is reconciled with
 `origin/main` at `d541a0c6fdb12ac280ec7eb044b7a4397be7fd8c`, the working tree

@@ -175,6 +175,17 @@ original Website Item contracts and `lt_ecommerce_paused=1`. It does not prove
 Payment Request, Payment Entry, receipt email, operator email, or live/customer
 approval.
 
+## 2026-05-17 Simple Purchasable Payment Cascade
+
+Use `simple-purchasable-payment-cascade-2026-05-17.md` and
+`simple-purchasable-payment-cascade-2026-05-17.json` for the rollback-safe
+payment/customer-message proof of that same simple repair lane. The contract
+temporarily applies the checkout contract, resolves all 33 sale lines through
+checkout logic, then proves Payment Request, Payment Entry, Sales Invoice,
+customer receipt, operator email, welcome email, idempotency, and rollback
+cleanup. It does not authorize customer exposure; final owner/product approval
+is still required.
+
 ## Evidence inventory
 
 | Lane | Required artifact | Current state | Use it for |
@@ -217,6 +228,7 @@ approval.
 | Product source repair map | `product-source-repair-map-2026-05-17.md` + `product-source-repair-map-2026-05-17.json` + `../../scripts/verify/product_source_repair_map.py` | Present, source-backed repair queue | Maps every Odoo-export product to `purchasable_product`, reports 53/53 source rows found, and assigns the remaining 35 products to focused repair lanes instead of treating legacy holds as a product model. |
 | Simple purchasable rehearsal | `simple-purchasable-rehearsal-2026-05-17.md` + `simple-purchasable-rehearsal-2026-05-17.json` + `../../scripts/verify/simple_purchasable_rehearsal_contract.py` | Present, rollback-safe backend proof | Proves the four simple repair-lane products can preserve source-backed prices and 33 sale SKU lines through Sales Order and Sales Invoice when temporarily treated as checkout inside one transaction. |
 | Simple purchasable browser proof | `simple-purchasable-browser-proof-2026-05-17.md` + `simple-purchasable-browser-proof-2026-05-17.json` + `../../scripts/verify/simple_purchasable_browser_proof.py` | Present, local-only browser proof | Proves the same four products pass desktop/mobile product pages, cart, and checkout preview after temporary local opening, then verifies local contracts and ecommerce pause are restored. |
+| Simple purchasable payment cascade | `simple-purchasable-payment-cascade-2026-05-17.md` + `simple-purchasable-payment-cascade-2026-05-17.json` + `../../scripts/verify/simple_purchasable_payment_cascade_contract.py` | Present, rollback-safe payment proof | Proves the same four products and all 33 sale lines pass Payment Request, Payment Entry, Sales Invoice, receipt, operator email, welcome email, idempotency, and rollback cleanup. |
 | Phase 6 launch decision packet | `phase-6-launch-decision-packet-2026-05-10.md` | Present, parent decision | Keeps public ecommerce paused; live checkout remains blocked until production HTTPS host, explicit live Stripe/site config, policy approval, webhook setup, and one intentional real payment test pass. |
 | Infrastructure synthesis | `ecommerce-infrastructure-research-synthesis-2026-05-10.md` | Present, parent-created | Corrected synthesis for the real question: ERPNext receiving infrastructure, contract/runtime layers, line-level preservation, quote/checkout bridges, fail-loud evidence, and verifier gates. |
 | Knowledge base index | `ecommerce-knowledge-base-index-2026-05-10.md` | Present, parent-created | Supporting index of recalled memory, local artifacts, source repos, verified docs, blockers, and next actions. |
