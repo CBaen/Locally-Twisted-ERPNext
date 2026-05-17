@@ -18,12 +18,37 @@ const CHROME_PATH =
 	"C:/Program Files/Google/Chrome/Application/chrome.exe";
 const OUT_DIR = path.join(process.cwd(), "output", "playwright");
 const REPORT_PATH = path.join(OUT_DIR, "post-import-checkout-proof.json");
+const EXPECTED_DIRECT_CHECKOUT_PRODUCT_COUNT = 18;
+const VIEWPORTS = [
+	{ name: "desktop", width: 1366, height: 900 },
+	{ name: "mobile", width: 390, height: 844 },
+];
 
 const PRODUCTS = [
 	{
 		label: "Easter Balloon Cups",
 		route: "/shop-items/seasonal-specialty/easter-balloon-cups",
 		expectedTemplate: "easter-balloon-cups",
+	},
+	{
+		label: "Elsa Bouquet",
+		route: "/shop-items/bouquets/elsa-bouquet",
+		expectedTemplate: "elsa-bouquet",
+	},
+	{
+		label: "Encanto Bouquet",
+		route: "/shop-items/bouquets/encanto-bouquet",
+		expectedTemplate: "encanto-bouquet",
+	},
+	{
+		label: "Flamingo Bouquet",
+		route: "/shop-items/bouquets/flamingo-bouquet",
+		expectedTemplate: "flamingo-bouquet",
+	},
+	{
+		label: "Football Bouquet",
+		route: "/shop-items/bouquets/football-bouquet",
+		expectedTemplate: "football-bouquet",
 	},
 	{
 		label: "7' Butterfly Column",
@@ -39,6 +64,51 @@ const PRODUCTS = [
 		label: "6' Graduation stands",
 		route: "/shop-items/stands-easels/6-graduation-stands",
 		expectedTemplate: "6-graduation-stands",
+	},
+	{
+		label: "Holy COW!! Bouquet",
+		route: "/shop-items/bouquets/holy-cow-bouquet",
+		expectedTemplate: "holy-cow-bouquet",
+	},
+	{
+		label: "Mickey Mouse Bouquet",
+		route: "/shop-items/bouquets/mickey-mouse-bouquet",
+		expectedTemplate: "mickey-mouse-bouquet",
+	},
+	{
+		label: "Minion Bouquet",
+		route: "/shop-items/bouquets/minion-bouquet",
+		expectedTemplate: "minion-bouquet",
+	},
+	{
+		label: "Mother's Day Bouquet",
+		route: "/shop-items/bouquets/mothers-day-bouquet",
+		expectedTemplate: "mothers-day-bouquet",
+	},
+	{
+		label: "Over the Hill Bouquet",
+		route: "/shop-items/bouquets/over-the-hill-bouquet",
+		expectedTemplate: "over-the-hill-bouquet",
+	},
+	{
+		label: "Paw Patrol Bouquet",
+		route: "/shop-items/bouquets/paw-patrol-bouquet",
+		expectedTemplate: "paw-patrol-bouquet",
+	},
+	{
+		label: "Soccer Bouquet",
+		route: "/shop-items/bouquets/soccer-bouquet",
+		expectedTemplate: "soccer-bouquet",
+	},
+	{
+		label: "Space Bouquet",
+		route: "/shop-items/bouquets/space-bouquet",
+		expectedTemplate: "space-bouquet",
+	},
+	{
+		label: "Stitch Bouquet",
+		route: "/shop-items/bouquets/stitch-bouquet",
+		expectedTemplate: "stitch-bouquet",
 	},
 	{
 		label: "Unicorn Bouquet",
@@ -367,6 +437,11 @@ async function assertCartAndCheckout(page, productResults) {
 }
 
 async function main() {
+	if (PRODUCTS.length !== EXPECTED_DIRECT_CHECKOUT_PRODUCT_COUNT) {
+		fail(
+			`post-import checkout proof must cover ${EXPECTED_DIRECT_CHECKOUT_PRODUCT_COUNT} direct checkout product families, found ${PRODUCTS.length}`,
+		);
+	}
 	fs.mkdirSync(OUT_DIR, { recursive: true });
 	const browser = await chromium.launch({
 		headless: true,
@@ -378,16 +453,28 @@ async function main() {
 		baseUrl: BASE_URL,
 		chromePath: CHROME_PATH,
 		products: [],
+		viewports: [],
 		ok: false,
 	};
 	try {
-		await gotoOk(page, "/");
-		await page.evaluate(() => window.LT_CART && window.LT_CART.clear && window.LT_CART.clear());
-		for (const product of PRODUCTS) {
-			proof.products.push(await addProductToCart(page, product));
+		for (const viewport of VIEWPORTS) {
+			await page.setViewportSize({ width: viewport.width, height: viewport.height });
+			await gotoOk(page, "/");
+			await page.evaluate(() => window.LT_CART && window.LT_CART.clear && window.LT_CART.clear());
+			const viewportProof = {
+				viewport,
+				products: [],
+			};
+			for (const product of PRODUCTS) {
+				const productProof = await addProductToCart(page, product);
+				productProof.viewport = viewport.name;
+				viewportProof.products.push(productProof);
+				proof.products.push(productProof);
+			}
+			const checkoutProof = await assertCartAndCheckout(page, viewportProof.products);
+			viewportProof.checkoutPreview = checkoutProof.checkoutPreview;
+			proof.viewports.push(viewportProof);
 		}
-		const checkoutProof = await assertCartAndCheckout(page, proof.products);
-		proof.checkoutPreview = checkoutProof.checkoutPreview;
 		proof.ok = true;
 	} finally {
 		fs.writeFileSync(REPORT_PATH, JSON.stringify(proof, null, 2) + "\n", "utf8");

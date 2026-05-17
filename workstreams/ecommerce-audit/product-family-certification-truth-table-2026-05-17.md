@@ -50,7 +50,7 @@ Website Item was unpublished.
 | Variant media safety | PASS | `python scripts/verify/variant_media_contract.py`; unclassified media held and product pages keep approved primary image |
 | Product-page runtime | PASS | `python scripts/verify/product_page_runtime_contract.py`; selected config preserved through SO/SI/Quotation paths in rollback |
 | Cart/checkout runtime | PASS | `python scripts/verify/cart_checkout_contract.py`; blocked-product guards, cart line keys, add-ons, over-limit quantities, stale payload failures, and color-recipe/variant mismatch failures guarded |
-| Open-mode product UX | PASS / local only | Temporarily set local `lt_ecommerce_paused=0`, ran `node scripts/verify/post_import_checkout_proof.js`, restored `lt_ecommerce_paused=1`, and cleared website cache; product page, cart, and checkout preview passed for Easter Balloon Cups, 7' Butterfly Column, Graduation Grab n Go, 6' Graduation stands, and Unicorn Bouquet |
+| Open-mode product UX | PASS / local only | Temporarily set local `lt_ecommerce_paused=0`, ran `node scripts/verify/post_import_checkout_proof.js`, restored `lt_ecommerce_paused=1`, and cleared website cache; product page, cart, and checkout preview passed for all 18 current checkout families at desktop and mobile widths |
 | Stripe amount parity | PASS | `python scripts/verify/stripe_amount_parity_contract.py`; hosted checkout cents match ERPNext totals |
 | Payment cascade | PASS | `python scripts/verify/payment_cascade_contract.py`; SO -> PR -> Payment Entry -> SI -> receipt/operator/welcome email rolled back |
 
@@ -76,9 +76,8 @@ classification are:
 - `graduation-grab-n-go`
 
 The updated checkout-family cascade now covers these three, and the open-mode
-browser proof covers a representative selection for each. The remaining Tranche
-1 UX work is to expand browser coverage across all 18 current checkout families
-at desktop and mobile widths.
+browser proof covers all 18 current checkout families at desktop and mobile
+widths.
 
 The five backend needs-review products relative to source-template legacy hold
 classification are:
@@ -197,13 +196,10 @@ source meaning, add-ons, and media/pricing presentation are reviewed.
 
 ## Next Concrete Work
 
-1. Expand the open-mode browser proof from the representative five products to
-   all 18 currently purchasable product families at desktop and mobile widths
-   before any full design/UX certification claim.
-2. Use the Odoo product export list to repair the remaining product-family
+1. Use the Odoo product export list to repair the remaining product-family
    holds into purchasable products; repull the export if current source data is
    incomplete or unclear.
-3. Keep all other product families blocked, needs-review, or hidden until their
+2. Keep all other product families blocked, needs-review, or hidden until their
    tranche gate passes; do not present `quote_first` as the business model.
-4. Replace remaining verifier/report wording that says quote-first with
+3. Replace remaining verifier/report wording that says quote-first with
    blocked/import-repair language where the field name itself is not required.
