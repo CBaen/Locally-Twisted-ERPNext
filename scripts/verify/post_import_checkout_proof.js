@@ -17,107 +17,35 @@ const CHROME_PATH =
 	process.env.PLAYWRIGHT_CHROME_PATH ||
 	"C:/Program Files/Google/Chrome/Application/chrome.exe";
 const OUT_DIR = path.join(process.cwd(), "output", "playwright");
+const DEFAULT_PRODUCTS_MANIFEST = path.join(
+	process.cwd(),
+	"audits",
+	"odoo-erpnext-migration-audit-2026-05-08",
+	"25-v1-odoo-erpnext-import-manifest.json",
+);
+const DEFAULT_WEBSITE_ITEMS_SNAPSHOT = path.join(
+	process.cwd(),
+	"audits",
+	"odoo-erpnext-migration-audit-2026-05-08",
+	"current-state-snapshot-2026-05-17-2132-clean-odoo-products",
+	"website_items.json",
+);
 const REPORT_PATH = process.env.LT_CHECKOUT_PROOF_REPORT
 	? path.resolve(process.cwd(), process.env.LT_CHECKOUT_PROOF_REPORT)
 	: path.join(OUT_DIR, "post-import-checkout-proof.json");
 const CUSTOM_PRODUCTS_JSON = process.env.LT_CHECKOUT_PROOF_PRODUCTS_JSON || "";
-const DEFAULT_EXPECTED_DIRECT_CHECKOUT_PRODUCT_COUNT = 18;
+const PRODUCTS_MANIFEST_PATH = process.env.LT_CHECKOUT_PROOF_PRODUCTS_MANIFEST
+	? path.resolve(process.cwd(), process.env.LT_CHECKOUT_PROOF_PRODUCTS_MANIFEST)
+	: DEFAULT_PRODUCTS_MANIFEST;
+const WEBSITE_ITEMS_SNAPSHOT_PATH = process.env.LT_CHECKOUT_PROOF_WEBSITE_ITEMS_SNAPSHOT
+	? path.resolve(process.cwd(), process.env.LT_CHECKOUT_PROOF_WEBSITE_ITEMS_SNAPSHOT)
+	: DEFAULT_WEBSITE_ITEMS_SNAPSHOT;
+const DEFAULT_EXPECTED_DIRECT_CHECKOUT_PRODUCT_COUNT = 53;
+const DEFAULT_BATCH_SIZE = 27;
+const BATCH_SIZE = Number.parseInt(process.env.LT_CHECKOUT_PROOF_BATCH_SIZE || String(DEFAULT_BATCH_SIZE), 10);
 const VIEWPORTS = [
 	{ name: "desktop", width: 1366, height: 900 },
 	{ name: "mobile", width: 390, height: 844 },
-];
-
-const DEFAULT_PRODUCTS = [
-	{
-		label: "Easter Balloon Cups",
-		route: "/shop-items/seasonal-specialty/easter-balloon-cups",
-		expectedTemplate: "easter-balloon-cups",
-	},
-	{
-		label: "Elsa Bouquet",
-		route: "/shop-items/bouquets/elsa-bouquet",
-		expectedTemplate: "elsa-bouquet",
-	},
-	{
-		label: "Encanto Bouquet",
-		route: "/shop-items/bouquets/encanto-bouquet",
-		expectedTemplate: "encanto-bouquet",
-	},
-	{
-		label: "Flamingo Bouquet",
-		route: "/shop-items/bouquets/flamingo-bouquet",
-		expectedTemplate: "flamingo-bouquet",
-	},
-	{
-		label: "Football Bouquet",
-		route: "/shop-items/bouquets/football-bouquet",
-		expectedTemplate: "football-bouquet",
-	},
-	{
-		label: "7' Butterfly Column",
-		route: "/shop-items/columns/7-butterfly-column",
-		expectedTemplate: "7-butterfly-column",
-	},
-	{
-		label: "Graduation Grab n Go",
-		route: "/shop-items/grab-go/graduation-grab-n-go",
-		expectedTemplate: "graduation-grab-n-go",
-	},
-	{
-		label: "6' Graduation stands",
-		route: "/shop-items/stands-easels/6-graduation-stands",
-		expectedTemplate: "6-graduation-stands",
-	},
-	{
-		label: "Holy COW!! Bouquet",
-		route: "/shop-items/bouquets/holy-cow-bouquet",
-		expectedTemplate: "holy-cow-bouquet",
-	},
-	{
-		label: "Mickey Mouse Bouquet",
-		route: "/shop-items/bouquets/mickey-mouse-bouquet",
-		expectedTemplate: "mickey-mouse-bouquet",
-	},
-	{
-		label: "Minion Bouquet",
-		route: "/shop-items/bouquets/minion-bouquet",
-		expectedTemplate: "minion-bouquet",
-	},
-	{
-		label: "Mother's Day Bouquet",
-		route: "/shop-items/bouquets/mothers-day-bouquet",
-		expectedTemplate: "mothers-day-bouquet",
-	},
-	{
-		label: "Over the Hill Bouquet",
-		route: "/shop-items/bouquets/over-the-hill-bouquet",
-		expectedTemplate: "over-the-hill-bouquet",
-	},
-	{
-		label: "Paw Patrol Bouquet",
-		route: "/shop-items/bouquets/paw-patrol-bouquet",
-		expectedTemplate: "paw-patrol-bouquet",
-	},
-	{
-		label: "Soccer Bouquet",
-		route: "/shop-items/bouquets/soccer-bouquet",
-		expectedTemplate: "soccer-bouquet",
-	},
-	{
-		label: "Space Bouquet",
-		route: "/shop-items/bouquets/space-bouquet",
-		expectedTemplate: "space-bouquet",
-	},
-	{
-		label: "Stitch Bouquet",
-		route: "/shop-items/bouquets/stitch-bouquet",
-		expectedTemplate: "stitch-bouquet",
-	},
-	{
-		label: "Unicorn Bouquet",
-		route: "/shop-items/bouquets/unicorn-bouquet",
-		expectedTemplate: "unicorn-bouquet",
-	},
 ];
 
 const PRODUCTS = loadProducts();
@@ -134,7 +62,7 @@ function fail(message) {
 }
 
 function loadProducts() {
-	if (!CUSTOM_PRODUCTS_JSON) return DEFAULT_PRODUCTS;
+	if (!CUSTOM_PRODUCTS_JSON) return loadDefaultProductsFromManifest();
 	let parsed;
 	try {
 		parsed = JSON.parse(CUSTOM_PRODUCTS_JSON);
@@ -157,6 +85,54 @@ function loadProducts() {
 	return parsed;
 }
 
+function loadDefaultProductsFromManifest() {
+	if (!fs.existsSync(PRODUCTS_MANIFEST_PATH)) {
+		fail(`Default checkout proof manifest is missing: ${PRODUCTS_MANIFEST_PATH}`);
+	}
+	if (!fs.existsSync(WEBSITE_ITEMS_SNAPSHOT_PATH)) {
+		fail(`Default checkout proof Website Item snapshot is missing: ${WEBSITE_ITEMS_SNAPSHOT_PATH}`);
+	}
+	let manifest;
+	try {
+		manifest = JSON.parse(fs.readFileSync(PRODUCTS_MANIFEST_PATH, "utf8"));
+	} catch (error) {
+		fail(`Default checkout proof manifest is not valid JSON: ${error.message}`);
+	}
+	let websiteItems;
+	try {
+		websiteItems = JSON.parse(fs.readFileSync(WEBSITE_ITEMS_SNAPSHOT_PATH, "utf8"));
+	} catch (error) {
+		fail(`Default checkout proof Website Item snapshot is not valid JSON: ${error.message}`);
+	}
+	const websiteItemByCode = new Map();
+	for (const websiteItem of Array.isArray(websiteItems) ? websiteItems : []) {
+		if (websiteItem && websiteItem.item_code) {
+			websiteItemByCode.set(websiteItem.item_code, websiteItem);
+		}
+	}
+	const products = Array.isArray(manifest.products) ? manifest.products : [];
+	const included = products.filter((product) => product && product.include_in_v1 !== false);
+	return included.map((product, index) => {
+		const mapping = product.erpnext_mapping || {};
+		const expectedTemplate = mapping.website_item_code || mapping.template_item_code || product.slug || "";
+		const websiteItem = websiteItemByCode.get(expectedTemplate);
+		const route = websiteItem && websiteItem.route ? `/${String(websiteItem.route).replace(/^\/+/, "")}` : "";
+		const label =
+			(websiteItem && websiteItem.web_item_name) ||
+			product.source_name ||
+			expectedTemplate ||
+			`product-${index + 1}`;
+		if (!route || !expectedTemplate) {
+			fail(`Manifest product ${index + 1} is missing live Website Item route or expected template`);
+		}
+		return {
+			label,
+			route,
+			expectedTemplate,
+		};
+	});
+}
+
 function hasMoney(text) {
 	return /\$\s*\d|\d+\.\d{2}/.test(text || "");
 }
@@ -175,6 +151,15 @@ async function gotoOk(page, route) {
 	if (response.status() >= 400) fail(`${route} returned HTTP ${response.status()}`);
 	await page.waitForLoadState("networkidle", { timeout: 20000 }).catch(() => {});
 	return response.status();
+}
+
+async function assertNotPaused(page, route) {
+	if (page.url().includes("/ready-to-order-paused")) {
+		fail(`${route} redirected to ecommerce pause page; set lt_ecommerce_paused=0 for this local proof`);
+	}
+	if ((await page.locator(".lt-ecommerce-paused").count()) > 0) {
+		fail(`${route} rendered ecommerce pause page; set lt_ecommerce_paused=0 for this local proof`);
+	}
 }
 
 async function waitForCartRendered(page) {
@@ -373,6 +358,7 @@ async function assertCheckoutPreviewAcceptsCart(page) {
 
 async function addProductToCart(page, product) {
 	await gotoOk(page, product.route);
+	await assertNotPaused(page, product.route);
 
 	const title = await visibleText(page.locator(".lt-product__title"));
 	if (!title) fail(`${product.route} missing product title`);
@@ -466,7 +452,7 @@ async function addProductToCart(page, product) {
 
 async function assertCartAndCheckout(page, productResults) {
 	await gotoOk(page, "/cart");
-	if (page.url().includes("/ready-to-order-paused")) fail("/cart redirected to ecommerce pause page");
+	await assertNotPaused(page, "/cart");
 	await waitForCartRendered(page);
 	const cartBody = await page.locator("body").innerText();
 	for (const result of productResults) {
@@ -480,7 +466,7 @@ async function assertCartAndCheckout(page, productResults) {
 	const checkoutPreview = await assertCheckoutPreviewAcceptsCart(page);
 
 	await gotoOk(page, "/checkout");
-	if (page.url().includes("/ready-to-order-paused")) fail("/checkout redirected to ecommerce pause page");
+	await assertNotPaused(page, "/checkout");
 	if ((await page.locator("#lt-checkout-form").count()) === 0) {
 		fail("/checkout missing checkout form");
 	}
@@ -495,6 +481,9 @@ async function assertCartAndCheckout(page, productResults) {
 }
 
 async function main() {
+	if (!Number.isInteger(BATCH_SIZE) || BATCH_SIZE < 1 || BATCH_SIZE > 50) {
+		fail(`LT_CHECKOUT_PROOF_BATCH_SIZE must be an integer from 1 to 50; got ${BATCH_SIZE}`);
+	}
 	if (PRODUCTS.length !== EXPECTED_DIRECT_CHECKOUT_PRODUCT_COUNT) {
 		fail(
 			`post-import checkout proof must cover ${EXPECTED_DIRECT_CHECKOUT_PRODUCT_COUNT} direct checkout product families, found ${PRODUCTS.length}`,
@@ -511,6 +500,7 @@ async function main() {
 		baseUrl: BASE_URL,
 		chromePath: CHROME_PATH,
 		expectedProductCount: EXPECTED_DIRECT_CHECKOUT_PRODUCT_COUNT,
+		batchSize: BATCH_SIZE,
 		products: [],
 		viewports: [],
 		ok: false,
@@ -518,20 +508,31 @@ async function main() {
 	try {
 		for (const viewport of VIEWPORTS) {
 			await page.setViewportSize({ width: viewport.width, height: viewport.height });
-			await gotoOk(page, "/");
-			await page.evaluate(() => window.LT_CART && window.LT_CART.clear && window.LT_CART.clear());
 			const viewportProof = {
 				viewport,
-				products: [],
+				batches: [],
 			};
-			for (const product of PRODUCTS) {
-				const productProof = await addProductToCart(page, product);
-				productProof.viewport = viewport.name;
-				viewportProof.products.push(productProof);
-				proof.products.push(productProof);
+			for (let start = 0; start < PRODUCTS.length; start += BATCH_SIZE) {
+				await gotoOk(page, "/");
+				await page.evaluate(() => window.LT_CART && window.LT_CART.clear && window.LT_CART.clear());
+				const batchProducts = PRODUCTS.slice(start, start + BATCH_SIZE);
+				const batchProof = {
+					index: Math.floor(start / BATCH_SIZE) + 1,
+					start,
+					count: batchProducts.length,
+					products: [],
+				};
+				for (const product of batchProducts) {
+					const productProof = await addProductToCart(page, product);
+					productProof.viewport = viewport.name;
+					productProof.batch = batchProof.index;
+					batchProof.products.push(productProof);
+					proof.products.push(productProof);
+				}
+				const checkoutProof = await assertCartAndCheckout(page, batchProof.products);
+				batchProof.checkoutPreview = checkoutProof.checkoutPreview;
+				viewportProof.batches.push(batchProof);
 			}
-			const checkoutProof = await assertCartAndCheckout(page, viewportProof.products);
-			viewportProof.checkoutPreview = checkoutProof.checkoutPreview;
 			proof.viewports.push(viewportProof);
 		}
 		proof.ok = true;

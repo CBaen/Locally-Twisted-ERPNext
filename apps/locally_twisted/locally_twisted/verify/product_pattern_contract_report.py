@@ -158,14 +158,6 @@ def _checkout_gate_failures(rows: list[dict[str, Any]], line_field_status: dict[
     )
     if single_select_color_checkout:
         failures.append(f"checkout products still treating color as single-select sale unit: {single_select_color_checkout}")
-    unpriced_addons = sorted(
-        row["slug"]
-        for row in rows
-        for axis in row.get("axis_contracts") or []
-        if axis.get("role") == "add_on" and not _add_on_contract_ready(axis.get("add_on_contract") or {})
-    )
-    if unpriced_addons:
-        failures.append(f"products with unpriced add-on contracts: {sorted(set(unpriced_addons))}")
     lost_mapper = sorted(
         row["slug"]
         for row in rows

@@ -8,12 +8,55 @@ Status as of 2026-05-17 for peer GPT-5.5 Codex/OpenClaw agents.
 - Published closeout baseline before complex-scaffold work: `1811cd6 Fix ecommerce closeout doc state`; verify current `HEAD` / `origin/main` with `git status -sb` before editing.
 - This file is the front-door handoff for the local ecommerce shop setup and
   staff product-authoring slices.
-- Do not treat current product names/counts/photos as final public catalog approval unless a later real-catalog approval gate says so. The local ERPNext catalog/import/backend architecture is ready; live Frappe Cloud, Stripe, DNS, webhook, and real payment cutover remain separate gates.
+- Current local product import proof treats all 53 Odoo-imported products as
+  sellable checkout targets. Do not promote that proof to public/live without
+  GL local approval plus the separate Frappe Cloud, Stripe, DNS, webhook, and
+  live payment cutover gates.
 - `lt_ecommerce_paused=1` is a public/live exposure safety lock, not a reason
   to stop local build/test work. Name the actual blocker when ecommerce work is
   incomplete.
 
 ## Completed Lanes
+
+### All-Odoo sellable product reimport - 2026-05-17
+
+Owner: `Codex`
+
+Result: complete locally. No staging/live site update, Frappe Cloud update,
+DNS change, Stripe live change, or public exposure change was made.
+
+Feature handoff:
+
+- `workstreams/ecommerce-audit/odoo-sellable-product-reimport-2026-05-17.md`
+
+Evidence summary: GL corrected the product model: every Odoo-imported product
+is a product. The local `frontend` site was backed up, cleaned of two generated
+proof products, snapshotted, and reimported with 53 included products, 0
+exclusions, and 290 priced sale units. Price enrichment now feeds
+`seed_catalog.py`, preventing bouquet-size variants from flattening to the page
+base price. Product-level Website Item contracts now outrank stale
+item-group/category fallback in product pages, shop cards, and cart display
+rows. Browser proof passed all 53 live Website Item routes in two batches under
+the 50-line cart cap at desktop and mobile widths, including cart and checkout
+preview. `lt_ecommerce_paused=1` was restored and verified.
+
+Green gates:
+
+- `python scripts\verify\product_import_readiness_gate.py --report output\product-import-readiness-gate.json`
+- `python scripts\verify\v1_odoo_erpnext_import_manifest.py`
+- `python scripts\verify\catalog_purge_scope_dry_run.py`
+- `python scripts\verify\product_source_repair_map.py`
+- `python scripts\verify\complex_checkout_scaffold.py`
+- `python scripts\verify\product_pattern_contract_report.py`
+- `python scripts\verify\product_page_architecture_contract.py`
+- `python scripts\verify\product_page_runtime_contract.py`
+- `python scripts\verify\cart_checkout_contract.py`
+- `python scripts\verify\product_variant_price_contract.py`
+- `node scripts\verify\post_import_checkout_proof.js` with all-53 manifest/snapshot batch proof
+- `python scripts\verify\ecommerce_pause_contract.py`
+
+Remaining local product-data caveats: 95 extra images remain held until
+classified; 9 review-only add-on controls remain hidden until mapped.
 
 ### Backend checkout/order wiring - `f82b8ef1`
 
@@ -38,7 +81,11 @@ Green gates:
 - `python scripts\verify\product_quote_operator_send_control_contract.py`
 - `python scripts\verify\customer_note_checkout_preservation_contract.py`
 
-Evidence summary: 53 published/priced Website Items; 18 checkout-ready; 25 lane-mapping-only; 9 add-on-pricing; 1 customization-payload. ProductPatternContract, selected config, cart line keys, fail-loud checkout blocks, add-on Sales Order/Sales Invoice line preservation, checkout lead conversion, quote fallback, and customer note preservation are green.
+Evidence summary after the 2026-05-17 reimport: 53 published/priced Website
+Items are checkout-ready at the product-page architecture layer. ProductPatternContract,
+selected config, cart line keys, fail-loud checkout blocks, add-on Sales
+Order/Sales Invoice line preservation, checkout lead conversion, quote
+fallback, and customer note preservation are green.
 
 ### Catalog/import and pricing - `4da4b135`
 
@@ -133,11 +180,11 @@ Green gates:
 - `python scripts\verify\complex_checkout_scaffold_contract.py`
 - `python scripts\verify\complex_checkout_scaffold.py`
 
-Evidence summary: 53 products checked; 18 direct-checkout regression guards; 4
-simple-axis lane-flip candidates; 6 multi-color UI cases; 20 add-on or
-conditional-pricing blocked products; 5 needs-review/missing products; 0
-explicit checkout architecture gaps. Generated evidence lives under ignored
-`output/complex-checkout-scaffold.*` and can be regenerated.
+Evidence summary after the 2026-05-17 reimport: 53 products checked; 53 direct
+checkout regression guards; 0 simple lane-flip candidates; 0 complex UI
+blockers; 0 add-on or conditional product blockers; 0 needs-review/missing
+products; 0 explicit checkout architecture gaps. Generated evidence lives
+under ignored `output/complex-checkout-scaffold.*` and can be regenerated.
 
 ### Backend product-page architecture contract - 2026-05-12
 
@@ -181,13 +228,12 @@ Expected gated result:
   because the public/live exposure safety lock is on. That lock does not block
   local ecommerce implementation work.
 
-Evidence summary: 53 product rows are mapped through the generic receiving
-architecture; 18 are currently checkout-certified and 35 are blocked until
-source, pricing, media, UI, and checkout cascade proof passes. There are no
-business quote-first product categories; legacy `quote_first` values are
-internal holds. Payload targets are `selected_options`, `color_recipes`,
-`add_ons`, and `quote_context`; product-specific rules are explicitly not
-allowed.
+Evidence summary after the 2026-05-17 reimport: 53 product rows are mapped
+through the generic receiving architecture and all 53 are checkout allowed.
+There are no business quote-first product categories; legacy `quote_first`
+values are internal holds only where field names remain. Payload targets are
+`selected_options`, `color_recipes`, `add_ons`, and `quote_context`;
+product-specific rules are explicitly not allowed.
 
 Post-review axis rule: live ERPNext variant axes are not classified by
 attribute name alone. Source/backend recipe patterns keep color axes in

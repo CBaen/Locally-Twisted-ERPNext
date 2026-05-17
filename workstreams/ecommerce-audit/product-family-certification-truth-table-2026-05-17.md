@@ -1,12 +1,26 @@
 # Product Family Certification Truth Table - 2026-05-17
 
+## Superseded Current State
+
+This tranche table is historical as of the later 2026-05-17 all-Odoo sellable
+reimport. Do not use the older tranche counts below as the current product
+queue.
+
+Current control artifact:
+`workstreams/ecommerce-audit/odoo-sellable-product-reimport-2026-05-17.md`.
+Current verified state: 53 Odoo-imported products included, 0 excluded, 290
+priced sale units, 53 checkout-allowed product pages, and all 53 live Website
+Item routes browser-proved in two batches before restoring
+`lt_ecommerce_paused=1`. The remaining work is optional-surface follow-through:
+95 extra images held until classified and 9 review-only add-on controls hidden
+until mapped.
+
 ## Purpose
 
-Backend-first certification map for existing Locally Twisted ecommerce product
-families. This is the control artifact for the active goal: certify products in
-tranches, proving pricing, variant logic, media, product-page UX, checkout,
-payment, invoice, receipt, and owner/operator cascades before any public
-ecommerce release claim.
+Historical backend-first certification map for existing Locally Twisted
+ecommerce product families. This was the control artifact for the earlier
+tranche goal. The active control artifact is now
+`odoo-sellable-product-reimport-2026-05-17.md`.
 
 This is not a live-release approval. `lt_ecommerce_paused=1` remains the
 customer exposure lock.

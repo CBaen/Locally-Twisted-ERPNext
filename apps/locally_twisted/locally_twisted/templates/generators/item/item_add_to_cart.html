@@ -14,7 +14,7 @@
 
 {% set cart_settings = shopping_cart.cart_settings %}
 {% set product_info = shopping_cart.product_info %}
-{% set lt_checkout_lane = checkout_lane_for_item_group(doc.item_group) %}
+{% set lt_checkout_lane = lt_product_runtime.commerce_lane if lt_product_runtime is defined else checkout_lane_for_item_group(doc.item_group) %}
 
 <div class="lt-product__cart" data-variant-item-code="{{ item_code }}">
 

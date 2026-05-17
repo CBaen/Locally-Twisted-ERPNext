@@ -13,8 +13,8 @@ Read-only contract verification for GL-selected proof products.
 
 ## Classic Arch
 
-- Template: Custom quote page (`complex_custom_product`)
-- Commerce lane: Quote request first (`quote_first`)
+- Template: Configurable product page (`complex_custom_product`)
+- Commerce lane: Online checkout (`checkout`)
 - Required axes: Arch Size, Design, LED Lights
 - Customization axes: latex colors
 - Gallery images in source contract: 23
@@ -43,4 +43,4 @@ Selector type: `multi_select_drawer`
 
 ## Gate result
 
-**PASS for proof-product contract shape.** Source import is still blocked by price/media review gates elsewhere.
+**PASS for proof-product contract shape.** Source import still needs the broader catalog gates before staging/live exposure.

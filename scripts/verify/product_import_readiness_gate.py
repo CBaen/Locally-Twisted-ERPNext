@@ -39,20 +39,14 @@ V1_IMPORT_MANIFEST_JSON = AUDIT_ROOT / "25-v1-odoo-erpnext-import-manifest.json"
 GUARD_PATHS_JSON = AUDIT_ROOT / "27-local-import-guard-paths.json"
 FINAL_APPROVAL_JSON = AUDIT_ROOT / "28-local-destructive-import-approval.json"
 
-EXPECTED_INCLUDED_PRODUCTS = 48
-EXPECTED_EXCLUDED_PRODUCTS = 5
-EXPECTED_EXCLUDED_SLUGS = {
-    "classic-arch",
-    "classic-column",
-    "classic-organic-arch",
-    "classic-organic-balloon-garland",
-    "classic-organic-columns",
-}
+EXPECTED_INCLUDED_PRODUCTS = 53
+EXPECTED_EXCLUDED_PRODUCTS = 0
+EXPECTED_EXCLUDED_SLUGS: set[str] = set()
 EXPECTED_PURGE_COUNTS = {
-    "website_items": 48,
-    "item_templates": 48,
-    "item_variants": 6894,
-    "item_prices": 6928,
+    "website_items": 53,
+    "item_templates": 53,
+    "item_variants": 10617,
+    "item_prices": 10652,
 }
 
 REQUIRED_SOURCE_FILES = (
@@ -226,7 +220,7 @@ def _corrected_v1_manifest_row() -> GateRow:
     return GateRow(
         "corrected_v1_manifest",
         "pass",
-        f"Corrected manifest validates {included} included products and {excluded} owner-explicit exclusions.",
+        f"Corrected manifest validates {included} included Odoo products and {excluded} exclusions.",
     )
 
 
@@ -323,8 +317,8 @@ def _v1_price_approval_row() -> GateRow:
         return GateRow(
             "v1_price_approval",
             "warning",
-            f"{ready} sale units have source prices; {holds} sale units are recorded as checkout-hold/quote-first because source price is missing.",
-            next_action="Do not enable direct checkout for held sale units until prices are provided.",
+            f"{ready} sale units have source prices; {holds} sale units are blocked from checkout because source price is missing.",
+            next_action="Do not enable checkout for held sale units until prices are provided.",
         )
 
     return GateRow(
@@ -376,7 +370,6 @@ def _v1_add_on_row() -> GateRow:
             blocker=f"Missing {V1_IMPORT_MANIFEST_JSON.relative_to(ROOT)}.",
             next_action="Run: python scripts/verify/v1_odoo_erpnext_import_manifest.py",
         )
-    bad = []
     review_only = []
     for row in manifest.get("products") or []:
         axes = (row.get("add_on_manifest") or {}).get("review_only_axes_from_global_packet") or []
@@ -384,23 +377,12 @@ def _v1_add_on_row() -> GateRow:
             continue
         label = f"{row.get('source_name')} ({row.get('slug')}): {', '.join(axes)}"
         review_only.append(label)
-        lane = (row.get("product_contract") or {}).get("commerce_lane")
-        if lane != "quote_first":
-            bad.append(label)
-    if bad:
-        return GateRow(
-            "v1_add_on_fallbacks",
-            "blocker",
-            "Review-only add-on axes exist on non-quote-first included products.",
-            blocker="Needs checkout mapping or quote-first fallback for: " + "; ".join(bad),
-            next_action="Map the add-on axes into checkout or set those products to quote-first before destructive import.",
-        )
     if review_only:
         return GateRow(
             "v1_add_on_fallbacks",
             "pass",
-            f"{len(review_only)} included product(s) keep review-only add-on axes protected behind quote-first fallback.",
-            next_action="Map these add-ons before allowing direct checkout for those products.",
+            f"{len(review_only)} included product(s) keep review-only add-on controls hidden until mapped.",
+            next_action="Map these add-ons before exposing them as paid checkout add-ons.",
         )
     return GateRow(
         "v1_add_on_fallbacks",
@@ -452,7 +434,7 @@ def _purge_scope_row() -> GateRow:
         "pass",
         (
             f"Catalog purge scope dry-run exists for {included} included products, "
-            f"{excluded} owner-explicit exclusions, "
+            f"{excluded} exclusions, "
             f"{counts.get('item_templates')} templates, {counts.get('item_variants')} variants, "
             f"and {counts.get('item_prices')} prices."
         ),
@@ -573,7 +555,7 @@ def _rollback_plan() -> list[str]:
         "Freeze source and commit/review the exact import code before staging.",
         "Run `bench --site frontend backup --with-files` on the target site and record the backup path outside chat.",
         "Create a fresh catalog state snapshot of Website Item, Item, Item Price, Item Variant Attribute, Item Attribute, Item Group, and File rows.",
-        "Run `python scripts/verify/catalog_purge_scope_dry_run.py` and review the exact protected/excluded item codes.",
+        "Run `python scripts/verify/catalog_purge_scope_dry_run.py` and review the exact protected service item codes and product item codes.",
         "Run the import runner in dry-run mode and archive the report.",
         "Only after approval, run the destructive/import mode on staging first.",
         "After import, rerun catalog shape, price, media, cart/checkout, and product-import readiness gates.",

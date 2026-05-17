@@ -1,22 +1,22 @@
-﻿{
-    "generated_at":  "2026-05-11T18:27:58Z",
-    "read_only":  true,
-    "destructive_import_ran":  false,
-    "backup_path":  "/home/frappe/frappe-bench/sites/frontend/private/backups/20260511_122754-frontend-database.sql.gz",
-    "backup_files":  [
-                         "/home/frappe/frappe-bench/sites/frontend/private/backups/20260511_122754-frontend-site_config_backup.json",
-                         "/home/frappe/frappe-bench/sites/frontend/private/backups/20260511_122754-frontend-database.sql.gz",
-                         "/home/frappe/frappe-bench/sites/frontend/private/backups/20260511_122754-frontend-files.tar",
-                         "/home/frappe/frappe-bench/sites/frontend/private/backups/20260511_122754-frontend-private-files.tar"
-                     ],
-    "container_visible_paths":  {
-                                    "snapshot_path":  "/home/frappe/frappe-bench/apps/locally_twisted/locally_twisted/seed/_guard/current-state-snapshot-2026-05-11-1050",
-                                    "purge_scope_report":  "/home/frappe/frappe-bench/apps/locally_twisted/locally_twisted/seed/_guard/16-catalog-purge-scope-dry-run.json",
-                                    "manifest":  "/home/frappe/frappe-bench/apps/locally_twisted/locally_twisted/seed/_guard/25-v1-odoo-erpnext-import-manifest.json"
-                                },
-    "guard_verification":  {
-                               "ok":  true,
-                               "command":  "docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.seed_catalog.execute --kwargs \"{\u0027dry_run\u0027: True, \u0027destructive\u0027: True, \u0027backup_path\u0027: \u0027/home/frappe/frappe-bench/sites/frontend/private/backups/20260511_122754-frontend-database.sql.gz\u0027, \u0027snapshot_path\u0027: \u0027/home/frappe/frappe-bench/apps/locally_twisted/locally_twisted/seed/_guard/current-state-snapshot-2026-05-11-1050\u0027, \u0027purge_scope_report\u0027: \u0027/home/frappe/frappe-bench/apps/locally_twisted/locally_twisted/seed/_guard/16-catalog-purge-scope-dry-run.json\u0027, \u0027v1_subset_only\u0027: True}\"",
-                               "result":  "PASS: guard accepted backup_path, snapshot_path, and purge_scope_report while dry_run=True; no purge/import/delete ran."
-                           }
+{
+  "generated_at": "2026-05-17T21:33:30Z",
+  "read_only": true,
+  "destructive_import_ran": false,
+  "backup_path": "/home/frappe/frappe-bench/sites/frontend/private/backups/20260517_153250-frontend-database.sql.gz",
+  "backup_files": [
+    "/home/frappe/frappe-bench/sites/frontend/private/backups/20260517_153250-frontend-site_config_backup.json",
+    "/home/frappe/frappe-bench/sites/frontend/private/backups/20260517_153250-frontend-database.sql.gz",
+    "/home/frappe/frappe-bench/sites/frontend/private/backups/20260517_153250-frontend-files.tar",
+    "/home/frappe/frappe-bench/sites/frontend/private/backups/20260517_153250-frontend-private-files.tar"
+  ],
+  "container_visible_paths": {
+    "snapshot_path": "/home/frappe/frappe-bench/apps/locally_twisted/locally_twisted/seed/_guard/current-state-snapshot-2026-05-17-2132-clean-odoo-products",
+    "purge_scope_report": "/home/frappe/frappe-bench/apps/locally_twisted/locally_twisted/seed/_guard/16-catalog-purge-scope-dry-run.json",
+    "manifest": "/home/frappe/frappe-bench/apps/locally_twisted/locally_twisted/seed/_guard/25-v1-odoo-erpnext-import-manifest.json"
+  },
+  "guard_verification": {
+    "ok": true,
+    "command": "docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.seed_catalog.execute --kwargs \"{'dry_run': True, 'destructive': True, 'backup_path': '/home/frappe/frappe-bench/sites/frontend/private/backups/20260517_153250-frontend-database.sql.gz', 'snapshot_path': '/home/frappe/frappe-bench/apps/locally_twisted/locally_twisted/seed/_guard/current-state-snapshot-2026-05-17-2132-clean-odoo-products', 'purge_scope_report': '/home/frappe/frappe-bench/apps/locally_twisted/locally_twisted/seed/_guard/16-catalog-purge-scope-dry-run.json', 'v1_subset_only': True}\"",
+    "result": "PASS: guard accepted fresh backup_path, fresh snapshot_path, and all-53 purge_scope_report while dry_run=True; no purge/import/delete ran. Dry-run plan selected 53 of 53 Odoo products and excluded 0."
+  }
 }

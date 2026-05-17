@@ -328,16 +328,16 @@ def resolved_product_page_contract_values(
 ) -> dict[str, str]:
     """Resolve stored Website Item fields with fail-closed checkout precedence.
 
-    Paid checkout is allowed only when the Website Item explicitly says both
-    `simple_product` and `checkout`. Inference can preserve quote-first review
-    behavior for unclassified complex products, but it must never infer paid
-    checkout from item-group hints or partially-filled fields.
+    Paid checkout is allowed only when the Website Item explicitly says
+    `checkout` and a known product page type. Inference can preserve review
+    behavior for unclassified products, but it must never infer paid checkout
+    from item-group hints or partially-filled fields.
     """
     inferred_page_type = inferred.get("product_page_type") or "needs_review"
     inferred_commerce_lane = inferred.get("commerce_lane") or "needs_review"
 
-    if explicit_page_type == "simple_product" and explicit_commerce_lane == "checkout":
-        return {"product_page_type": "simple_product", "commerce_lane": "checkout"}
+    if explicit_commerce_lane == "checkout" and explicit_page_type in {"simple_product", "complex_custom_product"}:
+        return {"product_page_type": explicit_page_type, "commerce_lane": "checkout"}
 
     if explicit_page_type == "complex_custom_product" and explicit_commerce_lane == "quote_first":
         return {"product_page_type": "complex_custom_product", "commerce_lane": "quote_first"}

@@ -1,6 +1,9 @@
 # Ecommerce Finished Experience Roadmap
 
 Date: 2026-05-11
+Current update: 2026-05-17 all-Odoo sellable local reimport supersedes the
+old 18-checkout / 35-quote-first product baseline. Keep the layer standard, but
+use the 2026-05-17 handoff for current product scope.
 Scope: Locally Twisted ERPNext/Frappe ecommerce architecture, storefront runtime, checkout, ERPNext documents, and proof gates.
 
 This roadmap defines what must be true before an agent can honestly say:
@@ -23,9 +26,11 @@ Verified gates at the time this plan was written:
 Current ProductPatternContract summary:
 
 - Source products: 53.
-- Explicit checkout products: 18.
-- Direct checkout ready products: 18.
-- Quote-first supported products: 35.
+- Local all-Odoo sellable import target products: 53.
+- Excluded products: 0.
+- Priced sale units: 290.
+- Older staged-contract baseline: 18 direct-checkout / 35 quote-first was a
+  temporary architecture proof and is no longer the current product model.
 - Checkout gate: passing for the current contract set.
 
 Important boundary:
@@ -60,12 +65,15 @@ Important boundary:
   - Checkout guard proving no source mapper slug checkout override.
 - Risks found:
   - Import can lose Odoo source semantics if source IDs, axis hashes, variant pointers, and pattern classes are not preserved.
-  - Quote-first can be misread as a blocker instead of an intentional commerce lane.
+  - Historical quote-first architecture language can be misread as the current
+    business product model.
   - Add-ons, media, and conditional prices can be silently flattened into variants.
 - Plan adjustment:
   - Make source pattern preservation a permanent import gate.
   - Keep required sale-unit axes, customization axes, add-ons, review-only axes, media roles, and pricing provenance separate.
-  - Treat quote-first as a lane contract, not an exclusion or blocker.
+  - Treat every Odoo-imported product as a product unless GL explicitly
+    excludes it; unclear pricing/media/add-ons should fail loudly inside the
+    sellable product contract, not remove the product from scope.
 - Open question or escalation:
   - Owner approval is needed only for business pricing or whether a review-only add-on should become a priced checkout add-on.
 
@@ -90,7 +98,8 @@ Important boundary:
 
 - Evidence checked:
   - Fail-loud law in `AGENTS.md`.
-  - Current checkout contract behavior for quote-first and invalid add-ons.
+  - Current checkout contract behavior for unsupported configurations and
+    invalid add-ons.
 - Risks found:
   - Checkout can create business trust failures if it accepts unpriced add-ons, unsupported customizations, missing prices, or invalid quantities.
   - Freeform customer fields can leak unsafe or unusable fulfillment data if not constrained.
@@ -149,14 +158,13 @@ Build plan:
    - conditional pricing
    - media roles
    - checkout lane
-   - quote-first lane
+   - review/hold state
    - fail-loud states
 3. Ensure every published Website Item resolves to one of:
    - checkout-ready
    - lane-mapping-only
    - needs add-on pricing
    - needs customization payload
-   - quote-first supported
    - explicit fail-loud review state
 4. Keep source mapper semantics attached to ERPNext-side contract rows.
 
@@ -183,7 +191,8 @@ Build plan:
    - add-on rows only for priced add-on contracts
    - blocked/review copy for review-only axes
 3. Remove or guard against frontend-only eligibility decisions.
-4. Ensure the frontend can display quote-first without implying checkout success.
+4. Ensure the frontend can display blocked/review states without implying
+   checkout success.
 
 Proof gate:
 
@@ -361,7 +370,8 @@ Proof gate:
 Pass condition:
 
 - A customer can configure and buy every checkout-ready pattern without losing choices.
-- Quote-first products route intentionally and do not show false checkout success.
+- Products with incomplete pricing, add-ons, media, or configuration contracts
+  fail loudly without implying checkout success.
 
 ## Layer 9 - Full Proof Ladder
 
@@ -399,7 +409,8 @@ The finished claim is allowed only when all of these are true:
 2. Every checkout-lane product is priced, configurable, and server-validatable.
 3. Multi-color products use a multi-color recipe contract, not a single-select shortcut.
 4. Add-ons are either priced and preserved or blocked/review-only.
-5. Conditional pricing is proven or quote-first.
+5. Conditional pricing is proven or explicitly blocked with a customer-safe
+   review state.
 6. Product page controls come from backend contract data.
 7. Cart lines preserve the full selected configuration.
 8. Checkout rejects incomplete, unsupported, or unpriced selections.
@@ -418,7 +429,7 @@ The finished claim is allowed only when all of these are true:
 - No single-select color checkout shortcut for multi-color/color-recipe products.
 - No silent fallback that looks like success.
 - Backend contract informs frontend behavior.
-- Quote-first is a lane setting, not a blocker.
+- Review/hold states are setup states, not product exclusions.
 - Generated reports are evidence, not source of truth.
 
 ## Suggested Task Breakdown
@@ -449,7 +460,8 @@ Exit gate:
 
 ### Task D - Add-On And Pricing Contract Expansion
 
-Map review-only add-on classes into either priced add-on contracts or intentional quote-first lanes.
+Map review-only add-on classes into either priced add-on contracts or explicit
+customer-safe review states.
 
 Exit gate:
 

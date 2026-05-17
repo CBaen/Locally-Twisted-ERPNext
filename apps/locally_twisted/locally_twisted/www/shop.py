@@ -12,6 +12,7 @@ ERPNext's "Shop Items" hierarchy.
 import frappe
 
 from locally_twisted.commerce_rules import checkout_lane_for_item_group
+from locally_twisted.product_page_runtime import product_page_contract_for_website_item
 from locally_twisted.product_options import apply_variant_starting_price
 
 # /shop handles query-string search from the header overlay. Frappe's website
@@ -47,10 +48,12 @@ def get_context(context):
 
     for item in items:
         apply_variant_starting_price(item)
+        product_contract = product_page_contract_for_website_item(item.get("item_code"))
 
         # Slug retained for analytics/debugging; navigation now links to category routes.
         item["category_slug"] = frappe.scrub(item.get("item_group") or "all").replace("_", "-")
-        item["checkout_lane"] = checkout_lane_for_item_group(item.get("item_group"))
+        item["checkout_lane"] = product_contract.get("commerce_lane") or checkout_lane_for_item_group(item.get("item_group"))
+        item["product_page_type"] = product_contract.get("product_page_type") or ""
         rate = item.get("price_list_rate")
         if item.get("price_is_from") and item.get("formatted_price"):
             item["price_display"] = item["formatted_price"]

@@ -6,6 +6,58 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-17 - Browser proof route authority must be the live Website Item route
+
+After the all-Odoo import, `post_import_checkout_proof.js` correctly loaded
+all 53 products from the V1 manifest but initially used planned manifest routes
+for browser navigation. `baby-shower-combination-photo-opt` failed at 404
+because the current Website Item route is
+`/shop-items/table-decor/baby-shower-combination-photo-opt`, not the planned
+route in the import manifest. The product was fine; the verifier route source
+was stale.
+
+**Counter-move:** use the import manifest for inclusion/sale-unit authority
+and the live/clean Website Item snapshot for public route authority. Browser
+proofs should fail loudly if those two sources cannot be joined by item code,
+because route drift is a storefront contract issue, not a product-exclusion
+reason.
+
+---
+
+## 2026-05-17 - Product contract authority must outrank category fallback
+
+The local all-Odoo sellable reimport correctly stored `7-butterfly-column` as
+`complex_custom_product|checkout`, but the rendered page still showed the
+quote-first gate until the Frappe web worker restarted. The immediate code
+cause was older product-page/shop/cart paths using item-group/category checkout
+lane fallback instead of the Website Item product contract. The operational
+cause was assuming a green backend field meant the rendered route had picked
+up the same authority.
+
+**Counter-move:** after changing product import/classification rules, prove the
+actual product routes in a browser, not just database fields. Product pages,
+shop cards, cart display rows, and checkout preview must all read from the
+same product-level Website Item contract before any legacy category fallback.
+If Python/Jinja route output contradicts a fresh bench Python check, restart
+the local Frappe backend worker, clear website cache, and re-test the route.
+
+---
+
+## 2026-05-17 - All-product browser proof must respect cart safety caps
+
+The first all-53 browser proof failed at `/cart` because the verifier added 53
+line items into one browser cart. That was not a product failure; it hit the
+intentional 50-line cart API cap that protects public requests. Splitting the
+same live-route list into 27-product and 26-product batches made the proof
+valid and both batches passed.
+
+**Counter-move:** when proving whole-catalog checkout surfaces, match the
+verifier shape to production safety limits. A batch proof can still cover
+every product, but each batch must stay under request caps and state that the
+split is intentional.
+
+---
+
 ## 2026-05-17 - Browser proofs should click visible product controls
 
 The multi-color browser proof failed on the first attempt because the verifier

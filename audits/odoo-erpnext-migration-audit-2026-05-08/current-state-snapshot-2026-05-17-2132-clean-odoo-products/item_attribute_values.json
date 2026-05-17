@@ -1,0 +1,1946 @@
+[
+  {
+    "abbr": "SMA",
+    "attribute_value": "Small 3 balloon bouquet",
+    "idx": 1,
+    "name": "hoa2l9fv3u",
+    "parent": "Add Bouquet",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "5BA",
+    "attribute_value": "5 balloon bouquet",
+    "idx": 2,
+    "name": "hoape3e4v0",
+    "parent": "Add Bouquet",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "7BA",
+    "attribute_value": "7 balloon bouquet",
+    "idx": 3,
+    "name": "hoa421mpe4",
+    "parent": "Add Bouquet",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "12",
+    "attribute_value": "1",
+    "idx": 1,
+    "name": "hocj0r7s1f",
+    "parent": "Add Foil Number",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "22",
+    "attribute_value": "2",
+    "idx": 2,
+    "name": "hock9cidag",
+    "parent": "Add Foil Number",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "32",
+    "attribute_value": "3",
+    "idx": 3,
+    "name": "hocha7o9im",
+    "parent": "Add Foil Number",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "42",
+    "attribute_value": "4",
+    "idx": 4,
+    "name": "hoc7vlveeq",
+    "parent": "Add Foil Number",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "52",
+    "attribute_value": "5",
+    "idx": 5,
+    "name": "hocokij90p",
+    "parent": "Add Foil Number",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "62",
+    "attribute_value": "6",
+    "idx": 6,
+    "name": "hocd6cdp9t",
+    "parent": "Add Foil Number",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "72",
+    "attribute_value": "7",
+    "idx": 7,
+    "name": "hocssnciop",
+    "parent": "Add Foil Number",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "82",
+    "attribute_value": "8",
+    "idx": 8,
+    "name": "hoc3p8su8g",
+    "parent": "Add Foil Number",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "92",
+    "attribute_value": "9",
+    "idx": 9,
+    "name": "hoc8rsg26u",
+    "parent": "Add Foil Number",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "02",
+    "attribute_value": "0",
+    "idx": 10,
+    "name": "hocr999n21",
+    "parent": "Add Foil Number",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "FOI",
+    "attribute_value": "Foil stars",
+    "idx": 1,
+    "name": "hodgj5s6db",
+    "parent": "Add ons",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "THE",
+    "attribute_value": "themed foils",
+    "idx": 2,
+    "name": "hodbo16unk",
+    "parent": "Add ons",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "NON",
+    "attribute_value": "None",
+    "idx": 3,
+    "name": "hodpe1b2rr",
+    "parent": "Add ons",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "20F",
+    "attribute_value": "20ft",
+    "idx": 1,
+    "name": "hoeap6o9hc",
+    "parent": "Arch Size",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "25F",
+    "attribute_value": "25ft",
+    "idx": 2,
+    "name": "hoejl18ajp",
+    "parent": "Arch Size",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "30F",
+    "attribute_value": "30ft",
+    "idx": 3,
+    "name": "hoe6uvf74s",
+    "parent": "Arch Size",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "35F",
+    "attribute_value": "35ft",
+    "idx": 4,
+    "name": "hoe5ukfcjr",
+    "parent": "Arch Size",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "BLU",
+    "attribute_value": "blue",
+    "idx": 1,
+    "name": "hoedi7tc41",
+    "parent": "Baby color",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "PIN",
+    "attribute_value": "pink",
+    "idx": 2,
+    "name": "hoe65lnf9a",
+    "parent": "Baby color",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "SMA",
+    "attribute_value": "Small \u2014 1 featured foil balloon, 2 coordinating foil balloons, 7 latex balloons",
+    "idx": 1,
+    "name": "hof5tqkag8",
+    "parent": "Bouquet Size",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "MED",
+    "attribute_value": "Medium \u2014 2 featured foil balloons, 4 coordinating foil balloons, 14 latex balloons",
+    "idx": 2,
+    "name": "hof5beqmkk",
+    "parent": "Bouquet Size",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "LAR",
+    "attribute_value": "Large \u2014 3 featured foil balloons, 5 coordinating foil balloons, 16 latex balloons",
+    "idx": 3,
+    "name": "hofth0eqrl",
+    "parent": "Bouquet Size",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "BLA",
+    "attribute_value": "Black",
+    "idx": 1,
+    "name": "hogh4m6r9p",
+    "parent": "Color Palette",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "WHI",
+    "attribute_value": "White",
+    "idx": 2,
+    "name": "hogpb09hrp",
+    "parent": "Color Palette",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "RED",
+    "attribute_value": "Red",
+    "idx": 3,
+    "name": "hogr8tlvlh",
+    "parent": "Color Palette",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "ROY",
+    "attribute_value": "Royal Blue",
+    "idx": 4,
+    "name": "hogn64d5ca",
+    "parent": "Color Palette",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "GRE",
+    "attribute_value": "Green",
+    "idx": 5,
+    "name": "hogj99aiim",
+    "parent": "Color Palette",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "YEL",
+    "attribute_value": "Yellow",
+    "idx": 6,
+    "name": "hogdfp12id",
+    "parent": "Color Palette",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "ORA",
+    "attribute_value": "Orange",
+    "idx": 7,
+    "name": "hog1qtmp3c",
+    "parent": "Color Palette",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "PUR",
+    "attribute_value": "Purple",
+    "idx": 8,
+    "name": "hogh3ip6rp",
+    "parent": "Color Palette",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "PAS",
+    "attribute_value": "Pastel Pink",
+    "idx": 9,
+    "name": "hogq0cvflo",
+    "parent": "Color Palette",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "PAST",
+    "attribute_value": "Pastel Blue",
+    "idx": 10,
+    "name": "hog4eaolim",
+    "parent": "Color Palette",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "PASTE",
+    "attribute_value": "Pastel Lilac",
+    "idx": 11,
+    "name": "hogpah5o3c",
+    "parent": "Color Palette",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "PASTEL",
+    "attribute_value": "Pastel Green",
+    "idx": 12,
+    "name": "hogsmb2650",
+    "parent": "Color Palette",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "PAS2",
+    "attribute_value": "Pastel Yellow",
+    "idx": 13,
+    "name": "hogf3b7mkc",
+    "parent": "Color Palette",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "PEA",
+    "attribute_value": "Peach",
+    "idx": 14,
+    "name": "hognvcltat",
+    "parent": "Color Palette",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "CHR",
+    "attribute_value": "Chrome Silver",
+    "idx": 15,
+    "name": "hogp1943o6",
+    "parent": "Color Palette",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "CHRO",
+    "attribute_value": "Chrome Gold",
+    "idx": 16,
+    "name": "hog6qph8dl",
+    "parent": "Color Palette",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "CHROM",
+    "attribute_value": "Chrome Rose Gold",
+    "idx": 17,
+    "name": "hog2iu3q0q",
+    "parent": "Color Palette",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "CHROME",
+    "attribute_value": "Chrome Blue",
+    "idx": 18,
+    "name": "hogr00n0ga",
+    "parent": "Color Palette",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "CHR2",
+    "attribute_value": "Chrome Copper",
+    "idx": 19,
+    "name": "hog28p3et3",
+    "parent": "Color Palette",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "BLU",
+    "attribute_value": "Blush",
+    "idx": 20,
+    "name": "hogac5h385",
+    "parent": "Color Palette",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "CAN",
+    "attribute_value": "Canyon Rose",
+    "idx": 21,
+    "name": "hogjaqqqqg",
+    "parent": "Color Palette",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "CAR",
+    "attribute_value": "Caramel",
+    "idx": 22,
+    "name": "hogf3q7u39",
+    "parent": "Color Palette",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "SAN",
+    "attribute_value": "Sangria",
+    "idx": 23,
+    "name": "hogq9n615o",
+    "parent": "Color Palette",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "CHO",
+    "attribute_value": "Chocolate",
+    "idx": 24,
+    "name": "hogp3jca2s",
+    "parent": "Color Palette",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "SLA",
+    "attribute_value": "Slate Blue",
+    "idx": 25,
+    "name": "hogkqca1qa",
+    "parent": "Color Palette",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "SEA",
+    "attribute_value": "Seafoam",
+    "idx": 26,
+    "name": "hoggrs6f67",
+    "parent": "Color Palette",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "TEA",
+    "attribute_value": "Teal",
+    "idx": 27,
+    "name": "hogld14lr5",
+    "parent": "Color Palette",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "SMO",
+    "attribute_value": "Smoke Grey",
+    "idx": 28,
+    "name": "hog1h4gpok",
+    "parent": "Color Palette",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "NAV",
+    "attribute_value": "Navy",
+    "idx": 29,
+    "name": "hogrqqa2if",
+    "parent": "Color Palette",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "RED",
+    "attribute_value": "Red",
+    "idx": 1,
+    "name": "5ch8ic8paa",
+    "parent": "Colour",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "GRE",
+    "attribute_value": "Green",
+    "idx": 2,
+    "name": "5chssmf86o",
+    "parent": "Colour",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "BLU",
+    "attribute_value": "Blue",
+    "idx": 3,
+    "name": "5ch6qcv9vd",
+    "parent": "Colour",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "BLA",
+    "attribute_value": "Black",
+    "idx": 4,
+    "name": "5ch076dmq8",
+    "parent": "Colour",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "WHI",
+    "attribute_value": "White",
+    "idx": 5,
+    "name": "5chftuhe67",
+    "parent": "Colour",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "5FT",
+    "attribute_value": "5ft",
+    "idx": 1,
+    "name": "hogl43mr7e",
+    "parent": "Column Height",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "6FT",
+    "attribute_value": "6ft",
+    "idx": 2,
+    "name": "hog5jhhlfl",
+    "parent": "Column Height",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "7FT",
+    "attribute_value": "7ft",
+    "idx": 3,
+    "name": "hogaguo4pt",
+    "parent": "Column Height",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "8FT",
+    "attribute_value": "8ft",
+    "idx": 4,
+    "name": "hoglndbggj",
+    "parent": "Column Height",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "9FT",
+    "attribute_value": "9ft",
+    "idx": 5,
+    "name": "hogrgu20th",
+    "parent": "Column Height",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "10F",
+    "attribute_value": "10ft",
+    "idx": 6,
+    "name": "hoglb3krg9",
+    "parent": "Column Height",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "SMA",
+    "attribute_value": "Small",
+    "idx": 1,
+    "name": "hoh0m1gr5g",
+    "parent": "Delivery Size",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "MED",
+    "attribute_value": "Medium",
+    "idx": 2,
+    "name": "hohrute955",
+    "parent": "Delivery Size",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "LAR",
+    "attribute_value": "Large",
+    "idx": 3,
+    "name": "hohu92ho1c",
+    "parent": "Delivery Size",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "MIC",
+    "attribute_value": "Mickey",
+    "idx": 1,
+    "name": "hoig5jg20u",
+    "parent": "Delivery themes",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "MIN",
+    "attribute_value": "Minnie",
+    "idx": 2,
+    "name": "hoiai3bnvp",
+    "parent": "Delivery themes",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "MER",
+    "attribute_value": "Mermaid",
+    "idx": 3,
+    "name": "hoiep527qs",
+    "parent": "Delivery themes",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "BAS",
+    "attribute_value": "Basketball",
+    "idx": 4,
+    "name": "hoim57c1r1",
+    "parent": "Delivery themes",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "SOC",
+    "attribute_value": "Soccer",
+    "idx": 5,
+    "name": "hoi9gdhjor",
+    "parent": "Delivery themes",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "UNI",
+    "attribute_value": "Unicorn",
+    "idx": 6,
+    "name": "hoijh5d5rn",
+    "parent": "Delivery themes",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "CHA",
+    "attribute_value": "Chase",
+    "idx": 7,
+    "name": "hoikuf8ef3",
+    "parent": "Delivery themes",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "SPI",
+    "attribute_value": "spiderman",
+    "idx": 8,
+    "name": "hoi4h7ctkq",
+    "parent": "Delivery themes",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "BAT",
+    "attribute_value": "batman",
+    "idx": 9,
+    "name": "hoieton8cn",
+    "parent": "Delivery themes",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "GAM",
+    "attribute_value": "Gamer",
+    "idx": 10,
+    "name": "hoiepd0r0i",
+    "parent": "Delivery themes",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "DIN",
+    "attribute_value": "Dino Birthday",
+    "idx": 11,
+    "name": "hoi1ljepdv",
+    "parent": "Delivery themes",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "SON",
+    "attribute_value": "Sonic",
+    "idx": 12,
+    "name": "hoipkfbvss",
+    "parent": "Delivery themes",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "ELM",
+    "attribute_value": "Elmo",
+    "idx": 13,
+    "name": "hoio94r6lc",
+    "parent": "Delivery themes",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "ENC",
+    "attribute_value": "Encanto",
+    "idx": 14,
+    "name": "hoi7ltglh7",
+    "parent": "Delivery themes",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "CAM",
+    "attribute_value": "Camping Birthday",
+    "idx": 15,
+    "name": "hoi27b4h9q",
+    "parent": "Delivery themes",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "RAI",
+    "attribute_value": "Rainbow Birthday",
+    "idx": 16,
+    "name": "hoiv6du4fq",
+    "parent": "Delivery themes",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "SPA",
+    "attribute_value": "Space",
+    "idx": 17,
+    "name": "hoici285dm",
+    "parent": "Delivery themes",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "BOH",
+    "attribute_value": "Boho Rainbow",
+    "idx": 18,
+    "name": "hoiipf5v9e",
+    "parent": "Delivery themes",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "FRO",
+    "attribute_value": "Frozen",
+    "idx": 19,
+    "name": "hois2a6ljd",
+    "parent": "Delivery themes",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "BIR",
+    "attribute_value": "Birthday Celebration",
+    "idx": 20,
+    "name": "hoi803lltk",
+    "parent": "Delivery themes",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "JUR",
+    "attribute_value": "Jurassic World",
+    "idx": 21,
+    "name": "hoini9l93a",
+    "parent": "Delivery themes",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "BLU",
+    "attribute_value": "Blush and Mint Cake",
+    "idx": 22,
+    "name": "hoi7j9e314",
+    "parent": "Delivery themes",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "ROS",
+    "attribute_value": "Rosegold and pink Happy Birthday",
+    "idx": 23,
+    "name": "hoi6vuqc71",
+    "parent": "Delivery themes",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "PIN",
+    "attribute_value": "Pink Butterfly",
+    "idx": 24,
+    "name": "hoip5tjf16",
+    "parent": "Delivery themes",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "TIK",
+    "attribute_value": "TikTok Birthday",
+    "idx": 25,
+    "name": "hoimuio37c",
+    "parent": "Delivery themes",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "FOO",
+    "attribute_value": "Football",
+    "idx": 26,
+    "name": "hoi1ft2f6m",
+    "parent": "Delivery themes",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "TOY",
+    "attribute_value": "Toy Story",
+    "idx": 27,
+    "name": "hoion5vvga",
+    "parent": "Delivery themes",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "SWI",
+    "attribute_value": "Swirl (up to 4 colors)",
+    "idx": 1,
+    "name": "hoj7amqtqe",
+    "parent": "Design",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "LAY",
+    "attribute_value": "Layered (up to 8 colors)",
+    "idx": 2,
+    "name": "hojkhtv13l",
+    "parent": "Design",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "250",
+    "attribute_value": "250",
+    "idx": 1,
+    "name": "hojkueilcs",
+    "parent": "Drop Size",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "500",
+    "attribute_value": "500",
+    "idx": 2,
+    "name": "hoj9s7m017",
+    "parent": "Drop Size",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "100",
+    "attribute_value": "1000",
+    "idx": 3,
+    "name": "hojgqdun4d",
+    "parent": "Drop Size",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "BUN",
+    "attribute_value": "Bunny",
+    "idx": 1,
+    "name": "hojdtgu55o",
+    "parent": "Easter Designs",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "FLO",
+    "attribute_value": "Flower",
+    "idx": 2,
+    "name": "hojq8fgvss",
+    "parent": "Easter Designs",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "BUNN",
+    "attribute_value": "Bunny in basket",
+    "idx": 3,
+    "name": "hojh9prgg3",
+    "parent": "Easter Designs",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "EAS",
+    "attribute_value": "Easter egg",
+    "idx": 4,
+    "name": "hoj4h7kb0m",
+    "parent": "Easter Designs",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "UNI",
+    "attribute_value": "Unicorn egg",
+    "idx": 5,
+    "name": "hojr1697vt",
+    "parent": "Easter Designs",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "BUT",
+    "attribute_value": "Butterfly",
+    "idx": 6,
+    "name": "hoja9oqp7f",
+    "parent": "Easter Designs",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "TUR",
+    "attribute_value": "Turtle",
+    "idx": 7,
+    "name": "hojhopjrgv",
+    "parent": "Easter Designs",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "6FT",
+    "attribute_value": "6ft",
+    "idx": 1,
+    "name": "hokr93gitg",
+    "parent": "Garland Length",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "9FT",
+    "attribute_value": "9ft",
+    "idx": 2,
+    "name": "hokhjribhr",
+    "parent": "Garland Length",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "12F",
+    "attribute_value": "12ft",
+    "idx": 3,
+    "name": "hokbnujhos",
+    "parent": "Garland Length",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "CON",
+    "attribute_value": "Congrats",
+    "idx": 1,
+    "name": "hok02uqh5l",
+    "parent": "Graduation stands",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "YAY",
+    "attribute_value": "Yay",
+    "idx": 2,
+    "name": "hokrkleikn",
+    "parent": "Graduation stands",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "BLA",
+    "attribute_value": "Black",
+    "idx": 1,
+    "name": "hok04kc0n3",
+    "parent": "Hair color",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "BRO",
+    "attribute_value": "Brown",
+    "idx": 2,
+    "name": "hokeg7cauu",
+    "parent": "Hair color",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "YEL",
+    "attribute_value": "yellow",
+    "idx": 3,
+    "name": "hokuks87rj",
+    "parent": "Hair color",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "ORA",
+    "attribute_value": "Orange",
+    "idx": 4,
+    "name": "hok7t5hrr9",
+    "parent": "Hair color",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "DAR",
+    "attribute_value": "Dark Brown",
+    "idx": 5,
+    "name": "hok0f0jq0d",
+    "parent": "Hair color",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "REF",
+    "attribute_value": "Reflex Champagne",
+    "idx": 1,
+    "name": "honv95utla",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "REFL",
+    "attribute_value": "Reflex Truffle",
+    "idx": 2,
+    "name": "honk0ajmlf",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "DUS",
+    "attribute_value": "Dusk Cream",
+    "idx": 3,
+    "name": "honv46ltsa",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "DUSK",
+    "attribute_value": "Dusk Green Tea",
+    "idx": 4,
+    "name": "honmhvdshf",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "DUSKB",
+    "attribute_value": "Dusk Blue",
+    "idx": 5,
+    "name": "honjmqugte",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "DUSKL",
+    "attribute_value": "Dusk Lilac",
+    "idx": 6,
+    "name": "honv027gpd",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "DUSKR",
+    "attribute_value": "Dusk Rose",
+    "idx": 7,
+    "name": "hon9ps0vks",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "TEA",
+    "attribute_value": "Teal",
+    "idx": 8,
+    "name": "honqblumqn",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "BLU",
+    "attribute_value": "Blue Slate",
+    "idx": 9,
+    "name": "hond4t1oa2",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "SMO",
+    "attribute_value": "Smoke Grey",
+    "idx": 10,
+    "name": "hon8sp9o2n",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "REFLE",
+    "attribute_value": "Reflex Silver",
+    "idx": 11,
+    "name": "honi57gelj",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "REFLEX",
+    "attribute_value": "Reflex Gold",
+    "idx": 12,
+    "name": "honkufjv8a",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "REF2",
+    "attribute_value": "Reflex Blue",
+    "idx": 13,
+    "name": "honi4t9rkk",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "REF3",
+    "attribute_value": "Reflex green",
+    "idx": 14,
+    "name": "hon9mrjhq9",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "REF4",
+    "attribute_value": "Reflex Violet",
+    "idx": 15,
+    "name": "honlonc8dh",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "REF5",
+    "attribute_value": "Reflex Red",
+    "idx": 16,
+    "name": "honsu07krt",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "WHI",
+    "attribute_value": "White",
+    "idx": 17,
+    "name": "honqjpp18s",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "BLA",
+    "attribute_value": "black",
+    "idx": 18,
+    "name": "hong22m3sq",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "RED",
+    "attribute_value": "Red",
+    "idx": 19,
+    "name": "honu2aut6l",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "ORA",
+    "attribute_value": "Orange",
+    "idx": 20,
+    "name": "honr6i4vfb",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "YEL",
+    "attribute_value": "yellow",
+    "idx": 21,
+    "name": "honrf9n94s",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "RAS",
+    "attribute_value": "raspberry",
+    "idx": 22,
+    "name": "hon85f0u5r",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "FUC",
+    "attribute_value": "fuchsia",
+    "idx": 23,
+    "name": "honsrcv3c7",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "BUB",
+    "attribute_value": "bubble Gum",
+    "idx": 24,
+    "name": "honbvisc8p",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "EUC",
+    "attribute_value": "eucalyptus",
+    "idx": 25,
+    "name": "hon60i0l84",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "FOR",
+    "attribute_value": "Forest",
+    "idx": 26,
+    "name": "honmnrdqgt",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "SHA",
+    "attribute_value": "Shamrock",
+    "idx": 27,
+    "name": "hon415ibpo",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "WIN",
+    "attribute_value": "Wintergreen",
+    "idx": 28,
+    "name": "hon0qnn45t",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "LIM",
+    "attribute_value": "Lime",
+    "idx": 29,
+    "name": "honr3piedp",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "LTB",
+    "attribute_value": "LT Blue",
+    "idx": 30,
+    "name": "hon85dlg70",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "PER",
+    "attribute_value": "Periwinkle",
+    "idx": 31,
+    "name": "honkhbtqbh",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "ROY",
+    "attribute_value": "Royal Blue",
+    "idx": 32,
+    "name": "honloj76iv",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "ROB",
+    "attribute_value": "Robin's Egg",
+    "idx": 33,
+    "name": "honvb49k8s",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "DEE",
+    "attribute_value": "Deep Teal",
+    "idx": 34,
+    "name": "hon44053ja",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "HON",
+    "attribute_value": "Honey",
+    "idx": 35,
+    "name": "hon18hdnok",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "VIO",
+    "attribute_value": "Violet",
+    "idx": 36,
+    "name": "honupd47qt",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "ORC",
+    "attribute_value": "Orchid",
+    "idx": 37,
+    "name": "hons9vcn0r",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "LIL",
+    "attribute_value": "Lilac",
+    "idx": 38,
+    "name": "honhio0slq",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "CHO",
+    "attribute_value": "Chocolate",
+    "idx": 39,
+    "name": "hong6174cf",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "BRO",
+    "attribute_value": "Brown",
+    "idx": 40,
+    "name": "honpu8la5r",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "LAT",
+    "attribute_value": "Latte",
+    "idx": 41,
+    "name": "honij2dpr4",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "PAS",
+    "attribute_value": "Pastel Pink",
+    "idx": 42,
+    "name": "honf0n1gq2",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "PAST",
+    "attribute_value": "Pastel Blue",
+    "idx": 43,
+    "name": "honr248djb",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "PASTE",
+    "attribute_value": "Pastel Green",
+    "idx": 44,
+    "name": "honb8vrfqd",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "PASTEL",
+    "attribute_value": "Pastel Purple",
+    "idx": 45,
+    "name": "hon76h5kra",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "PAS2",
+    "attribute_value": "Pastel Yellow",
+    "idx": 46,
+    "name": "honhd2r9q0",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "PAS3",
+    "attribute_value": "Pastel Melon",
+    "idx": 47,
+    "name": "hongm7ac1n",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "GRE",
+    "attribute_value": "Grey",
+    "idx": 48,
+    "name": "honq3o5h10",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "CLE",
+    "attribute_value": "Clear",
+    "idx": 49,
+    "name": "honk0d7igp",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "BLUS",
+    "attribute_value": "Blush",
+    "idx": 50,
+    "name": "hondfdlo4d",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "EMP",
+    "attribute_value": "Empowermint",
+    "idx": 51,
+    "name": "honecnfktk",
+    "parent": "latex colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "NOL",
+    "attribute_value": "No Lights",
+    "idx": 1,
+    "name": "hok7l6bc7q",
+    "parent": "LED Lights",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "ADD",
+    "attribute_value": "Add LED Lights",
+    "idx": 2,
+    "name": "hok70t49i0",
+    "parent": "LED Lights",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "ELD",
+    "attribute_value": "Elder",
+    "idx": 1,
+    "name": "holvro875g",
+    "parent": "Missionary",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "SIS",
+    "attribute_value": "Sister",
+    "idx": 2,
+    "name": "hol9utsvdm",
+    "parent": "Missionary",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "GOL",
+    "attribute_value": "Gold",
+    "idx": 1,
+    "name": "holun46onv",
+    "parent": "Number colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "SIL",
+    "attribute_value": "Silver",
+    "idx": 2,
+    "name": "hol7gprm2i",
+    "parent": "Number colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "ROS",
+    "attribute_value": "Rose gold",
+    "idx": 3,
+    "name": "hols7i20vu",
+    "parent": "Number colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "PIN",
+    "attribute_value": "pink",
+    "idx": 4,
+    "name": "holk16v8am",
+    "parent": "Number colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "BLU",
+    "attribute_value": "blue",
+    "idx": 5,
+    "name": "holcn89gma",
+    "parent": "Number colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "WHI",
+    "attribute_value": "white gold",
+    "idx": 6,
+    "name": "hold229loi",
+    "parent": "Number colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "BLA",
+    "attribute_value": "Black",
+    "idx": 7,
+    "name": "hole0cncc0",
+    "parent": "Number colors",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "RED",
+    "attribute_value": "Red",
+    "idx": 1,
+    "name": "holqghq09m",
+    "parent": "Orbz toppers",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "BLU",
+    "attribute_value": "Blue/Green",
+    "idx": 2,
+    "name": "holo7hfoi4",
+    "parent": "Orbz toppers",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "BLA",
+    "attribute_value": "Black/gold",
+    "idx": 3,
+    "name": "holr584fmq",
+    "parent": "Orbz toppers",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "PUR",
+    "attribute_value": "Purple",
+    "idx": 4,
+    "name": "hol97gbn6h",
+    "parent": "Orbz toppers",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "BLUE",
+    "attribute_value": "Blue/gold",
+    "idx": 5,
+    "name": "holbto4hfu",
+    "parent": "Orbz toppers",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "FAN",
+    "attribute_value": "Fantacy",
+    "idx": 6,
+    "name": "hol8q208i4",
+    "parent": "Orbz toppers",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "PIN",
+    "attribute_value": "Pink/gold",
+    "idx": 7,
+    "name": "holv67hokf",
+    "parent": "Orbz toppers",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "GOL",
+    "attribute_value": "Gold Marble",
+    "idx": 8,
+    "name": "holbdgqafl",
+    "parent": "Orbz toppers",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "PINK",
+    "attribute_value": "Pink Marble",
+    "idx": 9,
+    "name": "holkarac5k",
+    "parent": "Orbz toppers",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "BLUEM",
+    "attribute_value": "Blue Marble",
+    "idx": 10,
+    "name": "holacu12tc",
+    "parent": "Orbz toppers",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "NON",
+    "attribute_value": "None",
+    "idx": 1,
+    "name": "hompdog728",
+    "parent": "Plush add ons",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "TED",
+    "attribute_value": "Teddy Bear",
+    "idx": 2,
+    "name": "homq0tm97t",
+    "parent": "Plush add ons",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "MAT",
+    "attribute_value": "Matte",
+    "idx": 1,
+    "name": "mkf6buksr2",
+    "parent": "Proof Finish",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "CHR",
+    "attribute_value": "Chrome",
+    "idx": 2,
+    "name": "mkfu2ecas3",
+    "parent": "Proof Finish",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "SAT",
+    "attribute_value": "Satin",
+    "idx": 3,
+    "name": "mkf11p83h6",
+    "parent": "Proof Finish",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "CRY",
+    "attribute_value": "Crystal",
+    "idx": 4,
+    "name": "mkfp7oo662",
+    "parent": "Proof Finish",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "SMA",
+    "attribute_value": "Small",
+    "idx": 1,
+    "name": "6gs0a82v4v",
+    "parent": "Proof Size",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "LAR",
+    "attribute_value": "Large",
+    "idx": 2,
+    "name": "6gs93ci0oa",
+    "parent": "Proof Size",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "MED",
+    "attribute_value": "Medium",
+    "idx": 3,
+    "name": "mkf10b1m76",
+    "parent": "Proof Size",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "GRA",
+    "attribute_value": "Grand",
+    "idx": 4,
+    "name": "mkfsqjn80u",
+    "parent": "Proof Size",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "TAB",
+    "attribute_value": "Tabletop",
+    "idx": 1,
+    "name": "mkf4p9nl8r",
+    "parent": "Proof Stand",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "WEI",
+    "attribute_value": "Weighted",
+    "idx": 2,
+    "name": "mkfjd7rlmc",
+    "parent": "Proof Stand",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "HAN",
+    "attribute_value": "Hanging",
+    "idx": 3,
+    "name": "mkfav3fb69",
+    "parent": "Proof Stand",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "XS",
+    "attribute_value": "Extra Small",
+    "idx": 1,
+    "name": "5ch3vifnld",
+    "parent": "Size",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "S",
+    "attribute_value": "Small",
+    "idx": 2,
+    "name": "5ch33lu497",
+    "parent": "Size",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "M",
+    "attribute_value": "Medium",
+    "idx": 3,
+    "name": "5chkrrbmub",
+    "parent": "Size",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "L",
+    "attribute_value": "Large",
+    "idx": 4,
+    "name": "5chhgpp1uf",
+    "parent": "Size",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "XL",
+    "attribute_value": "Extra Large",
+    "idx": 5,
+    "name": "5chpokst1c",
+    "parent": "Size",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "BLU",
+    "attribute_value": "Blush",
+    "idx": 1,
+    "name": "hooikdhn9d",
+    "parent": "skin color",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "LAT",
+    "attribute_value": "Latte",
+    "idx": 2,
+    "name": "hoo33ffp31",
+    "parent": "skin color",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "BRO",
+    "attribute_value": "Brown",
+    "idx": 3,
+    "name": "hoobgjne5m",
+    "parent": "skin color",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "LAR",
+    "attribute_value": "large topper",
+    "idx": 1,
+    "name": "hopa5trqjl",
+    "parent": "topper",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "BUR",
+    "attribute_value": "Burst",
+    "idx": 2,
+    "name": "hopfhbas36",
+    "parent": "topper",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "FOI",
+    "attribute_value": "foil star",
+    "idx": 3,
+    "name": "hopa0aqgum",
+    "parent": "topper",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "FOIL",
+    "attribute_value": "foil heart",
+    "idx": 4,
+    "name": "hopv7f0241",
+    "parent": "topper",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "BUB",
+    "attribute_value": "bubble gum",
+    "idx": 5,
+    "name": "hop88dvmo9",
+    "parent": "topper",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  },
+  {
+    "abbr": "LOG",
+    "attribute_value": "Logo",
+    "idx": 6,
+    "name": "hop9tts19p",
+    "parent": "topper",
+    "parentfield": "item_attribute_values",
+    "parenttype": "Item Attribute"
+  }
+]

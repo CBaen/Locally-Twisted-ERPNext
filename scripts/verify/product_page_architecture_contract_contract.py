@@ -49,23 +49,23 @@ class ProductPageArchitectureContractTest(unittest.TestCase):
         self.assertIn("canonical_cart_line_key", contract["payload_contract"]["server_derived_keys"])
         self.assertEqual(validate_product_page_architecture_contract(contract), [])
 
-    def test_review_only_add_on_blocks_checkout_instead_of_becoming_free_option(self) -> None:
+    def test_review_only_add_on_stays_hidden_without_blocking_base_checkout(self) -> None:
         contract = build_product_page_architecture_contract(
             _row(
                 axes=[
                     _axis("Package", "sale_unit", values=["Standard"]),
                     _axis("Plush add ons", "review_only", values=["Bear"]),
                 ],
-                status="needs_add_on_pricing",
+                status="checkout_ready",
                 lane="checkout",
-                fail_loud=["review_only_add_on"],
             )
         ).to_dict()
 
-        self.assertFalse(contract["checkout_allowed"])
+        self.assertTrue(contract["checkout_allowed"])
         controls = {control["axis_name"]: control for control in contract["controls"]}
         self.assertEqual(controls["Plush add ons"]["payload_target"], "quote_context")
-        self.assertIn("review_only_add_on", contract["fail_loud_states"])
+        self.assertFalse(controls["Plush add ons"]["checkout_blocking"])
+        self.assertEqual(contract["fail_loud_states"], ())
 
     def test_color_customization_never_targets_selected_options(self) -> None:
         contract = build_product_page_architecture_contract(

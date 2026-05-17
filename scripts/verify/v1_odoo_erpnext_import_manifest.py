@@ -31,6 +31,7 @@ from locally_twisted.catalog_contract import build_product_page_contract
 from locally_twisted.catalog_contract.pattern_mapper import (
     build_product_pattern_contract as build_source_pattern_contract,
 )
+from locally_twisted.catalog_variant_rules import project_required_variant_combo
 
 
 AUDIT_ROOT = ROOT / "audits" / "odoo-erpnext-migration-audit-2026-05-08"
@@ -100,8 +101,8 @@ def build_manifest(generated_at: str) -> dict[str, Any]:
         warnings = _warning_codes(contract)
         warning_counts.update(warnings)
 
-        source_price_resolution = _source_price_resolution(source, contract)
         price_row = price_enrichment.get(slug, {})
+        source_price_resolution = _source_price_resolution(source, contract, price_row)
         review_row = price_review.get(slug, {})
         media_row = media_packet.get(slug, {})
         sale_units = source_price_resolution["sale_units"]
@@ -204,7 +205,7 @@ def build_manifest(generated_at: str) -> dict[str, Any]:
                         for add_on in confirmed_add_ons
                     ],
                     "review_only_axes_from_global_packet": review_only_axes,
-                    "decision": "no_v1_review_only_add_on_blocker" if not review_only_axes else "quote_only_until_approved",
+                    "decision": "no_v1_review_only_add_on_blocker" if not review_only_axes else "hide_add_on_until_mapped",
                 },
             }
         )
@@ -254,7 +255,7 @@ def build_manifest(generated_at: str) -> dict[str, Any]:
                 "id": "v1_source_price_resolution",
                 "scope": "V1 included products",
                 "count": v1_price_review_units,
-                "decision_needed": "Resolve source price conflicts, or keep source-missing sale units on checkout hold/quote-first fallback.",
+                "decision_needed": "Resolve source price conflicts, or keep source-missing sale units blocked from checkout until priced.",
                 "safe_default": "source_price_missing_checkout_hold",
             },
             {
@@ -266,17 +267,17 @@ def build_manifest(generated_at: str) -> dict[str, Any]:
             },
             {
                 "id": "v1_review_only_add_ons",
-                "scope": "V1 included quote-first products",
+                "scope": "V1 included products with review-only add-on axes",
                 "count": review_only_add_on_product_count,
-                "decision_needed": "Approve each review-only add-on family for checkout, or keep those products/add-ons quote-first until mapped.",
-                "safe_default": "quote_only_until_approved",
+                "decision_needed": "Approve each review-only add-on family for checkout add-on controls, or keep those add-on controls hidden until mapped.",
+                "safe_default": "hide_add_on_until_mapped",
             },
         ],
         "blocker_reduction": {
-            "source_contract": f"Corrected V1 includes products that fit backend schema, including variants and quote-first products. Warning counts inside V1: {dict(sorted(warning_counts.items()))}.",
+            "source_contract": f"Corrected V1 includes Odoo-imported products as sellable product targets when source trace and backend schema are present. Warning counts inside V1: {dict(sorted(warning_counts.items()))}.",
             "price_review": f"Corrected V1 prices are derived from source artifacts where possible. Resolution counts: {dict(sorted(sale_units_by_source.items()))}. Excluded live-snapshot review units: {excluded_price_review_units}.",
-            "media": f"{v1_extra_images_held} global extra image rows apply to corrected V1; {excluded_extra_images} belong to explicitly excluded products. Primary images are source-backed and extras are held unless approved.",
-            "add_ons": f"{review_only_add_on_product_count} corrected V1 products have review-only add-on axes and must stay quote-first for those add-ons until mapped. Confirmed foil_number add-on remains available where eligible.",
+            "media": f"{v1_extra_images_held} global extra image rows apply to corrected V1; {excluded_extra_images} belong to products outside this generated subset. Primary images are source-backed and extras are held unless approved.",
+            "add_ons": f"{review_only_add_on_product_count} corrected V1 products have review-only add-on axes. Those add-on controls stay hidden until mapped; the products themselves remain sellable targets. Confirmed foil_number add-on remains available where eligible.",
         },
         "products": products,
         "excluded_products": excluded_products,
@@ -382,13 +383,13 @@ def _warning_codes(contract) -> list[str]:
     return sorted(set(codes))
 
 
-def _source_price_resolution(product: dict[str, Any], contract) -> dict[str, Any]:
+def _source_price_resolution(product: dict[str, Any], contract, price_row: dict[str, Any] | None = None) -> dict[str, Any]:
     axes = [axis.name for axis in contract.required_axes]
     rows = product.get("valid_variants") or []
     groups: dict[tuple[tuple[str, str], ...], list[dict[str, Any]]] = {}
     if rows:
         for row in rows:
-            combo = row.get("combo") or {}
+            combo = project_required_variant_combo(row.get("combo") or {})
             key = tuple((axis, str(combo.get(axis) or "")) for axis in axes) if axes else (("single SKU", ""),)
             groups.setdefault(key, []).append(row)
     else:
@@ -396,6 +397,7 @@ def _source_price_resolution(product: dict[str, Any], contract) -> dict[str, Any
 
     sale_units = []
     counts: Counter[str] = Counter()
+    enrichment_prices = _price_enrichment_prices(price_row)
     for key in sorted(groups):
         source_rows = groups[key]
         prices = sorted(
@@ -406,25 +408,34 @@ def _source_price_resolution(product: dict[str, Any], contract) -> dict[str, Any
             }
         )
         projected_combo = {axis: value for axis, value in key if axis != "single SKU"}
-        if not prices:
+        enrichment_price = enrichment_prices.get(_combo_key(projected_combo))
+        if enrichment_price:
+            status = "source_price_ready"
+            chosen_price = enrichment_price
+            decision = "use_price_enrichment_artifact"
+            price_source_kind = "price_enrichment_artifact"
+        elif not prices:
             status = "source_price_missing_checkout_hold"
             chosen_price = None
-            decision = "hold_checkout_or_quote_first_until_price_set"
+            decision = "block_checkout_until_price_set"
+            price_source_kind = "source_hold"
         elif len(prices) > 1:
             status = "conflict_needs_fix"
             chosen_price = None
             decision = "fix_conflicting_source_prices_before_import"
+            price_source_kind = "source_hold"
         else:
             status = "source_price_ready"
             chosen_price = prices[0]
             decision = "use_source_artifact_price"
+            price_source_kind = "odoo_source_artifact"
         counts[status] += 1
         sale_units.append(
             {
                 "sale_unit_key": _sale_unit_key(projected_combo),
                 "projected_required_combo": projected_combo,
                 "chosen_price": chosen_price,
-                "price_source_kind": "odoo_source_artifact" if chosen_price else "source_hold",
+                "price_source_kind": price_source_kind,
                 "price_resolution_status": status,
                 "price_decision": decision,
                 "source_prices": prices,
@@ -443,6 +454,20 @@ def _source_price_resolution(product: dict[str, Any], contract) -> dict[str, Any
     }
 
 
+def _price_enrichment_prices(price_row: dict[str, Any] | None) -> dict[tuple[tuple[str, str], ...], str]:
+    result = {}
+    for unit in (price_row or {}).get("sale_units") or []:
+        chosen = unit.get("chosen_price")
+        if chosen in (None, ""):
+            continue
+        result[_combo_key(unit.get("projected_required_combo") or {})] = str(chosen)
+    return result
+
+
+def _combo_key(combo: dict[str, Any]) -> tuple[tuple[str, str], ...]:
+    return tuple(sorted((str(axis), str(value)) for axis, value in (combo or {}).items()))
+
+
 def _price_decision(resolution: dict[str, Any]) -> str:
     counts = resolution["counts"]
     if counts["conflict_needs_fix"]:
@@ -459,14 +484,12 @@ def _product_import_status(*, contract, review_units: int, review_only_axes: lis
         return "blocked", reasons
     if review_units:
         reasons.append(f"{review_units} sale unit price(s) need source-price fix or checkout hold")
+    review_notes = []
     if review_only_axes:
-        if contract.commerce_lane == "quote_first":
-            reasons.append("review-only add-on axis uses quote-first fallback until mapped")
-        else:
-            reasons.append("review-only add-on axis needs checkout mapping before direct checkout")
+        review_notes.append("review-only add-on axis hidden until mapped")
     if reasons:
         return "fix_needed", reasons
-    return "ready", ["product data maps to current ERPNext backend contract"]
+    return "ready", review_notes or ["product data maps to current ERPNext backend contract"]
 
 
 def _sale_unit_manifest(sale_units: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -575,10 +598,10 @@ def _validate_manifest(manifest: dict[str, Any]) -> dict[str, Any]:
         "ok": not errors,
         "errors": errors,
         "checks": [
-            "owner_explicit_exclusions_are_excluded",
+            "no_owner_exclusions_active",
             "owner_must_work_products_are_included",
             "no_needs_review_backend_contracts",
-            "variants_and_quote_first_allowed_when_backend_contract_exists",
+            "odoo_products_allowed_when_backend_contract_exists",
             "source_ids_axis_hashes_variant_pointers_and_pattern_class_preserved",
         ],
     }
@@ -591,9 +614,9 @@ def render_markdown(manifest: dict[str, Any]) -> str:
         "",
         f"- Generated: `{manifest['generated_at']}`",
         "- Mode: read-only manifest; no purge, import, delete, or ERPNext mutation.",
-        "- V1 scope: products that fit the current ERPNext backend/schema contract.",
+        "- V1 scope: Odoo-imported products that fit the current ERPNext backend/schema contract.",
         "- Variants, cups, and high-variant products are not blanket exclusions.",
-        "- Owner-explicit excluded structures are held out: Classic Column, Classic Arch, Classic Organic Arch, Classic Organic Columns, Classic Garland.",
+        "- No owner exclusion list is active for Odoo-imported products.",
         "",
         "## Summary",
         "",
@@ -630,7 +653,7 @@ def render_markdown(manifest: dict[str, Any]) -> str:
             f"- Line configuration version: `{manifest['runtime_contract']['configuration_version']}`.",
             f"- Line fields: `{json.dumps(manifest['runtime_contract']['line_fieldnames'], sort_keys=True)}`.",
             "- Confirmed foil-number add-on: `ADDON-FOIL-NUMBER` runtime contract for eligible bouquet products.",
-            "- Quote-first products may be imported with `lt_commerce_lane=quote_first`; they must not be presented as Ready-to-Order checkout until backend support is complete.",
+            "- Odoo-imported products should import as sellable checkout targets; review-only add-on controls stay hidden until mapped.",
             "",
             "## Included Products",
             "",

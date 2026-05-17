@@ -2,27 +2,27 @@
 
 Read-only dry run from saved snapshot. No ERPNext connection and no deletes.
 
-- Generated: `2026-05-12T02:53:07Z`
-- Snapshot: `audits\odoo-erpnext-migration-audit-2026-05-08\current-state-snapshot-2026-05-11-1050`
-- Import subset rule: include products that fit the current ERPNext backend schema; variants are allowed; exclude owner-named unsupported structures and proven schema/backend blockers.
-- Variants, cups, and high-variant products are not blanket exclusions.
+- Generated: `2026-05-17T23:23:10Z`
+- Snapshot: `audits\odoo-erpnext-migration-audit-2026-05-08\current-state-snapshot-2026-05-17-2132-clean-odoo-products`
+- Import subset rule: include Odoo-imported products that fit the current ERPNext backend schema; variants and high-variant products are allowed; exclude only proven schema/backend blockers.
+- Variants, cups, and high-variant products are products and are not blanket exclusions.
 
 ## Import source subset
 
-- Included products: 48
-- Excluded products: 5
-- Excluded by primary reason: owner_explicit_exclusion=5
-- Excluded by all reason flags: owner_explicit_exclusion=5
+- Included products: 53
+- Excluded products: 0
+- Excluded by primary reason: none
+- Excluded by all reason flags: none
 
 ## Proposed generated catalog purge scope
 
-- Website Items: 48
-- Item templates: 48
-- Item variants: 6894
-- Item Prices: 6928
-- Item Variant Attribute rows: 20488
-- Product-related File rows attached to purge items/templates: 642
-- Existing excluded Website Item templates held out of purge scope: 5
+- Website Items: 53
+- Item templates: 53
+- Item variants: 10617
+- Item Prices: 10652
+- Item Variant Attribute rows: 32028
+- Product-related File rows attached to purge items/templates: 2522
+- Existing excluded Website Item templates held out of purge scope: 0
 
 ## Protected service item codes
 
@@ -42,6 +42,11 @@ Read-only dry run from saved snapshot. No ERPNext connection and no deletes.
 - `basketball-arch`
 - `birthday-deliveries`
 - `butterfly-get-well-bouquet-latex-free`
+- `classic-arch`
+- `classic-column`
+- `classic-organic-arch`
+- `classic-organic-balloon-garland`
+- `classic-organic-columns`
 - `classic-organic-for-easel`
 - `easter-arch`
 - `easter-balloon-arch-bunny-ear`
@@ -81,15 +86,10 @@ Read-only dry run from saved snapshot. No ERPNext connection and no deletes.
 
 ## Excluded source products held out of import
 
-- `classic-organic-balloon-garland` - owner_explicit_exclusion (owner_explicit_exclusion)
-- `classic-arch` - owner_explicit_exclusion (owner_explicit_exclusion)
-- `classic-column` - owner_explicit_exclusion (owner_explicit_exclusion)
-- `classic-organic-columns` - owner_explicit_exclusion (owner_explicit_exclusion)
-- `classic-organic-arch` - owner_explicit_exclusion (owner_explicit_exclusion)
 
 ## Safety interpretation
 
-This dry run defines only the product-catalog-owned demolition set for the corrected import subset. Excluded source products and service items are held out of destructive scope. It does not include Customers, Leads, Quotations, Sales Orders, Sales Invoices, Payment records, tax setup, workspaces, fixtures, or non-catalog business records.
+This dry run defines only the product-catalog-owned demolition set for the corrected import subset. Service items remain protected. It does not include Customers, Leads, Quotations, Sales Orders, Sales Invoices, Payment records, tax setup, workspaces, fixtures, or non-catalog business records.
 
 Before real destructive mode, rerun against live DB with backup/export and exact allowlist confirmation.
 

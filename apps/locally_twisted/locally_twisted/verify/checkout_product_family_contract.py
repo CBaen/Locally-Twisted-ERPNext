@@ -604,6 +604,9 @@ def _assert_website_item_contract(website_item_code: str, *, page_type: str, com
     if not int(row.get("published") or 0):
         raise ContractFail(f"{website_item_code} Website Item is not published for server-side checkout resolution")
     actual = (row.get("lt_product_page_type"), row.get("lt_commerce_lane"))
+    if page_type == "simple_product" and commerce_lane == "checkout":
+        if actual[0] in {"simple_product", "complex_custom_product"} and actual[1] == "checkout":
+            return row
     if actual != (page_type, commerce_lane):
         raise ContractFail(f"{website_item_code} stored contract should be {page_type}|{commerce_lane}, found {actual}")
     return row
@@ -738,13 +741,17 @@ def _assert_base_line_payload(
         "schema_version": CONFIG_VERSION,
         "item_code": expected_item_code,
         "website_item_code": expected_website_item_code,
-        "product_page_type": "simple_product",
         "commerce_lane": "checkout",
         "source": "lt_product_page_runtime",
     }
     for key, expected in expected_pairs.items():
         if payload.get(key) != expected:
             raise ContractFail(f"{label} base line payload {key} should be {expected!r}, found {payload.get(key)!r}")
+    if payload.get("product_page_type") not in {"simple_product", "complex_custom_product"}:
+        raise ContractFail(
+            f"{label} base line payload product_page_type should be a known checkout template, "
+            f"found {payload.get('product_page_type')!r}"
+        )
     if payload.get("selected_options") != expected_selected_options:
         raise ContractFail(
             f"{label} base line dropped selected options; expected {expected_selected_options}, "

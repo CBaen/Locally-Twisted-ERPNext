@@ -1,23 +1,17 @@
 {
   "destructive_allowed": false,
-  "excluded_existing_template_item_codes_held": [
-    "classic-arch",
-    "classic-column",
-    "classic-organic-arch",
-    "classic-organic-balloon-garland",
-    "classic-organic-columns"
-  ],
-  "generated_at": "2026-05-12T02:53:07Z",
+  "excluded_existing_template_item_codes_held": [],
+  "generated_at": "2026-05-17T23:23:10Z",
   "protected_service_item_codes": [],
   "purge_scope_counts": {
-    "excluded_existing_templates_held": 5,
-    "item_prices": 6928,
-    "item_templates": 48,
-    "item_variant_attribute_rows": 20488,
-    "item_variants": 6894,
-    "product_related_file_rows": 642,
+    "excluded_existing_templates_held": 0,
+    "item_prices": 10652,
+    "item_templates": 53,
+    "item_variant_attribute_rows": 32028,
+    "item_variants": 10617,
+    "product_related_file_rows": 2522,
     "protected_service_templates": 0,
-    "website_items": 48
+    "website_items": 53
   },
   "purge_template_item_codes": [
     "6-color-rainbow-arch",
@@ -32,6 +26,11 @@
     "basketball-arch",
     "birthday-deliveries",
     "butterfly-get-well-bouquet-latex-free",
+    "classic-arch",
+    "classic-column",
+    "classic-organic-arch",
+    "classic-organic-balloon-garland",
+    "classic-organic-columns",
     "classic-organic-for-easel",
     "easter-arch",
     "easter-balloon-arch-bunny-ear",
@@ -70,143 +69,16 @@
     "unicorn-bouquet"
   ],
   "read_only": true,
-  "snapshot": "audits\\odoo-erpnext-migration-audit-2026-05-08\\current-state-snapshot-2026-05-11-1050",
+  "snapshot": "audits\\odoo-erpnext-migration-audit-2026-05-08\\current-state-snapshot-2026-05-17-2132-clean-odoo-products",
   "v1_subset": {
-    "excluded_count": 5,
-    "excluded_counts_by_primary_reason": {
-      "owner_explicit_exclusion": 5
-    },
-    "excluded_counts_by_reason": {
-      "owner_explicit_exclusion": 5
-    },
-    "excluded_products": [
-      {
-        "commerce_lane": "quote_first",
-        "customization_axes": [
-          "latex colors"
-        ],
-        "excluded_reason_codes": [
-          "owner_explicit_exclusion"
-        ],
-        "excluded_reason_details": [
-          {
-            "code": "owner_explicit_exclusion",
-            "detail": "Owner excluded this structure from the current import subset: Classic Garland."
-          }
-        ],
-        "name": "Classic Organic Balloon Garland",
-        "primary_exclusion_reason": "owner_explicit_exclusion",
-        "product_page_type": "complex_custom_product",
-        "required_axes": [
-          "Garland Length"
-        ],
-        "selected_for_v1_import": false,
-        "slug": "classic-organic-balloon-garland",
-        "source_variant_rows": 159
-      },
-      {
-        "commerce_lane": "quote_first",
-        "customization_axes": [
-          "latex colors"
-        ],
-        "excluded_reason_codes": [
-          "owner_explicit_exclusion"
-        ],
-        "excluded_reason_details": [
-          {
-            "code": "owner_explicit_exclusion",
-            "detail": "Owner excluded this structure from the current import subset: Classic Arch."
-          }
-        ],
-        "name": "Classic Arch",
-        "primary_exclusion_reason": "owner_explicit_exclusion",
-        "product_page_type": "complex_custom_product",
-        "required_axes": [
-          "Arch Size",
-          "Design",
-          "LED Lights"
-        ],
-        "selected_for_v1_import": false,
-        "slug": "classic-arch",
-        "source_variant_rows": 848
-      },
-      {
-        "commerce_lane": "quote_first",
-        "customization_axes": [
-          "latex colors"
-        ],
-        "excluded_reason_codes": [
-          "owner_explicit_exclusion"
-        ],
-        "excluded_reason_details": [
-          {
-            "code": "owner_explicit_exclusion",
-            "detail": "Owner excluded this structure from the current import subset: Classic Column."
-          }
-        ],
-        "name": "Classic Column",
-        "primary_exclusion_reason": "owner_explicit_exclusion",
-        "product_page_type": "complex_custom_product",
-        "required_axes": [
-          "Column Height",
-          "topper"
-        ],
-        "selected_for_v1_import": false,
-        "slug": "classic-column",
-        "source_variant_rows": 1908
-      },
-      {
-        "commerce_lane": "quote_first",
-        "customization_axes": [
-          "latex colors"
-        ],
-        "excluded_reason_codes": [
-          "owner_explicit_exclusion"
-        ],
-        "excluded_reason_details": [
-          {
-            "code": "owner_explicit_exclusion",
-            "detail": "Owner excluded this structure from the current import subset: Classic Organic Columns."
-          }
-        ],
-        "name": "Classic Organic columns",
-        "primary_exclusion_reason": "owner_explicit_exclusion",
-        "product_page_type": "complex_custom_product",
-        "required_axes": [
-          "Column Height"
-        ],
-        "selected_for_v1_import": false,
-        "slug": "classic-organic-columns",
-        "source_variant_rows": 318
-      },
-      {
-        "commerce_lane": "quote_first",
-        "customization_axes": [
-          "latex colors"
-        ],
-        "excluded_reason_codes": [
-          "owner_explicit_exclusion"
-        ],
-        "excluded_reason_details": [
-          {
-            "code": "owner_explicit_exclusion",
-            "detail": "Owner excluded this structure from the current import subset: Classic Organic Arch."
-          }
-        ],
-        "name": "Classic Organic Arch",
-        "primary_exclusion_reason": "owner_explicit_exclusion",
-        "product_page_type": "complex_custom_product",
-        "required_axes": [
-          "Arch Size"
-        ],
-        "selected_for_v1_import": false,
-        "slug": "classic-organic-arch",
-        "source_variant_rows": 636
-      }
-    ],
-    "included_count": 48,
+    "excluded_count": 0,
+    "excluded_counts_by_primary_reason": {},
+    "excluded_counts_by_reason": {},
+    "excluded_products": [],
+    "included_count": 53,
     "included_slugs": [
       "baby-shower-combination-photo-opt",
+      "classic-organic-balloon-garland",
       "basketball-arch",
       "number-balloon-columns",
       "easter-balloon-arch-bunny-ear",
@@ -217,8 +89,12 @@
       "premium-organic-arch",
       "pemium-organic-column",
       "pride-progress-rainbow-balloon-arch",
+      "classic-arch",
+      "classic-column",
+      "classic-organic-columns",
       "baby-shower-garland",
       "balloon-drop",
+      "classic-organic-arch",
       "unicorn-bouquet",
       "mickey-mouse-bouquet",
       "minion-bouquet",
@@ -258,7 +134,7 @@
     "must_work_validation_errors": [],
     "rows": [
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [
           "latex colors"
         ],
@@ -273,31 +149,24 @@
         "source_variant_rows": 53
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [
           "latex colors"
         ],
-        "excluded_reason_codes": [
-          "owner_explicit_exclusion"
-        ],
-        "excluded_reason_details": [
-          {
-            "code": "owner_explicit_exclusion",
-            "detail": "Owner excluded this structure from the current import subset: Classic Garland."
-          }
-        ],
+        "excluded_reason_codes": [],
+        "excluded_reason_details": [],
         "name": "Classic Organic Balloon Garland",
-        "primary_exclusion_reason": "owner_explicit_exclusion",
+        "primary_exclusion_reason": null,
         "product_page_type": "complex_custom_product",
         "required_axes": [
           "Garland Length"
         ],
-        "selected_for_v1_import": false,
+        "selected_for_v1_import": true,
         "slug": "classic-organic-balloon-garland",
         "source_variant_rows": 159
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [],
         "excluded_reason_codes": [],
         "excluded_reason_details": [],
@@ -312,7 +181,7 @@
         "source_variant_rows": 2
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [
           "Number colors",
           "latex colors"
@@ -328,7 +197,7 @@
         "source_variant_rows": 371
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [],
         "excluded_reason_codes": [],
         "excluded_reason_details": [],
@@ -343,7 +212,7 @@
         "source_variant_rows": 2
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [
           "latex colors"
         ],
@@ -358,7 +227,7 @@
         "source_variant_rows": 53
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [
           "latex colors"
         ],
@@ -375,7 +244,7 @@
         "source_variant_rows": 212
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [],
         "excluded_reason_codes": [],
         "excluded_reason_details": [],
@@ -392,7 +261,7 @@
         "source_variant_rows": 30
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [
           "latex colors"
         ],
@@ -409,7 +278,7 @@
         "source_variant_rows": 159
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [
           "latex colors"
         ],
@@ -426,7 +295,7 @@
         "source_variant_rows": 424
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [
           "latex colors"
         ],
@@ -443,7 +312,7 @@
         "source_variant_rows": 636
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [],
         "excluded_reason_codes": [],
         "excluded_reason_details": [],
@@ -458,82 +327,61 @@
         "source_variant_rows": 4
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [
           "latex colors"
         ],
-        "excluded_reason_codes": [
-          "owner_explicit_exclusion"
-        ],
-        "excluded_reason_details": [
-          {
-            "code": "owner_explicit_exclusion",
-            "detail": "Owner excluded this structure from the current import subset: Classic Arch."
-          }
-        ],
+        "excluded_reason_codes": [],
+        "excluded_reason_details": [],
         "name": "Classic Arch",
-        "primary_exclusion_reason": "owner_explicit_exclusion",
+        "primary_exclusion_reason": null,
         "product_page_type": "complex_custom_product",
         "required_axes": [
           "Arch Size",
           "Design",
           "LED Lights"
         ],
-        "selected_for_v1_import": false,
+        "selected_for_v1_import": true,
         "slug": "classic-arch",
         "source_variant_rows": 848
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [
           "latex colors"
         ],
-        "excluded_reason_codes": [
-          "owner_explicit_exclusion"
-        ],
-        "excluded_reason_details": [
-          {
-            "code": "owner_explicit_exclusion",
-            "detail": "Owner excluded this structure from the current import subset: Classic Column."
-          }
-        ],
+        "excluded_reason_codes": [],
+        "excluded_reason_details": [],
         "name": "Classic Column",
-        "primary_exclusion_reason": "owner_explicit_exclusion",
+        "primary_exclusion_reason": null,
         "product_page_type": "complex_custom_product",
         "required_axes": [
           "Column Height",
           "topper"
         ],
-        "selected_for_v1_import": false,
+        "selected_for_v1_import": true,
         "slug": "classic-column",
         "source_variant_rows": 1908
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [
           "latex colors"
         ],
-        "excluded_reason_codes": [
-          "owner_explicit_exclusion"
-        ],
-        "excluded_reason_details": [
-          {
-            "code": "owner_explicit_exclusion",
-            "detail": "Owner excluded this structure from the current import subset: Classic Organic Columns."
-          }
-        ],
+        "excluded_reason_codes": [],
+        "excluded_reason_details": [],
         "name": "Classic Organic columns",
-        "primary_exclusion_reason": "owner_explicit_exclusion",
+        "primary_exclusion_reason": null,
         "product_page_type": "complex_custom_product",
         "required_axes": [
           "Column Height"
         ],
-        "selected_for_v1_import": false,
+        "selected_for_v1_import": true,
         "slug": "classic-organic-columns",
         "source_variant_rows": 318
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [
           "latex colors"
         ],
@@ -550,7 +398,7 @@
         "source_variant_rows": 159
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [
           "latex colors"
         ],
@@ -567,26 +415,19 @@
         "source_variant_rows": 159
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [
           "latex colors"
         ],
-        "excluded_reason_codes": [
-          "owner_explicit_exclusion"
-        ],
-        "excluded_reason_details": [
-          {
-            "code": "owner_explicit_exclusion",
-            "detail": "Owner excluded this structure from the current import subset: Classic Organic Arch."
-          }
-        ],
+        "excluded_reason_codes": [],
+        "excluded_reason_details": [],
         "name": "Classic Organic Arch",
-        "primary_exclusion_reason": "owner_explicit_exclusion",
+        "primary_exclusion_reason": null,
         "product_page_type": "complex_custom_product",
         "required_axes": [
           "Arch Size"
         ],
-        "selected_for_v1_import": false,
+        "selected_for_v1_import": true,
         "slug": "classic-organic-arch",
         "source_variant_rows": 636
       },
@@ -741,7 +582,7 @@
         "source_variant_rows": 30
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [
           "latex colors"
         ],
@@ -756,7 +597,7 @@
         "source_variant_rows": 53
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [
           "latex colors"
         ],
@@ -771,7 +612,7 @@
         "source_variant_rows": 53
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [
           "latex colors"
         ],
@@ -788,7 +629,7 @@
         "source_variant_rows": 156
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [],
         "excluded_reason_codes": [],
         "excluded_reason_details": [],
@@ -819,7 +660,7 @@
         "source_variant_rows": 7
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [
           "Color Palette"
         ],
@@ -836,7 +677,7 @@
         "source_variant_rows": 1160
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [
           "latex colors"
         ],
@@ -851,7 +692,7 @@
         "source_variant_rows": 53
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [
           "Baby color"
         ],
@@ -866,7 +707,7 @@
         "source_variant_rows": 2
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [
           "latex colors"
         ],
@@ -881,7 +722,7 @@
         "source_variant_rows": 53
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [],
         "excluded_reason_codes": [],
         "excluded_reason_details": [],
@@ -896,7 +737,7 @@
         "source_variant_rows": 2
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [],
         "excluded_reason_codes": [],
         "excluded_reason_details": [],
@@ -909,7 +750,7 @@
         "source_variant_rows": 0
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [],
         "excluded_reason_codes": [],
         "excluded_reason_details": [],
@@ -967,7 +808,7 @@
         "source_variant_rows": 30
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [],
         "excluded_reason_codes": [],
         "excluded_reason_details": [],
@@ -980,7 +821,7 @@
         "source_variant_rows": 2
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [],
         "excluded_reason_codes": [],
         "excluded_reason_details": [],
@@ -993,7 +834,7 @@
         "source_variant_rows": 2
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [],
         "excluded_reason_codes": [],
         "excluded_reason_details": [],
@@ -1006,7 +847,7 @@
         "source_variant_rows": 2
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [],
         "excluded_reason_codes": [],
         "excluded_reason_details": [],
@@ -1021,7 +862,7 @@
         "source_variant_rows": 2
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [
           "latex colors"
         ],
@@ -1036,7 +877,7 @@
         "source_variant_rows": 53
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [],
         "excluded_reason_codes": [],
         "excluded_reason_details": [],
@@ -1062,7 +903,7 @@
         "source_variant_rows": 0
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [
           "Color Palette"
         ],
@@ -1079,7 +920,7 @@
         "source_variant_rows": 87
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [
           "Color Palette"
         ],
@@ -1096,7 +937,7 @@
         "source_variant_rows": 174
       },
       {
-        "commerce_lane": "quote_first",
+        "commerce_lane": "checkout",
         "customization_axes": [],
         "excluded_reason_codes": [],
         "excluded_reason_details": [],
@@ -1109,6 +950,6 @@
         "source_variant_rows": 0
       }
     ],
-    "rule": "include products that fit the current ERPNext backend schema; variants are allowed; exclude owner-named unsupported structures and proven schema/backend blockers"
+    "rule": "include Odoo-imported products that fit the current ERPNext backend schema; variants and high-variant products are allowed; exclude only proven schema/backend blockers"
   }
 }

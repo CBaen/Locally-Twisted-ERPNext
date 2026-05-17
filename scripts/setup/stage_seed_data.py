@@ -17,6 +17,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE = ROOT / "_resources" / "odoo-live"
 TARGET = ROOT / "apps" / "locally_twisted" / "locally_twisted" / "seed" / "_data"
+PRICE_ENRICHMENT = (
+    ROOT
+    / "audits"
+    / "odoo-erpnext-migration-audit-2026-05-08"
+    / "21-product-page-price-enrichment-candidates.json"
+)
 
 
 def main() -> int:
@@ -28,6 +34,8 @@ def main() -> int:
     if TARGET.exists():
         shutil.rmtree(TARGET)
     shutil.copytree(SOURCE, TARGET)
+    if PRICE_ENRICHMENT.exists():
+        shutil.copy2(PRICE_ENRICHMENT, TARGET / "product_page_price_enrichment_candidates.json")
     print(f"staged seed data: {SOURCE} -> {TARGET}")
     return 0
 

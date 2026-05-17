@@ -317,28 +317,28 @@ def _control_contract(axis: Mapping[str, Any], *, checkout_allowed: bool) -> Pro
     elif role == "customization":
         payload_target = "customizations"
         required_for_checkout = False
-        checkout_blocking = checkout_allowed
-        server_validation = "Preserve customization payload in quote context until a checkout validator exists."
-        failure_mode = "unsupported customization blocks paid checkout"
+        checkout_blocking = False
+        server_validation = "Hide unsupported customization controls until a checkout validator exists; reject submitted payloads server-side."
+        failure_mode = "unsupported customization payload is rejected, but the base product remains purchasable"
     elif role == "add_on":
         add_on_contract = _to_mapping(axis.get("add_on_contract"))
         ready = _add_on_contract_ready(add_on_contract)
         payload_target = "add_ons" if ready else "quote_context"
         required_for_checkout = ready and checkout_allowed
-        checkout_blocking = checkout_allowed and not ready
+        checkout_blocking = False
         selector_type = _clean(add_on_contract.get("input_type") or selector_type or "add_on_selector")
         server_validation = (
             "Validate add-on eligibility, quantity/value, ERPNext Item Price, and separate order/invoice line."
             if ready
-            else "Keep add-on in quote/review context until an approved priced add-on Item contract exists."
+            else "Hide add-on control until an approved priced add-on Item contract exists."
         )
-        failure_mode = "unapproved or unpriced add-on blocks paid checkout"
+        failure_mode = "unapproved or unpriced add-on payload is rejected, but the base product remains purchasable"
     elif role == "review_only":
         payload_target = "quote_context"
         selector_type = "review_notice"
         required_for_checkout = False
-        checkout_blocking = checkout_allowed
-        server_validation = "Paid checkout blocked; preserve source meaning for operator quote review."
+        checkout_blocking = False
+        server_validation = "Hide review-only source controls from paid checkout until mapped and approved."
         failure_mode = "review-only source axis cannot become a free checkout option"
     else:
         payload_target = "quote_context"

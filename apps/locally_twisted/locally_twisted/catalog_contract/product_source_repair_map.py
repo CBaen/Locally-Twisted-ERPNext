@@ -149,7 +149,7 @@ def build_product_source_repair_map(
     scaffold_artifact: dict[str, Any],
     metadata: dict[str, Any] | None = None,
     expected_source_products: int | None = 53,
-    expected_direct_checkout_products: int | None = 18,
+    expected_direct_checkout_products: int | None = 53,
 ) -> ProductSourceRepairReport:
     source_by_slug = _by_slug(source_products)
     price_by_slug = _by_slug(price_enrichment_artifact.get("products") or [])

@@ -18,6 +18,25 @@ UX and search/discovery. Current visible/imported products are test products
 only; real catalog truth requires a separate approved catalog/import proof
 gate.
 
+## 2026-05-17 All-Odoo Sellable Product Reimport
+
+Use `odoo-sellable-product-reimport-2026-05-17.md` as the current front-door
+handoff for the local sellable product import slice. It supersedes the older
+48-kept / 5-Classic-excluded import packet and the tranche-only repair state.
+
+Current evidence: 53 Odoo-imported products included, 0 excluded, 290 priced
+sale units, 53 checkout-allowed product pages, and 0 import-readiness blockers.
+The local `frontend` site was backed up, cleaned of generated proof products,
+snapshotted, reimported, and then browser-proved across all 53 live Website
+Item routes in two batches under the cart 50-line cap. Desktop and mobile
+product page, cart, and checkout preview passed. `lt_ecommerce_paused=1` was
+restored and verified. No staging/live/Frappe Cloud/Stripe/DNS/public exposure
+change was performed.
+
+Remaining caveats: 95 extra images remain held until classified, and 9
+review-only add-on controls remain hidden until mapped. Those do not make the
+base products non-products.
+
 ## 2026-05-11 Post-Import Checkout Closeout
 
 Use `post-import-checkout-launch-closeout-2026-05-11.md` as the current
@@ -25,21 +44,9 @@ front-door handoff for the local ecommerce checkout slice. It supersedes stale
 pause-centric, bouquet-only, cups-exclusion, and blanket high-variant exclusion
 notes for this slice.
 
-Current closeout evidence: corrected product set is 48 kept / 5
-owner-explicit Classic exclusions; the approved local import ran against the
-local ERPNext `frontend` site only and completed the guarded upsert/write path
-with exit 0; the final browser proof passes for Easter Balloon Cups, 7'
-Butterfly Column, Graduation Grab n Go, 6' Graduation stands, and Unicorn
-Bouquet. Final proof command:
-`& "C:\Program Files\nodejs\node.exe" scripts/verify/post_import_checkout_proof.js`.
-Backend contracts are green for `product_import_readiness_gate`,
-`post_import_catalog_state`, `direct_checkout_target_contract`, and
-`cart_checkout_contract`. Remaining caveats: 8 review-only add-on axes are
-internally held, and the five Classic exclusions are internally held, until
-they are mapped and proven from source data; they are not business quote-first
-products. The local import evidence is upsert/write rather than a
-delete/recreate transcript. The docs closeout publish path was clean after
-`1811cd6`; verify current worktree state before staging future changes.
+Historical evidence: the 2026-05-11 packet proved the earlier narrow checkout
+slice. It is superseded for current import scope by the 2026-05-17 all-Odoo
+sellable reimport above.
 
 ## 2026-05-11 Storefront Proof And Complex UI Handoff
 
@@ -74,11 +81,11 @@ scripts/verify/complex_checkout_scaffold.py` refreshes ProductPatternContract
 data and writes ignored `output/complex-checkout-scaffold.*` artifacts without
 touching Frappe Cloud or the live domain.
 
-Current scaffold proof: 53 products checked, 18 direct-checkout regression
-guards, 4 simple-axis lane-flip candidates, 6 multi-color UI cases, 20
-add-on/conditional blocked products, 5 needs-review/missing products, and 0
-explicit checkout architecture gaps. The scaffold supersedes older
-rendered-front-end heuristic lane-flip lists.
+Current scaffold proof after the all-Odoo sellable correction: 53 products
+checked, 53 direct checkout regression guards, 0 simple lane-flip candidates,
+0 complex UI blockers, 0 add-on/conditional product blockers, and 0 explicit
+checkout architecture gaps. Review-only add-on controls can still stay hidden
+until mapped.
 
 ## 2026-05-12 Ecommerce Shop Setup Closeout
 
@@ -132,15 +139,11 @@ safety evidence.
 
 ## 2026-05-17 Product Family Certification Truth Table
 
-Use `product-family-certification-truth-table-2026-05-17.md` as the current
-front-door artifact for existing product/product-page certification. It
-unpublished the generated local release-proof Website Item from the public
-product surface, refreshed the 53-product backend-first scaffold, and splits
-the catalog into checkout regression guards, simple lane-flip candidates,
-multi-color UI products, add-on/conditional-pricing blocked products, and
-needs-review products. It also records the source/backend lane differences and
-the updated backend-first price gate: 18 current backend checkout products and
-51/51 checkout sale units have live ERPNext price coverage.
+`product-family-certification-truth-table-2026-05-17.md` is now historical for
+the tranche approach. Current product/product-page certification lives in
+`odoo-sellable-product-reimport-2026-05-17.md`: 53 checkout products, 0
+exclusions, 290 priced sale units, and all 53 live routes browser-proved in
+local open mode before restoring `lt_ecommerce_paused=1`.
 
 ## 2026-05-17 Product Source Repair Map
 
@@ -225,8 +228,8 @@ behavior, owner approval, or staging/live exposure.
 | Infrastructure readiness packet | `ecommerce-infrastructure-readiness-packet-2026-05-10.md` | Present, parent-created | Current launch-readiness packet: what is proven, what remains blocked, Odoo logic to preserve, verifier state, and next engineering gates. |
 | ERPNext receiving build spec from Odoo | `erpnext-receiving-build-spec-from-odoo-2026-05-10.md` | Present, parent-created | Converts live Odoo backend logic into concrete ERPNext/Frappe object model, gaps, gates, and coding order. |
 | Ready-to-order checkout scope decision | `ready-to-order-checkout-scope-decision-2026-05-10.md` | Present, GL-directed / parent-recorded | Narrows launch scope: direct checkout only for ready-to-order/simple products; complex/high-variant/high-dollar decor routes quote-first/invoice-first. |
-| Ready-to-order product candidate list | `ready-to-order-product-candidate-list-2026-05-10.md` | Present, subagent-created / parent-read | Classifies all 53 source products: 0 checkout-ready-now, 15 checkout-after-small-fix, 33 quote-first, 5 hide/needs-review. |
-| Ready-to-order product cut plan | `ready-to-order-product-cut-plan-2026-05-10.md` | Present, parent-created / no-port launch scope | Converts the 53-product classification into a practical first-shelf plan: keep 13 bouquet-family products as the recommended first checkout shelf, hold Easter/Mother's Day unless seasonal, keep complex/event/custom decor quote-first, and keep unclear add-on families hidden/review-only. |
+| Ready-to-order product candidate list | `ready-to-order-product-candidate-list-2026-05-10.md` | Historical, superseded by 2026-05-17 full import closeout | Earlier staged scope artifact that classified products into checkout/quote/hide buckets; do not use as the current product model. |
+| Ready-to-order product cut plan | `ready-to-order-product-cut-plan-2026-05-10.md` | Historical, superseded by 2026-05-17 full import closeout | Earlier first-shelf plan; all 53 Odoo products now target sellable checkout behavior locally unless GL explicitly excludes a product. |
 | Event pages vs ready-to-order shop contract | `event-pages-vs-ready-to-order-shop-contract-2026-05-10.md` | Present, GL-directed / parent-recorded | Public IA/merchandising rule: high-ticket decor lives as examples on event pages with quote CTAs; shop stays simple/low-variation and preserves customer notes. |
 | Customer note checkout preservation audit | `customer-note-checkout-preservation-audit-2026-05-10.md` | Present, subagent-created / parent-read | Finds optional `order_notes` is code-wired to Sales Order timeline Communication and operator/payment-success lookup, but lacks a single passing end-to-end checkout-note verifier. |
 | Ecommerce infrastructure agent playbook | `ecommerce-infrastructure-agent-playbook-2026-05-10.md` | Present, subagent-created / parent-read | Reusable future-agent playbook: scope rules, Odoo witness rules, ready-to-order vs event quote split, customer-note rule, artifact-first behavior, verifier gates, and failure modes. |
@@ -240,7 +243,8 @@ behavior, owner approval, or staging/live exposure.
 | Phase 5 delivery/payment/operator packet | `phase-5-delivery-payment-operator-packet-2026-05-10.md` | Present, parent-verified / local proof | Proves delivery fee mapping, pickup, tax boundaries, payment backend config, mocked webhook, paid cascade, payment-success reconciliation, operator quote review/send control, customer quote delivery BCC safety, local launch readiness, and pause-state safety. |
 | Product import hardening gate | `product-import-hardening-gate-2026-05-11.md` + `../../scripts/verify/product_import_readiness_gate.py` | Present, backend-owned / read-only gate | Minimum real-catalog import readiness gate for peer GPT agents: source packets, approvals, fail-loud import fields, dry-run/destructive/backup guards, snapshot and rollback plan. Expected current result is blocked until hardening and approvals are complete. |
 | Payment portal live cutover checklist | `../payment-portal-live-cutover-checklist-2026-05-11.md` | Present, backend-owned / checklist | Moves passing local/test payment contracts into staging/live cutover steps for Frappe v15.106.0 / ERPNext v15.105.0, Frappe Cloud site config, Stripe webhook/policy setup, and one approved low-risk live payment test. |
-| Post-import checkout launch closeout | `post-import-checkout-launch-closeout-2026-05-11.md` | Present, local proof / backend-owned closeout | Current 48 kept / 5 Classic-excluded import and checkout proof packet; records final browser proof PASS, backend contract gates, priority products, upsert/write caveat, and remaining caveats. |
+| All-Odoo sellable product reimport | `odoo-sellable-product-reimport-2026-05-17.md` + `../../scripts/verify/v1_odoo_erpnext_import_manifest.py` + `../../scripts/verify/product_import_readiness_gate.py` + `../../scripts/verify/post_import_checkout_proof.js` | Present, local-only full import/proof closeout | Current front-door product-import handoff: 53 Odoo products included, 0 excluded, 290 priced sale units, all 53 live routes browser-proved in batches, and pause restored. |
+| Post-import checkout launch closeout | `post-import-checkout-launch-closeout-2026-05-11.md` | Historical, superseded by 2026-05-17 full import closeout | Older 48 kept / 5 Classic-excluded proof packet; use only for history. |
 | Storefront proof and complex UI handoff | `storefront-proof-and-complex-ui-handoff-2026-05-11.md` | Present, rendered storefront proof / frontend-owned handoff | Captures Ready-to-Order/search proof, final post-import checkout proof, all-priced-page audit, Classic Arch proof, quote-first lane correction, complex UI requirements, and regression proof ladder. |
 | Ready-to-Order nav/search backend gate | `ready-to-order-nav-search-backend-gate-2026-05-12.md` | Present, review-closeout / local DB + rendered proof | Captures owner-include-as-allowlist rule, backend `simple_product|checkout` requirement, hidden-vs-removed search quick-link assertion, mobile drawer label correction, and nav/search verifier receipts. |
 | Complex checkout scaffold | `complex-checkout-scaffold-2026-05-12.md` + `../../scripts/verify/complex_checkout_scaffold.py` | Present, local ProductPatternContract scaffold / source-owned gate | Maps all 53 products into direct-checkout guard, simple lane-flip, multi-color UI, add-on/conditional blocked, or needs-review stages before any future quote-first lane flip. |
@@ -248,7 +252,7 @@ behavior, owner approval, or staging/live exposure.
 | Ecommerce shop setup closeout | `../../ECOMMERCE-SHOP-HANDOFF.md` | Present, current root closeout | Current completed-lane summary for backend wiring, catalog/import/pricing, media readiness, storefront UX/homepage verifier alignment, runner wrapper, remaining live gates, and scoped worktree caveats. |
 | Product blueprint authoring | `product-blueprint-authoring-2026-05-14.md` + `../../scripts/verify/product_blueprint_contract.py` + `../../scripts/verify/product_blueprint_live_contract.py` | Present, local-only staff authoring / rollback-safe apply proof | Adds employee Desk product setup, validation evidence, dry-run apply plan, guarded unpublished local apply, and fixed-price blueprint add-on runtime cascade. |
 | Generic Product Setup runtime | `generic-product-setup-runtime-2026-05-15.md` + `../../scripts/verify/product_blueprint_live_contract.py` + `../../scripts/verify/cart_checkout_contract.py` + `../../scripts/verify/payment_cascade_contract.py` | Present, local-only complex Product Setup media/payment proof | Proves generic selection groups, SKU-defining variants, configuration-only choices, combination media rules, server-selected image parity through cart/checkout/Stripe/receipt, role-gated local apply, and fake-card local payment cascade. |
-| Product family certification truth table | `product-family-certification-truth-table-2026-05-17.md` + `../../scripts/verify/checkout_product_family_contract.py` + `../../scripts/verify/post_import_checkout_proof.js` | Present, backend-first current product certification | Splits the 53 real product families into 18 certified checkout regression guards and 35 blocked repair rows while preserving GL's no-business-quote-first correction. |
+| Product family certification truth table | `product-family-certification-truth-table-2026-05-17.md` | Historical tranche map, superseded by all-Odoo sellable closeout | Older staged certification split; current source/import truth is all 53 products as checkout targets. |
 | Product source repair map | `product-source-repair-map-2026-05-17.md` + `product-source-repair-map-2026-05-17.json` + `../../scripts/verify/product_source_repair_map.py` | Present, source-backed repair queue | Maps every Odoo-export product to `purchasable_product`, reports 53/53 source rows found, and assigns the remaining 35 products to focused repair lanes instead of treating legacy holds as a product model. |
 | Simple purchasable rehearsal | `simple-purchasable-rehearsal-2026-05-17.md` + `simple-purchasable-rehearsal-2026-05-17.json` + `../../scripts/verify/simple_purchasable_rehearsal_contract.py` | Present, rollback-safe backend proof | Proves the four simple repair-lane products can preserve source-backed prices and 33 sale SKU lines through Sales Order and Sales Invoice when temporarily treated as checkout inside one transaction. |
 | Simple purchasable browser proof | `simple-purchasable-browser-proof-2026-05-17.md` + `simple-purchasable-browser-proof-2026-05-17.json` + `../../scripts/verify/simple_purchasable_browser_proof.py` | Present, local-only browser proof | Proves the same four products pass desktop/mobile product pages, cart, and checkout preview after temporary local opening, then verifies local contracts and ecommerce pause are restored. |
@@ -270,24 +274,21 @@ behavior, owner approval, or staging/live exposure.
 Native ERPNext/Frappe can receive the ecommerce shop meaning safely when the
 `locally_twisted` contract layer stays in charge: ProductPatternContract,
 Website Item page/lane fields, versioned line payload fields, source-backed
-dependency/add-on/pricing/media services, held-product fail-closed bridges,
-fail-loud verifiers, and scoped import guards. As of the 2026-05-12 closeout,
-local backend wiring, catalog/import/pricing, media readiness, storefront
-product UX/nav/search, homepage verifier alignment, and runner wrapper lanes
-are green. The local system has 53 published priced Website Items, 18
-direct-checkout products, and 35 blocked-until-certified products that fail
-closed until their source, pricing, media, UI, and checkout cascades are proven.
-The complex-checkout scaffold now splits those 35 into 4 simple-axis
-purchasable rehearsal candidates, 6 multi-color UI cases, 20 add-on/conditional
-blocked products, and 5 source/backend review products. The staff blueprint
-slice now lets employees define new customizable products in ERPNext locally,
-preview/apply them unpublished, and prove one fixed-price blueprint add-on
-cascade. This is local ecommerce architecture/import/authoring proof, not final
-live cutover approval. Remaining launch gates are Frappe Cloud staging/source
-freeze, Cloudflare/DNS, live Stripe/site config/webhook, legal or policy
-approvals where needed, one intentional low-risk live payment test, and final
-real catalog approval if the local product set is to become public catalog
-truth.
+dependency/add-on/pricing/media services, fail-loud verifiers, and scoped
+import guards. As of the 2026-05-17 closeout, local backend wiring,
+catalog/import/pricing, media primary-image readiness, storefront product UX,
+cart/checkout preview, and runner wrapper lanes are green for all 53
+Odoo-imported products as sellable checkout targets. The local system has 53
+published priced Website Items, 53 checkout-allowed product pages, 0 excluded
+Odoo products, and 290 priced sale units. The staff blueprint slice still lets
+employees define new customizable products in ERPNext locally, preview/apply
+them unpublished, and prove fixed-price blueprint add-on cascades. This is
+local ecommerce architecture/import/authoring proof, not final live cutover
+approval. Remaining launch gates are GL local acceptance, Frappe Cloud
+staging/source freeze, Cloudflare/DNS, live Stripe/site config/webhook, legal
+or policy approvals where needed, one intentional low-risk live payment test,
+and final real catalog approval if the local product set is to become public
+catalog truth.
 
 
 ## Pre-Phase-5 hygiene verification (2026-05-10 18:xx MDT)
@@ -300,7 +301,7 @@ Parent reran the Phase 1-4 owned gates after documentation cleanup and stale ign
 - `python scripts/verify/checkout_fulfillment_contract.py` PASS; rollback confirmed.
 - `python scripts/verify/payment_cascade_contract.py` PASS; rollback confirmed.
 - `python scripts/verify/customer_note_checkout_preservation_contract.py` PASS; survivor counts stayed zero.
-- `python scripts/verify/checkout_product_family_contract.py --report workstreams/ecommerce-audit/2026-05-10-2330-phase-1-4-shop-audit/checkout-product-family-all-skus-final.json` PASS; current all-SKU proof reports 15 checkout families/pages, 47 enabled sale SKUs, 39 add-on rows, 86 Sales Order/Sales Invoice rows, rollback clean.
+- `python scripts/verify/checkout_product_family_contract.py --report workstreams/ecommerce-audit/2026-05-10-2330-phase-1-4-shop-audit/checkout-product-family-all-skus-final.json` PASS; historical all-SKU fixture proof reports 15 checkout families/pages, 47 enabled sale SKUs, 39 add-on rows, 86 Sales Order/Sales Invoice rows, rollback clean. Current product scope is the 2026-05-17 all-Odoo proof.
 - `python scripts/verify/quote_event_checkout_boundary_contract.py --report output/phase-4-quote-event-checkout-boundary-contract-20260510.json` PASS; generated JSON matched durable workstream copy, then the ignored output duplicate was removed.
 
 Current durable JSON evidence remains only under this workstream directory. Ignored `output/phase-*20260510.json` duplicates are regenerated proof artifacts, not source, and were deleted after equality checks.
@@ -314,12 +315,12 @@ Current durable JSON evidence remains only under this workstream directory. Igno
 5. Rerun the readiness verifier immediately before any import/public launch decision in the same intended ecommerce mode.
 6. Run Lane F/final synthesis only after version mismatches and final launch gates are either resolved or explicitly labeled.
 7. Do not delete/reimport products, click admin-like Odoo mutation paths, or mutate authenticated systems for this audit without a fresh rollback/preflight.
-8. Do not use the May 10 candidate/cut-plan artifacts as the final product model. Use `product-source-repair-map-2026-05-17.md` for current product-scope repair work; build held products toward purchasable checkout only after their repair lane gates pass.
-9. Count precisely: the first checkout tranche is 15 Website Item families/pages, not 15 sale SKUs. Current fixture proof covers 47 enabled sale SKUs and 86 Sales Order/Sales Invoice rows. Recommended public shelf remains 13 bouquet-family pages only until seasonal/business/media/price approval; Easter Balloon Cups and Mother's Day are architecture-verified but held unless timely.
+8. Do not use the May 10 candidate/cut-plan artifacts as the final product model. Use `odoo-sellable-product-reimport-2026-05-17.md` and `product-source-repair-map-2026-05-17.md` for current product-scope work; all 53 Odoo products target purchasable behavior locally.
+9. Count precisely: the current local proof is 53 Website Item product pages, 0 exclusions, and 290 priced sale units. The older 15-family/47-SKU and 18-family tranche counts are historical.
 10. Treat the focused customer-note verifier as Phase 1 complete: `customer_note_checkout_preservation_contract.py` now passes in rollback-safe mode.
 11. Use `ready-to-order-ecommerce-plan-deepen-2026-05-10.md`, `ready-to-order-ecommerce-goal-progress-2026-05-10.md`, `phase-5-delivery-payment-operator-packet-2026-05-10.md`, `product-import-hardening-gate-2026-05-11.md`, and `../payment-portal-live-cutover-checklist-2026-05-11.md` as active sequencing gates: Phases 1-5 are locally verifier-backed; import and live payment are the remaining backend cutover gates.
 12. Treat `ready-to-order-product-cut-plan-2026-05-10.md` as historical launch-shelf evidence, not the business catalog model. There are no business quote-first products; complex/event/custom products are blocked or hidden only until source-backed purchasable behavior is implemented and verified.
-13. Do not treat the current 53 products as final catalog truth. Use them only as fixture products until a future controlled purge/reupload/import audit proves the schema, logic, cascading information, and automations repopulate correctly.
+13. Do not treat the current 53-product local proof as live approval. GL still needs local testing, then a separate staging/live release packet must prove Frappe Cloud, Stripe, DNS, and real payment gates.
 14. Continue product-authoring work under the live-exposure lock. Use
     `product-blueprint-authoring-2026-05-14.md` and
     `capabilities/recipes/erpnext-product-blueprint-authoring.md`; do not cite

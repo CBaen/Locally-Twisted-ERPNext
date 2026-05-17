@@ -40,8 +40,6 @@ CHECKOUT_BLOCKING_PATTERNS = {
     "large_single_choice_color",
     "multi_color_recipes",
     "conditional_pricing",
-    "freeform_customer_text",
-    "add_ons",
 }
 
 
@@ -112,9 +110,11 @@ class ERPNextProductPatternReport:
         lane_counts = Counter(_website_lane(row.website_item) for row in self.rows)
         pattern_counts: Counter[str] = Counter()
         blocker_counts: Counter[str] = Counter()
+        deferred_control_counts: Counter[str] = Counter()
         for row in self.rows:
             pattern_counts.update(row.patterns)
             blocker_counts.update(row.checkout_eligibility.get("blocking_reasons") or [])
+            deferred_control_counts.update(row.checkout_eligibility.get("deferred_control_reasons") or [])
         inventory_failures = self.inventory_failures()
         checkout_gate_failures = self.checkout_gate_failures()
         return {
@@ -126,6 +126,7 @@ class ERPNextProductPatternReport:
             "website_lane_counts": dict(sorted(lane_counts.items())),
             "pattern_counts": dict(sorted(pattern_counts.items())),
             "checkout_blocker_counts": dict(sorted(blocker_counts.items())),
+            "checkout_deferred_control_counts": dict(sorted(deferred_control_counts.items())),
             "explicit_checkout_products": lane_counts.get("checkout", 0),
             "direct_checkout_ready_products": capability_counts.get("direct_checkout_ready", 0),
             "quote_first_supported_products": capability_counts.get("quote_first_supported", 0),
@@ -204,11 +205,12 @@ class ERPNextProductPatternReport:
             f"- Source products checked: {summary['source_products']}",
             f"- Explicit checkout Website Items: {summary['explicit_checkout_products']}",
             f"- Direct-checkout ready by generic architecture: {summary['direct_checkout_ready_products']}",
-            f"- Quote-first supported by generic architecture: {summary['quote_first_supported_products']}",
+            f"- Internal hold supported by generic architecture: {summary['quote_first_supported_products']}",
             f"- Needs review or missing records: {summary['missing_or_needs_review_products']}",
             f"- Capability counts: {_format_counts(summary['capability_counts'])}",
             f"- Website lane counts: {_format_counts(summary['website_lane_counts'])}",
             f"- Checkout blocker counts: {_format_counts(summary['checkout_blocker_counts'])}",
+            f"- Deferred checkout-control counts: {_format_counts(summary['checkout_deferred_control_counts'])}",
             "",
             "## Server-Side Boundary",
             "",
@@ -491,6 +493,7 @@ def _checkout_eligibility(
 ) -> dict[str, Any]:
     patterns = set(product.get("patterns") or [])
     blocking = []
+    deferred_controls = []
     missing_mapper_contract = (
         not patterns
         or not product.get("source_integrity")
@@ -503,10 +506,10 @@ def _checkout_eligibility(
     if not template:
         blocking.append("missing_template_item")
     source_axes = _source_axes(product)
+    unpriced_add_on_axes = _unpriced_add_on_axes(source_axes.get("add_on_axes") or [], add_on_price_by_item)
+    if unpriced_add_on_axes and _website_lane(website_item) == "checkout":
+        deferred_controls.append("unpriced_add_on_controls_hidden_until_mapped")
     if _website_lane(website_item) == "checkout" and patterns & CHECKOUT_BLOCKING_PATTERNS:
-        unpriced_add_on_axes = _unpriced_add_on_axes(source_axes.get("add_on_axes") or [], add_on_price_by_item)
-        if unpriced_add_on_axes:
-            blocking.append("priced_add_on_line_contract_needed")
         if (
             "conditional_pricing" in patterns
             and live_coverage.get("coverage_status") not in {"covered", "representative_item_required"}
@@ -517,10 +520,10 @@ def _checkout_eligibility(
             line_fields,
         ):
             blocking.append("multi_color_recipe_configuration_contract_needed")
-        if "freeform_customer_text" in patterns and source_axes.get("freeform_customer_text_axes"):
-            blocking.append("checkout_customization_contract_needed")
+    if "freeform_customer_text" in patterns and source_axes.get("freeform_customer_text_axes"):
+        deferred_controls.append("freeform_customer_text_controls_hidden_until_validated")
     if source_axes["review_only_axes"] and _website_lane(website_item) == "checkout":
-        blocking.append("review_only_add_on_checkout_contract_needed")
+        deferred_controls.append("review_only_add_on_controls_hidden_until_mapped")
     if representative is None and _website_lane(website_item) == "checkout":
         blocking.append("missing_representative_priced_item")
     if live_coverage.get("coverage_status") == "partial" and _website_lane(website_item) == "checkout":
@@ -535,6 +538,7 @@ def _checkout_eligibility(
         "line_configuration_fields_ready": not missing_line_fields,
         "missing_line_fields": missing_line_fields,
         "blocking_reasons": sorted(set(blocking)),
+        "deferred_control_reasons": sorted(set(deferred_controls)),
         "eligible_for_direct_checkout_by_generic_contract": not blocking and _website_lane(website_item) == "checkout",
     }
 

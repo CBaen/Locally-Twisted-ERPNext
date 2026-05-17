@@ -57,6 +57,7 @@ from locally_twisted.catalog_import_subset import (
 from locally_twisted.catalog_contract import build_product_page_contract
 from locally_twisted.catalog_variant_rules import (
     dedupe_required_variant_rows,
+    project_required_variant_combo,
     normalize_variant_value,
     required_variant_attribute_names,
 )
@@ -93,7 +94,35 @@ def _load_inputs():
     slug_to_group_raw = json.loads((base / "slug_to_group.json").read_text(encoding="utf-8"))
     slug_to_group = {k: v for k, v in slug_to_group_raw.items() if not k.startswith("_")}
     normalize_map = json.loads((base / "value_normalize_map.json").read_text(encoding="utf-8"))
-    return catalog, slug_to_group, normalize_map, base / "images"
+    price_enrichment = _load_price_enrichment(base)
+    return catalog, slug_to_group, normalize_map, base / "images", price_enrichment
+
+
+def _load_price_enrichment(base: Path) -> dict[str, dict[tuple[tuple[str, str], ...], float]]:
+    """Load approved sale-unit prices staged beside the source catalog."""
+    candidates = (
+        base / "product_page_price_enrichment_candidates.json",
+        base / "21-product-page-price-enrichment-candidates.json",
+    )
+    source = next((path for path in candidates if path.exists()), None)
+    if not source:
+        return {}
+    artifact = json.loads(source.read_text(encoding="utf-8"))
+    result: dict[str, dict[tuple[tuple[str, str], ...], float]] = {}
+    for product in artifact.get("products") or []:
+        slug = str(product.get("slug") or "").strip()
+        if not slug:
+            continue
+        prices: dict[tuple[tuple[str, str], ...], float] = {}
+        for unit in product.get("sale_units") or []:
+            chosen = unit.get("chosen_price")
+            if chosen in (None, ""):
+                continue
+            combo = unit.get("projected_required_combo") or {}
+            prices[_combo_key(combo)] = float(chosen)
+        if prices:
+            result[slug] = prices
+    return result
 
 
 # ── Helpers ──────────────────────────────────────────────────────────
@@ -182,6 +211,19 @@ def _upsert_item_price(item_code: str, price: float):
         "selling": 1,
     })
     doc.insert(ignore_permissions=True)
+
+
+def _combo_key(combo: dict[str, str] | None) -> tuple[tuple[str, str], ...]:
+    return tuple(sorted((str(axis), str(value)) for axis, value in (combo or {}).items()))
+
+
+def _price_for_sale_unit(
+    prod: dict,
+    combo: dict[str, str],
+    price_enrichment: dict[str, dict[tuple[tuple[str, str], ...], float]],
+) -> float | None:
+    prices = price_enrichment.get(str(prod.get("slug") or "")) or {}
+    return prices.get(_combo_key(combo))
 
 
 def _upsert_template_item(prod: dict, item_group: str, file_url: str | None) -> str:
@@ -411,7 +453,13 @@ def _validate_destructive_guards(
     }
 
 
-def _seed_variants(template_code: str, prod: dict, normalize_map: dict, log) -> int:
+def _seed_variants(
+    template_code: str,
+    prod: dict,
+    normalize_map: dict,
+    price_enrichment: dict[str, dict[tuple[tuple[str, str], ...], float]],
+    log,
+) -> int:
     """Generate Item Variants for every valid combination Odoo encoded.
 
     Each variant gets its own Item Price on Standard Selling from the scraped
@@ -438,7 +486,9 @@ def _seed_variants(template_code: str, prod: dict, normalize_map: dict, log) -> 
             existing = get_variant(template_code, args=args)
         except Exception:
             existing = None
-        variant_price = v.get("erpnext_variant_price", v.get("price", base_price))
+        variant_price = _price_for_sale_unit(prod, args, price_enrichment)
+        if variant_price is None:
+            variant_price = v.get("erpnext_variant_price", v.get("price", base_price))
         if existing:
             _upsert_item_price(existing, variant_price)
             continue
@@ -499,7 +549,7 @@ def execute(
 
     Returns: a summary string.
     """
-    catalog, slug_to_group, normalize_map, images_dir = _load_inputs()
+    catalog, slug_to_group, normalize_map, images_dir, price_enrichment = _load_inputs()
     guard = _validate_destructive_guards(
         destructive=destructive,
         backup_path=backup_path,
@@ -576,13 +626,14 @@ def execute(
             # If template has variants, do NOT create Item Price on it (validate_item_template throws)
             has_attrs = bool(prod.get("attributes"))
             if not has_attrs:
-                _upsert_item_price(template, prod.get("base_price"))
+                template_price = _price_for_sale_unit(prod, {}, price_enrichment)
+                _upsert_item_price(template, template_price if template_price is not None else prod.get("base_price"))
 
             web_item = _upsert_website_item(template, prod, group, file_url, contract)
 
             variants_created = 0
             if has_attrs:
-                variants_created = _seed_variants(template, prod, normalize_map, print)
+                variants_created = _seed_variants(template, prod, normalize_map, price_enrichment, print)
                 _rebuild_variant_cache(template)
 
             summary["products_seeded"] += 1

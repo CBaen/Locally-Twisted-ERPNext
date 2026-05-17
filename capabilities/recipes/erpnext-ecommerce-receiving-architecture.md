@@ -60,27 +60,34 @@ OpenClaw cockpit witness:
   config/webhook, legal/policy approval where needed, one intentional live
   payment test, and final real catalog approval if the local products become
   public catalog truth.
-- 2026-05-12 complex-checkout scaffold: local/source-only planning is now
-  executable through `scripts/verify/complex_checkout_scaffold.py`. It maps the
-  53 products into 18 direct-checkout regression guards, 4 simple-axis
-  lane-flip candidates, 6 multi-color UI cases, 20 add-on/conditional blocked
-  products, and 5 needs-review/missing products. This report supersedes older
-  heuristic quote-first flip lists and still authorizes no live update.
+- 2026-05-17 all-Odoo sellable reimport: local/source proof now treats every
+  Odoo-imported product as a sellable product target. Current local proof is
+  53 included products, 0 exclusions, 290 priced sale units, 53 checkout-allowed
+  product pages, and all 53 live Website Item routes browser-proved in two
+  batches under the cart 50-line cap. `lt_ecommerce_paused=1` was restored.
+  Handoff: `workstreams/ecommerce-audit/odoo-sellable-product-reimport-2026-05-17.md`.
+- 2026-05-17 browser proof route authority: use the import manifest for
+  included-product authority and the clean Website Item snapshot for public
+  route authority. Planned import routes can drift from current Website Item
+  routes; browser verifiers must join those sources by item code and fail
+  loudly if the join is missing.
+- 2026-05-17 complex-checkout scaffold after reimport: local/source planning
+  is executable through `scripts/verify/complex_checkout_scaffold.py`. It now
+  maps the 53 products into 53 direct checkout regression guards, 0 simple
+  lane-flip candidates, 0 complex UI blockers, 0 add-on/conditional product
+  blockers, and 0 needs-review/missing products. Review-only add-on controls
+  can remain hidden until mapped without making the base product non-sellable.
 - 2026-05-17 product-lane correction: there are no business quote-first
   products. Legacy `quote_first` values are internal safety holds only; every
   real product targets purchasable behavior from Odoo export product details
   and pricing. If source data is unclear, repull or repair the import source
   rather than preserving a non-purchasable product category.
-- 2026-05-17 product-family certification: the current control artifacts are
-  `workstreams/ecommerce-audit/product-family-certification-truth-table-2026-05-17.md`
-  and `workstreams/ecommerce-audit/product-source-repair-map-2026-05-17.md`.
-  Current proof is tranche-based: 18 current backend checkout families remain
-  under regression guard; four simple products passed backend, browser, and
-  payment/customer-message cascade proof; six multi-color products passed
-  backend checkout/SO/SI rehearsal for 563 enabled color SKUs plus
-  desktop/mobile browser product/cart/checkout preview with 14 color drawer
-  proofs, but still need payment/customer-message, media behavior, and owner
-  approval.
+- 2026-05-17 product-family certification: the previous tranche artifacts are
+  historical. Current control is the all-Odoo sellable reimport handoff plus
+  `workstreams/ecommerce-audit/product-source-repair-map-2026-05-17.md`, which
+  now reports 53 source export rows found and 53 certified checkout products.
+  Extra images and review-only add-on controls still need separate approval
+  before those optional surfaces are exposed.
 - 2026-05-12 backend product-page architecture contract:
   `lt-product-page-architecture-contract-v1` is now the generic receiving
   architecture between ProductPatternContract/source semantics and product-page
@@ -216,10 +223,10 @@ As of 2026-05-10, the first backend preservation slice exists:
   `simple_product` or `complex_custom_product` with plain labels. Current
   source evidence classifies 15 Ready-to-order page candidates and 38 Custom
   quote page candidates while still blocking import.
-- Live price-readiness now has a separate gate. Current ERPNext Item Price
-  coverage passes for checkout-classified page contracts: 15 Ready-to-order
-  Website Item families/pages and 47 enabled sale SKUs. Keep those counts
-  separate in handoffs; 15 is not the SKU count.
+- Live price-readiness now has a separate gate. The current local full-import
+  contract covers all 53 Odoo-imported Website Item product pages as sellable
+  checkout targets with 0 exclusions and 290 priced sale units. Older 15-family
+  / 47-SKU proof is historical fixture evidence, not current product scope.
 - Source price-enrichment now has a separate candidate gate. Current coverage
   preserves 10,828 source variant rows and collapses them into 290 / 290
   expected import sale units: 17 source base-price units and 273
@@ -243,9 +250,10 @@ As of 2026-05-10, the first backend preservation slice exists:
   ERPNext refuses template Items on Quotation rows; the requested product page
   still lives in LT custom fields and JSON.
 - The checkout product-family contract is all-enabled-SKU proof, not a
-  representative sample. Current fixture coverage is 15 checkout Website Item
-  families/pages, 47 enabled sale SKUs, 39 bouquet foil-number add-on rows,
-  and 86 Sales Order/Sales Invoice rows with rollback clean.
+  representative sample. Current local product scope is the 2026-05-17
+  all-Odoo proof: 53 Website Item product pages, 0 exclusions, and 290 priced
+  sale units. The older 15-family / 47-SKU / 86-row rollback proof remains
+  historical fixture evidence for line-level cascade behavior.
 - The confirmed `foil_number` add-on proof slice exists: `ADDON-FOIL-NUMBER`
   is code-owned, priced through ERPNext Item Price, expanded into its own Sales
   Order Item line, copied to Sales Invoice Item, and preserved in the base

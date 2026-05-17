@@ -1,8 +1,8 @@
 """Complex product checkout scaffold for ERPNext ecommerce.
 
 This module is pure/data-oriented. It translates the current
-ProductPatternContract report into the next implementation map for products
-that are not yet safe direct-checkout pages.
+ProductPatternContract report into the checkout regression and enhancement map
+for Odoo-imported products.
 """
 
 from __future__ import annotations
@@ -15,7 +15,7 @@ from typing import Any, Literal
 SCHEMA_VERSION = "lt-complex-checkout-scaffold-v1"
 SOURCE_SCHEMA_VERSION = "lt-erpnext-product-pattern-contract-v1"
 EXPECTED_SOURCE_PRODUCTS = 53
-EXPECTED_DIRECT_CHECKOUT_PRODUCTS = 18
+EXPECTED_DIRECT_CHECKOUT_PRODUCTS = 53
 
 ScaffoldStage = Literal[
     "direct_checkout_regression_guard",
@@ -90,8 +90,8 @@ class ComplexCheckoutScaffoldReport:
             "destructive_allowed": False,
             "live_site_update_allowed": False,
             "purpose": (
-                "Local ERPNext ecommerce scaffold for complex product-page checkout UI, "
-                "server contracts, lane-flip proof order, and regression guards."
+            "Local ERPNext ecommerce scaffold for product-page checkout regression guards, "
+            "deferred enhancement controls, server contracts, and proof order."
             ),
             "ok": not self.contract_failures,
             "summary": self.summary(),
@@ -444,7 +444,11 @@ def _contract_failures(
             failures.append(f"{row.slug} missing multi-color browser proof gate")
         if _row_requires_add_on_or_conditional(row) and row.scaffold_stage == "simple_axis_lane_flip_candidate":
             failures.append(f"{row.slug} cannot be a simple lane-flip candidate while add-on/conditional work remains")
-        if row.slug == "classic-arch" and row.proof_ladder_stage != "06_classic_arch_last":
+        if (
+            row.slug == "classic-arch"
+            and row.scaffold_stage != "direct_checkout_regression_guard"
+            and row.proof_ladder_stage != "06_classic_arch_last"
+        ):
             failures.append("classic-arch must remain the last stress product in the proof ladder")
     return failures
 
@@ -517,11 +521,11 @@ def _proof_ladder_stage(
 
 def _proof_ladder() -> dict[str, str]:
     return {
-        "01_preserve_existing_direct_checkout": "Keep the current 18 direct-checkout products green.",
-        "02_simple_axis_lane_flip_rehearsal": "Locally prove simple quote-first products with no add-on or color-recipe work.",
+        "01_preserve_existing_direct_checkout": "Keep all 53 Odoo-imported checkout products green.",
+        "02_simple_axis_lane_flip_rehearsal": "Locally prove any internal-hold product before checkout exposure.",
         "03_first_multi_color_recipe_case": "Build and prove one multi-color recipe product before broader rollout.",
         "04_classic_column_before_arch": "Prove the column-shaped complex product path before the full arch path.",
-        "05_add_on_or_conditional_after_mapping": "Build approved add-on and conditional pricing contracts only after mapping is explicit.",
+        "05_add_on_or_conditional_after_mapping": "Build approved add-on and conditional pricing controls only after mapping is explicit.",
         "06_classic_arch_last": "Use Classic Arch as the final stress case because design-dependent color limits are hardest.",
         "07_review_or_catalog_repair": "Repair missing/needs-review records before they enter checkout planning.",
     }

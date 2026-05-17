@@ -2,8 +2,8 @@
 
 This script does not connect to ERPNext and does not delete anything. It uses the
 snapshot as evidence to identify product-catalog rows in the corrected import
-subset. Variants and quote-first products are allowed when the current backend
-schema can preserve their meaning.
+subset. Odoo-imported products are product targets; variants and high-variant
+products are allowed when the current backend schema can preserve their meaning.
 """
 
 from __future__ import annotations
@@ -162,7 +162,7 @@ def _import_subset() -> dict:
         raise SystemExit("FATAL: " + "; ".join(validation_errors))
 
     return {
-        "rule": "include products that fit the current ERPNext backend schema; variants are allowed; exclude owner-named unsupported structures and proven schema/backend blockers",
+        "rule": "include Odoo-imported products that fit the current ERPNext backend schema; variants and high-variant products are allowed; exclude only proven schema/backend blockers",
         "included_slugs": included,
         "included_count": len(included),
         "excluded_products": excluded,
@@ -185,7 +185,7 @@ def _write_report(report: dict) -> None:
         f"- Generated: `{report['generated_at']}`",
         f"- Snapshot: `{report['snapshot']}`",
         f"- Import subset rule: {subset['rule']}.",
-        "- Variants, cups, and high-variant products are not blanket exclusions.",
+        "- Variants, cups, and high-variant products are products and are not blanket exclusions.",
         "",
         "## Import source subset",
         "",
@@ -228,7 +228,7 @@ def _write_report(report: dict) -> None:
             "",
             "## Safety interpretation",
             "",
-            "This dry run defines only the product-catalog-owned demolition set for the corrected import subset. Excluded source products and service items are held out of destructive scope. It does not include Customers, Leads, Quotations, Sales Orders, Sales Invoices, Payment records, tax setup, workspaces, fixtures, or non-catalog business records.",
+            "This dry run defines only the product-catalog-owned demolition set for the corrected import subset. Service items remain protected. It does not include Customers, Leads, Quotations, Sales Orders, Sales Invoices, Payment records, tax setup, workspaces, fixtures, or non-catalog business records.",
             "",
             "Before real destructive mode, rerun against live DB with backup/export and exact allowlist confirmation.",
             "",

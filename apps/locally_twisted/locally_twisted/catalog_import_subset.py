@@ -11,13 +11,7 @@ from collections import Counter
 from typing import Any
 
 
-OWNER_EXPLICIT_EXCLUDED_SLUGS = {
-    "classic-column": "Classic Column",
-    "classic-arch": "Classic Arch",
-    "classic-organic-arch": "Classic Organic Arch",
-    "classic-organic-columns": "Classic Organic Columns",
-    "classic-organic-balloon-garland": "Classic Garland",
-}
+OWNER_EXPLICIT_EXCLUDED_SLUGS: dict[str, str] = {}
 
 OWNER_MUST_WORK_SLUGS = {
     "graduation-grab-n-go": "Graduation Deliveries",

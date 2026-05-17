@@ -4,7 +4,7 @@
   "live_site_update_allowed": false,
   "metadata": {
     "business_rule": "Products target purchasable checkout; legacy quote_first values are internal holds.",
-    "generated_at": "2026-05-17T21:23:02Z",
+    "generated_at": "2026-05-17T23:10:57Z",
     "price_enrichment": "audits\\odoo-erpnext-migration-audit-2026-05-08\\21-product-page-price-enrichment-candidates.json",
     "scaffold": "output\\complex-checkout-scaffold.json",
     "source_catalog": "_resources\\odoo-live\\catalog.json"
@@ -12,11 +12,9 @@
   "products": [
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "quote_first",
-      "notes": [
-        "legacy internal hold state; not a business product lane"
-      ],
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
+      "notes": [],
       "odoo_id": "14",
       "price_evidence": {
         "candidate_units": 1,
@@ -26,14 +24,12 @@
         "source_base_units": 1,
         "source_resolver_units": 0
       },
-      "repair_lane": "multi_color_recipe_checkout_build",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "keep multi_color_purchasable_rehearsal_contract green",
-        "keep multi_color_purchasable_browser_proof green",
-        "payment/receipt/customer-message cascade proof",
-        "final owner/product-scope approval before customer exposure"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "multi_color_recipe_ui_required",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "baby-shower-combination-photo-opt",
       "source_attributes": [
         "latex colors"
@@ -49,10 +45,9 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "quote_first",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
       "notes": [
-        "legacy internal hold state; not a business product lane",
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
       "odoo_id": "19",
@@ -64,13 +59,12 @@
         "source_base_units": 0,
         "source_resolver_units": 0
       },
-      "repair_lane": "add_on_conditional_pricing_build",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "explicit add-on or conditional pricing contract",
-        "ERPNext price provenance",
-        "checkout/payment/invoice/receipt cascade proof"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "classic-organic-balloon-garland",
       "source_attributes": [
         "Garland Length",
@@ -87,10 +81,9 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "quote_first",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
       "notes": [
-        "legacy internal hold state; not a business product lane",
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
       "odoo_id": "21",
@@ -102,13 +95,12 @@
         "source_base_units": 0,
         "source_resolver_units": 0
       },
-      "repair_lane": "add_on_conditional_pricing_build",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "explicit add-on or conditional pricing contract",
-        "ERPNext price provenance",
-        "checkout/payment/invoice/receipt cascade proof"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "basketball-arch",
       "source_attributes": [
         "Arch Size"
@@ -124,11 +116,9 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "quote_first",
-      "notes": [
-        "legacy internal hold state; not a business product lane"
-      ],
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
+      "notes": [],
       "odoo_id": "22",
       "price_evidence": {
         "candidate_units": 1,
@@ -138,14 +128,12 @@
         "source_base_units": 1,
         "source_resolver_units": 0
       },
-      "repair_lane": "multi_color_recipe_checkout_build",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "keep multi_color_purchasable_rehearsal_contract green",
-        "keep multi_color_purchasable_browser_proof green",
-        "payment/receipt/customer-message cascade proof",
-        "final owner/product-scope approval before customer exposure"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "multi_color_recipe_ui_required",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "number-balloon-columns",
       "source_attributes": [
         "Number colors",
@@ -162,10 +150,9 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "quote_first",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
       "notes": [
-        "legacy internal hold state; not a business product lane",
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
       "odoo_id": "30",
@@ -177,13 +164,12 @@
         "source_base_units": 0,
         "source_resolver_units": 0
       },
-      "repair_lane": "add_on_conditional_pricing_build",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "explicit add-on or conditional pricing contract",
-        "ERPNext price provenance",
-        "checkout/payment/invoice/receipt cascade proof"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "easter-balloon-arch-bunny-ear",
       "source_attributes": [
         "Arch Size"
@@ -232,10 +218,9 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "quote_first",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
       "notes": [
-        "legacy internal hold state; not a business product lane",
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
       "odoo_id": "39",
@@ -247,13 +232,12 @@
         "source_base_units": 0,
         "source_resolver_units": 0
       },
-      "repair_lane": "add_on_conditional_pricing_build",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "explicit add-on or conditional pricing contract",
-        "ERPNext price provenance",
-        "checkout/payment/invoice/receipt cascade proof"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "halloween-arch",
       "source_attributes": [
         "Arch Size",
@@ -270,10 +254,9 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "quote_first",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
       "notes": [
-        "legacy internal hold state; not a business product lane",
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
       "odoo_id": "45",
@@ -285,11 +268,12 @@
         "source_base_units": 0,
         "source_resolver_units": 0
       },
-      "repair_lane": "simple_purchasable_rehearsal",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "final owner/product-scope approval before customer exposure"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "simple_axis_lane_flip_candidate",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "large-head-missionary",
       "source_attributes": [
         "Hair color",
@@ -307,10 +291,9 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "quote_first",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
       "notes": [
-        "legacy internal hold state; not a business product lane",
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
       "odoo_id": "52",
@@ -322,13 +305,12 @@
         "source_base_units": 0,
         "source_resolver_units": 0
       },
-      "repair_lane": "add_on_conditional_pricing_build",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "explicit add-on or conditional pricing contract",
-        "ERPNext price provenance",
-        "checkout/payment/invoice/receipt cascade proof"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "premium-organic-garland",
       "source_attributes": [
         "Garland Length",
@@ -345,10 +327,9 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "quote_first",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
       "notes": [
-        "legacy internal hold state; not a business product lane",
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
       "odoo_id": "53",
@@ -360,13 +341,12 @@
         "source_base_units": 0,
         "source_resolver_units": 0
       },
-      "repair_lane": "add_on_conditional_pricing_build",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "explicit add-on or conditional pricing contract",
-        "ERPNext price provenance",
-        "checkout/payment/invoice/receipt cascade proof"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "premium-organic-arch",
       "source_attributes": [
         "Add ons",
@@ -384,10 +364,9 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "quote_first",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
       "notes": [
-        "legacy internal hold state; not a business product lane",
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
       "odoo_id": "54",
@@ -399,13 +378,12 @@
         "source_base_units": 0,
         "source_resolver_units": 0
       },
-      "repair_lane": "add_on_conditional_pricing_build",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "explicit add-on or conditional pricing contract",
-        "ERPNext price provenance",
-        "checkout/payment/invoice/receipt cascade proof"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "pemium-organic-column",
       "source_attributes": [
         "Add ons",
@@ -423,10 +401,9 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "quote_first",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
       "notes": [
-        "legacy internal hold state; not a business product lane",
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
       "odoo_id": "55",
@@ -438,13 +415,12 @@
         "source_base_units": 0,
         "source_resolver_units": 0
       },
-      "repair_lane": "add_on_conditional_pricing_build",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "explicit add-on or conditional pricing contract",
-        "ERPNext price provenance",
-        "checkout/payment/invoice/receipt cascade proof"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "pride-progress-rainbow-balloon-arch",
       "source_attributes": [
         "Arch Size"
@@ -460,10 +436,9 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "quote_first",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
       "notes": [
-        "legacy internal hold state; not a business product lane",
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
       "odoo_id": "57",
@@ -475,13 +450,12 @@
         "source_base_units": 0,
         "source_resolver_units": 0
       },
-      "repair_lane": "add_on_conditional_pricing_build",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "explicit add-on or conditional pricing contract",
-        "ERPNext price provenance",
-        "checkout/payment/invoice/receipt cascade proof"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "classic-arch",
       "source_attributes": [
         "Arch Size",
@@ -500,10 +474,9 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "quote_first",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
       "notes": [
-        "legacy internal hold state; not a business product lane",
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
       "odoo_id": "58",
@@ -515,13 +488,12 @@
         "source_base_units": 0,
         "source_resolver_units": 0
       },
-      "repair_lane": "add_on_conditional_pricing_build",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "explicit add-on or conditional pricing contract",
-        "ERPNext price provenance",
-        "checkout/payment/invoice/receipt cascade proof"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "classic-column",
       "source_attributes": [
         "Column Height",
@@ -539,10 +511,9 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "quote_first",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
       "notes": [
-        "legacy internal hold state; not a business product lane",
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
       "odoo_id": "65",
@@ -554,13 +525,12 @@
         "source_base_units": 0,
         "source_resolver_units": 0
       },
-      "repair_lane": "add_on_conditional_pricing_build",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "explicit add-on or conditional pricing contract",
-        "ERPNext price provenance",
-        "checkout/payment/invoice/receipt cascade proof"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "classic-organic-columns",
       "source_attributes": [
         "Column Height",
@@ -577,10 +547,9 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "quote_first",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
       "notes": [
-        "legacy internal hold state; not a business product lane",
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
       "odoo_id": "71",
@@ -592,13 +561,12 @@
         "source_base_units": 0,
         "source_resolver_units": 0
       },
-      "repair_lane": "add_on_conditional_pricing_build",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "explicit add-on or conditional pricing contract",
-        "ERPNext price provenance",
-        "checkout/payment/invoice/receipt cascade proof"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "baby-shower-garland",
       "source_attributes": [
         "Garland Length",
@@ -615,10 +583,9 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "quote_first",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
       "notes": [
-        "legacy internal hold state; not a business product lane",
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
       "odoo_id": "74",
@@ -630,13 +597,12 @@
         "source_base_units": 0,
         "source_resolver_units": 0
       },
-      "repair_lane": "add_on_conditional_pricing_build",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "explicit add-on or conditional pricing contract",
-        "ERPNext price provenance",
-        "checkout/payment/invoice/receipt cascade proof"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "balloon-drop",
       "source_attributes": [
         "Drop Size",
@@ -653,10 +619,9 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "quote_first",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
       "notes": [
-        "legacy internal hold state; not a business product lane",
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
       "odoo_id": "99",
@@ -668,13 +633,12 @@
         "source_base_units": 0,
         "source_resolver_units": 0
       },
-      "repair_lane": "add_on_conditional_pricing_build",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "explicit add-on or conditional pricing contract",
-        "ERPNext price provenance",
-        "checkout/payment/invoice/receipt cascade proof"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "classic-organic-arch",
       "source_attributes": [
         "Add ons",
@@ -1085,11 +1049,9 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "quote_first",
-      "notes": [
-        "legacy internal hold state; not a business product lane"
-      ],
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
+      "notes": [],
       "odoo_id": "126",
       "price_evidence": {
         "candidate_units": 1,
@@ -1099,14 +1061,12 @@
         "source_base_units": 1,
         "source_resolver_units": 0
       },
-      "repair_lane": "multi_color_recipe_checkout_build",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "keep multi_color_purchasable_rehearsal_contract green",
-        "keep multi_color_purchasable_browser_proof green",
-        "payment/receipt/customer-message cascade proof",
-        "final owner/product-scope approval before customer exposure"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "multi_color_recipe_ui_required",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "7-epic-column",
       "source_attributes": [
         "latex colors"
@@ -1122,10 +1082,9 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "quote_first",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
       "notes": [
-        "legacy internal hold state; not a business product lane",
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
       "odoo_id": "127",
@@ -1137,13 +1096,12 @@
         "source_base_units": 0,
         "source_resolver_units": 0
       },
-      "repair_lane": "add_on_conditional_pricing_build",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "explicit add-on or conditional pricing contract",
-        "ERPNext price provenance",
-        "checkout/payment/invoice/receipt cascade proof"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "organic-grab-n-go",
       "source_attributes": [
         "Garland Length",
@@ -1160,8 +1118,8 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "needs_review",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
       "notes": [
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
@@ -1174,13 +1132,12 @@
         "source_base_units": 0,
         "source_resolver_units": 0
       },
-      "repair_lane": "source_backend_review",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "source export meaning review",
-        "backend product type and buying path repair",
-        "price/media/checkout proof"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "needs_review_or_missing",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "birthday-deliveries",
       "source_attributes": [
         "Add Bouquet",
@@ -1234,10 +1191,9 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "quote_first",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
       "notes": [
-        "legacy internal hold state; not a business product lane",
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
       "odoo_id": "131",
@@ -1249,13 +1205,12 @@
         "source_base_units": 0,
         "source_resolver_units": 0
       },
-      "repair_lane": "add_on_conditional_pricing_build",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "explicit add-on or conditional pricing contract",
-        "ERPNext price provenance",
-        "checkout/payment/invoice/receipt cascade proof"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "star-column",
       "source_attributes": [
         "Color Palette",
@@ -1273,11 +1228,9 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "quote_first",
-      "notes": [
-        "legacy internal hold state; not a business product lane"
-      ],
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
+      "notes": [],
       "odoo_id": "132",
       "price_evidence": {
         "candidate_units": 1,
@@ -1287,14 +1240,12 @@
         "source_base_units": 1,
         "source_resolver_units": 0
       },
-      "repair_lane": "multi_color_recipe_checkout_build",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "keep multi_color_purchasable_rehearsal_contract green",
-        "keep multi_color_purchasable_browser_proof green",
-        "payment/receipt/customer-message cascade proof",
-        "final owner/product-scope approval before customer exposure"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "multi_color_recipe_ui_required",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "sleepy-baby-column",
       "source_attributes": [
         "latex colors"
@@ -1310,11 +1261,9 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "quote_first",
-      "notes": [
-        "legacy internal hold state; not a business product lane"
-      ],
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
+      "notes": [],
       "odoo_id": "133",
       "price_evidence": {
         "candidate_units": 1,
@@ -1324,14 +1273,12 @@
         "source_base_units": 1,
         "source_resolver_units": 0
       },
-      "repair_lane": "multi_color_recipe_checkout_build",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "keep multi_color_purchasable_rehearsal_contract green",
-        "keep multi_color_purchasable_browser_proof green",
-        "payment/receipt/customer-message cascade proof",
-        "final owner/product-scope approval before customer exposure"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "multi_color_recipe_ui_required",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "baby-table-decor",
       "source_attributes": [
         "Baby color"
@@ -1347,11 +1294,9 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "quote_first",
-      "notes": [
-        "legacy internal hold state; not a business product lane"
-      ],
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
+      "notes": [],
       "odoo_id": "134",
       "price_evidence": {
         "candidate_units": 1,
@@ -1361,13 +1306,12 @@
         "source_base_units": 1,
         "source_resolver_units": 0
       },
-      "repair_lane": "add_on_conditional_pricing_build",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "explicit add-on or conditional pricing contract",
-        "ERPNext price provenance",
-        "checkout/payment/invoice/receipt cascade proof"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "logo-3-layered-bouquet",
       "source_attributes": [
         "latex colors"
@@ -1383,10 +1327,9 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "quote_first",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
       "notes": [
-        "legacy internal hold state; not a business product lane",
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
       "odoo_id": "135",
@@ -1398,13 +1341,12 @@
         "source_base_units": 0,
         "source_resolver_units": 0
       },
-      "repair_lane": "add_on_conditional_pricing_build",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "explicit add-on or conditional pricing contract",
-        "ERPNext price provenance",
-        "checkout/payment/invoice/receipt cascade proof"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "6-color-rainbow-arch",
       "source_attributes": [
         "Arch Size"
@@ -1420,11 +1362,9 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "quote_first",
-      "notes": [
-        "legacy internal hold state; not a business product lane"
-      ],
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
+      "notes": [],
       "odoo_id": "137",
       "price_evidence": {
         "candidate_units": 1,
@@ -1434,11 +1374,12 @@
         "source_base_units": 1,
         "source_resolver_units": 0
       },
-      "repair_lane": "simple_purchasable_rehearsal",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "final owner/product-scope approval before customer exposure"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "simple_axis_lane_flip_candidate",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "mothers-day-front-yard-7-column",
       "source_attributes": [],
       "source_export_found": true,
@@ -1452,8 +1393,8 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "needs_review",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
       "notes": [],
       "odoo_id": "140",
       "price_evidence": {
@@ -1464,13 +1405,12 @@
         "source_base_units": 1,
         "source_resolver_units": 0
       },
-      "repair_lane": "source_backend_review",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "source export meaning review",
-        "backend product type and buying path repair",
-        "price/media/checkout proof"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "needs_review_or_missing",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "marble-table-decor",
       "source_attributes": [
         "Orbz toppers"
@@ -1594,8 +1534,8 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "needs_review",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
       "notes": [],
       "odoo_id": "144",
       "price_evidence": {
@@ -1606,13 +1546,12 @@
         "source_base_units": 1,
         "source_resolver_units": 0
       },
-      "repair_lane": "source_backend_review",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "source export meaning review",
-        "backend product type and buying path repair",
-        "price/media/checkout proof"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "needs_review_or_missing",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "butterfly-get-well-bouquet-latex-free",
       "source_attributes": [
         "Plush add ons"
@@ -1628,8 +1567,8 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "needs_review",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
       "notes": [],
       "odoo_id": "146",
       "price_evidence": {
@@ -1640,13 +1579,12 @@
         "source_base_units": 1,
         "source_resolver_units": 0
       },
-      "repair_lane": "source_backend_review",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "source export meaning review",
-        "backend product type and buying path repair",
-        "price/media/checkout proof"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "needs_review_or_missing",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "bandage-get-well-bouquet-latex-free",
       "source_attributes": [
         "Plush add ons"
@@ -1662,8 +1600,8 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "needs_review",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
       "notes": [],
       "odoo_id": "147",
       "price_evidence": {
@@ -1674,13 +1612,12 @@
         "source_base_units": 1,
         "source_resolver_units": 0
       },
-      "repair_lane": "source_backend_review",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "source export meaning review",
-        "backend product type and buying path repair",
-        "price/media/checkout proof"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "needs_review_or_missing",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "shooting-star-get-well-bouquet-latex-free",
       "source_attributes": [
         "Plush add ons"
@@ -1731,11 +1668,9 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "quote_first",
-      "notes": [
-        "legacy internal hold state; not a business product lane"
-      ],
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
+      "notes": [],
       "odoo_id": "152",
       "price_evidence": {
         "candidate_units": 1,
@@ -1745,14 +1680,12 @@
         "source_base_units": 1,
         "source_resolver_units": 0
       },
-      "repair_lane": "multi_color_recipe_checkout_build",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "keep multi_color_purchasable_rehearsal_contract green",
-        "keep multi_color_purchasable_browser_proof green",
-        "payment/receipt/customer-message cascade proof",
-        "final owner/product-scope approval before customer exposure"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "multi_color_recipe_ui_required",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "classic-organic-for-easel",
       "source_attributes": [
         "latex colors"
@@ -1768,11 +1701,9 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "quote_first",
-      "notes": [
-        "legacy internal hold state; not a business product lane"
-      ],
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
+      "notes": [],
       "odoo_id": "158",
       "price_evidence": {
         "candidate_units": 1,
@@ -1782,11 +1713,12 @@
         "source_base_units": 1,
         "source_resolver_units": 0
       },
-      "repair_lane": "simple_purchasable_rehearsal",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "final owner/product-scope approval before customer exposure"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "simple_axis_lane_flip_candidate",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "easter-arch",
       "source_attributes": [],
       "source_export_found": true,
@@ -1831,10 +1763,9 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "quote_first",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
       "notes": [
-        "legacy internal hold state; not a business product lane",
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
       "odoo_id": "177",
@@ -1846,13 +1777,12 @@
         "source_base_units": 0,
         "source_resolver_units": 0
       },
-      "repair_lane": "add_on_conditional_pricing_build",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "explicit add-on or conditional pricing contract",
-        "ERPNext price provenance",
-        "checkout/payment/invoice/receipt cascade proof"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "large-garland",
       "source_attributes": [
         "Color Palette",
@@ -1869,10 +1799,9 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "quote_first",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
       "notes": [
-        "legacy internal hold state; not a business product lane",
         "uses live snapshot price evidence; review provenance before destructive reimport"
       ],
       "odoo_id": "178",
@@ -1884,13 +1813,12 @@
         "source_base_units": 0,
         "source_resolver_units": 0
       },
-      "repair_lane": "add_on_conditional_pricing_build",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "explicit add-on or conditional pricing contract",
-        "ERPNext price provenance",
-        "checkout/payment/invoice/receipt cascade proof"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "large-organic-column",
       "source_attributes": [
         "Color Palette",
@@ -1907,11 +1835,9 @@
     },
     {
       "business_target": "purchasable_product",
-      "current_customer_state": "blocked_until_certified",
-      "current_website_lane": "quote_first",
-      "notes": [
-        "legacy internal hold state; not a business product lane"
-      ],
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
+      "notes": [],
       "odoo_id": "179",
       "price_evidence": {
         "candidate_units": 1,
@@ -1921,11 +1847,12 @@
         "source_base_units": 1,
         "source_resolver_units": 0
       },
-      "repair_lane": "simple_purchasable_rehearsal",
+      "repair_lane": "certified_current_checkout",
       "required_next_gates": [
-        "final owner/product-scope approval before customer exposure"
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
       ],
-      "scaffold_stage": "simple_axis_lane_flip_candidate",
+      "scaffold_stage": "direct_checkout_regression_guard",
       "slug": "pride-arch",
       "source_attributes": [],
       "source_export_found": true,
@@ -1942,27 +1869,18 @@
   "read_only": true,
   "schema_version": "lt-product-source-repair-map-v1",
   "summary": {
-    "blocked_until_certified_products": 35,
-    "certified_checkout_products": 18,
+    "blocked_until_certified_products": 0,
+    "certified_checkout_products": 53,
     "current_customer_state_counts": {
-      "blocked_until_certified": 35,
-      "certified_checkout": 18
+      "certified_checkout": 53
     },
     "ok": true,
     "products": 53,
     "repair_lane_counts": {
-      "add_on_conditional_pricing_build": 20,
-      "certified_current_checkout": 18,
-      "multi_color_recipe_checkout_build": 6,
-      "simple_purchasable_rehearsal": 4,
-      "source_backend_review": 5
+      "certified_current_checkout": 53
     },
     "scaffold_stage_counts": {
-      "add_on_or_conditional_pricing_blocked": 20,
-      "direct_checkout_regression_guard": 18,
-      "multi_color_recipe_ui_required": 6,
-      "needs_review_or_missing": 5,
-      "simple_axis_lane_flip_candidate": 4
+      "direct_checkout_regression_guard": 53
     },
     "schema_version": "lt-product-source-repair-map-v1",
     "source_export_found": 53,

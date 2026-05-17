@@ -1,48 +1,28 @@
 # Locally Twisted - Coding Handoff
 
-Codex product certification update on 2026-05-17: GL corrected the ecommerce
-product model. There are no business "quote-first products"; every product
-targets purchasable behavior from Odoo export product details and pricing.
-Legacy `quote_first` values remain only as internal safety holds until source
-data, pricing, media, UI, cart, checkout, payment, invoice, receipt, and
-operator/customer payload preservation are proven. Current source-backed repair
-queue: `workstreams/ecommerce-audit/product-source-repair-map-2026-05-17.md`
-and verifier `python scripts/verify/product_source_repair_map.py`.
-First repair-lane proof now exists for the simple tranche:
-`workstreams/ecommerce-audit/simple-purchasable-rehearsal-2026-05-17.md`
-and verifier `python scripts/verify/simple_purchasable_rehearsal_contract.py`
-prove `large-head-missionary`, `mothers-day-front-yard-7-column`,
-`easter-arch`, and `pride-arch` can preserve source-backed prices and 33 sale
-SKU lines through Sales Order and Sales Invoice inside rollback. This is
-backend-only proof, not browser, payment, receipt, live, or owner approval.
-Browser proof also exists at
-`workstreams/ecommerce-audit/simple-purchasable-browser-proof-2026-05-17.md`
-with verifier `python scripts/verify/simple_purchasable_browser_proof.py`;
-desktop and mobile product/cart/checkout preview passed for the same four
-products after temporary local-only opening, and restoration was verified.
-Payment cascade proof also exists at
-`workstreams/ecommerce-audit/simple-purchasable-payment-cascade-2026-05-17.md`
-with verifier
-`python scripts/verify/simple_purchasable_payment_cascade_contract.py`; all 33
-sale lines passed Payment Request, Payment Entry, Sales Invoice, customer
-receipt, operator email, welcome email, idempotency, and rollback cleanup. Final
-owner/product approval and staging/live exposure remain pending.
-Second repair-lane proof now exists for the multi-color tranche:
-`workstreams/ecommerce-audit/multi-color-purchasable-rehearsal-2026-05-17.md`
-and verifier
-`python scripts/verify/multi_color_purchasable_rehearsal_contract.py`; it proves
-`7-epic-column`, `baby-shower-combination-photo-opt`, `baby-table-decor`,
-`classic-organic-for-easel`, `number-balloon-columns`, and
-`sleepy-baby-column` can resolve 563 enabled color SKUs through checkout with
-`color_recipes`, preserve source-backed prices and SO/SI line fields, and roll
-back cleanly. Browser proof also exists at
-`workstreams/ecommerce-audit/multi-color-purchasable-browser-proof-2026-05-17.md`
-with verifier `python scripts/verify/multi_color_purchasable_browser_proof.py`;
-desktop and mobile product/cart/checkout preview passed with 12 product-route
-checks and 14 visible color drawer proofs, and restoration was verified.
-Payment Request, Payment Entry, receipt email, operator email, welcome email,
-media update behavior, owner approval, and staging/live exposure remain pending
-for that tranche.
+Codex all-Odoo sellable reimport closeout on 2026-05-17: GL corrected the
+catalog contract again: every Odoo-imported product is a product and the local
+target is sellable checkout behavior, not a permanent quote-first category.
+The local `frontend` ERPNext site was backed up, cleaned of two generated proof
+products, snapshotted, and reimported with 53 included products, 0 exclusions,
+and 290 priced sale units. The first import proved the all-53 write path; the
+second import repaired flattened bouquet-size prices by staging the price
+enrichment artifact into `seed_catalog.py`. Product-level Website Item
+contracts now outrank stale group/category lane fallbacks in shop cards,
+product-page controls, and cart display rows. Browser proof passed for all 53
+live Website Item routes in two batches under the cart 50-line safety cap, at
+desktop and mobile widths, including cart and checkout preview. Local ecommerce
+was restored to `lt_ecommerce_paused=1`; no Frappe Cloud, staging, live,
+Stripe live, DNS, or public exposure change was performed. Feature handoff:
+`workstreams/ecommerce-audit/odoo-sellable-product-reimport-2026-05-17.md`.
+Primary gates: `python scripts/verify/product_import_readiness_gate.py --report
+output/product-import-readiness-gate.json`,
+`python scripts/verify/v1_odoo_erpnext_import_manifest.py`,
+`python scripts/verify/product_variant_price_contract.py`,
+`python scripts/verify/cart_checkout_contract.py`,
+`python scripts/verify/product_page_architecture_contract.py`,
+`node scripts/verify/post_import_checkout_proof.js` with all-53 live-route
+batches, and `python scripts/verify/ecommerce_pause_contract.py`.
 
 Codex repo hygiene closeout on 2026-05-17: local `main` is reconciled with
 `origin/main` at `d541a0c6fdb12ac280ec7eb044b7a4397be7fd8c`, the working tree
@@ -306,14 +286,16 @@ guards: `python scripts\verify\nav_ia.py` and `npm run test:search-contract`.
 
 Codex ecommerce scaffold update on 2026-05-12: complex product checkout
 planning is now source-backed and local-only through
-`scripts/verify/complex_checkout_scaffold.py`. The scaffold passes with 53
-products: 18 direct-checkout regression guards, 4 simple-axis lane-flip
-candidates, 6 multi-color UI cases, 20 add-on/conditional blocked products, 5
-needs-review/missing products, and 0 explicit checkout architecture gaps. It
-supersedes older heuristic quote-first flip lists and does not authorize live
-site, Frappe Cloud, DNS, Stripe, or Website Item lane updates. Feature handoff:
-`workstreams/ecommerce-audit/complex-checkout-scaffold-2026-05-12.md`; guards:
-`python scripts/verify/complex_checkout_scaffold_contract.py` and
+`scripts/verify/complex_checkout_scaffold.py`. After the 2026-05-17 all-Odoo
+sellable reimport, the scaffold passes with 53 direct checkout guards, 0
+simple lane-flip candidates, 0 complex UI blockers, 0 add-on/conditional
+product blockers, and 0 needs-review products. It supersedes older heuristic
+quote-first flip lists and does not authorize live site, Frappe Cloud, DNS, or
+Stripe exposure. Feature handoff:
+`workstreams/ecommerce-audit/complex-checkout-scaffold-2026-05-12.md`; current
+closeout:
+`workstreams/ecommerce-audit/odoo-sellable-product-reimport-2026-05-17.md`;
+guards: `python scripts/verify/complex_checkout_scaffold_contract.py` and
 `python scripts/verify/complex_checkout_scaffold.py`.
 
 Codex public-site update on 2026-05-11: `/event-balloons` is removed as a
@@ -339,25 +321,12 @@ marketing opt-in. The BTFP Mirabel twisting photo was also pixel-rotated into
 the correct orientation rather than relying on EXIF orientation. Commit
 `0e9d4f8` already pushed this code/image slice; the docs below now record it.
 
-Codex backend closeout on 2026-05-11: the local ecommerce checkout slice is
-green after the approved local import. Current front-door handoff:
-`workstreams/ecommerce-audit/post-import-checkout-launch-closeout-2026-05-11.md`.
-Use the corrected product scope of 48 kept products and 5 owner-explicit
-Classic exclusions (`classic-organic-balloon-garland`, `classic-arch`,
-`classic-column`, `classic-organic-columns`, `classic-organic-arch`). The local
-approved import completed with exit 0 against the local ERPNext `frontend` site
-only and proved the guarded upsert/write path, not a full delete/recreate
-transcript. Final browser proof passed with
-`& "C:\Program Files\nodejs\node.exe" scripts/verify/post_import_checkout_proof.js`
-for Easter Balloon Cups, 7' Butterfly Column, Graduation Grab n Go, 6'
-Graduation stands, and Unicorn Bouquet. Backend contracts are green for
-`product_import_readiness_gate`, `post_import_catalog_state`,
-`direct_checkout_target_contract`, and `cart_checkout_contract`. Remaining
-caveats: 8 review-only add-on axes and the five Classic exclusions are internal
-holds until mapped, repulled, approved, and proved; they are not business
-quote-first products. Frappe Cloud/live Stripe/DNS/real payment tests are
-separate gates, and the shared worktree may have active uncommitted changes
-from other agents.
+Codex backend closeout on 2026-05-11 is historical. The old 48 kept / 5
+Classic-excluded local import packet is superseded by the 2026-05-17 all-Odoo
+sellable reimport: 53 products included, 0 excluded, 290 priced sale units, all
+53 routes browser-proved locally, and `lt_ecommerce_paused=1` restored. Current
+front-door handoff:
+`workstreams/ecommerce-audit/odoo-sellable-product-reimport-2026-05-17.md`.
 
 Codex update on 2026-05-11: homepage Custom Event Decor is hidden for the
 launch page, but its recovery assets are preserved intentionally. The homepage

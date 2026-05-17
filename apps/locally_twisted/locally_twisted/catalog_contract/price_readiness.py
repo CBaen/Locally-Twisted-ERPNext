@@ -253,7 +253,7 @@ class _LivePriceCatalog:
                 if key not in expected:
                     continue
             else:
-                if item_code != slug:
+                if item_code != slug and item.get("variant_of") != slug:
                     continue
                 key = ()
 
@@ -304,7 +304,12 @@ def _source_resolver_priced_units(
     if not expected:
         return 0
     if set(expected.keys()) == {()}:
-        return 1 if product.get("base_price") is not None else 0
+        if product.get("base_price") is not None:
+            return 1
+        for row in product.get("valid_variants") or []:
+            if row.get("erpnext_variant_price") is not None or row.get("price") is not None:
+                return 1
+        return 0
 
     priced: set[tuple[tuple[str, str], ...]] = set()
     for row in product.get("valid_variants") or []:

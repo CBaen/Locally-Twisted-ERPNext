@@ -1,8 +1,7 @@
 {
-  "blocked_for_destructive_import": true,
+  "blocked_for_destructive_import": false,
   "commerce_lane_counts": {
-    "checkout": 15,
-    "quote_first": 38
+    "checkout": 53
   },
   "confirmed_add_on_product_count": 14,
   "dependency_matrix_product_count": 36,

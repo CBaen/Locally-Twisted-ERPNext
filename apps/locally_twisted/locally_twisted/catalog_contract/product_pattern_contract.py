@@ -651,6 +651,7 @@ def _checkout_eligibility(
 ) -> CheckoutEligibility:
     fail_loud: list[FailLoudState] = []
     required_work: list[str] = []
+    notes: list[str] = []
 
     if pricing.status in {"missing", "incomplete", "conflict_needs_fix"}:
         fail_loud.append("missing_price")
@@ -659,19 +660,16 @@ def _checkout_eligibility(
     review_axes = [axis.name for axis in axes if axis.role == "review_only"]
     unmapped_addons = [axis.name for axis in axes if axis.role == "add_on" and axis.status != "ready"]
     if review_axes:
-        fail_loud.append("review_only_add_on")
-        required_work.append("Keep review-only add-on axes in quote/review payloads until mapping is approved.")
+        notes.append("Review-only source add-on controls stay hidden from paid checkout until mapped.")
     if unmapped_addons:
-        fail_loud.append("unpriced_add_on")
-        required_work.append("Map confirmed add-ons to priced ERPNext add-on Items with quantity/value validation.")
+        notes.append("Unmapped add-on controls stay hidden from paid checkout until priced and validated.")
 
     customization_axes = [axis.name for axis in axes if axis.role == "customization"]
     unsupported_customization_axes = [
         axis.name for axis in axes if axis.role == "customization" and not is_balloon_color_axis(axis.name)
     ]
     if unsupported_customization_axes:
-        fail_loud.append("unsupported_customization_payload")
-        required_work.append("Add validated customization payload schema and SO/SI/receipt summaries.")
+        notes.append("Unsupported customization controls stay hidden from paid checkout until validated.")
     color_configuration_axes = [
         axis.name for axis in axes if axis.role == "customization" and is_balloon_color_axis(axis.name)
     ]
@@ -689,7 +687,7 @@ def _checkout_eligibility(
         fail_loud.append("dependency_mismatch")
         required_work.append("Import or generate a source-backed dependency matrix for sale-unit options.")
 
-    _apply_mapper_enforcement(source_pattern, axes, pricing, dependency_matrix, fail_loud, required_work)
+    _apply_mapper_enforcement(source_pattern, axes, pricing, dependency_matrix, fail_loud, required_work, notes)
 
     if "missing_price" in fail_loud:
         status: CheckoutStatus = "needs_pricing"
@@ -719,6 +717,7 @@ def _checkout_eligibility(
         current_commerce_lane=_clean(erpnext_product.get("lt_commerce_lane")),
         fail_loud_states=tuple(dict.fromkeys(fail_loud)),
         required_work=tuple(dict.fromkeys(required_work)),
+        notes=tuple(dict.fromkeys(notes)),
     )
 
 
@@ -729,6 +728,7 @@ def _apply_mapper_enforcement(
     dependency_matrix: DependencyMatrixContract,
     fail_loud: list[FailLoudState],
     required_work: list[str],
+    notes: list[str],
 ) -> None:
     if not source_pattern:
         return
@@ -752,8 +752,7 @@ def _apply_mapper_enforcement(
             fail_loud.append("unsupported_customization_payload")
             required_work.append("Preserve multi-color recipe selections in a validated customization payload before checkout.")
     if "freeform_customer_text" in patterns and _source_freeform_axes(source_pattern):
-        fail_loud.append("unsupported_customization_payload")
-        required_work.append("Preserve freeform customer text with validation limits and SO/SI summaries before checkout.")
+        notes.append("Freeform customer text controls stay hidden from paid checkout until validation limits exist.")
     if "conditional_pricing" in patterns and (
         pricing.status != "ready" or dependency_matrix.status in {"missing_source_matrix", "mismatch"}
     ):
@@ -832,6 +831,13 @@ def _customization_payload(
         raise ProductPatternContractError("customizations must be a dict or list")
     if customizations and not any(axis.role == "customization" for axis in contract.axis_contracts):
         raise ProductPatternContractError("customization payload provided for a product without customization axes")
+    unsupported_axes = [
+        axis.name for axis in contract.axis_contracts if axis.role == "customization" and not is_balloon_color_axis(axis.name)
+    ]
+    if mode == "checkout" and unsupported_axes and _has_unsupported_customization_payload(customizations, unsupported_axes):
+        raise ProductPatternContractError(
+            f"unsupported customization payload is not connected to checkout yet: {sorted(unsupported_axes)}"
+        )
     color_recipes = _color_recipe_payload(contract, selected_config, customizations, mode=mode)
     if color_recipes:
         customizations = {**customizations, "color_recipes": color_recipes}
@@ -842,6 +848,24 @@ def _customization_payload(
     ):
         raise ProductPatternContractError("customization payload is not connected to paid checkout yet")
     return customizations
+
+
+def _has_unsupported_customization_payload(customizations: dict[str, Any], unsupported_axes: list[str]) -> bool:
+    if not customizations:
+        return False
+    unsupported = {_key(axis) for axis in unsupported_axes}
+    direct_keys = {_key(key) for key in customizations if _key(key) not in {"items", "color recipes"}}
+    if direct_keys & unsupported:
+        return True
+    rows = customizations.get("items") or []
+    if isinstance(rows, list):
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+            axis_key = _key(row.get("axis") or row.get("key") or row.get("source_axis") or row.get("name"))
+            if axis_key in unsupported:
+                return True
+    return bool(direct_keys and direct_keys - {"color recipes"})
 
 
 def _color_recipe_payload(

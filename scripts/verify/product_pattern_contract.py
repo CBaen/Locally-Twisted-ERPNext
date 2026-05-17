@@ -293,9 +293,9 @@ def _contract_failures(artifact: dict[str, Any]) -> tuple[list[str], list[str]]:
     summary = artifact.get("summary") or {}
     if int(summary.get("source_products") or 0) < 53:
         inventory_failures.append(f"expected at least 53 source products, found {summary.get('source_products')}")
-    if int(summary.get("explicit_checkout_products") or 0) != 18:
+    if int(summary.get("explicit_checkout_products") or 0) != 53:
         inventory_failures.append(
-            "current explicit checkout product count changed; expected 18, "
+            "current explicit checkout product count changed; expected 53, "
             f"found {summary.get('explicit_checkout_products')}"
         )
     products = artifact.get("products")
@@ -348,11 +348,12 @@ def _print_summary(artifact: dict[str, Any], failures: list[str]) -> None:
     print(f"  direct_checkout_ready_products: {summary.get('direct_checkout_ready_products')}")
     print(f"  inventory_ok: {artifact.get('inventory_ok')}")
     print(f"  checkout_gate_ok: {artifact.get('checkout_gate_ok')}")
-    print(f"  quote_first_supported_products: {summary.get('quote_first_supported_products')}")
+    print(f"  internal_hold_supported_products: {summary.get('quote_first_supported_products')}")
     print(f"  missing_or_needs_review_products: {summary.get('missing_or_needs_review_products')}")
     print(f"  capability_counts: {_format_counts(summary.get('capability_counts') or {})}")
     print(f"  website_lane_counts: {_format_counts(summary.get('website_lane_counts') or {})}")
     print(f"  checkout_blocker_counts: {_format_counts(summary.get('checkout_blocker_counts') or {})}")
+    print(f"  deferred_control_counts: {_format_counts(summary.get('checkout_deferred_control_counts') or {})}")
     if failures:
         print("  failures:")
         for failure in failures:

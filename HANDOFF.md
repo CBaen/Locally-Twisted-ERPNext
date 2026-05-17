@@ -2,13 +2,19 @@
 
 > **Deprecated for active coordination as of 2026-05-02.** This file is now a legacy whole-project handoff/context record, not the active coordination surface. For current work, use `locally-twisted-queue.md` for active lanes, `workstreams/<feature>.md` for feature-specific handoffs, `locally-twisted-decisions.md` for durable decisions, and `CODING-HANDOFF.md` for compact technical startup. Do not try to force this file into full parity with every active workstream.
 
-**Last updated:** 2026-05-05 (Codex - mega-menu/product containment takeover)
+**Last updated:** 2026-05-17 (Codex - all-Odoo sellable local reimport pointer)
 
 Overwrite-not-append. Git is the changelog. Read this first; everything else as needed. **Audience: peer Opus 4.7 instance.** Read like I'd want to read before substantive work.
 
 ---
 
 ## State of the world (the load-bearing facts)
+
+**Current-session delta (2026-05-17):**
+- Active ecommerce coordination lives in `CODING-HANDOFF.md`, `ECOMMERCE-SHOP-HANDOFF.md`, `locally-twisted-queue.md`, and `workstreams/ecommerce-audit/odoo-sellable-product-reimport-2026-05-17.md`.
+- Local import logic now treats 53/53 Odoo-imported products as sellable checkout targets with 0 exclusions and 290 priced sale units.
+- Local browser proof covered all 53 live Website Item routes in two cart-safe batches; `lt_ecommerce_paused=1` was restored after proof.
+- No staging/live/Frappe Cloud/Stripe/DNS deployment was performed. GL still needs to test locally before any live push.
 
 **Current-session delta (2026-05-05):**
 - `_resources/STYLE-GUIDE.md` v4.2 is the only current visual authority for the LT rebrand.
@@ -107,7 +113,7 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 | `/shop-items` + `/all-products` | Route to `/shop` |
 | `Plan by Occasion` | Product/category links only; no contact shortcuts |
 | `/privacy` + `/terms-of-service` | Static policy routes live; Stripe Dashboard wiring still pending |
-| Shop catalog | Same 53 Website Items / 10,578 variants / 10,613 Item Prices from yesterday |
+| Shop catalog | Current catalog details belong in `CODING-HANDOFF.md`; 2026-05-17 local proof covers 53 Odoo products, 0 exclusions, and 290 priced sale units |
 | Stripe checkout (test mode) | Same as yesterday — guest cart + Checkout Session + cascade |
 
 ## What's NOT done (next session candidates, by priority)

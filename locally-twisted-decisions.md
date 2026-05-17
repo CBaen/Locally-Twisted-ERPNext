@@ -8,6 +8,46 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-17 - Local Odoo reimport includes every product as sellable
+
+**Decision:** The corrected local Odoo-to-ERPNext import includes all 53
+Odoo-imported products, excludes 0 products, and writes product contracts as
+sellable checkout targets. Review-only add-on controls and unclassified extra
+images may remain hidden/held, but they do not make the base products
+non-products.
+
+**Reasoning:** GL explicitly corrected the earlier conceptual model: every
+imported Odoo product is a product. The safer technical response is not to keep
+Classic/high-variant/complex products out of the catalog, but to preserve them
+as sellable products while hiding only controls that are not yet mapped,
+priced, or approved. The local proof also found an implementation hazard:
+stale item-group/category fallback rules can override the Website Item product
+contract and render a checkout product as quote/needs-review unless product
+contract authority wins.
+
+**Implementation boundary:** This is a local proof and source-code decision,
+not a live release. `lt_ecommerce_paused=1` remains the customer exposure lock.
+Product-level Website Item contracts must be the authority for product page,
+shop card, and cart display checkout behavior. Extra images stay held until
+classified, and review-only add-on controls stay hidden until mapped. No
+Frappe Cloud, Stripe, DNS, or public ecommerce promotion is approved until GL
+tests locally and approves a separate release packet.
+
+**Receipts:** `workstreams/ecommerce-audit/odoo-sellable-product-reimport-2026-05-17.md`;
+`audits/odoo-erpnext-migration-audit-2026-05-08/25-v1-odoo-erpnext-import-manifest.md`;
+`scripts/verify/product_import_readiness_gate.py`;
+`scripts/verify/v1_odoo_erpnext_import_manifest.py`;
+`scripts/verify/post_import_checkout_proof.js`;
+`apps/locally_twisted/locally_twisted/seed/seed_catalog.py`;
+`apps/locally_twisted/locally_twisted/templates/generators/item/item_configure.html`;
+`apps/locally_twisted/locally_twisted/www/shop.py`;
+`apps/locally_twisted/locally_twisted/api/cart.py`.
+
+**Decided by:** GL direct correction and Codex local reimport/proof execution,
+2026-05-17.
+
+---
+
 ## 2026-05-17 - Duplicate Odoo color casing resolves to one ERPNext color
 
 **Decision:** Odoo color values that differ only by casing resolve to the

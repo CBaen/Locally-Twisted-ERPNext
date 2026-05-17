@@ -70,10 +70,8 @@ def _product_page_type(
 
 
 def _commerce_lane(product_page_type: str) -> str:
-    if product_page_type == "simple_product":
+    if product_page_type in {"simple_product", "complex_custom_product"}:
         return "checkout"
-    if product_page_type == "complex_custom_product":
-        return "quote_first"
     return "needs_review"
 
 

@@ -110,8 +110,13 @@ def _resolve_cart_item_for_sale(item_code, configuration=None):
         return None, "unavailable"
 
     product_page_contract = product_page_contract_for_website_item(website_item["item_code"])
-    checkout_lane = checkout_lane_for_item_group(website_item.get("item_group"))
-    if product_page_contract.get("commerce_lane") != "checkout":
+    product_commerce_lane = product_page_contract.get("commerce_lane")
+    checkout_lane = (
+        "retail_checkout"
+        if product_commerce_lane == "checkout"
+        else checkout_lane_for_item_group(website_item.get("item_group"))
+    )
+    if product_commerce_lane != "checkout":
         return None, "quote_required"
     normalized_configuration = normalize_client_configuration(configuration)
 
@@ -138,7 +143,7 @@ def _resolve_cart_item_for_sale(item_code, configuration=None):
         "short_description": website_item.get("short_description") or None,
         "item_group": website_item.get("item_group"),
         "checkout_lane": checkout_lane,
-        "product_commerce_lane": product_page_contract.get("commerce_lane"),
+        "product_commerce_lane": product_commerce_lane,
         "product_page_type": product_page_contract.get("product_page_type"),
         "configuration": normalized_configuration,
         "selected_media": selected_media,

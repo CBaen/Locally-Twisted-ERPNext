@@ -20,13 +20,13 @@ COMMERCE_LANE_OPTIONS = (
 PRODUCT_PAGE_TYPE_LABELS = {
     "needs_review": "Needs page review",
     "simple_product": "Ready-to-order page",
-    "complex_custom_product": "Custom quote page",
+    "complex_custom_product": "Configurable product page",
 }
 
 COMMERCE_LANE_LABELS = {
     "needs_review": "Needs review before customers use it",
     "checkout": "Online checkout",
-    "quote_first": "Quote request first",
+    "quote_first": "Internal checkout hold",
     "hybrid": "Checkout or quote",
 }
 

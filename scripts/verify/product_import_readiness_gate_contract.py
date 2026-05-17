@@ -39,9 +39,9 @@ def main() -> int:
         {
             "products": [
                 {
-                    "source_name": "Protected Quote Product",
-                    "slug": "protected-quote-product",
-                    "product_contract": {"commerce_lane": "quote_first"},
+                    "source_name": "Protected Checkout Product",
+                    "slug": "protected-checkout-product",
+                    "product_contract": {"commerce_lane": "checkout"},
                     "add_on_manifest": {"review_only_axes_from_global_packet": ["Add ons"]},
                 }
             ]
@@ -49,26 +49,26 @@ def main() -> int:
     )
     if protected_row.status != "pass":
         failures.append(
-            "quote-first review-only add-ons should be treated as protected pass, "
+            "review-only add-ons should be hidden without blocking the product import, "
             f"found {protected_row.status}: {protected_row.summary}"
         )
 
-    checkout_row = _add_on_row_for_manifest(
+    no_add_on_row = _add_on_row_for_manifest(
         {
             "products": [
                 {
-                    "source_name": "Unsafe Checkout Product",
-                    "slug": "unsafe-checkout-product",
+                    "source_name": "Plain Checkout Product",
+                    "slug": "plain-checkout-product",
                     "product_contract": {"commerce_lane": "checkout"},
-                    "add_on_manifest": {"review_only_axes_from_global_packet": ["Add ons"]},
+                    "add_on_manifest": {"review_only_axes_from_global_packet": []},
                 }
             ]
         }
     )
-    if checkout_row.status != "blocker":
+    if no_add_on_row.status != "pass":
         failures.append(
-            "checkout review-only add-ons should remain a blocker, "
-            f"found {checkout_row.status}: {checkout_row.summary}"
+            "products with no review-only add-ons should pass, "
+            f"found {no_add_on_row.status}: {no_add_on_row.summary}"
         )
 
     if failures:

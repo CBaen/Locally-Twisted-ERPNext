@@ -7,8 +7,8 @@ purchase contract:
 - Retail single-SKU products still resolve normally.
 - Ready-to-order variant item codes can be summarized for cart display, using the
   parent Website Item for display route/image and the variant Item Price.
-- Quote-first product page variants are rejected from cart before checkout so
-  complex decor cannot be sold through the retail lane.
+- Odoo-imported product variants, including complex decor variants, resolve
+  through the retail lane once the product is imported as sellable checkout.
 - Variant templates are not added directly from /shop.
 - Server checkout rejects direct POST quantities above the browser cart cap
   with customer-safe failure copy.
@@ -33,9 +33,9 @@ SITE = "frontend"
 BASE = "http://localhost:8081"
 ROOT = Path(__file__).resolve().parents[2]
 
-QUOTE_VARIANT_TEMPLATE = "6-color-rainbow-arch"
-QUOTE_VARIANT_ITEM = "6-color-rainbow-arch-20F"
-QUOTE_SINGLE_SKU_ITEM = "easter-arch"
+COMPLEX_VARIANT_TEMPLATE = "6-color-rainbow-arch"
+COMPLEX_VARIANT_ITEM = "6-color-rainbow-arch-20F"
+COMPLEX_SINGLE_SKU_ITEM = "easter-arch"
 RETAIL_VARIANT_TEMPLATE = "unicorn-bouquet"
 RETAIL_VARIANT_ITEM = "unicorn-bouquet-SMA"
 COLOR_RECIPE_TEMPLATE = "7-butterfly-column"
@@ -122,10 +122,10 @@ def by_item_code(items: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
     return {item["item_code"]: item for item in items}
 
 
-def check_cart_api_routes_ready_to_order_and_blocks_quote_first() -> None:
+def check_cart_api_routes_sellable_odoo_products() -> None:
     data = bench_execute(
         "locally_twisted.api.cart.get_cart_items",
-        kwargs={"item_codes": [RETAIL_VARIANT_ITEM, QUOTE_VARIANT_ITEM, SINGLE_SKU_ITEM, QUOTE_VARIANT_TEMPLATE]},
+        kwargs={"item_codes": [RETAIL_VARIANT_ITEM, COMPLEX_VARIANT_ITEM, SINGLE_SKU_ITEM, COMPLEX_VARIANT_TEMPLATE]},
     )
 
     items = by_item_code(data.get("items") or [])
@@ -134,12 +134,12 @@ def check_cart_api_routes_ready_to_order_and_blocks_quote_first() -> None:
     assert_true(SINGLE_SKU_ITEM in items, f"{SINGLE_SKU_ITEM} should still resolve as a cart item")
     assert_true(RETAIL_VARIANT_ITEM in items, f"{RETAIL_VARIANT_ITEM} should resolve as a retail variant cart item")
     assert_true(
-        QUOTE_VARIANT_TEMPLATE in missing,
-        f"{QUOTE_VARIANT_TEMPLATE} should not resolve as a directly purchasable template",
+        COMPLEX_VARIANT_TEMPLATE in missing,
+        f"{COMPLEX_VARIANT_TEMPLATE} should not resolve as a directly purchasable template",
     )
     assert_true(
-        missing.get(QUOTE_VARIANT_ITEM) == "quote_required",
-        f"{QUOTE_VARIANT_ITEM} should be rejected from cart as quote_required, found {missing.get(QUOTE_VARIANT_ITEM)!r}",
+        COMPLEX_VARIANT_ITEM in items,
+        f"{COMPLEX_VARIANT_ITEM} should resolve as a sellable Odoo product variant, missing reason {missing.get(COMPLEX_VARIANT_ITEM)!r}",
     )
 
     single = items[SINGLE_SKU_ITEM]
@@ -160,6 +160,12 @@ def check_cart_api_routes_ready_to_order_and_blocks_quote_first() -> None:
     assert_true(
         variant.get("checkout_lane") == "retail_checkout",
         f"{RETAIL_VARIANT_ITEM} should be marked retail_checkout, found {variant.get('checkout_lane')!r}",
+    )
+
+    complex_variant = items[COMPLEX_VARIANT_ITEM]
+    assert_true(
+        complex_variant.get("checkout_lane") == "retail_checkout",
+        f"{COMPLEX_VARIANT_ITEM} should be marked retail_checkout, found {complex_variant.get('checkout_lane')!r}",
     )
 
 
@@ -541,12 +547,12 @@ def check_shop_cards_keep_priced_products_cartable_and_do_not_add_templates() ->
         )
         return
     assert_true(
-        f'data-item-code="{QUOTE_VARIANT_TEMPLATE}"' not in html,
-        f"/shop must not expose an add-to-cart button for template {QUOTE_VARIANT_TEMPLATE}",
+        f'data-item-code="{COMPLEX_VARIANT_TEMPLATE}"' not in html,
+        f"/shop must not expose an add-to-cart button for template {COMPLEX_VARIANT_TEMPLATE}",
     )
     assert_true(
-        f'data-item-code="{QUOTE_SINGLE_SKU_ITEM}"' in html,
-        f"/shop should keep priced single-SKU product {QUOTE_SINGLE_SKU_ITEM} cartable",
+        f'data-item-code="{COMPLEX_SINGLE_SKU_ITEM}"' in html,
+        f"/shop should keep priced single-SKU product {COMPLEX_SINGLE_SKU_ITEM} cartable",
     )
     assert_true(
         f'data-item-code="{SINGLE_SKU_ITEM}"' in html,
@@ -557,7 +563,7 @@ def check_shop_cards_keep_priced_products_cartable_and_do_not_add_templates() ->
 def main() -> int:
     parse_noop_args(__doc__)
     checks = [
-        check_cart_api_routes_ready_to_order_and_blocks_quote_first,
+        check_cart_api_routes_sellable_odoo_products,
         check_checkout_resolver_accepts_retail_variant,
         check_configured_same_sku_cart_lines_stay_separate_and_visible,
         check_multi_digit_add_on_quantity_and_total_are_visible,

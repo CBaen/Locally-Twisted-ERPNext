@@ -7,7 +7,7 @@ maturity: candidate
 scope: Locally Twisted ERPNext/Frappe catalog imports from Odoo website_sale
 currently_true: unknown
 verification_level: 2
-last_verified: 2026-05-08
+last_verified: 2026-05-17
 evidence_quality: direct
 successful_uses: 1
 failed_uses: 1
@@ -56,7 +56,9 @@ price, or scraped page base price as the price for every ERPNext variant.
 - `scripts/verify/catalog_variant_contract.py` proves variant shape parity, not
   price parity.
 - `scripts/verify/product_variant_price_contract.py` proves the currently
-  guarded bouquet-size price family only. It is not a whole-catalog certificate.
+  guarded price families used by the all-Odoo sellable reimport proof. Pair it
+  with `v1_odoo_erpnext_import_manifest.py` and the all-product browser proof
+  before claiming catalog-wide checkout readiness.
 
 ## Implementation Pattern
 
@@ -131,8 +133,9 @@ Current shape guard:
 python scripts/verify/catalog_variant_contract.py
 ```
 
-Do not claim "all product pricing is correct" from these commands until
-non-bouquet product families have been audited and covered.
+Do not claim live/public pricing approval from these commands. They prove the
+local import/runtime contract; GL still needs to test locally before any live
+release packet.
 
 ## Receipt
 
@@ -143,6 +146,10 @@ variants were `$35`. Direct Odoo resolver probes recovered Small `$35`, Medium
 bouquet-size family, and `npm run test:product-prices` plus
 `cart_checkout_contract.py` passed afterward.
 
-A later sample audit proved more non-bouquet products remain wrong, including
-25ft arches and longer Pride arch variants. Treat this recipe as active until a
-full dry-run audit plus product-family contracts are complete.
+On 2026-05-17, the all-Odoo sellable reimport first exposed that the import
+path could still flatten bouquet-size variants to the scraped page base price.
+`scripts/setup/stage_seed_data.py` now stages the price enrichment artifact and
+`seed_catalog.py` prefers those approved sale-unit prices before page fallback
+prices. The second guarded local reimport passed
+`product_variant_price_contract.py`; the manifest reports 53 included products,
+0 exclusions, and 290 source-ready sale units.
