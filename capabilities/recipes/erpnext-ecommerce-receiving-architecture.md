@@ -7,7 +7,7 @@ maturity: candidate
 scope: Locally Twisted ERPNext/Frappe ecommerce product import, product detail logic, cart, checkout, and invoice integration
 currently_true: unknown
 verification_level: 2
-last_verified: 2026-05-14
+last_verified: 2026-05-17
 evidence_quality: direct
 successful_uses: 1
 failed_uses: 0
@@ -66,6 +66,19 @@ OpenClaw cockpit witness:
   lane-flip candidates, 6 multi-color UI cases, 20 add-on/conditional blocked
   products, and 5 needs-review/missing products. This report supersedes older
   heuristic quote-first flip lists and still authorizes no live update.
+- 2026-05-17 product-lane correction: there are no business quote-first
+  products. Legacy `quote_first` values are internal safety holds only; every
+  real product targets purchasable behavior from Odoo export product details
+  and pricing. If source data is unclear, repull or repair the import source
+  rather than preserving a non-purchasable product category.
+- 2026-05-17 product-family certification: the current control artifacts are
+  `workstreams/ecommerce-audit/product-family-certification-truth-table-2026-05-17.md`
+  and `workstreams/ecommerce-audit/product-source-repair-map-2026-05-17.md`.
+  Current proof is tranche-based: 18 current backend checkout families remain
+  under regression guard; four simple products passed backend, browser, and
+  payment/customer-message cascade proof; six multi-color products passed
+  backend checkout/SO/SI rehearsal for 563 enabled color SKUs but still need
+  browser, payment/customer-message, media behavior, and owner approval.
 - 2026-05-12 backend product-page architecture contract:
   `lt-product-page-architecture-contract-v1` is now the generic receiving
   architecture between ProductPatternContract/source semantics and product-page

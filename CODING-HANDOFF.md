@@ -27,6 +27,17 @@ with verifier
 sale lines passed Payment Request, Payment Entry, Sales Invoice, customer
 receipt, operator email, welcome email, idempotency, and rollback cleanup. Final
 owner/product approval and staging/live exposure remain pending.
+Second repair-lane proof now exists for the multi-color tranche:
+`workstreams/ecommerce-audit/multi-color-purchasable-rehearsal-2026-05-17.md`
+and verifier
+`python scripts/verify/multi_color_purchasable_rehearsal_contract.py`; it proves
+`7-epic-column`, `baby-shower-combination-photo-opt`, `baby-table-decor`,
+`classic-organic-for-easel`, `number-balloon-columns`, and
+`sleepy-baby-column` can resolve 563 enabled color SKUs through checkout with
+`color_recipes`, preserve source-backed prices and SO/SI line fields, and roll
+back cleanly. Browser UX, Payment Request, Payment Entry, receipt email,
+operator email, welcome email, media update behavior, owner approval, and
+staging/live exposure remain pending for that tranche.
 
 Codex repo hygiene closeout on 2026-05-17: local `main` is reconciled with
 `origin/main` at `d541a0c6fdb12ac280ec7eb044b7a4397be7fd8c`, the working tree

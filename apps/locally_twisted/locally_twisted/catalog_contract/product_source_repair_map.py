@@ -305,9 +305,10 @@ def _required_next_gates(stage: str, source_found: bool) -> tuple[str, ...]:
         )
     if stage == "multi_color_recipe_ui_required":
         return (
-            "customer-facing multi-color recipe UI",
-            "backend color recipe validation",
-            "checkout/payment/invoice/receipt cascade proof",
+            "keep multi_color_purchasable_rehearsal_contract green",
+            "browser product/cart/checkout proof",
+            "payment/receipt/customer-message cascade proof",
+            "final owner/product-scope approval before customer exposure",
         )
     if stage == "add_on_or_conditional_pricing_blocked":
         return (

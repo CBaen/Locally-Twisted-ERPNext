@@ -1,0 +1,5150 @@
+{
+  "add_on_line_count": 0,
+  "color_recipe_line_count": 563,
+  "commit_calls_intercepted": 0,
+  "enabled_color_sku_count": 563,
+  "expected_sales_order_line_count": 563,
+  "line_fields": [
+    "custom_lt_configuration_json",
+    "custom_lt_configuration_summary",
+    "custom_lt_configuration_version",
+    "custom_lt_product_page_type",
+    "custom_lt_product_template_item"
+  ],
+  "multi_color_rehearsal_product_count": 6,
+  "multi_color_rehearsal_products": [
+    {
+      "add_on_options": 0,
+      "color_axes": [
+        "latex colors"
+      ],
+      "enabled_color_sku_count": 51,
+      "resolved_line_count": 51,
+      "source_axis_value_counts": {
+        "latex colors": {
+          "canonical": 51,
+          "raw": 53
+        }
+      },
+      "source_canonical_color_combo_count": 51,
+      "source_name": "7' Epic Column",
+      "source_price": 100.0,
+      "source_price_basis": "Odoo base price; color recipe choices do not change price",
+      "source_valid_variant_count": 53,
+      "ui_axis_coverage": {
+        "latex colors": {
+          "payload_target": "color_recipes",
+          "selector_type": "multi_color_recipe_builder",
+          "source_canonical_value_count": 51,
+          "source_raw_value_count": 53,
+          "ui_value_count": 51
+        }
+      },
+      "verified_variant_count": 51,
+      "verified_variants": [
+        {
+          "color_recipes": {
+            "latex colors": "black"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-BLA"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Blue Slate"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-BLU"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Blush"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-BLUS"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Brown"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-BRO"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "bubble Gum"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-BUB"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Chocolate"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-CHO"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Clear"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-CLE"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Deep Teal"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-DEE"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Dusk Cream"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-DUS"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Dusk Green Tea"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-DUSK"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Dusk Blue"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-DUSKB"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Dusk Lilac"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-DUSKL"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Dusk Rose"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-DUSKR"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Empowermint"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-EMP"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "eucalyptus"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-EUC"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Forest"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-FOR"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "fuchsia"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-FUC"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Grey"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-GRE"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Honey"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-HON"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Latte"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-LAT"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Lilac"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-LIL"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Lime"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-LIM"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "LT Blue"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-LTB"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Orange"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-ORA"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Orchid"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-ORC"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Pastel Pink"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-PAS"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Pastel Yellow"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-PAS2"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Pastel Melon"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-PAS3"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Pastel Blue"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-PAST"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Pastel Green"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-PASTE"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Pastel Purple"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-PASTEL"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Periwinkle"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-PER"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "raspberry"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-RAS"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Red"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-RED"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex Champagne"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-REF"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex Blue"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-REF2"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex green"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-REF3"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex Violet"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-REF4"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex Red"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-REF5"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex Truffle"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-REFL"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex Silver"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-REFLE"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex Gold"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-REFLEX"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Robin's Egg"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-ROB"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Royal Blue"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-ROY"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Shamrock"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-SHA"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Smoke Grey"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-SMO"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Teal"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-TEA"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Violet"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-VIO"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "White"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-WHI"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Wintergreen"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-WIN"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "yellow"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "7-epic-column-YEL"
+        }
+      ],
+      "website_item_code": "7-epic-column"
+    },
+    {
+      "add_on_options": 0,
+      "color_axes": [
+        "latex colors"
+      ],
+      "enabled_color_sku_count": 51,
+      "resolved_line_count": 51,
+      "source_axis_value_counts": {
+        "latex colors": {
+          "canonical": 51,
+          "raw": 53
+        }
+      },
+      "source_canonical_color_combo_count": 51,
+      "source_name": "Baby Shower Combination Photo opt",
+      "source_price": 650.0,
+      "source_price_basis": "Odoo base price; color recipe choices do not change price",
+      "source_valid_variant_count": 53,
+      "ui_axis_coverage": {
+        "latex colors": {
+          "payload_target": "color_recipes",
+          "selector_type": "multi_color_recipe_builder",
+          "source_canonical_value_count": 51,
+          "source_raw_value_count": 53,
+          "ui_value_count": 51
+        }
+      },
+      "verified_variant_count": 51,
+      "verified_variants": [
+        {
+          "color_recipes": {
+            "latex colors": "black"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-BLA"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Blue Slate"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-BLU"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Blush"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-BLUS"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Brown"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-BRO"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "bubble Gum"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-BUB"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Chocolate"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-CHO"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Clear"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-CLE"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Deep Teal"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-DEE"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Dusk Cream"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-DUS"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Dusk Green Tea"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-DUSK"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Dusk Blue"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-DUSKB"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Dusk Lilac"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-DUSKL"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Dusk Rose"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-DUSKR"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Empowermint"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-EMP"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "eucalyptus"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-EUC"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Forest"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-FOR"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "fuchsia"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-FUC"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Grey"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-GRE"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Honey"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-HON"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Latte"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-LAT"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Lilac"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-LIL"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Lime"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-LIM"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "LT Blue"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-LTB"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Orange"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-ORA"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Orchid"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-ORC"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Pastel Pink"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-PAS"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Pastel Yellow"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-PAS2"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Pastel Melon"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-PAS3"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Pastel Blue"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-PAST"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Pastel Green"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-PASTE"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Pastel Purple"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-PASTEL"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Periwinkle"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-PER"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "raspberry"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-RAS"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Red"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-RED"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex Champagne"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-REF"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex Blue"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-REF2"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex green"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-REF3"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex Violet"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-REF4"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex Red"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-REF5"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex Truffle"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-REFL"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex Silver"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-REFLE"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex Gold"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-REFLEX"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Robin's Egg"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-ROB"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Royal Blue"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-ROY"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Shamrock"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-SHA"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Smoke Grey"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-SMO"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Teal"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-TEA"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Violet"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-VIO"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "White"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-WHI"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Wintergreen"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-WIN"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "yellow"
+          },
+          "price": 650.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-shower-combination-photo-opt-YEL"
+        }
+      ],
+      "website_item_code": "baby-shower-combination-photo-opt"
+    },
+    {
+      "add_on_options": 0,
+      "color_axes": [
+        "Baby color"
+      ],
+      "enabled_color_sku_count": 2,
+      "resolved_line_count": 2,
+      "source_axis_value_counts": {
+        "Baby color": {
+          "canonical": 2,
+          "raw": 2
+        }
+      },
+      "source_canonical_color_combo_count": 2,
+      "source_name": "Baby Table decor",
+      "source_price": 30.0,
+      "source_price_basis": "Odoo base price; color recipe choices do not change price",
+      "source_valid_variant_count": 2,
+      "ui_axis_coverage": {
+        "Baby color": {
+          "payload_target": "color_recipes",
+          "selector_type": "multi_color_recipe_builder",
+          "source_canonical_value_count": 2,
+          "source_raw_value_count": 2,
+          "ui_value_count": 2
+        }
+      },
+      "verified_variant_count": 2,
+      "verified_variants": [
+        {
+          "color_recipes": {
+            "Baby color": "blue"
+          },
+          "price": 30.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-table-decor-BLU"
+        },
+        {
+          "color_recipes": {
+            "Baby color": "pink"
+          },
+          "price": 30.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "baby-table-decor-PIN"
+        }
+      ],
+      "website_item_code": "baby-table-decor"
+    },
+    {
+      "add_on_options": 0,
+      "color_axes": [
+        "latex colors"
+      ],
+      "enabled_color_sku_count": 51,
+      "resolved_line_count": 51,
+      "source_axis_value_counts": {
+        "latex colors": {
+          "canonical": 51,
+          "raw": 53
+        }
+      },
+      "source_canonical_color_combo_count": 51,
+      "source_name": "classic organic for easel",
+      "source_price": 100.0,
+      "source_price_basis": "Odoo base price; color recipe choices do not change price",
+      "source_valid_variant_count": 53,
+      "ui_axis_coverage": {
+        "latex colors": {
+          "payload_target": "color_recipes",
+          "selector_type": "multi_color_recipe_builder",
+          "source_canonical_value_count": 51,
+          "source_raw_value_count": 53,
+          "ui_value_count": 51
+        }
+      },
+      "verified_variant_count": 51,
+      "verified_variants": [
+        {
+          "color_recipes": {
+            "latex colors": "black"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-BLA"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Blue Slate"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-BLU"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Blush"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-BLUS"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Brown"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-BRO"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "bubble Gum"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-BUB"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Chocolate"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-CHO"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Clear"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-CLE"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Deep Teal"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-DEE"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Dusk Cream"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-DUS"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Dusk Green Tea"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-DUSK"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Dusk Blue"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-DUSKB"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Dusk Lilac"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-DUSKL"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Dusk Rose"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-DUSKR"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Empowermint"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-EMP"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "eucalyptus"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-EUC"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Forest"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-FOR"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "fuchsia"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-FUC"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Grey"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-GRE"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Honey"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-HON"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Latte"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-LAT"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Lilac"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-LIL"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Lime"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-LIM"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "LT Blue"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-LTB"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Orange"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-ORA"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Orchid"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-ORC"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Pastel Pink"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-PAS"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Pastel Yellow"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-PAS2"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Pastel Melon"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-PAS3"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Pastel Blue"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-PAST"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Pastel Green"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-PASTE"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Pastel Purple"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-PASTEL"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Periwinkle"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-PER"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "raspberry"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-RAS"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Red"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-RED"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex Champagne"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-REF"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex Blue"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-REF2"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex green"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-REF3"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex Violet"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-REF4"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex Red"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-REF5"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex Truffle"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-REFL"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex Silver"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-REFLE"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex Gold"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-REFLEX"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Robin's Egg"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-ROB"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Royal Blue"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-ROY"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Shamrock"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-SHA"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Smoke Grey"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-SMO"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Teal"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-TEA"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Violet"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-VIO"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "White"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-WHI"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Wintergreen"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-WIN"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "yellow"
+          },
+          "price": 100.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "classic-organic-for-easel-YEL"
+        }
+      ],
+      "website_item_code": "classic-organic-for-easel"
+    },
+    {
+      "add_on_options": 0,
+      "color_axes": [
+        "Number colors",
+        "latex colors"
+      ],
+      "enabled_color_sku_count": 357,
+      "resolved_line_count": 357,
+      "source_axis_value_counts": {
+        "Number colors": {
+          "canonical": 7,
+          "raw": 7
+        },
+        "latex colors": {
+          "canonical": 51,
+          "raw": 53
+        }
+      },
+      "source_canonical_color_combo_count": 357,
+      "source_name": "Number Balloon Columns",
+      "source_price": 55.0,
+      "source_price_basis": "Odoo base price; color recipe choices do not change price",
+      "source_valid_variant_count": 371,
+      "ui_axis_coverage": {
+        "Number colors": {
+          "payload_target": "color_recipes",
+          "selector_type": "multi_color_recipe_builder",
+          "source_canonical_value_count": 7,
+          "source_raw_value_count": 7,
+          "ui_value_count": 7
+        },
+        "latex colors": {
+          "payload_target": "color_recipes",
+          "selector_type": "multi_color_recipe_builder",
+          "source_canonical_value_count": 51,
+          "source_raw_value_count": 53,
+          "ui_value_count": 51
+        }
+      },
+      "verified_variant_count": 357,
+      "verified_variants": [
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "black"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-BLA"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Blue Slate"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-BLU"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Blush"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-BLUS"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Brown"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-BRO"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "bubble Gum"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-BUB"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Chocolate"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-CHO"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Clear"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-CLE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Deep Teal"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-DEE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Dusk Cream"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-DUS"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Dusk Green Tea"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-DUSK"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Dusk Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-DUSKB"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Dusk Lilac"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-DUSKL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Dusk Rose"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-DUSKR"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Empowermint"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-EMP"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "eucalyptus"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-EUC"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Forest"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-FOR"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "fuchsia"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-FUC"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Grey"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-GRE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Honey"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-HON"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Latte"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-LAT"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Lilac"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-LIL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Lime"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-LIM"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "LT Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-LTB"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Orange"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-ORA"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Orchid"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-ORC"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Pastel Pink"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-PAS"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Pastel Yellow"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-PAS2"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Pastel Melon"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-PAS3"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Pastel Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-PAST"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Pastel Green"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-PASTE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Pastel Purple"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-PASTEL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Periwinkle"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-PER"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "raspberry"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-RAS"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Red"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-RED"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Reflex Champagne"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-REF"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Reflex Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-REF2"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Reflex green"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-REF3"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Reflex Violet"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-REF4"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Reflex Red"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-REF5"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Reflex Truffle"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-REFL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Reflex Silver"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-REFLE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Reflex Gold"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-REFLEX"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Robin's Egg"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-ROB"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Royal Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-ROY"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Shamrock"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-SHA"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Smoke Grey"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-SMO"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Teal"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-TEA"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Violet"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-VIO"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "White"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-WHI"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "Wintergreen"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-WIN"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Black",
+            "latex colors": "yellow"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLA-YEL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "black"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-BLA"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Blue Slate"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-BLU"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Blush"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-BLUS"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Brown"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-BRO"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "bubble Gum"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-BUB"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Chocolate"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-CHO"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Clear"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-CLE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Deep Teal"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-DEE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Dusk Cream"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-DUS"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Dusk Green Tea"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-DUSK"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Dusk Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-DUSKB"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Dusk Lilac"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-DUSKL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Dusk Rose"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-DUSKR"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Empowermint"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-EMP"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "eucalyptus"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-EUC"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Forest"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-FOR"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "fuchsia"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-FUC"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Grey"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-GRE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Honey"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-HON"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Latte"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-LAT"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Lilac"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-LIL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Lime"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-LIM"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "LT Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-LTB"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Orange"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-ORA"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Orchid"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-ORC"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Pastel Pink"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-PAS"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Pastel Yellow"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-PAS2"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Pastel Melon"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-PAS3"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Pastel Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-PAST"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Pastel Green"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-PASTE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Pastel Purple"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-PASTEL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Periwinkle"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-PER"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "raspberry"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-RAS"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Red"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-RED"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Reflex Champagne"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-REF"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Reflex Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-REF2"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Reflex green"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-REF3"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Reflex Violet"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-REF4"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Reflex Red"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-REF5"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Reflex Truffle"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-REFL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Reflex Silver"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-REFLE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Reflex Gold"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-REFLEX"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Robin's Egg"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-ROB"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Royal Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-ROY"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Shamrock"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-SHA"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Smoke Grey"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-SMO"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Teal"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-TEA"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Violet"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-VIO"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "White"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-WHI"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "Wintergreen"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-WIN"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "blue",
+            "latex colors": "yellow"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-BLU-YEL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "black"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-BLA"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Blue Slate"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-BLU"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Blush"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-BLUS"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Brown"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-BRO"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "bubble Gum"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-BUB"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Chocolate"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-CHO"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Clear"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-CLE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Deep Teal"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-DEE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Dusk Cream"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-DUS"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Dusk Green Tea"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-DUSK"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Dusk Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-DUSKB"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Dusk Lilac"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-DUSKL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Dusk Rose"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-DUSKR"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Empowermint"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-EMP"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "eucalyptus"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-EUC"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Forest"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-FOR"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "fuchsia"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-FUC"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Grey"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-GRE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Honey"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-HON"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Latte"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-LAT"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Lilac"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-LIL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Lime"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-LIM"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "LT Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-LTB"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Orange"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-ORA"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Orchid"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-ORC"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Pastel Pink"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-PAS"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Pastel Yellow"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-PAS2"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Pastel Melon"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-PAS3"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Pastel Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-PAST"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Pastel Green"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-PASTE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Pastel Purple"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-PASTEL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Periwinkle"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-PER"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "raspberry"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-RAS"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Red"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-RED"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Reflex Champagne"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-REF"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Reflex Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-REF2"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Reflex green"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-REF3"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Reflex Violet"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-REF4"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Reflex Red"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-REF5"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Reflex Truffle"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-REFL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Reflex Silver"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-REFLE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Reflex Gold"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-REFLEX"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Robin's Egg"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-ROB"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Royal Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-ROY"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Shamrock"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-SHA"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Smoke Grey"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-SMO"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Teal"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-TEA"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Violet"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-VIO"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "White"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-WHI"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "Wintergreen"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-WIN"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Gold",
+            "latex colors": "yellow"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-GOL-YEL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "black"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-BLA"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Blue Slate"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-BLU"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Blush"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-BLUS"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Brown"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-BRO"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "bubble Gum"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-BUB"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Chocolate"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-CHO"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Clear"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-CLE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Deep Teal"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-DEE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Dusk Cream"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-DUS"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Dusk Green Tea"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-DUSK"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Dusk Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-DUSKB"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Dusk Lilac"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-DUSKL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Dusk Rose"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-DUSKR"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Empowermint"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-EMP"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "eucalyptus"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-EUC"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Forest"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-FOR"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "fuchsia"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-FUC"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Grey"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-GRE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Honey"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-HON"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Latte"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-LAT"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Lilac"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-LIL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Lime"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-LIM"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "LT Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-LTB"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Orange"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-ORA"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Orchid"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-ORC"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Pastel Pink"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-PAS"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Pastel Yellow"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-PAS2"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Pastel Melon"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-PAS3"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Pastel Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-PAST"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Pastel Green"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-PASTE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Pastel Purple"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-PASTEL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Periwinkle"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-PER"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "raspberry"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-RAS"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Red"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-RED"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Reflex Champagne"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-REF"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Reflex Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-REF2"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Reflex green"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-REF3"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Reflex Violet"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-REF4"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Reflex Red"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-REF5"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Reflex Truffle"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-REFL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Reflex Silver"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-REFLE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Reflex Gold"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-REFLEX"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Robin's Egg"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-ROB"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Royal Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-ROY"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Shamrock"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-SHA"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Smoke Grey"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-SMO"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Teal"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-TEA"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Violet"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-VIO"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "White"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-WHI"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "Wintergreen"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-WIN"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "pink",
+            "latex colors": "yellow"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-PIN-YEL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "black"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-BLA"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Blue Slate"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-BLU"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Blush"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-BLUS"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Brown"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-BRO"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "bubble Gum"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-BUB"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Chocolate"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-CHO"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Clear"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-CLE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Deep Teal"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-DEE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Dusk Cream"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-DUS"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Dusk Green Tea"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-DUSK"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Dusk Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-DUSKB"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Dusk Lilac"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-DUSKL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Dusk Rose"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-DUSKR"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Empowermint"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-EMP"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "eucalyptus"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-EUC"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Forest"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-FOR"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "fuchsia"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-FUC"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Grey"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-GRE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Honey"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-HON"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Latte"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-LAT"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Lilac"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-LIL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Lime"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-LIM"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "LT Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-LTB"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Orange"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-ORA"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Orchid"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-ORC"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Pastel Pink"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-PAS"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Pastel Yellow"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-PAS2"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Pastel Melon"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-PAS3"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Pastel Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-PAST"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Pastel Green"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-PASTE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Pastel Purple"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-PASTEL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Periwinkle"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-PER"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "raspberry"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-RAS"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Red"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-RED"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Reflex Champagne"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-REF"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Reflex Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-REF2"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Reflex green"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-REF3"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Reflex Violet"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-REF4"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Reflex Red"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-REF5"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Reflex Truffle"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-REFL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Reflex Silver"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-REFLE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Reflex Gold"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-REFLEX"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Robin's Egg"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-ROB"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Royal Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-ROY"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Shamrock"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-SHA"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Smoke Grey"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-SMO"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Teal"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-TEA"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Violet"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-VIO"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "White"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-WHI"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "Wintergreen"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-WIN"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Rose gold",
+            "latex colors": "yellow"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-ROS-YEL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "black"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-BLA"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Blue Slate"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-BLU"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Blush"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-BLUS"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Brown"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-BRO"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "bubble Gum"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-BUB"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Chocolate"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-CHO"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Clear"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-CLE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Deep Teal"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-DEE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Dusk Cream"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-DUS"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Dusk Green Tea"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-DUSK"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Dusk Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-DUSKB"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Dusk Lilac"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-DUSKL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Dusk Rose"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-DUSKR"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Empowermint"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-EMP"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "eucalyptus"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-EUC"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Forest"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-FOR"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "fuchsia"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-FUC"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Grey"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-GRE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Honey"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-HON"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Latte"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-LAT"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Lilac"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-LIL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Lime"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-LIM"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "LT Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-LTB"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Orange"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-ORA"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Orchid"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-ORC"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Pastel Pink"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-PAS"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Pastel Yellow"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-PAS2"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Pastel Melon"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-PAS3"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Pastel Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-PAST"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Pastel Green"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-PASTE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Pastel Purple"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-PASTEL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Periwinkle"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-PER"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "raspberry"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-RAS"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Red"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-RED"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Reflex Champagne"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-REF"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Reflex Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-REF2"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Reflex green"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-REF3"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Reflex Violet"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-REF4"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Reflex Red"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-REF5"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Reflex Truffle"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-REFL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Reflex Silver"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-REFLE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Reflex Gold"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-REFLEX"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Robin's Egg"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-ROB"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Royal Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-ROY"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Shamrock"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-SHA"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Smoke Grey"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-SMO"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Teal"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-TEA"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Violet"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-VIO"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "White"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-WHI"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "Wintergreen"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-WIN"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "Silver",
+            "latex colors": "yellow"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-SIL-YEL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "black"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-BLA"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Blue Slate"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-BLU"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Blush"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-BLUS"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Brown"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-BRO"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "bubble Gum"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-BUB"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Chocolate"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-CHO"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Clear"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-CLE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Deep Teal"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-DEE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Dusk Cream"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-DUS"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Dusk Green Tea"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-DUSK"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Dusk Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-DUSKB"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Dusk Lilac"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-DUSKL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Dusk Rose"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-DUSKR"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Empowermint"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-EMP"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "eucalyptus"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-EUC"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Forest"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-FOR"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "fuchsia"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-FUC"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Grey"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-GRE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Honey"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-HON"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Latte"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-LAT"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Lilac"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-LIL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Lime"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-LIM"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "LT Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-LTB"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Orange"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-ORA"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Orchid"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-ORC"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Pastel Pink"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-PAS"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Pastel Yellow"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-PAS2"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Pastel Melon"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-PAS3"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Pastel Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-PAST"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Pastel Green"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-PASTE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Pastel Purple"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-PASTEL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Periwinkle"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-PER"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "raspberry"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-RAS"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Red"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-RED"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Reflex Champagne"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-REF"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Reflex Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-REF2"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Reflex green"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-REF3"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Reflex Violet"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-REF4"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Reflex Red"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-REF5"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Reflex Truffle"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-REFL"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Reflex Silver"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-REFLE"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Reflex Gold"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-REFLEX"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Robin's Egg"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-ROB"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Royal Blue"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-ROY"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Shamrock"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-SHA"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Smoke Grey"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-SMO"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Teal"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-TEA"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Violet"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-VIO"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "White"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-WHI"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "Wintergreen"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-WIN"
+        },
+        {
+          "color_recipes": {
+            "Number colors": "white gold",
+            "latex colors": "yellow"
+          },
+          "price": 55.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "number-balloon-columns-WHI-YEL"
+        }
+      ],
+      "website_item_code": "number-balloon-columns"
+    },
+    {
+      "add_on_options": 0,
+      "color_axes": [
+        "latex colors"
+      ],
+      "enabled_color_sku_count": 51,
+      "resolved_line_count": 51,
+      "source_axis_value_counts": {
+        "latex colors": {
+          "canonical": 51,
+          "raw": 53
+        }
+      },
+      "source_canonical_color_combo_count": 51,
+      "source_name": "Sleepy Baby Column",
+      "source_price": 220.0,
+      "source_price_basis": "Odoo base price; color recipe choices do not change price",
+      "source_valid_variant_count": 53,
+      "ui_axis_coverage": {
+        "latex colors": {
+          "payload_target": "color_recipes",
+          "selector_type": "multi_color_recipe_builder",
+          "source_canonical_value_count": 51,
+          "source_raw_value_count": 53,
+          "ui_value_count": 51
+        }
+      },
+      "verified_variant_count": 51,
+      "verified_variants": [
+        {
+          "color_recipes": {
+            "latex colors": "black"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-BLA"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Blue Slate"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-BLU"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Blush"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-BLUS"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Brown"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-BRO"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "bubble Gum"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-BUB"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Chocolate"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-CHO"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Clear"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-CLE"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Deep Teal"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-DEE"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Dusk Cream"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-DUS"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Dusk Green Tea"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-DUSK"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Dusk Blue"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-DUSKB"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Dusk Lilac"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-DUSKL"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Dusk Rose"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-DUSKR"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Empowermint"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-EMP"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "eucalyptus"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-EUC"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Forest"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-FOR"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "fuchsia"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-FUC"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Grey"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-GRE"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Honey"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-HON"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Latte"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-LAT"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Lilac"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-LIL"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Lime"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-LIM"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "LT Blue"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-LTB"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Orange"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-ORA"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Orchid"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-ORC"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Pastel Pink"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-PAS"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Pastel Yellow"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-PAS2"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Pastel Melon"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-PAS3"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Pastel Blue"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-PAST"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Pastel Green"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-PASTE"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Pastel Purple"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-PASTEL"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Periwinkle"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-PER"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "raspberry"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-RAS"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Red"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-RED"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex Champagne"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-REF"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex Blue"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-REF2"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex green"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-REF3"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex Violet"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-REF4"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex Red"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-REF5"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex Truffle"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-REFL"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex Silver"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-REFLE"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Reflex Gold"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-REFLEX"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Robin's Egg"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-ROB"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Royal Blue"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-ROY"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Shamrock"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-SHA"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Smoke Grey"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-SMO"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Teal"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-TEA"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Violet"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-VIO"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "White"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-WHI"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "Wintergreen"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-WIN"
+        },
+        {
+          "color_recipes": {
+            "latex colors": "yellow"
+          },
+          "price": 220.0,
+          "resolved_line_count": 1,
+          "variant_item_code": "sleepy-baby-column-YEL"
+        }
+      ],
+      "website_item_code": "sleepy-baby-column"
+    }
+  ],
+  "ok": true,
+  "original_contracts": {
+    "7-epic-column": {
+      "commerce_lane": "quote_first",
+      "item_group": "Columns",
+      "product_page_type": "complex_custom_product",
+      "published": true,
+      "route": "shop-items/columns/7-epic-column",
+      "web_item_name": "7' Epic Column",
+      "website_item_name": "WEB-ITM-0017"
+    },
+    "baby-shower-combination-photo-opt": {
+      "commerce_lane": "quote_first",
+      "item_group": "Table Decor",
+      "product_page_type": "complex_custom_product",
+      "published": true,
+      "route": "shop-items/table-decor/baby-shower-combination-photo-opt",
+      "web_item_name": "Baby Shower Combination Photo opt",
+      "website_item_name": "WEB-ITM-0035"
+    },
+    "baby-table-decor": {
+      "commerce_lane": "quote_first",
+      "item_group": "Table Decor",
+      "product_page_type": "complex_custom_product",
+      "published": true,
+      "route": "shop-items/table-decor/baby-table-decor",
+      "web_item_name": "Baby Table decor",
+      "website_item_name": "WEB-ITM-0020"
+    },
+    "classic-organic-for-easel": {
+      "commerce_lane": "quote_first",
+      "item_group": "Stands & Easels",
+      "product_page_type": "complex_custom_product",
+      "published": true,
+      "route": "shop-items/stands-easels/classic-organic-for-easel",
+      "web_item_name": "classic organic for easel",
+      "website_item_name": "WEB-ITM-0031"
+    },
+    "number-balloon-columns": {
+      "commerce_lane": "quote_first",
+      "item_group": "Columns",
+      "product_page_type": "complex_custom_product",
+      "published": true,
+      "route": "shop-items/columns/number-balloon-columns",
+      "web_item_name": "Number Balloon Columns",
+      "website_item_name": "WEB-ITM-0001"
+    },
+    "sleepy-baby-column": {
+      "commerce_lane": "quote_first",
+      "item_group": "Columns",
+      "product_page_type": "complex_custom_product",
+      "published": true,
+      "route": "shop-items/columns/sleepy-baby-column",
+      "web_item_name": "Sleepy Baby Column",
+      "website_item_name": "WEB-ITM-0049"
+    }
+  },
+  "rolled_back": true,
+  "sales_invoice": "ACC-SINV-2026-00004",
+  "sales_order": "SAL-ORD-2026-00024",
+  "sales_order_line_count": 563,
+  "schema_version": "lt-product-config-v1",
+  "survivor_counts": {
+    "customer": 0,
+    "sales_invoice": 0,
+    "sales_order": 0
+  },
+  "transactional_contract": "simple_product|checkout"
+}

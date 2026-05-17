@@ -6,6 +6,21 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-17 - Source color casing drift can break product proof
+
+The multi-color rehearsal initially failed before checkout because Odoo had
+duplicate source color labels with different casing, such as `Blue Slate` /
+`Blue slate` and `Smoke Grey` / `Smoke grey`. The Item Attribute fixture path
+already knew to collapse those values, but the runtime color canonicalizer did
+not yet know the same aliases.
+
+**Counter-move:** color cleanup must be shared by import, product-page runtime,
+cart/checkout validation, and verifier expectations. When a source product
+looks short by one or two color values, check the Odoo value-normalize map
+before assuming the product export or ERPNext variants are wrong.
+
+---
+
 ## 2026-05-17 - Variant media proof is not done until payment and receipt pass
 
 The Product Setup selected image worked on the product page/cart/checkout path,

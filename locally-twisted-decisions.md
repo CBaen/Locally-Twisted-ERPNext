@@ -8,6 +8,33 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-17 - Duplicate Odoo color casing resolves to one ERPNext color
+
+**Decision:** Odoo color values that differ only by casing resolve to the
+canonical ERPNext color name before runtime validation or verifier comparison.
+The first explicit runtime aliases are `Blue slate` -> `Blue Slate` and
+`Smoke grey` -> `Smoke Grey`.
+
+**Reasoning:** ERPNext Item Attribute import already rejects duplicate values
+that differ only by casing, and the Odoo value-normalize map already collapses
+those source rows. The multi-color product rehearsal exposed the missing
+runtime side of the same rule: source export values and live ERPNext variants
+must compare by canonical color meaning, not raw casing.
+
+**Implementation boundary:** This is not permission to invent color names or
+rewrite source colors broadly. Add aliases only when they are backed by the
+Odoo export/value-normalize map or by an approved supplier/color source.
+
+**Receipts:** `apps/locally_twisted/locally_twisted/catalog_contract/color_rules.py`;
+`apps/locally_twisted/locally_twisted/verify/product_page_runtime_contract.py`;
+`workstreams/ecommerce-audit/multi-color-purchasable-rehearsal-2026-05-17.md`;
+`scripts/verify/multi_color_purchasable_rehearsal_contract.py`.
+
+**Decided by:** Codex source-backed repair during multi-color product proof,
+2026-05-17.
+
+---
+
 ## 2026-05-17 - Products are purchasable targets, not quote-first categories
 
 **Decision:** There are no business "quote-first products" in the Locally

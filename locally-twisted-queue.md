@@ -92,6 +92,22 @@ DNS/cache/security/Frappe Cloud release change. Future release review must
 compare the previous live app hash to the target app mirror commit; do not use
 the final commit alone as release scope proof.
 
+**Product-family certification track (2026-05-17):** Current control artifact
+is `workstreams/ecommerce-audit/product-family-certification-truth-table-2026-05-17.md`.
+GL corrected the business model: no product is intentionally quote-first;
+legacy `quote_first` values are internal holds until source-backed checkout
+proof passes. Simple repair lane proof is green for `large-head-missionary`,
+`mothers-day-front-yard-7-column`, `easter-arch`, and `pride-arch` through
+backend, browser, and payment/customer-message cascade, pending final
+owner/product approval. Multi-color repair lane backend rehearsal is green for
+`7-epic-column`, `baby-shower-combination-photo-opt`, `baby-table-decor`,
+`classic-organic-for-easel`, `number-balloon-columns`, and
+`sleepy-baby-column` through 563 color SKU checkout/SO/SI lines, pending
+browser proof, payment/customer-message cascade, media behavior proof, and
+final owner/product approval. Handoffs:
+`workstreams/ecommerce-audit/simple-purchasable-payment-cascade-2026-05-17.md`
+and `workstreams/ecommerce-audit/multi-color-purchasable-rehearsal-2026-05-17.md`.
+
 **Repo hygiene cleanup track (2026-05-17):** the cleanup track reconciled local
 `main` with `origin/main` at `d541a0c` and deleted stale detached Codex
 worktrees that held already-merged LT value after explicit approval. This is a

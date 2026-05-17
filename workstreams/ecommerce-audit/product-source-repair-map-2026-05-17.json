@@ -4,7 +4,7 @@
   "live_site_update_allowed": false,
   "metadata": {
     "business_rule": "Products target purchasable checkout; legacy quote_first values are internal holds.",
-    "generated_at": "2026-05-17T20:53:46Z",
+    "generated_at": "2026-05-17T21:09:02Z",
     "price_enrichment": "audits\\odoo-erpnext-migration-audit-2026-05-08\\21-product-page-price-enrichment-candidates.json",
     "scaffold": "output\\complex-checkout-scaffold.json",
     "source_catalog": "_resources\\odoo-live\\catalog.json"
@@ -28,9 +28,10 @@
       },
       "repair_lane": "multi_color_recipe_checkout_build",
       "required_next_gates": [
-        "customer-facing multi-color recipe UI",
-        "backend color recipe validation",
-        "checkout/payment/invoice/receipt cascade proof"
+        "keep multi_color_purchasable_rehearsal_contract green",
+        "browser product/cart/checkout proof",
+        "payment/receipt/customer-message cascade proof",
+        "final owner/product-scope approval before customer exposure"
       ],
       "scaffold_stage": "multi_color_recipe_ui_required",
       "slug": "baby-shower-combination-photo-opt",
@@ -139,9 +140,10 @@
       },
       "repair_lane": "multi_color_recipe_checkout_build",
       "required_next_gates": [
-        "customer-facing multi-color recipe UI",
-        "backend color recipe validation",
-        "checkout/payment/invoice/receipt cascade proof"
+        "keep multi_color_purchasable_rehearsal_contract green",
+        "browser product/cart/checkout proof",
+        "payment/receipt/customer-message cascade proof",
+        "final owner/product-scope approval before customer exposure"
       ],
       "scaffold_stage": "multi_color_recipe_ui_required",
       "slug": "number-balloon-columns",
@@ -1099,9 +1101,10 @@
       },
       "repair_lane": "multi_color_recipe_checkout_build",
       "required_next_gates": [
-        "customer-facing multi-color recipe UI",
-        "backend color recipe validation",
-        "checkout/payment/invoice/receipt cascade proof"
+        "keep multi_color_purchasable_rehearsal_contract green",
+        "browser product/cart/checkout proof",
+        "payment/receipt/customer-message cascade proof",
+        "final owner/product-scope approval before customer exposure"
       ],
       "scaffold_stage": "multi_color_recipe_ui_required",
       "slug": "7-epic-column",
@@ -1286,9 +1289,10 @@
       },
       "repair_lane": "multi_color_recipe_checkout_build",
       "required_next_gates": [
-        "customer-facing multi-color recipe UI",
-        "backend color recipe validation",
-        "checkout/payment/invoice/receipt cascade proof"
+        "keep multi_color_purchasable_rehearsal_contract green",
+        "browser product/cart/checkout proof",
+        "payment/receipt/customer-message cascade proof",
+        "final owner/product-scope approval before customer exposure"
       ],
       "scaffold_stage": "multi_color_recipe_ui_required",
       "slug": "sleepy-baby-column",
@@ -1322,9 +1326,10 @@
       },
       "repair_lane": "multi_color_recipe_checkout_build",
       "required_next_gates": [
-        "customer-facing multi-color recipe UI",
-        "backend color recipe validation",
-        "checkout/payment/invoice/receipt cascade proof"
+        "keep multi_color_purchasable_rehearsal_contract green",
+        "browser product/cart/checkout proof",
+        "payment/receipt/customer-message cascade proof",
+        "final owner/product-scope approval before customer exposure"
       ],
       "scaffold_stage": "multi_color_recipe_ui_required",
       "slug": "baby-table-decor",
@@ -1742,9 +1747,10 @@
       },
       "repair_lane": "multi_color_recipe_checkout_build",
       "required_next_gates": [
-        "customer-facing multi-color recipe UI",
-        "backend color recipe validation",
-        "checkout/payment/invoice/receipt cascade proof"
+        "keep multi_color_purchasable_rehearsal_contract green",
+        "browser product/cart/checkout proof",
+        "payment/receipt/customer-message cascade proof",
+        "final owner/product-scope approval before customer exposure"
       ],
       "scaffold_stage": "multi_color_recipe_ui_required",
       "slug": "classic-organic-for-easel",

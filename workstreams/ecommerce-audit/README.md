@@ -186,6 +186,18 @@ customer receipt, operator email, welcome email, idempotency, and rollback
 cleanup. It does not authorize customer exposure; final owner/product approval
 is still required.
 
+## 2026-05-17 Multi-Color Purchasable Rehearsal
+
+Use `multi-color-purchasable-rehearsal-2026-05-17.md` and
+`multi-color-purchasable-rehearsal-2026-05-17.json` for the rollback-safe
+backend rehearsal of the six multi-color repair-lane products. The contract
+temporarily applies `simple_product|checkout` in one ERPNext transaction,
+proves 563 enabled color SKUs resolve through checkout with `color_recipes`,
+preserves all Sales Order/Sales Invoice line fields, and rolls back with zero
+surviving records. It does not prove browser UX, Payment Request, Payment
+Entry, receipt/operator/welcome emails, media update behavior, owner approval,
+or staging/live exposure.
+
 ## Evidence inventory
 
 | Lane | Required artifact | Current state | Use it for |

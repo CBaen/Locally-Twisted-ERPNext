@@ -55,6 +55,7 @@ Website Item was unpublished.
 | Simple purchasable rehearsal | PASS / backend only | `python scripts/verify/simple_purchasable_rehearsal_contract.py`; 4 simple repair-lane products, 33 sale SKUs, source-backed prices, SO/SI line preservation, and rollback cleanup passed |
 | Simple purchasable browser proof | PASS / local only | `python scripts/verify/simple_purchasable_browser_proof.py`; temporary local opening proved the same 4 products through desktop/mobile product pages, cart, checkout preview, and verified restoration |
 | Simple purchasable payment cascade | PASS / rollback only | `python scripts/verify/simple_purchasable_payment_cascade_contract.py`; all 33 sale lines passed Payment Request, Payment Entry, Sales Invoice, receipt, operator email, welcome email, idempotency, and rollback cleanup |
+| Multi-color purchasable rehearsal | PASS / backend only | `python scripts/verify/multi_color_purchasable_rehearsal_contract.py --report workstreams/ecommerce-audit/multi-color-purchasable-rehearsal-2026-05-17.json`; 6 multi-color repair-lane products, 563 enabled color SKUs, source-backed prices, color-recipes payloads, SO/SI line preservation, and rollback cleanup passed |
 | Stripe amount parity | PASS | `python scripts/verify/stripe_amount_parity_contract.py`; hosted checkout cents match ERPNext totals |
 | Payment cascade | PASS | `python scripts/verify/payment_cascade_contract.py`; SO -> PR -> Payment Entry -> SI -> receipt/operator/welcome email rolled back |
 
@@ -98,7 +99,7 @@ classification are:
 |---|---:|---|
 | Direct checkout regression guard | 18 | Current backend says checkout-ready; keep these green while proving UX/cascade family by family |
 | Simple purchasable payment cascade passed | 4 | Source/export price, SO/SI line preservation, desktop/mobile product-page UX, cart, checkout preview, Payment Request, Payment Entry, Sales Invoice, receipt, operator email, and welcome email are proven; final owner/product approval remains before customer checkout |
-| Multi-color recipe UI required | 6 | Needs customer-facing multi-color UI plus backend validation before checkout |
+| Multi-color backend rehearsal passed | 6 | Source/export price, server-side color recipe controls, checkout line resolution, SO/SI line preservation, and rollback cleanup are proven; browser UX, payment/customer-message cascade, media update behavior, and final owner/product approval remain before customer checkout |
 | Add-on or conditional pricing blocked | 20 | Needs explicit add-on and/or conditional pricing contracts before checkout |
 | Needs review or missing | 5 | Keep blocked or hidden until product-page type, buying path, source export meaning, pricing, and media are reviewed |
 
@@ -145,19 +146,22 @@ welcome email, idempotency, and rollback cleanup.
 | Mother's day front yard 7' Column | `mothers-day-front-yard-7-column` | Backend SO/SI, browser, and payment cascade proof passed; still needs final owner/product approval |
 | Pride Arch | `pride-arch` | Backend SO/SI, browser, and payment cascade proof passed; still needs final owner/product approval |
 
-## Tranche 3 - Multi-Color Recipe UI Required
+## Tranche 3 - Multi-Color Backend Rehearsal Passed
 
-These require customer-facing multi-color recipe UI, backend validation, image
-update behavior where approved, and receipt summary parity before checkout.
+These stay out of customer checkout until browser UX, payment/customer-message
+cascade, media update behavior where approved, and final owner/product approval
+pass. Backend rehearsal passed on 2026-05-17 with 563 enabled color SKU lines,
+source-backed prices, `color_recipes` payloads, SO/SI preservation, and zero
+surviving generated records.
 
-| Product | Slug |
-|---|---|
-| 7' Epic Column | `7-epic-column` |
-| Baby Shower Combination Photo opt | `baby-shower-combination-photo-opt` |
-| Baby Table decor | `baby-table-decor` |
-| classic organic for easel | `classic-organic-for-easel` |
-| Number Balloon Columns | `number-balloon-columns` |
-| Sleepy Baby Column | `sleepy-baby-column` |
+| Product | Slug | Required before checkout |
+|---|---|---|
+| 7' Epic Column | `7-epic-column` | Backend SO/SI proof passed for 51 color SKUs; still needs browser, payment/customer-message cascade, media behavior, and final owner/product approval |
+| Baby Shower Combination Photo opt | `baby-shower-combination-photo-opt` | Backend SO/SI proof passed for 51 color SKUs; still needs browser, payment/customer-message cascade, media behavior, and final owner/product approval |
+| Baby Table decor | `baby-table-decor` | Backend SO/SI proof passed for 2 color SKUs; still needs browser, payment/customer-message cascade, media behavior, and final owner/product approval |
+| classic organic for easel | `classic-organic-for-easel` | Backend SO/SI proof passed for 51 color SKUs; still needs browser, payment/customer-message cascade, media behavior, and final owner/product approval |
+| Number Balloon Columns | `number-balloon-columns` | Backend SO/SI proof passed for 357 color SKUs; still needs browser, payment/customer-message cascade, media behavior, and final owner/product approval |
+| Sleepy Baby Column | `sleepy-baby-column` | Backend SO/SI proof passed for 51 color SKUs; still needs browser, payment/customer-message cascade, media behavior, and final owner/product approval |
 
 ## Tranche 4 - Add-On Or Conditional Pricing Blocked
 
@@ -203,12 +207,14 @@ source meaning, add-ons, and media/pricing presentation are reviewed.
 
 ## Next Concrete Work
 
-1. Get final owner/product-scope approval before exposing the simple
-   repair-lane products to customers.
-2. Use `product-source-repair-map-2026-05-17.md` to repair the remaining
+1. Run local browser and payment/customer-message cascade proof for the six
+   multi-color repair-lane products.
+2. Get final owner/product-scope approval before exposing the simple
+   repair-lane products or the multi-color repair-lane products to customers.
+3. Use `product-source-repair-map-2026-05-17.md` to repair the remaining
    product-family holds into purchasable products; repull the Odoo export if
    current source data is incomplete or unclear.
-3. Keep all other product families blocked, needs-review, or hidden until their
+4. Keep all other product families blocked, needs-review, or hidden until their
    tranche gate passes; do not present `quote_first` as the business model.
-4. Replace remaining verifier/report wording that says quote-first with
+5. Replace remaining verifier/report wording that says quote-first with
    blocked/import-repair language where the field name itself is not required.

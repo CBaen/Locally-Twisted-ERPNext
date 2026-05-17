@@ -1,6 +1,6 @@
 # Ecommerce Shop Handoff
 
-Status as of 2026-05-14 for peer GPT-5.5 Codex/OpenClaw agents.
+Status as of 2026-05-17 for peer GPT-5.5 Codex/OpenClaw agents.
 
 ## Current Repository State
 
@@ -266,6 +266,14 @@ that appears in product options and fails loudly above its quantity max.
   Entry, Sales Invoice, receipt email, operator email, welcome email, and
   rollback cleanup. Final owner/product approval and live exposure are still
   pending for that tranche.
+- First multi-color repair-lane backend proof is green:
+  `7-epic-column`, `baby-shower-combination-photo-opt`, `baby-table-decor`,
+  `classic-organic-for-easel`, `number-balloon-columns`, and
+  `sleepy-baby-column` preserve source-backed prices and 563 enabled color SKU
+  lines through checkout, `color_recipes`, Sales Order, and Sales Invoice in
+  rollback. Browser UX, payment/customer-message cascade, media update
+  behavior, final owner/product approval, and live exposure are still pending
+  for that tranche.
 - The shared worktree may still show regenerated audit artifacts under `audits/odoo-erpnext-migration-audit-2026-05-08/`; do not broad-stage them without reviewing the producing lane.
 
 ## Remaining Launch Gates
@@ -296,6 +304,12 @@ These are not current local ecommerce architecture blockers:
   backend SO/SI rehearsal and local browser cart/checkout preview are proven,
   and payment/customer-message proof is complete. Do not expose them to
   customers until final owner/product approval is explicit.
+- Current source-backed multi-color candidates are only `7-epic-column`,
+  `baby-shower-combination-photo-opt`, `baby-table-decor`,
+  `classic-organic-for-easel`, `number-balloon-columns`, and
+  `sleepy-baby-column`; their backend checkout/SO/SI rehearsal is proven. Do
+  not expose them to customers until browser, payment/customer-message, media
+  behavior, and final owner/product approval gates pass.
 - Product-page controls must be driven by the generic architecture contract,
   not by product-name branches or frontend-only checkout eligibility.
 - Color-axis payload targets must come from source/backend semantics, not from

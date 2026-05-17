@@ -32,7 +32,9 @@ def _color_key(name: str) -> str:
 
 
 COLOR_NAME_ALIASES = {
+    "blue slate": "Blue Slate",
     "reflex champage": "Reflex Champagne",
+    "smoke grey": "Smoke Grey",
 }
 
 

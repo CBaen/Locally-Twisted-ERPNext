@@ -1,6 +1,6 @@
 # Locally Twisted Launch Runbook
 
-Last updated: 2026-05-16 by Codex.
+Last updated: 2026-05-17 by Codex.
 
 This is the plain launch doc at the project root.
 
@@ -16,7 +16,7 @@ The public website and inquiry forms are now live on Frappe Cloud at
 `https://locallytwisted.com`.
 
 Ecommerce/live checkout is still a separate gate. The site can stay live while
-checkout remains paused or quote-first.
+checkout remains paused and unproven products remain internally held.
 
 The 2026-05-14 connection audit proves public route health, not direct Frappe
 Cloud dashboard/API control from Codex.
@@ -76,12 +76,19 @@ owner-only queued attachment refs. Ecommerce/live checkout is still blocked.
    - Live checkout remains blocked until the live Stripe config, product scope,
      policy URLs, webhook, and one real low-risk payment test pass.
    - Do not treat the public website being live as checkout approval.
+   - There are no business quote-first products. Product rows that still carry
+     legacy internal hold values are blocked because source, pricing, media,
+     browser, payment, or owner-approval proof is incomplete.
+   - Current local repair proof: four simple products passed backend, browser,
+     and payment/customer-message cascade; six multi-color products passed
+     backend checkout/SO/SI rehearsal only. Neither tranche is live-approved.
 
 ## Codex Owns
 
 1. Keep source, Frappe Cloud app mirror, and live site migration state aligned.
 2. Verify live public routes and form submission paths after any release.
-3. Keep ecommerce hidden, paused, or quote-first unless the ecommerce gates pass.
+3. Keep ecommerce hidden or paused, and keep unproven products internally held,
+   unless the ecommerce gates pass.
 4. Prove any checkout/product/deposit scope before opening it.
 5. Configure/check live Stripe without printing secrets.
 6. Check Cloudflare dynamic routes after DNS/security/cache changes.
