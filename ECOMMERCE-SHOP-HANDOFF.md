@@ -182,9 +182,12 @@ Expected gated result:
   local ecommerce implementation work.
 
 Evidence summary: 53 product rows are mapped through the generic receiving
-architecture; 18 checkout-allowed, 35 quote-first-allowed; payload targets are
-`selected_options`, `color_recipes`, `add_ons`, and `quote_context`;
-product-specific rules are explicitly not allowed.
+architecture; 18 are currently checkout-certified and 35 are blocked until
+source, pricing, media, UI, and checkout cascade proof passes. There are no
+business quote-first product categories; legacy `quote_first` values are
+internal holds. Payload targets are `selected_options`, `color_recipes`,
+`add_ons`, and `quote_context`; product-specific rules are explicitly not
+allowed.
 
 Post-review axis rule: live ERPNext variant axes are not classified by
 attribute name alone. Source/backend recipe patterns keep color axes in
@@ -272,11 +275,13 @@ These are not current local ecommerce architecture blockers:
 
 ## Do Not Regress
 
-- `quote_first` is a lane/state, not a permanent product blocker.
+- `quote_first` is a legacy internal hold state, not a business product
+  category or permanent product blocker.
 - Direct checkout must still be backend-truth driven by Website Item fields, ProductPatternContract, resolver behavior, selected config, item code, price, media, add-ons, cart line key, checkout summary, and SO/SI preserved fields.
 - `needs_review` and partial/blank Website Item classification must fail closed.
 - Add-ons require explicit mapping, price, quantity/value limits, and SO/SI line preservation before checkout.
-- Use the complex-checkout scaffold before flipping any quote-first product.
+- Use the source repair map and complex-checkout scaffold before moving any
+  held product into checkout.
   Current source-backed simple-axis candidates are only `large-head-missionary`,
   `mothers-day-front-yard-7-column`, `easter-arch`, and `pride-arch`.
 - Product-page controls must be driven by the generic architecture contract,

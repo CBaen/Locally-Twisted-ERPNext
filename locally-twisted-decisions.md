@@ -8,6 +8,39 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-17 - Products are purchasable targets, not quote-first categories
+
+**Decision:** There are no business "quote-first products" in the Locally
+Twisted catalog model. If it is a product, the target state is purchasable.
+Pricing and product details come from the Odoo product export list; if a
+product cannot be mapped cleanly, repull or repair the source/import path
+instead of treating quote-first as a final product lane.
+
+**Reasoning:** GL corrected an agent-created concept. The old `quote_first`
+language was useful only as a safety hold that prevented unproven products from
+entering checkout. Keeping it as business language makes future agents think
+custom or complex products are supposed to stay out of ecommerce, which is the
+opposite of the current software goal.
+
+**Implementation boundary:** Existing `quote_first` field values and verifier
+names may remain temporarily as internal legacy safety states where renaming
+would be a larger code migration. Active docs, maps, queues, and future work
+must translate that state as blocked/import-repair/pending-certification, not
+as a product category. A held product may enter checkout only after source
+export data, pricing, media, UI, cart, checkout, payment, invoice, receipt, and
+operator/customer payload preservation pass.
+
+**Receipts:** `workstreams/ecommerce-audit/product-family-certification-truth-table-2026-05-17.md`;
+`workstreams/ecommerce-audit/product-source-repair-map-2026-05-17.md`;
+`apps/locally_twisted/locally_twisted/catalog_contract/product_source_repair_map.py`;
+`scripts/verify/product_source_repair_map.py`;
+`scripts/verify/product_source_repair_map_contract.py`.
+
+**Decided by:** GL direct correction and Codex documentation/repair-map update,
+2026-05-17.
+
+---
+
 ## 2026-05-17 - Product Setup media authority must survive checkout and receipt
 
 **Decision:** For complex ecommerce products, the selected customer image is

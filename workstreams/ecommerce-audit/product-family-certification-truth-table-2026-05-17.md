@@ -51,6 +51,7 @@ Website Item was unpublished.
 | Product-page runtime | PASS | `python scripts/verify/product_page_runtime_contract.py`; selected config preserved through SO/SI/Quotation paths in rollback |
 | Cart/checkout runtime | PASS | `python scripts/verify/cart_checkout_contract.py`; blocked-product guards, cart line keys, add-ons, over-limit quantities, stale payload failures, and color-recipe/variant mismatch failures guarded |
 | Open-mode product UX | PASS / local only | Temporarily set local `lt_ecommerce_paused=0`, ran `node scripts/verify/post_import_checkout_proof.js`, restored `lt_ecommerce_paused=1`, and cleared website cache; product page, cart, and checkout preview passed for all 18 current checkout families at desktop and mobile widths |
+| Product source repair map | PASS | `python scripts/verify/product_source_repair_map.py`; 53/53 Odoo export rows found, 18 certified checkout products, 35 blocked-until-certified products, 0 contract failures |
 | Stripe amount parity | PASS | `python scripts/verify/stripe_amount_parity_contract.py`; hosted checkout cents match ERPNext totals |
 | Payment cascade | PASS | `python scripts/verify/payment_cascade_contract.py`; SO -> PR -> Payment Entry -> SI -> receipt/operator/welcome email rolled back |
 
@@ -196,9 +197,9 @@ source meaning, add-ons, and media/pricing presentation are reviewed.
 
 ## Next Concrete Work
 
-1. Use the Odoo product export list to repair the remaining product-family
-   holds into purchasable products; repull the export if current source data is
-   incomplete or unclear.
+1. Use `product-source-repair-map-2026-05-17.md` to repair the remaining
+   product-family holds into purchasable products; repull the Odoo export if
+   current source data is incomplete or unclear.
 2. Keep all other product families blocked, needs-review, or hidden until their
    tranche gate passes; do not present `quote_first` as the business model.
 3. Replace remaining verifier/report wording that says quote-first with

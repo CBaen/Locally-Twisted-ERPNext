@@ -1,0 +1,1973 @@
+{
+  "contract_failures": [],
+  "destructive_allowed": false,
+  "live_site_update_allowed": false,
+  "metadata": {
+    "business_rule": "Products target purchasable checkout; legacy quote_first values are internal holds.",
+    "generated_at": "2026-05-17T20:23:44Z",
+    "price_enrichment": "audits\\odoo-erpnext-migration-audit-2026-05-08\\21-product-page-price-enrichment-candidates.json",
+    "scaffold": "output\\complex-checkout-scaffold.json",
+    "source_catalog": "_resources\\odoo-live\\catalog.json"
+  },
+  "products": [
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "quote_first",
+      "notes": [
+        "legacy internal hold state; not a business product lane"
+      ],
+      "odoo_id": "14",
+      "price_evidence": {
+        "candidate_units": 1,
+        "expected_units": 1,
+        "live_snapshot_units": 0,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 1,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "multi_color_recipe_checkout_build",
+      "required_next_gates": [
+        "customer-facing multi-color recipe UI",
+        "backend color recipe validation",
+        "checkout/payment/invoice/receipt cascade proof"
+      ],
+      "scaffold_stage": "multi_color_recipe_ui_required",
+      "slug": "baby-shower-combination-photo-opt",
+      "source_attributes": [
+        "latex colors"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/14/image_1920"
+      },
+      "source_name": "Baby Shower Combination Photo opt",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/baby-shower-combination-photo-opt-14",
+      "source_variant_count": 53
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "quote_first",
+      "notes": [
+        "legacy internal hold state; not a business product lane",
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "19",
+      "price_evidence": {
+        "candidate_units": 3,
+        "expected_units": 3,
+        "live_snapshot_units": 3,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "add_on_conditional_pricing_build",
+      "required_next_gates": [
+        "explicit add-on or conditional pricing contract",
+        "ERPNext price provenance",
+        "checkout/payment/invoice/receipt cascade proof"
+      ],
+      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "slug": "classic-organic-balloon-garland",
+      "source_attributes": [
+        "Garland Length",
+        "latex colors"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 0,
+        "primary_image_url": "http://5.78.136.133/web/image/product.product/65/image_1024/Classic%20Organic%20Balloon%20Garland%20%286ft%29?unique=e7d65bc"
+      },
+      "source_name": "Classic Organic Balloon Garland",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/classic-organic-balloon-garland-19",
+      "source_variant_count": 159
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "quote_first",
+      "notes": [
+        "legacy internal hold state; not a business product lane",
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "21",
+      "price_evidence": {
+        "candidate_units": 2,
+        "expected_units": 2,
+        "live_snapshot_units": 2,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "add_on_conditional_pricing_build",
+      "required_next_gates": [
+        "explicit add-on or conditional pricing contract",
+        "ERPNext price provenance",
+        "checkout/payment/invoice/receipt cascade proof"
+      ],
+      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "slug": "basketball-arch",
+      "source_attributes": [
+        "Arch Size"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/21/image_1920"
+      },
+      "source_name": "Basketball Arch",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/basketball-arch-21",
+      "source_variant_count": 2
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "quote_first",
+      "notes": [
+        "legacy internal hold state; not a business product lane"
+      ],
+      "odoo_id": "22",
+      "price_evidence": {
+        "candidate_units": 1,
+        "expected_units": 1,
+        "live_snapshot_units": 0,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 1,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "multi_color_recipe_checkout_build",
+      "required_next_gates": [
+        "customer-facing multi-color recipe UI",
+        "backend color recipe validation",
+        "checkout/payment/invoice/receipt cascade proof"
+      ],
+      "scaffold_stage": "multi_color_recipe_ui_required",
+      "slug": "number-balloon-columns",
+      "source_attributes": [
+        "Number colors",
+        "latex colors"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/22/image_1920"
+      },
+      "source_name": "Number Balloon Columns",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/number-balloon-columns-22",
+      "source_variant_count": 371
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "quote_first",
+      "notes": [
+        "legacy internal hold state; not a business product lane",
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "30",
+      "price_evidence": {
+        "candidate_units": 2,
+        "expected_units": 2,
+        "live_snapshot_units": 2,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "add_on_conditional_pricing_build",
+      "required_next_gates": [
+        "explicit add-on or conditional pricing contract",
+        "ERPNext price provenance",
+        "checkout/payment/invoice/receipt cascade proof"
+      ],
+      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "slug": "easter-balloon-arch-bunny-ear",
+      "source_attributes": [
+        "Arch Size"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/30/image_1920"
+      },
+      "source_name": "Easter Balloon Arch - Bunny Ear",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/easter-balloon-arch-bunny-ear-30",
+      "source_variant_count": 2
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
+      "notes": [],
+      "odoo_id": "38",
+      "price_evidence": {
+        "candidate_units": 1,
+        "expected_units": 1,
+        "live_snapshot_units": 0,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 1,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "certified_current_checkout",
+      "required_next_gates": [
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
+      ],
+      "scaffold_stage": "direct_checkout_regression_guard",
+      "slug": "graduation-grab-n-go",
+      "source_attributes": [
+        "latex colors"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/38/image_1920"
+      },
+      "source_name": "Graduation Grab n Go",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/graduation-grab-n-go-38",
+      "source_variant_count": 53
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "quote_first",
+      "notes": [
+        "legacy internal hold state; not a business product lane",
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "39",
+      "price_evidence": {
+        "candidate_units": 4,
+        "expected_units": 4,
+        "live_snapshot_units": 4,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "add_on_conditional_pricing_build",
+      "required_next_gates": [
+        "explicit add-on or conditional pricing contract",
+        "ERPNext price provenance",
+        "checkout/payment/invoice/receipt cascade proof"
+      ],
+      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "slug": "halloween-arch",
+      "source_attributes": [
+        "Arch Size",
+        "latex colors"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/39/image_1920"
+      },
+      "source_name": "Halloween arch",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/halloween-arch-39",
+      "source_variant_count": 212
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "quote_first",
+      "notes": [
+        "legacy internal hold state; not a business product lane",
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "45",
+      "price_evidence": {
+        "candidate_units": 30,
+        "expected_units": 30,
+        "live_snapshot_units": 30,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "simple_purchasable_rehearsal",
+      "required_next_gates": [
+        "focused source/export purchasable rehearsal",
+        "open-mode product UX proof",
+        "checkout/payment/invoice/receipt cascade proof"
+      ],
+      "scaffold_stage": "simple_axis_lane_flip_candidate",
+      "slug": "large-head-missionary",
+      "source_attributes": [
+        "Hair color",
+        "Missionary",
+        "skin color"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/45/image_1920"
+      },
+      "source_name": "Large head Missionary",
+      "source_url": "http://5.78.136.133/shop/personalized-displays-4/large-head-missionary-45",
+      "source_variant_count": 30
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "quote_first",
+      "notes": [
+        "legacy internal hold state; not a business product lane",
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "52",
+      "price_evidence": {
+        "candidate_units": 3,
+        "expected_units": 3,
+        "live_snapshot_units": 3,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "add_on_conditional_pricing_build",
+      "required_next_gates": [
+        "explicit add-on or conditional pricing contract",
+        "ERPNext price provenance",
+        "checkout/payment/invoice/receipt cascade proof"
+      ],
+      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "slug": "premium-organic-garland",
+      "source_attributes": [
+        "Garland Length",
+        "latex colors"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/52/image_1920"
+      },
+      "source_name": "Premium Organic Garland",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/premium-organic-garland-52",
+      "source_variant_count": 159
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "quote_first",
+      "notes": [
+        "legacy internal hold state; not a business product lane",
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "53",
+      "price_evidence": {
+        "candidate_units": 4,
+        "expected_units": 4,
+        "live_snapshot_units": 4,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "add_on_conditional_pricing_build",
+      "required_next_gates": [
+        "explicit add-on or conditional pricing contract",
+        "ERPNext price provenance",
+        "checkout/payment/invoice/receipt cascade proof"
+      ],
+      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "slug": "premium-organic-arch",
+      "source_attributes": [
+        "Add ons",
+        "Arch Size",
+        "latex colors"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/53/image_1920"
+      },
+      "source_name": "Premium Organic Arch",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/premium-organic-arch-53",
+      "source_variant_count": 424
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "quote_first",
+      "notes": [
+        "legacy internal hold state; not a business product lane",
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "54",
+      "price_evidence": {
+        "candidate_units": 6,
+        "expected_units": 6,
+        "live_snapshot_units": 6,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "add_on_conditional_pricing_build",
+      "required_next_gates": [
+        "explicit add-on or conditional pricing contract",
+        "ERPNext price provenance",
+        "checkout/payment/invoice/receipt cascade proof"
+      ],
+      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "slug": "pemium-organic-column",
+      "source_attributes": [
+        "Add ons",
+        "Column Height",
+        "latex colors"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/54/image_1920"
+      },
+      "source_name": "Pemium Organic Column",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/pemium-organic-column-54",
+      "source_variant_count": 636
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "quote_first",
+      "notes": [
+        "legacy internal hold state; not a business product lane",
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "55",
+      "price_evidence": {
+        "candidate_units": 4,
+        "expected_units": 4,
+        "live_snapshot_units": 4,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "add_on_conditional_pricing_build",
+      "required_next_gates": [
+        "explicit add-on or conditional pricing contract",
+        "ERPNext price provenance",
+        "checkout/payment/invoice/receipt cascade proof"
+      ],
+      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "slug": "pride-progress-rainbow-balloon-arch",
+      "source_attributes": [
+        "Arch Size"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/55/image_1920"
+      },
+      "source_name": "Pride progress Rainbow Balloon Arch",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/pride-progress-rainbow-balloon-arch-55",
+      "source_variant_count": 4
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "quote_first",
+      "notes": [
+        "legacy internal hold state; not a business product lane",
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "57",
+      "price_evidence": {
+        "candidate_units": 16,
+        "expected_units": 16,
+        "live_snapshot_units": 16,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "add_on_conditional_pricing_build",
+      "required_next_gates": [
+        "explicit add-on or conditional pricing contract",
+        "ERPNext price provenance",
+        "checkout/payment/invoice/receipt cascade proof"
+      ],
+      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "slug": "classic-arch",
+      "source_attributes": [
+        "Arch Size",
+        "Design",
+        "LED Lights",
+        "latex colors"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 22,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/57/image_1920"
+      },
+      "source_name": "Classic Arch",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/classic-arch-57",
+      "source_variant_count": 848
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "quote_first",
+      "notes": [
+        "legacy internal hold state; not a business product lane",
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "58",
+      "price_evidence": {
+        "candidate_units": 36,
+        "expected_units": 36,
+        "live_snapshot_units": 36,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "add_on_conditional_pricing_build",
+      "required_next_gates": [
+        "explicit add-on or conditional pricing contract",
+        "ERPNext price provenance",
+        "checkout/payment/invoice/receipt cascade proof"
+      ],
+      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "slug": "classic-column",
+      "source_attributes": [
+        "Column Height",
+        "latex colors",
+        "topper"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 5,
+        "primary_image_url": "http://5.78.136.133/web/image/product.product/110/image_1024/Classic%20Column%20%285ft%2C%20large%20topper%29?unique=8ebaffd"
+      },
+      "source_name": "Classic Column",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/classic-column-58",
+      "source_variant_count": 1908
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "quote_first",
+      "notes": [
+        "legacy internal hold state; not a business product lane",
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "65",
+      "price_evidence": {
+        "candidate_units": 6,
+        "expected_units": 6,
+        "live_snapshot_units": 6,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "add_on_conditional_pricing_build",
+      "required_next_gates": [
+        "explicit add-on or conditional pricing contract",
+        "ERPNext price provenance",
+        "checkout/payment/invoice/receipt cascade proof"
+      ],
+      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "slug": "classic-organic-columns",
+      "source_attributes": [
+        "Column Height",
+        "latex colors"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/65/image_1920"
+      },
+      "source_name": "Classic Organic columns",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/classic-organic-columns-65",
+      "source_variant_count": 318
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "quote_first",
+      "notes": [
+        "legacy internal hold state; not a business product lane",
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "71",
+      "price_evidence": {
+        "candidate_units": 3,
+        "expected_units": 3,
+        "live_snapshot_units": 3,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "add_on_conditional_pricing_build",
+      "required_next_gates": [
+        "explicit add-on or conditional pricing contract",
+        "ERPNext price provenance",
+        "checkout/payment/invoice/receipt cascade proof"
+      ],
+      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "slug": "baby-shower-garland",
+      "source_attributes": [
+        "Garland Length",
+        "latex colors"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/71/image_1920"
+      },
+      "source_name": "Baby Shower Garland",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/baby-shower-garland-71",
+      "source_variant_count": 159
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "quote_first",
+      "notes": [
+        "legacy internal hold state; not a business product lane",
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "74",
+      "price_evidence": {
+        "candidate_units": 3,
+        "expected_units": 3,
+        "live_snapshot_units": 3,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "add_on_conditional_pricing_build",
+      "required_next_gates": [
+        "explicit add-on or conditional pricing contract",
+        "ERPNext price provenance",
+        "checkout/payment/invoice/receipt cascade proof"
+      ],
+      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "slug": "balloon-drop",
+      "source_attributes": [
+        "Drop Size",
+        "latex colors"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/74/image_1920"
+      },
+      "source_name": "Balloon Drop",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/balloon-drop-74",
+      "source_variant_count": 159
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "quote_first",
+      "notes": [
+        "legacy internal hold state; not a business product lane",
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "99",
+      "price_evidence": {
+        "candidate_units": 4,
+        "expected_units": 4,
+        "live_snapshot_units": 4,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "add_on_conditional_pricing_build",
+      "required_next_gates": [
+        "explicit add-on or conditional pricing contract",
+        "ERPNext price provenance",
+        "checkout/payment/invoice/receipt cascade proof"
+      ],
+      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "slug": "classic-organic-arch",
+      "source_attributes": [
+        "Add ons",
+        "Arch Size",
+        "latex colors"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/99/image_1920"
+      },
+      "source_name": "Classic Organic Arch",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/classic-organic-arch-99",
+      "source_variant_count": 636
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
+      "notes": [
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "115",
+      "price_evidence": {
+        "candidate_units": 3,
+        "expected_units": 3,
+        "live_snapshot_units": 3,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "certified_current_checkout",
+      "required_next_gates": [
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
+      ],
+      "scaffold_stage": "direct_checkout_regression_guard",
+      "slug": "unicorn-bouquet",
+      "source_attributes": [
+        "Add Foil Number",
+        "Bouquet Size"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/115/image_1920"
+      },
+      "source_name": "Unicorn Bouquet",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/unicorn-bouquet-115",
+      "source_variant_count": 30
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
+      "notes": [
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "116",
+      "price_evidence": {
+        "candidate_units": 3,
+        "expected_units": 3,
+        "live_snapshot_units": 3,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "certified_current_checkout",
+      "required_next_gates": [
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
+      ],
+      "scaffold_stage": "direct_checkout_regression_guard",
+      "slug": "mickey-mouse-bouquet",
+      "source_attributes": [
+        "Add Foil Number",
+        "Bouquet Size"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/116/image_1920"
+      },
+      "source_name": "Mickey Mouse Bouquet",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/mickey-mouse-bouquet-116",
+      "source_variant_count": 30
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
+      "notes": [
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "117",
+      "price_evidence": {
+        "candidate_units": 3,
+        "expected_units": 3,
+        "live_snapshot_units": 3,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "certified_current_checkout",
+      "required_next_gates": [
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
+      ],
+      "scaffold_stage": "direct_checkout_regression_guard",
+      "slug": "minion-bouquet",
+      "source_attributes": [
+        "Add Foil Number",
+        "Bouquet Size"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 6,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/117/image_1920"
+      },
+      "source_name": "Minion Bouquet",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/minion-bouquet-117",
+      "source_variant_count": 30
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
+      "notes": [
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "118",
+      "price_evidence": {
+        "candidate_units": 3,
+        "expected_units": 3,
+        "live_snapshot_units": 3,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "certified_current_checkout",
+      "required_next_gates": [
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
+      ],
+      "scaffold_stage": "direct_checkout_regression_guard",
+      "slug": "encanto-bouquet",
+      "source_attributes": [
+        "Add Foil Number",
+        "Bouquet Size"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/118/image_1920"
+      },
+      "source_name": "Encanto Bouquet",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/encanto-bouquet-118",
+      "source_variant_count": 30
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
+      "notes": [
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "119",
+      "price_evidence": {
+        "candidate_units": 3,
+        "expected_units": 3,
+        "live_snapshot_units": 3,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "certified_current_checkout",
+      "required_next_gates": [
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
+      ],
+      "scaffold_stage": "direct_checkout_regression_guard",
+      "slug": "stitch-bouquet",
+      "source_attributes": [
+        "Add Foil Number",
+        "Bouquet Size"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/119/image_1920"
+      },
+      "source_name": "Stitch Bouquet",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/stitch-bouquet-119",
+      "source_variant_count": 30
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
+      "notes": [
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "120",
+      "price_evidence": {
+        "candidate_units": 3,
+        "expected_units": 3,
+        "live_snapshot_units": 3,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "certified_current_checkout",
+      "required_next_gates": [
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
+      ],
+      "scaffold_stage": "direct_checkout_regression_guard",
+      "slug": "flamingo-bouquet",
+      "source_attributes": [
+        "Add Foil Number",
+        "Bouquet Size"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/120/image_1920"
+      },
+      "source_name": "Flamingo Bouquet",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/flamingo-bouquet-120",
+      "source_variant_count": 30
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
+      "notes": [
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "121",
+      "price_evidence": {
+        "candidate_units": 3,
+        "expected_units": 3,
+        "live_snapshot_units": 3,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "certified_current_checkout",
+      "required_next_gates": [
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
+      ],
+      "scaffold_stage": "direct_checkout_regression_guard",
+      "slug": "football-bouquet",
+      "source_attributes": [
+        "Add Foil Number",
+        "Bouquet Size"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/121/image_1920"
+      },
+      "source_name": "Football Bouquet",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/football-bouquet-121",
+      "source_variant_count": 30
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
+      "notes": [
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "122",
+      "price_evidence": {
+        "candidate_units": 3,
+        "expected_units": 3,
+        "live_snapshot_units": 3,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "certified_current_checkout",
+      "required_next_gates": [
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
+      ],
+      "scaffold_stage": "direct_checkout_regression_guard",
+      "slug": "soccer-bouquet",
+      "source_attributes": [
+        "Add Foil Number",
+        "Bouquet Size"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/122/image_1920"
+      },
+      "source_name": "Soccer Bouquet",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/soccer-bouquet-122",
+      "source_variant_count": 30
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
+      "notes": [
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "123",
+      "price_evidence": {
+        "candidate_units": 3,
+        "expected_units": 3,
+        "live_snapshot_units": 3,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "certified_current_checkout",
+      "required_next_gates": [
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
+      ],
+      "scaffold_stage": "direct_checkout_regression_guard",
+      "slug": "space-bouquet",
+      "source_attributes": [
+        "Add Foil Number",
+        "Bouquet Size"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/123/image_1920"
+      },
+      "source_name": "Space Bouquet",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/space-bouquet-123",
+      "source_variant_count": 30
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
+      "notes": [
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "124",
+      "price_evidence": {
+        "candidate_units": 3,
+        "expected_units": 3,
+        "live_snapshot_units": 3,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "certified_current_checkout",
+      "required_next_gates": [
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
+      ],
+      "scaffold_stage": "direct_checkout_regression_guard",
+      "slug": "over-the-hill-bouquet",
+      "source_attributes": [
+        "Add Foil Number",
+        "Bouquet Size"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/124/image_1920"
+      },
+      "source_name": "Over the Hill Bouquet",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/over-the-hill-bouquet-124",
+      "source_variant_count": 30
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
+      "notes": [],
+      "odoo_id": "125",
+      "price_evidence": {
+        "candidate_units": 1,
+        "expected_units": 1,
+        "live_snapshot_units": 0,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 1,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "certified_current_checkout",
+      "required_next_gates": [
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
+      ],
+      "scaffold_stage": "direct_checkout_regression_guard",
+      "slug": "7-butterfly-column",
+      "source_attributes": [
+        "latex colors"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 0,
+        "primary_image_url": "http://5.78.136.133/web/image/product.product/485/image_1024/7%27%20Butterfly%20Column?unique=42d7d48"
+      },
+      "source_name": "7' Butterfly Column",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/7-butterfly-column-125",
+      "source_variant_count": 53
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "quote_first",
+      "notes": [
+        "legacy internal hold state; not a business product lane"
+      ],
+      "odoo_id": "126",
+      "price_evidence": {
+        "candidate_units": 1,
+        "expected_units": 1,
+        "live_snapshot_units": 0,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 1,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "multi_color_recipe_checkout_build",
+      "required_next_gates": [
+        "customer-facing multi-color recipe UI",
+        "backend color recipe validation",
+        "checkout/payment/invoice/receipt cascade proof"
+      ],
+      "scaffold_stage": "multi_color_recipe_ui_required",
+      "slug": "7-epic-column",
+      "source_attributes": [
+        "latex colors"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 0,
+        "primary_image_url": "http://5.78.136.133/web/image/product.product/486/image_1024/7%27%20Epic%20Column?unique=eac7fc9"
+      },
+      "source_name": "7' Epic Column",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/7-epic-column-126",
+      "source_variant_count": 53
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "quote_first",
+      "notes": [
+        "legacy internal hold state; not a business product lane",
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "127",
+      "price_evidence": {
+        "candidate_units": 3,
+        "expected_units": 3,
+        "live_snapshot_units": 3,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "add_on_conditional_pricing_build",
+      "required_next_gates": [
+        "explicit add-on or conditional pricing contract",
+        "ERPNext price provenance",
+        "checkout/payment/invoice/receipt cascade proof"
+      ],
+      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "slug": "organic-grab-n-go",
+      "source_attributes": [
+        "Garland Length",
+        "latex colors"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/127/image_1920"
+      },
+      "source_name": "Organic Grab n' Go",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/organic-grab-n-go-127",
+      "source_variant_count": 156
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "needs_review",
+      "notes": [
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "128",
+      "price_evidence": {
+        "candidate_units": 81,
+        "expected_units": 81,
+        "live_snapshot_units": 81,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "source_backend_review",
+      "required_next_gates": [
+        "source export meaning review",
+        "backend product type and buying path repair",
+        "price/media/checkout proof"
+      ],
+      "scaffold_stage": "needs_review_or_missing",
+      "slug": "birthday-deliveries",
+      "source_attributes": [
+        "Add Bouquet",
+        "Add Foil Number",
+        "Delivery Size",
+        "Delivery themes"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 14,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/128/image_1920"
+      },
+      "source_name": "Birthday Deliveries",
+      "source_url": "http://5.78.136.133/shop/special-occasions-birthday-parties-5/birthday-deliveries-128",
+      "source_variant_count": 2430
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
+      "notes": [
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "130",
+      "price_evidence": {
+        "candidate_units": 7,
+        "expected_units": 7,
+        "live_snapshot_units": 7,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "certified_current_checkout",
+      "required_next_gates": [
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
+      ],
+      "scaffold_stage": "direct_checkout_regression_guard",
+      "slug": "easter-balloon-cups",
+      "source_attributes": [
+        "Easter Designs"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 4,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/130/image_1920"
+      },
+      "source_name": "Easter Balloon Cups",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/easter-balloon-cups-130",
+      "source_variant_count": 7
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "quote_first",
+      "notes": [
+        "legacy internal hold state; not a business product lane",
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "131",
+      "price_evidence": {
+        "candidate_units": 4,
+        "expected_units": 4,
+        "live_snapshot_units": 4,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "add_on_conditional_pricing_build",
+      "required_next_gates": [
+        "explicit add-on or conditional pricing contract",
+        "ERPNext price provenance",
+        "checkout/payment/invoice/receipt cascade proof"
+      ],
+      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "slug": "star-column",
+      "source_attributes": [
+        "Color Palette",
+        "Column Height",
+        "Orbz toppers"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 0,
+        "primary_image_url": "http://5.78.136.133/web/image/product.product/1013/image_1024/Star%20Column%20%286ft%2C%20Red%29?unique=b5935b4"
+      },
+      "source_name": "Star Column",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/star-column-131",
+      "source_variant_count": 1160
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "quote_first",
+      "notes": [
+        "legacy internal hold state; not a business product lane"
+      ],
+      "odoo_id": "132",
+      "price_evidence": {
+        "candidate_units": 1,
+        "expected_units": 1,
+        "live_snapshot_units": 0,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 1,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "multi_color_recipe_checkout_build",
+      "required_next_gates": [
+        "customer-facing multi-color recipe UI",
+        "backend color recipe validation",
+        "checkout/payment/invoice/receipt cascade proof"
+      ],
+      "scaffold_stage": "multi_color_recipe_ui_required",
+      "slug": "sleepy-baby-column",
+      "source_attributes": [
+        "latex colors"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/132/image_1920"
+      },
+      "source_name": "Sleepy Baby Column",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/sleepy-baby-column-132",
+      "source_variant_count": 53
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "quote_first",
+      "notes": [
+        "legacy internal hold state; not a business product lane"
+      ],
+      "odoo_id": "133",
+      "price_evidence": {
+        "candidate_units": 1,
+        "expected_units": 1,
+        "live_snapshot_units": 0,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 1,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "multi_color_recipe_checkout_build",
+      "required_next_gates": [
+        "customer-facing multi-color recipe UI",
+        "backend color recipe validation",
+        "checkout/payment/invoice/receipt cascade proof"
+      ],
+      "scaffold_stage": "multi_color_recipe_ui_required",
+      "slug": "baby-table-decor",
+      "source_attributes": [
+        "Baby color"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/133/image_1920"
+      },
+      "source_name": "Baby Table decor",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/baby-table-decor-133",
+      "source_variant_count": 2
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "quote_first",
+      "notes": [
+        "legacy internal hold state; not a business product lane"
+      ],
+      "odoo_id": "134",
+      "price_evidence": {
+        "candidate_units": 1,
+        "expected_units": 1,
+        "live_snapshot_units": 0,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 1,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "add_on_conditional_pricing_build",
+      "required_next_gates": [
+        "explicit add-on or conditional pricing contract",
+        "ERPNext price provenance",
+        "checkout/payment/invoice/receipt cascade proof"
+      ],
+      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "slug": "logo-3-layered-bouquet",
+      "source_attributes": [
+        "latex colors"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/134/image_1920"
+      },
+      "source_name": "Logo 3 layered bouquet",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/logo-3-layered-bouquet-134",
+      "source_variant_count": 53
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "quote_first",
+      "notes": [
+        "legacy internal hold state; not a business product lane",
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "135",
+      "price_evidence": {
+        "candidate_units": 2,
+        "expected_units": 2,
+        "live_snapshot_units": 2,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "add_on_conditional_pricing_build",
+      "required_next_gates": [
+        "explicit add-on or conditional pricing contract",
+        "ERPNext price provenance",
+        "checkout/payment/invoice/receipt cascade proof"
+      ],
+      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "slug": "6-color-rainbow-arch",
+      "source_attributes": [
+        "Arch Size"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/135/image_1920"
+      },
+      "source_name": "6 color rainbow arch",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/6-color-rainbow-arch-135",
+      "source_variant_count": 2
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "quote_first",
+      "notes": [
+        "legacy internal hold state; not a business product lane"
+      ],
+      "odoo_id": "137",
+      "price_evidence": {
+        "candidate_units": 1,
+        "expected_units": 1,
+        "live_snapshot_units": 0,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 1,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "simple_purchasable_rehearsal",
+      "required_next_gates": [
+        "focused source/export purchasable rehearsal",
+        "open-mode product UX proof",
+        "checkout/payment/invoice/receipt cascade proof"
+      ],
+      "scaffold_stage": "simple_axis_lane_flip_candidate",
+      "slug": "mothers-day-front-yard-7-column",
+      "source_attributes": [],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/137/image_1920"
+      },
+      "source_name": "Mother's day front yard 7' Column",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/mothers-day-front-yard-7-column-137",
+      "source_variant_count": 0
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "needs_review",
+      "notes": [],
+      "odoo_id": "140",
+      "price_evidence": {
+        "candidate_units": 1,
+        "expected_units": 1,
+        "live_snapshot_units": 0,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 1,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "source_backend_review",
+      "required_next_gates": [
+        "source export meaning review",
+        "backend product type and buying path repair",
+        "price/media/checkout proof"
+      ],
+      "scaffold_stage": "needs_review_or_missing",
+      "slug": "marble-table-decor",
+      "source_attributes": [
+        "Orbz toppers"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/140/image_1920"
+      },
+      "source_name": "Marble table decor",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/marble-table-decor-140",
+      "source_variant_count": 10
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
+      "notes": [
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "141",
+      "price_evidence": {
+        "candidate_units": 3,
+        "expected_units": 3,
+        "live_snapshot_units": 3,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "certified_current_checkout",
+      "required_next_gates": [
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
+      ],
+      "scaffold_stage": "direct_checkout_regression_guard",
+      "slug": "paw-patrol-bouquet",
+      "source_attributes": [
+        "Add Foil Number",
+        "Bouquet Size"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/141/image_1920"
+      },
+      "source_name": "Paw Patrol Bouquet",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/paw-patrol-bouquet-141",
+      "source_variant_count": 30
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
+      "notes": [
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "142",
+      "price_evidence": {
+        "candidate_units": 3,
+        "expected_units": 3,
+        "live_snapshot_units": 3,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "certified_current_checkout",
+      "required_next_gates": [
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
+      ],
+      "scaffold_stage": "direct_checkout_regression_guard",
+      "slug": "elsa-bouquet",
+      "source_attributes": [
+        "Add Foil Number",
+        "Bouquet Size"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/142/image_1920"
+      },
+      "source_name": "Elsa Bouquet",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/elsa-bouquet-142",
+      "source_variant_count": 30
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
+      "notes": [
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "143",
+      "price_evidence": {
+        "candidate_units": 3,
+        "expected_units": 3,
+        "live_snapshot_units": 3,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "certified_current_checkout",
+      "required_next_gates": [
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
+      ],
+      "scaffold_stage": "direct_checkout_regression_guard",
+      "slug": "holy-cow-bouquet",
+      "source_attributes": [
+        "Add Foil Number",
+        "Bouquet Size"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/143/image_1920"
+      },
+      "source_name": "Holy COW!! Bouquet",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/holy-cow-bouquet-143",
+      "source_variant_count": 30
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "needs_review",
+      "notes": [],
+      "odoo_id": "144",
+      "price_evidence": {
+        "candidate_units": 1,
+        "expected_units": 1,
+        "live_snapshot_units": 0,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 1,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "source_backend_review",
+      "required_next_gates": [
+        "source export meaning review",
+        "backend product type and buying path repair",
+        "price/media/checkout proof"
+      ],
+      "scaffold_stage": "needs_review_or_missing",
+      "slug": "butterfly-get-well-bouquet-latex-free",
+      "source_attributes": [
+        "Plush add ons"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/144/image_1920"
+      },
+      "source_name": "Butterfly \"GET WELL\" Bouquet (Latex free)",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/butterfly-get-well-bouquet-latex-free-144",
+      "source_variant_count": 2
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "needs_review",
+      "notes": [],
+      "odoo_id": "146",
+      "price_evidence": {
+        "candidate_units": 1,
+        "expected_units": 1,
+        "live_snapshot_units": 0,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 1,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "source_backend_review",
+      "required_next_gates": [
+        "source export meaning review",
+        "backend product type and buying path repair",
+        "price/media/checkout proof"
+      ],
+      "scaffold_stage": "needs_review_or_missing",
+      "slug": "bandage-get-well-bouquet-latex-free",
+      "source_attributes": [
+        "Plush add ons"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/146/image_1920"
+      },
+      "source_name": "Bandage \"GET WELL\" Bouquet (Latex free)",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/bandage-get-well-bouquet-latex-free-146",
+      "source_variant_count": 2
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "needs_review",
+      "notes": [],
+      "odoo_id": "147",
+      "price_evidence": {
+        "candidate_units": 1,
+        "expected_units": 1,
+        "live_snapshot_units": 0,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 1,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "source_backend_review",
+      "required_next_gates": [
+        "source export meaning review",
+        "backend product type and buying path repair",
+        "price/media/checkout proof"
+      ],
+      "scaffold_stage": "needs_review_or_missing",
+      "slug": "shooting-star-get-well-bouquet-latex-free",
+      "source_attributes": [
+        "Plush add ons"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/147/image_1920"
+      },
+      "source_name": "Shooting star \"GET WELL\" Bouquet (Latex free)",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/shooting-star-get-well-bouquet-latex-free-147",
+      "source_variant_count": 2
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
+      "notes": [
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "149",
+      "price_evidence": {
+        "candidate_units": 2,
+        "expected_units": 2,
+        "live_snapshot_units": 2,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "certified_current_checkout",
+      "required_next_gates": [
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
+      ],
+      "scaffold_stage": "direct_checkout_regression_guard",
+      "slug": "6-graduation-stands",
+      "source_attributes": [
+        "Graduation stands"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/149/image_1920"
+      },
+      "source_name": "6' Graduation stands",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/6-graduation-stands-149",
+      "source_variant_count": 2
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "quote_first",
+      "notes": [
+        "legacy internal hold state; not a business product lane"
+      ],
+      "odoo_id": "152",
+      "price_evidence": {
+        "candidate_units": 1,
+        "expected_units": 1,
+        "live_snapshot_units": 0,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 1,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "multi_color_recipe_checkout_build",
+      "required_next_gates": [
+        "customer-facing multi-color recipe UI",
+        "backend color recipe validation",
+        "checkout/payment/invoice/receipt cascade proof"
+      ],
+      "scaffold_stage": "multi_color_recipe_ui_required",
+      "slug": "classic-organic-for-easel",
+      "source_attributes": [
+        "latex colors"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/152/image_1920"
+      },
+      "source_name": "classic organic for easel",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/classic-organic-for-easel-152",
+      "source_variant_count": 53
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "quote_first",
+      "notes": [
+        "legacy internal hold state; not a business product lane"
+      ],
+      "odoo_id": "158",
+      "price_evidence": {
+        "candidate_units": 1,
+        "expected_units": 1,
+        "live_snapshot_units": 0,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 1,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "simple_purchasable_rehearsal",
+      "required_next_gates": [
+        "focused source/export purchasable rehearsal",
+        "open-mode product UX proof",
+        "checkout/payment/invoice/receipt cascade proof"
+      ],
+      "scaffold_stage": "simple_axis_lane_flip_candidate",
+      "slug": "easter-arch",
+      "source_attributes": [],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/158/image_1920"
+      },
+      "source_name": "Easter Arch",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/easter-arch-158",
+      "source_variant_count": 0
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "certified_checkout",
+      "current_website_lane": "checkout",
+      "notes": [],
+      "odoo_id": "165",
+      "price_evidence": {
+        "candidate_units": 1,
+        "expected_units": 1,
+        "live_snapshot_units": 0,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 1,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "certified_current_checkout",
+      "required_next_gates": [
+        "keep checkout_product_family_contract green",
+        "keep post_import_checkout_proof green"
+      ],
+      "scaffold_stage": "direct_checkout_regression_guard",
+      "slug": "mothers-day-bouquet",
+      "source_attributes": [],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/165/image_1920"
+      },
+      "source_name": "Mother's Day Bouquet",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/mothers-day-bouquet-165",
+      "source_variant_count": 0
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "quote_first",
+      "notes": [
+        "legacy internal hold state; not a business product lane",
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "177",
+      "price_evidence": {
+        "candidate_units": 3,
+        "expected_units": 3,
+        "live_snapshot_units": 3,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "add_on_conditional_pricing_build",
+      "required_next_gates": [
+        "explicit add-on or conditional pricing contract",
+        "ERPNext price provenance",
+        "checkout/payment/invoice/receipt cascade proof"
+      ],
+      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "slug": "large-garland",
+      "source_attributes": [
+        "Color Palette",
+        "Garland Length"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/177/image_1920"
+      },
+      "source_name": "Large Garland",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/large-garland-177",
+      "source_variant_count": 87
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "quote_first",
+      "notes": [
+        "legacy internal hold state; not a business product lane",
+        "uses live snapshot price evidence; review provenance before destructive reimport"
+      ],
+      "odoo_id": "178",
+      "price_evidence": {
+        "candidate_units": 6,
+        "expected_units": 6,
+        "live_snapshot_units": 6,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 0,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "add_on_conditional_pricing_build",
+      "required_next_gates": [
+        "explicit add-on or conditional pricing contract",
+        "ERPNext price provenance",
+        "checkout/payment/invoice/receipt cascade proof"
+      ],
+      "scaffold_stage": "add_on_or_conditional_pricing_blocked",
+      "slug": "large-organic-column",
+      "source_attributes": [
+        "Color Palette",
+        "Column Height"
+      ],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/178/image_1920"
+      },
+      "source_name": "Large Organic Column",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/large-organic-column-178",
+      "source_variant_count": 174
+    },
+    {
+      "business_target": "purchasable_product",
+      "current_customer_state": "blocked_until_certified",
+      "current_website_lane": "quote_first",
+      "notes": [
+        "legacy internal hold state; not a business product lane"
+      ],
+      "odoo_id": "179",
+      "price_evidence": {
+        "candidate_units": 1,
+        "expected_units": 1,
+        "live_snapshot_units": 0,
+        "price_status": "PASS_PRICE_ENRICHMENT",
+        "source_base_units": 1,
+        "source_resolver_units": 0
+      },
+      "repair_lane": "simple_purchasable_rehearsal",
+      "required_next_gates": [
+        "focused source/export purchasable rehearsal",
+        "open-mode product UX proof",
+        "checkout/payment/invoice/receipt cascade proof"
+      ],
+      "scaffold_stage": "simple_axis_lane_flip_candidate",
+      "slug": "pride-arch",
+      "source_attributes": [],
+      "source_export_found": true,
+      "source_media": {
+        "additional_image_count": 1,
+        "primary_image_url": "http://5.78.136.133/web/image/product.template/179/image_1920"
+      },
+      "source_name": "Pride Arch",
+      "source_url": "http://5.78.136.133/shop/what-we-make-3/pride-arch-179",
+      "source_variant_count": 0
+    }
+  ],
+  "purpose": "Map every existing Locally Twisted source product to a purchasable-product repair lane. Legacy quote_first values are treated as internal holds, not business categories.",
+  "read_only": true,
+  "schema_version": "lt-product-source-repair-map-v1",
+  "summary": {
+    "blocked_until_certified_products": 35,
+    "certified_checkout_products": 18,
+    "current_customer_state_counts": {
+      "blocked_until_certified": 35,
+      "certified_checkout": 18
+    },
+    "ok": true,
+    "products": 53,
+    "repair_lane_counts": {
+      "add_on_conditional_pricing_build": 20,
+      "certified_current_checkout": 18,
+      "multi_color_recipe_checkout_build": 6,
+      "simple_purchasable_rehearsal": 4,
+      "source_backend_review": 5
+    },
+    "scaffold_stage_counts": {
+      "add_on_or_conditional_pricing_blocked": 20,
+      "direct_checkout_regression_guard": 18,
+      "multi_color_recipe_ui_required": 6,
+      "needs_review_or_missing": 5,
+      "simple_axis_lane_flip_candidate": 4
+    },
+    "schema_version": "lt-product-source-repair-map-v1",
+    "source_export_found": 53,
+    "source_export_missing": 0
+  }
+}

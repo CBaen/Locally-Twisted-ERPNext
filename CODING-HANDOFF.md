@@ -1,5 +1,14 @@
 # Locally Twisted - Coding Handoff
 
+Codex product certification update on 2026-05-17: GL corrected the ecommerce
+product model. There are no business "quote-first products"; every product
+targets purchasable behavior from Odoo export product details and pricing.
+Legacy `quote_first` values remain only as internal safety holds until source
+data, pricing, media, UI, cart, checkout, payment, invoice, receipt, and
+operator/customer payload preservation are proven. Current source-backed repair
+queue: `workstreams/ecommerce-audit/product-source-repair-map-2026-05-17.md`
+and verifier `python scripts/verify/product_source_repair_map.py`.
+
 Codex repo hygiene closeout on 2026-05-17: local `main` is reconciled with
 `origin/main` at `d541a0c6fdb12ac280ec7eb044b7a4397be7fd8c`, the working tree
 is clean, and only the main LT worktree remains registered. The cleanup
@@ -309,10 +318,11 @@ for Easter Balloon Cups, 7' Butterfly Column, Graduation Grab n Go, 6'
 Graduation stands, and Unicorn Bouquet. Backend contracts are green for
 `product_import_readiness_gate`, `post_import_catalog_state`,
 `direct_checkout_target_contract`, and `cart_checkout_contract`. Remaining
-caveats: 8 review-only add-on axes are quote-first protected until mapped, the
-five Classic exclusions remain quote-first, Frappe Cloud/live Stripe/DNS/real
-payment tests are separate gates, and the shared worktree may have active
-uncommitted changes from other agents.
+caveats: 8 review-only add-on axes and the five Classic exclusions are internal
+holds until mapped, repulled, approved, and proved; they are not business
+quote-first products. Frappe Cloud/live Stripe/DNS/real payment tests are
+separate gates, and the shared worktree may have active uncommitted changes
+from other agents.
 
 Codex update on 2026-05-11: homepage Custom Event Decor is hidden for the
 launch page, but its recovery assets are preserved intentionally. The homepage
