@@ -40,6 +40,7 @@ BLUEPRINT_DOCTYPES = (
     "LT Product Blueprint Conditional Price",
     "LT Product Blueprint Media Rule",
 )
+OWNER_USER = "locallytwisted@gmail.com"
 
 
 def run() -> dict[str, object]:
@@ -84,11 +85,13 @@ def _run_contract() -> dict[str, object]:
     after = _counts()
     _assert_no_business_mutation(before, after)
     apply_result = _assert_guarded_local_apply()
+    owner_result = _assert_owner_profile_product_build_flow()
     return {
         "ok": True,
         "blueprint": doc.name,
         "validation_status": doc.validation_status,
         "staff_setup": staff_result,
+        "owner_setup": owner_result,
         "save_only_guard_counts_unchanged": True,
         "local_apply": apply_result,
     }
@@ -366,6 +369,90 @@ def _insert_item_manager_user(suffix: str) -> str:
     )
     user.insert(ignore_permissions=True)
     return email
+
+
+def _assert_owner_profile_product_build_flow() -> dict[str, object]:
+    if not frappe.db.exists("User", OWNER_USER):
+        raise ContractFail(f"Owner product setup user does not exist: {OWNER_USER}")
+
+    suffix = frappe.generate_hash(length=8).lower()
+    slug = f"owner-profile-build-{suffix}"
+    axis = f"Owner Proof Size {suffix}"
+    current_user = frappe.session.user
+    try:
+        frappe.set_user(OWNER_USER)
+        doc = frappe.get_doc(
+            {
+                "doctype": "LT Product Blueprint",
+                "product_name": "Owner Profile Product Build Proof",
+                "product_slug": slug,
+                "item_group": _first_leaf_item_group(),
+                "page_template": "Ready-to-order page",
+                "buying_path": "Direct checkout",
+                "publish_status": "Draft",
+                "base_price": 55,
+                "product_summary": "Rollback-safe owner-profile Product Setup proof.",
+                "option_rows": [
+                    {
+                        "axis_name": axis,
+                        "selection_behavior": "SKU-defining variant",
+                        "control_type": "Single select",
+                        "required": 1,
+                        "min_selections": 1,
+                        "max_selections": 1,
+                        "values": "Small\nLarge",
+                    },
+                    {
+                        "axis_name": "Owner Style Notes",
+                        "selection_behavior": "Configuration only",
+                        "control_type": "Multi select",
+                        "required": 0,
+                        "min_selections": 0,
+                        "max_selections": 2,
+                        "values": "Classic\nBright\nSoft",
+                    },
+                ],
+                "media_rule_rows": [
+                    {
+                        "rule_name": "Owner proof media",
+                        "rule_type": "Selection group",
+                        "selection_group": axis,
+                        "selection_value": "Small",
+                        "image": "/files/owner-product-setup-proof.png",
+                        "approved_for_customer": 1,
+                    }
+                ],
+            }
+        ).insert()
+
+        if doc.owner != OWNER_USER:
+            raise ContractFail(f"Owner Product Setup record should be owned by {OWNER_USER}, found {doc.owner}.")
+        if doc.validation_status != "Ready For Local Preview":
+            raise ContractFail(f"Owner Product Setup should validate for local preview: {doc.validation_summary}")
+
+        preview = get_local_apply_preview(doc.name)
+        if not preview.get("ok") or preview.get("writes_enabled"):
+            raise ContractFail(f"Owner Desk preview should be readable and no-write: {preview}")
+        if preview.get("planned_counts", {}).get("item_variants") != 2:
+            raise ContractFail(f"Owner preview did not preserve two SKU variants: {preview}")
+
+        with _temporary_conf_flag("lt_allow_local_blueprint_apply", 1):
+            result = apply_locally_from_desk(doc.name)
+        if not result.get("ok"):
+            raise ContractFail(f"Owner local apply did not return ok: {result}")
+
+        _assert_local_apply_records(doc, result, slug, axis)
+        return {
+            "user": OWNER_USER,
+            "blueprint": doc.name,
+            "item_code": result.get("item_code"),
+            "website_item": result.get("website_item"),
+            "variant_count": len(result.get("variants") or []),
+            "item_price_count": len(result.get("item_prices") or []),
+            "published": result.get("website_item_published"),
+        }
+    finally:
+        frappe.set_user(current_user)
 
 
 def _insert_support_add_on_item(suffix: str) -> str:

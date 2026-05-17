@@ -351,8 +351,8 @@ def _upsert_website_item(frappe, template_item: str, website_plan: dict[str, Any
     else:
         from webshop.webshop.doctype.website_item.website_item import make_website_item
 
-        name, _route = make_website_item(frappe.get_doc("Item", template_item), save=True)
-        doc = frappe.get_doc("Website Item", name)
+        doc = make_website_item(frappe.get_doc("Item", template_item), save=False)
+        doc.insert(ignore_permissions=True)
 
     doc.web_item_name = website_plan["web_item_name"][:140]
     doc.item_group = _text(data.get("item_group"))

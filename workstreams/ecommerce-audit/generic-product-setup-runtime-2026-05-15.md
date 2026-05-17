@@ -17,6 +17,7 @@ Implement the ecommerce system around generic Product Setup behavior, not around
 - Approved Product Setup media rules can drive customer-facing image changes. Raw variant images remain held back unless an approved media rule exists.
 - `LT Owner Home` `Products` / `Add Product` now route employees into `LT Product Blueprint`, not raw ERPNext `Item`.
 - Rollback-safe staff proof now verifies an `Item Manager` user can create a Product Setup with 60 configuration choices, a max of 9 selections, 2 SKU-defining variants, and 1 approved media rule through the Product Blueprint document path.
+- Owner-profile proof now verifies `locallytwisted@gmail.com` can create and locally apply Product Setup records through the guarded Product Blueprint path. The apply helper creates the generated unpublished `Website Item` server-side without requiring the owner profile to receive raw Website Item permissions.
 - Local `frontend` was migrated and workspace sync was run after DocType changes.
 
 ## Proof
@@ -29,6 +30,7 @@ Implement the ecommerce system around generic Product Setup behavior, not around
 - `python scripts/verify/backend_workspace_parity.py` passed.
 - `python scripts/verify/product_page_architecture_contract.py` passed.
 - `python scripts/verify/product_blueprint_live_contract.py` passed.
+  - Owner setup proof inside this verifier: `locallytwisted@gmail.com`, 2 SKU-defining variants, 2 price rows, unpublished Website Item.
   - Staff setup proof inside this verifier: 60 configuration choices, max 9, 2 variants, 1 media rule, rollback-safe.
 - `python scripts/verify/checkout_product_family_contract.py` passed.
 - `python scripts/verify/quote_event_checkout_boundary_contract.py` passed.

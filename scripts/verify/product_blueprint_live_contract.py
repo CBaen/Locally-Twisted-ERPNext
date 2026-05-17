@@ -59,6 +59,15 @@ def main() -> int:
             f"variants={staff_setup.get('variant_combination_count')}, "
             f"media_rules={staff_setup.get('media_rules')}"
         )
+    owner_setup = result.get("owner_setup") or {}
+    if owner_setup:
+        print(
+            "  - owner_setup: "
+            f"user={owner_setup.get('user')}, "
+            f"{owner_setup.get('variant_count')} variant(s), "
+            f"{owner_setup.get('item_price_count')} price row(s), "
+            f"published={owner_setup.get('published')}"
+        )
     local_apply = result.get("local_apply") or {}
     print(
         "  - local_apply: "

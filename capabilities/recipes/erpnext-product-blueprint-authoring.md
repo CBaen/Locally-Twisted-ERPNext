@@ -5,11 +5,11 @@ schema_version: 2.0
 level: recipe
 maturity: candidate
 scope: Locally Twisted ERPNext staff-authored product setup for highly customizable ecommerce products
-currently_true: unknown
+currently_true: true
 verification_level: 2
-last_verified: 2026-05-14
+last_verified: 2026-05-17
 evidence_quality: direct
-successful_uses: 1
+successful_uses: 2
 failed_uses: 0
 regressions: 0
 used_by:
@@ -69,6 +69,11 @@ verifier work. For local build work, name the actual blocker.
   checkout-approved fixed-item-price rows pointing at an enabled Item with a
   Standard Selling Item Price. Quantity min/max is enforced by checkout
   validation.
+- The real owner account `locallytwisted@gmail.com` can create and locally
+  apply a Product Blueprint through the guarded Product Setup path. The owner
+  profile does not need raw `Website Item` DocPerm access; generated Website
+  Items are created unpublished by the server-side helper after the owner passes
+  Product Setup role and local-site gates.
 
 ## Workflow
 
@@ -100,6 +105,10 @@ Expected current result: product blueprint pure/live contracts pass;
 `technical_architecture_ok=true` and `import_reopen_ok=false` while the public
 exposure lock is on. That false `import_reopen_ok` is expected local safety
 posture, not a local product-authoring blocker.
+
+The live contract now includes owner-profile Product Setup proof:
+`locallytwisted@gmail.com` creates and applies a rollback-safe local product
+with two SKU variants, two Item Prices, and an unpublished Website Item.
 
 ## Remaining Work
 
