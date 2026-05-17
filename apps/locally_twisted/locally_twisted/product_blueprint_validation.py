@@ -341,6 +341,7 @@ def _row_to_dict(row: Any) -> dict[str, Any]:
         "rule_type",
         "selection_group",
         "selection_value",
+        "selection_conditions",
         "variant_item",
         "image",
         "approved_for_customer",

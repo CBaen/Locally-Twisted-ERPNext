@@ -31,7 +31,10 @@ from locally_twisted.payments.settings import (
     get_stripe_payment_method_configuration,
     get_stripe_settings,
 )
-from locally_twisted.product_page_runtime import customer_facing_line_label
+from locally_twisted.product_page_runtime import (
+    customer_facing_line_image,
+    customer_facing_line_label,
+)
 
 
 def stripe_line_items_for_sales_order(so) -> list[dict]:
@@ -41,12 +44,16 @@ def stripe_line_items_for_sales_order(so) -> list[dict]:
 
     for item in so.items:
         item_name = customer_facing_line_label(item)
+        product_data = {"name": item_name}
+        image = customer_facing_line_image(item)
+        if image:
+            product_data["images"] = [_absolute_image_url(image)]
         qty = int(item.qty)
         unit_amount_cents = _money_to_cents(item.rate)
         line_items.append({
             "price_data": {
                 "currency": currency,
-                "product_data": {"name": item_name},
+                "product_data": product_data,
                 "unit_amount": unit_amount_cents,
             },
             "quantity": qty,
@@ -87,6 +94,15 @@ def _stripe_line_items_total_cents(line_items: list[dict]) -> int:
 
 def _money_to_cents(value) -> int:
     return int(round(flt(value) * 100))
+
+
+def _absolute_image_url(image: str) -> str:
+    image = str(image or "").strip()
+    if image.startswith(("http://", "https://")):
+        return image
+    if not image.startswith("/"):
+        image = f"/{image}"
+    return get_url(image)
 
 
 def create_session_for_sales_order(

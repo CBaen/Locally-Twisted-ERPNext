@@ -34,7 +34,7 @@ payment received without being told final receipt paperwork is already done.
 from urllib.parse import urlencode
 
 import frappe
-from frappe.utils import escape_html, flt
+from frappe.utils import escape_html, flt, get_url, nowdate
 
 from locally_twisted import policy_documents
 from locally_twisted.communication_copy_policy import document_copy_kwargs
@@ -51,7 +51,10 @@ from locally_twisted.payments.settings import (
     DEFAULT_OPERATOR_EMAIL,
     get_operator_email,
 )
-from locally_twisted.product_page_runtime import customer_facing_line_label
+from locally_twisted.product_page_runtime import (
+    customer_facing_line_image,
+    customer_facing_line_label,
+)
 
 
 no_cache = 1
@@ -269,11 +272,74 @@ def _mark_payment_request_paid(pr_name):
     if frappe.db.get_value("Payment Request", pr_name, "status") == "Paid":
         return
 
-    pr = frappe.get_doc("Payment Request", pr_name)
-    pr.flags.ignore_permissions = True
-    pr.flags.mute_email = True
-    pr.set_as_paid()
-    frappe.db.commit()
+    previous_user = frappe.session.user
+    try:
+        frappe.set_user("Administrator")
+        pr = frappe.get_doc("Payment Request", pr_name)
+        pr.flags.ignore_permissions = True
+        pr.flags.mute_email = True
+        try:
+            pr.set_as_paid()
+        except frappe.ValidationError as exc:
+            if "unbilled Sales Order" not in str(exc):
+                raise
+            _create_payment_entry_for_billed_sales_order(pr)
+        frappe.db.commit()
+    finally:
+        frappe.set_user(previous_user or "Guest")
+
+
+def _create_payment_entry_for_billed_sales_order(payment_request):
+    """Recover paid Stripe orders when invoice creation beat PR settlement."""
+    if payment_request.reference_doctype != "Sales Order":
+        raise ValueError(
+            f"Payment Request {payment_request.name} does not reference a Sales Order"
+        )
+
+    invoice_name = _submitted_sales_invoice_for_sales_order(payment_request.reference_name)
+    if not invoice_name:
+        raise ValueError(
+            f"No submitted Sales Invoice found for billed Sales Order {payment_request.reference_name}"
+        )
+
+    from erpnext.accounts.doctype.payment_entry.payment_entry import get_payment_entry
+
+    payment_entry = get_payment_entry(
+        "Sales Invoice",
+        invoice_name,
+        party_amount=payment_request.outstanding_amount or payment_request.grand_total,
+        bank_account=payment_request.payment_account,
+        bank_amount=payment_request.outstanding_amount or payment_request.grand_total,
+        created_from_payment_request=True,
+    )
+    payment_entry.update(
+        {
+            "mode_of_payment": payment_request.mode_of_payment,
+            "reference_no": payment_request.name,
+            "reference_date": nowdate(),
+            "remarks": (
+                "Payment Entry against Sales Invoice "
+                f"{invoice_name} via Payment Request {payment_request.name}"
+            ),
+        }
+    )
+    for reference in payment_entry.references:
+        reference.payment_request = payment_request.name
+    payment_entry.insert(ignore_permissions=True)
+    payment_entry.submit()
+
+    if frappe.db.get_value("Payment Request", payment_request.name, "status") != "Paid":
+        payment_request.db_set({"status": "Paid", "outstanding_amount": 0})
+
+
+def _submitted_sales_invoice_for_sales_order(so_name):
+    row = frappe.get_all(
+        "Sales Invoice Item",
+        filters={"sales_order": so_name, "docstatus": 1},
+        fields=["parent"],
+        limit=1,
+    )
+    return row[0]["parent"] if row else None
 
 
 def _message_already_queued_or_sent(reference_doctype, reference_name, subject):
@@ -400,10 +466,17 @@ def _send_receipt_email(so_name):
     lines_html = ""
     for item in so.items:
         name = customer_facing_line_label(item)
+        image = customer_facing_line_image(item)
+        image_html = (
+            f'<img src="{escape_html(_absolute_image_url(image))}" alt="" width="48" height="48" '
+            f'style="width:48px;height:48px;object-fit:cover;border-radius:4px;margin-right:8px;vertical-align:middle;">'
+            if image
+            else ""
+        )
         lines_html += (
             f'<tr>'
             f'<td style="padding:8px 0;border-bottom:1px solid #eee;">'
-            f'{escape_html(name)} &times; {int(item.qty)}'
+            f'{image_html}{escape_html(name)} &times; {int(item.qty)}'
             f'</td>'
             f'<td style="padding:8px 0;border-bottom:1px solid #eee;text-align:right;">'
             f'${flt(item.amount):,.2f}'
@@ -461,6 +534,15 @@ def _send_receipt_email(so_name):
         **document_copy_kwargs(external_audience=True, primary_recipients=[email]),
     )
     frappe.db.commit()
+
+
+def _absolute_image_url(image):
+    image = str(image or "").strip()
+    if image.startswith(("http://", "https://")):
+        return image
+    if not image.startswith("/"):
+        image = f"/{image}"
+    return get_url(image)
 
 
 OPERATOR_EMAIL = DEFAULT_OPERATOR_EMAIL

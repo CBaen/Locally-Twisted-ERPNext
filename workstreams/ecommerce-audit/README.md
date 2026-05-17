@@ -118,12 +118,15 @@ and lets checkout-approved fixed-item-price blueprint add-ons cascade into
 product options and checkout validation.
 
 Boundaries: the local `frontend` site has `lt_allow_local_blueprint_apply=1`
-for this test harness; generated Website Items stay unpublished; `Approved For
-Live` remains blocked; no live publish, order, invoice, Payment Request, Stripe,
-Frappe Cloud, DNS, or live checkout work was performed. Remaining product
-authoring work is browser proof of an applied blueprint product, richer
-self-service UI for complex cases, conditional pricing runtime, media
-assignment, broader add-on family mapping, and refreshed import safety evidence.
+for this test harness; generated Website Items stay unpublished unless a local
+proof explicitly publishes them; `Approved For Live` remains blocked; no
+Frappe Cloud, DNS, staging/live publish, or live checkout work was performed.
+2026-05-17 local proof did perform one intentional test-mode Stripe checkout
+against an employee-authored 48-variant proof product, then restored
+`lt_ecommerce_paused=1`. Remaining product authoring work is richer
+self-service UI for complex cases, conditional pricing runtime, broader real
+catalog media approval UI, broader add-on family mapping, and refreshed import
+safety evidence.
 
 ## Evidence inventory
 
@@ -162,6 +165,7 @@ assignment, broader add-on family mapping, and refreshed import safety evidence.
 | Backend product-page architecture contract | `backend-product-page-architecture-contract-2026-05-12.md` + `../../scripts/verify/product_page_architecture_contract.py` | Present, post-review / source+live projection gate | Owns `lt-product-page-architecture-contract-v1`, source/backend axis role projection, payload target mapping, line-field parity, and the post-review color-axis regression proof. |
 | Ecommerce shop setup closeout | `../../ECOMMERCE-SHOP-HANDOFF.md` | Present, current root closeout | Current completed-lane summary for backend wiring, catalog/import/pricing, media readiness, storefront UX/homepage verifier alignment, runner wrapper, remaining live gates, and scoped worktree caveats. |
 | Product blueprint authoring | `product-blueprint-authoring-2026-05-14.md` + `../../scripts/verify/product_blueprint_contract.py` + `../../scripts/verify/product_blueprint_live_contract.py` | Present, local-only staff authoring / rollback-safe apply proof | Adds employee Desk product setup, validation evidence, dry-run apply plan, guarded unpublished local apply, and fixed-price blueprint add-on runtime cascade. |
+| Generic Product Setup runtime | `generic-product-setup-runtime-2026-05-15.md` + `../../scripts/verify/product_blueprint_live_contract.py` + `../../scripts/verify/cart_checkout_contract.py` + `../../scripts/verify/payment_cascade_contract.py` | Present, local-only complex Product Setup media/payment proof | Proves generic selection groups, SKU-defining variants, configuration-only choices, combination media rules, server-selected image parity through cart/checkout/Stripe/receipt, role-gated local apply, and fake-card local payment cascade. |
 | Phase 6 launch decision packet | `phase-6-launch-decision-packet-2026-05-10.md` | Present, parent decision | Keeps public ecommerce paused; live checkout remains blocked until production HTTPS host, explicit live Stripe/site config, policy approval, webhook setup, and one intentional real payment test pass. |
 | Infrastructure synthesis | `ecommerce-infrastructure-research-synthesis-2026-05-10.md` | Present, parent-created | Corrected synthesis for the real question: ERPNext receiving infrastructure, contract/runtime layers, line-level preservation, quote/checkout bridges, fail-loud evidence, and verifier gates. |
 | Knowledge base index | `ecommerce-knowledge-base-index-2026-05-10.md` | Present, parent-created | Supporting index of recalled memory, local artifacts, source repos, verified docs, blockers, and next actions. |

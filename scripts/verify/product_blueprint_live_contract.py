@@ -59,6 +59,10 @@ def main() -> int:
             f"variants={staff_setup.get('variant_combination_count')}, "
             f"media_rules={staff_setup.get('media_rules')}"
         )
+    role_apply = result.get("role_apply") or {}
+    if role_apply:
+        roles = ", ".join(row.get("role") for row in role_apply.get("applied_roles") or [])
+        print(f"  - role_apply: {roles}")
     owner_setup = result.get("owner_setup") or {}
     if owner_setup:
         print(
@@ -67,6 +71,14 @@ def main() -> int:
             f"{owner_setup.get('variant_count')} variant(s), "
             f"{owner_setup.get('item_price_count')} price row(s), "
             f"published={owner_setup.get('published')}"
+        )
+    complex_media = result.get("complex_variant_media") or {}
+    if complex_media:
+        print(
+            "  - complex_variant_media: "
+            f"{complex_media.get('variant_count')} variant(s), "
+            f"{complex_media.get('item_price_count')} price row(s), "
+            f"selected_image={complex_media.get('selected_image')}"
         )
     local_apply = result.get("local_apply") or {}
     print(

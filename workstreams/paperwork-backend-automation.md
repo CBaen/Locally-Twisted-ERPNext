@@ -110,7 +110,11 @@ Current live-data facts from the fresh finance inventory:
 - Stripe checkout is the payment surface.
 - `/payment-success` and the Stripe webhook reconcile paid orders.
 - Paid-order cascade creates Payment Entry, submitted Sales Invoice, receipt email queue, operator notification queue, and first-order welcome email queue.
-- The cascade is idempotent and covered by `payment_cascade_contract.py`.
+- The cascade is idempotent and covered by `payment_cascade_contract.py`. As of
+  2026-05-17, that contract also proves Guest-return Stripe reconciliation can
+  settle Payment Requests, create Payment Entries, keep selected Product Setup
+  media in the receipt email, and recover the retry case where a Sales Invoice
+  already exists before Payment Request settlement.
 
 ### CRM and backend automation
 

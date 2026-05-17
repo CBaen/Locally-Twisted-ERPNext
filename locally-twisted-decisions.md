@@ -8,6 +8,40 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-17 - Product Setup media authority must survive checkout and receipt
+
+**Decision:** For complex ecommerce products, the selected customer image is
+not a frontend hint. It is a server-resolved Product Setup value that must
+cascade through product page, cart, checkout, Sales Order line JSON, Stripe
+Checkout, Sales Invoice/receipt copy, and the customer receipt email.
+
+**Reasoning:** GL's requirement is enterprise ecommerce behavior, not a demo:
+some photos change from one variant, some from a combination of selections,
+and the customer must see the same selected image through purchase and receipt.
+The fake-card local proof found real downstream blockers after the product
+image path itself worked: Guest-context Stripe reconciliation could not create
+the Payment Entry, and the dynamic checkout tax row pointed at the group
+account `2300 - Duties and Taxes - LT`. A product proof is incomplete until
+the payment/request/invoice/email cascade also works.
+
+**Implementation boundary:** Media rules may be single-selection or explicit
+selection-combination rules. Checkout and receipts must trust the server
+resolver, not browser-supplied image paths. Checkout tax rows must use a
+non-group tax account; `sync_commerce_rules` owns creation of
+`LT Sales Tax Payable - LT` for local/staged sites. Local ecommerce can be
+temporarily opened for proof, but it must be restored to `lt_ecommerce_paused=1`
+afterward unless GL explicitly approves exposure.
+
+**Receipts:** `workstreams/ecommerce-audit/generic-product-setup-runtime-2026-05-15.md`;
+`capabilities/recipes/erpnext-product-blueprint-authoring.md`;
+`scripts/verify/product_blueprint_live_contract.py`;
+`scripts/verify/payment_cascade_contract.py`.
+
+**Decided by:** GL request for complex variant/media/product-create proof and
+Codex local fake-card verification on 2026-05-17.
+
+---
+
 ## 2026-05-17 - Repo cleanup must reconcile value before deleting stale worktrees
 
 **Decision:** Detached LT worktrees and duplicate local publish commits may be

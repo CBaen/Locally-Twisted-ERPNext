@@ -9,7 +9,7 @@ currently_true: true
 verification_level: 2
 last_verified: 2026-05-17
 evidence_quality: direct
-successful_uses: 2
+successful_uses: 3
 failed_uses: 0
 regressions: 0
 used_by:
@@ -74,6 +74,13 @@ verifier work. For local build work, name the actual blocker.
   profile does not need raw `Website Item` DocPerm access; generated Website
   Items are created unpublished by the server-side helper after the owner passes
   Product Setup role and local-site gates.
+- Product-create capability now covers both `Item Manager` and `System Manager`
+  local apply paths without raw Website Item profile access. The server helper
+  owns generated Website Item creation.
+- Approved media can be keyed to one selection group/value or to an explicit
+  selection combination. The server-resolved `selected_media` value is the
+  authority for the product page API, cart, checkout, Stripe Checkout line
+  images, Sales Order/Sales Invoice line JSON, and customer receipt thumbnail.
 
 ## Workflow
 
@@ -95,6 +102,9 @@ python scripts/verify/product_blueprint_live_contract.py
 python scripts/verify/product_page_runtime_contract.py
 python scripts/verify/product_add_on_dependency_contract.py
 python scripts/verify/product_page_architecture_contract_contract.py
+python scripts/verify/cart_checkout_contract.py
+python scripts/verify/stripe_amount_parity_contract.py
+python scripts/verify/payment_cascade_contract.py
 python scripts/verify/ecommerce_pause_contract.py
 python scripts/verify/product_page_architecture_readiness.py --json
 python scripts/verify/verifier_cli_contract.py
@@ -110,14 +120,20 @@ The live contract now includes owner-profile Product Setup proof:
 `locallytwisted@gmail.com` creates and applies a rollback-safe local product
 with two SKU variants, two Item Prices, and an unpublished Website Item.
 
+The 2026-05-17 release smoke created a local employee-authored 48-variant proof
+product and completed one real local Stripe test-card checkout. Verified
+selected image chain:
+`/files/lt-proof-large-chrome.png` on product page -> cart -> checkout ->
+Sales Order line JSON -> Stripe Checkout line image -> customer receipt email.
+Local ecommerce was restored to `lt_ecommerce_paused=1` afterward.
+
 ## Remaining Work
 
-- Browser proof of an applied blueprint product page, cart line, checkout
-  summary, and rollback-safe order/invoice preservation.
 - Richer self-service UI for multi-slot color recipes, complex add-on families,
   and conditional pricing.
 - Conditional pricing runtime and fail-loud checkout/quote behavior.
-- Media assignment fields, dry-run/apply behavior, and approval evidence.
+- Broader media assignment review UI and approval evidence for real catalog
+  product families beyond the local proof product.
 - Fresh import safety evidence before any staging/live product release.
 
 Backlinks:

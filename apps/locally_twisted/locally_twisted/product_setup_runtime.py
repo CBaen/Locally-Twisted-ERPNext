@@ -229,6 +229,13 @@ def resolve_product_setup_configuration(
         "add_ons": add_ons,
         "customizations": [],
     }
+    selected_media = resolve_product_setup_media(
+        schema,
+        variant_item_code=_text(configuration.get("item_code")),
+        configuration=configuration,
+    )
+    if selected_media:
+        payload["selected_media"] = selected_media
 
     return {
         "schema_version": "lt-product-setup-resolution-v1",
@@ -239,9 +246,42 @@ def resolve_product_setup_configuration(
         "resolved_variant_attributes": resolved_variant_attributes,
         "configuration_groups": configuration_groups,
         "add_ons": add_ons,
+        "selected_media": selected_media,
         "configuration_payload": payload,
         "validation_hash": _validation_hash(payload),
     }
+
+
+def resolve_product_setup_media(
+    schema: dict[str, Any] | None,
+    *,
+    variant_item_code: str | None = None,
+    configuration: Any = None,
+) -> dict[str, Any]:
+    """Return the best approved Product Setup media rule for a selection."""
+    if not schema:
+        return {}
+    rules = [
+        rule
+        for rule in schema.get("media_rules") or []
+        if rule.get("approved_for_customer") and rule.get("image")
+    ]
+    if not rules:
+        return {}
+
+    selected = _selected_media_values(configuration)
+    variant_item_code = _text(variant_item_code)
+    candidates: list[tuple[int, dict[str, Any]]] = []
+
+    for rule in rules:
+        if not _media_rule_matches(rule, selected=selected, variant_item_code=variant_item_code):
+            continue
+        candidates.append((_media_rule_score(rule), rule))
+
+    if not candidates:
+        return {}
+    candidates.sort(key=lambda row: row[0], reverse=True)
+    return candidates[0][1]
 
 
 def get_product_setup_schema_json(item_code: str | None) -> str:
@@ -324,12 +364,15 @@ def _pricing_rule(row: dict[str, Any], index: int) -> dict[str, Any]:
 
 def _media_rule(row: dict[str, Any], index: int) -> dict[str, Any]:
     label = _text(row.get("rule_name")) or f"Media Rule {index}"
+    conditions = _media_rule_conditions(row)
     return {
         "key": _slug(label),
         "label": label,
         "rule_type": _text(row.get("rule_type")) or "Selection group",
         "selection_group": _text(row.get("selection_group")),
         "selection_value": _text(row.get("selection_value")),
+        "selection_conditions": _text(row.get("selection_conditions")),
+        "conditions": conditions,
         "variant_item": _text(row.get("variant_item")),
         "image": _text(row.get("image")),
         "approved_for_customer": _as_bool(row.get("approved_for_customer")),
@@ -375,6 +418,154 @@ def _selection_input(configuration: dict[str, Any]) -> dict[str, Any]:
                 if row_key:
                     merged[_slug(row_key)] = row.get("values") or row.get("value")
     return merged
+
+
+def _media_rule_matches(
+    rule: dict[str, Any],
+    *,
+    selected: dict[str, list[str]],
+    variant_item_code: str,
+) -> bool:
+    rule_type = _text(rule.get("rule_type")) or "Selection group"
+    conditions = rule.get("conditions") or []
+
+    if rule_type == "Exact resolved variant":
+        if _text(rule.get("variant_item")) != variant_item_code:
+            return False
+        return _conditions_match(conditions, selected)
+
+    if rule_type == "Selection combination":
+        return bool(conditions) and _conditions_match(conditions, selected)
+
+    if rule_type == "Selection group":
+        group = _text(rule.get("selection_group"))
+        value = _text(rule.get("selection_value"))
+        if not group or not value:
+            return False
+        group_values = selected.get(group) or selected.get(_slug(group)) or []
+        return value in group_values
+
+    return False
+
+
+def _media_rule_score(rule: dict[str, Any]) -> int:
+    rule_type = _text(rule.get("rule_type")) or "Selection group"
+    conditions = rule.get("conditions") or []
+    if rule_type == "Exact resolved variant" and conditions:
+        return 200 + len(conditions)
+    if rule_type == "Selection combination":
+        return 100 + len(conditions)
+    if rule_type == "Exact resolved variant":
+        return 80
+    if rule_type == "Selection group":
+        return 10
+    return 0
+
+
+def _conditions_match(conditions: list[dict[str, str]], selected: dict[str, list[str]]) -> bool:
+    for condition in conditions:
+        group = _text(condition.get("group") or condition.get("selection_group"))
+        value = _text(condition.get("value") or condition.get("selection_value"))
+        if not group or not value:
+            return False
+        group_values = selected.get(group) or selected.get(_slug(group)) or []
+        if value not in group_values:
+            return False
+    return True
+
+
+def _selected_media_values(configuration: Any) -> dict[str, list[str]]:
+    configuration = _configuration_dict(configuration)
+    selected: dict[str, list[str]] = {}
+    for key, value in (configuration.get("selected_options") or {}).items():
+        _set_selected_media_values(selected, key, value)
+    for row in configuration.get("configuration_groups") or []:
+        if not isinstance(row, dict):
+            continue
+        label = _text(row.get("label") or row.get("key"))
+        key = _text(row.get("key") or label)
+        values = row.get("values") or []
+        _set_selected_media_values(selected, key, values)
+        _set_selected_media_values(selected, label, values)
+    return selected
+
+
+def _set_selected_media_values(target: dict[str, list[str]], key: Any, raw_values: Any) -> None:
+    clean_key = _text(key)
+    if not clean_key:
+        return
+    values = raw_values if isinstance(raw_values, list) else [raw_values]
+    clean = [_text(item) for item in values if _text(item)]
+    if not clean:
+        return
+    target[clean_key] = clean
+    target[_slug(clean_key)] = clean
+
+
+def _configuration_dict(configuration: Any) -> dict[str, Any]:
+    if configuration in (None, ""):
+        return {}
+    if isinstance(configuration, str):
+        try:
+            configuration = json.loads(configuration)
+        except (TypeError, ValueError):
+            return {}
+    return configuration if isinstance(configuration, dict) else {}
+
+
+def _media_rule_conditions(row: dict[str, Any]) -> list[dict[str, str]]:
+    raw_conditions = row.get("conditions")
+    if isinstance(raw_conditions, list):
+        return _condition_list_from_mappings(raw_conditions)
+
+    parsed = _parse_condition_text(row.get("selection_conditions") or row.get("conditions_json"))
+    if parsed:
+        return parsed
+
+    group = _text(row.get("selection_group"))
+    value = _text(row.get("selection_value"))
+    if group and value:
+        return [{"group": group, "value": value}]
+    return []
+
+
+def _parse_condition_text(value: Any) -> list[dict[str, str]]:
+    text = _text(value)
+    if not text:
+        return []
+    if text.startswith("["):
+        try:
+            rows = json.loads(text)
+        except (TypeError, ValueError):
+            rows = []
+        if isinstance(rows, list):
+            return _condition_list_from_mappings(rows)
+    conditions: list[dict[str, str]] = []
+    for line in text.splitlines():
+        clean = line.strip()
+        if not clean:
+            continue
+        separator = "=" if "=" in clean else ":"
+        if separator not in clean:
+            continue
+        group, selected_value = clean.split(separator, 1)
+        group = group.strip()
+        selected_value = selected_value.strip()
+        if group and selected_value:
+            conditions.append({"group": group, "value": selected_value})
+    return conditions
+
+
+def _condition_list_from_mappings(rows: list[Any]) -> list[dict[str, str]]:
+    conditions: list[dict[str, str]] = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        group = _text(row.get("group") or row.get("selection_group"))
+        value = _text(row.get("value") or row.get("selection_value"))
+        if group and value:
+            conditions.append({"group": group, "value": value})
+    return conditions
 
 
 def _selected_values(selections: dict[str, Any], group: dict[str, Any]) -> list[str]:

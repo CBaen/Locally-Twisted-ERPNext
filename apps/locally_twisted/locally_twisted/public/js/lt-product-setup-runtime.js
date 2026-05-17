@@ -163,14 +163,59 @@
   function selectedMediaRule(form, variantCode) {
     const rules = approvedMediaRules();
     if (!rules.length) return null;
-    const exact = rules.find((rule) => rule.rule_type === "Exact resolved variant" && rule.variant_item === variantCode);
-    if (exact) return exact;
     const values = selectedValueMap(form);
-    return rules.find((rule) => {
-      if (rule.rule_type !== "Selection group") return false;
+    const matches = rules
+      .filter((rule) => mediaRuleMatches(rule, values, variantCode))
+      .map((rule) => ({ rule, score: mediaRuleScore(rule) }))
+      .sort((a, b) => b.score - a.score);
+    return matches.length ? matches[0].rule : null;
+  }
+
+  function mediaRuleMatches(rule, values, variantCode) {
+    const type = rule.rule_type || "Selection group";
+    const conditions = mediaRuleConditions(rule);
+    if (type === "Exact resolved variant") {
+      return rule.variant_item === variantCode && conditionsMatch(conditions, values);
+    }
+    if (type === "Selection combination") {
+      return conditions.length > 0 && conditionsMatch(conditions, values);
+    }
+    if (type === "Selection group") {
       const groupValues = values[rule.selection_group] || values[slug(rule.selection_group)];
       return Array.isArray(groupValues) && groupValues.indexOf(rule.selection_value) !== -1;
-    }) || null;
+    }
+    return false;
+  }
+
+  function mediaRuleScore(rule) {
+    const type = rule.rule_type || "Selection group";
+    const count = mediaRuleConditions(rule).length;
+    if (type === "Exact resolved variant" && count) return 200 + count;
+    if (type === "Selection combination") return 100 + count;
+    if (type === "Exact resolved variant") return 80;
+    if (type === "Selection group") return 10;
+    return 0;
+  }
+
+  function conditionsMatch(conditions, values) {
+    return conditions.every((condition) => {
+      const group = condition.group || condition.selection_group || "";
+      const value = condition.value || condition.selection_value || "";
+      const groupValues = values[group] || values[slug(group)] || [];
+      return Array.isArray(groupValues) && groupValues.indexOf(value) !== -1;
+    });
+  }
+
+  function mediaRuleConditions(rule) {
+    if (Array.isArray(rule.conditions)) return rule.conditions;
+    const textValue = text(rule.selection_conditions);
+    if (!textValue) return [];
+    return textValue.split(/\r?\n/).map((line) => {
+      const separator = line.indexOf("=") !== -1 ? "=" : ":";
+      const parts = line.split(separator);
+      if (parts.length < 2) return null;
+      return { group: text(parts[0]), value: text(parts.slice(1).join(separator)) };
+    }).filter((condition) => condition && condition.group && condition.value);
   }
 
   function enforceMaxSelections(event) {

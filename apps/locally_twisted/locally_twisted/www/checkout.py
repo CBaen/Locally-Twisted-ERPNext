@@ -978,7 +978,7 @@ def submit_guest_order(item_code="", qty=1, items_json="",
         "items": so_line_items,
         "taxes": [{
             "charge_type": "On Net Total",
-            "account_head": commerce_rules.TAX_ACCOUNT_HEAD,
+            "account_head": commerce_rules.validate_sales_tax_account_head(),
             "description": f"Utah sales tax ({tax.label})",
             "rate": float(tax.rate),
         }],

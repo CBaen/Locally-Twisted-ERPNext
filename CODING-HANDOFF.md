@@ -158,6 +158,29 @@ guards: `python scripts/verify/product_blueprint_contract.py`,
 `lt_ecommerce_paused=1` remains a live/customer exposure safety lock, not an
 implementation blocker for local ecommerce build work.
 
+Codex complex Product Setup media/payment update on 2026-05-17: Product Setup
+media rules now support explicit selection combinations, and the server-selected
+media image is carried through product page API, cart, checkout, Sales Order
+line JSON, Stripe Checkout line images, Sales Invoice/receipt copy, and the
+customer receipt thumbnail. Local proof created a 48-variant employee-authored
+product with generated/uploaded images and completed one real local Stripe
+test-card purchase: `SAL-ORD-2026-00023`, Payment Request
+`ACC-PRQ-2026-00020`, Payment Entry `ACC-PAY-2026-00002`, Sales Invoice
+`ACC-SINV-2026-00003`, selected image `/files/lt-proof-large-chrome.png`.
+The paid-order cascade also now guards two failures found by that proof:
+trusted Stripe reconciliation runs with server authority instead of Guest
+permissions, and checkout taxes resolve to non-group `LT Sales Tax Payable -
+LT` instead of the parent Duties and Taxes account. Local ecommerce was restored
+to `lt_ecommerce_paused=1`; no staging/live ecommerce release was performed.
+Feature handoff:
+`workstreams/ecommerce-audit/generic-product-setup-runtime-2026-05-15.md`;
+capability: `capabilities/recipes/erpnext-product-blueprint-authoring.md`;
+additional guards: `python scripts/verify/cart_checkout_contract.py`,
+`python scripts/verify/stripe_amount_parity_contract.py`,
+`python scripts/verify/payment_cascade_contract.py`,
+`python scripts/verify/payment_launch_readiness.py`, and
+`python scripts/verify/ecommerce_pause_contract.py`.
+
 Codex ecommerce architecture correction on 2026-05-12: product-page receiving
 architecture is now explicit and generic through
 `lt-product-page-architecture-contract-v1`. The new contract maps

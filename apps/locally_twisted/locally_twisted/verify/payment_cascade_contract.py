@@ -6,6 +6,7 @@ paths, verifies the downstream ERPNext records, then rolls everything back.
 """
 from __future__ import annotations
 
+import json
 import time
 from html import unescape
 from quopri import decodestring
@@ -17,6 +18,7 @@ from frappe.utils import add_days, flt, nowdate
 ITEM_CODE = "easter-arch"
 PRICE_LIST = "Standard Selling"
 NOTES = "Gate code 1234. Please call on arrival."
+SELECTED_IMAGE = "/files/payment-cascade-selected-image.png"
 
 
 class ContractFail(Exception):
@@ -74,7 +76,8 @@ def _run_contract():
 
     from locally_twisted.www.payment_success import reconcile_paid_sales_order
 
-    first = reconcile_paid_sales_order(
+    first = _reconcile_as_guest(
+        reconcile_paid_sales_order,
         sales_order.name,
         payment_request=payment_request.name,
         source="payment_cascade_contract",
@@ -85,7 +88,8 @@ def _run_contract():
 
     evidence = _collect_evidence(sales_order.name, customer.name, payment_request.name, contact.name)
 
-    second = reconcile_paid_sales_order(
+    second = _reconcile_as_guest(
+        reconcile_paid_sales_order,
         sales_order.name,
         payment_request=payment_request.name,
         source="payment_cascade_contract_second_run",
@@ -98,7 +102,55 @@ def _run_contract():
     if duplicate_failures:
         raise ContractFail("; ".join(duplicate_failures))
 
-    return {"ok": True, **evidence}
+    billed_retry = _run_billed_sales_order_retry(token)
+
+    return {"ok": True, **evidence, "billed_sales_order_retry": billed_retry}
+
+
+def _reconcile_as_guest(func, *args, **kwargs):
+    previous_user = frappe.session.user
+    try:
+        frappe.set_user("Guest")
+        return func(*args, **kwargs)
+    finally:
+        frappe.set_user(previous_user or "Administrator")
+
+
+def _run_billed_sales_order_retry(token):
+    email = f"lt-cascade-billed-{token}@example.invalid"
+    customer = _create_customer(f"billed {token}", email)
+    contact = _create_contact(customer.name, f"billed {token}", email)
+    address = _create_address(customer.name, f"billed {token}", email)
+    sales_order = _create_sales_order(customer.name, address.name)
+
+    from locally_twisted.www.payment_success import (
+        _ensure_sales_invoice,
+        reconcile_paid_sales_order,
+    )
+
+    invoice = _ensure_sales_invoice(sales_order.name)
+    payment_request = _create_payment_request(sales_order.name, customer.name, email)
+    result = _reconcile_as_guest(
+        reconcile_paid_sales_order,
+        sales_order.name,
+        payment_request=payment_request.name,
+        source="payment_cascade_billed_retry",
+        raise_on_error=True,
+    )
+    if not result.get("ok"):
+        raise ContractFail(f"billed retry reconciliation returned errors: {result.get('errors')}")
+    if frappe.db.get_value("Payment Request", payment_request.name, "status") != "Paid":
+        raise ContractFail("billed retry Payment Request did not become Paid")
+    payment_entry = _payment_entry_for_payment_request(payment_request.name)
+    if not payment_entry:
+        raise ContractFail("billed retry did not create a Payment Entry linked to the Payment Request")
+    return {
+        "sales_order": sales_order.name,
+        "sales_invoice": invoice,
+        "payment_request": payment_request.name,
+        "payment_entry": payment_entry,
+        "contact": contact.name,
+    }
 
 
 def _create_customer(token, email):
@@ -151,6 +203,8 @@ def _create_address(customer_name, token, email):
 
 
 def _create_sales_order(customer_name, address_name):
+    from locally_twisted import commerce_rules
+
     rate = frappe.db.get_value(
         "Item Price",
         {"item_code": ITEM_CODE, "price_list": PRICE_LIST},
@@ -169,7 +223,31 @@ def _create_sales_order(customer_name, address_name):
             "currency": "USD",
             "selling_price_list": PRICE_LIST,
             "shipping_address_name": address_name,
-            "items": [{"item_code": ITEM_CODE, "qty": 1, "rate": flt(rate)}],
+            "items": [
+                {
+                    "item_code": ITEM_CODE,
+                    "qty": 1,
+                    "rate": flt(rate),
+                    "custom_lt_configuration_json": json.dumps(
+                        {
+                            "schema_version": "lt-product-config-v1",
+                            "selected_media": {
+                                "image": SELECTED_IMAGE,
+                                "label": "Payment cascade selected image",
+                            },
+                        },
+                        sort_keys=True,
+                    ),
+                }
+            ],
+            "taxes": [
+                {
+                    "charge_type": "On Net Total",
+                    "account_head": commerce_rules.validate_sales_tax_account_head(),
+                    "description": "Utah sales tax (84088)",
+                    "rate": 7.45,
+                }
+            ],
         }
     )
     sales_order.insert(ignore_permissions=True)
@@ -246,6 +324,7 @@ def _collect_evidence(sales_order_name, customer_name, payment_request_name, con
             "Pickup and delivery windows are requests until confirmed",
             "not returnable once they are prepared, delivered, or picked up",
             "same day",
+            SELECTED_IMAGE,
         ):
             if expected not in receipt_message:
                 failures.append(f"customer receipt email missing policy text/link: {expected}")

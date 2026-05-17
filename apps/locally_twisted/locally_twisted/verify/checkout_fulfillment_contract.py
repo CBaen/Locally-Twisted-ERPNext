@@ -83,6 +83,11 @@ def _check_setup_records():
         raise ContractFail(
             f"missing non-taxable item tax template: {commerce_rules.NON_TAXABLE_ITEM_TAX_TEMPLATE}"
         )
+    try:
+        tax_account = commerce_rules.validate_sales_tax_account_head()
+    except Exception as exc:
+        raise ContractFail(f"checkout sales tax account is not transaction-ready: {exc}") from exc
+
     missing_items = sorted(item for item in delivery_items if not frappe.db.exists("Item", item))
     if missing_items:
         raise ContractFail(f"missing checkout delivery items: {missing_items}")
@@ -101,6 +106,7 @@ def _check_setup_records():
     return {
         "sales_order_fields": len(required_so_fields),
         "delivery_items": len(delivery_items),
+        "sales_tax_account": tax_account,
     }
 
 

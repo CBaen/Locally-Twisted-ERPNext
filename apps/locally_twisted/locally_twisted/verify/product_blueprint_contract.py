@@ -85,13 +85,17 @@ def _run_contract() -> dict[str, object]:
     after = _counts()
     _assert_no_business_mutation(before, after)
     apply_result = _assert_guarded_local_apply()
+    role_apply_result = _assert_product_create_role_apply_boundaries()
     owner_result = _assert_owner_profile_product_build_flow()
+    complex_media_result = _assert_complex_variant_media_checkout_flow()
     return {
         "ok": True,
         "blueprint": doc.name,
         "validation_status": doc.validation_status,
         "staff_setup": staff_result,
+        "role_apply": role_apply_result,
         "owner_setup": owner_result,
+        "complex_variant_media": complex_media_result,
         "save_only_guard_counts_unchanged": True,
         "local_apply": apply_result,
     }
@@ -101,6 +105,15 @@ def _assert_doctypes_exist() -> None:
     missing = [doctype for doctype in BLUEPRINT_DOCTYPES if not frappe.db.exists("DocType", doctype)]
     if missing:
         raise ContractFail(f"Missing product blueprint DocTypes after migrate: {missing}")
+
+
+def _product_blueprint_create_roles() -> set[str]:
+    meta = frappe.get_meta("LT Product Blueprint")
+    return {
+        row.role
+        for row in meta.permissions or []
+        if getattr(row, "create", 0) and getattr(row, "role", None)
+    }
 
 
 def _insert_valid_quote_first_blueprint():
@@ -355,6 +368,10 @@ def _assert_item_manager_staff_setup_flow() -> dict[str, object]:
 
 
 def _insert_item_manager_user(suffix: str) -> str:
+    return _insert_role_user(suffix, "Item Manager")
+
+
+def _insert_role_user(suffix: str, role: str) -> str:
     email = f"lt-product-setup-{suffix}@example.invalid"
     user = frappe.get_doc(
         {
@@ -364,11 +381,67 @@ def _insert_item_manager_user(suffix: str) -> str:
             "last_name": "Setup Proof",
             "enabled": 1,
             "send_welcome_email": 0,
-            "roles": [{"role": "Item Manager"}],
+            "roles": [{"role": role}],
         }
     )
     user.insert(ignore_permissions=True)
     return email
+
+
+def _assert_product_create_role_apply_boundaries() -> dict[str, object]:
+    create_roles = _product_blueprint_create_roles()
+    expected_roles = {"Item Manager", "System Manager"}
+    if not expected_roles.issubset(create_roles):
+        raise ContractFail(f"Product Setup create roles should include {expected_roles}, found {create_roles}")
+
+    results = []
+    for role in sorted(expected_roles):
+        suffix = frappe.generate_hash(length=8).lower()
+        user = _insert_role_user(suffix, role)
+        current_user = frappe.session.user
+        slug = f"{role.lower().replace(' ', '-')}-apply-proof-{suffix}"
+        axis = f"{role} Proof Size {suffix}"
+        try:
+            frappe.set_user(user)
+            doc = frappe.get_doc(
+                {
+                    "doctype": "LT Product Blueprint",
+                    "product_name": f"{role} Apply Proof",
+                    "product_slug": slug,
+                    "item_group": _first_leaf_item_group(),
+                    "page_template": "Ready-to-order page",
+                    "buying_path": "Direct checkout",
+                    "publish_status": "Draft",
+                    "base_price": 45,
+                    "option_rows": [
+                        {
+                            "axis_name": axis,
+                            "selection_behavior": "SKU-defining variant",
+                            "control_type": "Single select",
+                            "required": 1,
+                            "min_selections": 1,
+                            "max_selections": 1,
+                            "values": "Small\nLarge",
+                        }
+                    ],
+                }
+            ).insert()
+            with _temporary_conf_flag("lt_allow_local_blueprint_apply", 1):
+                result = apply_locally_from_desk(doc.name)
+            if len(result.get("variants") or []) != 2 or len(result.get("item_prices") or []) != 2:
+                raise ContractFail(f"{role} apply should create two priced variants, found {result}")
+            results.append(
+                {
+                    "role": role,
+                    "user": user,
+                    "variant_count": 2,
+                    "published": result.get("website_item_published"),
+                }
+            )
+        finally:
+            frappe.set_user(current_user)
+
+    return {"create_roles": sorted(create_roles), "applied_roles": results}
 
 
 def _assert_owner_profile_product_build_flow() -> dict[str, object]:
@@ -453,6 +526,168 @@ def _assert_owner_profile_product_build_flow() -> dict[str, object]:
         }
     finally:
         frappe.set_user(current_user)
+
+
+def _assert_complex_variant_media_checkout_flow() -> dict[str, object]:
+    """Prove Product Setup media choices survive from selection to checkout."""
+    suffix = frappe.generate_hash(length=8).lower()
+    slug = f"complex-media-proof-{suffix}"
+    size_axis = "Proof Size"
+    finish_axis = "Proof Finish"
+    stand_axis = "Proof Stand"
+    combo_image = f"/files/{slug}-large-chrome.png"
+    size_image = f"/files/{slug}-small.png"
+    fallback_image = f"/files/{slug}-fallback.png"
+
+    doc = frappe.get_doc(
+        {
+            "doctype": "LT Product Blueprint",
+            "product_name": "Complex Variant Media Proof",
+            "product_slug": slug,
+            "item_group": _first_leaf_item_group(),
+            "page_template": "Ready-to-order page",
+            "buying_path": "Direct checkout",
+            "publish_status": "Local Preview Ready",
+            "base_price": 75,
+            "product_summary": "Rollback-safe complex variant media checkout proof.",
+            "option_rows": [
+                {
+                    "axis_name": size_axis,
+                    "selection_behavior": "SKU-defining variant",
+                    "control_type": "Single select",
+                    "required": 1,
+                    "min_selections": 1,
+                    "max_selections": 1,
+                    "values": "Small\nMedium\nLarge\nGrand",
+                },
+                {
+                    "axis_name": finish_axis,
+                    "selection_behavior": "SKU-defining variant",
+                    "control_type": "Single select",
+                    "required": 1,
+                    "min_selections": 1,
+                    "max_selections": 1,
+                    "values": "Matte\nChrome\nSatin\nCrystal",
+                },
+                {
+                    "axis_name": stand_axis,
+                    "selection_behavior": "SKU-defining variant",
+                    "control_type": "Single select",
+                    "required": 1,
+                    "min_selections": 1,
+                    "max_selections": 1,
+                    "values": "Tabletop\nWeighted\nHanging",
+                },
+                {
+                    "axis_name": "Accent Pattern",
+                    "selection_behavior": "Configuration only",
+                    "control_type": "Single select",
+                    "required": 0,
+                    "min_selections": 0,
+                    "max_selections": 1,
+                    "values": "Confetti\nCloud\nSwirl",
+                },
+            ],
+            "media_rule_rows": [
+                {
+                    "rule_name": "Small size media",
+                    "rule_type": "Selection group",
+                    "selection_group": size_axis,
+                    "selection_value": "Small",
+                    "image": size_image,
+                    "approved_for_customer": 1,
+                },
+                {
+                    "rule_name": "Large chrome media",
+                    "rule_type": "Selection combination",
+                    "selection_conditions": f"{size_axis}=Large\n{finish_axis}=Chrome",
+                    "image": combo_image,
+                    "approved_for_customer": 1,
+                },
+            ],
+        }
+    ).insert(ignore_permissions=True)
+
+    preview = get_local_apply_preview(doc.name)
+    if preview.get("planned_counts", {}).get("item_variants") != 48:
+        raise ContractFail(f"Complex proof should plan 48 variants, found {preview}")
+
+    with _temporary_conf_flag("lt_allow_local_blueprint_apply", 1):
+        result = apply_locally_from_desk(doc.name)
+
+    if len(result.get("variants") or []) != 48 or len(result.get("item_prices") or []) != 48:
+        raise ContractFail(f"Complex proof did not apply 48 priced variants: {result}")
+
+    frappe.db.set_value(
+        "Website Item",
+        result["website_item"],
+        {"published": 1, "website_image": fallback_image},
+        update_modified=False,
+    )
+
+    variant_item = f"{slug}-LARGE-CHROME-WEIGHT"
+    configuration = {
+        "schema_version": CONFIG_VERSION,
+        "item_code": variant_item,
+        "website_item_code": slug,
+        "selected_options": {
+            size_axis: "Large",
+            finish_axis: "Chrome",
+            stand_axis: "Weighted",
+        },
+        "configuration_groups": [
+            {
+                "key": "accent-pattern",
+                "label": "Accent Pattern",
+                "values": ["Confetti"],
+            }
+        ],
+        "add_ons": [],
+        "customizations": [],
+    }
+
+    from locally_twisted.api.cart import get_cart_items
+    from locally_twisted.api.variant_media import get_variant_media
+    from locally_twisted.www.checkout import _resolve_sale_lines
+
+    media = get_variant_media(
+        item_code=variant_item,
+        template_item_code=slug,
+        configuration=configuration,
+    )
+    if media.get("image") != combo_image:
+        raise ContractFail(f"Combination media should win on the product page, found {media}")
+
+    cart = get_cart_items(
+        [
+            {
+                "item_code": variant_item,
+                "qty": 1,
+                "configuration": configuration,
+            }
+        ]
+    )
+    cart_items = cart.get("items") or []
+    if len(cart_items) != 1 or cart_items[0].get("website_image") != combo_image:
+        raise ContractFail(f"Cart should use the selected Product Setup image, found {cart}")
+
+    sale_lines, _resolved_items = _resolve_sale_lines(
+        [{"item_code": variant_item, "qty": 1, "configuration": configuration}]
+    )
+    if len(sale_lines) != 1:
+        raise ContractFail(f"Complex proof should produce one base checkout line, found {sale_lines}")
+    payload = json.loads(sale_lines[0].get("custom_lt_configuration_json") or "{}")
+    if payload.get("selected_media", {}).get("image") != combo_image:
+        raise ContractFail(f"Checkout payload should preserve selected image, found {payload}")
+
+    return {
+        "blueprint": doc.name,
+        "item_code": result.get("item_code"),
+        "variant_count": len(result.get("variants") or []),
+        "item_price_count": len(result.get("item_prices") or []),
+        "selected_image": combo_image,
+        "fallback_image": fallback_image,
+    }
 
 
 def _insert_support_add_on_item(suffix: str) -> str:

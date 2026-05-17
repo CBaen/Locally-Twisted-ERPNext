@@ -21,6 +21,7 @@ from locally_twisted.catalog_variant_rules import required_variant_attribute_nam
 from locally_twisted.product_page_labels import COMMERCE_LANE_OPTIONS, PRODUCT_PAGE_TYPE_OPTIONS
 from locally_twisted.product_setup_runtime import (
     product_setup_schema_for_website_item,
+    resolve_product_setup_media,
     resolve_product_setup_configuration,
 )
 
@@ -429,6 +430,12 @@ def sales_order_line_configuration_fields(
         website_item_code=website_item_code,
         client_configuration=client_configuration,
     )
+    selected_media = _selected_media_for_checkout(
+        website_item_code=website_item_code,
+        resolved_item=resolved_item,
+        client_configuration=client_configuration,
+        setup_resolution=setup_resolution,
+    )
     color_recipes = _validated_checkout_color_recipes(client_configuration, variant_options=variant_options)
     _assert_checkout_configuration_is_priced(
         client_configuration,
@@ -460,6 +467,8 @@ def sales_order_line_configuration_fields(
         "validation_hash": (setup_resolution or {}).get("validation_hash"),
         "source": "lt_product_page_runtime",
     }
+    if selected_media:
+        payload["selected_media"] = selected_media
     summary = _configuration_summary(payload)
 
     return {
@@ -664,6 +673,23 @@ def _product_setup_resolution_for_checkout(
             frappe.ValidationError,
         )
     return resolution
+
+
+def _selected_media_for_checkout(
+    *,
+    website_item_code: str | None,
+    resolved_item: dict[str, Any],
+    client_configuration: dict[str, Any] | None,
+    setup_resolution: dict[str, Any] | None,
+) -> dict[str, Any]:
+    if setup_resolution and setup_resolution.get("selected_media"):
+        return setup_resolution["selected_media"]
+    schema = product_setup_schema_for_website_item(website_item_code)
+    return resolve_product_setup_media(
+        schema,
+        variant_item_code=resolved_item.get("item_code"),
+        configuration=client_configuration,
+    )
 
 
 def _assert_client_options_match_variant(
@@ -1138,6 +1164,14 @@ def customer_facing_line_label(item: Any) -> str:
         if first_piece and "Parent item" not in first_piece:
             return first_piece
     return str(base_name or "").strip()
+
+
+def customer_facing_line_image(item: Any) -> str:
+    """Return the customer-facing image chosen by Product Setup, if present."""
+    payload = _row_payload(item)
+    selected_media = payload.get("selected_media") or {}
+    image = selected_media.get("image") if isinstance(selected_media, dict) else ""
+    return str(image or "").strip()
 
 
 def _row_get(row: Any, fieldname: str) -> Any:

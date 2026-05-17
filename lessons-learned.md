@@ -6,6 +6,22 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-17 - Variant media proof is not done until payment and receipt pass
+
+The Product Setup selected image worked on the product page/cart/checkout path,
+but the real fake-card purchase still exposed two backend failures: Stripe
+return reconciliation ran under Guest and could not create the Payment Entry,
+then the invoice path used a group tax account. The customer page correctly
+said reconciliation was pending, but the ecommerce proof itself was not done.
+
+**Counter-move:** for ecommerce Product Setup work, verify the whole customer
+money path before calling it release-ready: selected media -> cart -> checkout
+-> Stripe test card -> Payment Request Paid -> Payment Entry -> Sales Invoice
+-> customer receipt email. Contracts should include the ugly retry shape too,
+where an invoice already exists before the Payment Request is settled.
+
+---
+
 ## 2026-05-17 - Merged worktrees still need value review before deletion
 
 During repo cleanup, two detached Codex worktrees were clean and already

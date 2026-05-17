@@ -31,6 +31,10 @@ from locally_twisted.product_page_runtime import (
     product_page_contract_for_website_item,
     sales_order_add_on_lines,
 )
+from locally_twisted.product_setup_runtime import (
+    product_setup_schema_for_website_item,
+    resolve_product_setup_media,
+)
 
 
 MAX_CART_LINES = 50
@@ -119,11 +123,17 @@ def _resolve_cart_item_for_sale(item_code, configuration=None):
     if not rate:
         return None, "unpriced"
 
+    selected_media = _selected_product_setup_media(
+        website_item_code=website_item["item_code"],
+        variant_item_code=item["item_code"],
+        configuration=normalized_configuration,
+    )
+
     return {
         "item_code": item["item_code"],
         "website_item_code": website_item["item_code"],
         "web_item_name": website_item.get("web_item_name") or item.get("item_name") or item["item_code"],
-        "website_image": item.get("image") or website_item.get("website_image") or None,
+        "website_image": selected_media.get("image") or item.get("image") or website_item.get("website_image") or None,
         "route": website_item.get("route") or ("shop/" + website_item["item_code"]),
         "short_description": website_item.get("short_description") or None,
         "item_group": website_item.get("item_group"),
@@ -131,6 +141,7 @@ def _resolve_cart_item_for_sale(item_code, configuration=None):
         "product_commerce_lane": product_page_contract.get("commerce_lane"),
         "product_page_type": product_page_contract.get("product_page_type"),
         "configuration": normalized_configuration,
+        "selected_media": selected_media,
         "price_list_rate": flt(rate),
         "available": True,
         "is_variant": bool(item.get("variant_of")),
@@ -298,6 +309,20 @@ def _clean_qty(value) -> int:
     except (TypeError, ValueError):
         qty = 1
     return max(1, min(qty, MAX_QTY_PER_LINE))
+
+
+def _selected_product_setup_media(
+    *,
+    website_item_code: str,
+    variant_item_code: str,
+    configuration: dict | None,
+) -> dict:
+    schema = product_setup_schema_for_website_item(website_item_code)
+    return resolve_product_setup_media(
+        schema,
+        variant_item_code=variant_item_code,
+        configuration=configuration,
+    )
 
 
 def _cart_display_lines(row: dict, qty: int) -> list[dict]:

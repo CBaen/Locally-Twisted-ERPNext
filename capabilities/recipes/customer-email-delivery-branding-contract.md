@@ -7,9 +7,9 @@ maturity: candidate
 scope: Locally Twisted ERPNext/Frappe customer/operator email branding, company-copy routing, and Email Queue proof
 currently_true: true
 verification_level: 2
-last_verified: 2026-05-16
+last_verified: 2026-05-17
 evidence_quality: direct
-successful_uses: 4
+successful_uses: 5
 failed_uses: 3
 regressions: 0
 depends_on:
@@ -71,6 +71,9 @@ privacy copy.
   data URLs before browser screenshots or PDFs, then verify image dimensions.
 - Only public intake confirmations use the playful branded shell with the balloon-dog footer mark.
 - Paid receipts, first-order welcome emails, reviewed quote emails, and other customer proof responses use `render_formal_customer_email` with logo-only inline images.
+- Paid receipts must include the server-selected Product Setup thumbnail when
+  a checkout line has `selected_media`; the image must come from trusted line
+  JSON, not from a browser-supplied display URL.
 - Internal paid-order notifications use `render_operator_email`: plain, formal, action oriented, and specific to the operator recipient.
 - The playful public inquiry subject is only for public forms. Do not use it
   for legal, billing, invoices, receipts, payroll, vendor packets, contracts, or
@@ -169,6 +172,11 @@ enough.
 owner Email Queue `683s86r04b` sent to `locallytwisted@gmail.com` with five
 attachment refs, and customer Email Queue `683suhfaa9` sent with zero photo
 attachments.
+
+2026-05-17 local ecommerce receipt proof: fake-card Sales Order
+`SAL-ORD-2026-00023` sent customer receipt Email Queue `q710cltm2i`; SQL
+position check confirmed `/files/lt-proof-large-chrome.png` was present in the
+receipt message and recipients were the customer plus `locallytwisted@gmail.com`.
 
 ## Failure Modes
 

@@ -14,7 +14,9 @@ from locally_twisted.commerce_rules import (
     DELIVERY_STANDARD_ITEM,
     NON_TAXABLE_ITEM_TAX_TEMPLATE,
     PRICE_LIST,
-    TAX_ACCOUNT_HEAD,
+    TAX_ACCOUNT_NAME,
+    TAX_PARENT_ACCOUNT_HEAD,
+    sales_tax_account_head,
 )
 from locally_twisted.product_page_runtime import (
     ADD_ON_ITEM_CONTRACTS,
@@ -331,10 +333,12 @@ def execute(commit: bool = True) -> str:
         "quotation_fields": [],
         "items": [],
         "item_prices": [],
+        "accounts": [],
         "item_tax_templates": [],
         "payment_terms": [],
         "payment_terms_templates": [],
     }
+    _ensure_sales_tax_account(summary)
     _ensure_sales_order_fields(summary)
     _ensure_product_page_fields(summary)
     _ensure_line_configuration_fields(summary)
@@ -418,6 +422,35 @@ def _company_name() -> str | None:
     return frappe.defaults.get_user_default("Company") or frappe.db.get_value("Company", {}, "name")
 
 
+def _ensure_sales_tax_account(summary: dict) -> None:
+    company = _company_name()
+    if not company:
+        return
+    if frappe.db.get_value(
+        "Account",
+        {"company": company, "account_name": TAX_ACCOUNT_NAME, "is_group": 0},
+        "name",
+    ):
+        return
+    if not frappe.db.exists("Account", TAX_PARENT_ACCOUNT_HEAD):
+        return
+
+    account = frappe.get_doc(
+        {
+            "doctype": "Account",
+            "account_name": TAX_ACCOUNT_NAME,
+            "company": company,
+            "parent_account": TAX_PARENT_ACCOUNT_HEAD,
+            "root_type": "Liability",
+            "report_type": "Balance Sheet",
+            "account_type": "Tax",
+            "is_group": 0,
+        }
+    )
+    account.insert(ignore_permissions=True)
+    summary["accounts"].append(f"created:{account.name}")
+
+
 def _ensure_item_tax_templates(summary: dict) -> None:
     company = _company_name()
     if not company:
@@ -438,7 +471,7 @@ def _ensure_item_tax_templates(summary: dict) -> None:
         if template.company != company:
             template.company = company
             changed = True
-        desired_taxes = [{"tax_type": TAX_ACCOUNT_HEAD, "tax_rate": 0}]
+        desired_taxes = [{"tax_type": sales_tax_account_head(), "tax_rate": 0}]
         current_taxes = [
             {"tax_type": row.tax_type, "tax_rate": float(row.tax_rate or 0)}
             for row in template.taxes
@@ -457,7 +490,7 @@ def _ensure_item_tax_templates(summary: dict) -> None:
             "name": NON_TAXABLE_ITEM_TAX_TEMPLATE,
             "title": NON_TAXABLE_ITEM_TAX_TEMPLATE,
             "company": company,
-            "taxes": [{"tax_type": TAX_ACCOUNT_HEAD, "tax_rate": 0}],
+            "taxes": [{"tax_type": sales_tax_account_head(), "tax_rate": 0}],
         }
     )
     template.insert(ignore_permissions=True)

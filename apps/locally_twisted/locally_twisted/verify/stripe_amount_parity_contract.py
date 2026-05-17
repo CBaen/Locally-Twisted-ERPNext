@@ -48,7 +48,13 @@ def run() -> dict[str, object]:
     configured_order = _fake_sales_order(
         grand_total=47.00,
         items=[
-            {"item_code": "unicorn-bouquet-SMA", "item_name": "Unicorn Bouquet", "rate": 35.00, "qty": 1},
+            {
+                "item_code": "unicorn-bouquet-SMA",
+                "item_name": "Unicorn Bouquet",
+                "rate": 35.00,
+                "qty": 1,
+                "custom_lt_configuration_json": '{"selected_media":{"image":"/files/selected-unicorn-proof.png"}}',
+            },
             {
                 "item_code": "ADDON-FOIL-NUMBER",
                 "item_name": "Foil Number Add-On",
@@ -64,10 +70,17 @@ def run() -> dict[str, object]:
         for row in configured_items
     ]
     evidence["configured_line_names"] = configured_names
+    configured_images = [
+        row["price_data"]["product_data"].get("images") or []
+        for row in configured_items
+    ]
+    evidence["configured_line_images"] = configured_images
     if "Foil number: 12" not in " ".join(configured_names):
         failures.append(f"Configured add-on Stripe line should preserve selected foil number, found {configured_names}")
     if "Parent item" in " ".join(configured_names):
         failures.append(f"Configured add-on Stripe line should not expose internal parent summary, found {configured_names}")
+    if not any("/files/selected-unicorn-proof.png" in " ".join(images) for images in configured_images):
+        failures.append(f"Configured Stripe line should include selected Product Setup image, found {configured_images}")
 
     negative_adjustment_rejected = False
     try:

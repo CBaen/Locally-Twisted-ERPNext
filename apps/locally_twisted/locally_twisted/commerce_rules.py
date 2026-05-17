@@ -14,7 +14,10 @@ from decimal import Decimal, ROUND_HALF_UP
 PRICE_LIST = "Standard Selling"
 DELIVERY_STANDARD_ITEM = "DELIVERY-STANDARD"
 DELIVERY_PARK_CITY_ITEM = "DELIVERY-PARK-CITY"
-TAX_ACCOUNT_HEAD = "2300 - Duties and Taxes - LT"
+TAX_ACCOUNT_HEAD = "LT Sales Tax Payable - LT"
+TAX_ACCOUNT_NAME = "LT Sales Tax Payable"
+TAX_PARENT_ACCOUNT_HEAD = "2300 - Duties and Taxes - LT"
+TAX_ACCOUNT_FALLBACKS = ("ST 6% - LT", "ST 6.25% - LT", "ST 4% - LT")
 NON_TAXABLE_ITEM_TAX_TEMPLATE = "LT Non-Taxable Sales"
 NON_TAXABLE_ITEM_CODES = {DELIVERY_STANDARD_ITEM, DELIVERY_PARK_CITY_ITEM}
 NON_TAXABLE_ITEM_GROUPS = {"services"}
@@ -193,6 +196,92 @@ def is_taxable_item(*, item_code: str | None = "", item_group: str | None = "") 
     if normalize_city(item_group) in NON_TAXABLE_ITEM_GROUPS:
         return False
     return True
+
+
+def sales_tax_account_head() -> str:
+    """Return a transaction-safe sales tax account for dynamic checkout taxes."""
+    try:
+        import frappe
+    except Exception:
+        return TAX_ACCOUNT_HEAD
+
+    configured = str(getattr(frappe.conf, "lt_sales_tax_account_head", "") or "").strip()
+    candidates = [configured, TAX_ACCOUNT_HEAD, *TAX_ACCOUNT_FALLBACKS]
+
+    company = _current_company()
+    if company:
+        generic = frappe.db.get_value(
+            "Account",
+            {"company": company, "account_name": TAX_ACCOUNT_NAME, "is_group": 0},
+            "name",
+        )
+        if generic:
+            candidates.insert(1, generic)
+
+    for candidate in candidates:
+        if _is_transaction_account(candidate):
+            return candidate
+
+    child = _first_tax_child_account(company)
+    if child:
+        return child
+
+    return TAX_ACCOUNT_HEAD
+
+
+def validate_sales_tax_account_head() -> str:
+    account = sales_tax_account_head()
+    try:
+        import frappe
+    except Exception:
+        return account
+
+    if not frappe.db.exists("Account", account):
+        raise ValueError(f"Sales tax account does not exist: {account}")
+    if int(frappe.db.get_value("Account", account, "is_group") or 0):
+        raise ValueError(f"Sales tax account cannot be a group account: {account}")
+    return account
+
+
+def _current_company() -> str | None:
+    try:
+        import frappe
+    except Exception:
+        return None
+    return frappe.defaults.get_user_default("Company") or frappe.db.get_value("Company", {}, "name")
+
+
+def _is_transaction_account(account: str | None) -> bool:
+    if not account:
+        return False
+    try:
+        import frappe
+    except Exception:
+        return False
+    if not frappe.db.exists("Account", account):
+        return False
+    return not int(frappe.db.get_value("Account", account, "is_group") or 0)
+
+
+def _first_tax_child_account(company: str | None) -> str | None:
+    try:
+        import frappe
+    except Exception:
+        return None
+    if not company or not frappe.db.exists("Account", TAX_PARENT_ACCOUNT_HEAD):
+        return None
+    row = frappe.db.get_value(
+        "Account",
+        {
+            "company": company,
+            "parent_account": TAX_PARENT_ACCOUNT_HEAD,
+            "account_type": "Tax",
+            "is_group": 0,
+        },
+        "name",
+        order_by="name asc",
+    )
+    return row
 
 
 def resolve_fulfillment(
