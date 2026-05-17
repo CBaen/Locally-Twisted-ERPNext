@@ -7,9 +7,9 @@ maturity: candidate
 scope: Locally Twisted launch repo cleanup, raw asset intake, generated evidence retention, stale artifact deletion, and forbidden branch/worktree cleanup
 currently_true: true
 verification_level: 2
-last_verified: 2026-05-11
+last_verified: 2026-05-17
 evidence_quality: direct
-successful_uses: 2
+successful_uses: 3
 failed_uses: 0
 regressions: 0
 depends_on:
@@ -51,7 +51,9 @@ GitHub is the archive for tracked historical experiments. Local holding folders 
 3. Delete only regenerable ignored output directly: caches, build output, screenshots, stale local verifier reports, and generated preview folders.
 4. Move large raw photo drops outside the repo when they may still be useful but are not production source.
 5. Delete tracked experiment output only when the implemented production source and durable handoffs already exist. Git history remains the archive.
-6. For a forbidden branch or linked worktree, do not keep it as a bookmark. Prove whether it has unique work first: inspect the linked worktree, check staged/unstaged/untracked files, and run `git merge-base --is-ancestor <branch> main` before removal.
+6. For a forbidden branch or linked worktree, do not keep it as a bookmark. Prove whether it has unique work first: inspect the linked worktree, check staged/unstaged/untracked files, and run `git merge-base --is-ancestor <branch-or-head> main` before removal.
+   - For detached worktrees, also verify the feature value is already present in current source/docs/verifiers. A clean ancestor check proves commit containment; it does not prove the topic was reviewed.
+   - Get explicit approval for the exact worktree path before deletion.
 7. Before committing tracked asset deletions, prove the asset is preserved by Git history, an exact local holding copy, or an intentional production replacement.
 8. Add `.gitignore` guards for raw/drop paths that should not re-enter the launch repo.
 9. Update the feature handoff, queue, decisions, lessons, and capability index when the cleanup changes future-agent behavior.
@@ -78,3 +80,15 @@ The launch cleanup removed regenerable outputs, stale mirrors/audits, old app cl
 ## 2026-05-11 Receipt
 
 Follow-up cleanup removed the forbidden linked worktree/branch `ecommerce-phase-1-4-hygiene-20260510` after ancestry and worktree-state checks proved it did not hold unique unstaged/untracked work. The three deleted tracked `assets/what we do photos/` raw images were removed from repo source after `git hash-object` proved exact copies in `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted-local-drops\landing-page-pics-20260510\`. Ignored forensic screenshot folders from regression research were deleted after the findings moved into tracked docs.
+
+## 2026-05-17 Receipt
+
+Repo history cleanup reconciled local `main` to `origin/main` after clean-clone
+publishing left duplicate local commits. Local duplicates were skipped only
+after mapping them to pushed equivalents. Two detached Codex worktrees were
+then reviewed for feature value, proven clean and ancestor-contained, approved
+by GL for deletion, removed with `git worktree remove`, and pruned from the
+registry. Closeout proof showed `HEAD == origin/main == d541a0c`, no staged or
+unstaged changes, no untracked files, no conflict markers, and only the main
+LT worktree remaining. Handoff:
+`workstreams/repo-history-and-worktree-cleanup-2026-05-17.md`.

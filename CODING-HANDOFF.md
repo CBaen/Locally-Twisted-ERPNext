@@ -1,5 +1,17 @@
 # Locally Twisted - Coding Handoff
 
+Codex repo hygiene closeout on 2026-05-17: local `main` is reconciled with
+`origin/main` at `d541a0c6fdb12ac280ec7eb044b7a4397be7fd8c`, the working tree
+is clean, and only the main LT worktree remains registered. The cleanup
+reviewed then deleted two stale detached Codex worktrees after proving they
+were clean, ancestor-contained, and had no unique feature value left to apply:
+`C:\Users\baenb\.codex\worktrees\84e7\locally-twisted` and
+`C:\Users\baenb\.codex\worktrees\lt-backend-checkout-docs-20260503`.
+Feature/value review confirmed contact prefill and checkout lead-conversion
+work from those worktrees already exists in current `main`. Handoff:
+`workstreams/repo-history-and-worktree-cleanup-2026-05-17.md`; capability:
+`capabilities/recipes/launch-repo-cleanup-and-evidence-retention.md`.
+
 Codex live inquiry release closeout on 2026-05-16: full repo commit
 `631f9a8 Run contact intake schema sync on install` and Frappe app mirror commit
 `b4b3bf8 Run contact intake schema sync on install` are live on

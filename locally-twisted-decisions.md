@@ -8,6 +8,36 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-17 - Repo cleanup must reconcile value before deleting stale worktrees
+
+**Decision:** Detached LT worktrees and duplicate local publish commits may be
+removed/reconciled only after proving both the git state and the feature value.
+Clean/merged status is necessary but not sufficient: the current source/docs
+must already contain the worktree's useful behavior, verifier, or handoff value.
+
+**Reasoning:** The cleanup track found two stale detached Codex worktrees whose
+HEAD commits were ancestors of `main` and `origin/main`. GL correctly asked
+whether their value had been reviewed before deletion. The follow-up audit
+proved the contact-prefill work and checkout lead-conversion docs/verifiers
+were already present in current `main`, so deleting the worktrees removed only
+stale checkout copies, not feature knowledge.
+
+**Implementation boundary:** Before deleting any future LT linked worktree,
+check `git status --porcelain`, prove `HEAD` is an ancestor of both `main` and
+`origin/main`, inspect the latest worktree topic, verify that topic exists in
+current source/docs/verifiers, and get explicit approval for the exact path.
+For duplicate local commits created by clean-clone publishing, reconcile local
+`main` to `origin/main` and skip local duplicates only after mapping them to
+their pushed equivalents.
+
+**Receipts:** `workstreams/repo-history-and-worktree-cleanup-2026-05-17.md`;
+`capabilities/recipes/launch-repo-cleanup-and-evidence-retention.md`.
+
+**Decided by:** GL request to reconcile and clean up, GL confirmation to delete
+the reviewed stale worktrees, and Codex cleanup execution on 2026-05-17.
+
+---
+
 ## 2026-05-16 - Inquiry form release proof requires site update plus live form evidence
 
 **Decision:** Public inquiry form fixes are not considered live from a GitHub

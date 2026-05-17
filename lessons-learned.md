@@ -6,6 +6,37 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-17 - Merged worktrees still need value review before deletion
+
+During repo cleanup, two detached Codex worktrees were clean and already
+merged into `main`, but GL asked the right follow-up: had their value actually
+been reviewed and applied? A clean ancestor check proves deletion is unlikely
+to lose commits; it does not prove the agent understood what the worktree was
+for or whether a newer doc/code path had superseded it.
+
+**Counter-move:** before deleting stale LT worktrees, check four things:
+status clean, HEAD is an ancestor of `main` and `origin/main`, the latest
+visible topic is already present in current source/docs/verifiers, and GL has
+approved the exact path deletion. Record the review in the cleanup handoff so
+future agents can see that feature value was preserved, not merely discarded.
+
+---
+
+## 2026-05-17 - Clean-clone publishing can leave duplicate local history
+
+Publishing from clean temporary clones protected the shared LT checkout from
+unrelated local work, but it left local `main` with duplicate commits beside
+the clean pushed hashes on `origin/main`. The files were clean, but the graph
+looked ahead/behind and could confuse later agents or pushes.
+
+**Counter-move:** after clean-clone publishing is finished, reconcile local
+`main` back to `origin/main`. Use rebase only from a clean file tree, map each
+local duplicate to the pushed commit that already contains it, skip/drop only
+after that evidence, then verify `HEAD == origin/main`, no file diffs, no
+untracked files, no conflict markers, and no stale temp clones.
+
+---
+
 ## 2026-05-15 - Assistant access needs a business DTO before provider adapters
 
 The owner access request started with ChatGPT language, then expanded to
