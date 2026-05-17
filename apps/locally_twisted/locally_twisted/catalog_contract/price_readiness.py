@@ -8,6 +8,7 @@ from typing import Any
 
 from locally_twisted.catalog_variant_rules import normalize_variant_value
 from locally_twisted.catalog_contract.source_builder import build_product_page_contract
+from locally_twisted.product_page_labels import commerce_lane_label, product_page_type_label
 
 
 @dataclass(frozen=True)
@@ -17,6 +18,10 @@ class PriceCoverageRow:
     product_page_type_label: str
     commerce_lane: str
     commerce_lane_label: str
+    current_product_page_type: str
+    current_product_page_type_label: str
+    current_commerce_lane: str
+    current_commerce_lane_label: str
     required_axes: tuple[str, ...]
     expected_sale_units: int
     source_resolver_priced_units: int
@@ -39,33 +44,52 @@ class PriceReadinessReport:
     failures: tuple[str, ...]
 
     def summary(self) -> dict[str, Any]:
-        checkout_rows = [row for row in self.rows if row.commerce_lane == "checkout"]
-        quote_rows = [row for row in self.rows if row.commerce_lane == "quote_first"]
+        source_checkout_rows = [row for row in self.rows if row.commerce_lane == "checkout"]
+        source_quote_rows = [row for row in self.rows if row.commerce_lane == "quote_first"]
+        backend_checkout_rows = [row for row in self.rows if row.current_commerce_lane == "checkout"]
+        backend_quote_rows = [row for row in self.rows if row.current_commerce_lane == "quote_first"]
         source_blocked = [row for row in self.rows if row.expected_sale_units and not row.source_resolver_ready]
+        lane_drift = [
+            row for row in self.rows
+            if row.commerce_lane != row.current_commerce_lane
+            or row.product_page_type != row.current_product_page_type
+        ]
         return {
             "source_products": len(self.rows),
-            "checkout_products": len(checkout_rows),
-            "quote_first_products": len(quote_rows),
-            "checkout_products_live_price_ready": sum(1 for row in checkout_rows if row.live_ready),
-            "checkout_expected_sale_units": sum(row.expected_sale_units for row in checkout_rows),
-            "checkout_live_priced_sale_units": sum(row.live_active_priced_units for row in checkout_rows),
+            "checkout_products": len(backend_checkout_rows),
+            "quote_first_products": len(backend_quote_rows),
+            "source_checkout_products": len(source_checkout_rows),
+            "source_quote_first_products": len(source_quote_rows),
+            "backend_checkout_products": len(backend_checkout_rows),
+            "backend_quote_first_products": len(backend_quote_rows),
+            "checkout_products_live_price_ready": sum(1 for row in backend_checkout_rows if row.live_ready),
+            "checkout_expected_sale_units": sum(row.expected_sale_units for row in backend_checkout_rows),
+            "checkout_live_priced_sale_units": sum(row.live_active_priced_units for row in backend_checkout_rows),
             "source_resolver_blocked_products": len(source_blocked),
+            "source_backend_lane_differences": len(lane_drift),
         }
 
     def to_markdown(self) -> str:
         summary = self.summary()
+        lane_drift = [
+            row for row in self.rows
+            if row.commerce_lane != row.current_commerce_lane
+            or row.product_page_type != row.current_product_page_type
+        ]
         lines = [
             "# Product Page Price Readiness Report",
             "",
-            "This read-only report compares the two product-page template classifications with live ERPNext Item Price coverage.",
+            "This read-only report compares source product-page template classifications, current backend Website Item lanes, and live ERPNext Item Price coverage.",
             "It does not mutate ERPNext. It also does not declare the source artifact safe for destructive purge/import.",
             "",
             "## Summary",
             "",
             f"- Source products checked: {summary['source_products']}",
-            f"- Online checkout products: {summary['checkout_products']}",
-            f"- Quote request first products: {summary['quote_first_products']}",
-            f"- Checkout products with live ERPNext price coverage: {summary['checkout_products_live_price_ready']} / {summary['checkout_products']}",
+            f"- Source-template online checkout products: {summary['source_checkout_products']}",
+            f"- Current backend online checkout products: {summary['backend_checkout_products']}",
+            f"- Current backend quote-first products: {summary['backend_quote_first_products']}",
+            f"- Source/backend lane differences: {summary['source_backend_lane_differences']}",
+            f"- Backend checkout products with live ERPNext price coverage: {summary['checkout_products_live_price_ready']} / {summary['backend_checkout_products']}",
             f"- Checkout sale units with live ERPNext prices: {summary['checkout_live_priced_sale_units']} / {summary['checkout_expected_sale_units']}",
             f"- Products still blocked for source resolver-backed reimport prices: {summary['source_resolver_blocked_products']}",
             "",
@@ -79,21 +103,38 @@ class PriceReadinessReport:
         else:
             lines.append("**PASS for current live ERPNext checkout price coverage.**")
             lines.append("")
-            lines.append("This means the current live database has server-owned Item Price coverage for the checkout-classified page contracts.")
+            lines.append("This means the current live database has server-owned Item Price coverage for the backend checkout-classified Website Item rows.")
             lines.append("It does not mean source data can be purged/reimported safely; source resolver-backed prices remain a separate blocker.")
+
+        lines.extend(["", "## Source / Backend Lane Differences", ""])
+        if lane_drift:
+            lines.extend(
+                [
+                    "| Slug | Source template | Source lane | Current backend template | Current backend lane |",
+                    "|---|---|---|---|---|",
+                ]
+            )
+            for row in lane_drift:
+                lines.append(
+                    f"| {row.slug} | {row.product_page_type_label} | {row.commerce_lane_label} | "
+                    f"{row.current_product_page_type_label} | {row.current_commerce_lane_label} |"
+                )
+        else:
+            lines.append("- None")
 
         lines.extend([
             "",
             "## Product Coverage",
             "",
-            "| Slug | Template | Lane | Required axes | Expected sale units | Source resolver-priced units | Live priced units | Live price range | Missing live units |",
-            "|---|---|---|---|---:|---:|---:|---|---|",
+            "| Slug | Source template | Source lane | Current backend template | Current backend lane | Required axes | Expected sale units | Source resolver-priced units | Live priced units | Live price range | Missing live units |",
+            "|---|---|---|---|---|---|---:|---:|---:|---|---|",
         ])
         for row in self.rows:
             axes = ", ".join(row.required_axes) or "(single SKU)"
             missing = "<br>".join(row.missing_live_units) or ""
             lines.append(
                 f"| {row.slug} | {row.product_page_type_label} | {row.commerce_lane_label} | "
+                f"{row.current_product_page_type_label} | {row.current_commerce_lane_label} | "
                 f"{axes} | {row.expected_sale_units} | {row.source_resolver_priced_units} | "
                 f"{row.live_active_priced_units} | {row.live_price_range} | {missing} |"
             )
@@ -119,12 +160,18 @@ def build_price_readiness_report(
         expected = _expected_sale_units(product, required_axes)
         source_priced = _source_resolver_priced_units(product, expected, required_axes)
         live = live_catalog.coverage_for(str(product.get("slug") or ""), required_axes, expected)
+        current_product_page_type = str(live.get("current_product_page_type") or contract.product_page_type)
+        current_commerce_lane = str(live.get("current_commerce_lane") or contract.commerce_lane)
         row = PriceCoverageRow(
             slug=contract.slug,
             product_page_type=contract.product_page_type,
             product_page_type_label=contract.product_page_type_label,
             commerce_lane=contract.commerce_lane,
             commerce_lane_label=contract.commerce_lane_label,
+            current_product_page_type=current_product_page_type,
+            current_product_page_type_label=product_page_type_label(current_product_page_type),
+            current_commerce_lane=current_commerce_lane,
+            current_commerce_lane_label=commerce_lane_label(current_commerce_lane),
             required_axes=required_axes,
             expected_sale_units=len(expected),
             source_resolver_priced_units=source_priced,
@@ -134,12 +181,12 @@ def build_price_readiness_report(
         )
         rows.append(row)
 
-        if contract.commerce_lane == "checkout":
+        if current_commerce_lane == "checkout":
             if not expected:
-                failures.append(f"{contract.slug} is checkout-classified but has no expected sale unit.")
+                failures.append(f"{contract.slug} is backend checkout-classified but has no expected sale unit.")
             elif row.missing_live_units:
                 failures.append(
-                    f"{contract.slug} is checkout-classified but live ERPNext is missing prices for: "
+                    f"{contract.slug} is backend checkout-classified but live ERPNext is missing prices for: "
                     + "; ".join(row.missing_live_units)
                 )
 
@@ -149,14 +196,26 @@ def build_price_readiness_report(
 class _LivePriceCatalog:
     def __init__(self, rows: list[dict[str, Any]]):
         self._items: dict[str, dict[str, Any]] = {}
+        self._website_items: dict[str, dict[str, str]] = {}
         for row in rows:
             item_code = _clean(row.get("item_code"))
             if not item_code:
                 continue
+            template_item = _clean(row.get("template_item")) or item_code
+            if template_item:
+                self._website_items.setdefault(
+                    template_item,
+                    {
+                        "current_product_page_type": _clean(row.get("current_product_page_type")),
+                        "current_commerce_lane": _clean(row.get("current_commerce_lane")),
+                        "current_route": _clean(row.get("current_route")),
+                        "current_published": _clean(row.get("current_published")),
+                    },
+                )
             item = self._items.setdefault(
                 item_code,
                 {
-                    "template": _clean(row.get("template_item")),
+                    "template": template_item,
                     "variant_of": _clean(row.get("variant_of")),
                     "disabled": _clean(row.get("disabled")),
                     "price": _decimal_or_none(row.get("price_list_rate")),
@@ -210,6 +269,7 @@ class _LivePriceCatalog:
             "priced_units": len(live_units),
             "missing": missing,
             "price_range": _price_range(prices),
+            **self._website_items.get(slug, {}),
         }
 
 

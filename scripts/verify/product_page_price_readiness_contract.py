@@ -51,9 +51,14 @@ def _slug_to_group() -> dict[str, str]:
 def _live_price_rows(slugs: list[str]) -> list[dict[str, str]]:
     quoted = ", ".join("'" + slug.replace("'", "''") + "'" for slug in slugs)
     sql = f"""
+    set sql_big_selects=1;
     set sql_select_limit=1000000;
     select
         coalesce(nullif(i.variant_of, ''), i.name) as template_item,
+        wi.lt_product_page_type as current_product_page_type,
+        wi.lt_commerce_lane as current_commerce_lane,
+        wi.route as current_route,
+        wi.published as current_published,
         i.name as item_code,
         i.variant_of,
         i.disabled,
@@ -61,6 +66,8 @@ def _live_price_rows(slugs: list[str]) -> list[dict[str, str]]:
         iva.attribute,
         iva.attribute_value
     from tabItem i
+    left join `tabWebsite Item` wi
+      on wi.item_code = coalesce(nullif(i.variant_of, ''), i.name)
     left join `tabItem Price` ip
       on ip.item_code = i.name
      and ip.price_list = '{PRICE_LIST}'

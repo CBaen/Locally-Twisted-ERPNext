@@ -128,6 +128,18 @@ self-service UI for complex cases, conditional pricing runtime, broader real
 catalog media approval UI, broader add-on family mapping, and refreshed import
 safety evidence.
 
+## 2026-05-17 Product Family Certification Truth Table
+
+Use `product-family-certification-truth-table-2026-05-17.md` as the current
+front-door artifact for existing product/product-page certification. It
+unpublished the generated local release-proof Website Item from the public
+product surface, refreshed the 53-product backend-first scaffold, and splits
+the catalog into checkout regression guards, simple lane-flip candidates,
+multi-color UI products, add-on/conditional-pricing blocked products, and
+needs-review products. It also records the source/backend lane differences and
+the updated backend-first price gate: 18 current backend checkout products and
+51/51 checkout sale units have live ERPNext price coverage.
+
 ## Evidence inventory
 
 | Lane | Required artifact | Current state | Use it for |
