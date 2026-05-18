@@ -6,6 +6,27 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-17 - Safety gates must preserve known-good product behavior
+
+The Encanto Bouquet regression was not missing data. ERPNext still had
+`encanto-bouquet-SMA`, `encanto-bouquet-MED`, and `encanto-bouquet-LAR` images
+stored on the variant Items. The failure was an overbroad media safety gate:
+while trying to hold unclassified source extra/gallery images, the code also
+held simple checkout variant `Item.image` values that were already meaningful
+customer-selection media. The verifier had been rewritten to expect that
+broken behavior, which hid the regression until GL tested the product.
+
+**Counter-move:** when adding a safety gate, first name the known-good
+behaviors that must survive. Then write both positive and negative guards.
+For LT variant media, the positive guard is Encanto Small/Medium/Large image
+swap plus cart/order/receipt cascade. The negative guard is Classic Arch
+complex raw media staying held without Product Setup approval. Do not collapse
+different media classes - parent primary image, simple variant Item image,
+Product Setup media rule, and unclassified source extra/gallery image - into
+one generic "hold everything" rule.
+
+---
+
 ## 2026-05-17 - Browser proof route authority must be the live Website Item route
 
 After the all-Odoo import, `post_import_checkout_proof.js` correctly loaded

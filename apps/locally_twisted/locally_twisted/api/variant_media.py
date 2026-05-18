@@ -10,6 +10,10 @@ from locally_twisted.product_setup_runtime import (
     product_setup_schema_for_website_item,
     resolve_product_setup_media,
 )
+from locally_twisted.product_variant_media import (
+    approved_variant_item_media,
+    held_variant_item_media_reason,
+)
 
 
 def _variant_options(item_code: str) -> list[dict[str, str]]:
@@ -34,8 +38,9 @@ def get_variant_media(item_code: str, template_item_code: str | None = None, con
     """Return the storefront image for an Item or variant Item.
 
     Variant Items are sellable rows, while the Website Item usually lives on
-    the template. This method keeps the template image as fallback until a
-    source-backed media role marks a variant image as approved for rendering.
+    the template. Product Setup media rules win first. Simple checkout
+    variants may then use their own Item.image; complex product images stay
+    held until Product Setup approves the customer-facing rule.
     """
     item_code = (item_code or "").strip()
     template_item_code = (template_item_code or "").strip() or None
@@ -55,10 +60,16 @@ def get_variant_media(item_code: str, template_item_code: str | None = None, con
     if template_item_code and website_item_code != template_item_code:
         frappe.throw(_("Tiny snag: that option does not match this product. Please choose again."), frappe.ValidationError)
 
+    website_fields = ["item_code", "web_item_name", "website_image", "route"]
+    website_meta = frappe.get_meta("Website Item")
+    for fieldname in ("lt_product_page_type", "lt_commerce_lane"):
+        if website_meta.has_field(fieldname):
+            website_fields.append(fieldname)
+
     website_item = frappe.db.get_value(
         "Website Item",
         {"item_code": website_item_code, "published": 1},
-        ["item_code", "web_item_name", "website_image", "route"],
+        website_fields,
         as_dict=True,
     )
     if not website_item:
@@ -66,20 +77,28 @@ def get_variant_media(item_code: str, template_item_code: str | None = None, con
 
     fallback_image = website_item.get("website_image") or None
     variant_image = item.get("image") or None
+    variant_options = _variant_options(item["item_code"]) if item.get("variant_of") else []
     setup_schema = product_setup_schema_for_website_item(website_item["item_code"])
     setup_media = resolve_product_setup_media(
         setup_schema,
         variant_item_code=item["item_code"],
         configuration=configuration,
     )
-    approved_variant_image = setup_media.get("image") if setup_media else None
-    image = approved_variant_image or fallback_image
-    held_back_variant_image = bool(variant_image and variant_image != fallback_image)
-    hold_reason = (
-        "Variant image is held until source media classification approves the variant_image role."
-        if held_back_variant_image
-        else ""
+    variant_item_media = approved_variant_item_media(
+        item=item,
+        website_item=website_item,
+        variant_options=variant_options,
     )
+    approved_media = setup_media or variant_item_media
+    approved_variant_image = approved_media.get("image") if approved_media else None
+    image = approved_variant_image or fallback_image
+    hold_reason = "" if approved_media else held_variant_item_media_reason(item=item, website_item=website_item)
+    held_back_variant_image = bool(hold_reason)
+    media_role = "primary"
+    if setup_media:
+        media_role = "product_setup_media_rule"
+    elif variant_item_media:
+        media_role = "variant_item_image"
 
     return {
         "item_code": item["item_code"],
@@ -92,9 +111,10 @@ def get_variant_media(item_code: str, template_item_code: str | None = None, con
         "held_back_render_policy": "hold_back" if held_back_variant_image else "",
         "hold_reason": hold_reason,
         "role_reason": hold_reason,
-        "media_role": "product_setup_media_rule" if approved_variant_image else "primary",
+        "media_role": media_role,
         "product_setup_media_rule": setup_media or {},
+        "variant_item_media_rule": variant_item_media or {},
         "alt": item.get("item_name") or website_item.get("web_item_name") or item["item_code"],
         "route": website_item.get("route"),
-        "variant_options": _variant_options(item["item_code"]) if item.get("variant_of") else [],
+        "variant_options": variant_options,
     }

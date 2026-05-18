@@ -58,6 +58,11 @@ hold only. It is not a business lane.
   `templates/generators/item/item_add_to_cart.html`, `www/shop.py`, and
   `api/cart.py` use the Website Item product contract before legacy
   item-group/category lane fallback.
+- Follow-up variant media repair:
+  `product_variant_media.py`, `api/variant_media.py`, `api/cart.py`,
+  `product_page_runtime.py`, and `scripts/verify/variant_media_contract.py`
+  restore simple checkout variant `Item.image` rendering/cascade while keeping
+  complex raw media held without Product Setup approval.
 
 ## Verification
 
@@ -97,6 +102,8 @@ Safety proof:
 - Product pattern report: 53 published, 53 priced, checkout status
   `checkout_ready` for all 53.
 - Extra images remain held until classified: 95.
+- Simple checkout variant Item images are approved selected media and are not
+  part of the extra-image hold.
 - Review-only add-on controls remain hidden until mapped: 9.
 
 ## Boundaries
@@ -115,3 +122,6 @@ Safety proof:
 GL tests the local storefront/product/cart/checkout behavior. After approval,
 prepare a separate staging/live release packet from this commit with the
 normal Frappe Cloud, Stripe, DNS, and ecommerce exposure gates.
+
+Related follow-up handoff:
+`workstreams/ecommerce-audit/variant-item-media-restore-2026-05-17.md`.

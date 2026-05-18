@@ -103,10 +103,17 @@ now report 53 checkout-allowed products and 0 quote-first-allowed products.
 Browser proof passed all 53 live Website Item routes in two batches under the
 cart 50-line cap, at desktop and mobile widths, including cart and checkout
 preview. `lt_ecommerce_paused=1` was restored and verified. Remaining caveats:
-95 extra images stay held until classified and 9 review-only add-on controls
-stay hidden until mapped. No staging/live/Frappe Cloud/Stripe/DNS/public
-exposure change was performed; GL local testing and explicit release approval
-are still required before any live promotion.
+95 source extra/gallery images stay held until classified and 9 review-only
+add-on controls stay hidden until mapped. Follow-up on 2026-05-17 repaired the
+Encanto/simple checkout variant media regression: selected simple variant
+`Item.image` now renders and cascades to cart, Sales Order payload, and receipt
+helper while complex raw media stays held. Handoff:
+`workstreams/ecommerce-audit/variant-item-media-restore-2026-05-17.md`;
+failure recipe:
+`capabilities/failures/variant-media-overgating-regression.md`; guard:
+`python scripts/verify/variant_media_contract.py`. No staging/live/Frappe
+Cloud/Stripe/DNS/public exposure change was performed; GL local testing and
+explicit release approval are still required before any live promotion.
 
 **Repo hygiene cleanup track (2026-05-17):** the cleanup track reconciled local
 `main` with `origin/main` at `d541a0c` and deleted stale detached Codex

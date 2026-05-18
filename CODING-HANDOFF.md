@@ -1,5 +1,25 @@
 # Locally Twisted - Coding Handoff
 
+Codex variant media regression repair on 2026-05-17: GL caught
+`/shop-items/bouquets/encanto-bouquet` keeping the parent image after
+Small/Medium/Large size selection even though the backend variant Items still
+had size images. The root cause was overbroad media hardening from `019bf27`
+/ `8e4a95b`: unclassified source extra/gallery media needed to stay held, but
+the API also held simple checkout variant `Item.image` values. Source now uses
+`product_variant_media.py` so Product Setup media rules win first, simple
+`simple_product|checkout` variant Item images render as selected media, and
+complex/custom raw Item images remain held without Product Setup approval.
+The selected simple variant image cascades through product page, cart,
+Sales Order line JSON, and customer-facing receipt helper. Feature handoff:
+`workstreams/ecommerce-audit/variant-item-media-restore-2026-05-17.md`;
+failure recipe:
+`capabilities/failures/variant-media-overgating-regression.md`. Verified:
+`python -m py_compile ...`, `python scripts\verify\variant_media_contract.py`,
+`python scripts\verify\cart_checkout_contract.py`, and
+`python scripts\verify\product_page_runtime_contract.py`. No live deployment
+or Frappe Cloud update was performed; GL local testing is still required before
+any live promotion.
+
 Codex all-Odoo sellable reimport closeout on 2026-05-17: GL corrected the
 catalog contract again: every Odoo-imported product is a product and the local
 target is sellable checkout behavior, not a permanent quote-first category.

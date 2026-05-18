@@ -12,11 +12,41 @@ Status as of 2026-05-17 for peer GPT-5.5 Codex/OpenClaw agents.
   sellable checkout targets. Do not promote that proof to public/live without
   GL local approval plus the separate Frappe Cloud, Stripe, DNS, webhook, and
   live payment cutover gates.
+- Encanto/simple checkout variant media was repaired after GL caught the
+  product page keeping the parent image. Simple `simple_product|checkout`
+  variant `Item.image` now renders and cascades; complex/unclassified media
+  remains held.
 - `lt_ecommerce_paused=1` is a public/live exposure safety lock, not a reason
   to stop local build/test work. Name the actual blocker when ecommerce work is
   incomplete.
 
 ## Completed Lanes
+
+### Variant item media restore - 2026-05-17
+
+Owner: `Codex`
+
+Result: complete locally. No staging/live site update, Frappe Cloud update,
+DNS change, Stripe live change, or public exposure change was made.
+
+Feature handoff:
+
+- `workstreams/ecommerce-audit/variant-item-media-restore-2026-05-17.md`
+
+Evidence summary: Encanto Bouquet size variants already had backend
+`Item.image` values, but the media API held them because the source extra-image
+hold gate had been applied too broadly. Source now routes selected media
+through `product_variant_media.py`: Product Setup media wins first, simple
+checkout variant `Item.image` is approved selected media, and complex raw Item
+media stays held unless Product Setup approves it. Cart, Sales Order payload,
+and receipt helpers share the same selected-media path.
+
+Green gates:
+
+- `python -m py_compile apps\locally_twisted\locally_twisted\product_variant_media.py apps\locally_twisted\locally_twisted\api\variant_media.py apps\locally_twisted\locally_twisted\api\cart.py apps\locally_twisted\locally_twisted\product_page_runtime.py scripts\verify\variant_media_contract.py`
+- `python scripts\verify\variant_media_contract.py`
+- `python scripts\verify\cart_checkout_contract.py`
+- `python scripts\verify\product_page_runtime_contract.py`
 
 ### All-Odoo sellable product reimport - 2026-05-17
 
@@ -55,8 +85,9 @@ Green gates:
 - `node scripts\verify\post_import_checkout_proof.js` with all-53 manifest/snapshot batch proof
 - `python scripts\verify\ecommerce_pause_contract.py`
 
-Remaining local product-data caveats: 95 extra images remain held until
-classified; 9 review-only add-on controls remain hidden until mapped.
+Remaining local product-data caveats: 95 source extra/gallery images remain
+held until classified; 9 review-only add-on controls remain hidden until
+mapped. Simple checkout variant `Item.image` is no longer part of that hold.
 
 ### Backend checkout/order wiring - `f82b8ef1`
 
@@ -129,7 +160,12 @@ Files changed in that lane:
 - `scripts/verify/product_page_media_classification_packet.py`
 - `scripts/verify/variant_media_contract.py`
 
-Evidence summary: 49 products / 95 source extra images are explicitly held as `ignored_artifact` / `hold_back`; `unsafe_unclassified_images=0`; media visibility and variant media contracts pass. No media readiness blocker remains.
+Evidence summary: 49 products / 95 source extra images are explicitly held as
+`ignored_artifact` / `hold_back`; `unsafe_unclassified_images=0`. The
+2026-05-17 regression repair clarified that this hold does not cover already
+mapped simple checkout variant `Item.image` values; those are selected product
+media and are guarded by `variant_media_contract.py`. No source extra-image
+readiness blocker remains.
 
 ### Storefront/product UX and homepage contract - `3132de36`, `4fd5ae4f`
 

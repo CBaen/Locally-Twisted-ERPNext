@@ -35,6 +35,7 @@ from locally_twisted.product_setup_runtime import (
     product_setup_schema_for_website_item,
     resolve_product_setup_media,
 )
+from locally_twisted.product_variant_media import approved_variant_item_media_for_codes
 
 
 MAX_CART_LINES = 50
@@ -323,10 +324,16 @@ def _selected_product_setup_media(
     configuration: dict | None,
 ) -> dict:
     schema = product_setup_schema_for_website_item(website_item_code)
-    return resolve_product_setup_media(
+    setup_media = resolve_product_setup_media(
         schema,
         variant_item_code=variant_item_code,
         configuration=configuration,
+    )
+    if setup_media:
+        return setup_media
+    return approved_variant_item_media_for_codes(
+        variant_item_code=variant_item_code,
+        website_item_code=website_item_code,
     )
 
 

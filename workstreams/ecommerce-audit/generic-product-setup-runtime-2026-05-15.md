@@ -14,7 +14,11 @@ Implement the ecommerce system around generic Product Setup behavior, not around
 - SKU-defining selections resolve against the actual ERPNext variant chosen for checkout.
 - Cart line keys include the configuration payload, so different configurations of the same SKU remain separate.
 - Sales Order, Sales Invoice, Quotation, receipt/payment labels, and operator review paths continue to preserve structured configuration JSON plus readable summaries through the existing line fields.
-- Approved Product Setup media rules can drive customer-facing image changes. Raw variant images remain held back unless an approved media rule exists.
+- Approved Product Setup media rules can drive customer-facing image changes.
+  Product Setup media wins first. Simple checkout variant `Item.image` values
+  are also approved selected media when the parent Website Item is
+  `simple_product|checkout`. Complex/custom raw variant images remain held
+  back unless an approved Product Setup media rule exists.
 - Product Setup media now supports `Selection combination` rules with explicit
   `selection_conditions` such as `Proof Size=Large` and
   `Proof Finish=Chrome`. The same server resolver drives product-page API,
@@ -108,6 +112,22 @@ closeout on 2026-05-17:
 - Temporary image-generation scripts and local screenshot artifacts from the
   proof run were deleted after the proof images were uploaded into local
   ERPNext Files.
+
+## 2026-05-17 Simple Variant Media Regression Repair
+
+- GL caught Encanto Bouquet size selection keeping the parent image even though
+  ERPNext variant Items still had Small/Medium/Large images.
+- Root cause: the unclassified source extra-image hold was applied broadly
+  enough to hide simple checkout variant `Item.image` values, and the verifier
+  had been rewritten to expect the broken behavior.
+- Added the shared `product_variant_media.py` helper. Product Setup media
+  rules still take precedence; simple checkout variant Item media now renders
+  and cascades to cart, Sales Order payload, and receipt helpers; complex raw
+  Item media remains held without Product Setup approval.
+- Guard:
+  `python scripts\verify\variant_media_contract.py`.
+- Feature handoff:
+  `workstreams/ecommerce-audit/variant-item-media-restore-2026-05-17.md`.
 
 ## Known Remaining Gates
 

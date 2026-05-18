@@ -122,6 +122,12 @@ OpenClaw cockpit witness:
 - Native ERPNext/Webshop ecommerce is insufficient and may need custom DocTypes, child tables, custom fields, APIs, template overrides, pricing services, and verifiers.
 - Frontend must render backend truth. Missing backend field/logic cannot be hidden by polished UI.
 - Variant images are conditional: only flag missing image mapping when the source says a variant has or should expose an image. Not every variant requires its own image.
+- Simple checkout variant `Item.image` is customer-facing selected media when
+  the variant belongs to a `simple_product|checkout` Website Item and the image
+  differs from the parent fallback. Product Setup media rules still take
+  precedence, and complex/custom raw Item images stay held until a Product
+  Setup media rule approves them. Do not let the source extra-image
+  `hold_until_classified` gate erase already-mapped simple variant images.
 
 ## Implemented Runtime Slice
 
@@ -246,6 +252,14 @@ As of 2026-05-10, the first backend preservation slice exists:
   gallery, variant, category, or reference media is imported. The packet must
   keep every unclassified source extra image at `hold_until_classified` and
   must not approve parent-gallery or variant assignments by itself.
+- Variant media overgating was repaired on 2026-05-17 after Encanto Bouquet
+  exposed a regression: the API held simple size-variant images even though
+  ERPNext had the mapped Item images. The current guard,
+  `python scripts/verify/variant_media_contract.py`, must prove both sides:
+  Encanto simple size images render and cascade to cart/order/receipt helpers,
+  while Classic Arch complex raw Item images remain held without Product Setup
+  approval. Feature handoff:
+  `workstreams/ecommerce-audit/variant-item-media-restore-2026-05-17.md`.
 - `LT-PRODUCT-QUOTE-REVIEW` is a code-owned zero-dollar review Item used when
   ERPNext refuses template Items on Quotation rows; the requested product page
   still lives in LT custom fields and JSON.

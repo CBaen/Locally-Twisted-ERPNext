@@ -2,7 +2,7 @@
 
 > **Deprecated for active coordination as of 2026-05-02.** This file is now a legacy whole-project handoff/context record, not the active coordination surface. For current work, use `locally-twisted-queue.md` for active lanes, `workstreams/<feature>.md` for feature-specific handoffs, `locally-twisted-decisions.md` for durable decisions, and `CODING-HANDOFF.md` for compact technical startup. Do not try to force this file into full parity with every active workstream.
 
-**Last updated:** 2026-05-17 (Codex - all-Odoo sellable local reimport pointer)
+**Last updated:** 2026-05-17 (Codex - variant media restore pointer)
 
 Overwrite-not-append. Git is the changelog. Read this first; everything else as needed. **Audience: peer Opus 4.7 instance.** Read like I'd want to read before substantive work.
 
@@ -10,7 +10,17 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 
 ## State of the world (the load-bearing facts)
 
-**Current-session delta (2026-05-17):**
+**Current-session delta (2026-05-17 - variant media restore):**
+- Active repair handoff:
+  `workstreams/ecommerce-audit/variant-item-media-restore-2026-05-17.md`.
+- Encanto Bouquet proved the media gate had overreached: simple checkout
+  variant Item images were held even though ERPNext still had them.
+- Source now allows `simple_product|checkout` variant `Item.image` to render
+  and cascade to cart/order/receipt helpers while complex raw media remains
+  held behind Product Setup media approval.
+- Guard: `python scripts/verify/variant_media_contract.py`; no live deploy.
+
+**Current-session delta (2026-05-17 - all-Odoo local reimport):**
 - Active ecommerce coordination lives in `CODING-HANDOFF.md`, `ECOMMERCE-SHOP-HANDOFF.md`, `locally-twisted-queue.md`, and `workstreams/ecommerce-audit/odoo-sellable-product-reimport-2026-05-17.md`.
 - Local import logic now treats 53/53 Odoo-imported products as sellable checkout targets with 0 exclusions and 290 priced sale units.
 - Local browser proof covered all 53 live Website Item routes in two cart-safe batches; `lt_ecommerce_paused=1` was restored after proof.

@@ -24,6 +24,7 @@ from locally_twisted.product_setup_runtime import (
     resolve_product_setup_media,
     resolve_product_setup_configuration,
 )
+from locally_twisted.product_variant_media import approved_variant_item_media_for_codes
 
 
 CONFIG_VERSION = "lt-product-config-v1"
@@ -685,10 +686,16 @@ def _selected_media_for_checkout(
     if setup_resolution and setup_resolution.get("selected_media"):
         return setup_resolution["selected_media"]
     schema = product_setup_schema_for_website_item(website_item_code)
-    return resolve_product_setup_media(
+    setup_media = resolve_product_setup_media(
         schema,
         variant_item_code=resolved_item.get("item_code"),
         configuration=client_configuration,
+    )
+    if setup_media:
+        return setup_media
+    return approved_variant_item_media_for_codes(
+        variant_item_code=resolved_item.get("item_code"),
+        website_item_code=website_item_code,
     )
 
 

@@ -8,6 +8,42 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-17 - Simple checkout variant images are approved selected media
+
+**Decision:** A resolved variant `Item.image` is customer-facing selected
+media when the parent Website Item is explicitly `simple_product|checkout`,
+the variant belongs to that Website Item, and the variant image differs from
+the parent fallback. Product Setup media rules still take precedence. Complex
+or custom product raw Item images remain held unless Product Setup media rules
+approve the customer-facing selection.
+
+**Reasoning:** GL caught the Encanto Bouquet route showing the parent image
+after choosing Small/Medium/Large even though the backend still stored mapped
+size images on the variant Items. The previous media-safety gate correctly
+held unclassified source extra/gallery images, but it overreached by holding
+simple checkout variant images that were already part of product-selection
+meaning. In ecommerce, the selected image is evidence of what the customer
+chose and must cascade through cart, order payload, and receipt helpers.
+
+**Implementation boundary:** This restores simple checkout variant media only.
+It is not approval to render the 95 unclassified source extra images, parent
+gallery media, category/reference media, or complex/custom raw variant media.
+Those stay behind classification/Product Setup approval. This is local/source
+work only and does not approve live ecommerce promotion.
+
+**Receipts:** `apps/locally_twisted/locally_twisted/product_variant_media.py`;
+`apps/locally_twisted/locally_twisted/api/variant_media.py`;
+`apps/locally_twisted/locally_twisted/api/cart.py`;
+`apps/locally_twisted/locally_twisted/product_page_runtime.py`;
+`scripts/verify/variant_media_contract.py`;
+`workstreams/ecommerce-audit/variant-item-media-restore-2026-05-17.md`;
+`capabilities/failures/variant-media-overgating-regression.md`.
+
+**Decided by:** GL approval of the narrow fix after Encanto local testing
+exposed the regression; Codex implemented and verified locally on 2026-05-17.
+
+---
+
 ## 2026-05-17 - Local Odoo reimport includes every product as sellable
 
 **Decision:** The corrected local Odoo-to-ERPNext import includes all 53
