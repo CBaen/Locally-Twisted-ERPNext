@@ -16,6 +16,9 @@ Status as of 2026-05-17 for peer GPT-5.5 Codex/OpenClaw agents.
   product page keeping the parent image. Simple `simple_product|checkout`
   variant `Item.image` now renders and cascades; complex/unclassified media
   remains held.
+- Current local runtime note: `frontend` has `lt_ecommerce_paused=0` so GL can
+  test localhost product/cart behavior. Restore it to `1` after local
+  acceptance or before release-packet work.
 - `lt_ecommerce_paused=1` is a public/live exposure safety lock, not a reason
   to stop local build/test work. Name the actual blocker when ecommerce work is
   incomplete.

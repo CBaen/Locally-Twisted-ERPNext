@@ -17,8 +17,11 @@ failure recipe:
 `python -m py_compile ...`, `python scripts\verify\variant_media_contract.py`,
 `python scripts\verify\cart_checkout_contract.py`, and
 `python scripts\verify\product_page_runtime_contract.py`. No live deployment
-or Frappe Cloud update was performed; GL local testing is still required before
-any live promotion.
+or Frappe Cloud update was performed. At closeout, local `frontend` ecommerce
+is intentionally open with `lt_ecommerce_paused=0` so GL can test
+`localhost:8081`; restore it to `1` after local acceptance or before any
+release-packet work. GL local testing is still required before any live
+promotion.
 
 Codex all-Odoo sellable reimport closeout on 2026-05-17: GL corrected the
 catalog contract again: every Odoo-imported product is a product and the local

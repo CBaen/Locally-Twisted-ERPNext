@@ -78,6 +78,10 @@ held until classified.
 This does not approve live ecommerce promotion. GL local testing and a separate
 release packet are still required before any live push.
 
+At closeout, the local `frontend` site is intentionally open with
+`lt_ecommerce_paused=0` so GL can test `localhost:8081`. Restore it to `1`
+after local acceptance or before starting release-packet work.
+
 ## Next Safe Step
 
 GL tests the local Encanto product page and then the broader local ecommerce
