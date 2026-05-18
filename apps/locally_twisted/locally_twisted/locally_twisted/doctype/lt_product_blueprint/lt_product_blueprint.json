@@ -39,7 +39,7 @@
   {"fieldname": "product_name", "fieldtype": "Data", "in_global_search": 1, "in_list_view": 1, "label": "Product Name", "reqd": 1, "search_index": 1},
   {"fieldname": "product_slug", "fieldtype": "Data", "in_global_search": 1, "in_list_view": 1, "label": "Product Slug", "reqd": 1, "search_index": 1, "unique": 1},
   {"fieldname": "item_group", "fieldtype": "Link", "in_list_view": 1, "label": "Item Group", "options": "Item Group", "reqd": 1},
-  {"default": "Custom quote page", "fieldname": "page_template", "fieldtype": "Select", "in_list_view": 1, "label": "Page Template", "options": "Ready-to-order page\nCustom quote page", "reqd": 1},
+  {"default": "Configurable product page", "fieldname": "page_template", "fieldtype": "Select", "in_list_view": 1, "label": "Page Template", "options": "Ready-to-order page\nConfigurable product page", "reqd": 1},
   {"default": "Quote first", "fieldname": "buying_path", "fieldtype": "Select", "in_list_view": 1, "label": "Buying Path", "options": "Direct checkout\nQuote first\nNeeds review", "reqd": 1},
   {"default": "Draft", "fieldname": "publish_status", "fieldtype": "Select", "in_list_view": 1, "label": "Product Setup Status", "options": "Draft\nNeeds Product Review\nNeeds Price Review\nNeeds Media Review\nLocal Preview Ready\nStaging Ready\nApproved For Live", "reqd": 1},
   {"fieldname": "base_price", "fieldtype": "Currency", "label": "Base Checkout Price"},

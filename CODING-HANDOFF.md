@@ -701,26 +701,26 @@ Queue or Communication side effects.
 
 ## State Of Reality
 
-The ERPNext build is active at `http://localhost:8081`. The project is **a migration of Locally Twisted's business intent + catalog data into a fresh ERPNext install** (frame revised 2026-04-30 — see `locally-twisted-decisions.md`). "Fresh install" — destination is greenfield ERPNext; no auto-translated Odoo modules or DB dumps. "Migration" — catalog records (53 Website Items / 10,578 original variants / 10,613 original catalog Item Prices, ported 2026-04-30), form intent, policies, voice/brand all carried across from the prior Odoo attempt and the legacy `locallytwisted.com` site, and the new storefront replaces `locallytwisted.com` at cutover. The current live DB now has 10,672 Items and 10,654 Item Prices after delivery service Items and the optional-add-on variant repair.
+The ERPNext build is active at `http://localhost:8081`. The project is **a migration of Locally Twisted's business intent + catalog data into a fresh ERPNext install** (frame revised 2026-04-30 — see `locally-twisted-decisions.md`). "Fresh install" — destination is greenfield ERPNext; no auto-translated Odoo modules or DB dumps. "Migration" — catalog records (53 Website Items / 10,578 original variants / 10,613 original catalog Item Prices, ported 2026-04-30), form intent, policies, voice/brand all carried across from the prior Odoo attempt and the legacy `locallytwisted.com` site, and the new storefront replaces `locallytwisted.com` at cutover. The current local DB now has 10,674 Items and 10,656 Item Prices after delivery service Items, support Items, and the optional-add-on variant repair.
 
 The catalog port from the old Odoo test deployment appears real, but several docs had stale counts. The Odoo shop at `http://5.78.136.133/shop` was used as the catalog source/reference for that port because GL explicitly named it as the old live account/source for catalog data. That does not make Odoo the product truth for unrelated business scope.
 
-Verified DB counts on 2026-05-08:
+Verified DB counts on 2026-05-18:
 
 | Record | Count |
 |---|---:|
 | Website Items | 53 |
-| Items total | 10,672 |
+| Items total | 10,674 |
 | Variant templates | 49 |
-| Non-variant root Items | 6 |
+| Non-variant root Items | 8 |
 | Active customer-facing variants | 10,227 |
 | Disabled legacy optional-add-on variants | 390 |
 | All variant records | 10,617 |
-| Item Prices | 10,654 |
+| Item Prices | 10,656 |
 | Item Variant Attribute rows | 32,028 |
-| Item Attributes | 26 |
+| Item Attributes | 29 |
 
-Docs that still mention `10,631 Items`, `10,613 Items`, `10,633 Items`, `10,613 Item Prices`, `10,615 Item Prices`, `8,925 Item Prices`, `4 single-SKU templates`, `10,560 variants`, or `10,578 variants` as current DB totals are stale. The 6 non-variant root Items are 4 catalog single-SKU products plus 2 delivery service Items. `Add Foil Number` is now optional for bouquet-size products, so the customer-facing active variant count is lower than the original raw port; the disabled legacy add-on variants remain in the database as history.
+Docs that still mention `10,631 Items`, `10,613 Items`, `10,633 Items`, `10,672 Items`, `10,613 Item Prices`, `10,615 Item Prices`, `10,654 Item Prices`, `8,925 Item Prices`, `4 single-SKU templates`, `6 non-variant root Items`, `10,560 variants`, or `10,578 variants` as current DB totals are stale. The 8 non-variant root Items are 4 catalog single-SKU products, 2 delivery service Items, and 2 support Items (`ADDON-FOIL-NUMBER`, `LT-PRODUCT-QUOTE-REVIEW`). `Add Foil Number` is now optional for bouquet-size products, so the customer-facing active variant count is lower than the original raw port; the disabled legacy add-on variants remain in the database as history.
 
 ## Current Stopping Point
 

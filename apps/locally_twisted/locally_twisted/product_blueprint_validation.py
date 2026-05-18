@@ -21,6 +21,9 @@ NOT_CHECKED = "Not checked"
 
 PAGE_TEMPLATE_TO_CONTRACT = {
     "Ready-to-order page": "simple_product",
+    "Configurable product page": "complex_custom_product",
+    # Legacy value kept readable so old local Product Setup drafts fail safe
+    # through the same contract instead of becoming invalid on load.
     "Custom quote page": "complex_custom_product",
 }
 
@@ -99,7 +102,7 @@ def validate_blueprint(data: dict[str, Any]) -> dict[str, Any]:
     if not item_group:
         blockers.append("Item Group is required so ERPNext knows where the product belongs.")
     if page_template not in PAGE_TEMPLATE_TO_CONTRACT:
-        blockers.append("Page Template must be Ready-to-order page or Custom quote page.")
+        blockers.append("Page Template must be Ready-to-order page or Configurable product page.")
     if buying_path not in BUYING_PATH_TO_CONTRACT:
         blockers.append("Buying Path must be Direct checkout, Quote first, or Needs review.")
     if publish_status not in STATUS_OPTIONS:
@@ -110,8 +113,8 @@ def validate_blueprint(data: dict[str, Any]) -> dict[str, Any]:
 
     if buying_path == "Direct checkout" and page_template != "Ready-to-order page":
         blockers.append("Direct checkout requires the Ready-to-order page template.")
-    if page_template == "Custom quote page" and buying_path == "Direct checkout":
-        blockers.append("Custom quote pages cannot go straight to paid checkout.")
+    if page_template in {"Configurable product page", "Custom quote page"} and buying_path == "Direct checkout":
+        blockers.append("Configurable product pages cannot go straight to paid checkout.")
     if buying_path == "Direct checkout" and base_price <= 0:
         blockers.append("Direct checkout products need a base checkout price before Item Price rows can be planned.")
 

@@ -1,6 +1,6 @@
 # Ecommerce Shop Handoff
 
-Status as of 2026-05-17 for peer GPT-5.5 Codex/OpenClaw agents.
+Status as of 2026-05-18 for peer GPT-5.5 Codex/OpenClaw agents.
 
 ## Current Repository State
 
@@ -16,6 +16,9 @@ Status as of 2026-05-17 for peer GPT-5.5 Codex/OpenClaw agents.
   product page keeping the parent image. Simple `simple_product|checkout`
   variant `Item.image` now renders and cascades; complex/unclassified media
   remains held.
+- `Add Foil Number` is confirmed as an add-on, not a required SKU axis. The
+  local DB repair disabled 390 stale optional-add-on variants, and
+  `seed_catalog.py` now runs that idempotent cleanup after destructive import.
 - Current local runtime note: `frontend` has `lt_ecommerce_paused=0` so GL can
   test localhost product/cart behavior. Restore it to `1` after local
   acceptance or before release-packet work.
@@ -24,6 +27,40 @@ Status as of 2026-05-17 for peer GPT-5.5 Codex/OpenClaw agents.
   incomplete.
 
 ## Completed Lanes
+
+### Catalog optional add-on variant guard - 2026-05-18
+
+Owner: `Codex`
+
+Result: complete locally. No staging/live site update, Frappe Cloud update,
+DNS change, Stripe live change, or public exposure change was made.
+
+Feature handoff:
+
+- `workstreams/ecommerce-audit/catalog-optional-addon-variant-guard-2026-05-18.md`
+
+Evidence summary: `catalog_variant_contract.py` caught 13 bouquet templates
+with 30 stale enabled `Add Foil Number` variants each. The existing
+`repair_optional_addon_variants` routine was run against local `frontend`,
+which disabled 390 stale optional-add-on variants and left the 39 required
+Bouquet Size variants enabled. `seed_catalog.py` now runs that cleanup after
+destructive import so a future import rerun does not rely on a manual memory
+step. Product Setup/readiness labels now use `Configurable product page`; the
+old `Custom quote page` label remains accepted as a legacy safe alias.
+
+Green gates:
+
+- `bench --site frontend migrate`
+- `python scripts\verify\catalog_variant_contract.py`
+- `python scripts\verify\product_page_architecture_readiness.py --json`
+- `python scripts\verify\product_import_readiness_gate.py --report output\product-import-readiness-gate.json`
+- `python scripts\verify\product_blueprint_contract.py`
+- `bench --site frontend execute locally_twisted.verify.product_blueprint_contract.run`
+- `python scripts\verify\cart_checkout_contract.py`
+- `python scripts\verify\variant_media_contract.py`
+- `python scripts\verify\checkout_product_family_contract.py`
+- `python scripts\verify\product_add_on_dependency_contract.py`
+- `python scripts\verify\product_page_runtime_contract.py`
 
 ### Variant item media restore - 2026-05-17
 
@@ -141,7 +178,7 @@ Current local ERPNext counts:
 - 10,227 active variants
 - 390 disabled variants
 - 10,656 Item Prices
-- 26 Item Attributes
+- 29 Item Attributes
 - 32,028 Item Variant Attribute rows
 
 Result: no ERPNext catalog/pricing/import blocker remains for the local setup.

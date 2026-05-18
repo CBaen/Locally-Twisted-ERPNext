@@ -6,6 +6,22 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-18 - One-off data repairs must become import closeout steps
+
+After the all-Odoo sellable reimport, `catalog_variant_contract.py` failed
+because 390 old `Add Foil Number` variants were enabled again as active SKU
+choices. The repair script already existed and worked, but it was not wired
+into the import runner, so the system depended on an agent remembering to run
+it manually.
+
+**Counter-move:** when a local repair corrects imported catalog shape, decide
+whether it is a one-time rescue or a required import closeout step. If the
+same stale state can reappear on rerun, wire the repair into the importer and
+keep the verifier strict. Do not "fix" this class by updating counts to match
+bad data.
+
+---
+
 ## 2026-05-17 - Safety gates must preserve known-good product behavior
 
 The Encanto Bouquet regression was not missing data. ERPNext still had

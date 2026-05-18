@@ -123,7 +123,7 @@ def build_product_setup_schema(data: dict[str, Any]) -> dict[str, Any]:
     product_slug = _text(data.get("product_slug"))
     product_name = _text(data.get("product_name"))
     buying_path = _text(data.get("buying_path")) or "Needs review"
-    page_template = _text(data.get("page_template")) or "Custom quote page"
+    page_template = _text(data.get("page_template")) or "Configurable product page"
     publish_status = _text(data.get("publish_status")) or "Draft"
     groups = [_selection_group(row, index) for index, row in enumerate(data.get("option_rows") or [], start=1)]
     add_ons = [_add_on_group(row, index) for index, row in enumerate(data.get("add_on_rows") or [], start=1)]

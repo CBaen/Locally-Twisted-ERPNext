@@ -123,7 +123,7 @@ def _insert_valid_quote_first_blueprint():
             "product_name": "Contract Product Blueprint",
             "product_slug": "contract-product-blueprint",
             "item_group": _first_leaf_item_group(),
-            "page_template": "Custom quote page",
+            "page_template": "Configurable product page",
             "buying_path": "Quote first",
             "publish_status": "Draft",
             "base_price": 0,

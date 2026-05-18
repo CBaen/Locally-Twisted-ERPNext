@@ -128,7 +128,7 @@ def _criteria(contract_results: dict[str, dict[str, object]], public_ecommerce_p
         _row(
             "two_reusable_template_types",
             PASS if runtime and labels_ok else BLOCKED,
-            "The reusable types exist as logic classes, not product families: Ready-to-order page and Custom quote page.",
+            "The reusable types exist as logic classes, not product families: Ready-to-order page and Configurable product page.",
             blocker=None if runtime and labels_ok else "Product-page runtime or plain labels are not currently proven.",
             evidence=[
                 "locally_twisted/product_page_labels.py",
@@ -186,7 +186,7 @@ def _criteria(contract_results: dict[str, dict[str, object]], public_ecommerce_p
         _row(
             "quote_first_lead_to_draft_quotation",
             PASS if runtime and quote_customization else BLOCKED,
-            "Custom quote pages preserve selected options, notes, and color recipes from product page to Lead and draft Quotation.",
+            "Configurable product pages preserve selected options, notes, and color recipes from product page to Lead and draft Quotation.",
             blocker=None if runtime and quote_customization else _join_blockers(
                 _contract_blocker(contract_results, "runtime"),
                 _contract_blocker(contract_results, "quote_customization"),
@@ -423,7 +423,7 @@ def _plain_template_labels_present() -> bool:
         COMMERCE_LANE_LABELS.get("checkout"),
         COMMERCE_LANE_LABELS.get("quote_first"),
     }
-    if not {"Ready-to-order page", "Custom quote page"}.issubset(expected_values):
+    if not {"Ready-to-order page", "Configurable product page"}.issubset(expected_values):
         return False
     internal_markers = ("simple_product", "complex_custom_product", "quote_first", "needs_review", "_")
     return all(

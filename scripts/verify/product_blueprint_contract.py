@@ -193,7 +193,7 @@ class ProductBlueprintContractTest(unittest.TestCase):
     def test_quote_first_allows_review_only_complexity_without_checkout_success(self) -> None:
         result = validate_blueprint(
             _blueprint(
-                page_template="Custom quote page",
+                page_template="Configurable product page",
                 buying_path="Quote first",
                 option_rows=[{"axis_name": "Design", "role": "Review only", "values": "Swirl\nLayered"}],
                 conditional_price_rows=[
@@ -209,6 +209,19 @@ class ProductBlueprintContractTest(unittest.TestCase):
         self.assertTrue(result["ok"], result)
         self.assertEqual(result["contract"]["commerce_lane"], "quote_first")
         self.assertEqual(result["contract"]["payload_target_counts"]["quote_context"], 1)
+
+    def test_legacy_custom_quote_page_label_still_maps_to_safe_internal_hold(self) -> None:
+        result = validate_blueprint(
+            _blueprint(
+                page_template="Custom quote page",
+                buying_path="Quote first",
+                option_rows=[{"axis_name": "Design", "role": "Review only", "values": "Swirl"}],
+            )
+        )
+
+        self.assertTrue(result["ok"], result)
+        self.assertEqual(result["contract"]["product_page_type"], "complex_custom_product")
+        self.assertEqual(result["contract"]["commerce_lane"], "quote_first")
 
     def test_preview_status_with_blockers_fails_loudly(self) -> None:
         result = validate_blueprint(_blueprint(product_slug="Bad Slug", publish_status="Local Preview Ready"))
@@ -454,7 +467,7 @@ def _blueprint(**overrides):
         "product_name": "Proof Product",
         "product_slug": "proof-product",
         "item_group": "Bouquets",
-        "page_template": "Custom quote page",
+        "page_template": "Configurable product page",
         "buying_path": "Quote first",
         "publish_status": "Draft",
         "option_rows": [],

@@ -35,6 +35,10 @@ hold only. It is not a business lane.
   `21-product-page-price-enrichment-candidates.json` into the seed data path
   and making `seed_catalog.py` prefer approved sale-unit enrichment before
   scraped page-level fallback prices.
+- Follow-up 2026-05-18: disabled the 390 stale `Add Foil Number` optional
+  add-on variants that were still enabled from older imports, then wired the
+  same idempotent cleanup into `seed_catalog.py` so future destructive import
+  runs do not leave optional add-ons as required SKU axes.
 
 ## Code Changes
 
@@ -46,7 +50,8 @@ hold only. It is not a business lane.
   configurable product pages and `quote_first` as an internal hold.
 - `catalog_import_subset.py`: no owner-excluded Odoo product slugs.
 - `seed/seed_catalog.py` and `scripts/setup/stage_seed_data.py`: stage and use
-  price enrichment for sale-unit prices during import.
+  price enrichment for sale-unit prices during import; `seed_catalog.py` now
+  also runs the optional-add-on variant repair after destructive import.
 - `catalog_contract/*` and `scripts/verify/*`: all import/readiness/product
   gates now expect 53 checkout products and 0 exclusions.
 - `scripts/verify/post_import_checkout_proof.js`: default browser proof now
@@ -78,6 +83,7 @@ Backend/source gates passed locally:
 - `python scripts/verify/product_page_runtime_contract.py`
 - `python scripts/verify/cart_checkout_contract.py`
 - `python scripts/verify/product_variant_price_contract.py`
+- `python scripts/verify/catalog_variant_contract.py`
 
 Browser proof:
 
@@ -104,6 +110,9 @@ Safety proof:
 - Extra images remain held until classified: 95.
 - Simple checkout variant Item images are approved selected media and are not
   part of the extra-image hold.
+- `Add Foil Number` variants are disabled legacy history, not active sale
+  units. Active catalog variants are back to 10,227; all variant records remain
+  10,617 including the disabled legacy variants.
 - Review-only add-on controls remain hidden until mapped: 9.
 
 ## Boundaries
@@ -125,3 +134,6 @@ normal Frappe Cloud, Stripe, DNS, and ecommerce exposure gates.
 
 Related follow-up handoff:
 `workstreams/ecommerce-audit/variant-item-media-restore-2026-05-17.md`.
+
+Related follow-up guard:
+`workstreams/ecommerce-audit/catalog-optional-addon-variant-guard-2026-05-18.md`.

@@ -8,6 +8,41 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-18 - Optional add-ons are repaired inside the import path
+
+**Decision:** `Add Foil Number` stays a paid add-on, not an active required
+variant axis. The local catalog repair disabled the 390 stale optional-add-on
+variants, and `seed_catalog.py` now runs the same idempotent repair after
+destructive import so future reimports do not depend on a remembered manual
+step. Product Setup/readiness labels use `Configurable product page`; legacy
+`Custom quote page` input is accepted only as a safe alias.
+
+**Reasoning:** The all-Odoo sellable reimport made every product purchasable,
+but it left older `Add Foil Number` variants enabled on 13 bouquet templates.
+That caused `catalog_variant_contract.py` to fail with 10,617 active variants
+instead of 10,227 active variants. The correct fix is not to loosen the
+verifier; it is to keep optional add-ons out of required SKU generation and
+make the cleanup part of the import runner.
+
+**Implementation boundary:** This is local/source work. It does not promote
+the catalog to staging/live, expose checkout publicly, change Stripe, or
+approve unmapped add-ons. The add-on subsystem still owns priced foil-number
+checkout lines.
+
+**Receipts:** `apps/locally_twisted/locally_twisted/seed/seed_catalog.py`;
+`apps/locally_twisted/locally_twisted/seed/repair_optional_addon_variants.py`;
+`apps/locally_twisted/locally_twisted/verify/product_page_architecture_readiness.py`;
+`apps/locally_twisted/locally_twisted/product_blueprint_validation.py`;
+`workstreams/ecommerce-audit/catalog-optional-addon-variant-guard-2026-05-18.md`;
+`scripts/verify/catalog_variant_contract.py`;
+`scripts/verify/product_page_architecture_readiness.py`.
+
+**Decided by:** Codex implementation after local team-readiness pass exposed
+the failure; aligned with GL's instruction that imported products are
+purchasable products and optional controls must not corrupt the product model.
+
+---
+
 ## 2026-05-17 - Simple checkout variant images are approved selected media
 
 **Decision:** A resolved variant `Item.image` is customer-facing selected

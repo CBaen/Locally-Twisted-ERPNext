@@ -29,6 +29,8 @@ Behavior — applies to EVERY product:
      File doc created, Item.image set.
   6. Find-or-create Website Item with published=1, item_group=child group.
   7. ItemVariantsCacheManager.rebuild_cache(template) so webshop selectors render.
+  8. Disable stale optional-add-on variants after import so add-ons do not
+     silently become required SKU axes on rerun.
 
 Loud-fail discipline (~/.claude/rules/loud-failure.md):
   Any error during a product's seed raises and stops the run. Re-run picks up where
@@ -523,6 +525,18 @@ def _rebuild_variant_cache(template_code: str):
                          title="LT seed_catalog: cache rebuild")
 
 
+def _repair_optional_addon_variants_after_import() -> dict:
+    """Run the idempotent post-import cleanup for optional add-on axes."""
+    from locally_twisted.seed.repair_optional_addon_variants import execute as repair_optional_addons
+
+    rendered = repair_optional_addons()
+    try:
+        parsed = json.loads(rendered)
+    except (TypeError, ValueError):
+        parsed = {"raw": rendered}
+    return parsed if isinstance(parsed, dict) else {"raw": rendered}
+
+
 # ── Public entrypoint ────────────────────────────────────────────────
 
 def execute(
@@ -656,12 +670,25 @@ def execute(
             print(f"[{i:3}/{len(products)}] {slug}: FAIL — {type(e).__name__}: {e}")
             raise
 
+    optional_repair = _repair_optional_addon_variants_after_import()
+    summary["optional_addon_variant_repair"] = optional_repair
+    disabled_optional = sum(
+        int(row.get("disabled_optional_variants") or 0)
+        for row in optional_repair.get("results", [])
+        if isinstance(row, dict)
+    )
+
     elapsed = time.time() - started
     print()
     print(f"=== DONE in {elapsed:.1f}s ===")
     print(f"  products seeded: {summary['products_seeded']}")
     print(f"  variants created: {summary['variants_created']}")
     print(f"  items pre-existing: {summary['items_already_present']}")
+    print(
+        "  optional add-on variant repair: "
+        f"{optional_repair.get('templates_checked', 0)} template(s), "
+        f"{disabled_optional} stale optional variant(s) disabled"
+    )
     print(f"  missing images: {len(summary['missing_images'])} ({summary['missing_images']})")
     print(f"  errors: {len(summary['errors'])}")
 

@@ -74,22 +74,22 @@ do not queue, and agent replies that imply success without verification.
 
 ## Current Verified State
 
-Verified against the ERPNext database on 2026-05-08:
+Verified against the local ERPNext database on 2026-05-18:
 
 | Record | Count |
 |---|---:|
 | Website Items | 53 |
-| Items total | 10,672 |
+| Items total | 10,674 |
 | Variant templates | 49 |
-| Non-variant root Items | 6 |
+| Non-variant root Items | 8 |
 | Active customer-facing variants | 10,227 |
 | Disabled legacy optional-add-on variants | 390 |
 | All variant records | 10,617 |
-| Item Prices | 10,654 |
+| Item Prices | 10,656 |
 | Item Variant Attribute rows | 32,028 |
-| Item Attributes | 26 |
+| Item Attributes | 29 |
 
-Important correction: older files may claim `10,631 Items`, `10,613 Items`, `10,633 Items`, `10,613 Item Prices`, `10,615 Item Prices`, `8,925 Item Prices`, `4 single-SKU templates`, `10,560 variants`, or `10,578 variants`. Those counts are stale as current DB totals. The 6 non-variant root Items are 4 catalog single-SKU products plus 2 delivery service Items. Active variants dropped from the old customer-facing `10,578` baseline because `Add Foil Number` is no longer a required variant axis for bouquet-size products; the old add-on variants remain disabled as history. Re-check DB before changing catalog docs or seed logic.
+Important correction: older files may claim `10,631 Items`, `10,613 Items`, `10,633 Items`, `10,672 Items`, `10,613 Item Prices`, `10,615 Item Prices`, `10,654 Item Prices`, `8,925 Item Prices`, `4 single-SKU templates`, `6 non-variant root Items`, `10,560 variants`, or `10,578 variants`. Those counts are stale as current DB totals. The 8 non-variant root Items are 4 catalog single-SKU products, 2 delivery service Items, and 2 support Items (`ADDON-FOIL-NUMBER`, `LT-PRODUCT-QUOTE-REVIEW`). Active variants dropped from the old customer-facing `10,578` baseline because `Add Foil Number` is no longer a required variant axis for bouquet-size products; the old add-on variants remain disabled as history. Re-check DB before changing catalog docs or seed logic.
 
 ## Local Stack
 
