@@ -1,0 +1,146 @@
+[
+  {
+    "image": null,
+    "is_group": 1,
+    "item_group_name": "All Item Groups",
+    "name": "All Item Groups",
+    "parent_item_group": "",
+    "route": null
+  },
+  {
+    "image": null,
+    "is_group": 0,
+    "item_group_name": "Arches",
+    "name": "Arches",
+    "parent_item_group": "Shop Items",
+    "route": "shop-items/arches"
+  },
+  {
+    "image": null,
+    "is_group": 0,
+    "item_group_name": "Bouquets",
+    "name": "Bouquets",
+    "parent_item_group": "Shop Items",
+    "route": "shop-items/bouquets"
+  },
+  {
+    "image": null,
+    "is_group": 0,
+    "item_group_name": "Columns",
+    "name": "Columns",
+    "parent_item_group": "Shop Items",
+    "route": "shop-items/columns"
+  },
+  {
+    "image": null,
+    "is_group": 0,
+    "item_group_name": "Consumable",
+    "name": "Consumable",
+    "parent_item_group": "All Item Groups",
+    "route": null
+  },
+  {
+    "image": null,
+    "is_group": 0,
+    "item_group_name": "Deliveries",
+    "name": "Deliveries",
+    "parent_item_group": "Shop Items",
+    "route": "shop-items/deliveries"
+  },
+  {
+    "image": null,
+    "is_group": 0,
+    "item_group_name": "Drops",
+    "name": "Drops",
+    "parent_item_group": "Shop Items",
+    "route": "shop-items/drops"
+  },
+  {
+    "image": null,
+    "is_group": 0,
+    "item_group_name": "Garlands",
+    "name": "Garlands",
+    "parent_item_group": "Shop Items",
+    "route": "shop-items/garlands"
+  },
+  {
+    "image": null,
+    "is_group": 0,
+    "item_group_name": "Get-Well Bouquets",
+    "name": "Get-Well Bouquets",
+    "parent_item_group": "Shop Items",
+    "route": "shop-items/get-well-bouquets"
+  },
+  {
+    "image": null,
+    "is_group": 0,
+    "item_group_name": "Grab & Go",
+    "name": "Grab & Go",
+    "parent_item_group": "Shop Items",
+    "route": "shop-items/grab-go"
+  },
+  {
+    "image": null,
+    "is_group": 0,
+    "item_group_name": "Products",
+    "name": "Products",
+    "parent_item_group": "All Item Groups",
+    "route": null
+  },
+  {
+    "image": null,
+    "is_group": 0,
+    "item_group_name": "Raw Material",
+    "name": "Raw Material",
+    "parent_item_group": "All Item Groups",
+    "route": null
+  },
+  {
+    "image": null,
+    "is_group": 0,
+    "item_group_name": "Seasonal & Specialty",
+    "name": "Seasonal & Specialty",
+    "parent_item_group": "Shop Items",
+    "route": "shop-items/seasonal-specialty"
+  },
+  {
+    "image": null,
+    "is_group": 0,
+    "item_group_name": "Services",
+    "name": "Services",
+    "parent_item_group": "All Item Groups",
+    "route": null
+  },
+  {
+    "image": null,
+    "is_group": 1,
+    "item_group_name": "Shop Items",
+    "name": "Shop Items",
+    "parent_item_group": "All Item Groups",
+    "route": "shop-items"
+  },
+  {
+    "image": null,
+    "is_group": 0,
+    "item_group_name": "Stands & Easels",
+    "name": "Stands & Easels",
+    "parent_item_group": "Shop Items",
+    "route": "shop-items/stands-easels"
+  },
+  {
+    "image": null,
+    "is_group": 0,
+    "item_group_name": "Sub Assemblies",
+    "name": "Sub Assemblies",
+    "parent_item_group": "All Item Groups",
+    "route": null
+  },
+  {
+    "image": null,
+    "is_group": 0,
+    "item_group_name": "Table Decor",
+    "name": "Table Decor",
+    "parent_item_group": "Shop Items",
+    "route": "shop-items/table-decor"
+  }
+]

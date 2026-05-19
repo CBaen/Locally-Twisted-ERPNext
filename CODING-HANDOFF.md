@@ -15,15 +15,19 @@ performed. Verified local passes: syntax for touched Python files,
 `simple_purchasable_payment_cascade_contract.py`,
 `npm run test:checkout-experience`, `thank_you_payment_state_contract.py`,
 `allow_guest_surface_inventory.py`, and
-`product_import_readiness_gate_contract.py`. Accepted blockers:
-`product_price_modifier_contract.py` now fails as `SOURCE DATA BLOCKED` because
-the backend container cannot see `_resources/odoo-live`, and
-`product_import_readiness_gate.py` blocks on 2026-05-17 snapshot/backup/approval
-evidence because today is 2026-05-19. Follow-up blocker:
-`ignore_permissions_justification_lint.py` intentionally fails on 32 existing
-production `ignore_permissions=True` uses that need guard/justification review.
-Public ecommerce is still not release-ready until these blockers are cleared or
-explicitly accepted for a target release.
+`product_import_readiness_gate_contract.py`. Follow-up on the same day restored
+source-price proof and fresh import-readiness evidence: `stage_seed_data.py`
+made `_resources/odoo-live` container-visible, `product_price_modifier_contract.py`
+passed for 49 products / 10,186 active variants, fresh snapshot
+`current-state-snapshot-2026-05-19-2314` passed, purge-scope dry run passed for
+53 templates / 10,629 variants / 10,664 prices, bench backup
+`20260519_171525` completed, and guard-path dry run accepted the packet with no
+purge/import/delete. Remaining blockers: `product_import_readiness_gate.py` is
+11 pass / 1 blocker because final destructive approval has not been renewed for
+the 2026-05-19 packet; `ignore_permissions_justification_lint.py` intentionally
+fails on 32 existing production `ignore_permissions=True` uses that need
+guard/justification review. Public ecommerce is still not release-ready until
+these blockers are cleared or explicitly accepted for a target release.
 
 Codex domain/provider/reindex cleanup on 2026-05-19: public DNS and Cloudflare
 API confirm the current web chain is GoDaddy registrar -> Cloudflare

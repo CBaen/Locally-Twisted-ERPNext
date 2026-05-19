@@ -68,9 +68,10 @@ checkout browser experience, payment amount/state, webhook/browser-return
 reconciliation, payment cascade, checkout fulfillment, checkout lead conversion,
 simple purchasable payment cascade, thank-you payment-state source guard, and
 guest endpoint inventory. Remaining blockers before release language changes:
-source-price modifier proof is blocked until `_resources/odoo-live` is
-container-visible; import readiness is blocked on same-day snapshot, backup, and
-explicit destructive approval; permission-bypass lint flags 32 existing
+source-price modifier proof now passes after staging `_resources/odoo-live`;
+fresh same-day snapshot, purge-scope dry run, backup, and guard-path dry run now
+pass; import readiness remains blocked only on renewed explicit destructive
+approval for the 2026-05-19 packet; permission-bypass lint flags 32 existing
 production `ignore_permissions=True` calls that need guard/justification review.
 Do not describe checkout/payment/catalog/public ecommerce as release-ready until
 those blockers are cleared or explicitly accepted for the target release.

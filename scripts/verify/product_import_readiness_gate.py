@@ -45,8 +45,8 @@ EXPECTED_EXCLUDED_SLUGS: set[str] = set()
 EXPECTED_PURGE_COUNTS = {
     "website_items": 53,
     "item_templates": 53,
-    "item_variants": 10617,
-    "item_prices": 10652,
+    "item_variants": 10629,
+    "item_prices": 10664,
 }
 
 REQUIRED_SOURCE_FILES = (

@@ -1,15 +1,15 @@
 {
   "destructive_allowed": false,
   "excluded_existing_template_item_codes_held": [],
-  "generated_at": "2026-05-17T23:23:10Z",
+  "generated_at": "2026-05-19T23:14:56Z",
   "protected_service_item_codes": [],
   "purge_scope_counts": {
     "excluded_existing_templates_held": 0,
-    "item_prices": 10652,
+    "item_prices": 10664,
     "item_templates": 53,
-    "item_variant_attribute_rows": 32028,
-    "item_variants": 10617,
-    "product_related_file_rows": 2522,
+    "item_variant_attribute_rows": 32049,
+    "item_variants": 10629,
+    "product_related_file_rows": 4108,
     "protected_service_templates": 0,
     "website_items": 53
   },
@@ -69,7 +69,7 @@
     "unicorn-bouquet"
   ],
   "read_only": true,
-  "snapshot": "audits\\odoo-erpnext-migration-audit-2026-05-08\\current-state-snapshot-2026-05-17-2132-clean-odoo-products",
+  "snapshot": "audits\\odoo-erpnext-migration-audit-2026-05-08\\current-state-snapshot-2026-05-19-2314",
   "v1_subset": {
     "excluded_count": 0,
     "excluded_counts_by_primary_reason": {},
@@ -134,7 +134,7 @@
     "must_work_validation_errors": [],
     "rows": [
       {
-        "commerce_lane": "checkout",
+        "commerce_lane": "quote_first",
         "customization_axes": [
           "latex colors"
         ],
@@ -149,7 +149,7 @@
         "source_variant_rows": 53
       },
       {
-        "commerce_lane": "checkout",
+        "commerce_lane": "quote_first",
         "customization_axes": [
           "latex colors"
         ],
@@ -181,7 +181,7 @@
         "source_variant_rows": 2
       },
       {
-        "commerce_lane": "checkout",
+        "commerce_lane": "quote_first",
         "customization_axes": [
           "Number colors",
           "latex colors"
@@ -227,7 +227,7 @@
         "source_variant_rows": 53
       },
       {
-        "commerce_lane": "checkout",
+        "commerce_lane": "quote_first",
         "customization_axes": [
           "latex colors"
         ],
@@ -261,7 +261,7 @@
         "source_variant_rows": 30
       },
       {
-        "commerce_lane": "checkout",
+        "commerce_lane": "quote_first",
         "customization_axes": [
           "latex colors"
         ],
@@ -278,7 +278,7 @@
         "source_variant_rows": 159
       },
       {
-        "commerce_lane": "checkout",
+        "commerce_lane": "quote_first",
         "customization_axes": [
           "latex colors"
         ],
@@ -295,7 +295,7 @@
         "source_variant_rows": 424
       },
       {
-        "commerce_lane": "checkout",
+        "commerce_lane": "quote_first",
         "customization_axes": [
           "latex colors"
         ],
@@ -327,7 +327,7 @@
         "source_variant_rows": 4
       },
       {
-        "commerce_lane": "checkout",
+        "commerce_lane": "quote_first",
         "customization_axes": [
           "latex colors"
         ],
@@ -346,7 +346,7 @@
         "source_variant_rows": 848
       },
       {
-        "commerce_lane": "checkout",
+        "commerce_lane": "quote_first",
         "customization_axes": [
           "latex colors"
         ],
@@ -364,7 +364,7 @@
         "source_variant_rows": 1908
       },
       {
-        "commerce_lane": "checkout",
+        "commerce_lane": "quote_first",
         "customization_axes": [
           "latex colors"
         ],
@@ -381,7 +381,7 @@
         "source_variant_rows": 318
       },
       {
-        "commerce_lane": "checkout",
+        "commerce_lane": "quote_first",
         "customization_axes": [
           "latex colors"
         ],
@@ -398,7 +398,7 @@
         "source_variant_rows": 159
       },
       {
-        "commerce_lane": "checkout",
+        "commerce_lane": "quote_first",
         "customization_axes": [
           "latex colors"
         ],
@@ -415,7 +415,7 @@
         "source_variant_rows": 159
       },
       {
-        "commerce_lane": "checkout",
+        "commerce_lane": "quote_first",
         "customization_axes": [
           "latex colors"
         ],
@@ -582,7 +582,7 @@
         "source_variant_rows": 30
       },
       {
-        "commerce_lane": "checkout",
+        "commerce_lane": "quote_first",
         "customization_axes": [
           "latex colors"
         ],
@@ -597,7 +597,7 @@
         "source_variant_rows": 53
       },
       {
-        "commerce_lane": "checkout",
+        "commerce_lane": "quote_first",
         "customization_axes": [
           "latex colors"
         ],
@@ -612,7 +612,7 @@
         "source_variant_rows": 53
       },
       {
-        "commerce_lane": "checkout",
+        "commerce_lane": "quote_first",
         "customization_axes": [
           "latex colors"
         ],
@@ -677,7 +677,7 @@
         "source_variant_rows": 1160
       },
       {
-        "commerce_lane": "checkout",
+        "commerce_lane": "quote_first",
         "customization_axes": [
           "latex colors"
         ],
@@ -707,7 +707,7 @@
         "source_variant_rows": 2
       },
       {
-        "commerce_lane": "checkout",
+        "commerce_lane": "quote_first",
         "customization_axes": [
           "latex colors"
         ],
@@ -862,7 +862,7 @@
         "source_variant_rows": 2
       },
       {
-        "commerce_lane": "checkout",
+        "commerce_lane": "quote_first",
         "customization_axes": [
           "latex colors"
         ],

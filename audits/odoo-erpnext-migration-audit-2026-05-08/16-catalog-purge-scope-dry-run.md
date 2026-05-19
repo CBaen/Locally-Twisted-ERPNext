@@ -2,8 +2,8 @@
 
 Read-only dry run from saved snapshot. No ERPNext connection and no deletes.
 
-- Generated: `2026-05-17T23:23:10Z`
-- Snapshot: `audits\odoo-erpnext-migration-audit-2026-05-08\current-state-snapshot-2026-05-17-2132-clean-odoo-products`
+- Generated: `2026-05-19T23:14:56Z`
+- Snapshot: `audits\odoo-erpnext-migration-audit-2026-05-08\current-state-snapshot-2026-05-19-2314`
 - Import subset rule: include Odoo-imported products that fit the current ERPNext backend schema; variants and high-variant products are allowed; exclude only proven schema/backend blockers.
 - Variants, cups, and high-variant products are products and are not blanket exclusions.
 
@@ -18,10 +18,10 @@ Read-only dry run from saved snapshot. No ERPNext connection and no deletes.
 
 - Website Items: 53
 - Item templates: 53
-- Item variants: 10617
-- Item Prices: 10652
-- Item Variant Attribute rows: 32028
-- Product-related File rows attached to purge items/templates: 2522
+- Item variants: 10629
+- Item Prices: 10664
+- Item Variant Attribute rows: 32049
+- Product-related File rows attached to purge items/templates: 4108
 - Existing excluded Website Item templates held out of purge scope: 0
 
 ## Protected service item codes

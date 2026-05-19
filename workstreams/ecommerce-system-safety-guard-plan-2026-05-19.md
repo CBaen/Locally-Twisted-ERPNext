@@ -38,18 +38,12 @@ Resolved in this track:
 
 Remaining hard stops:
 
-- `scripts/verify/product_price_modifier_contract.py` fails as
-  `SOURCE DATA BLOCKED` until `_resources/odoo-live` is visible inside the
-  backend container. This is a source-data/mount blocker, not catalog price
-  drift proof.
-- `scripts/verify/product_import_readiness_gate.py` blocks because the newest
-  snapshot, backup, and destructive approval evidence are dated 2026-05-17
-  while today is 2026-05-19.
+- `scripts/verify/product_import_readiness_gate.py` still blocks final
+  destructive import because explicit approval has not been renewed for the
+  2026-05-19 snapshot, backup, dry-run, and guard-path packet.
 - `scripts/verify/ignore_permissions_justification_lint.py` intentionally fails
   on 32 existing production permission bypasses that need guard/justification
   review.
-- `npm run test:ecommerce-full` still cannot be called green while the
-  source-price modifier proof is blocked.
 
 ## Safety Rules
 
@@ -155,9 +149,8 @@ Required outcome:
 
 Current status:
 - Lane 1 product/cart verifier changes are integrated and locally passing.
-- Lane 2 import/source guards are integrated; source-price and destructive
-  readiness remain honestly blocked by missing container source access and stale
-  same-day evidence.
+- Lane 2 import/source guards are integrated; source-price now passes and
+  import readiness is blocked only on final same-day destructive approval.
 - Lane 3 payment/thank-you changes are integrated and locally passing.
 - Lane 4 API/permission inventory verifiers are integrated; guest endpoint
   inventory passes and permission-bypass lint reports a follow-up blocker.
@@ -190,8 +183,8 @@ Unverified by this track:
 - target-site staging/live behavior;
 - live Stripe, production webhooks, DNS, Frappe Cloud release, and public
   customer exposure;
-- source-price modifier proof until the Odoo source packet is mounted inside
-  the backend container.
+- destructive import execution, because the 2026-05-19 packet has not received
+  renewed explicit approval.
 
 Blocked for release:
 - any statement that checkout, payment, catalog, receipts, or public ecommerce
@@ -224,9 +217,9 @@ release language changes from pending to verified.
 | Receipt | Owning lane | Current status | Required proof before release |
 |---|---:|---|---|
 | Product classification authority | 1 | verified local | `python scripts/verify/website_item_classification_contract.py` PASS dry-run; `npm run test:shop-smoke` PASS. |
-| Source price parity | 2 | blocked | `python scripts/verify/product_price_modifier_contract.py` fails as `SOURCE DATA BLOCKED` because the backend container cannot see `_resources/odoo-live`. |
+| Source price parity | 2 | verified local | `python scripts/verify/product_price_modifier_contract.py` PASS for 49 products / 10,186 active variants after `python scripts/setup/stage_seed_data.py`. |
 | Visible price parity | 2 | verified local | `python scripts/verify/product_variant_price_contract.py` PASS; `npm run test:product-price-display` PASS. |
-| Catalog import guard | 2 | blocked safely | `python scripts/verify/product_import_readiness_gate_contract.py` PASS; `python scripts/verify/product_import_readiness_gate.py` BLOCKED on stale 2026-05-17 snapshot, backup, and approval, with destructive command redacted. |
+| Catalog import guard | 2 | blocked safely | `python scripts/verify/product_import_readiness_gate_contract.py` PASS; fresh snapshot `current-state-snapshot-2026-05-19-2314`, purge-scope dry run, backup `20260519_171525`, and guard-path dry run passed; `python scripts/verify/product_import_readiness_gate.py` is 11 pass / 1 blocker because final destructive approval has not been renewed. |
 | Variant/media identity | 1 or 2, as assigned | verified local | `python scripts/verify/variant_media_contract.py` PASS. |
 | Cart and checkout identity | 1 | verified local | `python scripts/verify/cart_checkout_contract.py` PASS; `npm run test:checkout-experience` PASS. |
 | Payment amount/state | 3 | verified local | `python scripts/verify/stripe_amount_parity_contract.py` PASS; `python scripts/verify/payment_webhook_contract.py` PASS; `python scripts/verify/payment_success_reconciliation_contract.py` PASS. |
