@@ -12,6 +12,11 @@ It is not backend access. It must not expose ERPNext Desk, Leads, Customers,
 Contacts, Files, Communications, Email Queue, Orders, Invoices, Payments,
 Products, maintenance rows, raw logs, reports, or customer portal records.
 
+It is also not ad-account access. Google Ads and Meta/Facebook/Instagram
+takeover work is a separate provider-control lane documented in
+`workstreams/ad-account-takeover-2026-05-19.md` and
+`capabilities/recipes/ad-account-takeover-provider-control.md`.
+
 ## Implementation
 
 Source files:

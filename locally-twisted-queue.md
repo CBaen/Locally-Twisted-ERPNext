@@ -10,6 +10,24 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 ## Active
 
+**Google Ads / Meta account takeover (2026-05-19):** Source handoff is
+`workstreams/ad-account-takeover-2026-05-19.md`. Verified support evidence from
+LT Gmail/Drive identifies Google Ads account `Locally Twisted` / customer ID
+`437-723-0551`, historical customer ID `295-025-7991`, ENB manager account
+`124-663-1239`, ENB admin-user evidence for `tosh@exploringnotboring.com`, and
+current policy issue on campaign `22063769748`
+(`ENB_Sales_Search_Custom Balloon Arches + Delivery - $5/day | 12.27.24`) for
+HTTP `404` destination failure. Meta evidence is not dashboard-complete: there
+is Facebook Business Manager email evidence and ENB/HighLevel
+`Facebook Painting Leads` evidence, but no verified Meta ad account ID,
+campaign export, pixel/dataset, lead-form, partner, or billing inventory yet.
+Next safe step is authenticated provider-dashboard inventory using
+`capabilities/recipes/ad-account-takeover-provider-control.md`; do not remove
+ENB/agency access, billing, pixels/tags, lead forms, tracking phone numbers, or
+manager links until dashboard exports and HighLevel/lead-routing dependencies
+are captured. No live-site deploy, ad mutation, billing mutation, or access
+mutation was performed.
+
 
 **Ecommerce launch execution posture (2026-05-11 GL/Leader correction):** The
 goal is to open and prove the ecommerce path, not preserve pause posture.

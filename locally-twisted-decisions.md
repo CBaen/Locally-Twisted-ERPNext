@@ -8,6 +8,39 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-19 - Ad account takeover requires provider dashboard control
+
+**Decision:** Locally Twisted Google Ads and Meta/Facebook/Instagram takeover
+work is a provider-control lane. Gmail/Drive reports, ENB emails, public ad
+libraries, and repo/site scans are support evidence only; they do not prove
+current users, partners, billing, campaigns, pixels/tags, conversions, lead
+forms, or manager links. The next complete pass must use authenticated Google
+Ads and Meta Business dashboards or official exports before changing access.
+
+**Reasoning:** The 2026-05-19 Google Ads policy URL and GL correction clarified
+the goal: see and manage the ad accounts. The read-only mailbox/Drive crawl was
+useful and found account IDs, ENB manager/admin evidence, campaign history,
+billing warnings, tracking risks, and Meta/HighLevel lead-pipeline clues, but
+it was not account control. Removing or changing ENB/agency access before
+dashboard exports would risk losing billing, tracking, lead-routing, phone, and
+conversion context.
+
+**Implementation boundary:** No Google Ads, Meta, billing, user, partner,
+campaign, pixel, tag, conversion, lead-form, HighLevel, Frappe Cloud,
+Cloudflare, Stripe, DNS, local code, or live-site mutation was performed in
+this slice. Opening the GL-provided Google Ads URL in Chrome was navigation
+only. This decision does not approve any spend change or ENB access removal.
+
+**Receipts:** `workstreams/ad-account-takeover-2026-05-19.md`;
+`capabilities/recipes/ad-account-takeover-provider-control.md`;
+`capabilities/failures/ad-dashboard-research-vs-control-drift.md`;
+`workstreams/marketing-review-access-2026-05-15.md`.
+
+**Decided by:** GL direct correction and Codex documentation closeout on
+2026-05-19.
+
+---
+
 ## 2026-05-18 - Raw 50+ color axes do not belong in direct checkout
 
 **Decision:** Products remain real products, but direct checkout requires a

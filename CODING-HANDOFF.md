@@ -1,5 +1,25 @@
 # Locally Twisted - Coding Handoff
 
+Codex ad-account takeover documentation closeout on 2026-05-19: GL clarified
+that the goal is account control, not another research crawl. Support evidence
+from LT Gmail/Drive identifies Google Ads account `Locally Twisted` / customer
+ID `437-723-0551`, historical customer ID `295-025-7991`, ENB manager account
+`124-663-1239`, ENB admin-user evidence for `tosh@exploringnotboring.com`, and
+the current policy issue on campaign `22063769748`
+(`ENB_Sales_Search_Custom Balloon Arches + Delivery - $5/day | 12.27.24`) for
+HTTP `404` destination failure. Meta evidence is still not dashboard-complete:
+Facebook Business Manager email evidence and ENB/HighLevel
+`Facebook Painting Leads` evidence exist, but the Meta ad account ID, current
+campaigns, pixels/datasets, lead forms, partners, and billing are unverified.
+Feature handoff: `workstreams/ad-account-takeover-2026-05-19.md`; capability:
+`capabilities/recipes/ad-account-takeover-provider-control.md`; failure guard:
+`capabilities/failures/ad-dashboard-research-vs-control-drift.md`. No ad
+account mutation, billing mutation, user/partner/access mutation, website code
+change, live deploy, Frappe Cloud, Cloudflare, Stripe, DNS, or production
+change was performed. Next agent should open authenticated Google Ads and Meta
+Business dashboards first, export access/campaign/billing/tracking/lead-form
+state, and only then propose ENB/agency access changes.
+
 Codex school/seasonal color-preset product repair on 2026-05-18: local
 ERPNext now blocks the unsafe raw 50+ color checkout path for
 hyperspecialized products while keeping them real products. Graduation

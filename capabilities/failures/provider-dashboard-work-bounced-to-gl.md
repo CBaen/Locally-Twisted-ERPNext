@@ -10,14 +10,18 @@ scope: project
 owner_context: Locally Twisted Frappe Cloud / Cloudflare launch
 related_capabilities:
   - recipes/frappe-cloud-cloudflare-stripe-launch-gate.md
+  - recipes/ad-account-takeover-provider-control.md
   - recipes/codex-browser-verification-surface.md
-related_failures: []
+related_failures:
+  - ad-dashboard-research-vs-control-drift.md
 tags:
   - launch
   - frappe-cloud
   - cloudflare
   - browser-automation
   - agent-ownership
+  - google-ads
+  - meta-business
 ---
 
 # Failure Recipe: Provider dashboard work bounced to GL
@@ -32,6 +36,8 @@ documented process.
 
 - Frappe Cloud, Cloudflare, Stripe, DNS, hosting, or other production-provider
   work is in scope.
+- Google Ads, Meta Business, Facebook Ads, Instagram Ads, or other marketing
+  provider account-control work is in scope.
 - The provider operation is dashboard-first or account-session dependent.
 - The agent has no simple CLI and mistakes that for "human must do it."
 
@@ -40,6 +46,7 @@ documented process.
 | Date | Project | Surface | Action being taken | Bad outcome | Evidence | Guard state | Status |
 |---|---|---|---|---|---|---|---|
 | 2026-05-12 | Locally Twisted | Frappe Cloud staging launch | Custom app install/site config after GL logged in | Agent handed GL manual install/config steps instead of taking over with automation/process | Conversation, staging probe showing `locally_twisted` not installed | added | guarded |
+| 2026-05-19 | Locally Twisted | Google Ads / Meta account takeover | GL supplied a Google Ads dashboard URL and wanted to see/manage the account | Agent initially substituted Gmail/Drive research inventory for dashboard control; GL corrected the goal | `workstreams/ad-account-takeover-2026-05-19.md` and `capabilities/failures/ad-dashboard-research-vs-control-drift.md` | added | guarded |
 
 ## Root pattern
 
@@ -94,7 +101,9 @@ For provider launch work, first attempt an agent-owned execution path:
 ## Cross-links
 
 - Related capability: `capabilities/recipes/frappe-cloud-cloudflare-stripe-launch-gate.md`
+- Related capability: `capabilities/recipes/ad-account-takeover-provider-control.md`
 - Related capability: `capabilities/recipes/codex-browser-verification-surface.md`
+- Related failure: `capabilities/failures/ad-dashboard-research-vs-control-drift.md`
 - Related workstream: `workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11.md`
 
 ## Evidence quality

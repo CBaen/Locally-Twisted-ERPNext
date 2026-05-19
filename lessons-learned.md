@@ -6,6 +6,27 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-19 - Provider account control is not an inbox crawl
+
+The ad takeover request started with a real Google Ads policy URL and a clear
+business goal: take control of Google Ads and Facebook/Instagram ads. The
+mailbox/Drive crawl found useful support evidence, including the Google Ads
+customer ID, ENB manager/admin evidence, campaign history, billing warnings,
+tracking issues, and Meta/HighLevel lead-pipeline clues. But it did not give
+GL what was asked for: the ability to see and manage the current provider
+accounts.
+
+**Counter-move:** when GL gives a provider dashboard URL or asks to see/manage
+an account, open the authenticated dashboard first and state the exact
+dashboard state or blocker. Use Gmail, Drive, reports, and public ad libraries
+only as supporting context after the account-control path is attempted. For
+LT ads, use `workstreams/ad-account-takeover-2026-05-19.md` and
+`capabilities/recipes/ad-account-takeover-provider-control.md`; do not remove
+ENB/agency access until dashboard exports and lead-routing dependencies are
+captured.
+
+---
+
 ## 2026-05-18 - Sellable product does not mean raw-source checkout
 
 The all-Odoo sellable reimport correctly restored every imported item as a
