@@ -24,11 +24,15 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "apps" / "locally_twisted"))
 
 from locally_twisted.catalog_variant_rules import dedupe_required_variant_rows
+from locally_twisted.color_preset_rules import COLLEGE_COLOR_PRESET_ATTRIBUTE, COLLEGE_PRESET_LABELS
 
 CATALOG_PATH = ROOT / "_resources" / "odoo-live" / "catalog.json"
 NORMALIZE_PATH = ROOT / "_resources" / "odoo-live" / "value_normalize_map.json"
 CONTAINER = "locally-twisted-erpnext-v15-backend-1"
 SITE = "frontend"
+GRADUATION_GRAB_TEMPLATE = "graduation-grab-n-go"
+GRADUATION_STANDS_TEMPLATE = "6-graduation-stands"
+GRADUATION_STANDS_ATTRIBUTE = "Graduation stands"
 
 
 class CatalogVariantFail(Exception):
@@ -61,9 +65,44 @@ def expected_variants(catalog: dict[str, Any], normalize_map: dict[str, dict[str
         slug = prod.get("slug")
         if not slug:
             continue
+        projected = school_color_preset_expected_rows(prod)
+        if projected is not None:
+            expected[slug] = {combo_key(row, normalize_map) for row in projected}
+            continue
         valid = dedupe_required_variant_rows(prod.get("valid_variants") or [])
         expected[slug] = {combo_key(row.get("combo") or {}, normalize_map) for row in valid}
     return expected
+
+
+def school_color_preset_expected_rows(prod: dict[str, Any]) -> list[dict[str, str]] | None:
+    """Project approved graduation products from raw colors to college presets."""
+    slug = prod.get("slug")
+    if slug == GRADUATION_GRAB_TEMPLATE:
+        return [
+            {COLLEGE_COLOR_PRESET_ATTRIBUTE: label}
+            for label in COLLEGE_PRESET_LABELS
+        ]
+    if slug == GRADUATION_STANDS_TEMPLATE:
+        design_values = source_axis_values(prod, GRADUATION_STANDS_ATTRIBUTE)
+        return [
+            {
+                GRADUATION_STANDS_ATTRIBUTE: design,
+                COLLEGE_COLOR_PRESET_ATTRIBUTE: label,
+            }
+            for design in design_values
+            for label in COLLEGE_PRESET_LABELS
+        ]
+    return None
+
+
+def source_axis_values(prod: dict[str, Any], axis_name: str) -> tuple[str, ...]:
+    axis = (prod.get("attributes") or {}).get(axis_name) or {}
+    values = axis.get("values") or []
+    return tuple(
+        str(value.get("name") or "").strip()
+        for value in values
+        if isinstance(value, dict) and value.get("name")
+    )
 
 
 def run_mariadb(query: str) -> str:

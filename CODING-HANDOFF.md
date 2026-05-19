@@ -1,5 +1,24 @@
 # Locally Twisted - Coding Handoff
 
+Codex school/seasonal color-preset product repair on 2026-05-18: local
+ERPNext now blocks the unsafe raw 50+ color checkout path for
+hyperspecialized products while keeping them real products. Graduation
+Grab n Go now has 4 checkout variants using `College Color Preset`
+(`graduation-grab-n-go-WSU`, `-UTU`, `-BYU`, `-USU`) at the original $85.
+`6-graduation-stands` now has 2 designs x 4 college presets = 8 checkout
+variants at the original $45. Nineteen high-cardinality school/corporate/
+seasonal/baby products moved to internal `quote_first` / customer quote
+request flow so stale localStorage or direct cart API calls return
+`quote_required`. Source-owned repair:
+`apps/locally_twisted/locally_twisted/seed/repair_school_seasonal_color_presets.py`;
+rules: `apps/locally_twisted/locally_twisted/color_preset_rules.py`;
+guard: `python scripts/verify/school_seasonal_color_preset_contract.py`.
+Browser proof confirmed the two graduation product pages render college
+preset chips, no raw `latex colors` selector, correct enabled Add to Cart
+variants/prices, and cart line configuration preserving the selected preset
+label. No staging/live/Frappe Cloud/Stripe/DNS/public exposure change was
+performed.
+
 Codex variant media regression repair on 2026-05-17: GL caught
 `/shop-items/bouquets/encanto-bouquet` keeping the parent image after
 Small/Medium/Large size selection even though the backend variant Items still
@@ -701,26 +720,26 @@ Queue or Communication side effects.
 
 ## State Of Reality
 
-The ERPNext build is active at `http://localhost:8081`. The project is **a migration of Locally Twisted's business intent + catalog data into a fresh ERPNext install** (frame revised 2026-04-30 — see `locally-twisted-decisions.md`). "Fresh install" — destination is greenfield ERPNext; no auto-translated Odoo modules or DB dumps. "Migration" — catalog records (53 Website Items / 10,578 original variants / 10,613 original catalog Item Prices, ported 2026-04-30), form intent, policies, voice/brand all carried across from the prior Odoo attempt and the legacy `locallytwisted.com` site, and the new storefront replaces `locallytwisted.com` at cutover. The current local DB now has 10,674 Items and 10,656 Item Prices after delivery service Items, support Items, and the optional-add-on variant repair.
+The ERPNext build is active at `http://localhost:8081`. The project is **a migration of Locally Twisted's business intent + catalog data into a fresh ERPNext install** (frame revised 2026-04-30 — see `locally-twisted-decisions.md`). "Fresh install" — destination is greenfield ERPNext; no auto-translated Odoo modules or DB dumps. "Migration" — catalog records (53 Website Items / 10,578 original variants / 10,613 original catalog Item Prices, ported 2026-04-30), form intent, policies, voice/brand all carried across from the prior Odoo attempt and the legacy `locallytwisted.com` site, and the new storefront replaces `locallytwisted.com` at cutover. The current local DB now has 10,686 Items and 10,668 Item Prices after delivery service Items, support Items, the optional-add-on variant repair, and the college color preset repair.
 
 The catalog port from the old Odoo test deployment appears real, but several docs had stale counts. The Odoo shop at `http://5.78.136.133/shop` was used as the catalog source/reference for that port because GL explicitly named it as the old live account/source for catalog data. That does not make Odoo the product truth for unrelated business scope.
 
-Verified DB counts on 2026-05-18:
+Verified DB counts on 2026-05-18 after the school/seasonal color-preset repair:
 
 | Record | Count |
 |---|---:|
 | Website Items | 53 |
-| Items total | 10,674 |
+| Items total | 10,686 |
 | Variant templates | 49 |
 | Non-variant root Items | 8 |
-| Active customer-facing variants | 10,227 |
-| Disabled legacy optional-add-on variants | 390 |
-| All variant records | 10,617 |
-| Item Prices | 10,656 |
-| Item Variant Attribute rows | 32,028 |
-| Item Attributes | 29 |
+| Active customer-facing variants | 10,186 |
+| Disabled variant records | 443 |
+| All variant records | 10,629 |
+| Item Prices | 10,668 |
+| Item Variant Attribute rows | 32,049 |
+| Item Attributes | 30 |
 
-Docs that still mention `10,631 Items`, `10,613 Items`, `10,633 Items`, `10,672 Items`, `10,613 Item Prices`, `10,615 Item Prices`, `10,654 Item Prices`, `8,925 Item Prices`, `4 single-SKU templates`, `6 non-variant root Items`, `10,560 variants`, or `10,578 variants` as current DB totals are stale. The 8 non-variant root Items are 4 catalog single-SKU products, 2 delivery service Items, and 2 support Items (`ADDON-FOIL-NUMBER`, `LT-PRODUCT-QUOTE-REVIEW`). `Add Foil Number` is now optional for bouquet-size products, so the customer-facing active variant count is lower than the original raw port; the disabled legacy add-on variants remain in the database as history.
+Docs that still mention `10,631 Items`, `10,613 Items`, `10,633 Items`, `10,672 Items`, `10,674 Items`, `10,613 Item Prices`, `10,615 Item Prices`, `10,654 Item Prices`, `10,656 Item Prices`, `8,925 Item Prices`, `4 single-SKU templates`, `6 non-variant root Items`, `10,560 variants`, `10,578 variants`, `10,617 variants`, or `10,227 active variants` as current DB totals are stale. The 8 non-variant root Items are 4 catalog single-SKU products, 2 delivery service Items, and 2 support Items (`ADDON-FOIL-NUMBER`, `LT-PRODUCT-QUOTE-REVIEW`). `Add Foil Number` is optional for bouquet-size products. Graduation products now use bounded college preset variants, so the customer-facing active variant count is lower than the raw color-axis port; disabled legacy add-on/raw-color variants remain in the database as history.
 
 ## Current Stopping Point
 
@@ -794,7 +813,7 @@ Verified or updated during the 2026-05-01 storefront correction and contact clea
 - The active theme/app source has been cleaned away from old font and UI-pastel references. Do not reintroduce `DM Serif`, `Raleway`, `Montserrat`, `Playfair`, `lt-blush`, `lt-soft-blue`, old `soft-blue`/`light-blue`, UI `blush`, or unresolved `--lt-primary` in customer-facing source.
 - A 16-asset custom brass-line icon suite now lives at `apps/locally_twisted/locally_twisted/public/icons/brand/`. Balloon-specific surfaces should use balloon-form icons first: pair, cluster, arch, organic garland, column, and bouquet.
 - The contact page no longer depends on an external map iframe for the main service-area proof; it uses a controlled service-area panel.
-- Per-product variant correctness now compares normalized Odoo `valid_variants` to active, required-choice ERPNext variants. Current pass on 2026-05-08: 53 products checked, 10,227 expected active variants, 10,227 live active variants, 4 single-SKU products. Disabled legacy optional-add-on variants are intentionally ignored by this customer-facing contract. This is shape parity only, not price parity.
+- Per-product variant correctness now compares normalized Odoo `valid_variants` plus approved graduation college-preset projection to active, required-choice ERPNext variants. Current pass on 2026-05-18: 53 products checked, 10,186 expected active variants, 10,186 live active variants, 4 single-SKU products. Disabled legacy optional-add-on/raw-color graduation variants are intentionally ignored by this customer-facing contract. This is shape parity only, not price parity.
 - Catalog variant price parity is partially repaired, not complete. `c7f9da3` fixed the bouquet-size family from Odoo's dynamic `/website_sale/get_combination_info` resolver and added `npm run test:product-prices`, but a later sample dry-run proved non-bouquet templates still have wrong flat prices, including 25ft arches and longer Pride arch variants. Use `workstreams/catalog-variant-price-recovery.md` before any catalog price claim or repair.
 - Product option UX P0 pass completed 2026-05-02 and was reconciled with the current commerce lane on 2026-05-05. `item_configure.html` no longer runs per-attribute `frappe.get_all` lookups from Jinja; it uses `get_variant_attribute_options`, a project Jinja helper backed by Webshop's `get_attributes_and_values`. Quote-required custom installs such as Arches and Garlands intentionally show a `/contact?item=...` quote CTA instead of cart selectors. Retail variants such as `unicorn-bouquet` still render inline single-select chips/selects, consume `valid_options_for_attributes`, and write selected variant codes to `LT_CART`.
 - Generated Webshop asset-map drift was corrected in the running ERPNext stack on 2026-05-02. The container already has Yarn Classic at `/home/frappe/.nvm/versions/node/v20.19.2/bin/yarn`, but non-interactive `docker exec` does not include that directory in `PATH`. Use `export PATH=/home/frappe/.nvm/versions/node/v20.19.2/bin:$PATH` before `bench build --app webshop`; no package install was needed. Important Docker nuance: the frontend/nginx container must be the final Webshop build target because `sites/assets/webshop` links to each container's own app-public files while `assets.json` is shared. Building only in the backend writes asset-map names nginx cannot serve. After rebuilding from the frontend container and clearing `assets_json` plus website cache, follow-up console checks returned 200s with 0 console errors/warnings.

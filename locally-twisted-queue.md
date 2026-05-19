@@ -51,12 +51,14 @@ cart/checkout/receipt summary parity.
 published in `8e4a95b`, storefront UX/homepage verifier alignment
 `3132de36`/`4fd5ae4f` published in `3179463`, and runner wrapper work
 `786f962e` included in `e4186c1`. Current local counts are 53 published Website
-Items, 10,674 Items, 49 templates, 10,617 variants, 10,227 active variants, 390
-disabled variants, 10,656 Item Prices, 29 Item Attributes, and 32,028 Item
-Variant Attribute rows. No local ERPNext catalog/pricing/import/media/backend
-ecommerce blocker remains; remaining gates are staging/live release, Stripe,
-DNS, legal/policy, explicit real payment approval, and final real catalog
-approval if the local product set is to become public catalog truth.
+Items, 10,686 Items, 49 templates, 10,629 variants, 10,186 active variants, 443
+disabled variants, 10,668 Item Prices, 30 Item Attributes, and 32,049 Item
+Variant Attribute rows after the college color preset repair. No local ERPNext
+catalog/pricing/import/media/backend ecommerce blocker remains for the guarded
+local architecture; remaining gates are GL local UI/UX approval, staging/live
+release, Stripe, DNS, legal/policy, explicit real payment approval, and final
+real catalog approval if the local product set is to become public catalog
+truth.
 
 **Backend product-page architecture contract (2026-05-12):** The architecture
 layer corrected after the complex-scaffold drift is
@@ -115,9 +117,16 @@ failure recipe:
 disabled 390 stale enabled `Add Foil Number` optional-add-on variants in local
 ERPNext and wired that idempotent cleanup into `seed_catalog.py`; handoff:
 `workstreams/ecommerce-audit/catalog-optional-addon-variant-guard-2026-05-18.md`;
-guard: `python scripts/verify/catalog_variant_contract.py`. No staging/live/Frappe
-Cloud/Stripe/DNS/public exposure change was performed; GL local testing and
-explicit release approval are still required before any live promotion.
+guard: `python scripts/verify/catalog_variant_contract.py`. Follow-up on
+2026-05-18 added the school/seasonal color preset guard: Graduation Grab n Go
+now has 4 college preset checkout variants, `6-graduation-stands` has 8
+college preset checkout variants, and 19 hyperspecialized 50+ color products
+route to quote request instead of raw-color checkout. Handoff:
+`workstreams/ecommerce-audit/school-seasonal-color-preset-product-logic-2026-05-18.md`;
+guards: `python scripts/verify/school_seasonal_color_preset_contract.py` and
+`python scripts/verify/catalog_variant_contract.py`. No staging/live/Frappe
+Cloud/Stripe/DNS/public exposure change was performed; GL local UI/UX testing
+and explicit release approval are still required before any live promotion.
 
 **Repo hygiene cleanup track (2026-05-17):** the cleanup track reconciled local
 `main` with `origin/main` at `d541a0c` and deleted stale detached Codex
@@ -315,7 +324,7 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 - [P1] **Workspace asset intake cleanup.** Triage any future untracked LT asset drops before new visual work. 2026-05-10 launch cleanup moved raw local photo drops `assets/landing page pics/` and `assets/New Balloon Pics 3.7.26/` out of the repo to `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted-local-drops\` and added ignore guards so they do not re-enter the launch worktree. 2026-05-11 follow-up removed duplicate tracked raw launch photos from `assets/what we do photos/` after exact blob matches were verified in `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted-local-drops\landing-page-pics-20260510\`. Remaining raw/drop candidates named in older queue entries, such as `assets/landing page assets/`, `assets/hero assets/`, or loose logo source PNGs, should be either committed intentionally as production/source assets, moved to the same local holding area, or deleted after review. Do not leave floating untracked assets as a second source of truth. The red dog cartoon source used for the favicon is kept with the committed favicon source set. Cleanup handoff/capability: `workstreams/launch-repo-cleanup-2026-05-10.md` and `capabilities/recipes/launch-repo-cleanup-and-evidence-retention.md`.
 - [P6] **Phase 6 cutover work item — fixture pruning.** BEFORE Jeff's first post-takeover deploy, REMOVE operator-state-sensitive Item Attribute fixtures from `hooks.py fixtures = [...]` (especially `latex colors` — 51 values Jeff is most likely to edit as supplier inventory shifts). Otherwise BBC fixture sync silently overwrites his renames on every `bench migrate`. Document in `NOUPDATE-DRIFT.md` (TBD). See `locally-twisted-decisions.md` 2026-04-30 entry.
 
-**Slice numbering (current state):** 1-7 done (brand, chrome, homepage, BTFP, Contact, Accessibility, Refund+FAQ, Lookbook). Slice 8 (service categories), Slice 9 (color chart), Slice 13 (blog) — PENDING. Slice 10 (`/book`) is retired; `/contact` is the primary inquiry route and `/book` redirects to `/contact?intent=quick`. Slice 11 (browse) + Slice 12 (cart+checkout) DONE. **2026-04-30 catalog port shipped on top of Slice 11/12** — original catalog baseline was 53 Website Items, 10,578 raw/customer variants, and 10,613 catalog Item Prices. Current local DB totals were rechecked on 2026-05-18 as 53 Website Items, 10,674 Items, 10,227 active customer-facing variants, 390 disabled legacy optional-add-on variants, 10,617 all variant records, and 10,656 Item Prices after delivery service Items, support Items, and the optional-add-on bouquet repair. Product detail, mega menu, `/shop` hub, and category detail pages are built. `/shop-by-category` is now a compatibility redirect to `/shop`. See `locally-twisted-decisions.md` 2026-04-30 and 2026-05-02 entries. Historical "Already DONE" entries removed from queue per the "GitHub is our archive" rule — `git log` is the changelog.
+**Slice numbering (current state):** 1-7 done (brand, chrome, homepage, BTFP, Contact, Accessibility, Refund+FAQ, Lookbook). Slice 8 (service categories), Slice 9 (color chart), Slice 13 (blog) — PENDING. Slice 10 (`/book`) is retired; `/contact` is the primary inquiry route and `/book` redirects to `/contact?intent=quick`. Slice 11 (browse) + Slice 12 (cart+checkout) DONE. **2026-04-30 catalog port shipped on top of Slice 11/12** — original catalog baseline was 53 Website Items, 10,578 raw/customer variants, and 10,613 catalog Item Prices. Current local DB totals were rechecked on 2026-05-18 as 53 Website Items, 10,686 Items, 10,186 active customer-facing variants, 443 disabled variant records, 10,629 all variant records, and 10,668 Item Prices after delivery service Items, support Items, the optional-add-on bouquet repair, and the college color preset repair. Product detail, mega menu, `/shop` hub, and category detail pages are built. `/shop-by-category` is now a compatibility redirect to `/shop`. See `locally-twisted-decisions.md` 2026-04-30 and 2026-05-02 entries. Historical "Already DONE" entries removed from queue per the "GitHub is our archive" rule — `git log` is the changelog.
 
 ### Future scope (post-Phase 1)
 

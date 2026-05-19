@@ -8,6 +8,46 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-18 - Raw 50+ color axes do not belong in direct checkout
+
+**Decision:** Products remain real products, but direct checkout requires a
+bounded, customer-safe sale unit. Graduation products can be checkout products
+when their color choice is an approved college preset. Hyperspecialized
+products with raw 50+ `latex colors` axes, school/corporate custom colors, or
+seasonal/baby scheme ambiguity route to customer quote request until their
+UI/UX, pricing, color mapping, operator review, and downstream payload are
+approved.
+
+**Reasoning:** GL corrected that Classic Arch, Classic Column, graduation
+grab-and-go, columns, corporate/school colors, Halloween, and baby products do
+not all have the same checkout risk. "Every imported Odoo item is a product"
+does not mean every raw source option is safe to expose as a cart SKU. The
+business-safe split is: keep the product visible, keep source data, but only
+allow checkout when the choice is fixed enough for cart, order, invoice, and
+receipt. Quote request is an operating path for a real product, not a deletion
+or a fake product category.
+
+**Implementation boundary:** Local ERPNext only. `graduation-grab-n-go` now has
+4 college preset checkout variants at $85. `6-graduation-stands` now has
+2 designs x 4 college preset checkout variants at $45. Nineteen
+high-cardinality school/corporate/seasonal/baby products now use internal
+`quote_first` as the quote-request safety lane. No Frappe Cloud, staging/live,
+Stripe, DNS, or public exposure change is approved. Structured preset metadata
+through order/invoice/receipt beyond the selected-option label remains a
+separate release-readiness task.
+
+**Receipts:** `apps/locally_twisted/locally_twisted/color_preset_rules.py`;
+`apps/locally_twisted/locally_twisted/seed/repair_school_seasonal_color_presets.py`;
+`apps/locally_twisted/locally_twisted/verify/school_seasonal_color_preset_contract.py`;
+`scripts/verify/school_seasonal_color_preset_contract.py`;
+`scripts/verify/catalog_variant_contract.py`;
+`workstreams/ecommerce-audit/school-seasonal-color-preset-product-logic-2026-05-18.md`.
+
+**Decided by:** GL product-direction correction and Codex local verifier-first
+implementation on 2026-05-18.
+
+---
+
 ## 2026-05-18 - Optional add-ons are repaired inside the import path
 
 **Decision:** `Add Foil Number` stays a paid add-on, not an active required

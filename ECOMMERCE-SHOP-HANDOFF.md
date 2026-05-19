@@ -9,9 +9,13 @@ Status as of 2026-05-18 for peer GPT-5.5 Codex/OpenClaw agents.
 - This file is the front-door handoff for the local ecommerce shop setup and
   staff product-authoring slices.
 - Current local product import proof treats all 53 Odoo-imported products as
-  sellable checkout targets. Do not promote that proof to public/live without
-  GL local approval plus the separate Frappe Cloud, Stripe, DNS, webhook, and
-  live payment cutover gates.
+  real products. Direct checkout is now bounded for high-complexity color
+  products: the two graduation products use college color preset checkout
+  variants, while hyperspecialized 50+ color products route to quote request
+  until their UI/UX, pricing, color logic, and operator flow are approved.
+  Do not promote this local proof to public/live without GL local approval
+  plus the separate Frappe Cloud, Stripe, DNS, webhook, and live payment
+  cutover gates.
 - Encanto/simple checkout variant media was repaired after GL caught the
   product page keeping the parent image. Simple `simple_product|checkout`
   variant `Item.image` now renders and cascades; complex/unclassified media
@@ -19,6 +23,11 @@ Status as of 2026-05-18 for peer GPT-5.5 Codex/OpenClaw agents.
 - `Add Foil Number` is confirmed as an add-on, not a required SKU axis. The
   local DB repair disabled 390 stale optional-add-on variants, and
   `seed_catalog.py` now runs that idempotent cleanup after destructive import.
+- `College Color Preset` is now a code-owned Item Attribute for the first
+  local graduation checkout set: Weber State, University of Utah, BYU, and
+  Utah State. `seed_catalog.py` runs the school/seasonal preset repair after
+  destructive import so raw graduation color variants do not reappear as active
+  checkout choices.
 - Current local runtime note: `frontend` has `lt_ecommerce_paused=0` so GL can
   test localhost product/cart behavior. Restore it to `1` after local
   acceptance or before release-packet work.
@@ -27,6 +36,45 @@ Status as of 2026-05-18 for peer GPT-5.5 Codex/OpenClaw agents.
   incomplete.
 
 ## Completed Lanes
+
+### School/seasonal color preset product logic - 2026-05-18
+
+Owner: `Codex`
+
+Result: complete locally for the first guarded slice. No staging/live site
+update, Frappe Cloud update, DNS change, Stripe live change, or public exposure
+change was made.
+
+Feature handoff:
+
+- `workstreams/ecommerce-audit/school-seasonal-color-preset-product-logic-2026-05-18.md`
+
+Evidence summary: raw 50+ `latex colors` axes were failing because many
+hyperspecialized products were still `complex_custom_product|checkout`.
+The new verifier fails that state, then the local repair converts
+`graduation-grab-n-go` to 4 college preset checkout variants at $85, converts
+`6-graduation-stands` to 2 designs x 4 college preset variants at $45, and
+moves 19 school/corporate/seasonal/baby high-cardinality color products to
+quote request. Cart API guards now return `quote_required` for those quote
+request products. Browser proof confirmed graduation pages render college
+preset chips, hide raw `latex colors`, enable Add to Cart with the expected
+variant/prices, and store the selected preset label in cart configuration.
+
+Green gates:
+
+- `python -m compileall apps/locally_twisted/locally_twisted/color_preset_rules.py apps/locally_twisted/locally_twisted/seed/repair_school_seasonal_color_presets.py apps/locally_twisted/locally_twisted/verify/school_seasonal_color_preset_contract.py scripts/verify/school_seasonal_color_preset_contract.py scripts/verify/catalog_variant_contract.py`
+- `python -m json.tool apps/locally_twisted/locally_twisted/fixtures/item_attribute.json`
+- `python scripts\verify\school_seasonal_color_preset_contract.py`
+- `python scripts\verify\catalog_variant_contract.py`
+- `python scripts\dev\clear_website_cache.py`
+- Browser Playwright probes for `/shop-items/grab-go/graduation-grab-n-go`,
+  `/shop-items/stands-easels/6-graduation-stands`, and
+  `/shop-items/arches/classic-arch`
+
+Remaining before live release: enrich order/invoice/receipt configuration with
+structured preset metadata beyond the current selected-option label if GL wants
+that explicit downstream fielding, design the quote-request preset/custom color
+UI for arches/columns/seasonal/baby products, and get GL local UI/UX approval.
 
 ### Catalog optional add-on variant guard - 2026-05-18
 
@@ -169,17 +217,18 @@ Guarded data repair:
 - `python scripts\verify\website_item_classification_contract.py --apply`
 - Changed exactly 5 Website Item classification fields to `needs_review|needs_review`.
 
-Current local ERPNext counts:
+Current local ERPNext counts after the 2026-05-18 school/seasonal color-preset
+repair:
 
 - 53 published Website Items
-- 10,674 Items
+- 10,686 Items
 - 49 templates
-- 10,617 variants
-- 10,227 active variants
-- 390 disabled variants
-- 10,656 Item Prices
-- 29 Item Attributes
-- 32,028 Item Variant Attribute rows
+- 10,629 variants
+- 10,186 active variants
+- 443 disabled variants
+- 10,668 Item Prices
+- 30 Item Attributes
+- 32,049 Item Variant Attribute rows
 
 Result: no ERPNext catalog/pricing/import blocker remains for the local setup.
 

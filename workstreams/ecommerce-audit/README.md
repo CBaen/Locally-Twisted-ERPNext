@@ -112,9 +112,13 @@ setup closeout. Completed lanes:
   Files Node and focused runner proofs pass. Long broad sweeps may still see
   transient ERPNext HTTP 417/502, but exact reruns pass.
 
-Current local counts: 53 published Website Items, 10,674 Items, 49 templates,
-10,617 variants, 10,227 active variants, 390 disabled variants, 10,656 Item
-Prices, 26 Item Attributes, and 32,028 Item Variant Attribute rows.
+2026-05-18 school/seasonal color-preset follow-up:
+`school-seasonal-color-preset-product-logic-2026-05-18.md` converted the two
+graduation checkout products to college preset variants and moved
+hyperspecialized 50+ color products to quote request. Current local counts:
+53 published Website Items, 10,686 Items, 49 templates, 10,629 variants,
+10,186 active variants, 443 disabled variants, 10,668 Item Prices,
+30 Item Attributes, and 32,049 Item Variant Attribute rows.
 
 ## 2026-05-14 Product Blueprint Authoring
 

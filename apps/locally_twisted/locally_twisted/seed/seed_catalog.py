@@ -537,6 +537,18 @@ def _repair_optional_addon_variants_after_import() -> dict:
     return parsed if isinstance(parsed, dict) else {"raw": rendered}
 
 
+def _repair_school_seasonal_color_presets_after_import() -> dict:
+    """Run the idempotent school/seasonal preset repair after source import."""
+    from locally_twisted.seed.repair_school_seasonal_color_presets import execute as repair_presets
+
+    rendered = repair_presets()
+    try:
+        parsed = json.loads(rendered)
+    except (TypeError, ValueError):
+        parsed = {"raw": rendered}
+    return parsed if isinstance(parsed, dict) else {"raw": rendered}
+
+
 # ── Public entrypoint ────────────────────────────────────────────────
 
 def execute(
@@ -672,9 +684,16 @@ def execute(
 
     optional_repair = _repair_optional_addon_variants_after_import()
     summary["optional_addon_variant_repair"] = optional_repair
+    preset_repair = _repair_school_seasonal_color_presets_after_import()
+    summary["school_seasonal_color_preset_repair"] = preset_repair
     disabled_optional = sum(
         int(row.get("disabled_optional_variants") or 0)
         for row in optional_repair.get("results", [])
+        if isinstance(row, dict)
+    )
+    disabled_preset_stale = sum(
+        int(row.get("disabled_now") or 0)
+        for row in preset_repair.get("graduation_products", [])
         if isinstance(row, dict)
     )
 
@@ -688,6 +707,11 @@ def execute(
         "  optional add-on variant repair: "
         f"{optional_repair.get('templates_checked', 0)} template(s), "
         f"{disabled_optional} stale optional variant(s) disabled"
+    )
+    print(
+        "  school/seasonal color preset repair: "
+        f"{len(preset_repair.get('graduation_products', []))} graduation template(s), "
+        f"{disabled_preset_stale} stale raw-color variant(s) disabled"
     )
     print(f"  missing images: {len(summary['missing_images'])} ({summary['missing_images']})")
     print(f"  errors: {len(summary['errors'])}")

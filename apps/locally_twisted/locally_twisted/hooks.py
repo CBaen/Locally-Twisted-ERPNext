@@ -200,6 +200,7 @@ fixtures = [
             "Arch Size",
             "Baby color",
             "Bouquet Size",
+            "College Color Preset",
             "Color Palette",
             "Column Height",
             "Delivery Size",

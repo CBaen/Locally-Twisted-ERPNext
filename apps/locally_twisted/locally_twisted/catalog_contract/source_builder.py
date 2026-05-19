@@ -15,6 +15,7 @@ from locally_twisted.catalog_contract.models import (
     ProductPageContract,
     RequiredOptionAxisContract,
 )
+from locally_twisted.color_preset_rules import is_quote_request_color_product
 from locally_twisted.product_page_labels import commerce_lane_label, product_page_type_label
 
 
@@ -69,7 +70,9 @@ def _product_page_type(
     return "complex_custom_product"
 
 
-def _commerce_lane(product_page_type: str) -> str:
+def _commerce_lane(*, slug: str, product_page_type: str) -> str:
+    if is_quote_request_color_product(slug):
+        return "quote_first"
     if product_page_type in {"simple_product", "complex_custom_product"}:
         return "checkout"
     return "needs_review"
@@ -217,7 +220,7 @@ def build_product_page_contract(product: dict[str, Any], *, category_hint: str =
         customization_axes=customization_axes,
         warnings=warnings,
     )
-    commerce_lane = _commerce_lane(product_page_type)
+    commerce_lane = _commerce_lane(slug=slug, product_page_type=product_page_type)
 
     return ProductPageContract(
         slug=slug,

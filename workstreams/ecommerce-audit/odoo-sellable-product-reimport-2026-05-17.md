@@ -39,6 +39,12 @@ hold only. It is not a business lane.
   add-on variants that were still enabled from older imports, then wired the
   same idempotent cleanup into `seed_catalog.py` so future destructive import
   runs do not leave optional add-ons as required SKU axes.
+- Follow-up 2026-05-18: added a school/seasonal color-preset guard. The
+  imported products remain real products, but direct checkout now requires a
+  bounded sale unit. Graduation Grab n Go and 6' Graduation stands use college
+  preset checkout variants; hyperspecialized 50+ raw-color products route to
+  quote request until GL approves their UI/UX, pricing, color logic, and
+  operator flow.
 
 ## Code Changes
 
@@ -51,7 +57,8 @@ hold only. It is not a business lane.
 - `catalog_import_subset.py`: no owner-excluded Odoo product slugs.
 - `seed/seed_catalog.py` and `scripts/setup/stage_seed_data.py`: stage and use
   price enrichment for sale-unit prices during import; `seed_catalog.py` now
-  also runs the optional-add-on variant repair after destructive import.
+  also runs the optional-add-on variant repair and school/seasonal color-preset
+  repair after destructive import.
 - `catalog_contract/*` and `scripts/verify/*`: all import/readiness/product
   gates now expect 53 checkout products and 0 exclusions.
 - `scripts/verify/post_import_checkout_proof.js`: default browser proof now
@@ -104,15 +111,18 @@ Safety proof:
 - Odoo-imported product exclusions: 0.
 - Import manifest sale units: 290.
 - Import readiness blockers: 0.
-- Product-page architecture: 53 checkout allowed, 0 quote-first allowed.
-- Product pattern report: 53 published, 53 priced, checkout status
-  `checkout_ready` for all 53.
+- Product-page architecture: all 53 imported rows remain products, but checkout
+  is now gated by product safety. Graduation preset products are checkout;
+  hyperspecialized raw-color products are quote request until reviewed.
+- Product pattern report from the all-sellable reimport is superseded for the
+  school/seasonal color slice by
+  `school-seasonal-color-preset-product-logic-2026-05-18.md`.
 - Extra images remain held until classified: 95.
 - Simple checkout variant Item images are approved selected media and are not
   part of the extra-image hold.
-- `Add Foil Number` variants are disabled legacy history, not active sale
-  units. Active catalog variants are back to 10,227; all variant records remain
-  10,617 including the disabled legacy variants.
+- `Add Foil Number` variants and old graduation raw-color variants are disabled
+  legacy history, not active sale units. Active catalog variants are now
+  10,186; all variant records are 10,629 including disabled legacy variants.
 - Review-only add-on controls remain hidden until mapped: 9.
 
 ## Boundaries
@@ -137,3 +147,6 @@ Related follow-up handoff:
 
 Related follow-up guard:
 `workstreams/ecommerce-audit/catalog-optional-addon-variant-guard-2026-05-18.md`.
+
+Related school/seasonal follow-up:
+`workstreams/ecommerce-audit/school-seasonal-color-preset-product-logic-2026-05-18.md`.

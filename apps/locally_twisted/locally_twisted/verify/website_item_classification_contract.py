@@ -33,11 +33,11 @@ CHECKOUT_READY_AFTER_SMALL_FIX = (
     "easter-balloon-cups",
     "mothers-day-bouquet",
     "graduation-grab-n-go",
-    "7-butterfly-column",
     "6-graduation-stands",
 )
 
 QUOTE_FIRST = (
+    "7-butterfly-column",
     "baby-shower-combination-photo-opt",
     "classic-organic-balloon-garland",
     "basketball-arch",
@@ -95,8 +95,8 @@ DESIRED_BY_LANE: dict[str, dict[str, str]] = {
 
 EXPECTED_TOTAL = 53
 EXPECTED_COUNTS = {
-    "checkout_ready_after_small_fix": 18,
-    "quote_first": 30,
+    "checkout_ready_after_small_fix": 17,
+    "quote_first": 31,
     "hide_or_needs_review": 5,
 }
 ONLY_MUTATED_FIELDS = (WEBSITE_ITEM_PAGE_TYPE_FIELD, WEBSITE_ITEM_COMMERCE_LANE_FIELD)

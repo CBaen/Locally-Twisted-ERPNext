@@ -6,6 +6,26 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-18 - Sellable product does not mean raw-source checkout
+
+The all-Odoo sellable reimport correctly restored every imported item as a
+product, but the next review exposed a different failure: high-complexity
+products with 50+ raw color choices were still direct checkout products. That
+made products "sellable" by flattening business nuance into unsafe SKU axes.
+Graduation products needed bounded college presets; Classic Arch, Classic
+Column, custom school/corporate colors, Halloween, and baby scheme products
+needed quote-request handling until their color logic and operator flow are
+reviewed.
+
+**Counter-move:** separate product existence from checkout readiness. A product
+can be real and still require quote request. Write both guards: a negative
+guard that fails if raw 50+ color axes can enter checkout, and a positive guard
+that proves approved preset products still add to cart with price and selected
+configuration intact. Do not use "all products are products" as permission to
+expose every source option directly to payment.
+
+---
+
 ## 2026-05-18 - One-off data repairs must become import closeout steps
 
 After the all-Odoo sellable reimport, `catalog_variant_contract.py` failed
