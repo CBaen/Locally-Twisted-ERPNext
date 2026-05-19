@@ -74,7 +74,8 @@ pass; import readiness remains blocked only on renewed explicit destructive
 approval for the 2026-05-19 packet. Permission-bypass lint now passes after
 adding explicit guard comments to the 32 previously flagged existing production
 `ignore_permissions=True` calls; guest endpoint inventory still passes with
-11 guest endpoints and 3 public write endpoints.
+11 guest endpoints and 3 public write endpoints. `npm run test:ecommerce-full`
+now passes locally after the source-price and permission-bypass fixes.
 Do not describe checkout/payment/catalog/public ecommerce as release-ready until
 those blockers are cleared or explicitly accepted for the target release.
 

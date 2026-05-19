@@ -153,6 +153,7 @@ Current status:
   inventory and permission-bypass lint now pass.
 - Lane 5 docs are integrated and updated with the controller verification
   receipts below.
+- Final local umbrella proof now passes with `npm run test:ecommerce-full`.
 
 ## Coordination Snapshot
 
@@ -223,6 +224,10 @@ release language changes from pending to verified.
 | Thank-you and receipt/email truth | 3 | verified local | `python scripts/verify/thank_you_payment_state_contract.py` PASS; `python scripts/verify/payment_cascade_contract.py` PASS; `python scripts/verify/simple_purchasable_payment_cascade_contract.py` PASS. |
 | Public API and permission bypass inventory | 4 | verified local | `python scripts/verify/allow_guest_surface_inventory.py` PASS with 11 guest endpoints and 3 public write endpoints; `python scripts/verify/ignore_permissions_justification_lint.py` PASS with 150 bypasses scanned / 0 requiring attention after explicit guard comments were added to existing bypass sites. |
 | Docs parity | 5 | verified local | This workstream, `locally-twisted-queue.md`, and `CODING-HANDOFF.md` name the same local-only posture and blockers. |
+
+Final local umbrella: `npm run test:ecommerce-full` passed after the
+source-price mount, same-day import-readiness evidence refresh, and
+permission-bypass guard comments.
 
 Release wording rule: until every required row is verified or explicitly
 accepted as blocked, agents must say "local ecommerce safety guard active" or

@@ -30,7 +30,11 @@ production `ignore_permissions=True` uses, `ignore_permissions_justification_lin
 now passes with 150 bypasses scanned / 0 requiring attention, and
 `allow_guest_surface_inventory.py` still passes with 11 guest endpoints / 3
 public write endpoints. Public ecommerce is still not release-ready until final
-destructive approval and target release gates are explicitly handled.
+destructive approval and target release gates are explicitly handled. Final
+local umbrella rerun after those fixes: `npm run test:ecommerce-full` passed,
+including ecommerce pause/open-testing contract, shop smoke, product prices,
+visible price display, variant media, checkout experience, checkout
+fulfillment, and checkout lead conversion.
 
 Codex domain/provider/reindex cleanup on 2026-05-19: public DNS and Cloudflare
 API confirm the current web chain is GoDaddy registrar -> Cloudflare
