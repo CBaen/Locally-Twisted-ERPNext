@@ -7,8 +7,10 @@ purchase contract:
 - Retail single-SKU products still resolve normally.
 - Ready-to-order variant item codes can be summarized for cart display, using the
   parent Website Item for display route/image and the variant Item Price.
-- Odoo-imported product variants, including complex decor variants, resolve
-  through the retail lane once the product is imported as sellable checkout.
+- Checkout tests use products whose Website Item contract is
+  simple_product|checkout.
+- Quote-first products are rejected by cart/checkout resolution with
+  customer-safe copy instead of being forced into paid checkout.
 - Variant templates are not added directly from /shop.
 - Server checkout rejects direct POST quantities above the browser cart cap
   with customer-safe failure copy.
@@ -34,17 +36,24 @@ BASE = "http://localhost:8081"
 ROOT = Path(__file__).resolve().parents[2]
 
 COMPLEX_VARIANT_TEMPLATE = "6-color-rainbow-arch"
-COMPLEX_VARIANT_ITEM = "6-color-rainbow-arch-20F"
 COMPLEX_SINGLE_SKU_ITEM = "easter-arch"
 RETAIL_VARIANT_TEMPLATE = "unicorn-bouquet"
 RETAIL_VARIANT_ITEM = "unicorn-bouquet-SMA"
-COLOR_RECIPE_TEMPLATE = "7-butterfly-column"
-COLOR_RECIPE_ITEM = "7-butterfly-column-REF"
+CHECKOUT_CONFIG_TEMPLATE = "6-graduation-stands"
+CHECKOUT_CONFIG_ITEM = "6-graduation-stands-CON-BYU"
+QUOTE_FIRST_TEMPLATE = "7-butterfly-column"
+QUOTE_FIRST_ITEM = "7-butterfly-column-REF"
 SINGLE_SKU_ITEM = "mothers-day-bouquet"
-PRICE_LIST = "Standard Selling"
 MAX_QTY_PER_LINE = 99
 CONFIG_VERSION = "lt-product-config-v1"
 FOIL_NUMBER_ADD_ON_ITEM = "ADDON-FOIL-NUMBER"
+QUOTE_FIRST_CART_COPY = (
+    "Tiny snag: this design needs a quote before checkout so details, timing, and pricing stay together."
+)
+QUOTE_FIRST_CHECKOUT_COPY = (
+    "Tiny snag: this design needs a quote before checkout. "
+    "Please send it through the inquiry form so we keep the details together."
+)
 
 
 class ContractFail(Exception):
@@ -122,10 +131,37 @@ def by_item_code(items: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
     return {item["item_code"]: item for item in items}
 
 
+def check_backend_product_classification_examples() -> None:
+    rows = bench_execute(
+        "frappe.client.get_list",
+        kwargs={
+            "doctype": "Website Item",
+            "filters": {"item_code": ["in", [CHECKOUT_CONFIG_TEMPLATE, QUOTE_FIRST_TEMPLATE]]},
+            "fields": ["item_code", "lt_product_page_type", "lt_commerce_lane", "published"],
+            "limit_page_length": 2,
+        },
+    )
+    by_code = {row.get("item_code"): row for row in rows or []}
+    checkout = by_code.get(CHECKOUT_CONFIG_TEMPLATE)
+    quote_first = by_code.get(QUOTE_FIRST_TEMPLATE)
+
+    assert_true(checkout is not None, f"missing Website Item for {CHECKOUT_CONFIG_TEMPLATE}")
+    assert_true(quote_first is not None, f"missing Website Item for {QUOTE_FIRST_TEMPLATE}")
+    assert_true(
+        checkout.get("lt_product_page_type") == "simple_product" and checkout.get("lt_commerce_lane") == "checkout",
+        f"{CHECKOUT_CONFIG_TEMPLATE} should be simple_product|checkout, found {checkout}",
+    )
+    assert_true(
+        quote_first.get("lt_product_page_type") == "complex_custom_product"
+        and quote_first.get("lt_commerce_lane") == "quote_first",
+        f"{QUOTE_FIRST_TEMPLATE} should be complex_custom_product|quote_first, found {quote_first}",
+    )
+
+
 def check_cart_api_routes_sellable_odoo_products() -> None:
     data = bench_execute(
         "locally_twisted.api.cart.get_cart_items",
-        kwargs={"item_codes": [RETAIL_VARIANT_ITEM, COMPLEX_VARIANT_ITEM, SINGLE_SKU_ITEM, COMPLEX_VARIANT_TEMPLATE]},
+        kwargs={"item_codes": [RETAIL_VARIANT_ITEM, CHECKOUT_CONFIG_ITEM, SINGLE_SKU_ITEM, COMPLEX_VARIANT_TEMPLATE]},
     )
 
     items = by_item_code(data.get("items") or [])
@@ -138,8 +174,8 @@ def check_cart_api_routes_sellable_odoo_products() -> None:
         f"{COMPLEX_VARIANT_TEMPLATE} should not resolve as a directly purchasable template",
     )
     assert_true(
-        COMPLEX_VARIANT_ITEM in items,
-        f"{COMPLEX_VARIANT_ITEM} should resolve as a sellable Odoo product variant, missing reason {missing.get(COMPLEX_VARIANT_ITEM)!r}",
+        CHECKOUT_CONFIG_ITEM in items,
+        f"{CHECKOUT_CONFIG_ITEM} should resolve as a sellable checkout product variant, missing reason {missing.get(CHECKOUT_CONFIG_ITEM)!r}",
     )
 
     single = items[SINGLE_SKU_ITEM]
@@ -162,10 +198,10 @@ def check_cart_api_routes_sellable_odoo_products() -> None:
         f"{RETAIL_VARIANT_ITEM} should be marked retail_checkout, found {variant.get('checkout_lane')!r}",
     )
 
-    complex_variant = items[COMPLEX_VARIANT_ITEM]
+    complex_variant = items[CHECKOUT_CONFIG_ITEM]
     assert_true(
         complex_variant.get("checkout_lane") == "retail_checkout",
-        f"{COMPLEX_VARIANT_ITEM} should be marked retail_checkout, found {complex_variant.get('checkout_lane')!r}",
+        f"{CHECKOUT_CONFIG_ITEM} should be marked retail_checkout, found {complex_variant.get('checkout_lane')!r}",
     )
 
 
@@ -252,11 +288,34 @@ def _review_only_add_on_configuration() -> dict[str, Any]:
     }
 
 
-def _color_recipe_configuration() -> dict[str, Any]:
+def _checkout_configured_variant_configuration() -> dict[str, Any]:
+    line = bench_execute(
+        "locally_twisted.api.cart.resolve_cart_item_for_sale",
+        kwargs={"item_code": CHECKOUT_CONFIG_ITEM},
+    )
+    selected_options = {
+        str(row.get("attribute")): str(row.get("attribute_value"))
+        for row in line.get("variant_options") or []
+        if row.get("attribute") and row.get("attribute_value")
+    }
     return {
         "schema_version": CONFIG_VERSION,
-        "item_code": COLOR_RECIPE_ITEM,
-        "website_item_code": COLOR_RECIPE_TEMPLATE,
+        "item_code": CHECKOUT_CONFIG_ITEM,
+        "website_item_code": CHECKOUT_CONFIG_TEMPLATE,
+        "selected_options": selected_options,
+        "color_recipes": [],
+        "add_ons": [],
+        "customizations": [],
+    }
+
+
+def _quote_first_stale_checkout_configuration() -> dict[str, Any]:
+    return {
+        "schema_version": CONFIG_VERSION,
+        "item_code": QUOTE_FIRST_ITEM,
+        "website_item_code": QUOTE_FIRST_TEMPLATE,
+        "product_page_type": "simple_product",
+        "commerce_lane": "checkout",
         "selected_options": {},
         "color_recipes": [
             {
@@ -356,10 +415,10 @@ def check_cart_line_key_matches_browser_unicode_serialization() -> None:
     )
 
 
-def check_cart_api_echoes_browser_line_key_for_color_recipes() -> None:
-    configuration = _color_recipe_configuration()
+def check_cart_api_echoes_browser_line_key_for_checkout_configuration() -> None:
+    configuration = _checkout_configured_variant_configuration()
     browser_line_key = (
-        f"{COLOR_RECIPE_ITEM}::"
+        f"{CHECKOUT_CONFIG_ITEM}::"
         + json.dumps(configuration, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
     )
     data = bench_execute(
@@ -367,7 +426,7 @@ def check_cart_api_echoes_browser_line_key_for_color_recipes() -> None:
         kwargs={
             "item_codes": [
                 {
-                    "item_code": COLOR_RECIPE_ITEM,
+                    "item_code": CHECKOUT_CONFIG_ITEM,
                     "qty": 1,
                     "configuration": configuration,
                     "line_key": browser_line_key,
@@ -376,41 +435,49 @@ def check_cart_api_echoes_browser_line_key_for_color_recipes() -> None:
         },
     )
     items = data.get("items") or []
-    assert_true(len(items) == 1, f"color recipe cart row should return 1 row, found {items}")
+    assert_true(len(items) == 1, f"checkout configured cart row should return 1 row, found {items}")
     assert_true(
         items[0].get("cart_line_key") == browser_line_key,
-        "cart API must echo the browser line key so enriched color recipes still render on /cart",
+        "cart API must echo the browser line key so configured checkout products still render on /cart",
     )
-    color_recipes = (items[0].get("configuration") or {}).get("color_recipes") or []
-    assert_true(color_recipes, f"server should retain color recipe evidence, found {items[0]}")
     assert_true(
-        color_recipes[0].get("status") == "validated_for_checkout",
-        f"server should still validate/enrich color recipes, found {color_recipes[0]}",
+        items[0].get("product_commerce_lane") == "checkout",
+        f"{CHECKOUT_CONFIG_ITEM} should resolve through checkout, found {items[0]}",
+    )
+    assert_true(
+        (items[0].get("configuration") or {}).get("selected_options") == configuration["selected_options"],
+        f"server should retain checkout selected options, found {items[0]}",
     )
 
 
-def check_color_recipe_must_include_resolved_variant_color() -> None:
-    mismatched_configuration = _color_recipe_configuration()
-    mismatched_configuration["color_recipes"] = [
-        {
-            "axis": "latex colors",
-            "label": "latex colors",
-            "values": ["White"],
-        }
-    ]
-    expected = "saved color recipe no longer matches this item"
+def check_quote_first_product_rejected_by_cart_and_checkout_resolution() -> None:
+    data = bench_execute(
+        "locally_twisted.api.cart.get_cart_items",
+        kwargs={"item_codes": [QUOTE_FIRST_ITEM]},
+    )
+    assert_true(data.get("items") == [], f"{QUOTE_FIRST_ITEM} should not return cartable items, found {data}")
+    missing = by_item_code(data.get("missing") or [])
+    assert_true(
+        missing.get(QUOTE_FIRST_ITEM, {}).get("reason") == "quote_required",
+        f"{QUOTE_FIRST_ITEM} should be blocked as quote_required, found {data}",
+    )
+    bench_execute_expect_error(
+        "locally_twisted.api.cart.resolve_cart_item_for_sale",
+        kwargs={"item_code": QUOTE_FIRST_ITEM},
+        expected=QUOTE_FIRST_CART_COPY,
+    )
     bench_execute_expect_error(
         "locally_twisted.www.checkout._resolve_sale_lines",
         kwargs={
             "cart_items": [
                 {
-                    "item_code": COLOR_RECIPE_ITEM,
+                    "item_code": QUOTE_FIRST_ITEM,
                     "qty": 1,
-                    "configuration": mismatched_configuration,
+                    "configuration": _quote_first_stale_checkout_configuration(),
                 }
             ]
         },
-        expected=expected,
+        expected=QUOTE_FIRST_CHECKOUT_COPY,
     )
 
 
@@ -563,13 +630,14 @@ def check_shop_cards_keep_priced_products_cartable_and_do_not_add_templates() ->
 def main() -> int:
     parse_noop_args(__doc__)
     checks = [
+        check_backend_product_classification_examples,
         check_cart_api_routes_sellable_odoo_products,
         check_checkout_resolver_accepts_retail_variant,
         check_configured_same_sku_cart_lines_stay_separate_and_visible,
         check_multi_digit_add_on_quantity_and_total_are_visible,
         check_cart_line_key_matches_browser_unicode_serialization,
-        check_cart_api_echoes_browser_line_key_for_color_recipes,
-        check_color_recipe_must_include_resolved_variant_color,
+        check_cart_api_echoes_browser_line_key_for_checkout_configuration,
+        check_quote_first_product_rejected_by_cart_and_checkout_resolution,
         check_cart_and_checkout_templates_fail_loud_on_line_key_mismatch,
         check_product_page_color_selector_uses_recipe_schema,
         check_source_mapper_has_no_product_slug_checkout_override,

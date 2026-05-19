@@ -135,7 +135,8 @@ def build_report() -> dict[str, Any]:
         "generated_at": datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
         "read_only": True,
         "current_product_records_are_fixture_evidence_only": True,
-        "destructive_import_allowed": False if blockers else True,
+        "destructive_import_allowed": False,
+        "destructive_import_status": _destructive_import_status(blockers),
         "corrected_v1_manifest": _manifest_summary(manifest),
         "summary": {
             "pass": sum(1 for row in rows if row.status == "pass"),
@@ -472,6 +473,19 @@ def _backup_required_row() -> GateRow:
     artifact = _optional_json(GUARD_PATHS_JSON)
     if artifact and artifact.get("guard_verification", {}).get("ok"):
         backup = artifact.get("backup_path")
+        backup_date = _backup_path_date(str(backup or ""))
+        if backup_date != date.today():
+            return GateRow(
+                "fresh_backup_required",
+                "blocker",
+                "A backup path is recorded, but it is not current for today's destructive-readiness packet.",
+                blocker=(
+                    f"Recorded backup path is {backup or '<missing>'}; "
+                    f"parsed backup date is {backup_date.isoformat() if backup_date else '<unknown>'}; "
+                    f"today is {date.today().isoformat()}."
+                ),
+                next_action="Run a fresh local backup after source freeze and record the guarded path before destructive import is reconsidered.",
+            )
         return GateRow(
             "fresh_backup_required",
             "pass",
@@ -533,6 +547,19 @@ def _import_runner_guard_row() -> GateRow:
 def _final_destructive_approval_row() -> GateRow:
     approval = _optional_json(FINAL_APPROVAL_JSON) or {}
     if approval.get("approved") is True and approval.get("scope") == "local_erpnext_container_site_frontend":
+        approved_at = str(approval.get("approved_at") or "")
+        approved_date = _iso_date(approved_at)
+        if approved_date != date.today():
+            return GateRow(
+                "final_destructive_approval",
+                "blocker",
+                "Prior destructive approval exists, but it is not current for today's source/snapshot/backup packet.",
+                blocker=(
+                    f"Recorded approval is dated {approved_at or '<missing>'}; "
+                    f"today is {date.today().isoformat()}. Destructive import remains blocked/manual/local-only."
+                ),
+                next_action="Renew explicit approval only after the fresh snapshot, backup, dry-run proof, and redacted command packet are reviewed.",
+            )
         return GateRow(
             "final_destructive_approval",
             "pass",
@@ -550,6 +577,26 @@ def _final_destructive_approval_row() -> GateRow:
     )
 
 
+def _iso_date(value: str) -> date | None:
+    if not value:
+        return None
+    try:
+        return datetime.fromisoformat(value.replace("Z", "+00:00")).date()
+    except ValueError:
+        return None
+
+
+def _backup_path_date(value: str) -> date | None:
+    filename = Path(value).name
+    token = filename[:8]
+    if len(token) != 8 or not token.isdigit():
+        return None
+    try:
+        return datetime.strptime(token, "%Y%m%d").date()
+    except ValueError:
+        return None
+
+
 def _rollback_plan() -> list[str]:
     return [
         "Freeze source and commit/review the exact import code before staging.",
@@ -557,7 +604,7 @@ def _rollback_plan() -> list[str]:
         "Create a fresh catalog state snapshot of Website Item, Item, Item Price, Item Variant Attribute, Item Attribute, Item Group, and File rows.",
         "Run `python scripts/verify/catalog_purge_scope_dry_run.py` and review the exact protected service item codes and product item codes.",
         "Run the import runner in dry-run mode and archive the report.",
-        "Only after approval, run the destructive/import mode on staging first.",
+        "Only after renewed explicit approval, assemble any destructive command manually for local-only rehearsal; staging/live remain out of scope unless separately approved.",
         "After import, rerun catalog shape, price, media, cart/checkout, and product-import readiness gates.",
         "Rollback path is restore DB/files backup or restore from the fresh snapshot plus rerun the previous known-good fixture/import seed.",
     ]
@@ -584,31 +631,33 @@ def _verifier_commands() -> list[str]:
     ]
 
 
+def _destructive_import_status(blockers: list[GateRow]) -> dict[str, Any]:
+    return {
+        "allowed_by_this_read_only_gate": False,
+        "status": "blocked_manual_local_only",
+        "reason": (
+            "This verifier is read-only and never authorizes a destructive import command. "
+            "A destructive import remains manual, local-only, and blocked until all gate rows pass, "
+            "a fresh same-day snapshot and backup are recorded, dry-run proof is reviewed, "
+            "and the exact command receives explicit approval outside this report."
+        ),
+        "active_blockers": [row.id for row in blockers],
+    }
+
+
 def _local_only_command_packet() -> list[str]:
-    snapshots_by_modified_time = sorted(
-        AUDIT_ROOT.glob("current-state-snapshot-*"),
-        key=lambda path: path.stat().st_mtime,
-    )
-    snapshot_path = _snapshot_display_path(snapshots_by_modified_time)
-    purge_report = str(PURGE_DRY_RUN_JSON.relative_to(ROOT))
-    guard = _optional_json(GUARD_PATHS_JSON) or {}
-    backup_path = guard.get("backup_path") or "<backup-from-bench-backup>"
-    guard_paths = guard.get("container_visible_paths") or {}
-    container_snapshot = guard_paths.get("snapshot_path") or f"<container-visible copy of {snapshot_path}>"
-    container_purge = guard_paths.get("purge_scope_report") or f"<container-visible copy of {purge_report}>"
-    approved = (_optional_json(FINAL_APPROVAL_JSON) or {}).get("approved") is True
-    destructive_prefix = "" if approved else "BLOCKED UNTIL FINAL EXPLICIT APPROVAL: "
     return [
-        "python scripts/setup/stage_seed_data.py",
-        "docker exec locally-twisted-erpnext-v15-backend-1 bash -lc \"cd /home/frappe/frappe-bench && bench --site frontend backup --with-files\"",
-        "docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.seed_catalog.execute --kwargs \"{'dry_run': True, 'v1_subset_only': True}\"",
+        "LOCAL-ONLY / NON-DESTRUCTIVE: python scripts/setup/stage_seed_data.py",
+        "LOCAL-ONLY / MANUAL BACKUP REQUIRED: docker exec locally-twisted-erpnext-v15-backend-1 bash -lc \"cd /home/frappe/frappe-bench && bench --site frontend backup --with-files\"",
+        "LOCAL-ONLY / DRY-RUN ONLY: docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.seed_catalog.execute --kwargs \"{'dry_run': True, 'v1_subset_only': True}\"",
         (
-            f"{destructive_prefix}docker exec locally-twisted-erpnext-v15-backend-1 "
-            "bench --site frontend execute locally_twisted.seed.seed_catalog.execute --kwargs "
-            "\"{'dry_run': False, 'destructive': True, 'v1_subset_only': True, "
-            f"'backup_path': '{backup_path}', "
-            f"'snapshot_path': '{container_snapshot}', "
-            f"'purge_scope_report': '{container_purge}'}}\""
+            "BLOCKED / MANUAL / LOCAL-ONLY / DESTRUCTIVE COMMAND REDACTED: "
+            "seed_catalog destructive import is intentionally not emitted by this read-only readiness gate. "
+            "Required guarded inputs are not printed here: "
+            "backup_path=<fresh local backup path>; "
+            "snapshot_path=<fresh container-visible current-state snapshot>; "
+            "purge_scope_report=<reviewed container-visible purge scope JSON>. "
+            "Write-mode flags remain blocked until final explicit approval is renewed for the fresh snapshot/backup/dry-run packet."
         ),
     ]
 
@@ -677,6 +726,7 @@ def _print_summary(report: dict[str, Any]) -> None:
     print(f"  scope: {report['scope']}")
     print(f"  read_only: {report['read_only']}")
     print(f"  destructive_import_allowed: {report['destructive_import_allowed']}")
+    print(f"  destructive_import_status: {report['destructive_import_status']['status']}")
     print(
         "  summary: "
         f"{report['summary']['pass']} pass, "

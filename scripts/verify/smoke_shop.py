@@ -69,6 +69,7 @@ EXPECTED_CATEGORIES = [
 QUOTE_FIRST_PRODUCT_URLS = [
     (f"{BASE}/shop-items/garlands/baby-shower-garland", "Baby Shower Garland", "baby-shower-garland"),
     (f"{BASE}/shop-items/arches/classic-arch", "Classic Arch", "classic-arch"),
+    (f"{BASE}/shop-items/columns/7-butterfly-column", "7' Butterfly Column", "7-butterfly-column"),
 ]
 PRODUCT_VARIANT_URL = f"{BASE}/shop-items/bouquets/unicorn-bouquet"
 PRODUCT_VARIANT_EXPECTED_ATTRS = ["Bouquet Size"]
@@ -361,10 +362,6 @@ def check_homepage(page):
             "Product mega menu must expose backend-approved Balloon Cups",
         )
         assert_(
-            page.locator("#lt-mega-products a[href='/shop-items/columns/7-butterfly-column']").count() >= 1,
-            "Product mega menu must expose 7' Butterfly Column unless backend proves a blocker",
-        )
-        assert_(
             page.locator("#lt-mega-products a[href='/shop-items/stands-easels/6-graduation-stands']").count() >= 1,
             "Product mega menu must expose 6' Graduation stands unless backend proves a blocker",
         )
@@ -373,6 +370,7 @@ def check_homepage(page):
             "Product mega menu must expose Graduation Grab n Go unless backend proves a blocker",
         )
         for excluded_href in (
+            "/shop-items/columns/7-butterfly-column",
             "/shop-items/arches/classic-arch",
             "/shop-items/columns/classic-column",
             "/shop-items/arches/classic-organic-arch",
@@ -381,7 +379,7 @@ def check_homepage(page):
         ):
             assert_(
                 page.locator(f"#lt-mega-products a[href='{excluded_href}']").count() == 0,
-                f"Product mega menu must not expose owner-excluded {excluded_href}",
+                f"Product mega menu must not expose quote-first or owner-excluded {excluded_href}",
             )
         assert_(
             page.locator("#lt-mega-products a[href='/shop-items/arches']").count() == 0,

@@ -12,6 +12,7 @@ land in browser history.
 """
 import frappe
 from frappe import _
+from frappe.utils import flt
 
 from locally_twisted.product_page_runtime import customer_facing_line_label
 
@@ -200,26 +201,34 @@ def get_context(context):
 
     context.title = "Thank you! | Locally Twisted"
     context.metatags = {
-        "description": "Order confirmation. Locally Twisted thanks you for your purchase.",
+        "description": "Payment status check for a Locally Twisted order.",
         "robots": "noindex, nofollow",
     }
     context.colocated_css = PAGE_CSS
-    context.thank_you_eyebrow = "Payment Received"
     reconciliation_pending = (
         (frappe.form_dict.get("reconciliation") or "").strip().lower() == "pending"
     )
-    payment_check_needed = status == "payment-check" or not so_name
-    context.reconciliation_pending = reconciliation_pending or payment_check_needed
+    payment_state = _payment_state_for_sales_order(so_name) if so_name else _payment_check_state()
+    if status == "payment-check":
+        payment_state = _payment_check_state()
+    payment_check_needed = status == "payment-check" or not so_name or payment_state["state"] == "payment_check"
+    context.thank_you_eyebrow = payment_state["eyebrow"]
+    context.thank_you_lede = payment_state["lede"]
+    context.reconciliation_notice = payment_state["notice"]
+    context.reconciliation_pending = (
+        reconciliation_pending
+        or payment_check_needed
+        or payment_state["state"] == "reconciliation_needed"
+    )
 
     if payment_check_needed:
-        context.thank_you_eyebrow = "Payment Check"
-        context.thank_you_lede = (
-            "Tiny snag: we could not confirm this payment return in the browser."
-        )
-        context.reconciliation_notice = (
-            "If you saw a card charge, please call (801) 285-0860 or email "
-            "billing@locallytwisted.com so we can match it up for you."
-        )
+        if reconciliation_pending and so_name:
+            context.reconciliation_notice = (
+                "Tiny snag: this page was asked to show a payment follow-up, "
+                "but the order is not marked paid in our records yet. If you saw "
+                "a card charge, please call (801) 285-0860 or email "
+                "billing@locallytwisted.com so we can match it up for you."
+            )
     elif reconciliation_pending:
         context.thank_you_lede = (
             "Your payment came through. We have your order, and the final receipt "
@@ -238,7 +247,7 @@ def get_context(context):
 
     context.so = None
     context.line_items = []
-    if so_name:
+    if so_name and not payment_check_needed:
         # Use ignore_permissions for read since the customer (a guest) has no
         # User session that maps to the Customer record. We only expose
         # public-safe fields (order id, items, total). No address, no email.
@@ -263,3 +272,129 @@ def get_context(context):
             pass
 
     return context
+
+
+def _payment_check_state():
+    return {
+        "state": "payment_check",
+        "eyebrow": "Payment Check",
+        "lede": "Tiny snag: we could not confirm this payment return in the browser.",
+        "notice": (
+            "If you saw a card charge, please call (801) 285-0860 or email "
+            "billing@locallytwisted.com so we can match it up for you."
+        ),
+    }
+
+
+def _payment_state_for_sales_order(so_name):
+    if not frappe.db.exists("Sales Order", so_name):
+        return _payment_check_state()
+
+    so = frappe.db.get_value(
+        "Sales Order",
+        so_name,
+        ["name", "grand_total", "currency"],
+        as_dict=True,
+    )
+    paid_payment_request = _paid_payment_request_for_sales_order(so)
+    invoice_state = _invoice_state_for_sales_order(so)
+
+    if paid_payment_request and invoice_state.get("state") == "paid":
+        return _paid_state()
+
+    if paid_payment_request:
+        return {
+            "state": "reconciliation_needed",
+            "eyebrow": "Payment Received",
+            "lede": (
+                "Your payment came through. We have your order, and the final receipt "
+                "or invoice check is still finishing in the background."
+            ),
+            "notice": (
+                "Tiny snag: the final receipt or invoice details are still being checked. "
+                "The team has an internal record to follow up."
+            ),
+        }
+
+    if invoice_state.get("state") == "paid":
+        return _paid_state()
+
+    return {
+        "state": "payment_check",
+        "eyebrow": "Payment Check",
+        "lede": "We need to check this payment before we call the order confirmed.",
+        "notice": (
+            "If you just paid or saw a card charge, please call (801) 285-0860 or email "
+            "billing@locallytwisted.com so we can match it up for you."
+        ),
+    }
+
+
+def _paid_state():
+    return {
+        "state": "paid",
+        "eyebrow": "Payment Received",
+        "lede": (
+            "Your payment came through. We have your order and will send a confirmation "
+            "receipt to the email you gave us."
+        ),
+        "notice": "",
+    }
+
+
+def _paid_payment_request_for_sales_order(so):
+    rows = frappe.get_all(
+        "Payment Request",
+        filters={
+            "reference_doctype": "Sales Order",
+            "reference_name": so.name,
+            "status": "Paid",
+        },
+        fields=["name", "grand_total", "currency", "outstanding_amount"],
+        limit_page_length=20,
+    )
+    expected_cents = _money_to_cents(so.grand_total)
+    expected_currency = (so.currency or "USD").upper()
+    for row in rows:
+        if (row.get("currency") or "USD").upper() != expected_currency:
+            continue
+        if _money_to_cents(row.get("grand_total")) != expected_cents:
+            continue
+        if flt(row.get("outstanding_amount")) > 0.01:
+            continue
+        return row
+    return None
+
+
+def _invoice_state_for_sales_order(so):
+    rows = frappe.get_all(
+        "Sales Invoice Item",
+        filters={"sales_order": so.name, "docstatus": 1},
+        fields=["parent"],
+        limit_page_length=20,
+    )
+    if not rows:
+        return {"state": "missing"}
+
+    expected_cents = _money_to_cents(so.grand_total)
+    expected_currency = (so.currency or "USD").upper()
+    for row in rows:
+        invoice = frappe.db.get_value(
+            "Sales Invoice",
+            row["parent"],
+            ["grand_total", "currency", "outstanding_amount", "status"],
+            as_dict=True,
+        )
+        if not invoice:
+            continue
+        if (invoice.get("currency") or "USD").upper() != expected_currency:
+            continue
+        if _money_to_cents(invoice.get("grand_total")) != expected_cents:
+            continue
+        if flt(invoice.get("outstanding_amount")) <= 0.01 or invoice.get("status") == "Paid":
+            return {"state": "paid", "invoice": row["parent"]}
+    return {"state": "unpaid"}
+
+
+def _money_to_cents(value):
+    return int(round(flt(value) * 100))

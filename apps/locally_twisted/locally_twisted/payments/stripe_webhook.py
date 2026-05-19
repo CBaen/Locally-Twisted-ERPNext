@@ -98,11 +98,16 @@ def stripe_webhook():
         return {"error": "missing payment_request metadata"}
 
     try:
-        from locally_twisted.www.payment_success import reconcile_paid_sales_order
+        from locally_twisted.www.payment_success import (
+            reconcile_paid_sales_order,
+            verify_paid_stripe_session,
+        )
+
+        verified = verify_paid_stripe_session(session, source="stripe_webhook")
 
         result = reconcile_paid_sales_order(
-            so_name,
-            payment_request=pr_name,
+            verified["sales_order"],
+            payment_request=verified["payment_request"],
             source="stripe_webhook",
             raise_on_error=True,
         )

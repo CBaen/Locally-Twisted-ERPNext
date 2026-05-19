@@ -57,6 +57,24 @@ staging-to-live gates to decide what can safely go live. Current
 visible/imported product records are fixture/test products for architecture
 proof only; Locally Twisted itself is a real client project.
 
+**P0 ecommerce safety guard and release receipt matrix (2026-05-19):** Active
+coordination source is
+`workstreams/ecommerce-system-safety-guard-plan-2026-05-19.md`. This is
+local-only, no live/staging deploy, no destructive catalog import, no Stripe
+live payment, no secrets, and backend-first. Five GPT-5.5 worker lanes were
+integrated locally. Passed receipts now cover backend product classification,
+shop smoke, cart/checkout identity, visible price display, variant media,
+checkout browser experience, payment amount/state, webhook/browser-return
+reconciliation, payment cascade, checkout fulfillment, checkout lead conversion,
+simple purchasable payment cascade, thank-you payment-state source guard, and
+guest endpoint inventory. Remaining blockers before release language changes:
+source-price modifier proof is blocked until `_resources/odoo-live` is
+container-visible; import readiness is blocked on same-day snapshot, backup, and
+explicit destructive approval; permission-bypass lint flags 32 existing
+production `ignore_permissions=True` calls that need guard/justification review.
+Do not describe checkout/payment/catalog/public ecommerce as release-ready until
+those blockers are cleared or explicitly accepted for the target release.
+
 **Shop smoke gate (2026-05-11):** `d52c6888` cleared the
 `/civic-community missing focused page title` blocker by rebaselining the
 audience-page H1 expectations in `scripts/verify/smoke_shop.py` to match the

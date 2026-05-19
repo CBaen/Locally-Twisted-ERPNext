@@ -113,21 +113,20 @@ def _handle_stripe_session(session_id):
     if (session.get("payment_status") or "").lower() != "paid":
         _redirect(PAYMENT_CHECK_ROUTE)
 
-    sales_order = (
-        session.get("client_reference_id")
-        or (session.get("metadata") or {}).get("sales_order")
-    )
-    if not sales_order:
+    try:
+        verified = verify_paid_stripe_session(session, source="payment_success")
+    except Exception:
+        frappe.log_error(frappe.get_traceback(), "Stripe session ERPNext verification failed")
         _redirect(PAYMENT_CHECK_ROUTE)
 
     result = reconcile_paid_sales_order(
-        sales_order,
-        payment_request=(session.get("metadata") or {}).get("payment_request"),
+        verified["sales_order"],
+        payment_request=verified["payment_request"],
         source="payment_success",
         raise_on_error=False,
     )
 
-    query = {"order": sales_order}
+    query = {"order": verified["sales_order"]}
     if not result.get("ok"):
         query["reconciliation"] = "pending"
     _redirect(f"/thank-you?{urlencode(query)}")
@@ -135,6 +134,44 @@ def _handle_stripe_session(session_id):
 
 class PaidOrderReconciliationError(Exception):
     """Raised when the paid-order cascade fails in a retryable path."""
+
+
+class StripePaymentVerificationError(Exception):
+    """Raised when a paid Stripe event does not match ERPNext payment records."""
+
+
+def verify_paid_stripe_session(session, *, source="stripe"):
+    """Verify a paid Checkout Session against the ERPNext order and PR."""
+    metadata = session.get("metadata") or {}
+    if (session.get("payment_status") or "").lower() != "paid":
+        raise StripePaymentVerificationError("Stripe session is not paid")
+
+    sales_order = session.get("client_reference_id") or metadata.get("sales_order")
+    metadata_sales_order = metadata.get("sales_order")
+    payment_request = metadata.get("payment_request")
+    origin = metadata.get("lt_origin")
+
+    if not sales_order:
+        raise StripePaymentVerificationError("Stripe session missing Sales Order reference")
+    if metadata_sales_order and metadata_sales_order != sales_order:
+        raise StripePaymentVerificationError(
+            f"Stripe metadata sales_order {metadata_sales_order} does not match client_reference_id {sales_order}"
+        )
+    if origin and origin != "guest_checkout":
+        raise StripePaymentVerificationError(f"Stripe session origin {origin!r} is not guest_checkout")
+    if not payment_request:
+        raise StripePaymentVerificationError("Stripe session missing payment_request metadata")
+
+    _verify_payment_request_matches_sales_order(payment_request, sales_order)
+    _verify_stripe_amount_and_currency(session, sales_order)
+    expected_cents = _sales_order_total_cents(sales_order)
+    metadata_expected_cents = metadata.get("amount_expected_cents")
+    if metadata_expected_cents and int(metadata_expected_cents) != expected_cents:
+        raise StripePaymentVerificationError(
+            f"Stripe metadata amount_expected_cents {metadata_expected_cents} does not match Sales Order {sales_order} total {expected_cents}"
+        )
+
+    return {"sales_order": sales_order, "payment_request": payment_request, "source": source}
 
 
 def reconcile_paid_sales_order(
@@ -163,11 +200,25 @@ def reconcile_paid_sales_order(
             errors.append(message)
             return None
 
-    if payment_request:
-        run("marking Payment Request paid", _mark_payment_request_paid, payment_request)
-
     if not so_name and payment_request:
         so_name = frappe.db.get_value("Payment Request", payment_request, "reference_name")
+
+    if payment_request:
+        try:
+            so_name = _verify_payment_request_matches_sales_order(payment_request, so_name)
+        except Exception as exc:
+            message = f"{source}: Payment Request does not match Sales Order"
+            frappe.log_error(frappe.get_traceback(), message)
+            errors.append(f"{message}: {exc}")
+            if raise_on_error:
+                raise PaidOrderReconciliationError("; ".join(errors))
+            return {
+                "ok": False,
+                "sales_order": so_name,
+                "payment_request": payment_request,
+                "errors": errors,
+            }
+        run("marking Payment Request paid", _mark_payment_request_paid, payment_request)
 
     if not so_name:
         errors.append(f"{source}: missing Sales Order for paid-order cascade")
@@ -187,6 +238,83 @@ def reconcile_paid_sales_order(
         "payment_request": payment_request,
         "errors": errors,
     }
+
+
+def _verify_payment_request_matches_sales_order(payment_request, so_name=None):
+    if not frappe.db.exists("Payment Request", payment_request):
+        raise ValueError(f"Payment Request not found: {payment_request}")
+
+    pr = frappe.db.get_value(
+        "Payment Request",
+        payment_request,
+        [
+            "reference_doctype",
+            "reference_name",
+            "grand_total",
+            "currency",
+            "outstanding_amount",
+        ],
+        as_dict=True,
+    )
+    if pr.reference_doctype != "Sales Order":
+        raise ValueError(
+            f"Payment Request {payment_request} references {pr.reference_doctype}, expected Sales Order"
+        )
+    resolved_so = so_name or pr.reference_name
+    if not resolved_so:
+        raise ValueError(f"Payment Request {payment_request} has no Sales Order reference")
+    if pr.reference_name != resolved_so:
+        raise ValueError(
+            f"Payment Request {payment_request} references {pr.reference_name}, not {resolved_so}"
+        )
+    if not frappe.db.exists("Sales Order", resolved_so):
+        raise ValueError(f"Sales Order not found: {resolved_so}")
+
+    so = frappe.db.get_value(
+        "Sales Order",
+        resolved_so,
+        ["grand_total", "currency"],
+        as_dict=True,
+    )
+    if (pr.currency or "USD").upper() != (so.currency or "USD").upper():
+        raise ValueError(
+            f"Payment Request {payment_request} currency {pr.currency} does not match Sales Order {resolved_so} currency {so.currency}"
+        )
+    if _money_to_cents(pr.grand_total) != _money_to_cents(so.grand_total):
+        raise ValueError(
+            f"Payment Request {payment_request} total {pr.grand_total} does not match Sales Order {resolved_so} total {so.grand_total}"
+        )
+    return resolved_so
+
+
+def _verify_stripe_amount_and_currency(session, sales_order):
+    amount_total = session.get("amount_total")
+    currency = session.get("currency")
+    if amount_total is None and not currency:
+        return
+
+    expected_cents = _sales_order_total_cents(sales_order)
+    expected_currency = _sales_order_currency(sales_order).lower()
+    if amount_total is not None and int(amount_total) != expected_cents:
+        raise StripePaymentVerificationError(
+            f"Stripe amount_total {amount_total} does not match Sales Order {sales_order} total {expected_cents}"
+        )
+    if currency and str(currency).lower() != expected_currency:
+        raise StripePaymentVerificationError(
+            f"Stripe currency {currency} does not match Sales Order {sales_order} currency {expected_currency}"
+        )
+
+
+def _sales_order_total_cents(sales_order):
+    return _money_to_cents(frappe.db.get_value("Sales Order", sales_order, "grand_total"))
+
+
+def _sales_order_currency(sales_order):
+    return frappe.db.get_value("Sales Order", sales_order, "currency") or "USD"
+
+
+def _money_to_cents(value):
+    return int(round(flt(value) * 100))
 
 
 def _convert_checkout_leads_after_payment(so_name):

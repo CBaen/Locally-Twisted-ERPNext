@@ -1,5 +1,30 @@
 # Locally Twisted - Coding Handoff
 
+Codex ecommerce safety guard closeout on 2026-05-19: the P0 coordination source
+is `workstreams/ecommerce-system-safety-guard-plan-2026-05-19.md`, with the
+active queue item in `locally-twisted-queue.md`. Five GPT-5.5 worker lanes were
+used and integrated locally. No staging/live deploy, Frappe Cloud update, DNS
+mutation, Stripe live payment, destructive catalog import, or secret access was
+performed. Verified local passes: syntax for touched Python files,
+`website_item_classification_contract.py`, `npm run test:shop-smoke`,
+`cart_checkout_contract.py`, `product_variant_price_contract.py`,
+`npm run test:product-price-display`, `variant_media_contract.py`,
+`stripe_amount_parity_contract.py`, `payment_success_reconciliation_contract.py`,
+`payment_webhook_contract.py`, `payment_cascade_contract.py`,
+`checkout_fulfillment_contract.py`, `checkout_lead_conversion_contract.py`,
+`simple_purchasable_payment_cascade_contract.py`,
+`npm run test:checkout-experience`, `thank_you_payment_state_contract.py`,
+`allow_guest_surface_inventory.py`, and
+`product_import_readiness_gate_contract.py`. Accepted blockers:
+`product_price_modifier_contract.py` now fails as `SOURCE DATA BLOCKED` because
+the backend container cannot see `_resources/odoo-live`, and
+`product_import_readiness_gate.py` blocks on 2026-05-17 snapshot/backup/approval
+evidence because today is 2026-05-19. Follow-up blocker:
+`ignore_permissions_justification_lint.py` intentionally fails on 32 existing
+production `ignore_permissions=True` uses that need guard/justification review.
+Public ecommerce is still not release-ready until these blockers are cleared or
+explicitly accepted for a target release.
+
 Codex domain/provider/reindex cleanup on 2026-05-19: public DNS and Cloudflare
 API confirm the current web chain is GoDaddy registrar -> Cloudflare
 authoritative DNS -> Frappe Cloud -> ERPNext/Frappe. Cloudflare zone

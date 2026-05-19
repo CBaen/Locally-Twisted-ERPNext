@@ -135,6 +135,7 @@ def _invoke_webhook(event, reconcile_calls=None):
     original_secret = frappe.conf.get("stripe_webhook_signing_secret")
     original_response = getattr(frappe.local, "response", None)
     original_reconcile = payment_success.reconcile_paid_sales_order
+    original_verify = payment_success.verify_paid_stripe_session
     original_log_error = frappe.log_error
     log_error_calls = []
 
@@ -155,6 +156,13 @@ def _invoke_webhook(event, reconcile_calls=None):
             "errors": [],
         }
 
+    def verify_paid_stripe_session(session, **kwargs):
+        metadata = session.get("metadata") or {}
+        return {
+            "sales_order": session.get("client_reference_id") or metadata.get("sales_order"),
+            "payment_request": metadata.get("payment_request"),
+        }
+
     def log_error(*args, **kwargs):
         log_error_calls.append({"args": args, "kwargs": kwargs})
 
@@ -164,6 +172,7 @@ def _invoke_webhook(event, reconcile_calls=None):
         frappe.conf.stripe_webhook_signing_secret = "whsec_probe"
         stripe.Webhook.construct_event = construct_event
         payment_success.reconcile_paid_sales_order = reconcile_paid_sales_order
+        payment_success.verify_paid_stripe_session = verify_paid_stripe_session
         frappe.log_error = log_error
 
         result = webhook_module.stripe_webhook()
@@ -175,6 +184,7 @@ def _invoke_webhook(event, reconcile_calls=None):
     finally:
         stripe.Webhook.construct_event = original_construct_event
         payment_success.reconcile_paid_sales_order = original_reconcile
+        payment_success.verify_paid_stripe_session = original_verify
         frappe.log_error = original_log_error
         if original_request is None:
             try:

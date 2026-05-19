@@ -18,7 +18,9 @@ def run() -> dict[str, object]:
     from locally_twisted.www import payment_success, thank_you
 
     original_retrieve = stripe_session.retrieve_session
+    original_verify = payment_success.verify_paid_stripe_session
     original_reconcile = payment_success.reconcile_paid_sales_order
+    original_payment_state = thank_you._payment_state_for_sales_order
     original_form_dict = getattr(frappe.local, "form_dict", None)
     original_redirect = getattr(frappe.local.flags, "redirect_location", None)
     calls: list[dict[str, object]] = []
@@ -40,9 +42,29 @@ def run() -> dict[str, object]:
             "errors": ["receipt email failed"],
         }
 
+    def fake_verify_paid_stripe_session(session, **kwargs):
+        calls.append({"verify": session.get("id"), **kwargs})
+        return {
+            "sales_order": session.get("client_reference_id"),
+            "payment_request": (session.get("metadata") or {}).get("payment_request"),
+        }
+
+    def fake_payment_state_for_sales_order(so_name):
+        return {
+            "state": "reconciliation_needed",
+            "eyebrow": "Payment Received",
+            "lede": (
+                "Your payment came through. We have your order, and the final receipt "
+                "or invoice check is still finishing in the background."
+            ),
+            "notice": "Tiny snag: the final receipt or invoice details are still being checked.",
+        }
+
     try:
         stripe_session.retrieve_session = fake_retrieve_session
+        payment_success.verify_paid_stripe_session = fake_verify_paid_stripe_session
         payment_success.reconcile_paid_sales_order = fake_reconcile_paid_sales_order
+        thank_you._payment_state_for_sales_order = fake_payment_state_for_sales_order
         try:
             payment_success._handle_stripe_session("cs_test_reconcile_pending")
         except frappe.Redirect:
@@ -86,7 +108,9 @@ def run() -> dict[str, object]:
         return {"ok": False, "failures": [frappe.get_traceback()]}
     finally:
         stripe_session.retrieve_session = original_retrieve
+        payment_success.verify_paid_stripe_session = original_verify
         payment_success.reconcile_paid_sales_order = original_reconcile
+        thank_you._payment_state_for_sales_order = original_payment_state
         if original_form_dict is None:
             frappe.local.form_dict = frappe._dict()
         else:
