@@ -11,7 +11,67 @@ This is not the same as variant-count correctness. `catalog_variant_contract.py`
 proves active ERPNext variants match the normalized Odoo option combinations.
 It does not prove the `Item Price` values are right.
 
-## Current State - 2026-05-08
+## Current State - 2026-05-19
+
+Resolved in the local ERPNext database:
+
+- GL caught the Easter Bunny Ear Arch product page still showing the same
+  price when the customer selected different arch sizes.
+- Root cause confirmed: non-bouquet variant families still had flattened
+  ERPNext `Item Price` rows from the original base-price import. The product
+  page was mostly displaying the backend value it was given.
+- Source of truth confirmed again: the old Odoo shop at
+  `http://5.78.136.133/shop` and its `/website_sale/get_combination_info`
+  endpoint. For `easter-balloon-arch-bunny-ear`, Odoo returns:
+  - `20ft`: `$375`
+  - `25ft`: `$440`
+- Local ERPNext now matches those prices:
+  - `easter-balloon-arch-bunny-ear-20F`: `$375`
+  - `easter-balloon-arch-bunny-ear-25F`: `$440`
+- Added `locally_twisted.seed.repair_variant_price_modifiers_from_odoo` to
+  recover Odoo option price modifiers and apply them across active ERPNext
+  variants without stopping on large color/customizer families.
+- Applied the modifier repair locally across 49 variant products:
+  - 10,186 active variants inspected.
+  - 8,405 `Item Price` rows corrected during the apply run.
+  - Post-apply dry-run reported 0 remaining variant prices that would change.
+- Added `scripts/verify/product_price_modifier_contract.py` and included it in
+  `npm run test:product-prices`, so bouquet-specific price checks are now paired
+  with the broad Odoo modifier parity gate.
+- Added `scripts/verify/product_price_display.spec.js` and
+  `npm run test:product-price-display` to prove the actual product page updates
+  the visible price and selected variant item code for the reported arch.
+- Opened the wider incident review at
+  `workstreams/ecommerce-price-identity-incident-review-2026-05-19.md` and the
+  failure recipe at
+  `capabilities/failures/ecommerce-variant-price-source-drift.md`.
+- Wired the broad source-price modifier and visible price-display gates into
+  `scripts/verify/website_launch_verify.py`; added the same class of checks to
+  the product import readiness command list.
+
+Passing proof after repair:
+
+```powershell
+python scripts/verify/catalog_variant_contract.py
+npm run test:product-prices
+npm run test:product-price-display
+```
+
+Focused cascade proof:
+
+- `locally_twisted.api.cart.get_cart_items` now returns:
+  - `easter-balloon-arch-bunny-ear-20F`: `price_list_rate=375.0`
+  - `easter-balloon-arch-bunny-ear-25F`: `price_list_rate=440.0`
+
+Known separate drift:
+
+- `python scripts/verify/cart_checkout_contract.py` still fails two color-recipe
+  assertions because the current backend routes that tested color-recipe item to
+  quote-required instead of checkout. That is separate from the size/price
+  repair and should be handled in the checkout/color-recipe lane, not mixed into
+  this pricing correction.
+
+## Prior State - 2026-05-08
 
 Resolved:
 
@@ -70,53 +130,64 @@ Related shop/cart verification:
 - `scripts/verify/cart_checkout_contract.py`
 - `scripts/verify/smoke_shop.py`
 
-## Current Verifiers
+## Current Verifiers - 2026-05-19
 
-Passing after the bouquet repair:
+Passing after the broad local modifier repair:
 
 ```powershell
 npm run test:product-prices
-python scripts/verify/cart_checkout_contract.py
+npm run test:product-price-display
+python scripts/verify/catalog_variant_contract.py
 ```
 
-Current broader shop smoke is green again:
+Supporting checkout/cart proof for the reported Easter arch variants:
 
 ```powershell
-python scripts/verify/smoke_shop.py
+locally_twisted.api.cart.get_cart_items
 ```
 
-The earlier 2026-05-08 category rail/card-rendering failures are closed in the
-current open ecommerce website gate. Do not interpret the green shop smoke as
-full catalog price parity; it proves the guarded bouquet prices and current
-rendered shop flow, while the non-bouquet price recovery remains open.
+`python scripts/verify/cart_checkout_contract.py` currently has separate
+color-recipe drift because the tested color-recipe item is routed to quote. Do
+not treat that as part of the size-price repair; handle it in the
+checkout/color-recipe lane.
 
 ## How To Continue
 
-1. Stage the Odoo catalog data for in-container repair commands:
+For this lane, the next work is not another narrow product patch. Treat any
+price issue as source-price identity work:
+
+1. Stage the Odoo catalog data for in-container repair commands when source data
+   needs refreshing:
 
    ```powershell
    python scripts/setup/stage_seed_data.py
    ```
 
-2. Run dry-run probes in small batches first:
+2. Run the broad dry-run source-price guard before and after any catalog import,
+   repair, seed, selector, or checkout-price change:
 
    ```powershell
-   docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.repair_variant_prices_from_odoo.execute --kwargs "{'slug_filter':'6-color-rainbow-arch','dry_run':True}"
+   python scripts/verify/product_price_modifier_contract.py
    ```
 
-3. Build a full audit report before mass-applying non-bouquet prices. The
-   repair command supports `dry_run=True` and `max_products`, but a full
-   all-product dry run can be slow because it calls Odoo's resolver for many
-   combinations.
-
-4. Apply in bounded batches only after reviewing the dry-run mismatches:
+3. Prove visible customer behavior for non-first priced options:
 
    ```powershell
-   docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.repair_variant_prices_from_odoo.execute --kwargs "{'slug_filter':'6-color-rainbow-arch'}"
+   npm run test:product-price-display
    ```
 
-5. Extend `scripts/verify/product_variant_price_contract.py` for each repaired
-   product family before calling that family closed.
+4. If the broad guard fails, use the repair script in dry-run mode first:
+
+   ```powershell
+   docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.repair_variant_price_modifiers_from_odoo.execute --kwargs "{'dry_run': True, 'strict': False}"
+   ```
+
+5. Apply only after reviewing mismatches and confirming the target is local or a
+   GL-approved staging/live maintenance window:
+
+   ```powershell
+   docker exec locally-twisted-erpnext-v15-backend-1 bench --site frontend execute locally_twisted.seed.repair_variant_price_modifiers_from_odoo.execute --kwargs "{'strict': False}"
+   ```
 
 6. Remove ignored staged seed data after repair work if it is no longer needed:
 
@@ -126,8 +197,9 @@ rendered shop flow, while the non-bouquet price recovery remains open.
 
 ## Rules For Future Agents
 
-- Do not claim all product pricing is correct until a full Odoo resolver audit
-  has passed or every product family has its own price contract.
+- Do not claim product pricing is correct unless the broad source-price modifier
+  gate passes on the target DB and representative visible/cart/checkout proof
+  covers non-first priced options.
 - Do not use `_resources/odoo-live/catalog.json` row `price` from the old
   snapshot as proof by itself; older snapshots were generated before dynamic
   price recovery.

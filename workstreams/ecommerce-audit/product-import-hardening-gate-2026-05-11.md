@@ -139,8 +139,11 @@ Minimal post-import verifier set:
 - `python scripts/verify/catalog_variant_contract.py`
 - `python scripts/verify/variant_media_contract.py`
 - `npm run test:product-prices`
+- `npm run test:product-price-display`
 - `npm run test:variant-media`
 - `python scripts/verify/cart_checkout_contract.py`
+- `node scripts/verify/post_import_checkout_proof.js`
+- `python scripts/verify/stripe_amount_parity_contract.py`
 - `python scripts/verify/checkout_product_family_contract.py --report <durable-v1-report-path>`
 - `python scripts/verify/quote_event_checkout_boundary_contract.py --report <durable-v1-boundary-report-path>`
 - `npm run test:shop-smoke`
@@ -179,8 +182,10 @@ Rollback is restore DB/files backup first. Snapshot-based repair is only a secon
 
 ## Current Blockers
 
-Current result: `PASS` for local corrected V1 import readiness, with no
-warnings or blockers.
+Current result: historical `PASS` for local corrected V1 import readiness is
+stale after the 2026-05-19 price-identity incident. Re-run the gate and the new
+source-price modifier / visible-price checks before using this packet as import
+approval evidence.
 
 Fresh read-only gate result on 2026-05-12:
 

@@ -35,6 +35,11 @@ hold only. It is not a business lane.
   `21-product-page-price-enrichment-candidates.json` into the seed data path
   and making `seed_catalog.py` prefer approved sale-unit enrichment before
   scraped page-level fallback prices.
+- Follow-up 2026-05-19: GL caught that this was still too narrow. Easter Bunny
+  Ear Arch `20ft` and `25ft` still shared the same local price even though Odoo
+  charged `$375` and `$440`. Treat the reimport proof's price claims as
+  superseded by the price-identity incident lane:
+  `workstreams/ecommerce-price-identity-incident-review-2026-05-19.md`.
 - Follow-up 2026-05-18: disabled the 390 stale `Add Foil Number` optional
   add-on variants that were still enabled from older imports, then wired the
   same idempotent cleanup into `seed_catalog.py` so future destructive import
@@ -90,6 +95,8 @@ Backend/source gates passed locally:
 - `python scripts/verify/product_page_runtime_contract.py`
 - `python scripts/verify/cart_checkout_contract.py`
 - `python scripts/verify/product_variant_price_contract.py`
+- `python scripts/verify/product_price_modifier_contract.py`
+- `npm run test:product-price-display`
 - `python scripts/verify/catalog_variant_contract.py`
 
 Browser proof:
@@ -124,6 +131,10 @@ Safety proof:
   legacy history, not active sale units. Active catalog variants are now
   10,186; all variant records are 10,629 including disabled legacy variants.
 - Review-only add-on controls remain hidden until mapped: 9.
+- 2026-05-19 price identity correction: local active variant prices are now
+  guarded by `npm run test:product-prices` plus
+  `npm run test:product-price-display`, but no staging/live approval follows
+  from this local evidence.
 
 ## Boundaries
 
@@ -139,8 +150,9 @@ Safety proof:
 ## Next Safe Step
 
 GL tests the local storefront/product/cart/checkout behavior. After approval,
-prepare a separate staging/live release packet from this commit with the
-normal Frappe Cloud, Stripe, DNS, and ecommerce exposure gates.
+prepare a separate staging/live release packet from the accepted commit with the
+normal Frappe Cloud, Stripe, DNS, ecommerce exposure gates, and 2026-05-19
+source-price identity guards.
 
 Related follow-up handoff:
 `workstreams/ecommerce-audit/variant-item-media-restore-2026-05-17.md`.

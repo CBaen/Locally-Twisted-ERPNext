@@ -159,6 +159,12 @@ def build_steps(args: argparse.Namespace) -> list[Step]:
         Step("Public ecommerce mode contract", [python, "scripts/verify/ecommerce_pause_contract.py"], 180),
         Step("Shop smoke", [python, "scripts/verify/smoke_shop.py"], 900),
         Step("Product variant prices", [python, "scripts/verify/product_variant_price_contract.py"], 180),
+        Step("Product source price modifiers", [python, "scripts/verify/product_price_modifier_contract.py"], 900),
+        Step(
+            "Product visible price display",
+            local_playwright_command(workers, "scripts/verify/product_price_display.spec.js"),
+            360,
+        ),
         Step("Variant media contract", [python, "scripts/verify/variant_media_contract.py"], 240),
         Step(
             "Checkout experience",

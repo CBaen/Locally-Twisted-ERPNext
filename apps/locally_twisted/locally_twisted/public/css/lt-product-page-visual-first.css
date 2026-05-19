@@ -406,7 +406,7 @@
 
 .lt-product__color-card {
   display: grid;
-  grid-template-columns: auto 1.65rem minmax(0, 1fr);
+  grid-template-columns: auto 2.2rem minmax(0, 1fr);
   align-items: center;
   min-width: 0;
   gap: 0.55rem;
@@ -440,6 +440,22 @@
 
 .lt-product__color-swatch::after {
   content: none;
+}
+
+.lt-product__color-swatch--image {
+  width: 2.15rem;
+  height: 2.15rem;
+  background: transparent;
+  -webkit-mask: none;
+  mask: none;
+  overflow: hidden;
+}
+
+.lt-product__color-swatch--image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .lt-product__color-name {

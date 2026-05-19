@@ -35,7 +35,7 @@
                 </label>
 
                 {%- if is_color_drawer -%}
-                    {%- set color_groups = get_balloon_color_groups(values) -%}
+                    {%- set color_groups = get_balloon_color_groups(values, attr_name, doc.item_code) -%}
                     <div class="lt-product__color-drawers"
                          id="{{ field_id }}"
                          aria-label="{{ _(attr_name) }}">
@@ -57,10 +57,16 @@
                                                    name="lt-quote-color-{{ attr_name | replace(' ', '-') }}"
                                                    value="{{ color.name }}"
                                                    data-attribute-name="{{ attr_name }}">
-                                            <span class="lt-product__color-swatch" style="--lt-color-swatch: {{ color.hex_value or '#d8c7b8' }}" aria-hidden="true"></span>
+                                            <span class="lt-product__color-swatch{% if color.swatch_url %} lt-product__color-swatch--image{% endif %}"
+                                                  style="--lt-color-swatch: {{ color.hex_value or '#d8c7b8' }}"
+                                                  aria-hidden="true">
+                                                {% if color.swatch_url %}
+                                                    <img src="{{ color.swatch_url }}" alt="" loading="lazy" decoding="async">
+                                                {% endif %}
+                                            </span>
                                             <span class="lt-product__color-name">
                                                 <span>{{ color.name }}</span>
-                                                {% if color.hex_value %}<span class="lt-product__color-hex">({{ color.hex_value }})</span>{% endif %}
+                                                {% if color.hex_value and not color.swatch_url %}<span class="lt-product__color-hex">({{ color.hex_value }})</span>{% endif %}
                                             </span>
                                         </label>
                                     {%- endfor -%}

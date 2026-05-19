@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
+import json
+import hashlib
 from dataclasses import dataclass
+from functools import lru_cache
+from pathlib import Path
 
 COLOR_STYLE_ORDER = (
     "Reflex",
@@ -15,6 +19,9 @@ COLOR_STYLE_ORDER = (
     "Brights",
     "Review Needed",
 )
+
+COLOR_SWATCH_AXIS_NAMES = frozenset({"latex colors", "color palette", "number colors", "baby color"})
+SWATCH_MAP_FILE = Path(__file__).with_name("odoo_color_swatch_map.json")
 
 
 @dataclass(frozen=True)
@@ -135,35 +142,115 @@ def approximate_hex_for_color(name: str) -> str:
     return ""
 
 
-def classify_color_name(name: str) -> ClassifiedColor:
+def _product_key(item_code: str | None) -> str:
+    return str(item_code or "").strip().lower()
+
+
+def _axis_key(axis_name: str | None) -> str:
+    return _color_key(axis_name or "")
+
+
+def _value_key(name: str | None) -> str:
+    display = " ".join(str(name or "").replace("-", " ").strip().split())
+    digest = hashlib.sha1(display.encode("utf-8")).hexdigest()[:10]
+    return f"{display.lower()}##{digest}"
+
+
+def _map_key(*parts: str | None) -> str:
+    if len(parts) == 3:
+        product, axis_name, value_name = parts
+        return "|||".join([_product_key(product), _axis_key(axis_name), _value_key(value_name)])
+    if len(parts) == 2:
+        axis_name, value_name = parts
+        return "|||".join([_axis_key(axis_name), _value_key(value_name)])
+    return "|||".join(_value_key(part) for part in parts)
+
+
+def _normalized_map_key(*parts: str | None) -> str:
+    if len(parts) == 2:
+        axis_name, value_name = parts
+        return "|||".join([_axis_key(axis_name), _color_key(value_name or "")])
+    return "|||".join(_color_key(part or "") for part in parts)
+
+
+@lru_cache(maxsize=1)
+def _swatch_map() -> dict:
+    try:
+        return json.loads(SWATCH_MAP_FILE.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+
+def swatch_url_for_color(name: str, axis_name: str | None = None, item_code: str | None = None) -> str:
+    """Return the localized owner-approved Odoo swatch image for a color, if mapped."""
+    data = _swatch_map()
+    if not data:
+        return ""
+
+    names = [str(name or "").strip()]
+    canonical = canonical_color_name(name)
+    if canonical and canonical not in names:
+        names.append(canonical)
+
+    lookups = []
+    for candidate in names:
+        if item_code and axis_name:
+            lookups.append(("by_product_axis_value", _map_key(item_code, axis_name, candidate)))
+        if axis_name:
+            lookups.append(("by_axis_value", _map_key(axis_name, candidate)))
+        lookups.append(("by_value", _map_key(candidate)))
+        if axis_name:
+            lookups.append(("by_axis_normalized_value", _normalized_map_key(axis_name, candidate)))
+        lookups.append(("by_normalized_value", _normalized_map_key(candidate)))
+
+    for section, key in lookups:
+        entry = (data.get(section) or {}).get(key)
+        if entry and entry.get("asset_url"):
+            return str(entry["asset_url"])
+    return ""
+
+
+def _classified_color(clean: str, group: str, axis_name: str | None, item_code: str | None) -> ClassifiedColor:
+    swatch_url = swatch_url_for_color(clean, axis_name=axis_name, item_code=item_code)
+    return ClassifiedColor(
+        clean,
+        group,
+        clean,
+        approximate_hex_for_color(clean),
+        swatch_url=swatch_url,
+        status="owner_odoo_swatch" if swatch_url else "approximate_review",
+    )
+
+
+def classify_color_name(name: str, axis_name: str | None = None, item_code: str | None = None) -> ClassifiedColor:
     clean = canonical_color_name(name)
     lower = clean.lower()
 
     if lower.startswith("reflex"):
-        return ClassifiedColor(clean, "Reflex", clean, approximate_hex_for_color(clean), status="approximate_review")
+        return _classified_color(clean, "Reflex", axis_name, item_code)
     if lower.startswith("dusk"):
-        return ClassifiedColor(clean, "Dusk", clean, approximate_hex_for_color(clean), status="approximate_review")
+        return _classified_color(clean, "Dusk", axis_name, item_code)
     if lower.startswith("pastel"):
-        return ClassifiedColor(clean, "Pastels", clean, approximate_hex_for_color(clean), status="approximate_review")
+        return _classified_color(clean, "Pastels", axis_name, item_code)
 
     if any(token in lower for token in ["blue", "teal", "periwinkle", "robin"]):
-        return ClassifiedColor(clean, "Blues + Teals", clean, approximate_hex_for_color(clean), status="approximate_review")
+        return _classified_color(clean, "Blues + Teals", axis_name, item_code)
     if any(token in lower for token in ["green", "eucalyptus", "forest", "shamrock", "wintergreen", "lime", "empowermint"]):
-        return ClassifiedColor(clean, "Greens", clean, approximate_hex_for_color(clean), status="approximate_review")
+        return _classified_color(clean, "Greens", axis_name, item_code)
     if any(token in lower for token in ["pink", "raspberry", "fuchsia", "bubble gum", "violet", "orchid", "lilac", "blush"]):
-        return ClassifiedColor(clean, "Pinks + Purples", clean, approximate_hex_for_color(clean), status="approximate_review")
+        return _classified_color(clean, "Pinks + Purples", axis_name, item_code)
     if any(token in lower for token in ["white", "black", "grey", "gray", "smoke", "chocolate", "brown", "latte", "clear"]):
-        return ClassifiedColor(clean, "Neutrals", clean, approximate_hex_for_color(clean), status="approximate_review")
+        return _classified_color(clean, "Neutrals", axis_name, item_code)
     if any(token in lower for token in ["red", "orange", "yellow", "honey"]):
-        return ClassifiedColor(clean, "Brights", clean, approximate_hex_for_color(clean), status="approximate_review")
+        return _classified_color(clean, "Brights", axis_name, item_code)
 
-    return ClassifiedColor(clean, "Review Needed", clean, approximate_hex_for_color(clean), status="approximate_review")
+    return _classified_color(clean, "Review Needed", axis_name, item_code)
 
 
-def grouped_colors(values: list[str] | tuple[str, ...]) -> list[dict]:
+def grouped_colors(values: list[str] | tuple[str, ...], axis_name: str | None = None, item_code: str | None = None) -> list[dict]:
     buckets: dict[str, list[dict]] = {group: [] for group in COLOR_STYLE_ORDER}
     for value in values:
-        color = classify_color_name(value)
+        color = classify_color_name(value, axis_name=axis_name, item_code=item_code)
         buckets.setdefault(color.group, []).append(
             {
                 "name": color.name,
@@ -183,4 +270,4 @@ def grouped_colors(values: list[str] | tuple[str, ...]) -> list[dict]:
 
 
 def is_balloon_color_axis(axis_name: str | None) -> bool:
-    return str(axis_name or "").strip().lower() in {"latex colors", "color palette", "number colors", "baby color"}
+    return str(axis_name or "").strip().lower() in COLOR_SWATCH_AXIS_NAMES

@@ -167,7 +167,7 @@ def is_balloon_color_attribute(attribute: str | None) -> bool:
     return is_balloon_color_axis(attribute)
 
 
-def get_balloon_color_groups(values) -> list[dict[str, Any]]:
+def get_balloon_color_groups(values, axis_name: str | None = None, item_code: str | None = None) -> list[dict[str, Any]]:
     """Group high-cardinality balloon colors for drawer/accordion rendering."""
     clean_values: list[str] = []
     for value in values or []:
@@ -175,7 +175,7 @@ def get_balloon_color_groups(values) -> list[dict[str, Any]]:
             value = value.get("name") or value.get("attribute_value") or value.get("value")
         if value:
             clean_values.append(str(value))
-    return grouped_colors(clean_values)
+    return grouped_colors(clean_values, axis_name=axis_name, item_code=item_code)
 
 
 def get_product_gallery_slides(item_code: str | None, primary_image: str | None = None, limit: int = 12) -> list[dict[str, str]]:

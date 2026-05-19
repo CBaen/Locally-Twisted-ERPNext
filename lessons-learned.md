@@ -6,6 +6,27 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-19 - Price existence is not source-price truth
+
+The Easter Bunny Ear Arch failure was not a product-page styling bug and not a
+single Odoo import cleanup. GL selected different sizes and the price did not
+change. The cart/checkout architecture was mostly doing the right thing by
+trusting server-side ERPNext `Item Price`; the deeper failure was that many
+variant Item Prices had been flattened upstream by an import path and the
+guard stack did not block it.
+
+**Counter-move:** ecommerce proof must start with source price identity, not
+internal agreement. For source-derived variant products, verify source dynamic
+price logic -> ERPNext variant `Item Price` -> visible product page -> cart ->
+checkout/order/payment/invoice/receipt. A verifier that proves "every variant
+has a price" or "Stripe matches ERPNext" is necessary but not sufficient; it
+can perfectly preserve the wrong price. Use
+`workstreams/ecommerce-price-identity-incident-review-2026-05-19.md` and
+`capabilities/failures/ecommerce-variant-price-source-drift.md` before any
+future ecommerce import, checkout launch, or broad product-pricing claim.
+
+---
+
 ## 2026-05-19 - DNS cutover proof is not SEO discovery proof
 
 Cloudflare and Frappe Cloud can be correctly serving a site while the sitemap,

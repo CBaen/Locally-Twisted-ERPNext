@@ -5,13 +5,13 @@ schema_version: 2.0
 level: recipe
 maturity: candidate
 scope: Locally Twisted ERPNext/Frappe ecommerce product import, product detail logic, cart, checkout, and invoice integration
-currently_true: unknown
+currently_true: local_only
 verification_level: 2
-last_verified: 2026-05-17
+last_verified: 2026-05-19
 evidence_quality: direct
 successful_uses: 1
-failed_uses: 0
-regressions: 0
+failed_uses: 1
+regressions: 1
 used_by:
   - Codex
   - OpenClaw
@@ -39,7 +39,7 @@ Use this before importing, repairing, or claiming completion for Odoo-derived pr
 
 ## Rule
 
-Do not treat product transfer as the goal. ERPNext must first be able to safely receive products and integrate their meaning everywhere: backend fields, product template type, variant logic, add-on logic, cascading dependencies, dynamic pricing, media visibility, product pages, cart, checkout, Sales Order, invoice, fulfillment/operator meaning, desktop/mobile customer journeys, and fail-loud verifiers.
+Do not treat product transfer as the goal. ERPNext must first be able to safely receive products and integrate their meaning everywhere: backend fields, product template type, variant logic, add-on logic, cascading dependencies, source-correct dynamic pricing, media visibility, product pages, cart, checkout, Sales Order, invoice, fulfillment/operator meaning, desktop/mobile customer journeys, and fail-loud verifiers.
 
 Odoo is a conceptual witness for mature ecommerce behavior, not infrastructure to copy. Do not import Odoo fields into ERPNext unless the ERPNext destination field, behavior owner, and verifier exist.
 
@@ -66,6 +66,15 @@ OpenClaw cockpit witness:
   product pages, and all 53 live Website Item routes browser-proved in two
   batches under the cart 50-line cap. `lt_ecommerce_paused=1` was restored.
   Handoff: `workstreams/ecommerce-audit/odoo-sellable-product-reimport-2026-05-17.md`.
+- 2026-05-19 price-identity correction: GL caught Easter Bunny Ear Arch
+  selecting `20ft` and `25ft` without a price change. That exposed a receiving
+  architecture oversight: "priced sale unit" and "Item Price exists" are not
+  enough. The receiving contract now requires source dynamic price truth to
+  match ERPNext variant `Item Price` and cascade through visible page, cart,
+  checkout, Sales Order, payment provider, invoice, and receipt. Incident:
+  `workstreams/ecommerce-price-identity-incident-review-2026-05-19.md`.
+  Failure recipe:
+  `capabilities/failures/ecommerce-variant-price-source-drift.md`.
 - 2026-05-17 browser proof route authority: use the import manifest for
   included-product authority and the clean Website Item snapshot for public
   route authority. Planned import routes can drift from current Website Item

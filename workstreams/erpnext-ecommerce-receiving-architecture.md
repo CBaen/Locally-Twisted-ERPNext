@@ -1,9 +1,11 @@
 # ERPNext Ecommerce Receiving Architecture
 
 Status: active peer-agent handoff; core technical architecture and Phase 1-4
-ready-to-order/quote-boundary proof are verified, but the current public/local
-posture is paused by `lt_ecommerce_paused=1`. No destructive import, public
-checkout, live payment, or production cutover is approved.
+ready-to-order/quote-boundary proof are verified locally, but the 2026-05-19
+price-identity incident proved source-price truth was under-guarded. Current
+public/local resting posture is paused by `lt_ecommerce_paused=1`. No
+destructive import, public checkout, live payment, or production cutover is
+approved.
 Owner context: Codex, 2026-05-09. GL explicitly redirected this lane away from OpenClaw cockpit/infrastructure work and toward backend-first product-page architecture.
 
 ## Prime directive
@@ -11,6 +13,14 @@ Owner context: Codex, 2026-05-09. GL explicitly redirected this lane away from O
 Do not migrate products as the goal. Build the ERPNext ecommerce receiving ecosystem first.
 
 A product is not "received" when a record exists. It is received only when its field data, option logic, price logic, add-on logic, image/media relationships where applicable, cart behavior, checkout behavior, Sales Order / invoice meaning, fulfillment/operator meaning, and customer journey all have safe homes inside the ERPNext/Frappe system and fail loudly when incomplete.
+
+2026-05-19 correction: "price logic" means source-correct price identity, not
+just an ERPNext `Item Price` row. The selected source option must resolve to one
+enabled ERPNext sellable Item, match the source pricing logic, and carry the same
+amount through product page, cart, checkout, Sales Order, payment provider,
+invoice, and receipt. See
+`workstreams/ecommerce-price-identity-incident-review-2026-05-19.md` and
+`capabilities/failures/ecommerce-variant-price-source-drift.md`.
 
 ## GL decision / framing
 

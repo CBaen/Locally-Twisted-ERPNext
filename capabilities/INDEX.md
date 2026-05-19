@@ -148,6 +148,7 @@ pattern that feels familiar.
 - [public-form-photo-storage-owner-attachment-gap](failures/public-form-photo-storage-owner-attachment-gap.md) - prevents private Lead File uploads from being mistaken for CRM photo storage or owner Email Queue attachment delivery.
 - [playwright-in-file-parallel-fixture-race](failures/playwright-in-file-parallel-fixture-race.md) - keeps LT Playwright specs serial by default unless backend fixture isolation is proven.
 - [variant-media-overgating-regression](failures/variant-media-overgating-regression.md) - prevents media safety gates from hiding already-approved simple checkout variant Item images while still holding complex/unclassified media.
+- [ecommerce-variant-price-source-drift](failures/ecommerce-variant-price-source-drift.md) - prevents variant shape, price existence, or Stripe/ERPNext agreement from being mistaken for source-correct ecommerce pricing.
 
 ## Evidence And Registry
 

@@ -635,9 +635,22 @@ Codex update on 2026-05-08: catalog variant pricing now has a dedicated
 handoff at `workstreams/catalog-variant-price-recovery.md` and capability
 recipe at `capabilities/recipes/erpnext-catalog-variant-price-parity.md`.
 The bouquet-size family was repaired from Odoo's dynamic resolver and is
-guarded by `npm run test:product-prices`, but full catalog pricing is not
-certified. Do not claim all product pricing is correct until the remaining
-non-bouquet variant templates are audited and covered by price contracts.
+guarded by `npm run test:product-prices`.
+
+Codex update on 2026-05-19: GL caught the wider price-identity failure on
+`easter-balloon-arch-bunny-ear`, where `20ft` and `25ft` showed the same local
+price even though Odoo's dynamic resolver returned `$375` and `$440`. Treat this
+as an ecommerce architecture incident, not a one-product import bug. The active
+incident lane is
+`workstreams/ecommerce-price-identity-incident-review-2026-05-19.md`; failure
+recipe is `capabilities/failures/ecommerce-variant-price-source-drift.md`.
+Local containment corrected 8,405 `Item Price` rows across 49 variant products /
+10,186 active variants, added `scripts/verify/product_price_modifier_contract.py`
+and `scripts/verify/product_price_display.spec.js`, and wired the broad
+source-price guard into `scripts/verify/website_launch_verify.py`. Do not claim
+staging/live/public ecommerce price approval from local repair evidence; rerun
+target-site source-price, visible-page, cart/checkout, and payment/accounting
+cascade proof first.
 
 Codex update on 2026-05-08: website launch verification and public
 microinteractions now have a focused closeout. `npm run test:website-verify`
@@ -855,7 +868,7 @@ Verified or updated during the 2026-05-01 storefront correction and contact clea
 - A 16-asset custom brass-line icon suite now lives at `apps/locally_twisted/locally_twisted/public/icons/brand/`. Balloon-specific surfaces should use balloon-form icons first: pair, cluster, arch, organic garland, column, and bouquet.
 - The contact page no longer depends on an external map iframe for the main service-area proof; it uses a controlled service-area panel.
 - Per-product variant correctness now compares normalized Odoo `valid_variants` plus approved graduation college-preset projection to active, required-choice ERPNext variants. Current pass on 2026-05-18: 53 products checked, 10,186 expected active variants, 10,186 live active variants, 4 single-SKU products. Disabled legacy optional-add-on/raw-color graduation variants are intentionally ignored by this customer-facing contract. This is shape parity only, not price parity.
-- Catalog variant price parity is partially repaired, not complete. `c7f9da3` fixed the bouquet-size family from Odoo's dynamic `/website_sale/get_combination_info` resolver and added `npm run test:product-prices`, but a later sample dry-run proved non-bouquet templates still have wrong flat prices, including 25ft arches and longer Pride arch variants. Use `workstreams/catalog-variant-price-recovery.md` before any catalog price claim or repair.
+- Catalog variant price parity is locally repaired and guarded for the active variant set after the 2026-05-19 price-identity incident. `c7f9da3` fixed the bouquet-size family first; the 2026-05-19 local modifier repair corrected the broader non-bouquet flattening class, including Easter Bunny Ear Arch `25ft`. Use `workstreams/ecommerce-price-identity-incident-review-2026-05-19.md` and `workstreams/catalog-variant-price-recovery.md` before any catalog price claim or repair. Local proof does not equal staging/live/public approval.
 - Product option UX P0 pass completed 2026-05-02 and was reconciled with the current commerce lane on 2026-05-05. `item_configure.html` no longer runs per-attribute `frappe.get_all` lookups from Jinja; it uses `get_variant_attribute_options`, a project Jinja helper backed by Webshop's `get_attributes_and_values`. Quote-required custom installs such as Arches and Garlands intentionally show a `/contact?item=...` quote CTA instead of cart selectors. Retail variants such as `unicorn-bouquet` still render inline single-select chips/selects, consume `valid_options_for_attributes`, and write selected variant codes to `LT_CART`.
 - Generated Webshop asset-map drift was corrected in the running ERPNext stack on 2026-05-02. The container already has Yarn Classic at `/home/frappe/.nvm/versions/node/v20.19.2/bin/yarn`, but non-interactive `docker exec` does not include that directory in `PATH`. Use `export PATH=/home/frappe/.nvm/versions/node/v20.19.2/bin:$PATH` before `bench build --app webshop`; no package install was needed. Important Docker nuance: the frontend/nginx container must be the final Webshop build target because `sites/assets/webshop` links to each container's own app-public files while `assets.json` is shared. Building only in the backend writes asset-map names nginx cannot serve. After rebuilding from the frontend container and clearing `assets_json` plus website cache, follow-up console checks returned 200s with 0 console errors/warnings.
 - `scripts/verify/layout_fit.spec.js` is the committed passive Playwright Test gate. Latest full launch run: `python scripts\verify\website_launch_verify.py --with-a11y --with-contact-smoke` -> 15/15 hidden-ecommerce launch steps passed, including `layout-fit` 325/325 across the current route list and 13 viewport families, `container-contract` 75/75, `interactive-layout` 163/163, `search_contract` 3/3, `portfolio_reel` 6/6, ecommerce pause contract, shop pause smoke, product prices, variant media, checkout experience 2/2, axe accessibility 50 route/viewport checks with 0 violations, manual accessibility, and contact smoke backend proof/cleanup. `scripts/verify/container_contract.spec.js` is the route-level public container contract; focused rerun after the homepage Custom Event Decor repair passed 75/75. `scripts/verify/portfolio_reel.spec.js` is the route-specific proof-gallery gate.

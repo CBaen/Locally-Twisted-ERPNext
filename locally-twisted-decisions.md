@@ -8,6 +8,43 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-19 - Ecommerce price identity is a launch invariant
+
+**Decision:** Treat source-correct variant pricing as an architecture invariant
+for LT ecommerce, not as a one-product data repair. A product cannot be called
+checkout-ready unless the selected source option resolves to one enabled ERPNext
+sellable Item, that Item's `Standard Selling` Item Price matches the source
+pricing logic, and the same amount cascades through visible page, cart,
+checkout, Sales Order, payment provider, invoice, and receipt.
+
+**Reasoning:** GL caught `easter-balloon-arch-bunny-ear` showing no price change
+between `20ft` and `25ft`. ERPNext/Webshop architecture expects variants to be
+the transaction Items and Item Price to carry the selling rate. The LT cart and
+checkout were mostly correct to use server-side Item Price, but that meant they
+faithfully propagated a corrupted backend price table. Prior gates proved
+variant shape, price existence, or downstream agreement; they did not prove
+source dynamic-price truth for all priced option axes.
+
+**Implementation boundary:** Local ERPNext was repaired for the active variant
+set using Odoo option price modifiers; the reported product now resolves
+`20ft=$375` and `25ft=$440`. New guards include the broad
+`product_price_modifier_contract.py`, visible `product_price_display.spec.js`,
+launch-gate integration, and product-import readiness command-list updates. No
+staging/live deploy, Stripe live enablement, DNS change, or public ecommerce
+approval happened in this incident lane.
+
+**Receipts:** `workstreams/ecommerce-price-identity-incident-review-2026-05-19.md`;
+`workstreams/catalog-variant-price-recovery.md`;
+`capabilities/recipes/erpnext-catalog-variant-price-parity.md`;
+`capabilities/failures/ecommerce-variant-price-source-drift.md`;
+`scripts/verify/product_price_modifier_contract.py`;
+`scripts/verify/product_price_display.spec.js`.
+
+**Decided by:** GL escalation on 2026-05-19 that this is an ERPNext ecommerce
+architecture failure and Codex team-style forensic review the same day.
+
+---
+
 ## 2026-05-19 - Public DNS cutover is not reindex proof
 
 **Decision:** Treat the current customer-facing web chain as GoDaddy registrar
