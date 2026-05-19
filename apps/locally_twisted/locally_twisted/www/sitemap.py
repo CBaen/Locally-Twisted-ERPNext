@@ -2,11 +2,11 @@
 
 from urllib.parse import quote
 
-from frappe.utils import get_url, nowdate
+from frappe.utils import nowdate
 from frappe.website.router import get_pages
 from frappe.www.sitemap import get_public_pages_from_doctypes
 
-from locally_twisted.seo import canonical_path, normalize_path
+from locally_twisted.seo import absolute_url, canonical_path, normalize_path
 
 
 no_cache = 1
@@ -16,8 +16,8 @@ base_template_path = "www/sitemap.xml"
 def _sitemap_url(path: str) -> str:
     canonical = normalize_path(path)
     if canonical == "/":
-        return get_url("/")
-    return get_url(quote(canonical.lstrip("/").encode("utf-8")))
+        return absolute_url("/")
+    return absolute_url(quote(canonical.lstrip("/").encode("utf-8")))
 
 
 def _add_link(links: list[dict[str, str]], seen: set[str], path: str, lastmod: str) -> None:

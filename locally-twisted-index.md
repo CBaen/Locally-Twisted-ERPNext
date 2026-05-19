@@ -76,6 +76,7 @@ Built before the frame reset; some still active, some legacy reference.
 |------|---------|
 | `workstreams/launch-v1-success-contract.md` | V1 launch scope contract: website-first quality, buyer priority, commercial lanes, quality targets, deferred 10-year ERPNext maturity, and immediate redesign sequence. |
 | `workstreams/website-launch.md` | Launch controller board and verification gates. |
+| `workstreams/domain-provider-reindex-cleanup-2026-05-19.md` | Current provider-chain and reindex cleanup handoff: GoDaddy registrar, Cloudflare authoritative DNS/email routing, Frappe Cloud hosting, Hetzner/Odoo old-reference status, Bluehost cleanup target, and live sitemap/canonical vanity-host blocker. |
 | `workstreams/launch-repo-cleanup-2026-05-10.md` | Launch cleanup handoff for raw drops, stale generated evidence, removed contest output, and repo-light client handoff rules. |
 | `workstreams/ecommerce-audit/README.md` | Front-door ecommerce infrastructure/evidence map, including the 2026-05-17 all-Odoo sellable reimport proof, product repair map, and local-only launch gates. |
 | `workstreams/ecommerce-audit/odoo-sellable-product-reimport-2026-05-17.md` | Current all-Odoo local import closeout: 53/53 Odoo products included as sellable checkout targets, 0 exclusions, 290 priced sale units, all 53 routes browser-proved in batches, no live deploy. |
@@ -98,9 +99,9 @@ The four reference surfaces below are **temporary** and will be retired. See `CL
 | Path / URL | Disposition |
 |------|------|
 | `C:\Users\baenb\projects\locally-twisted-odoo` | Local clone of prior platform attempt. Read-only. Will be archived to GitHub and removed from disk. |
-| `http://5.78.136.133/` | Failed test deployment of prior attempt. Serves HTTP 200 but no customers depend on it. Will be decommissioned. |
+| `http://5.78.136.133/` | Failed Odoo/Hetzner test deployment of prior attempt. Not current public DNS. Keep read-only until archive/decommission proof is complete. |
 | `https://github.com/CBaen/locally-twisted-odoo` | Prior attempt's source repo. Will be archived as read-only. |
-| `https://locallytwisted.com` | Current customer-facing site. Damaged beyond repair. Out of scope for editing; replaced at cutover. |
+| `https://locallytwisted.com` | Current customer-facing Frappe Cloud site served through Cloudflare. Source is this ERPNext project and the Frappe app mirror. |
 
 **Future instances:** if you reach into the prior-platform dir for anything other than the resources already copied to `_resources/`, stop. The thing you need lives here, or it's not needed.
 

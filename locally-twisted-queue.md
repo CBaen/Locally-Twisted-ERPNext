@@ -10,6 +10,22 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 ## Active
 
+**Domain, provider cleanup, and reindex repair (2026-05-19):** Source handoff
+is `workstreams/domain-provider-reindex-cleanup-2026-05-19.md`. Verified live
+chain is GoDaddy registrar -> Cloudflare authoritative DNS/email routing ->
+Frappe Cloud -> ERPNext/Frappe. Hetzner/Odoo `5.78.136.133` is old reference
+and decommission scope, not current public DNS. Bluehost is the former
+nameserver/likely hosting cleanup target; Wix remains unverified. Reindexing is
+blocked until the live sitemap/canonical host drift is released: current live
+`sitemap.xml` has 29/29 locs on `https://locallytwisted.v.frappe.cloud`, and
+`/about` canonical/`og:url` also use the vanity host. Source fix and SEO guard
+are started in `seo.py`, `www/sitemap.py`, and `seo_contract.spec.js`, but no
+app mirror sync, Frappe Cloud deploy/site update, cache clear, Search Console
+submission, provider cancellation, or DNS mutation has been performed. Next
+safe step is local SEO verification, then normal Frappe Cloud release gate,
+then live `LT_BASE_URL=https://locallytwisted.com npm run test:seo-contract`,
+then Search Console sitemap submit/URL Inspection.
+
 **Google Ads / Meta account takeover (2026-05-19):** Source handoff is
 `workstreams/ad-account-takeover-2026-05-19.md`. Verified support evidence from
 LT Gmail/Drive identifies Google Ads account `Locally Twisted` / customer ID

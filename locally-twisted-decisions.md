@@ -8,6 +8,43 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-19 - Public DNS cutover is not reindex proof
+
+**Decision:** Treat the current customer-facing web chain as GoDaddy registrar
+-> Cloudflare authoritative DNS/email routing -> Frappe Cloud -> ERPNext/Frappe.
+Hetzner/Odoo `5.78.136.133` is old reference/decommission scope, not the
+current public site path. Bluehost is a legacy-provider cleanup candidate
+because it was the original Cloudflare-detected nameserver set, but it must be
+inventoried before cancellation. Reindexing is blocked until live sitemap and
+canonical URLs advertise `https://locallytwisted.com`, not the Frappe Cloud
+vanity host.
+
+**Reasoning:** Public DNS and Cloudflare API prove the domain has moved to
+Cloudflare and Frappe Cloud for web serving, but the live SEO discovery layer
+still points search engines at `https://locallytwisted.v.frappe.cloud`.
+Submitting the current sitemap or requesting indexing now would reinforce the
+wrong host. Google Ads destination repair also depends on knowing which old
+URLs should redirect, which should stay 404, and which campaign URLs must be
+changed.
+
+**Implementation boundary:** Source code was patched so SEO helpers and sitemap
+generation use the current request host, and the SEO contract now rejects
+Frappe Cloud vanity-host sitemap output. No Frappe Cloud deploy/site update,
+app mirror push, cache clear, Search Console submission, DNS mutation, provider
+cancellation, Google Ads change, Meta change, or live checkout change was
+performed.
+
+**Receipts:** `workstreams/domain-provider-reindex-cleanup-2026-05-19.md`;
+`workstreams/frappe-cloud-cutover.md`;
+`workstreams/seo-geo-aeo-contract.md`;
+`capabilities/recipes/lt-seo-geo-aeo-contract.md`;
+`capabilities/failures/frappe-cloud-sitemap-public-domain-drift.md`.
+
+**Decided by:** GL request to confirm Cloudflare/Frappe Cloud/Hetzner state and
+Codex live DNS/Cloudflare/SEO verification on 2026-05-19.
+
+---
+
 ## 2026-05-19 - Ad account takeover requires provider dashboard control
 
 **Decision:** Locally Twisted Google Ads and Meta/Facebook/Instagram takeover

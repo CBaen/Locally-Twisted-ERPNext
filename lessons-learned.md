@@ -6,6 +6,23 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-19 - DNS cutover proof is not SEO discovery proof
+
+Cloudflare and Frappe Cloud can be correctly serving a site while the sitemap,
+canonical tags, Open Graph URLs, or structured data still point at a staging or
+vanity host. LT's public domain returned `200` from Frappe Cloud, but the live
+sitemap had 29/29 URLs on `locallytwisted.v.frappe.cloud`, and `/about`
+canonical/`og:url` used the same vanity host. That would make a Search Console
+reindex request actively harmful.
+
+**Counter-move:** after any DNS/Frappe Cloud/custom-domain cutover, verify the
+discovery layer separately: sitemap hosts, canonical hosts, `og:url`,
+structured-data URLs, robots sitemap hint, and Search Console property. Run
+the SEO contract against the public domain before submitting a sitemap or
+requesting URL Inspection. Route health is necessary, but it is not enough.
+
+---
+
 ## 2026-05-19 - Provider account control is not an inbox crawl
 
 The ad takeover request started with a real Google Ads policy URL and a clear

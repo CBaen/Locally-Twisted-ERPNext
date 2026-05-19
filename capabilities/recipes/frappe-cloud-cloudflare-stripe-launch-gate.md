@@ -50,6 +50,11 @@ Default public launch posture:
 - Staging root/login behavior depends on Website Settings parity. Check
   staging `/`, `/#login`, `/home`, `/contact`, `home_page`, branding, favicon,
   and theme before calling source broken or live broken.
+- Public route health is not Search Console readiness. After custom-domain
+  cutover, sitemap, canonical, Open Graph URL, and structured-data URLs must
+  advertise the public domain, not the Frappe Cloud vanity host. As of
+  2026-05-19, source guard work exists but live reindex work remains blocked
+  until the fix is released and verified.
 
 ## Human Access Boundary
 
@@ -86,6 +91,7 @@ python scripts/verify/synthetic_business_pipeline.py
 python scripts/verify/payment_backend_config_contract.py
 python scripts/verify/payment_webhook_contract.py
 python scripts/verify/stripe_amount_parity_contract.py
+$env:LT_BASE_URL='https://locallytwisted.com'; npm run test:seo-contract
 ```
 
 For live inquiry form release proof, include authenticated backend verification
@@ -115,6 +121,8 @@ python scripts/verify/book_form_repeat_email_photos.py --base-url https://locall
   instead of comparing previous live app hash to target app mirror commit.
 - Treating staging `/#login` rendering Sign In as live breakage before checking
   environment and Website Settings parity.
+- Treating `Server: Frappe Cloud` or a passing dynamic-route gate as proof that
+  sitemap/canonical URLs are ready for Search Console.
 - Letting custom fields or custom DocTypes exist only in the local database
   instead of source-controlled install/migration code.
 - Querying optional legacy fields during migration without checking current

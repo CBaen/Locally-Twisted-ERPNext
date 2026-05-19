@@ -1,6 +1,7 @@
 # Website Launch Workstream
 
-Last updated: 2026-05-10 by Codex after the full pages/forms-first launch gate passed with ecommerce hidden.
+Last updated: 2026-05-19 by Codex after the Cloudflare/Frappe Cloud provider
+and reindex audit.
 
 Scope correction 2026-05-10 (GL authoritative): going live today is
 non-negotiable, and ecommerce may ship later. The current safest launch posture
@@ -9,6 +10,11 @@ Ready-to-Order, shop, product, cart, and checkout work is preserved and can be
 reopened after final ecommerce polish, live payment readiness, owner review,
 Frappe Cloud/staging discipline, DNS cutover, and the agency staging-to-live
 gate.
+
+2026-05-19 update: public pages/forms are now live through Cloudflare DNS and
+Frappe Cloud. Live checkout remains blocked. Reindex work is also blocked until
+the live sitemap/canonical source fix is released; current live discovery URLs
+still advertise `locallytwisted.v.frappe.cloud`.
 
 ## Outcome
 
@@ -55,6 +61,12 @@ pass. New verifier:
 `python scripts/verify/cloudflare_launch_readiness.py --base-url https://locallytwisted.com`.
 `payment_launch_readiness.py --mode live` now treats explicit HTTPS
 `host_name` as a hard live-mode requirement.
+
+2026-05-19 domain/provider/reindex audit: current public web chain is GoDaddy
+registrar -> Cloudflare authoritative DNS/email routing -> Frappe Cloud ->
+ERPNext/Frappe. Hetzner/Odoo is old reference/decommission scope and Bluehost
+is the old nameserver/likely hosting cleanup target. Source handoff:
+`workstreams/domain-provider-reindex-cleanup-2026-05-19.md`.
 
 2026-05-10 launch repo cleanup: stale generated output, old local evidence,
 raw drops, and historical contest/research debris were removed or moved outside
@@ -290,7 +302,8 @@ Primary coordination file: `workstreams/erpnext-backend-simplification.md`.
 | Ecommerce/shop | Hidden for today’s pages/forms-first launch; preserved for this week’s ecommerce work | `ecommerce_pause_contract.py` passed; `/shop`, `/cart`, and `/checkout` route to the branded quote fallback; earlier open-commerce proof passed `npm run test:ecommerce-full`, `website_launch_verify.py`, `product_page_architecture_readiness.py`, synthetic pipeline, and automation index | Continue non-bouquet price audit, media/category approval, and staged/live readiness; do not call this production-ready without staging/client/live-payment cutover approval |
 | Visual/accessibility QA | Civic site-wide visual pass implemented and locally verified; `/portfolio` proof-gallery reel added as a route-specific visual slice; homepage launch repair pass landed; compact generated-photo hero contract landed; BTFP crawl/header update verified | `output/playwright/launch-baseline-20260502/`, `output/playwright/brand-token-20260502/`, `output/playwright/civic-overhaul-20260503-verified/`, `output/playwright/landing-fixes-20260507/`, `output/playwright/compact-heroes-20260507/`, `output/playwright/home-portfolio-corrections-20260507/`, and `output/playwright/generated-heroes-20260510/` are local screenshot evidence; current component gates pass with `layout-fit` 325/325, `container-contract` 75/75, `interactive-layout` 163/163, `a11y` 50 route/viewport results with 0 violations, and `a11y-manual` passed | Rerun screenshots after final media/content changes |
 | Backend readiness | Paperwork/backend focus active | `paperwork-backend-automation.md` and `business-automation-index.md` now record the 2026-05-06 baseline: finance inventory, customer documents, payment cascade, CRM stage guardrails, payment config/webhook/local readiness, checkout-to-Lead conversion, Accountant Home parity, read-only paperwork status, synthetic no-live pipeline audit, branded Sales Invoice print output, outbound document registry, automation index, scheduled checkup, and Stripe amount-parity contract passed; live Stripe/site setup is cutover-deferred, not a current fake-data blocker | Build reviewed internal digest/queue surfaces; do not send reminders, use live credentials/customer data, or wire CRM stages to finance until thresholds are explicit |
-| Frappe Cloud / Cloudflare / Stripe | Gate defined; not cut over | `workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11.md`, `scripts/verify/frappe_cloud_preflight.py`, `scripts/verify/cloudflare_launch_readiness.py`, and stricter `payment_launch_readiness.py --mode live` | Freeze/push source, pass Frappe Cloud staging, then run Cloudflare and live Stripe gates before DNS/payment exposure |
+| Frappe Cloud / Cloudflare / Stripe | Pages/forms live through Cloudflare/Frappe Cloud; checkout blocked | `workstreams/frappe-cloud-cloudflare-stripe-launch-2026-05-11.md`, `scripts/verify/frappe_cloud_preflight.py`, `scripts/verify/cloudflare_launch_readiness.py`, and stricter `payment_launch_readiness.py --mode live` | Keep live checkout blocked until Stripe/product/payment gates pass |
+| Reindex / provider cleanup | Source fix started; live not ready for Search Console submit | `workstreams/domain-provider-reindex-cleanup-2026-05-19.md`, `workstreams/seo-geo-aeo-contract.md`, and `capabilities/failures/frappe-cloud-sitemap-public-domain-drift.md` | Release sitemap/canonical public-domain fix, rerun live SEO contract, then submit sitemap/priority URLs in Search Console |
 | Release gate | Not started | No integrated launch report yet | Run final route, form, shop, visual, accessibility, and policy-source gates after implementation lanes land |
 
 ## Higher-Quality Launch Additions

@@ -1,6 +1,7 @@
 # SEO/GEO/AEO Contract
 
-Last updated: 2026-05-11 by Codex after `/event-balloons` removal and no-redirect sitemap guard.
+Last updated: 2026-05-19 by Codex after public-domain sitemap/canonical drift
+was found on live Frappe Cloud.
 
 ## Scope
 
@@ -17,6 +18,9 @@ plan and does not certify search rankings.
   duplicates.
 - `/sitemap.xml` prefers canonical public routes while preserving ecommerce
   URLs that still need discovery continuity through testing and launch review.
+- Public sitemap, canonical, Open Graph URL, and structured-data URLs must use
+  the tested public host. For production, that means `https://locallytwisted.com`,
+  not `https://locallytwisted.v.frappe.cloud`.
 - `/event-balloons` and `/event_balloons` are intentionally removed. They must
   return 404 with no redirect and must not appear in `/sitemap.xml`, canonical
   maps, route aliases, or public links.
@@ -45,6 +49,26 @@ redirect, and the SEO contract now treats `/event-balloons` plus
 `/event_balloons` as excluded discovery paths. The four event audience routes
 remain the crawlable event-discovery pages.
 
+## 2026-05-19 Public Domain Drift
+
+Live provider audit confirmed `locallytwisted.com` serves from Frappe Cloud
+through Cloudflare, but the discovery layer still points at the Frappe Cloud
+vanity host:
+
+- `https://locallytwisted.com/sitemap.xml` returned 29 locs, all on
+  `https://locallytwisted.v.frappe.cloud`.
+- `https://locallytwisted.com/about` emitted canonical and `og:url` values on
+  `https://locallytwisted.v.frappe.cloud/about`.
+
+Source was patched so SEO helpers prefer the current request host and sitemap
+generation uses the same absolute URL helper. The Playwright SEO contract now
+rejects sitemap URLs on `locallytwisted.v.frappe.cloud` or any host other than
+the tested base host.
+
+This is not live until the Frappe Cloud app release/site update/cache clear
+sequence completes and the SEO contract passes against
+`https://locallytwisted.com`.
+
 ## Verification
 
 ```powershell
@@ -53,6 +77,13 @@ npm run test:seo-contract
 
 Latest focused route-removal result: 2/2 passed on 2026-05-11 with
 `npm run test:seo-contract -- --grep "removed Event Balloons|sitemap" --workers=1`.
+
+Live reindex gate after Frappe Cloud release:
+
+```powershell
+$env:LT_BASE_URL='https://locallytwisted.com'
+npm run test:seo-contract
+```
 
 ## Open Rules
 
@@ -64,3 +95,5 @@ Latest focused route-removal result: 2/2 passed on 2026-05-11 with
   canonical route; do not leave duplicate canonicals ambiguous.
 - Do not add redirects for owner-rejected prelaunch routes unless GL explicitly
   asks for a redirect. A clean 404 is the correct state for `/event-balloons`.
+- Do not submit a sitemap or ask Google to recrawl while sitemap/canonical
+  output advertises the Frappe Cloud vanity host.

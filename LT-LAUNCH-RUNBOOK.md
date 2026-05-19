@@ -1,6 +1,6 @@
 # Locally Twisted Launch Runbook
 
-Last updated: 2026-05-17 by Codex.
+Last updated: 2026-05-19 by Codex.
 
 This is the plain launch doc at the project root.
 
@@ -24,6 +24,11 @@ Cloud dashboard/API control from Codex.
 The 2026-05-15 inquiry-photo hotfix is now live and proved on 2026-05-16 by a
 real company-email smoke with five photos. That smoke proved CRM photo rows and
 owner-only queued attachment refs. Ecommerce/live checkout is still blocked.
+
+The 2026-05-19 domain/provider audit confirms the public web path is GoDaddy
+registrar -> Cloudflare DNS/email routing -> Frappe Cloud -> ERPNext/Frappe.
+Reindexing is blocked until the live sitemap/canonical fix is released because
+current live discovery URLs still advertise the Frappe Cloud vanity host.
 
 ## Current Confirmed State
 
@@ -51,6 +56,10 @@ owner-only queued attachment refs. Ecommerce/live checkout is still blocked.
 2. Cloudflare / domain
    - `locallytwisted.com` now reaches the Frappe Cloud site for the public
      website and inquiry forms.
+   - Cloudflare is authoritative DNS with `edward.ns.cloudflare.com` and
+     `laura.ns.cloudflare.com`.
+   - Cloudflare API reports original registrar as GoDaddy and original
+     nameservers as Bluehost.
    - 2026-05-14 Cloudflare dynamic-route gate passed 10 checks with 0 blockers
      and 0 warnings.
    - 2026-05-14 Frappe Cloud preflight recognized the `www` Frappe Cloud
@@ -59,7 +68,16 @@ owner-only queued attachment refs. Ecommerce/live checkout is still blocked.
    - Future DNS/security/cache changes still need the Cloudflare dynamic-route
      gate before claiming route health.
 
-3. Public forms
+3. Search / reindex
+   - Google Search Console TXT verification exists in Cloudflare DNS.
+   - Live sitemap currently uses `locallytwisted.v.frappe.cloud` for all 29
+     locs. Live `/about` canonical and `og:url` also use the vanity host.
+   - Source fix started in `seo.py` and `www/sitemap.py`; no Frappe Cloud
+     release has been run for that fix yet.
+   - Do not submit the sitemap or request recrawl until live SEO verification
+     passes against `https://locallytwisted.com`.
+
+4. Public forms
    - `/contact` live smoke passed.
    - `/balloon-twisting-and-face-painting` live smoke passed.
    - Strict live repeat-email/five-photo proof passed with customer and business
@@ -70,7 +88,7 @@ owner-only queued attachment refs. Ecommerce/live checkout is still blocked.
      attachment refs, and customer Email Queue `683suhfaa9` with no photo
      attachments.
 
-4. Stripe / ecommerce
+5. Stripe / ecommerce
    - Stripe CLI access on `wardenclyffe` works for the Built by Cameron account,
      but that does not approve LT live checkout or merchant-account ownership.
    - Live checkout remains blocked until the live Stripe config, product scope,
@@ -93,7 +111,9 @@ owner-only queued attachment refs. Ecommerce/live checkout is still blocked.
 4. Prove any checkout/product/deposit scope before opening it.
 5. Configure/check live Stripe without printing secrets.
 6. Check Cloudflare dynamic routes after DNS/security/cache changes.
-7. Block fake success, half-live checkout, stale migration claims, or unsafe
+7. Check sitemap/canonical public-domain output before Search Console reindex
+   work.
+8. Block fake success, half-live checkout, stale migration claims, or unsafe
    payment behavior.
 
 ## Required Gates
@@ -106,6 +126,7 @@ Public site/forms release:
 python scripts/verify/frappe_cloud_preflight.py
 python scripts/verify/cloudflare_launch_readiness_contract.py
 python scripts/verify/cloudflare_launch_readiness.py --base-url https://locallytwisted.com
+$env:LT_BASE_URL='https://locallytwisted.com'; npm run test:seo-contract
 ```
 
 Live form proof with authenticated backend verification:
@@ -137,6 +158,8 @@ python scripts/verify/stripe_amount_parity_contract.py
    business approval before live payments.
 3. Public ecommerce/product checkout remains separate from the pages/forms
    launch and must pass its own product/payment/customer-email proof.
+4. Reindexing/Search Console submission is blocked until live sitemap and
+   canonical URLs use `https://locallytwisted.com`.
 
 ## Do Not Do
 
@@ -149,3 +172,5 @@ python scripts/verify/stripe_amount_parity_contract.py
    previous live app hash to the target app mirror commit before promotion.
 6. Do not treat a staging root login screen as live breakage without naming the
    environment and checking Website Settings parity.
+7. Do not submit a sitemap or ask Google to reindex while the live sitemap or
+   canonical tags point at `locallytwisted.v.frappe.cloud`.

@@ -6,8 +6,8 @@ profile: foundation
 level: recipe
 maturity: candidate
 scope: Locally Twisted public technical discovery surfaces
-currently_true: unknown
-last_verified: 2026-05-11
+currently_true: false
+last_verified: 2026-05-19
 evidence_quality: direct
 verification_level: 1
 tags:
@@ -39,9 +39,19 @@ content-image alt text, or removed-route behavior.
 4. Avoid unverified rating, review-count, or hours claims.
 5. Keep rejected prelaunch routes out of sitemap/canonical maps unless GL
    explicitly approves a redirect.
-6. Run the verifier:
+6. For production, sitemap, canonical, Open Graph URL, and structured-data URLs
+   must use `https://locallytwisted.com`, not the Frappe Cloud vanity host.
+7. Run the verifier:
 
 ```powershell
+npm run test:seo-contract
+```
+
+After a Frappe Cloud release and before Search Console reindex work, run the
+same contract against production:
+
+```powershell
+$env:LT_BASE_URL='https://locallytwisted.com'
 npm run test:seo-contract
 ```
 
@@ -58,6 +68,14 @@ npm run test:seo-contract
 
 These return 404 without redirect and are excluded from sitemap/canonical
 coverage. The four event audience pages remain crawlable.
+
+## Current Watch
+
+On 2026-05-19, the live public site served from Frappe Cloud through Cloudflare,
+but the live sitemap and about-page discovery metadata advertised
+`https://locallytwisted.v.frappe.cloud`. Source was patched and the verifier was
+strengthened, but `currently_true` remains false until the fix is deployed to
+Frappe Cloud, cache is cleared, and the production SEO contract passes.
 
 ## Rollback / revalidation path
 

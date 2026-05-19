@@ -24,6 +24,11 @@ Current launch posture:
 - The 2026-05-15 inquiry-photo hotfix and inquiry spam/filter source are live
   as of the 2026-05-16 Frappe Cloud site update. The accepted real smoke proved
   CRM photo rows and owner-only Email Queue attachment refs.
+- The 2026-05-19 domain/provider audit confirmed Cloudflare authoritative DNS
+  and Frappe Cloud public serving, but found SEO discovery drift: live sitemap
+  and canonical metadata still advertise `locallytwisted.v.frappe.cloud`.
+  Reindex work is blocked until the source fix is released and the live SEO
+  contract passes.
 - Staging is separate from live. The 2026-05-16 staging `/#login` failure was
   Website Settings drift on staging, not a live production outage.
 - Live Stripe checkout remains closed until the separate product/payment gates
@@ -55,6 +60,7 @@ the final go/no-go evidence for payments and ecommerce exposure.
 | Public site/forms | Live smoke on 2026-05-16 proved Lead `CRM-LEAD-2026-00013`, five private Files, five CRM photo rows, owner Email Queue `683s86r04b` with five attachment refs, and customer Email Queue `683suhfaa9` with zero photo attachments | `smoke_forms.py` for each route plus `book_form_repeat_email_photos.py` against live with authenticated backend CDP after future form changes |
 | Hidden commerce | Website launch does not approve checkout | `python scripts/verify/ecommerce_pause_contract.py` before relying on a paused/no-purchase posture |
 | Cloudflare | Domain now routes to Frappe Cloud for pages/forms; rerun dynamic-route gate after any DNS/cache/security change | `python scripts/verify/cloudflare_launch_readiness.py --base-url https://locallytwisted.com` |
+| SEO/reindex | Source guard added for sitemap/canonical public-domain drift, but live still advertises the Frappe Cloud vanity host until a Frappe Cloud release lands | `$env:LT_BASE_URL='https://locallytwisted.com'; npm run test:seo-contract` |
 | Stripe | Live checkout remains blocked | `python scripts/verify/payment_launch_readiness.py --mode live --base-url https://locallytwisted.com` plus one intentional low-risk real payment test |
 | Backend proof before opening checkout | Still required before any checkout scope opens | `business_automation_index.py`, `synthetic_business_pipeline.py`, `payment_backend_config_contract.py`, `payment_webhook_contract.py`, `stripe_amount_parity_contract.py` |
 
@@ -233,3 +239,6 @@ Passed on 2026-05-16 after site update `b48j584nua` / update job
   launch and needs its own product/payment/customer-email proof.
 - Any future DNS, Cloudflare cache/security, or Frappe Cloud release change
   needs the relevant live route/API/form gates rerun.
+- Search Console reindex work is blocked until live sitemap and canonical
+  output use `https://locallytwisted.com` instead of the Frappe Cloud vanity
+  host.

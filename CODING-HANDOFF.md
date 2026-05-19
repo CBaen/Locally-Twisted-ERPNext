@@ -1,5 +1,26 @@
 # Locally Twisted - Coding Handoff
 
+Codex domain/provider/reindex cleanup on 2026-05-19: public DNS and Cloudflare
+API confirm the current web chain is GoDaddy registrar -> Cloudflare
+authoritative DNS -> Frappe Cloud -> ERPNext/Frappe. Cloudflare zone
+`locallytwisted.com` is active, nameservers are `edward.ns.cloudflare.com` and
+`laura.ns.cloudflare.com`, original nameservers were Bluehost
+`ns1.bluehost.com` / `ns2.bluehost.com`, and original registrar is GoDaddy.
+Live `https://locallytwisted.com/` returns `200` from `Server: Frappe Cloud`;
+the old Hetzner/Odoo IP `5.78.136.133` is reference/decommission scope, not
+the current public site path. Reindex blocker found: live sitemap and canonical
+metadata currently advertise `https://locallytwisted.v.frappe.cloud` instead
+of `https://locallytwisted.com` (29/29 sitemap locs use the vanity host).
+Source fix started in `seo.py`, `www/sitemap.py`, and
+`scripts/verify/seo_contract.spec.js`, but it is not live until app mirror sync,
+Frappe Cloud deploy/site update, cache clear, and live SEO verification pass.
+Feature handoff:
+`workstreams/domain-provider-reindex-cleanup-2026-05-19.md`; failure recipe:
+`capabilities/failures/frappe-cloud-sitemap-public-domain-drift.md`. No
+provider cancellation, Search Console submission, DNS mutation, Frappe Cloud
+deploy, app mirror push, Google Ads change, Meta change, or live-site deploy
+was performed.
+
 Codex ad-account takeover documentation closeout on 2026-05-19: GL clarified
 that the goal is account control, not another research crawl. Support evidence
 from LT Gmail/Drive identifies Google Ads account `Locally Twisted` / customer

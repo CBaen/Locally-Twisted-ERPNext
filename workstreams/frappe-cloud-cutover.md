@@ -2,7 +2,7 @@
 
 Status: LIVE VERIFIED on Frappe Cloud at `https://locallytwisted.com`.
 Owner lane: production hosting and final `locallytwisted.com` cutover.
-Last verified: 2026-05-12.
+Last verified: 2026-05-19.
 
 ## Purpose
 
@@ -52,10 +52,17 @@ Verification artifacts:
 - Public domain is already delegated to Cloudflare:
   - `edward.ns.cloudflare.com`
   - `laura.ns.cloudflare.com`
-- Current public records still point to the old site:
-  - `locallytwisted.com A 162.241.218.247`
-  - `www.locallytwisted.com CNAME locallytwisted.com`
+- Current public records point to Frappe Cloud:
+  - `locallytwisted.com A 34.226.39.121`, DNS-only.
+  - `www.locallytwisted.com CNAME locallytwisted.v.frappe.cloud`, DNS-only.
+- Cloudflare zone read on 2026-05-19 reported original registrar as
+  `godaddy.com, llc (id: 146)` and original nameservers as
+  `ns1.bluehost.com` / `ns2.bluehost.com`.
 - Frappe Cloud docs currently say custom domains using Cloudflare must be DNS-only during verification; proxied records do not work for the custom-domain add.
+- SEO discovery needs a follow-up release before Search Console reindex work:
+  live sitemap and canonical metadata still advertise
+  `locallytwisted.v.frappe.cloud`; see
+  `workstreams/domain-provider-reindex-cleanup-2026-05-19.md`.
 
 ## Primary Architecture Decision
 
@@ -104,14 +111,16 @@ The verifier is read-only. It checks branch, remote, dirty worktree state, app m
 
 Current known preflight warnings:
 
-- The worktree is dirty because several other LT feature lanes are active. Cutover should use a clean, reviewed, pushed commit.
-- DNS still points to the current old site. That is correct until cutover.
+- If the worktree is dirty because other LT feature lanes are active, cutover
+  should use a clean, reviewed, pushed commit.
 
 Resolved prep warnings:
 
 - `id_ed25519.pub` is now readable and is the key to paste into Frappe Cloud Settings > SSH Key.
 - `ssh-agent` is not required for the current prep path; use the Frappe Cloud dashboard SSH certificate flow with the matching local private key.
 - The app-root mirror exists at `CBaen/Locally-Twisted-Frappe-App` with `pyproject.toml` at repository root.
+- DNS no longer points to the old site. Cloudflare now routes web traffic to
+  Frappe Cloud.
 
 ## Frappe Cloud Setup Path
 

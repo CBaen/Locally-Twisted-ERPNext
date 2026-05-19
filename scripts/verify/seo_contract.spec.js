@@ -73,6 +73,12 @@ test.describe("Locally Twisted SEO, GEO, and AEO contract", () => {
 		for (const path of ["/shop", "/shop-items/seasonal-specialty"]) {
 			expect(xml, `paused ecommerce URL should remain in sitemap: ${path}`).toContain(absolutePath(path));
 		}
+
+		expect(xml, "sitemap should not advertise the Frappe Cloud vanity host").not.toContain("locallytwisted.v.frappe.cloud");
+		for (const match of xml.matchAll(/<loc>(.*?)<\/loc>/g)) {
+			const loc = new URL(match[1]);
+			expect(loc.hostname, `${match[1]} should use the tested public host`).toBe(ABSOLUTE_BASE.hostname);
+		}
 	});
 
 	test("removed Event Balloons hub routes return 404 without redirect", async ({ request }) => {
