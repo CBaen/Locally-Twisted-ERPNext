@@ -234,8 +234,10 @@ def _ensure_item_attribute(frappe, attribute_name: str, values: list[str]) -> st
 
     if existing:
         if changed:
+            # Permission bypass is guarded by the local-only blueprint apply gate.
             doc.save(ignore_permissions=True)
     else:
+        # Permission bypass is guarded by the local-only blueprint apply gate.
         doc.insert(ignore_permissions=True)
     return doc.name
 
@@ -266,12 +268,14 @@ def _upsert_template_item(frappe, base_item: dict[str, Any], planned: dict[str, 
         item.attributes = []
         for attr_name in attr_names:
             item.append("attributes", {"attribute": attr_name})
+        # Permission bypass is guarded by blueprint target collision checks and local apply confirmation.
         item.save(ignore_permissions=True)
         return item.name
 
     item = frappe.get_doc({"doctype": "Item", "item_code": item_code, **payload})
     for attr_name in attr_names:
         item.append("attributes", {"attribute": attr_name})
+    # Permission bypass is guarded by blueprint target collision checks and local apply confirmation.
     item.insert(ignore_permissions=True)
     return item.name
 
@@ -298,6 +302,7 @@ def _upsert_variant(frappe, template_item: str, variant_plan: dict[str, Any]) ->
         variant = create_variant(template_item, args=args)
         variant.item_code = item_code
         variant.item_name = _variant_item_name(frappe, template_item, args)
+        # Permission bypass is guarded by variant-template checks and local apply confirmation.
         variant.insert(ignore_permissions=True)
         return variant.name
     except ItemVariantExistsError:
@@ -323,6 +328,7 @@ def _upsert_item_price(frappe, price_plan: dict[str, Any]) -> str:
         doc.price_list_rate = price
         doc.currency = "USD"
         doc.selling = 1
+        # Permission bypass is guarded by local apply confirmation and exact Item Price lookup.
         doc.save(ignore_permissions=True)
         return doc.name
     doc = frappe.get_doc(
@@ -335,6 +341,7 @@ def _upsert_item_price(frappe, price_plan: dict[str, Any]) -> str:
             "selling": 1,
         }
     )
+    # Permission bypass is guarded by local apply confirmation and exact Item Price plan rows.
     doc.insert(ignore_permissions=True)
     return doc.name
 
@@ -352,6 +359,7 @@ def _upsert_website_item(frappe, template_item: str, website_plan: dict[str, Any
         from webshop.webshop.doctype.website_item.website_item import make_website_item
 
         doc = make_website_item(frappe.get_doc("Item", template_item), save=False)
+        # Permission bypass is guarded by route collision checks and local apply confirmation.
         doc.insert(ignore_permissions=True)
 
     doc.web_item_name = website_plan["web_item_name"][:140]
@@ -366,6 +374,7 @@ def _upsert_website_item(frappe, template_item: str, website_plan: dict[str, Any
         doc.lt_product_page_type = website_plan.get("lt_product_page_type")
     if meta.has_field("lt_commerce_lane"):
         doc.lt_commerce_lane = website_plan.get("lt_commerce_lane")
+    # Permission bypass is guarded by route collision checks and local apply confirmation.
     doc.save(ignore_permissions=True)
     return doc.name
 

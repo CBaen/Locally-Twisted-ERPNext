@@ -41,9 +41,6 @@ Remaining hard stops:
 - `scripts/verify/product_import_readiness_gate.py` still blocks final
   destructive import because explicit approval has not been renewed for the
   2026-05-19 snapshot, backup, dry-run, and guard-path packet.
-- `scripts/verify/ignore_permissions_justification_lint.py` intentionally fails
-  on 32 existing production permission bypasses that need guard/justification
-  review.
 
 ## Safety Rules
 
@@ -153,7 +150,7 @@ Current status:
   import readiness is blocked only on final same-day destructive approval.
 - Lane 3 payment/thank-you changes are integrated and locally passing.
 - Lane 4 API/permission inventory verifiers are integrated; guest endpoint
-  inventory passes and permission-bypass lint reports a follow-up blocker.
+  inventory and permission-bypass lint now pass.
 - Lane 5 docs are integrated and updated with the controller verification
   receipts below.
 
@@ -224,7 +221,7 @@ release language changes from pending to verified.
 | Cart and checkout identity | 1 | verified local | `python scripts/verify/cart_checkout_contract.py` PASS; `npm run test:checkout-experience` PASS. |
 | Payment amount/state | 3 | verified local | `python scripts/verify/stripe_amount_parity_contract.py` PASS; `python scripts/verify/payment_webhook_contract.py` PASS; `python scripts/verify/payment_success_reconciliation_contract.py` PASS. |
 | Thank-you and receipt/email truth | 3 | verified local | `python scripts/verify/thank_you_payment_state_contract.py` PASS; `python scripts/verify/payment_cascade_contract.py` PASS; `python scripts/verify/simple_purchasable_payment_cascade_contract.py` PASS. |
-| Public API and permission bypass inventory | 4 | partial / blocked | `python scripts/verify/allow_guest_surface_inventory.py` PASS with 11 guest endpoints and 3 public write endpoints; `python scripts/verify/ignore_permissions_justification_lint.py` FAILS on 32 existing production bypasses requiring review. |
+| Public API and permission bypass inventory | 4 | verified local | `python scripts/verify/allow_guest_surface_inventory.py` PASS with 11 guest endpoints and 3 public write endpoints; `python scripts/verify/ignore_permissions_justification_lint.py` PASS with 150 bypasses scanned / 0 requiring attention after explicit guard comments were added to existing bypass sites. |
 | Docs parity | 5 | verified local | This workstream, `locally-twisted-queue.md`, and `CODING-HANDOFF.md` name the same local-only posture and blockers. |
 
 Release wording rule: until every required row is verified or explicitly

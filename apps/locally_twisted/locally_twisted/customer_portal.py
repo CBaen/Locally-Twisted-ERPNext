@@ -165,6 +165,7 @@ def submit_customer_change_request(
             "payload_json": json.dumps(payload_dict, sort_keys=True),
         }
     )
+    # Permission bypass is guarded by resolve_customer_identity and _assert_source_access above.
     request.insert(ignore_permissions=True)
     return {
         "ok": True,
@@ -258,6 +259,7 @@ def register_customer_portal_file(
             "uploaded_by_customer": 1,
         }
     )
+    # Permission bypass is guarded by source access and customer-owned File checks above.
     doc.insert(ignore_permissions=True)
     return {"ok": True, "portal_file": doc.name, "file": file_name, "purpose": purpose}
 

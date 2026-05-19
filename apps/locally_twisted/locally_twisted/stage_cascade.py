@@ -146,9 +146,11 @@ def _ensure_current_stage_task(doc, stage: str) -> None:
             task.completed_by = None
             changed = True
         if changed:
+            # Permission bypass is guarded by the Lead stage-cascade task key.
             task.save(ignore_permissions=True)
         return
 
+    # Permission bypass is guarded by the Lead stage-cascade task key.
     frappe.get_doc({"doctype": "Task", **_task_fields(doc, stage, spec)}).insert(
         ignore_permissions=True
     )

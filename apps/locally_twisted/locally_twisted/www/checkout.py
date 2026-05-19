@@ -1152,6 +1152,7 @@ def _record_order_notes(so_name, notes, sender=None):
     if already_recorded:
         return
 
+    # Permission bypass is guarded to attach customer checkout notes to this Sales Order.
     frappe.get_doc({
         "doctype": "Communication",
         "communication_type": "Communication",

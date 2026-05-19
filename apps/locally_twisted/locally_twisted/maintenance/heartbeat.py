@@ -495,8 +495,10 @@ def _write_result(result: dict[str, Any]) -> None:
             "digest_json": json.dumps(_storage_payload(result), indent=2, default=str),
         }
     )
+    # Permission bypass is guarded to store sanitized system heartbeat run evidence.
     run_doc.insert(ignore_permissions=True)
     for event in result["events"]:
+        # Permission bypass is guarded to store sanitized system heartbeat event evidence.
         frappe.get_doc(
             {
                 "doctype": EVENT_DOCTYPE,

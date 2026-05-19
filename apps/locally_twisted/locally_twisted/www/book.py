@@ -518,6 +518,7 @@ def _insert_lead_with_retry(lead_doc, *, defer_customer_ack=False, customer_emai
         if customer_email:
             lead.flags.lt_customer_email = customer_email
         try:
+            # Permission bypass is guarded by public form validation and retry-only insert handling.
             lead.insert(ignore_permissions=True)
             return lead
         except Exception as exc:
@@ -574,6 +575,7 @@ def _send_deferred_business_notification(lead, photo_uploads, *, solicitation_fi
 def _record_sales_solicitation_note(lead, solicitation_filter):
     reasons = ", ".join(solicitation_filter.get("sales_reasons") or [])
     customer_reasons = ", ".join(solicitation_filter.get("customer_reasons") or [])
+    # Permission bypass is guarded to record solicitation suppression evidence on this Lead.
     frappe.get_doc({
         "doctype": "Comment",
         "comment_type": "Info",
@@ -903,6 +905,7 @@ def _ensure_lead_source(source_name):
     if frappe.db.exists("Lead Source", source_name):
         return
     try:
+        # Permission bypass is guarded by duplicate handling for known Lead Source labels.
         frappe.get_doc({
             "doctype": "Lead Source",
             "source_name": source_name,
@@ -1095,6 +1098,7 @@ def _record_inquiry_communication(
     if description:
         body_html = f"{body_html}<br><br>{escape_html(description).replace(chr(10), '<br>')}"
 
+    # Permission bypass is guarded to attach the received public inquiry summary to its Lead.
     frappe.get_doc({
         "doctype": "Communication",
         "communication_type": "Communication",

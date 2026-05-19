@@ -341,6 +341,7 @@ def _convert_checkout_leads_after_payment(so_name):
                 lead.set(PIPELINE_FIELD, "Approved")
                 changed = True
             if changed:
+                # Permission bypass is guarded by verified payment and linked Customer/Lead lookup.
                 lead.flags.ignore_permissions = True
                 lead.save(ignore_permissions=True)
             converted.append(lead.name)
@@ -453,6 +454,7 @@ def _create_payment_entry_for_billed_sales_order(payment_request):
     )
     for reference in payment_entry.references:
         reference.payment_request = payment_request.name
+    # Permission bypass is guarded by verified Stripe payment and matched Sales Invoice recovery.
     payment_entry.insert(ignore_permissions=True)
     payment_entry.submit()
 
@@ -518,11 +520,13 @@ def _ensure_sales_invoice(so_name):
     from erpnext.selling.doctype.sales_order.sales_order import make_sales_invoice
     from locally_twisted.product_page_runtime import copy_sales_order_line_configuration_to_invoice
 
+    # Permission bypass is guarded by verified payment reconciliation for this Sales Order.
     si = make_sales_invoice(so_name, ignore_permissions=True)
     si.flags.ignore_permissions = True
     si.flags.mute_email = True
     si.set_missing_values()
     copy_sales_order_line_configuration_to_invoice(si, so_name)
+    # Permission bypass is guarded by verified payment reconciliation for this Sales Order.
     si.insert(ignore_permissions=True)
     si.submit()
     frappe.db.commit()

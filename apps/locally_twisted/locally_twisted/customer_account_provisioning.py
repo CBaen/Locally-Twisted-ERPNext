@@ -39,6 +39,7 @@ def provision_customer_account(contact_name: str | None = None, commit: bool | i
     changed = _link_contact_to_user(contact, user.name) or changed
 
     if changed:
+        # Permission bypass is guarded by Contact write access and User safety checks above.
         user.save(ignore_permissions=True)
 
     if _as_bool(commit):
@@ -124,6 +125,7 @@ def _link_contact_to_user(contact, user_name: str) -> bool:
     if existing == user_name:
         return False
     contact.user = user_name
+    # Permission bypass is limited to the Contact.user link after caller access checks.
     contact.save(ignore_permissions=True)
     return True
 

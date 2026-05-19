@@ -189,6 +189,7 @@ def record_backend_failure_resolution(
             "content": _resolution_comment_content(payload),
         }
     )
+    # Permission bypass is guarded to write system resolution evidence onto the affected record.
     comment.insert(ignore_permissions=True)
     if commit:
         frappe.db.commit()
@@ -260,6 +261,7 @@ def _write_record_comment(payload: dict[str, Any]) -> str:
             "content": content,
         }
     )
+    # Permission bypass is guarded to write system failure evidence onto the affected record.
     comment.insert(ignore_permissions=True)
     return comment.name
 

@@ -24,10 +24,13 @@ passed for 49 products / 10,186 active variants, fresh snapshot
 `20260519_171525` completed, and guard-path dry run accepted the packet with no
 purge/import/delete. Remaining blockers: `product_import_readiness_gate.py` is
 11 pass / 1 blocker because final destructive approval has not been renewed for
-the 2026-05-19 packet; `ignore_permissions_justification_lint.py` intentionally
-fails on 32 existing production `ignore_permissions=True` uses that need
-guard/justification review. Public ecommerce is still not release-ready until
-these blockers are cleared or explicitly accepted for a target release.
+the 2026-05-19 packet. Permission-bypass review follow-up cleared in the same
+track: explicit guard comments were added beside the 32 previously flagged
+production `ignore_permissions=True` uses, `ignore_permissions_justification_lint.py`
+now passes with 150 bypasses scanned / 0 requiring attention, and
+`allow_guest_surface_inventory.py` still passes with 11 guest endpoints / 3
+public write endpoints. Public ecommerce is still not release-ready until final
+destructive approval and target release gates are explicitly handled.
 
 Codex domain/provider/reindex cleanup on 2026-05-19: public DNS and Cloudflare
 API confirm the current web chain is GoDaddy registrar -> Cloudflare

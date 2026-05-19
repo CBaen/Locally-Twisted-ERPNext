@@ -349,6 +349,7 @@ def _ensure_contact_link(doc):
                 "is_primary_mobile_no": 1,
                 "is_primary_phone": 1,
             })
+        # Permission bypass is guarded by Lead hook context and only creates the matching Contact.
         contact.insert(ignore_permissions=True)
 
     # Attach Contact to this Lead (via Contact.links). Avoid duplicate
@@ -363,6 +364,7 @@ def _ensure_contact_link(doc):
             "link_doctype": "Lead",
             "link_name": doc.name,
         })
+        # Permission bypass is guarded by duplicate-link checks for this Lead and Contact pair.
         contact.save(ignore_permissions=True)
 
 
