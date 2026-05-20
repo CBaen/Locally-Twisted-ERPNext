@@ -1,5 +1,32 @@
 # Locally Twisted - Coding Handoff
 
+Codex product-page local review closeout on 2026-05-20: local-only product page
+work repaired two customer-facing issues before staging. Mobile product detail
+spacing now removes the large dead zone between product image and details, and
+the fulfillment panel now follows the Website Item runtime commerce lane
+instead of item-group fallback. This keeps Classic Arch and other
+`quote_first`/`needs_review` products on quote/install language instead of
+showing checkout pickup copy. Classic Arch proof contracts were aligned to
+`complex_custom_product|quote_first`, and `smoke_shop.py` now fails if
+quote-first product pages show "Pickup is requested at checkout" or omit
+"Quoted event work." Feature handoff:
+`workstreams/ecommerce-audit/product-page-local-review-2026-05-20.md`; failure
+recipe: `capabilities/failures/product-fulfillment-copy-lane-drift.md`.
+Verified locally after cache clear/restart: `product_page_runtime_contract.py`,
+`proof_product_contract.py`, `commerce_rules_contract.py`,
+`npm run test:product-price-display`, `npm run test:variant-media`,
+`python scripts\verify\smoke_shop.py`, `npm run test:layout-fit -- --grep
+"variant-product|single-product|seasonal-category"` (39/39), and
+`python -m py_compile` for touched Python files. No staging/live/Frappe
+Cloud/Stripe/DNS/public exposure change was performed. Remaining blocker before
+staging: reconcile the broader product-classification guard conflict instead of
+applying stale verifier expectations. `quote_event_checkout_boundary_contract.py`
+expects `basketball-arch` to be `complex_custom_product|quote_first` while the
+current DB has it as checkout, and `website_item_classification_contract.py`
+dry-run wants 17 classification changes from an older target model. Do not
+apply those classification changes without explicit local review and GL
+approval.
+
 Codex ecommerce safety guard closeout on 2026-05-19: the P0 coordination source
 is `workstreams/ecommerce-system-safety-guard-plan-2026-05-19.md`, with the
 active queue item in `locally-twisted-queue.md`. Five GPT-5.5 worker lanes were

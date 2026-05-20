@@ -18,6 +18,22 @@ UX and search/discovery. Current visible/imported products are test products
 only; real catalog truth requires a separate approved catalog/import proof
 gate.
 
+## 2026-05-20 Product Page Local Review
+
+Use `product-page-local-review-2026-05-20.md` for the current local product-page
+design/logic review slice before staging. It records the mobile image/details
+spacing repair, the fulfillment-panel runtime lane fix, Classic Arch
+`complex_custom_product|quote_first` proof alignment, and the local verifier
+receipt set.
+
+This handoff is not a staging packet and not live approval. Its open blocker is
+the broader product-classification conflict:
+`quote_event_checkout_boundary_contract.py` still expects some older
+quote-first rows, including `basketball-arch`, while the current DB has at
+least that product as checkout. `website_item_classification_contract.py`
+dry-run wants 17 lane changes from an older target model. Do not apply those
+classification changes without current GL review.
+
 ## 2026-05-17 All-Odoo Sellable Product Reimport
 
 Use `odoo-sellable-product-reimport-2026-05-17.md` as the current front-door

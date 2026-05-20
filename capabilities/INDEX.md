@@ -149,6 +149,7 @@ pattern that feels familiar.
 - [playwright-in-file-parallel-fixture-race](failures/playwright-in-file-parallel-fixture-race.md) - keeps LT Playwright specs serial by default unless backend fixture isolation is proven.
 - [variant-media-overgating-regression](failures/variant-media-overgating-regression.md) - prevents media safety gates from hiding already-approved simple checkout variant Item images while still holding complex/unclassified media.
 - [ecommerce-variant-price-source-drift](failures/ecommerce-variant-price-source-drift.md) - prevents variant shape, price existence, or Stripe/ERPNext agreement from being mistaken for source-correct ecommerce pricing.
+- [product-fulfillment-copy-lane-drift](failures/product-fulfillment-copy-lane-drift.md) - prevents product-page pickup/delivery copy from using category fallback when the Website Item runtime lane is quote-first or needs-review.
 
 ## Evidence And Registry
 

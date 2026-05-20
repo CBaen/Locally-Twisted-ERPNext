@@ -7,9 +7,9 @@ maturity: candidate
 scope: Locally Twisted ERPNext/Frappe product detail option controls and product-page containers
 currently_true: yes
 verification_level: 2
-last_verified: 2026-05-07
+last_verified: 2026-05-20
 evidence_quality: direct
-successful_uses: 1
+successful_uses: 2
 failed_uses: 0
 regressions: 0
 depends_on:
@@ -108,3 +108,12 @@ and `python scripts/verify/smoke_shop.py`. Fresh screenshots were captured at
 `output/playwright/product-page-clear-options-unicorn-390.png`; computed styles
 showed 0 borders, transparent backgrounds, and no shadows for product controls,
 with pickup/delivery still framed.
+
+On 2026-05-20, local product-page review adjusted the visual-first product CSS
+so mobile product pages no longer leave a large dead zone between the image and
+details. The same pass preserved the allowed fulfillment frame while changing
+its copy source to runtime lane authority. Fresh desktop/mobile review
+screenshots were kept locally under ignored
+`output/playwright/product-redesign-review-20260520/`, and the focused layout
+gate passed 39/39 checks for variant, single-product, and seasonal-category
+routes.

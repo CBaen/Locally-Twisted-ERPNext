@@ -14,7 +14,7 @@ Read-only contract verification for GL-selected proof products.
 ## Classic Arch
 
 - Template: Configurable product page (`complex_custom_product`)
-- Commerce lane: Online checkout (`checkout`)
+- Commerce lane: Internal checkout hold (`quote_first`)
 - Required axes: Arch Size, Design, LED Lights
 - Customization axes: latex colors
 - Gallery images in source contract: 23

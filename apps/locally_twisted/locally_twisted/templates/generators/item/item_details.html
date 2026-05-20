@@ -108,7 +108,7 @@
         {% endif %}
     </div>
 
-    {% set lt_fulfillment_panel = public_fulfillment_panel(doc.item_group) %}
+    {% set lt_fulfillment_panel = public_fulfillment_panel(doc.item_group, lt_product_runtime.commerce_lane) %}
     <section class="lt-product__fulfillment" aria-labelledby="lt-product-fulfillment-heading">
         <h2 id="lt-product-fulfillment-heading" class="lt-product__fulfillment-heading">
             {{ _(lt_fulfillment_panel.heading) }}

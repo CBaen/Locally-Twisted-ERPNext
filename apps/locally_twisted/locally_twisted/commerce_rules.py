@@ -426,8 +426,15 @@ def payment_rule_for_lane(
     )
 
 
-def public_fulfillment_panel(item_group: str | None) -> dict:
-    lane = checkout_lane_for_item_group(item_group)
+def public_fulfillment_panel(
+    item_group: str | None, commerce_lane: str | None = None
+) -> dict:
+    commerce_lane = (commerce_lane or "").strip()
+    lane = (
+        "quote_required"
+        if commerce_lane in {"quote_first", "needs_review"}
+        else checkout_lane_for_item_group(item_group)
+    )
     if lane == "quote_required":
         return {
             "lane": lane,

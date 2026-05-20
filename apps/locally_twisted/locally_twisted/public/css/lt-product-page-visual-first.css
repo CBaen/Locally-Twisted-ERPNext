@@ -234,6 +234,19 @@
 }
 
 @media (max-width: 767px) {
+  .product-container.item-main.lt-product-page__main .lt-product__summary-row {
+    display: block;
+    gap: 0;
+  }
+
+  .lt-product__media-column {
+    margin-bottom: 0 !important;
+  }
+
+  .lt-product__details {
+    padding-top: 0.35rem;
+  }
+
   .lt-product__media-shell.has-thumbnails {
     grid-template-columns: 1fr;
   }

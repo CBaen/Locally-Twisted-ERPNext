@@ -8,6 +8,43 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-20 - Product-page customer promises follow the runtime product lane
+
+**Decision:** Customer-facing product-page fulfillment copy must read from the
+resolved Website Item runtime commerce lane before falling back to Item Group
+rules. A `quote_first` or `needs_review` product may remain visible and priced,
+but it must not show checkout pickup/delivery promises unless that exact
+product runtime contract is checkout-approved.
+
+**Reasoning:** During local product-page review, Classic Arch still rendered
+checkout pickup copy even though the product runtime contract was
+`complex_custom_product|quote_first`. The root problem was that the fulfillment
+panel used Item Group lane fallback while the rest of the page used the Website
+Item product contract. That mismatch creates false customer promises: the page
+looks like it will checkout even though the product is intentionally
+quote/install reviewed.
+
+**Implementation boundary:** Local source only. `public_fulfillment_panel` now
+accepts the runtime commerce lane, `item_details.html` passes
+`lt_product_runtime.commerce_lane`, Classic Arch proof expectations were
+aligned to `complex_custom_product|quote_first`, and `smoke_shop.py` guards
+quote-first pages against checkout pickup copy. No broader Website Item
+classification mutation, staging deploy, live deploy, Frappe Cloud update,
+Stripe change, DNS change, or public exposure change was performed.
+
+**Receipts:** `workstreams/ecommerce-audit/product-page-local-review-2026-05-20.md`;
+`capabilities/failures/product-fulfillment-copy-lane-drift.md`;
+`capabilities/recipes/frappe-product-page-company-first.md`;
+`capabilities/recipes/frappe-product-clear-control-contract.md`;
+`scripts/verify/smoke_shop.py`;
+`scripts/verify/proof_product_contract.py`;
+`apps/locally_twisted/locally_twisted/verify/product_page_runtime_contract.py`.
+
+**Decided by:** GL approval of the local product-page fix and Codex
+verifier-first implementation on 2026-05-20.
+
+---
+
 ## 2026-05-19 - Ecommerce price identity is a launch invariant
 
 **Decision:** Treat source-correct variant pricing as an architecture invariant

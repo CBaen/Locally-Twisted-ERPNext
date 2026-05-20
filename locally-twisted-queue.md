@@ -57,6 +57,24 @@ staging-to-live gates to decide what can safely go live. Current
 visible/imported product records are fixture/test products for architecture
 proof only; Locally Twisted itself is a real client project.
 
+**P0 product-page local review before staging (2026-05-20):** Active handoff is
+`workstreams/ecommerce-audit/product-page-local-review-2026-05-20.md`. Local
+source now fixes the mobile product image/details gap and makes the visible
+fulfillment panel read from the runtime Website Item commerce lane, so Classic
+Arch / quote-first products show quote/install language instead of checkout
+pickup copy. Passed local receipts: `product_page_runtime_contract.py`,
+`proof_product_contract.py`, `commerce_rules_contract.py`,
+`npm run test:product-price-display`, `npm run test:variant-media`,
+`python scripts\verify\smoke_shop.py`, `npm run test:layout-fit -- --grep
+"variant-product|single-product|seasonal-category"` (39/39), and Python
+compile for touched modules. No staging/live/Frappe Cloud/Stripe/DNS change was
+performed. Remaining blocker before staging is not this CSS/copy slice; it is
+the broader product-classification verifier conflict. Do not apply
+`website_item_classification_contract.py` planned changes or treat
+`quote_event_checkout_boundary_contract.py` as current truth until the
+Basketball Arch/current-DB checkout conflict and the dry-run's 17 planned lane
+changes are reviewed against the current business model.
+
 **P0 ecommerce safety guard and release receipt matrix (2026-05-19):** Active
 coordination source is
 `workstreams/ecommerce-system-safety-guard-plan-2026-05-19.md`. This is

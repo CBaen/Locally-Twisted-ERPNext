@@ -7,9 +7,9 @@ maturity: candidate
 scope: Locally Twisted ERPNext/Frappe Webshop product detail pages
 currently_true: yes
 verification_level: 2
-last_verified: 2026-05-07
+last_verified: 2026-05-20
 evidence_quality: direct
-successful_uses: 1
+successful_uses: 2
 failed_uses: 0
 regressions: 0
 depends_on:
@@ -62,6 +62,10 @@ retail recommendation engine.
 - Product recommendations, upsells, cross-sells, generic reviews tabs, and
   empty specification panels are out of scope for launch. The company, proof
   photos, service authority, and contact path carry the brand.
+- Fulfillment/pickup/delivery copy must follow the resolved Website Item
+  runtime commerce lane before falling back to Item Group rules. Quote-first or
+  needs-review product pages must show quote/install language, not checkout
+  pickup copy.
 
 ## Implementation Pattern
 
@@ -108,3 +112,13 @@ Verification passed with `python scripts/dev/clear_website_cache.py --restart`,
 "variant-product|single-product|seasonal-category"` (39/39). Screenshots for
 the flagged Unicorn Bouquet path were saved under `output/playwright/` with
 `product-page-company-first-unicorn-*`.
+
+On 2026-05-20, local product-page review found Classic Arch was correctly
+`complex_custom_product|quote_first` at runtime but still showed checkout
+pickup copy because the fulfillment panel used Item Group fallback. The repair
+passed the runtime lane into `public_fulfillment_panel`, aligned Classic Arch
+proof expectations, and added `smoke_shop.py` assertions that quote-first pages
+do not show "Pickup is requested at checkout" and do show "Quoted event work."
+Verification passed locally with `product_page_runtime_contract.py`,
+`proof_product_contract.py`, `commerce_rules_contract.py`, `smoke_shop.py`, and
+the focused product layout gate. No staging/live release was performed.

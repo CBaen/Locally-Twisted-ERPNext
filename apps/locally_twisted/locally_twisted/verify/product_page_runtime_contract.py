@@ -113,7 +113,7 @@ def _assert_live_runtime_contracts_match_proof_source() -> None:
 
     expected = {
         "unicorn-bouquet": ("simple_product", "checkout"),
-        "classic-arch": ("complex_custom_product", "checkout"),
+        "classic-arch": ("complex_custom_product", "quote_first"),
     }
     for website_item_code, (page_type, commerce_lane) in expected.items():
         contract = product_page_contract_for_website_item(website_item_code)

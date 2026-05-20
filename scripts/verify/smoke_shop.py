@@ -828,6 +828,14 @@ def check_quote_first_product_pages_keep_quote_gate(page):
             page.locator(".btn-add-to-cart, #lt-add-to-cart-variant").count() == 0,
             f"{url} should not expose add-to-cart controls",
         )
+        assert_(
+            "Pickup is requested at checkout" not in body,
+            f"{url} should not show checkout pickup copy on a quote-first product page",
+        )
+        assert_(
+            "Quoted event work" in body,
+            f"{url} should show quote/install fulfillment language",
+        )
     print("  OK quote-first products keep product details, options, and contact handoff")
 
 

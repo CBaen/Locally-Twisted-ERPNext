@@ -6,6 +6,24 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-20 - Product-page copy can break the commerce contract
+
+Classic Arch was correctly treated as a quote-first complex product by the
+runtime product contract, but the fulfillment panel still showed checkout pickup
+language because it used Item Group fallback instead of the resolved Website
+Item commerce lane. The page looked visually acceptable, but it made the wrong
+customer promise.
+
+**Counter-move:** product-page proof must check the visible promises, not only
+the selected variant, price, and add-to-cart controls. When a product is
+`quote_first` or `needs_review`, the page must not contain checkout pickup copy
+and must contain quote/install language. Keep `smoke_shop.py` as the customer
+copy guard, and use
+`capabilities/failures/product-fulfillment-copy-lane-drift.md` before changing
+fulfillment panels, product contracts, or category fallback logic.
+
+---
+
 ## 2026-05-19 - Price existence is not source-price truth
 
 The Easter Bunny Ear Arch failure was not a product-page styling bug and not a

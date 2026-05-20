@@ -96,9 +96,9 @@ def main() -> int:
             failures.append("Classic Arch latex colors should preserve the full high-cardinality color list.")
     if any(axis.name == "latex colors" for axis in classic.required_axes):
         failures.append("Classic Arch latex colors must not remain a normal required ERPNext variant selector/dropdown.")
-    if classic.product_page_type != "complex_custom_product" or classic.commerce_lane != "checkout":
+    if classic.product_page_type != "complex_custom_product" or classic.commerce_lane != "quote_first":
         failures.append(
-            f"Classic Arch must classify as complex_custom_product/checkout, found {classic.product_page_type}/{classic.commerce_lane}."
+            f"Classic Arch must classify as complex_custom_product/quote_first, found {classic.product_page_type}/{classic.commerce_lane}."
         )
     if not classic.dependency_matrices:
         failures.append("Classic Arch must preserve source valid-option dependency matrix.")
