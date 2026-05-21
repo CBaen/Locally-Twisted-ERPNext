@@ -13,9 +13,13 @@ Fresh branch-level checks passed:
 `python -m py_compile apps\locally_twisted\locally_twisted\navbar_context.py scripts\verify\nav_ia.py scripts\verify\smoke_shop.py scripts\verify\ecommerce_pause_contract.py`,
 `node --check apps\locally_twisted\locally_twisted\public\js\lt-megamenu.js`,
 `node --check scripts\verify\search_contract.spec.js`, and
-`python scripts\verify\nav_ia.py`. Rendered `http://localhost:8081/` proof is
-still pending because the running Docker stack currently bind-mounts the main
-checkout, not this isolated worktree. Do not deploy or promote this branch
+`python scripts\verify\nav_ia.py`. Codex then repointed the local Docker stack
+with a temporary compose override so `http://localhost:8081/` mounts this
+worktree instead of the main checkout, cleared website cache, and ran
+`python scripts\verify\smoke_shop.py`; it passed with all shop smoke checks.
+Direct homepage HTML proof showed category links present, product links absent,
+and no ERPNext/Website Item/backend-approved wording. GL local visual review is
+still required before staging/live release. Do not deploy or promote this branch
 live until GL has tested the local rendered path and explicitly approves the
 release gate.
 

@@ -200,5 +200,7 @@ children under `Shop Items`, aligned navbar/search/mobile labels to
 customer-facing category concepts, and updated `nav_ia.py`, `smoke_shop.py`,
 `search_contract.spec.js`, and `ecommerce_pause_contract.py` to reject the old
 product quick-link contract. Branch-level syntax and source nav verification
-passed; rendered `localhost:8081` proof remains pending until the local Docker
-stack is repointed from main to the branch worktree.
+passed. Codex then repointed the local Docker stack with a temporary compose
+override so `localhost:8081` mounted the branch worktree, cleared website
+cache, and `python scripts/verify/smoke_shop.py` passed with all shop smoke
+checks.

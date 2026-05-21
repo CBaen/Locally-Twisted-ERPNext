@@ -63,9 +63,12 @@ proof only; Locally Twisted itself is a real client project.
 submenu, search overlay, and mobile drawer from product quick links to
 ERPNext/Frappe `Item Group` category links under `Shop Items`. The dropdown copy
 is customer-facing and must not mention ERPNext, Website Item, or backend
-approval concepts. Branch-level syntax and nav IA checks pass, but rendered
-`http://localhost:8081/` proof is still pending because the running Docker
-stack bind-mounts the main checkout, not the isolated worktree. Do not stage,
+approval concepts. Branch-level syntax and nav IA checks pass. The local Docker
+stack was repointed with a temporary compose override so
+`http://localhost:8081/` now mounts this worktree, `python
+scripts/dev/clear_website_cache.py` passed, and `python
+scripts/verify/smoke_shop.py` passed with all shop smoke checks. GL local visual
+review is still required before any staging/live release gate. Do not stage,
 deploy, or promote this feature live until GL has tested the local rendered
 path and approved the release gate.
 

@@ -80,17 +80,22 @@ Changed files:
   - Updates LT's approved worktree root to the shorter
     `C:\Users\baenb\agent-worktrees\builtbycameron-lt`.
 
-## Local Runtime Caveat
+## Local Runtime State
 
-The running Docker stack for `http://localhost:8081/` currently bind-mounts the
-main LT checkout:
+Initial finding: the running Docker stack for `http://localhost:8081/` was
+bind-mounted to the main LT checkout:
 
 `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted\apps\locally_twisted`
 
-It does not mount this worktree. Do not claim the branch is visible on
-`localhost:8081` until the local stack is intentionally repointed, rebuilt, or
-otherwise tested from this branch. Avoid copying files into the main checkout
-as a shortcut because that defeats the isolation model.
+For local review, Codex recreated the local compose services with a temporary
+override that bind-mounted this branch worktree instead:
+
+`C:\Users\baenb\agent-worktrees\builtbycameron-lt\codex-20260521-rom\apps\locally_twisted`
+
+That made the branch visible on `http://localhost:8081/` without editing the
+main checkout. The temporary override file was removed after the containers
+were recreated. To restore the local stack to the main checkout, run compose
+from the normal `pwd.yml` without the override.
 
 ## Verification Receipt
 
@@ -103,17 +108,35 @@ node --check scripts\verify\search_contract.spec.js
 python scripts\verify\nav_ia.py
 ```
 
-All four checks exited 0. Full rendered browser verification is still pending
-because `localhost:8081` is mounted to main, not this worktree.
+All four checks exited 0. These checks proved the branch source contract before
+the local Docker stack was repointed.
+
+Rendered local proof after repointing the Docker bind mount to this worktree:
+
+```powershell
+python scripts/dev/clear_website_cache.py
+python scripts/verify/smoke_shop.py
+```
+
+`smoke_shop.py` passed with `=== All shop smoke checks PASSED ===`.
+
+Direct homepage HTML probe after cache clear:
+
+- `Browse ready-to-order by category.` present.
+- Category links for Arches, Bouquets, and Seasonal & Specialty present.
+- Product links for Unicorn Bouquet and Easter Balloon Cups absent from the
+  header HTML.
+- `ERPNext`, `Website Item`, and `Backend-approved` absent from the header
+  HTML.
 
 ## Next Safe Step
 
-For GL local testing, use one of these reviewed paths:
+For GL local testing:
 
-1. Repoint/recreate the local Docker stack so the app bind mount reads from
-   this worktree, then clear website cache and run the focused browser gates.
-2. Merge/cherry-pick this branch into a local-only review checkout after GL
-   approves the source diff, then clear cache and test `localhost:8081`.
+1. Open `http://localhost:8081/`.
+2. Hover/click `Ready-to-Order`.
+3. Confirm the submenu reads as category browse, not individual product browse.
+4. Confirm the dropdown avoids ERPNext/backend language.
 
 Do not push to live, update Frappe Cloud, change Stripe, mutate DNS, or promote
 this branch until GL has tested locally and explicitly approves the release
