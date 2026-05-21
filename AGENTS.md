@@ -6,14 +6,23 @@ This project inherits the machine-wide Guiding Light communication protocol from
 
 Do not treat old handoff files as truth. Treat them as claims, then verify important facts against git, files, and the running ERPNext database before relying on them.
 
-## Git Policy - Main Only
+## Git Policy - Main And Reviewed Worktrees
 
-Branches are forbidden in this repo. Work on `main` only.
+`main` remains the trusted base and default path. Normal single-session LT work stays on `main`.
 
-- Do not create, switch to, commit on, push to, or open PRs from feature, codex, topic, or experiment branches.
-- Before editing, run `git rev-parse --abbrev-ref HEAD`; it must print `main`. If it does not, stop and switch to `main` without discarding work.
-- Push completed commits directly to `origin/main`. GitHub is the archive; branches are not holding areas, queues, or coordination lanes.
-- Machine-wide hooks live at `C:\Users\baenb\.codex\git-hooks\no-branches` and block non-main commits and pushes. Git has no pre-hook that can fully prevent branch creation before it happens, so agents must obey this file as the primary rule.
+Task branches are allowed only in dedicated linked worktrees under:
+
+`C:\Users\baenb\agent-worktrees\built-by-cameron__clients__locally-twisted\<agent-session-id>__<task-slug>`
+
+- Do not create, switch to, commit on, push from, or open PRs from feature, codex, topic, experiment, or task branches inside the main checkout.
+- Before editing, run `git rev-parse --abbrev-ref HEAD`; `main` is allowed in the main checkout. If it prints anything else, verify the folder is a linked worktree for the current task before continuing.
+- A linked LT worktree must be created from the actual LT Git root: `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted`.
+- A linked LT worktree must live outside all project repos, under the approved neutral worktree root above. Do not create LT worktrees inside `C:\Users\baenb\projects`, the Built by Cameron parent repo, `_CLIENTS`, this repo, or any nested repo.
+- Before creating or using a worktree, claim the task in `C:\Users\baenb\agent-coordination\LIVE-BOARD.md` and `C:\Users\baenb\agent-coordination\SESSION-REGISTRY.md`.
+- Use one task per worktree and clear branch names such as `codex/<task-slug>`, `claude/<task-slug>`, `human/<task-slug>`, or `agent/<task-slug>`.
+- Do not push, merge, rebase, or land a task branch to `main` without explicit review or publish approval. If a task branch must be pushed for review or backup, push only the current task branch from its matching linked worktree.
+- Pushes to `origin/main` must come from local `main` after verification and an approved publish path. GitHub is the archive; task branches are not holding areas or queue lanes.
+- Machine-wide hooks currently live at `C:\Users\baenb\.codex\git-hooks\controlled-branches` and allow non-main commits only from linked worktrees. The older `no-branches` hook path is a fallback/archive, not the active policy.
 - Do not report unrelated repository file state as routine status, progress chatter, or closeout filler. Surface other changed files only when they block the LT task, overlap files you must touch, affect commit/push safety, or GL asks for git state. Treat repeated unsolicited changed-file commentary as a mental-load/accessibility issue.
 
 ## No Monoliths
