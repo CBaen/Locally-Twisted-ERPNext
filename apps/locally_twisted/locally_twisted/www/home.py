@@ -5,6 +5,7 @@ wide installed-work proof photos, full-stage client proof crawl,
 a contact CTA, and secondary twisting/face-painting support.
 """
 import frappe
+from urllib.parse import quote
 
 from locally_twisted.seo import business_graph
 
@@ -37,42 +38,46 @@ CLIENT_CRAWL = [
 LANDING_PHOTO_BASE = "/assets/locally_twisted/images/landing-page-pics/landing-page"
 
 
+def _landing_photo(filename: str) -> str:
+    return quote(f"{LANDING_PHOTO_BASE}/{filename}", safe="/:%")
+
+
 # One of a Kind Designs uses the landing-page photo packet directly.
 FEATURED_WORK = [
     {
-        "image": f"{LANDING_PHOTO_BASE}/train.webp",
+        "image": _landing_photo("train.webp"),
         "alt": "Two train balloon sculptures for a custom event display",
     },
     {
-        "image": f"{LANDING_PHOTO_BASE}/20. Dinosour arch.webp",
+        "image": _landing_photo("20. Dinosour arch.webp"),
         "alt": "Dinosaur-themed balloon arch installation",
     },
     {
-        "image": f"{LANDING_PHOTO_BASE}/balloon Ferris wheel Salt lake city utah.webp",
+        "image": _landing_photo("balloon Ferris wheel Salt lake city utah.webp"),
         "alt": "Balloon Ferris wheel installation in Salt Lake City",
     },
     {
-        "image": f"{LANDING_PHOTO_BASE}/cochella photo opt - Copy.webp",
+        "image": _landing_photo("cochella photo opt - Copy.webp"),
         "alt": "Large festival-style balloon photo installation",
     },
     {
-        "image": f"{LANDING_PHOTO_BASE}/IMG_8457.webp",
+        "image": _landing_photo("IMG_8457.webp"),
         "alt": "Large custom balloon decor installation",
     },
     {
-        "image": f"{LANDING_PHOTO_BASE}/25_ arch up to 24_ balloons organic.webp",
+        "image": _landing_photo("25_ arch up to 24_ balloons organic.webp"),
         "alt": "Organic balloon arch installation",
     },
     {
-        "image": f"{LANDING_PHOTO_BASE}/50 latex free backdrop.webp",
+        "image": _landing_photo("50 latex free backdrop.webp"),
         "alt": "Latex-free balloon backdrop installation",
     },
     {
-        "image": f"{LANDING_PHOTO_BASE}/Celebrate orgnaic wall.webp",
+        "image": _landing_photo("Celebrate orgnaic wall.webp"),
         "alt": "Celebrate organic balloon wall installation",
     },
     {
-        "image": f"{LANDING_PHOTO_BASE}/Organic on swing - Copy.webp",
+        "image": _landing_photo("Organic on swing - Copy.webp"),
         "alt": "Organic balloon garland on a swing frame",
     },
 ]

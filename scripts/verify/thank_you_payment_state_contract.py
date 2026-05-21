@@ -11,12 +11,16 @@ import ast
 import sys
 from pathlib import Path
 
+from _cli import parse_noop_args
+
 
 ROOT = Path(__file__).resolve().parents[2]
 TARGET = ROOT / "apps/locally_twisted/locally_twisted/www/thank_you.py"
 
 
 def main() -> int:
+    parse_noop_args(__doc__)
+
     source = TARGET.read_text(encoding="utf-8")
     tree = ast.parse(source)
     failures: list[str] = []

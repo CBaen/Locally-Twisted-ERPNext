@@ -1,7 +1,8 @@
 # SEO/GEO/AEO Contract
 
-Last updated: 2026-05-19 by Codex after public-domain sitemap/canonical drift
-was found on live Frappe Cloud.
+Last updated: 2026-05-21 by Codex after local robots discovery and
+current-host canonical verification were tightened. Indexing submission is
+parked until shop staging and owner product approval.
 
 ## Scope
 
@@ -9,6 +10,11 @@ This handoff owns the launch technical discovery gate for canonical public
 routes, sitemap shape, social metadata, business/service structured data,
 FAQPage AEO answers, and content-image alt text. It is not a content strategy
 plan and does not certify search rankings.
+
+This handoff does not authorize the external marketing company to index the
+site. Per GL on 2026-05-21, no Search Console submission, sitemap submission,
+recrawl request, external indexing work, or shop/product discovery push should
+happen until the shop is on staging and the owner approves products to go live.
 
 ## Current Contract
 
@@ -18,6 +24,8 @@ plan and does not certify search rankings.
   duplicates.
 - `/sitemap.xml` prefers canonical public routes while preserving ecommerce
   URLs that still need discovery continuity through testing and launch review.
+- `/robots.txt` allows public crawling, advertises the current-host sitemap,
+  and must not point crawlers at the Frappe Cloud vanity host.
 - Public sitemap, canonical, Open Graph URL, and structured-data URLs must use
   the tested public host. For production, that means `https://locallytwisted.com`,
   not `https://locallytwisted.v.frappe.cloud`.
@@ -69,6 +77,22 @@ This is not live until the Frappe Cloud app release/site update/cache clear
 sequence completes and the SEO contract passes against
 `https://locallytwisted.com`.
 
+## 2026-05-21 Robots And Local Host Closeout
+
+Local verification found `/robots.txt` returned 200 with blank content, so it
+was not blocking crawlers but also was not advertising the sitemap. The LT app
+now owns `www/robots.py` and `www/robots.txt`, allowing public crawl and
+emitting `Sitemap: <current-host>/sitemap.xml`.
+
+The local nginx/Frappe request host drops the `:8081` port, while site config
+correctly knows `http://localhost:8081`. The SEO helper now falls back to the
+configured URL only when the configured URL has the same host plus an explicit
+port that the request lost. Production still prefers the request domain so
+`locallytwisted.com` can replace the Frappe Cloud vanity host.
+
+Local result after cache clear and web-process restart: `npm run
+test:seo-contract` passed 12/12 against `http://localhost:8081`.
+
 ## Verification
 
 ```powershell
@@ -89,6 +113,9 @@ npm run test:seo-contract
 
 - Do not hardcode exact Google review counts or ratings unless reverified in
   the same run.
+- Do not submit the sitemap, request reindexing, hand off Search Console, or
+  give the external marketing company indexing authority until the shop is on
+  staging and the owner approves products to go live.
 - If FAQ visible content changes, update `FAQ_AEO_QUESTIONS` in `faq.py` and
   the verifier expectations in the same slice.
 - If a public route alias is added, decide whether it redirects or declares a

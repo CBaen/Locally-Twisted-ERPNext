@@ -49,37 +49,39 @@ Secondary boundary profiles:
 
 ## Current Live Inventory
 
-Verified from the running local ERPNext database on 2026-05-15.
+Verified from the running local ERPNext database on 2026-05-15, tightened
+with the combined human-access matrix on 2026-05-21, and rechecked after the
+local fake-data cleanup on 2026-05-21.
 
 Enabled users:
 
 - `Administrator`: `System User`, full admin; not a normal operating persona.
 - `cameron@builtbycameron.com`: `System User`, `LT Owner Home`,
-  `LT Owner Access`, plus `System Manager` and `Website Manager`.
+  `LT Owner Access`, plus full support/repair roles including `System Manager`,
+  `Website Manager`, finance, item, and newsletter access.
 - `locallytwisted@gmail.com`: `System User`, `LT Owner Home`,
-  owner/operator sales, customer, project, and catalog access; no
-  `System Manager`. Temporary local password set on 2026-05-15:
+  owner/operator sales, customer, project, catalog, finance, website, and
+  repair access. Temporary local password set on 2026-05-15:
   `LocalTemp2026!` until GL changes it later.
-- `lt-owner-temp@example.com`: `System User`, `LT Owner` role profile,
-  `LT Owner Calm Desk`, `LT Owner Home`.
-- `lt-manager-temp@example.com`: `System User`, `LT Manager` role profile,
-  `LT Manager Operations Desk`, `LT Manager Home`.
-- `lt-employee-temp@example.com`: `System User`, `LT Employee` role profile,
-  `LT Employee Job Desk`, `LT Employee Home`.
-- `lt-accountant-temp@example.com`: `System User`, `LT Accountant` role
-  profile, `LT Accountant Desk`, `LT Accountant Home`.
-- `lt-admin-temp@example.com`: `System User`, `LT Admin` role profile.
 - `Guest`: `Website User`, guest role only.
-- `lt-portal-visual-1778476910635718999@example.invalid`: enabled customer
-  test `Website User` with `Customer`.
 
 Disabled users:
 
-- `locallytwisted@yahoo.com`: disabled `System User`.
-- `lt-contractor-temp@example.com`: disabled `Website User` with `Customer`.
+- None known after the local fake-data cleanup.
 
 Other current facts:
 
+- Temporary persona users and customer visual test users were deleted during
+  the 2026-05-21 local data cleanup. Recreate them only for a deliberate
+  verifier/demo pass, then clean them up again.
+- The `Guest` Customer, `Guest` Portal User link, `Guest-Guest` Contact, and
+  their Dynamic Link are Webshop guest-pricing infrastructure, not client data.
+  Do not delete them during local fake-data cleanup; anonymous product pages,
+  variant-price calls, cart, and checkout paths can fail without them. Guard:
+  `python scripts/verify/webshop_guest_party_contract.py`. They now also have
+  source-level Frappe `doc_events` protection in
+  `locally_twisted.webshop_guest_party_guard`; the verifier proves destructive
+  runtime probes are blocked.
 - No enabled Supplier user was found.
 - No permanent marketing reviewer user was found.
 - No enabled Maintenance Admin user was found.
@@ -118,9 +120,9 @@ Manager:
 - `LT Manager Home` is the manager Desk entry.
 - Manager workspace surfaces inquiry, booking, customer/contact, job, task, and
   add-record actions.
-- The current role matrix still gives the manager `Item Price` create/write/delete
-  through ERPNext roles, even though catalog tools are not surfaced in the
-  manager workspace. This is a current hardening target, not a closed item.
+- The older 2026-05-15 yellow flag is closed as of 2026-05-21: Manager no
+  longer inherits `Sales Master Manager`, and the combined access matrix fails
+  if Manager regains `Item Price`, `Website Item`, or `Web Page` access.
 
 Employee:
 
@@ -130,6 +132,9 @@ Employee:
 - Employee no longer gets a visible Booking Calendar shortcut; Manager retains
   booking visibility.
 - Employee does not get visible customer, finance, or catalog administration.
+- The stock ERPNext `All` permission rows were removed from `Contact` and
+  `Address` on 2026-05-21 so employee logins no longer inherit direct customer
+  contact/address access just because they can log in.
 
 Accountant:
 
@@ -157,6 +162,9 @@ Marketing reviewer:
 - `/me` redirects marketing reviewers to `/marketing-review`.
 - Permission hooks deny sensitive backend DocType list/read/write/delete
   access and block sensitive record mutation for explicit marketing reviewers.
+- Per GL on 2026-05-21, this role has no indexing authority. Do not use it for
+  Search Console, sitemap submission, recrawl requests, SEO tooling access, or
+  ecommerce launch approval before shop staging plus owner product approval.
 
 Supplier:
 
@@ -210,6 +218,63 @@ Known yellow/non-blocking result:
 - `maintenance_heartbeat.py` still reports `client_notification_preferences`
   yellow until the owner chooses recipient, cadence, topic, and channel.
 
+## 2026-05-21 Combined Access Gate
+
+`scripts/verify/human_access_silo_matrix.py` is now the combined gate to run
+before giving out or changing a human login. It checks:
+
+- admin/support and owner full access;
+- default workspace landing pages for owner, manager, employee, and accounting;
+- role-restricted workspaces for Owner Home, Manager Home, My Jobs,
+  Accounting Home, Marketing Home, and Maintenance Home;
+- direct persona permission checks that catch Manager `Item Price`/website
+  access and Employee customer contact/address access;
+- external marketing review isolation, including no Desk, no DocPerm rows,
+  no website/product/customer/CRM/finance records, and no indexing authority;
+- invite-only customer portal settings;
+- sanitized maintenance status.
+
+Commands passed locally on 2026-05-21:
+
+```powershell
+python scripts/setup/sync_backend_workspaces.py
+python scripts/verify/human_access_silo_matrix.py
+npm run test:human-access
+python scripts/verify/marketing_review_access_boundary.py
+python scripts/verify/backend_workspace_parity.py
+python scripts/verify/finance_workspace_parity.py
+python scripts/verify/marketing_workspace_parity.py
+python scripts/verify/custom_doctype_permission_boundary.py
+python scripts/verify/maintenance_admin_boundary.py
+python scripts/verify/customer_portal_inventory.py --strict-menu
+python scripts/verify/customer_portal_home_contract.py
+python scripts/verify/customer_account_provisioning_contract.py
+python scripts/verify/owner_business_access_contract.py
+$env:LT_DESK_TEST_USER='locallytwisted@gmail.com'; $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner
+```
+
+Post-cleanup verifier note: `persona_workspace_permissions.py` now skips
+absent temp persona users instead of failing because the cleanup removed those
+fake accounts. It still checks the shortcut/permission contract for any temp
+persona user that is intentionally reprovisioned.
+
+Local fake-data cleanup receipt on 2026-05-21:
+
+- backup taken before cleanup:
+  `./frontend/private/backups/20260521_102343-frontend-database.sql.gz`;
+- operational customer/CRM/sales/payment/tasks/events/custom LT data,
+  communications, queue rows, logs, route/access history, deletion history, and
+  version history verified at `0`;
+- system Webshop guest plumbing preserved/restored after cleanup:
+  `Customer:Guest`, `Portal User:Guest -> Customer Guest`,
+  `Contact:Guest-Guest`, and one Dynamic Link, with source-level runtime guard
+  probes passing after restart/cache refresh;
+- remaining users: `Administrator`, `cameron@builtbycameron.com`, `Guest`,
+  and `locallytwisted@gmail.com`;
+- catalog/config assets preserved: Items, Website Items, Item Prices,
+  Workspaces, Role Profiles, and Files attached only to Item, Website Item, or
+  unattached public/site assets.
+
 ## Follow-Up Queue Inputs
 
 - Verify the exact Jeff/business-owner cutover account and owner daily path
@@ -217,19 +282,18 @@ Known yellow/non-blocking result:
 - Before any real assistant integration, add the external-provider auth gate
   and token verifier. Local Frappe session proof is not enough for ChatGPT,
   MCP, OpenAPI, or other API clients.
-- Keep `/owner-actions` fake records local and clearly marked with
-  `LT-DEMO-OWNER-ACTIONS`; remove them with
-  `python scripts/setup/sync_owner_demo_data.py --cleanup` when no longer
-  useful for demo/training.
+- Do not recreate `/owner-actions` fake records unless GL asks for a fresh
+  local demo/training pass. If they are recreated, keep them clearly marked
+  with `LT-DEMO-OWNER-ACTIONS` and clean them up afterward.
 - Keep Cameron/Built by Cameron support access intact while narrowing the
   client-facing owner path.
 - Add focused failing permission-matrix verifiers only for exposure that
   affects the required owner/support profiles.
-- Decide whether Manager should retain any `Item Price` create/write/delete
-  permission only if that exposure affects owner/support delegation or
-  handoff safety.
-- Decide whether to remove or disable the leftover enabled customer visual
-  test user if it affects owner/support account clarity or launch safety.
+- Keep the combined access matrix in the release gate so Manager cannot regain
+  `Item Price` through broad ERPNext roles and Employee cannot regain
+  Contact/Address access through the stock `All` role.
+- The leftover enabled customer visual test user was removed during the
+  2026-05-21 local fake-data cleanup.
 - If a real Exploring Not Boring account is created, create it as a `Website
   User` with only `LT Marketing Review Access`, no customer/supplier/Desk/admin
   roles, and rerun the marketing boundary verifier plus live HTTP proof.

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from urllib.parse import quote
+
 from locally_twisted.seo import service_schema
 
 
@@ -358,7 +360,8 @@ LANDING_PHOTO_BASE = "/assets/locally_twisted/images/landing-page-pics"
 
 
 def _photo(folder: str, filename: str, alt: str) -> dict[str, str]:
-    return {"image": f"{LANDING_PHOTO_BASE}/{folder}/{filename}", "alt": alt}
+    image = quote(f"{LANDING_PHOTO_BASE}/{folder}/{filename}", safe="/:%")
+    return {"image": image, "alt": alt}
 
 
 EVENT_TYPE_PAGES = {

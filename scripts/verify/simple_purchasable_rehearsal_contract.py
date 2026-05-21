@@ -21,10 +21,8 @@ ROOT = Path(__file__).resolve().parents[2]
 EXPECTED_PRODUCTS = {
     "large-head-missionary",
     "mothers-day-front-yard-7-column",
-    "easter-arch",
-    "pride-arch",
 }
-EXPECTED_SALE_SKUS = 33
+EXPECTED_SALE_SKUS = 31
 
 
 class ContractFail(Exception):

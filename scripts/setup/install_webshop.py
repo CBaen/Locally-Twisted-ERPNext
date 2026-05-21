@@ -75,6 +75,7 @@ Idempotent: safe to re-run.
 from __future__ import annotations
 
 import argparse
+import os
 import shutil
 import subprocess
 import sys
@@ -291,6 +292,16 @@ def main() -> None:
     parser.add_argument("--build-assets", action="store_true",
                         help="Install Node+yarn if missing and run bench build.")
     args = parser.parse_args()
+
+    if os.environ.get("LT_ALLOW_DEPRECATED_INSTALL_WEBSHOP") != "1":
+        print(
+            "FAIL: scripts/setup/install_webshop.py is deprecated for the current custom-image stack.\n"
+            "Use scripts/dev/build_webshop_assets.py --durable-rebuild for Webshop asset rebuilds. "
+            "Use --runtime-only only for emergency local repair, then rebuild the image before launch proof.\n"
+            "Set LT_ALLOW_DEPRECATED_INSTALL_WEBSHOP=1 only for historical recovery work.",
+            file=sys.stderr,
+        )
+        sys.exit(2)
 
     if args.fetch:
         fetch_upstream_apps()

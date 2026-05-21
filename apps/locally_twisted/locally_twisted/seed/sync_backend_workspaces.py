@@ -73,8 +73,30 @@ WORKSPACES_TO_NORMALIZE = [
     EMPLOYEE_HOME,
 ]
 
-OWNER_REQUIRED_ROLES = ["Item Manager"]
+OWNER_REQUIRED_ROLES = [
+    "Accounts Manager",
+    "Accounts User",
+    "Item Manager",
+    "Newsletter Manager",
+    "System Manager",
+    "Website Manager",
+]
 OWNER_ROLE_PROFILE = "LT Owner"
+MANAGER_ROLE_PROFILE = "LT Manager"
+MANAGER_FORBIDDEN_ROLES = [
+    "Accounts Manager",
+    "Accounts User",
+    "Item Manager",
+    "Newsletter Manager",
+    "Purchase Master Manager",
+    "Sales Master Manager",
+    "System Manager",
+    "Website Manager",
+]
+STANDARD_DOCTYPE_PERMISSION_ROLE_REMOVALS = {
+    "Address": {"All"},
+    "Contact": {"All"},
+}
 OWNER_PROTECTED_USER_ROLES = {
     "cameron@builtbycameron.com": ["System Manager", "Website Manager"],
 }
@@ -354,6 +376,9 @@ def execute() -> str:
         "ensured_number_cards": [],
         "synced_crm_pipeline": {},
         "updated_role_profiles": [],
+        "removed_doctype_permission_roles": [],
+        "removed_role_profile_roles": [],
+        "removed_user_roles": [],
         "updated_user_roles": [],
         "updated_users": [],
         "updated_workspaces": [],
@@ -362,6 +387,8 @@ def execute() -> str:
     summary["synced_crm_pipeline"] = sync_crm_pipeline.sync()
     _ensure_booking_calendar(summary)
     _ensure_owner_roles(summary)
+    _prune_manager_roles(summary)
+    _harden_standard_contact_permissions(summary)
     _ensure_owner_home_building_blocks(summary)
     for workspace in WORKSPACES_TO_NORMALIZE:
         _normalize_workspace(workspace, summary)
@@ -419,6 +446,81 @@ def _ensure_owner_roles(summary: dict) -> None:
     if changed:
         doc.save(ignore_permissions=True)
         summary["updated_role_profiles"].append("LT Owner")
+
+
+def _prune_manager_roles(summary: dict) -> None:
+    _remove_roles_from_role_profile(MANAGER_ROLE_PROFILE, MANAGER_FORBIDDEN_ROLES, summary)
+    if not frappe.db.exists("Role Profile", MANAGER_ROLE_PROFILE):
+        return
+
+    users = frappe.get_all(
+        "User",
+        filters={"role_profile_name": MANAGER_ROLE_PROFILE},
+        pluck="name",
+    )
+    for user_name in users:
+        _remove_roles_from_user(user_name, MANAGER_FORBIDDEN_ROLES, summary)
+
+
+def _remove_roles_from_role_profile(role_profile: str, roles: list[str], summary: dict) -> None:
+    if not frappe.db.exists("Role Profile", role_profile):
+        return
+
+    role_set = set(roles)
+    doc = frappe.get_doc("Role Profile", role_profile)
+    existing = [row.role for row in doc.roles]
+    removed = sorted(set(existing) & role_set)
+    if not removed:
+        return
+
+    doc.set("roles", [row.as_dict() for row in doc.roles if row.role not in role_set])
+    doc.save(ignore_permissions=True)
+    summary["removed_role_profile_roles"].append(
+        {"role_profile": role_profile, "roles": removed}
+    )
+
+
+def _remove_roles_from_user(user_name: str, roles: list[str], summary: dict) -> None:
+    if not frappe.db.exists("User", user_name):
+        return
+
+    role_set = set(roles)
+    doc = frappe.get_doc("User", user_name)
+    existing = [row.role for row in doc.roles]
+    removed = sorted(set(existing) & role_set)
+    if not removed:
+        return
+
+    doc.set("roles", [row.as_dict() for row in doc.roles if row.role not in role_set])
+    doc.save(ignore_permissions=True)
+    summary["removed_user_roles"].append({"user": user_name, "roles": removed})
+
+
+def _harden_standard_contact_permissions(summary: dict) -> None:
+    for doctype, roles in STANDARD_DOCTYPE_PERMISSION_ROLE_REMOVALS.items():
+        if not frappe.db.exists("DocType", doctype):
+            continue
+
+        rows = frappe.get_all(
+            "DocPerm",
+            filters={
+                "parent": doctype,
+                "parenttype": "DocType",
+                "permlevel": 0,
+                "role": ["in", sorted(roles)],
+            },
+            fields=["name", "role"],
+        )
+        if not rows:
+            continue
+
+        removed = sorted({row.role for row in rows})
+        for row in rows:
+            frappe.delete_doc("DocPerm", row.name, ignore_permissions=True)
+        frappe.clear_cache(doctype=doctype)
+        summary["removed_doctype_permission_roles"].append(
+            {"doctype": doctype, "roles": removed}
+        )
 
 
 def _ensure_owner_home_building_blocks(summary: dict) -> None:

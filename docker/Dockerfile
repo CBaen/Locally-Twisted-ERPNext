@@ -19,6 +19,8 @@
 
 ARG BASE_IMAGE=frappe/erpnext:v15.105.0
 FROM ${BASE_IMAGE}
+ARG PAYMENTS_REF=6c3be057f87c041779f34c6fcb319d8bf0eda5b0
+ARG WEBSHOP_REF=6c8fd0013dfe297edb6ebcc10e27ba495902dd19
 
 USER root
 
@@ -36,11 +38,19 @@ RUN apt-get update \
 USER frappe
 WORKDIR /home/frappe/frappe-bench
 
-# Clone upstream apps. --depth 1 keeps the image lean. .git dirs are stripped
-# afterward — runtime doesn't need them, and stripping shrinks the image.
+# Clone upstream apps at pinned commits. These refs were verified from the
+# official version-15 branches on 2026-05-21; do not float to branch heads
+# during build or the image can silently ship different Webshop/Payments code.
+# .git dirs are stripped afterward because runtime doesn't need them.
 RUN cd apps \
-    && git clone --depth 1 https://github.com/frappe/payments.git payments \
-    && git clone --depth 1 https://github.com/frappe/webshop.git webshop \
+    && git init payments \
+    && git -C payments remote add origin https://github.com/frappe/payments.git \
+    && git -C payments fetch --depth 1 origin "${PAYMENTS_REF}" \
+    && git -C payments checkout --detach FETCH_HEAD \
+    && git init webshop \
+    && git -C webshop remote add origin https://github.com/frappe/webshop.git \
+    && git -C webshop fetch --depth 1 origin "${WEBSHOP_REF}" \
+    && git -C webshop checkout --detach FETCH_HEAD \
     && rm -rf payments/.git webshop/.git
 
 # Add the LT custom app from local source. Build context is project root,

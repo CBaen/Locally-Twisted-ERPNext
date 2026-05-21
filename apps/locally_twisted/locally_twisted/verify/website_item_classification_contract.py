@@ -1,8 +1,9 @@
 """Dry-run/apply verifier for explicit Website Item ecommerce classifications.
 
 This verifier is intentionally narrow: it only reads/writes Website Item
-lt_product_page_type and lt_commerce_lane for the 53 source-backed product-page
-records named in the 2026-05-10 ready-to-order ecommerce Phase 2 packet.
+lt_product_page_type and lt_commerce_lane for the current source-backed
+product-page records named in the 2026-05-10 ready-to-order ecommerce Phase 2
+packet.
 """
 from __future__ import annotations
 
@@ -36,19 +37,31 @@ CHECKOUT_READY_AFTER_SMALL_FIX = (
     "6-graduation-stands",
 )
 
+CONFIGURABLE_CHECKOUT = (
+    "basketball-arch",
+    "easter-balloon-arch-bunny-ear",
+    "large-head-missionary",
+    "pride-progress-rainbow-balloon-arch",
+    "star-column",
+    "baby-table-decor",
+    "6-color-rainbow-arch",
+    "mothers-day-front-yard-7-column",
+    "birthday-deliveries",
+    "marble-table-decor",
+    "butterfly-get-well-bouquet-latex-free",
+    "bandage-get-well-bouquet-latex-free",
+    "shooting-star-get-well-bouquet-latex-free",
+)
+
 QUOTE_FIRST = (
     "7-butterfly-column",
     "baby-shower-combination-photo-opt",
     "classic-organic-balloon-garland",
-    "basketball-arch",
     "number-balloon-columns",
-    "easter-balloon-arch-bunny-ear",
     "halloween-arch",
-    "large-head-missionary",
     "premium-organic-garland",
     "premium-organic-arch",
     "pemium-organic-column",
-    "pride-progress-rainbow-balloon-arch",
     "classic-arch",
     "classic-column",
     "classic-organic-columns",
@@ -57,30 +70,22 @@ QUOTE_FIRST = (
     "classic-organic-arch",
     "7-epic-column",
     "organic-grab-n-go",
-    "star-column",
     "sleepy-baby-column",
-    "baby-table-decor",
     "logo-3-layered-bouquet",
-    "6-color-rainbow-arch",
-    "mothers-day-front-yard-7-column",
     "classic-organic-for-easel",
-    "easter-arch",
     "large-garland",
     "large-organic-column",
-    "pride-arch",
 )
 
-HIDE_OR_NEEDS_REVIEW = (
-    "birthday-deliveries",
-    "marble-table-decor",
-    "butterfly-get-well-bouquet-latex-free",
-    "bandage-get-well-bouquet-latex-free",
-    "shooting-star-get-well-bouquet-latex-free",
-)
+HIDE_OR_NEEDS_REVIEW = ()
 
 DESIRED_BY_LANE: dict[str, dict[str, str]] = {
     "checkout_ready_after_small_fix": {
         "product_page_type": "simple_product",
+        "commerce_lane": "checkout",
+    },
+    "configurable_checkout": {
+        "product_page_type": "complex_custom_product",
         "commerce_lane": "checkout",
     },
     "quote_first": {
@@ -93,11 +98,12 @@ DESIRED_BY_LANE: dict[str, dict[str, str]] = {
     },
 }
 
-EXPECTED_TOTAL = 53
+EXPECTED_TOTAL = 51
 EXPECTED_COUNTS = {
     "checkout_ready_after_small_fix": 17,
-    "quote_first": 31,
-    "hide_or_needs_review": 5,
+    "configurable_checkout": 13,
+    "quote_first": 21,
+    "hide_or_needs_review": 0,
 }
 ONLY_MUTATED_FIELDS = (WEBSITE_ITEM_PAGE_TYPE_FIELD, WEBSITE_ITEM_COMMERCE_LANE_FIELD)
 
@@ -278,6 +284,7 @@ def run(apply: bool = False) -> dict[str, Any]:
 def _desired_rows() -> list[dict[str, str]]:
     rows: list[dict[str, str]] = []
     rows.extend(_lane_rows("checkout_ready_after_small_fix", CHECKOUT_READY_AFTER_SMALL_FIX))
+    rows.extend(_lane_rows("configurable_checkout", CONFIGURABLE_CHECKOUT))
     rows.extend(_lane_rows("quote_first", QUOTE_FIRST))
     rows.extend(_lane_rows("hide_or_needs_review", HIDE_OR_NEEDS_REVIEW))
     return rows

@@ -138,16 +138,21 @@ def _assert_forbidden_record_access(user: str) -> None:
         for doctype in FORBIDDEN_MARKETING_DOCTYPES:
             if not frappe.db.exists("DocType", doctype):
                 continue
-            names = frappe.get_all(doctype, pluck="name", limit_page_length=1, ignore_permissions=True)
+            meta = frappe.get_meta(doctype)
+            names = (
+                [doctype]
+                if meta.issingle
+                else frappe.get_all(doctype, pluck="name", limit_page_length=1, ignore_permissions=True)
+            )
             frappe.set_user(user)
             try:
-                rows = frappe.get_list(doctype, pluck="name", limit_page_length=1)
+                rows = [] if meta.issingle else frappe.get_list(doctype, pluck="name", limit_page_length=1)
             except frappe.PermissionError:
                 rows = []
             if rows:
                 raise ContractFail(f"{user} can list forbidden DocType {doctype}")
             if names:
-                doc = frappe.get_doc(doctype, names[0])
+                doc = frappe.get_single(doctype) if meta.issingle else frappe.get_doc(doctype, names[0])
                 for ptype in ("read", "write", "delete"):
                     if doc.has_permission(ptype, user=user):
                         raise ContractFail(f"{user} can {ptype} forbidden {doctype} record {names[0]}")

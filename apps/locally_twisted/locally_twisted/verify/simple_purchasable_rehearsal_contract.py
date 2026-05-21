@@ -31,20 +31,6 @@ SIMPLE_REHEARSAL_PRODUCTS = {
         "required_attributes": (),
         "source_price_basis": "Odoo base price",
     },
-    "easter-arch": {
-        "source_name": "Easter Arch",
-        "source_price": 250.0,
-        "source_variant_count": 0,
-        "required_attributes": (),
-        "source_price_basis": "Odoo base price",
-    },
-    "pride-arch": {
-        "source_name": "Pride Arch",
-        "source_price": 325.0,
-        "source_variant_count": 0,
-        "required_attributes": (),
-        "source_price_basis": "Odoo base price",
-    },
 }
 
 

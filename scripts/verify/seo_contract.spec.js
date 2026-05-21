@@ -81,6 +81,18 @@ test.describe("Locally Twisted SEO, GEO, and AEO contract", () => {
 		}
 	});
 
+	test("robots.txt allows public crawling and advertises the current-host sitemap", async ({ request }) => {
+		const response = await request.get(new URL("/robots.txt", BASE_URL).toString());
+		expect(response.status()).toBe(200);
+		const text = await response.text();
+
+		expect(text).toContain("User-agent: *");
+		expect(text).toContain("Allow: /");
+		expect(text).toContain(`Sitemap: ${absolutePath("/sitemap.xml")}`);
+		expect(text).not.toContain("Disallow: /");
+		expect(text).not.toContain("locallytwisted.v.frappe.cloud");
+	});
+
 	test("removed Event Balloons hub routes return 404 without redirect", async ({ request }) => {
 		for (const path of ["/event-balloons", "/event_balloons"]) {
 			const response = await request.get(new URL(path, BASE_URL).toString(), {

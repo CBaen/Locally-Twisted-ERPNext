@@ -1,7 +1,11 @@
 import frappe
+import webshop.webshop.product_data_engine.query as product_query
 
+from locally_twisted.overrides.website_item import get_guest_safe_product_info_for_website
 from locally_twisted.product_options import apply_variant_starting_price
 from webshop.webshop.api import get_product_filter_data as webshop_get_product_filter_data
+
+product_query.get_product_info_for_website = get_guest_safe_product_info_for_website
 
 
 @frappe.whitelist(allow_guest=True)

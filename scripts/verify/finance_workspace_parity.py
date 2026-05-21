@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify LT accountant finance workspace and cards."""
+"""Verify LT accounting finance workspace and cards."""
 from __future__ import annotations
 
 import json
@@ -13,6 +13,7 @@ from _cli import parse_noop_args
 CONTAINER = "locally-twisted-erpnext-v15-backend-1"
 SITE = "frontend"
 ACCOUNTANT_HOME = "LT Accountant Home"
+ACCOUNTANT_HOME_TITLE = "Accounting Home"
 ACCOUNTANT_ROLE = "LT Accountant Access"
 ACCOUNTANT_TEMP_USER = "lt-accountant-temp@example.com"
 
@@ -89,7 +90,7 @@ EXPECTED_REPORT_SHORTCUTS = {
 }
 
 EXPECTED_TEXT = {
-    "Accountant Home",
+    "Accounting Home",
     "Money to collect",
     "Review before sending",
     "Accounting reference",
@@ -156,6 +157,11 @@ def check_workspace() -> list[str]:
     shortcuts = {row.get("label"): row for row in workspace.get("shortcuts", [])}
     roles = {row.get("role") for row in workspace.get("roles", [])}
     workspace_cards = {row.get("number_card_name") for row in workspace.get("number_cards", [])}
+
+    if workspace.get("title") != ACCOUNTANT_HOME_TITLE:
+        failures.append(
+            f"{ACCOUNTANT_HOME} title expected {ACCOUNTANT_HOME_TITLE!r}, found {workspace.get('title')!r}"
+        )
 
     if ACCOUNTANT_ROLE not in roles:
         failures.append(f"{ACCOUNTANT_HOME} missing role {ACCOUNTANT_ROLE!r}")

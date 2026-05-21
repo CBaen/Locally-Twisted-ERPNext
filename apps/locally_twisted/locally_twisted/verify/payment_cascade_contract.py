@@ -15,7 +15,7 @@ import frappe
 from frappe.utils import add_days, flt, nowdate
 
 
-ITEM_CODE = "easter-arch"
+ITEM_CODE = "mothers-day-bouquet"
 PRICE_LIST = "Standard Selling"
 NOTES = "Gate code 1234. Please call on arrival."
 SELECTED_IMAGE = "/files/payment-cascade-selected-image.png"

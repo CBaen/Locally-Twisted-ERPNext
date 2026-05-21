@@ -64,12 +64,6 @@ async function chooseReadyToOrderOption(page) {
 	await firstChoice.check({ force: true });
 }
 
-async function chooseFirstColorRecipeOption(page) {
-	const firstColor = page.locator('.lt-product__attr[data-payload-target="color_recipes"] input.js-lt-color-radio').first();
-	await expect(firstColor).toBeVisible();
-	await firstColor.check({ force: true });
-}
-
 async function primeBrowser(page) {
 	await page.addInitScript(() => {
 		window.localStorage.setItem("lt_cookie_consent", "declined");
@@ -116,7 +110,7 @@ for (const viewport of VIEWPORTS) {
 		await expect(page.locator(".lt-product__cart--quote-first")).toBeVisible();
 		await expect(page.locator(".lt-product__configure")).toHaveCount(0);
 		const architecture = await expectArchitectureContract(page, "quote_first");
-		expect(architecture.controls.some((control) => control.payload_target === "color_recipes")).toBe(true);
+		expect(architecture.controls.some((control) => control.payload_target === "selected_options")).toBe(true);
 		await expectNoHorizontalOverflow(page);
 		await chooseFirstVisibleOption(page);
 		await page.locator('[data-customization-key="color_notes"]').fill("Reflex Gold and Navy");
@@ -160,39 +154,38 @@ for (const viewport of VIEWPORTS) {
 		await expect(page.locator("#lt-add-to-cart-variant")).toBeEnabled();
 	});
 
-	test(`source-backed checkout color axes stay color recipes on ${viewport.name}`, async ({ page }) => {
+	test(`source-backed checkout color presets stay sale-unit options on ${viewport.name}`, async ({ page }) => {
 		await page.setViewportSize({ width: viewport.width, height: viewport.height });
 		await primeBrowser(page);
-		await page.goto(new URL("/shop-items/columns/7-butterfly-column", BASE_URL).toString(), {
+		await page.goto(new URL("/shop-items/grab-go/graduation-grab-n-go", BASE_URL).toString(), {
 			waitUntil: "domcontentloaded",
 		});
 
 		await expect(page.locator(".lt-product__configure")).toBeVisible();
 		const architecture = await expectArchitectureContract(page, "checkout");
-		const colorControl = architecture.controls.find((control) => control.axis_name === "latex colors");
+		const colorControl = architecture.controls.find((control) => control.axis_name === "College Color Preset");
 		expect(colorControl).toEqual(
 			expect.objectContaining({
-				role: "customization",
-				payload_target: "color_recipes",
-				selector_type: "multi_color_recipe_builder",
-				source: "combined",
+				role: "sale_unit",
+				payload_target: "selected_options",
+				selector_type: "chip_group",
+				source: "erpnext_variant",
 			}),
 		);
-		await expect(page.locator('.lt-product__attr[data-payload-target="color_recipes"]')).toBeVisible();
+		await expect(page.locator('.lt-product__attr[data-payload-target="selected_options"]')).toBeVisible();
 		await expectNoHorizontalOverflow(page);
-		await chooseFirstColorRecipeOption(page);
+		await chooseReadyToOrderOption(page);
 		await expect(page.locator("#lt-add-to-cart-variant")).toBeEnabled();
 		await page.locator("#lt-add-to-cart-variant").click();
 
 		const cart = await page.evaluate(() => JSON.parse(window.localStorage.getItem("lt_cart") || "{}"));
 		expect(cart.items).toHaveLength(1);
 		const configuration = cart.items[0].configuration;
-		expect(configuration.selected_options).toEqual({});
-		expect(configuration.color_recipes).toEqual([
+		expect(configuration.selected_options).toEqual(
 			expect.objectContaining({
-				axis: "latex colors",
-				values: expect.arrayContaining(["Reflex Champagne"]),
+				"College Color Preset": "Weber State Purple and White",
 			}),
-		]);
+		);
+		expect(configuration.color_recipes).toEqual([]);
 	});
 }

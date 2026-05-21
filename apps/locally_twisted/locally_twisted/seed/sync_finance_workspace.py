@@ -1,4 +1,4 @@
-"""Sync LT accountant finance workspace.
+"""Sync LT accounting finance workspace.
 
 Run in-process:
   bench --site frontend execute locally_twisted.seed.sync_finance_workspace.execute
@@ -11,6 +11,7 @@ import frappe
 
 
 ACCOUNTANT_HOME = "LT Accountant Home"
+ACCOUNTANT_HOME_TITLE = "Accounting Home"
 ACCOUNTANT_ROLE = "LT Accountant Access"
 ACCOUNTANT_DEFAULT_WORKSPACE_USERS = ["lt-accountant-temp@example.com"]
 CUSTOMER_REMINDER_REPORT_NAME = "LT Customer Reminder Review"
@@ -181,7 +182,7 @@ def _ensure_accountant_workspace(summary: dict) -> None:
                 "doctype": "Workspace",
                 "name": ACCOUNTANT_HOME,
                 "label": ACCOUNTANT_HOME,
-                "title": "Accountant Home",
+                "title": ACCOUNTANT_HOME_TITLE,
                 "module": "Accounts",
                 "icon": "organization",
                 "indicator_color": "green",
@@ -195,7 +196,7 @@ def _ensure_accountant_workspace(summary: dict) -> None:
 
     fields = {
         "label": ACCOUNTANT_HOME,
-        "title": "Accountant Home",
+        "title": ACCOUNTANT_HOME_TITLE,
         "module": "Accounts",
         "icon": "organization",
         "indicator_color": "green",
@@ -291,7 +292,7 @@ def _accountant_home_content() -> list[dict]:
     blocks = [
         _header(
             "lt-accountant-title",
-            '<span class="h4"><b>Accountant Home</b></span>',
+            '<span class="h4"><b>Accounting Home</b></span>',
             12,
         ),
         _header(

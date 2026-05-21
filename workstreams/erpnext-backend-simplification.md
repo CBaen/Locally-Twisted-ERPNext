@@ -1,6 +1,6 @@
 # ERPNext Backend Simplification Workstream
 
-Last updated: 2026-05-15 by Codex after owner phone-action access closeout.
+Last updated: 2026-05-21 by Codex after local fake-data cleanup and access gate recheck.
 
 ## Outcome
 
@@ -43,6 +43,24 @@ local `/owner-actions` page, owner-safe business DTOs, a narrow whitelisted API
 adapter, and fake local records for a quality localhost owner tour. Feature
 handoff: `workstreams/owner-phone-action-center-2026-05-15.md`. Capability:
 `capabilities/recipes/erpnext-owner-business-access-api.md`.
+
+2026-05-21 local data cleanup update: the local ERPNext database was backed up
+and then cleared of fake operational/customer data. Operational CRM/sales/
+payment, tasks/events/projects, communications, queue rows, custom LT
+operational records, logs, deletion history, route/access history, and version
+history were verified at `0`. The `Guest` Customer, `Guest` Portal User link,
+`Guest-Guest` Contact, and their Dynamic Link were restored because Webshop's
+anonymous product pricing/cart paths require them; treat those as system
+infrastructure, not client data. Guard this with
+`python scripts/verify/webshop_guest_party_contract.py` after future cleanup.
+The custom app now also protects this Guest party chain through Frappe
+`doc_events` in `locally_twisted.webshop_guest_party_guard`; the verifier must
+show all rollback-safe runtime guard probes blocked.
+Only the core users remain: `Administrator`, `cameron@builtbycameron.com`,
+`Guest`, and `locallytwisted@gmail.com`. Catalog/config records were preserved:
+Items, Website Items, Item Prices, Files attached to Item/Website Item/public
+assets, Workspaces, and Role Profiles. Temp persona users are no longer expected
+to exist after cleanup.
 
 ## Owner
 
@@ -186,6 +204,13 @@ owner-focused:
   entries, customers, reminder review, journal entries, and chart of accounts.
   It no longer exposes bank, vendor, payment-terms, statement-reminder, or
   employee/payroll shortcuts while those lanes remain incomplete.
+- As of 2026-05-21, the finance workspace still uses the stable database name
+  `LT Accountant Home`, but the visible title/content now says `Accounting Home`.
+  Do not rename the workspace primary key without a separate migration.
+- `LT Marketing Home` was added on 2026-05-21 as an internal Desk workspace for
+  public review links, website/shop/content shortcuts, newsletters, email
+  groups, campaigns, and new-inquiry visibility. It deliberately does not grant
+  the website-only external `LT Marketing Review Access` role Desk access.
 - `LT Maintenance Home` remains the sanitized maintenance surface. The
   `LT Maintenance Heartbeat` report was re-synced so it includes
   `LT Maintenance Admin Access`; maintenance, heartbeat, and finance parity
@@ -199,19 +224,25 @@ Code ownership and guards:
 - `apps/locally_twisted/locally_twisted/seed/sync_backend_workspaces.py`
   now owns deterministic Manager and Employee workspace shortcut/content sets.
 - `apps/locally_twisted/locally_twisted/seed/sync_finance_workspace.py`
-  now owns the reduced Accountant Home shortcut/content set and prunes removed
+  now owns the reduced Accounting Home shortcut/content set and prunes removed
   finance/payroll setup links.
+- `apps/locally_twisted/locally_twisted/seed/sync_marketing_workspace.py`
+  owns the internal Marketing Home workspace and keeps the external marketing
+  reviewer boundary intact.
 - `scripts/verify/backend_workspace_parity.py` now fails if Owner product
   shortcuts bypass `LT Product Blueprint` or if Manager/Employee workspaces
   regain non-persona shortcuts.
 - `apps/locally_twisted/locally_twisted/verify/persona_workspace_permissions.py`
   proves visible workspace shortcuts match each persona's actual read/create
   permission before the workspace parity gate can pass.
-- `scripts/verify/finance_workspace_parity.py` now fails if Accountant Home
+- `scripts/verify/finance_workspace_parity.py` now fails if Accounting Home
   regains unfinished bank/vendor/payroll setup shortcuts.
+- `scripts/verify/marketing_workspace_parity.py` now fails if Marketing Home is
+  missing expected public-review/content/outreach shortcuts or if the external
+  marketing-review role is given Desk access.
 - `scripts/verify/persona_desk_routes.spec.js` and `npm run test:desk-personas`
-  prove Manager, Employee, and Accountant temp accounts land on the expected
-  personalized Desk views.
+  are available for deliberate temp-persona browser proof, but those fake
+  users are no longer expected to exist after the 2026-05-21 local data cleanup.
 - The backend and finance syncs both touch `User.default_workspace`; run them
   serially when applying both in the same session.
 
@@ -240,8 +271,14 @@ The latest access review is
 
 Current verified access state:
 
-- Owner, Manager, Employee, and Accountant temp Desk personas all pass browser
-  route proof after backend restart.
+- The remaining enabled users are `Administrator`,
+  `cameron@builtbycameron.com`, `Guest`, and `locallytwisted@gmail.com`.
+- Owner/support access for `locallytwisted@gmail.com` passed browser route
+  proof after the local data cleanup.
+- Owner, Manager, Employee, and Accountant temp Desk personas have historical
+  browser-route proof, but the fake temp users were deleted during the
+  2026-05-21 local cleanup and must be intentionally reprovisioned before
+  rerunning `npm run test:desk-personas`.
 - Customer Website User portal contracts pass and keep customer accounts out of
   Desk/backend records.
 - The marketing reviewer lane is separate from customer accounts:
@@ -251,15 +288,17 @@ Current verified access state:
   workspace, portal-code, and hook based.
 - No enabled Supplier user, permanent marketing reviewer user, or enabled
   Maintenance Admin user was found in the local DB.
-- One enabled customer visual test account remains:
-  `lt-portal-visual-1778476910635718999@example.invalid`.
+- The previous customer visual test account was removed during the
+  2026-05-21 local fake-data cleanup.
 
-Important finding:
+Resolved finding:
 
-- Manager workspace does not surface catalog tools, but the current role matrix
-  still grants Manager `Item Price` create/write/delete. Treat this as the next
-  access-hardening target. Add a failing permission-matrix verifier before
-  removing or rewriting broad ERPNext roles.
+- The 2026-05-15 audit found that Manager did not surface catalog tools but
+  still inherited `Item Price` create/write/delete through
+  `Sales Master Manager`. The 2026-05-21 access closeout removes
+  `Sales Master Manager` from the `LT Manager` role profile and any
+  reprovisioned manager temp user, and `npm run test:human-access` now fails if
+  that permission returns.
 
 Verification receipt on 2026-05-15:
 
@@ -278,6 +317,64 @@ Verification receipt on 2026-05-15:
 - `npm run test:marketing-review-access`
 - `$env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-personas`
 - `$env:LT_DESK_TEST_USER='lt-owner-temp@example.com'; $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner`
+
+## 2026-05-21 Access Silo Matrix Closeout
+
+GL's current rule is explicit: the external marketing company must not index
+the site until the shop is on staging and the owner approves products to go
+live. Shop/product staging, live release, sitemap submission, Search Console
+submission, and reindex requests are parked outside this backend access lane.
+
+The backend login model is now documented and verified as a set of logical
+landing pages plus access boundaries:
+
+- Admin/support: `Administrator` and `cameron@builtbycameron.com` retain full
+  repair access.
+- Owner: `locallytwisted@gmail.com` lands on `LT Owner Home` and has the owner
+  plus full repair roles needed to run the business.
+- Manager: `LT Manager Home` for inquiries, bookings, customers/contacts, jobs,
+  and tasks. It no longer inherits `Sales Master Manager` or `Item Price`
+  access.
+- Employee: `LT Employee Home` / visible `My Jobs` for assigned work.
+  The stock ERPNext `All` permission rows were removed from `Contact` and
+  `Address` so employee logins do not inherit customer contact/address access
+  just by being logged in.
+- Accounting: stable workspace key `LT Accountant Home`, visible title
+  `Accounting Home`.
+- Internal marketing/admin: `LT Marketing Home` for website/shop/content and
+  outreach shortcuts.
+- External marketing reviewer: `/marketing-review` only, as a `Website User`
+  with `LT Marketing Review Access`, no Desk, no DocPerm rows, no website
+  editing, no product access, no customer/CRM/finance records, and no indexing
+  authority.
+- Maintenance: `LT Maintenance Home` for sanitized maintenance status only.
+- Customer: invite-only website portal at `/me`, `/account/*`, and
+  `/organization`.
+
+`scripts/verify/human_access_silo_matrix.py` is the combined handoff gate for
+this slice. It verifies admin/owner full access, persona default workspaces,
+workspace role restrictions, external marketing review isolation, maintenance
+sanitization, customer portal invite-only settings, and the parked indexing
+rule in one live ERPNext matrix. `npm run test:human-access` wraps the same
+gate.
+
+Verification receipt on 2026-05-21:
+
+- `python scripts/setup/sync_backend_workspaces.py`
+- `python scripts/verify/human_access_silo_matrix.py`
+- `npm run test:human-access`
+- `python scripts/verify/marketing_review_access_boundary.py`
+- `python scripts/verify/backend_workspace_parity.py`
+- `python scripts/verify/finance_workspace_parity.py`
+- `python scripts/verify/marketing_workspace_parity.py`
+- `python scripts/verify/custom_doctype_permission_boundary.py`
+- `python scripts/verify/maintenance_admin_boundary.py`
+- `python scripts/verify/customer_portal_inventory.py --strict-menu`
+- `python scripts/verify/customer_portal_home_contract.py`
+- `python scripts/verify/customer_account_provisioning_contract.py`
+- `python scripts/verify/owner_business_access_contract.py`
+- `$env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-personas`
+- `$env:LT_DESK_TEST_USER='locallytwisted@gmail.com'; $env:LT_DESK_TEST_PASSWORD='LocalTemp2026!'; npm run test:desk-owner`
 
 ## 2026-05-02 CRM Pipeline Translation
 

@@ -9,7 +9,7 @@ as a reason to stop local ecommerce implementation work.
 
 Coverage:
   1. Homepage navbar exposes the current mode-aware nav and /contact CTA.
-  2. /shop renders the ready-to-order category rail/dropdown + 53 product cards
+  2. /shop renders the ready-to-order category rail/dropdown + product cards
      when ecommerce is open, or redirects to the pause page when paused.
   3. /shop and category pages use the approved product-showroom card contract.
   4. /shop-by-category redirects to /shop instead of rendering the retired
@@ -425,9 +425,14 @@ def check_shop_page(page):
     assert_(category_select.count() == 1, "/shop should expose one mobile category select")
     assert_(category_select.locator("option").count() == 12, "/shop mobile category select should include All + 11 categories")
 
-    body = page.content()
-    assert_("53 ITEMS" in body or "53&nbsp;ITEMS" in body or ">53" in body, "/shop should show 53 items count")
-    print(f"  OK {rail_count} category rail links rendered, 53 items")
+    card_count = page.locator(".lt-shop__card").count()
+    assert_(card_count > 0, "/shop should render product cards")
+    count_label = " ".join(page.locator(".lt-shop__count").inner_text().split())
+    assert_(
+        count_label == f"{card_count} ITEMS",
+        f"/shop count label {count_label!r} should match {card_count} rendered cards",
+    )
+    print(f"  OK {rail_count} category rail links rendered, {card_count} items")
 
 
 def check_search_page_retired(page):

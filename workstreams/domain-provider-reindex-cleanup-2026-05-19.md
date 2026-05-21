@@ -123,6 +123,17 @@ Local verification after the source patch:
 - `npm run test:seo-contract` passed 11/11 against `http://localhost:8081`.
 - `python scripts/verify/cloudflare_launch_readiness.py --base-url https://locallytwisted.com` passed 10/10 against current live, proving route health only.
 
+2026-05-21 local follow-up:
+
+- `apps/locally_twisted/locally_twisted/www/robots.py` and `.txt` now make
+  `/robots.txt` advertise the current-host sitemap instead of returning blank
+  content.
+- The local SEO helper preserves `http://localhost:8081` when the Frappe nginx
+  request host drops the port, while still preferring the real request host for
+  production.
+- `npm run test:seo-contract` now includes the robots check and passed 12/12
+  against `http://localhost:8081`.
+
 ## Reindex Order
 
 1. Prove the local source fix with `npm run test:seo-contract`.

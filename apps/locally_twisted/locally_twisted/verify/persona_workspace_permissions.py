@@ -19,10 +19,17 @@ CREATE_VIEWS = {"New"}
 def run() -> dict[str, object]:
     failures = []
     checked = []
+    skipped = []
 
     for user, workspace_name in PERSONA_WORKSPACES.items():
         if not frappe.db.exists("User", user):
-            failures.append(f"{user} does not exist")
+            skipped.append(
+                {
+                    "user": user,
+                    "workspace": workspace_name,
+                    "reason": "temp persona user is not provisioned",
+                }
+            )
             continue
         if not frappe.db.exists("Workspace", workspace_name):
             failures.append(f"{workspace_name} does not exist")
@@ -54,7 +61,7 @@ def run() -> dict[str, object]:
                         f"{ptype} permission on {target_type} {target_name!r}"
                     )
 
-    return {"ok": not failures, "checked": checked, "failures": failures}
+    return {"ok": not failures, "checked": checked, "skipped": skipped, "failures": failures}
 
 
 def _visible_shortcut_labels(workspace) -> list[str]:

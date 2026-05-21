@@ -158,6 +158,12 @@ doc_events = {
 
 override_whitelisted_methods = {
     "webshop.webshop.api.get_product_filter_data": "locally_twisted.api.product_listing.get_product_filter_data",
+    "webshop.webshop.shopping_cart.product_info.get_product_info_for_website": "locally_twisted.overrides.website_item.get_guest_safe_product_info_for_website",
+    "webshop.webshop.variant_selector.utils.get_next_attribute_and_values": "locally_twisted.api.variant_selector.get_next_attribute_and_values",
+}
+
+override_doctype_class = {
+    "Website Item": "locally_twisted.overrides.website_item.LocallyTwistedWebsiteItem",
 }
 
 # Shared website context for shop sidebars/footer defaults and the public mega menu.
@@ -409,6 +415,61 @@ for _marketing_sensitive_doctype in _marketing_mutation_block_doctypes:
         doc_events[_marketing_sensitive_doctype].setdefault(
             _marketing_sensitive_event,
             "locally_twisted.marketing_review_access.block_marketing_sensitive_doc_mutation",
+        )
+
+
+def _append_doc_event(doctype, event, handler):
+    current = doc_events.setdefault(doctype, {}).get(event)
+    if not current:
+        doc_events[doctype][event] = handler
+        return
+    if isinstance(current, list):
+        if handler not in current:
+            current.append(handler)
+        return
+    if current != handler:
+        doc_events[doctype][event] = [current, handler]
+
+
+_guest_party_guard_records = ("User", "Customer", "Contact")
+for _guest_party_guard_doctype in _guest_party_guard_records:
+    for _guest_party_guard_event in ("validate", "before_save", "on_change"):
+        _append_doc_event(
+            _guest_party_guard_doctype,
+            _guest_party_guard_event,
+            "locally_twisted.webshop_guest_party_guard.validate_guest_party_record",
+        )
+    _append_doc_event(
+        _guest_party_guard_doctype,
+        "on_trash",
+        "locally_twisted.webshop_guest_party_guard.block_guest_party_delete",
+    )
+    _append_doc_event(
+        _guest_party_guard_doctype,
+        "before_rename",
+        "locally_twisted.webshop_guest_party_guard.block_guest_party_rename",
+    )
+
+_guest_party_guard_child_doctypes = ("Has Role", "Portal User", "Dynamic Link")
+for _guest_party_guard_doctype in _guest_party_guard_child_doctypes:
+    for _guest_party_guard_event in ("validate", "before_insert", "before_save", "on_change"):
+        _append_doc_event(
+            _guest_party_guard_doctype,
+            _guest_party_guard_event,
+            "locally_twisted.webshop_guest_party_guard.validate_guest_party_record",
+        )
+    _append_doc_event(
+        _guest_party_guard_doctype,
+        "on_trash",
+        "locally_twisted.webshop_guest_party_guard.block_guest_party_delete",
+    )
+
+for _guest_party_guard_doctype in ("Contact Email", "Contact Phone"):
+    for _guest_party_guard_event in ("validate", "before_insert", "before_save", "on_change"):
+        _append_doc_event(
+            _guest_party_guard_doctype,
+            _guest_party_guard_event,
+            "locally_twisted.webshop_guest_party_guard.validate_guest_party_record",
         )
 
 # DocType Class

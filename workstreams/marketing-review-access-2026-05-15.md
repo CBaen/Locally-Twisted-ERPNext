@@ -12,6 +12,11 @@ It is not backend access. It must not expose ERPNext Desk, Leads, Customers,
 Contacts, Files, Communications, Email Queue, Orders, Invoices, Payments,
 Products, maintenance rows, raw logs, reports, or customer portal records.
 
+It is also not indexing authority. Per GL on 2026-05-21, the external
+marketing company must not index the site, request recrawls, submit sitemaps,
+or own Search Console/indexing work until the shop is on staging and the owner
+approves products to go live.
+
 It is also not ad-account access. Google Ads and Meta/Facebook/Instagram
 takeover work is a separate provider-control lane documented in
 `workstreams/ad-account-takeover-2026-05-19.md` and
@@ -63,6 +68,8 @@ Protected route:
 - Do not use customer portal routes as the marketing review surface.
 - Do not use this account for editing website pages, products, blog posts,
   policy copy, or customer records. It is review-only.
+- Do not use this account for indexing, Search Console, sitemap submission,
+  recrawl requests, SEO tooling access, or ecommerce launch approval.
 - Keep this lane separate from the customer portal lane documented in
   `workstreams/customer-client-portal-translation-2026-05-10.md`.
 - Cross-link: the broader current access audit is documented in
@@ -110,9 +117,24 @@ Follow-up audit receipt from 2026-05-15:
   marketing proof, `npm run test:desk-personas`, and `npm run test:desk-owner`
   passed.
 
+Follow-up access closeout from 2026-05-21:
+
+- `apps/locally_twisted/locally_twisted/marketing_review_access.py` now treats
+  website/content/shop/outreach DocTypes such as `Web Page`,
+  `Website Settings`, `Blog Post`, `Newsletter`, `Email Group`, `Campaign`,
+  and `Item Group` as forbidden for external marketing reviewers.
+- `python scripts/verify/marketing_review_access_boundary.py` passed and now
+  checks both regular and single DocTypes without granting the temporary
+  marketing user list/read/write/delete access.
+- `python scripts/verify/human_access_silo_matrix.py` and
+  `npm run test:human-access` passed and record the marketing reviewer lane as
+  review-only with no Desk, no DocPerm rows, and no indexing authority.
+
 ## Current Non-Work
 
 - No permanent Exploring Not Boring user has been created in the local DB.
 - No production/Frappe Cloud deploy was performed in this slice.
 - GitHub push to `origin/main` is source archive only; it is not a
   production/Frappe Cloud deploy and does not push code live.
+- No Search Console submission, sitemap submission, reindex request, staging
+  promotion, or live shop/indexing work belongs to this slice.

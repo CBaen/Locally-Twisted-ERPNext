@@ -36,7 +36,7 @@ BASE = "http://localhost:8081"
 ROOT = Path(__file__).resolve().parents[2]
 
 COMPLEX_VARIANT_TEMPLATE = "6-color-rainbow-arch"
-COMPLEX_SINGLE_SKU_ITEM = "easter-arch"
+COMPLEX_SINGLE_SKU_ITEM = "mothers-day-front-yard-7-column"
 RETAIL_VARIANT_TEMPLATE = "unicorn-bouquet"
 RETAIL_VARIANT_ITEM = "unicorn-bouquet-SMA"
 CHECKOUT_CONFIG_TEMPLATE = "6-graduation-stands"

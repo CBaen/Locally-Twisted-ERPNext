@@ -225,17 +225,9 @@ COPY = {
         "brand": "<p>A six-color rainbow in a full-span arch — every color of the spectrum, hand-blended, the kind of piece that makes a kid stop walking and stare.</p>",
         "details": "<ul><li>One full-span rainbow arch in six colors</li><li>Indoor and outdoor capable</li><li>Setup and teardown by our team</li></ul>",
     },
-    "WEB-ITM-0051": {  # Easter Arch — Arches
-        "brand": "<p>Soft pastels and spring greens in a garden-inspired arch. Designed for egg hunts, church socials, and family brunches.</p>",
-        "details": "<ul><li>One full-span Easter arch in pastel tones — pinks, mints, lavenders, soft yellows</li><li>Indoor and outdoor capable</li><li>Setup and teardown included</li></ul>",
-    },
     "WEB-ITM-0052": {  # Large Garland — Garlands
         "brand": "<p>Balloons up to 24 inches — bolder, more dramatic. The scale creates depth and dimension that a standard garland can't.</p>",
         "details": "<ul><li>One organic garland built from larger latex, up to 24\"</li><li>Lengths sized to your space</li><li>Choose your palette</li><li>Setup and teardown by our team</li></ul>",
-    },
-    "WEB-ITM-0053": {  # Pride Arch — Arches
-        "brand": "<p>Full-spectrum rainbow in a statement arch. Bold, joyful, and built to celebrate exactly who you are.</p>",
-        "details": "<ul><li>One full-span Pride arch</li><li>Standard rainbow palette or Progress Pride on request</li><li>Indoor and outdoor capable</li><li>Setup and teardown included</li></ul>",
     },
 }
 

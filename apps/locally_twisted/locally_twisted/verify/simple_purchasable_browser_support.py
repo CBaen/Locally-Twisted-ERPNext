@@ -16,8 +16,6 @@ import frappe
 SIMPLE_BROWSER_PRODUCTS = (
     "large-head-missionary",
     "mothers-day-front-yard-7-column",
-    "easter-arch",
-    "pride-arch",
 )
 
 

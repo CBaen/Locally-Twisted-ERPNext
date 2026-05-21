@@ -135,6 +135,12 @@ def build_steps(args: argparse.Namespace) -> list[Step]:
         Step("Verifier CLI safety contract", [python, "scripts/verify/verifier_cli_contract.py"], 120),
         Step("Navigation IA", [python, "scripts/verify/nav_ia.py"], 120),
         Step("Public homepage identity", [python, "scripts/verify/public_home_identity.py"], 120),
+        Step("Public asset integrity", [python, "scripts/verify/public_asset_integrity.py"], 180),
+        Step(
+            "Public browser network integrity",
+            local_playwright_command(workers, "scripts/verify/public_network_integrity.spec.js"),
+            360,
+        ),
         Step("Passive layout matrix", local_playwright_command(workers, "scripts/verify/layout_fit.spec.js"), 900),
         Step(
             "Public container contract",

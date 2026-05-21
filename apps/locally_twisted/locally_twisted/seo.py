@@ -54,10 +54,20 @@ def canonical_path(path: str | None) -> str:
 
 
 def site_base_url() -> str:
+    configured = str(frappe.utils.get_url() or "").rstrip("/")
     request = getattr(frappe.local, "request", None)
     if request and getattr(request, "host_url", None):
-        return str(request.host_url).rstrip("/")
-    configured = str(frappe.utils.get_url() or "").rstrip("/")
+        request_base = str(request.host_url).rstrip("/")
+        request_url = urlparse(request_base)
+        configured_url = urlparse(configured)
+        if (
+            configured
+            and request_url.hostname == configured_url.hostname
+            and configured_url.port
+            and not request_url.port
+        ):
+            return configured
+        return request_base
     if configured:
         return configured
     return ""

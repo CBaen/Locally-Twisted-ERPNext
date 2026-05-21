@@ -17,7 +17,7 @@ CASES = [
     ("/contact?service=face-painting", ["Face Painting"]),
 ]
 BTFP_PAGE = "/balloon-twisting-and-face-painting"
-ITEM_CASE = ("/contact?item=easter-arch", "easter-arch", "Easter Arch")
+ITEM_CASE = ("/contact?item=classic-arch", "classic-arch", "Classic Arch")
 QUOTE_HANDOFF_KEY = "lt_checkout_quote_handoff_v1"
 
 

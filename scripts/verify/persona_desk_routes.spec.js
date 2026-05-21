@@ -41,9 +41,9 @@ const PERSONAS = [
 	{
 		name: "accountant",
 		user: process.env.LT_ACCOUNTANT_TEST_USER || "lt-accountant-temp@example.com",
-		title: "Accountant Home",
+		title: "Accounting Home",
 		expected: [
-			"Accountant Home",
+			"Accounting Home",
 			"Money to collect",
 			"Sales Invoices",
 			"Payment Requests",
