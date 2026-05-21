@@ -472,6 +472,25 @@ for _guest_party_guard_doctype in ("Contact Email", "Contact Phone"):
             "locally_twisted.webshop_guest_party_guard.validate_guest_party_record",
         )
 
+
+_owner_catalog_guard_events = {
+    "Item": ("validate", "before_insert", "before_save", "on_change", "on_trash", "before_rename"),
+    "Website Item": ("validate", "before_insert", "before_save", "on_change", "on_trash", "before_rename"),
+    "Item Price": ("validate", "before_insert", "before_save", "on_change", "on_trash"),
+    "Item Attribute": ("validate", "before_insert", "before_save", "on_change", "on_trash", "before_rename"),
+    "Item Attribute Value": ("validate", "before_insert", "before_save", "on_change", "on_trash"),
+    "Item Variant Attribute": ("validate", "before_insert", "before_save", "on_change", "on_trash"),
+    "Item Group": ("validate", "before_insert", "before_save", "on_change", "on_trash", "before_rename"),
+    "Webshop Settings": ("validate", "before_save", "on_update", "on_change"),
+}
+for _owner_catalog_guard_doctype, _owner_catalog_guard_doctype_events in _owner_catalog_guard_events.items():
+    for _owner_catalog_guard_event in _owner_catalog_guard_doctype_events:
+        _append_doc_event(
+            _owner_catalog_guard_doctype,
+            _owner_catalog_guard_event,
+            "locally_twisted.owner_catalog_guard.validate_owner_catalog_mutation",
+        )
+
 # DocType Class
 # ---------------
 # Override standard doctype classes

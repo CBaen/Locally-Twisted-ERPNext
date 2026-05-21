@@ -80,22 +80,24 @@ def apply_blueprint_locally(
         raise ProductBlueprintApplyError("Local blueprint apply blocked: " + "; ".join(gate["blockers"]))
 
     import frappe
+    from locally_twisted.owner_catalog_guard import catalog_guard_context
 
     data = blueprint_doc_to_dict(doc)
     planned = plan["planned_records"]
     _guard_existing_targets(frappe, doc, planned)
 
-    attributes = [
-        _ensure_item_attribute(frappe, row["attribute_name"], row.get("values") or [])
-        for row in planned.get("item_attributes") or []
-    ]
-    template_item = _upsert_template_item(frappe, planned["base_item"], planned, data)
-    variants = [_upsert_variant(frappe, template_item, row) for row in planned.get("item_variants") or []]
-    prices = [_upsert_item_price(frappe, row) for row in planned.get("item_prices") or []]
-    website_item = _upsert_website_item(frappe, template_item, planned["website_item"], data)
-    _write_blueprint_targets(frappe, doc, template_item, website_item)
-    cache_result = _rebuild_variant_cache(frappe, template_item) if variants else {"attempted": False}
-    frappe.clear_cache()
+    with catalog_guard_context("blueprint_local_apply"):
+        attributes = [
+            _ensure_item_attribute(frappe, row["attribute_name"], row.get("values") or [])
+            for row in planned.get("item_attributes") or []
+        ]
+        template_item = _upsert_template_item(frappe, planned["base_item"], planned, data)
+        variants = [_upsert_variant(frappe, template_item, row) for row in planned.get("item_variants") or []]
+        prices = [_upsert_item_price(frappe, row) for row in planned.get("item_prices") or []]
+        website_item = _upsert_website_item(frappe, template_item, planned["website_item"], data)
+        _write_blueprint_targets(frappe, doc, template_item, website_item)
+        cache_result = _rebuild_variant_cache(frappe, template_item) if variants else {"attempted": False}
+        frappe.clear_cache()
 
     return {
         "schema_version": SCHEMA_VERSION,
