@@ -1,6 +1,18 @@
 D:2026-05-12 | Check:local ERPNext DB + rendered search/nav verifier evidence | Confidence:[LOCAL-PROOF]
 # Ready-to-Order Nav/Search Backend Gate
 
+## Superseded For Public Chrome On 2026-05-21
+
+This handoff is historical product-checkout eligibility evidence. It no longer
+owns the public `Ready-to-Order` header/menu/search/drawer chrome. GL corrected
+that public chrome should be category discovery, not product quick links. The
+current source handoff is
+`../ready-to-order-category-menu-2026-05-21.md`.
+
+Do not use this file to restore product quick links or ERPNext/backend copy in
+the customer-facing menu. Product eligibility still matters below the category
+page and in checkout/product-page contracts.
+
 Use this handoff for GPT-5.5/OpenClaw peers touching LT Ready-to-Order header
 links, mobile drawer links, search quick links, or Website Item checkout
 classification.

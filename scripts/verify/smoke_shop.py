@@ -312,26 +312,26 @@ def check_homepage(page):
     search_button.click()
     assert_(page.locator("#lt-site-search-panel").is_visible(), "Search overlay did not open")
     assert_(page.url.rstrip("/") == BASE, "Opening search overlay must not navigate away from the current page")
-    page.locator("#lt-site-search-input").fill("balloon cups")
+    page.locator("#lt-site-search-input").fill("seasonal")
     if PUBLIC_ECOMMERCE_PAUSED:
         form_action = page.locator("#lt-site-search-panel form").first.get_attribute("action")
         assert_(form_action == "/contact", f"Paused search form should submit to /contact, got {form_action!r}")
         assert_(
-            page.locator("#lt-site-search-panel [data-lt-search-product-entry]").count() == 0,
-            "Paused search overlay must not expose product quick links",
+            page.locator("#lt-site-search-panel [data-lt-search-ready-order-entry]").count() == 0,
+            "Paused search overlay must not expose ready-to-order category quick links",
         )
     else:
         assert_(
-            page.locator("#lt-site-search-panel a[href='/shop-items/seasonal-specialty/easter-balloon-cups']").is_visible(),
-            "Search overlay should include backend-approved Balloon Cups product links",
+            page.locator("#lt-site-search-panel a[href='/shop-items/seasonal-specialty']").is_visible(),
+            "Search overlay should include ready-to-order category links",
         )
         assert_(
-            page.locator("#lt-site-search-panel a[href='/shop-items/arches/classic-arch']").count() == 0,
-            "Search overlay must not expose owner-excluded Classic Arch",
+            page.locator("#lt-site-search-panel a[href='/shop-items/seasonal-specialty/easter-balloon-cups']").count() == 0,
+            "Search overlay must not expose product page quick links",
         )
         assert_(
-            page.locator("#lt-site-search-panel a[href='/shop-items/columns/classic-column']").count() == 0,
-            "Search overlay must not expose owner-excluded Classic Column",
+            page.locator("#lt-site-search-panel", has_text="ERPNext").count() == 0,
+            "Search overlay must not expose internal ERPNext wording",
         )
     page.keyboard.press("Escape")
     assert_(not page.locator("#lt-site-search-panel").is_visible(), "Search overlay did not close on Escape")
@@ -353,38 +353,33 @@ def check_homepage(page):
     if not PUBLIC_ECOMMERCE_PAUSED:
         product_trigger.click()
         assert_(page.locator("#lt-mega-products").is_visible(), "Ready-to-Order mega menu did not open")
+        panel_text = page.locator("#lt-mega-products").inner_text()
+        assert_("Browse ready-to-order by category." in panel_text, "Ready-to-Order mega menu should frame category browsing")
+        assert_("ERPNext" not in panel_text, "Ready-to-Order mega menu must not expose internal ERPNext wording")
+        assert_("Website Item" not in panel_text, "Ready-to-Order mega menu must not expose backend data model wording")
+        assert_("Backend-approved" not in panel_text, "Ready-to-Order mega menu must not expose backend approval wording")
         assert_(
-            page.locator("#lt-mega-products a[href='/shop-items/bouquets/unicorn-bouquet']").count() >= 1,
-            "Product mega menu should link to backend-approved checkout products",
+            page.locator("#lt-mega-products a[href='/shop-items/arches']").count() >= 1,
+            "Ready-to-Order mega menu should link to the Arches category",
         )
         assert_(
-            page.locator("#lt-mega-products a[href='/shop-items/seasonal-specialty/easter-balloon-cups']").count() >= 1,
-            "Product mega menu must expose backend-approved Balloon Cups",
+            page.locator("#lt-mega-products a[href='/shop-items/bouquets']").count() >= 1,
+            "Ready-to-Order mega menu should link to the Bouquets category",
         )
         assert_(
-            page.locator("#lt-mega-products a[href='/shop-items/stands-easels/6-graduation-stands']").count() >= 1,
-            "Product mega menu must expose 6' Graduation stands unless backend proves a blocker",
+            page.locator("#lt-mega-products a[href='/shop-items/seasonal-specialty']").count() >= 1,
+            "Ready-to-Order mega menu should link to the Seasonal & Specialty category",
         )
-        assert_(
-            page.locator("#lt-mega-products a[href='/shop-items/grab-go/graduation-grab-n-go']").count() >= 1,
-            "Product mega menu must expose Graduation Grab n Go unless backend proves a blocker",
-        )
-        for excluded_href in (
-            "/shop-items/columns/7-butterfly-column",
-            "/shop-items/arches/classic-arch",
-            "/shop-items/columns/classic-column",
-            "/shop-items/arches/classic-organic-arch",
-            "/shop-items/columns/classic-organic-columns",
-            "/shop-items/garlands/classic-organic-balloon-garland",
+        for product_href in (
+            "/shop-items/bouquets/unicorn-bouquet",
+            "/shop-items/seasonal-specialty/easter-balloon-cups",
+            "/shop-items/stands-easels/6-graduation-stands",
+            "/shop-items/grab-go/graduation-grab-n-go",
         ):
             assert_(
-                page.locator(f"#lt-mega-products a[href='{excluded_href}']").count() == 0,
-                f"Product mega menu must not expose quote-first or owner-excluded {excluded_href}",
+                page.locator(f"#lt-mega-products a[href='{product_href}']").count() == 0,
+                f"Ready-to-Order mega menu must not expose product link {product_href}",
             )
-        assert_(
-            page.locator("#lt-mega-products a[href='/shop-items/arches']").count() == 0,
-            "Product mega menu must not frame category lanes as ready-to-order checkout",
-        )
 
     quote_cta = page.locator(".lt-mega-header__cta", has_text="Contact Us")
     assert_(quote_cta.count() == 1, "Desktop header missing Contact Us CTA")
@@ -1023,7 +1018,7 @@ def check_mobile_drawer(p):
         "Contact Us": "/contact",
     }
     if not PUBLIC_ECOMMERCE_PAUSED:
-        expected_links["Shop All"] = "/shop"
+        expected_links["All Ready-to-Order"] = "/shop"
     for label, href in expected_links.items():
         link = page.locator("#lt-mobile-nav a", has_text=label).first
         assert_(link.count() == 1, f"Mobile drawer missing {label}")

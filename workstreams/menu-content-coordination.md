@@ -14,7 +14,7 @@ Before editing any nav, chrome, public page hero/body copy, footer links, or nav
 - Do not edit another active lane's files without adding a note here first.
 - Treat `workstreams/website-launch.md` as the broader launch lane; use this file for menu/content collisions.
 - Keep `/contact` as the shared conversion path unless Guiding Light explicitly changes the architecture.
-- Current public chrome includes `Twisting & Face Painting` pointing to `/balloon-twisting-and-face-painting`, an event-audience dropdown linking only to `/civic-community`, `/corporate-events`, `/schools-campuses`, and `/private-celebrations`, `Ready-to-Order` pointing to `/shop` while ecommerce is open for testing, `Contact Us` pointing to `/contact`, and top-banner-only `Free Event Quote` pointing to `/contact`. The short-notice sentence `SHORT NOTICE? LET US KNOW. WE CAN OFTEN HELP WITH 24 HOURS NOTICE!` is a centered deep-navy `/contact` link on desktop and a matching visible deep-navy `/contact` strip on mobile; the account link remains on the desktop right. The old prepared-design proof copy and delivery/truck icon are removed. `Ready-to-Order`, `Cart`, and `Recent Work` do not belong in the top banner, and `Free Event Quote` must not appear in primary nav, mobile drawer, or search quick results. Banner text stays warm-white on navy; brass is accent only. Mobile safe-area left/right padding must match the physical sides. Do not remove, hide, rename, or replace the BTFP lane unless GL explicitly approves the exact action and `workstreams/nav-service-removal-approvals.md` records the required marker. Do not restore standalone `/process` or `/event-balloons` pages or links without explicit GL approval.
+- Current public chrome includes `Twisting & Face Painting` pointing to `/balloon-twisting-and-face-painting`, an event-audience dropdown linking only to `/civic-community`, `/corporate-events`, `/schools-campuses`, and `/private-celebrations`, `Ready-to-Order` pointing to `/shop` while ecommerce is open for testing, `Contact Us` pointing to `/contact`, and top-banner-only `Free Event Quote` pointing to `/contact`. `Ready-to-Order` menu/search/drawer entries are category discovery sourced from visible `Item Group` children of `Shop Items`; do not restore product quick links or ERPNext/backend copy in the public dropdown. The short-notice sentence `SHORT NOTICE? LET US KNOW. WE CAN OFTEN HELP WITH 24 HOURS NOTICE!` is a centered deep-navy `/contact` link on desktop and a matching visible deep-navy `/contact` strip on mobile; the account link remains on the desktop right. The old prepared-design proof copy and delivery/truck icon are removed. `Ready-to-Order`, `Cart`, and `Recent Work` do not belong in the top banner, and `Free Event Quote` must not appear in primary nav, mobile drawer, or search quick results. Banner text stays warm-white on navy; brass is accent only. Mobile safe-area left/right padding must match the physical sides. Do not remove, hide, rename, or replace the BTFP lane unless GL explicitly approves the exact action and `workstreams/nav-service-removal-approvals.md` records the required marker. Do not restore standalone `/process` or `/event-balloons` pages or links without explicit GL approval.
 - Do not claim a route, drawer, form, or verifier is fixed without recording the command and result.
 
 ## Style-Guide Alignment Note For Menu/Content Agents
@@ -49,6 +49,8 @@ Feature handoff for the removed Event Balloons hub route:
 `workstreams/event-balloons-route-removal-2026-05-11.md`.
 Feature handoff for the homepage review platform proof strip:
 `workstreams/homepage-review-platform-proof-2026-05-11.md`.
+Feature handoff for the Ready-to-Order category menu correction:
+`workstreams/ready-to-order-category-menu-2026-05-21.md`.
 
 ## Current Conflict Notes
 
@@ -91,6 +93,14 @@ Status:
 ```
 
 ## Session Notes
+
+### 2026-05-21 - Codex ready-to-order category menu
+Lane: Ready-to-Order dropdown category source and customer-facing submenu copy.
+Files: `navbar_context.py`, `navbar.html`, `lt-mega-menu.css`, `lt-megamenu.js`, `hooks.py`, `nav_ia.py`, `smoke_shop.py`, and related docs/verifiers as needed after source tracing.
+Intent: Replace product-heavy Ready-to-Order submenu behavior with category-level customer-facing navigation from the real ERPNext/Frappe category source, with no ERPNext/internal wording in the dropdown.
+Conflicts: Stay out of unrelated public chrome, BTFP service lane, event audience menu, checkout/payment flow, and catalog import/reclassification unless source tracing proves a direct dependency.
+Verification: Branch-level checks passed from `C:\Users\baenb\agent-worktrees\builtbycameron-lt\codex-20260521-rom`: `python -m py_compile apps\locally_twisted\locally_twisted\navbar_context.py scripts\verify\nav_ia.py scripts\verify\smoke_shop.py scripts\verify\ecommerce_pause_contract.py`; `node --check apps\locally_twisted\locally_twisted\public\js\lt-megamenu.js`; `node --check scripts\verify\search_contract.spec.js`; `python scripts\verify\nav_ia.py`. Rendered browser proof against `http://localhost:8081/` is pending because the running Docker stack bind-mounts the main checkout, not this branch worktree.
+Status: Handoff-ready for local rendered testing; not live-release-ready.
 
 ### 2026-05-11 - Codex current session event hub and review proof cleanup
 Lane: Removed `/event-balloons` hub route, homepage review platform strip, and

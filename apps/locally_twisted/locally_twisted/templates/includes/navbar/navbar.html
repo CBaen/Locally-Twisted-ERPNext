@@ -6,7 +6,7 @@
    - #lt-mobile-backdrop and #lt-mobile-close close the drawer.
    - [data-lt-drawer-accordion-trigger] toggles same-id drawer panels.
    - [data-lt-search-toggle] opens #lt-site-search-panel without leaving the page.
-   - Ecommerce surfaces are hidden while the online shop is paused.
+   - Ready-to-Order category surfaces are hidden while the online shop is paused.
 #}
 
 {% set event_links = lt_nav_event_links or [
@@ -19,7 +19,7 @@
     {"label": "Frequently Asked Questions", "route": "faq"},
     {"label": "Start a Quote", "route": "contact"}
 ] %}
-{% set product_links = lt_nav_product_links or [] %}
+{% set ready_to_order_links = lt_nav_ready_to_order_links or [] %}
 {% if lt_ecommerce_paused is defined %}
     {% set ecommerce_paused = lt_ecommerce_paused %}
 {% else %}
@@ -97,12 +97,12 @@
                             </button>
 
                             <div class="lt-megamenu__panel" id="lt-mega-products" hidden>
-                                <p class="lt-megamenu__eyebrow">Backend-approved checkout</p>
-                                <h2 class="lt-megamenu__title">Ready-to-order pieces with a clear checkout path.</h2>
-                                <p class="lt-megamenu__summary">These links come from ERPNext Website Item records whose product page, options, cart, and checkout path are ready for purchase.</p>
+                                <p class="lt-megamenu__eyebrow">Ready-to-order</p>
+                                <h2 class="lt-megamenu__title">Browse ready-to-order by category.</h2>
+                                <p class="lt-megamenu__summary">Start with the type of decor you need, then choose the piece that fits your event.</p>
 
                                 <div class="lt-megamenu__grid">
-                                    {% for item in product_links %}
+                                    {% for item in ready_to_order_links %}
                                         <a class="lt-megamenu__card" href="/{{ item.route }}">
                                             <img src="/assets/locally_twisted/icons/brand/{{ item.icon }}.svg" alt="" width="30" height="30">
                                             <strong>{{ item.label }}</strong>
@@ -196,12 +196,12 @@
 
         <div class="lt-site-search-panel__quick" data-lt-search-list>
             {% if not ecommerce_paused %}
-                <a href="/shop" data-lt-search-entry data-lt-search-product-entry data-lt-search-keywords="ready order shop all products pickup checkout">
-                    <strong>Shop</strong>
-                    <span>Browse product pages; checkout appears only where ERPNext allows it</span>
+                <a href="/shop" data-lt-search-entry data-lt-search-ready-order-entry data-lt-search-keywords="ready order shop all categories pickup checkout balloon decor">
+                    <strong>All Ready-to-Order</strong>
+                    <span>Browse every ready-to-order category in one place.</span>
                 </a>
-                {% for item in lt_nav_search_product_links or [] %}
-                    <a href="/{{ item.route }}" data-lt-search-entry data-lt-search-product-entry data-lt-search-keywords="{{ item.keywords | e }}">
+                {% for item in lt_nav_search_ready_to_order_links or [] %}
+                    <a href="/{{ item.route }}" data-lt-search-entry data-lt-search-ready-order-entry data-lt-search-keywords="{{ item.keywords | e }}">
                         <strong>{{ item.label }}</strong>
                         <span>{{ item.summary }}</span>
                     </a>
@@ -286,8 +286,8 @@
                     <span aria-hidden="true">+</span>
                 </button>
                 <div class="lt-mega-drawer__panel" id="lt-mobile-products" hidden>
-                    <a href="/shop">Shop All</a>
-                    {% for item in product_links %}
+                    <a href="/shop">All Ready-to-Order</a>
+                    {% for item in ready_to_order_links %}
                         <a href="/{{ item.route }}">{{ item.label }}</a>
                     {% endfor %}
                 </div>

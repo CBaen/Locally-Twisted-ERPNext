@@ -3193,3 +3193,49 @@ live outage claim.
 
 **Avoid:** escalating a staging-only root/login drift into a live breakage
 claim, or debugging source code before checking Frappe Website Settings.
+
+---
+
+## 2026-05-21 - Menu level must match the customer's decision level
+
+**Lesson:** A public navigation submenu should expose the level a customer can
+reason about. For LT `Ready-to-Order`, that means category concepts from Item
+Group records, not a long list of individual Website Item products.
+
+**What happened:** The local header showed product quick links in the
+`Ready-to-Order` dropdown, and the current data made the menu look like almost
+all bouquets. The copy also described ERPNext/backend approval instead of the
+customer's choice: what kind of decor do I need?
+
+**Do this next time:** Trace the rendered menu to the source data, compare that
+data level to the intended customer decision, then update the context,
+template, search behavior, and verifier contracts together. If the menu is
+category browse, use the same source as `/shop`: visible `Item Group` children
+of `Shop Items`.
+
+**Avoid:** product dumps in primary nav, backend implementation copy in public
+dropdowns, and verifiers that lock the UI to product examples when the business
+intent is category discovery.
+
+---
+
+## 2026-05-21 - Derived worktree IDs still need Windows path-length reality checks
+
+**Lesson:** A stable readable project ID can still be too long for a Windows
+worktree when the repo has deep framework paths. Repo-forest safety and path
+length both matter.
+
+**What happened:** The first LT worktree path used the full derived ID
+`built-by-cameron__clients__locally-twisted` plus a long session/task slug. Git
+failed while checking out deep Frappe/ERPNext files with `Filename too long`.
+The short ID `builtbycameron-lt` created a clean external worktree without
+putting anything inside the parent/company repo or client repo.
+
+**Do this next time:** Keep worktrees outside all project repos, but use short
+stable IDs for deep repos. Verify the path before creation and update both the
+project `AGENTS.md` and the neutral coordination hub when a shorter ID becomes
+the real safe default.
+
+**Avoid:** treating path readability as more important than checkout success,
+or adding parent-repo `.gitignore` rules as the first fix for bad worktree
+placement.

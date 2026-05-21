@@ -83,11 +83,14 @@ cart/checkout/receipt summary parity.
 
 ## 2026-05-12 Ready-to-Order Nav/Search Backend Gate
 
-Use `ready-to-order-nav-search-backend-gate-2026-05-12.md` for the current
-Ready-to-Order menu/search closeout. Owner include codes are merchandising
-allowlist entries only; they cannot bypass Website Item
-`simple_product|checkout` fields. Search filtering hides backend-approved
-nonmatching quick-link nodes instead of removing them from the DOM.
+Use `ready-to-order-nav-search-backend-gate-2026-05-12.md` as historical
+product-checkout eligibility evidence only. Public Ready-to-Order chrome was
+superseded on 2026-05-21 by
+`../ready-to-order-category-menu-2026-05-21.md`: header/menu/search/drawer
+entries are category discovery from visible `Item Group` children of
+`Shop Items`, not Website Item product quick links. Owner include codes and
+`simple_product|checkout` fields still matter below the category page and in
+checkout/product-page contracts.
 
 ## 2026-05-12 Complex Checkout Scaffold
 

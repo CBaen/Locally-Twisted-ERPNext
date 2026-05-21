@@ -168,10 +168,10 @@
                 var text = (
                     (entry.textContent || "") + " " + (entry.getAttribute("data-lt-search-keywords") || "")
                 ).toLowerCase();
-                var isProductEntry = entry.hasAttribute("data-lt-search-product-entry");
+                var isReadyOrderEntry = entry.hasAttribute("data-lt-search-ready-order-entry");
                 var matched = terms.length ? terms.every(function (term) {
                     return text.indexOf(term) !== -1;
-                }) : !isProductEntry;
+                }) : !isReadyOrderEntry;
                 entry.toggleAttribute("hidden", !matched);
                 if (matched) visible += 1;
             });

@@ -7,7 +7,7 @@ maturity: candidate
 scope: Locally Twisted ERPNext/Frappe public navigation, header/footer IA, and service-route parity
 currently_true: yes
 verification_level: 2
-last_verified: 2026-05-12
+last_verified: 2026-05-21
 evidence_quality: direct
 successful_uses: 2
 failed_uses: 0
@@ -53,12 +53,12 @@ For the current LT site:
   keeping `Free Event Quote` and the account link on the right.
 - `Twisting & Face Painting` points to `/balloon-twisting-and-face-painting`.
 - `Ready-to-Order` points to `/shop` when `lt_ecommerce_paused=0`.
-- Ready-to-Order product quick links in header, mobile drawer, and search must
-  be backend-derived. Owner include codes are merchandising allowlist entries
-  only; they cannot bypass Website Item `simple_product|checkout` fields,
-  enabled root Item status, published state, or Standard Selling price checks.
-  Header search filtering may leave backend-approved but nonmatching product
-  nodes in the DOM with `hidden`; owner-excluded products should stay absent.
+- Ready-to-Order header, mobile drawer, and search quick links are category
+  discovery, not product merchandising. They must come from visible ERPNext
+  `Item Group` children of `Shop Items`, ordered by weightage, matching the
+  `/shop` category source. Copy must be customer-facing category language and
+  must not mention ERPNext, Website Item, backend approval, or internal
+  checkout-lane concepts.
 - `Free Event Quote` and `Contact Us` point to `/contact`; `Free Event Quote`
   belongs in the top utility banner and must not replace the BTFP service lane
   in primary nav, mobile drawer, or search quick links.
@@ -181,11 +181,24 @@ and route lists. Direct local checks return 404 with no redirect for both
 `/event-balloons` and `/event_balloons`; sitemap search is clean. The four
 event audience routes remain live.
 
-On 2026-05-12, review closeout hardened Ready-to-Order product quick links:
-`READY_TO_ORDER_OWNER_INCLUDE_CODES` is now only an allowlist, and
+On 2026-05-12, review closeout hardened the then-current Ready-to-Order product
+quick-link contract. That product-link contract is superseded for public chrome
+by the 2026-05-21 category-menu decision below, but remains useful history for
+product-page checkout eligibility. `READY_TO_ORDER_OWNER_INCLUDE_CODES` is now
+only an allowlist, and
 `navbar_context.py` still requires backend Website Item `simple_product|checkout`
 before nav/search exposure. `search_contract.spec.js` now asserts filtered
 backend-approved quick links are hidden rather than removed, while Classic
 owner-excluded products remain absent. `python scripts\verify\nav_ia.py`,
 `npm run test:search-contract`, and live ERPNext reads of the four included item
 codes passed.
+
+On 2026-05-21, GL corrected the menu level: the public Ready-to-Order dropdown
+must not be a product list or expose ERPNext/backend copy. Codex changed
+`navbar_context.py` to source menu/search/drawer entries from `Item Group`
+children under `Shop Items`, aligned navbar/search/mobile labels to
+customer-facing category concepts, and updated `nav_ia.py`, `smoke_shop.py`,
+`search_contract.spec.js`, and `ecommerce_pause_contract.py` to reject the old
+product quick-link contract. Branch-level syntax and source nav verification
+passed; rendered `localhost:8081` proof remains pending until the local Docker
+stack is repointed from main to the branch worktree.

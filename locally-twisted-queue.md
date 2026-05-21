@@ -57,6 +57,18 @@ staging-to-live gates to decide what can safely go live. Current
 visible/imported product records are fixture/test products for architecture
 proof only; Locally Twisted itself is a real client project.
 
+**P0 Ready-to-Order category menu local review (2026-05-21):** Active handoff is
+`workstreams/ready-to-order-category-menu-2026-05-21.md`. Source branch
+`codex/ready-order-category-menu` changes the public `Ready-to-Order` desktop
+submenu, search overlay, and mobile drawer from product quick links to
+ERPNext/Frappe `Item Group` category links under `Shop Items`. The dropdown copy
+is customer-facing and must not mention ERPNext, Website Item, or backend
+approval concepts. Branch-level syntax and nav IA checks pass, but rendered
+`http://localhost:8081/` proof is still pending because the running Docker
+stack bind-mounts the main checkout, not the isolated worktree. Do not stage,
+deploy, or promote this feature live until GL has tested the local rendered
+path and approved the release gate.
+
 **P0 product-page local review before staging (2026-05-20):** Active handoff is
 `workstreams/ecommerce-audit/product-page-local-review-2026-05-20.md`. Local
 source now fixes the mobile product image/details gap and makes the visible

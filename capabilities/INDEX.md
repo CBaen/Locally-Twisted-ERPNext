@@ -150,6 +150,7 @@ pattern that feels familiar.
 - [variant-media-overgating-regression](failures/variant-media-overgating-regression.md) - prevents media safety gates from hiding already-approved simple checkout variant Item images while still holding complex/unclassified media.
 - [ecommerce-variant-price-source-drift](failures/ecommerce-variant-price-source-drift.md) - prevents variant shape, price existence, or Stripe/ERPNext agreement from being mistaken for source-correct ecommerce pricing.
 - [product-fulfillment-copy-lane-drift](failures/product-fulfillment-copy-lane-drift.md) - prevents product-page pickup/delivery copy from using category fallback when the Website Item runtime lane is quote-first or needs-review.
+- [ready-order-menu-product-dump](failures/ready-order-menu-product-dump.md) - prevents the public Ready-to-Order menu/search/drawer from drifting back to product lists or ERPNext/backend copy instead of Item Group category discovery.
 
 ## Evidence And Registry
 

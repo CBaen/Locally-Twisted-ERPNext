@@ -12,12 +12,13 @@ Do not treat old handoff files as truth. Treat them as claims, then verify impor
 
 Task branches are allowed only in dedicated linked worktrees under:
 
-`C:\Users\baenb\agent-worktrees\built-by-cameron__clients__locally-twisted\<agent-session-id>__<task-slug>`
+`C:\Users\baenb\agent-worktrees\builtbycameron-lt\<agent-session-id>__<task-slug>`
 
 - Do not create, switch to, commit on, push from, or open PRs from feature, codex, topic, experiment, or task branches inside the main checkout.
 - Before editing, run `git rev-parse --abbrev-ref HEAD`; `main` is allowed in the main checkout. If it prints anything else, verify the folder is a linked worktree for the current task before continuing.
 - A linked LT worktree must be created from the actual LT Git root: `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted`.
 - A linked LT worktree must live outside all project repos, under the approved neutral worktree root above. Do not create LT worktrees inside `C:\Users\baenb\projects`, the Built by Cameron parent repo, `_CLIENTS`, this repo, or any nested repo.
+- The shorter `builtbycameron-lt` project ID is intentional. The longer derived repo-forest ID exceeded Windows path limits for deep Frappe/ERPNext files during worktree creation.
 - Before creating or using a worktree, claim the task in `C:\Users\baenb\agent-coordination\LIVE-BOARD.md` and `C:\Users\baenb\agent-coordination\SESSION-REGISTRY.md`.
 - Use one task per worktree and clear branch names such as `codex/<task-slug>`, `claude/<task-slug>`, `human/<task-slug>`, or `agent/<task-slug>`.
 - Do not push, merge, rebase, or land a task branch to `main` without explicit review or publish approval. If a task branch must be pushed for review or backup, push only the current task branch from its matching linked worktree.

@@ -175,7 +175,7 @@ def assert_navigation_matches_mode(paused: bool) -> None:
         'href="/shop"',
         'href="/cart"',
         'action="/shop"',
-        "data-lt-search-product-entry",
+        "data-lt-search-ready-order-entry",
     )
     if paused:
         for needle in open_markers:

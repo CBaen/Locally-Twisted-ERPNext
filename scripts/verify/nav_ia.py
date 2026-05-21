@@ -256,8 +256,8 @@ def test_search_is_overlay_not_public_page(navbar: str, footer: str, search_rout
             raise AssertionError(f"Header search overlay contract is missing: {needle}")
     if "lt-mega-header__mobile-search" in navbar:
         raise AssertionError("Mobile search must live in the drawer, not the crowded header action row")
-    if "data-lt-search-product-entry" not in navbar or "{% if not ecommerce_paused %}" not in navbar:
-        raise AssertionError("Search overlay product links must exist only behind the open-commerce guard")
+    if "data-lt-search-ready-order-entry" not in navbar or "{% if not ecommerce_paused %}" not in navbar:
+        raise AssertionError("Search overlay ready-to-order category links must exist only behind the open-commerce guard")
     if 'href="/about"' not in navbar or "About Us" not in navbar:
         raise AssertionError("Search overlay and public nav must expose the source-owned /about page")
     if '<strong>Free Event Quote</strong>' in navbar:
@@ -327,7 +327,7 @@ def test_mobile_nav_matches_primary_order(navbar: str) -> None:
     if "lt-mobile-nav-heading" in drawer or ">Locally Twisted</span>" in drawer:
         raise AssertionError("Mobile drawer brand must show the logo only, without duplicate Locally Twisted text")
     if 'data-lt-drawer-accordion-trigger="lt-mobile-products"' not in drawer:
-        raise AssertionError("Mobile drawer must expose the open-commerce product panel when commerce is unpaused")
+        raise AssertionError("Mobile drawer must expose the open-commerce ready-to-order category panel when commerce is unpaused")
 
 
 def test_ecommerce_entry_points_are_config_guarded(navbar: str, footer: str, navbar_context: str) -> None:
@@ -336,7 +336,7 @@ def test_ecommerce_entry_points_are_config_guarded(navbar: str, footer: str, nav
         "{% if not ecommerce_paused %}",
         "Ready-to-Order",
         'href="/shop"',
-        "data-lt-search-product-entry",
+        "data-lt-search-ready-order-entry",
         'href="/cart"',
         "Shopping cart",
     )
@@ -344,17 +344,25 @@ def test_ecommerce_entry_points_are_config_guarded(navbar: str, footer: str, nav
         if needle not in combined:
             raise AssertionError(f"Open-commerce source guard is missing expected ecommerce marker: {needle}")
     context_required = (
+        "_ready_to_order_category_links",
+        "Item Group",
+        "parent_item_group",
+        "Shop Items",
+        "show_in_website",
+        "lt_nav_ready_to_order_links",
+        "lt_nav_search_ready_to_order_links",
+    )
+    for needle in context_required:
+        if needle not in navbar_context:
+            raise AssertionError(f"Ready-to-Order menu must follow Item Group category source: {needle}")
+    retired_context = (
+        "_ready_to_order_product_links",
         "_is_backend_checkout_enabled",
         "lt_product_page_type",
         "lt_commerce_lane",
         "simple_product",
         "checkout",
         "_has_checkout_price",
-    )
-    for needle in context_required:
-        if needle not in navbar_context:
-            raise AssertionError(f"Ready-to-Order menu must follow corrected backend eligibility: {needle}")
-    retired_context = (
         "HIGH_VARIANT_MENU_LIMIT",
         "READY_TO_ORDER_EXCLUDED_TERMS",
         "is_balloon_color_axis",
@@ -368,11 +376,11 @@ def test_ecommerce_entry_points_are_config_guarded(navbar: str, footer: str, nav
     )
     for needle in retired_context:
         if needle in navbar_context:
-            raise AssertionError(f"Ready-to-Order menu still uses retired blanket exclusion logic: {needle}")
+            raise AssertionError(f"Ready-to-Order menu still uses retired product-selection logic: {needle}")
     forbidden = (
-        '"Arches", "route": "shop-items/arches"',
-        '"Columns", "route": "shop-items/columns"',
-        '"Garlands", "route": "shop-items/garlands"',
+        "Backend-approved checkout",
+        "ERPNext Website Item",
+        "Browse product pages; checkout appears only where ERPNext allows it",
         "Shop the {{ item.label | lower }} lane.",
         "Custom sizing, high-variant choices, cups, installs, and venue coordination stay in the quote path.",
     )

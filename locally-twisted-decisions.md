@@ -910,6 +910,11 @@ passed on 2026-05-12; both Playwright test runs reported one worker.
 
 ## 2026-05-12 - Ready-to-Order owner include cannot bypass backend checkout fields
 
+**Status update 2026-05-21:** Superseded for public header/search/mobile chrome
+by the category-first navigation decision below. Keep this decision as product
+checkout eligibility history, but do not use it to restore product quick links
+inside the Ready-to-Order menu.
+
 **Decision:** Ready-to-Order menu and search product quick links must require
 both owner inclusion and backend Website Item checkout eligibility. The owner
 include list is a merchandising allowlist, not a checkout override. Products
@@ -4810,3 +4815,62 @@ corporate, marketing, school, nonprofit, or business context.
 
 **Decided by:** GL request to combat form spam and add a sales-solicitation
 filter without blocking potential customers, 2026-05-15.
+
+---
+
+## 2026-05-21 - Ready-to-Order navigation is category-first, not product-first
+
+**Decision:** The public `Ready-to-Order` menu, mobile drawer section, and
+search quick links use ERPNext/Frappe `Item Group` category records under
+`Shop Items`, not individual Website Item product records. Customer-facing menu
+copy must describe category concepts and must not mention ERPNext, Website
+Item, backend approval, or internal checkout-lane language.
+
+**Reasoning:** GL caught the rendered menu behaving like a product dump: almost
+every entry was a bouquet, and the dropdown explained backend implementation
+instead of helping customers choose a decor category. The existing `/shop`
+route already treats `Item Group` children of `Shop Items` as the browse source
+of truth. Keeping the nav at the same level prevents menu clutter and keeps the
+backend product/checkout rules from leaking into customer copy.
+
+**Implementation boundary:** Do not reintroduce product quick links in
+`Ready-to-Order` chrome unless GL explicitly asks for a merchandising feature
+and the source contract, search behavior, verifiers, and customer copy are
+updated together. Product detail and checkout eligibility remain backend-owned
+below the category page; the nav is only category discovery.
+
+**Receipts:** `apps/locally_twisted/locally_twisted/navbar_context.py`;
+`apps/locally_twisted/locally_twisted/templates/includes/navbar/navbar.html`;
+`scripts/verify/nav_ia.py`; `scripts/verify/smoke_shop.py`;
+`scripts/verify/search_contract.spec.js`;
+`workstreams/ready-to-order-category-menu-2026-05-21.md`.
+
+**Decided by:** GL direct correction and Codex implementation,
+2026-05-21.
+
+---
+
+## 2026-05-21 - LT worktrees use a short stable project ID
+
+**Decision:** Future LT linked worktrees use the shorter neutral root
+`C:\Users\baenb\agent-worktrees\builtbycameron-lt\...` instead of the longer
+derived repo-forest ID.
+
+**Reasoning:** The long worktree path
+`built-by-cameron__clients__locally-twisted\codex-20260521-ready-order-menu__ready-order-category-menu`
+failed during worktree creation with Windows `Filename too long` errors on deep
+Frappe/ERPNext paths. The shorter root stays outside all project repos while
+preserving stable project identity.
+
+**Implementation boundary:** Do not put LT worktrees inside
+`C:\Users\baenb\projects`, the Built by Cameron parent repo, `_CLIENTS`, the LT
+repo, or any nested repo. Keep the short ID recorded in LT `AGENTS.md` and the
+neutral coordination hub.
+
+**Receipts:** `AGENTS.md`;
+`C:\Users\baenb\agent-coordination\PROJECTS.md`;
+`C:\Users\baenb\agent-coordination\WORKTREE-RULES.md`;
+`workstreams/ready-to-order-category-menu-2026-05-21.md`.
+
+**Decided by:** Codex worktree failure evidence during the GL-approved
+multi-agent workflow, 2026-05-21.

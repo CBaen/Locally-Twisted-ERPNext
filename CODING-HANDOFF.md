@@ -1,5 +1,24 @@
 # Locally Twisted - Coding Handoff
 
+Codex Ready-to-Order category-menu branch on 2026-05-21: branch
+`codex/ready-order-category-menu` changes the public `Ready-to-Order` desktop
+submenu, search overlay, and mobile drawer from individual Website Item product
+quick links to category links sourced from visible `Item Group` children of
+`Shop Items`. The dropdown copy is now customer-facing and source verifiers
+reject ERPNext, Website Item, and backend-approval language in the menu. Feature
+handoff: `workstreams/ready-to-order-category-menu-2026-05-21.md`; capability
+failure card: `capabilities/failures/ready-order-menu-product-dump.md`; nav
+recipe update: `capabilities/recipes/frappe-public-nav-business-route-contract.md`.
+Fresh branch-level checks passed:
+`python -m py_compile apps\locally_twisted\locally_twisted\navbar_context.py scripts\verify\nav_ia.py scripts\verify\smoke_shop.py scripts\verify\ecommerce_pause_contract.py`,
+`node --check apps\locally_twisted\locally_twisted\public\js\lt-megamenu.js`,
+`node --check scripts\verify\search_contract.spec.js`, and
+`python scripts\verify\nav_ia.py`. Rendered `http://localhost:8081/` proof is
+still pending because the running Docker stack currently bind-mounts the main
+checkout, not this isolated worktree. Do not deploy or promote this branch
+live until GL has tested the local rendered path and explicitly approves the
+release gate.
+
 Codex product-page local review closeout on 2026-05-20: local-only product page
 work repaired two customer-facing issues before staging. Mobile product detail
 spacing now removes the large dead zone between product image and details, and

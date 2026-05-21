@@ -21,6 +21,20 @@ PRODUCT_GROUP_ICONS = {
     "Seasonal & Specialty": "balloon-pair",
 }
 
+READY_TO_ORDER_CATEGORY_SUMMARIES = {
+    "Arches": "Entry moments, photo frames, and room-defining balloon statements.",
+    "Columns": "Freestanding color and height for doors, stages, and focal points.",
+    "Bouquets": "Themed balloon bundles for birthdays, characters, teams, and quick gifts.",
+    "Get-Well Bouquets": "Cheerful balloon bundles for recovery, hospitals, and thoughtful deliveries.",
+    "Garlands": "Organic balloon runs for backdrops, mantels, entrances, and install moments.",
+    "Drops": "Ceiling drops and reveal moments for dances, parties, and big announcements.",
+    "Grab & Go": "Fast pickup pieces when you need party color without a custom install.",
+    "Table Decor": "Centerpieces and smaller pieces for tables, counters, and welcome areas.",
+    "Stands & Easels": "Freestanding display pieces for signs, graduations, entrances, and school moments.",
+    "Deliveries": "Delivery-ready balloon options and logistics support.",
+    "Seasonal & Specialty": "Holiday, school-year, and limited-season pieces.",
+}
+
 EVENT_LINKS = [
     {
         "label": "Civic & Community",
@@ -67,86 +81,37 @@ def _group_icon(item_group: str | None) -> str:
     return PRODUCT_GROUP_ICONS.get(_plain_text(item_group), "balloon-pair")
 
 
-def _has_checkout_price(website_item_code: str) -> bool:
-    return bool(
-        frappe.db.sql(
-            """
-            SELECT ip.name
-            FROM `tabItem` it
-            JOIN `tabItem Price` ip
-              ON ip.item_code = it.item_code
-             AND ip.price_list = 'Standard Selling'
-             AND ip.selling = 1
-            WHERE it.disabled = 0
-              AND (it.item_code = %(item_code)s OR it.variant_of = %(item_code)s)
-            LIMIT 1
-            """,
-            {"item_code": website_item_code},
-        )
+def _category_summary(label: str) -> str:
+    return READY_TO_ORDER_CATEGORY_SUMMARIES.get(
+        label,
+        "Browse ready-to-order balloon decor by category.",
     )
 
 
-def _is_backend_checkout_enabled(item: dict) -> bool:
-    return item.get("lt_product_page_type") == "simple_product" and item.get("lt_commerce_lane") == "checkout"
-
-
-def _ready_to_order_exclusion_reason(item: dict) -> str:
-    item_code = item.get("item_code") or ""
-    if not _is_backend_checkout_enabled(item):
-        return "not_checkout_enabled"
-    if not _has_checkout_price(item_code):
-        return "missing_checkout_price"
-    return ""
-
-
-def _ready_to_order_product_links() -> list[dict[str, str]]:
+def _ready_to_order_category_links() -> list[dict[str, str]]:
     if is_ecommerce_paused():
         return []
 
-    meta = frappe.get_meta("Website Item")
-    if not meta.has_field("lt_product_page_type") or not meta.has_field("lt_commerce_lane"):
-        return []
-
-    items = frappe.db.sql(
-        """
-        SELECT
-            wi.item_code,
-            wi.web_item_name,
-            wi.route,
-            wi.short_description,
-            wi.item_group,
-            wi.lt_product_page_type,
-            wi.lt_commerce_lane
-        FROM `tabWebsite Item` wi
-        LEFT JOIN `tabItem` it ON it.item_code = wi.item_code
-        WHERE wi.published = 1
-          AND it.disabled = 0
-          AND (it.variant_of IS NULL OR it.variant_of = '')
-        ORDER BY wi.item_group, wi.web_item_name
-        """,
-        as_dict=True,
+    categories = frappe.db.get_all(
+        "Item Group",
+        filters={"parent_item_group": "Shop Items", "show_in_website": 1},
+        fields=["name", "item_group_name", "route", "weightage"],
+        order_by="weightage asc, item_group_name asc",
     )
 
     links = []
-    for item in items:
-        if _ready_to_order_exclusion_reason(item):
-            continue
-
-        label = _plain_text(item.get("web_item_name") or item.get("item_code"))
-        route = _route(item.get("route"), "")
+    for category in categories:
+        label = _plain_text(category.get("item_group_name") or category.get("name"))
+        route = _route(category.get("route"), "")
         if not label or not route:
             continue
 
-        item_group = _plain_text(item.get("item_group"))
-        description = _plain_text(item.get("short_description"))
         keywords = " ".join(
             part
             for part in (
-                "ready order product shop",
+                "ready order shop category balloon decor",
                 label,
-                item.get("item_code"),
-                item_group,
-                description,
+                category.get("name"),
                 route.replace("-", " ").replace("/", " "),
             )
             if part
@@ -155,30 +120,29 @@ def _ready_to_order_product_links() -> list[dict[str, str]]:
             {
                 "label": label,
                 "route": route,
-                "summary": item_group or "Ready-to-order product",
+                "summary": _category_summary(label),
                 "keywords": keywords,
-                "icon": _group_icon(item_group),
-                "item_code": item.get("item_code") or "",
-                "item_group": item_group,
+                "icon": _group_icon(label),
+                "item_group": _plain_text(category.get("name")),
             }
         )
     return links
 
 
 def update_website_context(context):
-    """Add mega-menu data backed by explicit ERPNext Website Item checkout lanes."""
+    """Add mega-menu data backed by ready-to-order Item Group categories."""
     try:
-        product_links = _ready_to_order_product_links()
+        ready_to_order_links = _ready_to_order_category_links()
     except Exception as exc:
         frappe.log_error(
             title="LT navbar context",
-            message=f"navbar_context ready-to-order links failed: {exc}",
+            message=f"navbar_context ready-to-order category links failed: {exc}",
         )
-        product_links = []
+        ready_to_order_links = []
 
-    context["lt_nav_product_links"] = product_links
+    context["lt_nav_ready_to_order_links"] = ready_to_order_links
     context["lt_nav_event_links"] = EVENT_LINKS
     context["lt_nav_service_links"] = SERVICE_LINKS
-    context["lt_nav_search_product_links"] = product_links
+    context["lt_nav_search_ready_to_order_links"] = ready_to_order_links
     context["lt_nav_quote_route"] = "contact"
     return context
