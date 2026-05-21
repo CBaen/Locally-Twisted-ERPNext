@@ -491,6 +491,23 @@ for _owner_catalog_guard_doctype, _owner_catalog_guard_doctype_events in _owner_
             "locally_twisted.owner_catalog_guard.validate_owner_catalog_mutation",
         )
 
+
+_public_access_guard_events = {
+    "Website Settings": ("validate", "before_save", "on_update", "on_change"),
+    "Portal Settings": ("validate", "before_save", "on_update", "on_change"),
+    "DocPerm": ("validate", "before_insert", "before_save", "on_change"),
+    "Role": ("validate", "before_save", "on_change"),
+    "User": ("validate", "before_insert", "before_save", "on_change"),
+    "Has Role": ("validate", "before_insert", "before_save", "on_change"),
+}
+for _public_access_guard_doctype, _public_access_guard_doctype_events in _public_access_guard_events.items():
+    for _public_access_guard_event in _public_access_guard_doctype_events:
+        _append_doc_event(
+            _public_access_guard_doctype,
+            _public_access_guard_event,
+            "locally_twisted.public_access_guard.validate_public_access_boundary",
+        )
+
 # DocType Class
 # ---------------
 # Override standard doctype classes
