@@ -6,6 +6,19 @@ This project inherits the machine-wide Guiding Light communication protocol from
 
 Do not treat old handoff files as truth. Treat them as claims, then verify important facts against git, files, and the running ERPNext database before relying on them.
 
+## Coordination Safety Pilot
+
+This repo is the protected clean child/client pilot for the neutral multi-agent
+coordination system. Before edits, read
+`C:\Users\baenb\agent-coordination\STARTUP-CHECKLIST.md`, check
+`LIVE-BOARD.md` and `SESSION-REGISTRY.md`, and apply the Six-Box Rule from the
+machine guide.
+
+For this repo, normal LT client work is Box 4: child/client repo. Machine-wide
+coordination updates are Box 5 and belong in `C:\Users\baenb\agent-coordination`,
+not in LT source. Parent/company Built by Cameron tasks are separate from LT
+client tasks unless Guiding Light explicitly says the task crosses that boundary.
+
 ## Git Policy - Main And Reviewed Worktrees
 
 `main` remains the trusted base and default path. Normal single-session LT work stays on `main`.

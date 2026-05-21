@@ -75,6 +75,7 @@ Built before the frame reset; some still active, some legacy reference.
 | File | Purpose |
 |------|---------|
 | `workstreams/launch-v1-success-contract.md` | V1 launch scope contract: website-first quality, buyer priority, commercial lanes, quality targets, deferred 10-year ERPNext maturity, and immediate redesign sequence. |
+| `workstreams/coordination-safety-pilot-2026-05-21.md` | Protected child/client repo pilot for the neutral multi-agent coordination workflow; no product or release approval. |
 | `workstreams/website-launch.md` | Launch controller board and verification gates. |
 | `workstreams/domain-provider-reindex-cleanup-2026-05-19.md` | Current provider-chain and reindex cleanup handoff: GoDaddy registrar, Cloudflare authoritative DNS/email routing, Frappe Cloud hosting, Hetzner/Odoo old-reference status, Bluehost cleanup target, and live sitemap/canonical vanity-host blocker. |
 | `workstreams/launch-repo-cleanup-2026-05-10.md` | Launch cleanup handoff for raw drops, stale generated evidence, removed contest output, and repo-light client handoff rules. |

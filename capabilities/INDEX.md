@@ -42,6 +42,7 @@ new evidence in the stated scope. Do not promote old LT cards from memory alone.
 ## Principles
 
 - System rule: `C:\Users\baenb\capabilities\principles\no-monolith-files.md` - do not create or expand hand-authored production monoliths; split by clear responsibility unless the file is research/reference material.
+- [multi-agent-coordination-safety](principles/multi-agent-coordination-safety.md) - keep LT parallel-agent work inside the neutral claim/worktree workflow without leaking parent/company repo scope into LT tasks.
 
 ## Ingredients
 

@@ -8,6 +8,32 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-21 - LT is the protected clean child/client coordination pilot
+
+**Decision:** Use Locally Twisted as the protected clean child/client pilot for
+the neutral multi-agent coordination system. The first proof is a read-only
+cold-agent dry run, not product work.
+
+**Reasoning:** LT is income-critical and physically nested inside the Built by
+Cameron parent repo while remaining its own independent Git repo. It is the
+right place to prove that agents can respect parent/child boundaries,
+worktree-location rules, live-board claims, and local-vs-live release gates
+without risking customer-facing behavior.
+
+**Implementation boundary:** This decision updates coordination docs only. It
+does not approve ERPNext/Frappe edits, staging, live release, DNS, Stripe,
+provider mutation, worktree cleanup, or product feature work.
+
+**Receipts:** `AGENTS.md`,
+`workstreams/coordination-safety-pilot-2026-05-21.md`,
+`capabilities/principles/multi-agent-coordination-safety.md`, and
+`C:\Users\baenb\agent-coordination\REPO-READINESS.md`.
+
+**Decided by:** Guiding Light approval of the three-repo coordination-safety
+pilot on 2026-05-21.
+
+---
+
 ## 2026-05-20 - Product-page customer promises follow the runtime product lane
 
 **Decision:** Customer-facing product-page fulfillment copy must read from the

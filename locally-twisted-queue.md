@@ -10,6 +10,15 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 ## Active
 
+**P0 coordination safety pilot (2026-05-21):** Active handoff is
+`workstreams/coordination-safety-pilot-2026-05-21.md`. LT is the protected
+clean child/client pilot for the neutral multi-agent workflow. First action is
+a read-only cold-agent dry run from the LT root: confirm Git root, parent repo
+above, nested repos below, branch/status, worktree routing, Six-Box ownership,
+and proposed live-board/session-registry entries. Do not use this pilot as
+permission for product, ERPNext, Frappe Cloud, DNS, Stripe, staging, or live
+release work.
+
 **Domain, provider cleanup, and reindex repair (2026-05-19):** Source handoff
 is `workstreams/domain-provider-reindex-cleanup-2026-05-19.md`. Verified live
 chain is GoDaddy registrar -> Cloudflare authoritative DNS/email routing ->

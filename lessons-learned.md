@@ -6,6 +6,20 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-21 - Clean child/client repos still need explicit coordination proof
+
+LT being clean is not enough to make parallel agent work safe. Because it sits
+inside the Built by Cameron repo forest and pays the bills, future agents must
+prove the coordination workflow with a read-only dry run before using LT as a
+parallel editing target.
+
+**Counter-move:** start LT sessions by reading the neutral startup checklist,
+confirming the child/client Git root, checking the live board and registry, and
+naming the Six-Box write target before any edit. Use
+`workstreams/coordination-safety-pilot-2026-05-21.md` as the pilot receipt.
+
+---
+
 ## 2026-05-20 - Product-page copy can break the commerce contract
 
 Classic Arch was correctly treated as a quote-first complex product by the
