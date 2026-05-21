@@ -100,7 +100,7 @@ Files: `navbar_context.py`, `navbar.html`, `lt-mega-menu.css`, `lt-megamenu.js`,
 Intent: Replace product-heavy Ready-to-Order submenu behavior with category-level customer-facing navigation from the real ERPNext/Frappe category source, with no ERPNext/internal wording in the dropdown.
 Conflicts: Stay out of unrelated public chrome, BTFP service lane, event audience menu, checkout/payment flow, and catalog import/reclassification unless source tracing proves a direct dependency.
 Verification: Branch-level checks passed from `C:\Users\baenb\agent-worktrees\builtbycameron-lt\codex-20260521-rom`: `python -m py_compile apps\locally_twisted\locally_twisted\navbar_context.py scripts\verify\nav_ia.py scripts\verify\smoke_shop.py scripts\verify\ecommerce_pause_contract.py`; `node --check apps\locally_twisted\locally_twisted\public\js\lt-megamenu.js`; `node --check scripts\verify\search_contract.spec.js`; `python scripts\verify\nav_ia.py`. Codex repointed the local Docker stack with a temporary compose override so `http://localhost:8081/` mounts this worktree, then `python scripts/dev/clear_website_cache.py` and `python scripts/verify/smoke_shop.py` passed. Direct homepage HTML probe confirmed category links are present, product links are absent, and ERPNext/Website Item/backend-approved wording is absent.
-Status: Handoff-ready for GL local visual review; not live-release-ready.
+Status: Accepted locally by GL on `http://localhost:8081/`; not staging/live-release-ready.
 
 ### 2026-05-11 - Codex current session event hub and review proof cleanup
 Lane: Removed `/event-balloons` hub route, homepage review platform strip, and

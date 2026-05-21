@@ -67,10 +67,11 @@ approval concepts. Branch-level syntax and nav IA checks pass. The local Docker
 stack was repointed with a temporary compose override so
 `http://localhost:8081/` now mounts this worktree, `python
 scripts/dev/clear_website_cache.py` passed, and `python
-scripts/verify/smoke_shop.py` passed with all shop smoke checks. GL local visual
-review is still required before any staging/live release gate. Do not stage,
-deploy, or promote this feature live until GL has tested the local rendered
-path and approved the release gate.
+scripts/verify/smoke_shop.py` passed with all shop smoke checks. GL confirmed
+the rendered local menu looks correct on `http://localhost:8081/`. This is
+local acceptance only, not staging/live release approval. Do not stage, deploy,
+or promote this feature live until a separate release gate is explicitly opened
+and passed.
 
 **P0 product-page local review before staging (2026-05-20):** Active handoff is
 `workstreams/ecommerce-audit/product-page-local-review-2026-05-20.md`. Local

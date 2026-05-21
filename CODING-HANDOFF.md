@@ -18,10 +18,10 @@ with a temporary compose override so `http://localhost:8081/` mounts this
 worktree instead of the main checkout, cleared website cache, and ran
 `python scripts\verify\smoke_shop.py`; it passed with all shop smoke checks.
 Direct homepage HTML proof showed category links present, product links absent,
-and no ERPNext/Website Item/backend-approved wording. GL local visual review is
-still required before staging/live release. Do not deploy or promote this branch
-live until GL has tested the local rendered path and explicitly approves the
-release gate.
+and no ERPNext/Website Item/backend-approved wording. GL confirmed the rendered
+local change looks correct on `http://localhost:8081/`. This is local
+acceptance only, not staging/live release approval. Do not deploy or promote
+this branch live until a separate release gate is explicitly opened and passed.
 
 Codex product-page local review closeout on 2026-05-20: local-only product page
 work repaired two customer-facing issues before staging. Mobile product detail

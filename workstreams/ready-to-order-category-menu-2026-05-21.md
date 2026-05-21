@@ -141,3 +141,10 @@ For GL local testing:
 Do not push to live, update Frappe Cloud, change Stripe, mutate DNS, or promote
 this branch until GL has tested locally and explicitly approves the release
 gate.
+
+## Local Acceptance
+
+GL confirmed on 2026-05-21 that the rendered change is visible and correct on
+`http://localhost:8081/`. This closes the local review loop for this feature.
+It does not approve staging, live release, Frappe Cloud, DNS, Stripe, app mirror
+sync, or any production provider mutation.
