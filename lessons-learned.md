@@ -6,6 +6,24 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-21 - Capability notes must become support systems when risk or value demands it
+
+Writing a capability card is not enough when the pattern protects client money,
+customer trust, live release paths, provider accounts, public forms, checkout,
+or parallel-agent boundaries. A card can reduce rediscovery, but it cannot by
+itself stop a bad push, prove a route, preserve a customer promise, or make an
+agent remember the safe path.
+
+**Counter-move:** use the Capability Graduation Ladder. Keep low-risk cards
+`reference_only`, but graduate important patterns into `skill_backed`,
+`verifier_backed`, `gate_backed`, `automation_backed`,
+`architecture_backed`, or `release_live_approval_backed` support. In LT,
+start cleanup-first through
+`workstreams/capability-graduation-ladder-2026-05-21.md` because existing graph
+debt must be repaired before trust promotion.
+
+---
+
 ## 2026-05-21 - Clean child/client repos still need explicit coordination proof
 
 LT being clean is not enough to make parallel agent work safe. Because it sits

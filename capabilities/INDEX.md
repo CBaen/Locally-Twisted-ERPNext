@@ -21,6 +21,8 @@ files needed for the current task.
   package `C:\Users\baenb\projects\capabilities-framework\capabilities\INDEX.md`.
 - Latest framework handoff:
   [capabilities-framework-v2-4-seed-update-2026-05-21](../workstreams/capabilities-framework-v2-4-seed-update-2026-05-21.md).
+- Latest graduation handoff:
+  [capability-graduation-ladder-2026-05-21](../workstreams/capability-graduation-ladder-2026-05-21.md).
 
 ## How To Use This
 
@@ -35,12 +37,16 @@ files needed for the current task.
 - Evidence-backed use, upvotes, downvotes, failures, fixes, and promotions go
   in `evidence/`.
 - Use source/provenance metadata when a capability is borrowed, researched, inspired, agent-generated, or adapted from official docs/user practice; local proof still needs evidence.
+- Use graduation metadata when a capability becomes backed by a skill,
+  verifier, gate, automation, architecture, or release/live approval boundary.
 
 ## Capability Lifecycle
 
-This root follows the shared capability schema v2.4. Older files remain
+This root follows the shared capability schema v2.5. Older files remain
 usable as legacy cards, but `currently_true`, `verified`, and `staple` require
 new evidence in the stated scope. Do not promote old LT cards from memory alone.
+Graduation metadata is not trust proof; it points agents to the support system
+that carries or should carry the capability.
 
 ## Atomic Ingredients
 
@@ -55,6 +61,7 @@ new evidence in the stated scope. Do not promote old LT cards from memory alone.
 - [Capability Evolution Gates](principles/capability-evolution-gates.md) - requires evidence, date, result, confidence, and rollback/revalidation for trust-bearing changes.
 - [Agent-Centered Infrastructure](principles/agent-centered-infrastructure.md) - keeps framework decisions focused on what helps agents work efficiently and earn trust.
 - [Capabilities Should Enhance, Not Become Chores](principles/capabilities-should-enhance-not-become-chores.md) - keeps the framework useful without turning it into paperwork.
+- [Capability Graduation Ladder](principles/capability-graduation-ladder.md) - marks when LT capabilities should become skills, verifiers, gates, automations, architecture, or release/live approval boundaries.
 
 ## Ingredients
 
@@ -125,6 +132,7 @@ Workflows. Multi-step. Clear start and finish.
 - [Organic Capability Growth](recipes/organic-capability-growth.md) - use optional flat metadata and read-only reports to surface valuable new combinations.
 - [Perfect Bite Contest Layer](recipes/perfect-bite-contest-layer.md) - score high-bar combination candidates without auto-promoting or writing trusted roots.
 - [Source Provenance And Adoption](recipes/source-provenance-and-adoption.md) - preserve origin, attribution, rights, and local-adoption boundaries for borrowed or researched learning.
+- [Capability Graduation Sweep](recipes/capability-graduation-sweep.md) - audit LT capabilities for support-system graduation candidates without mutating trust state.
 - [Cross-Project Capability Composition](recipes/cross-project-capability-composition.md) - link and compose capabilities across roots, projects, agents, and subjects.
 - [Failure Cascade And Watch Status](recipes/failure-cascade-and-watch-status.md) - retest lower layers and watch affected dependents after composed capability failures.
 - [Probationary Revalidation](recipes/probationary-revalidation.md) - put repaired dependency chains on probation until three verified uses restore trust.

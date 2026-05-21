@@ -1,5 +1,16 @@
 # Locally Twisted - Coding Handoff
 
+Codex capability graduation adoption on 2026-05-21: LT now carries the global
+Capability Graduation Ladder seed as cleanup-first infrastructure. Updated
+`capabilities/SCHEMA.md` to v2.5, added
+`capabilities/principles/capability-graduation-ladder.md`, added
+`capabilities/recipes/capability-graduation-sweep.md`, and opened
+`workstreams/capability-graduation-ladder-2026-05-21.md`. This is docs and
+capability-root adoption only. No ERPNext DB, product code, staging, live,
+provider, DNS, Stripe, public indexing, registry write, or trust promotion was
+performed. Next safe step is a read-only graduation audit and small action
+packets for high-risk cards. Treat existing LT graph debt as still open.
+
 Codex Ready-to-Order category-menu branch on 2026-05-21: branch
 `codex/ready-order-category-menu` changes the public `Ready-to-Order` desktop
 submenu, search overlay, and mobile drawer from individual Website Item product

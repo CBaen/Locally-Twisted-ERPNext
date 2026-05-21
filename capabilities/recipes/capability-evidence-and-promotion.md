@@ -17,6 +17,7 @@ depends_on:
   - current-truth-needs-evidence
 used_by:
   - source-provenance-and-adoption
+  - capability-graduation-sweep
 tags:
   - capability promotion
   - upvote

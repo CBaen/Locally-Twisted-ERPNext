@@ -10,6 +10,18 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 ## Active
 
+**P0 capability graduation cleanup (2026-05-21):** Active handoff is
+`workstreams/capability-graduation-ladder-2026-05-21.md`. LT now has the global
+Capability Graduation Ladder seed (`schema_version: 2.5`) but must adopt it
+cleanup-first because the local capability graph already has older
+project-specific validation debt. Next safe step is a read-only graduation
+audit plus small action packets for high-risk cards such as Frappe
+Cloud/Cloudflare/Stripe launch, public storefront security, ecommerce
+receiving architecture, Webshop Guest party, shared inquiry form, and
+multi-agent coordination. Do not promote cards, write registries, change trust
+metadata, edit ERPNext data, or touch staging/live/provider/payment/DNS paths
+from this lane without a separate approved packet.
+
 **P0 coordination safety pilot (2026-05-21):** Active handoff is
 `workstreams/coordination-safety-pilot-2026-05-21.md`. LT is the protected
 clean child/client pilot for the neutral multi-agent workflow. First action is

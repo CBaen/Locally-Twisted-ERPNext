@@ -8,6 +8,34 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-21 - Capability graduation is cleanup-first in LT
+
+**Decision:** Adopt the global Capability Graduation Ladder in LT now, but use
+it as a cleanup and action-packet lane before marking any local capability as
+verified, staple, or active live support.
+
+**Reasoning:** LT already has real gates, verifiers, and architecture-like
+patterns around checkout, payments, public forms, provider accounts, Frappe
+Cloud, DNS, and multi-agent coordination. Those need to graduate into support
+systems, but the local capability graph still has older project-specific
+validation debt. Mass-promoting cards would turn architecture language into
+false certainty.
+
+**Implementation boundary:** This decision updates capability framework docs
+only. It does not approve ERPNext/Frappe edits, registry writes, trust-field
+promotion, staging, live release, DNS, Stripe, Frappe Cloud, provider
+dashboards, or public indexing work.
+
+**Receipts:** `workstreams/capability-graduation-ladder-2026-05-21.md`,
+`capabilities/SCHEMA.md`, `capabilities/principles/capability-graduation-ladder.md`,
+and `capabilities/recipes/capability-graduation-sweep.md`.
+
+**Decided by:** Guiding Light correction that capabilities must graduate into
+support architecture when value or risk justifies it; Codex implementation on
+2026-05-21.
+
+---
+
 ## 2026-05-21 - Capability v2.4 seed parity does not clear LT graph debt
 
 **Decision:** Keep the v2.4 framework seed cards in LT's visible

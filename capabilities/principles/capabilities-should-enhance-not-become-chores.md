@@ -8,6 +8,7 @@ maturity: candidate
 scope: capability framework
 currently_true: unknown
 last_verified: 2026-05-07
+used_by: [capability-graduation-ladder]
 tags:
   - progressive
   - lightweight

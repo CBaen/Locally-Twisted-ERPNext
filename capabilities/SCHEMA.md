@@ -1,6 +1,6 @@
 # Capability File Schema
 
-Schema version: 2.4
+Schema version: 2.5
 
 Capabilities are reusable operating knowledge. They help an agent find the
 right tool, rule, workflow, or project pattern without making the user repeat
@@ -12,7 +12,7 @@ structure everywhere, but use the lightest profile that honestly fits the work.
 
 ## Compatibility
 
-Existing `1.0`, `1.1`, `2.0`, `2.1`, and `2.2` files remain readable as
+Existing `1.0`, `1.1`, `2.0`, `2.1`, `2.2`, `2.3`, and `2.4` files remain readable as
 legacy or current capability cards. Schema `2.0` maps to the governed profile
 in `2.1+`. Do not rewrite old files just to fill unknown history. When a legacy card is
 touched for real work, upgrade it honestly:
@@ -230,6 +230,18 @@ Field meanings:
   copying could matter.
 - `attribution_required`: optional `true`, `false`, or `unknown` flag for
   whether visible attribution is required.
+- `graduation_stage`: optional support level when a capability has moved
+  beyond reference prose into a skill, verifier, gate, automation,
+  architecture, or release/live approval gate.
+- `graduation_status`: optional state for that support level.
+- `graduation_required`: optional `true`, `false`, or `unknown` flag for
+  capabilities whose risk or value requires a graduation review.
+- `supporting_artifacts`: optional flat list of the skill, command, verifier,
+  gate, template, architecture file, or approval surface that supports the
+  graduated capability.
+- `graduation_reason`: optional short reason for the chosen stage.
+- `graduation_review`: optional date or review note for the last graduation
+  review.
 
 ### Optional Organic Growth Metadata
 
@@ -293,6 +305,46 @@ Rules:
 - Rejected external ideas usually belong in `failures/` or evidence downvotes;
   use `adoption_state: rejected` on a formal card only when the card itself is
   the durable warning or boundary.
+
+### Optional Graduation Metadata
+
+Capabilities are not meant to remain references when the repeated value or
+blast radius calls for support systems. Graduation metadata marks when a card
+has moved from "agents should remember this" into a skill, verifier, gate,
+automation, architecture, or release approval boundary.
+
+```yaml
+graduation_stage: reference_only | skill_backed | verifier_backed | gate_backed | automation_backed | architecture_backed | release_live_approval_backed
+graduation_status: none | candidate | proposed | active | blocked | retired | unknown
+graduation_required: true | false | unknown
+supporting_artifacts: [relative/path, command name, skill id, root-qualified ref]
+graduation_reason: short plain-language reason
+graduation_review: YYYY-MM-DD | unknown
+```
+
+Rules:
+
+- Missing fields are not warnings for ordinary foundation cards.
+- Use `graduation_required: true` when the capability affects live systems,
+  money, client data, customer communication, account access, publish/upload,
+  legal/policy compliance, security, or a high-value repeated workflow.
+- Use `graduation_stage: reference_only` when the card intentionally stays
+  prose.
+- Use `skill_backed` when agents need a triggerable procedure, scripts, templates, or
+  bundled references.
+- Use `verifier_backed` when the key support is a check that proves a claim.
+- Use `gate_backed` when unsafe progress should stop until proof is present.
+- Use `automation_backed` when repeated safe work should run through a tool,
+  job, or scheduled packet.
+- Use `architecture_backed` when the system should be shaped so the safe path
+  is the default or the risky path is isolated.
+- Use `release_live_approval_backed` when public, production, live, client,
+  money, account, marketplace, publish, sale, upload, or permission-changing
+  actions require explicit approval and proof.
+- `graduation_status: active` for any stage above `reference` should point at
+  `supporting_artifacts`.
+- Graduation does not prove `currently_true`. It only states what kind of
+  support system now carries or should carry the capability.
 
 ### Perfect Bite Candidates
 
@@ -531,3 +583,6 @@ repeated waste.
 - `2.4` - adds optional source/provenance and adoption metadata so borrowed,
   researched, inspired, agent-generated, official-docs-based, and local
   practice learning can be distinguished without new top-level folders.
+- `2.5` - adds optional graduation metadata so capabilities can be marked as
+  reference-only, skill-backed, verifier-backed, gate-backed, automation-backed,
+  architecture-backed, or release/live approval-backed.
