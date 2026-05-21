@@ -5,11 +5,16 @@ from typing import Any
 
 import frappe
 from frappe import _
+from frappe.utils import get_url, now_datetime
 
 
 MARKETING_REVIEW_ROLE = "LT Marketing Review Access"
 MARKETING_REVIEW_COMPANY = "Exploring Not Boring"
 MARKETING_REVIEW_ROUTE = "/marketing-review"
+MARKETING_REVIEW_PACKET_METHOD = (
+    "/api/method/locally_twisted.marketing_review_access.download_marketing_review_packet"
+)
+MARKETING_REVIEW_PACKET_TITLE = "Locally Twisted Marketing Review Packet"
 
 PUBLIC_REVIEW_LINKS = [
     {
@@ -118,8 +123,84 @@ def apply_marketing_review_context(context) -> Any:
     context.marketing_review_company = MARKETING_REVIEW_COMPANY
     context.marketing_review_links = PUBLIC_REVIEW_LINKS
     context.marketing_review_role = MARKETING_REVIEW_ROLE
+    context.marketing_review_packet = marketing_review_packet_context()
     context.page_css = MARKETING_REVIEW_CSS
     return context
+
+
+def marketing_review_packet_context() -> dict[str, Any]:
+    """Return the current packet metadata for the protected review page."""
+    generated_at = now_datetime()
+    return {
+        "title": MARKETING_REVIEW_PACKET_TITLE,
+        "generated_label": generated_at.strftime("%Y-%m-%d %H:%M"),
+        "download_href": MARKETING_REVIEW_PACKET_METHOD,
+        "sitemap_href": "/sitemap.xml",
+        "robots_href": "/robots.txt",
+    }
+
+
+@frappe.whitelist(methods=["GET"])
+def download_marketing_review_packet() -> None:
+    """Download the current website-only packet for external marketing review."""
+    require_marketing_review_access()
+    generated_at = now_datetime()
+    content = build_marketing_review_packet(generated_at=generated_at)
+    filename = f"locally-twisted-marketing-review-packet-{generated_at.strftime('%Y%m%d-%H%M')}.md"
+
+    frappe.response.filename = filename
+    frappe.response.filecontent = content.encode("utf-8")
+    frappe.response.type = "download"
+    frappe.response.display_content_as = "attachment"
+
+
+def build_marketing_review_packet(generated_at=None) -> str:
+    """Build a sanitized, current marketing review packet from approved public inputs."""
+    generated_at = generated_at or now_datetime()
+    site_url = get_url().rstrip("/")
+
+    lines = [
+        f"# {MARKETING_REVIEW_PACKET_TITLE}",
+        "",
+        f"Generated: {generated_at.strftime('%Y-%m-%d %H:%M')}",
+        f"Review company: {MARKETING_REVIEW_COMPANY}",
+        f"Access role: {MARKETING_REVIEW_ROLE}",
+        "",
+        "## Current Status",
+        "",
+        "- This packet is for public website and ecommerce review only.",
+        "- Do not submit indexing, recrawl, Search Console, sitemap submission, or ads launch requests.",
+        "- Shop indexing waits until the shop is on staging and owner product approval is recorded.",
+        "- This account has no ERPNext Desk, customer record, file, order, invoice, payment, or product-edit authority.",
+        "",
+        "## Discovery Files",
+        "",
+        f"- Sitemap: {site_url}/sitemap.xml",
+        f"- Robots: {site_url}/robots.txt",
+        "",
+        "## Review Pages",
+        "",
+    ]
+
+    for item in PUBLIC_REVIEW_LINKS:
+        lines.append(f"- {item['label']}: {site_url}{item['href']} - {item['description']}")
+
+    lines.extend(
+        [
+            "",
+            "## What To Send Back",
+            "",
+            "- Broken links, missing pages, unclear copy, confusing navigation, mobile layout problems, and product/shop review notes.",
+            "- Suggested edits as comments or a separate document. Do not make changes inside ERPNext.",
+            "- Any indexing, ads, analytics, or Search Console recommendations as recommendations only, not actions.",
+            "",
+            "## Access Boundary",
+            "",
+            "- Approved: view the public review doorway, public website pages, sitemap, robots file, and this packet.",
+            "- Not approved: ERPNext Desk, website editing, product editing, customer/client records, files, invoices, payments, email queues, Search Console ownership, sitemap submission, recrawl requests, ad account ownership, or campaign launch authority.",
+        ]
+    )
+    return "\n".join(lines) + "\n"
 
 
 def require_marketing_review_access(user: str | None = None) -> None:
@@ -278,6 +359,65 @@ MARKETING_REVIEW_CSS = """
 }
 .lt-marketing-review__notice strong {
   color: var(--lt-navy);
+}
+.lt-marketing-review__packet {
+  display: grid;
+  gap: 0.85rem;
+  margin: 1rem 0 0;
+  border: 1px solid rgba(14, 34, 64, 0.14);
+  border-radius: 6px;
+  background: #ffffff;
+  padding: 1rem 1.15rem;
+  color: var(--lt-ink);
+  font-family: var(--lt-font-body);
+  box-shadow: 0 12px 28px rgba(10, 10, 11, 0.05);
+}
+.lt-marketing-review__packet-title {
+  margin: 0;
+  color: var(--lt-navy);
+  font-family: var(--lt-font-heading);
+  font-size: 1.18rem;
+  line-height: 1.15;
+}
+.lt-marketing-review__packet-meta {
+  margin: 0;
+  color: var(--lt-soft-gray);
+  font-size: 0.93rem;
+  line-height: 1.45;
+}
+.lt-marketing-review__packet-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+.lt-marketing-review__packet-action {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(14, 34, 64, 0.18);
+  border-radius: 999px;
+  background: var(--lt-navy);
+  color: #ffffff;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.9rem;
+  font-weight: 900;
+  text-decoration: none;
+}
+.lt-marketing-review__packet-action:hover,
+.lt-marketing-review__packet-action:focus-visible {
+  background: var(--lt-crimson);
+  color: #ffffff;
+  text-decoration: none;
+}
+.lt-marketing-review__packet-action--secondary {
+  background: #ffffff;
+  color: var(--lt-navy);
+}
+.lt-marketing-review__packet-action--secondary:hover,
+.lt-marketing-review__packet-action--secondary:focus-visible {
+  background: #f7f4ef;
+  color: var(--lt-crimson);
 }
 .lt-marketing-review__grid {
   display: grid;

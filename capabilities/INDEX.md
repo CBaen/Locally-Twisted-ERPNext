@@ -120,7 +120,7 @@ Workflows. Multi-step. Clear start and finish.
 - [frappe-sitewide-visual-overhaul](recipes/frappe-sitewide-visual-overhaul.md) - ship a Frappe/Webshop visual redesign with cache-busts, route checks, screenshots, and launch-safe receipts.
 - [public-site-microinteraction-contract](recipes/public-site-microinteraction-contract.md) - keep small public-site interactions such as card-wide navigation launch-safe, accessible, and free of prototype/demo source drift.
 - [lt-brand-copy-audience-pages](recipes/lt-brand-copy-audience-pages.md) - keep event audience-page copy company-first, buyer-aware, proof-led, and quote-led without founder-only, product-purchase, or removed-hub drift.
-- [lt-seo-geo-aeo-contract](recipes/lt-seo-geo-aeo-contract.md) - keep canonical routes, sitemap, metadata, JSON-LD, FAQ visible questions, and technical discovery verifiers in parity.
+- [lt-seo-geo-aeo-contract](recipes/lt-seo-geo-aeo-contract.md) - keep canonical routes, sitemap, metadata, JSON-LD, FAQ visible questions, selective indexing/noindex gates, and technical discovery verifiers in parity.
 - [lt-brand-style-guide-consolidation](recipes/lt-brand-style-guide-consolidation.md) - consolidate LT visual authority, delete conflicting style references, and verify old font/pastel/icon drift is gone.
 - [cross-browser-motion-visual-verification](recipes/cross-browser-motion-visual-verification.md) - verify animated, marquee, carousel, reduced-motion, and browser-session visual behavior across Chrome/Brave and media-query branches.
 - [compact-hero-contract](recipes/compact-hero-contract.md) - keep public page heroes compact, same-height per viewport family, and protected by Playwright checks instead of route-local oversized padding.

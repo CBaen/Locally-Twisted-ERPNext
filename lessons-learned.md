@@ -6,6 +6,25 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-21 - Do not make indexing all-or-nothing during ecommerce review
+
+After the site switch, the urgent question was whether to index everything,
+keep everything hidden, or only hold products. The correct model is selective:
+stable business pages can be discoverable while unfinished ecommerce remains
+out of the sitemap and emits `noindex`.
+
+**Counter-move:** separate crawler access from indexing permission. Keep
+`robots.txt` crawlable so Google can see page-level `noindex`; use robots meta
+for noindex; exclude paused ecommerce discovery paths from the sitemap; keep
+staging globally noindex with `lt_public_indexing_enabled=0`; and submit
+Search Console only after live canonical/sitemap/robots proof passes on
+`https://locallytwisted.com`.
+
+Feature handoff:
+`workstreams/selective-indexing-gate-2026-05-21.md`.
+
+---
+
 ## 2026-05-21 - Capability notes must become support systems when risk or value demands it
 
 Writing a capability card is not enough when the pattern protects client money,

@@ -46,6 +46,11 @@ submission, provider cancellation, or DNS mutation has been performed. Next
 safe step is local SEO verification, then normal Frappe Cloud release gate,
 then live `LT_BASE_URL=https://locallytwisted.com npm run test:seo-contract`,
 then Search Console sitemap submit/URL Inspection.
+2026-05-21 source follow-up adds selective indexing: stable business pages can
+index after review, ecommerce discovery paths are excluded/noindex while
+`lt_ecommerce_paused=1`, the pause page is always noindex, and staging can be
+globally noindexed with `lt_public_indexing_enabled=0`. This is not live until
+the same release gate runs.
 
 **Google Ads / Meta account takeover (2026-05-19):** Source handoff is
 `workstreams/ad-account-takeover-2026-05-19.md`. Verified support evidence from
@@ -313,7 +318,12 @@ can make Administrator look like every role. Feature handoff:
 `workstreams/marketing-review-access-2026-05-15.md`; broader access audit:
 `workstreams/user-access-audit-2026-05-15.md`; capability:
 `capabilities/recipes/erpnext-external-review-access.md`; guard:
-`npm run test:marketing-review-access`.
+`npm run test:marketing-review-access`. 2026-05-21 follow-up: the protected
+`/marketing-review` page now includes a backend-generated Marketing Review
+Packet download with public review links, sitemap/robots links, and explicit
+no-indexing/no-Desk/no-editing boundaries. The packet is sanitized and
+marketing-only; do not attach customer data, backend exports, product source
+records, invoices, orders, files, or Leads.
 
 **Owner/support access focus (2026-05-15 GL correction):** the active access
 track is the business owner's day-to-day use plus Cameron/Built by Cameron

@@ -17,9 +17,12 @@ BLOCKED_PUBLIC_PATHS = (
     "/shop-items",
     "/shop-by-category",
     "/all-products",
+    "/products",
     "/cart",
     "/checkout",
 )
+
+ECOMMERCE_DISCOVERY_PATHS = BLOCKED_PUBLIC_PATHS + (PAUSE_ROUTE,)
 
 
 def _as_bool(value: object) -> bool:
@@ -47,6 +50,14 @@ def is_blocked_public_path(path: str | None) -> bool:
     return any(
         normalized == blocked or normalized.startswith(f"{blocked}/")
         for blocked in BLOCKED_PUBLIC_PATHS
+    )
+
+
+def is_ecommerce_discovery_path(path: str | None) -> bool:
+    normalized = normalize_path(path)
+    return any(
+        normalized == blocked or normalized.startswith(f"{blocked}/")
+        for blocked in ECOMMERCE_DISCOVERY_PATHS
     )
 
 

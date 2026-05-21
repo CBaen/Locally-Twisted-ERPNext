@@ -12,6 +12,8 @@ from locally_twisted.marketing_review_access import (
     MARKETING_REVIEW_ROLE,
     MARKETING_REVIEW_ROUTE,
     apply_marketing_review_context,
+    build_marketing_review_packet,
+    download_marketing_review_packet,
     marketing_role_boundary,
 )
 
@@ -82,8 +84,10 @@ def _run_contract() -> dict:
     _assert_forbidden_record_access(marketing_user)
     _assert_contact_creation_blocked(marketing_user)
     _assert_review_context_allowed(marketing_user)
+    _assert_packet_download_allowed(marketing_user)
     _assert_me_redirects_to_review(marketing_user)
     _assert_review_context_blocked(customer_user)
+    _assert_packet_download_blocked(customer_user)
 
     return {
         "role": MARKETING_REVIEW_ROLE,
@@ -93,6 +97,7 @@ def _run_contract() -> dict:
         ],
         "forbidden_roles_checked": sorted(FORBIDDEN_MARKETING_ROLES),
         "review_route_context": "allowed_for_marketing_role_only",
+        "packet_download": "allowed_for_marketing_role_only",
         "me_route": f"redirects_to_{MARKETING_REVIEW_ROUTE}",
         "rolled_back": True,
     }
@@ -188,6 +193,47 @@ def _assert_review_context_allowed(user: str) -> None:
         apply_marketing_review_context(context)
         if not context.get("marketing_review_links"):
             raise ContractFail("marketing review context did not expose review links")
+        packet = context.get("marketing_review_packet") or {}
+        if not packet.get("download_href"):
+            raise ContractFail("marketing review context did not expose packet download")
+    finally:
+        frappe.set_user(original_user)
+
+
+def _assert_packet_download_allowed(user: str) -> None:
+    original_user = frappe.session.user
+    original_response = getattr(frappe.local, "response", None)
+    try:
+        frappe.set_user(user)
+        packet = build_marketing_review_packet()
+        for expected in ("Do not submit indexing", "/sitemap.xml", "/robots.txt", "ERPNext Desk"):
+            if expected not in packet:
+                raise ContractFail(f"marketing review packet missing {expected!r}")
+
+        frappe.local.response = frappe._dict()
+        download_marketing_review_packet()
+        response = frappe.local.response
+        if response.get("type") != "download":
+            raise ContractFail("marketing review packet did not set download response type")
+        if not str(response.get("filename") or "").startswith("locally-twisted-marketing-review-packet-"):
+            raise ContractFail("marketing review packet filename is not scoped")
+        if b"/sitemap.xml" not in (response.get("filecontent") or b""):
+            raise ContractFail("marketing review packet download body missing sitemap")
+    finally:
+        if original_response is not None:
+            frappe.local.response = original_response
+        frappe.set_user(original_user)
+
+
+def _assert_packet_download_blocked(user: str) -> None:
+    original_user = frappe.session.user
+    try:
+        frappe.set_user(user)
+        try:
+            download_marketing_review_packet()
+        except frappe.PermissionError:
+            return
+        raise ContractFail("non-marketing Website User should not download marketing review packet")
     finally:
         frappe.set_user(original_user)
 

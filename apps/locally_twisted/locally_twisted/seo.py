@@ -6,11 +6,14 @@ from urllib.parse import urlparse
 
 import frappe
 
+from locally_twisted.ecommerce_pause import PAUSE_ROUTE, is_ecommerce_discovery_path, is_ecommerce_paused
+
 
 SITE_NAME = "Locally Twisted"
 BUSINESS_NAME = "Locally Twisted"
 PHONE = "+1-801-285-0860"
 EMAIL = "hi@locallytwisted.com"
+PUBLIC_INDEXING_ENABLED_DEFAULT = True
 
 DEFAULT_SOCIAL_IMAGE_PATH = "/assets/locally_twisted/images/heroes/home-generated-lifestyle-desktop.webp"
 SOCIAL_IMAGE_PATHS = {
@@ -73,6 +76,35 @@ def site_base_url() -> str:
     return ""
 
 
+def _as_bool(value: object, default: bool = False) -> bool:
+    if value is None:
+        return default
+    if isinstance(value, str):
+        return value.strip().lower() not in {"0", "false", "no", "off", "disabled"}
+    return bool(value)
+
+
+def is_public_indexing_enabled() -> bool:
+    return _as_bool(
+        frappe.conf.get("lt_public_indexing_enabled", PUBLIC_INDEXING_ENABLED_DEFAULT),
+        default=PUBLIC_INDEXING_ENABLED_DEFAULT,
+    )
+
+
+def should_noindex_path(path: str | None) -> bool:
+    if normalize_path(path) == PAUSE_ROUTE:
+        return True
+    if not is_public_indexing_enabled():
+        return True
+    if is_ecommerce_paused() and is_ecommerce_discovery_path(path):
+        return True
+    return False
+
+
+def robots_meta_for_path(path: str | None) -> str:
+    return "noindex, follow" if should_noindex_path(path) else "index, follow"
+
+
 def absolute_url(path: str | None = "/") -> str:
     normalized = normalize_path(path)
     base = site_base_url()
@@ -96,13 +128,16 @@ def social_image_path(path: str | None = None) -> str:
 def apply_seo_context(context):
     page_path = canonical_path(request_path())
     image_path = social_image_path(page_path)
+    robots_meta = robots_meta_for_path(page_path)
     context["lt_canonical_url"] = absolute_url(page_path)
     context["lt_social_image_url"] = absolute_url(image_path)
     context["lt_og_url"] = absolute_url(page_path)
     context["lt_site_name"] = SITE_NAME
     context["lt_twitter_card"] = "summary_large_image"
+    context["lt_robots_meta"] = robots_meta
     metatags = context.get("metatags") or {}
     metatags["twitter:card"] = "summary_large_image"
+    metatags["robots"] = robots_meta
     context["metatags"] = metatags
     return context
 

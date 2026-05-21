@@ -59,7 +59,16 @@ test.describe("Locally Twisted SEO, GEO, and AEO contract", () => {
 		});
 	}
 
-	test("sitemap prefers canonical public routes while preserving paused ecommerce URLs", async ({ request }) => {
+	test("sitemap prefers canonical public routes and follows the current ecommerce indexing gate", async ({ request }) => {
+		const shopProbe = await request.get(new URL("/shop", BASE_URL).toString(), {
+			failOnStatusCode: false,
+			maxRedirects: 0,
+		});
+		const ecommercePaused =
+			shopProbe.status() >= 300 &&
+			shopProbe.status() < 400 &&
+			(shopProbe.headers().location || "").includes("/ready-to-order-paused");
+
 		const response = await request.get(new URL("/sitemap.xml", BASE_URL).toString());
 		expect(response.status()).toBe(200);
 		const xml = await response.text();
@@ -70,8 +79,13 @@ test.describe("Locally Twisted SEO, GEO, and AEO contract", () => {
 		for (const path of ["/home", "/about-us", "/event-balloons", "/event_balloons", "/balloon_twisting_and_face_painting", "/refund_policy", "/terms_of_service"]) {
 			expect(xml, `sitemap should exclude duplicate ${path}`).not.toContain(absolutePath(path));
 		}
-		for (const path of ["/shop", "/shop-items/seasonal-specialty"]) {
-			expect(xml, `paused ecommerce URL should remain in sitemap: ${path}`).toContain(absolutePath(path));
+		for (const path of ["/shop", "/all-products", "/products", "/shop-items", "/shop-items/seasonal-specialty"]) {
+			if (ecommercePaused) {
+				expect(xml, `paused ecommerce URL should be out of sitemap: ${path}`).not.toContain(absolutePath(path));
+			} else {
+				if (path === "/products") continue;
+				expect(xml, `open ecommerce URL should remain in sitemap: ${path}`).toContain(absolutePath(path));
+			}
 		}
 
 		expect(xml, "sitemap should not advertise the Frappe Cloud vanity host").not.toContain("locallytwisted.v.frappe.cloud");
@@ -91,6 +105,13 @@ test.describe("Locally Twisted SEO, GEO, and AEO contract", () => {
 		expect(text).toContain(`Sitemap: ${absolutePath("/sitemap.xml")}`);
 		expect(text).not.toContain("Disallow: /");
 		expect(text).not.toContain("locallytwisted.v.frappe.cloud");
+	});
+
+	test("paused ecommerce doorway is explicitly noindex", async ({ page }) => {
+		const response = await gotoAndSettle(page, "/ready-to-order-paused");
+		expect(response, "/ready-to-order-paused should return a response").not.toBeNull();
+		expect(response.status(), "/ready-to-order-paused should load").toBeLessThan(400);
+		await expect(page.locator("meta[name='robots']")).toHaveAttribute("content", /noindex/);
 	});
 
 	test("removed Event Balloons hub routes return 404 without redirect", async ({ request }) => {

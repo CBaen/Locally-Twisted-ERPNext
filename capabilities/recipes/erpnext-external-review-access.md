@@ -5,11 +5,11 @@ schema_version: 2.0
 level: recipe
 maturity: candidate
 scope: Locally Twisted external website-review access for non-operator reviewers
-currently_true: unknown
-verification_level: 2
-last_verified: 2026-05-15
+currently_true: verified
+verification_level: 3
+last_verified: 2026-05-21
 evidence_quality: direct
-successful_uses: 1
+successful_uses: 2
 failed_uses: 1
 regressions: 0
 depends_on:
@@ -48,7 +48,12 @@ Current LT example: `Exploring Not Boring` marketing review access.
 - The owned public review route is `/marketing-review`.
 - `/me` redirects marketing reviewers to `/marketing-review`; it does not place
   them in the customer portal.
-- The route is `noindex` and shows only public review links.
+- The route is `noindex` and shows only public review links plus the protected
+  backend-generated Marketing Review Packet download.
+- The packet is generated fresh at request time and stays sanitized: public
+  review links, sitemap, robots, review status, and access boundaries only.
+  It must not include backend record exports, customer data, files, orders,
+  invoices, payments, Leads, or product source records.
 - Backend-sensitive DocTypes are hidden and denied through marketing-only
   permission query conditions, `has_permission`, and mutation guards.
 
@@ -125,10 +130,12 @@ For live local HTTP proof:
 3. Verify `/me` resolves to `/marketing-review`.
 4. Verify `/marketing-review` renders `data-lt-marketing-review` and
    `Exploring Not Boring`.
-5. Verify the page body contains no backend route markers such as `/app/` and
+5. Verify the packet download is present and only available to the explicit
+   marketing review role.
+6. Verify the page body contains no backend route markers such as `/app/` and
    no backend labels such as `Sales Invoice`, `Email Queue`, or
    `Payment Entry`.
-6. Delete the temporary User through
+7. Delete the temporary User through
    `locally_twisted.verify.marketing_review_access_boundary.cleanup_fixture`.
 
 ## Failure Modes
@@ -141,6 +148,9 @@ For live local HTTP proof:
   misclassifying Administrator or bench execution.
 - Letting the review account edit website pages, products, policies, blog
   posts, customer records, or files.
+- Uploading a static review packet and forgetting to refresh it.
+- Adding private backend exports or customer/order data to the packet because
+  the reviewer asked for "view privileges."
 - Running rollback-heavy customer/marketing verifiers in parallel and confusing
   session/user context.
 

@@ -16,6 +16,23 @@
       <strong>Public-site review only</strong>
       <span>Use these links to inspect copy, layout, proof, navigation, and public customer paths.</span>
     </div>
+    <div class="lt-marketing-review__packet" data-lt-marketing-review-packet>
+      <h2 class="lt-marketing-review__packet-title">{{ marketing_review_packet.title }}</h2>
+      <p class="lt-marketing-review__packet-meta">
+        Generated fresh when downloaded. Current page copy was prepared {{ marketing_review_packet.generated_label }}.
+      </p>
+      <div class="lt-marketing-review__packet-actions">
+        <a class="lt-marketing-review__packet-action" href="{{ marketing_review_packet.download_href }}">
+          Download packet
+        </a>
+        <a class="lt-marketing-review__packet-action lt-marketing-review__packet-action--secondary" href="{{ marketing_review_packet.sitemap_href }}">
+          Sitemap
+        </a>
+        <a class="lt-marketing-review__packet-action lt-marketing-review__packet-action--secondary" href="{{ marketing_review_packet.robots_href }}">
+          Robots
+        </a>
+      </div>
+    </div>
     <div class="lt-marketing-review__grid">
       {% for item in marketing_review_links %}
       <a class="lt-marketing-review__link" href="{{ item.href }}">

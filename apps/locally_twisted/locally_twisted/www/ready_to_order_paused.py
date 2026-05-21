@@ -8,6 +8,7 @@ def get_context(context):
     context.title = "Ready-to-order is paused | Locally Twisted"
     context.metatags = {
         "description": "Ready-to-order shopping is temporarily paused while Locally Twisted polishes product pages and checkout.",
+        "robots": "noindex, follow",
     }
     context.page_css = PAGE_CSS
     return context

@@ -8,6 +8,43 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-21 - Index stable business pages, not unfinished ecommerce
+
+**Decision:** Use selective indexing for Locally Twisted. Stable public
+business pages may be indexable after SEO/GEO/AEO review, but staging,
+owner-review environments, Ready-to-Order shop routes, product category routes,
+product detail routes, cart, checkout, upstream product aliases, and the
+Ready-to-Order pause doorway must stay out of public indexing until ecommerce
+has owner approval.
+
+**Reasoning:** The site has been public for about a week after the platform
+switch, so keeping every public business page hidden is bad for operations and
+discovery. At the same time, the product catalog is still being prepared for
+owner approval, so indexing product pages would publish unfinished commerce
+promises. Google can index approved business pages without indexing products,
+and paid ad destinations can be repaired separately through working landing
+URLs.
+
+**Implementation boundary:** Local source only. `seo.py` now owns robots meta
+decisions, `sitemap.py` excludes paused ecommerce discovery paths, the pause
+doorway is always noindex, `/products` is treated as ecommerce discovery, and
+`lt_public_indexing_enabled=0` is the staging/global noindex switch. No
+Frappe Cloud deploy, app mirror sync, Search Console submission, Google Ads
+mutation, Meta mutation, DNS change, Stripe change, staging promotion, live
+release, or product approval was performed.
+
+**Receipts:** `workstreams/selective-indexing-gate-2026-05-21.md`;
+`workstreams/seo-geo-aeo-contract.md`;
+`workstreams/domain-provider-reindex-cleanup-2026-05-19.md`;
+`capabilities/recipes/lt-seo-geo-aeo-contract.md`;
+`scripts/verify/seo_contract.spec.js`.
+
+**Decided by:** Guiding Light's 2026-05-21 correction that the business likely
+needs indexing now, but not unfinished products; Codex local source guard and
+verification the same day.
+
+---
+
 ## 2026-05-21 - Capability graduation is cleanup-first in LT
 
 **Decision:** Adopt the global Capability Graduation Ladder in LT now, but use
@@ -659,9 +696,13 @@ and bench contexts can be misclassified; this boundary must check explicit
 `LT Marketing Review Access` has `desk_access = 0` and no DocPerm rows.
 Marketing reviewers landing on `/me` are redirected to `/marketing-review`.
 Permission query conditions, `has_permission`, and mutation hooks deny
-sensitive backend DocTypes only for explicit marketing-role users. No permanent
-marketing reviewer user was created locally in this slice, and no production
-deploy was performed.
+sensitive backend DocTypes only for explicit marketing-role users. The
+2026-05-21 packet follow-up keeps the same boundary: the Marketing Review
+Packet is generated on request from approved public review inputs and may
+include public sitemap/robots links, review pages, and access limits only. It
+must not include customer data, backend exports, files, orders, invoices,
+payments, Leads, or product source records. No permanent marketing reviewer
+user was created locally in this slice, and no production deploy was performed.
 
 **Verification receipt:** Local verification passed with
 `python scripts/setup/sync_marketing_review_access.py`,

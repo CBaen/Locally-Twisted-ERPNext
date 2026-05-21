@@ -41,7 +41,12 @@ content-image alt text, or removed-route behavior.
    explicitly approves a redirect.
 6. For production, sitemap, canonical, Open Graph URL, and structured-data URLs
    must use `https://locallytwisted.com`, not the Frappe Cloud vanity host.
-7. Run the verifier:
+7. While `lt_ecommerce_paused=1`, keep Ready-to-Order shop, product category,
+   product detail, cart, checkout, `/products`, and pause-doorway URLs out of
+   public indexing. Stable public business pages may be indexable after review.
+8. For staging or owner-review environments, set `lt_public_indexing_enabled=0`
+   so every route emits `noindex, follow`.
+9. Run the verifier:
 
 ```powershell
 npm run test:seo-contract
@@ -76,6 +81,12 @@ but the live sitemap and about-page discovery metadata advertised
 `https://locallytwisted.v.frappe.cloud`. Source was patched and the verifier was
 strengthened, but `currently_true` remains false until the fix is deployed to
 Frappe Cloud, cache is cleared, and the production SEO contract passes.
+
+On 2026-05-21, selective indexing source guards were added: paused ecommerce
+discovery paths are noindex and excluded from sitemap, the pause doorway is
+always noindex, and `lt_public_indexing_enabled=0` can noindex staging/owner
+review environments globally. This is local source proof only until released
+through the Frappe Cloud gate.
 
 ## Rollback / revalidation path
 

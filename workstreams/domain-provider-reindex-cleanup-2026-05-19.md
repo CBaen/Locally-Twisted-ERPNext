@@ -134,6 +134,31 @@ Local verification after the source patch:
 - `npm run test:seo-contract` now includes the robots check and passed 12/12
   against `http://localhost:8081`.
 
+2026-05-21 selective indexing follow-up:
+
+- Decision: index stable approved public business pages first; do not index
+  Ready-to-Order shop, product category, product detail, cart, checkout, or
+  pause-doorway pages while ecommerce is paused or owner product approval is
+  still in progress.
+- Source guard: `seo.py` now emits page-level robots metadata through
+  `robots_meta_for_path()`. Stable public pages emit `index, follow`; ecommerce
+  discovery paths emit `noindex, follow` when `lt_ecommerce_paused=1`; the
+  pause doorway is always `noindex, follow`.
+- Staging guard: `lt_public_indexing_enabled=0` makes every route emit
+  `noindex, follow` for private staging/owner-review environments without
+  needing to block crawlers in `robots.txt`.
+- Sitemap guard: `www/sitemap.py` excludes ecommerce discovery paths while
+  `lt_ecommerce_paused=1`. When ecommerce is reopened, those URLs may re-enter
+  the sitemap and must pass product-page review before Search Console
+  submission.
+- Extra blocked discovery path added: `/products`, because it is an upstream
+  ecommerce/product discovery surface and should not be public during the pause.
+- Local proof: source compiled, `npm run test:seo-contract` passed 13/13 in the
+  current local open-ecommerce mode, `/ready-to-order-paused` rendered
+  `<meta name="robots" content="noindex, follow">`, and a helper proof verified
+  paused `/shop`, `/shop-items/...`, and product detail paths noindex while
+  `/contact` remains indexable.
+
 ## Reindex Order
 
 1. Prove the local source fix with `npm run test:seo-contract`.
@@ -149,11 +174,13 @@ $env:LT_BASE_URL='https://locallytwisted.com'; npm run test:seo-contract
 5. Confirm `https://locallytwisted.com/sitemap.xml` contains only
    `https://locallytwisted.com/...` URLs.
 6. Confirm public canonical and `og:url` values use `https://locallytwisted.com`.
-7. Add targeted 301 redirects for high-value old WordPress/WooCommerce URLs
+7. Confirm stable business pages are indexable and ecommerce discovery pages
+   are absent/noindex while `lt_ecommerce_paused=1`.
+8. Add targeted 301 redirects for high-value old WordPress/WooCommerce URLs
    before using removals for pages that should be preserved as traffic.
-8. In Google Search Console, submit `https://locallytwisted.com/sitemap.xml`
+9. In Google Search Console, submit `https://locallytwisted.com/sitemap.xml`
    and use URL Inspection for priority pages.
-9. Use Search Console Removals only for pages that should disappear quickly,
+10. Use Search Console Removals only for pages that should disappear quickly,
    and only after the site itself is returning the intended redirect, 404, or
    noindex behavior.
 

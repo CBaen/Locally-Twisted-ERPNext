@@ -33,6 +33,7 @@ def main() -> int:
         print("[MARKETING REVIEW ACCESS BOUNDARY] " + ("PASS" if not failures else "FAIL"))
         print(f"  role: {result.get('role')}")
         print(f"  review_route_context: {result.get('review_route_context')}")
+        print(f"  packet_download: {result.get('packet_download')}")
         print(f"  forbidden_doctypes_checked: {len(result.get('forbidden_doctypes_checked') or [])}")
         print("  rollback: verifier rolled back the temporary marketing user")
     if failures:

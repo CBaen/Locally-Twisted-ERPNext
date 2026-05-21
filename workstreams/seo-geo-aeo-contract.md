@@ -1,8 +1,7 @@
 # SEO/GEO/AEO Contract
 
-Last updated: 2026-05-21 by Codex after local robots discovery and
-current-host canonical verification were tightened. Indexing submission is
-parked until shop staging and owner product approval.
+Last updated: 2026-05-21 by Codex after selective indexing guards were added.
+Indexing submission is parked until shop staging and owner product approval.
 
 ## Scope
 
@@ -22,10 +21,16 @@ happen until the shop is on staging and the owner approves products to go live.
   LocalBusiness/Organization JSON-LD without unverified ratings or hours.
 - Legacy route aliases declare canonical public routes instead of creating SEO
   duplicates.
-- `/sitemap.xml` prefers canonical public routes while preserving ecommerce
-  URLs that still need discovery continuity through testing and launch review.
+- `/sitemap.xml` prefers canonical public routes. While `lt_ecommerce_paused=1`,
+  ecommerce discovery URLs stay out of the sitemap.
 - `/robots.txt` allows public crawling, advertises the current-host sitemap,
   and must not point crawlers at the Frappe Cloud vanity host.
+- Page-level robots metadata is the indexing control. Stable public business
+  pages can emit `index, follow`; ecommerce discovery paths emit
+  `noindex, follow` while paused; `/ready-to-order-paused` is always
+  `noindex, follow`.
+- Staging and private owner-review environments must set
+  `lt_public_indexing_enabled=0` so every route emits `noindex, follow`.
 - Public sitemap, canonical, Open Graph URL, and structured-data URLs must use
   the tested public host. For production, that means `https://locallytwisted.com`,
   not `https://locallytwisted.v.frappe.cloud`.
@@ -93,6 +98,29 @@ port that the request lost. Production still prefers the request domain so
 Local result after cache clear and web-process restart: `npm run
 test:seo-contract` passed 12/12 against `http://localhost:8081`.
 
+## 2026-05-21 Selective Indexing Gate
+
+GL clarified that the business cannot stay invisible for another week, but the
+shop/product catalog is not owner-approved yet. The contract is now selective:
+index stable public business pages after review, but keep shop/product
+discovery and staging out of public indexing.
+
+Source changes:
+
+- `ecommerce_pause.py` now exposes ecommerce discovery path classification and
+  includes `/products`.
+- `seo.py` owns `robots_meta_for_path()` and `should_noindex_path()`.
+- `www/sitemap.py` excludes ecommerce discovery paths while ecommerce is paused.
+- `ready_to_order_paused.py` always noindexes the pause doorway.
+- `templates/generators/item_group.html` no longer hardcodes `index, follow`.
+- `seo_contract.spec.js` verifies the current ecommerce indexing gate and the
+  pause doorway noindex state.
+
+Local result after cache clear and web-process restart: `npm.cmd run
+test:seo-contract` passed 13/13 against `http://localhost:8081`.
+
+Feature handoff: `workstreams/selective-indexing-gate-2026-05-21.md`.
+
 ## Verification
 
 ```powershell
@@ -124,3 +152,7 @@ npm run test:seo-contract
   asks for a redirect. A clean 404 is the correct state for `/event-balloons`.
 - Do not submit a sitemap or ask Google to recrawl while sitemap/canonical
   output advertises the Frappe Cloud vanity host.
+- Do not use `robots.txt` as the product noindex mechanism. Google must be able
+  to crawl a URL to see its `noindex` directive.
+- Do not index staging. Use `lt_public_indexing_enabled=0` for staging and
+  private owner review.
