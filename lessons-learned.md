@@ -3253,3 +3253,21 @@ the real safe default.
 **Avoid:** treating path readability as more important than checkout success,
 or adding parent-repo `.gitignore` rules as the first fix for bad worktree
 placement.
+
+---
+
+## 2026-05-21 - Capability Seed Parity Is Not LT Truth Repair
+
+**Lesson:** A framework seed update can make LT aware of new capability
+concepts without proving or repairing LT-specific capability claims.
+
+**What happened:** v2.4 source/provenance, organic growth, and Perfect Bite
+cards were propagated into LT. The root still reports older missing references,
+backlinks, and trust warnings.
+
+**Do this next time:** Regenerate the registry and graph report after seed
+propagation, then split local cleanup into its own LT workstream. Verify each
+missing reference or trust field against current LT files before editing.
+
+**Avoid:** using a source-package update as cover to normalize LT
+`currently_true`, dependency, or backlink fields without local evidence.

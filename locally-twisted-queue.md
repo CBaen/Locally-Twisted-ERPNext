@@ -468,6 +468,10 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
 ### Cross-cutting / housekeeping
 
 - [P1] **Clean legacy capability-card registry warnings.** The project capability root is now visible at `capabilities/`, but some older LT cards still carry legacy/maturity/frontmatter warnings when `capability_registry.py` runs. Do not block current launch work on this, but the next capability-maintenance slice should update only the stale cards it owns, regenerate the registry, and aim for warnings=0 without inventing evidence.
+  - 2026-05-21 update: v2.4 framework seed parity is complete, but validation
+    still reports 32 registry warnings, 35 graph errors, and 45 graph warnings.
+    Start from
+    `workstreams/capabilities-framework-v2-4-seed-update-2026-05-21.md`.
 
 - ~~**Sweep `scripts/verify/_screenshots/` accumulated bloat.**~~ DONE 2026-04-30: added `scripts/verify/_screenshots/` to `.gitignore` (option B). 127MB of accumulated diagnostic captures no longer reach git. Existing on-disk dirs not auto-deleted but gitignored — GL or future instance can `rm -rf scripts/verify/_screenshots/*` to reclaim disk space when desired.
 

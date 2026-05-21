@@ -1,6 +1,6 @@
 # Capability File Schema
 
-Schema version: 2.2
+Schema version: 2.4
 
 Capabilities are reusable operating knowledge. They help an agent find the
 right tool, rule, workflow, or project pattern without making the user repeat
@@ -12,9 +12,9 @@ structure everywhere, but use the lightest profile that honestly fits the work.
 
 ## Compatibility
 
-Existing `1.0`, `1.1`, `2.0`, and `2.1` files remain readable as legacy or
-current capability cards. Schema `2.0` maps to the governed profile in `2.1+`.
-Do not rewrite old files just to fill unknown history. When a legacy card is
+Existing `1.0`, `1.1`, `2.0`, `2.1`, and `2.2` files remain readable as
+legacy or current capability cards. Schema `2.0` maps to the governed profile
+in `2.1+`. Do not rewrite old files just to fill unknown history. When a legacy card is
 touched for real work, upgrade it honestly:
 
 - Use `evidence_quality: retrofitted` if old proof is incomplete.
@@ -59,7 +59,7 @@ that improves discovery: by agent, feature, domain, subsystem, or subject.
 
 For new project roots, prefer visible top-level folders such as
 `capabilities/` and `capabilities-<scope>/`. Hidden agent-specific roots such
-as `capabilities/` or `.openclaw/capabilities/` remain valid for runtime
+as `.codex/capabilities/` or `.openclaw/capabilities/` remain valid for runtime
 adapters and existing installs, but the framework package itself is portable.
 
 Each root index must label:
@@ -166,6 +166,33 @@ Use `depends_on` for ingredients, recipes, principles, or external contracts the
 card relies on. Use `used_by` for higher-level cards that inherit this card's
 risk.
 
+For durable cross-root relationships, use a root-qualified reference in
+metadata and a normal Markdown link in the body for readability:
+
+```yaml
+depends_on: [shared::capability-id, project-a::recipes/example.md]
+used_by: [tesla-launch::meal-id]
+```
+
+The alias before `::` is resolved by tooling when the caller supplies the
+related root path, for example:
+
+```powershell
+python tools\capability_dependency_report.py --root capabilities --related-root shared=C:\Users\<user>\capabilities --json
+```
+
+If a root-qualified dependency fails, consuming cards in other roots inherit
+watch status until the dependency and the consuming chain are revalidated.
+
+Traffic light state is derived from `watch_status`; do not add a
+`traffic_light` frontmatter field in v1 of the organic growth layer:
+
+| Derived light | `watch_status` values | Meaning |
+|---|---|---|
+| green | `clear` | The card is clear within its stated scope. |
+| yellow | `watch`, `probation`, `revalidating`, `unknown` | The card can be inspected or cautiously reused, but trust is not greenlit. |
+| red | `failed`, `stale` | The card or dependency chain is not trusted for normal use until repaired. |
+
 Field meanings:
 
 - `id`: stable key used by registries and evidence ledgers.
@@ -193,6 +220,94 @@ Field meanings:
 - `last_failure`: last date a failure or regression was observed.
 - `confidence_notes`: short explanation of the current confidence state.
 - `tags`: retrieval terms, project names, tools, synonyms, and user phrasing.
+- `source_kind`: optional source/provenance class for where the learning came
+  from.
+- `adoption_state`: optional adoption state for whether the source is only a
+  reference, locally adapted, locally verified, rejected, or unknown.
+- `source_refs`: optional flat source pointers, links, root-qualified refs, or
+  safe source names.
+- `rights_status`: optional rights/terms state when reuse, attribution, or
+  copying could matter.
+- `attribution_required`: optional `true`, `false`, or `unknown` flag for
+  whether visible attribution is required.
+
+### Optional Organic Growth Metadata
+
+These fields are optional flat metadata. They help agents discover useful
+combinations, propose recipes, and run contests without changing the core
+substrate or creating nested dependency objects.
+
+```yaml
+building_block_type: action | noun | principle | guard | workflow | contract | custom plain scalar
+composition_roles: [speed, safety, revenue, learning, reliability, creativity, leverage]
+portability: local | project | cross-project | global | experimental
+combination_potential: low | medium | high
+```
+
+Rules:
+
+- Missing fields are not warnings.
+- Values are plain scalars or flat lists only.
+- `depends_on` and `used_by` stay string references only.
+- New metadata values may be proposed by growth reports, but they are not
+  standardized until reviewed.
+- Growth and contest tools may report candidates, but they do not promote
+  cards, write evidence, or mutate trust-bearing fields.
+
+`building_block_type` answers "what kind of block is this?" `composition_roles`
+answers "what job can it play inside a meal?" `portability` answers "where
+could this travel?" `combination_potential` answers "how promising is it for
+future recipes, meals, feasts, or contests?"
+
+### Optional Source / Provenance Metadata
+
+These fields are optional flat metadata for borrowed, researched, inspired,
+agent-generated, official-docs-based, or user-practice-derived learning. They
+help agents distinguish "someone else's ingredient," "someone else's recipe,"
+"reference only," and "verified local practice" without creating new piles.
+
+```yaml
+source_kind: local_evidence | user_practice | official_docs | external_research | third_party_pattern | agent_output | mixed | unknown
+adoption_state: reference_only | adapted | verified_local | rejected | unknown
+source_refs: [safe source link, root-qualified card ref, local research note, source name]
+rights_status: checked | unchecked | not_applicable | restricted | unknown
+attribution_required: true | false | unknown
+```
+
+Rules:
+
+- Missing fields are not warnings.
+- Values are plain scalars or flat lists only.
+- Use `source_refs` for safe pointers, not copied secrets, private client
+  material, long quotes, or raw source dumps.
+- `source_kind` and `adoption_state` do not prove the capability is currently
+  true. They only tell an agent where the learning came from and how far it has
+  been adopted.
+- `adoption_state: verified_local` means the local adaptation was checked in
+  this root's scope. It does not mean the original source is universally true.
+- External adopted cards should keep either `source_refs` or a
+  `## Source / Provenance` section so inspiration is not mistaken for local
+  proof.
+- If rights, terms, or attribution can matter, record `rights_status` and
+  `attribution_required` before a card becomes a preferred path.
+- Rejected external ideas usually belong in `failures/` or evidence downvotes;
+  use `adoption_state: rejected` on a formal card only when the card itself is
+  the durable warning or boundary.
+
+### Perfect Bite Candidates
+
+A Perfect Bite is not a formal card type in v1. It is a high-bar contest
+candidate generated from capability evidence, dependency state, optional
+metadata, and agent justification.
+
+A candidate must name the combined ingredients, meals, recipes, or principles;
+explain why the combination is better than separate use; name the prize it
+competes for; show evidence and traffic-light state; list failure points and a
+repair path; declare reuse scope; and state whether current internet,
+official-source, rights, or provenance/adoption review is required.
+
+Promotion is manual. A Perfect Bite report can create action items, research
+brief holds, or proposed cards, but it cannot greenlight trust by itself.
 
 ## Verification Levels
 
@@ -288,6 +403,23 @@ Real situations where this capability helped.
 
 Short, non-sensitive summary of why the current maturity and verification level
 are justified. Detailed events belong in the evidence ledger.
+
+### Source / Provenance
+
+Use this when origin, rights, research status, or adaptation boundaries matter.
+Keep it short:
+
+```markdown
+## Source / Provenance
+
+- Origin:
+- Source type:
+- License/terms:
+- What we adopted:
+- What we changed:
+- What is not proven here:
+- Last source check:
+```
 
 ### Rollback / revalidation path
 
@@ -394,3 +526,8 @@ repeated waste.
   evidence is needed, composition/cascade when dependency risk needs tracking.
 - `2.2` - evolves `failures/` into the Failure Recipes layer while preserving
   `type: failure` compatibility through `failure_kind`.
+- `2.3` - adds optional organic growth metadata, derived traffic-light
+  semantics, and Perfect Bite contest candidates as proposal-only reports.
+- `2.4` - adds optional source/provenance and adoption metadata so borrowed,
+  researched, inspired, agent-generated, official-docs-based, and local
+  practice learning can be distinguished without new top-level folders.

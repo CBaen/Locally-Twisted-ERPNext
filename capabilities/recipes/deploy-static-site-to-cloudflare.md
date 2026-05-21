@@ -2,6 +2,8 @@
 name: Deploy Static Site to Cloudflare Pages
 level: recipe
 last_verified: 2026-04-25
+used_by:
+  - meals:ship-internal-tool
 ---
 
 ## What it does

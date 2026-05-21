@@ -19,6 +19,8 @@ files needed for the current task.
   `C:\Users\baenb\capabilities\INDEX.md`, agency root
   `C:\Users\baenb\projects\Built_by_Cameron\capabilities\INDEX.md`, and source
   package `C:\Users\baenb\projects\capabilities-framework\capabilities\INDEX.md`.
+- Latest framework handoff:
+  [capabilities-framework-v2-4-seed-update-2026-05-21](../workstreams/capabilities-framework-v2-4-seed-update-2026-05-21.md).
 
 ## How To Use This
 
@@ -32,17 +34,27 @@ files needed for the current task.
 - Dead ends and recurring Failure Recipes go in `failures/`.
 - Evidence-backed use, upvotes, downvotes, failures, fixes, and promotions go
   in `evidence/`.
+- Use source/provenance metadata when a capability is borrowed, researched, inspired, agent-generated, or adapted from official docs/user practice; local proof still needs evidence.
 
 ## Capability Lifecycle
 
-This root follows the shared capability schema v2.2. Older files remain
+This root follows the shared capability schema v2.4. Older files remain
 usable as legacy cards, but `currently_true`, `verified`, and `staple` require
 new evidence in the stated scope. Do not promote old LT cards from memory alone.
+
+## Atomic Ingredients
+
+- [Evidence Ledger Event](atomic_ingredients/evidence-ledger-event.md) - compact evidence event for use, upvotes, downvotes, failures, fixes, and promotions.
 
 ## Principles
 
 - System rule: `C:\Users\baenb\capabilities\principles\no-monolith-files.md` - do not create or expand hand-authored production monoliths; split by clear responsibility unless the file is research/reference material.
 - [multi-agent-coordination-safety](principles/multi-agent-coordination-safety.md) - keep LT parallel-agent work inside the neutral claim/worktree workflow without leaking parent/company repo scope into LT tasks.
+- [Current Truth Needs Evidence](principles/current-truth-needs-evidence.md) - prevents capability claims from becoming false certainty.
+- [No Monolith Files](principles/no-monolith-files.md) - prevents hand-authored production files from becoming giant catch-all modules except research/reference artifacts.
+- [Capability Evolution Gates](principles/capability-evolution-gates.md) - requires evidence, date, result, confidence, and rollback/revalidation for trust-bearing changes.
+- [Agent-Centered Infrastructure](principles/agent-centered-infrastructure.md) - keeps framework decisions focused on what helps agents work efficiently and earn trust.
+- [Capabilities Should Enhance, Not Become Chores](principles/capabilities-should-enhance-not-become-chores.md) - keeps the framework useful without turning it into paperwork.
 
 ## Ingredients
 
@@ -50,6 +62,8 @@ The smallest reusable units. One tool, one command, one MCP server, or a thin
 combination.
 
 - [screenshot](ingredients/screenshot.md) - capture the live screen to a file you can read.
+- [gh-cli](ingredients/gh-cli.md) - use GitHub CLI for repo, PR, release, and workflow operations after identity is confirmed.
+- [wrangler](ingredients/wrangler.md) - use Cloudflare Wrangler for Pages and Workers deployment tasks after account identity is confirmed.
 
 ## Recipes
 
@@ -106,6 +120,17 @@ Workflows. Multi-step. Clear start and finish.
 - [take-live-coordinated-workflows](recipes/take-live-coordinated-workflows.md) - coordinate multi-agent launch lanes with controller ownership, review gates, and release verification.
 - [visual-debugging](recipes/visual-debugging.md) - see what the user sees without asking them to describe it.
 - [deploy-static-site-to-cloudflare](recipes/deploy-static-site-to-cloudflare.md) - get a Hugo/Astro/Next-static site live on a custom domain.
+- [Capability Evidence And Promotion](recipes/capability-evidence-and-promotion.md) - promote, upvote, downvote, verify, staple, or deprecate capabilities.
+- [Organic Capability Growth](recipes/organic-capability-growth.md) - use optional flat metadata and read-only reports to surface valuable new combinations.
+- [Perfect Bite Contest Layer](recipes/perfect-bite-contest-layer.md) - score high-bar combination candidates without auto-promoting or writing trusted roots.
+- [Source Provenance And Adoption](recipes/source-provenance-and-adoption.md) - preserve origin, attribution, rights, and local-adoption boundaries for borrowed or researched learning.
+- [Cross-Project Capability Composition](recipes/cross-project-capability-composition.md) - link and compose capabilities across roots, projects, agents, and subjects.
+- [Failure Cascade And Watch Status](recipes/failure-cascade-and-watch-status.md) - retest lower layers and watch affected dependents after composed capability failures.
+- [Probationary Revalidation](recipes/probationary-revalidation.md) - put repaired dependency chains on probation until three verified uses restore trust.
+- [Hub/Spoke Capability Indexing](recipes/hub-spoke-capability-indexing.md) - keep capability indexes slim and token-protective as roots grow.
+- [Cross-Root Meal Placement And Trust](recipes/cross-root-meal-placement-and-trust.md) - place meals with the consuming capability root and propagate trust changes across dependencies.
+- [Capability Registry Generation](recipes/capability-registry-generation.md) - generate compact retrieval indexes without reading every card.
+- [Visible Capability Root Contract](recipes/visible-capability-root-contract.md) - label every capability root and keep new roots visible instead of buried.
 
 ## External Design-Studio Capabilities
 

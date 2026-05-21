@@ -8,6 +8,29 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-21 - Capability v2.4 seed parity does not clear LT graph debt
+
+**Decision:** Keep the v2.4 framework seed cards in LT's visible
+`capabilities/` root, but treat the remaining registry and graph findings as
+separate LT cleanup work.
+
+**Reasoning:** The source package update adds useful infrastructure for
+source/provenance, organic growth, and Perfect Bite proposals. The remaining LT
+validation failures point at older LT-specific references and trust metadata;
+silently fixing them during seed propagation would fabricate certainty.
+
+**Implementation boundary:** This decision updates capability seed parity only.
+It does not approve public-site, ERPNext/Frappe, staging, live, DNS, Stripe, or
+trust-field cleanup work.
+
+**Receipts:** `workstreams/capabilities-framework-v2-4-seed-update-2026-05-21.md`
+and `capabilities/INDEX.md`.
+
+**Decided by:** Codex propagation pass after framework v2.4 update on
+2026-05-21.
+
+---
+
 ## 2026-05-21 - LT is the protected clean child/client coordination pilot
 
 **Decision:** Use Locally Twisted as the protected clean child/client pilot for

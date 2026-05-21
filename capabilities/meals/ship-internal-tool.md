@@ -2,6 +2,8 @@
 name: Ship an Internal Tool
 level: meal
 last_verified: 2026-04-25
+depends_on:
+  - recipes:deploy-static-site-to-cloudflare
 ---
 
 ## What it does
