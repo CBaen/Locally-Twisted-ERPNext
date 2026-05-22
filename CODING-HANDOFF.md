@@ -1,5 +1,24 @@
 # Locally Twisted - Coding Handoff
 
+Codex Frappe Cloud staging prep on 2026-05-22: source `main` is clean and
+pushed at `2ee28da Harden product galleries and release gates`; the private
+Frappe Cloud app-root mirror `CBaen/Locally-Twisted-Frappe-App` is pushed at
+`f236d6d Sync app from LT source 2ee28da`. This mirror update is broad by
+definition because the previous mirror was `b4b3bf8` from 2026-05-15; it
+contains the current `apps/locally_twisted` tree, not only the final gallery
+commit. Local gates rerun after the mirror push: `frappe_cloud_preflight.py`,
+`human_access_silo_matrix.py`, `marketing_review_access_boundary.py`, `npm run
+test:owner-product-safety`, and `npm run test:ecommerce-full` all passed.
+Staging is **not** owner-review ready yet: `locallytwisted-staging.frappe.cloud`
+still shows stale/pre-update signals, provider-side deploy/update/migration
+and cache clear are unverified, and database-side Product Setup/gallery proof
+has not run on staging. Triad decision: do not use a generic `press-deploy`
+commit marker, and do not use the targeted
+`press-deploy-bench-39776-000013-f94-virginia` marker until Frappe Cloud
+dashboard/API/SSH proof confirms that bench is staging-only and contains no
+live/custom-domain site. Handoff:
+`workstreams/frappe-cloud-staging-owner-review-2026-05-22.md`.
+
 Codex release/docs gate integrity patch on 2026-05-22: release processes,
 major builds, and patch spirals require triad review before any commit, push,
 staging, live, provider, or Search Console claim. Staging proof must be

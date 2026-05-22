@@ -33,6 +33,17 @@ Frappe Cloud, Stripe, DNS, Search Console, or production approval. Do not claim
 staging from local Docker verifiers by setting only `LT_BASE_URL`; database-side
 proof must run against staging or stay explicitly unverified.
 
+2026-05-22 staging-prep update: source `main` was archived at `2ee28da`, and
+the Frappe Cloud app-root mirror was archived at `f236d6d` from that source.
+Staging is still blocked, not complete. The current blocker is provider-state
+proof and staging update execution: prove
+`locallytwisted-staging.frappe.cloud` is on
+`bench-39776-000013-f94-virginia`, prove live/custom-domain traffic is on
+`bench-39776-000015-f94v`, then deploy/update/migrate/cache-clear staging only.
+Do not use generic `press-deploy`; do not use the targeted staging marker until
+that mapping is proven. Handoff:
+`workstreams/frappe-cloud-staging-owner-review-2026-05-22.md`.
+
 **P0 capability graduation cleanup (2026-05-21):** Active handoff is
 `workstreams/capability-graduation-ladder-2026-05-21.md`. LT now has the global
 Capability Graduation Ladder seed (`schema_version: 2.5`) but must adopt it

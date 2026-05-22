@@ -33,6 +33,12 @@ current live discovery URLs still advertise the Frappe Cloud vanity host.
 ## Current Confirmed State
 
 1. Frappe Cloud
+   - Staging-prep source commit prepared on 2026-05-22:
+     `2ee28da Harden product galleries and release gates`.
+   - Staging-prep Frappe app mirror commit prepared on 2026-05-22:
+     `f236d6d Sync app from LT source 2ee28da`.
+   - These commits are not staging or live proof until Frappe Cloud
+     deploy/update/migration/cache evidence exists for the target site.
    - Current full repo source commit:
      `631f9a8 Run contact intake schema sync on install`.
    - Current Frappe app mirror commit:
@@ -142,6 +148,15 @@ Staging-safe gate list:
    unverified. Do not claim staging from a local Docker database read.
 6. Record remaining live-only blockers before any live/provider/Search Console
    action.
+
+2026-05-22 provider trigger rule: Frappe Cloud supports commit-message deploy
+markers for benches, but LT agents must not use generic `press-deploy`.
+The proposed targeted marker
+`press-deploy-bench-39776-000013-f94-virginia` is blocked until current
+Frappe Cloud dashboard/API/SSH proof confirms that bench is staging-only and
+contains no live/custom-domain site. If provider proof is available, prefer
+dashboard deploy/update with the staging site explicitly selected, or use only
+the exact bench-specific marker.
 
 Public site/forms release:
 

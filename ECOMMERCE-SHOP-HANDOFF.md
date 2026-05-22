@@ -33,6 +33,13 @@ Status as of 2026-05-18 for peer GPT-5.5 Codex/OpenClaw agents.
   Product Setup schema; arbitrary selected-variant/reference/category media
   stays separate. Handoff:
   `workstreams/ecommerce-audit/product-gallery-restoration-2026-05-22.md`.
+- Frappe Cloud staging prep started on 2026-05-22. Source `main` is pushed at
+  `2ee28da`; the private app-root mirror is pushed at `f236d6d`. This is not
+  staging proof. The current staging site still needs Frappe Cloud
+  deploy/update/migrate/cache evidence, current bench/site mapping proof, and
+  staging-side Product Setup/gallery/account checks before owner review.
+  Handoff:
+  `workstreams/frappe-cloud-staging-owner-review-2026-05-22.md`.
 - Current local product import proof treats all 53 Odoo-imported products as
   real products. Direct checkout is now bounded for high-complexity color
   products: the two graduation products use college color preset checkout
@@ -76,6 +83,15 @@ this ecommerce lane, the staging-safe list is:
    that proof unverified. Do not claim staging from local Docker database reads.
 6. Keep live checkout, Stripe, DNS, Search Console, and provider mutations
    behind their separate gates.
+
+2026-05-22 staging-prep nuance: official Frappe Cloud docs support
+`press-deploy` commit markers, including bench-specific markers. For LT, do
+not use generic `press-deploy`, and do not use the proposed targeted
+`press-deploy-bench-39776-000013-f94-virginia` marker until current provider
+evidence proves that bench is staging-only and no live/custom-domain site is
+attached. Repo history suggests that bench is staging/source and
+`bench-39776-000015-f94v` is live/destination, but release gates require
+current provider proof, not likely history.
 
 ## Completed Lanes
 
