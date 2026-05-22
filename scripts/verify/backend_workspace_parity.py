@@ -44,6 +44,7 @@ EXPECTED_WORKSPACE_SHORTCUTS = {
 STALE_LABELS = {"Event Calendar", "Clients & Customers", "Contacts"}
 
 FORBIDDEN_WORKSPACE_SHORTCUTS = {
+    "LT Owner Home": {"Product Prices"},
     "LT Manager Home": {"Products", "Product Prices", "Add Product"},
     "LT Employee Home": {
         "Events Inquiry Inbox",

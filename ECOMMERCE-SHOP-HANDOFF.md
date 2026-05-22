@@ -8,6 +8,16 @@ Status as of 2026-05-18 for peer GPT-5.5 Codex/OpenClaw agents.
 - Published closeout baseline before complex-scaffold work: `1811cd6 Fix ecommerce closeout doc state`; verify current `HEAD` / `origin/main` with `git status -sb` before editing.
 - This file is the front-door handoff for the local ecommerce shop setup and
   staff product-authoring slices.
+- Owner Product Setup guard closeout was recovered and triad-reviewed on
+  2026-05-22. Owner-like users can use `LT Product Blueprint` / Product Setup,
+  but direct raw catalog mutations are blocked and local apply cannot publish,
+  hide, or reroute existing public Website Items. Handoff:
+  `workstreams/ecommerce-audit/owner-product-setup-guard-closeout-2026-05-22.md`.
+- Product option selection UX was repaired locally on 2026-05-22. Selected
+  option labels now use short display text while included detail appears
+  intentionally in product details, and foil-number add-ons are capped at
+  3 digits. Handoff:
+  `workstreams/ecommerce-audit/product-option-selection-ux-2026-05-22.md`.
 - Category detail heroes were repaired locally on 2026-05-22. All 11
   `/shop-items/<group>` routes now use generated category-specific hero crops
   built from owner/Odoo balloon swatches and exact color names. This is route
@@ -43,6 +53,78 @@ Status as of 2026-05-18 for peer GPT-5.5 Codex/OpenClaw agents.
   incomplete.
 
 ## Completed Lanes
+
+### Product option selection UX - 2026-05-22
+
+Owner: `Codex`
+
+Result: complete locally for the screenshot-reported option-text/add-on UX
+slice. No staging/live site update, Frappe Cloud update, DNS change, Stripe
+live change, or public exposure change was made.
+
+Feature handoff:
+
+- `workstreams/ecommerce-audit/product-option-selection-ux-2026-05-22.md`
+
+Evidence summary: option values that carried both a label and included-copy
+detail were showing the full stored text outside the selected button. The UI
+now splits display label from included detail, keeps selected tags short, and
+renders included detail intentionally in the product details area. Product
+Setup copy rules can swap/reset title/story/details. Foil-number add-ons are
+still add-ons, not SKU axes, and now validate/price up to 3 digits.
+
+Recovered-lane proof:
+
+- `npm run test:product-options-experience` passed `4/4`.
+- Final pre-commit proof also passed `npm run test:product-options-experience`
+  `4/4`, and the visible price display plus cart/checkout checks passed inside
+  `npm run test:owner-product-safety`.
+
+Rerun before staging if source changes again:
+
+- `npm run test:product-options-experience`
+- `npm run test:product-price-display`
+- `python scripts\verify\cart_checkout_contract.py`
+
+### Owner Product Setup guard closeout - 2026-05-22
+
+Owner: `Codex` with triad witness/recorder/fixer review.
+
+Result: complete locally for the owner-product safety slice. No staging/live
+site update, Frappe Cloud update, DNS change, Stripe live change, Search
+Console action, provider mutation, destructive import, or public exposure
+change was made.
+
+Feature handoff:
+
+- `workstreams/ecommerce-audit/owner-product-setup-guard-closeout-2026-05-22.md`
+
+Evidence summary: Jeff needs owner control over products, but direct ERPNext
+catalog tables are too sharp for daily business editing. The kept path is
+Product Setup via `LT Product Blueprint`. Owner-like direct edits to raw Items,
+Website Items, Item Prices, option axes/values, Item Groups, Webshop Settings,
+and product gallery slideshow records are blocked. Backfilled Product Setup
+records stay Draft. Local apply preserves current published state for existing
+Website Items and refuses hidden->visible, public->hidden, and public-route
+changes outside the reviewed release path. Product Setup sync dry runs now
+truthfully report missing-field updates and fill missing rows without wiping
+existing options.
+
+Green focused gates:
+
+- `python -m py_compile` for Product Blueprint local apply, Product Blueprint
+  verifier, Product Setup sync, DocType controller, and owner catalog guard.
+- `python scripts\verify\owner_catalog_guard_contract.py` passed `19/19`.
+- `python scripts\verify\product_blueprint_live_contract.py` passed with
+  existing-public visibility, hide, and route-change protections.
+- `python scripts\setup\sync_product_blueprints_from_catalog.py` dry run
+  passed for `51` Website Items, `0` creates, `21` would-update rows.
+- `npm run test:owner-product-safety` passed in the final pre-commit state.
+- `npm run test:public-network` passed `40/40`.
+
+Remaining before staging: have GL/Jeff test the local owner workflow, then
+prepare a separate staging packet. Rerun the owner-product umbrella if source
+changes again. This handoff is not live checkout approval.
 
 ### Shop category generated heroes and balloon color catalog - 2026-05-22
 

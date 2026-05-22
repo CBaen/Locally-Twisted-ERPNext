@@ -156,7 +156,10 @@ def get_checkout_add_on_options(item_code: str | None, price_list: str = PRICE_L
                 "input_type": spec.get("input_type") or "number_text",
                 "quantity_min": int(spec.get("quantity_min") or 0),
                 "quantity_max": int(spec.get("quantity_max") or 10),
-                "help": "Optional upgrade. Each selected number is priced separately.",
+                "value_label": spec.get("value_label") or "Number",
+                "maxlength": int(spec.get("maxlength") or spec.get("quantity_max") or 10),
+                "pattern": spec.get("pattern") or "",
+                "help": spec.get("help") or "Optional upgrade. Each selected number is priced separately.",
             }
         )
     return options
@@ -181,10 +184,9 @@ def get_balloon_color_groups(values, axis_name: str | None = None, item_code: st
 def get_product_gallery_slides(item_code: str | None, primary_image: str | None = None, limit: int = 12) -> list[dict[str, str]]:
     """Return source-approved product gallery slides for a product template.
 
-    Website Slideshow rows are the backend-approved gallery path. When no
-    slideshow is supplied by Webshop, this fallback returns only the primary
-    image. Live variant Item.image rows are intentionally held back here until
-    the source media packet classifies them as `gallery` or `variant_image`.
+    Website Slideshow rows are the backend-approved product-level gallery path.
+    Live variant Item.image rows are intentionally held back here unless they
+    are approved through simple variant media or Product Setup media rules.
     """
     if not item_code:
         return []
@@ -200,6 +202,29 @@ def get_product_gallery_slides(item_code: str | None, primary_image: str | None 
         slides.append({"image": image, "heading": heading})
 
     add_slide(primary_image, "Main product photo")
+    website_item = frappe.db.get_value(
+        "Website Item",
+        {"item_code": item_code},
+        ["web_item_name", "website_image", "slideshow"],
+        as_dict=True,
+    )
+    if website_item:
+        if not primary_image:
+            add_slide(website_item.get("website_image"), "Main product photo")
+        slideshow_name = website_item.get("slideshow")
+        if slideshow_name:
+            rows = frappe.get_all(
+                "Website Slideshow Item",
+                filters={"parent": slideshow_name},
+                fields=["image", "heading", "description"],
+                order_by="idx asc",
+                limit_page_length=limit,
+            )
+            for row in rows:
+                add_slide(
+                    row.get("image"),
+                    row.get("heading") or row.get("description") or website_item.get("web_item_name") or "Product photo",
+                )
     return slides
 
 

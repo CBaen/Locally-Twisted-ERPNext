@@ -13,7 +13,7 @@ from locally_twisted.product_setup_runtime import (
 )
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=True, methods=["GET", "POST"])
 def get_product_setup_schema(item_code: str) -> dict[str, Any]:
     """Return the backend-owned Product Setup schema for a product page."""
     schema = product_setup_schema_for_website_item(item_code)
@@ -25,7 +25,7 @@ def get_product_setup_schema(item_code: str) -> dict[str, Any]:
     return schema
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=True, methods=["POST"])
 def resolve_product_setup(item_code: str, configuration: Any = None) -> dict[str, Any]:
     """Validate a browser configuration against Product Setup before commerce."""
     schema = product_setup_schema_for_website_item(item_code)

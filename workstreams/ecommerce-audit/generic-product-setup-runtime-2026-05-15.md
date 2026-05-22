@@ -129,6 +129,76 @@ closeout on 2026-05-17:
 - Feature handoff:
   `workstreams/ecommerce-audit/variant-item-media-restore-2026-05-17.md`.
 
+## 2026-05-21 Product Setup Media And Copy Expansion
+
+- GL flagged that "primary product photo" was not enough for Jeff's expected
+  owner workflow. The Desk label is now `Fallback/Main Product Photo`, with
+  separate Product Setup tables for product gallery photos, option-specific
+  image rules, and option-specific copy rules.
+- Product Setup can now express:
+  - default/fallback product image,
+  - multiple approved gallery photos that sync to a `Website Slideshow`,
+  - selected-option or exact-variant image rules,
+  - selected-option or exact-variant title/story/details copy rules.
+- The product page runtime now swaps selected Product Setup copy along with
+  already-verified selected images and prices, then resets to default copy when
+  the selection no longer matches an approved content rule.
+- Backfill now represents existing variant `Item.image` mappings inside Product
+  Setup media rules so owner review has the same evidence the storefront can
+  already use. The current local catalog has no existing Website Slideshow rows,
+  so Product Setup gallery support is present but `checked_gallery_rows` is `0`
+  until Jeff/GL approve gallery images.
+- Follow-up witness review found and closed guard gaps: local Product Setup
+  apply now always keeps Website Items unpublished, `Visible in shop` requests
+  cannot save with validation blockers such as missing customer-facing media,
+  exact checkout price rows cannot target another product's Items, direct owner
+  edits to `Website Slideshow` and `Website Slideshow Item` are blocked, and
+  selected Product Setup copy is preserved into cart/checkout/Sales Order line
+  payloads instead of remaining page-only state.
+- Guards:
+  `python scripts/verify/product_setup_catalog_coverage.py`,
+  `npm run test:product-setup-content`,
+  `python scripts/verify/product_blueprint_live_contract.py`,
+  `python scripts/verify/variant_media_contract.py`,
+  `npm run test:product-price-display`, and
+  `npm run test:owner-product-safety`.
+
+## 2026-05-22 Owner Guard Closeout Refinements
+
+- The owner-product lane was re-run through a triad witness/recorder/fixer
+  review after GL clarified this cannot be solo work. The closeout handoff is
+  `owner-product-setup-guard-closeout-2026-05-22.md`.
+- Local Product Setup apply now preserves existing public Website Item
+  `published` state. It refuses hidden->visible, public->hidden, and public
+  route-change requests for existing Website Items; those changes belong to
+  the reviewed staging/live release and redirect path.
+- Product Setup sync dry runs now truthfully report existing records that
+  would be updated, and missing price-row fills no longer clear existing option
+  rows.
+- Desk preview includes `target_item_code` and `target_website_item`, so
+  preview and apply validation share the same target-link context.
+- Product option display now splits stored option values into short display
+  labels and included-copy detail. This fixes the duplicate long selected text
+  GL showed in screenshots while keeping backend option matching intact.
+- Foil-number add-ons remain add-ons, not variant axes; they now accept up to
+  3 numeric digits and update visible price display with the add-on total.
+- Owner guard coverage expanded from the original small probe set to `19/19`
+  owner-like probes, including existing Item/Website Item save/delete/rename,
+  Item Attribute, Item Attribute Value, Item Variant Attribute, Item Group,
+  Website Slideshow, Website Slideshow Item, Webshop Settings, and the allowed
+  Product Blueprint server context.
+- Focused latest guards:
+  `python scripts/verify/owner_catalog_guard_contract.py`,
+  `python scripts/verify/product_blueprint_live_contract.py`, and
+  `python scripts/setup/sync_product_blueprints_from_catalog.py`.
+- Final pre-commit closeout additionally passed
+  `npm run test:owner-product-safety`,
+  `npm run test:product-options-experience`, `npm run test:public-network`,
+  `npm run test:form-experience`, `npm run test:public-assets`,
+  `allow_guest_surface_inventory.py`, `smoke_forms.py --shape-only
+  --skip-newsletter`, `newsletter_concurrency_contract.py`, Python compile,
+  JSON parse checks, and `git diff --check`.
+
 ## Known Remaining Gates
 
 - `python scripts/verify/product_import_readiness_gate.py --json` is still blocked by a stale catalog snapshot dated 2026-05-11. This is an import/destructive-readiness blocker, not a Product Setup runtime failure.

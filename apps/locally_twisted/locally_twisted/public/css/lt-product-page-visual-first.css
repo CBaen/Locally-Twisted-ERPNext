@@ -170,6 +170,18 @@
   gap: 0.75rem;
 }
 
+.lt-product__addons-intro {
+  margin: 0;
+  color: var(--lt-polish-muted, #595a5c);
+  font-weight: 650;
+}
+
+.lt-product__selected-inclusion {
+  margin: 0.65rem 0 0;
+  color: var(--lt-polish-ink, #191817);
+  font-weight: 650;
+}
+
 .lt-product__addon {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(7rem, 9rem);

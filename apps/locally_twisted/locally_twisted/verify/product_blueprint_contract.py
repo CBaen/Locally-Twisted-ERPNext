@@ -10,6 +10,7 @@ from locally_twisted.product_blueprint_local_apply import (
     LOCAL_APPLY_CONFIRMATION,
     ProductBlueprintApplyError,
     apply_blueprint_locally,
+    _route_for,
 )
 from locally_twisted.product_options import get_checkout_add_on_options
 from locally_twisted.product_page_runtime import CONFIG_VERSION, sales_order_add_on_lines
@@ -28,6 +29,8 @@ GUARD_DOCTYPES = (
     "Website Item",
     "Item Price",
     "Item Attribute",
+    "Website Slideshow",
+    "Website Slideshow Item",
     "Sales Order",
     "Sales Invoice",
     "Payment Request",
@@ -39,6 +42,8 @@ BLUEPRINT_DOCTYPES = (
     "LT Product Blueprint Add On",
     "LT Product Blueprint Conditional Price",
     "LT Product Blueprint Media Rule",
+    "LT Product Blueprint Gallery Image",
+    "LT Product Blueprint Content Rule",
 )
 OWNER_USER = "locallytwisted@gmail.com"
 
@@ -82,9 +87,12 @@ def _run_contract() -> dict[str, object]:
     staff_result = _assert_item_manager_staff_setup_flow()
     _assert_live_approval_blocks()
     _assert_preview_with_blockers_blocks()
+    _assert_visible_shop_requires_customer_image()
+    _assert_exact_price_rows_stay_in_product_family()
     after = _counts()
     _assert_no_business_mutation(before, after)
     apply_result = _assert_guarded_local_apply()
+    existing_visibility_result = _assert_local_apply_preserves_existing_public_visibility()
     role_apply_result = _assert_product_create_role_apply_boundaries()
     owner_result = _assert_owner_profile_product_build_flow()
     complex_media_result = _assert_complex_variant_media_checkout_flow()
@@ -98,6 +106,7 @@ def _run_contract() -> dict[str, object]:
         "complex_variant_media": complex_media_result,
         "save_only_guard_counts_unchanged": True,
         "local_apply": apply_result,
+        "existing_visibility": existing_visibility_result,
     }
 
 
@@ -209,6 +218,50 @@ def _assert_preview_with_blockers_blocks() -> None:
         raise ContractFail(f"Blocked preview failure did not explain the preview gate: {error}")
 
 
+def _assert_visible_shop_requires_customer_image() -> None:
+    error = _insert_expect_error(
+        {
+            "doctype": "LT Product Blueprint",
+            "product_name": "Visible Missing Image Blueprint",
+            "product_slug": "visible-missing-image-blueprint",
+            "item_group": _first_leaf_item_group(),
+            "page_template": "Ready-to-order page",
+            "buying_path": "Direct checkout",
+            "publish_status": "Draft",
+            "shop_visibility": "Visible in shop",
+            "base_price": 35,
+        }
+    )
+    if "fallback/main product photo" not in error:
+        raise ContractFail(f"Visible product image guard did not fail loudly: {error}")
+
+
+def _assert_exact_price_rows_stay_in_product_family() -> None:
+    slug = "cross-product-price-blueprint"
+    unrelated_item = _first_unrelated_item(slug)
+    error = _insert_expect_error(
+        {
+            "doctype": "LT Product Blueprint",
+            "product_name": "Cross Product Price Blueprint",
+            "product_slug": slug,
+            "item_group": _first_leaf_item_group(),
+            "page_template": "Ready-to-order page",
+            "buying_path": "Direct checkout",
+            "publish_status": "Draft",
+            "base_price": 0,
+            "price_rows": [
+                {
+                    "item_code": unrelated_item,
+                    "price": 99,
+                    "enabled_for_checkout": 1,
+                }
+            ],
+        }
+    )
+    if "must belong to this Product Setup" not in error:
+        raise ContractFail(f"Cross-product price guard did not fail loudly: {error}")
+
+
 def _assert_guarded_local_apply() -> dict[str, object]:
     suffix = frappe.generate_hash(length=8).lower()
     slug = f"contract-local-apply-{suffix}"
@@ -224,8 +277,10 @@ def _assert_guarded_local_apply() -> dict[str, object]:
             "page_template": "Ready-to-order page",
             "buying_path": "Direct checkout",
             "publish_status": "Draft",
+            "shop_visibility": "Visible in shop",
             "base_price": 42,
             "product_summary": "Rollback-safe local apply contract product.",
+            "primary_image": f"/files/{slug}-default.png",
             "option_rows": [
                 {
                     "axis_name": axis,
@@ -465,6 +520,9 @@ def _assert_owner_profile_product_build_flow() -> dict[str, object]:
                 "publish_status": "Draft",
                 "base_price": 55,
                 "product_summary": "Rollback-safe owner-profile Product Setup proof.",
+                "product_story": "<p>Default owner story.</p>",
+                "product_details": "<p>Default owner details.</p>",
+                "primary_image": "/files/owner-product-default.png",
                 "option_rows": [
                     {
                         "axis_name": axis,
@@ -495,6 +553,30 @@ def _assert_owner_profile_product_build_flow() -> dict[str, object]:
                         "approved_for_customer": 1,
                     }
                 ],
+                "gallery_image_rows": [
+                    {
+                        "image": "/files/owner-gallery-one.png",
+                        "heading": "Owner gallery one",
+                        "approved_for_customer": 1,
+                    },
+                    {
+                        "image": "/files/owner-gallery-two.png",
+                        "heading": "Owner gallery two",
+                        "approved_for_customer": 1,
+                    },
+                ],
+                "content_rule_rows": [
+                    {
+                        "rule_name": "Large owner copy",
+                        "rule_type": "Selection group",
+                        "selection_group": axis,
+                        "selection_value": "Large",
+                        "display_title": "Owner Large Proof Title",
+                        "product_story": "<p>Large owner story.</p>",
+                        "product_details": "<p>Large owner details.</p>",
+                        "approved_for_customer": 1,
+                    }
+                ],
             }
         ).insert()
 
@@ -508,6 +590,7 @@ def _assert_owner_profile_product_build_flow() -> dict[str, object]:
             raise ContractFail(f"Owner Desk preview should be readable and no-write: {preview}")
         if preview.get("planned_counts", {}).get("item_variants") != 2:
             raise ContractFail(f"Owner preview did not preserve two SKU variants: {preview}")
+        _assert_owner_media_content_schema(doc, axis)
 
         with _temporary_conf_flag("lt_allow_local_blueprint_apply", 1):
             result = apply_locally_from_desk(doc.name)
@@ -515,6 +598,7 @@ def _assert_owner_profile_product_build_flow() -> dict[str, object]:
             raise ContractFail(f"Owner local apply did not return ok: {result}")
 
         _assert_local_apply_records(doc, result, slug, axis)
+        _assert_owner_gallery_records(result)
         return {
             "user": OWNER_USER,
             "blueprint": doc.name,
@@ -522,10 +606,44 @@ def _assert_owner_profile_product_build_flow() -> dict[str, object]:
             "website_item": result.get("website_item"),
             "variant_count": len(result.get("variants") or []),
             "item_price_count": len(result.get("item_prices") or []),
+            "gallery_image_count": (result.get("gallery") or {}).get("image_count"),
             "published": result.get("website_item_published"),
         }
     finally:
         frappe.set_user(current_user)
+
+
+def _assert_owner_media_content_schema(doc, axis: str) -> None:
+    from locally_twisted.product_setup_runtime import (
+        build_product_setup_schema_doc,
+        resolve_product_setup_content,
+    )
+
+    schema = build_product_setup_schema_doc(doc)
+    if len(schema.get("gallery_images") or []) != 2:
+        raise ContractFail(f"Owner Product Setup schema lost gallery images: {schema}")
+    if len(schema.get("content_rules") or []) != 1:
+        raise ContractFail(f"Owner Product Setup schema lost content rules: {schema}")
+    selected = resolve_product_setup_content(
+        schema,
+        variant_item_code="",
+        configuration={"selected_options": {axis: "Large"}},
+    )
+    if selected.get("display_title") != "Owner Large Proof Title":
+        raise ContractFail(f"Owner selected content rule did not resolve: {selected}")
+
+
+def _assert_owner_gallery_records(result: dict[str, object]) -> None:
+    gallery = result.get("gallery") or {}
+    if gallery.get("image_count") != 2 or not gallery.get("slideshow"):
+        raise ContractFail(f"Owner local apply did not create the product gallery: {result}")
+    slideshow = frappe.get_doc("Website Slideshow", gallery["slideshow"])
+    images = [row.image for row in slideshow.slideshow_items or []]
+    if images != ["/files/owner-gallery-one.png", "/files/owner-gallery-two.png"]:
+        raise ContractFail(f"Owner Website Slideshow images drifted: {images}")
+    linked = frappe.db.get_value("Website Item", result["website_item"], "slideshow")
+    if linked != slideshow.name:
+        raise ContractFail(f"Owner Website Item did not link the slideshow: {linked}")
 
 
 def _assert_complex_variant_media_checkout_flow() -> dict[str, object]:
@@ -538,6 +656,7 @@ def _assert_complex_variant_media_checkout_flow() -> dict[str, object]:
     combo_image = f"/files/{slug}-large-chrome.png"
     size_image = f"/files/{slug}-small.png"
     fallback_image = f"/files/{slug}-fallback.png"
+    combo_title = "Large Chrome Proof Title"
 
     doc = frappe.get_doc(
         {
@@ -604,6 +723,17 @@ def _assert_complex_variant_media_checkout_flow() -> dict[str, object]:
                     "image": combo_image,
                     "approved_for_customer": 1,
                 },
+            ],
+            "content_rule_rows": [
+                {
+                    "rule_name": "Large chrome content",
+                    "rule_type": "Selection combination",
+                    "selection_conditions": f"{size_axis}=Large\n{finish_axis}=Chrome",
+                    "display_title": combo_title,
+                    "product_story": "<p>Large chrome proof story.</p>",
+                    "product_details": "<p>Large chrome proof details.</p>",
+                    "approved_for_customer": 1,
+                }
             ],
         }
     ).insert(ignore_permissions=True)
@@ -679,6 +809,8 @@ def _assert_complex_variant_media_checkout_flow() -> dict[str, object]:
     payload = json.loads(sale_lines[0].get("custom_lt_configuration_json") or "{}")
     if payload.get("selected_media", {}).get("image") != combo_image:
         raise ContractFail(f"Checkout payload should preserve selected image, found {payload}")
+    if payload.get("selected_content", {}).get("display_title") != combo_title:
+        raise ContractFail(f"Checkout payload should preserve selected Product Setup copy, found {payload}")
 
     return {
         "blueprint": doc.name,
@@ -686,6 +818,7 @@ def _assert_complex_variant_media_checkout_flow() -> dict[str, object]:
         "variant_count": len(result.get("variants") or []),
         "item_price_count": len(result.get("item_prices") or []),
         "selected_image": combo_image,
+        "selected_title": combo_title,
         "fallback_image": fallback_image,
     }
 
@@ -831,12 +964,109 @@ def _assert_dynamic_blueprint_add_on(slug: str, add_on_item: str) -> None:
         raise ContractFail(f"Blueprint add-on quantity limit did not fail loudly: {max_error}")
 
 
+def _assert_local_apply_preserves_existing_public_visibility() -> dict[str, object]:
+    suffix = frappe.generate_hash(length=8).lower()
+    slug = f"contract-existing-public-{suffix}"
+    item_group = _first_leaf_item_group()
+    item = frappe.get_doc(
+        {
+            "doctype": "Item",
+            "item_code": slug,
+            "item_name": f"Contract Existing Public {suffix}",
+            "item_group": item_group,
+            "stock_uom": "Nos",
+            "is_stock_item": 0,
+            "is_sales_item": 1,
+            "is_purchase_item": 0,
+            "include_item_in_manufacturing": 0,
+        }
+    ).insert(ignore_permissions=True)
+    from webshop.webshop.doctype.website_item.website_item import make_website_item
+
+    website_item = make_website_item(item, save=False)
+    website_item.web_item_name = item.item_name
+    website_item.item_group = item_group
+    expected_route = _route_for(frappe, slug, item_group)
+    website_item.route = expected_route
+    website_item.published = 1
+    website_item.website_image = f"/files/{slug}.png"
+    if hasattr(website_item, "lt_product_page_type"):
+        website_item.lt_product_page_type = "simple_product"
+    if hasattr(website_item, "lt_commerce_lane"):
+        website_item.lt_commerce_lane = "checkout"
+    website_item.insert(ignore_permissions=True)
+
+    doc = frappe.get_doc(
+        {
+            "doctype": "LT Product Blueprint",
+            "product_name": f"Contract Existing Public {suffix}",
+            "product_slug": slug,
+            "target_item_code": slug,
+            "target_website_item": website_item.name,
+            "item_group": item_group,
+            "page_template": "Ready-to-order page",
+            "buying_path": "Direct checkout",
+            "publish_status": "Draft",
+            "shop_visibility": "Keep current",
+            "base_price": 25,
+            "product_summary": "Existing public Product Setup preservation proof.",
+            "primary_image": f"/files/{slug}.png",
+        }
+    ).insert(ignore_permissions=True)
+
+    result = apply_blueprint_locally(
+        doc,
+        allow_writes=True,
+        confirmation=LOCAL_APPLY_CONFIRMATION,
+    )
+    published_after = int(frappe.db.get_value("Website Item", website_item.name, "published") or 0)
+    route_after = frappe.db.get_value("Website Item", website_item.name, "route")
+    if result.get("website_item_published") != 1 or published_after != 1:
+        raise ContractFail(f"Existing public Website Item was not preserved during local apply: {result}")
+    if route_after != expected_route:
+        raise ContractFail(f"Existing public Website Item route changed during local apply: {route_after}")
+
+    doc.shop_visibility = "Hidden from shop"
+    hide_error = _call_expect_error(
+        lambda: apply_blueprint_locally(
+            doc,
+            allow_writes=True,
+            confirmation=LOCAL_APPLY_CONFIRMATION,
+        )
+    )
+    if "cannot hide an existing public Website Item" not in hide_error:
+        raise ContractFail(f"Existing public hide request did not fail loudly: {hide_error}")
+
+    doc.shop_visibility = "Keep current"
+    legacy_route = f"shop-items/legacy-{slug}"
+    frappe.db.set_value("Website Item", website_item.name, "route", legacy_route, update_modified=False)
+    route_error = _call_expect_error(
+        lambda: apply_blueprint_locally(
+            doc,
+            allow_writes=True,
+            confirmation=LOCAL_APPLY_CONFIRMATION,
+        )
+    )
+    if "cannot reroute an existing public Website Item" not in route_error:
+        raise ContractFail(f"Existing public route change did not fail loudly: {route_error}")
+
+    return {
+        "item_code": slug,
+        "website_item": website_item.name,
+        "published_after_apply": published_after,
+        "hide_request_blocked": True,
+        "route_change_blocked": True,
+    }
+
+
 def _assert_expected_local_apply_delta(before: dict[str, int], after: dict[str, int]) -> None:
     expected = {
         "Item": 3,
         "Website Item": 1,
         "Item Price": 2,
         "Item Attribute": 1,
+        "Website Slideshow": 0,
+        "Website Slideshow Item": 0,
         "Sales Order": 0,
         "Sales Invoice": 0,
         "Payment Request": 0,
@@ -877,6 +1107,18 @@ def _first_leaf_item_group() -> str:
     if not value:
         raise ContractFail("No Item Group exists for product blueprint contract.")
     return value
+
+
+def _first_unrelated_item(slug: str) -> str:
+    rows = frappe.get_all(
+        "Item",
+        filters={"item_code": ["not like", f"{slug}%"]},
+        pluck="item_code",
+        limit_page_length=1,
+    )
+    if not rows:
+        raise ContractFail(f"No unrelated Item exists for price-target guard test: {slug}")
+    return rows[0]
 
 
 def _counts() -> dict[str, int]:

@@ -8,7 +8,7 @@ from webshop.webshop.api import get_product_filter_data as webshop_get_product_f
 product_query.get_product_info_for_website = get_guest_safe_product_info_for_website
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=True, methods=["GET", "POST"])
 def get_product_filter_data(query_args=None):
     result = webshop_get_product_filter_data(query_args=query_args)
     items = (result or {}).get("items") or []

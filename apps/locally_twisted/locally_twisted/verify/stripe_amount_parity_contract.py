@@ -46,7 +46,7 @@ def run() -> dict[str, object]:
         failures.append("Nontaxable order should not need an adjustment line")
 
     configured_order = _fake_sales_order(
-        grand_total=47.00,
+        grand_total=71.00,
         items=[
             {
                 "item_code": "unicorn-bouquet-SMA",
@@ -59,8 +59,8 @@ def run() -> dict[str, object]:
                 "item_code": "ADDON-FOIL-NUMBER",
                 "item_name": "Foil Number Add-On",
                 "rate": 12.00,
-                "qty": 1,
-                "custom_lt_configuration_summary": "Add-on - Foil number: 12; Parent item - unicorn-bouquet-SMA; Qty per product - 2",
+                "qty": 3,
+                "custom_lt_configuration_summary": "Add-on - Foil number: 111; Parent item - unicorn-bouquet-SMA; Qty per product - 3",
             },
         ],
     )
@@ -75,7 +75,7 @@ def run() -> dict[str, object]:
         for row in configured_items
     ]
     evidence["configured_line_images"] = configured_images
-    if "Foil number: 12" not in " ".join(configured_names):
+    if "Foil number: 111" not in " ".join(configured_names):
         failures.append(f"Configured add-on Stripe line should preserve selected foil number, found {configured_names}")
     if "Parent item" in " ".join(configured_names):
         failures.append(f"Configured add-on Stripe line should not expose internal parent summary, found {configured_names}")

@@ -218,7 +218,7 @@ def _axis(
             "price_status": "ready" if add_on_ready else "",
             "live_unit_price": "12.00" if add_on_ready else "",
             "quantity_min": 1 if add_on_ready else "",
-            "quantity_max": 4 if add_on_ready else "",
+            "quantity_max": 3 if add_on_ready else "",
             "receipt_label": "Proof add-on" if add_on_ready else "",
         },
     }

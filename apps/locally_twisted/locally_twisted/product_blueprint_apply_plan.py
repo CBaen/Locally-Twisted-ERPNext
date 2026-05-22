@@ -37,6 +37,8 @@ def build_apply_plan(data: dict[str, Any]) -> dict[str, Any]:
     product_name = _text(data.get("product_name"))
     item_group = _text(data.get("item_group"))
     base_price = float(contract.get("base_price") or 0)
+    shop_visibility = _text(contract.get("shop_visibility")) or "Keep current"
+    exact_price_rows = list(contract.get("price_rows") or [])
     sale_axes = [
         {
             "axis_name": row.get("label"),
@@ -62,6 +64,8 @@ def build_apply_plan(data: dict[str, Any]) -> dict[str, Any]:
         product_page_type=product_page_type,
         commerce_lane=commerce_lane,
         base_price=base_price,
+        shop_visibility=shop_visibility,
+        exact_price_rows=exact_price_rows,
         sale_axes=sale_axes,
         variant_combos=variant_combos if not blockers else [],
         contract=contract,
@@ -93,6 +97,8 @@ def _planned_records(
     product_page_type: str | None,
     commerce_lane: str | None,
     base_price: float,
+    shop_visibility: str,
+    exact_price_rows: list[dict[str, Any]],
     sale_axes: list[dict[str, Any]],
     variant_combos: list[dict[str, str]],
     contract: dict[str, Any],
@@ -115,6 +121,8 @@ def _planned_records(
         "web_item_name": product_name,
         "route": f"shop-items/{slug}",
         "published": 0,
+        "requested_shop_visibility": shop_visibility,
+        "shop_visibility": "local_preview_unpublished",
         "lt_product_page_type": product_page_type,
         "lt_commerce_lane": commerce_lane,
     }
@@ -137,18 +145,13 @@ def _planned_records(
         }
         for combo in variant_combos
     ]
-    price_target_codes = [row["item_code"] for row in item_variants] or ([slug] if commerce_lane == "checkout" else [])
-    item_prices = [
-        {
-            "doctype": "Item Price",
-            "action": "would_upsert",
-            "item_code": item_code,
-            "price_list": "Standard Selling",
-            "price_list_rate": base_price,
-        }
-        for item_code in price_target_codes
-        if commerce_lane == "checkout"
-    ]
+    item_prices = _planned_item_prices(
+        slug=slug,
+        commerce_lane=commerce_lane,
+        base_price=base_price,
+        item_variants=item_variants,
+        exact_price_rows=exact_price_rows,
+    )
     add_ons = [
         {
             "source_name": row.get("add_on_name"),
@@ -170,12 +173,63 @@ def _planned_records(
         "color_recipes": contract.get("color_recipe_rows") or [],
         "conditional_prices": contract.get("conditional_price_rows") or [],
         "product_setup_schema": setup_schema,
+        "gallery": {
+            "action": "would_apply_approved_gallery_images"
+            if setup_schema.get("gallery_images")
+            else "held_until_gallery_images_exist",
+            "images": setup_schema.get("gallery_images") or [],
+            "reason": "Approved Product Setup gallery images become the product's Website Slideshow.",
+        },
         "media": {
             "action": "would_apply_approved_rules" if setup_schema.get("media_rules") else "held_until_media_rules_exist",
             "rules": setup_schema.get("media_rules") or [],
             "reason": "Only approved Product Setup media rules can change customer-facing images.",
         },
+        "content_rules": {
+            "action": "would_apply_approved_rules"
+            if setup_schema.get("content_rules")
+            else "held_until_content_rules_exist",
+            "rules": setup_schema.get("content_rules") or [],
+            "reason": "Only approved Product Setup copy rules can change customer-facing page content.",
+        },
     }
+
+
+def _planned_item_prices(
+    *,
+    slug: str,
+    commerce_lane: str | None,
+    base_price: float,
+    item_variants: list[dict[str, Any]],
+    exact_price_rows: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    if commerce_lane != "checkout":
+        return []
+    rows = [
+        {
+            "doctype": "Item Price",
+            "action": "would_upsert",
+            "item_code": row["item_code"],
+            "price_list": "Standard Selling",
+            "price_list_rate": row["price"],
+            "option_summary": row.get("option_summary"),
+        }
+        for row in exact_price_rows
+        if row.get("enabled_for_checkout")
+    ]
+    if rows:
+        return rows
+    price_target_codes = [row["item_code"] for row in item_variants] or [slug]
+    return [
+        {
+            "doctype": "Item Price",
+            "action": "would_upsert",
+            "item_code": item_code,
+            "price_list": "Standard Selling",
+            "price_list_rate": base_price,
+        }
+        for item_code in price_target_codes
+    ]
 
 
 def _variant_combinations(sale_axes: list[dict[str, Any]]) -> list[dict[str, str]]:

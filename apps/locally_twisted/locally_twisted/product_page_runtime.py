@@ -7,6 +7,7 @@ quote flows must use this runtime layer before creating business records.
 from __future__ import annotations
 
 import json
+import re
 from typing import Any
 
 import frappe
@@ -43,6 +44,7 @@ LINE_FIELDNAMES = {
 
 MAX_CONFIGURATION_BYTES = 12000
 MAX_ADD_ON_QUANTITY = 10
+MAX_FOIL_NUMBER_DIGITS = 3
 MAX_COLOR_RECIPE_VALUES = 24
 
 FOIL_NUMBER_ELIGIBLE_WEBSITE_ITEMS = (
@@ -67,9 +69,16 @@ ADD_ON_ITEM_CONTRACTS = {
         "item_name": "Foil Number Add-On",
         "label": "Foil number",
         "item_group": "Bouquets",
-        "description": "Optional foil number upgrade for ready-to-order product pages.",
+        "description": "Add number foils to make it a birthday bouquet.",
         "rate": 12.0,
         "eligible_website_item_codes": FOIL_NUMBER_ELIGIBLE_WEBSITE_ITEMS,
+        "input_type": "digit_text",
+        "quantity_min": 1,
+        "quantity_max": MAX_FOIL_NUMBER_DIGITS,
+        "value_label": "Numbers",
+        "maxlength": MAX_FOIL_NUMBER_DIGITS,
+        "pattern": "[0-9]{1,3}",
+        "help": "Choose up to 3 number foils. Repeated digits are okay.",
     },
 }
 
@@ -437,6 +446,7 @@ def sales_order_line_configuration_fields(
         client_configuration=client_configuration,
         setup_resolution=setup_resolution,
     )
+    selected_content = (setup_resolution or {}).get("selected_content") or {}
     color_recipes = _validated_checkout_color_recipes(client_configuration, variant_options=variant_options)
     _assert_checkout_configuration_is_priced(
         client_configuration,
@@ -470,6 +480,8 @@ def sales_order_line_configuration_fields(
     }
     if selected_media:
         payload["selected_media"] = selected_media
+    if selected_content:
+        payload["selected_content"] = selected_content
     summary = _configuration_summary(payload)
 
     return {
@@ -804,7 +816,7 @@ def _validated_checkout_add_ons(
                 frappe.ValidationError,
             )
         _assert_add_on_is_eligible(key, spec, website_item_code)
-        value = raw.get("value")
+        value = _validated_add_on_value(spec, raw.get("value"))
         quantity = _add_on_quantity(raw.get("quantity"), value=value)
         quantity_min = int(spec.get("quantity_min") or 0)
         quantity_max = int(spec.get("quantity_max") or MAX_ADD_ON_QUANTITY)
@@ -834,6 +846,23 @@ def _validated_checkout_add_ons(
             }
         )
     return normalized
+
+
+def _validated_add_on_value(spec: dict[str, Any], value: Any) -> Any:
+    if spec.get("input_type") != "digit_text":
+        return value
+
+    text = str(value or "").strip()
+    quantity_max = int(spec.get("quantity_max") or MAX_ADD_ON_QUANTITY)
+    if not re.fullmatch(rf"[0-9]{{1,{quantity_max}}}", text):
+        frappe.throw(
+            _(
+                "Tiny snag: number foils need up to 3 digits, using only 0-9. "
+                "Please choose the numbers again."
+            ),
+            frappe.ValidationError,
+        )
+    return text
 
 
 def _validated_checkout_color_recipes(
@@ -1146,6 +1175,9 @@ def _configuration_summary(payload: dict[str, Any]) -> str:
             pieces.append("Configured choices preserved in structured payload")
     if payload.get("customizations"):
         pieces.append("Customizations preserved in structured payload")
+    selected_content = payload.get("selected_content") or {}
+    if isinstance(selected_content, dict) and selected_content.get("display_title"):
+        pieces.append(f"Selected copy - {selected_content.get('display_title')}")
     if not pieces:
         pieces.append("No extra product options")
     pieces.append(f"Page type - {payload.get('product_page_type')}")
@@ -1177,6 +1209,12 @@ def customer_facing_line_label(item: Any) -> str:
         if value not in (None, ""):
             return f"{label}: {value}"
         return label or str(base_name or "").strip()
+
+    selected_content = payload.get("selected_content") or {}
+    if isinstance(selected_content, dict):
+        display_title = str(selected_content.get("display_title") or "").strip()
+        if display_title:
+            return display_title
 
     summary = str(_row_get(item, LINE_FIELDNAMES["summary"]) or "").strip()
     if summary.startswith("Add-on - "):

@@ -55,7 +55,7 @@ def known_add_on_contracts_for_axis(axis_name: str) -> list[dict]:
                 "pricing_rule": "$12 each selected number",
                 "unit_price": 12.0,
                 "quantity_min": 1,
-                "quantity_max": 4,
+                "quantity_max": 3,
                 "requires_value": True,
                 "receipt_label": "Foil number add-on",
                 "source_attribute": axis_name,

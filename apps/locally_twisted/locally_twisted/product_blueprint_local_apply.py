@@ -95,27 +95,31 @@ def apply_blueprint_locally(
         variants = [_upsert_variant(frappe, template_item, row) for row in planned.get("item_variants") or []]
         prices = [_upsert_item_price(frappe, row) for row in planned.get("item_prices") or []]
         website_item = _upsert_website_item(frappe, template_item, planned["website_item"], data)
+        gallery = _sync_website_gallery(frappe, website_item, template_item, data)
         _write_blueprint_targets(frappe, doc, template_item, website_item)
         cache_result = _rebuild_variant_cache(frappe, template_item) if variants else {"attempted": False}
+        website_item_published = _current_website_item_published(frappe, website_item)
         frappe.clear_cache()
 
+    visibility_label = "published" if website_item_published else "unpublished"
     return {
         "schema_version": SCHEMA_VERSION,
         "ok": True,
         "mode": "local_apply",
         "writes_enabled": True,
         "live_publish_enabled": False,
-        "website_item_published": 0,
+        "website_item_published": website_item_published,
         "blueprint": getattr(doc, "name", None),
         "item_code": template_item,
         "website_item": website_item,
         "item_attributes": attributes,
         "variants": variants,
         "item_prices": prices,
+        "gallery": gallery,
         "cache": cache_result,
         "summary": (
             f"Applied local records for {template_item}: "
-            f"{len(variants)} variant(s), {len(prices)} price row(s), one unpublished Website Item."
+            f"{len(variants)} variant(s), {len(prices)} price row(s), one {visibility_label} Website Item."
         ),
     }
 
@@ -142,9 +146,9 @@ def _plan_blockers(plan: dict[str, Any]) -> list[str]:
     if plan.get("live_publish_enabled"):
         blockers.append("Apply plan attempted to enable live publishing.")
     planned = plan.get("planned_records") or {}
-    website = planned.get("website_item") or {}
-    if int(website.get("published") or 0) != 0:
-        blockers.append("Local apply only supports unpublished Website Items.")
+    website_plan = planned.get("website_item") or {}
+    if int(website_plan.get("published") or 0):
+        blockers.append("Local apply cannot publish Website Items. Use the reviewed staging/live release path.")
     duplicate_codes = _duplicate_variant_codes(planned.get("item_variants") or [])
     if duplicate_codes:
         blockers.append(f"Variant item codes must be unique before local apply: {', '.join(duplicate_codes)}.")
@@ -178,7 +182,7 @@ def _result_summary(planned: dict[str, Any]) -> str:
     return (
         "Local apply preview only: would write "
         f"{counts['item_variants']} variant(s), {counts['item_prices']} price row(s), "
-        "and one unpublished Website Item."
+        "and one Website Item with guarded visibility."
     )
 
 
@@ -196,10 +200,47 @@ def _guard_existing_targets(frappe, doc: Any, planned: dict[str, Any]) -> None:
             "Local apply found an existing Website Item for "
             f"{base_code}. Link the blueprint target first or choose a new slug."
         )
+    _guard_existing_website_visibility(frappe, doc, existing_website_item)
+    _guard_existing_public_route(frappe, existing_website_item, planned)
 
     item_group = planned["base_item"]["item_group"]
     if not frappe.db.exists("Item Group", item_group):
         raise ProductBlueprintApplyError(f"Item Group does not exist: {item_group}")
+
+    _guard_item_price_targets(frappe, doc, planned)
+
+
+def _guard_item_price_targets(frappe, doc: Any, planned: dict[str, Any]) -> None:
+    base_code = _text(planned["base_item"]["item_code"])
+    target_code = _text(getattr(doc, "target_item_code", "")) or base_code
+    allowed = {base_code, target_code}
+    allowed.update(
+        _text(row.get("item_code"))
+        for row in planned.get("item_variants") or []
+        if _text(row.get("item_code"))
+    )
+    if frappe.db.exists("Item", target_code):
+        allowed.update(
+            _text(code)
+            for code in frappe.get_all(
+                "Item",
+                filters={"variant_of": target_code},
+                pluck="item_code",
+            )
+            if _text(code)
+        )
+
+    invalid = sorted(
+        {
+            _text(row.get("item_code"))
+            for row in planned.get("item_prices") or []
+            if _text(row.get("item_code")) and _text(row.get("item_code")) not in allowed
+        }
+    )
+    if invalid:
+        raise ProductBlueprintApplyError(
+            "Local apply refused exact price row(s) outside this Product Setup: " + ", ".join(invalid)
+        )
 
 
 def _ensure_item_attribute(frappe, attribute_name: str, values: list[str]) -> str:
@@ -366,12 +407,20 @@ def _upsert_website_item(frappe, template_item: str, website_plan: dict[str, Any
 
     doc.web_item_name = website_plan["web_item_name"][:140]
     doc.item_group = _text(data.get("item_group"))
-    doc.published = 0
+    doc.published = _published_value_for(doc, data, existing=bool(existing))
     doc.route = route
     summary = _text(data.get("product_summary"))
+    story = _text(data.get("product_story"))
+    details = _text(data.get("product_details"))
+    primary_image = _text(data.get("primary_image"))
     doc.short_description = summary[:140] if summary else doc.web_item_name
     doc.web_long_description = summary
+    doc.website_image = primary_image or None
     meta = frappe.get_meta("Website Item")
+    if meta.has_field("lt_brand_description"):
+        doc.lt_brand_description = story
+    if meta.has_field("lt_product_details"):
+        doc.lt_product_details = details
     if meta.has_field("lt_product_page_type"):
         doc.lt_product_page_type = website_plan.get("lt_product_page_type")
     if meta.has_field("lt_commerce_lane"):
@@ -379,6 +428,54 @@ def _upsert_website_item(frappe, template_item: str, website_plan: dict[str, Any
     # Permission bypass is guarded by route collision checks and local apply confirmation.
     doc.save(ignore_permissions=True)
     return doc.name
+
+
+def _sync_website_gallery(frappe, website_item_name: str, template_item: str, data: dict[str, Any]) -> dict[str, Any]:
+    rows = list(data.get("gallery_image_rows") or [])
+    if not rows:
+        return {"attempted": False, "reason": "no Product Setup gallery rows"}
+
+    approved_rows = [
+        row
+        for row in rows
+        if _as_bool(row.get("approved_for_customer")) and _text(row.get("image"))
+    ]
+    if not approved_rows:
+        frappe.db.set_value("Website Item", website_item_name, "slideshow", None, update_modified=False)
+        return {"attempted": True, "slideshow": "", "image_count": 0}
+
+    slideshow_name = f"LT Product Gallery - {template_item}"[:140]
+    existing = frappe.db.exists("Website Slideshow", slideshow_name)
+    if existing:
+        slideshow = frappe.get_doc("Website Slideshow", existing)
+    else:
+        slideshow = frappe.get_doc(
+            {
+                "doctype": "Website Slideshow",
+                "name": slideshow_name,
+                "slideshow_name": slideshow_name,
+            }
+        )
+
+    slideshow.slideshow_name = slideshow_name
+    slideshow.slideshow_items = []
+    for row in approved_rows:
+        slideshow.append(
+            "slideshow_items",
+            {
+                "image": _text(row.get("image")),
+                "heading": _text(row.get("heading")) or "Product photo",
+                "description": _text(row.get("description")),
+            },
+        )
+
+    if existing:
+        slideshow.save(ignore_permissions=True)
+    else:
+        slideshow.insert(ignore_permissions=True)
+
+    frappe.db.set_value("Website Item", website_item_name, "slideshow", slideshow.name, update_modified=False)
+    return {"attempted": True, "slideshow": slideshow.name, "image_count": len(approved_rows)}
 
 
 def _write_blueprint_targets(frappe, doc: Any, item_code: str, website_item: str) -> None:
@@ -416,6 +513,51 @@ def _route_for(frappe, slug: str, item_group: str) -> str:
     return f"{group_route}/{slug}".strip("/")
 
 
+def _published_value_for(doc: Any, data: dict[str, Any], *, existing: bool) -> int:
+    if existing:
+        return int(getattr(doc, "published", 0) or 0)
+    return 0
+
+
+def _current_website_item_published(frappe, website_item_name: str) -> int:
+    return int(frappe.db.get_value("Website Item", website_item_name, "published") or 0)
+
+
+def _guard_existing_website_visibility(frappe, doc: Any, website_item_name: str | None) -> None:
+    if not website_item_name:
+        return
+    requested = _text(getattr(doc, "shop_visibility", "")) or "Keep current"
+    current_published = _current_website_item_published(frappe, website_item_name)
+    if requested == "Visible in shop" and not current_published:
+        raise ProductBlueprintApplyError(
+            "Local apply cannot publish an existing hidden Website Item. "
+            "Use the reviewed staging/live release path."
+        )
+    if requested == "Hidden from shop" and current_published:
+        raise ProductBlueprintApplyError(
+            "Local apply cannot hide an existing public Website Item. "
+            "Use the reviewed removal, redirect, and cart-impact path."
+        )
+
+
+def _guard_existing_public_route(frappe, website_item_name: str | None, planned: dict[str, Any]) -> None:
+    if not website_item_name:
+        return
+    if not _current_website_item_published(frappe, website_item_name):
+        return
+    current_route = _text(frappe.db.get_value("Website Item", website_item_name, "route"))
+    planned_route = _route_for(
+        frappe,
+        _text(planned["website_item"]["item_code"]),
+        _text(planned["base_item"]["item_group"]),
+    )
+    if current_route and current_route != planned_route:
+        raise ProductBlueprintApplyError(
+            "Local apply cannot reroute an existing public Website Item. "
+            "Use the reviewed redirect and SEO release path."
+        )
+
+
 def _variant_item_name(frappe, template_item: str, args: dict[str, str]) -> str:
     template_name = frappe.db.get_value("Item", template_item, "item_name") or template_item
     suffix = " / ".join(str(value) for value in args.values())
@@ -435,3 +577,9 @@ def _make_abbr(value: str, used: set[str]) -> str:
 
 def _text(value: Any) -> str:
     return str(value or "").strip()
+
+
+def _as_bool(value: Any) -> bool:
+    if isinstance(value, bool):
+        return value
+    return str(value or "").strip().lower() in {"1", "true", "yes", "y", "on"}

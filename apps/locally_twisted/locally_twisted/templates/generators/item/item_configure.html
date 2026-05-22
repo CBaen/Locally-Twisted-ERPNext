@@ -111,13 +111,24 @@
             {%- elif is_chips -%}
                 <div class="lt-product__chips" id="{{ field_id }}" role="radiogroup" aria-label="{{ _(attr_name) }}">
                     {%- for v in values -%}
+                        {%- set option_label = v -%}
+                        {%- set option_included_copy = "" -%}
+                        {%- if " — " in v -%}
+                            {%- set option_label = v.split(" — ", 1)[0] -%}
+                            {%- set option_included_copy = v.split(" — ", 1)[1] -%}
+                        {%- elif " - " in v -%}
+                            {%- set option_label = v.split(" - ", 1)[0] -%}
+                            {%- set option_included_copy = v.split(" - ", 1)[1] -%}
+                        {%- endif -%}
                         <label class="lt-product__chip">
                             <input type="radio"
                                    class="lt-product__chip-input js-lt-attr-input"
                                    name="lt-attr-{{ attr_name | replace(' ', '-') }}"
                                    value="{{ v }}"
-                                   data-attribute-name="{{ attr_name }}">
-                            <span class="lt-product__chip-label">{{ v }}</span>
+                                   data-attribute-name="{{ attr_name }}"
+                                   data-display-value="{{ option_label }}"
+                                   data-included-copy="{{ option_included_copy }}">
+                            <span class="lt-product__chip-label">{{ option_label }}</span>
                         </label>
                     {%- endfor -%}
                 </div>
@@ -128,7 +139,18 @@
                         data-attribute-name="{{ attr_name }}">
                     <option value="">{{ _("Choose a") }} {{ _(attr_name) | lower }}.</option>
                     {%- for v in values -%}
-                        <option value="{{ v }}">{{ v }}</option>
+                        {%- set option_label = v -%}
+                        {%- set option_included_copy = "" -%}
+                        {%- if " — " in v -%}
+                            {%- set option_label = v.split(" — ", 1)[0] -%}
+                            {%- set option_included_copy = v.split(" — ", 1)[1] -%}
+                        {%- elif " - " in v -%}
+                            {%- set option_label = v.split(" - ", 1)[0] -%}
+                            {%- set option_included_copy = v.split(" - ", 1)[1] -%}
+                        {%- endif -%}
+                        <option value="{{ v }}"
+                                data-display-value="{{ option_label }}"
+                                data-included-copy="{{ option_included_copy }}">{{ option_label }}</option>
                     {%- endfor -%}
                 </select>
             {%- endif -%}
@@ -139,11 +161,16 @@
 
     {%- if lt_add_on_options -%}
         <div class="lt-product__addons" aria-label="{{ _('Optional upgrades') }}">
+            <p class="lt-product__addons-intro">
+                {{ _("Add number foils to make it a birthday bouquet!") }}
+            </p>
             {%- for add_on in lt_add_on_options -%}
                 <div class="lt-product__addon"
                      data-addon-key="{{ add_on.key }}"
                      data-addon-label="{{ add_on.label }}"
-                     data-addon-unit-price="{{ add_on.unit_price }}">
+                     data-addon-unit-price="{{ add_on.unit_price }}"
+                     data-addon-input-type="{{ add_on.input_type }}"
+                     data-addon-quantity-max="{{ add_on.quantity_max }}">
                     <label class="lt-product__addon-toggle">
                         <input type="checkbox"
                                class="js-lt-addon-toggle"
@@ -157,13 +184,14 @@
                         </span>
                     </label>
                     <label class="lt-product__addon-value-label">
-                        <span>{{ _("Number") }}</span>
+                        <span>{{ _(add_on.value_label or "Number") }}</span>
                         <input type="text"
                                class="lt-product__addon-value js-lt-addon-value"
                                data-addon-key="{{ add_on.key }}"
                                inputmode="numeric"
                                autocomplete="off"
-                               maxlength="10"
+                               maxlength="{{ add_on.maxlength or add_on.quantity_max or 10 }}"
+                               {% if add_on.pattern %}pattern="{{ add_on.pattern }}"{% endif %}
                                disabled>
                     </label>
                     <p class="lt-product__addon-help">{{ _(add_on.help) }}</p>
@@ -213,6 +241,8 @@
     var addOnRows = form.querySelectorAll('.lt-product__addon');
     var mediaRequestSerial = 0;
     var variantRequestSerial = 0;
+    var activeBasePriceNumber = null;
+    var activeBasePriceText = '';
 
     var msgChooseOptions = "{{ _('Pick a value for each option.') | replace("'", "\\'") }}";
     var msgIncomplete = "{{ _('Choose your options to add to cart') | replace("'", "\\'") }}";
@@ -371,6 +401,52 @@
         return picks;
     }
 
+    function splitOptionCopy(value) {
+        var text = String(value || '');
+        var markers = [' — ', ' - '];
+        for (var i = 0; i < markers.length; i += 1) {
+            var marker = markers[i];
+            var index = text.indexOf(marker);
+            if (index > -1) {
+                return {
+                    label: text.slice(0, index).trim(),
+                    included: text.slice(index + marker.length).trim()
+                };
+            }
+        }
+        return { label: text.trim(), included: '' };
+    }
+
+    function optionDisplayLabel(value) {
+        return splitOptionCopy(value).label;
+    }
+
+    function selectedDisplayLabel(a) {
+        var select = a.querySelector('select.js-lt-attr-input');
+        if (select && select.value) {
+            var option = select.options[select.selectedIndex];
+            return (option && option.getAttribute('data-display-value')) || optionDisplayLabel(select.value);
+        }
+        var checked = a.querySelector('.js-lt-attr-input:checked');
+        if (checked) {
+            return checked.getAttribute('data-display-value') || optionDisplayLabel(checked.value);
+        }
+        return '';
+    }
+
+    function selectedIncludedCopy(a) {
+        var select = a.querySelector('select.js-lt-attr-input');
+        if (select && select.value) {
+            var option = select.options[select.selectedIndex];
+            return (option && option.getAttribute('data-included-copy')) || splitOptionCopy(select.value).included;
+        }
+        var checked = a.querySelector('.js-lt-attr-input:checked');
+        if (checked) {
+            return checked.getAttribute('data-included-copy') || splitOptionCopy(checked.value).included;
+        }
+        return '';
+    }
+
     function showSelectedTags() {
         var picks = selectedAttrs();
         attrEls.forEach(function (a) {
@@ -386,7 +462,25 @@
                 sel.textContent = ' - ' + colorNames.join(', ');
                 return;
             }
-            sel.textContent = picks[name] ? ' - ' + picks[name] : '';
+            sel.textContent = picks[name] ? ' - ' + selectedDisplayLabel(a) : '';
+        });
+    }
+
+    function updateSelectedIncludedCopy() {
+        var details = document.querySelector('.js-lt-product-details');
+        if (!details) return;
+        details.querySelectorAll('.lt-product__selected-inclusion').forEach(function (row) {
+            row.remove();
+        });
+        attrEls.forEach(function (a) {
+            var included = selectedIncludedCopy(a);
+            if (!included) return;
+            var label = selectedDisplayLabel(a);
+            if (!label) return;
+            var row = document.createElement('p');
+            row.className = 'lt-product__selected-inclusion';
+            row.textContent = label + ' includes ' + included;
+            details.appendChild(row);
         });
     }
 
@@ -461,6 +555,51 @@
         return pinfo && pinfo.formatted_price_sales_uom ? pinfo.formatted_price_sales_uom : '';
     }
 
+    function numericPriceFromVariantMessage(msg) {
+        var pinfo = msg && msg.product_info && msg.product_info.price;
+        if (!pinfo) return null;
+        var candidates = [pinfo.price_list_rate, pinfo.price_list_rate_formatted, pinfo.formatted_price_sales_uom];
+        for (var i = 0; i < candidates.length; i += 1) {
+            if (candidates[i] === undefined || candidates[i] === null || candidates[i] === '') continue;
+            var number = parseFloat(String(candidates[i]).replace(/[^0-9.]+/g, ''));
+            if (!Number.isNaN(number)) return number;
+        }
+        return null;
+    }
+
+    function formatMoney(amount) {
+        if (typeof amount !== 'number' || Number.isNaN(amount)) return '';
+        return '$ ' + amount.toFixed(2);
+    }
+
+    function selectedAddOnTotal() {
+        var total = 0;
+        addOnRows.forEach(function (row) {
+            var toggle = row.querySelector('.js-lt-addon-toggle');
+            if (!toggle || !toggle.checked) return;
+            var valueInput = row.querySelector('.js-lt-addon-value');
+            var quantity = selectedNumberCount(valueInput ? valueInput.value : '');
+            var unitPrice = parseFloat(row.getAttribute('data-addon-unit-price') || '0');
+            if (!Number.isNaN(unitPrice)) {
+                total += unitPrice * quantity;
+            }
+        });
+        return total;
+    }
+
+    function updateDisplayedPrice() {
+        if (activeBasePriceNumber === null) {
+            priceTextEl.textContent = activeBasePriceText || msgPriceWaiting;
+            return;
+        }
+        var addOnTotal = selectedAddOnTotal();
+        if (addOnTotal > 0) {
+            priceTextEl.textContent = formatMoney(activeBasePriceNumber + addOnTotal) + ' including ' + formatMoney(addOnTotal) + ' in number foils';
+            return;
+        }
+        priceTextEl.textContent = activeBasePriceText || formatMoney(activeBasePriceNumber) || msgPriceWaiting;
+    }
+
     function selectedLedNeedsPriceReview(picks) {
         var ledChoice = picks && picks['LED Lights'];
         return ledChoice && ledChoice.toLowerCase().indexOf('add led') !== -1;
@@ -478,11 +617,13 @@
         if (viewInCart) viewInCart.classList.add('hidden');
     }
 
-    function enableAdd(variantCode, formattedPrice) {
+    function enableAdd(variantCode, formattedPrice, basePriceNumber) {
         addBtn.disabled = false;
         addBtn.textContent = msgAddToCart;
         addBtn.setAttribute('data-item-code', variantCode);
-        priceTextEl.textContent = formattedPrice || msgPriceWaiting;
+        activeBasePriceText = formattedPrice || msgPriceWaiting;
+        activeBasePriceNumber = typeof basePriceNumber === 'number' && !Number.isNaN(basePriceNumber) ? basePriceNumber : null;
+        updateDisplayedPrice();
     }
 
     function selectedConfiguration(variantCode) {
@@ -512,13 +653,20 @@
         return null;
     }
 
+    function updateSelectedContent(variantCode) {
+        if (window.LT_PRODUCT_SETUP && typeof window.LT_PRODUCT_SETUP.applySelectedContent === 'function') {
+            window.LT_PRODUCT_SETUP.applySelectedContent(form, variantCode);
+        }
+        updateSelectedIncludedCopy();
+    }
+
     function selectedAddOns() {
         var addOns = [];
         addOnRows.forEach(function (row) {
             var toggle = row.querySelector('.js-lt-addon-toggle');
             if (!toggle || !toggle.checked) return;
             var valueInput = row.querySelector('.js-lt-addon-value');
-            var value = valueInput ? (valueInput.value || '').trim() : '';
+            var value = valueInput ? sanitizedAddOnValue(row, valueInput) : '';
             var quantity = selectedNumberCount(value);
             addOns.push({
                 key: row.getAttribute('data-addon-key'),
@@ -528,6 +676,18 @@
             });
         });
         return addOns;
+    }
+
+    function sanitizedAddOnValue(row, valueInput) {
+        if (!valueInput) return '';
+        var value = valueInput.value || '';
+        if (row.getAttribute('data-addon-input-type') === 'digit_text') {
+            var max = parseInt(row.getAttribute('data-addon-quantity-max') || valueInput.getAttribute('maxlength') || '3', 10);
+            value = value.replace(/\D/g, '').slice(0, max || 3);
+            if (valueInput.value !== value) valueInput.value = value;
+            return value;
+        }
+        return value.trim();
     }
 
     function selectedNumberCount(value) {
@@ -540,7 +700,7 @@
         addOnRows.forEach(function (row) {
             var toggle = row.querySelector('.js-lt-addon-toggle');
             var valueInput = row.querySelector('.js-lt-addon-value');
-            if (toggle && toggle.checked && valueInput && !(valueInput.value || '').trim()) {
+            if (toggle && toggle.checked && valueInput && !sanitizedAddOnValue(row, valueInput)) {
                 needsValue = true;
             }
         });
@@ -559,10 +719,15 @@
             applyValidOptions(null);
             setStatus(msgChooseOptions);
             disableAdd(msgIncomplete);
+            activeBasePriceNumber = null;
+            activeBasePriceText = '';
             priceTextEl.textContent = msgPriceWaiting;
+            updateSelectedContent(null);
             resetProductImage();
             return;
         }
+
+        updateSelectedContent(null);
 
         if (!window.frappe || !frappe.call) {
             disableAdd(msgFrappeNotReady);
@@ -583,6 +748,8 @@
                 if (pickedCount < totalAttrs) {
                     setStatus(msgChooseOptions);
                     disableAdd(msgIncomplete);
+                    activeBasePriceNumber = null;
+                    activeBasePriceText = '';
                     priceTextEl.textContent = msgPriceWaiting;
                     resetProductImage();
                     return;
@@ -593,26 +760,34 @@
                     if (addOnsNeedValue()) {
                         setStatus(msgAddOnNeedsValue, true);
                         disableAdd(msgIncomplete);
+                        activeBasePriceText = formattedPriceFromVariantMessage(msg) || activeBasePriceText;
+                        activeBasePriceNumber = numericPriceFromVariantMessage(msg);
+                        updateDisplayedPrice();
+                        updateSelectedContent(variantCode);
                         updateVariantImage(variantCode);
                         return;
                     }
                     if (selectedLedNeedsPriceReview(picks)) {
                         priceTextEl.textContent = msgLedPriceReview;
                         disableAdd(msgLedPriceReview);
+                        updateSelectedContent(variantCode);
                         updateVariantImage(variantCode);
                         setStatus(msgLedPriceMissing, true);
                         return;
                     }
-                    enableAdd(variantCode, formattedPriceFromVariantMessage(msg));
+                    enableAdd(variantCode, formattedPriceFromVariantMessage(msg), numericPriceFromVariantMessage(msg));
+                    updateSelectedContent(variantCode);
                     updateVariantImage(variantCode);
                     setStatus('');
                 } else if (matches.length === 0) {
                     setStatus(msgUnavailable, true);
                     disableAdd(msgPickValid);
+                    updateSelectedContent(null);
                     resetProductImage();
                 } else {
                     setStatus(msgChooseOptions);
                     disableAdd(msgIncomplete);
+                    updateSelectedContent(null);
                     resetProductImage();
                 }
             },
@@ -620,6 +795,7 @@
                 if (requestId !== variantRequestSerial) return;
                 setStatus(msgUnavailable, true);
                 disableAdd(msgPickValid);
+                updateSelectedContent(null);
                 resetProductImage();
             }
         });
@@ -668,7 +844,10 @@
             });
         }
         if (valueInput) {
-            valueInput.addEventListener('input', refresh);
+            valueInput.addEventListener('input', function () {
+                sanitizedAddOnValue(row, valueInput);
+                refresh();
+            });
         }
     });
 

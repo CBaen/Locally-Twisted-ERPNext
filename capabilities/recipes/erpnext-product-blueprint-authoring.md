@@ -7,9 +7,9 @@ maturity: candidate
 scope: Locally Twisted ERPNext staff-authored product setup for highly customizable ecommerce products
 currently_true: true
 verification_level: 2
-last_verified: 2026-05-17
+last_verified: 2026-05-22
 evidence_quality: direct
-successful_uses: 3
+successful_uses: 4
 failed_uses: 0
 regressions: 0
 used_by:
@@ -65,6 +65,10 @@ verifier work. For local build work, name the actual blocker.
 - Local apply keeps Website Items unpublished and creates no Sales Orders,
   Sales Invoices, Payment Requests, Stripe records, Frappe Cloud updates, DNS
   changes, or live publish actions.
+- For existing Website Items, local apply preserves the current public
+  `published` state instead of forcing a new value. Hidden->visible,
+  public->hidden, and public route-change requests for existing Website Items
+  are blocked; those changes require the reviewed release/redirect path.
 - Blueprint-authored checkout add-ons currently cascade only when they are
   checkout-approved fixed-item-price rows pointing at an enabled Item with a
   Standard Selling Item Price. Quantity min/max is enforced by checkout
@@ -81,6 +85,13 @@ verifier work. For local build work, name the actual blocker.
   selection combination. The server-resolved `selected_media` value is the
   authority for the product page API, cart, checkout, Stripe Checkout line
   images, Sales Order/Sales Invoice line JSON, and customer receipt thumbnail.
+- Stored option values and customer display labels are separate concerns.
+  Product pages may keep stored source values for backend matching while
+  rendering short selected labels and intentional included-copy detail.
+- Product Setup exact checkout price rows must belong to the Product Setup's
+  target Item or variants. Cross-product Item Price targets are save blockers.
+- Backfilled Product Setup records stay Draft until reviewed so they do not
+  silently take over runtime checkout behavior.
 
 ## Workflow
 
@@ -108,6 +119,10 @@ python scripts/verify/payment_cascade_contract.py
 python scripts/verify/ecommerce_pause_contract.py
 python scripts/verify/product_page_architecture_readiness.py --json
 python scripts/verify/verifier_cli_contract.py
+python scripts/verify/product_setup_catalog_coverage.py
+python scripts/verify/catalog_public_sellability_contract.py
+python scripts/verify/owner_catalog_guard_contract.py
+npm run test:owner-product-safety
 ```
 
 Expected current result: product blueprint pure/live contracts pass;
@@ -119,6 +134,15 @@ posture, not a local product-authoring blocker.
 The live contract now includes owner-profile Product Setup proof:
 `locallytwisted@gmail.com` creates and applies a rollback-safe local product
 with two SKU variants, two Item Prices, and an unpublished Website Item.
+
+The 2026-05-22 owner-guard closeout adds focused proof that owner-like raw
+catalog mutation is blocked across `19/19` probes, existing public Website
+Items keep their visibility during local apply, public hide/route changes fail
+loudly, and Product Setup catalog sync reports `51` Website Items with `0`
+creates and `21` would-update rows. Final pre-commit
+`npm run test:owner-product-safety` and
+`npm run test:product-options-experience` passed. Handoff:
+`workstreams/ecommerce-audit/owner-product-setup-guard-closeout-2026-05-22.md`.
 
 The 2026-05-17 release smoke created a local employee-authored 48-variant proof
 product and completed one real local Stripe test-card checkout. Verified
@@ -134,11 +158,13 @@ Local ecommerce was restored to `lt_ecommerce_paused=1` afterward.
 - Conditional pricing runtime and fail-loud checkout/quote behavior.
 - Broader media assignment review UI and approval evidence for real catalog
   product families beyond the local proof product.
+- Owner/GL local workflow testing before staging.
 - Fresh import safety evidence before any staging/live product release.
 
 Backlinks:
 
 - `workstreams/ecommerce-audit/product-blueprint-authoring-2026-05-14.md`
+- `workstreams/ecommerce-audit/owner-product-setup-guard-closeout-2026-05-22.md`
 - `workstreams/ecommerce-audit/README.md`
 - `ECOMMERCE-SHOP-HANDOFF.md`
 - `locally-twisted-decisions.md`

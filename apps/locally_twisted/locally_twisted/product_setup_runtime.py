@@ -129,6 +129,8 @@ def build_product_setup_schema(data: dict[str, Any]) -> dict[str, Any]:
     add_ons = [_add_on_group(row, index) for index, row in enumerate(data.get("add_on_rows") or [], start=1)]
     pricing_rules = [_pricing_rule(row, index) for index, row in enumerate(data.get("conditional_price_rows") or [], start=1)]
     media_rules = [_media_rule(row, index) for index, row in enumerate(data.get("media_rule_rows") or [], start=1)]
+    gallery_images = [_gallery_image(row, index) for index, row in enumerate(data.get("gallery_image_rows") or [], start=1)]
+    content_rules = [_content_rule(row, index) for index, row in enumerate(data.get("content_rule_rows") or [], start=1)]
     sku_groups = [group for group in groups if group["sku_defining"]]
     variant_count = _variant_combination_count(sku_groups)
 
@@ -142,6 +144,8 @@ def build_product_setup_schema(data: dict[str, Any]) -> dict[str, Any]:
             "page_template": page_template,
             "buying_path": buying_path,
             "setup_status": publish_status,
+            "shop_visibility": _text(data.get("shop_visibility")) or "Keep current",
+            "primary_image": _text(data.get("primary_image")),
         },
         "commerce": {
             "requested_outcome": COMMERCE_OUTCOME_BY_PATH.get(buying_path, "review"),
@@ -151,7 +155,9 @@ def build_product_setup_schema(data: dict[str, Any]) -> dict[str, Any]:
         "selection_groups": groups,
         "add_on_groups": add_ons,
         "pricing_rules": pricing_rules,
+        "gallery_images": gallery_images,
         "media_rules": media_rules,
+        "content_rules": content_rules,
         "generation": {
             "sku_defining_group_count": len(sku_groups),
             "variant_combination_count": variant_count,
@@ -234,8 +240,15 @@ def resolve_product_setup_configuration(
         variant_item_code=_text(configuration.get("item_code")),
         configuration=configuration,
     )
+    selected_content = resolve_product_setup_content(
+        schema,
+        variant_item_code=_text(configuration.get("item_code")),
+        configuration=configuration,
+    )
     if selected_media:
         payload["selected_media"] = selected_media
+    if selected_content:
+        payload["selected_content"] = selected_content
 
     return {
         "schema_version": "lt-product-setup-resolution-v1",
@@ -247,6 +260,7 @@ def resolve_product_setup_configuration(
         "configuration_groups": configuration_groups,
         "add_ons": add_ons,
         "selected_media": selected_media,
+        "selected_content": selected_content,
         "configuration_payload": payload,
         "validation_hash": _validation_hash(payload),
     }
@@ -284,6 +298,38 @@ def resolve_product_setup_media(
     return candidates[0][1]
 
 
+def resolve_product_setup_content(
+    schema: dict[str, Any] | None,
+    *,
+    variant_item_code: str | None = None,
+    configuration: Any = None,
+) -> dict[str, Any]:
+    """Return the best approved Product Setup content rule for a selection."""
+    if not schema:
+        return {}
+    rules = [
+        rule
+        for rule in schema.get("content_rules") or []
+        if rule.get("approved_for_customer") and _content_rule_has_copy(rule)
+    ]
+    if not rules:
+        return {}
+
+    selected = _selected_media_values(configuration)
+    variant_item_code = _text(variant_item_code)
+    candidates: list[tuple[int, dict[str, Any]]] = []
+
+    for rule in rules:
+        if not _media_rule_matches(rule, selected=selected, variant_item_code=variant_item_code):
+            continue
+        candidates.append((_media_rule_score(rule), rule))
+
+    if not candidates:
+        return {}
+    candidates.sort(key=lambda row: row[0], reverse=True)
+    return candidates[0][1]
+
+
 def get_product_setup_schema_json(item_code: str | None) -> str:
     """Return HTML-safe Product Setup schema JSON for product templates."""
     schema = product_setup_schema_for_website_item(item_code) or {
@@ -294,7 +340,9 @@ def get_product_setup_schema_json(item_code: str | None) -> str:
         "selection_groups": [],
         "add_on_groups": [],
         "pricing_rules": [],
+        "gallery_images": [],
         "media_rules": [],
+        "content_rules": [],
         "generation": {"sku_defining_group_count": 0, "variant_combination_count": 0},
         "source": "legacy_product_runtime",
     }
@@ -379,6 +427,47 @@ def _media_rule(row: dict[str, Any], index: int) -> dict[str, Any]:
         "document_output": _text(row.get("document_output")) or DOCUMENT_CUSTOMER_OPERATOR,
         "operator_note": _text(row.get("operator_note")),
     }
+
+
+def _gallery_image(row: dict[str, Any], index: int) -> dict[str, Any]:
+    label = _text(row.get("heading")) or f"Gallery Photo {index}"
+    return {
+        "key": _slug(label),
+        "label": label,
+        "image": _text(row.get("image")),
+        "heading": label,
+        "description": _text(row.get("description")),
+        "approved_for_customer": _as_bool(row.get("approved_for_customer")),
+        "operator_note": _text(row.get("operator_note")),
+    }
+
+
+def _content_rule(row: dict[str, Any], index: int) -> dict[str, Any]:
+    label = _text(row.get("rule_name")) or f"Copy Rule {index}"
+    conditions = _media_rule_conditions(row)
+    return {
+        "key": _slug(label),
+        "label": label,
+        "rule_type": _text(row.get("rule_type")) or "Selection group",
+        "selection_group": _text(row.get("selection_group")),
+        "selection_value": _text(row.get("selection_value")),
+        "selection_conditions": _text(row.get("selection_conditions")),
+        "conditions": conditions,
+        "variant_item": _text(row.get("variant_item")),
+        "display_title": _text(row.get("display_title")),
+        "product_story": _text(row.get("product_story")),
+        "product_details": _text(row.get("product_details")),
+        "approved_for_customer": _as_bool(row.get("approved_for_customer")),
+        "operator_note": _text(row.get("operator_note")),
+    }
+
+
+def _content_rule_has_copy(rule: dict[str, Any]) -> bool:
+    return bool(
+        _text(rule.get("display_title"))
+        or _text(rule.get("product_story"))
+        or _text(rule.get("product_details"))
+    )
 
 
 def _behavior(row: dict[str, Any]) -> str:

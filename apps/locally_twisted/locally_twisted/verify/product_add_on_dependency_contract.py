@@ -96,8 +96,8 @@ def _assert_confirmed_foil_number_stays_priced_checkout() -> None:
             {
                 "key": "foil_number",
                 "label": "Foil number",
-                "value": "12",
-                "quantity": 2,
+                "value": "111",
+                "quantity": 3,
             }
         ]
     )
@@ -119,8 +119,8 @@ def _assert_confirmed_foil_number_stays_priced_checkout() -> None:
     add_on_line = add_on_lines[0]
     if add_on_line.get("item_code") != FOIL_NUMBER_ITEM:
         raise ContractFail(f"confirmed foil_number line used wrong Item: {add_on_line.get('item_code')}")
-    if int(add_on_line.get("qty") or 0) != 2:
-        raise ContractFail(f"foil number '12' should create quantity 2, found {add_on_line.get('qty')}")
+    if int(add_on_line.get("qty") or 0) != 3:
+        raise ContractFail(f"foil number '111' should create quantity 3, found {add_on_line.get('qty')}")
     if flt(add_on_line.get("rate")) != flt(ADD_ON_ITEM_CONTRACTS["foil_number"]["rate"]):
         raise ContractFail(f"foil_number add-on line used wrong rate: {add_on_line.get('rate')}")
 

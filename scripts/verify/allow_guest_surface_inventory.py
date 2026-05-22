@@ -40,6 +40,7 @@ GUARD_MARKERS = {
     "stripe-signature",
     "token",
     "validate",
+    "validationerror",
     "verify",
 }
 

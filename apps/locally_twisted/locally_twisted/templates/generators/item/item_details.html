@@ -29,7 +29,9 @@
 
     {# Title row with optional wishlist heart #}
     <div class="lt-product__title-row">
-        <h1 class="lt-product__title" itemprop="name">
+        <h1 class="lt-product__title js-lt-product-title"
+            itemprop="name"
+            data-lt-default-text="{{ doc.web_item_name | e }}">
             {{ _(doc.web_item_name) }}
         </h1>
         {% if cart_settings.enable_wishlist %}
@@ -50,11 +52,13 @@
 
     {# GL visual-first request: fun product story belongs next to the product image,
        close to title/sizing, not buried below logistics. #}
-    {% if _brand %}
-        <div class="lt-product__brand-description lt-product__brand-description--lead" itemprop="description">
+    <div class="lt-product__brand-description lt-product__brand-description--lead js-lt-product-story{% if not _brand %} hidden{% endif %}"
+         itemprop="description"
+         data-lt-copy-wrapper>
+        {% if _brand %}
             {{ doc.lt_brand_description | safe }}
-        </div>
-    {% endif %}
+        {% endif %}
+    </div>
 
     {% if lt_product_runtime.is_ready_to_order %}
         <p class="lt-product__standard-note">
@@ -85,23 +89,28 @@
     {% endif %}
 
     <div class="lt-product__copy-panel">
-        {% if _details %}
-            <section class="lt-product__details-section" aria-labelledby="lt-product-details-heading">
+        <section class="lt-product__details-section{% if not _details %} hidden{% endif %}"
+                 aria-labelledby="lt-product-details-heading"
+                 data-lt-copy-wrapper>
+            {% if _details %}
                 <h2 id="lt-product-details-heading" class="lt-product__details-heading">{{ _("What's Included") }}</h2>
-                <div class="lt-product__details-body">
+                <div class="lt-product__details-body js-lt-product-details">
                     {{ doc.lt_product_details | safe }}
                 </div>
-            </section>
-        {% endif %}
+            {% else %}
+                <h2 id="lt-product-details-heading" class="lt-product__details-heading">{{ _("What's Included") }}</h2>
+                <div class="lt-product__details-body js-lt-product-details"></div>
+            {% endif %}
+        </section>
 
         {% if not _brand and not _details %}
             {# Legacy fallback for any Website Item not yet migrated. #}
             {% if frappe.utils.strip_html(doc.web_long_description or '') %}
-                <div class="lt-product__description" itemprop="description">
+                <div class="lt-product__description js-lt-product-legacy-copy" itemprop="description">
                     {{ _(doc.web_long_description) | safe }}
                 </div>
             {% elif frappe.utils.strip_html(doc.description or '') %}
-                <div class="lt-product__description" itemprop="description">
+                <div class="lt-product__description js-lt-product-legacy-copy" itemprop="description">
                     {{ _(doc.description) | safe }}
                 </div>
             {% endif %}

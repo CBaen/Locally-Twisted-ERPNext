@@ -8,6 +8,77 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-22 - Product option display labels are separate from stored source values
+
+**Decision:** Product option controls may keep source/stored values that
+include backend matching detail, but the customer-facing selected label should
+show the short display value. Included-copy detail belongs in the product
+details area, not duplicated beside the selected option button. Foil numbers
+remain an add-on, not a SKU axis, and are capped at three numeric digits.
+
+**Reasoning:** GL showed that selecting a size inside the option container also
+populated long text outside the button and into the main product area. The
+stored option text was doing two jobs at once: backend matching and customer
+display. Splitting display label from included detail fixes the visual problem
+without weakening the backend option contract. Foil-number behavior also needed
+to match the owner/business meaning: birthday number foils are optional add-on
+digits, not variant combinations.
+
+**Implementation boundary:** Local source only. This updates product option
+template rendering, frontend selection handling, add-on contract metadata,
+runtime validation, and Playwright verification. It does not approve staging,
+live checkout, Stripe, DNS, Frappe Cloud, or all product pages for checkout.
+
+**Receipts:**
+`workstreams/ecommerce-audit/product-option-selection-ux-2026-05-22.md`;
+`scripts/verify/product_options_experience.spec.js`;
+`apps/locally_twisted/locally_twisted/templates/generators/item/item_configure.html`;
+`apps/locally_twisted/locally_twisted/product_page_runtime.py`.
+
+**Decided by:** Guiding Light's 2026-05-21 screenshot correction and Codex
+local repair/verification on 2026-05-22.
+
+---
+
+## 2026-05-22 - Owner product edits use Product Setup, not raw catalog tables
+
+**Decision:** Jeff/owner users may manage product business meaning through
+`LT Product Blueprint` / Product Setup, but owner-like direct edits to raw
+ERPNext catalog infrastructure are blocked. Local Product Setup apply must
+preserve the current public Website Item state for existing products and must
+not publish, hide, or reroute public Website Items outside the reviewed
+release/redirect path.
+
+**Reasoning:** GL's concern is operationally correct: a normal owner action in
+ERPNext can break the public shop by changing an Item, Website Item, price row,
+variant attribute, category route, gallery slideshow, or global Webshop
+setting. The safe shape is business-control first, raw-infrastructure guarded.
+The triad review found specific gaps: local apply could have unpublished an
+existing public Website Item, dry-run sync could misreport updates, a missing
+price-row fill could wipe option rows, and verifier coverage was narrower than
+the hook surface.
+
+**Implementation boundary:** Local source only. This updates owner catalog
+guards, Product Setup validation/apply/sync behavior, Product Setup media/copy
+child tables, local verifiers, and handoffs. It does not approve staging,
+Frappe Cloud deploys, DNS, Stripe live checkout, Search Console, provider
+dashboard changes, destructive import, or live release.
+
+**Receipts:**
+`workstreams/ecommerce-audit/owner-product-setup-guard-closeout-2026-05-22.md`;
+`research/owner-product-operations-break-lab/lanes/04-owner-catalog-guard-implementation.md`;
+`research/owner-product-operations-break-lab/lanes/05-sidecar-lens-c-access-operational-guardrails.md`;
+`capabilities/recipes/erpnext-product-blueprint-authoring.md`;
+`scripts/verify/owner_catalog_guard_contract.py`;
+`scripts/verify/product_blueprint_live_contract.py`;
+`scripts/setup/sync_product_blueprints_from_catalog.py`.
+
+**Decided by:** Guiding Light's 2026-05-21/2026-05-22 owner-protection
+correction and triad workflow requirement; Codex implementation and focused
+local verification on 2026-05-22.
+
+---
+
 ## 2026-05-22 - Shop category heroes use owner/Odoo balloon color authority
 
 **Decision:** `/shop-items/<group>` hero imagery is generated representative

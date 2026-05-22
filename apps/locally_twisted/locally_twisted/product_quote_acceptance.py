@@ -200,7 +200,7 @@ def create_draft_sales_order_from_product_quote_token(
     )
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=True, methods=["POST"])
 def accept_product_quote_from_token(
     token: str | None = None,
     accepted_by: str | None = None,

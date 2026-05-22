@@ -7,7 +7,7 @@ maturity: candidate
 scope: Locally Twisted Frappe and ERPNext implementation quirks that repeatedly cause false debugging paths
 currently_true: unknown
 verification_level: 1
-last_verified: 2026-05-10
+last_verified: 2026-05-22
 evidence_quality: mixed
 successful_uses: 0
 failed_uses: 0
@@ -198,6 +198,33 @@ dedicated failure cards.
   ```
 - Guardrail: execute the final Webshop build in the frontend-serving path,
   clear `assets_json`/site cache, and recheck console/network state.
+- Owner card:
+  [frappe-sitewide-visual-overhaul](frappe-sitewide-visual-overhaul.md)
+
+### 8) Logged-in website pages can load without the CSRF token
+
+- Status: rechecked in current LT stack.
+- Symptom: category pages return `200`, but Webshop startup calls log
+  `POST / 400 (BAD REQUEST)` from `show_cart_navbar` or
+  `get_item_filter_data` after the same browser has been logged into Desk.
+- Root cause: LT's custom `templates/base.html` must preserve Frappe's
+  `<!-- csrf_token -->` marker. Frappe's website renderer replaces that marker
+  with `frappe.csrf_token = "..."`; without it, logged-in website pages do not
+  send the `X-Frappe-CSRF-Token` header that `frappe.call` expects.
+- Source / evidence:
+  `workstreams/ecommerce-break-lab-2026-05-21.md` incident note for
+  Webshop startup POST 400s and stale hashed asset.
+- Direct check command:
+  ```powershell
+  npm run test:public-network
+  ```
+- Verifier command:
+  ```powershell
+  npm run test:public-network
+  ```
+- Guardrail: keep the marker in the LT base template, clear website/asset
+  caches after template edits, and keep the logged-in Desk-session Webshop CSRF
+  regression in `scripts/verify/public_network_integrity.spec.js`.
 - Owner card:
   [frappe-sitewide-visual-overhaul](frappe-sitewide-visual-overhaul.md)
 

@@ -19,6 +19,8 @@
       schema = JSON.parse(script.textContent || "{}");
     } catch (error) {
       schema = null;
+      document.documentElement.setAttribute("data-lt-product-setup-error", "schema-json-parse-failed");
+      console.error("[LT Product Setup] Product setup schema JSON failed to parse.", error);
     }
     return schema;
   }
@@ -33,6 +35,12 @@
     const current = setupSchema();
     if (!current || current.source !== "lt_product_setup") return [];
     return (current.media_rules || []).filter((rule) => rule.approved_for_customer && rule.image);
+  }
+
+  function approvedContentRules() {
+    const current = setupSchema();
+    if (!current || current.source !== "lt_product_setup") return [];
+    return (current.content_rules || []).filter((rule) => rule.approved_for_customer && contentRuleHasCopy(rule));
   }
 
   function text(value) {
@@ -161,7 +169,14 @@
   }
 
   function selectedMediaRule(form, variantCode) {
-    const rules = approvedMediaRules();
+    return selectedConditionalRule(approvedMediaRules(), form, variantCode);
+  }
+
+  function selectedContentRule(form, variantCode) {
+    return selectedConditionalRule(approvedContentRules(), form, variantCode);
+  }
+
+  function selectedConditionalRule(rules, form, variantCode) {
     if (!rules.length) return null;
     const values = selectedValueMap(form);
     const matches = rules
@@ -169,6 +184,49 @@
       .map((rule) => ({ rule, score: mediaRuleScore(rule) }))
       .sort((a, b) => b.score - a.score);
     return matches.length ? matches[0].rule : null;
+  }
+
+  function contentRuleHasCopy(rule) {
+    return !!(text(rule.display_title) || text(rule.product_story) || text(rule.product_details));
+  }
+
+  function applySelectedContent(form, variantCode) {
+    const rule = selectedContentRule(form, variantCode);
+    applyTitle(rule && rule.display_title);
+    applyRichContent(".js-lt-product-story", rule && rule.product_story);
+    applyRichContent(".js-lt-product-details", rule && rule.product_details);
+    toggleLegacyCopy(rule);
+  }
+
+  function applyTitle(value) {
+    const title = document.querySelector(".js-lt-product-title");
+    if (!title) return;
+    if (!title.hasAttribute("data-lt-default-text")) {
+      title.setAttribute("data-lt-default-text", title.textContent || "");
+    }
+    const fallback = title.getAttribute("data-lt-default-text") || title.textContent || "";
+    title.textContent = text(value) || fallback;
+  }
+
+  function applyRichContent(selector, value) {
+    const node = document.querySelector(selector);
+    if (!node) return;
+    if (!node.hasAttribute("data-lt-default-html")) {
+      node.setAttribute("data-lt-default-html", node.innerHTML || "");
+    }
+    const fallback = node.getAttribute("data-lt-default-html") || "";
+    const html = text(value) ? value : fallback;
+    node.innerHTML = html || "";
+    const hasContent = text(node.textContent);
+    const wrapper = node.closest("[data-lt-copy-wrapper]") || node;
+    wrapper.classList.toggle("hidden", !hasContent);
+  }
+
+  function toggleLegacyCopy(rule) {
+    const legacy = document.querySelector(".js-lt-product-legacy-copy");
+    if (!legacy) return;
+    const selectedCopy = !!(rule && (text(rule.product_story) || text(rule.product_details)));
+    legacy.classList.toggle("hidden", selectedCopy);
   }
 
   function mediaRuleMatches(rule, values, variantCode) {
@@ -236,7 +294,9 @@
   });
 
   window.LT_PRODUCT_SETUP = {
+    applySelectedContent,
     collectConfigurationGroups,
+    selectedContentRule,
     selectedMediaRule,
     setupSchema
   };

@@ -6,6 +6,41 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-22 - Do not use backend option text as the visible selected label
+
+The option-text regression came from letting one string serve as both backend
+source value and UI label. When the option value carried extra included-copy
+detail, selecting a size made the product page repeat long text outside the
+button and in the main details area.
+
+**Counter-move:** keep source/stored option values for matching, but expose
+separate display-label and included-copy fields in the rendered controls.
+Selected tags should use the display label. Included-copy detail should be
+rendered intentionally where the customer expects product details. Use
+`workstreams/ecommerce-audit/product-option-selection-ux-2026-05-22.md` and
+`npm run test:product-options-experience` before touching product option UI.
+
+---
+
+## 2026-05-22 - Owner access needs a business lane and a guard rail
+
+The recovered owner-product work proved two things at once: Jeff needs real
+product-control power, and raw ERPNext catalog tables are the wrong place for a
+busy owner to exercise that power. Direct edits to Items, Website Items, Item
+Prices, option attributes, Item Groups, gallery slideshows, or Webshop Settings
+can make a page look fine while pricing, route, cart, checkout, or public media
+truth drifts underneath it.
+
+**Counter-move:** keep owner work in Product Setup and make raw catalog edits
+fail loudly for owner-like users. Local apply must preserve existing public
+Website Item visibility, reject publish/hide/reroute requests for existing
+public products, keep backfilled Product Setup records in Draft until reviewed,
+and verify the hook surface with real owner-like probes. Use
+`workstreams/ecommerce-audit/owner-product-setup-guard-closeout-2026-05-22.md`
+and `npm run test:owner-product-safety` before staging owner product work.
+
+---
+
 ## 2026-05-21 - Do not make indexing all-or-nothing during ecommerce review
 
 After the site switch, the urgent question was whether to index everything,

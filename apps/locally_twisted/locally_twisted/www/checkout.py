@@ -709,7 +709,7 @@ def _log_paused_checkout_api_block(surface: str) -> None:
         pass
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=True, methods=["POST"])
 @rate_limit(limit=600, seconds=60 * 60)
 def preview_checkout_totals(item_code="", qty=1, items_json="",
                             fulfillment_method="delivery", pickup_location="",
@@ -745,7 +745,7 @@ def preview_checkout_totals(item_code="", qty=1, items_json="",
     return {"ok": True, "fulfillment": fulfillment.__dict__, **_build_totals(so_line_items, fulfillment, tax)}
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=True, methods=["POST"])
 @rate_limit(limit=600, seconds=60 * 60)
 def submit_guest_order(item_code="", qty=1, items_json="",
                        name="", email="", phone="",

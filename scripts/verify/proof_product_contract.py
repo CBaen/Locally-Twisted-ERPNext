@@ -69,9 +69,9 @@ def main() -> int:
     else:
         if foil_number.item_code != "ADDON-FOIL-NUMBER":
             failures.append(f"Foil number add-on must preserve ERPNext item_code, found {foil_number.item_code!r}.")
-        if foil_number.quantity_min != 1 or foil_number.quantity_max != 4:
+        if foil_number.quantity_min != 1 or foil_number.quantity_max != 3:
             failures.append(
-                "Foil number add-on must preserve quantity bounds 1..4, "
+                "Foil number add-on must preserve quantity bounds 1..3, "
                 f"found {foil_number.quantity_min}..{foil_number.quantity_max}."
             )
         if foil_number.requires_value is not True:

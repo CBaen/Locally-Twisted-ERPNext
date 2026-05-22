@@ -97,12 +97,22 @@ def _doc_to_validation_payload(doc) -> dict:
         "page_template": doc.page_template,
         "buying_path": doc.buying_path,
         "publish_status": doc.publish_status,
+        "shop_visibility": doc.shop_visibility,
         "base_price": doc.base_price,
+        "target_item_code": doc.target_item_code,
+        "target_website_item": doc.target_website_item,
+        "price_rows": [row.as_dict() for row in doc.price_rows or []],
+        "product_summary": doc.product_summary,
+        "product_story": doc.product_story,
+        "product_details": doc.product_details,
+        "primary_image": doc.primary_image,
+        "gallery_image_rows": [row.as_dict() for row in doc.gallery_image_rows or []],
         "option_rows": [row.as_dict() for row in doc.option_rows or []],
         "color_recipe_rows": [row.as_dict() for row in doc.color_recipe_rows or []],
         "add_on_rows": [row.as_dict() for row in doc.add_on_rows or []],
         "conditional_price_rows": [row.as_dict() for row in doc.conditional_price_rows or []],
         "media_rule_rows": [row.as_dict() for row in doc.media_rule_rows or []],
+        "content_rule_rows": [row.as_dict() for row in doc.content_rule_rows or []],
     }
 
 

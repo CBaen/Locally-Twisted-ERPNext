@@ -381,7 +381,7 @@ def check_configured_same_sku_cart_lines_stay_separate_and_visible() -> None:
 
 def check_multi_digit_add_on_quantity_and_total_are_visible() -> None:
     cart_entries = [
-        {"item_code": RETAIL_VARIANT_ITEM, "qty": 1, "configuration": _foil_number_configuration("12")},
+        {"item_code": RETAIL_VARIANT_ITEM, "qty": 1, "configuration": _foil_number_configuration("111")},
     ]
     data = bench_execute(
         "locally_twisted.api.cart.get_cart_items",
@@ -396,10 +396,51 @@ def check_multi_digit_add_on_quantity_and_total_are_visible() -> None:
     ]
     assert_true(len(add_on_rows) == 1, f"multi-digit add-on should show one add-on display row, found {items}")
     add_on = add_on_rows[0]
-    assert_true(add_on.get("display_label") == "Foil number: 12", f"add-on label should preserve selected value, found {add_on}")
-    assert_true(int(add_on.get("qty") or 0) == 2, f"foil number 12 should display add-on qty 2, found {add_on}")
-    assert_true(float(add_on.get("line_total") or 0) == 24.0, f"foil number 12 should display add-on total $24, found {add_on}")
-    assert_true(float(items[0].get("line_total") or 0) == 59.0, f"line total should include $35 + $24, found {items[0]}")
+    assert_true(add_on.get("display_label") == "Foil number: 111", f"add-on label should preserve selected value, found {add_on}")
+    assert_true(int(add_on.get("qty") or 0) == 3, f"foil number 111 should display add-on qty 3, found {add_on}")
+    assert_true(float(add_on.get("line_total") or 0) == 36.0, f"foil number 111 should display add-on total $36, found {add_on}")
+    assert_true(float(items[0].get("line_total") or 0) == 71.0, f"line total should include $35 + $36, found {items[0]}")
+
+
+def check_foil_number_add_on_preserves_duplicate_and_zero_digits() -> None:
+    for value in ("000", "007"):
+        cart_entries = [
+            {"item_code": RETAIL_VARIANT_ITEM, "qty": 1, "configuration": _foil_number_configuration(value)},
+        ]
+        data = bench_execute(
+            "locally_twisted.api.cart.get_cart_items",
+            kwargs={"item_codes": cart_entries},
+        )
+        items = data.get("items") or []
+        assert_true(len(items) == 1, f"foil add-on {value} cart row should return 1 row, found {items}")
+        add_on_rows = [
+            line
+            for line in (items[0].get("display_lines") or [])
+            if line.get("is_add_on")
+        ]
+        assert_true(len(add_on_rows) == 1, f"foil add-on {value} should show one add-on display row, found {items}")
+        add_on = add_on_rows[0]
+        assert_true(add_on.get("display_label") == f"Foil number: {value}", f"add-on label should preserve {value}, found {add_on}")
+        assert_true(int(add_on.get("qty") or 0) == 3, f"foil number {value} should display add-on qty 3, found {add_on}")
+        assert_true(float(items[0].get("line_total") or 0) == 71.0, f"line total should include $35 + $36, found {items[0]}")
+
+
+def check_foil_number_add_on_rejects_too_many_or_non_digit_values() -> None:
+    expected = "number foils need up to 3 digits"
+    for value in ("1234", "12a"):
+        bench_execute_expect_error(
+            "locally_twisted.www.checkout._resolve_sale_lines",
+            kwargs={
+                "cart_items": [
+                    {
+                        "item_code": RETAIL_VARIANT_ITEM,
+                        "qty": 1,
+                        "configuration": _foil_number_configuration(value),
+                    }
+                ]
+            },
+            expected=expected,
+        )
 
 
 def check_cart_line_key_matches_browser_unicode_serialization() -> None:
@@ -635,6 +676,8 @@ def main() -> int:
         check_checkout_resolver_accepts_retail_variant,
         check_configured_same_sku_cart_lines_stay_separate_and_visible,
         check_multi_digit_add_on_quantity_and_total_are_visible,
+        check_foil_number_add_on_preserves_duplicate_and_zero_digits,
+        check_foil_number_add_on_rejects_too_many_or_non_digit_values,
         check_cart_line_key_matches_browser_unicode_serialization,
         check_cart_api_echoes_browser_line_key_for_checkout_configuration,
         check_quote_first_product_rejected_by_cart_and_checkout_resolution,

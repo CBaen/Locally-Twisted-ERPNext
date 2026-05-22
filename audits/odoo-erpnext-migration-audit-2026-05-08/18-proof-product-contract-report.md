@@ -37,7 +37,7 @@ Selector type: `multi_select_drawer`
 ### Unicorn Bouquet foil-number add-on
 
 - Item code: `ADDON-FOIL-NUMBER`
-- Quantity bounds: `1` to `4`
+- Quantity bounds: `1` to `3`
 - Requires value: `True`
 - Receipt label: `Foil number add-on`
 

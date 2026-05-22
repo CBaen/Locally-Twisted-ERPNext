@@ -1,5 +1,37 @@
 # Locally Twisted - Coding Handoff
 
+Codex owner Product Setup guard closeout on 2026-05-22: the recovered owner
+product-management lane is now triad-reviewed and documented in
+`workstreams/ecommerce-audit/owner-product-setup-guard-closeout-2026-05-22.md`.
+Jeff/owner users keep Product Setup access through `LT Product Blueprint`, but
+direct raw catalog edits are blocked for Items, Website Items, Item Prices,
+option axes/values, Item Groups, Webshop Settings, and product gallery
+slideshow records. Local apply now preserves existing public Website Item
+visibility, blocks hidden->visible, public->hidden, and public route-change
+requests, and keeps backfilled Product Setup records in Draft until reviewed.
+Product Setup sync dry runs now truthfully report missing-field updates and
+fill missing child rows without wiping existing options. Focused local proof:
+`python scripts\verify\owner_catalog_guard_contract.py` passed `19/19`,
+`python scripts\verify\product_blueprint_live_contract.py` passed including
+existing public visibility and route-change guards, and
+`python scripts\setup\sync_product_blueprints_from_catalog.py` dry run passed
+for `51` Website Items with `0` creates / `21` would-update rows. Final
+pre-commit umbrella `npm run test:owner-product-safety` passed. This is
+local-only. It is not staging/live release, Stripe, DNS, Search Console, or
+Frappe Cloud approval.
+
+Codex product-option UX repair on 2026-05-22: the screenshot-reported behavior
+where a selected size/option copied long text outside the button now has a
+focused handoff at
+`workstreams/ecommerce-audit/product-option-selection-ux-2026-05-22.md`.
+Option controls split the short display label from included-copy detail,
+selected tags show the short label, intentional included-copy detail renders
+inside product details, Product Setup copy rules can swap/reset page copy, and
+the foil-number add-on is capped/validated at 3 digits with matching price
+display. Recovered-lane proof: `npm run test:product-options-experience`
+passed `4/4`; final pre-commit run also passed `4/4`. Rerun if source changes
+again before staging.
+
 Codex shop category hero/color-catalog closeout on 2026-05-22: all 11
 `/shop-items/<group>` compact hero routes now use category-specific generated
 WebP crops instead of the repeated generic shop lifestyle image. The generated

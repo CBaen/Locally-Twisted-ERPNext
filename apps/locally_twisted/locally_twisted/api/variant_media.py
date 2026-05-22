@@ -33,7 +33,7 @@ def _variant_options(item_code: str) -> list[dict[str, str]]:
     ]
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=True, methods=["GET", "POST"])
 def get_variant_media(item_code: str, template_item_code: str | None = None, configuration: Any = None) -> dict:
     """Return the storefront image for an Item or variant Item.
 

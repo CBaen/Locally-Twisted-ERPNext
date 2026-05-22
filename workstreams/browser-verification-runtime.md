@@ -43,3 +43,14 @@ For website, shop, cart, checkout, contact, portfolio, BTFP, public-nav, securit
 - No product, route, CSS, Jinja, or ERPNext behavior changed.
 - No new screenshot/output directory was created.
 - No in-app Browser Use automation was proven; only its missing control-tool blocker was observed.
+
+## Deferred Chrome Plugin Repair
+
+2026-05-21 update: Chrome 148.0.7778.179 is installed and running, the Codex
+Chrome Extension is installed/enabled in profile `Default`, and the native host
+manifest at `C:\Users\baenb\AppData\Local\OpenAI\extension\com.openai.codexextension.json`
+matches the expected extension origin. The bridge still fails before tab access
+with `browser-client is not trusted`. Save this for a later session when Chrome
+and Codex are logged into only the intended account/profile context, then retry
+the Chrome plugin bridge before claiming extension-backed console debugging
+works.

@@ -189,7 +189,7 @@ def _throw_inquiry_spam_gate():
     frappe.throw(INQUIRY_SPAM_RETRY_MESSAGE, frappe.ValidationError)
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=True, methods=["POST"])
 @rate_limit(limit=20, seconds=60 * 60)
 def submit_book_inquiry():
     """Receive a /book form submission and create a Lead + linked records.

@@ -72,7 +72,7 @@ web_include_js = [
     "/assets/locally_twisted/js/lt-site-preferences.js?v=20260510-form-inline-1",
     "/assets/locally_twisted/js/lt-inquiry-form-experience.js?v=20260515-form-layout-1",
     "/assets/locally_twisted/js/lt-megamenu.js?v=20260521-ready-order-categories-1",
-    "/assets/locally_twisted/js/lt-product-setup-runtime.js?v=20260515-generic-1",
+    "/assets/locally_twisted/js/lt-product-setup-runtime.js?v=20260521-content-2",
     "/assets/locally_twisted/js/lt-product-card-click.js?v=20260508-1",
     "/assets/locally_twisted/js/lt-audience-ribbon.js?v=20260510-collab-slider-1",
 ]
@@ -481,6 +481,8 @@ _owner_catalog_guard_events = {
     "Item Attribute Value": ("validate", "before_insert", "before_save", "on_change", "on_trash"),
     "Item Variant Attribute": ("validate", "before_insert", "before_save", "on_change", "on_trash"),
     "Item Group": ("validate", "before_insert", "before_save", "on_change", "on_trash", "before_rename"),
+    "Website Slideshow": ("validate", "before_insert", "before_save", "on_change", "on_trash", "before_rename"),
+    "Website Slideshow Item": ("validate", "before_insert", "before_save", "on_change", "on_trash"),
     "Webshop Settings": ("validate", "before_save", "on_update", "on_change"),
 }
 for _owner_catalog_guard_doctype, _owner_catalog_guard_doctype_events in _owner_catalog_guard_events.items():
@@ -490,6 +492,20 @@ for _owner_catalog_guard_doctype, _owner_catalog_guard_doctype_events in _owner_
             _owner_catalog_guard_event,
             "locally_twisted.owner_catalog_guard.validate_owner_catalog_mutation",
         )
+for _owner_catalog_guard_event in (
+    "validate",
+    "before_insert",
+    "before_save",
+    "on_change",
+    "on_update",
+    "on_trash",
+    "before_rename",
+):
+    _append_doc_event(
+        "*",
+        _owner_catalog_guard_event,
+        "locally_twisted.owner_catalog_guard.validate_owner_catalog_mutation",
+    )
 
 
 _public_access_guard_events = {

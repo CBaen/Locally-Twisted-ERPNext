@@ -18,6 +18,32 @@ UX and search/discovery. Current visible/imported products are test products
 only; real catalog truth requires a separate approved catalog/import proof
 gate.
 
+## 2026-05-22 Owner Product Setup Guard Closeout
+
+Use `owner-product-setup-guard-closeout-2026-05-22.md` as the front-door
+handoff for the recovered owner product-management safety lane. It records the
+triad witness/recorder/fixer review, the owner catalog guard expansion, Product
+Setup exact-price/gallery/copy/backfill behavior, local apply visibility and
+route protections, and the focused proof set.
+
+Current evidence: owner raw catalog mutations are blocked across `19/19`
+probes, existing public Website Items keep their published state during local
+Product Setup apply, local apply refuses public hide/route-change requests, and
+Product Setup sync dry run reports `51` Website Items with `0` creates and
+`21` truthful would-update rows. Final pre-commit
+`npm run test:owner-product-safety` passed. This is local-only.
+
+## 2026-05-22 Product Option Selection UX
+
+Use `product-option-selection-ux-2026-05-22.md` for the screenshot-reported
+option-text and foil-number add-on repair. This keeps stored backend option
+values intact while splitting short display labels from included-copy details
+on the product page.
+
+Current evidence: final pre-commit `npm run test:product-options-experience`
+passed `4/4`, and visible price display plus cart/checkout passed through the
+owner-product umbrella. Rerun those gates if source changes before staging.
+
 ## 2026-05-20 Product Page Local Review
 
 Use `product-page-local-review-2026-05-20.md` for the current local product-page

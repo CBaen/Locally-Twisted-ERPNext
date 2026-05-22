@@ -10,6 +10,18 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 ## Active
 
+**P0 owner Product Setup local review before staging (2026-05-22):** Active
+handoff is
+`workstreams/ecommerce-audit/owner-product-setup-guard-closeout-2026-05-22.md`.
+The owner-product guard is locally implemented and focused proof passed:
+owner raw catalog mutations are blocked, Product Setup apply preserves existing
+public Website Item visibility, and public route/hide/publish changes require
+the reviewed release path. Final pre-commit `npm run test:owner-product-safety`
+passed. Next safe step is GL/Jeff local owner-workflow testing, then a separate
+staging packet if approved. Do not treat
+this as live checkout, Frappe Cloud, Stripe, DNS, Search Console, or production
+approval.
+
 **P0 capability graduation cleanup (2026-05-21):** Active handoff is
 `workstreams/capability-graduation-ladder-2026-05-21.md`. LT now has the global
 Capability Graduation Ladder seed (`schema_version: 2.5`) but must adopt it
@@ -30,6 +42,13 @@ above, nested repos below, branch/status, worktree routing, Six-Box ownership,
 and proposed live-board/session-registry entries. Do not use this pilot as
 permission for product, ERPNext, Frappe Cloud, DNS, Stripe, staging, or live
 release work.
+
+**P1 Chrome plugin console-debug bridge repair (2026-05-21):** Deferred source
+is `workstreams/browser-verification-runtime.md`. Chrome 148, the Codex Chrome
+Extension, and the native host manifest all checked out locally, but the bridge
+still failed with `browser-client is not trusted`. Retry only when Chrome and
+Codex are in the intended single account/profile context; do not claim
+extension-backed console debugging works until `browser.tabs.list()` succeeds.
 
 **Domain, provider cleanup, and reindex repair (2026-05-19):** Source handoff
 is `workstreams/domain-provider-reindex-cleanup-2026-05-19.md`. Verified live

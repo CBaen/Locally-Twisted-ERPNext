@@ -50,7 +50,7 @@ def _already_on_list_response():
     return {"ok": True, "message": "You're already on the list — thanks!"}
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=True, methods=["POST"])
 @rate_limit(limit=10, seconds=60 * 60, key="email", ip_based=False)
 def signup(email=None):
     """Sign up a newsletter email address.

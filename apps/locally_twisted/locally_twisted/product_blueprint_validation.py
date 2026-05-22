@@ -50,6 +50,7 @@ STATUS_OPTIONS = {
     *PREVIEW_STATUSES,
     *LIVE_STATUSES,
 }
+SHOP_VISIBILITY_OPTIONS = {"Keep current", "Visible in shop", "Hidden from shop"}
 
 SLUG_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 
@@ -68,7 +69,15 @@ def blueprint_doc_to_dict(doc: Any) -> dict[str, Any]:
         "page_template": _text(getattr(doc, "page_template", "")),
         "buying_path": _text(getattr(doc, "buying_path", "")),
         "publish_status": _text(getattr(doc, "publish_status", "")) or "Draft",
+        "shop_visibility": _text(getattr(doc, "shop_visibility", "")) or "Keep current",
+        "target_item_code": _text(getattr(doc, "target_item_code", "")),
         "base_price": getattr(doc, "base_price", None),
+        "price_rows": [_row_to_dict(row) for row in getattr(doc, "price_rows", [])],
+        "product_summary": _text(getattr(doc, "product_summary", "")),
+        "product_story": _text(getattr(doc, "product_story", "")),
+        "product_details": _text(getattr(doc, "product_details", "")),
+        "primary_image": _text(getattr(doc, "primary_image", "")),
+        "gallery_image_rows": [_row_to_dict(row) for row in getattr(doc, "gallery_image_rows", [])],
         "option_rows": [_row_to_dict(row) for row in getattr(doc, "option_rows", [])],
         "color_recipe_rows": [_row_to_dict(row) for row in getattr(doc, "color_recipe_rows", [])],
         "add_on_rows": [_row_to_dict(row) for row in getattr(doc, "add_on_rows", [])],
@@ -76,6 +85,7 @@ def blueprint_doc_to_dict(doc: Any) -> dict[str, Any]:
             _row_to_dict(row) for row in getattr(doc, "conditional_price_rows", [])
         ],
         "media_rule_rows": [_row_to_dict(row) for row in getattr(doc, "media_rule_rows", [])],
+        "content_rule_rows": [_row_to_dict(row) for row in getattr(doc, "content_rule_rows", [])],
     }
 
 
@@ -91,6 +101,8 @@ def validate_blueprint(data: dict[str, Any]) -> dict[str, Any]:
     page_template = _text(data.get("page_template"))
     buying_path = _text(data.get("buying_path"))
     publish_status = _text(data.get("publish_status")) or "Draft"
+    shop_visibility = _text(data.get("shop_visibility")) or "Keep current"
+    target_item_code = _text(data.get("target_item_code"))
     base_price = _float(data.get("base_price"))
 
     if not product_name:
@@ -107,34 +119,57 @@ def validate_blueprint(data: dict[str, Any]) -> dict[str, Any]:
         blockers.append("Buying Path must be Direct checkout, Quote first, or Needs review.")
     if publish_status not in STATUS_OPTIONS:
         blockers.append(f"Unknown product setup status: {publish_status}.")
+    if shop_visibility not in SHOP_VISIBILITY_OPTIONS:
+        blockers.append("Shop Visibility must be Keep current, Visible in shop, or Hidden from shop.")
 
     product_page_type = PAGE_TEMPLATE_TO_CONTRACT.get(page_template)
     commerce_lane = BUYING_PATH_TO_CONTRACT.get(buying_path)
 
-    if buying_path == "Direct checkout" and page_template != "Ready-to-order page":
-        blockers.append("Direct checkout requires the Ready-to-order page template.")
-    if page_template in {"Configurable product page", "Custom quote page"} and buying_path == "Direct checkout":
-        blockers.append("Configurable product pages cannot go straight to paid checkout.")
-    if buying_path == "Direct checkout" and base_price <= 0:
-        blockers.append("Direct checkout products need a base checkout price before Item Price rows can be planned.")
-
     option_rows = [_normalize_option(row) for row in data.get("option_rows") or []]
     color_rows = [_normalize_color_recipe(row) for row in data.get("color_recipe_rows") or []]
     add_on_rows = [_normalize_add_on(row) for row in data.get("add_on_rows") or []]
-    price_rows = [_normalize_conditional_price(row) for row in data.get("conditional_price_rows") or []]
+    conditional_price_rows = [_normalize_conditional_price(row) for row in data.get("conditional_price_rows") or []]
+    exact_price_rows = [_normalize_price_row(row) for row in data.get("price_rows") or []]
+    gallery_image_rows = [_normalize_gallery_image(row) for row in data.get("gallery_image_rows") or []]
+    media_rule_rows = [_normalize_media_rule(row) for row in data.get("media_rule_rows") or []]
+    content_rule_rows = [_normalize_content_rule(row) for row in data.get("content_rule_rows") or []]
+
+    if buying_path == "Direct checkout" and base_price <= 0 and not _has_positive_checkout_price_rows(exact_price_rows):
+        blockers.append("Direct checkout products need a base checkout price or exact checkout price rows.")
+    if shop_visibility == "Visible in shop" and not _has_customer_facing_product_image(
+        primary_image=_text(data.get("primary_image")),
+        gallery_image_rows=gallery_image_rows,
+    ):
+        blockers.append(
+            "Visible shop products need a fallback/main product photo or at least one approved gallery photo."
+        )
 
     _validate_options(option_rows, blockers, warnings)
     _validate_color_recipes(color_rows, blockers)
     _validate_add_ons(add_on_rows, buying_path, blockers, warnings)
-    _validate_conditional_prices(price_rows, buying_path, blockers, warnings)
+    _validate_conditional_prices(conditional_price_rows, buying_path, blockers, warnings)
+    _validate_exact_prices(exact_price_rows, buying_path, slug, target_item_code, blockers, warnings)
+    _validate_gallery_images(gallery_image_rows, blockers, warnings)
+    _validate_media_rules(media_rule_rows, blockers, warnings)
+    _validate_content_rules(content_rule_rows, blockers, warnings)
 
     if buying_path == "Direct checkout" and not option_rows and not color_rows and not add_on_rows:
         warnings.append("Direct checkout product has no options/add-ons; confirm it is truly a simple fixed product.")
 
     if publish_status in LIVE_STATUSES:
         save_blockers.append("Live approval is not available from local product blueprints.")
+    unsafe_price_blockers = [
+        blocker for blocker in blockers if "exact checkout price rows must belong to this Product Setup" in blocker
+    ]
+    if unsafe_price_blockers:
+        save_blockers.append("Product setup cannot save cross-product checkout price rows: " + "; ".join(unsafe_price_blockers))
     if publish_status in PREVIEW_STATUSES and blockers:
         save_blockers.append("Product setup cannot move to preview/staging while validation blockers remain.")
+    if shop_visibility == "Visible in shop" and blockers:
+        save_blockers.append(
+            "Product setup cannot request shop visibility while validation blockers remain: "
+            + "; ".join(blockers)
+        )
 
     validation_status = READY_FOR_LOCAL_PREVIEW if not blockers else BLOCKED
     summary = _summary(validation_status, blockers, warnings)
@@ -152,11 +187,16 @@ def validate_blueprint(data: dict[str, Any]) -> dict[str, Any]:
             "product_page_type": product_page_type,
             "commerce_lane": commerce_lane,
             "base_price": base_price,
+            "shop_visibility": shop_visibility,
+            "price_rows": exact_price_rows,
             "payload_target_counts": _payload_target_counts(option_rows, add_on_rows),
             "option_rows": option_rows,
             "color_recipe_rows": color_rows,
             "add_on_rows": add_on_rows,
-            "conditional_price_rows": price_rows,
+            "conditional_price_rows": conditional_price_rows,
+            "media_rule_rows": media_rule_rows,
+            "gallery_image_rows": gallery_image_rows,
+            "content_rule_rows": content_rule_rows,
             "product_generation_enabled": False,
             "live_publish_enabled": False,
         },
@@ -250,6 +290,102 @@ def _validate_conditional_prices(
             warnings.append(f"{label}: checkout pricing approval is ignored while the product is quote-first/review.")
 
 
+def _validate_exact_prices(
+    rows: list[dict[str, Any]],
+    buying_path: str,
+    product_slug: str,
+    target_item_code: str,
+    blockers: list[str],
+    warnings: list[str],
+) -> None:
+    seen: set[str] = set()
+    allowed_roots = _allowed_price_roots(product_slug, target_item_code)
+    for idx, row in enumerate(rows, start=1):
+        label = row.get("item_code") or f"price row {idx}"
+        if not row.get("item_code"):
+            blockers.append(f"Price row {idx} needs a sellable Item.")
+        elif not _belongs_to_current_product(row["item_code"], allowed_roots):
+            blockers.append(f"{label}: exact checkout price rows must belong to this Product Setup's Item or variants.")
+        if row.get("item_code") in seen:
+            blockers.append(f"Exact checkout price is duplicated for {row['item_code']}.")
+        seen.add(row.get("item_code"))
+        if row["enabled_for_checkout"] and row["price"] <= 0:
+            blockers.append(f"{label}: checkout price must be greater than zero.")
+        if buying_path != "Direct checkout" and row["enabled_for_checkout"]:
+            warnings.append(f"{label}: checkout price is ignored while the product is quote-first/review.")
+
+
+def _validate_gallery_images(
+    rows: list[dict[str, Any]],
+    blockers: list[str],
+    warnings: list[str],
+) -> None:
+    seen: set[str] = set()
+    for idx, row in enumerate(rows, start=1):
+        label = row.get("heading") or f"gallery photo {idx}"
+        image = row.get("image")
+        if not image:
+            blockers.append(f"{label}: gallery photo needs an image.")
+        if image in seen:
+            warnings.append(f"{label}: gallery photo image is duplicated.")
+        seen.add(image)
+        if image and not row.get("approved_for_customer"):
+            warnings.append(f"{label}: gallery photo is saved but not approved for customer display.")
+
+
+def _validate_media_rules(
+    rows: list[dict[str, Any]],
+    blockers: list[str],
+    warnings: list[str],
+) -> None:
+    valid_types = {"Selection group", "Selection combination", "Exact resolved variant"}
+    for idx, row in enumerate(rows, start=1):
+        label = row.get("rule_name") or f"image rule {idx}"
+        if not row.get("rule_name"):
+            blockers.append(f"Image rule {idx} needs a rule name.")
+        if row.get("rule_type") not in valid_types:
+            blockers.append(f"{label}: image rule type is not recognized.")
+        if row.get("rule_type") == "Selection group" and not (
+            row.get("selection_group") and row.get("selection_value")
+        ):
+            blockers.append(f"{label}: selection-group image rules need a selection group and value.")
+        if row.get("rule_type") == "Selection combination" and not row.get("selection_conditions"):
+            blockers.append(f"{label}: combination image rules need selection conditions.")
+        if row.get("rule_type") == "Exact resolved variant" and not row.get("variant_item"):
+            blockers.append(f"{label}: exact-variant image rules need a variant item.")
+        if row.get("approved_for_customer") and not row.get("image"):
+            blockers.append(f"{label}: approved image rule must include an image.")
+        if row.get("image") and not row.get("approved_for_customer"):
+            warnings.append(f"{label}: image rule is saved but not approved for customer display.")
+
+
+def _validate_content_rules(
+    rows: list[dict[str, Any]],
+    blockers: list[str],
+    warnings: list[str],
+) -> None:
+    valid_types = {"Selection group", "Selection combination", "Exact resolved variant"}
+    for idx, row in enumerate(rows, start=1):
+        label = row.get("rule_name") or f"copy rule {idx}"
+        if not row.get("rule_name"):
+            blockers.append(f"Copy rule {idx} needs a rule name.")
+        if row.get("rule_type") not in valid_types:
+            blockers.append(f"{label}: copy rule type is not recognized.")
+        if row.get("rule_type") == "Selection group" and not (
+            row.get("selection_group") and row.get("selection_value")
+        ):
+            blockers.append(f"{label}: selection-group copy rules need a selection group and value.")
+        if row.get("rule_type") == "Selection combination" and not row.get("selection_conditions"):
+            blockers.append(f"{label}: combination copy rules need selection conditions.")
+        if row.get("rule_type") == "Exact resolved variant" and not row.get("variant_item"):
+            blockers.append(f"{label}: exact-variant copy rules need a variant item.")
+        has_copy = row.get("display_title") or row.get("product_story") or row.get("product_details")
+        if row.get("approved_for_customer") and not has_copy:
+            blockers.append(f"{label}: approved copy rule must change a title, About This Design, or What's Included.")
+        if has_copy and not row.get("approved_for_customer"):
+            warnings.append(f"{label}: copy rule is saved but not approved for customer display.")
+
+
 def _normalize_option(row: dict[str, Any]) -> dict[str, Any]:
     role = _text(row.get("role")) or "Sale unit option"
     selection_behavior = _text(row.get("selection_behavior")) or ROLE_TO_BEHAVIOR.get(role, "SKU-defining variant")
@@ -306,6 +442,80 @@ def _normalize_conditional_price(row: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _normalize_price_row(row: dict[str, Any]) -> dict[str, Any]:
+    enabled = row.get("enabled_for_checkout")
+    return {
+        "item_code": _text(row.get("item_code")),
+        "option_summary": _text(row.get("option_summary")),
+        "price": _float(row.get("price")),
+        "enabled_for_checkout": True if enabled is None else _as_bool(enabled),
+        "operator_note": _text(row.get("operator_note")),
+    }
+
+
+def _normalize_gallery_image(row: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "image": _text(row.get("image")),
+        "heading": _text(row.get("heading")),
+        "description": _text(row.get("description")),
+        "approved_for_customer": _as_bool(row.get("approved_for_customer")),
+        "operator_note": _text(row.get("operator_note")),
+    }
+
+
+def _normalize_media_rule(row: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "rule_name": _text(row.get("rule_name")),
+        "rule_type": _text(row.get("rule_type")) or "Selection group",
+        "selection_group": _text(row.get("selection_group")),
+        "selection_value": _text(row.get("selection_value")),
+        "selection_conditions": _text(row.get("selection_conditions")),
+        "variant_item": _text(row.get("variant_item")),
+        "image": _text(row.get("image")),
+        "approved_for_customer": _as_bool(row.get("approved_for_customer")),
+        "operator_note": _text(row.get("operator_note")),
+    }
+
+
+def _normalize_content_rule(row: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "rule_name": _text(row.get("rule_name")),
+        "rule_type": _text(row.get("rule_type")) or "Selection group",
+        "selection_group": _text(row.get("selection_group")),
+        "selection_value": _text(row.get("selection_value")),
+        "selection_conditions": _text(row.get("selection_conditions")),
+        "variant_item": _text(row.get("variant_item")),
+        "display_title": _text(row.get("display_title")),
+        "product_story": _text(row.get("product_story")),
+        "product_details": _text(row.get("product_details")),
+        "approved_for_customer": _as_bool(row.get("approved_for_customer")),
+        "operator_note": _text(row.get("operator_note")),
+    }
+
+
+def _has_positive_checkout_price_rows(rows: list[dict[str, Any]]) -> bool:
+    return any(row.get("enabled_for_checkout") and row.get("price", 0) > 0 for row in rows)
+
+
+def _has_customer_facing_product_image(
+    *,
+    primary_image: str,
+    gallery_image_rows: list[dict[str, Any]],
+) -> bool:
+    if _text(primary_image):
+        return True
+    return any(row.get("approved_for_customer") and _text(row.get("image")) for row in gallery_image_rows)
+
+
+def _allowed_price_roots(product_slug: str, target_item_code: str) -> set[str]:
+    return {root for root in {_text(product_slug), _text(target_item_code)} if root}
+
+
+def _belongs_to_current_product(item_code: str, allowed_roots: set[str]) -> bool:
+    code = _text(item_code)
+    return any(code == root or code.startswith(f"{root}-") for root in allowed_roots)
+
+
 def _row_to_dict(row: Any) -> dict[str, Any]:
     if isinstance(row, dict):
         return dict(row)
@@ -347,7 +557,16 @@ def _row_to_dict(row: Any) -> dict[str, Any]:
         "selection_conditions",
         "variant_item",
         "image",
+        "heading",
+        "description",
         "approved_for_customer",
+        "display_title",
+        "product_story",
+        "product_details",
+        "item_code",
+        "option_summary",
+        "price",
+        "enabled_for_checkout",
     )
     return {key: getattr(row, key, None) for key in keys if hasattr(row, key)}
 

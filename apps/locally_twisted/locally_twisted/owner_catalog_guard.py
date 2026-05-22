@@ -2,7 +2,8 @@
 
 The safe owner workflow is Product Blueprint -> preview -> guarded apply.
 Direct Desk edits to Item, Website Item, Item Price, variant attributes, item
-groups, and Webshop Settings can desync public pages, pricing, or checkout.
+groups, Webshop gallery records, and Webshop Settings can desync public pages,
+pricing, media, or checkout.
 """
 from __future__ import annotations
 
@@ -33,6 +34,8 @@ PROTECTED_DOCTYPES = {
     "Item Attribute Value": "product option values",
     "Item Variant Attribute": "product variant options",
     "Item Group": "shop categories",
+    "Website Slideshow": "public product gallery records",
+    "Website Slideshow Item": "public product gallery photos",
     "Webshop Settings": "storefront settings",
 }
 
@@ -44,6 +47,8 @@ OWNER_COPY = {
     "Item Attribute Value": "Product option values need a guarded update so variants and prices stay matched.",
     "Item Variant Attribute": "Variant option changes need a guarded update so customer choices resolve to exactly one price.",
     "Item Group": "Shop category changes need a guarded update so navigation, routes, and breadcrumbs stay coherent.",
+    "Website Slideshow": "Product gallery changes need a guarded product update so public photos stay tied to the right product.",
+    "Website Slideshow Item": "Product gallery photo changes need a guarded product update so public photos stay tied to the right product.",
     "Webshop Settings": "Store settings are protected because they can hide prices, block guests, or change checkout.",
 }
 

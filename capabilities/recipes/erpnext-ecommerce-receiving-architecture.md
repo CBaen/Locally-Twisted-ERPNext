@@ -7,7 +7,7 @@ maturity: candidate
 scope: Locally Twisted ERPNext/Frappe ecommerce product import, product detail logic, cart, checkout, and invoice integration
 currently_true: local_only
 verification_level: 2
-last_verified: 2026-05-19
+last_verified: 2026-05-22
 evidence_quality: direct
 successful_uses: 1
 failed_uses: 1
@@ -75,6 +75,15 @@ OpenClaw cockpit witness:
   `workstreams/ecommerce-price-identity-incident-review-2026-05-19.md`.
   Failure recipe:
   `capabilities/failures/ecommerce-variant-price-source-drift.md`.
+- 2026-05-22 owner Product Setup guard closeout: the owner management path is
+  `LT Product Blueprint` / Product Setup, not raw ERPNext catalog tables.
+  Owner-like direct edits to Items, Website Items, Item Prices, option
+  attributes/values, Item Groups, Webshop Settings, and product gallery
+  slideshow records are blocked. Backfilled Product Setup records stay Draft
+  until reviewed. Existing public Website Items keep their published state
+  during local apply, and local apply cannot publish, hide, or reroute existing
+  Website Items. Handoff:
+  `workstreams/ecommerce-audit/owner-product-setup-guard-closeout-2026-05-22.md`.
 - 2026-05-17 browser proof route authority: use the import manifest for
   included-product authority and the clean Website Item snapshot for public
   route authority. Planned import routes can drift from current Website Item

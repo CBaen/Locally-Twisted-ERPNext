@@ -92,7 +92,18 @@ every deploy.
     background-color: #FFFFFF;
 }
 .lt-book__bot-check {
-    display: none;
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    clip: rect(0, 0, 0, 0);
+    clip-path: inset(50%);
 }
 .lt-book__bot-check label,
 .lt-book__bot-check input {

@@ -88,6 +88,14 @@ def main() -> int:
         f"published={local_apply.get('published')}"
     )
     print(f"  - dynamic_add_on_checked: {local_apply.get('dynamic_add_on_checked')}")
+    existing_visibility = result.get("existing_visibility") or {}
+    if existing_visibility:
+        print(
+            "  - existing_visibility: "
+            f"published_after_apply={existing_visibility.get('published_after_apply')}, "
+            f"hide_request_blocked={existing_visibility.get('hide_request_blocked')}, "
+            f"route_change_blocked={existing_visibility.get('route_change_blocked')}"
+        )
     return 0
 
 

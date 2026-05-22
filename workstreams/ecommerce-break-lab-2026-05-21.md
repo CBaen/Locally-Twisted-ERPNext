@@ -93,6 +93,118 @@ and data failures:
 - public Guest write endpoints expand without an allowlist;
 - destructive import or fake-data cleanup uses a broad target.
 
+## 2026-05-22 Owner Product Guard Triad Closeout
+
+Follow-up triad review for owner product-management work is documented in
+`workstreams/ecommerce-audit/owner-product-setup-guard-closeout-2026-05-22.md`.
+
+Additional focused proof after the triad fixes:
+
+```powershell
+python scripts\verify\owner_catalog_guard_contract.py
+python scripts\verify\product_blueprint_live_contract.py
+python scripts\setup\sync_product_blueprints_from_catalog.py
+```
+
+Results:
+
+- owner catalog guard passed `19/19` probes;
+- existing public Website Items keep their published state during local
+  Product Setup apply;
+- local apply refuses public hide and route-change requests;
+- Product Setup sync dry run passed with `51` Website Items, `0` creates, and
+  `21` would-update rows.
+- Final pre-commit closeout passed `npm run test:owner-product-safety`,
+  `npm run test:product-options-experience`, `npm run test:public-network`,
+  public write/form gates, public assets, Python compile, JSON parse checks,
+  and `git diff --check`.
+
+This did not deploy, stage, publish, expose checkout live, or mutate provider
+state. Rerun `npm run test:owner-product-safety` if source changes before
+preparing owner staging.
+
+## Incident - Webshop Startup POST 400s And Stale Hashed Asset
+
+Observed in Guiding Light's local Chrome on 2026-05-21:
+
+```text
+Refused to apply style from
+http://localhost:8081/assets/webshop/dist/css/webshop-web.bundle.C4VO6TJ6.css
+because its MIME type ('text/html') is not a supported stylesheet MIME type.
+
+website.js:83 POST http://localhost:8081/ 400 (BAD REQUEST)
+show_cart_navbar @ shopping_cart.js:177
+get_item_filter_data @ views.js:47
+```
+
+Verified:
+
+- The current local HTML for `/shop-items`, `/shop-items/arches`, and
+  `/shop-items/bouquets` references
+  `/assets/webshop/dist/css/webshop-web.bundle.KIQY4ZII.css`, not the stale
+  `C4VO6TJ6` hash.
+- A direct request to the stale `C4VO6TJ6` CSS URL returns `404 text/html`,
+  which matches the browser's "stylesheet MIME type text/html" failure class.
+- The frontend access log contained real `POST /` `400` rows from
+  `/shop-items/arches` with the two Webshop startup calls.
+- Fresh Guest/browser probes against `/shop-items/arches` returned `200` for:
+  `webshop.webshop.doctype.webshop_settings.webshop_settings.is_cart_enabled`
+  and `webshop.webshop.api.get_product_filter_data`.
+- A realistic logged-in browser state reproduced the exact startup failure:
+  after `/app` generated a session CSRF token, `/shop-items/arches` loaded as
+  the same logged-in user with `frappe.csrf_token` missing from the website
+  page. Webshop's own startup JS then posted both calls to `/` without
+  `X-Frappe-CSRF-Token`, and Frappe returned `400 application/json`, body length
+  `282`, `exc_type: CSRFTokenError`.
+- Root cause for the POST 400s: LT's custom `templates/base.html` copied
+  Frappe's website base contract but omitted Frappe's `<!-- csrf_token -->`
+  marker. Frappe v15's website renderer injects the current session token by
+  replacing that marker. Without it, logged-in website pages can return `200`
+  while their Webshop AJAX startup calls fail.
+- Fix applied: restored `<!-- csrf_token -->` before `body_include` in
+  `apps/locally_twisted/locally_twisted/templates/base.html`, then cleared
+  Frappe website and asset-path caches.
+- Post-fix browser proof: logged in, opened `/app`, then opened
+  `/shop-items/arches`; the website page exposed the same CSRF token, both
+  Webshop startup POSTs returned `200 application/json` with the CSRF header
+  present, and no route-local `400`/MIME console errors were observed.
+- The strengthened `npm run test:public-network` gate now passes `40/40` and
+  fails on same-origin non-GET `>=400`, same-origin failed requests,
+  same-origin asset `>=400`, console warnings/errors, wrong CSS/JS/image/font
+  MIME types, logged-in Desk-session Webshop CSRF regressions, and a synthetic
+  detector self-check for stale stylesheet plus POST failure classes.
+- `npm run test:public-assets` passes and proves the current rendered public
+  routes do not reference missing or wrong-MIME local assets.
+- `npm run test:webshop-guest-party` passes and proves this incident is not a
+  current Guest-party infrastructure break.
+
+Unverified:
+
+- The exact stale-state source for the old `C4VO6TJ6` CSS request in Guiding
+  Light's Chrome: browser cache, old open tab/page memory, or a previously
+  cached/rendered page from before the current Webshop asset hash.
+- Staging/live exposure. This incident evidence is local-only unless separately
+  reproduced against a target URL.
+
+Risk:
+
+- A public route can return `200` while Webshop startup POSTs or hashed CSS/JS
+  assets are broken.
+- Route-only smoke checks are not enough for ecommerce release language.
+
+Guard:
+
+```powershell
+npm run test:public-assets
+npm run test:public-network
+npm run test:webshop-guest-party
+```
+
+If this class recurs, capture the base URL, route, stale asset URL, status,
+content-type, current rendered asset URL, `assets.json` mapping, exact POST
+payload, response body, cache-clear/build command used, and post-fix verifier
+output.
+
 ## Breaks Actually Run
 
 ### Break 1 - Wrong Ecommerce Mode

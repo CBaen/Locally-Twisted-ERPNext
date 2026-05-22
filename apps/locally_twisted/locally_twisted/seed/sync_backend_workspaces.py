@@ -240,13 +240,6 @@ OWNER_HOME_SHORTCUTS = [
         "color": "Green",
     },
     {
-        "label": "Product Prices",
-        "type": "DocType",
-        "link_to": "Item Price",
-        "doc_view": "List",
-        "color": "Purple",
-    },
-    {
         "label": "Add New Inquiry",
         "type": "DocType",
         "link_to": "Lead",
@@ -845,11 +838,11 @@ def _owner_home_content() -> list[dict]:
             _shortcut("lt-owner-fast-contacts", "People to Contact", 3),
             _header(
                 "lt-owner-catalog-title",
-                '<span class="h4"><b>Catalog tools</b></span><br><span class="text-muted">For product and pricing work after today\'s customer work is handled.</span>',
+                '<span class="h4"><b>Catalog tools</b></span><br><span class="text-muted">Use Product Setup to add products, change prices, update photos and copy, or hide products. Direct price tables are protected.</span>',
                 12,
             ),
+            _shortcut("lt-owner-catalog-products", "Products", 3),
             _shortcut("lt-owner-catalog-add-product", "Add Product", 3),
-            _shortcut("lt-owner-catalog-prices", "Product Prices", 3),
             _shortcut("lt-owner-catalog-add-inquiry", "Add New Inquiry", 3),
             _shortcut("lt-owner-catalog-add-customer", "Add Customer", 3),
         ]
