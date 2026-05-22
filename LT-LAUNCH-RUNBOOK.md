@@ -1,6 +1,6 @@
 # Locally Twisted Launch Runbook
 
-Last updated: 2026-05-19 by Codex.
+Last updated: 2026-05-22 by Codex.
 
 This is the plain launch doc at the project root.
 
@@ -119,6 +119,29 @@ current live discovery URLs still advertise the Frappe Cloud vanity host.
 ## Required Gates
 
 Use these from the repo root unless a staging/production URL is required.
+
+Release/process rule:
+
+- A triad is required before any commit/push/staging claim for release
+  processes, major builds, or patch spirals.
+- Keep source scope, staging scope, and live/provider scope separate. A local
+  pass is a prerequisite, not staging proof.
+- Do not treat `LT_BASE_URL=<staging-url>` as a universal retarget. Verifiers
+  that read the local Docker `frontend` database still prove local records even
+  if their browser fetch points at staging.
+
+Staging-safe gate list:
+
+1. Confirm the exact source commit and app-mirror commit intended for staging.
+2. Confirm the staging host, site update/migration job, cache clear, installed
+   app order, and `lt_ecommerce_paused=1`.
+3. Run local hard gates first, including the relevant product/owner/access
+   gates for the changed slice.
+4. Run staging HTTP/browser gates against the staging URL.
+5. Run any database-side proof in the staging environment, or mark that proof
+   unverified. Do not claim staging from a local Docker database read.
+6. Record remaining live-only blockers before any live/provider/Search Console
+   action.
 
 Public site/forms release:
 

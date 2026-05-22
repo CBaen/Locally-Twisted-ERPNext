@@ -19,12 +19,19 @@ The owner-product guard is locally implemented and focused proof passed:
 owner raw catalog mutations are blocked, Product Setup apply preserves existing
 public Website Item visibility, public route/hide/publish changes require the
 reviewed release path, and approved product-page gallery media projects through
-Product Setup into native Website Slideshow rows. Final pre-commit
-`npm run test:owner-product-safety` passed. Next safe step is GL/Jeff local
-owner-workflow and shop-gallery testing, then a separate staging packet if
-approved. Do not treat
-this as live checkout, Frappe Cloud, Stripe, DNS, Search Console, or production
-approval.
+Product Setup into native Website Slideshow rows. Published checkout Product
+Setups are `Local Preview Ready` so active runtime media can render during
+local/staging preview; non-checkout backfills stay Draft. Local account proof
+now includes `locallytwisted@gmail.com` as owner/admin and
+`marketing@exploringnotboring.com` as website-only `LT Marketing Review
+Access`. Current hardening is in release-gate review: gallery, Product Setup,
+contact expanded-layout, marketing boundary, public access, human access,
+owner-product, and ecommerce gates have passed locally; the remaining safe
+step is triad-reviewed release scope plus the full launch/security suite, then
+Frappe Cloud staging/mirror work if green. Do not treat this as live checkout,
+Frappe Cloud, Stripe, DNS, Search Console, or production approval. Do not claim
+staging from local Docker verifiers by setting only `LT_BASE_URL`; database-side
+proof must run against staging or stay explicitly unverified.
 
 **P0 capability graduation cleanup (2026-05-21):** Active handoff is
 `workstreams/capability-graduation-ladder-2026-05-21.md`. LT now has the global

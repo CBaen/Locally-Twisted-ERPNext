@@ -28,7 +28,9 @@ Status as of 2026-05-18 for peer GPT-5.5 Codex/OpenClaw agents.
 - Product page galleries were restored locally on 2026-05-22 as native
   Product Setup -> Website Slideshow architecture. Approved source gallery
   media now creates Product Setup gallery rows, projects to
-  `Website Slideshow`, and renders in the product gallery rail. Variant media
+  `Website Slideshow`, and renders in the product gallery rail. Approved
+  simple checkout exact-variant media can join the rail only through active
+  Product Setup schema; arbitrary selected-variant/reference/category media
   stays separate. Handoff:
   `workstreams/ecommerce-audit/product-gallery-restoration-2026-05-22.md`.
 - Current local product import proof treats all 53 Odoo-imported products as
@@ -58,6 +60,23 @@ Status as of 2026-05-18 for peer GPT-5.5 Codex/OpenClaw agents.
   to stop local build/test work. Name the actual blocker when ecommerce work is
   incomplete.
 
+## Release And Staging Gate Integrity
+
+Release processes, major builds, and patch spirals now require triad review
+before any commit, push, staging, live, provider, or Search Console claim. For
+this ecommerce lane, the staging-safe list is:
+
+1. Confirm the intended source commit, app-mirror commit, staging host, rollback
+   path, and whether the push is archive-only or deploy-triggering.
+2. Run local hard gates for the changed slice before staging.
+3. Prove Frappe Cloud staging deploy/update/migration/cache clear, app order,
+   and `lt_ecommerce_paused=1`.
+4. Run staging HTTP/browser checks against the staging URL.
+5. Run database-side Product Setup/gallery/checkout proof in staging, or mark
+   that proof unverified. Do not claim staging from local Docker database reads.
+6. Keep live checkout, Stripe, DNS, Search Console, and provider mutations
+   behind their separate gates.
+
 ## Completed Lanes
 
 ### Product gallery restoration - 2026-05-22
@@ -77,9 +96,12 @@ Evidence summary: source/Odoo additional product photos are now role-based
 media, not a blanket held bucket. `gallery` media renders only after Product
 Setup owns it and the guarded apply path projects it into native ERPNext
 `Website Slideshow` rows. `variant_image`, `reference`, and
-`ignored_artifact` do not populate the gallery rail. The product image
-template now reads LT projected gallery slides before Webshop fallback
-`slides`, so one-extra projected galleries render on real product pages.
+`ignored_artifact` do not populate the gallery rail. Approved simple checkout
+exact-variant media can join the rail only from active Product Setup schema,
+which is why published checkout backfills now sit at `Local Preview Ready`
+instead of `Draft`. The product image template now reads LT projected gallery
+slides before Webshop fallback `slides`, so one-extra projected galleries
+render on real product pages.
 
 Green gates:
 
@@ -92,9 +114,10 @@ Green gates:
 - `npm run test:ecommerce-full`
 
 Current local counts: `68` approved live Product Setup gallery rows, `47`
-Website Items with slideshows, and `68` Website Slideshow Item rows. The source
-packet still records `70` deduped source gallery images because `easter-arch`
-and `pride-arch` are source products but not current live Website Items.
+Website Items with slideshows, `68` Website Slideshow Item rows, and `30`
+published checkout Product Setups at `Local Preview Ready`. The source packet
+still records `70` deduped source gallery images because `easter-arch` and
+`pride-arch` are source products but not current live Website Items.
 
 ### Product option selection UX - 2026-05-22
 
@@ -145,10 +168,11 @@ Evidence summary: Jeff needs owner control over products, but direct ERPNext
 catalog tables are too sharp for daily business editing. The kept path is
 Product Setup via `LT Product Blueprint`. Owner-like direct edits to raw Items,
 Website Items, Item Prices, option axes/values, Item Groups, Webshop Settings,
-and product gallery slideshow records are blocked. Backfilled Product Setup
-records stay Draft. Local apply preserves current published state for existing
-Website Items and refuses hidden->visible, public->hidden, and public-route
-changes outside the reviewed release path. Product Setup sync dry runs now
+and product gallery slideshow records are blocked. Published checkout
+backfills are `Local Preview Ready` for runtime media/price preview;
+non-checkout backfills stay Draft. Local apply preserves current published state
+for existing Website Items and refuses hidden->visible, public->hidden, and
+public-route changes outside the reviewed release path. Product Setup sync dry runs now
 truthfully report missing-field updates and fill missing rows without wiping
 existing options.
 

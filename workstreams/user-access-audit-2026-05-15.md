@@ -294,8 +294,10 @@ Local fake-data cleanup receipt on 2026-05-21:
   Contact/Address access through the stock `All` role.
 - The leftover enabled customer visual test user was removed during the
   2026-05-21 local fake-data cleanup.
-- If a real Exploring Not Boring account is created, create it as a `Website
-  User` with only `LT Marketing Review Access`, no customer/supplier/Desk/admin
-  roles, and rerun the marketing boundary verifier plus live HTTP proof.
+- On 2026-05-22 the standing local `marketing@exploringnotboring.com` account
+  was created as a `Website User` with only `LT Marketing Review Access`.
+  Future staging/live accounts must keep that exact boundary: no
+  customer/supplier/Desk/admin roles. Rerun the marketing boundary verifier,
+  human access silo matrix, and live HTTP proof after provisioning it.
 - If a Maintenance Admin account is created, keep it role-only and rerun the
   maintenance boundary verifier before sharing credentials.

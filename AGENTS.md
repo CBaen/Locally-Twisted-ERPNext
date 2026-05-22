@@ -83,6 +83,20 @@ fallback content that looks successful, hidden horizontal scrollbars, native
 scrollbars on crawls, stale docs treated as proof, customer emails that silently
 do not queue, and agent replies that imply success without verification.
 
+## Triadic Release Rule
+
+Release processes, major builds, and patch spirals require a triad before any
+commit, push, staging, live, provider, or Search Console claim. Name the roles
+used for the pass, such as Witness, Recorder, and Fixer, or name the equivalent
+three independent lenses. The triad must check scope, release/staging gates, and
+documentation truth separately from the person who made the source change.
+
+Local proof, a source commit, or an environment variable such as `LT_BASE_URL`
+is not staging proof by itself. If a verifier reads the local Docker `frontend`
+database, setting a staging URL only changes the HTTP fetch target; it does not
+prove staging records, Frappe Cloud app-mirror state, site update/migration, or
+cache state.
+
 ## Project Reality
 
 - Client: Locally Twisted, owned by Jeff Kimber.

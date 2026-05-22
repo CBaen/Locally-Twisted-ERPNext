@@ -39,10 +39,12 @@ def main() -> int:
     print(f"  website_items: {evidence.get('website_items')}")
     print(f"  blueprints: {evidence.get('blueprints')}")
     print(f"  draft_backfilled_blueprints: {evidence.get('draft_backfilled_blueprints')}")
+    print(f"  active_preview_blueprints: {evidence.get('active_preview_blueprints')}")
     print(f"  checkout_products: {evidence.get('checkout_products')}")
     print(f"  checked_price_rows: {evidence.get('checked_price_rows')}")
     print(f"  checked_variant_media_rows: {evidence.get('checked_variant_media_rows')}")
     print(f"  checked_gallery_rows: {evidence.get('checked_gallery_rows')}")
+    print(f"  checked_customer_safe_setup_schemas: {evidence.get('checked_customer_safe_setup_schemas')}")
     failures = result.get("failures") or []
     for failure in failures[:40]:
         print(f"  - {failure}")

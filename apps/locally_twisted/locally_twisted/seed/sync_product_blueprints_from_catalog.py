@@ -117,13 +117,14 @@ def _blueprint_spec(
     gallery_image_rows = _gallery_image_rows(row, source_products.get(item_code), images_dir, write=write)
     media_rule_rows = _media_rule_rows(item_code, variants, row)
     base_price = min([price["price"] for price in price_rows], default=0)
+    publish_status = _publish_status(row)
     return {
         "product_name": row.get("web_item_name") or item.item_name or item_code,
         "product_slug": item_code,
         "item_group": row.get("item_group") or item.item_group,
         "page_template": _page_template(row.get("lt_product_page_type")),
         "buying_path": _buying_path(row.get("lt_commerce_lane")),
-        "publish_status": "Draft",
+        "publish_status": publish_status,
         "shop_visibility": "Visible in shop" if int(row.get("published") or 0) else "Hidden from shop",
         "base_price": base_price,
         "product_summary": _summary(row),
@@ -132,7 +133,7 @@ def _blueprint_spec(
         "primary_image": row.get("website_image") or "",
         "target_item_code": item_code,
         "target_website_item": row.get("name"),
-        "operator_notes": "Created from the current storefront catalog for guarded owner editing. Draft until reviewed.",
+        "operator_notes": _operator_notes(publish_status),
         "option_rows": option_rows,
         "price_rows": price_rows,
         "gallery_image_rows": gallery_image_rows,
@@ -192,6 +193,10 @@ def _fill_missing_fields(doc, spec: dict[str, Any]) -> bool:
     if not getattr(doc, "media_rule_rows", None) and spec["media_rule_rows"]:
         _replace_media_rule_rows(doc, spec["media_rule_rows"])
         changed = True
+    if _can_promote_current_storefront_preview(doc, spec):
+        doc.publish_status = spec["publish_status"]
+        doc.operator_notes = spec["operator_notes"]
+        changed = True
     return changed
 
 
@@ -209,7 +214,33 @@ def _missing_update_fields(doc, spec: dict[str, Any]) -> list[str]:
         missing.append("gallery_image_rows")
     if not getattr(doc, "media_rule_rows", None) and spec["media_rule_rows"]:
         missing.append("media_rule_rows")
+    if _can_promote_current_storefront_preview(doc, spec):
+        missing.append("publish_status")
     return missing
+
+
+def _publish_status(row: dict[str, Any]) -> str:
+    if int(row.get("published") or 0) and row.get("lt_commerce_lane") == "checkout":
+        return "Local Preview Ready"
+    return "Draft"
+
+
+def _operator_notes(publish_status: str) -> str:
+    if publish_status == "Local Preview Ready":
+        return (
+            "Created from the current storefront catalog for guarded owner editing. "
+            "Published checkout baseline is active for local/staging preview until owner review."
+        )
+    return "Created from the current storefront catalog for guarded owner editing. Draft until reviewed."
+
+
+def _can_promote_current_storefront_preview(doc, spec: dict[str, Any]) -> bool:
+    if spec.get("publish_status") != "Local Preview Ready":
+        return False
+    if getattr(doc, "publish_status", None) != "Draft":
+        return False
+    notes = getattr(doc, "operator_notes", None) or ""
+    return "current storefront catalog for guarded owner editing" in notes
 
 
 def _base_fields(spec: dict[str, Any]) -> dict[str, Any]:

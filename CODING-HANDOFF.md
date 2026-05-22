@@ -1,5 +1,13 @@
 # Locally Twisted - Coding Handoff
 
+Codex release/docs gate integrity patch on 2026-05-22: release processes,
+major builds, and patch spirals require triad review before any commit, push,
+staging, live, provider, or Search Console claim. Staging proof must be
+environment-specific. `product_gallery_projection_contract.py` reads the local
+Docker `frontend` ERPNext database; setting `LT_BASE_URL` to a staging URL only
+retargets the rendered HTML fetch and does not prove staging Product Setup,
+Website Slideshow, app-mirror, site update/migration, or cache state.
+
 Codex product gallery architecture restoration on 2026-05-22: product-page
 additional photos are restored as permanent architecture, not staging polish.
 The kept chain is source-approved gallery media -> `LT Product Blueprint
@@ -10,19 +18,25 @@ Product Setup projection, `variant_image` stays selected-option media only,
 `reference` stays retained evidence, and `ignored_artifact` never renders.
 Current local proof: `70` deduped source gallery images in the classification
 packet, `68` approved live Product Setup gallery rows, `47` Website Items with
-slideshows, and `68` Website Slideshow Item rows. The product image template
-now treats `get_product_gallery_slides()` as LT authority and uses Webshop
-`slides` only as fallback, so projected one-extra routes cannot silently render
-no thumbnail rail. Feature handoff:
+slideshows, `68` Website Slideshow Item rows, and `30` published checkout
+Product Setups promoted to `Local Preview Ready` so active Product Setup
+runtime media is available for local/staging preview. The product image
+template now treats `get_product_gallery_slides()` as LT authority and uses
+Webshop `slides` only as fallback, so projected one-extra routes cannot
+silently render no thumbnail rail. Approved simple checkout exact-variant media
+can join the thumbnail set only through active Product Setup schema; arbitrary
+variant/reference/category media still cannot populate the rail. Feature handoff:
 `workstreams/ecommerce-audit/product-gallery-restoration-2026-05-22.md`;
 research brief:
 `research/research-product-gallery-architecture/research-brief.md`; failure
 recipe: `capabilities/failures/product-gallery-projection-regression.md`.
 Verified locally: `python scripts\verify\product_gallery_projection_contract.py`
 passed with rendered-route checks, `npm run test:product-gallery-experience`
-passed `3/3`, `npm run test:owner-product-safety` passed, and
-`npm run test:ecommerce-full` passed. This is local-only; no staging/live,
-Frappe Cloud, DNS, Stripe, or Search Console action was performed.
+passed `4/4` including the Mickey bouquet regression, `python
+scripts\verify\product_setup_catalog_coverage.py` passed, `npm run
+test:owner-product-safety` passed, and `npm run test:ecommerce-full` passed.
+This is local-only; no staging/live, Frappe Cloud, DNS, Stripe, or Search
+Console action was performed.
 
 Codex owner Product Setup guard closeout on 2026-05-22: the recovered owner
 product-management lane is now triad-reviewed and documented in
@@ -32,7 +46,8 @@ direct raw catalog edits are blocked for Items, Website Items, Item Prices,
 option axes/values, Item Groups, Webshop Settings, and product gallery
 slideshow records. Local apply now preserves existing public Website Item
 visibility, blocks hidden->visible, public->hidden, and public route-change
-requests, and keeps backfilled Product Setup records in Draft until reviewed.
+requests. Published checkout backfills are `Local Preview Ready` for runtime
+media/price preview; non-checkout backfills stay Draft until reviewed.
 Product Setup sync dry runs now truthfully report missing-field updates and
 fill missing child rows without wiping existing options. Focused local proof:
 `python scripts\verify\owner_catalog_guard_contract.py` passed `19/19`,
@@ -109,9 +124,11 @@ It does not add DocPerm rows, Desk access, customer records, order/invoice data,
 files, or product source exports. Feature handoff:
 `workstreams/marketing-review-access-2026-05-15.md`; capability:
 `capabilities/recipes/erpnext-external-review-access.md`; guard:
-`python scripts/verify/marketing_review_access_boundary.py`. No permanent
-reviewer user, staging/live/provider/indexing mutation, or Search Console
-action was performed.
+`python scripts/verify/marketing_review_access_boundary.py`. On 2026-05-22 the
+standing local reviewer `marketing@exploringnotboring.com` was created as an
+enabled `Website User` with only `LT Marketing Review Access`; the human access
+matrix now fails if that account is missing, disabled, or broadened. No
+staging/live/provider/indexing mutation or Search Console action was performed.
 
 Codex capability graduation adoption on 2026-05-21: LT now carries the global
 Capability Graduation Ladder seed as cleanup-first infrastructure. Updated

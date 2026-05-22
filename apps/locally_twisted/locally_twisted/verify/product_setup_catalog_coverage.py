@@ -6,6 +6,13 @@ from typing import Any
 import frappe
 from frappe.utils import flt
 
+from locally_twisted.product_setup_runtime import ACTIVE_SETUP_STATUSES, get_product_setup_schema_json
+
+
+UNSAFE_CUSTOMER_SCHEMA_TERMS = (
+    "super shape",
+)
+
 
 def run() -> dict[str, Any]:
     website_items = frappe.get_all(
@@ -47,7 +54,9 @@ def run() -> dict[str, Any]:
         "checked_price_rows": 0,
         "checked_variant_media_rows": 0,
         "checked_gallery_rows": 0,
+        "checked_customer_safe_setup_schemas": 0,
         "draft_backfilled_blueprints": 0,
+        "active_preview_blueprints": 0,
     }
 
     for row in website_items:
@@ -60,9 +69,15 @@ def run() -> dict[str, Any]:
             failures.append(f"{item_code} Product Setup target_item_code is {blueprint.get('target_item_code')!r}")
         if blueprint.get("target_website_item") != row["name"]:
             failures.append(f"{item_code} Product Setup target_website_item is {blueprint.get('target_website_item')!r}")
-        if "current storefront catalog for guarded owner editing" in (blueprint.get("operator_notes") or ""):
+        if _published_checkout(row):
+            if blueprint.get("publish_status") not in ACTIVE_SETUP_STATUSES:
+                failures.append(f"{item_code} published checkout Product Setup must be active for preview/runtime media")
+            else:
+                evidence["active_preview_blueprints"] += 1
+                _check_customer_safe_setup_schema(item_code, failures, evidence)
+        elif "current storefront catalog for guarded owner editing" in (blueprint.get("operator_notes") or ""):
             if blueprint.get("publish_status") != "Draft":
-                failures.append(f"{item_code} backfilled Product Setup must stay Draft until reviewed")
+                failures.append(f"{item_code} non-checkout backfilled Product Setup must stay Draft until reviewed")
             else:
                 evidence["draft_backfilled_blueprints"] += 1
         if row.get("lt_commerce_lane") == "checkout":
@@ -111,6 +126,10 @@ def _sellable_codes(item_code: str) -> list[str]:
             order_by="name asc",
         )
     return [item_code]
+
+
+def _published_checkout(website_item: dict[str, Any]) -> bool:
+    return int(website_item.get("published") or 0) and website_item.get("lt_commerce_lane") == "checkout"
 
 
 def _check_variant_media_rows(
@@ -184,3 +203,15 @@ def _check_gallery_rows(
             failures.append(f"{website_item['item_code']} Product Setup missing gallery image {row.get('image')!r}")
         elif not int(match.get("approved_for_customer") or 0):
             failures.append(f"{website_item['item_code']} Product Setup gallery image {row.get('image')!r} must be approved")
+
+
+def _check_customer_safe_setup_schema(
+    item_code: str,
+    failures: list[str],
+    evidence: dict[str, int],
+) -> None:
+    evidence["checked_customer_safe_setup_schemas"] += 1
+    schema_text = get_product_setup_schema_json(item_code).casefold()
+    for term in UNSAFE_CUSTOMER_SCHEMA_TERMS:
+        if term.casefold() in schema_text:
+            failures.append(f"{item_code} Product Setup customer schema still exposes {term!r}")

@@ -3,6 +3,17 @@ const { test, expect } = require("@playwright/test");
 const BASE_URL = process.env.LT_BASE_URL || "http://localhost:8081";
 const CLASSIC_ARCH_URL = new URL("/shop-items/arches/classic-arch", BASE_URL).toString();
 const LARGE_GARLAND_URL = new URL("/shop-items/garlands/large-garland", BASE_URL).toString();
+const MICKEY_BOUQUET_URL = new URL("/shop-items/bouquets/mickey-mouse-bouquet", BASE_URL).toString();
+
+async function normalizedMainImagePath(page) {
+	return page.locator(".product-image img.website-image").evaluate((img) => new URL(img.getAttribute("src"), location.href).pathname);
+}
+
+async function normalizedThumbnailPaths(page) {
+	return page.locator(".lt-product__thumbnail-button img").evaluateAll((imgs) =>
+		imgs.map((img) => new URL(img.getAttribute("src"), location.href).pathname),
+	);
+}
 
 test("Classic Arch renders permanent product gallery thumbnails on desktop", async ({ page }) => {
 	await page.setViewportSize({ width: 1366, height: 900 });
@@ -11,6 +22,7 @@ test("Classic Arch renders permanent product gallery thumbnails on desktop", asy
 
 	const shell = page.locator(".lt-product__media-shell.has-thumbnails");
 	await expect(shell).toBeVisible();
+	await expect(page.getByText("Other product photos", { exact: true })).toHaveCount(0);
 
 	const rail = page.locator('[data-lt-gallery-role="standard-product-thumbnails"]');
 	const mainImage = page.locator(".product-image");
@@ -87,6 +99,29 @@ test("single-extra projected galleries still render the permanent thumbnail rail
 	if (boxes.scrollHeight > boxes.clientHeight + 2) {
 		expect(["auto", "scroll"].includes(boxes.overflowY), "overflow stays inside the thumbnail rail").toBeTruthy();
 	}
+});
+
+test("Mickey Mouse Bouquet gallery exposes the full selectable product-photo set", async ({ page }) => {
+	await page.setViewportSize({ width: 1366, height: 900 });
+	await page.goto(MICKEY_BOUQUET_URL, { waitUntil: "domcontentloaded" });
+	await page.waitForSelector(".product-image img.website-image");
+
+	const thumbs = page.locator(".lt-product__thumbnail-button");
+	const paths = await normalizedThumbnailPaths(page);
+	expect(paths, "Mickey should show the primary image plus the two distinct approved product photos").toHaveLength(3);
+	expect(paths[0], "the initial main product photo must also be the first thumbnail").toBe(
+		"/files/mickey-mouse-bouquet.png",
+	);
+	expect(paths, "large bouquet photo should be available without selecting a size first").toContain(
+		"/files/mickey-mouse-bouquet-large.webp",
+	);
+
+	const firstMain = await normalizedMainImagePath(page);
+	await thumbs.nth(2).click();
+	await expect.poll(async () => normalizedMainImagePath(page)).not.toBe(firstMain);
+	await thumbs.nth(0).click();
+	await expect.poll(async () => normalizedMainImagePath(page)).toBe(firstMain);
+	await expect(page.locator(".lt-product__thumbnail-button[aria-pressed='true']")).toHaveCount(1);
 });
 
 test("product gallery survives variant selection and supports mobile swipe", async ({ page }) => {

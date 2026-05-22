@@ -37,6 +37,9 @@ image or only selected-variant image behavior.
 - The product image template chooses a generic Webshop `slides` fallback before
   the LT slideshow helper, so one-extra or projected-gallery routes render no
   thumbnail rail.
+- Published checkout Product Setups stay `Draft`, so active Product Setup
+  runtime media is unavailable and approved simple product photos disappear
+  from the gallery rail.
 
 ## Known Instances
 
@@ -69,10 +72,14 @@ Current guards:
 ## What Not To Do
 
 - Do not restore galleries by hardcoding product-page images.
-- Do not render selected variant images as gallery thumbnails.
+- Do not render arbitrary selected variant images as gallery thumbnails.
+- Only approved simple checkout exact-variant media may join the standard
+  thumbnail set, and only when read through active Product Setup schema.
 - Do not render category/reference media as product-gallery media.
 - Do not call DB slideshow rows sufficient without route render proof.
 - Do not make Webshop fallback `slides` outrank LT Product Setup projection.
+- Do not let published checkout Product Setups remain inactive if their media
+  or price rules are needed by the public runtime.
 
 ## Cross-Links
 
@@ -88,4 +95,3 @@ Verified locally against source Odoo export, local ERPNext Product Setup rows,
 native Website Slideshow rows, rendered product routes, desktop browser
 geometry, mobile gallery behavior, variant media persistence, owner-product
 safety, and ecommerce full gates. Live remains unmodified.
-

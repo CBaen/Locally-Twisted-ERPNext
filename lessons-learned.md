@@ -6,6 +6,40 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-22 - Triads are required before release or patch-spiral claims
+
+Release processes, major builds, and patch spirals are too easy to collapse
+into "tests passed, ship it." The safe shape is a triad before commit, push,
+staging, live, provider, or Search Console claims: one lens for risk, one for
+handoff/docs/gates, and one for implementation gaps.
+
+**Counter-move:** name the triad roles in the lane handoff and record what each
+checked. Keep local proof, GitHub archive, staging proof, and live/provider
+proof as separate states. If a verifier reads local Docker or local ERPNext
+records, do not call it staging proof just because an HTTP base URL points at
+staging.
+
+---
+
+## 2026-05-22 - Do not fix a runtime bypass by making the gate weaker
+
+The Mickey Mouse Bouquet gallery regression looked like a missing thumbnail
+problem, but triad review found a deeper risk: approved Product Setup media was
+being read from raw child rows, bypassing the active Product Setup status gate.
+When the helper was corrected to use active Product Setup schema, the local data
+contract mismatch surfaced: published checkout backfills were still Draft, so
+their approved media could not render.
+
+**Counter-move:** keep runtime reads behind active Product Setup schema and fix
+the data contract when published checkout products need that runtime data.
+Published checkout backfills should be `Local Preview Ready`; non-checkout
+backfills stay Draft. Run the Product Setup catalog sync with `--write`, then
+run `product_setup_catalog_coverage.py` and `npm run
+test:product-gallery-experience` before claiming product media is ready for
+owner/staging review.
+
+---
+
 ## 2026-05-22 - DB gallery rows are not enough without rendered route proof
 
 The product-gallery restoration almost passed with the backend projection green
@@ -53,8 +87,10 @@ truth drifts underneath it.
 **Counter-move:** keep owner work in Product Setup and make raw catalog edits
 fail loudly for owner-like users. Local apply must preserve existing public
 Website Item visibility, reject publish/hide/reroute requests for existing
-public products, keep backfilled Product Setup records in Draft until reviewed,
-and verify the hook surface with real owner-like probes. Use
+public products, keep published checkout backfills at `Local Preview Ready`
+only when active runtime price/media preview needs them, keep non-checkout
+backfills in Draft until reviewed, and verify the hook surface with real
+owner-like probes. Use
 `workstreams/ecommerce-audit/owner-product-setup-guard-closeout-2026-05-22.md`
 and `npm run test:owner-product-safety` before staging owner product work.
 

@@ -8,6 +8,87 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-22 - Triads are mandatory for release processes and patch spirals
+
+**Decision:** Release processes, major builds, and patch spirals require a triad
+before any commit, push, staging, live, provider, or Search Console claim.
+
+**Reasoning:** The current ecommerce hardening found doc and gate drift after
+local product/gallery fixes were already green. Local proof, GitHub archive,
+staging proof, and live/provider proof are different states. A triad gives the
+release lane separate risk, documentation/gate, and implementation-gap checks
+before anyone says the work is ready for the next stage.
+
+**Implementation boundary:** Feature handoffs must name the triad roles or the
+equivalent three lenses. Release docs must say which stage was actually proved.
+Do not call a local Docker/database verifier staging proof just because its
+HTTP base URL can point at staging.
+
+## 2026-05-22 - Staging proof must be environment-specific
+
+**Decision:** Setting `LT_BASE_URL` to a staging URL is not staging proof for
+verifiers that still read the local Docker `frontend` ERPNext database.
+
+**Reasoning:** `product_gallery_projection_contract.py` shells into the local
+Docker site for Product Setup, Website Item, and Website Slideshow rows. The
+base URL only changes rendered-route fetches. That can be a useful mismatch
+detector, but it does not prove staging records, app mirror, site
+update/migration, cache clear, source file availability, or pause state.
+
+**Implementation boundary:** A staging packet must prove the actual staging
+host/app mirror/site update/cache state, run staging HTTP/browser checks, and
+run database-side contracts in staging or mark them unverified.
+
+## 2026-05-22 - External marketing review requires a standing website-only user
+
+**Decision:** `marketing@exploringnotboring.com` is the standing external
+marketing reviewer account for local/staging owner review. It must be an
+enabled `Website User` with only `LT Marketing Review Access`, no Desk, no
+DocPerm-backed records, and no indexing authority.
+
+**Reasoning:** Temporary verifier users proved the role boundary, but they did
+not satisfy the operational handoff requirement that Exploring Not Boring have
+real review access. Staging cannot be called owner-review ready if the standing
+account is missing or accidentally broadened.
+
+**Implementation boundary:** `sync_marketing_review_access.py --reviewer-email
+marketing@exploringnotboring.com` creates or repairs the account. The human
+access silo matrix now fails if the standing reviewer is missing, disabled,
+not a Website User, or has forbidden roles. This grants public review access
+only; it does not grant ERPNext Desk, Search Console/indexing, CRM, product,
+order, invoice, file, or provider access.
+
+**Receipts:** `apps/locally_twisted/locally_twisted/seed/sync_marketing_review_access.py`;
+`apps/locally_twisted/locally_twisted/verify/human_access_silo_matrix.py`;
+`workstreams/marketing-review-access-2026-05-15.md`.
+
+## 2026-05-22 - Published checkout Product Setups are active preview records
+
+**Decision:** Published checkout products with owner-editable Product Setup
+records must be at least `Local Preview Ready`, not Draft, when their Product
+Setup price/media rules are needed by the public runtime. Non-checkout
+backfills remain Draft until reviewed.
+
+**Reasoning:** A triad review caught that rendering approved simple checkout
+media from raw Product Setup child rows bypassed the established active-status
+gate. Switching the gallery helper to active Product Setup schema exposed the
+real data mismatch: published checkout bouquets were still Draft backfills, so
+approved customer media disappeared from the thumbnail rail. The right fix is
+to make the data contract truthful, not to weaken the runtime gate.
+
+**Implementation boundary:** `sync_product_blueprints_from_catalog.py --write`
+promotes published checkout backfills to `Local Preview Ready` and leaves
+non-checkout backfills Draft. `product_setup_catalog_coverage.py` now fails if
+published checkout Product Setups are inactive. Approved simple checkout
+exact-variant media may join the gallery rail only through active Product Setup
+schema. This is local/staging preview readiness, not live approval.
+
+**Receipts:** `apps/locally_twisted/locally_twisted/seed/sync_product_blueprints_from_catalog.py`;
+`apps/locally_twisted/locally_twisted/verify/product_setup_catalog_coverage.py`;
+`apps/locally_twisted/locally_twisted/product_options.py`;
+`workstreams/ecommerce-audit/product-gallery-restoration-2026-05-22.md`;
+`scripts/verify/product_gallery_experience.spec.js`.
+
 ## 2026-05-22 - Product galleries use Product Setup and native Website Slideshow
 
 **Decision:** Product-page additional photos are approved `gallery` media when

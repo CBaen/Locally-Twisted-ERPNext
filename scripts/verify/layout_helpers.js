@@ -431,9 +431,29 @@ async function auditPageLayout(page, options = {}) {
 				);
 			}
 
+			function isHiddenByAncestor(element) {
+				let current = element.parentElement;
+				while (current && current !== document.documentElement) {
+					if (current.hidden || current.getAttribute("aria-hidden") === "true") return true;
+					const currentStyle = window.getComputedStyle(current);
+					if (
+						!currentStyle ||
+						currentStyle.display === "none" ||
+						currentStyle.visibility === "hidden" ||
+						Number.parseFloat(currentStyle.opacity || "1") === 0
+					) {
+						return true;
+					}
+					current = current.parentElement;
+				}
+				return false;
+			}
+
 			function isVisible(element, style) {
 				if (!style || style.display === "none" || style.visibility === "hidden") return false;
+				if (element.hidden || element.getAttribute("aria-hidden") === "true") return false;
 				if (Number.parseFloat(style.opacity || "1") === 0) return false;
+				if (isHiddenByAncestor(element)) return false;
 				const rect = element.getBoundingClientRect();
 				return rect.width > 0 && rect.height > 0;
 			}

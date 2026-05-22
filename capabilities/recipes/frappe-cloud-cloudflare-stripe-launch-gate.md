@@ -79,6 +79,29 @@ destructive final go/no-go.
 
 Run from repo root unless a staging/production URL is explicitly required.
 
+Triad rule:
+
+- Release processes, major builds, and patch spirals require triad review
+  before commit, push, staging, live, provider, or Search Console claims.
+- The triad must separately check source scope, staging/live gate evidence, and
+  doc truth. Local green checks are prerequisites, not release approval.
+- Do not treat `LT_BASE_URL=<staging-url>` as a universal retarget. A verifier
+  that shells into the local Docker `frontend` site still proves local ERPNext
+  records even if it fetches rendered HTML from another host.
+
+Concise staging-safe list:
+
+1. Identify the source commit, app-mirror commit, staging host, rollback path,
+   and whether the push is archive-only or deploy-triggering.
+2. Prove Frappe Cloud deploy, site update/migration, cache clear, app order, and
+   `lt_ecommerce_paused=1` on staging.
+3. Run local hard gates for the changed slice before staging.
+4. Run staging HTTP/browser gates against the staging URL.
+5. Run database-side contracts in the staging environment, or leave them
+   explicitly unverified for staging.
+6. Keep live checkout, Stripe, DNS, Search Console, and provider mutations
+   blocked until their separate gates pass.
+
 ```powershell
 python scripts/verify/frappe_cloud_preflight.py
 python scripts/verify/website_launch_verify.py --base-url <staging-url> --with-a11y --with-contact-smoke
@@ -133,6 +156,8 @@ python scripts/verify/book_form_repeat_email_photos.py --base-url https://locall
 - Treating a source/app mirror push for form-photo delivery as live proof
   before bench deploy, site update/migration, and live verifier proof of CRM
   photo rows plus owner Email Queue attachment refs.
+- Treating a local Docker/database verifier as staging proof just because
+  `LT_BASE_URL` points at a staging URL.
 
 ## Verification Notes
 

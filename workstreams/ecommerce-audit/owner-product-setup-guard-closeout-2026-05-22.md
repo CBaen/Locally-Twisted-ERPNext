@@ -58,8 +58,10 @@ Product Setup coverage/backfill:
 - `sync_product_blueprints_from_catalog.py` creates/fills Product Setup records
   from current Website Items without mutating Items, Website Items, Item
   Prices, routes, checkout records, or live catalog state.
-- Backfilled Product Setup records remain `Draft` until reviewed, so they do
-  not silently take over runtime checkout behavior.
+- Published checkout backfills can be `Local Preview Ready` when active Product
+  Setup runtime price/media rules are needed for local or staging preview.
+  Non-checkout backfills remain `Draft` until reviewed, so they do not silently
+  take over runtime checkout behavior.
 - Dry runs now truthfully report `would_update` for existing Product Setup
   records with missing fields/child rows.
 - Filling missing price rows no longer clears existing option rows.
@@ -187,6 +189,11 @@ npm run test:owner-product-safety
 - Guiding Light and Jeff need local owner-workflow testing before staging.
 - Staging preview for the owner can be prepared only after the local owner
   product gate is green in the final commit state.
+- A triad must review release scope, gate evidence, and doc truth before any
+  commit/push/staging claim from this lane.
+- Staging proof needs the actual staging host/app mirror/site update/cache
+  state plus staging HTTP/browser checks. Local Docker database verifiers are
+  prerequisites only unless rerun against the staging environment itself.
 - Public checkout/Stripe remains gated separately by Frappe Cloud, Stripe,
   webhook, policy, product scope, and low-risk payment proof.
 - Direct SQL/import/restore paths remain outside document hooks. Keep same-day

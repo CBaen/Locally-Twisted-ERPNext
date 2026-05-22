@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 from functools import lru_cache
 import os
 from pathlib import Path
 from typing import Any
+from urllib.parse import unquote, urlparse
 
 import frappe
 from frappe.utils import flt, fmt_money
@@ -24,7 +26,11 @@ from locally_twisted.product_page_runtime import (
     checkout_add_on_contracts_for_item,
     product_page_contract_for_website_item,
 )
-from locally_twisted.product_setup_runtime import get_product_setup_schema_json
+from locally_twisted.product_setup_runtime import (
+    DOCUMENT_CUSTOMER_OPERATOR,
+    get_product_setup_schema_json,
+    product_setup_schema_for_website_item,
+)
 from webshop.webshop.variant_selector.utils import get_attributes_and_values
 
 
@@ -185,27 +191,47 @@ def get_product_gallery_slides(item_code: str | None, primary_image: str | None 
     """Return source-approved product gallery slides for a product template.
 
     Website Slideshow rows are the backend-approved product-level gallery path.
-    Live variant Item.image rows are intentionally held back here unless they
-    are approved through simple variant media or Product Setup media rules.
+    Approved simple checkout variant media rules join the same customer-facing
+    thumbnail set, deduped against primary/slideshow images.
     """
     if not item_code:
         return []
 
-    seen: set[str] = set()
+    seen_images: set[str] = set()
+    seen_exact_hashes: set[str] = set()
+    seen_visual_hashes: list[str] = []
     slides: list[dict[str, str]] = []
 
-    def add_slide(image: str | None, heading: str) -> None:
+    def add_slide(
+        image: str | None,
+        heading: str,
+        *,
+        dedupe_file: bool = False,
+        dedupe_visual: bool = False,
+    ) -> None:
         image = str(image or "").strip()
-        if not image or image in seen or len(slides) >= limit:
+        if not image or len(slides) >= limit:
             return
-        seen.add(image)
+        image_key = _image_url_key(image)
+        if image_key in seen_images:
+            return
+        exact_hash, visual_hash = _local_image_fingerprint(image)
+        if dedupe_file and exact_hash and exact_hash in seen_exact_hashes:
+            return
+        if dedupe_visual and visual_hash and _visually_seen(visual_hash, seen_visual_hashes):
+            return
+        seen_images.add(image_key)
+        if exact_hash:
+            seen_exact_hashes.add(exact_hash)
+        if visual_hash:
+            seen_visual_hashes.append(visual_hash)
         slides.append({"image": image, "heading": heading})
 
     add_slide(primary_image, "Main product photo")
     website_item = frappe.db.get_value(
         "Website Item",
         {"item_code": item_code},
-        ["web_item_name", "website_image", "slideshow"],
+        ["web_item_name", "website_image", "slideshow", "lt_product_page_type", "lt_commerce_lane"],
         as_dict=True,
     )
     if website_item:
@@ -225,7 +251,111 @@ def get_product_gallery_slides(item_code: str | None, primary_image: str | None 
                     row.get("image"),
                     row.get("heading") or row.get("description") or website_item.get("web_item_name") or "Product photo",
                 )
+        for row in _approved_simple_variant_gallery_rows(item_code, website_item, limit=limit):
+            add_slide(
+                row.get("image"),
+                row.get("heading") or website_item.get("web_item_name") or "Product photo",
+                dedupe_file=True,
+                dedupe_visual=True,
+            )
     return slides
+
+
+def _approved_simple_variant_gallery_rows(
+    item_code: str,
+    website_item: dict[str, Any],
+    *,
+    limit: int,
+) -> list[dict[str, str]]:
+    if website_item.get("lt_product_page_type") != "simple_product":
+        return []
+    if website_item.get("lt_commerce_lane") != "checkout":
+        return []
+
+    setup_schema = product_setup_schema_for_website_item(item_code)
+    if not setup_schema:
+        return []
+
+    rows: list[dict[str, str]] = []
+    for rule in setup_schema.get("media_rules") or []:
+        if len(rows) >= limit:
+            break
+        if not rule.get("approved_for_customer"):
+            continue
+        if rule.get("document_output") != DOCUMENT_CUSTOMER_OPERATOR:
+            continue
+        if rule.get("rule_type") != "Exact resolved variant":
+            continue
+        if not rule.get("variant_item"):
+            continue
+        image = str(rule.get("image") or "").strip()
+        if not image:
+            continue
+        rows.append({"image": image, "heading": _media_rule_heading(rule)})
+    return rows
+
+
+def _media_rule_heading(row: dict[str, Any]) -> str:
+    conditions = str(row.get("selection_conditions") or "").strip().splitlines()
+    if conditions:
+        return conditions[0].split("=", 1)[-1].strip() or "Product photo"
+    return str(row.get("rule_name") or row.get("label") or "Product photo").strip()
+
+
+def _image_url_key(image: str) -> str:
+    parsed = urlparse(str(image or "").strip())
+    path = unquote(parsed.path or str(image or "").strip())
+    return path or str(image or "").strip()
+
+
+@lru_cache(maxsize=512)
+def _local_image_fingerprint(image: str) -> tuple[str, str]:
+    path = _local_public_file_path(image)
+    if not path or not path.is_file():
+        return "", ""
+
+    exact_hash = ""
+    visual_hash = ""
+    try:
+        exact_hash = hashlib.sha256(path.read_bytes()).hexdigest()
+    except OSError:
+        exact_hash = ""
+
+    try:
+        from PIL import Image
+
+        with Image.open(path) as img:
+            sample = img.convert("L").resize((8, 8))
+            pixels = list(sample.getdata())
+        avg = sum(pixels) / len(pixels)
+        visual_hash = "".join("1" if pixel >= avg else "0" for pixel in pixels)
+    except Exception:
+        visual_hash = ""
+
+    return exact_hash, visual_hash
+
+
+def _local_public_file_path(image: str) -> Path | None:
+    path = _image_url_key(image)
+    if not path.startswith("/files/"):
+        return None
+    relative = path.removeprefix("/files/").strip("/")
+    if not relative or ".." in Path(relative).parts:
+        return None
+    return Path(frappe.get_site_path("public", "files", *Path(relative).parts))
+
+
+def _visually_seen(visual_hash: str, seen_visual_hashes: list[str]) -> bool:
+    for existing in seen_visual_hashes:
+        if _hash_distance(visual_hash, existing) <= 2:
+            return True
+    return False
+
+
+def _hash_distance(left: str, right: str) -> int:
+    if len(left) != len(right):
+        return max(len(left), len(right))
+    return sum(1 for a, b in zip(left, right) if a != b)
 
 
 def get_product_page_runtime_context(item_code: str | None) -> dict[str, Any]:
