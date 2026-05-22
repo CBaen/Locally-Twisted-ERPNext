@@ -4,7 +4,7 @@ type: failure
 failure_kind: process_ownership_failure
 schema_version: 0.1
 date_discovered: 2026-05-12
-last_updated: 2026-05-12
+last_updated: 2026-05-22
 status: guarded
 scope: project
 owner_context: Locally Twisted Frappe Cloud / Cloudflare launch
@@ -47,6 +47,7 @@ documented process.
 |---|---|---|---|---|---|---|---|
 | 2026-05-12 | Locally Twisted | Frappe Cloud staging launch | Custom app install/site config after GL logged in | Agent handed GL manual install/config steps instead of taking over with automation/process | Conversation, staging probe showing `locally_twisted` not installed | added | guarded |
 | 2026-05-19 | Locally Twisted | Google Ads / Meta account takeover | GL supplied a Google Ads dashboard URL and wanted to see/manage the account | Agent initially substituted Gmail/Drive research inventory for dashboard control; GL corrected the goal | `workstreams/ad-account-takeover-2026-05-19.md` and `capabilities/failures/ad-dashboard-research-vs-control-drift.md` | added | guarded |
+| 2026-05-22 | Locally Twisted | Frappe Cloud ecommerce staging owner review | App mirror was pushed for staging prep and provider deploy was next | Agent stopped at the abstract statement "need Frappe Cloud provider proof" before searching for the concrete provider artifacts already in repo/history | Follow-up search found app mirror `f236d6d`, bench IDs, Press dashboard/API methods, dashboard URL `https://cloud.frappe.io/dashboard/groups/bench-39776/deploys/6g85b2nqj7`, no local API token, no SSH certificate, and unauthenticated dashboard/API state as `Guest` / `403` | added | guarded |
 
 ## Root pattern
 
@@ -70,6 +71,10 @@ capabilities for account-session workflows.
   browser/API/SSH investigation.
 - A launch verifier blocked on missing provider setup while the agent has not
   attempted the documented provider workflow.
+- An abstract provider-proof blocker is reported before searching local
+  runbooks, app mirrors, Frappe Cloud bench IDs, Press source, prior indexed
+  conversations, dashboard URLs, API-token setup, SSH certificate state, and
+  authenticated browser surfaces.
 
 ## Required guard
 
