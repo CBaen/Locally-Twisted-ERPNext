@@ -35,13 +35,17 @@ proof must run against staging or stay explicitly unverified.
 
 2026-05-22 staging-prep update: source `main` was archived at `2ee28da`, and
 the Frappe Cloud app-root mirror was archived at `f236d6d` from that source.
-Staging is still blocked, not complete. The current blocker is provider-state
-proof and staging update execution: prove
-`locallytwisted-staging.frappe.cloud` is on
-`bench-39776-000013-f94-virginia`, prove live/custom-domain traffic is on
-`bench-39776-000015-f94v`, then deploy/update/migrate/cache-clear staging only.
-Do not use generic `press-deploy`; do not use the targeted staging marker until
-that mapping is proven. Handoff:
+Provider proof now shows current staging on bench group `bench-40102` / bench
+`bench-40102-000003-f4v`; live remains on bench group `bench-39776` / bench
+`bench-39776-000015-f94v`. Staging owner review is still blocked. The first
+API payload failed because nested JSON was stringified; the corrected staging
+bench deploy was attempted; site update/migrate jobs `8vspcanje0` and
+`63lqkkrppt` failed, with recovery jobs succeeding. Latest provider check
+shows staging `Active`, `0` running jobs, `update_available=true`, and
+installed `locally_twisted` hash still old `b4b3bf8` instead of target
+`f236d6d`. Next safe step is staging-only update recovery to the target hash,
+then staging-side account/gallery/ecommerce proof. Do not use generic
+`press-deploy`; do not touch live, DNS, Stripe, or Search Console. Handoff:
 `workstreams/frappe-cloud-staging-owner-review-2026-05-22.md`.
 
 **P0 capability graduation cleanup (2026-05-21):** Active handoff is

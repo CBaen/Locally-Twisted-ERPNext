@@ -34,9 +34,16 @@ Status as of 2026-05-18 for peer GPT-5.5 Codex/OpenClaw agents.
   stays separate. Handoff:
   `workstreams/ecommerce-audit/product-gallery-restoration-2026-05-22.md`.
 - Frappe Cloud staging prep started on 2026-05-22. Source `main` is pushed at
-  `2ee28da`; the private app-root mirror is pushed at `f236d6d`. This is not
-  staging proof. The current staging site still needs Frappe Cloud
-  deploy/update/migrate/cache evidence, current bench/site mapping proof, and
+  `2ee28da`; the private app-root mirror is pushed at `f236d6d`. Provider
+  proof now shows current staging on bench group `bench-40102` / bench
+  `bench-40102-000003-f4v`; live remains on bench group `bench-39776` / bench
+  `bench-39776-000015-f94v`. This is not owner-review ready: the corrected
+  staging bench deploy was attempted, site update/migrate jobs `8vspcanje0`
+  and `63lqkkrppt` failed with recovery jobs succeeding, and the latest
+  provider check shows staging `Active`, `0` running jobs,
+  `update_available=true`, and installed `locally_twisted` hash still old
+  `b4b3bf8`, not target `f236d6d`. The first API payload failure was caused by
+  stringified nested JSON. Staging still needs target-hash update proof plus
   staging-side Product Setup/gallery/account checks before owner review.
   Handoff:
   `workstreams/frappe-cloud-staging-owner-review-2026-05-22.md`.
@@ -86,12 +93,12 @@ this ecommerce lane, the staging-safe list is:
 
 2026-05-22 staging-prep nuance: official Frappe Cloud docs support
 `press-deploy` commit markers, including bench-specific markers. For LT, do
-not use generic `press-deploy`, and do not use the proposed targeted
-`press-deploy-bench-39776-000013-f94-virginia` marker until current provider
-evidence proves that bench is staging-only and no live/custom-domain site is
-attached. Repo history suggests that bench is staging/source and
-`bench-39776-000015-f94v` is live/destination, but release gates require
-current provider proof, not likely history.
+not use generic `press-deploy`. Current provider proof supersedes older repo
+history: staging is `bench-40102` / `bench-40102-000003-f4v`, and live remains
+`bench-39776` / `bench-39776-000015-f94v`. Owner review is blocked until
+staging installs target app hash `f236d6d` and passes staging-side proof; the
+latest provider check still shows old app hash `b4b3bf8` with
+`update_available=true`.
 
 ## Completed Lanes
 

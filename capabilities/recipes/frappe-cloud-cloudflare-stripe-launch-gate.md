@@ -1,7 +1,7 @@
 ---
 name: Frappe Cloud Cloudflare Stripe launch gate
 level: recipe
-last_verified: 2026-05-16
+last_verified: 2026-05-22
 currently_true: true
 ---
 
@@ -55,6 +55,18 @@ Default public launch posture:
   advertise the public domain, not the Frappe Cloud vanity host. As of
   2026-05-19, source guard work exists but live reindex work remains blocked
   until the fix is released and verified.
+- As of 2026-05-22, owner-review staging is blocked, not ready. Current
+  provider evidence puts `locallytwisted-staging.frappe.cloud` on Frappe Cloud
+  bench group `bench-40102` / bench `bench-40102-000003-f4v`, while live and
+  vanity traffic are separate on group `bench-39776` / bench
+  `bench-39776-000015-f94v`. The target app mirror commit `f236d6d` exists, but
+  staging still reports installed app hash
+  `b4b3bf80108234c12051b572ac9b9cd4728f0efc` after a failed
+  site update/migrate. Hash is not site readiness: app mirror hash, deploy
+  candidate, or bench deploy evidence is not owner-review proof until the
+  staging installed app hash matches the target, site update/migration/cache
+  succeeds, and staging route/browser/account/Product Setup/gallery checks pass
+  on staging.
 
 ## Human Access Boundary
 
@@ -85,6 +97,11 @@ Triad rule:
   before commit, push, staging, live, provider, or Search Console claims.
 - The triad must separately check source scope, staging/live gate evidence, and
   doc truth. Local green checks are prerequisites, not release approval.
+- Release triads must include artifact-owning helpers, not advisory-only
+  commentary. Each helper must own a check or artifact and return concrete
+  evidence such as a provider mapping report, payload validation note, verifier
+  output, patch plan, or blocker log that the controller can inspect before
+  mutation or closeout.
 - Do not treat `LT_BASE_URL=<staging-url>` as a universal retarget. A verifier
   that shells into the local Docker `frontend` site still proves local ERPNext
   records even if it fetches rendered HTML from another host.
@@ -93,13 +110,23 @@ Concise staging-safe list:
 
 1. Identify the source commit, app-mirror commit, staging host, rollback path,
    and whether the push is archive-only or deploy-triggering.
-2. Prove Frappe Cloud deploy, site update/migration, cache clear, app order, and
+2. Prove current Frappe Cloud site mapping before mutation. Current API
+   inventory beats stale runbook bench IDs; do not reuse old bench IDs from
+   docs without API/dashboard proof. For 2026-05-22 staging, the current target
+   is group `bench-40102` / bench `bench-40102-000003-f4v`, not the old
+   `bench-39776-000013-f94-virginia` source-bench reference.
+3. For Frappe Cloud API mutations, send `Content-Type: application/json`
+   typed JSON payloads only. For `press.api.bench.deploy_and_update`, `apps`
+   and `sites` must be real JSON arrays/objects accepted by the endpoint, not
+   nested JSON strings. A payload that stringifies nested `apps` or `sites` can
+   fail with `'str' object has no attribute 'get'`.
+4. Prove Frappe Cloud deploy, site update/migration, cache clear, app order, and
    `lt_ecommerce_paused=1` on staging.
-3. Run local hard gates for the changed slice before staging.
-4. Run staging HTTP/browser gates against the staging URL.
-5. Run database-side contracts in the staging environment, or leave them
+5. Run local hard gates for the changed slice before staging.
+6. Run staging HTTP/browser gates against the staging URL.
+7. Run database-side contracts in the staging environment, or leave them
    explicitly unverified for staging.
-6. Keep live checkout, Stripe, DNS, Search Console, and provider mutations
+8. Keep live checkout, Stripe, DNS, Search Console, and provider mutations
    blocked until their separate gates pass.
 
 ```powershell
@@ -140,8 +167,15 @@ python scripts/verify/book_form_repeat_email_photos.py --base-url https://locall
   routes and webhook path pass.
 - Treating a successful Frappe Cloud bench deploy as proof the site is running
   the new code before site update/migration succeeds.
+- Treating app mirror commit `f236d6d`, app release hash, or deploy candidate
+  creation as staging proof while the target site still reports the old
+  installed app hash. Hash existence is not site readiness.
 - Treating the final source commit as the full Frappe Cloud release scope
   instead of comparing previous live app hash to target app mirror commit.
+- Sending Frappe Cloud API payloads without `Content-Type: application/json`,
+  or with nested `apps` or `sites` encoded as strings instead of typed JSON
+  arrays/objects, then treating the API exception as a provider mystery instead
+  of a payload-contract failure.
 - Treating staging `/#login` rendering Sign In as live breakage before checking
   environment and Website Settings parity.
 - Treating `Server: Frappe Cloud` or a passing dynamic-route gate as proof that
@@ -225,3 +259,22 @@ On 2026-05-16:
 - Staging `/#login` rendered Sign In because staging Website Settings drifted,
   not because live was broken. Staging was repaired and cache clear job
   `fb85o6ncdh` succeeded.
+
+On 2026-05-22:
+
+- Source `2ee28da Harden product galleries and release gates` and app mirror
+  `f236d6d Sync app from LT source 2ee28da` exist and were prepared for
+  owner-review staging.
+- Current provider API inventory superseded the older staging/source-bench
+  assumption and any stale runbook bench IDs: staging is group `bench-40102` / bench
+  `bench-40102-000003-f4v`; live and vanity are group `bench-39776` / bench
+  `bench-39776-000015-f94v`.
+- Staging installed app hash remained
+  `b4b3bf80108234c12051b572ac9b9cd4728f0efc` after a failed
+  site update/migrate, so the owner-review staging gate remained blocked until
+  the installed hash is the target and staging site update/migrate/cache plus
+  route, browser, account, Product Setup, and gallery proof pass.
+- Frappe Cloud API payloads must use `Content-Type: application/json` and
+  preserve nested `apps` and `sites` as typed JSON. A failed attempt that sent
+  nested values as strings produced `'str' object has no attribute 'get'`; the
+  recovery path is payload validation, not guessing at new hashes.

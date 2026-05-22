@@ -6,6 +6,26 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-22 - Helper agents must own artifacts during release failures
+
+The Frappe Cloud staging failure had helper agents, but the helpers were too
+advisory to protect the release path. They produced useful analysis, but no
+helper owned a required artifact: current provider-state proof, pre-mutation
+payload-shape proof, or post-mutation success verifier. That let stale bench
+assumptions, an invalid Frappe Cloud API payload shape, and deploy-hash versus
+site-readiness confusion remain on the main agent's critical path.
+
+**Counter-move:** release/build failure work needs owned outputs, not just
+opinions. The Controller owns the critical path and stop/go gates; Witness owns
+independent provider-state verification; Recorder owns docs/handoff parity;
+Fixer owns concrete patch/verifier changes. Subagents must have narrow write
+scopes, executable verification outputs, sanitized payload/response artifacts,
+or blocking handoff sections that the Controller cannot bypass. Use
+`capabilities/failures/artifactless-subagent-release-triad.md` before future
+provider, staging, live, Search Console, Stripe, DNS, or major-build recovery.
+
+---
+
 ## 2026-05-22 - Triads are required before release or patch-spiral claims
 
 Release processes, major builds, and patch spirals are too easy to collapse

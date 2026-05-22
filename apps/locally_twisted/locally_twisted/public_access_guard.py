@@ -66,6 +66,9 @@ def _validate_website_settings(doc) -> None:
 
 
 def _validate_portal_settings(doc) -> None:
+    if getattr(frappe.flags, "in_migrate", False):
+        _normalize_portal_settings_for_migrate(doc)
+
     if doc.get("default_role"):
         _block(
             "Portal Settings.default_role must stay empty so public signup cannot auto-grant roles.",
@@ -85,6 +88,19 @@ def _validate_portal_settings(doc) -> None:
             _block(f"{route} must remain Supplier-only.", doc)
         if route in STOCK_CUSTOMER_ROUTES_TO_HIDE:
             _block(f"{route} must stay hidden from the customer portal menu.", doc)
+
+
+def _normalize_portal_settings_for_migrate(doc) -> None:
+    """Let Frappe's migrate-time portal sync repair safe values before saving."""
+    doc.set("default_role", None)
+    doc.set("default_portal_home", "me")
+
+    for row in doc.get("menu") or []:
+        route = row.get("route")
+        if route in SUPPLIER_ROUTES:
+            row.set("role", "Supplier")
+        if route in STOCK_CUSTOMER_ROUTES_TO_HIDE:
+            row.set("enabled", 0)
 
 
 def _validate_docperm(doc) -> None:

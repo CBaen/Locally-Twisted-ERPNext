@@ -33,22 +33,35 @@ current live discovery URLs still advertise the Frappe Cloud vanity host.
 ## Current Confirmed State
 
 1. Frappe Cloud
-   - Staging-prep source commit prepared on 2026-05-22:
+   - Staging-prep source commit exists and was prepared on 2026-05-22:
      `2ee28da Harden product galleries and release gates`.
-   - Staging-prep Frappe app mirror commit prepared on 2026-05-22:
+   - Staging-prep Frappe app mirror commit exists and was prepared on
+     2026-05-22:
      `f236d6d Sync app from LT source 2ee28da`.
    - These commits are not staging or live proof until Frappe Cloud
      deploy/update/migration/cache evidence exists for the target site.
-   - Current full repo source commit:
+   - Current owner-review staging state as of 2026-05-22: blocked. Current
+     provider evidence puts `locallytwisted-staging.frappe.cloud` on Frappe
+     Cloud bench group `bench-40102` / bench `bench-40102-000003-f4v`.
+   - Current live/vanity state as of 2026-05-22: separate from staging on bench
+     group `bench-39776` / bench `bench-39776-000015-f94v`.
+   - Target app mirror commit for staging is `f236d6d`, but staging still
+     reports installed app hash `b4b3bf80108234c12051b572ac9b9cd4728f0efc`
+     after a failed site update/migrate. Hash is not site readiness. Owner
+     review remains blocked until the installed app hash is the target and
+     staging site update/migration/cache, app order, pause state, route,
+     browser, account, Product Setup, and gallery proof pass on staging.
+   - Last proven live full repo source commit:
      `631f9a8 Run contact intake schema sync on install`.
-   - Current Frappe app mirror commit:
+   - Last proven live Frappe app mirror commit:
      `b4b3bf8 Run contact intake schema sync on install`.
    - Previous live app hash:
      `04de8212aa7dbf4895716717865fc6e1029c757b`.
-   - Current site update/migrate job: `b48j584nua`, status `Success`.
-   - Current update job: `b48oge6unq`, status `Success`.
-   - Source bench: `bench-39776-000013-f94-virginia`.
-   - Destination bench: `bench-39776-000015-f94v`.
+   - Last proven live site update/migrate job: `b48j584nua`, status `Success`.
+   - Last proven live update job: `b48oge6unq`, status `Success`.
+   - Historical 2026-05-16 source bench: `bench-39776-000013-f94-virginia`.
+     This is not the current 2026-05-22 staging target.
+   - Live/destination bench: `bench-39776-000015-f94v`.
    - Cache clear job: `26es8svcaq`, status `Success`.
    - Site state after update: Active, no update available.
    - 2026-05-14 public route probe: `https://locallytwisted.com` returned HTTP
@@ -130,6 +143,10 @@ Release/process rule:
 
 - A triad is required before any commit/push/staging claim for release
   processes, major builds, or patch spirals.
+- The triad must include artifact-owning helpers, not advisory-only helpers.
+  Each helper must own a check or artifact and return inspectable evidence such
+  as provider mapping, payload validation, verifier output, a patch plan, or a
+  blocker log.
 - Keep source scope, staging scope, and live/provider scope separate. A local
   pass is a prerequisite, not staging proof.
 - Do not treat `LT_BASE_URL=<staging-url>` as a universal retarget. Verifiers
@@ -139,24 +156,31 @@ Release/process rule:
 Staging-safe gate list:
 
 1. Confirm the exact source commit and app-mirror commit intended for staging.
-2. Confirm the staging host, site update/migration job, cache clear, installed
+2. Confirm current Frappe Cloud provider mapping. Current API inventory beats
+   stale runbook bench IDs. As of 2026-05-22, staging is group `bench-40102` /
+   bench `bench-40102-000003-f4v`, and live/vanity is group `bench-39776` /
+   bench `bench-39776-000015-f94v`.
+3. For Frappe Cloud API mutations, send `Content-Type: application/json` typed
+   JSON payloads only. Do not send nested `apps` or `sites` values as strings;
+   that can fail with `'str' object has no attribute 'get'`.
+4. Confirm the staging host, site update/migration job, cache clear, installed
    app order, and `lt_ecommerce_paused=1`.
-3. Run local hard gates first, including the relevant product/owner/access
+5. Run local hard gates first, including the relevant product/owner/access
    gates for the changed slice.
-4. Run staging HTTP/browser gates against the staging URL.
-5. Run any database-side proof in the staging environment, or mark that proof
+6. Run staging HTTP/browser gates against the staging URL.
+7. Run any database-side proof in the staging environment, or mark that proof
    unverified. Do not claim staging from a local Docker database read.
-6. Record remaining live-only blockers before any live/provider/Search Console
+8. Record remaining live-only blockers before any live/provider/Search Console
    action.
 
 2026-05-22 provider trigger rule: Frappe Cloud supports commit-message deploy
 markers for benches, but LT agents must not use generic `press-deploy`.
-The proposed targeted marker
-`press-deploy-bench-39776-000013-f94-virginia` is blocked until current
-Frappe Cloud dashboard/API/SSH proof confirms that bench is staging-only and
-contains no live/custom-domain site. If provider proof is available, prefer
-dashboard deploy/update with the staging site explicitly selected, or use only
-the exact bench-specific marker.
+The old proposed targeted marker
+`press-deploy-bench-39776-000013-f94-virginia` is stale and must not be used
+for the current staging site. Current evidence points staging at group
+`bench-40102`; any deploy/update must target the current staging group/site
+explicitly and must still pass site update/migration before owner review.
+Prefer dashboard/API deploy/update with the staging site explicitly selected.
 
 Public site/forms release:
 
@@ -206,9 +230,12 @@ python scripts/verify/stripe_amount_parity_contract.py
 3. Do not paste Stripe, Cloudflare, or Frappe Cloud secrets into chat or docs.
 4. Do not call a Frappe Cloud deploy complete until both bench deploy and site
    update/migration have succeeded and live route/API verifiers pass.
-5. Do not call a future release narrow from the final commit alone. Compare the
+5. Do not treat app mirror commit `f236d6d`, a Frappe Cloud app hash, or a
+   deploy candidate as staging proof while the target site still reports an old
+   installed app hash. Hash existence is not site readiness.
+6. Do not call a future release narrow from the final commit alone. Compare the
    previous live app hash to the target app mirror commit before promotion.
-6. Do not treat a staging root login screen as live breakage without naming the
+7. Do not treat a staging root login screen as live breakage without naming the
    environment and checking Website Settings parity.
-7. Do not submit a sitemap or ask Google to reindex while the live sitemap or
+8. Do not submit a sitemap or ask Google to reindex while the live sitemap or
    canonical tags point at `locallytwisted.v.frappe.cloud`.

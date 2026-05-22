@@ -49,6 +49,8 @@ supports another machine type. Add `failure_kind` to clarify intent:
 - `regression_pattern` - a behavior repeatedly breaks after changes.
 - `process_failure` - the workflow, delegation, evidence, or approval process
   failed even if no single code artifact is the root cause.
+- `release_gate_gap` - provider, deploy, migration, cache, route, payment, or
+  approval evidence was treated as complete before every required gate passed.
 
 Older dead-end entries without `failure_kind` remain valid. When you touch one,
 add `failure_kind: dead_end` if it still applies.
@@ -61,6 +63,8 @@ Check Failure Recipes before or during work when:
 - a task touches a surface with known regressions or business risk;
 - a verifier expectation, approval gate, or source-of-truth rule is being
   changed;
+- Frappe Cloud, Cloudflare, Stripe, DNS, Search Console, or another provider
+  surface is being checked, deployed, recovered, or approved;
 - a subagent, tool lane, or research dispatch times out or produces no durable
   artifact;
 - a bug looks isolated, but the trigger or guard failure could recur.

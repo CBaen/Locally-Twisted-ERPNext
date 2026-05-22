@@ -1,7 +1,8 @@
 # Frappe Cloud Staging Owner Review - 2026-05-22
 
-Status: source and app mirror prepared; staging deploy/update is blocked on
-current Frappe Cloud bench/site mapping proof.
+Status: source and app mirror are archived; Frappe Cloud staging owner review
+is still blocked because staging is Active but still running the old
+`locally_twisted` app hash.
 
 ## Scope
 
@@ -29,24 +30,31 @@ This workstream cross-links:
 | Mirror scope | Broad app-root sync from `apps/locally_twisted`; not just the final source commit |
 | Local hard gates | `frappe_cloud_preflight.py`, `human_access_silo_matrix.py`, `marketing_review_access_boundary.py`, `npm run test:owner-product-safety`, and `npm run test:ecommerce-full` passed after the source push |
 | Staging host probe | `https://locallytwisted-staging.frappe.cloud/` returns HTTP 200 from Frappe Cloud |
-| Staging stale signals | `/robots.txt` is blank; product routes still redirect to `ready-to-order-paused`; product-gallery staging proof is absent |
-| Provider access | No Frappe Cloud CLI/env vars found; no SSH certificate present; raw SSH with the local key returned `Permission denied`; known local dev/admin credentials did not log into staging |
+| Current staging provider mapping | Staging is on Frappe Cloud bench group `bench-40102` / bench `bench-40102-000003-f4v` |
+| Current live provider mapping | Live remains on bench group `bench-39776` / bench `bench-39776-000015-f94v` |
+| First API issue | Initial API payload failed because nested JSON was stringified; this was a payload-shape error, not proof of deploy success |
+| Deploy/update attempt | Corrected staging bench deploy was attempted; site update/migrate jobs `8vspcanje0` and `63lqkkrppt` failed, with recovery jobs succeeding |
+| Latest provider check | Staging is `Active`, has `0` running jobs, `update_available=true`, and installed `locally_twisted` hash is still old `b4b3bf8`, not target `f236d6d` |
+| Owner review status | Blocked: staging is stable after recovery, but it has not picked up the target app mirror commit |
 
 ## Triad Decision
 
-The triad reviewed whether to trigger Frappe Cloud with an app-mirror empty
-commit containing `press-deploy-bench-39776-000013-f94-virginia`.
+The triad first reviewed whether to trigger Frappe Cloud with an app-mirror
+empty commit containing `press-deploy-bench-39776-000013-f94-virginia`.
 
 - Sartre: conditional pass if `bench-39776-000013-f94-virginia` is proven to
   be staging-only; reject plain `press-deploy`.
 - Peirce: block until current provider evidence proves that bench/site mapping.
 - Controller decision: no marker deploy yet. The stricter release gate wins.
 
-Reason: repo history strongly suggests `bench-39776-000013-f94-virginia` was
-the source/staging bench and `bench-39776-000015-f94v` was the live/destination
-bench, but provider state can drift. A targeted marker is still a provider
-mutation and must not run until the current Frappe Cloud dashboard/API/SSH view
-proves no live/custom-domain site sits on the target bench.
+Provider API proof later showed the prior staging-bench assumption was stale:
+current staging is `bench-40102` / `bench-40102-000003-f4v`, while live remains
+`bench-39776` / `bench-39776-000015-f94v`. This confirms the earlier block was
+correct: repo history was not enough evidence for a provider mutation.
+
+Current decision: owner review remains blocked. Staging is Active with no
+running jobs after recovery, but `update_available=true` and the installed
+`locally_twisted` app hash is still old `b4b3bf8`, not target `f236d6d`.
 
 Official Frappe Cloud docs checked on 2026-05-22:
 
@@ -57,20 +65,17 @@ Official Frappe Cloud docs checked on 2026-05-22:
 
 ## Next Safe Step
 
-Prove provider mapping before any deploy trigger:
+Recover staging to the target app hash without touching live:
 
-1. Confirm `https://locallytwisted-staging.frappe.cloud` is on
-   `bench-39776-000013-f94-virginia`.
-2. Confirm `https://locallytwisted.com` and
-   `https://locallytwisted.v.frappe.cloud` are on
-   `bench-39776-000015-f94v`.
-3. Confirm no live/custom-domain/customer-facing site is attached to
-   `bench-39776-000013-f94-virginia`.
-4. Confirm Frappe Cloud accepts the full bench identifier for targeted
-   `press-deploy-bench-39776-000013-f94-virginia`, or use dashboard deploy and
-   update with the staging site explicitly selected.
+1. Treat `bench-40102` / `bench-40102-000003-f4v` as the current staging
+   target, not the older `bench-39776-000013-f94-virginia` value.
+2. Confirm no running staging jobs before the next action.
+3. Use the Frappe Cloud staging-only update path for
+   `locallytwisted-staging.frappe.cloud`; do not use generic `press-deploy`.
+4. After any update attempt, prove the installed `locally_twisted` hash changes
+   from `b4b3bf8` to target `f236d6d`.
 
-After that proof, deploy/update staging only, then prove:
+After target hash proof, deploy/update staging only, then prove:
 
 - staging bench deploy succeeded;
 - staging site update/migrate succeeded;

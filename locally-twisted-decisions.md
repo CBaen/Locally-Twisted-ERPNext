@@ -8,6 +8,36 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-22 - Release helpers must own blocking artifacts
+
+**Decision:** For release processes, major builds, and release/build failure
+recovery, helper agents are not enough unless they own a required output. A
+future LT release triad must use explicit ownership: Controller owns the
+critical path and stop/go decisions; Witness owns independent provider-state
+verification; Recorder owns docs and handoff parity; Fixer owns concrete
+patch/verifier changes.
+
+**Reasoning:** The Frappe Cloud staging failure had helper-agent review, but
+the helpers were read-only/advisory. No helper owned the current provider-state
+artifact, the pre-mutation payload-shape proof, or the post-mutation success
+verifier. That coordination gap let technical problems stay live on the main
+agent's path: stale bench assumptions, wrong Frappe Cloud API payload shape,
+and confusion between app/deploy hash and site update/migration readiness.
+
+**Implementation boundary:** Subagents used for provider, staging, live,
+Search Console, Stripe, DNS, or major-build failures must have a narrow write
+scope or an executable verification output. Acceptable outputs include a named
+file patch, a pass/fail verifier command, a sanitized payload/response artifact,
+or a blocking handoff section. A helper's "pass" or "block" statement is not a
+release gate by itself unless the required artifact exists and the Controller
+records how it was satisfied.
+
+**Receipts:** `capabilities/failures/artifactless-subagent-release-triad.md`;
+`capabilities/failures/provider-dashboard-work-bounced-to-gl.md`;
+`capabilities/failures/frappe-cloud-release-site-migration-drift.md`.
+
+---
+
 ## 2026-05-22 - Triads are mandatory for release processes and patch spirals
 
 **Decision:** Release processes, major builds, and patch spirals require a triad
