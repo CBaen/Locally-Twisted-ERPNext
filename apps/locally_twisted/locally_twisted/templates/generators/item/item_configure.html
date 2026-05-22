@@ -100,7 +100,7 @@
                                         </span>
                                         <span class="lt-product__color-name">
                                             <span>{{ color.name }}</span>
-                                            {% if color.hex_value and not color.swatch_url %}<span class="lt-product__color-hex">({{ color.hex_value }})</span>{% endif %}
+                                            {% if color.hex_value %}<span class="lt-product__color-hex">({{ color.hex_value }})</span>{% endif %}
                                         </span>
                                     </label>
                                 {%- endfor -%}
@@ -375,6 +375,11 @@
         var picks = selectedAttrs();
         attrEls.forEach(function (a) {
             var sel = a.querySelector('.lt-product__attr-selected');
+            if (!sel) return;
+            if (a.getAttribute('data-display-type') === 'chips') {
+                sel.textContent = '';
+                return;
+            }
             var name = a.getAttribute('data-attribute-name');
             var colorNames = selectedColorNames(a);
             if (colorNames.length) {

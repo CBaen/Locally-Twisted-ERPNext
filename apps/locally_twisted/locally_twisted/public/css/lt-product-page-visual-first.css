@@ -298,6 +298,10 @@
   min-width: 0;
 }
 
+.lt-product__attr[data-display-type="chips"] .lt-product__attr-selected {
+  display: none;
+}
+
 .lt-product__attr[data-attribute-name="Arch Size"] .lt-product__chips {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }

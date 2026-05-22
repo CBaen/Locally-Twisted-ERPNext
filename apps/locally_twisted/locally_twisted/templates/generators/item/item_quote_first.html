@@ -66,7 +66,7 @@
                                             </span>
                                             <span class="lt-product__color-name">
                                                 <span>{{ color.name }}</span>
-                                                {% if color.hex_value and not color.swatch_url %}<span class="lt-product__color-hex">({{ color.hex_value }})</span>{% endif %}
+                                                {% if color.hex_value %}<span class="lt-product__color-hex">({{ color.hex_value }})</span>{% endif %}
                                             </span>
                                         </label>
                                     {%- endfor -%}

@@ -111,6 +111,22 @@ for (const viewport of VIEWPORTS) {
 		await expect(page.locator(".lt-product__configure")).toHaveCount(0);
 		const architecture = await expectArchitectureContract(page, "quote_first");
 		expect(architecture.controls.some((control) => control.payload_target === "selected_options")).toBe(true);
+		const colorControl = architecture.controls.find((control) => control.axis_name === "latex colors");
+		expect(colorControl).toEqual(
+			expect.objectContaining({
+				role: "customization",
+				payload_target: "color_recipes",
+				selector_type: "multi_color_recipe_builder",
+			}),
+		);
+		await expect(page.locator('.lt-product__quote-attr[data-attribute-name="latex colors"]')).toHaveAttribute(
+			"data-display-type",
+			"color-drawer",
+		);
+		await expect(page.locator(".lt-product__color-drawer")).toHaveCount(8);
+		await expect(page.locator(".lt-product__color-card")).toHaveCount(51);
+		await expect(page.locator(".lt-product__color-swatch img")).toHaveCount(51);
+		await expect(page.locator(".lt-product__color-hex")).toHaveCount(51);
 		await expectNoHorizontalOverflow(page);
 		await chooseFirstVisibleOption(page);
 		await page.locator('[data-customization-key="color_notes"]').fill("Reflex Gold and Navy");
