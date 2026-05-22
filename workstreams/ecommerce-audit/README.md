@@ -34,6 +34,20 @@ least that product as checkout. `website_item_classification_contract.py`
 dry-run wants 17 lane changes from an older target model. Do not apply those
 classification changes without current GL review.
 
+## 2026-05-22 Shop Category Generated Heroes
+
+Use `shop-category-hero-imagery-2026-05-22.md` as the current front-door
+handoff for `/shop-items/<group>` route hero imagery. It supersedes the first
+bad local attempt that cropped Odoo/product photos into banners.
+
+Current evidence: all 11 category detail routes have unique generated hero
+WebP crops for mobile, tablet, and desktop. The source prompt authority is the
+category shape plus owner/Odoo balloon color names and swatch references, with
+hex values documented only as web-match approximations. `shop_category_hero_images.spec.js`
+passed 35/35 and the category routes passed public asset, container, and layout
+gates. No ERPNext Item Group `image` fields were changed, and no staging/live
+release was performed.
+
 ## 2026-05-17 All-Odoo Sellable Product Reimport
 
 Use `odoo-sellable-product-reimport-2026-05-17.md` as the current front-door

@@ -1,5 +1,25 @@
 # Locally Twisted - Coding Handoff
 
+Codex shop category hero/color-catalog closeout on 2026-05-22: all 11
+`/shop-items/<group>` compact hero routes now use category-specific generated
+WebP crops instead of the repeated generic shop lifestyle image. The generated
+source authority is the owner/Odoo balloon swatch system and exact balloon
+color names, not hex-only prompts. Source assets and manifest:
+`_resources/generated-hero-sources/2026-05-22/`; color authority:
+`_resources/STYLE-GUIDE-BALLOON-COLOR-ADDENDUM.md`; feature handoff:
+`workstreams/ecommerce-audit/shop-category-hero-imagery-2026-05-22.md`;
+capability: `capabilities/recipes/lt-balloon-color-generated-hero-contract.md`;
+research brief: `research/research-shop-category-generated-heroes/research-brief.md`.
+This did not mutate ERPNext Item Group `image` fields, did not approve
+category card/mega-menu photography, and did not stage or deploy live. Verified
+locally: `python scripts\verify\odoo_color_swatch_contract.py`,
+`python -m py_compile scripts\setup\generate_shop_category_heroes.py`,
+`python scripts\dev\clear_website_cache.py`,
+`scripts\verify\run_playwright.cmd test scripts/verify/shop_category_hero_images.spec.js --reporter=line --workers=1`
+passed 35/35, `npm run test:public-assets`,
+`npm run test:container-contract -- --grep "seasonal-category|shop"`, and
+`npm run test:layout-fit -- --grep "seasonal-category|shop"`.
+
 Codex selective indexing gate on 2026-05-21: local source now supports
 indexing stable public business pages while keeping unfinished ecommerce out of
 public discovery. `seo.py` owns `robots_meta_for_path()` and

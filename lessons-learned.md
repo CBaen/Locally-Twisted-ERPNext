@@ -3308,3 +3308,28 @@ missing reference or trust field against current LT files before editing.
 
 **Avoid:** using a source-package update as cover to normalize LT
 `currently_true`, dependency, or backlink fields without local evidence.
+
+---
+
+## 2026-05-22 - Balloon color prompts need swatch authority, not hex confidence
+
+**Lesson:** For LT balloon visuals, exact owner/Odoo swatch images and balloon
+color names outrank hex values. Hex can help web matching, but it is not enough
+to make generated balloon imagery look like the colors Jeff actually offers.
+
+**What happened:** The first category-hero repair used source-photo crops and
+still produced bad category heroes. The next generated-image pass improved the
+shape problem, but GL clarified the generation brief must name the balloon
+colors and source context, not only hex. The kept repair uses generated
+category-specific hero art, a 53-color addendum, a dated manifest, and a
+verifier that checks the prompt/manifest boundary.
+
+**Do this next time:** Before generating LT balloon imagery, open
+`_resources/STYLE-GUIDE-BALLOON-COLOR-ADDENDUM.md`, pass the source color
+names and swatch refs into the prompt, review the contact sheet for fake text
+or mismatched palette, then run `scripts/verify/shop_category_hero_images.spec.js`
+when route heroes are involved.
+
+**Avoid:** hex-only prompts, treating model output as proof photography,
+leaving fake signage/text in generated banners, or confusing route hero art
+with ERPNext Item Group image approval.

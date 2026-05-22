@@ -8,6 +8,43 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-22 - Shop category heroes use owner/Odoo balloon color authority
+
+**Decision:** `/shop-items/<group>` hero imagery is generated representative
+hero art per category, not proof photography, not cropped Odoo product photos,
+and not generic reused shop lifestyle imagery. Generated hero prompts must use
+category shape plus exact owner/Odoo balloon color names and swatch references.
+Hex values are retained only as best web-match approximations for CSS,
+documents, and customer matching.
+
+**Reasoning:** GL rejected the first crop-based repair because the banners were
+bad images and did not represent the product categories with the right balloon
+color system. Hex values can drift from real balloon stock; the owner/Odoo
+swatch images and balloon color names are the closest local authority for LT's
+actual color offering. Category pages need product-shaped, ratio-aware hero
+art, while proof photography and ERPNext Item Group image assignment remain
+separate approval lanes.
+
+**Implementation boundary:** Local source only. This updates style-guide
+authority, generated source assets, public route hero crops, CSS route mapping,
+and a focused verifier. It does not approve ERPNext Item Group `image` fields,
+category card photos, image-rich mega-menu photos, Frappe Cloud deployment,
+DNS, Stripe, staging, live release, or public ecommerce launch.
+
+**Receipts:** `_resources/STYLE-GUIDE-BALLOON-COLOR-ADDENDUM.md`;
+`_resources/generated-hero-sources/2026-05-22/shop-category-generated-hero-manifest.json`;
+`workstreams/ecommerce-audit/shop-category-hero-imagery-2026-05-22.md`;
+`capabilities/recipes/lt-balloon-color-generated-hero-contract.md`;
+`scripts/setup/generate_shop_category_heroes.py`;
+`scripts/verify/shop_category_hero_images.spec.js`.
+
+**Decided by:** Guiding Light's 2026-05-22 correction that generated category
+heroes must use the real balloon-color offering by source color names/swatches,
+not hex-only prompts; Codex local implementation and verification the same
+day.
+
+---
+
 ## 2026-05-21 - Index stable business pages, not unfinished ecommerce
 
 **Decision:** Use selective indexing for Locally Twisted. Stable public

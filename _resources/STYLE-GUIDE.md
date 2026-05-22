@@ -1,7 +1,7 @@
 # Locally Twisted - ERPNext/Frappe Style Guide
 
-**Version:** 4.5
-**Last Updated:** 2026-05-08
+**Version:** 4.7
+**Last Updated:** 2026-05-22
 **Build Target:** ERPNext v15.105.0 + Frappe v15.106.0 / Webshop
 **Primary Viewport:** Mobile-first, 375px base
 
@@ -20,7 +20,7 @@ styling.
 
 Use this guide when writing customer-facing copy, building Frappe/Jinja pages,
 styling Webshop surfaces, reviewing visual work, making image selections, drawing
-icons, or briefing GPT/Codex-style coding agents. Version 4.6 keeps the
+icons, or briefing GPT/Codex-style coding agents. Version 4.7 keeps the
 non-negotiable compact hero contract and adds the shared generated-photo hero
 rule: public heroes use breakpoint-specific lifestyle crops made through the
 project image-generation API under the black landing-page readability overlay.
@@ -28,6 +28,8 @@ Existing real/proof photos are reserved for portfolio, product, and proof
 surfaces. It also keeps the portfolio correction:
 portfolio photos carry the proof alone, without captions or visible frame
 wrappers, while mobile keeps slide-in motion instead of becoming a static stack.
+It also adds the balloon color addendum as the source for owner/Odoo swatches,
+supplier-style color names, drawer grouping, and best web-match hex values.
 
 ---
 
@@ -47,6 +49,7 @@ wrappers, while mobile keeps slide-in motion instead of becoming a static stack.
 12. **Containers are launch-critical.** Text, images, controls, menus, cards, forms, chips, drawers, and modals must stay inside their containers at breakpoint edges and in open/expanded states.
 13. **Verify visible work.** Do not claim a route, layout, or visual state works without checking it.
 14. **Heroes are compact, photographic, and standardized.** A hero labels the page; it is not the page. Use the hero height contract below, use a generated lifestyle photo under the black landing-page readability overlay, and do not add page-local hero padding or giant title clamps without a documented exception.
+15. **Balloon color names and swatches outrank hex.** Use `_resources/STYLE-GUIDE-BALLOON-COLOR-ADDENDUM.md` when briefing generated images or matching customer colors. Hex values are best web approximations only.
 
 ---
 
@@ -252,6 +255,11 @@ Use plain customer labels. Avoid backend CRM language in public copy.
 The approved blend is Civic Celebration plus Slate Blue and Berry. Use deep,
 serious grounds with warm paper, brass detail, and berry/crimson action. Balloon
 photos provide most color.
+
+Balloon color selection, generated hero prompts, and customer color matching use
+the separate addendum: [`STYLE-GUIDE-BALLOON-COLOR-ADDENDUM.md`](STYLE-GUIDE-BALLOON-COLOR-ADDENDUM.md).
+The balloon color name and owner/Odoo swatch image are the authority; sampled
+hex values are only web approximations.
 
 ### Core Palette
 

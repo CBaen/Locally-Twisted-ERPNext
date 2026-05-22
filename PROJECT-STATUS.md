@@ -8,6 +8,13 @@
 
 > **Domain/reindex correction, 2026-05-19:** Public pages/forms now serve through Cloudflare DNS and Frappe Cloud. Current chain is GoDaddy registrar -> Cloudflare DNS/email routing -> Frappe Cloud -> ERPNext/Frappe. Hetzner/Odoo is old reference/decommission scope. Reindex work is blocked until the live sitemap/canonical fix is released because current live discovery URLs still advertise `locallytwisted.v.frappe.cloud`. Use `workstreams/domain-provider-reindex-cleanup-2026-05-19.md`.
 
+> **Category hero/color correction, 2026-05-22:** `/shop-items/<group>`
+> compact heroes now use generated, category-specific WebP crops sourced from
+> owner/Odoo balloon swatches and exact color names. This does not mean
+> ERPNext Item Group `image` fields were approved or changed. Use
+> `workstreams/ecommerce-audit/shop-category-hero-imagery-2026-05-22.md` and
+> `_resources/STYLE-GUIDE-BALLOON-COLOR-ADDENDUM.md`.
+
 **Repo:** `git init` 2026-04-26 at `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted`. Pushed to `https://github.com/CBaen/Locally-Twisted-ERPNext`. Separate from BBC agency repo per the agency isolation rule.
 **Tech:** ERPNext v15.105.0 + Frappe v15.106.0 verified locally on 2026-05-08, MariaDB 11.8, Redis 6.2, nginx — running via `frappe_docker` upstream + custom port pinning.
 **Purpose:** Migrate LT's business intent + catalog data into a fresh ERPNext v15 install — website, ecommerce, lead intake, operator workflow, invoicing, payments, accounting, payroll, end-to-end. Frame revised 2026-04-30 (see `locally-twisted-decisions.md`). The destination is greenfield ERPNext; the migration sources are the failed Odoo attempt's discovery work, the catalog data ported 2026-04-30, and the legacy `locallytwisted.com` site that the new ERPNext storefront replaces at cutover.
@@ -31,7 +38,7 @@
 - **localStorage-backed guest cart** at `/cart` (LT-owned route; multi-item checkout).
 - **Phase 1 customer surfaces live or compatibility-safe:** `/`, `/lookbook`, `/shop`, `/shop-by-category` redirecting to `/shop`, `/shop-items/<group>` × 11, `/shop-items/<group>/<slug>` × 53, `/balloon-twisting-and-face-painting`, `/contact`, `/all-products` routing to `/shop`, `/faq`, `/refund-policy`, `/accessibility`, `/cart`, `/checkout`, `/payment-success`, `/thank-you`. All form-bearing pages have AJAX → Lead + Communication wiring with three-channel loud-failure compliance.
 - **Mobile responsiveness shipped 2026-04-29** at 320 / 375 / 414 viewports.
-- **Current visual authority:** `_resources/STYLE-GUIDE.md` version 4.2 or newer. The old `_resources/design-guide/` synthesis was deleted on 2026-05-05 because it conflicted with the Civic Celebration + Slate Blue/Berry + Brand Direction contract and kept reintroducing light-blue/blush styling. Stale shop/spec comparison docs and the old generic icon-comparison resource were also deleted. The current feature handoff is `workstreams/brand-style-guide-consolidation.md`, and the current brand SVG suite is `apps/locally_twisted/locally_twisted/public/icons/brand/`.
+- **Current visual authority:** `_resources/STYLE-GUIDE.md` version 4.7 or newer plus `_resources/STYLE-GUIDE-BALLOON-COLOR-ADDENDUM.md`. The old `_resources/design-guide/` synthesis was deleted on 2026-05-05 because it conflicted with the Civic Celebration + Slate Blue/Berry + Brand Direction contract and kept reintroducing light-blue/blush styling. Stale shop/spec comparison docs and the old generic icon-comparison resource were also deleted. The current brand feature handoff is `workstreams/brand-style-guide-consolidation.md`, the current category hero handoff is `workstreams/ecommerce-audit/shop-category-hero-imagery-2026-05-22.md`, and the current brand SVG suite is `apps/locally_twisted/locally_twisted/public/icons/brand/`.
 
 **Catalog port complete (2026-04-30):**
 - **Old live Odoo test shop catalog rebuilt in ERPNext webshop end-to-end.** Catalog source/reference: `http://5.78.136.133/shop`, captured to `_resources/odoo-live/catalog.json` via `scripts/setup/scrape_odoo_live.py`. This was a catalog-data port into a new ERPNext build, not an Odoo business-system migration.
@@ -64,7 +71,7 @@
 - **ERPNext Backend simplification workstream** — multi-handoff lane at `workstreams/erpnext-backend-simplification.md`; owner/manager/employee Desk first pass, Owner Home command center, workspace sync, Lead photo wiring, Task-only stage cascade, and read-only backend inventory are done. Next: checkout/Lead conversion parity, Contact/Customer/order flow simplification, DB-only field keep/hide/export decisions, then backend-tour sample data.
 - **Stripe Dashboard URL wiring for `/privacy` and `/terms-of-service`** after GL/legal approval; dashboard still has placeholder URLs until changed.
 - **Sample data for backend tour** — realistic Lead records, paid SO, upcoming event for Jeff's desk demo.
-- **Category browse imagery** — each Item Group has empty `image` field. Use representative category media for `/shop-items/<group>` pages or a future image-rich mega menu; do not revive the retired `/shop-by-category` card index for launch.
+- **Category browse imagery** - `/shop-items/<group>` route heroes are repaired locally with generated category-specific WebP crops. ERPNext Item Group `image` fields are still empty/unapproved for category cards or future image-rich menus; use the category-media approval lane before mutating DB images. Do not revive the retired `/shop-by-category` card index for launch.
 
 **Phase 6 carry-forward (CRITICAL — must happen at cutover):**
 - **Remove operator-state-sensitive Item Attribute fixtures from `hooks.py fixtures = [...]` BEFORE Jeff's first post-takeover deploy.** Especially the `latex colors` Item Attribute (51 values — the most likely category Jeff edits as his supplier inventory shifts). Otherwise BBC fixture sync silently overwrites his renames on every `bench migrate`. See `locally-twisted-decisions.md` 2026-04-30 entry "Phase 6 cutover work item." Document in `NOUPDATE-DRIFT.md` (TBD).

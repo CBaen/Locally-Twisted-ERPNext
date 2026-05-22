@@ -8,6 +8,13 @@ Status as of 2026-05-18 for peer GPT-5.5 Codex/OpenClaw agents.
 - Published closeout baseline before complex-scaffold work: `1811cd6 Fix ecommerce closeout doc state`; verify current `HEAD` / `origin/main` with `git status -sb` before editing.
 - This file is the front-door handoff for the local ecommerce shop setup and
   staff product-authoring slices.
+- Category detail heroes were repaired locally on 2026-05-22. All 11
+  `/shop-items/<group>` routes now use generated category-specific hero crops
+  built from owner/Odoo balloon swatches and exact color names. This is route
+  hero art only: ERPNext Item Group `image` fields remain unapproved and
+  unchanged. Handoff:
+  `workstreams/ecommerce-audit/shop-category-hero-imagery-2026-05-22.md`;
+  color authority: `_resources/STYLE-GUIDE-BALLOON-COLOR-ADDENDUM.md`.
 - Current local product import proof treats all 53 Odoo-imported products as
   real products. Direct checkout is now bounded for high-complexity color
   products: the two graduation products use college color preset checkout
@@ -36,6 +43,41 @@ Status as of 2026-05-18 for peer GPT-5.5 Codex/OpenClaw agents.
   incomplete.
 
 ## Completed Lanes
+
+### Shop category generated heroes and balloon color catalog - 2026-05-22
+
+Owner: `Codex`
+
+Result: complete locally for the route-hero slice. No staging/live site update,
+Frappe Cloud update, DNS change, Stripe live change, ERPNext Item Group image
+mutation, or public exposure change was made.
+
+Feature handoff:
+
+- `workstreams/ecommerce-audit/shop-category-hero-imagery-2026-05-22.md`
+
+Evidence summary: the previous category pages all inherited the same generic
+shop hero image. A first repair using Odoo/photo crops was rejected. The kept
+repair generates representative wide hero art per category, prompts with the
+category shape plus owner/Odoo balloon color names and swatch references, crops
+to the compact hero breakpoints, and maps each `/shop-items/<group>` route to a
+unique WebP set. The style guide now has a balloon color addendum with 53
+drawer options, swatch references, and best web-match hex values for matching
+only. Hex values are not image-generation authority.
+
+Green gates:
+
+- `python scripts\verify\odoo_color_swatch_contract.py`
+- `python -m py_compile scripts\setup\generate_shop_category_heroes.py`
+- `python scripts\dev\clear_website_cache.py`
+- `scripts\verify\run_playwright.cmd test scripts/verify/shop_category_hero_images.spec.js --reporter=line --workers=1`
+- `npm run test:public-assets`
+- `npm run test:container-contract -- --grep "seasonal-category|shop"`
+- `npm run test:layout-fit -- --grep "seasonal-category|shop"`
+
+Remaining before live release: GL local visual review on localhost, then the
+normal release gate if approved. Separate future work still owns ERPNext Item
+Group `image` field approval for category cards or image-rich menus.
 
 ### School/seasonal color preset product logic - 2026-05-18
 

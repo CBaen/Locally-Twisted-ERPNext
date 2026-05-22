@@ -28,6 +28,10 @@ tags:
 Use this recipe when selecting representative images for customer-facing Item
 Groups under `Shop Items`.
 
+This is separate from CSS route hero art. The 2026-05-22 generated hero pass
+updated `/shop-items/<group>` compact hero assets only; it did not approve or
+mutate ERPNext Item Group `image` fields.
+
 ## Contract
 
 Category browse images are not product truth. They are visual wayfinding, so do
@@ -89,3 +93,9 @@ customer-facing Item Groups under `Shop Items`. `scripts/verify/category_media_c
 generated quick picks for all 11 categories without changing ERPNext data.
 `scripts/setup/sync_category_media.py` wrote a selection template, dry-ran 11
 would-update rows, and an unapproved apply safety check made 0 live updates.
+
+On 2026-05-22, route-level category hero art was repaired through generated
+WebP crops and CSS mapping. That work is tracked in
+`workstreams/ecommerce-audit/shop-category-hero-imagery-2026-05-22.md` and
+`capabilities/recipes/lt-balloon-color-generated-hero-contract.md`; it leaves
+this ERPNext Item Group approval lane parked until GL/Jeff approve DB images.

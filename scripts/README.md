@@ -48,6 +48,7 @@ should not be used as launch proof.
 | `sync_variant_media.py` | Stages Odoo product images and applies conservative variant image mappings. | After reviewing or refreshing catalog media mappings |
 | `sync_category_media.py` | Writes an approval template from category candidates, then stages and dry-runs or applies approved Item Group image selections through Frappe. `--apply` refuses unapproved selections. | After Jeff/GL approve category browse images |
 | `pull_odoo_color_swatches.py` | Downloads owner-uploaded Odoo product color swatch images from `product.template.attribute.value`, dedupes identical files into local app assets, and writes the source-owned drawer map consumed by `color_rules.py`. | After refreshing `_resources/odoo-live/catalog.json`, before verifying color drawers with `odoo_color_swatch_contract.py`, or when the old Odoo source color uploads need to be re-localized |
+| `generate_shop_category_heroes.py` | Generates representative `/shop-items/<category>` hero sources and breakpoint WebP crops through the approved Together/FLUX path using owner/Odoo color names and swatch references as prompt authority. | After changing category hero prompts, source swatches, or the shop category visual contract |
 
 ## dev/
 
