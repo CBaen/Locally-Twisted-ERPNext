@@ -13,12 +13,16 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 **P0 owner Product Setup local review before staging (2026-05-22):** Active
 handoff is
 `workstreams/ecommerce-audit/owner-product-setup-guard-closeout-2026-05-22.md`.
+Related gallery restoration handoff:
+`workstreams/ecommerce-audit/product-gallery-restoration-2026-05-22.md`.
 The owner-product guard is locally implemented and focused proof passed:
 owner raw catalog mutations are blocked, Product Setup apply preserves existing
-public Website Item visibility, and public route/hide/publish changes require
-the reviewed release path. Final pre-commit `npm run test:owner-product-safety`
-passed. Next safe step is GL/Jeff local owner-workflow testing, then a separate
-staging packet if approved. Do not treat
+public Website Item visibility, public route/hide/publish changes require the
+reviewed release path, and approved product-page gallery media projects through
+Product Setup into native Website Slideshow rows. Final pre-commit
+`npm run test:owner-product-safety` passed. Next safe step is GL/Jeff local
+owner-workflow and shop-gallery testing, then a separate staging packet if
+approved. Do not treat
 this as live checkout, Frappe Cloud, Stripe, DNS, Search Console, or production
 approval.
 
@@ -150,7 +154,10 @@ guest endpoint inventory. Remaining blockers before release language changes:
 source-price modifier proof now passes after staging `_resources/odoo-live`;
 fresh same-day snapshot, purge-scope dry run, backup, and guard-path dry run now
 pass; import readiness remains blocked only on renewed explicit destructive
-approval for the 2026-05-19 packet. Permission-bypass lint now passes after
+approval for the 2026-05-19 packet. Product-page galleries are no longer part
+of the old "extra images held" blocker: `product-gallery-restoration-2026-05-22.md`
+restored approved gallery media through Product Setup and Website Slideshow;
+category/reference media remains separate. Permission-bypass lint now passes after
 adding explicit guard comments to the 32 previously flagged existing production
 `ignore_permissions=True` calls; guest endpoint inventory still passes with
 11 guest endpoints and 3 public write endpoints. `npm run test:ecommerce-full`
@@ -239,9 +246,10 @@ backed up, cleaned of local proof products, snapshotted, and reimported with
 now report 53 checkout-allowed products and 0 quote-first-allowed products.
 Browser proof passed all 53 live Website Item routes in two batches under the
 cart 50-line cap, at desktop and mobile widths, including cart and checkout
-preview. `lt_ecommerce_paused=1` was restored and verified. Remaining caveats:
-95 source extra/gallery images stay held until classified and 9 review-only
-add-on controls stay hidden until mapped. Follow-up on 2026-05-17 repaired the
+preview. `lt_ecommerce_paused=1` was restored and verified. Current media
+caveats are narrower after 2026-05-22: product-page gallery media is restored
+through Product Setup and Website Slideshow; category/reference media and 9
+review-only add-on controls stay hidden/unmapped until approved. Follow-up on 2026-05-17 repaired the
 Encanto/simple checkout variant media regression: selected simple variant
 `Item.image` now renders and cascades to cart, Sales Order payload, and receipt
 helper while complex raw media stays held. Handoff:
@@ -414,7 +422,7 @@ See `.planning/phases/01-customer-site-and-storefront/PLAN.md` for the full slic
   passed on 2026-05-15, but live is still on the older form release and still
   needs Frappe Cloud deploy/site update plus live proof before production
   claims.
-- [P0] **Ready-to-order ecommerce launch hardening and real catalog import gate.** Active front-door handoff: `workstreams/ecommerce-audit/README.md`; current all-Odoo sellable reimport closeout: `workstreams/ecommerce-audit/odoo-sellable-product-reimport-2026-05-17.md`; import gate handoff: `workstreams/ecommerce-audit/product-import-hardening-gate-2026-05-11.md`; payment cutover checklist: `workstreams/payment-portal-live-cutover-checklist-2026-05-11.md`; receiving architecture handoff/capability: `workstreams/erpnext-ecommerce-receiving-architecture.md` and `capabilities/recipes/erpnext-ecommerce-receiving-architecture.md`. Current local proof uses the corrected manifest: 53 Odoo-imported products included, 0 excluded, 290 sale units priced, and 53 checkout-allowed product pages. The approved local reimport completed against the local ERPNext `frontend` site only after fresh backups and guard evidence; it is not a staging/live release. Browser proof passed all 53 live Website Item routes in two batches with desktop/mobile product page, cart, and checkout preview. Product-level Website Item contracts now outrank stale item-group/category lane fallback in product pages, shop cards, and cart display rows. Read this lane together with the 2026-05-19 price-identity incident below: source-price truth now requires the broad modifier and visible price guards, not only the original import/browser proof. Remaining caveats: 95 extra images are held until classified and 9 review-only add-on controls stay hidden until mapped. Current product records are still local import/proof evidence until GL completes local testing and explicitly approves any live release; live Frappe Cloud/Stripe/DNS/webhook/real payment gates remain separate.
+- [P0] **Ready-to-order ecommerce launch hardening and real catalog import gate.** Active front-door handoff: `workstreams/ecommerce-audit/README.md`; current all-Odoo sellable reimport closeout: `workstreams/ecommerce-audit/odoo-sellable-product-reimport-2026-05-17.md`; import gate handoff: `workstreams/ecommerce-audit/product-import-hardening-gate-2026-05-11.md`; payment cutover checklist: `workstreams/payment-portal-live-cutover-checklist-2026-05-11.md`; receiving architecture handoff/capability: `workstreams/erpnext-ecommerce-receiving-architecture.md` and `capabilities/recipes/erpnext-ecommerce-receiving-architecture.md`. Current local proof uses the corrected manifest: 53 Odoo-imported products included, 0 excluded, 290 sale units priced, and 53 checkout-allowed product pages. The approved local reimport completed against the local ERPNext `frontend` site only after fresh backups and guard evidence; it is not a staging/live release. Browser proof passed all 53 live Website Item routes in two batches with desktop/mobile product page, cart, and checkout preview. Product-level Website Item contracts now outrank stale item-group/category lane fallback in product pages, shop cards, and cart display rows. Read this lane together with the 2026-05-19 price-identity incident below: source-price truth now requires the broad modifier and visible price guards, not only the original import/browser proof. Current media caveat: product-page gallery media is restored through Product Setup and Website Slideshow; category/reference media and 9 review-only add-on controls remain separate approval/mapping lanes. Current product records are still local import/proof evidence until GL completes local testing and explicitly approves any live release; live Frappe Cloud/Stripe/DNS/webhook/real payment gates remain separate.
   2026-05-12 nav/search review closeout is `workstreams/ecommerce-audit/ready-to-order-nav-search-backend-gate-2026-05-12.md`: Ready-to-Order quick links now require owner include plus backend `simple_product|checkout`, owner include cannot bypass checkout eligibility, and the search contract treats filtered backend-approved links as hidden rather than removed from the DOM.
   2026-05-14 product blueprint authoring handoff is `workstreams/ecommerce-audit/product-blueprint-authoring-2026-05-14.md`; capability is `capabilities/recipes/erpnext-product-blueprint-authoring.md`. Employees can now define product basics, options, color recipes, add-ons, and conditional pricing in `LT Product Blueprint`, preview a no-write apply plan, and use guarded local Desk apply to create unpublished ERPNext product records. Local `frontend` has `lt_allow_local_blueprint_apply=1` for this test harness. Do not enable that gate on staging/live or publish generated Website Items without product-page browser proof, cart/checkout proof, media/conditional-pricing/add-on family mapping, refreshed import safety evidence, and explicit release approval.
   2026-05-15 generic Product Setup runtime handoff is `workstreams/ecommerce-audit/generic-product-setup-runtime-2026-05-15.md`: selection groups are generic, SKU-defining axes resolve to ERPNext variants, configuration-only groups stay out of variant generation, setup schemas/API feed the product page, cart/checkout validates server-side, Sales Order/Sales Invoice/Quotation records preserve structured details, approved media rules can drive customer images, and `LT Owner Home` Add Product opens Product Setup. 2026-05-17 proof now verifies `Item Manager`, `System Manager`, and the real owner account can create/apply local Product Setup without raw Website Item access; a 48-variant employee-authored proof product supports single-selection and combination media rules; and one real local Stripe test-card purchase proved selected image parity from product page to cart, checkout, Sales Order JSON, Stripe Checkout, paid invoice, and receipt email before restoring `lt_ecommerce_paused=1`. Remaining gates are fresh import snapshot/readiness, staging/live Stripe/webhook/payment approval, and final product scope approval.

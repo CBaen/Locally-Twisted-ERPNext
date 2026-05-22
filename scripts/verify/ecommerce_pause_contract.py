@@ -159,8 +159,10 @@ def assert_source_has_safe_default() -> None:
         fail("ecommerce pause must be controlled by lt_ecommerce_paused site config")
 
     pause_source = read(PAUSE_PAGE_SOURCE)
-    if "noindex" in pause_source or "nofollow" in pause_source:
-        fail("paused ecommerce page must not noindex or nofollow crawler-visible paused behavior")
+    if '"robots": "noindex, follow"' not in pause_source:
+        fail("paused ecommerce page must stay noindex, follow while ecommerce discovery is paused")
+    if "nofollow" in pause_source:
+        fail("paused ecommerce page must not nofollow crawler-visible fallback links")
 
 
 def assert_navigation_matches_mode(paused: bool) -> None:

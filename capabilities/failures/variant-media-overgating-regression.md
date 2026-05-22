@@ -4,13 +4,14 @@ type: failure
 failure_kind: recurring_pattern
 schema_version: 0.1
 date_discovered: 2026-05-17
-last_updated: 2026-05-17
+last_updated: 2026-05-22
 status: guarded
 scope: project
 owner_context: Locally Twisted ERPNext ecommerce
 related_capabilities:
   - erpnext-ecommerce-receiving-architecture
-related_failures: []
+related_failures:
+  - product-gallery-projection-regression
 tags:
   - ecommerce
   - media
@@ -70,11 +71,16 @@ Any media safety hardening must include both sides:
 
 - Positive guard: known simple checkout variants with approved `Item.image`
   must render on the product page and cascade to cart/order/receipt helpers.
-- Negative guard: complex/custom raw Item images and source extra/gallery media
-  must remain held until Product Setup or a classification packet approves
-  them.
+- Positive guard: source-approved product-page gallery media must project
+  through Product Setup and Website Slideshow, then render as gallery
+  thumbnails. It must not be confused with selected variant media.
+- Negative guard: complex/custom raw Item images plus category/reference or
+  ignored source media must remain held until Product Setup or a classification
+  packet approves them.
 
 Current guard: `python scripts/verify/variant_media_contract.py`.
+Gallery guard: `python scripts/verify/product_gallery_projection_contract.py`
+and `npm run test:product-gallery-experience`.
 
 ## Recovery Recipe
 
@@ -102,6 +108,8 @@ Current guard: `python scripts/verify/variant_media_contract.py`.
 
 - Related capability: `capabilities/recipes/erpnext-ecommerce-receiving-architecture.md`
 - Related handoff: `workstreams/ecommerce-audit/variant-item-media-restore-2026-05-17.md`
+- Related gallery handoff: `workstreams/ecommerce-audit/product-gallery-restoration-2026-05-22.md`
+- Related failure: `capabilities/failures/product-gallery-projection-regression.md`
 - Related decision: `locally-twisted-decisions.md`
 - Related lesson: `lessons-learned.md`
 

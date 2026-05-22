@@ -140,19 +140,21 @@ def build_media_visibility_report(
     contracts_by_slug: dict[str, Any] = {}
 
     for product in products:
+        slug = str(product.get("slug") or "")
+        if not live.has_product(slug):
+            continue
         contract = build_product_page_contract(
             product,
             category_hint=slug_to_group.get(str(product.get("slug") or ""), ""),
         )
         contracts_by_slug[contract.slug] = contract
-        slug = str(product.get("slug") or "")
-        source_extra_images = len(product.get("additional_image_urls") or [])
         live_row = live.coverage_for(slug)
         source_extra_roles = [
             image.role
             for image in contract.gallery
             if image.role != "primary"
         ]
+        source_extra_images = len(source_extra_roles)
         row = MediaVisibilityRow(
             slug=contract.slug,
             product_page_type_label=contract.product_page_type_label,
@@ -271,6 +273,9 @@ class _LiveMediaCatalog:
             "active_variant_images": len(variant_images),
             "distinct_variant_images": len(set(variant_images)),
         }
+
+    def has_product(self, slug: str) -> bool:
+        return slug in self._products
 
 
 def _clean(value: Any) -> str:

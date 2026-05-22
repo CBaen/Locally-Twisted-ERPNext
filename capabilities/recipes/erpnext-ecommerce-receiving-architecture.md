@@ -144,8 +144,8 @@ OpenClaw cockpit witness:
   the variant belongs to a `simple_product|checkout` Website Item and the image
   differs from the parent fallback. Product Setup media rules still take
   precedence, and complex/custom raw Item images stay held until a Product
-  Setup media rule approves them. Do not let the source extra-image
-  `hold_until_classified` gate erase already-mapped simple variant images.
+  Setup media rule approves them. Do not let any broad source-media hold erase
+  already-mapped simple variant images or Product Setup-approved gallery media.
 
 ## Implemented Runtime Slice
 
@@ -263,13 +263,17 @@ As of 2026-05-10, the first backend preservation slice exists:
   unit at `business_review_required` and must not approve customer-facing
   prices by itself.
 - Media visibility now has a separate read-only gate. Current ERPNext has live
-  primary Website Item images for all source products and partial active
-  variant-image evidence, but source media import remains blocked until extra
-  images are classified and an approved parent-gallery destination exists.
-- Source extra images must have a source-backed classification packet before
-  gallery, variant, category, or reference media is imported. The packet must
-  keep every unclassified source extra image at `hold_until_classified` and
-  must not approve parent-gallery or variant assignments by itself.
+  primary Website Item images for all source products, active variant-image
+  evidence, and approved product-page gallery media projected through Product
+  Setup into native Website Slideshow rows.
+- Source extra images are role-based. Product-page `gallery` media can render
+  only after Product Setup owns it and `Website Item.slideshow` points at the
+  native slideshow. `variant_image`, `reference`, and `ignored_artifact` do not
+  populate the gallery rail. Category/reference media still needs explicit
+  approval before it renders outside the product gallery.
+- Product gallery guards are `python scripts/verify/product_gallery_projection_contract.py`
+  and `npm run test:product-gallery-experience`. They must prove source ->
+  Product Setup -> Website Slideshow -> rendered route, not only database rows.
 - Variant media overgating was repaired on 2026-05-17 after Encanto Bouquet
   exposed a regression: the API held simple size-variant images even though
   ERPNext had the mapped Item images. The current guard,

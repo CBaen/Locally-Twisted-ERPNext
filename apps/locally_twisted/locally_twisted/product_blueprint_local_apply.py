@@ -124,6 +124,46 @@ def apply_blueprint_locally(
     }
 
 
+def sync_website_gallery_from_blueprint_doc(doc: Any) -> dict[str, Any]:
+    """Project approved Product Setup gallery rows into Website Slideshow only."""
+    import frappe
+    from locally_twisted.owner_catalog_guard import catalog_guard_context
+
+    data = blueprint_doc_to_dict(doc)
+    template_item = _text(getattr(doc, "target_item_code", None)) or _text(getattr(doc, "product_slug", None))
+    if not template_item:
+        raise ProductBlueprintApplyError("Gallery projection needs a target item code.")
+
+    website_item = _text(getattr(doc, "target_website_item", None))
+    if not website_item:
+        website_item = frappe.db.get_value("Website Item", {"item_code": template_item}, "name")
+    if not website_item:
+        raise ProductBlueprintApplyError(f"Gallery projection could not find Website Item for {template_item}.")
+
+    with catalog_guard_context("blueprint_local_apply"):
+        gallery = _sync_website_gallery(frappe, website_item, template_item, data)
+        frappe.clear_cache()
+
+    return {
+        "ok": True,
+        "blueprint": getattr(doc, "name", None),
+        "item_code": template_item,
+        "website_item": website_item,
+        "gallery": gallery,
+    }
+
+
+def execute_gallery_projection(blueprint_name: str) -> str:
+    """Bench entrypoint for projecting approved Product Setup gallery rows."""
+    import frappe
+
+    doc = frappe.get_doc("LT Product Blueprint", blueprint_name)
+    result = sync_website_gallery_from_blueprint_doc(doc)
+    rendered = json.dumps(result, indent=2, sort_keys=True)
+    print(rendered)
+    return rendered
+
+
 def execute(
     blueprint_name: str,
     allow_writes: bool = False,

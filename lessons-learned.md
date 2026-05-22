@@ -6,6 +6,25 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-22 - DB gallery rows are not enough without rendered route proof
+
+The product-gallery restoration almost passed with the backend projection green
+while some product routes still rendered no thumbnail rail. The root was a
+template priority issue: Webshop fallback `slides` could be truthy with only a
+primary image, so the LT Product Setup / Website Slideshow helper was never
+used for some projected galleries.
+
+**Counter-move:** product-gallery proof must cover all layers: source-approved
+`gallery` rows, Product Setup rows, native Website Slideshow rows, linked
+Website Items, and rendered browser routes. Keep selected variant media,
+product gallery media, category/reference media, and ignored artifacts as
+separate roles. Use
+`workstreams/ecommerce-audit/product-gallery-restoration-2026-05-22.md`,
+`python scripts\verify\product_gallery_projection_contract.py`, and
+`npm run test:product-gallery-experience` before any staging/owner claim.
+
+---
+
 ## 2026-05-22 - Do not use backend option text as the visible selected label
 
 The option-text regression came from letting one string serve as both backend
@@ -212,8 +231,10 @@ The Encanto Bouquet regression was not missing data. ERPNext still had
 stored on the variant Items. The failure was an overbroad media safety gate:
 while trying to hold unclassified source extra/gallery images, the code also
 held simple checkout variant `Item.image` values that were already meaningful
-customer-selection media. The verifier had been rewritten to expect that
-broken behavior, which hid the regression until GL tested the product.
+customer-selection media. A later gallery pass proved the same lesson from the
+other direction: source-approved product-page gallery media also needs its own
+positive path, not a blanket hold. The verifier had been rewritten to expect
+the broken behavior, which hid the regression until GL tested the product.
 
 **Counter-move:** when adding a safety gate, first name the known-good
 behaviors that must survive. Then write both positive and negative guards.
@@ -221,8 +242,8 @@ For LT variant media, the positive guard is Encanto Small/Medium/Large image
 swap plus cart/order/receipt cascade. The negative guard is Classic Arch
 complex raw media staying held without Product Setup approval. Do not collapse
 different media classes - parent primary image, simple variant Item image,
-Product Setup media rule, and unclassified source extra/gallery image - into
-one generic "hold everything" rule.
+Product Setup media rule, approved product gallery image, and unclassified
+category/reference media - into one generic "hold everything" rule.
 
 ---
 

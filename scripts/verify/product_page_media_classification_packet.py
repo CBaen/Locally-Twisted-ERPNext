@@ -63,14 +63,14 @@ def _contract_failures(packet: dict[str, Any]) -> list[str]:
         failures.append("packet safe default must hold unclassified images as ignored_artifact")
     if packet.get("hold_status") != "hold_until_classified":
         failures.append("packet hold_status must be hold_until_classified")
-    if packet.get("approved_gallery_count") != 0:
-        failures.append("packet approved gallery media")
+    if int(packet.get("approved_gallery_count") or 0) <= 0:
+        failures.append("packet approved no product gallery media")
     if packet.get("assigned_variant_image_count") != 0:
         failures.append("packet assigned variant images")
     if packet.get("approved_reference_count") != 0:
         failures.append("packet approved reference images")
-    if packet.get("held_back_ignored_artifact_count") != packet.get("source_extra_image_count"):
-        failures.append("all source extra images must be explicitly held as ignored_artifact until approval")
+    if int(packet.get("held_back_ignored_artifact_count") or 0) != 0:
+        failures.append("packet held approved product-gallery media as ignored_artifact")
     if packet.get("unsafe_unclassified_image_count") != 0:
         failures.append("packet has unsafe unclassified source extra images")
     if packet.get("unclassified_image_count") != 0:
@@ -90,16 +90,14 @@ def _contract_failures(packet: dict[str, Any]) -> list[str]:
         if int(row.get("extra_image_count") or 0) != len(row.get("images") or []):
             failures.append(f"{row.get('slug')} extra_image_count does not match images list")
         for image in row.get("images") or []:
-            if image.get("current_role") != "ignored_artifact":
-                failures.append(f"{row.get('slug')} image is not held as ignored_artifact")
-            if image.get("classification_status") != "hold_until_classified":
-                failures.append(f"{row.get('slug')} image classification_status is not hold_until_classified")
-            if image.get("render_policy") != "hold_back":
-                failures.append(f"{row.get('slug')} image render_policy is not hold_back")
+            if image.get("current_role") != "gallery":
+                failures.append(f"{row.get('slug')} image is not approved as gallery")
+            if image.get("classification_status") != "approved":
+                failures.append(f"{row.get('slug')} image classification_status is not approved")
+            if image.get("render_policy") != "render":
+                failures.append(f"{row.get('slug')} image render_policy is not render")
             if not image.get("role_reason"):
                 failures.append(f"{row.get('slug')} image missing role_reason")
-            if not image.get("hold_reason"):
-                failures.append(f"{row.get('slug')} image missing hold_reason")
             if image.get("safe_default") != "ignored_artifact":
                 failures.append(f"{row.get('slug')} image safe_default is not ignored_artifact")
             if image.get("allowed_roles") != EXPECTED_ALLOWED_ROLES:
@@ -111,6 +109,7 @@ def _print_summary(packet: dict[str, Any], failures: list[str]) -> None:
     print("[PRODUCT PAGE MEDIA CLASSIFICATION PACKET] " + ("PASS" if not failures else "FAIL"))
     print(f"  source_products: {packet.get('source_product_count')}")
     print(f"  products_with_extra_images: {packet.get('products_with_extra_images')}")
+    print(f"  source_extra_urls: {packet.get('source_extra_url_count')}")
     print(f"  source_extra_images: {packet.get('source_extra_image_count')}")
     print(f"  held_back_ignored_artifacts: {packet.get('held_back_ignored_artifact_count')}")
     print(f"  unsafe_unclassified_images: {packet.get('unsafe_unclassified_image_count')}")
@@ -132,13 +131,14 @@ def _to_markdown(packet: dict[str, Any]) -> str:
     lines = [
         "# Product Page Media Classification Packet",
         "",
-        "This packet is source-backed and read-only. It does not assign, approve, upload, move, or delete images.",
-        "Every source extra image stays held until GL/Locally Twisted classifies it.",
+        "This packet is source-backed and read-only. It does not upload, move, or delete images.",
+        "Approved product-gallery media must project through Product Setup and Website Slideshow.",
         "",
         "## Summary",
         "",
         f"- Source products: {packet.get('source_product_count')}",
         f"- Products with extra images: {packet.get('products_with_extra_images')}",
+        f"- Source extra URLs: {packet.get('source_extra_url_count')}",
         f"- Source extra images: {packet.get('source_extra_image_count')}",
         f"- Held-back ignored artifacts: {packet.get('held_back_ignored_artifact_count')}",
         f"- Unsafe unclassified images: {packet.get('unsafe_unclassified_image_count')}",
@@ -150,13 +150,14 @@ def _to_markdown(packet: dict[str, Any]) -> str:
         "",
         "## Product Rows",
         "",
-        "| Product | Template | Lane | Extra images | Safe default |",
-        "|---|---|---|---:|---|",
+        "| Product | Template | Lane | Extra URLs | Approved gallery images | Safe default |",
+        "|---|---|---|---:|---:|---|",
     ]
     for row in packet.get("products") or []:
         lines.append(
             f"| `{row.get('slug')}` {row.get('title')} | {row.get('product_page_type_label')} | "
-            f"{row.get('commerce_lane_label')} | {row.get('extra_image_count')} | ignored_artifact / hold_until_classified / hold_back |"
+            f"{row.get('commerce_lane_label')} | {row.get('source_extra_url_count')} | "
+            f"{row.get('extra_image_count')} | ignored_artifact for future unclassified media |"
         )
     lines.extend(["", "## Image Rows", ""])
     for row in packet.get("products") or []:
@@ -164,7 +165,7 @@ def _to_markdown(packet: dict[str, Any]) -> str:
         for image in row.get("images") or []:
             lines.append(
                 f"- `{image.get('source_index')}` {image.get('url')} -> "
-                f"ignored_artifact / hold_until_classified / hold_back. Reason: {image.get('role_reason')}"
+                f"gallery / approved / render. Reason: {image.get('role_reason')}"
             )
         lines.append("")
     return "\n".join(lines).rstrip() + "\n"

@@ -6,25 +6,40 @@ edit product business fields through the guarded Product Setup path.
 """
 from __future__ import annotations
 
+import json
+import shutil
 from collections import defaultdict
+from pathlib import Path
 from typing import Any
 
 import frappe
 from frappe.utils import flt, strip_html
 
+from locally_twisted.catalog_contract.gallery_media import canonical_gallery_sources
+from locally_twisted.product_blueprint_local_apply import sync_website_gallery_from_blueprint_doc
+
 
 PRICE_LIST = "Standard Selling"
+SITE_FILES_DIR = Path("/home/frappe/frappe-bench/sites/frontend/public/files")
+DEFAULT_DATA_DIRS = [
+    Path("/tmp/lt-product-gallery-source"),
+    Path("/workspace/_resources/odoo-live"),
+    Path("/home/frappe/frappe-bench/_resources/odoo-live"),
+    Path("/home/frappe/frappe-bench/sites/_resources/odoo-live"),
+]
 
 
-def execute(write: bool = False) -> dict[str, Any]:
+def execute(write: bool = False, apply_gallery: bool = False, data_dir: str | None = None) -> dict[str, Any]:
     rows = _website_items()
+    source_products, images_dir = _source_products(data_dir)
     existing = _existing_blueprints()
     planned: list[dict[str, Any]] = []
     created: list[str] = []
     updated: list[str] = []
+    projected: list[dict[str, Any]] = []
 
     for row in rows:
-        spec = _blueprint_spec(row)
+        spec = _blueprint_spec(row, source_products=source_products, images_dir=images_dir, write=write)
         planned.append(_plan_row(spec, existing.get(spec["product_slug"])))
         if not write:
             continue
@@ -33,6 +48,10 @@ def execute(write: bool = False) -> dict[str, Any]:
             created.append(result["name"])
         elif result["action"] == "updated":
             updated.append(result["name"])
+        if apply_gallery:
+            doc = frappe.get_doc("LT Product Blueprint", result["name"])
+            projection = sync_website_gallery_from_blueprint_doc(doc)
+            projected.append(projection)
 
     if write:
         frappe.db.commit()
@@ -44,11 +63,13 @@ def execute(write: bool = False) -> dict[str, Any]:
         "planned": planned,
         "created": created,
         "updated": updated,
+        "projected": projected,
         "summary": {
             "would_create": sum(1 for row in planned if row["action"] == "create"),
             "would_update": sum(1 for row in planned if row["action"] == "update"),
             "created": len(created),
             "updated": len(updated),
+            "projected": len(projected),
         },
     }
 
@@ -81,13 +102,19 @@ def _existing_blueprints() -> dict[str, str]:
     return {row["product_slug"]: row["name"] for row in rows if row.get("product_slug")}
 
 
-def _blueprint_spec(row: dict[str, Any]) -> dict[str, Any]:
+def _blueprint_spec(
+    row: dict[str, Any],
+    *,
+    source_products: dict[str, dict[str, Any]],
+    images_dir: Path | None,
+    write: bool,
+) -> dict[str, Any]:
     item_code = row["item_code"]
     item = frappe.get_doc("Item", item_code)
     variants = _active_variants(item_code) if int(item.get("has_variants") or 0) else []
     option_rows = _option_rows(item, variants)
     price_rows = _price_rows(item_code, variants) if row.get("lt_commerce_lane") == "checkout" else []
-    gallery_image_rows = _gallery_image_rows(row)
+    gallery_image_rows = _gallery_image_rows(row, source_products.get(item_code), images_dir, write=write)
     media_rule_rows = _media_rule_rows(item_code, variants, row)
     base_price = min([price["price"] for price in price_rows], default=0)
     return {
@@ -159,7 +186,7 @@ def _fill_missing_fields(doc, spec: dict[str, Any]) -> bool:
     if not getattr(doc, "option_rows", None) and spec["option_rows"]:
         _replace_option_rows(doc, spec["option_rows"])
         changed = True
-    if not getattr(doc, "gallery_image_rows", None) and spec["gallery_image_rows"]:
+    if spec["gallery_image_rows"] and _gallery_rows_need_update(doc, spec["gallery_image_rows"]):
         _replace_gallery_rows(doc, spec["gallery_image_rows"])
         changed = True
     if not getattr(doc, "media_rule_rows", None) and spec["media_rule_rows"]:
@@ -178,7 +205,7 @@ def _missing_update_fields(doc, spec: dict[str, Any]) -> list[str]:
         missing.append("price_rows")
     if not getattr(doc, "option_rows", None) and spec["option_rows"]:
         missing.append("option_rows")
-    if not getattr(doc, "gallery_image_rows", None) and spec["gallery_image_rows"]:
+    if spec["gallery_image_rows"] and _gallery_rows_need_update(doc, spec["gallery_image_rows"]):
         missing.append("gallery_image_rows")
     if not getattr(doc, "media_rule_rows", None) and spec["media_rule_rows"]:
         missing.append("media_rule_rows")
@@ -318,7 +345,31 @@ def _price_rows(item_code: str, variants: list[dict[str, Any]]) -> list[dict[str
     return rows
 
 
-def _gallery_image_rows(website_item: dict[str, Any]) -> list[dict[str, Any]]:
+def _gallery_image_rows(
+    website_item: dict[str, Any],
+    source_product: dict[str, Any] | None,
+    images_dir: Path | None,
+    *,
+    write: bool,
+) -> list[dict[str, Any]]:
+    if source_product:
+        rows = []
+        for source in canonical_gallery_sources(source_product, images_dir):
+            if not source.source_path:
+                continue
+            file_url = _ensure_gallery_file_attached(source.source_path, website_item["item_code"]) if write else source.file_url
+            rows.append(
+                {
+                    "image": file_url,
+                    "heading": source.label or "Product photo",
+                    "description": "",
+                    "approved_for_customer": 1,
+                    "operator_note": "Backfilled from source-approved Odoo product gallery media.",
+                }
+            )
+        if rows:
+            return rows
+
     slideshow = website_item.get("slideshow")
     if not slideshow:
         return []
@@ -334,10 +385,85 @@ def _gallery_image_rows(website_item: dict[str, Any]) -> list[dict[str, Any]]:
             "heading": row.get("heading") or row.get("description") or "Product photo",
             "description": row.get("description") or "",
             "approved_for_customer": 1,
+            "operator_note": "Backfilled from existing Website Slideshow.",
         }
         for row in rows
         if row.get("image")
     ]
+
+
+def _source_products(data_dir: str | None) -> tuple[dict[str, dict[str, Any]], Path | None]:
+    data_path = _find_data_dir(data_dir)
+    if not data_path:
+        return {}, None
+    data = json.loads((data_path / "catalog.json").read_text(encoding="utf-8"))
+    products = list(data.get("products") if isinstance(data, dict) else data)
+    return {
+        str(product.get("slug") or "").strip(): product
+        for product in products
+        if str(product.get("slug") or "").strip()
+    }, data_path / "images"
+
+
+def _find_data_dir(data_dir: str | None) -> Path | None:
+    if data_dir:
+        path = Path(data_dir)
+        if (path / "catalog.json").exists() and (path / "images").exists():
+            return path
+        raise FileNotFoundError(f"product gallery data_dir is missing catalog.json/images: {path}")
+    for path in DEFAULT_DATA_DIRS:
+        if (path / "catalog.json").exists() and (path / "images").exists():
+            return path
+    return None
+
+
+def _ensure_gallery_file_attached(source: Path, item_code: str) -> str:
+    file_url = f"/files/{source.name}"
+    target = SITE_FILES_DIR / source.name
+    target.parent.mkdir(parents=True, exist_ok=True)
+    if not target.exists() or target.stat().st_size != source.stat().st_size:
+        shutil.copy2(source, target)
+
+    existing = frappe.db.exists(
+        "File",
+        {
+            "file_url": file_url,
+            "attached_to_doctype": "Item",
+            "attached_to_name": item_code,
+        },
+    )
+    if not existing:
+        frappe.get_doc(
+            {
+                "doctype": "File",
+                "file_name": source.name,
+                "file_url": file_url,
+                "is_private": 0,
+                "attached_to_doctype": "Item",
+                "attached_to_name": item_code,
+            }
+        ).insert(ignore_permissions=True)
+    return file_url
+
+
+def _gallery_rows_need_update(doc, expected_rows: list[dict[str, Any]]) -> bool:
+    existing = [
+        _text(_row_value(row, "image"))
+        for row in getattr(doc, "gallery_image_rows", []) or []
+        if _text(_row_value(row, "image"))
+    ]
+    expected = [_text(row.get("image")) for row in expected_rows if _text(row.get("image"))]
+    return existing != expected
+
+
+def _row_value(row: Any, key: str) -> Any:
+    if isinstance(row, dict):
+        return row.get(key)
+    return getattr(row, key, None)
+
+
+def _text(value: Any) -> str:
+    return str(value or "").strip()
 
 
 def _media_rule_rows(

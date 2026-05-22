@@ -25,6 +25,12 @@ Status as of 2026-05-18 for peer GPT-5.5 Codex/OpenClaw agents.
   unchanged. Handoff:
   `workstreams/ecommerce-audit/shop-category-hero-imagery-2026-05-22.md`;
   color authority: `_resources/STYLE-GUIDE-BALLOON-COLOR-ADDENDUM.md`.
+- Product page galleries were restored locally on 2026-05-22 as native
+  Product Setup -> Website Slideshow architecture. Approved source gallery
+  media now creates Product Setup gallery rows, projects to
+  `Website Slideshow`, and renders in the product gallery rail. Variant media
+  stays separate. Handoff:
+  `workstreams/ecommerce-audit/product-gallery-restoration-2026-05-22.md`.
 - Current local product import proof treats all 53 Odoo-imported products as
   real products. Direct checkout is now bounded for high-complexity color
   products: the two graduation products use college color preset checkout
@@ -53,6 +59,42 @@ Status as of 2026-05-18 for peer GPT-5.5 Codex/OpenClaw agents.
   incomplete.
 
 ## Completed Lanes
+
+### Product gallery restoration - 2026-05-22
+
+Owner: `Codex` with triad review.
+
+Result: complete locally for product-page additional photos. No staging/live
+site update, Frappe Cloud update, DNS change, Stripe live change, Search
+Console action, ERPNext Item Group image mutation, or public exposure change
+was made.
+
+Feature handoff:
+
+- `workstreams/ecommerce-audit/product-gallery-restoration-2026-05-22.md`
+
+Evidence summary: source/Odoo additional product photos are now role-based
+media, not a blanket held bucket. `gallery` media renders only after Product
+Setup owns it and the guarded apply path projects it into native ERPNext
+`Website Slideshow` rows. `variant_image`, `reference`, and
+`ignored_artifact` do not populate the gallery rail. The product image
+template now reads LT projected gallery slides before Webshop fallback
+`slides`, so one-extra projected galleries render on real product pages.
+
+Green gates:
+
+- `python scripts\verify\product_page_media_classification_packet.py`
+- `python scripts\verify\product_page_media_visibility_contract.py`
+- `python scripts\verify\product_setup_catalog_coverage.py`
+- `python scripts\verify\product_gallery_projection_contract.py`
+- `npm run test:product-gallery-experience`
+- `npm run test:owner-product-safety`
+- `npm run test:ecommerce-full`
+
+Current local counts: `68` approved live Product Setup gallery rows, `47`
+Website Items with slideshows, and `68` Website Slideshow Item rows. The source
+packet still records `70` deduped source gallery images because `easter-arch`
+and `pride-arch` are source products but not current live Website Items.
 
 ### Product option selection UX - 2026-05-22
 
@@ -297,9 +339,11 @@ Green gates:
 - `node scripts\verify\post_import_checkout_proof.js` with all-53 manifest/snapshot batch proof
 - `python scripts\verify\ecommerce_pause_contract.py`
 
-Remaining local product-data caveats: 95 source extra/gallery images remain
-held until classified; 9 review-only add-on controls remain hidden until
-mapped. Simple checkout variant `Item.image` is no longer part of that hold.
+Remaining local product-data caveats: product-page gallery media is no longer
+held under the old blanket extra-image rule; it is approved through Product
+Setup and Website Slideshow. Category/reference media and 9 review-only add-on
+controls remain separate approval/mapping lanes. Simple checkout variant
+`Item.image` is selected media, not gallery media.
 
 ### Backend checkout/order wiring - `f82b8ef1`
 
@@ -373,12 +417,13 @@ Files changed in that lane:
 - `scripts/verify/product_page_media_classification_packet.py`
 - `scripts/verify/variant_media_contract.py`
 
-Evidence summary: 49 products / 95 source extra images are explicitly held as
-`ignored_artifact` / `hold_back`; `unsafe_unclassified_images=0`. The
-2026-05-17 regression repair clarified that this hold does not cover already
-mapped simple checkout variant `Item.image` values; those are selected product
-media and are guarded by `variant_media_contract.py`. No source extra-image
-readiness blocker remains.
+Evidence summary: superseded by the 2026-05-22 product gallery restoration.
+The old lane correctly forced a safe media review boundary but over-described
+all source extras as held. Current source media is role-based: approved
+product-page `gallery` media projects through Product Setup into native
+Website Slideshow rows, simple checkout variant `Item.image` remains selected
+variant media guarded by `variant_media_contract.py`, and category/reference
+media stays separate until explicitly approved.
 
 ### Storefront/product UX and homepage contract - `3132de36`, `4fd5ae4f`
 

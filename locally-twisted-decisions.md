@@ -8,6 +8,46 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-22 - Product galleries use Product Setup and native Website Slideshow
+
+**Decision:** Product-page additional photos are approved `gallery` media when
+they come from the source product-gallery set. They must be owned by Product
+Setup, projected into native ERPNext `Website Slideshow` rows, linked through
+`Website Item.slideshow`, and rendered by the Webshop product gallery template.
+Selected variant media, category/reference media, and ignored artifacts are
+separate contracts and must not populate the product gallery rail.
+
+**Reasoning:** GL caught that product pages had lost the expected additional
+photo thumbnails even though this behavior existed before. The structural bug
+was not only CSS: source extras existed, Product Setup could hold gallery rows,
+and the UI had a rail, but the live Frappe projection was empty or bypassed.
+The old "hold all source extras" rule overcorrected the media-safety problem
+and removed valid product-page gallery meaning. A later triad review also found
+that DB slideshow rows could pass while some rendered product pages still
+showed no rail because the template chose Webshop fallback `slides` before the
+LT projected gallery helper.
+
+**Implementation boundary:** Local source and local ERPNext data only. The
+source sync now dedupes Odoo paired images, fills Product Setup gallery rows,
+and can apply the guarded slideshow projection. The product image template
+treats `get_product_gallery_slides()` as LT authority. This does not approve
+ERPNext Item Group images, menu/category/reference media, staging, live
+checkout, Stripe, DNS, Frappe Cloud, Search Console, or public release.
+
+**Receipts:** `workstreams/ecommerce-audit/product-gallery-restoration-2026-05-22.md`;
+`research/research-product-gallery-architecture/research-brief.md`;
+`capabilities/failures/product-gallery-projection-regression.md`;
+`scripts/verify/product_gallery_projection_contract.py`;
+`scripts/verify/product_gallery_experience.spec.js`;
+`apps/locally_twisted/locally_twisted/catalog_contract/gallery_media.py`;
+`apps/locally_twisted/locally_twisted/templates/generators/item/item_image.html`.
+
+**Decided by:** Guiding Light's 2026-05-22 correction that product galleries
+must be restored architecturally forever; Codex triad implementation and local
+verification on 2026-05-22.
+
+---
+
 ## 2026-05-22 - Product option display labels are separate from stored source values
 
 **Decision:** Product option controls may keep source/stored values that
@@ -467,10 +507,11 @@ meaning. In ecommerce, the selected image is evidence of what the customer
 chose and must cascade through cart, order payload, and receipt helpers.
 
 **Implementation boundary:** This restores simple checkout variant media only.
-It is not approval to render the 95 unclassified source extra images, parent
-gallery media, category/reference media, or complex/custom raw variant media.
-Those stay behind classification/Product Setup approval. This is local/source
-work only and does not approve live ecommerce promotion.
+It is not approval to render category/reference media or complex/custom raw
+variant media. As of 2026-05-22, source-approved product-page gallery media has
+its own Product Setup -> Website Slideshow projection path; do not mix that
+gallery path with selected variant media. This is local/source work only and
+does not approve live ecommerce promotion.
 
 **Receipts:** `apps/locally_twisted/locally_twisted/product_variant_media.py`;
 `apps/locally_twisted/locally_twisted/api/variant_media.py`;

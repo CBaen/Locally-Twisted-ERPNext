@@ -1,8 +1,10 @@
 {# Locally Twisted override of webshop's item_image.html.
    Visual-first pass 2026-05-08: keep Webshop slideshow behavior, but give the
    media area customer-facing structure for GL's requested “other product photos”
-   rail. This does not stage Odoo media or mutate DB state. #}
-{% set lt_gallery_slides = slides or get_product_gallery_slides(doc.item_code, doc.website_image) %}
+   rail. Product Setup / Website Slideshow is the LT gallery authority; Webshop
+   `slides` is only a fallback for older/non-LT gallery contexts. #}
+{% set lt_projected_slides = get_product_gallery_slides(doc.item_code, doc.website_image) %}
+{% set lt_gallery_slides = lt_projected_slides if lt_projected_slides and (lt_projected_slides | length > 1) else (slides or lt_projected_slides) %}
 {% set has_gallery = lt_gallery_slides and (lt_gallery_slides | length > 1) %}
 {% set column_size = 4 %}
 <div class="col-md-{{ column_size }} h-100 d-flex mb-4 lt-product__media-column">
@@ -18,16 +20,35 @@
                         aria-label="{{ _('View product photo') }} {{ loop.index }}"
                         aria-pressed="{{ 'true' if loop.first else 'false' }}">
                     <img class="item-slideshow-image mb-2 {% if loop.first %}active{% endif %}"
-                         src="{{ item.image | e }}" alt="{{ item.heading | e }}">
+                         src="{{ item.image | e }}" alt="{{ doc.item_name | e }} {{ _('photo') }} {{ loop.index }}">
                 </button>
                 {% endfor %}
+            </div>
+            <div class="lt-product__gallery-status"
+                 aria-live="polite"
+                 aria-label="{{ _('Product gallery position') }}">
+                <span class="lt-product__gallery-status-current">1</span>
+                <span aria-hidden="true">/</span>
+                <span class="lt-product__gallery-status-total">{{ lt_gallery_slides | length }}</span>
             </div>
             {{ product_image(lt_gallery_slides[0].image, 'product-image') }}
             <!-- Simple image slideshow -->
             <script>
                 frappe.ready(() => {
+                    const $shell = $('.lt-product__media-shell.has-thumbnails').first();
                     const $galleryImages = $('.lt-product__thumbnail-button .item-slideshow-image');
                     const $galleryButtons = $('.lt-product__thumbnail-button');
+                    const $statusCurrent = $('.lt-product__gallery-status-current').first();
+
+                    function syncGalleryFrame() {
+                        const productImage = $('.product-image').first().get(0);
+                        const shell = $shell.get(0);
+                        if (!productImage || !shell) return;
+                        const height = productImage.getBoundingClientRect().height;
+                        if (height > 0) {
+                            shell.style.setProperty('--lt-product-main-image-height', `${Math.round(height)}px`);
+                        }
+                    }
 
                     function showGalleryImage(index) {
                         if (!$galleryImages.length) return;
@@ -42,10 +63,16 @@
                         $galleryImages.removeClass('active');
                         $img.addClass('active');
                         $galleryButtons.attr('aria-pressed', 'false');
+                        $statusCurrent.text(String(safeIndex + 1));
                         const button = $img.closest('.lt-product__thumbnail-button').attr('aria-pressed', 'true').get(0);
                         if (button && button.scrollIntoView) {
                             button.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
                         }
+                        const mainImage = $product_image.find('img').get(0);
+                        if (mainImage && !mainImage.complete) {
+                            mainImage.addEventListener('load', syncGalleryFrame, { once: true });
+                        }
+                        syncGalleryFrame();
                     }
 
                     function activeGalleryIndex() {
@@ -90,6 +117,19 @@
                             if (window.LT) window.LT.productGallerySwiped = false;
                         }, 350);
                     });
+
+                    window.LT = window.LT || {};
+                    window.LT.syncProductGalleryHeight = syncGalleryFrame;
+                    $('.product-image img').on('load', syncGalleryFrame);
+                    const mainImage = $('.product-image img').first().get(0);
+                    if (mainImage && window.MutationObserver) {
+                        new MutationObserver(syncGalleryFrame).observe(mainImage, {
+                            attributes: true,
+                            attributeFilter: ['src'],
+                        });
+                    }
+                    window.addEventListener('resize', syncGalleryFrame);
+                    syncGalleryFrame();
                 })
             </script>
         {% else %}

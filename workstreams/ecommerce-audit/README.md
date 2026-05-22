@@ -33,6 +33,21 @@ Product Setup sync dry run reports `51` Website Items with `0` creates and
 `21` truthful would-update rows. Final pre-commit
 `npm run test:owner-product-safety` passed. This is local-only.
 
+## 2026-05-22 Product Gallery Restoration
+
+Use `product-gallery-restoration-2026-05-22.md` as the front-door handoff for
+product-page additional-photo galleries. It records the source-approved gallery
+media -> Product Setup -> Website Slideshow -> Webshop template architecture,
+the role split between `gallery`, `variant_image`, `reference`, and
+`ignored_artifact`, and the rendered-route regression guard.
+
+Current evidence: Product Setup owns `68` approved live gallery rows, `47`
+Website Items have native `Website Slideshow` links, `68` Website Slideshow
+Item rows exist, and rendered product routes prove the thumbnail rail. Final
+local gates passed through `product_gallery_projection_contract.py`,
+`test:product-gallery-experience`, `test:owner-product-safety`, and
+`test:ecommerce-full`. This is local-only.
+
 ## 2026-05-22 Product Option Selection UX
 
 Use `product-option-selection-ux-2026-05-22.md` for the screenshot-reported
@@ -89,9 +104,10 @@ product page, cart, and checkout preview passed. `lt_ecommerce_paused=1` was
 restored and verified. No staging/live/Frappe Cloud/Stripe/DNS/public exposure
 change was performed.
 
-Remaining caveats: 95 extra images remain held until classified, and 9
-review-only add-on controls remain hidden until mapped. Those do not make the
-base products non-products.
+Remaining caveats: product-page gallery media is now approved through Product
+Setup and native Website Slideshow projection. Category/reference media and 9
+review-only add-on controls remain separate approval/mapping lanes. Those do
+not make the base products non-products.
 
 ## 2026-05-11 Post-Import Checkout Closeout
 
@@ -159,10 +175,11 @@ setup closeout. Completed lanes:
   `website_item_classification_contract --apply` changed exactly 5 Website Item
   fields to `needs_review|needs_review`; no ERPNext catalog/pricing/import
   blocker remains.
-- Media `d2653ce8` / `d9543e5f`: commit `8e4a95b`; 49 products / 95 source
-  extra images are explicitly held as `ignored_artifact` / `hold_back`,
-  `unsafe_unclassified_images=0`, and media visibility / variant media
-  contracts pass.
+- Media `d2653ce8` / `d9543e5f`: commit `8e4a95b` is historical. It forced
+  source extras into a safe hold bucket. The current 2026-05-22 gallery
+  restoration supersedes that blanket rule for product-page gallery media:
+  approved `gallery` rows now project through Product Setup and Website
+  Slideshow, while variant/category/reference media stay separate.
 - Storefront/product UX `3132de36` plus homepage blocker `4fd5ae4f`: commit
   `3179463`; homepage container verifier was rebaselined to committed
   `show_custom_event_decor=False`; focused nav/search/shop/container checks

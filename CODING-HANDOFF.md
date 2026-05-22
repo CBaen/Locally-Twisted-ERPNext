@@ -1,5 +1,29 @@
 # Locally Twisted - Coding Handoff
 
+Codex product gallery architecture restoration on 2026-05-22: product-page
+additional photos are restored as permanent architecture, not staging polish.
+The kept chain is source-approved gallery media -> `LT Product Blueprint
+Gallery Image` -> ERPNext `Website Slideshow` / `Website Slideshow Item` ->
+`Website Item.slideshow` -> the Webshop product gallery template. Source
+additional product photos now use explicit roles: `gallery` renders after
+Product Setup projection, `variant_image` stays selected-option media only,
+`reference` stays retained evidence, and `ignored_artifact` never renders.
+Current local proof: `70` deduped source gallery images in the classification
+packet, `68` approved live Product Setup gallery rows, `47` Website Items with
+slideshows, and `68` Website Slideshow Item rows. The product image template
+now treats `get_product_gallery_slides()` as LT authority and uses Webshop
+`slides` only as fallback, so projected one-extra routes cannot silently render
+no thumbnail rail. Feature handoff:
+`workstreams/ecommerce-audit/product-gallery-restoration-2026-05-22.md`;
+research brief:
+`research/research-product-gallery-architecture/research-brief.md`; failure
+recipe: `capabilities/failures/product-gallery-projection-regression.md`.
+Verified locally: `python scripts\verify\product_gallery_projection_contract.py`
+passed with rendered-route checks, `npm run test:product-gallery-experience`
+passed `3/3`, `npm run test:owner-product-safety` passed, and
+`npm run test:ecommerce-full` passed. This is local-only; no staging/live,
+Frappe Cloud, DNS, Stripe, or Search Console action was performed.
+
 Codex owner Product Setup guard closeout on 2026-05-22: the recovered owner
 product-management lane is now triad-reviewed and documented in
 `workstreams/ecommerce-audit/owner-product-setup-guard-closeout-2026-05-22.md`.
@@ -674,7 +698,7 @@ launch assets. Feature handoff:
 
 OpenClaw/Moji update on 2026-05-10 22:18: GL clarified that current ERPNext products are test products only. Future ecommerce/shop proof must include a controlled purge/reupload/import path that shows products fitting the LT schema populate the correct fields, preserve cascading option logic, and trigger intended automations. Do not perform that purge/reupload as part of this closeout/audit; use current products only as fixtures for verifier coverage.
 
-OpenClaw/Moji update on 2026-05-10 closeout: Phase 4 ecommerce safety was rerun after public-regression cleanup and remains protected. The quote/event boundary verifier still blocks 33 quote-first + 5 needs-review products through product controls, cart API, direct checkout URL, and stale localStorage. A standard-product-page local slice adds runtime page/lane classes, a ready-to-order note, and thumbnail `aria-pressed` sync; `product_page_runtime_contract.py` passes, but this is not import-reopen or live-checkout readiness. The remaining local implementation issues were unresolved source extra-image/Website Slideshow approval work and missing product-authoring/runtime proof; the public ecommerce safety lock protected live exposure but was not the implementation blocker. Product-scope handoff: `workstreams/ecommerce-audit/ready-to-order-product-cut-plan-2026-05-10.md`; recommended first checkout shelf is 13 bouquet-family products only, holding Easter/Mother's Day unless seasonal.
+OpenClaw/Moji update on 2026-05-10 closeout: Phase 4 ecommerce safety was rerun after public-regression cleanup and remains protected. The quote/event boundary verifier still blocks 33 quote-first + 5 needs-review products through product controls, cart API, direct checkout URL, and stale localStorage. A standard-product-page local slice adds runtime page/lane classes, a ready-to-order note, and thumbnail `aria-pressed` sync; `product_page_runtime_contract.py` passes, but this is not import-reopen or live-checkout readiness. The old source extra-image/Website Slideshow approval blocker is superseded by `workstreams/ecommerce-audit/product-gallery-restoration-2026-05-22.md`; remaining product readiness still depends on the current product-authoring/runtime, checkout, payment, and release gates. Product-scope handoff: `workstreams/ecommerce-audit/ready-to-order-product-cut-plan-2026-05-10.md`; recommended first checkout shelf is historical and must not override current Product Setup/runtime evidence.
 
 OpenClaw/Moji update on 2026-05-10 late: ready-to-order ecommerce Phases 1-6 now have local proof/decision artifacts. Phase 5 proves delivery/payment/operator readiness locally: checkout fulfillment delivery fees + pickup + tax boundaries, local Stripe/test payment backend config, mocked webhook handling, paid-order cascade, payment-success reconciliation, operator quote review/send control, customer quote delivery BCC safety, and pause-mode safety all pass. Phase 6 decision: do not open live checkout yet; public ecommerce stays paused with `lt_ecommerce_paused=1` until HTTPS production host, explicit live Stripe/site config, policy approval, webhook setup, and one intentional low-risk real payment test pass. Current evidence: `workstreams/ecommerce-audit/phase-5-delivery-payment-operator-packet-2026-05-10.md` and `workstreams/ecommerce-audit/phase-6-launch-decision-packet-2026-05-10.md`. Safe wording: local ecommerce implementation is complete to the non-live boundary; live launch is an owner/access cutover.
 
@@ -1123,7 +1147,7 @@ Next safest slices:
 - Send `_resources/policies/legal-accounting-review-packet-2026-05-06.md` to Jeff/legal/accounting before treating the public policy set as final.
 - Wire the Stripe Dashboard privacy/terms URLs to `/privacy` and `/terms-of-service` after GL/legal approval.
 - Finish payment live-mode configuration and run `python scripts/verify/payment_launch_readiness.py --mode live` only when cutover work begins. It is not a blocker for current synthetic/backend automation work.
-- Review skipped/unmatched catalog media with GL/Jeff: parked until approval. The automated pass only mapped photos whose Odoo labels clearly matched product options. Refresh `output/catalog-media-review.json` with the detailed dry-run command before assigning anything. Regenerate `output/category-media-candidates.md` for the 11 category quick picks before the approval conversation. Do not assign generic gallery images by guess.
+- Review skipped/unmatched catalog media with GL/Jeff: parked until approval. The automated pass only mapped photos whose Odoo labels clearly matched product options. Product-page source gallery media is now role-approved through Product Setup and Website Slideshow; category/reference/media-menu assignments are still separate approval lanes. Refresh `output/catalog-media-review.json` with the detailed dry-run command before assigning variant/category media. Regenerate `output/category-media-candidates.md` for the 11 category quick picks before the approval conversation. Do not assign generic category/reference images by guess.
 - Keep product navigation product-backed: use `scripts/verify/nav_ia.py` before touching header/footer IA.
 - Continue brand review from `workstreams/brand-style-guide-consolidation.md`. The emergency menu/container/product repair is verified; remaining visual work is GL/Jeff review of photos, proof hierarchy, exact review/trust counts, and category/product imagery.
 - Keep the responsive container gate green for any new public UI. Add route-specific interactive checks when a change introduces a new drawer, modal, accordion, filter, product control, or breakpoint state.

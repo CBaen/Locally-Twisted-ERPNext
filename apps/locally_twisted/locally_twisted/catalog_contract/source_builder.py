@@ -6,6 +6,7 @@ from typing import Any
 
 from locally_twisted.catalog_contract.addon_rules import classify_axis, known_add_on_contracts_for_axis
 from locally_twisted.catalog_contract.color_rules import grouped_colors, is_balloon_color_axis
+from locally_twisted.catalog_contract.gallery_media import canonical_gallery_sources
 from locally_twisted.catalog_contract.models import (
     AddOnContract,
     ColorGroupContract,
@@ -192,17 +193,18 @@ def build_product_page_contract(product: dict[str, Any], *, category_hint: str =
             role_reason="Source primary image maps to the Website Item primary media slot.",
         )
     ] if primary_image else []
-    for url in product.get("additional_image_urls") or []:
+    raw_extra_count = len(product.get("additional_image_urls") or [])
+    canonical_extras = canonical_gallery_sources(product)
+    for source in canonical_extras:
         gallery.append(
             GalleryImageContract(
-                url=str(url),
-                role="ignored_artifact",
-                label="Held source extra image",
-                classification_status="hold_until_classified",
-                render_policy="hold_back",
+                url=source.url,
+                role="gallery",
+                label=source.label or "Product gallery photo",
+                classification_status="approved",
+                render_policy="render",
                 role_reason=(
-                    "No source-backed classification approves this extra image as gallery, "
-                    "variant_image, or reference media."
+                    "Source additional product image is approved as customer-facing product gallery media."
                 ),
             )
         )
@@ -210,8 +212,10 @@ def build_product_page_contract(product: dict[str, Any], *, category_hint: str =
     has_prices = _has_resolver_prices(variant_rows)
     if variant_rows and not has_prices:
         warnings.append("Variant product lacks resolver-backed erpnext_variant_price rows.")
-    if gallery and any(image.role == "ignored_artifact" for image in gallery):
-        warnings.append("One or more alternate images are held back until gallery/variant/reference classification.")
+    if raw_extra_count > len(canonical_extras):
+        warnings.append(
+            "Source alternate images include thumbnail/full-size pairs; product gallery uses the deduped full-quality set."
+        )
 
     product_page_type = _product_page_type(
         slug=slug,

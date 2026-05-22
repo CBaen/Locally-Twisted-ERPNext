@@ -219,18 +219,17 @@ Completed:
   units, with 0 approved public prices.
 - Added a separate read-only media visibility gate so live primary/variant
   image behavior is not confused with approved source media classification.
-  Current live ERPNext has primary `Website Item` images for all 53 source
-  products and 1,751 active variant image rows, but source media is still
-  blocked for import because 95 extra images across 49 products are
-  unclassified and no ERPNext `Website Slideshow` records exist for approved
-  parent-gallery media.
-- Added a source-backed media classification packet for those unclassified
-  source extras. `python scripts/verify/product_page_media_classification_packet.py`
-  writes `audits/odoo-erpnext-migration-audit-2026-05-08/23-product-page-media-classification-packet.md`
+  As of 2026-05-22, product-page gallery media is no longer a blanket held
+  bucket: source-approved `gallery` media is owned by Product Setup, projected
+  into native ERPNext `Website Slideshow` rows, and rendered by the Webshop
+  product gallery template.
+- Updated the source-backed media classification packet to use explicit roles.
+  `python scripts/verify/product_page_media_classification_packet.py` writes
+  `audits/odoo-erpnext-migration-audit-2026-05-08/23-product-page-media-classification-packet.md`
   and `.json` with one row per source extra image, allowed roles, and the
-  enforced safe default `hold_until_classified`. Current packet covers 49
-  products and 95 source extra images, with 0 approved parent-gallery images
-  and 0 assigned variant images.
+  role decision. Current packet covers `70` deduped source gallery images with
+  `0` unsafe unclassified images; live projection covers `68` gallery images
+  because two source slugs are not current live Website Items.
 - Added the first confirmed add-on runtime slice for `foil_number`:
   `ADDON-FOIL-NUMBER` is a code-owned ERPNext Item with a Standard Selling
   price, checkout expands it into an explicit Sales Order Item line, invoices
@@ -448,14 +447,22 @@ Verified 2026-05-10:
   at `business_review_required` with 0 approved public prices. GL cleared this
   packet as an import/reopen business blocker for testing; keep the provenance
   visible in any import rehearsal.
-- `python scripts/verify/product_page_media_visibility_contract.py` produced
-  the expected BLOCKED report at
-  `audits/odoo-erpnext-migration-audit-2026-05-08/20-product-page-media-visibility-report.md`.
+- `python scripts/verify/product_page_media_visibility_contract.py` PASS and
+  wrote
+  `audits/odoo-erpnext-migration-audit-2026-05-08/20-product-page-media-visibility-report.md`
+  with `68` approved live gallery images, `47` Website Items with slideshows,
+  and `68` Website Slideshow Item rows.
 - `python scripts/verify/product_page_media_classification_packet.py` PASS.
-  Current packet covers 49 products and 95 source extra images; every image
-  remains `review_needed` with safe default `hold_until_classified`. GL cleared
-  this packet as an import/reopen business blocker for testing; it is still the
-  source evidence trail before any actual media assignment.
+  Current packet covers `70` deduped source gallery images with `0` unsafe
+  unclassified images. It is still the source evidence trail for media roles,
+  but product-page gallery media now has a live Product Setup -> Website
+  Slideshow projection path.
+- `python scripts/verify/product_gallery_projection_contract.py` PASS and
+  proves source-approved gallery media, Product Setup rows, native slideshow
+  rows, linked Website Items, and rendered product route thumbnail rails.
+- `npm run test:product-gallery-experience` PASS and proves Classic Arch,
+  Large Garland, desktop rail geometry, mobile swipe behavior, and variant
+  selection persistence.
 - `python scripts/verify/variant_media_contract.py` PASS against open guest
   product routes and variant image swap behavior.
 - `npm run test:checkout-experience` PASS against the open-mode cart/checkout
