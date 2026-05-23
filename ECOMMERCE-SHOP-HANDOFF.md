@@ -5,6 +5,15 @@ Status as of 2026-05-23 for peer GPT-5.5 Codex/OpenClaw agents.
 ## Current Repository State
 
 - Branch: `main`
+- 2026-05-23 next-agent staging closeout:
+  `workstreams/frappe-cloud-staging-next-agent-closeout-2026-05-23.md`.
+  This is docs closeout only. It does not reopen forensic-freeze, does not
+  mutate provider/staging/app mirror/live/DNS/Stripe/Search Console, and does
+  not prove owner-review readiness. It adds the standing rule that a docs-only
+  closeout commit should not cause another read-only packet solely to chase
+  `HEAD`; generate fresh source-bound artifacts only when release input state
+  changes, explicit reopen approval exists, or a mutation-capable packet is
+  being prepared.
 - 2026-05-23 freeze reopen approval timestamp guard:
   `workstreams/frappe-cloud-freeze-approval-timestamp-guard-2026-05-23.md`.
   Future mutation-capable packets now need a current, bounded, ISO-8601

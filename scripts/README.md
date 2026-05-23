@@ -77,10 +77,11 @@ read-only no-go packet
 and the current release-prevention action list before reopening any Frappe
 Cloud staging/live path. Archived packets are evidence for their packet source
 commit; generate fresh source-bound artifacts before mutation when `HEAD` has
-moved. These script gates prove local prevention only unless a release packet
-says otherwise. Use `freeze_reopen_approval_artifact.py` to preview, write, or
-validate `freeze-reopen-approval.json`; do not hand-copy that artifact from
-prose.
+moved and release input state changed. A docs-only closeout commit does not by
+itself require another no-go packet. These script gates prove local prevention
+only unless a release packet says otherwise. Use
+`freeze_reopen_approval_artifact.py` to preview, write, or validate
+`freeze-reopen-approval.json`; do not hand-copy that artifact from prose.
 
 | Script | Purpose | Run when |
 |--------|---------|----------|

@@ -1,5 +1,16 @@
 # Locally Twisted - Coding Handoff
 
+Next-agent staging closeout on 2026-05-23:
+`workstreams/frappe-cloud-staging-next-agent-closeout-2026-05-23.md`.
+This is a docs closeout and stale-packet-loop guard, not a release packet and
+not staging proof. Source before the closeout was `d53cdd0`; verify current
+`HEAD` with `git log`. Do not generate another read-only staging packet only
+because a docs-only closeout commit moved `HEAD`. Generate fresh artifacts only
+when release input state changes, GL explicitly reopens forensic-freeze with
+approval evidence, or a mutation-capable release packet is being prepared.
+Ignored generated Python `__pycache__` folders under `scripts`, `apps`, and the
+temporary `.tmp\frappe-app-mirror-sync` clone were removed locally.
+
 Freeze reopen approval helper on 2026-05-23:
 `workstreams/frappe-cloud-freeze-reopen-approval-helper-2026-05-23.md`.
 Future agents must not hand-copy `freeze-reopen-approval.json` from chat,

@@ -6,6 +6,22 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-23 - A no-go packet loop can become its own failure
+
+The repeated read-only staging packets were valuable while each one answered a
+new question about mirror freshness, hosted preflight, approval shape, or guard
+behavior. After a docs-only closeout, repeating the packet solely because the
+commit hash changed does not improve staging truth. It creates another stale
+archive and consumes the next agent's attention.
+
+**Counter-move:** separate release input changes from documentation archive
+changes. If only docs moved, write a next-agent closeout and keep the lock
+intact. Generate fresh packet artifacts only when release input state changes,
+explicit freeze-reopen approval exists, or mutation-capable release work is
+being prepared.
+
+---
+
 ## 2026-05-23 - Artifact encoding can become a fake release blocker
 
 The `9e63fef` read-only staging packet initially wrote `read-receipt.json` with

@@ -16,6 +16,12 @@ process and must not be used as launch authority. Required source:
 `workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`.
 Required fix-agent action list:
 `workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`.
+Next-agent closeout:
+`workstreams/frappe-cloud-staging-next-agent-closeout-2026-05-23.md`.
+Do not create a new read-only no-go packet only because a docs-only commit
+moved `HEAD`; that creates packet churn without changing staging reality.
+Fresh artifacts are required when release input state changes, explicit
+freeze-reopen approval exists, or a mutation-capable packet is being prepared.
 Next safe step is not a deploy. The first local/offline guard layer now exists
 at
 `release_locks/locally-twisted-staging-forensic-freeze.json`,

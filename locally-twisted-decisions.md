@@ -8,6 +8,30 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-23 - Docs-only closeouts must not create read-only packet churn
+
+**Decision:** A docs-only closeout commit must not force another read-only
+staging packet solely because `HEAD` moved. Archived packets remain
+source-bound evidence for the release input state they measured. Fresh packets
+are required when release input state changes, explicit freeze-reopen approval
+exists, or a mutation-capable packet is being prepared.
+
+**Reasoning:** The 2026-05-23 staging freeze started producing repeated no-go
+packets after guard/doc commits. That was useful while each packet answered a
+new release-state question, but repeating the pattern after a docs-only
+closeout creates noise and keeps the next agent in a loop instead of moving to
+the actual reopen boundary.
+
+**Implementation boundary:** This is documentation/process control only. It
+does not reopen forensic-freeze, sync the app mirror, deploy, bootstrap,
+migrate, cache clear, or mutate live/DNS/Stripe/Search Console.
+
+**Receipts:** `workstreams/frappe-cloud-staging-next-agent-closeout-2026-05-23.md`;
+`workstreams/release-artifacts/README.md`;
+`workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`.
+
+---
+
 ## 2026-05-23 - Release artifact JSON readers must tolerate UTF-8 BOM
 
 **Decision:** Local LT release guard JSON readers must accept UTF-8 BOM

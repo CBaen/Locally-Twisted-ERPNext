@@ -360,6 +360,15 @@ execution can leave forensic-freeze.
     chain. This prevents stale approval, plan, mirror, provider, and payload
     artifacts from being mixed into a release packet.
 
+26. **Stop the docs-only stale-packet loop.** `implemented-docs`
+    `workstreams/frappe-cloud-staging-next-agent-closeout-2026-05-23.md`
+    records the current takeover boundary. A docs-only commit can move `HEAD`
+    without changing Frappe Cloud, the app-root mirror, staging data, users,
+    bootstrap code, or release authority. Do not generate another no-go packet
+    solely to chase that commit. Fresh packets are required when release input
+    state changes, explicit freeze-reopen approval exists, or a
+    mutation-capable packet is being prepared.
+
 ## P1 Actions
 
 1. Wire the release lock and owner-review gate into `npm run` scripts so future

@@ -73,6 +73,12 @@ packet coherence only; it is not app mirror sync, provider deploy/update,
 hosted preflight, bootstrap/import, owner-review, live, DNS, Stripe, Search
 Console, or checkout proof.
 
+Do not create another read-only no-go packet solely because a docs-only closeout
+commit moved `HEAD`. Archived packets are source-bound evidence for the release
+input state they measured. Generate a fresh packet when release input state
+changed, explicit freeze-reopen approval exists, or a mutation-capable packet is
+being prepared.
+
 The expanded current action list is
 `../frappe-cloud-release-prevention-action-items-2026-05-23.md`.
 

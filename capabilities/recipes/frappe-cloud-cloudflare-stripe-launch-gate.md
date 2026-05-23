@@ -180,6 +180,12 @@ Default public launch posture:
   preflight still returns HTTP `417`, staging owner-review data/users/routes
   are still missing, and `app_mirror_sync` is still blocked by the missing
   `freeze-reopen-approval.json`.
+- A docs-only closeout commit is not a reason to generate another read-only
+  no-go packet by itself. Use
+  `workstreams/frappe-cloud-staging-next-agent-closeout-2026-05-23.md` as the
+  takeover boundary. Generate fresh packet artifacts only when release input
+  state changed, explicit freeze-reopen approval exists, or a mutation-capable
+  packet is being prepared.
 - Previous archived snapshot-source read-only packet:
   `workstreams/release-artifacts/2026-05-23-staging-reopen-b039667-readonly/`.
   It updates no-go evidence for packet source
