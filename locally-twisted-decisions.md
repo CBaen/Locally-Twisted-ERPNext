@@ -8,6 +8,28 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-23 - Release artifact JSON readers must tolerate UTF-8 BOM
+
+**Decision:** Local LT release guard JSON readers must accept UTF-8 BOM
+artifacts through `utf-8-sig`, while packet writers should still prefer UTF-8
+without BOM.
+
+**Reasoning:** During the `9e63fef` read-only staging packet, a PowerShell
+generated `read-receipt.json` with a UTF-8 BOM. The release controller blocked
+before reaching the intended approval gate. That was useful as a witness
+finding, but it is not a meaningful release-safety blocker. BOM tolerance keeps
+the controller focused on actual release authority and staging proof gaps.
+
+**Implementation boundary:** This is local/offline guard hardening only. It
+does not create approval, reopen forensic-freeze, sync the app mirror, deploy,
+bootstrap, migrate, clear cache, or mutate live/DNS/Stripe/Search Console.
+
+**Receipts:** `scripts/release/release_guard_common.py`;
+`scripts/verify/release_controller_contract.py`;
+`workstreams/release-artifacts/2026-05-23-staging-reopen-9e63fef-readonly/`.
+
+---
+
 ## 2026-05-23 - Freeze reopen approval artifacts must be helper-generated or helper-validated
 
 **Decision:** Future mutation-capable LT staging packets must not rely on a

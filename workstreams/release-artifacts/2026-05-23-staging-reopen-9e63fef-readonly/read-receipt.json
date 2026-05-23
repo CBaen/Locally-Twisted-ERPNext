@@ -1,0 +1,22 @@
+{
+    "agent":  "Codex release controller",
+    "created_at":  "2026-05-23T07:49:56.8749502Z",
+    "source_commit":  "9e63fef7d786ea24dc1ffa8dbf9e6cffa03847d7",
+    "target":  "locallytwisted-staging.frappe.cloud",
+    "read_documents":  [
+                           "CODING-HANDOFF.md",
+                           "ECOMMERCE-SHOP-HANDOFF.md",
+                           "LT-LAUNCH-RUNBOOK.md",
+                           "workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md",
+                           "workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md",
+                           "workstreams/frappe-cloud-staging-owner-review-2026-05-22.md",
+                           "workstreams/release-artifacts/README.md",
+                           "workstreams/frappe-cloud-release-artifact-chain-binding-2026-05-23.md",
+                           "workstreams/frappe-cloud-freeze-approval-timestamp-guard-2026-05-23.md",
+                           "workstreams/frappe-cloud-freeze-reopen-approval-helper-2026-05-23.md",
+                           "scripts/README.md",
+                           "capabilities/recipes/frappe-cloud-cloudflare-stripe-launch-gate.md",
+                           "locally-twisted-queue.md"
+                       ],
+    "provider_mutation_executed":  false
+}

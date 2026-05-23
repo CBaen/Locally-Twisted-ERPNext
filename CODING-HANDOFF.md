@@ -24,23 +24,38 @@ mutate provider/staging/live/DNS/Stripe/Search Console/app mirror/bootstrap/
 migrate/cache/checkout/secrets.
 
 Latest read-only staging packet on 2026-05-23:
-`workstreams/release-artifacts/2026-05-23-staging-reopen-b039667-readonly/`
+`workstreams/release-artifacts/2026-05-23-staging-reopen-9e63fef-readonly/`
 is archived evidence for packet source
-`b0396675a8664a42e887b6ac141b63ac115eaaa7`. It performed no provider or
+`9e63fef7d786ea24dc1ffa8dbf9e6cffa03847d7`. It performed no provider or
 staging mutation. Result remains **NO-GO**: app mirror freshness is `ok=false`
-against source `b039667`, the app-root mirror/deployed staging app remains at
+against source `9e63fef`, the app-root mirror/deployed staging app remains at
 `181076c...`, hosted preflight returns HTTP `417`, catalog/Product
 Setup/gallery rows are zero, required owner/marketing users are missing,
-representative product/category routes fail, and `app_mirror_sync` is still
-blocked by missing `freeze-reopen-approval.json`. This packet contains a
-current pre-sync `app-mirror-sync-plan.json`, but no approval artifact. Do not
-reuse it after `HEAD` moves.
+representative product/category routes fail, the approval helper preview is
+`ok=false`, and `app_mirror_sync` is still blocked by missing
+`freeze-reopen-approval.json`. This packet contains a current pre-sync
+`app-mirror-sync-plan.json`, but no approval artifact. Do not reuse it after
+`HEAD` moves.
 
 Previous read-only staging packet:
+`workstreams/release-artifacts/2026-05-23-staging-reopen-b039667-readonly/`
+is archived evidence for packet source
+`b0396675a8664a42e887b6ac141b63ac115eaaa7`. It is not mutation proof for any
+later commit.
+
+Earlier read-only staging packet:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-fa38bc3-readonly/`
 is archived evidence for packet source
 `fa38bc31a120f6d52f1e21e4ab011d5b03c2d74d`. It is not mutation proof for any
 later commit.
+
+Release artifact JSON encoding guard on 2026-05-23:
+`workstreams/frappe-cloud-release-json-artifact-bom-guard-2026-05-23.md`.
+`scripts/release/release_guard_common.py` now reads JSON artifacts with
+`utf-8-sig`, and `scripts/verify/release_controller_contract.py` includes a
+UTF-8 BOM read-receipt fixture. This is local controller hardening only; it
+prevents PowerShell-generated JSON artifacts from creating a false blocker and
+does not authorize mutation.
 
 Release artifact chain binding on 2026-05-23:
 Run `git status -sb` and `git log --oneline -5` for the current HEAD; do not

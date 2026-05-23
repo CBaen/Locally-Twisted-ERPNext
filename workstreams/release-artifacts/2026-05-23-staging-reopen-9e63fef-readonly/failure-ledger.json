@@ -1,0 +1,20 @@
+{
+    "fresh_release_plan_approved":  false,
+    "failures":  [
+                     {
+                         "class":  "typed_provider_payload_shape",
+                         "guard_written":  true,
+                         "guard":  "scripts/verify/frappe_cloud_payload_contract.py"
+                     },
+                     {
+                         "class":  "staging_bootstrap_report_developer_mode",
+                         "guard_written":  true,
+                         "guard":  "apps/locally_twisted/locally_twisted/staging_owner_review_preflight.py"
+                     },
+                     {
+                         "class":  "stale_app_mirror_missing_hosted_preflight",
+                         "guard_written":  true,
+                         "guard":  "scripts/verify/frappe_cloud_app_mirror_freshness.py"
+                     }
+                 ]
+}

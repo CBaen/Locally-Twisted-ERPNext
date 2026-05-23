@@ -73,7 +73,7 @@ should not be used as launch proof.
 Release evidence and current no-go state live outside this scripts directory.
 Start with `workstreams/release-artifacts/README.md`, the latest archived
 read-only no-go packet
-`workstreams/release-artifacts/2026-05-23-staging-reopen-fa38bc3-readonly/`,
+`workstreams/release-artifacts/2026-05-23-staging-reopen-9e63fef-readonly/`,
 and the current release-prevention action list before reopening any Frappe
 Cloud staging/live path. Archived packets are evidence for their packet source
 commit; generate fresh source-bound artifacts before mutation when `HEAD` has

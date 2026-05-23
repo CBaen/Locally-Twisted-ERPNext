@@ -6,6 +6,20 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-23 - Artifact encoding can become a fake release blocker
+
+The `9e63fef` read-only staging packet initially wrote `read-receipt.json` with
+a UTF-8 BOM from PowerShell. The controller blocked before reaching the real
+release authority issue. The real blocker remained the missing explicit
+`freeze-reopen-approval.json`; the BOM was packet-writing friction.
+
+**Counter-move:** release guard JSON loading now uses `utf-8-sig`, and the
+release controller contract includes a BOM read-receipt fixture. Continue to
+prefer UTF-8 without BOM when writing artifacts, but do not let encoding noise
+mask the true go/no-go gate.
+
+---
+
 ## 2026-05-23 - Approval artifacts need a generator, not a template copy
 
 The release controller required `freeze-reopen-approval.json`, but a future

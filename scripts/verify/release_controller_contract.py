@@ -108,6 +108,21 @@ def run_contract() -> list[str]:
         if "provider_mutation_executed" not in allowed.stdout:
             failures.append("allowed read-only output did not report provider_mutation_executed=false")
 
+        bom_receipt = tmp_path / "read-receipt-bom.json"
+        bom_receipt.write_text(
+            json.dumps(
+                {
+                    "agent": "release-controller-contract",
+                    "created_at": "2026-05-23T00:00:00-06:00",
+                    "read_documents": REQUIRED_READ_DOCS,
+                }
+            ),
+            encoding="utf-8-sig",
+        )
+        allowed_bom = run_controller("--action", "read_only_forensics", "--read-receipt", str(bom_receipt), "--json")
+        if allowed_bom.returncode != 0:
+            failures.append("read_only_forensics did not accept a UTF-8 BOM read receipt")
+
         approval = tmp_path / "freeze-reopen-approval.json"
         mirror = tmp_path / "app-mirror-freshness.json"
         sync_plan = tmp_path / "app-mirror-sync-plan.json"

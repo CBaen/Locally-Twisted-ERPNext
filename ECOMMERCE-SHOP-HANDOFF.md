@@ -23,9 +23,9 @@ Status as of 2026-05-23 for peer GPT-5.5 Codex/OpenClaw agents.
   only and did not mutate provider, staging, live, DNS, Stripe, Search Console,
   app mirror, bootstrap, migrate, cache, checkout, or secrets.
 - 2026-05-23 latest read-only staging packet:
-  `workstreams/release-artifacts/2026-05-23-staging-reopen-b039667-readonly/`.
+  `workstreams/release-artifacts/2026-05-23-staging-reopen-9e63fef-readonly/`.
   This packet is bound to source
-  `b0396675a8664a42e887b6ac141b63ac115eaaa7` and performed no provider or
+  `9e63fef7d786ea24dc1ffa8dbf9e6cffa03847d7` and performed no provider or
   staging mutation. It proves staging remains **NO-GO** for owner review:
   app-root mirror/deployed app hash is still `181076c...`, mirror freshness is
   `ok=false`, hosted preflight returns HTTP `417`, catalog/Product
@@ -33,10 +33,19 @@ Status as of 2026-05-23 for peer GPT-5.5 Codex/OpenClaw agents.
   representative routes fail, and the release controller blocks
   `app_mirror_sync` because `freeze-reopen-approval.json` is missing.
 - 2026-05-23 previous read-only staging packet:
+  `workstreams/release-artifacts/2026-05-23-staging-reopen-b039667-readonly/`
+  is archived evidence for source
+  `b0396675a8664a42e887b6ac141b63ac115eaaa7`, not mutation proof for later
+  commits.
+- 2026-05-23 earlier read-only staging packet:
   `workstreams/release-artifacts/2026-05-23-staging-reopen-fa38bc3-readonly/`
   is archived evidence for source
   `fa38bc31a120f6d52f1e21e4ab011d5b03c2d74d`, not mutation proof for later
   commits.
+- 2026-05-23 JSON artifact guard:
+  `release_guard_common.read_json()` now accepts UTF-8 BOM JSON artifacts, and
+  `release_controller_contract.py` proves a BOM read receipt passes. This is
+  local guard hardening only; it does not reopen forensic-freeze.
 - 2026-05-23 Gate/Fixer chain-binding guard:
   `workstreams/frappe-cloud-release-artifact-chain-binding-2026-05-23.md`.
   The release controller now rejects mutation-capable packets whose approval,
@@ -280,7 +289,7 @@ The hosted preflight output must be bound to the same staging site and release
 hash as `provider-snapshot.json` and `app-mirror-freshness.json`; a hand-shaped
 minimal `ok` artifact is not acceptable.
 The latest read-only packet
-`workstreams/release-artifacts/2026-05-23-staging-reopen-b039667-readonly/`
+`workstreams/release-artifacts/2026-05-23-staging-reopen-9e63fef-readonly/`
 produced the provider snapshot and tried hosted preflight; hosted preflight is
 blocked because staging is still running app hash `181076c...`, which does not
 include the source preflight method.

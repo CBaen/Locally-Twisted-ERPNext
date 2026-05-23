@@ -110,7 +110,7 @@ Default public launch posture:
   `locally_twisted/staging_owner_review_preflight.py` and has a stale
   `locally_twisted/staging_owner_review_bootstrap.py` relative to source
   `24c8465`. Later read-only packets, including
-  `workstreams/release-artifacts/2026-05-23-staging-reopen-b039667-readonly/`,
+  `workstreams/release-artifacts/2026-05-23-staging-reopen-9e63fef-readonly/`,
   carry their own source-bound mirror freshness artifacts.
 - Also as of 2026-05-23, hosted bootstrap preflight is a separate chain-bound
   artifact, not a stale bootstrap-status read. The current packet
@@ -167,20 +167,30 @@ Default public launch posture:
   artifacts must bind to repo `HEAD`, rollback hash, mirror hash, provider
   target hash, payload site, and deployed/preflight hashes before any local
   mutation gate can pass.
+- Release artifact JSON loading now tolerates UTF-8 BOM through
+  `release_guard_common.read_json()` and is covered by
+  `release_controller_contract.py`. Prefer UTF-8 without BOM when writing new
+  packet files, but a PowerShell-written BOM must not become a false release
+  blocker.
 - The latest archived snapshot-source read-only packet is
-  `workstreams/release-artifacts/2026-05-23-staging-reopen-b039667-readonly/`.
+  `workstreams/release-artifacts/2026-05-23-staging-reopen-9e63fef-readonly/`.
   It updates no-go evidence for packet source
-  `b0396675a8664a42e887b6ac141b63ac115eaaa7`: the app-root mirror/deployed
+  `9e63fef7d786ea24dc1ffa8dbf9e6cffa03847d7`: the app-root mirror/deployed
   staging app remains at `181076c239b2d1d3d508a41ac471c71f9d2b5158`, hosted
   preflight still returns HTTP `417`, staging owner-review data/users/routes
   are still missing, and `app_mirror_sync` is still blocked by the missing
   `freeze-reopen-approval.json`.
 - Previous archived snapshot-source read-only packet:
+  `workstreams/release-artifacts/2026-05-23-staging-reopen-b039667-readonly/`.
+  It updates no-go evidence for packet source
+  `b0396675a8664a42e887b6ac141b63ac115eaaa7` and is not mutation proof for a
+  later commit.
+- Earlier archived snapshot-source read-only packet:
   `workstreams/release-artifacts/2026-05-23-staging-reopen-fa38bc3-readonly/`.
   It updates no-go evidence for packet source
   `fa38bc31a120f6d52f1e21e4ab011d5b03c2d74d` and is not mutation proof for a
   later commit.
-- Earlier archived snapshot-source read-only packet:
+- Oldest archived snapshot-source read-only packet:
   `workstreams/release-artifacts/2026-05-23-staging-reopen-current-head-readonly/`.
   It updates no-go evidence for packet source
   `69e4e9f2cf3c97e337b9e8046d4cd86cc5e1b68c`. The folder name is historical:

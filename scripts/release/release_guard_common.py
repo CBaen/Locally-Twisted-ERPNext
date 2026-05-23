@@ -179,7 +179,7 @@ def repo_path(rel_path: str) -> Path:
 
 def read_json(path: Path) -> Any:
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
+        return json.loads(path.read_text(encoding="utf-8-sig"))
     except FileNotFoundError as exc:
         raise ReleaseGuardError(f"required artifact is missing: {path}") from exc
     except json.JSONDecodeError as exc:

@@ -114,9 +114,9 @@ reopen forensic-freeze, or mutate provider/staging/live/DNS/Stripe/Search
 Console/app mirror/bootstrap/migrate/cache/checkout/secrets.
 
 2026-05-23 latest archived read-only packet:
-`workstreams/release-artifacts/2026-05-23-staging-reopen-b039667-readonly/`.
+`workstreams/release-artifacts/2026-05-23-staging-reopen-9e63fef-readonly/`.
 This packet updates no-go evidence at source
-`b0396675a8664a42e887b6ac141b63ac115eaaa7`. It confirms the app-root
+`9e63fef7d786ea24dc1ffa8dbf9e6cffa03847d7`. It confirms the app-root
 mirror/deployed staging app remains at
 `181076c239b2d1d3d508a41ac471c71f9d2b5158`, hosted preflight still returns
 HTTP `417`, owner-review data/users/routes are still missing, and
@@ -124,13 +124,25 @@ HTTP `417`, owner-review data/users/routes are still missing, and
 This is not provider mutation, owner-review readiness, or mutation proof for a
 later commit.
 
+2026-05-23 release JSON BOM guard:
+`workstreams/frappe-cloud-release-json-artifact-bom-guard-2026-05-23.md`.
+The controller now reads JSON artifacts with `utf-8-sig` so a PowerShell
+UTF-8 BOM does not block before the intended release gate. This is local
+guard hardening only, not approval or mutation.
+
 2026-05-23 archived snapshot-source read-only packet:
+`workstreams/release-artifacts/2026-05-23-staging-reopen-b039667-readonly/`.
+This packet updates no-go evidence at source
+`b0396675a8664a42e887b6ac141b63ac115eaaa7`. It is not mutation proof for a
+later commit.
+
+2026-05-23 earlier archived snapshot-source read-only packet:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-fa38bc3-readonly/`.
 This packet updates no-go evidence at source
 `fa38bc31a120f6d52f1e21e4ab011d5b03c2d74d`. It is not mutation proof for a
 later commit.
 
-2026-05-23 earlier archived snapshot-source read-only packet:
+2026-05-23 oldest archived snapshot-source read-only packet:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-current-head-readonly/`.
 This packet updates the no-go evidence at source
 `69e4e9f2cf3c97e337b9e8046d4cd86cc5e1b68c`. The folder name is historical:
