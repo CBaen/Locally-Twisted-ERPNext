@@ -11,6 +11,7 @@ import argparse
 import http.cookiejar
 import json
 import os
+import re
 import subprocess
 import sys
 import urllib.error
@@ -32,20 +33,43 @@ REQUIRED_USERS = {
     "marketing@exploringnotboring.com": {"LT Marketing Review Access"},
 }
 MIN_COUNTS = {
-    "Website Item": 50,
-    "Item": 10000,
-    "Item Price": 10000,
-    "LT Product Blueprint": 50,
-    "Website Slideshow": 1,
-    "Website Slideshow Item": 1,
+    "Website Item": 51,
+    "Item": 10685,
+    "Item Price": 10666,
+    "LT Product Blueprint": 51,
+    "Website Slideshow": 47,
+    "Website Slideshow Item": 68,
 }
 OWNER_VISIBLE_ROUTES = (
     "/app",
     "/shop",
     "/shop-items",
     "/shop-items/bouquets/mickey-mouse-bouquet",
+    "/shop-items/arches/classic-arch",
+    "/shop-items/garlands/large-garland",
     "/shop-items/columns",
 )
+EXPECTED_GALLERY_THUMBNAILS = {
+    "/shop-items/bouquets/mickey-mouse-bouquet": {
+        "exact": 3,
+        "required_paths": {
+            "/files/mickey-mouse-bouquet.png",
+            "/files/mickey-mouse-bouquet-large.webp",
+        },
+    },
+    "/shop-items/arches/classic-arch": {
+        "minimum": 12,
+        "required_paths": {
+            "/files/classic-arch.png",
+        },
+    },
+    "/shop-items/garlands/large-garland": {
+        "minimum": 2,
+        "required_paths": {
+            "/files/large-garland.png",
+        },
+    },
+}
 
 
 def main() -> int:
@@ -67,6 +91,7 @@ def main() -> int:
                 "expected app hash is required; pass --expected-hash, set LT_EXPECTED_APP_HASH, "
                 "or use --expected-hash-from-mirror"
             )
+        args.expected_hash = normalize_expected_hash(args.expected_hash)
         result = run_gate(args)
     except Exception as exc:
         print("[STAGING OWNER REVIEW GATE] FAIL")
@@ -130,8 +155,15 @@ def run_gate(args: argparse.Namespace) -> dict[str, Any]:
         failures.append("lt_public_indexing_enabled is not disabled on staging")
     if (bootstrap_status or {}).get("unavailable"):
         failures.append("staging bootstrap status method is not available on the target app")
-    elif (bootstrap_status or {}).get("status", {}).get("state") != "success":
-        failures.append(f"bootstrap status is not success: {bootstrap_status}")
+    else:
+        status_payload = (bootstrap_status or {}).get("status", {})
+        if status_payload.get("state") != "success":
+            failures.append(f"bootstrap status is not success: {bootstrap_status}")
+        if status_payload.get("expected_app_hash") != args.expected_hash:
+            failures.append(
+                "bootstrap status is not bound to the deployed app hash: "
+                f"{status_payload.get('expected_app_hash')} != {args.expected_hash}"
+            )
     for doctype, minimum in MIN_COUNTS.items():
         value = counts.get(doctype)
         if not isinstance(value, int) or value < minimum:
@@ -154,14 +186,29 @@ def run_gate(args: argparse.Namespace) -> dict[str, Any]:
         if route["path"].startswith("/shop") and "paused" in route["final_url"]:
             failures.append(f"{route['path']} still resolves to paused page for authenticated owner/admin proof")
     product_routes = {route["path"]: route for route in routes}
-    mickey_route = product_routes.get("/shop-items/bouquets/mickey-mouse-bouquet") or {}
-    if mickey_route.get("status") == 200 and mickey_route.get("thumbnail_count") != 3:
-        failures.append(
-            "Mickey Mouse Bouquet staging gallery should expose exactly 3 product thumbnails; "
-            f"found {mickey_route.get('thumbnail_count')}"
-        )
-    classic_route = product_routes.get("/shop-items/columns") or {}
-    if classic_route.get("status") == 200 and not classic_route.get("looks_like_category"):
+    for path, contract in EXPECTED_GALLERY_THUMBNAILS.items():
+        route = product_routes.get(path) or {}
+        if route.get("status") != 200:
+            continue
+        thumbnail_paths = route.get("thumbnail_paths") or []
+        unique_paths = sorted(set(thumbnail_paths))
+        if not route.get("has_gallery_shell"):
+            failures.append(f"{path} did not render the product gallery thumbnail shell")
+        if "exact" in contract and len(unique_paths) != contract["exact"]:
+            failures.append(
+                f"{path} staging gallery should expose exactly {contract['exact']} unique thumbnails; "
+                f"found {len(unique_paths)}: {unique_paths}"
+            )
+        if "minimum" in contract and len(unique_paths) < contract["minimum"]:
+            failures.append(
+                f"{path} staging gallery should expose at least {contract['minimum']} unique thumbnails; "
+                f"found {len(unique_paths)}: {unique_paths}"
+            )
+        missing_paths = sorted(set(contract["required_paths"]) - set(unique_paths))
+        if missing_paths:
+            failures.append(f"{path} staging gallery is missing required thumbnail paths: {missing_paths}")
+    category_route = product_routes.get("/shop-items/columns") or {}
+    if category_route.get("status") == 200 and not category_route.get("looks_like_category"):
         failures.append("/shop-items/columns did not render like a shop category page")
 
     return {
@@ -259,6 +306,7 @@ def fetch_route(site: str, opener: urllib.request.OpenerDirector, path: str) -> 
         body = exc.read().decode("utf-8", errors="replace")
         final_url = exc.geturl()
         status = exc.code
+    thumbnail_paths = extract_gallery_thumbnail_paths(body)
     return {
         "path": path,
         "status": status,
@@ -267,7 +315,8 @@ def fetch_route(site: str, opener: urllib.request.OpenerDirector, path: str) -> 
         "login_page": "login_email" in body or "redirect-to" in final_url or "<title>Sign In" in body,
         "has_gallery_shell": "lt-product__media-shell has-thumbnails" in body
         or "lt-product__media-shell  has-thumbnails" in body,
-        "thumbnail_count": body.count("lt-product__thumbnail-button"),
+        "thumbnail_count": len(set(thumbnail_paths)),
+        "thumbnail_paths": thumbnail_paths,
         "looks_like_category": "product-card" in body or "lt-shop" in body or "item-card" in body,
     }
 
@@ -283,6 +332,33 @@ def resolve_mirror_head(mirror_url: str) -> str:
     if len(head) != 40:
         raise RuntimeError(f"could not resolve app mirror HEAD from {mirror_url!r}")
     return head
+
+
+def normalize_expected_hash(value: str) -> str:
+    expected_hash = str(value).strip().lower()
+    if len(expected_hash) != 40 or any(char not in "0123456789abcdef" for char in expected_hash):
+        raise RuntimeError(f"expected app hash must be a full 40-character hex commit hash: {value!r}")
+    return expected_hash
+
+
+def extract_gallery_thumbnail_paths(body: str) -> list[str]:
+    button_pattern = re.compile(
+        r"<button\b(?=[^>]*\bclass=[\"'][^\"']*\blt-product__thumbnail-button\b)[^>]*>(.*?)</button>",
+        re.IGNORECASE | re.DOTALL,
+    )
+    img_pattern = re.compile(r"<img\b[^>]*\bsrc=[\"']([^\"']+)[\"']", re.IGNORECASE)
+    paths: list[str] = []
+    for button_html in button_pattern.findall(body):
+        match = img_pattern.search(button_html)
+        if not match:
+            continue
+        paths.append(normalize_asset_path(match.group(1)))
+    return paths
+
+
+def normalize_asset_path(src: str) -> str:
+    parsed = urllib.parse.urlsplit(src)
+    return parsed.path or src
 
 
 def extract_title(body: str) -> str:

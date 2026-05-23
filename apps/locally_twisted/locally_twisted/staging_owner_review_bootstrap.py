@@ -23,15 +23,15 @@ OWNER_EMAIL = "locallytwisted@gmail.com"
 MARKETING_EMAIL = "marketing@exploringnotboring.com"
 DEVELOPER_EMAIL = "cameron@builtbycameron.com"
 CATALOG_MIN_COUNTS = {
-    "Item": 10000,
-    "Item Price": 10000,
-    "Website Item": 50,
+    "Item": 10685,
+    "Item Price": 10666,
+    "Website Item": 51,
 }
 OWNER_REVIEW_MIN_COUNTS = {
     **CATALOG_MIN_COUNTS,
-    "LT Product Blueprint": 50,
-    "Website Slideshow": 1,
-    "Website Slideshow Item": 1,
+    "LT Product Blueprint": 51,
+    "Website Slideshow": 47,
+    "Website Slideshow Item": 68,
 }
 OWNER_ROLES = (
     "Desk User",
@@ -53,7 +53,10 @@ OWNER_ROLES = (
 
 
 @frappe.whitelist()
-def enqueue_staging_owner_review_bootstrap(confirm: str) -> dict[str, Any]:
+def enqueue_staging_owner_review_bootstrap(
+    confirm: str,
+    expected_app_hash: str | None = None,
+) -> dict[str, Any]:
     """Queue the staging data bootstrap.
 
     The long catalog import must run in a worker. Do not call the seed
@@ -62,11 +65,17 @@ def enqueue_staging_owner_review_bootstrap(confirm: str) -> dict[str, Any]:
     """
     _assert_staging(confirm)
     frappe.only_for("System Manager")
-    _set_status("queued", {"message": "queued staging owner-review bootstrap"})
+    expected_app_hash = _normalize_expected_app_hash(expected_app_hash)
+    _set_status(
+        "queued",
+        {"message": "queued staging owner-review bootstrap"},
+        expected_app_hash=expected_app_hash,
+    )
     job = frappe.enqueue(
         "locally_twisted.staging_owner_review_bootstrap.run_staging_owner_review_bootstrap",
         queue="long",
         timeout=7200,
+        expected_app_hash=expected_app_hash,
         job_name=JOB_NAME,
         job_id=JOB_NAME,
         enqueue_after_commit=False,
@@ -96,10 +105,19 @@ def get_staging_owner_review_bootstrap_status(confirm: str) -> dict[str, Any]:
     }
 
 
-def run_staging_owner_review_bootstrap() -> dict[str, Any]:
+def run_staging_owner_review_bootstrap(expected_app_hash: str | None = None) -> dict[str, Any]:
     _assert_staging(CONFIRMATION)
-    _set_status("running", {"message": "starting staging owner-review bootstrap", "counts": _counts()})
-    summary: dict[str, Any] = {"steps": [], "pre_counts": _counts()}
+    expected_app_hash = _normalize_expected_app_hash(expected_app_hash)
+    _set_status(
+        "running",
+        {"message": "starting staging owner-review bootstrap"},
+        expected_app_hash=expected_app_hash,
+    )
+    summary: dict[str, Any] = {
+        "steps": [],
+        "expected_app_hash": expected_app_hash,
+        "pre_counts": _counts(),
+    }
     try:
         _run_seed_syncs(summary, before_catalog=True)
         _ensure_owner_user(summary)
@@ -115,14 +133,14 @@ def run_staging_owner_review_bootstrap() -> dict[str, Any]:
         frappe.clear_cache()
         frappe.db.commit()
         summary["post_counts"] = _counts()
-        _set_status("success", summary)
+        _set_status("success", summary, expected_app_hash=expected_app_hash)
         return summary
     except Exception as exc:
         frappe.db.rollback()
         summary["error"] = f"{type(exc).__name__}: {exc}"
         summary["traceback_tail"] = traceback.format_exc().splitlines()[-20:]
         summary["post_counts"] = _counts()
-        _set_status("failure", summary)
+        _set_status("failure", summary, expected_app_hash=expected_app_hash)
         raise
 
 
@@ -142,11 +160,17 @@ def _assert_staging(confirm: str) -> None:
         )
 
 
-def _set_status(state: str, payload: dict[str, Any]) -> None:
+def _set_status(
+    state: str,
+    payload: dict[str, Any],
+    *,
+    expected_app_hash: str | None = None,
+) -> None:
     status = {
         "state": state,
         "site": frappe.local.site,
         "target_site": STAGING_SITE,
+        "expected_app_hash": expected_app_hash,
         "updated_at": frappe.utils.now_datetime().isoformat(),
         "counts": _counts(),
         **payload,
@@ -176,6 +200,15 @@ def _get_status() -> dict[str, Any]:
 
 def _status_path() -> Path:
     return Path(frappe.get_site_path("private", "files", STATUS_FILE))
+
+
+def _normalize_expected_app_hash(expected_app_hash: str | None) -> str | None:
+    if not expected_app_hash:
+        return None
+    expected_app_hash = str(expected_app_hash).strip()
+    if len(expected_app_hash) != 40 or any(char not in "0123456789abcdef" for char in expected_app_hash.lower()):
+        frappe.throw("Expected app hash must be a full 40-character hex commit hash.", frappe.ValidationError)
+    return expected_app_hash.lower()
 
 
 def _counts() -> dict[str, int]:
