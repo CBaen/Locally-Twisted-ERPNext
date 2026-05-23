@@ -35,7 +35,7 @@
     "test:customer-portal-visual": "scripts\\verify\\run_playwright.cmd test scripts/verify/customer_portal_visual.spec.js --reporter=line",
     "test:customer-login-visual": "scripts\\verify\\run_playwright.cmd test scripts/verify/customer_login_visual.spec.js --reporter=line",
     "test:human-access": "python scripts/verify/human_access_silo_matrix.py",
-    "test:staging-owner-review": "python scripts/verify/staging_owner_review_gate.py --expected-hash 3e86bc149d6dcc04daa194b740c1733f5c796261",
+    "test:staging-owner-review": "python scripts/verify/staging_owner_review_gate.py --expected-hash-from-mirror",
     "test:marketing-review-access": "python scripts/verify/marketing_review_access_boundary.py",
     "test:public-access-guard": "python scripts/verify/public_access_guard_contract.py",
     "test:product-quote-first": "scripts\\verify\\run_playwright.cmd test scripts/verify/product_quote_first_experience.spec.js --reporter=line",

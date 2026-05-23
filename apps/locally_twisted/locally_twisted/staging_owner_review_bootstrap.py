@@ -16,10 +16,23 @@ import frappe
 
 JOB_NAME = "lt-staging-owner-review-bootstrap"
 STATUS_KEY = "lt_staging_owner_review_bootstrap_status"
+STATUS_FILE = "lt-staging-owner-review-bootstrap-status.json"
 CONFIRMATION = "seed locally twisted staging owner review"
+STAGING_SITE = "locallytwisted-staging.frappe.cloud"
 OWNER_EMAIL = "locallytwisted@gmail.com"
 MARKETING_EMAIL = "marketing@exploringnotboring.com"
 DEVELOPER_EMAIL = "cameron@builtbycameron.com"
+CATALOG_MIN_COUNTS = {
+    "Item": 10000,
+    "Item Price": 10000,
+    "Website Item": 50,
+}
+OWNER_REVIEW_MIN_COUNTS = {
+    **CATALOG_MIN_COUNTS,
+    "LT Product Blueprint": 50,
+    "Website Slideshow": 1,
+    "Website Slideshow Item": 1,
+}
 OWNER_ROLES = (
     "Desk User",
     "LT Owner Access",
@@ -66,7 +79,7 @@ def enqueue_staging_owner_review_bootstrap(confirm: str) -> dict[str, Any]:
 def get_staging_owner_review_bootstrap_status(confirm: str) -> dict[str, Any]:
     _assert_staging(confirm)
     frappe.only_for("System Manager")
-    status = frappe.cache().get_value(STATUS_KEY) or {}
+    status = _get_status()
     return {
         "ok": True,
         "status": status,
@@ -90,12 +103,15 @@ def run_staging_owner_review_bootstrap() -> dict[str, Any]:
     try:
         _run_seed_syncs(summary, before_catalog=True)
         _ensure_owner_user(summary)
-        if _counts()["Website Item"] == 0 or _counts()["Item"] == 0:
-            _seed_catalog(summary)
+        catalog_gaps = _count_gaps(_counts(), CATALOG_MIN_COUNTS)
+        if catalog_gaps:
+            _seed_catalog(summary, catalog_gaps)
         else:
             summary["steps"].append({"name": "seed_catalog", "action": "skipped_existing_catalog"})
+        _assert_count_baseline("catalog", CATALOG_MIN_COUNTS)
         _run_seed_syncs(summary, before_catalog=False)
         _sync_product_setup_and_galleries(summary)
+        _assert_count_baseline("owner_review", OWNER_REVIEW_MIN_COUNTS)
         frappe.clear_cache()
         frappe.db.commit()
         summary["post_counts"] = _counts()
@@ -115,10 +131,11 @@ def _assert_staging(confirm: str) -> None:
         frappe.throw("Wrong confirmation for staging owner-review bootstrap.", frappe.PermissionError)
     site = str(frappe.local.site or "")
     host = str(getattr(getattr(frappe.local, "request", None), "host", "") or "")
-    allowed_by_site = "staging" in site.lower() or "staging" in host.lower()
-    allowed_by_config = bool(frappe.conf.get("lt_allow_staging_bootstrap"))
-    forbidden = "locallytwisted.v.frappe.cloud" in site or "locallytwisted.com" in host
-    if forbidden or not (allowed_by_site or allowed_by_config):
+    site_name = site.lower().strip()
+    host_name = host.lower().split(":", 1)[0].strip()
+    forbidden = "locallytwisted.v.frappe.cloud" in site_name or "locallytwisted.com" in host_name
+    allowed = site_name == STAGING_SITE or host_name == STAGING_SITE
+    if forbidden or not allowed:
         frappe.throw(
             f"Staging owner-review bootstrap is blocked on site={site!r} host={host!r}.",
             frappe.PermissionError,
@@ -126,16 +143,39 @@ def _assert_staging(confirm: str) -> None:
 
 
 def _set_status(state: str, payload: dict[str, Any]) -> None:
-    frappe.cache().set_value(
-        STATUS_KEY,
-        {
-            "state": state,
+    status = {
+        "state": state,
+        "site": frappe.local.site,
+        "target_site": STAGING_SITE,
+        "updated_at": frappe.utils.now_datetime().isoformat(),
+        "counts": _counts(),
+        **payload,
+    }
+    frappe.cache().set_value(STATUS_KEY, status, expires_in_sec=86400)
+    status_path = _status_path()
+    status_path.parent.mkdir(parents=True, exist_ok=True)
+    status_path.write_text(json.dumps(status, indent=2, sort_keys=True), encoding="utf-8")
+
+
+def _get_status() -> dict[str, Any]:
+    cached = frappe.cache().get_value(STATUS_KEY)
+    if isinstance(cached, dict) and cached:
+        return cached
+    status_path = _status_path()
+    if not status_path.exists():
+        return {}
+    try:
+        return json.loads(status_path.read_text(encoding="utf-8"))
+    except ValueError as exc:
+        return {
+            "state": "failure",
+            "message": f"durable bootstrap status could not be parsed: {exc}",
             "site": frappe.local.site,
-            "updated_at": frappe.utils.now_datetime().isoformat(),
-            **payload,
-        },
-        expires_in_sec=86400,
-    )
+        }
+
+
+def _status_path() -> Path:
+    return Path(frappe.get_site_path("private", "files", STATUS_FILE))
 
 
 def _counts() -> dict[str, int]:
@@ -227,7 +267,7 @@ def _run_seed_syncs(summary: dict[str, Any], *, before_catalog: bool) -> None:
         summary["steps"].append({"name": module_path.rsplit(".", 1)[-1], "result": _compact_result(result)})
 
 
-def _seed_catalog(summary: dict[str, Any]) -> None:
+def _seed_catalog(summary: dict[str, Any], catalog_gaps: dict[str, dict[str, int]]) -> None:
     from locally_twisted.seed.seed_catalog import execute
 
     guard_dir = Path(frappe.get_app_path("locally_twisted", "seed", "_guard"))
@@ -238,7 +278,14 @@ def _seed_catalog(summary: dict[str, Any]) -> None:
         snapshot_path=str(guard_dir / "current-state-snapshot-2026-05-19-2314"),
         purge_scope_report=str(guard_dir / "16-catalog-purge-scope-dry-run.json"),
     )
-    summary["steps"].append({"name": "seed_catalog", "result": _compact_result(result)})
+    summary["steps"].append(
+        {
+            "name": "seed_catalog",
+            "reason": "missing_or_partial_catalog_baseline",
+            "gaps": catalog_gaps,
+            "result": _compact_result(result),
+        }
+    )
 
 
 def _sync_product_setup_and_galleries(summary: dict[str, Any]) -> None:
@@ -247,6 +294,23 @@ def _sync_product_setup_and_galleries(summary: dict[str, Any]) -> None:
     data_dir = frappe.get_app_path("locally_twisted", "seed", "_data")
     result = execute(write=True, apply_gallery=True, data_dir=data_dir)
     summary["steps"].append({"name": "sync_product_blueprints_from_catalog", "result": _compact_result(result)})
+
+
+def _count_gaps(counts: dict[str, int], minimums: dict[str, int]) -> dict[str, dict[str, int]]:
+    return {
+        doctype: {"actual": int(counts.get(doctype) or 0), "minimum": minimum}
+        for doctype, minimum in minimums.items()
+        if int(counts.get(doctype) or 0) < minimum
+    }
+
+
+def _assert_count_baseline(label: str, minimums: dict[str, int]) -> None:
+    gaps = _count_gaps(_counts(), minimums)
+    if gaps:
+        frappe.throw(
+            f"Staging owner-review bootstrap did not reach the {label} baseline: {gaps}",
+            frappe.ValidationError,
+        )
 
 
 def _compact_result(result: Any) -> Any:

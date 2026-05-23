@@ -10,6 +10,8 @@ from __future__ import annotations
 import argparse
 import http.cookiejar
 import json
+import os
+import subprocess
 import sys
 import urllib.error
 import urllib.parse
@@ -21,6 +23,7 @@ from typing import Any
 DEFAULT_SITE = "locallytwisted-staging.frappe.cloud"
 DEFAULT_TEAM = "5b8acl3gba"
 DEFAULT_CREDENTIALS = Path(r"C:\Users\baenb\Desktop\vs key\LT Frappe API.txt")
+DEFAULT_APP_MIRROR = "https://github.com/CBaen/Locally-Twisted-Frappe-App.git"
 PRESS_API = "https://cloud.frappe.io/api/method"
 CONFIRMATION = "seed locally twisted staging owner review"
 EXPECTED_APP_ORDER = ["frappe", "erpnext", "payments", "webshop", "locally_twisted"]
@@ -50,11 +53,20 @@ def main() -> int:
     parser.add_argument("--site", default=DEFAULT_SITE)
     parser.add_argument("--team", default=DEFAULT_TEAM)
     parser.add_argument("--credentials", type=Path, default=DEFAULT_CREDENTIALS)
-    parser.add_argument("--expected-hash", required=True)
+    parser.add_argument("--expected-hash", default=os.environ.get("LT_EXPECTED_APP_HASH"))
+    parser.add_argument("--expected-hash-from-mirror", action="store_true")
+    parser.add_argument("--mirror-url", default=DEFAULT_APP_MIRROR)
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args()
 
     try:
+        if args.expected_hash_from_mirror:
+            args.expected_hash = resolve_mirror_head(args.mirror_url)
+        if not args.expected_hash:
+            raise RuntimeError(
+                "expected app hash is required; pass --expected-hash, set LT_EXPECTED_APP_HASH, "
+                "or use --expected-hash-from-mirror"
+            )
         result = run_gate(args)
     except Exception as exc:
         print("[STAGING OWNER REVIEW GATE] FAIL")
@@ -118,7 +130,7 @@ def run_gate(args: argparse.Namespace) -> dict[str, Any]:
         failures.append("lt_public_indexing_enabled is not disabled on staging")
     if (bootstrap_status or {}).get("unavailable"):
         failures.append("staging bootstrap status method is not available on the target app")
-    elif (bootstrap_status or {}).get("status", {}).get("state") not in {"success", None}:
+    elif (bootstrap_status or {}).get("status", {}).get("state") != "success":
         failures.append(f"bootstrap status is not success: {bootstrap_status}")
     for doctype, minimum in MIN_COUNTS.items():
         value = counts.get(doctype)
@@ -141,6 +153,16 @@ def run_gate(args: argparse.Namespace) -> dict[str, Any]:
             failures.append(f"{route['path']} resolved to a login page for authenticated owner/admin proof")
         if route["path"].startswith("/shop") and "paused" in route["final_url"]:
             failures.append(f"{route['path']} still resolves to paused page for authenticated owner/admin proof")
+    product_routes = {route["path"]: route for route in routes}
+    mickey_route = product_routes.get("/shop-items/bouquets/mickey-mouse-bouquet") or {}
+    if mickey_route.get("status") == 200 and mickey_route.get("thumbnail_count") != 3:
+        failures.append(
+            "Mickey Mouse Bouquet staging gallery should expose exactly 3 product thumbnails; "
+            f"found {mickey_route.get('thumbnail_count')}"
+        )
+    classic_route = product_routes.get("/shop-items/columns") or {}
+    if classic_route.get("status") == 200 and not classic_route.get("looks_like_category"):
+        failures.append("/shop-items/columns did not render like a shop category page")
 
     return {
         "ok": not failures,
@@ -243,7 +265,24 @@ def fetch_route(site: str, opener: urllib.request.OpenerDirector, path: str) -> 
         "final_url": final_url,
         "title": extract_title(body),
         "login_page": "login_email" in body or "redirect-to" in final_url or "<title>Sign In" in body,
+        "has_gallery_shell": "lt-product__media-shell has-thumbnails" in body
+        or "lt-product__media-shell  has-thumbnails" in body,
+        "thumbnail_count": body.count("lt-product__thumbnail-button"),
+        "looks_like_category": "product-card" in body or "lt-shop" in body or "item-card" in body,
     }
+
+
+def resolve_mirror_head(mirror_url: str) -> str:
+    result = subprocess.run(
+        ["git", "ls-remote", mirror_url, "HEAD"],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    head = result.stdout.strip().split()[0] if result.stdout.strip() else ""
+    if len(head) != 40:
+        raise RuntimeError(f"could not resolve app mirror HEAD from {mirror_url!r}")
+    return head
 
 
 def extract_title(body: str) -> str:
