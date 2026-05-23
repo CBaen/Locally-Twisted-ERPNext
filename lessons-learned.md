@@ -6,6 +6,23 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-23 - Prep helpers can accidentally look like release proof
+
+The next useful movement after the forensic freeze was not another no-go packet
+or a provider call. It was reducing post-approval packet ambiguity. The first
+draft of that idea could have written controller-consumable artifact names,
+which would make prep files look like release evidence.
+
+**Counter-move:** prep-only helpers must not write final artifact filenames.
+Use a manifest with negative flags such as `controller_consumable: false`,
+`mutation_capable: false`, and `provider_mutation_executed: false`. Keep
+approval, provider snapshot, app mirror freshness, deploy completion, hosted
+preflight, owner-review gate, and triad artifacts absent until real proof
+exists. Agency-level mirror:
+`../../lessons-learned.md`.
+
+---
+
 ## 2026-05-23 - A no-go packet loop can become its own failure
 
 The repeated read-only staging packets were valuable while each one answered a

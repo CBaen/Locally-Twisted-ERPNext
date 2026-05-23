@@ -40,7 +40,7 @@ approval, and mutation-capable output requires fresh explicit approval evidence
 plus `--write`. The staging-freeze packet template now names the current required
 artifact shapes, but those are template examples only; no real reopen approval,
 app mirror sync plan, deploy completion, or hosted preflight proof exists for a
-new attempt yet. The read-only current-state packet already ran and is a no-go. Next
+new attempt yet. The read-only snapshot-source packet already ran and is a no-go. Next
 safe release packet, after explicit freeze reopen only, must sync the app-root
 mirror from reviewed source, then take a fresh read-only provider snapshot, run
 hosted preflight, and decide on bootstrap/import only if those gates pass. Do
@@ -56,15 +56,21 @@ The next packet must not only contain the required artifact shapes; those
 artifacts must bind to the same current source `HEAD`, rollback hash, target
 app hash, payload site, provider snapshot, deploy completion, and hosted
 preflight chain.
-Provider Witness recheck after `5e11003` confirmed the app-root mirror is still
+Provider Witness recheck after `5e11003` confirmed the app-root mirror was still
 `181076c239b2d1d3d508a41ac471c71f9d2b5158`, mirror freshness is still no-go
-against current source, and `app_mirror_sync` is still blocked by the missing
+against that packet's reviewed source, and `app_mirror_sync` is still blocked by the missing
 `freeze-reopen-approval.json`. Do not create that approval artifact from the
 current goal/chat context; it needs a fresh artifact-bound reopen approval.
 Gate/Fixer follow-up added local artifact-chain binding so a future release
 packet cannot mix stale approval, app mirror, provider, payload, deploy, or
 hosted-preflight artifacts. Handoff:
 `workstreams/frappe-cloud-release-artifact-chain-binding-2026-05-23.md`.
+Packet-prep follow-up:
+`workstreams/frappe-cloud-staging-reopen-packet-prep-2026-05-23.md`. This adds
+`scripts/release/staging_reopen_packet_prepare.py` and
+`npm run test:staging-reopen-packet-prepare` as a prep-only lane. It does not
+create controller-consumable final artifacts or mutate provider/staging/app
+mirror/live/DNS/Stripe/Search Console.
 
 Latest archived snapshot-source read-only packet:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-9e63fef-readonly/`

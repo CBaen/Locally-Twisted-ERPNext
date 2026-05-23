@@ -8,6 +8,34 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-23 - Staging reopen prep must not write final release artifact names
+
+**Decision:** The staging reopen prep helper may write only prep-only files and
+must not create controller-consumable artifact names such as
+`freeze-reopen-approval.json`, `read-receipt.json`, `failure-ledger.json`,
+`app-mirror-sync-plan.json`, provider snapshot, app mirror freshness, deploy
+completion, hosted preflight, owner-review gate output, or mutation-valid triad
+files.
+
+**Reasoning:** A helper that writes final artifact names before approval could
+reduce setup friction but create false release authority. The safer contract is
+to produce a manifest and missing-artifacts note that make the next path
+clear while keeping every final proof artifact absent until the real proof
+exists.
+
+**Implementation boundary:** This is local/offline prep only. It does not
+reopen forensic-freeze, sync the app mirror, deploy, bootstrap, migrate, cache
+clear, create users, index staging, unpause checkout, or mutate live/DNS/
+Stripe/Search Console.
+
+**Receipts:** `scripts/release/staging_reopen_packet_prepare.py`;
+`scripts/verify/staging_reopen_packet_prepare_contract.py`;
+`workstreams/frappe-cloud-staging-reopen-packet-prep-2026-05-23.md`.
+Agency-level mirror:
+`../../built-by-cameron-decisions.md`.
+
+---
+
 ## 2026-05-23 - Docs-only closeouts must not create read-only packet churn
 
 **Decision:** A docs-only closeout commit must not force another read-only

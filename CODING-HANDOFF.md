@@ -1,5 +1,20 @@
 # Locally Twisted - Coding Handoff
 
+Staging reopen packet prep helper on 2026-05-23:
+`workstreams/frappe-cloud-staging-reopen-packet-prep-2026-05-23.md`.
+`scripts/release/staging_reopen_packet_prepare.py` creates only prep-only
+context files and is covered by
+`scripts/verify/staging_reopen_packet_prepare_contract.py` plus
+`npm run test:staging-reopen-packet-prepare`. It deliberately does not create
+controller-consumable artifacts such as `freeze-reopen-approval.json`,
+`read-receipt.json`, `failure-ledger.json`, `app-mirror-sync-plan.json`,
+provider snapshot, app mirror freshness, deploy completion, hosted preflight,
+owner-review gate output, or mutation-valid triad files. The manifest uses
+`artifact_status: prep_only`, not `ok: true`. This is local/offline guard
+implementation only and performs no provider/staging/app mirror/live/DNS/
+Stripe/Search Console/bootstrap/migrate/cache/indexing/checkout/secrets
+mutation.
+
 Next-agent staging closeout on 2026-05-23:
 `workstreams/frappe-cloud-staging-next-agent-closeout-2026-05-23.md`.
 This is a docs closeout and stale-packet-loop guard, not a release packet and

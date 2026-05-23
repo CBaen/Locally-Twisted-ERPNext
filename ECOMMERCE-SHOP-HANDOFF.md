@@ -5,6 +5,14 @@ Status as of 2026-05-23 for peer GPT-5.5 Codex/OpenClaw agents.
 ## Current Repository State
 
 - Branch: `main`
+- 2026-05-23 staging reopen packet prep helper:
+  `workstreams/frappe-cloud-staging-reopen-packet-prep-2026-05-23.md`.
+  `scripts/release/staging_reopen_packet_prepare.py` writes only prep-only
+  context files, refuses final release artifact names, and is covered by
+  `npm run test:staging-reopen-packet-prepare`. It does not generate approval,
+  provider, app mirror, deploy, hosted preflight, owner-review, or triad proof,
+  and it performs no provider/staging/app mirror/live/DNS/Stripe/Search Console
+  mutation.
 - 2026-05-23 next-agent staging closeout:
   `workstreams/frappe-cloud-staging-next-agent-closeout-2026-05-23.md`.
   This is docs closeout only. It does not reopen forensic-freeze, does not

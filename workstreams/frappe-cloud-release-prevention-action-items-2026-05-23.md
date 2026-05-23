@@ -369,6 +369,15 @@ execution can leave forensic-freeze.
     state changes, explicit freeze-reopen approval exists, or a
     mutation-capable packet is being prepared.
 
+27. **Add a prep-only staging reopen packet helper.** `implemented-local`
+    `scripts/release/staging_reopen_packet_prepare.py` creates only prep
+    context files and refuses final artifact names so a future agent cannot
+    mistake prep for approval, provider proof, app mirror sync, deploy
+    completion, hosted preflight, owner-review readiness, or triad completion.
+    It is covered by
+    `scripts/verify/staging_reopen_packet_prepare_contract.py` and
+    `npm run test:staging-reopen-packet-prepare`.
+
 ## P1 Actions
 
 1. Wire the release lock and owner-review gate into `npm run` scripts so future

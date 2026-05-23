@@ -79,6 +79,16 @@ input state they measured. Generate a fresh packet when release input state
 changed, explicit freeze-reopen approval exists, or a mutation-capable packet is
 being prepared.
 
+Prep-only packet folders may be created by
+`scripts/release/staging_reopen_packet_prepare.py`. They are not release
+packets. A prep folder must not contain final artifact names such as
+`freeze-reopen-approval.json`, `read-receipt.json`, `failure-ledger.json`,
+`app-mirror-sync-plan.json`, provider/app-mirror/deploy/hosted-preflight
+proof, owner-review gate output, or mutation-valid triad artifacts. The prep
+manifest uses `artifact_status: prep_only` and `controller_consumable: false`.
+Feature handoff:
+`../frappe-cloud-staging-reopen-packet-prep-2026-05-23.md`.
+
 The expanded current action list is
 `../frappe-cloud-release-prevention-action-items-2026-05-23.md`.
 

@@ -113,7 +113,7 @@ Default public launch posture:
   `workstreams/release-artifacts/2026-05-23-staging-reopen-9e63fef-readonly/`,
   carry their own source-bound mirror freshness artifacts.
 - Also as of 2026-05-23, hosted bootstrap preflight is a separate chain-bound
-  artifact, not a stale bootstrap-status read. The current packet
+  artifact, not a stale bootstrap-status read. The archived readiness-refresh packet
   `workstreams/release-artifacts/2026-05-23-staging-reopen-readiness-refresh/`
   is no-go because the actual staging target returns HTTP `417` for
   `preflight_staging_owner_review_bootstrap`. Future `staging_bootstrap` must
@@ -186,6 +186,12 @@ Default public launch posture:
   takeover boundary. Generate fresh packet artifacts only when release input
   state changed, explicit freeze-reopen approval exists, or a mutation-capable
   packet is being prepared.
+- Prep-only staging reopen folders may be created with
+  `scripts/release/staging_reopen_packet_prepare.py`, covered by
+  `npm run test:staging-reopen-packet-prepare`. These folders are not release
+  packets and must not contain final artifact names or `ok=true` proof
+  manifests. They only record current source context, missing proof, and
+  non-authorizing approval preview.
 - Previous archived snapshot-source read-only packet:
   `workstreams/release-artifacts/2026-05-23-staging-reopen-b039667-readonly/`.
   It updates no-go evidence for packet source
