@@ -81,14 +81,21 @@ provider proof, or staging proof. Feature handoff:
 `../frappe-cloud-release-artifact-template-parity-2026-05-23.md`.
 
 Latest archived read-only packet:
+`2026-05-23-staging-reopen-fa38bc3-readonly/` is read-only evidence for packet
+source commit `fa38bc31a120f6d52f1e21e4ab011d5b03c2d74d`. It proves the app
+mirror/deployed staging app still remain at
+`181076c239b2d1d3d508a41ac471c71f9d2b5158`, hosted preflight still returns
+HTTP `417`, staging owner-review rows/users/routes are still missing, and
+`app_mirror_sync` is still blocked by missing `freeze-reopen-approval.json`.
+This packet includes a current pre-sync `app-mirror-sync-plan.json`, but it is
+not mutation-capable because there is no approval artifact. Once this packet is
+committed, repo `HEAD` will move; generate fresh source-bound artifacts for the
+then-current release source before mutation.
+
+Previous archived read-only packet:
 `2026-05-23-staging-reopen-current-head-readonly/` is read-only evidence for
 packet source commit `69e4e9f2cf3c97e337b9e8046d4cd86cc5e1b68c`. The folder
-name is historical; once the packet was committed, repo `HEAD` moved. It
-includes a valid pre-sync `app-mirror-sync-plan.json` for that packet source,
-but it deliberately does not include `freeze-reopen-approval.json`. The release
-controller still blocks `app_mirror_sync`, and staging remains no-go for owner
-review. For mutation, generate fresh source-bound artifacts for the then-current
-release source instead of reusing this archived packet.
+name is historical and must not be treated as current-head authority.
 
 Run:
 

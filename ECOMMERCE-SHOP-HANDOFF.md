@@ -13,6 +13,16 @@ Status as of 2026-05-23 for peer GPT-5.5 Codex/OpenClaw agents.
   locally. This is local/offline prevention only and did not mutate provider,
   staging, live, DNS, Stripe, Search Console, app mirror, bootstrap, migrate,
   cache, checkout, or secrets.
+- 2026-05-23 latest read-only staging packet:
+  `workstreams/release-artifacts/2026-05-23-staging-reopen-fa38bc3-readonly/`.
+  This packet is bound to source
+  `fa38bc31a120f6d52f1e21e4ab011d5b03c2d74d` and performed no provider or
+  staging mutation. It proves staging remains **NO-GO** for owner review:
+  app-root mirror/deployed app hash is still `181076c...`, mirror freshness is
+  `ok=false`, hosted preflight returns HTTP `417`, catalog/Product
+  Setup/gallery rows are zero, owner/marketing users are missing,
+  representative routes fail, and the release controller blocks
+  `app_mirror_sync` because `freeze-reopen-approval.json` is missing.
 - 2026-05-23 Gate/Fixer chain-binding guard:
   `workstreams/frappe-cloud-release-artifact-chain-binding-2026-05-23.md`.
   The release controller now rejects mutation-capable packets whose approval,

@@ -156,6 +156,14 @@ Default public launch posture:
   target hash, payload site, and deployed/preflight hashes before any local
   mutation gate can pass.
 - The latest archived snapshot-source read-only packet is
+  `workstreams/release-artifacts/2026-05-23-staging-reopen-fa38bc3-readonly/`.
+  It updates no-go evidence for packet source
+  `fa38bc31a120f6d52f1e21e4ab011d5b03c2d74d`: the app-root mirror/deployed
+  staging app remains at `181076c239b2d1d3d508a41ac471c71f9d2b5158`, hosted
+  preflight still returns HTTP `417`, staging owner-review data/users/routes
+  are still missing, and `app_mirror_sync` is still blocked by the missing
+  `freeze-reopen-approval.json`.
+- Previous archived snapshot-source read-only packet:
   `workstreams/release-artifacts/2026-05-23-staging-reopen-current-head-readonly/`.
   It updates no-go evidence for packet source
   `69e4e9f2cf3c97e337b9e8046d4cd86cc5e1b68c`. The folder name is historical:

@@ -97,6 +97,17 @@ another local offline guard gap only. It did not create a valid approval,
 reopen forensic-freeze, or mutate provider/staging/live/DNS/Stripe/Search
 Console/app mirror/bootstrap/migrate/cache/checkout/secrets.
 
+2026-05-23 latest archived read-only packet:
+`workstreams/release-artifacts/2026-05-23-staging-reopen-fa38bc3-readonly/`.
+This packet updates no-go evidence at source
+`fa38bc31a120f6d52f1e21e4ab011d5b03c2d74d`. It confirms the app-root
+mirror/deployed staging app remains at
+`181076c239b2d1d3d508a41ac471c71f9d2b5158`, hosted preflight still returns
+HTTP `417`, owner-review data/users/routes are still missing, and
+`app_mirror_sync` is still blocked by missing `freeze-reopen-approval.json`.
+This is not provider mutation, owner-review readiness, or mutation proof for a
+later commit.
+
 2026-05-23 archived snapshot-source read-only packet:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-current-head-readonly/`.
 This packet updates the no-go evidence at source

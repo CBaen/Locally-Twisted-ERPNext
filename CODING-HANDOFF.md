@@ -10,6 +10,19 @@ only. It does not reopen forensic-freeze, create a real approval artifact, or
 mutate provider/staging/live/DNS/Stripe/Search Console/app mirror/bootstrap/
 migrate/cache/checkout/secrets.
 
+Latest read-only staging packet on 2026-05-23:
+`workstreams/release-artifacts/2026-05-23-staging-reopen-fa38bc3-readonly/`
+is archived evidence for packet source
+`fa38bc31a120f6d52f1e21e4ab011d5b03c2d74d`. It performed no provider or
+staging mutation. Result remains **NO-GO**: app mirror freshness is `ok=false`
+against source `fa38bc3`, the app-root mirror/deployed staging app remains at
+`181076c...`, hosted preflight returns HTTP `417`, catalog/Product
+Setup/gallery rows are zero, required owner/marketing users are missing,
+representative product/category routes fail, and `app_mirror_sync` is still
+blocked by missing `freeze-reopen-approval.json`. This packet contains a
+current pre-sync `app-mirror-sync-plan.json`, but no approval artifact. Do not
+reuse it after `HEAD` moves.
+
 Release artifact chain binding on 2026-05-23:
 Run `git status -sb` and `git log --oneline -5` for the current HEAD; do not
 trust a handoff sentence as the latest archive label. The artifact-chain
