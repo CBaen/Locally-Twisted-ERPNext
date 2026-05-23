@@ -77,6 +77,12 @@ App-mirror sync-plan follow-up:
 `npm run test:app-mirror-sync-plan` so a future approved reopen packet can
 generate the pre-sync `app-mirror-sync-plan.json` instead of hand-copying JSON.
 It does not sync the app mirror or reopen forensic-freeze.
+Documentation parity follow-up:
+`workstreams/frappe-cloud-doc-parity-849d8c2-2026-05-23.md`. This records the
+`849d8c2` local guard archive, updates the peer-facing handoff surface, and
+keeps the rule that docs-only closeouts do not justify another read-only
+no-go packet. It does not mutate provider/app mirror/staging/live/DNS/Stripe/
+Search Console or make owner review ready.
 
 Latest archived snapshot-source read-only packet:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-9e63fef-readonly/`

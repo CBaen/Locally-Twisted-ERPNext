@@ -3,6 +3,10 @@
 Status: **implemented local/offline artifact helper; no provider or app mirror
 mutation**.
 
+Archive commit: `849d8c2d88cc868990cab124af02648e493b49d1`.
+Documentation parity closeout:
+`frappe-cloud-doc-parity-849d8c2-2026-05-23.md`.
+
 ## Scope
 
 This work adds a local producer/validator for the required pre-sync
@@ -119,3 +123,6 @@ hard current blocker.
 - `python -m py_compile scripts\release\app_mirror_sync_plan_artifact.py scripts\verify\app_mirror_sync_plan_artifact_contract.py`
 - `python scripts\verify\app_mirror_sync_plan_artifact_contract.py`
 - `npm run test:app-mirror-sync-plan`
+- `npm run test:release-prevention`
+- `python scripts\verify\verifier_cli_contract.py`
+- `git diff --check`

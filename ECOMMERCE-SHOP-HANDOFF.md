@@ -5,6 +5,13 @@ Status as of 2026-05-23 for peer GPT-5.5 Codex/OpenClaw agents.
 ## Current Repository State
 
 - Branch: `main`
+- 2026-05-23 documentation parity closeout after app mirror sync-plan guard:
+  `workstreams/frappe-cloud-doc-parity-849d8c2-2026-05-23.md`. This records
+  `849d8c2d88cc868990cab124af02648e493b49d1` as the pre-closeout guard
+  archive and confirms this closeout did not mutate provider, app mirror,
+  staging, live, DNS, Stripe, Search Console, bootstrap, migrate, cache,
+  indexing, checkout, users, or secrets. It is not a release packet and does
+  not make staging owner-review ready.
 - 2026-05-23 app mirror sync plan helper:
   `workstreams/frappe-cloud-app-mirror-sync-plan-helper-2026-05-23.md`.
   `scripts/release/app_mirror_sync_plan_artifact.py` writes only the local

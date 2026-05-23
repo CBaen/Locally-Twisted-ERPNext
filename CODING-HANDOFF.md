@@ -1,5 +1,14 @@
 # Locally Twisted - Coding Handoff
 
+Doc parity closeout after `849d8c2` on 2026-05-23:
+`workstreams/frappe-cloud-doc-parity-849d8c2-2026-05-23.md`.
+This pass records the current local guard archive and removes ignored Python
+`__pycache__` runtime artifacts. It is not a release packet and did not mutate
+provider, app mirror, staging, live, DNS, Stripe, Search Console, bootstrap,
+migrate, cache, indexing, checkout, users, or secrets. The forensic-freeze
+lock remains active; future agents must not create another read-only no-go
+packet solely because this docs closeout moves `HEAD`.
+
 App mirror sync plan helper on 2026-05-23:
 `workstreams/frappe-cloud-app-mirror-sync-plan-helper-2026-05-23.md`.
 `scripts/release/app_mirror_sync_plan_artifact.py` creates or validates the

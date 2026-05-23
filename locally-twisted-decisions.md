@@ -8,6 +8,29 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-23 - Documentation parity closeouts are not release gates
+
+**Decision:** LT staging documentation closeouts may record the current source
+archive, guard state, cleanup, and next safe action, but they must not be used
+as release packets or provider-state proof. A docs closeout that moves `HEAD`
+does not require another read-only no-go packet by itself.
+
+**Reasoning:** After the app mirror sync-plan helper was archived at
+`849d8c2`, the right next step was peer-readable docs parity and cleanup, not
+another provider probe or another source-bound no-go packet. The release input
+state did not change; only documentation did.
+
+**Implementation boundary:** This is documentation/process control only. It
+does not reopen forensic-freeze, sync the app mirror, deploy, bootstrap,
+migrate, clear cache, create users, index staging, unpause checkout, or mutate
+live/DNS/Stripe/Search Console.
+
+**Receipts:** `workstreams/frappe-cloud-doc-parity-849d8c2-2026-05-23.md`;
+`CODING-HANDOFF.md`; `ECOMMERCE-SHOP-HANDOFF.md`;
+`locally-twisted-queue.md`.
+
+---
+
 ## 2026-05-23 - App mirror sync plans must be generated, not hand-copied
 
 **Decision:** Future LT staging reopen packets must create

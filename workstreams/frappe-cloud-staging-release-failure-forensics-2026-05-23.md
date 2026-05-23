@@ -11,6 +11,17 @@ forensic review. Do not use this session as launch authority.
 Action-item handoff for the next fix agent:
 `workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`.
 
+Later guard handoffs added after this original forensic report:
+
+- `workstreams/frappe-cloud-freeze-reopen-approval-helper-2026-05-23.md`
+- `workstreams/frappe-cloud-staging-reopen-packet-prep-2026-05-23.md`
+- `workstreams/frappe-cloud-app-mirror-sync-plan-helper-2026-05-23.md`
+- `workstreams/release-artifacts/README.md`
+
+Agents starting here must read those before attempting any freeze reopen,
+app-mirror sync, provider deploy/update, hosted preflight, bootstrap/import,
+or owner-review proof.
+
 ## Scope Boundary
 
 - Applies to: Locally Twisted Frappe Cloud staging owner-review push,

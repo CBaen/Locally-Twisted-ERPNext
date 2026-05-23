@@ -6,6 +6,21 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-23 - A docs closeout should close the loop, not reopen the release
+
+After `849d8c2`, the repo already had a clean local guard archive for the app
+mirror sync-plan helper. The useful follow-up was to make peer-facing docs and
+capability evidence agree, remove ignored runtime cache folders, and leave the
+forensic-freeze boundary intact. Creating another no-go packet would have made
+the archive longer without changing staging reality.
+
+**Counter-move:** when a release lane is frozen and only docs move, write a
+bounded documentation parity closeout. Record what changed, what did not
+change, and which artifacts are still required before mutation. Do not convert
+that closeout into provider proof, staging proof, or another packet loop.
+
+---
+
 ## 2026-05-23 - Pre-sync plans are not mirror sync proof
 
 A valid `app-mirror-sync-plan.json` is only a local precondition for a future

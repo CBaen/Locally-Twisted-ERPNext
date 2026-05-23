@@ -1,5 +1,11 @@
 # Release Artifacts
 
+Latest docs-only closeout:
+`../frappe-cloud-doc-parity-849d8c2-2026-05-23.md`.
+It records the local app mirror sync-plan guard archive and cleanup after
+`849d8c2`; it is not a release packet and does not justify another read-only
+no-go packet by itself.
+
 This folder holds sanitized release evidence packets. Do not store secrets,
 tokens, session IDs, private customer records, raw provider logs, or credential
 files here.
