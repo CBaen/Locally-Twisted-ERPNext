@@ -17,7 +17,9 @@ Newly direct-required docs:
 - `workstreams/frappe-cloud-failure-ledger-artifact-helper-2026-05-23.md`
 - `workstreams/frappe-cloud-doc-parity-849d8c2-2026-05-23.md`
 - `workstreams/frappe-cloud-a5ed680-readonly-closeout-2026-05-23.md`
+- `workstreams/frappe-cloud-staging-app-deploy-closeout-2026-05-23.md`
 - `workstreams/frappe-cloud-release-learning-ledger-2026-05-23.md`
+- `capabilities/failures/frappe-cloud-deploy-site-object-drift.md`
 
 This closes a local gate gap: a future approved `app_mirror_sync` packet should
 not pass the controller after reading only the older forensic report, lock,
@@ -50,8 +52,11 @@ after the first read-receipt widening:
 - generate or validate the failure ledger through the helper;
 - treat the `849d8c2` docs closeout as documentation parity, not release
   proof;
-- treat the `a5ed680` packet as latest staging-reality read-only no-go
-  evidence, not current-source mutation authority;
+- treat the `a5ed680` packet as pre-deploy no-go evidence, not current-source
+  mutation authority;
+- treat the later staging app deploy closeout as app-hash proof plus
+  owner-review NO-GO proof, not bootstrap/import or client-review authority;
+- require complete Frappe Cloud provider site objects in deploy/update payloads;
 - preserve the good/bad/important lessons, including that GL's dual-account
   workflow is expected and official Frappe Cloud docs must be refreshed before
   release execution.

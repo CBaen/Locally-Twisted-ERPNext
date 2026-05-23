@@ -5,6 +5,13 @@ Status: **docs closeout and stale-packet-loop guard; no provider mutation**.
 This handoff exists for the next GPT-5.5-shaped agent taking over Locally
 Twisted staging recovery. It is not a release packet and not staging proof.
 
+2026-05-23 later superseding note: staging-only app mirror sync and Frappe
+Cloud deploy/update were approved and completed after this docs closeout. Use
+`workstreams/frappe-cloud-staging-app-deploy-closeout-2026-05-23.md` and
+`workstreams/release-artifacts/2026-05-23-staging-reopen-5edb641-use-now/` for
+the current staging app-hash state. This older closeout remains useful only for
+the stale-packet-loop rule.
+
 ## Source State
 
 - Repo: `C:\Users\baenb\projects\Built_by_Cameron\_CLIENTS\locally-twisted`

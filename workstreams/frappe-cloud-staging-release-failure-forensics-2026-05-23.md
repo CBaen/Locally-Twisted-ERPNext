@@ -16,11 +16,14 @@ Later guard handoffs added after this original forensic report:
 - `workstreams/frappe-cloud-freeze-reopen-approval-helper-2026-05-23.md`
 - `workstreams/frappe-cloud-staging-reopen-packet-prep-2026-05-23.md`
 - `workstreams/frappe-cloud-app-mirror-sync-plan-helper-2026-05-23.md`
+- `workstreams/frappe-cloud-staging-app-deploy-closeout-2026-05-23.md`
 - `workstreams/release-artifacts/README.md`
 
 Agents starting here must read those before attempting any freeze reopen,
 app-mirror sync, provider deploy/update, hosted preflight, bootstrap/import,
-or owner-review proof.
+or owner-review proof. The later deploy closeout supersedes this original
+report's stopped-state app hash, but it does not supersede the root failure
+rules or owner-review NO-GO boundary.
 
 ## Scope Boundary
 

@@ -6,6 +6,37 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-23 - Typed JSON is not enough when the provider object is incomplete
+
+The first approved Frappe Cloud deploy/update attempt after app mirror sync
+used `Content-Type: application/json` and real `apps` / `sites` arrays, but the
+`sites[]` row only contained `name`. The site did not update until the payload
+used the full current provider site object: `name`, `server`, `bench`,
+`skip_backups`, and `skip_failing_patches`.
+
+**Counter-move:** payload validators must check provider-required object
+fields, not only JSON type shape. Build deploy/update payloads from current
+provider `deploy_information.sites`, validate them locally, and archive failed
+attempts as named failure classes before retrying.
+
+---
+
+## 2026-05-23 - Staging app-hash success is still not owner-review readiness
+
+The approved staging-only app mirror sync and Frappe Cloud deploy/update
+successfully moved source `5edb641` to staging app hash
+`5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831`. Hosted preflight then failed
+safely on missing `LT Marketing Review Access`,
+`Webshop Settings.enable_checkout=0`, and missing backup/zero-data proof for
+destructive catalog seed.
+
+**Counter-move:** treat app hash success as one layer only. Owner-review still
+requires hosted preflight, safe bootstrap/import proof, required roles/settings,
+business data, routes, and the final staging owner-review gate. Do not let a
+green deploy job become a readiness claim.
+
+---
+
 ## 2026-05-23 - Current evidence still does not authorize current mutation
 
 The `a5ed680` packet was useful because it rebuilt read-only evidence against

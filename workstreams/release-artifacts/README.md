@@ -1,6 +1,23 @@
 # Release Artifacts
 
-Latest staging-reality read-only no-go packet:
+Latest staging app deploy archive:
+`2026-05-23-staging-reopen-5edb641-use-now/`.
+It is bound to source
+`5edb641de4a3f09cc6c292904fb70551c87db3df`. GL approved staging-only
+`app_mirror_sync` and staging-only Frappe Cloud deploy/update from app mirror
+hash `5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831`. The app-root mirror was
+synced, Frappe Cloud deploy `eu92fvbhpp` succeeded, site update job
+`41ftn09ocp` succeeded, and staging installed `locally_twisted` hash now
+matches `5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831`. Owner-review remains
+NO-GO: hosted preflight blocks on missing `LT Marketing Review Access`,
+`Webshop Settings.enable_checkout=0`, and missing backup/zero-data proof for
+destructive catalog seed. This packet did not touch live, DNS, Stripe, Search
+Console, checkout unpause, bootstrap/import, manual migrate, or manual cache
+clear. After commit it is archive evidence, not authority for any later
+mutation. Handoff:
+`../frappe-cloud-staging-app-deploy-closeout-2026-05-23.md`.
+
+Previous staging-reality read-only no-go packet:
 `2026-05-23-staging-reopen-a5ed680-readonly/`.
 It is bound to source
 `a5ed6804392f9c576a321e81b8fa0a477c200828` and confirms staging remains
@@ -120,7 +137,13 @@ closeout. Feature handoff:
 
 As of the `a5ed680` read-only closeout, it must also include
 `../frappe-cloud-a5ed680-readonly-closeout-2026-05-23.md` so future
-mutation-capable packets cannot skip the latest staging-reality no-go evidence.
+mutation-capable packets cannot skip the pre-deploy no-go evidence.
+
+As of the staging app deploy closeout, it must also include
+`../frappe-cloud-staging-app-deploy-closeout-2026-05-23.md` and
+`../../capabilities/failures/frappe-cloud-deploy-site-object-drift.md` so future
+deploy/update packets cannot skip the current app-hash proof, hosted preflight
+NO-GO blockers, or complete-site-object payload guard.
 
 As of the learning-ledger update, it must also include
 `../frappe-cloud-release-learning-ledger-2026-05-23.md` so future release

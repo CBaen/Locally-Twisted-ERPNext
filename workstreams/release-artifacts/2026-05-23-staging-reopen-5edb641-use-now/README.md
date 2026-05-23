@@ -27,14 +27,16 @@ completed from source commit
 The app-root mirror is now at
 `5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831`.
 
-The installed staging app is still at
-`181076c239b2d1d3d508a41ac471c71f9d2b5158`, so staging does not yet contain the
-clean source.
+The installed staging app is now also at
+`5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831` after Frappe Cloud deploy
+`eu92fvbhpp` and site update job `41ftn09ocp` reached `Success`.
 
-The next provider mutation, if approved, is **Frappe Cloud deploy/update only**
-for the staging site and the synced app mirror hash. It is not owner-review
-readiness, live release, DNS, Stripe, Search Console, indexing, checkout
-unpause, bootstrap, migrate, or cache clear.
+The next provider mutation, if approved, is **not deploy/update again by
+default**. Current hosted preflight is NO-GO, so the next action must address
+the blockers in `hosted-bootstrap-preflight.json` under a fresh approval
+artifact. This archive is not owner-review readiness, live release, DNS,
+Stripe, Search Console, indexing, checkout unpause, bootstrap, migrate, or
+cache clear authority.
 
 ## Generated Artifacts
 
@@ -49,6 +51,12 @@ unpause, bootstrap, migrate, or cache clear.
 - `app-mirror-freshness.json`
 - `provider-snapshot-post-mirror-sync.json`
 - `sanitized-payload.json`
+- `deploy-attempt-1-result.json`
+- `sanitized-payload-attempt-1.json`
+- `deploy-request.json`
+- `deploy-request-2.json`
+- `deploy-completion.json`
+- `hosted-bootstrap-preflight.json`
 
 ## Completed Approved Boundary
 

@@ -10,21 +10,43 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 ## Active
 
+**P0 staging owner-review NO-GO after clean app deploy (2026-05-23):** The
+approved staging-only app mirror sync and Frappe Cloud deploy/update completed
+from source `5edb641de4a3f09cc6c292904fb70551c87db3df`. Staging installed app
+hash now matches app mirror
+`5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831`, Frappe Cloud deploy
+`eu92fvbhpp` and site update job `41ftn09ocp` succeeded, app order is correct,
+ecommerce remains paused, and public indexing remains disabled. Owner-review
+is still **NO-GO**: hosted preflight blocks on missing
+`LT Marketing Review Access`, `Webshop Settings.enable_checkout=0`, and
+missing backup/zero-data proof for destructive catalog seed. Next safe action
+is a fresh approval-bound packet that addresses those blockers before any
+bootstrap/import, cache, migrate, checkout, live/DNS/Stripe/Search Console, or
+indexing action. Handoff:
+`workstreams/frappe-cloud-staging-app-deploy-closeout-2026-05-23.md`.
+Evidence packet:
+`workstreams/release-artifacts/2026-05-23-staging-reopen-5edb641-use-now/`.
+Do not reuse that packet for future mutation after commit. The exact deploy
+payload failure found in attempt 1 is now guarded by
+`capabilities/failures/frappe-cloud-deploy-site-object-drift.md` and
+`scripts/verify/frappe_cloud_payload_contract.py`.
+
 **P0 staging release failure forensic freeze (2026-05-23):** Release execution
 is stopped. The Frappe Cloud owner-review staging attempt failed as a release
 process and must not be used as launch authority. Required source:
 `workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`.
 Required fix-agent action list:
 `workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`.
-Latest staging-reality read-only closeout:
+Historical pre-deploy freeze context follows; the current app-hash/deploy state
+is the P0 item above. Previous staging-reality read-only closeout:
 `workstreams/frappe-cloud-a5ed680-readonly-closeout-2026-05-23.md`.
-Latest staging-reality read-only packet:
+Previous staging-reality read-only packet:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-a5ed680-readonly/`.
 Good/bad/important learning ledger:
 `workstreams/frappe-cloud-release-learning-ledger-2026-05-23.md`.
 Staging route map:
 `workstreams/frappe-cloud-staging-route-map-2026-05-23.md`.
-Current post-push prep-only packet:
+Older post-push prep-only packet:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-63d9c71-prep/`.
 It is **NO-GO** and not mutation authority: active forensic-freeze still blocks
 provider/app mirror/staging mutation, the app-root mirror/deployed app remain

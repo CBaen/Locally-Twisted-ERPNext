@@ -534,7 +534,15 @@ def write_payload(path: Path, app_hash: str) -> None:
                             "hash": app_hash,
                         }
                     ],
-                    "sites": [{"name": "locallytwisted-staging.frappe.cloud"}],
+                    "sites": [
+                        {
+                            "name": "locallytwisted-staging.frappe.cloud",
+                            "server": "f4-virginia.frappe.cloud",
+                            "bench": "bench-40102-000013-f4v",
+                            "skip_backups": False,
+                            "skip_failing_patches": False,
+                        }
+                    ],
                 },
             }
         ),

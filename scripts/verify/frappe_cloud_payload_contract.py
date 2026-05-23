@@ -3,6 +3,8 @@
 
 The 2026-05-22 staging failure proved that nested `apps` and `sites` values
 must be typed JSON arrays/objects, not strings that look like JSON.
+The 2026-05-23 retry proved typed JSON is still not enough: deploy/update site
+rows must carry the complete current provider site object, not only `name`.
 
 Examples:
   python scripts/verify/frappe_cloud_payload_contract.py --self-test
@@ -15,6 +17,9 @@ import json
 import sys
 from pathlib import Path
 from typing import Any
+
+
+REQUIRED_SITE_FIELDS = ("name", "server", "bench", "skip_backups", "skip_failing_patches")
 
 
 def load_payload_file(path: Path) -> Any:
@@ -66,6 +71,27 @@ def validate_frappe_cloud_payload(payload: Any) -> list[str]:
                 failures.append(f"{key}[{index}] must be a JSON object")
             elif not item:
                 failures.append(f"{key}[{index}] must not be empty")
+            elif key == "sites":
+                failures.extend(validate_site_object(item, index))
+    return failures
+
+
+def validate_site_object(site: dict[str, Any], index: int) -> list[str]:
+    failures: list[str] = []
+    for field in REQUIRED_SITE_FIELDS:
+        if field not in site:
+            failures.append(f"sites[{index}] must include {field}")
+
+    for field in ("name", "server", "bench"):
+        if field in site and not isinstance(site[field], str):
+            failures.append(f"sites[{index}].{field} must be a string")
+        elif field in site and not site[field].strip():
+            failures.append(f"sites[{index}].{field} must not be blank")
+
+    for field in ("skip_backups", "skip_failing_patches"):
+        if field in site and not isinstance(site[field], bool):
+            failures.append(f"sites[{index}].{field} must be a boolean")
+
     return failures
 
 
@@ -84,6 +110,13 @@ def extract_content_type(payload: Any) -> str | None:
 
 
 def run_self_test() -> list[str]:
+    valid_site = {
+        "name": "locallytwisted-staging.frappe.cloud",
+        "server": "f4-virginia.frappe.cloud",
+        "bench": "bench-40102-000013-f4v",
+        "skip_backups": False,
+        "skip_failing_patches": False,
+    }
     valid_body = {
         "apps": [
             {
@@ -92,7 +125,7 @@ def run_self_test() -> list[str]:
                 "hash": "a" * 40,
             }
         ],
-        "sites": [{"name": "locallytwisted-staging.frappe.cloud"}],
+        "sites": [valid_site],
     }
     valid_payload = {"content_type": "application/json", "body": valid_body}
     invalid_apps_string = {
@@ -106,6 +139,10 @@ def run_self_test() -> list[str]:
     invalid_item_string = {
         "content_type": "application/json",
         "body": {"apps": ["locally_twisted"], "sites": valid_body["sites"]},
+    }
+    incomplete_site = {
+        "content_type": "application/json",
+        "body": {"apps": valid_body["apps"], "sites": [{"name": valid_site["name"]}]},
     }
     missing_sites = {"content_type": "application/json", "body": {"apps": valid_body["apps"]}}
     invalid_content_type = {"content_type": "application/x-www-form-urlencoded", "body": valid_body}
@@ -121,6 +158,8 @@ def run_self_test() -> list[str]:
         failures.append("stringified sites payload did not fail")
     if not validate_frappe_cloud_payload(invalid_item_string):
         failures.append("string item payload did not fail")
+    if not validate_frappe_cloud_payload(incomplete_site):
+        failures.append("incomplete site object did not fail")
     if not validate_frappe_cloud_payload(missing_sites):
         failures.append("missing sites payload did not fail")
     return failures

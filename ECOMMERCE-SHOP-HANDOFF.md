@@ -5,7 +5,29 @@ Status as of 2026-05-23 for peer GPT-5.5 Codex/OpenClaw agents.
 ## Current Repository State
 
 - Branch: `main`
-- 2026-05-23 current-source read-only staging packet after `a5ed680`:
+- 2026-05-23 staging app deploy closeout:
+  `workstreams/frappe-cloud-staging-app-deploy-closeout-2026-05-23.md` and
+  `workstreams/release-artifacts/2026-05-23-staging-reopen-5edb641-use-now/`.
+  Source `5edb641de4a3f09cc6c292904fb70551c87db3df` was approved for
+  staging-only app mirror sync, then app mirror hash
+  `5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831` was approved for staging-only
+  Frappe Cloud deploy/update. Frappe Cloud deploy `eu92fvbhpp` and site update
+  job `41ftn09ocp` succeeded; staging now has the expected installed app hash,
+  correct app order, ecommerce paused, and public indexing disabled.
+  Owner-review remains **NO-GO** because hosted preflight blocks on missing
+  `LT Marketing Review Access`, `Webshop Settings.enable_checkout=0`, and no
+  backup/zero-data proof for destructive catalog seed. No bootstrap/import,
+  live, DNS, Stripe, Search Console, checkout unpause, manual migrate, or
+  manual cache clear was performed. This archive is not authority for the next
+  mutation after commit.
+- 2026-05-23 complete-site-object payload guard:
+  `scripts/verify/frappe_cloud_payload_contract.py` now rejects typed JSON
+  deploy/update payloads when `sites[]` rows only include `name`. Use the
+  current provider site object with `name`, `server`, `bench`, `skip_backups`,
+  and `skip_failing_patches`. Failure recipe:
+  `capabilities/failures/frappe-cloud-deploy-site-object-drift.md`.
+- Previous 2026-05-23 current-source read-only staging packet after
+  `a5ed680`:
   `workstreams/frappe-cloud-a5ed680-readonly-closeout-2026-05-23.md` and
   `workstreams/release-artifacts/2026-05-23-staging-reopen-a5ed680-readonly/`.
   This is **NO-GO** read-only evidence, not owner-review readiness and not a
@@ -351,11 +373,13 @@ payload artifacts for future provider deploy/update controller actions.
 The hosted preflight output must be bound to the same staging site and release
 hash as `provider-snapshot.json` and `app-mirror-freshness.json`; a hand-shaped
 minimal `ok` artifact is not acceptable.
-The latest read-only packet
+The older pre-deploy read-only packet
 `workstreams/release-artifacts/2026-05-23-staging-reopen-a5ed680-readonly/`
 produced the provider snapshot and tried hosted preflight; hosted preflight is
-blocked because staging is still running app hash `181076c...`, which does not
-include the source preflight method.
+blocked in that archive because staging was still running app hash
+`181076c...`, which did not include the source preflight method. The later
+staging app deploy closeout at the top of this file supersedes that app-hash
+state but not the owner-review NO-GO boundary.
 Post-`ceab908` docs parity handoff:
 `workstreams/frappe-cloud-doc-parity-ceab908-2026-05-23.md`.
 

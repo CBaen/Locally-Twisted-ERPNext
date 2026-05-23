@@ -25,7 +25,22 @@ push, app mirror hash, or deploy ID is only one evidence piece.
 Current local source after the dual-account documentation update:
 `d7b00453b327669607f9ae7944e9ede27ddaac42`.
 
-The latest staging-reality source-bound packet is:
+Latest staging app deploy archive:
+`workstreams/release-artifacts/2026-05-23-staging-reopen-5edb641-use-now/`.
+
+It proves the approved staging-only app mirror sync and Frappe Cloud
+deploy/update completed: source `5edb641de4a3f09cc6c292904fb70551c87db3df`,
+app mirror `5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831`, Frappe Cloud deploy
+`eu92fvbhpp`, site update job `41ftn09ocp`, and installed staging app hash
+`5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831`.
+
+It is still **NO-GO** for owner-review. Hosted preflight blocks on missing
+`LT Marketing Review Access`, `Webshop Settings.enable_checkout=0`, and
+missing backup/zero-data proof for destructive catalog seed. It does not
+authorize live, DNS, Stripe, Search Console, bootstrap/import, migrate, cache,
+checkout, indexing, user, or secret mutation after commit.
+
+Previous staging-reality source-bound packet:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-a5ed680-readonly/`.
 
 It is **NO-GO** and read-only. It does not authorize provider, app mirror,
@@ -46,6 +61,9 @@ These are the paths future agents must treat as stop signs:
 - Running or retrying Frappe Cloud mutation after repeated provider/bootstrap
   failures without first making a prevention artifact.
 - Hand-authoring release JSON from chat, prose, an old packet, or a template.
+- Sending typed JSON Frappe Cloud deploy/update payloads whose `sites[]` rows
+  only contain `name`; use the current provider site object with `name`,
+  `server`, `bench`, `skip_backups`, and `skip_failing_patches`.
 - Continuing after a Codex/GitHub/Frappe Cloud account switch without a fresh
   release identity proof artifact.
 - Running bootstrap/import/migrate/cache clear before deploy-completion and
@@ -77,8 +95,9 @@ The next mutation-capable attempt must use this order:
    requested staging action.
 11. For app mirror sync, create post-sync app mirror freshness proof before
    deploy/update.
-12. For deploy/update, capture post-deploy completion proof before hosted
-    preflight.
+12. For deploy/update, build `sanitized-payload.json` from the current provider
+    site object, not a name-only row; then capture post-deploy completion proof
+    before hosted preflight.
 13. For bootstrap/import, run hosted preflight first, then the staging
     owner-review gate after mutation.
 14. Stop immediately on any `NO-GO`, `BLOCKED`, HTTP 417, stale hash, missing
@@ -114,6 +133,18 @@ Safe identity wording for future LT release packets:
   Cloud work; this is expected account context, not a blocker by itself.`
 
 ## Literal Staging Route Evidence
+
+Current post-deploy hosted preflight evidence from
+`workstreams/release-artifacts/2026-05-23-staging-reopen-5edb641-use-now/hosted-bootstrap-preflight.json`:
+
+- `target_hash` passed: deployed app hash matches
+  `5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831`.
+- `app_order`, `app_hooks`, and `standard_report` passed.
+- Blockers: missing `LT Marketing Review Access`,
+  `Webshop Settings.enable_checkout=0`, and missing backup/zero-data proof for
+  destructive catalog seed.
+- Counts remain zero for `Item`, `Item Price`, `LT Product Blueprint`,
+  `Website Item`, `Website Slideshow`, and `Website Slideshow Item`.
 
 From
 `workstreams/release-artifacts/2026-05-23-staging-reopen-a5ed680-readonly/staging-owner-review-gate-readonly.json`:

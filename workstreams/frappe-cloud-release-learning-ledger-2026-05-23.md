@@ -10,6 +10,21 @@ Current local source at creation: `d7b00453b327669607f9ae7944e9ede27ddaac42`.
 Current mode: forensic-freeze, local/offline only. Provider mutation is not
 allowed without a fresh approval artifact.
 
+## Current Update After Approved Staging App Deploy
+
+Later on 2026-05-23, GL approved staging-only app mirror sync from source
+`5edb641de4a3f09cc6c292904fb70551c87db3df`, then staging-only Frappe Cloud
+deploy/update from app mirror
+`5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831`. The deploy/update completed:
+Frappe Cloud deploy `eu92fvbhpp` and site update job `41ftn09ocp` succeeded,
+and staging now has the expected app hash.
+
+This is still not owner-review readiness. Hosted preflight now reaches the
+right app code and fails safely on missing `LT Marketing Review Access`,
+`Webshop Settings.enable_checkout=0`, and missing backup/zero-data proof for
+destructive catalog seed. No bootstrap/import, live, DNS, Stripe, Search
+Console, checkout unpause, manual migrate, or manual cache clear happened.
+
 ## Good
 
 - The repo now has a release lock, release controller, identity proof helper,
@@ -23,6 +38,13 @@ allowed without a fresh approval artifact.
 - Guiding Light's two-account model is now documented as expected:
   `cameronbpaul@gmail.com` and `locallytwisted@gmail.com`. This is not a
   personal failure and must not be treated as suspicious by default.
+- The approved app mirror sync and deploy/update proved the clean source can
+  reach staging when the packet is current, the controller is used, and the
+  provider site update job is verified.
+- The first deploy/update attempt revealed a precise guard gap without
+  touching live surfaces: typed JSON is not enough when the Frappe Cloud
+  `sites[]` row only contains `name`. The payload contract now requires the
+  complete provider site object.
 - Official Frappe Cloud docs refreshed on 2026-05-23 support the guard shape:
   private benches control custom apps/updates, bench deploys are separate from
   source commits, app/site updates have their own deploy/update flow, custom
@@ -32,18 +54,22 @@ allowed without a fresh approval artifact.
 ## Bad
 
 - Staging is still **NO-GO** for owner review.
-- The latest staging-reality packet remains
-  `workstreams/release-artifacts/2026-05-23-staging-reopen-a5ed680-readonly/`.
-  It is source-bound archive evidence, not current-source mutation authority.
+- The latest staging app deploy archive is
+  `workstreams/release-artifacts/2026-05-23-staging-reopen-5edb641-use-now/`.
+  It is source-bound archive evidence after commit, not current-source mutation
+  authority for later steps.
 - Docs-only commits moved repo `HEAD` after that packet. That is fine, but it
   makes "current-source packet" wording dangerous unless the text clearly says
   the packet is historical staging evidence.
-- The app-root mirror/deployed staging app was still at stale hash
-  `181076c239b2d1d3d508a41ac471c71f9d2b5158` in the latest read-only packet.
-- Hosted preflight still returned HTTP `417` in the latest read-only packet.
+- The app-root mirror/deployed staging app are now at
+  `5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831`, but hosted preflight still
+  returns `ok=false`.
 - Owner-review proof was missing: zero catalog/Product Setup/gallery rows,
   required owner/marketing users missing, and representative product/category
   routes returned `404`.
+- The current preflight blockers are missing `LT Marketing Review Access`,
+  `Webshop Settings.enable_checkout=0`, and no backup/zero-data proof for
+  destructive catalog seed.
 - Repeated read-only no-go packets can become noise if they only chase docs-only
   commits. Fresh packets are for changed release input state, explicit reopen
   approval, or a real mutation-capable attempt.
@@ -56,6 +82,13 @@ allowed without a fresh approval artifact.
   Codex, GitHub, Frappe Cloud, and owner/reviewer email to all match.
 - Do not treat local tests, GitHub commits, app mirror hashes, deploy IDs,
   HTTP 200 shells, or `/shop` visibility as owner-review readiness.
+- Do not treat a successful staging app-hash deploy as owner-review readiness.
+  App hash proof only proves code reached the target; data, roles, settings,
+  backup/zero-data proof, routes, and owner-review gates still decide readiness.
+- Do not treat typed JSON as a sufficient Frappe Cloud payload proof. For
+  deploy/update, `sites[]` must include `name`, `server`, `bench`,
+  `skip_backups`, and `skip_failing_patches` from the current provider site
+  object.
 - Do not call Frappe Cloud, sync the app mirror, deploy/update, bootstrap,
   migrate, clear cache, touch live/DNS/Stripe/Search Console, unpause checkout,
   or create users while forensic-freeze is active.

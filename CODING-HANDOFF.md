@@ -1,6 +1,29 @@
 # Locally Twisted - Coding Handoff
 
-Latest staging-reality read-only packet after `a5ed680` on 2026-05-23:
+Latest staging app deploy closeout on 2026-05-23:
+`workstreams/frappe-cloud-staging-app-deploy-closeout-2026-05-23.md` and
+`workstreams/release-artifacts/2026-05-23-staging-reopen-5edb641-use-now/`.
+GL approved staging-only `app_mirror_sync` from source
+`5edb641de4a3f09cc6c292904fb70551c87db3df`, then staging-only Frappe Cloud
+deploy/update from app mirror
+`5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831`. The app-root mirror is fresh,
+Frappe Cloud deploy `eu92fvbhpp` succeeded, site update job `41ftn09ocp`
+succeeded, and staging installed `locally_twisted` hash now matches
+`5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831`. Staging remains **NO-GO** for
+owner review: hosted preflight blocks on missing `LT Marketing Review Access`,
+`Webshop Settings.enable_checkout=0`, and missing backup/zero-data proof for
+destructive catalog seed. No live, DNS, Stripe, Search Console, checkout
+unpause, bootstrap/import, manual migrate, or manual cache clear action was
+performed. This packet was archived at `c82c92f`; after later commits it is
+evidence only, not authority for any new mutation.
+
+Important deploy payload guard added after that closeout: typed JSON arrays are
+not sufficient for Frappe Cloud deploy/update. Each `sites[]` row must include
+the complete current provider site object: `name`, `server`, `bench`,
+`skip_backups`, and `skip_failing_patches`. See
+`capabilities/failures/frappe-cloud-deploy-site-object-drift.md`.
+
+Previous staging-reality read-only packet after `a5ed680` on 2026-05-23:
 `workstreams/frappe-cloud-a5ed680-readonly-closeout-2026-05-23.md` and
 `workstreams/release-artifacts/2026-05-23-staging-reopen-a5ed680-readonly/`.
 This packet is **NO-GO** and read-only. It is source-bound archive evidence,

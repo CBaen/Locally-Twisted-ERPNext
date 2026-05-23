@@ -4,13 +4,14 @@ type: failure
 failure_kind: release_gate_gap
 schema_version: 0.1
 date_discovered: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-05-23
 status: guarded
 scope: project
 owner_context: Locally Twisted Frappe Cloud staging deploy and site update
 related_capabilities:
   - ../recipes/frappe-cloud-cloudflare-stripe-launch-gate.md
 related_failures:
+  - frappe-cloud-deploy-site-object-drift.md
   - frappe-cloud-release-site-migration-drift.md
   - staging-proof-surface-conflation.md
   - provider-dashboard-work-bounced-to-gl.md
@@ -46,13 +47,15 @@ objects.
 | Date | Project | Surface | Action being taken | Bad outcome | Evidence | Guard state | Status |
 |---|---|---|---|---|---|---|---|
 | 2026-05-22 | Locally Twisted | Frappe Cloud staging deploy/update | Deploy app mirror commit `f236d6d86deca0066c98e3776189b32c8818cb6d` to staging bench group `bench-40102` / bench `bench-40102-000003-f4v` while live remained on group `bench-39776` / bench `bench-39776-000015-f94v` | First `deploy_and_update` request used form-encoded nested `apps`/`sites`; the async job failed with `'str' object has no attribute 'get'`; the corrected JSON shape then exposed real site-migration failures instead of pretending staging was ready | Parent staging-recovery check and Frappe Cloud job evidence; failed Release Pipeline `6podv9kvbn`; site update/migrate jobs `8vspcanje0` and `63lqkkrppt` failed with recoveries succeeding; final corrected JSON deploy later reached app mirror hash `3e86bc149d6dcc04daa194b740c1733f5c796261` with site migrate job `crn5pskff4` successful per Controller evidence | typed JSON payload and async terminal-result guard added | guarded |
+| 2026-05-23 | Locally Twisted | Frappe Cloud staging deploy/update | Deploy app mirror commit `5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831` to staging after approved app mirror sync from source `5edb641` | Typed JSON arrays/objects were present, but `sites[]` only had `{name}`; staging installed hash stayed old until a corrected full site object was used | `workstreams/release-artifacts/2026-05-23-staging-reopen-5edb641-use-now/deploy-attempt-1-result.json`; corrected `sanitized-payload.json`; closeout `workstreams/frappe-cloud-staging-app-deploy-closeout-2026-05-23.md` | payload contract now requires complete provider site object | guarded |
 
 ## Root Pattern
 
 Provider APIs can acknowledge request receipt without proving the provider
 understood, ran, or finished the release. For Frappe Cloud nested payloads,
 `application/x-www-form-urlencoded` can silently turn app/site objects into
-strings that only fail after the job starts.
+strings that only fail after the job starts. Typed JSON is still insufficient
+when required provider site fields are missing.
 
 ## Why It Seemed Reasonable At The Time
 
@@ -81,6 +84,10 @@ For PowerShell, this means building one object graph and serializing it once
 with sufficient JSON depth. Do not pre-stringify `apps` or `sites`; they must
 arrive as arrays of objects, not strings that look like JSON.
 
+For deploy/update payloads, `sites[]` rows must also include the complete
+current provider site object: `name`, `server`, `bench`, `skip_backups`, and
+`skip_failing_patches`.
+
 ## Recovery Recipe
 
 1. Stop treating the provider API response as release proof.
@@ -97,6 +104,7 @@ arrive as arrays of objects, not strings that look like JSON.
 
 - Do not send nested Frappe Cloud app/site payloads as form-encoded strings.
 - Do not call `200`/`null` a deploy success.
+- Do not treat typed JSON as enough when the site row only contains `name`.
 - Do not skip deploy job status because the site status is `Active`.
 - Do not skip site update/migrate proof because the app mirror target exists.
 - Do not move to live, DNS, Stripe, or Search Console from this evidence.
@@ -104,8 +112,10 @@ arrive as arrays of objects, not strings that look like JSON.
 ## Cross-links
 
 - `../../workstreams/frappe-cloud-staging-owner-review-2026-05-22.md`
+- `../../workstreams/frappe-cloud-staging-app-deploy-closeout-2026-05-23.md`
 - `../../LT-LAUNCH-RUNBOOK.md`
 - `../recipes/frappe-cloud-cloudflare-stripe-launch-gate.md`
+- `frappe-cloud-deploy-site-object-drift.md`
 - `frappe-cloud-release-site-migration-drift.md`
 - `staging-proof-surface-conflation.md`
 - `provider-dashboard-work-bounced-to-gl.md`

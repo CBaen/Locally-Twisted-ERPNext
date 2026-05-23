@@ -10,6 +10,12 @@ This work did not perform provider, staging, live, DNS, Stripe, Search
 Console, app mirror, bootstrap, migrate, cache, checkout, or secret-reading
 mutation.
 
+2026-05-23 follow-up: the template's `sanitized-payload.json` example now uses
+the complete provider site object after the later deploy/update attempt proved
+that typed JSON with a name-only `sites[]` row is still incomplete. See
+`workstreams/frappe-cloud-staging-app-deploy-closeout-2026-05-23.md` and
+`capabilities/failures/frappe-cloud-deploy-site-object-drift.md`.
+
 ## Why This Exists
 
 After the post-`ebb7151` release-guard pass, the controller required artifacts

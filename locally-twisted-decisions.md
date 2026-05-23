@@ -8,6 +8,55 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-23 - Staging app deploy proof is not owner-review readiness
+
+**Decision:** The approved staging-only app mirror sync and Frappe Cloud
+deploy/update may be treated as proof that the clean app hash reached staging,
+but not as proof that staging is ready for owner review, bootstrap/import,
+checkout, live cutover, DNS, Stripe, Search Console, or public indexing.
+
+**Reasoning:** Source `5edb641de4a3f09cc6c292904fb70551c87db3df` was synced
+to app mirror `5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831`, Frappe Cloud deploy
+`eu92fvbhpp` succeeded, and site update job `41ftn09ocp` succeeded. Hosted
+preflight then failed safely on missing `LT Marketing Review Access`,
+`Webshop Settings.enable_checkout=0`, and missing backup/zero-data proof for
+destructive catalog seed. Code reached staging; owner-review prerequisites did
+not.
+
+**Implementation boundary:** Future mutation needs a fresh bounded approval
+artifact and current packet for the exact next action. Do not reuse the
+`5edb641` packet after commit, and do not run bootstrap/import, migrate, cache
+clear, checkout unpause, live/DNS/Stripe/Search Console, or indexing work from
+this deploy proof.
+
+**Receipts:**
+`workstreams/frappe-cloud-staging-app-deploy-closeout-2026-05-23.md`;
+`workstreams/release-artifacts/2026-05-23-staging-reopen-5edb641-use-now/`.
+
+---
+
+## 2026-05-23 - Frappe Cloud deploy/update payloads require complete site objects
+
+**Decision:** LT Frappe Cloud deploy/update payloads must include complete
+provider site objects in `sites[]`: `name`, `server`, `bench`, `skip_backups`,
+and `skip_failing_patches`. Typed JSON arrays/objects alone are not sufficient.
+
+**Reasoning:** Attempt 1 of the approved staging deploy/update used
+`application/json` and real arrays, but `sites[]` only included `name`. Staging
+did not update until the payload used the full current provider site object
+from Frappe Cloud/Press `deploy_information.sites`.
+
+**Implementation boundary:** Build deploy/update payloads from current provider
+state and validate them with
+`scripts/verify/frappe_cloud_payload_contract.py` before controller approval.
+Do not hand-copy name-only site rows from old packets, chat, or templates.
+
+**Receipts:** `capabilities/failures/frappe-cloud-deploy-site-object-drift.md`;
+`scripts/verify/frappe_cloud_payload_contract.py`;
+`workstreams/release-artifacts/2026-05-23-staging-reopen-5edb641-use-now/deploy-attempt-1-result.json`.
+
+---
+
 ## 2026-05-23 - Current-source read-only packets are evidence, not mutation authority
 
 **Decision:** The `a5ed680` read-only staging packet is archived current-source

@@ -88,11 +88,29 @@ are still missing, and `app_mirror_sync` is still blocked by missing
 mutate provider, app mirror, staging, live, DNS, Stripe, Search Console,
 bootstrap, migrate, cache, checkout, users, indexing, or secrets.
 
+2026-05-23 staging app deploy update: GL later approved staging-only
+`app_mirror_sync` from source `5edb641de4a3f09cc6c292904fb70551c87db3df` and
+staging-only Frappe Cloud deploy/update from app mirror
+`5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831`. Packet
+`workstreams/release-artifacts/2026-05-23-staging-reopen-5edb641-use-now/`
+and handoff
+`workstreams/frappe-cloud-staging-app-deploy-closeout-2026-05-23.md` confirm
+Frappe Cloud deploy `eu92fvbhpp` and site update job `41ftn09ocp` succeeded.
+Staging now has installed app hash
+`5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831`, correct app order, no running
+jobs, ecommerce paused, and public indexing disabled. Owner-review is still
+NO-GO: hosted preflight blocks on missing `LT Marketing Review Access`,
+`Webshop Settings.enable_checkout=0`, and missing backup/zero-data proof for
+destructive catalog seed. No live, DNS, Stripe, Search Console, checkout
+unpause, bootstrap/import, manual migrate, or manual cache clear action was
+performed.
+
 ## Current State And Superseded Staging History
 
 Read this section as layered evidence, not a single current release path. The
 2026-05-22 staging recovery records are retained for rollback/history, while
-the 2026-05-23 read-only packets supersede them for any new staging action.
+the 2026-05-23 read-only and deploy evidence packets supersede them for any
+new staging action.
 
 1. Frappe Cloud
    - Staging recovery save state:

@@ -4,8 +4,11 @@ Status: **forensic-freeze action list with the first local/offline prevention
 guard layer implemented at commit `58258fd`, expanded through the current
 read-only no-go archive `ceab908`, the post-`ebb7151` read-only packet, the
 release packet template parity fix `f5e2e91`, and the release artifact
-chain-binding guard plus freeze-reopen approval timestamp guard. Do not use
-this as permission to deploy.**
+chain-binding guard plus freeze-reopen approval timestamp guard. The later
+approved staging-only app mirror sync and deploy/update reached staging app
+hash `5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831`, but owner-review remains
+NO-GO. Do not use this as permission to bootstrap, clear cache, touch live, or
+open checkout.**
 
 This document exists because notes were present, but the release process still
 continued. The first executable local gates now exist; the next agent must keep
@@ -41,6 +44,16 @@ repo, and named release operator explicit without reading secrets. A separate
 local status command reports NO-GO/BLOCKED/READY_FOR_CONTROLLER so future agents
 do not restart a provider attempt from a vague "probably ready" state.
 
+2026-05-23 staging app deploy update: approved staging-only app mirror sync and
+Frappe Cloud deploy/update completed from source
+`5edb641de4a3f09cc6c292904fb70551c87db3df`. Frappe Cloud deploy
+`eu92fvbhpp` and site update job `41ftn09ocp` succeeded. Hosted preflight then
+failed safely on missing `LT Marketing Review Access`,
+`Webshop Settings.enable_checkout=0`, and missing backup/zero-data proof for
+destructive catalog seed. The deploy attempt also exposed a new guard gap:
+typed JSON was not enough when the `sites[]` row only contained `name`. The
+payload contract now requires the complete current provider site object.
+
 Implemented local guard paths:
 
 - `release_locks/locally-twisted-staging-forensic-freeze.json`
@@ -65,6 +78,7 @@ Implemented local guard paths:
 - `scripts/verify/release_claim_language_contract.py`
 - `workstreams/release-artifacts/README.md`
 - `workstreams/frappe-cloud-staging-route-map-2026-05-23.md`
+- `workstreams/frappe-cloud-staging-app-deploy-closeout-2026-05-23.md`
 - `workstreams/release-artifacts/2026-05-23-staging-freeze/TEMPLATE.md`
 
 Local guard command:
@@ -89,8 +103,9 @@ Recorder/Security review found the required read receipt was narrower than the
 packet-authoring docs agents now need. The lock and controller now require
 front-door handoffs, launch runbook, release-artifact README, artifact-chain
 binding handoff, scripts README, action list, forensic report,
-staging-owner-review history, launch capability, and queue before mutation can
-pass.
+staging-owner-review history, launch capability, the staging app deploy
+closeout, the complete-site-object failure recipe, and queue before mutation
+can pass.
 
 2026-05-23 read-only current-state packet:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-readonly/`.
@@ -464,6 +479,23 @@ execution can leave forensic-freeze.
     `npm run test:read-receipt`. This helper does not create approval, contact
     Frappe Cloud, sync the app mirror, deploy, bootstrap, migrate, cache clear,
     index staging, unpause checkout, or touch live/DNS/Stripe/Search Console.
+
+33. **Require complete provider site objects in deploy/update payloads.** `implemented-local`
+    The first approved deploy/update attempt after app mirror sync used typed
+    JSON, but the `sites[]` row only contained `name`. That was still
+    incomplete for the current Press update path. The payload contract now
+    rejects deploy/update payloads unless each `sites[]` row includes `name`,
+    `server`, `bench`, `skip_backups`, and `skip_failing_patches`. Failure
+    recipe:
+    `capabilities/failures/frappe-cloud-deploy-site-object-drift.md`.
+
+34. **Resolve post-deploy hosted preflight blockers before bootstrap/import.** `open-before-provider-mutation`
+    Staging now has the expected app hash, but hosted preflight is NO-GO:
+    missing `LT Marketing Review Access`, `Webshop Settings.enable_checkout=0`,
+    and missing backup/zero-data proof for destructive catalog seed. The next
+    mutation-capable packet must address those blockers and run the controller
+    for the exact next action before bootstrap/import, cache clear, checkout
+    unpause, or owner-review claims.
 
 ## P1 Actions
 

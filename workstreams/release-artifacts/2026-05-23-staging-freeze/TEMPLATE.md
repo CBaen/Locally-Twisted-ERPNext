@@ -287,12 +287,20 @@ python scripts/verify/frappe_cloud_deploy_completion_contract.py `
     ],
     "sites": [
       {
-        "name": "locallytwisted-staging.frappe.cloud"
+        "name": "locallytwisted-staging.frappe.cloud",
+        "server": "f4-virginia.frappe.cloud",
+        "bench": "bench-40102-000013-f4v",
+        "skip_backups": false,
+        "skip_failing_patches": false
       }
     ]
   }
 }
 ```
+
+Build `sites[]` rows from the current provider `deploy_information.sites`
+object. Do not use a name-only row; typed JSON without the complete site object
+is a known deploy/update failure class.
 
 ## Failure Ledger Shape
 

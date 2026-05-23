@@ -5,6 +5,13 @@
 NO-GO. This is a read-only release-state closeout, not owner-review staging
 readiness and not approval to mutate.
 
+2026-05-23 later superseding note: this packet is no longer the latest staging
+provider state. The later approved staging-only app mirror sync and deploy/update
+are archived at
+`workstreams/release-artifacts/2026-05-23-staging-reopen-5edb641-use-now/` with
+handoff `workstreams/frappe-cloud-staging-app-deploy-closeout-2026-05-23.md`.
+Use this file as pre-reopen no-go history only.
+
 Current source checked:
 `a5ed6804392f9c576a321e81b8fa0a477c200828`.
 

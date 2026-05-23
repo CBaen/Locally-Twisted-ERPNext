@@ -212,6 +212,20 @@ Default public launch posture:
   missing `freeze-reopen-approval.json`. It did not mutate provider, staging,
   app mirror, live, DNS, Stripe, Search Console, bootstrap, migrate, cache,
   checkout, users, indexing, or secrets.
+- Latest approved staging-only app deploy evidence:
+  `workstreams/release-artifacts/2026-05-23-staging-reopen-5edb641-use-now/`
+  and `workstreams/frappe-cloud-staging-app-deploy-closeout-2026-05-23.md`.
+  Source `5edb641de4a3f09cc6c292904fb70551c87db3df` was synced to the
+  app-root mirror at `5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831`, then
+  deployed/updated to staging by Frappe Cloud release `eu92fvbhpp` and site
+  update job `41ftn09ocp`, both `Success`. Staging now has installed
+  `locally_twisted` hash `5dd674c5ae9d6b3cb125ecf7ba2dd2e4e65e3831`, correct
+  app order, no running jobs, `lt_ecommerce_paused=1`, and
+  `lt_public_indexing_enabled=0`. Owner-review remains NO-GO: hosted
+  preflight blocks on missing `LT Marketing Review Access`,
+  `Webshop Settings.enable_checkout=0`, and missing backup/zero-data proof for
+  destructive catalog seed. This archive is not authority for later mutation
+  after commit.
 - Previous archived snapshot-source read-only packet:
   `workstreams/release-artifacts/2026-05-23-staging-reopen-b039667-readonly/`.
   It updates no-go evidence for packet source
@@ -312,9 +326,12 @@ Concise staging-safe list:
    typed JSON payloads only. For `press.api.bench.deploy_and_update`, `apps`
    and `sites` must be real JSON arrays/objects accepted by the endpoint, not
    nested JSON strings. A payload that stringifies nested `apps` or `sites` can
-   fail with `'str' object has no attribute 'get'`. Validate the sanitized
-   payload artifact with `scripts/verify/frappe_cloud_payload_contract.py`
-   before provider mutation.
+   fail with `'str' object has no attribute 'get'`. Typed JSON is still not
+   enough if the site row is incomplete: each `sites[]` row must carry the
+   current provider site object fields `name`, `server`, `bench`,
+   `skip_backups`, and `skip_failing_patches`. Validate the sanitized payload
+   artifact with `scripts/verify/frappe_cloud_payload_contract.py` before
+   provider mutation.
 8. Prove the release packet is one coherent source/hash chain before mutation:
    reopen approval, app mirror sync plan/freshness, provider snapshot, payload,
    deploy completion, and hosted preflight artifacts cannot be mixed from
@@ -407,6 +424,10 @@ python scripts/verify/book_form_repeat_email_photos.py --base-url https://locall
   or with nested `apps` or `sites` encoded as strings instead of typed JSON
   arrays/objects, then treating the API exception as a provider mystery instead
   of a payload-contract failure.
+- Sending typed JSON deploy/update payloads with `sites[]` rows that only
+  contain `name`. The Press update path also needs `server`, `bench`,
+  `skip_backups`, and `skip_failing_patches` from the current provider site
+  object.
 - Treating staging `/#login` rendering Sign In as live breakage before checking
   environment and Website Settings parity.
 - Treating `Server: Frappe Cloud` or a passing dynamic-route gate as proof that
