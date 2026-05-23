@@ -15,9 +15,13 @@ def standard_report_import_context() -> Iterator[None]:
     because those records are source artifacts. LT's seed syncs use the same
     contract when repairing a hosted staging site after app install.
     """
-    previous = getattr(frappe.flags, "in_import", None)
+    flag_names = ("in_import", "in_patch", "in_install")
+    previous = {flag_name: getattr(frappe.flags, flag_name, None) for flag_name in flag_names}
     frappe.flags.in_import = True
+    frappe.flags.in_patch = True
+    frappe.flags.in_install = True
     try:
         yield
     finally:
-        frappe.flags.in_import = previous
+        for flag_name, value in previous.items():
+            setattr(frappe.flags, flag_name, value)

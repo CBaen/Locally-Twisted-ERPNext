@@ -7,6 +7,7 @@ site's catalog, owner accounts, Product Setup rows, or gallery projection.
 from __future__ import annotations
 
 import json
+import importlib
 import traceback
 from pathlib import Path
 from typing import Any
@@ -292,11 +293,13 @@ def _run_seed_syncs(summary: dict[str, Any], *, before_catalog: bool) -> None:
         )
     )
     for module_path in modules:
-        module = frappe.get_attr(f"{module_path}.execute")
+        module = importlib.import_module(module_path)
+        module = importlib.reload(module)
+        execute = getattr(module, "execute")
         if module_path.endswith("sync_marketing_review_access"):
-            result = module(reviewer_email=MARKETING_EMAIL, send_welcome_email=False)
+            result = execute(reviewer_email=MARKETING_EMAIL, send_welcome_email=False)
         else:
-            result = module()
+            result = execute()
         summary["steps"].append({"name": module_path.rsplit(".", 1)[-1], "result": _compact_result(result)})
 
 
