@@ -1,9 +1,11 @@
 # Locally Twisted - Coding Handoff
 
 Release artifact chain binding on 2026-05-23:
-`3054396 Bind staging release artifacts` is the current GitHub archive on
-`main` / `origin/main`. Gate/Fixer found one remaining local guard gap after
-`5e11003`: the release
+Run `git status -sb` and `git log --oneline -5` for the current HEAD; do not
+trust a handoff sentence as the latest archive label. The artifact-chain
+implementation archive is `3054396 Bind staging release artifacts`, with a
+follow-up docs clarification at `a838d8d Clarify current release archive`.
+Gate/Fixer found one remaining local guard gap after `5e11003`: the release
 controller validated required artifact shapes, but did not prove those
 artifacts belonged to the same source/hash chain. The offline controller now
 binds reopen approval, app mirror sync plan, mirror freshness, provider

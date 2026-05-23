@@ -66,8 +66,11 @@ hosted preflight checks. It does not create real release artifacts or reopen
 provider/staging execution. Handoff:
 `workstreams/frappe-cloud-release-artifact-template-parity-2026-05-23.md`.
 
-2026-05-23 chain-binding update: current source archive is
-`3054396 Bind staging release artifacts`. The local release controller now
+2026-05-23 chain-binding update: verify current source with `git log`; this
+runbook intentionally names durable commit roles instead of trying to be the
+latest-HEAD oracle. The artifact-chain implementation archive is
+`3054396 Bind staging release artifacts`, with follow-up docs clarification at
+`a838d8d Clarify current release archive`. The local release controller now
 rejects mutation-capable release packets whose approval, app mirror
 plan/freshness, provider snapshot, deploy payload, deploy completion, or
 hosted preflight artifacts do not agree on source commit, app hash, rollback
