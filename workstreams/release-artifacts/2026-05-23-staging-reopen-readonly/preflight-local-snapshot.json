@@ -1,0 +1,90 @@
+{
+  "created_at_utc": "2026-05-23T03:37:39Z",
+  "env_files": [],
+  "environment": "local",
+  "http": {
+    "failures": [],
+    "routes": [],
+    "target_url": null
+  },
+  "label": "staging-reopen-local-preflight",
+  "repo": {
+    "branch": "main",
+    "changed_paths": [],
+    "dirty": false,
+    "dirty_count": 0,
+    "head": "e44ecc2da16a1c3ca28cc9a0f29d56627b1142ae",
+    "is_git_repo": true,
+    "path": "C:\\Users\\baenb\\projects\\Built_by_Cameron\\_CLIENTS\\locally-twisted",
+    "remote_url": "https://github.com/CBaen/Locally-Twisted-ERPNext.git",
+    "staged_count": 0,
+    "untracked_count": 0
+  },
+  "schema_version": "release-status-snapshot/v1",
+  "warnings": [],
+  "watch": {
+    "files": [
+      {
+        "path": "package.json",
+        "sha256": "b11b6d0b22a6e2d2088817040d183412c5cbebb6e2cd552629a44973f5e630fd",
+        "size_bytes": 7712
+      },
+      {
+        "path": "apps/locally_twisted/locally_twisted/hooks.py",
+        "sha256": "3fa39cd3a1f7edbda9b140ba93d9325408f687b5e8f33a6d03a448738d3d9e9e",
+        "size_bytes": 23987
+      },
+      {
+        "path": "apps/locally_twisted/locally_twisted/patches.txt",
+        "sha256": "3bf007b0beffefbb22b692f15a4625a82330fcdb41a65feaa04d71531741da23",
+        "size_bytes": 921
+      },
+      {
+        "path": "apps/locally_twisted/locally_twisted/staging_owner_review_bootstrap.py",
+        "sha256": "3ee33a33a8f4358eab3d9cbcda1e4ba5549f13df685eaa6ab9d02af1b788925f",
+        "size_bytes": 13835
+      },
+      {
+        "path": "apps/locally_twisted/locally_twisted/staging_owner_review_preflight.py",
+        "sha256": "fa7f243137ccfb8213fec6cf7dba9b978cef9f07879cb27839bdd101fb55f381",
+        "size_bytes": 15811
+      },
+      {
+        "path": "scripts/release/frappe_cloud_release_controller.py",
+        "sha256": "d55434cfe285e6588aa78d0b564b12aa07a8f1fbb8c312aef27dfbc0df5e5419",
+        "size_bytes": 7757
+      },
+      {
+        "path": "scripts/release/release_guard_common.py",
+        "sha256": "65c9092946b55edf8b59d2c4dabd9a2715009b387cfbbbd7ae8c40f10eead4f3",
+        "size_bytes": 10302
+      },
+      {
+        "path": "scripts/verify/staging_owner_review_bootstrap_contract.py",
+        "sha256": "29cb09cfc8ff2b0da63b6fc22278f4e48f3595622eb0cc83a644f5c715da7608",
+        "size_bytes": 9541
+      },
+      {
+        "path": "scripts/verify/staging_owner_review_gate.py",
+        "sha256": "ba91322d037e5b7b4de5e855e47ae278ca786192ef205a00fe3e6eed67d1b32e",
+        "size_bytes": 16298
+      },
+      {
+        "path": "scripts/verify/staging_owner_review_gate_contract.py",
+        "sha256": "86c7fd8cd4075547dce8329865f4448529be8d232f336b1d86bb8bee69c09228",
+        "size_bytes": 12965
+      },
+      {
+        "path": "scripts/verify/frappe_cloud_provider_snapshot.py",
+        "sha256": "d738abd3b4a5019d3ef3502cc7e43f1d0cf463b694eb2f9d4df1b851c1188c5f",
+        "size_bytes": 9732
+      },
+      {
+        "path": "release_locks/locally-twisted-staging-forensic-freeze.json",
+        "sha256": "30ac60434bf17d9211ba09d1a258c7a976228c159c3f75e2d00a07ffff507dac",
+        "size_bytes": 2202
+      }
+    ],
+    "missing_patterns": []
+  }
+}

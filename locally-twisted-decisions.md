@@ -8,6 +8,28 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-23 - Staging read-only packets must prove mirror freshness before hosted bootstrap
+
+**Decision:** A read-only provider snapshot is not enough to reopen staging
+bootstrap. The release packet must also prove the app-root mirror/deployed app
+contains the current hosted bootstrap preflight method before any
+bootstrap/import or cache action.
+
+**Reasoning:** The 2026-05-23 read-only packet found staging provider state was
+stable and app order was correct, but the deployed app hash
+`181076c239b2d1d3d508a41ac471c71f9d2b5158` did not include
+`locally_twisted/staging_owner_review_preflight.py`. The hosted preflight
+method failed with no such attribute. Proceeding to bootstrap from that app
+would repeat the exact pattern the forensic freeze is meant to prevent.
+
+**Implementation boundary:** `scripts/verify/staging_owner_review_gate.py
+--json` now emits strict JSON on failure so release packets can be parsed. The
+current packet is
+`workstreams/release-artifacts/2026-05-23-staging-reopen-readonly/` and is a
+no-go packet, not mutation approval.
+
+---
+
 ## 2026-05-23 - Release reopen guards must cover provider, owner gate, and bootstrap locally first
 
 **Decision:** The release-prevention suite now includes local/offline contracts

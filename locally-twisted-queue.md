@@ -31,6 +31,19 @@ if GL explicitly reopens release execution. Do not deploy, bootstrap, mutate
 Frappe Cloud, touch live/DNS/Stripe/Search Console, or claim owner-review
 readiness from the interrupted session.
 
+2026-05-23 read-only packet update:
+`workstreams/release-artifacts/2026-05-23-staging-reopen-readonly/` now records
+the current provider/staging state. Staging is Active on app hash
+`181076c239b2d1d3d508a41ac471c71f9d2b5158` with correct app order, no running
+jobs, ecommerce paused, and public indexing disabled. Owner review remains
+blocked: catalog/Product Setup/gallery rows are zero, required owner/marketing
+users are missing, and product/category routes return `404`. The hosted
+bootstrap preflight is also unavailable on staging because the app-root mirror
+at `181076c...` does not include source `staging_owner_review_preflight.py` from
+`e44ecc2`. Next safe release packet, after explicit freeze reopen only, must
+sync the app-root mirror from reviewed source before any provider deploy,
+hosted preflight, bootstrap/import, or cache action.
+
 **P0 owner Product Setup local review before staging (2026-05-22):** Active
 handoff is
 `workstreams/ecommerce-audit/owner-product-setup-guard-closeout-2026-05-22.md`.

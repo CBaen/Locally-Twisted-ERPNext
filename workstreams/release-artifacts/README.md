@@ -57,3 +57,9 @@ preferred snapshot producer. Use `--self-test` for offline release-prevention
 proof. Use real provider mode only inside a current release packet/read-only
 forensics plan, with target and rollback hashes supplied, and write output to
 that packet's `provider-snapshot.json`.
+
+Current packet:
+`2026-05-23-staging-reopen-readonly/` is a read-only no-go packet. It proves
+the provider snapshot path works against current staging and records the owner
+review blockers, but it does not approve mutation. The packet also proves the
+deployed staging app lacks the current hosted bootstrap preflight method.

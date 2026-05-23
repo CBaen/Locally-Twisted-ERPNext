@@ -6,6 +6,18 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-23 - Release verifier JSON must stay JSON when it fails
+
+The staging owner-review gate supported `--json`, but on failure it appended
+human failure lines after the JSON object. That made the most important release
+artifact unparsable exactly when the release was blocked.
+
+**Counter-move:** JSON mode must emit only machine-readable JSON and still
+return nonzero on failure. Human failure summaries belong in non-JSON mode or a
+separate parser/summary command.
+
+---
+
 ## 2026-05-23 - A release packet needs artifact producers, not only validators
 
 The release-prevention layer originally validated required artifacts, but the

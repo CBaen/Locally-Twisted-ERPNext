@@ -14,6 +14,25 @@ Local verifier command: `npm run test:release-prevention`. This is prevention
 architecture only. It is not staging proof, owner-review readiness, live
 approval, DNS/Search Console/Stripe approval, or checkout exposure.
 
+Codex read-only staging reopen packet on 2026-05-23:
+`workstreams/release-artifacts/2026-05-23-staging-reopen-readonly/` is the
+current proof packet. It used the release controller in `read_only_forensics`
+mode and performed no provider/staging/live/DNS/Stripe/Search Console mutation.
+Current staging is `Active`, installed `locally_twisted` hash is
+`181076c239b2d1d3d508a41ac471c71f9d2b5158`, app order is correct, running jobs
+are empty, ecommerce is paused, and public indexing is disabled. It is still
+**not owner-review ready**: staging has `Item=0`, `Website Item=0`,
+`LT Product Blueprint=0`, `Website Slideshow=0`, `Website Slideshow Item=0`,
+missing `locallytwisted@gmail.com` / `marketing@exploringnotboring.com`, and
+representative shop/product routes return `404`. The deployed app-root mirror
+is also stale relative to source `e44ecc2`: mirror/app hash `181076c...` does
+not contain `locally_twisted/staging_owner_review_preflight.py`, so the hosted
+preflight endpoint fails with "module ... has no attribute
+`preflight_staging_owner_review_bootstrap`." Next controlled release packet
+must sync the app-root mirror from reviewed source, take a fresh provider
+snapshot, run the hosted preflight, then bootstrap/import only if the active
+lock is explicitly reopened and the controller gates pass.
+
 Codex Frappe Cloud staging failure forensics on 2026-05-23: release execution
 was stopped by GL. Treat owner-review staging as **not ready** until a new
 release controller proves otherwise from current state. Source `origin/main`

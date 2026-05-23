@@ -27,6 +27,18 @@ Status as of 2026-05-18 for peer GPT-5.5 Codex/OpenClaw agents.
   architecture only; it does not prove staging data, owner accounts, Product
   Setup/gallery projection, live checkout, DNS, Stripe, Search Console, or
   owner-review readiness.
+- 2026-05-23 read-only staging reopen packet:
+  `workstreams/release-artifacts/2026-05-23-staging-reopen-readonly/`.
+  Controller `read_only_forensics` passed with no provider mutation. Frappe
+  Cloud staging is Active, has no running jobs, correct app order,
+  `lt_ecommerce_paused=1`, and `lt_public_indexing_enabled=0`, but it remains
+  blocked for owner review: all catalog/Product Setup/gallery counts are zero,
+  `locallytwisted@gmail.com` and `marketing@exploringnotboring.com` are
+  missing, and representative shop/product routes return `404`. The deployed
+  app hash/app mirror `181076c239b2d1d3d508a41ac471c71f9d2b5158` also lacks
+  the current source `staging_owner_review_preflight.py`, so hosted bootstrap
+  preflight is unavailable on staging. Do not bootstrap/import from this
+  deployed app.
 - Owner Product Setup guard closeout was recovered and triad-reviewed on
   2026-05-22. Owner-like users can use `LT Product Blueprint` / Product Setup,
   but direct raw catalog mutations are blocked and local apply cannot publish,
@@ -143,6 +155,9 @@ reopening staging bootstrap/import requires the expanded prevention suite,
 real provider snapshot output, real hosted bootstrap preflight output,
 backup-or-zero-data proof before destructive catalog seed paths, and mandatory
 payload artifacts for future provider deploy/update controller actions.
+The current read-only packet produced the provider snapshot and tried hosted
+preflight; hosted preflight is blocked because staging is still running app
+hash `181076c...`, which does not include the source preflight method.
 
 2026-05-22 staging-prep nuance: official Frappe Cloud docs support
 `press-deploy` commit markers, including bench-specific markers. For LT, do

@@ -38,6 +38,15 @@ npm run test:release-prevention
 This command is not staging proof. It proves the local prevention architecture
 exists before future release execution is reopened.
 
+2026-05-23 read-only current-state packet:
+`workstreams/release-artifacts/2026-05-23-staging-reopen-readonly/`.
+This packet produced a real read-only provider snapshot and a strict JSON
+staging owner-review gate artifact. It did not mutate provider/staging/live
+state. Result: staging is provider-stable but still owner-review blocked, and
+the hosted bootstrap preflight cannot run because the deployed app hash/app
+mirror `181076c239b2d1d3d508a41ac471c71f9d2b5158` does not include the current
+source preflight module from `e44ecc2`.
+
 Source incident:
 `workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`.
 
@@ -160,10 +169,24 @@ execution can leave forensic-freeze.
 16. **Add a provider snapshot producer.** `implemented-local; open-before-provider-mutation`
     `scripts/verify/frappe_cloud_provider_snapshot.py` now has an offline
     self-test and a real read-only mode that can write the sanitized
-    `provider-snapshot.json` artifact. The script has not been run against
-    Frappe Cloud in this guard-hardening pass; the next release packet must run
-    real read-only mode with current target and rollback hashes before any
-    mutation.
+    `provider-snapshot.json` artifact. The 2026-05-23 read-only packet ran real
+    provider mode for the current staging target and wrote
+    `workstreams/release-artifacts/2026-05-23-staging-reopen-readonly/provider-snapshot.json`.
+    Any future release packet still needs a fresh snapshot after app mirror
+    sync and before mutation.
+
+17. **Fix staging owner-review JSON artifacts.** `implemented-local`
+    `scripts/verify/staging_owner_review_gate.py --json` now emits strict JSON
+    even when the gate fails. This was required because the read-only staging
+    artifact initially appended human failure lines after the JSON object,
+    making it unsuitable as a machine-readable release packet artifact.
+
+18. **Block on stale app-root mirror before hosted bootstrap.** `open-before-provider-mutation`
+    Read-only proof shows staging/app mirror hash `181076c...` lacks
+    `locally_twisted/staging_owner_review_preflight.py`, and the hosted
+    preflight endpoint fails with no such attribute. Future release execution
+    must sync the app-root mirror from reviewed source before deploy/update,
+    hosted preflight, bootstrap/import, or cache action.
 
 ## P1 Actions
 
@@ -207,6 +230,7 @@ Still mandatory before any provider mutation is reopened:
   bootstrap/deploy/migrate/cache mutation
 - real hosted bootstrap preflight execution and artifact from the actual
   staging target
+- current app-root mirror containing the reviewed source preflight module
 - fresh artifact-backed release plan
 - staging bootstrap preflight for hosted constraints
 - staging database/account/product/gallery proof on the actual target site

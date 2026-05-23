@@ -109,6 +109,8 @@ def main() -> int:
         print(f"  users: {', '.join(sorted(result['accounts']))}")
         print(f"  owner-visible routes: {len(result['owner_visible_routes'])}")
     if result["failures"]:
+        if args.json:
+            return 1
         print("  failures:")
         for failure in result["failures"]:
             print(f"    - {failure}")
