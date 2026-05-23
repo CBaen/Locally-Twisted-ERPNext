@@ -12,6 +12,12 @@ continued. The first executable local gates now exist; the next agent must keep
 them green and finish the still-open provider/staging prerequisites before
 reopening Locally Twisted Frappe Cloud staging release work.
 
+Good/bad staging route map:
+`workstreams/frappe-cloud-staging-route-map-2026-05-23.md`.
+This is now part of the required read set before mutation. It records the bad
+routes that caused or hid failure, the good route for future staging work, and
+the literal staging route evidence from the current read-only packet.
+
 2026-05-23 guard implementation update: the first local/offline prevention
 layer now exists. It blocks release mutation while forensic-freeze is active,
 validates `application/json` typed Frappe Cloud payload shape before provider
@@ -21,13 +27,24 @@ fails docs that collapse provider success into owner-review readiness. The
 approval artifact now has a local helper so future agents do not hand-copy the
 freeze-reopen transition from a template or archived packet.
 
+2026-05-23 identity/status guard update: the controller now requires a fresh
+`release-identity-proof.json` before any mutation-capable action. That artifact
+makes the Codex account, GitHub account, Frappe Cloud team/site, app mirror
+repo, and named release operator explicit without reading secrets. A separate
+local status command reports NO-GO/BLOCKED/READY_FOR_CONTROLLER so future agents
+do not restart a provider attempt from a vague "probably ready" state.
+
 Implemented local guard paths:
 
 - `release_locks/locally-twisted-staging-forensic-freeze.json`
 - `scripts/release/frappe_cloud_release_controller.py`
+- `scripts/release/release_identity_artifact.py`
+- `scripts/release/release_status_report.py`
 - `scripts/release/freeze_reopen_approval_artifact.py`
 - `scripts/verify/release_lock_contract.py`
 - `scripts/verify/release_controller_contract.py`
+- `scripts/verify/release_identity_artifact_contract.py`
+- `scripts/verify/release_status_report_contract.py`
 - `scripts/verify/freeze_reopen_approval_artifact_contract.py`
 - `scripts/verify/frappe_cloud_payload_contract.py`
 - `scripts/verify/frappe_cloud_app_mirror_freshness.py`
@@ -38,6 +55,7 @@ Implemented local guard paths:
 - `scripts/verify/staging_owner_review_bootstrap_contract.py`
 - `scripts/verify/release_claim_language_contract.py`
 - `workstreams/release-artifacts/README.md`
+- `workstreams/frappe-cloud-staging-route-map-2026-05-23.md`
 - `workstreams/release-artifacts/2026-05-23-staging-freeze/TEMPLATE.md`
 
 Local guard command:
@@ -48,6 +66,14 @@ npm run test:release-prevention
 
 This command is not staging proof. It proves the local prevention architecture
 exists before future release execution is reopened.
+
+Plain current-state command:
+
+```powershell
+python scripts\release\release_status_report.py
+```
+
+With no fresh packet artifacts, this must report `NO-GO`.
 
 2026-05-23 read-receipt widening:
 Recorder/Security review found the required read receipt was narrower than the

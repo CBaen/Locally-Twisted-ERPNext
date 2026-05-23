@@ -18,6 +18,12 @@ It records the local app mirror sync-plan guard archive and cleanup after
 `849d8c2`; it is not a release packet and does not justify another read-only
 no-go packet by itself.
 
+Good/bad staging route map:
+`../frappe-cloud-staging-route-map-2026-05-23.md`.
+Read it before any mutation-capable packet. It distinguishes process routes,
+literal URL routes, and owner-review readiness proof so HTTP 200 shells are not
+mistaken for a safe staging release.
+
 This folder holds sanitized release evidence packets. Do not store secrets,
 tokens, session IDs, private customer records, raw provider logs, or credential
 files here.
@@ -30,6 +36,8 @@ must include:
 - `gate-fixer.md` - executable verifier or patch evidence.
 - `recorder.md` - docs/handoff parity, stale-claim cleanup, next safe step.
 - `read-receipt.json` - required docs read for the current attempt.
+- `release-identity-proof.json` - human-safe proof of the active Codex,
+  GitHub, Frappe Cloud team/site, app mirror repo, and release operator context.
 - `sanitized-payload.json` - typed Frappe Cloud payload shape with
   `content_type: application/json`, no secrets.
 - `freeze-reopen-approval.json` - explicit approval artifact bound to the
@@ -66,10 +74,14 @@ release controller can move past forensic-freeze:
 
 - `release_locks/locally-twisted-staging-forensic-freeze.json`
 - `scripts/release/frappe_cloud_release_controller.py`
+- `scripts/release/release_identity_artifact.py`
+- `scripts/release/release_status_report.py`
 - `scripts/release/freeze_reopen_approval_artifact.py`
 - `scripts/release/app_mirror_sync_plan_artifact.py`
 - `scripts/verify/release_lock_contract.py`
 - `scripts/verify/release_controller_contract.py`
+- `scripts/verify/release_identity_artifact_contract.py`
+- `scripts/verify/release_status_report_contract.py`
 - `scripts/verify/freeze_reopen_approval_artifact_contract.py`
 - `scripts/verify/app_mirror_sync_plan_artifact_contract.py`
 - `scripts/verify/frappe_cloud_payload_contract.py`
@@ -85,8 +97,8 @@ The required read receipt is intentionally wider than the lock's earliest
 forensic docs. It must include the front-door handoffs, launch runbook,
 release-artifact README, artifact-chain binding handoff, freeze-approval
 timestamp guard, freeze-reopen approval helper handoff, scripts README, action
-list, forensic report, staging-owner-review history, launch capability, and
-queue before mutation can pass.
+list, staging route map, forensic report, staging-owner-review history, launch
+capability, and queue before mutation can pass.
 
 As of the required-read-docs refresh, it must also include the next-agent
 closeout, staging reopen packet prep handoff, app-mirror sync-plan helper
@@ -121,6 +133,33 @@ Feature handoff:
 
 The expanded current action list is
 `../frappe-cloud-release-prevention-action-items-2026-05-23.md`.
+
+## How To Prove Release Identity
+
+Do not rely on memory, chat context, or which Codex account appears to be open.
+Before a mutation-capable packet exists, generate a fresh identity artifact:
+
+```powershell
+python scripts\release\release_identity_artifact.py `
+  --write `
+  --output workstreams\release-artifacts\<fresh-packet>\release-identity-proof.json `
+  --codex-account-label "<human-safe Codex account label>" `
+  --github-account "<GitHub login>" `
+  --frappe-cloud-team "<team/account label>" `
+  --operator "<release operator>" `
+  --evidence "<exact fresh identity evidence>" `
+  --json
+```
+
+Preview mode is intentionally not mutation-capable:
+
+```powershell
+python scripts\release\release_identity_artifact.py --json
+```
+
+The helper is local/offline. It does not read Codex auth files, contact Frappe
+Cloud, read secrets, push the app mirror, deploy, bootstrap, migrate, clear
+cache, index staging, touch live/DNS/Stripe/Search Console, or unpause checkout.
 
 ## How To Provide Freeze-Reopen Approval
 

@@ -20,6 +20,8 @@ Current-source read-only closeout:
 `workstreams/frappe-cloud-a5ed680-readonly-closeout-2026-05-23.md`.
 Current read-only packet:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-a5ed680-readonly/`.
+Staging route map:
+`workstreams/frappe-cloud-staging-route-map-2026-05-23.md`.
 It is **NO-GO** and not mutation authority: active forensic-freeze still blocks
 provider/app mirror/staging mutation, the app-root mirror/deployed app remain
 at `181076c...`, hosted preflight still returns HTTP `417`, owner-review
@@ -103,6 +105,18 @@ mutation-capable packets must produce or validate `failure-ledger.json` through
 `scripts/release/failure_ledger_artifact.py`; empty ledgers, stale source
 commits, fake guard paths, raw/secret diagnostic keys, and repeated failure
 classes without fresh plan evidence now fail before mutation.
+Release identity/status follow-up:
+`scripts/release/release_identity_artifact.py`,
+`scripts/release/release_status_report.py`, `npm run test:release-identity`,
+and `npm run test:release-status` make the active Codex/GitHub/Frappe Cloud/
+app-mirror/operator context explicit and provide a plain NO-GO/BLOCKED/
+READY_FOR_CONTROLLER readout. The controller now requires
+`release-identity-proof.json` before mutation. With no fresh packet artifacts,
+the status command must remain NO-GO.
+The route map records the current good path and bad paths: `/app`, `/shop`,
+and `/shop-items` returning 200 are not owner-review readiness, while
+representative product/category routes still returned 404 in the current
+read-only packet.
 
 Previous archived snapshot-source read-only packet:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-9e63fef-readonly/`

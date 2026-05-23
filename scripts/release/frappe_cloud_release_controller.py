@@ -39,6 +39,7 @@ from release_guard_common import (
     validate_triad_artifacts,
     approved_actions_from_reopen_approval,
 )
+from release_identity_artifact import validate_identity_artifact
 
 sys.path.insert(0, str(PROJECT_ROOT))
 from scripts.verify.frappe_cloud_payload_contract import (  # noqa: E402
@@ -84,6 +85,7 @@ def main() -> int:
     parser.add_argument("--action", required=True, help="Release action to gate.")
     parser.add_argument("--lock-file", type=Path, default=DEFAULT_LOCK_PATH)
     parser.add_argument("--read-receipt", type=Path, help="JSON proof that required release docs were read.")
+    parser.add_argument("--identity-proof", type=Path, help="JSON proof of the active release account/session context.")
     parser.add_argument("--payload-file", type=Path, help="Sanitized Frappe Cloud JSON payload artifact to validate.")
     parser.add_argument("--reopen-approval", type=Path, help="Explicit forensic-freeze reopen approval artifact JSON.")
     parser.add_argument("--app-mirror-sync-plan", type=Path, help="Pre-sync app mirror plan artifact JSON.")
@@ -172,6 +174,7 @@ def write_emergency_handoff(args: argparse.Namespace, result: dict[str, object])
                 "## Failure-Class Circuit Breaker",
                 "",
                 f"Failure ledger provided: `{bool(args.failure_ledger)}`",
+                f"Identity proof provided: `{bool(args.identity_proof)}`",
             ]
         )
         + "\n",
@@ -207,6 +210,10 @@ def run_controller(args: argparse.Namespace) -> dict[str, object]:
                 validate_reopen_approval(args.reopen_approval, lock, action=args.action),
             )
             reopen_approved_actions = approved_actions_from_reopen_approval(args.reopen_approval)
+
+        if not args.identity_proof:
+            raise ReleaseGuardError("release identity proof artifact is required before mutation")
+        raise_if_failures("invalid release identity proof", validate_identity_artifact(args.identity_proof, lock=lock))
 
         if args.action == "app_mirror_sync":
             if not args.app_mirror_sync_plan:
@@ -267,6 +274,7 @@ def run_controller(args: argparse.Namespace) -> dict[str, object]:
                 action=args.action,
                 payload_file=args.payload_file,
                 reopen_approval_path=args.reopen_approval,
+                identity_proof_path=args.identity_proof,
                 app_mirror_sync_plan_path=args.app_mirror_sync_plan,
                 app_mirror_freshness_path=args.app_mirror_freshness,
                 provider_snapshot_path=args.provider_snapshot,

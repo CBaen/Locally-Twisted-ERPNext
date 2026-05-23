@@ -46,6 +46,7 @@ REQUIRED_READ_DOCS = [
     "LT-LAUNCH-RUNBOOK.md",
     "workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md",
     "workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md",
+    "workstreams/frappe-cloud-staging-route-map-2026-05-23.md",
     "workstreams/frappe-cloud-staging-owner-review-2026-05-22.md",
     "workstreams/release-artifacts/README.md",
     "workstreams/frappe-cloud-release-artifact-chain-binding-2026-05-23.md",
@@ -491,6 +492,7 @@ def validate_release_artifact_chain(
     action: str,
     payload_file: Path | None = None,
     reopen_approval_path: Path | None = None,
+    identity_proof_path: Path | None = None,
     app_mirror_sync_plan_path: Path | None = None,
     app_mirror_freshness_path: Path | None = None,
     provider_snapshot_path: Path | None = None,
@@ -508,6 +510,7 @@ def validate_release_artifact_chain(
     current_source_commit = normalize_hash(source_commit) if source_commit else current_git_head()
 
     approval = read_json(reopen_approval_path) if reopen_approval_path else None
+    identity = read_json(identity_proof_path) if identity_proof_path else None
     sync_plan = read_json(app_mirror_sync_plan_path) if app_mirror_sync_plan_path else None
     mirror = read_json(app_mirror_freshness_path) if app_mirror_freshness_path else None
     provider = read_json(provider_snapshot_path) if provider_snapshot_path else None
@@ -525,6 +528,25 @@ def validate_release_artifact_chain(
             )
         )
 
+    if identity:
+        failures.extend(
+            require_hash_match(
+                "release identity proof source_commit",
+                identity.get("source_commit"),
+                "current repository HEAD",
+                current_source_commit,
+            )
+        )
+        if approval:
+            failures.extend(
+                require_hash_match(
+                    "release identity proof source_commit",
+                    identity.get("source_commit"),
+                    "freeze reopen approval source_commit",
+                    approval.get("source_commit"),
+                )
+            )
+
     if sync_plan:
         failures.extend(
             require_hash_match(
@@ -541,6 +563,15 @@ def validate_release_artifact_chain(
                     sync_plan.get("source_commit"),
                     "freeze reopen approval source_commit",
                     approval.get("source_commit"),
+                )
+            )
+        if identity:
+            failures.extend(
+                require_hash_match(
+                    "app mirror sync plan source_commit",
+                    sync_plan.get("source_commit"),
+                    "release identity proof source_commit",
+                    identity.get("source_commit"),
                 )
             )
         if provider:
@@ -569,6 +600,15 @@ def validate_release_artifact_chain(
                     mirror.get("source_commit"),
                     "freeze reopen approval source_commit",
                     approval.get("source_commit"),
+                )
+            )
+        if identity:
+            failures.extend(
+                require_hash_match(
+                    "app mirror freshness source_commit",
+                    mirror.get("source_commit"),
+                    "release identity proof source_commit",
+                    identity.get("source_commit"),
                 )
             )
         if sync_plan:

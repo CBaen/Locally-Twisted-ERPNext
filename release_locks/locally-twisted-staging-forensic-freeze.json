@@ -37,6 +37,7 @@
     "LT-LAUNCH-RUNBOOK.md",
     "workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md",
     "workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md",
+    "workstreams/frappe-cloud-staging-route-map-2026-05-23.md",
     "workstreams/frappe-cloud-staging-owner-review-2026-05-22.md",
     "workstreams/release-artifacts/README.md",
     "workstreams/frappe-cloud-release-artifact-chain-binding-2026-05-23.md",
@@ -61,6 +62,7 @@
   "requires_to_reopen": [
     "Fresh explicit approval to leave forensic-freeze",
     "Valid local forensic-freeze reopen approval artifact bound to this lock and staging target",
+    "Fresh release identity proof artifact for Codex, GitHub, Frappe Cloud, app mirror, and operator context",
     "Pre-sync app mirror plan artifact before app_mirror_sync",
     "Fresh app mirror freshness artifact after reviewed app-root mirror sync",
     "Post-deploy/update completion artifact before hosted preflight",

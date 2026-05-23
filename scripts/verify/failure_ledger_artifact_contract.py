@@ -210,11 +210,13 @@ def run_contract() -> list[str]:
 
 def write_controller_artifacts(tmp_path: Path, valid_ledger: Path) -> dict[str, list[str]]:
     approval = tmp_path / "freeze-reopen-approval.json"
+    identity = tmp_path / "release-identity-proof.json"
     sync_plan = tmp_path / "app-mirror-sync-plan.json"
     provider = tmp_path / "provider-snapshot.json"
     receipt = tmp_path / "read-receipt.json"
     triad = tmp_path / "triad"
     write_reopen_approval(approval)
+    write_identity(identity)
     write_sync_plan(sync_plan)
     write_provider(provider)
     write_read_receipt(receipt)
@@ -225,6 +227,8 @@ def write_controller_artifacts(tmp_path: Path, valid_ledger: Path) -> dict[str, 
             str(receipt),
             "--reopen-approval",
             str(approval),
+            "--identity-proof",
+            str(identity),
             "--app-mirror-sync-plan",
             str(sync_plan),
             "--provider-snapshot",
@@ -233,6 +237,48 @@ def write_controller_artifacts(tmp_path: Path, valid_ledger: Path) -> dict[str, 
             str(triad),
         ]
     }
+
+
+def write_identity(path: Path) -> None:
+    checked_at = datetime.now(timezone.utc).isoformat()
+    checks = []
+    for surface, expected, actual in (
+        ("codex_account", "Codex/ChatGPT account selected intentionally for LT release work", "work-account-contract"),
+        ("github_cli", "GitHub CLI account allowed to read/write LT source and app mirror as needed", "CBaen"),
+        ("frappe_cloud_team", "Frappe Cloud team/account owns the LT staging site", "lt-team-contract"),
+        ("frappe_cloud_site", "locallytwisted-staging.frappe.cloud", "locallytwisted-staging.frappe.cloud"),
+        ("app_mirror_repo", "https://github.com/CBaen/Locally-Twisted-Frappe-App.git", "https://github.com/CBaen/Locally-Twisted-Frappe-App.git"),
+        ("release_operator", "named operator responsible for this release packet", "failure-ledger-contract"),
+    ):
+        checks.append(
+            {
+                "surface": surface,
+                "status": "manual_confirmed",
+                "expected": expected,
+                "actual": actual,
+                "method": "offline failure-ledger contract fixture",
+                "evidence": "synthetic release identity proof for local contract only",
+                "checked_at": checked_at,
+            }
+        )
+    created_at = datetime.now(timezone.utc) - timedelta(minutes=1)
+    path.write_text(
+        json.dumps(
+            {
+                "ok": True,
+                "artifact_type": "release_identity_proof",
+                "lock_id": "lt-staging-forensic-freeze-2026-05-23",
+                "target_site": "locallytwisted-staging.frappe.cloud",
+                "source_commit": git_head(),
+                "created_at": created_at.isoformat(),
+                "expires_at": (created_at + timedelta(hours=12)).isoformat(),
+                "secret_free": True,
+                "provider_mutation_executed": False,
+                "account_checks": checks,
+            }
+        ),
+        encoding="utf-8",
+    )
 
 
 def write_reopen_approval(path: Path) -> None:

@@ -124,6 +124,7 @@ def run_contract() -> list[str]:
             failures.append("read_only_forensics did not accept a UTF-8 BOM read receipt")
 
         approval = tmp_path / "freeze-reopen-approval.json"
+        identity = tmp_path / "release-identity-proof.json"
         mirror = tmp_path / "app-mirror-freshness.json"
         sync_plan = tmp_path / "app-mirror-sync-plan.json"
         provider = tmp_path / "provider-snapshot.json"
@@ -135,6 +136,7 @@ def run_contract() -> list[str]:
         triad_dir = tmp_path / "triad"
         ledger = tmp_path / "failure-ledger.json"
         write_reopen_approval(approval, source_commit)
+        write_valid_identity(identity, source_commit)
         write_valid_mirror(mirror, source_commit, "b" * 40)
         write_valid_sync_plan(sync_plan, source_commit)
         write_valid_provider(provider, "locallytwisted-staging.frappe.cloud", "b" * 40)
@@ -146,6 +148,22 @@ def run_contract() -> list[str]:
         write_valid_triad(triad_dir)
         write_valid_failure_ledger(ledger, source_commit)
 
+        deploy_missing_identity = run_controller(
+            "--action",
+            "frappe_cloud_deploy",
+            "--payload-file",
+            str(payload),
+            "--read-receipt",
+            str(receipt),
+            "--reopen-approval",
+            str(approval),
+            "--json",
+        )
+        if deploy_missing_identity.returncode == 0:
+            failures.append("frappe_cloud_deploy passed without release identity proof")
+        if "identity proof" not in f"{deploy_missing_identity.stdout}\n{deploy_missing_identity.stderr}".lower():
+            failures.append("deploy missing-identity output did not mention identity proof")
+
         deploy_missing_mirror = run_controller(
             "--action",
             "frappe_cloud_deploy",
@@ -155,6 +173,8 @@ def run_contract() -> list[str]:
             str(receipt),
             "--reopen-approval",
             str(approval),
+            "--identity-proof",
+            str(identity),
             "--json",
         )
         if deploy_missing_mirror.returncode == 0:
@@ -181,6 +201,8 @@ def run_contract() -> list[str]:
             str(receipt),
             "--reopen-approval",
             str(approval),
+            "--identity-proof",
+            str(identity),
             "--json",
         )
         if missing_mirror.returncode == 0:
@@ -195,6 +217,8 @@ def run_contract() -> list[str]:
             str(receipt),
             "--reopen-approval",
             str(approval),
+            "--identity-proof",
+            str(identity),
             "--json",
         )
         if sync_missing_plan.returncode == 0:
@@ -209,6 +233,8 @@ def run_contract() -> list[str]:
             str(receipt),
             "--reopen-approval",
             str(approval),
+            "--identity-proof",
+            str(identity),
             "--app-mirror-sync-plan",
             str(sync_plan),
             "--provider-snapshot",
@@ -231,6 +257,8 @@ def run_contract() -> list[str]:
             str(receipt),
             "--reopen-approval",
             str(approval),
+            "--identity-proof",
+            str(identity),
             "--app-mirror-sync-plan",
             str(stale_sync_plan),
             "--provider-snapshot",
@@ -257,6 +285,8 @@ def run_contract() -> list[str]:
             str(receipt),
             "--reopen-approval",
             str(approval),
+            "--identity-proof",
+            str(identity),
             "--app-mirror-freshness",
             str(mirror),
             "--provider-snapshot",
@@ -281,6 +311,8 @@ def run_contract() -> list[str]:
             str(receipt),
             "--reopen-approval",
             str(approval),
+            "--identity-proof",
+            str(identity),
             "--app-mirror-freshness",
             str(mirror),
             "--provider-snapshot",
@@ -301,6 +333,8 @@ def run_contract() -> list[str]:
             str(receipt),
             "--reopen-approval",
             str(approval),
+            "--identity-proof",
+            str(identity),
             "--app-mirror-freshness",
             str(mirror),
             "--provider-snapshot",
@@ -319,6 +353,8 @@ def run_contract() -> list[str]:
             str(receipt),
             "--reopen-approval",
             str(approval),
+            "--identity-proof",
+            str(identity),
             "--app-mirror-freshness",
             str(mirror),
             "--provider-snapshot",
@@ -344,6 +380,8 @@ def run_contract() -> list[str]:
                 str(receipt),
                 "--reopen-approval",
                 str(approval),
+                "--identity-proof",
+                str(identity),
                 "--app-mirror-freshness",
                 str(mirror),
                 "--provider-snapshot",
@@ -391,6 +429,8 @@ def run_contract() -> list[str]:
             str(receipt),
             "--reopen-approval",
             str(approval),
+            "--identity-proof",
+            str(identity),
             "--app-mirror-freshness",
             str(mirror),
             "--provider-snapshot",
@@ -421,6 +461,8 @@ def run_contract() -> list[str]:
             failures.append("release controller help does not expose --reopen-approval")
         if "--app-mirror-sync-plan" not in help_result.stdout:
             failures.append("release controller help does not expose --app-mirror-sync-plan")
+        if "--identity-proof" not in help_result.stdout:
+            failures.append("release controller help does not expose --identity-proof")
 
     return failures
 
@@ -435,6 +477,48 @@ def current_source_commit() -> str:
         check=True,
     )
     return result.stdout.strip().lower()
+
+
+def write_valid_identity(path: Path, source_commit: str) -> None:
+    now = datetime.now(timezone.utc) - timedelta(minutes=1)
+    expires_at = now + timedelta(hours=12)
+    account_checks = []
+    for surface, expected, actual in (
+        ("codex_account", "Codex/ChatGPT account selected intentionally for LT release work", "work-account-contract"),
+        ("github_cli", "GitHub CLI account allowed to read/write LT source and app mirror as needed", "CBaen"),
+        ("frappe_cloud_team", "Frappe Cloud team/account owns the LT staging site", "lt-team-contract"),
+        ("frappe_cloud_site", "locallytwisted-staging.frappe.cloud", "locallytwisted-staging.frappe.cloud"),
+        ("app_mirror_repo", "https://github.com/CBaen/Locally-Twisted-Frappe-App.git", "https://github.com/CBaen/Locally-Twisted-Frappe-App.git"),
+        ("release_operator", "named operator responsible for this release packet", "release-controller-contract"),
+    ):
+        account_checks.append(
+            {
+                "surface": surface,
+                "status": "manual_confirmed",
+                "expected": expected,
+                "actual": actual,
+                "method": "offline release controller contract fixture",
+                "evidence": "synthetic account/session proof for local contract only",
+                "checked_at": now.isoformat(),
+            }
+        )
+    path.write_text(
+        json.dumps(
+            {
+                "ok": True,
+                "artifact_type": "release_identity_proof",
+                "lock_id": "lt-staging-forensic-freeze-2026-05-23",
+                "target_site": "locallytwisted-staging.frappe.cloud",
+                "source_commit": source_commit,
+                "created_at": now.isoformat(),
+                "expires_at": expires_at.isoformat(),
+                "secret_free": True,
+                "provider_mutation_executed": False,
+                "account_checks": account_checks,
+            }
+        ),
+        encoding="utf-8",
+    )
 
 
 def write_payload(path: Path, app_hash: str) -> None:

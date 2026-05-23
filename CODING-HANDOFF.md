@@ -15,6 +15,25 @@ mutation. No provider, staging, app mirror, live, DNS, Stripe, Search Console,
 bootstrap, migrate, cache, checkout, user, indexing, or secret mutation was
 performed.
 
+Staging route map on 2026-05-23:
+`workstreams/frappe-cloud-staging-route-map-2026-05-23.md` records the
+known-bad process routes, the only allowed good route for a future
+mutation-capable packet, and the literal staging route evidence from the
+`a5ed680` read-only packet. Current literal route truth: `/app`, `/shop`, and
+`/shop-items` returned `200` but are not owner-review proof; representative
+product/category routes returned `404`; catalog/gallery/user counts are still
+missing. The required read receipt now includes this route map.
+
+Release identity/status guard hardening on 2026-05-23:
+Future mutation-capable packets must include `release-identity-proof.json`
+generated or validated through `scripts/release/release_identity_artifact.py`.
+The release controller now requires that proof before any mutation-capable
+action, and `scripts/release/release_status_report.py` gives a plain local
+NO-GO/BLOCKED/READY_FOR_CONTROLLER summary. With no fresh packet artifacts,
+the status command must stay **NO-GO**. This is local/offline guard hardening
+only; it does not create approval, sync the app mirror, call Frappe Cloud, or
+mutate provider/staging/live/DNS/Stripe/Search Console.
+
 Failure-ledger helper hardening on 2026-05-23:
 `workstreams/frappe-cloud-failure-ledger-artifact-helper-2026-05-23.md`.
 Future mutation-capable packets must generate or validate `failure-ledger.json`
