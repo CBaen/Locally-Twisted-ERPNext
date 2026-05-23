@@ -57,7 +57,7 @@ actual staging site.
 deploy. It is the local prevention gate future release work must pass before
 asking to reopen provider mutation.
 
-2026-05-23 template parity update: latest source archive is
+2026-05-23 template parity update: the previous documentation archive is
 `5e11003 Document release artifact template parity`; the underlying template
 fix is `f5e2e91 Update staging release artifact template`. It corrected the
 staging-freeze packet template so future packets include the current required
@@ -66,11 +66,12 @@ hosted preflight checks. It does not create real release artifacts or reopen
 provider/staging execution. Handoff:
 `workstreams/frappe-cloud-release-artifact-template-parity-2026-05-23.md`.
 
-2026-05-23 chain-binding update: the local release controller now rejects
-mutation-capable release packets whose approval, app mirror plan/freshness,
-provider snapshot, deploy payload, deploy completion, or hosted preflight
-artifacts do not agree on source commit, app hash, rollback hash, and site.
-Handoff:
+2026-05-23 chain-binding update: current source archive is
+`3054396 Bind staging release artifacts`. The local release controller now
+rejects mutation-capable release packets whose approval, app mirror
+plan/freshness, provider snapshot, deploy payload, deploy completion, or
+hosted preflight artifacts do not agree on source commit, app hash, rollback
+hash, and site. Handoff:
 `workstreams/frappe-cloud-release-artifact-chain-binding-2026-05-23.md`.
 
 ## Current Confirmed State

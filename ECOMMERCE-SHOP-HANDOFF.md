@@ -13,11 +13,13 @@ Status as of 2026-05-23 for peer GPT-5.5 Codex/OpenClaw agents.
   source/hash chain. This is local/offline prevention only; it did not mutate
   provider, staging, live, DNS, Stripe, Search Console, app mirror, bootstrap,
   migrate, cache, checkout, or secrets.
-- Latest GitHub archive: `5e11003 Document release artifact template parity`.
-  This is documentation parity for the release packet template fix. The
-  underlying template change is `f5e2e91 Update staging release artifact
-  template`, which updates the staging-freeze release packet template so future
-  packets include `freeze-reopen-approval.json`,
+- Latest GitHub archive: `3054396 Bind staging release artifacts`. This is
+  local/offline release artifact chain binding plus documentation parity only.
+  The previous documentation-parity archive is `5e11003 Document release
+  artifact template parity`, and the underlying template change is
+  `f5e2e91 Update staging release artifact template`, which updates the
+  staging-freeze release packet template so future packets include
+  `freeze-reopen-approval.json`,
   `app-mirror-sync-plan.json`, `deploy-completion.json`, and the hosted
   preflight `checks` payload shape. These commits do not create those real
   artifacts, do not reopen forensic-freeze, and do not mutate provider/

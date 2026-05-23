@@ -22,7 +22,8 @@ at
 `scripts/release/frappe_cloud_release_controller.py`, and
 `npm run test:release-prevention`, first archived at commit `58258fd` and
 expanded through the `ceab908` read-only no-go packet, the `f5e2e91` release
-packet template fix, and the `5e11003` documentation parity archive. Provider
+packet template fix, the `5e11003` documentation parity archive, and
+`3054396` artifact-chain binding guard. Provider
 mutation remains blocked while the forensic-freeze lock is active. The local
 guard hardening now includes provider snapshot self-test/producer,
 owner-review gate contract, hosted bootstrap preflight/source contract,

@@ -1,7 +1,9 @@
 # Locally Twisted - Coding Handoff
 
 Release artifact chain binding on 2026-05-23:
-Gate/Fixer found one remaining local guard gap after `5e11003`: the release
+`3054396 Bind staging release artifacts` is the current GitHub archive on
+`main` / `origin/main`. Gate/Fixer found one remaining local guard gap after
+`5e11003`: the release
 controller validated required artifact shapes, but did not prove those
 artifacts belonged to the same source/hash chain. The offline controller now
 binds reopen approval, app mirror sync plan, mirror freshness, provider
@@ -16,8 +18,8 @@ mutate provider/staging/live/DNS/Stripe/Search Console/app mirror/bootstrap/
 migrate/cache/checkout/secrets.
 
 Release artifact and documentation parity on 2026-05-23:
-`5e11003 Document release artifact template parity` is the current GitHub
-archive on `main` / `origin/main`. The underlying template fix is
+`5e11003 Document release artifact template parity` is the previous
+documentation-parity archive. The underlying template fix is
 `f5e2e91 Update staging release artifact template`. Gate/Fixer found that
 `workstreams/release-artifacts/2026-05-23-staging-freeze/TEMPLATE.md` still
 named the old artifact set and did not include the current required shapes for
