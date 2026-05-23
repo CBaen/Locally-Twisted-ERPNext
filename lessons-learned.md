@@ -6,6 +6,23 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-23 - Notes do not stop release churn unless scripts enforce them
+
+The staging release failure already had warnings, handoffs, and triad language,
+but the process still continued through repeated provider/bootstrap failures.
+The failure was not only technical. It was a control failure: prose existed,
+but no release lock, payload validator, circuit breaker, or required-doc gate
+blocked more mutation.
+
+**Counter-move:** release warnings must become executable stop gates. The next
+agent must implement the action list in
+`workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md` before
+reopening staging release execution. Use
+`capabilities/failures/release-controller-churn-after-stop.md` before any
+provider, staging, live, DNS, Stripe, Search Console, or launch recovery work.
+
+---
+
 ## 2026-05-22 - Staging proof has separate layers that cannot borrow each other
 
 The staging recovery failed operationally because several true statements were

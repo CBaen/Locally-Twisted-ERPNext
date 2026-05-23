@@ -10,6 +10,20 @@ Overwrite-not-append. Git is the changelog. Read this first; everything else as 
 
 ## State of the world (the load-bearing facts)
 
+**Current-session delta (2026-05-23 - staging release forensic freeze):**
+- The 2026-05-22/23 Frappe Cloud owner-review staging attempt failed as a
+  release process and is frozen. Do not use its commits, app mirror hashes,
+  deploy IDs, interrupted bootstrap attempts, or local proof as launch
+  authority.
+- Required forensic source:
+  `workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`.
+- Required next-agent action list:
+  `workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`.
+- Required failure recipe:
+  `capabilities/failures/release-controller-churn-after-stop.md`.
+- No live, DNS, Stripe, Search Console, production indexing, or live checkout
+  mutation is approved from this lane.
+
 **Current-session delta (2026-05-17 - variant media restore):**
 - Active repair handoff:
   `workstreams/ecommerce-audit/variant-item-media-restore-2026-05-17.md`.

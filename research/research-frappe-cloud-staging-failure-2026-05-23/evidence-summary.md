@@ -4,6 +4,14 @@ Date boundary: 2026-05-22 America/Denver / 2026-05-23 UTC.
 
 Scope: staging repair research only. No live, DNS, Stripe, Cloudflare mutation, Search Console, checkout exposure, secret printing, or production promotion.
 
+2026-05-23 supersession: this evidence summary is historical. It is not current
+release authority and does not authorize the "next safe recovery path" below as
+an execution plan. Release execution is frozen until the prevention action list
+is implemented:
+`../../workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`.
+Forensics source:
+`../../workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`.
+
 ## Current Evidence Chain
 
 ### Worker A Staging/Account Proof Update - 2026-05-23T00:23Z

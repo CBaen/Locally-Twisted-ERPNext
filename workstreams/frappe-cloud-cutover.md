@@ -15,6 +15,13 @@ Make the eventual owner-present Frappe Cloud launch look boring:
 
 Do not re-enable checkout/payment or change Cloudflare proxy mode without a fresh launch gate.
 
+2026-05-23 release-freeze note: the owner-review staging push failed as a
+release process and is not cutover authority. Future staging/live work must
+start with
+`workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md` and
+`workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`;
+do not resume mutation from the interrupted staging session.
+
 ## Live Cutover Result - 2026-05-12
 
 Decision: `LIVE VERIFIED`.

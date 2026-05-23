@@ -12,6 +12,13 @@ GL correction, 2026-05-10: public ecommerce is reopened for full local testing. 
 
 Status note, 2026-05-10: Codex opened local ecommerce with `lt_ecommerce_paused=0`; `npm run test:ecommerce-full`, `npm run test:public-verify`, `python scripts/verify/product_page_architecture_readiness.py`, `python scripts/verify/synthetic_business_pipeline.py`, and `python scripts/verify/business_automation_index.py` passed.
 
+Status note, 2026-05-23: the owner-review staging push failed as a release
+process. V1 launch success cannot be claimed from the failed session's commits,
+app mirror hashes, deploy IDs, interrupted bootstrap attempts, or local proof.
+Future release work must satisfy
+`workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`
+before staging/live execution reopens.
+
 Do not use the 10-year ERPNext vision as a reason to delay the website unless the missing backend work directly affects launch trust, inquiry handling, policies, or customer-facing accuracy.
 
 ## V1 Launch Promise

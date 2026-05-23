@@ -4,7 +4,7 @@ type: failure
 failure_kind: process_failure
 schema_version: 0.1
 date_discovered: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-05-23
 status: open
 scope: project
 owner_context: Locally Twisted Frappe Cloud staging and release processes
@@ -15,6 +15,7 @@ related_failures:
   - provider-dashboard-work-bounced-to-gl.md
   - frappe-cloud-release-site-migration-drift.md
   - frappe-cloud-app-mirror-release-scope-drift.md
+  - release-controller-churn-after-stop.md
 tags:
   - locally-twisted
   - release
@@ -55,6 +56,7 @@ success verifier.
 |---|---|---|---|---|---|---|---|
 | 2026-05-22 | Locally Twisted | Frappe Cloud staging owner review | Helper agents reviewed Frappe Cloud staging/provider risk while main agent attempted staging update | Helpers did not prevent stale bench assumptions, an invalid API payload shape, or the gap between deploy hash and site update/migration proof because no helper owned a blocking artifact, payload-shape proof, or post-mutation verifier | Active thread facts; `workstreams/frappe-cloud-staging-owner-review-2026-05-22.md`; `capabilities/failures/provider-dashboard-work-bounced-to-gl.md`; `capabilities/failures/frappe-cloud-release-site-migration-drift.md` | missing | open |
 | 2026-05-22 | Locally Twisted | Frappe Cloud staging recovery documentation | Worker C was explicitly scoped to failure/capability documentation only | This is the correct narrowed shape for a Recorder, but it also proves the process rule: a release triad is only real when each helper has an action artifact. A read-only-only triad cannot satisfy release control. | This failure card, `frappe-cloud-api-payload-shape-drift.md`, `frappe-cloud-release-site-migration-drift.md`, `frappe-cloud-permission-role-fixture-order-drift.md`, `staging-proof-surface-conflation.md` | Recorder artifact added; enforcement still manual | open |
+| 2026-05-23 | Locally Twisted | Frappe Cloud staging release freeze | GL stopped the release process after repeated provider/bootstrap failure classes | The triad pattern did not become an executable release lock, so the process relied on the main controller stopping itself. Future release work must require artifacts that block commands. | `../../workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`; `release-controller-churn-after-stop.md` | action list written; executable lock still required | open |
 
 ## Root pattern
 

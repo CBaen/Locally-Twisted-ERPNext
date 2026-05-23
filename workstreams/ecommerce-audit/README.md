@@ -25,6 +25,14 @@ commit, push, staging, live, provider, or Search Console claims. Staging proof
 must be environment-specific: local Docker/database contracts are prerequisites,
 not staging proof, unless they run against the staging environment itself.
 
+2026-05-23 correction: the Frappe Cloud owner-review staging attempt failed as
+a release process and is frozen. Use
+`../frappe-cloud-staging-release-failure-forensics-2026-05-23.md` before any
+future staging/live execution. No ecommerce audit handoff may convert that
+session's commits, hashes, or provider attempts into owner-review readiness.
+The next fix-agent action list is
+`../frappe-cloud-release-prevention-action-items-2026-05-23.md`.
+
 ## 2026-05-22 Owner Product Setup Guard Closeout
 
 Use `owner-product-setup-guard-closeout-2026-05-22.md` as the front-door

@@ -75,6 +75,8 @@ Built before the frame reset; some still active, some legacy reference.
 | File | Purpose |
 |------|---------|
 | `workstreams/launch-v1-success-contract.md` | V1 launch scope contract: website-first quality, buyer priority, commercial lanes, quality targets, deferred 10-year ERPNext maturity, and immediate redesign sequence. |
+| `workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md` | Current forensic freeze source for the failed Frappe Cloud owner-review staging release process; not launch authority. |
+| `workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md` | Required next-agent action list for release locks, payload validation, circuit breakers, artifact-owned triad proof, and owner-review gate enforcement before staging release work reopens. |
 | `workstreams/coordination-safety-pilot-2026-05-21.md` | Protected child/client repo pilot for the neutral multi-agent coordination workflow; no product or release approval. |
 | `workstreams/website-launch.md` | Launch controller board and verification gates. |
 | `workstreams/domain-provider-reindex-cleanup-2026-05-19.md` | Current provider-chain and reindex cleanup handoff: GoDaddy registrar, Cloudflare authoritative DNS/email routing, Frappe Cloud hosting, Hetzner/Odoo old-reference status, Bluehost cleanup target, and live sitemap/canonical vanity-host blocker. |

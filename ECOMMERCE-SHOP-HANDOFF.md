@@ -8,6 +8,14 @@ Status as of 2026-05-18 for peer GPT-5.5 Codex/OpenClaw agents.
 - Published closeout baseline before complex-scaffold work: `1811cd6 Fix ecommerce closeout doc state`; verify current `HEAD` / `origin/main` with `git status -sb` before editing.
 - This file is the front-door handoff for the local ecommerce shop setup and
   staff product-authoring slices.
+- 2026-05-23 release-process failure: the Frappe Cloud owner-review staging
+  attempt was stopped by GL and is not launch authority. Treat owner-review
+  staging as blocked until a new release controller starts from current
+  read-only provider state and satisfies the gates in
+  `workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`.
+  Do not resume provider/bootstrap mutation from the interrupted session. The
+  next fix-agent action list is
+  `workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`.
 - Owner Product Setup guard closeout was recovered and triad-reviewed on
   2026-05-22. Owner-like users can use `LT Product Blueprint` / Product Setup,
   but direct raw catalog mutations are blocked and local apply cannot publish,
@@ -33,19 +41,21 @@ Status as of 2026-05-18 for peer GPT-5.5 Codex/OpenClaw agents.
   Product Setup schema; arbitrary selected-variant/reference/category media
   stays separate. Handoff:
   `workstreams/ecommerce-audit/product-gallery-restoration-2026-05-22.md`.
-- Frappe Cloud staging prep started on 2026-05-22. Source `main` is pushed at
-  `2ee28da`; the private app-root mirror is pushed at `f236d6d`. Provider
-  proof now shows current staging on bench group `bench-40102` / bench
-  `bench-40102-000003-f4v`; live remains on bench group `bench-39776` / bench
-  `bench-39776-000015-f94v`. This is not owner-review ready: the corrected
-  staging bench deploy was attempted, site update/migrate jobs `8vspcanje0`
-  and `63lqkkrppt` failed with recovery jobs succeeding, and the latest
-  provider check shows staging `Active`, `0` running jobs,
-  `update_available=true`, and installed `locally_twisted` hash still old
-  `b4b3bf8`, not target `f236d6d`. The first API payload failure was caused by
-  stringified nested JSON. Staging still needs target-hash update proof plus
-  staging-side Product Setup/gallery/account checks before owner review.
-  Handoff:
+- Frappe Cloud staging recovery ran on 2026-05-22. Source `main` is pushed at
+  `2ca1b85`; the private app-root mirror is pushed at `3e86bc1`; staging
+  installed `locally_twisted` app hash is
+  `3e86bc149d6dcc04daa194b740c1733f5c796261`. Provider proof shows current
+  staging on bench group `bench-40102` / bench `bench-40102-000003-f4v`; live
+  remains on bench group `bench-39776` / bench `bench-39776-000015-f94v`.
+  Frappe Cloud deploy, site migration, config update, and cache clear
+  succeeded with ecommerce paused and public indexing disabled. This is not
+  owner-review ready: staging currently has app code but no business data.
+  Worker A's target-site proof found `Item=0`, `Website Item=0`,
+  `Website Slideshow=0`, `Website Slideshow Item=0`, and missing
+  `locallytwisted@gmail.com` plus `marketing@exploringnotboring.com` users.
+  `scripts/verify/staging_owner_review_gate.py` is now the mandatory
+  executable gate before calling staging owner-review ready; it must fail on
+  zero catalog/users even when app deploy succeeded. Handoff:
   `workstreams/frappe-cloud-staging-owner-review-2026-05-22.md`.
 - Current local product import proof treats all 53 Odoo-imported products as
   real products. Direct checkout is now bounded for high-complexity color
@@ -85,20 +95,33 @@ this ecommerce lane, the staging-safe list is:
 2. Run local hard gates for the changed slice before staging.
 3. Prove Frappe Cloud staging deploy/update/migration/cache clear, app order,
    and `lt_ecommerce_paused=1`.
-4. Run staging HTTP/browser checks against the staging URL.
-5. Run database-side Product Setup/gallery/checkout proof in staging, or mark
+4. Run `python scripts\verify\staging_owner_review_gate.py --expected-hash
+   <installed-locally_twisted-hash>` against staging. This gate is mandatory
+   before any "owner-review ready" language and must fail if catalog/Product
+   Setup/gallery rows or required users are missing, even when app deploy and
+   migrate succeeded.
+5. Run staging HTTP/browser checks against the staging URL.
+6. Run database-side Product Setup/gallery/checkout proof in staging, or mark
    that proof unverified. Do not claim staging from local Docker database reads.
-6. Keep live checkout, Stripe, DNS, Search Console, and provider mutations
+7. Keep live checkout, Stripe, DNS, Search Console, and provider mutations
    behind their separate gates.
+
+2026-05-23 failure-prevention addition: after one provider/bootstrap failure,
+stop for forensic classification and write the prevention guard before retry.
+After two related failures, all provider mutation stops until a new
+artifact-owning triad approves a fresh release plan. A helper opinion is not a
+gate; the triad must own concrete artifacts. This is now tracked as
+`capabilities/failures/release-controller-churn-after-stop.md`.
 
 2026-05-22 staging-prep nuance: official Frappe Cloud docs support
 `press-deploy` commit markers, including bench-specific markers. For LT, do
 not use generic `press-deploy`. Current provider proof supersedes older repo
 history: staging is `bench-40102` / `bench-40102-000003-f4v`, and live remains
 `bench-39776` / `bench-39776-000015-f94v`. Owner review is blocked until
-staging installs target app hash `f236d6d` and passes staging-side proof; the
-latest provider check still shows old app hash `b4b3bf8` with
-`update_available=true`.
+staging bootstrap/import completes and the mandatory staging owner-review gate
+passes. The current blocker is not app hash: staging has `3e86bc1` installed,
+but it has zero catalog/shop/gallery records and the required owner/marketing
+users are missing.
 
 ## Completed Lanes
 

@@ -8,6 +8,33 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-23 - Failed release sessions cannot become launch authority
+
+**Decision:** The 2026-05-22/23 Frappe Cloud owner-review staging attempt is a
+failed release process and cannot be used as launch authority. Future release
+work must start from a new read-only current-state snapshot and a fresh
+artifact-backed plan before any provider mutation.
+
+**Reasoning:** The session produced real source fixes, but it repeatedly
+continued deploy/bootstrap churn across different failure classes: payload
+shape, migration drift, missing roles, empty staging data, and hosted
+standard-report constraints. GL stopped execution because the process itself
+had become unsafe. Launch trust cannot depend on an agent's persistence after
+the correct action is to stop.
+
+**Implementation boundary:** After one provider/bootstrap failure, classify the
+failure and write the guard before retry. After two related failures, all
+provider mutation stops until a new artifact-owning triad approves a fresh
+release plan. If GL says stop, execution stops immediately and only read-only
+forensics may continue until release execution is explicitly reopened.
+
+**Receipts:** `workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`.
+Implementation action list:
+`workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`.
+Failure recipe: `capabilities/failures/release-controller-churn-after-stop.md`.
+
+---
+
 ## 2026-05-22 - Staging proof is layered, not transferable between surfaces
 
 **Decision:** LT staging/launch work must name the exact proof surface before

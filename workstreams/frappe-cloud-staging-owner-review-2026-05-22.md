@@ -1,8 +1,14 @@
 # Frappe Cloud Staging Owner Review - 2026-05-22
 
-Status: staging source is deployed to the owner-review Frappe Cloud site with
-checkout paused and public indexing disabled. This is **not** live approval and
-does not touch DNS, Stripe, Search Console, or the live vanity site.
+Status: superseded for release control by
+`workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`.
+The 2026-05-22 evidence below remains useful history, but it is not current
+owner-review readiness and must not be used as launch authority. Release
+execution was stopped by GL on 2026-05-23 after repeated provider/bootstrap
+failure. Treat staging owner review as **blocked** until a new release
+controller starts from current read-only state and passes the forensic gates.
+The next fix-agent action list is
+`workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`.
 
 ## Scope
 
@@ -37,6 +43,8 @@ This workstream cross-links:
 | Final staging site state | Site is `Active` with `0` running jobs after the successful deploy/config/cache chain |
 | Ecommerce pause | Staging has `lt_ecommerce_paused=true`; guest shop/product routes should remain paused unless owner/backend session bypass is intentionally used for review |
 | Public indexing | Staging has `lt_public_indexing_enabled=false`; do not submit or index staging |
+| Owner-review gate | `scripts/verify/staging_owner_review_gate.py` is mandatory before saying staging is owner-review ready |
+| Current staging blocker | App hash is current, but target-site proof found `Item=0`, `Website Item=0`, `Website Slideshow=0`, `Website Slideshow Item=0`, and missing `locallytwisted@gmail.com` / `marketing@exploringnotboring.com` users |
 | Live boundary | No live/DNS/Stripe/Search Console mutation is part of this staging recovery pass |
 
 ## Failure Chain
@@ -88,9 +96,10 @@ was stale. API inventory later proved current staging is `bench-40102` /
 
 Current decision: staging release recovery has crossed the provider deploy and
 site migration gate for app hash
-`3e86bc149d6dcc04daa194b740c1733f5c796261`. Owner review is still gated by
-staging-specific account, route, gallery, Product Setup, browser, and security
-proof. Do not collapse "staging deployed" into "live ready."
+`3e86bc149d6dcc04daa194b740c1733f5c796261`. Owner review is blocked by
+target-site data/account proof: the deployed app is present, but the staging
+site has zero catalog/shop/gallery records and missing required users. Do not
+collapse "staging deployed" into "owner-review ready" or "live ready."
 
 Official Frappe Cloud docs checked on 2026-05-22:
 
@@ -104,22 +113,28 @@ Official Frappe Cloud docs checked on 2026-05-22:
 Run these as staging-specific proof before handing the URL to Jeff as review
 ready:
 
-1. Prove the installed staging app hash is still
+1. Run `python scripts\verify\staging_owner_review_gate.py --expected-hash
+   3e86bc149d6dcc04daa194b740c1733f5c796261`. This is the mandatory gate before
+   owner-review-ready language. It must fail on zero catalog rows, zero
+   Product Setup/gallery rows, missing owner/marketing users, bad app order,
+   wrong app hash, unpaused public exposure, enabled public indexing, or
+   authenticated owner-visible route failure.
+2. Prove the installed staging app hash is still
    `3e86bc149d6dcc04daa194b740c1733f5c796261` and `locally_twisted` remains
    installed last.
-2. Prove `lt_ecommerce_paused=true` and `lt_public_indexing_enabled=false`
+3. Prove `lt_ecommerce_paused=true` and `lt_public_indexing_enabled=false`
    after cache clear.
-3. Prove `locallytwisted@gmail.com` exists with intended backend/owner access.
-4. Prove `marketing@exploringnotboring.com` exists with review-only access and
+4. Prove `locallytwisted@gmail.com` exists with intended backend/owner access.
+5. Prove `marketing@exploringnotboring.com` exists with review-only access and
    no unintended Desk/product-edit access.
-5. Prove logged-in owner/backend review can see shop/products while guest shop
+6. Prove logged-in owner/backend review can see shop/products while guest shop
    remains safely paused.
-6. Prove Product Setup/gallery projection exists in staging records and product
+7. Prove Product Setup/gallery projection exists in staging records and product
    pages render the restored gallery behavior.
-7. Run staging HTTP/browser smoke for `/`, `/contact`, `/login`,
+8. Run staging HTTP/browser smoke for `/`, `/contact`, `/login`,
    `/shop-items`, representative category pages, and representative product
    pages.
-8. Run the full release/security suite needed before any live promotion
+9. Run the full release/security suite needed before any live promotion
    discussion; keep Stripe/live checkout as a separate blocked gate.
 
 ## Commands Already Run
@@ -150,9 +165,25 @@ C:\Users\baenb\agent-worktrees\builtbycameron-lt\app-mirror-sync-20260522-portal
 
 That mirror was pushed through `3e86bc1`.
 
+Worker A target-site proof after the successful app deploy found the current
+blocker:
+
+```text
+Item=0
+Website Item=0
+Website Slideshow=0
+Website Slideshow Item=0
+locallytwisted@gmail.com missing
+marketing@exploringnotboring.com missing
+```
+
+That is the exact class `scripts/verify/staging_owner_review_gate.py` must keep
+blocking. A green Frappe Cloud app deploy is not enough for owner review.
+
 ## Boundaries
 
 Do not touch live, DNS, Stripe, Search Console, or production indexing from this
 workstream. Do not run a generic `press-deploy` marker. Do not call owner review
-complete until the staging-specific gates above pass. Do not call live ready
-until staging approval plus live release/security/payment gates pass.
+complete until `scripts/verify/staging_owner_review_gate.py` passes on the
+actual staging site after bootstrap/import. Do not call live ready until
+staging approval plus live release/security/payment gates pass.

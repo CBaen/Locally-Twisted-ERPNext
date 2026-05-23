@@ -1,5 +1,19 @@
 # Frappe Cloud Staging Failure Research Brief
 
+## 2026-05-23 Supersession
+
+This brief is historical research context, not a current release plan. Release
+execution was stopped after the owner-review staging process failed as a
+process. Do not use the recovery language below to resume provider mutation.
+Current controlling docs:
+
+- `../../workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`
+- `../../workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`
+- `../../capabilities/failures/release-controller-churn-after-stop.md`
+
+Next safe work is implementing executable prevention gates, then taking a fresh
+read-only provider snapshot under a new release controller.
+
 ### 1. Want
 
 Locally Twisted needs Frappe Cloud staging repaired and documented so peer agents can safely continue owner-review staging without touching live, DNS, Stripe, or Search Console. Success means `https://locallytwisted-staging.frappe.cloud` is proven to run the target `locally_twisted` app mirror commit `f236d6d`, the staging site update/migration and cache clear are proven, and staging-side owner/product/gallery/access/ecommerce checks pass with a sanitized evidence chain another agent can audit.

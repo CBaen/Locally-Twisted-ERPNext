@@ -1,6 +1,6 @@
 # Locally Twisted Launch Runbook
 
-Last updated: 2026-05-22 by Codex.
+Last updated: 2026-05-23 by Codex.
 
 This is the plain launch doc at the project root.
 
@@ -9,6 +9,9 @@ Detailed technical gate:
 
 Project capability:
 `capabilities/recipes/frappe-cloud-cloudflare-stripe-launch-gate.md`
+
+Current release-freeze action list:
+`workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`
 
 ## The Simple Version
 
@@ -29,6 +32,13 @@ The 2026-05-19 domain/provider audit confirms the public web path is GoDaddy
 registrar -> Cloudflare DNS/email routing -> Frappe Cloud -> ERPNext/Frappe.
 Reindexing is blocked until the live sitemap/canonical fix is released because
 current live discovery URLs still advertise the Frappe Cloud vanity host.
+
+The 2026-05-22/23 owner-review staging push failed as a release process and is
+frozen. Do not resume deploy/bootstrap mutation from that session. Staging
+owner review is not ready until the release prevention action items are turned
+into executable guards, a new read-only provider snapshot is taken, and
+`scripts/verify/staging_owner_review_gate.py` passes on the actual staging
+site.
 
 ## Current Confirmed State
 

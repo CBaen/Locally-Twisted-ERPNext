@@ -1,22 +1,42 @@
 # Locally Twisted - Coding Handoff
 
-Codex Frappe Cloud staging prep on 2026-05-22: source `main` is clean and
-pushed at `2ee28da Harden product galleries and release gates`; the private
+Codex Frappe Cloud staging failure forensics on 2026-05-23: release execution
+was stopped by GL. Treat owner-review staging as **not ready** until a new
+release controller proves otherwise from current state. Source `origin/main`
+reached `a5fb5f5`; the Frappe Cloud app-root mirror reached
+`181076c239b2d1d3d508a41ac471c71f9d2b5158`; the last known provider poll was
+interrupted while deploy `52caqn2v57` was running and the installed app hash was
+still `3fd5a87eca6a6d2e23c95592f07d41196e4cd68f`. Do not resume mutation from
+that momentum. Required reading before any future staging/live action:
+`workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`
+and the action-item handoff
+`workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`.
+The next agent must implement release locks, payload validation, circuit
+breakers, artifact-owned triad proof, and owner-review gate enforcement before
+any new provider mutation.
+
+Codex Frappe Cloud staging recovery on 2026-05-22: save state tag
+`savepoint/lt-staging-recovery-20260522-173929` exists. Source `main` is
+pushed at `2ca1b85 Ensure LT access roles before permission sync`; the private
 Frappe Cloud app-root mirror `CBaen/Locally-Twisted-Frappe-App` is pushed at
-`f236d6d Sync app from LT source 2ee28da`. This mirror update is broad by
-definition because the previous mirror was `b4b3bf8` from 2026-05-15; it
-contains the current `apps/locally_twisted` tree, not only the final gallery
-commit. Local gates rerun after the mirror push: `frappe_cloud_preflight.py`,
-`human_access_silo_matrix.py`, `marketing_review_access_boundary.py`, `npm run
-test:owner-product-safety`, and `npm run test:ecommerce-full` all passed.
-Staging is **not** owner-review ready yet: `locallytwisted-staging.frappe.cloud`
-still shows stale/pre-update signals, provider-side deploy/update/migration
-and cache clear are unverified, and database-side Product Setup/gallery proof
-has not run on staging. Triad decision: do not use a generic `press-deploy`
-commit marker, and do not use the targeted
-`press-deploy-bench-39776-000013-f94-virginia` marker until Frappe Cloud
-dashboard/API/SSH proof confirms that bench is staging-only and contains no
-live/custom-domain site. Handoff:
+`3e86bc1 Ensure LT access roles before permission sync`; staging installed
+`locally_twisted` app hash is
+`3e86bc149d6dcc04daa194b740c1733f5c796261`. Frappe Cloud staging deploy,
+site migration, config update, and cache clear succeeded on
+`locallytwisted-staging.frappe.cloud`; staging is paused
+(`lt_ecommerce_paused=true`) and public indexing is disabled
+(`lt_public_indexing_enabled=false`). This is still **not** owner-review ready:
+the staging target has app code but no business data. Worker A's staging proof
+found `Item=0`, `Website Item=0`, `Website Slideshow=0`,
+`Website Slideshow Item=0`, and missing `locallytwisted@gmail.com` plus
+`marketing@exploringnotboring.com` user records. The mandatory executable gate
+before saying "staging owner-review ready" is
+`python scripts\verify\staging_owner_review_gate.py --expected-hash 3e86bc149d6dcc04daa194b740c1733f5c796261`.
+It must fail on zero catalog rows or missing users even when Frappe Cloud app
+deploy/migrate succeeded. Next engineering step is staging bootstrap/import for
+catalog, Product Setup/gallery projection, and required accounts, then rerun
+that gate. Live, DNS, Stripe, Search Console, and production indexing remain
+untouched. Handoff:
 `workstreams/frappe-cloud-staging-owner-review-2026-05-22.md`.
 
 Codex release/docs gate integrity patch on 2026-05-22: release processes,

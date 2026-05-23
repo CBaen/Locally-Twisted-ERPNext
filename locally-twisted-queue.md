@@ -10,6 +10,19 @@ LT-specific work only. Cross-client / agency-wide work lives at `Built_by_Camero
 
 ## Active
 
+**P0 staging release failure forensic freeze (2026-05-23):** Release execution
+is stopped. The Frappe Cloud owner-review staging attempt failed as a release
+process and must not be used as launch authority. Required source:
+`workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`.
+Required fix-agent action list:
+`workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`.
+Next safe step is not a deploy. It is implementing the release lock,
+controller, payload validator, circuit breaker, artifact-owned triad, and
+owner-review gate enforcement, then taking a new read-only current-state
+snapshot and writing a fresh artifact-backed release plan. Do not deploy,
+bootstrap, mutate Frappe Cloud, touch live/DNS/Stripe/Search Console, or claim
+owner-review readiness from the interrupted session.
+
 **P0 owner Product Setup local review before staging (2026-05-22):** Active
 handoff is
 `workstreams/ecommerce-audit/owner-product-setup-guard-closeout-2026-05-22.md`.
@@ -33,19 +46,23 @@ Frappe Cloud, Stripe, DNS, Search Console, or production approval. Do not claim
 staging from local Docker verifiers by setting only `LT_BASE_URL`; database-side
 proof must run against staging or stay explicitly unverified.
 
-2026-05-22 staging-prep update: source `main` was archived at `2ee28da`, and
-the Frappe Cloud app-root mirror was archived at `f236d6d` from that source.
-Provider proof now shows current staging on bench group `bench-40102` / bench
+2026-05-22 staging-recovery update: source `main` is archived at `2ca1b85`,
+and the Frappe Cloud app-root mirror is archived at `3e86bc1`. Provider proof
+shows current staging on bench group `bench-40102` / bench
 `bench-40102-000003-f4v`; live remains on bench group `bench-39776` / bench
-`bench-39776-000015-f94v`. Staging owner review is still blocked. The first
-API payload failed because nested JSON was stringified; the corrected staging
-bench deploy was attempted; site update/migrate jobs `8vspcanje0` and
-`63lqkkrppt` failed, with recovery jobs succeeding. Latest provider check
-shows staging `Active`, `0` running jobs, `update_available=true`, and
-installed `locally_twisted` hash still old `b4b3bf8` instead of target
-`f236d6d`. Next safe step is staging-only update recovery to the target hash,
-then staging-side account/gallery/ecommerce proof. Do not use generic
-`press-deploy`; do not touch live, DNS, Stripe, or Search Console. Handoff:
+`bench-39776-000015-f94v`. Staging deploy/migrate/config/cache succeeded and
+installed app hash is `3e86bc149d6dcc04daa194b740c1733f5c796261`, with
+ecommerce paused and public indexing disabled. Staging owner review is still
+blocked because the target site has app code but no business data:
+authenticated proof found `Item=0`, `Website Item=0`, `Website Slideshow=0`,
+`Website Slideshow Item=0`, and both `locallytwisted@gmail.com` and
+`marketing@exploringnotboring.com` missing as User records. Next safe step is
+staging bootstrap/import for catalog, Product Setup/gallery projection, and
+required accounts, then run the mandatory executable gate:
+`python scripts\verify\staging_owner_review_gate.py --expected-hash 3e86bc149d6dcc04daa194b740c1733f5c796261`.
+That gate must fail on zero catalog/users even when app deploy succeeded. Do
+not use generic `press-deploy`; do not touch live, DNS, Stripe, or Search
+Console. Handoff:
 `workstreams/frappe-cloud-staging-owner-review-2026-05-22.md`.
 
 **P0 capability graduation cleanup (2026-05-21):** Active handoff is

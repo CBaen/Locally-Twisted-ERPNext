@@ -4,7 +4,7 @@ type: failure
 failure_kind: release_gate_gap
 schema_version: 0.1
 date_discovered: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-05-23
 status: guarded
 scope: project
 owner_context: Locally Twisted staging, live, GitHub archive, Frappe Cloud, and cache-proof boundaries
@@ -15,6 +15,7 @@ related_failures:
   - frappe-cloud-api-payload-shape-drift.md
   - frappe-cloud-release-site-migration-drift.md
   - frappe-cloud-permission-role-fixture-order-drift.md
+  - release-controller-churn-after-stop.md
 tags:
   - locally-twisted
   - staging
@@ -55,6 +56,7 @@ live readiness.
 | Date | Project | Surface | Bad outcome | Evidence | Guard state | Status |
 |---|---|---|---|---|---|---|
 | 2026-05-22 | Locally Twisted | Ecommerce staging owner review | Local product/gallery proof, source commits, app mirror push, provider deploy, site update, cache, staging route proof, account proof, and live readiness were discussed as one blended release path | Coordination board and handoff records separated local-main, GitHub archive, app mirror, staging gate, and live-release gate; Frappe Cloud recovery showed why app hash, site update/migrate, cache clear, and route proof must each be terminal before owner-ready language | proof-surface checklist added to failure layer | guarded |
+| 2026-05-23 | Locally Twisted | Frappe Cloud staging owner review | Provider/app hash success and bootstrap attempts still did not equal owner-review readiness because staging had zero catalog/shop/gallery rows and missing required users; the release process itself was frozen | `../../workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`; `../../workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md` | owner-review gate exists; release lock/action items still required | open |
 
 ## Root Pattern
 

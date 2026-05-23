@@ -16,6 +16,12 @@ Frappe Cloud. Live checkout remains blocked. Reindex work is also blocked until
 the live sitemap/canonical source fix is released; current live discovery URLs
 still advertise `locallytwisted.v.frappe.cloud`.
 
+2026-05-23 update: owner-review staging release execution is frozen after the
+failed Frappe Cloud staging push. Future staging/live work must start from
+`workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md` and
+`workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`, not
+from the interrupted provider/bootstrap sequence.
+
 ## Outcome
 
 Launch the Locally Twisted website as a polished public site today: customers

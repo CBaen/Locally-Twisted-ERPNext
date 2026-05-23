@@ -67,6 +67,14 @@ Default public launch posture:
   staging installed app hash matches the target, site update/migration/cache
   succeeds, and staging route/browser/account/Product Setup/gallery checks pass
   on staging.
+- As of 2026-05-23, the owner-review staging attempt documented in
+  `workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`
+  failed as a release process and is frozen. That session's commits, app mirror
+  hashes, deploy IDs, and interrupted bootstrap attempts are not launch
+  authority. A new release controller must start from current read-only
+  provider state and an artifact-backed plan before any mutation. The concrete
+  action list is
+  `workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`.
 
 ## Human Access Boundary
 
@@ -105,6 +113,10 @@ Triad rule:
 - Do not treat `LT_BASE_URL=<staging-url>` as a universal retarget. A verifier
   that shells into the local Docker `frontend` site still proves local ERPNext
   records even if it fetches rendered HTML from another host.
+- After one provider/bootstrap failure, stop for forensic classification and
+  write the guard before retry. After two related failures, all provider
+  mutation stops until a new artifact-owning triad approves a fresh release
+  plan. If GL says stop, execution stops immediately.
 
 Concise staging-safe list:
 
@@ -170,6 +182,12 @@ python scripts/verify/book_form_repeat_email_photos.py --base-url https://locall
 - Treating app mirror commit `f236d6d`, app release hash, or deploy candidate
   creation as staging proof while the target site still reports the old
   installed app hash. Hash existence is not site readiness.
+- Continuing provider/bootstrap mutation after repeated failure classes instead
+  of stopping for forensic review and prevention architecture.
+- Treating prose warnings as release controls when no release lock, payload
+  validator, circuit breaker, or required-doc receipt exists.
+- Letting advisory-only subagents satisfy a release triad without concrete
+  artifacts owned by Provider Witness, Gate/Fixer, and Recorder.
 - Treating the final source commit as the full Frappe Cloud release scope
   instead of comparing previous live app hash to target app mirror commit.
 - Sending Frappe Cloud API payloads without `Content-Type: application/json`,

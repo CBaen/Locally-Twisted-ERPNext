@@ -129,6 +129,9 @@ Agent communication:
 - Do not say a route, form, automation, payment, document, or layout works
   without current verification evidence.
 - If a check was not run, say that plainly.
+- For release/provider work, a written warning is not loud enough. The failure
+  must block the next mutation through a nonzero verifier, release lock,
+  circuit breaker, or controller gate.
 
 Verifier scripts:
 
