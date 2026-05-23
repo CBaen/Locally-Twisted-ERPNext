@@ -74,6 +74,31 @@ REQUIRED_APP_MIRROR_SOURCE_FILES = {
     "locally_twisted/staging_owner_review_bootstrap.py",
 }
 
+REQUIRED_HOSTED_PREFLIGHT_FIELDS = {
+    "ok",
+    "site",
+    "method",
+    "expected_app_hash",
+    "preflight",
+    "provider_mutation_executed",
+}
+
+REQUIRED_HOSTED_PREFLIGHT_METHOD = (
+    "locally_twisted.staging_owner_review_bootstrap."
+    "preflight_staging_owner_review_bootstrap"
+)
+REQUIRED_HOSTED_PREFLIGHT_SITE = "locallytwisted-staging.frappe.cloud"
+REQUIRED_HOSTED_PREFLIGHT_CHECKS = {
+    "standard_report",
+    "roles",
+    "settings",
+    "app_hooks",
+    "app_order",
+    "target_hash",
+    "baseline_counts",
+    "destructive_seed_evidence",
+}
+
 EXPECTED_APP_ORDER = ["frappe", "erpnext", "payments", "webshop", "locally_twisted"]
 
 REQUIRED_TRIAD_ARTIFACTS = {
@@ -256,6 +281,93 @@ def validate_app_mirror_freshness(path: Path) -> list[str]:
     missing_source_files = sorted(REQUIRED_APP_MIRROR_SOURCE_FILES - seen_paths)
     if missing_source_files:
         failures.append(f"app mirror freshness is missing required source files: {missing_source_files}")
+    return failures
+
+
+def validate_hosted_bootstrap_preflight(
+    path: Path,
+    provider_snapshot_path: Path | None = None,
+    app_mirror_freshness_path: Path | None = None,
+) -> list[str]:
+    artifact = read_json(path)
+    if not isinstance(artifact, dict):
+        return [f"hosted bootstrap preflight artifact must be a JSON object: {path}"]
+
+    missing = sorted(field for field in REQUIRED_HOSTED_PREFLIGHT_FIELDS if field not in artifact)
+    failures = [f"hosted bootstrap preflight artifact is missing required fields: {missing}"] if missing else []
+    if artifact.get("ok") is not True:
+        failures.append("hosted bootstrap preflight artifact must have ok=true before staging bootstrap")
+    if artifact.get("provider_mutation_executed") is not False:
+        failures.append("hosted bootstrap preflight artifact must prove provider_mutation_executed=false")
+    if artifact.get("method") != REQUIRED_HOSTED_PREFLIGHT_METHOD:
+        failures.append(f"hosted bootstrap preflight method must be {REQUIRED_HOSTED_PREFLIGHT_METHOD}")
+    if artifact.get("site") != REQUIRED_HOSTED_PREFLIGHT_SITE:
+        failures.append(f"hosted bootstrap preflight site must be {REQUIRED_HOSTED_PREFLIGHT_SITE}")
+    if "body_excerpt" in artifact:
+        failures.append("hosted bootstrap preflight artifact must not contain raw body_excerpt")
+    expected_hash = str(artifact.get("expected_app_hash") or "")
+    if len(expected_hash) != 40 or any(char not in "0123456789abcdef" for char in expected_hash.lower()):
+        failures.append("hosted bootstrap preflight expected_app_hash must be a full 40-character hex hash")
+
+    if provider_snapshot_path:
+        snapshot = read_json(provider_snapshot_path)
+        if not isinstance(snapshot, dict):
+            failures.append(f"provider snapshot must be a JSON object: {provider_snapshot_path}")
+        else:
+            if artifact.get("site") != snapshot.get("site"):
+                failures.append(
+                    "hosted bootstrap preflight site must match provider snapshot site "
+                    f"({artifact.get('site')!r} != {snapshot.get('site')!r})"
+                )
+            for snapshot_hash_field in ("target_app_hash", "installed_app_hash"):
+                if expected_hash and expected_hash.lower() != str(snapshot.get(snapshot_hash_field) or "").lower():
+                    failures.append(
+                        "hosted bootstrap preflight expected_app_hash must match provider snapshot "
+                        f"{snapshot_hash_field}"
+                    )
+
+    if app_mirror_freshness_path:
+        mirror = read_json(app_mirror_freshness_path)
+        if not isinstance(mirror, dict):
+            failures.append(f"app mirror freshness artifact must be a JSON object: {app_mirror_freshness_path}")
+        elif expected_hash and expected_hash.lower() != str(mirror.get("mirror_hash") or "").lower():
+            failures.append("hosted bootstrap preflight expected_app_hash must match app mirror freshness mirror_hash")
+
+    preflight = artifact.get("preflight")
+    if not isinstance(preflight, dict):
+        failures.append("hosted bootstrap preflight preflight must be an object")
+        return failures
+    if preflight.get("ok") is not True:
+        failures.append("hosted bootstrap preflight payload must have preflight.ok=true")
+    if preflight.get("failures") not in ([], ()):
+        failures.append(f"hosted bootstrap preflight payload has failures: {preflight.get('failures')}")
+    if preflight.get("target_site") != artifact.get("site"):
+        failures.append("hosted bootstrap preflight payload target_site must match artifact site")
+    if str(preflight.get("expected_app_hash") or "").lower() != expected_hash.lower():
+        failures.append("hosted bootstrap preflight payload expected_app_hash must match artifact expected_app_hash")
+    required_checks = preflight.get("required_checks")
+    if not isinstance(required_checks, list):
+        failures.append("hosted bootstrap preflight payload must include required_checks list")
+    else:
+        missing_checks = sorted(REQUIRED_HOSTED_PREFLIGHT_CHECKS - {str(item) for item in required_checks})
+        if missing_checks:
+            failures.append(f"hosted bootstrap preflight payload is missing required_checks: {missing_checks}")
+    checks = preflight.get("checks")
+    if not isinstance(checks, dict):
+        failures.append("hosted bootstrap preflight payload must include checks object")
+    else:
+        for check_name in sorted(REQUIRED_HOSTED_PREFLIGHT_CHECKS):
+            check = checks.get(check_name)
+            if not isinstance(check, dict):
+                failures.append(f"hosted bootstrap preflight checks.{check_name} must be an object")
+                continue
+            if check.get("ok") is not True:
+                failures.append(f"hosted bootstrap preflight checks.{check_name}.ok must be true")
+        target_hash_check = checks.get("target_hash") if isinstance(checks.get("target_hash"), dict) else {}
+        if str(target_hash_check.get("expected_app_hash") or "").lower() != expected_hash.lower():
+            failures.append("hosted bootstrap preflight target_hash.expected_app_hash must match artifact expected_app_hash")
+        if str(target_hash_check.get("current_app_hash") or "").lower() != expected_hash.lower():
+            failures.append("hosted bootstrap preflight target_hash.current_app_hash must match artifact expected_app_hash")
     return failures
 
 

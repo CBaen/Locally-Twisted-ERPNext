@@ -26,6 +26,7 @@ Implemented local guard paths:
 - `scripts/verify/frappe_cloud_app_mirror_freshness.py`
 - `scripts/verify/frappe_cloud_provider_snapshot.py`
 - `scripts/verify/staging_owner_review_gate_contract.py`
+- `scripts/verify/staging_owner_review_hosted_preflight.py`
 - `scripts/verify/staging_owner_review_bootstrap_contract.py`
 - `scripts/verify/release_claim_language_contract.py`
 - `workstreams/release-artifacts/README.md`
@@ -204,6 +205,19 @@ execution can leave forensic-freeze.
     `locally_twisted/staging_owner_review_bootstrap.py` relative to source
     `24c8465`. This is a no-go artifact, not sync approval.
 
+20. **Add hosted bootstrap preflight probe.** `implemented-local; open-before-provider-mutation`
+    `scripts/verify/staging_owner_review_hosted_preflight.py` now has an
+    offline self-test wired into `npm run test:release-prevention` and a real
+    read-only staging mode that writes `hosted-bootstrap-preflight.json`. The
+    2026-05-23 readiness refresh at
+    `workstreams/release-artifacts/2026-05-23-staging-reopen-readiness-refresh/`
+    proves the current staging app still returns HTTP `417` for
+    `preflight_staging_owner_review_bootstrap`. The release controller now
+    requires a passing hosted preflight artifact before `staging_bootstrap`,
+    and validates that it is from the same staging site/hash as the provider
+    snapshot and app-mirror freshness artifacts with the full hosted
+    `required_checks` payload.
+
 ## P1 Actions
 
 1. Wire the release lock and owner-review gate into `npm run` scripts so future
@@ -231,6 +245,7 @@ Implemented local/offline guards:
 - `scripts/release/frappe_cloud_release_controller.py`
 - `scripts/verify/frappe_cloud_payload_contract.py`
 - `scripts/verify/frappe_cloud_app_mirror_freshness.py`
+- `scripts/verify/staging_owner_review_hosted_preflight.py`
 - `scripts/verify/release_lock_contract.py`
 - `scripts/verify/release_controller_contract.py`
 - `scripts/verify/release_claim_language_contract.py`

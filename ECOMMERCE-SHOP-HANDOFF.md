@@ -54,6 +54,15 @@ Status as of 2026-05-23 for peer GPT-5.5 Codex/OpenClaw agents.
   and has a stale bootstrap module relative to source `24c8465`. The active
   release lock now blocks `app_mirror_sync`; do not sync the mirror until GL
   explicitly reopens forensic-freeze under an artifact-backed packet.
+- 2026-05-23 hosted preflight guard refresh:
+  `workstreams/frappe-cloud-hosted-preflight-guard-refresh-2026-05-23.md` and
+  `workstreams/release-artifacts/2026-05-23-staging-reopen-readiness-refresh/`.
+  The hosted preflight verifier now writes a sanitized artifact, and the
+  release controller requires a passing hosted-preflight artifact for future
+  `staging_bootstrap`. That artifact must match the provider snapshot site,
+  provider target/installed app hash, app-mirror hash, and the hosted
+  preflight `required_checks` payload. The current packet remains no-go because
+  staging returns HTTP `417` for the preflight method.
 - Owner Product Setup guard closeout was recovered and triad-reviewed on
   2026-05-22. Owner-like users can use `LT Product Blueprint` / Product Setup,
   but direct raw catalog mutations are blocked and local apply cannot publish,
@@ -164,6 +173,7 @@ Executable local prevention gates now in this repo:
 - `scripts/verify/frappe_cloud_app_mirror_freshness.py`
 - `scripts/verify/frappe_cloud_provider_snapshot.py`
 - `scripts/verify/staging_owner_review_gate_contract.py`
+- `scripts/verify/staging_owner_review_hosted_preflight.py`
 - `scripts/verify/staging_owner_review_bootstrap_contract.py`
 - `scripts/verify/release_claim_language_contract.py`
 - `npm run test:release-prevention`
@@ -174,6 +184,9 @@ reopening staging bootstrap/import requires the expanded prevention suite,
 real provider snapshot output, real hosted bootstrap preflight output,
 backup-or-zero-data proof before destructive catalog seed paths, and mandatory
 payload artifacts for future provider deploy/update controller actions.
+The hosted preflight output must be bound to the same staging site and release
+hash as `provider-snapshot.json` and `app-mirror-freshness.json`; a hand-shaped
+minimal `ok` artifact is not acceptable.
 The current read-only packet produced the provider snapshot and tried hosted
 preflight; hosted preflight is blocked because staging is still running app
 hash `181076c...`, which does not include the source preflight method.

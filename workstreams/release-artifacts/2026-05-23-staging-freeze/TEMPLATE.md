@@ -11,6 +11,8 @@ release execution is explicitly reopened. Do not put secrets in this folder.
 - `recorder.md`
 - `read-receipt.json`
 - `sanitized-payload.json`
+- `app-mirror-freshness.json`
+- `hosted-bootstrap-preflight.json`
 - `provider-snapshot.json`
 - `failure-ledger.json`
 
@@ -48,6 +50,66 @@ release execution is explicitly reopened. Do not put secrets in this folder.
   "staging_live_separation": true
 }
 ```
+
+## App Mirror Freshness Shape
+
+```json
+{
+  "ok": true,
+  "source_commit": "full source commit hash",
+  "mirror_hash": "full app-root mirror hash",
+  "provider_mutation_executed": false,
+  "required_files": [
+    {
+      "path": "locally_twisted/staging_owner_review_preflight.py",
+      "source_exists": true,
+      "mirror_exists": true,
+      "matches": true
+    },
+    {
+      "path": "locally_twisted/staging_owner_review_bootstrap.py",
+      "source_exists": true,
+      "mirror_exists": true,
+      "matches": true
+    }
+  ]
+}
+```
+
+This artifact must be fresh after the reviewed app-root mirror sync and before
+hosted preflight, bootstrap/import, deploy/update, or cache action.
+
+## Hosted Bootstrap Preflight Shape
+
+```json
+{
+  "ok": true,
+  "site": "locallytwisted-staging.frappe.cloud",
+  "method": "locally_twisted.staging_owner_review_bootstrap.preflight_staging_owner_review_bootstrap",
+  "expected_app_hash": "full-target-hash",
+  "preflight": {
+    "ok": true,
+    "failures": [],
+    "required_checks": [
+      "standard_report",
+      "roles",
+      "settings",
+      "app_hooks",
+      "app_order",
+      "target_hash",
+      "baseline_counts",
+      "destructive_seed_evidence"
+    ]
+  },
+  "provider_mutation_executed": false
+}
+```
+
+This artifact must be generated from the actual staging target and match the
+same site/hash as `provider-snapshot.json` and `app-mirror-freshness.json`.
+The real `preflight` object must include the full `required_checks` and
+`checks` payload from the hosted `build_bootstrap_preflight` response; a
+minimal hand-authored `ok=true` object is not valid release proof.
 
 ## Sanitized Payload Shape
 

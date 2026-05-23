@@ -8,6 +8,33 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-23 - Hosted bootstrap preflight must be chain-bound, not just present
+
+**Decision:** Future `staging_bootstrap` actions require a passing
+`hosted-bootstrap-preflight.json` from the actual staging target, and the
+artifact must be chain-bound to the provider snapshot site, provider
+target/installed app hash, and app-mirror hash. The hosted payload must include
+the full `required_checks` / `checks` structure from
+`build_bootstrap_preflight`, not only `ok=true`.
+
+**Reasoning:** A release gate that only requires a file can still be satisfied
+by a wrong-site, wrong-hash, or hand-shaped artifact. The 2026-05-23 readiness
+refresh found that the actual staging app still returns HTTP `417` because it
+lacks `preflight_staging_owner_review_bootstrap`. That no-go is useful only if
+future controllers cannot substitute unrelated proof.
+
+**Implementation boundary:** `scripts/verify/staging_owner_review_hosted_preflight.py`
+writes the hosted artifact and sanitizes HTTP error output. `scripts/release/release_guard_common.py`
+validates site/hash/check payload binding. `scripts/verify/release_lock_contract.py`
+and `scripts/verify/release_controller_contract.py` now prove missing,
+no-go, wrong-site, and wrong-hash hosted preflight artifacts fail before
+staging bootstrap can reach the final forensic-freeze block.
+
+**Receipts:** `workstreams/frappe-cloud-hosted-preflight-guard-refresh-2026-05-23.md`;
+`workstreams/release-artifacts/2026-05-23-staging-reopen-readiness-refresh/`.
+
+---
+
 ## 2026-05-23 - App mirror sync is a release-critical mutation during forensic freeze
 
 **Decision:** `app_mirror_sync` is now an explicit blocked action while the LT

@@ -52,6 +52,16 @@ bootstrap/import, or cache action. Docs-only parity handoff:
 Read-only app mirror freshness packet:
 `workstreams/release-artifacts/2026-05-23-app-mirror-freshness-readonly/`
 proves the mirror is still stale against source `24c8465`.
+Hosted preflight guard refresh:
+`workstreams/frappe-cloud-hosted-preflight-guard-refresh-2026-05-23.md` and
+`workstreams/release-artifacts/2026-05-23-staging-reopen-readiness-refresh/`
+add the missing release gate: future `staging_bootstrap` requires a sanitized,
+passing hosted preflight artifact from the actual staging target, and that
+artifact must match the provider snapshot site/hash plus app-mirror hash and
+include the full hosted `required_checks` payload. The refresh packet is still
+no-go because staging returns HTTP `417` for the preflight method. Treat the
+prior durable bootstrap status as forensic evidence, not as fresh preflight
+proof.
 
 **P0 owner Product Setup local review before staging (2026-05-22):** Active
 handoff is

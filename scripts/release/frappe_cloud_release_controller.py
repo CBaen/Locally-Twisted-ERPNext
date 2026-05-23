@@ -28,6 +28,7 @@ from release_guard_common import (
     raise_if_failures,
     validate_failure_ledger,
     validate_app_mirror_freshness,
+    validate_hosted_bootstrap_preflight,
     validate_provider_snapshot,
     validate_read_receipt,
     validate_release_lock,
@@ -61,6 +62,10 @@ PAYLOAD_REQUIRED_ACTIONS = {
     "frappe_cloud_deploy",
 }
 
+HOSTED_PREFLIGHT_REQUIRED_ACTIONS = {
+    "staging_bootstrap",
+}
+
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -69,6 +74,7 @@ def main() -> int:
     parser.add_argument("--read-receipt", type=Path, help="JSON proof that required release docs were read.")
     parser.add_argument("--payload-file", type=Path, help="Sanitized Frappe Cloud JSON payload artifact to validate.")
     parser.add_argument("--app-mirror-freshness", type=Path, help="Read-only app mirror freshness artifact JSON.")
+    parser.add_argument("--hosted-bootstrap-preflight", type=Path, help="Read-only hosted staging bootstrap preflight artifact JSON.")
     parser.add_argument("--provider-snapshot", type=Path, help="Read-only provider-state snapshot JSON.")
     parser.add_argument("--triad-artifact-dir", type=Path, help="Directory containing controller/provider-witness/gate-fixer/recorder artifacts.")
     parser.add_argument("--failure-ledger", type=Path, help="JSON failure-class ledger for circuit-breaker checks.")
@@ -170,8 +176,6 @@ def run_controller(args: argparse.Namespace) -> dict[str, object]:
         payload = load_payload_file(args.payload_file)
         raise_if_failures("invalid Frappe Cloud payload", validate_frappe_cloud_payload(payload))
 
-    ensure_action_allowed(args.action, lock)
-
     if args.action in READ_RECEIPT_ACTIONS:
         if not args.read_receipt:
             raise ReleaseGuardError("required-doc read receipt is missing")
@@ -186,6 +190,18 @@ def run_controller(args: argparse.Namespace) -> dict[str, object]:
             raise ReleaseGuardError("provider snapshot is required before mutation")
         raise_if_failures("invalid provider snapshot", validate_provider_snapshot(args.provider_snapshot))
 
+        if args.action in HOSTED_PREFLIGHT_REQUIRED_ACTIONS:
+            if not args.hosted_bootstrap_preflight:
+                raise ReleaseGuardError("hosted bootstrap preflight artifact is required before staging bootstrap")
+            raise_if_failures(
+                "invalid hosted bootstrap preflight artifact",
+                validate_hosted_bootstrap_preflight(
+                    args.hosted_bootstrap_preflight,
+                    provider_snapshot_path=args.provider_snapshot,
+                    app_mirror_freshness_path=args.app_mirror_freshness,
+                ),
+            )
+
         if not args.triad_artifact_dir:
             raise ReleaseGuardError("artifact-owned triad directory is required before mutation")
         raise_if_failures("invalid triad artifacts", validate_triad_artifacts(args.triad_artifact_dir))
@@ -193,6 +209,8 @@ def run_controller(args: argparse.Namespace) -> dict[str, object]:
         if not args.failure_ledger:
             raise ReleaseGuardError("failure-class ledger is required before mutation")
         raise_if_failures("failure circuit breaker blocked mutation", validate_failure_ledger(args.failure_ledger))
+
+    ensure_action_allowed(args.action, lock)
 
     return {
         "ok": True,

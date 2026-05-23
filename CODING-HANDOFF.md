@@ -14,6 +14,20 @@ Local verifier command: `npm run test:release-prevention`. This is prevention
 architecture only. It is not staging proof, owner-review readiness, live
 approval, DNS/Search Console/Stripe approval, or checkout exposure.
 
+Hosted preflight guard refresh on 2026-05-23:
+`workstreams/frappe-cloud-hosted-preflight-guard-refresh-2026-05-23.md` and
+`workstreams/release-artifacts/2026-05-23-staging-reopen-readiness-refresh/`
+are the current follow-up packet. `scripts/verify/staging_owner_review_hosted_preflight.py`
+now writes a sanitized hosted-preflight artifact without traceback body text.
+`scripts/release/frappe_cloud_release_controller.py` now requires a passing
+`hosted-bootstrap-preflight.json` before any future `staging_bootstrap` action,
+and `scripts/release/release_guard_common.py` binds that artifact to the
+provider snapshot site/hash and app-mirror hash while requiring the hosted
+preflight's `required_checks` / `checks` payload. A stale last bootstrap status
+is forensic evidence only; it is not a fresh hosted preflight artifact. The
+readiness refresh remains **NO-GO**: the current staging app returns HTTP `417`
+because it does not expose `preflight_staging_owner_review_bootstrap`.
+
 Codex read-only staging reopen packet on 2026-05-23:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-readonly/` is the
 current no-go proof packet. The packet and strict-JSON gate fix were archived

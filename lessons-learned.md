@@ -6,6 +6,34 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-23 - A hosted preflight file must prove target and checks, not just exist
+
+The first hosted-preflight guard closed the "artifact required" gap but still
+allowed a wrong-site, wrong-hash, or minimal hand-shaped `ok=true` artifact to
+look valid. That is not enough for staging bootstrap, because the point of the
+preflight is to prove the actual deployed staging app can run the exact
+non-mutating checks for the exact release hash.
+
+**Counter-move:** bind hosted preflight artifacts to provider snapshot
+site/hash and app-mirror hash, require the hosted `required_checks` / `checks`
+payload, sanitize HTTP error artifacts, and prove the controller path rejects
+missing, no-go, wrong-site, and wrong-hash artifacts.
+
+---
+
+## 2026-05-23 - Last bootstrap status is forensic evidence, not a fresh preflight
+
+The staging owner-review gate can read the last durable bootstrap status, which
+is useful for explaining an earlier failure. It does not prove the current
+hosted app can safely run the non-mutating bootstrap preflight now.
+
+**Counter-move:** store the old bootstrap status in the no-go packet as
+history only. Future staging bootstrap needs a fresh
+`hosted-bootstrap-preflight.json` from the actual staging target after app
+mirror freshness and provider snapshot proof.
+
+---
+
 ## 2026-05-23 - Mirror sync changes release input state
 
 The app-root mirror is not "just GitHub backup" in a Frappe Cloud custom-app

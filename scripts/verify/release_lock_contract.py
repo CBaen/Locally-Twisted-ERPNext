@@ -27,6 +27,7 @@ from release_guard_common import (  # noqa: E402
     load_release_lock,
     validate_failure_ledger,
     validate_app_mirror_freshness,
+    validate_hosted_bootstrap_preflight,
     validate_read_receipt,
     validate_release_lock,
     validate_triad_artifacts,
@@ -168,6 +169,129 @@ def run_checks(lock_file: Path) -> list[str]:
         if not validate_app_mirror_freshness(stale_mirror):
             failures.append("stale app mirror freshness artifact did not fail")
 
+        valid_provider_snapshot = tmp_path / "provider-snapshot.json"
+        valid_provider_snapshot.write_text(
+            json.dumps(
+                {
+                    "team": "team",
+                    "site": "locallytwisted-staging.frappe.cloud",
+                    "bench_group": "bench-group",
+                    "bench": "bench",
+                    "installed_app_hash": "b" * 40,
+                    "target_app_hash": "b" * 40,
+                    "release_id": "none",
+                    "running_jobs": [],
+                    "app_order": ["frappe", "erpnext", "payments", "webshop", "locally_twisted"],
+                    "site_status": "Active",
+                    "rollback_hash": "c" * 40,
+                    "staging_live_separation": True,
+                }
+            ),
+            encoding="utf-8",
+        )
+
+        valid_hosted_preflight = tmp_path / "hosted-bootstrap-preflight.json"
+        valid_hosted_preflight.write_text(
+            json.dumps(
+                {
+                    "ok": True,
+                    "site": "locallytwisted-staging.frappe.cloud",
+                    "method": (
+                        "locally_twisted.staging_owner_review_bootstrap."
+                        "preflight_staging_owner_review_bootstrap"
+                    ),
+                    "expected_app_hash": "b" * 40,
+                    "provider_mutation_executed": False,
+                    "preflight": valid_hosted_preflight_payload(
+                        "locallytwisted-staging.frappe.cloud",
+                        "b" * 40,
+                    ),
+                }
+            ),
+            encoding="utf-8",
+        )
+        failures.extend(
+            validate_hosted_bootstrap_preflight(
+                valid_hosted_preflight,
+                provider_snapshot_path=valid_provider_snapshot,
+                app_mirror_freshness_path=valid_mirror,
+            )
+        )
+
+        wrong_site_hosted_preflight = tmp_path / "wrong-site-hosted-bootstrap-preflight.json"
+        wrong_site_hosted_preflight.write_text(
+            json.dumps(
+                {
+                    "ok": True,
+                    "site": "wrong-staging.frappe.cloud",
+                    "method": (
+                        "locally_twisted.staging_owner_review_bootstrap."
+                        "preflight_staging_owner_review_bootstrap"
+                    ),
+                    "expected_app_hash": "b" * 40,
+                    "provider_mutation_executed": False,
+                    "preflight": valid_hosted_preflight_payload(
+                        "wrong-staging.frappe.cloud",
+                        "b" * 40,
+                    ),
+                }
+            ),
+            encoding="utf-8",
+        )
+        if not validate_hosted_bootstrap_preflight(
+            wrong_site_hosted_preflight,
+            provider_snapshot_path=valid_provider_snapshot,
+            app_mirror_freshness_path=valid_mirror,
+        ):
+            failures.append("wrong-site hosted bootstrap preflight artifact did not fail chain validation")
+
+        wrong_hash_hosted_preflight = tmp_path / "wrong-hash-hosted-bootstrap-preflight.json"
+        wrong_hash_hosted_preflight.write_text(
+            json.dumps(
+                {
+                    "ok": True,
+                    "site": "locallytwisted-staging.frappe.cloud",
+                    "method": (
+                        "locally_twisted.staging_owner_review_bootstrap."
+                        "preflight_staging_owner_review_bootstrap"
+                    ),
+                    "expected_app_hash": "d" * 40,
+                    "provider_mutation_executed": False,
+                    "preflight": valid_hosted_preflight_payload(
+                        "locallytwisted-staging.frappe.cloud",
+                        "d" * 40,
+                    ),
+                }
+            ),
+            encoding="utf-8",
+        )
+        if not validate_hosted_bootstrap_preflight(
+            wrong_hash_hosted_preflight,
+            provider_snapshot_path=valid_provider_snapshot,
+            app_mirror_freshness_path=valid_mirror,
+        ):
+            failures.append("wrong-hash hosted bootstrap preflight artifact did not fail chain validation")
+
+        stale_hosted_preflight = tmp_path / "stale-hosted-bootstrap-preflight.json"
+        stale_hosted_preflight.write_text(
+            json.dumps(
+                {
+                    "ok": False,
+                    "site": "locallytwisted-staging.frappe.cloud",
+                    "method": (
+                        "locally_twisted.staging_owner_review_bootstrap."
+                        "preflight_staging_owner_review_bootstrap"
+                    ),
+                    "expected_app_hash": "a" * 40,
+                    "provider_mutation_executed": False,
+                    "preflight": {"ok": False, "failures": ["target_hash: mismatch"]},
+                }
+            ),
+            encoding="utf-8",
+        )
+        if not validate_hosted_bootstrap_preflight(stale_hosted_preflight):
+            failures.append("stale hosted bootstrap preflight artifact did not fail")
+
         triad_dir = tmp_path / "triad"
         triad_dir.mkdir()
         missing_triad_failures = validate_triad_artifacts(triad_dir)
@@ -212,6 +336,34 @@ def run_checks(lock_file: Path) -> list[str]:
         failures.extend(validate_failure_ledger(guarded_ledger))
 
     return failures
+
+
+def valid_hosted_preflight_payload(site: str, app_hash: str) -> dict[str, object]:
+    required_checks = [
+        "standard_report",
+        "roles",
+        "settings",
+        "app_hooks",
+        "app_order",
+        "target_hash",
+        "baseline_counts",
+        "destructive_seed_evidence",
+    ]
+    checks = {name: {"ok": True, "failures": []} for name in required_checks}
+    checks["target_hash"] = {
+        "ok": True,
+        "expected_app_hash": app_hash,
+        "current_app_hash": app_hash,
+        "failures": [],
+    }
+    return {
+        "ok": True,
+        "target_site": site,
+        "expected_app_hash": app_hash,
+        "required_checks": required_checks,
+        "checks": checks,
+        "failures": [],
+    }
 
 
 if __name__ == "__main__":

@@ -109,6 +109,14 @@ Default public launch posture:
   `locally_twisted/staging_owner_review_preflight.py` and has a stale
   `locally_twisted/staging_owner_review_bootstrap.py` relative to source
   `24c8465`.
+- Also as of 2026-05-23, hosted bootstrap preflight is a separate chain-bound
+  artifact, not a stale bootstrap-status read. The current packet
+  `workstreams/release-artifacts/2026-05-23-staging-reopen-readiness-refresh/`
+  is no-go because the actual staging target returns HTTP `417` for
+  `preflight_staging_owner_review_bootstrap`. Future `staging_bootstrap` must
+  provide a sanitized passing `hosted-bootstrap-preflight.json` whose site/hash
+  matches `provider-snapshot.json` and `app-mirror-freshness.json`, and whose
+  payload includes the full hosted `required_checks` / `checks` structure.
 
 ## Human Access Boundary
 
@@ -181,8 +189,10 @@ Concise staging-safe list:
    before provider mutation.
 7. Run the hosted staging owner-review bootstrap preflight before import. The
    source contract is `scripts/verify/staging_owner_review_bootstrap_contract.py`,
-   but real staging still needs the whitelisted preflight output from the
-   actual target.
+   but real staging still needs the sanitized whitelisted preflight output from
+   the actual target. The artifact must be bound to the same staging site and
+   app hash as `provider-snapshot.json` and `app-mirror-freshness.json`; a
+   minimal hand-shaped `ok=true` payload is not release proof.
 8. Prove Frappe Cloud deploy, site update/migration, cache clear, app order, and
    `lt_ecommerce_paused=1` on staging.
 9. Run local hard gates for the changed slice before staging.
