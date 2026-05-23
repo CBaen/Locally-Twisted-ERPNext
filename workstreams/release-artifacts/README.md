@@ -87,12 +87,14 @@ release controller can move past forensic-freeze:
 - `scripts/release/release_identity_artifact.py`
 - `scripts/release/release_status_report.py`
 - `scripts/release/freeze_reopen_approval_artifact.py`
+- `scripts/release/read_receipt_artifact.py`
 - `scripts/release/app_mirror_sync_plan_artifact.py`
 - `scripts/verify/release_lock_contract.py`
 - `scripts/verify/release_controller_contract.py`
 - `scripts/verify/release_identity_artifact_contract.py`
 - `scripts/verify/release_status_report_contract.py`
 - `scripts/verify/freeze_reopen_approval_artifact_contract.py`
+- `scripts/verify/read_receipt_artifact_contract.py`
 - `scripts/verify/app_mirror_sync_plan_artifact_contract.py`
 - `scripts/verify/frappe_cloud_payload_contract.py`
 - `scripts/verify/frappe_cloud_app_mirror_freshness.py`
@@ -190,6 +192,30 @@ For LT, a safe Codex account label is:
 
 Do not call this uncertain by default. It is expected. The identity proof's job
 is to make that visible before mutation, not to force a single account.
+
+## How To Generate The Read Receipt
+
+Do not hand-copy `read-receipt.json` from a template or archived packet. Generate
+it from the active release lock:
+
+```powershell
+python scripts\release\read_receipt_artifact.py `
+  --write `
+  --output workstreams\release-artifacts\<fresh-packet>\read-receipt.json `
+  --agent "<agent/session id>" `
+  --evidence "<exact source of the read receipt>" `
+  --json
+```
+
+Preview mode is intentionally not mutation-capable:
+
+```powershell
+python scripts\release\read_receipt_artifact.py --json
+```
+
+The helper is local/offline. It does not contact Frappe Cloud, push the app
+mirror, deploy, bootstrap, migrate, clear cache, index staging, touch
+live/DNS/Stripe/Search Console, or unpause checkout.
 
 ## How To Provide Freeze-Reopen Approval
 

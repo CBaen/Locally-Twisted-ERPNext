@@ -1,0 +1,129 @@
+#!/usr/bin/env python3
+"""Build or validate a local release read receipt artifact.
+
+This helper is deliberately local/offline. It records the docs required by the
+active release lock and validates the receipt shape before any release
+controller can use it. It does not contact Frappe Cloud or mutate staging.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any
+
+from release_guard_common import (
+    DEFAULT_LOCK_PATH,
+    PROJECT_ROOT,
+    ReleaseGuardError,
+    current_git_head,
+    load_release_lock,
+    raise_if_failures,
+    validate_read_receipt,
+    validate_release_lock,
+)
+
+
+ARTIFACT_TYPE = "release_read_receipt"
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--lock-file", type=Path, default=DEFAULT_LOCK_PATH)
+    parser.add_argument("--output", type=Path, help="Where to write read-receipt.json with --write.")
+    parser.add_argument("--write", action="store_true", help="Write a passing read receipt.")
+    parser.add_argument("--force", action="store_true", help="Allow overwriting --output.")
+    parser.add_argument("--validate-only", type=Path, help="Validate an existing read receipt artifact.")
+    parser.add_argument("--agent", help="Agent/session name for the generated receipt.")
+    parser.add_argument("--evidence", help="Short evidence note for this receipt.")
+    parser.add_argument("--json", action="store_true")
+    args = parser.parse_args()
+
+    try:
+        result = run(args)
+    except ReleaseGuardError as exc:
+        result = {"ok": False, "failure": str(exc), "provider_mutation_executed": False}
+    except Exception as exc:  # pragma: no cover - defensive CLI surface.
+        result = {"ok": False, "failure": f"{type(exc).__name__}: {exc}", "provider_mutation_executed": False}
+
+    if args.json:
+        print(json.dumps(result, indent=2, sort_keys=True))
+    else:
+        marker = "PASS" if result.get("ok") else "BLOCK"
+        print(f"[RELEASE READ RECEIPT ARTIFACT] {marker}")
+        if result.get("output"):
+            print(f"  output: {result['output']}")
+        if result.get("failure"):
+            print(f"  failure: {result['failure']}")
+    return 0 if result.get("ok") else 1
+
+
+def run(args: argparse.Namespace) -> dict[str, Any]:
+    lock = load_release_lock(args.lock_file)
+    raise_if_failures("invalid release lock", validate_release_lock(lock))
+    required_docs = list(lock.get("required_read_docs") or [])
+
+    if args.validate_only:
+        failures = validate_read_receipt(args.validate_only, required_docs)
+        return {
+            "ok": not failures,
+            "path": str(args.validate_only),
+            "failures": failures,
+            "failure": "; ".join(failures) if failures else None,
+            "provider_mutation_executed": False,
+        }
+
+    if not args.write:
+        preview = build_receipt(lock=lock, agent=args.agent, evidence=args.evidence, ok=False)
+        preview["preview_only"] = True
+        return {
+            "ok": False,
+            "failure": "preview only; rerun with --write, --output, and --agent before release mutation",
+            "preview": preview,
+            "provider_mutation_executed": False,
+        }
+
+    if not args.output:
+        raise ReleaseGuardError("--write requires --output")
+    if not str(args.agent or "").strip():
+        raise ReleaseGuardError("--write requires --agent")
+    if args.output.exists() and not args.force:
+        raise ReleaseGuardError(f"refusing to overwrite existing read receipt without --force: {args.output}")
+
+    missing_files = [doc for doc in required_docs if not (PROJECT_ROOT / doc).exists()]
+    if missing_files:
+        raise ReleaseGuardError("required read docs are missing from the repo: " + ", ".join(missing_files))
+
+    receipt = build_receipt(lock=lock, agent=args.agent, evidence=args.evidence, ok=True)
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    failures = validate_read_receipt(args.output, required_docs)
+    raise_if_failures("generated read receipt is invalid", failures)
+    return {
+        "ok": True,
+        "output": str(args.output),
+        "source_commit": receipt["source_commit"],
+        "read_documents_count": len(receipt["read_documents"]),
+        "provider_mutation_executed": False,
+    }
+
+
+def build_receipt(*, lock: dict[str, Any], agent: str | None, evidence: str | None, ok: bool) -> dict[str, Any]:
+    return {
+        "ok": ok,
+        "artifact_type": ARTIFACT_TYPE,
+        "lock_id": lock.get("id"),
+        "stage": lock.get("stage"),
+        "source_commit": current_git_head(),
+        "agent": agent,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "evidence": evidence or "generated by scripts/release/read_receipt_artifact.py",
+        "read_documents": list(lock.get("required_read_docs") or []),
+        "provider_mutation_executed": False,
+    }
+
+
+if __name__ == "__main__":
+    sys.exit(main())

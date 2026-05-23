@@ -48,11 +48,13 @@ Implemented local guard paths:
 - `scripts/release/release_identity_artifact.py`
 - `scripts/release/release_status_report.py`
 - `scripts/release/freeze_reopen_approval_artifact.py`
+- `scripts/release/read_receipt_artifact.py`
 - `scripts/verify/release_lock_contract.py`
 - `scripts/verify/release_controller_contract.py`
 - `scripts/verify/release_identity_artifact_contract.py`
 - `scripts/verify/release_status_report_contract.py`
 - `scripts/verify/freeze_reopen_approval_artifact_contract.py`
+- `scripts/verify/read_receipt_artifact_contract.py`
 - `scripts/verify/frappe_cloud_payload_contract.py`
 - `scripts/verify/frappe_cloud_app_mirror_freshness.py`
 - `scripts/verify/frappe_cloud_provider_snapshot.py`
@@ -452,6 +454,16 @@ execution can leave forensic-freeze.
     It is local documentation and guard wiring only. It does not reopen
     forensic-freeze or mutate provider/app mirror/staging/live/DNS/Stripe/
     Search Console.
+
+32. **Generate read receipts instead of hand-copying them.** `implemented-local`
+    `scripts/release/read_receipt_artifact.py` writes or validates
+    `read-receipt.json` from the active release lock's required docs, records
+    the current source commit, and refuses to generate if required docs are
+    missing. It is covered by
+    `scripts/verify/read_receipt_artifact_contract.py` and
+    `npm run test:read-receipt`. This helper does not create approval, contact
+    Frappe Cloud, sync the app mirror, deploy, bootstrap, migrate, cache clear,
+    index staging, unpause checkout, or touch live/DNS/Stripe/Search Console.
 
 ## P1 Actions
 
