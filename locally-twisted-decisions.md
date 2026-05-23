@@ -8,6 +8,31 @@ LT-specific decisions only. Cross-client / agency-wide decisions live at `Built_
 
 ---
 
+## 2026-05-23 - GitHub archive proof is not app mirror freshness
+
+**Decision:** The `ceab908` read-only no-go packet archive proves a source
+state and packet state, but it does not prove the Frappe Cloud app-root mirror
+or staging deployed app contains the same source.
+
+**Reasoning:** The read-only packet proved staging was Active and safely
+paused, but the app-root mirror/deployed app hash was still
+`181076c239b2d1d3d508a41ac471c71f9d2b5158` and did not contain
+`locally_twisted/staging_owner_review_preflight.py`. Future agents must keep
+these states separate: source repo archive, app mirror, provider deploy/update,
+site migration/cache/config, staging records/routes/accounts, and owner-review
+readiness.
+
+**Implementation boundary:** Docs may cite `ceab908` only as source archive
+proof. A release packet still needs explicit freeze reopen, fresh provider
+snapshot, reviewed app-root mirror sync, hosted preflight proof, bootstrap
+preflight/import proof, and `scripts/verify/staging_owner_review_gate.py`
+against the actual staging target before owner-review-ready language.
+
+**Receipts:** `workstreams/frappe-cloud-doc-parity-ceab908-2026-05-23.md`;
+`workstreams/release-artifacts/2026-05-23-staging-reopen-readonly/`.
+
+---
+
 ## 2026-05-23 - Staging read-only packets must prove mirror freshness before hosted bootstrap
 
 **Decision:** A read-only provider snapshot is not enough to reopen staging

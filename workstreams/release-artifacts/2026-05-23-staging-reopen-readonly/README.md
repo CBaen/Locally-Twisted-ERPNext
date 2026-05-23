@@ -9,7 +9,8 @@ unpause.
 
 ## What This Proves
 
-- Source repo is clean at `e44ecc2`.
+- Source guard code was clean at `e44ecc2` when the packet was captured; this
+  packet and the strict-JSON gate fix are archived on GitHub in `ceab908`.
 - The current local release-prevention suite passes.
 - Frappe Cloud staging is Active with no running jobs.
 - Staging is still safely paused for ecommerce and public indexing is disabled.
@@ -18,8 +19,9 @@ unpause.
 - Staging is not owner-review ready: catalog/Product Setup/gallery rows are
   zero, required owner/marketing users are missing, and representative product
   routes return `404`.
-- The deployed staging app does not expose the new hosted bootstrap preflight
-  method from source commit `e44ecc2`.
+- The deployed staging app does not expose the hosted bootstrap preflight
+  method that was archived in source commit `ceab908` and first introduced in
+  source commit `e44ecc2`.
 
 ## Files
 
@@ -33,11 +35,14 @@ unpause.
 - `provider-witness.md`
 - `gate-fixer.md`
 - `recorder.md`
+- `release-controller-readonly.json`
 
 ## Current No-Go
 
 Do not run provider deploy/update, staging bootstrap, site migrate, cache clear,
 or owner-review-ready language from this packet. The next controlled release
-packet must sync the app-root mirror from reviewed source, take a fresh provider
-snapshot, run the hosted bootstrap preflight, then proceed only if the
-preflight and release lock/reopen conditions pass.
+packet must sync the app-root mirror from reviewed source, take a fresh
+provider snapshot, run the hosted bootstrap preflight, then proceed only if the
+preflight and release lock/reopen conditions pass. Post-packet docs parity is
+tracked in
+`workstreams/frappe-cloud-doc-parity-ceab908-2026-05-23.md`.

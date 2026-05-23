@@ -16,8 +16,10 @@ approval, DNS/Search Console/Stripe approval, or checkout exposure.
 
 Codex read-only staging reopen packet on 2026-05-23:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-readonly/` is the
-current proof packet. It used the release controller in `read_only_forensics`
-mode and performed no provider/staging/live/DNS/Stripe/Search Console mutation.
+current no-go proof packet. The packet and strict-JSON gate fix were archived
+to GitHub in commit `ceab908`. It used the release controller in
+`read_only_forensics` mode and performed no provider/staging/live/DNS/Stripe/
+Search Console mutation.
 Current staging is `Active`, installed `locally_twisted` hash is
 `181076c239b2d1d3d508a41ac471c71f9d2b5158`, app order is correct, running jobs
 are empty, ecommerce is paused, and public indexing is disabled. It is still
@@ -25,9 +27,10 @@ are empty, ecommerce is paused, and public indexing is disabled. It is still
 `LT Product Blueprint=0`, `Website Slideshow=0`, `Website Slideshow Item=0`,
 missing `locallytwisted@gmail.com` / `marketing@exploringnotboring.com`, and
 representative shop/product routes return `404`. The deployed app-root mirror
-is also stale relative to source `e44ecc2`: mirror/app hash `181076c...` does
-not contain `locally_twisted/staging_owner_review_preflight.py`, so the hosted
-preflight endpoint fails with "module ... has no attribute
+is also stale relative to source code archived at `ceab908` (the preflight
+source first landed in `e44ecc2`): mirror/app hash `181076c...` does not contain
+`locally_twisted/staging_owner_review_preflight.py`, so the hosted preflight
+endpoint fails with "module ... has no attribute
 `preflight_staging_owner_review_bootstrap`." Next controlled release packet
 must sync the app-root mirror from reviewed source, take a fresh provider
 snapshot, run the hosted preflight, then bootstrap/import only if the active
@@ -45,10 +48,11 @@ that momentum. Required reading before any future staging/live action:
 and the action-item handoff
 `workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`.
 The release lock, typed-payload validator, circuit breaker helper, controller
-CLI contract, claim-language gate, and release-artifact directory contract now
-exist locally at commit `58258fd`. The next agent must not rebuild those from
-scratch; it must run the prevention gates, take a fresh read-only provider
-snapshot, produce the artifact-backed release packet, and keep
+CLI contract, claim-language gate, and release-artifact directory contract
+were introduced locally at commit `58258fd` and later expanded through
+`e44ecc2`/`ceab908`. The next agent must not rebuild those from scratch; it
+must run the prevention gates, take a fresh read-only provider snapshot,
+produce the artifact-backed release packet, and keep
 `scripts/verify/staging_owner_review_gate.py` as the hard owner-review stop
 gate before any new provider mutation is reopened.
 Gate/Fixer witness follow-up on 2026-05-23 is now implemented locally:
@@ -64,7 +68,16 @@ bootstrap preflight output from the actual staging target. No provider,
 bootstrap, live, DNS, Stripe, Search Console, or checkout mutation was
 performed in this guard-hardening pass.
 
-Codex Frappe Cloud staging recovery on 2026-05-22: save state tag
+Documentation parity follow-up on 2026-05-23:
+`workstreams/frappe-cloud-doc-parity-ceab908-2026-05-23.md` records the
+post-`ceab908` handoff cleanup. It is docs-only and preserves the same hard
+no-go: GitHub source archive, app mirror hash, provider snapshot, and route
+checks are separate proof layers. The current app-root mirror is still behind
+source and staging remains blocked for owner review until the active
+forensic-freeze lock is explicitly reopened under a fresh artifact-backed
+release packet.
+
+Historical Frappe Cloud staging recovery on 2026-05-22: save state tag
 `savepoint/lt-staging-recovery-20260522-173929` exists. Source `main` is
 pushed at `2ca1b85 Ensure LT access roles before permission sync`; the private
 Frappe Cloud app-root mirror `CBaen/Locally-Twisted-Frappe-App` is pushed at
@@ -84,9 +97,11 @@ before saying "staging owner-review ready" is
 It must fail on zero catalog rows or missing users even when Frappe Cloud app
 deploy/migrate succeeded. Historical next step at that moment was staging
 bootstrap/import for catalog, Product Setup/gallery projection, and required
-accounts, then rerun that gate. That path is now superseded by the 2026-05-23
-forensic-freeze lock: bootstrap/import may resume only after GL explicitly
-reopens release execution and the release controller/artifact plan allows it.
+accounts, then rerun that gate. Do not run that old `3e86bc1` command as
+current guidance. That path is now superseded by the 2026-05-23
+forensic-freeze lock and the `181076c...` read-only no-go packet:
+bootstrap/import may resume only after GL explicitly reopens release execution
+and the release controller/artifact plan allows it.
 Live, DNS, Stripe, Search Console, and production indexing remain untouched.
 Handoff:
 `workstreams/frappe-cloud-staging-owner-review-2026-05-22.md`.

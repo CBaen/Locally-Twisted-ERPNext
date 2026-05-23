@@ -70,6 +70,14 @@ should not be used as launch proof.
 
 ## release/
 
+Release evidence and current no-go state live outside this scripts directory.
+Start with `workstreams/release-artifacts/README.md`, the current packet
+`workstreams/release-artifacts/2026-05-23-staging-reopen-readonly/`, and the
+docs parity handoff
+`workstreams/frappe-cloud-doc-parity-ceab908-2026-05-23.md` before reopening
+any Frappe Cloud staging/live path. These script gates prove local prevention
+only unless a release packet says otherwise.
+
 | Script | Purpose | Run when |
 |--------|---------|----------|
 | `frappe_cloud_release_controller.py` | Local Frappe Cloud release controller gate. It checks the active forensic-freeze release lock, required-doc read receipt, typed payload artifact, failure ledger, provider snapshot, and artifact-owned triad inputs. Future deploy/update actions cannot pass without `--payload-file`. It can write an emergency handoff artifact on failure. It does not deploy or mutate provider state. | Before any future LT Frappe Cloud staging/live command is allowed to leave forensic-freeze |

@@ -6,6 +6,21 @@ LT-specific patterns. Cross-client / agency-wide lessons go to `Built_by_Cameron
 
 ---
 
+## 2026-05-23 - A no-go packet needs a post-commit docs parity pass
+
+The read-only staging packet was correct as a no-go artifact, but some docs
+still pointed at the guard-introduction commits (`58258fd`/`e44ecc2`) as if
+they were the latest archive. That can make the next agent reason from the
+wrong source state even when the no-go boundary is correct.
+
+**Counter-move:** after a release artifact packet is committed, run a scoped
+docs parity pass that names the latest GitHub archive separately from the app
+mirror/deployed app hash. For the 2026-05-23 staging freeze, `ceab908` is
+source archive proof only. It is not app mirror freshness, Frappe Cloud deploy
+proof, staging data proof, or owner-review readiness.
+
+---
+
 ## 2026-05-23 - Release verifier JSON must stay JSON when it fails
 
 The staging owner-review gate supported `--json`, but on failure it appended
@@ -57,11 +72,11 @@ but no release lock, payload validator, circuit breaker, or required-doc gate
 blocked more mutation.
 
 **Counter-move:** release warnings must become executable stop gates. The
-first local/offline guard layer now exists at commit `58258fd`; the next agent
-must run it, preserve it, and complete the still-open current-state provider
-snapshot plus artifact-backed release packet in
-`workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md` before
-reopening staging release execution. Use
+first local/offline guard layer was introduced at commit `58258fd`, and the
+read-only no-go packet/provider snapshot was archived in `ceab908`. The next
+release agent must still run the guard, preserve it, sync/prove app-root mirror
+freshness after explicit freeze reopen, then take a fresh provider snapshot and
+artifact-backed release packet before staging mutation. Use
 `capabilities/failures/release-controller-churn-after-stop.md` before any
 provider, staging, live, DNS, Stripe, Search Console, or launch recovery work.
 

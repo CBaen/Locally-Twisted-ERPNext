@@ -1,14 +1,16 @@
 # Ecommerce Shop Handoff
 
-Status as of 2026-05-18 for peer GPT-5.5 Codex/OpenClaw agents.
+Status as of 2026-05-23 for peer GPT-5.5 Codex/OpenClaw agents.
 
 ## Current Repository State
 
 - Branch: `main`
-- Current GitHub archive for release-prevention guards: `58258fd Add release
-  prevention guards`; verify current `HEAD` / `origin/main` with
-  `git status -sb` before editing. Older closeout baseline
-  `1811cd6 Fix ecommerce closeout doc state` is historical only.
+- Read-only no-go packet archive: `ceab908 Record staging read-only no-go
+  packet`; verify current `HEAD` / `origin/main` with `git status -sb` before
+  editing. The initial local release-prevention guard commit
+  `58258fd Add release prevention guards` and older closeout baseline
+  `1811cd6 Fix ecommerce closeout doc state` are historical anchors, not the
+  current source state.
 - This file is the front-door handoff for the local ecommerce shop setup and
   staff product-authoring slices.
 - 2026-05-23 release-process failure: the Frappe Cloud owner-review staging
@@ -39,6 +41,10 @@ Status as of 2026-05-18 for peer GPT-5.5 Codex/OpenClaw agents.
   the current source `staging_owner_review_preflight.py`, so hosted bootstrap
   preflight is unavailable on staging. Do not bootstrap/import from this
   deployed app.
+- 2026-05-23 post-packet docs parity handoff:
+  `workstreams/frappe-cloud-doc-parity-ceab908-2026-05-23.md`. This records
+  `ceab908` as source archive proof only, not app mirror freshness, provider
+  deploy proof, staging data proof, or owner-review readiness.
 - Owner Product Setup guard closeout was recovered and triad-reviewed on
   2026-05-22. Owner-like users can use `LT Product Blueprint` / Product Setup,
   but direct raw catalog mutations are blocked and local apply cannot publish,
@@ -64,8 +70,8 @@ Status as of 2026-05-18 for peer GPT-5.5 Codex/OpenClaw agents.
   Product Setup schema; arbitrary selected-variant/reference/category media
   stays separate. Handoff:
   `workstreams/ecommerce-audit/product-gallery-restoration-2026-05-22.md`.
-- Frappe Cloud staging recovery ran on 2026-05-22. Source `main` is pushed at
-  `2ca1b85`; the private app-root mirror is pushed at `3e86bc1`; staging
+- Historical Frappe Cloud staging recovery ran on 2026-05-22. Source `main`
+  was pushed at `2ca1b85`; the private app-root mirror was pushed at `3e86bc1`; staging
   installed `locally_twisted` app hash is
   `3e86bc149d6dcc04daa194b740c1733f5c796261`. Provider proof shows current
   staging on bench group `bench-40102` / bench `bench-40102-000003-f4v`; live
@@ -79,7 +85,10 @@ Status as of 2026-05-18 for peer GPT-5.5 Codex/OpenClaw agents.
   `scripts/verify/staging_owner_review_gate.py` is now the mandatory
   executable gate before calling staging owner-review ready; it must fail on
   zero catalog/users even when app deploy succeeded. Handoff:
-  `workstreams/frappe-cloud-staging-owner-review-2026-05-22.md`.
+  `workstreams/frappe-cloud-staging-owner-review-2026-05-22.md`. This section
+  is retained as historical evidence only; the old `3e86bc1` staging gate
+  command is superseded by the 2026-05-23 forensic-freeze lock and the
+  `181076c...` read-only no-go packet.
 - Current local product import proof treats all 53 Odoo-imported products as
   real products. Direct checkout is now bounded for high-complexity color
   products: the two graduation products use college color preset checkout
@@ -158,6 +167,8 @@ payload artifacts for future provider deploy/update controller actions.
 The current read-only packet produced the provider snapshot and tried hosted
 preflight; hosted preflight is blocked because staging is still running app
 hash `181076c...`, which does not include the source preflight method.
+Post-`ceab908` docs parity handoff:
+`workstreams/frappe-cloud-doc-parity-ceab908-2026-05-23.md`.
 
 2026-05-22 staging-prep nuance: official Frappe Cloud docs support
 `press-deploy` commit markers, including bench-specific markers. For LT, do
@@ -165,9 +176,13 @@ not use generic `press-deploy`. Current provider proof supersedes older repo
 history: staging is `bench-40102` / `bench-40102-000003-f4v`, and live remains
 `bench-39776` / `bench-39776-000015-f94v`. Owner review is blocked until
 staging bootstrap/import completes and the mandatory staging owner-review gate
-passes. The current blocker is not app hash: staging has `3e86bc1` installed,
-but it has zero catalog/shop/gallery records and the required owner/marketing
-users are missing.
+passes. Historical 2026-05-22 blocker language said the blocker was not app
+hash because staging had `3e86bc1` installed but no catalog/shop/gallery
+records or required users. The current 2026-05-23 blocker is broader: staging
+now reports app hash `181076c...`, the app-root mirror is still behind current
+source and lacks the hosted preflight method, and the actual staging target
+still has zero catalog/Product Setup/gallery rows plus missing owner/marketing
+users.
 
 ## Completed Lanes
 

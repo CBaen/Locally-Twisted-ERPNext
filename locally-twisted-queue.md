@@ -20,16 +20,18 @@ Next safe step is not a deploy. The first local/offline guard layer now exists
 at
 `release_locks/locally-twisted-staging-forensic-freeze.json`,
 `scripts/release/frappe_cloud_release_controller.py`, and
-`npm run test:release-prevention`, archived at commit `58258fd`. Provider
+`npm run test:release-prevention`, first archived at commit `58258fd` and
+expanded through the `ceab908` read-only no-go packet. Provider
 mutation remains blocked while the forensic-freeze lock is active. The local
 guard hardening now includes provider snapshot self-test/producer,
 owner-review gate contract, hosted bootstrap preflight/source contract,
 mandatory deploy payload artifacts, and destructive-seed backup-or-zero-data
-proof. Next safe step is a read-only current-state provider snapshot and real
-hosted bootstrap preflight artifact plus a fresh artifact-backed release plan
-if GL explicitly reopens release execution. Do not deploy, bootstrap, mutate
-Frappe Cloud, touch live/DNS/Stripe/Search Console, or claim owner-review
-readiness from the interrupted session.
+proof. The read-only current-state packet already ran and is a no-go. Next
+safe release packet, after explicit freeze reopen only, must sync the app-root
+mirror from reviewed source, then take a fresh read-only provider snapshot, run
+hosted preflight, and decide on bootstrap/import only if those gates pass. Do
+not deploy, bootstrap, mutate Frappe Cloud, touch live/DNS/Stripe/Search
+Console, or claim owner-review readiness from the interrupted session.
 
 2026-05-23 read-only packet update:
 `workstreams/release-artifacts/2026-05-23-staging-reopen-readonly/` now records
@@ -40,9 +42,11 @@ blocked: catalog/Product Setup/gallery rows are zero, required owner/marketing
 users are missing, and product/category routes return `404`. The hosted
 bootstrap preflight is also unavailable on staging because the app-root mirror
 at `181076c...` does not include source `staging_owner_review_preflight.py` from
-`e44ecc2`. Next safe release packet, after explicit freeze reopen only, must
-sync the app-root mirror from reviewed source before any provider deploy,
-hosted preflight, bootstrap/import, or cache action.
+source code archived at `ceab908` (introduced in `e44ecc2`). Next safe release
+packet, after explicit freeze reopen only, must sync the app-root mirror from
+reviewed source before any provider deploy, hosted preflight,
+bootstrap/import, or cache action. Docs-only parity handoff:
+`workstreams/frappe-cloud-doc-parity-ceab908-2026-05-23.md`.
 
 **P0 owner Product Setup local review before staging (2026-05-22):** Active
 handoff is
@@ -70,7 +74,7 @@ production approval. Do not claim staging from local Docker verifiers by
 setting only `LT_BASE_URL`; database-side proof must run against staging or
 stay explicitly unverified.
 
-2026-05-22 staging-recovery update: source `main` is archived at `2ca1b85`,
+Historical 2026-05-22 staging-recovery update: source `main` is archived at `2ca1b85`,
 and the Frappe Cloud app-root mirror is archived at `3e86bc1`. Provider proof
 shows current staging on bench group `bench-40102` / bench
 `bench-40102-000003-f4v`; live remains on bench group `bench-39776` / bench
@@ -86,9 +90,9 @@ bootstrap/import for catalog, Product Setup/gallery projection, and required
 accounts, then run the mandatory executable gate:
 `python scripts\verify\staging_owner_review_gate.py --expected-hash 3e86bc149d6dcc04daa194b740c1733f5c796261`.
 That gate must fail on zero catalog/users even when app deploy succeeded. Do
-not use this as the current next safe step while the 2026-05-23 forensic-freeze
-lock is active. Do not use generic `press-deploy`; do not touch live, DNS,
-Stripe, or Search Console. Handoff:
+not use this old `3e86bc1` command or lane as the current next safe step while
+the 2026-05-23 forensic-freeze lock is active. Do not use generic
+`press-deploy`; do not touch live, DNS, Stripe, or Search Console. Handoff:
 `workstreams/frappe-cloud-staging-owner-review-2026-05-22.md`.
 
 **P0 capability graduation cleanup (2026-05-21):** Active handoff is

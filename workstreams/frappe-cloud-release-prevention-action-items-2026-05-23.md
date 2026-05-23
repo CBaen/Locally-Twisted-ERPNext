@@ -1,11 +1,12 @@
 # Frappe Cloud Release Prevention Action Items - 2026-05-23
 
 Status: **forensic-freeze action list with the first local/offline prevention
-guard layer implemented at commit `58258fd`. Do not use this as permission to
-deploy.**
+guard layer implemented at commit `58258fd`, expanded through the current
+read-only no-go archive `ceab908`. Do not use this as permission to deploy.**
 
 This document exists because notes were present, but the release process still
-continued. The next agent must convert these items into executable gates before
+continued. The first executable local gates now exist; the next agent must keep
+them green and finish the still-open provider/staging prerequisites before
 reopening Locally Twisted Frappe Cloud staging release work.
 
 2026-05-23 guard implementation update: the first local/offline prevention
@@ -45,7 +46,9 @@ staging owner-review gate artifact. It did not mutate provider/staging/live
 state. Result: staging is provider-stable but still owner-review blocked, and
 the hosted bootstrap preflight cannot run because the deployed app hash/app
 mirror `181076c239b2d1d3d508a41ac471c71f9d2b5158` does not include the current
-source preflight module from `e44ecc2`.
+source preflight module from `ceab908` (first introduced in `e44ecc2`).
+Docs parity handoff:
+`workstreams/frappe-cloud-doc-parity-ceab908-2026-05-23.md`.
 
 Source incident:
 `workstreams/frappe-cloud-staging-release-failure-forensics-2026-05-23.md`.

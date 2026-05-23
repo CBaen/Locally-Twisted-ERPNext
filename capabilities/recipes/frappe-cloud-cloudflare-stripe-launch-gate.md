@@ -55,8 +55,9 @@ Default public launch posture:
   advertise the public domain, not the Frappe Cloud vanity host. As of
   2026-05-19, source guard work exists but live reindex work remains blocked
   until the fix is released and verified.
-- As of 2026-05-22, owner-review staging is blocked, not ready. Current
-  provider evidence puts `locallytwisted-staging.frappe.cloud` on Frappe Cloud
+- Historical 2026-05-22 owner-review staging evidence is retained as
+  superseded blocker history. At that moment,
+  `locallytwisted-staging.frappe.cloud` was on Frappe Cloud
   bench group `bench-40102` / bench `bench-40102-000003-f4v`, while live and
   vanity traffic are separate on group `bench-39776` / bench
   `bench-39776-000015-f94v`. The target app mirror commit `f236d6d` exists, but
@@ -75,6 +76,17 @@ Default public launch posture:
   provider state and an artifact-backed plan before any mutation. The concrete
   action list is
   `workstreams/frappe-cloud-release-prevention-action-items-2026-05-23.md`.
+- As of the 2026-05-23 read-only no-go packet, staging is Active on app hash
+  `181076c239b2d1d3d508a41ac471c71f9d2b5158`, has correct app order, no
+  running jobs, ecommerce paused, and public indexing disabled. It is still not
+  owner-review ready: catalog/Product Setup/gallery rows are zero,
+  `locallytwisted@gmail.com` and `marketing@exploringnotboring.com` are
+  missing, representative routes return `404`, and the deployed app/app-root
+  mirror lacks `locally_twisted/staging_owner_review_preflight.py`. Source
+  archive `ceab908` is not app mirror freshness or staging readiness proof.
+  See
+  `workstreams/release-artifacts/2026-05-23-staging-reopen-readonly/` and
+  `workstreams/frappe-cloud-doc-parity-ceab908-2026-05-23.md`.
 - Also as of 2026-05-23, the first local/offline release-prevention layer is
   executable: `release_locks/locally-twisted-staging-forensic-freeze.json`,
   `scripts/release/frappe_cloud_release_controller.py`,

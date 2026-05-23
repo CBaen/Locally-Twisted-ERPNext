@@ -26,7 +26,13 @@ release controller can move past forensic-freeze:
 - `scripts/verify/release_lock_contract.py`
 - `scripts/verify/release_controller_contract.py`
 - `scripts/verify/frappe_cloud_payload_contract.py`
+- `scripts/verify/frappe_cloud_provider_snapshot.py`
+- `scripts/verify/staging_owner_review_gate_contract.py`
+- `scripts/verify/staging_owner_review_bootstrap_contract.py`
 - `scripts/verify/release_claim_language_contract.py`
+
+The expanded current action list is
+`../frappe-cloud-release-prevention-action-items-2026-05-23.md`.
 
 Run:
 
@@ -45,12 +51,12 @@ substitute `scripts/verify/staging_owner_review_gate.py` output for it: that
 gate is the later owner-review stop gate and may create an authenticated
 staging session while checking staging records/routes.
 
-Until a dedicated snapshot producer exists, the Provider Witness must own the
-exact command packet that calls only read-only Frappe Cloud/Press methods,
-writes the sanitized `provider-snapshot.json`, and then validates it through
-the local release controller helpers. The artifact must not contain secrets,
-tokens, session IDs, raw provider logs, customer records, or credential-file
-contents.
+The Provider Witness must own either the current snapshot producer output or an
+equivalent exact command packet that calls only read-only Frappe Cloud/Press
+methods, writes the sanitized `provider-snapshot.json`, and then validates it
+through the local release controller helpers. The artifact must not contain
+secrets, tokens, session IDs, raw provider logs, customer records, or
+credential-file contents.
 
 Current update: `scripts/verify/frappe_cloud_provider_snapshot.py` is now the
 preferred snapshot producer. Use `--self-test` for offline release-prevention
@@ -62,4 +68,6 @@ Current packet:
 `2026-05-23-staging-reopen-readonly/` is a read-only no-go packet. It proves
 the provider snapshot path works against current staging and records the owner
 review blockers, but it does not approve mutation. The packet also proves the
-deployed staging app lacks the current hosted bootstrap preflight method.
+deployed staging app lacks the current hosted bootstrap preflight method. The
+packet is archived in source commit `ceab908`; that archive is still not app
+mirror, provider deploy, or owner-review readiness proof.
