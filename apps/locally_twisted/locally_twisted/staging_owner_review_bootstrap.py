@@ -257,9 +257,9 @@ def _ensure_owner_user(summary: dict[str, Any]) -> None:
         "enabled": 1,
         "user_type": "System User",
         "send_welcome_email": 0,
-        "default_workspace": "LT Owner Home",
         "time_zone": "America/Denver",
     }
+    fields["default_workspace"] = "LT Owner Home" if frappe.db.exists("Workspace", "LT Owner Home") else None
     action = "unchanged"
     if frappe.db.exists("User", OWNER_EMAIL):
         doc = frappe.get_doc("User", OWNER_EMAIL)
